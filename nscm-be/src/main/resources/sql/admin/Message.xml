@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "../../mybatis/mybatis-3-mapper.dtd">
+<mapper namespace="com.lgcns.nscm.admin.message">
+
+
+    <resultMap id="messageResultMap" type="java.util.HashMap" />
+
+    <select id="retrieveMessage" resultType="java.util.HashMap">
+		SELECT  MSG_ID, LANG_CD, MSG_NM 
+				, MSG_TP_CD, MSG_ID||'='||MSG_NM AS I18N_CTN
+		  FROM  SCM_ADM_MSG_M
+ 		 WHERE  USE_YN = 'Y'
+ 		 <if test="langCd != null and langCd != ''">
+ 		   AND  LANG_CD = #{langCd}
+		 </if>
+    </select>
+    
+
+</mapper>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "../../mybatis/mybatis-3-mapper.dtd">
+<mapper namespace="com.lgcns.nscm.admin.lookup">
+
+
+    <resultMap id="lookupResultMap" type="java.util.HashMap" />
+    <resultMap id="lookupResultMap2" type="java.util.HashMap" />
+    
+    <select id="retrieveLookup" statementType="CALLABLE">
+		{ CALL SCM_MGR.PKG_NSCM_UI_COM_LOOKUP.PR_GET_LOOKUP_INFO_LIST(
+			#{type},
+			#{DATARESULT, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=lookupResultMap}
+		) }
+    </select>
+    
+    <select id="getQuery" resultType="java.util.HashMap">
+		SELECT  SQL_ID, DBMS_LOB.SUBSTR(SQL_DTL_CTN, 4000, 1) AS SQL_DTL_CTN
+		  FROM  SCM_MGR.SCM_ADM_CMBO_SQL_M
+		 WHERE  SQL_ID = #{comboId}
+    </select>
+
+    
+    <select id="test" statementType="CALLABLE">
+		{ CALL SCM_MGR.procTest(
+			#{test},
+			#{DATARESULT, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=lookupResultMap2}
+		) }
+    </select>
+    
+
+</mapper>

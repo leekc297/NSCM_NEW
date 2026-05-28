@@ -1,0 +1,57 @@
+{
+  "globalDependencies": ["package.json", "pnpm-lock.yaml", "configs/**/*"],
+  "tasks": {
+    "local": {
+      "cache": false,
+      "persistent": true
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "lint": {
+      "dependsOn": [],
+      "outputs": [],
+      "inputs": ["src/**/*.{ts,tsx,js,jsx}", "eslint.config.mjs", "tsconfig.json"]
+    },
+    "lint:fix": {
+      "outputs": [],
+      "cache": false,
+      "inputs": ["src/**/*.{ts,tsx,js,jsx}", "eslint.config.mjs", "tsconfig.json"]
+    },
+    "type-check": {
+      "dependsOn": ["^type-check"],
+      "outputs": [],
+      "inputs": ["src/**/*.{ts,tsx}", "tsconfig.json"]
+    },
+    "build": {
+      "dependsOn": ["^build", "lint", "type-check"],
+      "outputs": ["dist/**"],
+      "inputs": [
+        "src/**",
+        "package.json",
+        "tsconfig.json",
+        "vite.config.ts",
+        "index.html",
+        "src/**/*.test.{ts,tsx}",
+        ".env.production"
+      ]
+    },
+    "test": {
+      "dependsOn": ["^build"],
+      "cache": true,
+      "outputs": ["coverage/**"],
+      "inputs": ["src/**/*.{test,spec}.{ts,tsx}", "src/**"]
+    },
+    "demand#lint": {
+      "dependsOn": ["^lint"],
+      "outputs": [],
+      "inputs": ["src/**/*.{ts,tsx,js,jsx}", "eslint.config.mjs"]
+    },
+    "admin#lint": {
+      "dependsOn": ["^lint"],
+      "outputs": [],
+      "inputs": ["src/**/*.{ts,tsx,js,jsx}", "eslint.config.mjs"]
+    }
+  }
+}

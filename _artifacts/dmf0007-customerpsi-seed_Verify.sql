@@ -1,0 +1,62 @@
+-- =============================================================================
+-- DMF0007 customerPSI 시드 적용 후 검증 (단일 UNION ALL SELECT, DBeaver 호환)
+-- =============================================================================
+-- 모든 'ok' 컬럼이 TRUE 이면 시드 정상 적용.
+-- =============================================================================
+
+SELECT '1.SCM_MST_SHEET_COLUMNS customerPSI VALID_YN=Y' AS check_item,
+       TO_CHAR(COUNT(*)) AS actual,
+       '16' AS expected,
+       CASE WHEN COUNT(*) = 16 THEN 'OK' ELSE 'FAIL' END AS result
+  FROM SCM_MGR.SCM_MST_SHEET_COLUMNS
+ WHERE PROGRAM_ID='DMF0007' AND SHEET_NAME='customerPSI' AND VALID_YN='Y'
+UNION ALL
+SELECT '2.SCM_MST_SHEET_COLUMNS customerPSI VALID_YN=N (잔존 없어야)',
+       TO_CHAR(COUNT(*)),
+       '0',
+       CASE WHEN COUNT(*) = 0 THEN 'OK' ELSE 'FAIL' END
+  FROM SCM_MGR.SCM_MST_SHEET_COLUMNS
+ WHERE PROGRAM_ID='DMF0007' AND SHEET_NAME='customerPSI' AND VALID_YN='N'
+UNION ALL
+SELECT '3.SCM_ADM_MNU_BTN_MPG_M customerPSI SEARCH+SAVE',
+       TO_CHAR(COUNT(*)),
+       '2',
+       CASE WHEN COUNT(*) = 2 THEN 'OK' ELSE 'FAIL' END
+  FROM SCM_MGR.SCM_ADM_MNU_BTN_MPG_M
+ WHERE MNU_ID='DMF0007' AND SHT_NM='customerPSI' AND MNU_BTN_CD IN ('SEARCH','SAVE') AND USE_YN='Y'
+UNION ALL
+SELECT '4.SCM_ADM_MNU_BTN_MPG_M customerPSI SEARCH → P_DMF0007_PSI_GET',
+       MAX(API_ID),
+       'P_DMF0007_PSI_GET',
+       CASE WHEN MAX(API_ID)='P_DMF0007_PSI_GET' THEN 'OK' ELSE 'FAIL' END
+  FROM SCM_MGR.SCM_ADM_MNU_BTN_MPG_M
+ WHERE MNU_ID='DMF0007' AND SHT_NM='customerPSI' AND MNU_BTN_CD='SEARCH'
+UNION ALL
+SELECT '5.SCM_ADM_MNU_BTN_MPG_M customerPSI SAVE → P_DMF0007_FCST_SAVE',
+       MAX(API_ID),
+       'P_DMF0007_FCST_SAVE',
+       CASE WHEN MAX(API_ID)='P_DMF0007_FCST_SAVE' THEN 'OK' ELSE 'FAIL' END
+  FROM SCM_MGR.SCM_ADM_MNU_BTN_MPG_M
+ WHERE MNU_ID='DMF0007' AND SHT_NM='customerPSI' AND MNU_BTN_CD='SAVE'
+UNION ALL
+SELECT '6.USER_GR_MNU_BTN_MPG_M 오타 customerPsi 잔존 0건',
+       TO_CHAR(COUNT(*)),
+       '0',
+       CASE WHEN COUNT(*) = 0 THEN 'OK' ELSE 'FAIL' END
+  FROM SCM_MGR.SCM_ADM_USER_GR_MNU_BTN_MPG_M
+ WHERE MNU_ID='DMF0007' AND SHT_NM='customerPsi'
+UNION ALL
+SELECT '7.USER_GR_MNU_BTN_MPG_M customerPSI 권한 = customerFcst 와 동일 카운트',
+       TO_CHAR((SELECT COUNT(*) FROM SCM_MGR.SCM_ADM_USER_GR_MNU_BTN_MPG_M WHERE MNU_ID='DMF0007' AND SHT_NM='customerPSI')),
+       TO_CHAR((SELECT COUNT(*) FROM SCM_MGR.SCM_ADM_USER_GR_MNU_BTN_MPG_M WHERE MNU_ID='DMF0007' AND SHT_NM='customerFcst')),
+       CASE WHEN (SELECT COUNT(*) FROM SCM_MGR.SCM_ADM_USER_GR_MNU_BTN_MPG_M WHERE MNU_ID='DMF0007' AND SHT_NM='customerPSI')
+                = (SELECT COUNT(*) FROM SCM_MGR.SCM_ADM_USER_GR_MNU_BTN_MPG_M WHERE MNU_ID='DMF0007' AND SHT_NM='customerFcst')
+            THEN 'OK' ELSE 'FAIL' END
+  FROM DUAL
+UNION ALL
+SELECT '8.PR_GET_PROC_INFO_LIST customerPSI/SEARCH 호출 가능 (ORA-01403 없음)',
+       'see Diagnose.sql for proc invocation test',
+       'no error',
+       'MANUAL'
+  FROM DUAL
+ORDER BY 1;

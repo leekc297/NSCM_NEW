@@ -1,0 +1,60 @@
+export const templateStaticColumns = [
+  {
+    colNm: 'Number Only',
+    colLblNm: 'Number Only',
+    horzAlgnCd: 'R',
+    cellCtrlObjTpCd: 'FPNumber',
+    inputTpCd: 'O',
+    colWth: 140,
+    fixed: true,
+    uppercase: true,
+    visible: true,
+    display: true,
+  },
+  {
+    colNm: 'Percent',
+    colLblNm: 'Percent',
+    horzAlgnCd: 'R',
+    cellCtrlObjTpCd: 'FPDate',
+    inputTpCd: 'O',
+    colWth: 220,
+    visible: true,
+    display: true,
+  },
+  {
+    colNm: 'Combo',
+    colLblNm: 'Combo',
+    horzAlgnCd: 'L',
+    cellCtrlObjTpCd: 'FPComboBox',
+    cellCboDataTp: 'MyDivision',
+    inputTpCd: 'O',
+    colWth: 100,
+    visible: true,
+    display: true,
+  },
+  {
+    colNm: 'CheckBox',
+    colLblNm: 'CheckBox',
+    horzAlgnCd: 'C',
+    cellCtrlObjTpCd: 'FPCheckBox',
+    inputTpCd: 'O',
+    colWth: 120,
+    visible: true,
+    display: true,
+  },
+];
+
+export const templateItemsSource = [
+  {
+    'Number Only': 12345,
+    Percent: new Date('2026-03-17'),
+    Combo: '',
+    CheckBox: true,
+  },
+  {
+    'Number Only': 98765,
+    Percent: new Date('2026-03-18'),
+    Combo: '',
+    CheckBox: false,
+  },
+];

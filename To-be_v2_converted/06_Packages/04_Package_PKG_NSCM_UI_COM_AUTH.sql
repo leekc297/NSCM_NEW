@@ -1,0 +1,170 @@
+/*=============================================================================================
+ * File         : 04_Package_PKG_NSCM_UI_COM_AUTH.sql
+ * Description  : Package — PKG_NSCM_UI_COM_AUTH
+ *              : 안전 정제만 적용 (N' 접두사 제거).
+ *              : Standalone SP와 화면 단위로 PKG 통합은 별도 후속 작업.
+ *
+ * 실행 순서   : 06_Packages 단계 (Foundation + Tables + GTT + Views 이후)
+ * 실행 계정   : SCM_MGR
+ *
+ * TODO (수동 보정 필요):
+ *   - LEFT/RIGHT OUTER JOIN → (+) 변환 (사내 표준 §7.1.6)
+ *   - @변수 잔존 시 검토
+ *   - DATEADD/CHARINDEX/STRING_SPLIT (Oracle 비존재 함수) 수동 변환
+ *   - $$PLSQL_UNIT 하드코딩 → $$PLSQL_UNIT 치환
+ *===========================================================================================*/
+
+
+-- ====== PACKAGE SPEC ======
+
+CREATE OR REPLACE PACKAGE SCM_MGR.PKG_NSCM_UI_COM_AUTH
+AS
+
+	PROCEDURE PR_CHECK_MNU_AUTH ( 
+		P_USER_ID		IN VARCHAR2,	
+		P_MNU_ID		IN VARCHAR2,
+		DATA			OUT	SYS_REFCURSOR
+	);
+
+	PROCEDURE PR_CHECK_MNU_BTN_AUTH ( 
+		P_USER_ID		IN VARCHAR2,	
+		P_MNU_ID		IN VARCHAR2,
+		P_SHT_NM		IN VARCHAR2,
+		P_MNU_BTN_CD 	IN VARCHAR2,
+		DATA			OUT	SYS_REFCURSOR
+	);
+
+	PROCEDURE PR_GET_MNU_BTN_AUTH ( 
+		P_USER_ID		IN VARCHAR2,	
+		P_MNU_ID		IN VARCHAR2,
+		DATA			OUT	SYS_REFCURSOR
+	);
+
+	PROCEDURE PR_GET_UNIT_AUTH ( 
+		P_USER_ID		IN VARCHAR2,	
+		P_MNU_ID		IN VARCHAR2,
+		DATA			OUT	SYS_REFCURSOR
+	);
+
+END PKG_NSCM_UI_COM_AUTH;
+/
+
+
+-- ====== PACKAGE BODY ======
+
+CREATE OR REPLACE PACKAGE BODY SCM_MGR.PKG_NSCM_UI_COM_AUTH
+AS
+
+
+	PROCEDURE PR_CHECK_MNU_AUTH ( 
+		P_USER_ID	IN VARCHAR2,	
+		P_MNU_ID	IN VARCHAR2,
+		DATA		OUT	SYS_REFCURSOR
+	) IS
+	
+	BEGIN
+		OPEN DATA FOR
+			SELECT CASE WHEN EXISTS (
+				SELECT	*
+				FROM	SCM_ADM_USER_GR_MPG_M UG
+					INNER JOIN SCM_ADM_USER_GR_MNU_MPG_M GM
+						ON	UG.USER_GR_ID = GM.USER_GR_ID
+				WHERE 	1=1
+				AND		UG.USER_ID = P_USER_ID
+				AND		GM.MNU_ID = P_MNU_ID
+			) THEN 'Y' ELSE '' END AS HAS_AUTH_YN
+			FROM DUAL
+			;
+	END;
+
+	PROCEDURE PR_CHECK_MNU_BTN_AUTH ( 
+		P_USER_ID		IN VARCHAR2,	
+		P_MNU_ID		IN VARCHAR2,
+		P_SHT_NM		IN VARCHAR2,
+		P_MNU_BTN_CD 	IN VARCHAR2,
+		DATA			OUT	SYS_REFCURSOR
+	) IS
+	
+	BEGIN
+		OPEN DATA FOR
+			SELECT CASE WHEN EXISTS (
+				SELECT	*
+				  FROM	SCM_ADM_USER_GR_MPG_M UG
+			INNER JOIN SCM_ADM_USER_GR_MNU_BTN_MPG_M GMB
+					ON	UG.USER_GR_ID = GMB.USER_GR_ID
+				 WHERE 	1=1
+				   AND	UG.USER_ID = P_USER_ID
+				   AND	GMB.MNU_ID = P_MNU_ID
+				   AND	GMB.SHT_NM = P_SHT_NM
+				   AND	GMB.MNU_BTN_CD = P_MNU_BTN_CD
+			) THEN 'Y' ELSE '' END AS HAS_AUTH_YN
+			FROM DUAL
+			;
+	END;
+
+	PROCEDURE PR_GET_MNU_BTN_AUTH ( 
+		P_USER_ID		IN VARCHAR2,	
+		P_MNU_ID		IN VARCHAR2,
+		DATA			OUT	SYS_REFCURSOR
+	) IS
+	
+	BEGIN
+		OPEN DATA FOR
+			SELECT  DISTINCT GM.MNU_ID, GMB.SHT_NM, GMB.MNU_BTN_CD
+			  FROM	SCM_ADM_USER_GR_MPG_M UG
+		INNER JOIN  SCM_ADM_USER_GR_MNU_MPG_M GM
+				ON	GM.USER_GR_ID = UG.USER_GR_ID
+		INNER JOIN SCM_ADM_USER_GR_MNU_BTN_MPG_M GMB
+				ON	GMB.USER_GR_ID = UG.USER_GR_ID
+			   AND  GMB.MNU_ID = GM.MNU_ID
+			 WHERE 	1=1
+			   AND 	UG.USER_ID = P_USER_ID
+			   AND	GM.MNU_ID = P_MNU_ID
+			   AND	UG.USE_YN = 'Y'
+			;
+	END;
+
+
+	PROCEDURE PR_GET_UNIT_AUTH ( 
+		P_USER_ID		IN VARCHAR2,	
+		P_MNU_ID		IN VARCHAR2,
+		DATA			OUT	SYS_REFCURSOR
+	) IS
+	
+	BEGIN
+		OPEN DATA FOR
+			SELECT	AA.UNIT_TP_CD, AA.UNIT_ID, AA.EDIT_YN
+			FROM	(
+			    	SELECT	A.UNIT_TP_CD
+			    		  , A.UNIT_ID
+			    		  , A.EDIT_YN
+			    		  , ROW_NUMBER() OVER(
+			               		PARTITION BY A.UNIT_TP_CD, A.UNIT_ID 
+			               		ORDER BY A.EDIT_YN DESC
+				           	) AS RN
+			    	FROM	(
+							SELECT	UG.USER_ID		AS USER_ID
+								  , UG.USER_GR_ID	AS USER_GR_ID
+								  , GM.MNU_ID		AS MNU_ID
+								  , UGU.UNIT_TP_CD	AS UNIT_TP_CD
+								  , UGU.UNIT_ID		AS UNIT_ID
+								  , UGU.EDIT_YN		AS EDIT_YN
+							FROM 	SCM_ADM_USER_GR_MPG_M UG
+								INNER JOIN SCM_ADM_USER_GR_MNU_MPG_M GM
+									ON	GM.USER_GR_ID = UG.USER_GR_ID
+								INNER JOIN SCM_ADM_USER_GR_UNIT_AUTH_MPG_M UGU
+									ON 	UGU.USER_ID = UG.USER_ID 
+									AND UGU.USER_GR_ID = UG.USER_GR_ID
+							WHERE 	1=1
+							AND		UG.USER_ID = P_USER_ID
+							AND		GM.MNU_ID = P_MNU_ID
+							AND		UG.USE_YN = 'Y'
+							AND 	UGU.USE_YN = 'Y'
+							) A
+					) AA
+			WHERE RN = 1
+			;
+	END;
+
+END PKG_NSCM_UI_COM_AUTH;
+/

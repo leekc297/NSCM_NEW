@@ -1,0 +1,39 @@
+.resizeHandler {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 16px;
+  height: 16px;
+  cursor: se-resize;
+  &::after {
+    content: "";
+    position: absolute;
+    right: 3px;
+    bottom: 3px;
+    width: 8px;
+    height: 8px;
+    border-right: 2px solid $commonBorderStrong;
+    border-bottom: 2px solid $commonBorderStrong;
+  }
+}
+
+.defaultDialog :global(.MuiDialog-paper), .popoverDialog :global(.MuiPaper-root) {
+  padding: 24px;
+  border-radius: 3px;
+  border: 1px solid $commonBorderStrong;
+  background-color: $commonBgBasic;
+  background-image: none;
+  box-shadow: 0px 7px 10px 0px #0000001F, 0px 0px 2px 0px #00000038;
+}
+
+.defaultDialog :global(.MuiDialog-paper) {
+  overflow: hidden;
+  max-width: none;
+  max-height: none;
+  box-sizing: border-box;
+}
+
+.draggable {
+  width: fit-content;
+  min-width: 400px,
+}

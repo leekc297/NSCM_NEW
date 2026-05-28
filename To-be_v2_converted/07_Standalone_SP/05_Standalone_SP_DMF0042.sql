@@ -1,0 +1,2 @@
+-- 본 파일의 모든 SP는 PKG_DMF0042로 흡수됨 (재처리 포함).
+-- _archive_absorbed_into_PKG/05_Standalone_SP_DMF0042.sql 참조

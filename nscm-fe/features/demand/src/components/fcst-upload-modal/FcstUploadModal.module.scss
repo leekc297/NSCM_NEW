@@ -1,0 +1,37 @@
+.inputContainer {
+  height: 48px;
+  background-color: $commonBgDeep;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  margin-bottom: 10px;
+  border: 1px solid $commonBorderBasic;
+}
+
+.uploadFile {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.buttonGroup {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.statusContainer {
+  background-color: $commonBgDeep;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  border: 1px solid $commonBorderBasic;
+  margin-bottom: 10px;
+}
+
+.statusInput {
+  & > div {
+    border: none !important;
+  }
+}

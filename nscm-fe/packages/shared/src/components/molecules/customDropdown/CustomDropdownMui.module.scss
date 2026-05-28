@@ -1,0 +1,12 @@
+.autocomplete {
+  height: 36px;
+}
+
+.customDropdown {
+  [class*='MuiInputBase-formControl'][class*='MuiAutocomplete-inputRoot'] {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    white-space: nowrap;
+  }
+}

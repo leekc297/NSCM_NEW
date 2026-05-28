@@ -1,0 +1,28 @@
+{
+  "files.encoding": "utf8",
+  "files.autoGuessEncoding": true,
+  "[sql]": { "files.encoding": "utf8" },
+  "[json]": { "files.encoding": "utf8" },
+  "[jsonc]": { "files.encoding": "utf8" },
+  "[markdown]": { "files.encoding": "utf8" },
+  "[typescript]": { "files.encoding": "utf8" },
+  "[typescriptreact]": { "files.encoding": "utf8" },
+  "[javascript]": { "files.encoding": "utf8" },
+  "[javascriptreact]": { "files.encoding": "utf8" },
+  "[xml]": { "files.encoding": "utf8" },
+  "[java]": { "files.encoding": "utf8" },
+  "[yaml]": { "files.encoding": "utf8" },
+  "[powershell]": { "files.encoding": "utf8bom" },
+  "terminal.integrated.defaultProfile.windows": "PowerShell",
+  "terminal.integrated.profiles.windows": {
+    "PowerShell": {
+      "source": "PowerShell",
+      "args": [
+        "-NoExit",
+        "-Command",
+        "chcp 65001 | Out-Null; [Console]::OutputEncoding = [System.Text.Encoding]::UTF8; $OutputEncoding = [System.Text.Encoding]::UTF8"
+      ]
+    }
+  },
+  "terminal.integrated.fontFamily": "'D2Coding', 'Cascadia Code', 'Consolas'"
+}

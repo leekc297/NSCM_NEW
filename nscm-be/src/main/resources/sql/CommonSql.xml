@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "../mybatis/mybatis-3-mapper.dtd">
+<!--
+. <DESC>  공통 호출 sql 
+. <HISTORY>
+. 2026-01-14   jayden     최초작성
+-->
+<mapper namespace="com.lgcns.nscm">
+    
+    <select id="execStmt" resultType="com.lgcns.nscm.framework.model.CustomMap">
+        ${sQuery}
+    </select>
+    
+    <!-- 프로시저 정보 검색 -->
+    <resultMap id="procInfoMap" type="com.lgcns.nscm.framework.model.CustomMap" />
+    <select id="retrieveBtnInfoList" statementType="CALLABLE" >
+		<![CDATA[
+    	{ call SCM_MGR.PKG_NSCM_UI_COMM.PR_GET_PROC_INFO_LIST( #{mnuId}, #{shtNm}, #{mnuBtnCd} 
+    		, #{@procInfo, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=procInfoMap} ) }
+    	]]>
+    </select>
+    
+    <select id="retrieveProcInfoList" statementType="CALLABLE" >
+		<![CDATA[
+    	{ call SCM_MGR.PKG_NSCM_UI_COMM.PR_GET_API_INFO_LIST( #{apiId} 
+    		, #{@procInfo, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=procInfoMap} ) }
+    	]]>
+    </select>
+    
+    <!-- 동적 프로시저 호출 -->
+    <resultMap id="data1" type="com.lgcns.nscm.framework.model.CustomMap" />
+    <resultMap id="data2" type="com.lgcns.nscm.framework.model.CustomMap" />
+    <resultMap id="data3" type="com.lgcns.nscm.framework.model.CustomMap" />
+    <resultMap id="data4" type="com.lgcns.nscm.framework.model.CustomMap" />
+    <resultMap id="data5" type="com.lgcns.nscm.framework.model.CustomMap" />
+    <resultMap id="data6" type="com.lgcns.nscm.framework.model.CustomMap" />
+    <resultMap id="data7" type="com.lgcns.nscm.framework.model.CustomMap" />
+    <resultMap id="data8" type="com.lgcns.nscm.framework.model.CustomMap" />
+    <select id="callProc" statementType="CALLABLE" resultType="java.util.HashMap">
+        ${procExec}
+    </select>
+    
+    <update id="execProc" statementType="CALLABLE">
+        ${procExec}
+    </update>
+ 
+</mapper>

@@ -1,0 +1,52 @@
+.tabArea {
+  background-color: $navTopBgBasic;
+  height: 34px;
+  border-bottom: 1px solid $commonBorderBasic;
+}
+
+.tabContainer {
+  display: flex;
+  height: 100%;
+  overflow: hidden;
+}
+
+.tab {
+  color: $commonTextDone;
+  font-family: inherit; 
+  font-weight: 300;
+  font-size: 14px;
+  border: 0;
+  border-right: 1px solid $commonBorderBasic;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  box-sizing: border-box;
+  cursor: pointer;
+  overflow: hidden;
+  white-space: nowrap;
+  justify-content: space-between;
+  &.active {
+    background-color: $commonBgBasic;
+    font-weight: 400;
+    color: $commonTextBasic;
+  }
+  &.closeOther {
+    margin-left: auto;
+  }
+}
+
+.tabContent {
+  overflow: hidden;
+  display: block;
+  text-overflow: ellipsis;
+  min-width: 0;
+  line-height: 32px;
+}
+
+.closeBtn {
+  color: $commonTextDone;
+  flex: 0 0 12px;
+  display: grid;
+  place-items: center;
+  margin-left: 12px;
+}

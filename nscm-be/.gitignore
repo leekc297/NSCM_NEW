@@ -1,0 +1,46 @@
+*.class
+
+# Package Files #
+#*.jar
+*.war
+*.ear
+
+#Gradle temporary files
+target/
+
+#Eclipse files
+**/.project
+**/.classpath
+**/.settings/
+blog/bin/
+**/.tern-project
+
+#IntelliJ files
+**/*.iml
+**/.idea
+**/.gradle
+**/.mvn
+out/
+
+#VSCode files
+.vscode/**
+bin/**
+
+#log files
+logs/
+*.log
+
+#Build Files
+build
+
+#heap dump
+*.hprof
+
+#Namo CrossEditor SaveFiles
+src/main/resources/static/namo/**
+
+/http
+
+**/data.DS_Store
+
+gradle.properties

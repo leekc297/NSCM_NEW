@@ -1,0 +1,41 @@
+local_branch="$(git rev-parse --abbrev-ref HEAD)"
+valid_branch_regex="^(main|dev|feat\/|fix\/|docs\/|style\/|refactor\/|test\/|chore\/)"
+
+if [[ ! $local_branch =~ $valid_branch_regex ]]; then
+    echo "❌ 브랜치 이름 형식이 잘못되었습니다!"
+    exit 1
+fi
+
+
+#!/bin/sh
+
+# 현재 푸시하려는 브랜치 명 가져오기
+local_branch="$(git rev-parse --abbrev-ref HEAD)"
+
+# 정규식 설명:
+# ^(feat|fix|docs|style|refactor|test|chore) : 허용된 접두사로 시작
+# \/ : 중간에 슬래시(/) 허용 (예: feat/my-task)
+# [a-z0-0-]+ : 소문자, 숫자, 하이픈(-)만 허용 (Kebab-case & 공백 금지)
+# $ : 끝
+valid_branch_regex="^dev$|^(feat|fix|docs|style|refactor|test|chore)\/[a-z0-9-]+$"
+
+# main이나 develop 브랜치는 예외로 둘 경우를 대비해 추가
+if [ "$local_branch" = "dev" ]; then
+    exit 0
+fi
+
+if [[ ! $local_branch =~ $valid_branch_regex ]]; then
+    echo ""
+    echo "❌ [Error] 브랜치명이 규칙에 맞지 않습니다!"
+    echo "규칙: <type>/<kebab-case> (공백 금지, 소문자/하이픈만 사용)"
+    echo "허용 Type: feat, fix, docs, style, refactor, test, chore"
+    echo "예시: feat/login-form, fix/api-bug"
+    echo ""
+    exit 1
+fi
+
+echo "✅ 브랜치명 검사 통과: $local_branch"
+
+# 여기서 빌드를 실행 (푸시 전 최종 확인)
+echo "type-check..."
+pnpm type-check

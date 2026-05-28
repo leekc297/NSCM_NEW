@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 60초마다 설정 파일의 변경을 확인 하여 변경시 갱신 -->
+<configuration scan="true" scanPeriod="60 seconds">
+	<!-- application.yml의 property import -->
+	<springProperty scope="context" name="LOG_ROOT_LEVEL" source="logging.level.root" />
+	<springProperty scope="context" name="LOG_APP_LEVEL" source="logging.level.nscm" />
+	<springProperty scope="context" name="LOG_SQL_LEVEL" source="logging.level.sql" />
+	<springProperty scope="context" name="LOG_FILE_PATH" source="logging.file.path" />
+	<springProperty scope="context" name="LOG_FILE_NAME" source="logging.file.name" />
+	<springProperty scope="context" name="LOG_PATTERN" source="logging.pattern" />
+	<springProperty scope="context" name="LOG_MAX_HISTORY" source="logging.max-history" />
+	
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>${LOG_PATTERN}</pattern>
+		</encoder>
+	</appender>
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_FILE_PATH}/${LOG_FILE_NAME}.log</file>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>${LOG_PATTERN}</pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_FILE_PATH}/${LOG_FILE_NAME}.%d{yyyyMMdd}.log</fileNamePattern>
+			<maxHistory>${LOG_MAX_HISTORY}</maxHistory>
+		</rollingPolicy>
+	</appender>
+
+	<!-- profile local -->
+	<springProfile name="local">
+		<root level="${LOG_ROOT_LEVEL}">
+			<appender-ref ref="CONSOLE" />
+			<appender-ref ref="FILE" />
+		</root>
+		<logger name="com.lgcns.nscm" level="${LOG_APP_LEVEL}" additivity="false">
+			<appender-ref ref="CONSOLE" />
+			<appender-ref ref="FILE" />
+		</logger>
+		<logger name="org.apache.myBatis" level="${LOG_SQL_LEVEL}" additivity="false">
+			<appender-ref ref="CONSOLE" />
+		</logger>
+	</springProfile>
+	
+	<!-- profile dev,qa,prod -->
+	<springProfile name="dev,qa,prd">
+		<root level="${LOG_ROOT_LEVEL}">
+			<appender-ref ref="CONSOLE" />
+<!--			<appender-ref ref="FILE" />-->
+		</root>
+		<logger name="com.lgcns.nscm" level="${LOG_APP_LEVEL}" additivity="false">
+			<appender-ref ref="CONSOLE" />
+<!--			<appender-ref ref="FILE" />-->
+		</logger>
+		<logger name="org.apache.myBatis" level="${LOG_SQL_LEVEL}" additivity="false">
+			<appender-ref ref="CONSOLE" />
+<!--			<appender-ref ref="FILE" />-->
+		</logger>
+	</springProfile>
+
+	<!-- 모든 profile 공통 설정 -->
+	<logger name="jdbc.resultset" level="OFF"/>
+	<logger name="jdbc.sqltiming" level="OFF"/>
+	<logger name="jdbc.audit" level="OFF"/>
+	<logger name="jdbc.resultsettable" level="OFF"/>
+	<logger name="jdbc.connection" level="OFF"/>
+</configuration>

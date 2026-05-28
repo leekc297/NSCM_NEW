@@ -1,0 +1,203 @@
+plugins {
+    id 'org.springframework.boot' version '3.5.5'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java-library'
+    id 'com.diffplug.spotless' version '6.3.0'
+    id 'java'
+    id 'war'
+}
+
+group = 'com.lgcns'
+version = '0.0.1-SNAPSHOT'
+description = 'nscm'
+
+java {
+    // 2026-05-26 로컬 개발: Java 21 toolchain 자동 다운로드 (시스템에 21 미설치 환경 대비)
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+repositories {
+    // 2026-05-26 로컬 개발: 사내 Nexus 차단 → mavenCentral 대체
+    // 원본 (사내) : maven { url "http://10.94.57.6:8081/repository/maven-public/" }
+    mavenCentral()
+}
+
+configurations.all {
+    exclude group: 'commons-logging', module: 'commons-logging'
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-configuration-processor'
+
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.5'
+    implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
+
+    implementation 'org.apache.commons:commons-configuration2:2.12.0'
+    implementation 'org.apache.commons:commons-lang3'
+    implementation 'org.apache.commons:commons-pool2'
+    implementation 'org.apache.commons:commons-compress:1.28.0'
+    implementation 'org.apache.commons:commons-dbcp2'
+    implementation 'org.apache.commons:commons-text:1.15.0'
+    implementation 'org.apache.commons:commons-fileupload2-jakarta-servlet6:2.0.0-M4'
+
+    implementation 'org.apache.poi:poi:5.4.1'
+    implementation 'org.apache.poi:poi-ooxml:5.4.1'
+
+    implementation 'commons-codec:commons-codec'
+    implementation 'commons-net:commons-net:3.12.0'
+    implementation 'commons-discovery:commons-discovery:0.5'
+    implementation 'commons-io:commons-io'
+
+    implementation 'com.google.code.gson:gson'
+    implementation 'com.google.guava:guava:33.4.8-jre'
+    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+
+    implementation 'com.fasterxml.jackson.core:jackson-core'
+    implementation 'com.jayway.jsonpath:json-path'
+    implementation 'jakarta.mail:jakarta.mail-api'
+    implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4:1.16'
+    implementation 'com.github.mwiede:jsch:2.27.3'
+
+    implementation 'org.springframework:spring-core'
+    implementation 'org.springframework:spring-context'
+
+    implementation 'com.microsoft.sqlserver:mssql-jdbc:12.4.2.jre11'			// mssql 설정  26.01.13
+    implementation 'com.oracle.database.jdbc:ojdbc11:23.3.0.23.09'				// oracle 설정 26.01.13
+    implementation 'com.oracle.database.jdbc:ucp11:23.3.0.23.09'				// 대용량 처리 및 커넥션 풀 성능 향상을 위한 Oracle Connection Pool (선택 사항)
+
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.0'	// swagger 설정 26.01.16
+    implementation 'org.springframework.boot:spring-boot-starter-validation'	// validator 추가 26.01.16
+
+    implementation 'com.github.f4b6a3:ulid-creator:5.2.2'						// ULID 유틸 26.02.10
+
+    implementation 'org.springframework.boot:spring-boot-starter-mail'			// 메일발송을 위한 구현체 추가 26.02.19
+
+    implementation 'org.json:json:20231013'										// json과 xml 파싱을 위한 추가 26.03.04 -- wsdl 공통화에서 사용
+
+//	implementation 'com.sap.conn.jco:sapjco3:3.0.14'							// RFC 통신을 위한 라이브러리 추가 26.03.04
+    implementation files('lib/sapjco3.jar')
+//	providedRuntime 'com.sap.conn.jco:sapjco3:3.0.14'
+
+    implementation 'org.springframework.boot:spring-boot-starter-web-services'	// // Spring Web Services 코어 (WebServiceTemplate 포함) 26.03.04
+    implementation 'org.springframework:spring-oxm'								// XML 마샬링/언마샬링을 위한 라이브러리 (JAXB 등 사용 시) 26.03.04
+
+    implementation 'org.apache.poi:poi-ooxml:5.2.3'								// 엑셀 파싱 2026.03.25
+
+    // LG Energy Solution SSO 라이브러리
+    // 2026.02.23 Minyong Lee : SSO 개발 임시 중단, QA 서버 구비 시 재개 예정
+//    implementation files('lib/sso/external_v4.2.1.00_LGEnSol_38.jar')
+//    implementation files('lib/sso/INICrypto_v4.2.8.jar')
+//    implementation files('lib/sso/jdom.jar')
+//    implementation files('lib/sso/log4j-1.2.16.jar')
+//    implementation files('lib/sso/poolit.jar')
+//    implementation files('lib/sso/xercesImpl.jar')
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params'
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+}
+
+bootWar {
+    archiveFileName = 'nscm.war'
+
+    filesMatching("**/sapjco3-*.jar") {
+        name = "sapjco3.jar"
+    }
+
+    // JCo가 내부에서 풀려서 실행되도록 강제함
+    requiresUnpack '**/sapjco3.jar'
+
+}
+
+bootRun {
+//    jvmArgs = ['-Djvm.jasypt-encryptor-password=ThisisWebFrameworkSecurityKey']
+}
+
+
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+    options.compilerArgs.add("-parameters")
+}
+
+test {
+    useJUnitPlatform()
+    systemProperty 'file.encoding', 'UTF-8'
+}
+
+spotless {
+    lineEndings 'UNIX'
+
+    java {
+        // [수정] -PspotlessFiles 속성이 있으면 해당 파일만, 없으면 전체 src 폴더 대상
+        if (project.hasProperty('spotlessFiles')) {
+            target project.property('spotlessFiles').split(',').findAll { it.endsWith('.java') }
+        } else {
+            target 'src/**/*.java'
+        }
+        lineEndings 'UNIX'
+        importOrder 'java', 'javax', 'org', 'com', ''
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+
+    format 'misc', {
+        // [수정] 동일하게 -PspotlessFiles 속성이 있으면 해당 파일들만 필터링해서 타겟팅
+        if (project.hasProperty('spotlessFiles')) {
+            target project.property('spotlessFiles').split(',').findAll {
+                it.endsWith('.yml') || it.endsWith('.gradle') || it.endsWith('.md')
+            }
+        } else {
+            target '**/*.yml', '**/*.gradle', '**/*.md', '**/.gitignore'
+        }
+
+        indentWithSpaces(4)
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+}
+
+// Git Hook 설치 Task
+tasks.register('installGitHooks', Copy) {
+  group = 'setup'
+  description = 'Install the git hooks from scripts directory.'
+    from new File(rootProject.rootDir, 'scripts/pre-commit')
+    into new File(rootProject.rootDir, '.git/hooks')
+    fileMode 0755
+}
+
+tasks.withType(Javadoc) {
+    options {
+        // 한글 깨짐 방지 설정 (필수)
+        encoding = 'UTF-8'
+        charSet = 'UTF-8'
+        docEncoding = 'UTF-8'
+
+        // 커스텀 태그 등록: -tag "태그명:위치:헤더명"
+        // 위치 'a' (all)는 클래스, 메서드, 필드 등 모든 곳에서 사용 가능함을 의미합니다.
+        tags = [
+            'Project:a:Project:',
+            'Package:a:Package:',
+            'FileName:a:File Name:',
+            'date:a:Date:',
+            'description:a:Description:'
+        ]
+
+        // 에러가 있어도 빌드를 중단하지 않으려면 (선택 사항)
+        // failOnError = false
+    }
+}

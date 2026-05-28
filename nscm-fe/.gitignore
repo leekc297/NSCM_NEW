@@ -1,0 +1,37 @@
+# Dependencies
+node_modules/
+/.pnp
+.pnp.js
+
+# Build outputs
+dist/
+build/
+/out
+.report/
+.turbo/
+
+# Environment
+.env.local
+.env.production
+.env.*.local
+
+# IDE
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Cache
+.cache/
+
+# locale
+public/locales/*.json
+configs/types/generated-keys.d.ts

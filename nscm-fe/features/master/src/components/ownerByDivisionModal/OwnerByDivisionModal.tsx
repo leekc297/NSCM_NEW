@@ -1,0 +1,268 @@
+import { CellType, type FlexGrid } from '@mescius/wijmo.grid';
+import { useEffect, useRef, useState } from 'react';
+
+import _ from '@foundation/lodash';
+import { GridUtils } from '@foundation/utils';
+import { CustomDropdown, SearchArea, DataGrid, CustomDialog } from '@shared/components';
+import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
+import { Button, FormItem, InputField } from '@shared/lges';
+import { ControlConfirmIcon } from '@shared/lges-icons';
+import { Grid } from '@shared/mui';
+
+import {
+  MODAL_OWNER_BY_DIVISION,
+  MODAL_SHEET_OWNER_BY_DIVISION,
+} from './owner-by-division-modal.constants';
+import styles from './OwnerByDivisionModal.module.scss';
+import { useOwnerByDivisionModalStore } from './ownerByDivisionModalStore';
+
+interface OwnerByDivisionModalProps {
+  open: boolean;
+  modalClose: () => void;
+  setSelectedValue: (owners: string) => void;
+  preSearchParams: ProcRequest<MODAL_OWNER_BY_DIVISION, MODAL_SHEET_OWNER_BY_DIVISION>;
+  ownerId?: string;
+}
+
+export const OwnerByDivisionModal = ({
+  open,
+  modalClose,
+  setSelectedValue,
+  preSearchParams,
+  ownerId = '',
+}: OwnerByDivisionModalProps) => {
+  const { t } = useTranslation();
+
+  const gridRef =
+    useRef<
+      FlexGrid<ResponseData<MODAL_OWNER_BY_DIVISION, MODAL_SHEET_OWNER_BY_DIVISION, 'o_rc1'>>
+    >();
+
+  const initialized = useOwnerByDivisionModalStore(state => state.initialized);
+  const staticColumns = useOwnerByDivisionModalStore(state => state.staticColumns);
+  const fetchStaticColumns = useOwnerByDivisionModalStore(state => state.fetchStaticColumns);
+
+  const [divisions, teams, endCustomers, salesSites] = useTabComboQueries({
+    filters: ['MyDivision', 'TeambyDivision', 'EndCustomer', 'SalesSite'],
+  });
+
+  const [searchParam, setSearchParam] = useState<
+    ProcRequest<MODAL_OWNER_BY_DIVISION, MODAL_SHEET_OWNER_BY_DIVISION>
+  >({} as ProcRequest<MODAL_OWNER_BY_DIVISION, MODAL_SHEET_OWNER_BY_DIVISION>);
+
+  const [modalFilters, setModalFilters] = useState<{
+    owner: string;
+  }>({ owner: '' });
+
+  const { data: ownerData } = useTabProcQuery<MODAL_OWNER_BY_DIVISION>({
+    menuId: MODAL_OWNER_BY_DIVISION,
+    sheetName: MODAL_SHEET_OWNER_BY_DIVISION,
+    tabId: 'OwnerByDivisionModal',
+    filters: searchParam,
+    enabled: open,
+  });
+
+  const itemsSource = (ownerData?.o_rc1 ?? []).filter(owner =>
+    (owner.OWNER ?? '').toLowerCase().includes(modalFilters.owner.toLowerCase())
+  );
+
+  const handleOwnerChange = _.debounce((owner: string) => {
+    setModalFilters({
+      owner: owner,
+    });
+  }, 50);
+
+  const handleSubmit = () => {
+    const selections = gridRef.current?.selectedItems as ResponseData<
+      MODAL_OWNER_BY_DIVISION,
+      MODAL_SHEET_OWNER_BY_DIVISION,
+      'o_rc1'
+    >[];
+
+    if (!selections) return;
+
+    const owners = selections.map(item => item.OWNER).join(',');
+
+    setSelectedValue(owners);
+    modalClose();
+  };
+
+  const handleDblClick = (mouseEvent: MouseEvent) => {
+    const grid = gridRef.current;
+    if (!grid) return;
+
+    const ht = grid.hitTest(mouseEvent);
+    if (ht.cellType !== CellType.Cell) return;
+
+    const dataItem = GridUtils.getRow(grid, ht.row);
+    if (!dataItem) return;
+
+    setSelectedValue(dataItem.OWNER);
+    modalClose();
+  };
+
+  useEffect(() => {
+    if (!open) return;
+    setModalFilters({ owner: ownerId });
+    setSearchParam({ ...preSearchParams, owner: '' });
+    if (!initialized) void fetchStaticColumns();
+  }, [open]);
+
+  return (
+    <CustomDialog
+      size={1200}
+      type='modaless'
+      position='basic'
+      open={open}
+      handleClose={modalClose}
+      customHeaderTitle={
+        <div className='headerContainer'>
+          <div className='headerDot' />
+          <h2 className='headerTitle'>{t('LBL00336', '_OwnerByDivisionPopup')}</h2>
+        </div>
+      }
+      customContentArea={
+        <div className={styles.dialogContentWrapper}>
+          <SearchArea
+            conditions={
+              <>
+                <Grid size={4}>
+                  <FormItem
+                    label={t('LBL00001', '_Div.')}
+                    labelAlign='right'
+                    render={() => (
+                      <CustomDropdown
+                        mandatory
+                        disabled
+                        value={searchParam?.divisionId ?? ''}
+                        options={
+                          divisions?.map(item => ({ label: item.NAME, value: item.CODE })) ?? []
+                        }
+                      />
+                    )}
+                  />
+                </Grid>
+                <Grid size={4}>
+                  <FormItem
+                    label={t('LBL00044', '_Team')}
+                    labelAlign='right'
+                    render={() => (
+                      <CustomDropdown
+                        mandatory
+                        multiple
+                        disabled
+                        limitTags={1}
+                        value={searchParam.deptId}
+                        options={[
+                          ...new Map(
+                            (teams ?? [])
+                              .filter(item => item.DIVISION_ID === searchParam.divisionId)
+                              .map(item => [`${item.DIVISION_ID}|${item.CODE}`, item])
+                          ).values(),
+                        ].map(item => ({ label: item.NAME, value: item.CODE }))}
+                      />
+                    )}
+                  />
+                </Grid>
+                <Grid size={4}>
+                  <FormItem
+                    label={t('LBL00080', '_End Customer')}
+                    labelAlign='right'
+                    render={() => (
+                      <CustomDropdown
+                        multiple
+                        disabled
+                        limitTags={1}
+                        value={searchParam.endCustomer}
+                        options={
+                          [
+                            ...new Map(
+                              endCustomers
+                                ?.filter(
+                                  item =>
+                                    item.DIVISION_ID === searchParam.divisionId &&
+                                    (searchParam.deptId === 'ALL' ||
+                                      searchParam.deptId?.split(',').includes(item.DEPT_ID))
+                                )
+                                .map(item => [`${item.DIVISION_ID}|${item.CODE}`, item])
+                            ).values(),
+                          ].map(item => ({ label: item.NAME, value: item.CODE })) ?? []
+                        }
+                      />
+                    )}
+                  />
+                </Grid>
+                <Grid size={4}>
+                  <FormItem
+                    label={t('LBL00011', '_Sales Site')}
+                    labelAlign='right'
+                    render={() => (
+                      <CustomDropdown
+                        multiple
+                        disabled
+                        limitTags={1}
+                        value={searchParam.salesSite}
+                        options={[
+                          ...new Map(
+                            (salesSites ?? [])
+                              .filter(
+                                item =>
+                                  item.DIVISION_ID === searchParam.divisionId &&
+                                  (searchParam.deptId === 'ALL' ||
+                                    searchParam.deptId?.split(',').includes(item.DEPT_ID))
+                              )
+                              .map(item => [`${item.DIVISION_ID}|${item.CODE}`, item])
+                          ).values(),
+                        ].map(item => ({ label: item.NAME, value: item.CODE }))}
+                      />
+                    )}
+                  />
+                </Grid>
+                <Grid size={4}>
+                  <FormItem
+                    label={t('LBL00082', '_Owner')}
+                    labelAlign='right'
+                    render={() => (
+                      <InputField
+                        fullWidth
+                        defaultValue={preSearchParams.owner ?? ''}
+                        onChange={e => handleOwnerChange(e.target.value)}
+                      />
+                    )}
+                  />
+                </Grid>
+              </>
+            }
+          />
+          <div className={styles.gridWrapper}>
+            <DataGrid<ResponseData<MODAL_OWNER_BY_DIVISION, MODAL_SHEET_OWNER_BY_DIVISION, 'o_rc1'>>
+              gridRef={gridRef}
+              isReadOnly
+              staticColumns={staticColumns}
+              itemsSource={itemsSource}
+              dblClick={handleDblClick}
+            />
+          </div>
+          <div className={styles.buttonWrapper}>
+            <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel='Close'
+              onClick={modalClose}
+            />
+            <Button
+              appearance='contained'
+              buttonLabel='OK'
+              iconComponent={<ControlConfirmIcon size='small' />}
+              iconPosition='leading'
+              priority='primary'
+              size='medium'
+              onClick={handleSubmit}
+            />
+          </div>
+        </div>
+      }
+    />
+  );
+};

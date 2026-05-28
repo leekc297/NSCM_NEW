@@ -1,0 +1,72 @@
+-- =============================================================================
+-- DMF0007 — Customer PSI TabPage 활성화 시드 (DBeaver 호환)
+-- =============================================================================
+-- DBeaver Ctrl+Alt+Enter (Execute SQL Script) 로 실행
+-- (SQL*Plus 명령어 SET/PROMPT/WHENEVER 제거, `/` 미사용, 단일 BLOCK 단위 ;)
+-- =============================================================================
+
+-- BLOCK 1: SCM_MST_SHEET_COLUMNS customerPSI VALID_YN N→Y
+UPDATE SCM_MGR.SCM_MST_SHEET_COLUMNS
+   SET VALID_YN = 'Y'
+     , LAST_UPDATED_BY = 'minyonglee1'
+     , LAST_UPDATE_DATE = SYSDATE
+ WHERE PROGRAM_ID = 'DMF0007'
+   AND SHEET_NAME = 'customerPSI'
+   AND VALID_YN = 'N';
+
+-- BLOCK 2-1: SCM_ADM_MNU_BTN_MPG_M (DMF0007, customerPSI, SEARCH)
+INSERT INTO SCM_MGR.SCM_ADM_MNU_BTN_MPG_M
+  (MNU_ID, SHT_NM, MNU_BTN_CD, API_ID, USE_YN, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+SELECT 'DMF0007', 'customerPSI', 'SEARCH', 'P_DMF0007_PSI_GET', 'Y', 'minyonglee1', SYSDATE, 'minyonglee1', SYSDATE FROM DUAL
+ WHERE NOT EXISTS (
+   SELECT 1 FROM SCM_MGR.SCM_ADM_MNU_BTN_MPG_M
+    WHERE MNU_ID='DMF0007' AND SHT_NM='customerPSI' AND MNU_BTN_CD='SEARCH'
+ );
+
+-- BLOCK 2-2: SCM_ADM_MNU_BTN_MPG_M (DMF0007, customerPSI, SAVE)
+INSERT INTO SCM_MGR.SCM_ADM_MNU_BTN_MPG_M
+  (MNU_ID, SHT_NM, MNU_BTN_CD, API_ID, USE_YN, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+SELECT 'DMF0007', 'customerPSI', 'SAVE', 'P_DMF0007_FCST_SAVE', 'Y', 'minyonglee1', SYSDATE, 'minyonglee1', SYSDATE FROM DUAL
+ WHERE NOT EXISTS (
+   SELECT 1 FROM SCM_MGR.SCM_ADM_MNU_BTN_MPG_M
+    WHERE MNU_ID='DMF0007' AND SHT_NM='customerPSI' AND MNU_BTN_CD='SAVE'
+ );
+
+-- BLOCK 3-1: 'customerPsi' 오타 정정 → 'customerPSI'
+UPDATE SCM_MGR.SCM_ADM_USER_GR_MNU_BTN_MPG_M
+   SET SHT_NM = 'customerPSI'
+     , LAST_UPDATED_BY = 'minyonglee1'
+     , LAST_UPDATE_DATE = SYSDATE
+ WHERE MNU_ID = 'DMF0007'
+   AND SHT_NM = 'customerPsi'
+   AND MNU_BTN_CD IN ('SEARCH','SAVE')
+   AND NOT EXISTS (
+     SELECT 1 FROM SCM_MGR.SCM_ADM_USER_GR_MNU_BTN_MPG_M b
+      WHERE b.USER_GR_ID = SCM_ADM_USER_GR_MNU_BTN_MPG_M.USER_GR_ID
+        AND b.MNU_ID = 'DMF0007'
+        AND b.SHT_NM = 'customerPSI'
+        AND b.MNU_BTN_CD = SCM_ADM_USER_GR_MNU_BTN_MPG_M.MNU_BTN_CD
+   );
+
+-- BLOCK 3-2: 잔존 'customerPsi' 오타 행 삭제
+DELETE FROM SCM_MGR.SCM_ADM_USER_GR_MNU_BTN_MPG_M
+ WHERE MNU_ID = 'DMF0007'
+   AND SHT_NM = 'customerPsi';
+
+-- BLOCK 3-3: customerFcst 권한 → customerPSI 권한 복제 (없는 행만)
+INSERT INTO SCM_MGR.SCM_ADM_USER_GR_MNU_BTN_MPG_M
+  (USER_GR_ID, MNU_ID, SHT_NM, MNU_BTN_CD, USE_YN, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+SELECT FCST.USER_GR_ID, FCST.MNU_ID, 'customerPSI', FCST.MNU_BTN_CD, FCST.USE_YN,
+       'minyonglee1', SYSDATE, 'minyonglee1', SYSDATE
+  FROM SCM_MGR.SCM_ADM_USER_GR_MNU_BTN_MPG_M FCST
+ WHERE FCST.MNU_ID = 'DMF0007'
+   AND FCST.SHT_NM = 'customerFcst'
+   AND NOT EXISTS (
+     SELECT 1 FROM SCM_MGR.SCM_ADM_USER_GR_MNU_BTN_MPG_M B
+      WHERE B.USER_GR_ID = FCST.USER_GR_ID
+        AND B.MNU_ID = 'DMF0007'
+        AND B.SHT_NM = 'customerPSI'
+        AND B.MNU_BTN_CD = FCST.MNU_BTN_CD
+   );
+
+COMMIT;

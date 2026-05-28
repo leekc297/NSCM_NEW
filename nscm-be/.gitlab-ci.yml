@@ -1,0 +1,96 @@
+# This file is a template, and might need editing before it works on your project.
+# This is a sample GitLab CI/CD configuration file that should run without any modifications.
+# It demonstrates a basic 3 stage CI/CD pipeline. Instead of real tests or scripts,
+# it uses echo commands to simulate the pipeline execution.
+#
+# A pipeline is composed of independent jobs that run scripts, grouped into stages.
+# Stages run in sequential order, but jobs within stages run in parallel.
+#
+# For more information, see: https://docs.gitlab.com/ee/ci/yaml/index.html#stages
+#
+# You can copy and paste this template into a new `.gitlab-ci.yml` file.
+# You should not add this template to an existing `.gitlab-ci.yml` file by using the `include:` keyword.
+#
+# To contribute improvements to CI/CD templates, please follow the Development guide at:
+# https://docs.gitlab.com/ee/development/cicd/templates.html
+# This specific template is located at:
+# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
+---
+image: eclipse-temurin:21-jdk-jammy
+
+stages:
+  - build
+  - test
+  - deploy
+
+variables:
+  GRADLE_USER_HOME: "$CI_PROJECT_DIR/.gradle"
+  SERVER_USER: "grdsvc01"        # 접속할 계정명
+  SERVER_IP: "10.34.220.80"
+
+cache:
+  key: gradle-cache-shared
+  paths:
+    - .gradle/wrapper
+    - .gradle/caches
+build-job:
+  stage: build
+  tags:
+    - dev
+  script:
+    - chmod +x gradlew
+#    - ./gradlew clean bootWar -PnexusUsername=anonymous
+    - ./gradlew spotlessApply
+    - ./gradlew build -x test
+  artifacts:
+    paths:
+    - build/libs/nscm.war
+    expire_in: 1 day
+test-job:
+  stage: test
+  script:
+  - chmod +x gradlew
+  - ./gradlew test
+  artifacts:
+    when: always
+    reports:
+      junit: build/test-results/test/**/TEST-*.xml  # GitLab이 이 경로의 XML을 읽어 대시보드에 표시
+    paths:
+      - build/reports/tests/test/  # HTML 리포트 전체를 아티팩트로 저장 (웹에서 확인 가능)
+    expire_in: 1 week
+deploy-job:
+  stage: deploy
+  image: eclipse-temurin:21-jdk-jammy
+  before_script:
+    - apt-get update && apt-get install -y openssh-client
+    - eval $(ssh-agent -s)
+
+    # 1. 변수(문자열)를 파일로 저장
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    # echo 대신 printf를 써야 개인키의 줄바꿈 형식이 깨지지 않습니다.
+    - printf "%s\n" "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+
+    # 2. 에이전트에 키 등록
+    - ssh-add ~/.ssh/id_rsa
+
+  script:
+    - |
+      echo "1. 기존 프로세스 종료 (nscm.war)"
+      # pkill이 실패해도(프로세스가 없어도) 잡이 중단되지 않게 || true 처리
+      # ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "pkill -f nscm.war || echo 'No process running'"
+
+      echo "2. 파일 전송 및 교체 (/home/grdsvc01/sorc001/nscm.war)"
+      # build/libs 폴더의 war 파일을 서버의 nscm.war 이름으로 바로 전송
+      scp -o StrictHostKeyChecking=no build/libs/nscm.war $SERVER_USER@$SERVER_IP:/home/sorc001/nscm.war
+
+      echo "3. 새 프로세스 시작"
+      # nohup으로 백그라운드 실행 후 로그는 nscm_out.log에 기록
+      # ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "nohup java -jar /home/sorc001/nscm.war > /home/sorc001/nscm_out.log 2>&1 &"
+
+      echo "배포 완료!"
+  environment:
+    name: production
+  only:
+    - dev

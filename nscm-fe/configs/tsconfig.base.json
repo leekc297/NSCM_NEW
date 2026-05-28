@@ -1,0 +1,51 @@
+{
+  "compilerOptions": {
+    "target": "ES2023",
+    "allowJs": true,
+    "outDir": "dist",
+    "useDefineForClassFields": true,
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noFallthroughCasesInSwitch": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "incremental": true,
+    "tsBuildInfoFile": "./node_modules/.cache/tsbuildinfo",
+    "paths": {
+      "@mock/*": ["__mocks__/*"],
+      "@admin/*": ["features/admin/src/pages/*/index.ts"],
+      "@authority/*": ["features/authority/src/pages/*/index.ts"],
+      "@master/*": ["features/master/src/pages/*/index.ts"],
+      "@demand/*": ["features/demand/src/pages/*/index.ts"],
+      "@supply/*": ["features/supply/src/pages/*/index.ts"],
+      "@factory/*": ["features/factory/src/pages/*/index.ts"],
+      "@shipping/*": ["features/shipping/src/pages/*/index.ts"],
+      "@report/*": ["features/report/src/pages/*/index.ts"],
+      "@foundation/*": [
+        "packages/foundation/src/*/index.ts",
+        "packages/foundation/src/lib/*.ts",
+        "packages/foundation/src/*.ts"
+      ],
+
+      "@shared/*": [
+        "packages/shared/src/*/index.ts",
+        "packages/shared/src/lib/*.ts",
+        "packages/shared/src/*.ts"
+      ],
+    }
+  },
+  "references": [
+    { "path": "../packages/foundation" } // 인터페이스가 정의된 경로
+  ]
+}

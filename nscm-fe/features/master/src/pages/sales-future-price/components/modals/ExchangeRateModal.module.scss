@@ -1,0 +1,22 @@
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 1080px;
+  min-height: 480px;
+}
+
+.filterBar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 8px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+}
+
+.actionBar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}

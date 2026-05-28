@@ -1,0 +1,71 @@
+# [qa profile 설정]
+config:
+  datasources[0]: # ORACLE
+    databaseName: nscm_oracle
+    databaseType: oracle
+#    driverClassName: oracle.jdbc.OracleDriver
+#    jdbc-url: jdbc:oracle:thin:@10.34.220.81:2521:ESSCMD
+    driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    jdbc-url: jdbc:log4jdbc:oracle:thin:@10.34.220.81:2521:ESSCMD
+    username: SCMD_APP
+    password: "!SCMroqkf2026"
+    maxPoolSize: 10
+    minIdel: 10
+#    connectionTestQuery: "select 1 from dual"
+    mapperLocations: classpath:/sql/**/*.xml
+    configLocations: classpath:/mybatis/mybatis-config.xml
+  datasources[1]: # MS-SQL
+    databaseName: nscm_mssql
+    databaseType: mssql
+    driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    jdbc-url: jdbc:log4jdbc:sqlserver://165.244.95.223:1433;databaseName=NSCM_DEV;encrypt=false;trustServerCertificate=true
+    username: scp_mgr_dev
+    password: 1234qwer
+    maxPoolSize: 10
+    minIdel: 10
+#    connectionTestQuery: "select 1"
+    mapperLocations: "classpath:/sql/**/*.xml"
+    configLocations: "classpath:/mybatis/mybatis-config.xml"
+
+  domain:
+    fe: "http://localhost:3000/"
+    be: "http://localhost:8080/"
+
+  sso:
+    service-name: "LESAGSCMUIDOA01"
+    server-url: "http://nscm-server.dev.lgensol.com"
+    server-port: "7070"
+    nls-url: "http://gssodev.lgensol.com"
+    nls-port: "8001"
+    nls-login-url-suffix: "/nls3/clientLogin.jsp"
+    nls-logout-url-suffix: "/nls3/NCLogout.jsp"
+    nls-error-url-suffix: "/nls3/error.jsp"
+    ascp-url-suffix: "/sso/login_exec"
+    nd-url: "http://gssodev.lgensol.com:5480"
+    sso-domain: ".lgensol.com"
+    toa: "1"
+#    redirect-suffix: "" # ascp-url-suffix 사용하면 될듯?
+    cookie-session-timeout: 3000000
+    timeout: 15000
+    provider-list:
+      - "ssodev.lgensol.com"
+      - "ssolesdev.lgchem.com"
+      - "gssodev.ultiumcell.com"
+      - "gssodev.lgensol.com"
+      - "sso.lgensol.com"
+      - "ssoles.lgchem.com"
+      - "gsso.lgensol.com"
+      - "gssoles.lgchem.com"
+      - "gsso.ultiumcell.com"
+
+# logback-spring.xml에서 import되는 property
+logging:
+  level:
+    root: WARN
+    nscm: INFO
+    sql: INFO
+  file:
+    path: /logs001/lena/1.3/nscmwas01-8080
+    name: nscm
+  pattern: "%d{HH:mm:ss} %-5level %X{txId} %X{requestUri} %logger{50} - %msg%n"
+  max-history: 3 # day

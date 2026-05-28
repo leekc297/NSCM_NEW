@@ -1,0 +1,164 @@
+image: node:20
+
+stages:
+  - branch-strategy
+  - install
+  - check
+  - build
+  - deploy
+  - reload_locale
+
+variables:
+  PNPM_HOME: '.pnpm-store'
+  TURBO_CACHE_DIR: '.turbo/cache'
+  DEPLOY_PATH: '/engn001/lenaw/1.3/servers/nscmweb01-8090/htdocs'
+  LOCALE_ONLY:
+    value: 'false'
+    description: '로캘 파일만 단독으로 업데이트하려면 true를 입력하세요.'
+
+default:
+  tags:
+    - dev
+
+before_script:
+  - cd $CI_PROJECT_DIR
+  - npm config set registry http://10.94.57.6:8081/repository/npm-group/
+  - npm install -g pnpm@10.28.2
+  - echo "before_script Success!!"
+
+cache:
+  key: 'cache-$CI_COMMIT_REF_SLUG'
+
+  fallback_keys:
+    - 'cache-$CI_MERGE_REQUEST_TARGET_BRANCH_NAME'
+    - 'cache-dev'
+    - 'cache-stage'
+    - 'cache-main'
+
+  paths:
+    - .pnpm-store
+    - node_modules
+    - .turbo/cache
+
+# 0. branch-strategy
+check-branch-strategy:
+  stage: branch-strategy
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+  script:
+    - echo "check-branch-strategy. source ($CI_MERGE_REQUEST_SOURCE_BRANCH_NAME) -> target ($CI_MERGE_REQUEST_TARGET_BRANCH_NAME)"
+    - |
+      ALLOWED=false
+
+      if [ "$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME" == "stage" ] && [ "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" == "main" ]; then
+        ALLOWED=true
+
+      elif [ "$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME" == "dev" ] && [ "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" == "stage" ]; then
+        ALLOWED=true
+
+      elif [ "$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME" != "stage" ] && [ "$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME" != "dev" ] && [ "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" == "dev" ]; then
+        ALLOWED=true
+      fi
+
+      if [ "$ALLOWED" = true ]; then
+        echo "✅ 브랜치 전략에 부합합니다. 파이프라인을 계속 진행합니다."
+      else
+        echo "❌ [에러] 브랜치 전략 위반!"
+        echo "규칙: stage -> main / dev -> stage / others -> dev"
+        echo "현재 시도: $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME -> $CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
+        exit 1
+      fi
+
+# 1. 의존성 설치
+install_dependencies:
+  stage: install
+  script:
+    - pnpm install --frozen-lockfile
+  rules:
+    - if: $LOCALE_ONLY == "true"
+      when: never
+    - if: $CI_COMMIT_BRANCH =~ /^(main|stage|dev)$/
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^(main|stage|dev)$/
+
+# 2. 코드 퀄리티 체크
+static_analysis:
+  stage: check
+  script:
+    - pnpm lint --cache-dir=$TURBO_CACHE_DIR
+    - pnpm type-check --cache-dir=$TURBO_CACHE_DIR
+  rules:
+    - if: $LOCALE_ONLY == "true"
+      when: never
+    - if: $CI_COMMIT_BRANCH =~ /^(main|stage|dev)$/
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^(main|stage|dev)$/
+
+# 3. 빌드
+build_project:
+  stage: build
+  script:
+    - |
+      if [ -f "./apps/web/.env.$CI_COMMIT_BRANCH" ]; then
+        cp ./apps/web/.env.$CI_COMMIT_BRANCH ./apps/web/.env.production
+      fi
+    - pnpm build --cache-dir=$TURBO_CACHE_DIR
+  artifacts:
+    paths:
+      - apps/web/dist/
+    expire_in: 1 day
+  rules:
+    - if: $LOCALE_ONLY == "true"
+      when: never
+    - if: $CI_COMMIT_BRANCH =~ /^(main|stage|dev)$/
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^(main|stage|dev)$/
+
+# 4. 배포
+deploy_to_dev:
+  stage: deploy
+  cache:
+    - key: 'locale-cache-$CI_COMMIT_REF_SLUG'
+      paths:
+        - public/locales/
+      policy: pull
+  script:
+    - echo "Deploying to local directory..."
+    - ls -R apps/web/dist/
+    - rm -rf $DEPLOY_PATH/*
+    - cp -r apps/web/dist/* $DEPLOY_PATH/
+    - mkdir -p $DEPLOY_PATH/locales
+    - cp -r public/locales/* $DEPLOY_PATH/locales/
+    - echo "Successfully deployed to $DEPLOY_PATH"
+  rules:
+    - if: $LOCALE_ONLY == "true"
+      when: never
+    - if: $CI_COMMIT_BRANCH == "dev"
+
+# 99. 메세지 업데이트
+reload_locale:
+  stage: reload_locale
+  cache:
+    - key: 'locale-cache-$CI_COMMIT_REF_SLUG'
+      paths:
+        - public/locales/
+      policy: push
+    - key: 'cache-$CI_COMMIT_REF_SLUG'
+      fallback_keys:
+        - 'cache-$CI_MERGE_REQUEST_TARGET_BRANCH_NAME'
+        - 'cache-dev'
+        - 'cache-stage'
+        - 'cache-main'
+      paths:
+        - .pnpm-store
+        - node_modules
+        - .turbo/cache
+      policy: pull
+  script:
+    - echo "Update locales $CI_COMMIT_BRANCH"
+    - node scripts/sync-i18n.mjs
+    - rm -rf $DEPLOY_PATH/locales/*
+    - cp -r public/locales/* $DEPLOY_PATH/locales
+    - echo "Successfully update locales"
+  rules:
+    - if: $LOCALE_ONLY == "true"
+      when: always
+    - when: never
+  allow_failure: true

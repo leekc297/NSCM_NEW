@@ -1,0 +1,1 @@
+export { CustomerFcstMaster } from './CustomerFcstMaster';

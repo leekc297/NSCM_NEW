@@ -1,0 +1,63 @@
+.menuWrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  .menuLink {
+    width: 100%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 15px;
+    transition: 0.3s;
+    overflow: hidden;
+    color: $commonTextBasic;
+    .title {
+      &.isOpen {
+        color: $commonTextPrimary;
+      }
+    }
+    &:hover {
+      background-color: $navLeftBg1LevelHover;
+    }
+    .icon {
+      width: 13px;
+      height: 13px;
+    }
+  }
+
+  .subMenuLink {
+    width: 100%;
+    height: 0px;
+    overflow: hidden;
+    transition: height 0.35s ease;
+    &.isOpen {
+      height: 40px;
+    }
+
+    &.on {
+      background-color: $navLeftBgLastChildSelected;
+      a {
+        color: $navLeftTextLastChildSelected !important;
+      }
+    }
+
+    .subTitle {
+      width: 100%;
+      height: 40px;
+      padding-left: 36px;
+      display: flex;
+      align-items: center;
+      transition: 0.3s;
+      cursor: pointer;
+      font-size: 13px;
+
+      &:hover {
+        background-color: $navLeftBgLastChildSelected;
+        color: $navLeftTextLastChildSelected;
+        transition: 0.3s;
+      }
+    }
+  }
+}

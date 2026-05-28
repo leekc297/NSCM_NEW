@@ -1,0 +1,82 @@
+@use "sass:list";
+@use "../misc/variables" as *;
+/*!
+    *
+    * Wijmo Library 5.20251.40
+    * https://developer.mescius.com/wijmo
+    *
+    * Copyright(c) MESCIUS inc. All rights reserved.
+    *
+    * Licensed under the End-User License Agreement For MESCIUS Wijmo Software.
+    * us.sales@mescius.com
+    * https://developer.mescius.com/wijmo/licensing
+    *
+    */
+
+// multirow
+.wj-multirow {
+
+    .wj-cell {
+        &.wj-record-end:not(.wj-header) {
+            border-bottom-color: #787878;
+        }
+
+        &.wj-group-end {
+            border-right-color: #787878;
+        }
+
+        &.wj-center-vert:not(.wj-hasdropdown) {
+            display: table;
+            table-layout: fixed;
+            padding-top: 0; /* remove top/bottom padding to work around Safari bug */
+            padding-bottom: 0;
+
+            div {
+                display: table-cell;
+                vertical-align: middle;
+                overflow: inherit;
+                text-overflow: inherit;
+                width: 100%; // TFS 443520
+
+                &.wj-btn.wj-btn-glyph.wj-elem-detail {
+                    vertical-align: top;
+                    padding-top: list.nth($wj-cell-pdg, 1); // keep cell padding-top
+                }
+            }
+
+            .wj-inputnumber {//WJM-34591
+
+                // apply only on firefox, WJM-34792, WJM-34894
+                @supports (-moz-appearance: none) { 
+                    height: calc(100% - 1px) !important;
+                    width: calc(100% - 1px) !important;
+                }
+
+                div{
+                    display: inline-table;
+                }
+            }
+
+            .wj-inputnumber:dir(rtl) { //WJM-34894, consider rtl direction too
+
+                // apply only on firefox, 
+                @supports (-moz-appearance: none) { 
+                    left: 1px !important;
+                }
+            }
+        }
+    }
+
+    .wj-hdr-collapse {
+        position: absolute;
+        padding: 6px;
+        right: 0;
+        top: 0;
+        color: $wj-sel-bkg;
+        opacity: 0.5;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+}

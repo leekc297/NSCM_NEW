@@ -1,0 +1,88 @@
+{
+  "name": "nscm-fe",
+  "version": "0.1.0",
+  "private": true,
+  "description": "React Monorepo with Turborepo + 3-Layer Architecture",
+  "keywords": [
+    "monorepo",
+    "turborepo",
+    "react",
+    "typescript",
+    "pnpm"
+  ],
+  "license": "MIT",
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "type": "module",
+  "_packageManager_local_disabled": "pnpm@10.28.2",
+  "engines": {
+    "node": ">=20.14.0",
+    "pnpm": ">=10.0.0"
+  },
+  "scripts": {
+    "local": "turbo run local",
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "preview": "pnpm --filter @web preview",
+    "lint": "turbo run lint",
+    "lint:fix": "turbo run lint:fix",
+    "test": "turbo run test",
+    "type-check": "(pnpm gen || true) && turbo run type-check",
+    "ci": "turbo run lint type-check build test",
+    "clean": "turbo daemon stop && rm -rf .turbo node_modules/.cache",
+    "clean:turbo": "turbo daemon stop && rm -rf .turbo",
+    "clean:install": "pnpm clean:all && pnpm install",
+    "clean:all": "rm -rf pnpm-lock.yaml .turbo dist node_modules && pnpm -r exec rm -rf node_modules dist .turbo",
+    "prepare": "husky",
+    "gen:icons": "node scripts/generate-icons.mjs",
+    "gen:i18n": "rm -rf ./public/locales/ && node scripts/sync-i18n.mjs",
+    "gen": "pnpm gen:icons && pnpm gen:i18n"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^20.4.1",
+    "@commitlint/config-conventional": "^20.4.1",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@eslint/js": "^9.39.2",
+    "@mescius/wijmo.react.all": "^5.20252.44",
+    "@mui/material": "^7.3.7",
+    "@tanstack/eslint-plugin-query": "^5.91.4",
+    "@tanstack/react-query": "^5.0.0",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@types/lodash": "^4.17.23",
+    "@types/node": "^20.14.0",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.7.0",
+    "commitizen": "^4.3.1",
+    "cz-conventional-changelog": "^3.3.0",
+    "eslint": "^9.16.0",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.5.0",
+    "eslint-plugin-unused-imports": "^4.3.0",
+    "happy-dom": "^20.7.0",
+    "husky": "^9.1.7",
+    "immer": "^11.1.3",
+    "jsdom": "^28.1.0",
+    "prettier": "^3.4.2",
+    "sass": "^1.82.0",
+    "turbo": "^2.1.3",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.54.0",
+    "vite-tsconfig-paths": "^6.1.1",
+    "vitest": "^4.0.18",
+    "zustand": "^5.0.0"
+  }
+}

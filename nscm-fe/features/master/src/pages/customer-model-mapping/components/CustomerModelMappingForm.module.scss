@@ -1,0 +1,22 @@
+.inputWithSearch {
+  & > div:first-child {
+    display: flex;
+    align-items: center;
+  }
+  & button {
+    position: absolute;
+    right: -40px;
+  }
+}
+
+@media screen and (max-width: '1919px') {
+  .formItem {
+    grid-template-columns: 100px auto !important;
+    & > div:first-child {
+      width: 100px;
+    }
+  }
+  .input {
+    width: 85% !important;
+  }
+}

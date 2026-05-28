@@ -1,0 +1,341 @@
+@use 'sass:meta';
+@use '../misc/font-sizes' as *;
+@use '../misc/mixins' as *;
+@use '../misc/variables' as *;
+/*!
+    *
+    * Wijmo Library 5.20251.40
+    * https://developer.mescius.com/wijmo
+    *
+    * Copyright(c) MESCIUS inc. All rights reserved.
+    *
+    * Licensed under the End-User License Agreement For MESCIUS Wijmo Software.
+    * us.sales@mescius.com
+    * https://developer.mescius.com/wijmo/licensing
+    *
+    */
+
+// wijmo.nav
+
+// tabpanel
+.wj-tabpanel {
+  display: block;
+
+  > div {
+    // root
+
+    > .wj-tabpanes {
+      overflow: auto;
+      border-top: 1px solid #ddd;
+      @include prefix(user-select, text, webkit moz ms);
+
+      > .wj-tabpane:not(.wj-state-active) {
+        // hide inactive panes
+        display: none;
+      }
+    }
+
+    > .wj-tabheaders > .wj-tabheader {
+      position: relative;
+      cursor: pointer;
+      display: inline-block;
+      text-align: center;
+      padding: 8px 12px;
+      text-decoration: none;
+      color: inherit;
+      font-weight: bold;
+      text-transform: uppercase;
+
+      &.wj-state-active {
+        background: $wj-bkg;
+        // color: if(
+        //   meta.global-variable-exists(wj-tab-panel-color),
+        //   $wj-tab-panel-color,
+        //   $wj-sel-bkg
+        // );
+        $text-color: $wj-sel-bkg;
+        @if meta.global-variable-exists(wj-tab-panel-color) {
+          $text-color: $wj-tab-panel-color;
+        }
+        color: $text-color;
+      }
+
+      &:not(.wj-state-active):not(.wj-state-disabled):focus {
+        background: rgba(0, 0, 0, 0.1);
+      }
+
+      &:after {
+        content: '';
+        position: absolute;
+        background: $wj-sel-bkg;
+        height: 2.5px;
+        left: 45%;
+        width: 10%;
+        bottom: 0;
+        visibility: hidden;
+      }
+
+      &.wj-state-active:after {
+        left: 0;
+        width: 100%;
+        visibility: visible;
+      }
+    }
+  }
+
+  &.wj-animated {
+    // animate tab headers
+    > div {
+      > .wj-tabheaders > .wj-tabheader {
+        &.wj-state-active:after {
+          transition-duration: 0.2s;
+        }
+      }
+    }
+  }
+}
+
+// accordion
+.wj-accordion {
+  overflow: auto;
+
+  // content
+  > .wj-content {
+    border: none;
+    overflow: hidden;
+    display: none;
+  }
+
+  > .wj-header.wj-state-active + .wj-content {
+    display: block;
+  }
+
+  // header
+  > .wj-header {
+    display: block;
+    text-decoration: none;
+    padding: 12px;
+    font-size: $wj-nav-header-font-size; //120%;
+    cursor: pointer;
+
+    &.wj-state-active {
+      background: $wj-sel-bkg;
+      color: $wj-sel-txt;
+    }
+
+    &:focus {
+      outline: 2px solid $wj-accent-bkg;
+      outline-offset: -2px;
+    }
+  }
+
+  &.wj-show-icons > .wj-header {
+    &:before {
+      // collapsed glyph
+      content: '';
+      float: left;
+      margin: 0.4em 0.5em 0.4em 0;
+      opacity: 0.5;
+      white-space: normal;
+      border-top: 0.4em solid transparent;
+      border-bottom: 0.4em solid transparent;
+      border-left: 0.5em solid;
+    }
+
+    &.wj-state-active:before {
+      // expanded glyph
+      border-top: 0.5em solid;
+      border-left: 0.4em solid transparent;
+      border-right: 0.4em solid transparent;
+    }
+  }
+
+  // RTL icons
+  &.wj-rtl.wj-show-icons > .wj-header:before {
+    float: right;
+    margin: 0.4em 0 0.4em 0.5em;
+    transform: scaleX(-1);
+  }
+}
+
+// treeview
+.wj-treeview {
+  width: 100%;
+  overflow: auto;
+  //background: transparent;
+  border: none;
+
+  .wj-nodelist {
+    display: block;
+    position: relative;
+
+    .wj-nodelist {
+      padding-left: 1em;
+    }
+  }
+
+  .wj-node {
+    cursor: pointer;
+    white-space: nowrap;
+    padding: $wj-item-pdg;
+
+    &:before {
+      content: '';
+      position: relative;
+      display: inline-block;
+      border-top: 0.5em solid;
+      border-right: 0.45em solid transparent;
+      border-left: 0.45em solid transparent;
+      top: -1px;
+      margin-right: 4px;
+      opacity: 0.75;
+      box-sizing: border-box;
+    }
+
+    &.wj-state-selected {
+      color: inherit;
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    &.wj-state-multi-selected {
+      color: inherit;
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    &.wj-state-collapsed:before,
+    &.wj-state-collapsing:before {
+      transform: rotate(-90deg);
+    }
+
+    &.wj-state-collapsed.wj-state-loading:before {
+      animation-name: wjLazyNodeLoading;
+      animation-duration: 0.6s;
+      animation-direction: alternate;
+      animation-iteration-count: infinite;
+    }
+
+    &.wj-state-empty:before {
+      visibility: hidden;
+    }
+
+    &.wj-state-collapsed + .wj-nodelist {
+      display: none;
+    }
+
+    img {
+      padding-right: 4px;
+    }
+
+    .wj-node-check {
+      margin-right: 4px;
+    }
+
+    .wj-node-text {
+      // TFS 280472: https://bugzilla.mozilla.org/show_bug.cgi?id=389348
+      display: inline-block;
+    }
+  }
+
+  .wj-marker {
+    position: absolute;
+    background: $wj-accent-bkg;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  &.wj-state-loading * {
+    cursor: wait;
+  }
+
+  // animated trees
+  &.wj-animated {
+    .wj-node {
+      &:before {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      &.wj-state-collapsed:before,
+      &.wj-state-collapsing:before {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+    }
+  }
+
+  // RTL trees
+  &.wj-rtl {
+    .wj-nodelist {
+      .wj-nodelist {
+        padding-left: unset;
+        padding-right: 1em;
+      }
+
+      .wj-node:before {
+        margin-right: unset;
+        margin-left: 4px;
+      }
+
+      .wj-node.wj-state-collapsed:before,
+      .wj-node.wj-state-collapsing:before {
+        transform: rotate(+90deg);
+      }
+    }
+
+    .wj-node {
+      img {
+        padding-right: unset;
+        padding-left: 4px;
+      }
+
+      .wj-node-check {
+        margin-right: unset;
+        margin-left: 4px;
+      }
+    }
+  }
+}
+
+// treeview custom drag feedback icon
+.wj-tv-drag-feedback {
+  width: fit-content;
+  height: fit-content;
+  color: inherit;
+  background: rgba(0, 0, 0, 0.05);
+  padding: 6px 4px;
+  position: absolute;
+  left: -100vw;
+  top: -100vh;
+
+  .wj-tv-drag-ic {
+    display: block;
+    position: absolute;
+    background-color: red;
+    color: white;
+    height: 1.5em;
+    width: 1.5em;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 1.5em;
+    right: -0.75em;
+    top: -0.75em;
+
+    &.wj-larger-drag-ic {
+      height: 2em;
+      width: 2em;
+      line-height: 2em;
+      right: -1em;
+      top: -1em;
+    }
+  }
+}
+
+@keyframes wjLazyNodeLoading {
+  from {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+
+  to {
+    opacity: 0.5;
+    transform: scale(0.5);
+  }
+}

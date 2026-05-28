@@ -1,0 +1,16 @@
+.customPanelGroup {
+  height: calc(88vh - 220px) !important;
+  gap: 24px;
+  [class*='wj-flexgrid'] {
+    max-height: 100%;
+  }
+  > div > div {
+    display: flex;
+  }
+}
+
+.customCheckbox {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}

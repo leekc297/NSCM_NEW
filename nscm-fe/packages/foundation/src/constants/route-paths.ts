@@ -1,0 +1,37 @@
+/**
+ * 라우트 경로 상수
+ */
+
+export const ROUTE_PATHS = {
+  HOME: 'home',
+  MASTER: 'master',
+  DEMAND: 'demand',
+  DEMAND_MASTER: 'demand-master',
+  DEMAND_PLAN: 'demand-plan',
+  ADMIN: 'admin',
+  ADMIN_MENU: 'admin-menu',
+  SYSTEM: 'system',
+  AUTHORITY: 'authority',
+  AUTH_MGMT: 'auth-mgmt',
+  SYS0011: 'auth-request',
+  SYS0001: 'message-management',
+  SYS0002: 'user-management',
+  SYS0003: 'menu-management',
+  SYS0004: 'ui-category',
+  SYS0005: 'procedure-management',
+  SYS0006: 'api-management',
+  SYS0007: 'group-management',
+  SYS0008: 'group-menu',
+  SYS0009: 'menu-button-management',
+  SYS0010: 'lookup',
+  DMF0004: 'sales-site',
+  DMF0005: 'sales-site-project-model',
+  DMF0006: 'customer-model-mapping',
+  DMF0007: 'customer-fcst-master',
+  DMF0008: 'erp-edi-master',
+  DMF0020: 'sales-future-price',
+  DMF0082: 'forecast-price',
+  REPORT: 'report',
+  WATERFALL: 'waterfall',
+  DMF0022: 'sales-plan-waterfall',
+} as const;
