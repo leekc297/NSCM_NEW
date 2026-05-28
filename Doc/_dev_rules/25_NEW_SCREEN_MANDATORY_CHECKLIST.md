@@ -93,10 +93,11 @@ Doc/_dev_rules/24_ASIS_CROSSCHECK.md          ⭐ 4축 매핑 검증
 ### 1.5 Hook MD (3종 의무 Read)
 
 ```
-Doc/_dev_rules/hooks/new-screen-pre-build.md    ⭐ 본 체크리스트의 실행 hook
-Doc/_dev_rules/hooks/pre-write.md               ⭐ 파일 작성 직전
-Doc/_dev_rules/hooks/fe-import-check.md         ⭐ FE 작업 시
-Doc/_dev_rules/hooks/asis-coverage-check.md     ⭐ As-Is 4축 매핑 검증
+Doc/_dev_rules/hooks/new-screen-pre-build.md       ⭐ 본 체크리스트의 실행 hook
+Doc/_dev_rules/hooks/pre-write.md                  ⭐ 파일 작성 직전
+Doc/_dev_rules/hooks/fe-import-check.md            ⭐ FE 작업 시
+Doc/_dev_rules/hooks/asis-coverage-check.md        ⭐ As-Is 4축 매핑 검증
+Doc/_dev_rules/hooks/runtime-error-prevention.md   ⭐ NEW (2026-05-28) — 신규 화면 기본 오류 방지 (Box / isEss 사고 사례)
 ```
 
 ---

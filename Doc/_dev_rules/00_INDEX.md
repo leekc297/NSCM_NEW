@@ -44,11 +44,14 @@
 | 25 | [25_NEW_SCREEN_MANDATORY_CHECKLIST.md](25_NEW_SCREEN_MANDATORY_CHECKLIST.md) | ⭐⭐ 신규 화면 생성 강제 체크리스트 — 5종 자료 + POPUP 자동 생성 (2026-05-22) |
 | 26 | [26_VITE_DAYJS_LOCALE.md](26_VITE_DAYJS_LOCALE.md) | ⭐ Vite + @lges/design-system dayjs/locale 동적 import 해결 (2026-05-22) |
 | **27** | **[27_WIJMO_PIVOT_AND_MODULE.md](27_WIJMO_PIVOT_AND_MODULE.md)** | ⭐ **Wijmo 모듈 중복 (`node_modules/node_modules/` → `mergeManager === null`) + Grid header 머지 발동 조건 (TWO_DEPTH + group.header == leaf.header) + PivotGrid React 패턴 (useMemo + 1회 fields 설정 가드) + 신규 sheet 5종 매핑 (2026-05-28, DMF0007 PSI Tab + PivotGrid 작업 반영)** |
+| **28** | **[28_GIT_MULTI_REMOTE.md](28_GIT_MULTI_REMOTE.md)** | ⭐ **Git Multi-Remote — NSCM 모노레포 (`leekc297/NSCM` GitHub 개인 백업) + 사내 GitLab `.git` 외부 백업 (`NSCM_gitlab_backup`) + 민감 파일 `.gitignore` 의무 + "소스 업로드" 트리거 (2026-05-28)** |
 | 06g | [hooks/fe-import-check.md](hooks/fe-import-check.md) | ⭐ Hook — FE Import 자기 점검 (2026-05-22) |
 | 06h | [hooks/asis-coverage-check.md](hooks/asis-coverage-check.md) | ⭐ Hook — As-Is 4축 매핑 검증 (2026-05-22) |
 | 06i | [hooks/new-screen-pre-build.md](hooks/new-screen-pre-build.md) | ⭐⭐ Hook — 신규 화면 생성 직전 자기 점검 (2026-05-22) |
 | **06j** | **[hooks/module-duplication-check.md](hooks/module-duplication-check.md)** | ⭐ **Hook — `node_modules/node_modules/` 잔존 + Vite deps stale 캐시 검출 (2026-05-28)** |
 | **06k** | **[hooks/encoding-check.md](hooks/encoding-check.md)** | ⭐ **Hook — VSCode/.editorconfig/터미널 UTF-8 일관성 보장 (2026-05-28)** |
+| **06m** | **[hooks/rule-md-organize.md](hooks/rule-md-organize.md)** | ⭐⭐ **Hook 메타룰 — "MD 파일 정리해줘" 트리거 시 7단계 (회고 → 일반화 → 중복 grep → 작성/보강 결정 → 작성 → cross-ref → 검증) (2026-05-28)** |
+| **06n** | **[hooks/runtime-error-prevention.md](hooks/runtime-error-prevention.md)** | ⭐ **Hook — 신규 FE 화면/모달 작성 시 기본 런타임 오류 방지 (Box export 누락 / Edit 후 변수 미정의). PRE-WRITE 룰 23 + 기존 화면 import block Read + POST-WRITE grep 검증 의무 (2026-05-28, DMF0020 사고 후)** |
 
 ## 기술 스택 (확정)
 

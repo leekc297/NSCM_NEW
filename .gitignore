@@ -120,3 +120,8 @@ _artifacts/cloud-to-local-mirror/
 **/oracle_data/
 *.dmp
 *.dat
+
+# ---------------- 백업 / 임시 / Claude Code ----------------
+**/pnpm-lock.yaml.bak
+**/*.bak
+.claude/scheduled_tasks.lock

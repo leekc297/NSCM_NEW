@@ -13,6 +13,7 @@ import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { GridUtils } from '@foundation/utils';
 
 import { DIVISION_CODE } from '../sales-future-price.constants';
+import { useSalesFuturePriceStore } from '../useSalesFuturePriceStore';
 
 interface DynamicColumn {
   binding: string;
@@ -23,6 +24,42 @@ interface DynamicColumn {
 }
 
 export const useSalesFuturePriceExpression = () => {
+  const searchParams = useSalesFuturePriceStore(state => state.searchParams);
+
+  /**
+   * E8  AS-IS: DMF0020_SalesFuturePrice.cs:205, 2581
+   * `btnTemplate.Visible = (div == "81")` — ESS 사업부만 Template 버튼 표시.
+   * 룰 25 §4 hook 사고 사례 — 이전 단순화로 모든 사업부 표시한 사고.
+   */
+  const isEss = useCallback((divisionId: string): boolean => {
+    return divisionId.startsWith(DIVISION_CODE.ESS);
+  }, []);
+
+  /**
+   * F8 InsertRow 초기값 — AS-IS InsertRow (.cs:2007~2163) Combo Cell Type 자동 적용
+   * (CURRENCY/DEPT_ID/DomExp/END_CUSTOMER/SCM_SITE_ID/FCST_TYPE/INCOTERMS 등 빈값으로 생성)
+   * Image Popup Cell Type (ITEM_ID, PROJECT_CODE) 는 셀 더블클릭 시 popup 호출.
+   */
+  const buildInsertRowDefaults = useCallback((): Record<string, string> => {
+    return {
+      DIVISION_ID: searchParams.divisionId,
+      AUTHORITY_YN: 'Y',
+      // Combo cell type 빈값 — 사용자가 셀 클릭하여 선택
+      CURRENCY: '',
+      DEPT_ID: '',
+      DOM_EXP: '',
+      END_CUSTOMER: '',
+      SCM_SITE_ID: '',
+      FCST_TYPE: '',
+      INCOTERMS: '',
+      MEASURE: '',
+      // Image popup cell type — 빈값 (셀 더블클릭 시 popup)
+      ITEM_ID: '',
+      PROJECT_CODE: '',
+    };
+  }, [searchParams.divisionId]);
+
+
   /**
    * #72, #73  AS-IS: SetSpreadHeaderSpan (L645, L673)
    * `siMain.ColumnHeaderSpan(1, iLargeStartCol, 2, 1, 20, "SUM", FPHAlign.Center)`
@@ -106,6 +143,8 @@ export const useSalesFuturePriceExpression = () => {
   }, []);
 
   return {
+    isEss,
+    buildInsertRowDefaults,
     buildLargeSumHeader,
     setExchangeValues,
     getThisWeekMonday,

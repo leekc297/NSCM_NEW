@@ -212,8 +212,11 @@ return Dmf0099Response.listOf(data);
 | `Doc/_dev_rules/25_NEW_SCREEN_MANDATORY_CHECKLIST.md` | ⭐⭐ 신규 화면 생성 강제 체크리스트 — 5종 자료 + POPUP 자동 생성 (2026-05-22) |
 | `Doc/_dev_rules/26_VITE_DAYJS_LOCALE.md` | ⭐ Vite + @lges/design-system dayjs/locale 동적 import 해결 (2026-05-22) |
 | `Doc/_dev_rules/27_WIJMO_PIVOT_AND_MODULE.md` | ⭐ Wijmo 모듈 중복 (`node_modules/node_modules/`) + Grid header 머지 조건 + PivotGrid React 패턴 + Sheet 5종 매핑 (2026-05-28, DMF0007 PSI Tab 작업 반영) |
+| `Doc/_dev_rules/28_GIT_MULTI_REMOTE.md` | ⭐ Git Multi-Remote 운영 — NSCM 모노레포 + GitHub `leekc297/NSCM` 개인 백업 + 사내 GitLab .git 외부 백업 + 민감 파일 .gitignore 의무 (2026-05-28) |
 | `Doc/_dev_rules/hooks/module-duplication-check.md` | ⭐ Hook — `node_modules/node_modules/` 잔존 / Vite deps stale 캐시 검출 (2026-05-28) |
 | `Doc/_dev_rules/hooks/encoding-check.md` | ⭐ Hook — VSCode/.editorconfig/터미널 UTF-8 일관성 (2026-05-28) |
+| `Doc/_dev_rules/hooks/rule-md-organize.md` | ⭐⭐ Hook 메타룰 — "MD 파일 정리해줘" 트리거 시 회고 → 인사이트 일반화 → 중복 grep → 신규/보강 결정 → cross-ref 업데이트 7단계 (2026-05-28) |
+| `Doc/_dev_rules/hooks/runtime-error-prevention.md` | ⭐ Hook — 신규 FE 화면/모달 작성 시 기본 런타임 오류 방지 (Box export 누락 / Edit 후 변수 미정의 등). 룰 25 §1.5 Hook 5번째로 등록 (2026-05-28, DMF0020 사고 후) |
 | `Doc/_dev_rules/hooks/new-screen-pre-build.md` | ⭐⭐ 신규 화면 생성 직전 자기 점검 hook (2026-05-22) |
 | `Doc/_dev_rules/hooks/fe-import-check.md` | ⭐ FE Import 자기 점검 Hook — pre/post write 양방향 (2026-05-22) |
 | `Doc/_dev_rules/hooks/asis-coverage-check.md` | ⭐ As-Is 4축 매핑 검증 Hook — PR 머지 게이트 (2026-05-22) |
@@ -298,3 +301,5 @@ Root 폴더에 흩어져 있던 Cowork 분석 산출물(00_~29_)을 Phase별 폴
 - 2026-05-21 (v7.0~v7.4): SCP/SSP/FP 화면 분석서 정밀 분석 (302 xlsx + 480 신규 MD)
 - 2026-05-22 (Anti-Simplification): 최우선 룰 신규. 매트릭스 1,576 → 3,318행 재작성 (Cross-check OK 278/누락 0).
 - **2026-05-28 (DMF0007 PSI Tab + PivotGrid)**: 룰 27 (Wijmo 모듈 중복 / Grid 머지 조건 / PivotGrid / Sheet 5종 매핑) + hooks 2종 (module-duplication-check, encoding-check) + 룰 21 §9 (Wijmo/FE/인코딩 6건) + 08/10/12 cross-reference 추가.
+- **2026-05-28 (Git Multi-Remote + MD 정리 메타룰)**: 룰 28 (NSCM 모노레포 + GitHub `leekc297/NSCM` 개인 백업 + 사내 GitLab .git 외부 백업) + hook `rule-md-organize.md` ("MD 파일 정리해줘" 트리거 시 7단계 수행) + 메모리 트리거 약속 2건 ("소스 업로드/올려줘" → GitHub push, "MD 파일 정리해줘/룰 정리해줘" → 룰셋 정리).
+- **2026-05-28 (DMF0020 풀스택 재생성 + 런타임 오류 방지)**: DMF0020 SalesFuturePrice 신규 풀스택 (P1 4축 매핑 매트릭스 + P2 메타 SQL 4-파일 + v2 보강 + P4 FE 27 파일 + minyonglee1 권한 36/36). 사고 2건 (Box import 누락 / isEss 미정의) → 룰 23 §5.1 `@shared/mui` 정확 export 보강 + hook `runtime-error-prevention.md` 신규 + 룰 25 §1.5 Hook 5번째 추가. 메모리 트리거 4건 신규 (runtime-error-prevention / pnpm-install-avoidance / verify-sql-scalar-pattern / sql-idempotent-insert-all).

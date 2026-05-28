@@ -157,10 +157,41 @@ createStandardStore<T>     ← persist 없는 일반 store
 | `@shared/clsx` | `lib/clsx.ts` | `clsx` re-export |
 | `@shared/icons` | `lib/icons.ts` | MUI icons 일부 (`ArrowDropDown`, `Add`, `Remove` 등) |
 | `@shared/lges-icons` | `lib/lges-icons.ts` | `@lges/design-system/icon` 일부 (`FunctionSearchIcon` 등) |
-| `@shared/mui` | `lib/mui.ts` | MUI 컴포넌트 일부 (`Grid`, `Stack`, `Typography`, `Button`, `Tooltip` 등) |
+| `@shared/mui` | `lib/mui.ts` | **정확 export 목록** 아래 §5.1 참조 |
 | `@shared/panel` | `lib/panel.ts` | `react-resizable-panels` re-export (`Panel`, `PanelGroup`, `PanelSeparator`) |
 
 **⚠ 충돌 주의**: `Button` 이 `@shared/lges` (lges-design-system) 와 `@shared/mui` (MUI) 양쪽에 존재. 디자인 시스템 우선 (`@shared/lges`) 사용.
+
+### §5.1 `@shared/mui` 정확 export 목록 (2026-05-28 보강 — DMF0020 `Box` 오류 사고)
+
+`packages/shared/src/lib/mui.ts` 의 **유일한** export (1줄도 추가 없이 정확):
+
+```
+Button, ButtonProps                ← @shared/lges 의 Button 우선 사용 (충돌 주의)
+Typography, TypographyProps
+Tooltip, tooltipClasses, TooltipProps
+styled
+Grid, GridProps
+Stack, StackProps
+useMediaQuery
+InputAdornment
+```
+
+**⚠ 자주 오용되는 이름 (실제 미존재 — `@shared/mui` 에 없음)**:
+
+| 잘못된 이름 | 실제 위치 / 대체 |
+|---|---|
+| ❌ `Box` | ✅ 단순 wrapper 면 `<div className={styles.X}>`. layout 이 필요하면 `<Stack>` (방향 자동). MUI Box 가 정말 필요하면 `@mui/material` 직접 import (단 비표준) |
+| ❌ `Container` | ✅ `<div>` + SCSS Module |
+| ❌ `Paper` | ✅ `<div>` + SCSS Module (커스텀 그림자) |
+| ❌ `IconButton` | ✅ `@shared/lges` 의 `Button` + `iconComponent` prop |
+| ❌ `TextField` | ✅ `@shared/lges` 의 `InputField` |
+| ❌ `Select` / `MenuItem` | ✅ `@shared/components` 의 `CustomDropdown` |
+| ❌ `Dialog` | ✅ `@shared/components` 의 `CustomDialog` |
+| ❌ `Autocomplete` | ✅ `@shared/components` 의 `CustomDropdown` (단일/다중 모두 지원) |
+| ❌ `Checkbox` | ✅ `@shared/lges` 의 `Checkbox` |
+
+**사고 사례 (2026-05-28)**: DMF0020 SalesPriceVersionModal / ColumnTitleSetModal 작성 시 `import { Box, Stack } from '@shared/mui'` → Vite SyntaxError ("does not provide an export named 'Box'") → 화면 진입 자체 실패.
 
 ---
 

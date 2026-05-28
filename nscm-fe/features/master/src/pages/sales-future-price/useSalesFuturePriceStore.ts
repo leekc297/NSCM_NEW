@@ -2,7 +2,14 @@ import { apiClient } from '@foundation/apis';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { createPersistedStoreWithTab } from '@shared/stores';
 
-import { BUCKET_TYPE, DIVISION_CODE, MENU_ID, SHEETS } from './sales-future-price.constants';
+import {
+  BUCKET_TYPE,
+  DIVISION_CODE,
+  MENU_ID,
+  SHEETS,
+  SHEET_INDEX,
+  type BucketType,
+} from './sales-future-price.constants';
 
 /**
  * 검색 조건 (14 필드) — As-Is `DMF0020_SalesFuturePrice.cs` §18.1 14 필드.
@@ -21,7 +28,7 @@ interface SearchParamProps {
   periodTo: string;
   bizTypes: string[];
   owners: string[];
-  bucketType: BUCKET_TYPE;
+  bucketType: BucketType;
   searchOverRange: boolean;
   excludeNoPrice: boolean;
   versionId: string;
@@ -36,12 +43,22 @@ interface DynamicColumn {
   visible: boolean; // bucketType 에 따라 토글
 }
 
-/** Modal 열림 상태 — DMF0020 전용 POPUP 4종 */
+/**
+ * Modal 열림 상태 — DMF0020 호출 POPUP 6종 (룰 25 §3 자체 modal 신규 생성 결정)
+ * - openExchangeRate: DMF0020_SalesFuturePricePopUp (환율)
+ * - openSalesPriceRange: DMF0020_SalesPriceRangePopUp (조회 범위)
+ * - openPriceBatchInput: DMF0020_SaveSalesFuturePrice_Popup (Price 일괄입력)
+ * - openSalesPriceTemplate: DMF0020_SalesPriceTemplatePopup
+ * - openSalesPriceVersion: DMF0073_VersionBySalesPricePopup
+ * - openColumnTitleSet: DM0002_TitleSetForm_Popup (컬럼 표시 설정)
+ */
 interface ModalState {
   openExchangeRate: boolean;
   openSalesPriceRange: boolean;
   openPriceBatchInput: boolean;
   openSalesPriceTemplate: boolean;
+  openSalesPriceVersion: boolean;
+  openColumnTitleSet: boolean;
 }
 
 interface SalesFuturePriceState {
@@ -51,6 +68,8 @@ interface SalesFuturePriceState {
   staticColumns: RawFlexGridColumnConfig[];
   dynamicColumns: DynamicColumn[];
   selectedGroupKey?: string;
+  /** TabWrapper 활성 인덱스 — Tab1 FlexGrid wide / Tab2 Wijmo PivotGrid (사용자 요구) */
+  selectedTabIndex: SHEET_INDEX;
   isOpenSearchArea: boolean;
   modals: ModalState;
 }
@@ -63,13 +82,16 @@ interface SalesFuturePriceAction {
   fetchDynamicColumns: () => Promise<void>;
   setSelectedGroupKey: (key?: string) => void;
   setOpenSearchArea: (open?: boolean) => void;
+  setSelectedTabIndex: (index: SHEET_INDEX) => void;
   // Division 변경 종속 필드 리셋 — AS-IS: DMF0020_SalesFuturePrice.cs:2491,2508,2519,2579
   onDivisionChanged: (divisionId: string) => void;
-  // Modal 토글
+  // Modal 토글 (6종 — 자체 modal)
   setOpenExchangeRate: (value: boolean) => void;
   setOpenSalesPriceRange: (value: boolean) => void;
   setOpenPriceBatchInput: (value: boolean) => void;
   setOpenSalesPriceTemplate: (value: boolean) => void;
+  setOpenSalesPriceVersion: (value: boolean) => void;
+  setOpenColumnTitleSet: (value: boolean) => void;
 }
 
 const initSearchParams: SearchParamProps = {
@@ -96,6 +118,8 @@ const initModalState: ModalState = {
   openSalesPriceRange: false,
   openPriceBatchInput: false,
   openSalesPriceTemplate: false,
+  openSalesPriceVersion: false,
+  openColumnTitleSet: false,
 };
 
 const initSalesFuturePriceState: SalesFuturePriceState = {
@@ -105,6 +129,7 @@ const initSalesFuturePriceState: SalesFuturePriceState = {
   staticColumns: [],
   dynamicColumns: [],
   selectedGroupKey: undefined,
+  selectedTabIndex: SHEET_INDEX.MAIN_FLEX,
   isOpenSearchArea: true,
   modals: initModalState,
 } as const;
@@ -203,6 +228,11 @@ export const useSalesFuturePriceStore = createPersistedStoreWithTab<
         state.isOpenSearchArea = open ?? !state.isOpenSearchArea;
       });
     },
+    setSelectedTabIndex: index => {
+      set(state => {
+        state.selectedTabIndex = index;
+      });
+    },
     /**
      * Division 변경 시 종속 필드 리셋.
      * AS-IS: DMF0020_SalesFuturePrice.cs:2491,2508,2519,2579 (사업부 81/82 분기)
@@ -242,6 +272,16 @@ export const useSalesFuturePriceStore = createPersistedStoreWithTab<
     setOpenSalesPriceTemplate: value => {
       set(state => {
         state.modals.openSalesPriceTemplate = value;
+      });
+    },
+    setOpenSalesPriceVersion: value => {
+      set(state => {
+        state.modals.openSalesPriceVersion = value;
+      });
+    },
+    setOpenColumnTitleSet: value => {
+      set(state => {
+        state.modals.openColumnTitleSet = value;
       });
     },
   }),
