@@ -240,7 +240,8 @@ EXIT;
 
   # 5.2 expdp FULL
   $dumpName = "oracle-full"
-  $expdpCmd = "expdp system/'$SysPassword'@//localhost:1521/$Pdb DIRECTORY=BACKUP_DP DUMPFILE=$dumpName.dmp LOGFILE=$dumpName.log FULL=Y EXCLUDE=STATISTICS COMPRESSION=ALL"
+  # Oracle Free Edition 은 COMPRESSION=ALL 미지원 (ORA-00439). 미사용.
+  $expdpCmd = "expdp system/'$SysPassword'@//localhost:1521/$Pdb DIRECTORY=BACKUP_DP DUMPFILE=$dumpName.dmp LOGFILE=$dumpName.log FULL=Y EXCLUDE=STATISTICS"
   Write-Host "    expdp 실행 중 (수십 분 소요 가능)..."
   & docker exec $Container bash -c $expdpCmd *> $null
   $expdpExit = $LASTEXITCODE
