@@ -1,11 +1,11 @@
 ﻿> ⚠️ **이 파일은 이관되었습니다 (2026-05-30).** 진실 source 는 다음 파일입니다:
 > `C:\Projects\NSCM\Doc\_figma\screens\SSP0301_SqlPopup.md`
 > 본 파일은 분석서 호환성을 위해 유지됨.
-# SSP0301_SqlPopup — Figma 디자인 링크
+# SSP0301_SqlPopup.designer — Figma 디자인 링크
 
 > **이 파일의 역할**: Figma 디자인 파일·프레임의 링크를 명시. 사용자(이규철님)가 Figma 작성 후 채웁니다. 클로드 코드는 이 파일에서 디자인 명세를 가져옵니다.
 
-작성일: 2026-05-08 (자동) | 매핑된 As-Is: SSP0301_SqlPopup
+작성일: 2026-05-08 (자동) | 매핑된 As-Is: SSP0301_SqlPopup.designer
 
 ---
 
