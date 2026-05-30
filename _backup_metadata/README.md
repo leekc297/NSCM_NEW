@@ -42,8 +42,17 @@ _backup_metadata/
 2. `oracle-full.log` 의 `Job ... successfully completed` (또는 1 error) 확인
 3. 실제 dmp/tar 는 **D 드라이브** 의 같은 이름 폴더에서 복원
 
-### 차후 백업
-`backup-all.ps1 -Label <X>` 실행 → 자동으로 `D:\NSCM_backup\manual\YYYY-MM-DD_HHMM_<X>\` 생성. 그 후 메타 4종을 본 폴더에 복사 + push 가 권장 흐름.
+### 차후 백업 (자동화)
+```powershell
+.\backup-all.ps1 -Label <X> -PushMeta
+```
+→ `D:\NSCM_backup\manual\YYYY-MM-DD_HHMM_<X>\` 생성 + 메타 4종 자동으로 본 폴더에 복사 + git add/commit/push 까지 한 번에.
+
+수동 시:
+```powershell
+.\backup-all.ps1 -Label <X>           # 백업만
+# 그 다음 별도로 메타 복사 + push
+```
 
 ## 룰
 

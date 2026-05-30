@@ -11,6 +11,8 @@
 #   .\backup-all.ps1 -ScheduledMode                     # Task Scheduler 야간 (daily\YYYY-MM-DD_0200\)
 #   .\backup-all.ps1 -SkipFeTar                         # FE node_modules 생략 (테스트용)
 #   .\backup-all.ps1 -SkipOracleDmp                     # Oracle dmp 생략 (테스트용)
+#   .\backup-all.ps1 -PushMeta                          # ⭐ NEW: 메타 4종 자동 git push (private repo 한정)
+#   .\backup-all.ps1 -Label X -PushMeta                 # 라벨 백업 + 메타 자동 push 묶음
 #
 # 보존:
 #   - daily: 최근 7개 + 30일 초과 자동 삭제
@@ -30,7 +32,10 @@ param(
   [int]$MinFreeGb = 10,
   [string]$Container = "nscm-oracle",
   [string]$SysPassword = "!SCMroqkf2026",
-  [string]$Pdb = "FREEPDB1"
+  [string]$Pdb = "FREEPDB1",
+  [switch]$PushMeta,                                  # ⭐ NEW (2026-05-30): 메타 4종을 _backup_metadata/ 에 복사 + git push
+  [string]$MetaRepoRoot = "C:\Projects\NSCM",
+  [string]$GitBranch = "main"
 )
 
 $ErrorActionPreference = "Continue"  # PS5.1 native exe stderr ErrorRecord wrap 회피
@@ -305,8 +310,69 @@ if (Test-Path $manualDir) {
   }
 }
 
+
+# ----- 7. PUSH META (옵션) -----
+if ($PushMeta) {
+  Write-Step "7. PUSH META (GitHub _backup_metadata/)"
+  $folderName  = Split-Path $TargetDir -Leaf
+  $metaRoot    = Join-Path $MetaRepoRoot "_backup_metadata"
+  $metaDst     = Join-Path $metaRoot $folderName
+  if (-not (Test-Path $metaDst)) {
+    New-Item -ItemType Directory -Path $metaDst -Force | Out-Null
+  }
+
+  # 4종 메타 복사 (source.bundle 21MB + manifest.json + log + git-head)
+  $metaFiles = @('manifest.json','oracle-full.log','git-head.txt','git-dirty.txt','source.bundle')
+  $copied = 0
+  foreach ($mf in $metaFiles) {
+    $src = Join-Path $TargetDir $mf
+    if (Test-Path $src) {
+      Copy-Item $src $metaDst -Force
+      $copied++
+    }
+  }
+  Write-OK "메타 복사: $copied 파일 → $metaDst"
+
+  # git add + commit + push (실패는 warn 만, exit 0 유지)
+  Push-Location $MetaRepoRoot
+  try {
+    $relPath = "_backup_metadata/$folderName"
+    & git add $relPath *> $null
+    if ($LASTEXITCODE -ne 0) {
+      Write-Warn2 "git add 실패 — push 생략"
+    } else {
+      # 변경 없으면 commit 안 함
+      $cached = & git diff --cached --name-only
+      if (-not $cached) {
+        Write-Warn2 "git diff --cached 가 비어있음 — commit 생략 (변경 없음)"
+      } else {
+        $commitMsg = "backup: $folderName 메타데이터 push (auto by backup-all.ps1)"
+        & git commit -m $commitMsg *> $null
+        if ($LASTEXITCODE -eq 0) {
+          Write-OK "git commit 성공"
+          & git push origin $GitBranch *> $null
+          if ($LASTEXITCODE -eq 0) {
+            Write-OK "git push origin $GitBranch 성공"
+          } else {
+            Write-Warn2 "git push 실패 (네트워크/credential) — commit 은 로컬에 보존됨"
+          }
+        } else {
+          Write-Warn2 "git commit 실패 (hook 또는 변경 없음)"
+        }
+      }
+    }
+  } catch {
+    Write-Warn2 "PushMeta 단계 예외: $_"
+  } finally {
+    Pop-Location
+  }
+}
+
 Write-Host ""
 Write-Host ("BACKUP DONE: {0}" -f $TargetDir) -ForegroundColor Green
 Write-Host ("  total: {0:N0} MB / {1:N0}초" -f ($totalBytes/1MB), $swTotal.Elapsed.TotalSeconds)
+if ($PushMeta) {
+  Write-Host ("  GitHub: _backup_metadata/$(Split-Path $TargetDir -Leaf)/")
+}
 
 exit 0
