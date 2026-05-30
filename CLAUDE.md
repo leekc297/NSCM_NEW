@@ -64,6 +64,7 @@ Read: Doc/_dev_rules/hooks/new-screen-pre-build.md         ⭐⭐ 신규 화면 
 - **⭐ As-Is Cross-Check (Event/API/Validation/Expression 4축)**: `Doc/_dev_rules/24_ASIS_CROSSCHECK.md` ⭐ NEW (2026-05-22, DMF0020 modal 12건 누락 반영)
 - **⭐ 로컬 Docker Oracle CSV 적재 표준**: `Doc/_dev_rules/29_LOCAL_DB_CSV_IMPORT.md` ⭐ NEW (2026-05-30, Docker 재구축 + 113 테이블 적재 + sqlldr ctl 6대 처리 + 12GB 한도 + 200MB 임계 + DM_* 제외 + §2.5 7GB 안전 임계 자동 감시 반영)
 - **⭐ 로컬 환경 통합 백업/원복**: `Doc/_dev_rules/30_LOCAL_BACKUP_RESTORE.md` ⭐ NEW (2026-05-30, D:\NSCM_backup\ + git bundle + FE node_modules tar + Oracle expdp + Task Scheduler 02:00 + 키워드 트리거 "백업해줘"/"원복해줘")
+- **⭐ Figma 디자인 → React 신규 화면 연동**: `Doc/_dev_rules/31_FIGMA_DESIGN_INTEGRATION.md` ⭐ NEW (2026-05-30, Personal Access Token + REST API fetch + URL 자동 감지 trigger + Doc/_figma/screens/{화면ID}.md 진실 source + 룰 23 import inventory cross-check)
 - **PR 머지 게이트**: `Doc/_dev_rules/18_CODE_REVIEW_CHECKLIST.md` ⭐ NEW
 - **DB/Procedure**: `Doc/_analysis/db_migration/01_MSSQL_to_Oracle_Conversion_Rules.md`
 - **Hook 변경**: `Doc/_dev_rules/06_HOOKS.md`

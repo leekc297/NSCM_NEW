@@ -20,6 +20,17 @@
 .env.*
 !.env.example
 
+# ---------------- Figma Personal Access Token (2026-05-30) ----------------
+# Figma REST API 호출용 토큰. .figma_token 1줄 파일 — 평문 + git track 금지.
+# 위치: C:\Projects\NSCM\.figma_token
+**/.figma_token
+.figma_token
+
+# Figma fetch 결과 캐시 / 이미지 (gitignore — 회사 자산 + 대용량)
+# screens/ 와 README.md 는 track (Doc/_figma/ 안의 다른 패턴으로 명시)
+Doc/_figma/_api_cache/
+Doc/_figma/_images/
+
 # .npmrc 의 토큰 부분만 신경 (현재는 주석 처리 상태지만 보수적으로)
 **/.npmrc
 
@@ -60,14 +71,22 @@ _phase3/
 _phase4/
 _analysis/
 
-# Doc 의 회사 자산 (분석/figma/legacy/UI 캡처)
+# Doc 의 회사 자산 (분석/legacy/UI 캡처)
 Doc/_analysis/
 Doc/_archive/
-Doc/_figma/
 Doc/_legacy_source/
 Doc/output/
 Doc/ui_cap/
 # Doc/_dev_rules/, Doc/_templates/, Doc/README.md 는 commit OK (룰셋 + 템플릿)
+
+# Doc/_figma/ 세분화 (2026-05-30, 룰 31)
+#   screens/{화면ID}.md + README.md + design_system/ 는 track
+#   _api_cache/, _images/, 매핑 CSV 는 회사 자산 / 대용량 — ignore
+Doc/_figma/_api_cache/
+Doc/_figma/_images/
+Doc/_figma/_figma_screen_mapping*.csv
+Doc/_figma/_extract_report_*.csv
+Doc/_figma/_migration_report_*.csv
 
 # BE 로그 / output
 nscm-be/logs/
