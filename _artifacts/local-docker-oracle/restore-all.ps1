@@ -1,4 +1,4 @@
-# NSCM 풀스택 통합 원복
+﻿# NSCM 풀스택 통합 원복
 #   - 소스 git fetch/reset (또는 새 워크트리)
 #   - FE node_modules tar 풀기
 #   - FE/BE config 복원
@@ -27,7 +27,7 @@ param(
   [string]$Pdb = "FREEPDB1"
 )
 
-$ErrorActionPreference = "Stop"
+$ErrorActionPreference = "Continue"  # PS5.1 native exe stderr ErrorRecord wrap 회피
 $RepoRoot = "C:\Projects\NSCM"
 $FeRoot   = "$RepoRoot\nscm-fe"
 $BeRoot   = "$RepoRoot\nscm-be"
@@ -95,17 +95,17 @@ if (-not $SkipSource -and (Test-Path "$BackupDir\source.bundle")) {
       $dirty = & git status -s
       if ($dirty) {
         $stashMsg = "pre-restore-$([DateTime]::Now.ToString('yyyyMMdd_HHmm'))"
-        & git stash push -u -m $stashMsg 2>&1 | Out-Null
+        & git stash push -u -m $stashMsg *> $null
         Write-OK "현재 변경사항 stash: $stashMsg"
       }
       # bundle 에서 fetch
-      & git fetch $bundleAbs main:restore-tmp 2>&1 | Out-Null
+      & git fetch $bundleAbs main:restore-tmp *> $null
       if ($LASTEXITCODE -ne 0) {
         # main 이름 아니면 HEAD 추적
-        & git fetch $bundleAbs HEAD:restore-tmp 2>&1 | Out-Null
+        & git fetch $bundleAbs HEAD:restore-tmp *> $null
       }
-      & git reset --hard restore-tmp 2>&1 | Out-Null
-      & git branch -D restore-tmp 2>&1 | Out-Null
+      & git reset --hard restore-tmp *> $null
+      & git branch -D restore-tmp *> $null
       $head = & git rev-parse --short HEAD
       Write-OK "소스 reset 완료. HEAD=$head"
     }
@@ -135,7 +135,7 @@ if (-not $SkipFeTar) {
         if (Test-Path "$FeRoot\.local-packs") {
           Remove-Item "$FeRoot\.local-packs" -Recurse -Force -ErrorAction SilentlyContinue
         }
-        & "C:\Windows\System32\tar.exe" -xf $tarPath -C $FeRoot 2>&1 | Out-Null
+        & "C:\Windows\System32\tar.exe" -xf $tarPath -C $FeRoot *> $null
         Write-OK "fe-node-modules.tar 풀기 완료"
       } finally {
         Pop-Location
@@ -207,10 +207,10 @@ if (-not $SkipOracleDmp -and (Test-Path "$BackupDir\oracle-full.dmp")) {
       Write-DryRun "docker exec $Container impdp ... FULL=Y"
     } else {
       Write-Host "    5.1 docker compose down -v (volume 삭제)" -ForegroundColor Yellow
-      & docker compose down -v 2>&1 | Out-Null
+      & docker compose down -v *> $null
 
       Write-Host "    5.2 docker compose up -d + healthcheck 대기"
-      & docker compose up -d 2>&1 | Out-Null
+      & docker compose up -d *> $null
 
       $sw = [System.Diagnostics.Stopwatch]::StartNew()
       while ($sw.Elapsed.TotalSeconds -lt 600) {
@@ -227,15 +227,15 @@ CREATE OR REPLACE DIRECTORY BACKUP_DP AS '/opt/oracle/dpdump_backup';
 GRANT READ, WRITE ON DIRECTORY BACKUP_DP TO SYSTEM;
 EXIT;
 "@
-      & docker exec $Container bash -c "mkdir -p /opt/oracle/dpdump_backup" 2>&1 | Out-Null
-      $createDirSql | & docker exec -i $Container bash -c "sqlplus -s sys/'$SysPassword'@//localhost:1521/$Pdb as sysdba" 2>&1 | Out-Null
-      & docker cp "$BackupDir\oracle-full.dmp" "${Container}:/opt/oracle/dpdump_backup/oracle-full.dmp" 2>&1 | Out-Null
+      & docker exec $Container bash -c "mkdir -p /opt/oracle/dpdump_backup" *> $null
+      $createDirSql | & docker exec -i $Container bash -c "sqlplus -s sys/'$SysPassword'@//localhost:1521/$Pdb as sysdba" *> $null
+      & docker cp "$BackupDir\oracle-full.dmp" "${Container}:/opt/oracle/dpdump_backup/oracle-full.dmp" *> $null
 
       Write-Host "    5.4 impdp 실행 (수십 분 소요 가능)"
       $impdpCmd = "impdp system/'$SysPassword'@//localhost:1521/$Pdb DIRECTORY=BACKUP_DP DUMPFILE=oracle-full.dmp LOGFILE=impdp.log FULL=Y TABLE_EXISTS_ACTION=REPLACE"
-      & docker exec $Container bash -c $impdpCmd 2>&1 | Out-Null
+      & docker exec $Container bash -c $impdpCmd *> $null
       $impdpExit = $LASTEXITCODE
-      & docker cp "${Container}:/opt/oracle/dpdump_backup/impdp.log" "$BackupDir\impdp.log" 2>&1 | Out-Null
+      & docker cp "${Container}:/opt/oracle/dpdump_backup/impdp.log" "$BackupDir\impdp.log" *> $null
       Write-OK "impdp exit=$impdpExit (log: $BackupDir\impdp.log)"
     }
   } finally {

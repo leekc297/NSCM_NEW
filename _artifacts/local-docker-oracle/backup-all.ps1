@@ -1,4 +1,4 @@
-# NSCM 풀스택 통합 백업
+﻿# NSCM 풀스택 통합 백업
 #   - 소스 git bundle (전체 히스토리)
 #   - FE node_modules + .local-packs (junction 보존 tar)
 #   - FE/BE config-local
@@ -33,7 +33,7 @@ param(
   [string]$Pdb = "FREEPDB1"
 )
 
-$ErrorActionPreference = "Stop"
+$ErrorActionPreference = "Continue"  # PS5.1 native exe stderr ErrorRecord wrap 회피
 $RepoRoot = "C:\Projects\NSCM"
 $FeRoot   = "$RepoRoot\nscm-fe"
 $BeRoot   = "$RepoRoot\nscm-be"
@@ -136,7 +136,7 @@ if (-not $SkipSource) {
   Push-Location $RepoRoot
   try {
     $bundlePath = "$TargetDir\source.bundle"
-    & git bundle create $bundlePath --all 2>&1 | Out-Null
+    & git bundle create $bundlePath --all *> $null
     if ($LASTEXITCODE -ne 0) {
       Write-Fail "git bundle 생성 실패"
     } else {
@@ -174,7 +174,7 @@ if (-not $SkipFeTar) {
     Push-Location $FeRoot
     try {
       $arg = @("-cf",$tarPath,"node_modules",".local-packs")
-      & $tarExe $arg 2>&1 | Out-Null
+      & $tarExe $arg *> $null
       if ($LASTEXITCODE -ne 0) {
         Write-Warn2 "tar exit=$LASTEXITCODE (junction 일부 실패 가능)"
       }
@@ -235,20 +235,20 @@ CREATE OR REPLACE DIRECTORY BACKUP_DP AS '/opt/oracle/dpdump_backup';
 GRANT READ, WRITE ON DIRECTORY BACKUP_DP TO SYSTEM;
 EXIT;
 "@
-  $createDirSql | & docker exec -i $Container bash -c "sqlplus -s sys/'$SysPassword'@//localhost:1521/$Pdb as sysdba" 2>&1 | Out-Null
-  & docker exec $Container bash -c "mkdir -p /opt/oracle/dpdump_backup && rm -f /opt/oracle/dpdump_backup/oracle-full.*" 2>&1 | Out-Null
+  $createDirSql | & docker exec -i $Container bash -c "sqlplus -s sys/'$SysPassword'@//localhost:1521/$Pdb as sysdba" *> $null
+  & docker exec $Container bash -c "mkdir -p /opt/oracle/dpdump_backup && rm -f /opt/oracle/dpdump_backup/oracle-full.*" *> $null
 
   # 5.2 expdp FULL
   $dumpName = "oracle-full"
   $expdpCmd = "expdp system/'$SysPassword'@//localhost:1521/$Pdb DIRECTORY=BACKUP_DP DUMPFILE=$dumpName.dmp LOGFILE=$dumpName.log FULL=Y EXCLUDE=STATISTICS COMPRESSION=ALL"
   Write-Host "    expdp 실행 중 (수십 분 소요 가능)..."
-  & docker exec $Container bash -c $expdpCmd 2>&1 | Out-Null
+  & docker exec $Container bash -c $expdpCmd *> $null
   $expdpExit = $LASTEXITCODE
 
   # 5.3 호스트로 복사
-  & docker cp "${Container}:/opt/oracle/dpdump_backup/$dumpName.dmp" "$TargetDir\$dumpName.dmp" 2>&1 | Out-Null
-  & docker cp "${Container}:/opt/oracle/dpdump_backup/$dumpName.log" "$TargetDir\$dumpName.log" 2>&1 | Out-Null
-  & docker exec $Container bash -c "rm -rf /opt/oracle/dpdump_backup" 2>&1 | Out-Null
+  & docker cp "${Container}:/opt/oracle/dpdump_backup/$dumpName.dmp" "$TargetDir\$dumpName.dmp" *> $null
+  & docker cp "${Container}:/opt/oracle/dpdump_backup/$dumpName.log" "$TargetDir\$dumpName.log" *> $null
+  & docker exec $Container bash -c "rm -rf /opt/oracle/dpdump_backup" *> $null
 
   $logContent = Get-Content "$TargetDir\$dumpName.log" -ErrorAction SilentlyContinue -Raw
   $expdpOk = ($logContent -and $logContent -match 'successfully completed')
