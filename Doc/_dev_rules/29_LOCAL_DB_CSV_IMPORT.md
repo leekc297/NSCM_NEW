@@ -39,6 +39,50 @@ if (size -le 200) { 전체 이관 } else { div in (40,81) 만 filter }
 
 ---
 
+## §2.5 7GB 안전 임계 (2026-05-30 사용자 결정)
+
+Oracle Free Edition 12 GB 한도 대비 **7 GB 를 운영 안전 임계** 로 한다. 12 GB 한도에 근접하면 ORA-12954 + 컨테이너 재구축 사고 (2026-05-29) 가 재발하므로, 여유 5 GB 를 두고 운영.
+
+| 사용량 | 상태 | 동작 |
+|---|---|---|
+| < 6.0 GB | SAFE | 적재 자유 |
+| 6.0 ~ 7.0 GB | WARN | `check-oracle-size.ps1 -Quiet` 결과만 로그 |
+| ≥ 7.0 GB | **CRIT** | `bulk_load_csv.ps1` 자동 중단 + Top15 보고 + Resume 가능 |
+
+**자동 정리 절대 금지** (사용자 결정): CRIT 시 truncate / DELETE / PURGE 자동 실행하지 않음. 사용자에게 알리고 사용자 결정 대기.
+
+### 측정 도구
+- `_artifacts/local-docker-oracle/check-oracle-size.ps1`
+- `_artifacts/local-docker-oracle/check-oracle-size.sql`
+
+Exit code:
+- `0` = SAFE / WARN
+- `7` = CRIT (bulk_load_csv 자동 중단 트리거)
+- `2` = sqlplus 실패 / 컨테이너 미가동
+
+### bulk_load_csv.ps1 통합 동작
+- 5건 적재마다 (`-SizeCheckEvery 5` 기본값) `check-oracle-size.ps1 -Quiet` 호출
+- exit code 7 수신 시:
+  1. 콘솔에 `@@ABORT@@` 메시지 + Top15 큰 세그먼트
+  2. 남은 CSV 목록을 `bulk_load_csv.resume.txt` 에 저장
+  3. break (적재 중단)
+- 사용자 정리 후 `.\bulk_load_csv.ps1 -Resume` 으로 재개
+
+### 측정 SQL 패턴 (참고)
+```sql
+SELECT SUM(bytes)/1024/1024/1024 GB
+  FROM dba_segments
+ WHERE owner NOT IN ('SYS','SYSTEM','SYSAUX', ...)  -- 시스템 스키마 제외
+```
+정확한 제외 목록은 `check-oracle-size.sql` 참조.
+
+### Cross-Reference
+- 룰 30 `30_LOCAL_BACKUP_RESTORE.md` — CRIT 도달 후 컨테이너 재구축 시 원복 절차
+- 룰 21 §10.1 ORA-12954 (12GB 한도 초과 후 사고 패턴)
+- 메모리 `feedback_oracle_7gb_threshold.md`
+
+---
+
 ## §3. sqlldr 표준 ctl 자동 생성 — 6가지 필수 처리
 
 CSV → Oracle 적재 시 sqlldr ctl 에 다음 6가지 가 모두 들어가야 첫 시도에 성공.

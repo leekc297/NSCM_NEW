@@ -45,7 +45,8 @@
 | 26 | [26_VITE_DAYJS_LOCALE.md](26_VITE_DAYJS_LOCALE.md) | ⭐ Vite + @lges/design-system dayjs/locale 동적 import 해결 (2026-05-22) |
 | **27** | **[27_WIJMO_PIVOT_AND_MODULE.md](27_WIJMO_PIVOT_AND_MODULE.md)** | ⭐ **Wijmo 모듈 중복 (`node_modules/node_modules/` → `mergeManager === null`) + Grid header 머지 발동 조건 (TWO_DEPTH + group.header == leaf.header) + PivotGrid React 패턴 (useMemo + 1회 fields 설정 가드) + 신규 sheet 5종 매핑 (2026-05-28, DMF0007 PSI Tab + PivotGrid 작업 반영)** |
 | **28** | **[28_GIT_MULTI_REMOTE.md](28_GIT_MULTI_REMOTE.md)** | ⭐ **Git Multi-Remote — NSCM 모노레포 (`leekc297/NSCM` GitHub 개인 백업) + 사내 GitLab `.git` 외부 백업 (`NSCM_gitlab_backup`) + 민감 파일 `.gitignore` 의무 + "소스 업로드" 트리거 (2026-05-28)** |
-| **29** | **[29_LOCAL_DB_CSV_IMPORT.md](29_LOCAL_DB_CSV_IMPORT.md)** | ⭐ **로컬 Docker Oracle CSV 적재 표준 — sqlldr ctl 6대 처리 (CR 제거 / 컬럼 quote / DATE / regex precision / multi-line / NOT NULL relax) + 12GB Free 한도 + 200MB 임계 + DM_* 제외 + DDL `/` terminator 자동 삽입 (2026-05-30, Docker 재구축 + 113 테이블 적재 작업 반영)** |
+| **29** | **[29_LOCAL_DB_CSV_IMPORT.md](29_LOCAL_DB_CSV_IMPORT.md)** | ⭐ **로컬 Docker Oracle CSV 적재 표준 — sqlldr ctl 6대 처리 (CR 제거 / 컬럼 quote / DATE / regex precision / multi-line / NOT NULL relax) + 12GB Free 한도 + 200MB 임계 + DM_* 제외 + DDL `/` terminator 자동 삽입 + §2.5 7GB 안전 임계 자동 감시 (2026-05-30, Docker 재구축 + 113 테이블 적재 + 7GB 임계 관리 작업 반영)** |
+| **30** | **[30_LOCAL_BACKUP_RESTORE.md](30_LOCAL_BACKUP_RESTORE.md)** | ⭐ **로컬 환경 통합 백업/원복 — D:\NSCM_backup\ + git bundle + FE node_modules tar + Oracle expdp FULL + Windows Task Scheduler 매일 02:00 + daily 7개 + manual 30일 보존. 키워드 "백업해줘" / "원복해줘" 트리거 (2026-05-30)** |
 | 06g | [hooks/fe-import-check.md](hooks/fe-import-check.md) | ⭐ Hook — FE Import 자기 점검 (2026-05-22) |
 | 06h | [hooks/asis-coverage-check.md](hooks/asis-coverage-check.md) | ⭐ Hook — As-Is 4축 매핑 검증 (2026-05-22) |
 | 06i | [hooks/new-screen-pre-build.md](hooks/new-screen-pre-build.md) | ⭐⭐ Hook — 신규 화면 생성 직전 자기 점검 (2026-05-22) |
