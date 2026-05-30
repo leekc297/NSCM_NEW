@@ -27,10 +27,33 @@ Doc/_analysis/domain_DM/screens/DMF0020_SalesFuturePrice/
 ├── web_components.md  — As-Is 컨트롤 → To-Be 매핑
 ├── tobe_design.md     — To-Be React 화면 설계
 ├── oracle_migration.md — T-SQL → PL/SQL 변환 가이드
-├── figma_link.md      — Figma 디자인 링크
+├── figma_link.md      — Figma 디자인 링크 ⚠️ 2026-05-30 이관됨 (아래 §1.3 참조)
 ├── validation.md      — Validation 추출 (MSG####)
 └── expressions.md     — Spread/Grid 계산식 추출
 ```
+
+### 1.3. Figma 자료 (3차 신뢰 — Layout 정밀 SSoT) ⭐ NEW 2026-05-30
+
+```
+Doc/_figma/screens/{화면ID}.md              ← figma_link.md 이관 + 자동 갱신 (룰 31)
+Doc/_figma/_images/{화면ID}.svg             ← Figma image export
+Doc/_figma/_api_cache/{file_key}/*.json     ← Figma API fetch 결과
+```
+
+**figma_link.md 위치 변경**:
+- 이전: `Doc/_analysis/.../screens/{SCREEN_ID}/figma_link.md` (8 MD 중 하나)
+- 2026-05-30 이관: `Doc/_figma/screens/{SCREEN_ID}.md` (분석서와 분리, 진실 source)
+- 원본 figma_link.md 는 보존 + 위에 안내 line 추가 ("이관됨 → Doc/_figma/screens/...")
+- 397 → 401 MD 이관 완료 (commit `e246ad2`), 95 Figma frame fetch + 32 화면 매핑 완료 (`97eb545`)
+
+**To-Be 코드 작성 시 신뢰 우선순위**:
+| 자료 | 용도 |
+|---|---|
+| MD 8종 (`Doc/_analysis/`) | 1차 — As-Is 동작 / Validation / Expression / API |
+| xlsx 12시트 | 2차 — 시각 자료 + 메타 통계 |
+| **Figma (`Doc/_figma/`)** | **3차 — Layout / 컴포넌트 / 색상 / spacing SSoT (룰 31 매핑 표)** |
+
+상세: [`Doc/_dev_rules/31_FIGMA_DESIGN_INTEGRATION.md`](31_FIGMA_DESIGN_INTEGRATION.md)
 
 ### 1.2. xlsx 12시트 (2차 신뢰)
 

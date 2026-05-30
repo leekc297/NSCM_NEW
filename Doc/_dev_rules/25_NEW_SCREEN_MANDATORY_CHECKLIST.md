@@ -20,9 +20,11 @@
 
 ---
 
-## §1. 5종 사전 입력 자료 의무 확인 (Pre-Read MUST)
+## §1. 6종 사전 입력 자료 의무 확인 (Pre-Read MUST)
 
-다음 5종 자료를 **모두** Read tool 로 직접 확인한 뒤가 아니면 코드 작성 금지. 한 건이라도 확인 안 했다면 anti-simplification 룰 위반.
+> 2026-05-30: Figma 디자인 통합 (룰 31) — 기존 5종 + Figma = **6종** 으로 확장.
+
+다음 6종 자료를 **모두** Read tool 로 직접 확인한 뒤가 아니면 코드 작성 금지. 한 건이라도 확인 안 했다면 anti-simplification 룰 위반.
 
 ### 1.1 AS-IS C# Source (.cs + .Designer.cs)
 
@@ -101,29 +103,55 @@ Doc/_dev_rules/hooks/runtime-error-prevention.md   ⭐ NEW (2026-05-28) — 신�
 Doc/_dev_rules/hooks/menu-not-displayed-debug.md   ⭐ NEW (2026-05-29) — 메뉴 미표시 5단계 디버깅 (MNU_URL ↔ FE slug 1차, 권한 3차). 신규 화면 메타 SQL BLOCK 2 작성 시 FE route-paths.ts cross-check 의무
 ```
 
+### 1.6 Figma 디자인 자료 ⭐ NEW (2026-05-30 — 룰 31)
+
+```
+Doc/_figma/screens/{SCREEN_ID}.md                  ⭐ Figma 디자인 진실 source (Layout + Frame + Image SVG 경로)
+Doc/_figma/_images/{SCREEN_ID}.svg                 ⭐ Figma image export (95 화면 분 완료, 로컬 gitignore)
+Doc/_figma/_api_cache/{file_key}/node_*.json       ⭐ Figma API fetch 결과 캐시
+```
+
+**확인 절차**:
+1. `Doc/_figma/screens/{SCREEN_ID}.md` 존재 확인 — 있으면 Read
+2. MD 의 **URL / Node ID / Frame size / Cache 위치** 추출
+3. **이미지** `Doc/_figma/_images/{SCREEN_ID}.svg` 존재 시 Read (이미지 인식 가능)
+4. Figma URL 새로 받으면 → `fetch-figma.ps1 -Url <URL>` 호출하여 갱신
+
+**Figma 자료의 역할**:
+- Layout 정확도 ↑ — As-Is .Designer.cs 의 정적 좌표보다 To-Be 가 Figma 우선
+- 컴포넌트 매핑 — Figma 컴포넌트 명 → `@shared/components` (룰 23 cross-check)
+- 색상/spacing — Figma fills → `@lges/design-system` 토큰 매핑 (룰 31 §5)
+
+**Figma 자료 없는 화면**:
+- `Doc/_figma/screens/{SCREEN_ID}.md` 가 TBD 인 경우 — 사용자에게 Figma URL 요청 또는 As-Is 자료만으로 진행 (사용자 결정)
+- 신규 화면 (사용자가 Figma URL 동반 메시지) — Claude 가 자동 fetch + 6번째 자료 채움
+
+상세: [`Doc/_dev_rules/31_FIGMA_DESIGN_INTEGRATION.md`](31_FIGMA_DESIGN_INTEGRATION.md)
+
 ---
 
-## §2. 5종 자료 확인 결과 보고 양식 (사용자에게 첫 응답 시)
+## §2. 6종 자료 확인 결과 보고 양식 (사용자에게 첫 응답 시)
 
 코드 작성 전 다음 표를 **반드시** 사용자에게 출력:
 
 ```markdown
-## {SCREEN_ID} 신규 화면 생성 사전 확인 (룰 25)
+## {SCREEN_ID} 신규 화면 생성 사전 확인 (룰 25 — 6종)
 
 | # | 자료 | 위치 | 상태 |
 |---:|---|---|:---:|
 | 1 | AS-IS .cs / .Designer.cs | `Doc/_legacy_source/.../...cs` (X 변종 발견) | ✅ Read 완료 (line count: NNNN / NNNN) |
 | 2 | 화면 분석서 xlsx | `_analysis/_screens/.../{NN}_{DOMAIN}_{SCREEN_ID}.xlsx` | ✅ Read 완료 (12 시트 OK / 정정 안내 N) |
 | 3 | 화면별 8 MD | `Doc/_analysis/domain_X/screens/{SCREEN_ID}/` | ✅ 8/8 Read 완료 / Validation NN건 / Expression NN건 |
-| 4 | 룰셋 MD | anti-simplification + 01 + 17 + 24 | ✅ 모두 Read |
+| 4 | 룰셋 MD | anti-simplification + 01 + 17 + 24 + 31 | ✅ 모두 Read |
 | 5 | Hook MD | new-screen-pre-build + pre-write + fe-import-check + asis-coverage-check | ✅ 모두 Read |
+| 6 | **Figma 자료** ⭐ NEW | `Doc/_figma/screens/{SCREEN_ID}.md` + `_images/{SCREEN_ID}.svg` | ✅/⚠ TBD / ❌ 미존재 |
 
 호출 POPUP: NN개
 - POPUP1 (기존 화면 OO) — 신규 생성 불필요
 - POPUP2 (DMF0099_XxxPopup) — ❌ 미생성 → §3 자동 생성 대상
 ```
 
-❌ 위 표를 출력하지 않거나 자료 5종 중 1건이라도 Read 안 한 상태에서 코드 작성 시 anti-simplification 위반.
+❌ 위 표를 출력하지 않거나 자료 6종 중 1건이라도 Read 안 한 상태에서 코드 작성 시 anti-simplification 위반. (Figma 자료는 TBD 일 수 있으나 그 상태도 "확인 후 TBD" 라고 명시 필수.)
 
 ---
 
