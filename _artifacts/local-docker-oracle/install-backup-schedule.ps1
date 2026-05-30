@@ -6,15 +6,23 @@
 #
 # 사용법:
 #   .\install-backup-schedule.ps1                    # 등록 (관리자 권한 필요)
+#   .\install-backup-schedule.ps1 -PushMeta          # ⭐ NEW: 매일 02:00 자동 백업 + 메타 GitHub push
 #   .\install-backup-schedule.ps1 -Uninstall         # 제거
 #   .\install-backup-schedule.ps1 -At "03:00AM"      # 시간 변경
 #   .\install-backup-schedule.ps1 -DryRun            # 명령만 출력
+#
+# ⚠️ -PushMeta 사용 시:
+#   - Task Scheduler 가 git push credential 보유해야 함
+#     (Git Credential Manager 가 사용자 계정에 cached 돼 있어야 정상)
+#   - private repo (leekc297/NSCM) 한정 사용
+#   - 확인: 수동으로 `cd C:\Projects\NSCM && git push origin main` 가 인증 prompt 없이 동작하는지
 
 [CmdletBinding()]
 param(
   [string]$TaskName = "NSCM_Daily_Backup",
   [string]$At = "02:00AM",
   [string]$ScriptPath = "C:\Projects\NSCM\_artifacts\local-docker-oracle\backup-all.ps1",
+  [switch]$PushMeta,                                  # ⭐ NEW (2026-05-30)
   [switch]$Uninstall,
   [switch]$DryRun
 )
@@ -68,9 +76,15 @@ if ($existing) {
 
 # Task 정의
 Write-Step "REGISTER"
+$scriptArg = "-NoProfile -ExecutionPolicy Bypass -File `"$ScriptPath`" -ScheduledMode"
+if ($PushMeta) {
+  $scriptArg += " -PushMeta"
+  Write-OK "PushMeta 활성 — task argument 에 -PushMeta 포함"
+  Write-Host "    ⚠ git push credential 사전 확인 필수: cd C:\Projects\NSCM ; git push origin main" -ForegroundColor Yellow
+}
 $action = New-ScheduledTaskAction `
   -Execute "powershell.exe" `
-  -Argument "-NoProfile -ExecutionPolicy Bypass -File `"$ScriptPath`" -ScheduledMode"
+  -Argument $scriptArg
 
 $trigger = New-ScheduledTaskTrigger -Daily -At $At
 
@@ -89,19 +103,26 @@ $settings = New-ScheduledTaskSettingsSet `
   -MultipleInstances IgnoreNew
 
 if ($DryRun) {
-  Write-Host "  [DRY] Register-ScheduledTask -TaskName $TaskName -Action <powershell.exe -NoProfile ...> -Trigger <Daily at $At> -Principal <S4U $env:USERNAME> -Settings <RestartCount=3>"
+  Write-Host "  [DRY] Register-ScheduledTask -TaskName $TaskName"
+  Write-Host "        Action: powershell.exe $scriptArg"
+  Write-Host "        Trigger: Daily at $At"
+  Write-Host "        Principal: S4U $env:USERNAME"
+  Write-Host "        Settings: RestartCount=3, ExecutionTimeLimit=3h"
   exit 0
 }
 
 try {
+  $desc = "NSCM 모노레포 자동 백업 (소스 + FE node_modules + Oracle expdp)"
+  if ($PushMeta) { $desc += " + GitHub _backup_metadata push" }
   Register-ScheduledTask `
     -TaskName $TaskName `
     -Action $action `
     -Trigger $trigger `
     -Principal $principal `
     -Settings $settings `
-    -Description "NSCM 모노레포 자동 백업 (소스 + FE node_modules + Oracle expdp)" | Out-Null
+    -Description $desc | Out-Null
   Write-OK "Task '$TaskName' 등록 완료 (매일 $At)"
+  if ($PushMeta) { Write-OK "PushMeta 옵션 포함" }
 
   # 등록 검증
   $task = Get-ScheduledTask -TaskName $TaskName
