@@ -57,6 +57,7 @@ NSCM_gitlab_backup/
 
 # ---------------- 임시/캐시 ----------------
 **/*.log
+!_backup_metadata/**/*.log
 **/*.tmp
 **/*.swp
 **/.DS_Store
