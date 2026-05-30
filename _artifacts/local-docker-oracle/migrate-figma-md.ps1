@@ -57,13 +57,21 @@ foreach ($md in $mdFiles) {
   $counter++
   # 부모 폴더명이 화면 ID (예: Doc/_analysis/domain_DM/screens/DMF0007/figma_link.md → DMF0007)
   $parentDir = Split-Path $md.FullName -Parent
-  $screenId = Split-Path $parentDir -Leaf
+  $rawFolder = Split-Path $parentDir -Leaf
 
-  # 화면 ID 유효성: 영문/숫자/언더스코어/하이픈
+  # 화면 ID 정규화:
+  #   "FP00100_Line.UIL"            → "FP00100_Line"     (마지막 .UIL/.designer 제거)
+  #   "DMF0021_SalesPlan - 복사본"   → "DMF0021_SalesPlan" ('-' 뒤 한글 + 공백 제거)
+  #   "SSP0301_SqlPopup.designer"   → "SSP0301_SqlPopup"
+  $screenId = $rawFolder -replace '\.(UIL|designer|cs|Designer)\s*$', ''
+  $screenId = $screenId -replace '\s*-\s*[^A-Za-z0-9_-].*$', ''   # ' - 복사본' 등 한글 접미사 제거
+  $screenId = $screenId.Trim()
+
+  # 화면 ID 유효성: 영문/숫자/언더스코어/하이픈만
   if ($screenId -notmatch '^[A-Za-z0-9_-]+$') {
-    Write-Warn2 "[$counter/$($mdFiles.Count)] 화면 ID 비정상 ('$screenId'): $($md.FullName)"
+    Write-Warn2 "[$counter/$($mdFiles.Count)] 화면 ID 비정상 ('$rawFolder' → '$screenId'): $($md.FullName)"
     $report += [pscustomobject]@{
-      idx=$counter; screenId=$screenId; src=$md.FullName; dst=""; status='SKIP_INVALID_ID'
+      idx=$counter; screenId=$rawFolder; src=$md.FullName; dst=""; status='SKIP_INVALID_ID'
     }
     continue
   }
