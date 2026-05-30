@@ -1,0 +1,35 @@
+-- =============================================================================
+-- 39_Cleanup_5_DMF_Screens_Dev_DBeaver.sql
+-- DBeaver 실행용 (SET/PROMPT/DEFINE/&/슬래시 금지)
+-- 자식 → 부모 순서, 각 DELETE 를 단일 statement
+-- =============================================================================
+
+-- BLOCK 1: 사용자 그룹별 버튼 권한 매핑 (114 row)
+DELETE FROM SCM_MGR.SCM_ADM_USER_GR_MNU_BTN_MPG_M
+ WHERE MNU_ID IN ('DMF0008','DMF0020','DMF0043','DMF0043_01','DMF0072');
+
+-- BLOCK 2: 사용자 그룹별 메뉴 권한 매핑 (20 row)
+DELETE FROM SCM_MGR.SCM_ADM_USER_GR_MNU_MPG_M
+ WHERE MNU_ID IN ('DMF0008','DMF0020','DMF0043','DMF0043_01','DMF0072');
+
+-- BLOCK 3: API_M (간접, 자식 우선) — 32 row
+DELETE FROM SCM_MGR.SCM_ADM_API_M
+ WHERE API_ID IN (
+   SELECT DISTINCT API_ID
+     FROM SCM_MGR.SCM_ADM_MNU_BTN_MPG_M
+    WHERE MNU_ID IN ('DMF0008','DMF0020','DMF0043','DMF0043_01','DMF0072')
+ );
+
+-- BLOCK 4: MNU_BTN_MPG_M (36 row)
+DELETE FROM SCM_MGR.SCM_ADM_MNU_BTN_MPG_M
+ WHERE MNU_ID IN ('DMF0008','DMF0020','DMF0043','DMF0043_01','DMF0072');
+
+-- BLOCK 5: PROC_M (PKG_DMF{0008,0020,0043,0072}.*) — 124 row
+DELETE FROM SCM_MGR.SCM_ADM_PROC_M
+ WHERE REGEXP_LIKE(PROC_NM, '^PKG_DMF(0008|0020|0043|0072)\.');
+
+-- BLOCK 6: MNU_M (5 row)
+DELETE FROM SCM_MGR.SCM_ADM_MNU_M
+ WHERE MNU_ID IN ('DMF0008','DMF0020','DMF0043','DMF0043_01','DMF0072');
+
+COMMIT;
