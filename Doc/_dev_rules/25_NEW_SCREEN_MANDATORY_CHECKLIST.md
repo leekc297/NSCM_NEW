@@ -98,6 +98,7 @@ Doc/_dev_rules/hooks/pre-write.md                  ⭐ 파일 작성 직전
 Doc/_dev_rules/hooks/fe-import-check.md            ⭐ FE 작업 시
 Doc/_dev_rules/hooks/asis-coverage-check.md        ⭐ As-Is 4축 매핑 검증
 Doc/_dev_rules/hooks/runtime-error-prevention.md   ⭐ NEW (2026-05-28) — 신규 화면 기본 오류 방지 (Box / isEss 사고 사례)
+Doc/_dev_rules/hooks/menu-not-displayed-debug.md   ⭐ NEW (2026-05-29) — 메뉴 미표시 5단계 디버깅 (MNU_URL ↔ FE slug 1차, 권한 3차). 신규 화면 메타 SQL BLOCK 2 작성 시 FE route-paths.ts cross-check 의무
 ```
 
 ---

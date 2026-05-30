@@ -33,8 +33,24 @@ export const useSessionStore = createPersistedStore<SessionState & SessionAction
           userId: userId,
         });
 
+        // eslint-disable-next-line no-console
+        console.log('[login] response:', sessionResult);
+        // eslint-disable-next-line no-console
+        console.log('[login] response.data:', sessionResult.data);
+        // eslint-disable-next-line no-console
+        console.log('[login] response.data.result:', sessionResult.data?.result);
+
+        const nextSession = sessionResult.data?.result;
+        if (!nextSession) {
+          console.error('[login] result missing — keeping initial empty session');
+          set(state => {
+            state.isLogin = false;
+          });
+          return;
+        }
+
         set(state => {
-          state.session = sessionResult.data.result;
+          state.session = nextSession;
           state.isLogin = true;
         });
       } catch (e) {

@@ -66,6 +66,15 @@ const ErpEdiMasterWithTab = LazyLoader(() =>
 const SalesFuturePriceWithTab = LazyLoader(() =>
   import('@master/sales-future-price').then(m => ({ default: m.SalesFuturePrice }))
 );
+const ContributeMainWithTab = LazyLoader(() =>
+  import('@master/contribute-main').then(m => ({ default: m.ContributeMain }))
+);
+const ContributeViewWithTab = LazyLoader(() =>
+  import('@master/contribute-view').then(m => ({ default: m.ContributeView }))
+);
+const NNMasterMappingWithTab = LazyLoader(() =>
+  import('@master/nn-master-mapping').then(m => ({ default: m.NNMasterMapping }))
+);
 
 // @demand
 const ForecastPricePageWithTab = LazyLoader(() =>
@@ -200,6 +209,18 @@ export const router: RemixRouter = createBrowserRouter([
               {
                 path: ROUTE_PATHS.DMF0020,
                 element: <SalesFuturePriceWithTab />,
+              },
+              {
+                path: ROUTE_PATHS.DMF0043,
+                element: <ContributeMainWithTab />,
+              },
+              {
+                path: ROUTE_PATHS.DMF0043_01,
+                element: <ContributeViewWithTab />,
+              },
+              {
+                path: ROUTE_PATHS.DMF0072,
+                element: <NNMasterMappingWithTab />,
               },
             ],
           },

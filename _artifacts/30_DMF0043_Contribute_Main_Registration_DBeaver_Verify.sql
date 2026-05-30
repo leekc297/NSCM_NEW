@@ -1,0 +1,40 @@
+--==============================================================================
+-- DMF0043_Contribute_Main — 메타 등록 검증 (DBeaver 단일 SELECT — UNION ALL)
+-- 메모리 feedback_dbeaver_single_statement.md: 반드시 단일 SELECT
+-- 룰 메모리 feedback_verify_sql_scalar_pattern.md: scalar 만 비교 (COUNT 혼합 금지)
+--==============================================================================
+
+SELECT 'BLOCK 1 MSG_M (MNU 3 + API 6×3=18 = 21)' BLOCK_NAME,
+       (SELECT COUNT(*) FROM SCM_ADM_MSG_M WHERE MSG_ID IN (
+          'MNU_DMF0043',
+          'MSG_API_DMF0043_MAIN_SEARCH','MSG_API_DMF0043_MAIN_SAVE',
+          'MSG_API_DMF0043_VERSION_SEARCH','MSG_API_DMF0043_TITLE_SEARCH',
+          'MSG_API_DMF0043_CONTRIBUTE_RATE_SEARCH','MSG_API_DMF0043_CONTRIBUTE_RATE_SAVE')) ACTUAL,
+       21 EXPECT_MIN, 'rows' UNIT FROM DUAL
+UNION ALL
+SELECT 'BLOCK 2 MNU_M (DMF0043)',
+       (SELECT COUNT(*) FROM SCM_ADM_MNU_M WHERE MNU_ID = 'DMF0043'),
+       1, 'rows' FROM DUAL
+UNION ALL
+SELECT 'BLOCK 4 API_M (DMF0043_* 9)',
+       (SELECT COUNT(*) FROM SCM_ADM_API_M WHERE API_ID LIKE 'DMF0043_%'),
+       9, 'rows' FROM DUAL
+UNION ALL
+SELECT 'BLOCK 5 MNU_BTN_MPG_M (DMF0043 routing 9)',
+       (SELECT COUNT(*) FROM SCM_ADM_MNU_BTN_MPG_M WHERE MNU_ID = 'DMF0043'),
+       9, 'rows' FROM DUAL
+UNION ALL
+SELECT 'BLOCK 6 SHEET_COLUMNS (DMF0043 main 10 + contributeRate 6 = 16)',
+       (SELECT COUNT(*) FROM SCM_MST_SHEET_COLUMNS WHERE PROGRAM_ID = 'DMF0043'),
+       16, 'rows' FROM DUAL
+UNION ALL
+SELECT 'BLOCK 7a USER_GR_MNU_MPG_M (DMF0043 권한 - DMF0020 형제 복제)',
+       (SELECT COUNT(*) FROM SCM_ADM_USER_GR_MNU_MPG_M WHERE MNU_ID = 'DMF0043' AND USE_YN = 'Y'),
+       (SELECT COUNT(*) FROM SCM_ADM_USER_GR_MNU_MPG_M WHERE MNU_ID = 'DMF0020' AND USE_YN = 'Y'),
+       'rows' FROM DUAL
+UNION ALL
+SELECT 'BLOCK 7b USER_GR_MNU_BTN_MPG_M (DMF0043 BTN 권한)',
+       (SELECT COUNT(*) FROM SCM_ADM_USER_GR_MNU_BTN_MPG_M WHERE MNU_ID = 'DMF0043' AND USE_YN = 'Y'),
+       (SELECT COUNT(DISTINCT USER_GR_ID) FROM SCM_ADM_USER_GR_MNU_MPG_M WHERE MNU_ID = 'DMF0020' AND USE_YN = 'Y') * 9,
+       'rows (GR × 9 routing)' FROM DUAL
+ORDER BY BLOCK_NAME;

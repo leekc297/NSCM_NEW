@@ -125,3 +125,8 @@ _artifacts/cloud-to-local-mirror/
 **/pnpm-lock.yaml.bak
 **/*.bak
 .claude/scheduled_tasks.lock
+
+# ---------------- 로컬 환경 복구용 (커밋 금지) ----------------
+# 2026-05-28 FE node_modules 손상 복구 시 생성. pnpm.overrides 우회 + manual hoist.
+# 사내 registry 접속 불가 환경에서 임시로 사용. 다른 PC / CI 에는 부적용.
+nscm-fe/.local-packs/

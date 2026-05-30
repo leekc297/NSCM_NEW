@@ -18,7 +18,6 @@ interface SearchParamProps {
 type FiltersBySheet = {
   [SHEETS.CUSTOMER_FCST]?: ProcRequest<MENU_ID, SHEETS.CUSTOMER_FCST>;
   [SHEETS.CUSTOMER_PSI]?: ProcRequest<MENU_ID, SHEETS.CUSTOMER_PSI>;
-  [SHEETS.CUSTOMER_PSI_PIVOT]?: ProcRequest<MENU_ID, SHEETS.CUSTOMER_PSI_PIVOT>;
 };
 
 interface CustomerFcstMasterState {
@@ -85,7 +84,6 @@ export const useCustomerFcstMasterStore = createPersistedStoreWithTab<
         state.filters = {
           [SHEETS.CUSTOMER_FCST]: next,
           [SHEETS.CUSTOMER_PSI]: next,
-          [SHEETS.CUSTOMER_PSI_PIVOT]: next,
         };
       });
     },

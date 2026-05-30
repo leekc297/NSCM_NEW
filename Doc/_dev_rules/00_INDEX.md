@@ -45,6 +45,7 @@
 | 26 | [26_VITE_DAYJS_LOCALE.md](26_VITE_DAYJS_LOCALE.md) | ⭐ Vite + @lges/design-system dayjs/locale 동적 import 해결 (2026-05-22) |
 | **27** | **[27_WIJMO_PIVOT_AND_MODULE.md](27_WIJMO_PIVOT_AND_MODULE.md)** | ⭐ **Wijmo 모듈 중복 (`node_modules/node_modules/` → `mergeManager === null`) + Grid header 머지 발동 조건 (TWO_DEPTH + group.header == leaf.header) + PivotGrid React 패턴 (useMemo + 1회 fields 설정 가드) + 신규 sheet 5종 매핑 (2026-05-28, DMF0007 PSI Tab + PivotGrid 작업 반영)** |
 | **28** | **[28_GIT_MULTI_REMOTE.md](28_GIT_MULTI_REMOTE.md)** | ⭐ **Git Multi-Remote — NSCM 모노레포 (`leekc297/NSCM` GitHub 개인 백업) + 사내 GitLab `.git` 외부 백업 (`NSCM_gitlab_backup`) + 민감 파일 `.gitignore` 의무 + "소스 업로드" 트리거 (2026-05-28)** |
+| **29** | **[29_LOCAL_DB_CSV_IMPORT.md](29_LOCAL_DB_CSV_IMPORT.md)** | ⭐ **로컬 Docker Oracle CSV 적재 표준 — sqlldr ctl 6대 처리 (CR 제거 / 컬럼 quote / DATE / regex precision / multi-line / NOT NULL relax) + 12GB Free 한도 + 200MB 임계 + DM_* 제외 + DDL `/` terminator 자동 삽입 (2026-05-30, Docker 재구축 + 113 테이블 적재 작업 반영)** |
 | 06g | [hooks/fe-import-check.md](hooks/fe-import-check.md) | ⭐ Hook — FE Import 자기 점검 (2026-05-22) |
 | 06h | [hooks/asis-coverage-check.md](hooks/asis-coverage-check.md) | ⭐ Hook — As-Is 4축 매핑 검증 (2026-05-22) |
 | 06i | [hooks/new-screen-pre-build.md](hooks/new-screen-pre-build.md) | ⭐⭐ Hook — 신규 화면 생성 직전 자기 점검 (2026-05-22) |
@@ -52,6 +53,7 @@
 | **06k** | **[hooks/encoding-check.md](hooks/encoding-check.md)** | ⭐ **Hook — VSCode/.editorconfig/터미널 UTF-8 일관성 보장 (2026-05-28)** |
 | **06m** | **[hooks/rule-md-organize.md](hooks/rule-md-organize.md)** | ⭐⭐ **Hook 메타룰 — "MD 파일 정리해줘" 트리거 시 7단계 (회고 → 일반화 → 중복 grep → 작성/보강 결정 → 작성 → cross-ref → 검증) (2026-05-28)** |
 | **06n** | **[hooks/runtime-error-prevention.md](hooks/runtime-error-prevention.md)** | ⭐ **Hook — 신규 FE 화면/모달 작성 시 기본 런타임 오류 방지 (Box export 누락 / Edit 후 변수 미정의). PRE-WRITE 룰 23 + 기존 화면 import block Read + POST-WRITE grep 검증 의무 (2026-05-28, DMF0020 사고 후)** |
+| **06o** | **[hooks/menu-not-displayed-debug.md](hooks/menu-not-displayed-debug.md)** | ⭐ **Hook — 메뉴 클릭 후 화면 미표시 5단계 디버깅 (1=MNU_URL↔FE slug, 2=라우터 매핑, 3=메뉴 권한, 4=부모 권한, 5=런타임 오류). "권한 누락" 단정 금지 (2026-05-29, DMF0043/0043_01/0072 사고)** |
 
 ## 기술 스택 (확정)
 

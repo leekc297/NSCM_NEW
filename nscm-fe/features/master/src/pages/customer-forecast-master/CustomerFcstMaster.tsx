@@ -12,7 +12,6 @@ import { useTabProcQuery, useProcMutation, useSaveWithValidation } from '@shared
 import { CustomerFcstMasterFcstGrid } from './componenets/CustomerFcstMasterFcstGrid';
 import { CustomerFcstMasterForm } from './componenets/CustomerFcstMasterForm';
 import { CustomerFcstMasterPsiGrid } from './componenets/CustomerFcstMasterPsiGrid';
-import { CustomerFcstMasterPsiPivotGrid } from './componenets/CustomerFcstMasterPsiPivotGrid';
 import { MENU_ID, SHEET_INDEX, SHEETS } from './customer-fcst-master.constants';
 import { useCustomerFcstMasterStore } from './useCustomerFcstMasterStore';
 
@@ -57,13 +56,6 @@ export const CustomerFcstMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
     tabId,
     filters: filters[SHEETS.CUSTOMER_PSI],
     enabled: !!filters[SHEETS.CUSTOMER_PSI],
-  });
-  const { data: psiPivotData } = useTabProcQuery<MENU_ID, SHEETS.CUSTOMER_PSI_PIVOT>({
-    menuId: MENU_ID,
-    sheetName: SHEETS.CUSTOMER_PSI_PIVOT,
-    tabId,
-    filters: filters[SHEETS.CUSTOMER_PSI_PIVOT],
-    enabled: !!filters[SHEETS.CUSTOMER_PSI_PIVOT],
   });
 
   const { mutate: saveFcst } = useProcMutation<MENU_ID, SHEETS.CUSTOMER_FCST>({
@@ -195,12 +187,9 @@ export const CustomerFcstMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
   }, [tabId]);
 
   const isFcstTab = activeIndex === SHEET_INDEX.CUSTOMER_FCST;
-  const isPsiPivotTab = activeIndex === SHEET_INDEX.CUSTOMER_PSI_PIVOT;
   const activeDataCount = isFcstTab
     ? (fcstData?.o_rc1.length ?? 0)
-    : isPsiPivotTab
-      ? (psiPivotData?.o_rc1.length ?? 0)
-      : (psiData?.o_rc1.length ?? 0);
+    : (psiData?.o_rc1.length ?? 0);
 
   return (
     <>
@@ -241,9 +230,6 @@ export const CustomerFcstMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
             editTrackerRef={psiEditTrackerRef}
             data={psiData?.o_rc1 ?? []}
           />
-        </TabItem>
-        <TabItem label={t('LBL_DMF0007_CUSTOMER_PSI_PIVOT', '_Customer PSI (Pivot)')}>
-          <CustomerFcstMasterPsiPivotGrid data={psiPivotData?.o_rc1 ?? []} />
         </TabItem>
       </TabWrapper>
     </>

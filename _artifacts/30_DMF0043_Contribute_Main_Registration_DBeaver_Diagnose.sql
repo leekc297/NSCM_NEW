@@ -1,0 +1,31 @@
+--==============================================================================
+-- DMF0043_Contribute_Main — 메타 등록 진단 (DBeaver 단일 SELECT)
+-- 사용 시점: BE 호출 실패 / FE 빈 결과 / 권한 누락 의심 시
+--==============================================================================
+
+WITH menu_check AS (
+  SELECT 'MENU' AREA, MNU_ID ID, UPPR_MNU_ID UPPR, MNU_URL URL, MNU_MSG_ID MSG, USE_YN STATE
+    FROM SCM_ADM_MNU_M WHERE MNU_ID = 'DMF0043'
+), api_check AS (
+  SELECT 'API' AREA, API_ID ID, API_URL UPPR, API_MSG_ID URL, NULL MSG, USE_YN STATE
+    FROM SCM_ADM_API_M WHERE API_ID LIKE 'DMF0043_%'
+), routing_check AS (
+  SELECT 'ROUTE' AREA, MNU_ID || '/' || SHT_NM || '/' || MNU_BTN_CD ID, API_ID UPPR, NULL URL, NULL MSG, USE_YN STATE
+    FROM SCM_ADM_MNU_BTN_MPG_M WHERE MNU_ID = 'DMF0043'
+), perm_mnu AS (
+  SELECT 'PERM_MNU' AREA, USER_GR_ID || '/' || MNU_ID ID, NULL UPPR, NULL URL, NULL MSG, USE_YN STATE
+    FROM SCM_ADM_USER_GR_MNU_MPG_M WHERE MNU_ID = 'DMF0043'
+), perm_btn AS (
+  SELECT 'PERM_BTN' AREA, USER_GR_ID || '/' || MNU_ID || '/' || SHT_NM || '/' || MNU_BTN_CD ID, NULL UPPR, NULL URL, NULL MSG, USE_YN STATE
+    FROM SCM_ADM_USER_GR_MNU_BTN_MPG_M WHERE MNU_ID = 'DMF0043'
+), sheet_cols AS (
+  SELECT 'SHEET_COL' AREA, PROGRAM_ID || '/' || SHEET_NAME || '/' || COLUMN_NAME ID, COLUMN_LABEL_NAME UPPR, TO_CHAR(COLUMN_WIDTH) URL, CELL_CONTROL_OBJECT_TYPE_CODE MSG, VALID_YN STATE
+    FROM SCM_MST_SHEET_COLUMNS WHERE PROGRAM_ID = 'DMF0043'
+)
+SELECT * FROM menu_check
+UNION ALL SELECT * FROM api_check
+UNION ALL SELECT * FROM routing_check
+UNION ALL SELECT * FROM perm_mnu
+UNION ALL SELECT * FROM perm_btn
+UNION ALL SELECT * FROM sheet_cols
+ORDER BY AREA, ID;

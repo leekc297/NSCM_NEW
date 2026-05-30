@@ -122,7 +122,7 @@ export const ExchangeRateModal = ({
               <>
                 <Grid size={4}>
                   <FormItem
-                    label={t('LBL00050', '_Division')}
+                    label={t('LBL_COMMON_DIVISION', '_사업부')}
                     labelAlign='right'
                     render={() => (
                       <CustomDropdown

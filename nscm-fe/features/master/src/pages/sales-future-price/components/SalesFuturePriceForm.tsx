@@ -15,7 +15,6 @@ import styles from './SalesFuturePriceForm.module.scss';
 interface SalesFuturePriceFormProps {
   onSearch?: () => void;
   onOpenExchangeRate: () => void;
-  onOpenSalesPriceRange: () => void;
   onOpenPriceBatchInput: () => void;
   onOpenSalesPriceTemplate: () => void;
   onOpenSalesPriceVersion: () => void;
@@ -34,7 +33,6 @@ const csvToArray = (csv: string | null | undefined): string[] =>
 export const SalesFuturePriceForm = ({
   onSearch,
   onOpenExchangeRate,
-  onOpenSalesPriceRange,
   onOpenPriceBatchInput,
   onOpenSalesPriceTemplate,
   onOpenSalesPriceVersion,
@@ -116,7 +114,7 @@ export const SalesFuturePriceForm = ({
         <>
           <Grid size={3}>
             <FormItem
-              label={t('LBL00050', '_Division')}
+              label={t('LBL_COMMON_DIVISION', '_사업부')}
               labelAlign='right'
               render={() => (
                 <CustomDropdown
@@ -130,7 +128,7 @@ export const SalesFuturePriceForm = ({
           </Grid>
           <Grid size={3}>
             <FormItem
-              label={t('LBL00076', '_Team')}
+              label={t('LBL00044', '_Team')}
               labelAlign='right'
               render={() => (
                 <CustomDropdown
@@ -150,7 +148,7 @@ export const SalesFuturePriceForm = ({
           </Grid>
           <Grid size={3}>
             <FormItem
-              label={t('LBL00081', '_End Customer')}
+              label={t('LBL00080', '_End Customer')}
               labelAlign='right'
               render={() => (
                 <CustomDropdown
@@ -170,7 +168,7 @@ export const SalesFuturePriceForm = ({
           </Grid>
           <Grid size={3}>
             <FormItem
-              label={t('LBL00082', '_Sales Site')}
+              label={t('LBL00011', '_Sales Site')}
               labelAlign='right'
               render={() => (
                 <CustomDropdown
@@ -185,9 +183,9 @@ export const SalesFuturePriceForm = ({
             />
           </Grid>
 
-          <Grid size={3}>
+          <Grid size={2}>
             <FormItem
-              label={t('LBL00083', '_Plant Site')}
+              label={t('LBL00005', '_Plant Site')}
               labelAlign='right'
               render={() => (
                 <CustomDropdown
@@ -204,9 +202,9 @@ export const SalesFuturePriceForm = ({
               )}
             />
           </Grid>
-          <Grid size={3}>
+          <Grid size={5}>
             <FormItem
-              label={t('LBL00084', '_Model / Nickname')}
+              label={t('LBL00003', '_Model/Nickname')}
               labelAlign='right'
               render={() => (
                 <InputField
@@ -218,9 +216,9 @@ export const SalesFuturePriceForm = ({
               )}
             />
           </Grid>
-          <Grid size={3}>
+          <Grid size={2}>
             <FormItem
-              label={t('LBL00085', '_Project')}
+              label={t('LBL_DMF0020_PROJECT', '_Project')}
               labelAlign='right'
               render={() => (
                 <Stack direction='row' spacing={1} sx={{ width: '100%' }}>
@@ -240,8 +238,9 @@ export const SalesFuturePriceForm = ({
             />
           </Grid>
           <Grid size={3}>
+            {/* AS-IS Designer.cs:1168 Period (size=263) — date-range-multi 의 가시성을 위해 size=3 유지 */}
             <FormItem
-              label={t('LBL00086', '_Period')}
+              label={t('LBL00013', '_Period')}
               labelAlign='right'
               render={() => (
                 <DatePickerCalendar
@@ -265,9 +264,10 @@ export const SalesFuturePriceForm = ({
             />
           </Grid>
 
-          <Grid size={3}>
+          <Grid size={5}>
+            {/* AS-IS Designer.cs:1252 lblBizType.Text = "Biz.Type" (clbBizType width 100~786 — 최대 폭) */}
             <FormItem
-              label={t('LBL00087', '_Bz.Type')}
+              label={t('LBL00085', '_Biz. Type')}
               labelAlign='right'
               render={() => (
                 <CustomDropdown
@@ -281,9 +281,9 @@ export const SalesFuturePriceForm = ({
               )}
             />
           </Grid>
-          <Grid size={3}>
+          <Grid size={2}>
             <FormItem
-              label={t('LBL00088', '_Owner')}
+              label={t('LBL00082', '_Owner')}
               labelAlign='right'
               render={() => (
                 <InputField
@@ -297,9 +297,10 @@ export const SalesFuturePriceForm = ({
               )}
             />
           </Grid>
-          <Grid size={3}>
+          <Grid size={2}>
+            {/* AS-IS Designer.cs:872 cboBucketType.ControlWidth = 76 (가장 좁음) */}
             <FormItem
-              label={t('LBL00089', '_Bucket')}
+              label={t('LBL_DMF0020_BUCKET', '_Bucket')}
               labelAlign='right'
               render={() => (
                 <CustomDropdown
@@ -318,7 +319,7 @@ export const SalesFuturePriceForm = ({
           </Grid>
           <Grid size={3}>
             <FormItem
-              label={t('LBL00090', '_Version')}
+              label={t('LBL_DMF0020_VERSION', '_Version')}
               labelAlign='right'
               render={() => (
                 <Stack direction='row' spacing={1} sx={{ width: '100%' }}>
@@ -340,12 +341,13 @@ export const SalesFuturePriceForm = ({
           <Grid size={6} sx={{ display: 'flex', alignItems: 'center' }}>
             <Stack direction='row' spacing={2} alignItems='center'>
               <Checkbox
-                labelText={t('LBL00091', '_Search over range')}
+                labelText={t('LBL_DMF0020_SEARCH_RANGE', '_Search over range')}
                 checked={searchParams.searchOverRange}
                 onChange={checked => setSearchParams({ searchOverRange: checked })}
               />
               <Checkbox
-                labelText={t('LBL00092', '_Exclude no price')}
+                /* AS-IS Designer.cs:259 checkInvalidExec.Properties.Caption = "Price 미등록 제외" (한국어 정본) */
+                labelText={t('LBL_DMF0020_EXCLUDE_NO_PRICE', '_Price 미등록 제외')}
                 checked={searchParams.excludeNoPrice}
                 onChange={checked => setSearchParams({ excludeNoPrice: checked })}
               />
@@ -353,34 +355,27 @@ export const SalesFuturePriceForm = ({
           </Grid>
           <Grid size={6}>
             <Stack direction='row' className={styles.popupButtonGroup}>
-              {/* AS-IS btnExchangeRate L310,325 (Designer 136×26) */}
+              {/* AS-IS Designer.cs:334 btnExchangeRate.Text = "Exchange Rate" (136×26) */}
               <Button
                 appearance='outlined'
                 priority='normal'
                 size='small'
                 onClick={onOpenExchangeRate}
               >
-                {t('LBL00093', '_Exchange Rate')}
+                {t('LBL_DMF0020_EXCHANGE_RATE', '_Exchange Rate')}
               </Button>
-              {/* AS-IS btnSavePricePeriod L917,932 (Designer 136×25) */}
-              <Button
-                appearance='outlined'
-                priority='normal'
-                size='small'
-                onClick={onOpenSalesPriceRange}
-              >
-                {t('LBL00094', '_Sales Price Range')}
-              </Button>
-              {/* AS-IS Price 일괄입력 — Division 무관 (always visible) */}
+              {/* AS-IS Designer.cs:941 btnSavePricePeriod.Text = "Price일괄입력" (한국어 정본, 공백 없음).
+                  AS-IS .cs:2360 btnSavePricePeriod_Click → DMF0020_SaveSalesFuturePrice_Popup */}
               <Button
                 appearance='outlined'
                 priority='normal'
                 size='small'
                 onClick={onOpenPriceBatchInput}
               >
-                {t('LBL00095', '_Price 일괄입력')}
+                {t('LBL_DMF0020_PRICE_BATCH', '_Price일괄입력')}
               </Button>
-              {/* AS-IS btnTemplate L1068,1084 (Designer 90×64) — Division 81 (ESS) 만 표시 (L205,211 / L2581,2587)
+              {/* AS-IS Designer.cs:1095 btnTemplate.Text = "Excel Form" (90×64) — Division 81 (ESS) 만 표시 (L205,211 / L2581,2587)
+                  사용자 결정 2026-05-28: "Sales Price Template" → "Excel Form" AS-IS 정본 복원.
                   E8 매핑 (룰 25 §4 hook 사고 사례) — 모든 사업부 표시 시 단순화 사고 재발 */}
               {showTemplateButton && (
                 <Button
@@ -389,26 +384,26 @@ export const SalesFuturePriceForm = ({
                   size='small'
                   onClick={onOpenSalesPriceTemplate}
                 >
-                  {t('LBL00096', '_Sales Price Template')}
+                  {t('LBL_DMF0020_EXCEL_FORM', '_Excel Form')}
                 </Button>
               )}
-              {/* AS-IS btnColumn L3792 — Grid 컬럼 표시 설정 (DM0002_TitleSetForm_Popup) */}
+              {/* AS-IS btnColumn L3792 — Grid 컬럼 표시 설정 (DM0002_TitleSetForm_Popup, icon-only) */}
               <Button
                 appearance='outlined'
                 priority='normal'
                 size='small'
                 onClick={onOpenColumnTitleSet}
               >
-                {t('LBL00098', '_Column Setup')}
+                {t('LBL_DMF0020_COLUMN_SETUP', '_Column Setup')}
               </Button>
-              {/* AS-IS btnBatch L272,287 (Designer 119×26) */}
+              {/* AS-IS Designer.cs:296 btnBatch.Text = "Batch Job" (119×26) */}
               <Button
                 appearance='outlined'
                 priority='normal'
                 size='small'
                 onClick={onBatchClick}
               >
-                {t('LBL00097', '_Batch')}
+                {t('LBL_DMF0020_BATCH_JOB', '_Batch Job')}
               </Button>
             </Stack>
           </Grid>

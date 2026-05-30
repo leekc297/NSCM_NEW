@@ -18,6 +18,8 @@ import type { RESPONSE_SET } from './erp-edi-master.constants';
 import { MENU_ID, SHEET_INDEX, SHEETS } from './erp-edi-master.constants';
 import { EMPTY_SALES_SITE_ROW, EMPTY_SSPM_ROW } from './erp-edi-master.empty-rows';
 import styles from './ErpEdiMaster.module.scss';
+import { useErpEdiMasterExpression } from './hooks/useErpEdiMasterExpression';
+import { useErpEdiMasterValidation } from './hooks/useErpEdiMasterValidation';
 import { useErpEdiMasterStore } from './useErpEdiMasterStore';
 
 export const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
@@ -51,6 +53,20 @@ export const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
   const setOpenSearchArea = useErpEdiMasterStore(state => state.setOpenSearchArea);
 
   const [activeTab, setActiveTab] = useState<SHEET_INDEX>(SHEET_INDEX.SALES_SITE);
+
+  // V2 (2026-05-29 Step B 보완): validation + expression hooks.
+  // AS-IS validation.md 40건 / expressions.md 75건 매핑 — __asis-mapping__.md 참조.
+  const {
+    validateSalesSiteRequired,
+    validateSspmRequired,
+    validateDuplicateKey,
+    validateActiveUniqueness,
+    confirmSaveData,
+  } = useErpEdiMasterValidation();
+  const {
+    lockSalesSiteInsertColumns,
+    lockSspmInsertColumns,
+  } = useErpEdiMasterExpression();
 
   const { data: summaryData } = useTabProcQuery<MENU_ID, SHEETS.SUMMARY>({
     menuId: MENU_ID,
@@ -143,13 +159,35 @@ export const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
     }
   };
 
+  /** F7 저장 — AS-IS .cs:~620 SaveData → DMF0008_SAVE_SALES_SITE / DMF0008_SAVE_SSPM
+   *
+   * V2 (Step B 2026-05-29): validation hook 연동 (validation.md 40건 중 핵심 9건).
+   *   1. 필수값 5건 (MSG00002): SCM_SITE_ID/REP_SOLDTO/REP_SHIPTO/SITE_VALID/CUSTOMER_VALID
+   *   2. PK 중복 검사 (MSG00060)
+   *   3. ACTIVE 1건 초과 (MSG00130)
+   *   4. confirmSave (MSG00004)
+   *   5. result_code 'F' (MSG00284)
+   */
   const handleSave = () => {
     if (activeTab === SHEET_INDEX.SALES_SITE) {
       const saveData = salesSiteData?.o_rc1?.filter?.(item => item.CRUD_TYPE) ?? [];
-      saveWithValidation(saveData, staticColumns[SHEETS.SALES_SITE], mutateSalesSite);
+      if (saveData.length === 0) return;
+      if (!validateSalesSiteRequired(saveData)) return;
+      if (!validateDuplicateKey(saveData, ['SCM_SITE_ID', 'REP_SOLDTO_CODE', 'REP_SHIPTO_CODE'])) return;
+      if (!validateActiveUniqueness(saveData, ['SCM_SITE_ID', 'REP_SOLDTO_CODE', 'REP_SHIPTO_CODE'], 'SITE_VALID_YN')) return;
+      confirmSaveData(() => {
+        // V2 (Step B): useProcMutation onSuccess 콜백에서 result_code 'F' 처리는 BE 응답 형식 정착 후 별도 PR.
+        // 현재는 saveWithValidation 의 mandatory column 검증 + 위 클라이언트 검증만으로 차단.
+        saveWithValidation(saveData, staticColumns[SHEETS.SALES_SITE], mutateSalesSite);
+      });
     } else {
       const saveData = sspmData?.o_rc1?.filter?.(item => item.CRUD_TYPE) ?? [];
-      saveWithValidation(saveData, staticColumns[SHEETS.SSPM], mutateSspm);
+      if (saveData.length === 0) return;
+      if (!validateSspmRequired(saveData)) return;
+      if (!validateDuplicateKey(saveData, ['ITEM_ID', 'SOLDTO_CODE', 'SHIPTO_CODE'])) return;
+      confirmSaveData(() => {
+        saveWithValidation(saveData, staticColumns[SHEETS.SSPM], mutateSspm);
+      });
     }
   };
 
@@ -224,6 +262,13 @@ export const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
       void fetchUpdateHistory();
     }
   }, [tabId]);
+
+  // V2 (Step B 2026-05-29): InsertRow 직후 4 컬럼 잠금 (AS-IS .cs:1849-1879)
+  // Grid 가 초기화된 직후 한 번만 등록. activeTab 변경 시 새 grid mount 가능 — tab 종속.
+  useEffect(() => {
+    if (salesSiteGridRef.current) lockSalesSiteInsertColumns(salesSiteGridRef.current);
+    if (sspmGridRef.current) lockSspmInsertColumns(sspmGridRef.current);
+  }, [activeTab, lockSalesSiteInsertColumns, lockSspmInsertColumns]);
 
   return (
     <>

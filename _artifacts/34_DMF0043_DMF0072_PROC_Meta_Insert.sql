@@ -1,0 +1,64 @@
+--==============================================================================
+-- 34_DMF0043_DMF0072_PROC_Meta_Insert.sql (SQL*Plus 버전)
+--
+-- 목적: SCM_ADM_PROC_M 미등록으로 인한 BE 동적 SP 호출 실패 (PLS-00306) 해결
+--   - PKG_DMF0043 8 SPs (총 55 rows)
+--   - PKG_DMF0072 2 SPs (총 34 rows)
+--   = 91 rows
+--
+-- 변환 룰 (ALL_ARGUMENTS → SCM_ADM_PROC_M):
+--   IN  P_USER_ID    → sesUserId (BE 세션 자동 주입)
+--   IN  P_MENU_ID    → menuId    (BE 세션 자동 주입)
+--   IN  P_LANG_CD    → sesLangCd (BE 세션 자동 주입)
+--   IN  P_XXX_YYY    → xxxYyy    (camelCase)
+--   OUT O_RCn        → o_rcn     (소문자)
+--   OUT O_RESULT_CURSOR → O_RESULT_CURSOR (그대로) + DATA_TP_CD='PROC_RESULT'
+--   DATA: VARCHAR2 → VARCHAR / REF CURSOR → CURSOR
+--
+-- 멱등: NOT EXISTS (PROC_NM + SORT_ORD) 가드
+--
+-- 작성: 2026-05-29
+--==============================================================================
+SET DEFINE OFF
+SET SERVEROUTPUT ON
+
+PROMPT === PKG_DMF0043 + PKG_DMF0072 PROC 메타 INSERT (자동 변환 SELECT) ===
+
+INSERT INTO SCM_ADM_PROC_M
+  (PROC_NM, COL_NM, COL_TP_CD, DATA_TP_CD, SORT_ORD,
+   CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+SELECT
+  PACKAGE_NAME || '.' || OBJECT_NAME AS PROC_NM,
+  CASE
+    WHEN IN_OUT = 'IN' AND ARGUMENT_NAME = 'P_USER_ID' THEN 'sesUserId'
+    WHEN IN_OUT = 'IN' AND ARGUMENT_NAME = 'P_MENU_ID' THEN 'menuId'
+    WHEN IN_OUT = 'IN' AND ARGUMENT_NAME = 'P_LANG_CD' THEN 'sesLangCd'
+    WHEN IN_OUT = 'IN' THEN
+      LOWER(SUBSTR(REPLACE(INITCAP(REPLACE(SUBSTR(ARGUMENT_NAME, 3), '_', ' ')), ' ', ''), 1, 1))
+      || SUBSTR(REPLACE(INITCAP(REPLACE(SUBSTR(ARGUMENT_NAME, 3), '_', ' ')), ' ', ''), 2)
+    WHEN IN_OUT = 'OUT' AND ARGUMENT_NAME = 'O_RESULT_CURSOR' THEN 'O_RESULT_CURSOR'
+    WHEN IN_OUT = 'OUT' THEN LOWER(ARGUMENT_NAME)
+    ELSE ARGUMENT_NAME
+  END AS COL_NM,
+  IN_OUT AS COL_TP_CD,
+  CASE
+    WHEN ARGUMENT_NAME = 'O_RESULT_CURSOR' THEN 'PROC_RESULT'
+    WHEN DATA_TYPE = 'REF CURSOR' THEN 'CURSOR'
+    WHEN DATA_TYPE = 'VARCHAR2' THEN 'VARCHAR'
+    ELSE DATA_TYPE
+  END AS DATA_TP_CD,
+  POSITION AS SORT_ORD,
+  'admin', SYSDATE, 'admin', SYSDATE
+FROM ALL_ARGUMENTS S
+WHERE PACKAGE_NAME IN ('PKG_DMF0043','PKG_DMF0072')
+  AND POSITION > 0
+  AND NOT EXISTS (
+    SELECT 1 FROM SCM_ADM_PROC_M T
+     WHERE T.PROC_NM = S.PACKAGE_NAME || '.' || S.OBJECT_NAME
+       AND T.SORT_ORD = S.POSITION
+  );
+
+COMMIT;
+
+PROMPT === COMPLETE ===
+EXIT

@@ -369,7 +369,7 @@ pnpm dev
 | `UPPR_MNU_ID` | `'DMF'` |
 | `MNU_LV_NO` | `3` (1=대분류, 2=중분류, 3=화면) |
 | `MNU_MSG_ID` | `'MNU_DMF0099'` (i18n 참조) |
-| `MNU_URL` | `'dmf0099-sales-monitor'` ★ **slug only — 디렉토리 prefix 금지**. 부모 메뉴 경로는 FE 라우터가 SCM_ADM_MNU_M 트리를 walk-up 해 자동 조립. 형제 메뉴들 (DMF0004~0008 등) 모두 leaf segment 만 저장됨 |
+| `MNU_URL` | `'dmf0099-sales-monitor'` ★ **slug only — 디렉토리 prefix 금지**. 부모 메뉴 경로는 FE 라우터가 SCM_ADM_MNU_M 트리를 walk-up 해 자동 조립. 형제 메뉴들 (DMF0004~0008 등) 모두 leaf segment 만 저장됨. **⚠ FE `nscm-fe/packages/foundation/src/constants/route-paths.ts` 의 동일 MNU_ID slug 와 정확히 일치 의무** — 불일치 시 메뉴 클릭해도 화면 안 뜸 (2026-05-29 DMF0043/0043_01/0072 사고). 작성 직후 cross-check: `grep -nE "^\s*{MNU_ID}:" nscm-fe/packages/foundation/src/constants/route-paths.ts` |
 | `SORT_ORD` | `99` |
 | `USE_YN` | `'Y'` |
 
@@ -396,15 +396,81 @@ pnpm dev
 
 ### 4.4 Procedure 메타 (`SCM_ADM_PROC_M`)
 
+⛔ **절대 누락 금지** — BE 의 동적 SP 호출은 본 메타에서 IN/OUT 파라미터를 조회해 바인딩한다. 누락 시 BE 가 파라미터 0개로 SP 호출 → `ORA-06550 PLS-00306: 인수의 갯수나 유형이 잘못되었습니다` (2026-05-29 DMF0043 사고).
+
 SP IN/OUT 파라미터 1개당 1행. `ALL_ARGUMENTS` 시스템 뷰로 자동 추출 가능.
 
 | 컬럼 | 값 (예) |
 |---|---|
 | `PROC_NM` (PK1) | `'PKG_DMF0099.P_DMF0099_GET_MAIN_DATA'` |
-| `COL_NM` (PK2) | `'divisionId'` (IN 은 camelCase / OUT 은 `'o_rc1'` 형식) |
+| `COL_NM` (PK2) | `'divisionId'` (변환 룰 ↓ 참조) |
 | `COL_TP_CD` | `'IN'` / `'OUT'` |
 | `DATA_TP_CD` | `'VARCHAR'` / `'NUMBER'` / `'DATE'` / `'CLOB'` / `'CURSOR'` / `'PROC_RESULT'` |
-| `SORT_ORD` | `1, 2, 3, ...` (SP 파라미터 순서) |
+| `SORT_ORD` | `1, 2, 3, ...` (SP 파라미터 순서, `ALL_ARGUMENTS.POSITION` 그대로) |
+
+**ARGUMENT_NAME → COL_NM 변환 룰** (BE 자동 주입 키와 정확히 일치 의무):
+
+| ALL_ARGUMENTS.ARGUMENT_NAME | IN_OUT | COL_NM | 비고 |
+|---|---|---|---|
+| `P_USER_ID` | IN | `sesUserId` | BE 세션 자동 주입 |
+| `P_MENU_ID` | IN | `menuId` | BE 세션 자동 주입 |
+| `P_LANG_CD` | IN | `sesLangCd` | BE 세션 자동 주입 |
+| `P_XXX_YYY` (그 외) | IN | `xxxYyy` | `P_` 제거 + camelCase |
+| `O_RC1`, `O_RC2`, ... | OUT | `o_rc1`, `o_rc2`, ... | 소문자 |
+| `O_RESULT_CURSOR` | OUT | `O_RESULT_CURSOR` | 대문자 그대로 + `DATA_TP_CD='PROC_RESULT'` |
+
+**DATA_TYPE → DATA_TP_CD 변환**:
+
+| ALL_ARGUMENTS.DATA_TYPE | DATA_TP_CD |
+|---|---|
+| `VARCHAR2` | `VARCHAR` |
+| `REF CURSOR` (O_RC*) | `CURSOR` |
+| `REF CURSOR` (O_RESULT_CURSOR) | `PROC_RESULT` |
+| `NUMBER` / `DATE` / `CLOB` | 그대로 |
+
+**자동 변환 SQL 템플릿** (모든 신규 화면 등록 시 BLOCK 4 로 적용 의무 — `_artifacts/34_DMF0043_DMF0072_PROC_Meta_Insert_DBeaver.sql` 참조):
+
+```sql
+INSERT INTO SCM_ADM_PROC_M (PROC_NM, COL_NM, COL_TP_CD, DATA_TP_CD, SORT_ORD,
+                            CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+SELECT
+  PACKAGE_NAME || '.' || OBJECT_NAME AS PROC_NM,
+  CASE
+    WHEN IN_OUT = 'IN' AND ARGUMENT_NAME = 'P_USER_ID' THEN 'sesUserId'
+    WHEN IN_OUT = 'IN' AND ARGUMENT_NAME = 'P_MENU_ID' THEN 'menuId'
+    WHEN IN_OUT = 'IN' AND ARGUMENT_NAME = 'P_LANG_CD' THEN 'sesLangCd'
+    WHEN IN_OUT = 'IN' THEN
+      LOWER(SUBSTR(REPLACE(INITCAP(REPLACE(SUBSTR(ARGUMENT_NAME, 3), '_', ' ')), ' ', ''), 1, 1))
+      || SUBSTR(REPLACE(INITCAP(REPLACE(SUBSTR(ARGUMENT_NAME, 3), '_', ' ')), ' ', ''), 2)
+    WHEN IN_OUT = 'OUT' AND ARGUMENT_NAME = 'O_RESULT_CURSOR' THEN 'O_RESULT_CURSOR'
+    WHEN IN_OUT = 'OUT' THEN LOWER(ARGUMENT_NAME)
+  END,
+  IN_OUT,
+  CASE
+    WHEN ARGUMENT_NAME = 'O_RESULT_CURSOR' THEN 'PROC_RESULT'
+    WHEN DATA_TYPE = 'REF CURSOR' THEN 'CURSOR'
+    WHEN DATA_TYPE = 'VARCHAR2' THEN 'VARCHAR'
+    ELSE DATA_TYPE
+  END,
+  POSITION, 'admin', SYSDATE, 'admin', SYSDATE
+FROM ALL_ARGUMENTS S
+WHERE PACKAGE_NAME = 'PKG_{SCREEN_ID}'
+  AND POSITION > 0
+  AND NOT EXISTS (
+    SELECT 1 FROM SCM_ADM_PROC_M T
+     WHERE T.PROC_NM = S.PACKAGE_NAME || '.' || S.OBJECT_NAME AND T.SORT_ORD = S.POSITION
+  );
+```
+
+**PR 직전 검증 (필수)**:
+
+```sql
+-- ALL_ARGUMENTS 와 SCM_ADM_PROC_M 카운트 일치 확인
+SELECT 'EXPECT' AS K, COUNT(*) FROM ALL_ARGUMENTS WHERE PACKAGE_NAME = 'PKG_{SCREEN_ID}' AND POSITION > 0
+UNION ALL
+SELECT 'ACTUAL', COUNT(*) FROM SCM_ADM_PROC_M WHERE PROC_NM LIKE 'PKG_{SCREEN_ID}.%';
+-- 두 행의 COUNT 가 정확히 일치해야 함
+```
 
 ### 4.5 API (`SCM_ADM_API_M`)
 

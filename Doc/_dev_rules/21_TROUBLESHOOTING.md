@@ -14,6 +14,8 @@
 | `POST /api/{MENU}/{sheet}/{action}/call-proc 500` | BE 측 오류 (메타 미등록 / SP INVALID / 파라미터 mismatch) | §7 |
 | DBeaver 실행 시 `ORA-00922` / `ORA-00933` | DBeaver SQL 에 `/`, `SET DEFINE`, `PROMPT`, 다중 `;` 포함 | 룰 08 §7.1 |
 | AS-IS 의 동적 visibility 가 신규 화면에 미반영 | Designer.cs + .cs 동적 배치 누락 | 룰 24 / 룰 25 §4 |
+| 메뉴 클릭 시 빈 화면 / `No matching route` / MDI 탭만 열리고 비어있음 | `SCM_ADM_MNU_M.MNU_URL` ↔ FE `route-paths.ts` slug 불일치 (1차) → 권한 (3차) | hook `menu-not-displayed-debug.md` 5단계 의무 (1=URL, 2=라우터, 3=메뉴권한, 4=부모권한, 5=런타임) |
+| 조회 버튼 클릭 시 `ORA-06550 PLS-00306: 인수의 갯수나 유형이 잘못되었습니다` | `SCM_ADM_PROC_M` (PROC 메타) 미등록 → BE 가 파라미터 0개로 SP 호출 | 룰 08 §4.4 의 자동 변환 SQL 로 `ALL_ARGUMENTS` → `SCM_ADM_PROC_M` INSERT. 신규 화면 등록 시 BLOCK 4 절대 누락 금지 |
 
 ## §1. Oracle SP 빈 결과 진단 (DMF0007 사례)
 
@@ -618,6 +620,113 @@ rm -rf nscm-fe/apps/web/node_modules/.vite
 **부작용 가중**: `WHENEVER SQLERROR EXIT SQL.SQLCODE ROLLBACK` 가 설정되어 있으면 검증 SELECT 의 에러로 트랜잭션 전체 롤백 → UPDATE 도 되돌려짐.
 
 **해결**: 검증용 row count 가 필요하면 PL/SQL 블록으로 감싸기, 또는 단순 `SELECT COUNT(*)` 로 변경.
+
+---
+
+## §10. 로컬 Docker Oracle 사고 묶음 (2026-05-30 추가)
+
+> 룰 [29_LOCAL_DB_CSV_IMPORT.md](29_LOCAL_DB_CSV_IMPORT.md) 와 짝. 본 §은 발생한 ORA 에러별 진단/복구 절차.
+
+### §10.1 ORA-12954 / ORA-01109 — Oracle Free Edition 12 GB 한도 초과
+
+**증상**:
+- BE bootRun: `[DBCP: nscm_oracle(oracle)] Failed to initialize pool: ORA-01109: database not open`
+- sqlplus: `ALTER PLUGGABLE DATABASE FREEPDB1 OPEN` 시 `ORA-12954: The request exceeds the maximum allowed database size of 12 GB.`
+- `SELECT name, open_mode FROM v$pdbs;` 결과 `FREEPDB1 = MOUNTED` (READ WRITE 아님)
+
+**원인**: PDB datafile (특히 `temp01.dbf` / `undotbs01.dbf` / `ts_scm_d01.dbf`) 의 control file 등록 logical size 합산이 12 GB 초과. Oracle Free 라이센스 체크가 PDB OPEN 시점에 실패.
+
+**시도해도 안 되는 것**:
+- OS level `truncate` (logical size 가 그대로라 한도 체크 통과 X)
+- `ALTER PLUGGABLE DATABASE OPEN UPGRADE` (한도 체크 동일)
+- `ALTER DATABASE DATAFILE ... RESIZE` (PDB MOUNT 상태에서 PDB datafile 접근 불가, ORA-01516)
+- `ALTER SESSION SET CONTAINER = FREEPDB1` (MOUNT 상태에서 컨테이너 전환 불가)
+
+**유일한 복구 = 컨테이너 재구성 (D 옵션)**:
+```bash
+cd C:\Projects\NSCM\_artifacts\local-docker-oracle
+docker compose down -v      # 볼륨까지 삭제
+docker compose up -d
+# 5~10분 대기 (DATABASE IS READY TO USE)
+.\load_all.ps1              # DDL 재적재
+# 그 후 CSV 재적재 + 사용자 시드 재적용
+```
+
+**사고 회피**:
+- 일상 작업 시 `TEMP` tablespace 사이즈 모니터링 (대형 sort/hash 작업 후 truncate).
+- 디스크 사용량 정기 점검: `docker exec nscm-oracle du -sh /opt/oracle/oradata/FREE/FREEPDB1/`
+
+### §10.2 화면 조회 결과 0건 — 5단계 진단
+
+> **금지**: "데이터 자체가 없다" 단정. anti-simplification 룰 — 데이터 source 정확 추적.
+
+#### 진단 5단계 (순서대로)
+
+```
+[1] BE log 에서 호출 SP 식별
+    Get-Content $beLog | Select-String "PKG_DMF{화면ID}|/DMF{화면ID}/.+/call-proc"
+    → exception="" 이면 SP 실행 성공 + 결과 0
+
+[2] SP body 에서 사용 테이블 추출 (FROM/JOIN 모두)
+    SELECT line, text FROM dba_source WHERE name='PKG_DMF{화면ID}' AND type='PACKAGE BODY'
+      AND line BETWEEN <proc_start> AND <proc_end>
+    → anti-simplification: 200 lines 만으로는 부족, procedure 전체 추출 의무
+
+[3] 각 테이블 row count 확인
+    SELECT 'tbl='||COUNT(*) FROM SCM_MGR.<tbl>;
+    → 0 이거나 dependency synonym 깨졌으면 그 테이블이 원인
+
+[4] CSV/DDL 폴더에서 누락 테이블 매칭
+    ls /c/TRANFILE/DB/DATA/ | grep -i <tbl>
+    → 있으면 적재 (룰 29 §2 의 200MB 임계 적용)
+
+[5] SP 동적 SQL 의 WHERE 조건 검증 (위 1~4 후에도 0 일 때)
+    - PLAN_WEEK 자동 계산: SP 가 `SCM_SYS_CALENDAR_M.ISO_YYYYWW` 기반 → 데이터 의 MAX PLAN_WEEK 과 불일치 시 0
+    - 권한 JOIN: PR_SCM_EDIT_YN(P_USER_ID, P_MENU_ID) — `P_MENU_ID` 가 NULL 이면 결과 0 (§10.3 참조)
+```
+
+#### 사례
+- **DMF0007 (Customer FCST)**: `DM_MST_CUSTOMER_FCST` 미적재 → CSV 200MB 미만이라 전체 + 82 row 도 보강. PLAN_WEEK='202622' 부재 → 202621 복제로 생성.
+- **DMF0006 (Customer Model)**: `DM_MST_CUSTOMER_MODEL` 미적재 → CSV 25 KB 라 전체 적재.
+
+### §10.3 SP 호출 결과 0건 / 권한 fail — PROC_M COL_NM 정확성
+
+**증상**:
+- SP 호출은 정상 (exception=""), 결과만 0건
+- 또는 `No Permission` 메시지
+- 직접 SQL 으로 같은 조건 실행 시 결과 있음
+
+**원인**: `SCM_ADM_PROC_M` 의 `COL_NM` 이 BE 자동 채움 키와 매칭 안 됨 → BE 가 그 자리에 NULL 전달 → SP 내부 권한 JOIN (`PR_SCM_EDIT_YN`, UGA cross 등) 실패.
+
+**BE 가 자동 채우는 PROC_M COL_NM** (FE 가 별도 명시 안 해도 BE 가 session 에서 자동 매핑):
+| COL_NM | 값 |
+|---|---|
+| `sesUserId` | 로그인 사용자 ID |
+| `sesLangCd` | 세션 언어 코드 |
+| `mnuId` | 현재 메뉴 ID (** `menuId` 아님**) |
+
+**금지된 COL_NM** (BE 가 자동 채움 안 함):
+- `menuId` (BE 는 `mnuId` 매칭)
+- `userInfo` (BE 는 `sesUserId` 매칭)
+- `P_USER_ID` / `P_MENU_ID` 같은 SP signature 변수명 그대로 (BE 는 camelCase JSON key 매칭)
+
+**fix 절차**:
+1. 잘 동작하는 SP (예: `PKG_DMF0007.P_DMF0007_GET_CUST_FCST_DATA`) 의 PROC_M COL_NM 확인하여 9번째 위치 = `mnuId` 패턴 학습.
+2. 신규 SP 의 PROC_M 시드 시 동일 패턴 적용.
+3. PROC_M 의 PK = (PROC_NM, COL_NM, COL_TP_CD) 라 `UPDATE` 시 PK 충돌 → `DELETE` + `INSERT` 패턴 사용.
+
+**사고 사례**: 2026-05-30 DMF0007 `customerPsi/SEARCH` redirect 시 PROC_M 의 9번째 COL_NM 을 `menuId` 로 잘못 시드 → BE 가 `mnuId` 매칭 → NULL 전달 → SP 내부 `PR_SCM_EDIT_YN(P_USER_ID, NULL)` 결과 0 → 화면 빈 결과.
+
+### §10.4 BE 캐시 `Query is not exist` — `SCM_ADM_CMBO_SQL_M` reload 후
+
+**증상**: dropdown / lookup combo 가 빈 결과. BE log `EXCEPTION: LookupController.retrieveCombo() | Message: Query is not exist.`
+
+**원인**: BE 가 시작 시점에 `SCM_ADM_CMBO_SQL_M` 의 combo SQL 들을 cache. 그 후 row 가 추가/변경되어도 BE cache 에 반영 안 됨.
+
+**해결**: BE 재기동 → 사용자 시크릿 창 재로그인.
+
+**같은 패턴이 적용되는 메타 테이블** (변경 후 BE 재기동 권장):
+- `SCM_ADM_CMBO_SQL_M`, `SCM_MST_SHEET_COLUMNS`, `SCM_ADM_API_M`, `SCM_ADM_PROC_M`, `SCM_ADM_MNU_M`
 
 ---
 

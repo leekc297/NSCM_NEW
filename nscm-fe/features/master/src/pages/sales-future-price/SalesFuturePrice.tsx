@@ -138,7 +138,13 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MenuId>) => {
     gridRef.current?.invalidate();
   };
 
-  /** F7 저장 — AS-IS SaveData (.cs:1551~1933) MSG00137/MSG00002/MSG00043/MSG00004 */
+  /** F7 저장 — AS-IS SaveData (.cs:1551~1933) MSG00137/MSG00002/MSG00043/MSG00004
+   *
+   * TODO (2026-05-28 사용자 결정): Save 응답의 Range Rate 초과 데이터(AS-IS .cs:1935 ds.Tables[2]) 가
+   *   있으면 SalesPriceRangeModal 을 자동으로 띄운다. AS-IS [PJ20200138] 패턴 복원.
+   *   현재는 Range Rate 결과셋이 없어 TODO. Save 흐름에 result.rangeRateRows 가 추가되면
+   *   `if (rangeRateRows.length > 0) setOpenSalesPriceRange(true)` 호출 예정.
+   */
   const onSave = () => {
     const rows = (data as { o_rc1?: SalesFuturePriceRow[] } | undefined)?.o_rc1 ?? [];
     const saveData = rows.filter(item => item.CRUD_TYPE);
@@ -213,7 +219,6 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MenuId>) => {
       <SalesFuturePriceForm
         onSearch={onSearch}
         onOpenExchangeRate={() => setOpenExchangeRate(true)}
-        onOpenSalesPriceRange={() => setOpenSalesPriceRange(true)}
         onOpenPriceBatchInput={() => setOpenPriceBatchInput(true)}
         onOpenSalesPriceTemplate={() => setOpenSalesPriceTemplate(true)}
         onOpenSalesPriceVersion={() => setOpenSalesPriceVersion(true)}

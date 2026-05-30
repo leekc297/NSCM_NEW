@@ -4,3 +4,6 @@ export * from './pages/sales-site-project-model/SalesSiteProjectModel';
 export * from './pages/customer-forecast-master/CustomerFcstMaster';
 export * from './pages/erp-edi-master/ErpEdiMaster';
 export * from './pages/sales-future-price/SalesFuturePrice';
+export * from './pages/contribute-main/ContributeMain';
+export * from './pages/contribute-view/ContributeView';
+export * from './pages/nn-master-mapping/NNMasterMapping';

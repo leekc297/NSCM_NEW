@@ -190,7 +190,7 @@ export const PriceBatchInputModal = ({
               <>
                 <Grid size={4}>
                   <FormItem
-                    label={t('LBL00050', '_Division')}
+                    label={t('LBL_COMMON_DIVISION', '_사업부')}
                     labelAlign='right'
                     render={() => (
                       <InputField fullWidth value={filter.divisionId} disabled />

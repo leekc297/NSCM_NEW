@@ -15,8 +15,11 @@
 |---:|---|---|---|---|
 | 1 | `Box is not exported from '@shared/mui'` | `SalesPriceVersionModal.tsx:18`, `ColumnTitleSetModal.tsx:23` | `@shared/mui` 의 실제 export 인벤토리 확인 없이 MUI 의 `Box` 를 추측으로 import | Vite SyntaxError → 화면 진입 실패 |
 | 2 | `isEss is not defined` | `SalesFuturePriceForm.tsx:193` | Edit 으로 `const isEss = ...` 선언을 `showTemplateButton` prop 으로 대체할 때 라인 193 의 `disabled={!isEss}` 사용처를 갱신 안 함 | ReferenceError → 컴포넌트 render 실패 |
+| 3 | `t._setOwnerList is not a function` at `ColumnGroupCollection2.push` | `ContributeMainGrid.tsx:49,52,55` | `<FlexGridColumnGroup>` JSX 안에 단일 `<FlexGridColumn>` 1개씩 배치. React 19 + `@mescius/wijmo.react.grid 5.20252.44` wrapper 가 single child 케이스에서 column 객체를 정상 instance 로 생성 못함 → 내부 `_setOwnerList` 호출 시 plain object → TypeError | 화면 진입 시 ErrorBoundary "Unexpected Application Error" (2026-05-29 DMF0043 사고) |
+| 4 | `ORA-06550 PLS-00306: '...' 호출 시 인수의 갯수나 유형이 잘못되었습니다` | DMF0043 main SEARCH 시 BE 가 `{call PKG_DMF0043.P_DMF0043_GET_MAIN_VARSION_DATA}` 를 파라미터 0개로 호출 | 신규 화면 메타 등록 시 `SCM_ADM_PROC_M` (PROC 메타) INSERT 누락. BE 동적 SP 호출은 본 메타에서 IN/OUT 을 조회해 바인딩하는데 메타가 0건이라 파라미터 없이 호출됨 | 조회 버튼 클릭 시 GlobalExceptionHandler 500 (2026-05-29 DMF0043/0072 사고, 91 rows 누락) |
+| 5 | `TypeError: value?.trim is not a function` at `CustomDropdown.tsx:65` | `ContributeMainForm.tsx` 의 `<CustomDropdown value={...} options={...row.CODE...}>` | SP 결과의 `CODE = VER_SEQ` 가 Oracle `NUMBER` 타입 → JSON 직렬화 시 JS `number` → `CustomDropdown.value` 는 `string` 만 허용 (`value?.trim().split(',')` 호출) → number 면 `.trim is not a function` | 화면 진입 즉시 ErrorBoundary "Unexpected Application Error" (2026-05-29 DMF0043 사고) |
 
-**공통 패턴**: 신규 화면 작성 시 **기존 화면의 정확한 import 패턴 및 변수 사용처를 cross-check 하지 않은 단순화** 가 원인.
+**공통 패턴**: 신규 화면 작성 시 **기존 화면의 정확한 import 패턴 / 변수 사용처 / Wijmo 컴포넌트 사용 패턴을 cross-check 하지 않은 단순화** 가 원인. Wijmo 의 경우 declarative JSX (`<FlexGridColumnGroup>`) 가 항상 작동하지 않으므로 기존 화면이 쓰는 imperative 패턴 (initialized 콜백에서 `grid.columnGroups.push`) 우선 사용.
 
 ---
 
@@ -29,6 +32,9 @@
 | 3 | ❌ Edit 으로 변수 선언 삭제/변경 후 **사용처 grep 검증 없이** 완료 보고 |
 | 4 | ❌ 작성 직후 dev 서버 동작 검증 없이 "완료" 보고 (사용자가 첫 오류 발견하는 사태) |
 | 5 | ❌ 기존 화면 (특히 `customer-forecast-master`, `user-management`) 의 import block 을 cross-check 하지 않고 신규 화면 작성 |
+| 6 | ❌ Wijmo `<FlexGridColumnGroup>` JSX 안에 단일 `<FlexGridColumn>` 1개만 배치. React wrapper 의 single-child column 인스턴스 생성 실패 → `_setOwnerList is not a function`. 다단 헤더 필요 시 (a) leaf 2개 이상 보장 또는 (b) imperative 패턴 (`grid.columnGroups.push(new ColumnGroup({...}))`) 사용 |
+| 7 | ❌ Wijmo Column 머지 의도로 `<FlexGridColumnGroup header="A"><FlexGridColumn header="A" /></FlexGridColumnGroup>` 의도적 자동 머지 시도 — 룰 27 §"TWO_DEPTH + group.header == leaf.header" 룰 활용. 단, leaf 1개 케이스는 §1.6 위반 |
+| 8 | ❌ Oracle SP 결과를 콤보 `options` 로 매핑할 때 `value` 에 **NUMBER 컬럼을 그대로 전달**. CustomDropdown 의 `value` 는 `string` 만 허용 → number 면 `.trim is not a function` 폭발. **`value: String(row.NUMBER_COL)` 명시 변환 의무**. DDL 확인 → NUMBER 컬럼은 String() 캐스팅 후 사용 |
 
 ---
 
@@ -105,7 +111,37 @@ for v in isEss isPower isAutomotive division divisionCode; do
   [ $used -gt 0 ] && [ $declared -eq 0 ] && echo "❌ $v: 미선언 사용 $used 위치"
 done
 
-# 3. Vite dev 서버 동작 검증 (선택)
+# 3. Wijmo FlexGridColumnGroup 단일 자식 (single-child) 검출
+#    JSX 단일 자식이면 _setOwnerList 오류 발생. leaf 2개 이상 보장 또는 imperative API 사용
+python3 -c "
+import re, sys, pathlib
+for p in pathlib.Path('$SCREEN_PATH').rglob('*.tsx'):
+    txt = p.read_text(encoding='utf-8')
+    for m in re.finditer(r'<FlexGridColumnGroup[^>]*>([\s\S]*?)</FlexGridColumnGroup>', txt):
+        leaves = re.findall(r'<FlexGridColumn[\s/]', m.group(1))
+        if len(leaves) < 2:
+            line = txt[:m.start()].count('\n') + 1
+            print(f'❌ {p}:{line} FlexGridColumnGroup single-child (leaf={len(leaves)}) → _setOwnerList 위험')
+" 2>/dev/null || true
+
+# 4. SCM_ADM_PROC_M 메타 카운트 일치 확인 (DB 접속 환경)
+#    누락 시 BE 동적 SP 호출이 PLS-00306 폭발 (DMF0043 사고)
+SCREEN_PKG="PKG_{SCREEN_ID}"
+docker exec nscm-oracle bash -c "sqlplus -S SCM_MGR/PASSWORD@localhost:1521/FREEPDB1 <<EOF
+SELECT 'EXPECT' K, COUNT(*) N FROM ALL_ARGUMENTS WHERE PACKAGE_NAME = '$SCREEN_PKG' AND POSITION > 0
+UNION ALL
+SELECT 'ACTUAL', COUNT(*) FROM SCM_ADM_PROC_M WHERE PROC_NM LIKE '$SCREEN_PKG.%';
+EXIT
+EOF"
+# → EXPECT == ACTUAL 이어야 함. 불일치 시 룰 08 §4.4 의 자동 변환 SQL 적용
+
+# 5. SP 결과 → 콤보 옵션 매핑 시 NUMBER → String 변환 누락 검출
+#    `.map(row => ({ value: row.XXX }))` 패턴에서 row.XXX 의 Oracle 타입이 NUMBER 면 String() 명시
+grep -nE "value:\s*row\.[A-Z_]+\s*[,}]" $SCREEN_PATH/**/*.tsx 2>/dev/null | while read line; do
+  echo "⚠ 검토 필요: $line — Oracle 컬럼 타입이 NUMBER 면 value: String(row.XXX) 로 변환"
+done
+
+# 6. Vite dev 서버 동작 검증 (선택)
 # 사용자 직접 서버 기동 후 화면 진입 → "Unexpected Application Error" 발생 0건 확인
 ```
 
@@ -149,3 +185,4 @@ done
 - 2026-05-28: 신규 작성 (DMF0020 Box/isEss 2건 사고 후).
   - 룰 23 §5.1 `@shared/mui` 정확 export 목록 보강 + Box/Container/Paper 미존재 명시
   - 룰 25 §1.5 에 본 hook 추가
+- 2026-05-29: §0 사고 #3 (Wijmo `_setOwnerList`) + §1 금지 #6,7 + §3 grep #3 (FlexGridColumnGroup single-child 검출) 추가. 룰 27 §F (FlexGridColumnGroup JSX single-child 폭발 + 3가지 해결책) 추가.

@@ -1,0 +1,14 @@
+@media screen and (max-width: '1920px') {
+  .formItem {
+    grid-template-columns: 100px auto !important;
+    & > div:first-child {
+      width: 100px;
+    }
+  }
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 4px;
+  justify-content: flex-end;
+}

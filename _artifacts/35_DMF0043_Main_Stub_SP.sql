@@ -1,0 +1,228 @@
+--==============================================================================
+-- 35_DMF0043_Main_Stub_SP.sql  (SQL*Plus)
+--
+-- 목적:
+--   1) PKG_DMF0043.P_DMF0043_GET_CONTRIBUTE_MAIN_DATA 가 DB 미존재 (spec 에는
+--      선언만, ALL_ARGUMENTS 0건) + body 는 MSSQL 잔존 → BE 호출 실패.
+--   2) 임시 standalone SP 로 long-format 데이터 반환 (FE PivotGrid 가 client
+--      side 에서 PIVOT 수행 — 룰 27 §C).
+--   3) API_URL 정정 + SCM_ADM_PROC_M 메타 자동 등록.
+--
+-- TODO (별도 PR — Anti-Simplification):
+--   - PKG_DMF0043 body 의 P_DMF0043_GET_CONTRIBUTE_MAIN_DATA 본격 변환
+--     (PIVOT 동적 컬럼 + dis/his 4-case 처리)
+--   - 변환 완료 후: 본 standalone DROP + API_URL revert (PKG_DMF0043. prefix 복귀)
+--
+-- 작성: 2026-05-29
+--==============================================================================
+SET DEFINE OFF
+SET SERVEROUTPUT ON
+
+PROMPT === BLOCK 1: standalone stub SP 생성 ===
+
+CREATE OR REPLACE PROCEDURE SCM_MGR.P_DMF0043_GET_CONTRIBUTE_MAIN_DATA
+(
+    P_USER_ID         IN  VARCHAR2,
+    P_MENU_ID         IN  VARCHAR2,
+    P_YEAR_ID         IN  VARCHAR2,
+    P_IS_YEAR_BY_YEAR IN  VARCHAR2,
+    P_IS_MISMATCH     IN  VARCHAR2,
+    P_IS_HISTORY      IN  VARCHAR2,
+    O_RC1             OUT SYS_REFCURSOR,
+    O_RESULT_CURSOR   OUT SYS_REFCURSOR
+)
+/*
+   v6 (2026-05-29): SP 측 동적 PIVOT 으로 변경 — AS-IS 와 동일 구조.
+     - 메인 마스터 = SCM_MST_SITE_ITEM (1 row per 분류 키 6개)
+     - 동적 PIVOT IN-list = DM_MST_CONTRIBUTE_RATIO_DTL 의 DISTINCT (YYYYMM, OS_CORP_CD)
+     - 컬럼 alias 형식 = "M#YYYYMM#OS_CORP_CD" (AS-IS PKG body 의 V_ColumnData 형식과 동일)
+     - 메모리 룰 feedback_asis_to_tobe_sp_no_omission 보완: AS-IS PIVOT 처리 구조 보존.
+     - 미반영 (별도 PR): AS-IS dis/his 4 case 분기 (a/b/c/d) + 사용자 권한 (p_user_group) 추가 필터
+*/
+AS
+    V_VER_SEQ     NUMBER;
+    V_DIVISION_ID VARCHAR2(20) := '40';
+    V_PIVOT_LIST  CLOB := EMPTY_CLOB();
+    V_SQL         CLOB;
+    V_MISMATCH_FILTER VARCHAR2(200);
+BEGIN
+    BEGIN
+        V_VER_SEQ := TO_NUMBER(P_YEAR_ID);
+    EXCEPTION WHEN OTHERS THEN
+        V_VER_SEQ := NULL;
+    END;
+
+    /* 1) 동적 PIVOT IN-list 생성 — (YYYYMM, OS_CORP_CD) 조합.
+          12 months × 8 corps ≈ 96 entries → VARCHAR2(4000) 초과 가능 → CLOB + cursor loop */
+    DBMS_LOB.CREATETEMPORARY(V_PIVOT_LIST, TRUE);
+    FOR REC IN (
+        SELECT DISTINCT YYYYMM, OS_CORP_CD
+          FROM DM_MST_CONTRIBUTE_RATIO_DTL
+         WHERE VER_SEQ = V_VER_SEQ
+         ORDER BY YYYYMM, OS_CORP_CD
+    ) LOOP
+        IF DBMS_LOB.GETLENGTH(V_PIVOT_LIST) > 0 THEN
+            DBMS_LOB.APPEND(V_PIVOT_LIST, ', ');
+        END IF;
+        DBMS_LOB.APPEND(V_PIVOT_LIST,
+            '''' || REC.YYYYMM || '#' || REC.OS_CORP_CD ||
+            ''' AS "M#' || REC.YYYYMM || '#' || REC.OS_CORP_CD || '"');
+    END LOOP;
+
+    IF DBMS_LOB.GETLENGTH(V_PIVOT_LIST) = 0 THEN
+        /* 빈 결과 안전 처리 */
+        DBMS_LOB.APPEND(V_PIVOT_LIST, '''_EMPTY_'' AS "M#NO_DATA"');
+    END IF;
+
+    /* 2) isMismatch 필터 — AS-IS .cs:293 p_dis = 'N'/'ALL'/'Y'.
+          WHERE 절은 SELECT alias 참조 불가 → 실제 식 (R.DEPARTMENT_ID IS [NOT] NULL) 사용 */
+    V_MISMATCH_FILTER := CASE
+        WHEN P_IS_MISMATCH = 'N' THEN ' AND R.DEPARTMENT_ID IS NOT NULL '
+        WHEN P_IS_MISMATCH = 'Y' THEN ' AND R.DEPARTMENT_ID IS NULL '
+        ELSE ''
+    END;
+
+    /* 3) 동적 SQL 구성 — SITE_ITEM × CONTRIBUTE PIVOT */
+    V_SQL :=
+'WITH SITE_ITEM_BASE AS (
+    SELECT
+        A.DIVISION_ID,
+        MAX(DIV.DIVISION_NAME)                          AS DIVISION_NM,
+        TEAM.DEPARTMENT_ID,
+        MAX(TEAM.DEPARTMENT_NAME)                       AS DEPARTMENT_NM,
+        TEAM.DEPT_ID,
+        MAX(TEAM.DEPT_NM)                               AS DEPT_NM,
+        NVL(A.CUST_GROUP, '' '')                        AS END_CUST_REPORT,
+        NVL(A.CUST_GROUP_DTL, '' '')                    AS SOLDTO_CUST_REPORT,
+        NVL(C.FORECAST_INFO_PRODUCT_GROUP, '' '')       AS PRODUCT_GROUP,
+        NVL(C.FORECAST_INFO_BIZ_TYPE, '' '')            AS DM_BIZ_TYPE
+      FROM SCM_MST_SITE_ITEM A
+        INNER JOIN SCM_MST_SITE B
+           ON A.DIVISION_ID = B.DIVISION_ID AND A.SCM_SITE_ID = B.SCM_SITE_ID
+        INNER JOIN DM_MST_ITEM_SINGLE_V C
+           ON A.DIVISION_ID = C.DIVISION_ID AND A.ITEM_ID = C.ITEM_ID
+        LEFT JOIN SCM_MST_DIVISION DIV
+           ON DIV.DIVISION_ID = A.DIVISION_ID AND DIV.VALID_YN = ''Y''
+        LEFT JOIN (
+            SELECT U.USER_ID,
+                   CC.DEPT_ID                AS DEPT_ID,
+                   CC.DEPT_NAME_KO           AS DEPT_NM,
+                   DD.DEPT_ID                AS DEPARTMENT_ID,
+                   DD.DEPT_NAME_KO           AS DEPARTMENT_NAME
+              FROM SCM_MST_SSO_USER_INFO U
+                INNER JOIN SCM_MST_SSO_DEPT_INFO CC ON U.DEPT_ID = CC.DEPT_ID
+                INNER JOIN SCM_MST_SSO_DEPT_INFO DD ON CC.UPPER_DEPT_ID = DD.DEPT_ID
+        ) TEAM ON TEAM.USER_ID IN (
+            SELECT TOKEN FROM TABLE(FN_STRING_SPLIT(A.OWNER, '',''))
+        )
+     WHERE A.DIVISION_ID = ''' || V_DIVISION_ID || '''
+       AND B.SITE_TYPE = ''SALES''
+       AND A.VALID_YN = ''Y''
+     GROUP BY A.DIVISION_ID, TEAM.DEPARTMENT_ID, TEAM.DEPT_ID,
+              NVL(A.CUST_GROUP, '' ''), NVL(A.CUST_GROUP_DTL, '' ''),
+              NVL(C.FORECAST_INFO_PRODUCT_GROUP, '' ''),
+              NVL(C.FORECAST_INFO_BIZ_TYPE, '' '')
+),
+RATIO_LONG AS (
+    SELECT DEPARTMENT_ID, DEPT_ID, END_CUST_REPORT, SOLDTO_CUST_REPORT,
+           PRODUCT_GROUP, DM_BIZ_TYPE,
+           YYYYMM || ''#'' || OS_CORP_CD            AS COL_KEY,
+           CONTRIBUTION_RATIO
+      FROM DM_MST_CONTRIBUTE_RATIO_DTL
+     WHERE VER_SEQ = ' || V_VER_SEQ || '
+),
+RATIO_PVT AS (
+    SELECT *
+      FROM RATIO_LONG
+     PIVOT (MAX(CONTRIBUTION_RATIO) FOR COL_KEY IN (' || V_PIVOT_LIST || '))
+)
+SELECT SI.DIVISION_ID, SI.DIVISION_NM,
+       SI.DEPARTMENT_ID, SI.DEPARTMENT_NM,
+       SI.DEPT_ID, SI.DEPT_NM,
+       SI.END_CUST_REPORT, SI.SOLDTO_CUST_REPORT,
+       NVL(CUST.SOLDTO_DESC, SI.SOLDTO_CUST_REPORT)   AS SOLDTO_CUST_REPORT_NM,
+       SI.PRODUCT_GROUP, SI.DM_BIZ_TYPE,
+       CASE WHEN SI.DEPARTMENT_ID IS NOT NULL
+             AND SI.DEPT_ID IS NOT NULL
+             AND TRIM(SI.END_CUST_REPORT) IS NOT NULL
+             AND TRIM(SI.SOLDTO_CUST_REPORT) IS NOT NULL
+             AND TRIM(SI.PRODUCT_GROUP) IS NOT NULL
+             AND TRIM(SI.DM_BIZ_TYPE) IS NOT NULL
+            THEN ''Y'' ELSE ''N''
+       END AS EDIT_FLAG,
+       CASE WHEN R.DEPARTMENT_ID IS NULL THEN ''Y'' ELSE ''N'' END AS DISCARD,
+       R.*
+  FROM SITE_ITEM_BASE SI
+  LEFT JOIN RATIO_PVT R
+    ON R.DEPARTMENT_ID      = SI.DEPARTMENT_ID
+   AND R.DEPT_ID            = SI.DEPT_ID
+   AND R.END_CUST_REPORT    = SI.END_CUST_REPORT
+   AND R.SOLDTO_CUST_REPORT = SI.SOLDTO_CUST_REPORT
+   AND R.PRODUCT_GROUP      = SI.PRODUCT_GROUP
+   AND R.DM_BIZ_TYPE        = SI.DM_BIZ_TYPE
+  LEFT JOIN (
+      SELECT SOLDTO_CODE, MAX(SOLDTO_DESCRIPTION) AS SOLDTO_DESC
+        FROM SCM_MST_CUSTOMER
+       WHERE VALID_YN = ''Y''
+       GROUP BY SOLDTO_CODE
+  ) CUST ON CUST.SOLDTO_CODE = SI.SOLDTO_CUST_REPORT
+ WHERE 1=1' || V_MISMATCH_FILTER || '
+ ORDER BY SI.DEPARTMENT_ID, SI.DEPT_ID, SI.END_CUST_REPORT, SI.SOLDTO_CUST_REPORT';
+
+    OPEN O_RC1 FOR V_SQL;
+
+    OPEN O_RESULT_CURSOR FOR
+        SELECT '0' AS CODE, 'SUCCESS' AS MSG, '0' AS EVENT FROM DUAL;
+END P_DMF0043_GET_CONTRIBUTE_MAIN_DATA;
+/
+
+PROMPT === BLOCK 2: SCM_ADM_API_M.API_URL → standalone (PKG. prefix 제거) ===
+
+UPDATE SCM_MGR.SCM_ADM_API_M
+   SET API_URL          = 'P_DMF0043_GET_CONTRIBUTE_MAIN_DATA',
+       LAST_UPDATED_BY  = 'admin',
+       LAST_UPDATE_DATE = SYSDATE
+ WHERE API_ID = 'DMF0043_main_SEARCH';
+
+PROMPT === BLOCK 3: SCM_ADM_PROC_M 메타 자동 등록 (ALL_ARGUMENTS) ===
+
+INSERT INTO SCM_MGR.SCM_ADM_PROC_M
+  (PROC_NM, COL_NM, COL_TP_CD, DATA_TP_CD, SORT_ORD,
+   CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+SELECT
+  S.OBJECT_NAME AS PROC_NM,
+  CASE
+    WHEN S.IN_OUT = 'IN' AND S.ARGUMENT_NAME = 'P_USER_ID' THEN 'sesUserId'
+    WHEN S.IN_OUT = 'IN' AND S.ARGUMENT_NAME = 'P_MENU_ID' THEN 'menuId'
+    WHEN S.IN_OUT = 'IN' AND S.ARGUMENT_NAME = 'P_LANG_CD' THEN 'sesLangCd'
+    WHEN S.IN_OUT = 'IN' THEN
+      LOWER(SUBSTR(REPLACE(INITCAP(REPLACE(SUBSTR(S.ARGUMENT_NAME, 3), '_', ' ')), ' ', ''), 1, 1))
+      || SUBSTR(REPLACE(INITCAP(REPLACE(SUBSTR(S.ARGUMENT_NAME, 3), '_', ' ')), ' ', ''), 2)
+    WHEN S.IN_OUT = 'OUT' AND S.ARGUMENT_NAME = 'O_RESULT_CURSOR' THEN 'O_RESULT_CURSOR'
+    WHEN S.IN_OUT = 'OUT' THEN LOWER(S.ARGUMENT_NAME)
+    ELSE S.ARGUMENT_NAME
+  END AS COL_NM,
+  S.IN_OUT AS COL_TP_CD,
+  CASE
+    WHEN S.ARGUMENT_NAME = 'O_RESULT_CURSOR' THEN 'PROC_RESULT'
+    WHEN S.DATA_TYPE = 'REF CURSOR' THEN 'CURSOR'
+    WHEN S.DATA_TYPE = 'VARCHAR2' THEN 'VARCHAR'
+    ELSE S.DATA_TYPE
+  END AS DATA_TP_CD,
+  S.POSITION AS SORT_ORD,
+  'admin', SYSDATE, 'admin', SYSDATE
+FROM ALL_ARGUMENTS S
+WHERE S.OWNER = 'SCM_MGR'
+  AND S.OBJECT_NAME = 'P_DMF0043_GET_CONTRIBUTE_MAIN_DATA'
+  AND S.PACKAGE_NAME IS NULL
+  AND S.POSITION > 0
+  AND NOT EXISTS (
+    SELECT 1 FROM SCM_MGR.SCM_ADM_PROC_M T
+     WHERE T.PROC_NM = S.OBJECT_NAME
+       AND T.SORT_ORD = S.POSITION
+  );
+
+COMMIT;
+
+PROMPT === COMPLETE ===
+EXIT

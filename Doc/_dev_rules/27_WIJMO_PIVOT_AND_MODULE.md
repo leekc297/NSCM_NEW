@@ -279,6 +279,67 @@ _artifacts/<task>-seed_Diagnose.sql     ← 진단 SELECT 다수
 
 ---
 
+## §F. FlexGridColumnGroup JSX 사용 금지 (single-child 폭발)
+
+### 증상
+
+- 화면 진입 시 `Unexpected Application Error`
+- 콘솔: `TypeError: t._setOwnerList is not a function at ColumnGroupCollection2.push`
+- 스택: wijmo react wrapper 의 `updateChildProperties` → `getInstance` → 내부 `_setOwnerList(plain object)` 호출
+
+### 근본 원인
+
+`@mescius/wijmo.react.grid@5.20252.44` + React 19 조합에서 다음 패턴은 폭발:
+
+```tsx
+<FlexGridColumnGroup header="A">
+  <FlexGridColumn binding="X" header="X" />   {/* leaf 1개만 */}
+</FlexGridColumnGroup>
+```
+
+React 가 `children` 을 single element 로 처리할 때 wrapper 의 `getInstance` 가 column 객체를 정상 `Column` instance 로 생성하지 않고 plain object 를 ColumnGroupCollection 에 push → `_setOwnerList` 호출 시 폭발.
+
+### 해결 (3가지 선택지)
+
+**(1) Flat 화** (가장 단순, 그룹 머지 의미 없을 때):
+```tsx
+{/* group 제거하고 leaf header 만 직접 라벨링 */}
+<FlexGridColumn binding="X" header="A" />
+```
+
+**(2) Leaf 2개 이상 보장** (의도가 진짜 다단 헤더):
+```tsx
+<FlexGridColumnGroup header="A">
+  <FlexGridColumn binding="X1" header="X1" />
+  <FlexGridColumn binding="X2" header="X2" />
+</FlexGridColumnGroup>
+```
+
+**(3) Imperative API** (동적 그룹 — 권장, sales-future-price 패턴):
+```tsx
+<FlexGrid initialized={(g) => {
+  const grp = new ColumnGroup({ header: 'A' });
+  grp.columns.push(new Column({ binding: 'X', header: 'X' }));
+  g.columnGroups.push(grp);
+}}>
+  {/* JSX 안에는 group 사용 안 함 */}
+</FlexGrid>
+```
+
+### 적용 사례
+
+| 화면 | 위반 → 조치 |
+|---|---|
+| DMF0043 ContributeMain (2026-05-29 사고) | `<FlexGridColumnGroup>` 3개 (각 leaf 1개) → flat 화로 단순화 |
+| DMF0020 SalesFuturePrice | `useSalesFuturePriceExpression.buildLargeSumHeader` → imperative API (`columnGroup` 배열 변환 후 grid 외부에서 push) |
+
+### 자동 검출
+
+hook `runtime-error-prevention.md` §3 의 grep 명령 (Step 3) 으로 PR 직전 자동 검출 가능.
+
+---
+
 ## §E. 변경 이력
 
 - 2026-05-28 작성 (DMF0007 PSI Tab + PivotGrid 추가 작업 반영)
+- 2026-05-29 §F 추가 (DMF0043 ContributeMain `_setOwnerList is not a function` 사고 — FlexGridColumnGroup JSX single-child 폭발)

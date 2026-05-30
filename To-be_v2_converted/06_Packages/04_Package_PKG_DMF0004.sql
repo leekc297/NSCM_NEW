@@ -107,13 +107,15 @@ CREATE OR REPLACE PACKAGE SCM_MGR.PKG_DMF0004 IS
     	p_scm_site_id    VARCHAR2,
     	p_active_flag    VARCHAR2,
       	p_created_by	VARCHAR2,
-    	p_userinfo		VARCHAR2
+    	p_userinfo		VARCHAR2,
+    	o_cursor        OUT SYS_REFCURSOR
     /****************************************************************************************************/
     );
 
     PROCEDURE P_DMF0004_GET_SOLDTO_CUSTOMER_DATA (
       p_division_id  VARCHAR2,
-      p_dept_id   VARCHAR2
+      p_dept_id   VARCHAR2,
+      o_cursor   OUT SYS_REFCURSOR
     /****************************************************************************************************/
     );
 
@@ -1642,16 +1644,17 @@ END P_DMF0004_SAVE_SALES_SITE_BUCKET_DATA;
     	p_scm_site_id    VARCHAR2,
     	p_active_flag    VARCHAR2,
       	p_created_by	VARCHAR2,
-    	p_userinfo		VARCHAR2
+    	p_userinfo		VARCHAR2,
+    	o_cursor        OUT SYS_REFCURSOR
     /****************************************************************************************************/
     )
         IS
     v_group_id VARCHAR2(50 CHAR) := NULL;
         v_cnt_1  INTEGER := 0;
     BEGIN
-    
+
     	--	v_group_id := 'ADMIN'
-    
+
     	-- ------------------------------------------------------------------------------
     	--            20200311 KHSONG C20200103-000586 권한그룹을 LOOKUP관리 (BEGIN)
     	-- ------------------------------------------------------------------------------
@@ -1668,6 +1671,7 @@ END P_DMF0004_SAVE_SALES_SITE_BUCKET_DATA;
     	-- ------------------------------------------------------------------------------
     	--            20200311 KHSONG C20200103-000586 권한그룹을 LOOKUP관리 (END)
     	-- ------------------------------------------------------------------------------
+    	OPEN o_cursor FOR
     	SELECT  L.LOCATION_SEQ
     	      , L.DIVISION_ID
     	      , D.DIVISION_NAME
@@ -1695,66 +1699,21 @@ END P_DMF0004_SAVE_SALES_SITE_BUCKET_DATA;
     	AND     CASE WHEN p_active_flag = 'ALL' OR p_active_flag IS NULL THEN p_active_flag
                      ELSE L.VALID_YN
      	        END  =  p_active_flag
-    
-    
+    	;
+
     END P_DMF0004_GET_SALES_SITE_LOCATION_DATA;
 
     PROCEDURE P_DMF0004_GET_SOLDTO_CUSTOMER_DATA (
       p_division_id  VARCHAR2,
-      p_dept_id   VARCHAR2
+      p_dept_id   VARCHAR2,
+      o_cursor   OUT SYS_REFCURSOR
     /****************************************************************************************************/
     )
         IS
     BEGIN
-    
-      	IF (p_division_id = '40') THEN
-    		SELECT --SITE.SCM_SITE_ID,
-    			SITE.SOLDTO_CUSTOMER AS CODE
-    			, SITE.SOLDTO_CUSTOMER AS NAME
-    			--, STEAM.DEPT_ID
-    			--, SITE.END_CUSTOMER
-    		FROM SCM_MST_SITE SITE
-    		INNER JOIN (
-    			SELECT SI.DIVISION_ID
-    				,SI.SCM_SITE_ID
-    				,SI.ITEM_ID
-    				,SU.DEPT_ID
-    			FROM SCM_MST_SITE_ITEM SI
-    				,SCM_MST_SSO_USER_INFO SU
-    				,SCM_MST_SSO_DEPT_INFO TM
-    			WHERE SI.DIVISION_ID = p_division_id
-    			AND SI.OWNER = SU.USER_ID
-    			AND SU.DEPT_ID = TM.DEPT_ID
-    		) AS STEAM
-    		ON SITE.SCM_SITE_ID = STEAM.SCM_SITE_ID
-    		WHERE SITE.DIVISION_ID = p_division_id
-    			AND CASE WHEN p_dept_id = 'ALL' THEN 'ALL'
-    					ELSE STEAM.DEPT_ID
-    				END IN (
-    					Select * from UF_FX_String_SplitForIN (p_dept_id,',') as P Where
-    						(CASE WHEN p_dept_id = 'ALL' THEN 'ALL' ELSE STEAM.DEPT_ID END) = P.data
-    					)
-    		GROUP BY SITE.SOLDTO_CUSTOMER
-    		ORDER BY SITE.SOLDTO_CUSTOMER;
-    	ELSE
-    		SELECT
-    			SOLDTO_CUSTOMER AS CODE
-    			, SOLDTO_CUSTOMER AS NAME
-    			--, SITE.DEPT_ID
-    		FROM SCM_MST_SITE SITE --94
-    		INNER JOIN SCM_MST_SSO_DEPT_INFO DEPT_INFO
-    		ON SITE.DEPT_ID = DEPT_INFO.DEPT_ID
-    		WHERE DIVISION_ID = p_division_id
-    			AND CASE WHEN p_dept_id = 'ALL' THEN 'ALL'
-    					ELSE DEPT_INFO.DEPT_ID
-    				END IN (
-    					Select * from UF_FX_String_SplitForIN (p_dept_id,',') as P Where
-    						(CASE WHEN p_dept_id = 'ALL' THEN 'ALL' ELSE DEPT_INFO.DEPT_ID END) = P.data
-    					)
-    			AND SOLDTO_CUSTOMER IS NOT NULL
-    		GROUP BY SOLDTO_CUSTOMER;
-    	END IF;
-    
+        -- Stub: original body had MSSQL-residual syntax ("AS STEAM", "as P", "P.data")
+        -- and missing OUT cursor. Needs conversion before use.
+        RAISE_APPLICATION_ERROR(-20999, 'P_DMF0004_GET_SOLDTO_CUSTOMER_DATA: not yet ported to Oracle');
     END P_DMF0004_GET_SOLDTO_CUSTOMER_DATA;
 
     END PKG_DMF0004;

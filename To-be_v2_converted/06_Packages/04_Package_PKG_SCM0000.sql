@@ -183,7 +183,7 @@ PROCEDURE P_SCM0000_SAVE_SRCH_COND (
     V_ERR_MSG    VARCHAR2(4000);
     
     
-  $$PLSQL_UNIT      VARCHAR2(200) := $$PLSQL_UNIT;
+  v_plsql_unit      VARCHAR2(200) := $$PLSQL_UNIT;
   v_log_type          VARCHAR2(30 CHAR); -- START/END/ERROR/...
   n_log_count         PLS_INTEGER        := 0;
   v_log_message       VARCHAR2(1000 CHAR);
@@ -193,14 +193,14 @@ BEGIN
 
 
     IF UTL_CALL_STACK.SUBPROGRAM(1).COUNT > 1 THEN
-        $$PLSQL_UNIT := $$PLSQL_UNIT || '.' || UTL_CALL_STACK.SUBPROGRAM(1)(2);
+        v_plsql_unit := v_plsql_unit || '.' || UTL_CALL_STACK.SUBPROGRAM(1)(2);
     END IF;
     
   v_log_type    := 'START';
   v_log_message := '########## Start of procedure ##########';
   v_description := '';
   d_event_date  := SYSDATE;
-  BEGIN SCM_MGR.PR_SCM_SYS_LOG_BATCH($$PLSQL_UNIT, v_log_type, n_log_count, v_log_message, v_description, d_event_date); END;
+  BEGIN SCM_MGR.PR_SCM_SYS_LOG_BATCH(v_plsql_unit, v_log_type, n_log_count, v_log_message, v_description, d_event_date); END;
 
 
   -- P_DATA 로그 (CLOB chunk)
@@ -216,7 +216,7 @@ BEGIN
       v_log_message := 'P_DATA LENGTH';
       v_description := 'P_DATA_LEN=' || TO_CHAR(V_CLOB_LEN);
       d_event_date  := SYSDATE;
-      SCM_MGR.PR_SCM_SYS_LOG_BATCH($$PLSQL_UNIT, v_log_type, n_log_count, v_log_message, v_description, d_event_date);
+      SCM_MGR.PR_SCM_SYS_LOG_BATCH(v_plsql_unit, v_log_type, n_log_count, v_log_message, v_description, d_event_date);
 
       -- 내용 로그 (분할)
       WHILE V_POS <= V_CLOB_LEN LOOP
@@ -226,7 +226,7 @@ BEGIN
           v_log_message := 'P_DATA CHUNK ' || TO_CHAR(V_IDX);
           v_description := V_CHUNK;
           d_event_date  := SYSDATE;
-          SCM_MGR.PR_SCM_SYS_LOG_BATCH($$PLSQL_UNIT, v_log_type, n_log_count, v_log_message, v_description, d_event_date);
+          SCM_MGR.PR_SCM_SYS_LOG_BATCH(v_plsql_unit, v_log_type, n_log_count, v_log_message, v_description, d_event_date);
 
           V_POS := V_POS + V_CHUNK_SIZE;
           V_IDX := V_IDX + 1;
@@ -242,7 +242,7 @@ BEGIN
     v_log_message := '';
     v_description := 'P_USER_ID : ''' || P_USER_ID || ''', P_MNU_ID : ''' || P_MNU_ID || '''';
     d_event_date  := SYSDATE;
-    BEGIN SCM_MGR.PR_SCM_SYS_LOG_BATCH($$PLSQL_UNIT, v_log_type, n_log_count, v_log_message, v_description, d_event_date); END;
+    BEGIN SCM_MGR.PR_SCM_SYS_LOG_BATCH(v_plsql_unit, v_log_type, n_log_count, v_log_message, v_description, d_event_date); END;
 
 
        
@@ -299,7 +299,7 @@ BEGIN
     v_log_type    := 'END';
     v_log_message := '########## END of procedure ##########';
     d_event_date  := SYSDATE;
-    BEGIN SCM_MGR.PR_SCM_SYS_LOG_BATCH($$PLSQL_UNIT, v_log_type, n_log_count, v_log_message, v_description, d_event_date); END;
+    BEGIN SCM_MGR.PR_SCM_SYS_LOG_BATCH(v_plsql_unit, v_log_type, n_log_count, v_log_message, v_description, d_event_date); END;
 
 EXCEPTION
     WHEN OTHERS THEN
