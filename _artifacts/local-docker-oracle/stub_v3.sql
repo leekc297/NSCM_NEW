@@ -1,0 +1,68 @@
+ALTER SESSION SET CONTAINER = FREEPDB1;
+SET SERVEROUTPUT ON SIZE UNLIMITED
+
+-- Drop existing
+BEGIN
+  BEGIN EXECUTE IMMEDIATE 'DROP FUNCTION SCM_MGR.UF_FX_STRING_SPLITFORIN'; EXCEPTION WHEN OTHERS THEN NULL; END;
+  BEGIN EXECUTE IMMEDIATE 'DROP TYPE SCM_MGR.T_STR_TABLE_V FORCE'; EXCEPTION WHEN OTHERS THEN NULL; END;
+END;
+/
+
+-- Plain VARCHAR2 collection (provides COLUMN_VALUE pseudo-column)
+CREATE OR REPLACE TYPE SCM_MGR.T_STR_TABLE_V AS TABLE OF VARCHAR2(4000);
+/
+
+CREATE OR REPLACE FUNCTION SCM_MGR.UF_FX_STRING_SPLITFORIN(
+  p_str   IN VARCHAR2,
+  p_delim IN VARCHAR2 DEFAULT ','
+) RETURN SCM_MGR.T_STR_TABLE_V PIPELINED IS
+  v_start PLS_INTEGER := 1;
+  v_pos   PLS_INTEGER;
+  v_len   PLS_INTEGER;
+BEGIN
+  IF p_str IS NULL THEN RETURN; END IF;
+  v_len := LENGTH(p_delim);
+  LOOP
+    v_pos := INSTR(p_str, p_delim, v_start);
+    IF v_pos = 0 THEN
+      PIPE ROW(SUBSTR(p_str, v_start));
+      EXIT;
+    END IF;
+    PIPE ROW(SUBSTR(p_str, v_start, v_pos - v_start));
+    v_start := v_pos + v_len;
+  END LOOP;
+  RETURN;
+END;
+/
+
+-- Extend SCM_MST_ITEM_SN with DIVISION_ID (and a few common cols seen in errors)
+DECLARE v_cnt NUMBER;
+BEGIN
+  SELECT COUNT(*) INTO v_cnt FROM dba_tab_columns WHERE owner='SCM_MGR' AND table_name='SCM_MST_ITEM_SN' AND column_name='DIVISION_ID';
+  IF v_cnt = 0 THEN
+    EXECUTE IMMEDIATE 'ALTER TABLE SCM_MGR.SCM_MST_ITEM_SN ADD (DIVISION_ID VARCHAR2(30), SITE_ID VARCHAR2(30), PLANT_ID VARCHAR2(30), COMPANY_ID VARCHAR2(30))';
+    DBMS_OUTPUT.PUT_LINE('Added DIVISION_ID/SITE_ID/PLANT_ID/COMPANY_ID columns');
+  END IF;
+END;
+/
+
+-- Recompile
+BEGIN
+  FOR i IN 1..3 LOOP
+    FOR r IN (SELECT object_name, object_type FROM dba_objects WHERE owner='SCM_MGR' AND status='INVALID' AND object_type IN ('PACKAGE','PACKAGE BODY','PROCEDURE','FUNCTION','VIEW','TRIGGER')) LOOP
+      BEGIN
+        IF r.object_type = 'PACKAGE BODY' THEN
+          EXECUTE IMMEDIATE 'ALTER PACKAGE SCM_MGR.'||r.object_name||' COMPILE BODY';
+        ELSE
+          EXECUTE IMMEDIATE 'ALTER '||r.object_type||' SCM_MGR.'||r.object_name||' COMPILE';
+        END IF;
+      EXCEPTION WHEN OTHERS THEN NULL;
+      END;
+    END LOOP;
+  END LOOP;
+END;
+/
+
+SELECT object_type||':'||COUNT(*) AS info FROM dba_objects WHERE owner='SCM_MGR' AND status='INVALID' GROUP BY object_type;
+SELECT 'PKG_COM0000_errors='||COUNT(*) FROM dba_errors WHERE owner='SCM_MGR' AND name='PKG_COM0000';
+EXIT

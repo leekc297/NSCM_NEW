@@ -1,0 +1,51 @@
+version: "3.8"
+
+# NSCM 로컬 Docker Oracle 컨테이너 정의
+#
+# 사용법:
+#   cd C:\Projects\NSCM\_artifacts\local-docker-oracle
+#   docker compose up -d
+#   docker compose logs -f oracle      # "DATABASE IS READY TO USE!" 까지 대기 (최초 기동 5~10분)
+#   docker compose down                # 정지 (볼륨 유지)
+#   docker compose down -v             # 정지 + 볼륨까지 삭제 (DB 초기화)
+#
+# 비밀번호:
+#   ORACLE_PASSWORD = !SCMroqkf2026  (As-Is SCMD_APP 비번과 동일 — 로컬 한정)
+#
+# 접속:
+#   sqlplus sys/'!SCMroqkf2026'@//localhost:1521/FREEPDB1 as sysdba
+#   sqlplus SCM_MGR/'!SCMroqkf2026'@//localhost:1521/FREEPDB1
+#   JDBC: jdbc:oracle:thin:@//localhost:1521/FREEPDB1
+#
+# 볼륨 마운트:
+#   nscm-oracle-data : Oracle datafile (영속)
+#   ../../To-be_v2_converted : 컨테이너 내부 /work 에 read-only 로 노출 → sqlplus @ /work/...
+#   .                : 이 폴더의 _artifacts SQL 을 /artifacts 로 노출
+
+services:
+  oracle:
+    image: gvenzl/oracle-free:23-slim-faststart
+    container_name: nscm-oracle
+    restart: unless-stopped
+    ports:
+      - "1521:1521"
+    environment:
+      ORACLE_PASSWORD: "!SCMroqkf2026"
+      ORACLE_DATABASE: FREEPDB1
+      APP_USER: ""           # 우리는 00_create_schema.sql 에서 직접 만들므로 비워둠
+      APP_USER_PASSWORD: ""
+    volumes:
+      - nscm-oracle-data:/opt/oracle/oradata
+      - ../../To-be_v2_converted:/work:ro
+      - .:/artifacts                # rw — sqlplus SPOOL 로그 기록용
+    healthcheck:
+      test: ["CMD", "healthcheck.sh"]
+      interval: 30s
+      timeout: 10s
+      retries: 20
+      start_period: 60s
+    shm_size: "1g"
+
+volumes:
+  nscm-oracle-data:
+    name: nscm-oracle-data

@@ -113,8 +113,41 @@ tmp_*.txt
 # 다른 _artifacts/*.sql 은 commit OK (비밀번호 노출 0건 확인됨)
 _artifacts/*sysdba*.sql
 _artifacts/grant_minyonglee1_full_admin.sql
-_artifacts/local-docker-oracle/
 _artifacts/cloud-to-local-mirror/
+
+# ---------------- _artifacts/local-docker-oracle/ 세분화 (2026-05-30) ----------------
+# 스크립트(.ps1/.sh) / 룰 SQL(.sql) / 컬럼 메타(.tsv) / README(.md) / docker-compose.yml
+# 은 git track 함 — 다른 PC 에서도 환경 재구성 필요.
+# 산출물 (로그/임시/자동 생성 폴더) 만 ignore.
+# 비밀번호 `!SCMroqkf2026` 는 로컬 한정 (docker-compose.yml 주석 참조).
+_artifacts/local-docker-oracle/*.log
+_artifacts/local-docker-oracle/*_run.log
+_artifacts/local-docker-oracle/*.bad
+_artifacts/local-docker-oracle/*.discard
+_artifacts/local-docker-oracle/*.dmp
+_artifacts/local-docker-oracle/*.bak.*
+_artifacts/local-docker-oracle/bulk_load_csv.resume.txt
+_artifacts/local-docker-oracle/last-pids.json
+_artifacts/local-docker-oracle/.start-all-fe.out*
+_artifacts/local-docker-oracle/start-all_be.out*
+_artifacts/local-docker-oracle/ctl/
+_artifacts/local-docker-oracle/csv_fixed/
+_artifacts/local-docker-oracle/ddl_fixed/
+_artifacts/local-docker-oracle/ddl_logs/
+_artifacts/local-docker-oracle/ddl_logs_fixed/
+# 작업 중 일시 dump / 정리 SQL — git track X (To-be_v2_converted 에 정식 버전 존재)
+_artifacts/local-docker-oracle/logs_*.txt
+_artifacts/local-docker-oracle/compile_log.txt
+_artifacts/local-docker-oracle/pkg_*.txt
+_artifacts/local-docker-oracle/pkg_*.sql
+_artifacts/local-docker-oracle/PKG_*.txt
+_artifacts/local-docker-oracle/PKG_*.sql
+_artifacts/local-docker-oracle/psi_pivot_*.sql
+_artifacts/local-docker-oracle/fcst_proc_*.sql
+_artifacts/local-docker-oracle/fcst_proc_*.txt
+_artifacts/local-docker-oracle/delete_*.sql
+_artifacts/local-docker-oracle/drop_*.sql
+_artifacts/local-docker-oracle/fp_mgr_setup.sql
 
 # ---------------- DB / 로컬 데이터 ----------------
 **/oracle_data/
