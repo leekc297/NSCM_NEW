@@ -119,6 +119,46 @@ URL 만 + 특별한 키워드 없음:
 | 5 | ❌ `.figma_token` 평문을 메모리/log/git 에 노출 | 토큰 폐기 + 재발급 |
 | 6 | ❌ Figma URL → React 변환 시 룰 23 (FE Import Inventory) 미참조 | runtime 폭발 (룰 23 사고 패턴) |
 | 7 | ❌ 같은 화면 여러 번 fetch (rate limit 위협) | _api_cache/ 활용 |
+| 8 | ❌ **frame name → NSCM 화면 ID 매핑 시 DB cross-check 생략** | 2026-05-30 사고 패턴 (아래 §6.1) |
+| 9 | ❌ **fuzzy match 결과를 anti-simplification 검증 없이 채택** | false positive 누락 |
+| 10 | ❌ **Figma Free plan 의 `/v1/files/{key}?depth=N` endpoint 반복 호출** | Retry-After 4.6일 차단 (2026-05-30 발견) |
+
+### §6.1 Frame name → 화면 ID 매핑 사고 패턴 (2026-05-30)
+
+**증상**:
+- Stage 1 fuzzy match 가 단순 token 공유 (예: "Sales") 로 **false positive** 매칭 생성
+- 한국어 frame name (예: "해외법인 기여율 등록") 는 NSCM 영문 메뉴와 매칭 불가 → 매핑 0건
+- 의심: `프로시저 세팅` → SYS0010 (lookup) 잘못 매칭 / `Batch Log` → SYS0010 잘못 매칭
+
+**원인**:
+- Claude 가 frame name 의 일부 단어만 보고 추측 (예: "Lookup" 단어가 "프로시저" 와 무관)
+- NSCM DB 의 실제 화면 (SCM_ADM_MNU_M) 의 정확한 매칭 검증 누락
+
+**필수 절차** (사고 방지):
+1. fuzzy match 결과를 **항상 NSCM DB cross-check**:
+   ```sql
+   SELECT MNU_ID, MNU_URL, MNU_MSG_ID
+     FROM SCM_MGR.SCM_ADM_MNU_M
+    WHERE MNU_TP_CD IN ('SCREEN','POPUP');
+   ```
+2. matched_screen_id 가 DB 에 **존재**하는지 + **URL/한글명**이 frame name 과 의미적으로 일치하는지 확인
+3. **HIGH** (=100, URL 완벽 일치) 만 자동 매핑. **MID/LOW** 는 모두 사용자 검토.
+4. Claude 가 수동 매핑 시 `confidence='MANUAL'` 표기 + 사용자에게 검토 요청 명시.
+5. 매핑 정정 사고 발생 시 본 §6.1 에 사례 추가.
+
+### §6.2 Figma Free plan rate limit 정책 (2026-05-30 발견)
+
+| endpoint | rate limit pool | 사용 권장 |
+|---|---|---|
+| `/v1/files/{key}?depth=N` | 매우 엄격 (`Retry-After: 397381` = 4.6일) | ❌ 사용 금지 |
+| `/v1/files/{key}/nodes?ids=<page>` | 별도 pool | ✅ 사용 가능 |
+| `/v1/images/{key}?ids=<frames>` | 별도 pool | ✅ 사용 가능 (batch 50개씩) |
+| `/v1/me` | 거의 무제한 | ✅ 인증 확인용 |
+
+**대응**:
+- 큰 파일 전체 fetch 가 필요하면 `node-id` 지정 후 `/nodes` endpoint 사용
+- batch 호출 사이 800ms sleep 권장
+- 429 발생 시 즉시 재시도 금지 (cooldown 더 길어짐) — 10~30분 대기
 
 ---
 
