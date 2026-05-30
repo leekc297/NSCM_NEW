@@ -55,6 +55,49 @@ D:\NSCM_backup\
 
 ---
 
+## 3.5 GitHub 메타 미러 (`_backup_metadata/`) — 2026-05-30 신규
+
+D 드라이브 손상 시 백업 자체도 잃을 위험 → GitHub `leekc297/NSCM` (private) 에 **메타 4종** 미러.
+
+### 미러 대상 (총 ~22 MB / 백업)
+| 파일 | 크기 | 용도 |
+|---|---:|---|
+| `source.bundle` | ~22 MB | git 전체 히스토리 — bundle 만으로 소스 복원 가능 |
+| `manifest.json` | ~40 KB | 백업 구성 + 크기 + 타임스탬프 + git_head |
+| `oracle-full.log` | ~70 KB | expdp 실행 로그 (테이블별 row 수 — 검증용) |
+| `git-head.txt` | <1 KB | 백업 시 git HEAD SHA |
+| `git-dirty.txt` | <1 KB | 백업 시 미커밋 파일 목록 (있는 경우) |
+
+### 절대 미러 X (D 드라이브 보관, 로컬 한정)
+- `fe-node-modules.tar` (~414 MB) — GitHub 100MB 단일파일 제한 + 사내 registry 자산
+- `oracle-full.dmp` (~1.2 GB) — 100MB 제한 + 회사 데이터 외부 노출 우려
+- `fe-config/.env.local` — 환경 변수 (민감)
+- `be-config/config-local.yml` — DB 비밀번호 평문 (민감)
+
+### 폴더 구조 (모노레포 안)
+```
+C:\Projects\NSCM\_backup_metadata\
+  ├── README.md                              (폴더 사용법)
+  ├── 2026-05-30_1842_post-figma-stage1\     (백업별 subfolder)
+  │    ├── source.bundle
+  │    ├── manifest.json
+  │    ├── oracle-full.log
+  │    └── git-head.txt
+  └── ...
+```
+
+### `.gitignore` 예외 의무
+```
+**/*.log
+!_backup_metadata/**/*.log     ← 메타 log 는 track 예외
+```
+
+### Private repo 한정
+- public repo 로 변경 금지 (회사 객체명 + git-head + bundle 노출 위험)
+- `gh repo view leekc297/NSCM --json visibility` 로 확인 후 진행
+
+---
+
 ## 4. Trigger 방식
 
 ### 4.1 자동 (Windows Task Scheduler)
@@ -130,6 +173,42 @@ manifest.json 정합성 확인
 
 ---
 
+## 6.5 `-PushMeta` 옵션 — 2026-05-30 신규
+
+### `backup-all.ps1 -PushMeta`
+백업 완료 직후 Step 7 에서 자동 실행:
+1. 4종 메타를 `_backup_metadata/<YYYY-MM-DD_HHMM_라벨>/` 으로 복사
+2. `git add _backup_metadata/<폴더>`
+3. `git commit -m "backup: <폴더> 메타데이터 push (auto by backup-all.ps1)"`
+4. `git push origin main`
+
+Push 실패는 warn 만 (백업 자체는 성공). 빈 commit 회피 (git diff --cached 가 비어있으면 skip).
+
+### `install-backup-schedule.ps1 -PushMeta`
+Task Scheduler 등록 시 task argument 에 `-PushMeta` 자동 포함:
+```
+Action: powershell.exe -NoProfile -ExecutionPolicy Bypass -File "...\backup-all.ps1" -ScheduledMode -PushMeta
+```
+
+### 사전 확인 (필수)
+Task Scheduler 가 git push 시 인증 prompt 없이 통과해야 함:
+```powershell
+cd C:\Projects\NSCM
+git push origin main
+```
+이 명령이 prompt 없이 성공해야 자동 push 정상 동작 (Git Credential Manager cached).
+
+### 사용 예
+```powershell
+# 수동 1회 (백업 + 메타 push)
+.\backup-all.ps1 -Label post-feature -PushMeta
+
+# 자동화 (매일 02:00 + 메타 자동 push)
+.\install-backup-schedule.ps1 -PushMeta
+```
+
+---
+
 ## 7. 사용 도구 / 파일
 
 | 파일 | 역할 |
@@ -156,3 +235,4 @@ manifest.json 정합성 확인
 ## 9. 변경 이력
 
 - 2026-05-30 신규 작성 — 사용자 결정: D:\NSCM_backup\, Task Scheduler 02:00 야간, daily 7개 보존
+- 2026-05-30 §3.5 + §6.5 신규 — GitHub `_backup_metadata/` 메타 미러 + `-PushMeta` 옵션 (backup-all.ps1 + install-backup-schedule.ps1). `.gitignore` 예외 `!_backup_metadata/**/*.log`. Private repo 한정. Task Scheduler 자동 push 등록 완료.

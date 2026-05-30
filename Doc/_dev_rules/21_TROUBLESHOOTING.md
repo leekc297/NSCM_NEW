@@ -730,4 +730,113 @@ docker compose up -d
 
 ---
 
+## §11. PowerShell / Windows 환경 사고 묶음 (2026-05-30 추가)
+
+이번 세션의 Figma fetch + 백업 자동화 작업에서 발견한 Windows PowerShell 동작 차이/사고들.
+
+### §11.1 PowerShell AMSI crash — Antimalware Scan Interface 메모리 오류
+
+**증상**:
+```
+Unhandled Exception: System.AccessViolationException: Attempted to read or write protected memory.
+   at System.Management.Automation.AmsiUtils.AmsiNativeMethods.AmsiScanBuffer(...)
+   at System.Management.Automation.AmsiUtils.ScanContent(...)
+   at System.Management.Automation.CompiledScriptBlockData.PerformSecurityChecks()
+```
+- `.ps1` 스크립트 실행 도중 갑자기 PowerShell 프로세스 자체가 crash
+- 같은 스크립트를 다시 실행하면 종종 성공 (재현성 낮음)
+
+**원인**: Windows Defender / 사내 보안 에이전트의 AMSI scanning 이 PowerShell 의 script block compilation 도중 native memory 접근 충돌. 일시적 (시스템 메모리 압박 / Defender 갱신 직후).
+
+**우회 (가장 안정적)**:
+1. **bash 으로 작업 이전** (Git Bash 가 NSCM 환경에 항상 있음):
+   ```bash
+   # 예: figma_link.md 397 이관 — PowerShell migrate-figma-md.ps1 가 crash → bash 우회
+   find /c/Projects/NSCM/Doc/_analysis -name "figma_link.md" -type f | while read f; do
+     raw=$(basename "$(dirname "$f")")
+     sid=$(echo "$raw" | sed -E 's/\.(UIL|designer|cs)$//' | tr -d ' ')
+     cp "$f" "/c/Projects/NSCM/Doc/_figma/screens/${sid}.md"
+   done
+   ```
+2. **`powershell -NoProfile -ExecutionPolicy Bypass -File <script>`** 로 별도 instance 실행 (AMSI re-init):
+   ```powershell
+   powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\path\script.ps1
+   ```
+3. 같은 스크립트 재시도 (often 통과)
+
+**예방 (시도 가치)**:
+- 스크립트 길이 줄이기 — AMSI scan 부담 ↓
+- 모듈/dot-source 분리
+
+### §11.2 PowerShell `Invoke-RestMethod` foreground vs background 일관성 차이
+
+**증상**: 같은 URL + 같은 token 인데 foreground 에서 200 OK 받고 background 에서 404/429.
+
+**사례** (2026-05-30 Figma fetch):
+- foreground `Invoke-RestMethod -Uri "https://api.figma.com/v1/files/c9V...?depth=2"` → 200 OK, 1.2 MB JSON 수신
+- background (같은 PowerShell tool, run_in_background:true) 같은 호출 → 404 Not Found
+
+**원인**: PowerShell tool 의 새 instance 가 spawn 될 때 (1) DNS cache 다름 (2) `[Net.ServicePointManager]::SecurityProtocol` 기본 다름 (TLS 1.0 fallback?) (3) 같은 환경 변수 (proxy 등) 다르게 정의 가능. 또는 Figma 의 rate limit 가 호출별로 다르게 적용.
+
+**우회 (가장 안정적)**:
+1. **`curl` (bash 또는 cmd /c) 사용** — TLS / proxy 동작이 PowerShell 보다 일관성 있음:
+   ```bash
+   TOKEN=$(tr -d '\r\n ' < /c/Projects/NSCM/.figma_token)
+   curl -s -H "X-Figma-Token: $TOKEN" "https://api.figma.com/v1/files/..." -o /tmp/resp.json
+   ```
+2. **PowerShell 안에서 curl 호출**:
+   ```powershell
+   $tmpJson = "$env:TEMP\resp.json"
+   & cmd /c "curl -s -H `"X-Figma-Token: $Token`" `"$endpoint`" -o `"$tmpJson`" --max-time 60"
+   $resp = Get-Content $tmpJson -Raw | ConvertFrom-Json
+   ```
+3. 또는 PowerShell 코드 시작에서 명시적으로:
+   ```powershell
+   [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+   ```
+
+### §11.3 `$ErrorActionPreference = "Stop"` + `2>&1` + native exe = NativeCommandError
+
+**증상**: `docker compose up`, `git push` 등 native exe 가 정상 동작 (exit code 0) 인데도 PowerShell 이 즉시 throw 하고 스크립트 중단.
+
+**원인**: PowerShell 5.1 에서 `2>&1` 가 native exe stderr 의 모든 line 을 ErrorRecord 로 wrap → `$?` = false → `ErrorActionPreference = "Stop"` 가 throw. 정상 stderr (예: docker 의 warning 메시지, sqlplus 의 SP2-XXXX 정보 메시지) 도 fatal 처리.
+
+**우회**:
+- `$ErrorActionPreference = "Continue"` (전역)
+- `2>&1 | Out-Null` → `*> $null` (모든 스트림 무시)
+- 정상 exit code 만 `$LASTEXITCODE` 로 검사
+
+**사례**: start-all.ps1 / backup-all.ps1 / restore-all.ps1 모두 이 패턴으로 fix 완료 (commit `0232676`, `ff27edb`).
+
+### §11.4 `.gitignore` 의 `**/*.log` 가 메타 백업 log 까지 차단
+
+**증상**: `_backup_metadata/.../oracle-full.log` 가 commit 에 안 들어감 (git status 도 안 보임).
+
+**원인**: `.gitignore` 의 line 59 `**/*.log` 가 모든 log 차단.
+
+**해결**: 예외 패턴 `!_backup_metadata/**/*.log` 추가.
+```
+**/*.log
+!_backup_metadata/**/*.log
+```
+
+같은 패턴이 적용 가능한 다른 디렉토리:
+- `_artifacts/` 안의 검증용 log (필요 시 케이스 별 예외)
+
+### §11.5 `Doc/_figma/` 폴더 통째 ignore 가 README + screens 도 차단
+
+**증상**: `Doc/_figma/README.md`, `screens/{화면ID}.md` 가 commit 에 안 들어감.
+
+**원인**: `.gitignore` 의 `Doc/_figma/` 가 폴더 통째 ignore.
+
+**해결**: 세분화 — track 대상 (README + screens/) 은 명시적으로 ignore 해제, 산출물 (_api_cache/ + _images/ + CSV) 만 ignore.
+```
+# Doc/_figma/_api_cache/
+# Doc/_figma/_images/
+# Doc/_figma/_figma_screen_mapping*.csv
+# (Doc/_figma/README.md + screens/ 는 자동으로 track)
+```
+
+---
+
 **본 가이드는 발생한 이슈를 기록·재현·예방하는 살아있는 문서입니다. 새로운 이슈 발생 시 본 문서에 추가하세요.**
