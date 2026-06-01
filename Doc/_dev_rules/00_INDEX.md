@@ -1,11 +1,61 @@
 # NSCM 바이브코딩 개발 Rule (진입점)
 
-**작성일**: 2026-05-13
+**작성일**: 2026-05-13 (2026-06-01 §B 트리거 매트릭스 신설)
 **대상**: AI 바이브코딩 (Claude) + 인간 개발자 공통
 **원칙**: ⭐ **한 사람이 개발한 것처럼 일관성 있게**
 **근거 소스**: `C:\Projects\NSCM` (실제 개발된 nscm-be / nscm-fe 코드 패턴 분석)
 
-## 룰셋 문서 구성
+---
+
+## §A 사용 흐름 (모든 작업)
+
+```
+1. CLAUDE.md (Project root) — 3 진입점 정책
+2. hooks/anti-simplification.md — 최우선 강제
+3. 01_CLAUDE.md — 분기 라우터
+4. 본 문서 §B 트리거 매트릭스 — 작업 키워드 → 적용 룰/hook 자동 분기
+5. (작업 진행)
+6. hooks/pre-write → post-write → pre-submit (공통)
+```
+
+> 종전: 8 파일 사전 로드 + 인라인 카탈로그 (룰 31 + hook 19) 다 훑기 →
+> 슬림: **§B 매트릭스 1회 lookup** 으로 진입 룰 결정 → 트리거 매핑된 hook + 룰만 Read.
+
+---
+
+## §B 트리거 매트릭스 ⭐ (2026-06-01 신설)
+
+사용자 메시지에 아래 키워드 또는 작업 신호가 감지되면 해당 룰 + hook 만 추가로 Read.
+
+| # | 작업 트리거 (감지 키워드 / 신호) | 진입 룰 (필수 1차) | 보조 룰 (2차) | 적용 Hook |
+|---:|---|---|---|---|
+| T1 | **신규 화면 생성** — `화면 생성/추가/신규/만들어/DMFxxxx 만들어` | **25** | 17 / 05 / 08 | new-screen-pre-build, asis-coverage-check, runtime-error-prevention, popup-asis-analysis |
+| T2 | **As-Is 4축 매핑** — `As-Is 매핑/Event 매핑/Validation/Expression` | **24** | 20 / 09 | asis-coverage-check, popup-asis-analysis |
+| T3 | **Wijmo Grid / PIVOT / Header merge** — `Grid/Wijmo/PIVOT/freeze/머지` | **12** | 27 | pivot-frozen-columns, runtime-error-prevention |
+| T4 | **FE Import / 모듈 사고** — `Cannot find module/Box export/@shared` | **23** | 26 | fe-import-check, module-duplication-check, runtime-error-prevention |
+| T5 | **DB 오류 / SP 진단** — `ORA-XXXXX/PLS-00XXX/SP 본문 의문/row 수 불일치` | **21** | 10 / 16 / 24 | db-error-asis-cross-check |
+| T6 | **Figma 연동** — `figma.com/design URL/Figma 디자인 반영` | **31** | 23 / 25 | figma-mapping-check |
+| T7 | **메뉴 미표시 / 라우팅** — `메뉴 안 나옴/화면 미표시/권한 부여 요청` | **15** | 11 / 08 | menu-not-displayed-debug |
+| T8 | **POPUP 작업** — `popup/팝업/Dialog/Modal` | **25 §3.3.1** | 24 §3.5 / 14 / 23 | popup-asis-analysis |
+| T9 | **메타 등록 / 신규 SP 등록** — `메타 등록/SCM_ADM_PROC_M/MENU 추가` | **08** | 10 / 11 | (없음, 룰 21 §10 PROC 메타 트러블슈팅) |
+| T10 | **화면 분석서 (xlsx 13시트)** — `분석서 작성/xlsx 12시트/시트 분석` | **20** | 19 / 09 | screen-analysis-pre-build/post-build/pre-submit |
+| T11 | **백업 / 원복** — `백업해줘/원복해줘/restore` | **30** | (없음) | (없음) |
+| T12 | **CSV 적재 / Docker Oracle** — `CSV 적재/sqlldr/Oracle 12GB` | **29** | (없음) | (없음) |
+| T13 | **사고 회고 → 룰 정리** — `MD 파일 정리/룰 정리/rule 정리` | **(메타룰)** | — | rule-md-organize |
+| T14 | **변환 SP 결함** — `SUBSTR/PATINDEX/LISTAGG/JSON_OBJECT/GTT` | **21 §10** | 24 §6.5 | db-error-asis-cross-check |
+| T15 | **신규 화면 진입 baseline** — 룰 25 §0.5 (As-Is row/column/SP body cross-check) | **25 §0.5** | 24 §6.5 | screen-entry-asis-baseline |
+
+**감지 미스 시 fallback**: T1 (신규 화면) + T2 (As-Is 매핑) + T5 (DB 오류) 의 보수적 union 을 적용.
+
+**상세 인벤토리는 §C** (룰 31 + hook 19 + 메모리 52 카탈로그).
+
+---
+
+## §C 전체 룰/Hook 인벤토리 (참조용)
+
+> 본 인벤토리는 1차 로드 대상이 아닙니다. §B 매트릭스 결과로 필요한 항목만 Read.
+
+### 룰셋 문서 구성
 
 | # | 문서 | 용도 |
 |---|---|---|
@@ -57,6 +107,10 @@
 | **06m** | **[hooks/rule-md-organize.md](hooks/rule-md-organize.md)** | ⭐⭐ **Hook 메타룰 — "MD 파일 정리해줘" 트리거 시 7단계 (회고 → 일반화 → 중복 grep → 작성/보강 결정 → 작성 → cross-ref → 검증) (2026-05-28)** |
 | **06n** | **[hooks/runtime-error-prevention.md](hooks/runtime-error-prevention.md)** | ⭐ **Hook — 신규 FE 화면/모달 작성 시 기본 런타임 오류 방지 (Box export 누락 / Edit 후 변수 미정의). PRE-WRITE 룰 23 + 기존 화면 import block Read + POST-WRITE grep 검증 의무 (2026-05-28, DMF0020 사고 후)** |
 | **06o** | **[hooks/menu-not-displayed-debug.md](hooks/menu-not-displayed-debug.md)** | ⭐ **Hook — 메뉴 클릭 후 화면 미표시 5단계 디버깅 (1=MNU_URL↔FE slug, 2=라우터 매핑, 3=메뉴 권한, 4=부모 권한, 5=런타임 오류). "권한 누락" 단정 금지 (2026-05-29, DMF0043/0043_01/0072 사고)** |
+| **06q** | **[hooks/screen-entry-asis-baseline.md](hooks/screen-entry-asis-baseline.md)** | ⭐⭐ **Hook — 신규/수정 화면 진입 시 As-Is DB baseline 4단계 자동 점검 (mapping CSV + row diff + column diff + SP body diff). 룰 25 §0.5 의무 (2026-06-01, DMF0043 4축 사고 후)** |
+| **06r** | **[hooks/popup-asis-analysis.md](hooks/popup-asis-analysis.md)** | ⭐ **Hook — POPUP 화면 As-Is 원시소스 정밀 분석 (9단계 .cs+.Designer.cs 전체 Read) + SCSS Module 강제 + CustomDialog/setAlert (2026-06-01, DMF0043_ContributeRatePopup 4건 사고)** |
+| **06s** | **[hooks/pivot-frozen-columns.md](hooks/pivot-frozen-columns.md)** | ⭐ **Hook — PIVOT/동적 컬럼 화면 frozenColumns 의무 (BASE 컬럼 좌측 고정, 가로 스크롤 시 dimension 항상 visible) (2026-06-01)** |
+| **06t** | **[hooks/db-error-asis-cross-check.md](hooks/db-error-asis-cross-check.md)** | ⭐ **Hook — DB 오류 / row 수 불일치 시 As-Is MSSQL 직접 sqlcmd cross-check 의무. 추측/단순 fallback 금지 (2026-06-01)** |
 
 ## 기술 스택 (확정)
 

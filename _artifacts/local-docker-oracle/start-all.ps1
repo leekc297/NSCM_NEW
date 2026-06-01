@@ -22,7 +22,7 @@ param(
   [switch]$SkipFe,
   [int]$DockerReadyTimeoutSec  = 600,
   [int]$BeReadyTimeoutSec      = 300,
-  [int]$FeReadyTimeoutSec      = 120
+  [int]$FeReadyTimeoutSec      = 180
 )
 
 $ErrorActionPreference = "Continue"  # native exe stderr 를 ErrorRecord 로 wrap 하는 PS5.1 동작 회피

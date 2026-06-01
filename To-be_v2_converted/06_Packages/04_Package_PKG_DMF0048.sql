@@ -312,7 +312,7 @@ CREATE OR REPLACE PACKAGE BODY SCM_MGR.PKG_DMF0048 IS
         -- ----------------------------------------------------------------------------------------------------------------------
         -- 사용자의 팀정보 & 권한 - [C20210504-000057] SalesPlan 권한은 있으나 편집안되는 현상 수정 2021/05/13 SJHan
         -- ----------------------------------------------------------------------------------------------------------------------
-        SELECT LISTAGG(D.SEGMENT3, ',') WITHIN GROUP(ORDER BY D.SEGMENT3)
+        SELECT LISTAGG(D.SEGMENT3, ',' ON OVERFLOW TRUNCATE WITH COUNT) WITHIN GROUP(ORDER BY D.SEGMENT3)
         INTO   V_DEPT_LIST
         FROM   (SELECT LOOK.SEGMENT1, LOOK.SEGMENT3
                 FROM   SCM_ADM_USER_M USR

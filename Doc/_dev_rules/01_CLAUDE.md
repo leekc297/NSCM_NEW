@@ -1,10 +1,33 @@
-# CLAUDE.md — AI 바이브코딩 컨텍스트 (필수 로드)
+# CLAUDE.md — AI 바이브코딩 컨텍스트 (분기 라우터)
 
 > ⭐ **이 문서를 작업 시작 시 반드시 첫 번째로 읽으세요.**
 > NSCM 프로젝트에서 코드를 작성/수정할 때 따라야 할 핵심 룰입니다.
 > 룰을 어기면 "한 사람이 개발한 것처럼"이 깨집니다.
 >
 > ⚠️ **최우선 룰** (2026-05-22 신규): [`hooks/anti-simplification.md`](hooks/anti-simplification.md) — 작업 단순화 절대 금지. 본 01_CLAUDE.md 의 모든 룰을 압도. 사용자가 "모두/전체/정밀/상세" 요청 시 다중 패턴 + Cross-check 의무. 위반 = 신뢰성 손상 → 도구 사용 중단.
+>
+> 📍 **분기 라우터 정책** (2026-06-01): 본 문서는 (a) 작업 트리거별 진입 룰을 자동 분기하고 (b) 모든 작업에 공통 적용되는 hard rule 만 정의합니다. 세부 룰 본문은 [`00_INDEX.md §B 트리거 매트릭스`](00_INDEX.md#§b-트리거-매트릭스-) 가 작업 키워드에 따라 자동 분기.
+
+## 0. 작업 트리거 매트릭스 (먼저 lookup)
+
+사용자 메시지의 작업 키워드 → 자동 진입 룰. 상세 매트릭스는 [`00_INDEX.md §B`](00_INDEX.md).
+
+| 작업 트리거 | 진입 룰 | 보조 hook |
+|---|---|---|
+| 신규 화면 생성 | **25** → 17/05/08 | new-screen-pre-build, asis-coverage-check, popup-asis-analysis, runtime-error-prevention |
+| As-Is 4축 매핑 | **24** → 20/09 | asis-coverage-check, popup-asis-analysis |
+| Wijmo Grid / PIVOT | **12** → 27 | pivot-frozen-columns, runtime-error-prevention |
+| FE Import / 모듈 | **23** → 26 | fe-import-check, module-duplication-check |
+| DB 오류 / SP 진단 | **21** → 10/16/24 | db-error-asis-cross-check |
+| Figma 연동 | **31** → 23 | figma-mapping-check |
+| 메뉴 미표시 | **15** → 11/08 | menu-not-displayed-debug |
+| POPUP 작업 | **25 §3.3.1** → 24 §3.5/14/23 | popup-asis-analysis |
+| 화면 분석서 | **20** → 19/09 | screen-analysis-pre/post-build, pre-submit |
+| 백업/원복 | **30** | (없음) |
+| CSV/Docker | **29** | (없음) |
+| 변환 SP 결함 | **21 §10** → 24 §6.5 | db-error-asis-cross-check |
+
+> 감지 미스 시 fallback: 신규 화면(T1) + As-Is 매핑(T2) + DB 오류(T5) 보수적 union.
 
 ## 1. 프로젝트 정체성
 

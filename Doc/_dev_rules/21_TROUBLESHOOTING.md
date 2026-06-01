@@ -840,3 +840,77 @@ Unhandled Exception: System.AccessViolationException: Attempted to read or write
 ---
 
 **본 가이드는 발생한 이슈를 기록·재현·예방하는 살아있는 문서입니다. 새로운 이슈 발생 시 본 문서에 추가하세요.**
+
+## §12. DMF0043 DB 오류 사고 묶음 (2026-06-01 추가)
+
+> ⭐⭐ **진실 source (DB 오류 진단 주제) — 이 주제는 여기만 변경.**
+> 룰 24 §6.5 / hook `db-error-asis-cross-check.md` 는 이 절을 link only 참조.
+
+DMF0043 작업 중 발견한 DB 오류 11종. **동일 패턴은 다른 PIVOT/동적 SP 화면에도 발생 가능** — 재발 방지 의무.
+
+### §12.1 ORA-06504 (Return types of Result Set variables or query do not match)
+- **원인**: TITLE SP O_RC1 default 분기에 `EDIT_YN` 23번째 컬럼 — caller 22-var FETCH 와 불일치
+- **Fix**: SELECT 의 추가 컬럼 제거 (`_artifacts/55`)
+- **재발 방지**: SP `OPEN ... FOR SELECT` 의 컬럼 수 = caller `FETCH ... INTO 변수` 수 cross-check
+
+### §12.2 caller 가 잘못된 OUT cursor FETCH
+- **원인**: TITLE SP default 분기가 `OPEN O_RC3 FOR ...` 인데 caller 는 `v_rc1` (O_RC1) FETCH
+- **Fix**: SP 본문 `O_RC3` → `O_RC1` (`_artifacts/54`)
+- **재발 방지**: caller FETCH cursor 이름 = SP OPEN cursor 이름 일치 의무
+
+### §12.3 ORA-01427 (single-row subquery > 1 row)
+- **원인**: `SCM_MST_SHEET_COLUMNS` seed 중복 (8 컬럼 × 2 dup)
+- **Fix**: PARTITION BY ROW_NUMBER dedupe + PK index UNIQUE→NON-UNIQUE (`_artifacts/57`)
+- **재발 방지**: 화면 작업 전 `SCM_MST_SHEET_COLUMNS (PROGRAM_ID, SHEET_NAME, COLUMN_NAME, DIVISION_ID)` 중복 grep
+
+### §12.4 ORA-01489 (result of string concatenation is too long)
+- **원인**: `LISTAGG('[' || col || '],')` 동적 컬럼 168개 × ~30자 > VARCHAR2(4000)
+- **Fix**: LISTAGG → CURSOR LOOP + CLOB concat (`_artifacts/58`)
+- **재발 방지**: PIVOT/동적 컬럼 SP 의 LISTAGG 잔존 시 CLOB 패턴
+
+### §12.5 ORA-00936 (missing expression — dynamic SQL)
+- **원인**: MSSQL `[col]` 식별자 + PIVOT IN 절 Oracle 비호환
+- **Fix**: `[col]` → `"col"` + PIVOT IN `'val' AS "alias"` (`_artifacts/61`)
+- **재발 방지**: To-Be SP body 의 `[A-Z_]` 패턴 grep 으로 변환 누락 사전 검출
+
+### §12.6 ORA-00904 (invalid identifier — SITE_ITEM.PRODUCT_GROUP)
+- **원인**: To-Be 마이그레이션에서 `REPORT_GROUP3` 컬럼 자체 누락
+- **Fix**: As-Is DB 컬럼 cross-check → ALTER TABLE ADD + dim 데이터 import + JOIN 복원 (`_artifacts/63`)
+- **재발 방지**: 컬럼 누락 진단 시 룰 24 §6.5 As-Is DB 직접 조회 의무
+
+### §12.7 ORA-56907 (PIVOT 중복 alias)
+- **원인**: TITLE SP 의 GTT (GT_GMST_TEMP_2 / GT_GMST_TEMP2_2) DELETE 없이 INSERT만 → BE pool session 재사용 시 row 누적
+- **Fix**: SP 시작에 `DELETE FROM GTT` 추가 (`_artifacts/65`)
+- **재발 방지**: 모든 GTT 사용 SP 의 시작부에 명시적 DELETE 의무
+
+### §12.8 ORA-01400 (CREATED_BY NULL)
+- **원인**: `callSettersOnNulls=true` 활성화 후 `CustomMap.put` 의 `value.getClass()` NPE → exception 처리 중 sesUserId NULL 상태로 sys_log INSERT
+- **Fix**: `CustomMap.java` null guard (`if (value == null) return super.put(key, null);`)
+- **재발 방지**: MyBatis `callSettersOnNulls=true` 활성화 시 모든 typeHandler / CustomMap subclass NULL 처리 검토
+
+### §12.9 ORA-06502 (PL/SQL 문자열 버퍼 너무 작음)
+- **원인**: SAVE SP line 113 `v_in_para_data VARCHAR2(4000) := JSON_OBJECT(...)` — 96 row × 다수 컬럼 = 수만 char
+- **Fix**: `v_in_para_data CLOB` + `JSON_OBJECT(... RETURNING CLOB)`
+- **재발 방지**: bulk save SP (^ 구분 string) 의 JSON_OBJECT / 변수 선언 CLOB 의무
+
+### §12.10 ORA-01722 (invalid number — SUBSTR offset 0 bug)
+- **원인**: MSSQL → Oracle 변환 시 `SUBSTR(str, 0, idx)` 그대로 — Oracle offset 0 == 1 + length=idx → ^ 포함 추출
+- **Fix**: `SUBSTR(str, 0, idx)` → `SUBSTR(str, 1, idx - 1)` 13곳 일괄 (`_artifacts/68`)
+- **재발 방지**: To-Be SP body 의 `SUBSTR(.., 0, v_index_..)` 패턴 grep 후 `1, idx-1` 치환
+
+### §12.11 BE → SP IN parameter NULL (callMutationProc array wrap)
+- **원인**: `useProcMutation.mutate` array signature → `apiClient.callMutationProc` 가 `{data: [...]}` wrap → BE 의 `BaseService.makeProcedure` 가 `params.activeFlag` top-level lookup → 못 찾음
+- **Fix**: `apiClient.post('/{menuId}/{sheet}/{action}/call-proc', {top-level fields})` 직접 호출
+- **재발 방지**: bulk save (^ 구분, single payload) 화면은 `mutate` 우회 + `apiClient.post` 직접. Row-by-row 만 `mutate(array)`
+
+### §12.Q Quick Decision Tree
+
+| 증상 | 1차 의심 | §12.X |
+|---|---|---|
+| 화면 0건 (SP exception=NULL) | TITLE SP OPEN cursor 이름 / SHEET_COLUMNS 중복 / dim 0건 | §12.1~3, §12.6 |
+| ORA-01489 / 문자열 한도 | LISTAGG / VARCHAR2(4000) | §12.4, §12.9 |
+| ORA-00936 dynamic SQL | MSSQL `[col]` / PIVOT IN | §12.5 |
+| ORA-56907 PIVOT alias | GTT 누적 (DELETE 누락) | §12.7 |
+| ORA-01400 NULL FK | callSettersOnNulls 후 NPE | §12.8 |
+| ORA-01722 invalid number | SUBSTR offset 0 bug | §12.10 |
+| 저장 OK + 실제 DB 미변경 | mutate array wrap + BE top-level lookup | §12.11 |

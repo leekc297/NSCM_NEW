@@ -600,6 +600,65 @@ VALUES ('DMF0020', 'salesPriceRange', 'SEARCH', 'DMF0020_salesPriceRange_SEARCH'
 
 ---
 
+## ⭐ 11.5 PIVOT / 동적 컬럼 화면 — `frozenColumns` 자동 설정 (2026-06-01 신규)
+
+**원칙**: SP 에서 PIVOT 으로 동적 컬럼을 생성하는 화면은 **동적 컬럼 직전의 마지막 정적 컬럼까지 좌측 고정** (`frozenColumns`) 의무. 가로 스크롤 시 핵심 dimension 항상 표시.
+
+### 11.5.1 트리거
+
+다음 1개 이상 해당 시 → `frozenColumns` 명시 의무:
+- SP 가 PIVOT 또는 동적 SQL 로 컬럼 생성 (Y# / M# / dynamic period × dimension 등)
+- Grid 가 BASE 컬럼 + 동적 컬럼 두 영역으로 구성
+- 컬럼 50개 이상으로 가로 스크롤 필수
+
+### 11.5.2 표준 구현 패턴
+
+```tsx
+const BASE_COLUMNS = [
+  { binding: 'DEPT_NAME', header: '부문', ... },
+  { binding: 'TEAM_NAME', header: '팀', ... },
+  ...
+  { binding: 'DM_BIZ_TYPE', header: '형태', ... },  // ← 동적 컬럼 직전 마지막 정적
+];
+
+<FlexGrid
+  initialized={(g) => {
+    // PIVOT/동적 컬럼 직전까지 좌측 고정
+    g.frozenColumns = BASE_COLUMNS.length;
+  }}
+  ...
+/>
+```
+
+### 11.5.3 cross-check (PR 머지 게이트)
+
+```bash
+# PIVOT/동적 SP 화면인지 확인
+grep -rE "PIVOT.*FOR.*COLUMN_NAME|v_ColumnDataPivot|v_ColumnData2" To-be_v2_converted/06_Packages/ \
+  | awk -F: '{print $1}' | sort -u
+
+# 해당 화면 FE 코드에 frozenColumns 존재 확인
+grep -nE "frozenColumns\s*=" features/<domain>/src/pages/<screen>/components/*Grid.tsx
+# 누락 시 → PR Reject
+```
+
+### 11.5.4 적용 사례
+
+| 화면 | BASE 컬럼 | 동적 컬럼 | frozenColumns |
+|---|---|---|---|
+| DMF0043 Contribute Main | 6 (부문/팀/고객군/판매처/제품군/형태) | 108 (12 월 × 9 RBU) | 6 |
+| DMF0007 Customer FCST (예상) | dim 컬럼 | 동적 기간 | dim 끝 |
+
+### 11.5.5 자기 점검
+
+- [ ] PIVOT SP 결과 cursor 컬럼 수가 BASE + 동적 합과 일치
+- [ ] `frozenColumns = BASE_COLUMNS.length` 명시
+- [ ] 가로 스크롤 시 BASE 컬럼 항상 visible (시각 검증)
+
+상세 hook: [`hooks/pivot-frozen-columns.md`](hooks/pivot-frozen-columns.md)
+
+---
+
 ## 12. 관련 문서
 
 | 룰 | 주제 |

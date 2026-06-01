@@ -60,6 +60,21 @@ const SalesSiteProjectModelWithTab = LazyLoader(() =>
 const CustomerFcstMasterWithTab = LazyLoader(() =>
   import('@master/customer-forecast-master').then(m => ({ default: m.CustomerFcstMaster }))
 );
+const ContributeMainWithTab = LazyLoader(() =>
+  import('@master/contribute-main').then(m => ({ default: m.ContributeMain }))
+);
+const ContributeViewWithTab = LazyLoader(() =>
+  import('@master/contribute-view').then(m => ({ default: m.ContributeView }))
+);
+const ErpEdiMasterWithTab = LazyLoader(() =>
+  import('@master/erp-edi-master').then(m => ({ default: m.ErpEdiMaster }))
+);
+const NnMasterMappingWithTab = LazyLoader(() =>
+  import('@master/nn-master-mapping').then(m => ({ default: m.NnMasterMapping }))
+);
+const SalesFuturePriceWithTab = LazyLoader(() =>
+  import('@master/sales-future-price').then(m => ({ default: m.SalesFuturePrice }))
+);
 // @demand
 const ForecastPricePageWithTab = LazyLoader(() =>
   import('@demand/forecast-price').then(m => ({ default: m.ForecastPrice }))
@@ -185,6 +200,26 @@ export const router: RemixRouter = createBrowserRouter([
               {
                 path: ROUTE_PATHS.DMF0007,
                 element: <CustomerFcstMasterWithTab />,
+              },
+              {
+                path: ROUTE_PATHS.DMF0043,
+                element: <ContributeMainWithTab />,
+              },
+              {
+                path: ROUTE_PATHS.DMF0043_01,
+                element: <ContributeViewWithTab />,
+              },
+              {
+                path: ROUTE_PATHS.DMF0008,
+                element: <ErpEdiMasterWithTab />,
+              },
+              {
+                path: ROUTE_PATHS.DMF0072,
+                element: <NnMasterMappingWithTab />,
+              },
+              {
+                path: ROUTE_PATHS.DMF0020,
+                element: <SalesFuturePriceWithTab />,
               },
             ],
           },

@@ -121,6 +121,35 @@
 | `SetExchangeValues()` (환율 적용) | `setExchangeValues()` hook |
 | `GetThisWeekMonday(date)` (주 시작일 계산) | `getThisWeekMonday()` hook |
 
+### 3.5 ⛔ AS-IS UI 요소 중 TO-BE 미반영 대상 (2026-06-01 신규)
+
+**원칙**: AS-IS 1:1 매핑은 **로직/이벤트/Validation/Expression** 한정. UI 보조 요소 중 **공통 컴포넌트가 대체하는 것** 은 절대 그대로 가져오지 말 것.
+
+| # | AS-IS UI 요소 | TO-BE 미반영 이유 / 대체 |
+|---:|---|---|
+| 1 | `btnReset` / `btnClear` "초기화" 버튼 | AS-IS BaseForm 기본 제공. TO-BE 는 사용자 명시 요구 없으면 생성 금지. 필터 초기화는 `useStore.reset()` 만 store 에 유지 |
+| 2 | "F5=조회 / F7=저장 / F8=추가 / F9=삭제 / F12=Excel" hotkey hint 텍스트 | `<SubTitle hotkeyConfig={...}/>` 가 통합 표시. SearchBar 에 별도 텍스트 라벨 금지 |
+| 3 | `btnPrint` "인쇄" / `btnExport` "Excel" 버튼 (단독) | `<SubTitle excelFileName=.../>` 가 통합 |
+| 4 | `lblStatus` 하단 상태 라벨 ("총 N건") | `<SubTitle dataCount={N}/>` 통합 |
+| 5 | `btnHelp` "도움말" 버튼 | TO-BE 미적용 (별도 manual flag 가 SubTitle 에 있음) |
+| 6 | AS-IS `MainMenu` / `MenuStrip` | TO-BE 는 MDI 탭 + 라우터가 처리 (룰 15) |
+
+**판별 기준**: AS-IS 의 UI 컨트롤이 다음 중 하나에 해당하면 TO-BE 미반영:
+1. 공통 컴포넌트 (`MainTitle`/`SubTitle`/`SearchArea`/`hotkeyConfig`) 가 같은 기능을 제공
+2. BaseForm/MDI 자동 제공 (close/print/help 등)
+3. 사용자가 명시적으로 요청하지 않은 BaseForm 잔존 위젯
+
+**위반 시 영향**: 화면에 중복 UI 가 발생하여 사용자가 "어디서 나왔는지 모르는" 버튼을 만나게 됨. AS-IS 충실도 ≠ UI 가독성.
+
+**사고 사례 (DMF0043 2026-06-01)**: SearchBar 에 "초기화" 버튼 + "F5=조회 / F7=저장 / F8=추가 / F9=삭제 / F12=Excel" hint 텍스트를 AS-IS 추출 그대로 노출 → 사용자가 "어디서 나왔는지 모르겠다" 지적 + SubTitle 의 hotkeyConfig 와 중복.
+
+**Pre-write hook 추가 grep**:
+```bash
+# TO-BE SearchBar/조회영역 에서 다음 패턴이 보이면 즉시 제거
+grep -nE "초기화|onReset|resetButton|F5=조회|F7=저장|F12=Excel" \
+  nscm-fe/features/<domain>/src/pages/<screen>/components/SearchBar.tsx
+```
+
 ---
 
 ## §4. POPUP 매핑 (별도 .cs 파일 cross-check)
@@ -233,6 +262,78 @@ grep -cE "^\s+const \w+ = useCallback" hooks/use<Screen>Validation.ts
 
 ---
 
+## ⭐ §6.5 AS-IS DB 직접 조회 의무 (2026-06-01 신규)
+
+**원칙**: DB 오류 발생 또는 데이터 미일치 / 사용자 요청 시 — **반드시 AS-IS MSSQL DB 에 직접 연결** 하여 원본 데이터/SP body/스키마 cross-check 후 수정. 추측/단순 fallback 절대 금지.
+
+### 6.5.1 트리거 조건
+
+다음 조건 중 1개 이상 → AS-IS DB 직접 조회 의무:
+
+| 트리거 | 예시 |
+|---|---|
+| DB 오류 ORA-xxxxx 발생 (ORA-01400/01427/01489/01722/06502/56907 등) | DMF0043 PIVOT 중복 alias / NULL CREATED_BY |
+| 화면 데이터 0건 / 일부 누락 / 값 불일치 | 로컬 SITE_ITEM ATTRIBUTE1/2 NULL — As-Is 18건 |
+| To-Be 와 As-Is 결과 row 수 불일치 | DMF0043 As-Is 11건 vs To-Be 0건 |
+| SP / Table / Column 스키마 의문 | REPORT_GROUP3 컬럼 누락 여부 |
+| 사용자가 "As-Is 확인 후 진행" 명시 요청 | "AS-IS 소스 확인 부탁드립니다" |
+
+### 6.5.2 연결 정보 (gitignore)
+
+`.env.asis` 파일 (2026-06-01 생성, `.gitignore` `.env.*` 패턴으로 자동 제외):
+```
+ASIS_DB_HOST=165.244.95.223
+ASIS_DB_PORT=1433
+ASIS_DB_NAME=LGCE_SCMDEV       # ⚠ LGCD 아님 — D vs E 주의
+ASIS_DB_USER=scp_mgr_dev
+ASIS_DB_PASS=(env)
+```
+
+### 6.5.3 sqlcmd 호출 패턴 (Git Bash)
+
+```bash
+source .env.asis 2>/dev/null
+sqlcmd -S "${ASIS_DB_HOST},${ASIS_DB_PORT}" -d "${ASIS_DB_NAME}" \
+  -U "${ASIS_DB_USER}" -P "${ASIS_DB_PASS}" -C -W \
+  -Q "SET NOCOUNT ON; <쿼리>"
+```
+
+### 6.5.4 자주 사용하는 진단 쿼리
+
+```sql
+-- 1) As-Is SP 본문 추출
+SELECT definition FROM sys.sql_modules WHERE object_id = OBJECT_ID('<SP_NAME>')
+
+-- 2) 테이블 컬럼 인벤토리
+SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='<T>' ORDER BY ORDINAL_POSITION
+
+-- 3) row 수 차이 진단
+SELECT COUNT(*) FROM <table> WHERE <key>='<value>'   -- As-Is
+SELECT COUNT(*) FROM SCM_MGR.<table> WHERE <key>='<value>'   -- Local (Oracle)
+
+-- 4) SP 직접 실행 (영향 X — SELECT only)
+EXEC dbo.<SP_NAME> @p1='...', @p2='...'
+```
+
+### 6.5.5 적용 흐름
+
+1. **DB 오류 메시지 → AS-IS 동일 쿼리/SP 실행** → 정상 동작 시 To-Be 환경 차이 확인
+2. **데이터 불일치 → AS-IS row 수 / sample 추출** → 차이 분석
+3. **As-Is SP body 와 To-Be SP body 비교** → MSSQL → Oracle 변환 누락/오류 식별
+4. **누락 row import 시** — AS-IS 에서 직접 추출 → `_artifacts/{seq}_*_Import.sql` 생성하여 로컬 import
+5. **변환 누락 fix 시** — `_artifacts/{seq}_{SP}_Fix.sql` 생성하여 SP recompile
+
+### 6.5.6 사고 사례 (2026-06-01 DMF0043)
+
+| 사고 | As-Is 직접 조회로 발견 | Fix |
+|---|---|---|
+| 화면 0건 | As-Is 11건 JOIN 매칭, 로컬 0건 | `_artifacts/63/64` site_item dim import |
+| Trend Power_01 값 0 | As-Is DTL 96건, 로컬 0건 | `_artifacts/66` DTL bulk import |
+| SP `[col]` 변환 누락 | As-Is SP body 와 1:1 비교 — Oracle 변환 부분 다수 | `_artifacts/61` 전면 재변환 |
+| REPORT_GROUP3 컬럼 누락 | As-Is `SCM_MST_SITE_ITEM` 컬럼 인벤토리 | `_artifacts/63` ALTER TABLE ADD |
+
+---
+
 ## §7. ❌ 절대 금지 패턴
 
 | # | 금지 | 사유 |
@@ -271,3 +372,4 @@ grep -cE "^\s+const \w+ = useCallback" hooks/use<Screen>Validation.ts
 ## §9. 변경 이력
 
 - 2026-05-22: 신규 작성. DMF0020 사고 (modal P1-P6 12건 + Event #70 1건 누락) 후 항구 방지 룰.
+- 2026-06-01: §3.5 신규 — AS-IS UI 요소 중 TO-BE 미반영 대상 (초기화 버튼 / hotkey hint 텍스트 / 인쇄·Excel 단독 버튼 등 6종). DMF0043 SearchBar 에 "초기화" + "F5=조회 ~ F12=Excel" hint 텍스트 그대로 노출 → SubTitle hotkeyConfig 와 중복 + 사용자 "어디서 나왔는지 모르겠다" 지적 후 항구 방지.

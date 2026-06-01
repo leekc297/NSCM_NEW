@@ -1,5 +1,8 @@
 # 31. Figma 디자인 → React 신규 화면 연동
 
+> ⭐⭐ **진실 source (Figma 연동 주제) — 이 주제는 여기만 변경.**
+> 룰 25 §1.0 / hook `figma-mapping-check.md` 는 이 룰을 link only 참조.
+
 > ⭐ **Figma 가 디자인 SSoT (Single Source of Truth)**.
 > 신규 화면 작업 시 Figma URL → REST API fetch → JSON 정리 → React 코드 작성에 직접 반영.
 > 작성: 2026-05-30
@@ -81,6 +84,69 @@ URL 만 + 특별한 키워드 없음:
 ---
 
 ## §5. Figma → React/NSCM 컴포넌트 매핑
+
+### ⭐ 5.0 화면 Button 명세 의무 (2026-06-01 신규)
+
+**모든 신규 화면은 Figma SVG + figma_link.md + AS-IS `.cs` 의 button 목록을 모두 확인하여 1:1 매핑 의무.**
+
+#### 작업 절차
+
+| 단계 | 작업 |
+|---:|---|
+| 1 | `Doc/_figma/_images/{화면ID}_Table.svg` (또는 `*_Form.svg`) 확인 → 헤더/footer 영역의 button label 정리 |
+| 2 | `Doc/_figma/screens/{화면ID}.md` 의 layout 요약 + components 섹션에서 button 명세 추출 |
+| 3 | AS-IS `Doc/_legacy_source/.../{화면ID}.cs` 의 button 클릭 핸들러 + Designer.cs 의 button 컨트롤 추출 |
+| 4 | 표 작성: `Figma 라벨 / AS-IS 핸들러 / To-Be 매핑 (hotkeyConfig 키 / customButton)` |
+| 5 | `__asis-mapping__.md` 의 `## Button 매핑` 섹션에 ✅/⏳/❌ 표시 |
+
+#### To-Be 표준 매핑 (룰 12 §5 + `Hotkeys` enum 기반)
+
+| Figma 버튼 라벨 (일반적) | AS-IS 출처 | To-Be 매핑 | 자동/customButton |
+|---|---|---|---|
+| 조회 / Search (F5) | F5 hotkey | `hotkeyConfig.search` | SubTitle 자동 (또는 SearchBar 별도) |
+| 저장 / Save (F7) | F7 hotkey | `hotkeyConfig.save` | SubTitle 자동 |
+| 추가 / Insert (F8) | F8 hotkey | `hotkeyConfig.insert` | SubTitle 자동 |
+| 삭제 / Delete (F9) | F9 hotkey | `hotkeyConfig.delete` | SubTitle 자동 |
+| 정렬 / Sort (F3) | F3 hotkey | (`hotkeyConfig.sort` 명시 X → default 사용) | SubTitle 자동 |
+| 필터 / Filter (F4) | F4 hotkey | (default) | SubTitle 자동 |
+| 조건 / Condition (F6) | F6 hotkey | (default) | SubTitle 자동 |
+| 초기화 / Reset Condition (F10) | F10 hotkey | (default) | SubTitle 자동 |
+| 엑셀 / Excel | btnExcel | `hotkeyConfig.excel` | SubTitle 자동 |
+| 매뉴얼 / Manual (F1) | F1 hotkey | `manual: false` 로 비활성 (룰 12 §5 deprecation) | — |
+| **화면 특화 버튼** (예: DMF0043 "기여율 버전관리") | 별도 btnXxx_Click | `customButtons: [{ label, action }]` prop | **customButton** |
+
+#### customButton 패턴
+
+화면 특화 버튼 (= 룰 12 §5 표에 없는 button, 예: POPUP 호출 / 다른 SP 트리거) 은 `customButtons` prop 로 등록:
+
+```tsx
+const customButtons = [
+  { label: '기여율 버전관리', action: () => setVersionPopupOpen(true) },
+  // 추가 화면 특화 버튼 ...
+];
+
+<SubTitle ... customButtons={customButtons} />
+```
+
+#### 자동 활성/비활성 판단
+
+- `hotkeyConfig` 에 명시 안 함 → `SubTitle` 의 `DefaultButtonActions` (룰 12 §5 표) 사용. F3/F4/F6/F10 자동 활성.
+- `hotkeyConfig.x = false` → 명시적 비활성 (button 자체 미렌더).
+- `hotkeyConfig.x = function` → 화면별 커스텀 함수.
+
+#### AS-IS 에 없는 button 추가 금지 (Anti-Simplification)
+
+AS-IS `.cs` 에 button click 핸들러가 없으면 To-Be 에도 추가 X. 단, Figma 디자인본에 명시되어 있고 신규 요구이면 사용자 확인 후 customButton 으로 추가.
+
+#### 누락 검출 의무
+
+- Figma layout 의 button 목록 = AS-IS .cs 의 button 핸들러 목록 — 두 목록 합집합이 To-Be 매핑에 100% 등장해야 함.
+- 누락 1건이라도 → `__asis-mapping__.md` 에 ❌ + 사유 기재.
+- PR 머지 게이트: `## Button 매핑` 섹션 행에 ❌ 0건 필요.
+
+---
+
+## §5.1 Figma → React/NSCM 컴포넌트 매핑
 
 | Figma 노드 type / name 패턴 | NSCM React 매핑 | 출처 |
 |---|---|---|

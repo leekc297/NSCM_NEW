@@ -87,7 +87,7 @@ CREATE OR REPLACE PACKAGE BODY SCM_MGR.PKG_DMF0073 IS
         ******************************************************************************************************/
      AS
 
-        V_IN_PARA_DATA VARCHAR2(4000);
+        V_IN_PARA_DATA CLOB;
         V_LOG_TYPE     VARCHAR2(20) := NULL;
         N_LOG_COUNT    NUMBER := 0;
         V_LOG_MESSAGE  VARCHAR2(4000 CHAR) := NULL;
@@ -291,7 +291,7 @@ CREATE OR REPLACE PACKAGE BODY SCM_MGR.PKG_DMF0073 IS
         V_ERR_CODE      INTEGER;
         V_ERR_MESSAGE   VARCHAR2(4000 CHAR) := NULL;
         V_ROWCNT        INTEGER;
-        V_IN_PARA_DATA  VARCHAR2(4000);
+        V_IN_PARA_DATA  CLOB;
     BEGIN
 
         V_IN_PARA_DATA := JSON_OBJECT('P_DIVISION_ID' VALUE P_DIVISION_ID

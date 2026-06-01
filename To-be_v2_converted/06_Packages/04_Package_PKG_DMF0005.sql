@@ -1278,9 +1278,9 @@ END P_DMF0005_SAVE_SALES_SITE_MODEL_PRODUCTION;
     			---------------------------(1)
     				BEGIN
     					--문자열 자르기(0 ~ INDEX)
-    					s_item_id_before := SUBSTR(p_item_id_before			, 0, v_index_item_id_before		);
-    					s_item_id_after := SUBSTR(p_item_id_after			, 0, v_index_item_id_after		);
-    					s_last_updated_by := SUBSTR(p_last_updated_by			, 0, v_index_last_updated_by		);
+    					s_item_id_before := SUBSTR(p_item_id_before			, 1, v_index_item_id_before - 1		);
+    					s_item_id_after := SUBSTR(p_item_id_after			, 1, v_index_item_id_after - 1		);
+    					s_last_updated_by := SUBSTR(p_last_updated_by			, 1, v_index_last_updated_by - 1		);
     
     					--문자열 자르기(^ ~ END)
     					p_item_id_before := SUBSTR(p_item_id_before			, LENGTH(s_item_id_before			  ||  '^') || 1, LENGTH(p_item_id_before			));

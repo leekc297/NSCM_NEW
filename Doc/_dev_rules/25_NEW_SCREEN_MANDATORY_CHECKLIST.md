@@ -20,6 +20,54 @@
 
 ---
 
+## ⭐ §0.5 As-Is DB Baseline 자동 점검 (2026-06-01 Plan Stage 5)
+
+**원칙**: 신규/수정 화면 진입 시 코드 작성 전 As-Is MSSQL DB cross-check 4단계 의무.
+
+**도구**: `_artifacts/_diagnostics/`
+**Hook**: [`screen-entry-asis-baseline.md`](hooks/screen-entry-asis-baseline.md)
+**상세**: hook §1 4단계 + §2 결과 보고서 양식
+
+**4 단계**:
+1. `_mapping_asis_tobe.csv` 에 화면 SP/테이블 매핑 1줄 추가
+2. `row_count_diff.sh <TABLE>` — Row count cross-check (|Diff| > 1% 시 사용자 확인)
+3. `column_inventory.sh <TABLE>` — Column 인벤토리 cross-check (불일치 시 즉시 보고)
+4. PIVOT / 동적 컬럼 / bulk save SP 의 경우 `sp_body_diff.sh <ASIS_SP> <TOBE_PKG>` (선택)
+
+**위반 시**: DMF0043 사고 4축 (Row 누락 1.5M / DTL 96 누락 / SP `[col]` 잔존 / Cursor mismatch) 재발 위험.
+
+---
+
+## ⭐ §1.0 화면 Layout/Table Layout 자료 우선순위 (2026-06-01 신규)
+
+**원칙**: 신규/수정 화면 작업 시 layout/table layout 자료를 다음 **우선순위 순서로 fallback** 하여 확인. 상위 자료가 있으면 하위는 보완용.
+
+```
+[Priority 1] Figma 디자인본          → Doc/_figma/screens/{SCREEN_ID}.md + _images/{SCREEN_ID}.svg
+                                       ↓ (없으면)
+[Priority 2] AS-IS 화면 캡처 PNG     → C:\Projects_Document\NSCM\AsIs_UI_Sample\{SCREEN_ID}.png
+                                     또는 _analysis/_screens/{도메인}_Screens/{prefix}{SCREEN_ID}.xlsx 의 `2_Layout` 시트 임베드 PNG
+                                       ↓ (없으면)
+[Priority 3] Excel 화면분석서 12시트  → _analysis/_screens/{도메인}_Screens/{prefix}{SCREEN_ID}.xlsx
+                                       (3_FieldList / 5_Layout 등)
+                                       ↓ (병행)
+[Priority 4] 화면분석 MD              → Doc/_analysis/domain_{X}/screens/{SCREEN_ID}/{analysis.md / tobe_design.md 등 8 MD}
+```
+
+#### 적용 절차
+
+| 단계 | 작업 |
+|---:|---|
+| 1 | Figma `Doc/_figma/screens/{SCREEN_ID}.md` 존재 확인 → 있으면 Layout 우선 채택 |
+| 2 | 없으면 `C:\Projects_Document\NSCM\AsIs_UI_Sample\` 또는 xlsx `2_Layout` 시트 PNG 확인 |
+| 3 | 없으면 Excel xlsx (`3_FieldList` / `5_Layout` 시트) 확인 |
+| 4 | 병행: MD 8종 (analysis/validation/expressions/tobe_design 등) 정밀 cross-check |
+| 5 | 자료 간 불일치 발견 시 — Figma 가 최우선 ground truth. AS-IS 캡처는 동작 검증. Excel/MD 는 보완. |
+
+상세: 룰 19 §1 (Mockup SVG) / 룰 20 §1 (화면 분석서 파이프라인) / 룰 31 (Figma 디자인 연동)
+
+---
+
 ## §1. 6종 사전 입력 자료 의무 확인 (Pre-Read MUST)
 
 > 2026-05-30: Figma 디자인 통합 (룰 31) — 기존 5종 + Figma = **6종** 으로 확장.
@@ -121,6 +169,9 @@ Doc/_figma/_api_cache/{file_key}/node_*.json       ⭐ Figma API fetch 결과 �
 - Layout 정확도 ↑ — As-Is .Designer.cs 의 정적 좌표보다 To-Be 가 Figma 우선
 - 컴포넌트 매핑 — Figma 컴포넌트 명 → `@shared/components` (룰 23 cross-check)
 - 색상/spacing — Figma fills → `@lges/design-system` 토큰 매핑 (룰 31 §5)
+- **⭐ Button 명세 매핑 의무 (2026-06-01)** — Figma SVG/MD 의 button 라벨 ⊕ AS-IS `.cs` 의 click 핸들러 합집합을
+  `hotkeyConfig` (룰 12 §5 표준) + `customButtons` (화면 특화) 로 100% 매핑. 상세: **룰 31 §5.0**.
+  누락 1건 → `__asis-mapping__.md` 의 `## Button 매핑` 섹션에 ❌ + 사유 기재. PR 머지 게이트.
 
 **Figma 자료 없는 화면**:
 - `Doc/_figma/screens/{SCREEN_ID}.md` 가 TBD 인 경우 — 사용자에게 Figma URL 요청 또는 As-Is 자료만으로 진행 (사용자 결정)
@@ -181,6 +232,48 @@ Read: Doc/_analysis/domain_{X}/screens/{SCREEN_ID}/popups.md
 | POPUP 이 **독립 메뉴 (별도 SCREEN_ID 보유)** 인 경우 | 별도 신규 화면으로 처리 (본 체크리스트 재귀 적용 필요 — 사용자 별도 승인) |
 | POPUP 이 **현재 화면 종속** (별도 SCREEN_ID 없음) | `components/modals/{PopupName}Modal.tsx` 로 신규 생성 |
 | POPUP 이 **공통 모달 영역** (예: 검색 마스터 lookup) | `@shared/components` 의 기존 컴포넌트 재사용 — 신규 생성 금지 |
+
+### ⭐ 3.3.1 POPUP AS-IS 원본 정밀 분석 의무 (2026-06-01 신규)
+
+> ⭐⭐ **진실 source (POPUP 주제) — 이 주제는 여기만 변경.**
+> 룰 24 §3.5 / hook `popup-asis-analysis.md` 는 이 절을 link only 참조.
+
+**원칙**: POPUP 작업 시 AS-IS `.cs` + `.Designer.cs` 원본을 **반드시 전체 Read** 하여 동작 정밀 매핑. 추측/단순화 절대 금지.
+
+#### 의무 절차
+
+| 단계 | 작업 |
+|---:|---|
+| 1 | `Doc/_legacy_source/.../POPUP/{POPUP_NAME}.cs` 전체 Read (수백~수천 라인 전체) |
+| 2 | `Doc/_legacy_source/.../POPUP/{POPUP_NAME}.Designer.cs` 전체 Read — 컨트롤 인벤토리/이벤트 등록 |
+| 3 | `protected override` 메서드 모두 확인 (FindButton/EditButton/InsertButton/SaveButton/DeleteButton) — BaseForm 기본 동작 vs 화면 specific override |
+| 4 | `FoxDataRequest("..._SP_NAME")` 호출 모두 추출 — LOAD / SAVE / 부가 SP signature |
+| 5 | DefColumns struct 컬럼 추출 — binding / header / readOnly / lock 패턴 |
+| 6 | 권한 분기 (`UserInfoContext.Current["NowGroupID"]`) 확인 — admin only CRUD vs 모두 |
+| 7 | Edit toggle 동작 확인 (`SwitchLock` + `LockColumn`/`LockRange`) — 어느 컬럼이 영구 잠금 vs 편집 가능 |
+| 8 | bulk save 패턴 (`^` 구분 string × N) vs row-by-row 패턴 확인 |
+| 9 | MSG i18n 코드 모두 추출 (`MessageHelper.GMessageBox("MSGXXXXX")`) |
+
+#### To-Be 작성 의무
+
+- **SCSS Module 강제** (`{Popup}.module.scss`) — inline style 절대 금지 (룰 03 / 룰 24 §3.5)
+- `CustomDialog` (`@shared/components` — `Dialog` 아님, 룰 23 §1) 사용
+- Wijmo FlexGrid (룰 12 §5 표준 + GridAction)
+- `setAlert/confirm` (`@shared/stores` 의 `useMessageStore`) — `window.alert/confirm` 금지 (룰 14)
+- AS-IS 의 모든 button click 핸들러 1:1 매핑 (`hotkeyConfig` 표준 또는 `customButtons` — 룰 31 §5.0)
+- AS-IS L 라인 번호와 함께 주석 (`// AS-IS {file}:{LNN}`)
+
+#### 누락 검출 의무
+
+- `__asis-mapping__.md` 의 `## POPUP 매핑` 섹션에 각 POPUP 의 button / SP / event / validation 4축 모두 ✅/⏳/❌ 표시
+- ❌ 1건 이상 — PR 머지 게이트 차단
+
+#### 사고 사례 (2026-06-01 DMF0043_ContributeRatePopup)
+
+- Agent 가 sheet 매핑을 `VERSION_POPUP` 으로 잘못 선택 → BE 가 `GET_CONT_VIEW_VERSIONPOPUP` (다른 popup SP) 호출 → 화면 데이터 미조회
+- SCSS 적용 깨짐 (`headerContainer` global className 사용) → 일부 영역 표시 불량
+- `dialogContent height: 100%` → CustomDialog 자체 영역 초과 → actionBar 영역 외 push → CRUD 버튼 미표시
+- 위 사고들 모두 §3.3.1 정밀 분석 의무 위반에서 비롯
 
 ### 3.4 종속 POPUP 신규 생성 시 구조
 

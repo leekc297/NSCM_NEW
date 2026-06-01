@@ -80,6 +80,9 @@ cd nscm-fe/apps/web && ./node_modules/.bin/vite
 
 ## §B. Wijmo FlexGrid Column Header 세로 머지 조건
 
+> ⭐⭐ **진실 source (PIVOT / Column Header 머지 주제) — 이 주제는 여기만 변경.**
+> 룰 12 §11.5 / hook `pivot-frozen-columns.md` 는 이 절을 link only 참조.
+
 ### 발동 조건 (전부 만족해야 함)
 
 1. `<DataGrid allowMerging={AllowMerging.ColumnHeaders}>` (기본값)

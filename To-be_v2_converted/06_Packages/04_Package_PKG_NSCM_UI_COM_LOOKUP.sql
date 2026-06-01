@@ -70,8 +70,8 @@ AS
   			
           -- 1. 조회 컬럼 
             SELECT 
-                LISTAGG('''' || HEADER_VAL || ''' AS "' || HEADER_VAL || '"', ', ') WITHIN GROUP (ORDER BY MIN_LVL),
-                LISTAGG('"' || HEADER_VAL || '"', ', ') WITHIN GROUP (ORDER BY MIN_LVL)
+                LISTAGG('''' || HEADER_VAL || ''' AS "' || HEADER_VAL || '"', ', ' ON OVERFLOW TRUNCATE WITH COUNT) WITHIN GROUP (ORDER BY MIN_LVL),
+                LISTAGG('"' || HEADER_VAL || '"', ', ' ON OVERFLOW TRUNCATE WITH COUNT) WITHIN GROUP (ORDER BY MIN_LVL)
             INTO V_COLS, V_SELECT_COLS
             FROM (
             	SELECT HEADER_VAL, MIN(LVL) MIN_LVL

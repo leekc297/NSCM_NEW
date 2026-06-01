@@ -291,7 +291,7 @@ CREATE OR REPLACE PACKAGE BODY SCM_MGR.PKG_DMF0042 IS
         /****************************************************************************************************/
      AS
     
-        V_IN_PARA_DATA VARCHAR2(4000);
+        V_IN_PARA_DATA CLOB;
         V_LOG_TYPE     VARCHAR2(20) := NULL;
         N_LOG_COUNT    NUMBER := 0;
         V_LOG_MESSAGE  VARCHAR2(4000 CHAR) := NULL;
@@ -397,7 +397,7 @@ CREATE OR REPLACE PACKAGE BODY SCM_MGR.PKG_DMF0042 IS
         --DMF0042_GET_DM_PLN_BP_CUTOFF_VERSION('40', '20220501', '20231101', 'BP_M');
         --DMF0042_GET_DM_PLN_BP_CUTOFF_VERSION('40', '20211101', '20211231', 'BP_M');
     
-        V_IN_PARA_DATA VARCHAR2(4000);
+        V_IN_PARA_DATA CLOB;
         V_LOG_TYPE     VARCHAR2(20) := NULL;
         N_LOG_COUNT    NUMBER := 0;
         V_LOG_MESSAGE  VARCHAR2(4000 CHAR) := NULL;
@@ -490,7 +490,7 @@ CREATE OR REPLACE PACKAGE BODY SCM_MGR.PKG_DMF0042 IS
         */
      AS
     
-        V_IN_PARA_DATA VARCHAR2(4000);
+        V_IN_PARA_DATA CLOB;
         V_LOG_TYPE     VARCHAR2(20) := NULL;
         N_LOG_COUNT    NUMBER := 0;
         V_LOG_MESSAGE  VARCHAR2(4000 CHAR) := NULL;
@@ -563,7 +563,7 @@ CREATE OR REPLACE PACKAGE BODY SCM_MGR.PKG_DMF0042 IS
         /****************************************************************************************************/
      AS
     
-        V_IN_PARA_DATA VARCHAR2(4000);
+        V_IN_PARA_DATA CLOB;
         V_LOG_TYPE     VARCHAR2(20) := NULL;
         N_LOG_COUNT    NUMBER := 0;
         V_LOG_MESSAGE  VARCHAR2(4000 CHAR) := NULL;
@@ -676,7 +676,7 @@ CREATE OR REPLACE PACKAGE BODY SCM_MGR.PKG_DMF0042 IS
         /****************************************************************************************************/
      AS
     
-        V_IN_PARA_DATA VARCHAR2(4000);
+        V_IN_PARA_DATA CLOB;
         V_LOG_TYPE     VARCHAR2(20) := NULL;
         N_LOG_COUNT    NUMBER := 0;
         V_LOG_MESSAGE  VARCHAR2(4000 CHAR) := NULL;
@@ -790,7 +790,7 @@ CREATE OR REPLACE PACKAGE BODY SCM_MGR.PKG_DMF0042 IS
         V_USER_COL_CNT INTEGER;
         V_PROGRAM_ID   VARCHAR2(4000 CHAR);
         V_SHEET_NAME   VARCHAR2(4000 CHAR);
-        V_IN_PARA_DATA VARCHAR2(4000);
+        V_IN_PARA_DATA CLOB;
         V_LOG_TYPE     VARCHAR2(20) := NULL;
         N_LOG_COUNT    NUMBER := 0;
         V_LOG_MESSAGE  VARCHAR2(4000 CHAR) := NULL;
@@ -1332,7 +1332,7 @@ CREATE OR REPLACE PACKAGE BODY SCM_MGR.PKG_DMF0042 IS
         V_INDEX_EXCHANGE_PRICE  INTEGER;
         V_INDEX_CREATED_BY      INTEGER;
         V_INDEX_LAST_UPDATED_BY INTEGER;
-        V_IN_PARA_DATA          VARCHAR2(4000);
+        V_IN_PARA_DATA          CLOB;
     BEGIN
     
         V_IN_PARA_DATA := JSON_OBJECT('p_active_flag' VALUE P_ACTIVE_FLAG
@@ -1711,7 +1711,7 @@ CREATE OR REPLACE PACKAGE BODY SCM_MGR.PKG_DMF0042 IS
         V_CNT_4                 INTEGER := 0;
         V_CNT_5                 INTEGER := 0;
         V_CNT_6                 INTEGER := 0;
-        V_IN_PARA_DATA          VARCHAR2(4000);
+        V_IN_PARA_DATA          CLOB;
         -- 선언부에 추가
         V_RC1_SUB SYS_REFCURSOR;
         V_RC2_SUB SYS_REFCURSOR;
@@ -3570,7 +3570,7 @@ CREATE OR REPLACE PACKAGE BODY SCM_MGR.PKG_DMF0042 IS
         V_DESCRIPTION      VARCHAR2(500 CHAR);
         D_EVENT_DATE       DATE;
         V_CNT_1            INTEGER := 0;
-        V_IN_PARA_DATA     VARCHAR2(4000);
+        V_IN_PARA_DATA     CLOB;
         V_BP_QTY           NUMBER(30, 10);
         V_EXCHANGE_PRICE   NUMBER(30, 10);
         V_SQL_CODE         VARCHAR2(100) := NULL;
@@ -4612,7 +4612,7 @@ CREATE OR REPLACE PACKAGE BODY SCM_MGR.PKG_DMF0042 IS
         V_LOG_MESSAGE  VARCHAR2(1000 CHAR);
         V_DESCRIPTION  VARCHAR2(500 CHAR);
         D_EVENT_DATE   DATE;
-        V_IN_PARA_DATA VARCHAR2(4000);
+        V_IN_PARA_DATA CLOB;
         N_LOG_COUNT    NUMBER := 0;
         V_PROC_INPUT   CLOB := NULL;
         V_SQL_CODE     VARCHAR2(100) := NULL;

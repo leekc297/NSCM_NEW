@@ -576,7 +576,7 @@ BEGIN
             ,A.LAST_UPDATED_BY
             ,A.LAST_UPDATE_DATE
             ,'ALL,' || NVL(
-                (SELECT LISTAGG(B.GROUP_ID, ',') WITHIN GROUP (ORDER BY B.GROUP_ID)
+                (SELECT LISTAGG(B.GROUP_ID, ',' ON OVERFLOW TRUNCATE WITH COUNT) WITHIN GROUP (ORDER BY B.GROUP_ID)
                  FROM SCM_ADM_DQ_USER_GROUP B
                  LEFT JOIN SCM_ADM_USER_GR_M C
                    ON B.GROUP_ID = C.USER_GR_ID
@@ -585,7 +585,7 @@ BEGIN
                    AND B.DQ_ID = A.DQ_ID
                 ), '') AS GROUP_ID
             ,NVL(
-                (SELECT LISTAGG(C.USER_GR_NM, ',') WITHIN GROUP (ORDER BY C.USER_GR_NM)
+                (SELECT LISTAGG(C.USER_GR_NM, ',' ON OVERFLOW TRUNCATE WITH COUNT) WITHIN GROUP (ORDER BY C.USER_GR_NM)
                  FROM SCM_ADM_DQ_USER_GROUP B
                  LEFT JOIN SCM_ADM_USER_GR_M C
                    ON B.GROUP_ID = C.USER_GR_ID

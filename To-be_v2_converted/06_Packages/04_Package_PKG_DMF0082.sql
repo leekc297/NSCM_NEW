@@ -1187,7 +1187,7 @@ BEGIN
          , T2.NICK_NAME
          , F.ATTRIBUTE1                                     AS DMS_SALES
          , F.ATTRIBUTE2                                     AS DMS_CUSTOMER
-         , (SELECT LISTAGG(X.USER_NAME_EN, ',') WITHIN GROUP (ORDER BY X.USER_NAME_EN)
+         , (SELECT LISTAGG(X.USER_NAME_EN, ',' ON OVERFLOW TRUNCATE WITH COUNT) WITHIN GROUP (ORDER BY X.USER_NAME_EN)
             FROM   (SELECT DISTINCT ZA.USER_NAME_EN
                     FROM   SCM_MGR.SCM_MST_SSO_USER_INFO ZA
                     WHERE  ZA.USER_ID IN (

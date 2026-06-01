@@ -1,0 +1,92 @@
+--==============================================================================
+-- 41a_PKG_DMF0043_Spec_Body_Fix.sql
+--
+-- 목적:
+--   DMF0043 의 standalone SP 2개 (CONTRIBUTE_MAIN_DATA, CONTRIBUTION_SALES_LIST)
+--   가 PKG_DMF0043 SPEC 에 누락. SCM_MGR schema 에 standalone 으로는 deploy 됨.
+--   - DMF0043_GET_CONTRIBUTE_MAIN_DATA   : VALID (사용 가능)
+--   - DMF0043_GET_CONTRIBUTION_SALES_LIST: INVALID (참조 객체 누락)
+--
+--   사용자 결정: "기존 PKG/SP 존재 시 우선 사용, 필요분만 보완". 따라서:
+--   1) standalone SP 2개를 그대로 사용 (PKG body 정밀 변환 불필요)
+--   2) 누락 객체 2개만 신규 생성하여 SP #10 INVALID 해소
+--      - SCM_MST_COMPANY_SN : 빈 view (To-Be 환경에 없는 AS-IS 테이블)
+--      - FN_SCM_STRING_SPLIT: synonym → FN_STRING_SPLIT (시그니처 동일)
+--   3) BE 의 PROC_M 등록 시 PROC_NM 을 PKG prefix 없이 standalone 으로 등록
+--      (메모리 feedback_proc_meta_col_nm_be_auto_keys)
+--
+-- 멱등성: 모두 CREATE OR REPLACE — 재실행 OK.
+-- 작성: 2026-05-30
+--==============================================================================
+SET DEFINE OFF
+SET SERVEROUTPUT ON
+SET FEEDBACK ON
+WHENEVER SQLERROR EXIT FAILURE
+
+PROMPT === BLOCK 0 : 사전 상태 ===
+
+SELECT 'PRE: standalone SP count (10 expected)' AS K, COUNT(*) AS V
+  FROM USER_OBJECTS
+ WHERE OBJECT_NAME LIKE 'DMF0043_%'
+   AND OBJECT_TYPE = 'PROCEDURE'
+UNION ALL
+SELECT 'PRE: standalone SP INVALID (1 expected)', COUNT(*)
+  FROM USER_OBJECTS
+ WHERE OBJECT_NAME LIKE 'DMF0043_%'
+   AND OBJECT_TYPE = 'PROCEDURE'
+   AND STATUS = 'INVALID'
+UNION ALL
+SELECT 'PRE: SCM_MST_COMPANY_SN exists', COUNT(*)
+  FROM USER_OBJECTS
+ WHERE OBJECT_NAME = 'SCM_MST_COMPANY_SN'
+UNION ALL
+SELECT 'PRE: FN_SCM_STRING_SPLIT exists', COUNT(*)
+  FROM USER_OBJECTS
+ WHERE OBJECT_NAME = 'FN_SCM_STRING_SPLIT';
+
+PROMPT === BLOCK 1 : SCM_MST_COMPANY_SN 빈 view 생성 (To-Be 환경 누락 보완) ===
+
+CREATE OR REPLACE VIEW SCM_MGR.SCM_MST_COMPANY_SN AS
+SELECT TO_CHAR(NULL) AS COMPANY_ID
+  FROM DUAL
+ WHERE 1=0;
+
+PROMPT === BLOCK 2 : FN_SCM_STRING_SPLIT synonym 생성 (FN_STRING_SPLIT 시그니처 동일) ===
+
+CREATE OR REPLACE SYNONYM SCM_MGR.FN_SCM_STRING_SPLIT FOR SCM_MGR.FN_STRING_SPLIT;
+
+PROMPT === BLOCK 3 : SP #10 재컴파일 ===
+
+ALTER PROCEDURE SCM_MGR.DMF0043_GET_CONTRIBUTION_SALES_LIST COMPILE;
+
+PROMPT === BLOCK 4 : 사후 상태 ===
+
+SELECT 'POST: standalone SP count (10 expected)' AS K, COUNT(*) AS V
+  FROM USER_OBJECTS
+ WHERE OBJECT_NAME LIKE 'DMF0043_%'
+   AND OBJECT_TYPE = 'PROCEDURE'
+UNION ALL
+SELECT 'POST: standalone SP INVALID (0 expected)', COUNT(*)
+  FROM USER_OBJECTS
+ WHERE OBJECT_NAME LIKE 'DMF0043_%'
+   AND OBJECT_TYPE = 'PROCEDURE'
+   AND STATUS = 'INVALID'
+UNION ALL
+SELECT 'POST: SCM_MST_COMPANY_SN (1 expected)', COUNT(*)
+  FROM USER_OBJECTS
+ WHERE OBJECT_NAME = 'SCM_MST_COMPANY_SN' AND OBJECT_TYPE = 'VIEW'
+UNION ALL
+SELECT 'POST: FN_SCM_STRING_SPLIT synonym (1 expected)', COUNT(*)
+  FROM USER_OBJECTS
+ WHERE OBJECT_NAME = 'FN_SCM_STRING_SPLIT' AND OBJECT_TYPE = 'SYNONYM';
+
+PROMPT === BLOCK 5 : 잔존 오류 (0 expected) ===
+
+SELECT NAME, TYPE, LINE, POSITION, TEXT
+  FROM USER_ERRORS
+ WHERE NAME LIKE 'DMF0043_%' AND TYPE = 'PROCEDURE';
+
+COMMIT;
+
+PROMPT === COMPLETE ===
+EXIT;

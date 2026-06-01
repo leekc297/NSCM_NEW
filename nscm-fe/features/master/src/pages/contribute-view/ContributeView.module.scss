@@ -1,0 +1,13 @@
+.container { display: flex; flex-direction: column; height: 100%; gap: 8px; }
+.searchBar {
+  display: flex; flex-direction: column; gap: 8px; padding: 12px 16px;
+  background: #f5f7fa; border: 1px solid #e0e4e9; border-radius: 4px;
+  .searchRow, .actionRow { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+  .actionRow { padding-top: 8px; border-top: 1px dashed #d6dae0; }
+  label { font-size: 13px; color: #2b3a4a; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; }
+  input[type='text'], input:not([type]), select { padding: 6px 8px; font-size: 13px; border: 1px solid #b8bfc9; border-radius: 3px; background: white; min-width: 100px; }
+  .searchButton { padding: 8px 20px; font-size: 14px; font-weight: 600; background: #1976d2; color: white; border: none; border-radius: 3px; cursor: pointer; &:hover { background: #1565c0; } }
+  .resetButton { padding: 8px 16px; font-size: 13px; background: white; color: #495565; border: 1px solid #b8bfc9; border-radius: 3px; cursor: pointer; &:hover { background: #f0f3f7; } }
+  .hint { margin-left: auto; font-size: 12px; color: #6b7785; }
+}
+.gridContainer { flex: 1; overflow: hidden; min-height: 400px; border: 1px solid #e0e4e9; border-radius: 4px; background: white; }
