@@ -12,9 +12,11 @@ import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { toggleClass } from '@mescius/wijmo';
 import { useEffect, useRef, useState } from 'react';
 
+import { apiClient } from '@foundation/apis';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { MainTitle, SubTitle } from '@shared/components';
 import { useTabProcQuery } from '@shared/hooks';
+import { useMessageStore } from '@shared/stores';
 
 import {
   CustomerModal,
@@ -117,10 +119,143 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
     setInsertedRows(prev => prev.filter(r => r !== sel));
   };
 
+  // Phase B-Save: As-Is .cs L604-1015 SaveData() 1:1 변환
+  //   - 'I' (신규) / 'M' (수정) 행만 처리
+  //   - Validation: 빈 값 / 날짜 / 필수 / 길이 (As-Is L667-896)
+  //   - ^ 구분 join (As-Is L901-939) — 22 fields
+  //   - SP 호출 DMF0072_SAVE_NNMASTER_MAPPING (As-Is L949-975 / To-Be PROC_M 22 IN + 2 OUT cursor)
+  //   - 성공 시 자동 재조회 (As-Is L997 FindButton)
+  //   - useProcMutation array wrap 회피 — apiClient.post 직접 호출 (ContributeMain 패턴)
+  const handleSave = () => {
+    const setAlert = useMessageStore.getState().setAlert;
+    // 신규 (CRUD_TYPE='I') + 수정 (CRUD_TYPE='M') 행 모두 처리. 현 단계는 신규만 (수정 토글 별도)
+    const dirty: NnRow[] = insertedRows.filter(r => r.CRUD_TYPE === 'I' || r.CRUD_TYPE === 'M');
+    if (dirty.length === 0) {
+      void setAlert({ type: 'alert', content: '저장할 행이 없습니다. (Insert 후 저장)' });
+      return;
+    }
+
+    // Validation — As-Is L667-896 의 모든 체크
+    for (let i = 0; i < dirty.length; i++) {
+      const r = dirty[i];
+      const get = (k: string) => String((r as Record<string, unknown>)[k] ?? '');
+
+      const itemId = get('ITEM_ID');
+      const validFrom = get('VALID_START_DATE');
+      const validTo = get('VALID_END_DATE');
+
+      // L690-712: 빈 값 체크 (ITEM_ID + VALID_START + VALID_END)
+      if (itemId === '' || validFrom === '' || validTo === '') {
+        void setAlert({ type: 'alert', content: `[MSG00002] Valid From, Valid To, Model Code 값은 필수 입력입니다. (행 ${i + 1})` });
+        return;
+      }
+      // L715-737: 날짜 유효성
+      if (!/^\d{8}$/.test(validFrom) || !/^\d{8}$/.test(validTo)) {
+        void setAlert({ type: 'alert', content: `[MSG00049] 유효한 날짜 형식이 아닙니다. (행 ${i + 1}, YYYYMMDD)` });
+        return;
+      }
+      // L725-729: 시작일 <= 종료일
+      if (validFrom > validTo) {
+        void setAlert({ type: 'alert', content: `[MSG00108] 시작일자가 종료일자보다 늦을 수 없습니다. (행 ${i + 1})` });
+        return;
+      }
+      // L787-792: DATA_TYPE_CODE 필수
+      if (get('DATA_TYPE_CODE') === '') {
+        void setAlert({ type: 'alert', content: `[MSG00002] Excel/RPA(DATA_TYPE_CODE) 값은 필수 입력입니다. (행 ${i + 1})` });
+        return;
+      }
+      // L793-798: END_CUSTOMER 필수
+      if (get('END_CUSTOMER') === '') {
+        void setAlert({ type: 'alert', content: `[MSG00002] END_CUSTOMER 값은 필수 입력입니다. (행 ${i + 1})` });
+        return;
+      }
+      // L826-876: 신규 ('I') 행만 추가 필수
+      if (r.CRUD_TYPE === 'I') {
+        const mustFields: Array<[string, string]> = [
+          ['SOLDTO_CODE', 'SOLDTO'], ['SHIPTO_CODE', 'SHIPTO'],
+          ['PROJECT_CODE', 'PROJECT_CODE'], ['SCM_SITE_ID', 'SCM_SITE_ID'],
+          ['FCST_TYPE', 'FCST_TYPE'], ['INCOTERMS', 'INCOTERMS'], ['DOM_EXP', 'DOM_EXP'],
+        ];
+        for (const [key, label] of mustFields) {
+          if (get(key) === '') {
+            void setAlert({ type: 'alert', content: `[MSG00002] ${label} 값은 필수 입력입니다. (행 ${i + 1})` });
+            return;
+          }
+        }
+      }
+      // L878-883: ACTIVE_YN 필수
+      if (get('ACTIVE_YN') === '') {
+        void setAlert({ type: 'alert', content: `[MSG00002] ACTIVE_FLAG 값은 필수 입력입니다. (행 ${i + 1})` });
+        return;
+      }
+      // L887-896: 길이 체크
+      if (get('UNLOADING_POINT').length > 35
+          || get('CUSTOMER_PLANT').length > 10
+          || get('CUSTOMER_ITEM_ID').length > 50) {
+        void setAlert({ type: 'alert', content: `[Length] UNLOADING(≤35)/PLANT(≤10)/CUSTOMER_ITEM_ID(≤50) 최대 입력길이 초과 (행 ${i + 1})` });
+        return;
+      }
+    }
+
+    // ^ 구분 join (As-Is L901-939) — 22 fields. 빈 값 처리:
+    //   Cust 3개 (UNLOAD/PLANT/CUST_ITEM) 는 빈 값 시 ' ' (공백 1자), 나머지는 ''
+    const join = (key: string, blank = '') =>
+      dirty.map(r => {
+        const v = String((r as Record<string, unknown>)[key] ?? '');
+        return v === '' ? blank : v;
+      }).join('^');
+
+    const actType = dirty.map(r => r.CRUD_TYPE ?? 'M').join('^');
+    const mappingOriginal = dirty.map(r => {
+      // L918-925: 신규는 MAPPING_ITEM_ID 그대로, 수정은 MAPPING_ITEM_ID_ORIGINAL
+      const v = r.CRUD_TYPE === 'I'
+        ? String((r as Record<string, unknown>)['MAPPING_ITEM_ID'] ?? '')
+        : String((r as Record<string, unknown>)['MAPPING_ITEM_ID_ORIGINAL'] ?? '');
+      return v;
+    }).join('^');
+
+    void (async () => {
+      const ok = await setAlert({ type: 'confirm', content: `${dirty.length} 행을 저장하시겠습니까?` });
+      if (!ok) return;
+      try {
+        await apiClient.post(`/${MENU_ID}/main/SAVE/call-proc`, {
+          // PROC_M 22 IN args (BE 가 sesUserId 자동 채움. p_result_cursor/p_error_cursor 는 OUT)
+          divisionId: searchCondition.divisionId,   // L952: 화면 search div (clbDivisions.ControlValues)
+          companyId: join('COMPANY_ID'),
+          actType,
+          custFcstType: join('DATA_TYPE_CODE'),     // L955 P_CUST_FCST_TYPE = DATA_TYPE_CODE
+          endCustomer: join('END_CUSTOMER'),
+          custUnload: join('UNLOADING_POINT', ' '), // L905 빈 값 ' '
+          custPlant: join('CUSTOMER_PLANT', ' '),
+          soldto: join('SOLDTO_CODE'),
+          shipto: join('SHIPTO_CODE'),
+          projectCode: join('PROJECT_CODE'),
+          scmSiteId: join('SCM_SITE_ID'),
+          fcstType: join('FCST_TYPE'),
+          incoterms: join('INCOTERMS'),
+          domExp: join('DOM_EXP'),
+          custItemId: join('CUSTOMER_ITEM_ID', ' '),
+          mdmCode: join('ITEM_ID'),                 // L967 P_MDM_CODE = ITEM_ID
+          mappingItemId: join('MAPPING_ITEM_ID'),
+          mappingItemIdOriginal: mappingOriginal,
+          activeFlag: join('ACTIVE_YN'),
+          validFrom: join('VALID_START_DATE'),
+          validTo: join('VALID_END_DATE'),
+        });
+        void setAlert({ type: 'alert', content: '[MSG00020] 저장되었습니다.' });
+        setInsertedRows([]);
+        refetch?.();
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : '[MSG00284] 저장 중 오류가 발생했습니다.';
+        void setAlert({ type: 'alert', content: msg });
+      }
+    })();
+  };
+
   const hotkeyConfig: HotkeyConfig = {
     search: handleSearch,
     insert: handleInsert,
-    save: () => window.alert('저장 기능은 후속 commit 에서 구현됩니다 — As-Is L389 SaveData 1:1 변환 예정'),
+    save: handleSave,
     delete: handleDelete,
     manual: false,
     upload: false,
