@@ -766,6 +766,207 @@ grep -nE "HierarchicalMergeManager|class\s+\w+\s+extends\s+MergeManager" \
 
 ---
 
+## ⭐ 11.7 Grid Column 메타 표준 — Column 이름 기준 Control Type + Edit Type + Coloring + Popup (2026-06-02 신설)
+
+### 11.7.1 배경 (사용자 명시 요구)
+
+> "DMF0004 의 GRID 편집가능 항목 COLORING 룰을 신규 화면 4개에 적용 / SOLD_TO 같은 신규 입력 시 POPUP 선택 기능을 4 화면에 적용 / GRID Column 은 Column 이름 기준으로 POPUP/DROPDOWN/DATE PICKER/CHECKBOX 등 관리"
+
+NSCM 은 **`DataGrid` 래퍼** 가 표준 인프라로 이미 존재 (`packages/shared/src/components/organisms/data-grid/`):
+- `formatItem` 핸들러 (`dataGridUtils.ts:181-224`) — column meta 의 `_inputEditType` 기반 `wj-cell-editable` / `wj-cell-non-editable` / `wj-cell-popup` 클래스 자동 토글
+- `beginningEdit` 핸들러 (`dataGridUtils.ts:226-248`) — `_ctrlType: 'FPModal'` 셀의 키보드 편집 차단
+- `gridUtils.ts:48-69` (`isEditableCell`) — `CRUD_TYPE` + `EDIT_FLAG` + `_inputEditType` 조합 판정
+- SCSS (`foundation/src/styles/wijmo/parts/_grid.scss:671-700`) — `.wj-cell-editable { background: #fff8cd }`, `.wj-cell-non-editable { background: #f1f4f3 }`, `.wj-cell-popup::after { OpenInNew SVG }`
+
+→ 신규 화면은 **FlexGrid 직접 사용 금지**. `DataGrid` 래퍼 + column meta 표준 적용 의무.
+
+### 11.7.2 `CELL_CONTROL_TYPE` 14종 인벤토리
+
+위치: `packages/foundation/src/constants/column-config.ts:9-25`
+
+| Enum | Value | 사용 |
+|---|---|---|
+| `MODAL` | `'FPModal'` | Popup cell (SOLDTO/SHIPTO/PROJECT/ITEM 등) — OpenInNew 아이콘 + dblClick modal open |
+| `COMBO` | `'FPComboBox'` | Dropdown (lookup 데이터) |
+| `BUTTON` | `'FPButton'` | Cell 안 버튼 |
+| `DATE` | `'FPDate'` | YYYYMMDD date picker |
+| `DATE_MONTH` | `'FPDateMonth'` | YYYYMM month picker |
+| `DATE_TIME` | `'FPDateTime'` | YYYYMMDDHHMMSS datetime picker |
+| `DATE_TEXT` | `'FPDateText'` | text 표시 + date picker editor |
+| `CHECKBOX` | `'FPCheckBox'` | `*_YN` / boolean |
+| `NUMBER_TEXT` | `'FPNumberText'` | 천 단위 콤마 텍스트 |
+| `TEXT_BOX` | `'FPTextBox'` | 기본 textbox |
+| `PERCENT` | `'FPPercent'` | 퍼센트 표시 |
+| `TEXT` | `'FPText'` | 단순 텍스트 표시 |
+| `NUMBER` | `'FPNumber'` | 숫자 입력 (right align) |
+| `MULTILINE_TEXT` | `'FPMultiLineTextBox'` | 멀티라인 |
+
+### 11.7.3 Column 이름 패턴 → Control Type 표준 매핑
+
+> ⭐ **화면별 As-Is `.cs` 가 우선** — 아래 패턴은 As-Is 명시 없을 때 default. As-Is 가 다른 control 사용 시 As-Is 따름.
+
+| Column 이름 패턴 | 권장 `_ctrlType` | 비고 |
+|---|---|---|
+| `*_YN` (ACTIVE_YN / VALID_YN / EDIT_YN ...) | `FPCheckBox` 또는 `FPComboBox` (Y/N 옵션) | As-Is `Y/N` text 입력이면 `FPComboBox` |
+| `*_DATE` / `*_DT` (VALID_START_DATE / CREATION_DATE ...) | `FPDate` | YYYYMMDD 표시. text 만 표시면 `FPDateText` |
+| `*_DATETIME` / `LAST_UPDATE_DATE` | `FPDateTime` | |
+| `*_MONTH` / `*_YYYYMM` | `FPDateMonth` | |
+| `*_TYPE_CODE` (DATA_TYPE_CODE / FCST_TYPE ...) | `FPComboBox` | lookup 기반 (`SCM_ADM_LOOKUP_MASTER_DETAIL`) |
+| `SOLDTO_CODE` / `SHIPTO_CODE` | `FPModal` (popup) | `CustomerByDivisionModal` 또는 동등 |
+| `PROJECT_CODE` (신규 입력 시) | `FPModal` | `ProjectByDivisionModal` (룰 23 §12.A 재사용) |
+| `ITEM_ID` / `MAPPING_ITEM_ID` (신규 입력 시) | `FPModal` | `ItemByDivisionModal` (재사용) |
+| `END_CUSTOMER` / `SCM_SITE_ID` | `FPModal` 또는 `FPComboBox` | As-Is 의 `cellTypeImage` 여부로 분기 |
+| `*_QTY` / `*_CNT` / `*_AMOUNT` | `FPNumberText` | 천 단위 콤마 + right align |
+| `*_RATE` / `*_PERCENT` | `FPPercent` | |
+| `LAST_UPDATED_BY` / `CREATED_BY` / `OWNER` | `FPText` | 기본 read-only |
+| `DESCRIPTION` / `NOTE` / `REMARK` | `FPMultiLineTextBox` | 긴 텍스트 |
+| 기타 | `FPText` | default |
+
+### 11.7.4 `CELL_INPUT_EDIT_TYPE` 5종 정책
+
+위치: `packages/foundation/src/constants/column-config.ts:1-7`
+
+| Enum | Value | 의미 | CRUD_TYPE 조건 |
+|---|---|---|---|
+| `SEARCH_ONLY` | `'S'` | 검색 결과 표시만, 항상 read-only | (n/a) |
+| `OPTIONAL` | `'O'` | 입력 선택 — 신규/수정 모두 가능 | EDIT_FLAG ≠ 'N' |
+| `MANDATORY` | `'M'` | 필수 입력 — 신규/수정 모두 가능 | EDIT_FLAG ≠ 'N' |
+| `OPTIONAL_INSERT_ONLY` | `'IO'` | 신규 행에서만 선택 입력 (PK 후보) | CRUD_TYPE = 'I' |
+| `MANDATORY_INSERT_ONLY` | `'IM'` | 신규 행에서만 필수 입력 (PK) | CRUD_TYPE = 'I' |
+
+판정 logic (`gridUtils.ts:48-69`):
+```ts
+switch (inputEditType) {
+  case 'M': case 'O':         return editFlag !== 'N';
+  case 'IM': case 'IO':       return editFlag !== 'N' && crudType === 'I';
+  default:                    return false;  // 'S'
+}
+```
+
+### 11.7.5 표준 column 파일 구조
+
+신규 화면은 column meta 를 **별도 파일** `{screen-slug}/columns/{screen-slug}-columns.ts` 로 분리. constants.ts 에서 import.
+
+```ts
+// nn-master-mapping/columns/nn-master-mapping-columns.ts
+import { CELL_CONTROL_TYPE, CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
+
+export const MAIN_COLUMNS = [
+  { key: 'DATA_TYPE_CODE', header: 'Data Type', width: 100,
+    _ctrlType: CELL_CONTROL_TYPE.COMBO,
+    _inputEditType: CELL_INPUT_EDIT_TYPE.MANDATORY_INSERT_ONLY,  // 'IM'
+    merge: true },
+  { key: 'SOLDTO_CODE', header: 'SoldTo', width: 110,
+    _ctrlType: CELL_CONTROL_TYPE.MODAL,
+    _inputEditType: CELL_INPUT_EDIT_TYPE.MANDATORY_INSERT_ONLY,
+    _modalKey: 'customerByDivisionModal' },                     // dblClick handler 분기 키
+  { key: 'ACTIVE_YN', header: 'Active', width: 70,
+    _ctrlType: CELL_CONTROL_TYPE.CHECKBOX,
+    _inputEditType: CELL_INPUT_EDIT_TYPE.MANDATORY },
+  { key: 'VALID_START_DATE', header: 'Valid Start', width: 110,
+    _ctrlType: CELL_CONTROL_TYPE.DATE,
+    _inputEditType: CELL_INPUT_EDIT_TYPE.MANDATORY },
+  { key: 'LAST_UPDATED_BY', header: 'Updated By', width: 110,
+    _ctrlType: CELL_CONTROL_TYPE.TEXT,
+    _inputEditType: CELL_INPUT_EDIT_TYPE.SEARCH_ONLY },         // 'S' read-only
+] as const;
+```
+
+### 11.7.6 Coloring 자동 처리
+
+`DataGrid` 래퍼가 자동:
+- `_inputEditType: 'S'` → 회색 배경 (`#f1f4f3`) `.wj-cell-non-editable`
+- `_inputEditType: 'M/O'` + `EDIT_FLAG ≠ 'N'` → 노란 배경 (`#fff8cd`) `.wj-cell-editable`
+- `_inputEditType: 'IM/IO'` + `CRUD_TYPE = 'I'` → 노란 배경 + `_ctrlType: 'FPModal'` 이면 우측 OpenInNew 아이콘
+
+→ 화면 코드에 별도 SCSS / formatItem 핸들러 작성 **금지** (DataGrid 내장 활용).
+
+### 11.7.7 Popup cell 동작 — `_ctrlType: 'FPModal'` + dblClick handler
+
+DataGrid 자동:
+1. `formatItem` 핸들러 (`dataGridUtils.ts:207-214`) — popup class + OpenInNew 아이콘 자동
+2. `beginningEdit` 핸들러 (`dataGridUtils.ts:234-244`) — `_ctrlType === 'FPModal'` 셀의 키보드 편집 차단 (`cancel=true`)
+
+화면 코드:
+```tsx
+// Grid 컴포넌트
+const handleDblClick = (mouseEvent: MouseEvent) => {
+  const grid = gridRef.current;
+  if (!grid) return;
+  const ht = grid.hitTest(mouseEvent);
+  if (ht.cellType !== CellType.Cell) return;
+
+  const dataItem = GridUtils.getRow(grid, ht.row);
+  const binding = GridUtils.getBinding(grid, ht.col);
+  if (!dataItem || !binding) return;
+
+  // CRUD_TYPE='I' (신규 행) 에서만 popup
+  if (dataItem.CRUD_TYPE !== CRUD_TYPE.INSERT) return;
+
+  // _modalKey 기반 분기 (column meta 와 정합)
+  const col = MAIN_COLUMNS.find(c => c.key === binding);
+  if (!col || col._ctrlType !== CELL_CONTROL_TYPE.MODAL) return;
+
+  setClickedRow(ht.row);
+  switch (col._modalKey) {
+    case 'customerByDivisionModal': setOpenCustomerModal(true); break;
+    case 'projectByDivisionModal':  setOpenProjectModal(true);  break;
+    case 'itemByDivisionModal':     setOpenItemModal(true);     break;
+  }
+};
+```
+
+Modal `setSelectedValue` 콜백 — `CRUD_TYPE !== 'I'` 가드 의무:
+```ts
+const setSelectedValue = (codes: string, names?: string) => {
+  const dataItem = GridUtils.getRow(gridRef.current, clickedRow);
+  if (!dataItem || dataItem.CRUD_TYPE !== CRUD_TYPE.INSERT) return;  // 가드
+  editTrackerRef.current?.storeChange(dataItem, binding, codes);
+  // ... 데이터 갱신
+};
+```
+
+### 11.7.8 cross-check grep (PR 머지 게이트)
+
+```bash
+# 1. FlexGrid 직접 사용 0건 (DataGrid 래퍼만 사용)
+grep -rnE "<FlexGrid[ >]" nscm-fe/features/master/src/pages/{screen-slug}/
+
+# 2. column 표준 파일 존재
+ls nscm-fe/features/master/src/pages/{screen-slug}/columns/*.ts
+
+# 3. _inputEditType 명시 (모든 column)
+grep -nE "_inputEditType:\s*CELL_INPUT_EDIT_TYPE\.(S|O|M|IO|IM)|_inputEditType:\s*'(S|O|M|IO|IM)'" \
+     nscm-fe/features/master/src/pages/{screen-slug}/columns/*.ts
+
+# 4. Popup cell 의 _modalKey 명시
+grep -nE "_ctrlType:\s*CELL_CONTROL_TYPE\.MODAL" nscm-fe/features/master/src/pages/{screen-slug}/columns/*.ts | wc -l
+# → handleDblClick 의 switch case 수와 일치 의무
+
+# 5. As-Is cross-check
+grep -cE "siMain\.(LockColumn|LockRange)" Doc/_legacy_source/.../{SCREEN_ID}.cs
+grep -cE "siMain\.SetCellTypeCombo|cellTypeImage" Doc/_legacy_source/.../{SCREEN_ID}.cs
+# → To-Be column meta 와 카운트 일치 (As-Is LockColumn==To-Be 'S' / SetCellTypeCombo==To-Be 'FPComboBox' / cellTypeImage==To-Be 'FPModal')
+```
+
+### 11.7.9 적용 사례
+
+| 화면 | DataGrid 래퍼 | column 파일 | popup cell | 상태 |
+|---|:---:|---|---|---|
+| DMF0004 SalesSite | ✅ | inline | SOLDTO/SHIPTO/COUNTRY/CITY/LOCATION | 표준 |
+| customer-model-mapping | ✅ | inline | PROJECT/ITEM | 표준 |
+| sales-site-project-model | ✅ | inline | TEAM/PROJECT/ITEM | 표준 |
+| ApiManagement / GroupManagement | ✅ | — | (없음) | 표준 |
+| **DMF0072 NN Master Mapping** | (작업 후) | `columns/nn-master-mapping-columns.ts` | SOLDTO/SHIPTO/PROJECT/ITEM | 2026-06-02 적용 |
+| **DMF0008 ERP EDI Master** | (작업 후) | `columns/erp-edi-master-columns.ts` | (Repair) SOLDTO/SHIPTO/ITEM | 2026-06-02 적용 |
+| **DMF0043 Contribute Main** | (작업 후) | `columns/contribute-main-columns.ts` | (popup 없음) | 2026-06-02 적용 |
+| **DMF0043_01 Contribute View** | (작업 후) | `columns/contribute-view-columns.ts` | (조회 전용, popup 없음) | 2026-06-02 적용 |
+
+상세 hook: [`hooks/grid-column-meta-mandatory.md`](hooks/grid-column-meta-mandatory.md)
+상세 메모리: `feedback_grid_editable_coloring_mandatory.md`, `feedback_grid_popup_cell_mandatory.md`
+
+---
+
 ## 12. 관련 문서
 
 | 룰 | 주제 |

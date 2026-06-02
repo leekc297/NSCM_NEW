@@ -183,6 +183,57 @@ const handleInsert = () => {
 
 상세: [`hooks/asis-button-mapping.md`](hooks/asis-button-mapping.md), 메모리 `feedback_asis_button_mapping_mandatory.md`
 
+### ⭐ 1.5.2 As-Is Grid Column 분석 → To-Be Column 메타 매핑 의무 (2026-06-02 신설 — 사용자 명시 요구)
+
+신규 화면 작성 시 **Grid column 메타** 결정 전, As-Is `.cs` 의 grid 처리 패턴을 grep:
+
+```bash
+# As-Is grid cell 처리 패턴 (Lock + CellType 5종)
+grep -nE "siMain\.(LockColumn|LockRange)|siMain\.SetCellTypeCombo|siMain\.SetCellTypeCheckBox|siMain\.SetCellTypeDateTimeFormat|cellTypeImage" \
+     Doc/_legacy_source/06_UIL/domain_*/**/{SCREEN_ID}*/{SCREEN_ID}*.cs
+```
+
+| As-Is 패턴 (.cs) | To-Be Column Meta (`columns/{screen}-columns.ts`) |
+|---|---|
+| `siMain.LockColumn(col, true)` 만 | `_inputEditType: 'S'` (read-only) |
+| `siMain.LockColumn(col, false)` 또는 미명시 | `_inputEditType: 'M'` 또는 `'O'` (As-Is Validation 의 필수 여부로 결정) |
+| `InsertRow` 안 `cellTypeImage` (popup 셀) + `LockColumn` 으로 수정 시 잠금 | `_ctrlType: 'FPModal'` + `_inputEditType: 'IM'` (또는 `IO`) + `_modalKey` (호출 modal) |
+| `siMain.SetCellTypeCombo(col, dt)` | `_ctrlType: 'FPComboBox'` + `_inputEditType: 'M'` 또는 `'O'` |
+| `siMain.SetCellTypeCheckBox(col)` 또는 컬럼명 `*_YN` | `_ctrlType: 'FPCheckBox'` |
+| `siMain.SetCellTypeDateTimeFormat(...)` 또는 컬럼명 `*_DATE` | `_ctrlType: 'FPDate'` (또는 `FPDateTime` / `FPDateMonth`) |
+| `siMain.SetCellTypeText(col)` 또는 미설정 | `_ctrlType: 'FPText'` (default) |
+| 숫자 입력 `siMain.SetCellTypeNumber...` 또는 `*_QTY`/`*_CNT`/`*_AMOUNT` | `_ctrlType: 'FPNumberText'` |
+
+**Column 이름 패턴 → Control Type 기본 매핑** (As-Is 미명시 시): 룰 12 §11.7.3 참조.
+
+**산출물 의무**: `__asis-mapping__.md` 의 `## Grid Column 매핑` 섹션 — column 별 (As-Is Lock + CellType) × To-Be (`_ctrlType` + `_inputEditType` + `_modalKey`) 매트릭스:
+
+```markdown
+## Grid Column 매핑 ({SCREEN_ID})
+
+| Column | As-Is Lock | As-Is CellType | To-Be _inputEditType | To-Be _ctrlType | To-Be _modalKey |
+|---|---|---|---|---|---|
+| DATA_TYPE_CODE | LockColumn (InsertRow) | SetText 'SCM' default | IM | FPComboBox | — |
+| SOLDTO_CODE | LockColumn (M=true) | cellTypeImage (popup) | IM | FPModal | customerByDivisionModal |
+| ACTIVE_YN | (없음) | SetText 'Y' default | M | FPCheckBox | — |
+| VALID_START_DATE | (없음) | (text 8자) | M | FPDate | — |
+| LAST_UPDATED_BY | LockColumn (true) 항상 | (없음) | S | FPText | — |
+```
+
+**PR 머지 게이트** (cross-check 카운트 일치 의무):
+
+| As-Is `.cs` grep 카운트 | == To-Be column meta grep 카운트 |
+|---|---|
+| `siMain.LockColumn` 횟수 | `_inputEditType: 'S'` 또는 `IM`/`IO` 컬럼 수 |
+| `cellTypeImage` 또는 `SetCellTypeImage` 횟수 | `_ctrlType: 'FPModal'` (또는 `CELL_CONTROL_TYPE.MODAL`) 컬럼 수 |
+| `SetCellTypeCombo` 횟수 | `_ctrlType: 'FPComboBox'` 컬럼 수 |
+| `SetCellTypeCheckBox` 횟수 | `_ctrlType: 'FPCheckBox'` 컬럼 수 |
+| `SetCellTypeDateTimeFormat` 횟수 | `_ctrlType: 'FPDate'` (또는 DATE_*) 컬럼 수 |
+
+**1건이라도 불일치 → PR Reject** (As-Is 동작 1:1 보존 의무, 룰 24 §3 As-Is Event 축 + 메모리 `feedback_asis_to_tobe_sp_no_omission` 위반).
+
+상세: [`hooks/grid-column-meta-mandatory.md`](hooks/grid-column-meta-mandatory.md), 룰 12 §11.7, 메모리 `feedback_grid_editable_coloring_mandatory.md` + `feedback_grid_popup_cell_mandatory.md`
+
 ### 1.6 Figma 디자인 자료 ⭐ NEW (2026-05-30 — 룰 31)
 
 ```
