@@ -5,9 +5,11 @@ import {
   CellType,
   MergeManager,
   type FlexGrid as FlexGridType,
+  type FormatItemEventArgs,
   type GridPanel,
 } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
+import { toggleClass } from '@mescius/wijmo';
 import { useEffect, useRef } from 'react';
 
 import type { HotkeyConfig, PageProps } from '@foundation/models';
@@ -120,6 +122,32 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
             //   - 좌측 모든 allowMerging column 도 같은 값일 때만 머지 (column-dependent)
             g.allowMerging = AllowMerging.Cells;
             g.mergeManager = new HierarchicalMergeManager();
+
+            // 룰 12 §11.7 + hook grid-column-meta-mandatory.md (2026-06-02 적용):
+            //   column meta 의 _inputEditType + _ctrlType 기반 cell coloring 자동 토글
+            //   - _inputEditType='S' → wj-cell-non-editable (#f1f4f3 회색)
+            //   - _inputEditType='M'/'O'/'IM'/'IO' → wj-cell-editable (#fff8cd 노란) — CRUD 상태 무관 시각
+            //   - _ctrlType='FPModal' → wj-cell-popup (우측 OpenInNew 아이콘)
+            // 표준 DataGrid 래퍼의 dataGridUtils.ts:181-224 formatEditableColumns 동작 시범 적용
+            g.formatItem.addHandler((_s, e: FormatItemEventArgs) => {
+              if (e.panel.cellType !== CellType.Cell) return;
+              const col = e.panel.columns[e.col];
+              if (!col || !col.binding) return;
+              const meta = MAIN_COLUMNS.find(c => c.key === col.binding);
+              if (!meta) return;
+
+              const isEditable =
+                meta._inputEditType === 'M' ||
+                meta._inputEditType === 'O' ||
+                meta._inputEditType === 'IM' ||
+                meta._inputEditType === 'IO';
+              const isReadOnly = meta._inputEditType === 'S';
+              const isPopup = meta._ctrlType === 'FPModal';
+
+              toggleClass(e.cell, 'wj-cell-editable', isEditable);
+              toggleClass(e.cell, 'wj-cell-non-editable', isReadOnly);
+              toggleClass(e.cell, 'wj-cell-popup', isPopup);
+            });
           }}
           itemsSource={rows}
           autoGenerateColumns={false}

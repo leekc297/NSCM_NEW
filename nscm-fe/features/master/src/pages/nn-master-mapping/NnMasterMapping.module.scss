@@ -151,4 +151,31 @@
 .grid {
   height: 100%;
   width: 100%;
+
+  // 룰 12 §11.7 + hook grid-column-meta-mandatory.md (2026-06-02 적용):
+  // column meta _inputEditType + _ctrlType 기반 cell coloring (DMF0004 표준)
+  // foundation _grid.scss:671-700 의 색상 토큰 그대로 적용 ($wj-editable-cell=#fff8cd, $wj-non-editable-cell=#f1f4f3)
+  :global(.wj-cells .wj-cell) {
+    &:global(.wj-cell-editable) {
+      background: #fff8cd; // 노란 — 편집 가능 cell (M/O/IM/IO)
+    }
+    &:global(.wj-cell-non-editable) {
+      background: #f1f4f3; // 회색 — read-only cell (S)
+    }
+    // popup cell — 우측 OpenInNew SVG 아이콘 (foundation _grid.scss:685~700 패턴)
+    &:global(.wj-cell-popup) {
+      position: relative;
+      padding-right: 22px;
+      &::after {
+        content: '↗';
+        position: absolute;
+        right: 5px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 12px;
+        color: #5b5c5b;
+        font-weight: bold;
+      }
+    }
+  }
 }
