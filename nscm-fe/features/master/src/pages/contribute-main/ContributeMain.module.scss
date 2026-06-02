@@ -94,4 +94,14 @@
   border: 1px solid #e0e4e9;
   border-radius: 4px;
   background: white;
+
+  // 룰 12 §11.7 (2026-06-02) — Grid Column 메타 표준 cell coloring (DMF0004 표준)
+  :global(.wj-cells .wj-cell) {
+    &:global(.wj-cell-editable) {
+      background: #fff8cd; // 노란 — Y#/M# 동적 컬럼 (RBU_0999 제외) 편집 가능
+    }
+    &:global(.wj-cell-non-editable) {
+      background: #f1f4f3; // 회색 — BASE 6 컬럼 + RBU_0999 (구분) 컬럼 read-only
+    }
+  }
 }

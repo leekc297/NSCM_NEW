@@ -1,6 +1,7 @@
 import { FlexGrid, FlexGridColumn } from '@mescius/wijmo.react.grid';
 import type { FlexGrid as FlexGridType, FormatItemEventArgs, GridPanel } from '@mescius/wijmo.grid';
 import { AllowMerging, CellRange, CellType, MergeManager, Row } from '@mescius/wijmo.grid';
+import { toggleClass } from '@mescius/wijmo';
 import { type RefObject, useEffect, useMemo, useRef } from 'react';
 
 import { useTabProcQuery } from '@shared/hooks';
@@ -117,20 +118,24 @@ export const ContributeViewGrid = ({ gridRef, data }: Props) => {
         }
         g.mergeManager = new HeaderMergeManager();
 
-        // formatItem — row 0/1 별 텍스트 그리기
+        // formatItem — row 0/1 별 텍스트 그리기 + 룰 12 §11.7 (2026-06-02) cell coloring
+        // 조회 전용 화면 — 모든 cell 회색 (wj-cell-non-editable)
         g.formatItem.addHandler((_s, e: FormatItemEventArgs) => {
-          if (e.panel.cellType !== CellType.ColumnHeader) return;
-          const col = e.panel.columns[e.col];
-          if (!col) return;
-          const meta = columnMetaRef.current.find(m => m.binding === col.binding);
-          if (!meta) return;
-          if (meta.isBase) {
-            // BASE: row 0 에만 header 표시 (세로 머지)
-            e.cell.textContent = e.row === 0 ? meta.leaf : '';
-          } else {
-            // 동적: row 0 = 지역 (LARGE), row 1 = leaf (Commission/Markup)
-            if (e.row === 0) e.cell.textContent = meta.large;
-            else if (e.row === 1) e.cell.textContent = meta.leaf;
+          if (e.panel.cellType === CellType.ColumnHeader) {
+            const col = e.panel.columns[e.col];
+            if (!col) return;
+            const meta = columnMetaRef.current.find(m => m.binding === col.binding);
+            if (!meta) return;
+            if (meta.isBase) {
+              e.cell.textContent = e.row === 0 ? meta.leaf : '';
+            } else {
+              if (e.row === 0) e.cell.textContent = meta.large;
+              else if (e.row === 1) e.cell.textContent = meta.leaf;
+            }
+            return;
+          }
+          if (e.panel.cellType === CellType.Cell) {
+            toggleClass(e.cell, 'wj-cell-non-editable', true);
           }
         });
       }}

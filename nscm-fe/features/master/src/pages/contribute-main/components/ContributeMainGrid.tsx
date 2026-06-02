@@ -1,6 +1,7 @@
 import { FlexGrid, FlexGridColumn } from '@mescius/wijmo.react.grid';
 import type { FlexGrid as FlexGridType, FormatItemEventArgs, GridPanel } from '@mescius/wijmo.grid';
 import { AllowMerging, CellRange, CellType, MergeManager, Row } from '@mescius/wijmo.grid';
+import { toggleClass } from '@mescius/wijmo';
 import { type RefObject, useEffect, useMemo, useRef } from 'react';
 
 import type { MainRow } from '../types';
@@ -152,17 +153,36 @@ export const ContributeMainGrid = ({ gridRef, data }: Props) => {
         // formatItem 으로 row 0/1 의 텍스트 그리기
         //   - 동적 컬럼: row 0 = period, row 1 = leaf
         //   - BASE 컬럼: row 0 = header (세로 머지로 row 1 도 같은 셀)
+        // + 룰 12 §11.7 (2026-06-02): 편집 가능 cell coloring
+        //   - BASE 6 컬럼 → wj-cell-non-editable (회색)
+        //   - 동적 컬럼 RBU_0999 (구분 — As-Is L388) → wj-cell-non-editable (회색)
+        //   - 동적 컬럼 그 외 (Y#/M#) → wj-cell-editable (노란)
         g.formatItem.addHandler((_s, e: FormatItemEventArgs) => {
-          if (e.panel.cellType !== CellType.ColumnHeader) return;
-          const col = e.panel.columns[e.col];
-          if (!col) return;
-          const dyn = dynamicColumnsRef.current.find(d => d.binding === col.binding);
-          if (dyn) {
-            e.cell.textContent = e.row === 0 ? dyn.periodLabel : dyn.leafLabel;
-          } else {
-            // BASE 컬럼: 머지된 셀의 top-left (row 0) 에 header 표시
-            e.cell.textContent = e.row === 0 ? (col.header ?? '') : '';
+          if (e.panel.cellType === CellType.ColumnHeader) {
+            const col = e.panel.columns[e.col];
+            if (!col) return;
+            const dyn = dynamicColumnsRef.current.find(d => d.binding === col.binding);
+            if (dyn) {
+              e.cell.textContent = e.row === 0 ? dyn.periodLabel : dyn.leafLabel;
+            } else {
+              // BASE 컬럼: 머지된 셀의 top-left (row 0) 에 header 표시
+              e.cell.textContent = e.row === 0 ? (col.header ?? '') : '';
+            }
+            return;
           }
+
+          // 룰 12 §11.7 cell coloring
+          if (e.panel.cellType !== CellType.Cell) return;
+          const col2 = e.panel.columns[e.col];
+          if (!col2 || !col2.binding) return;
+
+          const isBase = col2.binding && !col2.binding.startsWith('Y#') && !col2.binding.startsWith('M#');
+          const isRbu999 = col2.binding.endsWith('RBU_0999');
+          const isReadOnlyCell = isBase || isRbu999;
+          const isEditableCell = !isReadOnlyCell;
+
+          toggleClass(e.cell, 'wj-cell-editable', isEditableCell);
+          toggleClass(e.cell, 'wj-cell-non-editable', isReadOnlyCell);
         });
       }}
       itemsSource={data}
@@ -170,7 +190,7 @@ export const ContributeMainGrid = ({ gridRef, data }: Props) => {
       style={{ height: '100%' }}
     >
       {BASE_COLUMNS.map(c => (
-        <FlexGridColumn key={c.binding} binding={c.binding} header={c.header} width={c.width} />
+        <FlexGridColumn key={c.binding} binding={c.binding} header={c.header} width={c.width} isReadOnly />
       ))}
       {dynamicColumns.map(c => (
         <FlexGridColumn

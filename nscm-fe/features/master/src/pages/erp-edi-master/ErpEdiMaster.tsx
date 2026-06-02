@@ -1,6 +1,7 @@
 import { FlexGrid, FlexGridColumn } from '@mescius/wijmo.react.grid';
-import type { FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
+import { CellType, type FlexGrid as FlexGridType, type FormatItemEventArgs } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
+import { toggleClass } from '@mescius/wijmo';
 import { useEffect, useMemo, useRef } from 'react';
 
 import { apiClient } from '@foundation/apis';
@@ -14,6 +15,15 @@ import { MENU_ID, SHEETS } from './erp-edi-master.constants';
 import styles from './ErpEdiMaster.module.scss';
 import type { RepairRow, SalesSiteRow, SspmRow, SummaryRow } from './types';
 import { useErpEdiMasterStore } from './useErpEdiMasterStore';
+
+// 룰 12 §11.7 (2026-06-02): 조회 전용 grid 의 모든 cell 회색 표시 (read-only 시각 강조).
+// DMF0008 의 4 grids (Summary/Repair/SalesSite/SSPM) 모두 `g.isReadOnly=true` — DMF0004 표준 패턴 동등.
+const applyReadOnlyColoring = (g: FlexGridType<unknown>): void => {
+  g.formatItem.addHandler((_s, e: FormatItemEventArgs) => {
+    if (e.panel.cellType !== CellType.Cell) return;
+    toggleClass(e.cell, 'wj-cell-non-editable', true);
+  });
+};
 
 // AS-IS DMF0008_ErpEdiMaster — 3단 구조 (2026-06-02 사용자 요구 반영):
 //   [검색] Division
@@ -237,6 +247,7 @@ export const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
               }
               g.isReadOnly = true;
               g.itemDoubleClick.addHandler(() => handleSummaryDoubleClick());
+              applyReadOnlyColoring(g as FlexGridType<unknown>);
             }}
             itemsSource={summaryRows}
             autoGenerateColumns={false}
@@ -264,6 +275,7 @@ export const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
                 (repairGridRef as { current: FlexGridType<RepairRow> | null }).current = g;
               }
               g.isReadOnly = true;
+              applyReadOnlyColoring(g as FlexGridType<unknown>);
             }}
             itemsSource={repairRows}
             autoGenerateColumns={false}
@@ -308,6 +320,7 @@ export const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
                     (salesSiteGridRef as { current: FlexGridType<SalesSiteRow> | null }).current = g;
                   }
                   g.isReadOnly = true;
+                  applyReadOnlyColoring(g as FlexGridType<unknown>);
                 }}
                 itemsSource={salesSiteRows}
                 autoGenerateColumns={false}
@@ -332,6 +345,7 @@ export const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
                     (sspmGridRef as { current: FlexGridType<SspmRow> | null }).current = g;
                   }
                   g.isReadOnly = true;
+                  applyReadOnlyColoring(g as FlexGridType<unknown>);
                 }}
                 itemsSource={sspmRows}
                 autoGenerateColumns={false}
