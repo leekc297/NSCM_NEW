@@ -10,16 +10,25 @@ import {
 } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { toggleClass } from '@mescius/wijmo';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { MainTitle, SubTitle } from '@shared/components';
 import { useTabProcQuery } from '@shared/hooks';
 
+import {
+  CustomerModal,
+  ItemByDivisionModal,
+  ProjectByDivisionModal,
+} from '../../components';
+
 import { NnMasterMappingForm } from './components/NnMasterMappingForm';
 import { MAIN_COLUMNS, MENU_ID, SHEETS } from './nn-master-mapping.constants';
 import styles from './NnMasterMapping.module.scss';
 import { useNnMasterMappingStore } from './useNnMasterMappingStore';
+
+// 신규 행 type — 기존 SP 결과와 합쳐 grid itemsSource 로 사용 (As-Is L538-602 InsertRow 결과)
+type NnRow = Record<string, unknown> & { CRUD_TYPE?: 'I' | 'M' | 'D' };
 
 // As-Is .cs L515 `siMain.SmartColMerge()` 동작 모사 (사용자 요구 2026-06-02):
 // "자신의 column 이 같은 값이어도, 좌측의 모든 allowMerging column 도 같은 값일 때만 머지"
@@ -58,7 +67,7 @@ class HierarchicalMergeManager extends MergeManager {
 }
 
 export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
-  const gridRef = useRef<FlexGridType<Record<string, unknown>>>(null);
+  const gridRef = useRef<FlexGridType<NnRow>>(null);
   const gridFilterRef = useRef<FlexGridFilter>(undefined);
 
   const filters = useNnMasterMappingStore(s => s.filters);
@@ -78,18 +87,111 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
     enabled: !!filters[SHEETS.MAIN],
   });
 
-  const handleSearch = () => { setFilter(); refetch?.(); };
+  const handleSearch = () => { setFilter(); refetch?.(); setInsertedRows([]); };
+
+  // Phase B-2: Insert / Delete handler — As-Is .cs L538-602 InsertRow / L275-279 DeleteButton 1:1
+  // 신규 행 별도 state 로 관리 (CRUD_TYPE='I'). 저장은 Phase 후속 — SAVE handler 미구현
+  const [insertedRows, setInsertedRows] = useState<NnRow[]>([]);
+
+  const handleInsert = () => {
+    // As-Is L538-602: InsertRow 안 DATA_TYPE='SCM' fixed, DIVISION=search div, ACTIVE_YN='Y' default
+    const newRow: NnRow = {
+      CRUD_TYPE: 'I',
+      DATA_TYPE_CODE: 'SCM',
+      DIVISION_ID: searchCondition.divisionId,
+      ACTIVE_YN: 'Y',
+    };
+    setInsertedRows(prev => [newRow, ...prev]);
+  };
+
+  const handleDelete = () => {
+    // As-Is L275-279: 'I' (신규) 행만 삭제. selected row 의 CRUD_TYPE='I' 인 경우만 제거
+    const g = gridRef.current;
+    if (!g) return;
+    const sel = g.selectedItems[0] as NnRow | undefined;
+    if (!sel || sel.CRUD_TYPE !== 'I') {
+      // 신규 행만 삭제 가능 (As-Is L277 조건)
+      window.alert('신규 입력 (Insert) 한 행만 삭제할 수 있습니다.');
+      return;
+    }
+    setInsertedRows(prev => prev.filter(r => r !== sel));
+  };
 
   const hotkeyConfig: HotkeyConfig = {
     search: handleSearch,
-    insert: () => undefined,
-    save: () => undefined,
-    delete: () => undefined,
+    insert: handleInsert,
+    save: () => window.alert('저장 기능은 후속 commit 에서 구현됩니다 — As-Is L389 SaveData 1:1 변환 예정'),
+    delete: handleDelete,
     manual: false,
     upload: false,
   };
 
-  const rows = ((data as { o_rc1?: Record<string, unknown>[] })?.o_rc1 ?? []) as Record<string, unknown>[];
+  // Phase B-3: dblClick popup handler — column meta 의 _ctrlType='FPModal' + _modalKey 기반 분기
+  //   - CRUD_TYPE='I' (신규 행) 에서만 popup (MAPPING_ITEM_ID 는 'M' 도 가능)
+  //   - column meta 의 _modalKey 로 switch (룰 12 §11.7 표준)
+  const [clickedRow, setClickedRow] = useState<number | null>(null);
+  const [clickedBinding, setClickedBinding] = useState<string | null>(null);
+  const [openCustomerModal, setOpenCustomerModal] = useState(false);
+  const [openProjectModal, setOpenProjectModal] = useState(false);
+  const [openItemModal, setOpenItemModal] = useState(false);
+
+  // dblClick handler — 최신 state 추적 위해 useRef (initialized 의 stale closure 회피)
+  const dblClickRef = useRef<(g: FlexGridType<NnRow>, e: { row: number; col: number }) => void>(() => undefined);
+  dblClickRef.current = (g, e) => {
+    const dataItem = g.rows[e.row]?.dataItem as NnRow | undefined;
+    const binding = g.columns[e.col]?.binding;
+    if (!dataItem || !binding) return;
+
+    const meta = MAIN_COLUMNS.find(c => c.key === binding);
+    if (!meta || meta._ctrlType !== 'FPModal') return;
+
+    // CRUD_TYPE 가드 — MAPPING_ITEM_ID (M) 은 신규/수정 모두 / 그 외 IM 은 신규만
+    const isInsert = dataItem.CRUD_TYPE === 'I';
+    const isMapping = meta._inputEditType === 'M';
+    if (!isInsert && !isMapping) return;
+
+    setClickedRow(e.row);
+    setClickedBinding(binding);
+    switch (meta._modalKey) {
+      case 'customerByDivisionModal': setOpenCustomerModal(true); break;
+      case 'projectByDivisionModal':  setOpenProjectModal(true);  break;
+      case 'itemByDivisionModal':     setOpenItemModal(true);     break;
+    }
+  };
+
+  // Modal 선택 콜백 — clicked row 의 cell 에 값 set + grid invalidate
+  const setRowCell = (binding: string, value: string) => {
+    const g = gridRef.current;
+    if (g === null || clickedRow === null) return;
+    const dataItem = g.rows[clickedRow]?.dataItem as NnRow | undefined;
+    if (!dataItem) return;
+    (dataItem as Record<string, unknown>)[binding] = value;
+    g.invalidate();
+  };
+
+  const handleCustomerSelect = (soldTo: string, _soldDesc: string, shipTo: string) => {
+    // CustomerModal 은 SOLDTO + SHIPTO 동시 반환 — clicked binding 기준 동작
+    if (clickedBinding === 'SOLDTO_CODE') {
+      setRowCell('SOLDTO_CODE', soldTo);
+      if (shipTo) setRowCell('SHIPTO_CODE', shipTo);
+    } else if (clickedBinding === 'SHIPTO_CODE') {
+      setRowCell('SHIPTO_CODE', shipTo || soldTo);
+    }
+    setOpenCustomerModal(false);
+  };
+
+  const handleProjectSelect = (projects: string) => {
+    setRowCell('PROJECT_CODE', projects);
+    setOpenProjectModal(false);
+  };
+
+  const handleItemSelect = (items: string) => {
+    if (clickedBinding) setRowCell(clickedBinding, items);
+    setOpenItemModal(false);
+  };
+
+  const spRows = ((data as { o_rc1?: NnRow[] })?.o_rc1 ?? []) as NnRow[];
+  const rows: NnRow[] = [...insertedRows, ...spRows];
 
   return (
     <div className={styles.container}>
@@ -136,17 +238,31 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
               const meta = MAIN_COLUMNS.find(c => c.key === col.binding);
               if (!meta) return;
 
+              // CRUD_TYPE='I' (신규 행) 추적 — IM/IO 컬럼은 신규 시에만 편집 가능 표시
+              const dataItem = e.panel.rows[e.row]?.dataItem as NnRow | undefined;
+              const isInsert = dataItem?.CRUD_TYPE === 'I';
+
               const isEditable =
                 meta._inputEditType === 'M' ||
                 meta._inputEditType === 'O' ||
-                meta._inputEditType === 'IM' ||
-                meta._inputEditType === 'IO';
-              const isReadOnly = meta._inputEditType === 'S';
-              const isPopup = meta._ctrlType === 'FPModal';
+                ((meta._inputEditType === 'IM' || meta._inputEditType === 'IO') && isInsert);
+              const isReadOnly =
+                meta._inputEditType === 'S' ||
+                ((meta._inputEditType === 'IM' || meta._inputEditType === 'IO') && !isInsert);
+              // popup cell — 신규 행 (IM) 또는 MAPPING_ITEM_ID ('M') 일 때만 ↗ 아이콘 표시
+              const isPopup =
+                meta._ctrlType === 'FPModal' &&
+                ((meta._inputEditType === 'M') || isInsert);
 
               toggleClass(e.cell, 'wj-cell-editable', isEditable);
               toggleClass(e.cell, 'wj-cell-non-editable', isReadOnly);
               toggleClass(e.cell, 'wj-cell-popup', isPopup);
+            });
+
+            // Phase B-3: dblClick popup handler — column meta 의 _modalKey 분기
+            g.itemDoubleClick.addHandler((_s, e) => {
+              if (e.panel.cellType !== CellType.Cell) return;
+              dblClickRef.current(g, { row: e.row, col: e.col });
             });
           }}
           itemsSource={rows}
@@ -158,12 +274,51 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
               binding={c.key}
               header={c.header}
               width={c.width}
-              isReadOnly={true}
+              // 룰 12 §11.7: _inputEditType='S' 또는 FPModal 컬럼은 키보드 편집 차단
+              // FPModal 은 dblClick 으로만 (formatItem 의 wj-cell-popup 처리)
+              isReadOnly={c._inputEditType === 'S' || c._ctrlType === 'FPModal'}
               allowMerging={c.merge ?? false}
             />
           ))}
         </FlexGrid>
       </div>
+
+      {/* Phase B-3: Customer/Project/Item Modal — column meta 의 _modalKey 기반 호출 */}
+      <CustomerModal
+        open={openCustomerModal}
+        modalClose={() => setOpenCustomerModal(false)}
+        setSelectedValue={handleCustomerSelect}
+        divisionId={searchCondition.divisionId}
+      />
+      <ProjectByDivisionModal
+        open={openProjectModal}
+        modalClose={() => setOpenProjectModal(false)}
+        setSelectedValue={handleProjectSelect}
+        preSearchParams={{
+          divisionId: searchCondition.divisionId,
+          deptId: searchCondition.deptId,
+          endCustomer: searchCondition.endCustomer,
+          salesSite: searchCondition.scmSiteId,
+          projectCode: '',
+          etc: 'N',
+        } as never}
+        callFromCell={true}
+      />
+      <ItemByDivisionModal
+        open={openItemModal}
+        modalClose={() => setOpenItemModal(false)}
+        setSelectedValue={handleItemSelect}
+        preSearchParams={{
+          divisionId: searchCondition.divisionId,
+          deptId: searchCondition.deptId,
+          endCustomer: searchCondition.endCustomer,
+          salesSite: searchCondition.scmSiteId,
+          projectCode: '',
+          itemId: '',
+        } as never}
+        callFromCell={true}
+        headerTitle={clickedBinding === 'MAPPING_ITEM_ID' ? 'Mapping Item Popup' : 'Model/Nickname Popup'}
+      />
     </div>
   );
 };
