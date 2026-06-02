@@ -2,18 +2,17 @@ import { useTabProcQuery } from '@shared/hooks';
 
 import { MENU_ID, SHEETS } from '../contribute-main.constants';
 import type { ContributeRatePopupResult } from '../types';
-import { useContributeMainStore } from '../useContributeMainStore';
 
 interface Props {
   yyyy: string;
+  open: boolean;
+  onClose: () => void;
   onSelect?: (row: ContributeRatePopupResult) => void;
 }
 
 // AS-IS DMF0043_ContributeRatePopup — 기여율 설정 POPUP (룰 25 §3 자동 생성)
-export const ContributeRatePopup = ({ yyyy, onSelect }: Props) => {
-  const open = useContributeMainStore(s => s.ratePopupOpen);
-  const setOpen = useContributeMainStore(s => s.setRatePopupOpen);
-
+// Main + View 양쪽에서 재사용 — store-agnostic (open/onClose 를 props 로 받음)
+export const ContributeRatePopup = ({ yyyy, open, onClose, onSelect }: Props) => {
   const { data } = useTabProcQuery({
     menuId: MENU_ID,
     sheetName: SHEETS.RATE_POPUP,
@@ -36,7 +35,7 @@ export const ContributeRatePopup = ({ yyyy, onSelect }: Props) => {
         justifyContent: 'center',
         zIndex: 1000,
       }}
-      onClick={() => setOpen(false)}
+      onClick={onClose}
     >
       <div
         style={{
@@ -67,7 +66,7 @@ export const ContributeRatePopup = ({ yyyy, onSelect }: Props) => {
                 style={{ cursor: 'pointer' }}
                 onClick={() => {
                   onSelect?.(r);
-                  setOpen(false);
+                  onClose();
                 }}
               >
                 <td>{String(r.divisionId)}</td>
@@ -79,7 +78,7 @@ export const ContributeRatePopup = ({ yyyy, onSelect }: Props) => {
             ))}
           </tbody>
         </table>
-        <button type='button' onClick={() => setOpen(false)}>
+        <button type='button' onClick={onClose}>
           닫기
         </button>
       </div>

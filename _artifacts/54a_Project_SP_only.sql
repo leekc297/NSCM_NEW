@@ -1,0 +1,133 @@
+--==============================================================================
+-- 54_DMF0072_popup_sp_create.sql  (SQL*Plus 본체)
+--
+-- 목적: DMF0072 의 Project / Item 팝업용 standalone SP 2종 신규 생성 (As-Is 1:1 변환)
+--
+-- 원천 (As-Is MSSQL — Doc/_legacy_source/DB_DDL/):
+--   1) DMF0072_GET_PROJECT_POPUP_LIST  ← SCM0002_GET_PROJECT_BY_DIVISION_POPUPEX (SP6_DDL.sql:22747)
+--   2) DMF0072_GET_ITEM_POPUP_LIST     ← DMF0002_GET_ITEM_BY_DIVISION_POPUPEx (SP1_DDL.sql:20954)
+--
+-- 변환 룰 (메모리 feedback_asis_to_tobe_sp_no_omission + anti-simplification 의무):
+--   - WITH(NOLOCK)      → 제거 (Oracle read consistency)
+--   - NVARCHAR(MAX)     → VARCHAR2(4000)
+--   - @변수             → P_변수
+--   - [dbo].xxx         → SCM_MGR.xxx 또는 그냥
+--   - ISNULL/isnull     → NVL
+--   - String_Split      → SCM_MGR.UF_FX_STRING_SPLIT (TOKEN 컬럼)
+--   - String_SplitForIN → SCM_MGR.UF_FX_STRING_SPLITFORIN (COLUMN_VALUE)
+--   - TOP 1 token       → FETCH FIRST 1 ROWS ONLY
+--   - LIKE P.token + '' → LIKE P.TOKEN || '%'
+--   - SET NOCOUNT ON    → 제거
+--   - CREATE PROCEDURE  → CREATE OR REPLACE PROCEDURE
+--   - SELECT 결과       → OPEN cursor FOR
+--
+-- 환경 검증 (사전 진단):
+--   - UF_FX_STRING_SPLIT / UF_FX_STRING_SPLITFORIN VALID
+--   - SCM_MST_PROJECT 7,671 row / SCM_MST_SITE_ITEM 109,078 row (Y=105,508) / SCM_MST_ITEM_SN 623,382 row
+--   - LOOKUP_MASTER_DETAIL ITEM_TYPE_CODE=4 / BIZ_TYPE_BPMS=12
+--
+-- BLOCK:
+--   B1 DMF0072_GET_PROJECT_POPUP_LIST : 6 IN + O_RC1
+--   B2 DMF0072_GET_ITEM_POPUP_LIST    : 7 IN + O_RC1
+--
+-- 멱등성: CREATE OR REPLACE
+-- 작성: 2026-06-02 (격차 B-2 As-Is 1:1 변환)
+--==============================================================================
+SET DEFINE OFF
+SET SERVEROUTPUT ON
+SET FEEDBACK ON
+SET LINESIZE 200
+WHENEVER SQLERROR EXIT FAILURE
+
+PROMPT === BLOCK 1 : DMF0072_GET_PROJECT_POPUP_LIST — As-Is SCM0002_GET_PROJECT_BY_DIVISION_POPUPEX 1:1 ===
+CREATE OR REPLACE PROCEDURE SCM_MGR.DMF0072_GET_PROJECT_POPUP_LIST (
+    P_DIVISION_ID   VARCHAR2,
+    P_DEPT_ID       VARCHAR2,
+    P_END_CUSTOMER  VARCHAR2,
+    P_SCM_SITE_ID   VARCHAR2,
+    P_PROJECT_CODE  VARCHAR2,
+    P_ETC           VARCHAR2,   -- 'N'=일반(SCM_MST_PROJECT), 'Y'=ETC(LOOKUP)
+    O_RC1           OUT SYS_REFCURSOR
+) AS
+BEGIN
+    -- As-Is L22781: IF @p_etc = 'N' 분기
+    IF P_ETC = 'N' OR P_ETC IS NULL THEN
+        OPEN O_RC1 FOR
+            SELECT A.DIVISION_ID,
+                   A.DIVISION_ID  AS DIVISION_NAME,
+                   A.PROJECT_CODE,
+                   A.PROJECT_NAME,
+                   A.PROJECT_STATUS,
+                   BIZ.CODE       AS BIZ_TYPE,
+                   BIZ.NAME       AS BIZ_TYPE_NAME,
+                   A.CURRENCY,
+                   MAX(A.PROJECT_VER_SEQ)  AS PROJECT_VER_SEQ,
+                   A.PROJECT_OWNER,
+                   TEAM.DEPT_ID,
+                   TEAM.DEPT_NAME_KO,
+                   C.END_CUSTOMER
+              FROM SCM_MGR.SCM_MST_PROJECT A
+              LEFT JOIN (SELECT * FROM SCM_MGR.SCM_MST_DIVISION WHERE VALID_YN = 'Y') D
+                ON A.DROP_YN = 'N' AND A.DIVISION_ID = D.DIVISION_ID
+              LEFT JOIN (SELECT * FROM SCM_MGR.SCM_MST_SITE_ITEM WHERE VALID_YN = 'Y') B
+                ON A.DIVISION_ID = B.DIVISION_ID
+               AND A.PROJECT_CODE = B.PROJECT_CODE
+              LEFT JOIN (SELECT DISTINCT DIVISION_ID, SCM_SITE_ID, DEPT_ID, END_CUSTOMER
+                           FROM SCM_MGR.SCM_MST_SITE WHERE VALID_YN = 'Y') C
+                ON B.DIVISION_ID = C.DIVISION_ID
+               AND B.SCM_SITE_ID = C.SCM_SITE_ID
+              LEFT JOIN SCM_MGR.SCM_MST_SSO_USER_INFO SU
+                ON SU.USER_ID = (SELECT TOKEN FROM TABLE(SCM_MGR.UF_FX_STRING_SPLIT(B.OWNER, ',')) WHERE ROWNUM = 1)
+              LEFT JOIN (SELECT * FROM SCM_MGR.SCM_MST_SSO_DEPT_INFO WHERE VALID_YN = 'Y') TEAM
+                ON SU.DEPT_ID = TEAM.DEPT_ID
+              LEFT JOIN (SELECT SEGMENT1 AS CODE, SEGMENT2 AS NAME
+                           FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL
+                          WHERE LOOKUP_TYPE = 'BIZ_TYPE_BPMS') BIZ
+                ON BIZ.CODE = A.BIZ_TYPE
+             WHERE TEAM.DEPT_ID IS NOT NULL
+               AND CASE WHEN P_DIVISION_ID = 'ALL' THEN 'ALL' ELSE A.DIVISION_ID END
+                   IN (SELECT COLUMN_VALUE FROM TABLE(SCM_MGR.UF_FX_STRING_SPLITFORIN(P_DIVISION_ID, ',')) P
+                        WHERE (CASE WHEN P_DIVISION_ID = 'ALL' THEN 'ALL' ELSE A.DIVISION_ID END) = P.COLUMN_VALUE)
+               AND CASE WHEN P_DEPT_ID = 'ALL' THEN 'ALL' ELSE TEAM.DEPT_ID END
+                   IN (SELECT COLUMN_VALUE FROM TABLE(SCM_MGR.UF_FX_STRING_SPLITFORIN(P_DEPT_ID, ',')) P
+                        WHERE (CASE WHEN P_DEPT_ID = 'ALL' THEN 'ALL' ELSE TEAM.DEPT_ID END) = P.COLUMN_VALUE)
+               AND CASE WHEN P_END_CUSTOMER = 'ALL' THEN 'ALL' ELSE NVL(C.END_CUSTOMER, '') END
+                   IN (SELECT COLUMN_VALUE FROM TABLE(SCM_MGR.UF_FX_STRING_SPLITFORIN(P_END_CUSTOMER, ',')) P
+                        WHERE (CASE WHEN P_END_CUSTOMER = 'ALL' THEN 'ALL' ELSE NVL(C.END_CUSTOMER, '') END) = P.COLUMN_VALUE)
+               AND CASE WHEN P_SCM_SITE_ID = 'ALL' THEN 'ALL' ELSE C.SCM_SITE_ID END
+                   IN (SELECT COLUMN_VALUE FROM TABLE(SCM_MGR.UF_FX_STRING_SPLITFORIN(P_SCM_SITE_ID, ',')) P
+                        WHERE (CASE WHEN P_SCM_SITE_ID = 'ALL' THEN 'ALL' ELSE C.SCM_SITE_ID END) = P.COLUMN_VALUE)
+               AND (
+                    EXISTS (SELECT 1 FROM TABLE(SCM_MGR.UF_FX_STRING_SPLIT(P_PROJECT_CODE, ',')) P WHERE A.PROJECT_CODE LIKE P.TOKEN || '%')
+                    OR
+                    EXISTS (SELECT 1 FROM TABLE(SCM_MGR.UF_FX_STRING_SPLIT(P_PROJECT_CODE, ',')) P WHERE A.PROJECT_NAME LIKE P.TOKEN || '%')
+                   )
+             GROUP BY A.DIVISION_ID, D.DIVISION_NAME, A.PROJECT_CODE, A.PROJECT_NAME, A.PROJECT_STATUS,
+                      A.BIZ_TYPE, A.BIZ_TYPE_NAME, BIZ.CODE, BIZ.NAME, A.CURRENCY, A.PROJECT_OWNER,
+                      TEAM.DEPT_ID, TEAM.DEPT_NAME_KO, C.END_CUSTOMER
+             ORDER BY A.PROJECT_NAME, A.PROJECT_CODE;
+    ELSE
+        -- As-Is L22893: ELSE (ETC = 'Y') — Lookup 에서 Project List 조회
+        OPEN O_RC1 FOR
+            SELECT A.SEGMENT1  AS DIVISION_ID,
+                   A.SEGMENT1  AS DIVISION_NAME,
+                   A.SEGMENT2  AS PROJECT_CODE,
+                   A.SEGMENT3  AS PROJECT_NAME,
+                   ''          AS PROJECT_STATUS,
+                   ''          AS BIZ_TYPE,
+                   ''          AS BIZ_TYPE_NAME,
+                   ''          AS CURRENCY,
+                   ''          AS PROJECT_VER_SEQ,
+                   ''          AS PROJECT_OWNER,
+                   ''          AS DEPT_ID,
+                   ''          AS DEPT_NAME_KO,
+                   ''          AS END_CUSTOMER
+              FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL A
+             WHERE A.LOOKUP_TYPE = 'DM_ETC_Project'
+               AND A.VALID_YN = 'Y'
+               AND A.SEGMENT1 = P_DIVISION_ID
+               AND EXISTS (SELECT 1 FROM TABLE(SCM_MGR.UF_FX_STRING_SPLIT(P_PROJECT_CODE, ',')) P WHERE A.SEGMENT2 LIKE P.TOKEN || '%');
+    END IF;
+END DMF0072_GET_PROJECT_POPUP_LIST;
+/
+EXIT;

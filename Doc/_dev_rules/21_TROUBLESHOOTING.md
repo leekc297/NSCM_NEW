@@ -914,3 +914,103 @@ DMF0043 작업 중 발견한 DB 오류 11종. **동일 패턴은 다른 PIVOT/�
 | ORA-01400 NULL FK | callSettersOnNulls 후 NPE | §12.8 |
 | ORA-01722 invalid number | SUBSTR offset 0 bug | §12.10 |
 | 저장 OK + 실제 DB 미변경 | mutate array wrap + BE top-level lookup | §12.11 |
+| **POPUP 데이터 미조회** | **SHEET_COLUMNS duplicate / 권한 / activeFlag mismatch** | **§13** |
+| **wrapper SP `ALL → ''` 변환** | **메인 SP 'ALL' 비교 미일치** | **§14** |
+
+---
+
+## ⭐ §13. POPUP 데이터 미조회 5단계 진단 (2026-06-02 신설 — DMF0072 Model/Nickname Popup 사고)
+
+### §13.0 배경
+
+DMF0072 진입 후 Model/Nickname Popup 클릭 시 **데이터 0건 표시**. 5단계 진단으로 root cause 발견 = `SCM_MST_SHEET_COLUMNS` duplicate.
+
+> "권한 누락" 단정 금지 (메뉴 미표시 hook 과 동일 anti-pattern).
+
+### §13.1 5단계 진단 (sequential)
+
+```sql
+-- 1단계 — BTN_MPG 등록 확인
+SELECT MNU_ID || '|' || SHT_NM || '|' || MNU_BTN_CD || '|' || API_ID
+  FROM SCM_MGR.SCM_ADM_MNU_BTN_MPG_M WHERE MNU_ID='{POPUP_MENU_ID}';
+
+-- 2단계 — API_M URL (PROC_NM 가 실제 존재 SP 인지)
+SELECT API_ID || '|' || API_URL FROM SCM_MGR.SCM_ADM_API_M WHERE API_ID='{API_ID}';
+
+-- 3단계 — PROC_M signature (FE 인자 ↔ COL_NM 정합)
+SELECT COL_NM, COL_TP_CD, SORT_ORD FROM SCM_MGR.SCM_ADM_PROC_M WHERE PROC_NM='{API_URL}' ORDER BY SORT_ORD;
+
+-- 4단계 — SP 직접 호출 (FE 인자 그대로)
+DECLARE V_RC SYS_REFCURSOR; ... BEGIN
+  SCM_MGR.{PKG}.{SP}(<인자>, V_RC); -- row count
+END; /
+
+-- 5단계 — SCM_MST_SHEET_COLUMNS duplicate
+SELECT 'distinct' AS K, COUNT(DISTINCT COLUMN_NAME) AS V FROM SCM_MGR.SCM_MST_SHEET_COLUMNS
+ WHERE PROGRAM_ID='{POPUP_MENU_ID}' AND SHEET_NAME='{POPUP_SHEET_NAME}'
+UNION ALL
+SELECT 'total', COUNT(*) FROM SCM_MGR.SCM_MST_SHEET_COLUMNS
+ WHERE PROGRAM_ID='{POPUP_MENU_ID}' AND SHEET_NAME='{POPUP_SHEET_NAME}';
+-- total > distinct → duplicate
+```
+
+**Fix (5단계 duplicate 발견 시)**:
+```sql
+DELETE FROM SCM_MGR.SCM_MST_SHEET_COLUMNS X
+ WHERE X.PROGRAM_ID = '{POPUP_MENU_ID}'
+   AND X.SHEET_NAME = '{POPUP_SHEET_NAME}'
+   AND X.ROWID NOT IN (
+     SELECT MIN(Y.ROWID) FROM SCM_MGR.SCM_MST_SHEET_COLUMNS Y
+      WHERE Y.PROGRAM_ID = '{POPUP_MENU_ID}' AND Y.SHEET_NAME = '{POPUP_SHEET_NAME}'
+      GROUP BY Y.COLUMN_NAME
+   );
+COMMIT;
+```
+
+### §13.2 적용 사례
+
+| 사례 | 화면 | 진단 단계 | 원인 | Fix |
+|---|---|---|---|---|
+| 2026-06-02 | DMF0072 Model/Nickname Popup (COM0008) | 5단계 — 34 = 17 × 2 | INSERT 2회 실행, 메모리 룰 `feedback_sql_idempotent_insert_all` 위반 | `_artifacts/56_COM0008_sheet_columns_dedupe.sql` |
+
+### §13.3 cross-ref
+
+- 메모리 `feedback_sql_idempotent_insert_all`
+- hook `menu-not-displayed-debug.md`
+
+---
+
+## ⭐ §14. Wrapper SP 의 `'ALL' → ''` 변환 안티 패턴 (2026-06-02 신설 — DMF0072 격차 A 사고)
+
+### §14.0 사고 패턴
+
+```sql
+-- ❌ wrapper 가 'ALL' → '' 변환 후 메인 SP 호출
+PKG_XXX.P_MAIN_SP(
+    CASE WHEN P_DEPT_ID='ALL' THEN '' ELSE P_DEPT_ID END, ...
+);
+```
+
+메인 SP 가 `'ALL'` 직접 비교 (As-Is 표준):
+```sql
+AND CASE WHEN P_DEPT_ID = 'ALL' THEN 'ALL' ELSE TEAM.DEPT_ID END
+    IN (SELECT TOKEN FROM TABLE(UF_FX_STRING_SPLIT(P_DEPT_ID, ',')) ...)
+```
+
+→ wrapper 가 `''` 빈 string 전달 → `UF_FX_STRING_SPLIT('', ',')` = **0 rows** → **모든 메인 데이터 0건 매칭**.
+
+### §14.1 Fix
+
+```sql
+-- ✅ wrapper 는 인자 그대로 + sesUserId/mnuId 전달
+PKG_XXX.P_MAIN_SP(P_DEPT_ID, P_USER_ID, P_MENU_ID, O_RC1, ...);
+```
+
+### §14.2 적용 사례
+
+- DMF0072 `DMF0072_GET_NNMASTER_MAPPING_WRAPPER` (`_artifacts/52`) — sesUserId/mnuId 추가 + ALL 변환 제거 → 메인 조회 정상
+
+### §14.3 cross-ref
+
+- 메모리 `feedback_wrapper_sp_no_all_transform.md`
+- 룰 24 §6.5 As-Is DB cross-check

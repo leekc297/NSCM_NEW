@@ -28,12 +28,13 @@ interface Action {
   setOpenSearchArea: (open?: boolean) => void;
 }
 
+// AS-IS .cs L479-485 의 7개 search param + 'ALL' sentinel 사용
 const initSearch: SearchCondition = {
   dataTypeCode: 'ALL',
-  divisionId: '40',
-  deptId: '',
-  endCustomer: '',
-  scmSiteId: '',
+  divisionId: '',
+  deptId: 'ALL',
+  endCustomer: 'ALL',
+  scmSiteId: 'ALL',
   projectCode: '',
   itemId: '',
 };

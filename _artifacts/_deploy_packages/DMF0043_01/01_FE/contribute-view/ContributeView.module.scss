@@ -1,0 +1,16 @@
+// AS-IS DMF0043_Contribute_View — 컨테이너 (룰 03 §5 inline style 0)
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 8px;
+}
+
+.gridContainer {
+  flex: 1;
+  overflow: hidden;
+  min-height: 400px;
+  border: 1px solid #e0e4e9;
+  border-radius: 4px;
+  background: white;
+}

@@ -469,8 +469,90 @@ configs/types/procedures.d.ts → MENU_ID 의 sheet/request/response 타입
 
 ---
 
+## ⭐ §12.A `features/master/src/components/*` 공용 Modal 인벤토리 (2026-06-02 신설)
+
+> ⭐ **DRY 원칙: 신규 화면에서 Project/Item/Team/Region lookup popup 이 필요할 때 신규 작성 전 본 인벤토리 1차 확인. 동일 기능 있으면 그대로 import 재사용.**
+
+작성 계기: DMF0072 NN Master Mapping 작업 시 Project/Item Popup 신규 작성 시도 → 동일 기능 modal 이 이미 customer-model-mapping/sales-site-project-model/sales-plan-waterfall 에서 사용 중 확인 → 신규 작성 없이 재사용.
+
+### §12.A.1 인벤토리
+
+| 컴포넌트 | menuId | sheetName | 사용 화면 | 특징 |
+|---|---|---|---|---|
+| `ProjectByDivisionModal` | `COM0005` | `projectByDivision` | customer-model-mapping / sales-site-project-model / sales-plan-waterfall / **nn-master-mapping (DMF0072)** | Division/Team/EndCustomer/SalesSite 사전 채움 |
+| `ItemByDivisionModal` | `COM0008` | `itemByDivision` | customer-model-mapping / sales-site-project-model / sales-plan-waterfall / **nn-master-mapping (DMF0072)** / forecast-price | `headerTitle?` prop (2026-06-02) |
+| `TeamModal` / `OwnerModal` / `RegionModal` / `StorageLocationModal` / `ProjectModal` | (별도) | — | sales-site-project-model | 단독 lookup |
+
+### §12.A.2 표준 import (3단계 root-relative)
+
+```ts
+// 같은 master/src/pages/<screen> 내부:
+import { ItemByDivisionModal, ProjectByDivisionModal } from '../../../components';
+
+// 다른 feature (예: features/demand) 에서:
+import { ItemByDivisionModal } from 'features/master/src/components';
+```
+
+⚠️ `'../../../../components/...'` 4단계 개별 파일 path 는 표준 위반. `index.ts` re-export 활용.
+
+### §12.A.3 공통 Props signature
+
+```ts
+interface XxxByDivisionModalProps {
+  open: boolean;
+  modalClose: () => void;
+  setSelectedValue: (codes: string, names?: string, ...extra) => void;  // comma-join string
+  preSearchParams: ProcRequest<MENU_ID, SHEET>;
+  callFromCell: boolean;          // true: 단일 선택 (cell 편집), false: search 영역 호출
+  headerTitle?: string;           // 화면별 헤더 커스터마이즈 (ItemByDivisionModal — 2026-06-02 추가)
+}
+```
+
+### §12.A.4 `headerTitle` prop override 패턴
+
+기존 화면 영향 0 (옵션 prop, 기본값 = 기존 i18n key).
+
+```tsx
+// 정의 측 (ItemByDivisionModal.tsx)
+<h2 className='headerTitle'>{headerTitle ?? t('LBL00343', '_ItemByDivisionPopup')}</h2>
+
+// 호출 측 (DMF0072)
+<ItemByDivisionModal headerTitle='Model/Nickname Popup' ... />
+```
+
+지양: 화면별 wrapper modal 신규 작성 (중복 코드, "한 사람이 개발한 것처럼" 위반).
+
+### §12.A.5 자기 점검 (PRE-WRITE — 신규 popup 작성 전)
+
+```bash
+# 1. master/src/components 의 기존 modal 인벤토리
+ls nscm-fe/features/master/src/components/ | grep -i "modal\|popup"
+
+# 2. 신규 작성 의도와 동일/유사한 modal 존재 여부
+grep -rln "export const .*ByDivisionModal\|export const .*Modal" \
+     nscm-fe/features/master/src/components/
+
+# 3. 동일 modal + i18n header 만 다른 경우 → headerTitle prop 옵션 추가
+# 4. 완전 다른 기능 → 신규 작성 (master/src/components 안에 두기)
+```
+
+**신규 작성 전 본 인벤토리 1차 확인 누락 = anti-simplification 위반.**
+
+### §12.A.6 cross-ref
+
+- 룰 25 §3.3 POPUP 신규 생성 vs 기존 화면 활용 분기
+- 룰 12 §11 POPUP → Modal 통합 패턴
+- 메모리 `reference_public_modals_master_components.md`
+
+---
+
 ## §13. 변경 이력
 
 - 2026-05-22 (DMF0020 사고 반영): 신규 작성.
   - 6종 import 오류 (Dialog/Button/InputField/DateRangePicker/MonthPicker/CheckboxField) 발견 → 본 문서로 항구 방지.
   - 관련 hook: `Doc/_dev_rules/hooks/fe-import-check.md`.
+- **2026-06-02 (DMF0072 NN Master Mapping 작업)**: §12.A 공용 Modal 인벤토리 신설.
+  - `master/src/components/{projectByDivisionModal,itemByDivisionModal,teamModal,...}` 7종 인벤토리 + cross-ref 사용 화면 표.
+  - `headerTitle?` prop override 패턴 표준화 (기존 화면 영향 0).
+  - 신규 작성 전 1차 확인 의무 (anti-simplification).
+  - 메모리: `reference_public_modals_master_components.md`

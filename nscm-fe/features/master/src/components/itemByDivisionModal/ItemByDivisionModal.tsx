@@ -22,6 +22,9 @@ interface ItemByDivisionModalProps {
   setSelectedValue: (items: string, itemName?: string, itemType?: string) => void;
   preSearchParams: ProcRequest<MODAL_ITEM_BY_DIVISION, MODAL_SHEET_ITEM_BY_DIVISION>;
   callFromCell: boolean;
+  // 호출 화면별 헤더 title 커스터마이즈 (옵션). 기본값: LBL00343 '_ItemByDivisionPopup'
+  // 예: DMF0072 NN Master Mapping 에서는 'Model/Nickname Popup' 으로 표시 (사용자 요구 2026-06-02)
+  headerTitle?: string;
 }
 
 export const ItemByDivisionModal = ({
@@ -30,6 +33,7 @@ export const ItemByDivisionModal = ({
   setSelectedValue,
   preSearchParams,
   callFromCell,
+  headerTitle,
 }: ItemByDivisionModalProps) => {
   const { t } = useTranslation();
 
@@ -132,7 +136,7 @@ export const ItemByDivisionModal = ({
       customHeaderTitle={
         <div className='headerContainer'>
           <div className='headerDot' />
-          <h2 className='headerTitle'>{t('LBL00343', '_ItemByDivisionPopup')}</h2>
+          <h2 className='headerTitle'>{headerTitle ?? t('LBL00343', '_ItemByDivisionPopup')}</h2>
         </div>
       }
       customContentArea={

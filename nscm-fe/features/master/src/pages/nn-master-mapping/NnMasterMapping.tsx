@@ -1,5 +1,12 @@
 import { FlexGrid, FlexGridColumn } from '@mescius/wijmo.react.grid';
-import type { FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
+import {
+  AllowMerging,
+  CellRange,
+  CellType,
+  MergeManager,
+  type FlexGrid as FlexGridType,
+  type GridPanel,
+} from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useRef } from 'react';
 
@@ -7,9 +14,46 @@ import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { MainTitle, SubTitle } from '@shared/components';
 import { useTabProcQuery } from '@shared/hooks';
 
-import { MENU_ID, SHEETS } from './nn-master-mapping.constants';
+import { NnMasterMappingForm } from './components/NnMasterMappingForm';
+import { MAIN_COLUMNS, MENU_ID, SHEETS } from './nn-master-mapping.constants';
 import styles from './NnMasterMapping.module.scss';
 import { useNnMasterMappingStore } from './useNnMasterMappingStore';
+
+// As-Is .cs L515 `siMain.SmartColMerge()` 동작 모사 (사용자 요구 2026-06-02):
+// "자신의 column 이 같은 값이어도, 좌측의 모든 allowMerging column 도 같은 값일 때만 머지"
+// Wijmo 기본 `AllowMerging.Cells` 는 column-independent — 이 클래스가 계층적 머지로 교체.
+class HierarchicalMergeManager extends MergeManager {
+  getMergedRange(panel: GridPanel, r: number, c: number, clip: boolean = true): CellRange | null {
+    if (panel.cellType !== CellType.Cell) {
+      return super.getMergedRange(panel, r, c, clip);
+    }
+    const col = panel.columns[c];
+    if (!col || !col.allowMerging) return null;
+
+    // 좌측 (포함) 의 allowMerging=true column 모음
+    const mergeColIdx: number[] = [];
+    for (let i = 0; i <= c; i++) {
+      if (panel.columns[i] && panel.columns[i].allowMerging) mergeColIdx.push(i);
+    }
+    if (mergeColIdx.length === 0) return null;
+
+    const sameAcrossKeys = (rowA: number, rowB: number): boolean =>
+      mergeColIdx.every(ci => {
+        const a = panel.getCellData(rowA, ci, false);
+        const b = panel.getCellData(rowB, ci, false);
+        return a === b;
+      });
+
+    let r1 = r;
+    let r2 = r;
+    while (r1 > 0 && sameAcrossKeys(r1 - 1, r)) r1--;
+    const rowCnt = panel.rows.length;
+    while (r2 < rowCnt - 1 && sameAcrossKeys(r2 + 1, r)) r2++;
+
+    if (r1 === r2) return null;
+    return new CellRange(r1, c, r2, c);
+  }
+}
 
 export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
   const gridRef = useRef<FlexGridType<Record<string, unknown>>>(null);
@@ -17,12 +61,11 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   const filters = useNnMasterMappingStore(s => s.filters);
   const searchCondition = useNnMasterMappingStore(s => s.searchCondition);
-  const setSearchCondition = useNnMasterMappingStore(s => s.setSearchCondition);
   const setFilter = useNnMasterMappingStore(s => s.setFilter);
-  const reset = useNnMasterMappingStore(s => s.reset);
   const openSearchArea = useNnMasterMappingStore(s => s.openSearchArea);
   const setOpenSearchArea = useNnMasterMappingStore(s => s.setOpenSearchArea);
 
+  // 화면 진입 시 자동 조회 (사용자 요구 2026-06-01)
   useEffect(() => { if (!filters[SHEETS.MAIN]) setFilter(); }, []);
 
   const { data, refetch } = useTabProcQuery<MENU_ID, SHEETS.MAIN>({
@@ -44,37 +87,54 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
     upload: false,
   };
 
-  const rows = (data?.p_cursor ?? []) as Record<string, unknown>[];
+  const rows = ((data as { o_rc1?: Record<string, unknown>[] })?.o_rc1 ?? []) as Record<string, unknown>[];
 
   return (
     <div className={styles.container}>
-      <MainTitle title={title} menuId={MENU_ID} openSearchArea={openSearchArea} toggleOpenSearchArea={setOpenSearchArea} />
-      {openSearchArea && (
-        <div className={styles.searchBar}>
-          <div className={styles.searchRow}>
-            <label>Data Type <input value={searchCondition.dataTypeCode} onChange={e => setSearchCondition({ dataTypeCode: e.target.value })} /></label>
-            <label>Division <input value={searchCondition.divisionId} onChange={e => setSearchCondition({ divisionId: e.target.value })} /></label>
-            <label>End Cust <input value={searchCondition.endCustomer} onChange={e => setSearchCondition({ endCustomer: e.target.value })} /></label>
-            <label>SCM Site <input value={searchCondition.scmSiteId} onChange={e => setSearchCondition({ scmSiteId: e.target.value })} /></label>
-            <label>Project <input value={searchCondition.projectCode} onChange={e => setSearchCondition({ projectCode: e.target.value })} /></label>
-          </div>
-          <div className={styles.actionRow}>
-            <button type='button' className={styles.searchButton} onClick={handleSearch}>🔍 조회 (F5)</button>
-            <button type='button' className={styles.resetButton} onClick={() => reset()}>초기화</button>
-            <span className={styles.hint}>화면 진입 시 자동 조회됩니다</span>
-          </div>
-        </div>
-      )}
-      <SubTitle menuId={MENU_ID} grid={gridRef} gridFilter={gridFilterRef} dataCount={rows.length} excelFileName='NnMasterMapping' useHotkey={true} hotkeyConfig={hotkeyConfig} searchParam={searchCondition} />
+      <MainTitle
+        title={title}
+        menuId={MENU_ID}
+        openSearchArea={openSearchArea}
+        toggleOpenSearchArea={setOpenSearchArea}
+      />
+      {openSearchArea && <NnMasterMappingForm onSearch={handleSearch} />}
+      <SubTitle
+        menuId={MENU_ID}
+        grid={gridRef}
+        gridFilter={gridFilterRef}
+        dataCount={rows.length}
+        excelFileName='NnMasterMapping'
+        useHotkey={true}
+        hotkeyConfig={hotkeyConfig}
+        searchParam={searchCondition}
+      />
       <div className={styles.gridContainer}>
         <FlexGrid
+          className={styles.grid}
           initialized={(g: FlexGridType<Record<string, unknown>>) => {
-            if (gridRef && 'current' in gridRef) (gridRef as { current: FlexGridType<Record<string, unknown>> | null }).current = g;
+            if (gridRef && 'current' in gridRef) {
+              (gridRef as { current: FlexGridType<Record<string, unknown>> | null }).current = g;
+            }
+            // As-Is .cs L515 `siMain.SmartColMerge()` 계층적 동작 (사용자 요구 2026-06-02):
+            //   - allowMerging=true column 의 cell 머지
+            //   - 좌측 모든 allowMerging column 도 같은 값일 때만 머지 (column-dependent)
+            g.allowMerging = AllowMerging.Cells;
+            g.mergeManager = new HierarchicalMergeManager();
           }}
           itemsSource={rows}
-          autoGenerateColumns={true}
-          style={{ height: '100%' }}
-        />
+          autoGenerateColumns={false}
+        >
+          {MAIN_COLUMNS.map(c => (
+            <FlexGridColumn
+              key={c.key}
+              binding={c.key}
+              header={c.header}
+              width={c.width}
+              isReadOnly={true}
+              allowMerging={c.merge ?? false}
+            />
+          ))}
+        </FlexGrid>
       </div>
     </div>
   );

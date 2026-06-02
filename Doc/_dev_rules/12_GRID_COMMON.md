@@ -659,6 +659,113 @@ grep -nE "frozenColumns\s*=" features/<domain>/src/pages/<screen>/components/*Gr
 
 ---
 
+## ⭐ 11.6 계층적 cell merge — As-Is `SmartColMerge` 동등 (2026-06-02 신설)
+
+### 11.6.1 배경 (DMF0072 사용자 요구)
+
+> "Grid 의 세로 셀 머지 시 자신의 column을 단독으로 머지 하지 않고, 자신의 column 이전에 있는 column까지를 확인해서 자신 이전의 column과 자신의 column까지 동일할 때만 Cell Merge 진행해주세요."
+
+Wijmo 기본 `AllowMerging.Cells` 는 **column-independent** — 각 column 의 같은 값이 위에서부터 머지 (좌측 column 무관).
+
+As-Is GSCM `siMain.SmartColMerge()` 는 **계층적 (dimension hierarchy 적) 머지** — A 컬럼이 같은 값일 때만 B 컬럼도 머지 가능 (좌측 모든 dimension column 종속).
+
+→ `MergeManager` 상속 + `getMergedRange()` 오버라이드 의무.
+
+### 11.6.2 표준 구현 — `HierarchicalMergeManager`
+
+```ts
+import {
+  AllowMerging,
+  CellRange,
+  CellType,
+  MergeManager,
+  type GridPanel,
+} from '@mescius/wijmo.grid';
+
+class HierarchicalMergeManager extends MergeManager {
+  getMergedRange(panel: GridPanel, r: number, c: number, clip: boolean = true): CellRange | null {
+    if (panel.cellType !== CellType.Cell) return super.getMergedRange(panel, r, c, clip);
+    const col = panel.columns[c];
+    if (!col || !col.allowMerging) return null;
+
+    // 좌측 (포함) 의 allowMerging=true column 모음
+    const mergeColIdx: number[] = [];
+    for (let i = 0; i <= c; i++) {
+      if (panel.columns[i] && panel.columns[i].allowMerging) mergeColIdx.push(i);
+    }
+    if (mergeColIdx.length === 0) return null;
+
+    const sameAcrossKeys = (rowA: number, rowB: number): boolean =>
+      mergeColIdx.every(ci => {
+        const a = panel.getCellData(rowA, ci, false);
+        const b = panel.getCellData(rowB, ci, false);
+        return a === b;
+      });
+
+    let r1 = r;
+    let r2 = r;
+    while (r1 > 0 && sameAcrossKeys(r1 - 1, r)) r1--;
+    const rowCnt = panel.rows.length;
+    while (r2 < rowCnt - 1 && sameAcrossKeys(r2 + 1, r)) r2++;
+
+    if (r1 === r2) return null;
+    return new CellRange(r1, c, r2, c);
+  }
+}
+```
+
+### 11.6.3 적용 (FlexGrid initialized)
+
+```tsx
+<FlexGrid
+  initialized={(g) => {
+    g.allowMerging = AllowMerging.Cells;
+    g.mergeManager = new HierarchicalMergeManager();
+  }}
+>
+  {MAIN_COLUMNS.map(c => (
+    <FlexGridColumn binding={c.key} header={c.header} allowMerging={c.merge ?? false} />
+  ))}
+</FlexGrid>
+```
+
+### 11.6.4 column 정의 패턴
+
+`MAIN_COLUMNS` 의 `merge: boolean` 필드 — 좌측부터 hierarchy 순서대로 true 지정.
+
+| 예시 (DMF0072) | merge |
+|---|:---:|
+| DATA_TYPE_CODE | ✅ |
+| DIVISION_ID | ✅ |
+| COMPANY_ID | ✅ |
+| ... (Data Type ~ MDM Code 15 컬럼) | ✅ |
+| MAPPING_ITEM_ID 이후 | ❌ |
+
+→ **계층 첫 컬럼이 false 면 그 이후 컬럼은 hierarchy 시작점 없음** (의도된 동작).
+
+### 11.6.5 cross-check (PR 머지 게이트)
+
+```bash
+# As-Is SmartColMerge 호출 화면인지 확인
+grep -n "SmartColMerge\|siMain\.SmartCol" Doc/_legacy_source/.../{SCREEN_ID}.cs
+
+# 호출 있으면 To-Be 에 HierarchicalMergeManager 적용 확인
+grep -nE "HierarchicalMergeManager|class\s+\w+\s+extends\s+MergeManager" \
+     nscm-fe/features/**/pages/{화면-slug}/*.tsx
+```
+
+**As-Is SmartColMerge 가 있는데 To-Be 에 MergeManager 누락 → PR Reject**
+
+### 11.6.6 적용 사례
+
+| 화면 | 사용 column 범위 | merge column 수 |
+|---|---|---|
+| DMF0072 NN Master Mapping | DATA_TYPE_CODE ~ ITEM_ID (15) | 15 |
+
+상세 메모리: `feedback_wijmo_hierarchical_merge.md`
+
+---
+
 ## 12. 관련 문서
 
 | 룰 | 주제 |

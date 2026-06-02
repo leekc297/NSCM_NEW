@@ -28,6 +28,8 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
   const openSearchArea = useContributeMainStore(s => s.openSearchArea);
   const setOpenSearchArea = useContributeMainStore(s => s.setOpenSearchArea);
   const setVersionPopupOpen = useContributeMainStore(s => s.setVersionPopupOpen);
+  const ratePopupOpen = useContributeMainStore(s => s.ratePopupOpen);
+  const setRatePopupOpen = useContributeMainStore(s => s.setRatePopupOpen);
 
   // 메인 grid 조회 — DMF0043_GET_CONTRIBUTE_MAIN_DATA
   const { data: mainData, refetch } = useTabProcQuery<MENU_ID, SHEETS.MAIN>({
@@ -247,7 +249,11 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
       <div className={styles.gridContainer}>
         <ContributeMainGrid gridRef={gridRef} data={rows} />
       </div>
-      <ContributeRatePopup yyyy={searchCondition.yyyy} />
+      <ContributeRatePopup
+        yyyy={searchCondition.yyyy}
+        open={ratePopupOpen}
+        onClose={() => setRatePopupOpen(false)}
+      />
       <VersionPopup />
     </div>
   );

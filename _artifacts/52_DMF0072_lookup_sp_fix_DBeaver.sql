@@ -1,0 +1,106 @@
+-- 52_DMF0072_lookup_sp_fix_DBeaver.sql  (DBeaver SQL Editor 용)
+-- SQL*Plus 명령어 (SET/PROMPT/WHENEVER) 제거. ';' terminator + '/' 제거.
+-- 메모리 feedback_dbeaver_sql_mandatory_grep.md 준수 (^SET / ^PROMPT / ^DEFINE / ^&\w / ^/$ 0건 확인 의무)
+
+-- ============================================
+-- B1: WRAPPER signature 확장 + ALL 그대로 전달
+-- ============================================
+CREATE OR REPLACE PROCEDURE SCM_MGR.DMF0072_GET_NNMASTER_MAPPING_WRAPPER (
+    P_DATA_TYPE_CODE VARCHAR2,
+    P_DIVISION_ID    VARCHAR2,
+    P_DEPT_ID        VARCHAR2,
+    P_END_CUSTOMER   VARCHAR2,
+    P_SCM_SITE_ID    VARCHAR2,
+    P_PROJECT_CODE   VARCHAR2,
+    P_ITEM_ID        VARCHAR2,
+    P_USER_ID        VARCHAR2,
+    P_MENU_ID        VARCHAR2,
+    O_RC1            OUT SYS_REFCURSOR
+) AS
+    V_RESULT_CURSOR SYS_REFCURSOR;
+BEGIN
+    SCM_MGR.PKG_DMF0072.P_DMF0072_GET_NNMASTER_MAPPING(
+        P_DATA_TYPE_CODE,
+        P_DIVISION_ID,
+        P_DEPT_ID,
+        P_END_CUSTOMER,
+        P_SCM_SITE_ID,
+        P_PROJECT_CODE,
+        P_ITEM_ID,
+        P_USER_ID,
+        P_MENU_ID,
+        O_RC1,
+        V_RESULT_CURSOR
+    );
+END DMF0072_GET_NNMASTER_MAPPING_WRAPPER;
+
+-- ============================================
+-- B2: END_CUSTOMER_LIST cascading
+-- ============================================
+CREATE OR REPLACE PROCEDURE SCM_MGR.DMF0072_GET_END_CUSTOMER_LIST (
+    P_DIVISION_ID VARCHAR2,
+    P_DEPT_ID     VARCHAR2,
+    O_RC1 OUT SYS_REFCURSOR
+) AS
+BEGIN
+    OPEN O_RC1 FOR
+      SELECT DISTINCT END_CUSTOMER AS CODE,
+             END_CUSTOMER AS NAME
+        FROM SCM_MGR.SCM_MST_SITE S
+       WHERE (P_DIVISION_ID IS NULL OR P_DIVISION_ID = 'ALL' OR S.DIVISION_ID = P_DIVISION_ID)
+         AND S.END_CUSTOMER IS NOT NULL
+         AND S.VALID_YN = 'Y'
+         AND (P_DEPT_ID IS NULL OR P_DEPT_ID = 'ALL'
+              OR EXISTS (
+                SELECT 1 FROM TABLE(SCM_MGR.UF_FX_STRING_SPLIT(P_DEPT_ID, ',')) P
+                 WHERE P.TOKEN IS NOT NULL
+              )
+             )
+       ORDER BY 1;
+END DMF0072_GET_END_CUSTOMER_LIST;
+
+-- ============================================
+-- B3: SALES_SITE_LIST multi-value split
+-- ============================================
+CREATE OR REPLACE PROCEDURE SCM_MGR.DMF0072_GET_SALES_SITE_LIST (
+    P_DIVISION_ID  VARCHAR2,
+    P_END_CUSTOMER VARCHAR2,
+    O_RC1 OUT SYS_REFCURSOR
+) AS
+BEGIN
+    OPEN O_RC1 FOR
+      SELECT DISTINCT S.SCM_SITE_ID AS CODE,
+             NVL(S.SITE_DESCRIPTION, S.SCM_SITE_ID) AS NAME
+        FROM SCM_MGR.SCM_MST_SITE S
+       WHERE (P_DIVISION_ID IS NULL OR P_DIVISION_ID = 'ALL' OR S.DIVISION_ID = P_DIVISION_ID)
+         AND S.VALID_YN = 'Y'
+         AND (P_END_CUSTOMER IS NULL OR P_END_CUSTOMER = 'ALL'
+              OR S.END_CUSTOMER IN (
+                SELECT TOKEN FROM TABLE(SCM_MGR.UF_FX_STRING_SPLIT(P_END_CUSTOMER, ','))
+                 WHERE TOKEN IS NOT NULL
+              )
+             )
+       ORDER BY 1
+       FETCH FIRST 500 ROWS ONLY;
+END DMF0072_GET_SALES_SITE_LIST;
+
+-- ============================================
+-- B4: PROC_M 메타 — WRAPPER 에 sesUserId/mnuId 추가
+-- ============================================
+INSERT INTO SCM_MGR.SCM_ADM_PROC_M (PROC_NM, COL_NM, DATA_TP_CD, COL_TP_CD, SORT_ORD, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+SELECT NEW.PROC_NM, NEW.COL_NM, NEW.DATA_TP_CD, NEW.COL_TP_CD, NEW.SORT_ORD, 'admin', SYSDATE, 'admin', SYSDATE
+  FROM (
+    SELECT 'DMF0072_GET_NNMASTER_MAPPING_WRAPPER' AS PROC_NM, 'sesUserId' AS COL_NM, 'VARCHAR' AS DATA_TP_CD, 'IN'  AS COL_TP_CD, 8 AS SORT_ORD FROM DUAL UNION ALL
+    SELECT 'DMF0072_GET_NNMASTER_MAPPING_WRAPPER',           'mnuId',                  'VARCHAR',               'IN',                9 FROM DUAL
+  ) NEW
+ WHERE NOT EXISTS (
+   SELECT 1 FROM SCM_MGR.SCM_ADM_PROC_M X
+    WHERE X.PROC_NM = NEW.PROC_NM AND X.COL_NM = NEW.COL_NM AND X.COL_TP_CD = NEW.COL_TP_CD
+ );
+
+UPDATE SCM_MGR.SCM_ADM_PROC_M
+   SET SORT_ORD = 10, LAST_UPDATED_BY='admin', LAST_UPDATE_DATE=SYSDATE
+ WHERE PROC_NM = 'DMF0072_GET_NNMASTER_MAPPING_WRAPPER'
+   AND COL_NM = 'o_rc1' AND COL_TP_CD = 'OUT' AND SORT_ORD <> 10;
+
+COMMIT;

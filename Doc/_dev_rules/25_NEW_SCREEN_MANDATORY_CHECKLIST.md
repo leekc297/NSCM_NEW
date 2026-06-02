@@ -149,7 +149,39 @@ Doc/_dev_rules/hooks/fe-import-check.md            ⭐ FE 작업 시
 Doc/_dev_rules/hooks/asis-coverage-check.md        ⭐ As-Is 4축 매핑 검증
 Doc/_dev_rules/hooks/runtime-error-prevention.md   ⭐ NEW (2026-05-28) — 신규 화면 기본 오류 방지 (Box / isEss 사고 사례)
 Doc/_dev_rules/hooks/menu-not-displayed-debug.md   ⭐ NEW (2026-05-29) — 메뉴 미표시 5단계 디버깅 (MNU_URL ↔ FE slug 1차, 권한 3차). 신규 화면 메타 SQL BLOCK 2 작성 시 FE route-paths.ts cross-check 의무
+Doc/_dev_rules/hooks/asis-button-mapping.md        ⭐ NEW (2026-06-02) — As-Is `.cs §4 Button` 5+1대 분석 후 To-Be hotkeyConfig 매핑 의무 (function/false). DMF0072 사용자 지적 후 신설
 ```
+
+### ⭐ 1.5.1 As-Is 공통 버튼 분석 의무 (2026-06-02 신설 — 사용자 명시 요구)
+
+신규 화면 작성 시 **`hotkeyConfig` 의 각 버튼 활성화 여부 결정 전**, As-Is `.cs §4 Button` 영역의 `protected override` 메서드를 grep:
+
+```bash
+grep -n "protected override void \(Find\|Insert\|Delete\|Edit\|Save\|Excel\)Button" \
+     Doc/_legacy_source/06_UIL/domain_*/**/{SCREEN_ID}*/{SCREEN_ID}*.cs
+```
+
+| As-Is 메서드 | To-Be hotkeyConfig | 결정 룰 |
+|---|---|---|
+| `FindButton()` 본문 있음 | `search: handleSearch` | function 필수 |
+| `InsertButton() → InsertRow()` | `insert: handleInsert` | function (TODO placeholder 허용) |
+| `DeleteButton() → siMain.Delete()` | `delete: handleDelete` | function (TODO placeholder 허용) |
+| `SaveButton() → SaveData()` | `save: handleSave` | function (TODO placeholder 허용) |
+| `EditButton()` | (별도 IsReadOnly toggle) | hotkeyConfig 미지원 |
+| `ExcelButton()` 본문 있음 | SubTitle 기본 Excel | 활성 |
+| As-Is 정의 없음 | `manual: false` / `upload: false` | **`false` 명시 의무** (silent omit 금지) |
+
+**Placeholder 패턴** (As-Is 에 있지만 To-Be 미구현):
+```ts
+const handleInsert = () => {
+  // TODO As-Is 1:1 구현 — {SCREEN_ID}.cs L{LINE} InsertRow() 참조
+  void setAlert({ type: 'alert', content: '미구현 — As-Is 참조' });
+};
+```
+
+**`__asis-mapping__.md` 의무 기록**: `## Button 매핑` 섹션에 6대 모두 결과 표로 기록. 누락 1건 → PR 머지 차단.
+
+상세: [`hooks/asis-button-mapping.md`](hooks/asis-button-mapping.md), 메모리 `feedback_asis_button_mapping_mandatory.md`
 
 ### 1.6 Figma 디자인 자료 ⭐ NEW (2026-05-30 — 룰 31)
 

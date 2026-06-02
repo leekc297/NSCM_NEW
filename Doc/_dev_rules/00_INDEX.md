@@ -29,7 +29,7 @@
 
 | # | 작업 트리거 (감지 키워드 / 신호) | 진입 룰 (필수 1차) | 보조 룰 (2차) | 적용 Hook |
 |---:|---|---|---|---|
-| T1 | **신규 화면 생성** — `화면 생성/추가/신규/만들어/DMFxxxx 만들어` | **25** | 17 / 05 / 08 | new-screen-pre-build, asis-coverage-check, runtime-error-prevention, popup-asis-analysis |
+| T1 | **신규 화면 생성** — `화면 생성/추가/신규/만들어/DMFxxxx 만들어` | **25** | 17 / 05 / 08 | new-screen-pre-build, asis-coverage-check, runtime-error-prevention, popup-asis-analysis, **asis-button-mapping** |
 | T2 | **As-Is 4축 매핑** — `As-Is 매핑/Event 매핑/Validation/Expression` | **24** | 20 / 09 | asis-coverage-check, popup-asis-analysis |
 | T3 | **Wijmo Grid / PIVOT / Header merge** — `Grid/Wijmo/PIVOT/freeze/머지` | **12** | 27 | pivot-frozen-columns, runtime-error-prevention |
 | T4 | **FE Import / 모듈 사고** — `Cannot find module/Box export/@shared` | **23** | 26 | fe-import-check, module-duplication-check, runtime-error-prevention |
@@ -111,6 +111,7 @@
 | **06r** | **[hooks/popup-asis-analysis.md](hooks/popup-asis-analysis.md)** | ⭐ **Hook — POPUP 화면 As-Is 원시소스 정밀 분석 (9단계 .cs+.Designer.cs 전체 Read) + SCSS Module 강제 + CustomDialog/setAlert (2026-06-01, DMF0043_ContributeRatePopup 4건 사고)** |
 | **06s** | **[hooks/pivot-frozen-columns.md](hooks/pivot-frozen-columns.md)** | ⭐ **Hook — PIVOT/동적 컬럼 화면 frozenColumns 의무 (BASE 컬럼 좌측 고정, 가로 스크롤 시 dimension 항상 visible) (2026-06-01)** |
 | **06t** | **[hooks/db-error-asis-cross-check.md](hooks/db-error-asis-cross-check.md)** | ⭐ **Hook — DB 오류 / row 수 불일치 시 As-Is MSSQL 직접 sqlcmd cross-check 의무. 추측/단순 fallback 금지 (2026-06-01)** |
+| **06u** | **[hooks/asis-button-mapping.md](hooks/asis-button-mapping.md)** | ⭐⭐ **Hook — As-Is `.cs §4 Button` 의 `protected override Find/Insert/Delete/Edit/Save/ExcelButton` 5+1대 분석 후 hotkeyConfig 의 function (활성) / false (숨김) 결정 의무. `() => undefined` 빈 함수 절대 금지 (2026-06-02, DMF0072 사용자 명시 요구)** |
 
 ## 기술 스택 (확정)
 
