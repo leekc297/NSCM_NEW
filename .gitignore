@@ -183,3 +183,6 @@ _artifacts/local-docker-oracle/fp_mgr_setup.sql
 # 2026-05-28 FE node_modules 손상 복구 시 생성. pnpm.overrides 우회 + manual hoist.
 # 사내 registry 접속 불가 환경에서 임시로 사용. 다른 PC / CI 에는 부적용.
 nscm-fe/.local-packs/
+
+# FE start-all 로그 (nscm-fe 워크스페이스 아래)
+nscm-fe/apps/web/.start-all-fe.out*

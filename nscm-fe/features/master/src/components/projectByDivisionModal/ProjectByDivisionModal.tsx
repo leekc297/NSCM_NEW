@@ -19,7 +19,13 @@ import { useProjectByDivisionModalStore } from './projectByDivisionModalStore';
 interface ProjectByDivisionModalProps {
   open: boolean;
   modalClose: () => void;
-  setSelectedValue: (projects: string, projectsNames?: string) => void;
+  // DMF0020 (2026-06-03): cell dblClick 시 PROJECT_STATUS / BIZ_TYPE_NAME 자동 채움 의무 — optional 추가 인자
+  setSelectedValue: (
+    projects: string,
+    projectsNames?: string,
+    projectStatus?: string,
+    bizTypeName?: string,
+  ) => void;
   preSearchParams: ProcRequest<MODAL_PROJECT_BY_DIVISION, MODAL_SHEET_PROJECT_BY_DIVISION>;
   callFromCell: boolean;
 }
@@ -98,7 +104,12 @@ export const ProjectByDivisionModal = ({
     const dataItem = GridUtils.getRow(grid, ht.row);
     if (!dataItem) return;
 
-    setSelectedValue(dataItem.PROJECT_CODE, dataItem.PROJECT_NAME);
+    setSelectedValue(
+      dataItem.PROJECT_CODE,
+      dataItem.PROJECT_NAME,
+      (dataItem as Record<string, unknown>).PROJECT_STATUS as string | undefined,
+      (dataItem as Record<string, unknown>).BIZ_TYPE_NAME as string | undefined,
+    );
     modalClose();
   };
 

@@ -323,6 +323,31 @@ import { type CellRangeEventArgs } from '@mescius/wijmo.grid';
 
 ⚠ Wijmo `FlexGrid` 컴포넌트 자체를 직접 사용 금지. 항상 `@shared/components` 의 `DataGrid` wrapper 사용 (`Doc/_dev_rules/12_GRID_COMMON.md`).
 
+### §8.1 Wijmo class 정확 export 위치 (2026-06-03 DMF0020 사고 보강)
+
+| Class / Enum | 정확 위치 | ❌ 잘못된 import |
+|---|---|---|
+| `FlexGrid` (type) | `@mescius/wijmo.grid` | `@mescius/wijmo` (core) |
+| `MergeManager` | `@mescius/wijmo.grid` | `@mescius/wijmo` |
+| `AllowMerging` (enum) | `@mescius/wijmo.grid` | `@mescius/wijmo` |
+| `CellRange` | `@mescius/wijmo.grid` | `@mescius/wijmo` |
+| `CellType` (enum) | `@mescius/wijmo.grid` | `@mescius/wijmo` |
+| `DataMap` | **`@mescius/wijmo.grid`** | `@mescius/wijmo` (사고: `does not provide an export named 'DataMap'`) |
+| `GridPanel` (type) | `@mescius/wijmo.grid` | `@mescius/wijmo` |
+| `Row` | `@mescius/wijmo.grid` | `@mescius/wijmo` |
+| `FormatItemEventArgs` (type) | `@mescius/wijmo.grid` | `@mescius/wijmo` |
+| `toggleClass` | `@mescius/wijmo` (core) | `@mescius/wijmo.grid` |
+| `Globalize`, `Control` | `@mescius/wijmo` (core) | `@mescius/wijmo.grid` |
+
+**검증 명령**:
+```bash
+grep -rn "export.*class.*DataMap\|export.*class.*MergeManager" \
+  nscm-fe/node_modules/@mescius/wijmo.grid/*.d.ts \
+  nscm-fe/node_modules/@mescius/wijmo/*.d.ts
+```
+
+→ Vite dev 서버에서 "does not provide an export named X" 오류 발생 시 위 표 cross-check.
+
 ---
 
 ## §9. 표준 화면 import 템플릿 (복사용)
@@ -479,8 +504,9 @@ configs/types/procedures.d.ts → MENU_ID 의 sheet/request/response 타입
 
 | 컴포넌트 | menuId | sheetName | 사용 화면 | 특징 |
 |---|---|---|---|---|
-| `ProjectByDivisionModal` | `COM0005` | `projectByDivision` | customer-model-mapping / sales-site-project-model / sales-plan-waterfall / **nn-master-mapping (DMF0072)** | Division/Team/EndCustomer/SalesSite 사전 채움 |
-| `ItemByDivisionModal` | `COM0008` | `itemByDivision` | customer-model-mapping / sales-site-project-model / sales-plan-waterfall / **nn-master-mapping (DMF0072)** / forecast-price | `headerTitle?` prop (2026-06-02) |
+| `ProjectByDivisionModal` | `COM0005` | `projectByDivision` | customer-model-mapping / sales-site-project-model / sales-plan-waterfall / **nn-master-mapping (DMF0072)** / **sales-future-price (DMF0020)** | Division/Team/EndCustomer/SalesSite 사전 채움 + 2026-06-03 옵션 `projectStatus`/`bizTypeName` 자동 채움 |
+| `ItemByDivisionModal` | `COM0008` | `itemByDivision` | customer-model-mapping / sales-site-project-model / sales-plan-waterfall / **nn-master-mapping (DMF0072)** / forecast-price / **sales-future-price (DMF0020)** | `headerTitle?` prop (2026-06-02) |
+| **`ColumnSettingModal`** ⭐ | `DMF0002` (호출 화면 menuId 그대로 전달) | `titleSet` (BE routing) | **sales-future-price (DMF0020)** / **contribute-view (DMF0043_01)** | Hybrid Option C — BE SP `DMF0002_GET_TITLESET_POPUP` 결과 우선 + `fallbackColumns` FE meta fallback. dual grid (Base/User) + Sort combo (2026-06-03) |
 | `TeamModal` / `OwnerModal` / `RegionModal` / `StorageLocationModal` / `ProjectModal` | (별도) | — | sales-site-project-model | 단독 lookup |
 
 ### §12.A.2 표준 import (3단계 root-relative)

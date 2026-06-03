@@ -144,11 +144,33 @@ export const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
     setSubFilter();
   };
 
+  // As-Is .cs L541 InsertButton → InsertRow() — Repair/SalesSite/SSPM sub grid 에 신규 행 추가
+  // To-Be 미구현 — placeholder 안내 (룰 25 §1.5.1 / hook asis-button-mapping §2)
+  const handleInsert = () => {
+    void setAlert({
+      type: 'alert',
+      content: '미구현 — As-Is DMF0008_ErpEdiMaster.cs L541 InsertRow() 참조 (Repair/SalesSite/SSPM)',
+    });
+  };
+
+  // As-Is .cs L808 SaveButton → spdSub (Sales Site/SSPM) 만 SaveSalesSite/SaveSSPM. spdMain 은 빈 본문
+  // To-Be 미구현 — placeholder 안내
+  const handleSave = () => {
+    void setAlert({
+      type: 'alert',
+      content:
+        '미구현 — As-Is DMF0008_ErpEdiMaster.cs L808 SaveButton 참조 (spdSub: SaveSalesSite/SaveSSPM)',
+    });
+  };
+
+  // As-Is UsrConditionPanel grep 0건 → condition/resetCondition false 의무 (룰 25 §1.5.3)
   const hotkeyConfig: HotkeyConfig = {
     search: handleSearch,
-    save: false,
-    insert: false,
+    save: handleSave,
+    insert: handleInsert,
     delete: false,
+    condition: false,
+    resetCondition: false,
     manual: false,
     upload: false,
   };

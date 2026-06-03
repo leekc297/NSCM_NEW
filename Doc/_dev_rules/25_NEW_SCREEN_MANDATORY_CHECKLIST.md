@@ -234,6 +234,72 @@ grep -nE "siMain\.(LockColumn|LockRange)|siMain\.SetCellTypeCombo|siMain\.SetCel
 
 상세: [`hooks/grid-column-meta-mandatory.md`](hooks/grid-column-meta-mandatory.md), 룰 12 §11.7, 메모리 `feedback_grid_editable_coloring_mandatory.md` + `feedback_grid_popup_cell_mandatory.md`
 
+### ⭐ 1.5.3 As-Is Search Aux 4대 (Sort/Filter/Condition/ResetCondition) 매핑 의무 (2026-06-02 신설 — 사용자 명시 요구)
+
+신규 화면 작성 시 **`hotkeyConfig` 의 조회 보조 4 키 (sort/filter/condition/resetCondition)** 결정 전, As-Is 4 화면 공통 default (BaseForm.cs) + 화면 고유 UsrConditionPanel 유무 확인 의무.
+
+#### 1.5.3.1 As-Is 인벤토리 (BaseForm.cs default)
+
+| Hotkey | To-Be enum | As-Is 위치 | As-Is 동작 |
+|---|---|---|---|
+| F3 sort | `Hotkeys.F3 = 'sort'` | `BaseForm.cs:5268 OnClickSortButton()` | FarPoint Spread native (`AllowAutoSort` 토글 + `SortIndicator`) |
+| F4 filter | `Hotkeys.F4 = 'filter'` | `BaseForm.cs:5054 OnClickFilterButton()` | FarPoint Spread native (`AutoFilterMode = EnhancedContextMenu` + `IsFilter` 플래그) |
+| F6 condition | `Hotkeys.F6 = 'condition'` | `BaseForm.cs:5237 OnClickConditionButton()` | `SavePanelCondition()` — UsrConditionPanel 컨트롤값 수집 (서버 저장) |
+| F10 resetCondition | `Hotkeys.F10 = 'resetCondition'` | `BaseForm.cs:5245 OnClickResetConditionButton()` | `ResetPanelCondition()` — Authentication API `Authentication/ResetSearchCondition` 호출 |
+
+**4 화면 (DMF0072/0008/0043/0043_01) 모두 `protected override` 없음** → BaseForm default 채택.
+
+#### 1.5.3.2 To-Be 매핑 정책 (기본 활성 + 예외 false)
+
+```
+SubTitle DefaultButtonActions (L62~112) 가 F3/F4/F6/F10 default 자동 제공
+  → hotkeyConfig 에서 4 키 명시 생략 = 자동 활성 (As-Is BaseForm default 동등)
+```
+
+| 키 | 정책 | 예외 (false 의무) |
+|---|---|---|
+| `sort` (F3) | (생략) = 자동 활성 | DataGrid 없는 화면만 false |
+| `filter` (F4) | (생략) = 자동 활성 | DataGrid 없는 화면만 false |
+| `condition` (F6) | (생략) = 자동 활성 | **As-Is `.cs`/`.Designer.cs` 에 `UsrConditionPanel` grep 0건 → false 의무** |
+| `resetCondition` (F10) | (생략) = 자동 활성 | **As-Is `.cs`/`.Designer.cs` 에 `UsrConditionPanel` grep 0건 → false 의무** |
+
+#### 1.5.3.3 검증 grep
+
+```bash
+# 1. As-Is UsrConditionPanel 존재 여부
+grep -nE "UsrConditionPanel|usrCondition" \
+     Doc/_legacy_source/06_UIL/domain_*/**/{SCREEN_ID}*.cs \
+     Doc/_legacy_source/06_UIL/domain_*/**/{SCREEN_ID}*.Designer.cs
+# → 0건이면 To-Be 에서 condition/resetCondition: false 명시 의무
+
+# 2. To-Be 명시 false 매핑 확인 (Panel 없는 화면만)
+grep -nE "condition:\s*false|resetCondition:\s*false" \
+     nscm-fe/features/.../{화면-slug}/*.tsx
+```
+
+#### 1.5.3.4 anti-simplification — 4 키 한 묶음 일반화 금지
+
+- ❌ "어차피 다 BaseForm default 니까 4 키 모두 (생략)" — UsrConditionPanel 부재 화면에서 condition/resetCondition 활성된 빈 panel 저장 시도 → silent fail (사용자 혼선)
+- ❌ "조회 전용 화면이니까 4 키 모두 false" — Sort/Filter 는 read-only grid 라도 default 활성 (사용자 편의)
+- ✅ 키별 의미 (Wijmo native sort/filter vs server-side Authentication API condition/reset) 구분 + As-Is 자료 별 판정
+
+#### 1.5.3.5 산출물 의무
+
+`__asis-mapping__.md` 의 `## Search Aux 매핑 (4대)` 섹션:
+
+```markdown
+## Search Aux 매핑 (4대 — 룰 25 §1.5.3 / 룰 12 §11.8 / hook asis-button-mapping §3.5)
+
+| Hotkey | As-Is 위치 (BaseForm default) | 화면 override | UsrConditionPanel | DataGrid 활성 요건 | To-Be 결정 |
+|---|---|---|---|---|---|
+| F3 sort | BaseForm.cs:5268 OnClickSortButton | 없음 | — | allowSorting={true} | (생략 = 자동 활성) |
+| F4 filter | BaseForm.cs:5054 OnClickFilterButton | 없음 | — | FlexGridFilter ref + gridFilter prop | (생략 = 자동 활성) |
+| F6 condition | BaseForm.cs:5237 OnClickConditionButton | 없음 | ✅/❌ | — | (생략) / false (Panel 없음) |
+| F10 resetCondition | BaseForm.cs:5245 OnClickResetConditionButton | 없음 | ✅/❌ | — | (생략) / false (Panel 없음) |
+```
+
+상세: [`hooks/asis-button-mapping.md`](hooks/asis-button-mapping.md) §3.5, 룰 12 §11.8, 메모리 `feedback_search_aux_default_activation.md`
+
 ### 1.6 Figma 디자인 자료 ⭐ NEW (2026-05-30 — 룰 31)
 
 ```
@@ -261,6 +327,53 @@ Doc/_figma/_api_cache/{file_key}/node_*.json       ⭐ Figma API fetch 결과 �
 - 신규 화면 (사용자가 Figma URL 동반 메시지) — Claude 가 자동 fetch + 6번째 자료 채움
 
 상세: [`Doc/_dev_rules/31_FIGMA_DESIGN_INTEGRATION.md`](31_FIGMA_DESIGN_INTEGRATION.md)
+
+---
+
+### §1.5.4 조회조건 Form 표준 패턴 의무 (2026-06-03 신규)
+
+신규 화면 Form 작성 시 **자매 화면 (DMF0007 customer-forecast-master 등) 의 표준 5종 import 그대로 사용 의무**.
+
+**표준 import (변경 금지)**:
+```tsx
+import { CustomDropdown, SearchArea } from '@shared/components';
+import { useTabComboQueries } from '@shared/hooks';
+import { DatePickerCalendar, FormItem } from '@shared/lges';
+import { Grid } from '@shared/mui';
+import { useSessionStore } from '@shared/stores';
+```
+
+**데이터 가져오기 표준**: `useTabComboQueries({ filters: ['MyDivision', 'BucketType', ...] })` — 다중 lookup 한 번에. BE 가 미리 등록한 표준 키 사용.
+
+| Filter 키 | 데이터 |
+|---|---|
+| `MyDivision` | 사용자 권한 기반 Division |
+| `BucketType` | Weekly/Monthly |
+| `EndCustomer` / `SalesSite` / `Team` / `BizType` | Division 기반 다중 (각각 `DIVISION_ID === sc.divisionId` 필터) |
+| `YesOrNo` | Y/N |
+
+**가로 사이즈 표준**: `<Grid size={n}>` (12 column 시스템). 단일 field 2~3, Period 4. 행당 합계 12 (또는 자동 wrap).
+
+**라벨 표준**: `<FormItem label={t('LBL00001', '_Div.')} labelAlign='right' required render={...} />` — i18n LBL 코드 + 라벨 정렬 + 필수 표시.
+
+**다중 선택 표준**: `<CustomDropdown multiple allOption useClearIcon limitTags={1} />` — 4 옵션 모두 표준.
+
+**Period 표준**: `<DatePickerCalendar mode='date-range' value={[start, end]} onChange={...} />`.
+
+**Popup 표준** (`@master/components` 재사용):
+- `ProjectByDivisionModal` / `ItemByDivisionModal` / `OwnerByDivisionModal` / `CustomerModal` / `TeamModal`
+
+⛔ **금지**:
+- 직접 `<label>` + `<input>` / `<select>` 작성 (라벨 정렬 / 필수 표시 / 일관성 깨짐)
+- 임의 `style={{ width: ... }}` / `min-width` 지정
+- 직접 `useTabProcQuery` 호출하여 개별 lookup SP 호출 (BE 메타 등록 추가 필요)
+- 한국어/영어 라벨 직접 입력 (`'Division'` → i18n `t('LBL00001', '_Div.')` 의무)
+
+**AS-IS 캡쳐 1:1 재현 의무**: `Doc/ui_cap/{MENU_ID}_init.png` 또는 `Doc/_figma/_images/{MENU_ID}.svg` 존재 시 row 순서/필드 그룹 정확 재현.
+
+**자매 화면 참조 의무**: 신규 Form 작성 직전 `Read C:\Projects\NSCM\nscm-fe\features\master\src\pages\customer-forecast-master\componenets\CustomerFcstMasterForm.tsx` (또는 동일 도메인 자매 Form).
+
+상세: 메모리 `feedback_form_search_area_standard.md`.
 
 ---
 

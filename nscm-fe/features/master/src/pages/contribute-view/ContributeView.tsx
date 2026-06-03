@@ -5,10 +5,11 @@ import { useEffect, useRef } from 'react';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { MainTitle, SubTitle } from '@shared/components';
 import { useTabProcQuery } from '@shared/hooks';
+import { useMessageStore } from '@shared/stores';
 
 import { ContributeViewForm } from './components/ContributeViewForm';
 import { ContributeViewGrid } from './components/ContributeViewGrid';
-import { ColumnTitleSetModal } from './components/modals/ColumnTitleSetModal';
+import { ColumnSettingModal } from '../../components';
 import { ContributeVersionModal } from './components/modals/ContributeVersionModal';
 import { MENU_ID, SHEETS } from './contribute-view.constants';
 import styles from './ContributeView.module.scss';
@@ -38,6 +39,8 @@ export const ContributeView = ({ tabId, title }: PageProps<MENU_ID>) => {
   const setVersionPopupOpen = useContributeViewStore(s => s.setVersionPopupOpen);
   const columnSetPopupOpen = useContributeViewStore(s => s.columnSetPopupOpen);
   const setColumnSetPopupOpen = useContributeViewStore(s => s.setColumnSetPopupOpen);
+
+  const setAlert = useMessageStore(s => s.setAlert);
 
   const { validateVersionSelected, validateSearchResultEmpty } = useContributeViewValidation();
 
@@ -86,20 +89,41 @@ export const ContributeView = ({ tabId, title }: PageProps<MENU_ID>) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mainData]);
 
+  // As-Is .cs L249 InsertButton → InsertRow() 본문 있음 — 화면 의도는 조회 전용 (Figma DMF0043_01) 이지만
+  // 룰 25 §1.5.1: As-Is 본문 있음 → function (TODO placeholder). silent fail 방지.
+  const handleInsert = () => {
+    void setAlert({
+      type: 'alert',
+      content:
+        '미구현 — As-Is DMF0043_Contribute_View.cs L249 InsertRow() 참조. 화면 의도(조회 전용) 와 As-Is 본문 (Insert 가능) 충돌 — 운영 결정 필요.',
+    });
+  };
+
+  // As-Is .cs L276 SaveButton → SaveData() 본문 있음 — Insert 와 동일 정책
+  const handleSave = () => {
+    void setAlert({
+      type: 'alert',
+      content:
+        '미구현 — As-Is DMF0043_Contribute_View.cs L276 SaveData() 참조. 화면 의도(조회 전용) 와 As-Is 본문 (Save 가능) 충돌 — 운영 결정 필요.',
+    });
+  };
+
   // Figma SVG (DMF0043_01.svg + DMF0043_01_Table.svg) + figma_link.md + AS-IS button:
   //   F5  = 조회 (handleSearch)
   //   F3  = Sort           (default — SubTitle hotkey)
   //   F4  = Filter         (default)
-  //   F6  = Condition      (default)
-  //   F10 = ResetCondition (default)
+  //   F6  = Condition      (default — As-Is UsrConditionPanel 존재)
+  //   F10 = ResetCondition (default — As-Is UsrConditionPanel 존재)
   //   Excel = default
-  //   F7  (save) / F8 (insert) / F9 (delete) : View 화면 조회 전용 → 비활성
+  //   F7  (save) : As-Is .cs L276 SaveData() 본문 있음 → placeholder (조회 전용 의도 vs As-Is 본문 충돌)
+  //   F8 (insert) : As-Is .cs L249 InsertRow() 본문 있음 → placeholder
+  //   F9 (delete) : As-Is .cs L254 본문 주석만 (빈) → false
   //   기여율버전관리 : customButton (AS-IS btnCutOff_Click L444)
   //   컬럼표시설정 : customButton (AS-IS btnColumn_Click L473)
   const hotkeyConfig: HotkeyConfig = {
     search: handleSearch,
-    save: false,
-    insert: false,
+    save: handleSave,
+    insert: handleInsert,
     delete: false,
     manual: false,
     upload: false,
@@ -149,10 +173,14 @@ export const ContributeView = ({ tabId, title }: PageProps<MENU_ID>) => {
         onClose={() => setVersionPopupOpen(false)}
         onSelect={handleVersionSelect}
       />
-      <ColumnTitleSetModal
+      <ColumnSettingModal
         open={columnSetPopupOpen}
-        onClose={() => setColumnSetPopupOpen(false)}
-        onApply={handleColumnApply}
+        modalClose={() => setColumnSetPopupOpen(false)}
+        menuId='DMF0043'
+        sheetName='ContributeSalesList'
+        columnType='C'
+        divisionId='40'
+        onSave={() => { handleColumnApply(); }}
       />
     </div>
   );

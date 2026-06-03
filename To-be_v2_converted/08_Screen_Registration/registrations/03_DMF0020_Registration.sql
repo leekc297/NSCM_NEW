@@ -38,7 +38,7 @@ DEFINE V_MENU_KO      = '환율/판매단가 관리'
 DEFINE V_MENU_EN      = 'Sales Future Price'
 DEFINE V_MENU_CN      = '汇率/销售单价管理'
 DEFINE V_SORT_ORD     = 50
-DEFINE V_SHEET_NM     = 'futurePrice'
+DEFINE V_SHEET_NM     = 'main'
 DEFINE V_PKG_NM       = 'PKG_DMF0020'
 DEFINE V_USER_ID      = 'admin'
 DEFINE V_API_SEARCH_MSG = 'MSG_API_DMF0020_FUTUREPRICE_SEARCH'
@@ -111,10 +111,10 @@ INSERT ALL
     VALUES ('PKG_DMF0020.P_DMF0020_GET_FUTUREPRICE_INFO', 'endYyyymmdd',   'IN',  'VARCHAR', 2, '&V_USER_ID', SYSDATE, '&V_USER_ID', SYSDATE)
   INTO SCM_ADM_PROC_M (PROC_NM, COL_NM, COL_TP_CD, DATA_TP_CD, SORT_ORD,
                        CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
-    VALUES ('PKG_DMF0020.P_DMF0020_GET_FUTUREPRICE_INFO', 'userId',        'IN',  'VARCHAR', 3, '&V_USER_ID', SYSDATE, '&V_USER_ID', SYSDATE)
+    VALUES ('PKG_DMF0020.P_DMF0020_GET_FUTUREPRICE_INFO', 'sesUserId',     'IN',  'VARCHAR', 3, '&V_USER_ID', SYSDATE, '&V_USER_ID', SYSDATE)
   INTO SCM_ADM_PROC_M (PROC_NM, COL_NM, COL_TP_CD, DATA_TP_CD, SORT_ORD,
                        CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
-    VALUES ('PKG_DMF0020.P_DMF0020_GET_FUTUREPRICE_INFO', 'menuId',        'IN',  'VARCHAR', 4, '&V_USER_ID', SYSDATE, '&V_USER_ID', SYSDATE)
+    VALUES ('PKG_DMF0020.P_DMF0020_GET_FUTUREPRICE_INFO', 'mnuId',         'IN',  'VARCHAR', 4, '&V_USER_ID', SYSDATE, '&V_USER_ID', SYSDATE)
   INTO SCM_ADM_PROC_M (PROC_NM, COL_NM, COL_TP_CD, DATA_TP_CD, SORT_ORD,
                        CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
     VALUES ('PKG_DMF0020.P_DMF0020_GET_FUTUREPRICE_INFO', 'o_rc1',           'OUT', 'CURSOR',      5, '&V_USER_ID', SYSDATE, '&V_USER_ID', SYSDATE)
@@ -163,13 +163,13 @@ SELECT * FROM DUAL;
 
 DECLARE
     v_col_json  CLOB := '[
-        {"sht_nm":"futurePrice","col_nm":"YYYYMMDD",      "col_lbl":"Date",           "cell_tp":"FPText",  "col_wth":110,"sort_ord":1,"align":"C","input_tp":"MANDATORY"},
-        {"sht_nm":"futurePrice","col_nm":"YYYYMM",        "col_lbl":"Year-Month",     "cell_tp":"FPText",  "col_wth": 90,"sort_ord":2,"align":"C","input_tp":"READONLY"},
-        {"sht_nm":"futurePrice","col_nm":"DIVISION_ID",   "col_lbl":"Div.",           "cell_tp":"FPText",  "col_wth": 80,"sort_ord":3,"align":"C","input_tp":"MANDATORY"},
-        {"sht_nm":"futurePrice","col_nm":"CURRENCY",      "col_lbl":"Currency",       "cell_tp":"FPText",  "col_wth": 90,"sort_ord":4,"align":"C","input_tp":"MANDATORY"},
-        {"sht_nm":"futurePrice","col_nm":"UNIT_CURRENCY", "col_lbl":"Unit Currency",  "cell_tp":"FPText",  "col_wth":110,"sort_ord":5,"align":"C","input_tp":"MANDATORY"},
-        {"sht_nm":"futurePrice","col_nm":"EXCHANGE_PRICE","col_lbl":"Exchange Price", "cell_tp":"FPNumber","col_wth":140,"sort_ord":6,"align":"R","scale":4,"input_tp":"MANDATORY"},
-        {"sht_nm":"futurePrice","col_nm":"EDIT_YN",       "col_lbl":"Editable",       "cell_tp":"FPText",  "col_wth": 80,"sort_ord":7,"align":"C","input_tp":"READONLY","visible":"N"}
+        {"sht_nm":"main","col_nm":"YYYYMMDD",      "col_lbl":"Date",           "cell_tp":"FPText",  "col_wth":110,"sort_ord":1,"align":"C","input_tp":"MANDATORY"},
+        {"sht_nm":"main","col_nm":"YYYYMM",        "col_lbl":"Year-Month",     "cell_tp":"FPText",  "col_wth": 90,"sort_ord":2,"align":"C","input_tp":"READONLY"},
+        {"sht_nm":"main","col_nm":"DIVISION_ID",   "col_lbl":"Div.",           "cell_tp":"FPText",  "col_wth": 80,"sort_ord":3,"align":"C","input_tp":"MANDATORY"},
+        {"sht_nm":"main","col_nm":"CURRENCY",      "col_lbl":"Currency",       "cell_tp":"FPText",  "col_wth": 90,"sort_ord":4,"align":"C","input_tp":"MANDATORY"},
+        {"sht_nm":"main","col_nm":"UNIT_CURRENCY", "col_lbl":"Unit Currency",  "cell_tp":"FPText",  "col_wth":110,"sort_ord":5,"align":"C","input_tp":"MANDATORY"},
+        {"sht_nm":"main","col_nm":"EXCHANGE_PRICE","col_lbl":"Exchange Price", "cell_tp":"FPNumber","col_wth":140,"sort_ord":6,"align":"R","scale":4,"input_tp":"MANDATORY"},
+        {"sht_nm":"main","col_nm":"EDIT_YN",       "col_lbl":"Editable",       "cell_tp":"FPText",  "col_wth": 80,"sort_ord":7,"align":"C","input_tp":"READONLY","visible":"N"}
     ]';
     v_col_count NUMBER;
 BEGIN
@@ -287,11 +287,11 @@ DELETE FROM SCM_ADM_MNU_BTN_MPG_M WHERE MNU_ID = '&V_MENU_ID';
 INSERT ALL
   INTO SCM_ADM_MNU_BTN_MPG_M (MNU_ID, SHT_NM, MNU_BTN_CD, API_ID, USE_YN,
                               CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
-    VALUES ('DMF0020', 'futurePrice', 'SEARCH', 'DMF0020_futurePrice_SEARCH', 'Y',
+    VALUES ('DMF0020', 'main', 'SEARCH', 'DMF0020_futurePrice_SEARCH', 'Y',
             '&V_USER_ID', SYSDATE, '&V_USER_ID', SYSDATE)
   INTO SCM_ADM_MNU_BTN_MPG_M (MNU_ID, SHT_NM, MNU_BTN_CD, API_ID, USE_YN,
                               CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
-    VALUES ('DMF0020', 'futurePrice', 'SAVE',   'DMF0020_futurePrice_SAVE', 'Y',
+    VALUES ('DMF0020', 'main', 'SAVE',   'DMF0020_futurePrice_SAVE', 'Y',
             '&V_USER_ID', SYSDATE, '&V_USER_ID', SYSDATE)
 SELECT * FROM DUAL;
 
@@ -342,7 +342,7 @@ ORDER BY 1;
 
 -- ── 동작 검증: PR_GET_PROC_INFO_LIST 가 정상 라우팅하는지 ─────────────────────────────────
 PROMPT
-PROMPT === PR_GET_PROC_INFO_LIST(DMF0020, futurePrice, SEARCH) 결과 ===
+PROMPT === PR_GET_PROC_INFO_LIST(DMF0020, main, SEARCH) 결과 ===
 DECLARE
     v_cur     SYS_REFCURSOR;
     v_proc_nm VARCHAR2(200); v_col_nm VARCHAR2(100);
@@ -350,7 +350,7 @@ DECLARE
     v_sort_ord NUMBER;       v_cnt PLS_INTEGER := 0;
 BEGIN
     SCM_MGR.PKG_NSCM_UI_COMM.PR_GET_PROC_INFO_LIST(
-        P_MNU_ID => 'DMF0020', P_SHT_NM => 'futurePrice', P_MNU_BTN_CD => 'SEARCH',
+        P_MNU_ID => 'DMF0020', P_SHT_NM => 'main', P_MNU_BTN_CD => 'SEARCH',
         O_CURSOR => v_cur
     );
     LOOP

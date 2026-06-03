@@ -1384,6 +1384,129 @@ interface RawProcedureMap extends Base {
    *   `spreadTitle` 는 4 그리드의 동적 헤더 SP `DMF0000_GET_COMMON_SPREAD_TITLE` 응답 메타.
    *   `updateHistory` 는 `DMF0000_GET_UPDATE_HISTORY` 의 SDATE/EDATE/UPDATED_BY.
    */
+  /**
+   * DMF0020 — Sales Future Price (환율/판매단가 관리)
+   *
+   * 메인 SP : PKG_DMF0020.P_DMF0020_GET_FUTUREPRICE_INFO (4 IN + 2 OUT cursor)
+   * 환율 SP : PKG_DMF0020.P_DMF0000_SAVE_EXCHANGE_POPUP_DATA (8 IN + 1 OUT)
+   * 메타 등록: To-be_v2_converted/08_Screen_Registration/registrations/03_DMF0020_Registration.sql
+   * Phase 2 DB 적재 검증 통과 (PKG_DMF0020 18 SP VALID, 4,511줄 body).
+   *
+   * sesUserId / mnuId 는 BE 자동 채움 (PROC_M COL_NM 매칭, 2026-06-03 fix 적용).
+   */
+  DMF0020: {
+    main: {
+      request: {
+        startYyyymmdd: string;
+        endYyyymmdd: string;
+      };
+      response: {
+        // P_DMF0020_GET_FUTUREPRICE_INFO SP body line 422 결과 7 컬럼
+        o_rc1: {
+          YYYYMMDD: string;
+          YYYYMM: string;
+          DIVISION_ID: string;
+          CURRENCY: string;
+          UNIT_CURRENCY: string;
+          EXCHANGE_PRICE: string | number;
+          EDIT_YN: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    pivot: {
+      request: { startYyyymmdd: string; endYyyymmdd: string };
+      response: { o_rc1: { [key: string]: string | number } };
+    };
+    exchange: {
+      request: { startYyyymmdd: string; endYyyymmdd: string };
+      response: {
+        o_rc1: {
+          DIVISION_ID: string;
+          CURRENCY: string;
+          UNIT_CURRENCY: string;
+          EXCHANGE_PRICE: string;
+          [key: string]: string;
+        };
+      };
+    };
+    priceBatch: {
+      // P_DMF0020_GET_SCM_MST_FUTURE_PRICE_POPUP signature
+      request: {
+        divisionId: string;
+        fromYyyymmdd: string;
+        toYyyymmdd: string;
+        createdBy: string;
+      };
+      response: { o_rc1: { [key: string]: string | number } };
+    };
+    version: {
+      request: {
+        startYyyymmdd: string;
+        endYyyymmdd: string;
+        createdBy: string;
+        divisionId: string;
+        versionType: string;
+        description: string;
+      };
+      response: {
+        // SP body 결과 SELECT 절 (line 60~77): CODE/VERSION_NO/VERSION_DESCRIPTION/VERSION_TYPE/
+        //   EDI_APPLY/VER_CRE_SEQ/YYYYMMDD/CREATED_BY/CREATION_DATE/MONTHLY_ROLLING_FCST/EDITABLE/EDIT_YN
+        o_rc1: {
+          CODE: string;
+          VERSION_NO: string;
+          VERSION_DESCRIPTION: string;
+          VERSION_TYPE: string;
+          EDI_APPLY: string;
+          VER_CRE_SEQ: string | number;
+          YYYYMMDD: string;
+          CREATED_BY: string;
+          CREATION_DATE: string;
+          MONTHLY_ROLLING_FCST: string;
+          EDITABLE: string;
+          EDIT_YN: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    titleSet: {
+      // DMF0002_GET_TITLESET_POPUP signature (standalone)
+      request: {
+        programId: string;
+        sheetName: string;
+        columnType: string;
+        divisionId: string;
+      };
+      response: { o_rc1: { COLUMN_NAME: string; COLUMN_LABEL: string; [key: string]: string } };
+    };
+    owner: {
+      request: { divisionId: string };
+      response: { o_rc1: { OWNER_ID: string; OWNER_NAME: string; [key: string]: string } };
+    };
+    spreadTitle: {
+      request: { startYyyymmdd: string; endYyyymmdd: string };
+      response: { o_rc1: { [key: string]: string } };
+    };
+    spreadTitleDate: {
+      request: { startYyyymmdd: string; endYyyymmdd: string };
+      response: {
+        o_rc1: {
+          BASIS_START_DATE: string;
+          BASIS_START_DATE2: string;
+          MMDD: string;
+          WEEK_NAME: string;
+          YER: string;
+          MON: string;
+          BASIS_YYYYMM: string;
+          [key: string]: string;
+        };
+      };
+    };
+    measureCount: {
+      request: Record<string, string>;
+      response: { o_rc1: { [key: string]: string | number } };
+    };
+  };
   DMF0008: {
     summary: {
       request: {

@@ -29,7 +29,7 @@
 
 | # | 작업 트리거 (감지 키워드 / 신호) | 진입 룰 (필수 1차) | 보조 룰 (2차) | 적용 Hook |
 |---:|---|---|---|---|
-| T1 | **신규 화면 생성** — `화면 생성/추가/신규/만들어/DMFxxxx 만들어` | **25** | 17 / 05 / 08 / 12 §11.7 | new-screen-pre-build, asis-coverage-check, runtime-error-prevention, popup-asis-analysis, **asis-button-mapping**, **grid-column-meta-mandatory** |
+| T1 | **신규 화면 생성** — `화면 생성/추가/신규/만들어/DMFxxxx 만들어` | **25** | 17 / 05 / 08 / 12 §11.7 / **12 §11.8** (Sort/Filter 자동 활성) | new-screen-pre-build, asis-coverage-check, runtime-error-prevention, popup-asis-analysis, **asis-button-mapping** (CRUD 6대 + Search Aux 4대), **grid-column-meta-mandatory** |
 | T2 | **As-Is 4축 매핑** — `As-Is 매핑/Event 매핑/Validation/Expression` | **24** | 20 / 09 | asis-coverage-check, popup-asis-analysis |
 | T3 | **Wijmo Grid / PIVOT / Header merge** — `Grid/Wijmo/PIVOT/freeze/머지` | **12** | 27 | pivot-frozen-columns, runtime-error-prevention |
 | T4 | **FE Import / 모듈 사고** — `Cannot find module/Box export/@shared` | **23** | 26 | fe-import-check, module-duplication-check, runtime-error-prevention |
@@ -44,6 +44,7 @@
 | T13 | **사고 회고 → 룰 정리** — `MD 파일 정리/룰 정리/rule 정리` | **(메타룰)** | — | rule-md-organize |
 | T14 | **변환 SP 결함** — `SUBSTR/PATINDEX/LISTAGG/JSON_OBJECT/GTT` | **21 §10** | 24 §6.5 | db-error-asis-cross-check |
 | T15 | **신규 화면 진입 baseline** — 룰 25 §0.5 (As-Is row/column/SP body cross-check) | **25 §0.5** | 24 §6.5 | screen-entry-asis-baseline |
+| T16 | **Deploy package 작성 / 압축** — `deploy zip 만들어/패키지 생성/이관 묶음` | **22 §9** | 08 §4.4 / 25 | deploy-package-completeness |
 
 **감지 미스 시 fallback**: T1 (신규 화면) + T2 (As-Is 매핑) + T5 (DB 오류) 의 보수적 union 을 적용.
 
@@ -113,6 +114,9 @@
 | **06t** | **[hooks/db-error-asis-cross-check.md](hooks/db-error-asis-cross-check.md)** | ⭐ **Hook — DB 오류 / row 수 불일치 시 As-Is MSSQL 직접 sqlcmd cross-check 의무. 추측/단순 fallback 금지 (2026-06-01)** |
 | **06u** | **[hooks/asis-button-mapping.md](hooks/asis-button-mapping.md)** | ⭐⭐ **Hook — As-Is `.cs §4 Button` 의 `protected override Find/Insert/Delete/Edit/Save/ExcelButton` 5+1대 분석 후 hotkeyConfig 의 function (활성) / false (숨김) 결정 의무. `() => undefined` 빈 함수 절대 금지 (2026-06-02, DMF0072 사용자 명시 요구)** |
 | **06v** | **[hooks/grid-column-meta-mandatory.md](hooks/grid-column-meta-mandatory.md)** | ⭐⭐ **Hook — Grid Column 메타 표준 의무. FlexGrid 직접 사용 금지, `DataGrid` 래퍼 + column meta `_ctrlType` (14 control type) + `_inputEditType` (5 edit type: S/O/M/IO/IM) + `_modalKey` (popup modal 식별). Column 이름 패턴 → Control Type 자동 매핑 (`*_YN`→CHECKBOX, `*_DATE`→DATE, `SOLDTO_CODE`/`SHIPTO_CODE`/`PROJECT_CODE`/`ITEM_ID`→MODAL). As-Is `LockColumn`/`cellTypeImage`/`SetCellTypeCombo` 카운트 == To-Be column meta 카운트 PR 머지 게이트 (2026-06-02, DMF0004 표준 분석 + 사용자 명시 요구)** |
+| **06w** | **[hooks/wijmo-merge-sticky-content.md](hooks/wijmo-merge-sticky-content.md)** | ⭐ **Hook — Wijmo cell merge + viewport sticky content. `g.mergedRanges` 잘못된 API 금지. 정확 4 요소 (allowMerging enum + column flag + mergeManager subclass + formatItem div wrap + scrollPositionChanged translateY). scroll 시 머지 cell content 가 viewport top 에 떠 있음 (2026-06-03 DMF0020 사용자 요구)** |
+| **06x** | **[hooks/popup-dialog-layout.md](hooks/popup-dialog-layout.md)** | ⭐ **Hook — CustomDialog popup 잘림/중앙 표시 방지. DEFAULT_HEIGHT='50vh' 고정 cross-check 의무. SCSS `min-height: 70vh` 금지 / `position='basic'` (중앙) / flex layout 의 `gridWrap flex:1 + min-height:0` + bottomRow `flex-shrink:0` (2026-06-03 DMF0020 popup 3종 사고)** |
+| **06y** | **[hooks/oracle-cmbo-varname-quote.md](hooks/oracle-cmbo-varname-quote.md)** | ⭐ **Hook — CMBO_SQL_M 의 `@varName` BE quote 없이 raw 치환 → VARCHAR2 컬럼 비교 시 ORA-01722. `SEGMENT1 = TO_CHAR(@divisionId)` wrap 의무. Oracle `'' = NULL` 룰도 함께 (`<> ''` 금지, `IS NOT NULL` 사용) (2026-06-03 DMF0020 CMBO 3종 사고)** |
 
 ## 기술 스택 (확정)
 

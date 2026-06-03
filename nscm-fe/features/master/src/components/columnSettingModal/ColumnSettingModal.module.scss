@@ -1,0 +1,47 @@
+// 공용 Column Setting popup — Hybrid (BE SP + fallback FE meta)
+//   .container height 100% + dualGrid flex:1 min-height:0 + bottomRow flex-shrink:0 (잘림 방지)
+.container {
+  display: flex; flex-direction: column; gap: 8px; padding: 8px;
+  height: 100%; box-sizing: border-box; overflow: hidden;
+}
+
+.dualGrid {
+  display: flex; gap: 8px; flex: 1 1 auto; min-height: 0;
+}
+
+.sideGrid {
+  flex: 1 1 50%; min-width: 0; min-height: 0;
+  border: 1px solid #b8bfc9; border-radius: 4px;
+  background: #fff; overflow: hidden; position: relative;
+}
+
+.centerBtns {
+  display: flex; flex-direction: column; gap: 16px; align-items: center; justify-content: center;
+  width: 60px; flex-shrink: 0;
+}
+
+.arrowBtn {
+  width: 44px; height: 38px; font-size: 18px;
+  background: #1976d2; color: white; border: none; border-radius: 4px; cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  &:hover { background: #1565c0; }
+}
+
+.sortCell { background: #fff8c5; }   // AS-IS 노란색 Sort 컬럼
+
+.bottomRow {
+  display: flex; gap: 8px; align-items: center; padding: 4px 8px;
+  flex-shrink: 0;
+  justify-content: flex-end;
+}
+
+.hint { margin-right: auto; font-size: 12px; color: #6b7785; }
+
+.defaultBtn, .okBtn, .cancelBtn {
+  padding: 6px 14px; font-size: 13px; font-weight: 600;
+  border: none; border-radius: 3px; cursor: pointer;
+}
+.defaultBtn { background: #e0e4e9; color: #2b3a4a; }
+.okBtn      { background: #2e7d32; color: white; }
+.cancelBtn  { background: white; color: #495565; border: 1px solid #b8bfc9; }
+.defaultBtn:disabled { opacity: 0.5; cursor: not-allowed; }

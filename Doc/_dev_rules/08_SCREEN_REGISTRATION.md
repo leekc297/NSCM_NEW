@@ -366,21 +366,59 @@ pnpm dev
 | 컬럼 | 값 |
 |---|---|
 | `MNU_ID` (PK) | `'DMF0099'` |
-| `UPPR_MNU_ID` | `'DMF'` |
+| `UPPR_MNU_ID` | `'Demand_Master'` ⚠ **표준 부모 메뉴 ID 인벤토리** (아래 표) 에서 정확히 복사. 대소문자 센서티브 — `'DEMAND_MASTER'` 등록 시 자매 화면과 불일치 → 트리 walk-up 실패 → 메뉴 미표시 (2026-06-03 DMF0020 사고). |
 | `MNU_LV_NO` | `3` (1=대분류, 2=중분류, 3=화면) |
 | `MNU_MSG_ID` | `'MNU_DMF0099'` (i18n 참조) |
 | `MNU_URL` | `'dmf0099-sales-monitor'` ★ **slug only — 디렉토리 prefix 금지**. 부모 메뉴 경로는 FE 라우터가 SCM_ADM_MNU_M 트리를 walk-up 해 자동 조립. 형제 메뉴들 (DMF0004~0008 등) 모두 leaf segment 만 저장됨. **⚠ FE `nscm-fe/packages/foundation/src/constants/route-paths.ts` 의 동일 MNU_ID slug 와 정확히 일치 의무** — 불일치 시 메뉴 클릭해도 화면 안 뜸 (2026-05-29 DMF0043/0043_01/0072 사고). 작성 직후 cross-check: `grep -nE "^\s*{MNU_ID}:" nscm-fe/packages/foundation/src/constants/route-paths.ts` |
+| `MNU_TP_CD` | `'SCREEN'` ⚠ 모든 leaf 화면 통일. `'FN'` / `'M'` 등 사용 시 BE/FE 매뉴 트리 빌더에서 다르게 처리될 수 있음 (자매 화면 비교 의무). |
 | `SORT_ORD` | `99` |
 | `USE_YN` | `'Y'` |
+
+#### 표준 부모 메뉴 ID 인벤토리 (NSCM 기본 시드, 2026-06-03 표준화)
+
+⚠️ 대소문자 센서티브. 신규 화면 BLOCK 4 의 `DEFINE V_UPPR_MENU = '...'` 에 위 표 그대로 복사.
+
+| Lv 1 (Root) | Lv 2 (Domain) |
+|---|---|
+| `Master` | `Demand_Master`, `Demand_Plan`, `Demand_JV_Plant` |
+| `Demand` | (Master 트리 하위) |
+| `Report` | `Customer_Forecast`, `Waterfall` |
+| `Admin` | `Admin_Menu`, `System` |
+| `Authority` | `Auth_Mgmt` |
+| `Popup` | `BusinessPopup`, `CommonPopup` |
+| `OPT` | `KHK` |
+
+**케이스 표준**:
+- Lv 1: 첫 글자만 대문자 (`Master`, `Admin`) — `MASTER` / `master` 금지
+- Lv 2: 단어별 첫 글자 대문자 + `_` (`Demand_Master`) — `DEMAND_MASTER` / `demand_master` 금지
+
+**작성 직후 검증 SQL** (자매 화면과 cross-check):
+
+```sql
+SELECT MNU_ID, UPPR_MNU_ID, MNU_LV_NO, MNU_TP_CD
+  FROM SCM_ADM_MNU_M
+ WHERE UPPR_MNU_ID = 'Demand_Master'     -- 본 신규 화면이 등록될 트리
+ ORDER BY SORT_ORD;
+-- 모든 row 의 UPPR_MNU_ID 가 정확히 동일해야 함 (대소문자까지).
+```
+
+**메뉴 미표시 시 진단**: hook `menu-not-displayed-debug.md` Step 1.5 (UPPR_MNU_ID 대소문자 정합) 적용. fix 패턴: `_artifacts/_deploy_packages/DMF0020/02_DB_Meta_SQL/11_DMF0020_fix_uppr_menu_case.sql`.
 
 ### 4.3 UI Category — Sheet Columns (`SCM_MST_SHEET_COLUMNS`)
 
 화면 그리드의 모든 컬럼 1개당 1행. 자세한 컬럼은 `PKG_SYS0004` 참조.
 
+⚠️ **SHEET_NAME 표준** (2026-06-03 표준화):
+- 메인 그리드 1개 화면 → **`'main'`** (자매 화면 표준 — DMF0072 등 다수)
+- 다중 sheet 화면 → 의미 이름 (DMF0008 의 `summary`/`repair`/`sspm`/`updateHistory`)
+- Lookup combo sheet → 의미 이름 camelCase (`division`/`team`/`endCustomer`/`salesSite`)
+- **FE constants.ts 의 `SHEETS.MAIN = 'main'` enum value 와 정확히 일치 의무**.
+- 화면 의미 이름 (`futurePrice` / `erpEdi` 등) 단독 사용 시 ORA-01403 at `PKG_NSCM_UI_COMM:17` (retrieveBtnInfoList) 발생 가능 (2026-06-03 DMF0020 사고).
+
 | 컬럼 | 값 (예) |
 |---|---|
 | `PROGRAM_ID` (PK1) | `'DMF0099'` |
-| `SHEET_NAME` (PK2) | `'main'` |
+| `SHEET_NAME` (PK2) | `'main'` (메인 그리드 1개 화면 표준) / 의미 이름 (다중 sheet) |
 | `COLUMN_NAME` (PK3) | `'DIVISION_ID'` (SP OUT cursor 컬럼명, UPPER_SNAKE) |
 | `COLUMN_LABEL_NAME` | `'LBL00001'` (i18n 코드) |
 | `SORT_ORDER_NO` | `1` |

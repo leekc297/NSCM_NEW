@@ -273,6 +273,101 @@ $zip.Dispose()
 
 ---
 
+## ⭐ 9. SP / 메타 완전성 (Combo / POPUP / Action SP 모두 포함) — 2026-06-02 신설
+
+### 9.1 배경 (사용자 명시 요구)
+
+> "신규 화면에 대한 압축파일 생성 중 아래의 항목에 대한 누락이 있는것 같습니다. 추가 요청 합니다.
+> - 컬럼, PROC, API 등 권한 관련 SQL전체
+> - COMBO, POPUP 에 사용되는 모든 QUERY 가 들어가는 SP, PKG 전체
+> - COMBO, POPUP 에서 사용하기 위하여 SCM_ADM_PROC_M 에 등록한 QUERY"
+
+**사고 사례 (실제, 2026-06-02)**:
+- DMF0072 deploy zip: 메인 SP 2건 (GET/SAVE) 메타만 포함. lookup 5종 (DataType/Division/Team/EndCustomer/SalesSite) 의 API_M/BTN_MPG/PROC_M + SP body 통째 누락 → 새 환경 deploy 시 조회 조건 dropdown 동작 X.
+- DMF0008 deploy zip: updateHistory sheet 의 모든 메타 + SP body 누락.
+- DMF0043 deploy zip: 메타 0 누락이지만 standalone SP body 9건 03_SP_PKG/ 미포함 → 새 환경 PKG/SP 빈 상태에서 ORA-04063.
+- DMF0043_01 deploy zip: DMF0002_GET_TITLESET_POPUP 공용 SP 동봉 누락 → TitleSet 모달 동작 X.
+
+### 9.2 의무 인벤토리 (deploy 직전 필수 cross-check)
+
+deploy zip 작성 직전 다음 5종을 화면 별로 인벤토리 작성 + 4-파일 세트 작성 의무:
+
+| # | 인벤토리 | 추출 방법 | 산출물 |
+|---:|---|---|---|
+| 1 | FE useTabProcQuery / useProcMutation 의 모든 sheetName | `grep -rE "useTabProcQuery\|useProcMutation" nscm-fe/features/.../{화면-slug}/` | sheetName 목록 (= BTN_MPG SHT_NM) |
+| 2 | FE POPUP modal 컴포넌트 | `grep -rE "<\w+Modal" nscm-fe/features/.../{화면-slug}/` + components/* | modal 별 sheet name |
+| 3 | 위 1+2 의 sheetName 에 매핑된 BE SP (`SCM_ADM_MNU_BTN_MPG_M` 의 API_ID → `SCM_ADM_API_M` 의 API_URL) | DB 조회 또는 `_artifacts/_diagnostics/` 진단 SQL | SP 이름 목록 |
+| 4 | 위 SP 들의 `SCM_ADM_PROC_M` PROC_NM 등록 | DB 조회 | PROC_NM × COL_NM × COL_TP_CD 인벤토리 |
+| 5 | 위 SP 들의 ALL_SOURCE body | `DBMS_METADATA.GET_DDL('PROCEDURE', name, owner)` 일괄 추출 | `03_SP_PKG/` 의 standalone SP body 파일 |
+
+### 9.3 메타 보강 SQL — 4-파일 세트 양식
+
+기존 `44_DMF{XXXX}_meta.sql` 에 lookup/popup 누락 발견 시 별도 보강 파일 `{N}_DMF{XXXX}_{purpose}_meta_boost.sql` 작성 (덮어쓰기 금지 — NOT EXISTS 멱등 패턴).
+
+표준 6 BLOCK:
+
+```
+BLOCK 1 : MSG_M (각 API 의 API_MSG_ID 마다 1 row)
+BLOCK 2 : API_M (API_ID + PROC_SELECT/PROC_SAVE + API_URL=SP 이름)
+BLOCK 3 : BTN_MPG (MNU_ID, SHT_NM=camelCase sheetName, MNU_BTN_CD=SEARCH/SAVE)
+BLOCK 4 : PROC_M (COL_NM 변환 표 — P_USER_ID→sesUserId / P_MENU_ID→mnuId / P_LANG_CD→sesLangCd / 그 외 IN→camelCase / O_RCn→소문자)
+BLOCK 5 : GUEST 권한 (BTN_MPG 자동 복제)
+BLOCK 6 : 사후 카운트
+```
+
+cross-ref: 룰 08 §4.4 (PROC_M 자동 변환 표) / 메모리 `feedback_proc_meta_mandatory.md` + `feedback_proc_meta_col_nm_be_auto_keys.md`.
+
+### 9.4 SP body 추출 — `03_SP_PKG/` 표준
+
+```bash
+# 1. 인벤토리 SP 목록을 한 .sql 로 일괄 추출 (PROMPT block 으로 구분)
+cat > /tmp/extract.sql <<EOF
+BEGIN
+  DBMS_METADATA.SET_TRANSFORM_PARAM(DBMS_METADATA.SESSION_TRANSFORM, 'SQLTERMINATOR', false);
+  DBMS_METADATA.SET_TRANSFORM_PARAM(DBMS_METADATA.SESSION_TRANSFORM, 'PRETTY', true);
+END;
+/
+PROMPT === SP_BEGIN: <NAME> ===
+SELECT DBMS_METADATA.GET_DDL('PROCEDURE', '<NAME>', 'SCM_MGR') FROM DUAL;
+PROMPT === SP_END ===
+EOF
+# 2. awk 로 PROMPT 마커를 PROCEDURE 별 헤더 + `/` terminator 로 변환
+# 3. PROMPT/SET/--/CREATE 패턴 정합 검증 후 03_SP_PKG/{N}_{화면ID}_{purpose}_SP_bodies.sql 저장
+```
+
+### 9.5 wrapper / 공용 SP — 별도 표시 의무
+
+| 분류 | 처리 |
+|---|---|
+| 화면 전용 SP (`DMF{화면ID}_*`) | 03_SP_PKG/ 에 body 의무 동봉 |
+| 화면별 wrapper (`DMF{화면ID}_GET_XXX_WRAPPER`) | body 동봉 + wrapper 가 호출하는 메인 SP body 도 같이 동봉 (DMF0008_GET_UPDATE_HISTORY → DMF0000_GET_UPDATE_HISTORY 사례) |
+| 공용 SP (`DMF0000_*` / `COM*` / 다른 화면 SP 재사용) | body 동봉 + 비고에 "공용 — 환경 사전 존재 확인 의무" 표시 (DMF0043_01 의 DMF0002_GET_TITLESET_POPUP 사례) |
+
+**환경 사전 존재 확인 명령** (deploy 받는 측 의무):
+```bash
+sqlplus -s SCM_MGR/<pw>@<dsn> <<< "SELECT OBJECT_NAME, STATUS FROM USER_OBJECTS WHERE OBJECT_TYPE='PROCEDURE' AND OBJECT_NAME=UPPER('<공용SP>');"
+# row 0 = 동봉 SP body 적용 의무
+# row 1 + STATUS=VALID = SKIP 가능
+# row 1 + STATUS=INVALID = ALTER PROCEDURE COMPILE 후 재확인
+```
+
+### 9.6 자기 점검 (deploy zip 작성 직전)
+
+```
+[ ] §9.2 의 5 인벤토리 모두 작성?
+[ ] sheetName 카운트 == BTN_MPG SHT_NM 카운트 == API_M 카운트?
+[ ] POPUP modal 카운트 == BTN_MPG (popup sheet) 카운트?
+[ ] 화면 전용 SP body 모두 03_SP_PKG/ 에?
+[ ] wrapper / 공용 SP body 도 03_SP_PKG/ 에 (비고: 공용 — 환경 사전 확인)?
+[ ] 메타 보강 SQL 4-파일 세트 (sql + DBeaver + Verify + Diagnose) 작성?
+[ ] BLOCK 6 사후 카운트가 인벤토리 카운트와 1:1 정합?
+[ ] 멱등 검증 (재실행 시 0 rows created — NOT EXISTS 차단)?
+```
+
+상세: [`hooks/deploy-package-completeness.md`](hooks/deploy-package-completeness.md), 메모리 `feedback_deploy_package_completeness.md`.
+
+---
+
 ## 8. 관련 문서
 
 | 룰 | 주제 |

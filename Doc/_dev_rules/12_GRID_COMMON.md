@@ -729,6 +729,61 @@ class HierarchicalMergeManager extends MergeManager {
 </FlexGrid>
 ```
 
+### 11.6.3.1 ❌ 잘못된 API (실제 사고 2026-06-03 DMF0020)
+
+```ts
+// ❌ g.mergedRanges 는 존재하지 않는 property — 무시되어 머지 미동작
+g.mergedRanges = { getMergedRange: ... };
+```
+
+→ 정확한 3 요소 (위 §11.6.2):
+1. `g.allowMerging = AllowMerging.All / .Cells / .ColumnHeaders` (enum)
+2. column 별 `allowMerging = true` (초기 + 동적 col 추가 후 재적용 의무)
+3. `g.mergeManager = new HierarchicalMergeManager()` (MergeManager subclass instance)
+
+### 11.6.3.2 Viewport Sticky Content (사용자 요구 — "현재 row 값 가시")
+
+Wijmo merge cell default 동작: 머지 그룹의 **topmost row 만** 표시. scroll 시 topmost 가 viewport 밖이면 그룹 의 다른 visible row 위치에 **빈 cell** → 사용자 사고.
+
+해결 — formatItem 안에서 cell content 를 `.merge-content` div 로 wrap + scroll event 에서 translateY 보정:
+
+```ts
+g.formatItem.addHandler((_s, e) => {
+  if (e.panel.cellType !== CellType.Cell) return;
+  const col = e.panel.columns[e.col];
+  if (!fixedBindings.includes(col.binding ?? '')) return;
+  const cellEl = e.cell as HTMLElement;
+  const text = cellEl.textContent ?? '';
+  if (text && !cellEl.querySelector('.merge-content')) {
+    const wrap = document.createElement('div');
+    wrap.className = 'merge-content';
+    wrap.textContent = text;
+    wrap.style.cssText = 'padding-top:4px;text-align:center;will-change:transform;';
+    cellEl.textContent = '';
+    cellEl.appendChild(wrap);
+  }
+});
+
+const adjustMergedContent = () => {
+  const root = g.cells.hostElement as HTMLElement | null;
+  if (!root) return;
+  const viewportTop = (root.querySelector('.wj-cells') as HTMLElement | null)?.scrollTop ?? 0;
+  root.querySelectorAll<HTMLElement>('.wj-cell .merge-content').forEach(div => {
+    const cellEl = div.parentElement as HTMLElement;
+    const cellTop = cellEl.offsetTop;
+    const cellH = cellEl.offsetHeight;
+    const stickyOffset = viewportTop - cellTop;
+    div.style.transform = (stickyOffset > 0 && stickyOffset < cellH - 24)
+      ? `translateY(${stickyOffset}px)`
+      : 'translateY(0)';
+  });
+};
+g.scrollPositionChanged.addHandler(adjustMergedContent);
+g.updatedView.addHandler(adjustMergedContent);
+```
+
+→ 상세: `Doc/_dev_rules/hooks/wijmo-merge-sticky-content.md`
+
 ### 11.6.4 column 정의 패턴
 
 `MAIN_COLUMNS` 의 `merge: boolean` 필드 — 좌측부터 hierarchy 순서대로 true 지정.
@@ -964,6 +1019,99 @@ grep -cE "siMain\.SetCellTypeCombo|cellTypeImage" Doc/_legacy_source/.../{SCREEN
 
 상세 hook: [`hooks/grid-column-meta-mandatory.md`](hooks/grid-column-meta-mandatory.md)
 상세 메모리: `feedback_grid_editable_coloring_mandatory.md`, `feedback_grid_popup_cell_mandatory.md`
+
+---
+
+## ⭐ 11.8 Sort/Filter 자동 활성 — DataGrid `allowSorting` + `FlexGridFilter` ref + SubTitle `gridFilter` prop (2026-06-02 신설)
+
+### 11.8.1 배경 (사용자 명시 요구)
+
+As-Is `BaseForm.cs:5054~5268` 의 `OnClickSortButton()` (F3) / `OnClickFilterButton()` (F4) / `OnClickConditionButton()` (F6) / `OnClickResetConditionButton()` (F10) 4 default 동작은 모든 화면 공통. 4 화면 (DMF0072 / DMF0008 / DMF0043 / DMF0043_01) 모두 `protected override` 없음 → BaseForm default 채택.
+
+To-Be 대응: `SubTitle` 의 `DefaultButtonActions` (`packages/shared/src/components/organisms/sub-title/SubTitle.tsx` L62~112) 가 F3/F4/F6/F10 default 자동 제공.
+
+→ **`hotkeyConfig` 명시 생략 = As-Is BaseForm default 동등.**
+
+### 11.8.2 표준 3 요소 (Sort/Filter 자동 활성 보장)
+
+```tsx
+import { FlexGrid } from '@grapecity/wijmo.react.grid';
+import { FlexGridFilter } from '@grapecity/wijmo.react.grid.filter';
+import { useRef } from 'react';
+
+// ① grid ref + filter ref
+const gridRef = useRef<FlexGrid>(undefined);
+const gridFilterRef = useRef<FlexGridFilter>(undefined);
+
+return (
+  <>
+    {/* ② DataGrid 래퍼에 allowSorting=true */}
+    <DataGrid
+      ref={gridRef}
+      allowSorting={true}              // ← F3 sort 활성 보장
+      itemsSource={items}
+      // ... column meta ...
+    >
+      {/* FlexGridFilter ref — F4 filter 활성 보장 */}
+      <FlexGridFilter ref={gridFilterRef} />
+    </DataGrid>
+
+    {/* ③ SubTitle 에 grid + gridFilter ref 모두 전달 */}
+    <SubTitle
+      menuId={menuId}
+      grid={gridRef}
+      gridFilter={gridFilterRef}        // ← prop 누락 시 F4 동작 안 함
+      dataCount={items.length}
+      // hotkeyConfig 미지정 = sort/filter/condition/resetCondition 자동 활성
+    />
+  </>
+);
+```
+
+### 11.8.3 명시 false (예외 — 사유 의무 기재)
+
+| 상황 | 권고 |
+|---|---|
+| DataGrid 자체가 없는 dashboard/text-only 화면 | `hotkeyConfig.sort = false` + `filter = false` 의무 |
+| Wijmo grid 는 있지만 read-only summary (사용자 정렬/필터 의미 X) | **기본 활성 유지** (사용자 편의 우선) |
+| 검색조건 panel (UsrConditionPanel) 없는 화면 | `condition = false` + `resetCondition = false` 의무 (룰 25 §1.5.3) |
+
+명시 false 시 `__asis-mapping__.md` 의 `## Search Aux 매핑` 섹션에 사유 기재.
+
+### 11.8.4 cross-check grep (PR 머지 게이트)
+
+⚠ **Wijmo FlexGrid 의 `allowSorting` 기본값 = true** — 명시 안 함 = sort 활성. 명시적 `false` 만 비활성.
+DataGrid 래퍼 사용 시 prop 으로 명시 권장.
+
+```bash
+# 1a. (FlexGrid 직접 사용) allowSorting={false} 명시 안 됨 확인
+grep -nE "<FlexGrid[^>]*allowSorting=\{false\}" \
+     nscm-fe/features/.../{화면-slug}/*.tsx
+# → 0건이면 default true 적용 (정상)
+
+# 1b. (DataGrid 래퍼 사용) allowSorting={true} 명시 권장
+grep -nE "<DataGrid[^>]*allowSorting=\{true\}" \
+     nscm-fe/features/.../{화면-slug}/*.tsx
+
+# 2. FlexGridFilter ref 정의 (1건 이상)
+grep -nE "useRef<FlexGridFilter>|<FlexGridFilter" \
+     nscm-fe/features/.../{화면-slug}/*.tsx
+
+# 3. SubTitle gridFilter prop 전달 (1건 이상)
+grep -nE "<SubTitle[^>]*gridFilter=" \
+     nscm-fe/features/.../{화면-slug}/*.tsx
+```
+
+판정:
+- (1a 0건 또는 1b 1건 이상) + 2 1건 이상 + 3 1건 이상 → `hotkeyConfig.sort/filter` 명시 불필요 (As-Is BaseForm default 동등 보장)
+- 1a 1건 이상 (의도적 비활성) → `hotkeyConfig.sort = false` 명시 + 사유 기재
+- 2 또는 3 누락 → 보강하거나 `hotkeyConfig.filter = false` 명시
+
+### 11.8.5 cross-ref
+
+- 룰 25 §1.5.3 — Search Aux 4대 매핑 의무 (UsrConditionPanel grep + condition/resetCondition 결정)
+- hook `asis-button-mapping.md` §3.5 — PRE-WRITE 자기 점검 4 row + POST-WRITE grep 3 추가
+- 메모리 `feedback_search_aux_default_activation.md` — 기본 활성 정책 5줄
 
 ---
 

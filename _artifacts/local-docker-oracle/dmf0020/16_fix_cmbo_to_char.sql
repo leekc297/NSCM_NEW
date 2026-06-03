@@ -1,0 +1,31 @@
+-- =====================================================================================
+-- CMBO @divisionId ORA-01722 fix
+-- 사고: BE substitution `@divisionId` → quote 없이 raw 숫자 81 삽입
+--   → `SEGMENT1 = 81` 비교 시 다른 row 의 `SEGMENT1='81_UC'` 와 number 변환 시도 → ORA-01722
+-- Fix: TO_CHAR wrap 으로 string compare 강제
+-- =====================================================================================
+WHENEVER SQLERROR CONTINUE;
+SET DEFINE OFF;
+
+UPDATE SCM_ADM_CMBO_SQL_M
+   SET SQL_DTL_CTN = 'SELECT SEGMENT2 AS CODE, SEGMENT2 AS NAME FROM SCM_ADM_LOOKUP_MASTER_DETAIL WHERE LOOKUP_TYPE = ''BP_CUSTOMS_HANDBOOK'' AND VALID_YN = ''Y'' AND SEGMENT1 = TO_CHAR(@divisionId) ORDER BY DISPLAY_SEQ',
+       LAST_UPDATED_BY = 'minyonglee1',
+       LAST_UPDATE_DATE = SYSDATE
+ WHERE SQL_ID = 'CustomsHandbook';
+
+UPDATE SCM_ADM_CMBO_SQL_M
+   SET SQL_DTL_CTN = 'SELECT SEGMENT2 AS CODE, SEGMENT2 AS NAME FROM SCM_ADM_LOOKUP_MASTER_DETAIL WHERE LOOKUP_TYPE = ''BP_FCST_TYPE'' AND VALID_YN = ''Y'' AND SEGMENT1 = TO_CHAR(@divisionId) ORDER BY DISPLAY_SEQ',
+       LAST_UPDATED_BY = 'minyonglee1',
+       LAST_UPDATE_DATE = SYSDATE
+ WHERE SQL_ID = 'FcstType';
+
+UPDATE SCM_ADM_CMBO_SQL_M
+   SET SQL_DTL_CTN = 'SELECT DISTINCT BIZ_TYPE_NAME AS CODE, BIZ_TYPE_NAME AS NAME FROM SCM_MST_PROJECT WHERE BIZ_TYPE_NAME IS NOT NULL AND DIVISION_ID = TO_CHAR(@divisionId) ORDER BY BIZ_TYPE_NAME',
+       LAST_UPDATED_BY = 'minyonglee1',
+       LAST_UPDATE_DATE = SYSDATE
+ WHERE SQL_ID = 'BizType';
+
+COMMIT;
+
+SELECT SQL_ID, SUBSTR(SQL_DTL_CTN,1,160) AS SQL_HEAD FROM SCM_ADM_CMBO_SQL_M WHERE SQL_ID IN ('CustomsHandbook','FcstType','BizType') ORDER BY 1;
+EXIT;
