@@ -1,0 +1,50 @@
+﻿ M CLAUDE.md
+ M Doc/_dev_rules/README.md
+R  Doc/_dev_rules/00_INDEX.md -> Doc/_dev_rules/_archive/00_INDEX.md
+R  Doc/_dev_rules/01_CLAUDE.md -> Doc/_dev_rules/_archive/01_CLAUDE.md
+R  Doc/_dev_rules/03_FE_RULES.md -> Doc/_dev_rules/_archive/03_FE_RULES.md
+R  Doc/_dev_rules/04_BE_RULES.md -> Doc/_dev_rules/_archive/04_BE_RULES.md
+R  Doc/_dev_rules/05_SCREEN_TEMPLATE.md -> Doc/_dev_rules/_archive/05_SCREEN_TEMPLATE.md
+R  Doc/_dev_rules/06_HOOKS.md -> Doc/_dev_rules/_archive/06_HOOKS.md
+R  Doc/_dev_rules/07_DO_AND_DONT.md -> Doc/_dev_rules/_archive/07_DO_AND_DONT.md
+R  Doc/_dev_rules/08_SCREEN_REGISTRATION.md -> Doc/_dev_rules/_archive/08_SCREEN_REGISTRATION.md
+R  Doc/_dev_rules/09_WIJMO_VALIDATION_EXPRESSION.md -> Doc/_dev_rules/_archive/09_WIJMO_VALIDATION_EXPRESSION.md
+R  Doc/_dev_rules/10_API_DYNAMIC_PROC.md -> Doc/_dev_rules/_archive/10_API_DYNAMIC_PROC.md
+R  Doc/_dev_rules/11_AUTH_SECURITY.md -> Doc/_dev_rules/_archive/11_AUTH_SECURITY.md
+R  Doc/_dev_rules/12_GRID_COMMON.md -> Doc/_dev_rules/_archive/12_GRID_COMMON.md
+R  Doc/_dev_rules/13_I18N_MESSAGES.md -> Doc/_dev_rules/_archive/13_I18N_MESSAGES.md
+R  Doc/_dev_rules/14_ERROR_HANDLING.md -> Doc/_dev_rules/_archive/14_ERROR_HANDLING.md
+R  Doc/_dev_rules/15_ROUTING_MDI.md -> Doc/_dev_rules/_archive/15_ROUTING_MDI.md
+R  Doc/_dev_rules/16_LOGGING_AUDIT.md -> Doc/_dev_rules/_archive/16_LOGGING_AUDIT.md
+R  Doc/_dev_rules/17_NEW_SCREEN_QUICKSTART.md -> Doc/_dev_rules/_archive/17_NEW_SCREEN_QUICKSTART.md
+R  Doc/_dev_rules/18_CODE_REVIEW_CHECKLIST.md -> Doc/_dev_rules/_archive/18_CODE_REVIEW_CHECKLIST.md
+R  Doc/_dev_rules/19_MOCKUP_SVG_RULES.md -> Doc/_dev_rules/_archive/19_MOCKUP_SVG_RULES.md
+R  Doc/_dev_rules/20_SCREEN_ANALYSIS_PIPELINE.md -> Doc/_dev_rules/_archive/20_SCREEN_ANALYSIS_PIPELINE.md
+R  Doc/_dev_rules/23_FE_IMPORT_INVENTORY.md -> Doc/_dev_rules/_archive/23_FE_IMPORT_INVENTORY.md
+R  Doc/_dev_rules/24_ASIS_CROSSCHECK.md -> Doc/_dev_rules/_archive/24_ASIS_CROSSCHECK.md
+R  Doc/_dev_rules/25_NEW_SCREEN_MANDATORY_CHECKLIST.md -> Doc/_dev_rules/_archive/25_NEW_SCREEN_MANDATORY_CHECKLIST.md
+R  Doc/_dev_rules/26_VITE_DAYJS_LOCALE.md -> Doc/_dev_rules/_archive/26_VITE_DAYJS_LOCALE.md
+R  Doc/_dev_rules/27_WIJMO_PIVOT_AND_MODULE.md -> Doc/_dev_rules/_archive/27_WIJMO_PIVOT_AND_MODULE.md
+R  Doc/_dev_rules/_INTEGRITY_REPORT_2026-05-22.md -> Doc/_dev_rules/_archive/_INTEGRITY_REPORT_2026-05-22.md
+ M nscm-fe/features/master/src/pages/erp-edi-master/ErpEdiMaster.tsx
+ M nscm-fe/features/master/src/pages/erp-edi-master/__asis-mapping__.md
+ M nscm-fe/features/master/src/pages/erp-edi-master/useErpEdiMasterStore.ts
+ M nscm-fe/packages/foundation/src/apis/axios.ts
+ M nscm-fe/packages/shared/src/components/molecules/index.ts
+ M nscm-fe/packages/shared/src/components/organisms/alert/Alert.tsx
+ M nscm-fe/packages/shared/src/hooks/index.ts
+ M nscm-fe/packages/shared/src/stores/useMessageStore.ts
+?? Doc/_rules_v2/
+?? GSCM/
+?? _artifacts/G15_DMF0015_BOD_metadata_2026-06-04.sql
+?? _artifacts/G15_DMF0015_PKG_DMF0015_2026-06-04.sql
+?? nscm-fe/features/master/src/pages/bod/
+?? nscm-fe/features/master/src/pages/erp-edi-master/erp-edi-master.types.ts
+?? nscm-fe/packages/shared/src/components/molecules/dateRangePicker/
+?? nscm-fe/packages/shared/src/components/molecules/monthPicker/
+?? nscm-fe/packages/shared/src/components/molecules/monthRangePicker/
+?? nscm-fe/packages/shared/src/hooks/useBatchMutation.ts
+?? nscm-fe/packages/shared/src/hooks/useConfirmYesNoCancel.ts
+?? nscm-fe/packages/shared/src/hooks/usePerfTrace.ts
+?? nscm-fe/packages/shared/src/hooks/useSearchConditionPersistence.ts
+?? nscm-fe/packages/shared/src/hooks/useTabCombosMulti.ts
