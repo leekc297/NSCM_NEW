@@ -1,0 +1,66 @@
+-- ============================================================================
+-- SCM0005 Phase 2 — GET_HISTORY 신규 SP + SAVE_USER_GROUP dead cleanup
+-- 작성: 2026-06-04
+-- ----------------------------------------------------------------------------
+-- (1) GET_HISTORY: FE useTabProcQuery({sheetName: HISTORY}) 호출 — 신규 작성 필요
+--     AS-IS 에 대응 SP 없음 (AS-IS .cs 는 PR_DM_ADM_DQ_EXECUTE_HIST INSERT 만 함).
+--     실행 history 조회는 SCM_ADM_DQ_EXECUTE_H 테이블에서 SELECT.
+-- (2) SAVE_USER_GROUP: FE 미호출 (grep 0 건) — dead, cleanup
+-- ============================================================================
+
+-- BLOCK 1: 신규 SP P_SCM0005_GET_HISTORY 작성 (standalone)
+CREATE OR REPLACE PROCEDURE SCM_MGR.P_SCM0005_GET_HISTORY
+(
+    p_queryId IN  VARCHAR2,
+    O_RC1     OUT SYS_REFCURSOR
+)
+/*
+ * Program ID   : P_SCM0005_GET_HISTORY
+ * Description  : Dynamic Query 실행 history 조회 (SCM_ADM_DQ_EXECUTE_H)
+ *                AS-IS 대응 SP 없음 — TO-BE 신규 (PR_DM_ADM_DQ_EXECUTE_HIST 가 INSERT 한 history 의 조회).
+ * History
+ * 2026.06.04   gyucheollee   Initial — TO-BE 신규
+ */
+AS
+BEGIN
+    OPEN O_RC1 FOR
+        SELECT h.HISTORY_SEQ,
+               h.DQ_ID,
+               h.DQ_TEXT,
+               h.CREATED_BY,
+               h.CREATION_DATE,
+               h.LAST_UPDATED_BY,
+               h.LAST_UPDATE_DATE
+          FROM SCM_ADM_DQ_EXECUTE_H h
+         WHERE (p_queryId IS NULL OR p_queryId = '' OR TO_CHAR(h.DQ_ID) = p_queryId)
+         ORDER BY h.CREATION_DATE DESC, h.HISTORY_SEQ DESC;
+END P_SCM0005_GET_HISTORY;
+/
+
+-- BLOCK 2: GET_HISTORY 메타 redirect (placeholder → standalone)
+UPDATE SCM_ADM_API_M
+   SET API_URL = 'P_SCM0005_GET_HISTORY',
+       API_MSG_DESC = 'TO-BE 신규 — SCM_ADM_DQ_EXECUTE_H 조회 (2026-06-04)',
+       LAST_UPDATED_BY = 'SYSTEM', LAST_UPDATE_DATE = SYSDATE
+ WHERE API_ID = 'API_SCM0005_GET_HISTORY';
+
+-- BLOCK 3: GET_HISTORY PROC_M 등록 (1 IN + 1 OUT)
+DELETE FROM SCM_ADM_PROC_M WHERE PROC_NM = 'P_SCM0005_GET_HISTORY';
+INSERT INTO SCM_ADM_PROC_M (PROC_NM, COL_NM, DATA_TP_CD, COL_TP_CD, SORT_ORD,
+    CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+SELECT 'P_SCM0005_GET_HISTORY' AS PROC_NM,
+       'queryId' AS COL_NM, 'VARCHAR' AS DATA_TP_CD, 'IN' AS COL_TP_CD, 1 AS SORT_ORD,
+       'SYSTEM' AS CB, SYSDATE AS CD, 'SYSTEM' AS LB, SYSDATE AS LD FROM DUAL UNION ALL
+SELECT 'P_SCM0005_GET_HISTORY', 'O_RC1', 'CURSOR', 'OUT', 2, 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL;
+
+-- BLOCK 4: SAVE_USER_GROUP dead cleanup (FE 호출 0건)
+DELETE FROM SCM_ADM_MNU_BTN_MPG_M WHERE API_ID = 'API_SCM0005_SAVE_USER_GROUP';
+DELETE FROM SCM_ADM_API_M WHERE API_ID = 'API_SCM0005_SAVE_USER_GROUP';
+DELETE FROM SCM_ADM_PROC_M WHERE PROC_NM = 'P_SCM0005_SAVE_USER_GROUP';
+
+COMMIT;
+
+PROMPT === Verify Phase 2 ===
+SELECT OBJECT_NAME, STATUS FROM USER_OBJECTS WHERE OBJECT_NAME = 'P_SCM0005_GET_HISTORY';
+SELECT COL_NM, DATA_TP_CD, COL_TP_CD, SORT_ORD FROM SCM_ADM_PROC_M WHERE PROC_NM = 'P_SCM0005_GET_HISTORY' ORDER BY SORT_ORD;
+SELECT API_ID FROM SCM_ADM_API_M WHERE API_ID = 'API_SCM0005_SAVE_USER_GROUP';

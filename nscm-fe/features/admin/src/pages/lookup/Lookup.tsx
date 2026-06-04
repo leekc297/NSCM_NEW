@@ -1,7 +1,9 @@
 import { type FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
+import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef } from 'react';
 
+import { apiClient } from '@foundation/apis';
 import _ from '@foundation/lodash';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { GridAction } from '@foundation/utils';
@@ -48,6 +50,8 @@ export const Lookup = ({ tabId, title }: PageProps<MENU_ID>) => {
   const detailStaticColumns = useLookupStore(state => state.staticColumns.lookupDetail);
 
   const { saveWithValidation } = useSaveWithValidation();
+  const queryClient = useQueryClient();
+  const setToast = useMessageStore(state => state.setToast);
 
   const { data: masterData, refetch: refetchMaster } = useTabProcQuery<
     MENU_ID,
@@ -87,10 +91,21 @@ export const Lookup = ({ tabId, title }: PageProps<MENU_ID>) => {
     sheetName: SHEETS.LOOKUP_DETAIL,
     tabId,
     onSuccess: () => {
-      // TODO[F6 / BLOCKED:BE]: 후처리 SP `SCM0003_AFTER_LOOKUP_MASTER_DETAIL` (canonical PROC 미등록)
-      console.warn(
-        '[SYS0010] After-save SP `SCM0003_AFTER_LOOKUP_MASTER_DETAIL` not yet wired (BE canonical PROC missing).'
-      );
+      // AS-IS SCM0003_AFTER_LOOKUP_MASTER_DETAIL — Lookup Detail 저장 후처리 (fire-and-forget).
+      // AS-IS DoAfterSave 의 try/catch 빈 catch 패턴 보존 — 실패해도 사용자 흐름 차단 X.
+      void apiClient
+        .post(`/${MENU_ID}/${SHEETS.LOOKUP_DETAIL}/AFTER_SAVE/call-proc`, {
+          programId: MENU_ID,
+          sheetName: selectedLookupType ?? '',
+          debugMode: 'F',
+        })
+        .catch((e: unknown) => {
+          // eslint-disable-next-line no-console
+          console.warn('[SYS0010] AFTER_SAVE post-process failed (non-blocking):', e);
+        });
+
+      void queryClient.invalidateQueries({ queryKey: [tabId] });
+      setToast({ type: 'success', message: t('MSG00002', '_성공적으로 저장되었습니다!') });
     },
   });
 
