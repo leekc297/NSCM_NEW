@@ -59,6 +59,11 @@ NSCM_gitlab_backup/
 # Visual Studio C#.NET WinForms 원본 — 외부 노출 금지 + 대용량
 GSCM/
 
+# ---------------- _artifacts/_tmp_*: 작업 중 임시 SQL/TXT (commit 금지) ----------------
+_artifacts/_tmp_*.sql
+_artifacts/_tmp_*.txt
+_artifacts/_tmp_*.csv
+
 # ---------------- _backup_metadata 대용량 제외 (GitHub 100MB 한도) ----------------
 # backup-all.ps1 가 git bundle / oracle dmp / tar 등을 메타 폴더에 복사하지만
 # 100MB 초과 파일은 GitHub push 차단 (2026-06-06 source.bundle 127MB 사고).
