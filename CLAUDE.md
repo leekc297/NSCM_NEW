@@ -17,65 +17,90 @@
 
 ## 2. 작업 시작 시 필수 행동 (반드시 순서대로)
 
-### Step 1: 룰셋 로드 (3 진입점만, 모든 작업)
+### Step 1: 룰셋 로드 (룰셋 v2 — 3 진입점만, 모든 작업) ⭐ 2026-06-03 갱신
 ```
-Read: Doc/_dev_rules/hooks/anti-simplification.md  ⚠️ ⭐ 최우선 — 모든 작업 단순화 금지 (2026-05-22)
-Read: Doc/_dev_rules/01_CLAUDE.md                   ← 분기 라우터 (작업 트리거 → 진입 룰)
-Read: Doc/_dev_rules/00_INDEX.md §B 트리거 매트릭스 ← 키워드 → 적용 룰 + Hook 자동 분기
+Read: Doc/_rules_v2/anti-simplification.md  ⚠️ ⭐ 최우선 — 단순화 절대 금지 (불변)
+Read: Doc/_rules_v2/CLAUDE.md               ← 분기 라우터 (작업 트리거 → 진입 룰)
+Read: Doc/_rules_v2/00_INDEX.md §A 트리거 매트릭스 ← 17 트리거 × 룰/Hook 자동 분기
 ```
 
-> ⭐ **3 진입점 정책 (2026-06-01 슬림화)**:
-> 위 3 파일만 1차 로드. **모든 도메인별 룰/hook 은 §B 트리거 매트릭스 가 작업 키워드에 따라 자동 분기.**
-> 종전 8 파일 사전 로드 (룰 25 / 24 / 12 / 23 / 09 + 6 hook) 는 §B 가 흡수.
-> 트리거 키워드에 매핑되지 않은 작업은 보수적으로 룰 25 + asis-coverage 적용.
+> ⭐ **3 진입점 정책 (룰셋 v2, 2026-06-03)**:
+> 위 3 파일만 1차 로드. **모든 도메인별 룰/hook 은 `00_INDEX.md` 의 17-트리거 매트릭스가 작업 키워드에 따라 자동 분기.**
+> 룰셋 v2 구조: `_asis/00_framework` (7 정밀) + `_asis/01_popups` (인벤토리) + `_tobe/01~13` (13 룰) + `_mapping/asis_to_tobe.md` (10 격차) + `hooks/` (10 hook).
 
 > ⚠️ **anti-simplification.md** 는 다른 모든 룰을 압도하는 최우선 룰입니다.
 > 속도/편의를 위한 작업 단순화는 절대 금지. 사용자가 "모두/전체/정밀/상세" 요청하면 다중 패턴 + Cross-check 의무.
 > 위반 = 신뢰성 손상 → 도구 사용 중단.
 
-### Step 1.5: 작성 중/직후 Hook (모든 작업 공통)
+### Step 1.5: 작성 중/직후 Hook (모든 작업 공통) ⭐ 2026-06-03 갱신
 ```
-파일 작성 직전: Read: Doc/_dev_rules/hooks/pre-write.md
-파일 작성 직후: Read: Doc/_dev_rules/hooks/post-write.md
-작업 종료 직전: Read: Doc/_dev_rules/hooks/pre-submit.md
+파일 작성 직전: Read: Doc/_rules_v2/hooks/pre-write.md
+파일 작성 직후: Read: Doc/_rules_v2/hooks/post-write.md
+작업 종료 직전: Read: Doc/_rules_v2/hooks/pre-submit.md
 ```
 
-> **트리거별 hook 추가 적용은 §B 매트릭스 참조** (FE import / 신규 화면 / As-Is 매핑 / DB 오류 / Figma / PIVOT / 메뉴 미표시 등).
+> **트리거별 hook 추가 적용은 `00_INDEX.md §A` 17-트리거 매트릭스 참조** (신규 화면 / Popup / Grid / Button / 메뉴 미표시 / BE / SQL / Figma 등).
 
-### Step 2: 영역별 추가 룰
-- **FE 작업**: `Doc/_dev_rules/03_FE_RULES.md`
-- **BE 작업**: `Doc/_dev_rules/04_BE_RULES.md`
-- **⭐⭐ 신규 화면 생성 강제 체크리스트 (필수)**: `Doc/_dev_rules/25_NEW_SCREEN_MANDATORY_CHECKLIST.md` (2026-05-22) — AS-IS .cs/.Designer.cs + xlsx + 8 MD + Hook + POPUP 자동 생성 5종 강제
-- **신규 화면 (5분 Quickstart)**: `Doc/_dev_rules/17_NEW_SCREEN_QUICKSTART.md` ⭐ NEW
-- **신규 화면 (풀스택 템플릿)**: `Doc/_dev_rules/05_SCREEN_TEMPLATE.md`
-- **신규 화면 (메타 등록)**: `Doc/_dev_rules/08_SCREEN_REGISTRATION.md` (7개 영역 메타 자기완결형 인라인 DML + 4-파일 SQL 세트, 2026-05-19 PKG 폐기)
-- **⭐ As-Is Validation/Expression → Wijmo 반영**: `Doc/_dev_rules/09_WIJMO_VALIDATION_EXPRESSION.md`
-- **⭐ Mockup SVG/PNG 생성 룰 (v7.4)**: `Doc/_dev_rules/19_MOCKUP_SVG_RULES.md` ⭐ **2026-05-21 v7.4 추가** — "메타 자동 생성도 일괄 자동화" 금지. .cs 전체 Read 후 13시트 모두 의미 있는 내용으로 채움 의무
-- **⭐ 화면 분석서 파이프라인**: `Doc/_dev_rules/20_SCREEN_ANALYSIS_PIPELINE.md` ⭐ NEW (2026-05-19)
-- **⭐ 트러블슈팅 가이드 (Oracle/DBeaver/Wijmo/PowerShell)**: `Doc/_dev_rules/21_TROUBLESHOOTING.md` ⭐ NEW (2026-05-19)
-- **⭐ 이관 패키지 (`_artifacts`) — DB/서버 미연결 환경**: `Doc/_dev_rules/22_PACKAGE_ARTIFACTS.md` ⭐ NEW (2026-05-22, DMF0020 작업 반영)
-- **⭐ FE Import 인벤토리 (`@shared/*`, `@foundation/*`, global)**: `Doc/_dev_rules/23_FE_IMPORT_INVENTORY.md` ⭐ NEW (2026-05-22, DMF0020 6종 import 오류 반영)
-- **⭐ As-Is Cross-Check (Event/API/Validation/Expression 4축)**: `Doc/_dev_rules/24_ASIS_CROSSCHECK.md` ⭐ NEW (2026-05-22, DMF0020 modal 12건 누락 반영)
-- **⭐ 로컬 Docker Oracle CSV 적재 표준**: `Doc/_dev_rules/29_LOCAL_DB_CSV_IMPORT.md` ⭐ NEW (2026-05-30, Docker 재구축 + 113 테이블 적재 + sqlldr ctl 6대 처리 + 12GB 한도 + 200MB 임계 + DM_* 제외 + §2.5 7GB 안전 임계 자동 감시 반영)
-- **⭐ 로컬 환경 통합 백업/원복**: `Doc/_dev_rules/30_LOCAL_BACKUP_RESTORE.md` ⭐ NEW (2026-05-30, D:\NSCM_backup\ + git bundle + FE node_modules tar + Oracle expdp + Task Scheduler 02:00 + 키워드 트리거 "백업해줘"/"원복해줘")
-- **⭐ Figma 디자인 → React 신규 화면 연동**: `Doc/_dev_rules/31_FIGMA_DESIGN_INTEGRATION.md` ⭐ NEW (2026-05-30, Personal Access Token + REST API fetch + URL 자동 감지 trigger + Doc/_figma/screens/{화면ID}.md 진실 source + 룰 23 import inventory cross-check)
-- **PR 머지 게이트**: `Doc/_dev_rules/18_CODE_REVIEW_CHECKLIST.md` ⭐ NEW
-- **DB/Procedure**: `Doc/_analysis/db_migration/01_MSSQL_to_Oracle_Conversion_Rules.md`
-- **Hook 변경**: `Doc/_dev_rules/06_HOOKS.md`
+> 룰 v1 (`Doc/_dev_rules/`) 24 룰은 `_archive/` 이동 완료. 유지되는 7 룰: 02 (브랜치/커밋) / 21 (트러블슈팅) / 22 (이관패키지) / 28 (Git multi-remote) / 29 (CSV 적재) / 30 (백업/원복) / 31 (Figma) — 룰 v2 와 cross-ref.
 
-### Step 2.5: 아키텍처 영역 (영역별 작업 시 필독) ⭐ NEW
-- **동적 SP 호출 아키텍처 (모든 화면 데이터 흐름)**: `Doc/_dev_rules/10_API_DYNAMIC_PROC.md`
-- **인증/권한/세션**: `Doc/_dev_rules/11_AUTH_SECURITY.md`
-- **Wijmo Grid 공통 (DataGrid/EditTracker/GridAction/CRUD_TYPE)**: `Doc/_dev_rules/12_GRID_COMMON.md`
-- **i18n (MSG/LBL/MNU 코드)**: `Doc/_dev_rules/13_I18N_MESSAGES.md`
-- **에러 처리 (Alert/Toast/Confirm)**: `Doc/_dev_rules/14_ERROR_HANDLING.md`
-- **라우팅/MDI 탭**: `Doc/_dev_rules/15_ROUTING_MDI.md`
-- **로깅/감사 (@SystemLog/X-Request-ID)**: `Doc/_dev_rules/16_LOGGING_AUDIT.md`
+### Step 2: 영역별 추가 룰 ⭐ 2026-06-03 룰 v2 갱신
+
+> 룰 v2 의 `00_INDEX.md §A` 17-트리거 매트릭스가 작업 키워드로 자동 분기. 아래는 빠른 참조:
+
+#### TO-BE 룰 (`Doc/_rules_v2/_tobe/`) — 13 정밀
+- **FE 폴더/명명**: `_tobe/01_file_structure.md`
+- **FE Import alias**: `_tobe/02_imports.md` (정확 export 인벤토리 + 사고 패턴)
+- **FE 메인 컴포넌트**: `_tobe/03_main_component.md` (7 단계 구조 + Multi-sheet/Tab/Panel/Dynamic 변형)
+- **FE Store (Zustand)**: `_tobe/04_store.md` (createPersistedStoreWithTab + G1 GET 의무)
+- **FE Constants**: `_tobe/05_constants.md` (MENU_ID/SHEETS/RESPONSE_SET + LBL 5자리)
+- **FE 조회조건 SearchArea**: `_tobe/06_search_area.md` (FormItem + useTabComboQueries + searchFields 카탈로그 + G2 통합)
+- **FE Grid DataGrid**: `_tobe/07_datagrid.md` (FlexGrid 직접 사용 금지 + EditTracker + 8 금지 사고 사례)
+- **FE Column meta**: `_tobe/08_column_meta.md` (`_inputEditType`/`_ctrlType`/`_modalKey` + dynamic util)
+- **FE SubTitle/hotkeyConfig**: `_tobe/09_subtitle_hotkey.md` (10 키 매핑 CRUD 6 + Aux 4)
+- **FE Popup/Modal**: `_tobe/10_popup_modal.md` (공용 11종 + CustomDialog + 신규 작성)
+- **BE Spring Boot**: `_tobe/11_be_controller_service.md` (Controller/Service/Mapper + 보안 의무 + 5 격차 endpoint)
+- **메타 SQL**: `_tobe/12_metadata_sql.md` (7-BLOCK + 멱등 INSERT + MSSQL→Oracle + lookup combo)
+- **Routing/Menu**: `_tobe/13_routing_menu.md` (MNU_URL slug + 7단계 디버깅)
+
+#### AS-IS Framework (`Doc/_rules_v2/_asis/00_framework/`) — 7 정밀 분석
+- BaseForm (6,329 lines, 157 method) / DataService (5,261 lines, 87 method) / MessageHelper (100% — Type 4 + Button 7 + 23 MSG ID) / Logging / Auth_FormAuth / UsrControls (36 컨트롤) / FoxDataClient (WCF→REST)
+
+#### Hook (`Doc/_rules_v2/hooks/`) — 10
+- pre-write / post-write / pre-submit / screen-create-checklist / asis-coverage-check / grid-column-meta / popup-asis-analysis / asis-button-mapping / runtime-error-prevention / menu-not-displayed-debug
+
+#### AS-IS↔TO-BE 격차 매핑 + 사양
+- `Doc/_rules_v2/_mapping/asis_to_tobe.md` (10 격차 = 신규 구현 8 + 격차 유지 2)
+
+#### 유지되는 룰 v1 (`Doc/_dev_rules/`)
+- **트러블슈팅 (Oracle/DBeaver/Wijmo/PowerShell)**: `Doc/_dev_rules/21_TROUBLESHOOTING.md`
+- **이관 패키지 (`_artifacts`)**: `Doc/_dev_rules/22_PACKAGE_ARTIFACTS.md`
+- **Git Multi-Remote (NSCM 모노레포 + GitHub + GitLab)**: `Doc/_dev_rules/28_GIT_MULTI_REMOTE.md`
+- **로컬 Docker Oracle CSV 적재**: `Doc/_dev_rules/29_LOCAL_DB_CSV_IMPORT.md`
+- **로컬 환경 백업/원복**: `Doc/_dev_rules/30_LOCAL_BACKUP_RESTORE.md`
+- **Figma → React**: `Doc/_dev_rules/31_FIGMA_DESIGN_INTEGRATION.md`
+- **브랜치/커밋/PR/리뷰**: `Doc/_dev_rules/02_DEVELOPMENT_RULES.md`
+- **DB MSSQL→Oracle 변환 룰**: `Doc/_analysis/db_migration/01_MSSQL_to_Oracle_Conversion_Rules.md`
+
+> ⚠️ 룰 v1 의 나머지 24 룰 (00 / 01 / 03~20 / 23~27) 은 `Doc/_dev_rules/_archive/` 로 이동 완료 (룰 v2 안에 흡수). 직접 참조 금지.
 
 ### Step 3: 기존 유사 코드 참조
 신규 파일 작성 전 기존 패턴을 반드시 확인:
 - **FE 화면**: `C:\Projects\NSCM\nscm-fe\features\admin\src\pages\user-management\` (표준 패턴)
 - **BE 도메인**: `C:\Projects\NSCM\nscm-be\src\main\java\com\lgcns\nscm\admin\menu\` (표준 패턴)
+
+### Step 3.5: ⭐ 신규 화면 features 폴더 결정 의무 (2026-06-04 추가 — SCM0008 사고 후)
+
+> 메모리 `feedback_new_screen_features_location.md` + 룰 v2 `_tobe/01_file_structure.md` §1.3/§1.4 적용 의무.
+
+신규 화면 작성 시 다음 5 단계 의무 수행:
+
+1. **SCM_ADM_MNU_M 트리 walk-up** — UPPR_MNU_ID 의 최상위 부모 (Lv 0) 식별
+2. **최상위 → features 매핑** — Master/Demand/Report → 동명 폴더 / Admin → features/admin / **Authority → features/authority** (UPPR_MNU_ID=Auth_Mgmt 도 features/authority)
+3. **Router.tsx import 검색** — `@authority/auth-request` 같은 import 있으면 **기존 작성 = cross-check 만**
+4. **features/{layer}/src/pages/ 인벤토리** grep — 자매 화면 표준 패턴 학습
+5. **결과 보고** — 신규 작성 / cross-check 결정 명시
+
+⚠️ 누락 시 SCM0008 사고처럼 admin 으로 잘못 매핑 → 9 파일 중복 작성 위험.
 
 ### Step 4: 화면별 분석 자료 참조 (해당 화면 작업 시) — ⭐ FE 신규 화면은 필수
 - DM: `Doc/_analysis/domain_DM/screens/{화면ID}/` 모든 8개 MD (특히 **validation.md** + **expressions.md** 필독)
@@ -315,4 +340,8 @@ Root 폴더에 흩어져 있던 Cowork 분석 산출물(00_~29_)을 Phase별 폴
 - **2026-06-02 (공통 버튼 10대 룰 정비 — 사용자 명시 요구)**: As-Is 분석으로 CRUD 3대 (Insert/Delete/Save) 구현 여부 판정 + Sort/Filter/Condition/ResetCondition 4대 구현 후 신규 4 화면 (DMF0072/0008/0043/0043_01) 적용. As-Is `BaseForm.cs:5054~5268` 의 4 default 메서드 (`OnClickSortButton/FilterButton/ConditionButton/ResetConditionButton`) = 모든 화면 공통 → To-Be `SubTitle.DefaultButtonActions` 자동 제공 → `hotkeyConfig` 명시 생략 = 자동 활성 정책. **룰 12 §11.8 신설** — Sort/Filter 자동 활성 3 요소 (`DataGrid allowSorting={true}` + `useRef<FlexGridFilter>` + `<SubTitle gridFilter={ref}>`). **룰 25 §1.5.3 신설** — Search Aux 4대 매핑 의무 (UsrConditionPanel grep 0건 → condition/resetCondition false 의무). **hook `asis-button-mapping.md` 보강** — 제목 + §0 (5+1대 → 10대) + §1.1 CRUD 6대 + §1.2 Search Aux 4대 + §3.5 PRE-WRITE Search Aux 자기 점검 6 row + §4 POST-WRITE grep 3~5 + §6 cross-ref. **메모리 신규** `feedback_search_aux_default_activation.md` (기본 활성 정책 + UsrConditionPanel cross-check + anti-simplification 4 키 일괄 처리 금지). **00_INDEX**: §B T1 보조 룰 컬럼에 `12 §11.8` 추가.
 - **2026-06-02 (Deploy Package 완전성 룰 정비 — 사용자 명시 요구)**: DMF0072/0008/0043/0043_01 deploy zip 검수 시 lookup combo / POPUP modal / standalone SP body 누락 4건 발견. **사후 보강**: DMF0072 (lookup 5종 메타 9 row + SP body 4건), DMF0008 (updateHistory 메타 3 row + wrapper SP body 2건 = DMF0008_*+DMF0000_*), DMF0043 (standalone SP body 9건), DMF0043_01 (공용 DMF0002_GET_TITLESET_POPUP body 1건). **룰 22 §9 신설** — SP/메타 완전성 (§9.1 사고 사례 / §9.2 5-종 인벤토리 / §9.3 메타 보강 SQL 4-파일 세트 표준 / §9.4 SP body 추출 절차 (DBMS_METADATA.GET_DDL) / §9.5 wrapper/공용 SP 별도 표시 / §9.6 자기 점검). **hook `deploy-package-completeness.md` 신설** — PRE-DEPLOY 5 인벤토리 + POST-DEPLOY 4 grep + 사후 보강 6 단계. **메모리 신규** `feedback_deploy_package_completeness.md`. **00_INDEX T16 신설** — deploy zip 트리거. 모든 NOT EXISTS 멱등 패턴으로 재실행 안전.
 - **2026-06-03 (DMF0020 완전 신규 풀스택 + UPPR_MNU_ID/SHT_NM/Form 표준화)**: DMF0020 (Sales Future Price / 환율·판매단가 관리) 완전 신규 풀스택 작성 (FE 22 파일 + PKG_DMF0020 18 SP DB 적재 + 메타 SQL 7-BLOCK + __asis-mapping__.md 153/153 4축 매핑 + Deploy package). **사고 #1 메뉴 미표시** — `UPPR_MNU_ID='DEMAND_MASTER'` 대문자 vs 실제 부모 `Demand_Master` (자매 화면 7개 표준) 불일치 + `MNU_TP_CD='FN'` vs 표준 `'SCREEN'`. fix SQL `11_DMF0020_fix_uppr_menu_case.sql` 적용. **사고 #2 ORA-01403** — FE `shtNm='main'` vs DB `SHT_NM='futurePrice'` 불일치. fix SQL `12_DMF0020_fix_sheet_name_main.sql` 적용. **사고 #3 조회조건 임의 작성** — 14 input 을 `<label>`+`<input>` 임의 작성 + 직접 useTabProcQuery 호출 → 자매 화면 (DMF0007) 표준 패턴 (SearchArea + FormItem + Grid + useTabComboQueries + CustomDropdown) 위반 + AS-IS 캡쳐 `Doc/ui_cap/DMF0020_init.png` 1:1 재현 X. Form 전면 재작성 (3-row layout: Div/Team/EC/BizType/Period | SalesSite/Project/Model+Nickname | PlantSite/Owner/Bucket/SearchRange/Version). **룰 보강**: hook `menu-not-displayed-debug.md` 5→7단계 (Step 1.5 UPPR_MNU_ID 대소문자 정합 + Step 1.6 SHT_NM 자매 화면 cross-check 신규) + 표준 부모 메뉴 ID 인벤토리 표 / 룰 08 §4.2/4.3 인벤토리 + 표준 + cross-check / 룰 25 §1.5.4 신규 (조회조건 Form 표준 5종 import + useTabComboQueries filter 키 인벤토리 + Grid size + FormItem + DatePickerCalendar 의무) / 메모리 신규 3건 (`feedback_mnu_uppr_case_standard.md` + `feedback_sheet_name_main_standard.md` + `feedback_form_search_area_standard.md`) / `feedback_be_restart_login.md` 보강 (BE 재기동 불필요 조건 4건).
+- **2026-06-09 (4 신규 admin 화면 풀스택 — MESSAGE/CODE/Group User/Program + 룰셋 자가 진화 #3)**: 사용자 명시 요구 — 4 admin 화면 신규/보강. MENU_ID 충돌 (SYS0011/0012 = AuthRequest/AuthApproval 기존) → SYS0014/0015 신규. **Phase A** (MESSAGE SYS0001 + CODE SYS0010 audit): SYS0010 lookupDetail AFTER_SAVE 권한 누락 fix. **Phase B SYS0015 PROGRAM**: 풀스택 (DDL `SCM_ADM_PROGRAM` + 7-BLOCK 메타 + 2 SP dual cursor + AS-IS TB_FX_ProgramInfo 406 → 397 row import + FE 6 파일 + Router + i18n). **Phase C SYS0014 Group User**: 4 SP (GET_GROUP/USER/AUTH + SAVE 4-sheet 통합) + 5 sheet SHEET_COLUMNS + FE 8 파일 (Main/UserInfo/3×UnitGrid cascade). **추가 보강**: SAVE SP 4 sheet 확장 + handleInsert/handleDelete per-grid + TitleArea rightButtons (룰 09 §12) + SsoUserModal popup (USER_ID dblClick + setUser callback + editTracker) + Recently-Added loadedRows 패턴 (Main grid CRUD_TYPE='I' 자동 isSelected) + SHEET_COLUMNS INPUT_TP_CD + ATTRIBUTE1(modalKey). **사고 → 룰 변환 1 건**: SCM_ADM_MNU_M.MNU_DESC NULL → FE sidebar 메뉴 미표시 (SYS0015 진단 사고). **hook 보강**: `menu-not-displayed-debug.md §1.3.5 Step 1.7` (MNU_DESC NULL 검증 + 자매 cross-check + fix UPDATE). **룰 13 §10 신설**: MNU_DESC 필수 의무 (anti-pattern + 자매 cross-check + 자동 검증 SQL). **메모리 신규**: `feedback_mnu_desc_required.md` + MEMORY.md 인덱스. **메뉴 위치 정정**: SYS0014/SYS0015 UPPR_MNU_ID Admin_Menu → System 이동 (사용자 요구) — SCM_ADM_MNU_M UPDATE + Router children 위치 변경. SYS0010 Admin_Menu 유지. **DB artifacts**: 72/73/74/75/76/77/78/79 (8 SQL) + `_artifacts/_asis_program_dump/` (AS-IS import + Python NOT NULL default 처리).
+- **2026-06-09 (SCM0005 DynamicQuery 풀스택 + SHEET_COLUMNS 전역 dedupe + 룰셋 자가 진화 #2)**: SCM0003/SCM0005 audit + SYS0013 BE/PROC_M/SP rewrite + AS-IS DQ 데이터 import (107/1886/272/157 row) + SHEET_COLUMNS binding fix + DynamicQueryResultGrid 동적 column 작업 중 사고 6 건 도출. **사고 → 룰 변환 6 건**: (1) `createPersistedStoreWithTab` 시그니처 (1 제네릭 + 2 인자) — SCM0009/SCM0005 재발 (2) `SCM_MST_SHEET_COLUMNS.COLUMN_NAME` = SP 반환 alias case-sensitive 일치 의무 — mismatch 시 row 추가되지만 cell 빈 칸 (3) `SCM_ADM_PROC_M` 행 수 + SORT_ORD = SP ALL_ARGUMENTS positional 정확 일치 의무 — PLS-00306 방지 (4) `MNU_BTN_CD` 표준 SEARCH 의무 (RETRIEVE 금지) + MNU_BTN_MPG_M ↔ USER_GR_MNU_BTN_MPG_M 일관성 — "권한없음" 방지 (5) `fetchStaticColumns` 는 `if (!initialized)` guard 밖 의무 — persist 시 영구 미호출 방지 (6) DataGrid `staticColumns` 하드코딩 `[{binding, header, width}]` 금지 — `mapRawColumnsToWijmoColumns` 의 `.filter(c => c.display)` 통과 못 함. **신규 hook 2 종**: `Doc/_rules_v2/hooks/sheet-columns-binding-match.md` / `proc-meta-signature-match.md`. **TO-BE 룰 3 종 보강**: 04_store §9/§10 (createPersistedStoreWithTab 시그니처 + fetchStaticColumns guard) / 07_datagrid §11 (staticColumns 출처 표준 — store/dynamic/하드코딩 금지) / 12_metadata_sql §13/§14 (MNU_BTN_CD 표준 + 전역 SHEET_COLUMNS dedupe). **메모리 신규 6 건**: feedback_createpersistedstorewithtab_signature / feedback_sheet_columns_binding_must_match_sp / feedback_proc_meta_must_match_sp_signature / feedback_button_code_consistency_search_vs_retrieve / feedback_fetchstaticcolumns_no_initialized_guard / feedback_grid_no_hardcoded_static_columns. **DB artifacts**: `_artifacts/57_SYS0011_dedupe / 65_GLOBAL_SHEET_COLUMNS_dedupe_all (15,166 row 삭제) / 66_SYS0013_permission_fix / 67_SYS0013_DMF0027_PROC_M_resync / 68_SYS0013_remaining_PROC_M / 69_SYS0013_SHEET_COLUMNS_register / 70_DMF0027_GET_DM_TMP_DYNAMIC_QUERY_LIST_rewrite / 71_SYS0013_SHEET_COLUMNS_resync_actual_sp_cols`. **FE 변경**: useDynamicQueryStore.ts (시그니처 fix + staticColumns state + fetchStaticColumns + setSelectedQueryId filter key 정정) / DynamicQuery.tsx (fetchStaticColumns guard 밖) / 5 sub-grid (Main/Columns/Parameters/History store-fetched + Result 동적 column) / SCM0009 AuthApprovalGrid 동일 패턴. **AS-IS data import**: `_artifacts/_asis_dq_dump/` (5 dump txt + convert_to_oracle.py NOT NULL default 처리 + insert_dq_*.sql 4 파일). 00_INDEX hook 카탈로그 14→16 항목 추가 + T08/T04 트리거 매트릭스 보강.
+- **2026-06-09 (SCM0008/0009 풀스택 fix + 룰셋 자가 진화)**: 사용자 명시 요구 다회 → SCM0008 Auth Request 4 사고 묶음 + SCM0009 Auth Approval 풀스택 (form 표준 컴포넌트 / Grid 메타 / SP dual cursor / i18n) 작업 후 룰셋 v2 패키지화. **사고 → 룰 변환 6 건**: (1) `useProcMutation onSuccess` override 시 default (invalidate + toast) 완전 대체 — 4 요소 명시 의무 (2) Oracle GET SP dual OUT cursor (`O_RC` + `O_RESULT_CURSOR`) — 단일 cursor 사용 시 FE `data.o_rc` undefined → grid 빈 표시 (3) DataGrid `selectionMode={SelectionMode.Row}` — 단일 row 선택 grid 의무 명시 (4) 그리드 특화 액션 버튼 (Add/Delete) 은 SubTitle 이 아닌 TitleArea.rightButtons 배치 (5) 서버 데이터 (APPROVAL_RESULT 등) 기반 row.isSelected 자동 setting 금지 (6) Recently-Added row 표시 = Wijmo `loadedRows` event handler + ref 3 요소 패턴 의무 (useEffect 단독 X) + (7) SearchArea Grid size 균등 표준 (3 field = 3/3/3). **신규 hook 3 종**: `Doc/_rules_v2/hooks/mutation-onsuccess-defaults.md` / `sp-dual-cursor-pattern.md` / `grid-interaction-patterns.md`. **TO-BE 룰 5 종 보강**: 07_datagrid §8/§9/§10 (selectionMode + 자동체크 금지 + recently-added) / 09_subtitle_hotkey §12 (그리드 특화 액션 배치) / 11_be_controller_service §3.1 (dual cursor 강화) / 12_metadata_sql §2.4.1 (PROC_M cursor 표준) / 06_search_area §10 (Grid size 균등). **메모리 신규 7 건**: feedback_useprocmutation_onsuccess_override / feedback_sp_dual_out_cursor_pattern / feedback_grid_selectionmode_row / feedback_grid_action_button_placement / feedback_no_auto_check_on_server_state / feedback_recently_added_loadedrows_pattern / feedback_form_grid_equal_sizing. **DB artifacts**: `_artifacts/57~63_SYS0011/SYS0012*.sql` (8 file — dedupe / SHEET_COLUMNS / API_M / MNU_BTN_MPG_M / PROC_M / USER_GR_MNU_BTN_MPG_M / SP 3 종 + dual cursor fix). **FE 변경**: SubTitle.tsx `searchAction` prop 신설 / AuthRequest.tsx + AuthApproval.tsx + AuthApprovalForm.tsx + useAuthApprovalStore.ts + AuthApprovalGrid.tsx + AuthorityGrid.tsx + MyAuthorityListGrid.tsx + DivisionGrid.tsx + UserInfoDetail.tsx 모두 표준 컴포넌트 + 룰 적용. **i18n**: KO/EN/CN.json 에 LBL00601~LBL00617 (17 키) 추가 + AuthRequest/UserInfoDetail 의 t() key 정리. 00_INDEX hook 카탈로그 11→14 항목 추가 + T05/T07 트리거 매트릭스 보강. 신규 화면 작성 시 룰 v2 트리거 매트릭스에서 자동 분기.
+- **2026-06-06 (SCM0008 fix + 공통 버튼 기본 표시 정책 + SearchArea 부재 Search 버튼 룰화)**: 사용자 명시 요구 3건 → 룰 자가 진화. **SCM0008 (Auth Request) 사고**: (1) hotkeyConfig 9 키 (insert/delete/save/search/condition/resetCondition/excel/upload/manual) 전부 false → Sort/Filter/Excel 까지 숨김 + SearchArea 부재 + search false → 사용자가 조회 트리거 + 정렬/필터/엑셀 다운로드 수단 없음 (2) SCM_MST_SHEET_COLUMNS PROGRAM_ID='SYS0011' 의 4 sheet 모두 정확히 2배 중복 (authority 6=3×2 / division 4=2×2 / myAuthorityList 18=9×2 / userInfo 14=7×2 = TOT 42 / DISTINCT 21). **fix**: (1) `_artifacts/57_SYS0011_SCM0008_sheet_columns_dedupe.sql` 4-파일 세트 적용 (21 row 삭제, 잔존 0건 검증 PASS) (2) `nscm-fe/packages/shared/src/components/organisms/sub-title/SubTitle.tsx` 에 **`searchAction?: () => void` prop 신설** — rightButtons 의 맨 앞 (customButtons 보다 좌측) 에 "Search(F5)" 자동 렌더 + F5 hotkey 자동 연동 (3) `AuthRequest.tsx` 의 hotkeyConfig 일괄 false 제거 → Hidden allowlist (insert/delete/save) + UsrConditionPanel 부재 (condition/resetCondition false) + manual/upload false + sort/filter/excel 생략 (자동 활성) + `searchAction={handleSearch}` (useQueryClient invalidate `[tabId]`). **룰 보강**: 룰 09 §2.2.1 (공통 버튼 기본 표시 정책 — Hidden allowlist + Always-visible 매트릭스 + SCM0008 위반 사례) + §2.5 (SearchArea 부재 searchAction 의무) + §7.4/§7.5 anti-pattern + §8 grep #6 (일괄 false 검출) + #7 (disableSearchArea + searchAction 누락 검출) / hook `asis-button-mapping.md` §5 (공통 버튼 정책 + 의무 매트릭스 + SCM0008 사례) / **hook 신규 `search-button-when-no-searcharea.md`** (SubTitle searchAction prop 구현 사양 + 화면 적용 패턴 + 자동 검증 grep). **메모리 신규 2건**: `feedback_common_button_visibility_default.md` (Hidden allowlist 정책 + 자동 검증 grep + 사고 사례) + `feedback_search_button_when_no_searcharea.md` (SubTitle prop 사양 + 적용 조건 2축 + 기존 위반 화면 인벤토리 4건 — admin 3 화면 향후 처리 TODO). MEMORY.md 인덱스 보강.
 - **2026-06-03 (DMF0020 메인 SP 1:1 변환 + popup 3종 AS-IS 매핑 + Wijmo 머지 sticky + 공용 ColumnSettingModal)**: 사용자 요구 다회 보완 → 룰 정리. **메인 SP B 옵션 변환**: AS-IS `DMF0020_GET_SCM_MST_FUTURE_PRICE` 1,898 lines → Oracle `P_DMF0020_GET_SCM_MST_FUTURE_PRICE_M` (Dynamic PIVOT + 28 fixed cols + 4 measure cartesian) + SAVE SP `P_DMF0020_SAVE_SCM_MST_FUTURE_PRICE_ALL_M` (17 IN ^-delim CLOB DELETE-INSERT). **CSV 적재**: SCM_MST_FUTURE_PRICE div=40/81 105만 rows + SCM_SYS_CALENDAR_M 15K + SCM_MST_SHEET_MEASURE. **CMBO 등록**: FcstType / CustomsHandbook / BizType (BP_FCST_TYPE / BP_CUSTOMS_HANDBOOK / SCM_MST_PROJECT). **3 popup AS-IS 1:1 매핑**: ExchangeRate (long→wide pivot + 2-row YYYY/MM header + Division/Currency Restricted merge), PriceBatch (2-row 검색조건 + 12 cols grid + Project/Item popup), ColumnSetting (dual grid Base/User + Sort combo). **공용 컴포넌트화 (Option C)**: `features/master/src/components/columnSettingModal/` 신설 → DMF0020/DMF0043_01 둘 다 호출 (Hybrid — BE SP 결과 + fallbackColumns FE meta fallback). **사고 → 룰화 8건**: (1) Wijmo `g.mergedRanges` 잘못된 API → 룰 12 §11.6.3.1 + hook `wijmo-merge-sticky-content.md` 신규 + 메모리 `feedback_wijmo_merge_sticky_content.md` (2) merge cell scroll 시 빈 영역 → §11.6.3.2 viewport sticky content 패턴 (translateY 보정) (3) Wijmo `DataMap` import 위치 (`@mescius/wijmo.grid`) → 룰 23 §8.1 신설 (Wijmo class export 위치 정확 표) (4) CustomDialog `DEFAULT_HEIGHT='50vh'` 미고려 SCSS `min-height: 70vh` 잘림 + position='overflow' 중앙 미표시 → hook `popup-dialog-layout.md` 신규 + 메모리 `feedback_popup_dialog_layout.md` (5) React Query refetch loop (filters 매 render 신규 객체) → useMemo 의무 (각 popup 적용) (6) CMBO_SQL_M `@varName` quote 없이 raw 치환 → VARCHAR2 비교 시 ORA-01722 (SEGMENT1='81_UC' 등) → hook `oracle-cmbo-varname-quote.md` 신규 + 메모리 `feedback_oracle_cmbo_quote_pitfall.md` (TO_CHAR wrap 의무 + Oracle '' = NULL 룰) (7) SCM_ADM_API_M `API_TP_CD` NOT NULL 누락 → 기존 메모리 `reference_scm_adm_api_m_ddl` cross-check 안 함 (anti-simplification 위반 자체 분석) (8) priceBatch sheet 가 환율 SP `P_DMF0020_GET_SCM_MST_FUTURE_PRICE_POPUP` (6 IN) 잘못 routing → 메인 SP `P_DMF0020_GET_SCM_MST_FUTURE_PRICE_M` (17 IN) 으로 변경. **00_INDEX hook 카탈로그**: 06w (wijmo-merge-sticky) + 06x (popup-dialog-layout) + 06y (oracle-cmbo-varname) 3건. **룰 23 §12.A 공용 modal 인벤토리**: `ColumnSettingModal` 추가 / `ProjectByDivisionModal` setSelectedValue 확장 (optional `projectStatus`/`bizTypeName` 자동 채움 — DMF0020). **메모리 신규 4건** + MEMORY.md 인덱스 보강.

@@ -1,3 +1,4 @@
+import { SelectionMode } from '@mescius/wijmo.grid';
 import type { FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import type { MutableRefObject } from 'react';
@@ -33,6 +34,7 @@ export const AuthorityGrid = ({ gridRef, gridFilterRef }: AuthorityGridProps) =>
       gridFilterRef={gridFilterRef}
       itemsSource={data?.o_rc ?? []}
       staticColumns={staticColumns}
+      selectionMode={SelectionMode.Row}
       isReadOnly
     />
   );

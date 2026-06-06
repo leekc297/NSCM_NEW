@@ -1,3 +1,4 @@
+import { apiClient } from '@foundation/apis';
 import { createPersistedStoreWithTab } from '@shared/stores';
 
 import { MENU_ID, SHEETS } from './erp-edi-master.constants';
@@ -21,8 +22,20 @@ interface ErpEdiMasterAction {
   reset: () => void;
   setSearchCondition: (params: Partial<SearchCondition>) => void;
   setFilter: () => void;
+  setRepairFilter: () => void;
   setSubFilter: () => void;
   setOpenSearchArea: (open?: boolean) => void;
+  /**
+   * G1 GET — 저장된 검색조건 자동 restore (Phase 7 PoC 보완 fix, 2026-06-04)
+   *
+   * 룰 v2 _tobe/04_store.md §2.7 (read-only 화면도 G1 GET 적용 가능)
+   * BE: GET /admin/menu/{mnuId}/search-conditions (MenuController 이미 구현)
+   *
+   * - 화면 진입 시 useEffect 에서 1 회 호출
+   * - 저장된 검색조건 → searchCondition 자동 restore + initialized=true
+   * - 미저장 시 initSearch (default) 유지
+   */
+  fetchSearchConditions: () => Promise<void>;
 }
 
 const fmtYyyymmdd = (d: Date): string =>
@@ -84,8 +97,25 @@ export const useErpEdiMasterStore = createPersistedStoreWithTab<
         };
       });
     },
+    // AS-IS spdSummary_CellDoubleClick (.cs L1887) → FindData_SubRepair_New (.cs L1051)
+    // 1단 SUMMARY row 더블클릭 시 senderName + flag 으로 REPAIR refetch
+    setRepairFilter: () => {
+      set(state => {
+        const c = state.searchCondition;
+        state.filters = {
+          ...state.filters,
+          [SHEETS.REPAIR]: {
+            divisionId: c.divisionId,
+            fromYyyymmdd: c.fromYyyymmdd,
+            toYyyymmdd: c.toYyyymmdd,
+            senderName: c.senderName,
+            flag: c.flag,
+          },
+        };
+      });
+    },
     // AS-IS FindData_SubSalesSite (.cs L895) + FindData_SubSalesSiteProjectModel (.cs L946)
-    // 3단 (sub) 의 SALES_SITE / SSPM 호출 trigger — 메인 row 더블클릭 시 호출
+    // 3단 (sub) 의 SALES_SITE / SSPM 호출 trigger — 2단 REPAIR row 더블클릭 시 호출
     setSubFilter: () => {
       set(state => {
         const c = state.searchCondition;
@@ -108,6 +138,33 @@ export const useErpEdiMasterStore = createPersistedStoreWithTab<
     setOpenSearchArea: open => {
       set(state => {
         state.openSearchArea = open ?? !state.openSearchArea;
+      });
+    },
+    /**
+     * G1 GET — 저장된 검색조건 자동 restore (Phase 7 PoC 보완 fix)
+     * BE 이미 구현 (MenuController.retrieveSearchConditions — `/admin/menu/{mnuId}/search-conditions`)
+     */
+    fetchSearchConditions: async () => {
+      if (get().initialized) return;
+      try {
+        const param = await apiClient.get<
+          { paramNm: keyof SearchCondition; paramCtn: string }[]
+        >(`/admin/menu/${MENU_ID}/search-conditions`);
+
+        if (param.data.result?.length > 0) {
+          const restored = param.data.result.reduce((acc, curr) => {
+            acc[curr.paramNm] = curr.paramCtn as SearchCondition[typeof curr.paramNm];
+            return acc;
+          }, {} as Partial<SearchCondition>);
+          set(state => {
+            state.searchCondition = { ...state.searchCondition, ...restored };
+          });
+        }
+      } catch {
+        // G1 GET 실패는 silently fail — default initSearch 유지
+      }
+      set(state => {
+        state.initialized = true;
       });
     },
   }),

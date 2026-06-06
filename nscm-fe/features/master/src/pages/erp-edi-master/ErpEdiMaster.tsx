@@ -50,9 +50,12 @@ export const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
   const searchCondition = useErpEdiMasterStore(s => s.searchCondition);
   const setSearchCondition = useErpEdiMasterStore(s => s.setSearchCondition);
   const setFilter = useErpEdiMasterStore(s => s.setFilter);
+  const setRepairFilter = useErpEdiMasterStore(s => s.setRepairFilter);
   const setSubFilter = useErpEdiMasterStore(s => s.setSubFilter);
   const openSearchArea = useErpEdiMasterStore(s => s.openSearchArea);
   const setOpenSearchArea = useErpEdiMasterStore(s => s.setOpenSearchArea);
+  const initialized = useErpEdiMasterStore(s => s.initialized);
+  const fetchSearchConditions = useErpEdiMasterStore(s => s.fetchSearchConditions);
 
   const setAlert = useMessageStore(s => s.setAlert);
   const setToast = useMessageStore(s => s.setToast);
@@ -102,6 +105,10 @@ export const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
   });
 
   useEffect(() => {
+    // G1 GET — 저장된 검색조건 자동 restore (Phase 7 PoC 보완 fix, 2026-06-04)
+    // 룰 v2 _tobe/04_store.md §2.7 (read-only 화면도 G1 GET 적용 가능)
+    if (!initialized) void fetchSearchConditions();
+
     if (!filters[SHEETS.MAIN]) setFilter();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -129,11 +136,38 @@ export const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
     }
   };
 
-  // AS-IS spdSub_CellDoubleClick: Summary row 더블클릭 → 3단 sub 영역 호출
+  // AS-IS spdSummary_CellDoubleClick (.cs L1887) → FindData_SubRepair_New (.cs L1051)
+  // 1단 SUMMARY row 더블클릭 → senderName + flag (column 별) 로 2단 REPAIR refetch
+  // column 매핑: GSCM_MASTER_DATA(col2)='4' / SUCCESS(col3)='5' / EXCEPTION_DATA(col4)='6' / 그 외='ALL'
   const handleSummaryDoubleClick = () => {
     const g = summaryGridRef.current;
     if (!g) return;
     const row = g.selectedItems[0] as SummaryRow | undefined;
+    if (!row) return;
+
+    const colIdx = (g as unknown as { selection?: { col?: number } }).selection?.col ?? -1;
+    const flagMap: Record<number, string> = { 2: '4', 3: '5', 4: '6' };
+    const sFlag = flagMap[colIdx] ?? 'ALL';
+
+    // AS-IS .cs L1933: flag='4' + GscmMasterData='0' → 안내 후 호출 skip
+    if (sFlag === '4' && (Number(row.GSCM_MASTER_DATA) || 0) === 0) {
+      void setAlert({ type: 'alert', content: '정비할 데이터가 없습니다.' });
+      return;
+    }
+
+    setSearchCondition({
+      senderName: String(row.EDI_SENDER_NAME ?? ''),
+      flag: sFlag,
+    });
+    setRepairFilter();
+  };
+
+  // AS-IS spdRepair_CellDoubleClick (.cs L1957) → FindData_SubSalesSite (.cs L895) + FindData_SubSalesSiteProjectModel (.cs L946)
+  // 2단 REPAIR row 더블클릭 → 3단 SalesSite + SSPM refetch
+  const handleRepairDoubleClick = () => {
+    const g = repairGridRef.current;
+    if (!g) return;
+    const row = g.selectedItems[0] as RepairRow | undefined;
     if (!row) return;
     setSearchCondition({
       selectedSoldTo: String(row.ERP_SOLDTO ?? ''),
@@ -183,20 +217,26 @@ export const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
     },
   ];
 
+  // Wijmo FlexGrid itemsSource setter 가 첫 row 의 Object.keys() 호출 → null/undefined row 또는
+  // non-array 받으면 "Cannot convert undefined or null to object" 폭발. 4 grid 모두 Array 가드 + null filter.
+  const safeRows = <T,>(data: unknown): T[] => {
+    if (!Array.isArray(data)) return [];
+    return data.filter((r): r is T => r != null && typeof r === 'object');
+  };
   const summaryRows = useMemo<SummaryRow[]>(
-    () => (summaryData?.o_rc1 ?? []) as SummaryRow[],
+    () => safeRows<SummaryRow>(summaryData?.o_rc1),
     [summaryData]
   );
   const repairRows = useMemo<RepairRow[]>(
-    () => (repairData?.o_rc1 ?? []) as RepairRow[],
+    () => safeRows<RepairRow>(repairData?.o_rc1),
     [repairData]
   );
   const salesSiteRows = useMemo<SalesSiteRow[]>(
-    () => (salesSiteData?.O_RESULT_CURSOR ?? salesSiteData?.o_rc1 ?? []) as SalesSiteRow[],
+    () => safeRows<SalesSiteRow>(salesSiteData?.O_RESULT_CURSOR ?? salesSiteData?.o_rc1),
     [salesSiteData]
   );
   const sspmRows = useMemo<SspmRow[]>(
-    () => (sspmData?.o_rc1 ?? []) as SspmRow[],
+    () => safeRows<SspmRow>(sspmData?.o_rc1),
     [sspmData]
   );
 
@@ -268,7 +308,13 @@ export const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
                 (summaryGridRef as { current: FlexGridType<SummaryRow> | null }).current = g;
               }
               g.isReadOnly = true;
-              g.itemDoubleClick.addHandler(() => handleSummaryDoubleClick());
+              // wijmo 버전별 itemDoubleClick event 가드 + DOM dblclick fallback
+              const dbl = (g as unknown as { itemDoubleClick?: { addHandler?: (h: () => void) => void } }).itemDoubleClick;
+              if (dbl && typeof dbl.addHandler === 'function') {
+                dbl.addHandler(() => handleSummaryDoubleClick());
+              } else if (g.hostElement) {
+                g.hostElement.addEventListener('dblclick', () => handleSummaryDoubleClick());
+              }
               applyReadOnlyColoring(g as FlexGridType<unknown>);
             }}
             itemsSource={summaryRows}
@@ -297,6 +343,12 @@ export const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
                 (repairGridRef as { current: FlexGridType<RepairRow> | null }).current = g;
               }
               g.isReadOnly = true;
+              const dbl = (g as unknown as { itemDoubleClick?: { addHandler?: (h: () => void) => void } }).itemDoubleClick;
+              if (dbl && typeof dbl.addHandler === 'function') {
+                dbl.addHandler(() => handleRepairDoubleClick());
+              } else if (g.hostElement) {
+                g.hostElement.addEventListener('dblclick', () => handleRepairDoubleClick());
+              }
               applyReadOnlyColoring(g as FlexGridType<unknown>);
             }}
             itemsSource={repairRows}

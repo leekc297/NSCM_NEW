@@ -90,6 +90,7 @@ export const GroupManagement = ({ tabId, title }: PageProps<MENU_ID>) => {
         dataCount={data?.o_rc.length ?? 0}
         excelFileName='Group'
         hotkeyConfig={hotkeyConfig}
+        searchAction={() => setFilters({ group: '', useYn: 'ALL' })}
       />
       <GroupManagementGrid
         gridRef={gridRef}

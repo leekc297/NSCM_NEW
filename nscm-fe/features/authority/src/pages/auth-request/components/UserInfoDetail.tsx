@@ -45,7 +45,7 @@ export const UserInfoDetail = () => {
     <DetailTableLine>
       <DetailTableRow>
         <DetailTableHeaderCell>
-          <Label labelText={t('', '_User ID')} />
+          <Label labelText={t('LBL00613', 'User ID')} />
         </DetailTableHeaderCell>
         <DetailTableDataCell>
           <Typography variant='bodyBasic'>{userInfo?.USER_ID ?? ''}</Typography>
@@ -53,7 +53,7 @@ export const UserInfoDetail = () => {
       </DetailTableRow>
       <DetailTableRow>
         <DetailTableHeaderCell>
-          <Label labelText={t('', '_User Name')} />
+          <Label labelText={t('LBL00614', 'User Name')} />
         </DetailTableHeaderCell>
         <DetailTableDataCell>
           <Typography variant='bodyBasic'>{userInfo?.USER_NM ?? ''}</Typography>
@@ -61,7 +61,7 @@ export const UserInfoDetail = () => {
       </DetailTableRow>
       <DetailTableRow>
         <DetailTableHeaderCell>
-          <Label labelText={t('', '_Department')} />
+          <Label labelText={t('LBL00615', 'Department')} />
         </DetailTableHeaderCell>
         <DetailTableDataCell>
           <Typography variant='bodyBasic'>{userInfo?.DEPT_NM ?? ''}</Typography>
@@ -69,7 +69,7 @@ export const UserInfoDetail = () => {
       </DetailTableRow>
       <DetailTableRow>
         <DetailTableHeaderCell>
-          <Label labelText={t('', '_Language')} isRequired />
+          <Label labelText={t('LBL00616', 'Language')} isRequired />
         </DetailTableHeaderCell>
         <DetailTableDataCell>
           <CustomDropdown
@@ -82,7 +82,7 @@ export const UserInfoDetail = () => {
       </DetailTableRow>
       <DetailTableRow>
         <DetailTableHeaderCell>
-          <Label labelText={t('', '_Time Zone')} isRequired />
+          <Label labelText={t('LBL00617', 'Time Zone')} isRequired />
         </DetailTableHeaderCell>
         <DetailTableDataCell>
           <CustomDropdown

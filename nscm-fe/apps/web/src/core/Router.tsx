@@ -41,10 +41,22 @@ const GroupMenuPageWithTab = LazyLoader(() =>
 const LookupPageWithTab = LazyLoader(() =>
   import('@admin/lookup').then(m => ({ default: m.Lookup }))
 );
+const DynamicQueryPageWithTab = LazyLoader(() =>
+  import('@admin/dynamic-query').then(m => ({ default: m.DynamicQuery }))
+);
+const ProgramPageWithTab = LazyLoader(() =>
+  import('@admin/program').then(m => ({ default: m.Program }))
+);
+const GroupUserPageWithTab = LazyLoader(() =>
+  import('@admin/group-user').then(m => ({ default: m.GroupUser }))
+);
 
 // @authority
 const AuthRequestPageWithTab = LazyLoader(() =>
   import('@authority/auth-request').then(m => ({ default: m.AuthRequest }))
+);
+const AuthApprovalPageWithTab = LazyLoader(() =>
+  import('@authority/auth-approval').then(m => ({ default: m.AuthApproval }))
 );
 
 // @master
@@ -119,6 +131,10 @@ export const router: RemixRouter = createBrowserRouter([
                 path: ROUTE_PATHS.SYS0010,
                 element: <LookupPageWithTab />,
               },
+              {
+                path: ROUTE_PATHS.SYS0013,
+                element: <DynamicQueryPageWithTab />,
+              },
             ],
           },
           {
@@ -161,6 +177,14 @@ export const router: RemixRouter = createBrowserRouter([
                 path: ROUTE_PATHS.SYS0009,
                 element: <MenuBtnManagementPageWithTab />,
               },
+              {
+                path: ROUTE_PATHS.SYS0014,
+                element: <GroupUserPageWithTab />,
+              },
+              {
+                path: ROUTE_PATHS.SYS0015,
+                element: <ProgramPageWithTab />,
+              },
             ],
           },
         ],
@@ -174,6 +198,10 @@ export const router: RemixRouter = createBrowserRouter([
               {
                 path: ROUTE_PATHS.SYS0011,
                 element: <AuthRequestPageWithTab />,
+              },
+              {
+                path: ROUTE_PATHS.SYS0012,
+                element: <AuthApprovalPageWithTab />,
               },
             ],
           },

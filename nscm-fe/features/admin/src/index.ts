@@ -9,3 +9,5 @@ export * from './pages/group-menu/GroupMenuManagement';
 export * from './pages/user-management/UserManagement';
 export * from './pages/menu-button-management/MenuButtonManagement';
 export * from './pages/lookup/Lookup';
+export * from './pages/program/Program';
+export * from './pages/group-user/GroupUser';

@@ -1,4 +1,4 @@
-import { CellRange, type FlexGrid } from '@mescius/wijmo.grid';
+import { CellRange, CellType, type CellRangeEventArgs, type FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useRef, useState, type MutableRefObject } from 'react';
 
@@ -109,6 +109,35 @@ export const CustomerModelMappingGrid = ({
     }
   };
 
+  // ⭐ B3 격차 보강 (Phase 7 A1 후속, 2026-06-04) — DMF0006 격차 #1
+  // AS-IS DMF0006_CustomerModelMapping.cs L1147~1156:
+  //   CONVERT_QTY_CELL / CONVERT_QTY_MODULE / CONVERT_QTY_PACK 음수 입력 시 "0" 보정.
+  // 룰 07 §2.10.2 (validation 변형).
+  const handleNegativeGuard = (
+    grid: FlexGrid<ResponseData<MENU_ID, SHEETS.CUSTOMER_MODEL_MAPPING>>,
+    cellRangeEventArgs: CellRangeEventArgs
+  ) => {
+    if (cellRangeEventArgs.panel.cellType !== CellType.Cell) return;
+    const binding = grid.columns[cellRangeEventArgs.col]?.binding;
+    if (
+      binding !== 'CONVERT_QTY_CELL' &&
+      binding !== 'CONVERT_QTY_MODULE' &&
+      binding !== 'CONVERT_QTY_PACK'
+    )
+      return;
+
+    const dataItem = GridUtils.getRow(grid, cellRangeEventArgs.row);
+    if (!dataItem) return;
+
+    const raw = (dataItem as Record<string, unknown>)[binding];
+    const value = Number(raw ?? 0);
+    if (value >= 0) return;
+
+    editTrackerRef.current?.storeChange(dataItem, binding, raw, 0);
+    (dataItem as Record<string, unknown>)[binding] = 0;
+    grid.refreshRange(new CellRange(cellRangeEventArgs.row, cellRangeEventArgs.col, cellRangeEventArgs.row, cellRangeEventArgs.col));
+  };
+
   return (
     <>
       <DataGrid<ResponseData<MENU_ID, SHEETS.CUSTOMER_MODEL_MAPPING>>
@@ -118,6 +147,7 @@ export const CustomerModelMappingGrid = ({
         itemsSource={data}
         staticColumns={staticColumn ?? []}
         dblClick={handleGridDblclick}
+        cellEditEnded={handleNegativeGuard}
       />
       <ProjectByDivisionModal
         open={openPrjByDivisionModal}

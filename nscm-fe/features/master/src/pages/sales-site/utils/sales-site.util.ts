@@ -26,9 +26,13 @@ const buildSalesSite = (row: WijmoRowItem) => {
   const country = String(row['COUNTRY'] ?? '')
     .trim()
     .slice(0, 2);
+  // ⭐ B4 fix (Phase 7 적용, 2026-06-04): DB SCM_MST_SITE.CITY 가 5-char 합성 코드
+  //    (Country prefix 2 chars + City code 3 chars — 예: 'JPHIU' = JP+HIU, 'CNSZX' = CN+SZX).
+  //    DB 검증 결과 2936/2936 rows 모두 5-char CITY + 2-char COUNTRY.
+  //    AS-IS DMF0004_SalesSite.cs L2565~2567 의 City.Substring(2,3) 과 동등 — 앞 2 chars (country prefix) skip 후 3 chars 추출.
   const city = String(row['CITY'] ?? '')
     .trim()
-    .slice(0, 3);
+    .slice(2, 5);
 
   if (!soldToCustomer || !country || !city) return '';
 

@@ -31,7 +31,7 @@ export const LookupForm = ({ onSubmit }: LookupFormProps) => {
         <>
           <Grid size={4}>
             <FormItem
-              label={t('', '_Lookup Type')}
+              label={t('LBL00618', 'Lookup Type')}
               labelAlign='right'
               labelSize='long'
               render={() => (
@@ -46,7 +46,7 @@ export const LookupForm = ({ onSubmit }: LookupFormProps) => {
           </Grid>
           <Grid size={4}>
             <FormItem
-              label={t('', '_System')}
+              label={t('LBL00621', 'System')}
               labelAlign='right'
               labelSize='long'
               render={() => (
@@ -70,7 +70,7 @@ export const LookupForm = ({ onSubmit }: LookupFormProps) => {
           </Grid>
           <Grid size={4}>
             <FormItem
-              label={t('', '_Valid')}
+              label={t('LBL00622', 'Valid')}
               labelAlign='right'
               labelSize='long'
               render={() => (

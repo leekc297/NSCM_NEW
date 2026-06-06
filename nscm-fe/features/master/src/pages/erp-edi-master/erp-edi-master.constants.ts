@@ -33,9 +33,10 @@ export const VALIDATION_MSG = {
 } as const;
 
 // AS-IS Designer.cs L58 + .cs L729 — 사용자 권한 기반 동적 lookup (SHEETS.DIVISION 호출)
-// 정적 fallback (SP 호출 실패 시 — 최소 default '40')
+// 정적 fallback (SP 호출 실패 시 — minyonglee1 권한 division 인벤토리)
 export const DIVISION_FALLBACK: ReadonlyArray<{ value: string; label: string }> = [
   { value: '40', label: '40 (Mobility & IT Battery)' },
+  { value: '81', label: '81 (ESS)' },
 ];
 
 // AS-IS .cs FindData_SubRepair 의 flag 옵션 (.cs L832~852 추정 — 정합성/정비대상 등)

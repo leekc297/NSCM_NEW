@@ -125,7 +125,7 @@ export const Lookup = ({ tabId, title }: PageProps<MENU_ID>) => {
       if (!selectedLookupType) {
         void setAlert({
           type: 'alert',
-          content: t('', '_Please select a Lookup Type first.'),
+          content: t('LBL00620', 'Please select a Lookup Type first.'),
         });
         return;
       }
@@ -177,10 +177,10 @@ export const Lookup = ({ tabId, title }: PageProps<MENU_ID>) => {
   };
 
   const hotkeyConfig: HotkeyConfig = {
+    search: handleSubmit,
     insert: onInsert,
     delete: onDelete,
     save: onSave,
-    excel: false,
     manual: false,
     upload: false,
   };
@@ -207,7 +207,7 @@ export const Lookup = ({ tabId, title }: PageProps<MENU_ID>) => {
         searchParam={searchParams}
       />
       <div className={styles.outerModule}>
-        <TitleArea isSubTitle title={t('', '_Lookup Type')} depth='h4' />
+        <TitleArea isSubTitle title={t('LBL00618', 'Lookup Type')} depth='h4' />
         <div className={styles.tableWrapper}>
           <div className={styles.masterGrid}>
             <LookupMasterGrid
@@ -217,7 +217,7 @@ export const Lookup = ({ tabId, title }: PageProps<MENU_ID>) => {
             />
           </div>
           <div className={styles.innerModule}>
-            <TitleArea isSubTitle title={t('', '_Lookup Values')} depth='h4' />
+            <TitleArea isSubTitle title={t('LBL00619', 'Lookup Values')} depth='h4' />
             <div className={styles.detailGrid}>
               <LookupDetailGrid
                 gridRef={detailGridRef}

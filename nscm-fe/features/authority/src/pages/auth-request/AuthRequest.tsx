@@ -1,12 +1,13 @@
 import type { FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { useEffect, useRef } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import { useEffect, useRef, useState } from 'react';
 
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { GridUtils } from '@foundation/utils';
 import { MainTitle, SubTitle } from '@shared/components';
 import { useProcMutation, useTabProcQuery } from '@shared/hooks';
-import { TitleArea } from '@shared/lges';
+import { Button, TitleArea } from '@shared/lges';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
 import type { RESPONSE_SET } from './auth-request.constants';
@@ -38,7 +39,9 @@ export const AuthRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
   const myAuthGridRef = useRef<FlexGrid<ResponseData<MENU_ID, SHEETS.MY_AUTHORITY_LIST>>>();
   const myAuthGridFilterRef = useRef<FlexGridFilter>();
 
+  const queryClient = useQueryClient();
   const session = useSessionStore(state => state.session);
+  const [recentlyAddedKeys, setRecentlyAddedKeys] = useState<Set<string>>(() => new Set());
   const initialized = useAuthRequestStore(state => state.initialized);
   const filters = useAuthRequestStore(state => state.filters);
   const langCd = useAuthRequestStore(state => state.langCd);
@@ -46,6 +49,7 @@ export const AuthRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
   const initFilters = useAuthRequestStore(state => state.initFilters);
   const fetchStaticColumns = useAuthRequestStore(state => state.fetchStaticColumns);
   const setAlert = useMessageStore(state => state.setAlert);
+  const setToast = useMessageStore(state => state.setToast);
 
   const { data: myAuthData } = useTabProcQuery<MENU_ID, SHEETS.MY_AUTHORITY_LIST>({
     menuId: MENU_ID,
@@ -95,15 +99,22 @@ export const AuthRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
     const selectedAuthority = GridUtils.getSelectedRows(authorityGridRef.current)?.[0];
     const checkedDivisions = collectCheckedRows(divisionGridRef.current);
 
-    if (!selectedAuthority || checkedDivisions.length === 0) {
+    if (!selectedAuthority) {
       void setAlert({
-        content: t('MSG00013', '_Please enter the required fields.'),
+        content: t('LBL00608', 'Please select an Authority row.'),
+      });
+      return;
+    }
+    if (checkedDivisions.length === 0) {
+      void setAlert({
+        content: t('LBL00609', 'Please check at least one Division checkbox.'),
       });
       return;
     }
 
     const rows: ResponseData<MENU_ID, SHEETS.MY_AUTHORITY_LIST, RESPONSE_SET.OUTPUT>[] =
       checkedDivisions.map(div => ({
+        USER_ID: session.userId ?? '',
         USER_GR_ID: selectedAuthority.USER_GR_ID,
         USER_GR_NM: selectedAuthority.USER_GR_NM,
         DIVISION_ID: div.DIVISION_ID,
@@ -114,9 +125,26 @@ export const AuthRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
         LAST_UPDATED_BY: session.userId ?? '',
         LAST_UPDATE_DATE: '',
         CRUD_TYPE: ACTIVE_FLAG.ADD,
-      }));
+      })) as ResponseData<MENU_ID, SHEETS.MY_AUTHORITY_LIST, RESPONSE_SET.OUTPUT>[];
 
-    mutateMyAuth(rows);
+    const addedKeys = new Set(
+      checkedDivisions.map(div => `${selectedAuthority.USER_GR_ID}::${div.DIVISION_ID}`)
+    );
+
+    mutateMyAuth(rows, {
+      onSuccess: () => {
+        setRecentlyAddedKeys(addedKeys);
+        const divGrid = divisionGridRef.current;
+        if (divGrid) {
+          for (let i = 0; i < divGrid.rows.length; i += 1) {
+            const r = divGrid.rows[i];
+            if (r) r.isSelected = false;
+          }
+        }
+        void queryClient.invalidateQueries({ queryKey: [tabId] });
+        setToast({ type: 'success', message: t('MSG00002', '_성공적으로 저장되었습니다!') });
+      },
+    });
   };
 
   const handleDelete = () => {
@@ -133,13 +161,16 @@ export const AuthRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
 
     const rows = checkedRows.map(row => ({
       ...row,
+      USER_ID: session.userId ?? '',
       LAST_UPDATED_BY: session.userId ?? '',
       CRUD_TYPE: ACTIVE_FLAG.DELETE,
-    }));
+    })) as ResponseData<MENU_ID, SHEETS.MY_AUTHORITY_LIST, RESPONSE_SET.OUTPUT>[];
 
     mutateMyAuth(rows, {
       onSuccess: () => {
-        void setAlert({ content: t('MSG00031', '_삭제되었습니다.') });
+        setRecentlyAddedKeys(new Set());
+        void queryClient.invalidateQueries({ queryKey: [tabId] });
+        setToast({ type: 'success', message: t('MSG00031', '_삭제되었습니다.') });
       },
     });
   };
@@ -151,6 +182,18 @@ export const AuthRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
     }
 
     const checkedRows = collectCheckedRows(myAuthGridRef.current);
+
+    // eslint-disable-next-line no-console
+    console.log('[SCM0008 handleRequest]', {
+      myAuthLen: myAuthData?.o_rc?.length,
+      checkedRowsLen: checkedRows.length,
+      checkedApprovalResults: checkedRows.map(r => r.APPROVAL_RESULT),
+      langCd,
+      tmzCd,
+      userInfoLangCd: userInfoData?.o_rc?.[0]?.LANG_CD,
+      userInfoTmzCd: userInfoData?.o_rc?.[0]?.TMZ_CD,
+    });
+
     if (checkedRows.length === 0) {
       void setAlert({ content: t('MSG00021', '_요청 권한을 선택해 주십시오.') });
       return;
@@ -160,23 +203,27 @@ export const AuthRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
     const currentTmzCd = tmzCd || userInfoData?.o_rc?.[0]?.TMZ_CD || '';
 
     if (!currentLangCd) {
-      void setAlert({ content: t('MSG00002', '_필수 항목을 입력해 주십시오.') });
+      void setAlert({ content: t('LBL00611', 'Please select Language.') });
       return;
     }
     if (!currentTmzCd) {
-      void setAlert({ content: t('MSG00002', '_필수 항목을 입력해 주십시오.') });
+      void setAlert({ content: t('LBL00612', 'Please select Time Zone.') });
       return;
     }
 
     const requestRows = checkedRows
-      .filter(row => row.APPROVAL_RESULT.trim() !== (APPROVAL_RESULT.REQUESTING as string))
+      .filter(row => (row.APPROVAL_RESULT ?? '').trim() !== (APPROVAL_RESULT.REQUESTING as string))
       .map(row => ({
         ...row,
+        USER_ID: session.userId ?? '',
         LAST_UPDATED_BY: session.userId ?? '',
         CRUD_TYPE: ACTIVE_FLAG.REQUEST,
-      }));
+      })) as ResponseData<MENU_ID, SHEETS.MY_AUTHORITY_LIST, RESPONSE_SET.OUTPUT>[];
 
-    if (requestRows.length === 0) return;
+    if (requestRows.length === 0) {
+      void setAlert({ content: t('LBL00610', 'Selected rows are already in REQUEST status.') });
+      return;
+    }
 
     const userInfoRow = userInfoData?.o_rc?.[0];
     const userInfoUpdate: ResponseData<MENU_ID, SHEETS.USER_INFO, RESPONSE_SET.OUTPUT>[] =
@@ -194,27 +241,48 @@ export const AuthRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
     mutateMyAuth(requestRows, {
       onSuccess: () => {
         if (userInfoUpdate.length > 0) mutateUserInfo(userInfoUpdate);
-        void setAlert({ content: t('MSG00158', '_요청되었습니다.') });
+        void queryClient.invalidateQueries({ queryKey: [tabId] });
+        setToast({ type: 'success', message: t('MSG00158', '_요청되었습니다.') });
       },
     });
   };
 
   const customButtons = [
-    { label: t('', '_Request'), action: handleRequest },
-    { label: t('', '_Add'), action: handleAdd },
-    { label: t('', '_Delete'), action: handleDelete },
+    { label: t('LBL00605', 'Request'), action: handleRequest },
   ];
 
+  const handleSearch = () => {
+    void queryClient.invalidateQueries({ queryKey: [tabId] });
+  };
+
+  const myAuthListButtons = (
+    <>
+      <Button
+        appearance='outlined'
+        priority='normal'
+        size='small'
+        buttonLabel={t('LBL00606', 'Add')}
+        onClick={handleAdd}
+      />
+      <Button
+        appearance='outlined'
+        priority='normal'
+        size='small'
+        buttonLabel={t('LBL00607', 'Delete')}
+        onClick={handleDelete}
+      />
+    </>
+  );
+
   const hotkeyConfig: HotkeyConfig = {
+    search: handleSearch,
     insert: false,
     delete: false,
     save: false,
-    search: false,
     condition: false,
     resetCondition: false,
-    excel: false,
-    upload: false,
     manual: false,
+    upload: false,
   };
 
   return (
@@ -232,25 +300,31 @@ export const AuthRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
       <div className={styles.contents}>
         <div className={styles.row}>
           <div className={styles.module}>
-            <TitleArea isSubTitle title={t('', '_Authority')} depth='h4' />
+            <TitleArea isSubTitle title={t('LBL00601', 'Authority')} depth='h4' />
             <AuthorityGrid gridRef={authorityGridRef} gridFilterRef={authorityGridFilterRef} />
           </div>
           <div className={styles.module}>
-            <TitleArea isSubTitle title={t('', '_Division')} depth='h4' />
+            <TitleArea isSubTitle title={t('LBL00602', 'Division')} depth='h4' />
             <DivisionGrid gridRef={divisionGridRef} gridFilterRef={divisionGridFilterRef} />
           </div>
         </div>
         <div className={styles.row}>
           <div className={styles.userInfoModule}>
-            <TitleArea isSubTitle title={t('', '_User Info')} depth='h4' />
+            <TitleArea isSubTitle title={t('LBL00603', 'User Info')} depth='h4' />
             <UserInfoDetail />
           </div>
           <div className={styles.module}>
-            <TitleArea isSubTitle title={t('', '_My Authority List')} depth='h4' />
+            <TitleArea
+              isSubTitle
+              title={t('LBL00604', 'My Authority List')}
+              depth='h4'
+              rightButtons={myAuthListButtons}
+            />
             <MyAuthorityListGrid
               gridRef={myAuthGridRef}
               gridFilterRef={myAuthGridFilterRef}
               data={myAuthData?.o_rc ?? []}
+              recentlyAddedKeys={recentlyAddedKeys}
             />
           </div>
         </div>

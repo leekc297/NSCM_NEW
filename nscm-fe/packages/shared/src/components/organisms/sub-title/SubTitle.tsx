@@ -7,6 +7,7 @@ import {
   ListTodoIcon,
   FileExceluploadIcon,
   FileExceldownloadIcon,
+  FunctionSearchIcon,
 } from '@lges/design-system/icon';
 import type { FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
@@ -39,6 +40,7 @@ interface SubTitleProps {
   hotkeyConfig?: HotkeyConfig;
   searchParam?: Record<keyof object, string>;
   customButtons?: CustomButtonProps[];
+  searchAction?: () => void;
 }
 
 const SubTitleComp = ({
@@ -52,6 +54,7 @@ const SubTitleComp = ({
   hotkeyConfig,
   searchParam,
   customButtons,
+  searchAction,
 }: SubTitleProps) => {
   const { t } = useTranslation();
   const setAlert = useMessageStore.getState().setAlert;
@@ -112,6 +115,7 @@ const SubTitleComp = ({
   };
 
   const buttonActions = { ...DefaultButtonActions, ...hotkeyConfig };
+  if (searchAction) buttonActions[Hotkeys.F5] = searchAction;
 
   useEffect(() => {
     const hotkeyHandler = (keyboardEvent: KeyboardEvent) => {
@@ -135,7 +139,7 @@ const SubTitleComp = ({
     return () => {
       globalThis.window.removeEventListener('keydown', hotkeyHandler, true);
     };
-  }, [grid.current, gridFilter.current, hotkeyConfig, useHotkey]);
+  }, [grid.current, gridFilter.current, hotkeyConfig, useHotkey, searchAction]);
 
   if (!useHotkey) {
     return (
@@ -175,6 +179,23 @@ const SubTitleComp = ({
                 </div>
               </Tooltip>
             ))}
+            {searchAction && (
+              <Tooltip followCursor title='Search' placement='bottom'>
+                <div style={{ marginRight: '12px' }}>
+                  <Button
+                    appearance='outlined'
+                    priority='normal'
+                    size='small'
+                    buttonLabel='Search(F5)'
+                    onClick={searchAction}
+                    iconComponent={<FunctionSearchIcon />}
+                  />
+                </div>
+              </Tooltip>
+            )}
+            {!searchAction && customButtons && customButtons.length > 0 && (
+              <div style={{ marginRight: '12px' }} />
+            )}
             {buttonActions.upload === false || (
               <Tooltip followCursor title='Upload' placement='bottom'>
                 <div>
