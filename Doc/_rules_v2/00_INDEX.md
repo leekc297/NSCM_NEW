@@ -15,7 +15,7 @@
 | T05 | "조회조건 / SearchArea / Form" | `_tobe/06_search_area.md` + searchFields 카탈로그 | search-button-when-no-searcharea (SearchArea 부재 시) |
 | T06 | "Modal / Popup / 공용 modal" | `_tobe/10_popup_modal.md` + `_asis/01_popups/00_inventory.md` | popup-asis-analysis + runtime-error-prevention |
 | T07 | "Button / CRUD / Search Aux / hotkeyConfig" | `_tobe/09_subtitle_hotkey.md` + `_asis/00_framework/01_BaseForm.md` | asis-button-mapping + search-button-when-no-searcharea (SearchArea 부재 시) |
-| T08 | "BE / Controller / Service / SP / cursor / mutation" | `_tobe/11_be_controller_service.md` + `_tobe/12_metadata_sql.md` | asis-coverage-check + **sp-dual-cursor-pattern** + **mutation-onsuccess-defaults** |
+| T08 | "BE / Controller / Service / SP / cursor / mutation" | `_tobe/11_be_controller_service.md` + `_tobe/12_metadata_sql.md` | asis-coverage-check + **sp-dual-cursor-pattern** + **mutation-onsuccess-defaults** + **proc-meta-signature-match** + **sp-body-minimal-change** (SP body 변경 시) |
 | T09 | "메뉴 안 나옴 / MNU_URL / SHT_NM / 권한 없음" | `_tobe/13_routing_menu.md` | menu-not-displayed-debug |
 | T10 | "DB 오류 / ORA-XXXXX" | `_dev_rules/21_TROUBLESHOOTING.md` (유지) + `_tobe/12_metadata_sql.md` | (없음) |
 | T11 | "Figma URL" | `_dev_rules/31_FIGMA_DESIGN_INTEGRATION.md` (유지) | (없음) |
@@ -60,7 +60,7 @@
 | 06 | UsrControls | 36 컨트롤 + ControlValues 표준 |
 | 07 | FoxDataClient | WCF→REST 매핑 |
 
-### B.3 Hook 카탈로그 (`hooks/`) — 10
+### B.3 Hook 카탈로그 (`hooks/`) — 18
 
 | # | Hook | 적용 trigger |
 |---:|---|---|
@@ -80,6 +80,8 @@
 | 14 | grid-interaction-patterns.md | T04 (DataGrid selectionMode + 그리드 특화 액션 배치 + 자동 체크 금지 + recently-added loadedRows 4 패턴, 2026-06-09) |
 | 15 | sheet-columns-binding-match.md | T04 / T08 (SHEET_COLUMNS.COLUMN_NAME ↔ SP 반환 alias 일치 의무 + 하드코딩 staticColumns 금지, 2026-06-09) |
 | 16 | proc-meta-signature-match.md | T08 (PROC_M 행 수 + SORT_ORD = SP ALL_ARGUMENTS positional 일치 + FE filter key 매핑, 2026-06-09) |
+| 17 | sp-body-minimal-change.md | T08 (Oracle SP body 변경 시 DBMS_METADATA.GET_DDL 원본 1바이트 변경 금지 + 3축 검증 의무, 2026-06-07) |
+| 18 | destructive-git-ops.md | (모든 트리거) git filter-branch / force-push / reset --hard 등 destructive ops 전 사용자 명시 승인 + 영향 보고 의무, 2026-06-07 |
 
 ### B.4 매핑 (`_mapping/`) — 1
 

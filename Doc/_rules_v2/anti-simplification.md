@@ -118,6 +118,44 @@ SELECT COLUMN_NAME, NULLABLE, DATA_DEFAULT
 -- 결과 0 행 이어야 통과
 ```
 
+### 1.5 ⭐ SP body 변경 (2026-06-07 신설 — DMF0020 ORA-04024 사고 반영)
+
+Oracle SP body 수정 (dual cursor 추가 / EXCEPTION 보강 / signature 변경) 시 **DBMS_METADATA.GET_DDL 원본 1바이트도 변경 금지**.
+
+| # | 금지 행위 (= 단순화) |
+|---:|---|
+| 19 | ❌ SP body 의 동적 SQL string (`DBMS_LOB.APPEND` / `V_SQL`) 임의 재작성 |
+| 20 | ❌ `OPEN ... FOR V_SQL` 의 `USING` 바인드 변수 순서/수 변경 |
+| 21 | ❌ WHERE 조건 / JOIN / SELECT 절 "유사 의미" 로 재작성 |
+| 22 | ❌ 변수 이름 rename / 공백·들여쓰기 정리 |
+| 23 | ❌ "원본 참조 안 하고 메모리로 재구성" — 200+ 라인 SP 는 특히 위험 |
+
+**의무 (SP body 변경 시 모두 필수)** — 상세는 hook `sp-body-minimal-change.md`:
+
+```
+[필수 1] DBMS_METADATA.GET_DDL 으로 원본 dump
+  docker exec ... sqlplus ... <<< "SELECT DBMS_METADATA.GET_DDL('PROCEDURE','{SP}','SCM_MGR') FROM DUAL;"
+
+[필수 2] 변경 명세 = "원본 + 추가 N 줄" 형식만 허용
+  - signature OUT parameter 1줄 추가
+  - END 직전 OPEN cursor 1~2줄 추가
+  - 그 외 모든 문자 변경 X
+  - 변경분 5줄 초과 시 작업 분리
+
+[필수 3] PROC_M 동반 보강 (NOT EXISTS 멱등)
+  - 추가한 OUT parameter 의 PROC_M row INSERT
+
+[필수 4] 3축 검증 의무 (audit PASS 만으로 fix 완료 보고 금지)
+  - SP status = VALID
+  - PROC_M ROWS = SP ALL_ARGUMENTS 카운트
+  - ⭐ 화면 진입 동작 정상 (사용자 직접 검증) — BE 로그 ORA-XXXXX 0건
+```
+
+**사고 사례** (2026-06-06):
+`_artifacts/88_axis3b_dmf0020_future_m_dual_cursor.sql` (DEPRECATED) — `P_DMF0020_GET_SCM_MST_FUTURE_PRICE_M` (PIVOT 200 라인) dual cursor 추가 작업 시 BASE 서브쿼리/JOIN/USING 바인드 모두 임의 작성 → `ORA-04024 핀 커서 self-deadlock` + 화면 조회 0건. `89` sql 로 원본 복원.
+
+Cross-ref: hook `sp-body-minimal-change.md`, 메모리 `feedback_sp_body_no_rewrite.md`.
+
 ---
 
 ## §2. 의무 (Hard Requirements)
