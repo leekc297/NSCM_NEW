@@ -59,20 +59,34 @@ D:\NSCM_backup\
 
 D 드라이브 손상 시 백업 자체도 잃을 위험 → GitHub `leekc297/NSCM` (private) 에 **메타 4종** 미러.
 
-### 미러 대상 (총 ~22 MB / 백업)
+### 미러 대상 (총 < 100 KB / 백업, 2026-06-07 정책 변경)
 | 파일 | 크기 | 용도 |
 |---|---:|---|
-| `source.bundle` | ~22 MB | git 전체 히스토리 — bundle 만으로 소스 복원 가능 |
 | `manifest.json` | ~40 KB | 백업 구성 + 크기 + 타임스탬프 + git_head |
 | `oracle-full.log` | ~70 KB | expdp 실행 로그 (테이블별 row 수 — 검증용) |
 | `git-head.txt` | <1 KB | 백업 시 git HEAD SHA |
 | `git-dirty.txt` | <1 KB | 백업 시 미커밋 파일 목록 (있는 경우) |
 
-### 절대 미러 X (D 드라이브 보관, 로컬 한정)
+### ⚠️ 절대 미러 X (D 드라이브 보관, 로컬 한정)
+- ⛔ `source.bundle` (~22 MB ~ 127 MB+) — **점진 증가 → 100MB 한도 초과 시 push 차단** (2026-06-06 사고: 127MB 로 인해 force-push history rewrite 필요). 2026-06-07 부터 GitHub mirror 제외. 소스 복원이 필요하면 `git clone https://github.com/leekc297/NSCM.git` 으로 충분 (mirror 가 곧 source).
 - `fe-node-modules.tar` (~414 MB) — GitHub 100MB 단일파일 제한 + 사내 registry 자산
 - `oracle-full.dmp` (~1.2 GB) — 100MB 제한 + 회사 데이터 외부 노출 우려
 - `fe-config/.env.local` — 환경 변수 (민감)
 - `be-config/config-local.yml` — DB 비밀번호 평문 (민감)
+
+### 95MB Size Guard (2026-06-07 추가)
+`backup-all.ps1 -PushMeta` Step 7 에서 모든 메타 파일에 대해 95MB size guard 적용 — 초과 시 자동 skip + warn. `oracle-full.log` 등이 향후 grow 해도 GitHub push 차단 사고 방지.
+
+### `.gitignore` 보강 (2026-06-07)
+`source.bundle` + 대용량 binary 패턴 명시 제외 — Copy-Item 실수 시 git add 가 자동 차단.
+
+```
+_backup_metadata/**/source.bundle
+_backup_metadata/**/*.dmp
+_backup_metadata/**/*.tar
+_backup_metadata/**/*.tar.gz
+_backup_metadata/**/*.zip
+```
 
 ### 폴더 구조 (모노레포 안)
 ```

@@ -11,7 +11,7 @@
 #   .\backup-all.ps1 -ScheduledMode                     # Task Scheduler 야간 (daily\YYYY-MM-DD_0200\)
 #   .\backup-all.ps1 -SkipFeTar                         # FE node_modules 생략 (테스트용)
 #   .\backup-all.ps1 -SkipOracleDmp                     # Oracle dmp 생략 (테스트용)
-#   .\backup-all.ps1 -PushMeta                          # ⭐ NEW: 메타 4종 자동 git push (private repo 한정)
+#   .\backup-all.ps1 -PushMeta                          # ⭐ 메타 4종 자동 git push (private repo 한정, source.bundle 제외 / 95MB guard)
 #   .\backup-all.ps1 -Label X -PushMeta                 # 라벨 백업 + 메타 자동 push 묶음
 #
 # 보존:
@@ -321,17 +321,28 @@ if ($PushMeta) {
     New-Item -ItemType Directory -Path $metaDst -Force | Out-Null
   }
 
-  # 4종 메타 복사 (source.bundle 21MB + manifest.json + log + git-head)
-  $metaFiles = @('manifest.json','oracle-full.log','git-head.txt','git-dirty.txt','source.bundle')
+  # 메타 4종 복사 — GitHub mirror 용 (manifest/log/git-head/git-dirty)
+  # ⚠️ source.bundle 은 제외 — 점진 증가 → 100MB 초과 시 GitHub push 차단
+  #    (2026-06-06 사고: source.bundle 127MB → push --force history rewrite 필요)
+  # ⚠️ size guard: 95MB 초과 파일 자동 skip + warn (oracle-full.log 등 grow 방어)
+  $metaFiles = @('manifest.json','oracle-full.log','git-head.txt','git-dirty.txt')
+  $sizeLimitMB = 95
   $copied = 0
+  $skipped = 0
   foreach ($mf in $metaFiles) {
     $src = Join-Path $TargetDir $mf
     if (Test-Path $src) {
+      $sizeMB = (Get-Item $src).Length / 1MB
+      if ($sizeMB -gt $sizeLimitMB) {
+        Write-Warn2 ("{0} {1:N1} MB > {2} MB 한도 — GitHub mirror 제외 (D:\NSCM_backup\ 원본만 유지)" -f $mf, $sizeMB, $sizeLimitMB)
+        $skipped++
+        continue
+      }
       Copy-Item $src $metaDst -Force
       $copied++
     }
   }
-  Write-OK "메타 복사: $copied 파일 → $metaDst"
+  Write-OK ("메타 복사: $copied 파일 → $metaDst (skip $skipped)")
 
   # git add + commit + push (실패는 warn 만, exit 0 유지)
   Push-Location $MetaRepoRoot
