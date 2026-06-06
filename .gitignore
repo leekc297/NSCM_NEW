@@ -55,6 +55,10 @@ nscm-be/logs/
 # ---------------- 사내 GitLab .git 백업 (NSCM_gitlab_backup) ----------------
 NSCM_gitlab_backup/
 
+# ---------------- AS-IS GSCM legacy 소스 (19GB / 28K 파일) ----------------
+# Visual Studio C#.NET WinForms 원본 — 외부 노출 금지 + 대용량
+GSCM/
+
 # ---------------- _backup_metadata 대용량 제외 (GitHub 100MB 한도) ----------------
 # backup-all.ps1 가 git bundle / oracle dmp / tar 등을 메타 폴더에 복사하지만
 # 100MB 초과 파일은 GitHub push 차단 (2026-06-06 source.bundle 127MB 사고).
