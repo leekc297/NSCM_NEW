@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+  DMF0015 BOD MyBatis Mapper — Phase 6 PoC (보완 6)
+  namespace = com.lgcns.nscm.master.bod (= BodServiceImpl 의 nameSpace 변수 "master.bod.")
+-->
+<mapper namespace="com.lgcns.nscm.master.bod">
+
+    <!-- Main 조회: AS-IS DM.DM0015_GET_BOD_DATA → TO-BE PKG_DMF0015.P_GET_BOD_M -->
+    <select id="retrieveMain" parameterType="java.util.Map" statementType="CALLABLE">
+        {call PKG_DMF0015.P_GET_BOD_M(
+            #{sesUserId,        mode=IN,  jdbcType=VARCHAR},
+            #{sesLangCd,        mode=IN,  jdbcType=VARCHAR},
+            #{mnuId,            mode=IN,  jdbcType=VARCHAR},
+            #{sesGrId,          mode=IN,  jdbcType=VARCHAR},
+            #{divisionId,       mode=IN,  jdbcType=VARCHAR},
+            #{bodType,          mode=IN,  jdbcType=VARCHAR},
+            #{fromSite,         mode=IN,  jdbcType=VARCHAR},
+            #{toSite,           mode=IN,  jdbcType=VARCHAR},
+            #{activeFlag,       mode=IN,  jdbcType=VARCHAR},
+            #{o_rc1,            mode=OUT, jdbcType=CURSOR, resultMap=DEFAULT_RESULT_MAP}
+        )}
+    </select>
+
+    <!-- Sub 조회: AS-IS DM.DM0015_GET_BOD_ITEM_DATA → TO-BE PKG_DMF0015.P_GET_BOD_ITEM_M -->
+    <select id="retrieveBodItem" parameterType="java.util.Map" statementType="CALLABLE">
+        {call PKG_DMF0015.P_GET_BOD_ITEM_M(
+            #{sesUserId,        mode=IN,  jdbcType=VARCHAR},
+            #{sesLangCd,        mode=IN,  jdbcType=VARCHAR},
+            #{mnuId,            mode=IN,  jdbcType=VARCHAR},
+            #{divisionId,       mode=IN,  jdbcType=VARCHAR},
+            #{bodId,            mode=IN,  jdbcType=VARCHAR},
+            #{o_rc1,            mode=OUT, jdbcType=CURSOR, resultMap=DEFAULT_RESULT_MAP}
+        )}
+    </select>
+
+    <!-- Main 저장: AS-IS DM.DM0015_SAVE_BOD_DATA → TO-BE PKG_DMF0015.P_SAVE_BOD_M -->
+    <!-- AS-IS 28 IN ^ csv → TO-BE 1 CLOB (BE 가 array → JSON CLOB 변환, SP 가 JSON parse) -->
+    <update id="saveMain" parameterType="java.util.Map" statementType="CALLABLE">
+        {call PKG_DMF0015.P_SAVE_BOD_M(
+            #{sesUserId,        mode=IN,  jdbcType=VARCHAR},
+            #{sesLangCd,        mode=IN,  jdbcType=VARCHAR},
+            #{mnuId,            mode=IN,  jdbcType=VARCHAR},
+            #{inData,           mode=IN,  jdbcType=CLOB},
+            #{o_msg,            mode=OUT, jdbcType=VARCHAR},
+            #{o_cd,             mode=OUT, jdbcType=VARCHAR}
+        )}
+    </update>
+
+    <!-- Sub 저장: AS-IS DM.DM0015_SAVE_BOD_ITEM_DATA → TO-BE PKG_DMF0015.P_SAVE_BOD_ITEM_M -->
+    <update id="saveBodItem" parameterType="java.util.Map" statementType="CALLABLE">
+        {call PKG_DMF0015.P_SAVE_BOD_ITEM_M(
+            #{sesUserId,        mode=IN,  jdbcType=VARCHAR},
+            #{sesLangCd,        mode=IN,  jdbcType=VARCHAR},
+            #{mnuId,            mode=IN,  jdbcType=VARCHAR},
+            #{inData,           mode=IN,  jdbcType=CLOB},
+            #{o_msg,            mode=OUT, jdbcType=VARCHAR},
+            #{o_cd,             mode=OUT, jdbcType=VARCHAR}
+        )}
+    </update>
+
+</mapper>
