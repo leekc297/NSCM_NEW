@@ -345,22 +345,33 @@ if ($PushMeta) {
   Write-OK ("메타 복사: $copied 파일 → $metaDst (skip $skipped)")
 
   # git add + commit + push (실패는 warn 만, exit 0 유지)
+  # ⚠️ 2026-06-07 보강 (78f0571 사고 후):
+  #   - 기존 staged 변경 (사용자 작업 중) 누적된 상태에서 02:00 자동 backup 진입 시
+  #     `git commit -m` 가 누적 변경 통째 commit 하는 사고 → path-limited commit 로 격리
   Push-Location $MetaRepoRoot
   try {
     $relPath = "_backup_metadata/$folderName"
+
+    # PRE-CHECK: 기존 staged 변경 검사 (warn only — backup 진행, 단 path-limited commit 으로 격리)
+    $existingStaged = @(& git diff --cached --name-only)
+    if ($existingStaged.Count -gt 0) {
+      Write-Warn2 "기존 staged 변경 $($existingStaged.Count) 파일 존재 — path-limited commit 로 격리 (다른 staged 는 보존)"
+    }
+
     & git add $relPath *> $null
     if ($LASTEXITCODE -ne 0) {
       Write-Warn2 "git add 실패 — push 생략"
     } else {
-      # 변경 없으면 commit 안 함
-      $cached = & git diff --cached --name-only
-      if (-not $cached) {
-        Write-Warn2 "git diff --cached 가 비어있음 — commit 생략 (변경 없음)"
+      # path 범위 변경 검사 (relPath 외 변경 무시)
+      $pathStaged = @(& git diff --cached --name-only -- $relPath)
+      if ($pathStaged.Count -eq 0) {
+        Write-Warn2 "$relPath 에 변경 없음 — commit 생략"
       } else {
         $commitMsg = "backup: $folderName 메타데이터 push (auto by backup-all.ps1)"
-        & git commit -m $commitMsg *> $null
+        # ⭐ path-limited commit: relPath 의 변경만 commit (다른 staged 는 그대로 남김)
+        & git commit -m $commitMsg -- $relPath *> $null
         if ($LASTEXITCODE -eq 0) {
-          Write-OK "git commit 성공"
+          Write-OK "git commit (path-limited: $relPath) 성공"
           & git push origin $GitBranch *> $null
           if ($LASTEXITCODE -eq 0) {
             Write-OK "git push origin $GitBranch 성공"

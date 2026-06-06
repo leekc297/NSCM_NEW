@@ -77,6 +77,26 @@ D 드라이브 손상 시 백업 자체도 잃을 위험 → GitHub `leekc297/NS
 ### 95MB Size Guard (2026-06-07 추가)
 `backup-all.ps1 -PushMeta` Step 7 에서 모든 메타 파일에 대해 95MB size guard 적용 — 초과 시 자동 skip + warn. `oracle-full.log` 등이 향후 grow 해도 GitHub push 차단 사고 방지.
 
+### Path-Limited Commit (2026-06-07 추가, 78f0571 사고 후)
+
+**사고 (78f0571)**: 어제 02:00 Task Scheduler 자동 backup 가 4 메타 파일 외에 사용자가 작업 중 stage 해둔 누적 변경 **72 파일 광범위 commit** (M 30 + D 38 + A 4). 원인: `git commit -m` 가 path 인수 없이 호출 시 **staging 영역 전체** commit.
+
+**Fix**: Step 7 commit 을 path-limited 로 변경:
+
+```powershell
+# Before (결함)
+& git add $relPath *> $null
+& git commit -m $commitMsg *> $null
+# → 누적된 사용자 staged 변경 통째 commit
+
+# After (격리)
+& git add $relPath *> $null
+& git commit -m $commitMsg -- $relPath *> $null
+# → $relPath 의 변경만 commit, 다른 staged 보존
+```
+
+추가 PRE-CHECK: 기존 staged 변경 있으면 warn 로그 (사용자가 작업 중인 변경을 backup 가 임의 commit 하지 않음을 통지).
+
 ### `.gitignore` 보강 (2026-06-07)
 `source.bundle` + 대용량 binary 패턴 명시 제외 — Copy-Item 실수 시 git add 가 자동 차단.
 
