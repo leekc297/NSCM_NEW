@@ -1,0 +1,46 @@
+--==============================================================================
+-- 81_priority_axis_safe_fix.sql
+-- 4-axis audit 의 안전 priority fix (위반 작은 axis 만 — 3-A/3-B 는 별도)
+--
+-- AXIS 4 (MNU_DESC NULL 2건): KHK / KHK_TEST 테스트 메뉴 → USE_YN='N' 비활성
+-- AXIS 2-A (1건): SYS0006/aaaa test sheet → MNU_BTN_MPG_M USE_YN='N' 비활성
+-- AXIS 2-B (8건): SYS0011 의 RETRIEVE 잔재 → DELETE (이미 SEARCH 권한 있음)
+-- AXIS 1 (1건 summary false positive): 실제 SHEET_COLUMNS 중복 0건 — 작업 없음
+--==============================================================================
+SET DEFINE OFF
+SET SERVEROUTPUT ON
+SET FEEDBACK ON
+WHENEVER SQLERROR EXIT FAILURE
+
+PROMPT === AXIS 4 fix: KHK / KHK_TEST 테스트 메뉴 USE_YN=N ===
+UPDATE SCM_MGR.SCM_ADM_MNU_M
+   SET USE_YN='N', LAST_UPDATED_BY='system', LAST_UPDATE_DATE=SYSDATE
+ WHERE MNU_ID IN ('KHK','KHK_TEST') AND USE_YN='Y';
+
+PROMPT === AXIS 2-A fix: SYS0006/aaaa test sheet 비활성 ===
+UPDATE SCM_MGR.SCM_ADM_MNU_BTN_MPG_M
+   SET USE_YN='N', LAST_UPDATED_BY='system', LAST_UPDATE_DATE=SYSDATE
+ WHERE MNU_ID='SYS0006' AND SHT_NM='aaaa' AND USE_YN='Y';
+
+PROMPT === AXIS 2-B fix: SYS0011 RETRIEVE 잔재 삭제 ===
+DELETE FROM SCM_MGR.SCM_ADM_USER_GR_MNU_BTN_MPG_M
+ WHERE MNU_ID='SYS0011' AND MNU_BTN_CD='RETRIEVE';
+
+COMMIT;
+
+PROMPT === VERIFY (각 axis 0 row 의무) ===
+
+PROMPT --- AXIS 4 (재 audit) ---
+SELECT MNU_ID, MNU_DESC, USE_YN FROM SCM_MGR.SCM_ADM_MNU_M WHERE MNU_DESC IS NULL AND USE_YN='Y';
+
+PROMPT --- AXIS 2-A (재 audit) ---
+SELECT M.MNU_ID, M.SHT_NM, M.MNU_BTN_CD
+  FROM SCM_MGR.SCM_ADM_MNU_BTN_MPG_M M
+ WHERE M.USE_YN='Y' AND NOT EXISTS (
+   SELECT 1 FROM SCM_MGR.SCM_ADM_USER_GR_MNU_BTN_MPG_M U
+    WHERE U.MNU_ID=M.MNU_ID AND U.SHT_NM=M.SHT_NM AND U.MNU_BTN_CD=M.MNU_BTN_CD);
+
+PROMPT --- AXIS 2-B (재 audit) ---
+SELECT MNU_ID, SHT_NM, MNU_BTN_CD FROM SCM_MGR.SCM_ADM_USER_GR_MNU_BTN_MPG_M WHERE MNU_BTN_CD='RETRIEVE';
+
+EXIT;

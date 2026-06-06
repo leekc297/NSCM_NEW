@@ -431,7 +431,11 @@ public interface NDaoInterface {
 				String sLangCd = SecurityUtil.getUserSession().getLangCd();
 				for(int i=0; i<paramList.size(); i++) {
 					Map<String, Object> paramMap = paramList.get(i);
-					if(!NullUtils.isNone(sUserId)) paramMap.put("sesUserId", sUserId);
+					if(!NullUtils.isNone(sUserId)) {
+						paramMap.put("sesUserId", sUserId);
+						paramMap.put("createdBy", sUserId);
+						paramMap.put("lastUpdatedBy", sUserId);
+					}
 					if(!NullUtils.isNone(sLangCd)) paramMap.put("sesLangCd", sLangCd);
 					result.addAll(sqlSes.selectList(sQID, paramMap));
 					errIdx++;
