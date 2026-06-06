@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "../../mybatis/mybatis-3-mapper.dtd">
+<mapper namespace="com.lgcns.nscm.general.file">
+
+<!--
+G5 File Transfer (Phase 7 A1, 2026-06-04) — 일반 파일 업로드/다운로드/삭제 mapper.
+테이블: SCM_SYS_FILE (메타 SQL: _artifacts/G5_file_transfer_metadata.sql)
+-->
+
+	<insert id="insertFile">
+		INSERT INTO SCM_SYS_FILE (
+			FILE_ID, MNU_ID, SHT_NM, FILE_NM, FILE_PATH, FILE_SIZE, MIME_TYPE,
+			UPLOADED_BY, UPLOADED_AT, DELETED_YN
+		) VALUES (
+			#{fileId}, #{mnuId}, #{shtNm}, #{fileName}, #{filePath}, #{fileSize}, #{mimeType},
+			#{uploadedBy}, SYSTIMESTAMP, 'N'
+		)
+	</insert>
+
+	<select id="selectFile" resultType="java.util.HashMap">
+		SELECT FILE_ID, MNU_ID, SHT_NM, FILE_NM, FILE_PATH, FILE_SIZE, MIME_TYPE,
+		       UPLOADED_BY, UPLOADED_AT, DELETED_YN
+		  FROM SCM_SYS_FILE
+		 WHERE FILE_ID = #{fileId}
+		   AND DELETED_YN = 'N'
+	</select>
+
+	<update id="deleteFile">
+		UPDATE SCM_SYS_FILE
+		   SET DELETED_YN = 'Y',
+		       LAST_UPDATED_BY = #{deletedBy},
+		       LAST_UPDATE_DATE = SYSTIMESTAMP
+		 WHERE FILE_ID = #{fileId}
+		   AND MNU_ID = #{mnuId}
+		   AND SHT_NM = #{shtNm}
+	</update>
+
+	<select id="selectFilesByMenu" resultType="java.util.HashMap">
+		SELECT FILE_ID, FILE_NM, FILE_SIZE, MIME_TYPE, UPLOADED_BY, UPLOADED_AT
+		  FROM SCM_SYS_FILE
+		 WHERE MNU_ID = #{mnuId}
+		   AND SHT_NM = #{shtNm}
+		   AND DELETED_YN = 'N'
+		 ORDER BY UPLOADED_AT DESC
+	</select>
+
+</mapper>
