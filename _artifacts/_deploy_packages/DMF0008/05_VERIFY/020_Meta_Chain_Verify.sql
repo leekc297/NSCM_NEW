@@ -1,0 +1,46 @@
+--==============================================================================
+-- 020_Meta_Chain_Verify.sql (DMF0008)
+--==============================================================================
+SET LINESIZE 250
+SET PAGESIZE 200
+
+PROMPT === VERIFY 1 : DMF0008 MNU_URL slug 정합 ===
+
+SELECT mnu_id, mnu_url,
+       CASE WHEN mnu_url = 'erp-edi-master' THEN 'PASS' ELSE 'FAIL' END AS result
+  FROM SCM_MGR.SCM_ADM_MNU_M
+ WHERE mnu_id = 'DMF0008';
+
+PROMPT === VERIFY 2 : API_M / PROC_M PKG path 잔존 ===
+
+SELECT 'API_M' AS src, api_id, api_url FROM SCM_MGR.SCM_ADM_API_M
+ WHERE api_id IN (SELECT api_id FROM SCM_MGR.SCM_ADM_MNU_BTN_MPG_M WHERE mnu_id = 'DMF0008')
+   AND api_url LIKE 'PKG_%'
+ UNION ALL
+SELECT 'PROC_M', proc_nm, col_nm FROM SCM_MGR.SCM_ADM_PROC_M
+ WHERE proc_nm LIKE 'PKG_DMF0008%'
+ ORDER BY 1, 2;
+
+PROMPT === VERIFY 3 : DMF0008 BTN_MPG ↔ API_M ↔ PROC_M chain ===
+
+SELECT BTN.MNU_ID, BTN.SHT_NM, BTN.MNU_BTN_CD,
+       BTN.API_ID AS BTN_API_ID, API.API_URL,
+       (SELECT COUNT(*) FROM SCM_MGR.SCM_ADM_PROC_M P WHERE P.PROC_NM = API.API_URL) AS PROC_M_COL_CNT,
+       CASE WHEN API.API_URL IS NULL THEN 'FAIL: API_M missing'
+            WHEN (SELECT COUNT(*) FROM SCM_MGR.SCM_ADM_PROC_M P WHERE P.PROC_NM = API.API_URL) = 0
+              THEN 'FAIL: PROC_M missing'
+            ELSE 'PASS' END AS RESULT
+  FROM SCM_MGR.SCM_ADM_MNU_BTN_MPG_M BTN
+  LEFT JOIN SCM_MGR.SCM_ADM_API_M API ON API.API_ID = BTN.API_ID
+ WHERE BTN.MNU_ID = 'DMF0008'
+ ORDER BY BTN.SHT_NM, BTN.MNU_BTN_CD;
+
+PROMPT === VERIFY 4 : GUEST 권한 ===
+
+SELECT 'MENU' AS type,
+       (SELECT COUNT(*) FROM SCM_MGR.SCM_ADM_USER_GR_MNU_MPG_M
+         WHERE USER_GR_ID = 'GUEST' AND MNU_ID = 'DMF0008') AS cnt FROM DUAL
+UNION ALL
+SELECT 'BTN',
+       (SELECT COUNT(*) FROM SCM_MGR.SCM_ADM_USER_GR_MNU_BTN_MPG_M
+         WHERE USER_GR_ID = 'GUEST' AND MNU_ID = 'DMF0008') FROM DUAL;

@@ -1,0 +1,87 @@
+--==============================================================================
+-- 42_DMF0043_01_meta.sql
+--
+-- 목적:
+--   DMF0043_01 (Contribute View) 화면 메타.
+--   AS-IS .cs 분석: 호출 SP 3개 (GET_SALES_LIST_SPREAD_TITLE + GET_CONTRIBUTION_SALES_LIST + GET_CONT_VIEW_VERSIONPOPUP)
+--   모두 DMF0043 PKG 의 SP 이며 standalone wrapper SP 가 별도로 등록되어 있음 (P_DMF0043_*).
+--   본 SQL 은 BTN_MPG + GUEST 권한 + PROC_M Verify 를 등록.
+--
+-- BLOCK 구조:
+--   B1  SCM_ADM_MNU_BTN_MPG_M           : 5 buttons (sheet 별 SEARCH)
+--   B2  SCM_ADM_USER_GR_MNU_BTN_MPG_M   : GUEST × 5
+--   B3  사후 카운트 + PROC_M Verify (멱등 INSERT 후보 식별 — 룰 21 §10.3 / 메모리 feedback_proc_meta_mandatory)
+--
+-- 멱등성: NOT EXISTS 가드 (메모리 feedback_sql_idempotent_insert_all).
+-- 작성: 2026-05-30 / 갱신: 2026-06-01 (PROC_M Verify 보강 — Phase 4 풀 보강)
+--==============================================================================
+SET DEFINE OFF
+SET SERVEROUTPUT ON
+SET FEEDBACK ON
+WHENEVER SQLERROR EXIT FAILURE
+
+PROMPT === BLOCK 1 : SCM_ADM_MNU_BTN_MPG_M (5 buttons) ===
+
+INSERT INTO SCM_MGR.SCM_ADM_MNU_BTN_MPG_M (MNU_ID, SHT_NM, MNU_BTN_CD, API_ID, USE_YN, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+SELECT 'DMF0043_01', NEW.SHT_NM, NEW.MNU_BTN_CD, NEW.API_ID, 'Y', 'admin', SYSDATE, 'admin', SYSDATE
+  FROM (
+    SELECT 'main'              AS SHT_NM, 'SEARCH' AS MNU_BTN_CD, 'P_DMF0043_SALES_LIST_GET'   AS API_ID FROM DUAL UNION ALL
+    SELECT 'mainTitle',                  'SEARCH',                'P_DMF0043_SALES_LIST_TITLE'           FROM DUAL UNION ALL
+    SELECT 'version',                    'SEARCH',                'P_DMF0043_VERSION_GET'                FROM DUAL UNION ALL
+    SELECT 'ratePopup',                  'SEARCH',                'P_DMF0043_RATE_POPUP'                 FROM DUAL UNION ALL
+    SELECT 'versionPopup',               'SEARCH',                'P_DMF0043_VERSION_POPUP'              FROM DUAL
+  ) NEW
+ WHERE NOT EXISTS (
+   SELECT 1 FROM SCM_MGR.SCM_ADM_MNU_BTN_MPG_M X
+    WHERE X.MNU_ID='DMF0043_01' AND X.SHT_NM=NEW.SHT_NM AND X.MNU_BTN_CD=NEW.MNU_BTN_CD
+ );
+
+PROMPT === BLOCK 2 : SCM_ADM_USER_GR_MNU_BTN_MPG_M (GUEST × 5) ===
+
+INSERT INTO SCM_MGR.SCM_ADM_USER_GR_MNU_BTN_MPG_M (USER_GR_ID, MNU_ID, SHT_NM, MNU_BTN_CD, USE_YN, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+SELECT 'GUEST', BTN.MNU_ID, BTN.SHT_NM, BTN.MNU_BTN_CD, 'Y', 'admin', SYSDATE, 'admin', SYSDATE
+  FROM SCM_MGR.SCM_ADM_MNU_BTN_MPG_M BTN
+ WHERE BTN.MNU_ID = 'DMF0043_01' AND BTN.USE_YN = 'Y'
+   AND NOT EXISTS (
+     SELECT 1 FROM SCM_MGR.SCM_ADM_USER_GR_MNU_BTN_MPG_M X
+      WHERE X.USER_GR_ID='GUEST' AND X.MNU_ID=BTN.MNU_ID AND X.SHT_NM=BTN.SHT_NM AND X.MNU_BTN_CD=BTN.MNU_BTN_CD
+   );
+
+PROMPT === BLOCK 3 : 사후 카운트 + PROC_M Verify ===
+
+-- BTN_MPG + GUEST 카운트
+SELECT 'POST: BTN_MPG (5)' AS K, COUNT(*) AS V FROM SCM_MGR.SCM_ADM_MNU_BTN_MPG_M WHERE MNU_ID='DMF0043_01'
+UNION ALL
+SELECT 'POST: GUEST BTN PERM (5)', COUNT(*) FROM SCM_MGR.SCM_ADM_USER_GR_MNU_BTN_MPG_M WHERE USER_GR_ID='GUEST' AND MNU_ID='DMF0043_01';
+
+-- PROC_M Verify (룰 21 §10.3 / 메모리 feedback_proc_meta_mandatory)
+--   BE 동적 SP 호출 시 PROC_M.PROC_NM 의 인자 COL_NM 매핑이 필요.
+--   누락 시 ORA-06550 PLS-00306 폭발 (DMF0043 사고 패턴).
+--   본 블록은 Verify only — 0건이면 BE 가 mnuId='DMF0043' parent meta 로 fallback 가능한지 확인 후 보강.
+PROMPT
+PROMPT --- PROC_M 등록 여부 (각 SP 의 인자 카운트가 0 이면 메타 등록 필요) ---
+SELECT 'PROC_M: ' || PROC_NM AS K, COUNT(*) AS V
+  FROM SCM_MGR.SCM_ADM_PROC_M
+ WHERE PROC_NM IN (
+   'P_DMF0043_SALES_LIST_GET',
+   'P_DMF0043_SALES_LIST_TITLE',
+   'P_DMF0043_VERSION_GET',
+   'P_DMF0043_RATE_POPUP',
+   'P_DMF0043_VERSION_POPUP'
+ )
+ GROUP BY PROC_NM
+ ORDER BY PROC_NM;
+
+PROMPT
+PROMPT --- 인자 0건인 SP 가 있으면 mnuId='DMF0043' parent 의 PROC_M 으로 fallback 가능 여부 확인 ---
+SELECT 'PROC_M: parent count' AS K, COUNT(*) AS V FROM SCM_MGR.SCM_ADM_PROC_M
+ WHERE PROC_NM IN (
+   'DMF0043_GET_CONTRIBUTION_SALES_LIST',
+   'DMF0043_GET_SALES_LIST_SPREAD_TITLE',
+   'DMF0043_GET_CONT_VIEW_VERSIONPOPUP'
+ );
+
+COMMIT;
+
+PROMPT === COMPLETE ===
+EXIT;

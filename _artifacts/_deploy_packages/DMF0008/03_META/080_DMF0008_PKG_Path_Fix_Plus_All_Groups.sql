@@ -1,0 +1,132 @@
+--==============================================================================
+-- 080_DMF0008_PKG_Path_Fix_Plus_All_Groups.sql
+--
+-- 사고 chain:
+--   A. API_URL = PKG_DMF0008.P_DMF0008_* (8 row) — PKG body 미존재 → BE 호출 실패
+--   B. minyonglee1 권한 그룹 (ADMIN/DM ADMIN/DM Viewer) 에 DMF0008 권한 부족 → "No Permission"
+--   C. DMF0008_GET_MY_DIVISION_LIST 미존재 → SCM0001_GET_DIVISION 으로 routing 변경
+--
+-- 실행: SCM_MGR 세션
+-- 멱등: REGEXP_REPLACE + NOT EXISTS
+-- 작성: 2026-06-05
+--==============================================================================
+SET DEFINE OFF
+SET SERVEROUTPUT ON
+SET FEEDBACK ON
+
+PROMPT === FIX A.1 : API_M.API_URL — PKG_DMF0008.P_DMF0008_* → standalone DMF0008_* ===
+
+UPDATE SCM_MGR.SCM_ADM_API_M
+   SET API_URL          = REGEXP_REPLACE(API_URL, '^PKG_DMF0008\.P?_?', ''),
+       LAST_UPDATED_BY  = 'admin',
+       LAST_UPDATE_DATE = SYSDATE
+ WHERE API_ID IN (
+   SELECT DISTINCT API_ID FROM SCM_MGR.SCM_ADM_MNU_BTN_MPG_M WHERE MNU_ID = 'DMF0008'
+ )
+   AND API_URL LIKE 'PKG_DMF0008.%';
+
+PROMPT === FIX A.2 : PROC_M.PROC_NM — 정합 ===
+
+UPDATE SCM_MGR.SCM_ADM_PROC_M
+   SET PROC_NM          = REGEXP_REPLACE(PROC_NM, '^PKG_DMF0008\.P?_?', ''),
+       LAST_UPDATED_BY  = 'admin',
+       LAST_UPDATE_DATE = SYSDATE
+ WHERE PROC_NM LIKE 'PKG_DMF0008.%';
+
+PROMPT === FIX A.3 : 검증 — PKG path 잔존 ===
+
+SELECT 'API_M' AS src, api_id, api_url FROM SCM_MGR.SCM_ADM_API_M
+ WHERE api_id IN (SELECT api_id FROM SCM_MGR.SCM_ADM_MNU_BTN_MPG_M WHERE mnu_id = 'DMF0008')
+   AND api_url LIKE 'PKG_DMF0008%';
+
+PROMPT === FIX B.1 : minyonglee1 의 3 그룹 (ADMIN / DM ADMIN / DM Viewer) 에 DMF0008 메뉴 권한 ===
+
+INSERT INTO SCM_MGR.SCM_ADM_USER_GR_MNU_MPG_M
+  (USER_GR_ID, MNU_ID, USE_YN, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+SELECT DISTINCT ugr.USER_GR_ID, 'DMF0008', 'Y',
+       'admin', SYSDATE, 'admin', SYSDATE
+  FROM SCM_MGR.SCM_ADM_USER_GR_MPG_M ugr
+ WHERE ugr.USER_ID = 'minyonglee1'
+   AND NOT EXISTS (
+     SELECT 1 FROM SCM_MGR.SCM_ADM_USER_GR_MNU_MPG_M X
+      WHERE X.USER_GR_ID = ugr.USER_GR_ID AND X.MNU_ID = 'DMF0008'
+   );
+
+PROMPT === FIX B.2 : minyonglee1 의 3 그룹 모두에 DMF0008 모든 버튼 권한 (14 row × 3 그룹) ===
+
+INSERT INTO SCM_MGR.SCM_ADM_USER_GR_MNU_BTN_MPG_M
+  (USER_GR_ID, MNU_ID, SHT_NM, MNU_BTN_CD,
+   USE_YN, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+SELECT DISTINCT ugr.USER_GR_ID, BTN.MNU_ID, BTN.SHT_NM, BTN.MNU_BTN_CD, 'Y',
+       'admin', SYSDATE, 'admin', SYSDATE
+  FROM SCM_MGR.SCM_ADM_USER_GR_MPG_M ugr
+  CROSS JOIN SCM_MGR.SCM_ADM_MNU_BTN_MPG_M BTN
+ WHERE ugr.USER_ID = 'minyonglee1'
+   AND BTN.MNU_ID = 'DMF0008'
+   AND NOT EXISTS (
+     SELECT 1 FROM SCM_MGR.SCM_ADM_USER_GR_MNU_BTN_MPG_M X
+      WHERE X.USER_GR_ID = ugr.USER_GR_ID
+        AND X.MNU_ID = BTN.MNU_ID AND X.SHT_NM = BTN.SHT_NM AND X.MNU_BTN_CD = BTN.MNU_BTN_CD
+   );
+
+PROMPT === FIX C : DMF0008/division/SEARCH 의 API_URL 을 SCM0001_GET_DIVISION 으로 변경 ===
+
+-- DMF0008_GET_MY_DIVISION_LIST 미존재. cloud 에 있는 SCM0001_GET_DIVISION 사용.
+-- (시그니처는 DIAG 결과 보고 추후 PROC_M 조정. 대부분 동일 sesUserId/mnuId/o_rc1 패턴)
+
+UPDATE SCM_MGR.SCM_ADM_API_M
+   SET API_URL          = 'SCM0001_GET_DIVISION',
+       LAST_UPDATED_BY  = 'admin',
+       LAST_UPDATE_DATE = SYSDATE
+ WHERE API_ID = 'P_DMF0008_DIVISION_GET'
+   AND API_URL = 'DMF0008_GET_MY_DIVISION_LIST';
+
+-- PROC_M 도 새 PROC_NM 으로 재매핑 (070 fix 의 sesUserId/mnuId/o_rc1 패턴 유지)
+DELETE FROM SCM_MGR.SCM_ADM_PROC_M
+ WHERE PROC_NM = 'DMF0008_GET_MY_DIVISION_LIST';
+
+INSERT INTO SCM_MGR.SCM_ADM_PROC_M
+  (PROC_NM, COL_NM, DATA_TP_CD, COL_TP_CD, SORT_ORD,
+   CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+SELECT 'SCM0001_GET_DIVISION', NEW.COL_NM, NEW.DATA_TP_CD, NEW.COL_TP_CD, NEW.SORT_ORD,
+       'admin', SYSDATE, 'admin', SYSDATE
+  FROM (
+    SELECT 'sesUserId' AS COL_NM, 'VARCHAR' AS DATA_TP_CD, 'IN' AS COL_TP_CD, 1 AS SORT_ORD FROM DUAL UNION ALL
+    SELECT 'mnuId',                'VARCHAR',               'IN',                2          FROM DUAL UNION ALL
+    SELECT 'o_rc1',                'CURSOR',                'OUT',               3          FROM DUAL
+  ) NEW
+ WHERE NOT EXISTS (
+   SELECT 1 FROM SCM_MGR.SCM_ADM_PROC_M
+    WHERE PROC_NM = 'SCM0001_GET_DIVISION' AND COL_NM = NEW.COL_NM
+ );
+
+PROMPT === FIX D : 사후 검증 — DMF0008 전체 chain ===
+
+SELECT BTN.MNU_ID, BTN.SHT_NM, BTN.MNU_BTN_CD,
+       BTN.API_ID, API.API_URL,
+       (SELECT COUNT(*) FROM SCM_MGR.SCM_ADM_PROC_M P WHERE P.PROC_NM = API.API_URL) AS PROC_CNT,
+       (SELECT COUNT(*) FROM all_objects WHERE owner='SCM_MGR' AND object_name = API.API_URL
+          AND object_type = 'PROCEDURE') AS SP_EXISTS,
+       CASE WHEN (SELECT COUNT(*) FROM all_objects WHERE owner='SCM_MGR'
+                   AND object_name = API.API_URL AND object_type = 'PROCEDURE') = 0
+              THEN 'FAIL: SP body missing'
+            WHEN (SELECT COUNT(*) FROM SCM_MGR.SCM_ADM_PROC_M P WHERE P.PROC_NM = API.API_URL) = 0
+              THEN 'FAIL: PROC_M missing'
+            ELSE 'PASS' END AS RESULT
+  FROM SCM_MGR.SCM_ADM_MNU_BTN_MPG_M BTN
+  LEFT JOIN SCM_MGR.SCM_ADM_API_M API ON API.API_ID = BTN.API_ID
+ WHERE BTN.MNU_ID = 'DMF0008'
+ ORDER BY BTN.SHT_NM, BTN.MNU_BTN_CD;
+
+PROMPT === FIX E : minyonglee1 권한 검증 ===
+
+SELECT ugr.USER_GR_ID,
+       (SELECT COUNT(*) FROM SCM_MGR.SCM_ADM_USER_GR_MNU_MPG_M
+         WHERE USER_GR_ID = ugr.USER_GR_ID AND MNU_ID = 'DMF0008') AS menu_perm,
+       (SELECT COUNT(*) FROM SCM_MGR.SCM_ADM_USER_GR_MNU_BTN_MPG_M
+         WHERE USER_GR_ID = ugr.USER_GR_ID AND MNU_ID = 'DMF0008') AS btn_perm,
+       'expect btn_perm = 14' AS note
+  FROM SCM_MGR.SCM_ADM_USER_GR_MPG_M ugr
+ WHERE ugr.USER_ID = 'minyonglee1';
+
+COMMIT;

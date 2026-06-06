@@ -1,0 +1,210 @@
+-- ============================================================================
+-- SCM0008 (Auth Request) → TO-BE SYS0011 메타 SQL (자기완결형 인라인 DML)
+-- 작성: 2026-06-04 / 룰 25 §1.5 + 룰 v2 _tobe/12_metadata_sql.md 7-BLOCK 준수
+-- 멱등 INSERT (NOT EXISTS) — 재실행 안전
+-- ============================================================================
+-- AS-IS 화면: SCM0008_Auth_Request (2213 lines / 7 SP / 3 grid / 1 form / 3 button)
+-- TO-BE: MNU_ID=SYS0011 / MNU_URL=auth-request / UPPR_MNU_ID=Auth_Mgmt
+-- ============================================================================
+
+-- ┌────────────────────────────────────────────────────────────────────────────┐
+-- │ BLOCK 1: i18n MSG / LBL                                                    │
+-- └────────────────────────────────────────────────────────────────────────────┘
+
+-- API 메시지 ID (7 SP × i18n)
+INSERT INTO SCM_COM_MSG_M (MSG_ID, MSG_CTN, LANG_CD, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+SELECT * FROM (
+    SELECT 'MSG_API_SYS0011_MAIN_RETRIEVE' AS MSG_ID, '권한 그룹 정보를 조회합니다' AS MSG_CTN, 'KO' AS LANG_CD,
+           'SYSTEM' AS CB, SYSDATE AS CD, 'SYSTEM' AS LB, SYSDATE AS LD FROM DUAL UNION ALL
+    SELECT 'MSG_API_SYS0011_MAIN_RETRIEVE', 'Retrieving auth group info', 'EN', 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'MSG_API_SYS0011_DIVISION_RETRIEVE', 'Division 목록 조회', 'KO', 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'MSG_API_SYS0011_DIVISION_RETRIEVE', 'Division list', 'EN', 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'MSG_API_SYS0011_MYAUTH_RETRIEVE', 'My Auth list 조회', 'KO', 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'MSG_API_SYS0011_MYAUTH_RETRIEVE', 'My Auth list', 'EN', 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'MSG_API_SYS0011_USERINFO_RETRIEVE', '사용자 정보 조회', 'KO', 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'MSG_API_SYS0011_USERINFO_RETRIEVE', 'User info', 'EN', 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'MSG_API_SYS0011_MYAUTH_ADD', 'My Auth list 추가', 'KO', 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'MSG_API_SYS0011_MYAUTH_ADD', 'Add to My Auth list', 'EN', 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'MSG_API_SYS0011_MYAUTH_REQUEST', '권한 신청', 'KO', 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'MSG_API_SYS0011_MYAUTH_REQUEST', 'Request auth', 'EN', 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'MSG_API_SYS0011_MYAUTH_DELETE', 'My Auth list 삭제', 'KO', 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'MSG_API_SYS0011_MYAUTH_DELETE', 'Delete from My Auth list', 'EN', 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL
+) NEW
+WHERE NOT EXISTS (SELECT 1 FROM SCM_COM_MSG_M WHERE MSG_ID = NEW.MSG_ID AND LANG_CD = NEW.LANG_CD);
+
+-- 화면 라벨 (LBL 5자리 표준)
+INSERT INTO SCM_COM_MSG_M (MSG_ID, MSG_CTN, LANG_CD, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+SELECT * FROM (
+    SELECT 'LBL00601' AS MSG_ID, 'User ID' AS MSG_CTN, 'KO' AS LANG_CD, 'SYSTEM' AS CB, SYSDATE AS CD, 'SYSTEM' AS LB, SYSDATE AS LD FROM DUAL UNION ALL
+    SELECT 'LBL00601', 'User ID', 'EN', 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'LBL00602', '사용자 이름', 'KO', 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'LBL00602', 'User Name', 'EN', 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'LBL00603', '부서', 'KO', 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'LBL00603', 'Department', 'EN', 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'LBL00604', '이메일', 'KO', 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'LBL00604', 'Email', 'EN', 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'LBL00605', '휴대폰', 'KO', 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'LBL00605', 'Cell Phone', 'EN', 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'LBL00606', '권한 그룹', 'KO', 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'LBL00606', 'Authority Group', 'EN', 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'LBL00607', 'My 권한 List', 'KO', 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'LBL00607', 'My Auth List', 'EN', 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'LBL00608', 'Division', 'KO', 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'LBL00608', 'Division', 'EN', 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL
+) NEW
+WHERE NOT EXISTS (SELECT 1 FROM SCM_COM_MSG_M WHERE MSG_ID = NEW.MSG_ID AND LANG_CD = NEW.LANG_CD);
+
+COMMIT;
+
+-- ┌────────────────────────────────────────────────────────────────────────────┐
+-- │ BLOCK 2: SCM_ADM_MNU_M (verify only — SYS0011 이미 등록됨)                  │
+-- └────────────────────────────────────────────────────────────────────────────┘
+
+-- (verify only, idempotent INSERT for safety)
+INSERT INTO SCM_ADM_MNU_M (MNU_ID, UPPR_MNU_ID, MNU_DESC, MNU_URL, MNU_MSG_ID, MNU_TP_CD, SORT_ORD,
+    BMK_YN, USE_YN, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+SELECT 'SYS0011', 'Auth_Mgmt', 'Auth Request', 'auth-request', 'MNU00050', 'SCREEN', 1,
+       'N', 'Y', 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL
+WHERE NOT EXISTS (SELECT 1 FROM SCM_ADM_MNU_M WHERE MNU_ID = 'SYS0011');
+
+COMMIT;
+
+-- ┌────────────────────────────────────────────────────────────────────────────┐
+-- │ BLOCK 3: (skipped — SCM_ADM_SHEET_M 구조는 별도 확인 후 추가)               │
+-- └────────────────────────────────────────────────────────────────────────────┘
+
+-- ┌────────────────────────────────────────────────────────────────────────────┐
+-- │ BLOCK 4: SCM_ADM_API_M (7 API — AS-IS 7 SP 매핑)                            │
+-- └────────────────────────────────────────────────────────────────────────────┘
+
+INSERT INTO SCM_ADM_API_M (API_ID, API_TP_CD, API_MSG_ID, API_MSG_DESC, API_URL, USE_YN,
+    CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+SELECT * FROM (
+    SELECT 'API_SCM0008_GET_AUTH_GROUP' AS API_ID, 'POST' AS API_TP_CD,
+           'MSG_API_SYS0011_MAIN_RETRIEVE' AS API_MSG_ID, 'AS-IS: UP_FX_GetReqAuthGroupInfo' AS API_MSG_DESC,
+           'P_SCM0008_GET_AUTH_GROUP_INFO' AS API_URL, 'Y' AS USE_YN,
+           'SYSTEM' AS CB, SYSDATE AS CD, 'SYSTEM' AS LB, SYSDATE AS LD FROM DUAL UNION ALL
+    SELECT 'API_SCM0008_GET_DIVISION', 'POST', 'MSG_API_SYS0011_DIVISION_RETRIEVE',
+           'AS-IS: UP_FX_GetNewUserAuthRequestList (Division 부분)',
+           'P_SCM0008_GET_DIVISION_LIST', 'Y', 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'API_SCM0008_GET_MY_AUTH', 'POST', 'MSG_API_SYS0011_MYAUTH_RETRIEVE',
+           'AS-IS: UP_FX_GetReqAuthMyListAdded',
+           'P_SCM0008_GET_MY_AUTH_LIST', 'Y', 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'API_SCM0008_GET_USER_INFO', 'POST', 'MSG_API_SYS0011_USERINFO_RETRIEVE',
+           'AS-IS: UP_FX_GetReqAuthCurrentUser',
+           'P_SCM0008_GET_CURRENT_USER', 'Y', 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'API_SCM0008_ADD_MY_AUTH', 'POST', 'MSG_API_SYS0011_MYAUTH_ADD',
+           'AS-IS: UP_FX_SaveReqAuthAddMyList',
+           'P_SCM0008_ADD_MY_AUTH', 'Y', 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'API_SCM0008_REQUEST_AUTH', 'POST', 'MSG_API_SYS0011_MYAUTH_REQUEST',
+           'AS-IS: UP_FX_SaveReqAuthRequestMyList',
+           'P_SCM0008_REQUEST_AUTH', 'Y', 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'API_SCM0008_DELETE_MY_AUTH', 'POST', 'MSG_API_SYS0011_MYAUTH_DELETE',
+           'AS-IS: UP_FX_DeleteReqAuthAddedMyList',
+           'P_SCM0008_DELETE_MY_AUTH', 'Y', 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL
+) NEW
+WHERE NOT EXISTS (SELECT 1 FROM SCM_ADM_API_M WHERE API_ID = NEW.API_ID);
+
+COMMIT;
+
+-- ┌────────────────────────────────────────────────────────────────────────────┐
+-- │ BLOCK 5: SCM_ADM_MNU_BTN_MPG_M (MNU + SHT + BTN_CD → API 매핑)             │
+-- └────────────────────────────────────────────────────────────────────────────┘
+
+INSERT INTO SCM_ADM_MNU_BTN_MPG_M (MNU_ID, SHT_NM, MNU_BTN_CD, API_ID, USE_YN,
+    CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+SELECT * FROM (
+    SELECT 'SYS0011' AS MNU_ID, 'main' AS SHT_NM, 'RETRIEVE' AS MNU_BTN_CD, 'API_SCM0008_GET_AUTH_GROUP' AS API_ID,
+           'Y' AS USE_YN, 'SYSTEM' AS CB, SYSDATE AS CD, 'SYSTEM' AS LB, SYSDATE AS LD FROM DUAL UNION ALL
+    SELECT 'SYS0011', 'division', 'RETRIEVE', 'API_SCM0008_GET_DIVISION', 'Y', 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'SYS0011', 'myAuth', 'RETRIEVE', 'API_SCM0008_GET_MY_AUTH', 'Y', 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'SYS0011', 'userInfo', 'RETRIEVE', 'API_SCM0008_GET_USER_INFO', 'Y', 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'SYS0011', 'myAuth', 'ADD', 'API_SCM0008_ADD_MY_AUTH', 'Y', 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'SYS0011', 'myAuth', 'REQUEST', 'API_SCM0008_REQUEST_AUTH', 'Y', 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'SYS0011', 'myAuth', 'DELETE', 'API_SCM0008_DELETE_MY_AUTH', 'Y', 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL
+) NEW
+WHERE NOT EXISTS (
+    SELECT 1 FROM SCM_ADM_MNU_BTN_MPG_M
+     WHERE MNU_ID = NEW.MNU_ID AND SHT_NM = NEW.SHT_NM AND MNU_BTN_CD = NEW.MNU_BTN_CD
+);
+
+COMMIT;
+
+-- ┌────────────────────────────────────────────────────────────────────────────┐
+-- │ BLOCK 6: SCM_ADM_PROC_M (BE 동적 호출 키 매핑 — 7 SP × 자동 채움 키)         │
+-- │ 자동 키: sesUserId / sesLangCd / mnuId — BE 가 callProc 시 자동 주입         │
+-- └────────────────────────────────────────────────────────────────────────────┘
+
+INSERT INTO SCM_ADM_PROC_M (PROC_NM, COL_NM, DATA_TP_CD, COL_TP_CD, SORT_ORD,
+    CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+SELECT * FROM (
+    -- P_SCM0008_GET_AUTH_GROUP_INFO: 0 IN, 1 OUT cursor
+    SELECT 'P_SCM0008_GET_AUTH_GROUP_INFO' AS PROC_NM, 'o_rc1' AS COL_NM, 'CURSOR' AS DATA_TP_CD, 'O' AS COL_TP_CD, 1 AS SORT_ORD,
+           'SYSTEM' AS CB, SYSDATE AS CD, 'SYSTEM' AS LB, SYSDATE AS LD FROM DUAL UNION ALL
+    -- P_SCM0008_GET_DIVISION_LIST
+    SELECT 'P_SCM0008_GET_DIVISION_LIST', 'sesUserId', 'VARCHAR2', 'I', 1, 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'P_SCM0008_GET_DIVISION_LIST', 'o_rc1', 'CURSOR', 'O', 2, 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    -- P_SCM0008_GET_MY_AUTH_LIST: 1 IN (userId), 1 OUT
+    SELECT 'P_SCM0008_GET_MY_AUTH_LIST', 'sesUserId', 'VARCHAR2', 'I', 1, 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'P_SCM0008_GET_MY_AUTH_LIST', 'o_rc1', 'CURSOR', 'O', 2, 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    -- P_SCM0008_GET_CURRENT_USER
+    SELECT 'P_SCM0008_GET_CURRENT_USER', 'sesUserId', 'VARCHAR2', 'I', 1, 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'P_SCM0008_GET_CURRENT_USER', 'o_rc1', 'CURSOR', 'O', 2, 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    -- P_SCM0008_ADD_MY_AUTH: 5 IN (userId, groupId, divisionId, plant, customer), 1 OUT
+    SELECT 'P_SCM0008_ADD_MY_AUTH', 'sesUserId', 'VARCHAR2', 'I', 1, 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'P_SCM0008_ADD_MY_AUTH', 'groupId', 'VARCHAR2', 'I', 2, 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'P_SCM0008_ADD_MY_AUTH', 'divisionId', 'VARCHAR2', 'I', 3, 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'P_SCM0008_ADD_MY_AUTH', 'plant', 'VARCHAR2', 'I', 4, 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'P_SCM0008_ADD_MY_AUTH', 'customer', 'VARCHAR2', 'I', 5, 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'P_SCM0008_ADD_MY_AUTH', 'o_rc1', 'CURSOR', 'O', 6, 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    -- P_SCM0008_REQUEST_AUTH: 1 IN, 1 OUT
+    SELECT 'P_SCM0008_REQUEST_AUTH', 'sesUserId', 'VARCHAR2', 'I', 1, 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'P_SCM0008_REQUEST_AUTH', 'o_rc1', 'CURSOR', 'O', 2, 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    -- P_SCM0008_DELETE_MY_AUTH: 2 IN, 1 OUT
+    SELECT 'P_SCM0008_DELETE_MY_AUTH', 'sesUserId', 'VARCHAR2', 'I', 1, 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'P_SCM0008_DELETE_MY_AUTH', 'requestId', 'VARCHAR2', 'I', 2, 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL UNION ALL
+    SELECT 'P_SCM0008_DELETE_MY_AUTH', 'o_rc1', 'CURSOR', 'O', 3, 'SYSTEM', SYSDATE, 'SYSTEM', SYSDATE FROM DUAL
+) NEW
+WHERE NOT EXISTS (
+    SELECT 1 FROM SCM_ADM_PROC_M
+     WHERE PROC_NM = NEW.PROC_NM AND COL_NM = NEW.COL_NM AND COL_TP_CD = NEW.COL_TP_CD
+);
+
+COMMIT;
+
+-- ┌────────────────────────────────────────────────────────────────────────────┐
+-- │ BLOCK 7: GUEST + ADMIN 권한 (메뉴 + 버튼)                                   │
+-- │ 자매 화면 (Auth_Mgmt 부모의 SYS0012) 권한 동적 복제 패턴                    │
+-- └────────────────────────────────────────────────────────────────────────────┘
+
+-- (간략 — 자매 화면 SYS0012 의 권한 패턴 복제. 실제 적용은 사이트별 권한 정책에 맞춤)
+-- 권한 자동 복제 SQL은 _artifacts/_diagnostics/ 의 표준 패턴 사용 권장.
+
+-- 검증용 placeholder:
+PROMPT === BLOCK 7 권한: 자매 화면 (SYS0012) 권한 복제 별도 작성 의무 ===
+
+-- ┌────────────────────────────────────────────────────────────────────────────┐
+-- │ VERIFY                                                                       │
+-- └────────────────────────────────────────────────────────────────────────────┘
+
+PROMPT === Verify BLOCK 1 (MSG/LBL) ===
+SELECT COUNT(*) AS MSG_CNT FROM SCM_COM_MSG_M WHERE MSG_ID LIKE 'MSG_API_SYS0011_%';
+SELECT COUNT(*) AS LBL_CNT FROM SCM_COM_MSG_M WHERE MSG_ID BETWEEN 'LBL00601' AND 'LBL00608';
+
+PROMPT === Verify BLOCK 4 (API_M) ===
+SELECT API_ID, API_URL FROM SCM_ADM_API_M WHERE API_ID LIKE 'API_SCM0008_%' ORDER BY API_ID;
+
+PROMPT === Verify BLOCK 5 (MNU_BTN_MPG_M) ===
+SELECT SHT_NM, MNU_BTN_CD, API_ID FROM SCM_ADM_MNU_BTN_MPG_M WHERE MNU_ID = 'SYS0011' ORDER BY SHT_NM, MNU_BTN_CD;
+
+PROMPT === Verify BLOCK 6 (PROC_M) ===
+SELECT PROC_NM, COUNT(*) AS COL_CNT FROM SCM_ADM_PROC_M WHERE PROC_NM LIKE 'P_SCM0008_%' GROUP BY PROC_NM ORDER BY PROC_NM;
+
+-- ============================================================================
+-- 적용 절차:
+--   1. sqlplus / DBeaver 로 본 SQL 실행
+--   2. SP body (Oracle 변환) 별도 작성 + 실행 — `_artifacts/SCM0008_SP_BODY.sql` (후속)
+--      AS-IS MSSQL UP_FX_* → Oracle PKG_SCM0008.P_* 변환 (룰 _analysis/db_migration/)
+--   3. 자매 화면 (SYS0012) 권한 복제 SQL 실행
+--   4. BE 재시작 후 FE auth-request 화면 진입 검증
+-- ============================================================================

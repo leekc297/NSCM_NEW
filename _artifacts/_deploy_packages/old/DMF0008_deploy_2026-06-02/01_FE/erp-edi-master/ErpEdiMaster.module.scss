@@ -1,0 +1,98 @@
+// AS-IS DMF0008_ErpEdiMaster — 3단 + 2 tab (룰 03 §5 SCSS Module, inline style 0)
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.gridSection {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-height: 0;
+}
+
+.sectionTitle {
+  padding: 4px 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #2b3a4a;
+  background: #f5f7fa;
+  border-left: 3px solid #1976d2;
+}
+
+.repairCount {
+  margin-left: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #c62828;
+}
+
+.gridContainer {
+  flex: 1;
+  overflow: hidden;
+  min-height: 100px;
+  border: 1px solid #e0e4e9;
+  border-radius: 4px;
+  background: white;
+}
+
+.subTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.subTitleSlot {
+  flex: 1;
+  min-width: 0;
+}
+
+.updateHistoryBar {
+  display: flex;
+  gap: 12px;
+  padding: 6px 10px;
+  background: #fffbe6;
+  border: 1px solid #ffe58f;
+  border-radius: 4px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+.historyItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.historyLabel {
+  font-size: 11px;
+  color: #6b7785;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.historyValue {
+  font-size: 11px;
+  color: #c62828;
+  font-weight: 500;
+  font-family: monospace;
+  white-space: nowrap;
+}
+
+.tabSection {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.grid {
+  height: 100%;
+  width: 100%;
+}

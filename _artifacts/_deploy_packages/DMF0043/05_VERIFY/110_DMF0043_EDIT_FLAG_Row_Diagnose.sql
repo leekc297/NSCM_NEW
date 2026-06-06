@@ -1,0 +1,42 @@
+--==============================================================================
+-- 110_DMF0043_EDIT_FLAG_Row_Diagnose.sql
+--
+-- 목적: SCM_MST_SHEET_COLUMNS 의 EDIT_FLAG row 가 wrapper 1st UNION 에서 제외되는 이유 확정
+-- 실행: SCM_MGR 세션
+-- 작성: 2026-06-05
+--==============================================================================
+SET DEFINE OFF
+SET SERVEROUTPUT ON
+SET LINESIZE 250
+SET PAGESIZE 200
+
+PROMPT === DIAG 1 : EDIT_FLAG row 의 모든 필터 컬럼 값 확인 ===
+
+SELECT COLUMN_NAME,
+       TO_NUMBER(SORT_ORDER_NO) AS sort,
+       DEFAULT_FLAG,
+       VISIBLE_FLAG,
+       VALID_YN,
+       DIVISION_ID
+  FROM SCM_MGR.SCM_MST_SHEET_COLUMNS
+ WHERE PROGRAM_ID = 'DMF0043'
+   AND SHEET_NAME = 'ContributeMain'
+ ORDER BY TO_NUMBER(SORT_ORDER_NO);
+
+PROMPT === DIAG 2 : PR_SCM_EDIT_YN(minyonglee1, DMF0043) 결과 ===
+
+SELECT * FROM TABLE(SCM_MGR.PKG_SCM_USER_MNU.PR_SCM_EDIT_YN('minyonglee1', 'DMF0043'));
+
+PROMPT === DIAG 3 : wrapper 1st UNION 시뮬레이션 (EDIT_FLAG 가 매치되는지) ===
+
+SELECT C.COLUMN_NAME, C.SORT_ORDER_NO, C.DEFAULT_FLAG, C.VALID_YN, C.DIVISION_ID, TEI.EDIT_YN AS TEI_EDIT_YN
+  FROM SCM_MGR.SCM_MST_SHEET_COLUMNS C
+  INNER JOIN TABLE(SCM_MGR.PKG_SCM_USER_MNU.PR_SCM_EDIT_YN('minyonglee1', 'DMF0043')) TEI
+     ON TEI.UNIT_ID = C.DIVISION_ID
+ WHERE 1 = 1
+   AND C.PROGRAM_ID = 'DMF0043'
+   AND C.SHEET_NAME = 'ContributeMain'
+   AND C.DEFAULT_FLAG = 'Y'
+   AND C.VALID_YN    = 'Y'
+   AND '40' IN (SELECT VALUE FROM TABLE(SCM_MGR.FN_SPLITSTRING(C.DIVISION_ID, ',')))
+ ORDER BY TO_NUMBER(C.SORT_ORDER_NO);

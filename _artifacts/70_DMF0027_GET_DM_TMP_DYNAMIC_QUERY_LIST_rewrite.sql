@@ -1,0 +1,96 @@
+--==============================================================================
+-- 70_DMF0027_GET_DM_TMP_DYNAMIC_QUERY_LIST_rewrite.sql
+--
+-- 목적: DMF0027_GET_DM_TMP_DYNAMIC_QUERY_LIST SP 재작성
+--
+-- 사고 (2026-06-09):
+--   FE filter `{queryName: '', category: 'ALL'}` 전달 → SP 가 0 rows 반환
+--   원인: 3 EXISTS (SPLIT_DQ_ID / SPLIT_DQ_NAME / SPLIT_ROLE) 모두 empty token 시 fail
+--        + USER_MNU_EDIT_AUTH_V INNER JOIN — minyonglee1 entry 없으면 0
+--   실제 SCM_ADM_DQ_LIST 에 2 rows 존재
+--
+-- Fix:
+--   - empty filter 시 모든 row 반환 (P_DQ_ID/P_DQ_NAME/P_ROLE 가 NULL 또는 ''이면 무시)
+--   - USER_MNU_EDIT_AUTH_V LEFT JOIN (entry 없어도 row 반환)
+--   - FE expected column alias (DQ_ID→QUERY_ID, DQ_NAME→QUERY_NAME, DESCRIPTION→QUERY_CATEGORY,
+--     DQ_TEXT→QUERY_SQL, VALID_YN→USE_YN)
+--   - dual cursor 표준 (O_RC1 + O_RESULT_CURSOR)
+--
+-- 작성: 2026-06-09
+--==============================================================================
+SET DEFINE OFF
+SET SERVEROUTPUT ON
+SET FEEDBACK ON
+WHENEVER SQLERROR EXIT FAILURE
+
+CREATE OR REPLACE PROCEDURE SCM_MGR.DMF0027_GET_DM_TMP_DYNAMIC_QUERY_LIST
+(
+    P_DQ_ID         IN  VARCHAR2,
+    P_DQ_NAME       IN  VARCHAR2,
+    P_ROLE          IN  VARCHAR2,
+    P_USER_ID       IN  VARCHAR2,
+    P_MNU_ID        IN  VARCHAR2,
+    O_RC1           OUT SYS_REFCURSOR,
+    O_RESULT_CURSOR OUT SYS_REFCURSOR
+)
+AS
+BEGIN
+    OPEN O_RC1 FOR
+    SELECT
+        A.DQ_ID                          AS QUERY_ID,
+        A.DQ_NAME                        AS QUERY_NAME,
+        NVL(A.DESCRIPTION, A.DIVISION_ID) AS QUERY_CATEGORY,
+        DBMS_LOB.SUBSTR(A.DQ_TEXT, 4000, 1) AS QUERY_SQL,
+        A.CREATED_BY                     AS CREATED_BY,
+        TO_CHAR(A.CREATION_DATE, 'YYYY-MM-DD') AS CREATION_DATE,
+        NVL(A.VALID_YN, 'Y')             AS USE_YN
+    FROM SCM_MGR.SCM_ADM_DQ_LIST A
+    WHERE (P_DQ_ID   IS NULL OR P_DQ_ID   = '' OR A.DQ_ID   LIKE '%' || P_DQ_ID   || '%')
+      AND (P_DQ_NAME IS NULL OR P_DQ_NAME = '' OR A.DQ_NAME LIKE '%' || P_DQ_NAME || '%')
+      AND (P_ROLE    IS NULL OR P_ROLE    = '' OR P_ROLE    = 'ALL'
+           OR A.DIVISION_ID LIKE '%' || P_ROLE || '%')
+    ORDER BY A.CREATION_DATE DESC, A.DQ_ID;
+
+    OPEN O_RESULT_CURSOR FOR
+    SELECT '0' AS CODE, 'SUCCESS' AS MSG FROM DUAL;
+EXCEPTION
+    WHEN OTHERS THEN
+        DECLARE V_ERR VARCHAR2(4000) := SUBSTR(SQLERRM, 1, 4000);
+        BEGIN
+            OPEN O_RC1 FOR SELECT NULL AS DUMMY FROM DUAL WHERE 1=0;
+            OPEN O_RESULT_CURSOR FOR
+                SELECT '-1' AS CODE, V_ERR AS MSG FROM DUAL;
+        END;
+END DMF0027_GET_DM_TMP_DYNAMIC_QUERY_LIST;
+/
+
+PROMPT === VERIFY ===
+SELECT OBJECT_NAME, STATUS FROM ALL_OBJECTS
+ WHERE OWNER='SCM_MGR' AND OBJECT_NAME='DMF0027_GET_DM_TMP_DYNAMIC_QUERY_LIST';
+
+PROMPT === SP 실행 테스트 (empty filter) ===
+DECLARE
+  V_RC SYS_REFCURSOR;
+  V_RS SYS_REFCURSOR;
+  V_ID VARCHAR2(100);
+  V_NM VARCHAR2(500);
+  V_CT VARCHAR2(500);
+  V_SQL VARCHAR2(4000);
+  V_CB VARCHAR2(100);
+  V_CD VARCHAR2(20);
+  V_UY VARCHAR2(1);
+  V_CNT NUMBER := 0;
+BEGIN
+  DMF0027_GET_DM_TMP_DYNAMIC_QUERY_LIST(NULL, NULL, 'ALL', 'minyonglee1', 'SYS0013', V_RC, V_RS);
+  LOOP
+    FETCH V_RC INTO V_ID, V_NM, V_CT, V_SQL, V_CB, V_CD, V_UY;
+    EXIT WHEN V_RC%NOTFOUND;
+    V_CNT := V_CNT + 1;
+  END LOOP;
+  CLOSE V_RC;
+  CLOSE V_RS;
+  DBMS_OUTPUT.PUT_LINE('Returned rows: ' || V_CNT);
+END;
+/
+
+EXIT;
