@@ -1035,6 +1035,182 @@ grep -rE "staticColumns=\{\[\s*\{\s*binding:" nscm-fe/features/
 
 ---
 
+## §12 Insert cell ComboBox dropdown 표준 (2026-06-07 신규, DMF0003)
+
+> **DMF0003 (MKT FCST) 누적 보완사항 일반화** — Insert row 의 dropdown cell 적용 시 12 단계 보완사항을 1-pass 의무.
+> 자매 reference: `features/master/src/pages/sales-future-price/components/SalesFuturePriceFlexGrid.tsx`
+> 상세: hook `wijmo-insert-cell-dropdown.md`
+
+### §12.1 ❌ 절대 금지 (Anti-pattern, DMF0003 사고 5건)
+
+| # | 금지 | 사고 | 정확 패턴 |
+|---:|---|---|---|
+| 1 | `<FlexGrid selectionMode='Row'>` | single click cell 진입 차단 → dropdown 미표시 | 미명시 (default `'MultiRange'`) |
+| 2 | `g.columnLayout = JSON.stringify(...)` imperative | columns 재생성 시 column.dataMap reset | JSX `<FlexGridColumn>` 평면 |
+| 3 | useEffect 안 `new DataMap(...)` 매번 | wijmo column stale state | `dataMaps = useMemo(...)` memoize |
+| 4 | `g.startEditing(true, 0, 0)` (col 0 read-only) | editor 진입 안 됨 | 첫 editable col (`_inputEditType: 'IM'\|'IO'`) 자동 찾기 |
+| 5 | `initialized` 에서 `new FlexGridFilter(g)` 자동 attach | column header filter icon 항상 표시 | F4 button 누름 시에만 attach |
+
+### §12.2 ✅ 정확한 패턴 (자매 DMF0020 동등)
+
+```tsx
+// Master.tsx
+const [endCustomersData, sitesData, ...] = useTabComboQueries({
+  filters: [
+    'EndCustomerByDivisionDept',   // 자매 검증 SQL (변수 없거나 @sesUserId 만)
+    'SiteByEndCustomer',
+    'Incoterms',
+    { comboId: 'FcstType', divisionId: sc.divisionId },        // @divisionId 사용 SQL = 객체
+    { comboId: 'CustomsHandbook', divisionId: sc.divisionId },
+    'PlantSite',
+    'Measure',
+  ],
+});
+
+// comboData → column binding (UPPER) 별 직접 매핑
+const comboData: Record<string, ComboItem[]> = useMemo(() => ({
+  END_CUSTOMER:   (endCustomersData ?? []) as ComboItem[],
+  SCM_SITE_ID:    (sitesData ?? []) as ComboItem[],
+  INCOTERMS:      (incotermsData ?? []) as ComboItem[],
+  FCST_TYPE:      (fcstTypeData ?? []) as ComboItem[],
+  DOM_EXP:        (customsHandbookData ?? []) as ComboItem[],
+  PLANT_SITE_ID:  (plantSiteData ?? []) as ComboItem[],
+  MEASURE:        (measureData ?? []) as ComboItem[],
+}), [endCustomersData, sitesData, incotermsData, fcstTypeData, customsHandbookData, plantSiteData, measureData]);
+```
+
+```tsx
+// Grid.tsx
+const dataMaps = useMemo<Record<string, DataMap | null>>(() => {
+  const make = (q: ComboItem[] | undefined): DataMap | null => {
+    const arr = q ?? [];
+    if (arr.length === 0) return null;
+    return new DataMap(arr, 'CODE', 'NAME');
+  };
+  const obj: Record<string, DataMap | null> = {};
+  for (const [k, v] of Object.entries(comboData)) obj[k] = make(v);
+  return obj;
+}, [comboData]);
+
+return (
+  <FlexGrid
+    itemsSource={collectionView}
+    autoGenerateColumns={false}
+    allowSorting={true}
+    headersVisibility='Column'
+    // selectionMode 미명시 (default 'MultiRange')
+    frozenColumns={FROZEN_COL_COUNT}
+    beginningEdit={beginningEdit}
+    formatItem={formatItem}
+    initialized={(g) => {
+      gridInstanceRef.current = g;
+      // 3-row header (자매 DMF0020 패턴)
+      if (g.columnHeaders.rows.length === 1) {
+        g.columnHeaders.rows.push(new Row());
+        g.columnHeaders.rows.push(new Row());
+      }
+      g.columnHeaders.rows.defaultSize = 24;
+      g.mergeManager = mergeManager;
+    }}
+  >
+    {fixedColumns.map(c => (
+      <FlexGridColumn
+        key={c.key}
+        binding={c.key}
+        header={c.header}
+        width={c.width}
+        align={...}
+        isReadOnly={c._inputEditType === 'S'}
+        dataMap={dataMaps[c.key] ?? undefined}   // ← React wrapper 자동 매핑
+      />
+    ))}
+    {dynamicColumns.map(c => (
+      <FlexGridColumn key={c.key} binding={c.key} header={c.key} width={60} align='right' />
+    ))}
+  </FlexGrid>
+);
+
+// 보완: useEffect 안 imperative dataMap 적용 + invalidate (이중 보장)
+useEffect(() => {
+  const g = gridInstanceRef.current;
+  if (!g) return;
+  for (const col of g.columns) {
+    const dm = dataMaps[col.binding ?? ''];
+    if (dm) col.dataMap = dm;
+  }
+  g.invalidate(true);
+}, [dataMaps, fixedColumns, dynamicColumns]);
+```
+
+### §12.3 handleInsert 표준
+
+```tsx
+const handleInsert = () => {
+  const newRow = markRowAsInserted({ DIVISION_ID: sc.divisionId, ... });
+  setInsertedRows(prev => [newRow, ...prev]);
+  setTimeout(() => {
+    const g = gridRef.current;
+    if (!g) return;
+    g.scrollIntoView(0, 0);
+    // 첫 editable col 자동 찾기 (DIVISION_ID 등 read-only 회피)
+    let firstEditableCol = 0;
+    for (let i = 0; i < g.columns.length; i++) {
+      const binding = g.columns[i].binding ?? '';
+      const meta = MAIN_COLUMNS.find(m => m.key === binding);
+      if (meta && (meta._inputEditType === 'IM' || meta._inputEditType === 'IO')) {
+        firstEditableCol = i;
+        break;
+      }
+    }
+    g.select(0, firstEditableCol);
+    g.startEditing(true, 0, firstEditableCol);  // ComboBox 즉시 펼침
+  }, 50);
+};
+```
+
+### §12.4 Sort / Filter button hotkeyConfig
+
+```tsx
+const handleSort = () => {
+  const g = gridRef.current;
+  if (g) GridAction.toggleColumnSort(g);
+};
+const handleFilter = () => {
+  const g = gridRef.current;
+  if (!g) return;
+  if (!gridFilterRef.current) {
+    gridFilterRef.current = new FlexGridFilter(g);  // 첫 누름 — attach
+    return;
+  }
+  GridAction.toggleColumnFilter(g, gridFilterRef.current);  // 이후 — toggle
+};
+
+const hotkeyConfig: HotkeyConfig = {
+  search: handleSearch, insert: handleInsert, save: handleSave, delete: handleDelete,
+  sort: handleSort, filter: handleFilter,  // ← 명시 의무 (button click 동작 보장)
+};
+```
+
+### §12.5 자동 검증 grep (PR 머지 게이트)
+
+```bash
+# 5 anti-pattern 검출 (모두 0 의무)
+grep -rn "selectionMode=['\"]Row['\"]" features/*/src/pages/*/components/*.tsx
+grep -rn "\.columnLayout\s*=" features/*/src/pages/*/components/*.tsx
+grep -rn "new DataMap" features/*/src/pages/*/components/*.tsx | grep -v useMemo
+grep -rn "startEditing.*,\s*0,\s*0)" features/*/src/pages/*/*.tsx
+grep -rn "new FlexGridFilter" features/*/src/pages/*/components/*.tsx | grep "initialized"
+```
+
+### §12.6 cross-ref
+
+- hook `wijmo-insert-cell-dropdown.md` (12 단계 상세)
+- hook `localstorage-persist-pattern.md` (Measure 등 화면 close 후에도 유지 필요한 state)
+- 메모리: `feedback_wijmo_jsx_over_columnlayout`, `feedback_wijmo_selection_mode_default`, `feedback_cmbo_sql_at_division_param`, `feedback_localstorage_persist_callback`
+- 자매 reference: `features/master/src/pages/sales-future-price/components/SalesFuturePriceFlexGrid.tsx:65-432`
+
+---
+
 ## §7 변경 이력
 
 | 일자 | 변경 | 이유 |
@@ -1042,3 +1218,4 @@ grep -rE "staticColumns=\{\[\s*\{\s*binding:" nscm-fe/features/
 | 2026-06-03 | 초안 (Phase 3 추출) | DMF0004~7 Grid 통합 분석 + 사고 사례 (Wijmo group / NUMBER cast / refetch loop) 반영 |
 | 2026-06-06 | §8 selectionMode + useCheckbox / §9 자동 체크 금지 / §10 Recently-Added loadedRows 패턴 신설 | SCM0008 Auth Request 4 사고 묶음 |
 | 2026-06-09 | §11 staticColumns 출처 표준 (store fetchStaticColumns + 동적 column useMemo + 하드코딩 금지) 신설 | SCM0005 DynamicQuery 5 grid column 0개 사고 |
+| 2026-06-07 | §12 Insert cell ComboBox dropdown 표준 (12 단계 보완사항) | DMF0003 MKT FCST Insert dropdown 5 사고 묶음 |

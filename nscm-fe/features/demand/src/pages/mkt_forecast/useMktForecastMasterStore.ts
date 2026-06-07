@@ -1,0 +1,118 @@
+import { createPersistedStoreWithTab } from '@shared/stores';
+
+import { BUCKET_TYPE, DIVISION, MENU_ID, SHEETS } from './mkt-forecast-master.constants';
+import type { SearchCondition } from './mkt-forecast-master.types';
+
+// Phase 7 격차 G1 — Search condition 저장/복원 (memory feedback_search_fields_catalog)
+//   zustand persist 자동 동작 — createPersistedStoreWithTab 가 localStorage 'mkt-forecast-master-' key 로 저장
+//   F6 (Condition) / F10 (Reset) SubTitle DefaultButtonActions 가 자동 활성
+
+// SP filter payload — useTabProcQuery enabled 가드
+type FiltersBySheet = {
+  [SHEETS.MAIN]?: ProcRequest<MENU_ID, SHEETS.MAIN>;
+};
+
+interface State {
+  initialized: boolean;
+  filters: FiltersBySheet;
+  searchCondition: SearchCondition;
+  openSearchArea: boolean;
+  // 사용자 명시 요구 (2026-06-07): Measure popup 에서 선택된 Measure 만 grid 표시
+  //   AS-IS DMF0003_1_MktFcst.cs L4916 btnMeasure_Click + SCM_MST_TITLESET_USER (USER_INQUIRY_COLUMN_TYPE_CODE='M')
+  //   AS-IS editable Measure = MKT_FCST 만 (MKT_FCST_RP 는 L1954 자동 setValue + L2909 SSP sync 색 표시 전용)
+  //   default = ['MKT_FCST', 'MKT_FCST_RP'] — AS-IS Selected 기본 2개
+  selectedMeasures: string[];
+}
+
+interface Action {
+  reset: () => void;
+  setSearchCondition: (p: Partial<SearchCondition>) => void;
+  setFilter: () => void;
+  setOpenSearchArea: (open?: boolean) => void;
+  setSelectedMeasures: (measures: string[]) => void;
+}
+
+// AS-IS Form_Load 기본값 (DMF0003_1_MktFcst.cs L318):
+//   Division : 40 (Mobility & IT Battery) — Form_Load 후 cboDivision_SelectedIndexChanged 자동 firing
+//   Period   : 오늘 ~ 90일 후 (AS-IS PR_GET_DAY_RANGE, 최대 3년 — MSG00164)
+//   Bucket   : W (Weekly) — Div 40 default (8주 관리)
+//   Lookup   : 모두 빈 값 (Project / Item / Owner)
+//   Checkbox : 모두 false (AS / Qty / Cell / Color / Sum)
+const yyyymmdd = (d: Date) => d.toISOString().slice(0, 10).replace(/-/g, '');
+const today = yyyymmdd(new Date());
+const ninetyDaysAhead = yyyymmdd(new Date(Date.now() + 90 * 24 * 3600 * 1000));
+
+const initSearch: SearchCondition = {
+  divisionId: DIVISION.MOBILITY,
+  teamIds: [],
+  endCustomers: [],
+  bizTypes: [],
+  scmSiteIds: [],
+  plantSiteIds: [],
+  itemTypes: [],
+  ediSenders: [],
+  startYyyymmdd: today,
+  endYyyymmdd: ninetyDaysAhead,
+  bucketType: BUCKET_TYPE.WEEKLY,
+  projectCode: '',
+  itemId: '',
+  owner: '',
+  asFromSite: false,
+  qtyFilter: false,
+  cellQty: false,
+  colorYn: false,
+  sumYn: false,
+};
+
+const initState: State = {
+  initialized: false,
+  filters: {},
+  searchCondition: initSearch,
+  openSearchArea: true,
+  selectedMeasures: ['MKT_FCST', 'MKT_FCST_RP'],
+};
+
+// SP DMF0003_GET_MKT_FCST_DATA — 22 IN parameter 매핑 (archive line 1546~1574):
+//   multi-value 항목은 ^ 구분 join (teamIds/endCustomers/...), 비어있으면 'ALL'
+//   sesUserId / mnuId / createdBy / userGroup / userDeptId / invalidExec : BE 자동 채움 (PROC_M COL_NM)
+//   senderCode : Phase 6 (EDI Sender 다중)
+export const useMktForecastMasterStore = createPersistedStoreWithTab<State & Action>(
+  (set, get) => ({
+    ...initState,
+    reset: () => set(initState),
+    setSearchCondition: p => set(state => {
+      state.searchCondition = { ...get().searchCondition, ...p };
+    }),
+    setFilter: () => set(state => {
+      const c = state.searchCondition;
+      const j = (arr: string[]): string => (arr.length === 0 ? 'ALL' : arr.join('^'));
+      state.filters = {
+        [SHEETS.MAIN]: {
+          divisionId:   c.divisionId,
+          scmSiteId:    j(c.scmSiteIds),
+          plantSiteId:  j(c.plantSiteIds),
+          teamId:       j(c.teamIds),
+          customer:     j(c.endCustomers),
+          bizType:      j(c.bizTypes),
+          projectCode:  c.projectCode || 'ALL',
+          itemId:       c.itemId || 'ALL',
+          fromYyyymmdd: c.startYyyymmdd,
+          toYyyymmdd:   c.endYyyymmdd,
+          itemType:     j(c.itemTypes),
+          owner:        c.owner || 'ALL',
+          qtyYn:        c.qtyFilter ? 'Y' : 'N',
+          cellYn:       c.cellQty ? 'Y' : 'N',
+          asYn:         c.asFromSite ? 'Y' : 'N',
+          senderCode:   j(c.ediSenders),
+        } as never,
+      };
+    }),
+    setOpenSearchArea: open => set(state => {
+      state.openSearchArea = open ?? !state.openSearchArea;
+    }),
+    setSelectedMeasures: measures => set(state => {
+      state.selectedMeasures = measures;
+    }),
+  }),
+  'mkt-forecast-master',
+);

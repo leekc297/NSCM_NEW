@@ -467,9 +467,88 @@ useEffect(() => {
 
 ---
 
+## §11 localStorage 별도 persist 패턴 (2026-06-07 신규, DMF0003)
+
+> DMF0003 (MKT FCST) Measure 선택 상태가 화면 close/reopen 후 사라지는 사고.
+> 원인: `createPersistedStoreWithTab` 는 sessionStorage (tabId 별) → tab close 시 lost.
+
+### §11.1 sessionStorage vs localStorage 결정 표
+
+| state 종류 | storage | 이유 |
+|---|---|---|
+| 검색조건 (조회조건 form) | sessionStorage (`createPersistedStoreWithTab`) | F5 새로고침 유지 + tab close 시 reset (다음 진입 시 default) |
+| Grid sort/filter 상태 | sessionStorage | 동일 |
+| **Column 설정 / Measure 선택** | **localStorage 별도** | **화면 close/reopen 후에도 유지 의무** |
+| User 환경설정 | localStorage | 동일 |
+
+### §11.2 ❌ Anti-pattern (사고 발생)
+
+```tsx
+// ❌ default 값 덮어쓰기 사고 — useEffect deps [state] 자동 저장
+useEffect(() => {
+  const saved = localStorage.getItem(KEY);
+  if (saved) setMyState(JSON.parse(saved));
+}, []);
+
+useEffect(() => {
+  // mount 시 closure 의 myState = default → saved 덮어쓰기!
+  localStorage.setItem(KEY, JSON.stringify(myState));
+}, [myState]);
+```
+
+**사고 흐름**:
+1. mount → 복원 useEffect → `setMyState(saved)` (async queue)
+2. **같은 render** → 저장 useEffect → closure 의 myState = default → `setItem(default)` ← saved 덮어쓰기
+3. 다음 render → 복원된 값 반영되지만 localStorage 는 이미 default
+
+### §11.3 ✅ 정확한 패턴
+
+```tsx
+const KEY = '{screen-id}-{state-name}';
+
+// ✅ mount 시 1회만 복원
+useEffect(() => {
+  try {
+    const saved = localStorage.getItem(KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved) as unknown;
+      if (Array.isArray(parsed) && parsed.length > 0 && parsed.every(x => typeof x === 'string')) {
+        setMyState(parsed as string[]);
+      }
+    }
+  } catch { /* noop */ }
+// eslint-disable-next-line react-hooks/exhaustive-deps
+}, []);
+
+// ✅ state 변경 callback 안에서 store + localStorage 동시 저장
+const handleApply = (newValue: string[]) => {
+  setMyState(newValue);                                    // store
+  try { localStorage.setItem(KEY, JSON.stringify(newValue)); } catch { /* noop */ }
+};
+
+<MyModal onApply={handleApply} />
+```
+
+### §11.4 자동 검증 grep
+
+```bash
+# 사고 패턴 검출 (deps [state] + setItem)
+grep -rn "localStorage\.setItem" features/{domain}/src/pages/{screen}/*.tsx -A 1
+# 위 결과에 useEffect deps [stateName] 가 있으면 anti-pattern → 위반
+```
+
+### §11.5 cross-ref
+
+- hook `localstorage-persist-pattern.md` (상세)
+- 메모리: `feedback_localstorage_persist_callback_pattern`
+- 사고: DMF0003 Measure persist (2026-06-07)
+
+---
+
 ## §8 변경 이력
 
 | 일자 | 변경 | 이유 |
 |---|---|---|
 | 2026-06-03 | 초안 (Phase 3 추출) | DMF0004~7 store 통합 분석 + G1 사양 정정 |
 | 2026-06-09 | §9 createPersistedStoreWithTab 시그니처 + §10 fetchStaticColumns guard 신설 | SCM0009/SCM0005 stateCreator 사고 재발 + SCM0005 grid column 0 사고 |
+| 2026-06-07 | §11 localStorage 별도 persist 패턴 + 사고 패턴 callback 직접 setItem 의무 신설 | DMF0003 Measure persist 사고 (useEffect deps 덮어쓰기) |

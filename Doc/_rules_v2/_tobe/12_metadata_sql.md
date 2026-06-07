@@ -663,9 +663,99 @@ INSERT INTO SHEET_COLUMNS (...) VALUES (...);
 
 ---
 
+## §15 CMBO_SQL_M `@varName` BE 자동 채움 표 (2026-06-07 신규, DMF0003)
+
+> DMF0003 (MKT FCST) Insert dropdown 사고 — `BizType` SQL 의 `@divisionId` 가 0 row 반환.
+> 원인: BE 가 자동 채움하는 `@varName` 은 **시스템 키만**. 그 외 변수는 FE 측에서 객체 filter 명시 전달 필수.
+
+### §15.1 자동 채움 시스템 키 (이것만 string filter 가능)
+
+| `@varName` | BE 자동 채움 | 채움 소스 |
+|---|---|---|
+| `@sesUserId` | ✅ | session 의 USER_ID |
+| `@sesLangCd` | ✅ | session 의 LANG_CD |
+| `@langCd` | ✅ | session 의 LANG_CD (alias) |
+| `@mnuId` | ✅ | 호출 화면 MENU_ID |
+
+### §15.2 명시 전달 필수 변수 (객체 filter 의무)
+
+| `@varName` | 채움 방식 | 위반 시 |
+|---|---|---|
+| `@divisionId` | ❌ 자동 X — `{ comboId, divisionId: '...' }` | 0 row 반환 → dropdown 빈 |
+| `@endCustomer` | ❌ 자동 X — `{ comboId, endCustomer: '...' }` | 동일 |
+| `@projectCode` | ❌ 자동 X | 동일 |
+| 그 외 사용자 정의 | ❌ 자동 X | 동일 |
+
+### §15.3 SQL 작성 권장
+
+```sql
+-- ✅ 변수 없는 SQL (자동 채움 X 변수 회피) — FE string filter 가능
+-- BizType (전 div distinct + DIVISION_ID 결과 컬럼 + FE filter)
+SELECT DISTINCT DIVISION_ID, BIZ_TYPE_NAME AS CODE, BIZ_TYPE_NAME AS NAME
+  FROM SCM_MST_PROJECT
+ WHERE BIZ_TYPE_NAME IS NOT NULL
+ ORDER BY DIVISION_ID, BIZ_TYPE_NAME
+
+-- ✅ @sesUserId 자동 채움 활용 — FE string filter 가능
+SELECT DISTINCT A.DIVISION_ID, ...
+  FROM SCM_MST_SITE A
+ WHERE A.DIVISION_ID IN (
+   SELECT UNIT_ID FROM SCM_ADM_USER_GR_UNIT_AUTH_MPG_M
+    WHERE USER_ID = @sesUserId AND UNIT_TP_CD = 'D'
+ )
+
+-- ⚠️ @divisionId 사용 SQL — FE 객체 filter 의무
+SELECT SEGMENT2 AS CODE, SEGMENT2 AS NAME
+  FROM SCM_ADM_LOOKUP_MASTER_DETAIL
+ WHERE LOOKUP_TYPE = 'BP_CUSTOMS_HANDBOOK' AND VALID_YN = 'Y'
+   AND SEGMENT1 = TO_CHAR(@divisionId)
+```
+
+### §15.4 FE 호출 패턴
+
+```tsx
+// ✅ 변수 없거나 @sesUserId 만 — string filter
+filters: ['EndCustomer', 'BizType', 'Incoterms', 'PlantSite', 'Measure']
+
+// ✅ @divisionId 사용 SQL — 객체 filter
+filters: [
+  { comboId: 'FcstType', divisionId: sc.divisionId },
+  { comboId: 'CustomsHandbook', divisionId: sc.divisionId },
+  { comboId: 'SiteByEndCustomer', divisionId: sc.divisionId, endCustomer: 'ALL' },
+]
+```
+
+### §15.5 자매 검증 SQL_ID 인벤토리
+
+| SQL_ID | 변수 | 결과 컬럼 | string OK? |
+|---|---|---|---|
+| `MyDivision` | `@sesUserId` | CODE/NAME | ✅ |
+| `TeambyDivision` | `@sesUserId`, `@langCd` | DIVISION_ID/CODE/NAME | ✅ |
+| `EndCustomer` | `@sesUserId` | DIVISION_ID/DEPT_ID/CODE/NAME | ✅ |
+| `EndCustomerByDivisionDept` | (없음) | DIVISION_ID/CODE/NAME | ✅ |
+| `SalesSite` | `@sesUserId` | DIVISION_ID/.../CODE/NAME | ✅ |
+| `SiteByEndCustomer` | `@divisionId`, `@endCustomer` | DIVISION_ID/EC/CODE/NAME | ❌ 객체 |
+| `BizType` | (2026-06-07 fix: 없음) | DIVISION_ID/CODE/NAME | ✅ |
+| `Incoterms` | (없음) | CODE/NAME | ✅ |
+| `FcstType` | `@divisionId` | CODE/NAME | ❌ 객체 |
+| `CustomsHandbook` | `@divisionId` | CODE/NAME | ❌ 객체 |
+| `PlantSite` | `@sesUserId` | DIVISION_ID/CODE/NAME | ✅ |
+| `Measure` | (없음) | CODE/NAME | ✅ |
+| `CurrencyList` | (없음) | CODE/NAME | ✅ |
+
+### §15.6 cross-ref
+
+- hook `wijmo-insert-cell-dropdown.md §2` (CMBO 의무 + filter 패턴)
+- 룰 `_tobe/06_search_area.md` (searchFields 카탈로그 SQL_ID 호출)
+- 룰 `_tobe/07_datagrid.md §12` (Insert cell ComboBox)
+- 메모리: `feedback_cmbo_sql_at_division_param`
+
+---
+
 ## §12 변경 이력
 
 | 일자 | 변경 | 이유 |
 |---|---|---|
 | 2026-06-03 | 초안 (Phase 3 추출) | 메타 SQL 7-BLOCK + MSSQL→Oracle + 멱등 INSERT + Lookup combo + 사고 메모리 통합 |
 | 2026-06-09 | §13 MNU_BTN_CD 표준 (RETRIEVE 금지, SEARCH 의무) + §14 전역 SHEET_COLUMNS dedupe 표준 신설 | SCM0005/SCM0009 권한 사고 + 전역 dedupe 15,167 row |
+| 2026-06-07 | §15 CMBO_SQL_M `@varName` BE 자동 채움 표 + 자매 검증 SQL_ID 인벤토리 신설 | DMF0003 BizType + EndCustomer dropdown 사고 (BE 자동 채움 추측 위반) |

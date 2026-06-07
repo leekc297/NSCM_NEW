@@ -37,6 +37,7 @@ export const ROUTE_PATHS = {
   DMF0008: 'erp-edi-master',
   DMF0072: 'nn-master-mapping',
   DMF0020: 'sales-future-price',
+  DMF0003: 'mkt_forecast',
   DMF0082: 'forecast-price',
   REPORT: 'report',
   WATERFALL: 'waterfall',

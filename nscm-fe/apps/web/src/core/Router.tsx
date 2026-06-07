@@ -87,6 +87,9 @@ const NnMasterMappingWithTab = LazyLoader(() =>
 const SalesFuturePriceWithTab = LazyLoader(() =>
   import('@master/sales-future-price').then(m => ({ default: m.SalesFuturePrice }))
 );
+const MktForecastMasterWithTab = LazyLoader(() =>
+  import('@demand/mkt_forecast').then(m => ({ default: m.MktForecastMaster }))
+);
 // @demand
 const ForecastPricePageWithTab = LazyLoader(() =>
   import('@demand/forecast-price').then(m => ({ default: m.ForecastPrice }))
@@ -259,6 +262,10 @@ export const router: RemixRouter = createBrowserRouter([
           {
             path: ROUTE_PATHS.DEMAND_PLAN,
             children: [
+              {
+                path: ROUTE_PATHS.DMF0003,
+                element: <MktForecastMasterWithTab />,
+              },
               {
                 path: ROUTE_PATHS.DMF0082,
                 element: <ForecastPricePageWithTab />,
