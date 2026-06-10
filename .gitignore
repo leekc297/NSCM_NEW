@@ -174,6 +174,8 @@ _artifacts/local-docker-oracle/csv_fixed/
 _artifacts/local-docker-oracle/ddl_fixed/
 _artifacts/local-docker-oracle/ddl_logs/
 _artifacts/local-docker-oracle/ddl_logs_fixed/
+# 사내 Oracle 적용 timestamped log archive (apply.sh 산출, 누적되므로 git 제외)
+_artifacts/_apply_corporate/_logs/
 # 작업 중 일시 dump / 정리 SQL — git track X (To-be_v2_converted 에 정식 버전 존재)
 _artifacts/local-docker-oracle/logs_*.txt
 _artifacts/local-docker-oracle/compile_log.txt

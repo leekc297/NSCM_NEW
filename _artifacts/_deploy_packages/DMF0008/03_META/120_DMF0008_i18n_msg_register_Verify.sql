@@ -1,0 +1,18 @@
+-- =================================================================
+-- 120_DMF0008_i18n_msg_register_Verify.sql
+--
+-- 적용 결과 검증 — 등록 expect:
+--   MNU_DMF0008 × 3 (KO/EN/CN)
+--   MSG_API_DMF0008_* × 12 (KO)
+--   합계: 15 row
+-- =================================================================
+
+SELECT 'MSG_TOTAL' AS K, COUNT(*) AS C, 15 AS EXPECTED FROM SCM_MGR.SCM_ADM_MSG_M
+ WHERE MSG_ID = 'MNU_DMF0008' OR MSG_ID LIKE 'MSG_API_DMF0008%'
+UNION ALL SELECT 'MNU_DMF0008', COUNT(*), 3 FROM SCM_MGR.SCM_ADM_MSG_M WHERE MSG_ID = 'MNU_DMF0008'
+UNION ALL SELECT 'MSG_API_DMF0008', COUNT(*), 12 FROM SCM_MGR.SCM_ADM_MSG_M WHERE MSG_ID LIKE 'MSG_API_DMF0008%';
+
+SELECT MSG_ID, LANG_CD, SUBSTR(MSG_NM, 1, 60) AS MSG_NM, MSG_TP_CD, USE_YN
+  FROM SCM_MGR.SCM_ADM_MSG_M
+ WHERE MSG_ID = 'MNU_DMF0008' OR MSG_ID LIKE 'MSG_API_DMF0008%'
+ ORDER BY MSG_ID, LANG_CD;
