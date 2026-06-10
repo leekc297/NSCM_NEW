@@ -1,10 +1,12 @@
-# NSCM 통합 안전 기동 스크립트 (Docker Oracle + BE Spring Boot + FE Vite)
+# NSCM 통합 안전 기동 스크립트 (BE Spring Boot + FE Vite)
+#
+# 2026-06-10: 사내 Oracle (10.20.100.153:2521:ESSCMD) 직접 연결로 전환되어
+#             Docker 기동 단계 제거. (config-local.yml 의 datasources[0] 참조)
 #
 # 사용법:
 #   cd C:\Projects\NSCM\_artifacts\local-docker-oracle
-#   .\start-all.ps1                     # 3종 기동
+#   .\start-all.ps1                     # BE + FE 기동
 #   .\start-all.ps1 -OpenBrowser        # 기동 후 http://localhost:5173 자동 열기
-#   .\start-all.ps1 -SkipDocker         # Docker 는 이미 떠있다고 가정
 #   .\start-all.ps1 -SkipBe             # BE 만 생략
 #   .\start-all.ps1 -SkipFe             # FE 만 생략
 #
@@ -17,10 +19,8 @@
 [CmdletBinding()]
 param(
   [switch]$OpenBrowser,
-  [switch]$SkipDocker,
   [switch]$SkipBe,
   [switch]$SkipFe,
-  [int]$DockerReadyTimeoutSec  = 600,
   [int]$BeReadyTimeoutSec      = 300,
   [int]$FeReadyTimeoutSec      = 180
 )
@@ -29,8 +29,6 @@ $ErrorActionPreference = "Continue"  # native exe stderr 를 ErrorRecord 로 wra
 
 # 고정 경로
 $RepoRoot      = "C:\Projects\NSCM"
-$DockerDir     = "$RepoRoot\_artifacts\local-docker-oracle"
-$ComposeFile   = "$DockerDir\docker-compose.yml"
 $BeDir         = "$RepoRoot\nscm-be"
 $FeWebDir      = "$RepoRoot\nscm-fe\apps\web"
 $ViteCmd       = "$FeWebDir\node_modules\.bin\vite.cmd"
@@ -47,35 +45,7 @@ function Write-Fail($msg) { Write-Host "  [FAIL] $msg"  -ForegroundColor Red }
 # ----- 0. PRE-CHECK -----
 Write-Step "0. PRE-CHECK"
 
-# 0.1 Docker Desktop
-if (-not $SkipDocker) {
-  $dockerProc = Get-Process "com.docker.proxy","Docker Desktop" -ErrorAction SilentlyContinue
-  if (-not $dockerProc) {
-    Write-Warn2 "Docker Desktop 프로세스 미감지. 자동 기동 시도."
-    try {
-      $dockerExe = "C:\Program Files\Docker\Docker\Docker Desktop.exe"
-      if (Test-Path $dockerExe) {
-        Start-Process $dockerExe
-        Write-Host "    Docker Desktop 기동 중... 60초 대기"
-        Start-Sleep -Seconds 60
-      } else {
-        Write-Fail "Docker Desktop 미설치 또는 경로 다름. 수동 기동 후 재시도."
-        exit 1
-      }
-    } catch {
-      Write-Fail "Docker Desktop 자동 기동 실패: $_"
-      exit 1
-    }
-  }
-  & docker info *> $null
-  if ($LASTEXITCODE -ne 0) {
-    Write-Fail "Docker 데몬 응답 없음. Docker Desktop 완전 기동 대기 후 재시도."
-    exit 1
-  }
-  Write-OK "Docker 데몬 응답 정상"
-}
-
-# 0.2 FE vite.cmd 존재 확인
+# 0.1 FE vite.cmd 존재 확인
 if (-not $SkipFe) {
   if (-not (Test-Path $ViteCmd)) {
     Write-Fail "vite.cmd 미발견: $ViteCmd"
@@ -86,18 +56,27 @@ if (-not $SkipFe) {
   Write-OK "FE vite.cmd 존재 확인"
 }
 
-# 0.3 포트 충돌 점검
+# 0.2 포트 충돌 점검
 function Test-PortInUse($port) {
   $r = Test-NetConnection -ComputerName 127.0.0.1 -Port $port -InformationLevel Quiet -WarningAction SilentlyContinue
   return [bool]$r
 }
-$ports = @{ 1521="Oracle"; 8080="BE"; 5173="FE" }
+$ports = @{ 8080="BE"; 5173="FE" }
 foreach ($p in $ports.Keys) {
   if (Test-PortInUse $p) {
     Write-Warn2 "포트 $p ($($ports[$p])) 이미 사용 중 — 기존 프로세스를 그대로 사용"
   } else {
     Write-OK "포트 $p ($($ports[$p])) 가용"
   }
+}
+
+# 0.3 사내 Oracle 도달 확인 (config-local.yml datasources[0])
+$OracleHost = "10.20.100.153"
+$OraclePort = 2521
+if (Test-NetConnection -ComputerName $OracleHost -Port $OraclePort -InformationLevel Quiet -WarningAction SilentlyContinue) {
+  Write-OK "사내 Oracle ${OracleHost}:${OraclePort} 도달 확인"
+} else {
+  Write-Warn2 "사내 Oracle ${OracleHost}:${OraclePort} 미도달 — 사내망/방화벽 확인 필요 (BE HikariPool init 실패 예상)"
 }
 
 # 0.4 상태 디렉토리
@@ -116,53 +95,10 @@ if (-not (Test-Path $BeLogDir)) {
   New-Item -ItemType Directory -Path $BeLogDir -Force | Out-Null
 }
 
-# ----- 1. DOCKER (Oracle 23ai Free) -----
-if (-not $SkipDocker) {
-  Write-Step "1. DOCKER (Oracle)"
-  Push-Location $DockerDir
-  try {
-    & docker compose -f $ComposeFile up -d *> $null
-    if ($LASTEXITCODE -ne 0) {
-      Write-Fail "docker compose up 실패"
-      exit 1
-    }
-    Write-OK "docker compose up -d 호출"
-
-    # Listener READY 가 1차 판정 (healthcheck unhealthy 라도 listener 가 응답하면 통신 가능)
-    Write-Host "    Oracle Listener READY 대기 (최대 ${DockerReadyTimeoutSec}초)..."
-    $sw = [System.Diagnostics.Stopwatch]::StartNew()
-    $ready = $false
-    $healthStatus = "unknown"
-    while ($sw.Elapsed.TotalSeconds -lt $DockerReadyTimeoutSec) {
-      $healthStatus = (& docker inspect --format='{{.State.Health.Status}}' nscm-oracle 2>$null) -as [string]
-      $lsnr = & docker exec nscm-oracle bash -c "lsnrctl status 2>/dev/null | grep -c READY" 2>$null
-      if ($healthStatus -eq "healthy" -or [int]$lsnr -gt 0) {
-        $ready = $true
-        break
-      }
-      Start-Sleep -Seconds 5
-    }
-    if (-not $ready) {
-      Write-Fail "Oracle 응답 없음 timeout (${DockerReadyTimeoutSec}s). docker compose logs oracle 확인 필요."
-      exit 1
-    }
-    if ($healthStatus -eq "healthy") {
-      Write-OK ("Oracle healthy ({0:N0}초)" -f $sw.Elapsed.TotalSeconds)
-    } else {
-      Write-OK ("Oracle Listener READY (healthcheck=$healthStatus, {0:N0}초)" -f $sw.Elapsed.TotalSeconds)
-      Write-Host "    (healthcheck 가 unhealthy 라벨이지만 SQL 통신 가능 — gvenzl healthcheck.sh 가 SCM_MGR ping 으로 판정, 무시해도 됨)" -ForegroundColor DarkGray
-    }
-  } finally {
-    Pop-Location
-  }
-} else {
-  Write-Step "1. DOCKER (SKIP)"
-}
-
-# ----- 2. BE (Spring Boot) -----
+# ----- 1. BE (Spring Boot) -----
 $bePid = $null
 if (-not $SkipBe) {
-  Write-Step "2. BE (Spring Boot)"
+  Write-Step "1. BE (Spring Boot)"
   if (Test-PortInUse 8080) {
     Write-OK "8080 이미 가동 중 — 기존 BE 사용"
   } else {
@@ -201,13 +137,13 @@ if (-not $SkipBe) {
     Write-OK ("BE 8080 응답 ({0:N0}초)" -f $sw.Elapsed.TotalSeconds)
   }
 } else {
-  Write-Step "2. BE (SKIP)"
+  Write-Step "1. BE (SKIP)"
 }
 
-# ----- 3. FE (Vite, turbo/pnpm 우회) -----
+# ----- 2. FE (Vite, turbo/pnpm 우회) -----
 $fePid = $null
 if (-not $SkipFe) {
-  Write-Step "3. FE (Vite)"
+  Write-Step "2. FE (Vite)"
   if (Test-PortInUse 5173) {
     Write-OK "5173 이미 가동 중 — 기존 FE 사용"
   } else {
@@ -240,11 +176,11 @@ if (-not $SkipFe) {
     Write-OK ("FE 5173 응답 ({0:N0}초)" -f $sw.Elapsed.TotalSeconds)
   }
 } else {
-  Write-Step "3. FE (SKIP)"
+  Write-Step "2. FE (SKIP)"
 }
 
-# ----- 4. POST -----
-Write-Step "4. POST"
+# ----- 3. POST -----
+Write-Step "3. POST"
 
 # PIDs 보존
 if ($StateDir) {
@@ -262,8 +198,8 @@ if ($StateDir) {
 }
 
 Write-Host ""
-Write-Host "DB ready: 1521 / BE ready: 8080 / FE ready: 5173" -ForegroundColor Green
-Write-Host "  - Oracle  : sqlplus SCM_MGR/'!SCMroqkf2026'@//localhost:1521/FREEPDB1"
+Write-Host "BE ready: 8080 / FE ready: 5173" -ForegroundColor Green
+Write-Host "  - Oracle  : 사내 ${OracleHost}:${OraclePort}:ESSCMD (SCM_MGR)"
 Write-Host "  - BE      : http://localhost:8080  (log: $BeLogFile)"
 Write-Host "  - FE      : http://localhost:5173  (log: $FeLogFile)"
 
