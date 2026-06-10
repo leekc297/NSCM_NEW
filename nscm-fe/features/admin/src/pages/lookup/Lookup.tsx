@@ -1,11 +1,11 @@
 import { type FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef } from 'react';
 
 import { apiClient } from '@foundation/apis';
 import _ from '@foundation/lodash';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
+import { useQueryClient } from '@foundation/query-client';
 import { GridAction } from '@foundation/utils';
 import { MainTitle, SubTitle } from '@shared/components';
 import { useProcMutation, useSaveWithValidation, useTabProcQuery } from '@shared/hooks';

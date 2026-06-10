@@ -1,6 +1,5 @@
-import { useQueryClient } from '@tanstack/react-query';
-
 import { apiClient } from '@foundation/apis';
+import { useQueryClient } from '@foundation/query-client';
 import { useMessageStore } from '@shared/stores';
 
 import { MENU_ID } from '../mkt-forecast-master.constants';

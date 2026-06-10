@@ -1,18 +1,18 @@
 // SCM0009 Auth Approval — 관리자가 사용자 권한 신청 승인/반려
 import { type FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef } from 'react';
 
 import type { HotkeyConfig, PageProps } from '@foundation/models';
+import { useQueryClient } from '@foundation/query-client';
 import { MainTitle, SubTitle } from '@shared/components';
 import { useProcMutation, useTabProcQuery } from '@shared/hooks';
 import { useMessageStore } from '@shared/stores';
 
-import { AuthApprovalForm } from './components/AuthApprovalForm';
-import { AuthApprovalGrid } from './components/AuthApprovalGrid';
 import { MENU_ID, SHEETS } from './auth-approval.constants';
 import type { ApprovalRow } from './auth-approval.types';
+import { AuthApprovalForm } from './components/AuthApprovalForm';
+import { AuthApprovalGrid } from './components/AuthApprovalGrid';
 import { useAuthApprovalStore } from './useAuthApprovalStore';
 
 const collectCheckedRows = <T,>(grid: FlexGrid<T> | null | undefined): T[] => {
@@ -125,7 +125,7 @@ export const AuthApproval = ({ tabId, title }: PageProps<MENU_ID>) => {
     { label: 'Reject', action: () => void handleReject() },
   ];
 
-  const rows = (data?.o_rc ?? []) as ApprovalRow[];
+  const rows = (data?.o_rc ?? []) as unknown as ApprovalRow[];
 
   return (
     <>

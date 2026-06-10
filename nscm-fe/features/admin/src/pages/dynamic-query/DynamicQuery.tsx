@@ -1,9 +1,9 @@
 import { type FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef } from 'react';
 
 import type { HotkeyConfig, PageProps } from '@foundation/models';
+import { useQueryClient } from '@foundation/query-client';
 import { MainTitle, SubTitle, TabItem, TabWrapper } from '@shared/components';
 import { useProcMutation, useTabProcQuery } from '@shared/hooks';
 import { useMessageStore } from '@shared/stores';
@@ -148,11 +148,11 @@ export const DynamicQuery = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   const customButtons = [{ label: 'Execute', action: handleExecute }];
 
-  const mainRows = (mainData?.o_rc1 ?? []) as QueryRow[];
-  const resultRows = (resultData?.o_rc1 ?? []) as ResultRow[];
-  const columnsRows = (columnsData?.o_rc1 ?? []) as ColumnMetaRow[];
-  const parametersRows = (parametersData?.o_rc1 ?? []) as ParameterMetaRow[];
-  const historyRows = (historyData?.o_rc1 ?? []) as HistoryRow[];
+  const mainRows = (mainData?.o_rc1 ?? []) as unknown as QueryRow[];
+  const resultRows = (resultData?.o_rc1 ?? []) as unknown as ResultRow[];
+  const columnsRows = (columnsData?.o_rc1 ?? []) as unknown as ColumnMetaRow[];
+  const parametersRows = (parametersData?.o_rc1 ?? []) as unknown as ParameterMetaRow[];
+  const historyRows = (historyData?.o_rc1 ?? []) as unknown as HistoryRow[];
 
   return (
     <>
