@@ -8,16 +8,16 @@
 
 | T# | 작업 트리거 (사용자 키워드) | 필독 룰 | Hook |
 |---:|---|---|---|
-| T01 | "신규 화면 / 화면 추가 / DMFXXX 만들어 / 화면 생성" | `_tobe/01~10` 전부 + `_asis/00_framework/01~07` 전부 + `_asis/02_screens/__TEMPLATE__.md` | screen-create-checklist + pre-write + asis-coverage-check + asis-button-mapping + runtime-error-prevention + grid-column-meta |
+| T01 | "신규 화면 / 화면 추가 / DMFXXX 만들어 / 화면 생성" | `_tobe/01~10` 전부 (특히 `01 §1.5` components/ 의무) + `_asis/00_framework/01~07` 전부 + `_asis/02_screens/__TEMPLATE__.md` | screen-create-checklist + pre-write + asis-coverage-check + asis-button-mapping + runtime-error-prevention + grid-column-meta + **components-folder-pattern** (2026-06-09) |
 | T02 | "AS-IS 화면 분석 / .cs 분석" | `_asis/02_screens/__TEMPLATE__.md` + `_asis/00_framework/01_BaseForm.md` | popup-asis-analysis (popup 호출 시) |
 | T03 | "Popup 분석 / popup 매핑" | `_asis/01_popups/__POPUP_TEMPLATE__.md` + `_asis/01_popups/00_inventory.md` + `_tobe/10_popup_modal.md` | popup-asis-analysis |
-| T04 | "Grid / DataGrid / 컬럼 메타 / row 선택 / 체크박스 / Add·Delete 배치" | `_tobe/07_datagrid.md` + `_tobe/08_column_meta.md` + `_tobe/09_subtitle_hotkey.md` §12 | grid-column-meta + runtime-error-prevention + **grid-interaction-patterns** |
+| T04 | "Grid / DataGrid / 컬럼 메타 / row 선택 / 체크박스 / Add·Delete 배치" | `_tobe/07_datagrid.md` + `_tobe/08_column_meta.md` + `_tobe/09_subtitle_hotkey.md` §12 + `_tobe/01_file_structure.md §1.5` (Grid 분리 의무) | grid-column-meta + runtime-error-prevention + **grid-interaction-patterns** + **components-folder-pattern** |
 | T05 | "조회조건 / SearchArea / Form" | `_tobe/06_search_area.md` + searchFields 카탈로그 | search-button-when-no-searcharea (SearchArea 부재 시) |
-| T06 | "Modal / Popup / 공용 modal" | `_tobe/10_popup_modal.md` + `_asis/01_popups/00_inventory.md` | popup-asis-analysis + runtime-error-prevention |
+| T06 | "Modal / Popup / 공용 modal" | `_tobe/10_popup_modal.md` + `_asis/01_popups/00_inventory.md` + `_tobe/01_file_structure.md §1.5` (modals/ 폴더 의무) | popup-asis-analysis + runtime-error-prevention + **components-folder-pattern** |
 | T07 | "Button / CRUD / Search Aux / hotkeyConfig" | `_tobe/09_subtitle_hotkey.md` + `_asis/00_framework/01_BaseForm.md` | asis-button-mapping + search-button-when-no-searcharea (SearchArea 부재 시) |
-| T08 | "BE / Controller / Service / SP / cursor / mutation" | `_tobe/11_be_controller_service.md` + `_tobe/12_metadata_sql.md` | asis-coverage-check + **sp-dual-cursor-pattern** + **mutation-onsuccess-defaults** + **proc-meta-signature-match** + **sp-body-minimal-change** (SP body 변경 시) |
+| T08 | "BE / Controller / Service / SP / cursor / mutation" | `_tobe/11_be_controller_service.md` + `_tobe/12_metadata_sql.md` | asis-coverage-check + **sp-dual-cursor-pattern** + **mutation-onsuccess-defaults** + **proc-meta-signature-match** + **sp-body-minimal-change** (SP body 변경 시) + **sp-utl-call-stack-safety** + **sp-exception-handler-debug-friendly** (2026-06-10) |
 | T09 | "메뉴 안 나옴 / MNU_URL / SHT_NM / 권한 없음" | `_tobe/13_routing_menu.md` | menu-not-displayed-debug |
-| T10 | "DB 오류 / ORA-XXXXX" | `_dev_rules/21_TROUBLESHOOTING.md` (유지) + `_tobe/12_metadata_sql.md` | (없음) |
+| T10 | "DB 오류 / ORA-XXXXX" | `_dev_rules/21_TROUBLESHOOTING.md` (유지) + `_tobe/12_metadata_sql.md` | **sp-exception-handler-debug-friendly** (사고 진단 시 EXCEPTION OTHERS 우회 절차, 2026-06-10) |
 | T11 | "Figma URL" | `_dev_rules/31_FIGMA_DESIGN_INTEGRATION.md` (유지) | (없음) |
 | T12 | "Git push / 백업 / 원복" | `_dev_rules/28_GIT_MULTI_REMOTE.md` + `_dev_rules/30_LOCAL_BACKUP_RESTORE.md` (유지) | (없음) |
 | T13 | "CSV 적재 / Oracle 적재" | `_dev_rules/29_LOCAL_DB_CSV_IMPORT.md` (유지) | (없음) |
@@ -25,6 +25,9 @@
 | T15 | "BaseForm / DataService / 공통 framework" | `_asis/00_framework/01~07.md` | (없음) |
 | T16 | "deploy zip / 이관 패키지" | `_dev_rules/22_PACKAGE_ARTIFACTS.md` (유지) + 메모리 `feedback_deploy_package_completeness.md` | pre-submit |
 | T17 | "G1~G10 격차 신규 구현" | `_mapping/asis_to_tobe.md` §2~§6 (해당 격차) | pre-submit |
+| T18 | "사내 DB 적용 / 클라우드 적용 / Docker → 사내 동기화" | `reference_corporate_oracle_connection` + `feedback_corporate_db_apply_pattern` + `feedback_corporate_schema_8_diffs` | db-corporate-apply + db-schema-divergence-check + asis-msg-inventory (i18n 시) |
+
+> 이전 hook 카탈로그 갱신은 §B.3 카탈로그 (27 항목) 참조. **새 23~27**: db-corporate-apply / db-schema-divergence-check / asis-msg-inventory / react-query-foundation-reexport / relative-import-order (2026-06-10 신규).
 
 ---
 
@@ -60,7 +63,7 @@
 | 06 | UsrControls | 36 컨트롤 + ControlValues 표준 |
 | 07 | FoxDataClient | WCF→REST 매핑 |
 
-### B.3 Hook 카탈로그 (`hooks/`) — 18
+### B.3 Hook 카탈로그 (`hooks/`) — 27
 
 | # | Hook | 적용 trigger |
 |---:|---|---|
@@ -82,6 +85,15 @@
 | 16 | proc-meta-signature-match.md | T08 (PROC_M 행 수 + SORT_ORD = SP ALL_ARGUMENTS positional 일치 + FE filter key 매핑, 2026-06-09) |
 | 17 | sp-body-minimal-change.md | T08 (Oracle SP body 변경 시 DBMS_METADATA.GET_DDL 원본 1바이트 변경 금지 + 3축 검증 의무, 2026-06-07) |
 | 18 | destructive-git-ops.md | (모든 트리거) git filter-branch / force-push / reset --hard 등 destructive ops 전 사용자 명시 승인 + 영향 보고 의무, 2026-06-07 |
+| 19 | type-check-error-patterns.md | ⭐ T01 / T04 / T06 / T08 (모든 FE 파일 작성 시 17 패턴 self-check — cloud `fix/lint-cleanup-20260608` 8 회 push 차단 사고 후, `pnpm type-check` 호출 없이 PRE-WRITE/POST-WRITE grep 으로 사전 차단, 2026-06-09) |
+| 20 | components-folder-pattern.md | ⭐ T01 / T04 / T06 (진입 페이지 ≤ 400 라인 + `<FlexGrid>`/`<DataGrid>`/`<CustomDialog>` inline JSX 금지 + components/modals/ 폴더 의무. DMF0008 inline 4 grid 440 라인 사고 후 사용자 명시 요구, 2026-06-09) |
+| 21 | sp-utl-call-stack-safety.md | ⭐ T08 (`UTL_CALL_STACK.SUBPROGRAM(1)(N)` (N≥2) 접근 시 `.COUNT >= N` 안전 체크 의무 + 안티 패턴 `(1)(1) IS NOT NULL` 검출 grep. DMF0008_GET_SALES_SITE Repair dblClick ORA-06533 사고 후, 2026-06-10) |
+| 22 | sp-exception-handler-debug-friendly.md | ⭐ T08 / T10 (EXCEPTION OTHERS 의 generic `RAISE_APPLICATION_ERROR(-20001, '오류가 발생했습니다.')` 가 실제 SQLERRM 손실 + SCM_SYS_LOG 미존재 시 cascade fail. 개발=SQLCODE/SQLERRM 명시 raise / 운영=표준 + SCM_SYS_LOG 정상. 진단 임시 patch 절차. DMF0008 30분 진단 사고 후, 2026-06-10) |
+| 23 | db-corporate-apply.md | ⭐ T17 (사내 DB 적용 — `docker exec nscm-oracle sqlplus` + `tr -d '\r'` CRLF 우회 + apply.sh wrapper + 04_GRANT_SYNONYM 별도 승인 의무 + Known error 6 카테고리 분류 + 화면별/카테고리별 순차 적용 + 보고서 의무. 2026-06-10 11 화면 사내 일괄 적용 작업 후) |
+| 24 | db-schema-divergence-check.md | ⭐ T17 (Docker vs 사내 Oracle 8가지 schema 차이 — SCM_ADM_MSG_M NOT NULL 4컬럼 / SCM_COM_MSG_M 미존재 / BMK_YN 미존재 / USERS tablespace / DBMS_METADATA bug. PRE-CHECK NOT NULL 비교 + 신규 SQL 호환성 의무 + 자기 점검 grep. 2026-06-10) |
+| 25 | asis-msg-inventory.md | ⭐ T17 (AS-IS MSG[숫자] 인벤토리 → To-Be 등록 SQL 절차 — 다중 grep 패턴 합집합 + Docker cross-check + 본문 한계 명시 + NOT NULL 보강 + 4-파일 세트 의무 + 의미 충돌 검증 + Docker DB 우선 검증. MSG00096 권한 없음 + 33 MSG ID 인벤토리 작업 후, 2026-06-10) |
+| 26 | react-query-foundation-reexport.md | ⭐ T01 / T04 (`@tanstack/react-query` 직접 import 금지 — `@foundation/query-client` re-export 사용 의무. PRE-WRITE grep `from '@tanstack/react-query` → 0 매치 확인. import 위치 `@foundation/*` 그룹. ESLint no-restricted-imports 차단. SCM0008/0009 사고 후, 2026-06-10) |
+| 27 | relative-import-order.md | ⭐ T01 / T04 (Relative imports 알파벳/계층 정렬 — 현 폴더 `.constants/.types` → 하위 폴더 `./components/*` → `./use{Name}Store`. ESLint `import/order` 차단. AuthApproval.tsx 사고 후, 2026-06-10) |
 
 ### B.4 매핑 (`_mapping/`) — 1
 
