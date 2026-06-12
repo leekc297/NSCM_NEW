@@ -394,3 +394,4 @@ DYNAMIC_PREFIX=$(rg -oE "binding: \`D_" features/{domain}/src/pages/{screen}/ | 
 | 일자 | 변경 | 이유 |
 |---|---|---|
 | 2026-06-03 | 초안 (Phase 3 추출) | column meta 표준 + dynamic column util + 사고 사례 통합 |
+| 2026-06-12 | ⭐ 컬럼 lookup 표준 위치 = `CELL_COMBO_DATA_TYPE` (ATTRIBUTE1 아님) 명문화. INPUT_TP_CD 표준 5종 (`S/O/M/IO/IM`) + **`'MI'` 절대 금지** (FE enum `MANDATORY_INSERT_ONLY='IM'` mismatch 시 cell editor 영원히 미동작). **hook `column-lookup-meta-standard.md`** 참조 의무 | SYS0014 dropdown 사고 (ATTRIBUTE1 위치 잘못 + INPUT_TP_CD 'MI' typo) 후 누락 방지 강조 |

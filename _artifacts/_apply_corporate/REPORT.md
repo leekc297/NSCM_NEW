@@ -3,7 +3,7 @@
 ## Phase 0~3 결과
 
 ### 적용 도구
-- `docker exec nscm-oracle sqlplus` (사내 DB: 10.20.100.153:2521:ESSCMD, user=SCM_MGR)
+- `docker exec nscm-oracle sqlplus` (사내 DB: 121.162.245.167:2521:ESSCMD, user=SCM_MGR)
 - 자동화 스크립트: `_artifacts/_apply_corporate/apply.sh`
 - 로그: `_artifacts/_apply_corporate/_logs/`
 

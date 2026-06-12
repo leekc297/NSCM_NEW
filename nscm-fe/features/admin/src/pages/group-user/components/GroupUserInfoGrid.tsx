@@ -10,15 +10,23 @@ import { useMessageStore } from '@shared/stores';
 import { SHEETS } from '../group-user.constants';
 import { useGroupUserStore } from '../useGroupUserStore';
 
+// WijmoRowItem 제약 (index signature: Record<string, WijmoPrimitive>) 만족 + 명시 필드
+type UserInfoRow = WijmoRowItem & {
+  USER_ID?: string;
+  USER_NM?: string;
+  DEPT_NM?: string;
+  USE_YN?: string;
+};
+
 interface Props {
   gridRef: MutableRefObject<FlexGrid | undefined>;
   gridFilterRef: MutableRefObject<FlexGridFilter | undefined>;
-  data: { USER_ID: string; USER_NM: string; DEPT_NM: string; USE_YN: string; CRUD_TYPE?: string }[];
+  data: UserInfoRow[];
 }
 
 export const GroupUserInfoGrid = ({ gridRef, gridFilterRef, data }: Props) => {
   const { t } = useTranslation();
-  const editTrackerRef = useRef<EditTracker<Record<string, unknown>>>();
+  const editTrackerRef = useRef<EditTracker<UserInfoRow>>();
   const [clickedRow, setClickedRow] = useState<number>(-1);
   const [openSsoUser, setOpenSsoUser] = useState(false);
   const { setAlert } = useMessageStore();
@@ -57,10 +65,10 @@ export const GroupUserInfoGrid = ({ gridRef, gridFilterRef, data }: Props) => {
     if (!dataItem) return;
     if (dataItem.CRUD_TYPE !== CRUD_TYPE.INSERT) return;
 
-    editTrackerRef.current?.storeChange(dataItem, 'USER_ID', dataItem.USER_ID, userId);
-    editTrackerRef.current?.storeChange(dataItem, 'USER_NM', dataItem.USER_NM, userNm);
+    editTrackerRef.current?.storeChange(dataItem as UserInfoRow, 'USER_ID', dataItem.USER_ID ?? '', userId);
+    editTrackerRef.current?.storeChange(dataItem as UserInfoRow, 'USER_NM', dataItem.USER_NM ?? '', userNm);
     if (deptId !== undefined) {
-      editTrackerRef.current?.storeChange(dataItem, 'DEPT_NM', dataItem.DEPT_NM, deptId);
+      editTrackerRef.current?.storeChange(dataItem as UserInfoRow, 'DEPT_NM', dataItem.DEPT_NM ?? '', deptId);
       dataItem.DEPT_NM = deptId;
     }
     dataItem.USER_ID = userId;

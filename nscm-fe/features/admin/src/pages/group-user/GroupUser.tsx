@@ -1,6 +1,7 @@
 import { type FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { useQueryClient } from '@foundation/query-client';
@@ -158,8 +159,13 @@ export const GroupUser = ({ tabId, title }: PageProps<MENU_ID>) => {
     });
   };
 
+  // ⭐ master hook §2.4 — Search 시 admin SYS0004 메타 refetch
+  const handleSearch = () => {
+    setMainFilter();
+    void fetchStaticColumns();
+  };
   const hotkeyConfig: HotkeyConfig = {
-    search: setMainFilter,
+    search: handleSearch,
     save: onSave,
     insert: onInsertGroup,
     delete: onDeleteGroup,

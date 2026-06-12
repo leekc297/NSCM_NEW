@@ -40,6 +40,43 @@ awk '/<FlexGridColumnGroup/,/<\/FlexGridColumnGroup>/' "$F" | grep -c "<FlexGrid
 
 # 9. useMemo preSearchParams (refetch loop)
 grep -B 2 "preSearchParams=\{\{ \.\.\." "$F" | grep -c "useMemo"   # ≥ 1 (사용 시)
+
+# ===== ⭐ type-check 17 패턴 자동 검증 (cloud type-check 회피) =====
+# 상세: ./type-check-error-patterns.md §6
+
+# 10. useTabProcQuery / useProcMutation 의 tabId 누락
+grep -nP 'use(Tab)?Proc(Query|Mutation)\(\{[^}]*\}\)' "$F" | grep -v 'tabId:' \
+  && echo "⚠ TS2345: tabId 누락 (use type-check-error-patterns §1)"
+
+# 11. ByDivisionModal 의 callFromCell 누락
+grep -nP '<(Project|Item|Owner|Customer)ByDivisionModal' "$F" | grep -v 'callFromCell' \
+  && echo "⚠ TS2741: callFromCell required prop 누락 (use type-check-error-patterns §1)"
+
+# 12. as XxxRow[] direct cast (TS2352)
+grep -nP 'as [A-Z]\w*Row\[\]' "$F" | grep -v 'as unknown as' \
+  && echo "⚠ TS2352: direct cast 차단 — 'as unknown as XxxRow[]' 우회 (use type-check-error-patterns §2)"
+
+# 13. as Record<string, unknown> direct cast (TS2352)
+grep -nP 'as Record<string, unknown>' "$F" | grep -v 'as unknown as' \
+  && echo "⚠ TS2352: Record direct cast — 'as unknown as Record<string, unknown>' 우회"
+
+# 14. DialogNavigationSize string literal 거부 (TS2322)
+grep -nP "size='(large|medium|small)'" "$F" \
+  && echo "⚠ TS2322: Dialog size 는 number literal 만 (1200/800/600 등)"
+
+# 15. CustomDialog deprecated prop
+grep -nP '<CustomDialog[^/]*?(width=|height=|title=|onClose=)' "$F" \
+  && echo "⚠ TS2322: CustomDialog deprecated prop — customHeaderTitle/handleClose/size 사용"
+
+# 16. popupBtnStyle JSX 사용 전 정의 (no-use-before-define)
+LINE_USE=$(grep -n "style={popupBtnStyle}" "$F" | head -1 | cut -d: -f1)
+LINE_DEF=$(grep -n "const popupBtnStyle\s*=" "$F" | head -1 | cut -d: -f1)
+[ -n "$LINE_USE" ] && [ -n "$LINE_DEF" ] && [ "$LINE_USE" -lt "$LINE_DEF" ] \
+  && echo "⚠ eslint no-use-before-define: popupBtnStyle JSX 사용 전 정의 의무"
+
+# 17. DataGrid<T> 의 T 가 WijmoRowItem constraint 만족하는지 확인 의무
+grep -nP '<DataGrid<' "$F" \
+  && echo "ℹ DataGrid<T>: T extends WijmoRowItem 또는 [key:string]: WijmoPrimitive 의무 확인"
 ```
 
 ### §0.2 BE `.java`

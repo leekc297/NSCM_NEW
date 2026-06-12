@@ -1,0 +1,55 @@
+SET PAGESIZE 500
+SET LINESIZE 300
+SET SERVEROUTPUT ON SIZE UNLIMITED
+
+-- A. 로그인 사용자 minyonglee1 의 USER_GR_ID + DMF0043 권한
+SELECT 'USER_M' AS K, USER_ID, USER_GR_ID, NM_KO FROM SCM_ADM_USER_M WHERE USER_ID='minyonglee1';
+
+-- B. minyonglee1 의 그룹에 DMF0043 권한 있는지
+SELECT 'GR_MNU_DMF0043' AS K, M.USER_GR_ID FROM SCM_ADM_USER_GR_MNU_MPG_M M WHERE M.MNU_ID='DMF0043' AND M.USER_GR_ID IN (SELECT USER_GR_ID FROM SCM_ADM_USER_M WHERE USER_ID='minyonglee1');
+
+-- C. minyonglee1 의 Division 권한 (UNIT_AUTH)
+SELECT 'UNIT_AUTH' AS K, USER_GR_ID, UNIT_TP_CD, UNIT_ID FROM SCM_ADM_USER_GR_UNIT_AUTH_MPG_M WHERE USER_GR_ID IN (SELECT USER_GR_ID FROM SCM_ADM_USER_M WHERE USER_ID='minyonglee1') AND UNIT_TP_CD='DIVISION' ORDER BY UNIT_ID FETCH FIRST 20 ROWS ONLY;
+
+-- D. DMF0043_GET_CONTRIBUTION_SALES_LIST 의 IN 파라미터 (SCM_ADM_PROC_M)
+SELECT COL_NM, COL_TP_CD, SORT_ORD FROM SCM_ADM_PROC_M WHERE PROC_NM='DMF0043_GET_CONTRIBUTION_SALES_LIST' ORDER BY SORT_ORD;
+
+-- E. SP body 의 첫 80 line (signature + WHERE 조건 파악)
+SELECT LINE, SUBSTR(TEXT, 1, 200) AS SRC FROM USER_SOURCE WHERE NAME='DMF0043_GET_CONTRIBUTION_SALES_LIST' AND TYPE='PROCEDURE' AND LINE <= 80 ORDER BY LINE;
+
+-- F. SP body 의 EXCEPTION block (마지막 30 line)
+SELECT LINE, SUBSTR(TEXT, 1, 200) AS SRC FROM USER_SOURCE WHERE NAME='DMF0043_GET_CONTRIBUTION_SALES_LIST' AND TYPE='PROCEDURE' AND LINE >= (SELECT MAX(LINE)-30 FROM USER_SOURCE WHERE NAME='DMF0043_GET_CONTRIBUTION_SALES_LIST' AND TYPE='PROCEDURE') ORDER BY LINE;
+
+-- G. SP 직접 호출 test (가장 row 많은 조합: DIV=40, VER_SEQ=8, R_B_20250820_V008_C)
+DECLARE
+  v_cursor SYS_REFCURSOR;
+  v_row_count NUMBER := 0;
+  v_first_row VARCHAR2(2000);
+BEGIN
+  DMF0043_GET_CONTRIBUTION_SALES_LIST(
+    p_division_id   => '40',
+    p_ver_seq       => 8,
+    p_version_no    => 'R_B_20250820_V008_C',
+    p_end_cust_rep  => '',
+    p_product_group => '',
+    p_biz_type      => '',
+    p_million_yn    => 'N',
+    p_compat_yn     => 'N',
+    p_user_id       => 'minyonglee1',
+    p_menu_id       => 'DMF0043',
+    p_cursor        => v_cursor
+  );
+  LOOP
+    FETCH v_cursor INTO v_first_row;
+    EXIT WHEN v_cursor%NOTFOUND OR v_row_count >= 3;
+    v_row_count := v_row_count + 1;
+    DBMS_OUTPUT.PUT_LINE('Row '||v_row_count||': '||SUBSTR(v_first_row,1,200));
+  END LOOP;
+  CLOSE v_cursor;
+  DBMS_OUTPUT.PUT_LINE('Fetched rows (max 3): '||v_row_count);
+EXCEPTION WHEN OTHERS THEN
+  DBMS_OUTPUT.PUT_LINE('ERR: '||SQLCODE||' '||SQLERRM);
+END;
+/
+
+EXIT;

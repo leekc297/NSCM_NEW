@@ -1,0 +1,8 @@
+SET LINESIZE 250
+PROMPT === RATIO SP 의 SUBSTR 패턴 (모든 form) ===
+SELECT line, text
+  FROM user_source
+ WHERE name = 'DMF0043_SAVE_DM_MST_CONTRIBUTE_RATIO'
+   AND type = 'PROCEDURE'
+   AND UPPER(text) LIKE '%SUBSTR%'
+ ORDER BY line;

@@ -1,0 +1,36 @@
+-- SYS0014 division/plant/customer UNIT_ID 컬럼 메타 정정
+-- 표준 패턴: CELL_COMBO_DATA_TYPE 에 SQL_ID (DataGrid wrapper 가 useTabComboQueries 로 자동 fetch + column.dataMap 주입)
+-- 49_sys0014_unit_id_lookup_meta.sql 의 ATTRIBUTE1 위치 잘못된 것을 정정.
+-- 참조 (기존 정상 작동 화면): SYS0001 (MSG_TP_CD/MessageType) / SYS0002 (LANG_CD/Language) / SYS0008 (BTN_AUTH_YN/YesOrNo)
+
+UPDATE SCM_MST_SHEET_COLUMNS
+   SET CELL_COMBO_DATA_TYPE = 'Division',
+       ATTRIBUTE1           = NULL,
+       LAST_UPDATED_BY      = 'admin',
+       LAST_UPDATE_DATE     = SYSDATE
+ WHERE PROGRAM_ID = 'SYS0014' AND SHEET_NAME = 'division' AND COLUMN_NAME = 'UNIT_ID';
+
+UPDATE SCM_MST_SHEET_COLUMNS
+   SET CELL_COMBO_DATA_TYPE = 'SalesPlant',
+       ATTRIBUTE1           = NULL,
+       LAST_UPDATED_BY      = 'admin',
+       LAST_UPDATE_DATE     = SYSDATE
+ WHERE PROGRAM_ID = 'SYS0014' AND SHEET_NAME = 'plant' AND COLUMN_NAME = 'UNIT_ID';
+
+UPDATE SCM_MST_SHEET_COLUMNS
+   SET CELL_COMBO_DATA_TYPE = 'EndCustomer',
+       ATTRIBUTE1           = NULL,
+       LAST_UPDATED_BY      = 'admin',
+       LAST_UPDATE_DATE     = SYSDATE
+ WHERE PROGRAM_ID = 'SYS0014' AND SHEET_NAME = 'customer' AND COLUMN_NAME = 'UNIT_ID';
+
+COMMIT;
+
+-- 검증
+SELECT SHEET_NAME, COLUMN_NAME, COLUMN_LABEL_NAME, INPUT_TP_CD,
+       CELL_CONTROL_OBJECT_TYPE_CODE, CELL_COMBO_DATA_TYPE, ATTRIBUTE1
+  FROM SCM_MST_SHEET_COLUMNS
+ WHERE PROGRAM_ID = 'SYS0014'
+   AND SHEET_NAME IN ('division','plant','customer')
+   AND COLUMN_NAME = 'UNIT_ID'
+ ORDER BY SHEET_NAME;

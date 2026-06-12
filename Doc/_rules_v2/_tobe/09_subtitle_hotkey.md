@@ -616,3 +616,4 @@ grep -c "GridAction.removeRow" "$MAIN"  # ≥ 1
 | 2026-06-03 | 초안 (Phase 3 추출) | DMF0004~7 SubTitle/hotkeyConfig 통합 + 메모리 룰 cross-ref |
 | 2026-06-06 | §2.2.1 공통 버튼 기본 표시 정책 신설 + §2.5 SearchArea 부재 searchAction 신설 + §7.4/§7.5 anti-pattern + §8 grep #6/#7 자동 검증 | 사용자 명시 요구 (SCM0008 일괄 false + Search 버튼 누락 사고). hidden allowlist = insert/delete/save 만 |
 | 2026-06-06 | §12 그리드 특화 액션 버튼 배치 (TitleArea rightButtons) 신설 | SCM0008 Auth Request — Add/Delete 가 SubTitle 에 있어 사용자 혼선 |
+| 2026-06-12 | hotkeyConfig 의 모든 버튼 (search/insert/save/delete/excel/upload/manual + customButtons) 은 `useTabBtnPermissions` + `hasButton(BTN_CD)` 조건부 callback 의무. 하드코딩 `search: handleSearch` 금지. **hook `menu-button-dynamic-fetch.md` + master `ui-dynamic-property-management.md`** 참조 의무 | 사용자 명시 — "UI 생성의 동적 속성관리" Menu Button 부분 (admin SYS0009 변경 즉시 반영) |

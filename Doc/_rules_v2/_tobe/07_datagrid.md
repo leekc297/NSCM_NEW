@@ -1219,3 +1219,4 @@ grep -rn "new FlexGridFilter" features/*/src/pages/*/components/*.tsx | grep "in
 | 2026-06-06 | §8 selectionMode + useCheckbox / §9 자동 체크 금지 / §10 Recently-Added loadedRows 패턴 신설 | SCM0008 Auth Request 4 사고 묶음 |
 | 2026-06-09 | §11 staticColumns 출처 표준 (store fetchStaticColumns + 동적 column useMemo + 하드코딩 금지) 신설 | SCM0005 DynamicQuery 5 grid column 0개 사고 |
 | 2026-06-07 | §12 Insert cell ComboBox dropdown 표준 (12 단계 보완사항) | DMF0003 MKT FCST Insert dropdown 5 사고 묶음 |
+| 2026-06-12 | DataGrid + Wijmo 직접 사용 화면 모두 `staticColumns` / `staticMeasures` 동적 fetch 의무 (`SCM_MST_SHEET_COLUMNS` + `SCM_MST_SHEET_MEASURE` admin 변경 즉시 반영). **master hook `ui-dynamic-property-management.md` + child `ui-category-setup-column-meta.md §8(Measure)/§11(Wijmo 직접)`** 참조 의무. DMF0020 PROJECT_STATUS VISIBLE_FLAG='N' 미반영 사고 후 | 사용자 명시 — UI 생성의 동적 속성관리 Column + Measure 부분 |

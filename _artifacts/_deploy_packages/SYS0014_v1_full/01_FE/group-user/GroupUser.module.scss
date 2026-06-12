@@ -1,0 +1,22 @@
+.contents {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  gap: 12px;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  flex: 1;
+  min-height: 0;
+}
+
+.module {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}

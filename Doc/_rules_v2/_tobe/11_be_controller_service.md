@@ -327,3 +327,4 @@ diff -u (AS-IS PKG body) (TO-BE PKG body)
 |---|---|
 | 2026-06-03 | 초안 (Phase 3 추출) — Spring Boot 표준 패턴 (BodController + Service + ...) |
 | **2026-06-04** | **전면 재작성 (Phase 6 PoC 정정)** — NSCM 동적 SP 호출 아키텍처 + 메타 SQL 중심 + Java 코드 0 줄 표준 |
+| 2026-06-12 | ⭐ SAVE SP 다중 row 처리 표준 — `'$[*]'` + cursor FOR LOOP (또는 bulk INSERT-SELECT / MERGE). `'$'` + SELECT INTO 절대 금지. entry + HIST sub SP 동시 fix. **hook `sp-json-table-array-pattern.md`** + 메모리 `feedback_sp_json_table_array_cursor_loop` | SYS0010 4 SP 다중 row 사고 (NextSCM Pilot 변환 결함) |

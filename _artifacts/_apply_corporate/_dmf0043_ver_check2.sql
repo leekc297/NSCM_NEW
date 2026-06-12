@@ -1,0 +1,16 @@
+SET LINESIZE 200
+SET PAGESIZE 100
+
+PROMPT === 1. CONTRIBUTE_VER 테이블 인벤토리 ===
+SELECT owner, table_name
+  FROM all_tables
+ WHERE owner = 'SCM_MGR'
+   AND table_name LIKE '%CONTRIBUTE%VER%'
+ ORDER BY table_name;
+
+PROMPT === 2. DMF0043_SAVE_DM_MST_CONTRIBUTE_VER SP body (전체) ===
+SELECT LINE, TEXT
+  FROM user_source
+ WHERE name = 'DMF0043_SAVE_DM_MST_CONTRIBUTE_VER'
+   AND type = 'PROCEDURE'
+ ORDER BY line;

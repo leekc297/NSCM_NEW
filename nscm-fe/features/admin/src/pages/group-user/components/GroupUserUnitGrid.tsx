@@ -2,8 +2,8 @@ import { type FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { type MutableRefObject } from 'react';
 
-import { DataGrid } from '@shared/components';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
+import { DataGrid } from '@shared/components';
 
 interface Props {
   gridRef: MutableRefObject<FlexGrid | undefined>;

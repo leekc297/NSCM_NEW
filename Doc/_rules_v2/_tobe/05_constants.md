@@ -237,3 +237,4 @@ rg "LBL_[A-Z]+_" features/{domain}/src/pages/{screen}/ | wc -l  # = 0
 | 일자 | 변경 | 이유 |
 |---|---|---|
 | 2026-06-03 | 초안 (Phase 3 추출) | DMF0004~7 constants 통합 분석 + i18n LBL 위반 사례 식별 |
+| 2026-06-12 | SHEETS enum 값 = 클라우드 `procedures.d.ts` 유니온 정확 일치 + DB `SCM_ADM_MNU_BTN_MPG_M.SHT_NM` 정렬 의무. i18n 키 KO=EN 정확 동일 의무 (CN 제외). **hook `fe-cloud-type-lint-readiness.md` §1 + `i18n-ko-en-alignment.md`** 참조 | DMF0020 클라우드 TS2820 + 다국어 영문화 정책 |

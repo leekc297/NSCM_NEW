@@ -1,0 +1,1 @@
+export { GroupUser } from './GroupUser';

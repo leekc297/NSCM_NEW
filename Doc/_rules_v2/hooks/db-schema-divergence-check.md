@@ -14,7 +14,7 @@
 
 ---
 
-## §1. 8가지 검증된 schema 차이 (2026-06-10 기준)
+## §1. 9가지 검증된 schema 차이 (2026-06-11 기준)
 
 | # | 차이 | Docker | 사내 | 영향 | 대응 |
 |---|---|---|---|---|---|
@@ -26,6 +26,7 @@
 | 6 | `SCM_ADM_MNU_M`.BMK_YN 컬럼 | ✅ 존재 | ❌ 미존재 | MENU INSERT 시 ORA-00904 | DDL 동기화 / 컬럼 제거 |
 | 7 | USERS tablespace quota | 여유 | 부족 | ORA-01653 (extend table) | DBA 측 확장 |
 | 8 | DBMS_METADATA stylesheet | 정상 | 버그 (`bad stylesheet: kuaudobj`) | SP body backup audit fail | audit-only 영향 — 실제 CREATE OR REPLACE 정상 |
+| 9 | `SCM_MST_SITE_ITEM`.REPORT_GROUP3 | ✅ 존재 | ❌ 미존재 | GET SP `'' AS PRODUCT_GROUP` 하드코딩 fallback ↔ FE SAVE `\|\| 'N'` default 불일치 → LEFT JOIN 0 match → silent "데이터 보이지 않음" | GET SP fallback 'N' 통일 + FE default 'N' 통일 (2026-06-11 DMF0043 사고, fix script `09_dmf0043_main_data_product_group_n.py`) — CLOB escape `''N''` (5 char) 주의 |
 
 ## §2. PRE-CHECK SQL (적용 전 의무)
 

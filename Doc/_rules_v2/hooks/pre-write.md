@@ -23,6 +23,7 @@
 - [ ] **DataGrid wrapper**: FlexGrid 직접 import 금지 → `DataGrid` (`@shared/components`)
 - [ ] **EditTracker.storeChange**: cell 변경 시 누락 금지
 - [ ] **CRUD_TYPE 가드**: modal cell 더블클릭 시 `CRUD_TYPE.INSERT` 가드 의무
+- [ ] **⭐ type-check-error-patterns** (`./type-check-error-patterns.md` §1~§5 17 패턴 self-check): `useTabProcQuery/useProcMutation` `tabId` 필수 / Modal `callFromCell` 필수 / `as XxxRow[]` direct cast 금지 (`as unknown as` 의무) / `DialogNavigationSize` number literal 만 / index sig `[key:string]: WijmoPrimitive` 의무 (optional `?: string` 금지)
 
 ### §0.3 BE `.java`
 

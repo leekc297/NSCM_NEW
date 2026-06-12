@@ -1,0 +1,190 @@
+ALTER SESSION SET DDL_LOCK_TIMEOUT=120;
+CREATE OR REPLACE PROCEDURE         P_SYS0014_SAVE_GROUP_USER_M (
+    P_SES_USER_ID    IN  VARCHAR2,
+    P_DATA           IN  CLOB,
+    O_RESULT_CURSOR  OUT SYS_REFCURSOR
+)
+AS
+    V_CNT NUMBER := 0;
+BEGIN
+    -- ============================================================
+    -- main sheet (SCM_ADM_USER_GR_M) - Group CRUD
+    -- ============================================================
+    INSERT INTO SCM_MGR.SCM_ADM_USER_GR_M (USER_GR_ID, USER_GR_NM, USE_YN, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+    SELECT V_USER_GR_ID, V_USER_GR_NM, NVL(V_USE_YN,'Y'), P_SES_USER_ID, SYSDATE, P_SES_USER_ID, SYSDATE
+      FROM JSON_TABLE(P_DATA, '$[*]' COLUMNS (
+          V_SHT_NM      VARCHAR2(30)  PATH '$.SHT_NM',
+          V_CRUD_TYPE   VARCHAR2(1)   PATH '$.CRUD_TYPE',
+          V_USER_GR_ID  VARCHAR2(50)  PATH '$.USER_GR_ID',
+          V_USER_GR_NM  VARCHAR2(100) PATH '$.USER_GR_NM',
+          V_USE_YN      VARCHAR2(1)   PATH '$.USE_YN'
+      ))
+     WHERE V_SHT_NM='main' AND V_CRUD_TYPE='I';
+    V_CNT := V_CNT + SQL%ROWCOUNT;
+
+    MERGE INTO SCM_MGR.SCM_ADM_USER_GR_M T
+    USING (
+        SELECT V_USER_GR_ID AS USER_GR_ID, V_USER_GR_NM AS USER_GR_NM, V_USE_YN AS USE_YN
+          FROM JSON_TABLE(P_DATA, '$[*]' COLUMNS (
+              V_SHT_NM     VARCHAR2(30)  PATH '$.SHT_NM',
+              V_CRUD_TYPE  VARCHAR2(1)   PATH '$.CRUD_TYPE',
+              V_USER_GR_ID VARCHAR2(50)  PATH '$.USER_GR_ID',
+              V_USER_GR_NM VARCHAR2(100) PATH '$.USER_GR_NM',
+              V_USE_YN     VARCHAR2(1)   PATH '$.USE_YN'
+          ))
+         WHERE V_SHT_NM='main' AND V_CRUD_TYPE='M'
+    ) S ON (T.USER_GR_ID = S.USER_GR_ID)
+    WHEN MATCHED THEN UPDATE SET T.USER_GR_NM=S.USER_GR_NM, T.USE_YN=NVL(S.USE_YN,'Y'),
+                                  T.LAST_UPDATED_BY=P_SES_USER_ID, T.LAST_UPDATE_DATE=SYSDATE;
+    V_CNT := V_CNT + SQL%ROWCOUNT;
+
+    -- Group DELETE (cascade — userInfo + unit_auth 도 삭제)
+    DELETE FROM SCM_MGR.SCM_ADM_USER_GR_UNIT_AUTH_MPG_M
+     WHERE USER_GR_ID IN (
+         SELECT V_USER_GR_ID FROM JSON_TABLE(P_DATA, '$[*]' COLUMNS (
+             V_SHT_NM     VARCHAR2(30) PATH '$.SHT_NM',
+             V_CRUD_TYPE  VARCHAR2(1)  PATH '$.CRUD_TYPE',
+             V_USER_GR_ID VARCHAR2(50) PATH '$.USER_GR_ID'
+         )) WHERE V_SHT_NM='main' AND V_CRUD_TYPE='D'
+     );
+    DELETE FROM SCM_MGR.SCM_ADM_USER_GR_MPG_M
+     WHERE USER_GR_ID IN (
+         SELECT V_USER_GR_ID FROM JSON_TABLE(P_DATA, '$[*]' COLUMNS (
+             V_SHT_NM     VARCHAR2(30) PATH '$.SHT_NM',
+             V_CRUD_TYPE  VARCHAR2(1)  PATH '$.CRUD_TYPE',
+             V_USER_GR_ID VARCHAR2(50) PATH '$.USER_GR_ID'
+         )) WHERE V_SHT_NM='main' AND V_CRUD_TYPE='D'
+     );
+    DELETE FROM SCM_MGR.SCM_ADM_USER_GR_M
+     WHERE USER_GR_ID IN (
+         SELECT V_USER_GR_ID FROM JSON_TABLE(P_DATA, '$[*]' COLUMNS (
+             V_SHT_NM     VARCHAR2(30) PATH '$.SHT_NM',
+             V_CRUD_TYPE  VARCHAR2(1)  PATH '$.CRUD_TYPE',
+             V_USER_GR_ID VARCHAR2(50) PATH '$.USER_GR_ID'
+         )) WHERE V_SHT_NM='main' AND V_CRUD_TYPE='D'
+     );
+    V_CNT := V_CNT + SQL%ROWCOUNT;
+
+    -- ============================================================
+    -- userInfo sheet (SCM_ADM_USER_GR_MPG_M) - User-Group mapping CRUD
+    -- ============================================================
+    INSERT INTO SCM_MGR.SCM_ADM_USER_GR_MPG_M (USER_GR_ID, USER_ID, USE_YN, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+    SELECT V_USER_GR_ID, V_USER_ID, NVL(V_USE_YN,'Y'), P_SES_USER_ID, SYSDATE, P_SES_USER_ID, SYSDATE
+      FROM JSON_TABLE(P_DATA, '$[*]' COLUMNS (
+          V_SHT_NM      VARCHAR2(30) PATH '$.SHT_NM',
+          V_CRUD_TYPE   VARCHAR2(1)  PATH '$.CRUD_TYPE',
+          V_USER_GR_ID  VARCHAR2(50) PATH '$.USER_GR_ID',
+          V_USER_ID     VARCHAR2(50) PATH '$.USER_ID',
+          V_USE_YN      VARCHAR2(1)  PATH '$.USE_YN'
+      ))
+     WHERE V_SHT_NM='userInfo' AND V_CRUD_TYPE='I';
+    V_CNT := V_CNT + SQL%ROWCOUNT;
+
+    -- userInfo UPDATE (USE_YN toggle)
+    MERGE INTO SCM_MGR.SCM_ADM_USER_GR_MPG_M T
+    USING (
+        SELECT V_USER_GR_ID AS USER_GR_ID, V_USER_ID AS USER_ID, V_USE_YN AS USE_YN
+          FROM JSON_TABLE(P_DATA, '$[*]' COLUMNS (
+              V_SHT_NM     VARCHAR2(30) PATH '$.SHT_NM',
+              V_CRUD_TYPE  VARCHAR2(1)  PATH '$.CRUD_TYPE',
+              V_USER_GR_ID VARCHAR2(50) PATH '$.USER_GR_ID',
+              V_USER_ID    VARCHAR2(50) PATH '$.USER_ID',
+              V_USE_YN     VARCHAR2(1)  PATH '$.USE_YN'
+          )) WHERE V_SHT_NM='userInfo' AND V_CRUD_TYPE='M'
+    ) S ON (T.USER_GR_ID = S.USER_GR_ID AND T.USER_ID = S.USER_ID)
+    WHEN MATCHED THEN UPDATE SET T.USE_YN=NVL(S.USE_YN,'Y'),
+                                  T.LAST_UPDATED_BY=P_SES_USER_ID, T.LAST_UPDATE_DATE=SYSDATE;
+    V_CNT := V_CNT + SQL%ROWCOUNT;
+
+    -- userInfo DELETE
+    DELETE FROM SCM_MGR.SCM_ADM_USER_GR_UNIT_AUTH_MPG_M T
+     WHERE (T.USER_GR_ID, T.USER_ID) IN (
+         SELECT V_USER_GR_ID, V_USER_ID FROM JSON_TABLE(P_DATA, '$[*]' COLUMNS (
+             V_SHT_NM     VARCHAR2(30) PATH '$.SHT_NM',
+             V_CRUD_TYPE  VARCHAR2(1)  PATH '$.CRUD_TYPE',
+             V_USER_GR_ID VARCHAR2(50) PATH '$.USER_GR_ID',
+             V_USER_ID    VARCHAR2(50) PATH '$.USER_ID'
+         )) WHERE V_SHT_NM='userInfo' AND V_CRUD_TYPE='D'
+     );
+    DELETE FROM SCM_MGR.SCM_ADM_USER_GR_MPG_M T
+     WHERE (T.USER_GR_ID, T.USER_ID) IN (
+         SELECT V_USER_GR_ID, V_USER_ID FROM JSON_TABLE(P_DATA, '$[*]' COLUMNS (
+             V_SHT_NM     VARCHAR2(30) PATH '$.SHT_NM',
+             V_CRUD_TYPE  VARCHAR2(1)  PATH '$.CRUD_TYPE',
+             V_USER_GR_ID VARCHAR2(50) PATH '$.USER_GR_ID',
+             V_USER_ID    VARCHAR2(50) PATH '$.USER_ID'
+         )) WHERE V_SHT_NM='userInfo' AND V_CRUD_TYPE='D'
+     );
+    V_CNT := V_CNT + SQL%ROWCOUNT;
+
+    -- ============================================================
+    -- division/plant/customer sheets (SCM_ADM_USER_GR_UNIT_AUTH_MPG_M)
+    -- UNIT_TP_CD: D / P / C (FE 가 SHT_NM 따라 매핑하여 payload 에 V_UNIT_TP_CD 직접 전송)
+    -- ============================================================
+    INSERT INTO SCM_MGR.SCM_ADM_USER_GR_UNIT_AUTH_MPG_M
+        (USER_GR_ID, USER_ID, UNIT_TP_CD, UNIT_ID, UPPR_UNIT_ID, EDIT_YN, USE_YN,
+         CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+    SELECT V_USER_GR_ID, V_USER_ID, V_UNIT_TP_CD, V_UNIT_ID, NVL(V_UPPR_UNIT_ID,'-'), NVL(V_EDIT_YN,'Y'), NVL(V_USE_YN,'Y'),
+           P_SES_USER_ID, SYSDATE, P_SES_USER_ID, SYSDATE
+      FROM JSON_TABLE(P_DATA, '$[*]' COLUMNS (
+          V_SHT_NM       VARCHAR2(30) PATH '$.SHT_NM',
+          V_CRUD_TYPE    VARCHAR2(1)  PATH '$.CRUD_TYPE',
+          V_USER_GR_ID   VARCHAR2(50) PATH '$.USER_GR_ID',
+          V_USER_ID      VARCHAR2(50) PATH '$.USER_ID',
+          V_UNIT_TP_CD   VARCHAR2(10) PATH '$.UNIT_TP_CD',
+          V_UNIT_ID      VARCHAR2(50) PATH '$.UNIT_ID',
+          V_UPPR_UNIT_ID VARCHAR2(50) PATH '$.UPPR_UNIT_ID',
+          V_EDIT_YN      VARCHAR2(1)  PATH '$.EDIT_YN',
+          V_USE_YN       VARCHAR2(1)  PATH '$.USE_YN'
+      ))
+     WHERE V_SHT_NM IN ('division','plant','customer') AND V_CRUD_TYPE='I';
+    V_CNT := V_CNT + SQL%ROWCOUNT;
+
+    -- unit_auth UPDATE (EDIT_YN/USE_YN toggle)
+    MERGE INTO SCM_MGR.SCM_ADM_USER_GR_UNIT_AUTH_MPG_M T
+    USING (
+        SELECT V_USER_GR_ID AS USER_GR_ID, V_USER_ID AS USER_ID, V_UNIT_TP_CD AS UNIT_TP_CD,
+               V_UNIT_ID AS UNIT_ID, V_EDIT_YN AS EDIT_YN, V_USE_YN AS USE_YN
+          FROM JSON_TABLE(P_DATA, '$[*]' COLUMNS (
+              V_SHT_NM     VARCHAR2(30) PATH '$.SHT_NM',
+              V_CRUD_TYPE  VARCHAR2(1)  PATH '$.CRUD_TYPE',
+              V_USER_GR_ID VARCHAR2(50) PATH '$.USER_GR_ID',
+              V_USER_ID    VARCHAR2(50) PATH '$.USER_ID',
+              V_UNIT_TP_CD VARCHAR2(10) PATH '$.UNIT_TP_CD',
+              V_UNIT_ID    VARCHAR2(50) PATH '$.UNIT_ID',
+              V_EDIT_YN    VARCHAR2(1)  PATH '$.EDIT_YN',
+              V_USE_YN     VARCHAR2(1)  PATH '$.USE_YN'
+          )) WHERE V_SHT_NM IN ('division','plant','customer') AND V_CRUD_TYPE='M'
+    ) S ON (T.USER_GR_ID=S.USER_GR_ID AND T.USER_ID=S.USER_ID AND T.UNIT_TP_CD=S.UNIT_TP_CD AND T.UNIT_ID=S.UNIT_ID)
+    WHEN MATCHED THEN UPDATE SET T.EDIT_YN=NVL(S.EDIT_YN,'Y'), T.USE_YN=NVL(S.USE_YN,'Y'),
+                                  T.LAST_UPDATED_BY=P_SES_USER_ID, T.LAST_UPDATE_DATE=SYSDATE;
+    V_CNT := V_CNT + SQL%ROWCOUNT;
+
+    -- unit_auth DELETE
+    DELETE FROM SCM_MGR.SCM_ADM_USER_GR_UNIT_AUTH_MPG_M T
+     WHERE (T.USER_GR_ID, T.USER_ID, T.UNIT_TP_CD, T.UNIT_ID) IN (
+         SELECT V_USER_GR_ID, V_USER_ID, V_UNIT_TP_CD, V_UNIT_ID FROM JSON_TABLE(P_DATA, '$[*]' COLUMNS (
+             V_SHT_NM     VARCHAR2(30) PATH '$.SHT_NM',
+             V_CRUD_TYPE  VARCHAR2(1)  PATH '$.CRUD_TYPE',
+             V_USER_GR_ID VARCHAR2(50) PATH '$.USER_GR_ID',
+             V_USER_ID    VARCHAR2(50) PATH '$.USER_ID',
+             V_UNIT_TP_CD VARCHAR2(10) PATH '$.UNIT_TP_CD',
+             V_UNIT_ID    VARCHAR2(50) PATH '$.UNIT_ID'
+         )) WHERE V_SHT_NM IN ('division','plant','customer') AND V_CRUD_TYPE='D'
+     );
+    V_CNT := V_CNT + SQL%ROWCOUNT;
+
+    COMMIT;
+
+    OPEN O_RESULT_CURSOR FOR
+    SELECT '0' AS CODE, 'SUCCESS' AS MSG, TO_CHAR(V_CNT) AS EVENT FROM DUAL;
+EXCEPTION
+    WHEN OTHERS THEN
+        ROLLBACK;
+        DECLARE V_ERR VARCHAR2(4000) := SUBSTR(SQLERRM, 1, 4000);
+        BEGIN
+            OPEN O_RESULT_CURSOR FOR SELECT '-1' AS CODE, V_ERR AS MSG, '0' AS EVENT FROM DUAL;
+        END;
+END P_SYS0014_SAVE_GROUP_USER_M;
+/
+SHOW ERRORS;
