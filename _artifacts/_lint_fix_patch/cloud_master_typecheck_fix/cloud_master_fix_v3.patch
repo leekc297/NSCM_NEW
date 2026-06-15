@@ -1,0 +1,312 @@
+warning: in the working copy of 'nscm-fe/features/master/src/components/columnSettingModal/ColumnSettingModal.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'nscm-fe/features/master/src/components/searchFields/SearchFields.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'nscm-fe/features/master/src/pages/contribute-view/components/modals/ContributeVersionModal.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'nscm-fe/features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'nscm-fe/features/master/src/pages/sales-future-price/components/modals/SalesPriceTemplateModal.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'nscm-fe/features/master/src/pages/sales-future-price/components/modals/SalesPriceVersionModal.tsx', LF will be replaced by CRLF the next time Git touches it
+diff --git a/nscm-fe/features/master/src/components/columnSettingModal/ColumnSettingModal.tsx b/nscm-fe/features/master/src/components/columnSettingModal/ColumnSettingModal.tsx
+index 1eb423e..f5ced61 100644
+--- a/nscm-fe/features/master/src/components/columnSettingModal/ColumnSettingModal.tsx
++++ b/nscm-fe/features/master/src/components/columnSettingModal/ColumnSettingModal.tsx
+@@ -89,11 +89,13 @@ export const ColumnSettingModal = ({
+   const { data, refetch, isLoading, isFetching } = useTabProcQuery({
+     menuId,
+     sheetName: 'titleSet',
++    tabId: menuId,
+     filters,
+     enabled: open,
+   });
+ 
+-  const beRows = useMemo(() => (data?.o_rc1 ?? []) as Record<string, unknown>[], [data]);
++  // BE 동적 컬럼 응답은 string 으로 직렬화 (eslint no-base-to-string 회피)
++  const beRows = useMemo(() => (data?.o_rc1 ?? []) as unknown as Record<string, string>[], [data]);
+   const loading = isLoading || isFetching;
+ 
+   // BE rows → ColumnSettingRow 정규화 + fallback (fallbackColumns)
+@@ -164,7 +166,7 @@ export const ColumnSettingModal = ({
+     setUserSel(null);
+   };
+ 
+-  const handleDefault = () => { refetch?.(); };
++  const handleDefault = () => { void refetch?.(); };
+ 
+   const handleOk = () => {
+     if (userRows.length === 0) {
+@@ -193,7 +195,7 @@ export const ColumnSettingModal = ({
+       const sameRow = (a: number, b: number): boolean => {
+         const ra = ri(a);
+         const rb = ri(b);
+-        return !!ra && !!rb && (ra as Record<string, unknown>)[key] === (rb as Record<string, unknown>)[key];
++        return !!ra && !!rb && (ra as unknown as Record<string, unknown>)[key] === (rb as unknown as Record<string, unknown>)[key];
+       };
+       let r1 = r, r2 = r;
+       while (r1 > 0 && sameRow(r1 - 1, r)) r1--;
+diff --git a/nscm-fe/features/master/src/components/searchFields/SearchFields.tsx b/nscm-fe/features/master/src/components/searchFields/SearchFields.tsx
+index 7abd819..ba103ab 100644
+--- a/nscm-fe/features/master/src/components/searchFields/SearchFields.tsx
++++ b/nscm-fe/features/master/src/components/searchFields/SearchFields.tsx
+@@ -51,10 +51,6 @@ interface MultiFieldProps {
+   onChange: (v: string[]) => void;
+   division?: string;       // 종속 필터용
+ }
+-interface DependentMultiFieldProps extends MultiFieldProps {
+-  deptIds?: string[];
+-  endCustomers?: string[];
+-}
+ interface PopupFieldProps {
+   value: string[];
+   onChange: (v: string[]) => void;
+@@ -72,17 +68,25 @@ const useL = () => {
+ };
+ 
+ // CustomDropdown options helper — NUMBER→String + DIVISION_ID 필터
++// row type 을 string-keyed 로 강제 (eslint no-base-to-string / restrict-template-expressions 회피)
+ const toOptions = (rows: Array<Record<string, unknown>> | undefined, divisionId?: string) => {
+-  const arr = rows ?? [];
++  const arr = (rows ?? []) as unknown as Array<Record<string, string>>;
+   return [...new Map(
+     arr.filter(r => !divisionId || !r.DIVISION_ID || r.DIVISION_ID === divisionId)
+-       .map(r => [`${r.DIVISION_ID ?? ''}|${r.CODE ?? ''}`, r]),
++       .map(r => [`${r.DIVISION_ID ?? ''}|${r.CODE ?? ''}`, r] as const),
+   ).values()].map(r => ({ label: String(r.NAME ?? r.CODE ?? ''), value: String(r.CODE ?? '') }));
+ };
+ 
+ // 'ALL' 기본값 helper — P_COM0006/P_COM0008 SP WHERE 절 `(P_X='ALL' OR ...)` 패턴 대응
+ const orAll = (arr?: string[]) => (arr && arr.length > 0 ? arr.join(',') : 'ALL');
+ 
++// 공통 style (popup button) — JSX 사용 전 선언 의무 (eslint no-use-before-define)
++const popupBtnStyle: React.CSSProperties = {
++  width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
++  padding: '6px 8px', border: '1px solid #b8bfc9', borderRadius: 3,
++  background: 'white', cursor: 'pointer', textAlign: 'left',
++};
++
+ // ====================================================================================
+ // 1. DivisionField (필수, size=4, combo=MyDivision)
+ //    AS-IS clbDivisions / DataService SetChangeControl("MyDivision")
+@@ -233,6 +237,7 @@ export const ProjectField = (props: PopupFieldProps) => {
+           projectCode: orAll(projectCodes),
+           etc: 'N',
+         } as never}
++        callFromCell={false}
+       />
+     </Grid>
+   );
+@@ -272,6 +277,7 @@ export const ItemField = (props: ItemFieldProps) => {
+           itemId: itemIds && itemIds.length > 0 ? itemIds.join(',') : '',
+         } as never}
+         headerTitle='Model / Nickname'
++        callFromCell={false}
+       />
+     </Grid>
+   );
+@@ -423,11 +429,3 @@ export const SearchOverRangeField = ({ value, onChange }: CheckFieldProps) => {
+   );
+ };
+ 
+-// ====================================================================================
+-// 공통 style (popup button)
+-// ====================================================================================
+-const popupBtnStyle: React.CSSProperties = {
+-  width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+-  padding: '6px 8px', border: '1px solid #b8bfc9', borderRadius: 3,
+-  background: 'white', cursor: 'pointer', textAlign: 'left',
+-};
+diff --git a/nscm-fe/features/master/src/pages/contribute-view/components/modals/ContributeVersionModal.tsx b/nscm-fe/features/master/src/pages/contribute-view/components/modals/ContributeVersionModal.tsx
+index af358b9..8de142a 100644
+--- a/nscm-fe/features/master/src/pages/contribute-view/components/modals/ContributeVersionModal.tsx
++++ b/nscm-fe/features/master/src/pages/contribute-view/components/modals/ContributeVersionModal.tsx
+@@ -124,12 +124,13 @@ export const ContributeVersionModal = ({ open, onClose, onSelect }: Props) => {
+   const { data, refetch } = useTabProcQuery({
+     menuId: MENU_ID,
+     sheetName: SHEETS.VERSION_POPUP,
++    tabId: MENU_ID,
+     filters,
+     enabled: open && !!filters,
+   });
+ 
+   const rows = useMemo<VersionPopupRow[]>(
+-    () => (data?.o_rc1 ?? []) as VersionPopupRow[],
++    () => (data?.o_rc1 ?? []) as unknown as VersionPopupRow[],
+     [data]
+   );
+ 
+@@ -173,7 +174,7 @@ export const ContributeVersionModal = ({ open, onClose, onSelect }: Props) => {
+   return (
+     <CustomDialog
+       open={open}
+-      size={1100}
++      size={1200}
+       type='modal'
+       position='basic'
+       handleClose={onClose}
+@@ -207,7 +208,11 @@ export const ContributeVersionModal = ({ open, onClose, onSelect }: Props) => {
+                   elevation
+                   size='small'
+                   value={period}
+-                  onChange={(date: [Dayjs, Dayjs]) => setPeriod(date)}
++                  onChange={date => {
++                    if (Array.isArray(date) && date.length === 2) {
++                      setPeriod([date[0] as Dayjs, date[1] as Dayjs]);
++                    }
++                  }}
+                 />
+               </div>
+             </div>
+diff --git a/nscm-fe/features/master/src/pages/erp-edi-master/erp-edi-master.constants.ts b/nscm-fe/features/master/src/pages/erp-edi-master/erp-edi-master.constants.ts
+index e83286f..1be70d5 100644
+--- a/nscm-fe/features/master/src/pages/erp-edi-master/erp-edi-master.constants.ts
++++ b/nscm-fe/features/master/src/pages/erp-edi-master/erp-edi-master.constants.ts
+@@ -10,6 +10,7 @@ export type MENU_ID = typeof MENU_ID;
+ //     - TAB 2: SSPM       → DMF0008_GET_SALES_SITE_PROJECT_MODEL (sheet 'sspm')
+ export enum SHEETS {
+   MAIN = 'main',
++  SUMMARY = 'summary',  // cloud 의 어제 분리 작업 ErpEdiMasterSummaryGrid 호환 (procedures.d.ts 의 'summary' sheet)
+   REPAIR = 'repair',
+   SALES_SITE = 'salesSite',
+   SSPM = 'sspm',
+@@ -17,14 +18,16 @@ export enum SHEETS {
+   UPDATE_HISTORY = 'updateHistory',  // AS-IS .cs L2918: DMF0000_GET_UPDATE_HISTORY (SDATE/EDATE/UPDATED_BY)
+ }
+ 
+-export enum RESPONSE_SET {
+-  MAIN = 'o_rc1',
+-  REPAIR = 'o_rc1',
+-  SALES_SITE = 'O_RESULT_CURSOR',
+-  SSPM = 'o_rc1',
+-  DIVISION = 'o_rc1',
+-  UPDATE_HISTORY = 'o_rc1',
+-}
++// const object — enum 대체 (NSCM 단일 cursor 표준 'o_rc1' 다수 중복 허용)
++export const RESPONSE_SET = {
++  MAIN: 'o_rc1',
++  REPAIR: 'o_rc1',
++  SALES_SITE: 'O_RESULT_CURSOR',
++  SSPM: 'o_rc1',
++  DIVISION: 'o_rc1',
++  UPDATE_HISTORY: 'o_rc1',
++} as const;
++export type RESPONSE_SET = (typeof RESPONSE_SET)[keyof typeof RESPONSE_SET];
+ 
+ // AS-IS .cs L734/L740
+ export const VALIDATION_MSG = {
+diff --git a/nscm-fe/features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx b/nscm-fe/features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx
+index b3f8542..9a160a9 100644
+--- a/nscm-fe/features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx
++++ b/nscm-fe/features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx
+@@ -11,13 +11,22 @@ interface Props {
+ // 분석서: Doc/_analysis/domain_DM/screens/DMF0020_SalesFuturePrice_POPUP_DMF0020_SalesPriceRange/
+ // 후속 phase 에서 보강 — Sales Price 적용 기간 범위 설정 + SAVE_PRICE_PERIOD SP 호출
+ export const SalesPriceRangeModal = ({ open, modalClose, defaultDivision, defaultPeriod }: Props) => (
+-  <CustomDialog open={open} onClose={modalClose} title='Sales Price Range' width={600} height={400}>
+-    <div style={{ padding: 16 }}>
+-      <p>Sales Price 적용 기간 범위 설정 (Phase 4 MVP — 후속 보강)</p>
+-      <ul>
+-        <li>Division: {defaultDivision}</li>
+-        <li>Period: {defaultPeriod.start} ~ {defaultPeriod.end}</li>
+-      </ul>
+-    </div>
+-  </CustomDialog>
++  <CustomDialog
++    open={open}
++    handleClose={modalClose}
++    customHeaderTitle='Sales Price Range'
++    size={600}
++    type='modal'
++    position='basic'
++    disableButtonCancel
++    customContentArea={
++      <div style={{ padding: 16 }}>
++        <p>Sales Price 적용 기간 범위 설정 (Phase 4 MVP — 후속 보강)</p>
++        <ul>
++          <li>Division: {defaultDivision}</li>
++          <li>Period: {defaultPeriod.start} ~ {defaultPeriod.end}</li>
++        </ul>
++      </div>
++    }
++  />
+ );
+diff --git a/nscm-fe/features/master/src/pages/sales-future-price/components/modals/SalesPriceTemplateModal.tsx b/nscm-fe/features/master/src/pages/sales-future-price/components/modals/SalesPriceTemplateModal.tsx
+index 1111801..5825e9a 100644
+--- a/nscm-fe/features/master/src/pages/sales-future-price/components/modals/SalesPriceTemplateModal.tsx
++++ b/nscm-fe/features/master/src/pages/sales-future-price/components/modals/SalesPriceTemplateModal.tsx
+@@ -11,12 +11,21 @@ interface Props {
+ // 후속 phase 에서 보강 — Sales Price Template (ESS Battery div=81 전용) Excel Form
+ // AS-IS L205, L2581 — btnTemplate.Visible = (div==81)
+ export const SalesPriceTemplateModal = ({ open, modalClose, defaultDivision }: Props) => (
+-  <CustomDialog open={open} onClose={modalClose} title='Sales Price Template (Excel Form)' width={600} height={400}>
+-    <div style={{ padding: 16 }}>
+-      <p>Sales Price Template — ESS Battery (div=81) 전용 Excel Form (Phase 4 MVP — 후속 보강)</p>
+-      <ul>
+-        <li>Division: {defaultDivision}</li>
+-      </ul>
+-    </div>
+-  </CustomDialog>
++  <CustomDialog
++    open={open}
++    handleClose={modalClose}
++    customHeaderTitle='Sales Price Template (Excel Form)'
++    size={600}
++    type='modal'
++    position='basic'
++    disableButtonCancel
++    customContentArea={
++      <div style={{ padding: 16 }}>
++        <p>Sales Price Template — ESS Battery (div=81) 전용 Excel Form (Phase 4 MVP — 후속 보강)</p>
++        <ul>
++          <li>Division: {defaultDivision}</li>
++        </ul>
++      </div>
++    }
++  />
+ );
+diff --git a/nscm-fe/features/master/src/pages/sales-future-price/components/modals/SalesPriceVersionModal.tsx b/nscm-fe/features/master/src/pages/sales-future-price/components/modals/SalesPriceVersionModal.tsx
+index 5f140ae..a18632a 100644
+--- a/nscm-fe/features/master/src/pages/sales-future-price/components/modals/SalesPriceVersionModal.tsx
++++ b/nscm-fe/features/master/src/pages/sales-future-price/components/modals/SalesPriceVersionModal.tsx
+@@ -132,6 +132,7 @@ export const SalesPriceVersionModal = ({ open, modalClose, defaultDivision, onAp
+   const { data, refetch, isLoading, isFetching } = useTabProcQuery({
+     menuId: MENU_ID,
+     sheetName: SHEETS.VERSION,
++    tabId: MENU_ID,
+     filters,
+     enabled: false, // Find 버튼 trigger
+   });
+@@ -192,7 +193,7 @@ export const SalesPriceVersionModal = ({ open, modalClose, defaultDivision, onAp
+   return (
+     <CustomDialog
+       open={open}
+-      size={1100}
++      size={1200}
+       type='modal'
+       position='basic'
+       handleClose={modalClose}
+@@ -218,7 +219,11 @@ export const SalesPriceVersionModal = ({ open, modalClose, defaultDivision, onAp
+                   elevation
+                   size='small'
+                   value={period}
+-                  onChange={(date: [Dayjs, Dayjs]) => setPeriod(date)}
++                  onChange={date => {
++                    if (Array.isArray(date) && date.length === 2) {
++                      setPeriod([date[0] as Dayjs, date[1] as Dayjs]);
++                    }
++                  }}
+                 />
+               </div>
+             </div>
+@@ -266,8 +271,13 @@ export const SalesPriceVersionModal = ({ open, modalClose, defaultDivision, onAp
+                 g.isReadOnly = true;
+                 // SelectionMode.ListBox = 2 — 다중 row 선택 가능 (Ctrl/Shift)
+                 g.selectionMode = 2;
+-                // Double-click 즉시 적용
+-                g.itemDoubleClick.addHandler(() => handleApply());
++                // Double-click 즉시 적용 (wijmo 버전별 itemDoubleClick 가드 + DOM fallback)
++                const dblG = (g as unknown as { itemDoubleClick?: { addHandler?: (fn: () => void) => void } }).itemDoubleClick;
++                if (dblG && typeof dblG.addHandler === 'function') {
++                  dblG.addHandler(() => handleApply());
++                } else if (g.hostElement) {
++                  g.hostElement.addEventListener('dblclick', () => handleApply());
++                }
+               }}
+               itemsSource={rows}
+               autoGenerateColumns={false}

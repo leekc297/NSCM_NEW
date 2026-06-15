@@ -1,0 +1,7 @@
+DECLARE v_rc1 SYS_REFCURSOR; v_rc2 SYS_REFCURSOR; v_rc3 SYS_REFCURSOR; BEGIN SCM_MGR.DMF0043_GET_CONTRIBUTION_SALES_LIST('40','12',NULL,'ALL','ALL','ALL','N','N','minyonglee1', v_rc1, v_rc2, v_rc3); DBMS_OUTPUT.PUT_LINE('OK'); EXCEPTION WHEN OTHERS THEN DBMS_OUTPUT.PUT_LINE('ERR: '||SQLERRM); END;
+*
+ERROR at line 1:
+ORA-04021: timeout occurred while waiting to lock object SCM_MGR.DMF0043_GET_CONTRIBUTION_SALES_LIST
+Help: https://docs.oracle.com/error-help/db/ora-04021/
+
+

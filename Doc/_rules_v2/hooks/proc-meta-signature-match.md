@@ -36,6 +36,21 @@ COL_NM = 'dqId'                                   // ← 'dqId'
 
 → MyBatis 가 `#{dqId}` placeholder 에 FE 의 `queryId` 못 찾음 → NULL bind → SP 가 NULL 받고 0 row 반환.
 
+### §0.3 SYS0013 HISTORY cross-sheet 일관성 사고 (2026-06-15) ⭐
+
+같은 store 의 3 시트 (COLUMNS / PARAMETERS / HISTORY) 가 같은 SP IN param (`P_DQ_ID`) 받는데, **HISTORY 만 다른 별칭** 사용:
+
+```ts
+state.filters[SHEETS.COLUMNS]    = { dqId: id };      // ✅
+state.filters[SHEETS.PARAMETERS] = { dqId: id };      // ✅
+state.filters[SHEETS.HISTORY]    = { queryId: id };   // ❌ alias
+// 주석: "HISTORY SP 는 'queryId' (P_QUERYID)" ← 추측 기반 — 실제 SP body 는 P_DQ_ID
+```
+
+→ HISTORY tab 의 BE 가 `queryId` 무시 → `P_DQ_ID=NULL` → SP WHERE `(P_DQ_ID IS NULL OR DQ_ID=P_DQ_ID)` 항상 true → **선택 query 무관 전체 history 반환** (모든 query 선택 시 같은 항목 표시).
+
+**근본 원인**: SP signature 추측 + 주석에 잘못된 가정 (`P_QUERYID`) 명시. 실제 SP body 확인 누락.
+
 ---
 
 ## §1. 의무 패턴
@@ -72,6 +87,39 @@ state.filters[SHEETS.COLUMNS] = { dqId: id };  // SP P_DQ_ID → COL_NM='dqId'
 // ❌ 금지 — 임의 명명 (FE 의도와 SP 시그니처 불일치)
 state.filters[SHEETS.COLUMNS] = { queryId: id };
 ```
+
+### §1.4 ⭐ Cross-sheet 일관성 (2026-06-15 SYS0013 사고 후 신설)
+
+같은 store 의 여러 시트가 **같은 SP IN param** 받을 때 **모든 시트 동일 key 사용 의무**:
+
+```ts
+// ✅ 의무
+setSelectedQueryId: id => {
+  state.filters[SHEETS.COLUMNS]    = { dqId: id };
+  state.filters[SHEETS.PARAMETERS] = { dqId: id };
+  state.filters[SHEETS.HISTORY]    = { dqId: id };  // 같은 P_DQ_ID 받으면 같은 key
+}
+```
+
+```ts
+// ❌ 금지 — 시트별 별칭 (BE 가 무시 → SP param=NULL → 전체 반환)
+state.filters[SHEETS.HISTORY] = { queryId: id };
+```
+
+**PRE-WRITE 의무**:
+1. store 의 `setSelectedXxx` 작성 전 분배 대상 시트별 SP signature cross-check
+2. 각 SP 의 `P_*` IN param 추측 금지 — `USER_ARGUMENTS` 또는 SP body 직접 확인
+3. 주석에 "SP 의 P_XXX" 추측 작성 금지 — fact 만 작성
+
+**POST-WRITE 검증 grep**:
+```bash
+# store 의 filter 분배 key 인벤토리
+grep -E 'state\.filters\[SHEETS\.\w+\]\s*=\s*\{\s*\w+:' useXxxStore.ts | sort -u
+# 같은 의미인데 key 다른 line 발견 시 의도 vs 사고 판단
+```
+
+**관련 메모리**:
+- `feedback_fe_filter_key_cross_sheet_consistency.md` (2026-06-15 SYS0013)
 
 ### §1.4 Dual cursor (GET SP)
 

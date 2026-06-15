@@ -5,7 +5,6 @@ import { useEffect, useRef } from 'react';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { MainTitle, SubTitle } from '@shared/components';
 import { useTabProcQuery } from '@shared/hooks';
-import { useMessageStore } from '@shared/stores';
 
 import { ContributeViewForm } from './components/ContributeViewForm';
 import { ContributeViewGrid } from './components/ContributeViewGrid';
@@ -39,8 +38,6 @@ export const ContributeView = ({ tabId, title }: PageProps<MENU_ID>) => {
   const setVersionPopupOpen = useContributeViewStore(s => s.setVersionPopupOpen);
   const columnSetPopupOpen = useContributeViewStore(s => s.columnSetPopupOpen);
   const setColumnSetPopupOpen = useContributeViewStore(s => s.setColumnSetPopupOpen);
-
-  const setAlert = useMessageStore(s => s.setAlert);
 
   const { validateVersionSelected, validateSearchResultEmpty } = useContributeViewValidation();
 
@@ -89,41 +86,29 @@ export const ContributeView = ({ tabId, title }: PageProps<MENU_ID>) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mainData]);
 
-  // As-Is .cs L249 InsertButton → InsertRow() 본문 있음 — 화면 의도는 조회 전용 (Figma DMF0043_01) 이지만
-  // 룰 25 §1.5.1: As-Is 본문 있음 → function (TODO placeholder). silent fail 방지.
-  const handleInsert = () => {
-    void setAlert({
-      type: 'alert',
-      content:
-        '미구현 — As-Is DMF0043_Contribute_View.cs L249 InsertRow() 참조. 화면 의도(조회 전용) 와 As-Is 본문 (Insert 가능) 충돌 — 운영 결정 필요.',
-    });
-  };
-
-  // As-Is .cs L276 SaveButton → SaveData() 본문 있음 — Insert 와 동일 정책
-  const handleSave = () => {
-    void setAlert({
-      type: 'alert',
-      content:
-        '미구현 — As-Is DMF0043_Contribute_View.cs L276 SaveData() 참조. 화면 의도(조회 전용) 와 As-Is 본문 (Save 가능) 충돌 — 운영 결정 필요.',
-    });
-  };
-
-  // Figma SVG (DMF0043_01.svg + DMF0043_01_Table.svg) + figma_link.md + AS-IS button:
+  // AS-IS DMF0043_Contribute_View 재검토 결과 (2026-06-11):
+  //   1) InsertButton (L249) → InsertRow() L429~468 본문 전체 주석 + 주석 내 DefColumns 도
+  //      DMF0044 컬럼 (CUTOFF_YYYYMMDD/ITEM_NAME/MEASURE/ITEM_ID) 복붙 후 미정리 — dead code
+  //   2) SaveButton (L276) → SaveData() L413~426 본문 = ProgressForm Show/Close 만, DB 호출 0
+  //   3) DeleteButton (L254~266) → 본문 전체 주석
+  //   4) FindData (L392) → `siMain.LockColumn(0, siMain.GetMaxColumnIndex(), true)` 명시적 전체 잠금
+  //   5) analysis.md §13.2: SAVE/INSERT/DELETE SP 부재 (GET + TITLE 2종 만)
+  //   → AS-IS 가 명백한 조회 전용 (Read-Only). Insert/Save/Delete 비활성화.
+  //
+  // Figma SVG (DMF0043_01.svg) + figma_link.md + AS-IS button:
   //   F5  = 조회 (handleSearch)
   //   F3  = Sort           (default — SubTitle hotkey)
   //   F4  = Filter         (default)
-  //   F6  = Condition      (default — As-Is UsrConditionPanel 존재)
-  //   F10 = ResetCondition (default — As-Is UsrConditionPanel 존재)
+  //   F6  = Condition      (default — AS-IS UsrConditionPanel 존재)
+  //   F10 = ResetCondition (default — AS-IS UsrConditionPanel 존재)
   //   Excel = default
-  //   F7  (save) : As-Is .cs L276 SaveData() 본문 있음 → placeholder (조회 전용 의도 vs As-Is 본문 충돌)
-  //   F8 (insert) : As-Is .cs L249 InsertRow() 본문 있음 → placeholder
-  //   F9 (delete) : As-Is .cs L254 본문 주석만 (빈) → false
+  //   F7/F8/F9 (save/insert/delete) : AS-IS read-only 의도 → false
   //   기여율버전관리 : customButton (AS-IS btnCutOff_Click L444)
   //   컬럼표시설정 : customButton (AS-IS btnColumn_Click L473)
   const hotkeyConfig: HotkeyConfig = {
     search: handleSearch,
-    save: handleSave,
-    insert: handleInsert,
+    save: false,
+    insert: false,
     delete: false,
     manual: false,
     upload: false,

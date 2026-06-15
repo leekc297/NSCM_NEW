@@ -59,8 +59,13 @@ export const Program = ({ tabId, title }: PageProps<MENU_ID>) => {
     GridAction.removeRow(gridRef.current, true);
   };
 
+  // ⭐ master hook §2.4 — Search 시 admin SYS0004 메타 refetch
+  const handleSearch = () => {
+    setFilters();
+    void fetchStaticColumns();
+  };
   const hotkeyConfig: HotkeyConfig = {
-    search: setFilters,
+    search: handleSearch,
     save: onSave,
     insert: onInsert,
     delete: onDelete,

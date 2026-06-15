@@ -24,7 +24,7 @@ type LongRow = {
 
 // Group key — 9 unique key (사용자 명시 sort 일치)
 // 같은 9-key combination 의 row 들이 같은 pivot row 로 묶이고 YYYYMMDD 별 QTY 가 bucket cell 에 채워짐
-function getGroupKey(row: LongRow): string {
+const getGroupKey = (row: LongRow): string => {
   return [
     row.DIVISION_ID ?? '',
     row.SCM_SITE_ID ?? '',
@@ -36,10 +36,10 @@ function getGroupKey(row: LongRow): string {
     row.INCOTERMS ?? '',
     row.MEASURE ?? '',
   ].join('|');
-}
+};
 
 // Bucket key (D_/W_/M_) 생성 — UTC 일관성
-function getBucketKey(yyyymmdd: string, bucketType: 'D' | 'W' | 'M'): string {
+const getBucketKey = (yyyymmdd: string, bucketType: 'D' | 'W' | 'M'): string => {
   if (bucketType === 'D') return `D_${yyyymmdd}`;
   if (bucketType === 'M') return `M_${yyyymmdd.slice(0, 6)}`;
 
@@ -55,15 +55,15 @@ function getBucketKey(yyyymmdd: string, bucketType: 'D' | 'W' | 'M'): string {
   const mmth = String(d.getUTCMonth() + 1).padStart(2, '0');
   const md = String(d.getUTCDate()).padStart(2, '0');
   return `W_${my}${mmth}${md}`;
-}
+};
 
 // long → wide PIVOT
 //   - 첫 row 메타 cols 명시적 복사 (DIVISION_ID, END_CUSTOMER 등 — 자동 spread 가 BE 측 case 변경 시 누락 회피)
 //   - 같은 group 의 row 의 YYYYMMDD 별 QTY 를 bucket cell 에 누적
-export function longToPivot(
+export const longToPivot = (
   longRows: LongRow[],
   bucketType: 'D' | 'W' | 'M',
-): MktFcstRow[] {
+): MktFcstRow[] => {
   const grouped = new Map<string, MktFcstRow>();
 
   for (const row of longRows) {
@@ -94,10 +94,10 @@ export function longToPivot(
 
     if (row.YYYYMMDD && row.QTY !== undefined) {
       const bucketKey = getBucketKey(row.YYYYMMDD, bucketType);
-      const existing = ((pivotRow as Record<string, unknown>)[bucketKey] as number | undefined) ?? 0;
-      (pivotRow as Record<string, unknown>)[bucketKey] = existing + Number(row.QTY ?? 0);
+      const existing = ((pivotRow as unknown as Record<string, unknown>)[bucketKey] as number | undefined) ?? 0;
+      (pivotRow as unknown as Record<string, unknown>)[bucketKey] = existing + Number(row.QTY ?? 0);
     }
   }
 
   return Array.from(grouped.values());
-}
+};

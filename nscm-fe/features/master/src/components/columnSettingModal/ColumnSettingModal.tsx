@@ -89,11 +89,13 @@ export const ColumnSettingModal = ({
   const { data, refetch, isLoading, isFetching } = useTabProcQuery({
     menuId,
     sheetName: 'titleSet',
+    tabId: menuId,
     filters,
     enabled: open,
   });
 
-  const beRows = useMemo(() => (data?.o_rc1 ?? []) as Record<string, unknown>[], [data]);
+  // BE 동적 컬럼 응답은 string 으로 직렬화 (eslint no-base-to-string 회피)
+  const beRows = useMemo(() => (data?.o_rc1 ?? []) as unknown as Record<string, string>[], [data]);
   const loading = isLoading || isFetching;
 
   // BE rows → ColumnSettingRow 정규화 + fallback (fallbackColumns)
@@ -164,7 +166,7 @@ export const ColumnSettingModal = ({
     setUserSel(null);
   };
 
-  const handleDefault = () => { refetch?.(); };
+  const handleDefault = () => { void refetch?.(); };
 
   const handleOk = () => {
     if (userRows.length === 0) {
@@ -193,7 +195,7 @@ export const ColumnSettingModal = ({
       const sameRow = (a: number, b: number): boolean => {
         const ra = ri(a);
         const rb = ri(b);
-        return !!ra && !!rb && (ra as Record<string, unknown>)[key] === (rb as Record<string, unknown>)[key];
+        return !!ra && !!rb && (ra as unknown as Record<string, unknown>)[key] === (rb as unknown as Record<string, unknown>)[key];
       };
       let r1 = r, r2 = r;
       while (r1 > 0 && sameRow(r1 - 1, r)) r1--;

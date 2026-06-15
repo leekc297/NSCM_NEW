@@ -77,17 +77,11 @@ Doc/_rules_v2/
 │  └─ 13_routing_menu.md
 ├─ _mapping/
 │  └─ asis_to_tobe.md               (AS-IS↔TO-BE + 10 격차 사양)
-└─ hooks/                           (10 hook)
-   ├─ pre-write.md
-   ├─ post-write.md
-   ├─ pre-submit.md
-   ├─ screen-create-checklist.md
-   ├─ asis-coverage-check.md
-   ├─ grid-column-meta.md
-   ├─ popup-asis-analysis.md
-   ├─ asis-button-mapping.md
-   ├─ runtime-error-prevention.md
-   └─ menu-not-displayed-debug.md
+└─ hooks/                           (41 hook — 전체 목록은 00_INDEX.md §B.3 카탈로그가 단일 진실 source)
+   ├─ pre-write.md / post-write.md / pre-submit.md     (공통 3)
+   ├─ oracle-db-workflow.md         ⭐⭐ Oracle SP/DB 작업 단일 진입점 (T08/T10/T18/T19, 2026-06-11)
+   ├─ screen-completion-gate.md     ⭐⭐ UI 화면 완성도 8 게이트 (T01/T20, 2026-06-11)
+   └─ (나머지 36 — 00_INDEX §A 트리거 매트릭스가 작업 키워드로 자동 분기)
 ```
 
 ---
@@ -158,6 +152,8 @@ Doc/_rules_v2/
 | `hooks/anti-simplification.md` | (`_rules_v2/anti-simplification.md` 로 복사 완료) |
 
 → 나머지 25 룰은 `Doc/_dev_rules/_archive/` 이동 예정.
+
+> ⭐ **2026-06-11 `Doc/_dev_rules/hooks/` 정리**: 유니크 6종 (oracle-cmbo-varname-quote / db-error-asis-cross-check / deploy-package-completeness / screen-entry-asis-baseline / wijmo-merge-sticky-content / popup-dialog-layout) → `_rules_v2/hooks/` 이관 (원본은 포인터 스텁). 중복 10종 DEPRECATED. 상세: `Doc/_dev_rules/hooks/README.md`.
 
 ---
 

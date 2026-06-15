@@ -86,6 +86,9 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   - 모든 dirty cell 을 ^ 구분 string 으로 누적 → SP 1회 호출 (bulk)
   //   - contributionType = 같은 row + 같은 period 의 RBU_0999 셀 값 (As-Is RetConType L872)
   const handleSave = () => {
+    // wijmo: 진행 중 cell edit 강제 commit — cell 수정 후 Enter 안 누른 채 저장 클릭 시
+    // row.binding=value 미반영 사고 방지
+    gridRef.current?.finishEditing();
     const rows = (mainData?.o_rc1 ?? []) as MainRow[];
     const dirty = rows.filter(r => r.EDIT_FLAG === 'M');
     const setAlert = useMessageStore.getState().setAlert;
@@ -124,7 +127,7 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
         const sQty = val == null ? '' : String(val);
         if (sQty === '') return;
         const conTypeKey = `${tag}#${period}#RBU_0999`;
-        const conType = String((row as Record<string, unknown>)[conTypeKey] ?? '');
+        const conType = (row as Record<string, string>)[conTypeKey] ?? '';
 
         buf.activeFlag         += '^' + (row.EDIT_FLAG ?? 'U');
         buf.verSeq             += '^' + (row.VER_SEQ ?? searchCondition.verSeq);
@@ -132,7 +135,9 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
         buf.deptId             += '^' + (row.DEPT_ID ?? '');
         buf.endCustReport      += '^' + (row.END_CUST_REPORT ?? '');
         buf.soldtoCustReport   += '^' + (row.SOLDTO_CUST_REPORT ?? '');
-        buf.productGroup       += '^' + (row.PRODUCT_GROUP ?? '');
+        // PRODUCT_GROUP: 사내 schema 의 SCM_MST_SITE_ITEM.REPORT_GROUP3 미존재로
+        // 조회 시 '' 반환됨. SAVE 의 NOT NULL 분기에서 ORA-01400 → 'N' 으로 default
+        buf.productGroup       += '^' + (row.PRODUCT_GROUP || 'N');
         buf.dmBizType          += '^' + (row.DM_BIZ_TYPE ?? '');
         buf.yyyymm             += '^' + period;
         buf.osCorpCd           += '^' + osCorpCd;

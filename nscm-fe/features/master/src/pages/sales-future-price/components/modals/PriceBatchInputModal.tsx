@@ -1,13 +1,15 @@
-import { FlexGrid, FlexGridColumn } from '@mescius/wijmo.react.grid';
+import { toggleClass } from '@mescius/wijmo';
 import {
   AllowMerging,
   CellRange,
   CellType,
   DataMap,
   type FlexGrid as FlexGridType,
+  type FormatItemEventArgs,
   type GridPanel,
   MergeManager,
 } from '@mescius/wijmo.grid';
+import { FlexGrid, FlexGridColumn } from '@mescius/wijmo.react.grid';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { CustomDialog } from '@shared/components';
@@ -19,6 +21,14 @@ import { MENU_ID, SHEETS } from '../../sales-future-price.constants';
 import { isPeriodInverted } from '../../utils/futurePriceDate';
 
 import styles from './PriceBatchInputModal.module.scss';
+
+// YYYYMMDD ↔ YYYY-MM-DD (use-before-define 회피 — file 상단 정의)
+const toDate = (s: string): string => {
+  if (!s) return '';
+  if (s.length === 8) return `${s.slice(0, 4)}-${s.slice(4, 6)}-${s.slice(6, 8)}`;
+  return s;
+};
+const fromDate = (s: string): string => s.replace(/-/g, '');
 
 interface Props {
   open: boolean;
@@ -66,7 +76,6 @@ export const PriceBatchInputModal = ({
   const [itemId, setItemId] = useState('');
   const [periodFrom, setPeriodFrom] = useState(defaultPeriod.start);
   const [periodTo, setPeriodTo] = useState(defaultPeriod.end);
-  const [editMode, setEditMode] = useState(false);
 
   // popup state
   const [openProject, setOpenProject] = useState(false);
@@ -77,7 +86,6 @@ export const PriceBatchInputModal = ({
       setDivisionId(defaultDivision);
       setPeriodFrom(defaultPeriod.start);
       setPeriodTo(defaultPeriod.end);
-      setEditMode(false);
     }
   }, [open, defaultDivision, defaultPeriod]);
 
@@ -139,11 +147,12 @@ export const PriceBatchInputModal = ({
   const { data, refetch, isLoading, isFetching } = useTabProcQuery({
     menuId: MENU_ID,
     sheetName: SHEETS.PRICE_BATCH,
+    tabId: MENU_ID,
     filters,
     enabled: false,
   });
 
-  const allRows = (data?.o_rc1 ?? []) as PriceBatchRow[];
+  const allRows = (data?.o_rc1 ?? []) as unknown as PriceBatchRow[];
   // 추가 client-side filter (사용자 명시 검색조건)
   const rows = useMemo(() => allRows.filter(r => {
     if (salesSite && salesSite !== 'ALL' && String(r.SCM_SITE_ID ?? '') !== salesSite) return false;
@@ -165,22 +174,11 @@ export const PriceBatchInputModal = ({
       return;
     }
     refetch?.();
-    setEditMode(false);
-  };
-
-  // AS-IS L815 EditButton — 필수 컬럼 체크 + SwitchLock
-  const handleEdit = () => {
-    if (rows.length === 0) {
-      void setAlert({ type: 'alert', content: '[MSG00113] 조회 후 편집하세요.' });
-      return;
-    }
-    setEditMode(true);
-    void setToast({ message: '편집 모드 활성화 (Price 컬럼만 수정 가능)', type: 'default', duration: 2000 });
   };
 
   const handleSave = async () => {
-    if (!editMode) {
-      void setAlert({ type: 'alert', content: '[MSG00099] 편집 모드에서만 저장 가능합니다.' });
+    if (rows.length === 0) {
+      void setAlert({ type: 'alert', content: '[MSG00113] 조회 후 저장하세요.' });
       return;
     }
     const ok = await setAlert({ type: 'confirm', content: '[MSG00004] 저장하시겠습니까?' });
@@ -231,10 +229,7 @@ export const PriceBatchInputModal = ({
             <button type='button' onClick={handleFind} className={styles.findBtn} disabled={loading}>
               {loading ? '⏳' : '🔍'} Find
             </button>
-            <button type='button' onClick={handleEdit} className={styles.editBtn} disabled={loading || rows.length === 0}>
-              ✏️ Edit
-            </button>
-            <button type='button' onClick={handleSave} className={styles.saveBtn} disabled={!editMode}>
+            <button type='button' onClick={handleSave} className={styles.saveBtn} disabled={loading || rows.length === 0}>
               💾 Save
             </button>
             <button type='button' onClick={handleExcel} className={styles.excelBtn}>
@@ -245,15 +240,20 @@ export const PriceBatchInputModal = ({
             </button>
           </div>
 
-          {/* Row 2 — Project popup / Model popup / Period (AS-IS 캡쳐) */}
+          {/* Row 2 — Project popup / Model popup / Period
+              (DMF0004/0005/0007 표준 popupBtnStyle 적용 — searchFields 카탈로그와 동일 형식) */}
           <div className={styles.filterRow}>
             <label className={styles.field}>Project
-              <input type='text' value={projectCode} onChange={e => setProjectCode(e.target.value)} placeholder='' />
-              <button type='button' onClick={() => setOpenProject(true)} className={styles.iconBtn}>🔍</button>
+              <button type='button' onClick={() => setOpenProject(true)} className={styles.popupBtn}>
+                <span>{projectCode || <span style={{ color: '#9ca3af' }}>&nbsp;</span>}</span>
+                <span style={{ color: '#1976d2' }}>🔍</span>
+              </button>
             </label>
             <label className={styles.field}>Model
-              <input type='text' value={itemId} onChange={e => setItemId(e.target.value)} placeholder='' />
-              <button type='button' onClick={() => setOpenItem(true)} className={styles.iconBtn}>🔍</button>
+              <button type='button' onClick={() => setOpenItem(true)} className={styles.popupBtn}>
+                <span>{itemId || <span style={{ color: '#9ca3af' }}>&nbsp;</span>}</span>
+                <span style={{ color: '#1976d2' }}>🔍</span>
+              </button>
             </label>
             <label className={styles.field}>Period
               <input type='date' value={toDate(periodFrom)} onChange={e => setPeriodFrom(fromDate(e.target.value))} />
@@ -263,7 +263,7 @@ export const PriceBatchInputModal = ({
               <input type='date' value={toDate(periodTo)} onChange={e => setPeriodTo(fromDate(e.target.value))} />
             </label>
             <span className={styles.hint}>
-              {loading ? '데이터 조회 중' : `${rows.length} rows${editMode ? ' (편집 모드)' : ''}`}
+              {loading ? '데이터 조회 중' : `${rows.length} rows`}
             </span>
           </div>
 
@@ -304,6 +304,15 @@ export const PriceBatchInputModal = ({
                   }
                 }
                 g.mergeManager = new DivMerge();
+
+                // PRICE_ALL 셀 background color (편집 가능 표시) — wj-cell-editable
+                g.formatItem.addHandler((_s, e: FormatItemEventArgs) => {
+                  if (e.panel.cellType !== CellType.Cell) return;
+                  const col = e.panel.columns[e.col];
+                  if (col?.binding === 'PRICE_ALL') {
+                    toggleClass(e.cell, 'wj-cell-editable', true);
+                  }
+                });
               }}
               itemsSource={rows}
               autoGenerateColumns={false}
@@ -323,7 +332,7 @@ export const PriceBatchInputModal = ({
               <FlexGridColumn binding='CURRENCY'     header='Currency*'         width={80}  align='center' isReadOnly />
               <FlexGridColumn binding='PLANT_SITE_ID' header='Plant Site*'      width={90}  align='left' isReadOnly />
               <FlexGridColumn binding='MEASURE'      header='Measure*'          width={80}  align='center' isReadOnly />
-              <FlexGridColumn binding='PRICE_ALL'    header='일괄입력 Price'    width={130} align='right' format='n4' isReadOnly={!editMode} />
+              <FlexGridColumn binding='PRICE_ALL'    header='일괄입력 Price'    width={130} align='right' format='n4' />
             </FlexGrid>
           </div>
         </div>
@@ -365,10 +374,3 @@ export const PriceBatchInputModal = ({
   );
 };
 
-// YYYYMMDD ↔ YYYY-MM-DD
-const toDate = (s: string): string => {
-  if (!s) return '';
-  if (s.length === 8) return `${s.slice(0, 4)}-${s.slice(4, 6)}-${s.slice(6, 8)}`;
-  return s;
-};
-const fromDate = (s: string): string => s.replace(/-/g, '');

@@ -10,19 +10,18 @@ import { useMessageStore } from '@shared/stores';
 
 import { ColumnSettingModal, ItemByDivisionModal, ProjectByDivisionModal } from '../../components';
 
-import { SalesFuturePriceFlexGrid } from './components/SalesFuturePriceFlexGrid';
-import { SalesFuturePriceForm } from './components/SalesFuturePriceForm';
 import { ExchangeRateModal } from './components/modals/ExchangeRateModal';
 import { PriceBatchInputModal } from './components/modals/PriceBatchInputModal';
 import { SalesPriceRangeModal } from './components/modals/SalesPriceRangeModal';
 import { SalesPriceTemplateModal } from './components/modals/SalesPriceTemplateModal';
 import { SalesPriceVersionModal } from './components/modals/SalesPriceVersionModal';
+import { SalesFuturePriceFlexGrid } from './components/SalesFuturePriceFlexGrid';
+import { SalesFuturePriceForm } from './components/SalesFuturePriceForm';
 import { useSalesFuturePriceValidation } from './hooks/useSalesFuturePriceValidation';
-import { MAIN_COLUMNS, MEASURE_4, MENU_ID, SHEETS } from './sales-future-price.constants';
+import { type BUCKET_TYPE, MAIN_COLUMNS, MEASURE_4, MENU_ID, SHEETS } from './sales-future-price.constants';
 import type { FuturePriceRow } from './sales-future-price.types';
-import { useSalesFuturePriceStore } from './useSalesFuturePriceStore';
-
 import styles from './SalesFuturePrice.module.scss';
+import { useSalesFuturePriceStore } from './useSalesFuturePriceStore';
 
 // AS-IS DMF0020_SalesFuturePrice.cs (3,969줄 Forms.UIL/Master 정본) — 메인 화면
 //   - 24 Event (Form_Load / clbDivisions_Change / btnExchangeRate_Click / btnSavePricePeriod_Click / ...)
@@ -51,6 +50,11 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   const openSearchArea = useSalesFuturePriceStore(s => s.openSearchArea);
   const setOpenSearchArea = useSalesFuturePriceStore(s => s.setOpenSearchArea);
   const setSearchCondition = useSalesFuturePriceStore(s => s.setSearchCondition);
+  // ⭐ master hook §2.3 — Column/Measure 동적 fetch (admin SYS0004 UI Category Setup 변경 즉시 반영)
+  const staticColumns = useSalesFuturePriceStore(s => s.staticColumns);
+  const staticMeasures = useSalesFuturePriceStore(s => s.staticMeasures);
+  const fetchStaticColumns = useSalesFuturePriceStore(s => s.fetchStaticColumns);
+  const fetchStaticMeasures = useSalesFuturePriceStore(s => s.fetchStaticMeasures);
 
   const validate = useSalesFuturePriceValidation();
 
@@ -64,12 +68,18 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   });
   const loading = isLoading || isFetching;
 
-
   // 화면 진입 시 자동 조회 — Division 자동 적용 후 filter 세팅 (AS-IS Form_Load + InitControls)
   useEffect(() => {
     if (!filters[SHEETS.MAIN] && sc.divisionId) setFilter();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sc.divisionId]);
+
+  // ⭐ master hook §2.3 + §5 — mount 시 1회 fetch (admin 메타 즉시 반영 baseline)
+  useEffect(() => {
+    void fetchStaticColumns();
+    void fetchStaticMeasures();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tabId]);
 
   // 신규/수정 행 추적 (CRUD_TYPE) — SP 결과와 합쳐 grid itemsSource
   const [insertedRows, setInsertedRows] = useState<FuturePriceRow[]>([]);
@@ -95,14 +105,22 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
     setFilter();
     refetch?.();
     setInsertedRows([]);
+    // ⭐ master hook §2.4 — Search 시 admin 메타 refetch (admin 변경 즉시 반영)
+    void fetchStaticColumns();
+    void fetchStaticMeasures();
   };
 
-  // F8 Insert — AS-IS L2049 dtMeasureCount.Rows.Count 만큼 row 추가 (= 4 measure 동시)
-  //   RTF / KRW / USD / LOC 4 row 한꺼번에 추가 (같은 INSERT_GROUP_ID 로 묶음)
-  //   같은 INSERT_GROUP_ID 의 4 row 는 좌측 fixed cols 동기화 (한 row 수정 시 4 row 동기)
+  // F8 Insert — AS-IS L2049 dtMeasureCount.Rows.Count 만큼 row 추가
+  //   ⭐ master hook §5 — Measure 동적 fetch (SCM_MST_SHEET_MEASURE 의 VALID_YN='Y' COLUMN_NAME 만)
+  //   admin 변경 즉시 반영. staticMeasures 비어있으면 MEASURE_4 hardcode fallback.
   const handleInsert = () => {
+    const validMeasures = (staticMeasures[SHEETS.MAIN] ?? [])
+      .filter(m => m.VALID_YN !== 'N')
+      .sort((a, b) => (a.SORT_ORDER_NO ?? 0) - (b.SORT_ORDER_NO ?? 0))
+      .map(m => m.COLUMN_NAME);
+    const measures = validMeasures.length > 0 ? validMeasures : MEASURE_4;
     const groupId = `I_${Date.now()}`;
-    const newRows: FuturePriceRow[] = MEASURE_4.map(m => ({
+    const newRows: FuturePriceRow[] = measures.map((m): FuturePriceRow => ({
       CRUD_TYPE: 'I',
       INSERT_GROUP_ID: groupId,
       DIVISION_ID: sc.divisionId,
@@ -133,7 +151,7 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
       void setAlert({ type: 'alert', content: '신규 입력 행만 삭제할 수 있습니다.' });
       return;
     }
-    const gid = sel.INSERT_GROUP_ID as string | undefined;
+    const gid = sel.INSERT_GROUP_ID;
     if (gid) {
       setInsertedRows(prev => prev.filter(r => r.INSERT_GROUP_ID !== gid));
     } else {
@@ -145,7 +163,7 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   각 row 는 (Insert 'I' / Update 'U' / Delete 'D') 별 4 measure × M dynamic col 펼침 (YYYYMMDD, PRICE)
   //   Inserted row 만 'I', SP 결과 row 의 dynamic cell 수정값 'U' (사용자 LOC row 만 editable)
   const handleSave = async () => {
-    const spRowsAll = (((data as { o_rc1?: FuturePriceRow[] })?.o_rc1 ?? []) as FuturePriceRow[]);
+    const spRowsAll = ((data as { o_rc1?: FuturePriceRow[] })?.o_rc1 ?? []);
     const v = validate.validateSaveRows([...insertedRows, ...spRowsAll], sc);
     if (!v.ok) return;
 
@@ -173,18 +191,19 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         const yyyymmdd = dk.startsWith('W_') ? dk.slice(2) : `${dk.slice(2)}01`;
         rownum++;
         acc.activeFlag.push('I');
-        acc.divisionId.push(String(row.DIVISION_ID ?? ''));
-        acc.projectCode.push(String(row.PROJECT_CODE ?? ''));
-        acc.scmSiteId.push(String(row.SCM_SITE_ID ?? ''));
-        acc.plantSiteId.push(String(row.PLANT_SITE_ID ?? ''));
-        acc.itemId.push(String(row.ITEM_ID ?? ''));
+        const r = row as Record<string, string>;
+        acc.divisionId.push(r.DIVISION_ID ?? '');
+        acc.projectCode.push(r.PROJECT_CODE ?? '');
+        acc.scmSiteId.push(r.SCM_SITE_ID ?? '');
+        acc.plantSiteId.push(r.PLANT_SITE_ID ?? '');
+        acc.itemId.push(r.ITEM_ID ?? '');
         acc.yyyymmdd.push(yyyymmdd);
-        acc.currency.push(String(row.CURRENCY ?? ''));
-        acc.measure.push(String(row.MEASURE ?? ''));
-        acc.domExp.push(String(row.DOM_EXP ?? ''));
-        acc.fcstType.push(String(row.FCST_TYPE ?? ''));
-        acc.incoterms.push(String(row.INCOTERMS ?? ''));
-        acc.price.push(String(price));
+        acc.currency.push(r.CURRENCY ?? '');
+        acc.measure.push(r.MEASURE ?? '');
+        acc.domExp.push(r.DOM_EXP ?? '');
+        acc.fcstType.push(r.FCST_TYPE ?? '');
+        acc.incoterms.push(r.INCOTERMS ?? '');
+        acc.price.push(String(price as string));
         acc.createdBy.push(userId);
         acc.creationDate.push(today);
         acc.lastUpdatedBy.push(userId);
@@ -227,7 +246,7 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   // SP P_DMF0020_GET_SCM_MST_FUTURE_PRICE_M 결과 — wide format (28 fixed cols + 동적 W_/M_)
   // PIVOT 이 DB 단에서 처리되어 클라이언트 측 변환 불필요
-  const spRows = (((data as { o_rc1?: FuturePriceRow[] })?.o_rc1 ?? []) as FuturePriceRow[]);
+  const spRows = ((data as { o_rc1?: FuturePriceRow[] })?.o_rc1 ?? []);
   const rows: FuturePriceRow[] = [...insertedRows, ...spRows];
 
   return (
@@ -272,6 +291,9 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
             rows={rows}
             gridRef={gridRef as never}
             divisionId={sc.divisionId}
+            bucketType={sc.bucketType as BUCKET_TYPE}
+            staticColumns={staticColumns[SHEETS.MAIN]}
+            staticMeasures={staticMeasures[SHEETS.MAIN]}
             onPopupCellDblClick={(modalKey, row) => {
               setPopupGroupId(row.INSERT_GROUP_ID ?? null);
               if (modalKey === 'PROJECT') setOpenProject(true);

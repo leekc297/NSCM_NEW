@@ -21,7 +21,7 @@ export type DivisionVisibility = {
   defaultBucket: 'D' | 'W' | 'M';
 };
 
-export function getDivisionVisibility(divisionId: string): DivisionVisibility {
+export const getDivisionVisibility = (divisionId: string): DivisionVisibility => {
   const prefix = divisionId.substring(0, 2);
 
   if (divisionId === DIVISION.MOBILITY) {
@@ -69,13 +69,13 @@ export function getDivisionVisibility(divisionId: string): DivisionVisibility {
     editableWeeklyOnly: false,
     defaultBucket: 'W',
   };
-}
+};
 
 // Division 별 visible columns 필터
-export function filterColumnsByDivision(
+export const filterColumnsByDivision = (
   columns: MainColumnMeta[],
   divisionId: string,
-): MainColumnMeta[] {
+): MainColumnMeta[] => {
   const vis = getDivisionVisibility(divisionId);
 
   return columns.filter(col => {
@@ -95,4 +95,4 @@ export function filterColumnsByDivision(
     // 기본: visible: false 가 아닌 모든 col 표시
     return col.visible !== false;
   });
-}
+};

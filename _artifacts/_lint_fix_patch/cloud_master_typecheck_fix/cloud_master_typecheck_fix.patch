@@ -1,0 +1,819 @@
+warning: in the working copy of 'nscm-fe/features/master/src/components/columnSettingModal/ColumnSettingModal.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'nscm-fe/features/master/src/components/searchFields/SearchFields.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'nscm-fe/features/master/src/pages/contribute-main/components/ContributeRatePopup.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'nscm-fe/features/master/src/pages/contribute-main/components/SearchBar.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'nscm-fe/features/master/src/pages/contribute-main/components/VersionPopup.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'nscm-fe/features/master/src/pages/contribute-view/components/ContributeViewForm.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'nscm-fe/features/master/src/pages/contribute-view/components/ContributeViewGrid.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'nscm-fe/features/master/src/pages/contribute-view/components/modals/ColumnTitleSetModal.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'nscm-fe/features/master/src/pages/contribute-view/components/modals/ContributeVersionModal.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'nscm-fe/features/master/src/pages/erp-edi-master/components/ErpEdiMasterForm.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'nscm-fe/features/master/src/pages/nn-master-mapping/NnMasterMapping.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'nscm-fe/features/master/src/pages/nn-master-mapping/components/NnMasterMappingForm.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'nscm-fe/features/master/src/pages/sales-future-price/components/modals/ColumnTitleSetModal.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'nscm-fe/features/master/src/pages/sales-future-price/components/modals/ExchangeRateModal.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'nscm-fe/features/master/src/pages/sales-future-price/components/modals/PriceBatchInputModal.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'nscm-fe/features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'nscm-fe/features/master/src/pages/sales-future-price/components/modals/SalesPriceTemplateModal.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'nscm-fe/features/master/src/pages/sales-future-price/components/modals/SalesPriceVersionModal.tsx', LF will be replaced by CRLF the next time Git touches it
+diff --git a/nscm-fe/configs/types/procedures.d.ts b/nscm-fe/configs/types/procedures.d.ts
+index 8a0308a..dd476f6 100644
+--- a/nscm-fe/configs/types/procedures.d.ts
++++ b/nscm-fe/configs/types/procedures.d.ts
+@@ -1511,8 +1511,10 @@ interface RawProcedureMap extends Base {
+     summary: {
+       request: {
+         divisionId: string;
+-        sesUserId: string;
+-        menuId: string;
++        fromYyyymmdd?: string;
++        toYyyymmdd?: string;
++        sesUserId?: string;
++        menuId?: string;
+       };
+       response: {
+         o_rc1: {
+@@ -1530,8 +1532,10 @@ interface RawProcedureMap extends Base {
+         divisionId: string;
+         senderName: string;
+         flag: string;
+-        sesUserId: string;
+-        menuId: string;
++        fromYyyymmdd?: string;
++        toYyyymmdd?: string;
++        sesUserId?: string;
++        menuId?: string;
+       };
+       response: {
+         o_rc1: {
+@@ -1567,8 +1571,8 @@ interface RawProcedureMap extends Base {
+         soldTo: string;
+         shipTo: string;
+         scmSiteId: string;
+-        sesUserId: string;
+-        menuId: string;
++        sesUserId?: string;
++        menuId?: string;
+       };
+       response: {
+         o_rc1: {
+@@ -1599,6 +1603,10 @@ interface RawProcedureMap extends Base {
+           TEAM_EDIT_FLAG: string;
+           [key: string]: string;
+         };
++        // BE 가 O_RESULT_CURSOR alias 로도 반환 가능 (룰 21 §10.3 dual cursor 패턴)
++        O_RESULT_CURSOR?: {
++          [key: string]: string;
++        };
+       };
+     };
+     sspm: {
+@@ -1606,8 +1614,8 @@ interface RawProcedureMap extends Base {
+         divisionId: string;
+         itemId: string;
+         scmSiteId: string;
+-        sesUserId: string;
+-        menuId: string;
++        sesUserId?: string;
++        menuId?: string;
+       };
+       response: {
+         o_rc1: {
+@@ -1691,8 +1699,8 @@ interface RawProcedureMap extends Base {
+         divisionId: string;
+         startYyyymmdd: string;
+         endYyyymmdd: string;
+-        sesUserId: string;
+-        menuId: string;
++        sesUserId?: string;
++        menuId?: string;
+       };
+       response: {
+         o_rc1: {
+@@ -1704,8 +1712,8 @@ interface RawProcedureMap extends Base {
+     };
+     updateHistory: {
+       request: {
+-        sesUserId: string;
+-        menuId: string;
++        sesUserId?: string;
++        menuId?: string;
+       };
+       response: {
+         o_rc1: {
+@@ -1716,6 +1724,42 @@ interface RawProcedureMap extends Base {
+         };
+       };
+     };
++    // 'main' = ErpEdiMaster SUMMARY sheet (SHEETS.MAIN='main' enum 과 일치, BE: PKG_DMF0008.P_DMF0008_GET_EDI_MST_SUMMARY)
++    main: {
++      request: {
++        divisionId: string;
++        fromYyyymmdd?: string;
++        toYyyymmdd?: string;
++        sesUserId?: string;
++        menuId?: string;
++      };
++      response: {
++        o_rc1: {
++          DIVISION_ID: string;
++          EDI_SENDER_NAME: string;
++          GSCM_MASTER_DATA: string;
++          SUCCESS: string;
++          EXCEPTION_DATA: string;
++          CNT: string;
++          EDIT_YN: string;
++          [key: string]: string;
++        };
++      };
++    };
++    // 'division' = ErpEdiMasterForm Division lookup (BE: PKG_DMF0008.P_DMF0008_GET_MY_DIVISION_LIST 또는 redirect)
++    division: {
++      request: {
++        sesUserId?: string;
++        menuId?: string;
++      };
++      response: {
++        o_rc1: {
++          CODE: string;
++          NAME: string;
++          [key: string]: string;
++        };
++      };
++    };
+   };
+ }
+ 
+diff --git a/nscm-fe/features/master/src/components/columnSettingModal/ColumnSettingModal.tsx b/nscm-fe/features/master/src/components/columnSettingModal/ColumnSettingModal.tsx
+index 1eb423e..952bf1f 100644
+--- a/nscm-fe/features/master/src/components/columnSettingModal/ColumnSettingModal.tsx
++++ b/nscm-fe/features/master/src/components/columnSettingModal/ColumnSettingModal.tsx
+@@ -93,7 +93,8 @@ export const ColumnSettingModal = ({
+     enabled: open,
+   });
+ 
+-  const beRows = useMemo(() => (data?.o_rc1 ?? []) as Record<string, unknown>[], [data]);
++  // BE 동적 컬럼 응답은 string 으로 직렬화 (eslint no-base-to-string 회피)
++  const beRows = useMemo(() => (data?.o_rc1 ?? []) as unknown as Record<string, string>[], [data]);
+   const loading = isLoading || isFetching;
+ 
+   // BE rows → ColumnSettingRow 정규화 + fallback (fallbackColumns)
+@@ -164,7 +165,7 @@ export const ColumnSettingModal = ({
+     setUserSel(null);
+   };
+ 
+-  const handleDefault = () => { refetch?.(); };
++  const handleDefault = () => { void refetch?.(); };
+ 
+   const handleOk = () => {
+     if (userRows.length === 0) {
+diff --git a/nscm-fe/features/master/src/components/searchFields/SearchFields.tsx b/nscm-fe/features/master/src/components/searchFields/SearchFields.tsx
+index 7abd819..1ef846e 100644
+--- a/nscm-fe/features/master/src/components/searchFields/SearchFields.tsx
++++ b/nscm-fe/features/master/src/components/searchFields/SearchFields.tsx
+@@ -51,10 +51,6 @@ interface MultiFieldProps {
+   onChange: (v: string[]) => void;
+   division?: string;       // 종속 필터용
+ }
+-interface DependentMultiFieldProps extends MultiFieldProps {
+-  deptIds?: string[];
+-  endCustomers?: string[];
+-}
+ interface PopupFieldProps {
+   value: string[];
+   onChange: (v: string[]) => void;
+@@ -72,17 +68,25 @@ const useL = () => {
+ };
+ 
+ // CustomDropdown options helper — NUMBER→String + DIVISION_ID 필터
++// row type 을 string-keyed 로 강제 (eslint no-base-to-string / restrict-template-expressions 회피)
+ const toOptions = (rows: Array<Record<string, unknown>> | undefined, divisionId?: string) => {
+-  const arr = rows ?? [];
++  const arr = (rows ?? []) as unknown as Array<Record<string, string>>;
+   return [...new Map(
+     arr.filter(r => !divisionId || !r.DIVISION_ID || r.DIVISION_ID === divisionId)
+-       .map(r => [`${r.DIVISION_ID ?? ''}|${r.CODE ?? ''}`, r]),
++       .map(r => [`${r.DIVISION_ID ?? ''}|${r.CODE ?? ''}`, r] as const),
+   ).values()].map(r => ({ label: String(r.NAME ?? r.CODE ?? ''), value: String(r.CODE ?? '') }));
+ };
+ 
+ // 'ALL' 기본값 helper — P_COM0006/P_COM0008 SP WHERE 절 `(P_X='ALL' OR ...)` 패턴 대응
+ const orAll = (arr?: string[]) => (arr && arr.length > 0 ? arr.join(',') : 'ALL');
+ 
++// 공통 style (popup button) — JSX 사용 전 선언 의무 (eslint no-use-before-define)
++const popupBtnStyle: React.CSSProperties = {
++  width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
++  padding: '6px 8px', border: '1px solid #b8bfc9', borderRadius: 3,
++  background: 'white', cursor: 'pointer', textAlign: 'left',
++};
++
+ // ====================================================================================
+ // 1. DivisionField (필수, size=4, combo=MyDivision)
+ //    AS-IS clbDivisions / DataService SetChangeControl("MyDivision")
+@@ -423,11 +427,3 @@ export const SearchOverRangeField = ({ value, onChange }: CheckFieldProps) => {
+   );
+ };
+ 
+-// ====================================================================================
+-// 공통 style (popup button)
+-// ====================================================================================
+-const popupBtnStyle: React.CSSProperties = {
+-  width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+-  padding: '6px 8px', border: '1px solid #b8bfc9', borderRadius: 3,
+-  background: 'white', cursor: 'pointer', textAlign: 'left',
+-};
+diff --git a/nscm-fe/features/master/src/pages/contribute-main/components/ContributeRatePopup.tsx b/nscm-fe/features/master/src/pages/contribute-main/components/ContributeRatePopup.tsx
+index 9a0a3c6..23a96ee 100644
+--- a/nscm-fe/features/master/src/pages/contribute-main/components/ContributeRatePopup.tsx
++++ b/nscm-fe/features/master/src/pages/contribute-main/components/ContributeRatePopup.tsx
+@@ -16,13 +16,14 @@ export const ContributeRatePopup = ({ yyyy, open, onClose, onSelect }: Props) =>
+   const { data } = useTabProcQuery({
+     menuId: MENU_ID,
+     sheetName: SHEETS.RATE_POPUP,
++    tabId: MENU_ID,
+     filters: { yyyy },
+     enabled: open && !!yyyy,
+   });
+ 
+   if (!open) return null;
+ 
+-  const rows = (data?.o_rc1 ?? []) as ContributeRatePopupResult[];
++  const rows = (data?.o_rc1 ?? []) as unknown as ContributeRatePopupResult[];
+ 
+   return (
+     <div
+diff --git a/nscm-fe/features/master/src/pages/contribute-main/components/SearchBar.tsx b/nscm-fe/features/master/src/pages/contribute-main/components/SearchBar.tsx
+index 93c98ba..ccb16b7 100644
+--- a/nscm-fe/features/master/src/pages/contribute-main/components/SearchBar.tsx
++++ b/nscm-fe/features/master/src/pages/contribute-main/components/SearchBar.tsx
+@@ -36,6 +36,7 @@ export const SearchBar = ({ onSearch, onOpenVersionPopup }: Props) => {
+   const { data: yearData, isLoading: yearLoading } = useTabProcQuery({
+     menuId: MENU_ID,
+     sheetName: SHEETS.VERSION,
++    tabId: MENU_ID,
+     filters: {},
+     enabled: true,
+   });
+@@ -43,7 +44,7 @@ export const SearchBar = ({ onSearch, onOpenVersionPopup }: Props) => {
+   const [yearOptions, setYearOptions] = useState<VersionOption[]>([]);
+ 
+   useEffect(() => {
+-    const rows = (yearData?.o_rc1 ?? []) as VersionOption[];
++    const rows = (yearData?.o_rc1 ?? []) as unknown as VersionOption[];
+     setYearOptions(rows);
+     // AS-IS InitControls — 첫 옵션 자동 선택
+     if (rows.length > 0 && !searchCondition.verSeq) {
+diff --git a/nscm-fe/features/master/src/pages/contribute-main/components/VersionPopup.tsx b/nscm-fe/features/master/src/pages/contribute-main/components/VersionPopup.tsx
+index e4576ec..5cc4007 100644
+--- a/nscm-fe/features/master/src/pages/contribute-main/components/VersionPopup.tsx
++++ b/nscm-fe/features/master/src/pages/contribute-main/components/VersionPopup.tsx
+@@ -84,12 +84,13 @@ export const VersionPopup = () => {
+   const { data: yearData } = useTabProcQuery({
+     menuId: MENU_ID,
+     sheetName: SHEETS.YEAR_POPUP,
++    tabId: MENU_ID,
+     filters: {},
+     enabled: open,
+   });
+ 
+   const yearOptions = useMemo<YearOption[]>(
+-    () => (yearData?.o_rc1 ?? []) as YearOption[],
++    () => (yearData?.o_rc1 ?? []) as unknown as YearOption[],
+     [yearData]
+   );
+ 
+@@ -98,6 +99,7 @@ export const VersionPopup = () => {
+   const { data: rateData, refetch } = useTabProcQuery({
+     menuId: MENU_ID,
+     sheetName: SHEETS.RATE_POPUP,
++    tabId: MENU_ID,
+     filters: { yyyy: selectedYear },
+     enabled: open && !!selectedYear,
+   });
+@@ -107,6 +109,7 @@ export const VersionPopup = () => {
+   const { mutate: saveVersion } = useProcMutation({
+     menuId: MENU_ID,
+     sheetName: SHEETS.VERSION,
++    tabId: MENU_ID,
+   });
+ 
+   // AS-IS .cs L84: Form_Load → FindData()  → Year 옵션 첫 항목 자동 선택
+@@ -288,15 +291,17 @@ export const VersionPopup = () => {
+     const trim = (s: string) => (s.startsWith('^') ? s.substring(1) : s);
+ 
+     saveVersion(
+-      {
+-        activeFlag: trim(buf.activeFlag),
+-        verSeq: trim(buf.verSeq),
+-        yyyy: trim(buf.yyyy),
+-        versionNm: trim(buf.versionNm),
+-        description: trim(buf.description),
+-        validYn: trim(buf.validYn),
+-        createdBy: trim(buf.createdBy),
+-      } as ProcRequest<MENU_ID, SHEETS.VERSION>,
++      [
++        {
++          activeFlag: trim(buf.activeFlag),
++          verSeq: trim(buf.verSeq),
++          yyyy: trim(buf.yyyy),
++          versionNm: trim(buf.versionNm),
++          description: trim(buf.description),
++          validYn: trim(buf.validYn),
++          createdBy: trim(buf.createdBy),
++        },
++      ] as unknown as (WijmoRowItem & { CRUD_TYPE?: string })[],
+       {
+         onSuccess: () => {
+           void setAlert({ type: 'alert', content: '저장이 완료되었습니다.' });
+diff --git a/nscm-fe/features/master/src/pages/contribute-view/components/ContributeViewForm.tsx b/nscm-fe/features/master/src/pages/contribute-view/components/ContributeViewForm.tsx
+index 24e8a19..0776bf5 100644
+--- a/nscm-fe/features/master/src/pages/contribute-view/components/ContributeViewForm.tsx
++++ b/nscm-fe/features/master/src/pages/contribute-view/components/ContributeViewForm.tsx
+@@ -32,6 +32,7 @@ export const ContributeViewForm = ({ onSearch, onOpenVersionPopup }: Props) => {
+   const { data: yearData, isLoading: yearLoading } = useTabProcQuery({
+     menuId: MENU_ID,
+     sheetName: SHEETS.VERSION,
++    tabId: MENU_ID,
+     filters: {},
+     enabled: true,
+   });
+@@ -39,7 +40,7 @@ export const ContributeViewForm = ({ onSearch, onOpenVersionPopup }: Props) => {
+   const [yearOptions, setYearOptions] = useState<VersionOption[]>([]);
+ 
+   useEffect(() => {
+-    const rows = (yearData?.o_rc1 ?? []) as VersionOption[];
++    const rows = (yearData?.o_rc1 ?? []) as unknown as VersionOption[];
+     setYearOptions(rows);
+     // AS-IS InitControls — 첫 옵션 자동 선택
+     // ⛔ Oracle NUMBER → JS number 자동 변환 위험 (메모: feedback_no_type_cast_around_runtime).
+diff --git a/nscm-fe/features/master/src/pages/contribute-view/components/ContributeViewGrid.tsx b/nscm-fe/features/master/src/pages/contribute-view/components/ContributeViewGrid.tsx
+index 5ef64ef..e467132 100644
+--- a/nscm-fe/features/master/src/pages/contribute-view/components/ContributeViewGrid.tsx
++++ b/nscm-fe/features/master/src/pages/contribute-view/components/ContributeViewGrid.tsx
+@@ -41,13 +41,14 @@ export const ContributeViewGrid = ({ gridRef, data }: Props) => {
+   const { data: titleData } = useTabProcQuery({
+     menuId: MENU_ID,
+     sheetName: SHEETS.MAIN_TITLE,
++    tabId: MENU_ID,
+     filters: titleFilter,
+     enabled: !!titleFilter,
+   });
+ 
+   // SP body 가 SORT_ORDER_NO 기준 정렬 + DISTINCT 처리됨 → FE dedup 불필요
+   const titleRows = useMemo<SpreadTitleRow[]>(
+-    () => (titleData?.o_rc1 ?? []) as SpreadTitleRow[],
++    () => (titleData?.o_rc1 ?? []) as unknown as SpreadTitleRow[],
+     [titleData]
+   );
+ 
+diff --git a/nscm-fe/features/master/src/pages/contribute-view/components/modals/ColumnTitleSetModal.tsx b/nscm-fe/features/master/src/pages/contribute-view/components/modals/ColumnTitleSetModal.tsx
+index 3214d42..30fbe4c 100644
+--- a/nscm-fe/features/master/src/pages/contribute-view/components/modals/ColumnTitleSetModal.tsx
++++ b/nscm-fe/features/master/src/pages/contribute-view/components/modals/ColumnTitleSetModal.tsx
+@@ -83,6 +83,7 @@ export const ColumnTitleSetModal = ({ open, onClose, onApply }: Props) => {
+   const { data } = useTabProcQuery({
+     menuId: MENU_ID,
+     sheetName: SHEETS.TITLE_SET,
++    tabId: MENU_ID,
+     filters,
+     enabled: open && !!filters,
+   });
+diff --git a/nscm-fe/features/master/src/pages/contribute-view/components/modals/ContributeVersionModal.tsx b/nscm-fe/features/master/src/pages/contribute-view/components/modals/ContributeVersionModal.tsx
+index af358b9..6153cea 100644
+--- a/nscm-fe/features/master/src/pages/contribute-view/components/modals/ContributeVersionModal.tsx
++++ b/nscm-fe/features/master/src/pages/contribute-view/components/modals/ContributeVersionModal.tsx
+@@ -124,12 +124,13 @@ export const ContributeVersionModal = ({ open, onClose, onSelect }: Props) => {
+   const { data, refetch } = useTabProcQuery({
+     menuId: MENU_ID,
+     sheetName: SHEETS.VERSION_POPUP,
++    tabId: MENU_ID,
+     filters,
+     enabled: open && !!filters,
+   });
+ 
+   const rows = useMemo<VersionPopupRow[]>(
+-    () => (data?.o_rc1 ?? []) as VersionPopupRow[],
++    () => (data?.o_rc1 ?? []) as unknown as VersionPopupRow[],
+     [data]
+   );
+ 
+@@ -173,7 +174,7 @@ export const ContributeVersionModal = ({ open, onClose, onSelect }: Props) => {
+   return (
+     <CustomDialog
+       open={open}
+-      size={1100}
++      size='large'
+       type='modal'
+       position='basic'
+       handleClose={onClose}
+@@ -207,7 +208,11 @@ export const ContributeVersionModal = ({ open, onClose, onSelect }: Props) => {
+                   elevation
+                   size='small'
+                   value={period}
+-                  onChange={(date: [Dayjs, Dayjs]) => setPeriod(date)}
++                  onChange={date => {
++                    if (Array.isArray(date) && date.length === 2) {
++                      setPeriod([date[0] as Dayjs, date[1] as Dayjs]);
++                    }
++                  }}
+                 />
+               </div>
+             </div>
+diff --git a/nscm-fe/features/master/src/pages/erp-edi-master/ErpEdiMaster.tsx b/nscm-fe/features/master/src/pages/erp-edi-master/ErpEdiMaster.tsx
+index e3d054f..e11257d 100644
+--- a/nscm-fe/features/master/src/pages/erp-edi-master/ErpEdiMaster.tsx
++++ b/nscm-fe/features/master/src/pages/erp-edi-master/ErpEdiMaster.tsx
+@@ -302,7 +302,7 @@ export const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
+       <div className={styles.gridSection}>
+         <div className={styles.sectionTitle}>Summary</div>
+         <div className={styles.gridContainer}>
+-          <FlexGrid<SummaryRow>
++          <FlexGrid
+             initialized={(g: FlexGridType<SummaryRow>) => {
+               if (summaryGridRef && 'current' in summaryGridRef) {
+                 (summaryGridRef as { current: FlexGridType<SummaryRow> | null }).current = g;
+@@ -337,7 +337,7 @@ export const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
+           Repair <span className={styles.repairCount}>(정비 필요 합계 수량: {repairTotal})</span>
+         </div>
+         <div className={styles.gridContainer}>
+-          <FlexGrid<RepairRow>
++          <FlexGrid
+             initialized={(g: FlexGridType<RepairRow>) => {
+               if (repairGridRef && 'current' in repairGridRef) {
+                 (repairGridRef as { current: FlexGridType<RepairRow> | null }).current = g;
+@@ -388,7 +388,7 @@ export const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
+         <TabWrapper persist>
+           <TabItem label='Sales Site'>
+             <div className={styles.gridContainer}>
+-              <FlexGrid<SalesSiteRow>
++              <FlexGrid
+                 initialized={(g: FlexGridType<SalesSiteRow>) => {
+                   if (salesSiteGridRef && 'current' in salesSiteGridRef) {
+                     (salesSiteGridRef as { current: FlexGridType<SalesSiteRow> | null }).current = g;
+@@ -413,7 +413,7 @@ export const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
+           </TabItem>
+           <TabItem label='SSPM'>
+             <div className={styles.gridContainer}>
+-              <FlexGrid<SspmRow>
++              <FlexGrid
+                 initialized={(g: FlexGridType<SspmRow>) => {
+                   if (sspmGridRef && 'current' in sspmGridRef) {
+                     (sspmGridRef as { current: FlexGridType<SspmRow> | null }).current = g;
+diff --git a/nscm-fe/features/master/src/pages/erp-edi-master/components/ErpEdiMasterForm.tsx b/nscm-fe/features/master/src/pages/erp-edi-master/components/ErpEdiMasterForm.tsx
+index 49a32d7..f65baa8 100644
+--- a/nscm-fe/features/master/src/pages/erp-edi-master/components/ErpEdiMasterForm.tsx
++++ b/nscm-fe/features/master/src/pages/erp-edi-master/components/ErpEdiMasterForm.tsx
+@@ -29,12 +29,13 @@ export const ErpEdiMasterForm = ({ onSearch }: Props) => {
+   const { data: divisionData } = useTabProcQuery({
+     menuId: MENU_ID,
+     sheetName: SHEETS.DIVISION,
++    tabId: MENU_ID,
+     filters: {},
+     enabled: true,
+   });
+ 
+   const divisionOptions = useMemo<Array<{ value: string; label: string }>>(() => {
+-    const rows = (divisionData?.o_rc1 ?? []) as DivisionRow[];
++    const rows = (divisionData?.o_rc1 ?? []) as unknown as DivisionRow[];
+     if (rows.length === 0) {
+       // SP 호출 실패 또는 권한 없음 시 fallback
+       return [...DIVISION_FALLBACK];
+diff --git a/nscm-fe/features/master/src/pages/nn-master-mapping/NnMasterMapping.tsx b/nscm-fe/features/master/src/pages/nn-master-mapping/NnMasterMapping.tsx
+index 91d54ff..f8f98e7 100644
+--- a/nscm-fe/features/master/src/pages/nn-master-mapping/NnMasterMapping.tsx
++++ b/nscm-fe/features/master/src/pages/nn-master-mapping/NnMasterMapping.tsx
+@@ -52,8 +52,8 @@ class HierarchicalMergeManager extends MergeManager {
+ 
+     const sameAcrossKeys = (rowA: number, rowB: number): boolean =>
+       mergeColIdx.every(ci => {
+-        const a = panel.getCellData(rowA, ci, false);
+-        const b = panel.getCellData(rowB, ci, false);
++        const a: unknown = panel.getCellData(rowA, ci, false);
++        const b: unknown = panel.getCellData(rowB, ci, false);
+         return a === b;
+       });
+ 
+@@ -89,12 +89,13 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
+     enabled: !!filters[SHEETS.MAIN],
+   });
+ 
+-  const handleSearch = () => { setFilter(); refetch?.(); setInsertedRows([]); };
+-
+   // Phase B-2: Insert / Delete handler — As-Is .cs L538-602 InsertRow / L275-279 DeleteButton 1:1
+   // 신규 행 별도 state 로 관리 (CRUD_TYPE='I'). 저장은 Phase 후속 — SAVE handler 미구현
++  // ⚠️ handleSearch 가 setInsertedRows 사용 → use-before-define 회피 위해 위로 이동
+   const [insertedRows, setInsertedRows] = useState<NnRow[]>([]);
+ 
++  const handleSearch = () => { setFilter(); refetch?.(); setInsertedRows([]); };
++
+   const handleInsert = () => {
+     // As-Is L538-602: InsertRow 안 DATA_TYPE='SCM' fixed, DIVISION=search div, ACTIVE_YN='Y' default
+     const newRow: NnRow = {
+@@ -138,7 +139,7 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
+     // Validation — As-Is L667-896 의 모든 체크
+     for (let i = 0; i < dirty.length; i++) {
+       const r = dirty[i];
+-      const get = (k: string) => String((r as Record<string, unknown>)[k] ?? '');
++      const get = (k: string) => ((r as Record<string, string>)[k] ?? '');
+ 
+       const itemId = get('ITEM_ID');
+       const validFrom = get('VALID_START_DATE');
+@@ -201,7 +202,7 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
+     //   Cust 3개 (UNLOAD/PLANT/CUST_ITEM) 는 빈 값 시 ' ' (공백 1자), 나머지는 ''
+     const join = (key: string, blank = '') =>
+       dirty.map(r => {
+-        const v = String((r as Record<string, unknown>)[key] ?? '');
++        const v = ((r as Record<string, string>)[key] ?? '');
+         return v === '' ? blank : v;
+       }).join('^');
+ 
+@@ -209,8 +210,8 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
+     const mappingOriginal = dirty.map(r => {
+       // L918-925: 신규는 MAPPING_ITEM_ID 그대로, 수정은 MAPPING_ITEM_ID_ORIGINAL
+       const v = r.CRUD_TYPE === 'I'
+-        ? String((r as Record<string, unknown>)['MAPPING_ITEM_ID'] ?? '')
+-        : String((r as Record<string, unknown>)['MAPPING_ITEM_ID_ORIGINAL'] ?? '');
++        ? ((r as Record<string, string>)['MAPPING_ITEM_ID'] ?? '')
++        : ((r as Record<string, string>)['MAPPING_ITEM_ID_ORIGINAL'] ?? '');
+       return v;
+     }).join('^');
+ 
+@@ -395,10 +396,21 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
+             });
+ 
+             // Phase B-3: dblClick popup handler — column meta 의 _modalKey 분기
+-            g.itemDoubleClick.addHandler((_s, e) => {
+-              if (e.panel.cellType !== CellType.Cell) return;
+-              dblClickRef.current(g, { row: e.row, col: e.col });
+-            });
++            // wijmo 버전별 itemDoubleClick event 가드 + DOM dblclick fallback
++            const dblG = (g as unknown as { itemDoubleClick?: { addHandler?: (fn: (s: unknown, e: { panel: { cellType: CellType }; row: number; col: number }) => void) => void } }).itemDoubleClick;
++            if (dblG && typeof dblG.addHandler === 'function') {
++              dblG.addHandler((_s, e) => {
++                if (e.panel.cellType !== CellType.Cell) return;
++                dblClickRef.current(g, { row: e.row, col: e.col });
++              });
++            } else if (g.hostElement) {
++              g.hostElement.addEventListener('dblclick', () => {
++                const sel = g.selection;
++                if (sel && sel.row >= 0 && sel.col >= 0) {
++                  dblClickRef.current(g, { row: sel.row, col: sel.col });
++                }
++              });
++            }
+           }}
+           itemsSource={rows}
+           autoGenerateColumns={false}
+diff --git a/nscm-fe/features/master/src/pages/nn-master-mapping/components/NnMasterMappingForm.tsx b/nscm-fe/features/master/src/pages/nn-master-mapping/components/NnMasterMappingForm.tsx
+index 0a87afe..549a4a5 100644
+--- a/nscm-fe/features/master/src/pages/nn-master-mapping/components/NnMasterMappingForm.tsx
++++ b/nscm-fe/features/master/src/pages/nn-master-mapping/components/NnMasterMappingForm.tsx
+@@ -55,29 +55,29 @@ export const NnMasterMappingForm = ({ onSearch }: Props) => {
+   const [openProjectModal, setOpenProjectModal] = useState(false);
+   const [openItemModal, setOpenItemModal] = useState(false);
+ 
+-  const { data: divData } = useTabProcQuery({ menuId: MENU_ID, sheetName: SHEETS.DIVISION, filters: {}, enabled: true });
+-  const { data: dtData } = useTabProcQuery({ menuId: MENU_ID, sheetName: SHEETS.DATA_TYPE, filters: {}, enabled: true });
++  const { data: divData } = useTabProcQuery({ menuId: MENU_ID, sheetName: SHEETS.DIVISION, tabId: MENU_ID, filters: {}, enabled: true });
++  const { data: dtData } = useTabProcQuery({ menuId: MENU_ID, sheetName: SHEETS.DATA_TYPE, tabId: MENU_ID, filters: {}, enabled: true });
+   const { data: teamData } = useTabProcQuery({
+-    menuId: MENU_ID, sheetName: SHEETS.TEAM,
++    menuId: MENU_ID, sheetName: SHEETS.TEAM, tabId: MENU_ID,
+     filters: { divisionId: sc.divisionId },
+     enabled: !!sc.divisionId,
+   });
+   const { data: ecData } = useTabProcQuery({
+-    menuId: MENU_ID, sheetName: SHEETS.END_CUSTOMER,
++    menuId: MENU_ID, sheetName: SHEETS.END_CUSTOMER, tabId: MENU_ID,
+     filters: { divisionId: sc.divisionId, deptId: sc.deptId },
+     enabled: !!sc.divisionId,
+   });
+   const { data: ssData } = useTabProcQuery({
+-    menuId: MENU_ID, sheetName: SHEETS.SALES_SITE,
++    menuId: MENU_ID, sheetName: SHEETS.SALES_SITE, tabId: MENU_ID,
+     filters: { divisionId: sc.divisionId, endCustomer: sc.endCustomer },
+     enabled: !!sc.divisionId,
+   });
+ 
+-  const divisionOptions = useMemo(() => toOptions(divData?.o_rc1 as LookupRow[] | undefined), [divData]);
+-  const dataTypeOptions = useMemo(() => toOptions(dtData?.o_rc1 as LookupRow[] | undefined), [dtData]);
+-  const teamOptions = useMemo(() => toOptions(teamData?.o_rc1 as LookupRow[] | undefined), [teamData]);
+-  const endCustomerOptions = useMemo(() => toOptions(ecData?.o_rc1 as LookupRow[] | undefined), [ecData]);
+-  const salesSiteOptions = useMemo(() => toOptions(ssData?.o_rc1 as LookupRow[] | undefined), [ssData]);
++  const divisionOptions = useMemo(() => toOptions(divData?.o_rc1 as unknown as LookupRow[] | undefined), [divData]);
++  const dataTypeOptions = useMemo(() => toOptions(dtData?.o_rc1 as unknown as LookupRow[] | undefined), [dtData]);
++  const teamOptions = useMemo(() => toOptions(teamData?.o_rc1 as unknown as LookupRow[] | undefined), [teamData]);
++  const endCustomerOptions = useMemo(() => toOptions(ecData?.o_rc1 as unknown as LookupRow[] | undefined), [ecData]);
++  const salesSiteOptions = useMemo(() => toOptions(ssData?.o_rc1 as unknown as LookupRow[] | undefined), [ssData]);
+ 
+   // Division 은 필수 — 첫 옵션 자동 선택 (As-Is .cs L460 의 `if (p_division_id == "") MSG00097` 회피)
+   useEffect(() => {
+diff --git a/nscm-fe/features/master/src/pages/sales-future-price/components/modals/ColumnTitleSetModal.tsx b/nscm-fe/features/master/src/pages/sales-future-price/components/modals/ColumnTitleSetModal.tsx
+index 6ec642d..d550468 100644
+--- a/nscm-fe/features/master/src/pages/sales-future-price/components/modals/ColumnTitleSetModal.tsx
++++ b/nscm-fe/features/master/src/pages/sales-future-price/components/modals/ColumnTitleSetModal.tsx
+@@ -58,11 +58,12 @@ export const ColumnTitleSetModal = ({ open, modalClose, onSave }: Props) => {
+   const { data, refetch, isLoading, isFetching } = useTabProcQuery({
+     menuId: MENU_ID,
+     sheetName: SHEETS.TITLE_SET,
++    tabId: MENU_ID,
+     filters,
+     enabled: open,
+   });
+ 
+-  const beRows = useMemo(() => (data?.o_rc1 ?? []) as Record<string, unknown>[], [data]);
++  const beRows = useMemo(() => (data?.o_rc1 ?? []) as unknown as Record<string, string>[], [data]);
+   const loading = isLoading || isFetching;
+ 
+   // BE rows → TitleSetRow 정규화 + fallback (MAIN_COLUMNS)
+@@ -160,7 +161,7 @@ export const ColumnTitleSetModal = ({ open, modalClose, onSave }: Props) => {
+       const key = binding === 'LARGE_CLASS_LABEL_NAME' ? 'LARGE_CLASS_LABEL_NAME' : 'SMALL_CLASS_LABEL_NAME';
+       const sameRow = (a: number, b: number): boolean => {
+         const ra = ri(a); const rb = ri(b);
+-        return !!ra && !!rb && (ra as Record<string, unknown>)[key] === (rb as Record<string, unknown>)[key];
++        return !!ra && !!rb && (ra as unknown as Record<string, unknown>)[key] === (rb as unknown as Record<string, unknown>)[key];
+       };
+       let r1 = r, r2 = r;
+       while (r1 > 0 && sameRow(r1 - 1, r)) r1--;
+diff --git a/nscm-fe/features/master/src/pages/sales-future-price/components/modals/ExchangeRateModal.tsx b/nscm-fe/features/master/src/pages/sales-future-price/components/modals/ExchangeRateModal.tsx
+index 91f5401..9e44170 100644
+--- a/nscm-fe/features/master/src/pages/sales-future-price/components/modals/ExchangeRateModal.tsx
++++ b/nscm-fe/features/master/src/pages/sales-future-price/components/modals/ExchangeRateModal.tsx
+@@ -71,11 +71,12 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
+   const { data, refetch, isLoading, isFetching } = useTabProcQuery({
+     menuId: MENU_ID,
+     sheetName: SHEETS.EXCHANGE,
++    tabId: MENU_ID,
+     filters,
+     enabled: false,
+   });
+ 
+-  const allRows = (data?.o_rc1 ?? []) as ExchangeRow[];
++  const allRows = (data?.o_rc1 ?? []) as unknown as ExchangeRow[];
+   const filteredRows = divisionId && divisionId !== 'ALL'
+     ? allRows.filter(r => String(r.DIVISION_ID ?? '') === divisionId)
+     : allRows;
+diff --git a/nscm-fe/features/master/src/pages/sales-future-price/components/modals/PriceBatchInputModal.tsx b/nscm-fe/features/master/src/pages/sales-future-price/components/modals/PriceBatchInputModal.tsx
+index fdea3b1..1c97b66 100644
+--- a/nscm-fe/features/master/src/pages/sales-future-price/components/modals/PriceBatchInputModal.tsx
++++ b/nscm-fe/features/master/src/pages/sales-future-price/components/modals/PriceBatchInputModal.tsx
+@@ -20,6 +20,14 @@ import { isPeriodInverted } from '../../utils/futurePriceDate';
+ 
+ import styles from './PriceBatchInputModal.module.scss';
+ 
++// YYYYMMDD ↔ YYYY-MM-DD (use-before-define 회피 — file 상단 정의)
++const toDate = (s: string): string => {
++  if (!s) return '';
++  if (s.length === 8) return `${s.slice(0, 4)}-${s.slice(4, 6)}-${s.slice(6, 8)}`;
++  return s;
++};
++const fromDate = (s: string): string => s.replace(/-/g, '');
++
+ interface Props {
+   open: boolean;
+   modalClose: () => void;
+@@ -139,11 +147,12 @@ export const PriceBatchInputModal = ({
+   const { data, refetch, isLoading, isFetching } = useTabProcQuery({
+     menuId: MENU_ID,
+     sheetName: SHEETS.PRICE_BATCH,
++    tabId: MENU_ID,
+     filters,
+     enabled: false,
+   });
+ 
+-  const allRows = (data?.o_rc1 ?? []) as PriceBatchRow[];
++  const allRows = (data?.o_rc1 ?? []) as unknown as PriceBatchRow[];
+   // 추가 client-side filter (사용자 명시 검색조건)
+   const rows = useMemo(() => allRows.filter(r => {
+     if (salesSite && salesSite !== 'ALL' && String(r.SCM_SITE_ID ?? '') !== salesSite) return false;
+@@ -365,10 +374,3 @@ export const PriceBatchInputModal = ({
+   );
+ };
+ 
+-// YYYYMMDD ↔ YYYY-MM-DD
+-const toDate = (s: string): string => {
+-  if (!s) return '';
+-  if (s.length === 8) return `${s.slice(0, 4)}-${s.slice(4, 6)}-${s.slice(6, 8)}`;
+-  return s;
+-};
+-const fromDate = (s: string): string => s.replace(/-/g, '');
+diff --git a/nscm-fe/features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx b/nscm-fe/features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx
+index b3f8542..a7b66a6 100644
+--- a/nscm-fe/features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx
++++ b/nscm-fe/features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx
+@@ -11,13 +11,22 @@ interface Props {
+ // 분석서: Doc/_analysis/domain_DM/screens/DMF0020_SalesFuturePrice_POPUP_DMF0020_SalesPriceRange/
+ // 후속 phase 에서 보강 — Sales Price 적용 기간 범위 설정 + SAVE_PRICE_PERIOD SP 호출
+ export const SalesPriceRangeModal = ({ open, modalClose, defaultDivision, defaultPeriod }: Props) => (
+-  <CustomDialog open={open} onClose={modalClose} title='Sales Price Range' width={600} height={400}>
+-    <div style={{ padding: 16 }}>
+-      <p>Sales Price 적용 기간 범위 설정 (Phase 4 MVP — 후속 보강)</p>
+-      <ul>
+-        <li>Division: {defaultDivision}</li>
+-        <li>Period: {defaultPeriod.start} ~ {defaultPeriod.end}</li>
+-      </ul>
+-    </div>
+-  </CustomDialog>
++  <CustomDialog
++    open={open}
++    handleClose={modalClose}
++    customHeaderTitle='Sales Price Range'
++    size='medium'
++    type='modal'
++    position='basic'
++    disableButtonCancel
++    customContentArea={
++      <div style={{ padding: 16 }}>
++        <p>Sales Price 적용 기간 범위 설정 (Phase 4 MVP — 후속 보강)</p>
++        <ul>
++          <li>Division: {defaultDivision}</li>
++          <li>Period: {defaultPeriod.start} ~ {defaultPeriod.end}</li>
++        </ul>
++      </div>
++    }
++  />
+ );
+diff --git a/nscm-fe/features/master/src/pages/sales-future-price/components/modals/SalesPriceTemplateModal.tsx b/nscm-fe/features/master/src/pages/sales-future-price/components/modals/SalesPriceTemplateModal.tsx
+index 1111801..c013a81 100644
+--- a/nscm-fe/features/master/src/pages/sales-future-price/components/modals/SalesPriceTemplateModal.tsx
++++ b/nscm-fe/features/master/src/pages/sales-future-price/components/modals/SalesPriceTemplateModal.tsx
+@@ -11,12 +11,21 @@ interface Props {
+ // 후속 phase 에서 보강 — Sales Price Template (ESS Battery div=81 전용) Excel Form
+ // AS-IS L205, L2581 — btnTemplate.Visible = (div==81)
+ export const SalesPriceTemplateModal = ({ open, modalClose, defaultDivision }: Props) => (
+-  <CustomDialog open={open} onClose={modalClose} title='Sales Price Template (Excel Form)' width={600} height={400}>
+-    <div style={{ padding: 16 }}>
+-      <p>Sales Price Template — ESS Battery (div=81) 전용 Excel Form (Phase 4 MVP — 후속 보강)</p>
+-      <ul>
+-        <li>Division: {defaultDivision}</li>
+-      </ul>
+-    </div>
+-  </CustomDialog>
++  <CustomDialog
++    open={open}
++    handleClose={modalClose}
++    customHeaderTitle='Sales Price Template (Excel Form)'
++    size='medium'
++    type='modal'
++    position='basic'
++    disableButtonCancel
++    customContentArea={
++      <div style={{ padding: 16 }}>
++        <p>Sales Price Template — ESS Battery (div=81) 전용 Excel Form (Phase 4 MVP — 후속 보강)</p>
++        <ul>
++          <li>Division: {defaultDivision}</li>
++        </ul>
++      </div>
++    }
++  />
+ );
+diff --git a/nscm-fe/features/master/src/pages/sales-future-price/components/modals/SalesPriceVersionModal.tsx b/nscm-fe/features/master/src/pages/sales-future-price/components/modals/SalesPriceVersionModal.tsx
+index 5f140ae..52d9430 100644
+--- a/nscm-fe/features/master/src/pages/sales-future-price/components/modals/SalesPriceVersionModal.tsx
++++ b/nscm-fe/features/master/src/pages/sales-future-price/components/modals/SalesPriceVersionModal.tsx
+@@ -132,6 +132,7 @@ export const SalesPriceVersionModal = ({ open, modalClose, defaultDivision, onAp
+   const { data, refetch, isLoading, isFetching } = useTabProcQuery({
+     menuId: MENU_ID,
+     sheetName: SHEETS.VERSION,
++    tabId: MENU_ID,
+     filters,
+     enabled: false, // Find 버튼 trigger
+   });
+@@ -192,7 +193,7 @@ export const SalesPriceVersionModal = ({ open, modalClose, defaultDivision, onAp
+   return (
+     <CustomDialog
+       open={open}
+-      size={1100}
++      size='large'
+       type='modal'
+       position='basic'
+       handleClose={modalClose}
+@@ -218,7 +219,11 @@ export const SalesPriceVersionModal = ({ open, modalClose, defaultDivision, onAp
+                   elevation
+                   size='small'
+                   value={period}
+-                  onChange={(date: [Dayjs, Dayjs]) => setPeriod(date)}
++                  onChange={date => {
++                    if (Array.isArray(date) && date.length === 2) {
++                      setPeriod([date[0] as Dayjs, date[1] as Dayjs]);
++                    }
++                  }}
+                 />
+               </div>
+             </div>
+@@ -266,8 +271,13 @@ export const SalesPriceVersionModal = ({ open, modalClose, defaultDivision, onAp
+                 g.isReadOnly = true;
+                 // SelectionMode.ListBox = 2 — 다중 row 선택 가능 (Ctrl/Shift)
+                 g.selectionMode = 2;
+-                // Double-click 즉시 적용
+-                g.itemDoubleClick.addHandler(() => handleApply());
++                // Double-click 즉시 적용 (wijmo 버전별 itemDoubleClick 가드 + DOM fallback)
++                const dblG = (g as unknown as { itemDoubleClick?: { addHandler?: (fn: () => void) => void } }).itemDoubleClick;
++                if (dblG && typeof dblG.addHandler === 'function') {
++                  dblG.addHandler(() => handleApply());
++                } else if (g.hostElement) {
++                  g.hostElement.addEventListener('dblclick', () => handleApply());
++                }
+               }}
+               itemsSource={rows}
+               autoGenerateColumns={false}

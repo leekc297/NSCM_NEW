@@ -1,0 +1,23 @@
+-- 67. SYS0013 — MNU_BTN_CD 'RETRIEVE' → 'SEARCH' (NSCM 표준, FE 호출 일치)
+-- + 66 의 cursor COL_NM 잘못된 변경 REVERT
+-- 사고: BE FE 호출 = /SYS0013/main/SEARCH/call-proc / DB 등록 = RETRIEVE → MNU_BTN_MPG_M JOIN 0 row → ORA-01403 → -9994
+-- 표준: memory feedback_button_code_consistency_search_vs_retrieve.md (RETRIEVE 금지, SEARCH 의무)
+BEGIN
+  -- REVERT 66 — 잘못된 cursor 표준 변경 복귀 (NSCM 다수 = o_rc1, 63 PROC)
+  UPDATE SCM_ADM_PROC_M SET COL_NM='o_rc1',
+         LAST_UPDATED_BY='admin', LAST_UPDATE_DATE=SYSDATE
+   WHERE PROC_NM LIKE 'PKG_SYS0013.%' AND COL_NM='o_rc';
+
+  -- MNU_BTN_CD: RETRIEVE → SEARCH (4 row in MNU_BTN_MPG_M)
+  UPDATE SCM_ADM_MNU_BTN_MPG_M SET MNU_BTN_CD='SEARCH',
+         LAST_UPDATED_BY='admin', LAST_UPDATE_DATE=SYSDATE
+   WHERE MNU_ID='SYS0013' AND MNU_BTN_CD='RETRIEVE';
+
+  -- USER_GR_MNU_BTN_MPG_M 도 동일 (권한 cascade)
+  UPDATE SCM_ADM_USER_GR_MNU_BTN_MPG_M SET MNU_BTN_CD='SEARCH',
+         LAST_UPDATED_BY='admin', LAST_UPDATE_DATE=SYSDATE
+   WHERE MNU_ID='SYS0013' AND MNU_BTN_CD='RETRIEVE';
+
+  COMMIT;
+END;
+/

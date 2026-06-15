@@ -37,7 +37,7 @@ export const PrModal = ({
   const setToast = useMessageStore.getState().setToast;
   const [saving, setSaving] = useState(false);
 
-  const handleSave = async () => {
+  const handleSave = () => {
     setSaving(true);
     void setToast({ message: 'PR 저장 중...', type: 'default' });
     // SP DMF0003_SAVE_PRPOPUP 호출 (20 IN — Phase 5 보강)
@@ -54,25 +54,21 @@ export const PrModal = ({
   return (
     <CustomDialog
       open={open}
-      onClose={onClose}
-      title={titleByType[popupType] || 'Purchase Request'}
-      width={1100}
-      height={650}
-      buttons={
-        popupType === 'View_PR'
-          ? [{ label: '닫기', onClick: onClose }]
-          : [
-              { label: '저장', onClick: handleSave, disabled: saving },
-              { label: '닫기', onClick: onClose },
-            ]
+      handleClose={onClose}
+      handleSubmit={popupType === 'View_PR' ? undefined : handleSave}
+      customHeaderTitle={titleByType[popupType] || 'Purchase Request'}
+      size={1000}
+      type='modal'
+      position='basic'
+      disableButtonCancel={saving}
+      customContentArea={
+        <div style={{ padding: 16 }}>
+          <div>Request No: {requestNo ?? '신규'}</div>
+          <div>Project: {projectCode ?? '-'} / Item: {itemId ?? '-'}</div>
+          <div>Plan Qty: {planQty ?? 0}</div>
+          {/* Phase 5 보강: form + grid + POPUP_TYPE 분기 */}
+        </div>
       }
-    >
-      <div style={{ padding: 16 }}>
-        <div>Request No: {requestNo ?? '신규'}</div>
-        <div>Project: {projectCode ?? '-'} / Item: {itemId ?? '-'}</div>
-        <div>Plan Qty: {planQty ?? 0}</div>
-        {/* Phase 5 보강: form + grid + POPUP_TYPE 분기 */}
-      </div>
-    </CustomDialog>
+    />
   );
 };

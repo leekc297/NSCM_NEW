@@ -74,6 +74,8 @@ export const AuthApproval = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   const handleSearch = () => {
     setFilter();
+    // ⭐ master hook §2.4 — Search 시 admin SYS0004 메타 refetch
+    void fetchStaticColumns();
   };
 
   const handleApprove = () => {

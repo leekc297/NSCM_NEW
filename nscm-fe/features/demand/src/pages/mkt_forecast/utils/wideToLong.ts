@@ -21,7 +21,7 @@ interface LongOutputRow {
 }
 
 // Bucket key (D_/W_/M_YYYYMMDD) 에서 YYYYMMDD 추출
-function bucketKeyToYyyymmdd(key: string): string {
+const bucketKeyToYyyymmdd = (key: string): string => {
   if (key.startsWith('D_') || key.startsWith('W_')) {
     return key.slice(2);
   }
@@ -29,10 +29,10 @@ function bucketKeyToYyyymmdd(key: string): string {
     return `${key.slice(2)}01`; // M_YYYYMM → YYYYMM01
   }
   return '';
-}
+};
 
 // wide row → long format (cellEditEnded 시 modified bucket cell 만 추출)
-export function wideToLong(row: MktFcstRow): LongOutputRow[] {
+export const wideToLong = (row: MktFcstRow): LongOutputRow[] => {
   const result: LongOutputRow[] = [];
 
   // bucket cell key 추출 (D_/W_/M_YYYYMMDD 형식)
@@ -61,4 +61,4 @@ export function wideToLong(row: MktFcstRow): LongOutputRow[] {
   }
 
   return result;
-}
+};

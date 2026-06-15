@@ -32,6 +32,11 @@
       "@factory/*": ["features/factory/src/pages/*/index.ts"],
       "@shipping/*": ["features/shipping/src/pages/*/index.ts"],
       "@report/*": ["features/report/src/pages/*/index.ts"],
+
+      // 공용 카탈로그 (master/components 안에 있으나 모든 features 가 사용)
+      // - searchFields (DivisionField/TeamField/BizTypeField 등 13종)
+      // - ProjectByDivisionModal / ItemByDivisionModal / OwnerByDivisionModal 등 공용 modal
+      "@master-components/*": ["features/master/src/components/*"],
       "@foundation/*": [
         "packages/foundation/src/*/index.ts",
         "packages/foundation/src/lib/*.ts",

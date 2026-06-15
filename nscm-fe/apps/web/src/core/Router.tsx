@@ -97,10 +97,43 @@ const ForecastPricePageWithTab = LazyLoader(() =>
 const CustomerFcstUploadPageWithTab = LazyLoader(() =>
   import('@demand/customer-fcst-upload').then(m => ({ default: m.CustomerFcstUpload }))
 );
+const SalesMonitoringPageWithTab = LazyLoader(() =>
+  import('@demand/sales-monitoring').then(m => ({ default: m.SalesMonitoring }))
+);
+const SalesPlanPageWithTab = LazyLoader(() =>
+  import('@demand/sales-plan').then(m => ({ default: m.SalesPlan }))
+);
+const MetalLinkPricePageWithTab = LazyLoader(() =>
+  import('@demand/metal-link-price').then(m => ({ default: m.MetalLinkPrice }))
+);
+const MktForecastAutoPageWithTab = LazyLoader(() =>
+  import('@demand/mkt-forecast-auto').then(m => ({ default: m.MktForecastAuto }))
+);
+const FcstPriceMgmtPageWithTab = LazyLoader(() =>
+  import('@demand/fcst-price-mgmt').then(m => ({ default: m.FcstPriceMgmt }))
+);
 
 // @report
 const SalesPlanWaterfallWithTab = LazyLoader(() =>
   import('@report/sales-plan-waterfall').then(m => ({ default: m.SalesPlanWaterfall }))
+);
+const BusinessPlanPageWithTab = LazyLoader(() =>
+  import('@report/business-plan').then(m => ({ default: m.BusinessPlan }))
+);
+const BusinessPlan1PageWithTab = LazyLoader(() =>
+  import('@report/business-plan-1').then(m => ({ default: m.BusinessPlan1 }))
+);
+const BusinessPlan2PageWithTab = LazyLoader(() =>
+  import('@report/business-plan-2').then(m => ({ default: m.BusinessPlan2 }))
+);
+const BusinessPlan3PageWithTab = LazyLoader(() =>
+  import('@report/business-plan-3').then(m => ({ default: m.BusinessPlan3 }))
+);
+const SalesReportsPageWithTab = LazyLoader(() =>
+  import('@report/sales-reports').then(m => ({ default: m.SalesReports }))
+);
+const EtcSalesReportsPageWithTab = LazyLoader(() =>
+  import('@report/etc-sales-reports').then(m => ({ default: m.EtcSalesReports }))
 );
 
 // etc.
@@ -270,10 +303,29 @@ export const router: RemixRouter = createBrowserRouter([
                 path: ROUTE_PATHS.DMF0082,
                 element: <ForecastPricePageWithTab />,
               },
-              // TODO: replace with actual path name
               {
-                path: 'dmf0014',
+                path: ROUTE_PATHS.DMF0048,
+                element: <SalesMonitoringPageWithTab />,
+              },
+              {
+                path: ROUTE_PATHS.DMF0021,
+                element: <SalesPlanPageWithTab />,
+              },
+              {
+                path: ROUTE_PATHS.DMF0014,
                 element: <CustomerFcstUploadPageWithTab />,
+              },
+              {
+                path: ROUTE_PATHS.DMF0074,
+                element: <MetalLinkPricePageWithTab />,
+              },
+              {
+                path: ROUTE_PATHS.DMF0081,
+                element: <MktForecastAutoPageWithTab />,
+              },
+              {
+                path: 'fcst-price-mgmt',
+                element: <FcstPriceMgmtPageWithTab />,
               },
             ],
           },
@@ -288,6 +340,40 @@ export const router: RemixRouter = createBrowserRouter([
               {
                 path: ROUTE_PATHS.DMF0022,
                 element: <SalesPlanWaterfallWithTab />,
+              },
+            ],
+          },
+          {
+            path: ROUTE_PATHS.BIZPLAN,
+            children: [
+              {
+                path: ROUTE_PATHS.DMF0042,
+                element: <BusinessPlanPageWithTab />,
+              },
+              {
+                path: ROUTE_PATHS.DMF0042_1,
+                element: <BusinessPlan1PageWithTab />,
+              },
+              {
+                path: ROUTE_PATHS.DMF0042_2,
+                element: <BusinessPlan2PageWithTab />,
+              },
+              {
+                path: ROUTE_PATHS.DMF0042_3,
+                element: <BusinessPlan3PageWithTab />,
+              },
+            ],
+          },
+          {
+            path: ROUTE_PATHS.SALES_REPORT,
+            children: [
+              {
+                path: ROUTE_PATHS.DMF0044,
+                element: <SalesReportsPageWithTab />,
+              },
+              {
+                path: ROUTE_PATHS.DMF0049,
+                element: <EtcSalesReportsPageWithTab />,
               },
             ],
           },

@@ -56,7 +56,7 @@ export const MktForecastPsiSubGrid = ({
     enabled: !!projectCode && !!itemId,
   });
 
-  const rows: PsiRow[] = (((data as { o_rc1?: PsiRow[] })?.o_rc1 ?? []) as PsiRow[]);
+  const rows: PsiRow[] = (((data as { o_rc1?: PsiRow[] })?.o_rc1 ?? []) as unknown as PsiRow[]);
 
   if (isLoading) {
     return <div style={{ padding: 16, color: '#1976d2' }}>⏳ PSI 분석 데이터 조회 중...</div>;

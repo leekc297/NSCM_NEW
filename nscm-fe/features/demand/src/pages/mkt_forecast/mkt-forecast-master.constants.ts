@@ -30,21 +30,23 @@ export enum SHEETS {
   SSP_SYNC_COMPARE = 'sspSyncCompare',
 }
 
-export enum RESPONSE_SET {
-  MAIN = 'o_rc1',                    // 메인 grid 데이터
-  MAIN_8WEEK = 'o_rc2',              // 8주 이내 bucket 정보 (Div 40)
-  MAIN_CURRENT_WEEK = 'o_rc3',       // 현재 주차 정보 (Div 40)
-  PSI = 'o_rc1',
-  CAR_FCST = 'o_rc1',
-  SPREAD_TITLE = 'o_rc1',
-  SPREAD_TITLE_PSI = 'o_rc1',
-  SPREAD_TITLE_CAR = 'o_rc1',
-  MASTER_CHG = 'o_rc1',
-  PR_POPUP = 'o_rc1',
-  PR_HISTORY = 'o_rc1',
-  SSP_SYNC = 'o_rc1',
-  SSP_SYNC_COMPARE = 'o_rc1',
-}
+// const object — enum 대체 (NSCM 단일 cursor 표준 'o_rc1' 다수 중복 허용)
+export const RESPONSE_SET = {
+  MAIN: 'o_rc1',                    // 메인 grid 데이터
+  MAIN_8WEEK: 'o_rc2',              // 8주 이내 bucket 정보 (Div 40)
+  MAIN_CURRENT_WEEK: 'o_rc3',       // 현재 주차 정보 (Div 40)
+  PSI: 'o_rc1',
+  CAR_FCST: 'o_rc1',
+  SPREAD_TITLE: 'o_rc1',
+  SPREAD_TITLE_PSI: 'o_rc1',
+  SPREAD_TITLE_CAR: 'o_rc1',
+  MASTER_CHG: 'o_rc1',
+  PR_POPUP: 'o_rc1',
+  PR_HISTORY: 'o_rc1',
+  SSP_SYNC: 'o_rc1',
+  SSP_SYNC_COMPARE: 'o_rc1',
+} as const;
+export type RESPONSE_SET = (typeof RESPONSE_SET)[keyof typeof RESPONSE_SET];
 
 // AS-IS Bucket Type (analysis MD §1.4 cboBucketType — DMF0003_GET_BUCKET_TYPE_CODE 동적 lookup):
 //   D : Daily (일별)

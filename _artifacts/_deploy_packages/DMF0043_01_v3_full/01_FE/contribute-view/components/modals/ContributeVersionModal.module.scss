@@ -1,0 +1,144 @@
+// AS-IS DMF0043_VersionPopup — Version 선택 모달 (룰 03 §5 SCSS Module, inline 0)
+
+.dialogContent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 4px 0;
+}
+
+.headerContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.headerDot {
+  width: 12px;
+  height: 12px;
+  background-color: #1976d2;
+  border-radius: 50%;
+}
+
+.headerTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.filterBar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: #f5f7fa;
+  border: 1px solid #e0e4e9;
+  border-radius: 4px;
+  flex-wrap: wrap;
+
+  .field {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .fieldWide {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 360px;
+  }
+
+  .datePickerWrap {
+    min-width: 280px;
+  }
+
+  .fieldLabel {
+    font-size: 13px;
+    color: #2b3a4a;
+    font-weight: 600;
+    min-width: 70px;
+  }
+
+  .input {
+    min-width: 110px;
+    padding: 6px 8px;
+    font-size: 13px;
+    border: 1px solid #b8bfc9;
+    border-radius: 3px;
+    background: white;
+  }
+
+  .select {
+    min-width: 160px;
+    padding: 6px 8px;
+    font-size: 13px;
+    border: 1px solid #b8bfc9;
+    border-radius: 3px;
+    background: white;
+  }
+}
+
+.gridWrapper {
+  height: 320px;
+  border: 1px solid #e0e4e9;
+  border-radius: 4px;
+  overflow: hidden;
+  background: white;
+}
+
+.grid {
+  height: 100%;
+  width: 100%;
+}
+
+.actionBar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 12px 8px;
+  margin-top: 8px;
+  border: 1px solid #e0e4e9;
+  border-radius: 4px;
+  background: #fafbfc;
+  flex-shrink: 0;
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  min-height: 48px;
+}
+
+.actionButton {
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  background: white;
+  color: #2b3a4a;
+  border: 1px solid #b8bfc9;
+  border-radius: 3px;
+  cursor: pointer;
+  min-width: 60px;
+
+  &:hover:not(:disabled) {
+    background: #f0f3f7;
+  }
+
+  &:disabled {
+    background: #f5f7fa;
+    color: #a0a8b0;
+    cursor: not-allowed;
+  }
+
+  &.primary {
+    background: #1976d2;
+    color: white;
+    border-color: #1976d2;
+
+    &:hover:not(:disabled) {
+      background: #1565c0;
+    }
+  }
+}

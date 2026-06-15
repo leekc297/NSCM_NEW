@@ -52,8 +52,8 @@ class HierarchicalMergeManager extends MergeManager {
 
     const sameAcrossKeys = (rowA: number, rowB: number): boolean =>
       mergeColIdx.every(ci => {
-        const a = panel.getCellData(rowA, ci, false);
-        const b = panel.getCellData(rowB, ci, false);
+        const a: unknown = panel.getCellData(rowA, ci, false);
+        const b: unknown = panel.getCellData(rowB, ci, false);
         return a === b;
       });
 
@@ -89,11 +89,12 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
     enabled: !!filters[SHEETS.MAIN],
   });
 
-  const handleSearch = () => { setFilter(); refetch?.(); setInsertedRows([]); };
-
   // Phase B-2: Insert / Delete handler — As-Is .cs L538-602 InsertRow / L275-279 DeleteButton 1:1
   // 신규 행 별도 state 로 관리 (CRUD_TYPE='I'). 저장은 Phase 후속 — SAVE handler 미구현
+  // ⚠️ handleSearch 가 setInsertedRows 사용 → use-before-define 회피 위해 위로 이동
   const [insertedRows, setInsertedRows] = useState<NnRow[]>([]);
+
+  const handleSearch = () => { setFilter(); refetch?.(); setInsertedRows([]); };
 
   const handleInsert = () => {
     // As-Is L538-602: InsertRow 안 DATA_TYPE='SCM' fixed, DIVISION=search div, ACTIVE_YN='Y' default
@@ -138,7 +139,7 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
     // Validation — As-Is L667-896 의 모든 체크
     for (let i = 0; i < dirty.length; i++) {
       const r = dirty[i];
-      const get = (k: string) => String((r as Record<string, unknown>)[k] ?? '');
+      const get = (k: string) => ((r as Record<string, string>)[k] ?? '');
 
       const itemId = get('ITEM_ID');
       const validFrom = get('VALID_START_DATE');
@@ -201,7 +202,7 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
     //   Cust 3개 (UNLOAD/PLANT/CUST_ITEM) 는 빈 값 시 ' ' (공백 1자), 나머지는 ''
     const join = (key: string, blank = '') =>
       dirty.map(r => {
-        const v = String((r as Record<string, unknown>)[key] ?? '');
+        const v = ((r as Record<string, string>)[key] ?? '');
         return v === '' ? blank : v;
       }).join('^');
 
@@ -209,8 +210,8 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
     const mappingOriginal = dirty.map(r => {
       // L918-925: 신규는 MAPPING_ITEM_ID 그대로, 수정은 MAPPING_ITEM_ID_ORIGINAL
       const v = r.CRUD_TYPE === 'I'
-        ? String((r as Record<string, unknown>)['MAPPING_ITEM_ID'] ?? '')
-        : String((r as Record<string, unknown>)['MAPPING_ITEM_ID_ORIGINAL'] ?? '');
+        ? ((r as Record<string, string>)['MAPPING_ITEM_ID'] ?? '')
+        : ((r as Record<string, string>)['MAPPING_ITEM_ID_ORIGINAL'] ?? '');
       return v;
     }).join('^');
 
@@ -395,10 +396,21 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
             });
 
             // Phase B-3: dblClick popup handler — column meta 의 _modalKey 분기
-            g.itemDoubleClick.addHandler((_s, e) => {
-              if (e.panel.cellType !== CellType.Cell) return;
-              dblClickRef.current(g, { row: e.row, col: e.col });
-            });
+            // wijmo 버전별 itemDoubleClick event 가드 + DOM dblclick fallback
+            const dblG = (g as unknown as { itemDoubleClick?: { addHandler?: (fn: (s: unknown, e: { panel: { cellType: CellType }; row: number; col: number }) => void) => void } }).itemDoubleClick;
+            if (dblG && typeof dblG.addHandler === 'function') {
+              dblG.addHandler((_s, e) => {
+                if (e.panel.cellType !== CellType.Cell) return;
+                dblClickRef.current(g, { row: e.row, col: e.col });
+              });
+            } else if (g.hostElement) {
+              g.hostElement.addEventListener('dblclick', () => {
+                const sel = g.selection;
+                if (sel && sel.row >= 0 && sel.col >= 0) {
+                  dblClickRef.current(g, { row: sel.row, col: sel.col });
+                }
+              });
+            }
           }}
           itemsSource={rows}
           autoGenerateColumns={false}

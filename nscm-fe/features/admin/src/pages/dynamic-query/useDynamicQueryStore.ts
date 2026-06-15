@@ -91,10 +91,9 @@ export const useDynamicQueryStore = createPersistedStoreWithTab<
     setSelectedQueryId: id => {
       set(state => {
         state.selectedQueryId = id;
-        // PROC_M COL_NM 매칭: COLUMNS/PARAMETERS SP 는 'dqId' (P_DQ_ID), HISTORY SP 는 'queryId' (P_QUERYID)
         state.filters[SHEETS.COLUMNS] = { dqId: id } as ProcRequest<MENU_ID, SHEETS.COLUMNS>;
         state.filters[SHEETS.PARAMETERS] = { dqId: id } as ProcRequest<MENU_ID, SHEETS.PARAMETERS>;
-        state.filters[SHEETS.HISTORY] = { queryId: id } as ProcRequest<MENU_ID, SHEETS.HISTORY>;
+        state.filters[SHEETS.HISTORY] = { dqId: id } as ProcRequest<MENU_ID, SHEETS.HISTORY>;
       });
     },
     fetchStaticColumns: async () => {
@@ -123,7 +122,7 @@ export const useDynamicQueryStore = createPersistedStoreWithTab<
 
         if (param.data.result?.length > 0) {
           const restored = param.data.result.reduce((acc, curr) => {
-            acc[curr.paramNm] = curr.paramCtn as SearchCondition[typeof curr.paramNm];
+            acc[curr.paramNm] = curr.paramCtn;
             return acc;
           }, {} as Partial<SearchCondition>);
           set(state => {

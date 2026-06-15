@@ -253,6 +253,8 @@ export const AuthRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   const handleSearch = () => {
     void queryClient.invalidateQueries({ queryKey: [tabId] });
+    // ⭐ master hook §2.4 — Search 시 admin SYS0004 메타 refetch
+    void fetchStaticColumns();
   };
 
   const myAuthListButtons = (

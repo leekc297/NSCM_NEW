@@ -30,7 +30,15 @@
 
 ## §1. PRE-DEPLOY 자기 점검 (zip 작성 직전 — 의무)
 
-### §1.1 5-종 인벤토리 작성
+### §1.0 ⭐ 2026-06-15 SYS0013 사고로 추가된 의무 (3건)
+
+| 사고 | 누락 카테고리 | Root Cause |
+|---|---|---|
+| ① `useTabBtnPermissions` Vite resolve 실패 | barrel export 통째 교체 | zip 의 `shared_hooks_index.ts` 가 로컬 export 목록 전체 → 클라우드 측 형제 hook 누락 |
+| ② DIVISION_ID='--' (2글자) mismatch | sentinel 글자 DUMP byte 검증 누락 | 사내 `'-'` (Len=1) → 클라우드 `'--'` (Len=2) 깨짐 |
+| ③ `SCM_ADM_DQ_EXECUTE_HIST` ORA-00942 | SP 참조 테이블 이름 추측 | 실제 이름 `_H` suffix (NSCM 표준), 추측 `HIST` 로 02_DB_DDL 누락 |
+
+### §1.1 6-종 인벤토리 작성
 
 ```
 ☐ FE useTabProcQuery / useProcMutation 의 모든 sheetName 추출?
@@ -52,7 +60,70 @@
 ☐ ALL_SOURCE 의 SP body 모두 03_SP_PKG/ 동봉?
    → DBMS_METADATA.GET_DDL('PROCEDURE', name, 'SCM_MGR') 일괄 추출
    → wrapper / 공용 SP 도 동봉 (비고 표시)
+
+☐ ⭐ SP body 가 참조하는 모든 테이블/시퀀스 02_DB_DDL/ 동봉? (2026-06-15 신설)
+   → grep -oE '(INTO|FROM|UPDATE)\s+(SCM_MGR\.)?(\w+)' 03_SP_PKG/*.sql + 02_DB_DDL/*.sql
+   → grep -oE '\w+\.NEXTVAL' 03_SP_PKG/*.sql + 02_DB_DDL/*.sql
+   → 사내 USER_OBJECTS 에서 실제 이름 확인 (추측 금지 — NSCM 표준: history = `_H` suffix, `HIST` 비표준)
+   → 누락 시 DBMS_METADATA.GET_DDL('TABLE'/'SEQUENCE', ...) 추출 + GRANT/SYNONYM 동봉
 ```
+
+### §1.5 ⭐ barrel re-export 파일 PATCH 안내문 표준 (2026-06-15 신설)
+
+```
+❌ 절대 금지: zip 에 `01_FE/<barrel>_index.ts` 전체 교체용 파일 포함
+   → 클라우드 측 export 목록과 mismatch → 클라우드에 없는 형제 파일 Vite resolve 실패
+
+✅ 의무: `01_FE/<barrel>.PATCH.md` 안내문 파일로 대체
+```
+
+PATCH.md 표준 내용:
+```markdown
+⚠ 이 파일을 통째로 교체하지 마세요.
+
+## 적용 방법
+클라우드 측 `<경로>/index.ts` 파일 끝에 한 줄 추가:
+```ts
+export * from './<신규파일>';
+```
+
+## 동반 파일
+같은 폴더에 `<신규파일>.ts` 신규 파일을 함께 배포 (이 zip 안 `01_FE/<신규파일>.ts`).
+```
+
+### §1.6 ⭐ 데이터 이관 sentinel byte 검증 (2026-06-15 신설)
+
+```sql
+-- 이관 직후 모든 sentinel 컬럼 (DIVISION_ID / USE_YN / VALID_YN / UNIT_TP_CD / MNU_TP_CD) DUMP byte 검증
+SELECT col, DUMP(col, 1016) AS HEX, COUNT(*) AS CNT
+  FROM <table>
+ GROUP BY col
+ ORDER BY 3 DESC;
+-- 기대: 사내 DUMP 와 정확 일치 (Len=1, byte=0x2d 등)
+```
+
+| 사고 패턴 | Fix |
+|---|---|
+| `'-'` (Len=1) → `'--'` (Len=2) 깨짐 | `UPDATE ... SET col='-' WHERE col='--'` |
+| `'Y'` 누락 / `'N'` 누락 | NVL default 검증 |
+
+### §1.7 ⭐ NOT EXISTS INSERT + UPDATE 동반 패턴 (2026-06-15 신설)
+
+이관 패키지 메뉴/메타 SQL 은 NOT EXISTS INSERT 만 하면 **기존 잘못된 row 못 고침**. UPDATE 동반 의무:
+
+```sql
+-- 1. 신규 등록
+INSERT INTO <table> (...) SELECT ... FROM DUAL WHERE NOT EXISTS (...);
+
+-- 2. 기존 row 보정 (표준값 강제)
+UPDATE <table> SET <표준컬럼>='D' WHERE <key>='SYS0013' AND <표준컬럼> <> 'D';
+COMMIT;
+```
+
+대상 컬럼:
+- `SCM_ADM_MNU_M.UNIT_TP_CD` = `'D'` (Division)
+- `SCM_MST_SHEET_COLUMNS.INPUT_TP_CD` = `'IM'` (mandatory insert)
+- 기타 표준값 강제 컬럼
 
 ### §1.2 자동 차단 (1건이라도 ✗ → deploy zip 작성 금지)
 

@@ -54,13 +54,25 @@
 ✓ useProcMutation       → @shared/hooks
 ✓ useTabComboQuery(s)   → @shared/hooks
 ✓ useTabLookupQuery(s)  → @shared/hooks
+✓ useTabCombosMulti     → @shared/hooks            (G2 multi-combo 1 round-trip)
+✓ useTabBtnPermissions  → @shared/hooks            (⭐ 2026-06-15 신규 — Menu Button 권한 동적 fetch)
 ✓ useSaveWithValidation → @shared/hooks
+✓ useSearchConditionPersistence → @shared/hooks
 ✓ useClearAppData       → @shared/hooks
+✓ useBatchMutation      → @shared/hooks
+✓ useConfirmYesNoCancel → @shared/hooks
+✓ useFileTransfer       → @shared/hooks
+✓ usePerfTrace          → @shared/hooks
 
 ✓ useTranslation        → 글로벌 auto-import (import 불필요)
                           또는 import { useTranslation } from '@foundation/i18n'
 ✓ t (직접)               → @foundation/i18n
 ```
+
+⚠ **신규 hook 작성 검토 시** (2026-06-15 사고 후 보강) — master hook 의 명칭만 보고 "미구현" 추측 → 가설 import → vite 폭발 family 차단:
+- **PRE-WRITE 의무**: `nscm-fe/packages/shared/src/hooks/index.ts` 직접 read 로 정확 export 확인
+- **BE endpoint 인벤토리**: 동적 fetch 패턴 작성 시 BE Controller 의 `@(Get|Post|...)Mapping` grep 의무
+- 메모리 `feedback_be_endpoint_inventory_before_hook.md` 참조 — NSCM `/admin/menu/{mnuId}/*` endpoint 패밀리 표
 
 ### 1.3 Store import 경로 확인
 

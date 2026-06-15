@@ -5,7 +5,7 @@ import { useEffect, useRef } from 'react';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { useQueryClient } from '@foundation/query-client';
 import { MainTitle, SubTitle, TabItem, TabWrapper } from '@shared/components';
-import { useProcMutation, useTabProcQuery } from '@shared/hooks';
+import { useProcMutation, useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
 import { useMessageStore } from '@shared/stores';
 
 import { DynamicQueryColumnsGrid } from './components/DynamicQueryColumnsGrid';
@@ -44,6 +44,9 @@ export const DynamicQuery = ({ tabId, title }: PageProps<MENU_ID>) => {
   const setAlert = useMessageStore(s => s.setAlert);
   const setToast = useMessageStore(s => s.setToast);
   const queryClient = useQueryClient();
+
+  // ui-dynamic-property-management §3 — Menu Button 동적 fetch (admin USE_YN + USER_GR 권한)
+  const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
 
   const { data: mainData } = useTabProcQuery<MENU_ID, SHEETS.MAIN>({
     menuId: MENU_ID,
@@ -94,6 +97,8 @@ export const DynamicQuery = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   const handleSearch = () => {
     setFilter();
+    // ⭐ master hook §2.4 — Search 시 admin SYS0004 메타 refetch
+    void fetchStaticColumns();
   };
 
   const { mutate: mutateSave } = useProcMutation<MENU_ID, SHEETS.MAIN>({
@@ -114,7 +119,7 @@ export const DynamicQuery = ({ tabId, title }: PageProps<MENU_ID>) => {
       void setAlert({ type: 'alert', content: 'Query 를 선택하세요' });
       return;
     }
-    mutateSave([{ QUERY_ID: selectedQueryId }] as never[], {
+    mutateSave([{ dqId: selectedQueryId }] as never[], {
       onSuccess: () => {
         void queryClient.invalidateQueries({ queryKey: [tabId] });
         setToast({ type: 'success', message: '저장 완료' });
@@ -127,7 +132,7 @@ export const DynamicQuery = ({ tabId, title }: PageProps<MENU_ID>) => {
       void setAlert({ type: 'alert', content: '실행할 Query 를 선택하세요' });
       return;
     }
-    mutateExecute([{ QUERY_ID: selectedQueryId }] as never[], {
+    mutateExecute([{ dqId: selectedQueryId }] as never[], {
       onSuccess: () => {
         void queryClient.invalidateQueries({ queryKey: [tabId] });
         setToast({ type: 'success', message: '실행 완료' });
@@ -135,9 +140,11 @@ export const DynamicQuery = ({ tabId, title }: PageProps<MENU_ID>) => {
     });
   };
 
+  // ui-dynamic-property-management §3.2 — hasButton 조건부 callback
+  // admin SYS0009 의 USE_YN='N' / USER_GR 미부여 시 자동 숨김
   const hotkeyConfig: HotkeyConfig = {
-    search: handleSearch,
-    save: handleSave,
+    search: hasButton('SEARCH') ? handleSearch : false,
+    save: hasButton('SAVE') ? handleSave : false,
     insert: false,
     delete: false,
     condition: false,
@@ -146,7 +153,9 @@ export const DynamicQuery = ({ tabId, title }: PageProps<MENU_ID>) => {
     upload: false,
   };
 
-  const customButtons = [{ label: 'Execute', action: handleExecute }];
+  const customButtons = hasButton('EXECUTE')
+    ? [{ label: 'Execute', action: handleExecute }]
+    : [];
 
   const mainRows = (mainData?.o_rc1 ?? []) as unknown as QueryRow[];
   const resultRows = (resultData?.o_rc1 ?? []) as unknown as ResultRow[];

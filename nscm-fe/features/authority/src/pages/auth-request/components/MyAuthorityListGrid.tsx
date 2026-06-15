@@ -58,7 +58,6 @@ export const MyAuthorityListGrid = ({
     }
 
     applyRowSelection(grid);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, gridRef, recentlyAddedKeys]);
 
   return (

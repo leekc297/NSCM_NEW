@@ -34,16 +34,18 @@ export const SspSyncCompareModal = ({
   return (
     <CustomDialog
       open={open}
-      onClose={onClose}
-      title='SSP 동기화 상세 비교 (SO / Shipment Result)'
-      width={1200}
-      height={600}
-      buttons={[{ label: '닫기', onClick: onClose }]}
-    >
-      <div style={{ padding: 16 }}>
-        <div>비교 데이터: {rows?.length ?? 0}건</div>
-        {/* Phase 5 보강: SmartColMerge grid */}
-      </div>
-    </CustomDialog>
+      handleClose={onClose}
+      customHeaderTitle='SSP 동기화 상세 비교 (SO / Shipment Result)'
+      size={1200}
+      type='modal'
+      position='basic'
+      disableButtonCancel
+      customContentArea={
+        <div style={{ padding: 16 }}>
+          <div>비교 데이터: {rows?.length ?? 0}건</div>
+          {/* Phase 5 보강: SmartColMerge grid */}
+        </div>
+      }
+    />
   );
 };

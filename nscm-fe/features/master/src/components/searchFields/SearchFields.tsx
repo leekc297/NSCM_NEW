@@ -32,7 +32,8 @@ import { useTranslation } from 'react-i18next';
 
 import { CustomDropdown } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
-import { DatePickerCalendar, FormItem } from '@shared/lges';
+import { Button, DatePickerCalendar, FormItem, InputField } from '@shared/lges';
+import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 
 import { ItemByDivisionModal } from '../itemByDivisionModal/ItemByDivisionModal';
@@ -51,10 +52,6 @@ interface MultiFieldProps {
   onChange: (v: string[]) => void;
   division?: string;       // 종속 필터용
 }
-interface DependentMultiFieldProps extends MultiFieldProps {
-  deptIds?: string[];
-  endCustomers?: string[];
-}
 interface PopupFieldProps {
   value: string[];
   onChange: (v: string[]) => void;
@@ -72,16 +69,44 @@ const useL = () => {
 };
 
 // CustomDropdown options helper — NUMBER→String + DIVISION_ID 필터
+// row type 을 string-keyed 로 강제 (eslint no-base-to-string / restrict-template-expressions 회피)
 const toOptions = (rows: Array<Record<string, unknown>> | undefined, divisionId?: string) => {
-  const arr = rows ?? [];
+  const arr = (rows ?? []) as unknown as Array<Record<string, string>>;
   return [...new Map(
     arr.filter(r => !divisionId || !r.DIVISION_ID || r.DIVISION_ID === divisionId)
-       .map(r => [`${r.DIVISION_ID ?? ''}|${r.CODE ?? ''}`, r]),
+       .map(r => [`${r.DIVISION_ID ?? ''}|${r.CODE ?? ''}`, r] as const),
   ).values()].map(r => ({ label: String(r.NAME ?? r.CODE ?? ''), value: String(r.CODE ?? '') }));
 };
 
 // 'ALL' 기본값 helper — P_COM0006/P_COM0008 SP WHERE 절 `(P_X='ALL' OR ...)` 패턴 대응
 const orAll = (arr?: string[]) => (arr && arr.length > 0 ? arr.join(',') : 'ALL');
+
+// ⭐ 2026-06-12 사용자 요구: 박스 + 우측 별도 조회 버튼 (TextBox 오른쪽 끝 뒤, 높이 정렬)
+//   InputField (박스) 와 Button (별도 조회 버튼) 을 flex 컨테이너로 분리 — endAdornment 안 사용
+//   기존 popupBtnStyle (전체 박스가 button) 은 deprecated
+interface PopupSearchInputProps {
+  value: string;
+  onValueChange: (v: string) => void;
+  onOpenPopup: () => void;
+}
+const popupRowStyle: React.CSSProperties = {
+  display: 'flex', alignItems: 'stretch', gap: 4, width: '100%',
+};
+const PopupSearchInput = ({ value, onValueChange, onOpenPopup }: PopupSearchInputProps) => (
+  <div style={popupRowStyle}>
+    <InputField
+      fullWidth
+      value={value}
+      onChange={e => onValueChange((e.target as HTMLInputElement).value)}
+    />
+    <Button
+      appearance='outlined'
+      priority='normal'
+      iconComponent={<FunctionSearchIcon appearance='lined' />}
+      onClick={onOpenPopup}
+    />
+  </div>
+);
 
 // ====================================================================================
 // 1. DivisionField (필수, size=4, combo=MyDivision)
@@ -213,10 +238,11 @@ export const ProjectField = (props: PopupFieldProps) => {
   return (
     <Grid size={4}>
       <FormItem label={L('LBL00507', 'Project')} labelAlign='right' render={() => (
-        <button type='button' onClick={() => setOpen(true)} style={popupBtnStyle}>
-          <span>{value.length > 0 ? value.join(',') : <span style={{ color: '#9ca3af' }}>&nbsp;</span>}</span>
-          <span style={{ color: '#1976d2' }}>🔍</span>
-        </button>
+        <PopupSearchInput
+          value={value.join(',')}
+          onValueChange={v => onChange(v.split(',').map(s => s.trim()).filter(Boolean))}
+          onOpenPopup={() => setOpen(true)}
+        />
       )} />
       <ProjectByDivisionModal
         open={open}
@@ -233,6 +259,7 @@ export const ProjectField = (props: PopupFieldProps) => {
           projectCode: orAll(projectCodes),
           etc: 'N',
         } as never}
+        callFromCell={false}
       />
     </Grid>
   );
@@ -251,10 +278,11 @@ export const ItemField = (props: ItemFieldProps) => {
   return (
     <Grid size={4}>
       <FormItem label={L('LBL00508', 'Model / Nickname')} labelAlign='right' render={() => (
-        <button type='button' onClick={() => setOpen(true)} style={popupBtnStyle}>
-          <span>{value.length > 0 ? value.join(',') : <span style={{ color: '#9ca3af' }}>&nbsp;</span>}</span>
-          <span style={{ color: '#1976d2' }}>🔍</span>
-        </button>
+        <PopupSearchInput
+          value={value.join(',')}
+          onValueChange={v => onChange(v.split(',').map(s => s.trim()).filter(Boolean))}
+          onOpenPopup={() => setOpen(true)}
+        />
       )} />
       <ItemByDivisionModal
         open={open}
@@ -272,6 +300,7 @@ export const ItemField = (props: ItemFieldProps) => {
           itemId: itemIds && itemIds.length > 0 ? itemIds.join(',') : '',
         } as never}
         headerTitle='Model / Nickname'
+        callFromCell={false}
       />
     </Grid>
   );
@@ -290,10 +319,11 @@ export const OwnerField = (props: OwnerFieldProps) => {
   return (
     <Grid size={4}>
       <FormItem label={L('LBL00510', 'Owner')} labelAlign='right' render={() => (
-        <button type='button' onClick={() => setOpen(true)} style={popupBtnStyle}>
-          <span>{value.length > 0 ? value.join(',') : <span style={{ color: '#9ca3af' }}>&nbsp;</span>}</span>
-          <span style={{ color: '#1976d2' }}>🔍</span>
-        </button>
+        <PopupSearchInput
+          value={value.join(',')}
+          onValueChange={v => onChange(v.split(',').map(s => s.trim()).filter(Boolean))}
+          onOpenPopup={() => setOpen(true)}
+        />
       )} />
       <OwnerByDivisionModal
         open={open}
@@ -391,10 +421,11 @@ export const VersionField = ({ value, onOpenPopup }: VersionFieldProps) => {
   return (
     <Grid size={6}>
       <FormItem label={L('LBL00513', 'Version')} labelAlign='right' required render={() => (
-        <button type='button' onClick={onOpenPopup} style={popupBtnStyle}>
-          <span>{value || 'Current'}</span>
-          <span style={{ color: '#1976d2' }}>🔍</span>
-        </button>
+        <PopupSearchInput
+          value={value || 'Current'}
+          onValueChange={() => { /* Version 은 popup 선택만, 직접 입력 안 함 */ }}
+          onOpenPopup={onOpenPopup}
+        />
       )} />
     </Grid>
   );
@@ -423,11 +454,3 @@ export const SearchOverRangeField = ({ value, onChange }: CheckFieldProps) => {
   );
 };
 
-// ====================================================================================
-// 공통 style (popup button)
-// ====================================================================================
-const popupBtnStyle: React.CSSProperties = {
-  width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-  padding: '6px 8px', border: '1px solid #b8bfc9', borderRadius: 3,
-  background: 'white', cursor: 'pointer', textAlign: 'left',
-};

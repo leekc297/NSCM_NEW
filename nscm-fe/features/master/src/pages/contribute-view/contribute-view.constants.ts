@@ -10,14 +10,16 @@ export enum SHEETS {
   TITLE_SET = 'titleSet',           // AS-IS DM0002_TitleSetForm_Popup — DMF0002_GET_TITLESET_POPUP
 }
 
-export enum RESPONSE_SET {
-  MAIN = 'p_cursor_main',
-  MAIN_TITLE = 'o_rc1',
-  VERSION = 'o_rc1',
-  RATE_POPUP = 'o_rc1',
-  VERSION_POPUP = 'o_rc1',
-  TITLE_SET = 'o_cursor',           // P_DMF0002_GET_TITLESET_POPUP 의 OUT cursor
-}
+// const object — enum 대체 (NSCM 단일 cursor 표준 'o_rc1' 다수 중복 허용)
+export const RESPONSE_SET = {
+  MAIN: 'p_cursor_main',
+  MAIN_TITLE: 'o_rc1',
+  VERSION: 'o_rc1',
+  RATE_POPUP: 'o_rc1',
+  VERSION_POPUP: 'o_rc1',
+  TITLE_SET: 'o_cursor',           // P_DMF0002_GET_TITLESET_POPUP 의 OUT cursor
+} as const;
+export type RESPONSE_SET = (typeof RESPONSE_SET)[keyof typeof RESPONSE_SET];
 
 // AS-IS DMF0043_Contribute_View.cs 의 Validation MSG codes (.cs L287, L335)
 export const VALIDATION_MSG = {

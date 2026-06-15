@@ -188,7 +188,7 @@ const SubTitleComp = ({
                     size='small'
                     buttonLabel='Search(F5)'
                     onClick={searchAction}
-                    iconComponent={<FunctionSearchIcon />}
+                    iconComponent={<FunctionSearchIcon appearance='lined' iconSize={20} />}
                   />
                 </div>
               </Tooltip>

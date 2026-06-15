@@ -31,12 +31,12 @@ interface Props {
 const NO_MERGE_KEYS = new Set(['MEASURE', 'YYYYMMDD', 'QTY', 'EDIT_FLAG']);
 const COL_META: Map<string, MainColumnMeta> = new Map(MAIN_COLUMNS.map(c => [c.key, c]));
 
-function getDynKey(binding: string): { kind: 'D' | 'W' | 'M' | ''; ym: string; wk: string } {
+const getDynKey = (binding: string): { kind: 'D' | 'W' | 'M' | ''; ym: string; wk: string } => {
   if (binding.startsWith('D_') && binding.length === 10) return { kind: 'D', ym: `${binding.slice(2, 6)}-${binding.slice(6, 8)}`, wk: binding.slice(8, 10) };
   if (binding.startsWith('W_') && binding.length === 10) return { kind: 'W', ym: `${binding.slice(2, 6)}-${binding.slice(6, 8)}`, wk: binding.slice(8, 10) };
   if (binding.startsWith('M_') && binding.length === 8)  return { kind: 'M', ym: `${binding.slice(2, 6)}-${binding.slice(6, 8)}`, wk: '' };
   return { kind: '', ym: '', wk: '' };
-}
+};
 
 // 자매 DMF0020 SalesFuturePriceFlexGrid 정확 동등 패턴 (사용자 명시 요구 2026-06-07):
 //   - JSX <FlexGridColumn> 으로 columns 평면 정의 (imperative columnLayout JSON 폐기)
@@ -58,6 +58,9 @@ export const MktForecastMasterGrid = ({
     searchCondition ?? ({ divisionId, bucketType: 'W', startYyyymmdd: '', endYyyymmdd: '' } as never),
   );
 
+  // FlexGrid instance ref — beginningEdit/mouseDoubleClick 등 cell handler 가 panel 접근에 사용 (use-before-define 방지)
+  const gridInstanceRef = useRef<FlexGridType<MktFcstRow> | null>(null);
+
   const collectionView = useMemo(() => new CollectionView(rows), [rows]);
 
   const fixedColumns = useMemo(
@@ -76,7 +79,7 @@ export const MktForecastMasterGrid = ({
         const binding = col.binding ?? '';
 
         if (panel.cellType === CellType.Cell && fixedBindings.includes(binding) && !NO_MERGE_KEYS.has(binding)) {
-          const view = panel.rows as unknown as { length: number; [n: number]: { dataItem?: Record<string, unknown> } };
+          const view = panel.rows as unknown as { length: number; [n: number]: { dataItem?: Record<string, string> } };
           const cur = view[r]?.dataItem;
           if (!cur) return null;
           if (String(cur.EDIT_FLAG ?? '') === 'I') return null;
@@ -173,7 +176,7 @@ export const MktForecastMasterGrid = ({
     }
 
     if (e.panel.cellType !== CellType.Cell) return;
-    const item = (e.panel.rows[e.row] as unknown as { dataItem?: Record<string, unknown> })?.dataItem;
+    const item = (e.panel.rows[e.row] as unknown as { dataItem?: Record<string, string> })?.dataItem;
     const isNewRow = String(item?.EDIT_FLAG ?? '') === 'I';
 
     // dynamic cell coloring (D_/W_/M_)
@@ -206,7 +209,7 @@ export const MktForecastMasterGrid = ({
     const binding = col?.binding ?? '';
     const meta = COL_META.get(binding);
     if (!meta) return;
-    const item = (panel.rows[e.row] as unknown as { dataItem?: Record<string, unknown> })?.dataItem;
+    const item = (panel.rows[e.row] as unknown as { dataItem?: Record<string, string> })?.dataItem;
     const isNewRow = String(item?.EDIT_FLAG ?? '') === 'I';
     const isInputType = meta._inputEditType === 'IM' || meta._inputEditType === 'IO';
     if (!isNewRow || !isInputType) {
@@ -225,12 +228,9 @@ export const MktForecastMasterGrid = ({
     if (!meta || meta._ctrlType !== 'FPModal' || !meta._modalKey) return;
     const item = g.rows[ht.row]?.dataItem;
     if (!item) return;
-    if (String((item as Record<string, unknown>).EDIT_FLAG ?? '') !== 'I') return;
+    if (((item as Record<string, string>).EDIT_FLAG ?? '') !== 'I') return;
     onPopupCellDblClick(item as MktFcstRow, meta._modalKey, binding);
   };
-
-  // FlexGrid instance ref
-  const gridInstanceRef = useRef<FlexGridType<MktFcstRow> | null>(null);
 
   // DataMap memoize — 자매 DMF0020 정확 동등 패턴
   const dataMaps = useMemo<Record<string, DataMap | null>>(() => {

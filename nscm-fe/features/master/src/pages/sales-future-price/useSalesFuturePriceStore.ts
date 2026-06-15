@@ -1,3 +1,5 @@
+import { apiClient } from '@foundation/apis';
+import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { createPersistedStoreWithTab } from '@shared/stores';
 
 import { BUCKET_TYPE, DIVISION, MENU_ID, SHEETS } from './sales-future-price.constants';
@@ -8,12 +10,25 @@ type FiltersBySheet = {
   [SHEETS.MAIN]?: ProcRequest<MENU_ID, SHEETS.MAIN>;
 };
 
+// SCM_MST_SHEET_MEASURE 동적 fetch row 형태
+export interface MeasureMeta {
+  COLUMN_NAME: string;
+  COLUMN_LABEL_NAME?: string;
+  SORT_ORDER_NO?: number;
+  VALID_YN?: string;
+}
+
+type StaticColumnsBySheet = { [key in SHEETS]: RawFlexGridColumnConfig[] };
+type StaticMeasuresBySheet = { [key in SHEETS]: MeasureMeta[] };
+
 interface State {
   initialized: boolean;
   filters: FiltersBySheet;
   searchCondition: SearchCondition;
   openSearchArea: boolean;
-  activeTab: 'main' | 'pivot';   // Tab1 메인 그리드 / Tab2 PivotGrid
+  activeTab: 'main' | 'pivot';
+  staticColumns: StaticColumnsBySheet;
+  staticMeasures: StaticMeasuresBySheet;
 }
 
 interface Action {
@@ -22,13 +37,10 @@ interface Action {
   setFilter: () => void;
   setOpenSearchArea: (open?: boolean) => void;
   setActiveTab: (tab: 'main' | 'pivot') => void;
+  fetchStaticColumns: () => Promise<void>;
+  fetchStaticMeasures: () => Promise<void>;
 }
 
-// 기본값 (AS-IS Form_Load 동작):
-//   Division : 40 (Mobility & IT Battery)
-//   Period   : 오늘 ~ 90일 후 (PR_GET_DAY_RANGE)
-//   Bucket   : W (Weekly)
-//   Version  : CURRENT
 const yyyymmdd = (d: Date) => d.toISOString().slice(0, 10).replace(/-/g, '');
 const today = yyyymmdd(new Date());
 const ninetyDaysAhead = yyyymmdd(new Date(Date.now() + 90 * 24 * 3600 * 1000));
@@ -52,12 +64,24 @@ const initSearch: SearchCondition = {
   versionId: 'CURRENT',
 };
 
+const emptyCols: StaticColumnsBySheet = Object.values(SHEETS).reduce((acc, k) => {
+  (acc as Record<string, RawFlexGridColumnConfig[]>)[k] = [];
+  return acc;
+}, {} as StaticColumnsBySheet);
+
+const emptyMeasures: StaticMeasuresBySheet = Object.values(SHEETS).reduce((acc, k) => {
+  (acc as Record<string, MeasureMeta[]>)[k] = [];
+  return acc;
+}, {} as StaticMeasuresBySheet);
+
 const initState: State = {
   initialized: false,
   filters: {},
   searchCondition: initSearch,
   openSearchArea: true,
   activeTab: 'main',
+  staticColumns: emptyCols,
+  staticMeasures: emptyMeasures,
 };
 
 export const useSalesFuturePriceStore = createPersistedStoreWithTab<State & Action>(
@@ -67,8 +91,6 @@ export const useSalesFuturePriceStore = createPersistedStoreWithTab<State & Acti
     setSearchCondition: p => set(state => {
       state.searchCondition = { ...get().searchCondition, ...p };
     }),
-    // SP P_DMF0020_GET_SCM_MST_FUTURE_PRICE_M — 17 IN (sesUserId/mnuId BE 자동 채움)
-    //   multi-value 항목은 ^ 구분 join (deptIds/endCustomers/...), 비어있으면 'ALL'
     setFilter: () => set(state => {
       const c = state.searchCondition;
       const j = (arr: string[]): string => (arr.length === 0 ? 'ALL' : arr.join('^'));
@@ -96,6 +118,43 @@ export const useSalesFuturePriceStore = createPersistedStoreWithTab<State & Acti
       state.openSearchArea = open ?? !state.openSearchArea;
     }),
     setActiveTab: tab => set(state => { state.activeTab = tab; }),
+
+    // ⭐ master hook §2.3 "UI 생성의 동적 속성관리" — Column 동적 fetch
+    //   SCM_MST_SHEET_COLUMNS 의 admin 변경 즉시 반영 (mount + Search 시 호출)
+    fetchStaticColumns: async () => {
+      try {
+        const sheets: SHEETS[] = [SHEETS.MAIN];
+        const responses = await Promise.all(
+          sheets.map(sheetNm =>
+            apiClient.post<RawFlexGridColumnConfig[]>(`/admin/menu/${MENU_ID}/column`, { sheetNm }),
+          ),
+        );
+        set(state => {
+          sheets.forEach((s, i) => { state.staticColumns[s] = responses[i].data.result ?? []; });
+        });
+      } catch (e) {
+        // BE 메타 미등록 시 화면이 안 깨지도록 fallback — 기존 MAIN_COLUMNS 하드코딩 유지
+        // (master hook §8.3 anti-pattern 5.4 회피)
+        console.warn('[DMF0020] fetchStaticColumns failed', e);
+      }
+    },
+
+    // ⭐ master hook §5 — Measure 동적 fetch (PIVOT 화면 의무)
+    fetchStaticMeasures: async () => {
+      try {
+        const sheets: SHEETS[] = [SHEETS.MAIN];
+        const responses = await Promise.all(
+          sheets.map(sheetNm =>
+            apiClient.post<MeasureMeta[]>(`/admin/menu/${MENU_ID}/measure`, { sheetNm }),
+          ),
+        );
+        set(state => {
+          sheets.forEach((s, i) => { state.staticMeasures[s] = responses[i].data.result ?? []; });
+        });
+      } catch (e) {
+        console.warn('[DMF0020] fetchStaticMeasures failed', e);
+      }
+    },
   }),
   'sales-future-price',
 );

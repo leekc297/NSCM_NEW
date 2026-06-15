@@ -36,6 +36,7 @@ export const SearchBar = ({ onSearch, onOpenVersionPopup }: Props) => {
   const { data: yearData, isLoading: yearLoading } = useTabProcQuery({
     menuId: MENU_ID,
     sheetName: SHEETS.VERSION,
+    tabId: MENU_ID,
     filters: {},
     enabled: true,
   });
@@ -43,7 +44,7 @@ export const SearchBar = ({ onSearch, onOpenVersionPopup }: Props) => {
   const [yearOptions, setYearOptions] = useState<VersionOption[]>([]);
 
   useEffect(() => {
-    const rows = (yearData?.o_rc1 ?? []) as VersionOption[];
+    const rows = (yearData?.o_rc1 ?? []) as unknown as VersionOption[];
     setYearOptions(rows);
     // AS-IS InitControls — 첫 옵션 자동 선택
     if (rows.length > 0 && !searchCondition.verSeq) {

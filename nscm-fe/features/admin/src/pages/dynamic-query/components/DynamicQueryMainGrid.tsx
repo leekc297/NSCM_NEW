@@ -19,8 +19,12 @@ export const DynamicQueryMainGrid = ({ gridRef, gridFilterRef, data }: Props) =>
   const staticColumns = useDynamicQueryStore(s => s.staticColumns[SHEETS.MAIN]);
 
   const handleSelectionChanged = (g: FlexGrid<QueryRow>) => {
-    const row = g.selectedItems[0];
-    if (row) setSelectedQueryId(String(row.QUERY_ID));
+    const row = g.selectedItems[0] as (QueryRow & { DQ_ID?: string }) | undefined;
+    // SP 반환은 DQ_ID (실 DB), SHEET_COLUMNS alias 가 QUERY_ID — 둘 다 fallback
+    const dqId = row?.DQ_ID ?? row?.QUERY_ID;
+    if (dqId !== undefined && dqId !== null && dqId !== '') {
+      setSelectedQueryId(String(dqId));
+    }
   };
 
   return (

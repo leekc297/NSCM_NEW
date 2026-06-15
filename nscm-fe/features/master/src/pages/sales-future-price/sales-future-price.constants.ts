@@ -9,8 +9,8 @@ export type MENU_ID = typeof MENU_ID;
 export enum SHEETS {
   MAIN = 'main',           // 메인 그리드 — wide format (동적 W_/M_ 컬럼)
   PIVOT = 'pivot',         // Tab2 — Wijmo PivotEngine 클라이언트 측 long format
-  EXCHANGE = 'exchange',   // ExchangeRate POPUP
-  PRICE_BATCH = 'priceBatch', // Price 일괄입력 POPUP
+  EXCHANGE = 'exchange',       // ExchangeRate POPUP — 클라우드 procedures.d.ts 유니온 정렬 (2026-06-12)
+  PRICE_BATCH = 'priceBatch',  // Price 일괄입력 POPUP — 클라우드 procedures.d.ts 유니온 정렬 (2026-06-12)
   VERSION = 'version',     // Version 선택 POPUP
   TITLE_SET = 'titleSet',  // Grid Column Setting POPUP
   OWNER = 'owner',         // Owner POPUP
@@ -19,18 +19,20 @@ export enum SHEETS {
   MEASURE_COUNT = 'measureCount',   // Item 별 Measure 개수 (RowSpan)
 }
 
-export enum RESPONSE_SET {
-  MAIN = 'o_rc1',
-  PIVOT = 'o_rc1',
-  EXCHANGE = 'o_rc1',
-  PRICE_BATCH = 'o_rc1',
-  VERSION = 'o_rc1',
-  TITLE_SET = 'o_rc1',
-  OWNER = 'o_rc1',
-  SPREAD_TITLE = 'o_rc1',
-  SPREAD_TITLE_DATE = 'o_rc1',
-  MEASURE_COUNT = 'o_rc1',
-}
+// const object — enum 대체 (NSCM 단일 cursor 표준 'o_rc1' 다수 중복 허용)
+export const RESPONSE_SET = {
+  MAIN: 'o_rc1',
+  PIVOT: 'o_rc1',
+  EXCHANGE: 'o_rc1',
+  PRICE_BATCH: 'o_rc1',
+  VERSION: 'o_rc1',
+  TITLE_SET: 'o_rc1',
+  OWNER: 'o_rc1',
+  SPREAD_TITLE: 'o_rc1',
+  SPREAD_TITLE_DATE: 'o_rc1',
+  MEASURE_COUNT: 'o_rc1',
+} as const;
+export type RESPONSE_SET = (typeof RESPONSE_SET)[keyof typeof RESPONSE_SET];
 
 // Bucket Type — AS-IS .cs L3823 cboBucketType_Click + Designer cboBucketType (Weekly / Monthly)
 export enum BUCKET_TYPE {

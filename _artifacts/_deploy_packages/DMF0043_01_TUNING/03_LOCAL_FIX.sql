@@ -1,0 +1,95 @@
+-- =====================================================================
+-- 03_LOCAL_FIX.sql
+--
+-- Phase B-1 (로컬 Docker 전용):
+--   FIX 3: helper SP P_DMF0043_INIT_TITLESET_USER (AUTONOMOUS_TRANSACTION + NOT EXISTS + COMMIT)
+--   FIX 2': stats gather (DEGREE=1 — Docker XE/Standard 안전치)
+--
+-- ⚠️ 본 script 는 로컬 (localhost:1521/FREEPDB1) 전용. cloud (FP_MGR 인덱스 포함) 은 03_CLOUD_FIX.sql.
+--
+-- 실행: sqlplus scm_mgr/PASS@//localhost:1521/FREEPDB1 @03_LOCAL_FIX.sql
+-- =====================================================================
+SET DEFINE OFF
+SET SERVEROUTPUT ON SIZE UNLIMITED
+SET LINESIZE 250
+SET FEEDBACK ON
+WHENEVER SQLERROR EXIT FAILURE
+
+PROMPT === [B-1.1] helper SP P_DMF0043_INIT_TITLESET_USER ===
+-- FIX 3: 본 SP body L113~144 (dead-code IF 1=0 안) 의 INSERT block 을 별도 helper 로 분리.
+-- 본 SP body 안에서는 dead-code 유지 (외부 호출 안 함) — helper 는 FE 첫 진입 시 명시 호출 가능.
+-- AUTONOMOUS_TRANSACTION 으로 outer transaction lock 회피.
+CREATE OR REPLACE PROCEDURE SCM_MGR.P_DMF0043_INIT_TITLESET_USER (
+  p_user_id     IN VARCHAR2,
+  p_program_id  IN VARCHAR2,
+  p_sheet_name  IN VARCHAR2
+) AS
+  PRAGMA AUTONOMOUS_TRANSACTION;
+BEGIN
+  INSERT INTO SCM_MGR.SCM_MST_TITLESET_USER
+    ( USER_ID, PROGRAM_ID, SHEET_NAME, USER_INQUIRY_COLUMN_TYPE_CODE, COLUMN_NAME,
+      SORT_ORDER_NO, SUB_TOTAL_FLAG, DATA_SORT_METHOD_CODE,
+      CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE )
+  SELECT p_user_id, C.PROGRAM_ID, C.SHEET_NAME, 'C', C.COLUMN_NAME,
+         C.SORT_ORDER_NO, 'N', NULL, p_user_id, SYSDATE, p_user_id, SYSDATE
+    FROM SCM_MGR.SCM_MST_SHEET_COLUMNS C
+   WHERE C.PROGRAM_ID  = p_program_id
+     AND C.SHEET_NAME  = p_sheet_name
+     AND C.DEFAULT_FLAG = 'Y'
+     AND C.VALID_YN     = 'Y'
+     AND NOT EXISTS (
+       SELECT 1 FROM SCM_MGR.SCM_MST_TITLESET_USER U
+        WHERE U.USER_ID = p_user_id
+          AND U.PROGRAM_ID = C.PROGRAM_ID
+          AND U.SHEET_NAME = C.SHEET_NAME
+          AND U.USER_INQUIRY_COLUMN_TYPE_CODE = 'C'
+          AND U.COLUMN_NAME = C.COLUMN_NAME
+     );
+  COMMIT;
+EXCEPTION
+  WHEN DUP_VAL_ON_INDEX THEN ROLLBACK;
+  WHEN OTHERS THEN
+    ROLLBACK;
+    DBMS_OUTPUT.PUT_LINE('[helper] ' || SQLERRM);
+    RAISE;
+END P_DMF0043_INIT_TITLESET_USER;
+/
+SHOW ERRORS
+
+PROMPT === [B-1.2] STATUS 검증 ===
+SELECT OBJECT_NAME, STATUS
+  FROM ALL_OBJECTS
+ WHERE OWNER='SCM_MGR' AND OBJECT_NAME='P_DMF0043_INIT_TITLESET_USER';
+
+PROMPT === [B-1.3] stats gather (로컬 DEGREE=1 — Docker 안전치) ===
+-- FIX 2': cloud 의 DEGREE=4 를 로컬은 DEGREE=1. FP_MGR.SCM_ITEM_M 은 로컬 미존재 — skip.
+DECLARE
+  v_exists NUMBER;
+BEGIN
+  FOR rec IN (
+    SELECT 'SCM_MST_SITE_ITEM' AS tn FROM DUAL UNION ALL
+    SELECT 'SCM_MST_SHEET_COLUMNS' FROM DUAL UNION ALL
+    SELECT 'SCM_MST_TITLESET_USER' FROM DUAL UNION ALL
+    SELECT 'DM_MST_CONTRIBUTE_RATIO_MST' FROM DUAL UNION ALL
+    SELECT 'DM_MST_CONTRIBUTE_RATIO_DTL' FROM DUAL UNION ALL
+    SELECT 'GT_DMF0043_SALES_LIST_C' FROM DUAL
+  ) LOOP
+    SELECT COUNT(*) INTO v_exists FROM USER_TABLES WHERE TABLE_NAME = rec.tn;
+    IF v_exists > 0 THEN
+      BEGIN
+        DBMS_STATS.GATHER_TABLE_STATS('SCM_MGR', rec.tn, CASCADE => TRUE, DEGREE => 1);
+        DBMS_OUTPUT.PUT_LINE('[stats] ' || rec.tn || ' OK');
+      EXCEPTION
+        WHEN OTHERS THEN DBMS_OUTPUT.PUT_LINE('[stats] ' || rec.tn || ' SKIP: ' || SUBSTR(SQLERRM,1,100));
+      END;
+    ELSE
+      DBMS_OUTPUT.PUT_LINE('[stats] ' || rec.tn || ' 미존재 — skip');
+    END IF;
+  END LOOP;
+END;
+/
+
+PROMPT === LOCAL FIX 완료 ===
+PROMPT - helper SP: SCM_MGR.P_DMF0043_INIT_TITLESET_USER
+PROMPT - stats: 로컬 존재 테이블 DEGREE=1 gather
+PROMPT - 다음: 04_BODY_PATCH.sql (SP body 본 변경)

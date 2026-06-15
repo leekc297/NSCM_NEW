@@ -1,5 +1,5 @@
-import { FlexGrid, FlexGridColumn } from '@mescius/wijmo.react.grid';
 import type { FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
+import { FlexGrid, FlexGridColumn } from '@mescius/wijmo.react.grid';
 import dayjs, { type Dayjs } from 'dayjs';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
@@ -132,6 +132,7 @@ export const SalesPriceVersionModal = ({ open, modalClose, defaultDivision, onAp
   const { data, refetch, isLoading, isFetching } = useTabProcQuery({
     menuId: MENU_ID,
     sheetName: SHEETS.VERSION,
+    tabId: MENU_ID,
     filters,
     enabled: false, // Find 버튼 trigger
   });
@@ -192,7 +193,7 @@ export const SalesPriceVersionModal = ({ open, modalClose, defaultDivision, onAp
   return (
     <CustomDialog
       open={open}
-      size={1100}
+      size={1200}
       type='modal'
       position='basic'
       handleClose={modalClose}
@@ -218,7 +219,11 @@ export const SalesPriceVersionModal = ({ open, modalClose, defaultDivision, onAp
                   elevation
                   size='small'
                   value={period}
-                  onChange={(date: [Dayjs, Dayjs]) => setPeriod(date)}
+                  onChange={date => {
+                    if (Array.isArray(date) && date.length === 2) {
+                      setPeriod([date[0] as Dayjs, date[1] as Dayjs]);
+                    }
+                  }}
                 />
               </div>
             </div>
@@ -266,8 +271,13 @@ export const SalesPriceVersionModal = ({ open, modalClose, defaultDivision, onAp
                 g.isReadOnly = true;
                 // SelectionMode.ListBox = 2 — 다중 row 선택 가능 (Ctrl/Shift)
                 g.selectionMode = 2;
-                // Double-click 즉시 적용
-                g.itemDoubleClick.addHandler(() => handleApply());
+                // Double-click 즉시 적용 (wijmo 버전별 itemDoubleClick 가드 + DOM fallback)
+                const dblG = (g as unknown as { itemDoubleClick?: { addHandler?: (fn: () => void) => void } }).itemDoubleClick;
+                if (dblG && typeof dblG.addHandler === 'function') {
+                  dblG.addHandler(() => handleApply());
+                } else if (g.hostElement) {
+                  g.hostElement.addEventListener('dblclick', () => handleApply());
+                }
               }}
               itemsSource={rows}
               autoGenerateColumns={false}

@@ -1274,8 +1274,9 @@ interface RawProcedureMap extends Base {
    * Master - Customer FCST Master
    *
    * - `customerFcst`: MEASURE_GROUP='CUST_FCST' 데이터 (PKG_DMF0007.P_DMF0007_GET_CUST_FCST_DATA)
-   * - `customerPSI` : MEASURE_GROUP='PSI' 데이터 (PKG_DMF0007.P_DMF0007_GET_CUST_PSI_DATA)
-   *   저장 SP 는 두 시트 공용 (PKG_DMF0007.P_DMF0007_SAVE_CUST_FCST_DATA).
+   *   저장 SP: PKG_DMF0007.P_DMF0007_SAVE_CUST_FCST_DATA
+   *
+   * 2026-06-15: customerPSI / customerPsiPivot 시트 제거 (사용자 요건 반영).
    */
   DMF0007: {
     customerFcst: {
@@ -1305,73 +1306,6 @@ interface RawProcedureMap extends Base {
           UPLOAD_ORDER: string;
           EDIT_FLAG: string;
           [key: string]: string;
-        };
-      };
-    };
-    customerPSI: {
-      request: {
-        planWeek: string;
-        divisionId: string;
-        endCustomer: string;
-        scmSiteId: string;
-        bucketType: string;
-        validYn: string;
-        userId: string;
-      };
-      response: {
-        o_rc1: {
-          PLAN_WEEK: string;
-          DIVISION_ID: string;
-          DEPT_ID: string;
-          CUSTOMER_CODE: string;
-          SCM_SITE_ID: string;
-          SUMMARY_BUCKET_TYPE: string;
-          MEASURE_GROUP: string;
-          MEASURE: string;
-          EDI_FCST_YN: string;
-          CUSTOMER_PSI: string;
-          UPLOAD_UOM: string;
-          UPLOAD_BUCKET_TYPE: string;
-          VALID_YN: string;
-          UPLOAD_ORDER: string;
-          EDIT_FLAG: string;
-          [key: string]: string;
-        };
-      };
-    };
-    /**
-     * customerPsiPivot — Wijmo PivotGrid 입력용 long-format raw rows.
-     * SP `P_DMF0007_GET_CUST_PSI_PIVOT_DATA` 반환.
-     */
-    customerPsiPivot: {
-      request: {
-        planWeek: string;
-        divisionId: string;
-        endCustomer: string;
-        scmSiteId: string;
-        bucketType: string;
-        validYn: string;
-        userId: string;
-      };
-      response: {
-        o_rc1: {
-          PLAN_WEEK: string;
-          DIVISION_ID: string;
-          CUSTOMER_CODE: string;
-          SCM_SITE_ID: string;
-          SUMMARY_BUCKET_TYPE: string;
-          SUMMARY_BUCKET_VALUE: string;
-          SUMMARY_BUCKET_YN: string;
-          MEASURE_GROUP: string;
-          MEASURE: string;
-          EDI_FCST_YN: string;
-          CUSTOMER_PSI: string;
-          UPLOAD_UOM: string;
-          UPLOAD_BUCKET_TYPE: string;
-          VALID_YN: string;
-          LAST_UPDATED_BY: string;
-          LAST_UPDATE_DATE: string;
-          EDIT_YN: string;
         };
       };
     };
@@ -1511,8 +1445,10 @@ interface RawProcedureMap extends Base {
     summary: {
       request: {
         divisionId: string;
-        sesUserId: string;
-        menuId: string;
+        fromYyyymmdd?: string;
+        toYyyymmdd?: string;
+        sesUserId?: string;
+        menuId?: string;
       };
       response: {
         o_rc1: {
@@ -1530,8 +1466,10 @@ interface RawProcedureMap extends Base {
         divisionId: string;
         senderName: string;
         flag: string;
-        sesUserId: string;
-        menuId: string;
+        fromYyyymmdd?: string;
+        toYyyymmdd?: string;
+        sesUserId?: string;
+        menuId?: string;
       };
       response: {
         o_rc1: {
@@ -1567,8 +1505,8 @@ interface RawProcedureMap extends Base {
         soldTo: string;
         shipTo: string;
         scmSiteId: string;
-        sesUserId: string;
-        menuId: string;
+        sesUserId?: string;
+        menuId?: string;
       };
       response: {
         o_rc1: {
@@ -1599,6 +1537,10 @@ interface RawProcedureMap extends Base {
           TEAM_EDIT_FLAG: string;
           [key: string]: string;
         };
+        // BE 가 O_RESULT_CURSOR alias 로도 반환 가능 (룰 21 §10.3 dual cursor 패턴)
+        O_RESULT_CURSOR?: {
+          [key: string]: string;
+        };
       };
     };
     sspm: {
@@ -1606,8 +1548,8 @@ interface RawProcedureMap extends Base {
         divisionId: string;
         itemId: string;
         scmSiteId: string;
-        sesUserId: string;
-        menuId: string;
+        sesUserId?: string;
+        menuId?: string;
       };
       response: {
         o_rc1: {
@@ -1691,8 +1633,8 @@ interface RawProcedureMap extends Base {
         divisionId: string;
         startYyyymmdd: string;
         endYyyymmdd: string;
-        sesUserId: string;
-        menuId: string;
+        sesUserId?: string;
+        menuId?: string;
       };
       response: {
         o_rc1: {
@@ -1704,14 +1646,50 @@ interface RawProcedureMap extends Base {
     };
     updateHistory: {
       request: {
-        sesUserId: string;
-        menuId: string;
+        sesUserId?: string;
+        menuId?: string;
       };
       response: {
         o_rc1: {
           SDATE: string;
           EDATE: string;
           UPDATED_BY: string;
+          [key: string]: string;
+        };
+      };
+    };
+    // 'main' = ErpEdiMaster SUMMARY sheet (SHEETS.MAIN='main' enum 과 일치, BE: PKG_DMF0008.P_DMF0008_GET_EDI_MST_SUMMARY)
+    main: {
+      request: {
+        divisionId: string;
+        fromYyyymmdd?: string;
+        toYyyymmdd?: string;
+        sesUserId?: string;
+        menuId?: string;
+      };
+      response: {
+        o_rc1: {
+          DIVISION_ID: string;
+          EDI_SENDER_NAME: string;
+          GSCM_MASTER_DATA: string;
+          SUCCESS: string;
+          EXCEPTION_DATA: string;
+          CNT: string;
+          EDIT_YN: string;
+          [key: string]: string;
+        };
+      };
+    };
+    // 'division' = ErpEdiMasterForm Division lookup (BE: PKG_DMF0008.P_DMF0008_GET_MY_DIVISION_LIST 또는 redirect)
+    division: {
+      request: {
+        sesUserId?: string;
+        menuId?: string;
+      };
+      response: {
+        o_rc1: {
+          CODE: string;
+          NAME: string;
           [key: string]: string;
         };
       };

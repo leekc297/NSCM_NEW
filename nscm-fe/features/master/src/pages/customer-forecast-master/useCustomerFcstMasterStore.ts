@@ -17,7 +17,6 @@ interface SearchParamProps {
 
 type FiltersBySheet = {
   [SHEETS.CUSTOMER_FCST]?: ProcRequest<MENU_ID, SHEETS.CUSTOMER_FCST>;
-  [SHEETS.CUSTOMER_PSI]?: ProcRequest<MENU_ID, SHEETS.CUSTOMER_PSI>;
 };
 
 interface CustomerFcstMasterState {
@@ -26,7 +25,6 @@ interface CustomerFcstMasterState {
   searchParams: SearchParamProps;
   staticColumns: {
     [SHEETS.CUSTOMER_FCST]: RawFlexGridColumnConfig[];
-    [SHEETS.CUSTOMER_PSI]: RawFlexGridColumnConfig[];
   };
   dateColumns: FlexGridColumnConfig[];
   openSearchArea: boolean;
@@ -57,7 +55,6 @@ const initCustomerFcstMasterState: CustomerFcstMasterState = {
   searchParams: initSearchParams,
   staticColumns: {
     [SHEETS.CUSTOMER_FCST]: [],
-    [SHEETS.CUSTOMER_PSI]: [],
   },
   dateColumns: [],
   openSearchArea: true,
@@ -83,23 +80,17 @@ export const useCustomerFcstMasterStore = createPersistedStoreWithTab<
         const next = { ...state.searchParams };
         state.filters = {
           [SHEETS.CUSTOMER_FCST]: next,
-          [SHEETS.CUSTOMER_PSI]: next,
         };
       });
     },
     fetchStaticColumns: async () => {
-      const [fcstColumns, psiColumns] = await Promise.all([
-        apiClient.post<RawFlexGridColumnConfig[]>(`/admin/menu/${MENU_ID}/column`, {
-          sheetNm: SHEETS.CUSTOMER_FCST,
-        }),
-        apiClient.post<RawFlexGridColumnConfig[]>(`/admin/menu/${MENU_ID}/column`, {
-          sheetNm: SHEETS.CUSTOMER_PSI,
-        }),
-      ]);
+      const fcstColumns = await apiClient.post<RawFlexGridColumnConfig[]>(
+        `/admin/menu/${MENU_ID}/column`,
+        { sheetNm: SHEETS.CUSTOMER_FCST }
+      );
       set(state => {
         state.staticColumns = {
           [SHEETS.CUSTOMER_FCST]: fcstColumns.data.result,
-          [SHEETS.CUSTOMER_PSI]: psiColumns.data.result,
         };
       });
       if (get().initialized) return;

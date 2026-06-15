@@ -91,3 +91,13 @@ DM,SP_DMF0043_GET_SPREAD_TITLE,PKG_DMF0043,P_DMF0043_GET_MAIN_SPREAD_TITLE,,,화
 ## §6. 변경 이력
 
 - 2026-06-01: 폴더 신설 (Plan Stage 4). sp_body_diff / row_count_diff / column_inventory 3 sh + README + 매핑 표 양식. DMF0043 sample row 작성.
+
+## 추가 도구 (2026-06-11 — SP 변환 파이프라인 연동)
+
+| 스크립트 | 용도 | 파이프라인 Stage |
+|---|---|---|
+| `run_sql.sh` | Oracle SQL 1회 실행 wrapper (`ORA_CONN` env 또는 `.env.asis` TOBE_*, CRLF 자동 제거) | 공통 |
+| `compile_check.sh` | 특정 object 또는 `--all-invalid` 재컴파일 + USER_ERRORS 리포트 (PASS/FAIL exit code) | Stage 2 |
+| `silent_fail_audit.sql` | silent fail family 7종 일괄 검출 (SUBSTR-0 / TRUNCATE GT / GTT DELETE / cursor mismatch / LISTAGG / MSSQL 잔존 / EXCEPTION 가림) | Stage 3 |
+
+> 파이프라인 본문: `Doc/_analysis/db_migration/02_SP_CONVERSION_PIPELINE.md`

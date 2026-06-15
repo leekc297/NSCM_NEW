@@ -55,29 +55,29 @@ export const NnMasterMappingForm = ({ onSearch }: Props) => {
   const [openProjectModal, setOpenProjectModal] = useState(false);
   const [openItemModal, setOpenItemModal] = useState(false);
 
-  const { data: divData } = useTabProcQuery({ menuId: MENU_ID, sheetName: SHEETS.DIVISION, filters: {}, enabled: true });
-  const { data: dtData } = useTabProcQuery({ menuId: MENU_ID, sheetName: SHEETS.DATA_TYPE, filters: {}, enabled: true });
+  const { data: divData } = useTabProcQuery({ menuId: MENU_ID, sheetName: SHEETS.DIVISION, tabId: MENU_ID, filters: {}, enabled: true });
+  const { data: dtData } = useTabProcQuery({ menuId: MENU_ID, sheetName: SHEETS.DATA_TYPE, tabId: MENU_ID, filters: {}, enabled: true });
   const { data: teamData } = useTabProcQuery({
-    menuId: MENU_ID, sheetName: SHEETS.TEAM,
+    menuId: MENU_ID, sheetName: SHEETS.TEAM, tabId: MENU_ID,
     filters: { divisionId: sc.divisionId },
     enabled: !!sc.divisionId,
   });
   const { data: ecData } = useTabProcQuery({
-    menuId: MENU_ID, sheetName: SHEETS.END_CUSTOMER,
+    menuId: MENU_ID, sheetName: SHEETS.END_CUSTOMER, tabId: MENU_ID,
     filters: { divisionId: sc.divisionId, deptId: sc.deptId },
     enabled: !!sc.divisionId,
   });
   const { data: ssData } = useTabProcQuery({
-    menuId: MENU_ID, sheetName: SHEETS.SALES_SITE,
+    menuId: MENU_ID, sheetName: SHEETS.SALES_SITE, tabId: MENU_ID,
     filters: { divisionId: sc.divisionId, endCustomer: sc.endCustomer },
     enabled: !!sc.divisionId,
   });
 
-  const divisionOptions = useMemo(() => toOptions(divData?.o_rc1 as LookupRow[] | undefined), [divData]);
-  const dataTypeOptions = useMemo(() => toOptions(dtData?.o_rc1 as LookupRow[] | undefined), [dtData]);
-  const teamOptions = useMemo(() => toOptions(teamData?.o_rc1 as LookupRow[] | undefined), [teamData]);
-  const endCustomerOptions = useMemo(() => toOptions(ecData?.o_rc1 as LookupRow[] | undefined), [ecData]);
-  const salesSiteOptions = useMemo(() => toOptions(ssData?.o_rc1 as LookupRow[] | undefined), [ssData]);
+  const divisionOptions = useMemo(() => toOptions(divData?.o_rc1 as unknown as LookupRow[] | undefined), [divData]);
+  const dataTypeOptions = useMemo(() => toOptions(dtData?.o_rc1 as unknown as LookupRow[] | undefined), [dtData]);
+  const teamOptions = useMemo(() => toOptions(teamData?.o_rc1 as unknown as LookupRow[] | undefined), [teamData]);
+  const endCustomerOptions = useMemo(() => toOptions(ecData?.o_rc1 as unknown as LookupRow[] | undefined), [ecData]);
+  const salesSiteOptions = useMemo(() => toOptions(ssData?.o_rc1 as unknown as LookupRow[] | undefined), [ssData]);
 
   // Division 은 필수 — 첫 옵션 자동 선택 (As-Is .cs L460 의 `if (p_division_id == "") MSG00097` 회피)
   useEffect(() => {

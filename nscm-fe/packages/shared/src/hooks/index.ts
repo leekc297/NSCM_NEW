@@ -6,4 +6,5 @@ export * from './useFileTransfer';
 export * from './usePerfTrace';
 export * from './useSaveWithValidation';
 export * from './useSearchConditionPersistence';
+export * from './useTabBtnPermissions';
 export * from './useTabCombosMulti';

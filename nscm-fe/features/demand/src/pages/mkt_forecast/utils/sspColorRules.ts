@@ -21,11 +21,11 @@ const COLOR_RED = 'rgb(255, 182, 193)';   // 미동기
 const COLOR_YELLOW = 'rgb(255, 255, 0)';  // 경고
 
 // Cell 색상 결정 — formatItem callback 안에서 호출
-export function getCellColor(
+export const getCellColor = (
   row: MktFcstRow,
   colKey: string,
   showColor: boolean,
-): CellStyle | null {
+): CellStyle | null => {
   if (!showColor) return null;
 
   // bucket cell 만 색상 적용 (D_/W_/M_YYYYMMDD)
@@ -46,16 +46,16 @@ export function getCellColor(
 
   // 합계 변수 비교 — Phase 3 expression 의 iWeeklySum vs iWkSum_Sync (Phase 6 보강 시)
   return null;
-}
+};
 
 // Wijmo FlexGrid formatItem helper — sender + cellRange
-export function applyCellColor(
+export const applyCellColor = (
   panel: { rows: { [n: number]: { dataItem: unknown } }; columns: { [n: number]: { binding: string } } },
   rowIndex: number,
   colIndex: number,
   cell: HTMLElement,
   showColor: boolean,
-): void {
+): void => {
   const row = panel.rows[rowIndex]?.dataItem as MktFcstRow | undefined;
   const colKey = panel.columns[colIndex]?.binding;
   if (!row || !colKey) return;
@@ -64,6 +64,6 @@ export function applyCellColor(
   if (style?.background) cell.style.backgroundColor = style.background;
   if (style?.color) cell.style.color = style.color;
   if (style?.fontWeight) cell.style.fontWeight = style.fontWeight;
-}
+};
 
 export { COLOR_BLUE, COLOR_RED, COLOR_YELLOW };

@@ -1,4 +1,4 @@
-import { FlexGrid, FlexGridColumn } from '@mescius/wijmo.react.grid';
+import { toggleClass } from '@mescius/wijmo';
 import {
   AllowMerging,
   CellRange,
@@ -10,21 +10,41 @@ import {
   MergeManager,
   Row,
 } from '@mescius/wijmo.grid';
-import { toggleClass } from '@mescius/wijmo';
+import { FlexGrid, FlexGridColumn } from '@mescius/wijmo.react.grid';
 import { useEffect, useMemo, type Ref } from 'react';
 
+import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { useTabComboQueries } from '@shared/hooks';
 
-import { MAIN_COLUMNS } from '../sales-future-price.constants';
+import { BUCKET_TYPE, MAIN_COLUMNS } from '../sales-future-price.constants';
 import type { FuturePriceRow } from '../sales-future-price.types';
-
 import styles from '../SalesFuturePrice.module.scss';
+import type { MeasureMeta } from '../useSalesFuturePriceStore';
 
 interface Props {
   rows: FuturePriceRow[];
   gridRef: Ref<FlexGridType<FuturePriceRow>>;
   onPopupCellDblClick?: (modalKey: string, row: FuturePriceRow) => void;
   divisionId?: string;
+  bucketType?: BUCKET_TYPE;
+  // ⭐ master hook §2.5 — admin SYS0004 UI Category Setup 동적 메타 (전체 속성 반영)
+  staticColumns?: RawFlexGridColumnConfig[];
+  staticMeasures?: MeasureMeta[];
+}
+
+// FlexGridColumn 렌더링용 통합 column meta
+interface MergedColumnMeta {
+  binding: string;
+  header: string;
+  width: number;
+  align: 'L' | 'R' | 'C';
+  visible: boolean;
+  fixed: boolean;
+  scale?: number;
+  _ctrlType?: 'FPText' | 'FPModal' | 'FPComboBox' | 'FPCheckBox' | 'FPDate' | 'FPDateTime' | 'FPNumber';
+  _inputEditType?: 'S' | 'M' | 'O' | 'IM' | 'IO';
+  _modalKey?: string;
+  _comboKey?: string;
 }
 
 // SP P_DMF0020_GET_SCM_MST_FUTURE_PRICE_M 결과는 wide format —
@@ -51,8 +71,46 @@ const getDynKey = (binding: string): { kind: 'W' | 'M' | null; ym: string; mmdd:
   return { kind: null, ym: '', mmdd: '', wk: '' };
 };
 
-export const SalesFuturePriceFlexGrid = ({ rows, gridRef, onPopupCellDblClick, divisionId }: Props) => {
-  const fixedBindings = useMemo(() => MAIN_COLUMNS.map(c => c.key), []);
+export const SalesFuturePriceFlexGrid = ({
+  rows, gridRef, onPopupCellDblClick, divisionId,
+  bucketType = BUCKET_TYPE.WEEKLY,
+  staticColumns, staticMeasures,
+}: Props) => {
+  const bucketPrefix = bucketType === BUCKET_TYPE.MONTHLY ? 'M' : 'W';
+  void staticMeasures;   // measure 는 SalesFuturePrice.tsx 의 handleInsert 에서 사용
+
+  // ⭐ master hook §4 — admin SYS0004 staticColumns 가 있으면 전체 속성 사용,
+  //   없으면 MAIN_COLUMNS hardcode fallback (BE 실패 시 화면 작동 보장)
+  const mergedColumns = useMemo<MergedColumnMeta[]>(() => {
+    if (!staticColumns || staticColumns.length === 0) {
+      return MAIN_COLUMNS.map<MergedColumnMeta>(c => ({
+        binding: c.key, header: c.header, width: c.width ?? 100, align: c.align ?? 'C',
+        visible: true, fixed: false,
+        _ctrlType: c._ctrlType, _inputEditType: c._inputEditType,
+        _modalKey: c._modalKey, _comboKey: c._comboKey,
+      }));
+    }
+    return staticColumns.map(sc => {
+      const fb = MAIN_COLUMNS.find(m => m.key === sc.colNm);
+      return {
+        binding: sc.colNm,
+        header: sc.colLblNm || fb?.header || sc.colNm,
+        width: sc.colWth ?? fb?.width ?? 100,
+        align: sc.horzAlgnCd ?? fb?.align ?? 'C',
+        visible: sc.visible !== false,
+        fixed: sc.fixed === true,
+        scale: sc.scale,
+        _ctrlType: sc.cellCtrlObjTpCd ?? fb?._ctrlType,
+        _inputEditType: sc.inputTpCd ?? fb?._inputEditType,
+        _modalKey: sc.attribute1 ?? fb?._modalKey,
+        _comboKey: sc.attribute2 ?? fb?._comboKey,
+      } as MergedColumnMeta;
+    });
+  }, [staticColumns]);
+
+  // visible=true 만 화면에 노출
+  const visibleColumns = useMemo(() => mergedColumns.filter(c => c.visible), [mergedColumns]);
+  const fixedBindings = useMemo(() => visibleColumns.map(c => c.binding), [visibleColumns]);
 
   // ===== Grid 내 combo column dropdown — useTabComboQueries + Wijmo DataMap =====
   //   AS-IS .cs L2029/L2034/L2036/L2038/L2055/L2013 SetCellTypeCombo 정확 매핑
@@ -91,20 +149,29 @@ export const SalesFuturePriceFlexGrid = ({ rows, gridRef, onPopupCellDblClick, d
     };
   }, [divQ, teamQ, ecQ, ssQ, incoQ, currQ, fcstQ, customsQ, bizQ]);
 
-  // 동적 컬럼 keys 추출 — SP 결과 모든 row 의 union (insertedRows 의 row 가 첫 자리에 있으면 동적 key 없으므로 첫 row 만 보면 누락)
+  // 동적 컬럼 keys 추출 — SP 결과 모든 row 의 union
+  //   Bucket=W → W_yyyymmdd 중 월요일 (주 시작일) 만 / Bucket=M → M_yyyymm 만
+  //   (사용자 요구 2026-06-12: "Bucket week 일때 주의 시작일만 나오도록")
   const dynBindings = useMemo<string[]>(() => {
     if (!rows || rows.length === 0) return [];
     const set = new Set<string>();
+    const matchPrefix = bucketPrefix === 'M' ? /^M_\d+$/ : /^W_\d+$/;
     for (const r of rows) {
       for (const k of Object.keys(r)) {
-        if (/^[WM]_\d+$/.test(k)) set.add(k);
+        if (!matchPrefix.test(k)) continue;
+        if (bucketPrefix === 'W') {
+          const d = k.slice(2);
+          const dt = new Date(Date.UTC(+d.slice(0, 4), +d.slice(4, 6) - 1, +d.slice(6, 8)));
+          if (dt.getUTCDay() !== 1) continue;   // 1 = Monday (주 시작일)
+        }
+        set.add(k);
       }
     }
     return [...set].sort();
-  }, [rows]);
+  }, [rows, bucketPrefix]);
 
   useEffect(() => {
-    const g = (gridRef && 'current' in gridRef ? gridRef.current : null) as FlexGridType<FuturePriceRow> | null;
+    const g = gridRef && 'current' in gridRef ? gridRef.current : null;
     if (!g) return;
     // 동적 cols 추가 후 allowMerging 재적용 + combo dataMap 적용
     for (let i = 0; i < g.columns.length; i++) {
@@ -122,7 +189,7 @@ export const SalesFuturePriceFlexGrid = ({ rows, gridRef, onPopupCellDblClick, d
       <FlexGrid
         className={styles.grid}
         initialized={(g: FlexGridType<FuturePriceRow>) => {
-          if (gridRef && 'current' in gridRef) {
+          if (gridRef && typeof gridRef === 'object' && 'current' in gridRef) {
             (gridRef as { current: FlexGridType<FuturePriceRow> | null }).current = g;
           }
 
@@ -144,16 +211,17 @@ export const SalesFuturePriceFlexGrid = ({ rows, gridRef, onPopupCellDblClick, d
                 if (e.row === 0) e.cell.textContent = dyn.ym;
                 else if (e.row === 1) e.cell.textContent = dyn.wk;
                 else if (e.row === 2) e.cell.textContent = dyn.mmdd;
-                (e.cell as HTMLElement).style.textAlign = 'center';
+                e.cell.style.textAlign = 'center';
               } else if (dyn.kind === 'M') {
-                if (e.row === 0) e.cell.textContent = dyn.ym.slice(0, 4);
-                else if (e.row === 1) e.cell.textContent = dyn.ym;
-                else if (e.row === 2) e.cell.textContent = dyn.ym.slice(5);
-                (e.cell as HTMLElement).style.textAlign = 'center';
+                // 사용자 요구 2026-06-12: Bucket=Month 1단=YYYY-MM / 2단="SUM" / 3단=빈칸
+                if (e.row === 0) e.cell.textContent = dyn.ym;
+                else if (e.row === 1) e.cell.textContent = 'SUM';
+                else if (e.row === 2) e.cell.textContent = '';
+                e.cell.style.textAlign = 'center';
               } else if (fixedBindings.includes(binding)) {
-                const meta = MAIN_COLUMNS.find(c => c.key === binding);
+                const meta = visibleColumns.find(c => c.binding === binding);
                 e.cell.textContent = meta?.header ?? binding;
-                (e.cell as HTMLElement).style.textAlign = 'center';
+                e.cell.style.textAlign = 'center';
               }
               return;
             }
@@ -161,7 +229,7 @@ export const SalesFuturePriceFlexGrid = ({ rows, gridRef, onPopupCellDblClick, d
             if (e.panel.cellType !== CellType.Cell) return;
             if (!col.binding) return;
             const rowItem = (e.panel.rows[e.row] as unknown as { dataItem?: FuturePriceRow })?.dataItem;
-            const meta = MAIN_COLUMNS.find(c => c.key === col.binding);
+            const meta = visibleColumns.find(c => c.binding === col.binding);
             const isDyn = !meta && /^[WM]_/.test(col.binding);
             const isInsert = rowItem?.CRUD_TYPE === 'I';
             const isLocRow = String(rowItem?.MEASURE ?? '') === 'LOC';
@@ -176,7 +244,7 @@ export const SalesFuturePriceFlexGrid = ({ rows, gridRef, onPopupCellDblClick, d
             // Wijmo merge cell 의 textContent 를 inner div (.merge-content) 로 감쌈
             //   scrollPositionChanged 에서 cell.offsetTop 이 viewport 위 → div.style.transform=translateY(scrollOffset) 로 sticky 효과
             if (meta && fixedBindings.includes(col.binding)) {
-              const cellEl = e.cell as HTMLElement;
+              const cellEl = e.cell;
               const text = cellEl.textContent ?? '';
               if (text && !cellEl.querySelector('.merge-content')) {
                 const wrap = document.createElement('div');
@@ -199,7 +267,7 @@ export const SalesFuturePriceFlexGrid = ({ rows, gridRef, onPopupCellDblClick, d
               if (editableForInsert) {
                 toggleClass(e.cell, 'wj-cell-editable', true);
                 if (meta._ctrlType === 'FPModal') {
-                  const cellEl = e.cell as HTMLElement;
+                  const cellEl = e.cell;
                   cellEl.style.cursor = 'pointer';
                   cellEl.title = `${meta.header} 팝업 (더블클릭)`;
                   // 🔍 돋보기 아이콘 (AS-IS cellTypeImage 동등)
@@ -228,7 +296,7 @@ export const SalesFuturePriceFlexGrid = ({ rows, gridRef, onPopupCellDblClick, d
             const binding = col.binding ?? '';
             const row = s.rows[e.row].dataItem as FuturePriceRow | undefined;
             const isInsert = row?.CRUD_TYPE === 'I';
-            const meta = MAIN_COLUMNS.find(c => c.key === binding);
+            const meta = visibleColumns.find(c => c.binding === binding);
 
             // Fixed col — Insert row 의 IM/IO + popup 차단
             if (meta) {
@@ -247,7 +315,7 @@ export const SalesFuturePriceFlexGrid = ({ rows, gridRef, onPopupCellDblClick, d
           g.cellEditEnded.addHandler((s, e) => {
             const col = s.columns[e.col];
             const binding = col.binding ?? '';
-            const meta = MAIN_COLUMNS.find(c => c.key === binding);
+            const meta = visibleColumns.find(c => c.binding === binding);
             if (!meta) return;
             const row = s.rows[e.row].dataItem as FuturePriceRow | undefined;
             if (!row || row.CRUD_TYPE !== 'I') return;
@@ -265,10 +333,10 @@ export const SalesFuturePriceFlexGrid = ({ rows, gridRef, onPopupCellDblClick, d
           });
 
           g.hostElement.addEventListener('dblclick', (ev) => {
-            const ht = g.hitTest(ev as MouseEvent);
+            const ht = g.hitTest(ev);
             if (ht.cellType !== CellType.Cell) return;
             const col = g.columns[ht.col];
-            const meta = MAIN_COLUMNS.find(c => c.key === col.binding);
+            const meta = visibleColumns.find(c => c.binding === col.binding);
             if (meta?._ctrlType !== 'FPModal' || meta._inputEditType !== 'IM') return;
             const row = g.rows[ht.row].dataItem as FuturePriceRow | undefined;
             if (!row || row.CRUD_TYPE !== 'I') return;
@@ -280,14 +348,14 @@ export const SalesFuturePriceFlexGrid = ({ rows, gridRef, onPopupCellDblClick, d
           //   (Wijmo merge cell 의 default 동작: topmost 만 표시, viewport 밖이면 안 보임)
           const adjustMergedContent = () => {
             const cellsPanel = g.cells;
-            const root = cellsPanel.hostElement as HTMLElement | null;
+            const root = cellsPanel.hostElement;
             if (!root) return;
             const visRange = g.viewRange;
-            const cellsRoot = root.querySelector('.wj-cells') as HTMLElement | null;
+            const cellsRoot = root.querySelector('.wj-cells');
             const viewportTop = cellsRoot?.scrollTop ?? root.scrollTop ?? 0;
             const mergeCells = root.querySelectorAll<HTMLElement>('.wj-cell .merge-content');
             mergeCells.forEach(div => {
-              const cellEl = div.parentElement as HTMLElement;
+              const cellEl = div.parentElement;
               if (!cellEl) return;
               const cellTop = cellEl.offsetTop;
               const cellH = cellEl.offsetHeight;
@@ -333,7 +401,7 @@ export const SalesFuturePriceFlexGrid = ({ rows, gridRef, onPopupCellDblClick, d
                 const sameRow = (a: number, b: number): boolean => {
                   const ra = rowItem(a); const rb = rowItem(b);
                   if (!ra || !rb) return false;
-                  return leftBindings.every(k => String(ra[k] ?? '') === String(rb[k] ?? ''));
+                  return leftBindings.every(k => ((ra as Record<string, string>)[k] ?? '') === ((rb as Record<string, string>)[k] ?? ''));
                 };
                 let r1 = r, r2 = r;
                 while (r1 > 0 && sameRow(r1 - 1, r)) r1--;
@@ -380,21 +448,8 @@ export const SalesFuturePriceFlexGrid = ({ rows, gridRef, onPopupCellDblClick, d
                     return new CellRange(1, c1, 1, c2);
                   }
                 } else if (dyn.kind === 'M') {
-                  if (r === 0) {
-                    const yr = dyn.ym.slice(0, 4);
-                    let c1 = c, c2 = c;
-                    while (c1 > 0) {
-                      const p = getDynKey(panel.columns[c1 - 1].binding ?? '');
-                      if (p.kind === 'M' && p.ym.slice(0, 4) === yr) c1--;
-                      else break;
-                    }
-                    while (c2 < panel.columns.length - 1) {
-                      const n = getDynKey(panel.columns[c2 + 1].binding ?? '');
-                      if (n.kind === 'M' && n.ym.slice(0, 4) === yr) c2++;
-                      else break;
-                    }
-                    return new CellRange(0, c1, 0, c2);
-                  }
+                  // Bucket=Month: 1단=YYYY-MM (각 컬럼 별도) / 2단="SUM" (각 컬럼 별도) — 머지 안 함
+                  // (사용자 요구 2026-06-12)
                 }
               }
               return null;
@@ -407,11 +462,13 @@ export const SalesFuturePriceFlexGrid = ({ rows, gridRef, onPopupCellDblClick, d
         allowSorting={true}
         style={{ height: '100%' }}
       >
-        {/* 좌측 15 fixed cols — meta._inputEditType 'S' (read-only) 만 isReadOnly, 나머지는 row 단위로 beginningEdit 에서 제어 */}
-        {MAIN_COLUMNS.map(c => (
+        {/* ⭐ master hook §4 — admin SYS0004 staticColumns 의 모든 속성 동적 적용
+            VISIBLE_FLAG='N' → visibleColumns 에서 제외 → 렌더링 skip
+            COLUMN_WIDTH / COLUMN_LABEL_NAME / HORIZONTAL_ALIGN_CODE / INPUT_TP_CD 모두 반영 */}
+        {visibleColumns.map(c => (
           <FlexGridColumn
-            key={c.key}
-            binding={c.key}
+            key={c.binding}
+            binding={c.binding}
             header={c.header}
             width={c.width}
             align={c.align === 'C' ? 'center' : c.align === 'R' ? 'right' : 'left'}

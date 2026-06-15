@@ -3,7 +3,7 @@ export interface SearchCondition {
   category: string;
 }
 
-export interface QueryRow {
+export interface QueryRow extends WijmoRowItem {
   QUERY_ID: string;
   QUERY_NAME: string;
   QUERY_CATEGORY: string;
@@ -13,11 +13,10 @@ export interface QueryRow {
   USE_YN: string;
 }
 
-export interface ResultRow {
-  [key: string]: unknown;
-}
+// Wijmo grid row 제약 (Record<string, WijmoPrimitive>) 만족.
+export type ResultRow = WijmoRowItem;
 
-export interface ColumnMetaRow {
+export interface ColumnMetaRow extends WijmoRowItem {
   QUERY_ID: string;
   COL_NM: string;
   COL_HEADER: string;
@@ -26,7 +25,7 @@ export interface ColumnMetaRow {
   SORT_ORD: number;
 }
 
-export interface ParameterMetaRow {
+export interface ParameterMetaRow extends WijmoRowItem {
   QUERY_ID: string;
   PARAM_NM: string;
   PARAM_LABEL: string;
@@ -36,7 +35,7 @@ export interface ParameterMetaRow {
   SORT_ORD: number;
 }
 
-export interface HistoryRow {
+export interface HistoryRow extends WijmoRowItem {
   HIST_ID: string;
   QUERY_ID: string;
   EXECUTED_BY: string;

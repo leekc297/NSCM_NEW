@@ -16,18 +16,14 @@ export const DynamicQueryResultGrid = ({ gridRef, data }: Props) => {
   const staticColumns = useMemo<RawFlexGridColumnConfig[]>(() => {
     if (!data || data.length === 0) return [];
     const first = data[0] as Record<string, unknown>;
-    return Object.keys(first).map((key, idx) => ({
-      COLUMN_NAME: key,
-      COLUMN_LABEL_NAME: key,
-      SORT_ORDER_NO: (idx + 1) * 10,
-      COLUMN_WIDTH: 120,
-      FIXED_FLAG: 'N',
-      VISIBLE_FLAG: 'Y',
-      HORIZONTAL_ALIGN_CODE: 'Left',
-      CELL_CONTROL_OBJECT_TYPE_CODE: 'S',
-      VALID_YN: 'Y',
-      DISPLAY_FLAG: 'Y',
-    })) as RawFlexGridColumnConfig[];
+    return Object.keys(first).map((key): RawFlexGridColumnConfig => ({
+      colNm: key,
+      colLblNm: key,
+      colWth: 120,
+      fixed: false,
+      visible: true,
+      display: true,
+    }));
   }, [data]);
 
   return (

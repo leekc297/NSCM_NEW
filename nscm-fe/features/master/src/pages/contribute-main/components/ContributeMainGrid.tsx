@@ -102,7 +102,7 @@ export const ContributeMainGrid = ({ gridRef, data }: Props) => {
         if (gridRef && 'current' in gridRef) {
           (gridRef as { current: FlexGridType<MainRow> | null }).current = g;
         }
-        g.allowMerging = AllowMerging.ColumnHeaders;
+        g.allowMerging = AllowMerging.ColumnHeaders | AllowMerging.Cells;
         // AS-IS Dsdm_Changed 1:1 매핑 — cell edit 종료 시 EDIT_FLAG = 'M' 마킹
         // 동적 컬럼 (Y#/M#) 수정만 dirty 처리. BASE 컬럼은 수정 대상 아님.
         g.cellEditEnded.addHandler((_s, e) => {
@@ -121,17 +121,16 @@ export const ContributeMainGrid = ({ gridRef, data }: Props) => {
         }
 
         // Custom merge manager:
-        //   - 동적 컬럼 row 0 (period): 같은 period 인접 컬럼들 가로 머지 (CellRange(0, left, 0, right))
-        //   - BASE 컬럼: row 0/1 세로 머지 (CellRange(0, c, 1, c))
+        //   - ColumnHeader BASE: row 0/1 세로 머지
+        //   - ColumnHeader 동적 row 0: 같은 period 가로 머지
+        //   - Cell BASE (부문~형태 6 col): 좌측 모든 allowMerging col 동일 row 끼리 세로 머지 (계층적, DMF0072 패턴)
         const dynStart = BASE_COLUMNS.length;
         class HeaderMergeManager extends MergeManager {
           getMergedRange(panel: GridPanel, r: number, c: number, clip = true): CellRange | null {
             if (panel.cellType === CellType.ColumnHeader) {
-              // BASE 컬럼: row 0/1 세로 머지
               if (c < dynStart) {
                 return new CellRange(0, c, 1, c);
               }
-              // 동적 컬럼 row 0: 같은 period 가로 머지
               if (r === 0) {
                 const cols = dynamicColumnsRef.current;
                 const idx = c - dynStart;
@@ -144,6 +143,29 @@ export const ContributeMainGrid = ({ gridRef, data }: Props) => {
                 if (left === right) return null;
                 return new CellRange(0, dynStart + left, 0, dynStart + right);
               }
+              return null;
+            }
+            if (panel.cellType === CellType.Cell) {
+              const col = panel.columns[c];
+              if (!col || !col.allowMerging) return null;
+              const mergeColIdx: number[] = [];
+              for (let i = 0; i <= c; i++) {
+                if (panel.columns[i] && panel.columns[i].allowMerging) mergeColIdx.push(i);
+              }
+              if (mergeColIdx.length === 0) return null;
+              const sameAcrossKeys = (rowA: number, rowB: number): boolean =>
+                mergeColIdx.every(ci => {
+                  const a: unknown = panel.getCellData(rowA, ci, false);
+                  const b: unknown = panel.getCellData(rowB, ci, false);
+                  return a === b;
+                });
+              let r1 = r;
+              let r2 = r;
+              while (r1 > 0 && sameAcrossKeys(r1 - 1, r)) r1--;
+              const rowCnt = panel.rows.length;
+              while (r2 < rowCnt - 1 && sameAcrossKeys(r2 + 1, r)) r2++;
+              if (r1 === r2) return null;
+              return new CellRange(r1, c, r2, c);
             }
             return super.getMergedRange(panel, r, c, clip);
           }
@@ -190,7 +212,7 @@ export const ContributeMainGrid = ({ gridRef, data }: Props) => {
       style={{ height: '100%' }}
     >
       {BASE_COLUMNS.map(c => (
-        <FlexGridColumn key={c.binding} binding={c.binding} header={c.header} width={c.width} isReadOnly />
+        <FlexGridColumn key={c.binding} binding={c.binding} header={c.header} width={c.width} isReadOnly allowMerging />
       ))}
       {dynamicColumns.map(c => (
         <FlexGridColumn

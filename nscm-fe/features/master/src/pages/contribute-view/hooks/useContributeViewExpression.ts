@@ -35,10 +35,10 @@ export interface MergeRange {
 }
 
 // 컬럼 메타 생성 — title sheet 의 SpreadTitleRow[] 로부터 ColumnMeta[] 빌드
-export function buildColumnMeta(
+export const buildColumnMeta = (
   titleRows: SpreadTitleRow[],
   baseColumnCount: number
-): ColumnMeta[] {
+): ColumnMeta[] => {
   return titleRows.map((r, i) => {
     const isBase = i < baseColumnCount;
     const binding = r.COLUMN_NAME ?? `col_${i}`;
@@ -54,13 +54,13 @@ export function buildColumnMeta(
       width: isBase ? 120 : 80,
     };
   });
-}
+};
 
 // AS-IS L156~232 의 머지 시퀀스 시뮬레이션 — row 0 (Large) + row 1 (Small) 머지 범위 계산
 //   동적 영역은 large/small label 변경 시점에 그룹화. SUM 컬럼은 별도 추가하지 않고
 //   AS-IS 가 명시적으로 row 1 에 'SUM' 머지를 추가하는 것은 leaf 가 SUM 인 컬럼에 대해
 //   row 1 셀을 'SUM' 으로 표기. formatItem 에서 leaf === 'SUM' 행을 직접 처리.
-export function buildHeaderMergeRanges(metas: ColumnMeta[]): MergeRange[] {
+export const buildHeaderMergeRanges = (metas: ColumnMeta[]): MergeRange[] => {
   const ranges: MergeRange[] = [];
   if (metas.length === 0) return ranges;
 
@@ -97,4 +97,4 @@ export function buildHeaderMergeRanges(metas: ColumnMeta[]): MergeRange[] {
   ranges.push({ row: 1, leftCol: smallStart, rightCol: metas.length - 1, text: lastSmall });
 
   return ranges;
-}
+};

@@ -25,7 +25,7 @@ export const MasterChgModal = ({ open, onClose, selectedRows: _selectedRows, div
   const setToast = useMessageStore.getState().setToast;
   const [saving, setSaving] = useState(false);
 
-  const handleSave = async () => {
+  const handleSave = () => {
     setSaving(true);
     void setToast({ message: 'Master Change 저장 중...', type: 'default' });
     // SP DMF0003_SAVE_MKT_FCST_PK_DATA_UPDATE 호출 (13 IN — Phase 5 보강)
@@ -36,20 +36,20 @@ export const MasterChgModal = ({ open, onClose, selectedRows: _selectedRows, div
   return (
     <CustomDialog
       open={open}
-      onClose={onClose}
-      title='Incoterms 일괄변경 (Master Change)'
-      width={1200}
-      height={600}
-      buttons={[
-        { label: '저장', onClick: handleSave, disabled: saving },
-        { label: '닫기', onClick: onClose },
-      ]}
-    >
-      <div style={{ padding: 16 }}>
-        <div>선택된 행: {_selectedRows?.length ?? 0}건</div>
-        <div>편집 가능 컬럼: New Incoterms / New FCST Type / New DOM_EXP / New Plant Site</div>
-        {/* Phase 5 보강: grid + form 작성 */}
-      </div>
-    </CustomDialog>
+      customHeaderTitle='Incoterms 일괄변경 (Master Change)'
+      size={1200}
+      type='modal'
+      position='basic'
+      handleSubmit={handleSave}
+      handleClose={onClose}
+      disableButtonCancel={saving}
+      customContentArea={
+        <div style={{ padding: 16 }}>
+          <div>선택된 행: {_selectedRows?.length ?? 0}건</div>
+          <div>편집 가능 컬럼: New Incoterms / New FCST Type / New DOM_EXP / New Plant Site</div>
+          {/* Phase 5 보강: grid + form 작성 */}
+        </div>
+      }
+    />
   );
 };

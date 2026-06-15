@@ -66,7 +66,7 @@ export const buildHeaderTree = (
 ): HeaderYearMonth[] => {
   if (!titleDate || titleDate.length === 0) return [];
 
-  const isWeekly = bucketType === BUCKET_TYPE.WEEKLY;
+  const isWeekly = String(bucketType) === String(BUCKET_TYPE.WEEKLY);
 
   // 1) bucketType 에 맞는 컬럼만 (E4 — W_/M_ Visible toggle)
   const filtered = titleDate.filter(t =>

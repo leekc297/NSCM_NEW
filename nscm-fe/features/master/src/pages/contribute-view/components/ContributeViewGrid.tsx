@@ -41,13 +41,14 @@ export const ContributeViewGrid = ({ gridRef, data }: Props) => {
   const { data: titleData } = useTabProcQuery({
     menuId: MENU_ID,
     sheetName: SHEETS.MAIN_TITLE,
+    tabId: MENU_ID,
     filters: titleFilter,
     enabled: !!titleFilter,
   });
 
   // SP body 가 SORT_ORDER_NO 기준 정렬 + DISTINCT 처리됨 → FE dedup 불필요
   const titleRows = useMemo<SpreadTitleRow[]>(
-    () => (titleData?.o_rc1 ?? []) as SpreadTitleRow[],
+    () => (titleData?.o_rc1 ?? []) as unknown as SpreadTitleRow[],
     [titleData]
   );
 
@@ -59,7 +60,18 @@ export const ContributeViewGrid = ({ gridRef, data }: Props) => {
 
   useEffect(() => {
     columnMetaRef.current = columnMetas;
-    internalRef.current?.invalidate();
+    const g = internalRef.current;
+    // Wijmo refresh() 가 내부 finishEditing() 을 호출하는데, edit cycle 중간이면
+    // null 접근으로 폭발. read-only grid 라도 발생 가능 (rAF 로 deferral).
+    if (g && g.hostElement && g.hostElement.isConnected) {
+      requestAnimationFrame(() => {
+        try {
+          g.invalidate();
+        } catch {
+          /* Wijmo internal refresh timing — safe to ignore */
+        }
+      });
+    }
   }, [columnMetas]);
 
   const baseColumns = useMemo<ColumnMeta[]>(
@@ -79,7 +91,9 @@ export const ContributeViewGrid = ({ gridRef, data }: Props) => {
           (gridRef as { current: FlexGridType<SalesViewRow> | null }).current = g;
         }
         g.isReadOnly = true;
-        g.allowMerging = AllowMerging.ColumnHeaders;
+        // 사용자 요구 (2026-06-11): BASE 9 컬럼 (YYYYMM~DM_BIZ_TYPE) 좌측-누적 cell 머지
+        // → ColumnHeaders + Cells 모두 머지 활성
+        g.allowMerging = AllowMerging.ColumnHeaders | AllowMerging.Cells;
 
         // 룰 12 §11.5: BASE 컬럼 좌측 고정
         g.frozenColumns = BASE_COLUMN_COUNT;
@@ -89,9 +103,12 @@ export const ContributeViewGrid = ({ gridRef, data }: Props) => {
           g.columnHeaders.rows.unshift(new Row());
         }
 
-        // Custom merge manager — BASE 컬럼 row 0/1 세로 머지 + 동적 컬럼 row 0 (지역) 가로 머지
+        // Custom merge manager:
+        //   - ColumnHeader: BASE 컬럼 row 0/1 세로 머지 + 동적 컬럼 row 0 (지역) 가로 머지
+        //   - Cell: BASE 9 컬럼 (YYYYMM~DM_BIZ_TYPE) — 좌측-누적 cell 세로 머지 (DMF0072/DMF0043 패턴)
+        //     자신 컬럼 단독이 아닌 YYYYMM 부터 자신까지 모든 컬럼 값 동일 row 만 머지
         const dynStart = BASE_COLUMN_COUNT;
-        class HeaderMergeManager extends MergeManager {
+        class HierarchicalMergeManager extends MergeManager {
           getMergedRange(panel: GridPanel, r: number, c: number, clip = true): CellRange | null {
             if (panel.cellType === CellType.ColumnHeader) {
               // BASE 컬럼: row 0/1 세로 머지
@@ -112,11 +129,35 @@ export const ContributeViewGrid = ({ gridRef, data }: Props) => {
                 if (left === right) return null;
                 return new CellRange(0, left, 0, right);
               }
+              return null;
+            }
+            // Cell hierarchical merge — BASE 9 컬럼 만 대상
+            if (panel.cellType === CellType.Cell) {
+              if (c >= dynStart) return null; // 동적 컬럼은 머지 X
+              const col = panel.columns[c];
+              if (!col || !col.allowMerging) return null;
+              // 좌측 0..c 모두 allowMerging + 값 동일 row 끼리 세로 머지
+              const sameAcrossKeys = (rowA: number, rowB: number): boolean => {
+                for (let ci = 0; ci <= c; ci++) {
+                  if (!panel.columns[ci]?.allowMerging) continue;
+                  const a: unknown = panel.getCellData(rowA, ci, false);
+                  const b: unknown = panel.getCellData(rowB, ci, false);
+                  if (a !== b) return false;
+                }
+                return true;
+              };
+              let r1 = r;
+              let r2 = r;
+              while (r1 > 0 && sameAcrossKeys(r1 - 1, r)) r1--;
+              const rowCnt = panel.rows.length;
+              while (r2 < rowCnt - 1 && sameAcrossKeys(r2 + 1, r)) r2++;
+              if (r1 === r2) return null;
+              return new CellRange(r1, c, r2, c);
             }
             return super.getMergedRange(panel, r, c, clip);
           }
         }
-        g.mergeManager = new HeaderMergeManager();
+        g.mergeManager = new HierarchicalMergeManager();
 
         // formatItem — row 0/1 별 텍스트 그리기 + 룰 12 §11.7 (2026-06-02) cell coloring
         // 조회 전용 화면 — 모든 cell 회색 (wj-cell-non-editable)
@@ -150,6 +191,7 @@ export const ContributeViewGrid = ({ gridRef, data }: Props) => {
           header={c.leaf}
           width={Math.max(c.width, 110)}
           isReadOnly
+          allowMerging
         />
       ))}
       {dynamicColumns.map(c => (

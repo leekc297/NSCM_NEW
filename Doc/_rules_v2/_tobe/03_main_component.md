@@ -19,7 +19,14 @@
 
 ### §1.1 구조 7 단계 (순서 의무)
 
+> ⭐ **진입 페이지는 `components/` 의 sub-component 를 import 하여 조합만 수행. inline JSX 정의 금지** (룰 01 §1.5 / DMF0008 사고 후 2026-06-09).
+
 ```typescript
+// [0] sub-component import (의무 — 상대경로 './components/')
+import { {PascalName}Form } from './components/{PascalName}Form';
+import { {PascalName}Grid } from './components/{PascalName}Grid';
+// (modal 있을 시) import { {PascalName}{Action}Modal } from './components/modals/{PascalName}{Action}Modal';
+
 export const {PascalName} = ({ tabId, title }: PageProps<MENU_ID>) => {
   // [1] Grid ref (single 또는 array)
   const gridRef = useRef<FlexGrid<ResponseData<MENU_ID, SHEETS>>>();
@@ -326,13 +333,15 @@ const hotkeyConfig: HotkeyConfig = {
 
 **의무**: **MainTitle → Form → SubTitle → Grid** 순서 (모든 화면 동일).
 
-### §3.7 한 컴포넌트 200 lines 초과
+### §3.7 한 컴포넌트 200 lines 초과 / 진입 페이지 inline JSX
 
-**금지**: 한 .tsx 파일이 200 lines 초과.
+**금지**:
+- 한 `.tsx` 파일이 200 lines 초과 (권장) / **400 lines 초과 (강제)**
+- 진입 페이지 안 `<FlexGrid>` / `<DataGrid>` / `<CustomDialog>` / `<Dialog>` JSX **직접 정의** (DMF0008 사고 2026-06-09)
 
-**의무**: sub-component 로 분리 (Form / Grid / Modal 등).
+**의무**: sub-component 로 분리 (Form / Grid / Modal 등) — 룰 01 §1.5 + hook `components-folder-pattern.md` 참조.
 
-**예외**: handleSave 의 pivot 변환 로직 (DMF0007) 같이 분리 가치 낮은 경우는 유지.
+**예외**: handleSave 의 pivot 변환 로직 (DMF0007) 같이 분리 가치 낮은 logic 함수는 유지 (JSX 가 아닌 logic).
 
 ---
 
@@ -403,3 +412,4 @@ wc -l features/{domain}/src/pages/{screen}/{Name}.tsx  # ≤ 250 권장
 | 일자 | 변경 | 이유 |
 |---|---|---|
 | 2026-06-03 | 초안 (Phase 3 추출) | DMF0004~7 메인 컴포넌트 통합 분석 |
+| 2026-06-09 | §1.1 sub-component import 라인 명시 + §3.7 inline JSX 금지 강화 | DMF0008 inline 4 grid 440 라인 사고 (사용자 명시 요구) |

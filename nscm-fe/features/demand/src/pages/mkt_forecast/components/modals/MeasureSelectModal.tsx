@@ -129,7 +129,7 @@ export const MeasureSelectModal = ({ open, onClose, defaultSelected, onApply, di
       open={open}
       type='modal'
       position='basic'
-      size={900}
+      size={800}
       handleClose={onClose}
       disableButtonCancel
       customHeaderTitle={

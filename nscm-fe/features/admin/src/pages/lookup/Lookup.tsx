@@ -100,7 +100,6 @@ export const Lookup = ({ tabId, title }: PageProps<MENU_ID>) => {
           debugMode: 'F',
         })
         .catch((e: unknown) => {
-          // eslint-disable-next-line no-console
           console.warn('[SYS0010] AFTER_SAVE post-process failed (non-blocking):', e);
         });
 
@@ -117,6 +116,8 @@ export const Lookup = ({ tabId, title }: PageProps<MENU_ID>) => {
     const next = { ...searchParams };
     if (_.isEqual(next, filters[SHEETS.LOOKUP_MASTER])) void refetchMaster();
     else setFilters();
+    // ⭐ master hook §2.4 — Search 시 admin SYS0004 메타 refetch (admin 변경 즉시 반영)
+    void fetchStaticColumns();
   };
 
   const onInsert = () => {

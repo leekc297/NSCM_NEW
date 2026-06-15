@@ -9,7 +9,8 @@ export type MENU_ID = typeof MENU_ID;
 //     - TAB 1: SALES_SITE → DMF0008_GET_SALES_SITE (sheet 'salesSite')
 //     - TAB 2: SSPM       → DMF0008_GET_SALES_SITE_PROJECT_MODEL (sheet 'sspm')
 export enum SHEETS {
-  MAIN = 'main',
+  // BE 메타 SHT_NM = 'summary' (SCM_ADM_MNU_BTN_MPG_M cross-check 2026-06-10). 'main' 은 alias 로 procedures.d.ts 에만 존재
+  SUMMARY = 'summary',
   REPAIR = 'repair',
   SALES_SITE = 'salesSite',
   SSPM = 'sspm',
@@ -17,14 +18,16 @@ export enum SHEETS {
   UPDATE_HISTORY = 'updateHistory',  // AS-IS .cs L2918: DMF0000_GET_UPDATE_HISTORY (SDATE/EDATE/UPDATED_BY)
 }
 
-export enum RESPONSE_SET {
-  MAIN = 'o_rc1',
-  REPAIR = 'o_rc1',
-  SALES_SITE = 'O_RESULT_CURSOR',
-  SSPM = 'o_rc1',
-  DIVISION = 'o_rc1',
-  UPDATE_HISTORY = 'o_rc1',
-}
+// const object — enum 대체 (NSCM 단일 cursor 표준 'o_rc1' 다수 중복 허용)
+export const RESPONSE_SET = {
+  SUMMARY: 'o_rc1',
+  REPAIR: 'o_rc1',
+  SALES_SITE: 'O_RESULT_CURSOR',
+  SSPM: 'o_rc1',
+  DIVISION: 'o_rc1',
+  UPDATE_HISTORY: 'o_rc1',
+} as const;
+export type RESPONSE_SET = (typeof RESPONSE_SET)[keyof typeof RESPONSE_SET];
 
 // AS-IS .cs L734/L740
 export const VALIDATION_MSG = {

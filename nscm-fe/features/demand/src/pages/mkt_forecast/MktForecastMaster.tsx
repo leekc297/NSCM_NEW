@@ -108,13 +108,13 @@ export const MktForecastMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
   // 자매 DMF0020 dataMaps 패턴 — column binding 별 직접 매핑 (`_comboKey` 우회)
   //   Grid 의 useEffect 가 col.binding 으로 직접 comboData[binding] 조회 → dataMap 적용
   const comboData: Record<string, ComboItem[]> = useMemo(() => ({
-    END_CUSTOMER:   (endCustomersData    ?? []) as ComboItem[],
-    SCM_SITE_ID:    (sitesData           ?? []) as ComboItem[],
-    INCOTERMS:      (incotermsData       ?? []) as ComboItem[],
-    FCST_TYPE:      (fcstTypeData        ?? []) as ComboItem[],
-    DOM_EXP:        (customsHandbookData ?? []) as ComboItem[],
-    PLANT_SITE_ID:  (plantSiteData       ?? []) as ComboItem[],
-    MEASURE:        (measureData         ?? []) as ComboItem[],
+    END_CUSTOMER:   (endCustomersData    ?? []) as unknown as ComboItem[],
+    SCM_SITE_ID:    (sitesData           ?? []) as unknown as ComboItem[],
+    INCOTERMS:      (incotermsData       ?? []) as unknown as ComboItem[],
+    FCST_TYPE:      (fcstTypeData        ?? []) as unknown as ComboItem[],
+    DOM_EXP:        (customsHandbookData ?? []) as unknown as ComboItem[],
+    PLANT_SITE_ID:  (plantSiteData       ?? []) as unknown as ComboItem[],
+    MEASURE:        (measureData         ?? []) as unknown as ComboItem[],
   }), [endCustomersData, sitesData, incotermsData, fcstTypeData, customsHandbookData, plantSiteData, measureData]);
 
   // 화면 진입 자동 조회 (AS-IS Form_Load → InitControls → FindData)
@@ -268,7 +268,7 @@ export const MktForecastMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   // F7 Save — AS-IS L1392 SaveButton override → SaveData
   const handleSave = async () => {
-    const spRows = (((data as { o_rc1?: MktFcstRow[] })?.o_rc1 ?? []) as MktFcstRow[]);
+    const spRows = (((data as { o_rc1?: MktFcstRow[] })?.o_rc1 ?? []) as unknown as MktFcstRow[]);
     const allRows = [...insertedRows, ...spRows];
     const modifiedRows = allRows.filter(r => r.EDIT_FLAG === 'I' || r.EDIT_FLAG === 'U' || r.EDIT_FLAG === 'D');
 
@@ -327,7 +327,7 @@ export const MktForecastMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   // SP long format (row 별 YYYYMMDD + QTY) → wide PIVOT (D_/W_/M_YYYYMMDD column 별 QTY 채움)
   // 사용자 명시 요구 (2026-06-07): selectedMeasures 만 grid 표시 (popup 으로 사용자 선택 가능)
-  const spRows = (((data as { o_rc1?: MktFcstRow[] })?.o_rc1 ?? []) as MktFcstRow[]);
+  const spRows = (((data as { o_rc1?: MktFcstRow[] })?.o_rc1 ?? []) as unknown as MktFcstRow[]);
   const filteredSpRows = spRows.filter(r => selectedMeasures.includes(String(r.MEASURE ?? '')));
   const pivotedRows = ((): MktFcstRow[] => {
     if (filteredSpRows.length === 0) return [];

@@ -16,13 +16,14 @@ export const ContributeRatePopup = ({ yyyy, open, onClose, onSelect }: Props) =>
   const { data } = useTabProcQuery({
     menuId: MENU_ID,
     sheetName: SHEETS.RATE_POPUP,
+    tabId: MENU_ID,
     filters: { yyyy },
     enabled: open && !!yyyy,
   });
 
   if (!open) return null;
 
-  const rows = (data?.o_rc1 ?? []) as ContributeRatePopupResult[];
+  const rows = (data?.o_rc1 ?? []) as unknown as ContributeRatePopupResult[];
 
   return (
     <div

@@ -25,17 +25,19 @@ export const PrHistoryModal = ({
   return (
     <CustomDialog
       open={open}
-      onClose={onClose}
-      title='PR 변경 이력'
-      width={900}
-      height={500}
-      buttons={[{ label: '닫기', onClick: onClose }]}
-    >
-      <div style={{ padding: 16 }}>
-        <div>Request No: {requestNo ?? '-'}</div>
-        <div>Project: {projectCode ?? '-'} / Item: {itemId ?? '-'}</div>
-        {/* Phase 5 보강: PR history grid (read-only) */}
-      </div>
-    </CustomDialog>
+      handleClose={onClose}
+      customHeaderTitle='PR 변경 이력'
+      size={800}
+      type='modal'
+      position='basic'
+      disableButtonCancel
+      customContentArea={
+        <div style={{ padding: 16 }}>
+          <div>Request No: {requestNo ?? '-'}</div>
+          <div>Project: {projectCode ?? '-'} / Item: {itemId ?? '-'}</div>
+          {/* Phase 5 보강: PR history grid (read-only) */}
+        </div>
+      }
+    />
   );
 };

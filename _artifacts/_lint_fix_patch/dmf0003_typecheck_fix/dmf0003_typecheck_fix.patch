@@ -1,0 +1,358 @@
+warning: in the working copy of 'nscm-fe/features/demand/src/pages/mkt_forecast/MktForecastMaster.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'nscm-fe/features/demand/src/pages/mkt_forecast/components/MktForecastCarSubGrid.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'nscm-fe/features/demand/src/pages/mkt_forecast/components/MktForecastPsiSubGrid.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'nscm-fe/features/demand/src/pages/mkt_forecast/components/modals/MasterChgModal.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'nscm-fe/features/demand/src/pages/mkt_forecast/components/modals/MeasureSelectModal.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'nscm-fe/features/demand/src/pages/mkt_forecast/components/modals/PrHistoryModal.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'nscm-fe/features/demand/src/pages/mkt_forecast/components/modals/PrModal.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'nscm-fe/features/demand/src/pages/mkt_forecast/components/modals/SspSyncCompareModal.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'nscm-fe/features/demand/src/pages/mkt_forecast/components/modals/SspSyncModal.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'nscm-fe/features/demand/src/pages/mkt_forecast/utils/longToPivot.ts', LF will be replaced by CRLF the next time Git touches it
+diff --git a/nscm-fe/features/demand/src/pages/mkt_forecast/MktForecastMaster.tsx b/nscm-fe/features/demand/src/pages/mkt_forecast/MktForecastMaster.tsx
+index 2b185b2..50074ca 100644
+--- a/nscm-fe/features/demand/src/pages/mkt_forecast/MktForecastMaster.tsx
++++ b/nscm-fe/features/demand/src/pages/mkt_forecast/MktForecastMaster.tsx
+@@ -108,13 +108,13 @@ export const MktForecastMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
+   // 자매 DMF0020 dataMaps 패턴 — column binding 별 직접 매핑 (`_comboKey` 우회)
+   //   Grid 의 useEffect 가 col.binding 으로 직접 comboData[binding] 조회 → dataMap 적용
+   const comboData: Record<string, ComboItem[]> = useMemo(() => ({
+-    END_CUSTOMER:   (endCustomersData    ?? []) as ComboItem[],
+-    SCM_SITE_ID:    (sitesData           ?? []) as ComboItem[],
+-    INCOTERMS:      (incotermsData       ?? []) as ComboItem[],
+-    FCST_TYPE:      (fcstTypeData        ?? []) as ComboItem[],
+-    DOM_EXP:        (customsHandbookData ?? []) as ComboItem[],
+-    PLANT_SITE_ID:  (plantSiteData       ?? []) as ComboItem[],
+-    MEASURE:        (measureData         ?? []) as ComboItem[],
++    END_CUSTOMER:   (endCustomersData    ?? []) as unknown as ComboItem[],
++    SCM_SITE_ID:    (sitesData           ?? []) as unknown as ComboItem[],
++    INCOTERMS:      (incotermsData       ?? []) as unknown as ComboItem[],
++    FCST_TYPE:      (fcstTypeData        ?? []) as unknown as ComboItem[],
++    DOM_EXP:        (customsHandbookData ?? []) as unknown as ComboItem[],
++    PLANT_SITE_ID:  (plantSiteData       ?? []) as unknown as ComboItem[],
++    MEASURE:        (measureData         ?? []) as unknown as ComboItem[],
+   }), [endCustomersData, sitesData, incotermsData, fcstTypeData, customsHandbookData, plantSiteData, measureData]);
+ 
+   // 화면 진입 자동 조회 (AS-IS Form_Load → InitControls → FindData)
+@@ -268,7 +268,7 @@ export const MktForecastMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
+ 
+   // F7 Save — AS-IS L1392 SaveButton override → SaveData
+   const handleSave = async () => {
+-    const spRows = (((data as { o_rc1?: MktFcstRow[] })?.o_rc1 ?? []) as MktFcstRow[]);
++    const spRows = (((data as { o_rc1?: MktFcstRow[] })?.o_rc1 ?? []) as unknown as MktFcstRow[]);
+     const allRows = [...insertedRows, ...spRows];
+     const modifiedRows = allRows.filter(r => r.EDIT_FLAG === 'I' || r.EDIT_FLAG === 'U' || r.EDIT_FLAG === 'D');
+ 
+@@ -327,7 +327,7 @@ export const MktForecastMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
+ 
+   // SP long format (row 별 YYYYMMDD + QTY) → wide PIVOT (D_/W_/M_YYYYMMDD column 별 QTY 채움)
+   // 사용자 명시 요구 (2026-06-07): selectedMeasures 만 grid 표시 (popup 으로 사용자 선택 가능)
+-  const spRows = (((data as { o_rc1?: MktFcstRow[] })?.o_rc1 ?? []) as MktFcstRow[]);
++  const spRows = (((data as { o_rc1?: MktFcstRow[] })?.o_rc1 ?? []) as unknown as MktFcstRow[]);
+   const filteredSpRows = spRows.filter(r => selectedMeasures.includes(String(r.MEASURE ?? '')));
+   const pivotedRows = ((): MktFcstRow[] => {
+     if (filteredSpRows.length === 0) return [];
+diff --git a/nscm-fe/features/demand/src/pages/mkt_forecast/components/MktForecastCarSubGrid.tsx b/nscm-fe/features/demand/src/pages/mkt_forecast/components/MktForecastCarSubGrid.tsx
+index e3a2f39..029e9a0 100644
+--- a/nscm-fe/features/demand/src/pages/mkt_forecast/components/MktForecastCarSubGrid.tsx
++++ b/nscm-fe/features/demand/src/pages/mkt_forecast/components/MktForecastCarSubGrid.tsx
+@@ -52,7 +52,7 @@ export const MktForecastCarSubGrid = ({
+     enabled: !!carMaker,
+   });
+ 
+-  const rows: CarRow[] = (((data as { o_rc1?: CarRow[] })?.o_rc1 ?? []) as CarRow[]);
++  const rows: CarRow[] = (((data as { o_rc1?: CarRow[] })?.o_rc1 ?? []) as unknown as CarRow[]);
+ 
+   if (isLoading) {
+     return <div style={{ padding: 16, color: '#1976d2' }}>⏳ Car Fcst 데이터 조회 중...</div>;
+diff --git a/nscm-fe/features/demand/src/pages/mkt_forecast/components/MktForecastPsiSubGrid.tsx b/nscm-fe/features/demand/src/pages/mkt_forecast/components/MktForecastPsiSubGrid.tsx
+index d1a8f60..eb80b0f 100644
+--- a/nscm-fe/features/demand/src/pages/mkt_forecast/components/MktForecastPsiSubGrid.tsx
++++ b/nscm-fe/features/demand/src/pages/mkt_forecast/components/MktForecastPsiSubGrid.tsx
+@@ -56,7 +56,7 @@ export const MktForecastPsiSubGrid = ({
+     enabled: !!projectCode && !!itemId,
+   });
+ 
+-  const rows: PsiRow[] = (((data as { o_rc1?: PsiRow[] })?.o_rc1 ?? []) as PsiRow[]);
++  const rows: PsiRow[] = (((data as { o_rc1?: PsiRow[] })?.o_rc1 ?? []) as unknown as PsiRow[]);
+ 
+   if (isLoading) {
+     return <div style={{ padding: 16, color: '#1976d2' }}>⏳ PSI 분석 데이터 조회 중...</div>;
+diff --git a/nscm-fe/features/demand/src/pages/mkt_forecast/components/modals/MasterChgModal.tsx b/nscm-fe/features/demand/src/pages/mkt_forecast/components/modals/MasterChgModal.tsx
+index ddf922e..d5ec8a6 100644
+--- a/nscm-fe/features/demand/src/pages/mkt_forecast/components/modals/MasterChgModal.tsx
++++ b/nscm-fe/features/demand/src/pages/mkt_forecast/components/modals/MasterChgModal.tsx
+@@ -25,7 +25,7 @@ export const MasterChgModal = ({ open, onClose, selectedRows: _selectedRows, div
+   const setToast = useMessageStore.getState().setToast;
+   const [saving, setSaving] = useState(false);
+ 
+-  const handleSave = async () => {
++  const handleSave = () => {
+     setSaving(true);
+     void setToast({ message: 'Master Change 저장 중...', type: 'default' });
+     // SP DMF0003_SAVE_MKT_FCST_PK_DATA_UPDATE 호출 (13 IN — Phase 5 보강)
+@@ -36,20 +36,20 @@ export const MasterChgModal = ({ open, onClose, selectedRows: _selectedRows, div
+   return (
+     <CustomDialog
+       open={open}
+-      onClose={onClose}
+-      title='Incoterms 일괄변경 (Master Change)'
+-      width={1200}
+-      height={600}
+-      buttons={[
+-        { label: '저장', onClick: handleSave, disabled: saving },
+-        { label: '닫기', onClick: onClose },
+-      ]}
+-    >
+-      <div style={{ padding: 16 }}>
+-        <div>선택된 행: {_selectedRows?.length ?? 0}건</div>
+-        <div>편집 가능 컬럼: New Incoterms / New FCST Type / New DOM_EXP / New Plant Site</div>
+-        {/* Phase 5 보강: grid + form 작성 */}
+-      </div>
+-    </CustomDialog>
++      customHeaderTitle='Incoterms 일괄변경 (Master Change)'
++      size={1200}
++      type='modal'
++      position='basic'
++      handleSubmit={handleSave}
++      handleClose={onClose}
++      disableButtonCancel={saving}
++      customContentArea={
++        <div style={{ padding: 16 }}>
++          <div>선택된 행: {_selectedRows?.length ?? 0}건</div>
++          <div>편집 가능 컬럼: New Incoterms / New FCST Type / New DOM_EXP / New Plant Site</div>
++          {/* Phase 5 보강: grid + form 작성 */}
++        </div>
++      }
++    />
+   );
+ };
+diff --git a/nscm-fe/features/demand/src/pages/mkt_forecast/components/modals/MeasureSelectModal.tsx b/nscm-fe/features/demand/src/pages/mkt_forecast/components/modals/MeasureSelectModal.tsx
+index df7df24..dc963e4 100644
+--- a/nscm-fe/features/demand/src/pages/mkt_forecast/components/modals/MeasureSelectModal.tsx
++++ b/nscm-fe/features/demand/src/pages/mkt_forecast/components/modals/MeasureSelectModal.tsx
+@@ -129,7 +129,7 @@ export const MeasureSelectModal = ({ open, onClose, defaultSelected, onApply, di
+       open={open}
+       type='modal'
+       position='basic'
+-      size={900}
++      size={800}
+       handleClose={onClose}
+       disableButtonCancel
+       customHeaderTitle={
+diff --git a/nscm-fe/features/demand/src/pages/mkt_forecast/components/modals/PrHistoryModal.tsx b/nscm-fe/features/demand/src/pages/mkt_forecast/components/modals/PrHistoryModal.tsx
+index 75ec0f5..1358dc5 100644
+--- a/nscm-fe/features/demand/src/pages/mkt_forecast/components/modals/PrHistoryModal.tsx
++++ b/nscm-fe/features/demand/src/pages/mkt_forecast/components/modals/PrHistoryModal.tsx
+@@ -25,17 +25,19 @@ export const PrHistoryModal = ({
+   return (
+     <CustomDialog
+       open={open}
+-      onClose={onClose}
+-      title='PR 변경 이력'
+-      width={900}
+-      height={500}
+-      buttons={[{ label: '닫기', onClick: onClose }]}
+-    >
+-      <div style={{ padding: 16 }}>
+-        <div>Request No: {requestNo ?? '-'}</div>
+-        <div>Project: {projectCode ?? '-'} / Item: {itemId ?? '-'}</div>
+-        {/* Phase 5 보강: PR history grid (read-only) */}
+-      </div>
+-    </CustomDialog>
++      handleClose={onClose}
++      customHeaderTitle='PR 변경 이력'
++      size={800}
++      type='modal'
++      position='basic'
++      disableButtonCancel
++      customContentArea={
++        <div style={{ padding: 16 }}>
++          <div>Request No: {requestNo ?? '-'}</div>
++          <div>Project: {projectCode ?? '-'} / Item: {itemId ?? '-'}</div>
++          {/* Phase 5 보강: PR history grid (read-only) */}
++        </div>
++      }
++    />
+   );
+ };
+diff --git a/nscm-fe/features/demand/src/pages/mkt_forecast/components/modals/PrModal.tsx b/nscm-fe/features/demand/src/pages/mkt_forecast/components/modals/PrModal.tsx
+index 0f7cb8a..3652e20 100644
+--- a/nscm-fe/features/demand/src/pages/mkt_forecast/components/modals/PrModal.tsx
++++ b/nscm-fe/features/demand/src/pages/mkt_forecast/components/modals/PrModal.tsx
+@@ -37,7 +37,7 @@ export const PrModal = ({
+   const setToast = useMessageStore.getState().setToast;
+   const [saving, setSaving] = useState(false);
+ 
+-  const handleSave = async () => {
++  const handleSave = () => {
+     setSaving(true);
+     void setToast({ message: 'PR 저장 중...', type: 'default' });
+     // SP DMF0003_SAVE_PRPOPUP 호출 (20 IN — Phase 5 보강)
+@@ -54,25 +54,21 @@ export const PrModal = ({
+   return (
+     <CustomDialog
+       open={open}
+-      onClose={onClose}
+-      title={titleByType[popupType] || 'Purchase Request'}
+-      width={1100}
+-      height={650}
+-      buttons={
+-        popupType === 'View_PR'
+-          ? [{ label: '닫기', onClick: onClose }]
+-          : [
+-              { label: '저장', onClick: handleSave, disabled: saving },
+-              { label: '닫기', onClick: onClose },
+-            ]
++      handleClose={onClose}
++      handleSubmit={popupType === 'View_PR' ? undefined : handleSave}
++      customHeaderTitle={titleByType[popupType] || 'Purchase Request'}
++      size={1000}
++      type='modal'
++      position='basic'
++      disableButtonCancel={saving}
++      customContentArea={
++        <div style={{ padding: 16 }}>
++          <div>Request No: {requestNo ?? '신규'}</div>
++          <div>Project: {projectCode ?? '-'} / Item: {itemId ?? '-'}</div>
++          <div>Plan Qty: {planQty ?? 0}</div>
++          {/* Phase 5 보강: form + grid + POPUP_TYPE 분기 */}
++        </div>
+       }
+-    >
+-      <div style={{ padding: 16 }}>
+-        <div>Request No: {requestNo ?? '신규'}</div>
+-        <div>Project: {projectCode ?? '-'} / Item: {itemId ?? '-'}</div>
+-        <div>Plan Qty: {planQty ?? 0}</div>
+-        {/* Phase 5 보강: form + grid + POPUP_TYPE 분기 */}
+-      </div>
+-    </CustomDialog>
++    />
+   );
+ };
+diff --git a/nscm-fe/features/demand/src/pages/mkt_forecast/components/modals/SspSyncCompareModal.tsx b/nscm-fe/features/demand/src/pages/mkt_forecast/components/modals/SspSyncCompareModal.tsx
+index ceb6406..4d52144 100644
+--- a/nscm-fe/features/demand/src/pages/mkt_forecast/components/modals/SspSyncCompareModal.tsx
++++ b/nscm-fe/features/demand/src/pages/mkt_forecast/components/modals/SspSyncCompareModal.tsx
+@@ -34,16 +34,18 @@ export const SspSyncCompareModal = ({
+   return (
+     <CustomDialog
+       open={open}
+-      onClose={onClose}
+-      title='SSP 동기화 상세 비교 (SO / Shipment Result)'
+-      width={1200}
+-      height={600}
+-      buttons={[{ label: '닫기', onClick: onClose }]}
+-    >
+-      <div style={{ padding: 16 }}>
+-        <div>비교 데이터: {rows?.length ?? 0}건</div>
+-        {/* Phase 5 보강: SmartColMerge grid */}
+-      </div>
+-    </CustomDialog>
++      handleClose={onClose}
++      customHeaderTitle='SSP 동기화 상세 비교 (SO / Shipment Result)'
++      size={1200}
++      type='modal'
++      position='basic'
++      disableButtonCancel
++      customContentArea={
++        <div style={{ padding: 16 }}>
++          <div>비교 데이터: {rows?.length ?? 0}건</div>
++          {/* Phase 5 보강: SmartColMerge grid */}
++        </div>
++      }
++    />
+   );
+ };
+diff --git a/nscm-fe/features/demand/src/pages/mkt_forecast/components/modals/SspSyncModal.tsx b/nscm-fe/features/demand/src/pages/mkt_forecast/components/modals/SspSyncModal.tsx
+index 5aa1c3f..383ab45 100644
+--- a/nscm-fe/features/demand/src/pages/mkt_forecast/components/modals/SspSyncModal.tsx
++++ b/nscm-fe/features/demand/src/pages/mkt_forecast/components/modals/SspSyncModal.tsx
+@@ -35,16 +35,18 @@ export const SspSyncModal = ({
+   return (
+     <CustomDialog
+       open={open}
+-      onClose={onClose}
+-      title='SSP 동기화 (Sync vs DP Qty)'
+-      width={1100}
+-      height={600}
+-      buttons={[{ label: '닫기', onClick: onClose }]}
+-    >
+-      <div style={{ padding: 16 }}>
+-        <div>동기화 데이터: {rows?.length ?? 0}건</div>
+-        {/* Phase 5 보강: SmartColMerge grid (MEASURE 기준 병합) */}
+-      </div>
+-    </CustomDialog>
++      handleClose={onClose}
++      customHeaderTitle='SSP 동기화 (Sync vs DP Qty)'
++      size={1000}
++      type='modal'
++      position='basic'
++      disableButtonCancel
++      customContentArea={
++        <div style={{ padding: 16 }}>
++          <div>동기화 데이터: {rows?.length ?? 0}건</div>
++          {/* Phase 5 보강: SmartColMerge grid (MEASURE 기준 병합) */}
++        </div>
++      }
++    />
+   );
+ };
+diff --git a/nscm-fe/features/demand/src/pages/mkt_forecast/utils/longToPivot.ts b/nscm-fe/features/demand/src/pages/mkt_forecast/utils/longToPivot.ts
+index 6bcff26..aa38a92 100644
+--- a/nscm-fe/features/demand/src/pages/mkt_forecast/utils/longToPivot.ts
++++ b/nscm-fe/features/demand/src/pages/mkt_forecast/utils/longToPivot.ts
+@@ -24,7 +24,7 @@ type LongRow = {
+ 
+ // Group key — 9 unique key (사용자 명시 sort 일치)
+ // 같은 9-key combination 의 row 들이 같은 pivot row 로 묶이고 YYYYMMDD 별 QTY 가 bucket cell 에 채워짐
+-function getGroupKey(row: LongRow): string {
++const getGroupKey = (row: LongRow): string => {
+   return [
+     row.DIVISION_ID ?? '',
+     row.SCM_SITE_ID ?? '',
+@@ -36,10 +36,10 @@ function getGroupKey(row: LongRow): string {
+     row.INCOTERMS ?? '',
+     row.MEASURE ?? '',
+   ].join('|');
+-}
++};
+ 
+ // Bucket key (D_/W_/M_) 생성 — UTC 일관성
+-function getBucketKey(yyyymmdd: string, bucketType: 'D' | 'W' | 'M'): string {
++const getBucketKey = (yyyymmdd: string, bucketType: 'D' | 'W' | 'M'): string => {
+   if (bucketType === 'D') return `D_${yyyymmdd}`;
+   if (bucketType === 'M') return `M_${yyyymmdd.slice(0, 6)}`;
+ 
+@@ -55,15 +55,15 @@ function getBucketKey(yyyymmdd: string, bucketType: 'D' | 'W' | 'M'): string {
+   const mmth = String(d.getUTCMonth() + 1).padStart(2, '0');
+   const md = String(d.getUTCDate()).padStart(2, '0');
+   return `W_${my}${mmth}${md}`;
+-}
++};
+ 
+ // long → wide PIVOT
+ //   - 첫 row 메타 cols 명시적 복사 (DIVISION_ID, END_CUSTOMER 등 — 자동 spread 가 BE 측 case 변경 시 누락 회피)
+ //   - 같은 group 의 row 의 YYYYMMDD 별 QTY 를 bucket cell 에 누적
+-export function longToPivot(
++export const longToPivot = (
+   longRows: LongRow[],
+   bucketType: 'D' | 'W' | 'M',
+-): MktFcstRow[] {
++): MktFcstRow[] => {
+   const grouped = new Map<string, MktFcstRow>();
+ 
+   for (const row of longRows) {
+@@ -94,10 +94,10 @@ export function longToPivot(
+ 
+     if (row.YYYYMMDD && row.QTY !== undefined) {
+       const bucketKey = getBucketKey(row.YYYYMMDD, bucketType);
+-      const existing = ((pivotRow as Record<string, unknown>)[bucketKey] as number | undefined) ?? 0;
+-      (pivotRow as Record<string, unknown>)[bucketKey] = existing + Number(row.QTY ?? 0);
++      const existing = ((pivotRow as unknown as Record<string, unknown>)[bucketKey] as number | undefined) ?? 0;
++      (pivotRow as unknown as Record<string, unknown>)[bucketKey] = existing + Number(row.QTY ?? 0);
+     }
+   }
+ 
+   return Array.from(grouped.values());
+-}
++};

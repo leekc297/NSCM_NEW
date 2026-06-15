@@ -83,6 +83,7 @@ export const ColumnTitleSetModal = ({ open, onClose, onApply }: Props) => {
   const { data } = useTabProcQuery({
     menuId: MENU_ID,
     sheetName: SHEETS.TITLE_SET,
+    tabId: MENU_ID,
     filters,
     enabled: open && !!filters,
   });

@@ -13,31 +13,31 @@ import type { CrudType, MktFcstRow } from '../mkt-forecast-master.types';
 //   - U : 기존 row cell 편집 (cellEditEnded)
 //   - D : 삭제 표시 row (handleDelete)
 
-export function markRowAsInserted(row: Partial<MktFcstRow>): MktFcstRow {
+export const markRowAsInserted = (row: Partial<MktFcstRow>): MktFcstRow => {
   return { ...row, EDIT_FLAG: 'I' as CrudType } as MktFcstRow;
-}
+};
 
-export function markRowAsUpdated(row: MktFcstRow): MktFcstRow {
+export const markRowAsUpdated = (row: MktFcstRow): MktFcstRow => {
   // 이미 'I' 마킹된 row 는 'I' 유지 (신규 row 의 cell 편집)
   if (row.EDIT_FLAG === 'I') return row;
   return { ...row, EDIT_FLAG: 'U' as CrudType };
-}
+};
 
-export function markRowAsDeleted(row: MktFcstRow): MktFcstRow {
+export const markRowAsDeleted = (row: MktFcstRow): MktFcstRow => {
   return { ...row, EDIT_FLAG: 'D' as CrudType };
-}
+};
 
-export function isModifiedRow(row: MktFcstRow): boolean {
+export const isModifiedRow = (row: MktFcstRow): boolean => {
   return row.EDIT_FLAG === 'I' || row.EDIT_FLAG === 'U' || row.EDIT_FLAG === 'D';
-}
+};
 
-export function getModifiedRows(rows: MktFcstRow[]): MktFcstRow[] {
+export const getModifiedRows = (rows: MktFcstRow[]): MktFcstRow[] => {
   return rows.filter(isModifiedRow);
-}
+};
 
 // P_ACTIVE_FLAG SP 호출 매핑 — CRUD_TYPE → 'I'/'U'/'D'
-export function toActiveFlag(row: MktFcstRow): 'I' | 'U' | 'D' {
+export const toActiveFlag = (row: MktFcstRow): 'I' | 'U' | 'D' => {
   if (row.EDIT_FLAG === 'I') return 'I';
   if (row.EDIT_FLAG === 'D') return 'D';
   return 'U';
-}
+};

@@ -1,0 +1,98 @@
+// AS-IS DMF0043_Contribute_View Designer.cs 조회조건 패널 — SCSS Module (룰 03 §5 inline style 0)
+
+.searchBar {
+  display: flex;
+  padding: 12px 16px;
+  background: #f5f7fa;
+  border: 1px solid #e0e4e9;
+  border-radius: 4px;
+
+  .searchRow {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .field {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .fieldLabel {
+    font-size: 13px;
+    color: #2b3a4a;
+    font-weight: 600;
+    min-width: 48px;
+  }
+
+  .checkField {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    color: #2b3a4a;
+    cursor: pointer;
+
+    input[type='checkbox'] {
+      width: 14px;
+      height: 14px;
+    }
+  }
+
+  .select {
+    min-width: 160px;
+    padding: 6px 8px;
+    font-size: 13px;
+    border: 1px solid #b8bfc9;
+    border-radius: 3px;
+    background: white;
+  }
+
+  .input {
+    padding: 6px 8px;
+    font-size: 13px;
+    border: 1px solid #b8bfc9;
+    border-radius: 3px;
+    background: white;
+    min-width: 100px;
+
+    &[readonly] {
+      background: #f5f7fa;
+      cursor: default;
+    }
+  }
+
+  .iconButton {
+    padding: 6px 10px;
+    font-size: 13px;
+    background: white;
+    color: #2b3a4a;
+    border: 1px solid #b8bfc9;
+    border-radius: 3px;
+    cursor: pointer;
+    min-width: 36px;
+
+    &:hover {
+      background: #f0f3f7;
+    }
+  }
+
+  .searchButton {
+    margin-left: auto;
+    padding: 8px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    background: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+
+    &:hover {
+      background: #1565c0;
+    }
+  }
+}

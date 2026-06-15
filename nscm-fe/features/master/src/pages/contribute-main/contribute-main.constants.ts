@@ -12,16 +12,18 @@ export enum SHEETS {
   SALES_LIST_TITLE = 'salesListTitle',
 }
 
-export enum RESPONSE_SET {
-  MAIN = 'o_rc1',
-  MAIN_TITLE = 'o_rc1',
-  VERSION = 'o_rc1',
-  YEAR_POPUP = 'o_rc1',
-  RATE_POPUP = 'o_rc1',
-  VERSION_POPUP = 'o_rc1',
-  SALES_LIST = 'p_cursor_main',
-  SALES_LIST_TITLE = 'o_rc1',
-}
+// const object — enum 대체 (NSCM 단일 cursor 표준 'o_rc1' 다수 중복 허용)
+export const RESPONSE_SET = {
+  MAIN: 'o_rc1',
+  MAIN_TITLE: 'o_rc1',
+  VERSION: 'o_rc1',
+  YEAR_POPUP: 'o_rc1',
+  RATE_POPUP: 'o_rc1',
+  VERSION_POPUP: 'o_rc1',
+  SALES_LIST: 'p_cursor_main',
+  SALES_LIST_TITLE: 'o_rc1',
+} as const;
+export type RESPONSE_SET = (typeof RESPONSE_SET)[keyof typeof RESPONSE_SET];
 
 // AS-IS .cs 의 5 Validation MSG codes
 export const VALIDATION_MSG = {

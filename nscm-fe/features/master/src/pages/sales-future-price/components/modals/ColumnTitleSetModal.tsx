@@ -1,4 +1,3 @@
-import { FlexGrid, FlexGridColumn } from '@mescius/wijmo.react.grid';
 import {
   AllowMerging,
   CellRange,
@@ -8,6 +7,7 @@ import {
   type GridPanel,
   MergeManager,
 } from '@mescius/wijmo.grid';
+import { FlexGrid, FlexGridColumn } from '@mescius/wijmo.react.grid';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { CustomDialog } from '@shared/components';
@@ -58,11 +58,12 @@ export const ColumnTitleSetModal = ({ open, modalClose, onSave }: Props) => {
   const { data, refetch, isLoading, isFetching } = useTabProcQuery({
     menuId: MENU_ID,
     sheetName: SHEETS.TITLE_SET,
+    tabId: MENU_ID,
     filters,
     enabled: open,
   });
 
-  const beRows = useMemo(() => (data?.o_rc1 ?? []) as Record<string, unknown>[], [data]);
+  const beRows = useMemo(() => (data?.o_rc1 ?? []) as unknown as Record<string, string>[], [data]);
   const loading = isLoading || isFetching;
 
   // BE rows → TitleSetRow 정규화 + fallback (MAIN_COLUMNS)
@@ -160,7 +161,7 @@ export const ColumnTitleSetModal = ({ open, modalClose, onSave }: Props) => {
       const key = binding === 'LARGE_CLASS_LABEL_NAME' ? 'LARGE_CLASS_LABEL_NAME' : 'SMALL_CLASS_LABEL_NAME';
       const sameRow = (a: number, b: number): boolean => {
         const ra = ri(a); const rb = ri(b);
-        return !!ra && !!rb && (ra as Record<string, unknown>)[key] === (rb as Record<string, unknown>)[key];
+        return !!ra && !!rb && (ra as unknown as Record<string, unknown>)[key] === (rb as unknown as Record<string, unknown>)[key];
       };
       let r1 = r, r2 = r;
       while (r1 > 0 && sameRow(r1 - 1, r)) r1--;

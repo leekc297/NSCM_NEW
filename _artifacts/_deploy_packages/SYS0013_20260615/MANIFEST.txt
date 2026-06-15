@@ -1,0 +1,30 @@
+SYS0013 Deploy Package — 20260615
+Total files: 27
+DB 데이터 (DQ 5 테이블) 제외 — 클라우드 별도 관리
+
+  01_FE/DynamicQuery.tsx                                             7383 bytes
+  01_FE/DynamicQueryMainGrid.tsx                                     1513 bytes
+  01_FE/dynamic-query.constants.ts                                    333 bytes
+  01_FE/shared_hooks_index.ts                                         396 bytes
+  01_FE/useTabBtnPermissions.ts                                      1855 bytes
+  02_DB_DDL/01_PKG_SYS0013_spec.sql                                  2104 bytes
+  02_DB_DDL/02_PKG_SYS0013_body.sql                                 27913 bytes
+  02_DB_DDL/03_SYS0013_GET_HISTORY.sql                               1292 bytes
+  02_DB_DDL/04_SYS0013_SAVE_QUERY.sql                                2412 bytes
+  02_DB_DDL/05_SYS0013_SAVE_COLUMNS.sql                              2135 bytes
+  02_DB_DDL/06_SYS0013_SAVE_PARAMETERS.sql                           2344 bytes
+  02_DB_DDL/07_SYS0013_SAVE_USER_GROUP.sql                           1464 bytes
+  02_DB_DDL/08_SYS0013_DELETE_USER_GROUP.sql                          769 bytes
+  02_DB_DDL/09_SYS0013_EXECUTE_HIST.sql                               700 bytes
+  03_GRANT_SYNONYM/01_GRANT_SCMD_APP.sql                              477 bytes
+  03_GRANT_SYNONYM/02_SYNONYM_SCMD_APP.sql                            702 bytes
+  04_META/01_MNU_M.sql                                                552 bytes
+  04_META/02_MSG_M.sql                                               1316 bytes
+  04_META/03_API_M.sql                                               6007 bytes
+  04_META/04_PROC_M.sql                                             17301 bytes
+  04_META/05_MNU_BTN_MPG_M.sql                                       6699 bytes
+  04_META/06_USER_GR_MNU_MPG_M.sql                                    887 bytes
+  04_META/07_USER_GR_MNU_BTN_MPG_M.sql                              12500 bytes
+  04_META/08_SHEET_COLUMNS.sql                                      25968 bytes
+  06_DEPLOY/README.md                                                1759 bytes
+  06_DEPLOY/apply.sh                                                  562 bytes

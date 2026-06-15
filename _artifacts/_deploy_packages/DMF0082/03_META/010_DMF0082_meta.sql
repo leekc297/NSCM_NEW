@@ -1,0 +1,143 @@
+--==============================================================================
+-- 010_DMF0082_meta.sql — DMF0082 FCST&PRICE MGMT 메타 SQL 7-BLOCK
+--   AS-IS .cs 9,418줄 (최대) / PKG body 5 SP + 1 신규 SAVE
+--   6 ResultSet 메인 SP / 권한 4 분기 / 3 신규 popup
+--   메뉴: Demand > Demand Plan > FCST & PRICE MGMT (fcst-price-mgmt slug)
+--==============================================================================
+SET DEFINE OFF
+SET SERVEROUTPUT ON
+SET FEEDBACK ON
+WHENEVER SQLERROR EXIT FAILURE
+
+PROMPT === BLOCK 1 : MSG_M (5) ===
+INSERT INTO SCM_MGR.SCM_ADM_MSG_M (MSG_ID, LANG_CD, MSG_TP_CD, MSG_NM, MSG_DESC, USE_YN, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+SELECT NEW.MSG_ID, 'KO', 'API', NEW.MSG_NM, NEW.MSG_NM, 'Y', 'admin', SYSDATE, 'admin', SYSDATE
+  FROM (
+    SELECT 'MSG_API_DMF0082_MAIN_RETRIEVE'         AS MSG_ID, 'FCST&PRICE 메인 조회 (6 ResultSet)' AS MSG_NM FROM DUAL UNION ALL
+    SELECT 'MSG_API_DMF0082_FUTUREPRICE_RETRIEVE',            'Future Price popup'                          FROM DUAL UNION ALL
+    SELECT 'MSG_API_DMF0082_MEASURE_COUNT_RETRIEVE',          'Measure Count popup'                          FROM DUAL UNION ALL
+    SELECT 'MSG_API_DMF0082_MEASURE_COUNT_SAVE_RETRIEVE',     'Measure Count Save Price popup'               FROM DUAL UNION ALL
+    SELECT 'MSG_API_DMF0082_WEEKDATA_RETRIEVE',               'Week Data popup'                              FROM DUAL
+  ) NEW
+ WHERE NOT EXISTS (SELECT 1 FROM SCM_MGR.SCM_ADM_MSG_M X WHERE X.MSG_ID=NEW.MSG_ID AND X.LANG_CD='KO');
+
+PROMPT === BLOCK 2 : MNU_M ===
+-- ⚠️ 기존 ROUTE_PATHS.DMF0082='forecast-price' 와 신규 slug 'fcst-price-mgmt' 충돌 결정 필요
+--   본 메타 SQL 은 정식 신규 slug 'fcst-price-mgmt' 사용
+INSERT INTO SCM_MGR.SCM_ADM_MNU_M (MNU_ID, UPPR_MNU_ID, MNU_NM, MNU_DESC, MNU_LVL, MNU_TP_CD, MNU_URL, MNU_ORD, USE_YN, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+SELECT 'DMF0082', 'Demand_Plan', 'FCST & PRICE MGMT', 'FCST & PRICE MGMT (최복잡 9,418줄 + 6 ResultSet + 권한 4 + 3 신규 popup + Figma)', 3, 'SCREEN', 'fcst-price-mgmt', 120, 'Y', 'admin', SYSDATE, 'admin', SYSDATE FROM DUAL
+ WHERE NOT EXISTS (SELECT 1 FROM SCM_MGR.SCM_ADM_MNU_M WHERE MNU_ID='DMF0082');
+
+PROMPT === BLOCK 3 : SHEET_COLUMNS (14 BASE — FCST + PRICE 병렬 행 후속) ===
+INSERT INTO SCM_MGR.SCM_MST_SHEET_COLUMNS (PROGRAM_ID, SHT_NM, SORT_ORD, COLUMN_NAME, HDR_NM, WIDTH, ALIGN_CD, CTRL_TP_CD, INPUT_TP_CD, MERGE_YN, FRZ_YN, VISIBLE_YN, USE_YN, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+SELECT 'DMF0082', 'main', NEW.SORT_ORD, NEW.COLUMN_NAME, NEW.HDR_NM, NEW.WIDTH, NEW.ALIGN_CD, NEW.CTRL_TP_CD, NEW.INPUT_TP_CD, 'Y', 'Y', 'Y', 'Y', 'admin', SYSDATE, 'admin', SYSDATE
+  FROM (
+    SELECT  1 AS SORT_ORD, 'DIVISION_ID' AS COLUMN_NAME, 'Div' AS HDR_NM, 60 AS WIDTH, 'C' AS ALIGN_CD, 'FPText' AS CTRL_TP_CD, 'S' AS INPUT_TP_CD FROM DUAL UNION ALL
+    SELECT  2, 'DEPT_NAME_KO',   'Department',   100, 'C', 'FPText', 'S' FROM DUAL UNION ALL
+    SELECT  3, 'TEAM_NAME_KO',   'Team',         100, 'C', 'FPText', 'S' FROM DUAL UNION ALL
+    SELECT  4, 'END_CUSTOMER',   'Customer',     100, 'C', 'FPText', 'S' FROM DUAL UNION ALL
+    SELECT  5, 'BIZ_TYPE_NAME',  'Biz.Type',     100, 'C', 'FPText', 'S' FROM DUAL UNION ALL
+    SELECT  6, 'SCM_SITE_ID',    'Sales Site',    90, 'C', 'FPText', 'S' FROM DUAL UNION ALL
+    SELECT  7, 'PROJECT_CODE',   'Project',      100, 'C', 'FPText', 'S' FROM DUAL UNION ALL
+    SELECT  8, 'ITEM_ID',        'Model',        120, 'C', 'FPText', 'S' FROM DUAL UNION ALL
+    SELECT  9, 'INCOTERMS',      'Incoterms',     80, 'C', 'FPText', 'S' FROM DUAL UNION ALL
+    SELECT 10, 'FCST_TYPE',      'Fcst Type',     90, 'C', 'FPText', 'S' FROM DUAL UNION ALL
+    SELECT 11, 'CURRENCY',       'Currency',      70, 'C', 'FPText', 'S' FROM DUAL UNION ALL
+    SELECT 12, 'MEASURE',        'Measure',      100, 'L', 'FPText', 'S' FROM DUAL UNION ALL
+    SELECT 13, 'QTY',            'Qty',           80, 'R', 'FPNumber','M' FROM DUAL UNION ALL
+    SELECT 14, 'EDIT_FLAG',      'EDIT_FLAG',      0, 'C', 'FPText', 'S' FROM DUAL
+  ) NEW
+ WHERE NOT EXISTS (SELECT 1 FROM SCM_MGR.SCM_MST_SHEET_COLUMNS X WHERE X.PROGRAM_ID='DMF0082' AND X.SHT_NM='main' AND X.COLUMN_NAME=NEW.COLUMN_NAME);
+
+PROMPT === BLOCK 4 : PROC_M (메인 18 + popup 4 × 6 = 24 + future_price 6 = 48) ===
+INSERT INTO SCM_MGR.SCM_ADM_PROC_M (PROC_NM, COL_NM, DATA_TP_CD, COL_TP_CD, SORT_ORD, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+SELECT NEW.PROC_NM, NEW.COL_NM, NEW.DATA_TP_CD, NEW.COL_TP_CD, NEW.SORT_ORD, 'admin', SYSDATE, 'admin', SYSDATE
+  FROM (
+    -- DMF0082_GET_MAIN_DATA (12 IN + 6 OUT = 18) — 메인 6 ResultSet
+    SELECT 'DMF0082_GET_MAIN_DATA' AS PROC_NM, 'divisionId'   AS COL_NM, 'VARCHAR' AS DATA_TP_CD, 'IN' AS COL_TP_CD,  1 AS SORT_ORD FROM DUAL UNION ALL
+    SELECT 'DMF0082_GET_MAIN_DATA',           'teamId',                   'VARCHAR',               'IN',                2 FROM DUAL UNION ALL
+    SELECT 'DMF0082_GET_MAIN_DATA',           'customer',                 'VARCHAR',               'IN',                3 FROM DUAL UNION ALL
+    SELECT 'DMF0082_GET_MAIN_DATA',           'bizType',                  'VARCHAR',               'IN',                4 FROM DUAL UNION ALL
+    SELECT 'DMF0082_GET_MAIN_DATA',           'fromYyyymmdd',             'VARCHAR',               'IN',                5 FROM DUAL UNION ALL
+    SELECT 'DMF0082_GET_MAIN_DATA',           'toYyyymmdd',               'VARCHAR',               'IN',                6 FROM DUAL UNION ALL
+    SELECT 'DMF0082_GET_MAIN_DATA',           'scmSiteId',                'VARCHAR',               'IN',                7 FROM DUAL UNION ALL
+    SELECT 'DMF0082_GET_MAIN_DATA',           'itemId',                   'VARCHAR',               'IN',                8 FROM DUAL UNION ALL
+    SELECT 'DMF0082_GET_MAIN_DATA',           'versionType',              'VARCHAR',               'IN',                9 FROM DUAL UNION ALL
+    SELECT 'DMF0082_GET_MAIN_DATA',           'qtyYn',                    'VARCHAR',               'IN',               10 FROM DUAL UNION ALL
+    SELECT 'DMF0082_GET_MAIN_DATA',           'sesUserId',                'VARCHAR',               'IN',               11 FROM DUAL UNION ALL
+    SELECT 'DMF0082_GET_MAIN_DATA',           'userGroup',                'VARCHAR',               'IN',               12 FROM DUAL UNION ALL
+    SELECT 'DMF0082_GET_MAIN_DATA',           'o_rc1',                    'CURSOR',                'OUT',              13 FROM DUAL UNION ALL
+    SELECT 'DMF0082_GET_MAIN_DATA',           'o_rc2',                    'CURSOR',                'OUT',              14 FROM DUAL UNION ALL
+    SELECT 'DMF0082_GET_MAIN_DATA',           'o_rc3',                    'CURSOR',                'OUT',              15 FROM DUAL UNION ALL
+    SELECT 'DMF0082_GET_MAIN_DATA',           'o_rc4',                    'CURSOR',                'OUT',              16 FROM DUAL UNION ALL
+    SELECT 'DMF0082_GET_MAIN_DATA',           'o_rc5',                    'CURSOR',                'OUT',              17 FROM DUAL UNION ALL
+    SELECT 'DMF0082_GET_MAIN_DATA',           'O_RESULT_CURSOR',          'PROC_RESULT',           'OUT',              18 FROM DUAL UNION ALL
+    -- DMF0082_POPUP_GET_FUTUREPRICE_INFO (4 IN + 2 OUT = 6)
+    SELECT 'DMF0082_POPUP_GET_FUTUREPRICE_INFO',   'startYyyymmdd',        'VARCHAR',               'IN',                1 FROM DUAL UNION ALL
+    SELECT 'DMF0082_POPUP_GET_FUTUREPRICE_INFO',   'endYyyymmdd',          'VARCHAR',               'IN',                2 FROM DUAL UNION ALL
+    SELECT 'DMF0082_POPUP_GET_FUTUREPRICE_INFO',   'sesUserId',            'VARCHAR',               'IN',                3 FROM DUAL UNION ALL
+    SELECT 'DMF0082_POPUP_GET_FUTUREPRICE_INFO',   'mnuId',                'VARCHAR',               'IN',                4 FROM DUAL UNION ALL
+    SELECT 'DMF0082_POPUP_GET_FUTUREPRICE_INFO',   'o_rc1',                'CURSOR',                'OUT',               5 FROM DUAL UNION ALL
+    SELECT 'DMF0082_POPUP_GET_FUTUREPRICE_INFO',   'O_RESULT_CURSOR',      'PROC_RESULT',           'OUT',               6 FROM DUAL UNION ALL
+    -- DMF0082_POPUP_GET_WEEKDATA (1 IN + 2 OUT = 3)
+    SELECT 'DMF0082_POPUP_GET_WEEKDATA',           'yyyymmdd',             'VARCHAR',               'IN',                1 FROM DUAL UNION ALL
+    SELECT 'DMF0082_POPUP_GET_WEEKDATA',           'o_rc1',                'CURSOR',                'OUT',               2 FROM DUAL UNION ALL
+    SELECT 'DMF0082_POPUP_GET_WEEKDATA',           'O_RESULT_CURSOR',      'PROC_RESULT',           'OUT',               3 FROM DUAL UNION ALL
+    -- DMF0082_POPUP_GET_MEASURE_COUNTINFO (2 IN + 2 OUT = 4)
+    SELECT 'DMF0082_POPUP_GET_MEASURE_COUNTINFO',  'sesUserId',            'VARCHAR',               'IN',                1 FROM DUAL UNION ALL
+    SELECT 'DMF0082_POPUP_GET_MEASURE_COUNTINFO',  'mnuId',                'VARCHAR',               'IN',                2 FROM DUAL UNION ALL
+    SELECT 'DMF0082_POPUP_GET_MEASURE_COUNTINFO',  'o_rc1',                'CURSOR',                'OUT',               3 FROM DUAL UNION ALL
+    SELECT 'DMF0082_POPUP_GET_MEASURE_COUNTINFO',  'O_RESULT_CURSOR',      'PROC_RESULT',           'OUT',               4 FROM DUAL UNION ALL
+    -- DMF0082_POPUP_GET_MEASURE_COUNTINFO_SAVE_PRICE (2 IN + 2 OUT = 4)
+    SELECT 'DMF0082_POPUP_GET_MEASURE_COUNTINFO_SAVE_PRICE', 'sesUserId',  'VARCHAR',               'IN',                1 FROM DUAL UNION ALL
+    SELECT 'DMF0082_POPUP_GET_MEASURE_COUNTINFO_SAVE_PRICE', 'mnuId',      'VARCHAR',               'IN',                2 FROM DUAL UNION ALL
+    SELECT 'DMF0082_POPUP_GET_MEASURE_COUNTINFO_SAVE_PRICE', 'o_rc1',      'CURSOR',                'OUT',               3 FROM DUAL UNION ALL
+    SELECT 'DMF0082_POPUP_GET_MEASURE_COUNTINFO_SAVE_PRICE', 'O_RESULT_CURSOR','PROC_RESULT',       'OUT',               4 FROM DUAL
+  ) NEW
+ WHERE NOT EXISTS (SELECT 1 FROM SCM_MGR.SCM_ADM_PROC_M X WHERE X.PROC_NM=NEW.PROC_NM AND X.COL_NM=NEW.COL_NM AND X.COL_TP_CD=NEW.COL_TP_CD);
+
+PROMPT === BLOCK 5 : API_M (5 endpoint) ===
+INSERT INTO SCM_MGR.SCM_ADM_API_M (API_ID, API_TP_CD, API_MSG_ID, API_MSG_DESC, API_URL, USE_YN, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+SELECT NEW.API_ID, NEW.API_TP_CD, NEW.API_MSG_ID, NEW.API_MSG_DESC, NEW.API_URL, 'Y', 'admin', SYSDATE, 'admin', SYSDATE
+  FROM (
+    SELECT 'P_DMF0082_MAIN_RETRIEVE'                AS API_ID, 'PROC_SELECT' AS API_TP_CD, 'MSG_API_DMF0082_MAIN_RETRIEVE'         AS API_MSG_ID, '메인 6RS'         AS API_MSG_DESC, 'PKG_DMF0082.P_DMF0082_GET_MAIN_DATA' AS API_URL FROM DUAL UNION ALL
+    SELECT 'P_DMF0082_FUTUREPRICE_RETRIEVE',                   'PROC_SELECT',              'MSG_API_DMF0082_FUTUREPRICE_RETRIEVE',                'Future Price',                  'PKG_DMF0082.P_DMF0082_POPUP_GET_FUTUREPRICE_INFO' FROM DUAL UNION ALL
+    SELECT 'P_DMF0082_MEASURE_COUNT_RETRIEVE',                 'PROC_SELECT',              'MSG_API_DMF0082_MEASURE_COUNT_RETRIEVE',              'Measure Count',                 'PKG_DMF0082.P_DMF0082_POPUP_GET_MEASURE_COUNTINFO' FROM DUAL UNION ALL
+    SELECT 'P_DMF0082_MEASURE_COUNT_SAVE_RETRIEVE',            'PROC_SELECT',              'MSG_API_DMF0082_MEASURE_COUNT_SAVE_RETRIEVE',         'Measure Count Save Price',      'PKG_DMF0082.P_DMF0082_POPUP_GET_MEASURE_COUNTINFO_SAVE_PRICE' FROM DUAL UNION ALL
+    SELECT 'P_DMF0082_WEEKDATA_RETRIEVE',                      'PROC_SELECT',              'MSG_API_DMF0082_WEEKDATA_RETRIEVE',                   'Week Data',                     'PKG_DMF0082.P_DMF0082_POPUP_GET_WEEKDATA' FROM DUAL
+  ) NEW
+ WHERE NOT EXISTS (SELECT 1 FROM SCM_MGR.SCM_ADM_API_M X WHERE X.API_ID=NEW.API_ID);
+
+PROMPT === BLOCK 6 : MNU_BTN_MPG_M (5) ===
+INSERT INTO SCM_MGR.SCM_ADM_MNU_BTN_MPG_M (MNU_ID, SHT_NM, MNU_BTN_CD, API_ID, USE_YN, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+SELECT 'DMF0082', NEW.SHT_NM, NEW.MNU_BTN_CD, NEW.API_ID, 'Y', 'admin', SYSDATE, 'admin', SYSDATE
+  FROM (
+    SELECT 'main'                    AS SHT_NM, 'SEARCH' AS MNU_BTN_CD, 'P_DMF0082_MAIN_RETRIEVE'                AS API_ID FROM DUAL UNION ALL
+    SELECT 'futurePricePopup',                  'SEARCH',               'P_DMF0082_FUTUREPRICE_RETRIEVE'                   FROM DUAL UNION ALL
+    SELECT 'measureCountPopup',                 'SEARCH',               'P_DMF0082_MEASURE_COUNT_RETRIEVE'                 FROM DUAL UNION ALL
+    SELECT 'measureCountSavePopup',             'SEARCH',               'P_DMF0082_MEASURE_COUNT_SAVE_RETRIEVE'            FROM DUAL UNION ALL
+    SELECT 'weekDataPopup',                     'SEARCH',               'P_DMF0082_WEEKDATA_RETRIEVE'                      FROM DUAL
+  ) NEW
+ WHERE NOT EXISTS (SELECT 1 FROM SCM_MGR.SCM_ADM_MNU_BTN_MPG_M X WHERE X.MNU_ID='DMF0082' AND X.SHT_NM=NEW.SHT_NM AND X.MNU_BTN_CD=NEW.MNU_BTN_CD);
+
+PROMPT === BLOCK 7 : 권한 ===
+INSERT INTO SCM_MGR.SCM_ADM_USER_GR_MNU_MPG_M (USER_GR_ID, MNU_ID, USE_YN, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+SELECT NEW.USER_GR_ID, 'DMF0082', 'Y', 'admin', SYSDATE, 'admin', SYSDATE
+  FROM (
+    SELECT 'GUEST' AS USER_GR_ID FROM DUAL UNION ALL
+    SELECT G.USER_GR_ID FROM SCM_MGR.SCM_ADM_USER_GR_MPG_M G WHERE G.USER_ID = 'minyonglee1' AND G.USE_YN = 'Y'
+  ) NEW
+ WHERE NOT EXISTS (SELECT 1 FROM SCM_MGR.SCM_ADM_USER_GR_MNU_MPG_M X WHERE X.USER_GR_ID=NEW.USER_GR_ID AND X.MNU_ID='DMF0082');
+
+INSERT INTO SCM_MGR.SCM_ADM_USER_GR_MNU_BTN_MPG_M (USER_GR_ID, MNU_ID, SHT_NM, MNU_BTN_CD, USE_YN, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+SELECT GR.USER_GR_ID, BTN.MNU_ID, BTN.SHT_NM, BTN.MNU_BTN_CD, 'Y', 'admin', SYSDATE, 'admin', SYSDATE
+  FROM SCM_MGR.SCM_ADM_MNU_BTN_MPG_M BTN
+  CROSS JOIN (
+    SELECT 'GUEST' AS USER_GR_ID FROM DUAL UNION ALL
+    SELECT G.USER_GR_ID FROM SCM_MGR.SCM_ADM_USER_GR_MPG_M G WHERE G.USER_ID = 'minyonglee1' AND G.USE_YN = 'Y'
+  ) GR
+ WHERE BTN.MNU_ID='DMF0082' AND BTN.USE_YN='Y'
+   AND NOT EXISTS (SELECT 1 FROM SCM_MGR.SCM_ADM_USER_GR_MNU_BTN_MPG_M X WHERE X.USER_GR_ID=GR.USER_GR_ID AND X.MNU_ID=BTN.MNU_ID AND X.SHT_NM=BTN.SHT_NM AND X.MNU_BTN_CD=BTN.MNU_BTN_CD);
+
+COMMIT;
+EXIT;

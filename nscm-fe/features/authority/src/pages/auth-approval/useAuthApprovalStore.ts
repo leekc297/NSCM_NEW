@@ -92,7 +92,7 @@ export const useAuthApprovalStore = createPersistedStoreWithTab<
 
         if (param.data.result?.length > 0) {
           const restored = param.data.result.reduce((acc, curr) => {
-            acc[curr.paramNm] = curr.paramCtn as SearchCondition[typeof curr.paramNm];
+            acc[curr.paramNm] = curr.paramCtn;
             return acc;
           }, {} as Partial<SearchCondition>);
           set(state => {

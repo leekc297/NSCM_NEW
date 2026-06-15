@@ -17,14 +17,16 @@ export enum SHEETS {
   SALES_SITE = 'salesSite',
 }
 
-export enum RESPONSE_SET {
-  MAIN = 'o_rc1',
-  DATA_TYPE = 'o_rc1',
-  DIVISION = 'o_rc1',
-  TEAM = 'o_rc1',
-  END_CUSTOMER = 'o_rc1',
-  SALES_SITE = 'o_rc1',
-}
+// const object — enum 대체 (NSCM 단일 cursor 표준 'o_rc1' 다수 중복 허용)
+export const RESPONSE_SET = {
+  MAIN: 'o_rc1',
+  DATA_TYPE: 'o_rc1',
+  DIVISION: 'o_rc1',
+  TEAM: 'o_rc1',
+  END_CUSTOMER: 'o_rc1',
+  SALES_SITE: 'o_rc1',
+} as const;
+export type RESPONSE_SET = (typeof RESPONSE_SET)[keyof typeof RESPONSE_SET];
 
 // AS-IS .cs 의 main grid column 정의 (23 컬럼)
 // merge=true: 사용자 요구 2026-06-02 — Data Type ~ MDM Code (ITEM_ID) 15개 컬럼 세로 머지 (As-Is .cs L515 `siMain.SmartColMerge()` 대응)

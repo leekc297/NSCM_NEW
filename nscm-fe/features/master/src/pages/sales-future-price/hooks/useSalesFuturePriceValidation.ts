@@ -60,9 +60,9 @@ export const useSalesFuturePriceValidation = () => {
       ['MEASURE',       'Measure'],
     ];
     for (let i = 0; i < dirty.length; i++) {
-      const r = dirty[i];
+      const r = dirty[i] as Record<string, string>;
       for (const [k, label] of REQUIRED) {
-        const v = String(r[k] ?? '').trim();
+        const v = (r[k] ?? '').trim();
         if (v === '') {
           void setAlert({ type: 'alert', content: `[MSG00002] [${label}] 은 필수 입력사항입니다. 다시 한번 확인해주세요. (행 ${i + 1})` });
           return { ok: false, msgId: MSG.REQUIRED_FIELD, rowIdx: i };
@@ -70,7 +70,7 @@ export const useSalesFuturePriceValidation = () => {
       }
       // AS-IS L1890 — Division=40 추가 검증 (MSG00414, 미등록 메시지)
       if (c.divisionId === DIVISION.MOBILITY && r.CRUD_TYPE === 'I') {
-        const projectCode = String(r['PROJECT_CODE'] ?? '').trim();
+        const projectCode = (r['PROJECT_CODE'] ?? '').trim();
         if (projectCode === '') {
           void setAlert({ type: 'alert', content: '[MSG00414] Division 40 환경에서 Project 필수.' });
           return { ok: false, msgId: MSG.SAVE_DIVISION_40, rowIdx: i };
@@ -82,7 +82,7 @@ export const useSalesFuturePriceValidation = () => {
     const PK = ['DIVISION_ID', 'END_CUSTOMER', 'SCM_SITE_ID', 'ITEM_ID', 'INCOTERMS', 'FCST_TYPE', 'DOM_EXP', 'CURRENCY'];
     const seen = new Set<string>();
     for (let i = 0; i < dirty.length; i++) {
-      const key = PK.map(k => String(dirty[i][k] ?? '')).join('|');
+      const key = PK.map(k => (dirty[i] as Record<string, string>)[k] ?? '').join('|');
       if (seen.has(key)) {
         void setAlert({ type: 'alert', content: `[MSG00043] 저장 시 중복 오류가 발생하였습니다. (행 ${i + 1}) 동일 PK 가 이미 존재합니다.` });
         return { ok: false, msgId: MSG.DUPLICATE, rowIdx: i };
@@ -117,7 +117,7 @@ export const useSalesFuturePriceValidation = () => {
 
   // ----- 셀 클릭 가드 (#63 spdMain_CellClick MSG00447 Currency 빈값) -----
   const validateCellClick = (binding: string, value: unknown): ValidationResult => {
-    if (binding === 'CURRENCY' && String(value ?? '').trim() === '') {
+    if (binding === 'CURRENCY' && String((value as string | undefined) ?? '').trim() === '') {
       void setAlert({ type: 'alert', content: '[MSG00447] Currency 가 비어 있습니다.' });
       return { ok: false, msgId: MSG.CURRENCY_EMPTY };
     }

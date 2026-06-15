@@ -106,24 +106,57 @@ SELECT * FROM (SELECT '{NEW_MENU_ID}', 'Sales Price', 'LOC', 'Local', 1, 'Y', 'a
 | **Visible** (사용자에게 표시) | `MNU_BTN_MPG_M.USE_YN = 'Y'` (admin 이 정의 자체 토글) |
 | **Enable** (클릭 가능) | 로그인 사용자 그룹의 `USER_GR_MNU_BTN_MPG_M` row 존재 + `USE_YN = 'Y'` (권한) |
 
-### 3.2 FE 구현 패턴
+### 3.2 FE 구현 패턴 ⭐ 2026-06-15 — **BE+FE 구현 완료**
+
+**BE Endpoint (기존)**: `GET /admin/menu/{mnuId}/auth` → `MenuAuthDto { mnuBtnAuth: List<String>, unitAuth: List<UnitDto> }`
+- 위치: `nscm-be/.../admin/menu/MenuController.java:63`
+- service: `AuthServiceImpl.retrieveMenuBtnAuth(userId, mnuId)` — SCM_ADM_USER_GR_MNU_BTN_MPG_M 조회
+
+**FE Hook (2026-06-15 신규 작성)**: `nscm-fe/packages/shared/src/hooks/useTabBtnPermissions.ts`
+- export: `@shared/hooks` 의 `useTabBtnPermissions`
+- 시그니처: `useTabBtnPermissions({ menuId }) → { buttons, hasButton, isLoading, refetch }`
+- react-query 캐싱 (queryKey `['menu-auth', menuId]`, staleTime 60s)
+
+**사용 패턴**:
 
 ```tsx
-// SubTitle 의 hotkeyConfig + customButtons 는 useTabBtnPermissions 결과 자동 적용
-const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID, shtNm: SHEETS.MAIN });
+import { useTabBtnPermissions } from '@shared/hooks';
+
+const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
 
 const hotkeyConfig: HotkeyConfig = {
   search: hasButton('SEARCH') ? handleSearch : false,
   insert: hasButton('INSERT') ? handleInsert : false,
   save:   hasButton('SAVE')   ? handleSave   : false,
   delete: hasButton('DELETE') ? handleDelete : false,
-  /* hidden 명시 (admin 정의 자체 없음) */
+  /* admin 정의 자체 없음 — Hidden allowlist */
   manual: false,
   upload: false,
 };
+
+const customButtons = hasButton('EXECUTE')
+  ? [{ label: 'Execute', action: handleExecute }]
+  : [];
 ```
 
-⚠ **hardcoded `hotkeyConfig: { search: handleSearch }`** 만 작성 (권한 무시) → SCM0008 사고 family (메모리 `feedback_common_button_visibility_default.md`).
+⚠ **hardcoded `hotkeyConfig: { search: handleSearch }`** 작성 시 → admin USE_YN='N' 비활성화 무시 → 운영 결정 무효화 (SCM0008 사고 family, 메모리 `feedback_common_button_visibility_default.md`).
+
+⚠ **`shtNm` 파라미터 없음** — BE 가 menu 전체의 권한 list 반환 (sheet 무관). sheet 별 권한 분리 필요 시 BE 보강 별도 task.
+
+### 3.3 ⭐ 2026-06-15 사고 사례 (재발 방지)
+
+**상황**: SYS0013 작업 시 master hook 의 `useTabBtnPermissions` 미구현으로 잘못 판단 → DynamicQuery.tsx 에 import → vite "does not provide an export named 'useTabBtnPermissions'" 사고.
+
+**root cause**: BE endpoint 인벤토리 사전 점검 미수행. 사용자 지적으로 BE 의 `/admin/menu/{mnuId}/auth` (`MenuController.java:63`) 이미 존재 발견.
+
+**재발 방지 의무** (anti-simplification + fe-import-check 보강):
+- 신규 hook 작성 검토 시 **BE Controller endpoint 인벤토리 grep 의무**:
+  ```bash
+  grep -rn "@(Get|Post|Put|Delete)Mapping" nscm-be/src/main/java/com/lgcns/nscm/admin/menu/
+  grep -rn "@(Get|Post|Put|Delete)Mapping" nscm-be/src/main/java/com/lgcns/nscm/general/
+  ```
+- 동적 fetch 패턴 (메뉴/권한/Column/Measure) 작업 시 `/admin/menu/{mnuId}/*` endpoint 인벤토리 의무
+- 추측 ("BE 에 없을 것") 금지 — 직접 확인 후 결정
 
 ### 3.3 신규 등록 의무 SQL (반드시 deploy SQL 에 포함)
 

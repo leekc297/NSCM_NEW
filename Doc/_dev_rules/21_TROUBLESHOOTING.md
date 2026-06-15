@@ -16,6 +16,10 @@
 | AS-IS 의 동적 visibility 가 신규 화면에 미반영 | Designer.cs + .cs 동적 배치 누락 | 룰 24 / 룰 25 §4 |
 | 메뉴 클릭 시 빈 화면 / `No matching route` / MDI 탭만 열리고 비어있음 | `SCM_ADM_MNU_M.MNU_URL` ↔ FE `route-paths.ts` slug 불일치 (1차) → 권한 (3차) | hook `menu-not-displayed-debug.md` 5단계 의무 (1=URL, 2=라우터, 3=메뉴권한, 4=부모권한, 5=런타임) |
 | 조회 버튼 클릭 시 `ORA-06550 PLS-00306: 인수의 갯수나 유형이 잘못되었습니다` | `SCM_ADM_PROC_M` (PROC 메타) 미등록 → BE 가 파라미터 0개로 SP 호출 | 룰 08 §4.4 의 자동 변환 SQL 로 `ALL_ARGUMENTS` → `SCM_ADM_PROC_M` INSERT. 신규 화면 등록 시 BLOCK 4 절대 누락 금지 |
+| ORA-06550 PLS-00306 이 **SP body 변경 직후** 발생 | dual/triple cursor 변환 후 PROC_M O_RESULT_CURSOR 누락 | §15.1 + 메모리 `feedback_proc_m_sync_after_sp_body_change.md` |
+| BE 로그 `ORA-20001: 오류가 발생했습니다. ORA-06512 at line N` 만 보임 (실제 사고 위치 추적 불가) | EXCEPTION OTHERS 가 generic raise 로 SQLERRM 가림 | §15.5 + hook `sp-exception-handler-debug-friendly.md` 진단 절차 (임시 patch → root cause → 복원) |
+| Repair grid 더블클릭 시 ORA-20001 / 실제 원인 `ORA-06533 Subscript beyond count` | `UTL_CALL_STACK.SUBPROGRAM(1)(2)` 안전 체크 누락 | §15.4 + hook `sp-utl-call-stack-safety.md` |
+| 브라우저 `사이트에 연결할 수 없음` + curl 도 outbound HTTP=000 | Windows TCP/IP buffer / non-paged pool 일시 고갈 | §15.6 (60-120초 대기 자동 회복 / netsh winsock reset 수동 회복) |
 
 ## §1. Oracle SP 빈 결과 진단 (DMF0007 사례)
 
@@ -1014,3 +1018,75 @@ PKG_XXX.P_MAIN_SP(P_DEPT_ID, P_USER_ID, P_MENU_ID, O_RC1, ...);
 
 - 메모리 `feedback_wrapper_sp_no_all_transform.md`
 - 룰 24 §6.5 As-Is DB cross-check
+
+---
+
+## ⭐ §15. DMF0008 사고 묶음 (2026-06-10 신설)
+
+> 사용자 보고: "조회 시 sql error" / "Repair 더블클릭 시 sql error" / "사이트에 연결할 수 없음" / "PKG/SP 다시 보완".
+> 5 사고 root cause 분석 + fix + 재발 방지 절차.
+> 진실 source: 본 §15. hook `sp-utl-call-stack-safety.md` / `sp-exception-handler-debug-friendly.md` 는 link only.
+
+### §15.1 ORA-06550 PLS-00306 — PROC_M O_RESULT_CURSOR 누락 (3 SP 일괄)
+
+- **원인**: 2026-06-09 이후 SP body 가 dual-cursor (O_RC1 + O_RESULT_CURSOR) 또는 triple-cursor (O_RC1 + O_RC3 + O_RESULT_CURSOR) 패턴으로 변환됐으나 SCM_ADM_PROC_M 메타 미동기화
+- **검출**: 메모리 `feedback_proc_m_sync_after_sp_body_change.md` §진단 SQL
+- **Fix**: NOT EXISTS 멱등 INSERT (메모리 §Fix 패턴)
+- **DMF0008 대상**: SUMMARY (5 IN + 3 OUT) / REPAIR (7 IN + 2 OUT) / SALES_SITE_PROJECT_MODEL (5 IN + 2 OUT)
+- **artifact**: `_artifacts/_deploy_packages/DMF0008/03_META/100_DMF0008_PROC_M_O_RESULT_CURSOR_boost.sql`
+
+### §15.2 cursor 덮어쓰기 (SP body line 132 OPEN O_RC1 FOR DUMMY)
+
+- **원인**: SUMMARY SP body 가 line 66 메인 OPEN O_RC1 후 line 132 에서 `OPEN O_RC1 FOR SELECT NULL AS DUMMY` 로 덮어쓰기 — 메인 결과 → DUMMY 변경
+- **검출**: SP body `OPEN O_RC1` 다중 발생 + 두 번째가 DUMMY 패턴 grep
+- **Fix**: 두 번째 OPEN O_RC1 line 주석 처리 (O_RC3 OPEN 은 유지 — top-level OPEN 없으면 cursor 미할당)
+- **메모리**: `feedback_sp_cursor_reassignment_overwrite.md`
+
+### §15.3 NVL(EXCEPTION_FLAG, NULL) != 'Y' anti-pattern
+
+- **원인**: `NVL(x, NULL) != 'Y'` 또는 bare `x != 'Y'` — NULL 비교 시 UNKNOWN → row 제외. 대부분 EXCEPTION_FLAG IS NULL 인 source 데이터 → 모든 row 제외
+- **검출**: `NVL(.*, NULL)` 또는 EXCEPTION_FLAG 단독 `!= 'Y'` grep
+- **Fix**: `NVL(EXCEPTION_FLAG, 'N') != 'Y'`
+- **메모리**: `feedback_isnull_to_nvl_null_handling.md`
+
+### §15.4 UTL_CALL_STACK.SUBPROGRAM(1)(2) 안전 체크 누락 (ORA-06533 Subscript beyond count)
+
+- **원인**: line 53 `IF UTL_CALL_STACK.SUBPROGRAM(1)(1) IS NOT NULL THEN` → 첫 element 존재만 보장. line 54 의 (2) 인덱스 접근 시 top-level 호출 시 폭발
+- **검출**: hook `sp-utl-call-stack-safety.md` §4 자동 grep (`SUBPROGRAM(1)(2)` + `.COUNT >=` 부재)
+- **Fix**: `IF UTL_CALL_STACK.SUBPROGRAM(1).COUNT >= 2 THEN ... (1)(2) ... ELSE $$PLSQL_UNIT END IF`
+- **자매 reference**: DMF0008_GET_SALES_SITE_PROJECT_MODEL line 57 (정확 패턴) vs DMF0008_GET_SALES_SITE line 53 (안티 패턴)
+- **메모리**: `feedback_sp_utl_call_stack_safe_pattern.md`
+
+### §15.5 EXCEPTION OTHERS 가 SQLERRM 가림 + SCM_SYS_LOG 미존재 cascade fail
+
+- **Symptom**: BE 로그 `ORA-20001: 오류가 발생했습니다. ORA-06512 at line N` (N = EXCEPTION 안 RAISE_APPLICATION_ERROR 위치). 진짜 사고 원인 추적 불가
+- **2 단계 사고**: (1) RAISE_APPLICATION_ERROR generic 메시지로 SQLERRM 손실 (2) SCM_SYS_LOG 테이블 미존재 시 PR_SCM_SYS_LOG_BATCH 자체 raise → cascade
+- **진단 절차**: hook `sp-exception-handler-debug-friendly.md` §4 (임시 patch → root cause → 복원)
+- **Fix 예 (개발 환경)**:
+  ```sql
+  EXCEPTION WHEN OTHERS THEN
+    -- PR_SCM_SYS_LOG_BATCH(...);
+    RAISE_APPLICATION_ERROR(-20001,
+      'SQLCODE=' || TO_CHAR(SQLCODE) || ' SQLERRM=' || SQLERRM ||
+      ' BACKTRACE=' || SUBSTR(DBMS_UTILITY.FORMAT_ERROR_BACKTRACE, 1, 800));
+  END;
+  ```
+- **메모리**: `feedback_exception_handler_hiding_real_error.md`
+
+### §15.6 Windows TCP/IP buffer ENOBUFS (`사이트에 연결할 수 없음`)
+
+- **Symptom**: vite proxy 로그 `AggregateError [ENOBUFS]` + `No buffer space available` + curl 로 outbound 도 HTTP=000 (lge.com 도 응답 없음)
+- **원인**: 24초 걸리는 SP 호출 (SSPM) + vite proxy → BE 사이 연결 누적 → Windows 의 dynamic port range 또는 non-paged pool 일시 고갈
+- **진단**: `netstat -an | awk '/TIME_WAIT/...'` + `netsh int ipv4 show dynamicport tcp`
+- **자동 회복**: 60~120초 대기 — TIME_WAIT 자동 정리
+- **수동 회복**:
+  1. 다른 port 로 vite 재기동 (`vite --port 5174`)
+  2. `netsh winsock reset` + `netsh int ip reset` (관리자 + 재부팅 필요)
+  3. SP 자체 튜닝 (SSPM 24초 → ms 단위)
+
+### §15.7 cross-ref
+
+- 메모리 `feedback_proc_m_sync_after_sp_body_change.md` / `feedback_sp_cursor_reassignment_overwrite.md` / `feedback_isnull_to_nvl_null_handling.md` / `feedback_sp_utl_call_stack_safe_pattern.md` / `feedback_exception_handler_hiding_real_error.md`
+- hook `sp-utl-call-stack-safety.md` / `sp-exception-handler-debug-friendly.md`
+- 룰 v2 hook `proc-meta-signature-match.md` — PROC_M signature PR 머지 게이트
+- 패키지 보강: `_artifacts/_deploy_packages/DMF0008/_README_2026-06-10_PATCH.md`

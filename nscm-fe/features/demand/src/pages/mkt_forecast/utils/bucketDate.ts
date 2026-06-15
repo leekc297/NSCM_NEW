@@ -13,21 +13,29 @@ import { BUCKET_TYPE } from '../mkt-forecast-master.constants';
 //   longToPivot.ts 의 getBucketKey 가 UTC 처리 → bucketDate 도 UTC 통일 의무
 //   local timezone 혼재 시 KST 자정 ↔ UTC 전일 의 yyyymmdd 키 mismatch → 동적 cell 빈 표시
 
-const yyyymmdd = (d: Date) => {
+const yyyymmdd = (d: Date): string => {
   const y = d.getUTCFullYear();
   const m = String(d.getUTCMonth() + 1).padStart(2, '0');
   const dd = String(d.getUTCDate()).padStart(2, '0');
   return `${y}${m}${dd}`;
 };
 
-const yyyymm = (d: Date) => {
+const yyyymm = (d: Date): string => {
   const y = d.getUTCFullYear();
   const m = String(d.getUTCMonth() + 1).padStart(2, '0');
   return `${y}${m}`;
 };
 
+const parseYyyymmdd = (s: string): Date => {
+  return new Date(Date.UTC(
+    parseInt(s.slice(0, 4), 10),
+    parseInt(s.slice(4, 6), 10) - 1,
+    parseInt(s.slice(6, 8), 10),
+  ));
+};
+
 // 일 단위 column key 생성 (D_YYYYMMDD)
-export function generateDailyKeys(startYyyymmdd: string, endYyyymmdd: string): string[] {
+export const generateDailyKeys = (startYyyymmdd: string, endYyyymmdd: string): string[] => {
   const start = parseYyyymmdd(startYyyymmdd);
   const end = parseYyyymmdd(endYyyymmdd);
   const keys: string[] = [];
@@ -39,10 +47,10 @@ export function generateDailyKeys(startYyyymmdd: string, endYyyymmdd: string): s
   }
 
   return keys;
-}
+};
 
 // 주 단위 column key 생성 (W_YYYYMMDD = 월요일)
-export function generateWeeklyKeys(startYyyymmdd: string, endYyyymmdd: string): string[] {
+export const generateWeeklyKeys = (startYyyymmdd: string, endYyyymmdd: string): string[] => {
   const start = parseYyyymmdd(startYyyymmdd);
   const end = parseYyyymmdd(endYyyymmdd);
   const keys: string[] = [];
@@ -59,10 +67,10 @@ export function generateWeeklyKeys(startYyyymmdd: string, endYyyymmdd: string): 
   }
 
   return keys;
-}
+};
 
 // 월 단위 column key 생성 (M_YYYYMM)
-export function generateMonthlyKeys(startYyyymmdd: string, endYyyymmdd: string): string[] {
+export const generateMonthlyKeys = (startYyyymmdd: string, endYyyymmdd: string): string[] => {
   const start = parseYyyymmdd(startYyyymmdd);
   const end = parseYyyymmdd(endYyyymmdd);
   const keys: string[] = [];
@@ -75,22 +83,22 @@ export function generateMonthlyKeys(startYyyymmdd: string, endYyyymmdd: string):
   }
 
   return keys;
-}
+};
 
 // Bucket type 별 column key 생성 entry point
-export function generateBucketKeys(
+export const generateBucketKeys = (
   bucketType: typeof BUCKET_TYPE[keyof typeof BUCKET_TYPE],
   startYyyymmdd: string,
   endYyyymmdd: string,
-): string[] {
+): string[] => {
   if (bucketType === BUCKET_TYPE.DAILY) return generateDailyKeys(startYyyymmdd, endYyyymmdd);
   if (bucketType === BUCKET_TYPE.WEEKLY) return generateWeeklyKeys(startYyyymmdd, endYyyymmdd);
   if (bucketType === BUCKET_TYPE.MONTHLY) return generateMonthlyKeys(startYyyymmdd, endYyyymmdd);
   return [];
-}
+};
 
 // Bucket key 에서 header label 추출
-export function getBucketHeader(key: string): string {
+export const getBucketHeader = (key: string): string => {
   if (key.startsWith('D_')) {
     const d = key.slice(2);
     return `${d.slice(4, 6)}/${d.slice(6, 8)}`;
@@ -104,10 +112,10 @@ export function getBucketHeader(key: string): string {
     return `${d.slice(0, 4)}/${d.slice(4, 6)}`;
   }
   return key;
-}
+};
 
 // Div 40 의 8주 관리 — 8주 이내 column key 만 editable
-export function getEditableWeeksFromCurrentDate(): string[] {
+export const getEditableWeeksFromCurrentDate = (): string[] => {
   const now = new Date();
   const keys: string[] = [];
 
@@ -125,12 +133,4 @@ export function getEditableWeeksFromCurrentDate(): string[] {
   }
 
   return keys;
-}
-
-function parseYyyymmdd(s: string): Date {
-  return new Date(Date.UTC(
-    parseInt(s.slice(0, 4), 10),
-    parseInt(s.slice(4, 6), 10) - 1,
-    parseInt(s.slice(6, 8), 10),
-  ));
-}
+};

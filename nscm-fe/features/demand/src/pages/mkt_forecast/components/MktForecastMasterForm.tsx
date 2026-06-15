@@ -9,7 +9,7 @@ import {
   BizTypeField, BucketField, DivisionField, EndCustomerField, ItemField,
   OwnerField, PeriodField, PlantSiteField, ProjectField, SalesSiteField,
   TeamField,
-} from 'features/master/src/components';
+} from 'features/master/src/components/searchFields/SearchFields';
 import { useMktForecastMasterStore } from '../useMktForecastMasterStore';
 
 interface Props {
@@ -81,7 +81,7 @@ export const MktForecastMasterForm = ({ onSearch }: Props) => {
           {/* Row 4 — 선택적 Lookup (Project / Item / Owner) */}
           <ProjectField
             value={sc.projectCode ? [sc.projectCode] : []}
-            onChange={v => set({ projectCode: v[0] ?? '' })}
+            onChange={(v: string[]) => set({ projectCode: v[0] ?? '' })}
             division={sc.divisionId}
             deptIds={sc.teamIds}
             endCustomers={sc.endCustomers}
@@ -90,7 +90,7 @@ export const MktForecastMasterForm = ({ onSearch }: Props) => {
           />
           <ItemField
             value={sc.itemId ? [sc.itemId] : []}
-            onChange={v => set({ itemId: v[0] ?? '' })}
+            onChange={(v: string[]) => set({ itemId: v[0] ?? '' })}
             division={sc.divisionId}
           />
           <OwnerField value={sc.owner} onChange={v => set({ owner: v })} division={sc.divisionId} />

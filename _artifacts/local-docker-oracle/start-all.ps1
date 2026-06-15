@@ -1,7 +1,7 @@
 # NSCM 통합 안전 기동 스크립트 (BE Spring Boot + FE Vite)
 #
-# 2026-06-10: 사내 Oracle (10.20.100.153:2521:ESSCMD) 직접 연결로 전환되어
-#             Docker 기동 단계 제거. (config-local.yml 의 datasources[0] 참조)
+# 2026-06-10: 사내 Oracle 직접 연결로 전환되어 Docker 기동 단계 제거.
+# 2026-06-15: 사내 Oracle IP 변경 10.20.100.153 → 121.162.245.167 (config-local.yml datasources[0] 참조)
 #
 # 사용법:
 #   cd C:\Projects\NSCM\_artifacts\local-docker-oracle
@@ -22,7 +22,7 @@ param(
   [switch]$SkipBe,
   [switch]$SkipFe,
   [int]$BeReadyTimeoutSec      = 300,
-  [int]$FeReadyTimeoutSec      = 180
+  [int]$FeReadyTimeoutSec      = 240
 )
 
 $ErrorActionPreference = "Continue"  # native exe stderr 를 ErrorRecord 로 wrap 하는 PS5.1 동작 회피
@@ -71,7 +71,7 @@ foreach ($p in $ports.Keys) {
 }
 
 # 0.3 사내 Oracle 도달 확인 (config-local.yml datasources[0])
-$OracleHost = "10.20.100.153"
+$OracleHost = "121.162.245.167"
 $OraclePort = 2521
 if (Test-NetConnection -ComputerName $OracleHost -Port $OraclePort -InformationLevel Quiet -WarningAction SilentlyContinue) {
   Write-OK "사내 Oracle ${OracleHost}:${OraclePort} 도달 확인"

@@ -89,6 +89,110 @@ ls nscm-fe/features/{layer}/src/pages/
 
 → 5 단계 누락 시 **anti-simplification 위반** + 중복 작성 사고 위험.
 
+### §1.5 components/ 폴더 의무 + 진입 페이지 분리 원칙 (2026-06-09 신규 — DMF0008 사고 후)
+
+> 사용자 요구 (2026-06-09): "DMF0004, DMF0005, DMF0006 처럼 폴더 내 컴포넌트를 생성하고 컴포넌트를 사용하는 것을 RULE 로 생성하고 따르도록 해주세요."
+> **CLAUDE.md §3 원칙 1 "한 사람이 개발한 것처럼"** 의 구체적 적용.
+
+#### §1.5.1 의무 매트릭스
+
+| # | 의무 항목 | 한도 / 형식 | 위반 시 |
+|---:|---|---|---|
+| 1 | `components/` 폴더 생성 시점 | 신규 화면 폴더 생성 직후 **즉시** (skeleton 단계여도) | 후속 grid/form 추가 시 root 에 분산 — 표준 위반 |
+| 2 | Form / Grid / SubGrid / Tab — 각 별도 `.tsx` 파일 | JSX 30 라인 초과 시 **강제 분리** | 진입 페이지 라인 폭증 + 재사용성 0 |
+| 3 | Modal / Popup — `components/modals/` 서브폴더 | (현재 inline event handler 만 있어도 폴더 미리 신설) | modal 신규 작성 시 root 또는 components/ 에 잘못 배치 |
+| 4 | 진입 페이지 (`{PascalName}.tsx`) inline JSX 한도 | **400 라인 강제 / 300 라인 권장** | 룰 03 §3.7 "200 lines 초과 분리 의무" 위반 |
+| 5 | 진입 페이지 안 `<FlexGrid>` / `<DataGrid>` JSX 직접 정의 | **금지** (sub-component 안에서만 정의) | DMF0008 사고 패턴 — 4 grid inline 으로 440 라인 폭발 |
+| 6 | 진입 페이지 안 `<CustomDialog>` / `<Dialog>` JSX 직접 정의 | **금지** (`components/modals/` 분리 의무) | inline modal 누적 → 진입 페이지 비대화 |
+| 7 | 진입 페이지 역할 | **composition + layout 만** (handler / store selector / hook + JSX import 조합) | logic + UI 혼재 시 룰 03 §1.1 7단계 구조 위반 |
+
+#### §1.5.2 표준 폴더 트리 (reference: DMF0004 sales-site)
+
+```
+features/master/src/pages/{kebab-case}/
+├─ {PascalName}.tsx                     ⭐ 의무: 진입 (composition only, ≤ 300 라인)
+├─ {PascalName}.module.scss             (선택)
+├─ {kebab-case}.constants.ts            ⭐ 의무
+├─ {kebab-case}.types.ts                (선택 — types 분리 시)
+├─ use{PascalName}Store.ts              ⭐ 의무: Zustand store
+├─ index.ts                             ⭐ 의무: 한 줄 export
+├─ components/                          ⭐ 의무: sub-component 폴더
+│  ├─ {PascalName}Form.tsx              ⭐ 의무: SearchArea
+│  ├─ {PascalName}Grid.tsx              ⭐ 의무: 메인 grid
+│  ├─ {PascalName}{SubName}Grid.tsx     (multi-sheet 시)
+│  ├─ {PascalName}{SubName}SubGrid.tsx  (sub grid 시)
+│  ├─ {PascalName}SubTabs.tsx           (Tab 컨테이너 있을 시)
+│  └─ modals/                           ⭐ 의무 폴더 (현재 inline event handler 만 있어도 폴더만 신설)
+│     └─ {PascalName}{Action}Modal.tsx  (modal 신규 작성 시)
+├─ hooks/                               (선택 — 화면 전용 hook)
+└─ utils/                               (선택 — 화면 전용 util)
+```
+
+#### §1.5.3 진입 페이지 import 패턴 (의무)
+
+```ts
+// 상단 — sub-component import (상대경로 ./)
+import { {Pascal}Form } from './components/{Pascal}Form';
+import { {Pascal}Grid } from './components/{Pascal}Grid';
+import { {Pascal}{Sub}Grid } from './components/{Pascal}{Sub}Grid';
+import { {Pascal}{Action}Modal } from './components/modals/{Pascal}{Action}Modal';
+import { use{Pascal}Store } from './use{Pascal}Store';
+import { MENU_ID, SHEETS } from './{kebab}.constants';
+
+// JSX 본문 — composition 만 (inline JSX 정의 금지)
+return (
+  <>
+    <MainTitle ... />
+    <{Pascal}Form ... />
+    <SubTitle ... />
+    <{Pascal}Grid gridRef={...} data={...} />
+    <{Pascal}SubGrid gridRef={...} data={...} />
+  </>
+);
+```
+
+#### §1.5.4 Anti-pattern (DMF0008 erp-edi-master, 2026-06-09 보완 대상)
+
+❌ **DMF0008 위반 사례**:
+- `ErpEdiMaster.tsx` **440 라인** 안에 4 grid (`<FlexGrid>` Summary/Repair/SalesSite/SSPM) 모두 inline JSX 정의
+- `components/` 에는 Form 과 SalesSiteGrid 만 있고 나머지 3 grid 누락
+- `components/modals/` 폴더 부재
+- UpdateHistory bar (13 라인) 도 inline JSX
+- → 진입 페이지 ≥ 400 라인 강제 한도 초과 + JSX 30 라인 초과 inline 5 건
+
+✅ **DMF0004 표준 사례** (`sales-site`):
+- `SalesSite.tsx` **223 라인** — composition 만
+- `components/` 안에 Form + 4 grid (메인 + Customer + Location + Bucket) 모두 별도 .tsx
+
+#### §1.5.5 자동 검증 grep (PR 머지 게이트)
+
+```bash
+# 1. 진입 페이지 라인 수 한도 (400 초과 시 분리 의무)
+wc -l features/{domain}/src/pages/{screen}/{Pascal}.tsx  # ≤ 400 강제 / ≤ 300 권장
+
+# 2. 진입 페이지 안 FlexGrid/DataGrid 직접 정의 금지
+rg -n "<FlexGrid\\b|<DataGrid\\b" features/{domain}/src/pages/{screen}/{Pascal}.tsx | wc -l  # = 0
+
+# 3. 진입 페이지 안 CustomDialog/Dialog 직접 정의 금지
+rg -n "<CustomDialog\\b|<Dialog\\b" features/{domain}/src/pages/{screen}/{Pascal}.tsx | wc -l  # = 0
+
+# 4. components/ 폴더 존재 의무
+test -d features/{domain}/src/pages/{screen}/components
+
+# 5. components/modals/ 폴더 존재 의무 (현재 modal 0 개여도 폴더 의무)
+test -d features/{domain}/src/pages/{screen}/components/modals
+
+# 6. 자매 화면 cross-check (DMF0004 reference)
+ls features/master/src/pages/sales-site/components/  # 표준 인벤토리 학습
+```
+
+#### §1.5.6 cross-ref
+
+- 룰 03 §1.1 (메인 컴포넌트 import 패턴) — sub-component import 라인 명시
+- 룰 03 §3.7 (200 lines 초과 분리 의무) — 본 §1.5 가 정량 한도 강화
+- 룰 10 §1 (popup_modal — modals/ 위치) — 본 §1.5.2 와 일관
+- hook `components-folder-pattern.md` — PR 머지 게이트 자동 grep
+
 ---
 
 ## §2 허용 변형
@@ -228,3 +332,4 @@ find {path} -name "*.scss" | grep -v ".module.scss" | wc -l  # = 0
 | 일자 | 변경 | 이유 |
 |---|---|---|
 | 2026-06-03 | 초안 (Phase 3 추출) | DMF0004~7 reference 분석 |
+| 2026-06-09 | §1.5 신설 (components/ 의무 + 진입 페이지 분리 원칙) | DMF0008 inline 4 grid 440 라인 사고 (사용자 명시 요구) |

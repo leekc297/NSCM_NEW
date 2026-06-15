@@ -52,7 +52,7 @@ export const MktForecastCarSubGrid = ({
     enabled: !!carMaker,
   });
 
-  const rows: CarRow[] = (((data as { o_rc1?: CarRow[] })?.o_rc1 ?? []) as CarRow[]);
+  const rows: CarRow[] = (((data as { o_rc1?: CarRow[] })?.o_rc1 ?? []) as unknown as CarRow[]);
 
   if (isLoading) {
     return <div style={{ padding: 16, color: '#1976d2' }}>⏳ Car Fcst 데이터 조회 중...</div>;

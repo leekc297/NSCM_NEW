@@ -32,6 +32,7 @@ export const ContributeViewForm = ({ onSearch, onOpenVersionPopup }: Props) => {
   const { data: yearData, isLoading: yearLoading } = useTabProcQuery({
     menuId: MENU_ID,
     sheetName: SHEETS.VERSION,
+    tabId: MENU_ID,
     filters: {},
     enabled: true,
   });
@@ -39,7 +40,7 @@ export const ContributeViewForm = ({ onSearch, onOpenVersionPopup }: Props) => {
   const [yearOptions, setYearOptions] = useState<VersionOption[]>([]);
 
   useEffect(() => {
-    const rows = (yearData?.o_rc1 ?? []) as VersionOption[];
+    const rows = (yearData?.o_rc1 ?? []) as unknown as VersionOption[];
     setYearOptions(rows);
     // AS-IS InitControls — 첫 옵션 자동 선택
     // ⛔ Oracle NUMBER → JS number 자동 변환 위험 (메모: feedback_no_type_cast_around_runtime).

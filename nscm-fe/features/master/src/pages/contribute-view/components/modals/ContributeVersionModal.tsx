@@ -124,12 +124,13 @@ export const ContributeVersionModal = ({ open, onClose, onSelect }: Props) => {
   const { data, refetch } = useTabProcQuery({
     menuId: MENU_ID,
     sheetName: SHEETS.VERSION_POPUP,
+    tabId: MENU_ID,
     filters,
     enabled: open && !!filters,
   });
 
   const rows = useMemo<VersionPopupRow[]>(
-    () => (data?.o_rc1 ?? []) as VersionPopupRow[],
+    () => (data?.o_rc1 ?? []) as unknown as VersionPopupRow[],
     [data]
   );
 
@@ -173,7 +174,7 @@ export const ContributeVersionModal = ({ open, onClose, onSelect }: Props) => {
   return (
     <CustomDialog
       open={open}
-      size={1100}
+      size={1200}
       type='modal'
       position='basic'
       handleClose={onClose}
@@ -207,7 +208,11 @@ export const ContributeVersionModal = ({ open, onClose, onSelect }: Props) => {
                   elevation
                   size='small'
                   value={period}
-                  onChange={(date: [Dayjs, Dayjs]) => setPeriod(date)}
+                  onChange={date => {
+                    if (Array.isArray(date) && date.length === 2) {
+                      setPeriod([date[0] as Dayjs, date[1] as Dayjs]);
+                    }
+                  }}
                 />
               </div>
             </div>

@@ -12,9 +12,9 @@
 | # | 게이트 | 판정 기준 | 근거 룰/Hook |
 |---|---|---|---|
 | G1 | AS-IS 매핑 완전성 | `__asis-mapping__.md` 4축 (Event/API/Validation/Expression) 카운트 = AS-IS 분석 자료 행 수와 **정확 일치, 누락 0** | asis-coverage-check + CLAUDE.md §4-11 |
-| G2 | 버튼 10대 매핑 | CRUD 6 + Search Aux 4 전수 판정 (구현/숨김/자동활성 명시). `() => undefined` 빈 핸들러 0건 | asis-button-mapping |
-| G3 | Grid 메타 완전성 | 전 grid: DataGrid 래퍼 + `_inputEditType`/`_ctrlType`/`_modalKey` + SHEET_COLUMNS ↔ SP alias 일치 + selectionMode 명시 | grid-column-meta + sheet-columns-binding-match + grid-interaction-patterns |
-| G4 | 메타/라우팅 정합 | MNU_M (UPPR 대소문자/MNU_DESC/MNU_TP_CD) + SHT_NM FE↔DB 일치 + PROC_M positional + 권한 (MNU_BTN_MPG_M ↔ USER_GR) | menu-not-displayed-debug 7단계 + proc-meta-signature-match |
+| G2 | 버튼 10대 매핑 + **동적 권한 fetch** | CRUD 6 + Search Aux 4 전수 판정 (구현/숨김/자동활성 명시) + `() => undefined` 빈 핸들러 0건 + ⭐ **`useTabBtnPermissions` + `hasButton(BTN_CD)` 조건부 사용** (hotkeyConfig 하드코딩 금지) + **신규 화면은 `SCM_ADM_MNU_BTN_MPG_M` + `USER_GR_MNU_BTN_MPG_M` 멱등 INSERT** | asis-button-mapping + ⭐⭐ **ui-dynamic-property-management §3** (master) + **menu-button-dynamic-fetch** (child) |
+| G3 | Grid 메타 완전성 + **동적 Column/Measure fetch** | 전 grid: DataGrid 래퍼 + `_inputEditType`/`_ctrlType`/`_modalKey` + SHEET_COLUMNS ↔ SP alias 일치 + selectionMode 명시 + ⭐ **store `staticColumns` + `fetchStaticColumns` + mount/Search 호출 + DataGrid prop 5 단계** + (PIVOT/measure 화면) **`staticMeasures` + `fetchStaticMeasures`** + **신규 화면은 `SCM_MST_SHEET_COLUMNS` + `SCM_MST_SHEET_MEASURE` 멱등 INSERT** + **컬럼 lookup = `CELL_COMBO_DATA_TYPE` 위치 (ATTRIBUTE1 금지)** + **INPUT_TP_CD 'IM' 표준 ('MI' typo 금지)** | grid-column-meta + sheet-columns-binding-match + grid-interaction-patterns + ⭐⭐ **ui-dynamic-property-management §4/§5** (master) + **ui-category-setup-column-meta** (child) + **column-lookup-meta-standard** |
+| G4 | 메타/라우팅 정합 | MNU_M (UPPR 대소문자/MNU_DESC/MNU_TP_CD) + SHT_NM FE↔DB 일치 + PROC_M positional + 권한 (MNU_BTN_MPG_M ↔ USER_GR — G2 master 와 cross-ref) | menu-not-displayed-debug 7단계 + proc-meta-signature-match |
 | G5 | 정적 검증 | `pnpm lint:fix` + `pnpm type-check` + `pnpm build` 3종 PASS (출력 첨부) + type-check-error-patterns 17종 grep 0건 | type-check-error-patterns + post-write |
 | G6 | 런타임 smoke (실행 증명) | 화면 진입 → 조회 → (편집 화면이면) Insert/수정/Save → **DB SELECT 로 실반영 확인** + 브라우저 콘솔 에러 0건. "alert 떴으니 됨" 금지 | oracle-db-workflow §2.5 + runtime-error-prevention |
 | G7 | 표준 패턴 정합 | 자매 화면(동일 features 폴더) 1개와 구조 비교: SearchArea/FormItem/Store/Constants/components 폴더 — 임의 작성 0건 | _tobe/01~10 + components-folder-pattern + screen-create-checklist |
@@ -27,9 +27,11 @@
 1. **validation.md / expressions.md 매핑 누락** (G1) — 카운트 불일치 = PR 머지 불가
 2. **메타 1글자 불일치** (G4) — UPPR_MNU_ID 대소문자 / SHT_NM / COL_NM camelCase / COLUMN_NAME alias → 화면 미표시·빈 grid·권한없음
 3. **silent fail** (G6) — 컴파일 PASS·alert 표시·DB 미반영. DB SELECT 검증 없이는 발견 불가
-4. **빈 버튼 핸들러 / hotkeyConfig 일괄 false** (G2) — 기능 자체가 조용히 사라짐
+4. **빈 버튼 핸들러 / hotkeyConfig 일괄 false / 하드코딩** (G2) — 기능 자체가 조용히 사라짐. ⭐ 추가 root cause: **`useTabBtnPermissions` 미사용** = admin USE_YN='N' 무시 → 운영 결정 무효화 (master `ui-dynamic-property-management §3` 필독)
 5. **자매 화면 미참조 임의 작성** (G7) — DMF0020 조회조건 사고: label+input 임의 작성 → 전면 재작성
 6. **lookup combo / popup SP / i18n 키 이관 누락** (G8) — 화면은 되는데 배포처에서 깨짐
+7. ⭐ **UI 동적 속성관리 3 구성요소 누락** (G2 + G3) — Menu Button (SCM_ADM_MNU_BTN_MPG_M) / Column (SCM_MST_SHEET_COLUMNS) / Measure (SCM_MST_SHEET_MEASURE) 중 1개라도 admin UI 데이터 부재 + 신규 INSERT 누락 + 하드코딩 → admin 변경 영영 미반영. **사용자 명시 요구 — 절대 누락 금지**. master `ui-dynamic-property-management.md` §6 PRE-WRITE 체크리스트 + §7 grep 5종 의무.
+8. ⭐ **컬럼 lookup 메타 위치 오등록** (G3) — `CELL_COMBO_DATA_TYPE` (FE `cellCboDataTp`) 표준 위치 대신 **`ATTRIBUTE1` 위치 등록 시 DataGrid wrapper 인식 안 함** → dropdown 미동작. INPUT_TP_CD 도 `'IM'` 표준, **`'MI'` typo 절대 금지** (FE enum mismatch → cell editor 영원히 미동작). hook `column-lookup-meta-standard.md`.
 
 ## §2 게이트 실행 절차
 
@@ -47,8 +49,8 @@
 | G | 결과 | 증거 |
 |---|---|---|
 | G1 AS-IS 매핑 | PASS | validation 23/23, expression 14/14 |
-| G2 버튼 10대 | PASS | CRUD 3 구현 + 3 숨김, Aux 4 자동활성 |
-| G3 Grid 메타 | PASS | 2 grid, SHEET_COLUMNS 17/17 alias 일치 |
+| G2 버튼 10대 + 동적 권한 | PASS | CRUD 3 구현 + 3 숨김, Aux 4 자동활성, `useTabBtnPermissions` 적용, MNU_BTN_MPG_M 7 row + USER_GR 3 그룹 INSERT |
+| G3 Grid 메타 + 동적 Col/Measure | PASS | 2 grid, SHEET_COLUMNS 17/17 alias 일치, `staticColumns`+`fetchStaticColumns` OK, (PIVOT 화면) SHEET_MEASURE 4 row, INPUT_TP_CD 'IM' OK |
 | G4 메타/라우팅 | PASS | MNU_DESC OK, SHT_NM='xxx' FE=DB |
 | G5 정적 검증 | PASS | lint/type-check/build 3종 (로그 경로) |
 | G6 런타임 smoke | PASS | 조회 152 row, SAVE 후 SELECT 3 row 확인, 콘솔 0 |

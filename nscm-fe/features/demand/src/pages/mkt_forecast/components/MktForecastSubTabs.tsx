@@ -25,12 +25,12 @@ export const MktForecastSubTabs = ({
   selectedProjectCode,
   selectedItemId,
 }: Props) => {
-  const [activeTab, setActiveTab] = useState<'psi' | 'carFcst'>('psi');
+  const [activeTabIndex, setActiveTabIndex] = useState<number>(0);
   const [carMaker, _setCarMaker] = useState<string>('ALL');
 
   return (
-    <TabWrapper activeKey={activeTab} onChange={key => setActiveTab(key as 'psi' | 'carFcst')}>
-      <TabItem key='psi' title='PSI 분석'>
+    <TabWrapper activeTabIndex={activeTabIndex} setActiveTabIndex={setActiveTabIndex}>
+      <TabItem label='PSI 분석'>
         <MktForecastPsiSubGrid
           divisionId={searchCondition.divisionId}
           projectCode={selectedProjectCode}
@@ -39,7 +39,7 @@ export const MktForecastSubTabs = ({
           toYyyymmdd={searchCondition.endYyyymmdd}
         />
       </TabItem>
-      <TabItem key='carFcst' title='Car Forecast'>
+      <TabItem label='Car Forecast'>
         <MktForecastCarSubGrid
           divisionId={searchCondition.divisionId}
           carMaker={carMaker}

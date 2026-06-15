@@ -1,4 +1,3 @@
-import { FlexGrid, FlexGridColumn } from '@mescius/wijmo.react.grid';
 import {
   AllowMerging,
   CellRange,
@@ -9,6 +8,7 @@ import {
   MergeManager,
   Row,
 } from '@mescius/wijmo.grid';
+import { FlexGrid, FlexGridColumn } from '@mescius/wijmo.react.grid';
 import { useEffect, useMemo, useState } from 'react';
 
 import { CustomDialog } from '@shared/components';
@@ -71,11 +71,12 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
   const { data, refetch, isLoading, isFetching } = useTabProcQuery({
     menuId: MENU_ID,
     sheetName: SHEETS.EXCHANGE,
+    tabId: MENU_ID,
     filters,
     enabled: false,
   });
 
-  const allRows = (data?.o_rc1 ?? []) as ExchangeRow[];
+  const allRows = (data?.o_rc1 ?? []) as unknown as ExchangeRow[];
   const filteredRows = divisionId && divisionId !== 'ALL'
     ? allRows.filter(r => String(r.DIVISION_ID ?? '') === divisionId)
     : allRows;
@@ -184,11 +185,11 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
                       const mm = binding.slice(6, 8);
                       if (e.row === 0) e.cell.textContent = yyyy;
                       else if (e.row === 1) e.cell.textContent = mm;
-                      (e.cell as HTMLElement).style.textAlign = 'center';
+                      e.cell.style.textAlign = 'center';
                     } else if (fixedBindings.includes(binding)) {
                       const meta = EXCHANGE_RATE_COLUMNS.find(c => c.key === binding);
                       e.cell.textContent = meta?.header ?? binding;
-                      (e.cell as HTMLElement).style.textAlign = 'center';
+                      e.cell.style.textAlign = 'center';
                     }
                   }
                 });

@@ -1,0 +1,28 @@
+warning: in the working copy of 'nscm-fe/features/authority/src/pages/auth-approval/AuthApproval.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'nscm-fe/features/authority/src/pages/auth-approval/auth-approval.types.ts', LF will be replaced by CRLF the next time Git touches it
+diff --git a/nscm-fe/features/authority/src/pages/auth-approval/AuthApproval.tsx b/nscm-fe/features/authority/src/pages/auth-approval/AuthApproval.tsx
+index cd6aca8..01388ea 100644
+--- a/nscm-fe/features/authority/src/pages/auth-approval/AuthApproval.tsx
++++ b/nscm-fe/features/authority/src/pages/auth-approval/AuthApproval.tsx
+@@ -125,7 +125,7 @@ export const AuthApproval = ({ tabId, title }: PageProps<MENU_ID>) => {
+     { label: 'Reject', action: () => void handleReject() },
+   ];
+ 
+-  const rows = (data?.o_rc ?? []) as ApprovalRow[];
++  const rows = (data?.o_rc ?? []) as unknown as ApprovalRow[];
+ 
+   return (
+     <>
+diff --git a/nscm-fe/features/authority/src/pages/auth-approval/auth-approval.types.ts b/nscm-fe/features/authority/src/pages/auth-approval/auth-approval.types.ts
+index 249110d..89babc8 100644
+--- a/nscm-fe/features/authority/src/pages/auth-approval/auth-approval.types.ts
++++ b/nscm-fe/features/authority/src/pages/auth-approval/auth-approval.types.ts
+@@ -16,5 +16,7 @@ export interface ApprovalRow {
+   CUSTOMER: string;
+   REQUEST_DATE: string;
+   STATUS: string;
+-  APPROVED_BY?: string;
++  APPROVED_BY: string;  // optional 제거 — WijmoPrimitive index sig 에 undefined 미포함 (TS2411 회피). BE 미반환 시 '' default
++  // DataGrid 의 WijmoRowItem constraint 호환 (룰 23 §6 — index signature 의무)
++  [key: string]: WijmoPrimitive;
+ }

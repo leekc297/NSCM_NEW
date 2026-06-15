@@ -51,4 +51,4 @@ export const wideToLong = (rows: FuturePriceRow[]): LongRow[] => {
 // 그룹 키 — 11개 컬럼 (Measure 제외) 의 동일 값 행 묶음
 //   AS-IS .cs Raw_CellClick + 사용자 캡쳐 group RowSpan 매칭
 export const groupKeyOf = (row: FuturePriceRow): string =>
-  GROUP_COLS.map(c => String(row[c] ?? '')).join('|');
+  GROUP_COLS.map(c => (row as Record<string, string>)[c] ?? '').join('|');

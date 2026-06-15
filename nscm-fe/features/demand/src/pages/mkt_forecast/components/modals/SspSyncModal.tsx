@@ -35,16 +35,18 @@ export const SspSyncModal = ({
   return (
     <CustomDialog
       open={open}
-      onClose={onClose}
-      title='SSP 동기화 (Sync vs DP Qty)'
-      width={1100}
-      height={600}
-      buttons={[{ label: '닫기', onClick: onClose }]}
-    >
-      <div style={{ padding: 16 }}>
-        <div>동기화 데이터: {rows?.length ?? 0}건</div>
-        {/* Phase 5 보강: SmartColMerge grid (MEASURE 기준 병합) */}
-      </div>
-    </CustomDialog>
+      handleClose={onClose}
+      customHeaderTitle='SSP 동기화 (Sync vs DP Qty)'
+      size={1000}
+      type='modal'
+      position='basic'
+      disableButtonCancel
+      customContentArea={
+        <div style={{ padding: 16 }}>
+          <div>동기화 데이터: {rows?.length ?? 0}건</div>
+          {/* Phase 5 보강: SmartColMerge grid (MEASURE 기준 병합) */}
+        </div>
+      }
+    />
   );
 };
