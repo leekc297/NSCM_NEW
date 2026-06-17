@@ -55,20 +55,25 @@ export const SalesFuturePriceForm = ({ onSearch, onVersionOpen }: Props) => {
       onSearch={onSearch}
       conditions={
         <>
-          {/* Row 1 */}
+          {/* Row 1 — 기본 1단 (Division / Team / End Customer) */}
           <DivisionField value={sc.divisionId} onChange={v => set({ divisionId: v })} />
           <TeamField value={sc.deptIds} onChange={v => set({ deptIds: v })} division={sc.divisionId} />
           <EndCustomerField value={sc.endCustomers} onChange={v => set({ endCustomers: v })} division={sc.divisionId} />
 
-          {/* Row 2 */}
+          {/* Row 2 — 기본 2단 (Biz Type / Period) */}
           <BizTypeField value={sc.bizTypes} onChange={v => set({ bizTypes: v })} />
           <PeriodField
             start={sc.startYyyymmdd}
             end={sc.endYyyymmdd}
             onChange={(start, end) => set({ startYyyymmdd: start, endYyyymmdd: end })}
           />
-
-          {/* Row 3 */}
+        </>
+      }
+      // ⭐ 2026-06-16 — 2단 초과 영역은 extraConditions 로 분리.
+      //   SearchArea 가 Search 버튼 우측에 아래 화살표 표시 → 클릭 시 확대/축소 (DMF0006 sample 패턴)
+      extraConditions={
+        <>
+          {/* Row 3 — Sales Site / Project / Plant Site */}
           <SalesSiteField value={sc.scmSiteIds} onChange={v => set({ scmSiteIds: v })} division={sc.divisionId} />
           <ProjectField
             value={sc.projectCodes}
@@ -81,7 +86,7 @@ export const SalesFuturePriceForm = ({ onSearch, onVersionOpen }: Props) => {
           />
           <PlantSiteField value={sc.plantSiteIds} onChange={v => set({ plantSiteIds: v })} division={sc.divisionId} />
 
-          {/* Row 4 */}
+          {/* Row 4 — Item / Owner / Bucket / SearchOverRange */}
           <ItemField
             value={sc.itemIds}
             onChange={v => set({ itemIds: v })}
@@ -108,7 +113,7 @@ export const SalesFuturePriceForm = ({ onSearch, onVersionOpen }: Props) => {
           />
           <SearchOverRangeField value={sc.searchOverRange} onChange={v => set({ searchOverRange: v })} />
 
-          {/* Row 5 */}
+          {/* Row 5 — Version */}
           <VersionField value={sc.versionId} onOpenPopup={onVersionOpen} />
         </>
       }

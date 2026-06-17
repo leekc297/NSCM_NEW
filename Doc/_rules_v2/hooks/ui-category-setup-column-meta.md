@@ -306,6 +306,25 @@ const hotkeyConfig = {
 
 → **fix**: SHEET_COLUMNS.COLUMN_NAME === SP 결과 case-sensitive 일치 필수. 메모리 `feedback_sheet_columns_binding_must_match_sp.md` 동일.
 
+### 5.5 ⭐ (실제 사례 2026-06-17) Wijmo 직접 grid 의 `if (!sc) return fallback` + BE ATTRIBUTE1 빈 칸 false 콤보 사고
+
+**사고**: DMF0043 (ContributeMain) admin SYS0004 에서 "팀" 컬럼 `VISIBLE_FLAG='N'` 설정 → 그래도 grid 에 계속 표시 됨.
+
+**Root cause (2 축 콤보)**:
+1. **BE `MenuServiceImpl.isDivisionAllowed`** (이전 룰 2026-06-16): `ATTRIBUTE1 빈 칸 → return false` → DMF0043 BASE 6 컬럼 (division 무관 공용 컬럼, ATTRIBUTE1 빈 칸) 이 BE 에서 모두 제거 → staticColumns 빈 배열
+2. **FE ContributeMainGrid** (이전 패턴): `staticColumns.length === 0 → return BASE_COLUMNS.map(c => ({...c, visible: true}))` fallback → 모든 BASE 컬럼 항상 표시 → admin 결정 무효화
+
+**Fix v3 + v4**:
+- BE: `isDivisionAllowed` 의 빈 칸 처리 `return false` → **`return true`** (사용자 명시 2026-06-17, 메모리 `feedback_be_attribute1_empty_division_all.md`)
+- FE: ContributeMainGrid + ContributeViewGrid 의 baseColumns useMemo 안 `if (!sc) return fallback` 제거 → `BASE_COLUMNS.filter(c => staticColumns.some(s => s.colNm === c.binding))` 패턴
+- FE: 컬럼 전체 속성 (align/format/inputTpCd/cellCtrlObjTpCd/cellCboDataTp/attribute1 등) 동기화 (사용자 명시 2026-06-17 — "visible 뿐 아니라 cell object 등 전체 속성")
+
+**재발 방지 룰**:
+- Wijmo 직접 grid 의 BASE 컬럼 useMemo 에서 **`if (!sc) return c` / `if (!sc) return {...c, visible: true}` 패턴 절대 금지** — staticColumns 에 없는 컬럼 = admin 제거.
+- BE 가 ATTRIBUTE1 빈 칸을 어떻게 처리하는지 cross-check — 2026-06-17 이후 빈 칸 = 전체 허용.
+
+**참조**: 메모리 `feedback_fe_grid_visible_no_fallback_loss.md` + `feedback_be_attribute1_empty_division_all.md`. 패키지 `UI_dynamic_property_4screens_LINT_PATCH_20260617` v3/v4.
+
 ---
 
 ## §6. Cross-ref

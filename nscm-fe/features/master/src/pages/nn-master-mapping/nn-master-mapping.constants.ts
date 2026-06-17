@@ -28,6 +28,15 @@ export const RESPONSE_SET = {
 } as const;
 export type RESPONSE_SET = (typeof RESPONSE_SET)[keyof typeof RESPONSE_SET];
 
+// ⭐ 2026-06-17 — DMF0004 reference 패턴 (SHEET_COLUMNS 메타 sheet name):
+//   SCM_MST_SHEET_COLUMNS.SHEET_NAME 의 실제 PascalCase 값.
+//   SHEETS.MAIN ('main') = MNU_BTN_MPG_M.SHT_NM + callProc 용.
+//   META_SHEETS.MAIN ('NNMasterMapping') = fetchStaticColumns 용.
+//   사용자 진단 SQL (2026-06-17) 으로 확인: NNMasterMapping (23).
+export const META_SHEETS = {
+  MAIN: 'NNMasterMapping',
+} as const;
+
 // AS-IS .cs 의 main grid column 정의 (23 컬럼)
 // merge=true: 사용자 요구 2026-06-02 — Data Type ~ MDM Code (ITEM_ID) 15개 컬럼 세로 머지 (As-Is .cs L515 `siMain.SmartColMerge()` 대응)
 // As-Is DefColumnsLabel.ITEM_ID = "MDM_CODE" — Item ID 컬럼이 MDM Code 라벨로 표시되는 컬럼

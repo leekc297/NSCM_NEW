@@ -1,9 +1,18 @@
-import { FlexGrid, FlexGridColumn } from '@mescius/wijmo.react.grid';
-import type { FlexGrid as FlexGridType, FormatItemEventArgs, GridPanel } from '@mescius/wijmo.grid';
-import { AllowMerging, CellRange, CellType, MergeManager, Row } from '@mescius/wijmo.grid';
 import { toggleClass } from '@mescius/wijmo';
+import {
+  AllowMerging,
+  CellRange,
+  CellType,
+  MergeManager,
+  Row,
+  type FlexGrid as FlexGridType,
+  type FormatItemEventArgs,
+  type GridPanel,
+} from '@mescius/wijmo.grid';
+import { FlexGrid, FlexGridColumn } from '@mescius/wijmo.react.grid';
 import { type RefObject, useEffect, useMemo, useRef } from 'react';
 
+import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { useTabProcQuery } from '@shared/hooks';
 
 import { BASE_COLUMN_COUNT, MENU_ID, SHEETS } from '../contribute-view.constants';
@@ -19,6 +28,8 @@ import styles from './ContributeViewGrid.module.scss';
 interface Props {
   gridRef: RefObject<FlexGridType<SalesViewRow> | null>;
   data: SalesViewRow[];
+  // ⭐ UI 동적 속성관리 (master hook §4) — admin SYS0004 메타 (BASE 컬럼 전체 속성 동기화)
+  staticColumns?: RawFlexGridColumnConfig[];
 }
 
 // AS-IS DMF0043_Contribute_View.cs InitSpread + SetSpreadHeaderSpan
@@ -31,7 +42,7 @@ interface Props {
 //   - readonly grid — AS-IS L342: siMain.LockColumn(0, Max, true)
 //   - 룰 12 §11.5: frozenColumns = BASE_COLUMN_COUNT (= 9)
 //   - 룰 27 §F: FlexGridColumnGroup JSX single-child 회피 — flat 컬럼 + HeaderMergeManager
-export const ContributeViewGrid = ({ gridRef, data }: Props) => {
+export const ContributeViewGrid = ({ gridRef, data, staticColumns }: Props) => {
   const internalRef = useRef<FlexGridType<SalesViewRow> | null>(null);
   const columnMetaRef = useRef<ColumnMeta[]>([]);
 
@@ -53,10 +64,56 @@ export const ContributeViewGrid = ({ gridRef, data }: Props) => {
   );
 
   // 첫 BASE_COLUMN_COUNT 개 = BASE (고정), 나머지 = dynamic (지역×Type)
-  const columnMetas = useMemo<ColumnMeta[]>(
-    () => buildColumnMeta(titleRows, BASE_COLUMN_COUNT),
-    [titleRows]
-  );
+  // 정책 (2026-06-17 v5 — BE 변경 없이 작동 보장):
+  //   BE 가 retrieveGridColumns 의 visible/division filter 를 하든 안 하든 (DMF0004 reference 처럼 filter 없음)
+  //   FE 가 자체적으로 staticColumns 의 visible 검사 + buildColumnMeta 와의 매칭 처리:
+  //   - staticColumns 빈 배열 → buildColumnMeta fallback (안전망)
+  //   - BASE binding 이 staticColumns 에 없음 (= admin SHEET_COLUMNS 미등록) → fallback 으로 표시
+  //   - BASE binding 있고 sc.visible === false → 표시 X (admin 결정 보존)
+  //   - BASE binding 있고 visible 미정의/true → 표시 + admin 메타 override (leaf/large/width)
+  // formatItem 안 columnMetaRef 가 lookup 하므로 여기서 단일 진실 source 로 통합.
+  const columnMetas = useMemo<ColumnMeta[]>(() => {
+    const built = buildColumnMeta(titleRows, BASE_COLUMN_COUNT);
+    if (!staticColumns || staticColumns.length === 0) return built;
+    // ⭐ 2026-06-17 v6 — DMF0004 reference 패턴 (사용자 명시):
+    //   staticColumns 가 단일 진실 source. BASE 컬럼은 메타 등록 + visible='Y' 통과 한 것만 표시.
+    //   미등록 = 표시 X. visible='N' = 표시 X. dynamic 컬럼은 SP buildColumnMeta 결과 그대로.
+    return built
+      .map(m => {
+        if (!m.isBase) return m;
+        const sc = staticColumns.find(s => s.colNm === m.binding);
+        // 미등록 → 표시 X (DMF0004 wrapper 와 동일 정책)
+        if (!sc) return { ...m, isHidden: true };
+        // admin visible='N' → 표시 X
+        if (sc.visible === false) return { ...m, isHidden: true };
+        // admin 등록 + visible=true → 메타 override
+        return {
+          ...m,
+          leaf: sc.colLblNm || m.leaf,
+          large: sc.lClsLblNm || m.large,
+          width: sc.colWth != null ? Number(sc.colWth) : m.width,
+          isHidden: false,
+        };
+      })
+      .filter(m => !m.isHidden);
+  }, [titleRows, staticColumns]);
+
+  // BASE 컬럼의 admin attribute (align/format/ctrlType/comboKey/modalKey) lookup 맵
+  // — FlexGridColumn rendering 시 사용. ColumnMeta 가 외부 export 라 확장 X.
+  const baseColumnAttrs = useMemo(() => {
+    const map = new Map<string, { align: 'left' | 'right' | 'center'; format?: string; ctrlType?: string; comboKey?: string; modalKey?: string; }>();
+    if (!staticColumns) return map;
+    for (const sc of staticColumns) {
+      map.set(sc.colNm, {
+        align: sc.horzAlgnCd === 'R' ? 'right' : sc.horzAlgnCd === 'C' ? 'center' : 'left',
+        format: sc.scale != null ? `n${Number(sc.scale)}` : undefined,
+        ctrlType: sc.cellCtrlObjTpCd,
+        comboKey: sc.cellCboDataTp,
+        modalKey: sc.attribute1,
+      });
+    }
+    return map;
+  }, [staticColumns]);
 
   useEffect(() => {
     columnMetaRef.current = columnMetas;
@@ -74,6 +131,7 @@ export const ContributeViewGrid = ({ gridRef, data }: Props) => {
     }
   }, [columnMetas]);
 
+  // columnMetas 가 admin 메타 통합 단일 source 라 base 부분은 derived (filter only).
   const baseColumns = useMemo<ColumnMeta[]>(
     () => columnMetas.filter(m => m.isBase),
     [columnMetas]
@@ -184,16 +242,26 @@ export const ContributeViewGrid = ({ gridRef, data }: Props) => {
       autoGenerateColumns={false}
       className={styles.grid}
     >
-      {baseColumns.map(c => (
-        <FlexGridColumn
-          key={c.binding}
-          binding={c.binding}
-          header={c.leaf}
-          width={Math.max(c.width, 110)}
-          isReadOnly
-          allowMerging
-        />
-      ))}
+      {/* ⭐ master hook §4 (v2 2026-06-17) — admin SYS0004 메타 전체 동기화:
+          visible (BE 미리 filter) / leaf (colLblNm) / large (lClsLblNm 다단 헤더) /
+          width (colWth) / align (horzAlgnCd) / format (scale → 'nN'). 조회 전용 grid (isReadOnly=true)
+          이므로 inputTpCd 무관. cellCtrlObjTpCd/cellCboDataTp/attribute1 은 메타로 보존
+          (admin 에서 추후 변경 시 cellEditingTemplate 확장 hook 으로 적용). */}
+      {baseColumns.map(c => {
+        const attrs = baseColumnAttrs.get(c.binding);
+        return (
+          <FlexGridColumn
+            key={c.binding}
+            binding={c.binding}
+            header={c.leaf}
+            width={Math.max(c.width, 110)}
+            align={attrs?.align ?? 'left'}
+            format={attrs?.format}
+            isReadOnly
+            allowMerging
+          />
+        );
+      })}
       {dynamicColumns.map(c => (
         <FlexGridColumn
           key={c.binding}

@@ -5,7 +5,7 @@ import { useEffect, useRef } from 'react';
 import { apiClient } from '@foundation/apis';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { MainTitle, SubTitle } from '@shared/components';
-import { useTabProcQuery, useProcMutation } from '@shared/hooks';
+import { useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
 import { useMessageStore } from '@shared/stores';
 
 import { ContributeMainGrid } from './components/ContributeMainGrid';
@@ -30,6 +30,15 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
   const setVersionPopupOpen = useContributeMainStore(s => s.setVersionPopupOpen);
   const ratePopupOpen = useContributeMainStore(s => s.ratePopupOpen);
   const setRatePopupOpen = useContributeMainStore(s => s.setRatePopupOpen);
+  // ⭐ UI 동적 속성관리 (master hook §4) — admin SYS0004 UI Category Setup 메타 동적 fetch
+  const staticColumns = useContributeMainStore(s => s.staticColumns);
+  const fetchStaticColumns = useContributeMainStore(s => s.fetchStaticColumns);
+
+  // mount 시 admin 메타 fetch (master hook §2.3)
+  useEffect(() => {
+    void fetchStaticColumns();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // 메인 grid 조회 — DMF0043_GET_CONTRIBUTE_MAIN_DATA
   const { data: mainData, refetch } = useTabProcQuery<MENU_ID, SHEETS.MAIN>({
@@ -40,13 +49,6 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
     enabled: !!filters[SHEETS.MAIN] && !!searchCondition.verSeq,
   });
 
-  // 저장 — DMF0043_SAVE_DM_MST_CONTRIBUTE_RATIO
-  const { mutate: saveMain } = useProcMutation<MENU_ID, SHEETS.MAIN>({
-    menuId: MENU_ID,
-    sheetName: SHEETS.MAIN,
-    tabId,
-  });
-
   const handleSearch = () => {
     const guard = findDataGuard(searchCondition.verSeq);
     if (!guard.ok) {
@@ -54,7 +56,9 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
       return;
     }
     setFilter();
-    refetch?.();
+    void refetch?.();
+    // ⭐ master hook §2.4 — Search 시 admin 메타 refetch
+    void fetchStaticColumns();
   };
 
   const handleInsert = () => {
@@ -73,8 +77,8 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   const handleDelete = () => {
     if (!gridRef.current) return;
-    const selected = gridRef.current.selectedItems[0];
-    if (selected) (selected as MainRow).EDIT_FLAG = 'D';
+    const selected = gridRef.current.selectedItems[0] as MainRow | undefined;
+    if (selected) selected.EDIT_FLAG = 'D';
     gridRef.current.invalidate();
   };
 
@@ -180,7 +184,7 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
           createdBy: trim(buf.createdBy),
         });
         void setAlert({ type: 'alert', content: '저장이 완료되었습니다.' });
-        refetch?.();
+        void refetch?.();
       } catch {
         void setAlert({ type: 'alert', content: '저장 중 오류가 발생했습니다.' });
       }
@@ -197,9 +201,12 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   F10 = ResetCondition  (default — resetPersonalizedCondition)
   //   F8/F9 (insert/delete) : AS-IS .cs 가 EditButton/Lock 으로만 처리 → 명시적 버튼 비활성
   //   기여율 버전관리 : customButton (figma DMF0043 추가 버튼)
+  // ⭐ UI 동적 속성관리 — Menu Button (master hook §3): admin USE_YN 즉시 반영
+  const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
+
   const hotkeyConfig: HotkeyConfig = {
-    search: handleSearch,
-    save: handleSave,
+    search: hasButton('SEARCH') ? handleSearch : false,
+    save:   hasButton('SAVE')   ? handleSave   : false,
     // F3/F4/F6/F10 : 명시 안 함 → SubTitle DefaultButtonActions 사용 (자동 활성)
     insert: false,
     delete: false,
@@ -207,12 +214,12 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
     upload: false,
   };
 
-  const customButtons = [
-    {
-      label: '기여율 버전관리',
-      action: () => setVersionPopupOpen(true),
-    },
-  ];
+  const customButtons = hasButton('VERSION_MGT')
+    ? [{
+        label: '기여율 버전관리',
+        action: () => setVersionPopupOpen(true),
+      }]
+    : [];
 
   // handleInsert / handleDelete 는 AS-IS .cs 에 명시적 버튼 없음. 추후 비즈니스 요구 시 활성화.
   void handleInsert; void handleDelete;
@@ -252,7 +259,7 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
         customButtons={customButtons}
       />
       <div className={styles.gridContainer}>
-        <ContributeMainGrid gridRef={gridRef} data={rows} />
+        <ContributeMainGrid gridRef={gridRef} data={rows} staticColumns={staticColumns[SHEETS.MAIN]} />
       </div>
       <ContributeRatePopup
         yyyy={searchCondition.yyyy}

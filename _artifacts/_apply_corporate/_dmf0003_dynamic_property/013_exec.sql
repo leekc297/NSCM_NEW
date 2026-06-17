@@ -1,0 +1,52 @@
+-- ora.py exec 호환 변형 (013_DMF0003_Sheet_Columns_LookupMeta.sql)
+
+UPDATE SCM_MST_SHEET_COLUMNS
+   SET CELL_CONTROL_OBJECT_TYPE_CODE = 'FPComboBox',
+       CELL_COMBO_DATA_TYPE          = 'EndCustomerByDivisionDept',
+       LAST_UPDATED_BY               = 'admin',
+       LAST_UPDATE_DATE              = SYSDATE
+ WHERE PROGRAM_ID = 'DMF0003' AND SHEET_NAME = 'main' AND COLUMN_NAME = 'END_CUSTOMER';
+
+UPDATE SCM_MST_SHEET_COLUMNS
+   SET CELL_CONTROL_OBJECT_TYPE_CODE = 'FPComboBox',
+       CELL_COMBO_DATA_TYPE          = 'SiteByEndCustomer',
+       LAST_UPDATED_BY               = 'admin',
+       LAST_UPDATE_DATE              = SYSDATE
+ WHERE PROGRAM_ID = 'DMF0003' AND SHEET_NAME = 'main' AND COLUMN_NAME = 'SCM_SITE_ID';
+
+UPDATE SCM_MST_SHEET_COLUMNS
+   SET CELL_CONTROL_OBJECT_TYPE_CODE = 'FPComboBox',
+       CELL_COMBO_DATA_TYPE          = 'Incoterms',
+       LAST_UPDATED_BY               = 'admin',
+       LAST_UPDATE_DATE              = SYSDATE
+ WHERE PROGRAM_ID = 'DMF0003' AND SHEET_NAME = 'main' AND COLUMN_NAME = 'INCOTERMS';
+
+UPDATE SCM_MST_SHEET_COLUMNS
+   SET CELL_CONTROL_OBJECT_TYPE_CODE = 'FPComboBox',
+       CELL_COMBO_DATA_TYPE          = 'FcstType',
+       LAST_UPDATED_BY               = 'admin',
+       LAST_UPDATE_DATE              = SYSDATE
+ WHERE PROGRAM_ID = 'DMF0003' AND SHEET_NAME = 'main' AND COLUMN_NAME = 'FCST_TYPE';
+
+UPDATE SCM_MST_SHEET_COLUMNS
+   SET CELL_CONTROL_OBJECT_TYPE_CODE = 'FPComboBox',
+       CELL_COMBO_DATA_TYPE          = 'CustomsHandbook',
+       LAST_UPDATED_BY               = 'admin',
+       LAST_UPDATE_DATE              = SYSDATE
+ WHERE PROGRAM_ID = 'DMF0003' AND SHEET_NAME = 'main' AND COLUMN_NAME = 'DOM_EXP';
+
+UPDATE SCM_MST_SHEET_COLUMNS
+   SET CELL_CONTROL_OBJECT_TYPE_CODE = 'FPComboBox',
+       CELL_COMBO_DATA_TYPE          = 'PlantSite',
+       LAST_UPDATED_BY               = 'admin',
+       LAST_UPDATE_DATE              = SYSDATE
+ WHERE PROGRAM_ID = 'DMF0003' AND SHEET_NAME = 'main' AND COLUMN_NAME = 'PLANT_SITE_ID';
+
+UPDATE SCM_MST_SHEET_COLUMNS
+   SET CELL_CONTROL_OBJECT_TYPE_CODE = 'FPComboBox',
+       CELL_COMBO_DATA_TYPE          = 'Measure',
+       LAST_UPDATED_BY               = 'admin',
+       LAST_UPDATE_DATE              = SYSDATE
+ WHERE PROGRAM_ID = 'DMF0003' AND SHEET_NAME = 'main' AND COLUMN_NAME = 'MEASURE';
+
+COMMIT;

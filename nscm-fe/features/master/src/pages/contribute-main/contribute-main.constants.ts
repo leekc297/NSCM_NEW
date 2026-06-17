@@ -25,6 +25,17 @@ export const RESPONSE_SET = {
 } as const;
 export type RESPONSE_SET = (typeof RESPONSE_SET)[keyof typeof RESPONSE_SET];
 
+// ⭐ 2026-06-17 — DMF0004 reference 패턴 (SHEET_COLUMNS 메타 sheet name):
+//   SCM_MST_SHEET_COLUMNS.SHEET_NAME 의 실제 PascalCase 값 (SP body 가 hardcode 참조).
+//   SHEETS (= MNU_BTN_MPG_M.SHT_NM + callProc 용 camelCase) 와 표기 다름.
+//   fetchStaticColumns 가 META_SHEETS 사용 → SP body 변경 회피 + admin SYS0004 메타 동기화 호환.
+//   사용자 진단 SQL (2026-06-17) 으로 확인: ContributeMain (8) / ContributeRate (5) / ContributeSalesList (10).
+export const META_SHEETS = {
+  MAIN: 'ContributeMain',
+  RATE_POPUP: 'ContributeRate',
+  SALES_LIST: 'ContributeSalesList',
+} as const;
+
 // AS-IS .cs 의 5 Validation MSG codes
 export const VALIDATION_MSG = {
   RATIO_OUT_OF_RANGE: 'MSG00303',   // 입력 데이터 100% 초과/미만 차단 (ValidChk)

@@ -255,8 +255,10 @@ export const ProjectField = (props: PopupFieldProps) => {
           divisionId: division,
           deptId: orAll(deptIds),
           endCustomer: orAll(endCustomers),
+          // ⭐ 사내 표준 PROC_M(PKG_COM0000.P_COM0005_...) COL_NM 'salesSite' 정렬 (NOT 'scmSiteId').
           salesSite: orAll(scmSiteIds),
-          projectCode: orAll(projectCodes),
+          // ⭐ SP 'p_project_code' 는 '' 또는 NULL 만 "전체" 의미 처리. 'ALL' 보내면 LIKE 'ALL%' 매치 0 row.
+          projectCode: projectCodes && projectCodes.length > 0 ? projectCodes.join(',') : '',
           etc: 'N',
         } as never}
         callFromCell={false}

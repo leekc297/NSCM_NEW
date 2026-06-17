@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import { useTabProcQuery } from '@shared/hooks';
 
 import { MENU_ID, SHEETS } from '../contribute-main.constants';
-import { useContributeMainStore } from '../useContributeMainStore';
 import styles from '../ContributeMain.module.scss';
+import { useContributeMainStore } from '../useContributeMainStore';
 
 interface VersionOption {
   CODE: string;

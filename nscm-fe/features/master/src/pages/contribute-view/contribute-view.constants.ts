@@ -32,3 +32,12 @@ export const VALIDATION_MSG = {
 // 사용자 요구 (2026-06-01): 년월(YYYYMM)부터 Biz(DM_BIZ_TYPE)까지 고정 = 9 컬럼
 // SP DMF0043_GET_SALES_LIST_SPREAD_TITLE 결과의 첫 9개 (SHEET_COLUMNS DEFAULT_FLAG='Y' DISTINCT 9개)
 export const BASE_COLUMN_COUNT = 9;
+
+// ⭐ 2026-06-17 — DMF0004 reference 패턴 (SHEET_COLUMNS 메타 sheet name):
+//   DMF0043_01 의 main grid 의 SHEET_COLUMNS 메타는 PROGRAM_ID='DMF0043' (DMF0043 의 ContributeSalesList sheet) 에 등록됨.
+//   (사용자 진단 SQL 2026-06-17 확인: DMF0043_01 main 자체 row 0, DMF0043 ContributeSalesList 10 row — YYYYMM/DEPARTMENT_NAME/DEPT_NAME 등).
+//   FE fetchStaticColumns 가 (mnuId='DMF0043', sheetNm='ContributeSalesList') 호출 → admin SYS0004 변경 즉시 반영.
+export const META_MENU_ID = 'DMF0043' as const;
+export const META_SHEETS = {
+  MAIN: 'ContributeSalesList',
+} as const;

@@ -11,7 +11,7 @@
 
 | 작업 타입 | 필독 순서 |
 |---|---|
-| **A. MSSQL → Oracle SP 신규 변환** | `Doc/_analysis/db_migration/01_MSSQL_to_Oracle_Conversion_Rules.md` (특히 부록 C 함정 9종) → `02_SP_CONVERSION_PIPELINE.md` (6-Stage 파이프라인) → 본 hook §1/§2 |
+| **A. MSSQL → Oracle SP 신규 변환** | `Doc/_analysis/db_migration/01_MSSQL_to_Oracle_Conversion_Rules.md` (부록 C 함정 9종 + ⭐ §7 성능 안티패턴 5룰) → `oracle-sp-perf-anti-patterns.md` (5 성능 룰 정밀) → `02_SP_CONVERSION_PIPELINE.md` (6-Stage 파이프라인) → 본 hook §1/§2 |
 | **B. 신규 GET SP 작성 (조회)** | `sp-dual-cursor-pattern.md` §1 → `proc-meta-signature-match.md` §1 → `sheet-columns-binding-match.md` §1 → `sp-exception-handler-debug-friendly.md` §2 |
 | **C. 신규 SAVE/MUTATION SP 작성** | `sp-dual-cursor-pattern.md` §1.3 (단일 cursor 허용) → `proc-meta-signature-match.md` §1 → 부록 C 함정: SUBSTR-0 / TRUNCATE GT / ^-delim bulk |
 | **D. 기존 SP 보강 (cursor/EXCEPTION 추가)** | `sp-body-minimal-change.md` §1 (DBMS_METADATA.GET_DDL 원본 + 최소 변경) → `sp-utl-call-stack-safety.md` (SUBPROGRAM 사용 시) → `sp-exception-handler-debug-friendly.md` |
@@ -30,6 +30,7 @@
 4. **Body 변경**: 원본 추출 후 최소 변경 (diff 5줄 초과 시 분리 작업) — `sp-body-minimal-change.md`
 5. **EXCEPTION**: 개발 = SQLCODE/SQLERRM/BACKTRACE 노출 / 운영 = generic + LOG — `sp-exception-handler-debug-friendly.md`
 6. **함정 회피**: 부록 C 9종 (SUBSTR-0 / TRUNCATE GT / LISTAGG OVERFLOW / JSON CLOB / GTT DELETE / cursor mismatch / ''=NULL / CMBO quote / ^-delim)
+7. ⭐ **성능 안티패턴 5 룰** (MSSQL → Oracle 변환 의무): `oracle-sp-perf-anti-patterns.md` — (1) column 안 REGEXP_SUBSTR/CONNECT BY → FROM 분리 (2) 분리자 split → GT 적재 (3) MASTER lookup → LEFT JOIN (4) GT MAIN KEY INDEX (5) WHERE 함수 → SARGable
 
 ## §2 POST-WRITE 검증 의무 (작성 직후 — 생략 금지)
 

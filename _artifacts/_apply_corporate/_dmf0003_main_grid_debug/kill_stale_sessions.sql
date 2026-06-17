@@ -1,0 +1,8 @@
+-- ORA-04021 lock 보유 stale session 4개 정리 (사용자 명시 승인 후)
+--   본인 (gyucheol_lee) OS user 의 이전 timeout SP 호출 잔존
+--   SID 12 = 현재 query session — 제외
+
+ALTER SYSTEM KILL SESSION '155,53269' IMMEDIATE;
+ALTER SYSTEM KILL SESSION '149,58708' IMMEDIATE;
+ALTER SYSTEM KILL SESSION '146,50279' IMMEDIATE;
+ALTER SYSTEM KILL SESSION '279,65006' IMMEDIATE;

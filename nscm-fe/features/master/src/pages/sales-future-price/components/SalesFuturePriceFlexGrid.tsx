@@ -150,8 +150,11 @@ export const SalesFuturePriceFlexGrid = ({
   }, [divQ, teamQ, ecQ, ssQ, incoQ, currQ, fcstQ, customsQ, bizQ]);
 
   // 동적 컬럼 keys 추출 — SP 결과 모든 row 의 union
-  //   Bucket=W → W_yyyymmdd 중 월요일 (주 시작일) 만 / Bucket=M → M_yyyymm 만
-  //   (사용자 요구 2026-06-12: "Bucket week 일때 주의 시작일만 나오도록")
+  //   Bucket=W → W_yyyymmdd 중 (① 주 시작일 월요일) ∪ (② 한 주가 두 달에 걸친 경우 월 변경 첫 날)
+  //              → ② 가 있어야 같은 ISO 주차라도 ym 별로 별도 컬럼이 생겨, 머지 로직이 6월 W27 / 7월 W27 두 그룹으로 분리.
+  //   Bucket=M → M_yyyymm 만
+  //   (사용자 요구 2026-06-12: "Bucket week 일때 주의 시작일만 나오도록"
+  //    + 2026-06-16: "대상년월이 다르면 동일 주차라도 대상년월별로 별도 보이도록 — 6월 W27 + 7월 W27")
   const dynBindings = useMemo<string[]>(() => {
     if (!rows || rows.length === 0) return [];
     const set = new Set<string>();
@@ -161,8 +164,11 @@ export const SalesFuturePriceFlexGrid = ({
         if (!matchPrefix.test(k)) continue;
         if (bucketPrefix === 'W') {
           const d = k.slice(2);
-          const dt = new Date(Date.UTC(+d.slice(0, 4), +d.slice(4, 6) - 1, +d.slice(6, 8)));
-          if (dt.getUTCDay() !== 1) continue;   // 1 = Monday (주 시작일)
+          const dd = +d.slice(6, 8);
+          const dt = new Date(Date.UTC(+d.slice(0, 4), +d.slice(4, 6) - 1, dd));
+          const isMonday = dt.getUTCDay() === 1;
+          const isMonthBoundary = dd === 1;   // 한 주가 두 달에 걸친 경우 월 변경 첫 날 (해당 주의 ym 분리 기준)
+          if (!isMonday && !isMonthBoundary) continue;
         }
         set.add(k);
       }
@@ -239,23 +245,6 @@ export const SalesFuturePriceFlexGrid = ({
               if (isLocRow) toggleClass(e.cell, 'wj-cell-editable', true);
               else toggleClass(e.cell, 'wj-cell-non-editable', true);
               return;
-            }
-
-            // Wijmo merge cell 의 textContent 를 inner div (.merge-content) 로 감쌈
-            //   scrollPositionChanged 에서 cell.offsetTop 이 viewport 위 → div.style.transform=translateY(scrollOffset) 로 sticky 효과
-            if (meta && fixedBindings.includes(col.binding)) {
-              const cellEl = e.cell;
-              const text = cellEl.textContent ?? '';
-              if (text && !cellEl.querySelector('.merge-content')) {
-                const wrap = document.createElement('div');
-                wrap.className = 'merge-content';
-                wrap.textContent = text;
-                wrap.style.cssText = 'padding-top:4px;text-align:center;line-height:18px;will-change:transform;';
-                cellEl.textContent = '';
-                cellEl.appendChild(wrap);
-                cellEl.style.verticalAlign = 'top';
-                cellEl.style.padding = '0';
-              }
             }
 
             // Fixed col cell coloring
@@ -343,34 +332,6 @@ export const SalesFuturePriceFlexGrid = ({
             if (meta._modalKey) onPopupCellDblClick?.(meta._modalKey, row);
           });
 
-          // Scroll 시 merge cell content 위치 보정 — 머지 그룹 topmost 가 viewport 위로 가면
-          //   .merge-content div 를 translateY 로 끌어내려 현재 visible row 위치에 표시
-          //   (Wijmo merge cell 의 default 동작: topmost 만 표시, viewport 밖이면 안 보임)
-          const adjustMergedContent = () => {
-            const cellsPanel = g.cells;
-            const root = cellsPanel.hostElement;
-            if (!root) return;
-            const visRange = g.viewRange;
-            const cellsRoot = root.querySelector('.wj-cells');
-            const viewportTop = cellsRoot?.scrollTop ?? root.scrollTop ?? 0;
-            const mergeCells = root.querySelectorAll<HTMLElement>('.wj-cell .merge-content');
-            mergeCells.forEach(div => {
-              const cellEl = div.parentElement;
-              if (!cellEl) return;
-              const cellTop = cellEl.offsetTop;
-              const cellH = cellEl.offsetHeight;
-              const stickyOffset = viewportTop - cellTop;
-              if (stickyOffset > 0 && stickyOffset < cellH - 24) {
-                div.style.transform = `translateY(${stickyOffset}px)`;
-              } else {
-                div.style.transform = 'translateY(0)';
-              }
-            });
-            void visRange;
-          };
-          g.scrollPositionChanged.addHandler(adjustMergedContent);
-          g.updatedView.addHandler(adjustMergedContent);
-
           // ===== 머지 활성 (Wijmo API: g.allowMerging + g.mergeManager) =====
           //   AllowMerging.All = ColumnHeaders | RowHeaders | Cells (헤더 + 데이터 cell 모두)
           g.allowMerging = AllowMerging.All;
@@ -381,8 +342,8 @@ export const SalesFuturePriceFlexGrid = ({
           }
 
           // MergeManager subclass — 헤더 + Cell 계층 머지 (사용자 요구 2026-06-03 v5):
-          //   Wijmo cell merge 유지 (시각 통합) — getMergedRange 가 같은 그룹 range 반환
-          //   추가: scrollPositionChanged event 로 머지 cell content 를 viewport 안 visible 영역 의 top 으로 강제 조정 (아래)
+          //   Wijmo cell merge 유지 (시각 통합) — getMergedRange 가 같은 그룹 range 반환.
+          //   좌측 fixed cols 의 계층 머지 (Division → Team → End Customer → ...) 동일 그룹 row 들을 세로 머지.
           class HierarchicalMergeManager extends MergeManager {
             getMergedRange(panel: GridPanel, r: number, c: number, _clip = true): CellRange | null {
               const col = panel.columns[c];
@@ -434,6 +395,7 @@ export const SalesFuturePriceFlexGrid = ({
                     return new CellRange(0, c1, 0, c2);
                   }
                   if (r === 1) {
+                    // 같은 wk + 같은 ym (월) 끼리 머지 — 월 변경 주는 의도적으로 분리 (6월 W27 + 7월 W27)
                     let c1 = c, c2 = c;
                     while (c1 > 0) {
                       const p = getDynKey(panel.columns[c1 - 1].binding ?? '');

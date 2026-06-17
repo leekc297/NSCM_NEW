@@ -5,6 +5,8 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { CustomDialog } from '@shared/components';
 import { Button } from '@shared/lges';
 
+import type { MeasureMeta } from '../../mkt-forecast-master.types';
+
 import styles from './MeasureSelectModal.module.scss';
 
 interface Props {
@@ -15,6 +17,10 @@ interface Props {
   /** 적용 시 선택된 Measure 목록 callback */
   onApply: (selected: string[]) => void;
   divisionId: string;
+  // ⭐ master hook §5 / child hook ui-category-setup-column-meta §8 —
+  //   admin SYS0004 UI Category Setup Measure 탭 `SCM_MST_SHEET_MEASURE` 동적 fetch 결과.
+  //   DB 1차 source 표준 (사용자 결정 2026-06-15 — FE ALL_MEASURES 하드코딩 완전 제거).
+  staticMeasures?: MeasureMeta[];
 }
 
 interface MeasureRow {
@@ -25,33 +31,28 @@ interface MeasureRow {
 }
 
 // AS-IS DMF0003_1_MktFcst.cs L4916 btnMeasure_Click — Measure 선택 popup
-// SCM_MST_SHEET_MEASURE 의 PROGRAM_ID='DMF0003' SHEET_NAME='Mkt Fcst' Measure 목록을
+// SCM_MST_SHEET_MEASURE 의 PROGRAM_ID='DMF0003' SHEET_NAME='main' Measure 목록을
 // USER_INQUIRY_COLUMN_TYPE_CODE='M' 로 SCM_MST_TITLESET_USER 에 등록
 //
-// AS-IS 입력 가능 Measure 분석 (2026-06-07 사용자 요구):
-//   - MKT_FCST       : 사용자 입력 가능 (실제 forecast 값)
-//   - MKT_FCST_RP    : L1954 자동 SetValue + L2909 SSP sync 색 표시 전용 — 입력 불가
-//   - 나머지 (RTF/IMM/CUST_FCST/CAR_FCST 등) : 모두 조회 전용 (실적/EDI/타 시스템 수신)
+// ⭐ master hook §5 — Measure 동적 fetch 표준 (사용자 결정 2026-06-15)
+//   1차 source = SCM_MST_SHEET_MEASURE (admin SYS0004 UI Category Setup)
+//   FE 하드코딩 (ALL_MEASURES) 완전 제거 — admin 변경이 화면에 즉시 반영
 //
 // 사용자 명시 요구 (2026-06-07): "양쪽 2개 Grid 위치 이동 방식 (Grid Column 과 같이)"
 // → 공용 ColumnSettingModal dual-grid 패턴 + 선택된 Measure 만 grid filter
 
-const ALL_MEASURES: MeasureRow[] = [
-  { MEASURE_CODE: 'MKT_FCST',       MEASURE_NAME: 'MKT FCST',          EDITABLE_YN: 'Y', SORT_ORDER_NO: 0 },
-  { MEASURE_CODE: 'MKT_FCST_RP',    MEASURE_NAME: 'MKT FCST (Result)', EDITABLE_YN: 'N', SORT_ORDER_NO: 0 },
-  { MEASURE_CODE: 'RTF',            MEASURE_NAME: 'RTF',               EDITABLE_YN: 'N', SORT_ORDER_NO: 0 },
-  { MEASURE_CODE: 'RTF_RP',         MEASURE_NAME: 'RTF (Result)',      EDITABLE_YN: 'N', SORT_ORDER_NO: 0 },
-  { MEASURE_CODE: 'IMM',            MEASURE_NAME: 'Immediate',         EDITABLE_YN: 'N', SORT_ORDER_NO: 0 },
-  { MEASURE_CODE: 'CUST_FCST',      MEASURE_NAME: 'Customer FCST',     EDITABLE_YN: 'N', SORT_ORDER_NO: 0 },
-  { MEASURE_CODE: 'CUST_FCST_EDI',  MEASURE_NAME: 'Customer FCST EDI', EDITABLE_YN: 'N', SORT_ORDER_NO: 0 },
-  { MEASURE_CODE: 'CUST_FCST_ORG',  MEASURE_NAME: 'Customer FCST Org', EDITABLE_YN: 'N', SORT_ORDER_NO: 0 },
-  { MEASURE_CODE: 'CUST_PSI',       MEASURE_NAME: 'Customer PSI',      EDITABLE_YN: 'N', SORT_ORDER_NO: 0 },
-  { MEASURE_CODE: 'MKT_PSI',        MEASURE_NAME: 'MKT PSI',           EDITABLE_YN: 'N', SORT_ORDER_NO: 0 },
-  { MEASURE_CODE: 'CAR_FCST',       MEASURE_NAME: 'Car FCST',          EDITABLE_YN: 'N', SORT_ORDER_NO: 0 },
-  { MEASURE_CODE: 'VMI',            MEASURE_NAME: 'VMI Inv',           EDITABLE_YN: 'N', SORT_ORDER_NO: 0 },
-];
-
-export const MeasureSelectModal = ({ open, onClose, defaultSelected, onApply, divisionId: _divisionId }: Props) => {
+export const MeasureSelectModal = ({ open, onClose, defaultSelected, onApply, divisionId: _divisionId, staticMeasures = [] }: Props) => {
+  // admin SYS0004 동적 fetch 결과를 MeasureRow 로 변환
+  //   ⭐ BE GridMeasure DTO 는 colNm/colLblNm camelCase 반환. UPPER_SNAKE 접근 시 undefined.
+  //   AS-IS 'MKT_FCST' 만 editable (L1954+L2909). 그 외 모두 Read-only.
+  const allMeasures = useMemo<MeasureRow[]>(() => {
+    return staticMeasures.map<MeasureRow>(m => ({
+      MEASURE_CODE: m.colNm,
+      MEASURE_NAME: m.colLblNm ?? m.colNm,
+      EDITABLE_YN:  m.colNm === 'MKT_FCST' ? 'Y' : 'N',
+      SORT_ORDER_NO: 0,
+    }));
+  }, [staticMeasures]);
   const baseGridRef = useRef<FlexGridType<MeasureRow> | null>(null);
   const userGridRef = useRef<FlexGridType<MeasureRow> | null>(null);
 
@@ -63,16 +64,16 @@ export const MeasureSelectModal = ({ open, onClose, defaultSelected, onApply, di
   useEffect(() => {
     if (!open) return;
     // 사용자 명시 요구 (2026-06-07): popup 적용한 Measure 를 다음 재진입 시 기억
-    //   - useEffect deps 는 [open] 만 — defaultSelected 매 render 변경 시 popup 내 row 이동 reset 회피
+    //   - useEffect deps 는 [open, allMeasures] — allMeasures 가 staticMeasures fetch 후 채워질 때 재로딩
     //   - open=true 전환 시 store 의 selectedMeasures (defaultSelected) 기준 reload
     //   - 적용 (handleApply) → onApply(setSelectedMeasures) → store 갱신 → sessionStorage persist → 재오픈 시 복원
     const selected = defaultSelected
       .map((code, i) => {
-        const m = ALL_MEASURES.find(x => x.MEASURE_CODE === code);
+        const m = allMeasures.find(x => x.MEASURE_CODE === code);
         return m ? { ...m, SORT_ORDER_NO: i + 1 } : null;
       })
       .filter((x): x is MeasureRow => x !== null);
-    const hidden = ALL_MEASURES
+    const hidden = allMeasures
       .filter(m => !defaultSelected.includes(m.MEASURE_CODE))
       .map(m => ({ ...m, SORT_ORDER_NO: 0 }));
     setSelectedRows(selected);
@@ -80,7 +81,7 @@ export const MeasureSelectModal = ({ open, onClose, defaultSelected, onApply, di
     setBaseSel(null);
     setUserSel(null);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open]);
+  }, [open, allMeasures]);
 
   const sortedSelected = useMemo(
     () => [...selectedRows].sort((a, b) => a.SORT_ORDER_NO - b.SORT_ORDER_NO),

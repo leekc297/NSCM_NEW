@@ -5,7 +5,7 @@ import { useEffect, useMemo, useRef } from 'react';
 import { apiClient } from '@foundation/apis';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { MainTitle, SubTitle, TabItem, TabWrapper } from '@shared/components';
-import { useTabProcQuery } from '@shared/hooks';
+import { useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
 import { useMessageStore } from '@shared/stores';
 
 import { ErpEdiMasterForm } from './components/ErpEdiMasterForm';
@@ -103,8 +103,8 @@ export const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
       await apiClient.post(`/${MENU_ID}/main/STATUS_UPDATE/call-proc`, {});
       setToast({ type: 'success', message: 'Status Update 완료. 재조회합니다.' });
       setSummaryFilters();
-      refetchSummary?.();
-      refetchRepair?.();
+      void refetchSummary?.();
+      void refetchRepair?.();
     } catch (e) {
       const msg = e instanceof Error ? e.message : 'Status Update 실패';
       void setAlert({ type: 'alert', content: msg });
@@ -145,10 +145,13 @@ export const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
     });
   };
 
+  // ⭐ UI 동적 속성관리 — Menu Button (master hook §3): admin USE_YN 즉시 반영
+  const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
+
   const hotkeyConfig: HotkeyConfig = {
-    search: setSummaryFilters,
-    save: handleSave,
-    insert: handleInsert,
+    search: hasButton('SEARCH') ? setSummaryFilters : false,
+    save:   hasButton('SAVE')   ? handleSave        : false,
+    insert: hasButton('INSERT') ? handleInsert      : false,
     delete: false,
     condition: false,
     resetCondition: false,
@@ -156,12 +159,12 @@ export const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
     upload: false,
   };
 
-  const customButtons = [
-    {
-      label: 'Status Update',
-      action: () => void handleStatusUpdate(),
-    },
-  ];
+  const customButtons = hasButton('STATUS_UPDATE')
+    ? [{
+        label: 'Status Update',
+        action: () => void handleStatusUpdate(),
+      }]
+    : [];
 
   // Wijmo FlexGrid Array 가드 + null filter (룰 12 §11.5)
   const safeRows = <T,>(data: unknown): T[] => {
@@ -186,7 +189,6 @@ export const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
     () => safeRows<ResponseData<MENU_ID, SHEETS.SSPM>>(sspmData?.o_rc1),
     [sspmData]
   );
-
 
   return (
     <div className={styles.container}>

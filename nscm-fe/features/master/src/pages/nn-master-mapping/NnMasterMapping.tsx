@@ -1,4 +1,4 @@
-import { FlexGrid, FlexGridColumn } from '@mescius/wijmo.react.grid';
+import { toggleClass } from '@mescius/wijmo';
 import {
   AllowMerging,
   CellRange,
@@ -9,13 +9,13 @@ import {
   type GridPanel,
 } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { toggleClass } from '@mescius/wijmo';
-import { useEffect, useRef, useState } from 'react';
+import { FlexGrid, FlexGridColumn } from '@mescius/wijmo.react.grid';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { apiClient } from '@foundation/apis';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { MainTitle, SubTitle } from '@shared/components';
-import { useTabProcQuery } from '@shared/hooks';
+import { useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
 import { useMessageStore } from '@shared/stores';
 
 import {
@@ -25,7 +25,7 @@ import {
 } from '../../components';
 
 import { NnMasterMappingForm } from './components/NnMasterMappingForm';
-import { MAIN_COLUMNS, MENU_ID, SHEETS } from './nn-master-mapping.constants';
+import { MAIN_COLUMNS, MENU_ID, type NnColumnMeta, SHEETS } from './nn-master-mapping.constants';
 import styles from './NnMasterMapping.module.scss';
 import { useNnMasterMappingStore } from './useNnMasterMappingStore';
 
@@ -77,9 +77,37 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
   const setFilter = useNnMasterMappingStore(s => s.setFilter);
   const openSearchArea = useNnMasterMappingStore(s => s.openSearchArea);
   const setOpenSearchArea = useNnMasterMappingStore(s => s.setOpenSearchArea);
+  // ⭐ UI 동적 속성관리 (master hook §4) — admin SYS0004 UI Category Setup 메타 동적 fetch
+  const staticColumns = useNnMasterMappingStore(s => s.staticColumns);
+  const fetchStaticColumns = useNnMasterMappingStore(s => s.fetchStaticColumns);
 
-  // 화면 진입 시 자동 조회 (사용자 요구 2026-06-01)
-  useEffect(() => { if (!filters[SHEETS.MAIN]) setFilter(); }, []);
+  // 화면 진입 시 자동 조회 + admin 메타 fetch (사용자 요구 2026-06-01 + master hook §2.3)
+  useEffect(() => {
+    if (!filters[SHEETS.MAIN]) setFilter();
+    void fetchStaticColumns();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // ⭐ mergedColumns — admin 메타 (visible/width/label) override + MAIN_COLUMNS 확장 속성 (_ctrlType/_modalKey/_inputEditType) fallback.
+  //   DMF0020 SalesFuturePriceFlexGrid mergedColumns 패턴 동일.
+  const mergedColumns = useMemo<(NnColumnMeta & { visible?: boolean })[]>(() => {
+    const sc = staticColumns?.[SHEETS.MAIN] ?? [];
+    if (sc.length === 0) return MAIN_COLUMNS.map(c => ({ ...c, visible: true }));
+    return sc.map(s => {
+      const fb = MAIN_COLUMNS.find(m => m.key === s.colNm);
+      return {
+        key: s.colNm,
+        header: s.colLblNm || fb?.header || s.colNm,
+        width: s.colWth ?? fb?.width ?? 100,
+        merge: fb?.merge ?? false,
+        visible: s.visible !== false,
+        _ctrlType: (s.cellCtrlObjTpCd as NnColumnMeta['_ctrlType']) ?? fb?._ctrlType,
+        _inputEditType: (s.inputTpCd as NnColumnMeta['_inputEditType']) ?? fb?._inputEditType,
+        _modalKey: fb?._modalKey,   // _modalKey 는 code-side 매핑 유지 (admin meta 미관리)
+      };
+    });
+  }, [staticColumns]);
+  const visibleColumns = useMemo(() => mergedColumns.filter(c => c.visible !== false), [mergedColumns]);
 
   const { data, refetch } = useTabProcQuery<MENU_ID, SHEETS.MAIN>({
     menuId: MENU_ID,
@@ -94,7 +122,13 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
   // ⚠️ handleSearch 가 setInsertedRows 사용 → use-before-define 회피 위해 위로 이동
   const [insertedRows, setInsertedRows] = useState<NnRow[]>([]);
 
-  const handleSearch = () => { setFilter(); refetch?.(); setInsertedRows([]); };
+  const handleSearch = () => {
+    setFilter();
+    void refetch?.();
+    setInsertedRows([]);
+    // ⭐ master hook §2.4 — Search 시 admin 메타 refetch (admin 변경 즉시 반영)
+    void fetchStaticColumns();
+  };
 
   const handleInsert = () => {
     // As-Is L538-602: InsertRow 안 DATA_TYPE='SCM' fixed, DIVISION=search div, ACTIVE_YN='Y' default
@@ -245,7 +279,7 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
         });
         void setAlert({ type: 'alert', content: '[MSG00020] 저장되었습니다.' });
         setInsertedRows([]);
-        refetch?.();
+        void refetch?.();
       } catch (e) {
         const msg = e instanceof Error ? e.message : '[MSG00284] 저장 중 오류가 발생했습니다.';
         void setAlert({ type: 'alert', content: msg });
@@ -253,11 +287,14 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
     })();
   };
 
+  // ⭐ UI 동적 속성관리 — Menu Button (master hook §3): admin USE_YN 즉시 반영
+  const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
+
   const hotkeyConfig: HotkeyConfig = {
-    search: handleSearch,
-    insert: handleInsert,
-    save: handleSave,
-    delete: handleDelete,
+    search: hasButton('SEARCH') ? handleSearch : false,
+    insert: hasButton('INSERT') ? handleInsert : false,
+    save:   hasButton('SAVE')   ? handleSave   : false,
+    delete: hasButton('DELETE') ? handleDelete : false,
     manual: false,
     upload: false,
   };
@@ -326,7 +363,7 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
     setOpenItemModal(false);
   };
 
-  const spRows = ((data as { o_rc1?: NnRow[] })?.o_rc1 ?? []) as NnRow[];
+  const spRows = (data as { o_rc1?: NnRow[] })?.o_rc1 ?? [];
   const rows: NnRow[] = [...insertedRows, ...spRows];
 
   return (
@@ -415,7 +452,9 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
           itemsSource={rows}
           autoGenerateColumns={false}
         >
-          {MAIN_COLUMNS.map(c => (
+          {/* ⭐ visibleColumns — admin SYS0004 visible=false 컬럼은 자동 제외, width/header 도 admin 메타 반영.
+              _ctrlType / _inputEditType / _modalKey 등 확장 속성은 formatItem/dblClick 안 MAIN_COLUMNS fallback 으로 처리. */}
+          {visibleColumns.map(c => (
             <FlexGridColumn
               key={c.key}
               binding={c.key}

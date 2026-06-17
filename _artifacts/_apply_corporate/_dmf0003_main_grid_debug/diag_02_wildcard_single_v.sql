@@ -1,0 +1,25 @@
+-- 진단 #2: P_ITEM_ID/P_PROJECT_CODE = '%' wildcard 시 ITEM_SINGLE_V + GT_SITE_ITEM_ALL + GT_SITE_ITEM row 측정
+DECLARE
+  c1 SYS_REFCURSOR; c2 SYS_REFCURSOR; c3 SYS_REFCURSOR; c4 SYS_REFCURSOR;
+  v_ori PLS_INTEGER; v_a PLS_INTEGER; v_b PLS_INTEGER; v_v PLS_INTEGER;
+  v_si_all PLS_INTEGER; v_si PLS_INTEGER;
+BEGIN
+  DMF0003_GET_MKT_FCST_DATA(
+    '81', 'ALL','ALL','ALL','ALL','ALL',
+    '%',         -- P_PROJECT_CODE wildcard
+    '%',         -- P_ITEM_ID wildcard
+    TO_CHAR(SYSDATE,'YYYYMMDD'), TO_CHAR(SYSDATE+90,'YYYYMMDD'),
+    'minyonglee1', 'ADMIN', 'ALL','ALL','N','N','N','N','ALL','ALL',
+    'minyonglee1','DMF0003',
+    c1, c2, c3, c4);
+  SELECT COUNT(*) INTO v_ori    FROM SCM_MGR.GT_GGET_ITEM_SINGLE_ORI;
+  SELECT COUNT(*) INTO v_a      FROM SCM_MGR.GT_GGET_ITEM_SINGLE_A;
+  SELECT COUNT(*) INTO v_b      FROM SCM_MGR.GT_GGET_ITEM_SINGLE_B;
+  SELECT COUNT(*) INTO v_v      FROM SCM_MGR.GT_GGET_ITEM_SINGLE_V;
+  SELECT COUNT(*) INTO v_si_all FROM SCM_MGR.GT_GGET_SITE_ITEM_ALL;
+  SELECT COUNT(*) INTO v_si     FROM SCM_MGR.GT_GGET_SITE_ITEM;
+  RAISE_APPLICATION_ERROR(-20999,
+    'WILDCARD ORI=' || v_ori || ' A=' || v_a || ' B=' || v_b || ' V=' || v_v
+    || ' SI_ALL=' || v_si_all || ' SI=' || v_si);
+END;
+/

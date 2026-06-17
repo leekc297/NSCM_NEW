@@ -4,11 +4,12 @@ import { useEffect, useRef } from 'react';
 
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { MainTitle, SubTitle } from '@shared/components';
-import { useTabProcQuery } from '@shared/hooks';
+import { useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
+
+import { ColumnSettingModal } from '../../components';
 
 import { ContributeViewForm } from './components/ContributeViewForm';
 import { ContributeViewGrid } from './components/ContributeViewGrid';
-import { ColumnSettingModal } from '../../components';
 import { ContributeVersionModal } from './components/modals/ContributeVersionModal';
 import { MENU_ID, SHEETS } from './contribute-view.constants';
 import styles from './ContributeView.module.scss';
@@ -38,6 +39,15 @@ export const ContributeView = ({ tabId, title }: PageProps<MENU_ID>) => {
   const setVersionPopupOpen = useContributeViewStore(s => s.setVersionPopupOpen);
   const columnSetPopupOpen = useContributeViewStore(s => s.columnSetPopupOpen);
   const setColumnSetPopupOpen = useContributeViewStore(s => s.setColumnSetPopupOpen);
+  // ⭐ UI 동적 속성관리 (master hook §4) — admin SYS0004 UI Category Setup 메타 동적 fetch
+  const fetchStaticColumns = useContributeViewStore(s => s.fetchStaticColumns);
+  const staticColumns = useContributeViewStore(s => s.staticColumns);
+
+  // mount 시 admin 메타 fetch (master hook §2.3)
+  useEffect(() => {
+    void fetchStaticColumns();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const { validateVersionSelected, validateSearchResultEmpty } = useContributeViewValidation();
 
@@ -56,7 +66,9 @@ export const ContributeView = ({ tabId, title }: PageProps<MENU_ID>) => {
     const ok = await validateVersionSelected(searchCondition.versionNo);
     if (!ok) return;
     setFilter();
-    refetch?.();
+    void refetch?.();
+    // ⭐ master hook §2.4 — Search 시 admin 메타 refetch (admin 변경 즉시 반영)
+    void fetchStaticColumns();
   };
 
   // AS-IS L466~470: VersionPopup 선택 → txtVersion.Text 채움
@@ -105,8 +117,11 @@ export const ContributeView = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   F7/F8/F9 (save/insert/delete) : AS-IS read-only 의도 → false
   //   기여율버전관리 : customButton (AS-IS btnCutOff_Click L444)
   //   컬럼표시설정 : customButton (AS-IS btnColumn_Click L473)
+  // ⭐ UI 동적 속성관리 — Menu Button (master hook §3): admin USE_YN 즉시 반영
+  const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
+
   const hotkeyConfig: HotkeyConfig = {
-    search: handleSearch,
+    search: hasButton('SEARCH') ? () => void handleSearch() : false,
     save: false,
     insert: false,
     delete: false,
@@ -117,13 +132,13 @@ export const ContributeView = ({ tabId, title }: PageProps<MENU_ID>) => {
   // 사용자 요구 (2026-06-01):
   //   - "기여율 버전관리" → SubTitle 에서 제거, Form 의 아이콘 버튼으로 이동
   //   - "컬럼 표시 설정" → SubTitle 의 아이콘형 버튼으로 (Form ⊞ btnColumn 과 동일 아이콘)
-  const customButtons = [
-    {
-      label: '⊞',
-      title: '컬럼 표시 설정',
-      action: () => setColumnSetPopupOpen(true),
-    },
-  ];
+  const customButtons = hasButton('COLUMN_SETUP')
+    ? [{
+        label: '⊞',
+        title: '컬럼 표시 설정',
+        action: () => setColumnSetPopupOpen(true),
+      }]
+    : [];
 
   return (
     <div className={styles.container}>
@@ -151,7 +166,7 @@ export const ContributeView = ({ tabId, title }: PageProps<MENU_ID>) => {
         customButtons={customButtons}
       />
       <div className={styles.gridContainer}>
-        <ContributeViewGrid gridRef={gridRef} data={rows} />
+        <ContributeViewGrid gridRef={gridRef} data={rows} staticColumns={staticColumns[SHEETS.MAIN]} />
       </div>
       <ContributeVersionModal
         open={versionPopupOpen}

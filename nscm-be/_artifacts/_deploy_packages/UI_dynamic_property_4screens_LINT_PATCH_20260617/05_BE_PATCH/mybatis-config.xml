@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "./mybatis-3-config.dtd">
+
+<configuration>
+    <settings>
+        <setting name="jdbcTypeForNull" value="NULL"/>	<!-- null 허용 -->
+        <setting name="defaultFetchSize" value="0"/>
+        <!-- callSettersOnNulls=true : cursor NULL 값도 result Map 에 포함 (DMF0043 PIVOT 전체 컬럼 보장, 2026-06-01) -->
+        <setting name="callSettersOnNulls" value="true"/>
+		<!-- 
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <setting name="lazyLoadingEnabled" value="true"/>
+		-->
+    </settings>
+
+<!-- 
+    <typeAliases>
+        <package name="com.lgcns.nscm.dto"/>
+    </typeAliases>
+-->
+
+    <typeHandlers>
+        <typeHandler handler="org.apache.ibatis.type.ClobTypeHandler" jdbcType="CLOB" javaType="java.lang.String" />
+    	
+		<!--
+        <typeHandler handler="org.apache.ibatis.type.DateTypeHandler" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+        -->
+    </typeHandlers>
+
+<!-- 
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="oracle.jdbc.driver.OracleDriver"/>
+                <property name="url" value="jdbc:oracle:thin:@10.94.57.6:1521:xe"/>
+                <property name="username" value="nscm_user"/>
+                <property name="password" value="password123"/>
+                
+                <property name="poolMaximumActiveConnections" value="20"/>
+                <property name="poolMaximumIdleConnections" value="5"/>
+                <property name="poolTimeToWait" value="10000"/>
+                <property name="poolPingEnabled" value="true"/>
+                <property name="poolPingQuery" value="SELECT 1 FROM DUAL"/>
+            </dataSource>
+        </environment>
+    </environments>
+-->
+
+
+</configuration>

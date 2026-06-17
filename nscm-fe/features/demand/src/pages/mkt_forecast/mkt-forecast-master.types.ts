@@ -92,3 +92,26 @@ export interface MktFcstRow {
 
 // CRUD_TYPE marker (Phase 2~7 — cellEditEnded cascade)
 export type CrudType = 'I' | 'U' | 'D' | '';
+
+// SCM_MST_SHEET_MEASURE row (admin SYS0004 UI Category Setup Measure 탭)
+//   master hook §5 — "UI 생성의 동적 속성관리" Measure 부분
+//   BE POST /admin/menu/{mnuId}/measure → List<GridMeasure>
+//   ⭐ BE GridMeasure DTO 가 camelCase JSON 반환 (colNm, colLblNm). UPPER_SNAKE 키 접근 시 undefined.
+export interface MeasureMeta {
+  colNm: string;
+  colLblNm?: string;
+  sClsLblNm?: string;
+  lClsLblNm?: string;
+  personalizable?: boolean;
+  display?: boolean;
+  attribute1?: string;
+  attribute2?: string;
+  attribute3?: string;
+  attribute4?: string;
+  attribute5?: string;
+  attribute6?: string;
+  attribute7?: string;
+  attribute8?: string;
+  attribute9?: string;
+  attribute10?: string;
+}

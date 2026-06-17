@@ -1,7 +1,9 @@
+import { apiClient } from '@foundation/apis';
+import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { createPersistedStoreWithTab } from '@shared/stores';
 
 import { BUCKET_TYPE, DIVISION, MENU_ID, SHEETS } from './mkt-forecast-master.constants';
-import type { SearchCondition } from './mkt-forecast-master.types';
+import type { MeasureMeta, SearchCondition } from './mkt-forecast-master.types';
 
 // Phase 7 격차 G1 — Search condition 저장/복원 (memory feedback_search_fields_catalog)
 //   zustand persist 자동 동작 — createPersistedStoreWithTab 가 localStorage 'mkt-forecast-master-' key 로 저장
@@ -11,6 +13,10 @@ import type { SearchCondition } from './mkt-forecast-master.types';
 type FiltersBySheet = {
   [SHEETS.MAIN]?: ProcRequest<MENU_ID, SHEETS.MAIN>;
 };
+
+// ⭐ master hook "UI 생성의 동적 속성관리" — Column / Measure 동적 fetch state
+type StaticColumnsBySheet = { [key in SHEETS]: RawFlexGridColumnConfig[] };
+type StaticMeasuresBySheet = { [key in SHEETS]: MeasureMeta[] };
 
 interface State {
   initialized: boolean;
@@ -22,6 +28,9 @@ interface State {
   //   AS-IS editable Measure = MKT_FCST 만 (MKT_FCST_RP 는 L1954 자동 setValue + L2909 SSP sync 색 표시 전용)
   //   default = ['MKT_FCST', 'MKT_FCST_RP'] — AS-IS Selected 기본 2개
   selectedMeasures: string[];
+  // ⭐ master hook §2.3 / §5 — admin SYS0004 UI Category Setup 동적 메타
+  staticColumns: StaticColumnsBySheet;
+  staticMeasures: StaticMeasuresBySheet;
 }
 
 interface Action {
@@ -30,6 +39,8 @@ interface Action {
   setFilter: () => void;
   setOpenSearchArea: (open?: boolean) => void;
   setSelectedMeasures: (measures: string[]) => void;
+  fetchStaticColumns: () => Promise<void>;
+  fetchStaticMeasures: () => Promise<void>;
 }
 
 // AS-IS Form_Load 기본값 (DMF0003_1_MktFcst.cs L318):
@@ -64,12 +75,24 @@ const initSearch: SearchCondition = {
   sumYn: false,
 };
 
+const emptyCols: StaticColumnsBySheet = Object.values(SHEETS).reduce((acc, k) => {
+  (acc as Record<string, RawFlexGridColumnConfig[]>)[k] = [];
+  return acc;
+}, {} as StaticColumnsBySheet);
+
+const emptyMeasures: StaticMeasuresBySheet = Object.values(SHEETS).reduce((acc, k) => {
+  (acc as Record<string, MeasureMeta[]>)[k] = [];
+  return acc;
+}, {} as StaticMeasuresBySheet);
+
 const initState: State = {
   initialized: false,
   filters: {},
   searchCondition: initSearch,
   openSearchArea: true,
   selectedMeasures: ['MKT_FCST', 'MKT_FCST_RP'],
+  staticColumns: emptyCols,
+  staticMeasures: emptyMeasures,
 };
 
 // SP DMF0003_GET_MKT_FCST_DATA — 22 IN parameter 매핑 (archive line 1546~1574):
@@ -94,12 +117,17 @@ export const useMktForecastMasterStore = createPersistedStoreWithTab<State & Act
           teamId:       j(c.teamIds),
           customer:     j(c.endCustomers),
           bizType:      j(c.bizTypes),
-          projectCode:  c.projectCode || 'ALL',
-          itemId:       c.itemId || 'ALL',
+          // ⭐ SP body line 1014/1010 의 LIKE 패턴 (`'%' || token || '%'`) 통과 위해
+          //   빈 시 '%' wildcard (split → ['%'] → LIKE '%%%' 모든 row 매치).
+          //   'ALL' 보내면 ITEM_ID LIKE '%ALL%' = 0 row → GT_SITE_ITEM_ALL 0 → 메인 cursor 0.
+          projectCode:  c.projectCode || '%',
+          itemId:       c.itemId || '%',
           fromYyyymmdd: c.startYyyymmdd,
           toYyyymmdd:   c.endYyyymmdd,
           itemType:     j(c.itemTypes),
-          owner:        c.owner || 'ALL',
+          // ⭐ SP body line 1055-1057 의 `P_OWNER IS NULL OR P_OWNER = ''` 첫 절 통과 위해
+          //   빈 시 '' (NULL 동등). 'ALL' 보내면 F.OWNER IN ('ALL') = 0 row.
+          owner:        c.owner || '',
           qtyYn:        c.qtyFilter ? 'Y' : 'N',
           cellYn:       c.cellQty ? 'Y' : 'N',
           asYn:         c.asFromSite ? 'Y' : 'N',
@@ -113,6 +141,46 @@ export const useMktForecastMasterStore = createPersistedStoreWithTab<State & Act
     setSelectedMeasures: measures => set(state => {
       state.selectedMeasures = measures;
     }),
+
+    // ⭐ master hook §2.3 / child hook ui-category-setup-column-meta §2.2 —
+    //   admin SYS0004 UI Category Setup `SCM_MST_SHEET_COLUMNS` 변경 즉시 반영.
+    //   mount + Search 시 호출 (admin 변경 + division 변경 cross-reflect).
+    fetchStaticColumns: async () => {
+      try {
+        const sheets: SHEETS[] = [SHEETS.MAIN];
+        const responses = await Promise.all(
+          sheets.map(sheetNm =>
+            apiClient.post<RawFlexGridColumnConfig[]>(`/admin/menu/${MENU_ID}/column`, { sheetNm }),
+          ),
+        );
+        set(state => {
+          sheets.forEach((s, i) => { state.staticColumns[s] = responses[i].data.result ?? []; });
+        });
+      } catch (e) {
+        // BE 메타 미등록 시 fallback (MAIN_COLUMNS 하드코딩) — 화면 작동 보장
+        // master hook §8 anti-pattern 5.4 회피 — 빈 결과는 fallback 트리거
+        console.warn('[DMF0003] fetchStaticColumns failed', e);
+      }
+    },
+
+    // ⭐ master hook §5 / child hook ui-category-setup-column-meta §8 —
+    //   admin SYS0004 UI Category Setup Measure 탭 `SCM_MST_SHEET_MEASURE` 변경 즉시 반영.
+    //   PIVOT 화면 (DMF0003 main grid + MeasureSelectModal) 의무.
+    fetchStaticMeasures: async () => {
+      try {
+        const sheets: SHEETS[] = [SHEETS.MAIN];
+        const responses = await Promise.all(
+          sheets.map(sheetNm =>
+            apiClient.post<MeasureMeta[]>(`/admin/menu/${MENU_ID}/measure`, { sheetNm }),
+          ),
+        );
+        set(state => {
+          sheets.forEach((s, i) => { state.staticMeasures[s] = responses[i].data.result ?? []; });
+        });
+      } catch (e) {
+        console.warn('[DMF0003] fetchStaticMeasures failed', e);
+      }
+    },
   }),
   'mkt-forecast-master',
 );

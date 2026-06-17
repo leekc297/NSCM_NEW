@@ -11,11 +11,29 @@ import { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { FlexGrid, FlexGridColumn } from '@mescius/wijmo.react.grid';
 import { useEffect, useMemo, useRef } from 'react';
 
+import type { RawFlexGridColumnConfig } from '@foundation/models';
+
 import { FROZEN_COL_COUNT, MAIN_COLUMNS, type MainColumnMeta } from '../mkt-forecast-master.constants';
 import { useMktForecastDynamicColumns } from '../hooks/useMktForecastDynamicColumns';
-import type { MktFcstRow, SearchCondition } from '../mkt-forecast-master.types';
+import type { MeasureMeta, MktFcstRow, SearchCondition } from '../mkt-forecast-master.types';
+import { getDivisionVisibility } from '../utils/divisionBranch';
 
 export interface ComboItem { CODE: string; NAME: string }
+
+// ⭐ master hook §11 — FlexGrid 직접 사용 시 통합 column meta (admin 동적 + MAIN_COLUMNS fallback)
+interface MergedColumnMeta {
+  binding: string;
+  header: string;
+  width: number;
+  align: 'L' | 'R' | 'C';
+  visible: boolean;
+  fixed: boolean;
+  scale?: number;
+  _ctrlType?: MainColumnMeta['_ctrlType'];
+  _inputEditType?: MainColumnMeta['_inputEditType'];
+  _modalKey?: string;
+  _comboKey?: string;
+}
 
 interface Props {
   rows: MktFcstRow[];
@@ -26,6 +44,12 @@ interface Props {
   onCellEditEnded?: (sender: unknown, e: { row: number; col: number }) => void;
   comboData?: Record<string, ComboItem[]>;
   onPopupCellDblClick?: (row: MktFcstRow, modalKey: string, binding: string) => void;
+  // ⭐ master hook §2.5 / §11 — admin SYS0004 UI Category Setup 동적 메타
+  staticColumns?: RawFlexGridColumnConfig[];
+  staticMeasures?: MeasureMeta[];
+  // ⭐ 2026-06-16 — 조회조건 4 checkbox (Sum / Color / Qty / Cell Qty) 보강
+  sumYn?: boolean;
+  colorYn?: boolean;
 }
 
 const NO_MERGE_KEYS = new Set(['MEASURE', 'YYYYMMDD', 'QTY', 'EDIT_FLAG']);
@@ -53,7 +77,12 @@ export const MktForecastMasterGrid = ({
   onCellEditEnded,
   comboData = {},
   onPopupCellDblClick,
+  staticColumns,
+  staticMeasures,
+  sumYn = false,
+  colorYn = false,
 }: Props) => {
+  void staticMeasures; // staticMeasures 는 부모 MeasureSelectModal 에서 사용 — Grid 는 binding 만 처리
   const dynamicCols = useMktForecastDynamicColumns(
     searchCondition ?? ({ divisionId, bucketType: 'W', startYyyymmdd: '', endYyyymmdd: '' } as never),
   );
@@ -63,14 +92,68 @@ export const MktForecastMasterGrid = ({
 
   const collectionView = useMemo(() => new CollectionView(rows), [rows]);
 
-  const fixedColumns = useMemo(
-    () => dynamicCols.fixedColumns.filter(c => c.visible !== false),
-    [dynamicCols.fixedColumns],
-  );
+  // ⭐ master hook §11.1 Step 2 — 통합 column meta (staticColumns 우선, MAIN_COLUMNS fallback)
+  //   admin SYS0004 변경 시 즉시 반영. BE 실패 / 메타 미등록 시 MAIN_COLUMNS 으로 안전 fallback.
+  //
+  // ⭐ 2026-06-16 Division 분기 (사용자 신고 5 컬럼 중복 fix):
+  //   DB SCM_MST_SHEET_COLUMNS 에는 *40 (Div 40 Mobility 전용) + base (Div 81/82 등) 쌍이
+  //   모두 VISIBLE='Y' 로 등록되어 있어, divisionBranch 통과 없이 staticColumns 그대로 fixedColumns
+  //   에 들어가면 DIVISION_ID/END_CUSTOMER/SCM_SITE_ID/ITEM_ID 4쌍이 동시 렌더 → 시각적 중복.
+  //   isVisibleByDivision 로 한 쪽만 표시.
+  const mergedColumns = useMemo<MergedColumnMeta[]>(() => {
+    const vis = getDivisionVisibility(divisionId);
+    const isVisibleByDivision = (binding: string): boolean => {
+      if (binding.endsWith('40')) return vis.showDivision40Cols;
+      if (binding === 'DIVISION_ID' || binding === 'END_CUSTOMER'
+        || binding === 'SCM_SITE_ID' || binding === 'ITEM_ID') {
+        return !vis.showDivision40Cols;
+      }
+      if (binding === 'CELL_TYPE') return vis.showCellType;
+      if (binding === 'VMI_YN') return vis.showEssNewFlag;
+      return true;
+    };
+
+    if (!staticColumns || staticColumns.length === 0) {
+      return MAIN_COLUMNS.map<MergedColumnMeta>(c => ({
+        binding: c.key,
+        header: c.header,
+        width: c.width ?? 100,
+        align: c.align ?? 'C',
+        visible: (c.visible !== false) && isVisibleByDivision(c.key),
+        fixed: c.freeze === true,
+        _ctrlType: c._ctrlType,
+        _inputEditType: c._inputEditType,
+        _modalKey: c._modalKey,
+        _comboKey: c._comboKey,
+      }));
+    }
+    return staticColumns.map<MergedColumnMeta>(sc => {
+      const fb = MAIN_COLUMNS.find(m => m.key === sc.colNm);
+      return {
+        binding: sc.colNm,
+        header: sc.colLblNm || fb?.header || sc.colNm,
+        width: sc.colWth ?? fb?.width ?? 100,
+        align: sc.horzAlgnCd ?? fb?.align ?? 'C',
+        visible: (sc.visible !== false) && isVisibleByDivision(sc.colNm),
+        fixed: sc.fixed === true,
+        scale: sc.scale,
+        _ctrlType: (sc.cellCtrlObjTpCd as MainColumnMeta['_ctrlType']) ?? fb?._ctrlType,
+        _inputEditType: (sc.inputTpCd as MainColumnMeta['_inputEditType']) ?? fb?._inputEditType,
+        // ⭐ 2026-06-16 — combo / modal key 표준 위치 = CELL_COMBO_DATA_TYPE (cellCboDataTp)
+        //   메모리 룰 feedback_column_lookup_meta_standard.md: ATTRIBUTE 위치 절대 금지
+        //   FPComboBox → SCM_ADM_CMBO_SQL_M SQL_ID / FPModal → popup key 둘 다 cellCboDataTp 사용
+        _modalKey: sc.cellCboDataTp ?? fb?._modalKey,
+        _comboKey: sc.cellCboDataTp ?? fb?._comboKey,
+      };
+    });
+  }, [staticColumns, divisionId]);
+
+  // ⭐ master hook §11.1 Step 3 — visible=true 만 렌더링 (admin VISIBLE_FLAG='N' 즉시 반영)
+  const fixedColumns = useMemo(() => mergedColumns.filter(c => c.visible), [mergedColumns]);
 
   // HierarchicalMergeManager — Data Cell + ColumnHeader 머지
   const mergeManager = useMemo(() => {
-    const fixedBindings = fixedColumns.map(c => c.key);
+    const fixedBindings = fixedColumns.map(c => c.binding);
 
     class HierarchicalMergeManager extends MergeManager {
       override getMergedRange(panel: GridPanel, r: number, c: number): CellRange | null {
@@ -95,7 +178,11 @@ export const MktForecastMasterGrid = ({
           while (r1 > 0 && sameRow(r1 - 1, r)) r1--;
           while (r2 < view.length - 1 && sameRow(r2 + 1, r)) r2++;
           if (r1 === r2) return null;
-          return new CellRange(r1, c, r2, c);
+          // ⭐ 2026-06-16 sticky merge — 시작 row 측 viewRange.row 측 이동
+          const vrTop = (panel.grid as unknown as { viewRange?: { row: number } } | undefined)?.viewRange?.row ?? 0;
+          const stickyStart = Math.max(r1, vrTop);
+          if (stickyStart >= r2) return null;
+          return new CellRange(stickyStart, c, r2, c);
         }
 
         if (panel.cellType === CellType.ColumnHeader) {
@@ -166,10 +253,11 @@ export const MktForecastMasterGrid = ({
           else e.cell.textContent = '월';
         }
         (e.cell as HTMLElement).style.textAlign = 'center';
-      } else if (fixedColumns.some(c => c.key === binding)) {
+      } else if (fixedColumns.some(c => c.binding === binding)) {
         // fixed col — mergeManager 가 row 0-2 머지. row 0 의 cell 만 표시
-        const meta = COL_META.get(binding);
-        e.cell.textContent = meta?.header ?? binding;
+        //   ⭐ master hook §11 — admin SYS0004 COLUMN_LABEL_NAME (header) 우선, MAIN_COLUMNS fallback
+        const merged = fixedColumns.find(c => c.binding === binding);
+        e.cell.textContent = merged?.header ?? COL_META.get(binding)?.header ?? binding;
         (e.cell as HTMLElement).style.textAlign = 'center';
       }
       return;
@@ -179,12 +267,44 @@ export const MktForecastMasterGrid = ({
     const item = (e.panel.rows[e.row] as unknown as { dataItem?: Record<string, string> })?.dataItem;
     const isNewRow = String(item?.EDIT_FLAG ?? '') === 'I';
 
-    // dynamic cell coloring (D_/W_/M_)
+    // ⭐ 2026-06-16 hook wijmo-merge-sticky-content — fixed col vertical merge cell content sticky
+    //   merge cell topmost row 가 viewport 위로 나가도 현재 visible row 위치에 텍스트 표시.
+    //   매 render 시 wrap 재생성 — wijmo 가 cell.textContent 재설정 시 wrap 사라지므로 항상 재구성.
+    if (fixedColumns.some(c => c.binding === binding)) {
+      const text = e.cell.textContent ?? '';
+      if (text) {
+        e.cell.textContent = '';
+        const wrap = document.createElement('div');
+        wrap.className = 'merge-content';
+        wrap.textContent = text;
+        wrap.style.cssText = 'padding-top:4px;text-align:center;will-change:transform;';
+        e.cell.appendChild(wrap);
+        (e.cell as HTMLElement).style.verticalAlign = 'top';
+        (e.cell as HTMLElement).style.padding = '0';
+      }
+    }
+
+    // SUM_TOTAL cell — 합계 column 강조 (옅은 청색)
+    if (binding === 'SUM_TOTAL') {
+      e.cell.style.backgroundColor = '#e3f2fd';
+      e.cell.style.fontWeight = '600';
+      return;
+    }
+
+    // dynamic cell coloring (D_/W_/M_) — 수정 가능 measure 는 colorYn 무관 항상 노란색
+    //   (사용자 명시 2026-06-16 — 수정 가능 cell 시각 표시는 의무, AS-IS 와 동등)
+    //   그 외 cell: colorYn=true 시 회색 / colorYn=false 시 흰색 (구분 표시 토글)
     if (binding.startsWith('D_') || binding.startsWith('W_') || binding.startsWith('M_')) {
       const measure = String(item?.MEASURE ?? '');
       const colIsEditable = col.isReadOnly === false;
       const measureIsEditable = measure === 'MKT_FCST';
-      e.cell.style.backgroundColor = (colIsEditable && measureIsEditable) ? '#fff8cd' : '#f1f4f3';
+      if (colIsEditable && measureIsEditable) {
+        e.cell.style.backgroundColor = '#fff8cd';   // 수정 가능 — 항상 표시
+      } else if (colorYn) {
+        e.cell.style.backgroundColor = '#f1f4f3';   // 그 외 + colorYn=true → 회색
+      } else {
+        e.cell.style.backgroundColor = '';          // 그 외 + colorYn=false → 흰색
+      }
       return;
     }
 
@@ -261,7 +381,7 @@ export const MktForecastMasterGrid = ({
       }
       g.invalidate(true);
     } catch { /* noop */ }
-  }, [dataMaps, mergeManager, fixedColumns, dynamicCols.dynamicColumns]);
+  }, [dataMaps, mergeManager, fixedColumns, dynamicCols.dynamicColumns, sumYn, colorYn]);
 
   return (
     <FlexGrid
@@ -294,18 +414,53 @@ export const MktForecastMasterGrid = ({
 
         g.mergeManager = mergeManager as never;
         g.hostElement.addEventListener('dblclick', (ev) => mouseDoubleClick(g, ev as MouseEvent));
+
+        // ⭐ 2026-06-16 — getBoundingClientRect 으로 viewport 안 cell 위치 정확 계산.
+        //   wijmo cell.offsetTop 은 row container 안의 offset → 절대 viewport 측 mismatch.
+        const adjustMergedContent = () => {
+          const root = g.cells.hostElement as HTMLElement | null;
+          if (!root) return;
+          const cellsRoot = (root.querySelector('.wj-cells') as HTMLElement | null) ?? root;
+          const cellsRect = cellsRoot.getBoundingClientRect();
+          const viewportTop = cellsRect.top;
+          const viewportBottom = cellsRect.bottom;
+          const lineH = 22;
+          root.querySelectorAll<HTMLElement>('.wj-cell .merge-content').forEach(div => {
+            const cellEl = div.parentElement as HTMLElement | null;
+            if (!cellEl) return;
+            const cellRect = cellEl.getBoundingClientRect();
+            const cellH = cellRect.height;
+            if (cellRect.top < viewportTop && cellRect.bottom > viewportTop) {
+              let offset = viewportTop - cellRect.top;
+              const maxOffset = cellH - lineH;
+              if (offset > maxOffset) offset = maxOffset;
+              const visibleBottom = Math.min(cellRect.bottom, viewportBottom);
+              const visibleH = visibleBottom - viewportTop;
+              if (visibleH < lineH) offset = Math.max(0, visibleH - lineH);
+              div.style.transform = `translateY(${offset}px)`;
+            } else {
+              div.style.transform = 'translateY(0)';
+            }
+          });
+        };
+        g.scrollPositionChanged.addHandler(adjustMergedContent);
+        g.updatedView.addHandler(adjustMergedContent);
+        // ⭐ 2026-06-16 sticky merge — scroll 시 mergeManager 측 시작 row 재계산 위해 invalidate
+        g.scrollPositionChanged.addHandler(() => { g.invalidate(); });
       }}
     >
-      {/* fixed cols — JSX FlexGridColumn 평면 + dataMap prop 직접 명시 (사용자 명시 요구 2026-06-07) */}
+      {/* fixed cols — JSX FlexGridColumn 평면 + dataMap prop 직접 명시 (사용자 명시 요구 2026-06-07)
+            ⭐ master hook §11.1 Step 3 — fixedColumns(=mergedColumns.filter(visible)) 사용
+            admin SYS0004 의 colLblNm/colWth/horzAlgnCd/inputTpCd 변경이 자동 반영. */}
       {fixedColumns.map(c => (
         <FlexGridColumn
-          key={c.key}
-          binding={c.key}
+          key={c.binding}
+          binding={c.binding}
           header={c.header}
-          width={c.width ?? 100}
+          width={c.width}
           align={c.align === 'L' ? 'left' : c.align === 'R' ? 'right' : 'center'}
           isReadOnly={c._inputEditType === 'S'}
-          dataMap={dataMaps[c.key] ?? undefined}
+          dataMap={dataMaps[c.binding] ?? undefined}
         />
       ))}
       {/* dynamic cols — 3-row header 는 formatItem 에서 textContent 설정 */}
@@ -319,6 +474,18 @@ export const MktForecastMasterGrid = ({
           isReadOnly={c._inputEditType === 'S'}
         />
       ))}
+      {/* ⭐ 2026-06-16 — Sum 컬럼 (AS-IS chkSum) — sumYn=true 시 우측 끝 합계 컬럼 추가 */}
+      {sumYn && (
+        <FlexGridColumn
+          key='SUM_TOTAL'
+          binding='SUM_TOTAL'
+          header='Sum'
+          width={100}
+          align='right'
+          isReadOnly
+          format='n0'
+        />
+      )}
     </FlexGrid>
   );
 };

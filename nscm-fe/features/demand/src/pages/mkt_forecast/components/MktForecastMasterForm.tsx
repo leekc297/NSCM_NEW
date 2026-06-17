@@ -60,17 +60,22 @@ export const MktForecastMasterForm = ({ onSearch }: Props) => {
       onSearch={onSearch}
       conditions={
         <>
-          {/* Row 1 */}
+          {/* Row 1 — 기본 1단 (Division / Team / End Customer) */}
           <DivisionField value={sc.divisionId} onChange={v => set({ divisionId: v as never })} />
           <TeamField value={sc.teamIds} onChange={v => set({ teamIds: v })} division={sc.divisionId} />
           <EndCustomerField value={sc.endCustomers} onChange={v => set({ endCustomers: v })} division={sc.divisionId} />
 
-          {/* Row 2 */}
+          {/* Row 2 — 기본 2단 (Biz Type / Sales Site / Plant Site) */}
           <BizTypeField value={sc.bizTypes} onChange={v => set({ bizTypes: v })} />
           <SalesSiteField value={sc.scmSiteIds} onChange={v => set({ scmSiteIds: v })} division={sc.divisionId} />
           <PlantSiteField value={sc.plantSiteIds} onChange={v => set({ plantSiteIds: v })} />
-
-          {/* Row 3 */}
+        </>
+      }
+      // ⭐ 2026-06-16 — 2단 초과 영역은 extraConditions 로 분리.
+      //   SearchArea 가 Search 버튼 우측에 아래 화살표 표시 → 클릭 시 확대/축소 (DMF0006 sample 패턴)
+      extraConditions={
+        <>
+          {/* Row 3 — Period / Bucket */}
           <PeriodField
             start={sc.startYyyymmdd}
             end={sc.endYyyymmdd}
@@ -93,10 +98,13 @@ export const MktForecastMasterForm = ({ onSearch }: Props) => {
             onChange={(v: string[]) => set({ itemId: v[0] ?? '' })}
             division={sc.divisionId}
           />
-          <OwnerField value={sc.owner} onChange={v => set({ owner: v })} division={sc.divisionId} />
+          <OwnerField
+            value={sc.owner ? [sc.owner] : []}
+            onChange={(v: string[]) => set({ owner: v[0] ?? '' })}
+            division={sc.divisionId}
+          />
 
-          {/* Row 5 — 4 Checkbox (Sum / Color / Qty>=0 / Cell Qty) + AS From Site (AS-IS chk*_CheckedChanged)
-              자매 SearchOverRangeField 패턴: native input type='checkbox' + Grid size only (item prop 없음) */}
+          {/* Row 5 — 4 Checkbox (Sum / Color / Qty>=0 / Cell Qty) */}
           <Grid size={2}>
             <FormItem label={t('LBL00540', { defaultValue: 'Sum' })} labelAlign='right' render={() => (
               <input type='checkbox' checked={sc.sumYn} onChange={e => set({ sumYn: e.target.checked })}
@@ -121,9 +129,6 @@ export const MktForecastMasterForm = ({ onSearch }: Props) => {
                 style={{ marginLeft: 8, transform: 'scale(1.2)' }} />
             )} />
           </Grid>
-          {/* AS From Site Checkbox 숨김 (사용자 명시 요구 2026-06-07) — store field 유지 */}
-
-          {/* Measure 버튼은 SubTitle 의 Column(⊞) 옆에 아이콘 버튼으로 이동 */}
         </>
       }
     />

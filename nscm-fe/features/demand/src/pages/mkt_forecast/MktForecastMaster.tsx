@@ -1,11 +1,14 @@
 import type { FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
 import { FlexGridFilter } from '@mescius/wijmo.grid.filter';
+import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
+import { apiClient } from '@foundation/apis';
+import { BUTTON_TYPE } from '@foundation/constants';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { GridAction } from '@foundation/utils';
 import { MainTitle, SubTitle } from '@shared/components';
-import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
+import { useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
 import {
@@ -56,6 +59,16 @@ export const MktForecastMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
   // 사용자 명시 요구 (2026-06-07): popup 에서 선택된 Measure 만 grid 표시
   const selectedMeasures = useMktForecastMasterStore(s => s.selectedMeasures);
   const setSelectedMeasures = useMktForecastMasterStore(s => s.setSelectedMeasures);
+  // ⭐ master hook "UI 생성의 동적 속성관리" §2.3 / §5 — admin SYS0004 메타 동적 fetch
+  const staticColumns = useMktForecastMasterStore(s => s.staticColumns);
+  const staticMeasures = useMktForecastMasterStore(s => s.staticMeasures);
+  const fetchStaticColumns = useMktForecastMasterStore(s => s.fetchStaticColumns);
+  const fetchStaticMeasures = useMktForecastMasterStore(s => s.fetchStaticMeasures);
+
+  // ⭐ master hook §3 / child hook menu-button-dynamic-fetch §2.1 —
+  //   admin SYS0009 Menu Button (`SCM_ADM_MNU_BTN_MPG_M` USE_YN + `USER_GR_MNU_BTN_MPG_M` 권한) 동적 fetch.
+  //   하드코딩 hotkeyConfig 금지 — admin USE_YN='N' 즉시 반영 보장.
+  const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
 
   const validate = useMktForecastValidation();
   const { saveRows } = useMktForecastMutation();
@@ -84,44 +97,62 @@ export const MktForecastMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
   const loading = isLoading || isFetching;
 
   // 사용자 명시 요구 (2026-06-07): Insert cell dropdown 정밀 적용
-  //   자매 DMF0020 SalesFuturePriceFlexGrid 패턴 동등 — 자매 검증 SQL_ID + column binding 별 직접 매핑
-  const [
-    endCustomersData,
-    sitesData,
-    incotermsData,
-    fcstTypeData,
-    customsHandbookData,
-    plantSiteData,
-    measureData,
-  ] = useTabComboQueries({
-    filters: [
-      'EndCustomerByDivisionDept',                                  // 자매 DMF0020 검증 SQL
-      'SiteByEndCustomer',                                          // 자매 DMF0020 검증 SQL
-      'Incoterms',
-      { comboId: 'FcstType', divisionId: sc.divisionId },           // @divisionId 명시 필수
-      { comboId: 'CustomsHandbook', divisionId: sc.divisionId },    // @divisionId 명시 필수
-      'PlantSite',
-      'Measure',
-    ] as never,
-  });
+  // ⭐ 2026-06-16 — 동적 combo fetch (memory feedback_admin_meta_dynamic_fetch.md):
+  //   admin SYS0004 의 SCM_MST_SHEET_COLUMNS 의 FPComboBox column 별 cellCboDataTp (= CELL_COMBO_DATA_TYPE = SCM_ADM_CMBO_SQL_M SQL_ID)
+  //   를 인벤토리화하여 useTabComboQueries 호출. 신규 column 추가 시 SYS0004 메타 INSERT 만으로 자동 fetch.
+  //   하드코딩 array 금지 (이전 7 SQL_ID 하드코딩 제거).
+  const comboInventory = useMemo(() => {
+    const cols = staticColumns[SHEETS.MAIN] ?? [];
+    const seen = new Set<string>();
+    const items: { colNm: string; sqlId: string }[] = [];
+    cols.forEach(c => {
+      const cellTp = String((c as Record<string, unknown>).cellCtrlObjTpCd ?? '');
+      const sqlId  = String((c as Record<string, unknown>).cellCboDataTp ?? '');
+      if (cellTp === 'FPComboBox' && sqlId) {
+        items.push({ colNm: String(c.colNm ?? ''), sqlId });
+        seen.add(sqlId);
+      }
+    });
+    return { items, sqlIds: Array.from(seen) };
+  }, [staticColumns]);
 
-  // 자매 DMF0020 dataMaps 패턴 — column binding 별 직접 매핑 (`_comboKey` 우회)
-  //   Grid 의 useEffect 가 col.binding 으로 직접 comboData[binding] 조회 → dataMap 적용
-  const comboData: Record<string, ComboItem[]> = useMemo(() => ({
-    END_CUSTOMER:   (endCustomersData    ?? []) as unknown as ComboItem[],
-    SCM_SITE_ID:    (sitesData           ?? []) as unknown as ComboItem[],
-    INCOTERMS:      (incotermsData       ?? []) as unknown as ComboItem[],
-    FCST_TYPE:      (fcstTypeData        ?? []) as unknown as ComboItem[],
-    DOM_EXP:        (customsHandbookData ?? []) as unknown as ComboItem[],
-    PLANT_SITE_ID:  (plantSiteData       ?? []) as unknown as ComboItem[],
-    MEASURE:        (measureData         ?? []) as unknown as ComboItem[],
-  }), [endCustomersData, sitesData, incotermsData, fcstTypeData, customsHandbookData, plantSiteData, measureData]);
+  // useTabComboQueries 의 filters: @divisionId 매개변수 필요한 SQL (FcstType / CustomsHandbook 등) 분기
+  //   divisionId 와 무관한 SQL = string 형, division 종속 SQL = ComboParam 객체
+  const DIVISION_SCOPED_SQL_IDS = useMemo(() => new Set(['FcstType', 'CustomsHandbook', 'BizTypeByDivision']), []);
+  const comboFilters = useMemo(
+    () => comboInventory.sqlIds.map(id =>
+      DIVISION_SCOPED_SQL_IDS.has(id)
+        ? { comboId: id, divisionId: sc.divisionId }
+        : id),
+    [comboInventory.sqlIds, sc.divisionId, DIVISION_SCOPED_SQL_IDS],
+  );
+  const comboQueries = useTabComboQueries({ filters: comboFilters as never });
+
+  // column binding 별 dataMap 매핑 — admin SYS0004 의 cellCboDataTp 인벤토리 기반 자동 생성
+  //   Grid 의 useEffect 가 col.binding 으로 comboData[binding] 조회 → dataMap 적용
+  const comboData: Record<string, ComboItem[]> = useMemo(() => {
+    const map: Record<string, ComboItem[]> = {};
+    comboInventory.items.forEach(({ colNm, sqlId }) => {
+      const idx = comboInventory.sqlIds.indexOf(sqlId);
+      if (idx >= 0) {
+        map[colNm] = (comboQueries[idx] ?? []) as unknown as ComboItem[];
+      }
+    });
+    return map;
+  }, [comboInventory, comboQueries]);
 
   // 화면 진입 자동 조회 (AS-IS Form_Load → InitControls → FindData)
   useEffect(() => {
     if (!filters[SHEETS.MAIN] && sc.divisionId) setFilter();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sc.divisionId]);
+
+  // ⭐ master hook §2.3 / §5 — mount 시 admin 메타 1회 fetch (admin 변경 즉시 반영 baseline)
+  useEffect(() => {
+    void fetchStaticColumns();
+    void fetchStaticMeasures();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tabId]);
 
   // 사용자 명시 요구 (2026-06-07): Measure 선택 상태를 화면 close/reopen 후에도 유지
   //   store 의 createPersistedStoreWithTab 은 sessionStorage (tabId 별) → tab close 시 사라짐
@@ -143,12 +174,41 @@ export const MktForecastMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
     } catch { /* noop */ }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  // Measure popup 적용 시 store update + localStorage 동시 저장
-  const handleMeasureApply = (measures: string[]) => {
+  const queryClient = useQueryClient();
+
+  // ⭐ Measure popup 적용 시 store update + localStorage + BE 사용자 권한 SAVE (SCM_MST_TITLESET_USER USER_INQUIRY_COLUMN_TYPE_CODE='M')
+  //   기존 인프라 활용 (사용자 명시 2026-06-16):
+  //     - SCM_ADM_API_M 'DMF0003_titleSet_SAVE' → SP PKG_SCM0002.P_SCM0002_SET_TITLESET_POPUP
+  //     - SCM_ADM_PROC_M 9 row IN param 매핑 (mnuId/sheetName/columnType/activeFlag/columnName/sortOrderNo/...)
+  //     - FE apiClient.callMutationProc 동적 endpoint POST {menuId}/{sheetName}/{action}/call-proc
+  //   SP body (PKG_DMF0003 line 850-919) 가 이 권한 row 기반 GT_GGET_SELECT_MEASURE 적재 → 새 measure row 반환.
+  const handleMeasureApply = async (measures: string[]) => {
     setSelectedMeasures(measures);
     try {
       localStorage.setItem(MEASURES_LS_KEY, JSON.stringify(measures));
     } catch { /* noop */ }
+
+    // popup 전체 measure (hidden+selected) 의 ACTIVE_FLAG 'Y'/'N' UPSERT
+    const allMeasures = staticMeasures[SHEETS.MAIN] ?? [];
+    if (allMeasures.length === 0) return;
+    const rows = allMeasures.map(m => {
+      const idx = measures.indexOf(m.colNm);
+      return {
+        sheetName:     'main',
+        columnType:    'M',
+        activeFlag:    idx >= 0 ? 'Y' : 'N',
+        columnName:    m.colNm,
+        sortOrderNo:   idx >= 0 ? idx + 1 : 0,
+        subTotalFlag:  'N',
+        sortMethodCode:'',
+      };
+    });
+    try {
+      await apiClient.callMutationProc(MENU_ID, 'titleSet' as never, BUTTON_TYPE.SAVE, rows as never);
+      void queryClient.invalidateQueries({ queryKey: [tabId] });
+    } catch (e) {
+      console.warn('[DMF0003] measure user permission save failed', e);
+    }
   };
 
   // cellEditEnded cascade — CRUD_TYPE marker (Phase 2)
@@ -157,11 +217,15 @@ export const MktForecastMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
   });
 
   // F5 Search — AS-IS L957 FindButton override
+  //   ⭐ master hook §2.4 — Search 시 fetchStaticColumns / fetchStaticMeasures 동반 호출
+  //   (admin 변경 + division 변경 cross-reflect — child hook §2.4 의무)
   const handleSearch = () => {
     const v = validate.validateFind(sc);
     if (!v.ok) return;
     void setToast({ message: '조회 중입니다...', type: 'default', duration: 2000 });
     setFilter();
+    void fetchStaticColumns();
+    void fetchStaticMeasures();
     refetch?.();
     setInsertedRows([]);
   };
@@ -312,28 +376,113 @@ export const MktForecastMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
   };
 
   // Button 10대 hotkey 매핑 (Phase 2 ✅ F5/F7/F8/F9 활성)
+  //   ⭐ master hook §3 / child hook menu-button-dynamic-fetch §2.1 —
+  //   `hasButton(BTN_CD)` 조건부 callback. admin 이 SYS0009 에서 USE_YN='N' 또는
+  //   사용자 그룹 권한 박탈 시 즉시 비활성 (hotkey 무효).
   const hotkeyConfig: HotkeyConfig = {
-    search: handleSearch,
-    insert: handleInsert,
-    save: handleSave,
-    delete: handleDelete,
-    sort: handleSort,
-    filter: handleFilter,
+    search: hasButton('SEARCH') ? handleSearch : false,
+    insert: hasButton('INSERT') ? handleInsert : false,
+    save:   hasButton('SAVE')   ? handleSave   : false,
+    delete: hasButton('DELETE') ? handleDelete : false,
+    sort:   hasButton('SORT')   ? handleSort   : false,
+    filter: hasButton('FILTER') ? handleFilter : false,
     manual: false,
     upload: false,
-    // F12 Excel : SubTitle 자동
+    // F12 Excel : SubTitle 자동 (hasButton('EXCEL') 은 SubTitle DefaultButtonActions 가 처리)
     // F6 Condition / F10 Reset : SubTitle DefaultButtonActions (생략 = 자동)
   };
 
+  // ⭐ menu-button-dynamic-fetch §2.2 — customButtons 동적 필터 (hasButton 필터링)
+  //   admin 이 신규 button 추가 시 즉시 노출 / USE_YN='N' 시 즉시 숨김.
+  //   사용자 명시 요구 (2026-06-15): M(MASTER_CHG) 버튼 제거. Measure 선택은 ⊟ 단일 진입.
+  const ALL_CUSTOM_BTNS = useMemo(() => [
+    { code: 'COLUMN_SETUP',   label: '⊞', title: 'Grid 항목 표시 (AS-IS btnColumn_Click)', action: () => setOpenColumnSelect(true) },
+    { code: 'MEASURE_SELECT', label: '⊟', title: 'Measure 선택 (AS-IS btnMeasure_Click)',  action: () => setOpenMeasureSelect(true) },
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  ], []);
+
+  const customButtons = useMemo(
+    () => ALL_CUSTOM_BTNS.filter(b => hasButton(b.code)).map(({ label, title, action }) => ({ label, title, action })),
+    [ALL_CUSTOM_BTNS, hasButton],
+  );
+
   // SP long format (row 별 YYYYMMDD + QTY) → wide PIVOT (D_/W_/M_YYYYMMDD column 별 QTY 채움)
   // 사용자 명시 요구 (2026-06-07): selectedMeasures 만 grid 표시 (popup 으로 사용자 선택 가능)
+  //
+  // ⭐ 2026-06-16 사용자 명시 — popup 에서 선택한 measure 는 SP 가 데이터 row 안 반환해도 grid 에 row 생성
+  //   SP body (PKG_DMF0003 4344 line) 가 hardcoded measure 처리 path 만 가짐 (MKT_FCST/MKT_FCST_RP/RTF 등 일부).
+  //   IMM/CUST_FCST/VMI 등 추가 measure 권한이 있어도 SP 가 데이터 row 자체 안 반환 → grid 표시 안 됨.
+  //   해결: FE 측 base group (Division/SCM_Site/Plant_Site/Project/Item/DomExp/FcstType/Incoterms 8 key) 별
+  //   selectedMeasures 의 모든 measure 별 placeholder row 추가 (bucket cell NULL).
   const spRows = (((data as { o_rc1?: MktFcstRow[] })?.o_rc1 ?? []) as unknown as MktFcstRow[]);
-  const filteredSpRows = spRows.filter(r => selectedMeasures.includes(String(r.MEASURE ?? '')));
   const pivotedRows = ((): MktFcstRow[] => {
-    if (filteredSpRows.length === 0) return [];
-    return longToPivot(filteredSpRows as never, sc.bucketType as 'D' | 'W' | 'M');
+    if (spRows.length === 0) return [];
+    const allWide = longToPivot(spRows as never, sc.bucketType as 'D' | 'W' | 'M');
+
+    const baseKey = (r: MktFcstRow): string => [
+      (r as Record<string, unknown>).DIVISION_ID ?? '',
+      (r as Record<string, unknown>).SCM_SITE_ID ?? '',
+      (r as Record<string, unknown>).PLANT_SITE_ID ?? '',
+      (r as Record<string, unknown>).PROJECT_CODE ?? '',
+      (r as Record<string, unknown>).ITEM_ID ?? '',
+      (r as Record<string, unknown>).DOM_EXP ?? '',
+      (r as Record<string, unknown>).FCST_TYPE ?? '',
+      (r as Record<string, unknown>).INCOTERMS ?? '',
+    ].join('|');
+
+    // base group 별 첫 row (placeholder template) + (key+measure) → row 매핑
+    const baseGroups = new Map<string, MktFcstRow>();
+    const measureRows = new Map<string, MktFcstRow>();
+    for (const r of allWide) {
+      const k = baseKey(r);
+      if (!baseGroups.has(k)) baseGroups.set(k, r);
+      measureRows.set(`${k}|${String((r as Record<string, unknown>).MEASURE ?? '')}`, r);
+    }
+
+    // base group 별 selectedMeasures 모든 measure row 보장 (없으면 placeholder)
+    const expanded: MktFcstRow[] = [];
+    baseGroups.forEach((base, k) => {
+      const bucketCols = Object.keys(base as Record<string, unknown>).filter(c => /^[DWM]_\d/.test(c));
+      selectedMeasures.forEach(m => {
+        const existing = measureRows.get(`${k}|${m}`);
+        if (existing) {
+          expanded.push(existing);
+        } else {
+          const blank = { ...(base as Record<string, unknown>), MEASURE: m } as Record<string, unknown>;
+          bucketCols.forEach(c => { blank[c] = null; });
+          expanded.push(blank as unknown as MktFcstRow);
+        }
+      });
+    });
+    return expanded;
   })();
-  const rows: MktFcstRow[] = [...insertedRows, ...pivotedRows];
+
+  // ⭐ 2026-06-16 — Qty>=0 filter (AS-IS cboQty) — qtyFilter=true 시 모든 bucket cell >= 0 인 row 만 유지
+  //   SP body 의 P_QTY_YN 가 미사용 (body 사용처 0) → FE 측 client filter 으로 보강
+  const filteredByQty = sc.qtyFilter
+    ? pivotedRows.filter(r => {
+        const rec = r as Record<string, unknown>;
+        return Object.keys(rec)
+          .filter(k => /^[DWM]_\d/.test(k))
+          .every(k => {
+            const v = Number(rec[k]);
+            return Number.isNaN(v) || v >= 0;
+          });
+      })
+    : pivotedRows;
+
+  // ⭐ 2026-06-16 — Sum 컬럼 값 계산 (AS-IS chkSum) — sumYn=true 시 각 row 의 bucket cells 합계
+  const finalPivoted = sc.sumYn
+    ? filteredByQty.map(r => {
+        const rec = r as Record<string, unknown>;
+        const sum = Object.keys(rec)
+          .filter(k => /^[DWM]_\d/.test(k))
+          .reduce((acc, k) => acc + (Number(rec[k]) || 0), 0);
+        return { ...rec, SUM_TOTAL: sum } as unknown as MktFcstRow;
+      })
+    : filteredByQty;
+
+  const rows: MktFcstRow[] = [...insertedRows, ...finalPivoted];
 
   return (
     <div className={styles.container}>
@@ -356,10 +505,7 @@ export const MktForecastMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
         excelFileName='MktForecastMaster'
         useHotkey={true}
         hotkeyConfig={hotkeyConfig}
-        customButtons={[
-          { label: '⊞', title: 'Grid 항목 표시 (AS-IS btnColumn_Click)', action: () => setOpenColumnSelect(true) },
-          { label: '⊟', title: 'Measure 선택 (AS-IS btnMeasure_Click)', action: () => setOpenMeasureSelect(true) },
-        ]}
+        customButtons={customButtons}
         searchParam={sc}
       />
 
@@ -382,13 +528,15 @@ export const MktForecastMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
         divisionId={sc.divisionId}
       />
 
-      {/* Phase 6 — Measure 선택 modal (AS-IS btnMeasure_Click) */}
+      {/* Phase 6 — Measure 선택 modal (AS-IS btnMeasure_Click)
+            ⭐ master hook §5 — staticMeasures 동적 전달 (ALL_MEASURES 하드코딩 제거) */}
       <MeasureSelectModal
         open={openMeasureSelect}
         onClose={() => setOpenMeasureSelect(false)}
         defaultSelected={selectedMeasures}
         onApply={handleMeasureApply}
         divisionId={sc.divisionId}
+        staticMeasures={staticMeasures[SHEETS.MAIN]}
       />
 
       {/* Insert Project popup (AS-IS cellTypeImage Project — L1865) */}
@@ -446,6 +594,10 @@ export const MktForecastMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
               onCellEditEnded={handleCellEditEnded as never}
               comboData={comboData}
               onPopupCellDblClick={handlePopupCellDblClick}
+              staticColumns={staticColumns[SHEETS.MAIN]}
+              staticMeasures={staticMeasures[SHEETS.MAIN]}
+              sumYn={sc.sumYn}
+              colorYn={sc.colorYn}
             />
         }
       </div>

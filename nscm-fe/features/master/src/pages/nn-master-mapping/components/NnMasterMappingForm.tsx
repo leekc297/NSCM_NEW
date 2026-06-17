@@ -5,9 +5,8 @@ import { useTabProcQuery } from '@shared/hooks';
 
 import { ItemByDivisionModal, ProjectByDivisionModal } from '../../../components';
 import { FALLBACK_ALL, MENU_ID, SHEETS } from '../nn-master-mapping.constants';
-import { useNnMasterMappingStore } from '../useNnMasterMappingStore';
-
 import styles from '../NnMasterMapping.module.scss';
+import { useNnMasterMappingStore } from '../useNnMasterMappingStore';
 
 interface Props {
   onSearch: () => void;
@@ -22,7 +21,7 @@ interface LookupRow {
 // 패턴 원천: features/master/src/pages/erp-edi-master/components/ErpEdiMasterForm.tsx (DMF0008)
 // SP 가 prepend 하는 `'ALL' AS CODE` 행은 제외 — CustomDropdown 의 `allOption` 으로 위임 (중복 회피)
 const toOptions = (rows: LookupRow[] | undefined): Array<{ value: string; label: string }> => {
-  const arr = (rows ?? []) as LookupRow[];
+  const arr = rows ?? [];
   if (arr.length === 0) return [];
   // NUMBER → String 강제 (메모리 feedback_no_type_cast_around_runtime)
   return arr

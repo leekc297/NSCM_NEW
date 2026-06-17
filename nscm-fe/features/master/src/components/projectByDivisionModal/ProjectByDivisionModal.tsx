@@ -119,6 +119,8 @@ export const ProjectByDivisionModal = ({
       divisionId: preSearchParams.divisionId,
       deptId: callFromCell ? 'ALL' : preSearchParams.deptId,
       endCustomer: callFromCell ? 'ALL' : preSearchParams.endCustomer,
+      // ⭐ 사내 표준 PROC_M(PKG_COM0000.P_COM0005_...) COL_NM 'salesSite' (NOT 'scmSiteId').
+      //   BE 가 params.get("salesSite") 로 매핑 → SP P_SCM_SITE_ID position 4 전달.
       salesSite: callFromCell ? 'ALL' : preSearchParams.salesSite,
       projectCode: '',
       etc: 'N',

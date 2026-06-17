@@ -1,5 +1,5 @@
-import { FlexGrid, FlexGridColumn } from '@mescius/wijmo.react.grid';
 import { DataMap, type FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
+import { FlexGrid, FlexGridColumn } from '@mescius/wijmo.react.grid';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { apiClient } from '@foundation/apis';
@@ -123,7 +123,6 @@ export const VersionPopup = () => {
       setRows([]);
       deletedRowsRef.current = [];
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
   const handleFind = () => {
@@ -185,7 +184,7 @@ export const VersionPopup = () => {
     // row.binding=value 미반영 사고 방지 (사용자 신규 row 입력 흐름)
     gridRef.current?.finishEditing();
     // rows state + wijmo collectionView items 둘 다 source 로 사용 — 최신 신규 row 반영 보장
-    const cvItems = (gridRef.current?.collectionView?.items as VersionRow[] | undefined) ?? [];
+    const cvItems = (gridRef.current?.collectionView?.items as VersionRow[]) ?? [];
     const sourceRows = cvItems.length > rows.length ? cvItems : rows;
     const dirty = [...sourceRows.filter(isDirty), ...deletedRowsRef.current];
     if (dirty.length === 0) {
