@@ -25,13 +25,21 @@ const REPAIR_STATUS_COLUMNS = new Set([
   'PLANT_SITE_STATUS',
 ]);
 
-// AS-IS .cs (DMF0008_ErpEdiMaster.cs L1322-1370) 의 "확인필요" 더블클릭 시 sub 조회 → 분기 메시지.
-// 위즈모 grid 더블클릭 = edit 모드 진입 사고 회피 위해 mouseover tooltip 으로 대체 (사용자 요구 2026-06-17).
-// - GSCM_SALES_SITE_ID / ACTIVE_SS 의 '확인필요' → Sales Site UI 추가 안내 (As-Is MSG00445)
-// - GSCM_SSPM / GSCM_SSPM_INCOTERMS / ACTIVE_SSPM / PROJECT_STATUS / PLANT_SITE_STATUS 의 '확인필요' → Sales Site Project Model UI 추가 안내 (As-Is MSG00446)
-const SALES_SITE_BINDINGS = new Set(['GSCM_SALES_SITE_ID', 'ACTIVE_SS']);
-const TOOLTIP_MSG_SALES_SITE = 'Sales Site UI에서 Sales Site를 추가하시기 바랍니다.';
-const TOOLTIP_MSG_SALES_SITE_PROJECT_MODEL = 'Sales Site Project Model UI에서 데이터를 추가하시기 바랍니다.';
+// AS-IS .cs L1253/L1349/L1370 — '확인필요' 셀 더블클릭 시 표시되는 메시지 (column 별 분기).
+//   GSCM_SALES_SITE_ID / ACTIVE_SS  → MSG00445 (Sales Site UI 추가)
+//   GSCM_SSPM / GSCM_SSPM_INCOTERMS / ACTIVE_SSPM → MSG00446 (SSPM UI 추가)
+//   PROJECT_STATUS / PLANT_SITE_STATUS  → 일반 확인 필요 안내
+//
+// 2026-06-17 사용자 요구: 더블클릭 (Wijmo 에디터 진입) 대신 mouseover tooltip 으로 표시.
+const REPAIR_CONFIRM_MSG: Record<string, string> = {
+  GSCM_SALES_SITE_ID: 'Sales Site UI에서 Sales Site를 추가하시기 바랍니다',
+  ACTIVE_SS: 'Sales Site UI에서 Sales Site를 추가하시기 바랍니다',
+  GSCM_SSPM: 'SSPM UI에서 SSPM을 추가하시기 바랍니다',
+  GSCM_SSPM_INCOTERMS: 'SSPM UI에서 SSPM을 추가하시기 바랍니다',
+  ACTIVE_SSPM: 'SSPM UI에서 SSPM을 추가하시기 바랍니다',
+  PROJECT_STATUS: 'Project Status 확인이 필요합니다',
+  PLANT_SITE_STATUS: 'Plant Site Status 확인이 필요합니다',
+};
 
 export const ErpEdiMasterRepairGrid = ({
   gridRef,
@@ -55,8 +63,8 @@ export const ErpEdiMasterRepairGrid = ({
   };
 
   // 셀 시각: 값=='확인필요' 이고 컬럼 ∈ REPAIR_STATUS_COLUMNS → ForeColor=Red, BackColor=Azure
-  // + 사용자 요구 (2026-06-17): mouseover tooltip 으로 As-Is 더블클릭 메시지 표시.
-  //   더블클릭 = wijmo edit 모드 진입 사고 회피. 컬럼별 분기 메시지 (As-Is MSG00445 / MSG00446).
+  // ⭐ 2026-06-17 사용자 요구 — mouseover tooltip (AS-IS 더블클릭 = Wijmo 에디터 진입 충돌).
+  //   AS-IS 의 더블클릭 메시지를 cell title attribute 로 대체 → 사용자가 셀에 호버 시 native tooltip 표시.
   const handleFormatItem = (
     grid: FlexGrid<ResponseData<MENU_ID, SHEETS.REPAIR>>,
     args: FormatItemEventArgs
@@ -70,16 +78,9 @@ export const ErpEdiMasterRepairGrid = ({
     if (value === '확인필요') {
       args.cell.style.color = 'red';
       args.cell.style.backgroundColor = 'azure';
+      // mouseover tooltip — AS-IS 더블클릭 메시지 (MSG00445/MSG00446 등) column 별 분기.
+      args.cell.title = REPAIR_CONFIRM_MSG[binding] ?? '확인 필요';
       args.cell.style.cursor = 'help';
-      // 컬럼별 분기 — As-Is FindData_SubSalesSiteProjectModel (L1322-1370) 와 동일 매핑
-      const tooltipMsg = SALES_SITE_BINDINGS.has(binding)
-        ? TOOLTIP_MSG_SALES_SITE
-        : TOOLTIP_MSG_SALES_SITE_PROJECT_MODEL;
-      args.cell.setAttribute('title', tooltipMsg);
-    } else {
-      // '확인필요' 가 아닌 cell 은 tooltip 제거 (wijmo 가 동일 cell DOM 을 재사용하므로 stale 방지)
-      args.cell.removeAttribute('title');
-      args.cell.style.cursor = '';
     }
   };
 

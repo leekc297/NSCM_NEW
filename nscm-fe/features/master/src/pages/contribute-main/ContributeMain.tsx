@@ -1,11 +1,11 @@
 import type { FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 
 import { apiClient } from '@foundation/apis';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { MainTitle, SubTitle } from '@shared/components';
-import { useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
+import { useTabBtnPermissions, useTabProcQuery, useProcMutation } from '@shared/hooks';
 import { useMessageStore } from '@shared/stores';
 
 import { ContributeMainGrid } from './components/ContributeMainGrid';
@@ -30,15 +30,12 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
   const setVersionPopupOpen = useContributeMainStore(s => s.setVersionPopupOpen);
   const ratePopupOpen = useContributeMainStore(s => s.ratePopupOpen);
   const setRatePopupOpen = useContributeMainStore(s => s.setRatePopupOpen);
-  // ⭐ UI 동적 속성관리 (master hook §4) — admin SYS0004 UI Category Setup 메타 동적 fetch
-  const staticColumns = useContributeMainStore(s => s.staticColumns);
   const fetchStaticColumns = useContributeMainStore(s => s.fetchStaticColumns);
 
-  // mount 시 admin 메타 fetch (master hook §2.3)
-  useEffect(() => {
-    void fetchStaticColumns();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // ⭐ master hook §3 / menu-button-dynamic-fetch §2.1 —
+  //   admin SYS0009 Menu Button (`SCM_ADM_MNU_BTN_MPG_M` USE_YN + `USER_GR_MNU_BTN_MPG_M` 권한) 동적 fetch.
+  //   하드코딩 hotkeyConfig 금지 — admin USE_YN='N' 즉시 반영 보장.
+  const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
 
   // 메인 grid 조회 — DMF0043_GET_CONTRIBUTE_MAIN_DATA
   const { data: mainData, refetch } = useTabProcQuery<MENU_ID, SHEETS.MAIN>({
@@ -49,6 +46,13 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
     enabled: !!filters[SHEETS.MAIN] && !!searchCondition.verSeq,
   });
 
+  // 저장 — DMF0043_SAVE_DM_MST_CONTRIBUTE_RATIO
+  const { mutate: saveMain } = useProcMutation<MENU_ID, SHEETS.MAIN>({
+    menuId: MENU_ID,
+    sheetName: SHEETS.MAIN,
+    tabId,
+  });
+
   const handleSearch = () => {
     const guard = findDataGuard(searchCondition.verSeq);
     if (!guard.ok) {
@@ -56,9 +60,9 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
       return;
     }
     setFilter();
-    void refetch?.();
-    // ⭐ master hook §2.4 — Search 시 admin 메타 refetch
+    // admin SHEET_COLUMNS 변경 반영 (mount 이후 Search 시 재 fetch — DMF0004 표준)
     void fetchStaticColumns();
+    refetch?.();
   };
 
   const handleInsert = () => {
@@ -77,8 +81,8 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   const handleDelete = () => {
     if (!gridRef.current) return;
-    const selected = gridRef.current.selectedItems[0] as MainRow | undefined;
-    if (selected) selected.EDIT_FLAG = 'D';
+    const selected = gridRef.current.selectedItems[0];
+    if (selected) (selected as MainRow).EDIT_FLAG = 'D';
     gridRef.current.invalidate();
   };
 
@@ -90,9 +94,6 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   - 모든 dirty cell 을 ^ 구분 string 으로 누적 → SP 1회 호출 (bulk)
   //   - contributionType = 같은 row + 같은 period 의 RBU_0999 셀 값 (As-Is RetConType L872)
   const handleSave = () => {
-    // wijmo: 진행 중 cell edit 강제 commit — cell 수정 후 Enter 안 누른 채 저장 클릭 시
-    // row.binding=value 미반영 사고 방지
-    gridRef.current?.finishEditing();
     const rows = (mainData?.o_rc1 ?? []) as MainRow[];
     const dirty = rows.filter(r => r.EDIT_FLAG === 'M');
     const setAlert = useMessageStore.getState().setAlert;
@@ -104,7 +105,10 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
 
     const v1 = validChk(dirty, searchCondition.chkYear);
     if (!v1.ok) {
-      void setAlert({ type: 'alert', content: `[${v1.msgCode}] 입력 데이터의 합계가 100% 가 아닙니다.` });
+      void setAlert({
+        type: 'alert',
+        content: `[${v1.msgCode}] 입력 데이터의 합계가 100% 가 아닙니다.`,
+      });
       return;
     }
     const v2 = validChk2(dirty, searchCondition.chkYear);
@@ -115,9 +119,18 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
     // AS-IS ^ 구분 누적 (Remove(0,1) 로 leading ^ 제거 패턴 동일)
     const tag = searchCondition.chkYear ? 'Y' : 'M';
     const buf = {
-      activeFlag: '', verSeq: '', departmentId: '', deptId: '',
-      endCustReport: '', soldtoCustReport: '', productGroup: '', dmBizType: '',
-      yyyymm: '', osCorpCd: '', contributionType: '', contributionRatio: '',
+      activeFlag: '',
+      verSeq: '',
+      departmentId: '',
+      deptId: '',
+      endCustReport: '',
+      soldtoCustReport: '',
+      productGroup: '',
+      dmBizType: '',
+      yyyymm: '',
+      osCorpCd: '',
+      contributionType: '',
+      contributionRatio: '',
       createdBy: '',
     };
     let count = 0;
@@ -133,21 +146,19 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
         const conTypeKey = `${tag}#${period}#RBU_0999`;
         const conType = (row as Record<string, string>)[conTypeKey] ?? '';
 
-        buf.activeFlag         += '^' + (row.EDIT_FLAG ?? 'U');
-        buf.verSeq             += '^' + (row.VER_SEQ ?? searchCondition.verSeq);
-        buf.departmentId       += '^' + (row.DEPARTMENT_ID ?? '');
-        buf.deptId             += '^' + (row.DEPT_ID ?? '');
-        buf.endCustReport      += '^' + (row.END_CUST_REPORT ?? '');
-        buf.soldtoCustReport   += '^' + (row.SOLDTO_CUST_REPORT ?? '');
-        // PRODUCT_GROUP: 사내 schema 의 SCM_MST_SITE_ITEM.REPORT_GROUP3 미존재로
-        // 조회 시 '' 반환됨. SAVE 의 NOT NULL 분기에서 ORA-01400 → 'N' 으로 default
-        buf.productGroup       += '^' + (row.PRODUCT_GROUP || 'N');
-        buf.dmBizType          += '^' + (row.DM_BIZ_TYPE ?? '');
-        buf.yyyymm             += '^' + period;
-        buf.osCorpCd           += '^' + osCorpCd;
-        buf.contributionType   += '^' + conType;
-        buf.contributionRatio  += '^' + sQty;
-        buf.createdBy          += '^' + 'minyonglee1';
+        buf.activeFlag += '^' + (row.EDIT_FLAG ?? 'U');
+        buf.verSeq += '^' + (row.VER_SEQ ?? searchCondition.verSeq);
+        buf.departmentId += '^' + (row.DEPARTMENT_ID ?? '');
+        buf.deptId += '^' + (row.DEPT_ID ?? '');
+        buf.endCustReport += '^' + (row.END_CUST_REPORT ?? '');
+        buf.soldtoCustReport += '^' + (row.SOLDTO_CUST_REPORT ?? '');
+        buf.productGroup += '^' + (row.PRODUCT_GROUP ?? '');
+        buf.dmBizType += '^' + (row.DM_BIZ_TYPE ?? '');
+        buf.yyyymm += '^' + period;
+        buf.osCorpCd += '^' + osCorpCd;
+        buf.contributionType += '^' + conType;
+        buf.contributionRatio += '^' + sQty;
+        buf.createdBy += '^' + 'minyonglee1';
         count++;
       });
     });
@@ -184,7 +195,7 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
           createdBy: trim(buf.createdBy),
         });
         void setAlert({ type: 'alert', content: '저장이 완료되었습니다.' });
-        void refetch?.();
+        refetch?.();
       } catch {
         void setAlert({ type: 'alert', content: '저장 중 오류가 발생했습니다.' });
       }
@@ -201,12 +212,11 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   F10 = ResetCondition  (default — resetPersonalizedCondition)
   //   F8/F9 (insert/delete) : AS-IS .cs 가 EditButton/Lock 으로만 처리 → 명시적 버튼 비활성
   //   기여율 버전관리 : customButton (figma DMF0043 추가 버튼)
-  // ⭐ UI 동적 속성관리 — Menu Button (master hook §3): admin USE_YN 즉시 반영
-  const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
-
+  // ⭐ master hook §3 / menu-button-dynamic-fetch §2.1 —
+  //   `hasButton(BTN_CD)` 조건부 callback. admin SYS0009 USE_YN='N' 즉시 비활성 (hotkey 무효).
   const hotkeyConfig: HotkeyConfig = {
     search: hasButton('SEARCH') ? handleSearch : false,
-    save:   hasButton('SAVE')   ? handleSave   : false,
+    save: hasButton('SAVE') ? handleSave : false,
     // F3/F4/F6/F10 : 명시 안 함 → SubTitle DefaultButtonActions 사용 (자동 활성)
     insert: false,
     delete: false,
@@ -214,15 +224,29 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
     upload: false,
   };
 
-  const customButtons = hasButton('VERSION_MGT')
-    ? [{
+  // ⭐ 사용자 명시 2026-06-17 — '기여율 버전관리' 버튼은 항상 노출.
+  //   admin 메타 등록 전후 무관 default visible. admin 측 명시 토글 정책은 운영 결정 후 별도 적용.
+  //   (이전 transitional fallback 은 BE auth 가 SEARCH/SAVE 만 반환할 때 strict mode 진입 →
+  //    'VERSION_MGMT' 미포함 → 빈 array → button 사라짐 사고. 단순 무조건 노출로 fix.)
+  const customButtons = useMemo(
+    () => [
+      {
         label: '기여율 버전관리',
         action: () => setVersionPopupOpen(true),
-      }]
-    : [];
+      },
+    ],
+    [setVersionPopupOpen]
+  );
 
   // handleInsert / handleDelete 는 AS-IS .cs 에 명시적 버튼 없음. 추후 비즈니스 요구 시 활성화.
-  void handleInsert; void handleDelete;
+  void handleInsert;
+  void handleDelete;
+
+  // ⭐ ui-category-setup-column-meta.md — 화면 mount 시 staticColumns 1회 fetch (DMF0004 표준).
+  useEffect(() => {
+    void fetchStaticColumns();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // 화면 진입 + Year 자동 선택 직후 자동 조회 trigger (AS-IS Form_Load + InitControls)
   useEffect(() => {
@@ -242,10 +266,7 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
         toggleOpenSearchArea={setOpenSearchArea}
       />
       {openSearchArea && (
-        <SearchBar
-          onSearch={handleSearch}
-          onOpenVersionPopup={() => setVersionPopupOpen(true)}
-        />
+        <SearchBar onSearch={handleSearch} onOpenVersionPopup={() => setVersionPopupOpen(true)} />
       )}
       <SubTitle
         menuId={MENU_ID}
@@ -259,7 +280,7 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
         customButtons={customButtons}
       />
       <div className={styles.gridContainer}>
-        <ContributeMainGrid gridRef={gridRef} data={rows} staticColumns={staticColumns[SHEETS.MAIN]} />
+        <ContributeMainGrid gridRef={gridRef} data={rows} />
       </div>
       <ContributeRatePopup
         yyyy={searchCondition.yyyy}

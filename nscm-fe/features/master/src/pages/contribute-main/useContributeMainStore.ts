@@ -2,7 +2,8 @@ import { apiClient } from '@foundation/apis';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { createPersistedStoreWithTab } from '@shared/stores';
 
-import { MENU_ID, META_SHEETS, SHEETS } from './contribute-main.constants';
+import type { MENU_ID } from './contribute-main.constants';
+import { MENU_ID as MENU_ID_CONST, SHEETS } from './contribute-main.constants';
 import type { SearchCondition } from './types';
 
 type FiltersBySheet = {
@@ -19,8 +20,12 @@ interface ContributeMainState {
   openSearchArea: boolean;
   ratePopupOpen: boolean;
   versionPopupOpen: boolean;
-  // ⭐ UI 동적 속성관리 (master hook §4) — BASE 컬럼 visible/width/label admin 메타 동적 fetch
-  staticColumns: { [SHEETS.MAIN]: RawFlexGridColumnConfig[] };
+  // ⭐ ui-dynamic-property-management.md §4 / ui-category-setup-column-meta.md
+  //   admin SYS0004 UI Category Setup 의 SCM_MST_SHEET_COLUMNS 기준 동적 fetch.
+  //   BASE 6 컬럼 (부문/팀/...) 의 visible/width/label/align 등 즉시 반영.
+  staticColumns: {
+    [SHEETS.MAIN]: RawFlexGridColumnConfig[];
+  };
 }
 
 interface ContributeMainAction {
@@ -30,7 +35,6 @@ interface ContributeMainAction {
   setOpenSearchArea: (open?: boolean) => void;
   setRatePopupOpen: (open: boolean) => void;
   setVersionPopupOpen: (open: boolean) => void;
-  /** BE 메타 GET → staticColumns 자동 채움 (DMF0004 표준). */
   fetchStaticColumns: () => Promise<void>;
 }
 
@@ -51,7 +55,9 @@ const initState: ContributeMainState = {
   openSearchArea: true,
   ratePopupOpen: false,
   versionPopupOpen: false,
-  staticColumns: { [SHEETS.MAIN]: [] },
+  staticColumns: {
+    [SHEETS.MAIN]: [],
+  },
 };
 
 export const useContributeMainStore = createPersistedStoreWithTab<
@@ -88,31 +94,33 @@ export const useContributeMainStore = createPersistedStoreWithTab<
         state.openSearchArea = open ?? !state.openSearchArea;
       });
     },
-    setRatePopupOpen: open => set(state => { state.ratePopupOpen = open; }),
-    setVersionPopupOpen: open => set(state => { state.versionPopupOpen = open; }),
-    /**
-     * fetchStaticColumns — DMF0004 표준 (Array.isArray 가드).
-     * BASE 컬럼 (DEPARTMENT_ID/DEPT_ID/END_CUST_REPORT/SOLDTO_CUST_REPORT/PRODUCT_GROUP/DM_BIZ_TYPE 등)
-     * 의 admin 메타 동적 반영. 동적 M#/Y# 컬럼은 별도 (MAIN_TITLE SP 결과).
-     */
+    setRatePopupOpen: open =>
+      set(state => {
+        state.ratePopupOpen = open;
+      }),
+    setVersionPopupOpen: open =>
+      set(state => {
+        state.versionPopupOpen = open;
+      }),
+    // ⭐ ui-category-setup-column-meta.md §3 / DMF0004 (useSalesSiteStore.ts:91-114) 표준 패턴.
+    //   POST /admin/menu/{MENU_ID}/column → SCM_MST_SHEET_COLUMNS row list.
+    //   BE 가 RawFlexGridColumnConfig (binding/header/width/visible 등) 으로 가공 반환.
     fetchStaticColumns: async () => {
-      try {
-        const res = await apiClient.post<RawFlexGridColumnConfig[]>(
-          `/admin/menu/${MENU_ID}/column`,
-          // ⭐ META_SHEETS = SCM_MST_SHEET_COLUMNS 실제 SHEET_NAME ('ContributeMain', PascalCase).
-          // SHEETS.MAIN ('main') 은 MNU_BTN_MPG_M.SHT_NM + callProc 용 — sheet 명 별도 표기.
-          { sheetNm: META_SHEETS.MAIN }
-        );
-        const result = res.data?.result;
+      const main = await apiClient.post<RawFlexGridColumnConfig[]>(
+        `/admin/menu/${MENU_ID_CONST}/column`,
+        { sheetNm: SHEETS.MAIN }
+      );
+      set(state => {
+        state.staticColumns = {
+          [SHEETS.MAIN]: main.data.result ?? [],
+        };
+      });
+      if (!get().initialized) {
         set(state => {
-          state.staticColumns = { [SHEETS.MAIN]: Array.isArray(result) ? result : [] };
+          state.initialized = true;
         });
-      } catch {
-        // silent fail
       }
-      if (get().initialized) return;
-      set(state => { state.initialized = true; });
     },
   }),
-  'contribute-main-v2'   // storageName v2 — staticColumns 추가
+  'contribute-main'
 );

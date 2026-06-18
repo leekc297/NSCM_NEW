@@ -1,6 +1,7 @@
-import type { FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
+import { CellType, type FlexGrid as FlexGridType, type HitTestInfo } from '@mescius/wijmo.grid';
 import { FlexGrid, FlexGridColumn } from '@mescius/wijmo.react.grid';
 import dayjs, { type Dayjs } from 'dayjs';
+import _ from 'lodash';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { CustomDialog } from '@shared/components';
@@ -34,7 +35,7 @@ import styles from './ContributeVersionModal.module.scss';
 // 결과 컬럼 (SP SELECT): VERSION_NO/VERSION_DESCRIPTION/VERSION_TYPE/VER_CRE_SEQ/YYYYMMDD/CREATED_BY/CREATION_DATE/EDIT_YN
 
 interface VersionPopupRow {
-  CODE?: string;                  // = VERSION_NO
+  CODE?: string; // = VERSION_NO
   VERSION_NO?: string;
   VERSION_DESCRIPTION?: string;
   VERSION_TYPE?: string;
@@ -48,12 +49,12 @@ interface VersionPopupRow {
 interface Props {
   open: boolean;
   onClose: () => void;
-  onSelect: (versionNo: string) => void;   // AS-IS L468: txtVersion.Text = popVersion.sVersions
+  onSelect: (versionNo: string) => void; // AS-IS L468: txtVersion.Text = popVersion.sVersions
 }
 
 // AS-IS clbType (MDF_TYPE) lookup — DB 실제 값 (2026-06-01 진단 결과 반영)
 // SCM_MGR.DM_MDF_VERSION 의 DIVISION_ID='40' VERSION_TYPE 분포:
-//   REPORT_SP_W (Sales Plan Week)  : 176건
+//   REPORT_BP_M (Sales Plan Week)  : 176건
 //   REPORT_BP_M (Business Plan Mon): 139건
 //   REPORT_MF_D (MDF Daily)         : (다른 DIVISION_ID)
 // SP body 의 VERSION_TYPE 정확 일치 필터 — 정확값 사용 의무
@@ -100,7 +101,7 @@ export const ContributeVersionModal = ({ open, onClose, onSelect }: Props) => {
   const [divisionId, setDivisionId] = useState<string>('40');
   // AS-IS clbType.ControlValues — Type dropdown (정확 일치 필터)
   // 'SP' default (View 화면이 Form_Load(true, "SP", ...) 로 호출하나, AS-IS InitControls 는 sCode 미사용 → 사용자 선택)
-  const [versionType, setVersionType] = useState<string>('REPORT_SP_W');
+  const [versionType, setVersionType] = useState<string>('REPORT_BP_M');
   // AS-IS txtDes.Text — Description 자유 입력 (LIKE 검색)
   const [description, setDescription] = useState<string>('');
 
@@ -112,7 +113,7 @@ export const ContributeVersionModal = ({ open, onClose, onSelect }: Props) => {
       open
         ? {
             startYyyymmdd: period[0].format('YYYYMMDD'),
-            endYyyymmdd: period[1].format('YYYYMMDD'),
+            endYyyymmdd: period[1]?.format('YYYYMMDD'),
             divisionId,
             versionType,
             description,
@@ -121,7 +122,7 @@ export const ContributeVersionModal = ({ open, onClose, onSelect }: Props) => {
     [open, period, divisionId, versionType, description]
   );
 
-  const { data, refetch } = useTabProcQuery({
+  const { data, refetch: search } = useTabProcQuery({
     menuId: MENU_ID,
     sheetName: SHEETS.VERSION_POPUP,
     tabId: MENU_ID,
@@ -133,6 +134,25 @@ export const ContributeVersionModal = ({ open, onClose, onSelect }: Props) => {
     () => (data?.o_rc1 ?? []) as unknown as VersionPopupRow[],
     [data]
   );
+
+  // const { mutate } = useCallProcMutation<MENU_ID, SHEETS.VERSION_POPUP>({
+  //   menuId: MENU_ID,
+  //   sheetName: SHEETS.VERSION_POPUP,
+  // });
+
+  const onSearch = () => {
+    if (_.isEmpty(filters?.endYyyymmdd)) {
+      void setAlert({ type: 'alert', content: '검색 기간 종료일을 선택해주세요.' });
+      return;
+    }
+    void search();
+
+    // mutate(filters as ProcRequest<MENU_ID, SHEETS.VERSION_POPUP>, {
+    //   onSuccess: res => {
+    //     console.log('res => ', res);
+    //   },
+    // });
+  };
 
   // popup close 시 상태 초기화
   useEffect(() => {
@@ -191,6 +211,7 @@ export const ContributeVersionModal = ({ open, onClose, onSelect }: Props) => {
                 className={styles.select}
                 value={divisionId}
                 onChange={e => setDivisionId(e.target.value)}
+                disabled
               >
                 {divisionOptions.map(o => (
                   <option key={o.value} value={o.value}>
@@ -245,7 +266,7 @@ export const ContributeVersionModal = ({ open, onClose, onSelect }: Props) => {
             <button
               type='button'
               className={`${styles.actionButton} ${styles.primary}`}
-              onClick={() => void refetch?.()}
+              onClick={onSearch}
             >
               조회
             </button>
@@ -258,6 +279,25 @@ export const ContributeVersionModal = ({ open, onClose, onSelect }: Props) => {
                 gridRef.current = g;
                 g.isReadOnly = true;
                 g.selectionMode = 1; // Row
+
+                g.hostElement.addEventListener('dblclick', (e: MouseEvent) => {
+                  // hitTest 메서드를 사용하여 마우스 클릭 위치의 가상 좌표 정보(HitTestInfo) 추출
+                  const ht: HitTestInfo = g.hitTest(e);
+
+                  // 사용자가 헤더가 아닌 '일반 데이터 셀(Cell)'을 더블클릭했는지 검증
+                  if (ht.cellType === CellType.Cell) {
+                    // 4. 더블클릭한 위치의 행(Row) 인덱스를 이용해 데이터 추출
+                    const selectedRowIndex = ht.row;
+                    const selectedRowData = g.rows[selectedRowIndex]
+                      .dataItem as VersionPopupRow | null;
+
+                    const versionNo = String(
+                      selectedRowData?.VERSION_NO ?? selectedRowData?.CODE ?? ''
+                    );
+                    onSelect(versionNo);
+                    onClose();
+                  }
+                });
               }}
               itemsSource={rows}
               autoGenerateColumns={false}
@@ -267,8 +307,8 @@ export const ContributeVersionModal = ({ open, onClose, onSelect }: Props) => {
               <FlexGridColumn binding='VERSION_NO' header='Version' width={220} />
               <FlexGridColumn binding='VERSION_DESCRIPTION' header='Description' width={300} />
               <FlexGridColumn binding='VERSION_TYPE' header='Type' width={100} />
-              <FlexGridColumn binding='CREATED_BY' header='Create By' width={100} />
-              <FlexGridColumn binding='CREATION_DATE' header='Create Date' width={150} />
+              <FlexGridColumn binding='MAX(CREATED_BY)' header='Create By' width={100} />
+              <FlexGridColumn binding='MAX(CREATION_DATE)' header='Create Date' width={150} />
             </FlexGrid>
           </div>
 

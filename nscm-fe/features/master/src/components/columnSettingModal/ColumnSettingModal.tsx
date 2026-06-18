@@ -1,4 +1,3 @@
-import { FlexGrid, FlexGridColumn } from '@mescius/wijmo.react.grid';
 import {
   AllowMerging,
   CellRange,
@@ -8,6 +7,7 @@ import {
   type GridPanel,
   MergeManager,
 } from '@mescius/wijmo.grid';
+import { FlexGrid, FlexGridColumn } from '@mescius/wijmo.react.grid';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { CustomDialog } from '@shared/components';
@@ -28,6 +28,9 @@ export interface ColumnSettingFallback {
   key: string;
   header: string;
   width?: number;
+  // ⭐ 2026-06-17 — popup 재진입 시 이전 visible 상태 복원용.
+  //   true (default): USER_FLAG='Y' (우측 visible grid). false: USER_FLAG='N' (좌측 hidden grid).
+  visible?: boolean;
 }
 
 export interface ColumnSettingRow {
@@ -77,13 +80,14 @@ export const ColumnSettingModal = ({
 
   // SP 호출 — filters useMemo 안정화 (refetch loop 방지)
   const filters = useMemo(
-    () => ({
-      programId: menuId,
-      sheetName,
-      columnType: columnType ?? sheetName,
-      divisionId: divisionId ?? '40',
-    } as never),
-    [menuId, sheetName, columnType, divisionId],
+    () =>
+      ({
+        programId: menuId,
+        sheetName,
+        columnType: columnType ?? sheetName,
+        divisionId: divisionId ?? '40',
+      }) as never,
+    [menuId, sheetName, columnType, divisionId]
   );
 
   const { data, refetch, isLoading, isFetching } = useTabProcQuery({
@@ -103,24 +107,28 @@ export const ColumnSettingModal = ({
     if (beRows.length > 0) {
       return beRows.map((r, i) => ({
         COLUMN_NAME: String(r.COLUMN_NAME ?? ''),
-        LARGE_CLASS_LABEL_NAME: String(r.LARGE_CLASS_LABEL_NAME ?? r.COLUMN_LABEL_NAME ?? r.COLUMN_NAME ?? ''),
-        SMALL_CLASS_LABEL_NAME: String(r.SMALL_CLASS_LABEL_NAME ?? r.COLUMN_LABEL_NAME ?? r.COLUMN_NAME ?? ''),
+        LARGE_CLASS_LABEL_NAME: String(
+          r.LARGE_CLASS_LABEL_NAME ?? r.COLUMN_LABEL_NAME ?? r.COLUMN_NAME ?? ''
+        ),
+        SMALL_CLASS_LABEL_NAME: String(
+          r.SMALL_CLASS_LABEL_NAME ?? r.COLUMN_LABEL_NAME ?? r.COLUMN_NAME ?? ''
+        ),
         COLUMN_LABEL_NAME: String(r.COLUMN_LABEL_NAME ?? r.COLUMN_NAME ?? ''),
-        USER_FLAG: (String(r.USER_FLAG ?? r.VISIBLE_FLAG ?? 'Y') === 'Y' ? 'Y' : 'N'),
-        USER_SORT_METHOD_CODE: ((['ASC', 'DESC'].includes(String(r.USER_SORT_METHOD_CODE ?? ''))
+        USER_FLAG: String(r.USER_FLAG ?? r.VISIBLE_FLAG ?? 'Y') === 'Y' ? 'Y' : 'N',
+        USER_SORT_METHOD_CODE: (['ASC', 'DESC'].includes(String(r.USER_SORT_METHOD_CODE ?? ''))
           ? r.USER_SORT_METHOD_CODE
-          : 'ASC') as 'ASC' | 'DESC'),
-        SUB_TOTAL_FLAG: (String(r.SUB_TOTAL_FLAG ?? 'N') === 'Y' ? 'Y' : 'N'),
+          : 'ASC') as 'ASC' | 'DESC',
+        SUB_TOTAL_FLAG: String(r.SUB_TOTAL_FLAG ?? 'N') === 'Y' ? 'Y' : 'N',
         SORT_ORDER_NO: Number(r.SORT_ORDER_NO ?? i + 1),
       }));
     }
-    // fallbackColumns 사용 — 모두 USER_FLAG='Y'
+    // fallbackColumns 사용 — c.visible 미명시 시 'Y' (default visible).
     return fallbackColumns.map((c, i) => ({
       COLUMN_NAME: c.key,
       LARGE_CLASS_LABEL_NAME: c.header,
       SMALL_CLASS_LABEL_NAME: c.header,
       COLUMN_LABEL_NAME: c.header,
-      USER_FLAG: 'Y',
+      USER_FLAG: c.visible === false ? 'N' : 'Y',
       USER_SORT_METHOD_CODE: 'ASC',
       SUB_TOTAL_FLAG: 'N',
       SORT_ORDER_NO: i + 1,
@@ -138,7 +146,7 @@ export const ColumnSettingModal = ({
   const baseRows = useMemo(() => rows.filter(r => r.USER_FLAG === 'N'), [rows]);
   const userRows = useMemo(
     () => rows.filter(r => r.USER_FLAG === 'Y').sort((a, b) => a.SORT_ORDER_NO - b.SORT_ORDER_NO),
-    [rows],
+    [rows]
   );
 
   const moveToUser = () => {
@@ -147,9 +155,14 @@ export const ColumnSettingModal = ({
       return;
     }
     setRows(prev => {
-      const maxSeq = Math.max(0, ...prev.filter(r => r.USER_FLAG === 'Y').map(r => r.SORT_ORDER_NO));
+      const maxSeq = Math.max(
+        0,
+        ...prev.filter(r => r.USER_FLAG === 'Y').map(r => r.SORT_ORDER_NO)
+      );
       return prev.map(r =>
-        r.COLUMN_NAME === baseSel.COLUMN_NAME ? { ...r, USER_FLAG: 'Y', SORT_ORDER_NO: maxSeq + 1 } : r,
+        r.COLUMN_NAME === baseSel.COLUMN_NAME
+          ? { ...r, USER_FLAG: 'Y', SORT_ORDER_NO: maxSeq + 1 }
+          : r
       );
     });
     setBaseSel(null);
@@ -161,12 +174,16 @@ export const ColumnSettingModal = ({
       return;
     }
     setRows(prev =>
-      prev.map(r => (r.COLUMN_NAME === userSel.COLUMN_NAME ? { ...r, USER_FLAG: 'N', SORT_ORDER_NO: 0 } : r)),
+      prev.map(r =>
+        r.COLUMN_NAME === userSel.COLUMN_NAME ? { ...r, USER_FLAG: 'N', SORT_ORDER_NO: 0 } : r
+      )
     );
     setUserSel(null);
   };
 
-  const handleDefault = () => { void refetch?.(); };
+  const handleDefault = () => {
+    void refetch?.();
+  };
 
   const handleOk = () => {
     if (userRows.length === 0) {
@@ -195,9 +212,15 @@ export const ColumnSettingModal = ({
       const sameRow = (a: number, b: number): boolean => {
         const ra = ri(a);
         const rb = ri(b);
-        return !!ra && !!rb && (ra as unknown as Record<string, unknown>)[key] === (rb as unknown as Record<string, unknown>)[key];
+        return (
+          !!ra &&
+          !!rb &&
+          (ra as unknown as Record<string, unknown>)[key] ===
+            (rb as unknown as Record<string, unknown>)[key]
+        );
       };
-      let r1 = r, r2 = r;
+      let r1 = r,
+        r2 = r;
       while (r1 > 0 && sameRow(r1 - 1, r)) r1--;
       while (r2 < view.length - 1 && sameRow(r2 + 1, r)) r2++;
       if (r1 === r2) return null;
@@ -215,7 +238,20 @@ export const ColumnSettingModal = ({
       disableButtonCancel
       customHeaderTitle={
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <div style={{ width: 14, height: 14, background: '#1976d2', borderRadius: '50%', color: '#fff', textAlign: 'center', fontSize: 9, lineHeight: '14px' }}>S</div>
+          <div
+            style={{
+              width: 14,
+              height: 14,
+              background: '#1976d2',
+              borderRadius: '50%',
+              color: '#fff',
+              textAlign: 'center',
+              fontSize: 9,
+              lineHeight: '14px',
+            }}
+          >
+            S
+          </div>
           <h2 style={{ fontSize: 16, fontWeight: 600, margin: 0 }}>{title}</h2>
         </div>
       }
@@ -234,21 +270,56 @@ export const ColumnSettingModal = ({
                 itemsSource={baseRows}
                 autoGenerateColumns={false}
                 selectionMode={1}
-                selectionChanged={(_s, e) => {
-                  setBaseSel(baseRows[e.row] ?? null);
+                selectionChanged={(s, e) => {
+                  // ⭐ 2026-06-17 fix — Wijmo panel.rows 가 itemsSource 와 다른 순서일 수 있음.
+                  //   panel.rows[e.row].dataItem 직접 추출 (sort/filter 영향 무관).
+                  const dataItem = s.rows[e.row]?.dataItem as ColumnSettingRow | undefined;
+                  setBaseSel(dataItem ?? null);
                 }}
                 style={{ height: '100%' }}
               >
-                <FlexGridColumn binding='LARGE_CLASS_LABEL_NAME' header='LargeClass' width={80}  align='left' isReadOnly />
-                <FlexGridColumn binding='SMALL_CLASS_LABEL_NAME' header='SmallClass' width={80}  align='left' isReadOnly />
-                <FlexGridColumn binding='COLUMN_LABEL_NAME'      header='Column'     width={120} align='left' isReadOnly />
+                <FlexGridColumn
+                  binding='LARGE_CLASS_LABEL_NAME'
+                  header='LargeClass'
+                  width={80}
+                  align='left'
+                  isReadOnly
+                />
+                <FlexGridColumn
+                  binding='SMALL_CLASS_LABEL_NAME'
+                  header='SmallClass'
+                  width={80}
+                  align='left'
+                  isReadOnly
+                />
+                <FlexGridColumn
+                  binding='COLUMN_LABEL_NAME'
+                  header='Column'
+                  width={120}
+                  align='left'
+                  isReadOnly
+                />
               </FlexGrid>
             </div>
 
             {/* 중앙 이동 버튼 */}
             <div className={styles.centerBtns}>
-              <button type='button' onClick={moveToUser} className={styles.arrowBtn} title='우측 추가'>▶</button>
-              <button type='button' onClick={moveToBase} className={styles.arrowBtn} title='좌측 제거'>◀</button>
+              <button
+                type='button'
+                onClick={moveToUser}
+                className={styles.arrowBtn}
+                title='우측 추가'
+              >
+                ▶
+              </button>
+              <button
+                type='button'
+                onClick={moveToBase}
+                className={styles.arrowBtn}
+                title='좌측 제거'
+              >
+                ◀
+              </button>
             </div>
 
             {/* 우측 User grid (Sort combo 포함) */}
@@ -265,8 +336,10 @@ export const ColumnSettingModal = ({
                 itemsSource={userRows}
                 autoGenerateColumns={false}
                 selectionMode={1}
-                selectionChanged={(_s, e) => {
-                  setUserSel(userRows[e.row] ?? null);
+                selectionChanged={(s, e) => {
+                  // ⭐ 2026-06-17 fix — panel.rows[e.row].dataItem 직접 추출 (Sort dropdown row 무관).
+                  const dataItem = s.rows[e.row]?.dataItem as ColumnSettingRow | undefined;
+                  setUserSel(dataItem ?? null);
                 }}
                 cellEditEnded={(s, e) => {
                   const item = s.rows[e.row]?.dataItem as ColumnSettingRow | undefined;
@@ -275,16 +348,40 @@ export const ColumnSettingModal = ({
                     prev.map(r =>
                       r.COLUMN_NAME === item.COLUMN_NAME
                         ? { ...r, USER_SORT_METHOD_CODE: item.USER_SORT_METHOD_CODE }
-                        : r,
-                    ),
+                        : r
+                    )
                   );
                 }}
                 style={{ height: '100%' }}
               >
-                <FlexGridColumn binding='LARGE_CLASS_LABEL_NAME' header='LargeClass' width={120} align='left' isReadOnly />
-                <FlexGridColumn binding='SMALL_CLASS_LABEL_NAME' header='SmallClass' width={120} align='left' isReadOnly />
-                <FlexGridColumn binding='COLUMN_LABEL_NAME'      header='Column'     width={130} align='left' isReadOnly />
-                <FlexGridColumn binding='USER_SORT_METHOD_CODE'  header='Sort'       width={80}  align='center' cssClass={styles.sortCell} />
+                <FlexGridColumn
+                  binding='LARGE_CLASS_LABEL_NAME'
+                  header='LargeClass'
+                  width={120}
+                  align='left'
+                  isReadOnly
+                />
+                <FlexGridColumn
+                  binding='SMALL_CLASS_LABEL_NAME'
+                  header='SmallClass'
+                  width={120}
+                  align='left'
+                  isReadOnly
+                />
+                <FlexGridColumn
+                  binding='COLUMN_LABEL_NAME'
+                  header='Column'
+                  width={130}
+                  align='left'
+                  isReadOnly
+                />
+                <FlexGridColumn
+                  binding='USER_SORT_METHOD_CODE'
+                  header='Sort'
+                  width={80}
+                  align='center'
+                  cssClass={styles.sortCell}
+                />
               </FlexGrid>
             </div>
           </div>
@@ -293,7 +390,12 @@ export const ColumnSettingModal = ({
             <span className={styles.hint}>
               {loading ? '⏳ 조회 중...' : `${baseRows.length} hidden / ${userRows.length} visible`}
             </span>
-            <button type='button' onClick={handleDefault} className={styles.defaultBtn} disabled={loading}>
+            <button
+              type='button'
+              onClick={handleDefault}
+              className={styles.defaultBtn}
+              disabled={loading}
+            >
               ✓ Default
             </button>
             <button type='button' onClick={handleOk} className={styles.okBtn}>

@@ -28,15 +28,6 @@ export const RESPONSE_SET = {
 } as const;
 export type RESPONSE_SET = (typeof RESPONSE_SET)[keyof typeof RESPONSE_SET];
 
-// ⭐ 2026-06-17 — DMF0004 reference 패턴 (SHEET_COLUMNS 메타 sheet name):
-//   SCM_MST_SHEET_COLUMNS.SHEET_NAME 의 실제 PascalCase 값.
-//   SHEETS.MAIN ('main') = MNU_BTN_MPG_M.SHT_NM + callProc 용.
-//   META_SHEETS.MAIN ('NNMasterMapping') = fetchStaticColumns 용.
-//   사용자 진단 SQL (2026-06-17) 으로 확인: NNMasterMapping (23).
-export const META_SHEETS = {
-  MAIN: 'NNMasterMapping',
-} as const;
-
 // AS-IS .cs 의 main grid column 정의 (23 컬럼)
 // merge=true: 사용자 요구 2026-06-02 — Data Type ~ MDM Code (ITEM_ID) 15개 컬럼 세로 머지 (As-Is .cs L515 `siMain.SmartColMerge()` 대응)
 // As-Is DefColumnsLabel.ITEM_ID = "MDM_CODE" — Item ID 컬럼이 MDM Code 라벨로 표시되는 컬럼
@@ -69,34 +60,187 @@ export interface NnColumnMeta {
   header: string;
   width?: number;
   merge?: boolean;
-  _ctrlType?: 'FPText' | 'FPModal' | 'FPComboBox' | 'FPCheckBox' | 'FPDate' | 'FPDateTime' | 'FPNumberText';
+  _ctrlType?:
+    | 'FPText'
+    | 'FPModal'
+    | 'FPComboBox'
+    | 'FPCheckBox'
+    | 'FPDate'
+    | 'FPDateTime'
+    | 'FPNumberText';
   _inputEditType?: 'S' | 'O' | 'M' | 'IO' | 'IM';
   _modalKey?: 'customerByDivisionModal' | 'projectByDivisionModal' | 'itemByDivisionModal';
 }
 
 export const MAIN_COLUMNS: ReadonlyArray<NnColumnMeta> = [
-  { key: 'DATA_TYPE_CODE', header: 'Data Type', width: 100, merge: true, _ctrlType: 'FPText', _inputEditType: 'S' },
-  { key: 'DIVISION_ID', header: 'Division', width: 80, merge: true, _ctrlType: 'FPText', _inputEditType: 'S' },
-  { key: 'COMPANY_ID', header: 'Company', width: 90, merge: true, _ctrlType: 'FPComboBox', _inputEditType: 'IM' },
-  { key: 'END_CUSTOMER', header: 'End Customer', width: 130, merge: true, _ctrlType: 'FPComboBox', _inputEditType: 'IM' },
-  { key: 'UNLOADING_POINT', header: 'Unloading Point', width: 130, merge: true, _ctrlType: 'FPText', _inputEditType: 'IO' },
-  { key: 'CUSTOMER_PLANT', header: 'Customer Plant', width: 130, merge: true, _ctrlType: 'FPText', _inputEditType: 'IO' },
-  { key: 'SOLDTO_CODE', header: 'SoldTo', width: 110, merge: true, _ctrlType: 'FPModal', _inputEditType: 'IM', _modalKey: 'customerByDivisionModal' },
-  { key: 'SHIPTO_CODE', header: 'ShipTo', width: 110, merge: true, _ctrlType: 'FPModal', _inputEditType: 'IM', _modalKey: 'customerByDivisionModal' },
-  { key: 'SCM_SITE_ID', header: 'SCM Site', width: 160, merge: true, _ctrlType: 'FPComboBox', _inputEditType: 'IM' },
-  { key: 'PROJECT_CODE', header: 'Project', width: 110, merge: true, _ctrlType: 'FPModal', _inputEditType: 'IM', _modalKey: 'projectByDivisionModal' },
-  { key: 'FCST_TYPE', header: 'FCST Type', width: 90, merge: true, _ctrlType: 'FPComboBox', _inputEditType: 'IM' },
-  { key: 'INCOTERMS', header: 'Incoterms', width: 90, merge: true, _ctrlType: 'FPComboBox', _inputEditType: 'IM' },
-  { key: 'DOM_EXP', header: 'Dom/Exp', width: 80, merge: true, _ctrlType: 'FPComboBox', _inputEditType: 'IM' },
-  { key: 'CUSTOMER_ITEM_ID', header: 'Customer Item', width: 140, merge: true, _ctrlType: 'FPText', _inputEditType: 'IO' },
-  { key: 'ITEM_ID', header: 'MDM Code', width: 140, merge: true, _ctrlType: 'FPModal', _inputEditType: 'IM', _modalKey: 'itemByDivisionModal' },
-  { key: 'MAPPING_ITEM_ID', header: 'Mapping Item', width: 140, _ctrlType: 'FPModal', _inputEditType: 'M', _modalKey: 'itemByDivisionModal' },
-  { key: 'MAPPING_ITEM_ID_ORIGINAL', header: 'Mapping Item (Org)', width: 160, _ctrlType: 'FPText', _inputEditType: 'S' },
-  { key: 'VALID_START_DATE', header: 'Valid Start', width: 110, _ctrlType: 'FPDate', _inputEditType: 'M' },
-  { key: 'VALID_END_DATE', header: 'Valid End', width: 110, _ctrlType: 'FPDate', _inputEditType: 'M' },
+  {
+    key: 'DATA_TYPE_CODE',
+    header: 'Data Type',
+    width: 100,
+    merge: true,
+    _ctrlType: 'FPText',
+    _inputEditType: 'S',
+  },
+  {
+    key: 'DIVISION_ID',
+    header: 'Division',
+    width: 80,
+    merge: true,
+    _ctrlType: 'FPText',
+    _inputEditType: 'S',
+  },
+  {
+    key: 'COMPANY_ID',
+    header: 'Company',
+    width: 90,
+    merge: true,
+    _ctrlType: 'FPComboBox',
+    _inputEditType: 'IM',
+  },
+  {
+    key: 'END_CUSTOMER',
+    header: 'End Customer',
+    width: 130,
+    merge: true,
+    _ctrlType: 'FPComboBox',
+    _inputEditType: 'IM',
+  },
+  {
+    key: 'UNLOADING_POINT',
+    header: 'Unloading Point',
+    width: 130,
+    merge: true,
+    _ctrlType: 'FPText',
+    _inputEditType: 'IO',
+  },
+  {
+    key: 'CUSTOMER_PLANT',
+    header: 'Customer Plant',
+    width: 130,
+    merge: true,
+    _ctrlType: 'FPText',
+    _inputEditType: 'IO',
+  },
+  {
+    key: 'SOLDTO_CODE',
+    header: 'SoldTo',
+    width: 110,
+    merge: true,
+    _ctrlType: 'FPModal',
+    _inputEditType: 'IM',
+    _modalKey: 'customerByDivisionModal',
+  },
+  {
+    key: 'SHIPTO_CODE',
+    header: 'ShipTo',
+    width: 110,
+    merge: true,
+    _ctrlType: 'FPModal',
+    _inputEditType: 'IM',
+    _modalKey: 'customerByDivisionModal',
+  },
+  {
+    key: 'SCM_SITE_ID',
+    header: 'SCM Site',
+    width: 160,
+    merge: true,
+    _ctrlType: 'FPComboBox',
+    _inputEditType: 'IM',
+  },
+  {
+    key: 'PROJECT_CODE',
+    header: 'Project',
+    width: 110,
+    merge: true,
+    _ctrlType: 'FPModal',
+    _inputEditType: 'IM',
+    _modalKey: 'projectByDivisionModal',
+  },
+  {
+    key: 'FCST_TYPE',
+    header: 'FCST Type',
+    width: 90,
+    merge: true,
+    _ctrlType: 'FPComboBox',
+    _inputEditType: 'IM',
+  },
+  {
+    key: 'INCOTERMS',
+    header: 'Incoterms',
+    width: 90,
+    merge: true,
+    _ctrlType: 'FPComboBox',
+    _inputEditType: 'IM',
+  },
+  {
+    key: 'DOM_EXP',
+    header: 'Dom/Exp',
+    width: 80,
+    merge: true,
+    _ctrlType: 'FPComboBox',
+    _inputEditType: 'IM',
+  },
+  {
+    key: 'CUSTOMER_ITEM_ID',
+    header: 'Customer Item',
+    width: 140,
+    merge: true,
+    _ctrlType: 'FPText',
+    _inputEditType: 'IO',
+  },
+  {
+    key: 'ITEM_ID',
+    header: 'MDM Code',
+    width: 140,
+    merge: true,
+    _ctrlType: 'FPModal',
+    _inputEditType: 'IM',
+    _modalKey: 'itemByDivisionModal',
+  },
+  {
+    key: 'MAPPING_ITEM_ID',
+    header: 'Mapping Item',
+    width: 140,
+    _ctrlType: 'FPModal',
+    _inputEditType: 'M',
+    _modalKey: 'itemByDivisionModal',
+  },
+  {
+    key: 'MAPPING_ITEM_ID_ORIGINAL',
+    header: 'Mapping Item (Org)',
+    width: 160,
+    _ctrlType: 'FPText',
+    _inputEditType: 'S',
+  },
+  {
+    key: 'VALID_START_DATE',
+    header: 'Valid Start',
+    width: 110,
+    _ctrlType: 'FPDate',
+    _inputEditType: 'M',
+  },
+  {
+    key: 'VALID_END_DATE',
+    header: 'Valid End',
+    width: 110,
+    _ctrlType: 'FPDate',
+    _inputEditType: 'M',
+  },
   { key: 'ACTIVE_YN', header: 'Active', width: 70, _ctrlType: 'FPCheckBox', _inputEditType: 'M' },
-  { key: 'LAST_UPDATE_DATE', header: 'Last Update', width: 140, _ctrlType: 'FPDateTime', _inputEditType: 'S' },
-  { key: 'LAST_UPDATED_BY', header: 'Updated By', width: 110, _ctrlType: 'FPText', _inputEditType: 'S' },
+  {
+    key: 'LAST_UPDATE_DATE',
+    header: 'Last Update',
+    width: 140,
+    _ctrlType: 'FPDateTime',
+    _inputEditType: 'S',
+  },
+  {
+    key: 'LAST_UPDATED_BY',
+    header: 'Updated By',
+    width: 110,
+    _ctrlType: 'FPText',
+    _inputEditType: 'S',
+  },
   { key: 'DC_LEVEL', header: 'DC Level', width: 90, _ctrlType: 'FPText', _inputEditType: 'M' },
 ];
 

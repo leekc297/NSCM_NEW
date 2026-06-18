@@ -12,7 +12,9 @@ import type { MENU_ID, SHEETS } from '../erp-edi-master.constants';
 import { useErpEdiMasterStore } from '../useErpEdiMasterStore';
 
 interface ErpEdiMasterSalesSiteGridProps {
-  gridRef: MutableRefObject<FlexGrid<ResponseData<MENU_ID, SHEETS.SALES_SITE, 'o_rc1'>> | undefined>;
+  gridRef: MutableRefObject<
+    FlexGrid<ResponseData<MENU_ID, SHEETS.SALES_SITE, 'o_rc1'>> | undefined
+  >;
   gridFilterRef: MutableRefObject<FlexGridFilter | undefined>;
   data: ResponseData<MENU_ID, SHEETS.SALES_SITE, 'o_rc1'>[];
 }
@@ -106,8 +108,7 @@ export const ErpEdiMasterSalesSiteGrid = ({
     if (dataItem.SOLDTO_CUSTOMER && cityCode.length >= 5) {
       const composed = `${dataItem.SOLDTO_CUSTOMER}_${cityCode.slice(0, 2)}_${cityCode.slice(2, 5)}`;
       // F12b [IMMEDIATE] ✅ V14: 동일 SSCM_SITE_ID 중복 검증 (자기 자신 제외)
-      const allRows = data;
-      const isDuplicate = allRows.some(
+      const isDuplicate = data.some(
         (row, idx) => idx !== clickedRow && row?.SSCM_SITE_ID === composed
       );
       if (isDuplicate) {

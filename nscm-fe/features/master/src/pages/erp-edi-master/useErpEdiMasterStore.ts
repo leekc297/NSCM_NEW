@@ -1,6 +1,6 @@
 import { apiClient } from '@foundation/apis';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
-import { createPersistedStoreWithTab } from '@shared/stores';
+import { createPersistedStoreWithTab, useSessionStore } from '@shared/stores';
 
 import { MENU_ID, RESPONSE_SET, SHEETS } from './erp-edi-master.constants';
 import type { SearchCondition } from './types';
@@ -18,6 +18,18 @@ interface UpdateHistoryEntry {
   UPDATED_BY?: string;
 }
 
+interface RepairContext {
+  division: string;
+  senderName: string;
+  flag: string;
+  erpSoldTo: string;
+  erpShipTo: string;
+  erpItemId: string;
+  gscmSalesSiteId: string;
+  activeSs: string;
+  gscmSspm: string;
+}
+
 interface ErpEdiMasterState {
   initialized: boolean;
   filters: FiltersBySheet;
@@ -32,6 +44,7 @@ interface ErpEdiMasterState {
   };
   // 메인 useTabProcQuery 결과 → useEffect 로 setUpdateHistory 호출 (Form 이 구독)
   updateHistory: UpdateHistoryEntry | undefined;
+  repairContext: RepairContext | undefined;
 }
 
 interface ErpEdiMasterAction {
@@ -42,6 +55,14 @@ interface ErpEdiMasterAction {
   setSummaryFilters: () => void;
   setRepairFilter: () => void;
   setSubFilter: () => void;
+  setRepairContext: (ctx: RepairContext | undefined) => void;
+  setSalesSiteFilters: (input: {
+    divisionId: string;
+    soldTo: string;
+    shipTo: string;
+    scmSiteId: string;
+  }) => void;
+  setSspmFilters: (input: { divisionId: string; itemId: string; scmSiteId: string }) => void;
   setOpenSearchArea: (open?: boolean) => void;
   setUpdateHistory: (entry: UpdateHistoryEntry | undefined) => void;
   /**
@@ -63,7 +84,7 @@ const initSearch: SearchCondition = (() => {
   return {
     fromYyyymmdd: fmtYyyymmdd(start),
     toYyyymmdd: fmtYyyymmdd(end),
-    divisionId: '81',
+    divisionId: '81', // 2026-06-17 사용자 요구: 초기값 81
     senderName: '',
     flag: 'ALL',
     selectedItemId: '',
@@ -80,6 +101,7 @@ const initState: ErpEdiMasterState = {
   openSearchArea: true,
   staticColumns: { summary: [], repair: [], salesSite: [], sspm: [] },
   updateHistory: undefined,
+  repairContext: undefined,
 };
 
 export const useErpEdiMasterStore = createPersistedStoreWithTab<
@@ -95,59 +117,87 @@ export const useErpEdiMasterStore = createPersistedStoreWithTab<
     },
     // AS-IS FindData_Main + FindData_SubRepair (.cs L727, L800): Summary + Repair 동시 호출
     setSummaryFilters: () => {
+      const sesUserId = useSessionStore.getState().session.userId ?? '';
       set(state => {
         const c = state.searchParams;
-        state.filters = {
-          ...state.filters,
-          [SHEETS.SUMMARY]: {
-            fromYyyymmdd: c.fromYyyymmdd,
-            toYyyymmdd: c.toYyyymmdd,
-            divisionId: c.divisionId,
-          },
-          [SHEETS.REPAIR]: {
-            divisionId: c.divisionId,
-            fromYyyymmdd: c.fromYyyymmdd,
-            toYyyymmdd: c.toYyyymmdd,
-            senderName: c.senderName,
-            flag: c.flag,
-          },
+        state.filters[SHEETS.SUMMARY] = {
+          divisionId: c.divisionId,
+          sesUserId,
+          menuId: MENU_ID,
+        };
+        state.filters[SHEETS.REPAIR] = {
+          divisionId: c.divisionId,
+          senderName: c.senderName,
+          flag: c.flag,
+          sesUserId,
+          menuId: MENU_ID,
         };
       });
     },
     // AS-IS spdSummary_CellDoubleClick (.cs L1887) → FindData_SubRepair_New (.cs L1051)
     setRepairFilter: () => {
+      const sesUserId = useSessionStore.getState().session.userId ?? '';
       set(state => {
         const c = state.searchParams;
-        state.filters = {
-          ...state.filters,
-          [SHEETS.REPAIR]: {
-            divisionId: c.divisionId,
-            fromYyyymmdd: c.fromYyyymmdd,
-            toYyyymmdd: c.toYyyymmdd,
-            senderName: c.senderName,
-            flag: c.flag,
-          },
+        state.filters[SHEETS.REPAIR] = {
+          divisionId: c.divisionId,
+          senderName: c.senderName,
+          flag: c.flag,
+          sesUserId,
+          menuId: MENU_ID,
         };
       });
     },
     // AS-IS FindData_SubSalesSite (.cs L895) + FindData_SubSalesSiteProjectModel (.cs L946)
     setSubFilter: () => {
+      const sesUserId = useSessionStore.getState().session.userId ?? '';
       set(state => {
         const c = state.searchParams;
-        state.filters = {
-          ...state.filters,
-          [SHEETS.SALES_SITE]: {
-            divisionId: c.divisionId,
-            soldTo: c.selectedSoldTo,
-            shipTo: c.selectedShipTo,
-            scmSiteId: c.selectedScmSiteId,
-          },
-          [SHEETS.SSPM]: {
-            divisionId: c.divisionId,
-            itemId: c.selectedItemId,
-            scmSiteId: c.selectedScmSiteId,
-          },
+        state.filters[SHEETS.SALES_SITE] = {
+          divisionId: c.divisionId,
+          soldTo: c.selectedSoldTo,
+          shipTo: c.selectedShipTo,
+          scmSiteId: c.selectedScmSiteId,
+          sesUserId,
+          menuId: MENU_ID,
         };
+        state.filters[SHEETS.SSPM] = {
+          divisionId: c.divisionId,
+          itemId: c.selectedItemId,
+          scmSiteId: c.selectedScmSiteId,
+          sesUserId,
+          menuId: MENU_ID,
+        };
+      });
+    },
+    setSalesSiteFilters: input => {
+      const sesUserId = useSessionStore.getState().session.userId ?? '';
+      set(state => {
+        state.filters[SHEETS.SALES_SITE] = {
+          divisionId: input.divisionId,
+          soldTo: input.soldTo,
+          shipTo: input.shipTo,
+          scmSiteId: input.scmSiteId,
+          sesUserId,
+          menuId: MENU_ID,
+        };
+      });
+    },
+    setSspmFilters: input => {
+      const sesUserId = useSessionStore.getState().session.userId ?? '';
+      set(state => {
+        state.filters[SHEETS.SSPM] = {
+          divisionId: input.divisionId,
+          itemId: input.itemId,
+          scmSiteId: input.scmSiteId,
+          sesUserId,
+          menuId: MENU_ID,
+        };
+      });
+    },
+    setRepairContext: ctx => {
+      set(state => {
+        state.repairContext = ctx;
       });
     },
     setOpenSearchArea: open => {
@@ -168,7 +218,10 @@ export const useErpEdiMasterStore = createPersistedStoreWithTab<
     fetchStaticColumns: async () => {
       // 개별 try/catch — 한 sheet fail 해도 다른 sheet 는 채움 (Promise.all 일괄 throw 방지)
       // + Array.isArray 가드 — BE 응답 형식이 예상과 다를 시 안전 (column 안 보임 사고 2026-06-10 fix)
-      const fetchOne = async (sheetNm: string, extra?: Record<string, unknown>): Promise<RawFlexGridColumnConfig[]> => {
+      const fetchOne = async (
+        sheetNm: string,
+        extra?: Record<string, unknown>
+      ): Promise<RawFlexGridColumnConfig[]> => {
         try {
           const res = await apiClient.post<RawFlexGridColumnConfig[]>(
             `/admin/menu/${MENU_ID}/column`,
@@ -193,9 +246,9 @@ export const useErpEdiMasterStore = createPersistedStoreWithTab<
       if (get().initialized) return;
       // G1 GET — 저장된 검색조건 자동 restore (Phase 7 PoC 패턴)
       try {
-        const param = await apiClient.get<
-          { paramNm: keyof SearchCondition; paramCtn: string }[]
-        >(`/admin/menu/${MENU_ID}/search-conditions`);
+        const param = await apiClient.get<{ paramNm: keyof SearchCondition; paramCtn: string }[]>(
+          `/admin/menu/${MENU_ID}/search-conditions`
+        );
         if (param.data.result?.length > 0) {
           const restored = param.data.result.reduce((acc, curr) => {
             acc[curr.paramNm] = curr.paramCtn;
@@ -213,9 +266,9 @@ export const useErpEdiMasterStore = createPersistedStoreWithTab<
       });
     },
   }),
-  // storageName v2 — store schema 변경 (staticColumns key 'main' → 'summary' 등) 으로 sessionStorage stale state 무시.
-  // 어제 v1 schema 의 staticColumns 가 새 selector state.staticColumns.summary 와 호환 안 됨 → DataGrid.filter() null read 사고 (2026-06-10).
-  'erp-edi-master-v2'
+  // storageName v3 — divisionId 초기값 '40' → '81' 변경 (2026-06-17) 으로 sessionStorage cached '40' 무시.
+  // v2 schema 의 cached searchParams.divisionId='40' 이 새 default '81' 와 불일치 → 사용자 진입 시 stale '40' 적용 사고 방지.
+  'erp-edi-master-v3'
 );
 
 // (placeholder ref — type-check 의미 없는 미사용 변수 회피)

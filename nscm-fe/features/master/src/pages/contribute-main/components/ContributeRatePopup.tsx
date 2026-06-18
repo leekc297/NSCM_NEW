@@ -61,9 +61,9 @@ export const ContributeRatePopup = ({ yyyy, open, onClose, onSelect }: Props) =>
             </tr>
           </thead>
           <tbody>
-            {rows.map(r => (
+            {rows.map((r, i) => (
               <tr
-                key={`${String(r.divisionId)}-${String(r.yyyymm)}-${String(r.osCorpCd)}-${String(r.contributionType)}`}
+                key={i}
                 style={{ cursor: 'pointer' }}
                 onClick={() => {
                   onSelect?.(r);

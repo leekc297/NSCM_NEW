@@ -1,8 +1,7 @@
-import { apiClient } from '@foundation/apis';
-import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { createPersistedStoreWithTab } from '@shared/stores';
 
-import { type MENU_ID, META_MENU_ID, META_SHEETS, SHEETS } from './contribute-view.constants';
+import type { MENU_ID } from './contribute-view.constants';
+import { SHEETS } from './contribute-view.constants';
 import type { ViewSearchCondition } from './types';
 
 type FiltersBySheet = {
@@ -16,11 +15,13 @@ interface ContributeViewState {
   filters: FiltersBySheet;
   searchCondition: ViewSearchCondition;
   openSearchArea: boolean;
-  versionPopupOpen: boolean;     // AS-IS btnSPVer_Click (.cs L453)
-  ratePopupOpen: boolean;        // AS-IS btnCutOff_Click (.cs L444)
-  columnSetPopupOpen: boolean;   // AS-IS btnColumn_Click (.cs L473)
-  // ⭐ UI 동적 속성관리 (master hook §4) — BASE 컬럼 visible/width/label admin 메타 동적 fetch
-  staticColumns: { [SHEETS.MAIN]: RawFlexGridColumnConfig[] };
+  versionPopupOpen: boolean; // AS-IS btnSPVer_Click (.cs L453)
+  ratePopupOpen: boolean; // AS-IS btnCutOff_Click (.cs L444)
+  columnSetPopupOpen: boolean; // AS-IS btnColumn_Click (.cs L473)
+  // ⭐ ColumnSettingModal OK 결과 — 사용자가 visible 로 유지한 BASE 컬럼 list.
+  //   빈 array = default (모든 base 컬럼 visible).
+  //   동적 컬럼 (Y#/M#) 은 ColumnSetting 대상 아님 → 영향 없음.
+  visibleBaseColumns: string[];
 }
 
 interface ContributeViewAction {
@@ -31,8 +32,7 @@ interface ContributeViewAction {
   setVersionPopupOpen: (open: boolean) => void;
   setRatePopupOpen: (open: boolean) => void;
   setColumnSetPopupOpen: (open: boolean) => void;
-  /** BE 메타 GET → staticColumns 자동 채움 (DMF0004 표준 패턴). */
-  fetchStaticColumns: () => Promise<void>;
+  setVisibleBaseColumns: (names: string[]) => void;
 }
 
 const currentYear = new Date().getFullYear();
@@ -57,7 +57,7 @@ const initState: ContributeViewState = {
   versionPopupOpen: false,
   ratePopupOpen: false,
   columnSetPopupOpen: false,
-  staticColumns: { [SHEETS.MAIN]: [] },
+  visibleBaseColumns: [],
 };
 
 export const useContributeViewStore = createPersistedStoreWithTab<
@@ -96,32 +96,22 @@ export const useContributeViewStore = createPersistedStoreWithTab<
         state.openSearchArea = open ?? !state.openSearchArea;
       });
     },
-    setVersionPopupOpen: open => set(state => { state.versionPopupOpen = open; }),
-    setRatePopupOpen: open => set(state => { state.ratePopupOpen = open; }),
-    setColumnSetPopupOpen: open => set(state => { state.columnSetPopupOpen = open; }),
-    /**
-     * fetchStaticColumns — DMF0004 표준 (Array.isArray 가드).
-     * BASE 컬럼 (YYYYMM~DM_BIZ_TYPE 9개) 의 admin 메타 동적 반영.
-     * 동적 컬럼 (region × commission/markup) 은 MAIN_TITLE SP 결과로 별도 생성 (admin 관리 X).
-     */
-    fetchStaticColumns: async () => {
-      try {
-        const res = await apiClient.post<RawFlexGridColumnConfig[]>(
-          // ⭐ DMF0043_01 main grid 의 SHEET_COLUMNS 메타는 DMF0043 의 ContributeSalesList sheet 에 등록됨.
-          // 사용자 진단 (2026-06-17): DMF0043_01 main 자체 row 0, DMF0043 ContributeSalesList 10 row.
-          `/admin/menu/${META_MENU_ID}/column`,
-          { sheetNm: META_SHEETS.MAIN }
-        );
-        const result = res.data?.result;
-        set(state => {
-          state.staticColumns = { [SHEETS.MAIN]: Array.isArray(result) ? result : [] };
-        });
-      } catch {
-        // silent fail — staticColumns 빈 배열 유지
-      }
-      if (get().initialized) return;
-      set(state => { state.initialized = true; });
-    },
+    setVersionPopupOpen: open =>
+      set(state => {
+        state.versionPopupOpen = open;
+      }),
+    setRatePopupOpen: open =>
+      set(state => {
+        state.ratePopupOpen = open;
+      }),
+    setColumnSetPopupOpen: open =>
+      set(state => {
+        state.columnSetPopupOpen = open;
+      }),
+    setVisibleBaseColumns: names =>
+      set(state => {
+        state.visibleBaseColumns = names;
+      }),
   }),
-  'contribute-view-v2'   // storageName v2 — staticColumns 추가
+  'contribute-view'
 );

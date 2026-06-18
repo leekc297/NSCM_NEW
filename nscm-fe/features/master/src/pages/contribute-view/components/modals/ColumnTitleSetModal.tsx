@@ -56,7 +56,7 @@ interface TitleSetRow {
 interface Props {
   open: boolean;
   onClose: () => void;
-  onApply: () => void;            // AS-IS L481~482: DialogResult.OK → InitSpread() (= mainTitle refetch)
+  onApply: () => void; // AS-IS L481~482: DialogResult.OK → InitSpread() (= mainTitle refetch)
 }
 
 export const ColumnTitleSetModal = ({ open, onClose, onApply }: Props) => {
@@ -122,13 +122,7 @@ export const ColumnTitleSetModal = ({ open, onClose, onApply }: Props) => {
       return;
     }
     const targets = new Set(selected);
-    setRows(prev =>
-      prev.map(r =>
-        targets.has(r)
-          ? { ...r, USER_FLAG: 'Y' }
-          : r
-      )
-    );
+    setRows(prev => prev.map(r => (targets.has(r) ? { ...r, USER_FLAG: 'Y' } : r)));
   };
 
   // AS-IS btnLeft_Click (.cs L575): User 선택 → Base 로 이동 (USER_FLAG='N')
@@ -190,8 +184,8 @@ export const ColumnTitleSetModal = ({ open, onClose, onApply }: Props) => {
       customContentArea={
         <div className={styles.dialogContent}>
           <div className={styles.note}>
-            Program: DMF0043 / Sheet: ContributeSalesList / Division: 40
-            &nbsp;|&nbsp; 전체 {rows.length}개 (사용 {userRows.length} / 미사용 {baseRows.length})
+            Program: DMF0043 / Sheet: ContributeSalesList / Division: 40 &nbsp;|&nbsp; 전체{' '}
+            {rows.length}개 (사용 {userRows.length} / 미사용 {baseRows.length})
           </div>
 
           <div className={styles.splitGridArea}>
@@ -209,8 +203,16 @@ export const ColumnTitleSetModal = ({ open, onClose, onApply }: Props) => {
                   autoGenerateColumns={false}
                   className={styles.grid}
                 >
-                  <FlexGridColumn binding='LARGE_CLASS_LABEL_NAME' header='LargeClass' width={100} />
-                  <FlexGridColumn binding='SMALL_CLASS_LABEL_NAME' header='SmallClass' width={100} />
+                  <FlexGridColumn
+                    binding='LARGE_CLASS_LABEL_NAME'
+                    header='LargeClass'
+                    width={100}
+                  />
+                  <FlexGridColumn
+                    binding='SMALL_CLASS_LABEL_NAME'
+                    header='SmallClass'
+                    width={100}
+                  />
                   <FlexGridColumn binding='COLUMN_LABEL_NAME' header='Column' width={160} />
                   <FlexGridColumn binding='SORT_ORDER_NO' header='Seq' width={50} align='right' />
                 </FlexGrid>
@@ -253,8 +255,16 @@ export const ColumnTitleSetModal = ({ open, onClose, onApply }: Props) => {
                   autoGenerateColumns={false}
                   className={styles.grid}
                 >
-                  <FlexGridColumn binding='LARGE_CLASS_LABEL_NAME' header='LargeClass' width={100} />
-                  <FlexGridColumn binding='SMALL_CLASS_LABEL_NAME' header='SmallClass' width={100} />
+                  <FlexGridColumn
+                    binding='LARGE_CLASS_LABEL_NAME'
+                    header='LargeClass'
+                    width={100}
+                  />
+                  <FlexGridColumn
+                    binding='SMALL_CLASS_LABEL_NAME'
+                    header='SmallClass'
+                    width={100}
+                  />
                   <FlexGridColumn binding='COLUMN_LABEL_NAME' header='Column' width={160} />
                   <FlexGridColumn binding='SORT_ORDER_NO' header='Seq' width={50} align='right' />
                 </FlexGrid>

@@ -15,18 +15,22 @@ export const validChk = (rows: MainRow[], chkYear: boolean): { ok: boolean; msgC
       const parts = k.split('#');
       if (parts.length !== 3) return;
       const [, period, osCorpCd] = parts;
-      if (osCorpCd.indexOf('999') >= 0) return;  // RBU_0999 (구분) 제외
+      if (osCorpCd.indexOf('999') >= 0) return; // RBU_0999 (구분) 제외
       const n = Number(v);
-      if (v == null || v === '' || Number.isNaN(n)) return;  // 빈값/NaN 제외
+      if (v == null || v === '' || Number.isNaN(n)) return; // 빈값/NaN 제외
       sumByPeriod.set(period, (sumByPeriod.get(period) ?? 0) + n);
     });
 
-    // 각 period 합계 검사 — 입력된 period 별 합 = 100% 또는 0% 만 검증
-    // (2026-06-11 사용자 요구: 12개월 강제 검증 제거. 사용자가 일부 월만 100% 입력해도 통과)
+    // 각 period 합계 검사
     for (const [, sum] of sumByPeriod) {
       if (Math.abs(sum - 100) > 0.001 && Math.abs(sum) > 0.001) {
         return { ok: false, msgCode: VALIDATION_MSG.RATIO_OUT_OF_RANGE };
       }
+    }
+
+    // M# 모드: 12개월 모두 검증 통과 필요 (As-Is L805 ValidChkCol.Count != 12)
+    if (!chkYear && sumByPeriod.size > 0 && sumByPeriod.size !== 12) {
+      return { ok: false, msgCode: VALIDATION_MSG.RATIO_OUT_OF_RANGE };
     }
   }
   return { ok: true, msgCode: '' };
@@ -42,7 +46,7 @@ export const validChk2 = (rows: MainRow[], chkYear: boolean): { ok: boolean; msg
       const parts = k.split('#');
       if (parts.length !== 3) continue;
       const [, period, osCorpCd] = parts;
-      if (osCorpCd.indexOf('999') >= 0) continue;  // RBU_0999 자체는 검사 대상 X (다른 셀의 동반)
+      if (osCorpCd.indexOf('999') >= 0) continue; // RBU_0999 자체는 검사 대상 X (다른 셀의 동반)
       if (v == null || v === '') continue;
       // 같은 period 의 RBU_0999 셀 값 확인
       const conTypeKey = `${tag}#${period}#RBU_0999`;

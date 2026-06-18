@@ -31,6 +31,9 @@ interface State {
   // ⭐ master hook §2.3 / §5 — admin SYS0004 UI Category Setup 동적 메타
   staticColumns: StaticColumnsBySheet;
   staticMeasures: StaticMeasuresBySheet;
+  // ⭐ grid-column-setting-popup-pattern.md (#58) — ColumnSettingModal OK 결과 저장.
+  //   빈 array = default (모든 base 컬럼 visible). 값 있음 = list 에 포함된 컬럼만 표시.
+  visibleBaseColumns: string[];
 }
 
 interface Action {
@@ -41,6 +44,7 @@ interface Action {
   setSelectedMeasures: (measures: string[]) => void;
   fetchStaticColumns: () => Promise<void>;
   fetchStaticMeasures: () => Promise<void>;
+  setVisibleBaseColumns: (names: string[]) => void;
 }
 
 // AS-IS Form_Load 기본값 (DMF0003_1_MktFcst.cs L318):
@@ -93,6 +97,7 @@ const initState: State = {
   selectedMeasures: ['MKT_FCST', 'MKT_FCST_RP'],
   staticColumns: emptyCols,
   staticMeasures: emptyMeasures,
+  visibleBaseColumns: [],
 };
 
 // SP DMF0003_GET_MKT_FCST_DATA — 22 IN parameter 매핑 (archive line 1546~1574):
@@ -181,6 +186,11 @@ export const useMktForecastMasterStore = createPersistedStoreWithTab<State & Act
         console.warn('[DMF0003] fetchStaticMeasures failed', e);
       }
     },
+    // ⭐ grid-column-setting-popup-pattern.md (#58) §1.1 — ColumnSettingModal OK 결과 저장.
+    setVisibleBaseColumns: names =>
+      set(state => {
+        state.visibleBaseColumns = names;
+      }),
   }),
   'mkt-forecast-master',
 );

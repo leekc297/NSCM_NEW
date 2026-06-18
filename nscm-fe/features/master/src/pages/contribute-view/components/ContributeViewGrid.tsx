@@ -1,25 +1,13 @@
 import { toggleClass } from '@mescius/wijmo';
-import {
-  AllowMerging,
-  CellRange,
-  CellType,
-  MergeManager,
-  Row,
-  type FlexGrid as FlexGridType,
-  type FormatItemEventArgs,
-  type GridPanel,
-} from '@mescius/wijmo.grid';
+import type { FlexGrid as FlexGridType, FormatItemEventArgs, GridPanel } from '@mescius/wijmo.grid';
+import { AllowMerging, CellRange, CellType, MergeManager, Row } from '@mescius/wijmo.grid';
 import { FlexGrid, FlexGridColumn } from '@mescius/wijmo.react.grid';
 import { type RefObject, useEffect, useMemo, useRef } from 'react';
 
-import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { useTabProcQuery } from '@shared/hooks';
 
 import { BASE_COLUMN_COUNT, MENU_ID, SHEETS } from '../contribute-view.constants';
-import {
-  buildColumnMeta,
-  type ColumnMeta,
-} from '../hooks/useContributeViewExpression';
+import { buildColumnMeta, type ColumnMeta } from '../hooks/useContributeViewExpression';
 import type { SalesViewRow, SpreadTitleRow } from '../types';
 import { useContributeViewStore } from '../useContributeViewStore';
 
@@ -28,8 +16,6 @@ import styles from './ContributeViewGrid.module.scss';
 interface Props {
   gridRef: RefObject<FlexGridType<SalesViewRow> | null>;
   data: SalesViewRow[];
-  // ⭐ UI 동적 속성관리 (master hook §4) — admin SYS0004 메타 (BASE 컬럼 전체 속성 동기화)
-  staticColumns?: RawFlexGridColumnConfig[];
 }
 
 // AS-IS DMF0043_Contribute_View.cs InitSpread + SetSpreadHeaderSpan
@@ -42,7 +28,7 @@ interface Props {
 //   - readonly grid — AS-IS L342: siMain.LockColumn(0, Max, true)
 //   - 룰 12 §11.5: frozenColumns = BASE_COLUMN_COUNT (= 9)
 //   - 룰 27 §F: FlexGridColumnGroup JSX single-child 회피 — flat 컬럼 + HeaderMergeManager
-export const ContributeViewGrid = ({ gridRef, data, staticColumns }: Props) => {
+export const ContributeViewGrid = ({ gridRef, data }: Props) => {
   const internalRef = useRef<FlexGridType<SalesViewRow> | null>(null);
   const columnMetaRef = useRef<ColumnMeta[]>([]);
 
@@ -64,56 +50,15 @@ export const ContributeViewGrid = ({ gridRef, data, staticColumns }: Props) => {
   );
 
   // 첫 BASE_COLUMN_COUNT 개 = BASE (고정), 나머지 = dynamic (지역×Type)
-  // 정책 (2026-06-17 v5 — BE 변경 없이 작동 보장):
-  //   BE 가 retrieveGridColumns 의 visible/division filter 를 하든 안 하든 (DMF0004 reference 처럼 filter 없음)
-  //   FE 가 자체적으로 staticColumns 의 visible 검사 + buildColumnMeta 와의 매칭 처리:
-  //   - staticColumns 빈 배열 → buildColumnMeta fallback (안전망)
-  //   - BASE binding 이 staticColumns 에 없음 (= admin SHEET_COLUMNS 미등록) → fallback 으로 표시
-  //   - BASE binding 있고 sc.visible === false → 표시 X (admin 결정 보존)
-  //   - BASE binding 있고 visible 미정의/true → 표시 + admin 메타 override (leaf/large/width)
-  // formatItem 안 columnMetaRef 가 lookup 하므로 여기서 단일 진실 source 로 통합.
-  const columnMetas = useMemo<ColumnMeta[]>(() => {
-    const built = buildColumnMeta(titleRows, BASE_COLUMN_COUNT);
-    if (!staticColumns || staticColumns.length === 0) return built;
-    // ⭐ 2026-06-17 v6 — DMF0004 reference 패턴 (사용자 명시):
-    //   staticColumns 가 단일 진실 source. BASE 컬럼은 메타 등록 + visible='Y' 통과 한 것만 표시.
-    //   미등록 = 표시 X. visible='N' = 표시 X. dynamic 컬럼은 SP buildColumnMeta 결과 그대로.
-    return built
-      .map(m => {
-        if (!m.isBase) return m;
-        const sc = staticColumns.find(s => s.colNm === m.binding);
-        // 미등록 → 표시 X (DMF0004 wrapper 와 동일 정책)
-        if (!sc) return { ...m, isHidden: true };
-        // admin visible='N' → 표시 X
-        if (sc.visible === false) return { ...m, isHidden: true };
-        // admin 등록 + visible=true → 메타 override
-        return {
-          ...m,
-          leaf: sc.colLblNm || m.leaf,
-          large: sc.lClsLblNm || m.large,
-          width: sc.colWth != null ? Number(sc.colWth) : m.width,
-          isHidden: false,
-        };
-      })
-      .filter(m => !m.isHidden);
-  }, [titleRows, staticColumns]);
+  const columnMetas = useMemo<ColumnMeta[]>(
+    () => buildColumnMeta(titleRows, BASE_COLUMN_COUNT),
+    [titleRows]
+  );
 
-  // BASE 컬럼의 admin attribute (align/format/ctrlType/comboKey/modalKey) lookup 맵
-  // — FlexGridColumn rendering 시 사용. ColumnMeta 가 외부 export 라 확장 X.
-  const baseColumnAttrs = useMemo(() => {
-    const map = new Map<string, { align: 'left' | 'right' | 'center'; format?: string; ctrlType?: string; comboKey?: string; modalKey?: string; }>();
-    if (!staticColumns) return map;
-    for (const sc of staticColumns) {
-      map.set(sc.colNm, {
-        align: sc.horzAlgnCd === 'R' ? 'right' : sc.horzAlgnCd === 'C' ? 'center' : 'left',
-        format: sc.scale != null ? `n${Number(sc.scale)}` : undefined,
-        ctrlType: sc.cellCtrlObjTpCd,
-        comboKey: sc.cellCboDataTp,
-        modalKey: sc.attribute1,
-      });
-    }
-    return map;
-  }, [staticColumns]);
+  // useEffect(() => {
+  //   columnMetaRef.current = columnMetas;
+  //   internalRef.current?.invalidate();
+  // }, [columnMetas]);
 
   useEffect(() => {
     columnMetaRef.current = columnMetas;
@@ -131,148 +76,280 @@ export const ContributeViewGrid = ({ gridRef, data, staticColumns }: Props) => {
     }
   }, [columnMetas]);
 
-  // columnMetas 가 admin 메타 통합 단일 source 라 base 부분은 derived (filter only).
-  const baseColumns = useMemo<ColumnMeta[]>(
-    () => columnMetas.filter(m => m.isBase),
-    [columnMetas]
-  );
+  // ⭐ ColumnSettingModal OK 결과 반영 — store.visibleBaseColumns 에 매칭되는 base 만 표시.
+  //   빈 array = default (모든 base 컬럼 visible).
+  const visibleBaseColumnsList = useContributeViewStore(s => s.visibleBaseColumns);
+  const baseColumns = useMemo<ColumnMeta[]>(() => {
+    const all = columnMetas.filter(m => m.isBase);
+    if (visibleBaseColumnsList.length === 0) return all;
+    const visibleSet = new Set(visibleBaseColumnsList);
+    return all.filter(m => visibleSet.has(m.binding));
+  }, [columnMetas, visibleBaseColumnsList]);
   const dynamicColumns = useMemo<ColumnMeta[]>(
     () => columnMetas.filter(m => !m.isBase && !m.isHidden),
     [columnMetas]
   );
 
+  // frozenColumns / dynStart 는 actual baseColumns.length 추적 (BASE_COLUMN_COUNT 상수 X).
+  const baseCountRef = useRef(BASE_COLUMN_COUNT);
+  useEffect(() => {
+    baseCountRef.current = baseColumns.length;
+    const g = internalRef.current;
+    if (g) g.frozenColumns = baseColumns.length;
+  }, [baseColumns.length]);
+
+  const mergingColums = new Set([
+    'YYYYMM',
+    'DEPARTMENT_NAME',
+    'DEPT_NAME',
+    'CUST_REPORT',
+    'END_CUST_REPORT',
+    'SHIPTO_CODE',
+  ]);
+
+  const setColumnName = (val: string) => {
+    if (val.includes('#')) {
+      return val.toUpperCase();
+    }
+    return val;
+  };
+
   return (
-    <FlexGrid
-      initialized={(g: FlexGridType<SalesViewRow>) => {
-        internalRef.current = g;
-        if (gridRef && 'current' in gridRef) {
-          (gridRef as { current: FlexGridType<SalesViewRow> | null }).current = g;
-        }
-        g.isReadOnly = true;
-        // 사용자 요구 (2026-06-11): BASE 9 컬럼 (YYYYMM~DM_BIZ_TYPE) 좌측-누적 cell 머지
-        // → ColumnHeaders + Cells 모두 머지 활성
-        g.allowMerging = AllowMerging.ColumnHeaders | AllowMerging.Cells;
+    <>
+      {/* <div>{ JSON.stringify(baseColumns) }</div>
+      <div>{ JSON.stringify(dynamicColumns) }</div> */}
 
-        // 룰 12 §11.5: BASE 컬럼 좌측 고정
-        g.frozenColumns = BASE_COLUMN_COUNT;
+      <FlexGrid
+        initialized={(g: FlexGridType<SalesViewRow>) => {
+          internalRef.current = g;
+          if (gridRef && 'current' in gridRef) {
+            (gridRef as { current: FlexGridType<SalesViewRow> | null }).current = g;
+          }
+          g.isReadOnly = true;
+          g.allowMerging = AllowMerging.ColumnHeaders;
 
-        // 2-row 헤더 (Row 0 = 지역, Row 1 = Commission/Markup)
-        while (g.columnHeaders.rows.length < 2) {
-          g.columnHeaders.rows.unshift(new Row());
-        }
+          // 룰 12 §11.5: BASE 컬럼 좌측 고정
+          g.frozenColumns = BASE_COLUMN_COUNT;
 
-        // Custom merge manager:
-        //   - ColumnHeader: BASE 컬럼 row 0/1 세로 머지 + 동적 컬럼 row 0 (지역) 가로 머지
-        //   - Cell: BASE 9 컬럼 (YYYYMM~DM_BIZ_TYPE) — 좌측-누적 cell 세로 머지 (DMF0072/DMF0043 패턴)
-        //     자신 컬럼 단독이 아닌 YYYYMM 부터 자신까지 모든 컬럼 값 동일 row 만 머지
-        const dynStart = BASE_COLUMN_COUNT;
-        class HierarchicalMergeManager extends MergeManager {
-          getMergedRange(panel: GridPanel, r: number, c: number, clip = true): CellRange | null {
-            if (panel.cellType === CellType.ColumnHeader) {
-              // BASE 컬럼: row 0/1 세로 머지
-              if (c < dynStart) {
-                return new CellRange(0, c, 1, c);
-              }
-              // 동적 row 0: 같은 LARGE_CLASS_LABEL_NAME 인접 컬럼 가로 머지
-              if (r === 0) {
-                const metas = columnMetaRef.current;
-                const idx = c;
-                if (idx >= metas.length) return null;
-                const large = metas[idx].large;
-                if (!large) return null;
-                let left = idx;
-                while (left > dynStart && metas[left - 1].large === large && !metas[left - 1].isBase) left--;
-                let right = idx;
-                while (right < metas.length - 1 && metas[right + 1].large === large && !metas[right + 1].isBase) right++;
-                if (left === right) return null;
-                return new CellRange(0, left, 0, right);
-              }
-              return null;
-            }
-            // Cell hierarchical merge — BASE 9 컬럼 만 대상
-            if (panel.cellType === CellType.Cell) {
-              if (c >= dynStart) return null; // 동적 컬럼은 머지 X
-              const col = panel.columns[c];
-              if (!col || !col.allowMerging) return null;
-              // 좌측 0..c 모두 allowMerging + 값 동일 row 끼리 세로 머지
-              const sameAcrossKeys = (rowA: number, rowB: number): boolean => {
-                for (let ci = 0; ci <= c; ci++) {
-                  if (!panel.columns[ci]?.allowMerging) continue;
-                  const a: unknown = panel.getCellData(rowA, ci, false);
-                  const b: unknown = panel.getCellData(rowB, ci, false);
-                  if (a !== b) return false;
+          // 2-row 헤더 (Row 0 = 지역, Row 1 = Commission/Markup)
+          while (g.columnHeaders.rows.length < 2) {
+            g.columnHeaders.rows.unshift(new Row());
+          }
+
+          // Custom merge manager — BASE 컬럼 row 0/1 세로 머지 + 동적 컬럼 row 0 (지역) 가로 머지
+          // ⭐ dynStart 는 매 호출 시 baseCountRef.current (= 실 표시 base 수) 사용 — ColumnSetting 반영.
+          class HeaderMergeManager extends MergeManager {
+            getMergedRange(panel: GridPanel, r: number, c: number, clip = true): CellRange | null {
+              const dynStart = baseCountRef.current;
+              if (panel.cellType === CellType.ColumnHeader) {
+                // BASE 컬럼: row 0/1 세로 머지
+                if (c < dynStart) {
+                  return new CellRange(0, c, 1, c);
                 }
-                return true;
-              };
-              let r1 = r;
-              let r2 = r;
-              while (r1 > 0 && sameAcrossKeys(r1 - 1, r)) r1--;
-              const rowCnt = panel.rows.length;
-              while (r2 < rowCnt - 1 && sameAcrossKeys(r2 + 1, r)) r2++;
-              if (r1 === r2) return null;
-              return new CellRange(r1, c, r2, c);
-            }
-            return super.getMergedRange(panel, r, c, clip);
-          }
-        }
-        g.mergeManager = new HierarchicalMergeManager();
+                // 동적 row 0: 같은 LARGE_CLASS_LABEL_NAME 인접 컬럼 가로 머지
+                if (r === 0) {
+                  const metas = columnMetaRef.current;
+                  const idx = c;
+                  if (idx >= metas.length) return null;
+                  const large = metas[idx].large;
+                  if (!large) return null;
+                  let left = idx;
+                  while (
+                    left > dynStart &&
+                    metas[left - 1].large === large &&
+                    !metas[left - 1].isBase
+                  )
+                    left--;
+                  let right = idx;
+                  while (
+                    right < metas.length - 1 &&
+                    metas[right + 1].large === large &&
+                    !metas[right + 1].isBase
+                  )
+                    right++;
+                  if (left === right) return null;
+                  return new CellRange(0, left, 0, right);
+                }
+              }
 
-        // formatItem — row 0/1 별 텍스트 그리기 + 룰 12 §11.7 (2026-06-02) cell coloring
-        // 조회 전용 화면 — 모든 cell 회색 (wj-cell-non-editable)
-        g.formatItem.addHandler((_s, e: FormatItemEventArgs) => {
-          if (e.panel.cellType === CellType.ColumnHeader) {
-            const col = e.panel.columns[e.col];
-            if (!col) return;
-            const meta = columnMetaRef.current.find(m => m.binding === col.binding);
-            if (!meta) return;
-            if (meta.isBase) {
-              e.cell.textContent = e.row === 0 ? meta.leaf : '';
-            } else {
-              if (e.row === 0) e.cell.textContent = meta.large;
-              else if (e.row === 1) e.cell.textContent = meta.leaf;
+              // 🔥 [추가 코드] 일반 데이터 셀 영역 위아래(세로) 머지 처리
+              if (panel.cellType === CellType.Cell) {
+                // 해당 컬럼이 머지 가능하도록 설정되어 있는지 확인
+                const col = panel.columns[c];
+
+                if (col?.allowMerging) {
+                  // 위아래로 동일한 값을 가진 행의 범위를 찾습니다.
+                  // ⭐ viewport row 제한 (wijmo-merge-sticky-content.md v4, 2026-06-18)
+                  let top = r;
+                  let bottom = r;
+                  const val = panel.getCellData(r, c, false);
+                  const minRow = panel.viewRange.row;
+                  const maxRow = panel.viewRange.row2;
+
+                  // 위쪽으로 동일한 값이 있는지 확인 (viewport 시작까지)
+                  while (top > minRow && panel.getCellData(top - 1, c, false) === val) {
+                    top--;
+                  }
+                  // 아래쪽으로 동일한 값이 있는지 확인 (viewport 끝까지)
+                  while (
+                    bottom < maxRow &&
+                    panel.getCellData(bottom + 1, c, false) === val
+                  ) {
+                    bottom++;
+                  }
+
+                  // 위아래로 머지할 타겟이 있다면 CellRange 반환 (세로 머지이므로 컬럼 c는 고정)
+                  if (top !== bottom) {
+                    if (mergingColums.has(col.binding as string) && c > 0) {
+                      // 해당 컬럼에 위아래로 여러 셀이 동일한 값이 있을 수는 있지만 이전 컬럼에 머지 범위에 속해 있는지 판단하여 머지를 해야 할지 말지를 판단하는 로직
+                      /**
+                       * 머지가 적용 되기 전 그리드
+                       * ----------------------------
+                       *   Cate A | Cate B |  Cate C
+                       * ----------------------------
+                       *    A1    |   B1   |   1
+                       * ----------------------------
+                       *    A1    |   B1   |   1
+                       * ----------------------------
+                       *    A1    |   B2   |   1      <-- 이렇게 앞에 Cate C의 값은 위아래 여러 셀이 같지만 Cate B가 다르기 때문에 머지 영역을 앞 머지 영역을 따라 정해줘야 한다.
+                       * ----------------------------
+                       *    A1    |   B2   |   1
+                       * ----------------------------
+                       *
+                       *  잘못된 머지
+                       * ----------------------------
+                       *   Cate A | Cate B |  Cate C
+                       * ----------------------------
+                       *          |        |
+                       *          |   B1   |
+                       *    A1    |--------|    1
+                       *          |        |
+                       *          |   B2   |
+                       * ----------------------------
+                       *
+                       * 아래 로직을 적용 시켰을 때의 정상적인 머지
+                       * ----------------------------
+                       *   Cate A | Cate B |  Cate C
+                       * ----------------------------
+                       *          |        |
+                       *          |   B1   |   1
+                       *    A1    |--------|---------
+                       *          |        |
+                       *          |   B2   |   1
+                       * ----------------------------
+                       */
+                      let prevTop = r;
+                      let prevbottom = r;
+                      const prevVal = panel.getCellData(r, c - 1, false);
+
+                      // 위쪽으로 동일한 값이 있는지 확인
+                      while (
+                        prevTop > 0 &&
+                        panel.getCellData(prevTop - 1, c - 1, false) === prevVal
+                      ) {
+                        prevTop--;
+                      }
+                      // 아래쪽으로 동일한 값이 있는지 확인
+                      while (
+                        prevbottom < panel.rows.length - 1 &&
+                        panel.getCellData(prevbottom + 1, c - 1, false) === prevVal
+                      ) {
+                        prevbottom++;
+                      }
+
+                      if (top < prevTop) {
+                        top = prevTop;
+                      }
+
+                      if (bottom > prevbottom) {
+                        bottom = prevbottom;
+                      }
+
+                      let cnt = 0;
+                      for (let i = 0; i < c; i++) {
+                        if (
+                          panel.getCellData(top, i, false) === panel.getCellData(bottom, i, false)
+                        ) {
+                          cnt++;
+                        }
+                      }
+                      if (cnt === c) {
+                        return new CellRange(top, c, bottom, c);
+                      }
+                    }
+                    if (c === 0) {
+                      return new CellRange(top, c, bottom, c);
+                    }
+                  }
+                }
+              }
+              return super.getMergedRange(panel, r, c, clip);
             }
-            return;
           }
-          if (e.panel.cellType === CellType.Cell) {
-            toggleClass(e.cell, 'wj-cell-non-editable', true);
-          }
-        });
-      }}
-      itemsSource={data}
-      autoGenerateColumns={false}
-      className={styles.grid}
-    >
-      {/* ⭐ master hook §4 (v2 2026-06-17) — admin SYS0004 메타 전체 동기화:
-          visible (BE 미리 filter) / leaf (colLblNm) / large (lClsLblNm 다단 헤더) /
-          width (colWth) / align (horzAlgnCd) / format (scale → 'nN'). 조회 전용 grid (isReadOnly=true)
-          이므로 inputTpCd 무관. cellCtrlObjTpCd/cellCboDataTp/attribute1 은 메타로 보존
-          (admin 에서 추후 변경 시 cellEditingTemplate 확장 hook 으로 적용). */}
-      {baseColumns.map(c => {
-        const attrs = baseColumnAttrs.get(c.binding);
-        return (
+          g.mergeManager = new HeaderMergeManager();
+          // ⭐ viewport sticky — scroll 시 머지 재계산 (wijmo-merge-sticky-content.md v4, 2026-06-18)
+          g.scrollPositionChanged.addHandler(() => g.invalidate());
+
+          // formatItem — row 0/1 별 텍스트 그리기 + 룰 12 §11.7 (2026-06-02) cell coloring
+          // 조회 전용 화면 — 모든 cell 회색 (wj-cell-non-editable)
+          //
+          // ⭐ 2026-06-17 fix — dynamic 컬럼 binding case-insensitive 매칭:
+          //   FlexGridColumn 의 binding = setColumnName(c.binding) = 대문자 (# 포함 시).
+          //   반면 columnMetaRef 의 m.binding = SP 응답 원본 (mixed case 가능) → find 실패 가능.
+          //   사고: row 0 (LARGE_CLASS_LABEL_NAME 상단 지역명) textContent 빈 셀.
+          //   fix: # 포함 dynamic 컬럼은 대문자 변환 후 비교.
+          g.formatItem.addHandler((_s, e: FormatItemEventArgs) => {
+            if (e.panel.cellType === CellType.ColumnHeader) {
+              const col = e.panel.columns[e.col];
+              if (!col) return;
+              const colBind = col.binding ?? '';
+              const meta = columnMetaRef.current.find(m => {
+                const mb = m.binding ?? '';
+                if (mb === colBind) return true;
+                // dynamic 컬럼 (# 포함) — setColumnName 으로 대문자 변환 매칭
+                if (mb.includes('#') && mb.toUpperCase() === colBind) return true;
+                return false;
+              });
+              if (!meta) return;
+              if (meta.isBase) {
+                e.cell.textContent = e.row === 0 ? meta.leaf : '';
+              } else {
+                if (e.row === 0) e.cell.textContent = meta.large;
+                else if (e.row === 1) e.cell.textContent = meta.leaf;
+              }
+              return;
+            }
+            if (e.panel.cellType === CellType.Cell) {
+              toggleClass(e.cell, 'wj-cell-non-editable', true);
+            }
+          });
+        }}
+        itemsSource={data}
+        autoGenerateColumns={false}
+        className={styles.grid}
+      >
+        {baseColumns.map(c => (
           <FlexGridColumn
             key={c.binding}
             binding={c.binding}
             header={c.leaf}
             width={Math.max(c.width, 110)}
-            align={attrs?.align ?? 'left'}
-            format={attrs?.format}
+            allowMerging={mergingColums.has(c.binding)}
             isReadOnly
-            allowMerging
           />
-        );
-      })}
-      {dynamicColumns.map(c => (
-        <FlexGridColumn
-          key={c.binding}
-          binding={c.binding}
-          header={c.leaf}
-          width={c.width}
-          align='right'
-          format='n0'
-          isReadOnly
-        />
-      ))}
-    </FlexGrid>
+        ))}
+        {dynamicColumns.map(c => (
+          <FlexGridColumn
+            key={setColumnName(c.binding)}
+            binding={setColumnName(c.binding)}
+            header={c.leaf}
+            width={c.width}
+            align='right'
+            format='n0'
+            isReadOnly
+          />
+        ))}
+      </FlexGrid>
+    </>
   );
 };

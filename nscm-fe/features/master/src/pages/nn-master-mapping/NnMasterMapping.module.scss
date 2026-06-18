@@ -164,7 +164,6 @@
     }
     // popup cell — 우측 OpenInNew SVG 아이콘 (foundation _grid.scss:685~700 패턴)
     &:global(.wj-cell-popup) {
-      position: relative;
       padding-right: 22px;
       &::after {
         content: '↗';

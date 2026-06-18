@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { CustomDropdown } from '@shared/components';
-import { useTabProcQuery } from '@shared/hooks';
+import { useTabProcQuery, useTabComboQueries } from '@shared/hooks';
 
 import { ItemByDivisionModal, ProjectByDivisionModal } from '../../../components';
 import { FALLBACK_ALL, MENU_ID, SHEETS } from '../nn-master-mapping.constants';
+//eslint-disable-next-line import/no-relative-parent-imports
 import styles from '../NnMasterMapping.module.scss';
 import { useNnMasterMappingStore } from '../useNnMasterMappingStore';
 
@@ -40,7 +41,7 @@ const toOptions = (rows: LookupRow[] | undefined): Array<{ value: string; label:
 //   - Team (L159):      clbTeam          UsrCheckedList 다중 → DMF0072_GET_TEAM_LIST
 //   - EndCustomer (L165~178): clbEndCustomer UsrCheckedList 다중 → DMF0072_GET_END_CUSTOMER_LIST
 //   - SalesSite (L186): clbSalesSite     UsrCheckedList 다중 → DMF0072_GET_SALES_SITE_LIST
-//   - Project (L457): umltProject text (TODO: popup), Item (L458): umltModel text (TODO: popup)
+//   - Project (L457): umltProject text (todo: popup), Item (L458): umltModel text (todo: popup)
 //
 // 다중 선택 패턴 원천: features/demand/src/pages/customer-fcst-upload/components/CustomerFcstUploadForm.tsx
 // As-Is `clbXxx.ControlValues` = 콤마 join string → PKG_DMF0072 의 UF_FX_STRING_SPLIT 으로 split (L196~205)
@@ -54,29 +55,58 @@ export const NnMasterMappingForm = ({ onSearch }: Props) => {
   const [openProjectModal, setOpenProjectModal] = useState(false);
   const [openItemModal, setOpenItemModal] = useState(false);
 
-  const { data: divData } = useTabProcQuery({ menuId: MENU_ID, sheetName: SHEETS.DIVISION, tabId: MENU_ID, filters: {}, enabled: true });
-  const { data: dtData } = useTabProcQuery({ menuId: MENU_ID, sheetName: SHEETS.DATA_TYPE, tabId: MENU_ID, filters: {}, enabled: true });
-  const { data: teamData } = useTabProcQuery({
-    menuId: MENU_ID, sheetName: SHEETS.TEAM, tabId: MENU_ID,
-    filters: { divisionId: sc.divisionId },
-    enabled: !!sc.divisionId,
+  const { data: divData } = useTabProcQuery({
+    menuId: MENU_ID,
+    sheetName: SHEETS.DIVISION,
+    tabId: MENU_ID,
+    filters: {},
+    enabled: true,
   });
+  const { data: dtData } = useTabProcQuery({
+    menuId: MENU_ID,
+    sheetName: SHEETS.DATA_TYPE,
+    tabId: MENU_ID,
+    filters: {},
+    enabled: true,
+  });
+  const [teamData] = useTabComboQueries({ filters: ['TeambyDivision'] });
   const { data: ecData } = useTabProcQuery({
-    menuId: MENU_ID, sheetName: SHEETS.END_CUSTOMER, tabId: MENU_ID,
+    menuId: MENU_ID,
+    sheetName: SHEETS.END_CUSTOMER,
+    tabId: MENU_ID,
     filters: { divisionId: sc.divisionId, deptId: sc.deptId },
     enabled: !!sc.divisionId,
   });
   const { data: ssData } = useTabProcQuery({
-    menuId: MENU_ID, sheetName: SHEETS.SALES_SITE, tabId: MENU_ID,
+    menuId: MENU_ID,
+    sheetName: SHEETS.SALES_SITE,
+    tabId: MENU_ID,
     filters: { divisionId: sc.divisionId, endCustomer: sc.endCustomer },
     enabled: !!sc.divisionId,
   });
 
-  const divisionOptions = useMemo(() => toOptions(divData?.o_rc1 as unknown as LookupRow[] | undefined), [divData]);
-  const dataTypeOptions = useMemo(() => toOptions(dtData?.o_rc1 as unknown as LookupRow[] | undefined), [dtData]);
-  const teamOptions = useMemo(() => toOptions(teamData?.o_rc1 as unknown as LookupRow[] | undefined), [teamData]);
-  const endCustomerOptions = useMemo(() => toOptions(ecData?.o_rc1 as unknown as LookupRow[] | undefined), [ecData]);
-  const salesSiteOptions = useMemo(() => toOptions(ssData?.o_rc1 as unknown as LookupRow[] | undefined), [ssData]);
+  const divisionOptions = useMemo(
+    () => toOptions(divData?.o_rc1 as unknown as LookupRow[] | undefined),
+    [divData]
+  );
+  const dataTypeOptions = useMemo(
+    () => toOptions(dtData?.o_rc1 as unknown as LookupRow[] | undefined),
+    [dtData]
+  );
+  /*
+  const teamOptions = useMemo(
+    () => toOptions(teamData?.o_rc1 as unknown as LookupRow[] | undefined),
+    [teamData]
+  );
+  */
+  const endCustomerOptions = useMemo(
+    () => toOptions(ecData?.o_rc1 as unknown as LookupRow[] | undefined),
+    [ecData]
+  );
+  const salesSiteOptions = useMemo(
+    () => toOptions(ssData?.o_rc1 as unknown as LookupRow[] | undefined),
+    [ssData]
+  );
 
   // Division 은 필수 — 첫 옵션 자동 선택 (As-Is .cs L460 의 `if (p_division_id == "") MSG00097` 회피)
   useEffect(() => {
@@ -88,7 +118,7 @@ export const NnMasterMappingForm = ({ onSearch }: Props) => {
     if (!divisionOptions.some(o => o.value === sc.divisionId)) {
       set({ divisionId: divisionOptions[0].value });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [divisionOptions]);
 
   // 2단 배치 (사용자 요구 2026-06-02):
@@ -114,7 +144,9 @@ export const NnMasterMappingForm = ({ onSearch }: Props) => {
           <CustomDropdown
             options={divisionOptions}
             value={sc.divisionId}
-            onChange={(_, v) => set({ divisionId: v, deptId: 'ALL', endCustomer: 'ALL', scmSiteId: 'ALL' })}
+            onChange={(_, v) =>
+              set({ divisionId: v, deptId: 'ALL', endCustomer: 'ALL', scmSiteId: 'ALL' })
+            }
             className={styles.dropdownDivision}
           />
         </div>
@@ -124,7 +156,16 @@ export const NnMasterMappingForm = ({ onSearch }: Props) => {
             multiple
             allOption
             useClearIcon
+            /*
             options={teamOptions}
+            */
+            options={[
+              ...new Map(
+                (teamData ?? [])
+                  .filter(item => item.DIVISION_ID === sc.divisionId)
+                  .map(item => [`${item.DIVISION_ID}|${item.CODE}`, item])
+              ).values(),
+            ].map(item => ({ label: item.NAME, value: item.CODE }))}
             value={sc.deptId}
             onChange={(_, v) => set({ deptId: v || 'ALL', endCustomer: 'ALL', scmSiteId: 'ALL' })}
             className={styles.dropdownTeam}
@@ -190,7 +231,9 @@ export const NnMasterMappingForm = ({ onSearch }: Props) => {
             className={styles.dropdown}
           />
         </div>
-        <button type='button' className={styles.searchButton} onClick={onSearch}>조회 (F5)</button>
+        <button type='button' className={styles.searchButton} onClick={onSearch}>
+          조회 (F5)
+        </button>
       </div>
 
       {/* Project Popup (COM0005 공용 modal 재사용) */}
@@ -201,14 +244,16 @@ export const NnMasterMappingForm = ({ onSearch }: Props) => {
           set({ projectCode: projects });
           setOpenProjectModal(false);
         }}
-        preSearchParams={{
-          divisionId: sc.divisionId,
-          deptId: sc.deptId,
-          endCustomer: sc.endCustomer,
-          salesSite: sc.scmSiteId,
-          projectCode: sc.projectCode,
-          etc: 'N',
-        } as never}
+        preSearchParams={
+          {
+            divisionId: sc.divisionId,
+            deptId: sc.deptId,
+            endCustomer: sc.endCustomer,
+            salesSite: sc.scmSiteId,
+            projectCode: sc.projectCode,
+            etc: 'N',
+          } as never
+        }
         callFromCell={false}
       />
 
@@ -220,16 +265,17 @@ export const NnMasterMappingForm = ({ onSearch }: Props) => {
           set({ itemId: items });
           setOpenItemModal(false);
         }}
-        preSearchParams={{
-          divisionId: sc.divisionId,
-          deptId: sc.deptId,
-          endCustomer: sc.endCustomer,
-          salesSite: sc.scmSiteId,
-          projectCode: sc.projectCode,
-          itemId: sc.itemId,
-        } as never}
+        preSearchParams={
+          {
+            divisionId: sc.divisionId,
+            deptId: sc.deptId,
+            endCustomer: sc.endCustomer,
+            salesSite: sc.scmSiteId,
+            projectCode: sc.projectCode,
+            itemId: sc.itemId,
+          } as never
+        }
         callFromCell={false}
-        headerTitle='Model/Nickname Popup'
       />
     </div>
   );

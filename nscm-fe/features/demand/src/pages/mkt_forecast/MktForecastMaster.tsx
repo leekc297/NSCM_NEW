@@ -64,6 +64,9 @@ export const MktForecastMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
   const staticMeasures = useMktForecastMasterStore(s => s.staticMeasures);
   const fetchStaticColumns = useMktForecastMasterStore(s => s.fetchStaticColumns);
   const fetchStaticMeasures = useMktForecastMasterStore(s => s.fetchStaticMeasures);
+  // ⭐ grid-column-setting-popup-pattern.md (#58) §2 — ColumnSettingModal OK 결과 store 영속
+  const visibleBaseColumns = useMktForecastMasterStore(s => s.visibleBaseColumns);
+  const setVisibleBaseColumns = useMktForecastMasterStore(s => s.setVisibleBaseColumns);
 
   // ⭐ master hook §3 / child hook menu-button-dynamic-fetch §2.1 —
   //   admin SYS0009 Menu Button (`SCM_ADM_MNU_BTN_MPG_M` USE_YN + `USER_GR_MNU_BTN_MPG_M` 권한) 동적 fetch.
@@ -103,17 +106,19 @@ export const MktForecastMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   하드코딩 array 금지 (이전 7 SQL_ID 하드코딩 제거).
   const comboInventory = useMemo(() => {
     const cols = staticColumns[SHEETS.MAIN] ?? [];
-    const seen = new Set<string>();
     const items: { colNm: string; sqlId: string }[] = [];
     cols.forEach(c => {
       const cellTp = String((c as Record<string, unknown>).cellCtrlObjTpCd ?? '');
       const sqlId  = String((c as Record<string, unknown>).cellCboDataTp ?? '');
       if (cellTp === 'FPComboBox' && sqlId) {
         items.push({ colNm: String(c.colNm ?? ''), sqlId });
-        seen.add(sqlId);
       }
     });
-    return { items, sqlIds: Array.from(seen) };
+    // ⭐ cascade-combo-filter.md §3 Map dedup 적용 (2026-06-18) — Set 대신 Map 기반 복합 key.
+    //   복합 unique key = `${sqlId}` (single 컬럼이지만 패턴 통일). 향후 division 컨텍스트 추가 시
+    //   `${divisionId}|${sqlId}` 패턴으로 확장.
+    const sqlIds = [...new Map(items.map(it => [it.sqlId, it.sqlId])).values()];
+    return { items, sqlIds };
   }, [staticColumns]);
 
   // useTabComboQueries 의 filters: @divisionId 매개변수 필요한 SQL (FcstType / CustomsHandbook 등) 분기
@@ -517,8 +522,18 @@ export const MktForecastMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
         sheetName='main'
         columnType='main'
         divisionId={sc.divisionId}
-        fallbackColumns={MAIN_COLUMNS.filter(c => c.visible !== false).map(c => ({ key: c.key, header: c.header, width: c.width }))}
-        onSave={() => { /* SCM_MST_TITLESET_USER 영구 저장 */ }}
+        fallbackColumns={(() => {
+          const visibleSet = visibleBaseColumns.length > 0 ? new Set(visibleBaseColumns) : null;
+          return MAIN_COLUMNS.filter(c => c.visible !== false).map(c => ({
+            key: c.key,
+            header: c.header,
+            width: c.width,
+            visible: visibleSet === null ? true : visibleSet.has(c.key),
+          }));
+        })()}
+        onSave={settings => {
+          setVisibleBaseColumns(settings.map(s => s.COLUMN_NAME));
+        }}
       />
 
       {/* Phase 5 — MasterChg modal */}

@@ -16,6 +16,8 @@ import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { FROZEN_COL_COUNT, MAIN_COLUMNS, type MainColumnMeta } from '../mkt-forecast-master.constants';
 import { useMktForecastDynamicColumns } from '../hooks/useMktForecastDynamicColumns';
 import type { MeasureMeta, MktFcstRow, SearchCondition } from '../mkt-forecast-master.types';
+import { useMktForecastMasterStore } from '../useMktForecastMasterStore';
+import { getMonthWeekIndex } from '../utils/bucketDate';
 import { getDivisionVisibility } from '../utils/divisionBranch';
 
 export interface ComboItem { CODE: string; NAME: string }
@@ -55,11 +57,22 @@ interface Props {
 const NO_MERGE_KEYS = new Set(['MEASURE', 'YYYYMMDD', 'QTY', 'EDIT_FLAG']);
 const COL_META: Map<string, MainColumnMeta> = new Map(MAIN_COLUMNS.map(c => [c.key, c]));
 
-const getDynKey = (binding: string): { kind: 'D' | 'W' | 'M' | ''; ym: string; wk: string } => {
-  if (binding.startsWith('D_') && binding.length === 10) return { kind: 'D', ym: `${binding.slice(2, 6)}-${binding.slice(6, 8)}`, wk: binding.slice(8, 10) };
-  if (binding.startsWith('W_') && binding.length === 10) return { kind: 'W', ym: `${binding.slice(2, 6)}-${binding.slice(6, 8)}`, wk: binding.slice(8, 10) };
-  if (binding.startsWith('M_') && binding.length === 8)  return { kind: 'M', ym: `${binding.slice(2, 6)}-${binding.slice(6, 8)}`, wk: '' };
-  return { kind: '', ym: '', wk: '' };
+// ⭐ 2026-06-18 사용자 명시 — Bucket 3종 다단 헤더 (Daily/Weekly: 3단 / Monthly: 2단)
+//   - Daily   : row 0=YYYY-MM / row 1=W{monthWeekIdx} / row 2=DD
+//   - Weekly  : row 0=YYYY-MM / row 1=W{monthWeekIdx} / row 2=Sum
+//   - Monthly : row 0=YYYY-MM / row 1=Sum / row 2=(빈)
+//   - mwi : 월 안 주차 인덱스 (월 변경 시 별도 — 같은 ym + 같은 mwi 일 때만 row 1 머지)
+const getDynKey = (binding: string): { kind: 'D' | 'W' | 'M' | ''; ym: string; dd: string; mwi: number } => {
+  if (binding.startsWith('D_') && binding.length === 10) {
+    return { kind: 'D', ym: `${binding.slice(2, 6)}-${binding.slice(6, 8)}`, dd: binding.slice(8, 10), mwi: getMonthWeekIndex(binding.slice(2, 10)) };
+  }
+  if (binding.startsWith('W_') && binding.length === 10) {
+    return { kind: 'W', ym: `${binding.slice(2, 6)}-${binding.slice(6, 8)}`, dd: binding.slice(8, 10), mwi: getMonthWeekIndex(binding.slice(2, 10)) };
+  }
+  if (binding.startsWith('M_') && binding.length === 8) {
+    return { kind: 'M', ym: `${binding.slice(2, 6)}-${binding.slice(6, 8)}`, dd: '', mwi: 0 };
+  }
+  return { kind: '', ym: '', dd: '', mwi: 0 };
 };
 
 // 자매 DMF0020 SalesFuturePriceFlexGrid 정확 동등 패턴 (사용자 명시 요구 2026-06-07):
@@ -149,7 +162,14 @@ export const MktForecastMasterGrid = ({
   }, [staticColumns, divisionId]);
 
   // ⭐ master hook §11.1 Step 3 — visible=true 만 렌더링 (admin VISIBLE_FLAG='N' 즉시 반영)
-  const fixedColumns = useMemo(() => mergedColumns.filter(c => c.visible), [mergedColumns]);
+  //   + grid-column-setting-popup-pattern.md (#58) §4 — ColumnSettingModal 사용자 hidden 적용
+  const visibleBaseColumnsList = useMktForecastMasterStore(s => s.visibleBaseColumns);
+  const fixedColumns = useMemo(() => {
+    const base = mergedColumns.filter(c => c.visible);
+    if (visibleBaseColumnsList.length === 0) return base;
+    const allowed = new Set(visibleBaseColumnsList);
+    return base.filter(c => allowed.has(c.binding));
+  }, [mergedColumns, visibleBaseColumnsList]);
 
   // HierarchicalMergeManager — Data Cell + ColumnHeader 머지
   const mergeManager = useMemo(() => {
@@ -174,34 +194,26 @@ export const MktForecastMasterGrid = ({
             if (String(ra.EDIT_FLAG ?? '') === 'I' || String(rb.EDIT_FLAG ?? '') === 'I') return false;
             return leftBindings.every(k => String(ra[k] ?? '') === String(rb[k] ?? ''));
           };
+          // ⭐ viewport row 제한 (wijmo-merge-sticky-content.md v4, 2026-06-18 보강)
+          //   기존: row 만 viewRange 측 이동 (vrTop) — row2 누락
+          //   변경: row + row2 양쪽 viewport 제한 + DMF0020/DMF0043 표준 양식 통일
+          const minRow = panel.viewRange.row;
+          const maxRow = panel.viewRange.row2;
           let r1 = r, r2 = r;
-          while (r1 > 0 && sameRow(r1 - 1, r)) r1--;
-          while (r2 < view.length - 1 && sameRow(r2 + 1, r)) r2++;
+          while (r1 > minRow && sameRow(r1 - 1, r)) r1--;
+          while (r2 < maxRow && sameRow(r2 + 1, r)) r2++;
           if (r1 === r2) return null;
-          // ⭐ 2026-06-16 sticky merge — 시작 row 측 viewRange.row 측 이동
-          const vrTop = (panel.grid as unknown as { viewRange?: { row: number } } | undefined)?.viewRange?.row ?? 0;
-          const stickyStart = Math.max(r1, vrTop);
-          if (stickyStart >= r2) return null;
-          return new CellRange(stickyStart, c, r2, c);
+          return new CellRange(r1, c, r2, c);
         }
 
         if (panel.cellType === CellType.ColumnHeader) {
           if (fixedBindings.includes(binding)) return new CellRange(0, c, 2, c);
           const dyn = getDynKey(binding);
+          // ⭐ 2026-06-18 사용자 명시 — Bucket 별 다단 헤더 머지 logic
+          //   Daily/Weekly: row 0 = 같은 YYYY-MM 머지 / row 1 = 같은 ym AND 같은 mwi 머지 (월 변경 시 별도)
+          //   Monthly: 머지 없음 (각 leaf 가 자기 자신 1 cell — row 0=ym / row 1=Sum)
           if (dyn.kind === 'D' || dyn.kind === 'W') {
             if (r === 0) {
-              let c1 = c, c2 = c;
-              while (c1 > 0) {
-                const p = getDynKey(panel.columns[c1 - 1].binding ?? '');
-                if ((p.kind === 'D' || p.kind === 'W') && p.ym.slice(0, 4) === dyn.ym.slice(0, 4)) c1--; else break;
-              }
-              while (c2 < panel.columns.length - 1) {
-                const n = getDynKey(panel.columns[c2 + 1].binding ?? '');
-                if ((n.kind === 'D' || n.kind === 'W') && n.ym.slice(0, 4) === dyn.ym.slice(0, 4)) c2++; else break;
-              }
-              return new CellRange(0, c1, 0, c2);
-            }
-            if (r === 1) {
               let c1 = c, c2 = c;
               while (c1 > 0) {
                 const p = getDynKey(panel.columns[c1 - 1].binding ?? '');
@@ -211,21 +223,22 @@ export const MktForecastMasterGrid = ({
                 const n = getDynKey(panel.columns[c2 + 1].binding ?? '');
                 if ((n.kind === 'D' || n.kind === 'W') && n.ym === dyn.ym) c2++; else break;
               }
+              return new CellRange(0, c1, 0, c2);
+            }
+            if (r === 1) {
+              let c1 = c, c2 = c;
+              while (c1 > 0) {
+                const p = getDynKey(panel.columns[c1 - 1].binding ?? '');
+                if ((p.kind === 'D' || p.kind === 'W') && p.ym === dyn.ym && p.mwi === dyn.mwi) c1--; else break;
+              }
+              while (c2 < panel.columns.length - 1) {
+                const n = getDynKey(panel.columns[c2 + 1].binding ?? '');
+                if ((n.kind === 'D' || n.kind === 'W') && n.ym === dyn.ym && n.mwi === dyn.mwi) c2++; else break;
+              }
               return new CellRange(1, c1, 1, c2);
             }
-          } else if (dyn.kind === 'M' && r === 0) {
-            const yr = dyn.ym.slice(0, 4);
-            let c1 = c, c2 = c;
-            while (c1 > 0) {
-              const p = getDynKey(panel.columns[c1 - 1].binding ?? '');
-              if (p.kind === 'M' && p.ym.slice(0, 4) === yr) c1--; else break;
-            }
-            while (c2 < panel.columns.length - 1) {
-              const n = getDynKey(panel.columns[c2 + 1].binding ?? '');
-              if (n.kind === 'M' && n.ym.slice(0, 4) === yr) c2++; else break;
-            }
-            return new CellRange(0, c1, 0, c2);
           }
+          // Monthly — 머지 없음 (단일 leaf cell)
         }
 
         return null;
@@ -244,13 +257,19 @@ export const MktForecastMasterGrid = ({
     if (e.panel.cellType === CellType.ColumnHeader) {
       const dyn = getDynKey(binding);
       if (dyn.kind) {
-        // dynamic col 3-row header
-        if (e.row === 0) e.cell.textContent = dyn.ym.slice(0, 4);   // Year
-        else if (e.row === 1) e.cell.textContent = dyn.ym.slice(5, 7); // Month
-        else if (e.row === 2) {
-          if (dyn.kind === 'D') e.cell.textContent = dyn.wk;
-          else if (dyn.kind === 'W') e.cell.textContent = `W${dyn.wk}`;
-          else e.cell.textContent = '월';
+        // ⭐ 2026-06-18 사용자 명시 — Bucket 3종 다단 헤더 textContent
+        //   Daily   : row 0=YYYY-MM / row 1=W{mwi} / row 2=DD
+        //   Weekly  : row 0=YYYY-MM / row 1=W{mwi} / row 2=Sum
+        //   Monthly : row 0=YYYY-MM / row 1=Sum   / row 2=(빈)
+        if (e.row === 0) {
+          e.cell.textContent = dyn.ym;
+        } else if (e.row === 1) {
+          if (dyn.kind === 'M') e.cell.textContent = 'Sum';
+          else e.cell.textContent = `W${dyn.mwi}`;
+        } else if (e.row === 2) {
+          if (dyn.kind === 'D') e.cell.textContent = dyn.dd;
+          else if (dyn.kind === 'W') e.cell.textContent = 'Sum';
+          else e.cell.textContent = '';
         }
         (e.cell as HTMLElement).style.textAlign = 'center';
       } else if (fixedColumns.some(c => c.binding === binding)) {

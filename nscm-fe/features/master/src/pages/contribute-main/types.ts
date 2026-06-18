@@ -45,9 +45,9 @@ export interface SalesRow {
 }
 
 export interface SearchCondition {
-  yyyy: string;     // usrYear 선택 년도
-  verSeq: string;   // usrYear 선택 verSeq
-  his: 'Y' | 'N';   // usrHis
+  yyyy: string; // usrYear 선택 년도
+  verSeq: string; // usrYear 선택 verSeq
+  his: 'Y' | 'N'; // usrHis
   dis: 'ALL' | 'N'; // usrDiscard (불일치 조회)
   chkYear: boolean; // chkYear (년도별 필터)
 }

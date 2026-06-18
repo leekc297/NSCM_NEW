@@ -1,1 +1,1 @@
-export { ErpEdiMaster } from './ErpEdiMaster';
+export { default as ErpEdiMaster } from './ErpEdiMaster';

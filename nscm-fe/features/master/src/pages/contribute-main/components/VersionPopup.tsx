@@ -91,7 +91,7 @@ export const VersionPopup = () => {
     enabled: open && !!selectedYear,
   });
 
-  // ⚠️ useProcMutation array payload BE unfold 안 됨 (모든 IN NULL) → apiClient.post 직접 호출
+  // useProcMutation array payload BE unfold 안 됨 (모든 IN NULL) → apiClient.post 직접 호출
   // (ContributeMain.tsx handleSave line 161~ 동일 패턴)
 
   // popup open + Year 콤보 default — AS-IS 의 yearPopup SP 첫 항목 ('ALL') 자동 선택
@@ -184,7 +184,8 @@ export const VersionPopup = () => {
     // row.binding=value 미반영 사고 방지 (사용자 신규 row 입력 흐름)
     gridRef.current?.finishEditing();
     // rows state + wijmo collectionView items 둘 다 source 로 사용 — 최신 신규 row 반영 보장
-    const cvItems = (gridRef.current?.collectionView?.items as VersionRow[]) ?? [];
+    // const cvItems = (gridRef.current?.collectionView?.items as VersionRow[] | undefined) ?? [];
+    const cvItems = gridRef.current?.collectionView?.items ?? [];
     const sourceRows = cvItems.length > rows.length ? cvItems : rows;
     const dirty = [...sourceRows.filter(isDirty), ...deletedRowsRef.current];
     if (dirty.length === 0) {
@@ -208,7 +209,10 @@ export const VersionPopup = () => {
       }
     }
 
-    const ok = await setAlert({ type: 'confirm', content: `${dirty.length}건을 저장하시겠습니까? (MSG00004)` });
+    const ok = await setAlert({
+      type: 'confirm',
+      content: `${dirty.length}건을 저장하시겠습니까? (MSG00004)`,
+    });
     if (!ok) return;
 
     const buf = {
@@ -337,11 +341,7 @@ export const VersionPopup = () => {
 
           {/* EDIT 토글 제거 (2026-06-11) — 추가/삭제/저장 항상 동작 */}
           <div className={styles.actionBar}>
-            <button
-              type='button'
-              className={styles.actionButton}
-              onClick={handleInsert}
-            >
+            <button type='button' className={styles.actionButton} onClick={handleInsert}>
               추가
             </button>
             <button
@@ -358,11 +358,7 @@ export const VersionPopup = () => {
             >
               저장
             </button>
-            <button
-              type='button'
-              className={styles.actionButton}
-              onClick={() => setOpen(false)}
-            >
+            <button type='button' className={styles.actionButton} onClick={() => setOpen(false)}>
               닫기
             </button>
           </div>

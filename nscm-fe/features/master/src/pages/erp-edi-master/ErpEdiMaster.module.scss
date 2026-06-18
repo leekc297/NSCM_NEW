@@ -17,7 +17,7 @@
 }
 
 // 3단 분리 — DMF0004 패턴 (height:0 + flex-grow N).
-// 비율 3:3:4 (Summary 30% / Repair 30% / Tab 40%) — 사용자 요구 2026-06-11
+// 2026-06-17 사용자 요구: 비율 3:3:4 (Summary 30% / Repair 30% / Tab 40%)
 // reference: features/master/src/pages/sales-site/SalesSite.module.scss
 .summarySection {
   height: 0;

@@ -18,17 +18,17 @@ import type { SpreadTitleRow } from '../types';
 //   - 루프 종료 후 마지막 Small + Large SUM 머지 (.cs L229~232)
 
 export interface ColumnMeta {
-  binding: string;        // COLUMN_NAME (예: 'M#202401#RBU_0001')
-  large: string;          // LARGE_CLASS_LABEL_NAME
-  small: string;          // SMALL_CLASS_LABEL_NAME
-  leaf: string;           // COLUMN_LABEL_NAME
-  isBase: boolean;        // true → BASE 컬럼 (좌측 고정, 단일 헤더)
-  isHidden: boolean;      // AS-IS .cs L189: ColumnName.IndexOf("B_") > 0 → VisibleColumns(i, false)
+  binding: string; // COLUMN_NAME (예: 'M#202401#RBU_0001')
+  large: string; // LARGE_CLASS_LABEL_NAME
+  small: string; // SMALL_CLASS_LABEL_NAME
+  leaf: string; // COLUMN_LABEL_NAME
+  isBase: boolean; // true → BASE 컬럼 (좌측 고정, 단일 헤더)
+  isHidden: boolean; // AS-IS .cs L189: ColumnName.IndexOf("B_") > 0 → VisibleColumns(i, false)
   width: number;
 }
 
 export interface MergeRange {
-  row: number;            // 0 = Large, 1 = Small (Leaf=2 는 자기 자신)
+  row: number; // 0 = Large, 1 = Small (Leaf=2 는 자기 자신)
   leftCol: number;
   rightCol: number;
   text: string;
@@ -71,7 +71,7 @@ export const buildHeaderMergeRanges = (metas: ColumnMeta[]): MergeRange[] => {
 
   for (let i = 1; i < metas.length; i++) {
     const m = metas[i];
-    if (m.isBase) continue;        // BASE 영역은 row 0/1/2 세로 머지 (formatItem 처리)
+    if (m.isBase) continue; // BASE 영역은 row 0/1/2 세로 머지 (formatItem 처리)
 
     if (m.large !== lastLarge) {
       // AS-IS .cs L203: row 0 large 머지

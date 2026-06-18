@@ -97,19 +97,45 @@ export const generateBucketKeys = (
   return [];
 };
 
-// Bucket key 에서 header label 추출
+// ⭐ 2026-06-18 사용자 명시 — 월 안 주차 인덱스 (W1/W2/W3...)
+//   사용자 요구: "월이 변경되는 경우 년월별 주차 별도 표기"
+//   → Weekly/Daily 의 row 1 (주차) 헤더에서 같은 달 안의 주만 같은 W 번호로 묶임.
+//   같은 W 라도 다른 달에 걸치면 별도 cell (자동 — 같은 W 가 다른 ym 이면 mergeManager 가 분리).
+//
+// 정의: 그 달 1일이 속한 주 = W1. 그 다음 월요일부터 W2/W3/...
+export const getMonthWeekIndex = (yyyymmdd: string): number => {
+  const d = parseYyyymmdd(yyyymmdd);
+  const firstOfMonth = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1));
+  // 그 달 1일의 월요일 (그 주의 시작 — 1일이 화요일이면 전달 마지막 월요일)
+  const firstDow = firstOfMonth.getUTCDay();
+  const firstMondayOffset = firstDow === 0 ? -6 : 1 - firstDow;
+  const firstMonday = new Date(firstOfMonth);
+  firstMonday.setUTCDate(firstMonday.getUTCDate() + firstMondayOffset);
+  // d 의 월요일
+  const dDow = d.getUTCDay();
+  const dMondayOffset = dDow === 0 ? -6 : 1 - dDow;
+  const dMonday = new Date(d);
+  dMonday.setUTCDate(dMonday.getUTCDate() + dMondayOffset);
+  const diffMs = dMonday.getTime() - firstMonday.getTime();
+  const diffWeeks = Math.round(diffMs / (7 * 24 * 3600 * 1000));
+  return diffWeeks + 1;
+};
+
+// Bucket key 에서 header label 추출 (Wijmo Column.header — 단일 row fallback)
+//   ⚠️ MktForecastMasterGrid 는 3-row columnHeaders + formatItem 으로 직접 textContent 설정.
+//      이 함수는 단일 row header 인 다른 화면용 / fallback.
 export const getBucketHeader = (key: string): string => {
   if (key.startsWith('D_')) {
     const d = key.slice(2);
-    return `${d.slice(4, 6)}/${d.slice(6, 8)}`;
+    return `${d.slice(0, 4)}-${d.slice(4, 6)}-${d.slice(6, 8)}`;
   }
   if (key.startsWith('W_')) {
     const d = key.slice(2);
-    return `W ${d.slice(4, 6)}/${d.slice(6, 8)}`;
+    return `${d.slice(0, 4)}-${d.slice(4, 6)} W${getMonthWeekIndex(d)}`;
   }
   if (key.startsWith('M_')) {
     const d = key.slice(2);
-    return `${d.slice(0, 4)}/${d.slice(4, 6)}`;
+    return `${d.slice(0, 4)}-${d.slice(4, 6)}`;
   }
   return key;
 };

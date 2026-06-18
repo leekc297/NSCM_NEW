@@ -15,7 +15,7 @@ export enum SHEETS {
   SALES_SITE = 'salesSite',
   SSPM = 'sspm',
   DIVISION = 'division',
-  UPDATE_HISTORY = 'updateHistory',  // AS-IS .cs L2918: DMF0000_GET_UPDATE_HISTORY (SDATE/EDATE/UPDATED_BY)
+  UPDATE_HISTORY = 'updateHistory', // AS-IS .cs L2918: DMF0000_GET_UPDATE_HISTORY (SDATE/EDATE/UPDATED_BY)
 }
 
 // const object — enum 대체 (NSCM 단일 cursor 표준 'o_rc1' 다수 중복 허용)
@@ -26,6 +26,7 @@ export const RESPONSE_SET = {
   SSPM: 'o_rc1',
   DIVISION: 'o_rc1',
   UPDATE_HISTORY: 'o_rc1',
+  O_RC1: 'o_rc1',
 } as const;
 export type RESPONSE_SET = (typeof RESPONSE_SET)[keyof typeof RESPONSE_SET];
 
@@ -48,3 +49,8 @@ export const REPAIR_FLAG_OPTIONS: ReadonlyArray<{ value: string; label: string }
   { value: 'Y', label: '정비 필요' },
   { value: 'N', label: '정상' },
 ];
+
+export enum SHEET_INDEX {
+  SALES_SITE,
+  SSPM,
+}

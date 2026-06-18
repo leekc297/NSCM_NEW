@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react';
 
-import { useTabProcQuery } from '@shared/hooks';
+import { apiClient } from '@foundation/apis';
+import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
+import { Button } from '@shared/lges';
+import { FunctionSearchIcon } from '@shared/lges-icons';
 
+import type { SearchParamProps } from '../../customer-model-mapping/customer-model-mapping.types';
 import { MENU_ID, SHEETS } from '../contribute-view.constants';
 import type { VersionOption, ViewSearchCondition } from '../types';
 import { useContributeViewStore } from '../useContributeViewStore';
@@ -10,7 +14,7 @@ import styles from './ContributeViewForm.module.scss';
 
 interface Props {
   onSearch: () => void;
-  onOpenVersionPopup: () => void;        // AS-IS btnSPVer_Click (.cs L453)
+  onOpenVersionPopup: () => void; // AS-IS btnSPVer_Click (.cs L453)
 }
 
 // AS-IS DMF0043_Contribute_View Designer.cs 조회조건 9 컨트롤 1:1 매핑
@@ -52,30 +56,32 @@ export const ContributeViewForm = ({ onSearch, onOpenVersionPopup }: Props) => {
         yyyy: String(first.NAME2 ?? first.NAME ?? '').substring(0, 4),
       });
     }
-  }, [yearData]);
+    void apiClient
+      .get<
+        { paramNm: keyof SearchParamProps; paramCtn: string }[]
+      >(`/admin/menu/${MENU_ID}/search-conditions`)
+      .then(res => {
+        if (res.data.result?.length > 0) {
+          const searchParams = res.data.result.reduce((acc, curr) => {
+            acc[curr.paramNm] = curr.paramCtn;
+            return acc;
+          }, {} as SearchParamProps);
+          setSearchCondition(searchParams);
+        }
+      });
+  }, []);
 
   const setCond = (k: keyof ViewSearchCondition, v: string) =>
     setSearchCondition({ [k]: v } as Partial<ViewSearchCondition>);
 
-  // AS-IS .cs L112: Data.Common(Data.Type.DMF0005_REPORT_GROUP3) — 제품군 lookup
-  //   To-Be 의 standalone lookup SP 미등록 → 정적 옵션 + 추후 SCM_ADM_LOOKUP_MASTER_DETAIL
-  //   (LOOKUP_TYPE='REPORT_GROUP2') 기반 SP 등록 후 동적 전환.
-  const PRODUCT_GROUP_OPTIONS = [
-    { value: 'ALL', label: 'ALL' },
-    { value: 'LCD', label: 'LCD' },
-    { value: 'OLED', label: 'OLED' },
-    { value: 'TR', label: 'TR' },
-    { value: 'POL', label: 'POL' },
-  ];
+  const [reportGroup, dmBizType] = useTabComboQueries({
+    filters: ['ReportGroup3', 'DmBizType'],
+  });
 
-  // AS-IS .cs L115: Data.Common(Data.Type.DM_BIZ_TYPE) — Biz lookup
-  //   To-Be SCM_ADM_LOOKUP_MASTER_DETAIL (LOOKUP_TYPE='DM_BIZ_TYPE_40') 기반 추후 동적.
-  const BIZ_TYPE_OPTIONS = [
-    { value: 'ALL', label: 'ALL' },
-    { value: 'SET', label: 'SET' },
-    { value: 'BIZ', label: 'BIZ' },
-    { value: 'Total', label: 'Total' },
-  ];
+  const PRODUCT_GROUP_OPTIONS =
+    reportGroup?.map(item => ({ label: item.NAME, value: item.CODE })) ?? [];
+
+  const BIZ_TYPE_OPTIONS = dmBizType?.map(item => ({ label: item.NAME, value: item.CODE })) ?? [];
 
   return (
     <div className={styles.searchBar}>
@@ -95,7 +101,7 @@ export const ContributeViewForm = ({ onSearch, onOpenVersionPopup }: Props) => {
               });
             }}
           >
-            <option value=''>{yearLoading ? '로딩 중...' : '선택'}</option>
+            {yearLoading ?? <option value=''>로딩 중</option>}
             {yearOptions.map(o => (
               <option key={String(o.CODE)} value={String(o.CODE)}>
                 {String(o.NAME2 ?? o.NAME ?? o.CODE)}
@@ -115,15 +121,17 @@ export const ContributeViewForm = ({ onSearch, onOpenVersionPopup }: Props) => {
             placeholder='버전 선택'
           />
           {/* AS-IS btnSPVer (Designer.cs L163~197): UsrButton image — Version popup */}
-          <button
-            type='button'
-            className={styles.iconButton}
-            onClick={onOpenVersionPopup}
-            title='SP Version 선택'
-            aria-label='SP Version 선택'
-          >
-            ⋯
-          </button>
+          {/* ⭐ 2026-06-17 사용자 요구 — DMF0005 (SalesSiteProjectModelForm L199-208) 패턴 동일. */}
+          <Button
+            appearance='outlined'
+            priority='normal'
+            iconComponent={
+              <FunctionSearchIcon
+                appearance='lined'
+                onClick={onOpenVersionPopup}
+              />
+            }
+          />
         </div>
 
         {/* AS-IS usrCust (Designer.cs L304~336): UsrMultiLineEditor free-form

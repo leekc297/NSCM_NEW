@@ -119,12 +119,7 @@ export const SearchBar = ({ onSearch, onOpenVersionPopup }: Props) => {
         </label>
 
         {/* 기여율버전관리 — 일단 hidden (룰 보강 후 재노출 검토) */}
-        <button
-          type='button'
-          className={styles.cutoffButton}
-          onClick={onOpenVersionPopup}
-          hidden
-        >
+        <button type='button' className={styles.cutoffButton} onClick={onOpenVersionPopup} hidden>
           기여율버전관리
         </button>
 

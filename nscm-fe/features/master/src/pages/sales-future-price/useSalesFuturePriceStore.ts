@@ -29,6 +29,9 @@ interface State {
   activeTab: 'main' | 'pivot';
   staticColumns: StaticColumnsBySheet;
   staticMeasures: StaticMeasuresBySheet;
+  // ⭐ grid-column-setting-popup-pattern.md (#58) — ColumnSettingModal OK 결과 저장.
+  //   빈 array = default (모든 base 컬럼 visible). 값 있음 = list 에 포함된 컬럼만 표시.
+  visibleBaseColumns: string[];
 }
 
 interface Action {
@@ -39,6 +42,7 @@ interface Action {
   setActiveTab: (tab: 'main' | 'pivot') => void;
   fetchStaticColumns: () => Promise<void>;
   fetchStaticMeasures: () => Promise<void>;
+  setVisibleBaseColumns: (names: string[]) => void;
 }
 
 const yyyymmdd = (d: Date) => d.toISOString().slice(0, 10).replace(/-/g, '');
@@ -82,6 +86,7 @@ const initState: State = {
   activeTab: 'main',
   staticColumns: emptyCols,
   staticMeasures: emptyMeasures,
+  visibleBaseColumns: [],
 };
 
 export const useSalesFuturePriceStore = createPersistedStoreWithTab<State & Action>(
@@ -155,6 +160,11 @@ export const useSalesFuturePriceStore = createPersistedStoreWithTab<State & Acti
         console.warn('[DMF0020] fetchStaticMeasures failed', e);
       }
     },
+    // ⭐ grid-column-setting-popup-pattern.md (#58) §1.1 — ColumnSettingModal OK 결과 저장.
+    setVisibleBaseColumns: names =>
+      set(state => {
+        state.visibleBaseColumns = names;
+      }),
   }),
   'sales-future-price',
 );

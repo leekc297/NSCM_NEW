@@ -19,7 +19,7 @@ import { useTabComboQueries } from '@shared/hooks';
 import { BUCKET_TYPE, MAIN_COLUMNS } from '../sales-future-price.constants';
 import type { FuturePriceRow } from '../sales-future-price.types';
 import styles from '../SalesFuturePrice.module.scss';
-import type { MeasureMeta } from '../useSalesFuturePriceStore';
+import { useSalesFuturePriceStore, type MeasureMeta } from '../useSalesFuturePriceStore';
 
 interface Props {
   rows: FuturePriceRow[];
@@ -108,8 +108,16 @@ export const SalesFuturePriceFlexGrid = ({
     });
   }, [staticColumns]);
 
-  // visible=true 만 화면에 노출
-  const visibleColumns = useMemo(() => mergedColumns.filter(c => c.visible), [mergedColumns]);
+  // ⭐ grid-column-setting-popup-pattern.md (#58) §1.4 — ColumnSettingModal OK 결과 반영.
+  //   store.visibleBaseColumns 가 빈 array (default) = 모두 visible.
+  //   값 있음 = list 에 포함된 binding 만 표시 (좌측 이동된 column 은 grid 에서 숨김).
+  const visibleBaseColumnsList = useSalesFuturePriceStore(s => s.visibleBaseColumns);
+  const visibleColumns = useMemo(() => {
+    const base = mergedColumns.filter(c => c.visible);
+    if (visibleBaseColumnsList.length === 0) return base;
+    const allowed = new Set(visibleBaseColumnsList);
+    return base.filter(c => allowed.has(c.binding));
+  }, [mergedColumns, visibleBaseColumnsList]);
   const fixedBindings = useMemo(() => visibleColumns.map(c => c.binding), [visibleColumns]);
 
   // ===== Grid 내 combo column dropdown — useTabComboQueries + Wijmo DataMap =====
@@ -364,9 +372,12 @@ export const SalesFuturePriceFlexGrid = ({
                   if (!ra || !rb) return false;
                   return leftBindings.every(k => ((ra as Record<string, string>)[k] ?? '') === ((rb as Record<string, string>)[k] ?? ''));
                 };
+                // ⭐ viewport row 제한 (wijmo-merge-sticky-content.md v4, 2026-06-18)
+                const minRow = panel.viewRange.row;
+                const maxRow = panel.viewRange.row2;
                 let r1 = r, r2 = r;
-                while (r1 > 0 && sameRow(r1 - 1, r)) r1--;
-                while (r2 < view.length - 1 && sameRow(r2 + 1, r)) r2++;
+                while (r1 > minRow && sameRow(r1 - 1, r)) r1--;
+                while (r2 < maxRow && sameRow(r2 + 1, r)) r2++;
                 if (r1 === r2) return null;
                 return new CellRange(r1, c, r2, c);
               }
@@ -418,6 +429,8 @@ export const SalesFuturePriceFlexGrid = ({
             }
           }
           g.mergeManager = new HierarchicalMergeManager();
+          // ⭐ viewport sticky — scroll 시 머지 재계산 (wijmo-merge-sticky-content.md v4, 2026-06-18)
+          g.scrollPositionChanged.addHandler(() => g.invalidate());
         }}
         itemsSource={rows}
         autoGenerateColumns={false}

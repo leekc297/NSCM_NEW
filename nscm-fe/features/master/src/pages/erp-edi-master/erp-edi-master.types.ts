@@ -9,6 +9,6 @@ export interface SearchParamProps {
   soldToCode: string;
   shipToCode: string;
   activeFlag: string;
-  periodFrom: string;  // YYYYMMDD
-  periodTo: string;    // YYYYMMDD
+  periodFrom: string; // YYYYMMDD
+  periodTo: string; // YYYYMMDD
 }

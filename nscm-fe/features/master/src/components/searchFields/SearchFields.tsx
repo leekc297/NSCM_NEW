@@ -50,7 +50,7 @@ interface SingleFieldProps {
 interface MultiFieldProps {
   value: string[];
   onChange: (v: string[]) => void;
-  division?: string;       // 종속 필터용
+  division?: string; // 종속 필터용
 }
 interface PopupFieldProps {
   value: string[];
@@ -72,10 +72,13 @@ const useL = () => {
 // row type 을 string-keyed 로 강제 (eslint no-base-to-string / restrict-template-expressions 회피)
 const toOptions = (rows: Array<Record<string, unknown>> | undefined, divisionId?: string) => {
   const arr = (rows ?? []) as unknown as Array<Record<string, string>>;
-  return [...new Map(
-    arr.filter(r => !divisionId || !r.DIVISION_ID || r.DIVISION_ID === divisionId)
-       .map(r => [`${r.DIVISION_ID ?? ''}|${r.CODE ?? ''}`, r] as const),
-  ).values()].map(r => ({ label: String(r.NAME ?? r.CODE ?? ''), value: String(r.CODE ?? '') }));
+  return [
+    ...new Map(
+      arr
+        .filter(r => !divisionId || !r.DIVISION_ID || r.DIVISION_ID === divisionId)
+        .map(r => [`${r.DIVISION_ID ?? ''}|${r.CODE ?? ''}`, r] as const)
+    ).values(),
+  ].map(r => ({ label: String(r.NAME ?? r.CODE ?? ''), value: String(r.CODE ?? '') }));
 };
 
 // 'ALL' 기본값 helper — P_COM0006/P_COM0008 SP WHERE 절 `(P_X='ALL' OR ...)` 패턴 대응
@@ -90,7 +93,10 @@ interface PopupSearchInputProps {
   onOpenPopup: () => void;
 }
 const popupRowStyle: React.CSSProperties = {
-  display: 'flex', alignItems: 'stretch', gap: 4, width: '100%',
+  display: 'flex',
+  alignItems: 'stretch',
+  gap: 4,
+  width: '100%',
 };
 const PopupSearchInput = ({ value, onValueChange, onOpenPopup }: PopupSearchInputProps) => (
   <div style={popupRowStyle}>
@@ -117,13 +123,21 @@ export const DivisionField = ({ value, onChange }: SingleFieldProps) => {
   const [divisions] = useTabComboQueries({ filters: ['MyDivision'] });
   return (
     <Grid size={4}>
-      <FormItem label={L('LBL00501', 'Div')} labelAlign='right' required render={() => (
-        <CustomDropdown
-          value={value}
-          options={(divisions ?? []).map(item => ({ label: String(item.NAME), value: String(item.CODE) }))}
-          onChange={(_, option) => onChange(String(option))}
-        />
-      )} />
+      <FormItem
+        label={L('LBL00501', 'Div')}
+        labelAlign='right'
+        required
+        render={() => (
+          <CustomDropdown
+            value={value}
+            options={(divisions ?? []).map(item => ({
+              label: String(item.NAME),
+              value: String(item.CODE),
+            }))}
+            onChange={(_, option) => onChange(String(option))}
+          />
+        )}
+      />
     </Grid>
   );
 };
@@ -136,14 +150,27 @@ export const TeamField = ({ value, onChange, division }: MultiFieldProps) => {
   const [teams] = useTabComboQueries({ filters: ['TeambyDivision'] });
   return (
     <Grid size={4}>
-      <FormItem label={L('LBL00502', 'Team')} labelAlign='right' render={() => (
-        <CustomDropdown
-          multiple allOption useClearIcon limitTags={1}
-          value={value.join(',')}
-          options={toOptions(teams as never, division)}
-          onChange={(_, options) => onChange(String(options ?? '').split(',').filter(Boolean))}
-        />
-      )} />
+      <FormItem
+        label={L('LBL00502', 'Team')}
+        labelAlign='right'
+        render={() => (
+          <CustomDropdown
+            multiple
+            allOption
+            useClearIcon
+            limitTags={1}
+            value={value.join(',')}
+            options={toOptions(teams as never, division)}
+            onChange={(_, options) =>
+              onChange(
+                String(options ?? '')
+                  .split(',')
+                  .filter(Boolean)
+              )
+            }
+          />
+        )}
+      />
     </Grid>
   );
 };
@@ -156,14 +183,27 @@ export const EndCustomerField = ({ value, onChange, division }: MultiFieldProps)
   const [endCustomers] = useTabComboQueries({ filters: ['EndCustomer'] });
   return (
     <Grid size={4}>
-      <FormItem label={L('LBL00503', 'End Customer')} labelAlign='right' render={() => (
-        <CustomDropdown
-          multiple allOption useClearIcon limitTags={1}
-          value={value.join(',')}
-          options={toOptions(endCustomers as never, division)}
-          onChange={(_, options) => onChange(String(options ?? '').split(',').filter(Boolean))}
-        />
-      )} />
+      <FormItem
+        label={L('LBL00503', 'End Customer')}
+        labelAlign='right'
+        render={() => (
+          <CustomDropdown
+            multiple
+            allOption
+            useClearIcon
+            limitTags={1}
+            value={value.join(',')}
+            options={toOptions(endCustomers as never, division)}
+            onChange={(_, options) =>
+              onChange(
+                String(options ?? '')
+                  .split(',')
+                  .filter(Boolean)
+              )
+            }
+          />
+        )}
+      />
     </Grid>
   );
 };
@@ -176,14 +216,27 @@ export const SalesSiteField = ({ value, onChange, division }: MultiFieldProps) =
   const [salesSites] = useTabComboQueries({ filters: ['SalesSite'] });
   return (
     <Grid size={4}>
-      <FormItem label={L('LBL00506', 'Sales Site')} labelAlign='right' render={() => (
-        <CustomDropdown
-          multiple allOption useClearIcon limitTags={1}
-          value={value.join(',')}
-          options={toOptions(salesSites as never, division)}
-          onChange={(_, options) => onChange(String(options ?? '').split(',').filter(Boolean))}
-        />
-      )} />
+      <FormItem
+        label={L('LBL00506', 'Sales Site')}
+        labelAlign='right'
+        render={() => (
+          <CustomDropdown
+            multiple
+            allOption
+            useClearIcon
+            limitTags={1}
+            value={value.join(',')}
+            options={toOptions(salesSites as never, division)}
+            onChange={(_, options) =>
+              onChange(
+                String(options ?? '')
+                  .split(',')
+                  .filter(Boolean)
+              )
+            }
+          />
+        )}
+      />
     </Grid>
   );
 };
@@ -196,14 +249,27 @@ export const PlantSiteField = ({ value, onChange, division }: MultiFieldProps) =
   const [salesSites] = useTabComboQueries({ filters: ['SalesSite'] });
   return (
     <Grid size={4}>
-      <FormItem label={L('LBL00509', 'Plant Site')} labelAlign='right' render={() => (
-        <CustomDropdown
-          multiple allOption useClearIcon limitTags={1}
-          value={value.join(',')}
-          options={toOptions(salesSites as never, division)}
-          onChange={(_, options) => onChange(String(options ?? '').split(',').filter(Boolean))}
-        />
-      )} />
+      <FormItem
+        label={L('LBL00509', 'Plant Site')}
+        labelAlign='right'
+        render={() => (
+          <CustomDropdown
+            multiple
+            allOption
+            useClearIcon
+            limitTags={1}
+            value={value.join(',')}
+            options={toOptions(salesSites as never, division)}
+            onChange={(_, options) =>
+              onChange(
+                String(options ?? '')
+                  .split(',')
+                  .filter(Boolean)
+              )
+            }
+          />
+        )}
+      />
     </Grid>
   );
 };
@@ -216,14 +282,27 @@ export const BizTypeField = ({ value, onChange }: Omit<MultiFieldProps, 'divisio
   const [bizTypes] = useTabComboQueries({ filters: ['BizType'] });
   return (
     <Grid size={4}>
-      <FormItem label={L('LBL00504', 'Biz.Type')} labelAlign='right' render={() => (
-        <CustomDropdown
-          multiple allOption useClearIcon limitTags={1}
-          value={value.join(',')}
-          options={toOptions(bizTypes as never)}
-          onChange={(_, options) => onChange(String(options ?? '').split(',').filter(Boolean))}
-        />
-      )} />
+      <FormItem
+        label={L('LBL00504', 'Biz.Type')}
+        labelAlign='right'
+        render={() => (
+          <CustomDropdown
+            multiple
+            allOption
+            useClearIcon
+            limitTags={1}
+            value={value.join(',')}
+            options={toOptions(bizTypes as never)}
+            onChange={(_, options) =>
+              onChange(
+                String(options ?? '')
+                  .split(',')
+                  .filter(Boolean)
+              )
+            }
+          />
+        )}
+      />
     </Grid>
   );
 };
@@ -237,30 +316,46 @@ export const ProjectField = (props: PopupFieldProps) => {
   const { value, onChange, division, deptIds, endCustomers, scmSiteIds, projectCodes } = props;
   return (
     <Grid size={4}>
-      <FormItem label={L('LBL00507', 'Project')} labelAlign='right' render={() => (
-        <PopupSearchInput
-          value={value.join(',')}
-          onValueChange={v => onChange(v.split(',').map(s => s.trim()).filter(Boolean))}
-          onOpenPopup={() => setOpen(true)}
-        />
-      )} />
+      <FormItem
+        label={L('LBL00507', 'Project')}
+        labelAlign='right'
+        render={() => (
+          <PopupSearchInput
+            value={value.join(',')}
+            onValueChange={v =>
+              onChange(
+                v
+                  .split(',')
+                  .map(s => s.trim())
+                  .filter(Boolean)
+              )
+            }
+            onOpenPopup={() => setOpen(true)}
+          />
+        )}
+      />
       <ProjectByDivisionModal
         open={open}
         modalClose={() => setOpen(false)}
         setSelectedValue={(projects: string) => {
-          onChange(projects.split(',').map(s => s.trim()).filter(Boolean));
+          onChange(
+            projects
+              .split(',')
+              .map(s => s.trim())
+              .filter(Boolean)
+          );
           setOpen(false);
         }}
-        preSearchParams={{
-          divisionId: division,
-          deptId: orAll(deptIds),
-          endCustomer: orAll(endCustomers),
-          // ⭐ 사내 표준 PROC_M(PKG_COM0000.P_COM0005_...) COL_NM 'salesSite' 정렬 (NOT 'scmSiteId').
-          salesSite: orAll(scmSiteIds),
-          // ⭐ SP 'p_project_code' 는 '' 또는 NULL 만 "전체" 의미 처리. 'ALL' 보내면 LIKE 'ALL%' 매치 0 row.
-          projectCode: projectCodes && projectCodes.length > 0 ? projectCodes.join(',') : '',
-          etc: 'N',
-        } as never}
+        preSearchParams={
+          {
+            divisionId: division,
+            deptId: orAll(deptIds),
+            endCustomer: orAll(endCustomers),
+            salesSite: orAll(scmSiteIds),
+            projectCode: orAll(projectCodes),
+            etc: 'N',
+          } as never
+        }
         callFromCell={false}
       />
     </Grid>
@@ -276,31 +371,50 @@ interface ItemFieldProps extends PopupFieldProps {
 export const ItemField = (props: ItemFieldProps) => {
   const L = useL();
   const [open, setOpen] = useState(false);
-  const { value, onChange, division, deptIds, endCustomers, scmSiteIds, projectCodes, itemIds } = props;
+  const { value, onChange, division, deptIds, endCustomers, scmSiteIds, projectCodes, itemIds } =
+    props;
   return (
     <Grid size={4}>
-      <FormItem label={L('LBL00508', 'Model / Nickname')} labelAlign='right' render={() => (
-        <PopupSearchInput
-          value={value.join(',')}
-          onValueChange={v => onChange(v.split(',').map(s => s.trim()).filter(Boolean))}
-          onOpenPopup={() => setOpen(true)}
-        />
-      )} />
+      <FormItem
+        label={L('LBL00508', 'Model / Nickname')}
+        labelAlign='right'
+        render={() => (
+          <PopupSearchInput
+            value={value.join(',')}
+            onValueChange={v =>
+              onChange(
+                v
+                  .split(',')
+                  .map(s => s.trim())
+                  .filter(Boolean)
+              )
+            }
+            onOpenPopup={() => setOpen(true)}
+          />
+        )}
+      />
       <ItemByDivisionModal
         open={open}
         modalClose={() => setOpen(false)}
         setSelectedValue={(items: string) => {
-          onChange(items.split(',').map(s => s.trim()).filter(Boolean));
+          onChange(
+            items
+              .split(',')
+              .map(s => s.trim())
+              .filter(Boolean)
+          );
           setOpen(false);
         }}
-        preSearchParams={{
-          divisionId: division,
-          deptId: orAll(deptIds),
-          endCustomer: orAll(endCustomers),
-          salesSite: orAll(scmSiteIds),
-          projectCode: orAll(projectCodes),
-          itemId: itemIds && itemIds.length > 0 ? itemIds.join(',') : '',
-        } as never}
+        preSearchParams={
+          {
+            divisionId: division,
+            deptId: orAll(deptIds),
+            endCustomer: orAll(endCustomers),
+            salesSite: orAll(scmSiteIds),
+            projectCode: orAll(projectCodes),
+            itemId: itemIds && itemIds.length > 0 ? itemIds.join(',') : '',
+          } as never
+        }
         headerTitle='Model / Nickname'
         callFromCell={false}
       />
@@ -317,31 +431,50 @@ interface OwnerFieldProps extends PopupFieldProps {
 export const OwnerField = (props: OwnerFieldProps) => {
   const L = useL();
   const [open, setOpen] = useState(false);
-  const { value, onChange, division, deptIds, endCustomers, scmSiteIds, projectCodes, owners } = props;
+  const { value, onChange, division, deptIds, endCustomers, scmSiteIds, projectCodes, owners } =
+    props;
   return (
     <Grid size={4}>
-      <FormItem label={L('LBL00510', 'Owner')} labelAlign='right' render={() => (
-        <PopupSearchInput
-          value={value.join(',')}
-          onValueChange={v => onChange(v.split(',').map(s => s.trim()).filter(Boolean))}
-          onOpenPopup={() => setOpen(true)}
-        />
-      )} />
+      <FormItem
+        label={L('LBL00510', 'Owner')}
+        labelAlign='right'
+        render={() => (
+          <PopupSearchInput
+            value={value.join(',')}
+            onValueChange={v =>
+              onChange(
+                v
+                  .split(',')
+                  .map(s => s.trim())
+                  .filter(Boolean)
+              )
+            }
+            onOpenPopup={() => setOpen(true)}
+          />
+        )}
+      />
       <OwnerByDivisionModal
         open={open}
         modalClose={() => setOpen(false)}
         setSelectedValue={(o: string) => {
-          onChange(o.split(',').map(s => s.trim()).filter(Boolean));
+          onChange(
+            o
+              .split(',')
+              .map(s => s.trim())
+              .filter(Boolean)
+          );
           setOpen(false);
         }}
-        preSearchParams={{
-          divisionId: division,
-          deptId: orAll(deptIds),
-          endCustomer: orAll(endCustomers),
-          salesSite: orAll(scmSiteIds),
-          projectCode: orAll(projectCodes),
-          owner: owners && owners.length > 0 ? owners.join(',') : '',
-        } as never}
+        preSearchParams={
+          {
+            divisionId: division,
+            deptId: orAll(deptIds),
+            endCustomer: orAll(endCustomers),
+            salesSite: orAll(scmSiteIds),
+            projectCode: orAll(projectCodes),
+            owner: owners && owners.length > 0 ? owners.join(',') : '',
+          } as never
+        }
         ownerId=''
       />
     </Grid>
@@ -366,17 +499,24 @@ export const PeriodField = ({ start, end, onChange }: PeriodFieldProps) => {
   const value: [Dayjs, Dayjs] = [toDayjs(start), end ? toDayjs(end) : dayjs().add(90, 'day')];
   return (
     <Grid size={8}>
-      <FormItem label={L('LBL00505', 'Period')} labelAlign='right' required render={() => (
-        <DatePickerCalendar
-          usecase='date-range-multi'
-          elevation
-          size='small'
-          value={value}
-          onChange={((date: [Dayjs, Dayjs]) => {
-            onChange(date[0]?.format('YYYYMMDD') ?? '', date[1]?.format('YYYYMMDD') ?? '');
-          }) as never}
-        />
-      )} />
+      <FormItem
+        label={L('LBL00505', 'Period')}
+        labelAlign='right'
+        required
+        render={() => (
+          <DatePickerCalendar
+            usecase='date-range-multi'
+            elevation
+            size='small'
+            value={value}
+            onChange={
+              ((date: [Dayjs, Dayjs]) => {
+                onChange(date[0]?.format('YYYYMMDD') ?? '', date[1]?.format('YYYYMMDD') ?? '');
+              }) as never
+            }
+          />
+        )}
+      />
     </Grid>
   );
 };
@@ -394,19 +534,27 @@ export const BucketField = ({ value, onChange }: BucketFieldProps) => {
   const options = (buckets ?? [])
     .map(item => ({ label: String(item.NAME ?? item.CODE), value: String(item.CODE) }))
     .filter(o => o.value === 'W' || o.value === 'M');
-  const effective = options.length > 0 ? options : [
-    { label: 'Weekly', value: 'W' },
-    { label: 'Monthly', value: 'M' },
-  ];
+  const effective =
+    options.length > 0
+      ? options
+      : [
+          { label: 'Weekly', value: 'W' },
+          { label: 'Monthly', value: 'M' },
+        ];
   return (
     <Grid size={2}>
-      <FormItem label={L('LBL00511', 'Bucket')} labelAlign='right' required render={() => (
-        <CustomDropdown
-          value={value || 'W'}
-          options={effective}
-          onChange={(_, option) => onChange((String(option) === 'M' ? 'M' : 'W'))}
-        />
-      )} />
+      <FormItem
+        label={L('LBL00511', 'Bucket')}
+        labelAlign='right'
+        required
+        render={() => (
+          <CustomDropdown
+            value={value || 'W'}
+            options={effective}
+            onChange={(_, option) => onChange(String(option) === 'M' ? 'M' : 'W')}
+          />
+        )}
+      />
     </Grid>
   );
 };
@@ -422,13 +570,20 @@ export const VersionField = ({ value, onOpenPopup }: VersionFieldProps) => {
   const L = useL();
   return (
     <Grid size={6}>
-      <FormItem label={L('LBL00513', 'Version')} labelAlign='right' required render={() => (
-        <PopupSearchInput
-          value={value || 'Current'}
-          onValueChange={() => { /* Version 은 popup 선택만, 직접 입력 안 함 */ }}
-          onOpenPopup={onOpenPopup}
-        />
-      )} />
+      <FormItem
+        label={L('LBL00513', 'Version')}
+        labelAlign='right'
+        required
+        render={() => (
+          <PopupSearchInput
+            value={value || 'Current'}
+            onValueChange={() => {
+              /* Version 은 popup 선택만, 직접 입력 안 함 */
+            }}
+            onOpenPopup={onOpenPopup}
+          />
+        )}
+      />
     </Grid>
   );
 };
@@ -444,15 +599,18 @@ export const SearchOverRangeField = ({ value, onChange }: CheckFieldProps) => {
   const L = useL();
   return (
     <Grid size={4}>
-      <FormItem label={L('LBL00512', 'Search over range')} labelAlign='right' render={() => (
-        <input
-          type='checkbox'
-          checked={value}
-          onChange={e => onChange(e.target.checked)}
-          style={{ marginLeft: 8, transform: 'scale(1.2)' }}
-        />
-      )} />
+      <FormItem
+        label={L('LBL00512', 'Search over range')}
+        labelAlign='right'
+        render={() => (
+          <input
+            type='checkbox'
+            checked={value}
+            onChange={e => onChange(e.target.checked)}
+            style={{ marginLeft: 8, transform: 'scale(1.2)' }}
+          />
+        )}
+      />
     </Grid>
   );
 };
-

@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { apiClient } from '@foundation/apis';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { MainTitle, SubTitle } from '@shared/components';
-import { useTabProcQuery } from '@shared/hooks';
+import { useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
 import { useMessageStore } from '@shared/stores';
 
 import { ColumnSettingModal, ItemByDivisionModal, ProjectByDivisionModal } from '../../components';
@@ -55,6 +55,14 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   const staticMeasures = useSalesFuturePriceStore(s => s.staticMeasures);
   const fetchStaticColumns = useSalesFuturePriceStore(s => s.fetchStaticColumns);
   const fetchStaticMeasures = useSalesFuturePriceStore(s => s.fetchStaticMeasures);
+  // ⭐ grid-column-setting-popup-pattern.md (#58) — ColumnSettingModal OK 결과 저장 + Grid filter.
+  const visibleBaseColumns = useSalesFuturePriceStore(s => s.visibleBaseColumns);
+  const setVisibleBaseColumns = useSalesFuturePriceStore(s => s.setVisibleBaseColumns);
+
+  // ⭐ master hook §3 / menu-button-dynamic-fetch §2.1 (DMF0003 reference)
+  //   admin SYS0009 Menu Button (`SCM_ADM_MNU_BTN_MPG_M` USE_YN + `USER_GR_MNU_BTN_MPG_M` 권한) 동적 fetch.
+  //   하드코딩 hotkeyConfig 금지 — admin USE_YN='N' 즉시 반영 보장.
+  const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
 
   const validate = useSalesFuturePriceValidation();
 
@@ -235,11 +243,13 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   F3 Sort / F4 Filter (자동 — `allowSorting=true` + `gridFilter` ref 생략)
   //   F6 Condition / F10 Reset Condition (SubTitle DefaultButtonActions 자동 활성 — DMF0020 은 SalesFuturePriceForm 조회조건 form 있음)
   //   F2 Edit: HotkeyConfig 미지원 (`_F2_Unused`) → actionBar 의 Edit 버튼으로 별도 노출
+  // ⭐ menu-button-dynamic-fetch §2.1 — `hasButton(BTN_CD)` 조건부 callback.
+  //   admin SYS0009 USE_YN='N' 즉시 비활성 (hotkey 무효).
   const hotkeyConfig: HotkeyConfig = {
-    search: handleSearch,
-    insert: handleInsert,
-    save: handleSave,
-    delete: handleDelete,
+    search: hasButton('SEARCH') ? handleSearch : false,
+    insert: hasButton('INSERT') ? handleInsert : false,
+    save: hasButton('SAVE') ? handleSave : false,
+    delete: hasButton('DELETE') ? handleDelete : false,
     manual: false,
     upload: false,
   };
@@ -329,8 +339,24 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         sheetName='main'
         columnType='main'
         divisionId={sc.divisionId}
-        fallbackColumns={MAIN_COLUMNS.map(c => ({ key: c.key, header: c.header, width: c.width }))}
-        onSave={() => { /* TODO: SCM_USR_TITLE_SET 영구 저장 */ }}
+        // ⭐ grid-column-setting-popup-pattern.md (#58) §1.2 — fallbackColumns 의 visible flag
+        //   매칭. visibleBaseColumns 빈 array (첫 진입) = 모두 visible.
+        //   값 있음 = list 에 포함된 column 만 visible → popup 재진입 시 이전 이동 내역 복원.
+        fallbackColumns={(() => {
+          const visibleSet =
+            visibleBaseColumns.length > 0 ? new Set(visibleBaseColumns) : null;
+          return MAIN_COLUMNS.map(c => ({
+            key: c.key,
+            header: c.header,
+            width: c.width,
+            visible: visibleSet === null ? true : visibleSet.has(c.key),
+          }));
+        })()}
+        onSave={settings => {
+          // ⭐ §1.3 — ColumnSettingModal 은 USER_FLAG='Y' rows (= 우측 visible) 만 전달.
+          //   사용자가 좌측으로 이동한 column = settings 에 미포함 → grid 에서 숨김.
+          setVisibleBaseColumns(settings.map(s => s.COLUMN_NAME));
+        }}
       />
       <SalesPriceRangeModal
         open={openRange}
