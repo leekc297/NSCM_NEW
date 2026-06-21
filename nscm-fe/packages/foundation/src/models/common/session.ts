@@ -1,6 +1,7 @@
 import type { Menu } from './menu';
 
 export interface UserSession {
+  groupId: string;
   langCd: string;
   userId: string;
   userEngNm: string;

@@ -1,5 +1,5 @@
 import { SearchArea } from '@shared/components';
-import { FormItem, InputField } from '@shared/lges';
+import { FormItem } from '@shared/lges';
 import { Grid } from '@shared/mui';
 
 import { useGroupUserStore } from '../useGroupUserStore';
@@ -19,18 +19,7 @@ export const GroupUserForm = () => {
       isHidden={!isOpenSearchArea}
       conditions={
         <Grid size={3}>
-          <FormItem
-            label={t('LBL00623', 'Search')}
-            labelAlign='right'
-            render={() => (
-              <InputField
-                fullWidth
-                value={searchParams.search}
-                onChange={event => setSearchParams({ search: event.target.value })}
-                onKeyDown={event => event.key === 'Enter' && setMainFilter()}
-              />
-            )}
-          />
+          <FormItem label='' labelAlign='right' render={() => <></>} />
         </Grid>
       }
     />

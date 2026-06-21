@@ -8,11 +8,7 @@ import '@foundation/styles/wijmo/wijmo.scss';
 
 const root = document.getElementById('root');
 if (root) {
-  ReactDOM.createRoot(root).render(
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  );
+  ReactDOM.createRoot(root).render(<App />);
 }
 
 // TODO: remove, non-strict 테스트용

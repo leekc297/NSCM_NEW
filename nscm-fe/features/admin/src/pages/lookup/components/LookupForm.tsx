@@ -1,5 +1,5 @@
 import { CustomDropdown, SearchArea } from '@shared/components';
-import { useTabComboQueries } from '@shared/hooks';
+import { useTabComboQueries, useTabLookupQueries } from '@shared/hooks';
 import { FormItem, InputField } from '@shared/lges';
 import { Grid } from '@shared/mui';
 
@@ -18,8 +18,16 @@ export const LookupForm = ({ onSubmit }: LookupFormProps) => {
   const setSearchParams = useLookupStore(state => state.setSearchParams);
   const isOpenSearchArea = useLookupStore(state => state.isOpenSearchArea);
 
-  const [system, yesOrNo] = useTabComboQueries({
-    filters: ['LookupCommon', 'YesOrNo'],
+  const [system] = useTabLookupQueries({
+    filters: [
+      {
+        lookupType: 'SYSTEM',
+      },
+    ],
+  });
+
+  const [yesOrNo] = useTabComboQueries({
+    filters: ['YesOrNo'],
   });
 
   return (
@@ -31,7 +39,7 @@ export const LookupForm = ({ onSubmit }: LookupFormProps) => {
         <>
           <Grid size={4}>
             <FormItem
-              label={t('LBL00618', 'Lookup Type')}
+              label={t('LBL00636', 'Lookup Type')}
               labelAlign='right'
               labelSize='long'
               render={() => (
@@ -46,7 +54,7 @@ export const LookupForm = ({ onSubmit }: LookupFormProps) => {
           </Grid>
           <Grid size={4}>
             <FormItem
-              label={t('LBL00621', 'System')}
+              label={t('LBL00638', 'System')}
               labelAlign='right'
               labelSize='long'
               render={() => (
@@ -70,7 +78,7 @@ export const LookupForm = ({ onSubmit }: LookupFormProps) => {
           </Grid>
           <Grid size={4}>
             <FormItem
-              label={t('LBL00622', 'Valid')}
+              label={t('LBL00639', 'Valid')}
               labelAlign='right'
               labelSize='long'
               render={() => (

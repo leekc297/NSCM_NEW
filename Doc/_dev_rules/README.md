@@ -5,21 +5,21 @@
 
 ---
 
-## 0. 룰셋 v2 진입점 (의무)
+## 0. 룰셋 진입점 (의무 — 2026-06-18 단일화 R-1)
 
 ```
-1. Read: Doc/_rules_v2/anti-simplification.md   ⚠️ 최우선
-2. Read: Doc/_rules_v2/CLAUDE.md                ← 분기 라우터
-3. Read: Doc/_rules_v2/00_INDEX.md              ← 17 트리거 매트릭스
+1. Read: Doc/_rules_v2/anti-simplification.md          ⚠️ 최우선
+2. Read: Doc/_rules_consolidation/RULESET_MASTER.md    ← ⭐ 단일 진입 (트리거 + 69 hook + UI 체크리스트)
+3. Read: Doc/_rules_v2/00_INDEX.md                      ← 상세 카탈로그
 ```
 
-상세는 `Doc/_rules_v2/CLAUDE.md` 참조.
+상세는 루트 `CLAUDE.md` → `Doc/_rules_consolidation/RULESET_MASTER.md` 참조.
 
 ---
 
-## 1. 현재 유지되는 룰 v1 (7 룰)
+## 1. 현재 유지되는 룰 v1 (8 룰) — 2026-06-18 룰 32 등재 (R-5)
 
-> Phase 4 결정 (2026-06-03): 절차/환경 표준은 룰 v2 와 별도로 유지.
+> Phase 4 결정 (2026-06-03): 절차/환경 표준은 룰 v2 와 별도로 유지. 단일 출처 = `RULESET_MASTER §5.4`.
 
 | 룰 # | 토픽 | 사유 |
 |---:|---|---|
@@ -30,6 +30,7 @@
 | `29_LOCAL_DB_CSV_IMPORT.md` | Docker Oracle CSV 적재 | 환경 표준 |
 | `30_LOCAL_BACKUP_RESTORE.md` | 백업/원복 표준 | 환경 표준 |
 | `31_FIGMA_DESIGN_INTEGRATION.md` | Figma → React 매핑 | 절차 표준 |
+| `32_CLAUDE_ORACLE_DIRECT.md` | ⭐ Claude Code Oracle 직결 (SQLcl/oracledb/docker sqlplus) | DB · 2026-06-11 신설, 2026-06-18 정식 등재 |
 
 → 룰 v2 의 `00_INDEX.md §A` 트리거 T10~T13 / T16 에서 자동 분기.
 
@@ -70,14 +71,15 @@
 
 ---
 
-## 3. `hooks/` 폴더 처분
+## 3. `hooks/` 폴더 처분 (2026-06-18 R-5 정리)
 
-> 룰 v1 `hooks/` 안의 hook 들은 룰 v2 `Doc/_rules_v2/hooks/` 에 재작성됨. 일부 trigger-specific hook 은 룰 v1 안에 남아 있음 (특수 trigger):
+> 룰 v2 중복 16종 → `_archive/hooks/` 물리 이동 완료 (grep 노이즈 제거). 미흡수 유니크 10종만 `hooks/` 에 잔존.
+> 상세 = `Doc/_dev_rules/hooks/README.md`.
 
-- `Doc/_dev_rules/hooks/anti-simplification.md` (`_rules_v2/anti-simplification.md` 로 복사 완료, v1 도 유지)
-- 그 외 hook 들 (rule-md-organize / runtime-error-prevention / menu-not-displayed-debug 등) 은 룰 v2 의 `hooks/` 에 통합
+- 잔존 10종 (v2 미흡수): screen-analysis-pre/post/pre-submit · new-screen-pre-build · fe-import-check · module-duplication-check · encoding-check · rule-md-organize · figma-mapping-check · pivot-frozen-columns
+- 이동 16종 위치: `Doc/_dev_rules/_archive/hooks/` · v2 대응: `Doc/_rules_v2/hooks/`
 
-신규 작업 시: 룰 v2 hooks 우선. v1 hooks 는 참고용만.
+신규 작업 시: 룰 v2 hooks (69) 우선. v1 hooks 는 참고용만.
 
 ---
 
@@ -86,5 +88,6 @@
 | 일자 | 변경 |
 |---|---|
 | 2026-06-03 | Phase 4 룰 v2 전환: 24 룰 `_archive/` 이동, 7 룰 유지, README 재작성 |
+| 2026-06-18 | 정합 정비 (R-1/R-5): 진입점 단일화(RULESET_MASTER), 룰 32 정식 등재(7→8), v1 중복 hook 16종 `_archive/hooks/` 이동 |
 
 > Plan 파일: `C:\Users\ejene\.claude\plans\effervescent-beaming-donut.md`

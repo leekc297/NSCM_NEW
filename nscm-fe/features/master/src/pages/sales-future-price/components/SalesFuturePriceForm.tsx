@@ -1,13 +1,22 @@
 import { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { SearchArea } from '@shared/components';
 import { useSessionStore } from '@shared/stores';
 
 import {
-  BizTypeField, BucketField, DivisionField, EndCustomerField, ItemField,
-  OwnerField, PeriodField, PlantSiteField, ProjectField, SalesSiteField,
-  SearchOverRangeField, TeamField, VersionField,
+  BizTypeField,
+  BucketField,
+  DivisionField,
+  EndCustomerField,
+  ItemField,
+  OwnerField,
+  PeriodField,
+  PlantSiteField,
+  ProjectField,
+  SalesSiteField,
+  SearchOverRangeField,
+  TeamField,
+  VersionField,
 } from '../../../components';
 import { BUCKET_TYPE } from '../sales-future-price.constants';
 import { useSalesFuturePriceStore } from '../useSalesFuturePriceStore';
@@ -40,12 +49,14 @@ export const SalesFuturePriceForm = ({ onSearch, onVersionOpen }: Props) => {
   const openSearchArea = useSalesFuturePriceStore(s => s.openSearchArea);
   const userId = useSessionStore(state => state.session.userId);
 
-  useEffect(() => { set({ userId } as never); }, [userId]);
+  useEffect(() => {
+    set({ userId } as never);
+  }, [userId]);
 
   // Division 변경 시 종속 reset (AS-IS clbDivisions_SelectedIndexChanged)
   useEffect(() => {
     set({ deptIds: [], endCustomers: [], scmSiteIds: [], plantSiteIds: [], bizTypes: [] });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sc.divisionId]);
 
   return (
@@ -53,14 +64,25 @@ export const SalesFuturePriceForm = ({ onSearch, onVersionOpen }: Props) => {
       searchButtonLabel={t('LBL00514', { defaultValue: 'Search' })}
       isHidden={!openSearchArea}
       onSearch={onSearch}
+      // ⭐ §3 UI-MANDATORY 10 — 2단 초과 시 `extraConditions` 분리 + 자동 펼치기/닫기 토글 버튼.
+      //    Row 1~2 (Division/Team/EndCustomer + BizType/Period) = 항상 표시.
+      //    Row 3~5 (Site/Project/Plant + Item/Owner/Bucket/Range + Version) = 펼치기 토글로 표시.
       conditions={
         <>
-          {/* Row 1 — 기본 1단 (Division / Team / End Customer) */}
+          {/* Row 1 */}
           <DivisionField value={sc.divisionId} onChange={v => set({ divisionId: v })} />
-          <TeamField value={sc.deptIds} onChange={v => set({ deptIds: v })} division={sc.divisionId} />
-          <EndCustomerField value={sc.endCustomers} onChange={v => set({ endCustomers: v })} division={sc.divisionId} />
+          <TeamField
+            value={sc.deptIds}
+            onChange={v => set({ deptIds: v })}
+            division={sc.divisionId}
+          />
+          <EndCustomerField
+            value={sc.endCustomers}
+            onChange={v => set({ endCustomers: v })}
+            division={sc.divisionId}
+          />
 
-          {/* Row 2 — 기본 2단 (Biz Type / Period) */}
+          {/* Row 2 */}
           <BizTypeField value={sc.bizTypes} onChange={v => set({ bizTypes: v })} />
           <PeriodField
             start={sc.startYyyymmdd}
@@ -69,12 +91,14 @@ export const SalesFuturePriceForm = ({ onSearch, onVersionOpen }: Props) => {
           />
         </>
       }
-      // ⭐ 2026-06-16 — 2단 초과 영역은 extraConditions 로 분리.
-      //   SearchArea 가 Search 버튼 우측에 아래 화살표 표시 → 클릭 시 확대/축소 (DMF0006 sample 패턴)
       extraConditions={
         <>
-          {/* Row 3 — Sales Site / Project / Plant Site */}
-          <SalesSiteField value={sc.scmSiteIds} onChange={v => set({ scmSiteIds: v })} division={sc.divisionId} />
+          {/* Row 3 */}
+          <SalesSiteField
+            value={sc.scmSiteIds}
+            onChange={v => set({ scmSiteIds: v })}
+            division={sc.divisionId}
+          />
           <ProjectField
             value={sc.projectCodes}
             onChange={v => set({ projectCodes: v })}
@@ -84,9 +108,13 @@ export const SalesFuturePriceForm = ({ onSearch, onVersionOpen }: Props) => {
             scmSiteIds={sc.scmSiteIds}
             projectCodes={sc.projectCodes}
           />
-          <PlantSiteField value={sc.plantSiteIds} onChange={v => set({ plantSiteIds: v })} division={sc.divisionId} />
+          <PlantSiteField
+            value={sc.plantSiteIds}
+            onChange={v => set({ plantSiteIds: v })}
+            division={sc.divisionId}
+          />
 
-          {/* Row 4 — Item / Owner / Bucket / SearchOverRange */}
+          {/* Row 4 */}
           <ItemField
             value={sc.itemIds}
             onChange={v => set({ itemIds: v })}
@@ -109,11 +137,16 @@ export const SalesFuturePriceForm = ({ onSearch, onVersionOpen }: Props) => {
           />
           <BucketField
             value={sc.bucketType}
-            onChange={v => set({ bucketType: v === 'M' ? BUCKET_TYPE.MONTHLY : BUCKET_TYPE.WEEKLY })}
+            onChange={v =>
+              set({ bucketType: v === 'M' ? BUCKET_TYPE.MONTHLY : BUCKET_TYPE.WEEKLY })
+            }
           />
-          <SearchOverRangeField value={sc.searchOverRange} onChange={v => set({ searchOverRange: v })} />
+          <SearchOverRangeField
+            value={sc.searchOverRange}
+            onChange={v => set({ searchOverRange: v })}
+          />
 
-          {/* Row 5 — Version */}
+          {/* Row 5 */}
           <VersionField value={sc.versionId} onOpenPopup={onVersionOpen} />
         </>
       }

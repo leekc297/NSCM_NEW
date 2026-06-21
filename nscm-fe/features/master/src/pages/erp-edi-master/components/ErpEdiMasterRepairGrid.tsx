@@ -6,18 +6,23 @@ import { GridUtils } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 
 import type { MENU_ID, SHEETS } from '../erp-edi-master.constants';
+import { applyReadOnlyColoring } from '../erp-edi-master.utils';
 import { useErpEdiMasterStore } from '../useErpEdiMasterStore';
 
 interface ErpEdiMasterRepairGridProps {
   gridRef: MutableRefObject<FlexGrid<ResponseData<MENU_ID, SHEETS.REPAIR>> | undefined>;
   gridFilterRef: MutableRefObject<FlexGridFilter | undefined>;
   data: ResponseData<MENU_ID, SHEETS.REPAIR>[];
-  onDblClick: (col: number, row: ResponseData<MENU_ID, SHEETS.REPAIR>) => void;
+  /** AS-IS .cs L1973 column index 분기 매핑 — SALES_SITE 또는 SSPM 단일 sheet target */
+  onDblClick: (targetSheet: 'SALES_SITE' | 'SSPM', row: ResponseData<MENU_ID, SHEETS.REPAIR>) => void;
 }
 
-const REPAIR_STATUS_COLUMNS = new Set([
-  'GSCM_SALES_SITE_ID',
-  'ACTIVE_SS',
+// AS-IS .cs L1032/L1150 — '확인필요' 컬러 대상 7 컬럼
+// AS-IS .cs L1322/L1361 — 더블클릭 후 0 row 응답 시 표시되는 MessageBox 메시지 분류:
+//   - SALES_SITE / ACTIVE_SS 가 확인필요 → MSG00445 "Sales Site UI에서 Sales Site를 추가하시기 바랍니다."
+//   - GSCM_SSPM ~ PLANT 가 확인필요  → MSG00446 "Sales Site Project Model UI에서 데이터를 추가하시기 바랍니다."
+const REPAIR_STATUS_COLUMNS_SALES_SITE = new Set(['GSCM_SALES_SITE_ID', 'ACTIVE_SS']);
+const REPAIR_STATUS_COLUMNS_SSPM = new Set([
   'GSCM_SSPM',
   'GSCM_SSPM_INCOTERMS',
   'ACTIVE_SSPM',
@@ -25,31 +30,17 @@ const REPAIR_STATUS_COLUMNS = new Set([
   'PLANT_SITE_STATUS',
 ]);
 
-// AS-IS .cs L1253/L1349/L1370 — '확인필요' 셀 더블클릭 시 표시되는 메시지 (column 별 분기).
-//   GSCM_SALES_SITE_ID / ACTIVE_SS  → MSG00445 (Sales Site UI 추가)
-//   GSCM_SSPM / GSCM_SSPM_INCOTERMS / ACTIVE_SSPM → MSG00446 (SSPM UI 추가)
-//   PROJECT_STATUS / PLANT_SITE_STATUS  → 일반 확인 필요 안내
-//
-// 2026-06-17 사용자 요구: 더블클릭 (Wijmo 에디터 진입) 대신 mouseover tooltip 으로 표시.
-const REPAIR_CONFIRM_MSG: Record<string, string> = {
-  GSCM_SALES_SITE_ID: 'Sales Site UI에서 Sales Site를 추가하시기 바랍니다',
-  ACTIVE_SS: 'Sales Site UI에서 Sales Site를 추가하시기 바랍니다',
-  GSCM_SSPM: 'SSPM UI에서 SSPM을 추가하시기 바랍니다',
-  GSCM_SSPM_INCOTERMS: 'SSPM UI에서 SSPM을 추가하시기 바랍니다',
-  ACTIVE_SSPM: 'SSPM UI에서 SSPM을 추가하시기 바랍니다',
-  PROJECT_STATUS: 'Project Status 확인이 필요합니다',
-  PLANT_SITE_STATUS: 'Plant Site Status 확인이 필요합니다',
-};
-
 export const ErpEdiMasterRepairGrid = ({
   gridRef,
   gridFilterRef,
   data,
   onDblClick,
 }: ErpEdiMasterRepairGridProps) => {
+  const { t } = useTranslation();
   const staticColumns = useErpEdiMasterStore(state => state.staticColumns.repair);
 
-  // Repair 셀 더블클릭 → Sub 탭 분기 (col < GSCM_SSPM ? SALES_SITE : SSPM)
+  // AS-IS .cs L1973: column < GSCM_SSPM_INDEX → SALES_SITE / else → SSPM
+  // To-Be: binding 비교 — REPAIR_STATUS_COLUMNS_SSPM 에 속하거나 그 이후 컬럼 = SSPM.
   const handleDblClick = (mouseEvent: MouseEvent) => {
     const grid = gridRef.current;
     if (!grid) return;
@@ -59,28 +50,42 @@ export const ErpEdiMasterRepairGrid = ({
     const dataItem = GridUtils.getRow(grid, ht.row);
     if (!dataItem) return;
 
-    onDblClick(ht.col, dataItem);
+    const binding = GridUtils.getBinding(grid, ht.col);
+    if (typeof binding !== 'string') return;
+
+    // GSCM_SSPM 컬럼 인덱스를 찾아 비교 (AS-IS column index 기반 분기 1:1 매핑)
+    const gscmSspmCol = grid.columns.findIndex(c => c.binding === 'GSCM_SSPM');
+    const targetSheet: 'SALES_SITE' | 'SSPM' =
+      gscmSspmCol >= 0 && ht.col >= gscmSspmCol ? 'SSPM' : 'SALES_SITE';
+
+    onDblClick(targetSheet, dataItem);
   };
 
-  // 셀 시각: 값=='확인필요' 이고 컬럼 ∈ REPAIR_STATUS_COLUMNS → ForeColor=Red, BackColor=Azure
-  // ⭐ 2026-06-17 사용자 요구 — mouseover tooltip (AS-IS 더블클릭 = Wijmo 에디터 진입 충돌).
-  //   AS-IS 의 더블클릭 메시지를 cell title attribute 로 대체 → 사용자가 셀에 호버 시 native tooltip 표시.
+  // 셀 시각:
+  //   1) base — 조회 전용 grid 회색 (룰 12 §11.7)
+  //   2) override — 값=='확인필요' & 컬럼 ∈ REPAIR_STATUS_COLUMNS → ForeColor=Red, BackColor=Azure
+  //   3) tooltip — '확인필요' 셀에 mouse hover 시 AS-IS .cs L1350/L1370 의 안내 메시지
+  //                (MSG00445 SALES_SITE / MSG00446 SSPM 그룹) 표시 (사용자 요구 2026-06-20).
   const handleFormatItem = (
     grid: FlexGrid<ResponseData<MENU_ID, SHEETS.REPAIR>>,
     args: FormatItemEventArgs
   ) => {
+    applyReadOnlyColoring(grid, args);
     if (args.panel.cellType !== CellType.Cell) return;
     const binding = GridUtils.getBinding(grid, args.col);
-    if (typeof binding !== 'string' || !REPAIR_STATUS_COLUMNS.has(binding)) return;
+    if (typeof binding !== 'string') return;
+    const isSalesSiteCol = REPAIR_STATUS_COLUMNS_SALES_SITE.has(binding);
+    const isSspmCol = REPAIR_STATUS_COLUMNS_SSPM.has(binding);
+    if (!isSalesSiteCol && !isSspmCol) return;
     const row = GridUtils.getRow(grid, args.row);
     if (!row) return;
     const value = row[binding];
     if (value === '확인필요') {
       args.cell.style.color = 'red';
       args.cell.style.backgroundColor = 'azure';
-      // mouseover tooltip — AS-IS 더블클릭 메시지 (MSG00445/MSG00446 등) column 별 분기.
-      args.cell.title = REPAIR_CONFIRM_MSG[binding] ?? '확인 필요';
-      args.cell.style.cursor = 'help';
+      args.cell.title = isSalesSiteCol
+        ? t('MSG00445', '_Sales Site UI에서 Sales Site를 추가하시기 바랍니다.')
+        : t('MSG00446', '_Sales Site Project Model UI에서 데이터를 추가하시기 바랍니다.');
     }
   };
 

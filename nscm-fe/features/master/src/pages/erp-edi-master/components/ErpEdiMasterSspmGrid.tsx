@@ -107,7 +107,13 @@ export const ErpEdiMasterSspmGrid = ({
           open={openProjectModal}
           modalClose={() => setOpenProjectModal(false)}
           setSelectedValue={setProject}
-          preSearchParams={{ divisionId: dataItem?.DIVISION_ID ?? '' } as never}
+          preSearchParams={{
+            divisionId: dataItem?.DIVISION_ID ?? '',
+            deptId: 'ALL',
+            endCustomer: 'ALL',
+            salesSite: 'ALL',
+            projectCode: '',
+          }}
           callFromCell
         />
       )}
@@ -116,7 +122,15 @@ export const ErpEdiMasterSspmGrid = ({
           open={openItemModal}
           modalClose={() => setOpenItemModal(false)}
           setSelectedValue={setItem}
-          preSearchParams={{ divisionId: dataItem?.DIVISION_ID ?? '' } as never}
+          preSearchParams={{
+            divisionId: dataItem?.DIVISION_ID ?? '',
+            deptId: 'ALL',
+            endCustomer: 'ALL',
+            salesSite: 'ALL',
+            projectCode: 'ALL',
+            activeFlag: 'ALL',
+            itemId: '',
+          }}
           callFromCell
         />
       )}
@@ -125,7 +139,14 @@ export const ErpEdiMasterSspmGrid = ({
           open={openOwnerModal}
           modalClose={() => setOpenOwnerModal(false)}
           setSelectedValue={setOwner}
-          preSearchParams={{ divisionId: dataItem?.DIVISION_ID ?? '' } as never}
+          preSearchParams={{
+            divisionId: dataItem?.DIVISION_ID ?? '',
+            deptId: 'ALL',
+            endCustomer: 'ALL',
+            projectCode: 'ALL',
+            salesSite: 'ALL',
+            owner: '',
+          }}
         />
       )}
     </>

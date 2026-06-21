@@ -80,7 +80,10 @@ export const useGroupUserStore = createPersistedStoreWithTab<GroupUserState & Gr
       set(state => {
         state.selectedUserGrId = id;
         state.selectedUserId = '';
-        state.filters[SHEETS.USER_INFO] = { userGrId: id } as ProcRequest<MENU_ID, SHEETS.USER_INFO>;
+        state.filters[SHEETS.USER_INFO] = { userGrId: id } as ProcRequest<
+          MENU_ID,
+          SHEETS.USER_INFO
+        >;
         state.filters[SHEETS.DIVISION] = undefined;
         state.filters[SHEETS.PLANT] = undefined;
         state.filters[SHEETS.CUSTOMER] = undefined;
@@ -90,18 +93,40 @@ export const useGroupUserStore = createPersistedStoreWithTab<GroupUserState & Gr
       const userGrId = get().selectedUserGrId;
       set(state => {
         state.selectedUserId = id;
-        state.filters[SHEETS.DIVISION] = { userGrId, userId: id, unitTpCd: UNIT_TP_CD.DIVISION } as ProcRequest<MENU_ID, SHEETS.DIVISION>;
-        state.filters[SHEETS.PLANT]    = { userGrId, userId: id, unitTpCd: UNIT_TP_CD.PLANT } as ProcRequest<MENU_ID, SHEETS.PLANT>;
-        state.filters[SHEETS.CUSTOMER] = { userGrId, userId: id, unitTpCd: UNIT_TP_CD.CUSTOMER } as ProcRequest<MENU_ID, SHEETS.CUSTOMER>;
+        state.filters[SHEETS.DIVISION] = {
+          userGrId,
+          userId: id,
+          unitTpCd: UNIT_TP_CD.DIVISION,
+        } as ProcRequest<MENU_ID, SHEETS.DIVISION>;
+        state.filters[SHEETS.PLANT] = {
+          userGrId,
+          userId: id,
+          unitTpCd: UNIT_TP_CD.PLANT,
+        } as ProcRequest<MENU_ID, SHEETS.PLANT>;
+        state.filters[SHEETS.CUSTOMER] = {
+          userGrId,
+          userId: id,
+          unitTpCd: UNIT_TP_CD.CUSTOMER,
+        } as ProcRequest<MENU_ID, SHEETS.CUSTOMER>;
       });
     },
     fetchStaticColumns: async () => {
       const [main, userInfo, division, plant, customer] = await Promise.all([
-        apiClient.post<RawFlexGridColumnConfig[]>(`/admin/menu/${MENU_ID}/column`, { sheetNm: SHEETS.MAIN }),
-        apiClient.post<RawFlexGridColumnConfig[]>(`/admin/menu/${MENU_ID}/column`, { sheetNm: SHEETS.USER_INFO }),
-        apiClient.post<RawFlexGridColumnConfig[]>(`/admin/menu/${MENU_ID}/column`, { sheetNm: SHEETS.DIVISION }),
-        apiClient.post<RawFlexGridColumnConfig[]>(`/admin/menu/${MENU_ID}/column`, { sheetNm: SHEETS.PLANT }),
-        apiClient.post<RawFlexGridColumnConfig[]>(`/admin/menu/${MENU_ID}/column`, { sheetNm: SHEETS.CUSTOMER }),
+        apiClient.post<RawFlexGridColumnConfig[]>(`/admin/menu/${MENU_ID}/column`, {
+          sheetNm: SHEETS.MAIN,
+        }),
+        apiClient.post<RawFlexGridColumnConfig[]>(`/admin/menu/${MENU_ID}/column`, {
+          sheetNm: SHEETS.USER_INFO,
+        }),
+        apiClient.post<RawFlexGridColumnConfig[]>(`/admin/menu/${MENU_ID}/column`, {
+          sheetNm: SHEETS.DIVISION,
+        }),
+        apiClient.post<RawFlexGridColumnConfig[]>(`/admin/menu/${MENU_ID}/column`, {
+          sheetNm: SHEETS.PLANT,
+        }),
+        apiClient.post<RawFlexGridColumnConfig[]>(`/admin/menu/${MENU_ID}/column`, {
+          sheetNm: SHEETS.CUSTOMER,
+        }),
       ]);
       set(state => {
         state.staticColumns = {

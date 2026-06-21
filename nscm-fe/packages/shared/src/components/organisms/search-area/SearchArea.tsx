@@ -157,9 +157,8 @@ export const SearchArea = ({
             )}
           </Box>
         </Box>
-        {/* ⭐ 2026-06-16 — 축소 시 DOM 자체 미생성 (display:none + margin-top 으로 인한 form 하단 잔여 공간 제거) */}
-        {!isCustomExtraCondition && isExpanded && extraConditions && (
-          <Box mt={`${size10}px`}>
+        {!isCustomExtraCondition && (
+          <Box mt={`${size10}px`} display={isExpanded ? 'block' : 'none'}>
             <Divider sx={{ background: semantic.color.commonBorderBasic }} />
             <Box
               pt={`${size8}px`}
@@ -179,8 +178,8 @@ export const SearchArea = ({
           </Box>
         )}
       </Box>
-      {isCustomExtraCondition && isExpanded && extraConditions && (
-        <Box mt={`${size10}px`}>
+      {isCustomExtraCondition && (
+        <Box mt={`${size10}px`} display={isExpanded ? 'block' : 'none'}>
           {extraConditions}
         </Box>
       )}

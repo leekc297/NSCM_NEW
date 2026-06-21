@@ -38,7 +38,7 @@ export const ErpEdiMasterSalesSiteGrid = ({
   data,
 }: ErpEdiMasterSalesSiteGridProps) => {
   const { t } = useTranslation();
-  const { setAlert } = useMessageStore();
+  const setAlert = useMessageStore(s => s.setAlert);
   const staticColumns = useErpEdiMasterStore(state => state.staticColumns.salesSite);
 
   const [openCustomerModal, setOpenCustomerModal] = useState(false);
@@ -114,7 +114,7 @@ export const ErpEdiMasterSalesSiteGrid = ({
       if (isDuplicate) {
         void setAlert({
           type: 'alert',
-          content: t('MSG00060', '_필수 입력사항입니다.'),
+          content: t('MSG00607', '_동일 Sales Site 가 이미 존재합니다.'),
         });
         dataItem.SSCM_SITE_ID = '';
       } else {

@@ -58,6 +58,9 @@ check-branch-strategy:
 
       elif [ "$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME" != "stage" ] && [ "$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME" != "dev" ] && [ "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" == "dev" ]; then
         ALLOWED=true
+
+      elif [ "$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME" != "main" ] && [ "$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME" != "stage" ] && [ "$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME" != "dev" ] && [ "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" != "main" ] && [ "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" != "stage" ] && [ "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" != "dev" ]; then
+        ALLOWED=true
       fi
 
       if [ "$ALLOWED" = true ]; then
@@ -79,6 +82,7 @@ install_dependencies:
       when: never
     - if: $CI_COMMIT_BRANCH =~ /^(main|stage|dev)$/
     - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^(main|stage|dev)$/
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^feat/
 
 # 2. 코드 퀄리티 체크
 static_analysis:
@@ -91,6 +95,7 @@ static_analysis:
       when: never
     - if: $CI_COMMIT_BRANCH =~ /^(main|stage|dev)$/
     - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^(main|stage|dev)$/
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^feat/
 
 # 3. 빌드
 build_project:

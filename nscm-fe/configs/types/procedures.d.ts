@@ -375,7 +375,7 @@ interface RawProcedureMap extends Base {
     }
     levelTwoMenu: {
       request: {
-        menuId: string;
+        pUpprMnuId: string;
       };
       response: {
         o_rc: {
@@ -396,7 +396,7 @@ interface RawProcedureMap extends Base {
     }
     levelThreeMenu: {
       request: {
-        menuId: string;
+        pUpprMnuId: string;
       };
       response: {
         o_rc: {
@@ -1274,9 +1274,8 @@ interface RawProcedureMap extends Base {
    * Master - Customer FCST Master
    *
    * - `customerFcst`: MEASURE_GROUP='CUST_FCST' 데이터 (PKG_DMF0007.P_DMF0007_GET_CUST_FCST_DATA)
-   *   저장 SP: PKG_DMF0007.P_DMF0007_SAVE_CUST_FCST_DATA
-   *
-   * 2026-06-15: customerPSI / customerPsiPivot 시트 제거 (사용자 요건 반영).
+   * - `customerPSI` : MEASURE_GROUP='PSI' 데이터 (PKG_DMF0007.P_DMF0007_GET_CUST_PSI_DATA)
+   *   저장 SP 는 두 시트 공용 (PKG_DMF0007.P_DMF0007_SAVE_CUST_FCST_DATA).
    */
   DMF0007: {
     customerFcst: {
@@ -1306,6 +1305,73 @@ interface RawProcedureMap extends Base {
           UPLOAD_ORDER: string;
           EDIT_FLAG: string;
           [key: string]: string;
+        };
+      };
+    };
+    customerPSI: {
+      request: {
+        planWeek: string;
+        divisionId: string;
+        endCustomer: string;
+        scmSiteId: string;
+        bucketType: string;
+        validYn: string;
+        userId: string;
+      };
+      response: {
+        o_rc1: {
+          PLAN_WEEK: string;
+          DIVISION_ID: string;
+          DEPT_ID: string;
+          CUSTOMER_CODE: string;
+          SCM_SITE_ID: string;
+          SUMMARY_BUCKET_TYPE: string;
+          MEASURE_GROUP: string;
+          MEASURE: string;
+          EDI_FCST_YN: string;
+          CUSTOMER_PSI: string;
+          UPLOAD_UOM: string;
+          UPLOAD_BUCKET_TYPE: string;
+          VALID_YN: string;
+          UPLOAD_ORDER: string;
+          EDIT_FLAG: string;
+          [key: string]: string;
+        };
+      };
+    };
+    /**
+     * customerPsiPivot — Wijmo PivotGrid 입력용 long-format raw rows.
+     * SP `P_DMF0007_GET_CUST_PSI_PIVOT_DATA` 반환.
+     */
+    customerPsiPivot: {
+      request: {
+        planWeek: string;
+        divisionId: string;
+        endCustomer: string;
+        scmSiteId: string;
+        bucketType: string;
+        validYn: string;
+        userId: string;
+      };
+      response: {
+        o_rc1: {
+          PLAN_WEEK: string;
+          DIVISION_ID: string;
+          CUSTOMER_CODE: string;
+          SCM_SITE_ID: string;
+          SUMMARY_BUCKET_TYPE: string;
+          SUMMARY_BUCKET_VALUE: string;
+          SUMMARY_BUCKET_YN: string;
+          MEASURE_GROUP: string;
+          MEASURE: string;
+          EDI_FCST_YN: string;
+          CUSTOMER_PSI: string;
+          UPLOAD_UOM: string;
+          UPLOAD_BUCKET_TYPE: string;
+          VALID_YN: string;
+          LAST_UPDATED_BY: string;
+          LAST_UPDATE_DATE: string;
+          EDIT_YN: string;
         };
       };
     };

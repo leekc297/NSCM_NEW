@@ -1,0 +1,26 @@
+// AS-IS DMF0072_NNMasterMapping 검색 폼 — SearchArea + FormItem + InputField + endAdornment Button.
+// reference: ContributeViewForm.module.scss (DMF0043_01) / SalesSiteProjectModelForm.module.scss (DMF0005)
+//
+// inputWithSearch — InputField + endAdornment Button (Project/Model/Nickname Popup trigger)
+//   button position: absolute / right: -40px → input 옆에 별도 영역으로 빠지게 (Input 폭은 변경 없음).
+.inputWithSearch {
+  & > div:first-child {
+    display: flex;
+    align-items: center;
+  }
+  & button {
+    position: absolute;
+    right: -40px;
+  }
+}
+
+// Multi-line label — Model/Nickname 처럼 라벨 텍스트 2단 표시 (Project 검색 button 영역과 시각 분리).
+// white-space: pre-line 으로 t() 결과 안 '\n' 을 line-break 로 렌더.
+.multilineLabel {
+  display: inline-block;
+  line-height: 1.15;
+  font-size: 12px;
+  white-space: pre-line;
+  text-align: right;
+}
+

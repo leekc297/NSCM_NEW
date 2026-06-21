@@ -2,36 +2,38 @@
 //   .container height 100% + dualGrid flex:1 min-height:0 + bottomRow flex-shrink:0 (잘림 방지)
 .container {
   display: flex; flex-direction: column; gap: 8px; padding: 8px;
-  height: 100%; box-sizing: border-box; overflow: hidden;
+  height: 450px; min-height: 350px; max-height: 65vh;
+  box-sizing: border-box; overflow: hidden;
 }
 
-.dualGrid {
-  display: flex; gap: 8px; flex: 1 1 auto; min-height: 0;
+// ColumnSelectDualList wrapper — flex 1 차지 (bottomRow 48px 만큼 제외) + min-height 보장
+.container > div:first-child {
+  flex: 1 1 auto;
+  min-height: 250px;
+  overflow: hidden;
 }
 
-.sideGrid {
-  flex: 1 1 50%; min-width: 0; min-height: 0;
-  border: 1px solid #b8bfc9; border-radius: 4px;
-  background: #fff; overflow: hidden; position: relative;
-}
+.sortToggleBtn {
+  padding: 2px 10px;
+  background: #fff8c5;
+  border: 1px solid #d4af37;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #5a4a00;
+  cursor: pointer;
 
-.centerBtns {
-  display: flex; flex-direction: column; gap: 16px; align-items: center; justify-content: center;
-  width: 60px; flex-shrink: 0;
+  &:hover {
+    background: #ffec80;
+  }
 }
-
-.arrowBtn {
-  width: 44px; height: 38px; font-size: 18px;
-  background: #1976d2; color: white; border: none; border-radius: 4px; cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
-  &:hover { background: #1565c0; }
-}
-
-.sortCell { background: #fff8c5; }   // AS-IS 노란색 Sort 컬럼
 
 .bottomRow {
   display: flex; gap: 8px; align-items: center; padding: 4px 8px;
   flex-shrink: 0;
+  flex-grow: 0;
+  min-height: 48px;
+  height: 48px;
   justify-content: flex-end;
 }
 

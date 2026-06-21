@@ -17,16 +17,18 @@
 
 ## 2. 작업 시작 시 필수 행동 (반드시 순서대로)
 
-### Step 1: 룰셋 로드 (룰셋 v2 — 3 진입점만, 모든 작업) ⭐ 2026-06-11 갱신
+### Step 1: 룰셋 로드 (단일 진입 — 4 파일, 모든 작업) ⭐ 2026-06-18 갱신 (진입점 단일화 R-1)
 ```
-Read: Doc/_rules_v2/anti-simplification.md  ⚠️ ⭐ 최우선 — 단순화 절대 금지 (불변)
-Read: Doc/_rules_v2/CLAUDE.md               ← 분기 라우터 (작업 트리거 → 진입 룰)
-Read: Doc/_rules_v2/00_INDEX.md §A 트리거 매트릭스 ← 20 트리거 × 룰/Hook 자동 분기
+Read: Doc/_rules_v2/anti-simplification.md          ⚠️ ⭐ 최우선 — 단순화 절대 금지 (불변)
+Read: Doc/_rules_consolidation/RULESET_MASTER.md    ← ⭐ 통합 마스터 (트리거 매트릭스 + 77 hook 카탈로그 + UI 체크리스트)
+Read: Doc/_rules_v2/00_INDEX.md                      ← 상세 카탈로그 (hook 본문 위치)
+(UI 작업 시) RULESET_MASTER §3 UI-MANDATORY 체크리스트를 PRE-WRITE 로 통과
 ```
 
-> ⭐ **3 진입점 정책 (룰셋 v2, 2026-06-03 / 2026-06-11 갱신)**:
-> 위 3 파일만 1차 로드. **모든 도메인별 룰/hook 은 `00_INDEX.md` 의 20-트리거 매트릭스가 작업 키워드에 따라 자동 분기.**
-> 룰셋 v2 구조: `_asis/00_framework` (7 정밀) + `_asis/01_popups` (인벤토리) + `_tobe/01~13` (13 룰) + `_mapping/asis_to_tobe.md` (10 격차) + `hooks/` (50 hook — 00_INDEX §B.3 카탈로그가 단일 진실 source).
+> ⭐ **단일 진입점 정책 (2026-06-18 갱신, R-1)**:
+> **진입점은 이 루트 `CLAUDE.md` 1곳.** 작업별 분기는 `RULESET_MASTER.md` 의 트리거 매트릭스(T01~T20)가 담당하고, hook 본문 위치는 `00_INDEX.md §B.3` 가 가진다. `Doc/_rules_v2/CLAUDE.md` 는 포인터로 축소됨 (직접 진입점 아님).
+> 룰셋 v2 구조: `_asis/00_framework` (7 정밀) + `_asis/01_popups` (인벤토리) + `_tobe/01~13` (13 룰) + `_mapping/asis_to_tobe.md` (10 격차) + `hooks/` (**77 hook** — 카운트 단일 소스 = `RULESET_MASTER §4` + `00_INDEX §B.3`).
+> ⚠️ **CLAUDE.md 사이즈 정책 (2026-06-20, hook #77 `claude-md-changelog-policy`)**: 본 파일 §15 entry 직접 추가 금지. 변경 이력 = `Doc/_archive/CLAUDE_changelog_YYYY-MM.md` 1-line. 상세 보고서 = `Doc/_archive/work_reports/{YYYY-MM-DD}_{topic}.md`.
 >
 > ⭐ **2대 통합 진입 hook (2026-06-11 신설)** — 해당 작업 시 개별 hook 보다 먼저 읽기:
 > - **Oracle SP/DB 작업 전부** → `Doc/_rules_v2/hooks/oracle-db-workflow.md` (작업 타입 8종 분기 + 증상→원인 매핑)
@@ -44,31 +46,34 @@ Read: Doc/_rules_v2/00_INDEX.md §A 트리거 매트릭스 ← 20 트리거 × �
 화면 작업 종료 직전(+) : Read: Doc/_rules_v2/hooks/screen-completion-gate.md ⭐ 8 게이트
 ```
 
-⭐ **신규 화면 / 화면 수정 (T01/T04/T07) 시 절대 누락 금지 hook 3종** — 사용자 명시 요구 (2026-06-12 / 2026-06-15 재강조):
+⭐ **신규 화면(T01) / 화면 수정(T01M) 시 누락 0** — `RULESET_MASTER §3 UI-MANDATORY 통합 체크리스트` 1장으로 일괄 통과 (2026-06-18, R-6).
 
+그중 절대 누락 금지 3종 (admin 동적 속성관리 master):
 ```
-1순위 master : Read: Doc/_rules_v2/hooks/ui-dynamic-property-management.md
+1순위 master : Doc/_rules_v2/hooks/ui-dynamic-property-management.md
                ↳ 3 구성요소 (Menu Button / Column / Measure) admin UI 기반 동적 fetch + 즉시 반영
-2순위 Button : Read: Doc/_rules_v2/hooks/menu-button-dynamic-fetch.md            (child)
-3순위 Col+Msr: Read: Doc/_rules_v2/hooks/ui-category-setup-column-meta.md         (child)
+2순위 Button : Doc/_rules_v2/hooks/menu-button-dynamic-fetch.md            (child)
+3순위 Col+Msr: Doc/_rules_v2/hooks/ui-category-setup-column-meta.md         (child)
 ```
 
-> 위 3종 누락 = admin 운영 결정이 화면에 무효화 → **신뢰성 손상**. PRE-WRITE 체크리스트 (master §6) + POST-WRITE grep (master §7) + Screen Completion Gate G2/G3 의 의무 점검 대상.
+> 위 3종 누락 = admin 운영 결정이 화면에 무효화 → **신뢰성 손상**. RULESET_MASTER §3 의 PRE-WRITE / POST-WRITE grep / Screen Completion Gate 의무 점검 대상.
 
 > **그 외 트리거별 hook 분기는 `00_INDEX.md §A` 20-트리거 매트릭스 참조** (Popup / SQL / SP 변환 / 사내 DB 적용 / Figma / 메뉴 미표시 등).
 
-> 룰 v1 (`Doc/_dev_rules/`) 24 룰은 `_archive/` 이동 완료. 유지되는 7 룰: 02 (브랜치/커밋) / 21 (트러블슈팅) / 22 (이관패키지) / 28 (Git multi-remote) / 29 (CSV 적재) / 30 (백업/원복) / 31 (Figma) — 룰 v2 와 cross-ref.
+> 룰 v1 (`Doc/_dev_rules/`) 24 룰은 `_archive/` 이동 완료. 유지되는 **8 룰**: 02 (브랜치/커밋) / 21 (트러블슈팅) / 22 (이관패키지) / 28 (Git multi-remote) / 29 (CSV 적재) / 30 (백업/원복) / 31 (Figma) / **32 (Claude Code Oracle 직결)** — 룰 v2 와 cross-ref. 단일 출처 = `RULESET_MASTER §5.4` (R-5, 룰 32 정식 등재).
 
 ### Step 2: 영역별 추가 룰 — 카탈로그는 00_INDEX 가 단일 진실 source
 
-> 작업 키워드 → 자동 분기는 `Doc/_rules_v2/00_INDEX.md §A 트리거 매트릭스 (20행)` 가 담당.
-> 카탈로그 (TO-BE 13 룰 / AS-IS Framework 7 / Hook 50종) 인벤토리는 `00_INDEX.md §B.3` 가 단일 진실 source.
+> 작업 키워드 → 분기는 `RULESET_MASTER §2 트리거 매트릭스 (T01~T20 + T01M 수정 분기)` 가 담당.
+> 카탈로그 (TO-BE 13 룰 / AS-IS Framework 7 / **Hook 69종**) 인벤토리는 `RULESET_MASTER §4` + `00_INDEX.md §B.3` 가 단일 진실 source.
 > 따라서 본 §2 에서는 위치/카운트를 중복 유지하지 않음 (카운트 불일치 사고 방지).
+>
+> ⭐ **용어 (R-8)**: "**문서 hook(guide)**" = AI 가 읽고 지키는 가이드 (69 중 대부분). "**실행 hook(enforced)**" = `.claude/settings.json` 이 자동 차단하는 5종. 상세 = `RULESET_MASTER §6`.
 
 **룰 v2 빠른 위치 (디렉터리만)**:
 - TO-BE 13 정밀 룰: `Doc/_rules_v2/_tobe/01_file_structure ~ 13_routing_menu.md`
 - AS-IS Framework 7 분석: `Doc/_rules_v2/_asis/00_framework/01~07_*.md`
-- 50 Hook: `Doc/_rules_v2/hooks/` (통합 진입 3 = oracle-db-workflow / screen-completion-gate / ui-dynamic-property-management + 공통 3 = pre-write / post-write / pre-submit + 트리거 매트릭스 분기 44)
+- **69 Hook**: `Doc/_rules_v2/hooks/` (통합 진입 3 = oracle-db-workflow / screen-completion-gate / ui-dynamic-property-management + 공통 3 = pre-write / post-write / pre-submit + 트리거 매트릭스 분기)
 - AS-IS↔TO-BE 격차: `Doc/_rules_v2/_mapping/asis_to_tobe.md` (10 격차)
 
 **유지되는 룰 v1 (`Doc/_dev_rules/`)** — 룰 v2 와 cross-ref:
@@ -217,11 +222,13 @@ return Dmf0099Response.listOf(data);
 | 경로 | 내용 |
 |---|---|
 | `Doc/_rules_v2/anti-simplification.md` | ⚠️ ⭐ 최우선 — 단순화 절대 금지 (불변) |
-| `Doc/_rules_v2/CLAUDE.md` | 분기 라우터 |
-| `Doc/_rules_v2/00_INDEX.md` | 트리거 매트릭스 17행 + 룰/Hook 카탈로그 |
+| `Doc/_rules_consolidation/RULESET_MASTER.md` | ⭐ 통합 마스터 (단일 진입 — 트리거 + 69 hook + UI 체크리스트) |
+| `Doc/_rules_consolidation/00_DIAGNOSIS_진단보고서.md` | 룰 체계 중복·충돌·누락 진단 (R-1~R-8) |
+| `Doc/_rules_v2/CLAUDE.md` | 포인터 (구 분기 라우터 — 직접 진입점 아님) |
+| `Doc/_rules_v2/00_INDEX.md` | 트리거 매트릭스 + 룰/Hook 카탈로그 (69) |
 | `Doc/_rules_v2/_tobe/` | TO-BE 13 정밀 룰 (01~13) |
 | `Doc/_rules_v2/_asis/00_framework/` | AS-IS Framework 7 정밀 분석 |
-| `Doc/_rules_v2/hooks/` | 48 Hook (통합 진입 3: oracle-db-workflow / screen-completion-gate / ⭐ ui-dynamic-property-management + pre/post-write + ... — §B.3 카탈로그 참조) |
+| `Doc/_rules_v2/hooks/` | **69 Hook** (단일 카운트 = RULESET_MASTER §4 + 00_INDEX §B.3) |
 | `Doc/_rules_v2/_mapping/asis_to_tobe.md` | AS-IS↔TO-BE + 10 격차 사양 |
 | `Doc/_rules_v2/meta-rule-evolution.md` | PoC → 룰 보강 사이클 (4 분류) |
 
@@ -297,7 +304,8 @@ Root 폴더에 흩어져 있던 Cowork 분석 산출물(00_~29_)을 Phase별 폴
 | 4 | Validation: 모든 `MessageHelper.GMessageBox` 추출 (Msg ID + 카테고리) | 누락 위반 |
 | 5 | Expression: 모든 `LockColumn/LockRange` + `SetValue` Auto-Sync 추출 | 누락 위반 |
 | 6 | 호출 POPUP: 모든 `new XxxPopup()` 추출 + 공통 영역 Link 또는 신규 분석서 | 누락 위반 |
-| 7 | SP
+| 7 | SP/Tables: 모든 호출 SP + 의존 테이블 인벤토리 (`_analysis/Screen_POPUP_SP_Tables_Matrix.xlsx` 기준) | 누락 위반 |
+
 ## 13. ⭐ 화면 분석서 통합 통계 (2026-05-22 기준)
 
 | 도메인 | xlsx (13시트) | analysis.md | 8 MD 완비 |
@@ -320,43 +328,12 @@ Root 폴더에 흩어져 있던 Cowork 분석 산출물(00_~29_)을 Phase별 폴
 
 핵심: (1) "모두/전체/정밀/상세" 요청 시 다중 패턴 + Cross-check 의무 (2) 자동화 1회 통과 채택 금지 (3) 기존 분석 자료 활용 (4) 추출 한계 명시 (5) 시간/토큰 절약 단독 결정 금지.
 
-## 15. ⭐ 변경 이력 (요약 — 풀 원문은 archive 참조)
+## 15. ⭐ 변경 이력 — pointer 만
 
-> **archive**:
-> - 2026-05-13 ~ 2026-05-30: `Doc/_archive/CLAUDE_changelog_phase0-4.md`
-> - 2026-06-03 ~ 2026-06-12: `Doc/_archive/CLAUDE_changelog_2026-06.md` ⭐ 2026-06-15 이동
->
-> 신규 항목은 본 §15 에 1-line entry 로 추가하고, 12개를 초과하면 다음 archive (`CLAUDE_changelog_2026-07.md` 등) 로 이동.
+> ⚠️ **본 §15 에 entry 직접 추가 금지** (룰 #77 claude-md-changelog-policy).
+> 모든 변경은 monthly archive 에 1-line, 상세는 work_reports/ 에 별도 보고서.
 
-| 일자 | 키워드 (archive 참조 = 풀 원문) |
-|---|---|
-| 2026-06-18 (밤) | ⭐ DMF0020 ColumnSettingModal 미반영 사고 → #58 hook 격상 (자가 진화 #19, hook 갱신): 사용자 보고 — 컬럼 왼쪽 이동 후 OK 클릭해도 grid 미반영 + 재진입 시 복원 X. DMF0043_01 사고와 100% 동일 패턴 (`onSave` 빈 callback + `fallbackColumns` visible flag 누락 + store visibleBaseColumns 없음). 5 단계 패턴 그대로 적용 (Store visibleBaseColumns + Screen onSave settings 저장 + fallbackColumns visible 매칭 + Grid visibleColumns Set filter). `grid-column-setting-popup-pattern.md` §0-A 사고 사례 + 적용 의무 강도 격상 (PR 차단). 적용 화면 표 갱신: DMF0043_01 master + DMF0020 검증 완료 |
-| 2026-06-18 (오후) | ⭐⭐ Cascade Combo Filter 5 단계 표준화 + DMF0020/0003 룰 전체 적용 (자가 진화 #18, hook 58→59): 사용자 명시 — `cell object 가 combo 일 경우 이전 column 값을 filter 로 적용`. `cascade-combo-filter.md` 신규 (§1 Form reset + §2 Multi-level filter + §3 Map dedup + §4 useTabComboQueries 1RT + §5 Grid Modal callback). DMF0004/0005/0006/0007 4 reference 추출. **PR 차단 강제** (사용자 결정). 동반 적용: (1) DMF0020 useTabBtnPermissions FE + `090_DMF0020_menu_button_dynamic.sql` 메타 — 4 button INSERT + sister/GUEST/minyonglee1 USER_GR 자동 복사 (2) DMF0003 sticky v4 보강 — `row2` 누락 fix (translateY 보정 잔존은 후속 PR). 00_INDEX.md T05 + #59 등재 |
-| 2026-06-18 | ⭐ Wijmo 세로 cell merge viewport sticky 패턴 v4 표준화 (자가 진화 #17, hook 갱신): 사용자 명시 룰화 요청. 기존 `wijmo-merge-sticky-content.md` v3 (translateY 보정 패턴) → v4 (viewport row 제한 `panel.viewRange.row/row2` + `scrollPositionChanged → g.invalidate()`) 갱신. DMF0004 `CustomMergeManager` 표준 + 4 화면 (DMF0043/DMF0043_01/DMF0072/DMF0020) 적용 검증. 머지 그룹 첫 row 가 viewport 위로 사라지면 새 viewport 첫 row 에 content 자동 표시. 00_INDEX.md #38 갱신 |
-| 2026-06-17 (밤) | ⭐ DMF0043_01 ColumnSetting popup 5 사고 → 통합 패턴 hook 신설 (자가 진화 #16, hook 57→58): 사용자 명시 룰화 요청. `grid-column-setting-popup-pattern.md` 작성 — 5 단계 (Store `visibleBaseColumns` + Screen `fallbackColumns.slice(0, BASE_COLUMN_COUNT)` + visible flag 매칭 + Modal `ColumnSettingFallback.visible?: boolean` + Grid `baseColumns` filter + `baseCountRef` + HeaderMergeManager `dynStart` 동적 갱신) + 사고 사례 5 (popup 빈 grid / 동적 column 포함 / 우→좌 button 무동작 / OK 미반영 / 재진입 복원 손실). DMF0043_01 master reference. 00_INDEX.md T04 row + §B.3 카탈로그 #58 등록 |
-| 2026-06-17 (저녁) | ⭐ Wijmo FlexGrid 가이드 2 파일 룰셋 통합 (자가 진화 #15, hook 56→57): 사용자 작성 `Doc/wijmo-flexgrid-guide.md` (17.7KB, 정신 모델 + 안티패턴 10 row + §11 CLAUDE.md 규칙 블록) + `Doc/wijmo-flexgrid-api-reference.md` (22.8KB, FlexGrid/Column/CollectionView 속성/메서드/이벤트 정확 시그니처 grep용) 두 파일을 NSCM 룰셋 자동 참조 시스템 통합. 신규 진입 hook `wijmo-flexgrid-entry.md` 작성 (T04 트리거 + 사전 의무 Read + 자기 점검 5 항목 + 기존 wijmo hooks 5 종 cross-ref). 00_INDEX.md T04 row + B.3 카탈로그 #57 등록. 메모리 entry 추가 |
-| 2026-06-17 | ⭐ DMF0043 dynamic 컬럼 클라우드 사고 → 3 hook 신설 (자가 진화 #14, hook 53→56): (1) **`pivot-dynamic-column-nvl.md`** — PIVOT 결과 NULL → MyBatis `callSettersOnNulls=false` 환경에서 setter skip → JSON 키 누락. DMF0020 (NVL 적용) 클라우드 정상 ↔ DMF0043 (NVL 누락) 사고 비교로 root cause 확정. 동적 SELECT `NVL(CAST(...AS NUMBER), 0)` + PIVOT 입력 `MAX(NVL(value, 0))` 의무. 2 줄 fix 로 첫 row NULL 0 검증 완료 (2) **`column-meta-rework-checklist.md`** — DMF0008/0020/0043/0043_01 4 화면 column 재작업 진입 룰 (인벤토리 4 + 점검 8). 사용자 명시 다음 작업 진입 의무 (3) **`sp-patch-file-deploy.md`** — `END;/` 한 줄 사고 + 객체 의존 순서 PLS-00905 사고 fallback `ALTER PROCEDURE COMPILE`. SQL client 별 적용 가이드. 메모리 3 신규 (BE 변경 절대 금지 / shared/* 전역 prop 변경 금지 / META cross-check DDL 의무). DataGrid.tsx 의 `autoGenerateColumns={false}` 전역 영향 사고 fix (모든 화면 grid 컬럼 0 → 복구) |
-| 2026-06-16 (밤) | ⭐ SearchArea 2단 초과 시 extraConditions 분리 룰 신설 (자가 진화 #13, hook 52→53): `Doc/_rules_v2/hooks/search-area-extra-conditions.md` 신설 — 12 col Grid 기준 6 필드 초과 시 SearchArea `extraConditions` prop 으로 3단 이후 분리 + 자동 ▼ 확장 토글. DMF0003 (5단 → 2단+3단 분리) + DMF0020 (5단 → 2단+3단 분리) 적용. Sample DMF0006. 2026-06-16 사용자 명시 |
-| 2026-06-16 (저녁) | ⭐ DMF0003 admin column/measure 3-filter + 사용자 measure 권한 UPSERT 풀스택 (자가 진화 #12, hook 51→52): (1) **BE 인프라 재사용 의무 룰 신설** (`Doc/_rules_v2/hooks/be-infrastructure-reuse.md`) — 사용자 명시 "BE 는 틀 제공 + 신규 생성 회피". 신규 Controller/Service 작성 전 §2 인벤토리 검색 의무 + 표준 path (SP + 메타 INSERT 만으로 완성) (2) MenuServiceImpl `retrieveGridColumns/Measures` 3-filter 추가 (mnuId≠SYS0004 시 `visible=Y + ATTRIBUTE1 ⊃ divisionId` 강제 — admin 단일 진실 source) (3) DMF0003 measure 권한 SAVE — 기존 SP `PKG_SCM0002.P_SCM0002_SET_TITLESET_POPUP` 재사용 + 신규 메타 INSERT (`031_dmf0003_titleset_save_meta.sql`) + FE `apiClient.callMutationProc` 표준 path (4) MktForecastMasterGrid `mergedColumns` division 분기 추가 (`*40` vs base 5쌍 중복 fix) |
-| 2026-06-16 | ⭐ DMF0003 메인 grid 22,095초 사고 → MSSQL→Oracle 변환 6 성능 룰 신설 (자가 진화 #11, hook 50→51): (1) column 안 REGEXP_SUBSTR/CONNECT BY → FROM 분리 (2) 분리자 split → GT 적재 (3) MASTER lookup → LEFT JOIN (4) GT MAIN KEY INDEX 의무 (5) WHERE 함수 → SARGable (6) 'ALL'/''/NULL 시 GT INSERT skip + SELECT OR short-circuit. `Doc/_rules_v2/hooks/oracle-sp-perf-anti-patterns.md` 신설 + `Doc/_analysis/db_migration/01_*` §7 추가 + 00_INDEX T19 등록 |
-| 2026-06-15 오후 | SYS0013 클라우드 적용 5건 사고 → 룰 보강 (자가 진화 #10, hook 2 보강 + 메모리 4 신규 + 1 보강): UNIT_TP_CD='D' INSERT+UPDATE 동반 / DIVISION_ID DUMP byte 검증 / barrel export PATCH 안내문 / SP 참조 테이블 USER_OBJECTS grep / FE filter key cross-sheet 일관성 |
-| 2026-06-15 | DMF0007 Customer PSI 시트 제거 (FE + i18n + DB 메타 SQL 4세트) + 사내 Oracle IP 변경 10.20.100.153 → 121.162.245.167 (5 파일 + 메모리 갱신) + CLAUDE.md 비대화 정리 (§15 archive 분리 + §2 압축, 62KB → ~20KB) |
-| 2026-06-12 오후 | SYS0012/0014/0010 풀스택 + 컬럼 lookup 누락 방지 강조 (자가 진화 #9, hook 48→50) |
-| 2026-06-12 | UI 동적 속성관리 master + 다국어 영문화 + 클라우드 정합 5건 룰화 (자가 진화 #8, hook 41→48) |
-| 2026-06-11 | 룰셋 정합성 대정비 + Oracle 파이프라인 + UI 완성도 게이트 (hook 41 + 트리거 20행, T19/T20 신설) |
-| 2026-06-11 오후 | UI Category Setup column 메타 동적 fetch hook + DMF0043_01 SP fix + 성능 튜닝 v1/v2 (자가 진화 #7) |
-| 2026-06-11 오후 | DMF0043 GET SP PRODUCT_GROUP '' → 'N' fix (자가 진화 #6) |
-| 2026-06-11 | DMF0043 silent SAVE fail 3축 fix (자가 진화 #5, SUBSTR-0 / mutate array / TRUNCATE GT) |
-| 2026-06-10 | 사내 Oracle 직결 전환 + 11 화면 일괄 적용 + lint 사고 2건 룰 변환 (자가 진화 #4, hook 5종 + 메모리 5종) |
-| 2026-06-09 | 4 신규 admin 화면 풀스택 (MESSAGE/CODE/Group User/Program) + MNU_DESC 룰 (자가 진화 #3) |
-| 2026-06-09 | SCM0005 DynamicQuery 풀스택 + SHEET_COLUMNS 전역 dedupe (자가 진화 #2, 사고 6 건 룰 변환) |
-| 2026-06-09 | SCM0008/0009 풀스택 fix (사고 6 건 룰 변환, hook 11→14 + 메모리 7건) |
-| 2026-06-07 | DMF0003 MKT FCST Insert dropdown 사고 5건 → 룰셋 자가 진화 (12단계 wijmo dropdown + CMBO @divisionId 등) |
-| 2026-06-06 | SCM0008 fix + 공통 버튼 기본 표시 정책 + SearchArea 부재 Search 버튼 룰화 |
-| 2026-06-03 | DMF0020 메인 SP 1:1 변환 + popup 3종 AS-IS 매핑 + Wijmo 머지 sticky + 공용 ColumnSettingModal (사고 8건 룰화) |
-| 2026-06-02 | Deploy Package 완전성 룰 정비 (DMF0072/0008/0043/0043_01 lookup/POPUP/SP 누락 4건 + hook 신설) |
-| 2026-06-02 | 공통 버튼 10대 룰 정비 (CRUD 6 + Search Aux 4 매핑 + Sort/Filter 자동 활성) |
-| 2026-06-02 | Grid Column 메타 표준화 + 4 화면 풀스택 적용 (CELL_CONTROL_TYPE 14 + CELL_INPUT_EDIT_TYPE 5) |
-| 2026-06-02 | DMF0072 NN Master Mapping 풀스택 + 4축 룰 보강 (사고 5건 룰화) |
-| 2026-06-01 | Plan — 룰 진입점 정비 + To-Be SP 결함 fix + As-Is DB cross-check 자동화 (DMF0043 3축 해소) |
-
+- **현재 월** (2026-06): `Doc/_archive/CLAUDE_changelog_2026-06.md`
+- **이전 월** (2026-05): `Doc/_archive/CLAUDE_changelog_phase0-4.md`
+- **상세 보고서**: `Doc/_archive/work_reports/{YYYY-MM-DD}_{topic}.md` (예: `2026-06-20_SYS0011_audit.md`)
+- **작성 정책**: `Doc/_rules_v2/hooks/claude-md-changelog-policy.md` (hook #77, 2026-06-20 신설)

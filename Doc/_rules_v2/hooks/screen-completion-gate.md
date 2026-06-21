@@ -15,7 +15,7 @@
 | G2 | 버튼 10대 매핑 + **동적 권한 fetch** | CRUD 6 + Search Aux 4 전수 판정 (구현/숨김/자동활성 명시) + `() => undefined` 빈 핸들러 0건 + ⭐ **`useTabBtnPermissions` + `hasButton(BTN_CD)` 조건부 사용** (hotkeyConfig 하드코딩 금지) + **신규 화면은 `SCM_ADM_MNU_BTN_MPG_M` + `USER_GR_MNU_BTN_MPG_M` 멱등 INSERT** | asis-button-mapping + ⭐⭐ **ui-dynamic-property-management §3** (master) + **menu-button-dynamic-fetch** (child) |
 | G3 | Grid 메타 완전성 + **동적 Column/Measure fetch** | 전 grid: DataGrid 래퍼 + `_inputEditType`/`_ctrlType`/`_modalKey` + SHEET_COLUMNS ↔ SP alias 일치 + selectionMode 명시 + ⭐ **store `staticColumns` + `fetchStaticColumns` + mount/Search 호출 + DataGrid prop 5 단계** + (PIVOT/measure 화면) **`staticMeasures` + `fetchStaticMeasures`** + **신규 화면은 `SCM_MST_SHEET_COLUMNS` + `SCM_MST_SHEET_MEASURE` 멱등 INSERT** + **컬럼 lookup = `CELL_COMBO_DATA_TYPE` 위치 (ATTRIBUTE1 금지)** + **INPUT_TP_CD 'IM' 표준 ('MI' typo 금지)** | grid-column-meta + sheet-columns-binding-match + grid-interaction-patterns + ⭐⭐ **ui-dynamic-property-management §4/§5** (master) + **ui-category-setup-column-meta** (child) + **column-lookup-meta-standard** |
 | G4 | 메타/라우팅 정합 | MNU_M (UPPR 대소문자/MNU_DESC/MNU_TP_CD) + SHT_NM FE↔DB 일치 + PROC_M positional + 권한 (MNU_BTN_MPG_M ↔ USER_GR — G2 master 와 cross-ref) | menu-not-displayed-debug 7단계 + proc-meta-signature-match |
-| G5 | 정적 검증 | `pnpm lint:fix` + `pnpm type-check` + `pnpm build` 3종 PASS (출력 첨부) + type-check-error-patterns 17종 grep 0건 | type-check-error-patterns + post-write |
+| G5 | 정적 검증 + **regression 0 보고** | `pnpm lint:fix` + `pnpm type-check` + `pnpm build` 3종 PASS (출력 첨부) + type-check-error-patterns 17종 grep 0건 + ⭐ **`_artifacts/_local_setup/regression-impact.ps1` 실행** → Hard Boundary 위반 / 영향 도메인 / `procedures.d.ts` 변경 인벤토리 보고 (룰 #62 §9) | type-check-error-patterns + post-write + ⭐ **regression-zero-mandatory §9** |
 | G6 | 런타임 smoke (실행 증명) | 화면 진입 → 조회 → (편집 화면이면) Insert/수정/Save → **DB SELECT 로 실반영 확인** + 브라우저 콘솔 에러 0건. "alert 떴으니 됨" 금지 | oracle-db-workflow §2.5 + runtime-error-prevention |
 | G7 | 표준 패턴 정합 | 자매 화면(동일 features 폴더) 1개와 구조 비교: SearchArea/FormItem/Store/Constants/components 폴더 — 임의 작성 0건 | _tobe/01~10 + components-folder-pattern + screen-create-checklist |
 | G8 | 이관 완전성 | deploy package 5종 인벤토리 (DDL/META/SP body/GRANT/i18n) + 멱등 SQL + 공용/wrapper SP 포함 | deploy-package-completeness |
@@ -52,7 +52,7 @@
 | G2 버튼 10대 + 동적 권한 | PASS | CRUD 3 구현 + 3 숨김, Aux 4 자동활성, `useTabBtnPermissions` 적용, MNU_BTN_MPG_M 7 row + USER_GR 3 그룹 INSERT |
 | G3 Grid 메타 + 동적 Col/Measure | PASS | 2 grid, SHEET_COLUMNS 17/17 alias 일치, `staticColumns`+`fetchStaticColumns` OK, (PIVOT 화면) SHEET_MEASURE 4 row, INPUT_TP_CD 'IM' OK |
 | G4 메타/라우팅 | PASS | MNU_DESC OK, SHT_NM='xxx' FE=DB |
-| G5 정적 검증 | PASS | lint/type-check/build 3종 (로그 경로) |
+| G5 정적 검증 + regression 0 | PASS | lint/type-check/build 3종 (로그 경로) + regression-impact.ps1 → Hard Boundary 위반 0, 영향 도메인=master, procedures.d.ts NO |
 | G6 런타임 smoke | PASS | 조회 152 row, SAVE 후 SELECT 3 row 확인, 콘솔 0 |
 | G7 표준 정합 | PASS | 자매 DMF0007 대비 구조 동일 |
 | G8 이관 완전성 | PASS | 5종 인벤토리 (zip 경로) |

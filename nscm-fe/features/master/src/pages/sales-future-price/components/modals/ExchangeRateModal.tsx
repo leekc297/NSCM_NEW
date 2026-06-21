@@ -8,10 +8,11 @@ import {
   MergeManager,
   Row,
 } from '@mescius/wijmo.grid';
-import { FlexGrid, FlexGridColumn } from '@mescius/wijmo.react.grid';
 import { useEffect, useMemo, useState } from 'react';
 
-import { CustomDialog } from '@shared/components';
+import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
+import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
+import { CustomDialog, DataGrid } from '@shared/components';
 import { useTabProcQuery } from '@shared/hooks';
 import { useMessageStore } from '@shared/stores';
 
@@ -65,8 +66,8 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
   const startYyyymmdd = periodFrom.length === 6 ? `${periodFrom}01` : periodFrom;
   const endYyyymmdd = periodTo.length === 6 ? `${periodTo}31` : periodTo;
   const filters = useMemo(
-    () => ({ startYyyymmdd, endYyyymmdd } as never),
-    [startYyyymmdd, endYyyymmdd],
+    () => ({ startYyyymmdd, endYyyymmdd }) as never,
+    [startYyyymmdd, endYyyymmdd]
   );
   const { data, refetch, isLoading, isFetching } = useTabProcQuery({
     menuId: MENU_ID,
@@ -77,9 +78,10 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
   });
 
   const allRows = (data?.o_rc1 ?? []) as unknown as ExchangeRow[];
-  const filteredRows = divisionId && divisionId !== 'ALL'
-    ? allRows.filter(r => String(r.DIVISION_ID ?? '') === divisionId)
-    : allRows;
+  const filteredRows =
+    divisionId && divisionId !== 'ALL'
+      ? allRows.filter(r => String(r.DIVISION_ID ?? '') === divisionId)
+      : allRows;
 
   // ===== long → wide pivot (사용자 요구 2026-06-03: AS-IS 2단 헤더 YYYY/MM) =====
   const { pivotRows, ymKeys } = useMemo(() => {
@@ -97,7 +99,8 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
         groupMap.set(key, { DIVISION_ID: div, CURRENCY: cur, UNIT_CURRENCY: uc });
       }
       const row = groupMap.get(key)!;
-      const price = typeof r.EXCHANGE_PRICE === 'number' ? r.EXCHANGE_PRICE : Number(r.EXCHANGE_PRICE);
+      const price =
+        typeof r.EXCHANGE_PRICE === 'number' ? r.EXCHANGE_PRICE : Number(r.EXCHANGE_PRICE);
       if (!Number.isNaN(price)) row[`M_${ym}`] = price;
     }
     const list = [...groupMap.values()].sort((a, b) => {
@@ -114,7 +117,10 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
 
   const handleFind = () => {
     if (periodFrom > periodTo) {
-      void setAlert({ type: 'alert', content: '[MSG00108] 시작 월이 종료 월보다 늦을 수 없습니다.' });
+      void setAlert({
+        type: 'alert',
+        content: '[MSG00108] 시작 월이 종료 월보다 늦을 수 없습니다.',
+      });
       return;
     }
     refetch?.();
@@ -137,7 +143,8 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
       customContentArea={
         <div className={styles.container}>
           <div className={styles.filterRow}>
-            <label>Div
+            <label>
+              Div
               <select value={divisionId} onChange={e => setDivisionId(e.target.value)}>
                 <option value='ALL'>ALL</option>
                 <option value='40'>40</option>
@@ -145,25 +152,66 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
                 <option value='82'>82</option>
               </select>
             </label>
-            <label>Period
-              <input type='text' value={periodFrom} onChange={e => setPeriodFrom(e.target.value)} placeholder='YYYY-MM' />
+            <label>
+              Period
+              <input
+                type='text'
+                value={periodFrom}
+                onChange={e => setPeriodFrom(e.target.value)}
+                placeholder='YYYY-MM'
+              />
             </label>
             <span>~</span>
             <label>
-              <input type='text' value={periodTo} onChange={e => setPeriodTo(e.target.value)} placeholder='YYYY-MM' />
+              <input
+                type='text'
+                value={periodTo}
+                onChange={e => setPeriodTo(e.target.value)}
+                placeholder='YYYY-MM'
+              />
             </label>
-            <button type='button' onClick={handleFind} className={styles.findBtn} disabled={loading}>
+            <button
+              type='button'
+              onClick={handleFind}
+              className={styles.findBtn}
+              disabled={loading}
+            >
               {loading ? '⏳ 조회 중...' : '🔍 Find'}
             </button>
-            <button type='button' onClick={modalClose} className={styles.closeBtn}>❌ Close</button>
+            <button type='button' onClick={modalClose} className={styles.closeBtn}>
+              ❌ Close
+            </button>
             <span style={{ marginLeft: 'auto', fontSize: 12, color: '#6b7785' }}>
               {loading ? '데이터 조회 중' : `${pivotRows.length} rows`}
             </span>
           </div>
 
           <div className={styles.gridWrap}>
-            <FlexGrid
+            <DataGrid<PivotRow>
               itemsSource={pivotRows}
+              staticColumns={EXCHANGE_RATE_COLUMNS.map(
+                (c): RawFlexGridColumnConfig => ({
+                  colNm: c.key,
+                  colLblNm: c.header,
+                  colWth: c.width,
+                  horzAlgnCd: c.align,
+                  fixed: true,
+                  visible: true,
+                  display: true,
+                  inputTpCd: CELL_INPUT_EDIT_TYPE.SEARCH_ONLY,
+                })
+              )}
+              dynamicColumns={ymKeys.map(
+                (ym): FlexGridColumnConfig => ({
+                  binding: `M_${ym}`,
+                  header: ym,
+                  width: 90,
+                  align: 'right',
+                  format: 'n2',
+                  isReadOnly: true,
+                  allowSorting: false,
+                })
+              )}
               autoGenerateColumns={false}
               style={{ height: '100%' }}
               frozenColumns={fixedBindings.length}
@@ -200,7 +248,12 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
                 g.allowMerging = AllowMerging.All;
                 for (let i = 0; i < g.columns.length; i++) g.columns[i].allowMerging = true;
                 class ExchangeMerge extends MergeManager {
-                  getMergedRange(panel: GridPanel, r: number, c: number, _clip = true): CellRange | null {
+                  getMergedRange(
+                    panel: GridPanel,
+                    r: number,
+                    c: number,
+                    _clip = true
+                  ): CellRange | null {
                     const col = panel.columns[c];
                     if (!col) return null;
                     const binding = col.binding ?? '';
@@ -213,7 +266,8 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
                       // 동적 M_yyyymm: row 0 (YYYY) horizontal merge
                       if (/^M_\d{6}$/.test(binding) && r === 0) {
                         const yyyy = binding.slice(2, 6);
-                        let c1 = c, c2 = c;
+                        let c1 = c,
+                          c2 = c;
                         while (c1 > 0) {
                           const pb = panel.columns[c1 - 1].binding ?? '';
                           if (/^M_\d{6}$/.test(pb) && pb.slice(2, 6) === yyyy) c1--;
@@ -240,7 +294,8 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
                         const cur = ri(r);
                         if (!cur) return null;
                         const sameRow = (a: number, b: number): boolean => {
-                          const ra = ri(a); const rb = ri(b);
+                          const ra = ri(a);
+                          const rb = ri(b);
                           if (!ra || !rb) return false;
                           if (binding === 'DIVISION_ID') {
                             return ra.DIVISION_ID === rb.DIVISION_ID;
@@ -248,7 +303,8 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
                           // CURRENCY merge — Restricted by left (Division + Currency)
                           return ra.DIVISION_ID === rb.DIVISION_ID && ra.CURRENCY === rb.CURRENCY;
                         };
-                        let r1 = r, r2 = r;
+                        let r1 = r,
+                          r2 = r;
                         while (r1 > 0 && sameRow(r1 - 1, r)) r1--;
                         while (r2 < view.length - 1 && sameRow(r2 + 1, r)) r2++;
                         if (r1 === r2) return null;
@@ -260,30 +316,7 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
                 }
                 g.mergeManager = new ExchangeMerge();
               }}
-            >
-              {/* 좌측 3 fixed cols (Div / Currency / Unit) */}
-              {EXCHANGE_RATE_COLUMNS.map(c => (
-                <FlexGridColumn
-                  key={c.key}
-                  binding={c.key}
-                  header={c.header}
-                  width={c.width}
-                  align={c.align === 'C' ? 'center' : c.align === 'R' ? 'right' : 'left'}
-                  isReadOnly
-                />
-              ))}
-              {/* 동적 월 cols — AS-IS L173 AddNumColumn (소수 2자리, 캡쳐: 960.00 등) */}
-              {ymKeys.map(ym => (
-                <FlexGridColumn
-                  key={ym}
-                  binding={`M_${ym}`}
-                  header={ym}
-                  width={90}
-                  align='right'
-                  format='n2'
-                />
-              ))}
-            </FlexGrid>
+            />
           </div>
         </div>
       }

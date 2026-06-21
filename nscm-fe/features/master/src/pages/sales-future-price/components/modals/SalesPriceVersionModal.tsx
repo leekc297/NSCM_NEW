@@ -1,9 +1,10 @@
 import type { FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
-import { FlexGrid, FlexGridColumn } from '@mescius/wijmo.react.grid';
 import dayjs, { type Dayjs } from 'dayjs';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { CustomDialog } from '@shared/components';
+import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
+import type { RawFlexGridColumnConfig } from '@foundation/models';
+import { CustomDialog, DataGrid } from '@shared/components';
 import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
 import { DatePickerCalendar } from '@shared/lges';
 import { useMessageStore } from '@shared/stores';
@@ -125,7 +126,7 @@ export const SalesPriceVersionModal = ({ open, modalClose, defaultDivision, onAp
             description,
           }
         : undefined,
-    [open, divisionId, period, versionType, description],
+    [open, divisionId, period, versionType, description]
   );
 
   // useTabProcQuery — enabled 가드 + isLoading 노출
@@ -137,10 +138,7 @@ export const SalesPriceVersionModal = ({ open, modalClose, defaultDivision, onAp
     enabled: false, // Find 버튼 trigger
   });
 
-  const rows = useMemo<VersionPopupRow[]>(
-    () => (data?.o_rc1 ?? []) as VersionPopupRow[],
-    [data],
-  );
+  const rows = useMemo<VersionPopupRow[]>(() => (data?.o_rc1 ?? []) as VersionPopupRow[], [data]);
 
   const loading = isLoading || isFetching;
 
@@ -169,12 +167,13 @@ export const SalesPriceVersionModal = ({ open, modalClose, defaultDivision, onAp
       return;
     }
     if (selectedItems.length > 2) {
-      void setAlert({ type: 'alert', content: '[MSG00255] Sales Price Version 은 최대 2개까지 선택할 수 있습니다.' });
+      void setAlert({
+        type: 'alert',
+        content: '[MSG00255] Sales Price Version 은 최대 2개까지 선택할 수 있습니다.',
+      });
       return;
     }
-    const versionNos = selectedItems
-      .map(r => String(r.VERSION_NO ?? r.CODE ?? ''))
-      .filter(Boolean);
+    const versionNos = selectedItems.map(r => String(r.VERSION_NO ?? r.CODE ?? '')).filter(Boolean);
     if (versionNos.length === 0) {
       void setAlert({ type: 'alert', content: '유효한 Version 이 선택되지 않았습니다.' });
       return;
@@ -205,9 +204,15 @@ export const SalesPriceVersionModal = ({ open, modalClose, defaultDivision, onAp
           <div className={styles.filterBar}>
             <div className={styles.field}>
               <span className={styles.fieldLabel}>Division</span>
-              <select className={styles.select} value={divisionId} onChange={e => setDivisionId(e.target.value)}>
+              <select
+                className={styles.select}
+                value={divisionId}
+                onChange={e => setDivisionId(e.target.value)}
+              >
                 {divisionOptions.map(o => (
-                  <option key={o.value} value={o.value}>{o.label}</option>
+                  <option key={o.value} value={o.value}>
+                    {o.label}
+                  </option>
                 ))}
               </select>
             </div>
@@ -229,13 +234,28 @@ export const SalesPriceVersionModal = ({ open, modalClose, defaultDivision, onAp
             </div>
             <div className={styles.field}>
               <label className={styles.checkboxLabel}>
-                <input type='checkbox' checked={chkDay} onChange={e => setChkDay(e.target.checked)} /> Day
+                <input
+                  type='checkbox'
+                  checked={chkDay}
+                  onChange={e => setChkDay(e.target.checked)}
+                />{' '}
+                Day
               </label>
               <label className={styles.checkboxLabel}>
-                <input type='checkbox' checked={chkWeek} onChange={e => setChkWeek(e.target.checked)} /> Week
+                <input
+                  type='checkbox'
+                  checked={chkWeek}
+                  onChange={e => setChkWeek(e.target.checked)}
+                />{' '}
+                Week
               </label>
               <label className={styles.checkboxLabel}>
-                <input type='checkbox' checked={chkManual} onChange={e => setChkManual(e.target.checked)} /> Manual
+                <input
+                  type='checkbox'
+                  checked={chkManual}
+                  onChange={e => setChkManual(e.target.checked)}
+                />{' '}
+                Manual
               </label>
             </div>
             <div className={styles.field}>
@@ -248,59 +268,77 @@ export const SalesPriceVersionModal = ({ open, modalClose, defaultDivision, onAp
                 placeholder='버전 설명 부분일치'
               />
             </div>
-            <button type='button'
+            <button
+              type='button'
               className={`${styles.actionButton} ${styles.primary}`}
               onClick={handleFind}
-              disabled={loading}>
+              disabled={loading}
+            >
               {loading ? '⏳ 조회 중...' : 'Find'}
             </button>
           </div>
 
           {/* 로딩 표시 + 결과 카운트 */}
           <div className={styles.statusBar}>
-            {loading
-              ? <span className={styles.loading}>⏳ 데이터 조회 중입니다. 잠시만 기다려 주세요...</span>
-              : <span className={styles.count}>{rows.length} 행 조회됨 — 행 클릭으로 선택 (Ctrl/Shift 다중, 최대 2개). 더블클릭 시 즉시 적용</span>}
+            {loading ? (
+              <span className={styles.loading}>
+                ⏳ 데이터 조회 중입니다. 잠시만 기다려 주세요...
+              </span>
+            ) : (
+              <span className={styles.count}>
+                {rows.length} 행 조회됨 — 행 클릭으로 선택 (Ctrl/Shift 다중, 최대 2개). 더블클릭 시
+                즉시 적용
+              </span>
+            )}
           </div>
 
           {/* Grid */}
           <div className={styles.gridWrapper}>
-            <FlexGrid
-              initialized={(g: FlexGridType<VersionPopupRow>) => {
+            <DataGrid
+              initialized={(grid) => {
+                const g = grid as unknown as FlexGridType<VersionPopupRow>;
                 gridRef.current = g;
                 g.isReadOnly = true;
                 // SelectionMode.ListBox = 2 — 다중 row 선택 가능 (Ctrl/Shift)
                 g.selectionMode = 2;
                 // Double-click 즉시 적용 (wijmo 버전별 itemDoubleClick 가드 + DOM fallback)
-                const dblG = (g as unknown as { itemDoubleClick?: { addHandler?: (fn: () => void) => void } }).itemDoubleClick;
+                const dblG = (
+                  g as unknown as { itemDoubleClick?: { addHandler?: (fn: () => void) => void } }
+                ).itemDoubleClick;
                 if (dblG && typeof dblG.addHandler === 'function') {
                   dblG.addHandler(() => handleApply());
                 } else if (g.hostElement) {
                   g.hostElement.addEventListener('dblclick', () => handleApply());
                 }
               }}
-              itemsSource={rows}
+              itemsSource={rows as unknown as WijmoRowItem[]}
+              staticColumns={[
+                { colNm: 'VERSION_NO', colLblNm: 'Version', colWth: 240, fixed: false, visible: true, display: true, inputTpCd: CELL_INPUT_EDIT_TYPE.SEARCH_ONLY },
+                { colNm: 'VERSION_DESCRIPTION', colLblNm: 'Description', colWth: 300, fixed: false, visible: true, display: true, inputTpCd: CELL_INPUT_EDIT_TYPE.SEARCH_ONLY },
+                { colNm: 'VERSION_TYPE', colLblNm: 'Type', colWth: 80, fixed: false, visible: true, display: true, inputTpCd: CELL_INPUT_EDIT_TYPE.SEARCH_ONLY },
+                { colNm: 'YYYYMMDD', colLblNm: 'Date', colWth: 100, fixed: false, visible: true, display: true, inputTpCd: CELL_INPUT_EDIT_TYPE.SEARCH_ONLY },
+                { colNm: 'CREATED_BY', colLblNm: 'Create By', colWth: 100, fixed: false, visible: true, display: true, inputTpCd: CELL_INPUT_EDIT_TYPE.SEARCH_ONLY },
+                { colNm: 'CREATION_DATE', colLblNm: 'Create Date', colWth: 150, fixed: false, visible: true, display: true, inputTpCd: CELL_INPUT_EDIT_TYPE.SEARCH_ONLY },
+                { colNm: 'EDITABLE', colLblNm: 'Editable', colWth: 70, fixed: false, visible: true, display: true, inputTpCd: CELL_INPUT_EDIT_TYPE.SEARCH_ONLY },
+                { colNm: 'MONTHLY_ROLLING_FCST', colLblNm: 'Monthly RF', colWth: 100, fixed: false, visible: true, display: true, inputTpCd: CELL_INPUT_EDIT_TYPE.SEARCH_ONLY },
+              ] as RawFlexGridColumnConfig[]}
               autoGenerateColumns={false}
               className={styles.grid}
-            >
-              {/* SP 결과 컬럼명 정확 매핑 (DMF0043_01 ContributeVersionModal 패턴) */}
-              <FlexGridColumn binding='VERSION_NO' header='Version' width={240} />
-              <FlexGridColumn binding='VERSION_DESCRIPTION' header='Description' width={300} />
-              <FlexGridColumn binding='VERSION_TYPE' header='Type' width={80} />
-              <FlexGridColumn binding='YYYYMMDD' header='Date' width={100} />
-              <FlexGridColumn binding='CREATED_BY' header='Create By' width={100} />
-              <FlexGridColumn binding='CREATION_DATE' header='Create Date' width={150} />
-              <FlexGridColumn binding='EDITABLE' header='Editable' width={70} />
-              <FlexGridColumn binding='MONTHLY_ROLLING_FCST' header='Monthly RF' width={100} />
-            </FlexGrid>
+            />
           </div>
 
           {/* Action */}
           <div className={styles.actionBar}>
-            <button type='button' className={`${styles.actionButton} ${styles.primary}`} onClick={handleApply}>
+            <button
+              type='button'
+              className={`${styles.actionButton} ${styles.primary}`}
+              onClick={handleApply}
+            >
               선택 Apply
             </button>
-            <button type='button' className={styles.actionButton} onClick={modalClose}>닫기</button>
+            <button type='button' className={styles.actionButton} onClick={modalClose}>
+              닫기
+            </button>
           </div>
         </div>
       }

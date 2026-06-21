@@ -15,9 +15,7 @@ async function run() {
 
   let messages;
   try {
-    // 2026-05-27 로컬 mirror: 사내 IP 차단 → 로컬 BE 사용 (환경변수 NSCM_I18N_API 로 override 가능)
-    const i18nApi = process.env.NSCM_I18N_API || 'http://localhost:8080/admin/message';
-    const response = await apiClient.get(i18nApi);
+    const response = await apiClient.get('http://10.34.220.80:8080/admin/message');
     messages = response.data.result;
   } catch {
     console.log('api 요청 실패. 목데이터로 동작합니다.');

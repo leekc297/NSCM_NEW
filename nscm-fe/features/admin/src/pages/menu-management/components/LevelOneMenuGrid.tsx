@@ -65,8 +65,11 @@ export const LevelOneMenuGrid = ({
     )
       return;
 
+    // 2026-06-21 PROC_M signature fix: BE GeneralController.callProc 가 path variable 'mnuId' 로
+    // SP IN 파라미터 'mnuId' 강제 덮어쓰기 → SP 가 'SYS0003' 받아 0 row. PROC_M COL_NM 을 'pUpprMnuId' 로
+    // 변경하여 path 충돌 회피 (사내 메타 UPDATE 완료, SP body 변경 X).
     setFilters(SHEETS.LEVEL_TWO_MENU, {
-      menuId: String(dataItem.MNU_ID),
+      pUpprMnuId: String(dataItem.MNU_ID),
     });
     setClickedLevelOneMenu(String(dataItem.MNU_ID));
     setClickedLevelTwoMenu('');

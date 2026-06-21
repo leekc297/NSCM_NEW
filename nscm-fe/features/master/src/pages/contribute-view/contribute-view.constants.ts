@@ -11,8 +11,10 @@ export enum SHEETS {
 }
 
 // const object — enum 대체 (NSCM 단일 cursor 표준 'o_rc1' 다수 중복 허용)
+// 2026-06-19 분리 PR — `DMF0043_GET_CONTRIBUTION_SALES_LIST` SP body 의 OUT cursor
+// `p_cursor_main` → `O_RC1` 표준화 (PROC_M 메타 + SP body 동반 변경).
 export const RESPONSE_SET = {
-  MAIN: 'p_cursor_main',
+  MAIN: 'o_rc1',
   MAIN_TITLE: 'o_rc1',
   VERSION: 'o_rc1',
   RATE_POPUP: 'o_rc1',

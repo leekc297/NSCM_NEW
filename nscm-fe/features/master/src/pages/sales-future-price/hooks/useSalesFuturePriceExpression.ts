@@ -27,42 +27,43 @@ export interface DivisionRole {
   showEndCustomer40: boolean;
 }
 
-export const useDivisionRole = (divisionId: string): DivisionRole => useMemo(() => {
-  const prefix = divisionId.slice(0, 2);
-  const isEss = prefix === DIVISION.ESS;
-  const isPower = divisionId === DIVISION.POWER;
-  const isMobility = divisionId === DIVISION.MOBILITY;
-  return {
-    isMobility,
-    isEss,
-    isPower,
-    showPlantSite: isEss,
-    showNewFlag: isEss,
-    showTemplate: isEss,  // AS-IS L205, L2581 — btnTemplate.Visible = (div==81)
-    showEndCustomer40: isMobility,
-  };
-}, [divisionId]);
+export const useDivisionRole = (divisionId: string): DivisionRole =>
+  useMemo(() => {
+    const prefix = divisionId.slice(0, 2);
+    const isEss = prefix === DIVISION.ESS;
+    const isPower = divisionId === DIVISION.POWER;
+    const isMobility = divisionId === DIVISION.MOBILITY;
+    return {
+      isMobility,
+      isEss,
+      isPower,
+      showPlantSite: isEss,
+      showNewFlag: isEss,
+      showTemplate: isEss, // AS-IS L205, L2581 — btnTemplate.Visible = (div==81)
+      showEndCustomer40: isMobility,
+    };
+  }, [divisionId]);
 
 // E3, E4, E5, E6 — 동적 시간축 컬럼 + 3단 헤더 트리 (DMF0020_GET_SPREAD_TITLE_DATE 결과 기반)
 //   AS-IS L701/L706 AddNumColumn + L712/L720/L726 ColumnHeaderSpan(0) + L731 ColumnHeaderSpan(1)
 export interface HeaderDay {
-  binding: string;     // W_20260511 or M_202605
-  label: string;       // MMDD
+  binding: string; // W_20260511 or M_202605
+  label: string; // MMDD
 }
 export interface HeaderWeek {
-  key: string;         // WEEK_NAME
+  key: string; // WEEK_NAME
   label: string;
   days: HeaderDay[];
 }
 export interface HeaderYearMonth {
-  key: string;         // BASIS_YYYYMM
-  label: string;       // YYYY-MM
+  key: string; // BASIS_YYYYMM
+  label: string; // YYYY-MM
   weeks: HeaderWeek[];
 }
 
 export const buildHeaderTree = (
   titleDate: SpreadTitleDateRow[] | undefined,
-  bucketType: SearchCondition['bucketType'],
+  bucketType: SearchCondition['bucketType']
 ): HeaderYearMonth[] => {
   if (!titleDate || titleDate.length === 0) return [];
 
@@ -70,7 +71,7 @@ export const buildHeaderTree = (
 
   // 1) bucketType 에 맞는 컬럼만 (E4 — W_/M_ Visible toggle)
   const filtered = titleDate.filter(t =>
-    isWeekly ? t.BASIS_START_DATE2.startsWith('W_') : t.BASIS_START_DATE2.startsWith('M_'),
+    isWeekly ? t.BASIS_START_DATE2.startsWith('W_') : t.BASIS_START_DATE2.startsWith('M_')
   );
 
   // 2) YYYY-MM 그룹 (E5) → WEEK_NAME (E6) → DAY 트리

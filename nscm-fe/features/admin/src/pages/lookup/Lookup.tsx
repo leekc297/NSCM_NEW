@@ -29,7 +29,7 @@ import { useLookupStore } from './useLookupStore';
 
 export const Lookup = ({ tabId, title }: PageProps<MENU_ID>) => {
   const { t } = useTranslation();
-  const { setAlert } = useMessageStore();
+  const setAlert = useMessageStore(state => state.setAlert);
 
   const masterGridRef =
     useRef<FlexGrid<ResponseData<MENU_ID, SHEETS.LOOKUP_MASTER, RESPONSE_SET.SAVE>>>();
@@ -99,8 +99,8 @@ export const Lookup = ({ tabId, title }: PageProps<MENU_ID>) => {
           sheetName: selectedLookupType ?? '',
           debugMode: 'F',
         })
-        .catch((e: unknown) => {
-          console.warn('[SYS0010] AFTER_SAVE post-process failed (non-blocking):', e);
+        .catch(() => {
+          /* AS-IS DoAfterSave 빈 catch 정합 — non-blocking */
         });
 
       void queryClient.invalidateQueries({ queryKey: [tabId] });
@@ -126,18 +126,23 @@ export const Lookup = ({ tabId, title }: PageProps<MENU_ID>) => {
       if (!selectedLookupType) {
         void setAlert({
           type: 'alert',
-          content: t('LBL00620', 'Please select a Lookup Type first.'),
+          content: t('MSG00624', 'Please select a Lookup Type first.'),
         });
         return;
       }
       GridAction.addRow(detailGridRef.current, {
         ...EMPTY_LOOKUP_DETAIL_ROW,
         LOOKUP_TYPE: selectedLookupType,
+        CRUD_TYPE: 'I',
       });
       return;
     }
     if (!masterGridRef.current) return;
-    GridAction.addRow(masterGridRef.current, { ...EMPTY_LOOKUP_MASTER_ROW });
+    GridAction.addRow(masterGridRef.current, {
+      ...EMPTY_LOOKUP_MASTER_ROW,
+      LOOKUP_GROUP: filters[SHEETS.LOOKUP_MASTER]?.lookupGroup,
+      CRUD_TYPE: 'I',
+    });
   };
 
   const onDelete = () => {
@@ -208,7 +213,7 @@ export const Lookup = ({ tabId, title }: PageProps<MENU_ID>) => {
         searchParam={searchParams}
       />
       <div className={styles.outerModule}>
-        <TitleArea isSubTitle title={t('LBL00618', 'Lookup Type')} depth='h4' />
+        <TitleArea isSubTitle title={t('LBL00636', 'Lookup Type')} depth='h4' />
         <div className={styles.tableWrapper}>
           <div className={styles.masterGrid}>
             <LookupMasterGrid
@@ -218,7 +223,7 @@ export const Lookup = ({ tabId, title }: PageProps<MENU_ID>) => {
             />
           </div>
           <div className={styles.innerModule}>
-            <TitleArea isSubTitle title={t('LBL00619', 'Lookup Values')} depth='h4' />
+            <TitleArea isSubTitle title={t('LBL00637', 'Lookup Values')} depth='h4' />
             <div className={styles.detailGrid}>
               <LookupDetailGrid
                 gridRef={detailGridRef}

@@ -49,6 +49,5 @@ Merge Request '%{source_branch}' into '%{target_branch}'
 ## 스크린샷 (선택 사항)
 
 /assign me
-/target_branch dev
 /cc @dong.lee2
 /draft

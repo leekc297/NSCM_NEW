@@ -29,7 +29,7 @@ export const OwnerByDivisionModal = ({
   modalClose,
   setSelectedValue,
   preSearchParams,
-  ownerId = '',
+  ownerId = undefined,
 }: OwnerByDivisionModalProps) => {
   const { t } = useTranslation();
 
@@ -103,7 +103,10 @@ export const OwnerByDivisionModal = ({
 
   useEffect(() => {
     if (!open) return;
-    setModalFilters({ owner: ownerId });
+    // ownerId 가 undefined 일 때 preSearchParams.owner fallback — DMF0005 가 prop 생략해도
+    // 호출 화면의 owner 검색조건이 modal filter 로 반영됨. feat/dmf0020-sales-future-price
+    // 머지 시 동일 패턴이라 conflict 0 + DMF0005 ownerId prop 주석 사고 사전 차단.
+    setModalFilters({ owner: ownerId ?? (preSearchParams.owner ?? '') });
     setSearchParam({ ...preSearchParams, owner: '' });
     if (!initialized) void fetchStaticColumns();
   }, [open]);

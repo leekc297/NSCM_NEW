@@ -18,7 +18,7 @@ export const HomePage = () => {
       <p>Today: {formatDate(new Date())}</p>
       {isLogin ? (
         <>
-          <p>Welcome, {session?.userNm ?? '(session missing)'}!</p>
+          <p>Welcome, {session.userNm}!</p>
           <Button onClick={() => logout()}>Logout</Button>
         </>
       ) : (

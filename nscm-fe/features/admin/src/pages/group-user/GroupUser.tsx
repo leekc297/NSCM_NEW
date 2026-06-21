@@ -1,7 +1,6 @@
 import { type FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { useQueryClient } from '@foundation/query-client';
@@ -37,7 +36,8 @@ const collectRowsWithSheet = <T extends { CRUD_TYPE?: string }>(
 export const GroupUser = ({ tabId, title }: PageProps<MENU_ID>) => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
-  const { setAlert, setToast } = useMessageStore();
+  const setAlert = useMessageStore(state => state.setAlert);
+  const setToast = useMessageStore(state => state.setToast);
 
   const mainGridRef = useRef<FlexGrid>();
   const mainGridFilterRef = useRef<FlexGridFilter>();
@@ -60,28 +60,45 @@ export const GroupUser = ({ tabId, title }: PageProps<MENU_ID>) => {
   const selectedUserId = useGroupUserStore(state => state.selectedUserId);
 
   const { data: mainData } = useTabProcQuery<MENU_ID, SHEETS.MAIN>({
-    menuId: MENU_ID, sheetName: SHEETS.MAIN, tabId,
-    filters: filters[SHEETS.MAIN], enabled: !!filters[SHEETS.MAIN],
+    menuId: MENU_ID,
+    sheetName: SHEETS.MAIN,
+    tabId,
+    filters: filters[SHEETS.MAIN],
+    enabled: !!filters[SHEETS.MAIN],
   });
   const { data: userData } = useTabProcQuery<MENU_ID, SHEETS.USER_INFO>({
-    menuId: MENU_ID, sheetName: SHEETS.USER_INFO, tabId,
-    filters: filters[SHEETS.USER_INFO], enabled: !!filters[SHEETS.USER_INFO],
+    menuId: MENU_ID,
+    sheetName: SHEETS.USER_INFO,
+    tabId,
+    filters: filters[SHEETS.USER_INFO],
+    enabled: !!filters[SHEETS.USER_INFO],
   });
   const { data: divisionData } = useTabProcQuery<MENU_ID, SHEETS.DIVISION>({
-    menuId: MENU_ID, sheetName: SHEETS.DIVISION, tabId,
-    filters: filters[SHEETS.DIVISION], enabled: !!filters[SHEETS.DIVISION],
+    menuId: MENU_ID,
+    sheetName: SHEETS.DIVISION,
+    tabId,
+    filters: filters[SHEETS.DIVISION],
+    enabled: !!filters[SHEETS.DIVISION],
   });
   const { data: plantData } = useTabProcQuery<MENU_ID, SHEETS.PLANT>({
-    menuId: MENU_ID, sheetName: SHEETS.PLANT, tabId,
-    filters: filters[SHEETS.PLANT], enabled: !!filters[SHEETS.PLANT],
+    menuId: MENU_ID,
+    sheetName: SHEETS.PLANT,
+    tabId,
+    filters: filters[SHEETS.PLANT],
+    enabled: !!filters[SHEETS.PLANT],
   });
   const { data: customerData } = useTabProcQuery<MENU_ID, SHEETS.CUSTOMER>({
-    menuId: MENU_ID, sheetName: SHEETS.CUSTOMER, tabId,
-    filters: filters[SHEETS.CUSTOMER], enabled: !!filters[SHEETS.CUSTOMER],
+    menuId: MENU_ID,
+    sheetName: SHEETS.CUSTOMER,
+    tabId,
+    filters: filters[SHEETS.CUSTOMER],
+    enabled: !!filters[SHEETS.CUSTOMER],
   });
 
   const { mutate: mutateSave } = useProcMutation<MENU_ID, SHEETS.MAIN>({
-    menuId: MENU_ID, sheetName: SHEETS.MAIN, tabId,
+    menuId: MENU_ID,
+    sheetName: SHEETS.MAIN,
+    tabId,
   });
 
   useEffect(() => {
@@ -101,7 +118,7 @@ export const GroupUser = ({ tabId, title }: PageProps<MENU_ID>) => {
   };
   const onInsertUser = () => {
     if (!selectedUserGrId) {
-      void setAlert({ type: 'alert', content: '먼저 Group 을 선택해 주십시오.' });
+      void setAlert({ type: 'alert', content: t('MSG00625', '_먼저 Group 을 선택해 주십시오.') });
       return;
     }
     if (!userGridRef.current) return;
@@ -113,7 +130,7 @@ export const GroupUser = ({ tabId, title }: PageProps<MENU_ID>) => {
   };
   const insertUnit = (gridRef: { current: FlexGrid | undefined }, unitTpCd: string) => {
     if (!selectedUserGrId || !selectedUserId) {
-      void setAlert({ type: 'alert', content: '먼저 Group 과 User 를 선택해 주십시오.' });
+      void setAlert({ type: 'alert', content: t('MSG00626', '_먼저 Group 과 User 를 선택해 주십시오.') });
       return;
     }
     if (!gridRef.current) return;
@@ -128,7 +145,7 @@ export const GroupUser = ({ tabId, title }: PageProps<MENU_ID>) => {
   };
   const deleteUnit = (gridRef: { current: FlexGrid | undefined }) => {
     if (!gridRef.current) return;
-    GridAction.removeRow(gridRef.current, true);
+    GridAction.removeRow(gridRef.current, false);
   };
 
   // — SAVE (4 sheet 통합 — main/userInfo/division/plant/customer 의 모든 CRUD row) —
@@ -138,23 +155,29 @@ export const GroupUser = ({ tabId, title }: PageProps<MENU_ID>) => {
       USER_GR_ID: selectedUserGrId,
     });
     const divRows = collectRowsWithSheet(divisionGridRef.current, SHEETS.DIVISION, {
-      USER_GR_ID: selectedUserGrId, USER_ID: selectedUserId, UNIT_TP_CD: UNIT_TP_CD.DIVISION,
+      USER_GR_ID: selectedUserGrId,
+      USER_ID: selectedUserId,
+      UNIT_TP_CD: UNIT_TP_CD.DIVISION,
     });
     const plantRows = collectRowsWithSheet(plantGridRef.current, SHEETS.PLANT, {
-      USER_GR_ID: selectedUserGrId, USER_ID: selectedUserId, UNIT_TP_CD: UNIT_TP_CD.PLANT,
+      USER_GR_ID: selectedUserGrId,
+      USER_ID: selectedUserId,
+      UNIT_TP_CD: UNIT_TP_CD.PLANT,
     });
     const custRows = collectRowsWithSheet(customerGridRef.current, SHEETS.CUSTOMER, {
-      USER_GR_ID: selectedUserGrId, USER_ID: selectedUserId, UNIT_TP_CD: UNIT_TP_CD.CUSTOMER,
+      USER_GR_ID: selectedUserGrId,
+      USER_ID: selectedUserId,
+      UNIT_TP_CD: UNIT_TP_CD.CUSTOMER,
     });
     const payload = [...mainRows, ...userRows, ...divRows, ...plantRows, ...custRows];
     if (payload.length === 0) {
-      void setAlert({ type: 'alert', content: '변경 사항이 없습니다.' });
+      void setAlert({ type: 'alert', content: t('MSG00627', '_변경 사항이 없습니다.') });
       return;
     }
     mutateSave(payload as never[], {
       onSuccess: () => {
         void queryClient.invalidateQueries({ queryKey: [tabId] });
-        setToast({ type: 'success', message: '저장 완료' });
+        setToast({ type: 'success', message: t('MSG00002', '_성공적으로 저장되었습니다!') });
       },
     });
   };
@@ -175,8 +198,20 @@ export const GroupUser = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   const renderTitleBtns = (insert: () => void, del: () => void) => (
     <>
-      <Button appearance='outlined' priority='normal' size='small' buttonLabel='Add'    onClick={insert} />
-      <Button appearance='outlined' priority='normal' size='small' buttonLabel='Delete' onClick={del} />
+      <Button
+        appearance='outlined'
+        priority='normal'
+        size='small'
+        buttonLabel={t('LBL00621', 'Add')}
+        onClick={insert}
+      />
+      <Button
+        appearance='outlined'
+        priority='normal'
+        size='small'
+        buttonLabel={t('LBL00622', 'Delete')}
+        onClick={del}
+      />
     </>
   );
 
@@ -200,24 +235,24 @@ export const GroupUser = ({ tabId, title }: PageProps<MENU_ID>) => {
       <div className={styles.contents}>
         <div className={styles.row}>
           <div className={styles.module}>
-            <TitleArea isSubTitle title={t('LBL00601', 'Authority')} depth='h4' />
+            <TitleArea isSubTitle title={t('LBL00640', 'Authority')} depth='h4' />
             <GroupUserMainGrid
               gridRef={mainGridRef}
               gridFilterRef={mainGridFilterRef}
-              data={(mainData as { o_rc1?: unknown[] })?.o_rc1 as never[] ?? []}
+              data={((mainData as { o_rc1?: unknown[] })?.o_rc1 as never[]) ?? []}
             />
           </div>
           <div className={styles.module}>
             <TitleArea
               isSubTitle
-              title='Group User'
+              title={t('LBL00642', 'Group User')}
               depth='h4'
               rightButtons={renderTitleBtns(onInsertUser, onDeleteUser)}
             />
             <GroupUserInfoGrid
               gridRef={userGridRef}
               gridFilterRef={userGridFilterRef}
-              data={(userData as { o_rc1?: unknown[] })?.o_rc1 as never[] ?? []}
+              data={((userData as { o_rc1?: unknown[] })?.o_rc1 as never[]) ?? []}
             />
           </div>
         </div>
@@ -225,7 +260,7 @@ export const GroupUser = ({ tabId, title }: PageProps<MENU_ID>) => {
           <div className={styles.module}>
             <TitleArea
               isSubTitle
-              title={t('LBL00602', 'Division')}
+              title={t('LBL00641', 'Division')}
               depth='h4'
               rightButtons={renderTitleBtns(
                 () => insertUnit(divisionGridRef, UNIT_TP_CD.DIVISION),
@@ -235,7 +270,7 @@ export const GroupUser = ({ tabId, title }: PageProps<MENU_ID>) => {
             <GroupUserUnitGrid
               gridRef={divisionGridRef}
               gridFilterRef={divisionGridFilterRef}
-              data={(divisionData as { o_rc1?: unknown[] })?.o_rc1 as never[] ?? []}
+              data={((divisionData as { o_rc1?: unknown[] })?.o_rc1 as never[]) ?? []}
               staticColumns={staticColumns[SHEETS.DIVISION]}
             />
           </div>
@@ -252,14 +287,14 @@ export const GroupUser = ({ tabId, title }: PageProps<MENU_ID>) => {
             <GroupUserUnitGrid
               gridRef={plantGridRef}
               gridFilterRef={plantGridFilterRef}
-              data={(plantData as { o_rc1?: unknown[] })?.o_rc1 as never[] ?? []}
+              data={((plantData as { o_rc1?: unknown[] })?.o_rc1 as never[]) ?? []}
               staticColumns={staticColumns[SHEETS.PLANT]}
             />
           </div>
           <div className={styles.module}>
             <TitleArea
               isSubTitle
-              title='Customer'
+              title={t('LBL00643', 'Customer')}
               depth='h4'
               rightButtons={renderTitleBtns(
                 () => insertUnit(customerGridRef, UNIT_TP_CD.CUSTOMER),
@@ -269,7 +304,7 @@ export const GroupUser = ({ tabId, title }: PageProps<MENU_ID>) => {
             <GroupUserUnitGrid
               gridRef={customerGridRef}
               gridFilterRef={customerGridFilterRef}
-              data={(customerData as { o_rc1?: unknown[] })?.o_rc1 as never[] ?? []}
+              data={((customerData as { o_rc1?: unknown[] })?.o_rc1 as never[]) ?? []}
               staticColumns={staticColumns[SHEETS.CUSTOMER]}
             />
           </div>

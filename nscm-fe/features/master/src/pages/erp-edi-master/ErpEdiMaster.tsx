@@ -1,6 +1,6 @@
 import { type FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { apiClient } from '@foundation/apis';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
@@ -25,16 +25,18 @@ import styles from './ErpEdiMaster.module.scss';
 import { useErpEdiMasterStore } from './useErpEdiMasterStore';
 
 // AS-IS DMF0008_ErpEdiMaster — 3단 구조:
-//   [검색] Division (Form)
-//   [1단] Summary    : DMF0008_GET_EDI_MST_SUMMARY (sheet 'summary' — BE 메타 cross-check 2026-06-10)
+//   [검색] Division (Form) + Last Update Start/End (AS-IS .cs L2918 DMF0000_GET_UPDATE_HISTORY)
+//   [1단] Summary    : DMF0008_GET_EDI_MST_SUMMARY (sheet 'summary')
 //   [2단] Repair     : DMF0008_GET_EDI_MST_REPAIR  (sheet 'repair')
 //   [3단 2 tab] Sub  : Sales Site / SSPM
 //
 // 룰 v2 _tobe/01_file_structure.md §1.5 + hook components-folder-pattern.md (2026-06-09):
 //   진입 페이지 = composition + layout 만. 4 grid + Form 은 components/ sub-component.
-//   메모리 feedback_grid_no_hardcoded_static_columns: column 정의는 store.staticColumns (BE 메타 GET).
-// 2026-06-10 사용자 요구: 버튼 영역 UpdateHistoryBar (Update Start/End/By) 삭제.
+// 룰 #24 menu-button-dynamic-fetch + #62 ui-dynamic-property-management (2026-06-15):
+//   useTabBtnPermissions + hasButton(BTN_CD) — admin USE_YN='N' 자동 반영.
 const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
+  // V08/V09 fix (2026-06-20): useState(*GridRef) 안티패턴 제거.
+  // SubTitle 의 grid/gridFilter 는 activeTab 기반 삼항으로 직접 전달 (Lookup.tsx L208 표준).
   const summaryGridRef = useRef<FlexGridType<ResponseData<MENU_ID, SHEETS.SUMMARY>>>();
   const repairGridRef = useRef<FlexGridType<ResponseData<MENU_ID, SHEETS.REPAIR>>>();
   const salesSiteGridRef =
@@ -52,20 +54,17 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
   const setSearchParams = useErpEdiMasterStore(s => s.setSearchParams);
   const setSummaryFilters = useErpEdiMasterStore(s => s.setSummaryFilters);
   const setRepairFilter = useErpEdiMasterStore(s => s.setRepairFilter);
-  const setSubFilter = useErpEdiMasterStore(s => s.setSubFilter);
-  const setSalesSiteFilters = useErpEdiMasterStore(state => state.setSalesSiteFilters);
-  const setSspmFilters = useErpEdiMasterStore(state => state.setSspmFilters);
-  const repairContext = useErpEdiMasterStore(state => state.repairContext);
-  const setRepairContext = useErpEdiMasterStore(state => state.setRepairContext);
+  const setSalesSiteOnly = useErpEdiMasterStore(s => s.setSalesSiteOnly);
+  const setSspmOnly = useErpEdiMasterStore(s => s.setSspmOnly);
+  const setSalesSiteFilters = useErpEdiMasterStore(s => s.setSalesSiteFilters);
+  const setSspmFilters = useErpEdiMasterStore(s => s.setSspmFilters);
+  const repairContext = useErpEdiMasterStore(s => s.repairContext);
+  const setRepairContext = useErpEdiMasterStore(s => s.setRepairContext);
   const openSearchArea = useErpEdiMasterStore(s => s.openSearchArea);
   const setOpenSearchArea = useErpEdiMasterStore(s => s.setOpenSearchArea);
-  const fetchStaticColumns = useErpEdiMasterStore(state => state.fetchStaticColumns);
-  const staticColumns = useErpEdiMasterStore(state => state.staticColumns);
-
-  // ⭐ master hook §3 / child hook menu-button-dynamic-fetch §2.1 —
-  //   admin SYS0009 Menu Button (`SCM_ADM_MNU_BTN_MPG_M` USE_YN + `USER_GR_MNU_BTN_MPG_M` 권한) 동적 fetch.
-  //   하드코딩 hotkeyConfig 금지 — admin USE_YN='N' 즉시 반영 보장.
-  const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
+  const fetchStaticColumns = useErpEdiMasterStore(s => s.fetchStaticColumns);
+  const staticColumns = useErpEdiMasterStore(s => s.staticColumns);
+  const setUpdateHistory = useErpEdiMasterStore(s => s.setUpdateHistory);
 
   const { t } = useTranslation();
 
@@ -74,8 +73,10 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   const { saveWithValidation } = useSaveWithValidation();
 
-  const [activeGrid, setActiveGrid] = useState(summaryGridRef);
-  const [activeGridFilter, setActiveGridFilter] = useState(summaryFilterRef);
+  // V07 fix (2026-06-20): 동적 권한 hook 도입 (Hook #24/#62).
+  // admin USE_YN='N' 시 자동 false. BE 메타 (SCM_ADM_USER_GR_MNU_BTN_MPG_M) 등록 필요.
+  const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
+
   const [activeTab, setActiveTab] = useState<SHEET_INDEX>(SHEET_INDEX.SALES_SITE);
 
   const { data: summaryData } = useTabProcQuery<MENU_ID, SHEETS.SUMMARY>({
@@ -110,37 +111,27 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
     enabled: !!filters[SHEETS.SSPM],
   });
 
-  // ⭐ 2026-06-17 사용자 요구 — Last Update Start/End 데이터 표시.
-  //   AS-IS .cs L2918: DMF0000_GET_UPDATE_HISTORY (SDATE/EDATE/UPDATED_BY).
-  //
-  // useTabProcQuery 우회 — apiClient.post 직접 호출 + try/catch silent.
-  //   사유: useTabProcQuery 가 BE 응답 401/403/-9994 시 자동 alert 표시 → 화면 진입 시
-  //   권한 없음 alert 3회 사고 (2026-06-17 사용자 보고).
-  //   UpdateHistory 는 부가 정보 → 메타 미등록 시 silent fail (UI 영향 없음).
-  //
-  // ⭐ 2026-06-17 fix — 응답 구조 `result.o_rc1[0]` 정확 처리.
-  //   SP body 의 OUT cursor 이름이 O_RC1 → BE 응답 key = 'o_rc1'.
-  //   이전 코드는 `result` 자체를 array 로 처리 → 데이터 못 받음 사고.
-  const setUpdateHistory = useErpEdiMasterStore(state => state.setUpdateHistory);
-  const refetchUpdateHistory = async (): Promise<void> => {
-    try {
-      const res = await apiClient.post<{
-        o_rc1?: Array<{ SDATE?: string; EDATE?: string; UPDATED_BY?: string }>;
-      }>(`/${MENU_ID}/${SHEETS.UPDATE_HISTORY}/SEARCH/call-proc`, { menuId: MENU_ID });
-      const rows = (res.data?.result?.o_rc1 ?? []) as Array<{
-        SDATE?: string;
-        EDATE?: string;
-        UPDATED_BY?: string;
-      }>;
-      if (rows[0]) setUpdateHistory(rows[0]);
-    } catch {
-      // silent — 권한 미등록 / 메타 미등록 시 무시 (UpdateHistory 는 부가 정보)
-    }
-  };
+  // F02 (2026-06-20): AS-IS .cs L2918 DMF0000_GET_UPDATE_HISTORY 호출.
+  // setSummaryFilters 가 filters[UPDATE_HISTORY] 도 함께 set (Store) → 자동 fetch.
+  const { data: updateHistoryData } = useTabProcQuery<MENU_ID, SHEETS.UPDATE_HISTORY>({
+    menuId: MENU_ID,
+    sheetName: SHEETS.UPDATE_HISTORY,
+    tabId,
+    filters: filters[SHEETS.UPDATE_HISTORY],
+    enabled: !!filters[SHEETS.UPDATE_HISTORY],
+  });
+
   useEffect(() => {
-    void refetchUpdateHistory();
+    const row = updateHistoryData?.o_rc1?.[0];
+    if (row) {
+      setUpdateHistory({
+        SDATE: String(row.SDATE ?? ''),
+        EDATE: String(row.EDATE ?? ''),
+        UPDATED_BY: String(row.UPDATED_BY ?? ''),
+      });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [updateHistoryData]);
 
   const { mutate: mutateSalesSite } = useProcMutation<MENU_ID, SHEETS.SALES_SITE, 'o_rc1'>({
     menuId: MENU_ID,
@@ -168,7 +159,7 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
       });
       void setAlert({
         type: 'alert',
-        content: t('', '_데이터가 저장되었습니다.'),
+        content: t('MSG00606', '_데이터가 저장되었습니다.'),
       });
     },
   });
@@ -185,24 +176,12 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialized]);
 
-  // AS-IS btnStatusUpdate_Click (.cs L2996~3057) 1:1 매핑:
-  //   L3000-3001: Repair / Sub grid Rows.Clear → repairContext clear (filters reset 효과)
-  //   L3027: SP "DM.PR_DM_DNM_EDI_CALLOFF_STATUS" 실행
-  //   L3052: FindData_Main() 재조회 = Summary + Repair refetch (setSummaryFilters 동등)
-  //   L3055: GetUpdateHistory() 재조회 = Update Start/End refetch
+  // AS-IS btnStatusUpdate_Click (.cs L2565~2620): PR_DM_DNM_EDI_CALLOFF_STATUS 호출 + Summary + Repair refetch
   const handleStatusUpdate = async () => {
     try {
-      // ⭐ 2026-06-17 fix — URL 의 sheet 명 'summary' → 'main' (BE 메타 040 file 등록 기준).
-      //   기존 'summary' 호출 시 BE 메타 미등록 → SP 호출 실패 → SCM_SYS_LOG_BATCH 에 row INSERT 안 됨
-      //   → UpdateHistory 결과 NULL 사고 (2026-06-17 사용자 보고).
-      await apiClient.post(`/${MENU_ID}/main/STATUS_UPDATE/call-proc`, {});
+      await apiClient.post(`/${MENU_ID}/summary/STATUS_UPDATE/call-proc`, {});
       setToast({ type: 'success', message: 'Status Update 완료. 재조회합니다.' });
-      // L3000-3001: Sub grid clear (선택된 repair row 정보 reset)
-      setRepairContext(undefined);
-      // L3052: Summary + Repair refetch
       setSummaryFilters();
-      // L3055: UpdateHistory refetch
-      void refetchUpdateHistory?.();
     } catch (e) {
       const msg = e instanceof Error ? e.message : 'Status Update 실패';
       void setAlert({ type: 'alert', content: msg });
@@ -216,15 +195,25 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
     setRepairContext(undefined);
   };
 
-  // RepairGrid onDblClick: (col, row)
-  const handleRepairDoubleClick = (_col: number, row: ResponseData<MENU_ID, SHEETS.REPAIR>) => {
+  // RepairGrid onDblClick — AS-IS .cs L1973 단일 sheet 분기 (성능 — 2 SP → 1 SP).
+  // targetSheet 에 따라 해당 sub tab 으로 전환 + 단일 filter set.
+  const handleRepairDoubleClick = (
+    targetSheet: 'SALES_SITE' | 'SSPM',
+    row: ResponseData<MENU_ID, SHEETS.REPAIR>
+  ) => {
     setSearchParams({
       selectedSoldTo: String(row.ERP_SOLDTO ?? ''),
       selectedShipTo: String(row.ERP_SHIPTO ?? ''),
       selectedItemId: String(row.ERP_ITEM_ID ?? ''),
       selectedScmSiteId: String(row.GSCM_SALES_SITE_ID ?? ''),
     });
-    setSubFilter();
+    if (targetSheet === 'SALES_SITE') {
+      setSalesSiteOnly();
+      setActiveTab(SHEET_INDEX.SALES_SITE);
+    } else {
+      setSspmOnly();
+      setActiveTab(SHEET_INDEX.SSPM);
+    }
     const ctx = {
       division: row.DIVISION_ID,
       senderName: row.EDI_SENDER_NAME,
@@ -241,10 +230,7 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   const handleInsert = () => {
     if (!repairContext) return;
-    if (
-      (useSessionStore.getState().session as { groupId?: string } | undefined)?.groupId ===
-      'SCP Planner'
-    ) {
+    if (useSessionStore.getState().session?.groupId === 'SCP Planner') {
       void setAlert({
         type: 'alert',
         content: t('MSG00096', '사용 권한이 없습니다.'),
@@ -282,72 +268,42 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
     }
   };
 
-  // ⭐ master hook §3 / child hook menu-button-dynamic-fetch §2.1 —
-  //   `hasButton(BTN_CD)` 조건부 callback. admin 이 SYS0009 에서 USE_YN='N' 또는
-  //   사용자 그룹 권한 박탈 시 즉시 비활성 (hotkey 무효).
+  // V07 fix (2026-06-20): hasButton 권한 분기.
+  // BTN_CD 표준: SEARCH / SAVE / INSERT / STATUS_UPDATE (DMF0008 메타 SCM_ADM_USER_GR_MNU_BTN_MPG_M).
+  // 2026-06-20 사용자 요구: Condition / ResetCondition 기본 활성 (SubTitle DefaultButtonActions).
+  // → 명시 미정의 = 자동 활성 (F6 / F10).
   const hotkeyConfig: HotkeyConfig = {
     search: hasButton('SEARCH') ? setSummaryFilters : false,
     save: hasButton('SAVE') ? handleSave : false,
     insert: hasButton('INSERT') ? handleInsert : false,
     delete: false,
-    condition: false,
-    resetCondition: false,
     manual: false,
     upload: false,
   };
 
-  // ⭐ 사용자 명시 — 'Status Update' 버튼 항상 노출 (DMF0043 동일 정책).
-  const customButtons = useMemo(
-    () => [
-      {
-        label: 'Status Update',
-        action: () => void handleStatusUpdate(),
-      },
-    ],
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
+  // V07: customButtons 도 권한 분기 (STATUS_UPDATE BTN_CD).
+  const customButtons = hasButton('STATUS_UPDATE')
+    ? [
+        {
+          label: 'Status Update',
+          action: () => void handleStatusUpdate(),
+        },
+      ]
+    : [];
 
-  // Wijmo FlexGrid Array 가드 + null filter (룰 12 §11.5)
-  const safeRows = <T,>(data: unknown): T[] => {
-    if (!Array.isArray(data)) return [];
-    return data.filter((r): r is T => r != null && typeof r === 'object');
-  };
-  const summaryRows = useMemo(
-    () => safeRows<ResponseData<MENU_ID, SHEETS.SUMMARY>>(summaryData?.o_rc1),
-    [summaryData]
-  );
-  const repairRows = useMemo(
-    () => safeRows<ResponseData<MENU_ID, SHEETS.REPAIR>>(repairData?.o_rc1),
-    [repairData]
-  );
-  const salesSiteRows = useMemo(
-    () =>
-      safeRows<ResponseData<MENU_ID, SHEETS.SALES_SITE, 'o_rc1'>>(
-        salesSiteData?.o_rc1 ?? salesSiteData?.o_rc1
-      ),
-    [salesSiteData]
-  );
-  const sspmRows = useMemo(
-    () => safeRows<ResponseData<MENU_ID, SHEETS.SSPM>>(sspmData?.o_rc1),
-    [sspmData]
-  );
+  // V11 fix (2026-06-20): typo dead code `?? salesSiteData?.o_rc1` 제거.
+  // safeRows<T>() inline helper 제거 → 도메인 표준 `?? []` (DMF0004 SalesSite.tsx L186 참조).
+  const summaryRows = summaryData?.o_rc1 ?? [];
+  const repairRows = repairData?.o_rc1 ?? [];
+  const salesSiteRows = salesSiteData?.o_rc1 ?? [];
+  const sspmRows = sspmData?.o_rc1 ?? [];
 
-  // AS-IS .cs L861: TotalCount = ds.Tables[0].Compute("SUM(CNT)", "")
-  const repairTotal = useMemo(
-    () => repairRows.reduce((sum, r) => sum + (Number(r.CNT) || 0), 0),
-    [repairRows]
-  );
-
-  useEffect(() => {
-    if (activeTab === SHEET_INDEX.SALES_SITE) {
-      setActiveGrid(salesSiteGridRef as never);
-      setActiveGridFilter(salesSiteFilterRef as never);
-    } else {
-      setActiveGrid(sspmGridRef as never);
-      setActiveGridFilter(sspmFilterRef as never);
-    }
-  }, [activeTab]);
+  // V08/V09 + V10 fix (2026-06-20): activeTab 기반 grid/filter ref 삼항 (Lookup.tsx L208 표준).
+  // dataCount = Repair count (사용자 결정 — Repair = 주 작업 영역).
+  const activeGridRef =
+    activeTab === SHEET_INDEX.SALES_SITE ? salesSiteGridRef : sspmGridRef;
+  const activeGridFilterRef =
+    activeTab === SHEET_INDEX.SALES_SITE ? salesSiteFilterRef : sspmFilterRef;
 
   return (
     <div className={styles.container}>
@@ -361,9 +317,9 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
 
       <SubTitle
         menuId={MENU_ID}
-        grid={activeGrid}
-        gridFilter={activeGridFilter}
-        dataCount={summaryRows.length}
+        grid={activeGridRef}
+        gridFilter={activeGridFilterRef}
+        dataCount={repairRows.length}
         excelFileName='ErpEdiMaster'
         useHotkey={true}
         hotkeyConfig={hotkeyConfig}
@@ -371,7 +327,7 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
         customButtons={customButtons}
       />
 
-      {/* 1단 — Summary (flex-grow 3 = 30%) */}
+      {/* 1단 — Summary (flex-grow 4 = 40%) */}
       <div className={styles.summarySection}>
         <div className={styles.sectionTitle}>Summary</div>
         <ErpEdiMasterSummaryGrid
@@ -382,7 +338,7 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
         />
       </div>
 
-      {/* 2단 — Repair (flex-grow 3 = 30%) — 2026-06-17 사용자 요구: Total 수량 숨김 */}
+      {/* 2단 — Repair (flex-grow 3 = 30%) */}
       <div className={styles.repairSection}>
         <div className={styles.sectionTitle}>Repair</div>
         <ErpEdiMasterRepairGrid
@@ -393,7 +349,7 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
         />
       </div>
 
-      {/* 3단 — Tab (flex-grow 4 = 40%): Sales Site / SSPM */}
+      {/* 3단 — Tab (flex-grow 3 = 30%): Sales Site / SSPM */}
       <div className={styles.subSection}>
         <TabWrapper
           persist

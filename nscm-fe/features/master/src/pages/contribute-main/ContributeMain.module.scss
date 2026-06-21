@@ -5,6 +5,16 @@
   gap: 8px;
 }
 
+// SearchBar 의 Checkbox + Label 한 줄 + FormItem 영역 가운데 정렬 (Year dropdown 과 vertical 정합).
+.customCheckbox {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+  height: 100%;
+  min-height: 32px;
+}
+
 .searchBar {
   display: flex;
   padding: 12px 16px;

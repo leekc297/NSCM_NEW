@@ -158,39 +158,6 @@ class AxiosConfig {
     const response = await this.post<LookupResponse[], LookupParam>('admin/lookup', params);
     return response.data.result;
   }
-
-  /**
-   * G2 — BigFilter (multi-combo 1 round-trip) — Phase 5 신규
-   *
-   * BE: POST /admin/combo-muti
-   * body: { comboList: [{comboId: 'MyDivision'}, {comboId: 'TeambyDivision'}, ...] }
-   * response: { MyDivision: [...], TeambyDivision: [...], ... }
-   *
-   * AS-IS BaseForm DataService.GetDMInnerTable (BigFilter 캐싱) 동등.
-   * DM 도메인 화면이 useTabComboQueries 5 별도 호출 대신 본 함수로 1 round-trip.
-   */
-  async getCombosMulti(comboList: ComboParam[]): Promise<Record<string, ComboResponse[]>> {
-    const response = await this.post<Record<string, ComboResponse[]>, { comboList: ComboParam[] }>(
-      'admin/combo-muti',
-      { comboList }
-    );
-    return response.data.result;
-  }
-
-  /**
-   * G2 — multi-lookup (lookup-muti) 1 round-trip
-   *
-   * BE: POST /admin/lookup-muti
-   * body: { lookupType: 'INPUT_TP_CD,MNU_TP_CD' } (csv)
-   * response: { INPUT_TP_CD: [...], MNU_TP_CD: [...] }
-   */
-  async getLookupsMulti(lookupTypes: string[]): Promise<Record<string, LookupResponse[]>> {
-    const response = await this.post<Record<string, LookupResponse[]>, { lookupType: string }>(
-      'admin/lookup-muti',
-      { lookupType: lookupTypes.join(',') }
-    );
-    return response.data.result;
-  }
 }
 
 export const apiClient = new AxiosConfig(basicConfig);

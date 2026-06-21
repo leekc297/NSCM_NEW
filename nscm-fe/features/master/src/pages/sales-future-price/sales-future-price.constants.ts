@@ -7,16 +7,16 @@ export type MENU_ID = typeof MENU_ID;
 //   - 24 Event / 18 PKG SP / 71 메인 Validation + 12 POPUP / 9 Expression / 7 POPUP
 //   - 분석서: Doc/_analysis/domain_DM/screens/DMF0020_SalesFuturePrice/ + 5 POPUP_*
 export enum SHEETS {
-  MAIN = 'main',           // 메인 그리드 — wide format (동적 W_/M_ 컬럼)
-  PIVOT = 'pivot',         // Tab2 — Wijmo PivotEngine 클라이언트 측 long format
-  EXCHANGE = 'exchange',       // ExchangeRate POPUP — 클라우드 procedures.d.ts 유니온 정렬 (2026-06-12)
-  PRICE_BATCH = 'priceBatch',  // Price 일괄입력 POPUP — 클라우드 procedures.d.ts 유니온 정렬 (2026-06-12)
-  VERSION = 'version',     // Version 선택 POPUP
-  TITLE_SET = 'titleSet',  // Grid Column Setting POPUP
-  OWNER = 'owner',         // Owner POPUP
-  SPREAD_TITLE = 'spreadTitle',     // 동적 컬럼 메타 (W_/M_)
+  MAIN = 'main', // 메인 그리드 — wide format (동적 W_/M_ 컬럼)
+  PIVOT = 'pivot', // Tab2 — Wijmo PivotEngine 클라이언트 측 long format
+  EXCHANGE = 'exchange', // ExchangeRate POPUP — 클라우드 procedures.d.ts 유니온 정렬 (2026-06-12)
+  PRICE_BATCH = 'priceBatch', // Price 일괄입력 POPUP — 클라우드 procedures.d.ts 유니온 정렬 (2026-06-12)
+  VERSION = 'version', // Version 선택 POPUP
+  TITLE_SET = 'titleSet', // Grid Column Setting POPUP
+  OWNER = 'owner', // Owner POPUP
+  SPREAD_TITLE = 'spreadTitle', // 동적 컬럼 메타 (W_/M_)
   SPREAD_TITLE_DATE = 'spreadTitleDate', // 동적 컬럼 + 3단 헤더
-  MEASURE_COUNT = 'measureCount',   // Item 별 Measure 개수 (RowSpan)
+  MEASURE_COUNT = 'measureCount', // Item 별 Measure 개수 (RowSpan)
 }
 
 // const object — enum 대체 (NSCM 단일 cursor 표준 'o_rc1' 다수 중복 허용)
@@ -64,7 +64,14 @@ export interface MainColumnMeta {
   visible?: boolean;
   merge?: boolean;
   freeze?: boolean;
-  _ctrlType?: 'FPText' | 'FPModal' | 'FPComboBox' | 'FPCheckBox' | 'FPDate' | 'FPDateTime' | 'FPNumber';
+  _ctrlType?:
+    | 'FPText'
+    | 'FPModal'
+    | 'FPComboBox'
+    | 'FPCheckBox'
+    | 'FPDate'
+    | 'FPDateTime'
+    | 'FPNumber';
   _inputEditType?: 'S' | 'M' | 'O' | 'IM' | 'IO';
   _modalKey?: string;
   _comboKey?: string;
@@ -83,51 +90,188 @@ export interface MainColumnMeta {
 //   FPText S                : read-only (자동 채움 또는 고정)
 export const MAIN_COLUMNS: MainColumnMeta[] = [
   // AS-IS L2051+2052: 자동 sc.divisionId 채움 + Lock — 사용자 명시 dropdown 가능
-  { key: 'DIVISION_ID',     header: 'Div',              width: 70,  align: 'C', _ctrlType: 'FPComboBox', _inputEditType: 'IM', _comboKey: 'MyDivision' },
+  {
+    key: 'DIVISION_ID',
+    header: 'Div',
+    width: 70,
+    align: 'C',
+    _ctrlType: 'FPComboBox',
+    _inputEditType: 'IM',
+    _comboKey: 'MyDivision',
+  },
   // AS-IS L2034/L2067 SetCellTypeCombo(dtTeamAuth)
-  { key: 'DEPT_ID',         header: 'Team',             width: 70,  align: 'C', _ctrlType: 'FPComboBox', _inputEditType: 'IM', _comboKey: 'TeambyDivision' },
+  {
+    key: 'DEPT_ID',
+    header: 'Team',
+    width: 70,
+    align: 'C',
+    _ctrlType: 'FPComboBox',
+    _inputEditType: 'IM',
+    _comboKey: 'TeambyDivision',
+  },
   // AS-IS L2038/L2086 SetCellTypeCombo(dtEndCustomerAuth)
-  { key: 'END_CUSTOMER',    header: 'End Customer',     width: 100, align: 'C', _ctrlType: 'FPComboBox', _inputEditType: 'IM', _comboKey: 'EndCustomerByDivisionDept' },
+  {
+    key: 'END_CUSTOMER',
+    header: 'End Customer',
+    width: 100,
+    align: 'C',
+    _ctrlType: 'FPComboBox',
+    _inputEditType: 'IM',
+    _comboKey: 'EndCustomerByDivisionDept',
+  },
   // AS-IS L2036/L2072 SetCellTypeCombo(dtSalesSiteAuth)
-  { key: 'SCM_SITE_ID',     header: 'Sales Site',       width: 90,  align: 'C', _ctrlType: 'FPComboBox', _inputEditType: 'IM', _comboKey: 'SiteByEndCustomer' },
+  {
+    key: 'SCM_SITE_ID',
+    header: 'Sales Site',
+    width: 90,
+    align: 'C',
+    _ctrlType: 'FPComboBox',
+    _inputEditType: 'IM',
+    _comboKey: 'SiteByEndCustomer',
+  },
   // AS-IS L2040/L2088 cellTypeImage (popup)
-  { key: 'PROJECT_CODE',    header: 'Project Code',     width: 120, align: 'C', _ctrlType: 'FPModal',    _inputEditType: 'IM', _modalKey: 'PROJECT' },
+  {
+    key: 'PROJECT_CODE',
+    header: 'Project Code',
+    width: 120,
+    align: 'C',
+    _ctrlType: 'FPModal',
+    _inputEditType: 'IM',
+    _modalKey: 'PROJECT',
+  },
   // AS-IS L2092 LockRange2(true) — Project popup 시 자동 채움 + 직접 입력 허용 (사용자 명시)
-  { key: 'PROJECT_STATUS',  header: 'Project Status',   width: 100, align: 'C', _ctrlType: 'FPText',     _inputEditType: 'IO' },
+  {
+    key: 'PROJECT_STATUS',
+    header: 'Project Status',
+    width: 100,
+    align: 'C',
+    _ctrlType: 'FPText',
+    _inputEditType: 'IO',
+  },
   // AS-IS L2094 LockRange2(true) — Project popup 시 자동 채움
   //   사용자 요구 2026-06-03 v4: Insert 시 BizType combo dropdown 도 가능 (CMBO_SQL_M 'BizType' 등록)
-  { key: 'BIZ_TYPE_NAME',   header: 'Biz.Type',         width: 100, align: 'C', _ctrlType: 'FPComboBox', _inputEditType: 'IO', _comboKey: 'BizType' },
+  {
+    key: 'BIZ_TYPE_NAME',
+    header: 'Biz.Type',
+    width: 100,
+    align: 'C',
+    _ctrlType: 'FPComboBox',
+    _inputEditType: 'IO',
+    _comboKey: 'BizType',
+  },
   // AS-IS L2044/L2059 cellTypeImage (popup)
-  { key: 'ITEM_ID',         header: 'Model',            width: 110, align: 'C', _ctrlType: 'FPModal',    _inputEditType: 'IM', _modalKey: 'ITEM' },
+  {
+    key: 'ITEM_ID',
+    header: 'Model',
+    width: 110,
+    align: 'C',
+    _ctrlType: 'FPModal',
+    _inputEditType: 'IM',
+    _modalKey: 'ITEM',
+  },
   // AS-IS L2029/L2055 SetCellTypeCombo(dtincotermsEditType)
-  { key: 'INCOTERMS',       header: 'Incoterms',        width: 70,  align: 'C', _ctrlType: 'FPComboBox', _inputEditType: 'IM', _comboKey: 'Incoterms' },
+  {
+    key: 'INCOTERMS',
+    header: 'Incoterms',
+    width: 70,
+    align: 'C',
+    _ctrlType: 'FPComboBox',
+    _inputEditType: 'IM',
+    _comboKey: 'Incoterms',
+  },
   // AS-IS BP_FCST_TYPE LOOKUP_TYPE — Phase C (2026-06-03) CMBO_SQL_M 'FcstType' 등록 후 dropdown 전환
-  { key: 'FCST_TYPE',       header: 'FCST Type',        width: 80,  align: 'C', _ctrlType: 'FPComboBox', _inputEditType: 'IM', _comboKey: 'FcstType' },
+  {
+    key: 'FCST_TYPE',
+    header: 'FCST Type',
+    width: 80,
+    align: 'C',
+    _ctrlType: 'FPComboBox',
+    _inputEditType: 'IM',
+    _comboKey: 'FcstType',
+  },
   // AS-IS L2013 SetCellTypeCombo(dtCustomsHandbook) — Phase C CMBO_SQL_M 'CustomsHandbook' 등록 후 dropdown 전환
-  { key: 'DOM_EXP',         header: 'Customs Handbook', width: 110, align: 'C', _ctrlType: 'FPComboBox', _inputEditType: 'IM', _comboKey: 'CustomsHandbook' },
+  {
+    key: 'DOM_EXP',
+    header: 'Customs Handbook',
+    width: 110,
+    align: 'C',
+    _ctrlType: 'FPComboBox',
+    _inputEditType: 'IM',
+    _comboKey: 'CustomsHandbook',
+  },
   // AS-IS 미등록 — text 입력
-  { key: 'PLANT_SITE_ID',   header: 'Plant Site',       width: 90,  align: 'C', _ctrlType: 'FPText',     _inputEditType: 'IM' },
+  {
+    key: 'PLANT_SITE_ID',
+    header: 'Plant Site',
+    width: 90,
+    align: 'C',
+    _ctrlType: 'FPText',
+    _inputEditType: 'IM',
+  },
   // AS-IS L2047주석 (Currency Combo 비활성) — CMBO_SQL_M 'CurrencyList' 등록되어 있어 dropdown 활용
-  { key: 'CURRENCY',        header: 'Currency',         width: 80,  align: 'C', _ctrlType: 'FPComboBox', _inputEditType: 'IM', _comboKey: 'CurrencyList' },
+  {
+    key: 'CURRENCY',
+    header: 'Currency',
+    width: 80,
+    align: 'C',
+    _ctrlType: 'FPComboBox',
+    _inputEditType: 'IM',
+    _comboKey: 'CurrencyList',
+  },
   // AS-IS 미등록 — 'Y'/'N' 옵션
-  { key: 'PRICE_EXIST',     header: 'Price Exist',      width: 90,  align: 'C', _ctrlType: 'FPText',     _inputEditType: 'IO' },
+  {
+    key: 'PRICE_EXIST',
+    header: 'Price Exist',
+    width: 90,
+    align: 'C',
+    _ctrlType: 'FPText',
+    _inputEditType: 'IO',
+  },
   // AS-IS L2074 SetText(RTF/KRW/USD/LOC) + L2104 LockRange2(true)
-  { key: 'MEASURE',         header: 'Measure',          width: 90,  align: 'C', _ctrlType: 'FPText',     _inputEditType: 'S' },
+  {
+    key: 'MEASURE',
+    header: 'Measure',
+    width: 90,
+    align: 'C',
+    _ctrlType: 'FPText',
+    _inputEditType: 'S',
+  },
 ];
 
 // AS-IS Measure 4종 (DMF0020 Sales Price SHEET_MEASURE 등록값)
 // 순서: RTF, KRW, USD, LOC (사용자 명시 2026-06-03)
 // LOC row 만 dynamic cell editable (AS-IS .cs L2108)
 export const MEASURE_4 = ['RTF', 'KRW', 'USD', 'LOC'] as const;
-export type Measure4 = typeof MEASURE_4[number];
+export type Measure4 = (typeof MEASURE_4)[number];
 
 // ExchangeRate POPUP — AS-IS DMF0020_SalesFuturePricePopUp.cs L141~194 InitSpread() 정밀 매핑
 //   AS-IS L146/147/148: AddComboColumn(Division=120/Currency=70/Unit=50) Freeze through UNIT_CURRENCY
 //   사용자 명시 (2026-06-03 v3) — 캡쳐 Doc/ui_cap/DMF0020_Exchang_rate.png 1:1 재현
 export const EXCHANGE_RATE_COLUMNS: MainColumnMeta[] = [
-  { key: 'DIVISION_ID',     header: 'Div',           width: 120, align: 'C', _ctrlType: 'FPText', _inputEditType: 'S' },
-  { key: 'CURRENCY',        header: 'Currency',      width: 70,  align: 'C', _ctrlType: 'FPText', _inputEditType: 'S' },
-  { key: 'UNIT_CURRENCY',   header: 'Unit',          width: 50,  align: 'C', _ctrlType: 'FPText', _inputEditType: 'S' },
+  {
+    key: 'DIVISION_ID',
+    header: 'Div',
+    width: 120,
+    align: 'C',
+    _ctrlType: 'FPText',
+    _inputEditType: 'S',
+  },
+  {
+    key: 'CURRENCY',
+    header: 'Currency',
+    width: 70,
+    align: 'C',
+    _ctrlType: 'FPText',
+    _inputEditType: 'S',
+  },
+  {
+    key: 'UNIT_CURRENCY',
+    header: 'Unit',
+    width: 50,
+    align: 'C',
+    _ctrlType: 'FPText',
+    _inputEditType: 'S',
+  },
 ];
 
 // 좌측 Freeze 해제 (사용자 요구 2026-06-03)
@@ -135,8 +279,15 @@ export const FROZEN_COL_COUNT = 0;
 
 // 그룹 동시 선택 — Measure 제외 11개 키 (As-Is .cs RowSpan + 사용자 캡쳐)
 export const GROUP_COLS = [
-  'DIVISION_ID', 'TEAM_INCHARGE', 'END_CUSTOMER', 'SCM_SITE_ID',
-  'ITEM_ID', 'INCOTERMS', 'FCST_TYPE', 'DOM_EXP', 'CURRENCY',
+  'DIVISION_ID',
+  'TEAM_INCHARGE',
+  'END_CUSTOMER',
+  'SCM_SITE_ID',
+  'ITEM_ID',
+  'INCOTERMS',
+  'FCST_TYPE',
+  'DOM_EXP',
+  'CURRENCY',
 ] as const;
 
 // AS-IS Validation MSG ID 매핑 (validation.md 71건):
@@ -151,23 +302,23 @@ export const GROUP_COLS = [
 //   - MSG00142 (편집 잠금 해제 필요)
 //   - MSG00227/00255/00265/00283/00412/00414/00447/00448 기타 미등록 메시지
 export const MSG = {
-  REQUIRED_FIELD:       'MSG00002',
-  CONFIRM_SAVE:         'MSG00004',
-  DUPLICATE:            'MSG00043',
-  REQUIRE_DIVISION:     'MSG00097',
-  NO_DATA:              'MSG00108',
-  SELECT_COPY_ROW:      'MSG00113',
-  EDIT_LOCK_REQUIRED:   'MSG00135',
-  REQUIRED_COLUMN:      'MSG00137',
-  EXCHANGE_LOCK:        'MSG00142',
-  BATCH_RESULT:         'MSG00143',
-  MULTI_VERSION:        'MSG00255',
-  EXCEL_UPLOAD_RESULT:  'MSG00265',
-  REQUIRE_VERSION:      'MSG00283',
-  EDIT_MODE_LOCK:       'MSG00408',
-  PRICE_EXIST_MISSING:  'MSG00412',
-  SAVE_DIVISION_40:     'MSG00414',
-  CURRENCY_EMPTY:       'MSG00447',
+  REQUIRED_FIELD: 'MSG00002',
+  CONFIRM_SAVE: 'MSG00004',
+  DUPLICATE: 'MSG00043',
+  REQUIRE_DIVISION: 'MSG00097',
+  NO_DATA: 'MSG00108',
+  SELECT_COPY_ROW: 'MSG00113',
+  EDIT_LOCK_REQUIRED: 'MSG00135',
+  REQUIRED_COLUMN: 'MSG00137',
+  EXCHANGE_LOCK: 'MSG00142',
+  BATCH_RESULT: 'MSG00143',
+  MULTI_VERSION: 'MSG00255',
+  EXCEL_UPLOAD_RESULT: 'MSG00265',
+  REQUIRE_VERSION: 'MSG00283',
+  EDIT_MODE_LOCK: 'MSG00408',
+  PRICE_EXIST_MISSING: 'MSG00412',
+  SAVE_DIVISION_40: 'MSG00414',
+  CURRENCY_EMPTY: 'MSG00447',
   EDIT_NOT_CURRENT_VER: 'MSG00448',
-  INSERT_ONLY_BUCKET:   'MSG00227',
+  INSERT_ONLY_BUCKET: 'MSG00227',
 } as const;

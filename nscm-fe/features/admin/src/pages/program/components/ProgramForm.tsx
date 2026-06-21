@@ -20,7 +20,7 @@ export const ProgramForm = () => {
       conditions={
         <Grid size={3}>
           <FormItem
-            label={t('LBL00623', 'Search')}
+            label={t('LBL00644', 'Program ID(Name)')}
             labelAlign='right'
             render={() => (
               <InputField

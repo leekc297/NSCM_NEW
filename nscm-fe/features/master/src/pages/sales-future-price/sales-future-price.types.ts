@@ -3,22 +3,22 @@
 //   Item[]     / Project[] / Period*       / BizType[]   / Owner[]
 //   Bucket*    / SearchOverRange / ExcludeNoPrice / Version*
 export interface SearchCondition {
-  divisionId: string;            // 필수 — clbDivisions
-  deptIds: string[];             // Team — clbTeam (^ delim)
-  endCustomers: string[];        // clbEndCustomer (^ delim)
-  scmSiteIds: string[];          // Sales Site — clbSalesSite (^ delim)
-  plantSiteIds: string[];        // Plant Site — clbPlantSite (div=81 전용)
-  itemIds: string[];             // Model — umltModel / btnItemId popup
-  nickName: string;              // (umltModel 보조)
-  projectCodes: string[];        // Project — umltProject / usrButton1 popup
-  startYyyymmdd: string;         // Period.start (drpDateTime)
-  endYyyymmdd: string;           // Period.end
-  bizTypes: string[];            // clbBizType
-  owners: string[];              // txtOwner / btnOwner popup
-  bucketType: 'W' | 'M';         // cboBucketType (필수)
-  searchOverRange: boolean;      // usrDiscard ("Search over range")
-  excludeNoPrice: boolean;       // checkInvalidExec ("Price 미등록 제외")
-  versionId: string;             // txtVersion / btnSPVer popup (default = CURRENT)
+  divisionId: string; // 필수 — clbDivisions
+  deptIds: string[]; // Team — clbTeam (^ delim)
+  endCustomers: string[]; // clbEndCustomer (^ delim)
+  scmSiteIds: string[]; // Sales Site — clbSalesSite (^ delim)
+  plantSiteIds: string[]; // Plant Site — clbPlantSite (div=81 전용)
+  itemIds: string[]; // Model — umltModel / btnItemId popup
+  nickName: string; // (umltModel 보조)
+  projectCodes: string[]; // Project — umltProject / usrButton1 popup
+  startYyyymmdd: string; // Period.start (drpDateTime)
+  endYyyymmdd: string; // Period.end
+  bizTypes: string[]; // clbBizType
+  owners: string[]; // txtOwner / btnOwner popup
+  bucketType: 'W' | 'M'; // cboBucketType (필수)
+  searchOverRange: boolean; // usrDiscard ("Search over range")
+  excludeNoPrice: boolean; // checkInvalidExec ("Price 미등록 제외")
+  versionId: string; // txtVersion / btnSPVer popup (default = CURRENT)
 }
 
 // 메인 그리드 행 (P_DMF0020_GET_SCM_MST_FUTURE_PRICE_M 결과 — wide format)
@@ -35,13 +35,13 @@ export type FuturePriceRow = Record<string, unknown> & {
 //   AS-IS: BASIS_START_DATE / BASIS_START_DATE2 / MMDD / WEEK_NAME / YER+MON / BASIS_YYYYMM
 //   To-Be: react FlexGrid <Col binding=BASIS_START_DATE2 header=MMDD> + 3단 group header
 export interface SpreadTitleDateRow {
-  BASIS_START_DATE: string;     // 시간키 (Tag)
-  BASIS_START_DATE2: string;    // W_20260511 or M_202605 (binding)
-  MMDD: string;                 // Row2 header
-  WEEK_NAME: string;            // Row1 header
-  YER: string;                  // Row0 left
-  MON: string;                  // Row0 right (= YYYY-MM)
-  BASIS_YYYYMM: string;         // Row0 merge key
+  BASIS_START_DATE: string; // 시간키 (Tag)
+  BASIS_START_DATE2: string; // W_20260511 or M_202605 (binding)
+  MMDD: string; // Row2 header
+  WEEK_NAME: string; // Row1 header
+  YER: string; // Row0 left
+  MON: string; // Row0 right (= YYYY-MM)
+  BASIS_YYYYMM: string; // Row0 merge key
 }
 
 // SP IN payload — BLOCK 4 PROC_M 매핑
@@ -62,7 +62,7 @@ export interface ExchangeSavePayload {
   yyyymmdd: string;
   currency: string;
   unitCurrency: string;
-  exchangePrice: string;       // VARCHAR (^delim 가능)
+  exchangePrice: string; // VARCHAR (^delim 가능)
   createdBy: string;
   lastUpdatedBy: string;
 }
@@ -111,9 +111,9 @@ export interface PivotRow {
 
 // 3단 동적 헤더 트리 (YYYY > YYYY-MM > MMDD)
 export interface PivotHeaderTree {
-  year: string;     // '2026'
+  year: string; // '2026'
   months: Array<{
-    ym: string;     // '2026-01'
+    ym: string; // '2026-01'
     days: Array<{ binding: string; label: string }>; // [{ binding: '20260101', label: '0101' }]
   }>;
 }

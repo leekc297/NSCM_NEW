@@ -1,5 +1,8 @@
 // AS-IS .cs DefColumns 의 13 컬럼 — Wijmo FlexGrid binding 용
-export interface MainRow {
+// Wijmo 의 WijmoPrimitive 와 호환을 위해 동적 키 인덱스 시그니처는 undefined 미포함
+// (실제 row 에서 비어있는 셀은 '' 로 채움).
+// hook #70 P3 — WijmoRowItem extends 의무 (Grid<T> 제네릭 제약 호환).
+export interface MainRow extends WijmoRowItem {
   DIVISION_ID: string;
   VER_SEQ: string;
   DEPARTMENT_ID: string;
@@ -13,8 +16,8 @@ export interface MainRow {
   COLUMN_LABEL_NAME: string;
   SMALL_CLASS_LABEL_NAME: string;
   LARGE_CLASS_LABEL_NAME: string;
-  // 동적 월별 컬럼 (Y#YYYYMM#OS_CORP_CD 패턴)
-  [dynamicKey: string]: string | number | undefined;
+  // 동적 월별 컬럼 (Y#YYYYMM#OS_CORP_CD 패턴) — WijmoRowItem 의 인덱스 시그니처
+  // [k: string]: WijmoPrimitive 를 상속받음 (별도 명시 시 CRUD_TYPE?: string 과 충돌).
 }
 
 export interface VersionRow {
@@ -44,7 +47,7 @@ export interface SalesRow {
   EDIT_FLAG?: string;
 }
 
-export interface SearchCondition {
+export interface SearchParamProps {
   yyyy: string; // usrYear 선택 년도
   verSeq: string; // usrYear 선택 verSeq
   his: 'Y' | 'N'; // usrHis

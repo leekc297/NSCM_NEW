@@ -3,7 +3,7 @@ import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { createPersistedStoreWithTab } from '@shared/stores';
 
 import { MENU_ID, SHEETS } from './auth-approval.constants';
-import type { SearchCondition } from './auth-approval.types';
+import type { ApprovalRow, SearchCondition } from './auth-approval.types';
 
 type FiltersBySheet = {
   [SHEETS.MAIN]?: ProcRequest<MENU_ID, SHEETS.MAIN>;
@@ -15,6 +15,8 @@ interface AuthApprovalState {
   searchCondition: SearchCondition;
   openSearchArea: boolean;
   staticColumns: RawFlexGridColumnConfig[];
+  openRejectPopup: boolean;
+  rejectTarget: ApprovalRow[];
 }
 
 interface AuthApprovalAction {
@@ -24,6 +26,8 @@ interface AuthApprovalAction {
   setOpenSearchArea: (open?: boolean) => void;
   fetchSearchConditions: () => Promise<void>;
   fetchStaticColumns: () => Promise<void>;
+  setOpenRejectPopup: (open?: boolean) => void;
+  setRejectTarget: (params: ApprovalRow[]) => void;
 }
 
 const fmt = (d: Date) =>
@@ -47,6 +51,8 @@ export const useAuthApprovalStore = createPersistedStoreWithTab<
     searchCondition: { ...initSearch },
     openSearchArea: true,
     staticColumns: [],
+    openRejectPopup: false,
+    rejectTarget: [],
 
     reset: () => {
       set(state => {
@@ -63,7 +69,7 @@ export const useAuthApprovalStore = createPersistedStoreWithTab<
     setFilter: () => {
       const { searchCondition } = get();
       set(state => {
-        state.filters[SHEETS.MAIN] = (searchCondition as unknown) as ProcRequest<
+        state.filters[SHEETS.MAIN] = searchCondition as unknown as ProcRequest<
           MENU_ID,
           SHEETS.MAIN
         >;
@@ -75,10 +81,9 @@ export const useAuthApprovalStore = createPersistedStoreWithTab<
       });
     },
     fetchStaticColumns: async () => {
-      const res = await apiClient.post<RawFlexGridColumnConfig[]>(
-        `/admin/menu/${MENU_ID}/column`,
-        { sheetNm: SHEETS.MAIN }
-      );
+      const res = await apiClient.post<RawFlexGridColumnConfig[]>(`/admin/menu/${MENU_ID}/column`, {
+        sheetNm: SHEETS.MAIN,
+      });
       set(state => {
         state.staticColumns = res.data.result;
       });
@@ -86,9 +91,9 @@ export const useAuthApprovalStore = createPersistedStoreWithTab<
     fetchSearchConditions: async () => {
       if (get().initialized) return;
       try {
-        const param = await apiClient.get<
-          { paramNm: keyof SearchCondition; paramCtn: string }[]
-        >(`/admin/menu/${MENU_ID}/search-conditions`);
+        const param = await apiClient.get<{ paramNm: keyof SearchCondition; paramCtn: string }[]>(
+          `/admin/menu/${MENU_ID}/search-conditions`
+        );
 
         if (param.data.result?.length > 0) {
           const restored = param.data.result.reduce((acc, curr) => {
@@ -104,6 +109,16 @@ export const useAuthApprovalStore = createPersistedStoreWithTab<
       }
       set(state => {
         state.initialized = true;
+      });
+    },
+    setOpenRejectPopup: open => {
+      set(state => {
+        state.openRejectPopup = open ?? !state.openRejectPopup;
+      });
+    },
+    setRejectTarget: params => {
+      set(state => {
+        state.rejectTarget = params ?? [];
       });
     },
   }),

@@ -1,0 +1,11 @@
+-- ============================================================
+-- DMF0043 — SCM_ADM_MNU_M (메뉴 등록)
+-- 실행 계정: SCM_MGR · 멱등: DELETE 선행 + INSERT
+-- 행 수: 1
+-- ============================================================
+
+DELETE FROM SCM_MGR.SCM_ADM_MNU_M WHERE MNU_ID = 'DMF0043';
+
+INSERT INTO SCM_MGR.SCM_ADM_MNU_M (MNU_ID, UPPR_MNU_ID, MNU_URL, SYS_MNUL_URL, MNU_MSG_ID, MNU_DESC, SORT_ORD, MNU_LV_NO, MNU_TP_CD, UNIT_TP_CD, USE_YN, N01_ATR_CTN, N02_ATR_CTN, N03_ATR_CTN, N04_ATR_CTN, N05_ATR_CTN, N06_ATR_CTN, N07_ATR_CTN, N08_ATR_CTN, N09_ATR_CTN, N10_ATR_CTN, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE) VALUES ('DMF0043', 'Demand_Master', 'contribute-main', NULL, 'MNU00030', 'Overseas Subs. Contribution Rate Reg.', 80, 3, 'SCREEN', 'D', 'Y', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'murim', TO_DATE('2019-09-04 12:35:12','YYYY-MM-DD HH24:MI:SS'), 'admin', TO_DATE('2026-06-15 11:24:57','YYYY-MM-DD HH24:MI:SS'));
+
+COMMIT;

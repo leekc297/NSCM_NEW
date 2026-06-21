@@ -29,7 +29,7 @@ export const GroupUserInfoGrid = ({ gridRef, gridFilterRef, data }: Props) => {
   const editTrackerRef = useRef<EditTracker<UserInfoRow>>();
   const [clickedRow, setClickedRow] = useState<number>(-1);
   const [openSsoUser, setOpenSsoUser] = useState(false);
-  const { setAlert } = useMessageStore();
+  const setAlert = useMessageStore(state => state.setAlert);
 
   const staticColumns = useGroupUserStore(state => state.staticColumns[SHEETS.USER_INFO]);
   const setSelectedUserId = useGroupUserStore(state => state.setSelectedUserId);
@@ -65,10 +65,25 @@ export const GroupUserInfoGrid = ({ gridRef, gridFilterRef, data }: Props) => {
     if (!dataItem) return;
     if (dataItem.CRUD_TYPE !== CRUD_TYPE.INSERT) return;
 
-    editTrackerRef.current?.storeChange(dataItem as UserInfoRow, 'USER_ID', dataItem.USER_ID ?? '', userId);
-    editTrackerRef.current?.storeChange(dataItem as UserInfoRow, 'USER_NM', dataItem.USER_NM ?? '', userNm);
+    editTrackerRef.current?.storeChange(
+      dataItem as UserInfoRow,
+      'USER_ID',
+      dataItem.USER_ID ?? '',
+      userId
+    );
+    editTrackerRef.current?.storeChange(
+      dataItem as UserInfoRow,
+      'USER_NM',
+      dataItem.USER_NM ?? '',
+      userNm
+    );
     if (deptId !== undefined) {
-      editTrackerRef.current?.storeChange(dataItem as UserInfoRow, 'DEPT_NM', dataItem.DEPT_NM ?? '', deptId);
+      editTrackerRef.current?.storeChange(
+        dataItem as UserInfoRow,
+        'DEPT_NM',
+        dataItem.DEPT_NM ?? '',
+        deptId
+      );
       dataItem.DEPT_NM = deptId;
     }
     dataItem.USER_ID = userId;
@@ -93,7 +108,9 @@ export const GroupUserInfoGrid = ({ gridRef, gridFilterRef, data }: Props) => {
         open={openSsoUser}
         modalClose={() => setOpenSsoUser(false)}
         setSelectedValue={setUser}
-        initialUser={(GridUtils.getRow(gridRef.current, clickedRow) as { USER_NM?: string })?.USER_NM}
+        initialUser={
+          (GridUtils.getRow(gridRef.current, clickedRow) as { USER_NM?: string })?.USER_NM
+        }
       />
     </>
   );

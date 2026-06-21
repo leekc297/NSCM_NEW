@@ -22,8 +22,8 @@ import { useAuthRequestStore } from './useAuthRequestStore';
 const collectCheckedRows = <T,>(grid: FlexGrid<T> | null | undefined): T[] => {
   if (!grid) return [];
   const rows: T[] = [];
-  for (let i = 0; i < grid.rows.length; i += 1) {
-    const row = grid.rows[i];
+  for (const element of grid.rows) {
+    const row = element;
     if (row?.isSelected) rows.push(row.dataItem as T);
   }
   return rows;
@@ -136,8 +136,8 @@ export const AuthRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
         setRecentlyAddedKeys(addedKeys);
         const divGrid = divisionGridRef.current;
         if (divGrid) {
-          for (let i = 0; i < divGrid.rows.length; i += 1) {
-            const r = divGrid.rows[i];
+          for (const element of divGrid.rows) {
+            const r = element;
             if (r) r.isSelected = false;
           }
         }
@@ -182,17 +182,6 @@ export const AuthRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
     }
 
     const checkedRows = collectCheckedRows(myAuthGridRef.current);
-
-    // eslint-disable-next-line no-console
-    console.log('[SCM0008 handleRequest]', {
-      myAuthLen: myAuthData?.o_rc?.length,
-      checkedRowsLen: checkedRows.length,
-      checkedApprovalResults: checkedRows.map(r => r.APPROVAL_RESULT),
-      langCd,
-      tmzCd,
-      userInfoLangCd: userInfoData?.o_rc?.[0]?.LANG_CD,
-      userInfoTmzCd: userInfoData?.o_rc?.[0]?.TMZ_CD,
-    });
 
     if (checkedRows.length === 0) {
       void setAlert({ content: t('MSG00021', '_요청 권한을 선택해 주십시오.') });
@@ -247,9 +236,7 @@ export const AuthRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
     });
   };
 
-  const customButtons = [
-    { label: t('LBL00605', 'Request'), action: handleRequest },
-  ];
+  const customButtons = [{ label: t('LBL00620', 'Request'), action: handleRequest }];
 
   const handleSearch = () => {
     void queryClient.invalidateQueries({ queryKey: [tabId] });
@@ -263,14 +250,14 @@ export const AuthRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
         appearance='outlined'
         priority='normal'
         size='small'
-        buttonLabel={t('LBL00606', 'Add')}
+        buttonLabel={t('LBL00621', 'Add')}
         onClick={handleAdd}
       />
       <Button
         appearance='outlined'
         priority='normal'
         size='small'
-        buttonLabel={t('LBL00607', 'Delete')}
+        buttonLabel={t('LBL00622', 'Delete')}
         onClick={handleDelete}
       />
     </>

@@ -1,16 +1,23 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import { apiClient } from '@foundation/apis';
+import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
-import { Button } from '@shared/lges';
+import { Button, Checkbox, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
+import { Grid } from '@shared/mui';
 
-import type { SearchParamProps } from '../../customer-model-mapping/customer-model-mapping.types';
 import { MENU_ID, SHEETS } from '../contribute-view.constants';
 import type { VersionOption, ViewSearchCondition } from '../types';
 import { useContributeViewStore } from '../useContributeViewStore';
 
 import styles from './ContributeViewForm.module.scss';
+
+// admin /search-conditions 응답 row 의 paramNm 키 (ViewSearchCondition 의 string-valued 키만)
+type SearchParamProps = Pick<
+  ViewSearchCondition,
+  'yyyy' | 'verSeq' | 'versionNo' | 'divisionId' | 'endCustReport' | 'productGroup' | 'bizType'
+>;
 
 interface Props {
   onSearch: () => void;
@@ -18,22 +25,22 @@ interface Props {
 }
 
 // AS-IS DMF0043_Contribute_View Designer.cs 조회조건 9 컨트롤 1:1 매핑
-//   usrYear      (UsrCombo, DropDownList, width 139)  → Year SP 콤보
-//   txtVersion   (UsrMultiLineEditor, readonly+popup) → Version (btnSPVer 로만 채움)
-//   btnSPVer     (UsrButton, image, width 37)         → Version popup trigger
-//   usrCust      (UsrMultiLineEditor, free-form)      → 고객군
-//   usrType      (UsrCombo, DropDownList, width 109)  → 제품군 (DMF0005_REPORT_GROUP3, lookup SP 미등록 — free-form)
-//   usrBiz       (UsrCombo, DropDownList, width 59)   → Biz (DM_BIZ_TYPE, lookup SP 미등록 — free-form)
-//   chkM         (UsrCheckBox, Visible=false)         → [M$] 백만 단위 (As-IS hidden)
-//   usrChk       (UsrCheckBox, Visible=false)         → 정합성 체크 (As-IS hidden)
-//   btnColumn    (UsrButton, image, width 40)         → 컬럼 표시 설정 (SubTitle Button 영역으로 이동)
-//   [신규] btnCutOff (AS-IS .cs L444 btnCutOff_Click)  → 기여율 버전관리 (Form 아이콘으로 대체)
+//   usrYear      (UsrCombo, DropDownList)         → Year SP 콤보 (SHEETS.VERSION SP)
+//   txtVersion   (UsrMultiLineEditor, readonly)   → Version (btnSPVer 로만 채움)
+//   btnSPVer     (UsrButton, image)               → Version popup trigger (InputField endAdornment)
+//   usrCust      (UsrMultiLineEditor, free-form)  → 고객군 (InputField)
+//   usrType      (UsrCombo, DropDownList)         → 제품군 (CustomDropdown — ReportGroup3 lookup)
+//   usrBiz       (UsrCombo, DropDownList)         → Biz (CustomDropdown — DmBizType lookup)
+//   chkM         (UsrCheckBox)                    → [M$] 백만 단위 (Checkbox)
+//   usrChk       (UsrCheckBox)                    → 정합성 체크 (Checkbox)
+//   btnColumn / btnCutOff — Form 에서 제거 (SubTitle customButton + 기여율버전관리 분리)
 export const ContributeViewForm = ({ onSearch, onOpenVersionPopup }: Props) => {
-  const searchCondition = useContributeViewStore(s => s.searchCondition);
-  const setSearchCondition = useContributeViewStore(s => s.setSearchCondition);
+  const { t } = useTranslation();
+  const searchParams = useContributeViewStore(s => s.searchParams);
+  const setSearchParams = useContributeViewStore(s => s.setSearchParams);
 
   // AS-IS InitControls (.cs L104~108) + GetVersionData — Year SP 콤보 데이터
-  const { data: yearData, isLoading: yearLoading } = useTabProcQuery({
+  const { data: yearData } = useTabProcQuery({
     menuId: MENU_ID,
     sheetName: SHEETS.VERSION,
     tabId: MENU_ID,
@@ -41,17 +48,16 @@ export const ContributeViewForm = ({ onSearch, onOpenVersionPopup }: Props) => {
     enabled: true,
   });
 
-  const [yearOptions, setYearOptions] = useState<VersionOption[]>([]);
+  const yearOptions = useMemo<VersionOption[]>(
+    () => (yearData?.o_rc1 ?? []) as unknown as VersionOption[],
+    [yearData]
+  );
 
+  // AS-IS InitControls — 첫 옵션 자동 선택 + 검색조건 복원 (G1 personalize)
   useEffect(() => {
-    const rows = (yearData?.o_rc1 ?? []) as unknown as VersionOption[];
-    setYearOptions(rows);
-    // AS-IS InitControls — 첫 옵션 자동 선택
-    // ⛔ Oracle NUMBER → JS number 자동 변환 위험 (메모: feedback_no_type_cast_around_runtime).
-    //   String() 강제 변환 의무.
-    if (rows.length > 0 && !searchCondition.verSeq) {
-      const first = rows[0];
-      setSearchCondition({
+    if (yearOptions.length > 0 && !searchParams.verSeq) {
+      const first = yearOptions[0];
+      setSearchParams({
         verSeq: String(first.CODE ?? ''),
         yyyy: String(first.NAME2 ?? first.NAME ?? '').substring(0, 4),
       });
@@ -62,149 +68,160 @@ export const ContributeViewForm = ({ onSearch, onOpenVersionPopup }: Props) => {
       >(`/admin/menu/${MENU_ID}/search-conditions`)
       .then(res => {
         if (res.data.result?.length > 0) {
-          const searchParams = res.data.result.reduce((acc, curr) => {
+          const restored = res.data.result.reduce((acc, curr) => {
             acc[curr.paramNm] = curr.paramCtn;
             return acc;
           }, {} as SearchParamProps);
-          setSearchCondition(searchParams);
+          setSearchParams(restored);
         }
       });
-  }, []);
-
-  const setCond = (k: keyof ViewSearchCondition, v: string) =>
-    setSearchCondition({ [k]: v } as Partial<ViewSearchCondition>);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [yearOptions]);
 
   const [reportGroup, dmBizType] = useTabComboQueries({
     filters: ['ReportGroup3', 'DmBizType'],
   });
 
-  const PRODUCT_GROUP_OPTIONS =
-    reportGroup?.map(item => ({ label: item.NAME, value: item.CODE })) ?? [];
+  const yearDropdownOptions = useMemo(
+    () =>
+      yearOptions.map(o => ({
+        value: String(o.CODE ?? ''),
+        label: String(o.NAME2 ?? o.NAME ?? o.CODE ?? ''),
+      })),
+    [yearOptions]
+  );
 
-  const BIZ_TYPE_OPTIONS = dmBizType?.map(item => ({ label: item.NAME, value: item.CODE })) ?? [];
+  const productGroupOptions = useMemo(
+    () => (reportGroup ?? []).map(item => ({ label: item.NAME, value: item.CODE })),
+    [reportGroup]
+  );
+
+  const bizTypeOptions = useMemo(
+    () => (dmBizType ?? []).map(item => ({ label: item.NAME, value: item.CODE })),
+    [dmBizType]
+  );
 
   return (
-    <div className={styles.searchBar}>
-      <div className={styles.searchRow}>
-        {/* AS-IS usrYear (Designer.cs L199~232): UsrCombo DropDownList */}
-        <div className={styles.field}>
-          <span className={styles.fieldLabel}>Year</span>
-          <select
-            className={styles.select}
-            value={searchCondition.verSeq}
-            onChange={e => {
-              const opt = yearOptions.find(o => String(o.CODE) === e.target.value);
-              // ⛔ NUMBER → String cast 의무 (메모: feedback_no_type_cast_around_runtime)
-              setSearchCondition({
-                verSeq: e.target.value,
-                yyyy: String(opt?.NAME2 ?? opt?.NAME ?? '').substring(0, 4),
-              });
-            }}
-          >
-            {yearLoading ?? <option value=''>로딩 중</option>}
-            {yearOptions.map(o => (
-              <option key={String(o.CODE)} value={String(o.CODE)}>
-                {String(o.NAME2 ?? o.NAME ?? o.CODE)}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* AS-IS txtVersion (Designer.cs L129~162): UsrMultiLineEditor readonly + btnSPVer 로만 채움 */}
-        <div className={styles.field}>
-          <span className={styles.fieldLabel}>Version</span>
-          <input
-            className={styles.input}
-            type='text'
-            readOnly
-            value={searchCondition.versionNo}
-            placeholder='버전 선택'
-          />
-          {/* AS-IS btnSPVer (Designer.cs L163~197): UsrButton image — Version popup */}
-          {/* ⭐ 2026-06-17 사용자 요구 — DMF0005 (SalesSiteProjectModelForm L199-208) 패턴 동일. */}
-          <Button
-            appearance='outlined'
-            priority='normal'
-            iconComponent={
-              <FunctionSearchIcon
-                appearance='lined'
-                onClick={onOpenVersionPopup}
-              />
-            }
-          />
-        </div>
-
-        {/* AS-IS usrCust (Designer.cs L304~336): UsrMultiLineEditor free-form
-            AS-IS .cs L313: p_end_cust_report = usrCust.Text (텍스트 그대로 SP 전달) */}
-        <div className={styles.field}>
-          <span className={styles.fieldLabel}>고객군</span>
-          <input
-            className={styles.input}
-            type='text'
-            value={searchCondition.endCustReport}
-            onChange={e => setCond('endCustReport', e.target.value)}
-            placeholder='고객군 코드 직접 입력 (빈값=전체)'
-          />
-        </div>
-
-        {/* AS-IS usrType (Designer.cs L412~444): UsrCombo DropDownList — 정적 옵션 dropdown */}
-        <div className={styles.field}>
-          <span className={styles.fieldLabel}>제품군</span>
-          <select
-            className={styles.select}
-            value={searchCondition.productGroup}
-            onChange={e => setCond('productGroup', e.target.value)}
-          >
-            {PRODUCT_GROUP_OPTIONS.map(o => (
-              <option key={o.value} value={o.value}>
-                {o.label}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* AS-IS usrBiz (Designer.cs L270~302): UsrCombo DropDownList — 정적 옵션 dropdown */}
-        <div className={styles.field}>
-          <span className={styles.fieldLabel}>Biz</span>
-          <select
-            className={styles.select}
-            value={searchCondition.bizType}
-            onChange={e => setCond('bizType', e.target.value)}
-          >
-            {BIZ_TYPE_OPTIONS.map(o => (
-              <option key={o.value} value={o.value}>
-                {o.label}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* AS-IS chkM (Designer.cs L233~268): [M$] 백만 단위 — AS-IS Visible=false 였으나 사용자 요구 2026-06-02 노출 */}
-        <label className={styles.checkField}>
-          <input
-            type='checkbox'
-            checked={searchCondition.millionYn === 'Y'}
-            onChange={e => setSearchCondition({ millionYn: e.target.checked ? 'Y' : 'N' })}
-          />
-          [M$]
-        </label>
-
-        {/* AS-IS usrChk (Designer.cs L338~373): 정합성 체크 — AS-IS Visible=false 였으나 사용자 요구 노출 */}
-        <label className={styles.checkField}>
-          <input
-            type='checkbox'
-            checked={searchCondition.compatibilityYn === 'Y'}
-            onChange={e => setSearchCondition({ compatibilityYn: e.target.checked ? 'Y' : 'N' })}
-          />
-          정합성 체크
-        </label>
-
-        {/* AS-IS btnColumn 은 사용자 요구로 Form 에서 제거 — SubTitle customButton 으로 일원화 */}
-
-        <button type='button' className={styles.searchButton} onClick={onSearch}>
-          조회 (F5)
-        </button>
-      </div>
-    </div>
+    <SearchArea
+      searchButtonLabel={t('LBL00112', 'Search')}
+      onSearch={onSearch}
+      conditions={
+        <>
+          <Grid size={4}>
+            <FormItem
+              label={t('LBL00086', 'Year')}
+              labelAlign='right'
+              required
+              render={() => (
+                <CustomDropdown
+                  value={searchParams.verSeq}
+                  options={yearDropdownOptions}
+                  onChange={(_, option) => {
+                    const opt = yearOptions.find(o => String(o.CODE) === option);
+                    setSearchParams({
+                      verSeq: option,
+                      yyyy: String(opt?.NAME2 ?? opt?.NAME ?? '').substring(0, 4),
+                    });
+                  }}
+                />
+              )}
+            />
+          </Grid>
+          <Grid size={4}>
+            <FormItem
+              label={t('LBL00606', 'Version')}
+              labelAlign='right'
+              required
+              render={() => (
+                <InputField
+                  fullWidth
+                  className={styles.inputWithSearch}
+                  value={searchParams.versionNo}
+                  InputProps={{
+                    readOnly: true,
+                    endAdornment: (
+                      <Button
+                        appearance='outlined'
+                        priority='normal'
+                        iconComponent={
+                          <FunctionSearchIcon appearance='lined' onClick={onOpenVersionPopup} />
+                        }
+                      />
+                    ),
+                  }}
+                  onDoubleClick={onOpenVersionPopup}
+                />
+              )}
+            />
+          </Grid>
+          <Grid size={4}>
+            <FormItem
+              label={t('LBL00087', 'Customer Group')}
+              labelAlign='right'
+              render={() => (
+                <InputField
+                  value={searchParams.endCustReport}
+                  onChange={e => setSearchParams({ endCustReport: e.target.value })}
+                />
+              )}
+            />
+          </Grid>
+          <Grid size={4}>
+            <FormItem
+              label={t('LBL00088', 'Product Group')}
+              labelAlign='right'
+              render={() => (
+                <CustomDropdown
+                  value={searchParams.productGroup}
+                  options={productGroupOptions}
+                  onChange={(_, option) => setSearchParams({ productGroup: option })}
+                />
+              )}
+            />
+          </Grid>
+          <Grid size={4}>
+            <FormItem
+              label={t('LBL00607', 'Biz Type')}
+              labelAlign='right'
+              render={() => (
+                <CustomDropdown
+                  value={searchParams.bizType}
+                  options={bizTypeOptions}
+                  onChange={(_, option) => setSearchParams({ bizType: option })}
+                />
+              )}
+            />
+          </Grid>
+          <Grid size={4}>
+            <FormItem
+              label={t('LBL00609', 'Million')}
+              labelAlign='right'
+              render={() => (
+                <Checkbox
+                  checked={searchParams.millionYn === 'Y'}
+                  onChange={checked =>
+                    setSearchParams({ millionYn: checked ? 'Y' : 'N' })
+                  }
+                />
+              )}
+            />
+          </Grid>
+          <Grid size={4}>
+            <FormItem
+              label={t('LBL00610', 'Consistency Check')}
+              labelAlign='right'
+              render={() => (
+                <Checkbox
+                  checked={searchParams.compatibilityYn === 'Y'}
+                  onChange={checked =>
+                    setSearchParams({ compatibilityYn: checked ? 'Y' : 'N' })
+                  }
+                />
+              )}
+            />
+          </Grid>
+        </>
+      }
+    />
   );
 };

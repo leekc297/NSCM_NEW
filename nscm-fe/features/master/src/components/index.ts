@@ -1,4 +1,6 @@
 export * from './columnSettingModal/ColumnSettingModal';
+export * from './contributeRateModal/ContributeRateModal';
+export * from './contributeVersionModal/ContributeVersionModal';
 export * from './customerModal/CustomerModal';
 export * from './itemByDivisionModal/ItemByDivisionModal';
 export * from './ownerByDivisionModal/OwnerByDivisionModal';

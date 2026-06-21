@@ -15,30 +15,31 @@ const toDayjs = (yyyymmdd: string): Dayjs =>
     ? dayjs(`${yyyymmdd.slice(0, 4)}-${yyyymmdd.slice(4, 6)}-${yyyymmdd.slice(6, 8)}`)
     : dayjs();
 
-const STATUS_OPTIONS = [
-  { label: 'All', value: 'ALL' },
-  { label: 'Request', value: 'REQUEST' },
-  { label: 'Approved', value: 'APPROVED' },
-  { label: 'Rejected', value: 'REJECTED' },
-];
-
 export const AuthApprovalForm = ({ onSearch }: Props) => {
+  const { t } = useTranslation();
   const sc = useAuthApprovalStore(s => s.searchCondition);
   const setSc = useAuthApprovalStore(s => s.setSearchCondition);
   const openSearchArea = useAuthApprovalStore(s => s.openSearchArea);
+
+  const STATUS_OPTIONS = [
+    { label: t('LBL00632', 'All'), value: 'ALL' },
+    { label: t('LBL00633', 'Request'), value: 'REQUEST' },
+    { label: t('LBL00634', 'Approved'), value: 'APPROVED' },
+    { label: t('LBL00635', 'Rejected'), value: 'REJECTED' },
+  ];
 
   const periodValue: [Dayjs, Dayjs] = [toDayjs(sc.startDate), toDayjs(sc.endDate)];
 
   return (
     <SearchArea
-      searchButtonLabel='Search'
+      searchButtonLabel={t('LBL00112', '_Search')}
       isHidden={!openSearchArea}
       onSearch={onSearch}
       conditions={
         <>
           <Grid size={3}>
             <FormItem
-              label='User ID'
+              label={t('LBL00629', 'User ID')}
               labelAlign='right'
               render={() => (
                 <InputField
@@ -52,7 +53,7 @@ export const AuthApprovalForm = ({ onSearch }: Props) => {
           </Grid>
           <Grid size={3}>
             <FormItem
-              label='Period'
+              label={t('LBL00630', 'Period')}
               labelAlign='right'
               required
               render={() => (
@@ -75,7 +76,7 @@ export const AuthApprovalForm = ({ onSearch }: Props) => {
           </Grid>
           <Grid size={3}>
             <FormItem
-              label='Status'
+              label={t('LBL00631', 'Status')}
               labelAlign='right'
               render={() => (
                 <CustomDropdown

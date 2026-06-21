@@ -39,7 +39,7 @@ Doc/_legacy_source/06_UIL/domain_DM/GSCM.DM.Forms.UIL/Master/DMF0072_NNMasterMap
 
 ## Grid Column 매핑 (룰 25 §1.5.2 / 룰 12 §11.7)
 
-상세는 `nn-master-mapping.constants.ts` L66~90 의 `MAIN_COLUMNS` 표 참조 (23 컬럼, As-Is 패턴 → To-Be `_inputEditType` / `_ctrlType` / `_modalKey` 1:1).
+상세는 사내 DB `SCM_MST_SHEET_COLUMNS` (PROGRAM_ID='DMF0072', SHEET_NAME='main', 23 row) 참조 — 2026-06-20 BE 메타 등록 후 FE `MAIN_COLUMNS` 하드코딩 제거 (룰 #65 ui-category-setup-column-meta). 등록 source: `_artifacts/_deploy_packages/DMF0072/03_META/080_DMF0072_dynamic_property_management.sql` BLOCK 3.
 
 ---
 

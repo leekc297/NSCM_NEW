@@ -56,12 +56,12 @@ export const ErpEdiMasterForm = () => {
             >
               <Stack direction='row' sx={{ gap: '4px', alignItems: 'center' }}>
                 <span className={styles.dotTag} />
-                <Label labelText={t('', '_Last Update Start:')} />
+                <Label labelText={t('LBL00612', '_Last Update Start:')} />
                 <Typography variant='bodyBasic'>{updateHistory?.SDATE ?? '-'}</Typography>
               </Stack>
               <Stack direction='row' sx={{ gap: '4px', alignItems: 'center' }}>
                 <span className={styles.dotTag} />
-                <Label labelText={t('', '_Last Update End')} />
+                <Label labelText={t('LBL00613', '_Last Update End')} />
                 <Typography variant='bodyBasic'>{updateHistory?.EDATE ?? '-'}</Typography>
               </Stack>
             </Stack>

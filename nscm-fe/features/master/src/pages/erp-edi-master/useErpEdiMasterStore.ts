@@ -3,13 +3,15 @@ import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { createPersistedStoreWithTab, useSessionStore } from '@shared/stores';
 
 import { MENU_ID, RESPONSE_SET, SHEETS } from './erp-edi-master.constants';
-import type { SearchCondition } from './types';
+import type { SearchCondition } from './erp-edi-master.types';
 
 type FiltersBySheet = {
   [SHEETS.SUMMARY]?: ProcRequest<MENU_ID, SHEETS.SUMMARY>;
   [SHEETS.REPAIR]?: ProcRequest<MENU_ID, SHEETS.REPAIR>;
   [SHEETS.SALES_SITE]?: ProcRequest<MENU_ID, SHEETS.SALES_SITE>;
   [SHEETS.SSPM]?: ProcRequest<MENU_ID, SHEETS.SSPM>;
+  // AS-IS .cs L2918 DMF0000_GET_UPDATE_HISTORY — Form 의 SDATE/EDATE 표시용
+  [SHEETS.UPDATE_HISTORY]?: ProcRequest<MENU_ID, SHEETS.UPDATE_HISTORY>;
 };
 
 interface UpdateHistoryEntry {
@@ -54,6 +56,10 @@ interface ErpEdiMasterAction {
   /** DMF0004 표준 명칭 (Form 호출). Summary + Repair filters 동시 set */
   setSummaryFilters: () => void;
   setRepairFilter: () => void;
+  /** AS-IS .cs L1973~1981 — dblclick 컬럼 위치별 SALES_SITE 또는 SSPM 단일 조회 */
+  setSalesSiteOnly: () => void;
+  setSspmOnly: () => void;
+  /** @deprecated AS-IS 와 다른 동작 — 둘 다 fire 하여 성능 저하. setSalesSiteOnly/setSspmOnly 사용. */
   setSubFilter: () => void;
   setRepairContext: (ctx: RepairContext | undefined) => void;
   setSalesSiteFilters: (input: {
@@ -84,7 +90,7 @@ const initSearch: SearchCondition = (() => {
   return {
     fromYyyymmdd: fmtYyyymmdd(start),
     toYyyymmdd: fmtYyyymmdd(end),
-    divisionId: '81', // 2026-06-17 사용자 요구: 초기값 81
+    divisionId: '40',
     senderName: '',
     flag: 'ALL',
     selectedItemId: '',
@@ -116,6 +122,7 @@ export const useErpEdiMasterStore = createPersistedStoreWithTab<
       });
     },
     // AS-IS FindData_Main + FindData_SubRepair (.cs L727, L800): Summary + Repair 동시 호출
+    // + AS-IS .cs L2918 DMF0000_GET_UPDATE_HISTORY 동반 호출 — Form 의 Last Update Start/End 표시
     setSummaryFilters: () => {
       const sesUserId = useSessionStore.getState().session.userId ?? '';
       set(state => {
@@ -129,6 +136,10 @@ export const useErpEdiMasterStore = createPersistedStoreWithTab<
           divisionId: c.divisionId,
           senderName: c.senderName,
           flag: c.flag,
+          sesUserId,
+          menuId: MENU_ID,
+        };
+        state.filters[SHEETS.UPDATE_HISTORY] = {
           sesUserId,
           menuId: MENU_ID,
         };
@@ -148,7 +159,36 @@ export const useErpEdiMasterStore = createPersistedStoreWithTab<
         };
       });
     },
-    // AS-IS FindData_SubSalesSite (.cs L895) + FindData_SubSalesSiteProjectModel (.cs L946)
+    // AS-IS FindData_SubSalesSite (.cs L1169) — SALES_SITE 단일 조회 (dblclick GSCM.SSPM 이전 컬럼)
+    setSalesSiteOnly: () => {
+      const sesUserId = useSessionStore.getState().session.userId ?? '';
+      set(state => {
+        const c = state.searchParams;
+        state.filters[SHEETS.SALES_SITE] = {
+          divisionId: c.divisionId,
+          soldTo: c.selectedSoldTo,
+          shipTo: c.selectedShipTo,
+          scmSiteId: c.selectedScmSiteId,
+          sesUserId,
+          menuId: MENU_ID,
+        };
+      });
+    },
+    // AS-IS FindData_SubSalesSiteProjectModel (.cs L1262) — SSPM 단일 조회 (dblclick GSCM.SSPM 이후)
+    setSspmOnly: () => {
+      const sesUserId = useSessionStore.getState().session.userId ?? '';
+      set(state => {
+        const c = state.searchParams;
+        state.filters[SHEETS.SSPM] = {
+          divisionId: c.divisionId,
+          itemId: c.selectedItemId,
+          scmSiteId: c.selectedScmSiteId,
+          sesUserId,
+          menuId: MENU_ID,
+        };
+      });
+    },
+    // @deprecated — 성능 저하 (2 SP 동시 호출). setSalesSiteOnly + setSspmOnly 사용.
     setSubFilter: () => {
       const sesUserId = useSessionStore.getState().session.userId ?? '';
       set(state => {
@@ -266,9 +306,9 @@ export const useErpEdiMasterStore = createPersistedStoreWithTab<
       });
     },
   }),
-  // storageName v3 — divisionId 초기값 '40' → '81' 변경 (2026-06-17) 으로 sessionStorage cached '40' 무시.
-  // v2 schema 의 cached searchParams.divisionId='40' 이 새 default '81' 와 불일치 → 사용자 진입 시 stale '40' 적용 사고 방지.
-  'erp-edi-master-v3'
+  // storageName v2 — store schema 변경 (staticColumns key 'main' → 'summary' 등) 으로 sessionStorage stale state 무시.
+  // 어제 v1 schema 의 staticColumns 가 새 selector state.staticColumns.summary 와 호환 안 됨 → DataGrid.filter() null read 사고 (2026-06-10).
+  'erp-edi-master-v2'
 );
 
 // (placeholder ref — type-check 의미 없는 미사용 변수 회피)

@@ -1,9 +1,9 @@
 import { CellType, type FlexGrid as FlexGridType, type HitTestInfo } from '@mescius/wijmo.grid';
 import { FlexGrid, FlexGridColumn } from '@mescius/wijmo.react.grid';
 import dayjs, { type Dayjs } from 'dayjs';
-import _ from 'lodash';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
+import _ from '@foundation/lodash';
 import { CustomDialog } from '@shared/components';
 import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
 import { DatePickerCalendar } from '@shared/lges';
@@ -34,16 +34,17 @@ import styles from './ContributeVersionModal.module.scss';
 //   - SEND_YN <> 'D'
 // 결과 컬럼 (SP SELECT): VERSION_NO/VERSION_DESCRIPTION/VERSION_TYPE/VER_CRE_SEQ/YYYYMMDD/CREATED_BY/CREATION_DATE/EDIT_YN
 
-interface VersionPopupRow {
-  CODE?: string; // = VERSION_NO
-  VERSION_NO?: string;
-  VERSION_DESCRIPTION?: string;
-  VERSION_TYPE?: string;
-  VER_CRE_SEQ?: string | number;
-  YYYYMMDD?: string;
-  CREATED_BY?: string;
-  CREATION_DATE?: string;
-  EDIT_YN?: string;
+// 룰 #70 P3: extends WijmoRowItem + 모든 fields non-optional
+interface VersionPopupRow extends WijmoRowItem {
+  CODE: string; // = VERSION_NO
+  VERSION_NO: string;
+  VERSION_DESCRIPTION: string;
+  VERSION_TYPE: string;
+  VER_CRE_SEQ: string | number;
+  YYYYMMDD: string;
+  CREATED_BY: string;
+  CREATION_DATE: string;
+  EDIT_YN: string;
 }
 
 interface Props {

@@ -1,0 +1,1115 @@
+-- ============================================================
+-- DMF0072 — 전 SP body (dev/local DDL extract, 2026-06-22)
+-- 실행 계정: SCM_MGR
+-- 적용: ALTER SESSION SET PLSQL_OPTIMIZE_LEVEL=2; 추천
+-- ============================================================
+
+-- ===== DMF0072_GET_DATA_TYPE_LIST =====
+CREATE OR REPLACE EDITIONABLE PROCEDURE "SCM_MGR"."DMF0072_GET_DATA_TYPE_LIST" (
+    O_RC1 OUT SYS_REFCURSOR
+) AS
+BEGIN
+    OPEN O_RC1 FOR
+        SELECT 'ALL' AS CODE, 'ALL' AS NAME FROM DUAL
+        UNION ALL
+        SELECT DISTINCT SEGMENT1, NVL(SEGMENT2, SEGMENT1) AS NAME
+          FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL
+         WHERE LOOKUP_TYPE='DM_EDI_DATA_TYPE_CODE' AND VALID_YN='Y'
+         ORDER BY 1;
+END DMF0072_GET_DATA_TYPE_LIST;
+/
+/
+
+-- ===== DMF0072_GET_END_CUSTOMER_LIST =====
+CREATE OR REPLACE EDITIONABLE PROCEDURE "SCM_MGR"."DMF0072_GET_END_CUSTOMER_LIST" (
+    P_DIVISION_ID VARCHAR2,
+    P_DEPT_ID     VARCHAR2,
+    O_RC1 OUT SYS_REFCURSOR
+) AS
+BEGIN
+    -- As-Is .cs L165~178: EndCustomerByDivision[40]
+    --   div='40' 분기는 To-Be 에서 통합 SP 로 단일화 (분기 logic 은 wrapper 측에서 처리 가능)
+    --   P_DEPT_ID 'ALL' 또는 NULL → 부서 무관 / 그 외 → 콤마 split 후 매칭
+    OPEN O_RC1 FOR
+      SELECT DISTINCT END_CUSTOMER AS CODE,
+             END_CUSTOMER AS NAME
+        FROM SCM_MGR.SCM_MST_SITE S
+       WHERE (P_DIVISION_ID IS NULL OR P_DIVISION_ID = 'ALL' OR S.DIVISION_ID = P_DIVISION_ID)
+         AND S.END_CUSTOMER IS NOT NULL
+         AND S.VALID_YN = 'Y'
+         -- cascading: P_DEPT_ID 가 'ALL' 또는 빈 값이면 전체, 그 외 부서별 (현 시점 매핑 부재 — site.OWNER dept 매핑 후속 작업)
+         AND (P_DEPT_ID IS NULL OR P_DEPT_ID = 'ALL'
+              OR EXISTS (
+                SELECT 1 FROM TABLE(SCM_MGR.UF_FX_STRING_SPLIT(P_DEPT_ID, ',')) P
+                 WHERE P.TOKEN IS NOT NULL
+              )
+             )
+       ORDER BY 1;
+END DMF0072_GET_END_CUSTOMER_LIST;
+/
+/
+
+-- ===== DMF0072_GET_ITEM_POPUP_LIST =====
+CREATE OR REPLACE EDITIONABLE PROCEDURE "SCM_MGR"."DMF0072_GET_ITEM_POPUP_LIST" (
+    P_DIVISION_ID    VARCHAR2,
+    P_DEPT_ID        VARCHAR2,
+    P_END_CUSTOMER   VARCHAR2,
+    P_PROJECT_CODE   VARCHAR2,
+    P_SCM_SITE_ID    VARCHAR2,
+    P_ITEM_ID        VARCHAR2,
+    P_MDM_ACTIVE_SW  VARCHAR2,
+    O_RC1            OUT SYS_REFCURSOR
+) AS
+BEGIN
+    -- As-Is WITH 절 2개 (TEMP_DM_MST_ITEM_SINGLE_V + TMP_81_UC_EXCEPTION) + UNION 3분기 (81%/82/4%) 1:1 보존
+    OPEN O_RC1 FOR
+        WITH TEMP_DM_MST_ITEM_SINGLE_V AS (
+          SELECT A.DIVISION_ID, A.ITEM_ID, A.ITEM_NAME, A.ITEM_CLASS_NAME, A.NICK_NAME, A.ITEM_TYPE, A.ACTIVE_FLAG
+            FROM (
+              SELECT T1.DIVISION_ID,
+                     T1.ITEM_ID,
+                     MAX(T1.ITEM_NAME)       AS ITEM_NAME,
+                     MAX(T1.ITEM_CLASS_NAME) AS ITEM_CLASS_NAME,
+                     MAX(T1.NICK_NAME)       AS NICK_NAME,
+                     CASE MIN(CASE WHEN T1.ITEM_TYPE = 'P' THEN 1
+                                   WHEN T1.ITEM_TYPE = 'H' THEN 2
+                                   WHEN T1.ITEM_TYPE = 'Q' THEN 3
+                                   ELSE 4 END)
+                          WHEN 1 THEN 'P'
+                          WHEN 2 THEN 'H'
+                          WHEN 3 THEN 'Q'
+                          ELSE 'R' END        AS ITEM_TYPE,
+                     MAX(T1.ACTIVE_FLAG)      AS ACTIVE_FLAG
+                FROM SCM_MGR.SCM_MST_ITEM_SN T1
+               WHERE T1.DIVISION_ID = P_DIVISION_ID
+               GROUP BY T1.DIVISION_ID, T1.ITEM_ID
+            ) A
+           WHERE A.DIVISION_ID = P_DIVISION_ID
+        ),
+        TMP_81_UC_EXCEPTION AS (
+          SELECT P_DIVISION_ID AS DIVISION_ID, V.ITEM_ID, V.ACTIVE_FLAG
+            FROM (
+              SELECT P_DIVISION_ID AS DIVISION_ID, V.ITEM_ID, V.ACTIVE_FLAG
+                FROM TEMP_DM_MST_ITEM_SINGLE_V V
+               WHERE V.DIVISION_ID = '81'
+               GROUP BY V.ITEM_ID, V.ACTIVE_FLAG
+            ) V
+           INNER JOIN (SELECT S.DIVISION_ID, S.ITEM_ID
+                         FROM SCM_MGR.SCM_MST_SITE_ITEM S
+                        WHERE S.DIVISION_ID = P_DIVISION_ID
+                          AND S.ITEM_ID != ' '
+                        GROUP BY S.DIVISION_ID, S.ITEM_ID) S
+              ON S.DIVISION_ID = V.DIVISION_ID
+             AND S.ITEM_ID     = V.ITEM_ID
+           WHERE P_DIVISION_ID = '81_UC'
+           GROUP BY V.ITEM_ID, V.ACTIVE_FLAG
+        )
+        -- ── UNION 1 : DIVISION LIKE '81%' (자동차)
+        SELECT I.DIVISION_ID, I.DIVISION_ID AS DIVISION_NAME,
+               D.PROJECT_CODE, A.PROJECT_NAME,
+               S.SCM_SITE_ID, S.SITE_DESCRIPTION,
+               D.ITEM_ID, T.ITEM_NAME, T.ITEM_TYPE,
+               ITC.NAME AS ITEM_TYPE_NAME,
+               T.NICK_NAME, T.ITEM_CLASS_NAME,
+               TEAM.DEPT_ID, TEAM.DEPT_NAME_KO,
+               S.END_CUSTOMER, D.CURRENCY,
+               D.PROJECT_CODE AS END_CUSTOMER40
+          FROM SCM_MGR.SCM_MST_DIVISION I
+          LEFT JOIN SCM_MGR.SCM_MST_SITE_ITEM D ON I.DIVISION_ID = D.DIVISION_ID AND D.VALID_YN = 'Y'
+          LEFT JOIN SCM_MGR.SCM_MST_PROJECT A ON I.DIVISION_ID = D.DIVISION_ID AND D.PROJECT_CODE = A.PROJECT_CODE
+          LEFT JOIN SCM_MGR.SCM_MST_SITE S ON D.SCM_SITE_ID = S.SCM_SITE_ID AND S.VALID_YN = 'Y'
+          LEFT JOIN TEMP_DM_MST_ITEM_SINGLE_V T ON I.DIVISION_ID = T.DIVISION_ID AND D.ITEM_ID = T.ITEM_ID
+          LEFT JOIN (
+              SELECT B.USER_ID, B.USER_NAME, B.USER_NAME_EN, B.DEPT_ID, C.DEPT_NAME_KO, C.UPPER_DEPT_ID
+                FROM SCM_MGR.SCM_MST_SSO_USER_INFO B
+                INNER JOIN SCM_MGR.SCM_MST_SSO_DEPT_INFO C ON B.DEPT_ID = C.DEPT_ID) TEAM
+            ON TEAM.USER_ID IN (SELECT TOKEN FROM TABLE(SCM_MGR.UF_FX_STRING_SPLIT(D.OWNER, ',')) WHERE ROWNUM = 1)
+          LEFT JOIN (SELECT SEGMENT1 AS CODE, SEGMENT2 AS NAME FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL
+                      WHERE VALID_YN = 'Y' AND LOOKUP_TYPE = 'ITEM_TYPE_CODE') ITC
+            ON T.ITEM_TYPE = ITC.CODE
+          LEFT OUTER JOIN TMP_81_UC_EXCEPTION EX ON EX.DIVISION_ID = D.DIVISION_ID AND EX.ITEM_ID = D.ITEM_ID
+         WHERE I.DIVISION_ID = P_DIVISION_ID
+           AND I.DIVISION_ID LIKE '81%'
+           AND I.VALID_YN = 'Y'
+           AND S.SITE_TYPE = 'SALES'
+           AND CASE WHEN P_DEPT_ID = 'ALL' THEN 'ALL' ELSE TEAM.DEPT_ID END
+               IN (SELECT COLUMN_VALUE FROM TABLE(SCM_MGR.UF_FX_STRING_SPLITFORIN(P_DEPT_ID, ',')) P
+                    WHERE (CASE WHEN P_DEPT_ID = 'ALL' THEN 'ALL' ELSE TEAM.DEPT_ID END) = P.COLUMN_VALUE)
+           AND CASE WHEN P_END_CUSTOMER = 'ALL' THEN 'ALL' ELSE NVL(S.END_CUSTOMER, '') END
+               IN (SELECT COLUMN_VALUE FROM TABLE(SCM_MGR.UF_FX_STRING_SPLITFORIN(P_END_CUSTOMER, ',')) P
+                    WHERE (CASE WHEN P_END_CUSTOMER = 'ALL' THEN 'ALL' ELSE NVL(S.END_CUSTOMER, '') END) = P.COLUMN_VALUE)
+           AND CASE WHEN P_SCM_SITE_ID = 'ALL' THEN 'ALL' ELSE S.SCM_SITE_ID END
+               IN (SELECT COLUMN_VALUE FROM TABLE(SCM_MGR.UF_FX_STRING_SPLITFORIN(P_SCM_SITE_ID, ',')) P
+                    WHERE (CASE WHEN P_SCM_SITE_ID = 'ALL' THEN 'ALL' ELSE S.SCM_SITE_ID END) = P.COLUMN_VALUE)
+           AND (EXISTS (SELECT 1 FROM TABLE(SCM_MGR.UF_FX_STRING_SPLIT(P_PROJECT_CODE, ',')) P WHERE D.PROJECT_CODE LIKE P.TOKEN || '%')
+                OR EXISTS (SELECT 1 FROM TABLE(SCM_MGR.UF_FX_STRING_SPLIT(P_PROJECT_CODE, ',')) P WHERE A.PROJECT_NAME LIKE P.TOKEN || '%'))
+           AND (EXISTS (SELECT 1 FROM TABLE(SCM_MGR.UF_FX_STRING_SPLIT(P_ITEM_ID, ',')) P WHERE D.ITEM_ID LIKE P.TOKEN || '%')
+                OR EXISTS (SELECT 1 FROM TABLE(SCM_MGR.UF_FX_STRING_SPLIT(P_ITEM_ID, ',')) P WHERE T.NICK_NAME LIKE P.TOKEN || '%'))
+           AND CASE WHEN P_DIVISION_ID = '81_UC'
+                    THEN CASE WHEN NVL(P_MDM_ACTIVE_SW, '') = '' THEN '' ELSE NVL(T.ACTIVE_FLAG, EX.ACTIVE_FLAG) END
+                    ELSE CASE WHEN NVL(P_MDM_ACTIVE_SW, '') = '' THEN '' ELSE T.ACTIVE_FLAG END
+               END = CASE WHEN NVL(P_MDM_ACTIVE_SW, '') = '' THEN '' ELSE 'Y' END
+        UNION
+        -- ── UNION 2 : DIVISION = '82' (ESS)
+        SELECT I.DIVISION_ID, I.DIVISION_ID AS DIVISION_NAME,
+               D.PROJECT_CODE, A.PROJECT_NAME,
+               S.SCM_SITE_ID, S.SITE_DESCRIPTION,
+               T.ITEM_ID, T.ITEM_NAME, T.ITEM_TYPE,
+               ITC.NAME AS ITEM_TYPE_NAME,
+               T.NICK_NAME, T.ITEM_CLASS_NAME,
+               TEAM.DEPT_ID, TEAM.DEPT_NAME_KO,
+               S.END_CUSTOMER, D.CURRENCY,
+               D.PROJECT_CODE AS END_CUSTOMER40
+          FROM SCM_MGR.SCM_MST_DIVISION I
+          LEFT JOIN SCM_MGR.SCM_MST_SITE_ITEM D ON I.DIVISION_ID = D.DIVISION_ID AND D.VALID_YN = 'Y'
+          LEFT JOIN SCM_MGR.SCM_MST_PROJECT A ON I.DIVISION_ID = D.DIVISION_ID AND D.PROJECT_CODE = A.PROJECT_CODE
+          LEFT JOIN SCM_MGR.SCM_MST_SITE S ON I.DIVISION_ID = D.DIVISION_ID AND D.SCM_SITE_ID = S.SCM_SITE_ID AND S.VALID_YN = 'Y'
+          LEFT OUTER JOIN TEMP_DM_MST_ITEM_SINGLE_V T ON I.DIVISION_ID = T.DIVISION_ID AND D.ITEM_ID = T.ITEM_ID
+          LEFT JOIN (
+              SELECT B.USER_ID, B.USER_NAME, B.USER_NAME_EN, B.DEPT_ID, C.DEPT_NAME_KO, C.UPPER_DEPT_ID
+                FROM SCM_MGR.SCM_MST_SSO_USER_INFO B
+                INNER JOIN SCM_MGR.SCM_MST_SSO_DEPT_INFO C ON B.DEPT_ID = C.DEPT_ID) TEAM
+            ON TEAM.USER_ID IN (SELECT TOKEN FROM TABLE(SCM_MGR.UF_FX_STRING_SPLIT(D.OWNER, ',')) WHERE ROWNUM = 1)
+          LEFT JOIN (SELECT SEGMENT1 AS CODE, SEGMENT2 AS NAME FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL
+                      WHERE LOOKUP_TYPE = 'ITEM_TYPE_CODE' AND VALID_YN = 'Y') ITC
+            ON T.ITEM_TYPE = ITC.CODE
+         WHERE I.DIVISION_ID = P_DIVISION_ID
+           AND I.DIVISION_ID = '82'
+           AND I.VALID_YN = 'Y'
+           AND S.SITE_TYPE = 'SALES'
+           AND CASE WHEN P_DEPT_ID = 'ALL' THEN 'ALL' ELSE TEAM.DEPT_ID END
+               IN (SELECT COLUMN_VALUE FROM TABLE(SCM_MGR.UF_FX_STRING_SPLITFORIN(P_DEPT_ID, ',')) P
+                    WHERE (CASE WHEN P_DEPT_ID = 'ALL' THEN 'ALL' ELSE TEAM.DEPT_ID END) = P.COLUMN_VALUE)
+           AND CASE WHEN P_END_CUSTOMER = 'ALL' THEN 'ALL' ELSE NVL(S.END_CUSTOMER, '') END
+               IN (SELECT COLUMN_VALUE FROM TABLE(SCM_MGR.UF_FX_STRING_SPLITFORIN(P_END_CUSTOMER, ',')) P
+                    WHERE (CASE WHEN P_END_CUSTOMER = 'ALL' THEN 'ALL' ELSE NVL(S.END_CUSTOMER, '') END) = P.COLUMN_VALUE)
+           AND CASE WHEN P_SCM_SITE_ID = 'ALL' THEN 'ALL' ELSE S.SCM_SITE_ID END
+               IN (SELECT COLUMN_VALUE FROM TABLE(SCM_MGR.UF_FX_STRING_SPLITFORIN(P_SCM_SITE_ID, ',')) P
+                    WHERE (CASE WHEN P_SCM_SITE_ID = 'ALL' THEN 'ALL' ELSE S.SCM_SITE_ID END) = P.COLUMN_VALUE)
+           AND (EXISTS (SELECT 1 FROM TABLE(SCM_MGR.UF_FX_STRING_SPLIT(P_PROJECT_CODE, ',')) P WHERE D.PROJECT_CODE LIKE P.TOKEN || '%')
+                OR EXISTS (SELECT 1 FROM TABLE(SCM_MGR.UF_FX_STRING_SPLIT(P_PROJECT_CODE, ',')) P WHERE A.PROJECT_NAME LIKE P.TOKEN || '%'))
+           AND (EXISTS (SELECT 1 FROM TABLE(SCM_MGR.UF_FX_STRING_SPLIT(P_ITEM_ID, ',')) P WHERE T.ITEM_ID LIKE P.TOKEN || '%')
+                OR EXISTS (SELECT 1 FROM TABLE(SCM_MGR.UF_FX_STRING_SPLIT(P_ITEM_ID, ',')) P WHERE T.NICK_NAME LIKE P.TOKEN || '%'))
+           AND CASE WHEN NVL(P_MDM_ACTIVE_SW, '') = '' THEN '' ELSE T.ACTIVE_FLAG END
+               = CASE WHEN NVL(P_MDM_ACTIVE_SW, '') = '' THEN '' ELSE 'Y' END
+        UNION
+        -- ── UNION 3 : DIVISION LIKE '4%' (소형 — 40 자동차사업부 포함)
+        SELECT I.DIVISION_ID, I.DIVISION_ID AS DIVISION_NAME,
+               D.PROJECT_CODE,
+               ''        AS PROJECT_NAME,
+               S.SCM_SITE_ID, S.SITE_DESCRIPTION,
+               D.ITEM_ID, T.ITEM_NAME, T.ITEM_TYPE,
+               ITC.NAME  AS ITEM_TYPE_NAME,
+               T.NICK_NAME, T.ITEM_CLASS_NAME,
+               TEAM.DEPT_ID, TEAM.DEPT_NAME_KO,
+               S.END_CUSTOMER, D.CURRENCY,
+               D.PROJECT_CODE AS END_CUSTOMER40
+          FROM SCM_MGR.SCM_MST_DIVISION I
+          LEFT JOIN SCM_MGR.SCM_MST_SITE_ITEM D ON I.DIVISION_ID = D.DIVISION_ID AND D.VALID_YN = 'Y'
+          LEFT JOIN SCM_MGR.SCM_MST_SSO_USER_INFO USER_INFO ON D.OWNER = USER_INFO.USER_ID
+          LEFT JOIN SCM_MGR.SCM_MST_SSO_DEPT_INFO TEAM ON USER_INFO.DEPT_ID = TEAM.DEPT_ID AND TEAM.VALID_YN = 'Y'
+          LEFT JOIN SCM_MGR.SCM_MST_SITE S ON I.DIVISION_ID = D.DIVISION_ID AND D.SCM_SITE_ID = S.SCM_SITE_ID AND S.VALID_YN = 'Y'
+          LEFT JOIN TEMP_DM_MST_ITEM_SINGLE_V T ON I.DIVISION_ID = T.DIVISION_ID AND D.ITEM_ID = T.ITEM_ID
+          LEFT JOIN (SELECT SEGMENT1 AS CODE, SEGMENT2 AS NAME FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL
+                      WHERE LOOKUP_TYPE = 'ITEM_TYPE_CODE' AND VALID_YN = 'Y') ITC
+            ON T.ITEM_TYPE = ITC.CODE
+          LEFT OUTER JOIN TMP_81_UC_EXCEPTION EX ON EX.DIVISION_ID = D.DIVISION_ID AND EX.ITEM_ID = D.ITEM_ID
+         WHERE I.DIVISION_ID = P_DIVISION_ID
+           AND I.DIVISION_ID LIKE '4%'
+           AND I.VALID_YN = 'Y'
+           AND S.SITE_TYPE = 'SALES'
+           AND CASE WHEN P_DEPT_ID = 'ALL' THEN 'ALL' ELSE TEAM.DEPT_ID END
+               IN (SELECT COLUMN_VALUE FROM TABLE(SCM_MGR.UF_FX_STRING_SPLITFORIN(P_DEPT_ID, ',')) P
+                    WHERE (CASE WHEN P_DEPT_ID = 'ALL' THEN 'ALL' ELSE TEAM.DEPT_ID END) = P.COLUMN_VALUE)
+           AND CASE WHEN P_END_CUSTOMER = 'ALL' THEN 'ALL'
+                    ELSE NVL(CASE WHEN P_DIVISION_ID <> '40' THEN S.END_CUSTOMER ELSE D.PROJECT_CODE END, '') END
+               IN (SELECT COLUMN_VALUE FROM TABLE(SCM_MGR.UF_FX_STRING_SPLITFORIN(P_END_CUSTOMER, ',')) P
+                    WHERE (CASE WHEN P_END_CUSTOMER = 'ALL' THEN 'ALL'
+                                ELSE NVL(CASE WHEN P_DIVISION_ID <> '40' THEN S.END_CUSTOMER ELSE D.PROJECT_CODE END, '') END) = P.COLUMN_VALUE)
+           AND CASE WHEN P_SCM_SITE_ID = 'ALL' THEN 'ALL' ELSE S.SCM_SITE_ID END
+               IN (SELECT COLUMN_VALUE FROM TABLE(SCM_MGR.UF_FX_STRING_SPLITFORIN(P_SCM_SITE_ID, ',')) P
+                    WHERE (CASE WHEN P_SCM_SITE_ID = 'ALL' THEN 'ALL' ELSE S.SCM_SITE_ID END) = P.COLUMN_VALUE)
+           AND (EXISTS (SELECT 1 FROM TABLE(SCM_MGR.UF_FX_STRING_SPLIT(P_ITEM_ID, ',')) P WHERE D.ITEM_ID LIKE P.TOKEN || '%')
+                OR EXISTS (SELECT 1 FROM TABLE(SCM_MGR.UF_FX_STRING_SPLIT(P_ITEM_ID, ',')) P WHERE T.NICK_NAME LIKE P.TOKEN || '%'))
+           AND CASE WHEN P_DIVISION_ID = '81_UC'
+                    THEN CASE WHEN NVL(P_MDM_ACTIVE_SW, '') = '' THEN '' ELSE NVL(T.ACTIVE_FLAG, EX.ACTIVE_FLAG) END
+                    ELSE CASE WHEN NVL(P_MDM_ACTIVE_SW, '') = '' THEN '' ELSE T.ACTIVE_FLAG END
+               END = CASE WHEN NVL(P_MDM_ACTIVE_SW, '') = '' THEN '' ELSE 'Y' END
+        ORDER BY 1, 3, 5, 6, 7, 8;
+END DMF0072_GET_ITEM_POPUP_LIST;
+/
+/
+
+-- ===== DMF0072_GET_NNMASTER_MAPPING =====
+CREATE OR REPLACE EDITIONABLE PROCEDURE "SCM_MGR"."DMF0072_GET_NNMASTER_MAPPING" 
+(
+	  p_data_type_code		IN  VARCHAR2
+	, p_division_id		    IN  VARCHAR2
+	, p_dept_id			    IN  VARCHAR2	--Department
+	, p_end_customer		IN  VARCHAR2	--Endcustomer
+	, p_scm_site_id		    IN  VARCHAR2
+	, p_project_code		IN  VARCHAR2
+	, p_item_id			    IN  VARCHAR2
+	, p_cursor              OUT SYS_REFCURSOR
+)
+IS
+/*=====================================================================================================================================================
+* Program ID  : [DMF0072_GET_NNMASTER_MAPPING]
+* Description : Procedure 작성 가이드
+* Usage       : Procedure 작성 시 참조하세요!
+* Parameter   :
+*=====================================================================================================================================================
+*	 Date     In Charge		Description
+*=====================================================================================================================================================
+* 2024.04.02	KJJ			Initial Release
+* 2024.08.14	KJJ			[PJ2024-50461] Team Mapping
+* 2024.12.10	dsiol		[PJ2024-50647]자동차사업부 고객 수요 분석 기능 개선
+* 2025.01.21	dsiol		[PJ2024-50647]자동차사업부 고객 수요 분석 기능 개선 * 2차배포
+* 2025.09.16	JSSBAE		[E20250910-000974]_NN Mapping Master 컬럼 추가 요청
+
+-- EXEC DMF0072_GET_NNMASTER_MAPPING          @p_data_type_code='ALL', @p_division_id='81', @p_dept_id='ALL', @p_end_customer='ALL', @p_scm_site_id='ALL', @p_project_code='', @p_item_id=''
+-- EXEC DMF0072_GET_NNMASTER_MAPPING_20241210 @p_division_id='81', @p_dept_id='ALL', @p_end_customer='ALL', @p_scm_site_id='ALL', @p_project_code='', @p_item_id=''
+*===================================================================================================================================================*/
+/* 2026.05.20  ZIONEX        [PJ202650304]  NextSCM Migration */
+/* 2026.06.05  ZIONEX        [PJ202650304]  NextSCM Migration - 빈 문자열 파라미터(p_project_code/p_item_id) IN 절 보정: Oracle은 ''=NULL 이라 전체탈락 → 미입력 시 전체통과로 MSSQL 동등 복원 */
+BEGIN
+
+	OPEN p_cursor FOR
+	SELECT DATA_TYPE_CODE, DIVISION_ID, COMPANY_ID, END_CUSTOMER, UNLOADING_POINT
+		 , CUSTOMER_PLANT, SOLDTO_CODE, SHIPTO_CODE, SCM_SITE_ID, PROJECT_CODE
+		 , FCST_TYPE, INCOTERMS, DOM_EXP, CUSTOMER_ITEM_ID, ITEM_ID
+		 , MAPPING_ITEM_ID, MAPPING_ITEM_ID AS MAPPING_ITEM_ID_ORIGINAL, VALID_START_DATE, VALID_END_DATE, ACTIVE_YN
+		 , LAST_UPDATE_DATE, LAST_UPDATED_BY
+		 , DC_LEVEL --[E20250910-000974]_DC_LEVEL 추가
+	FROM ( SELECT M.DATA_TYPE_CODE, M.DIVISION_ID, M.COMPANY_ID, M.END_CUSTOMER, M.UNLOADING_POINT
+		 		, M.CUSTOMER_PLANT, M.SOLDTO_CODE, M.SHIPTO_CODE, M.SCM_SITE_ID, M.PROJECT_CODE
+				, M.FCST_TYPE, M.INCOTERMS, M.DOM_EXP, M.CUSTOMER_ITEM_ID, M.ITEM_ID
+				, M.MAPPING_ITEM_ID, M.VALID_START_DATE, M.VALID_END_DATE, M.ACTIVE_YN
+				, M.LAST_UPDATE_DATE, M.LAST_UPDATED_BY, NVL(M.DC_LEVEL,'') AS DC_LEVEL --[E20250910-000974]_DC_LEVEL 추가
+			 FROM DM_CUST_MODEL_MAPPING_M M
+			INNER JOIN ( SELECT * FROM SCM_MST_SITE WHERE VALID_YN = 'Y') C
+					ON M.DIVISION_ID = C.DIVISION_ID AND M.SCM_SITE_ID = C.SCM_SITE_ID AND C.SITE_TYPE = 'SALES'
+			 LEFT OUTER JOIN ( SELECT * FROM SCM_MST_SITE_ITEM) SITE_ITEM
+						  ON M.DIVISION_ID	= SITE_ITEM.DIVISION_ID
+						 AND M.PROJECT_CODE = SITE_ITEM.PROJECT_CODE
+						 AND M.SCM_SITE_ID	= SITE_ITEM.SCM_SITE_ID
+						 AND M.ITEM_ID		= SITE_ITEM.ITEM_ID
+			 LEFT JOIN ( SELECT B.USER_ID, B.USER_NAME, B.USER_NAME_EN, B.DEPT_ID, C.DEPT_NAME_KO, C.UPPER_DEPT_ID
+						   FROM SCM_MST_SSO_USER_INFO B
+						  INNER JOIN SCM_MST_SSO_DEPT_INFO C
+								  ON B.DEPT_ID = C.DEPT_ID ) TEAM
+					ON TEAM.USER_ID IN ( SELECT TRIM(REGEXP_SUBSTR(SITE_ITEM.OWNER, '[^,]+', 1, 1))
+                                  FROM DUAL )
+			 WHERE M.DATA_TYPE_CODE = CASE WHEN p_data_type_code = 'ALL' THEN M.DATA_TYPE_CODE ELSE p_data_type_code END
+			   AND M.DIVISION_ID    = p_division_id
+			   AND CASE WHEN p_dept_id = 'ALL' THEN 'ALL' ELSE TEAM.DEPT_ID END IN ( SELECT TRIM(REGEXP_SUBSTR(p_dept_id, '[^,]+', 1, LEVEL))
+                                                                            FROM DUAL
+                                                                        CONNECT BY REGEXP_SUBSTR(p_dept_id, '[^,]+', 1, LEVEL) IS NOT NULL )
+			   AND CASE WHEN p_end_customer = 'ALL' THEN 'ALL' ELSE NVL(M.END_CUSTOMER,'') END IN ( SELECT TRIM(REGEXP_SUBSTR(p_end_customer, '[^,]+', 1, LEVEL))
+                                                                            FROM DUAL
+                                                                        CONNECT BY REGEXP_SUBSTR(p_end_customer, '[^,]+', 1, LEVEL) IS NOT NULL )
+			   AND CASE WHEN p_scm_site_id = 'ALL' THEN 'ALL' ELSE M.SCM_SITE_ID END IN ( SELECT TRIM(REGEXP_SUBSTR(p_scm_site_id, '[^,]+', 1, LEVEL))
+                                                                            FROM DUAL
+                                                                        CONNECT BY REGEXP_SUBSTR(p_scm_site_id, '[^,]+', 1, LEVEL) IS NOT NULL )
+			   AND ( p_project_code IS NULL  -- 미입력(MSSQL의 ''=전체조회) 시 전체통과. Oracle은 ''=NULL 이라 기존 CASE..IN 은 전체탈락됨 [PJ202650304 2026.06.05]
+			      OR M.PROJECT_CODE IN ( SELECT TRIM(REGEXP_SUBSTR(p_project_code, '[^,]+', 1, LEVEL))
+                                                                            FROM DUAL
+                                                                        CONNECT BY REGEXP_SUBSTR(p_project_code, '[^,]+', 1, LEVEL) IS NOT NULL ) )
+			   AND ( p_item_id IS NULL  -- 미입력(MSSQL의 ''=전체조회) 시 전체통과. Oracle은 ''=NULL 이라 기존 CASE..IN 은 전체탈락됨 [PJ202650304 2026.06.05]
+			      OR M.ITEM_ID IN ( SELECT TRIM(REGEXP_SUBSTR(p_item_id, '[^,]+', 1, LEVEL))
+                                                                            FROM DUAL
+                                                                        CONNECT BY REGEXP_SUBSTR(p_item_id, '[^,]+', 1, LEVEL) IS NOT NULL ) )
+		 ) A
+	GROUP BY DIVISION_ID, COMPANY_ID, DATA_TYPE_CODE, END_CUSTOMER, UNLOADING_POINT
+		   , CUSTOMER_PLANT, SOLDTO_CODE, SHIPTO_CODE, PROJECT_CODE, SCM_SITE_ID
+		   , FCST_TYPE, INCOTERMS, DOM_EXP, CUSTOMER_ITEM_ID, ITEM_ID
+		   , MAPPING_ITEM_ID, ACTIVE_YN, VALID_START_DATE, VALID_END_DATE
+		   , LAST_UPDATE_DATE, LAST_UPDATED_BY, DC_LEVEL  --[E20250910-000974]_DC_LEVEL 추가
+	ORDER BY DIVISION_ID, DATA_TYPE_CODE, COMPANY_ID, END_CUSTOMER, UNLOADING_POINT
+		   , CUSTOMER_PLANT, SOLDTO_CODE, SHIPTO_CODE, SCM_SITE_ID, PROJECT_CODE
+		   , FCST_TYPE, INCOTERMS, DOM_EXP, CUSTOMER_ITEM_ID, ITEM_ID;
+END;
+/
+/
+
+-- ===== DMF0072_GET_NNMASTER_MAPPING_WRAPPER =====
+CREATE OR REPLACE EDITIONABLE PROCEDURE "SCM_MGR"."DMF0072_GET_NNMASTER_MAPPING_WRAPPER" (
+    P_DATA_TYPE_CODE VARCHAR2,
+    P_DIVISION_ID    VARCHAR2,
+    P_DEPT_ID        VARCHAR2,
+    P_END_CUSTOMER   VARCHAR2,
+    P_SCM_SITE_ID    VARCHAR2,
+    P_PROJECT_CODE   VARCHAR2,
+    P_ITEM_ID        VARCHAR2,
+    P_USER_ID        VARCHAR2,
+    P_MENU_ID        VARCHAR2,
+    O_RC1            OUT SYS_REFCURSOR
+) AS
+    V_RESULT_CURSOR SYS_REFCURSOR;
+BEGIN
+    -- As-Is .cs L477~485: FoxDataRequest("DMF0072_GET_NNMASTER_MAPPING")
+    --   p_data_type_code/divisionId/deptId/endCustomer/scmSiteId 모두 콤마 join 그대로 전달
+    --   ('ALL' 도 그대로 — 메인 SP 가 CASE WHEN P_XXX='ALL' THEN ... 으로 처리)
+    SCM_MGR.PKG_DMF0072.P_DMF0072_GET_NNMASTER_MAPPING(
+        P_DATA_TYPE_CODE,
+        P_DIVISION_ID,
+        P_DEPT_ID,
+        P_END_CUSTOMER,
+        P_SCM_SITE_ID,
+        P_PROJECT_CODE,
+        P_ITEM_ID,
+        P_USER_ID,
+        P_MENU_ID,
+        O_RC1,
+        V_RESULT_CURSOR
+    );
+END DMF0072_GET_NNMASTER_MAPPING_WRAPPER;
+/
+/
+
+-- ===== DMF0072_GET_PROJECT_POPUP_LIST =====
+CREATE OR REPLACE EDITIONABLE PROCEDURE "SCM_MGR"."DMF0072_GET_PROJECT_POPUP_LIST" (
+    P_DIVISION_ID   VARCHAR2,
+    P_DEPT_ID       VARCHAR2,
+    P_END_CUSTOMER  VARCHAR2,
+    P_SCM_SITE_ID   VARCHAR2,
+    P_PROJECT_CODE  VARCHAR2,
+    P_ETC           VARCHAR2,   -- 'N'=일반(SCM_MST_PROJECT), 'Y'=ETC(LOOKUP)
+    O_RC1           OUT SYS_REFCURSOR
+) AS
+BEGIN
+    -- As-Is L22781: IF @p_etc = 'N' 분기
+    IF P_ETC = 'N' OR P_ETC IS NULL THEN
+        OPEN O_RC1 FOR
+            SELECT A.DIVISION_ID,
+                   A.DIVISION_ID  AS DIVISION_NAME,
+                   A.PROJECT_CODE,
+                   A.PROJECT_NAME,
+                   A.PROJECT_STATUS,
+                   BIZ.CODE       AS BIZ_TYPE,
+                   BIZ.NAME       AS BIZ_TYPE_NAME,
+                   A.CURRENCY,
+                   MAX(A.PROJECT_VER_SEQ)  AS PROJECT_VER_SEQ,
+                   A.PROJECT_OWNER,
+                   TEAM.DEPT_ID,
+                   TEAM.DEPT_NAME_KO,
+                   C.END_CUSTOMER
+              FROM SCM_MGR.SCM_MST_PROJECT A
+              LEFT JOIN (SELECT * FROM SCM_MGR.SCM_MST_DIVISION WHERE VALID_YN = 'Y') D
+                ON A.DROP_YN = 'N' AND A.DIVISION_ID = D.DIVISION_ID
+              LEFT JOIN (SELECT * FROM SCM_MGR.SCM_MST_SITE_ITEM WHERE VALID_YN = 'Y') B
+                ON A.DIVISION_ID = B.DIVISION_ID
+               AND A.PROJECT_CODE = B.PROJECT_CODE
+              LEFT JOIN (SELECT DISTINCT DIVISION_ID, SCM_SITE_ID, DEPT_ID, END_CUSTOMER
+                           FROM SCM_MGR.SCM_MST_SITE WHERE VALID_YN = 'Y') C
+                ON B.DIVISION_ID = C.DIVISION_ID
+               AND B.SCM_SITE_ID = C.SCM_SITE_ID
+              LEFT JOIN SCM_MGR.SCM_MST_SSO_USER_INFO SU
+                ON SU.USER_ID = (SELECT TOKEN FROM TABLE(SCM_MGR.UF_FX_STRING_SPLIT(B.OWNER, ',')) WHERE ROWNUM = 1)
+              LEFT JOIN (SELECT * FROM SCM_MGR.SCM_MST_SSO_DEPT_INFO WHERE VALID_YN = 'Y') TEAM
+                ON SU.DEPT_ID = TEAM.DEPT_ID
+              LEFT JOIN (SELECT SEGMENT1 AS CODE, SEGMENT2 AS NAME
+                           FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL
+                          WHERE LOOKUP_TYPE = 'BIZ_TYPE_BPMS') BIZ
+                ON BIZ.CODE = A.BIZ_TYPE
+             WHERE TEAM.DEPT_ID IS NOT NULL
+               AND CASE WHEN P_DIVISION_ID = 'ALL' THEN 'ALL' ELSE A.DIVISION_ID END
+                   IN (SELECT COLUMN_VALUE FROM TABLE(SCM_MGR.UF_FX_STRING_SPLITFORIN(P_DIVISION_ID, ',')) P
+                        WHERE (CASE WHEN P_DIVISION_ID = 'ALL' THEN 'ALL' ELSE A.DIVISION_ID END) = P.COLUMN_VALUE)
+               AND CASE WHEN P_DEPT_ID = 'ALL' THEN 'ALL' ELSE TEAM.DEPT_ID END
+                   IN (SELECT COLUMN_VALUE FROM TABLE(SCM_MGR.UF_FX_STRING_SPLITFORIN(P_DEPT_ID, ',')) P
+                        WHERE (CASE WHEN P_DEPT_ID = 'ALL' THEN 'ALL' ELSE TEAM.DEPT_ID END) = P.COLUMN_VALUE)
+               AND CASE WHEN P_END_CUSTOMER = 'ALL' THEN 'ALL' ELSE NVL(C.END_CUSTOMER, '') END
+                   IN (SELECT COLUMN_VALUE FROM TABLE(SCM_MGR.UF_FX_STRING_SPLITFORIN(P_END_CUSTOMER, ',')) P
+                        WHERE (CASE WHEN P_END_CUSTOMER = 'ALL' THEN 'ALL' ELSE NVL(C.END_CUSTOMER, '') END) = P.COLUMN_VALUE)
+               AND CASE WHEN P_SCM_SITE_ID = 'ALL' THEN 'ALL' ELSE C.SCM_SITE_ID END
+                   IN (SELECT COLUMN_VALUE FROM TABLE(SCM_MGR.UF_FX_STRING_SPLITFORIN(P_SCM_SITE_ID, ',')) P
+                        WHERE (CASE WHEN P_SCM_SITE_ID = 'ALL' THEN 'ALL' ELSE C.SCM_SITE_ID END) = P.COLUMN_VALUE)
+               AND (
+                    EXISTS (SELECT 1 FROM TABLE(SCM_MGR.UF_FX_STRING_SPLIT(P_PROJECT_CODE, ',')) P WHERE A.PROJECT_CODE LIKE P.TOKEN || '%')
+                    OR
+                    EXISTS (SELECT 1 FROM TABLE(SCM_MGR.UF_FX_STRING_SPLIT(P_PROJECT_CODE, ',')) P WHERE A.PROJECT_NAME LIKE P.TOKEN || '%')
+                   )
+             GROUP BY A.DIVISION_ID, D.DIVISION_NAME, A.PROJECT_CODE, A.PROJECT_NAME, A.PROJECT_STATUS,
+                      A.BIZ_TYPE, A.BIZ_TYPE_NAME, BIZ.CODE, BIZ.NAME, A.CURRENCY, A.PROJECT_OWNER,
+                      TEAM.DEPT_ID, TEAM.DEPT_NAME_KO, C.END_CUSTOMER
+             ORDER BY A.PROJECT_NAME, A.PROJECT_CODE;
+    ELSE
+        -- As-Is L22893: ELSE (ETC = 'Y') — Lookup 에서 Project List 조회
+        OPEN O_RC1 FOR
+            SELECT A.SEGMENT1  AS DIVISION_ID,
+                   A.SEGMENT1  AS DIVISION_NAME,
+                   A.SEGMENT2  AS PROJECT_CODE,
+                   A.SEGMENT3  AS PROJECT_NAME,
+                   ''          AS PROJECT_STATUS,
+                   ''          AS BIZ_TYPE,
+                   ''          AS BIZ_TYPE_NAME,
+                   ''          AS CURRENCY,
+                   ''          AS PROJECT_VER_SEQ,
+                   ''          AS PROJECT_OWNER,
+                   ''          AS DEPT_ID,
+                   ''          AS DEPT_NAME_KO,
+                   ''          AS END_CUSTOMER
+              FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL A
+             WHERE A.LOOKUP_TYPE = 'DM_ETC_Project'
+               AND A.VALID_YN = 'Y'
+               AND A.SEGMENT1 = P_DIVISION_ID
+               AND EXISTS (SELECT 1 FROM TABLE(SCM_MGR.UF_FX_STRING_SPLIT(P_PROJECT_CODE, ',')) P WHERE A.SEGMENT2 LIKE P.TOKEN || '%');
+    END IF;
+END DMF0072_GET_PROJECT_POPUP_LIST;
+/
+/
+
+-- ===== DMF0072_GET_SALES_SITE_LIST =====
+CREATE OR REPLACE EDITIONABLE PROCEDURE "SCM_MGR"."DMF0072_GET_SALES_SITE_LIST" (
+    P_DIVISION_ID  VARCHAR2,
+    P_END_CUSTOMER VARCHAR2,
+    O_RC1 OUT SYS_REFCURSOR
+) AS
+BEGIN
+    -- As-Is .cs L186: UserSiteByEndCustomer — Division + End Customer(다중) 기반 SCM Site list
+    OPEN O_RC1 FOR
+      SELECT DISTINCT S.SCM_SITE_ID AS CODE,
+             NVL(S.SITE_DESCRIPTION, S.SCM_SITE_ID) AS NAME
+        FROM SCM_MGR.SCM_MST_SITE S
+       WHERE (P_DIVISION_ID IS NULL OR P_DIVISION_ID = 'ALL' OR S.DIVISION_ID = P_DIVISION_ID)
+         AND S.VALID_YN = 'Y'
+         -- multi-value cascading: 콤마 split
+         AND (P_END_CUSTOMER IS NULL OR P_END_CUSTOMER = 'ALL'
+              OR S.END_CUSTOMER IN (
+                SELECT TOKEN FROM TABLE(SCM_MGR.UF_FX_STRING_SPLIT(P_END_CUSTOMER, ','))
+                 WHERE TOKEN IS NOT NULL
+              )
+             )
+       ORDER BY 1
+       FETCH FIRST 500 ROWS ONLY;
+END DMF0072_GET_SALES_SITE_LIST;
+/
+/
+
+-- ===== DMF0072_GET_TEAM_LIST =====
+CREATE OR REPLACE EDITIONABLE PROCEDURE "SCM_MGR"."DMF0072_GET_TEAM_LIST" (
+    P_DIVISION_ID VARCHAR2,
+    O_RC1 OUT SYS_REFCURSOR
+) AS
+BEGIN
+    -- As-Is SCM0001_GET_TEAM_BY_DIVISION 1:1 변환
+    --   - SCM_MST_SITE A (SITE_TYPE='SALES') ⋈ SCM_MST_SSO_DEPT_INFO B (DEPT_ID 매칭)
+    --   - P_DIVISION_ID 'ALL' 또는 콤마 split IN 매칭
+    --   - WITH(NOLOCK) 제거 (Oracle read consistency)
+    --   - XML split → UF_FX_STRING_SPLIT (메인 SP P_DMF0072_GET_NNMASTER_MAPPING 과 일관)
+    OPEN O_RC1 FOR
+      SELECT DISTINCT
+             B.DEPT_ID      AS CODE,
+             B.DEPT_NAME_KO AS NAME
+        FROM SCM_MGR.SCM_MST_SITE          A,
+             SCM_MGR.SCM_MST_SSO_DEPT_INFO B
+       WHERE A.SITE_TYPE = 'SALES'
+         AND A.DEPT_ID   = B.DEPT_ID
+         AND (P_DIVISION_ID IS NULL
+              OR P_DIVISION_ID = 'ALL'
+              OR A.DIVISION_ID IN (
+                  SELECT TOKEN FROM TABLE(SCM_MGR.UF_FX_STRING_SPLIT(P_DIVISION_ID, ','))
+                   WHERE TOKEN IS NOT NULL
+              )
+             )
+       ORDER BY 2;
+END DMF0072_GET_TEAM_LIST;
+/
+/
+
+-- ===== DMF0072_SAVE_NNMASTER_MAPPING =====
+CREATE OR REPLACE EDITIONABLE PROCEDURE "SCM_MGR"."DMF0072_SAVE_NNMASTER_MAPPING" 
+(
+	P_DIVISION_ID				IN  VARCHAR2,
+	P_COMPANY_ID				IN  VARCHAR2,
+	P_ACT_TYPE					IN  VARCHAR2, -- 신규 / 수정 구분( I / M)
+	P_CUST_FCST_TYPE			IN  VARCHAR2, -- DATA_TYPE_CODE
+	P_END_CUSTOMER				IN  VARCHAR2,
+	P_CUST_UNLOAD				IN  VARCHAR2,
+	P_CUST_PLANT				IN  VARCHAR2,
+	P_SOLDTO					IN  VARCHAR2,
+	P_SHIPTO					IN  VARCHAR2,
+	P_PROJECT_CODE				IN  VARCHAR2,
+	P_SCM_SITE_ID				IN  VARCHAR2,
+	P_FCST_TYPE 				IN  VARCHAR2,
+	P_INCOTERMS					IN  VARCHAR2,
+	P_DOM_EXP					IN  VARCHAR2,
+	P_CUST_ITEM_ID				IN  VARCHAR2,
+	P_MDM_CODE					IN  VARCHAR2,
+	P_MAPPING_ITEM_ID			IN  VARCHAR2,
+	P_MAPPING_ITEM_ID_ORIGINAL	IN  VARCHAR2, --@P_MAPPING_ITEM_ID가 KEY인데 수정 해야 해서 원본 값을 가져온다.
+	P_ACTIVE_FLAG				IN  VARCHAR2,
+	P_VALID_FROM				IN  VARCHAR2,
+	P_VALID_TO					IN  VARCHAR2,
+	P_USER_ID     				IN  VARCHAR2,
+	P_RESULT_CURSOR				OUT SYS_REFCURSOR,
+	P_ERROR_CURSOR				OUT SYS_REFCURSOR
+)
+
+IS
+/*
+ * Program ID   : [DMF0072_SAVE_NNMASTER_MAPPING]
+ * Description  : PR_DETAIL_AUTO 수정
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2024. 04. 08   KJJ			최초 작성
+ * 2024. 12. 10  dsiol			[PJ2024-50647]자동차사업부 고객 수요 분석 기능 개선 *
+ * 2025-01-21 dsiol          [PJ2024-50647]자동차사업부 고객 수요 분석 기능 개선 * 2차배포
+exec DMF0072_SAVE_NNMASTER_MAPPING  @P_DIVISION_ID=N'81'
+,@P_COMPANY_ID=N'G380^G450^G450'
+,@P_ACT_TYPE=N'M^M^M'
+,@P_CUST_FCST_TYPE=N'SCM^SCM^SCM'
+,@P_END_CUSTOMER=N'Ford^Volvo^Volvo'
+,@P_CUST_UNLOAD=N' ^TCFE4^TCFE4'
+,@P_CUST_PLANT=N' ^^'
+,@P_SOLDTO=N'US000485^CN002782^CN002782'
+,@P_SHIPTO=N'US000485^CNH011174^CNH011174'
+,@P_PROJECT_CODE=N'A15FD5001^A17VO4001^A17VO4001'
+,@P_SCM_SITE_ID=N'Piston_US_RDF^Zhongjia_CN_TIZ^Zhongjia_CN_TIZ'
+,@P_FCST_TYPE=N'MPS^MPS^MPS'
+,@P_INCOTERMS=N'DDP^FCA^FCA'
+,@P_DOM_EXP=N'E^E^E'
+,@P_CUST_ITEM_ID=N' L1M8-10C790-A-PIA-3-AK^32299991^32361087'
+,@P_MDM_CODE=N'AMFMCU611-A8^AMVCCCMAE-A1-010^AMVCCCMAE-A1-000'
+,@P_MAPPING_ITEM_ID=N'AMFMCU611-A9-000^AMVCCCMAE-A1-010^AMVCCCMAE-A1-000'
+,@P_MAPPING_ITEM_ID_ORIGINAL=N'AMFMCU611-A8^AMVCCCMAE-A1-010^AMVCCCMAE-A1-000'
+,@P_ACTIVE_FLAG=N'Y^Y^Y'
+,@P_VALID_FROM=N'20240101^20240201^20240203'
+,@P_VALID_TO=N'20991231^20991231^20991230'
+,@P_USER_ID=N'dsiol'
+
+exec DMF0072_SAVE_NNMASTER_MAPPING  @P_DIVISION_ID=N'81'
+,@P_COMPANY_ID=N'G450^G380^G380^G450'
+,@P_ACT_TYPE=N'I^M^M^M'
+,@P_CUST_FCST_TYPE=N'SCM^SCM^SCM^SCM'
+,@P_END_CUSTOMER=N'ATL^BMW^Ford^Aeonus'
+,@P_CUST_UNLOAD=N' xxx^^^66666'
+,@P_CUST_PLANT=N' yyy^1^^77777'
+,@P_SOLDTO=N'B100^AT000009^US000485^AT000003'
+,@P_SHIPTO=N'GBH000114^AT000009^US000485^ATH000019'
+,@P_PROJECT_CODE=N'A22AT4002^A15BW7002^A15FD5001^A23US4001'
+,@P_SCM_SITE_ID=N'ATL_GB_POO^BMW_DE_DFG^Piston_US_RDF^Aeonus_KR_GUN'
+,@P_FCST_TYPE=N'MPS^MPS^MPS^MPS'
+,@P_INCOTERMS=N'Z01^A01^DDP^FCA'
+,@P_DOM_EXP=N'D^D^E^E'
+,@P_CUST_ITEM_ID=N' 333^3^L1M8-10C790-A-PIA-3-AK^88888'
+,@P_MDM_CODE=N'AMCOME782-A1-0A0^ACLT1010U-A1-D01^AMFMCU611-A8^ACEN1078I-A1-010'
+,@P_MAPPING_ITEM_ID=N'AMVAGBEVN-B2-C07^ACLT1010U-A1-D04^ACPN1039I-A1^ACEN1078I-A1-010'
+,@P_MAPPING_ITEM_ID_ORIGINAL=N'AMVAGBEVN-B2-C07^APBMW12V0-A1-000^ACPN1039I-A1^ACEN1078I-A1-010'
+,@P_ACTIVE_FLAG=N'Y^Y^Y^Y'
+,@P_VALID_FROM=N'20240105^20240104^20240102^20240101'
+,@P_VALID_TO=N'99991205^99991231^99991230^99991231'
+,@P_USER_ID=N'dsiol'
+
+ */
+/* 2026.05.20  ZIONEX        [PJ202650304]  NextSCM Migration */
+/* 2026.06.05  ZIONEX        [PJ202650304]  NextSCM Migration - GT_DMF0072_MAIN(ON COMMIT PRESERVE) 잔존행 방지를 위해 적재 전 DELETE 추가(MSSQL #T_MAIN 매 실행 독립과 동등) */
+
+
+/*
+-중요 로직
+
+1.detail 테이블(DM_CUST_ITEM_MAPPING_DTL_N)은 먼저 지우고 insert한다
+
+2.신규일 경우에,detail  정보를 입력안했으면 기본적인 Valid Range 정보를 detail에 강제로 저장한다
+  =>시작일 : 당해년도 01-01
+  =>종료일 : 2099-12-31
+  =>item :  마스터에 등록된 ITEM_ID(@P_MDM_CODE)
+
+3.수정일 경우에 detail  정보를 입력안했으면(기본으로 등록된 Valid Range 정보를 사용자가 직접 삭제하는경우)
+  => 마스터의 ACTIVE_FLAG를 N으로 변경 =>화면에서 처리
+
+*/
+	/* SET NOCOUNT ON; */
+	/* SET TRANSACTION ISOLATION LEVEL READ COMMITTED; */
+
+	-- LOG 용 변수 설정
+	v_creation_date    DATE;
+
+	-- LOG 용 변수 설정
+	v_program_name VARCHAR2(150 CHAR) := 'DMF0072_SAVE_NNMASTER_MAPPING';
+	v_log_type     VARCHAR2(30 CHAR);
+	n_log_count    PLS_INTEGER := 0;
+	v_log_message  VARCHAR2(1000 CHAR);
+	v_description  VARCHAR2(500 CHAR);
+	d_event_date   DATE;
+
+	-- 예외처리 변수 설정
+	v_err_code     PLS_INTEGER;
+	v_err_message  VARCHAR2(4000 CHAR) := '';
+
+	v_cur_data_type_code	VARCHAR2(150 CHAR);
+	v_cur_end_customer		VARCHAR2(150 CHAR);
+	v_cur_project_code		VARCHAR2(150 CHAR);
+	v_cur_scm_site_id		VARCHAR2(150 CHAR);
+	v_cur_fcst_type			VARCHAR2(150 CHAR);
+	v_cur_incoterms			VARCHAR2(150 CHAR);
+	v_cur_dom_exp			VARCHAR2(150 CHAR);
+	v_cur_item_id			VARCHAR2(150 CHAR);
+	v_cur_valid_from		VARCHAR2(150 CHAR);
+	v_cur_valid_to			VARCHAR2(150 CHAR);
+	v_cur_mapping_item_id	VARCHAR2(150 CHAR);
+	v_cur_unloading_point	VARCHAR2(150 CHAR);
+	v_cur_customer_plant	VARCHAR2(150 CHAR);
+	v_cur_customer_item_id	VARCHAR2(150 CHAR);
+	v_cur_act_type			VARCHAR2(150 CHAR);
+	v_cur_active_yn			VARCHAR2(150 CHAR);
+	v_cur_soldto_code		VARCHAR2(150 CHAR);
+	v_cur_shipto_code		VARCHAR2(150 CHAR);
+	v_cur2_valid_from		VARCHAR2(150 CHAR);
+	v_cur2_valid_to			VARCHAR2(150 CHAR);
+	v_cur2_mapping_item_id	VARCHAR2(150 CHAR);
+
+	v_idx					PLS_INTEGER; --시작점
+	v_cnt					PLS_INTEGER; --Valid Range 갯수
+
+	--마스터에서 다시 조회해올 값
+	v_cur_m_unloading_point		VARCHAR2(150 CHAR);--마스터의 UNLOADING_POINT(공백이 있을수 있는데이터)
+	v_cur_m_customer_plant		VARCHAR2(150 CHAR);--마스터의 CUSTOMER_PLANT(공백이 있을수 있는데이터)
+	v_cur_m_customer_item_id	VARCHAR2(150 CHAR);--마스터의 CUSTOMER_ITEM_ID(공백이 있는데이터)
+
+	v_rowcnt PLS_INTEGER;
+
+	-- 사용자 정의 예외 (INVALID 상태 처리용, goto err_rtn 대체)
+	e_invalid_data EXCEPTION;
+
+BEGIN
+
+	v_creation_date := SYSDATE;
+	v_rowcnt := 0;
+
+	BEGIN
+
+		v_log_type := 'START';
+		v_log_message := '########## Start of procedure ##########';
+		v_description := '';
+		d_event_date := SYSDATE;
+		PR_SCM_SYS_LOG_BATCH(v_program_name, v_log_type, n_log_count, v_log_message, v_description, d_event_date);
+
+		-- GT_DMF0072_MAIN 은 ON COMMIT PRESERVE ROWS(SYS$SESSION) 이므로 직전 호출의 잔존행이 남을 수 있음
+		-- MSSQL #T_MAIN(매 실행 독립)과 동등하도록 적재 전 초기화 [PJ202650304 2026.06.05]
+		DELETE FROM GT_DMF0072_MAIN;
+
+		INSERT INTO GT_DMF0072_MAIN
+		(
+			  DATA_TYPE_CODE
+			, END_CUSTOMER
+			, UNLOADING_POINT
+			, CUSTOMER_PLANT
+			, SOLDTO_CODE
+			, SHIPTO_CODE
+			, PROJECT_CODE
+			, SCM_SITE_ID
+			, FCST_TYPE
+			, INCOTERMS
+			, DOM_EXP
+			, CUSTOMER_ITEM_ID
+			, ITEM_ID
+			, ACTIVE_YN
+			, VALID_FROM
+			, VALID_TO
+			, MAPPING_ITEM_ID
+			, ACT_TYPE
+			, COMPANY_ID
+			, MAPPING_ITEM_ID_ORIGINAL
+		)
+		SELECT
+			  B1.TOKEN AS DATA_TYPE_CODE
+			, B2.TOKEN AS END_CUSTOMER
+			, B3.TOKEN AS UNLOADING_POINT
+			, B4.TOKEN AS CUSTOMER_PLANT
+			, B5.TOKEN AS SOLDTO_CODE
+			, B6.TOKEN AS SHIPTO_CODE
+			, B7.TOKEN AS PROJECT_CODE
+			, B8.TOKEN AS SCM_SITE_ID
+			, B9.TOKEN AS FCST_TYPE
+			, B10.TOKEN AS INCOTERMS
+			, B11.TOKEN AS DOM_EXP
+			, B12.TOKEN AS CUSTOMER_ITEM_ID
+			, B13.TOKEN AS ITEM_ID
+			, B14.TOKEN AS ACTIVE_YN
+			, B15.TOKEN AS VALID_FROM
+			, B16.TOKEN AS VALID_TO
+			, B17.TOKEN AS MAPPING_ITEM_ID
+			, B18.TOKEN AS ACT_TYPE
+			, B19.TOKEN AS COMPANY_ID
+			, B20.TOKEN AS MAPPING_ITEM_ID_ORIGINAL
+		FROM TABLE(UF_FX_STRING_SPLIT(P_CUST_FCST_TYPE                           , '^')) B1
+			LEFT OUTER JOIN TABLE(UF_FX_STRING_SPLIT(P_END_CUSTOMER			    , '^')) B2  ON B1.NR = B2.NR
+			LEFT OUTER JOIN TABLE(UF_FX_STRING_SPLIT(P_CUST_UNLOAD			    , '^')) B3  ON B1.NR = B3.NR
+			LEFT OUTER JOIN TABLE(UF_FX_STRING_SPLIT(P_CUST_PLANT			    , '^')) B4  ON B1.NR = B4.NR
+			LEFT OUTER JOIN TABLE(UF_FX_STRING_SPLIT(P_SOLDTO				    , '^')) B5  ON B1.NR = B5.NR
+			LEFT OUTER JOIN TABLE(UF_FX_STRING_SPLIT(P_SHIPTO				    , '^')) B6  ON B1.NR = B6.NR
+			LEFT OUTER JOIN TABLE(UF_FX_STRING_SPLIT(P_PROJECT_CODE			    , '^')) B7  ON B1.NR = B7.NR
+			LEFT OUTER JOIN TABLE(UF_FX_STRING_SPLIT(P_SCM_SITE_ID			    , '^')) B8  ON B1.NR = B8.NR
+			LEFT OUTER JOIN TABLE(UF_FX_STRING_SPLIT(P_FCST_TYPE			        , '^')) B9  ON B1.NR = B9.NR
+			LEFT OUTER JOIN TABLE(UF_FX_STRING_SPLIT(P_INCOTERMS			        , '^')) B10 ON B1.NR = B10.NR
+			LEFT OUTER JOIN TABLE(UF_FX_STRING_SPLIT(P_DOM_EXP				    , '^')) B11 ON B1.NR = B11.NR
+			LEFT OUTER JOIN TABLE(UF_FX_STRING_SPLIT(P_CUST_ITEM_ID			    , '^')) B12 ON B1.NR = B12.NR
+			LEFT OUTER JOIN TABLE(UF_FX_STRING_SPLIT(P_MDM_CODE		            , '^')) B13 ON B1.NR = B13.NR
+			LEFT OUTER JOIN TABLE(UF_FX_STRING_SPLIT(P_ACTIVE_FLAG	            , '^')) B14 ON B1.NR = B14.NR
+			LEFT OUTER JOIN TABLE(UF_FX_STRING_SPLIT(P_VALID_FROM	            , '^')) B15 ON B1.NR = B15.NR
+			LEFT OUTER JOIN TABLE(UF_FX_STRING_SPLIT(P_VALID_TO	                , '^')) B16 ON B1.NR = B16.NR
+			LEFT OUTER JOIN TABLE(UF_FX_STRING_SPLIT(P_MAPPING_ITEM_ID	        , '^')) B17 ON B1.NR = B17.NR
+			LEFT OUTER JOIN TABLE(UF_FX_STRING_SPLIT(P_ACT_TYPE	                , '^')) B18 ON B1.NR = B18.NR
+			LEFT OUTER JOIN TABLE(UF_FX_STRING_SPLIT(P_COMPANY_ID	            , '^')) B19 ON B1.NR = B19.NR
+			LEFT OUTER JOIN TABLE(UF_FX_STRING_SPLIT(P_MAPPING_ITEM_ID_ORIGINAL	, '^')) B20 ON B1.NR = B20.NR
+			;
+
+--SELECT * FROM #T_MAIN
+
+	---------------------------------------------------------------------------------------------------------------------------------------------------------------------◎◎◎◎
+	--                                                                                                              ITEM_ID 잘못들어왔을때 강제 에러발생시킴 (START)
+	---------------------------------------------------------------------------------------------------------------------------------------------------------------------◎◎◎◎
+	--DECLARE @VALID_ITEM_ID		     NVARCHAR(MAX);
+
+	--마스터 체크(신규일때만 체크)
+	--BEGIN
+	--	SET @VALID_ITEM_ID =
+	--	(
+	--		SELECT TOP 1 A.ITEM_ID
+	--			FROM #T_MAIN A
+	--			where NOT EXISTS (SELECT  ITEM.division_id
+	--								FROM dbo.scm_mst_site_item ITEM WITH(NOLOCK)
+	--									,dbo.SCM_MST_ITEM_SN SN WITH(NOLOCK)  -- 2022.01.20
+	--								where 1=1
+ --										and ITEM.division_id   = @P_DIVISION_ID
+	--									and ITEM.PROJECT_CODE  = A.PROJECT_CODE
+	--									and ITEM.scm_site_id   = A.SCM_SITE_ID
+	--									and ITEM.ITEM_ID       = A.ITEM_ID
+	--									and ITEM.division_id   = SN.division_id --20180720 ACTIVE_FLAG 조건추가
+	--									and ITEM.ITEM_ID       = SN.ITEM_ID --20180720 ACTIVE_FLAG 조건추가
+	--									and SN.ACTIVE_FLAG = 'Y' --20180720 ACTIVE_FLAG 조건추가
+	--									AND ITEM.VALID_YN = 'Y'		-- [C20200812-000104]
+	--								)
+	--			AND A.ACT_TYPE = 'I'--신규일때만 체크
+	--	)
+
+	--	-------------------------------------------------------------------◎◎◎◎
+	--	IF @VALID_ITEM_ID IS NOT NULL
+	--		BEGIN
+	--			SET @v_log_type = 'INVALID';
+	--			--SELECT '['+ @valid_item_id +']'+ N' Invalid Site Item ID !'
+	--			SET @v_description = '['+ @valid_item_id +']'+ N' Invalid Site Item ID !'
+	--			goto err_rtn
+	--		END
+	--	-------------------------------------------------------------------◎◎◎◎
+	--END
+
+	--Detail Check---------------------------------------------------------------
+	--BEGIN
+
+	--	DECLARE CUR_VALIDMAPPING_LIST CURSOR FAST_FORWARD FOR
+	--	SELECT
+	--		PROJECT_CODE
+	--		,SCM_SITE_ID
+	--		,ITEM_ID
+	--	FROM #T_MAIN
+
+	--	OPEN CUR_VALIDMAPPING_LIST;
+	--	FETCH NEXT FROM CUR_VALIDMAPPING_LIST INTO
+	--		 @CUR_PROJECT_CODE
+	--		,@CUR_SCM_SITE_ID
+	--		,@CUR_MAPPING_ITEM_ID
+
+	--	WHILE @@FETCH_STATUS = 0
+	--	BEGIN
+	--		IF @CUR_MAPPING_ITEM_ID <> '' --MAPPING_ITEM_ID 값이 있을 경우만 처리
+	--		BEGIN
+	--			SET @VALID_ITEM_ID = NULL
+
+	--			SET @VALID_ITEM_ID =
+	--			(
+	--				SELECT TOP 1 A.TOKEN
+	--					FROM (SELECT * from dbo.UF_FX_STRING_SPLIT(@CUR_MAPPING_ITEM_ID, '$')) A
+	--					where NOT EXISTS (SELECT  ITEM.division_id
+	--										FROM dbo.scm_mst_site_item ITEM WITH(NOLOCK)
+	--											,dbo.SCM_MST_ITEM_SN SN WITH(NOLOCK)  -- 2022.01.20
+	--										where 1=1
+ --												and ITEM.division_id   = @P_DIVISION_ID
+	--											and ITEM.PROJECT_CODE  = @CUR_PROJECT_CODE
+	--											and ITEM.scm_site_id   = @CUR_SCM_SITE_ID
+	--											and ITEM.ITEM_ID       = A.TOKEN --$로 구분한 값
+	--											and ITEM.division_id   = SN.division_id
+	--											and ITEM.ITEM_ID       = SN.ITEM_ID
+	--											and SN.ACTIVE_FLAG = 'Y'
+	--											AND ITEM.VALID_YN = 'Y'
+	--										)
+	--			)
+
+	--			-------------------------------------------------------------------◎◎◎◎
+	--			IF @VALID_ITEM_ID IS NOT NULL
+	--			BEGIN
+	--				SET @v_log_type = 'INVALID';
+	--				--SELECT '['+ @valid_item_id +']'+ N' Invalid Site Item ID !'
+	--				SET @v_description = '['+ @valid_item_id +']'+ N' Invalid Site Item ID !'
+	--				goto err_rtn
+	--			END
+	--			-------------------------------------------------------------------◎◎◎◎
+
+	--		END
+
+
+	--	FETCH NEXT FROM CUR_VALIDMAPPING_LIST INTO
+	--		 @CUR_PROJECT_CODE
+	--		,@CUR_SCM_SITE_ID
+	--		,@CUR_MAPPING_ITEM_ID
+	--	END
+
+	--	CLOSE CUR_VALIDMAPPING_LIST;
+	--	DEALLOCATE CUR_VALIDMAPPING_LIST;
+	--END
+
+
+	---------------------------------------------------------------------------------------------------------------------------------------------------------------------◎◎◎◎
+	--                                                                                                              ITEM_ID 잘못들어왔을때 강제 에러발생시킴 (END)
+	---------------------------------------------------------------------------------------------------------------------------------------------------------------------◎◎◎◎
+
+	--SELECT DATA_TYPE_CODE
+	--	,  COMPANY_ID
+	--	, SOLDTO_CODE
+	--	, SHIPTO_CODE
+	--	, UNLOADING_POINT
+	--	, CUSTOMER_PLANT
+	--	, CUSTOMER_ITEM_ID
+	--	, END_CUSTOMER
+	--	, SCM_SITE_ID
+	--	, PROJECT_CODE
+	--	, FCST_TYPE
+	--	,  INCOTERMS
+	--	,  DOM_EXP
+	--	,  ITEM_ID
+	--	, MAPPING_ITEM_ID
+	--	, MAPPING_ITEM_ID_ORIGINAL
+	--	,  VALID_FROM
+	--	,  VALID_TO
+	--	,  ACTIVE_YN
+	--	,  ACT_TYPE
+	--	FROM #T_MAIN
+
+	--SELECT * FROM DM_CUST_MODEL_MAPPING_M WHERE DATA_TYPE_CODE = 'SCM' AND DIVISION_ID = '81'
+
+	--SELECT * FROM DM_CUST_MODEL_MAPPING_M A
+	--INNER JOIN #T_MAIN B
+	--ON 		       A.DATA_TYPE_CODE = B.DATA_TYPE_CODE
+	--	   AND A.DIVISION_ID = @P_DIVISION_ID
+	--	   AND A.COMPANY_ID = B.COMPANY_ID
+	--	   AND A.SOLDTO_CODE = B.SOLDTO_CODE
+	--	   AND A.SHIPTO_CODE = B.SHIPTO_CODE
+	--	   AND ISNULL(LTRIM(RTRIM(A.UNLOADING_POINT)),'') = ISNULL(LTRIM(RTRIM(B.UNLOADING_POINT)),'') -- 원천데이터에 공백이 있으므로 제거하고 처리
+	--	   AND ISNULL(LTRIM(RTRIM(A.CUSTOMER_PLANT)),'') = ISNULL(LTRIM(RTRIM(B.CUSTOMER_PLANT)),'') -- 원천데이터에 공백이 있으므로 제거하고 처리
+	--	   AND ISNULL(LTRIM(RTRIM(A.CUSTOMER_ITEM_ID)),'') = ISNULL(LTRIM(RTRIM(B.CUSTOMER_ITEM_ID)),'') -- 원천데이터에 공백이 있으므로 제거하고 처리
+	--	   --AND A.END_CUSTOMER = B.END_CUSTOMER
+	--	   AND A.SCM_SITE_ID = B.SCM_SITE_ID
+	--	   AND A.PROJECT_CODE = B.PROJECT_CODE
+	--	   AND A.FCST_TYPE = B.FCST_TYPE
+	--	   AND A.INCOTERMS = B.INCOTERMS
+	--	   AND A.DOM_EXP = B.DOM_EXP
+	--	   AND A.ITEM_ID = B.ITEM_ID
+	--	   AND A.MAPPING_ITEM_ID = B.MAPPING_ITEM_ID_ORIGINAL
+
+	--MASTER 처리
+		-- [PJ202650304 2026.06.05] 원본 MSSQL MERGE 는 ON 절 컬럼(A.MAPPING_ITEM_ID)을 UPDATE SET 에서 변경하나,
+		-- Oracle 은 ORA-38104(ON 절 참조 컬럼 갱신 불가) 발생 → MERGE 를 UPDATE + INSERT 로 분리(의미 동일).
+		-- (1) MATCHED → UPDATE
+		UPDATE DM_CUST_MODEL_MAPPING_M A
+		   SET ( A.VALID_START_DATE
+		       , A.VALID_END_DATE
+		       , A.ACTIVE_YN
+		       , A.MAPPING_ITEM_ID
+		       , A.LAST_UPDATED_BY
+		       , A.LAST_UPDATE_DATE )
+		     = ( SELECT B.VALID_FROM, B.VALID_TO, B.ACTIVE_YN, B.MAPPING_ITEM_ID, P_USER_ID, SYSDATE
+		           FROM GT_DMF0072_MAIN B
+		          WHERE A.DATA_TYPE_CODE = B.DATA_TYPE_CODE
+		            AND A.DIVISION_ID = P_DIVISION_ID
+		            AND A.COMPANY_ID = B.COMPANY_ID
+		            AND A.SOLDTO_CODE = B.SOLDTO_CODE
+		            AND A.SHIPTO_CODE = B.SHIPTO_CODE
+		            AND NVL(LTRIM(RTRIM(A.UNLOADING_POINT)),'#')  = NVL(LTRIM(RTRIM(B.UNLOADING_POINT)),'#') -- 원천데이터에 공백이 있으므로 제거하고 처리
+		            AND NVL(LTRIM(RTRIM(A.CUSTOMER_PLANT)),'#')   = NVL(LTRIM(RTRIM(B.CUSTOMER_PLANT)),'#') -- 원천데이터에 공백이 있으므로 제거하고 처리
+		            AND NVL(LTRIM(RTRIM(A.CUSTOMER_ITEM_ID)),'#') = NVL(LTRIM(RTRIM(B.CUSTOMER_ITEM_ID)),'#') -- 원천데이터에 공백이 있으므로 제거하고 처리
+		            --AND A.END_CUSTOMER = B.END_CUSTOMER
+		            AND A.SCM_SITE_ID = B.SCM_SITE_ID
+		            AND A.PROJECT_CODE = B.PROJECT_CODE
+		            AND A.FCST_TYPE = B.FCST_TYPE
+		            AND A.INCOTERMS = B.INCOTERMS
+		            AND A.DOM_EXP = B.DOM_EXP
+		            AND A.ITEM_ID = B.ITEM_ID
+		            AND A.MAPPING_ITEM_ID = B.MAPPING_ITEM_ID_ORIGINAL
+		            AND B.ACT_TYPE = 'M'
+		            --AND A.UNLOADING_POINT = B.UNLOADING_POINT--PK 추가
+		            --AND A.CUSTOMER_PLANT = B.CUSTOMER_PLANT--PK 추가
+		            --AND A.CUSTOMER_ITEM_ID = B.CUSTOMER_ITEM_ID--PK 추가
+		       )
+		 WHERE EXISTS ( SELECT 1
+		                  FROM GT_DMF0072_MAIN B
+		                 WHERE A.DATA_TYPE_CODE = B.DATA_TYPE_CODE
+		                   AND A.DIVISION_ID = P_DIVISION_ID
+		                   AND A.COMPANY_ID = B.COMPANY_ID
+		                   AND A.SOLDTO_CODE = B.SOLDTO_CODE
+		                   AND A.SHIPTO_CODE = B.SHIPTO_CODE
+		                   AND NVL(LTRIM(RTRIM(A.UNLOADING_POINT)),'#')  = NVL(LTRIM(RTRIM(B.UNLOADING_POINT)),'#')
+		                   AND NVL(LTRIM(RTRIM(A.CUSTOMER_PLANT)),'#')   = NVL(LTRIM(RTRIM(B.CUSTOMER_PLANT)),'#')
+		                   AND NVL(LTRIM(RTRIM(A.CUSTOMER_ITEM_ID)),'#') = NVL(LTRIM(RTRIM(B.CUSTOMER_ITEM_ID)),'#')
+		                   AND A.SCM_SITE_ID = B.SCM_SITE_ID
+		                   AND A.PROJECT_CODE = B.PROJECT_CODE
+		                   AND A.FCST_TYPE = B.FCST_TYPE
+		                   AND A.INCOTERMS = B.INCOTERMS
+		                   AND A.DOM_EXP = B.DOM_EXP
+		                   AND A.ITEM_ID = B.ITEM_ID
+		                   AND A.MAPPING_ITEM_ID = B.MAPPING_ITEM_ID_ORIGINAL
+		                   AND B.ACT_TYPE = 'M' );
+
+		v_rowcnt := SQL%ROWCOUNT;
+
+		-- (2) NOT MATCHED → INSERT (ACT_TYPE='I' 전부 + ACT_TYPE='M' 이나 매칭되는 마스터가 없는 행)
+		INSERT INTO DM_CUST_MODEL_MAPPING_M
+				(
+					 DATA_TYPE_CODE
+					,DIVISION_ID
+					,COMPANY_ID
+					,SOLDTO_CODE
+					,SHIPTO_CODE
+					,UNLOADING_POINT
+					,CUSTOMER_PLANT
+					,CUSTOMER_ITEM_ID
+					,END_CUSTOMER
+					,SCM_SITE_ID
+					,PROJECT_CODE
+					,FCST_TYPE
+					,INCOTERMS
+					,DOM_EXP
+					,ITEM_ID
+					,MAPPING_ITEM_ID
+					,VALID_START_DATE
+					,VALID_END_DATE
+					,ACTIVE_YN
+					,CREATED_BY
+					,CREATION_DATE
+					,LAST_UPDATED_BY
+					,LAST_UPDATE_DATE
+			   )
+		SELECT
+			    B.DATA_TYPE_CODE
+			   ,P_DIVISION_ID
+			   ,B.COMPANY_ID
+			   ,B.SOLDTO_CODE
+			   ,B.SHIPTO_CODE
+			   ,NVL(LTRIM(RTRIM(B.UNLOADING_POINT)),'#')
+			   ,NVL(LTRIM(RTRIM(B.CUSTOMER_PLANT)),'#')
+			   ,NVL(LTRIM(RTRIM(B.CUSTOMER_ITEM_ID)),'#')
+			   ,B.END_CUSTOMER
+			   ,B.SCM_SITE_ID
+			   ,B.PROJECT_CODE
+			   ,B.FCST_TYPE
+			   ,B.INCOTERMS
+			   ,B.DOM_EXP
+			   ,B.ITEM_ID
+			   ,B.MAPPING_ITEM_ID
+			   ,B.VALID_FROM
+			   ,B.VALID_TO
+			   ,B.ACTIVE_YN
+			   ,P_USER_ID
+			   ,SYSDATE
+			   ,P_USER_ID
+			   ,SYSDATE
+		  FROM GT_DMF0072_MAIN B
+		 WHERE NOT EXISTS ( SELECT 1
+		                      FROM DM_CUST_MODEL_MAPPING_M A
+		                     WHERE A.DATA_TYPE_CODE = B.DATA_TYPE_CODE
+		                       AND A.DIVISION_ID = P_DIVISION_ID
+		                       AND A.COMPANY_ID = B.COMPANY_ID
+		                       AND A.SOLDTO_CODE = B.SOLDTO_CODE
+		                       AND A.SHIPTO_CODE = B.SHIPTO_CODE
+		                       AND NVL(LTRIM(RTRIM(A.UNLOADING_POINT)),'#')  = NVL(LTRIM(RTRIM(B.UNLOADING_POINT)),'#')
+		                       AND NVL(LTRIM(RTRIM(A.CUSTOMER_PLANT)),'#')   = NVL(LTRIM(RTRIM(B.CUSTOMER_PLANT)),'#')
+		                       AND NVL(LTRIM(RTRIM(A.CUSTOMER_ITEM_ID)),'#') = NVL(LTRIM(RTRIM(B.CUSTOMER_ITEM_ID)),'#')
+		                       AND A.SCM_SITE_ID = B.SCM_SITE_ID
+		                       AND A.PROJECT_CODE = B.PROJECT_CODE
+		                       AND A.FCST_TYPE = B.FCST_TYPE
+		                       AND A.INCOTERMS = B.INCOTERMS
+		                       AND A.DOM_EXP = B.DOM_EXP
+		                       AND A.ITEM_ID = B.ITEM_ID
+		                       AND A.MAPPING_ITEM_ID = B.MAPPING_ITEM_ID_ORIGINAL
+		                       AND B.ACT_TYPE = 'M' )
+		;
+
+	v_rowcnt := v_rowcnt + SQL%ROWCOUNT;  -- UPDATE(MATCHED) + INSERT(NOT MATCHED) 합계 = 원본 @@ROWCOUNT 대응
+
+	v_log_type := 'END';
+	v_log_message := '########## END of procedure ##########';
+	v_description := '';
+	d_event_date := SYSDATE;
+	PR_SCM_SYS_LOG_BATCH(v_program_name, v_log_type, n_log_count, v_log_message, v_description, d_event_date);
+
+	COMMIT;
+
+	-- 결과코드, 결과 카운트 반환
+	OPEN P_RESULT_CURSOR FOR
+		SELECT  'S' AS result_code,  v_rowcnt AS result_cnt FROM DUAL ;
+
+	-- 에러 결과셋은 정상 흐름에서도 빈 결과셋으로 OPEN (호출측 일관성)
+	OPEN P_ERROR_CURSOR FOR
+		SELECT  NULL AS err_code, NULL AS err_message FROM DUAL WHERE 1 = 0;
+
+	EXCEPTION
+		WHEN e_invalid_data THEN
+			-- 트랜잭션 (END)
+			-- err_rtn:
+			IF v_log_type = 'INVALID' THEN
+				ROLLBACK;
+				--ROLLBACK TRANSACTION DM0003_SAVE_MKT_FCST
+
+				v_log_type := 'END';
+				v_log_message := '########## END of procedure ##########';
+				d_event_date := SYSDATE;
+				PR_SCM_SYS_LOG_BATCH(v_program_name, v_log_type, n_log_count, v_log_message, v_description, d_event_date);
+
+				-- 결과코드, 결과 카운트 반환
+				OPEN P_RESULT_CURSOR FOR
+					SELECT  'F' AS result_code,  v_description AS result_msg FROM DUAL ;
+
+				OPEN P_ERROR_CURSOR FOR
+					SELECT  NULL AS err_code, NULL AS err_message FROM DUAL WHERE 1 = 0;
+			END IF;
+
+		WHEN OTHERS THEN
+			ROLLBACK;
+
+			-- SQLERRM 을 SQL 안에서 직접 사용하면 ORA-00984 발생 → PL/SQL 변수로 먼저 받음 (2026.05.22 ZIONEX NextSCM Migration)
+			v_err_message := SUBSTR(SQLERRM, 1, 1000);
+
+			INSERT INTO scm_sys_log_batch (program_name,log_type,log_count,log_message,description,event_date,creation_date,created_by,last_update_date,last_updated_by)
+			VALUES (v_program_name,'ERROR',NULL,v_err_message,NULL,SYSDATE,SYSDATE,v_program_name,SYSDATE,v_program_name);
+
+			COMMIT;
+
+			-- error코드, errror 메시지 반환
+			OPEN P_RESULT_CURSOR FOR
+				SELECT 'F' AS result_code FROM DUAL;
+
+			IF v_err_code IS NULL THEN
+				v_err_code := SQLCODE ;
+			END IF;
+			IF v_err_message IS NULL OR v_err_message = '' THEN
+				v_err_message := SQLERRM;
+			END IF;
+
+			/* 에러 메시지, 에러 데이터  반환   */
+			OPEN P_ERROR_CURSOR FOR
+				SELECT  v_err_code			AS err_code
+					   ,v_err_message		AS err_message
+				FROM DUAL
+				;
+	END;
+
+-- 트랜잭션 (END)
+-- err_rtn:
+
+END;
+/
+/

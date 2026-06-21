@@ -16,20 +16,21 @@ const CATEGORY_OPTIONS = [
 ];
 
 export const DynamicQueryForm = ({ onSearch }: Props) => {
+  const { t } = useTranslation();
   const searchCondition = useDynamicQueryStore(s => s.searchCondition);
   const setSearchCondition = useDynamicQueryStore(s => s.setSearchCondition);
   const openSearchArea = useDynamicQueryStore(s => s.openSearchArea);
 
   return (
     <SearchArea
-      searchButtonLabel='Search'
+      searchButtonLabel={t('LBL00112', '_Search')}
       isHidden={!openSearchArea}
       onSearch={onSearch}
       conditions={
         <>
           <Grid size={3}>
             <FormItem
-              label='Query Name'
+              label={t('LBL00650', 'Query Name')}
               labelAlign='right'
               render={() => (
                 <InputField
@@ -43,7 +44,7 @@ export const DynamicQueryForm = ({ onSearch }: Props) => {
           </Grid>
           <Grid size={3}>
             <FormItem
-              label='Category'
+              label={t('LBL00651', 'Category')}
               labelAlign='right'
               render={() => (
                 <CustomDropdown

@@ -1,36 +1,31 @@
-import {
-  AllowMerging,
-  CellRange,
-  CellType,
-  DataMap,
-  type FlexGrid as FlexGridType,
-  type GridPanel,
-  MergeManager,
-} from '@mescius/wijmo.grid';
-import { FlexGrid, FlexGridColumn } from '@mescius/wijmo.react.grid';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
-import { CustomDialog } from '@shared/components';
+import {
+  type DualListColumn,
+  ColumnSelectDualList,
+  CustomDialog,
+} from '@shared/components';
 import { useTabProcQuery } from '@shared/hooks';
 import { useMessageStore } from '@shared/stores';
 
 import styles from './ColumnSettingModal.module.scss';
 
 // 공용 Column Setting popup (사용자 명시 2026-06-03):
-//   - AS-IS DM0002_TitleSetForm_Popup.cs 동등 동작 (Base/User dual grid + 이동 + Sort combo)
+//   - AS-IS DM0002_TitleSetForm_Popup.cs 동등 동작 (Base/User dual list + 이동 + Sort)
 //   - 화면별 props 로 menuId / sheetName / columnType / divisionId 전달
 //   - SP DMF0002_GET_TITLESET_POPUP 호출 (BE PROC_M COL_NM auto-fill)
 //   - BE 결과 없으면 fallbackColumns 사용 (Hybrid Option C)
 //
 // 사용 화면: DMF0020 (Sales Future Price) / DMF0043_01 (Contribute View)
+//
+// 2026-06-20: wijmo FlexGrid + CustomDialog 조합에서 selection 사고 (click row N → row 0 강제)
+//   해소를 위해 신규 공용 컴포넌트 `ColumnSelectDualList` (@shared/components/molecules)
+//   생성 후 사용. HTML <table> 기반 — wijmo 의존 0.
 
 export interface ColumnSettingFallback {
   key: string;
   header: string;
   width?: number;
-  // ⭐ 2026-06-17 — popup 재진입 시 이전 visible 상태 복원용.
-  //   true (default): USER_FLAG='Y' (우측 visible grid). false: USER_FLAG='N' (좌측 hidden grid).
-  visible?: boolean;
 }
 
 export interface ColumnSettingRow {
@@ -38,10 +33,11 @@ export interface ColumnSettingRow {
   LARGE_CLASS_LABEL_NAME: string;
   SMALL_CLASS_LABEL_NAME: string;
   COLUMN_LABEL_NAME: string;
-  USER_FLAG: 'Y' | 'N';
-  USER_SORT_METHOD_CODE: 'ASC' | 'DESC' | '';
-  SUB_TOTAL_FLAG: 'Y' | 'N';
+  USER_FLAG: string;
+  USER_SORT_METHOD_CODE: string;
+  SUB_TOTAL_FLAG: string;
   SORT_ORDER_NO: number;
+  [key: string]: string | number;
 }
 
 interface Props {
@@ -61,6 +57,8 @@ interface Props {
   onSave: (settings: ColumnSettingRow[]) => void;
   /** popup title (기본: 'Column Setting') */
   title?: string;
+  /** 이전에 OK 했던 visible column 키 목록 (popup 재진입 시 좌/우 상태 복원) */
+  initialVisibleKeys?: string[];
 }
 
 export const ColumnSettingModal = ({
@@ -73,10 +71,9 @@ export const ColumnSettingModal = ({
   fallbackColumns = [],
   onSave,
   title = 'Column Setting',
+  initialVisibleKeys,
 }: Props) => {
   const setAlert = useMessageStore.getState().setAlert;
-  const baseGridRef = useRef<FlexGridType<ColumnSettingRow> | null>(null);
-  const userGridRef = useRef<FlexGridType<ColumnSettingRow> | null>(null);
 
   // SP 호출 — filters useMemo 안정화 (refetch loop 방지)
   const filters = useMemo(
@@ -98,50 +95,67 @@ export const ColumnSettingModal = ({
     enabled: open,
   });
 
-  // BE 동적 컬럼 응답은 string 으로 직렬화 (eslint no-base-to-string 회피)
   const beRows = useMemo(() => (data?.o_rc1 ?? []) as unknown as Record<string, string>[], [data]);
   const loading = isLoading || isFetching;
 
-  // BE rows → ColumnSettingRow 정규화 + fallback (fallbackColumns)
   const initialRows = useMemo<ColumnSettingRow[]>(() => {
+    // initialVisibleKeys 가 있으면 USER_FLAG 강제 override — 이전 OK 상태 복원
+    const hasVisibleOverride = !!initialVisibleKeys && initialVisibleKeys.length > 0;
+    const computeFlag = (colName: string, beFlag: string): string => {
+      if (hasVisibleOverride) {
+        return initialVisibleKeys.includes(colName) ? 'Y' : 'N';
+      }
+      return beFlag === 'Y' ? 'Y' : 'N';
+    };
+
     if (beRows.length > 0) {
-      return beRows.map((r, i) => ({
-        COLUMN_NAME: String(r.COLUMN_NAME ?? ''),
-        LARGE_CLASS_LABEL_NAME: String(
-          r.LARGE_CLASS_LABEL_NAME ?? r.COLUMN_LABEL_NAME ?? r.COLUMN_NAME ?? ''
-        ),
-        SMALL_CLASS_LABEL_NAME: String(
-          r.SMALL_CLASS_LABEL_NAME ?? r.COLUMN_LABEL_NAME ?? r.COLUMN_NAME ?? ''
-        ),
-        COLUMN_LABEL_NAME: String(r.COLUMN_LABEL_NAME ?? r.COLUMN_NAME ?? ''),
-        USER_FLAG: String(r.USER_FLAG ?? r.VISIBLE_FLAG ?? 'Y') === 'Y' ? 'Y' : 'N',
-        USER_SORT_METHOD_CODE: (['ASC', 'DESC'].includes(String(r.USER_SORT_METHOD_CODE ?? ''))
-          ? r.USER_SORT_METHOD_CODE
-          : 'ASC') as 'ASC' | 'DESC',
-        SUB_TOTAL_FLAG: String(r.SUB_TOTAL_FLAG ?? 'N') === 'Y' ? 'Y' : 'N',
-        SORT_ORDER_NO: Number(r.SORT_ORDER_NO ?? i + 1),
-      }));
+      return beRows.map((r, i) => {
+        const colName = String(r.COLUMN_NAME ?? '');
+        const beFlag = String(r.USER_FLAG ?? r.VISIBLE_FLAG ?? 'Y');
+        return {
+          COLUMN_NAME: colName,
+          LARGE_CLASS_LABEL_NAME: String(
+            r.LARGE_CLASS_LABEL_NAME ?? r.COLUMN_LABEL_NAME ?? r.COLUMN_NAME ?? ''
+          ),
+          SMALL_CLASS_LABEL_NAME: String(
+            r.SMALL_CLASS_LABEL_NAME ?? r.COLUMN_LABEL_NAME ?? r.COLUMN_NAME ?? ''
+          ),
+          COLUMN_LABEL_NAME: String(r.COLUMN_LABEL_NAME ?? r.COLUMN_NAME ?? ''),
+          USER_FLAG: computeFlag(colName, beFlag),
+          USER_SORT_METHOD_CODE: ['ASC', 'DESC'].includes(String(r.USER_SORT_METHOD_CODE ?? ''))
+            ? String(r.USER_SORT_METHOD_CODE)
+            : 'ASC',
+          SUB_TOTAL_FLAG: String(r.SUB_TOTAL_FLAG ?? 'N') === 'Y' ? 'Y' : 'N',
+          SORT_ORDER_NO: Number(r.SORT_ORDER_NO ?? i + 1),
+        };
+      });
     }
-    // fallbackColumns 사용 — c.visible 미명시 시 'Y' (default visible).
     return fallbackColumns.map((c, i) => ({
       COLUMN_NAME: c.key,
       LARGE_CLASS_LABEL_NAME: c.header,
       SMALL_CLASS_LABEL_NAME: c.header,
       COLUMN_LABEL_NAME: c.header,
-      USER_FLAG: c.visible === false ? 'N' : 'Y',
+      USER_FLAG: computeFlag(c.key, 'Y'),
       USER_SORT_METHOD_CODE: 'ASC',
       SUB_TOTAL_FLAG: 'N',
       SORT_ORDER_NO: i + 1,
     }));
-  }, [beRows, fallbackColumns]);
+  }, [beRows, fallbackColumns, initialVisibleKeys]);
 
   const [rows, setRows] = useState<ColumnSettingRow[]>([]);
-  const [baseSel, setBaseSel] = useState<ColumnSettingRow | null>(null);
-  const [userSel, setUserSel] = useState<ColumnSettingRow | null>(null);
 
+  // popup 닫힐 때 rows reset
   useEffect(() => {
-    if (open) setRows(initialRows);
-  }, [open, initialRows]);
+    if (!open) setRows([]);
+  }, [open]);
+
+  // popup open + BE 응답 도착 시점 1회만 setRows (사용자 변경 보존)
+  // initialRows reference 변경 시 무조건 setRows 시 사용자 이동 결과 원복 사고.
+  useEffect(() => {
+    if (open && rows.length === 0 && initialRows.length > 0) {
+      setRows(initialRows);
+    }
+  }, [open, initialRows, rows.length]);
 
   const baseRows = useMemo(() => rows.filter(r => r.USER_FLAG === 'N'), [rows]);
   const userRows = useMemo(
@@ -149,8 +163,51 @@ export const ColumnSettingModal = ({
     [rows]
   );
 
+  const [selectedBaseCol, setSelectedBaseCol] = useState<string | null>(null);
+  const [selectedUserCol, setSelectedUserCol] = useState<string | null>(null);
+
+  const toggleSort = (rowKey: string) => {
+    setRows(prev =>
+      prev.map(r =>
+        r.COLUMN_NAME === rowKey
+          ? { ...r, USER_SORT_METHOD_CODE: r.USER_SORT_METHOD_CODE === 'DESC' ? 'ASC' : 'DESC' }
+          : r
+      )
+    );
+  };
+
+  const BASE_COLUMNS: DualListColumn<ColumnSettingRow>[] = [
+    { key: 'LARGE_CLASS_LABEL_NAME', header: 'LargeClass', width: 80, align: 'left' },
+    { key: 'SMALL_CLASS_LABEL_NAME', header: 'SmallClass', width: 80, align: 'left' },
+    { key: 'COLUMN_LABEL_NAME', header: 'Column', width: 120, align: 'left' },
+  ];
+
+  const USER_COLUMNS: DualListColumn<ColumnSettingRow>[] = [
+    { key: 'LARGE_CLASS_LABEL_NAME', header: 'LargeClass', width: 120, align: 'left' },
+    { key: 'SMALL_CLASS_LABEL_NAME', header: 'SmallClass', width: 120, align: 'left' },
+    { key: 'COLUMN_LABEL_NAME', header: 'Column', width: 130, align: 'left' },
+    {
+      key: 'USER_SORT_METHOD_CODE',
+      header: 'Sort',
+      width: 80,
+      align: 'center',
+      render: (row, rowKey) => (
+        <button
+          type='button'
+          onClick={e => {
+            e.stopPropagation();
+            toggleSort(rowKey);
+          }}
+          className={styles.sortToggleBtn}
+        >
+          {row.USER_SORT_METHOD_CODE}
+        </button>
+      ),
+    },
+  ];
+
   const moveToUser = () => {
-    if (!baseSel) {
+    if (!selectedBaseCol) {
       void setAlert({ type: 'alert', content: '좌측 column 선택' });
       return;
     }
@@ -160,25 +217,25 @@ export const ColumnSettingModal = ({
         ...prev.filter(r => r.USER_FLAG === 'Y').map(r => r.SORT_ORDER_NO)
       );
       return prev.map(r =>
-        r.COLUMN_NAME === baseSel.COLUMN_NAME
+        r.COLUMN_NAME === selectedBaseCol
           ? { ...r, USER_FLAG: 'Y', SORT_ORDER_NO: maxSeq + 1 }
           : r
       );
     });
-    setBaseSel(null);
+    setSelectedBaseCol(null);
   };
 
   const moveToBase = () => {
-    if (!userSel) {
+    if (!selectedUserCol) {
       void setAlert({ type: 'alert', content: '우측 column 선택' });
       return;
     }
     setRows(prev =>
       prev.map(r =>
-        r.COLUMN_NAME === userSel.COLUMN_NAME ? { ...r, USER_FLAG: 'N', SORT_ORDER_NO: 0 } : r
+        r.COLUMN_NAME === selectedUserCol ? { ...r, USER_FLAG: 'N', SORT_ORDER_NO: 0 } : r
       )
     );
-    setUserSel(null);
+    setSelectedUserCol(null);
   };
 
   const handleDefault = () => {
@@ -193,40 +250,6 @@ export const ColumnSettingModal = ({
     onSave(userRows);
     modalClose();
   };
-
-  const sortMap = useMemo(() => new DataMap(['ASC', 'DESC']), []);
-
-  // LargeClass/SmallClass 같은 값 row vertical merge (AS-IS FPMerge.Always)
-  class TitleSetMerge extends MergeManager {
-    getMergedRange(panel: GridPanel, r: number, c: number, _clip = true): CellRange | null {
-      if (panel.cellType !== CellType.Cell) return null;
-      const col = panel.columns[c];
-      const binding = col?.binding ?? '';
-      if (binding !== 'LARGE_CLASS_LABEL_NAME' && binding !== 'SMALL_CLASS_LABEL_NAME') return null;
-      const view = panel.rows;
-      const ri = (i: number): ColumnSettingRow | undefined =>
-        (view[i] as unknown as { dataItem?: ColumnSettingRow })?.dataItem;
-      const cur = ri(r);
-      if (!cur) return null;
-      const key = binding;
-      const sameRow = (a: number, b: number): boolean => {
-        const ra = ri(a);
-        const rb = ri(b);
-        return (
-          !!ra &&
-          !!rb &&
-          (ra as unknown as Record<string, unknown>)[key] ===
-            (rb as unknown as Record<string, unknown>)[key]
-        );
-      };
-      let r1 = r,
-        r2 = r;
-      while (r1 > 0 && sameRow(r1 - 1, r)) r1--;
-      while (r2 < view.length - 1 && sameRow(r2 + 1, r)) r2++;
-      if (r1 === r2) return null;
-      return new CellRange(r1, c, r2, c);
-    }
-  }
 
   return (
     <CustomDialog
@@ -257,134 +280,21 @@ export const ColumnSettingModal = ({
       }
       customContentArea={
         <div className={styles.container}>
-          <div className={styles.dualGrid}>
-            {/* 좌측 Base grid */}
-            <div className={styles.sideGrid}>
-              <FlexGrid
-                initialized={(g: FlexGridType<ColumnSettingRow>) => {
-                  baseGridRef.current = g;
-                  g.allowMerging = AllowMerging.Cells;
-                  for (let i = 0; i < g.columns.length; i++) g.columns[i].allowMerging = true;
-                  g.mergeManager = new TitleSetMerge();
-                }}
-                itemsSource={baseRows}
-                autoGenerateColumns={false}
-                selectionMode={1}
-                selectionChanged={(s, e) => {
-                  // ⭐ 2026-06-17 fix — Wijmo panel.rows 가 itemsSource 와 다른 순서일 수 있음.
-                  //   panel.rows[e.row].dataItem 직접 추출 (sort/filter 영향 무관).
-                  const dataItem = s.rows[e.row]?.dataItem as ColumnSettingRow | undefined;
-                  setBaseSel(dataItem ?? null);
-                }}
-                style={{ height: '100%' }}
-              >
-                <FlexGridColumn
-                  binding='LARGE_CLASS_LABEL_NAME'
-                  header='LargeClass'
-                  width={80}
-                  align='left'
-                  isReadOnly
-                />
-                <FlexGridColumn
-                  binding='SMALL_CLASS_LABEL_NAME'
-                  header='SmallClass'
-                  width={80}
-                  align='left'
-                  isReadOnly
-                />
-                <FlexGridColumn
-                  binding='COLUMN_LABEL_NAME'
-                  header='Column'
-                  width={120}
-                  align='left'
-                  isReadOnly
-                />
-              </FlexGrid>
-            </div>
-
-            {/* 중앙 이동 버튼 */}
-            <div className={styles.centerBtns}>
-              <button
-                type='button'
-                onClick={moveToUser}
-                className={styles.arrowBtn}
-                title='우측 추가'
-              >
-                ▶
-              </button>
-              <button
-                type='button'
-                onClick={moveToBase}
-                className={styles.arrowBtn}
-                title='좌측 제거'
-              >
-                ◀
-              </button>
-            </div>
-
-            {/* 우측 User grid (Sort combo 포함) */}
-            <div className={styles.sideGrid}>
-              <FlexGrid
-                initialized={(g: FlexGridType<ColumnSettingRow>) => {
-                  userGridRef.current = g;
-                  g.allowMerging = AllowMerging.Cells;
-                  for (let i = 0; i < g.columns.length; i++) g.columns[i].allowMerging = true;
-                  g.mergeManager = new TitleSetMerge();
-                  const sortCol = g.columns.getColumn('USER_SORT_METHOD_CODE');
-                  if (sortCol) sortCol.dataMap = sortMap;
-                }}
-                itemsSource={userRows}
-                autoGenerateColumns={false}
-                selectionMode={1}
-                selectionChanged={(s, e) => {
-                  // ⭐ 2026-06-17 fix — panel.rows[e.row].dataItem 직접 추출 (Sort dropdown row 무관).
-                  const dataItem = s.rows[e.row]?.dataItem as ColumnSettingRow | undefined;
-                  setUserSel(dataItem ?? null);
-                }}
-                cellEditEnded={(s, e) => {
-                  const item = s.rows[e.row]?.dataItem as ColumnSettingRow | undefined;
-                  if (!item) return;
-                  setRows(prev =>
-                    prev.map(r =>
-                      r.COLUMN_NAME === item.COLUMN_NAME
-                        ? { ...r, USER_SORT_METHOD_CODE: item.USER_SORT_METHOD_CODE }
-                        : r
-                    )
-                  );
-                }}
-                style={{ height: '100%' }}
-              >
-                <FlexGridColumn
-                  binding='LARGE_CLASS_LABEL_NAME'
-                  header='LargeClass'
-                  width={120}
-                  align='left'
-                  isReadOnly
-                />
-                <FlexGridColumn
-                  binding='SMALL_CLASS_LABEL_NAME'
-                  header='SmallClass'
-                  width={120}
-                  align='left'
-                  isReadOnly
-                />
-                <FlexGridColumn
-                  binding='COLUMN_LABEL_NAME'
-                  header='Column'
-                  width={130}
-                  align='left'
-                  isReadOnly
-                />
-                <FlexGridColumn
-                  binding='USER_SORT_METHOD_CODE'
-                  header='Sort'
-                  width={80}
-                  align='center'
-                  cssClass={styles.sortCell}
-                />
-              </FlexGrid>
-            </div>
-          </div>
+          <ColumnSelectDualList<ColumnSettingRow>
+            leftItems={baseRows}
+            rightItems={userRows}
+            leftColumns={BASE_COLUMNS}
+            rightColumns={USER_COLUMNS}
+            itemKey='COLUMN_NAME'
+            selectedLeftKey={selectedBaseCol}
+            selectedRightKey={selectedUserCol}
+            onSelectLeft={setSelectedBaseCol}
+            onSelectRight={setSelectedUserCol}
+            onMoveRight={moveToUser}
+            onMoveLeft={moveToBase}
+            leftTitle='Hidden'
+            rightTitle='Visible'
+          />
 
           <div className={styles.bottomRow}>
             <span className={styles.hint}>

@@ -2,7 +2,7 @@ import { apiClient } from '@foundation/apis';
 import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
 import { createPersistedStoreWithTab } from '@shared/stores';
 
-import { MENU_ID, SHEETS } from './customer-fcst-master.constants';
+import { SHEET_NAME, MENU_ID } from './customer-fcst-master.constants';
 import { getFcstRangeByBucket } from './utils/CustomerFcstMasterDateColumns';
 
 interface SearchParamProps {
@@ -15,17 +15,11 @@ interface SearchParamProps {
   userId: string;
 }
 
-type FiltersBySheet = {
-  [SHEETS.CUSTOMER_FCST]?: ProcRequest<MENU_ID, SHEETS.CUSTOMER_FCST>;
-};
-
 interface CustomerFcstMasterState {
   initialized: boolean;
-  filters: FiltersBySheet;
+  filters?: ProcRequest<MENU_ID, SHEET_NAME>;
   searchParams: SearchParamProps;
-  staticColumns: {
-    [SHEETS.CUSTOMER_FCST]: RawFlexGridColumnConfig[];
-  };
+  staticColumns: RawFlexGridColumnConfig[];
   dateColumns: FlexGridColumnConfig[];
   openSearchArea: boolean;
 }
@@ -51,11 +45,9 @@ const initSearchParams: SearchParamProps = {
 
 const initCustomerFcstMasterState: CustomerFcstMasterState = {
   initialized: false,
-  filters: {},
+  filters: undefined,
   searchParams: initSearchParams,
-  staticColumns: {
-    [SHEETS.CUSTOMER_FCST]: [],
-  },
+  staticColumns: [],
   dateColumns: [],
   openSearchArea: true,
 } as const;
@@ -77,21 +69,18 @@ export const useCustomerFcstMasterStore = createPersistedStoreWithTab<
     },
     setFilter: () => {
       set(state => {
-        const next = { ...state.searchParams };
-        state.filters = {
-          [SHEETS.CUSTOMER_FCST]: next,
-        };
+        state.filters = { ...state.searchParams };
       });
     },
     fetchStaticColumns: async () => {
-      const fcstColumns = await apiClient.post<RawFlexGridColumnConfig[]>(
+      const staticColumns = await apiClient.post<RawFlexGridColumnConfig[]>(
         `/admin/menu/${MENU_ID}/column`,
-        { sheetNm: SHEETS.CUSTOMER_FCST }
+        {
+          sheetNm: SHEET_NAME,
+        }
       );
       set(state => {
-        state.staticColumns = {
-          [SHEETS.CUSTOMER_FCST]: fcstColumns.data.result,
-        };
+        state.staticColumns = staticColumns.data.result;
       });
       if (get().initialized) return;
       const param = await apiClient.get<{ paramNm: keyof SearchParamProps; paramCtn: string }[]>(
@@ -119,7 +108,7 @@ export const useCustomerFcstMasterStore = createPersistedStoreWithTab<
     },
     fetchDateColumns: () => {
       set({
-        dateColumns: getFcstRangeByBucket(get().searchParams.bucketType ?? 'WEEKLY'),
+        dateColumns: getFcstRangeByBucket(get().filters?.bucketType ?? 'WEEKLY'),
       });
     },
   }),

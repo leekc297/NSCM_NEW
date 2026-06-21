@@ -12,6 +12,17 @@ export enum SHEETS {
   SALES_LIST_TITLE = 'salesListTitle',
 }
 
+export enum SHEET_INDEX {
+  MAIN,
+  MAIN_TITLE,
+  VERSION,
+  YEAR_POPUP,
+  RATE_POPUP,
+  VERSION_POPUP,
+  SALES_LIST,
+  SALES_LIST_TITLE,
+}
+
 // const object — enum 대체 (NSCM 단일 cursor 표준 'o_rc1' 다수 중복 허용)
 export const RESPONSE_SET = {
   MAIN: 'o_rc1',
@@ -20,7 +31,7 @@ export const RESPONSE_SET = {
   YEAR_POPUP: 'o_rc1',
   RATE_POPUP: 'o_rc1',
   VERSION_POPUP: 'o_rc1',
-  SALES_LIST: 'p_cursor_main',
+  SALES_LIST: 'o_rc1',
   SALES_LIST_TITLE: 'o_rc1',
 } as const;
 export type RESPONSE_SET = (typeof RESPONSE_SET)[keyof typeof RESPONSE_SET];

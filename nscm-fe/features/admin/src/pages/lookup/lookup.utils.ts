@@ -87,5 +87,8 @@ export const findDuplicateDetailRow = (rows: DetailRow[]): DetailRow | null => {
 
 export const sanitizeDetailRow = (row: DetailRow): DetailRow => ({
   ...row,
-  DISPLAY_SEQ: row.DISPLAY_SEQ?.trim() === '' || row.DISPLAY_SEQ == null ? '0' : row.DISPLAY_SEQ,
+  DISPLAY_SEQ:
+    String(row.DISPLAY_SEQ) === '0' || row.DISPLAY_SEQ?.trim() === '' || row.DISPLAY_SEQ == null
+      ? '0'
+      : row.DISPLAY_SEQ,
 });

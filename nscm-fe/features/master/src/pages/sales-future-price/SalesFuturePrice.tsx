@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { apiClient } from '@foundation/apis';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { MainTitle, SubTitle } from '@shared/components';
-import { useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
+import { useTabProcQuery } from '@shared/hooks';
 import { useMessageStore } from '@shared/stores';
 
 import { ColumnSettingModal, ItemByDivisionModal, ProjectByDivisionModal } from '../../components';
@@ -18,7 +18,13 @@ import { SalesPriceVersionModal } from './components/modals/SalesPriceVersionMod
 import { SalesFuturePriceFlexGrid } from './components/SalesFuturePriceFlexGrid';
 import { SalesFuturePriceForm } from './components/SalesFuturePriceForm';
 import { useSalesFuturePriceValidation } from './hooks/useSalesFuturePriceValidation';
-import { type BUCKET_TYPE, MAIN_COLUMNS, MEASURE_4, MENU_ID, SHEETS } from './sales-future-price.constants';
+import {
+  type BUCKET_TYPE,
+  MAIN_COLUMNS,
+  MEASURE_4,
+  MENU_ID,
+  SHEETS,
+} from './sales-future-price.constants';
 import type { FuturePriceRow } from './sales-future-price.types';
 import styles from './SalesFuturePrice.module.scss';
 import { useSalesFuturePriceStore } from './useSalesFuturePriceStore';
@@ -55,14 +61,7 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   const staticMeasures = useSalesFuturePriceStore(s => s.staticMeasures);
   const fetchStaticColumns = useSalesFuturePriceStore(s => s.fetchStaticColumns);
   const fetchStaticMeasures = useSalesFuturePriceStore(s => s.fetchStaticMeasures);
-  // ⭐ grid-column-setting-popup-pattern.md (#58) — ColumnSettingModal OK 결과 저장 + Grid filter.
-  const visibleBaseColumns = useSalesFuturePriceStore(s => s.visibleBaseColumns);
-  const setVisibleBaseColumns = useSalesFuturePriceStore(s => s.setVisibleBaseColumns);
-
-  // ⭐ master hook §3 / menu-button-dynamic-fetch §2.1 (DMF0003 reference)
-  //   admin SYS0009 Menu Button (`SCM_ADM_MNU_BTN_MPG_M` USE_YN + `USER_GR_MNU_BTN_MPG_M` 권한) 동적 fetch.
-  //   하드코딩 hotkeyConfig 금지 — admin USE_YN='N' 즉시 반영 보장.
-  const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
+  const applyColumnVisibility = useSalesFuturePriceStore(s => s.applyColumnVisibility);
 
   const validate = useSalesFuturePriceValidation();
 
@@ -76,17 +75,17 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   });
   const loading = isLoading || isFetching;
 
-  // 화면 진입 시 자동 조회 — Division 자동 적용 후 filter 세팅 (AS-IS Form_Load + InitControls)
-  useEffect(() => {
-    if (!filters[SHEETS.MAIN] && sc.divisionId) setFilter();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sc.divisionId]);
+  // ⚠️ 화면 진입 시 자동 조회 제거 (2026-06-21 사용자 보고: 조회 시간 큼).
+  //    SP `DMF0020_GET_SCM_MST_FUTURE_PRICE` 가 대용량 데이터 + 18 IN params + PIVOT 처리로 무거움.
+  //    AS-IS .cs Form_Load 의 자동 조회는 적용 안 함 — 사용자가 조회조건 입력 후 Search 버튼 (F5) 으로 직접 trigger.
 
   // ⭐ master hook §2.3 + §5 — mount 시 1회 fetch (admin 메타 즉시 반영 baseline)
+  //   + sessionStorage 의 이전 filters cache 무효화 — incomplete payload (sesUserId 누락 등) 재사용 회피.
+  //     사용자 검색 버튼 → setFilter() 새 payload 만 사용.
   useEffect(() => {
     void fetchStaticColumns();
     void fetchStaticMeasures();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabId]);
 
   // 신규/수정 행 추적 (CRUD_TYPE) — SP 결과와 합쳐 grid itemsSource
@@ -128,25 +127,27 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
       .map(m => m.COLUMN_NAME);
     const measures = validMeasures.length > 0 ? validMeasures : MEASURE_4;
     const groupId = `I_${Date.now()}`;
-    const newRows: FuturePriceRow[] = measures.map((m): FuturePriceRow => ({
-      CRUD_TYPE: 'I',
-      INSERT_GROUP_ID: groupId,
-      DIVISION_ID: sc.divisionId,
-      DEPT_ID: '',
-      END_CUSTOMER: '',
-      SCM_SITE_ID: '',
-      PROJECT_CODE: '',
-      PROJECT_STATUS: '',
-      BIZ_TYPE_NAME: '',
-      ITEM_ID: '',
-      INCOTERMS: '',
-      FCST_TYPE: '',
-      DOM_EXP: '',
-      PLANT_SITE_ID: '',
-      CURRENCY: '',
-      PRICE_EXIST: 'Y',
-      MEASURE: m,
-    }));
+    const newRows: FuturePriceRow[] = measures.map(
+      (m): FuturePriceRow => ({
+        CRUD_TYPE: 'I',
+        INSERT_GROUP_ID: groupId,
+        DIVISION_ID: sc.divisionId,
+        DEPT_ID: '',
+        END_CUSTOMER: '',
+        SCM_SITE_ID: '',
+        PROJECT_CODE: '',
+        PROJECT_STATUS: '',
+        BIZ_TYPE_NAME: '',
+        ITEM_ID: '',
+        INCOTERMS: '',
+        FCST_TYPE: '',
+        DOM_EXP: '',
+        PLANT_SITE_ID: '',
+        CURRENCY: '',
+        PRICE_EXIST: 'Y',
+        MEASURE: m,
+      })
+    );
     setInsertedRows(prev => [...newRows, ...prev]);
   };
 
@@ -171,7 +172,7 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   각 row 는 (Insert 'I' / Update 'U' / Delete 'D') 별 4 measure × M dynamic col 펼침 (YYYYMMDD, PRICE)
   //   Inserted row 만 'I', SP 결과 row 의 dynamic cell 수정값 'U' (사용자 LOC row 만 editable)
   const handleSave = async () => {
-    const spRowsAll = ((data as { o_rc1?: FuturePriceRow[] })?.o_rc1 ?? []);
+    const spRowsAll = (data as { o_rc1?: FuturePriceRow[] })?.o_rc1 ?? [];
     const v = validate.validateSaveRows([...insertedRows, ...spRowsAll], sc);
     if (!v.ok) return;
 
@@ -182,9 +183,23 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
 
     // 17 IN params 의 ^-delim 누적 array
     const acc: Record<string, string[]> = {
-      activeFlag: [], divisionId: [], projectCode: [], scmSiteId: [], plantSiteId: [], itemId: [],
-      yyyymmdd: [], currency: [], measure: [], domExp: [], fcstType: [], incoterms: [], price: [],
-      createdBy: [], creationDate: [], lastUpdatedBy: [], rownumKey: [],
+      activeFlag: [],
+      divisionId: [],
+      projectCode: [],
+      scmSiteId: [],
+      plantSiteId: [],
+      itemId: [],
+      yyyymmdd: [],
+      currency: [],
+      measure: [],
+      domExp: [],
+      fcstType: [],
+      incoterms: [],
+      price: [],
+      createdBy: [],
+      creationDate: [],
+      lastUpdatedBy: [],
+      rownumKey: [],
     };
     const today = new Date().toISOString().slice(0, 10).replace(/-/g, '');
     const userId = 'minyonglee1';
@@ -243,20 +258,18 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   F3 Sort / F4 Filter (자동 — `allowSorting=true` + `gridFilter` ref 생략)
   //   F6 Condition / F10 Reset Condition (SubTitle DefaultButtonActions 자동 활성 — DMF0020 은 SalesFuturePriceForm 조회조건 form 있음)
   //   F2 Edit: HotkeyConfig 미지원 (`_F2_Unused`) → actionBar 의 Edit 버튼으로 별도 노출
-  // ⭐ menu-button-dynamic-fetch §2.1 — `hasButton(BTN_CD)` 조건부 callback.
-  //   admin SYS0009 USE_YN='N' 즉시 비활성 (hotkey 무효).
   const hotkeyConfig: HotkeyConfig = {
-    search: hasButton('SEARCH') ? handleSearch : false,
-    insert: hasButton('INSERT') ? handleInsert : false,
-    save: hasButton('SAVE') ? handleSave : false,
-    delete: hasButton('DELETE') ? handleDelete : false,
+    search: handleSearch,
+    insert: handleInsert,
+    save: handleSave,
+    delete: handleDelete,
     manual: false,
     upload: false,
   };
 
   // SP P_DMF0020_GET_SCM_MST_FUTURE_PRICE_M 결과 — wide format (28 fixed cols + 동적 W_/M_)
   // PIVOT 이 DB 단에서 처리되어 클라이언트 측 변환 불필요
-  const spRows = ((data as { o_rc1?: FuturePriceRow[] })?.o_rc1 ?? []);
+  const spRows = (data as { o_rc1?: FuturePriceRow[] })?.o_rc1 ?? [];
   const rows: FuturePriceRow[] = [...insertedRows, ...spRows];
 
   return (
@@ -269,10 +282,7 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
       />
 
       {openSearchArea && (
-        <SalesFuturePriceForm
-          onSearch={handleSearch}
-          onVersionOpen={() => setOpenVersion(true)}
-        />
+        <SalesFuturePriceForm onSearch={handleSearch} onVersionOpen={() => setOpenVersion(true)} />
       )}
 
       <SubTitle
@@ -295,22 +305,23 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
       />
 
       {/* SP P_DMF0020_GET_SCM_MST_FUTURE_PRICE_M (wide format, 28 fixed + 동적 W_/M_) */}
-      {loading
-        ? <div style={{ padding: 16, color: '#1976d2' }}>⏳ 조회 중입니다...</div>
-        : <SalesFuturePriceFlexGrid
-            rows={rows}
-            gridRef={gridRef as never}
-            divisionId={sc.divisionId}
-            bucketType={sc.bucketType as BUCKET_TYPE}
-            staticColumns={staticColumns[SHEETS.MAIN]}
-            staticMeasures={staticMeasures[SHEETS.MAIN]}
-            onPopupCellDblClick={(modalKey, row) => {
-              setPopupGroupId(row.INSERT_GROUP_ID ?? null);
-              if (modalKey === 'PROJECT') setOpenProject(true);
-              else if (modalKey === 'ITEM') setOpenItem(true);
-            }}
-          />
-      }
+      {loading ? (
+        <div style={{ padding: 16, color: '#1976d2' }}>⏳ 조회 중입니다...</div>
+      ) : (
+        <SalesFuturePriceFlexGrid
+          rows={rows}
+          gridRef={gridRef as never}
+          divisionId={sc.divisionId}
+          bucketType={sc.bucketType as BUCKET_TYPE}
+          staticColumns={staticColumns[SHEETS.MAIN]}
+          staticMeasures={staticMeasures[SHEETS.MAIN]}
+          onPopupCellDblClick={(modalKey, row) => {
+            setPopupGroupId(row.INSERT_GROUP_ID ?? null);
+            if (modalKey === 'PROJECT') setOpenProject(true);
+            else if (modalKey === 'ITEM') setOpenItem(true);
+          }}
+        />
+      )}
 
       {/* POPUP 6종 */}
       <ExchangeRateModal
@@ -339,23 +350,17 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         sheetName='main'
         columnType='main'
         divisionId={sc.divisionId}
-        // ⭐ grid-column-setting-popup-pattern.md (#58) §1.2 — fallbackColumns 의 visible flag
-        //   매칭. visibleBaseColumns 빈 array (첫 진입) = 모두 visible.
-        //   값 있음 = list 에 포함된 column 만 visible → popup 재진입 시 이전 이동 내역 복원.
-        fallbackColumns={(() => {
-          const visibleSet =
-            visibleBaseColumns.length > 0 ? new Set(visibleBaseColumns) : null;
-          return MAIN_COLUMNS.map(c => ({
-            key: c.key,
-            header: c.header,
-            width: c.width,
-            visible: visibleSet === null ? true : visibleSet.has(c.key),
-          }));
-        })()}
+        fallbackColumns={MAIN_COLUMNS.map(c => ({ key: c.key, header: c.header, width: c.width }))}
+        // ⭐ modal 재진입 시 이전 OK 상태 복원 — store.staticColumns 의 visible flag 기반.
+        //   ColumnSettingModal 의 initialRows useMemo 가 USER_FLAG='Y'/'N' 결정에 사용.
+        initialVisibleKeys={(staticColumns[SHEETS.MAIN] ?? [])
+          .filter(c => c.visible !== false)
+          .map(c => c.colNm)}
         onSave={settings => {
-          // ⭐ §1.3 — ColumnSettingModal 은 USER_FLAG='Y' rows (= 우측 visible) 만 전달.
-          //   사용자가 좌측으로 이동한 column = settings 에 미포함 → grid 에서 숨김.
-          setVisibleBaseColumns(settings.map(s => s.COLUMN_NAME));
+          // 사용자 선택 column 만 visible — store.staticColumns 의 visible flag 적용 → grid 즉시 반영.
+          // ⚠️ 사내 SCM_USR_TITLE_SET 영구 저장은 별도 SP 호출 (Phase 후속).
+          const visibleKeys = settings.map(s => s.COLUMN_NAME);
+          applyColumnVisibility(SHEETS.MAIN, visibleKeys);
         }}
       />
       <SalesPriceRangeModal
@@ -379,26 +384,30 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
           // AS-IS L2049 LoopByDtMeasureCount — 같은 INSERT_GROUP_ID 의 4 measure row 동기화
           // AS-IS L2092 ProjectStatus LockRange2(true) — popup 선택 시 자동 채움
           // AS-IS L2094 BizTypeName LockRange2(true) — popup 선택 시 자동 채움
-          setInsertedRows(prev => prev.map(r =>
-            r.INSERT_GROUP_ID === popupGroupId
-              ? {
-                  ...r,
-                  PROJECT_CODE: projectCode,
-                  PROJECT_NAME: projectName ?? '',
-                  PROJECT_STATUS: projectStatus ?? '',
-                  BIZ_TYPE_NAME: bizTypeName ?? '',
-                }
-              : r,
-          ));
+          setInsertedRows(prev =>
+            prev.map(r =>
+              r.INSERT_GROUP_ID === popupGroupId
+                ? {
+                    ...r,
+                    PROJECT_CODE: projectCode,
+                    PROJECT_NAME: projectName ?? '',
+                    PROJECT_STATUS: projectStatus ?? '',
+                    BIZ_TYPE_NAME: bizTypeName ?? '',
+                  }
+                : r
+            )
+          );
         }}
-        preSearchParams={{
-          divisionId: sc.divisionId,
-          deptId: 'ALL',
-          endCustomer: 'ALL',
-          salesSite: 'ALL',
-          projectCode: '',
-          etc: 'N',
-        } as never}
+        preSearchParams={
+          {
+            divisionId: sc.divisionId,
+            deptId: 'ALL',
+            endCustomer: 'ALL',
+            salesSite: 'ALL',
+            projectCode: '',
+            etc: 'N',
+          } as never
+        }
         callFromCell={true}
       />
 
@@ -408,20 +417,29 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         modalClose={() => setOpenItem(false)}
         setSelectedValue={(itemId, itemName, itemClass) => {
           if (!popupGroupId) return;
-          setInsertedRows(prev => prev.map(r =>
-            r.INSERT_GROUP_ID === popupGroupId
-              ? { ...r, ITEM_ID: itemId, ITEM_NAME: itemName ?? '', ITEM_CLASS_NAME: itemClass ?? '' }
-              : r,
-          ));
+          setInsertedRows(prev =>
+            prev.map(r =>
+              r.INSERT_GROUP_ID === popupGroupId
+                ? {
+                    ...r,
+                    ITEM_ID: itemId,
+                    ITEM_NAME: itemName ?? '',
+                    ITEM_CLASS_NAME: itemClass ?? '',
+                  }
+                : r
+            )
+          );
         }}
-        preSearchParams={{
-          divisionId: sc.divisionId,
-          deptId: 'ALL',
-          endCustomer: 'ALL',
-          salesSite: 'ALL',
-          projectCode: '',
-          itemId: '',
-        } as never}
+        preSearchParams={
+          {
+            divisionId: sc.divisionId,
+            deptId: 'ALL',
+            endCustomer: 'ALL',
+            salesSite: 'ALL',
+            projectCode: '',
+            itemId: '',
+          } as never
+        }
         callFromCell={true}
       />
     </div>

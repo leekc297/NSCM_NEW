@@ -7,6 +7,7 @@ import { DataGrid } from '@shared/components';
 import { useMessageStore } from '@shared/stores';
 
 import type { MENU_ID, SHEETS } from '../erp-edi-master.constants';
+import { applyReadOnlyColoring } from '../erp-edi-master.utils';
 import { useErpEdiMasterStore } from '../useErpEdiMasterStore';
 
 interface ErpEdiMasterSummaryGridProps {
@@ -23,7 +24,7 @@ export const ErpEdiMasterSummaryGrid = ({
   onDblClick,
 }: ErpEdiMasterSummaryGridProps) => {
   const { t } = useTranslation();
-  const { setAlert } = useMessageStore();
+  const setAlert = useMessageStore(s => s.setAlert);
   const staticColumns = useErpEdiMasterStore(state => state.staticColumns.summary);
 
   // Summary 셀 더블클릭 (V12, V17)
@@ -49,7 +50,7 @@ export const ErpEdiMasterSummaryGrid = ({
     if (sFlag === '4' && dataItem.GSCM_MASTER_DATA === '0') {
       void setAlert({
         type: 'alert',
-        content: t('', '_정비할 데이터가 없습니다.'),
+        content: t('MSG00605', '_정비할 데이터가 없습니다.'),
       });
       return;
     }
@@ -64,6 +65,7 @@ export const ErpEdiMasterSummaryGrid = ({
       itemsSource={data}
       staticColumns={staticColumns}
       dblClick={handleDblClick}
+      formatItem={applyReadOnlyColoring}
     />
   );
 };

@@ -12,7 +12,9 @@
 
 import type { ExchangeRow, PivotHeaderTree, PivotRow } from '../sales-future-price.types';
 
-export const longToPivot = (rows: ExchangeRow[]): {
+export const longToPivot = (
+  rows: ExchangeRow[]
+): {
   pivotRows: PivotRow[];
   headerTree: PivotHeaderTree[];
   allDates: string[];
@@ -76,7 +78,8 @@ export const longToPivot = (rows: ExchangeRow[]): {
     }
     const row = groupMap.get(key)!;
     const d = String(r.YYYYMMDD ?? '');
-    const price = typeof r.EXCHANGE_PRICE === 'number' ? r.EXCHANGE_PRICE : Number(r.EXCHANGE_PRICE);
+    const price =
+      typeof r.EXCHANGE_PRICE === 'number' ? r.EXCHANGE_PRICE : Number(r.EXCHANGE_PRICE);
     if (d && !Number.isNaN(price)) {
       row[d] = price;
     }

@@ -1,4 +1,4 @@
-// SCM0005 Dynamic Query — 신규 SYS0013 (Admin_Menu 부모)
+// SYS0013 Dynamic Query — AS-IS SCM0005_DynamicQueryList rename (Admin_Menu 부모)
 
 export const MENU_ID = 'SYS0013' as const;
 export type MENU_ID = typeof MENU_ID;

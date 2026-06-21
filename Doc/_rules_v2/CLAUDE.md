@@ -1,18 +1,21 @@
-# CLAUDE.md — NSCM 룰셋 v2 진입점
+# CLAUDE.md — NSCM 룰셋 v2 (포인터 / Pointer)
 
-> ⭐ **AI 바이브코딩 시 이 파일을 가장 먼저 읽어야 합니다.**
+> ⚠️ **2026-06-18 진입점 단일화 (R-1)**: 이 파일은 **더 이상 1차 진입점이 아닙니다.**
+> 단일 진입점 = 루트 `C:\Projects\NSCM\CLAUDE.md` → `Doc/_rules_consolidation/RULESET_MASTER.md` (트리거 매트릭스 + 69 hook 카탈로그 + UI 체크리스트).
+> 본 파일은 룰 v2 디렉터리 구조·격차·보안 의무 설명용 참조 문서로 유지됩니다.
 
 ---
 
-## 진입점 정책 (3 파일 1차 로드 — 모든 작업)
+## 진입점 정책 (단일 진입 — 4 파일)
 
 ```
-1. Read: Doc/_rules_v2/anti-simplification.md   ⚠️ ⭐ 최우선 (단순화 절대 금지, 불변)
-2. Read: Doc/_rules_v2/CLAUDE.md                ← 분기 라우터 (이 파일)
-3. Read: Doc/_rules_v2/00_INDEX.md              ← 트리거 매트릭스 + 룰/Hook 카탈로그
+1. Read: Doc/_rules_v2/anti-simplification.md          ⚠️ ⭐ 최우선 (단순화 절대 금지, 불변)
+2. Read: Doc/_rules_consolidation/RULESET_MASTER.md    ← ⭐ 통합 마스터 (트리거 + 69 hook + UI 체크리스트)
+3. Read: Doc/_rules_v2/00_INDEX.md                      ← 상세 카탈로그 (hook 본문 위치)
+4. (UI 작업 시) RULESET_MASTER §3 UI-MANDATORY 체크리스트 PRE-WRITE 통과
 ```
 
-→ 위 3 파일만 1차 로드. 도메인별 룰/Hook 은 00_INDEX 의 **트리거 매트릭스** 가 작업 키워드로 자동 분기.
+→ 작업별 분기는 RULESET_MASTER 의 **트리거 매트릭스 (T01~T20 + 수정 분기 T01M)** 가 담당.
 
 ⚠️ **anti-simplification.md** 는 다른 모든 룰을 압도하는 최우선 룰. 속도/편의를 위한 단순화는 절대 금지. 사용자가 "모두/전체/정밀/상세" 요청 시 다중 패턴 + Cross-check 의무.
 
@@ -77,11 +80,11 @@ Doc/_rules_v2/
 │  └─ 13_routing_menu.md
 ├─ _mapping/
 │  └─ asis_to_tobe.md               (AS-IS↔TO-BE + 10 격차 사양)
-└─ hooks/                           (41 hook — 전체 목록은 00_INDEX.md §B.3 카탈로그가 단일 진실 source)
+└─ hooks/                           (69 hook — 전체 목록은 RULESET_MASTER §4 + 00_INDEX.md §B.3 카탈로그가 단일 진실 source)
    ├─ pre-write.md / post-write.md / pre-submit.md     (공통 3)
    ├─ oracle-db-workflow.md         ⭐⭐ Oracle SP/DB 작업 단일 진입점 (T08/T10/T18/T19, 2026-06-11)
    ├─ screen-completion-gate.md     ⭐⭐ UI 화면 완성도 8 게이트 (T01/T20, 2026-06-11)
-   └─ (나머지 36 — 00_INDEX §A 트리거 매트릭스가 작업 키워드로 자동 분기)
+   └─ (나머지 64 — RULESET_MASTER §2 트리거 매트릭스가 작업 키워드로 분기)
 ```
 
 ---
@@ -149,7 +152,8 @@ Doc/_rules_v2/
 | `29_LOCAL_DB_CSV_IMPORT.md` | Docker Oracle CSV 적재 |
 | `30_LOCAL_BACKUP_RESTORE.md` | 백업/원복 표준 |
 | `31_FIGMA_DESIGN_INTEGRATION.md` | Figma → React 매핑 |
-| `hooks/anti-simplification.md` | (`_rules_v2/anti-simplification.md` 로 복사 완료) |
+| `32_CLAUDE_ORACLE_DIRECT.md` | ⭐ Claude Code Oracle 직결 (SQLcl/oracledb/docker sqlplus) — 2026-06-18 정식 등재 (R-5) |
+| `hooks/anti-simplification.md` | (`_rules_v2/anti-simplification.md` 로 복사 완료 — DEPRECATED 포인터) |
 
 → 나머지 25 룰은 `Doc/_dev_rules/_archive/` 이동 예정.
 

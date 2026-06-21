@@ -56,7 +56,7 @@ export const Program = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   const onDelete = () => {
     if (!gridRef.current) return;
-    GridAction.removeRow(gridRef.current, true);
+    GridAction.removeRow(gridRef.current, false);
   };
 
   // ⭐ master hook §2.4 — Search 시 admin SYS0004 메타 refetch
@@ -91,11 +91,7 @@ export const Program = ({ tabId, title }: PageProps<MENU_ID>) => {
         hotkeyConfig={hotkeyConfig}
         searchParam={searchParams}
       />
-      <ProgramMainGrid
-        gridRef={gridRef}
-        gridFilterRef={gridFilterRef}
-        data={data?.o_rc1 ?? []}
-      />
+      <ProgramMainGrid gridRef={gridRef} gridFilterRef={gridFilterRef} data={data?.o_rc1 ?? []} />
     </>
   );
 };

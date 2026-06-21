@@ -1,4 +1,4 @@
-// SCM0009 Auth Approval — 표준 constants
+// SYS0012 Auth Approval — 표준 constants
 // 위치: features/authority/src/pages/auth-approval/ (auth-request 자매 화면)
 
 export const MENU_ID = 'SYS0012' as const;

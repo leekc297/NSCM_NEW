@@ -2,45 +2,36 @@ import { apiClient } from '@foundation/apis';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { createPersistedStoreWithTab } from '@shared/stores';
 
-import type { MENU_ID } from './contribute-main.constants';
-import { MENU_ID as MENU_ID_CONST, SHEETS } from './contribute-main.constants';
-import type { SearchCondition } from './types';
+import { MENU_ID, SHEETS } from './contribute-main.constants';
+import type { SearchParamProps } from './types';
 
 type FiltersBySheet = {
-  [SHEETS.MAIN]?: ProcRequest<MENU_ID, SHEETS.MAIN>;
-  [SHEETS.MAIN_TITLE]?: ProcRequest<MENU_ID, SHEETS.MAIN_TITLE>;
-  [SHEETS.VERSION]?: ProcRequest<MENU_ID, SHEETS.VERSION>;
-  [SHEETS.SALES_LIST]?: ProcRequest<MENU_ID, SHEETS.SALES_LIST>;
+  [key in SHEETS]?: ProcRequest<MENU_ID, key>;
+};
+
+type StaticColumnsBySheet = {
+  [key in SHEETS]?: RawFlexGridColumnConfig[];
 };
 
 interface ContributeMainState {
   initialized: boolean;
   filters: FiltersBySheet;
-  searchCondition: SearchCondition;
+  searchParams: SearchParamProps;
+  staticColumns: StaticColumnsBySheet;
   openSearchArea: boolean;
-  ratePopupOpen: boolean;
-  versionPopupOpen: boolean;
-  // ⭐ ui-dynamic-property-management.md §4 / ui-category-setup-column-meta.md
-  //   admin SYS0004 UI Category Setup 의 SCM_MST_SHEET_COLUMNS 기준 동적 fetch.
-  //   BASE 6 컬럼 (부문/팀/...) 의 visible/width/label/align 등 즉시 반영.
-  staticColumns: {
-    [SHEETS.MAIN]: RawFlexGridColumnConfig[];
-  };
 }
 
 interface ContributeMainAction {
   reset: () => void;
-  setSearchCondition: (params: Partial<SearchCondition>) => void;
-  setFilter: () => void;
-  setOpenSearchArea: (open?: boolean) => void;
-  setRatePopupOpen: (open: boolean) => void;
-  setVersionPopupOpen: (open: boolean) => void;
+  setSearchParams: (params: Partial<SearchParamProps>) => void;
+  setFilters: () => void;
   fetchStaticColumns: () => Promise<void>;
+  setOpenSearchArea: (open?: boolean) => void;
 }
 
 const currentYear = new Date().getFullYear();
 
-const initSearch: SearchCondition = {
+const initSearchParams: SearchParamProps = {
   yyyy: String(currentYear),
   verSeq: '',
   his: 'N',
@@ -51,13 +42,13 @@ const initSearch: SearchCondition = {
 const initState: ContributeMainState = {
   initialized: false,
   filters: {},
-  searchCondition: initSearch,
-  openSearchArea: true,
-  ratePopupOpen: false,
-  versionPopupOpen: false,
+  searchParams: initSearchParams,
   staticColumns: {
     [SHEETS.MAIN]: [],
+    [SHEETS.MAIN_TITLE]: [],
+    [SHEETS.VERSION]: [],
   },
+  openSearchArea: true,
 };
 
 export const useContributeMainStore = createPersistedStoreWithTab<
@@ -66,14 +57,14 @@ export const useContributeMainStore = createPersistedStoreWithTab<
   (set, get) => ({
     ...initState,
     reset: () => set(initState),
-    setSearchCondition: params => {
+    setSearchParams: params => {
       set(state => {
-        state.searchCondition = { ...get().searchCondition, ...params };
+        state.searchParams = { ...get().searchParams, ...params };
       });
     },
-    setFilter: () => {
+    setFilters: () => {
       set(state => {
-        const cond = state.searchCondition;
+        const cond = state.searchParams;
         state.filters = {
           [SHEETS.MAIN]: {
             yyyy: cond.yyyy,
@@ -89,37 +80,56 @@ export const useContributeMainStore = createPersistedStoreWithTab<
         };
       });
     },
+    fetchStaticColumns: async () => {
+      const [main, mainTitle, version] = await Promise.all([
+        apiClient.post<RawFlexGridColumnConfig[]>(`/admin/menu/${MENU_ID}/column`, {
+          sheetNm: SHEETS.MAIN,
+        }),
+        apiClient.post<RawFlexGridColumnConfig[]>(`/admin/menu/${MENU_ID}/column`, {
+          sheetNm: SHEETS.MAIN_TITLE,
+        }),
+        apiClient.post<RawFlexGridColumnConfig[]>(`/admin/menu/${MENU_ID}/column`, {
+          sheetNm: SHEETS.VERSION,
+        }),
+      ]);
+      set(state => {
+        state.staticColumns = {
+          [SHEETS.MAIN]: main.data.result,
+          [SHEETS.MAIN_TITLE]: mainTitle.data.result,
+          [SHEETS.VERSION]: version.data.result,
+        };
+      });
+
+      // F6 personalizeCondition / F10 reset 으로 저장된 조회조건 복원 (DMF0007 패턴).
+      if (get().initialized) return;
+      const param = await apiClient.get<{ paramNm: keyof SearchParamProps; paramCtn: string }[]>(
+        `/admin/menu/${MENU_ID}/search-conditions`
+      );
+      if (param.data.result?.length > 0) {
+        const restored = param.data.result.reduce<SearchParamProps>(
+          (acc, curr) => {
+            // chkYear 는 boolean 이므로 'true'/'false' 문자열 → boolean 변환
+            if (curr.paramNm === 'chkYear') {
+              acc.chkYear = curr.paramCtn === 'true';
+            } else {
+              (acc as unknown as Record<string, string>)[curr.paramNm] = curr.paramCtn;
+            }
+            return acc;
+          },
+          { ...initSearchParams }
+        );
+        set(state => {
+          state.searchParams = restored;
+        });
+      }
+      set(state => {
+        state.initialized = true;
+      });
+    },
     setOpenSearchArea: open => {
       set(state => {
         state.openSearchArea = open ?? !state.openSearchArea;
       });
-    },
-    setRatePopupOpen: open =>
-      set(state => {
-        state.ratePopupOpen = open;
-      }),
-    setVersionPopupOpen: open =>
-      set(state => {
-        state.versionPopupOpen = open;
-      }),
-    // ⭐ ui-category-setup-column-meta.md §3 / DMF0004 (useSalesSiteStore.ts:91-114) 표준 패턴.
-    //   POST /admin/menu/{MENU_ID}/column → SCM_MST_SHEET_COLUMNS row list.
-    //   BE 가 RawFlexGridColumnConfig (binding/header/width/visible 등) 으로 가공 반환.
-    fetchStaticColumns: async () => {
-      const main = await apiClient.post<RawFlexGridColumnConfig[]>(
-        `/admin/menu/${MENU_ID_CONST}/column`,
-        { sheetNm: SHEETS.MAIN }
-      );
-      set(state => {
-        state.staticColumns = {
-          [SHEETS.MAIN]: main.data.result ?? [],
-        };
-      });
-      if (!get().initialized) {
-        set(state => {
-          state.initialized = true;
-        });
-      }
     },
   }),
   'contribute-main'
