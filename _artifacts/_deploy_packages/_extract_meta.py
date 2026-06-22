@@ -11,7 +11,7 @@ con = oracledb.connect(user=os.environ['NSCM_ORA_USER'], password=os.environ['NS
 cur = con.cursor()
 
 ROOT = Path(__file__).resolve().parent  # _artifacts/_deploy_packages
-PROGS = ['DMF0043', 'DMF0043_01', 'DMF0072']
+PROGS = ['DMF0043', 'DMF0043_01', 'DMF0072', 'SYS0013']
 
 def quote(v):
     if v is None: return 'NULL'
