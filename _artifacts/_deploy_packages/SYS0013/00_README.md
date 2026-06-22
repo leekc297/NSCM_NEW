@@ -14,8 +14,8 @@
 | 순서 | 파일 | 행수 | 내용 |
 |---:|---|---:|---|
 | 1 | `04_PKG_SP/500_DQ_TYPES.sql` | 124 | TYPE 8 (FN_DQ_*_ROW/TAB + T_DQ_*) — 의존 root |
-| 2 | `04_PKG_SP/400_FN_DQ_FUNCTIONS.sql` | 1,242 | FN_DQ_* 4 functions (FP_PLAN/MKT_FCST_81/PROD_PLAN/STOCK) |
-| 3 | `04_PKG_SP/300_PR_DM_ADM_DQ_ALL.sql` | 1,639 | PR_DM_ADM_DQ_* 10 procedures (HIST + CREATE) |
+| 2 | `04_PKG_SP/400_FN_DQ_FUNCTIONS.sql` | ~1,000 | FN_DQ_* **VALID 3종** (MKT_FCST_81/PROD_PLAN/STOCK) — `FN_DQ_FP_PLAN` 제외 (RETURNS TABLE SQL Server syntax 잔존 INVALID) |
+| 3 | `04_PKG_SP/300_PR_DM_ADM_DQ_ALL.sql` | ~1,000 | PR_DM_ADM_DQ_* **VALID 6종** (HIST + USER_GROUP_DELETE) — INVALID 4개 제외 (`CREATE/CREATE_COLUMN/CREATE_PARAMETER/CREATE_USER_GROUP` — SQL Server 잔존, 미사용) |
 | 4 | `04_PKG_SP/200_SYS0013_ALL_SP.sql` | 1,129 | SYS0013_* standalone 14 procedures |
 | 5 | `04_PKG_SP/100_PKG_SYS0013_FULL.sql` | **1,984** | ⭐ PKG_SYS0013 spec + body (main API entry, 77 KB) |
 | 6 | `04_GRANT_SYNONYM/100_GRANT_SCMD_APP.sql` | 111 | EXECUTE/SELECT/INSERT/UPDATE/DELETE + PUBLIC SYNONYM 일괄 (37 EXECUTE + 10 TABLE + 5 SEQ) |

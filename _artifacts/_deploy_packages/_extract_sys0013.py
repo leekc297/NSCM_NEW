@@ -68,18 +68,19 @@ sys_sps = ['SYS0013_DELETE_USER_GROUP', 'SYS0013_EXECUTE_HIST', 'SYS0013_EXECUTE
 write_block(PKG_SP / '200_SYS0013_ALL_SP.sql',
             'SYS0013_* standalone procedures (14)', sys_sps, 'PROCEDURE')
 
-# 3) 6 PR_DM_ADM_DQ_* procedures
-pr_dq = ['PR_DM_ADM_DQ_CREATE', 'PR_DM_ADM_DQ_CREATE_COLUMN', 'PR_DM_ADM_DQ_CREATE_COLUMN_HIST',
-         'PR_DM_ADM_DQ_CREATE_HIST', 'PR_DM_ADM_DQ_CREATE_PARAMETER', 'PR_DM_ADM_DQ_CREATE_PARAMETER_HIST',
-         'PR_DM_ADM_DQ_CREATE_USER_GROUP', 'PR_DM_ADM_DQ_CREATE_USER_GROUP_DELETE',
+# 3) PR_DM_ADM_DQ_* procedures — INVALID 4개 제외 (CREATE / CREATE_COLUMN / CREATE_PARAMETER / CREATE_USER_GROUP)
+#    INVALID = SQL Server 변환 미완성 잔존. dev/local 에서도 컴파일 fail. PKG_SYS0013 종속 없음 (미사용).
+pr_dq = ['PR_DM_ADM_DQ_CREATE_COLUMN_HIST',
+         'PR_DM_ADM_DQ_CREATE_HIST', 'PR_DM_ADM_DQ_CREATE_PARAMETER_HIST',
+         'PR_DM_ADM_DQ_CREATE_USER_GROUP_DELETE',
          'PR_DM_ADM_DQ_CREATE_USER_GROUP_HIST', 'PR_DM_ADM_DQ_EXECUTE_HIST']
 write_block(PKG_SP / '300_PR_DM_ADM_DQ_ALL.sql',
-            'PR_DM_ADM_DQ_* procedures (history + create, 10)', pr_dq, 'PROCEDURE')
+            'PR_DM_ADM_DQ_* procedures (VALID only, 6) — INVALID 4개 제외 (SQL Server 잔존)', pr_dq, 'PROCEDURE')
 
-# 4) 4 FN_DQ_* functions
-fn_dq = ['FN_DQ_FP_PLAN', 'FN_DQ_MKT_FCST_81', 'FN_DQ_PROD_PLAN', 'FN_DQ_STOCK']
+# 4) FN_DQ_* functions — INVALID 1개 제외 (FN_DQ_FP_PLAN: RETURNS TABLE SQL Server syntax)
+fn_dq = ['FN_DQ_MKT_FCST_81', 'FN_DQ_PROD_PLAN', 'FN_DQ_STOCK']
 write_block(PKG_SP / '400_FN_DQ_FUNCTIONS.sql',
-            'FN_DQ_* table functions (4)', fn_dq, 'FUNCTION')
+            'FN_DQ_* table functions (VALID only, 3) — FN_DQ_FP_PLAN 제외 (RETURNS TABLE 잔존)', fn_dq, 'FUNCTION')
 
 # 5) 4 TYPE objects (TYPE → 'TYPE_SPEC' for spec only — table function row/tab)
 types = ['FN_DQ_PROD_PLAN_ROW', 'FN_DQ_PROD_PLAN_TAB', 'FN_DQ_STOCK_ROW', 'FN_DQ_STOCK_TAB',
@@ -100,11 +101,7 @@ for name in types:
         print(f"  TYPE {name}: FAIL {e}")
 (PKG_SP / '500_DQ_TYPES.sql').write_text('\n'.join(type_body), encoding='utf-8')
 
-# 6) GRANT + SYNONYM 일괄
-all_objs = (['PKG_SYS0013'] + sys_sps + pr_dq + fn_dq + types +
-            ['SCM_ADM_DQ_COLUMN', 'SCM_ADM_DQ_COLUMN_H', 'SCM_ADM_DQ_EXECUTE_H', 'SCM_ADM_DQ_EXECUTE_PARAMETER_H',
-             'SCM_ADM_DQ_LIST', 'SCM_ADM_DQ_LIST_H', 'SCM_ADM_DQ_PARAMETER', 'SCM_ADM_DQ_PARAMETER_H',
-             'SCM_ADM_DQ_USER_GROUP', 'SCM_ADM_DQ_USER_GROUP_H'])
+# 6) GRANT + SYNONYM 일괄 (VALID only)
 seqs = ['SEQ1_SCM_ADM_DQ_COLUMN_H', 'SEQ1_SCM_ADM_DQ_EXECUTE_H', 'SEQ1_SCM_ADM_DQ_LIST_H',
         'SEQ1_SCM_ADM_DQ_PARAMETER_H', 'SEQ1_SCM_ADM_DQ_USER_GROUP_H']
 gr = [f"-- ============================================================",
