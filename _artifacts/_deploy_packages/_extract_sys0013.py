@@ -92,6 +92,8 @@ type_body = [f"-- ============================================================",
 for name in types:
     try:
         ddl = get_ddl('TYPE', name)
+        # FORCE 옵션 inject — ORA-02303 (dependent type/table 거부) 회피
+        ddl = ddl.replace(f'TYPE "SCM_MGR"."{name}"', f'TYPE "SCM_MGR"."{name}" FORCE', 1)
         type_body.append(f"-- ===== {name} =====")
         type_body.append(ddl.strip())
         type_body.append('/')
