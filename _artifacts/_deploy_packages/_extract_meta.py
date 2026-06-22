@@ -124,17 +124,20 @@ for prog in PROGS:
         n6 = 0
 
     # GRANT_SCMD_APP — 화면의 SP 객체 GRANT EXECUTE + SYNONYM
+    # ⚠ Oracle GRANT 는 PKG.PROC 부분 grant 불가 — PKG 단위만. API_URL 'PKG_X.P_Y' 형식 → PKG_X 추출.
     grant_base = ROOT / prog / '04_GRANT_SYNONYM'
     grant_base.mkdir(parents=True, exist_ok=True)
-    # API_URL (= SP name) 기반 GRANT
     sp_names = proc_nms if api_ids else []
+    # 'PKG_NAME.P_PROC' → 'PKG_NAME' / 'STANDALONE_SP' → 그대로. set 으로 중복 제거.
+    grant_objs = sorted(set(sp.split('.')[0] for sp in sp_names))
     body = [f"-- ============================================================",
             f"-- {prog} — GRANT EXECUTE + PUBLIC SYNONYM 일괄 (SCMD_APP 사용계정)",
             f"-- 실행 계정: SCM_MGR · 룰 `feedback_scmd_app_grant_mandatory`",
+            f"-- ⚠ PKG.PROC 부분 grant 불가 — PKG/standalone 단위만 (중복 제거)",
             f"-- ============================================================", ""]
-    for sp in sp_names:
-        body.append(f"GRANT EXECUTE ON SCM_MGR.{sp} TO SCMD_APP;")
-        body.append(f"CREATE OR REPLACE PUBLIC SYNONYM {sp} FOR SCM_MGR.{sp};")
+    for obj in grant_objs:
+        body.append(f"GRANT EXECUTE ON SCM_MGR.{obj} TO SCMD_APP;")
+        body.append(f"CREATE OR REPLACE PUBLIC SYNONYM {obj} FOR SCM_MGR.{obj};")
     body.append('')
     (grant_base / '100_GRANT_SCMD_APP.sql').write_text('\n'.join(body), encoding='utf-8')
 

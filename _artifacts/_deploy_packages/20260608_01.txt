@@ -1,0 +1,146 @@
+
+명령의 6 행에서 시작하는 중 오류 발생 -
+GRANT EXECUTE ON SCM_MGR.PKG_SYS0013.P_SYS0013_GET_QUERY_LIST TO SCMD_APP
+오류 보고 -
+ORA-00905: 누락된 키워드
+
+https://docs.oracle.com/error-help/db/ora-00905/00905. 00000 -  "missing keyword"
+*Document: YES
+*Cause:    A required keyword was missing.
+*Action:   Add the required keyword to correct the syntax.
+
+명령의 7 행에서 시작하는 중 오류 발생 -
+CREATE OR REPLACE PUBLIC SYNONYM PKG_SYS0013.P_SYS0013_GET_QUERY_LIST FOR SCM_MGR.PKG_SYS0013.P_SYS0013_GET_QUERY_LIST
+오류 보고 -
+ORA-00905: 누락된 키워드
+
+https://docs.oracle.com/error-help/db/ora-00905/00905. 00000 -  "missing keyword"
+*Document: YES
+*Cause:    A required keyword was missing.
+*Action:   Add the required keyword to correct the syntax.
+
+명령의 8 행에서 시작하는 중 오류 발생 -
+GRANT EXECUTE ON SCM_MGR.PKG_SYS0013.P_SYS0013_EXECUTE_QUERY TO SCMD_APP
+오류 보고 -
+ORA-00905: 누락된 키워드
+
+https://docs.oracle.com/error-help/db/ora-00905/00905. 00000 -  "missing keyword"
+*Document: YES
+*Cause:    A required keyword was missing.
+*Action:   Add the required keyword to correct the syntax.
+
+명령의 9 행에서 시작하는 중 오류 발생 -
+CREATE OR REPLACE PUBLIC SYNONYM PKG_SYS0013.P_SYS0013_EXECUTE_QUERY FOR SCM_MGR.PKG_SYS0013.P_SYS0013_EXECUTE_QUERY
+오류 보고 -
+ORA-00905: 누락된 키워드
+
+https://docs.oracle.com/error-help/db/ora-00905/00905. 00000 -  "missing keyword"
+*Document: YES
+*Cause:    A required keyword was missing.
+*Action:   Add the required keyword to correct the syntax.
+
+명령의 10 행에서 시작하는 중 오류 발생 -
+GRANT EXECUTE ON SCM_MGR.PKG_SYS0013.P_SYS0013_GET_COLUMNS TO SCMD_APP
+오류 보고 -
+ORA-00905: 누락된 키워드
+
+https://docs.oracle.com/error-help/db/ora-00905/00905. 00000 -  "missing keyword"
+*Document: YES
+*Cause:    A required keyword was missing.
+*Action:   Add the required keyword to correct the syntax.
+
+명령의 11 행에서 시작하는 중 오류 발생 -
+CREATE OR REPLACE PUBLIC SYNONYM PKG_SYS0013.P_SYS0013_GET_COLUMNS FOR SCM_MGR.PKG_SYS0013.P_SYS0013_GET_COLUMNS
+오류 보고 -
+ORA-00905: 누락된 키워드
+
+https://docs.oracle.com/error-help/db/ora-00905/00905. 00000 -  "missing keyword"
+*Document: YES
+*Cause:    A required keyword was missing.
+*Action:   Add the required keyword to correct the syntax.
+
+명령의 12 행에서 시작하는 중 오류 발생 -
+GRANT EXECUTE ON SCM_MGR.PKG_SYS0013.P_SYS0013_GET_PARAMETERS TO SCMD_APP
+오류 보고 -
+ORA-00905: 누락된 키워드
+
+https://docs.oracle.com/error-help/db/ora-00905/00905. 00000 -  "missing keyword"
+*Document: YES
+*Cause:    A required keyword was missing.
+*Action:   Add the required keyword to correct the syntax.
+
+명령의 13 행에서 시작하는 중 오류 발생 -
+CREATE OR REPLACE PUBLIC SYNONYM PKG_SYS0013.P_SYS0013_GET_PARAMETERS FOR SCM_MGR.PKG_SYS0013.P_SYS0013_GET_PARAMETERS
+오류 보고 -
+ORA-00905: 누락된 키워드
+
+https://docs.oracle.com/error-help/db/ora-00905/00905. 00000 -  "missing keyword"
+*Document: YES
+*Cause:    A required keyword was missing.
+*Action:   Add the required keyword to correct the syntax.
+
+Grant을(를) 성공했습니다.
+
+
+SYNONYM SYS0013_GET_HISTORY이(가) 생성되었습니다.
+
+
+명령의 16 행에서 시작하는 중 오류 발생 -
+GRANT EXECUTE ON SCM_MGR.PKG_SYS0013.P_SYS0013_SAVE_QUERY_LIST TO SCMD_APP
+오류 보고 -
+ORA-00905: 누락된 키워드
+
+https://docs.oracle.com/error-help/db/ora-00905/00905. 00000 -  "missing keyword"
+*Document: YES
+*Cause:    A required keyword was missing.
+*Action:   Add the required keyword to correct the syntax.
+
+명령의 17 행에서 시작하는 중 오류 발생 -
+CREATE OR REPLACE PUBLIC SYNONYM PKG_SYS0013.P_SYS0013_SAVE_QUERY_LIST FOR SCM_MGR.PKG_SYS0013.P_SYS0013_SAVE_QUERY_LIST
+오류 보고 -
+ORA-00905: 누락된 키워드
+
+https://docs.oracle.com/error-help/db/ora-00905/00905. 00000 -  "missing keyword"
+*Document: YES
+*Cause:    A required keyword was missing.
+*Action:   Add the required keyword to correct the syntax.
+
+명령의 18 행에서 시작하는 중 오류 발생 -
+GRANT EXECUTE ON SCM_MGR.PKG_SYS0013.P_SYS0013_SAVE_COLUMNS TO SCMD_APP
+오류 보고 -
+ORA-00905: 누락된 키워드
+
+https://docs.oracle.com/error-help/db/ora-00905/00905. 00000 -  "missing keyword"
+*Document: YES
+*Cause:    A required keyword was missing.
+*Action:   Add the required keyword to correct the syntax.
+
+명령의 19 행에서 시작하는 중 오류 발생 -
+CREATE OR REPLACE PUBLIC SYNONYM PKG_SYS0013.P_SYS0013_SAVE_COLUMNS FOR SCM_MGR.PKG_SYS0013.P_SYS0013_SAVE_COLUMNS
+오류 보고 -
+ORA-00905: 누락된 키워드
+
+https://docs.oracle.com/error-help/db/ora-00905/00905. 00000 -  "missing keyword"
+*Document: YES
+*Cause:    A required keyword was missing.
+*Action:   Add the required keyword to correct the syntax.
+
+명령의 20 행에서 시작하는 중 오류 발생 -
+GRANT EXECUTE ON SCM_MGR.PKG_SYS0013.P_SYS0013_SAVE_PARAMETERS TO SCMD_APP
+오류 보고 -
+ORA-00905: 누락된 키워드
+
+https://docs.oracle.com/error-help/db/ora-00905/00905. 00000 -  "missing keyword"
+*Document: YES
+*Cause:    A required keyword was missing.
+*Action:   Add the required keyword to correct the syntax.
+
+명령의 21 행에서 시작하는 중 오류 발생 -
+CREATE OR REPLACE PUBLIC SYNONYM PKG_SYS0013.P_SYS0013_SAVE_PARAMETERS FOR SCM_MGR.PKG_SYS0013.P_SYS0013_SAVE_PARAMETERS
+오류 보고 -
+ORA-00905: 누락된 키워드
+
+https://docs.oracle.com/error-help/db/ora-00905/00905. 00000 -  "missing keyword"
+*Document: YES
+*Cause:    A required keyword was missing.
+*Action:   Add the required keyword to correct the syntax.
