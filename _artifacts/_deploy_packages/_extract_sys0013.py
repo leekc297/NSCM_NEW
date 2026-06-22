@@ -47,13 +47,13 @@ def write_block(file: Path, header: str, items: list, otype: str):
             print(f"  {name}: FAIL {e}")
     file.write_text('\n'.join(body), encoding='utf-8')
 
-# 1) PKG_SYS0013 (spec + body)
+# 1) PKG_SYS0013 (spec + body) — PACKAGE_SPEC 만 spec, PACKAGE_BODY 만 body (12c+ 'PACKAGE' 는 spec+body 둘 다 반환하므로 중복 회피)
 pkg_body = [f"-- ============================================================",
             f"-- PKG_SYS0013 (spec + body) — SYS0013 화면 main entry API",
             f"-- 실행 계정: SCM_MGR · 8 API_URL 중 7개 통과",
             f"-- ============================================================", "",
             "-- ===== SPEC =====",
-            get_ddl('PACKAGE', 'PKG_SYS0013').strip(), '/', '',
+            get_ddl('PACKAGE_SPEC', 'PKG_SYS0013').strip(), '/', '',
             "-- ===== BODY =====",
             get_ddl('PACKAGE_BODY', 'PKG_SYS0013').strip(), '/', '']
 (PKG_SP / '100_PKG_SYS0013_FULL.sql').write_text('\n'.join(pkg_body), encoding='utf-8')
