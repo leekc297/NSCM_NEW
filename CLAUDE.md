@@ -20,14 +20,14 @@
 ### Step 1: 룰셋 로드 (단일 진입 — 4 파일, 모든 작업) ⭐ 2026-06-18 갱신 (진입점 단일화 R-1)
 ```
 Read: Doc/_rules_v2/anti-simplification.md          ⚠️ ⭐ 최우선 — 단순화 절대 금지 (불변)
-Read: Doc/_rules_consolidation/RULESET_MASTER.md    ← ⭐ 통합 마스터 (트리거 매트릭스 + 77 hook 카탈로그 + UI 체크리스트)
+Read: Doc/_rules_consolidation/RULESET_MASTER.md    ← ⭐ 통합 마스터 (트리거 매트릭스 + hook 카탈로그 + UI 체크리스트)
 Read: Doc/_rules_v2/00_INDEX.md                      ← 상세 카탈로그 (hook 본문 위치)
 (UI 작업 시) RULESET_MASTER §3 UI-MANDATORY 체크리스트를 PRE-WRITE 로 통과
 ```
 
 > ⭐ **단일 진입점 정책 (2026-06-18 갱신, R-1)**:
 > **진입점은 이 루트 `CLAUDE.md` 1곳.** 작업별 분기는 `RULESET_MASTER.md` 의 트리거 매트릭스(T01~T20)가 담당하고, hook 본문 위치는 `00_INDEX.md §B.3` 가 가진다. `Doc/_rules_v2/CLAUDE.md` 는 포인터로 축소됨 (직접 진입점 아님).
-> 룰셋 v2 구조: `_asis/00_framework` (7 정밀) + `_asis/01_popups` (인벤토리) + `_tobe/01~13` (13 룰) + `_mapping/asis_to_tobe.md` (10 격차) + `hooks/` (**77 hook** — 카운트 단일 소스 = `RULESET_MASTER §4` + `00_INDEX §B.3`).
+> 룰셋 v2 구조: `_asis/00_framework` (7 정밀) + `_asis/01_popups` (인벤토리) + `_tobe/01~13` (13 룰) + `_mapping/asis_to_tobe.md` (10 격차) + `hooks/` (**hook 카탈로그** — 카운트 단일 소스 = `RULESET_MASTER §4` + `00_INDEX §B.3`).
 > ⚠️ **CLAUDE.md 사이즈 정책 (2026-06-20, hook #77 `claude-md-changelog-policy`)**: 본 파일 §15 entry 직접 추가 금지. 변경 이력 = `Doc/_archive/CLAUDE_changelog_YYYY-MM.md` 1-line. 상세 보고서 = `Doc/_archive/work_reports/{YYYY-MM-DD}_{topic}.md`.
 >
 > ⭐ **2대 통합 진입 hook (2026-06-11 신설)** — 해당 작업 시 개별 hook 보다 먼저 읽기:
@@ -65,15 +65,15 @@ Read: Doc/_rules_v2/00_INDEX.md                      ← 상세 카탈로그 (ho
 ### Step 2: 영역별 추가 룰 — 카탈로그는 00_INDEX 가 단일 진실 source
 
 > 작업 키워드 → 분기는 `RULESET_MASTER §2 트리거 매트릭스 (T01~T20 + T01M 수정 분기)` 가 담당.
-> 카탈로그 (TO-BE 13 룰 / AS-IS Framework 7 / **Hook 69종**) 인벤토리는 `RULESET_MASTER §4` + `00_INDEX.md §B.3` 가 단일 진실 source.
+> 카탈로그 (TO-BE 13 룰 / AS-IS Framework 7 / **Hook**) 인벤토리는 `RULESET_MASTER §4` + `00_INDEX.md §B.3` 가 단일 진실 source.
 > 따라서 본 §2 에서는 위치/카운트를 중복 유지하지 않음 (카운트 불일치 사고 방지).
 >
-> ⭐ **용어 (R-8)**: "**문서 hook(guide)**" = AI 가 읽고 지키는 가이드 (69 중 대부분). "**실행 hook(enforced)**" = `.claude/settings.json` 이 자동 차단하는 5종. 상세 = `RULESET_MASTER §6`.
+> ⭐ **용어 (R-8)**: "**문서 hook(guide)**" = AI 가 읽고 지키는 가이드 (대부분). "**실행 hook(enforced)**" = `.claude/settings.json` 이 자동 차단하는 5종. 상세 = `RULESET_MASTER §6`.
 
 **룰 v2 빠른 위치 (디렉터리만)**:
 - TO-BE 13 정밀 룰: `Doc/_rules_v2/_tobe/01_file_structure ~ 13_routing_menu.md`
 - AS-IS Framework 7 분석: `Doc/_rules_v2/_asis/00_framework/01~07_*.md`
-- **69 Hook**: `Doc/_rules_v2/hooks/` (통합 진입 3 = oracle-db-workflow / screen-completion-gate / ui-dynamic-property-management + 공통 3 = pre-write / post-write / pre-submit + 트리거 매트릭스 분기)
+- **Hook**: `Doc/_rules_v2/hooks/` (통합 진입 3 = oracle-db-workflow / screen-completion-gate / ui-dynamic-property-management + 공통 3 = pre-write / post-write / pre-submit + 트리거 매트릭스 분기)
 - AS-IS↔TO-BE 격차: `Doc/_rules_v2/_mapping/asis_to_tobe.md` (10 격차)
 
 **유지되는 룰 v1 (`Doc/_dev_rules/`)** — 룰 v2 와 cross-ref:
@@ -222,13 +222,13 @@ return Dmf0099Response.listOf(data);
 | 경로 | 내용 |
 |---|---|
 | `Doc/_rules_v2/anti-simplification.md` | ⚠️ ⭐ 최우선 — 단순화 절대 금지 (불변) |
-| `Doc/_rules_consolidation/RULESET_MASTER.md` | ⭐ 통합 마스터 (단일 진입 — 트리거 + 69 hook + UI 체크리스트) |
+| `Doc/_rules_consolidation/RULESET_MASTER.md` | ⭐ 통합 마스터 (단일 진입 — 트리거 + hook 카탈로그 + UI 체크리스트) |
 | `Doc/_rules_consolidation/00_DIAGNOSIS_진단보고서.md` | 룰 체계 중복·충돌·누락 진단 (R-1~R-8) |
 | `Doc/_rules_v2/CLAUDE.md` | 포인터 (구 분기 라우터 — 직접 진입점 아님) |
-| `Doc/_rules_v2/00_INDEX.md` | 트리거 매트릭스 + 룰/Hook 카탈로그 (69) |
+| `Doc/_rules_v2/00_INDEX.md` | 트리거 매트릭스 + 룰/Hook 카탈로그 |
 | `Doc/_rules_v2/_tobe/` | TO-BE 13 정밀 룰 (01~13) |
 | `Doc/_rules_v2/_asis/00_framework/` | AS-IS Framework 7 정밀 분석 |
-| `Doc/_rules_v2/hooks/` | **69 Hook** (단일 카운트 = RULESET_MASTER §4 + 00_INDEX §B.3) |
+| `Doc/_rules_v2/hooks/` | **Hook 카탈로그** (단일 카운트 = RULESET_MASTER §4 + 00_INDEX §B.3) |
 | `Doc/_rules_v2/_mapping/asis_to_tobe.md` | AS-IS↔TO-BE + 10 격차 사양 |
 | `Doc/_rules_v2/meta-rule-evolution.md` | PoC → 룰 보강 사이클 (4 분류) |
 

@@ -23,7 +23,8 @@
 4. (UI 작업 시) §3 UI-MANDATORY 체크리스트를 PRE-WRITE 로 통과
 ```
 
-> **카운트 단일 소스**: hook 총수 = **77** (`Doc/_rules_v2/hooks/*.md` 실측, 2026-06-20). 어떤 문서든 카운트를 별도 보유하지 말 것 — 본 파일 §4 와 00_INDEX 만 카운트를 가진다. (진단 R-2)
+> **카운트 단일 소스**: hook 총수 = **88** (`Doc/_rules_v2/hooks/*.md` 실측, 2026-06-23). 어떤 문서든 카운트를 별도 보유하지 말 것 — 본 파일 §4 와 00_INDEX 만 카운트를 가진다. (진단 R-2)
+> ⚠️ **2026-06-23 카운트 정합**: 표기 81 → 실측 87 drift(2026-06-20 DMF0072 fix 중 #82~#86 + 일일 이슈 인프라 #88 issue-log-daily-workflow 미등재) + 신규 #87 = **88**. §4 표에 7 행 일괄 등재.
 > ⚠️ **CLAUDE.md §15 직접 entry 추가 금지** (hook #77 `claude-md-changelog-policy`): 변경 이력은 monthly archive 에 1-line / 상세는 `Doc/_archive/work_reports/{YYYY-MM-DD}_{topic}.md`.
 
 ---
@@ -52,12 +53,12 @@
 | **T02** | AS-IS 화면 분석 / .cs 분석 | `_asis/02_screens/__TEMPLATE__` + `_asis/00_framework/01_BaseForm` | popup-asis-analysis |
 | **T03** | Popup 분석 / popup 매핑 | `_asis/01_popups/__POPUP_TEMPLATE__` + `00_inventory` + `_tobe/10_popup_modal` | popup-asis-analysis |
 | **T04** | Grid / DataGrid / 컬럼 메타 / dropdown / lookup / column setting popup / drill-down | `_tobe/07_datagrid` + `08_column_meta` + `09 §12` + `Doc/wijmo-flexgrid-guide` + `-api-reference` | ⭐⭐⭐ datagrid-shared-component-mandatory · grid-cell-interaction-patterns-mandatory + grid-column-meta + ui-category-setup-column-meta + column-lookup-meta-standard + grid-column-setting-popup-pattern + grid-interaction-patterns + sheet-columns-binding-match + wijmo-flexgrid-entry(진입) + wijmo-insert-cell-dropdown + wijmo-merge-sticky-content + runtime-error-prevention |
-| **T05** | 조회조건 / SearchArea / Form / combo / cascade / dropdown reset | `_tobe/06_search_area` + searchFields 카탈로그 | ⭐⭐⭐ messaging-api-and-search-fields-mandatory · cascade-combo-filter · screen-shell-composition-mandatory + search-area-extra-conditions + search-button-when-no-searcharea + cascade-pattern-check |
+| **T05** | 조회조건 / SearchArea / Form / combo / cascade / dropdown reset / **모달 콤보 옵션** | `_tobe/06_search_area` + searchFields 카탈로그 | ⭐⭐⭐ messaging-api-and-search-fields-mandatory · cascade-combo-filter · screen-shell-composition-mandatory + search-area-extra-conditions + search-button-when-no-searcharea + cascade-pattern-check + ⭐⭐⭐ **screen-combo-validation-message-mandatory** (§1 L — 콤보/모달 옵션 룩업 조회, 하드코딩 금지) + search-area-button-position-and-toggle |
 | **T06** | Modal / Popup / 공용 modal | `_tobe/10_popup_modal` + `01 §1.5(modals/)` | ⭐⭐⭐ popup-modal-and-routing-mandatory + popup-asis-analysis + popup-dialog-layout + modal-callback-cascade-check + components-folder-pattern + grid-column-setting-popup-pattern |
 | **T07** | Button / CRUD / SubTitle hotkey / 추가·삭제·저장·sort·filter·condition·reset | `_tobe/09_subtitle_hotkey` + `_asis/00_framework/01_BaseForm` | ⭐⭐⭐ subtitle-button-actions-mandatory · screen-meta-and-permissions-mandatory(권한) + screen-shell-composition-mandatory + asis-button-mapping + search-button-when-no-searcharea |
 | **T08** | BE / Controller / Service / SP / cursor / mutation / SAVE SP | `_tobe/11_be_controller_service` + `12_metadata_sql` + **`Doc/03.Framework` BE API javadoc** | ⭐⭐ **oracle-db-workflow(진입)** + ⭐⭐ **be-api-contract-ui(UI 호출 계약)** + be-infrastructure-reuse + asis-coverage-check + procedure-dts-ssot-mandatory + sp-dual-cursor-pattern + mutation-onsuccess-defaults + proc-meta-signature-match + sp-body-minimal-change + sp-utl-call-stack-safety + sp-exception-handler-debug-friendly + sp-no-fake-data-extraction + sp-json-table-array-pattern + sp-patch-file-deploy + scmd-app-grant-mandatory |
 | **T09** | 메뉴 안 나옴 / MNU_URL / SHT_NM / 권한 없음 | `_tobe/13_routing_menu` | menu-not-displayed-debug + menu-button-dynamic-fetch |
-| **T10** | DB 오류 / ORA-xxxxx / PLS-xxxxx / 데이터 0건 | `_dev_rules/21_TROUBLESHOOTING` + `_tobe/12_metadata_sql` | ⭐⭐ oracle-db-workflow §3 + sp-exception-handler-debug-friendly + sp-substr-zero-index-audit + oracle-cmbo-varname-quote + db-error-asis-cross-check + sp-no-fake-data-extraction + pivot-dynamic-column-nvl |
+| **T10** | DB 오류 / ORA-xxxxx / PLS-xxxxx / 데이터 0건 / **날짜·메시지 검증 오탐** | `_dev_rules/21_TROUBLESHOOTING` + `_tobe/12_metadata_sql` | ⭐⭐ oracle-db-workflow §3 + sp-exception-handler-debug-friendly + sp-substr-zero-index-audit + oracle-cmbo-varname-quote + db-error-asis-cross-check + sp-no-fake-data-extraction + pivot-dynamic-column-nvl + ⭐⭐⭐ **screen-combo-validation-message-mandatory** (§2 V 날짜 표시↔검증 형식 / §3 M 메시지 코드 충돌) |
 | **T11** | Figma URL | `_dev_rules/31_FIGMA_DESIGN_INTEGRATION` | (figma-mapping-check — v1) |
 | **T12** | Git push / 백업 / 원복 | `_dev_rules/28_GIT_MULTI_REMOTE` + `30_LOCAL_BACKUP_RESTORE` | destructive-git-ops |
 | **T13** | CSV 적재 / Oracle 적재 | `_dev_rules/29_LOCAL_DB_CSV_IMPORT` | (없음) |
@@ -137,9 +138,9 @@
 
 ---
 
-## §4. Hook 카탈로그 (전체 77 / Full Catalog) — 단일 카운트 소스
+## §4. Hook 카탈로그 (전체 88 / Full Catalog) — 단일 카운트 소스
 
-> 본문 위치: `Doc/_rules_v2/hooks/<name>.md`. 카운트 = **77** (2026-06-20 실측 — #77 claude-md-changelog-policy 신설). 정렬: 파일명 알파벳순(진단 R-4).
+> 본문 위치: `Doc/_rules_v2/hooks/<name>.md`. 카운트 = **88** (2026-06-23 실측 — #82~#86·#88 소급 등재 [2026-06-20 DMF0072 fix 중 신설된 feature-button-meta-completeness / search-area-button-position-and-toggle / sheet-columns-meta-completeness / sp-inline-function-gtt-mandatory / issue-feed-rules + 일일 이슈 인프라 issue-log-daily-workflow] + #87 신설 screen-combo-validation-message-mandatory [이슈목록 2026-06-23 R-1~R-5 승격]). 정렬: 파일명 알파벳순(진단 R-4).
 > 분류: 🅒 공통 · 🆄 UI/화면 · 🅖 Grid/Wijmo · 🅕 Search/Form · 🅟 Popup/Modal · 🅑 BE/SP/Oracle · 🅓 DB적용/Deploy · 🅖it Git/Infra
 
 | # | Hook | 분류 | 트리거 | 한 줄 요약 |
@@ -221,8 +222,20 @@
 | 75 | be-api-contract-ui | 🅑 | T07/T08/T01 | ⭐⭐ BE API javadoc UI 호출 계약 — callProc/combo-muti/lookup-muti/menu auth·동적컬럼 endpoint ↔ apiClient 매핑 + 표준 응답 {code,message,result}/successResponseEntity + @AuthCheck/@SystemLog (2026-06-19) |
 | 76 | code-naming-convention-mandatory | 🆄 | T01/전체 FE | ⭐⭐ 코드 Naming Convention + 품질 게이트 (인수인계서 §4 / 설계서 §3 누락 보강) — 변수/함수/상수 Naming Rule(함수=동사 camelCase / boolean=is·has·can / 상수=SNAKE_CASE / 미사용 파라미터=`_` 접두 / 축약어 금지) + 파일·폴더 명명 표 + 품질 자동화 게이트(Husky pre-push lint+type / Vitest / SonarLint / Branch Naming / GitLab CI Fail) (2026-06-19) |
 | 77 | claude-md-changelog-policy | 📘 | 전체 (CLAUDE.md 갱신 시) | ⭐⭐ CLAUDE.md 사이즈 다이어트 정책 — §15 entry 직접 추가 금지 + monthly archive (`Doc/_archive/CLAUDE_changelog_YYYY-MM.md`) 1-line 작성 + 상세 = `Doc/_archive/work_reports/{YYYY-MM-DD}_{topic}.md` 별도 보고서 분리. §15 본문 ≤ 5 줄 pointer 만 강제 (2026-06-20) |
+| 78 | ui-category-setup-no-arbitrary-data | 🅓 | 전체 (admin 메타 INSERT/UPDATE 시) | ⭐⭐⭐ **강력 룰 (anti-simplification 동급)** — admin UI Category Setup 관리 메타 8 테이블 (`SCM_MST_SHEET_COLUMNS`/`SCM_ADM_MNU_BTN_MPG_M`/`SCM_ADM_LOOKUP_MASTER_DETAIL`/`SCM_ADM_CMBO_SQL_M`/`SCM_ADM_MSG_M`/`SCM_ADM_API_M`/`SCM_ADM_PROC_M`/`SCM_ADM_MNU_M`) AI 임의 INSERT/UPDATE/추측 절대 금지. 허용: 사용자 명시 요청 / AS-IS 백업 실 데이터 그대로 복사 / 조회. 다국어 AI 번역 INSERT 금지. PRE-WRITE 4 점검 의무 (사용자 명시? 원천 실데이터? 메타 테이블? DDL grep?) (2026-06-22 사용자 명시) |
+| 79 | local-server-startup-standard | 📘 | "서버 기동" / "FE 띄워" / "로컬 시작" 트리거 | ⭐ 로컬 BE/FE 기동 시 `pnpm` 금지 — BE `gradlew.bat bootRun --args="--spring.profiles.active=local"` + FE `apps/web` 안 `node_modules\.bin\vite.cmd --port 5173 --host 127.0.0.1`. CLAUDE.md §8 `pnpm local` 표 인용 금지. 단일 출처 `_artifacts/_local_setup/nscm-fe-post-import-setup.ps1` L126-127 (2026-06-22 사용자 명시) |
+| 80 | sp-cursor-name-response-key | 🆄/🅑 | T07/T08 (FE cursor data 추출 시) | ⭐⭐⭐ SP OUT cursor 이름 ↔ FE response key 정합 — `salesSiteData?.o_rc1 ?? salesSiteData?.O_RESULT_CURSOR ?? []` fallback chain 의무 (단일 키 의존 금지). dead code 정리 시 BE log + git blame 검증 의무. DMF0008 V11→V12 회귀 사고 후 (2026-06-22) |
+| 81 | tab-driven-lazy-fetch | 🆄 | T01/T07 (multi-tab + row-context 화면) | ⭐⭐ 다단 grid + 하단 multi-tab sub-grid 화면에서 tab 전환 시 lazy fetch 의무 — `useEffect([activeTab, context])` 로 해당 sheet `setXOnly()` 호출 → tanstack 캐시로 재방문 무호출. DMF0008 V13 사용자 명시 (2026-06-22) |
 
-> ⚠️ 표 정렬은 파일명 알파벳순이지만 #70~#77 은 등재 시점 보존 위해 표 끝에 배치. 다음 정합 PR 시 알파벳순(atomic-design-components / be-api-contract-ui / claude-md-changelog-policy / code-naming-convention-mandatory / framework-foundation-entry / mdi-tab-isolation-mandatory / procedure-dts-ssot-mandatory / screen-runtime-pitfalls-mandatory)으로 재배치.
+| 82 | feature-button-meta-completeness | 🆄 | T01/T07 | 기능 버튼 메타 등록 완전성 — AS-IS 기능 + FE handler 있는데 버튼 미표시(`hasButton()` false) 방지 (2026-06-20 DMF0072) |
+| 83 | search-area-button-position-and-toggle | 🅕 | T05 | SearchArea 검색버튼 위치 + 3단↑ 조회조건 펼침/닫기 토글 의무 (2026-06-20 DMF0072) |
+| 84 | sheet-columns-meta-completeness | 🅖 | T01M/T04 | SHEET_COLUMNS 메타 완전성 + obsolete sheet 정리 (admin 반영 누락 방지, 2026-06-20 DMF0072) |
+| 85 | sp-inline-function-gtt-mandatory | 🅑 | T08/T19 | SP body inline scalar function row-by-row 호출 → GTT temp 사전 적재 의무 (성능) |
+| 86 | issue-feed-rules | 🅒 | (일일 이슈목록) | 일일 이슈목록 → 룰 후보 append-only 누적 피드 + 편입 절차(사람 검토 후 정식 승격) 정의 |
+| 87 | screen-combo-validation-message-mandatory | 🆄/🅕 | T01/T04/T05/T10 | ⭐⭐⭐ **L** 콤보/모달 옵션 = 룩업 조회(하드코딩 금지, 빈 결과 fallback) + **V** 날짜 셀 표시↔검증 형식 일치 + **M** 메시지 코드 의미 충돌 금지(MSG00004) + **D** 다단 헤더 depth=DB 라벨 메타(`getColumnDepth`, 화면 하드코딩 임시방편). 이슈목록 2026-06-23 R-1~R-5 승격 |
+| 88 | issue-log-daily-workflow | 🅒 | (일일 이슈목록 정리) | 일일 이슈목록 정리·룰 후보 편입 절차 — "이슈목록 정리/이슈 룰 반영" 요청 시 MD 정리(`_analysis/이슈목록_{날짜}.md`) → 룰 후보 `issue-feed-rules.md` 누적 → 사람 검토 후 정식 hook 승격. issue-feed-rules 짝 워크플로우 |
+
+> ⚠️ 표 정렬은 파일명 알파벳순이지만 #70~#88 은 등재 시점 보존 위해 표 끝에 배치. 다음 정합 PR 시 알파벳순으로 재배치.
 
 > **Retracted (참고)**: `screen-hooks-patterns-mandatory` (구 별도 번호) — 2026-06-18 철회. DMF0004~6 master 에 `hooks/` 폴더 부재. 신규 화면 hooks/ 폴더는 **권장**(필수 아님).
 
