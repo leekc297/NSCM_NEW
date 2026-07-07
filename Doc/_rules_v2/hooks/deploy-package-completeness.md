@@ -186,6 +186,23 @@ ls _artifacts/_deploy_packages/{화면}/04_Verify/*_Diagnose.sql        # Diagno
 
 ---
 
+## §4.5 ⭐ 2026-07-02 보강 — "후속 보강" 잔류 금지 + PROC_M 이관 방식 표준
+
+1. **패키지 내 "후속 보강" 주석 금지**: DMF0020 클라우드 저장 SQL ERROR 의 근본 원인 =
+   0630 패키지 `010_core_meta` 에 "SAVE_SCM_MST_FUTURE_PRICE_ALL/POPUP 은 후속 보강" 주석만 남기고
+   SAVE SP+PROC_M+GRANT 를 **미포함** → 그대로 잊혀 클라우드 저장 불능. 패키지는 그 시점의
+   **완결 세트**여야 하며, 부득이 제외 시 README 최상단 "미포함/차기 필수" 표에 명시 + 다음 패키지 1순위.
+2. **PROC_M 이관은 `DELETE(SP 단위) 후 INSERT`** — `MERGE ON (PROC_NM, SORT_ORD)` + COL_NM UPDATE 는
+   PK(PROC_NM, COL_NM, COL_TP_CD) 환경에서 **ORA-00001** (SYS0012 클라우드 사고).
+   상세: `proc-meta-signature-match.md` §0.4.
+3. **메타 존재 검사는 정확 키로**: API_M 은 `API_ID` 정확 일치 (`API_URL LIKE '%메뉴ID%'` 오진 —
+   API_URL=SP명이라 메뉴ID 미포함 다수). 체인 확정 = `PR_GET_PROC_INFO_LIST` 1콜.
+4. **적용 후 검증 SQL 을 패키지에 동봉** (90_DIAGNOSE 폴더 표준 — SYS0012_APPROVAL_20260702 참조):
+   SP 시그니처 vs PROC_M **위치+이름** 대조 + 기대값 주석.
+
+---
+
 ## §5. 변경 이력
 
 - **2026-06-02 작성** (DMF0072/0008/0043/0043_01 deploy zip 누락 4건 사후 보강 작업 — 사용자 명시 요구)
+- **2026-07-02 §4.5 신설** (DMF0020 SAVE '후속 보강' 잔류 → 클라우드 저장 불능 / SYS0012 PROC_M MERGE ORA-00001 사고)

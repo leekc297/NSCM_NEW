@@ -154,6 +154,38 @@ const handleAutoSalesSite = (s: FlexGrid<...>, e: CellRangeEventArgs) => {
 
 ---
 
+## §5-G. Grid combo/modal 셀 cascade — 행 컨텍스트 필터 (2026-07-03 DMF0020 확립, 사용자 명시)
+
+> **"그리드 셀 combo 가 같은 행의 상위 셀 값으로 필터되어야 하는 경우"의 표준.**
+> AS-IS 원천: `spdMain_ComboSelChange` 가 같은 행의 상위 셀 값을 `Data.Common(Type, false, param1=division, ...)`
+> 으로 SP(UP_FX PARAM1~5)에 넘겨 재조회 후 `SetCellTypeCombo` 로 행 단위 combo 를 덮어쓰는 구조.
+> ⚠️ **AS-IS 실측 확정 (2026-07-03)**: cascade 필터는 **메타(UI Category Setup)가 아니라 화면 코드가 결정**한다 —
+> `SCM_MST_SHEET_COLUMNS` 에 PARAM 저장 컬럼은 없고(ATTRIBUTE1~10 실질 미사용), 프레임워크의 메타 기반
+> combo 자동 부여(`SpreadInfo.cs L1444~1483`)는 `Data.Common(eDataType)` **파라미터 0개(전체 목록)** 다.
+> → TO-BE 등가 = **화면 constants 의 cascade 정의**(`GRID_CASCADE_FILTERS`/`GRID_CASCADE_CLEAR`). 메타 주도 확장(ATTRIBUTE 슬롯)은 사용자 결정 사항 — 임의 도입 금지.
+
+### 5-G.1 표준 5 의무 요소 (reference: DMF0020 `SalesFuturePriceGrid.tsx` + `CustDemandAnalysisModal.tsx`)
+
+| # | 의무 | 구현 |
+|---:|---|---|
+| 1 | **beginningEdit dataMap 스왑** — FPComboBox 편집 진입 시 해당 행의 상위 셀 값으로 콤보 전체 결과(1RT fetch)를 `.filter()` 해 `col.dataMap` 교체. Wijmo dataMap 은 컬럼 전역이라 행별 콤보는 이 방법이 유일 (룰 07 §2.10.5) | `GRID_CASCADE_FILTERS[binding]` = `{rowKey, comboKey}[]` |
+| 2 | ⭐ **cellEditEnded 진입 시 전체 dataMap 원복 필수** — 스왑이 남으면 필터 밖 CODE 를 가진 **다른 행의 CODE→NAME 표시가 깨짐** (편집 취소 포함 커버) | `dataMapsRef.current[binding]` 원복 — 핸들러 **맨 앞** |
+| 3 | **계단식 clear** — 상위 combo 값이 **실제로 변경된 경우만**(beginningEdit oldVal 캡처 비교) 하위 셀 + 팝업 파생 필드를 형제 행(INSERT_GROUP) 포함 일괄 `''` | `GRID_CASCADE_CLEAR[binding]` = 하위 컬럼 목록 (AS-IS clear 체인 1:1) |
+| 4 | **관대 통과 sentinel** — 행 상위 값이 비거나 'ALL' 이거나 **콤보 row 의 필터 키가 없으면 통과** (사내 미이관 필터 키는 데이터 적재 시 자동 활성 — 엄격 필터로 빈 콤보 사고 금지) | `!rv \|\| rv==='ALL' \|\| !cv \|\| rv===cv` |
+| 5 | **modal 셀 cascade** — 팝업 preSearchParams 는 조회조건이 아니라 **클릭한 행의 상위 셀 값** (AS-IS `Form_Load(false, div, team, endCust, site, project[, item])` 1:1) | `popupRow` state — dblClick 시 행 보관 |
+
+### 5-G.2 콤보 선택·변경 기준 (2026-07-03 사고 회피 — 사용처 역매핑 의무)
+
+1. cascade 필터 키(DIVISION_ID 등)를 **이미 반환하는 등록 콤보를 우선 재사용** (예: TeambyDivision2→TeambyDivision 교체 — DIVISION_ID 반환+권한 필터)
+2. ❌ **공유 콤보 SQL 에 필터 키 컬럼 추가 금지** — DISTINCT 조합이 늘어 **타 화면 콤보에 중복 CODE 표시** (TeambyDivision2 7화면 / EndCustomerByDivisionDept 29화면 / BizTypeByDivision 10화면 공유 실측). 변경 전 `SHEET_COLUMNS.CELL_COMBO_DATA_TYPE` 사용처 역매핑 의무
+3. 콤보 교체는 SHEET_COLUMNS 해당 화면 시트 행만 UPDATE (+FE fallback 상수 동기) — 타 화면 무변경
+4. AS-IS 그리드에서 combo 가 아닌 컬럼(팝업이 채우는 잠금 값 등)은 cascade **비대상** — `__asis-mapping__` 에 근거 기재
+
+### 5-G.3 카운트 대사 의무
+`__asis-mapping__.md` 에 "AS-IS 트리거(ComboSelChange 분기 + CellDoubleClick 팝업) N = TO-BE 배선 N" 표 작성 (modal-callback-cascade-check §3 동등). reference: `sales-future-price/__asis-mapping__.md` §Grid Cascade Filter.
+
+---
+
 ## §6. PRE-WRITE 자기 점검 (모두 ✓ 필수)
 
 ```
@@ -162,6 +194,9 @@ const handleAutoSalesSite = (s: FlexGrid<...>, e: CellRangeEventArgs) => {
 [ ] 3. Dedup 시 Map 기반 + 복합 unique key (`${col1}|${col2}`)?
 [ ] 4. useTabComboQueries 1 round-trip + client-side filter (useTabComboQuery N 회 X)?
 [ ] 5. Grid cell combo 의 lookup 메타가 CELL_COMBO_DATA_TYPE (ATTRIBUTE1 X)?
+[ ] 6. (Grid 셀 종속 combo) §5-G 5요소 — beginningEdit 스왑 / cellEditEnded 원복 / 계단식 clear(변경시만)
+       / 관대 sentinel / modal preSearchParams=행값? 콤보 응답에 필터 키 컬럼 존재 실측?
+[ ] 7. (콤보 변경 필요 시) 사용처 역매핑 후 공유 SQL 무변경 + 필터 키 반환 콤보 재사용?
 ```
 
 ---
@@ -228,6 +263,9 @@ grep -rnE "ATTRIBUTE1.*=.*'[A-Z]" features/*/src/pages/<screen>/components/*Form
 | §3 Map dedup | `features/master/src/pages/customer-forecast-master/componenets/CustomerFcstMasterForm.tsx:94-127` |
 | §4 useTabComboQueries | 4 화면 공통 — Form L25-30 부근 |
 | §5 Grid Modal cascade | `features/master/src/pages/sales-site/components/SalesSiteGrid.tsx:82-86` |
+| §5-G Grid 셀 cascade (스왑/원복/clear) | `features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx` (beginningEdit 스왑 + cellEditEnded 원복·clear) + `sales-future-price.constants.ts` (GRID_CASCADE_FILTERS/CLEAR) |
+| §5-G modal preSearchParams=행값 | `features/master/src/pages/sales-future-price/SalesFuturePrice.tsx` (popupRow) |
+| §5-G 상수 기반 3단 cascade (팝업 내 grid) | `features/demand/src/pages/mkt-fcst/components/modals/CustDemandAnalysisModal.tsx` (CUST_DEMAND_CASCADE) |
 
 ---
 
@@ -257,7 +295,7 @@ grep -rnE "ATTRIBUTE1.*=.*'[A-Z]" features/*/src/pages/<screen>/components/*Form
 | DMF0005 | ✅ L75-81 | ✅ L131-140 | ✅ Map | ✅ | ✅ L46-65 | reference |
 | DMF0006 | ✅ L49-76 | ✅ L99-107 | ✅ Map | ✅ | ✅ L38-90 | reference |
 | DMF0007 | ✅ L49-56 | ✅ L94-127 | ✅ Map | ✅ | (modal 없음) | reference |
-| DMF0020 | (공용 Field 사용 추정) | △ | △ | △ | △ Project/Item modal | 본 작업 검증 의무 |
+| DMF0020 | ✅ Form L69-82 | ✅ GRID_CASCADE_FILTERS | ✅ Map 복합키 | ✅ 1RT+beginningEdit 스왑 | ✅ popupRow preSearchParams | 2026-07-03 grid cascade 적용 (`__asis-mapping__.md` §Grid Cascade) |
 | DMF0003 | ⚠️ 미발견 → 보강 | △ comboFilters | ❌ Set 만 → 보강 | ✅ | ✅ L283-311 | 본 작업 §1/§3 보강 |
 
 ---

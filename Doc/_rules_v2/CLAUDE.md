@@ -1,7 +1,7 @@
 # CLAUDE.md — NSCM 룰셋 v2 (포인터 / Pointer)
 
 > ⚠️ **2026-06-18 진입점 단일화 (R-1)**: 이 파일은 **더 이상 1차 진입점이 아닙니다.**
-> 단일 진입점 = 루트 `C:\Projects\NSCM\CLAUDE.md` → `Doc/_rules_consolidation/RULESET_MASTER.md` (트리거 매트릭스 + 69 hook 카탈로그 + UI 체크리스트).
+> 단일 진입점 = 루트 `C:\Projects\NSCM\CLAUDE.md` → `Doc/_rules_consolidation/RULESET_MASTER.md` (트리거 매트릭스 + hook 카탈로그 + UI 체크리스트 — 카운트는 RULESET_MASTER §4 단일 소스, 본 파일 무표기).
 > 본 파일은 룰 v2 디렉터리 구조·격차·보안 의무 설명용 참조 문서로 유지됩니다.
 
 ---
@@ -10,7 +10,7 @@
 
 ```
 1. Read: Doc/_rules_v2/anti-simplification.md          ⚠️ ⭐ 최우선 (단순화 절대 금지, 불변)
-2. Read: Doc/_rules_consolidation/RULESET_MASTER.md    ← ⭐ 통합 마스터 (트리거 + 69 hook + UI 체크리스트)
+2. Read: Doc/_rules_consolidation/RULESET_MASTER.md    ← ⭐ 통합 마스터 (트리거 + hook 카탈로그 + UI 체크리스트)
 3. Read: Doc/_rules_v2/00_INDEX.md                      ← 상세 카탈로그 (hook 본문 위치)
 4. (UI 작업 시) RULESET_MASTER §3 UI-MANDATORY 체크리스트 PRE-WRITE 통과
 ```
@@ -80,7 +80,7 @@ Doc/_rules_v2/
 │  └─ 13_routing_menu.md
 ├─ _mapping/
 │  └─ asis_to_tobe.md               (AS-IS↔TO-BE + 10 격차 사양)
-└─ hooks/                           (69 hook — 전체 목록은 RULESET_MASTER §4 + 00_INDEX.md §B.3 카탈로그가 단일 진실 source)
+└─ hooks/                           (hook 전체 — 목록·카운트는 RULESET_MASTER §4 + 00_INDEX.md §B.3 카탈로그가 단일 진실 source)
    ├─ pre-write.md / post-write.md / pre-submit.md     (공통 3)
    ├─ oracle-db-workflow.md         ⭐⭐ Oracle SP/DB 작업 단일 진입점 (T08/T10/T18/T19, 2026-06-11)
    ├─ screen-completion-gate.md     ⭐⭐ UI 화면 완성도 8 게이트 (T01/T20, 2026-06-11)

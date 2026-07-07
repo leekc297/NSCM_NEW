@@ -1,6 +1,6 @@
 # issue-log-daily-workflow — 일일 이슈목록 정리·룰 후보 편입 절차
 
-> **트리거**: 사용자가 "이슈목록 정리", "오늘 이슈 정리해줘", "이슈 룰 반영" 등을 요청할 때.
+> **트리거**: 사용자가 "이슈목록 정리", "오늘 이슈 정리해줘", "이슈 룰 반영", **"이슈목록 Rule 적용"** 등을 요청할 때.
 > **목적**: Claude Code 개발 후 발생 이슈를 일일 단위로 MD 정리하고, 룰 후보를 안전지대 피드에 누적한다.
 > **성격**: 문서 hook(guide). 자동 차단(enforced) 아님 — AI 가 읽고 지킨다.
 
@@ -10,7 +10,7 @@
 
 | 구분 | 경로 |
 |---|---|
-| **원본 Excel (현행)** | `C:\Projects\NSCM\Doc\issue\이슈목록관리.xlsx` ⭐ 2026-06-23 위치 변경 (구: `C:\TRANFILE\RECEIVE\`) |
+| **원본 Excel (현행)** | `C:\Projects\NSCM\Doc\issue\이슈목록관리.xlsx` **또는** `C:\Projects\NSCM\_analysis\이슈목록관리.xlsx` ⭐ 2026-06-23 위치 변경 (구: `C:\TRANFILE\RECEIVE\`). 두 위치 중 **수정시각이 최신인 파일**을 처리 대상으로 (누적 파일). |
 | 시트 / 헤더 | 시트명 `이슈목록`, 헤더 행 5 (C5~S5), 데이터 행 6부터 |
 | **MD 정리본** | `C:\Projects\NSCM\_analysis\이슈목록_{YYYY-MM-DD}.md` |
 | **룰 후보 누적 피드** | `C:\Projects\NSCM\Doc\_rules_v2\hooks\issue-feed-rules.md` (append-only) |
@@ -44,4 +44,5 @@
 
 ---
 
-*최초 적용: 2026-06-23 (이슈목록 11건 → `_analysis/이슈목록_2026-06-23.md`, 룰 후보 R-1~R-5 적재).*
+*최초 적용: 2026-06-23 (이슈목록 11건 → `_analysis/이슈목록_2026-06-23.md`, 룰 후보 R-1~R-5 적재 → hook #87 승격).*
+*2차 적용: 2026-06-23 PM (Excel 18:08 갱신 15건 → 동일 MD 재생성, 신규 R-6~R-11 적재 → R-6~R-10 hook #89 `screen-grid-edit-merge-and-meta-mandatory` 승격, R-11 후속).*

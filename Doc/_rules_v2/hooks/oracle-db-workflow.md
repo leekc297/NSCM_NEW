@@ -11,11 +11,11 @@
 
 | 작업 타입 | 필독 순서 |
 |---|---|
-| **A. MSSQL → Oracle SP 신규 변환** | `Doc/_analysis/db_migration/01_MSSQL_to_Oracle_Conversion_Rules.md` (부록 C 함정 9종 + ⭐ §7 성능 안티패턴 5룰) → `oracle-sp-perf-anti-patterns.md` (5 성능 룰 정밀) → `02_SP_CONVERSION_PIPELINE.md` (6-Stage 파이프라인) → 본 hook §1/§2 |
+| **A. MSSQL → Oracle SP 신규 변환** | `Doc/_analysis/db_migration/01_MSSQL_to_Oracle_Conversion_Rules.md` (부록 C 함정 10종 + ⭐ §7 성능 안티패턴 5룰) → `oracle-sp-perf-anti-patterns.md` (5 성능 룰 정밀) → `02_SP_CONVERSION_PIPELINE.md` (6-Stage 파이프라인) → 본 hook §1/§2 |
 | **B. 신규 GET SP 작성 (조회)** | `sp-dual-cursor-pattern.md` §1 → `proc-meta-signature-match.md` §1 → `sheet-columns-binding-match.md` §1 → `sp-exception-handler-debug-friendly.md` §2 |
 | **C. 신규 SAVE/MUTATION SP 작성** | `sp-dual-cursor-pattern.md` §1.3 (단일 cursor 허용) → `proc-meta-signature-match.md` §1 → 부록 C 함정: SUBSTR-0 / TRUNCATE GT / ^-delim bulk |
 | **D. 기존 SP 보강 (cursor/EXCEPTION 추가)** | `sp-body-minimal-change.md` §1 (DBMS_METADATA.GET_DDL 원본 + 최소 변경) → `sp-utl-call-stack-safety.md` (SUBPROGRAM 사용 시) → `sp-exception-handler-debug-friendly.md` |
-| **E. SP 버그/사고 진단** | 본 hook §3 증상→원인 매핑 → `sp-exception-handler-debug-friendly.md` §4 (5-step 진단) → `_dev_rules/21_TROUBLESHOOTING.md` §0 분기 |
+| **E. SP 버그/사고 진단** | 본 hook §3 증상→원인 매핑 → `sp-exception-handler-debug-friendly.md` §4 (5-step 진단) → **hang/무반응/폭주 = `sp-hang-runaway-loop-diagnosis.md`** → `_dev_rules/21_TROUBLESHOOTING.md` §0 분기 |
 | **F. 사내 DB 적용 (Docker → 10.20.100.153)** | `db-schema-divergence-check.md` §2 PRE-CHECK → `db-corporate-apply.md` (apply.sh + Known error 분류) → REPORT.md 의무 |
 | **G. 광범위 audit/sweep (silent fail family)** | `sp-substr-zero-index-audit.md` + `_artifacts/_diagnostics/silent_fail_audit.sql` (SUBSTR-0 / TRUNCATE GT / cursor mismatch / GTT DELETE 일괄) |
 | **H. Claude(Code)가 DB 직접 질의/검증** | `Doc/_dev_rules/32_CLAUDE_ORACLE_DIRECT.md` (SQLcl MCP / python-oracledb / docker exec sqlplus 3 옵션) |
@@ -29,7 +29,7 @@
 3. **SHEET_COLUMNS**: COLUMN_NAME = SP SELECT alias case-sensitive 일치 — `sheet-columns-binding-match.md`
 4. **Body 변경**: 원본 추출 후 최소 변경 (diff 5줄 초과 시 분리 작업) — `sp-body-minimal-change.md`
 5. **EXCEPTION**: 개발 = SQLCODE/SQLERRM/BACKTRACE 노출 / 운영 = generic + LOG — `sp-exception-handler-debug-friendly.md`
-6. **함정 회피**: 부록 C 9종 (SUBSTR-0 / TRUNCATE GT / LISTAGG OVERFLOW / JSON CLOB / GTT DELETE / cursor mismatch / ''=NULL / CMBO quote / ^-delim)
+6. **함정 회피**: 부록 C 10종 (SUBSTR-0 / TRUNCATE GT(+mutex hang) / LISTAGG OVERFLOW / JSON CLOB / GTT DELETE / cursor mismatch / ''=NULL / CMBO quote / ^-delim / **FETCH_STATUS 무한루프**)
 7. ⭐ **성능 안티패턴 5 룰** (MSSQL → Oracle 변환 의무): `oracle-sp-perf-anti-patterns.md` — (1) column 안 REGEXP_SUBSTR/CONNECT BY → FROM 분리 (2) 분리자 split → GT 적재 (3) MASTER lookup → LEFT JOIN (4) GT MAIN KEY INDEX (5) WHERE 함수 → SARGable
 
 ## §2 POST-WRITE 검증 의무 (작성 직후 — 생략 금지)
@@ -60,6 +60,16 @@
 | ORA-01722 (invalid number) | CMBO @varName quote 누락 / '' = NULL | oracle-cmbo-varname-quote |
 | 사내 적용 시 ORA-01400/00904 | Docker↔사내 schema 8 차이 | db-schema-divergence-check |
 | 조회 0건 (에러 없음) | GTT DELETE 누락 / bind NULL (FE filter key) | proc-meta-signature-match §0.2 |
+| "동일 기간 두 개 이상 Currency" (실제 동일통화) | 편집 행을 `'I'` 저장 → 서버 "기존존재+'I'" 검증(통화비교 주석) 오탐 → **편집=`'M'`** | oracle-save-payload-integrity §1 |
+| SAVE 시 "중복 오류" (실제 중복 아님) | FE dedup 키 ≠ SP GROUP BY 키(`COUNT>1`=그룹 행수) / 중복검증 PK에 MEASURE 누락 | oracle-save-payload-integrity §2·§5 |
+| 신규 insert 시 ORA-01400 (NOT NULL) | 신규 행 NOT NULL 컬럼 빈값 → division placeholder(예 PLANT '-') 미채움 | oracle-save-payload-integrity §3 |
+| 조회 0건 (에러 없음, PROC_M 행수는 정합) | PROC_M COL_NM **순서 뒤틀림** — VARCHAR 라 silent (P_STATUS 에 날짜 유입 등) | proc-meta-signature-match §0.4 + get-zero-dup-invisible-diagnosis §1 |
+| GET 이 'Current' 류 DUAL 행만 반환 | WHERE `NVL(x, NULL)` 잔재 (ISNULL→NVL 변환 사고 — NULL 행 전멸) | get-zero-dup-invisible-diagnosis §2 |
+| 동일 데이터 2행 중복 (특정 환경만) | 최종 PIVOT 암묵 GROUP BY 행 분열 — 원천 placeholder 표기차('-'/'--'/' ') | get-zero-dup-invisible-diagnosis §3 |
+| 저장 성공(O_RESULT EVENT=N)인데 화면 미표시 | GET 마스터 EXISTS 필터(SITE_ITEM 등) 미통과 조합 / 신규행 정렬 위치 이동 | get-zero-dup-invisible-diagnosis §4 |
+| 업로드/저장 무반응 (BE 무응답, FE hang — 파일 수신·파싱은 정상) | SP 내 GTT `TRUNCATE`(DDL) 동시세션 mutex 경합 (library cache/cursor/row cache) | sp-hang-runaway-loop-diagnosis §1·§2 + 부록 C-2 |
+| 소량 입력인데 SP 영원히 실행 (V$SQL EXECUTIONS 수백만 폭증) | `@@FETCH_STATUS` 변환 누락 — `WHILE V_FETCH_STATUS=0` 재할당 없음 → 무한 루프 | sp-hang-runaway-loop-diagnosis §3 + 부록 C-10 |
+| `CREATE OR REPLACE` 재배포가 안 끝남 (LAST_DDL_TIME 미변경) | 멈춘 세션이 SP library cache pin 보유 → DBA kill 선행 (SCM_MGR ORA-01031 / stale SERIAL# ORA-00026) | sp-hang-runaway-loop-diagnosis §4 |
 
 ## §4 자기 점검 (작업 종료 직전)
 

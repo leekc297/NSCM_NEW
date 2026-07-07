@@ -77,6 +77,29 @@ import { LazyLoader } from '@shared/components';
 
 → React.lazy + Suspense + ErrorBoundary 통합.
 
+### §1.5 ⭐ 신규 화면 라우트 3-SET 원자 정합 (2026-07-06 DMF0048/DMF0014 사고 후 필수)
+
+> **실제 파일 위치 (2026-07 정정)**: route-paths.ts = `nscm-fe/packages/foundation/src/constants/route-paths.ts` / Router = `nscm-fe/apps/web/src/core/Router.tsx` (§10 의 `app/router/*` 는 구 경로 추정치).
+
+**FE 메뉴 네비게이션 메커니즘** (`apps/web/src/mdi/useMDIStore.ts` openTab):
+```ts
+mnuUrl: findMenuPath(mnuId).map(m => m.mnuUrl).join('/')   // 조상 MNU_URL 조인
+navigate(tabs[activeIndex].mnuUrl, ...)                     // 그 경로로 이동
+```
+→ 이동 경로 = **조상 MNU_URL 들의 join**. 따라서 **leaf `MNU_URL` 값 === `ROUTE_PATHS.{MNU_ID}` 값** 이어야 라우트 매칭. 불일치 = **Page Not Found**.
+
+**신규 화면 등록 시 아래 3곳을 반드시 동일 slug 로 원자 변경** (하나라도 빠지면 Page Not Found):
+
+| # | 파일/대상 | 내용 | 예 (DMF0048) |
+|---|---|---|---|
+| 1 | `route-paths.ts` | `ROUTE_PATHS.{MNU_ID}: '{의미형-kebab-slug}'` | `DMF0048: 'sales-monitoring'` |
+| 2 | `Router.tsx` | LazyLoader + nested route `path: ROUTE_PATHS.{MNU_ID}` (리터럴 금지) | `{ path: ROUTE_PATHS.DMF0048, element: <SalesMonitoringPageWithTab /> }` |
+| 3 | `SCM_ADM_MNU_M.MNU_URL` (사내+클라우드) | 동일 의미형 slug (leaf) | `UPDATE ... SET MNU_URL='sales-monitoring' WHERE MNU_ID='DMF0048'` |
+
+**⚠️ 리터럴 `dmf00xx` slug 금지** — 기존 화면 컨벤션은 **의미형 kebab** (DMF0008=`erp-edi-master` / DMF0020=`sales-future-price` / DMF0082=`forecast-price`). DMF0048/DMF0014 가 초기에 `path:'dmf0048'`/`'dmf0014'` 리터럴 + MNU_URL=`dmf0048`/`dmf0014` 로 등록되어 자매 화면과 형태가 달랐고, route-paths 를 의미형으로 바꾸자 MNU_URL 과 어긋나 Page Not Found 발생 → 3곳 모두 `sales-monitoring`/`customer-fcst-upload` 로 정렬(2026-07-06).
+
+**클라우드 이관 시**: route-paths.ts / Router.tsx (git) + `SCM_ADM_MNU_M.MNU_URL` UPDATE(DB) 를 **함께** 적용해야 함. FE 만 배포하고 MNU_URL 미변경 시 메뉴 클릭→Page Not Found (역도 동일).
+
 ---
 
 ## §2 표준 부모 메뉴 인벤토리 (메모리 룰)

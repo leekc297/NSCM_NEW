@@ -20,20 +20,26 @@
 
 ## §1 7-단계 디버깅
 
-### §1.1 Step 1 — MNU_URL ↔ FE slug 정합
+### §1.1 Step 1 — MNU_URL ↔ FE slug 정합 (⭐ "Page Not Found" 최우선 원인)
+
+> 실제 파일: route-paths = `nscm-fe/packages/foundation/src/constants/route-paths.ts` / Router = `nscm-fe/apps/web/src/core/Router.tsx`.
+> FE navigate 경로 = `findMenuPath(mnuId).map(m=>m.mnuUrl).join('/')` (`apps/web/src/mdi/useMDIStore.ts`) → **leaf MNU_URL === ROUTE_PATHS.{MNU_ID} 값** 이어야 매칭. 불일치 = **Page Not Found**.
 
 ```bash
-# DB
-sqlplus -s ... "SELECT MNU_URL FROM SCM_ADM_MNU_M WHERE MNU_ID = '{MENU_ID}';"
-# 예: 결과 'new-screen'
-
+# DB (사내/클라우드 각각)
+sqlplus -s ... "SELECT MNU_URL FROM SCM_ADM_MNU_M WHERE MNU_ID = '{MENU_ID}';"   # 예 'sales-monitoring'
 # FE
-grep -n "{MENU_ID}\|new-screen" nscm-fe/apps/web/src/app/router/route-paths.ts
-# 예: ROUTE_PATHS.NEW_SCREEN = 'new-screen'  → 일치 확인
+grep -n "{MENU_ID}" nscm-fe/packages/foundation/src/constants/route-paths.ts       # DMF0048: 'sales-monitoring'
+grep -n "ROUTE_PATHS.{MENU_ID}" nscm-fe/apps/web/src/core/Router.tsx               # path: ROUTE_PATHS.DMF0048
 ```
 
-- 불일치 시 fix → Step 2 로
-- 일치 시 Step 1.5 로
+**⚠️ Page Not Found 3-SET (2026-07-06 DMF0048/DMF0014 사고)** — 아래 3곳 slug 가 하나라도 어긋나면 Page Not Found:
+1. `route-paths.ts` `ROUTE_PATHS.{MNU_ID}` 값
+2. `Router.tsx` route `path: ROUTE_PATHS.{MNU_ID}` (리터럴 `'dmf00xx'` 금지)
+3. `SCM_ADM_MNU_M.MNU_URL` (사내+클라우드 **둘 다** — FE 만 배포하고 MNU_URL 미변경이 대표 사고)
+
+**리터럴 `dmf00xx` slug 금지** → 의미형 kebab (자매: DMF0008=`erp-edi-master`/DMF0020=`sales-future-price`). 상세 = 룰 13 §1.5.
+- 불일치 시 3곳 모두 동일 slug 로 fix → Step 2 로 / 일치 시 Step 1.5 로
 
 ### §1.2 Step 1.5 — UPPR_MNU_ID 대소문자 정합 (DMF0020 사고)
 
@@ -59,6 +65,13 @@ sqlplus -s ... "SELECT SHT_NM FROM SCM_ADM_MNU_M_SHEET WHERE MNU_ID = '{MENU_ID}
 grep "SHEETS\." features/{domain}/src/pages/{screen}/{kebab}.constants.ts
 # SHEETS.MAIN = 'main'   → 일치
 ```
+
+**⚠️ 변형 — "조회 권한없음" (BTN_MPG/USER_GR 불완전 이관, 2026-07-06 DMF0043)**: BE 로그 `checkMenuBtnAuth(SEARCH, shtNm='<FE명>')` → **HAS_AUTH_YN='N'**. FE 소스가 쓰는 sheet_name 으로 `SCM_MST_SHEET_COLUMNS` 는 이관됐으나 `SCM_ADM_MNU_BTN_MPG_M`/`SCM_ADM_USER_GR_MNU_BTN_MPG_M` 은 **구명칭만** 등록(신명칭 0행) → 권한 매칭 실패.
+```bash
+# BE 로그 checkMenuBtnAuth 의 shtNm 값 확인 → 그 값으로 BTN_MPG 조회
+SELECT COUNT(*) FROM SCM_ADM_MNU_BTN_MPG_M WHERE MNU_ID='{ID}' AND SHT_NM='{FE_SHEET}';  # 0 = gap
+```
+→ 보완: 구명칭 행을 FE명칭으로 **미러링**(값 그대로 INSERT-SELECT, 멱등 NOT EXISTS, null-API 오타버튼 제외). 메모리 `feedback_sht_nm_incomplete_migration_auth.md`.
 
 **증상 (불일치)**: 화면 진입 시 `ORA-01403` at `PKG_NSCM_UI_COMM:17` (retrieveBtnInfoList)
 

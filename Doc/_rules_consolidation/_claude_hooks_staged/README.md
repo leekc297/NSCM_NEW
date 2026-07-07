@@ -5,7 +5,7 @@
 룰 문서(`Doc/_rules_v2/hooks/*.md`)는 **AI 가 읽고 지키는 가이드("문서 hook")**.
 이 폴더의 스크립트는 **harness 가 자동 실행하는 차단/주입("실행 hook")** — AI 의지와 무관, `exit 2` 시 도구 호출 차단.
 
-> ⚠️ **용어(R-8)**: 문서 hook 69종 vs 실행 hook 5종은 **별개**. 단일 진입·전체 카탈로그 = `Doc/_rules_consolidation/RULESET_MASTER.md`.
+> ⚠️ **용어(R-8)**: 문서 hook(대다수) vs 실행 hook 5종은 **별개**. 단일 진입·전체 카탈로그·카운트 = `Doc/_rules_consolidation/RULESET_MASTER.md` §4.
 
 ## 파일 구성 (실제 wiring = `../settings.json` 기준, 5 스크립트)
 

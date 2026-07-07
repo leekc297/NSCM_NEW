@@ -17,7 +17,7 @@
 | G4 | 메타/라우팅 정합 | MNU_M (UPPR 대소문자/MNU_DESC/MNU_TP_CD) + SHT_NM FE↔DB 일치 + PROC_M positional + 권한 (MNU_BTN_MPG_M ↔ USER_GR — G2 master 와 cross-ref) | menu-not-displayed-debug 7단계 + proc-meta-signature-match |
 | G5 | 정적 검증 + **regression 0 보고** | `pnpm lint:fix` + `pnpm type-check` + `pnpm build` 3종 PASS (출력 첨부) + type-check-error-patterns 17종 grep 0건 + ⭐ **`_artifacts/_local_setup/regression-impact.ps1` 실행** → Hard Boundary 위반 / 영향 도메인 / `procedures.d.ts` 변경 인벤토리 보고 (룰 #62 §9) | type-check-error-patterns + post-write + ⭐ **regression-zero-mandatory §9** |
 | G6 | 런타임 smoke (실행 증명) | 화면 진입 → 조회 → (편집 화면이면) Insert/수정/Save → **DB SELECT 로 실반영 확인** + 브라우저 콘솔 에러 0건. "alert 떴으니 됨" 금지 | oracle-db-workflow §2.5 + runtime-error-prevention |
-| G7 | 표준 패턴 정합 | 자매 화면(동일 features 폴더) 1개와 구조 비교: SearchArea/FormItem/Store/Constants/components 폴더 — 임의 작성 0건 | _tobe/01~10 + components-folder-pattern + screen-create-checklist |
+| G7 | 표준 패턴 정합 + **Figma 레이아웃 정합** | 자매 화면(동일 features 폴더) 1개와 구조 비교: SearchArea/FormItem/Store/Constants/components 폴더 — 임의 작성 0건 + ⭐ **Figma MD(`Doc/_figma/screens/{ID}.md`) 존재 시 영역 배치 6축(상단조건/좌·우/상·하/영역 컨텐츠/버튼/라벨) 정합 — 불일치 0 (수정 작업이면 레이아웃 교체 수행) + `Figma 영역↔구현` 매핑표 보고** | _tobe/01~10 + components-folder-pattern + screen-create-checklist + ⭐⭐⭐ **figma-layout-parity-mandatory** |
 | G8 | 이관 완전성 | deploy package 5종 인벤토리 (DDL/META/SP body/GRANT/i18n) + 멱등 SQL + 공용/wrapper SP 포함 | deploy-package-completeness |
 
 ## §1 누락 다발 지점 (사고 통계 기반 — 우선 점검)

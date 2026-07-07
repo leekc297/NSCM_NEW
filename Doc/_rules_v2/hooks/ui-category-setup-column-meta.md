@@ -215,6 +215,8 @@ const COLS = [{ binding: 'A', header: 'A' }, /* ... */];
 - [ ] Search 버튼 / SearchArea onSearch 가 `setFilter()` + `fetchStaticColumns()` 둘 다 호출?
 - [ ] DataGrid 에 `staticColumns={staticColumns[SHEET]}` prop 전달?
 - [ ] 어떤 column 도 하드코딩되지 않음 (`<FlexGridColumn binding=` 직접 X)?
+- [ ] ⭐ 관리 속성(§1 표 전체 — visible/fixed/width/label/align/scale/inputTpCd/ctrlType/comboKey 등)을
+      **속성 단위로도 리터럴 덮어쓰기하지 않음** (§12 — DMF0048 `fixed: true` 사고)?
 
 ---
 
@@ -550,6 +552,64 @@ grep -n "MAIN_COLUMNS\.map.*FlexGridColumn" features/*/src/pages/{SCREEN}/compon
 # 2) MEASURE_4.map 잔존 검출 (handleInsert)
 grep -n "MEASURE_4\.map" features/*/src/pages/{SCREEN}/*.tsx
 ```
+
+---
+
+## §12. ⭐ 관리 속성 "속성 단위" 하드코딩(오버라이드) 금지 (2026-07-04 신설 — DMF0048 FIX 사고)
+
+> **사용자 명시 요구 (2026-07-04)**: "UI CATEGORY SETUP UI 에서 관리하는 항목에 대해서 항목을 사용하지
+> 않고 하드코딩하지 않도록 RULE 적용 요청."
+>
+> §2/§5 는 "컬럼 배열 전체 하드코딩" 을 금지했지만, **동적 fetch 를 하면서 관리 속성 1개를 리터럴로
+> 덮어쓰는 변종**은 명시하지 않았음 — 본 절이 그 사각지대를 닫는다.
+
+### 12.1 사고 사례 (실제 — DMF0048 SalesMonitoring, 2026-07-04)
+
+```tsx
+// ❌ staticColumns 는 동적 fetch 했으나, 고정(freeze)만 리터럴로 덮어씀
+const mainStaticColumns = useMemo(() =>
+  visibleColumns.map(c => ({
+    colNm: c.binding,
+    ...
+    fixed: true,   // ← AS-IS Freeze(0, MEASURE+1) 하드코드 "1:1 재현" 을 이유로 메타(FIXED_FLAG) 무시
+  })), [visibleColumns]);
+```
+
+**결과**: 사내 `SCM_MST_SHEET_COLUMNS.FIXED_FLAG` 가 전행 공란인데 화면은 전 컬럼 고정 → 사용자가
+"메타에 FIX 정보가 없는데 왜 FIX 처리되어 있나" 지적 → admin 의 고정 해제/변경 결정이 화면에서 무효.
+
+**Fix**: `fixed: col.fixed === true` (메타 위임) + fallback 경로 `fixed: false`. AS-IS 동작이 필요하면
+코드가 아니라 **메타 정비(FIXED_FLAG='Y' 등록)** 로 해결.
+
+### 12.2 Hard Rule
+
+1. §1 표의 **모든 관리 속성** (VISIBLE/DISPLAY/FIXED/LABEL/WIDTH/SCALE/CELL_CONTROL/INPUT_TP/ALIGN/
+   UPPERCASE/USER_SELECTABLE/CLASS_LABEL/ATTRIBUTE1~10) 은 admin 메타 값을 그대로 배선한다.
+   화면 코드에서 **속성 단위 리터럴 덮어쓰기 금지** (`fixed: true`, `visible: true`, `width: 100`,
+   `align: 'C'`, `inputTpCd: 'S'` 등 — 메타 키가 존재하는데 상수로 대체하는 모든 형태).
+2. **"AS-IS 코드 하드코드의 1:1 재현" 은 오버라이드의 면책 사유가 아니다.** AS-IS 가 메타를 안 읽고
+   코드로 처리한 동작(예: FarPoint `Freeze(0, N)`)은 TO-BE 에서 "메타 위임 + 메타 데이터 정비" 로
+   변환한다. 메타 데이터가 비어 있으면 화면 코드가 아니라 deploy SQL(§9 BLOCK 6)로 채운다.
+3. 허용 예외 (2가지 뿐):
+   - **fallback 경로**: 메타 미응답(빈 배열) 시의 MAIN_COLUMNS fallback — 단 fallback 값도 "메타가
+     있었다면 그 값" 스냅샷이어야 하며, 메타 응답이 있으면 절대 개입 금지 (§11.1 우선순위).
+   - **메타 비관리 속성**: SHEET_COLUMNS 가 관리하지 않는 순수 렌더 속성 (allowSorting/allowMerging/
+     format 문자열 조립/height(#93) 등) — 단 관리 속성에서 파생 가능하면 파생 사용.
+4. 동적(PIVOT) 컬럼도 동일 — spreadTitle SP 가 라벨/정렬/폭을 반환하면 그 값을 사용 (임의 상수 금지).
+
+### 12.3 POST-WRITE grep (작성 직후 — 출력 검토 의무)
+
+```bash
+# staticColumns 매핑 안에서 관리 속성의 리터럴 배선 검출 (히트 = 각 건 사유 소명 또는 fix)
+grep -nE "fixed: (true|false),|visible: (true|false),|inputTpCd: '(S|M|O|IM|IO)'|horzAlgnCd: '(L|R|C)'" \
+  features/*/src/pages/{SCREEN}/components/*Grid.tsx
+# 허용 히트 = fallback 분기 내부 (staticColumns 부재 시) 뿐. 메타 매핑 경로의 히트는 전건 위반.
+```
+
+### 12.4 재발 방지 계보
+
+- 배열 전체 하드코딩 금지 (§2/§5.1) → **속성 단위 오버라이드 금지 (§12)** → fallback 오염 금지 (§5.5)
+- 메모리: `feedback_ui_category_meta_no_attribute_hardcode.md` (2026-07-04)
 
 ---
 

@@ -49,9 +49,11 @@ if ($prompt -imatch 'as-is|As-Is|매핑|validation|expression|이벤트|핸들�
 }
 
 # 신규 화면 생성 관련 (T01 — 최우선 강제: UI-MANDATORY 체크리스트)
-if ($prompt -imatch '화면\s*(생성|추가|신규|만들|개발|작성)|신규\s*화면|to-be\s*화면|create\s+(new\s+)?(screen|page)|new\s+(screen|page)|add\s+(screen|page)|build\s+page|(DMF|FPF|SCF|SSF|CMF|SPF|MNF|ATF)\d{4}.*(만들|추가|생성|작성|개발|create|build|add)') {
+# 2026-07-02: "신규 생성/신규 UI" 트리거 추가 + ui-work-entry-playbook(§2 신규 플레이북 전문) 첨부 (사용자 명시)
+if ($prompt -imatch '화면\s*(생성|추가|신규|만들|개발|작성)|신규\s*화면|신규\s*생성|신규\s*UI|to-be\s*화면|create\s+(new\s+)?(screen|page)|new\s+(screen|page)|add\s+(screen|page)|build\s+page|(DMF|FPF|SCF|SSF|CMF|SPF|MNF|ATF)\d{4}.*(만들|추가|생성|작성|개발|create|build|add)') {
   $attachments += "$v2\anti-simplification.md"
   $attachments += "$cons\RULESET_MASTER.md"
+  $attachments += "$v2\hooks\ui-work-entry-playbook.md"
   $attachments += "$v2\hooks\ui-dynamic-property-management.md"
   $attachments += "$v2\hooks\screen-conventions-mandatory.md"
   $attachments += "$v2\hooks\regression-zero-mandatory.md"
@@ -60,8 +62,11 @@ if ($prompt -imatch '화면\s*(생성|추가|신규|만들|개발|작성)|신규
 }
 
 # 화면 수정 관련 (T01M — 기존 화면 변경 시 regression 0 + column 재작업)
-if ($prompt -imatch '(화면|컬럼|column|grid|속성|메타).*(수정|변경|고쳐|바꿔|재작업|modify|change|update|fix|rework)|(수정|변경|재작업).*(화면|컬럼|column|grid)') {
+# 2026-07-02: "보완" 트리거 추가 + ui-work-entry-playbook(§1 수정 UI 전면 점검·교정 플레이북 전문) 첨부 (사용자 명시)
+if ($prompt -imatch '보완|(화면|컬럼|column|grid|속성|메타|UI|팝업|popup|modal|모달).*(수정|변경|교체|고쳐|바꿔|재작업|modify|change|update|fix|rework)|(수정|변경|재작업).*(화면|컬럼|column|grid|UI)') {
+  $attachments += "$v2\anti-simplification.md"
   $attachments += "$cons\RULESET_MASTER.md"
+  $attachments += "$v2\hooks\ui-work-entry-playbook.md"
   $attachments += "$v2\hooks\regression-zero-mandatory.md"
   $attachments += "$v2\hooks\column-meta-rework-checklist.md"
 }

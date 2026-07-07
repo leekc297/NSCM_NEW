@@ -51,6 +51,32 @@ state.filters[SHEETS.HISTORY]    = { queryId: id };   // ❌ alias
 
 **근본 원인**: SP signature 추측 + 주석에 잘못된 가정 (`P_QUERYID`) 명시. 실제 SP body 확인 누락.
 
+### §0.4 SYS0012 클라우드 "순서 뒤틀림 = silent 0행" 사고 (2026-07-02) ⭐
+
+PROC_M **행수 9 = SP 인자 9 (개수 정합)** 인데 COL_NM **순서만 뒤틀림**:
+
+```
+클라우드 PROC_M 2~7: divisionId, userId, department, startDate, endDate, status
+사내 정상       2~7: userId, startDate, endDate, status, divisionId, department
+```
+
+전부 VARCHAR → **PLS-00306 없이 SP 정상 실행** — `P_STATUS` 에 시작일이 꽂혀 상태 분기 전멸 → **오류 없는 항상 0행**.
+
+**교훈 3가지**:
+1. 검증은 행수 카운트(§3.1)만으로 부족 — **위치별 COL_NM 이름까지 기대값과 대조** (아래 §3.4)
+2. ⚠ **PK_SCM_ADM_PROC_M = (PROC_NM, COL_NM, COL_TP_CD)** — 순서 교정 시 `COL_NM 을 UPDATE` 하면
+   같은 SP 의 다른 행과 충돌 → **ORA-00001**. 교정 표준:
+   - ✅ **단일 CASE UPDATE 로 SORT_ORD 스왑** (Oracle 문장 단위 일관성 — swap 안전):
+     ```sql
+     UPDATE SCM_MGR.SCM_ADM_PROC_M
+        SET SORT_ORD = CASE COL_NM WHEN 'userId' THEN 2 WHEN 'startDate' THEN 3 ... END
+      WHERE PROC_NM='P_XXX' AND COL_NM IN (...);
+     ```
+   - ✅ 이관 스크립트는 **SP 단위 DELETE 후 INSERT** (PK 구조 무관·멱등)
+   - ❌ `MERGE ON (PROC_NM, SORT_ORD) WHEN MATCHED UPDATE COL_NM` — ORA-00001
+3. BE 는 매 요청 PROC_M 재조회(`GeneralServiceImpl.callProc/execBtn` → `makeProcedure`, 캐시 없음)
+   → 교정 **COMMIT 즉시 반영, BE 재시작 불필요**
+
 ---
 
 ## §1. 의무 패턴
@@ -185,6 +211,24 @@ ORA-06550 PLS-00306: '{SP_NAME}' 호출 시 인수의 갯수나 유형이 잘못
 
 → 즉시 §3.1 SQL 실행 + PROC_M 재등록 (`DELETE + INSERT positional 정확`).
 
+### §3.4 ⭐ 위치+이름 대조 (순서 뒤틀림 검출 — §0.4 사고 후 신설, 이관/진단 의무)
+
+```sql
+WITH EXPECT (POS, COL_NM) AS ( /* 정상(사내) 순서를 기대값으로 나열 */
+    SELECT 1,'sesUserId' FROM DUAL UNION ALL SELECT 2,'userId' FROM DUAL /* ... */ )
+SELECT E.POS, A.ARGUMENT_NAME SP_ARG, P.COL_NM PROC_M_COL, E.COL_NM EXPECTED_COL,
+       CASE WHEN A.POSITION IS NULL THEN '*** SP 인자 없음'
+            WHEN P.SORT_ORD IS NULL THEN '*** PROC_M 행 없음'
+            WHEN P.COL_NM <> E.COL_NM THEN '*** 순서/이름 뒤틀림'
+            ELSE 'OK' END CHK
+FROM EXPECT E
+LEFT JOIN (SELECT POSITION, ARGUMENT_NAME FROM ALL_ARGUMENTS
+            WHERE OWNER='SCM_MGR' AND OBJECT_NAME='{SP}' AND PACKAGE_NAME IS NULL) A ON A.POSITION=E.POS
+LEFT JOIN (SELECT SORT_ORD, COL_NM FROM SCM_MGR.SCM_ADM_PROC_M WHERE PROC_NM='{SP}') P ON P.SORT_ORD=E.POS
+ORDER BY E.POS;
+-- 9행 전부 CHK='OK' 의무 (실전본: SYS0012_APPROVAL_20260702/90_DIAGNOSE/900_cloud_diagnose_search.sql)
+```
+
 ---
 
 ## §4. PR 머지 게이트
@@ -204,6 +248,8 @@ ORA-06550 PLS-00306: '{SP_NAME}' 호출 시 인수의 갯수나 유형이 잘못
 | PROC_M SORT_ORD 가 SP POSITION 과 불일치 | type mismatch (예: VARCHAR 자리에 CURSOR) |
 | FE filter `{queryId: id}` ↔ PROC_M COL_NM `dqId` | BE binds NULL → SP 0 row 반환 |
 | SP P_USER_ID 자리에 임의 COL_NM (예: `userId`) | BE 자동 채움 안 됨 → NULL → 권한 체크 fail |
+| 행수 동일 + COL_NM **순서만 뒤틀림** (전부 VARCHAR) | **에러 없는 silent 0행** (값이 엉뚱한 인자에 bind — SYS0012 §0.4) |
+| 순서 교정을 `COL_NM UPDATE` 로 시도 | ORA-00001 (PK=(PROC_NM,COL_NM,COL_TP_CD)) → SORT_ORD CASE 스왑/DELETE+INSERT |
 
 ---
 
@@ -222,3 +268,4 @@ ORA-06550 PLS-00306: '{SP_NAME}' 호출 시 인수의 갯수나 유형이 잘못
 | 일자 | 변경 | 이유 |
 |---|---|---|
 | 2026-06-09 | 초안 작성 | SCM0005 DMF0027 PLS-00306 + filter key mismatch 사고 |
+| 2026-07-02 | §0.4/§3.4 신설 + anti-pattern 2건 | SYS0012 클라우드 "순서 뒤틀림 silent 0행" + ORA-00001 교정 사고 |
