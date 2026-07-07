@@ -24,6 +24,10 @@ export interface SalesViewRow extends WijmoRowItem {
   // 별도 명시 시 CRUD_TYPE?: string 과 충돌 (TS2411). reference: contribute-main/types.ts MainRow.
 }
 
+export interface ValidationCheckCount {
+  CNT: number;
+}
+
 // AS-IS Designer.cs 조회조건 컨트롤 9종 매핑
 export interface ViewSearchCondition {
   yyyy: string; // usrYear 의 표시 연도 (4자리)

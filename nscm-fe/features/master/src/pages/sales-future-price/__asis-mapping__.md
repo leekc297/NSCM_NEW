@@ -8,6 +8,32 @@
 
 ---
 
+## ⚠️ 실측 정정 · 보완 이력 (2026-07-07 — UI분석서 v1.1 갭 기준)
+
+> 아래 §들의 일부 ✅ 는 "의도(정의)"만 있고 실코드 미배선이었음이 실측(갭 분석)으로 확인됨. 격차 은폐 금지 원칙에 따라 정정.
+
+**① 이번 보완으로 신규 배선/구현 (FE, BE 무수정):**
+- isCurVersion 게이트 **MSG00448** — `handleInsert`/`handleSave` 에 `versionId==='CURRENT'` 가드 (과거버전 Insert/Save 차단). 종전 `validateEdit` 정의만·미호출 → 배선.
+- Currency 빈값 **MSG00447** — Grid `beginningEdit` 동적 LOC 셀에 배선 (통화 미설정 시 가격 편집 차단).
+- 무변경 **MSG00004** — `validateSaveRows` dirty 0건 시 'No data' → "수정한 내용이 없습니다".
+- over-range 체크 → **조회기간 자동 52주** (`SalesFuturePriceForm` onChange).
+- 기존행('M') LOC 편집 시 **형제 measure 실시간 환율 재계산** (`groupKeyOf` 공용화, 표시 즉시 갱신).
+- **변경 셀 빨강**(AS-IS red cell) — EditTracker 변경 셀 formatItem 빨간 글자.
+- **40/81 저장 payload 키 분기**(40=END_CUSTOMER40) — `pushEntry` (현행 82-only라 무발현, 정합 확보).
+
+**② 실측 정정 (문서 ✅ ↔ 코드 괴리 → 실상):**
+- `useDivisionRole`·`buildHeaderTree` = **dead code**(전역 0 usage). 실제 division 분기·헤더는 `mainDynamicColumns`/`editableDivision` 등이 담당.
+- `SalesPriceTemplateModal.tsx`·`ColumnTitleSetModal.tsx` = **파일 미존재**(Template 팝업 미구현 / Column 은 공용 `ColumnSettingModal` 로 대체).
+- PriceExist **MSG00412** = **TO-BE N/A** — AS-IS EditButton(복사) 전제의 가드로, TO-BE 직접 셀편집 구조엔 트리거 없음(강제 배선 시 아키텍처 불일치).
+
+**③ 후속(별도 승인/작업):**
+- **T3 팝업**: ExchangeRate 저장 + **MSG00142 잠금**(SP `P_DMF0020_SAVE_DM_MST_EXCHANGE_RATE_ALL` 존재·API_M USE=Y, PROC_M 미등록 → 파라미터 SP 소스 실측 + 잠금규칙 후 배선) / **SalesPriceTemplate** 신규 모달(SP `P_DMF0020_GET_SALES_PRICE_TEMPLATE` 존재, 81 전용).
+- **T2 메타(사내 승인)**: 위 PROC_M 등록 / ColumnSetting 영구저장(SCM_USR_TITLE_SET) / NEW_FLAG(div81) UI Category.
+- **헤더 월→주차 drill**: 현 TO-BE 는 Bucket 토글(Weekly/Monthly) 모델 — AS-IS 인라인 월→주차 확장은 혼합 W_/M_ 컬럼 + drill 데이터 재조회가 필요한 별개 상호작용 → 후속.
+- **Excel Upload**: 사용자 명시 제외(2026-07-07).
+
+---
+
 ## §0. AS-IS 자료 인벤토리
 
 | # | 자료 | 경로 | 라인/시트 |
@@ -226,3 +252,46 @@ SCM0001_GET_BIZ_TYPE_BY_DIVISION / SCM0001_GET_SITE_BY_DIVISION / SCM0001_GET_PL
 ## §8. 변경 이력
 
 - 2026-06-03 (Phase 3 신규): 4축 매핑 매트릭스 완성. PKG_DMF0020 18 SP DB 적재 검증 완료. 메타 SQL sesUserId/mnuId fix 적용. FE 30 파일 신규 작성.
+
+---
+
+# Grid Cascade Filter (2026-07-03 — hook #59 적용, AS-IS spdMain_ComboSelChange 전수 1:1)
+
+> 원천: DMF0020_SalesFuturePrice.cs 3,969줄 전수 (에이전트 분석) + BigFilter.xml(AS-IS 콤보 원천 데이터셋).
+> 사용자 확정: 범위 = 그리드 셀 전체 (combo + modal 셀. 화면 모달 내부 필드는 범위 외).
+
+## 카운트 대사 — AS-IS 트리거 vs TO-BE 배선
+
+| AS-IS 트리거 (라인) | AS-IS 동작 | TO-BE 구현 | 상태 |
+|---|---|---|---|
+| ComboSelChange DIVISION_ID (L2612) | Team/EndCust/Site 재소싱 + 하위 7셀 clear | beginningEdit dataMap 스왑(하위 콤보) + cellEditEnded clear(GRID_CASCADE_CLEAR.DIVISION_ID) | ✅ |
+| ComboSelChange DEPT_ID (L2681) | EndCust/Site 재소싱 + 6셀 clear | 동일 (필터: DIVISION_ID+DEPT_ID) | ✅ |
+| ComboSelChange END_CUSTOMER (L2719) | Site 재소싱 + 5셀 clear | 동일 (필터: DIVISION_ID+END_CUSTOMER) | ✅ |
+| ComboSelChange SCM_SITE_ID (L2738) | 하위 4셀 clear | cellEditEnded clear | ✅ |
+| PROJECT 팝업 확정 (L3272~3289) | ITEM clear + PROJECT 파생 세팅 | 기존 콜백(INSERT_GROUP_ID 일괄 세팅) 유지 | ✅ (기구현) |
+| CellDoubleClick → PROJECT 팝업 (L3259) | 행 값 5개 전달 | preSearchParams = popupRow 행 값 (div/team/endCust/site/project) | ✅ |
+| CellDoubleClick → ITEM 팝업 (L3293) | 행 값 6개 전달 | 동일 + itemId | ✅ |
+
+## 콤보별 필터 전략 (사내 CMBO 실측 근거)
+
+| 컬럼 | 콤보 | 필터 | 비고 |
+|---|---|---|---|
+| DEPT_ID | **TeambyDivision** (메타 2행 교체 — TeambyDivision2 는 division 키 미반환) | DIVISION_ID | div 82=48팀 실측. SQL 보강은 공유 7화면 중복표시 위험으로 회피 |
+| END_CUSTOMER | EndCustomerByDivisionDept (무변경) | DIVISION_ID (+DEPT_ID 관대) | ⚠ 사내 SITE.DEPT_ID 미이관(전부 NULL) — team 필터는 관대 통과로 배선, 데이터 적재 시 자동 활성 |
+| SCM_SITE_ID | SiteByEndCustomer (무변경) | DIVISION_ID + END_CUSTOMER | 반환 컬럼 실측 즉시 가능 |
+| BIZ_TYPE_NAME | BizTypeByDivision | (비대상) | AS-IS 그리드에서 잠금 컬럼(팝업이 채움 — combo 아님). 등록 SQL 도 전역 lookup(BIZ_TYPE_BPMS) |
+| DIVISION_ID/INCOTERMS/FCST_TYPE/DOM_EXP/CURRENCY | — | (비대상) | 전역 lookup — AS-IS 동일 |
+| PLANT_SITE_ID | — | (해당 없음) | AS-IS cascade(div+proj+item)는 81 전용 — TO-BE 편집은 82 전용(text) |
+
+## 메커니즘 (hook #59 5단 대사)
+- §2 multi-filter: GRID_CASCADE_FILTERS + 'ALL'/빈값 sentinel 관대 통과 ✅
+- §3 Map dedup: `${DIVISION_ID}|${CODE}` 복합 키 ✅
+- §4 1RT: 기존 useTabComboQueries 전체 fetch 유지 (추가 호출 0) + beginningEdit 시점 클라 필터 dataMap 스왑 ✅
+- §5 modal callback: 기존 setSelectedValue 일괄 세팅 + dblClick 행 값 preSearchParams ✅
+- §1 Form reset: 기구현 (SalesFuturePriceForm L69~82 — 무변경) ✅
+- 스왑 dataMap 은 cellEditEnded 진입 시 전체 dataMap 원복 (타 행 CODE→NAME 표시 보존 — §2.10.5 컬럼 전역 제약 대응)
+- 계단식 clear 는 "값이 실제로 변경된 경우"만 (beginningEdit oldVal 캡처 비교 — AS-IS ComboSelChange 는 선택 시 동작과 등가)
+
+## 범위 외 (기재)
+- 빈값 시 sTempRow 복제 (AS-IS L2761~2777) — cascade 아님, 별도 회차
+- 화면 모달(Price Batch 등) 내부 조회 필드 cascade — 사용자 확정 범위 외

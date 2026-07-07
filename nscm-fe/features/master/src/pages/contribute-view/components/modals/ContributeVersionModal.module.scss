@@ -80,12 +80,28 @@
   }
 }
 
+.dialogContentWrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 8px;
+}
+
 .gridWrapper {
-  height: 320px;
-  border: 1px solid #e0e4e9;
-  border-radius: 4px;
-  overflow: hidden;
-  background: white;
+  // height: 320px;
+  // border: 1px solid #e0e4e9;
+  // border-radius: 4px;
+  // overflow: hidden;
+  // background: white;
+  flex: 1;
+  min-height: 0;
+}
+
+.buttonWrapper{
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-top: 5px;
 }
 
 .grid {
@@ -133,12 +149,23 @@
   }
 
   &.primary {
-    background: #1976d2;
+    background: #1F7795;
     color: white;
-    border-color: #1976d2;
+    border-color: #1F7795;
 
     &:hover:not(:disabled) {
-      background: #1565c0;
+      background: #1F7795;
+    }
+  }
+}
+
+
+.searchPeriod {
+  > div:nth-child(2) {
+    > div:nth-child(1) {
+      height: 36px;
+      min-width: 104.51px;
+      width: 100%;
     }
   }
 }

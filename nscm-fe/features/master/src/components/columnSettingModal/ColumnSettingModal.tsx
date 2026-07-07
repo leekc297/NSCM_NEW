@@ -1,11 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import {
-  type DualListColumn,
-  ColumnSelectDualList,
-  CustomDialog,
-} from '@shared/components';
+import { type DualListColumn, ColumnSelectDualList, CustomDialog } from '@shared/components';
 import { useTabProcQuery } from '@shared/hooks';
+import { Button } from '@shared/lges';
+import { ControlConfirmIcon } from '@shared/lges-icons';
 import { useMessageStore } from '@shared/stores';
 
 import styles from './ColumnSettingModal.module.scss';
@@ -144,9 +142,17 @@ export const ColumnSettingModal = ({
 
   const [rows, setRows] = useState<ColumnSettingRow[]>([]);
 
-  // popup 닫힐 때 rows reset
+  // 체크박스 다중선택 (첨부 이미지 디자인) — 체크된 행을 ▶/◀ 로 이동.
+  const [checkedLeft, setCheckedLeft] = useState<Set<string>>(new Set());
+  const [checkedRight, setCheckedRight] = useState<Set<string>>(new Set());
+
+  // popup 닫힐 때 rows/체크 reset
   useEffect(() => {
-    if (!open) setRows([]);
+    if (!open) {
+      setRows([]);
+      setCheckedLeft(new Set());
+      setCheckedRight(new Set());
+    }
   }, [open]);
 
   // popup open + BE 응답 도착 시점 1회만 setRows (사용자 변경 보존)
@@ -163,8 +169,24 @@ export const ColumnSettingModal = ({
     [rows]
   );
 
-  const [selectedBaseCol, setSelectedBaseCol] = useState<string | null>(null);
-  const [selectedUserCol, setSelectedUserCol] = useState<string | null>(null);
+  const toggleLeft = (key: string) =>
+    setCheckedLeft(prev => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+  const toggleRight = (key: string) =>
+    setCheckedRight(prev => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+  const toggleAllLeft = (checked: boolean) =>
+    setCheckedLeft(checked ? new Set(baseRows.map(r => r.COLUMN_NAME)) : new Set());
+  const toggleAllRight = (checked: boolean) =>
+    setCheckedRight(checked ? new Set(userRows.map(r => r.COLUMN_NAME)) : new Set());
 
   const toggleSort = (rowKey: string) => {
     setRows(prev =>
@@ -176,20 +198,17 @@ export const ColumnSettingModal = ({
     );
   };
 
+  // 첨부 이미지 디자인 — 좌: [Column], 우: [Column, Sort]. (체크박스/No 컬럼은 dual list 가 자동 추가)
   const BASE_COLUMNS: DualListColumn<ColumnSettingRow>[] = [
-    { key: 'LARGE_CLASS_LABEL_NAME', header: 'LargeClass', width: 80, align: 'left' },
-    { key: 'SMALL_CLASS_LABEL_NAME', header: 'SmallClass', width: 80, align: 'left' },
-    { key: 'COLUMN_LABEL_NAME', header: 'Column', width: 120, align: 'left' },
+    { key: 'COLUMN_LABEL_NAME', header: 'Column', align: 'left' },
   ];
 
   const USER_COLUMNS: DualListColumn<ColumnSettingRow>[] = [
-    { key: 'LARGE_CLASS_LABEL_NAME', header: 'LargeClass', width: 120, align: 'left' },
-    { key: 'SMALL_CLASS_LABEL_NAME', header: 'SmallClass', width: 120, align: 'left' },
-    { key: 'COLUMN_LABEL_NAME', header: 'Column', width: 130, align: 'left' },
+    { key: 'COLUMN_LABEL_NAME', header: 'Column', align: 'left' },
     {
       key: 'USER_SORT_METHOD_CODE',
       header: 'Sort',
-      width: 80,
+      width: 90,
       align: 'center',
       render: (row, rowKey) => (
         <button
@@ -207,36 +226,47 @@ export const ColumnSettingModal = ({
   ];
 
   const moveToUser = () => {
-    if (!selectedBaseCol) {
+    if (checkedLeft.size === 0) {
       void setAlert({ type: 'alert', content: '좌측 column 선택' });
       return;
     }
     setRows(prev => {
-      const maxSeq = Math.max(
-        0,
-        ...prev.filter(r => r.USER_FLAG === 'Y').map(r => r.SORT_ORDER_NO)
-      );
-      return prev.map(r =>
-        r.COLUMN_NAME === selectedBaseCol
-          ? { ...r, USER_FLAG: 'Y', SORT_ORDER_NO: maxSeq + 1 }
-          : r
-      );
+      let maxSeq = Math.max(0, ...prev.filter(r => r.USER_FLAG === 'Y').map(r => r.SORT_ORDER_NO));
+      return prev.map(r => {
+        if (r.USER_FLAG === 'N' && checkedLeft.has(r.COLUMN_NAME)) {
+          maxSeq += 1;
+          return { ...r, USER_FLAG: 'Y', SORT_ORDER_NO: maxSeq };
+        }
+        return r;
+      });
     });
-    setSelectedBaseCol(null);
+    setCheckedLeft(new Set());
   };
 
   const moveToBase = () => {
-    if (!selectedUserCol) {
+    if (checkedRight.size === 0) {
       void setAlert({ type: 'alert', content: '우측 column 선택' });
       return;
     }
     setRows(prev =>
       prev.map(r =>
-        r.COLUMN_NAME === selectedUserCol ? { ...r, USER_FLAG: 'N', SORT_ORDER_NO: 0 } : r
+        r.USER_FLAG === 'Y' && checkedRight.has(r.COLUMN_NAME)
+          ? { ...r, USER_FLAG: 'N', SORT_ORDER_NO: 0 }
+          : r
       )
     );
-    setSelectedUserCol(null);
+    setCheckedRight(new Set());
   };
+
+  // 우측 grid D&D 순서이동 — 재정렬된 key 순서(위→아래)대로 SORT_ORDER_NO 재부여.
+  const reorderRight = (orderedKeys: string[]) =>
+    setRows(prev =>
+      prev.map(r => {
+        if (r.USER_FLAG !== 'Y') return r;
+        const idx = orderedKeys.indexOf(r.COLUMN_NAME);
+        return idx === -1 ? r : { ...r, SORT_ORDER_NO: idx + 1 };
+      })
+    );
 
   const handleDefault = () => {
     void refetch?.();
@@ -256,28 +286,10 @@ export const ColumnSettingModal = ({
       open={open}
       type='modal'
       position='basic'
-      size={1200}
+      size={840}
       handleClose={modalClose}
       disableButtonCancel
-      customHeaderTitle={
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <div
-            style={{
-              width: 14,
-              height: 14,
-              background: '#1976d2',
-              borderRadius: '50%',
-              color: '#fff',
-              textAlign: 'center',
-              fontSize: 9,
-              lineHeight: '14px',
-            }}
-          >
-            S
-          </div>
-          <h2 style={{ fontSize: 16, fontWeight: 600, margin: 0 }}>{title}</h2>
-        </div>
-      }
+      title={title}
       customContentArea={
         <div className={styles.container}>
           <ColumnSelectDualList<ColumnSettingRow>
@@ -286,34 +298,43 @@ export const ColumnSettingModal = ({
             leftColumns={BASE_COLUMNS}
             rightColumns={USER_COLUMNS}
             itemKey='COLUMN_NAME'
-            selectedLeftKey={selectedBaseCol}
-            selectedRightKey={selectedUserCol}
-            onSelectLeft={setSelectedBaseCol}
-            onSelectRight={setSelectedUserCol}
+            checkedLeft={checkedLeft}
+            checkedRight={checkedRight}
+            onToggleLeft={toggleLeft}
+            onToggleRight={toggleRight}
+            onToggleAllLeft={toggleAllLeft}
+            onToggleAllRight={toggleAllRight}
             onMoveRight={moveToUser}
             onMoveLeft={moveToBase}
-            leftTitle='Hidden'
-            rightTitle='Visible'
+            onReorderRight={reorderRight}
           />
 
-          <div className={styles.bottomRow}>
-            <span className={styles.hint}>
-              {loading ? '⏳ 조회 중...' : `${baseRows.length} hidden / ${userRows.length} visible`}
-            </span>
-            <button
-              type='button'
+          {/* 버튼바 — 조회조건 팝업 표준 버튼과 동일. Default·Cancel=outlined, OK=contained+ConfirmIcon. */}
+          <div className={styles.actionBar}>
+            <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel='Default'
               onClick={handleDefault}
-              className={styles.defaultBtn}
               disabled={loading}
-            >
-              ✓ Default
-            </button>
-            <button type='button' onClick={handleOk} className={styles.okBtn}>
-              ✓ OK
-            </button>
-            <button type='button' onClick={modalClose} className={styles.cancelBtn}>
-              ❌ Cancel
-            </button>
+            />
+            <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel='Cancel'
+              onClick={modalClose}
+            />
+            <Button
+              appearance='contained'
+              priority='primary'
+              size='medium'
+              buttonLabel='OK'
+              iconComponent={<ControlConfirmIcon size='small' />}
+              iconPosition='leading'
+              onClick={handleOk}
+            />
           </div>
         </div>
       }

@@ -68,9 +68,8 @@ export const LevelTwoMenuGrid = ({
     )
       return;
 
-    // 2026-06-21 PROC_M signature fix — LevelOneMenuGrid 와 동일 패턴
     setFilters(SHEETS.LEVEL_THREE_MENU, {
-      pUpprMnuId: String(dataItem?.MNU_ID),
+      menuId: String(dataItem?.MNU_ID),
     });
     setClickedLevelTwoMenu(String(dataItem?.MNU_ID));
   };

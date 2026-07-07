@@ -1,49 +1,45 @@
 // 공용 Column Setting popup — Hybrid (BE SP + fallback FE meta)
-//   .container height 100% + dualGrid flex:1 min-height:0 + bottomRow flex-shrink:0 (잘림 방지)
+//   디자인 = 첨부 이미지 고정(체크박스|No|Column[|Sort] dual list + Default|Cancel|OK). 데이터만 동적.
 .container {
-  display: flex; flex-direction: column; gap: 8px; padding: 8px;
-  height: 450px; min-height: 350px; max-height: 65vh;
-  box-sizing: border-box; overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 4px 2px;
+  height: 460px;
+  min-height: 350px;
+  max-height: 68vh;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
-// ColumnSelectDualList wrapper — flex 1 차지 (bottomRow 48px 만큼 제외) + min-height 보장
+// ColumnSelectDualList wrapper — flex 1 차지 (버튼바 제외) + min-height 보장
 .container > div:first-child {
   flex: 1 1 auto;
   min-height: 250px;
   overflow: hidden;
 }
 
+// Sort 값(ASC/DESC) — 이미지의 plain 텍스트 (버튼 아님). 클릭 시 토글.
 .sortToggleBtn {
-  padding: 2px 10px;
-  background: #fff8c5;
-  border: 1px solid #d4af37;
-  border-radius: 3px;
-  font-size: 12px;
-  font-weight: 600;
-  color: #5a4a00;
+  padding: 0;
+  background: none;
+  border: none;
+  font-size: 14px;
+  color: #333;
   cursor: pointer;
 
   &:hover {
-    background: #ffec80;
+    color: #17919b;
+    text-decoration: underline;
   }
 }
 
-.bottomRow {
-  display: flex; gap: 8px; align-items: center; padding: 4px 8px;
-  flex-shrink: 0;
-  flex-grow: 0;
-  min-height: 48px;
-  height: 48px;
+// 버튼바 — 우측 정렬 (표준 @shared/lges Button 사용)
+.actionBar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
   justify-content: flex-end;
+  padding: 6px 2px 2px;
+  flex-shrink: 0;
 }
-
-.hint { margin-right: auto; font-size: 12px; color: #6b7785; }
-
-.defaultBtn, .okBtn, .cancelBtn {
-  padding: 6px 14px; font-size: 13px; font-weight: 600;
-  border: none; border-radius: 3px; cursor: pointer;
-}
-.defaultBtn { background: #e0e4e9; color: #2b3a4a; }
-.okBtn      { background: #2e7d32; color: white; }
-.cancelBtn  { background: white; color: #495565; border: 1px solid #b8bfc9; }
-.defaultBtn:disabled { opacity: 0.5; cursor: not-allowed; }

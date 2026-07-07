@@ -40,17 +40,22 @@ import { ItemByDivisionModal } from '../itemByDivisionModal/ItemByDivisionModal'
 import { OwnerByDivisionModal } from '../ownerByDivisionModal/OwnerByDivisionModal';
 import { ProjectByDivisionModal } from '../projectByDivisionModal/ProjectByDivisionModal';
 
+import styles from './SearchFields.module.scss';
+
 // ====================================================================================
 // 표준 props
 // ====================================================================================
+// gridSize: 화면별 4개/행 등 레이아웃 오버라이드용 (미지정 시 각 필드 기존 size 유지 — 회귀 0).
 interface SingleFieldProps {
   value: string;
   onChange: (v: string) => void;
+  gridSize?: number;
 }
 interface MultiFieldProps {
   value: string[];
   onChange: (v: string[]) => void;
   division?: string; // 종속 필터용
+  gridSize?: number;
 }
 interface PopupFieldProps {
   value: string[];
@@ -60,6 +65,7 @@ interface PopupFieldProps {
   endCustomers?: string[];
   scmSiteIds?: string[];
   projectCodes?: string[];
+  gridSize?: number;
 }
 
 // i18n helper — LBL+5자리 표준 (KO.json 미등록 시 fallback 영문)
@@ -91,6 +97,7 @@ interface PopupSearchInputProps {
   value: string;
   onValueChange: (v: string) => void;
   onOpenPopup: () => void;
+  disabled?: boolean; // ⭐ division 기준 비활성 (AS-IS Enabled=false) — 입력/팝업 버튼 모두 잠금
 }
 const popupRowStyle: React.CSSProperties = {
   display: 'flex',
@@ -98,18 +105,27 @@ const popupRowStyle: React.CSSProperties = {
   gap: 4,
   width: '100%',
 };
-const PopupSearchInput = ({ value, onValueChange, onOpenPopup }: PopupSearchInputProps) => (
+const PopupSearchInput = ({
+  value,
+  onValueChange,
+  onOpenPopup,
+  disabled,
+}: PopupSearchInputProps) => (
   <div style={popupRowStyle}>
     <InputField
       fullWidth
+      disabled={disabled}
       value={value}
       onChange={e => onValueChange((e.target as HTMLInputElement).value)}
     />
     <Button
       appearance='outlined'
       priority='normal'
+      disabled={disabled}
       iconComponent={<FunctionSearchIcon appearance='lined' />}
-      onClick={onOpenPopup}
+      onClick={() => {
+        if (!disabled) onOpenPopup();
+      }}
     />
   </div>
 );
@@ -118,11 +134,11 @@ const PopupSearchInput = ({ value, onValueChange, onOpenPopup }: PopupSearchInpu
 // 1. DivisionField (필수, size=4, combo=MyDivision)
 //    AS-IS clbDivisions / DataService SetChangeControl("MyDivision")
 // ====================================================================================
-export const DivisionField = ({ value, onChange }: SingleFieldProps) => {
+export const DivisionField = ({ value, onChange, gridSize }: SingleFieldProps) => {
   const L = useL();
   const [divisions] = useTabComboQueries({ filters: ['MyDivision'] });
   return (
-    <Grid size={4}>
+    <Grid size={gridSize ?? 4}>
       <FormItem
         label={L('LBL00501', 'Div')}
         labelAlign='right'
@@ -145,11 +161,11 @@ export const DivisionField = ({ value, onChange }: SingleFieldProps) => {
 // ====================================================================================
 // 2. TeamField (size=4, combo=TeambyDivision)
 // ====================================================================================
-export const TeamField = ({ value, onChange, division }: MultiFieldProps) => {
+export const TeamField = ({ value, onChange, division, gridSize }: MultiFieldProps) => {
   const L = useL();
   const [teams] = useTabComboQueries({ filters: ['TeambyDivision'] });
   return (
-    <Grid size={4}>
+    <Grid size={gridSize ?? 4}>
       <FormItem
         label={L('LBL00502', 'Team')}
         labelAlign='right'
@@ -178,11 +194,11 @@ export const TeamField = ({ value, onChange, division }: MultiFieldProps) => {
 // ====================================================================================
 // 3. EndCustomerField (size=4, combo=EndCustomer)
 // ====================================================================================
-export const EndCustomerField = ({ value, onChange, division }: MultiFieldProps) => {
+export const EndCustomerField = ({ value, onChange, division, gridSize }: MultiFieldProps) => {
   const L = useL();
   const [endCustomers] = useTabComboQueries({ filters: ['EndCustomer'] });
   return (
-    <Grid size={4}>
+    <Grid size={gridSize ?? 4}>
       <FormItem
         label={L('LBL00503', 'End Customer')}
         labelAlign='right'
@@ -211,11 +227,11 @@ export const EndCustomerField = ({ value, onChange, division }: MultiFieldProps)
 // ====================================================================================
 // 4. SalesSiteField (size=4, combo=SalesSite)
 // ====================================================================================
-export const SalesSiteField = ({ value, onChange, division }: MultiFieldProps) => {
+export const SalesSiteField = ({ value, onChange, division, gridSize }: MultiFieldProps) => {
   const L = useL();
   const [salesSites] = useTabComboQueries({ filters: ['SalesSite'] });
   return (
-    <Grid size={4}>
+    <Grid size={gridSize ?? 4}>
       <FormItem
         label={L('LBL00506', 'Sales Site')}
         labelAlign='right'
@@ -244,11 +260,11 @@ export const SalesSiteField = ({ value, onChange, division }: MultiFieldProps) =
 // ====================================================================================
 // 5. PlantSiteField (size=4, combo=SalesSite 재사용 — Plant Site combo BE 미등록)
 // ====================================================================================
-export const PlantSiteField = ({ value, onChange, division }: MultiFieldProps) => {
+export const PlantSiteField = ({ value, onChange, division, gridSize }: MultiFieldProps) => {
   const L = useL();
   const [salesSites] = useTabComboQueries({ filters: ['SalesSite'] });
   return (
-    <Grid size={4}>
+    <Grid size={gridSize ?? 4}>
       <FormItem
         label={L('LBL00509', 'Plant Site')}
         labelAlign='right'
@@ -277,11 +293,11 @@ export const PlantSiteField = ({ value, onChange, division }: MultiFieldProps) =
 // ====================================================================================
 // 6. BizTypeField (size=4, combo=BizType — SCM_ADM_LOOKUP_MASTER_DETAIL LOOKUP_TYPE='BIZ_TYPE')
 // ====================================================================================
-export const BizTypeField = ({ value, onChange }: Omit<MultiFieldProps, 'division'>) => {
+export const BizTypeField = ({ value, onChange, gridSize }: Omit<MultiFieldProps, 'division'>) => {
   const L = useL();
   const [bizTypes] = useTabComboQueries({ filters: ['BizType'] });
   return (
-    <Grid size={4}>
+    <Grid size={gridSize ?? 4}>
       <FormItem
         label={L('LBL00504', 'Biz.Type')}
         labelAlign='right'
@@ -310,17 +326,34 @@ export const BizTypeField = ({ value, onChange }: Omit<MultiFieldProps, 'divisio
 // ====================================================================================
 // 7. ProjectField (size=4, popup=ProjectByDivisionModal, 6필드 'ALL' 자동)
 // ====================================================================================
-export const ProjectField = (props: PopupFieldProps) => {
+interface ProjectFieldProps extends PopupFieldProps {
+  // 체크박스 선택 모드(재기동 시 선택값 carry 없음).
+  multiCheckbox?: boolean;
+  disabled?: boolean; // ⭐ division 기준 비활성 (예: DMF0048 Division='40' → Project 비활성)
+}
+export const ProjectField = (props: ProjectFieldProps) => {
   const L = useL();
   const [open, setOpen] = useState(false);
-  const { value, onChange, division, deptIds, endCustomers, scmSiteIds, projectCodes } = props;
+  const {
+    value,
+    onChange,
+    division,
+    deptIds,
+    endCustomers,
+    scmSiteIds,
+    projectCodes,
+    gridSize,
+    multiCheckbox,
+    disabled,
+  } = props;
   return (
-    <Grid size={4}>
+    <Grid size={gridSize ?? 4}>
       <FormItem
         label={L('LBL00507', 'Project')}
         labelAlign='right'
         render={() => (
           <PopupSearchInput
+            disabled={disabled}
             value={value.join(',')}
             onValueChange={v =>
               onChange(
@@ -352,11 +385,13 @@ export const ProjectField = (props: PopupFieldProps) => {
             deptId: orAll(deptIds),
             endCustomer: orAll(endCustomers),
             salesSite: orAll(scmSiteIds),
-            projectCode: orAll(projectCodes),
+            // multiCheckbox: 재기동 시 선택값 미전달(carry 없음) → 'ALL'(=전체 목록, 필터 없음).
+            projectCode: multiCheckbox ? 'ALL' : orAll(projectCodes),
             etc: 'N',
           } as never
         }
         callFromCell={false}
+        multiCheckbox={multiCheckbox}
       />
     </Grid>
   );
@@ -367,14 +402,26 @@ export const ProjectField = (props: PopupFieldProps) => {
 // ====================================================================================
 interface ItemFieldProps extends PopupFieldProps {
   itemIds?: string[];
+  // 재기동 시 기선택 모델을 전체목록에서 체크 표시(멀티 picker). 미지정 시 기존 동작.
+  multiCheckbox?: boolean;
 }
 export const ItemField = (props: ItemFieldProps) => {
   const L = useL();
   const [open, setOpen] = useState(false);
-  const { value, onChange, division, deptIds, endCustomers, scmSiteIds, projectCodes, itemIds } =
-    props;
+  const {
+    value,
+    onChange,
+    division,
+    deptIds,
+    endCustomers,
+    scmSiteIds,
+    projectCodes,
+    itemIds,
+    gridSize,
+    multiCheckbox,
+  } = props;
   return (
-    <Grid size={4}>
+    <Grid size={gridSize ?? 4}>
       <FormItem
         label={L('LBL00508', 'Model / Nickname')}
         labelAlign='right'
@@ -412,10 +459,12 @@ export const ItemField = (props: ItemFieldProps) => {
             endCustomer: orAll(endCustomers),
             salesSite: orAll(scmSiteIds),
             projectCode: orAll(projectCodes),
-            itemId: itemIds && itemIds.length > 0 ? itemIds.join(',') : '',
+            // multiCheckbox(체크박스 선택) 모드: 재기동 시 선택값 미전달(carry 없음) → 전체 목록.
+            itemId: multiCheckbox ? '' : itemIds && itemIds.length > 0 ? itemIds.join(',') : '',
           } as never
         }
         headerTitle='Model / Nickname'
+        multiCheckbox={multiCheckbox}
         callFromCell={false}
       />
     </Grid>
@@ -427,14 +476,26 @@ export const ItemField = (props: ItemFieldProps) => {
 // ====================================================================================
 interface OwnerFieldProps extends PopupFieldProps {
   owners?: string[];
+  // 체크박스 선택 모드(재기동 시 선택값 carry 없음).
+  multiCheckbox?: boolean;
 }
 export const OwnerField = (props: OwnerFieldProps) => {
   const L = useL();
   const [open, setOpen] = useState(false);
-  const { value, onChange, division, deptIds, endCustomers, scmSiteIds, projectCodes, owners } =
-    props;
+  const {
+    value,
+    onChange,
+    division,
+    deptIds,
+    endCustomers,
+    scmSiteIds,
+    projectCodes,
+    owners,
+    gridSize,
+    multiCheckbox,
+  } = props;
   return (
-    <Grid size={4}>
+    <Grid size={gridSize ?? 4}>
       <FormItem
         label={L('LBL00510', 'Owner')}
         labelAlign='right'
@@ -476,6 +537,7 @@ export const OwnerField = (props: OwnerFieldProps) => {
           } as never
         }
         ownerId=''
+        multiCheckbox={multiCheckbox}
       />
     </Grid>
   );
@@ -493,28 +555,33 @@ interface PeriodFieldProps {
   start: string;
   end: string;
   onChange: (start: string, end: string) => void;
+  gridSize?: number;
 }
-export const PeriodField = ({ start, end, onChange }: PeriodFieldProps) => {
+export const PeriodField = ({ start, end, onChange, gridSize }: PeriodFieldProps) => {
   const L = useL();
   const value: [Dayjs, Dayjs] = [toDayjs(start), end ? toDayjs(end) : dayjs().add(90, 'day')];
   return (
-    <Grid size={8}>
+    <Grid size={gridSize ?? 8}>
       <FormItem
         label={L('LBL00505', 'Period')}
         labelAlign='right'
         required
         render={() => (
-          <DatePickerCalendar
-            usecase='date-range-multi'
-            elevation
-            size='small'
-            value={value}
-            onChange={
-              ((date: [Dayjs, Dayjs]) => {
-                onChange(date[0]?.format('YYYYMMDD') ?? '', date[1]?.format('YYYYMMDD') ?? '');
-              }) as never
-            }
-          />
+          // ⭐ 디자인 기준 높이 36px 정합 (표준 CustomDropdown/InputField 동일).
+          //   design-system 내부 클래스 비의존 — wrapper CSS 로 input/inputbase 높이 강제.
+          <div className={styles.datePickerFix}>
+            <DatePickerCalendar
+              usecase='date-range-multi'
+              elevation
+              size='small'
+              value={value}
+              onChange={
+                ((date: [Dayjs, Dayjs]) => {
+                  onChange(date[0]?.format('YYYYMMDD') ?? '', date[1]?.format('YYYYMMDD') ?? '');
+                }) as never
+              }
+            />
+          </div>
         )}
       />
     </Grid>
@@ -527,8 +594,9 @@ export const PeriodField = ({ start, end, onChange }: PeriodFieldProps) => {
 interface BucketFieldProps {
   value: 'W' | 'M';
   onChange: (v: 'W' | 'M') => void;
+  gridSize?: number;
 }
-export const BucketField = ({ value, onChange }: BucketFieldProps) => {
+export const BucketField = ({ value, onChange, gridSize }: BucketFieldProps) => {
   const L = useL();
   const [buckets] = useTabComboQueries({ filters: ['BucketType'] });
   const options = (buckets ?? [])
@@ -542,7 +610,7 @@ export const BucketField = ({ value, onChange }: BucketFieldProps) => {
           { label: 'Monthly', value: 'M' },
         ];
   return (
-    <Grid size={2}>
+    <Grid size={gridSize ?? 2}>
       <FormItem
         label={L('LBL00511', 'Bucket')}
         labelAlign='right'
@@ -565,11 +633,12 @@ export const BucketField = ({ value, onChange }: BucketFieldProps) => {
 interface VersionFieldProps {
   value: string;
   onOpenPopup: () => void;
+  gridSize?: number;
 }
-export const VersionField = ({ value, onOpenPopup }: VersionFieldProps) => {
+export const VersionField = ({ value, onOpenPopup, gridSize }: VersionFieldProps) => {
   const L = useL();
   return (
-    <Grid size={6}>
+    <Grid size={gridSize ?? 6}>
       <FormItem
         label={L('LBL00513', 'Version')}
         labelAlign='right'
@@ -594,11 +663,12 @@ export const VersionField = ({ value, onOpenPopup }: VersionFieldProps) => {
 interface CheckFieldProps {
   value: boolean;
   onChange: (v: boolean) => void;
+  gridSize?: number;
 }
-export const SearchOverRangeField = ({ value, onChange }: CheckFieldProps) => {
+export const SearchOverRangeField = ({ value, onChange, gridSize }: CheckFieldProps) => {
   const L = useL();
   return (
-    <Grid size={4}>
+    <Grid size={gridSize ?? 4}>
       <FormItem
         label={L('LBL00512', 'Search over range')}
         labelAlign='right'

@@ -102,7 +102,8 @@ export const useProcMutation = <
 
   return useMutation({
     mutationFn: (data: ResponseData<M, S, RS>[]) => {
-      if (!data.length) return Promise.reject(new Error(t('MSG00004', '_수정한 내용이 없습니다.')));
+      if (!data.length)
+        return Promise.reject(new Error(t('MSG_NO_CHANGE', '_수정한 내용이 없습니다.')));
       return apiClient.callMutationProc<M, S, RS>(menuId, sheetName, procedureAction, data);
     },
     mutationKey: queryKey,

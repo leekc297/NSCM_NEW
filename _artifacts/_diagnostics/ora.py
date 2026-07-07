@@ -32,9 +32,19 @@ def conn_info():
                 if "=" in line and not line.strip().startswith("#"):
                     k, v = line.split("=", 1); kv[k.strip()] = v.strip()
             u = u or kv.get("TOBE_DB_USER"); p = p or kv.get("TOBE_DB_PASS")
-            d = d or f"{kv.get('TOBE_DB_HOST','localhost')}:{kv.get('TOBE_DB_PORT','1521')}/{kv.get('TOBE_DB_PDB','FREEPDB1')}"
+            if kv.get("TOBE_DB_HOST"):
+                d = d or f"{kv.get('TOBE_DB_HOST','localhost')}:{kv.get('TOBE_DB_PORT','1521')}/{kv.get('TOBE_DB_PDB','FREEPDB1')}"
+    # fallback: 기존 apply.sh 의 CONN 문자열에서 접속정보 파싱 (새 평문 사본 미생성)
+    #   형식: CONN='SCM_MGR/"pwd"@host:port/SID'
     if not (u and p and d):
-        sys.exit("ERROR: NSCM_ORA_USER/PASS/DSN 환경변수 또는 .env.asis 필요 (비밀번호 하드코딩 금지)")
+        import re
+        apply = pathlib.Path(__file__).resolve().parents[1] / "_apply_corporate" / "apply.sh"
+        if apply.exists():
+            m = re.search(r"CONN=['\"]?([^/]+)/\"?([^\"@]+)\"?@([^'\"\s]+)", apply.read_text(encoding="utf-8", errors="ignore"))
+            if m:
+                u = u or m.group(1); p = p or m.group(2); d = d or m.group(3)
+    if not (u and p and d):
+        sys.exit("ERROR: NSCM_ORA_USER/PASS/DSN 환경변수 또는 .env.asis 또는 apply.sh CONN 필요")
     return u, p, d
 
 def fetch(cur, sql, binds=None):

@@ -1,0 +1,34 @@
+// 조회조건 객체 높이 36px 동일화 (hook #94 search-condition-height-uniformity, 디자인 필수)
+//   DatePickerCalendar(size='small')는 본래 28px + sx forward 안 됨 → wrapper div + Mui* 부분일치
+//   셀렉터로 전 레벨(Box/FormControl/OutlinedInput/InputBase)을 36px 강제 (emotion hash 비의존).
+//   출처: features/master/src/components/searchFields/SearchFields.module.scss .datePickerFix
+.datePickerFix {
+  width: 100%;
+  height: 36px;
+  display: flex;
+  align-items: center;
+
+  :global {
+    [class*='MuiBox-root'],
+    [class*='MuiFormControl-root'],
+    [class*='MuiTextField-root'] {
+      height: 36px !important;
+      min-height: 36px !important;
+      box-sizing: border-box;
+    }
+
+    [class*='MuiOutlinedInput-root'],
+    [class*='MuiInputBase-root'] {
+      height: 36px !important;
+      min-height: 36px !important;
+      box-sizing: border-box;
+    }
+
+    [class*='MuiInputBase-input'],
+    input {
+      box-sizing: border-box;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+    }
+  }
+}

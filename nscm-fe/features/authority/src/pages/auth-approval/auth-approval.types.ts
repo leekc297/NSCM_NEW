@@ -1,19 +1,26 @@
 export interface SearchCondition {
+  divisionId: string;
   userId: string;
+  department: string;
   startDate: string;
   endDate: string;
   status: string;
 }
 
+// 2026-07-02 — SP P_SYS0012_GET_APPROVAL_LIST 컬럼 확장 정합 (AS-IS 기준 13 표시 컬럼):
+//   COMPANY_ID/WORKING_NAME/SSO_LOCATE(SSO_USER_INFO) + DEPARTMENT(SSO_DEPT) + AUTHORITY(USER_GR_NM).
+//   구 GRP_NAME/PLANT/CUSTOMER 는 SP/메타에서 제거(VALID_YN='N').
 export interface ApprovalRow {
   REQUEST_ID: string;
   USER_ID: string;
   USER_NAME: string;
+  COMPANY_ID: string;
+  WORKING_NAME: string;
+  SSO_LOCATE: string;
+  DEPARTMENT: string;
   GROUP_ID: string;
-  GRP_NAME: string;
+  AUTHORITY: string;
   DIVISION_ID: string;
-  PLANT: string;
-  CUSTOMER: string;
   REQUEST_DATE: string;
   STATUS: string;
   APPROVED_BY: string;

@@ -1,0 +1,15 @@
+// SYS0013 Columns/Parameters 그리드 상단 Add/Delete 툴바 (inline style 제거 대체)
+.gridToolbar {
+  display: flex;
+  gap: 8px;
+  padding: 4px 0;
+
+  button {
+    cursor: pointer;
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+  }
+}

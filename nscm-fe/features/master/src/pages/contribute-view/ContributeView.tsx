@@ -2,9 +2,11 @@ import type { FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useRef } from 'react';
 
+import { IcGridColumnSetup } from '@foundation/assets';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { MainTitle, SubTitle } from '@shared/components';
 import { useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
+import { useMessageStore } from '@shared/stores';
 
 import { ColumnSettingModal } from '../../components';
 
@@ -14,7 +16,7 @@ import { ContributeVersionModal } from './components/modals/ContributeVersionMod
 import { MENU_ID, SHEETS } from './contribute-view.constants';
 import styles from './ContributeView.module.scss';
 import { useContributeViewValidation } from './hooks/useContributeViewValidation';
-import type { SalesViewRow } from './types';
+import type { SalesViewRow, ValidationCheckCount } from './types';
 import { useContributeViewStore } from './useContributeViewStore';
 
 // AS-IS DMF0043_Contribute_View — 기여율 조회 화면 (조회 전용)
@@ -48,8 +50,14 @@ export const ContributeView = ({ tabId, title }: PageProps<MENU_ID>) => {
   const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
   const { validateVersionSelected, validateSearchResultEmpty } = useContributeViewValidation();
 
+  const { setAlert } = useMessageStore.getState();
+
   // AS-IS Form_Load + FindData (.cs L283): DMF0043_GET_CONTRIBUTION_SALES_LIST
-  const { data: mainData, refetch: search } = useTabProcQuery<MENU_ID, SHEETS.MAIN>({
+  const {
+    data: mainData,
+    refetch: search,
+    dataUpdatedAt,
+  } = useTabProcQuery<MENU_ID, SHEETS.MAIN>({
     menuId: MENU_ID,
     sheetName: SHEETS.MAIN,
     tabId,
@@ -69,7 +77,13 @@ export const ContributeView = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   // 화면 mount 시 admin SHEET_COLUMNS 동적 fetch (admin 변경 즉시 반영).
   useEffect(() => {
-    if (!initialized) void fetchStaticColumns();
+    if (initialized) {
+      if (searchParams.versionNo) {
+        setFilters();
+      }
+    } else {
+      void fetchStaticColumns();
+    }
   }, [initialized]);
 
   // AS-IS L466~470: VersionPopup 선택 → txtVersion.Text 채움
@@ -83,6 +97,7 @@ export const ContributeView = ({ tabId, title }: PageProps<MENU_ID>) => {
   };
 
   const rows = (mainData?.o_rc1 ?? []) as SalesViewRow[];
+  const validCnt = (mainData?.o_rc3 ?? []) as unknown as ValidationCheckCount[];
 
   // AS-IS .cs L333~336: MSG00307 — 조회 결과 알림
   useEffect(() => {
@@ -91,6 +106,17 @@ export const ContributeView = ({ tabId, title }: PageProps<MENU_ID>) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mainData]);
+
+  useEffect(() => {
+    if (mainData) {
+      if (searchParams.compatibilityYn === 'Y' && validCnt?.[0].CNT > 0) {
+        void setAlert({
+          type: 'alert',
+          content: t('MSG00631', '_해외법인 기여도 미 맵핑된 마스터가 존재합니다.'),
+        });
+      }
+    }
+  }, [dataUpdatedAt]);
 
   // Figma DMF0043_01 = 조회 전용 화면 (AS-IS .cs L249 InsertRow / L276 SaveData 본문 있으나
   // 화면 의도 = 조회 전용 — 운영 결정에 따라 hotkeyConfig.insert/save = false 로 차단).
@@ -117,9 +143,12 @@ export const ContributeView = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   - "컬럼 표시 설정" → SubTitle 의 아이콘형 버튼으로 (Form ⊞ btnColumn 과 동일 아이콘)
   const customButtons = [
     {
-      label: '⊞',
+      // Column Setting — 공용 Grid Column Setup 아이콘(↔ + 상/하 분할 2컬럼). @foundation/assets IcGridColumnSetup.
+      label: t('LBL00605', 'Column Setting'),
       title: t('LBL00605', 'Column Setting'),
       action: () => setColumnSetPopupOpen(true),
+      iconComponent: <IcGridColumnSetup />,
+      buttonLabel: '',
     },
   ];
 

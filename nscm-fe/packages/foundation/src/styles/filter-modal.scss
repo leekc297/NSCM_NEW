@@ -1,0 +1,66 @@
+// =============================================================================
+// Filter Modal (Wijmo FlexGridFilter) 디자인 표준 보완 — 2026-06-28 사용자 요구
+//   벤더 테마(styles/wijmo/parts/_grid_filter.scss) 위에 로드되어 폰트/사이즈/간격/
+//   버튼을 NSCM 표준으로 정돈. index.tsx 에서 wijmo.scss 다음에 import → !important 불필요.
+//   값은 표준 팔레트(variables/_colors-lges.scss) / 표준 폰트(_global.scss) 기준 리터럴.
+//   ⚠️ 전역(body-level popup) — 모든 화면의 컬럼 필터 팝업에 일괄 적용(=깔끔한 표준화).
+// =============================================================================
+
+$nscm-font:
+  'Spoqa Han Sans Neo', '맑은 고딕', 'malgun gothic', 'AppleGothicNeoSD', 'Apple SD 산돌고딕 Neo',
+  'Microsoft NeoGothic', 'Droid sans', sans-serif;
+
+.wj-columnfiltereditor {
+  font-family: $nscm-font;
+  font-size: 13px; // 표준 본문 (0.8125rem) 통일 — 벤더 기본 혼재 12px 정돈
+  color: #1f1f1f; // $commonTextBasic
+  padding: 12px 14px;
+  min-width: 252px !important; // 벤더 240 → 여백 정돈
+  border-radius: 6px;
+
+  // 컬럼명 헤더 — 표준 타이틀 톤
+  .wj-filter-header {
+    font-size: 13px;
+    font-weight: 700;
+    color: #0b3e63; // $commonTextPrimaryExtreme
+  }
+
+  // By Value / By Condition 탭 라벨
+  .wj-filtertype {
+    font-size: 12px;
+    margin: 10px 0;
+    color: #5b5c5b; // $commonTextLight
+  }
+
+  // 입력 / 콤보 / 조건 셀렉트
+  .wj-control {
+    font-size: 13px;
+    margin-bottom: 8px;
+  }
+
+  .wj-input .wj-form-control,
+  input.wj-form-control,
+  select.wj-form-control {
+    font-family: $nscm-font;
+    font-size: 13px;
+  }
+
+  // 값 목록
+  .wj-listbox {
+    font-size: 13px;
+    border: 1px solid #dde0df; // $commonBorderBasic
+    border-radius: 4px;
+
+    .wj-listbox-item {
+      padding: 4px 8px;
+      line-height: 1.5;
+    }
+  }
+
+  // 버튼 (Sort / OK / Cancel) — 폰트·라운드 정돈
+  .wj-btn {
+    font-family: $nscm-font;
+    font-size: 12px;
+    border-radius: 4px;
+  }
+}

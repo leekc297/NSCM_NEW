@@ -109,12 +109,24 @@ export const useContributeViewStore = createPersistedStoreWithTab<
         `/admin/menu/${MENU_ID}/column`,
         { sheetNm: 'ContributeSalesList' }
       );
+
       set(state => {
         state.staticColumns = {
           [SHEETS.MAIN]: main.data.result,
         };
         state.initialized = true;
       });
+
+      const visibleBaseColumns = main.data.result.map(col => {
+        if (col.visible) {
+          return col.colNm;
+        }
+      }) as string[];
+      if (visibleBaseColumns) {
+        set(state => {
+          state.visibleBaseColumns = visibleBaseColumns;
+        });
+      }
     },
     setOpenSearchArea: open => {
       set(state => {

@@ -93,6 +93,12 @@ const ForecastPricePageWithTab = LazyLoader(() =>
 const CustomerFcstUploadPageWithTab = LazyLoader(() =>
   import('@demand/customer-fcst-upload').then(m => ({ default: m.CustomerFcstUpload }))
 );
+const MktFcstPageWithTab = LazyLoader(() =>
+  import('@demand/mkt-fcst').then(m => ({ default: m.MktFcst }))
+);
+const SalesMonitoringPageWithTab = LazyLoader(() =>
+  import('@demand/sales-monitoring').then(m => ({ default: m.SalesMonitoring }))
+);
 
 // @report
 const SalesPlanWaterfallWithTab = LazyLoader(() =>
@@ -261,9 +267,20 @@ export const router: RemixRouter = createBrowserRouter([
                 path: ROUTE_PATHS.DMF0082,
                 element: <ForecastPricePageWithTab />,
               },
-              // T O D O: replace with actual path name
+              // DMF0003 — MKT FCST (시장예측). 라우트 slug = 사내 SCM_ADM_MNU_M.MNU_URL='mkt_forecast' 정합(필수).
+              //   ROUTE_PATHS(foundation) 무수정 정책 → 리터럴 slug 사용 (DMF0014 'dmf0014' 동일 패턴).
               {
-                path: 'dmf0014',
+                path: 'mkt_forecast',
+                element: <MktFcstPageWithTab />,
+              },
+              // DMF0048 — Sales Monitoring (판매 모니터링). ROUTE_PATHS.DMF0048='sales-monitoring' = SCM_ADM_MNU_M.MNU_URL 정합(필수).
+              {
+                path: ROUTE_PATHS.DMF0048,
+                element: <SalesMonitoringPageWithTab />,
+              },
+              // DMF0014 — Customer FCST Upload. ROUTE_PATHS.DMF0014='customer-fcst-upload' = MNU_URL 정합(필수).
+              {
+                path: ROUTE_PATHS.DMF0014,
                 element: <CustomerFcstUploadPageWithTab />,
               },
             ],

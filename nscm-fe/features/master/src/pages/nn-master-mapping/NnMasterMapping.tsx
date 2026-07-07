@@ -12,7 +12,6 @@ import { useMessageStore } from '@shared/stores';
 import { NnMasterMappingForm } from './components/NnMasterMappingForm';
 import { NnMasterMappingGrid } from './components/NnMasterMappingGrid';
 import { MENU_ID, SHEETS } from './nn-master-mapping.constants';
-import styles from './NnMasterMapping.module.scss';
 import { useNnMasterMappingStore } from './useNnMasterMappingStore';
 
 // AS-IS DMF0072_NNMasterMapping — N:N Master Mapping (Insert / Delete / Save 풀스택)
@@ -41,6 +40,9 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
   // 신규 행 별도 state — CRUD_TYPE='I' (As-Is L538-602 InsertRow 결과)
   const [insertedRows, setInsertedRows] = useState<ResponseData<MENU_ID, SHEETS.MAIN>[]>([]);
 
+  // 진입 시 자동조회 차단 — 사용자가 Search(F5) 를 눌러야 조회. mount 마다 false 라 persist 된 filters 도 무시됨.
+  const [hasSearched, setHasSearched] = useState(false);
+
   // 진입 시 admin 메타 동적 fetch + 자동 조회
   useEffect(() => {
     void fetchStaticColumns();
@@ -57,13 +59,14 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
     sheetName: SHEETS.MAIN,
     tabId,
     filters: filters[SHEETS.MAIN],
-    enabled: !!filters[SHEETS.MAIN],
+    enabled: hasSearched && !!filters[SHEETS.MAIN],
   });
 
   const spRows = data?.o_rc1 ?? [];
   const rows = [...insertedRows, ...spRows];
 
   const handleSearch = async () => {
+    setHasSearched(true);
     setFilter();
     void fetchStaticColumns();
     await refetch?.();
@@ -119,7 +122,8 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
       const get = (k: string): string => {
         const v = (r as Record<string, unknown>)[k];
         if (typeof v === 'string') return v;
-        if (typeof v === 'number' || typeof v === 'boolean' || typeof v === 'bigint') return String(v);
+        if (typeof v === 'number' || typeof v === 'boolean' || typeof v === 'bigint')
+          return String(v);
         return '';
       };
       const row = i + 1;
@@ -131,7 +135,8 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
       if (itemId === '' || validFrom === '' || validTo === '') {
         void setAlert({
           type: 'alert',
-          content: t('MSG00610', '_Valid From, Valid To, Model Code 값은 필수 입력입니다.') + ` (${row})`,
+          content:
+            t('MSG00610', '_Valid From, Valid To, Model Code 값은 필수 입력입니다.') + ` (${row})`,
         });
         return;
       }
@@ -177,7 +182,8 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
           if (get(key) === '') {
             void setAlert({
               type: 'alert',
-              content: t('MSG00614', '_{0} 값은 필수 입력입니다.').replace('{0}', label) + ` (${row})`,
+              content:
+                t('MSG00614', '_{0} 값은 필수 입력입니다.').replace('{0}', label) + ` (${row})`,
             });
             return;
           }
@@ -197,7 +203,11 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
       ) {
         void setAlert({
           type: 'alert',
-          content: t('MSG00616', '_Unloading(≤35) / Plant(≤10) / Customer Item ID(≤50) 최대 입력길이 초과.') + ` (${row})`,
+          content:
+            t(
+              'MSG00616',
+              '_Unloading(≤35) / Plant(≤10) / Customer Item ID(≤50) 최대 입력길이 초과.'
+            ) + ` (${row})`,
         });
         return;
       }
@@ -206,7 +216,8 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
     // ^ 구분 join (AS-IS L901-939) — 22 fields
     const asStr = (v: unknown): string => {
       if (typeof v === 'string') return v;
-      if (typeof v === 'number' || typeof v === 'boolean' || typeof v === 'bigint') return String(v);
+      if (typeof v === 'number' || typeof v === 'boolean' || typeof v === 'bigint')
+        return String(v);
       return '';
     };
     const join = (key: string, blank = '') =>
@@ -219,7 +230,8 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
     const actType = dirty.map(r => String(r.CRUD_TYPE ?? 'M')).join('^');
     const mappingOriginal = dirty
       .map(r => {
-        const key = r.CRUD_TYPE === CRUD_TYPE.INSERT ? 'MAPPING_ITEM_ID' : 'MAPPING_ITEM_ID_ORIGINAL';
+        const key =
+          r.CRUD_TYPE === CRUD_TYPE.INSERT ? 'MAPPING_ITEM_ID' : 'MAPPING_ITEM_ID_ORIGINAL';
         return asStr((r as Record<string, unknown>)[key]);
       })
       .join('^');
@@ -227,8 +239,7 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
     void (async () => {
       const ok = await setAlert({
         type: 'confirm',
-        content:
-          t('MSG00617', '_{0} 행을 저장하시겠습니까?').replace('{0}', String(dirty.length)),
+        content: t('MSG00617', '_{0} 행을 저장하시겠습니까?').replace('{0}', String(dirty.length)),
       });
       if (!ok) return;
       try {
@@ -259,8 +270,7 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
         setInsertedRows([]);
         await refetch?.();
       } catch (e) {
-        const msg =
-          e instanceof Error ? e.message : t('MSG00618', '_저장 중 오류가 발생했습니다.');
+        const msg = e instanceof Error ? e.message : t('MSG00618', '_저장 중 오류가 발생했습니다.');
         void setAlert({ type: 'alert', content: msg });
       }
     })();
@@ -280,7 +290,7 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
   };
 
   return (
-    <div className={styles.container}>
+    <>
       <MainTitle
         title={title}
         menuId={MENU_ID}
@@ -298,14 +308,12 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
         hotkeyConfig={hotkeyConfig}
         searchParam={searchCondition}
       />
-      <div className={styles.gridContainer}>
-        <NnMasterMappingGrid
-          gridRef={gridRef}
-          gridFilterRef={gridFilterRef}
-          data={rows}
-          searchCondition={searchCondition}
-        />
-      </div>
-    </div>
+      <NnMasterMappingGrid
+        gridRef={gridRef}
+        gridFilterRef={gridFilterRef}
+        data={rows}
+        searchCondition={searchCondition}
+      />
+    </>
   );
 };

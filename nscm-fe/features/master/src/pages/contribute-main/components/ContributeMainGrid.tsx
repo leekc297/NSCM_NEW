@@ -1,5 +1,13 @@
 import { toggleClass } from '@mescius/wijmo';
-import { AllowMerging, CellType, type FlexGrid as FlexGridType, type FormatItemEventArgs } from '@mescius/wijmo.grid';
+import type { GridPanel } from '@mescius/wijmo.grid';
+import {
+  AllowMerging,
+  CellRange,
+  CellType,
+  MergeManager,
+  type FlexGrid as FlexGridType,
+  type FormatItemEventArgs,
+} from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { type MutableRefObject, useEffect, useMemo, useRef } from 'react';
 
@@ -96,6 +104,7 @@ const buildDynamicColumns = (data: MainRow[], chkYear: boolean): FlexGridColumnC
       allowSorting: false,
       allowMerging: false,
       height: 24,
+      visible: true, // ⭐ Excel 다단헤더 export 시 visible 미명시=undefined→hidden 방지 (gridAction §223, DMF0048 선례)
       columns: [
         {
           binding: leaf.binding,
@@ -106,7 +115,10 @@ const buildDynamicColumns = (data: MainRow[], chkYear: boolean): FlexGridColumnC
           allowSorting: false,
           allowMerging: false,
           height: 24,
-          _inputEditType: isRbu999 ? CELL_INPUT_EDIT_TYPE.SEARCH_ONLY : CELL_INPUT_EDIT_TYPE.OPTIONAL,
+          visible: true, // ⭐ Excel export leaf 숨김 방지 (gridAction new Column({visible: columnGroup.visible}))
+          _inputEditType: isRbu999
+            ? CELL_INPUT_EDIT_TYPE.SEARCH_ONLY
+            : CELL_INPUT_EDIT_TYPE.OPTIONAL,
         },
       ],
     };
@@ -123,6 +135,89 @@ export const ContributeMainGrid = ({ gridRef, gridFilterRef, editTrackerRef, dat
     [data, chkYear]
   );
 
+  const fixedBindings = ['DEPARTMENT_ID', 'DEPT_ID', 'END_CUST_REPORT', 'SOLDTO_CUST_REPORT'];
+
+  class HierarchicalMergeManager extends MergeManager {
+    getMergedRange(panel: GridPanel, r: number, c: number, _clip = true): CellRange | null {
+      const col = panel.columns[c];
+      if (!col) return null;
+      const binding = col.binding ?? '';
+
+      // 2줄 고정이라 일단 하드코딩으로 세팅
+      if (panel.cellType === CellType.TopLeft) {
+        return new CellRange(0, c, 1, c + 1);
+      }
+
+      if (panel.cellType === CellType.ColumnHeader) {
+        const rg = new CellRange(r, c);
+
+        if (staticColumns?.some(col => col.colNm === binding)) {
+          // 위쪽 방향으로 헤더 텍스트가 같은 행이 있는지 탐색
+          for (let i = r; i > 0; i--) {
+            if (panel.getCellData(i, c, false) === panel.getCellData(i - 1, c, false)) {
+              rg.row = i - 1;
+            } else {
+              break;
+            }
+          }
+          // 아래쪽 방향으로 헤더 텍스트가 같은 행이 있는지 탐색
+          for (let i = r; i < panel.rows.length - 1; i++) {
+            if (panel.getCellData(i, c, false) === panel.getCellData(i + 1, c, false)) {
+              rg.row2 = i + 1;
+            } else {
+              break;
+            }
+          }
+        } else {
+          for (let i = c; i > 0; i--) {
+            if (panel.getCellData(r, i, false) === panel.getCellData(r, i - 1, false)) {
+              rg.col = i - 1;
+            } else {
+              break;
+            }
+          }
+          // 💡 오른쪽 방향으로 헤더 텍스트가 같은 열이 있는지 탐색
+          for (let i = c; i < panel.columns.length - 1; i++) {
+            if (panel.getCellData(r, i, false) === panel.getCellData(r, i + 1, false)) {
+              rg.col2 = i + 1;
+            } else {
+              break;
+            }
+          }
+        }
+        return rg;
+      }
+
+      if (panel.cellType === CellType.Cell && fixedBindings.includes(binding)) {
+        const view = panel.rows;
+        const rowItem = (i: number): Record<string, unknown> | undefined =>
+          (view[i] as unknown as { dataItem?: Record<string, unknown> })?.dataItem;
+        const cur = rowItem(r);
+        if (!cur) return null;
+        const fixedIdx = fixedBindings.indexOf(binding);
+        const leftBindings = fixedBindings.slice(0, fixedIdx + 1);
+        const sameRow = (a: number, b: number): boolean => {
+          const ra = rowItem(a);
+          const rb = rowItem(b);
+          if (!ra || !rb) return false;
+          return leftBindings.every(
+            k =>
+              ((ra as Record<string, string>)[k] ?? '') ===
+              ((rb as Record<string, string>)[k] ?? '')
+          );
+        };
+        const minRow = panel.viewRange.row;
+        const maxRow = panel.viewRange.row2;
+        let r1 = r,
+          r2 = r;
+        while (r1 > minRow && sameRow(r1 - 1, r)) r1--;
+        while (r2 < maxRow && sameRow(r2 + 1, r)) r2++;
+        if (r1 === r2) return null;
+        return new CellRange(r1, c, r2, c);
+      }
+      return new CellRange(r, c);
+    }
+  }
   // 동적 PIVOT 컬럼 cell coloring — 동적 컬럼 (admin 메타 없음) 에서 wrapper 의
   // formatEditableColumns 가 isEditableCell=false 로 판정해 wj-cell-editable 을 제거.
   // 따라서 wrapper 가 등록한 이후(=mount 시점) 핸들러를 다시 등록 → FIFO 호출 순서에서
@@ -135,9 +230,10 @@ export const ContributeMainGrid = ({ gridRef, gridFilterRef, editTrackerRef, dat
       const col = e.panel.columns[e.col];
       if (!col?.binding) return;
       if (!col.binding.startsWith('Y#') && !col.binding.startsWith('M#')) return;
-      const isRbu999 = col.binding.endsWith('RBU_0999');
-      toggleClass(e.cell, 'wj-cell-editable', !isRbu999);
-      toggleClass(e.cell, 'wj-cell-non-editable', isRbu999);
+      // const isRbu999 = col.binding.endsWith('RBU_0999');
+      // toggleClass(e.cell, 'wj-cell-editable', !isRbu999);
+      // toggleClass(e.cell, 'wj-cell-non-editable', isRbu999);
+      toggleClass(e.cell, 'wj-cell-editable', true);
     };
     grid.formatItem.addHandler(handler);
     grid.invalidate();
@@ -151,10 +247,7 @@ export const ContributeMainGrid = ({ gridRef, gridFilterRef, editTrackerRef, dat
   useEffect(() => {
     const grid = gridRef.current ?? internalRef.current;
     if (!grid) return;
-    const handler = (
-      _s: FlexGridType<MainRow>,
-      e: { row: number; col: number }
-    ) => {
+    const handler = (_s: FlexGridType<MainRow>, e: { row: number; col: number }) => {
       const col = grid.columns[e.col];
       if (!col?.binding) return;
       if (!col.binding.startsWith('Y#') && !col.binding.startsWith('M#')) return;
@@ -179,14 +272,11 @@ export const ContributeMainGrid = ({ gridRef, gridFilterRef, editTrackerRef, dat
   useEffect(() => {
     const grid = gridRef.current ?? internalRef.current;
     if (!grid) return;
-    const handler = (
-      _s: FlexGridType<MainRow>,
-      e: { col: number; cancel: boolean }
-    ) => {
+    const handler = (_s: FlexGridType<MainRow>, e: { col: number; cancel: boolean }) => {
       const col = grid.columns[e.col];
       if (!col?.binding) return;
       if (!col.binding.startsWith('Y#') && !col.binding.startsWith('M#')) return;
-      if (col.binding.endsWith('RBU_0999')) return; // RBU_0999 readonly
+      // if (col.binding.endsWith('RBU_0999')) return; // RBU_0999 readonly
       e.cancel = false; // 동적 PIVOT cell 편집 강제 허용
     };
     grid.beginningEdit.addHandler(handler);
@@ -212,9 +302,12 @@ export const ContributeMainGrid = ({ gridRef, gridFilterRef, editTrackerRef, dat
       gridFilterRef={gridFilterRef}
       editTrackerRef={editTrackerRef}
       staticColumns={staticColumns}
+      frozenColumns={staticColumns?.filter(col => col.visible).length}
       dynamicColumns={dynamicColumns}
       itemsSource={data}
       allowMerging={AllowMerging.All}
+      mergeManager={new HierarchicalMergeManager()}
+      alternatingRowStep={0}
     />
   );
 };

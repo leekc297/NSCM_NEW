@@ -73,12 +73,20 @@ const SubTitleComp = ({
     [Hotkeys.F5]: () => alert('검색은 화면별로 구현하세요.'),
     [Hotkeys.F6]: () =>
       searchParam &&
-      void GridAction.personalizeCondition(menuId, searchParam).then(() =>
-        setAlert({
-          type: 'alert',
-          content: t('MSG00010', '_조회 조건이 저장되었습니다.'),
-        })
-      ),
+      void GridAction.personalizeCondition(menuId, searchParam)
+        .then(() =>
+          setAlert({
+            type: 'alert',
+            content: t('MSG00010', '_조회 조건이 저장되었습니다.'),
+          })
+        )
+        // ⚠️ 실패(예: BE 400/500)를 조용히 삼키지 않고 표시 — 저장 실패 무피드백 방지(2026-07-01).
+        .catch(() =>
+          setAlert({
+            type: 'alert',
+            content: t('MSG00011', '_조회 조건 저장에 실패했습니다.'),
+          })
+        ),
     [Hotkeys.F7]: () => alert('저장은 화면별로 구현하세요.'),
     [Hotkeys.F8]: () => grid.current && GridAction.addRow(grid.current, {}),
     [Hotkeys.F9]: () =>
@@ -203,6 +211,7 @@ const SubTitleComp = ({
                     appearance='outlined'
                     priority='normal'
                     size='small'
+                    buttonLabel={t('LBL00346', 'Excel Upload')} // ⭐ 아이콘 우측 텍스트 (사용자 요구 2026-07-07)
                     onClick={buttonActions.upload}
                     iconComponent={<FileExceluploadIcon />}
                   />

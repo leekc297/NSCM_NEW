@@ -43,7 +43,9 @@ export const SalesPlanWaterfallForm = ({ onSubmit }: SalesPlanWaterfallFormProps
   const isOnlyWeekly = searchParams.bucket === BUCKET_TYPE.ONLY_WEEKLY;
   const isDivision40 = searchParams.divisionId === '40';
 
-  // TODO(F8): Combo IDs PascalCase 보존 — BE /combo 메타 확정 후 표기 교체 가능
+  // ComboId — SCM_ADM_CMBO_SQL_M 등록명 사용 (2026-07-02 전수 대조).
+  // AS-IS User*(auth-ext) 변형은 TO-BE 미이관 → 비auth 등록명으로 교정 (DIVISION_ID 등 컬럼 반환 — 클라 필터 가능).
+  // SALES_PLAN_AMOUNT_* 는 AS-IS UP_FX_GetCommonDataList 분기 1:1 등록분.
   const [
     myDivision,
     userTeamByDivision,
@@ -57,11 +59,11 @@ export const SalesPlanWaterfallForm = ({ onSubmit }: SalesPlanWaterfallFormProps
   ] = useTabComboQueries({
     filters: [
       'MyDivision',
-      'UserTeamByDivision',
-      'EndCustomerByDivision',
-      'UserSiteByEndCustomer',
+      'TeambyDivision',
+      'EndCustomer',
+      'SiteByEndCustomer',
       'BizType',
-      'UserPlantSiteByEndCustomer',
+      'PlantSitebyEndCustomer',
       'SALES_PLAN_AMOUNT_KRW',
       'SALES_PLAN_AMOUNT_USD',
       'SALES_PLAN_AMOUNT_LOC',

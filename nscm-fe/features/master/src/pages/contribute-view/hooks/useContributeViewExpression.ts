@@ -37,13 +37,21 @@ export interface MergeRange {
 // 컬럼 메타 생성 — title sheet 의 SpreadTitleRow[] 로부터 ColumnMeta[] 빌드
 export const buildColumnMeta = (
   titleRows: SpreadTitleRow[],
-  baseColumnCount: number
+  staticColumns: string[]
+  // baseColumnCount: number
 ): ColumnMeta[] => {
   return titleRows.map((r, i) => {
-    const isBase = i < baseColumnCount;
-    const binding = r.COLUMN_NAME ?? `col_${i}`;
+    if (r.COLUMN_NAME.includes('#')) {
+      r.COLUMN_NAME = r.COLUMN_NAME.toUpperCase();
+    }
+    // const isBase = i < baseColumnCount;
     // AS-IS .cs L189: ColumnName 에 "B_" 포함 → 숨김 (sum 백업/source 컬럼)
-    const isHidden = !isBase && binding.indexOf('B_') > 0;
+    // const isHidden = !isBase && binding.indexOf('B_') > 0;
+    const isBase = staticColumns.includes(r.COLUMN_NAME);
+    const binding = r.COLUMN_NAME ?? `col_${i}`;
+
+    const isHidden = binding.includes('B_');
+
     return {
       binding,
       large: r.LARGE_CLASS_LABEL_NAME ?? '',

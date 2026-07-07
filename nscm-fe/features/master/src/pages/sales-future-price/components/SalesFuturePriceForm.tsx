@@ -1,7 +1,5 @@
-import { useEffect } from 'react';
-
 import { SearchArea } from '@shared/components';
-import { useSessionStore } from '@shared/stores';
+import { Grid } from '@shared/mui';
 
 import {
   BizTypeField,
@@ -18,12 +16,16 @@ import {
   TeamField,
   VersionField,
 } from '../../../components';
+import { useSalesFuturePriceValidation } from '../hooks/useSalesFuturePriceValidation';
 import { BUCKET_TYPE } from '../sales-future-price.constants';
 import { useSalesFuturePriceStore } from '../useSalesFuturePriceStore';
+import { thisWeekMonday, yyyymmddOf } from '../utils/futurePriceDate';
 
 interface Props {
   onSearch: () => void;
   onVersionOpen: () => void;
+  // AS-IS MSG00227 — 신규 입력('I') 행 존재 시 Bucket 변경 차단용.
+  hasInsertRows?: boolean;
 }
 
 // AS-IS 캡쳐 (Doc/ui_cap/DMF0020_init.png) 1:1 layout + 사용자 사이즈 요구.
@@ -41,81 +43,101 @@ interface Props {
 //   Row 3: Sales Site(4) + Project(4)     + Plant Site(4)
 //   Row 4: Model/Nick(4) + Owner(4)       + Bucket(2) + SearchRange(2)
 //   Row 5: Version(6)
-export const SalesFuturePriceForm = ({ onSearch, onVersionOpen }: Props) => {
+export const SalesFuturePriceForm = ({ onSearch, onVersionOpen, hasInsertRows }: Props) => {
   const { t } = useTranslation();
+  const validate = useSalesFuturePriceValidation();
 
   const sc = useSalesFuturePriceStore(s => s.searchCondition);
   const set = useSalesFuturePriceStore(s => s.setSearchCondition);
   const openSearchArea = useSalesFuturePriceStore(s => s.openSearchArea);
-  const userId = useSessionStore(state => state.session.userId);
-
-  useEffect(() => {
-    set({ userId } as never);
-  }, [userId]);
-
-  // Division 변경 시 종속 reset (AS-IS clbDivisions_SelectedIndexChanged)
-  useEffect(() => {
-    set({ deptIds: [], endCustomers: [], scmSiteIds: [], plantSiteIds: [], bizTypes: [] });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sc.divisionId]);
 
   return (
     <SearchArea
       searchButtonLabel={t('LBL00514', { defaultValue: 'Search' })}
       isHidden={!openSearchArea}
       onSearch={onSearch}
-      // ⭐ §3 UI-MANDATORY 10 — 2단 초과 시 `extraConditions` 분리 + 자동 펼치기/닫기 토글 버튼.
-      //    Row 1~2 (Division/Team/EndCustomer + BizType/Period) = 항상 표시.
-      //    Row 3~5 (Site/Project/Plant + Item/Owner/Bucket/Range + Version) = 펼치기 토글로 표시.
+      // ⭐ 조회조건 순서 (2026-07-01 사용자 요구, gridSize={3} = 4개/단):
+      //    1단(항상): Div / Team / End Customer / Biz.Type
+      //    2단(항상): Sales Site / Project / Plant Site / Period
+      //    3단(펼침): Model·Nickname / Owner / Bucket / Version
+      //    4단(펼침): Search Over Range
+      //    ⚠ Project 는 Division='40' 일 때 숨김 → 4개/단 유지 위해 빈 Grid 슬롯으로 대체.
       conditions={
         <>
-          {/* Row 1 */}
-          <DivisionField value={sc.divisionId} onChange={v => set({ divisionId: v })} />
+          {/* 1단 */}
+          {/* Division 변경 시 종속 필드 reset (AS-IS clbDivisions_SelectedIndexChanged) — 사용자 조작 시에만.
+              복원/persist 로 divisionId 가 바뀔 때 복원값이 wipe 되지 않도록 useEffect 대신 onChange 에서 처리. */}
+          <DivisionField
+            gridSize={3}
+            value={sc.divisionId}
+            onChange={v =>
+              set({
+                divisionId: v,
+                deptIds: [],
+                endCustomers: [],
+                scmSiteIds: [],
+                plantSiteIds: [],
+                bizTypes: [],
+              })
+            }
+          />
           <TeamField
+            gridSize={3}
             value={sc.deptIds}
             onChange={v => set({ deptIds: v })}
             division={sc.divisionId}
           />
           <EndCustomerField
+            gridSize={3}
             value={sc.endCustomers}
             onChange={v => set({ endCustomers: v })}
             division={sc.divisionId}
           />
+          <BizTypeField gridSize={3} value={sc.bizTypes} onChange={v => set({ bizTypes: v })} />
 
-          {/* Row 2 */}
-          <BizTypeField value={sc.bizTypes} onChange={v => set({ bizTypes: v })} />
+          {/* 2단 */}
+          <SalesSiteField
+            gridSize={3}
+            value={sc.scmSiteIds}
+            onChange={v => set({ scmSiteIds: v })}
+            division={sc.divisionId}
+          />
+          {sc.divisionId !== '40' ? (
+            <ProjectField
+              gridSize={3}
+              value={sc.projectCodes}
+              onChange={v => set({ projectCodes: v })}
+              division={sc.divisionId}
+              deptIds={sc.deptIds}
+              endCustomers={sc.endCustomers}
+              scmSiteIds={sc.scmSiteIds}
+              projectCodes={sc.projectCodes}
+              multiCheckbox
+            />
+          ) : (
+            // Division='40' → Project 숨김. 4개/단 레이아웃 유지 위한 빈 슬롯 (사용자 명시 2026-06-27).
+            <Grid size={3} />
+          )}
+          <PlantSiteField
+            gridSize={3}
+            value={sc.plantSiteIds}
+            onChange={v => set({ plantSiteIds: v })}
+            division={sc.divisionId}
+          />
           <PeriodField
+            gridSize={3}
             start={sc.startYyyymmdd}
             end={sc.endYyyymmdd}
             onChange={(start, end) => set({ startYyyymmdd: start, endYyyymmdd: end })}
           />
         </>
       }
+      // 확장영역(펼치기) — 3단(Model/Owner/Bucket/Version) + 4단(Search Over Range).
       extraConditions={
         <>
-          {/* Row 3 */}
-          <SalesSiteField
-            value={sc.scmSiteIds}
-            onChange={v => set({ scmSiteIds: v })}
-            division={sc.divisionId}
-          />
-          <ProjectField
-            value={sc.projectCodes}
-            onChange={v => set({ projectCodes: v })}
-            division={sc.divisionId}
-            deptIds={sc.deptIds}
-            endCustomers={sc.endCustomers}
-            scmSiteIds={sc.scmSiteIds}
-            projectCodes={sc.projectCodes}
-          />
-          <PlantSiteField
-            value={sc.plantSiteIds}
-            onChange={v => set({ plantSiteIds: v })}
-            division={sc.divisionId}
-          />
-
-          {/* Row 4 */}
+          {/* 3단 */}
           <ItemField
+            gridSize={3}
             value={sc.itemIds}
             onChange={v => set({ itemIds: v })}
             division={sc.divisionId}
@@ -124,8 +146,10 @@ export const SalesFuturePriceForm = ({ onSearch, onVersionOpen }: Props) => {
             scmSiteIds={sc.scmSiteIds}
             projectCodes={sc.projectCodes}
             itemIds={sc.itemIds}
+            multiCheckbox
           />
           <OwnerField
+            gridSize={3}
             value={sc.owners}
             onChange={v => set({ owners: v })}
             division={sc.divisionId}
@@ -134,20 +158,39 @@ export const SalesFuturePriceForm = ({ onSearch, onVersionOpen }: Props) => {
             scmSiteIds={sc.scmSiteIds}
             projectCodes={sc.projectCodes}
             owners={sc.owners}
+            multiCheckbox
           />
           <BucketField
+            gridSize={3}
             value={sc.bucketType}
-            onChange={v =>
-              set({ bucketType: v === 'M' ? BUCKET_TYPE.MONTHLY : BUCKET_TYPE.WEEKLY })
-            }
+            onChange={v => {
+              // AS-IS MSG00227 — 신규 입력('I') 행이 있을 때 Bucket 변경 차단 (동적 컬럼 재구성 방지).
+              if (hasInsertRows && !validate.validateBucketChange('I').ok) return;
+              set({ bucketType: v === 'M' ? BUCKET_TYPE.MONTHLY : BUCKET_TYPE.WEEKLY });
+            }}
           />
-          <SearchOverRangeField
-            value={sc.searchOverRange}
-            onChange={v => set({ searchOverRange: v })}
-          />
+          <VersionField gridSize={3} value={sc.versionId} onOpenPopup={onVersionOpen} />
 
-          {/* Row 5 */}
-          <VersionField value={sc.versionId} onOpenPopup={onVersionOpen} />
+          {/* 4단 */}
+          <SearchOverRangeField
+            gridSize={3}
+            value={sc.searchOverRange}
+            onChange={v => {
+              // AS-IS usrDiscard_CheckedChanged — 체크 시 조회기간을 당주 월요일 ~ +52주로 자동 세팅.
+              if (v) {
+                const start = thisWeekMonday();
+                const end = new Date(start);
+                end.setDate(start.getDate() + 52 * 7);
+                set({
+                  searchOverRange: v,
+                  startYyyymmdd: yyyymmddOf(start),
+                  endYyyymmdd: yyyymmddOf(end),
+                });
+              } else {
+                set({ searchOverRange: v });
+              }
+            }}
+          />
         </>
       }
     />

@@ -1,63 +1,35 @@
-// SalesPriceVersionModal — DMF0043_01 ContributeVersionModal 패턴 100%
-
-.dialogContent { display: flex; flex-direction: column; gap: 12px; padding: 4px 0; }
-.headerContainer { display: flex; align-items: center; gap: 8px; }
-.headerDot { width: 12px; height: 12px; background: #1976d2; border-radius: 50%; }
-.headerTitle { font-size: 16px; font-weight: 600; color: #1a1a1a; margin: 0; }
-
-.filterBar {
-  display: flex; align-items: center; gap: 12px; padding: 10px 14px;
-  background: #f5f7fa; border: 1px solid #e0e4e9; border-radius: 4px; flex-wrap: wrap;
-
-  .field { display: inline-flex; align-items: center; gap: 6px; }
-  .fieldWide { display: inline-flex; align-items: center; gap: 6px; min-width: 360px; }
-  .datePickerWrap { min-width: 280px; }
-  .fieldLabel { font-size: 13px; color: #2b3a4a; font-weight: 600; min-width: 70px; }
-  .input { min-width: 110px; padding: 6px 8px; font-size: 13px; border: 1px solid #b8bfc9; border-radius: 3px; background: white; }
-  .select { min-width: 160px; padding: 6px 8px; font-size: 13px; border: 1px solid #b8bfc9; border-radius: 3px; background: white; }
-  .checkboxLabel { display: inline-flex; gap: 4px; align-items: center; font-size: 13px; margin-right: 8px; }
+// SalesPriceVersionModal — 표준 모달 레이아웃 (형제 PriceBatchInputModal 동일)
+//   SearchArea → gridWrapper → 하단 buttonWrapper.
+.dialogContent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 4px 0;
+  // ⭐ bounded 컨테이너화 — CustomDialog 높이 안에서 flex 분배해야 grid viewport bounded → vscroll 생성.
+  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
-
-.statusBar { padding: 6px 12px; font-size: 13px; color: #495565; }
-.loading {
-  color: #1976d2; font-weight: 600;
-  animation: pulse 1.5s ease-in-out infinite;
-}
-@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.55; } }
-.count { color: #6b7785; }
 
 .gridWrapper {
   position: relative;
-  flex: 1; min-height: 320px;
-  border: 1px solid #e0e4e9; border-radius: 4px; overflow: hidden; background: white;
-}
-.grid { height: 100%; width: 100%; }
-
-.selectedBar {
-  display: flex; align-items: center; gap: 12px;
-  padding: 8px 12px; background: #fff8cd; border: 1px solid #e0d57f; border-radius: 3px;
-  font-size: 13px;
-}
-.clearBtn {
-  margin-left: auto; padding: 3px 10px; font-size: 12px;
-  background: white; color: #6b7785; border: 1px solid #b8bfc9; border-radius: 3px; cursor: pointer;
+  // ⭐ min-height:0 = flex 자식 축소 허용 → wijmo grid 가 bounded viewport 확보 → 세로 스크롤바 생성.
+  flex: 1 1 auto;
+  min-height: 0;
+  border: 1px solid #e0e4e9;
+  border-radius: 4px;
+  overflow: hidden;
+  background: white;
 }
 
-.actionBar {
-  display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex-wrap: wrap;
-  padding: 12px 8px; margin-top: 8px;
-  border: 1px solid #e0e4e9; border-radius: 4px; background: #fafbfc;
-  flex-shrink: 0; position: sticky; bottom: 0; z-index: 10; min-height: 48px;
+.grid {
+  height: 100%;
+  width: 100%;
 }
-.actionButton {
-  padding: 6px 14px; font-size: 13px; font-weight: 500;
-  background: white; color: #2b3a4a; border: 1px solid #b8bfc9; border-radius: 3px; cursor: pointer; min-width: 60px;
 
-  &:hover:not(:disabled) { background: #f0f3f7; }
-  &:disabled { background: #f5f7fa; color: #a0a8b0; cursor: not-allowed; }
-
-  &.primary {
-    background: #1976d2; color: white; border-color: #1976d2;
-    &:hover:not(:disabled) { background: #1565c0; }
-  }
+.buttonWrapper {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-top: 5px;
 }

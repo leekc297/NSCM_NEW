@@ -29,6 +29,8 @@ export type FuturePriceRow = Record<string, unknown> & {
   CRUD_TYPE?: 'I' | 'M' | 'D';
   INSERT_GROUP_ID?: string;
   MEASURE?: string;
+  DIVISION_ID?: string;
+  CURRENCY?: string;
 };
 
 // 동적 시간축 컬럼 메타 (DMF0020_GET_SPREAD_TITLE_DATE 결과 기반)
@@ -75,45 +77,3 @@ export interface ValidationResult {
   rowIdx?: number;
 }
 
-// ----- 3단 pivot 변환 (사용자 요구 2026-06-03 + 룰 27 §F single-child 회피) -----
-
-// SP P_DMF0020_GET_FUTUREPRICE_INFO long format row (ExchangeRate)
-export interface ExchangeRow {
-  DIVISION_ID?: string;
-  YYYYMMDD?: string;
-  YYYYMM?: string;
-  CURRENCY?: string;
-  UNIT_CURRENCY?: string;
-  EXCHANGE_PRICE?: number | string;
-  EDIT_YN?: string;
-}
-
-// Pivot row — 15 fixed cols (캡쳐 + 사용자 정정) + 동적 날짜 컬럼 (binding=YYYYMMDD)
-export interface PivotRow {
-  DIVISION_ID: string;
-  TEAM_INCHARGE: string;
-  END_CUSTOMER: string;
-  SCM_SITE_ID: string;
-  PROJECT_CODE: string;
-  PROJECT_STATUS: string;
-  BIZ_TYPE: string;
-  ITEM_ID: string;
-  INCOTERMS: string;
-  FCST_TYPE: string;
-  DOM_EXP: string;
-  PLANT_SITE_ID: string;
-  CURRENCY: string;
-  PRICE_EXIST: string;
-  UNIT_CURRENCY: string;
-  EDIT_YN: string;
-  [yyyymmdd: string]: string | number;
-}
-
-// 3단 동적 헤더 트리 (YYYY > YYYY-MM > MMDD)
-export interface PivotHeaderTree {
-  year: string; // '2026'
-  months: Array<{
-    ym: string; // '2026-01'
-    days: Array<{ binding: string; label: string }>; // [{ binding: '20260101', label: '0101' }]
-  }>;
-}

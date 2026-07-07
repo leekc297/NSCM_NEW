@@ -1,0 +1,103 @@
+$ pnpm type-check
+
+> nscm-fe@0.1.0 type-check C:\Projects\NSCM\nscm-fe
+> (pnpm gen || true) && turbo run type-check
+
+
+> nscm-fe@0.1.0 gen C:\Projects\NSCM\nscm-fe
+> pnpm gen:icons && pnpm gen:i18n
+
+
+> nscm-fe@0.1.0 gen:icons C:\Projects\NSCM\nscm-fe
+> node scripts/generate-icons.mjs
+
+✅ 64개의 아이콘이 index.ts에 등록되었습니다.
+
+> nscm-fe@0.1.0 gen:i18n C:\Projects\NSCM\nscm-fe
+> rm -rf ./public/locales/ && node scripts/sync-i18n.mjs
+
+🚀 다국어 동기화 스크립트 시작...
+KO
+EN
+CN
+╭───────────────────────────────────────────────────────────────────────────╮
+│                                                                           │
+│                     Update available v2.8.5 ≫ v2.10.0                     │
+│    Changelog: https://github.com/vercel/turborepo/releases/tag/v2.10.0    │
+│           Run "pnpm dlx @turbo/codemod@latest update" to update           │
+│                                                                           │
+│          Follow @turborepo for updates: https://x.com/turborepo           │
+╰───────────────────────────────────────────────────────────────────────────╯
+• turbo 2.8.5
+• Packages in scope: @admin, @authority, @demand, @factory, @foundation, @master, @report, @shared, @shipping, @supply, @web
+• Running type-check in 11 packages
+• Remote caching disabled
+@foundation:type-check: cache miss, executing bf677a98431184d7
+@foundation:type-check: 
+@foundation:type-check: > @foundation@0.1.0 type-check C:\Projects\NSCM\nscm-fe\packages\foundation
+@foundation:type-check: > tsc --noEmit
+@foundation:type-check: 
+@shared:type-check: cache miss, executing 1d3cdfaa553c091a
+@shared:type-check: 
+@shared:type-check: > @shared@0.1.0 type-check C:\Projects\NSCM\nscm-fe\packages\shared
+@shared:type-check: > tsc --noEmit
+@shared:type-check: 
+@factory:type-check: cache miss, executing 016d052a95d40aa3
+@admin:type-check: cache miss, executing 522f91d8788a5b03
+@master:type-check: cache miss, executing a816d7cbd197780e
+@demand:type-check: cache miss, executing b08dda36a4f47947
+@supply:type-check: cache miss, executing b6169237a53d3f2e
+@shipping:type-check: cache miss, executing 8fa969359cfbc857
+@authority:type-check: cache miss, executing cf80eeef4de7ffdf
+@report:type-check: cache miss, executing 2038b9ade1a60b02
+@authority:type-check: 
+@authority:type-check: > @authority@0.1.0 type-check C:\Projects\NSCM\nscm-fe\features\authority
+@admin:type-check: 
+@admin:type-check: > @admin@0.1.0 type-check C:\Projects\NSCM\nscm-fe\features\admin
+@admin:type-check: > tsc --noEmit
+@admin:type-check: 
+@authority:type-check: > tsc --noEmit
+@authority:type-check:
+@factory:type-check:
+@factory:type-check: > @factory@0.1.0 type-check C:\Projects\NSCM\nscm-fe\features\factory
+@factory:type-check: > tsc --noEmit
+@factory:type-check:
+@report:type-check: 
+@report:type-check: > @report@0.1.0 type-check C:\Projects\NSCM\nscm-fe\features\report
+@report:type-check: > tsc --noEmit
+@report:type-check:
+@master:type-check:
+@master:type-check: > @master@0.1.0 type-check C:\Projects\NSCM\nscm-fe\features\master
+@master:type-check: > tsc --noEmit
+@master:type-check:
+@supply:type-check: 
+@supply:type-check: > @supply@0.1.0 type-check C:\Projects\NSCM\nscm-fe\features\supply
+@supply:type-check: > tsc --noEmit
+@shipping:type-check:
+@shipping:type-check: > @shipping@0.1.0 type-check C:\Projects\NSCM\nscm-fe\features\shipping
+@shipping:type-check: > tsc --noEmit
+@shipping:type-check:
+@supply:type-check:
+@demand:type-check: 
+@demand:type-check: > @demand@0.1.0 type-check C:\Projects\NSCM\nscm-fe\features\demand
+@demand:type-check: > tsc --noEmit
+@demand:type-check:
+@web:type-check: cache miss, executing 0dd2b15b9bf595ff
+@web:type-check: 
+@web:type-check: > @web@0.1.0 type-check C:\Projects\NSCM\nscm-fe\apps\web
+@web:type-check: > tsc --noEmit
+@web:type-check:
+@web:type-check: src/core/Router.tsx(49,10): error TS2307: Cannot find module '@admin/dynamic-query' or its corresponding type declarations.
+@web:type-check:  ELIFECYCLE  Command failed with exit code 2.
+@web:type-check: ERROR: command finished with error: command (C:\Projects\NSCM\nscm-fe\apps\web) C:\Users\gyucheol_lee\AppData\Local\pnpm\store\v11\links\@\pnpm\10.28.2\0258174c06562d978b174b36ee223ada6b57b3e4a027f536dcb022ed7fac4523\bin\pnpm.CMD run type-check exited (2)
+@web#type-check: command (C:\Projects\NSCM\nscm-fe\apps\web) C:\Users\gyucheol_lee\AppData\Local\pnpm\store\v11\links\@\pnpm\10.28.2\0258174c06562d978b174b36ee223ada6b57b3e4a027f536dcb022ed7fac4523\bin\pnpm.CMD run type-check exited (2)
+
+ Tasks:    10 successful, 11 total
+Cached:    0 cached, 11 total
+  Time:    1m13.257s
+Failed:    @web#type-check
+
+ ERROR  run failed: command  exited (2)
+ ELIFECYCLE  Command failed with exit code 2.
+
+LGENSOL+gyucheol_lee@LESP01D5420 MINGW64 /c/Projects/NSCM/nscm-fe (feat/dmf0021-20260622)

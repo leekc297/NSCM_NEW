@@ -50,7 +50,7 @@ export const AuthApproval = ({ tabId, title }: PageProps<MENU_ID>) => {
   const setToast = useMessageStore(s => s.setToast);
   const queryClient = useQueryClient();
 
-  const { data } = useTabProcQuery<MENU_ID, SHEETS.MAIN>({
+  const { data, refetch } = useTabProcQuery<MENU_ID, SHEETS.MAIN>({
     menuId: MENU_ID,
     sheetName: SHEETS.MAIN,
     tabId,
@@ -69,8 +69,8 @@ export const AuthApproval = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   const handleSearch = () => {
     setFilter();
-    // ⭐ master hook §2.4 — Search 시 admin SYS0004 메타 refetch
     void fetchStaticColumns();
+    void refetch?.();
   };
 
   // SAVE 패턴 — useProcMutation 의 array wrap (`{data:[...]}`) 매핑 결함 회피
@@ -83,11 +83,17 @@ export const AuthApproval = ({ tabId, title }: PageProps<MENU_ID>) => {
       return;
     }
     if (!isEmpty(selected.filter(item => item.STATUS === 'APPROVED'))) {
-      void setAlert({ type: 'alert', content: t('MSG00621', '_승인대기중인 항목만 선택 해 주십시오.') });
+      void setAlert({
+        type: 'alert',
+        content: t('MSG00621', '_승인대기중인 항목만 선택 해 주십시오.'),
+      });
       return;
     }
     if (!isEmpty(selected.filter(item => item.STATUS === 'REJECTED'))) {
-      void setAlert({ type: 'alert', content: t('MSG00621', '_승인대기중인 항목만 선택 해 주십시오.') });
+      void setAlert({
+        type: 'alert',
+        content: t('MSG00621', '_승인대기중인 항목만 선택 해 주십시오.'),
+      });
       return;
     }
     const validRows = selected.filter(r => !!r.REQUEST_ID);
@@ -101,19 +107,22 @@ export const AuthApproval = ({ tabId, title }: PageProps<MENU_ID>) => {
         { data: validRows.map(r => ({ REQUEST_ID: r.REQUEST_ID })) }
       );
       if (response.data?.code === '0') {
-        await queryClient.invalidateQueries({ queryKey: [tabId] });
+        // await queryClient.invalidateQueries({ queryKey: [tabId] });
         setToast({ type: 'success', message: t('MSG00622', '_승인 완료') });
+        void refetch?.();
       } else {
         void setAlert({
           type: 'alert',
           content: response.data?.message ?? t('MSG00003', '_저장에 실패하였습니다.'),
         });
+        void refetch?.();
       }
     } catch (err) {
       void setAlert({
         type: 'alert',
         content: (err as Error).message ?? t('MSG00003', '_저장에 실패하였습니다.'),
       });
+      void refetch?.();
     }
   };
 
@@ -163,11 +172,17 @@ export const AuthApproval = ({ tabId, title }: PageProps<MENU_ID>) => {
       return;
     }
     if (!isEmpty(selected.filter(item => item.STATUS === 'APPROVED'))) {
-      void setAlert({ type: 'alert', content: t('MSG00621', '_승인대기중인 항목만 선택 해 주십시오.') });
+      void setAlert({
+        type: 'alert',
+        content: t('MSG00621', '_승인대기중인 항목만 선택 해 주십시오.'),
+      });
       return;
     }
     if (!isEmpty(selected.filter(item => item.STATUS === 'REJECTED'))) {
-      void setAlert({ type: 'alert', content: t('MSG00621', '_승인대기중인 항목만 선택 해 주십시오.') });
+      void setAlert({
+        type: 'alert',
+        content: t('MSG00621', '_승인대기중인 항목만 선택 해 주십시오.'),
+      });
       return;
     }
     setRejectTarget(selected);

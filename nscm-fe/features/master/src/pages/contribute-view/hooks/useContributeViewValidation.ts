@@ -1,3 +1,4 @@
+import { t } from '@foundation/i18n';
 import { useMessageStore } from '@shared/stores';
 
 import { VALIDATION_MSG } from '../contribute-view.constants';
@@ -16,7 +17,7 @@ export const useContributeViewValidation = () => {
     if (!versionNo || versionNo.trim() === '') {
       await setAlert({
         type: 'alert',
-        content: `[${VALIDATION_MSG.VERSION_REQUIRED}] Version 을 선택하고 조회하세요.`,
+        content: t('MSG00283', '_버전을 선택하세요.'),
       });
       return false;
     }

@@ -75,6 +75,15 @@ class AxiosConfig {
     data?: P,
     options: AxiosRequestConfig<P> = {}
   ): AxiosPromise<ApiResponse<T>> {
+    // ⭐ FormData(multipart) 업로드 — Content-Type 제거해 브라우저/axios 가 boundary 포함
+    //   multipart/form-data 를 자동 설정하게 한다. (DEFAULT_HEADERS 의 application/json 이 강제되면
+    //   파일 파트가 파싱되지 않아 업로드가 무반응. 2026-07-07)
+    const isFormData = typeof FormData !== 'undefined' && data instanceof FormData;
+    if (isFormData) {
+      const headers = new AxiosHeaders(this.headers);
+      headers.delete('Content-Type');
+      return this.request<T, P>({ method: 'POST', url, data, headers, ...options });
+    }
     return this.request<T, P>({
       method: 'POST',
       url,

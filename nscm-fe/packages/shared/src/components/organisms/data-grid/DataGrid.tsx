@@ -34,6 +34,12 @@ interface DataGridProps<T extends WijmoRowItem = WijmoRowItem> extends FlexGridP
   useAggregationRow?: boolean;
   aggregationRowPlacement?: 'above' | 'below';
   /**
+   * 다단(2단/3단) 헤더 행 높이(px). 미지정(default)이면 Wijmo 기본 동작 — 기존 화면 무영향(회귀 0).
+   * 지정 시 columnHeaders 의 모든 헤더 row 를 이 높이로 강제(예: 3단 헤더 총높이 48px → 16 전달).
+   * 화면 useEffect/CSS 로는 wrapper 의 columnGroups 재적용에 덮여 무효 → wrapper-level 적용만 유효.
+   */
+  headerRowHeight?: number;
+  /**
    * @deprecated
    * Wijmo 'Initialized' property is hard to handle rendering of component with other states or properties.
    * Add and remove handler with useEffect to set handler for wijmo component.
@@ -59,6 +65,7 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
   allowMerging = AllowMerging.ColumnHeaders,
   selectionMode = SelectionMode.MultiRange,
   initialized,
+  headerRowHeight,
   dblClick,
   click,
   ...gridProps
@@ -67,6 +74,9 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
   const clickRef = useRef(click);
   dblClickRef.current = dblClick;
   clickRef.current = click;
+  // headerRowHeight 는 매 렌더 변경 가능 → ref 로 최신값 유지 (handleInitialized 1회 closure 보완).
+  const headerRowHeightRef = useRef(headerRowHeight);
+  headerRowHeightRef.current = headerRowHeight;
 
   const {
     setSummaryTooltip,
@@ -152,6 +162,18 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
      */
     grid.hostElement.addEventListener('dblclick', e => dblClickRef.current?.(e));
     grid.hostElement.addEventListener('click', e => clickRef.current?.(e));
+
+    // ⭐ 다단 헤더 행 높이 — columnGroups 재적용으로 헤더 row 높이가 리셋되므로
+    //   updatedLayout(매 layout refresh 후)에 재적용. 미지정(undefined) 화면은 무영향(회귀 0).
+    //   guard: 이미 목표 높이면 skip → 무한 루프 방지.
+    grid.updatedLayout.addHandler(() => {
+      const h = headerRowHeightRef.current;
+      if (h == null) return;
+      const headerRows = grid.columnHeaders?.rows;
+      if (!headerRows || headerRows.length === 0) return;
+      if (Math.round(headerRows.defaultSize) === h) return;
+      headerRows.defaultSize = h;
+    });
   };
 
   return (

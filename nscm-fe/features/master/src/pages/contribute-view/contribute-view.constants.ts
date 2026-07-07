@@ -1,9 +1,9 @@
-export const MENU_ID = 'DMF0043_01' as const;
+export const MENU_ID = 'DMF0043' as const;
 export type MENU_ID = typeof MENU_ID;
 
 export enum SHEETS {
-  MAIN = 'main',
-  MAIN_TITLE = 'mainTitle',
+  MAIN = 'salesList',
+  MAIN_TITLE = 'salesListTitle',
   VERSION = 'version',
   RATE_POPUP = 'ratePopup',
   VERSION_POPUP = 'versionPopup',

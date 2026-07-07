@@ -1,3 +1,4 @@
+import { toggleClass } from '@mescius/wijmo';
 import { CellType, type FlexGrid, type FormatItemEventArgs } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useState, type MutableRefObject } from 'react';
@@ -75,8 +76,9 @@ export const ErpEdiMasterSalesSiteGrid = ({
   ) => {
     if (args.panel.cellType !== CellType.Cell) return;
     const binding = GridUtils.getBinding(grid, args.col);
-    if (typeof binding !== 'string' || !YELLOW_HIGHLIGHT_COLUMNS.has(binding)) return;
-    args.cell.style.backgroundColor = 'rgba(255, 212, 0, 1)';
+    if (typeof binding !== 'string') return;
+    // 편집 가능 컬럼 = 표준 Yellow(`wj-cell-editable`). 그 외 = White+zebra (클래스 없음). hook #95.
+    toggleClass(args.cell, 'wj-cell-editable', YELLOW_HIGHLIGHT_COLUMNS.has(binding));
   };
 
   const setCustomer = (

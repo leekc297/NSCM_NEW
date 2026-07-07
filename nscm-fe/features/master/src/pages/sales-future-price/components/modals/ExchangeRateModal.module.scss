@@ -1,19 +1,35 @@
-// 사용자 사고 fix (2026-06-03 v2): popup 하단 잘림 = .container min-height 70vh > dialog 50vh 잘림
-//   → height 100% + flex layout 안에서 gridWrap flex:1/min-height:0
-.container {
-  display: flex; flex-direction: column; gap: 10px; padding: 8px;
-  height: 100%; box-sizing: border-box; overflow: hidden;
+// 표준 모달 레이아웃 (형제 ProjectByDivisionModal 동일) — SearchArea → grid → 하단 버튼.
+.dialogContentWrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
-.filterRow {
-  display: flex; gap: 12px; align-items: center; padding: 8px 12px; flex-wrap: wrap; flex-shrink: 0;
-  background: #f5f7fa; border: 1px solid #e0e4e9; border-radius: 4px;
-  label { display: inline-flex; gap: 6px; align-items: center; font-size: 13px; }
-  input[type='text'], select { padding: 4px 8px; font-size: 13px; border: 1px solid #b8bfc9; border-radius: 3px; }
+
+.gridWrapper {
+  flex: 1;
+  min-height: 0;
+  border: 1px solid #e0e4e9;
+  border-radius: 4px;
+  background: white;
+  overflow: hidden;
+  position: relative;
 }
-.findBtn, .closeBtn {
-  padding: 6px 18px; font-size: 13px; font-weight: 600;
-  border: none; border-radius: 3px; cursor: pointer;
+
+.buttonWrapper {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-top: 5px;
 }
-.findBtn { background: #1976d2; color: white; &:hover { background: #1565c0; } }
-.closeBtn { background: white; color: #495565; border: 1px solid #b8bfc9; }
-.gridWrap { flex: 1 1 auto; min-height: 0; border: 1px solid #e0e4e9; border-radius: 4px; background: white; overflow: hidden; position: relative; }
+
+// Period 범위(YYYY-MM ~ YYYY-MM) — InputField 2개 + 구분자, 36px 통일.
+.periodRange {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+}
+
+.grid {
+  height: 100%;
+}

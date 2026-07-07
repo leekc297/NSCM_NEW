@@ -1,7 +1,6 @@
 import { CellType, type FlexGrid } from '@mescius/wijmo.grid';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
-import _ from '@foundation/lodash';
 import { GridUtils } from '@foundation/utils';
 import { CustomDropdown, SearchArea, DataGrid, CustomDialog } from '@shared/components';
 import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
@@ -22,6 +21,8 @@ interface OwnerByDivisionModalProps {
   setSelectedValue: (owners: string) => void;
   preSearchParams: ProcRequest<MODAL_OWNER_BY_DIVISION, MODAL_SHEET_OWNER_BY_DIVISION>;
   ownerId?: string;
+  // ⭐ 멀티 선택 모드(옵션). true 시 체크박스 컬럼으로 선택(재기동 시 carry/프리체크 없음).
+  multiCheckbox?: boolean;
 }
 
 export const OwnerByDivisionModal = ({
@@ -30,6 +31,7 @@ export const OwnerByDivisionModal = ({
   setSelectedValue,
   preSearchParams,
   ownerId = undefined,
+  multiCheckbox = false,
 }: OwnerByDivisionModalProps) => {
   const { t } = useTranslation();
 
@@ -53,6 +55,7 @@ export const OwnerByDivisionModal = ({
   const [modalFilters, setModalFilters] = useState<{
     owner: string;
   }>({ owner: '' });
+  const [ownerKeyword, setOwnerKeyword] = useState('');
 
   const { data: ownerData } = useTabProcQuery<MODAL_OWNER_BY_DIVISION>({
     menuId: MODAL_OWNER_BY_DIVISION,
@@ -62,17 +65,33 @@ export const OwnerByDivisionModal = ({
     enabled: open,
   });
 
-  const itemsSource = (ownerData?.o_rc1 ?? []).filter(owner =>
-    (owner.OWNER ?? '').toLowerCase().includes(modalFilters.owner.toLowerCase())
+  // useMemo — 매 렌더 새 배열이면 그리드 re-bind 로 체크박스 선택(row.isSelected)이 풀림.
+  const itemsSource = useMemo(
+    () =>
+      (ownerData?.o_rc1 ?? []).filter(owner =>
+        (owner.OWNER ?? '').toLowerCase().includes(modalFilters.owner.toLowerCase())
+      ),
+    [ownerData, modalFilters]
   );
 
-  const handleOwnerChange = _.debounce((owner: string) => {
-    setModalFilters({
-      owner: owner,
-    });
-  }, 50);
+  // 자동필터 해제 — Search 버튼/Enter 시에만 modalFilters 반영 (입력 중 즉시필터 안 함).
+  const handleSearch = () => setModalFilters({ owner: ownerKeyword });
 
   const handleSubmit = () => {
+    if (multiCheckbox) {
+      // 체크박스 모드 — 체크된(row.isSelected) 행의 OWNER 수집.
+      const grid = gridRef.current;
+      if (!grid) return;
+      const ids: string[] = [];
+      for (const row of grid.rows) {
+        const it = row?.dataItem as { OWNER?: string } | undefined;
+        if (row?.isSelected && it?.OWNER) ids.push(it.OWNER);
+      }
+      setSelectedValue(ids.join(','));
+      modalClose();
+      return;
+    }
+
     const selections = gridRef.current?.selectedItems as ResponseData<
       MODAL_OWNER_BY_DIVISION,
       MODAL_SHEET_OWNER_BY_DIVISION,
@@ -106,7 +125,8 @@ export const OwnerByDivisionModal = ({
     // ownerId 가 undefined 일 때 preSearchParams.owner fallback — DMF0005 가 prop 생략해도
     // 호출 화면의 owner 검색조건이 modal filter 로 반영됨. feat/dmf0020-sales-future-price
     // 머지 시 동일 패턴이라 conflict 0 + DMF0005 ownerId prop 주석 사고 사전 차단.
-    setModalFilters({ owner: ownerId ?? (preSearchParams.owner ?? '') });
+    setModalFilters({ owner: ownerId ?? preSearchParams.owner ?? '' });
+    setOwnerKeyword(ownerId ?? preSearchParams.owner ?? '');
     setSearchParam({ ...preSearchParams, owner: '' });
     if (!initialized) void fetchStaticColumns();
   }, [open]);
@@ -127,6 +147,8 @@ export const OwnerByDivisionModal = ({
       customContentArea={
         <div className={styles.dialogContentWrapper}>
           <SearchArea
+            searchButtonLabel={t('LBL00664', 'Search')}
+            onSearch={handleSearch}
             conditions={
               <>
                 <Grid size={4}>
@@ -228,8 +250,9 @@ export const OwnerByDivisionModal = ({
                     render={() => (
                       <InputField
                         fullWidth
-                        defaultValue={preSearchParams.owner ?? ''}
-                        onChange={e => handleOwnerChange(e.target.value)}
+                        value={ownerKeyword}
+                        onChange={e => setOwnerKeyword(e.target.value)}
+                        onKeyDown={e => e.key === 'Enter' && handleSearch()}
                       />
                     )}
                   />
@@ -241,9 +264,10 @@ export const OwnerByDivisionModal = ({
             <DataGrid<ResponseData<MODAL_OWNER_BY_DIVISION, MODAL_SHEET_OWNER_BY_DIVISION, 'o_rc1'>>
               gridRef={gridRef}
               isReadOnly
+              useCheckbox={multiCheckbox}
               staticColumns={staticColumns}
               itemsSource={itemsSource}
-              dblClick={handleDblClick}
+              dblClick={multiCheckbox ? undefined : handleDblClick}
             />
           </div>
           <div className={styles.buttonWrapper}>

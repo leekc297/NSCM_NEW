@@ -6,13 +6,12 @@ import { useEffect, useMemo, useRef } from 'react';
 import { apiClient } from '@foundation/apis';
 import { CRUD_TYPE } from '@foundation/constants';
 import { useQueryClient } from '@foundation/query-client';
-import type { EditTracker} from '@foundation/utils';
+import type { EditTracker } from '@foundation/utils';
 import { GridAction } from '@foundation/utils';
-import { CustomDialog, DataGrid, SearchArea } from '@shared/components';
+import { CustomDialog, CustomDropdown, DataGrid, SearchArea } from '@shared/components';
 import { useTabProcQuery } from '@shared/hooks';
 import { Button, FormItem } from '@shared/lges';
 import { ControlConfirmIcon } from '@shared/lges-icons';
-import { Grid } from '@shared/mui';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
 import {
@@ -190,23 +189,35 @@ export const ContributeVersionModal = ({ open, modalClose }: ContributeVersionMo
     for (const r of dirty) {
       if (r.CRUD_TYPE === CRUD_TYPE.DELETE) continue;
       if (!r.YYYY || String(r.YYYY).length !== 4) {
-        void setAlert({ type: 'alert', content: t('MSG_YEAR_4DIGIT', 'Year(YYYY) 는 4자리 숫자여야 합니다.') });
+        void setAlert({
+          type: 'alert',
+          content: t('MSG_YEAR_4DIGIT', 'Year(YYYY) 는 4자리 숫자여야 합니다.'),
+        });
         savingRef.current = false;
         return;
       }
       if (!r.VERSION_NM || String(r.VERSION_NM).trim() === '') {
-        void setAlert({ type: 'alert', content: t('MSG_VERSION_NM_REQUIRED', '버전명을 입력해주세요.') });
+        void setAlert({
+          type: 'alert',
+          content: t('MSG_VERSION_NM_REQUIRED', '버전명을 입력해주세요.'),
+        });
         savingRef.current = false;
         return;
       }
       if (r.VALID_YN !== 'Y' && r.VALID_YN !== 'N') {
-        void setAlert({ type: 'alert', content: t('MSG_VALID_YN_INVALID', '유효여부는 Y 또는 N 이어야 합니다.') });
+        void setAlert({
+          type: 'alert',
+          content: t('MSG_VALID_YN_INVALID', '유효여부는 Y 또는 N 이어야 합니다.'),
+        });
         savingRef.current = false;
         return;
       }
     }
 
-    const ok = await setAlert({ type: 'confirm', content: t('MSG00004', '수정한 내용을 저장하시겠습니까?') });
+    const ok = await setAlert({
+      type: 'confirm',
+      content: t('MSG00001', '수정한 내용을 저장하시겠습니까?'),
+    });
     if (!ok) {
       savingRef.current = false;
       return;
@@ -222,7 +233,8 @@ export const ContributeVersionModal = ({ open, modalClose }: ContributeVersionMo
       createdBy: '',
     };
     dirty.forEach(r => {
-      const flag = r.CRUD_TYPE === CRUD_TYPE.INSERT ? 'I' : r.CRUD_TYPE === CRUD_TYPE.MODIFY ? 'U' : 'D';
+      const flag =
+        r.CRUD_TYPE === CRUD_TYPE.INSERT ? 'I' : r.CRUD_TYPE === CRUD_TYPE.MODIFY ? 'U' : 'D';
       buf.activeFlag += '^' + flag;
       buf.verSeq += '^' + String(r.VER_SEQ ?? '');
       buf.yyyy += '^' + String(r.YYYY ?? '');
@@ -244,11 +256,11 @@ export const ContributeVersionModal = ({ open, modalClose }: ContributeVersionMo
         validYn: trim(buf.validYn),
         createdBy: trim(buf.createdBy),
       });
-      void setAlert({ type: 'alert', content: t('MSG_SAVE_DONE', '저장이 완료되었습니다.') });
+      void setAlert({ type: 'alert', content: t('MSG00002', '저장이 완료되었습니다.') });
       void queryClient.invalidateQueries({ queryKey: [MODAL_VERSION] });
       void refetch?.();
     } catch {
-      void setAlert({ type: 'alert', content: t('MSG_SAVE_FAIL', '저장 중 오류가 발생했습니다.') });
+      void setAlert({ type: 'alert', content: t('MSG00003', '저장 중 오류가 발생했습니다.') });
     } finally {
       savingRef.current = false;
     }
@@ -271,33 +283,29 @@ export const ContributeVersionModal = ({ open, modalClose }: ContributeVersionMo
       customContentArea={
         <div className={styles.dialogContentWrapper}>
           <SearchArea
-            searchButtonLabel={t('BTN00001', '_Search')}
+            searchButtonLabel={t('LBL00722', '_Search')}
             onSearch={handleFind}
             conditions={
-              <Grid size={4}>
-                <FormItem
-                  label={t('LBL00002', '_Year')}
-                  labelAlign='right'
-                  required
-                  render={() => (
-                    <select
-                      value={selectedYear}
-                      onChange={e => setSelectedYear(e.target.value)}
-                      aria-label='year'
-                    >
-                      <option value=''>{t('LBL_SELECT', '_Select')}</option>
-                      {yearOptions.map(o => {
-                        const v = String(o.NAME2 ?? o.NAME ?? o.CODE ?? '').substring(0, 4);
-                        return v ? (
-                          <option key={String(o.CODE ?? v)} value={v}>
-                            {v}
-                          </option>
-                        ) : null;
-                      })}
-                    </select>
-                  )}
-                />
-              </Grid>
+              <FormItem
+                label={t('LBL00086', '_Year')}
+                labelAlign='right'
+                required
+                width={487}
+                labelSize='middle'
+                render={() => (
+                  <CustomDropdown
+                    value={selectedYear}
+                    options={yearOptions.map(o => ({
+                      label: String(o.NAME2 ?? o.NAME ?? o.CODE),
+                      value: String(o.CODE ?? ''),
+                    }))}
+                    onChange={(_: unknown, option: string) => {
+                      const opt = yearOptions.find(o => String(o.CODE) === option);
+                      setSelectedYear(String(opt?.CODE).substring(0, 4));
+                    }}
+                  />
+                )}
+              />
             }
           />
           <div className={styles.gridWrapper}>
@@ -314,26 +322,26 @@ export const ContributeVersionModal = ({ open, modalClose }: ContributeVersionMo
               appearance='outlined'
               priority='normal'
               size='medium'
-              buttonLabel={t('BTN00003', '_Insert')}
+              buttonLabel={t('LBL00121', '_Insert')}
               onClick={handleInsert}
             />
             <Button
               appearance='outlined'
               priority='normal'
               size='medium'
-              buttonLabel={t('BTN00004', '_Delete')}
+              buttonLabel={t('LBL00108', '_Delete')}
               onClick={handleDelete}
             />
             <Button
               appearance='outlined'
               priority='normal'
               size='medium'
-              buttonLabel={t('BTN00005', '_Close')}
+              buttonLabel={t('LBL00107', '_Close')}
               onClick={() => modalClose()}
             />
             <Button
               appearance='contained'
-              buttonLabel={t('BTN00006', '_Save')}
+              buttonLabel={t('LBL00111', '_Save')}
               iconComponent={<ControlConfirmIcon size='small' />}
               iconPosition='leading'
               priority='primary'

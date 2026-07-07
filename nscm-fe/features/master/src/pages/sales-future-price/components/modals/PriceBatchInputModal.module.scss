@@ -1,38 +1,54 @@
-// 사용자 사고 fix (2026-06-03 v2): popup 하단 잘림 = .container min-height 70vh > dialog 50vh 잘림
-//   → height 100% + flex layout 안에서 gridWrap flex:1/min-height:0 + filterRow/buttonRow flex-shrink:0
-.container {
-  display: flex; flex-direction: column; gap: 8px; padding: 8px;
-  height: 100%; box-sizing: border-box; overflow: hidden;
+// PriceBatchInputModal — 표준 모달 레이아웃 (형제 ExchangeRateModal 동일)
+//   SearchArea → gridWrapper → 하단 buttonWrapper.
+.dialogContent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 4px 0;
+  // ⭐ bounded 컨테이너화 — CustomDialog 높이 안에서 flex 분배해야 grid viewport bounded → vscroll 생성.
+  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
-.filterRow {
-  display: flex; gap: 10px; align-items: center; padding: 6px 10px; flex-wrap: wrap; flex-shrink: 0;
-  background: #f5f7fa; border: 1px solid #e0e4e9; border-radius: 4px; font-size: 13px;
-  span { font-size: 13px; color: #495565; }
+
+.gridWrapper {
+  position: relative;
+  // ⭐ min-height:0 = flex 자식 축소 허용 → wijmo grid 가 bounded viewport 확보 → 세로 스크롤바 생성.
+  flex: 1 1 auto;
+  min-height: 0;
+  border: 1px solid #e0e4e9;
+  border-radius: 4px;
+  overflow: hidden;
+  background: white;
 }
-.field {
-  display: inline-flex; gap: 4px; align-items: center;
-  input[type='text'], input[type='date'], select {
-    padding: 4px 8px; font-size: 13px; border: 1px solid #b8bfc9; border-radius: 3px;
+
+.grid {
+  height: 100%;
+  width: 100%;
+
+  // ⭐ 메인 그리드(SalesFuturePrice)와 동일 — 다단(3단) 헤더 셀이 16px row 안에 맞도록 타이포 보정.
+  //   행 높이 자체는 updatedLayout useEffect(48/rowCount)가 전담. CSS 는 텍스트 클리핑 방지만.
+  :global {
+    .wj-colheaders .wj-cell {
+      line-height: 14px;
+      padding: 1px 4px;
+      font-size: 11px;
+    }
   }
-  input[type='text'] { width: 160px; }
 }
-.iconBtn { padding: 4px 6px; font-size: 12px; background: #fff; border: 1px solid #b8bfc9; border-radius: 3px; cursor: pointer; }
-.iconBtn:hover { background: #f5f7fa; }
-// DMF0004/0005/0007 SearchFields 카탈로그 popupBtnStyle 동등 — 조회조건 popup 표준 버튼
-.popupBtn {
-  width: 200px; display: flex; align-items: center; justify-content: space-between;
-  padding: 6px 8px; border: 1px solid #b8bfc9; border-radius: 3px;
-  background: white; cursor: pointer; text-align: left; font-size: 13px;
+
+.buttonWrapper {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-top: 5px;
 }
-.popupBtn:hover { background: #f5f7fa; }
-.findBtn, .editBtn, .saveBtn, .excelBtn, .closeBtn {
-  padding: 5px 12px; font-size: 13px; font-weight: 600; border: none; border-radius: 3px; cursor: pointer;
+
+// Project / Model popup 조회 — InputField(박스) + 우측 별도 조회 버튼 (catalog PopupSearchInput 동일).
+//   endAdornment(박스 안 버튼) 미사용 → flex 분리로 버튼이 input 우측 끝에 높이 정렬.
+.popupRow {
+  display: flex;
+  align-items: stretch;
+  gap: 4px;
+  width: 100%;
 }
-.findBtn  { background: #1976d2; color: white; }
-.editBtn  { background: #0288d1; color: white; }
-.saveBtn  { background: #2e7d32; color: white; }
-.excelBtn { background: #1e8e3e; color: white; }
-.closeBtn { background: white; color: #495565; border: 1px solid #b8bfc9; }
-.findBtn:disabled, .editBtn:disabled, .saveBtn:disabled { opacity: 0.5; cursor: not-allowed; }
-.hint { margin-left: 8px; font-size: 12px; color: #6b7785; }
-.gridWrap { flex: 1 1 auto; min-height: 0; border: 1px solid #e0e4e9; border-radius: 4px; background: white; overflow: hidden; position: relative; }

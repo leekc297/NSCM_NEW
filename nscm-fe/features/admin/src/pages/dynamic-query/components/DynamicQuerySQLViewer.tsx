@@ -6,6 +6,8 @@ import { useEffect } from 'react';
 
 import { useDynamicQueryStore } from '../useDynamicQueryStore';
 
+import styles from './DynamicQuerySQLViewer.module.scss';
+
 interface Props {
   baseSql: string;
 }
@@ -21,28 +23,15 @@ export const DynamicQuerySQLViewer = ({ baseSql }: Props) => {
     setEditedSqlText(baseSql, selectedQueryId);
   }, [baseSql, selectedQueryId, setEditedSqlText]);
 
+  const { t } = useTranslation();
+
   return (
     <textarea
+      className={styles.sqlTextarea}
       value={editedSqlText}
       onChange={e => setEditedSqlText(e.target.value, selectedQueryId)}
       spellCheck={false}
-      placeholder={selectedQueryId ? '' : 'Query 를 선택하세요'}
-      style={{
-        width: '100%',
-        minHeight: 240,
-        padding: 12,
-        fontFamily:
-          'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \'Liberation Mono\', \'Courier New\', monospace',
-        fontSize: 13,
-        lineHeight: 1.5,
-        border: '1px solid #d9d9d9',
-        borderRadius: 4,
-        background: '#ffffff',
-        resize: 'vertical',
-        whiteSpace: 'pre-wrap',
-        wordBreak: 'break-word',
-        overflow: 'auto',
-      }}
+      placeholder={selectedQueryId ? '' : t('MSG00628', '_실행할 Query 를 선택하세요')}
     />
   );
 };

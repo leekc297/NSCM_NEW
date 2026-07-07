@@ -14,37 +14,43 @@ interface Props {
 }
 
 export const DynamicQueryResultGrid = ({ gridRef, data, columnsMeta }: Props) => {
-  // 컬럼 우선순위:
-  //   1. 결과 row 가 있으면 첫 row 의 key (실 실행 컬럼) — 실 SQL 변형 반영
-  //   2. 결과 0 row 면 admin 메타 (columnsMeta) 의 COLUMN_NAME — 빈 결과여도 헤더 표시
+  // 컬럼 순서 = Columns 탭 정의 순서(SEQNO). 결과 row 의 원시 key 순서(SQL/JSON)와 무관하게
+  //   정의된 순서로 정렬 + 정의에 없는 결과 컬럼은 뒤에 append (누락 방지).
   const staticColumns = useMemo<RawFlexGridColumnConfig[]>(() => {
+    const toCol = (key: string): RawFlexGridColumnConfig => ({
+      colNm: key,
+      colLblNm: key,
+      colWth: 120,
+      fixed: false,
+      visible: true,
+      display: true,
+    });
+
+    // SEQNO 오름차순 (Array.sort 안정 정렬 — 동일 SEQNO 는 SP 반환 순서=LAST_UPDATE_DATE 보존).
+    const orderedMeta = (columnsMeta ?? [])
+      .filter(c => c.VALID_YN !== 'N')
+      .slice()
+      .sort((a, b) => Number(a.SEQNO ?? 0) - Number(b.SEQNO ?? 0));
+
     if (data && data.length > 0) {
       const first = data[0] as Record<string, unknown>;
-      return Object.keys(first).map(
-        (key): RawFlexGridColumnConfig => ({
-          colNm: key,
-          colLblNm: key,
-          colWth: 120,
-          fixed: false,
-          visible: true,
-          display: true,
-        })
-      );
+      const resultKeys = Object.keys(first);
+      const upperToKey = new Map(resultKeys.map(k => [k.toUpperCase(), k]));
+      const metaUpper = new Set(orderedMeta.map(c => String(c.COLUMN_NAME).toUpperCase()));
+
+      // 1) 정의(SEQNO) 순서로, 결과에 존재하는 컬럼만 (대소문자 무시 매칭, 실제 key 보존)
+      const ordered = orderedMeta
+        .map(c => upperToKey.get(String(c.COLUMN_NAME).toUpperCase()))
+        .filter((k): k is string => !!k)
+        .map(toCol);
+      // 2) 정의에 없는 결과 컬럼 (예: 사용자 SQL 변형) 은 뒤에 append
+      const extras = resultKeys.filter(k => !metaUpper.has(k.toUpperCase())).map(toCol);
+      return [...ordered, ...extras];
     }
-    // fallback: admin 등록 컬럼 메타 기반
-    if (columnsMeta && columnsMeta.length > 0) {
-      return columnsMeta
-        .filter(c => c.VALID_YN !== 'N')
-        .map(
-          (c): RawFlexGridColumnConfig => ({
-            colNm: c.COLUMN_NAME,
-            colLblNm: c.COLUMN_NAME,
-            colWth: 120,
-            fixed: false,
-            visible: true,
-            display: true,
-          })
-        );
+
+    // 결과 0 row: 정의 메타 순서대로 헤더 표시
+    if (orderedMeta.length > 0) {
+      return orderedMeta.map(c => toCol(String(c.COLUMN_NAME)));
     }
     return [];
   }, [data, columnsMeta]);

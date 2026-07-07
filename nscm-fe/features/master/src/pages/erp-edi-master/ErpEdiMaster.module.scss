@@ -17,18 +17,30 @@
 }
 
 // 3단 분리 — DMF0004 패턴 (height:0 + flex-grow N). 비율 3:3:4 (Summary 30% / Repair 30% / Tab 40%)
-// 2026-06-20 사용자 요구로 4:3:3 → 3:3:4 변경 (Tab 영역 가장 크게).
-.summarySection {
+// ⭐ Figma node 5883-159383 정합 (2026-06-28): Top(527h) = Summary(좌 400w) | Repair(우 1202w)
+//   2-컬럼 + 하단 Sub 탭(180h). Top:Sub = 527:180. Summary:Repair = 400:1202 (gap 24).
+.topRow {
   height: 0;
-  flex-grow: 3;
+  flex-grow: 527; // Figma Top 높이
+  display: flex;
+  flex-direction: row;
+  gap: 24px; // Figma Top 내부 Spacing
+  min-height: 0;
+}
+
+.summaryCol {
+  flex-grow: 400; // Figma 좌 Module 400w
+  flex-basis: 0;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
-.repairSection {
-  height: 0;
-  flex-grow: 3;
+.repairCol {
+  flex-grow: 1202; // Figma 우 Module 1202w
+  flex-basis: 0;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -36,7 +48,7 @@
 
 .subSection {
   height: 0;
-  flex-grow: 4;
+  flex-grow: 180; // Figma 하단 Module 180h (Tab 36 + Table 132)
   display: flex;
   flex-direction: column;
   min-height: 0;

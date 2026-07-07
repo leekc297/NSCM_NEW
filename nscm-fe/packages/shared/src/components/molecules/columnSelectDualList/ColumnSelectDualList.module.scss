@@ -1,9 +1,10 @@
 .dualListContainer {
   display: flex;
-  gap: 8px;
+  gap: 12px;
   flex: 1 1 auto;
   min-height: 0;
   height: 100%;
+  align-items: stretch;
 }
 
 .sideTable {
@@ -11,20 +12,10 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  border: 1px solid #b8bfc9;
-  border-radius: 4px;
+  border: 1px solid #e0e3e2;
+  border-radius: 2px;
   overflow: hidden;
   background: #fff;
-}
-
-.tableHeader {
-  flex-shrink: 0;
-  padding: 6px 10px;
-  background: #f5f7fa;
-  border-bottom: 1px solid #b8bfc9;
-  font-weight: 600;
-  font-size: 13px;
-  color: #2b3a4a;
 }
 
 .tableScroll {
@@ -36,65 +27,121 @@
 .table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 13px;
+  table-layout: fixed;
+  font-size: 14px;
+  color: #333;
 
   thead th {
     position: sticky;
     top: 0;
-    background: #eef2f7;
-    border-bottom: 1px solid #b8bfc9;
-    padding: 6px 8px;
+    background: #f5f7fa;
+    border-bottom: 1px solid #e0e3e2;
+    padding: 4px 12px;
     font-weight: 600;
-    color: #2b3a4a;
+    color: #333;
+    text-align: center;
+    white-space: nowrap;
     z-index: 1;
   }
 
   tbody tr {
     cursor: pointer;
-    border-bottom: 1px solid #e0e4e9;
+    border-bottom: 1px solid #eef0ef;
 
     &:hover {
-      background: #f0f5ff;
+      background: #f7faff;
     }
   }
 
   tbody td {
-    padding: 6px 8px;
-    color: #495565;
+    padding: 4px 12px;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 
-.selected {
-  background: #c8dcff !important;
+.checkCol {
+  width: 48px;
+}
 
-  td {
-    color: #1a3a6e !important;
-    font-weight: 600;
+.noCol {
+  width: 60px;
+}
+
+.checkCell {
+  width: 48px;
+  text-align: center !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.noCell {
+  width: 60px;
+  text-align: center !important;
+}
+
+.checkbox {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  vertical-align: middle;
+  accent-color: #6a5acd;
+  cursor: pointer;
+}
+
+.checkedRow {
+  background: #f1eefb;
+
+  &:hover {
+    background: #ebe7f8;
   }
+}
+
+// 우측 grid 행 D&D 순서이동
+.draggableRow {
+  cursor: grab;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.dragging {
+  opacity: 0.4;
+}
+
+.dragOver td {
+  // 드롭 위치 표시 — 행 상단 보라 라인
+  box-shadow: inset 0 2px 0 0 #6a5acd;
 }
 
 .moveButtons {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
   align-items: center;
   justify-content: center;
-  width: 60px;
+  width: 56px;
   flex-shrink: 0;
 }
 
 .arrowBtn {
-  width: 44px;
-  height: 38px;
-  font-size: 18px;
-  background: #1976d2;
-  color: white;
-  border: none;
+  width: 40px;
+  height: 40px;
+  font-size: 12px;
+  color: #5b5c5b;
+  background: #fff;
+  border: 1px solid #dde0df;
   border-radius: 4px;
   cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &:hover {
-    background: #1565c0;
+    background: #f5f6f7;
+    border-color: #c8ccca;
   }
 }

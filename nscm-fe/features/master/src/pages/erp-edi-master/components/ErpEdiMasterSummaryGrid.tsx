@@ -7,7 +7,6 @@ import { DataGrid } from '@shared/components';
 import { useMessageStore } from '@shared/stores';
 
 import type { MENU_ID, SHEETS } from '../erp-edi-master.constants';
-import { applyReadOnlyColoring } from '../erp-edi-master.utils';
 import { useErpEdiMasterStore } from '../useErpEdiMasterStore';
 
 interface ErpEdiMasterSummaryGridProps {
@@ -65,7 +64,6 @@ export const ErpEdiMasterSummaryGrid = ({
       itemsSource={data}
       staticColumns={staticColumns}
       dblClick={handleDblClick}
-      formatItem={applyReadOnlyColoring}
     />
   );
 };

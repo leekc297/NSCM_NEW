@@ -27,13 +27,15 @@ export const ForecastPriceForm = ({
   const setSearchParams = useForecastPriceStore(state => state.setSearchParams);
   const isOpenSearchArea = useForecastPriceStore(state => state.isOpenSearchArea);
 
-  // ComboId — C# `Data.Type.X` PascalCase 보존. BE `/combo` 등록 여부 확정 전 (spec.md §11 F8)
+  // ComboId — SCM_ADM_CMBO_SQL_M 등록명 사용 (2026-07-02 전수 대조).
+  // AS-IS User*(auth-ext) 변형은 TO-BE 미이관 → 비auth 등록명으로 교정:
+  //   UserTeamByDivision → TeambyDivision / EndCustomerByDivision → EndCustomer (DIVISION_ID 컬럼 반환 — 클라 필터 가능)
   const [myDivision, userTeamByDivision, endCustomerByDivision, bizType, scmSiteByEndCustomer40] =
     useTabComboQueries({
       filters: [
         'MyDivision',
-        'UserTeamByDivision',
-        'EndCustomerByDivision',
+        'TeambyDivision',
+        'EndCustomer',
         'BizType',
         'ScmSitebyEndCustomer40',
       ],

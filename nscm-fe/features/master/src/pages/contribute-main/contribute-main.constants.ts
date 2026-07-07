@@ -2,7 +2,7 @@ export const MENU_ID = 'DMF0043' as const;
 export type MENU_ID = typeof MENU_ID;
 
 export enum SHEETS {
-  MAIN = 'main',
+  MAIN = 'ContributeMain',
   MAIN_TITLE = 'mainTitle',
   VERSION = 'version',
   YEAR_POPUP = 'yearPopup',
@@ -40,7 +40,7 @@ export type RESPONSE_SET = (typeof RESPONSE_SET)[keyof typeof RESPONSE_SET];
 export const VALIDATION_MSG = {
   RATIO_OUT_OF_RANGE: 'MSG00303', // 입력 데이터 100% 초과/미만 차단 (ValidChk)
   REQUIRED_DIVISION: 'MSG00308', // 필수값 — 구분값 입력 (ValidChk2)
-  SAVE_CONFIRM: 'MSG00004', // 저장 전 확인
+  SAVE_CONFIRM: 'MSG00001', // 저장 전 확인
   VERSION_REQUIRED: 'MSG00283', // FindData — 버전 미선택
   NOT_LOCK: 'MSG00266', // chkYear — sheet 잠금 상태 확인
 } as const;

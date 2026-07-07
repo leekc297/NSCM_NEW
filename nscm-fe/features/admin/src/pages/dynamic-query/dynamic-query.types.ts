@@ -1,6 +1,9 @@
+// DESIGN §1.2 — Report Name / Description / Role (구 queryName/category 대체).
+// setFilter 가 SP IN 파라미터로 매핑 — SP 입력명 정합 확인 의무(불일치 시 store 매핑, BE 무변경).
 export interface SearchCondition {
-  queryName: string;
-  category: string;
+  reportName: string;
+  description: string;
+  role: string;
 }
 
 // SP `PKG_SYS0013.P_SYS0013_GET_QUERY_LIST` 반환 컬럼 = SCM_ADM_DQ_LIST 원본 (DQ_ID / DQ_NAME / DQ_TEXT).
@@ -24,6 +27,7 @@ export interface QueryRow extends WijmoRowItem {
 export type ResultRow = WijmoRowItem;
 
 // SP `P_SYS0013_GET_COLUMNS` 반환 — SCM_ADM_DQ_COLUMNS 원본.
+// AGGREGATE = ATTRIBUTE2 영속화 (SUM/MAX/MIN/COUNT, 2026-06-26).
 export interface ColumnMetaRow extends WijmoRowItem {
   DQ_ID: number;
   COLUMN_NAME: string;
@@ -31,6 +35,7 @@ export interface ColumnMetaRow extends WijmoRowItem {
   VALUE_TYPE: string;
   VALID_YN: string;
   SEQNO: string;
+  AGGREGATE: string;
 }
 
 // SP `P_SYS0013_GET_PARAMETERS` 반환 — SCM_ADM_DQ_PARAMETER 원본.
@@ -51,12 +56,7 @@ export interface ParameterMetaRow extends WijmoRowItem {
 export const OPERATION_OPTIONS = ['=', '>', '<', 'IN', 'LIKE'] as const;
 export type OperationCode = (typeof OPERATION_OPTIONS)[number];
 
-export interface HistoryRow extends WijmoRowItem {
-  HIST_ID: string;
-  DQ_ID: number;
-  EXECUTED_BY: string;
-  EXECUTED_AT: string;
-  DURATION_MS: number;
-  ROW_COUNT: number;
-  STATUS: string;
-}
+// AS-IS AGGREGATE 콤보 (PKG_SYS0013 GET_ROLE_DATA P_NICKNAME='AGGREGATE' = SUM/MAX/MIN/COUNT).
+// 빈값 = 비집계(그룹) 컬럼. SCM_ADM_DQ_COLUMN.ATTRIBUTE2 영속화.
+export const AGGREGATE_OPTIONS = ['', 'SUM', 'MAX', 'MIN', 'COUNT'] as const;
+export type AggregateCode = (typeof AGGREGATE_OPTIONS)[number];

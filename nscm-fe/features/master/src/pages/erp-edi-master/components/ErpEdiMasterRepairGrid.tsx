@@ -6,7 +6,6 @@ import { GridUtils } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 
 import type { MENU_ID, SHEETS } from '../erp-edi-master.constants';
-import { applyReadOnlyColoring } from '../erp-edi-master.utils';
 import { useErpEdiMasterStore } from '../useErpEdiMasterStore';
 
 interface ErpEdiMasterRepairGridProps {
@@ -14,7 +13,10 @@ interface ErpEdiMasterRepairGridProps {
   gridFilterRef: MutableRefObject<FlexGridFilter | undefined>;
   data: ResponseData<MENU_ID, SHEETS.REPAIR>[];
   /** AS-IS .cs L1973 column index 분기 매핑 — SALES_SITE 또는 SSPM 단일 sheet target */
-  onDblClick: (targetSheet: 'SALES_SITE' | 'SSPM', row: ResponseData<MENU_ID, SHEETS.REPAIR>) => void;
+  onDblClick: (
+    targetSheet: 'SALES_SITE' | 'SSPM',
+    row: ResponseData<MENU_ID, SHEETS.REPAIR>
+  ) => void;
 }
 
 // AS-IS .cs L1032/L1150 — '확인필요' 컬러 대상 7 컬럼
@@ -61,16 +63,14 @@ export const ErpEdiMasterRepairGrid = ({
     onDblClick(targetSheet, dataItem);
   };
 
-  // 셀 시각:
-  //   1) base — 조회 전용 grid 회색 (룰 12 §11.7)
-  //   2) override — 값=='확인필요' & 컬럼 ∈ REPAIR_STATUS_COLUMNS → ForeColor=Red, BackColor=Azure
-  //   3) tooltip — '확인필요' 셀에 mouse hover 시 AS-IS .cs L1350/L1370 의 안내 메시지
-  //                (MSG00445 SALES_SITE / MSG00446 SSPM 그룹) 표시 (사용자 요구 2026-06-20).
+  // 셀 시각 (hook #95 grid-cell-backcolor-standard):
+  //   base — 클래스 없음 = White + 홀짝 zebra (공용 DataGrid 자동). ⚠ 조회 grid 통째 회색칠 금지(blanket gray 제거).
+  //   override — 값=='확인필요' & 컬럼 ∈ REPAIR_STATUS_COLUMNS → ForeColor=Red, BackColor=Azure (특수 상태 강조)
+  //   tooltip — '확인필요' 셀 hover 시 AS-IS .cs L1350/L1370 안내(MSG00445 SALES_SITE / MSG00446 SSPM).
   const handleFormatItem = (
     grid: FlexGrid<ResponseData<MENU_ID, SHEETS.REPAIR>>,
     args: FormatItemEventArgs
   ) => {
-    applyReadOnlyColoring(grid, args);
     if (args.panel.cellType !== CellType.Cell) return;
     const binding = GridUtils.getBinding(grid, args.col);
     if (typeof binding !== 'string') return;

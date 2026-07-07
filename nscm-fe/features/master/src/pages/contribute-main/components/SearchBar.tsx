@@ -3,11 +3,11 @@ import { useEffect, useMemo } from 'react';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabProcQuery } from '@shared/hooks';
 import { Checkbox, FormItem, Label } from '@shared/lges';
-import { Grid } from '@shared/mui';
 
 import { MENU_ID, SHEETS } from '../contribute-main.constants';
-import styles from '../ContributeMain.module.scss';
 import { useContributeMainStore } from '../useContributeMainStore';
+
+import styles from './ContributeMainComponents.module.scss';
 
 interface VersionOption extends WijmoRowItem {
   CODE: string;
@@ -56,6 +56,16 @@ export const SearchBar = ({ onSearch }: Props) => {
     });
   }, [yearOptions]);
 
+  useEffect(() => {
+    if (searchParams.verSeq === '' && yearOptions.length > 0) {
+      const first = yearOptions[0];
+      setSearchParams({
+        verSeq: String(first.CODE ?? ''),
+        yyyy: String(first.NAME2 ?? first.NAME ?? '').substring(0, 4),
+      });
+    }
+  }, [searchParams.verSeq]);
+
   return (
     <SearchArea
       searchButtonLabel={t('LBL00112', '_Search')}
@@ -63,75 +73,72 @@ export const SearchBar = ({ onSearch }: Props) => {
       onSearch={onSearch}
       conditions={
         <>
-          <Grid size={4}>
-            <FormItem
-              label={t('LBL00002', '_Year')}
-              labelAlign='right'
-              required
-              render={() => (
-                <CustomDropdown
-                  value={searchParams.verSeq}
-                  options={yearOptions.map(o => ({
-                    label: String(o.NAME2 ?? o.NAME ?? o.CODE),
-                    value: String(o.CODE ?? ''),
-                  }))}
-                  onChange={(_, option) => {
-                    const opt = yearOptions.find(o => String(o.CODE) === option);
-                    setSearchParams({
-                      verSeq: option,
-                      yyyy: String(opt?.NAME2 ?? opt?.NAME ?? '').substring(0, 4),
-                    });
+          <FormItem
+            label={t('LBL00086', '_Year')}
+            labelAlign='right'
+            required
+            width={487}
+            labelSize='middle'
+            render={() => (
+              <CustomDropdown
+                value={searchParams.verSeq}
+                options={yearOptions.map(o => ({
+                  label: String(o.NAME2 ?? o.NAME ?? o.CODE),
+                  value: String(o.CODE ?? ''),
+                }))}
+                onChange={(_, option) => {
+                  const opt = yearOptions.find(o => String(o.CODE) === option);
+                  setSearchParams({
+                    verSeq: option,
+                    yyyy: String(opt?.NAME2 ?? opt?.NAME ?? '').substring(0, 4),
+                  });
+                }}
+              />
+            )}
+          />
+          <FormItem
+            className={styles.display_flex}
+            render={() => (
+              <div className={styles.customCheckbox}>
+                <Checkbox
+                  checked={searchParams.chkYear}
+                  onChange={checked => setSearchParams({ chkYear: checked })}
+                />
+                <Label labelText={t('LBL00601', '_By Year')} depth='sub' />
+              </div>
+            )}
+          />
+          {/* <FormItem
+            className={styles.display_flex}
+            render={() => (
+              <div className={styles.customCheckbox}>
+                <Checkbox
+                  checked={searchParams.dis === 'N'}
+                  onChange={checked => {
+                    setSearchParams({ dis: checked ? 'N' : 'ALL', his: 'N' });
+                    // 다음 paint 후 onSearch — state 반영 보장 (AS-IS usrDiscard_Click).
+                    setTimeout(onSearch, 0);
                   }}
                 />
-              )}
-            />
-          </Grid>
-          <Grid size={2}>
-            <FormItem
-              render={() => (
-                <div className={styles.customCheckbox}>
-                  <Checkbox
-                    checked={searchParams.chkYear}
-                    onChange={checked => setSearchParams({ chkYear: checked })}
-                  />
-                  <Label labelText={t('LBL00601', '_By Year')} depth='sub' />
-                </div>
-              )}
-            />
-          </Grid>
-          <Grid size={2}>
-            <FormItem
-              render={() => (
-                <div className={styles.customCheckbox}>
-                  <Checkbox
-                    checked={searchParams.dis === 'N'}
-                    onChange={checked => {
-                      setSearchParams({ dis: checked ? 'N' : 'ALL', his: 'N' });
-                      // 다음 paint 후 onSearch — state 반영 보장 (AS-IS usrDiscard_Click).
-                      setTimeout(onSearch, 0);
-                    }}
-                  />
-                  <Label labelText={t('LBL00602', '_Discard')} depth='sub' />
-                </div>
-              )}
-            />
-          </Grid>
-          <Grid size={2}>
-            <FormItem
-              render={() => (
-                <div className={styles.customCheckbox}>
-                  <Checkbox
-                    checked={searchParams.his === 'Y'}
-                    onChange={checked => {
-                      setSearchParams({ his: checked ? 'Y' : 'N', dis: 'ALL' });
-                      setTimeout(onSearch, 0);
-                    }}
-                  />
-                  <Label labelText={t('LBL00603', '_History')} depth='sub' />
-                </div>
-              )}
-            />
-          </Grid>
+                <Label labelText={t('LBL00602', '_Discard')} depth='sub' />
+              </div>
+            )}
+          /> */}
+          {/* <FormItem
+            className={styles.display_flex}
+            render={() => (
+              <div className={styles.customCheckbox}>
+                <Checkbox
+                  checked={searchParams.his === 'Y'}
+                  onChange={checked => {
+                    setSearchParams({ his: checked ? 'Y' : 'N', dis: 'ALL' });
+                    setTimeout(onSearch, 0);
+                  }}
+                />
+                <Label labelText={t('LBL00648', '_History')} depth='sub' />
+              </div>
+            )}
+          /> */}
         </>
       }
     />

@@ -1,6 +1,6 @@
 // SYS0013 Columns Grid — AS-IS SCM0005_DynamicQueryList.cs SaveData L845-879 정합.
 // 컬럼: COLUMN_NAME (편집)/VALUE_YN/VALUE_TYPE/VALID_YN/SEQNO (admin staticColumns).
-// CRUD: 자체 Add/Delete 버튼 + cellEditEnded → store.columnsPendingChanges.
+// CRUD: Insert/Delete = 상단 공통버튼(부모 DynamicQuery 라우팅) / Modify = cellEditEnded → store.columnsPendingChanges.
 import { type FlexGrid } from '@mescius/wijmo.grid';
 import { type MutableRefObject, useEffect, useMemo } from 'react';
 
@@ -8,6 +8,7 @@ import { DataGrid } from '@shared/components';
 
 import { SHEETS } from '../dynamic-query.constants';
 import type { ColumnMetaRow } from '../dynamic-query.types';
+import { AGGREGATE_OPTIONS } from '../dynamic-query.types';
 import { useDynamicQueryStore } from '../useDynamicQueryStore';
 
 interface Props {
@@ -19,18 +20,16 @@ const EDITABLE_BINDINGS = new Set([
   'COLUMN_NAME',
   'VALUE_YN',
   'VALUE_TYPE',
+  'AGGREGATE',
   'VALID_YN',
   'SEQNO',
 ]);
 
 export const DynamicQueryColumnsGrid = ({ gridRef, data }: Props) => {
   const staticColumns = useDynamicQueryStore(s => s.staticColumns[SHEETS.COLUMNS]);
-  const selectedQueryId = useDynamicQueryStore(s => s.selectedQueryId);
   const columnsPendingChanges = useDynamicQueryStore(s => s.columnsPendingChanges);
   const columnsInsertedRows = useDynamicQueryStore(s => s.columnsInsertedRows);
-  const trackColumnsInsert = useDynamicQueryStore(s => s.trackColumnsInsert);
   const trackColumnsModify = useDynamicQueryStore(s => s.trackColumnsModify);
-  const trackColumnsDelete = useDynamicQueryStore(s => s.trackColumnsDelete);
 
   const enrichedData = useMemo<ColumnMetaRow[]>(() => {
     const deletedKeys = new Set(
@@ -46,22 +45,6 @@ export const DynamicQueryColumnsGrid = ({ gridRef, data }: Props) => {
     const row = g.rows[e.row]?.dataItem as ColumnMetaRow | undefined;
     if (!row || !row.COLUMN_NAME) return;
     trackColumnsModify(String(row.COLUMN_NAME), row as unknown as Record<string, unknown>);
-  };
-
-  const handleAdd = () => {
-    if (!selectedQueryId || selectedQueryId.startsWith('TEMP_')) return;
-    trackColumnsInsert(Number(selectedQueryId), {
-      VALUE_YN: 'Y',
-      VALUE_TYPE: 'System.String',
-      VALID_YN: 'Y',
-      SEQNO: '0',
-    });
-  };
-
-  const handleDelete = () => {
-    const sel = gridRef.current?.selectedItems?.[0] as ColumnMetaRow | undefined;
-    if (!sel?.COLUMN_NAME) return;
-    trackColumnsDelete(String(sel.COLUMN_NAME));
   };
 
   // Edit 활성화 — beginningEdit handler (메모리 #70 P7).
@@ -81,24 +64,15 @@ export const DynamicQueryColumnsGrid = ({ gridRef, data }: Props) => {
     };
   }, [gridRef]);
 
-  const disabled = !selectedQueryId || selectedQueryId.startsWith('TEMP_');
-
   return (
-    <>
-      <div style={{ padding: '4px 0', display: 'flex', gap: 8 }}>
-        <button onClick={handleAdd} disabled={disabled}>
-          + Add Column
-        </button>
-        <button onClick={handleDelete} disabled={disabled}>
-          - Delete Column
-        </button>
-      </div>
-      <DataGrid<ColumnMetaRow>
-        gridRef={gridRef as MutableRefObject<FlexGrid<ColumnMetaRow> | undefined>}
-        itemsSource={enrichedData}
-        staticColumns={staticColumns}
-        cellEditEnded={handleCellEditEnded}
-      />
-    </>
+    <DataGrid<ColumnMetaRow>
+      gridRef={gridRef as MutableRefObject<FlexGrid<ColumnMetaRow> | undefined>}
+      itemsSource={enrichedData}
+      staticColumns={staticColumns}
+      cellEditEnded={handleCellEditEnded}
+      comboDataMap={{
+        sysAggregateOptions: AGGREGATE_OPTIONS.map(v => ({ value: v, label: v || '-' })),
+      }}
+    />
   );
 };

@@ -12,3 +12,35 @@
     right: -40px;
   }
 }
+
+.customCheckbox {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+}
+
+.customGrid {
+  display: flex;
+  align-items: left;
+}
+// .customDropDown {
+//   width: 337.67px; // !important;
+//   height: 32px;
+//   & > div {
+//     height: 32px;
+//     div {
+//       fieldset {
+
+//       }
+//     }
+//   }
+// }
+
+// .MuiFormControl-root .MuiOutlinedInput-root {
+//   height: 32px; 
+//   min-height: 32px; 
+//   width: 337.67px !important;
+// }
+
+

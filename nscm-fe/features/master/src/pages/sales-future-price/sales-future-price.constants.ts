@@ -34,6 +34,17 @@ export const RESPONSE_SET = {
 } as const;
 export type RESPONSE_SET = (typeof RESPONSE_SET)[keyof typeof RESPONSE_SET];
 
+// ⭐ UI Category Setup(admin) SHEET_NAME — AS-IS 원본명 그대로 (사용자 명시 2026-06-26: SHEET_NAME 불변).
+//   라우팅용 SHEETS value('main' 등, BTN_BTN_MPG.SHT_NM)와 분리 — column/measure 메타 fetch 는 이 AS-IS명 사용.
+//   admin SCM_MST_SHEET_COLUMNS/SHEET_MEASURE.SHEET_NAME = 'Sales Price' → FE fetchStaticColumns/Measures 가 이 값으로 조회.
+//   미정의 sheet 는 SHEETS value 그대로 fallback. (#91 sheet-name-asis-preserve / #65 동적 메타)
+export const ADMIN_SHEET_NAME: Partial<Record<SHEETS, string>> = {
+  [SHEETS.MAIN]: 'Sales Price',
+  // ⭐ Price Batch Input 팝업 전용 시트 (AS-IS DMF0020_SaveSalesFuturePrice_Popup.cs L99
+  //   `shtMain = "Sales Price Save All"`). 메인('Sales Price')과 별개 컬럼셋. divisionId 로 SP 서버측 DIVISION_ID 필터.
+  [SHEETS.PRICE_BATCH]: 'Sales Price Save All',
+};
+
 // Bucket Type — AS-IS .cs L3823 cboBucketType_Click + Designer cboBucketType (Weekly / Monthly)
 export enum BUCKET_TYPE {
   WEEKLY = 'W',
@@ -99,7 +110,9 @@ export const MAIN_COLUMNS: MainColumnMeta[] = [
     _inputEditType: 'IM',
     _comboKey: 'MyDivision',
   },
-  // AS-IS L2034/L2067 SetCellTypeCombo(dtTeamAuth)
+  // AS-IS L2034/L2067 SetCellTypeCombo(dtTeamAuth) — AS-IS 원천(BigFilter 'TeambyDivision')은
+  //   DIVISION_ID 매핑 포함. cascade(#59) 위해 DIVISION_ID 반환 + 사용자 권한 필터가 있는 기존 등록
+  //   'TeambyDivision' 사용 (TeambyDivision2 는 division 키 미반환 — 2026-07-03 cascade 작업).
   {
     key: 'DEPT_ID',
     header: 'Team',
@@ -107,7 +120,7 @@ export const MAIN_COLUMNS: MainColumnMeta[] = [
     align: 'C',
     _ctrlType: 'FPComboBox',
     _inputEditType: 'IM',
-    _comboKey: 'TeambyDivision',
+    _comboKey: 'TeambyDivision', // UI Category CELL_COMBO_DATA_TYPE 정합 (fallback)
   },
   // AS-IS L2038/L2086 SetCellTypeCombo(dtEndCustomerAuth)
   {
@@ -157,7 +170,7 @@ export const MAIN_COLUMNS: MainColumnMeta[] = [
     align: 'C',
     _ctrlType: 'FPComboBox',
     _inputEditType: 'IO',
-    _comboKey: 'BizType',
+    _comboKey: 'BizTypeByDivision', // UI Category CELL_COMBO_DATA_TYPE 정합 (fallback)
   },
   // AS-IS L2044/L2059 cellTypeImage (popup)
   {
@@ -179,7 +192,7 @@ export const MAIN_COLUMNS: MainColumnMeta[] = [
     _inputEditType: 'IM',
     _comboKey: 'Incoterms',
   },
-  // AS-IS BP_FCST_TYPE LOOKUP_TYPE — Phase C (2026-06-03) CMBO_SQL_M 'FcstType' 등록 후 dropdown 전환
+  // AS-IS BP_FCST_TYPE — UI Category CELL_COMBO_DATA_TYPE = 'FCST_TYPE_NOT_FREE' (AS-IS UP_FX_GetCommonDataList)
   {
     key: 'FCST_TYPE',
     header: 'FCST Type',
@@ -187,17 +200,17 @@ export const MAIN_COLUMNS: MainColumnMeta[] = [
     align: 'C',
     _ctrlType: 'FPComboBox',
     _inputEditType: 'IM',
-    _comboKey: 'FcstType',
+    _comboKey: 'FCST_TYPE_NOT_FREE', // UI Category CELL_COMBO_DATA_TYPE 정합 (fallback)
   },
-  // AS-IS L2013 SetCellTypeCombo(dtCustomsHandbook) — Phase C CMBO_SQL_M 'CustomsHandbook' 등록 후 dropdown 전환
+  // AS-IS DOM/EXP — UI Category CELL_COMBO_DATA_TYPE = 'DOM_EXP' (AS-IS UP_FX_GetCommonDataList LOOKUP_TYPE='DOM/EXP')
   {
     key: 'DOM_EXP',
-    header: 'Customs Handbook',
+    header: 'DOM/EXP',
     width: 110,
     align: 'C',
     _ctrlType: 'FPComboBox',
     _inputEditType: 'IM',
-    _comboKey: 'CustomsHandbook',
+    _comboKey: 'DOM_EXP', // UI Category CELL_COMBO_DATA_TYPE 정합 (fallback)
   },
   // AS-IS 미등록 — text 입력
   {
@@ -243,6 +256,50 @@ export const MAIN_COLUMNS: MainColumnMeta[] = [
 // LOC row 만 dynamic cell editable (AS-IS .cs L2108)
 export const MEASURE_4 = ['RTF', 'KRW', 'USD', 'LOC'] as const;
 export type Measure4 = (typeof MEASURE_4)[number];
+
+// ============================================================================
+// ⭐ Grid cascade (hook #59 — AS-IS spdMain_ComboSelChange L2612~2757 1:1, 2026-07-03)
+// ============================================================================
+
+// combo 셀 cascade 필터 — 편집 시작 셀(binding)별 "행의 상위 셀 값 → 콤보 row 필터 키" 매핑.
+//   콤보 응답 필터 키 실측: TeambyDivision=DIVISION_ID / EndCustomerByDivisionDept=DIVISION_ID
+//   / SiteByEndCustomer=DIVISION_ID+END_CUSTOMER. 관대 통과: 콤보 row 에 필터 키 컬럼이 없거나(NULL)
+//   행의 상위 값이 비어 있으면 통과 (searchFields toOptions 관용구 + 사내 SITE.DEPT_ID 미이관 —
+//   EndCustomer 의 team 필터는 데이터 적재 시 자동 활성. __asis-mapping__ §cascade 근거).
+export const GRID_CASCADE_FILTERS: Record<
+  string,
+  { rowKey: string; comboKey: string }[]
+> = {
+  DEPT_ID: [{ rowKey: 'DIVISION_ID', comboKey: 'DIVISION_ID' }],
+  END_CUSTOMER: [
+    { rowKey: 'DIVISION_ID', comboKey: 'DIVISION_ID' },
+    { rowKey: 'DEPT_ID', comboKey: 'DEPT_ID' },
+  ],
+  SCM_SITE_ID: [
+    { rowKey: 'DIVISION_ID', comboKey: 'DIVISION_ID' },
+    { rowKey: 'END_CUSTOMER', comboKey: 'END_CUSTOMER' },
+  ],
+};
+
+// 상위 combo 변경 시 하위 셀 계단식 clear — AS-IS L2666~2679 / 2706~2717 / 2727~2736 / 2740~2747 1:1.
+//   AS-IS clear 대상(PROJECT_CODE/PROJECT_NAME/ITEM_ID/ITEM_CLASS_NAME) + TO-BE 팝업 파생 필드
+//   (PROJECT_STATUS/BIZ_TYPE_NAME/ITEM_NAME/NICK_NAME — 팝업이 채우는 값의 일관성) 동반 clear.
+const CLEAR_PROJECT_ITEM = [
+  'PROJECT_CODE',
+  'PROJECT_NAME',
+  'PROJECT_STATUS',
+  'BIZ_TYPE_NAME',
+  'ITEM_ID',
+  'ITEM_NAME',
+  'ITEM_CLASS_NAME',
+  'NICK_NAME',
+] as const;
+export const GRID_CASCADE_CLEAR: Record<string, readonly string[]> = {
+  DIVISION_ID: ['DEPT_ID', 'END_CUSTOMER', 'SCM_SITE_ID', ...CLEAR_PROJECT_ITEM],
+  DEPT_ID: ['END_CUSTOMER', 'SCM_SITE_ID', ...CLEAR_PROJECT_ITEM],
+  END_CUSTOMER: ['SCM_SITE_ID', ...CLEAR_PROJECT_ITEM],
+  SCM_SITE_ID: [...CLEAR_PROJECT_ITEM],
+};
 
 // ExchangeRate POPUP — AS-IS DMF0020_SalesFuturePricePopUp.cs L141~194 InitSpread() 정밀 매핑
 //   AS-IS L146/147/148: AddComboColumn(Division=120/Currency=70/Unit=50) Freeze through UNIT_CURRENCY
@@ -292,7 +349,7 @@ export const GROUP_COLS = [
 
 // AS-IS Validation MSG ID 매핑 (validation.md 71건):
 //   - MSG00002 [{}] 은 필수 입력사항입니다.
-//   - MSG00004 저장하시겠습니까?
+//   - MSG00001 저장하시겠습니까? (2026-07-02 MSG_M 명칭 재지정 — 구 MSG00004 는 "수정한 내용이 없습니다."로 용도 변경)
 //   - MSG00043 저장시 중복 오류가 발생하였습니다.{0}
 //   - MSG00097 Division 을 선택하세요.
 //   - MSG00108 조회된 데이터가 없습니다 (기간 역전 시).
@@ -303,7 +360,7 @@ export const GROUP_COLS = [
 //   - MSG00227/00255/00265/00283/00412/00414/00447/00448 기타 미등록 메시지
 export const MSG = {
   REQUIRED_FIELD: 'MSG00002',
-  CONFIRM_SAVE: 'MSG00004',
+  CONFIRM_SAVE: 'MSG00001',
   DUPLICATE: 'MSG00043',
   REQUIRE_DIVISION: 'MSG00097',
   NO_DATA: 'MSG00108',
@@ -321,4 +378,5 @@ export const MSG = {
   CURRENCY_EMPTY: 'MSG00447',
   EDIT_NOT_CURRENT_VER: 'MSG00448',
   INSERT_ONLY_BUCKET: 'MSG00227',
+  NO_CHANGES: 'MSG00004',
 } as const;

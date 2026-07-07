@@ -1,3 +1,4 @@
+import { CommunicationSendIcon, ControlAddIcon, EditDeleteIcon } from '@lges/design-system/icon';
 import type { FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useRef, useState } from 'react';
@@ -95,19 +96,19 @@ export const AuthRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
     }
   }, [session.userId, initialized, initFilters, fetchStaticColumns]);
 
-  const handleAdd = () => {
+  const handleInsert = () => {
     const selectedAuthority = GridUtils.getSelectedRows(authorityGridRef.current)?.[0];
     const checkedDivisions = collectCheckedRows(divisionGridRef.current);
 
     if (!selectedAuthority) {
       void setAlert({
-        content: t('LBL00608', 'Please select an Authority row.'),
+        content: t('LBL00730', 'Please select an Authority row.'),
       });
       return;
     }
     if (checkedDivisions.length === 0) {
       void setAlert({
-        content: t('LBL00609', 'Please check at least one Division checkbox.'),
+        content: t('LBL00731', 'Please check at least one Division checkbox.'),
       });
       return;
     }
@@ -149,7 +150,7 @@ export const AuthRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   const handleDelete = () => {
     if ((myAuthData?.o_rc?.length ?? 0) === 0) {
-      void setAlert({ content: t('MSG00005', '_등록된 요청 권한이 없습니다.') });
+      void setAlert({ content: t('MSG00020', '_등록된 요청 권한이 없습니다.') });
       return;
     }
 
@@ -177,7 +178,7 @@ export const AuthRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   const handleRequest = () => {
     if ((myAuthData?.o_rc?.length ?? 0) === 0) {
-      void setAlert({ content: t('MSG00005', '_등록된 요청 권한이 없습니다.') });
+      void setAlert({ content: t('MSG00020', '_등록된 요청 권한이 없습니다.') });
       return;
     }
 
@@ -196,7 +197,7 @@ export const AuthRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
       return;
     }
     if (!currentTmzCd) {
-      void setAlert({ content: t('LBL00612', 'Please select Time Zone.') });
+      void setAlert({ content: t('LBL00733', 'Please select Time Zone.') });
       return;
     }
 
@@ -210,7 +211,7 @@ export const AuthRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
       })) as ResponseData<MENU_ID, SHEETS.MY_AUTHORITY_LIST, RESPONSE_SET.OUTPUT>[];
 
     if (requestRows.length === 0) {
-      void setAlert({ content: t('LBL00610', 'Selected rows are already in REQUEST status.') });
+      void setAlert({ content: t('LBL00732', 'Selected rows are already in REQUEST status.') });
       return;
     }
 
@@ -236,7 +237,13 @@ export const AuthRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
     });
   };
 
-  const customButtons = [{ label: t('LBL00620', 'Request'), action: handleRequest }];
+  const customButtons = [
+    {
+      label: t('LBL00620', 'Request'),
+      action: handleRequest,
+      iconComponent: <CommunicationSendIcon appearance='lined' iconSize={20} />,
+    },
+  ];
 
   const handleSearch = () => {
     void queryClient.invalidateQueries({ queryKey: [tabId] });
@@ -244,25 +251,8 @@ export const AuthRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
     void fetchStaticColumns();
   };
 
-  const myAuthListButtons = (
-    <>
-      <Button
-        appearance='outlined'
-        priority='normal'
-        size='small'
-        buttonLabel={t('LBL00621', 'Add')}
-        onClick={handleAdd}
-      />
-      <Button
-        appearance='outlined'
-        priority='normal'
-        size='small'
-        buttonLabel={t('LBL00622', 'Delete')}
-        onClick={handleDelete}
-      />
-    </>
-  );
-
+  // 사용자 요구 2026-06-28: My Authority List 중단 Add/Delete 제거 → 상단 공통버튼 INSERT/DELETE 로 일원화.
+  //   SubTitle 공통버튼은 hotkeyConfig 핸들러만으로 표시(메타 비-gating). 기능(handleInsert/handleDelete) 동일.
   const hotkeyConfig: HotkeyConfig = {
     search: handleSearch,
     insert: false,
@@ -273,6 +263,27 @@ export const AuthRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
     manual: false,
     upload: false,
   };
+
+  const myAuthListButtons = (
+    <>
+      <Button
+        appearance='outlined'
+        priority='normal'
+        size='small'
+        buttonLabel={t('LBL00621', 'Add')}
+        onClick={handleInsert}
+        iconComponent={<ControlAddIcon size='default' />}
+      />
+      <Button
+        appearance='outlined'
+        priority='normal'
+        size='small'
+        buttonLabel={t('LBL00622', 'Delete')}
+        onClick={handleDelete}
+        iconComponent={<EditDeleteIcon appearance='lined' />}
+      />
+    </>
+  );
 
   return (
     <>
@@ -289,23 +300,23 @@ export const AuthRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
       <div className={styles.contents}>
         <div className={styles.row}>
           <div className={styles.module}>
-            <TitleArea isSubTitle title={t('LBL00601', 'Authority')} depth='h4' />
+            <TitleArea isSubTitle title={t('LBL00671', 'Authority')} depth='h4' />
             <AuthorityGrid gridRef={authorityGridRef} gridFilterRef={authorityGridFilterRef} />
           </div>
           <div className={styles.module}>
-            <TitleArea isSubTitle title={t('LBL00602', 'Division')} depth='h4' />
+            <TitleArea isSubTitle title={t('LBL00672', 'Division')} depth='h4' />
             <DivisionGrid gridRef={divisionGridRef} gridFilterRef={divisionGridFilterRef} />
           </div>
         </div>
         <div className={styles.row}>
           <div className={styles.userInfoModule}>
-            <TitleArea isSubTitle title={t('LBL00603', 'User Info')} depth='h4' />
+            <TitleArea isSubTitle title={t('LBL00658', 'User Info')} depth='h4' />
             <UserInfoDetail />
           </div>
           <div className={styles.module}>
             <TitleArea
               isSubTitle
-              title={t('LBL00604', 'My Authority List')}
+              title={t('LBL00673', 'My Authority List')}
               depth='h4'
               rightButtons={myAuthListButtons}
             />

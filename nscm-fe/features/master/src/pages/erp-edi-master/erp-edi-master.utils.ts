@@ -1,18 +1,5 @@
-import { toggleClass } from '@mescius/wijmo';
-import {
-  CellType,
-  type FlexGrid as FlexGridType,
-  type FormatItemEventArgs,
-} from '@mescius/wijmo.grid';
-
-// 룰 12 §11.7 (2026-06-02) — 조회 전용 grid 의 모든 cell 회색 표시 (read-only 시각 강조).
-// DMF0008 Summary / Repair (조회 전용) 의 DataGrid `formatItem` prop 으로 전달.
-// SCSS `:global(.wj-cell-non-editable)` (ErpEdiMaster.module.scss) 가 `background: #f1f4f3` 적용.
-// 다른 formatItem 핸들러와 함께 사용 시 chain 으로 호출 (gray 먼저 → 색상 override 나중 호출).
-export const applyReadOnlyColoring = <T = unknown>(
-  _grid: FlexGridType<T>,
-  args: FormatItemEventArgs
-): void => {
-  if (args.panel.cellType !== CellType.Cell) return;
-  toggleClass(args.cell, 'wj-cell-non-editable', true);
-};
+// ⭐ grid cell 배경 = hook #95 `grid-cell-backcolor-standard` 공통 표준 준수.
+//   기본(조회/비편집) = White + 홀짝 zebra (클래스 없음 → foundation `.wj-cell.wj-alt`, alternatingRowStep=1).
+//   편집가능 = `wj-cell-editable`(Yellow) — 공용 DataGrid `formatEditableColumns(isEditableCell)` 자동.
+//   조회 전용 grid 를 통째 회색칠하지 않는다(기존 applyReadOnlyColoring blanket gray 제거, 2026-06-28).
+export {};

@@ -7,24 +7,20 @@ import { GridUtils, type EditTracker } from '@foundation/utils';
 import { DataGrid, SsoUserModal } from '@shared/components';
 import { useMessageStore } from '@shared/stores';
 
-import { SHEETS } from '../group-user.constants';
+import { type MENU_ID, SHEETS } from '../group-user.constants';
 import { useGroupUserStore } from '../useGroupUserStore';
 
-// WijmoRowItem 제약 (index signature: Record<string, WijmoPrimitive>) 만족 + 명시 필드
-type UserInfoRow = WijmoRowItem & {
-  USER_ID?: string;
-  USER_NM?: string;
-  DEPT_NM?: string;
-  USE_YN?: string;
-};
+// 타입 SSOT — procedures.d.ts SYS0014.userInfo (USER_ID/USER_NM/DEPT_NM/USE_YN)
+type UserInfoRow = ResponseData<MENU_ID, SHEETS.USER_INFO>;
 
 interface Props {
   gridRef: MutableRefObject<FlexGrid | undefined>;
   gridFilterRef: MutableRefObject<FlexGridFilter | undefined>;
   data: UserInfoRow[];
+  onFocus?: () => void;
 }
 
-export const GroupUserInfoGrid = ({ gridRef, gridFilterRef, data }: Props) => {
+export const GroupUserInfoGrid = ({ gridRef, gridFilterRef, data, onFocus }: Props) => {
   const { t } = useTranslation();
   const editTrackerRef = useRef<EditTracker<UserInfoRow>>();
   const [clickedRow, setClickedRow] = useState<number>(-1);
@@ -103,6 +99,7 @@ export const GroupUserInfoGrid = ({ gridRef, gridFilterRef, data }: Props) => {
         selectionMode={SelectionMode.Row}
         selectionChanged={handleSelectionChanged}
         dblClick={handleDblClick}
+        gotFocus={() => onFocus?.()}
       />
       <SsoUserModal
         open={openSsoUser}

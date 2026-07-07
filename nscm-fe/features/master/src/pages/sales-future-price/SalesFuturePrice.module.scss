@@ -1,5 +1,7 @@
 .container { display: flex; flex-direction: column; height: 100%; gap: 8px; }
 
+.loading { padding: 16px; color: #1976d2; }
+
 .searchBar {
   display: flex; flex-direction: column; gap: 8px; padding: 12px 16px;
   background: #f5f7fa; border: 1px solid #e0e4e9; border-radius: 4px;
@@ -73,12 +75,9 @@
   width: 100%;
   height: 100%;
 
-  // ⭐ 동적 3단 headerHeight 정합 강제 (2026-06-21 사용자 보고 — JS column.height 강제 무효).
-  //   Wijmo column.height / columnHeaders.rows[i].height override 가 wrapper 의 ONE_DEPTH height=48
-  //   inline style 에 밀려 시각 적용 안 됨. CSS !important 로 row 별 16px 강제.
-  //   3단 × 16 = 48px → 정적 col 1단 영역 (mergeManager verticalSpan merge) 와 정합.
+  // 헤더 행 높이는 공유 DataGrid 의 headerRowHeight prop 이 전담(wrapper-level only 유효).
+  //   여기선 다단 헤더 셀이 16px row 안에 맞도록 셀 타이포만 보정 (CSS height 강제는 무효 → 제거).
   :global {
-    .wj-colheaders .wj-row { height: 16px !important; }
     .wj-colheaders .wj-cell {
       line-height: 14px;
       padding: 1px 4px;
@@ -101,4 +100,36 @@
 }
 :global(.selected-group) {
   background: #e3f2fd !important;
+}
+
+// ⭐ INSERT 편집/팝업 셀 solid Yellow — `.grid`(FlexGrid 호스트, 셀들의 조상) scope 로
+//   specificity (0,2,0) 승격 → 전역(foundation)·모듈 single-class(0,1,0)(wj-cell-popup 그라데이션 등) 및
+//   공용 wrapper formatEditableColumns 의 wj-cell-popup 재부착·소스/핸들러 순서를 전부 압도.
+//   (MODEL/PROJECT 는 FPModal+IM → wrapper 가 INSERT 시에만 wj-cell-popup 부착 → insert 팝업셀만 solid yellow.)
+.grid {
+  :global(.wj-cell-popup),
+  :global(.is-insert-editable),
+  :global(.wj-cell-editable) {
+    background: #fff8cd !important;
+  }
+}
+
+// ⭐ FPModal 팝업셀 아이콘 (DMF0006 과 동일 = foundation `.wj-cell-popup::after` 의 MUI OpenInNew SVG).
+//   DMF0020 은 wj-cell-popup override(그라데이션 배경/'↗') 및 insert 노란배경 충돌을 피하려
+//   클래스 대신 전용 span(.popup-icon)에 이 스타일을 입혀 동일 아이콘만 렌더한다. (2026-07-01)
+.popupIcon {
+  position: absolute;
+  top: 50%;
+  right: 5px;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  background-color: #5b5c5b;
+  pointer-events: none;
+
+  $svg-path: "M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z";
+  -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="#{$svg-path}"/></svg>') no-repeat center;
+  mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="#{$svg-path}"/></svg>') no-repeat center;
+  mask-size: contain;
+  -webkit-mask-size: contain;
 }

@@ -1,3 +1,7 @@
+/// <reference path="./global.d.ts" />
+// ↑ JsonPrimitive / WijmoRowItem 등 전역 앰비언트 타입(global.d.ts)을 명시적으로 로드.
+//   tsconfig include 나 단독 파일 체크 환경(예: 클라우드)에서도 전역 타입이 해석되도록 보장.
+
 export { };
 
 // 배열 타입에서 요소 타입만 추출하는 헬퍼
@@ -268,6 +272,684 @@ interface RawProcedureMap extends Base {
     };
   };
   /**
+   * MktFcst — DMF0003 (MKT FCST / 시장예측)
+   *
+   * ⭐ Phase 2a: 사내 Oracle SP 시그니처/PROC_M 실측 반영 (2026-06-28, ora.py 검증).
+   * SHEETS:
+   * - `Mkt Fcst`     (메인 조회 — PIVOT wide format. SHEETS.MAIN value 등록명. SP `DMF0003_GET_MKT_FCST_DATA`
+   *                   = 22 IN(camelCase) + O_RC1/O_RC2/O_RC3/O_RESULT_CURSOR. PROC_M 26 row 일치)
+   * - `spreadTitle`  (동적 컬럼 SP `DMF0003_GET_SPREAD_TITLE` = 6 IN + O_RC1 — 기간 PIVOT 헤더 메타)
+   * - `measureCount` (Insert 시 measure 행 개수 — admin SHEET_MEASURE 동적)
+   *
+   * sesUserId(P_USER_ID) / mnuId(P_MENU_ID) / createdBy(P_CREATED_BY) / userGroup(P_USER_GROUP)
+   * 는 BE makeProcedure 가 세션·메뉴 컨텍스트로 자동 채움 (PROC_M COL_NM 매칭).
+   * ⚠️ SP 에 bucketType(Bucket) IN 파라미터 없음 — Bucket(M/W/D) 은 FE 측 PIVOT 표시 분기 전용.
+   */
+  DMF0048: {
+    'Sales Monitoring': {
+      // PKG_DMF0048.P_DMF0048_GET_DM_PLN_SALES_MONITORING PROC_M(SORT_ORD 1~20 IN) 와 정확히 일치
+      //   (ALL_ARGUMENTS 실측 2026-07-04 — _deploy_packages/DMF0048_SALES_MONITORING_20260704/04_VERIFY).
+      request: {
+        divisionId: string; // 1  P_DIVISION_ID
+        deptId: string; // 2  P_DEPT_ID (Team — 콤마 delim, 빈값 'ALL')
+        endCustomer: string; // 3  P_END_CUSTOMER
+        scmSiteId: string; // 4  P_SCM_SITE_ID (Sales Site)
+        projectCode: string; // 5  P_PROJECT_CODE (빈값 '' = 전체)
+        itemId: string; // 6  P_ITEM_ID (LIKE 부분일치)
+        itemType: string; // 7  P_ITEM_TYPE
+        fromYyyymmdd: string; // 8  P_FROM_YYYYMMDD
+        nowYyyymmdd: string; // 9  P_NOW_YYYYMMDD (AS-IS sNowDate = 오늘)
+        toYyyymmdd: string; // 10 P_TO_YYYYMMDD
+        createdBy: string; // 11 P_CREATED_BY (BE 세션 자동)
+        plantSiteId: string; // 12 P_PLANT_SITE_ID
+        biztype: string; // 13 P_BIZTYPE
+        owner: string; // 14 P_OWNER
+        internalYn: string; // 15 P_INTERNAL_YN (Include Internal Txn)
+        userinfo: string; // 16 P_USERINFO (AS-IS NowGroupID — GET_ADMIN_GROUP 판정)
+        bucket: string; // 17 P_BUCKET ('DAILY'/'WEEKLY'/'MONTHLY' full-word)
+        userDeptId: string; // 18 P_USER_DEPT_ID (JV Planner 전용 — 일반 공란)
+        sesUserId: string; // 19 P_USER_ID (BE 세션 자동)
+        mnuId: string; // 20 P_MENU_ID (BE 메뉴 자동)
+      };
+      response: {
+        // O_RC1 — wide format (식별 컬럼 + 동적 PIVOT M_/W_/D_ 컬럼 + EDIT_YN). 스모크 실측 2026-07-04:
+        //   Div40 724행/59cols, Div81 1,236행 (04_VERIFY/002_smoke_results.txt).
+        o_rc1: {
+          DIVISION_ID: string;
+          END_CUSTOMER: string;
+          END_CUSTOMER40: string;
+          SCM_SITE_ID: string;
+          PROJECT_CODE: string;
+          GROUP_ID: string;
+          ITEM_ID: string;
+          TEXT: string;
+          KWH_CELL: string | number;
+          KWH_MODULE: string | number;
+          KWH_PACK: string | number;
+          NICK_NAME: string;
+          INCOTERMS: string;
+          FCST_TYPE: string;
+          DOM_EXP: string;
+          COMPANY_ID: string;
+          CELL_PROD_SITE_ID: string;
+          CURRENCY: string;
+          PLANT_SITE_ID: string;
+          MEASURE: string;
+          SORT_ORDER_NO: string | number;
+          // 행 편집 플래그 — read-only 화면이라 미사용 (기록: __asis-mapping__.md)
+          EDIT_YN: string;
+          [key: string]: string | number;
+        };
+        // O_RC2 — 현재/전주 주차 정보 (헤더 초록 강조 + Color 과거 회색 판정 입력).
+        o_rc2: {
+          THIS_YYYYMM: string; // 'M_'||현재월 binding
+          THIS_YYYYMMWW: string; // 'W_'||현재주 binding
+          BASIS_DATE: string;
+          PRE_YYYYMM: string;
+          PRE_YYYYMMWW: string;
+          BASIS_YYYYMM: string;
+          ISO_WEEK: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    spreadTitle: {
+      // DMF0048_GET_SPREAD_TITLE PROC_M (5 IN + o_rc1) — 2026-07-04 O_RC1 복원 변환분.
+      request: {
+        startYyyymmdd: string; // 1 P_START_YYYYMMDD
+        endYyyymmdd: string; // 2 P_END_YYYYMMDD
+        createdBy: string; // 3 P_CREATED_BY (BE 세션 자동)
+        divisionId: string; // 4 P_DIVISION_ID
+        bucket: string; // 5 P_BUCKET ('DAILY' 일 때만 D_ 생성)
+      };
+      response: {
+        // O_RC1 — SHEET_COLUMNS(division 필터) + 달력 기간컬럼 UNION (스모크 실측 48행/22cols).
+        o_rc1: {
+          PROGRAM_ID: string;
+          SHEET_NAME: string;
+          COLUMN_NAME: string; // binding (M_yyyymm / W_yyyymm+ISO_WEEK / D_yyyymmdd / 정적컬럼명)
+          COLUMN_LABEL_NAME: string;
+          SORT_ORDER_NO: string | number;
+          SMALL_CLASS_LABEL_NAME: string;
+          LARGE_CLASS_LABEL_NAME: string;
+          DAY_CODE: string;
+          COLUMN_WIDTH: string | number;
+          CELL_CONTROL_OBJECT_TYPE_CODE: string;
+          HORIZONTAL_ALIGN_CODE: string;
+          VISIBLE_FLAG: string;
+          DIVISION_ID: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    dayRange: {
+      // PR_GET_DAY_RANGE PROC_M (2 IN + o_rc1/o_rc2) — 기본 조회구간 (AS-IS GetDayRange p_month=6).
+      request: {
+        createdBy: string; // 1 P_CREATED_BY (BE 세션 자동)
+        month: string; // 2 P_MONTH (AS-IS 6 고정 — "7개월에서 6개월로 변경" .cs L994)
+      };
+      response: {
+        // o_rc1 = ISO 주 정렬 범위 (AS-IS Tables[0], 미사용) / o_rc2 = 월 경계 범위 (AS-IS Tables[1] 사용분)
+        o_rc1: { DAY_RANGE: string; [key: string]: string | number };
+        o_rc2: { DAY_RANGE: string; [key: string]: string | number };
+      };
+    };
+  };
+  /**
+   * CustomerFcstUpload — DMF0014 (Customer FCST Upload)
+   *
+   * 사내 Oracle PKG_DMF0014 ALL_ARGUMENTS 실측 (2026-07-04 —
+   * _deploy_packages/DMF0014_CUST_FCST_UPLOAD_20260704/04_VERIFY/001_all_arguments.txt).
+   * SHEETS:
+   * - `FCST Upload`  (메인 — 식별 13 + EDIT_FLAG/EDIT_YN + 동적 D_ 기간 컬럼.
+   *                   SHT_NM = SCM_ADM_EXCEL_COLUMNS 기존 등록명 그대로 — excel-upload 체인 키)
+   * - `spreadTitle`  (동적 기간 헤더 — 전 버킷 D_ 접두: WEEKLY=주 시작일 / MONTHLY=월 시작일)
+   * - `dayRange`     (PR_GET_DAY_RANGE 재사용 — DMF0048 dayRange 와 동일 계약)
+   * SAVE(P_DMF0014_SAVE_CUST_FCST_UPLOAD_DATA 17 IN '^'delim)는 apiClient.post 직접 — 타입 미등재.
+   */
+  DMF0014: {
+    'FCST Upload': {
+      // PKG_DMF0014.P_DMF0014_GET_CUST_FCST_UPLOAD_DATA PROC_M(SORT_ORD 1~15 IN) 정확 일치
+      request: {
+        divisionId: string; // 1  P_DIVISION_ID (단일 필수)
+        deptId: string; // 2  P_DEPT_ID (Team — 콤마 delim, 빈값 'ALL')
+        endCustomer: string; // 3  P_END_CUSTOMER
+        scmSiteId: string; // 4  P_SCM_SITE_ID (Sales Site)
+        plantSiteId: string; // 5  P_PLANT_SITE_ID
+        projectCode: string; // 6  P_PROJECT_CODE (텍스트 raw — 빈값 '')
+        itemId: string; // 7  P_ITEM_ID (Model/Nickname 텍스트 raw)
+        startYyyymmdd: string; // 8  P_START_YYYYMMDD
+        endYyyymmdd: string; // 9  P_END_YYYYMMDD
+        bucketType: string; // 10 P_BUCKET_TYPE ('DAILY'/'WEEKLY'/'MONTHLY' full-word)
+        domExp: string; // 11 P_DOM_EXP (Customs Handbook)
+        createdBy: string; // 12 P_CREATED_BY (BE 세션 자동)
+        userinfo: string; // 13 P_USERINFO (AS-IS NowGroupID)
+        sesUserId: string; // 14 P_USER_ID (BE 세션 자동)
+        mnuId: string; // 15 P_MENU_ID (BE 메뉴 자동)
+      };
+      response: {
+        // O_RC1 — 식별 13 + EDIT_FLAG/EDIT_YN + 동적 D_ 기간 컬럼 (스모크 실측 15 cols)
+        o_rc1: {
+          DIVISION_ID: string;
+          SCM_SITE_ID: string;
+          PLANT_SITE_ID: string;
+          CUSTOMER_PROJECT_CODE: string;
+          CUSTOMER_MODEL: string;
+          INCOTERMS: string;
+          FCST_TYPE: string;
+          DOM_EXP: string;
+          MEASURE_GROUP: string;
+          MEASURE: string;
+          UPLOAD_UOM: string;
+          PROJECT_CODE: string;
+          ITEM_ID: string;
+          EDIT_FLAG: string; // 'Y' = 기간 셀 편집 가능 행 (AS-IS EditButton 판정 1:1)
+          EDIT_YN: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    spreadTitle: {
+      // PKG_DMF0014.P_DMF0014_GET_SPREAD_TITLE PROC_M (3 IN + 세션 2 + o_rc1)
+      request: {
+        startYyyymmdd: string; // 1 P_START_YYYYMMDD
+        endYyyymmdd: string; // 2 P_END_YYYYMMDD
+        bucketType: string; // 3 P_BUCKET_TYPE (full-word — 'W'/'M' 은 커서 미오픈, DPY-4025)
+        sesUserId: string; // 4 P_USER_ID (BE 세션 자동)
+        mnuId: string; // 5 P_MENU_ID (BE 메뉴 자동)
+      };
+      response: {
+        // O_RC1 — 스모크 실측: DAILY 184 / WEEKLY 27 / MONTHLY 6 행 (20260701~20261231)
+        o_rc1: {
+          COLUMN_NAME: string; // 'D_yyyymmdd' (전 버킷 D_ 접두 — WEEKLY=주 시작일)
+          COLUMN_LABEL: string; // 'yyyymmdd'
+          SMALL_LABEL_NAME: string; // 상단 그룹 라벨 (요일 / Wnn / yyyy-mm)
+          EDIT_YN: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    dayRange: {
+      // PR_GET_DAY_RANGE PROC_M 재사용 (DMF0048 배선분 — DELETE+INSERT 금지 정책)
+      request: {
+        createdBy: string; // 1 P_CREATED_BY (BE 세션 자동)
+        month: string; // 2 P_MONTH (AS-IS GetDayRange p_month=6 — .cs L1237)
+      };
+      response: {
+        o_rc1: { DAY_RANGE: string; [key: string]: string | number };
+        o_rc2: { DAY_RANGE: string; [key: string]: string | number };
+      };
+    };
+  };
+  DMF0003: {
+    'Mkt Fcst': {
+      // DMF0003_GET_MKT_FCST_DATA PROC_M(SORT_ORD 1~22) IN 파라미터와 정확히 일치 (camelCase).
+      request: {
+        divisionId: string; // 1  P_DIVISION_ID
+        scmSiteId: string; // 2  P_SCM_SITE_ID (Sales Site)
+        plantSiteId: string; // 3  P_PLANT_SITE_ID
+        teamId: string; // 4  P_TEAM_ID
+        customer: string; // 5  P_CUSTOMER (End Customer)
+        bizType: string; // 6  P_BIZ_TYPE
+        projectCode: string; // 7  P_PROJECT_CODE
+        itemId: string; // 8  P_ITEM_ID
+        fromYyyymmdd: string; // 9  P_FROM_YYYYMMDD
+        toYyyymmdd: string; // 10 P_TO_YYYYMMDD
+        createdBy: string; // 11 P_CREATED_BY (BE 세션 자동)
+        userGroup: string; // 12 P_USER_GROUP (BE 세션 자동)
+        itemType: string; // 13 P_ITEM_TYPE
+        owner: string; // 14 P_OWNER
+        qtyYn: string; // 15 P_QTY_YN (Qty ≥ 0)
+        cellYn: string; // 16 P_CELL_YN (Cell Qty)
+        invalidExec: string; // 17 P_INVALID_EXEC (New Model Flag)
+        asYn: string; // 18 P_AS_YN
+        userDeptId: string; // 19 P_USER_DEPT_ID
+        senderCode: string; // 20 P_SENDER_CODE
+        sesUserId: string; // 21 P_USER_ID (BE 세션 자동)
+        mnuId: string; // 22 P_MENU_ID (BE 메뉴 자동)
+      };
+      response: {
+        // wide format (고정 컬럼 + 동적 PIVOT M_/W_/D_ 컬럼). O_RC1 = 메인 데이터셋.
+        //   O_RC2(8주 bucket) / O_RC3(현재 주차) = Phase 2b(편집 matrix) 입력.
+        o_rc1: {
+          DIVISION_ID: string;
+          END_CUSTOMER: string;
+          SCM_SITE_ID: string;
+          ITEM_ID: string;
+          NICK_NAME: string;
+          INCOTERMS: string;
+          FCST_TYPE: string;
+          DOM_EXP: string;
+          ITEM_TYPE: string;
+          MEASURE: string;
+          MEASURE_GROUP: string;
+          // 행 단위 편집 권한 ('Y'/'N') — 'N' = 데이터 컬럼 전체 잠금 (보강스펙 §1 Row 비대칭).
+          EDIT_FLAG: string;
+          // 7자리 요일 플래그('0000000') — 주→일 분배(Phase 2c) 입력. 본 단계 미사용.
+          BUCKET: string;
+          [key: string]: string | number;
+        };
+        // O_RC2 — SCM_SYS_CALENDAR_M 의 "7주 후 주(SYSDATE+49d)" 단일 row (SELECT *).
+        //   BASIS_YYYYMM = Division 40 Monthly 8주차 잠금 cutoff 월 (보강스펙 §5, SP L4277~4283).
+        o_rc2: {
+          BASIS_YYYYMMDD: string;
+          BASIS_YYYYMM: string;
+          ISO_YYYYWW: string;
+          ISO_WEEK: string;
+          MONTH_NAME: string;
+          CALENDAR_YYYY: string;
+          [key: string]: string | number;
+        };
+        // O_RC3 — 현재/전주 정보 (SP L4290~4302).
+        o_rc3: {
+          THIS_YYYYMM: string; // 'M_'||BASIS_YYYYMM (현재 월 컬럼 binding)
+          THIS_YYYYMMWW: string; // 'W_'||BASIS_YYYYMM||ISO_WEEK (현재 주 컬럼 binding)
+          BASIS_DATE: string;
+          PRE_YYYYMM: string; // 'M_'||전주 BASIS_YYYYMM
+          PRE_YYYYMMWW: string; // 'W_'||전주 binding
+          BASIS_YYYYMM: string; // 현재 월 (yyyymm)
+          ISO_WEEK: string; // 현재 ISO 주차
+          [key: string]: string | number;
+        };
+      };
+    };
+    spreadTitle: {
+      // DMF0003_GET_SPREAD_TITLE PROC_M IN 파라미터 (6 IN). createdBy/userGroup 은 BE 세션 자동.
+      //   ⚠️ SP body L86~123: 동적 기간컬럼 = D_yyyymmdd / W_yyyymm+ISO_WEEK / M_yyyymm.
+      //   type='LOAD'|'COLUMN' (기본 'COLUMN') — 첫 LOAD 시 AS_FROM_SITE 컬럼 자동추가 분기.
+      request: {
+        startYyyymmdd: string; // 1 P_START_YYYYMMDD
+        endYyyymmdd: string; // 2 P_END_YYYYMMDD
+        createdBy: string; // 3 P_CREATED_BY (BE 세션 자동)
+        divisionId: string; // 4 P_DIVISION_ID
+        userGroup: string; // 5 P_USER_GROUP (BE 세션 자동)
+        type: string; // 6 P_TYPE ('COLUMN' | 'LOAD')
+      };
+      response: {
+        // O_RC1 — SCM_MST_SHEET_COLUMNS + SCM_SYS_CALENDAR_M UNION (정적 컬럼 + 기간 컬럼).
+        o_rc1: {
+          PROGRAM_ID: string;
+          SHEET_NAME: string;
+          COLUMN_NAME: string; // binding (M_yyyymm / W_yyyymmISO / D_yyyymmdd / 정적컬럼명)
+          COLUMN_LABEL_NAME: string; // leaf header (일=CALENDAR_DAY)
+          SORT_ORDER_NO: string;
+          SMALL_CLASS_LABEL_NAME: string; // 2단 header (주차 WEEK_NAME)
+          LARGE_CLASS_LABEL_NAME: string; // 1단 header (대상 MONTH_NAME)
+          DAY_CODE: string; // 요일 (DAYOFWEEK)
+          COLUMN_WIDTH: string | number;
+          CELL_CONTROL_OBJECT_TYPE_CODE: string; // 'FPNumber' 등
+          HORIZONTAL_ALIGN_CODE: string; // 'R' (기간컬럼)
+          VISIBLE_FLAG: string;
+          DIVISION_ID: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    measureCount: {
+      request: Record<string, string>;
+      response: { o_rc1: { [key: string]: string | number } };
+    };
+    // ⭐ Phase 2e POPUP — DMF0003 내부 sheet 확장 (자매 titleSet sheet 표준 동일).
+    //   BTN_MPG(MNU_ID='DMF0003' + SHT_NM + SEARCH/SAVE) → API_M → PROC_M 은 corp handoff
+    //   `_artifacts/_apply_corporate/37_dmf0003_popup_metadata_handoff.sql` (적용 보류).
+    //   request key = PROC_M COL_NM(camelCase) positional, response = SP O_RC alias 실측.
+    //
+    // sspCompare — SSP↔MKT 동기화 비교 (DMF0003_GET_MKT_FCST_COMPARE_POPUP, 8 IN + O_RC1).
+    //   트리거: 메인 grid CellDblClick (Div40 & MEASURE='MKT_FCST_RP' & 동기화색[ATTR1 A/P]) (.cs L2628~2683).
+    //   ⚠️ 배포본 시그니처 = O_RC1 단일 (USER_ARGUMENTS 9 args 실측, 2026-06-28).
+    sspCompare: {
+      request: {
+        divisionId: string; // 1 P_DIVISION_ID
+        scmSiteId: string; // 2 P_SCM_SITE_ID
+        projectCode: string; // 3 P_PROJECT_CODE (End Customer40)
+        itemId: string; // 4 P_ITEM_ID
+        domExp: string; // 5 P_DOM_EXP
+        fcstType: string; // 6 P_FCST_TYPE
+        incoterms: string; // 7 P_INCOTERMS
+        yyyymmdd: string; // 8 P_YYYYMMDD
+      };
+      response: {
+        // O_RC1 — 비교 grid (SP body L100~106 실측 alias).
+        o_rc1: {
+          DIVISION_ID: string;
+          PROJECT_CODE: string; // End Customer
+          SCM_SITE_ID: string; // Sales Site
+          ITEM_ID: string; // Model
+          INCOTERMS: string;
+          FCST_TYPE: string;
+          DOM_EXP: string; // Customs Handbook
+          YYYYMMDD: string;
+          CATEGORY: string; // Measure ('Non-Sync MKT Fcst'/'Sync'/'Carry Over')
+          CONFIRM_ID: string;
+          SO_NO: string;
+          PLAN_QTY: string | number; // Qty
+          RESULT_QTY: string | number; // Shipment Result Qty
+          [key: string]: string | number;
+        };
+      };
+    };
+    // prPopup — PR 발행/조회 (DMF0003_GET_PRPOPUP 14 IN + O_RC1 DETAIL / O_RC2 HEADER / O_RC3 ERR_MSG).
+    //   트리거: 메인 grid 우클릭 contextMenu Request_PR(.cs L5689)/View_PR(L5746)/Add_History.
+    //   SAVE: DMF0003_SAVE_PRPOPUP (별 sheet btn 'SAVE'). popupType/^delim 다건.
+    prPopup: {
+      request: {
+        popupType: string; // 1 P_POPUP_TYPE (Request_PR/View_PR/Add_History/View_History)
+        requestNo: string; // 2 P_REQUEST_NO
+        divisionId: string; // 3 P_DIVISION_ID
+        projectCode: string; // 4 P_PROJECT_CODE
+        scmSiteId: string; // 5 P_SCM_SITE_ID (^delim 다건)
+        itemId: string; // 6 P_ITEM_ID (^delim 다건)
+        domExp: string; // 7 P_DOM_EXP
+        fcstType: string; // 8 P_FCST_TYPE
+        incoterms: string; // 9 P_INCOTERMS
+        plantSiteId: string; // 10 P_PLANT_SITE_ID
+        yyyymmdd: string; // 11 P_YYYYMMDD (^delim 다건)
+        planQty: string; // 12 P_PLAN_QTY (^delim 다건)
+      };
+      response: {
+        // O_RC1 — DETAIL grid (SP body L183~ 실측 alias, NextSCM migration L22).
+        o_rc1: {
+          ITEM_SEQ: string | number;
+          STORAGE_PLANT_ID: string;
+          YYYYMMDD: string;
+          PROJECT_CODE: string;
+          ITEM_ID: string;
+          ITEM_NAME: string;
+          ITEM_UOM: string;
+          QTY: string | number;
+          SCM_SITE_ID: string;
+          SLOC: string;
+          ITEM_DETAIL: string;
+          [key: string]: string | number;
+        };
+        // O_RC2 — HEADER (REQUEST_NO/DIVISION_NAME/PUCH_MGR/PUCH_GROUP/REQUESTED_BY/REQUEST_DATE/PR_HEADER).
+        o_rc2: {
+          REQUEST_NO: string;
+          DIVISION_NAME: string;
+          PUCH_MGR: string;
+          PUCH_GROUP: string;
+          REQUESTED_BY: string;
+          REQUEST_DATE: string;
+          PR_HEADER: string;
+          [key: string]: string | number;
+        };
+        // O_RC3 — ERR_MSG (단일 row, 비어있으면 정상).
+        o_rc3: { ERR_MSG: string; [key: string]: string | number };
+      };
+    };
+    // prHistory — PR 이력 조회 (DMF0003_GET_PR_HISTORY_POPUP 13 IN + O_RC1 grid / O_RC2 header).
+    //   트리거: 메인 grid 우클릭 contextMenu View_History (.cs L5739, BNPIn measure + D_ 컬럼 단일 셀).
+    prHistory: {
+      request: {
+        popupType: string; // 1 P_POPUP_TYPE (View_History)
+        divisionId: string; // 2 P_DIVISION_ID
+        requestNo: string; // 3 P_REQUEST_NO
+        projectCode: string; // 4 P_PROJECT_CODE
+        scmSiteId: string; // 5 P_SCM_SITE_ID
+        itemId: string; // 6 P_ITEM_ID
+        domExp: string; // 7 P_DOM_EXP
+        fcstType: string; // 8 P_FCST_TYPE
+        incoterms: string; // 9 P_INCOTERMS
+        plantSiteId: string; // 10 P_PLANT_SITE_ID
+        yyyymmdd: string; // 11 P_YYYYMMDD
+        planQty: string; // 12 P_PLAN_QTY
+      };
+      response: {
+        // O_RC1 — 이력 grid (SP body L64~67 실측 alias).
+        o_rc1: {
+          REQUEST_NO: string;
+          REQUEST_DATE: string;
+          REQUESTED_BY: string;
+          ITEM_QTY: string | number; // Qty
+          ITEM_DETAIL: string;
+          PR_HEADER: string;
+          PROJECT_CODE: string;
+          ITEM_ID: string;
+          ITEM_NAME: string;
+          YYYYMMDD: string;
+          [key: string]: string | number;
+        };
+        // O_RC2 — header (PR_HEADER/PROJECT_CODE/ITEM_ID/ITEM_NAME/YYYYMMDD).
+        o_rc2: {
+          PR_HEADER: string;
+          PROJECT_CODE: string;
+          ITEM_ID: string;
+          ITEM_NAME: string;
+          YYYYMMDD: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    // ⭐ PSI 고객수요분석 (2026-07-03 — AS-IS spdSub1/spdSub2/CustDemandAnalysis 팝업 1:1).
+    //   API_M/PROC_M 사내 배선: _artifacts/_deploy_packages/DMF0003_PSI_20260703/02_META.
+    //   request key = PROC_M COL_NM(camelCase) positional = SP ALL_ARGUMENTS 실측 일치.
+    //
+    // psiTitle — PSI 그리드 타이틀 (DMF0003_GET_SPREAD_TITLE_PSI 4 IN + O_RC1).
+    //   SHEET_COLUMNS(PROGRAM_ID='DMF0003', SHEET_NAME='psi' — SP 소문자 교정 2026-07-03) 17행.
+    psiTitle: {
+      request: {
+        startYyyymmdd: string; // 1 P_START_YYYYMMDD
+        endYyyymmdd: string; // 2 P_END_YYYYMMDD
+        createdBy: string; // 3 P_CREATED_BY (BE 세션 자동)
+        divisionId: string; // 4 P_DIVISION_ID
+      };
+      response: {
+        o_rc1: {
+          COLUMN_NAME: string;
+          COLUMN_LABEL_NAME: string;
+          SORT_ORDER_NO: string | number;
+          SMALL_CLASS_LABEL_NAME: string;
+          LARGE_CLASS_LABEL_NAME: string;
+          COLUMN_WIDTH: string | number;
+          HORIZONTAL_ALIGN_CODE: string;
+          VISIBLE_FLAG: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    // psi — PSI 분석 데이터 (DMF0003_GET_DM_ANL_MKT_PSI_DATA 6 IN + O_RESULT_CURSOR).
+    //   트리거: 메인 grid 데이터셀 더블클릭(Div81) / CustDemand 팝업 닫힘 재조회 (.cs L2796/6269/6373).
+    //   4 measure(Average impact(%)/Simulation (Impact)/Demand Plan (1st)/(final)) × 13개월 long rows.
+    psi: {
+      request: {
+        divisionId: string; // 1 P_DIVISION_ID
+        projectCode: string; // 2 P_PROJECT_CODE
+        projectName: string; // 3 P_PROJECT_NAME (NOT NULL — 본그리드 PROJECT null 검증 후 전달)
+        yyyymm: string; // 4 P_YYYYMM (당월)
+        createdBy: string; // 5 P_CREATED_BY (BE 세션 자동)
+        endCustomer: string; // 6 P_END_CUSTOMER
+      };
+      response: {
+        // 컬럼 15종 — 2026-07-03 사내 실측 (52행/A15BW7001).
+        O_RESULT_CURSOR: {
+          DIVISION_ID: string;
+          END_CUSTOMER: string;
+          PROJECT_NAME: string;
+          PROJECT_CODE: string;
+          YYYYMM: string; // 'yyyy.mm'
+          EDI_QTY: string | number;
+          MEASURE: string;
+          SUM: string;
+          PRODUCT: string;
+          SALE: string;
+          INVENTORY: string;
+          TIME_ADJUST: string;
+          MODEL_MIX: string;
+          MKT_DP: string;
+          SUPPLY_ISSUE: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    // psiLogic — PSI 분석 로직 조회 (DMF0003_GET_DM_ANL_MKT_PSI_AN_LOGIC 9 IN + O_RC1).
+    //   트리거: PSI Search 버튼 (기간/시뮬레이션 기간 기반, AS-IS 타임아웃 30분).
+    psiLogic: {
+      request: {
+        divisionId: string; // 1 P_DIVISION_ID
+        projectCode: string; // 2 P_PROJECT_CODE
+        projectName: string; // 3 P_PROJECT_NAME
+        yyyymmFrom: string; // 4 P_YYYYMM_FROM
+        yyyymmTo: string; // 5 P_YYYYMM_TO
+        yyyymmFromSimul: string; // 6 P_YYYYMM_FROM_SIMUL
+        yyyymmToSimul: string; // 7 P_YYYYMM_TO_SIMUL
+        createdBy: string; // 8 P_CREATED_BY (BE 세션 자동)
+        endCustomer: string; // 9 P_END_CUSTOMER
+      };
+      response: {
+        // psi 와 동일 15컬럼 (SUM alias "SUM") — 2026-07-03 실측 12행.
+        o_rc1: {
+          DIVISION_ID: string;
+          END_CUSTOMER: string;
+          PROJECT_NAME: string;
+          PROJECT_CODE: string;
+          YYYYMM: string;
+          EDI_QTY: string | number;
+          MEASURE: string;
+          SUM: string;
+          PRODUCT: string;
+          SALE: string;
+          INVENTORY: string;
+          TIME_ADJUST: string;
+          MODEL_MIX: string;
+          MKT_DP: string;
+          SUPPLY_ISSUE: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    // carTitle — Car Fcst 타이틀 (DMF0003_GET_SPREAD_TITLE_CAR 4 IN + O_RC1, SHEET_NAME='carFcst' 2행).
+    carTitle: {
+      request: {
+        startYyyymmdd: string;
+        endYyyymmdd: string;
+        createdBy: string; // BE 세션 자동
+        divisionId: string;
+      };
+      response: {
+        o_rc1: {
+          COLUMN_NAME: string;
+          COLUMN_LABEL_NAME: string;
+          COLUMN_WIDTH: string | number;
+          [key: string]: string | number;
+        };
+      };
+    };
+    // carProperty — Car 제조사/모델/BIZ TYPE 콤보 (DMF0003_GET_DM_ANL_CAR_PROPERTY 2 IN + 3 OUT).
+    //   maker=''→o_rc1 제조사(62)/o_rc3 BIZ TYPE(3), maker=선택→o_rc2 모델 (AS-IS .cs L6639/6714).
+    carProperty: {
+      request: {
+        divisionId: string; // 1 P_DIVISION_ID
+        makerName: string; // 2 P_MAKER_NAME ('' = 제조사 목록)
+      };
+      response: {
+        o_rc1: { CODE: string; NAME: string; [key: string]: string | number };
+        o_rc2: { CODE: string; NAME: string; [key: string]: string | number };
+        o_rc3: { CODE: string; NAME: string; [key: string]: string | number };
+      };
+    };
+    // car — Car FCST 참조 데이터 (DMF0003_GET_DM_ANL_CAR_REF 4 IN + 3 OUT).
+    //   트리거: Car 실행 버튼. o_rc1=YYYYQQ 타이틀 / o_rc2=데이터(분기 동적) / o_rc3=업로드정보.
+    car: {
+      request: {
+        fromYyyymmdd: string; // 1 P_FROM_YYYYMMDD
+        toYyyymmdd: string; // 2 P_TO_YYYYMMDD
+        carMaker: string; // 3 P_CAR_MAKER
+        carModel: string; // 4 P_CAR_MODEL
+      };
+      response: {
+        o_rc1: { YYYYQQ: string; [key: string]: string | number };
+        // 2026-07-03 실측: MAKER_NAME/CAR_MODEL/{YYYYQQ 동적}/MAJOR_CAT/MINOR_CAT.
+        o_rc2: {
+          MAKER_NAME: string;
+          CAR_MODEL: string;
+          MAJOR_CAT: string;
+          MINOR_CAT: string;
+          [key: string]: string | number;
+        };
+        o_rc3: { ATTRIBUTE1: string; ATTRIBUTE2: string; [key: string]: string | number };
+      };
+    };
+    // custDemandInit — 고객수요분석 팝업 조회 measure='Demand Plan (1st)' (DPINIT 5 IN + O_RC1).
+    custDemandInit: {
+      request: {
+        divisionId: string; // 1 P_DIVISION_ID
+        projectCode: string; // 2 P_PROJECT_CODE
+        yyyymm: string; // 3 P_YYYYMM
+        createdBy: string; // 4 P_CREATED_BY (BE 세션 자동)
+        endCustomer: string; // 5 P_END_CUSTOMER
+      };
+      response: {
+        // 2026-07-03 실측 10컬럼 (DESC 는 예약어 회피 인덱스 시그니처로 접근).
+        o_rc1: {
+          PROJECT_CODE: string;
+          END_CUSTOMER: string;
+          YYYYMM: string;
+          EDI_QTY: string | number;
+          IN_DE_VOL: string | number;
+          IMPUTATION_YN: string;
+          DEMAND_OPERATION: string;
+          VARIATION_FACTOR: string;
+          MKT_FCST: string | number;
+          [key: string]: string | number;
+        };
+      };
+    };
+    // custDemandResult — 팝업 조회 measure='Demand Plan (final)' (DPRESULT 5 IN + O_RC1, shape 동일).
+    custDemandResult: {
+      request: {
+        divisionId: string;
+        projectCode: string;
+        yyyymm: string;
+        createdBy: string; // BE 세션 자동
+        endCustomer: string;
+      };
+      response: {
+        o_rc1: {
+          PROJECT_CODE: string;
+          END_CUSTOMER: string;
+          YYYYMM: string;
+          EDI_QTY: string | number;
+          IN_DE_VOL: string | number;
+          IMPUTATION_YN: string;
+          DEMAND_OPERATION: string;
+          VARIATION_FACTOR: string;
+          MKT_FCST: string | number;
+          [key: string]: string | number;
+        };
+      };
+    };
+    // custDemand — 팝업 저장 (DMF0003_SAVE_DM_ANL_MKT_PSI_DETAIL 15 IN + dual OUT 2026-07-03 추가).
+    //   유효행(qtycd3+qty 존재)만 '^'-join, 한글→코드 변환 후 1콜 (AS-IS SaveData 1:1).
+    custDemand: {
+      request: {
+        divisionId: string; // 1  P_DIVISION_ID
+        projectCode: string; // 2  P_PROJECT_CODE
+        yyyymm: string; // 3  P_YYYYMM
+        custFcstM: string; // 4  P_CUST_FCST_M (ⓐ EDI_QTY, 콤마 제거)
+        measure: string; // 5  P_MEASURE ('DP_INIT'|'DP_RESULT')
+        qtycd1: string; // 6  P_QTYCD1 (IMPUTATION_YN 코드 ^join)
+        qtycd2: string; // 7  P_QTYCD2 (DEMAND_OPERATION 코드 ^join)
+        qtycd3: string; // 8  P_QTYCD3 (VARIATION_FACTOR 코드 ^join)
+        seq: string; // 9  P_SEQ (순번 ^join)
+        qty: string; // 10 P_QTY (IN_DE_VOL ^join)
+        mktFcstM: string; // 11 P_MKT_FCST_M (ⓓ, 콤마 제거)
+        desc: string; // 12 P_DESC (상세내용 ^join)
+        inputLimit: string; // 13 P_INPUT_LIMIT (입력기한)
+        createdBy: string; // 14 P_CREATED_BY (BE 세션 자동)
+        endCustomer: string; // 15 P_END_CUSTOMER
+      };
+      response: {
+        o_rc1: { DUMMY: string; [key: string]: string | number };
+        O_RESULT_CURSOR: {
+          MSG: string; // 'SUCCESS' | 'INVALID'
+          CODE: string; // '0' | '1'
+          EVENT: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+  };
+  /**
    * message
    */
   SYS0001: {
@@ -375,7 +1057,7 @@ interface RawProcedureMap extends Base {
     }
     levelTwoMenu: {
       request: {
-        pUpprMnuId: string;
+        menuId: string;
       };
       response: {
         o_rc: {
@@ -396,7 +1078,7 @@ interface RawProcedureMap extends Base {
     }
     levelThreeMenu: {
       request: {
-        pUpprMnuId: string;
+        menuId: string;
       };
       response: {
         o_rc: {
@@ -1017,6 +1699,59 @@ interface RawProcedureMap extends Base {
           DEPT_NM: string;
           LANG_CD: string;
           TMZ_CD: string;
+        };
+      };
+    };
+  }
+  /**
+   * group-user (SYS0014) — IN/OUT SSOT. SP: P_SYS0014_GET_GROUP_LIST_M / _GET_USER_BY_GROUP_M / _GET_AUTH_LIST_M / _SAVE_GROUP_USER_M
+   */
+  SYS0014: {
+    GroupInfo: {
+      request: {
+        search: string;
+      };
+      response: {
+        o_rc1: {
+          USER_GR_ID: string;
+          USER_GR_NM: string;
+          USE_YN: string;
+        };
+      };
+    };
+    UserInfo: {
+      request: {
+        userGrId: string;
+      };
+      response: {
+        o_rc1: {
+          USER_ID: string;
+          USER_NM: string;
+          USER_ENG_NM: string;
+          USER_EML: string;
+          DEPT_NM: string;
+          USE_YN: string;
+          CREATED_BY: string;
+          CREATION_DATE: string;
+          LAST_UPDATED_BY: string;
+          LAST_UPDATE_DATE: string;
+        };
+      };
+    };
+    Division: {
+      request: {
+        userGrId: string;
+        userId: string;
+        unitTpCd: string;
+      };
+      response: {
+        o_rc1: {
+          UNIT_ID: string;
+          UNIT_NM: string;
+          JV_PLANT_ID: string;
+          UPPR_UNIT_ID: string;
+          EDIT_YN: string;
+          USE_YN: string;
         };
       };
     };

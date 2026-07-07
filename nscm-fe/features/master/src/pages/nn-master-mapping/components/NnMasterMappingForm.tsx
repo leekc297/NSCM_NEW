@@ -1,13 +1,15 @@
 import { useEffect, useMemo, useState } from 'react';
 
+import { apiClient } from '@foundation/apis';
 import { CustomDropdown, SearchArea } from '@shared/components';
-import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
+import { useTabProcQuery, useTabComboQueries } from '@shared/hooks';
 import { Button, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 
 import { ItemByDivisionModal, ProjectByDivisionModal } from '../../../components';
 import { FALLBACK_ALL, MENU_ID, SHEETS } from '../nn-master-mapping.constants';
+import type { SearchCondition } from '../nn-master-mapping.types';
 import { useNnMasterMappingStore } from '../useNnMasterMappingStore';
 
 import styles from './NnMasterMappingForm.module.scss';
@@ -28,13 +30,30 @@ export const NnMasterMappingForm = ({ onSearch }: Props) => {
   const [openProjectModal, setOpenProjectModal] = useState(false);
   const [openItemModal, setOpenItemModal] = useState(false);
 
-  const { data: divData } = useTabProcQuery({
-    menuId: MENU_ID,
-    sheetName: SHEETS.DIVISION,
-    tabId: MENU_ID,
-    filters: {},
-    enabled: true,
-  });
+  const [divisions] = useTabComboQueries({ filters: ['MyDivision'] });
+
+  // 화면 진입 시 저장된 검색조건 복원 (As-Is Condition 기능 — contribute-view 동일 패턴)
+  //   Condition 버튼이 저장한 {paramNm, paramCtn} 들을 searchCondition 으로 셋팅. (자동조회는 하지 않음 — 사용자 Search)
+  useEffect(() => {
+    void apiClient
+      .get<
+        { paramNm: keyof SearchCondition; paramCtn: string }[]
+      >(`/admin/menu/${MENU_ID}/search-conditions`)
+      .then(res => {
+        if (res.data.result?.length > 0) {
+          const saved = res.data.result.reduce(
+            (acc, curr) => {
+              acc[curr.paramNm] = curr.paramCtn;
+              return acc;
+            },
+            {} as Partial<Record<keyof SearchCondition, string>>
+          );
+          set(saved as Partial<SearchCondition>);
+        }
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const { data: dtData } = useTabProcQuery({
     menuId: MENU_ID,
     sheetName: SHEETS.DATA_TYPE,
@@ -42,7 +61,13 @@ export const NnMasterMappingForm = ({ onSearch }: Props) => {
     filters: {},
     enabled: true,
   });
-  const [teamData] = useTabComboQueries({ filters: ['TeambyDivision'] });
+  const { data: teamData } = useTabProcQuery({
+    menuId: MENU_ID,
+    sheetName: SHEETS.TEAM,
+    tabId: MENU_ID,
+    filters: { divisionId: sc.divisionId },
+    enabled: !!sc.divisionId,
+  });
   const { data: ecData } = useTabProcQuery({
     menuId: MENU_ID,
     sheetName: SHEETS.END_CUSTOMER,
@@ -61,16 +86,8 @@ export const NnMasterMappingForm = ({ onSearch }: Props) => {
   // 표시 형식: ${CODE} (${NAME}) — 단 CODE==NAME 이면 CODE 만 (e.g. 'Excel')
   // SP 가 prepend 하는 `'ALL' AS CODE` 행은 제외 — CustomDropdown 의 `allOption` 으로 위임 (중복 회피)
   const divisionOptions = useMemo(
-    () =>
-      (divData?.o_rc1 ?? [])
-        .map(r => {
-          const code = String(r.CODE ?? '');
-          const name = String(r.NAME ?? code);
-          const label = code === name || name === '' ? code : `${code} (${name})`;
-          return { value: code, label };
-        })
-        .filter(o => o.value !== 'ALL' && o.value !== ''),
-    [divData]
+    () => divisions?.map(item => ({ label: item.NAME, value: item.CODE })) ?? [],
+    [divisions]
   );
 
   const dataTypeOptions = useMemo(
@@ -79,7 +96,7 @@ export const NnMasterMappingForm = ({ onSearch }: Props) => {
         .map(r => {
           const code = String(r.CODE ?? '');
           const name = String(r.NAME ?? code);
-          const label = code === name || name === '' ? code : `${code} (${name})`;
+          const label = code === name || name === '' ? code : `${code}`;
           return { value: code, label };
         })
         .filter(o => o.value !== 'ALL' && o.value !== ''),
@@ -88,16 +105,16 @@ export const NnMasterMappingForm = ({ onSearch }: Props) => {
 
   const teamOptions = useMemo(
     () =>
-      [
-        ...new Map(
-          (teamData ?? [])
-            .filter(item => item.DIVISION_ID === sc.divisionId)
-            .map(item => [`${item.DIVISION_ID}|${item.CODE}`, item])
-        ).values(),
-      ].map(item => ({ label: item.NAME, value: item.CODE })),
-    [teamData, sc.divisionId]
+      (teamData?.o_rc1 ?? [])
+        .map(r => {
+          const code = String(r.CODE ?? '');
+          const name = String(r.NAME ?? code);
+          const label = code === name || name === '' ? code : `${code} (${name})`;
+          return { value: code, label };
+        })
+        .filter(o => o.value !== 'ALL' && o.value !== ''),
+    [teamData]
   );
-
   const endCustomerOptions = useMemo(
     () =>
       (ecData?.o_rc1 ?? [])
@@ -140,31 +157,14 @@ export const NnMasterMappingForm = ({ onSearch }: Props) => {
     <SearchArea
       searchButtonLabel={t('LBL00112', '_Search')}
       onSearch={onSearch}
-      extraConditions={
-        // 3단(추가 검색조건) — SearchArea 의 자동 펼침/닫기 토글 버튼 활성화 (hook: search-area-extra-conditions)
-        <Grid size={4}>
-          <FormItem
-            label={t('LBL00619', '_Sales Site')}
-            labelAlign='right'
-            render={() => (
-              <CustomDropdown
-                multiple
-                allOption
-                useClearIcon
-                options={salesSiteOptions}
-                value={sc.scmSiteId}
-                onChange={(_, v) => set({ scmSiteId: v || 'ALL' })}
-              />
-            )}
-          />
-        </Grid>
-      }
       conditions={
         <>
-          <Grid size={4}>
+          <Grid size={3}>
             <FormItem
-              label={t('LBL00614', '_Data Type')}
+              className={styles.formItem}
+              label={t('LBL00614', 'Data Type')}
               labelAlign='right'
+              labelSize='middle'
               render={() => (
                 <CustomDropdown
                   allOption
@@ -175,10 +175,12 @@ export const NnMasterMappingForm = ({ onSearch }: Props) => {
               )}
             />
           </Grid>
-          <Grid size={4}>
+          <Grid size={3}>
             <FormItem
-              label={t('LBL00001', '_Div.')}
+              className={styles.formItem}
+              label={t('LBL00663', 'Div')}
               labelAlign='right'
+              labelSize='middle'
               required
               render={() => (
                 <CustomDropdown
@@ -191,10 +193,12 @@ export const NnMasterMappingForm = ({ onSearch }: Props) => {
               )}
             />
           </Grid>
-          <Grid size={4}>
+          <Grid size={3}>
             <FormItem
-              label={t('LBL00615', '_Team')}
+              className={styles.formItem}
+              label={t('LBL00044', 'Team')}
               labelAlign='right'
+              labelSize='middle'
               render={() => (
                 <CustomDropdown
                   multiple
@@ -209,10 +213,12 @@ export const NnMasterMappingForm = ({ onSearch }: Props) => {
               )}
             />
           </Grid>
-          <Grid size={4}>
+          <Grid size={3}>
             <FormItem
-              label={t('LBL00616', '_End Customer')}
+              className={styles.formItem}
+              label={t('LBL00616', 'End Customer')}
               labelAlign='right'
+              labelSize='middle'
               render={() => (
                 <CustomDropdown
                   multiple
@@ -225,10 +231,12 @@ export const NnMasterMappingForm = ({ onSearch }: Props) => {
               )}
             />
           </Grid>
-          <Grid size={4}>
+          <Grid size={3}>
             <FormItem
-              label={t('LBL00617', '_Project')}
+              className={styles.formItem}
+              label={t('LBL00617', 'Project')}
               labelAlign='right'
+              labelSize='middle'
               render={() => (
                 <InputField
                   fullWidth
@@ -238,6 +246,7 @@ export const NnMasterMappingForm = ({ onSearch }: Props) => {
                   InputProps={{
                     endAdornment: (
                       <Button
+                        disabled={sc.divisionId === '40'}
                         appearance='outlined'
                         priority='normal'
                         iconComponent={
@@ -250,16 +259,19 @@ export const NnMasterMappingForm = ({ onSearch }: Props) => {
                     ),
                   }}
                   onDoubleClick={() => setOpenProjectModal(true)}
+                  disabled={sc.divisionId === '40'}
                 />
               )}
             />
           </Grid>
-          <Grid size={4}>
+          <Grid size={3}>
             <FormItem
               // Model/Nickname 라벨 2단 표시 — Project 의 검색 button 영역과 시각 분리 (룰: search-area-button-position-and-toggle.md §1)
               // FormItem.label 이 string 만 받음 — JSX 직접 사용 불가. CSS `white-space: pre-wrap` 으로 multilineLabel 효과 처리.
-              label={t('LBL00618', '_Model/Nickname').replace('/', '/\n')}
+              label={t('LBL00618', 'Model/Nickname').replace('/', '/\n')}
               labelAlign='right'
+              labelSize='middle'
+              className={styles.formItem}
               render={() => (
                 <InputField
                   fullWidth
@@ -286,7 +298,24 @@ export const NnMasterMappingForm = ({ onSearch }: Props) => {
             />
           </Grid>
           {/* Sales Site 는 extraConditions (3단) 로 분리 — 펼침/닫기 토글 표시 */}
-
+          <Grid size={3}>
+            <FormItem
+              className={styles.formItem}
+              label={t('LBL00619', 'Sales Site')}
+              labelAlign='right'
+              labelSize='middle'
+              render={() => (
+                <CustomDropdown
+                  multiple
+                  allOption
+                  useClearIcon
+                  options={salesSiteOptions}
+                  value={sc.scmSiteId}
+                  onChange={(_, v) => set({ scmSiteId: v || 'ALL' })}
+                />
+              )}
+            />
+          </Grid>
           {/* Project Popup (COM0005 공용 modal 재사용) */}
           <ProjectByDivisionModal
             open={openProjectModal}

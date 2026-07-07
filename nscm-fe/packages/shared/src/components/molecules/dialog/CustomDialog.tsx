@@ -16,7 +16,9 @@ export type DialogNavigationSize = 1600 | 1400 | 1200 | 1000 | 800 | 600 | 400;
 export type DialogNavigationProps = {
   type?: DialogNavigationType;
   position?: DialogNavigationPosition;
-  size?: DialogNavigationSize;
+  // 표준 프리셋(DialogNavigationSize 참조) + 커스텀 px 폭 허용(런타임은 `Number(size)` 로 처리).
+  // number 가 프리셋 리터럴을 모두 포함하므로 union 대신 number 로 축약(no-redundant-type-constituents). 기존 프리셋 값 하위호환.
+  size?: number;
   isOutBound?: boolean;
   anchorEl?: HTMLButtonElement | null;
   title?: string;
@@ -29,6 +31,8 @@ export type DialogNavigationProps = {
   handleSubmit?: () => void;
   handleClose?: () => void;
   draggable?: boolean;
+  /** 초기 다이얼로그 높이 (CSS 값, 예: '75vh' / 700). 미지정 시 기존 기본값 '50vh' 유지. */
+  height?: string | number;
 } & DialogProps;
 
 const MAX_WIDTH = 2000;
@@ -100,11 +104,12 @@ const CustomDialogComponent = ({
   handleClose = () => _.noop(),
   handleSubmit = () => _.noop(),
   draggable = true,
+  height,
 }: DialogNavigationProps) => {
   // TODO: 최소, 최대 크기 미정.. 일단 400x300, 2000x1600 - 강민재
   const [dialogSize, setDialogSize] = useState<{ width: number; height: string | number }>({
     width: Number(size ?? DEFAULT_WIDTH),
-    height: DEFAULT_HEIGHT,
+    height: height ?? DEFAULT_HEIGHT,
   });
   const isResizing = useRef(false);
   const startPos = useRef({ x: 0, y: 0 });
@@ -167,7 +172,7 @@ const CustomDialogComponent = ({
   }, [handleMouseMove, handleMouseUp]);
 
   useEffect(() => {
-    if (!open) setDialogSize({ width: Number(size ?? DEFAULT_WIDTH), height: DEFAULT_HEIGHT });
+    if (!open) setDialogSize({ width: Number(size ?? DEFAULT_WIDTH), height: height ?? DEFAULT_HEIGHT });
   }, [open]);
 
   return (

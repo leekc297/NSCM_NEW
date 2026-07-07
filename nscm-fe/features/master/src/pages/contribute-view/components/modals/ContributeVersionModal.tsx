@@ -1,12 +1,20 @@
-import { CellType, type FlexGrid as FlexGridType, type HitTestInfo } from '@mescius/wijmo.grid';
+import {
+  CellType,
+  type FlexGrid as FlexGridType,
+  type HitTestInfo,
+  type FormatItemEventArgs,
+} from '@mescius/wijmo.grid';
 import { FlexGrid, FlexGridColumn } from '@mescius/wijmo.react.grid';
 import dayjs, { type Dayjs } from 'dayjs';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
+import { t } from '@foundation/i18n';
 import _ from '@foundation/lodash';
-import { CustomDialog } from '@shared/components';
-import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
-import { DatePickerCalendar } from '@shared/lges';
+import { CustomDialog, CustomDropdown, SearchArea } from '@shared/components';
+import { useTabComboQueries, useTabLookupQueries, useTabProcQuery } from '@shared/hooks';
+import { Button, DatePickerCalendar, FormItem, InputField } from '@shared/lges';
+import { ControlConfirmIcon } from '@shared/lges-icons';
+import { Grid } from '@shared/mui';
 import { useMessageStore } from '@shared/stores';
 
 import { MENU_ID, SHEETS } from '../../contribute-view.constants';
@@ -93,6 +101,18 @@ export const ContributeVersionModal = ({ open, onClose, onSelect }: Props) => {
     });
   }, [myDivisions]);
 
+  const [myMdfTypes] = useTabLookupQueries({ filters: ['MDF_TYPE'] });
+  const dmfTypeOptions = useMemo<Array<{ value: string; label: string }>>(() => {
+    const arr = (myMdfTypes ?? []) as Array<{ CODE?: string; NAME?: string }>;
+    if (arr.length === 0) return VERSION_TYPE_OPTIONS;
+    return arr.map(r => {
+      const code = String(r.CODE ?? '');
+      const name = String(r.NAME ?? code);
+      const label = code === name || name === '' ? code : `${code} (${name})`;
+      return { value: code, label };
+    });
+  }, [myMdfTypes]);
+
   // AS-IS L457~459: 현재 시각 -3M ~ +3M (DatePickerCalendar date-range-multi)
   const [period, setPeriod] = useState<[Dayjs, Dayjs]>(() => [
     dayjs().subtract(3, 'month'),
@@ -106,24 +126,15 @@ export const ContributeVersionModal = ({ open, onClose, onSelect }: Props) => {
   // AS-IS txtDes.Text — Description 자유 입력 (LIKE 검색)
   const [description, setDescription] = useState<string>('');
 
-  // AS-IS L455: sDivision = "40"
-  // PROC_M COL_NM 정합: startYyyymmdd / endYyyymmdd / divisionId / versionType / description
-  //   (sesUserId / mnuId 는 BE 자동 채움)
-  const filters = useMemo(
-    () =>
-      open
-        ? {
-            startYyyymmdd: period[0].format('YYYYMMDD'),
-            endYyyymmdd: period[1]?.format('YYYYMMDD'),
-            divisionId,
-            versionType,
-            description,
-          }
-        : undefined,
-    [open, period, divisionId, versionType, description]
-  );
+  const [filters, setFilters] = useState<{
+    startYyyymmdd: string;
+    endYyyymmdd: string;
+    divisionId: string;
+    versionType: string;
+    description: string;
+  }>();
 
-  const { data, refetch: search } = useTabProcQuery({
+  const { data } = useTabProcQuery({
     menuId: MENU_ID,
     sheetName: SHEETS.VERSION_POPUP,
     tabId: MENU_ID,
@@ -136,23 +147,18 @@ export const ContributeVersionModal = ({ open, onClose, onSelect }: Props) => {
     [data]
   );
 
-  // const { mutate } = useCallProcMutation<MENU_ID, SHEETS.VERSION_POPUP>({
-  //   menuId: MENU_ID,
-  //   sheetName: SHEETS.VERSION_POPUP,
-  // });
-
   const onSearch = () => {
-    if (_.isEmpty(filters?.endYyyymmdd)) {
+    if (_.isEmpty(period[1])) {
       void setAlert({ type: 'alert', content: '검색 기간 종료일을 선택해주세요.' });
       return;
     }
-    void search();
-
-    // mutate(filters as ProcRequest<MENU_ID, SHEETS.VERSION_POPUP>, {
-    //   onSuccess: res => {
-    //     console.log('res => ', res);
-    //   },
-    // });
+    setFilters({
+      startYyyymmdd: period[0].format('YYYYMMDD'),
+      endYyyymmdd: period[1]?.format('YYYYMMDD'),
+      divisionId,
+      versionType,
+      description,
+    });
   };
 
   // popup close 시 상태 초기화
@@ -162,6 +168,7 @@ export const ContributeVersionModal = ({ open, onClose, onSelect }: Props) => {
       setDivisionId('40');
       setVersionType('REPORT_SP_W');
       setDescription('');
+      setFilters(undefined);
     }
   }, [open]);
 
@@ -188,91 +195,91 @@ export const ContributeVersionModal = ({ open, onClose, onSelect }: Props) => {
   const headerTitle = (
     <div className={styles.headerContainer}>
       <div className={styles.headerDot} />
-      <h2 className={styles.headerTitle}>SP Version 선택</h2>
+      <h2 className={styles.headerTitle}>{t('MNU00179', '_Version Popup')}</h2>
     </div>
   );
 
   return (
     <CustomDialog
       open={open}
-      size={1200}
+      size={1000}
       type='modal'
       position='basic'
       handleClose={onClose}
       disableButtonCancel
       customHeaderTitle={headerTitle}
       customContentArea={
-        <div className={styles.dialogContent}>
+        <div className={styles.dialogContentWrapper}>
           {/* AS-IS 조회 조건 영역: Division (.cs L116), Period (drpPeriod), Type (clbType), Description (txtDes) */}
-          <div className={styles.filterBar}>
-            {/* AS-IS clbDivision (.cs L116, MyDivision lookup) */}
-            <div className={styles.field}>
-              <span className={styles.fieldLabel}>Division</span>
-              <select
-                className={styles.select}
-                value={divisionId}
-                onChange={e => setDivisionId(e.target.value)}
-                disabled
-              >
-                {divisionOptions.map(o => (
-                  <option key={o.value} value={o.value}>
-                    {o.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-            {/* AS-IS drpPeriod (.cs L108, .cs L212~213): date range picker */}
-            <div className={styles.fieldWide}>
-              <span className={styles.fieldLabel}>Period</span>
-              <div className={styles.datePickerWrap}>
-                <DatePickerCalendar
-                  usecase='date-range-multi'
-                  elevation
-                  size='small'
-                  value={period}
-                  onChange={date => {
-                    if (Array.isArray(date) && date.length === 2) {
-                      setPeriod([date[0] as Dayjs, date[1] as Dayjs]);
-                    }
-                  }}
-                />
-              </div>
-            </div>
-            {/* AS-IS clbType (.cs L127, MDF_TYPE lookup) — SP body 정확 일치 필터 */}
-            <div className={styles.field}>
-              <span className={styles.fieldLabel}>Type</span>
-              <select
-                className={styles.select}
-                value={versionType}
-                onChange={e => setVersionType(e.target.value)}
-              >
-                {VERSION_TYPE_OPTIONS.map(o => (
-                  <option key={o.value} value={o.value}>
-                    {o.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-            {/* AS-IS txtDes (.cs L240, LIKE 검색) */}
-            <div className={styles.field}>
-              <span className={styles.fieldLabel}>Description</span>
-              <input
-                className={styles.input}
-                type='text'
-                value={description}
-                onChange={e => setDescription(e.target.value)}
-                placeholder='버전 설명 부분일치 검색'
-              />
-            </div>
-            <button
-              type='button'
-              className={`${styles.actionButton} ${styles.primary}`}
-              onClick={onSearch}
-            >
-              조회
-            </button>
-          </div>
-
+          <SearchArea
+            searchButtonLabel={t('LBL00722', '_Search')}
+            onSearch={onSearch}
+            conditions={
+              <>
+                <Grid size={6}>
+                  <FormItem
+                    label={t('LBL00086', '_Year')}
+                    labelAlign='right'
+                    labelSize='middle'
+                    render={() => (
+                      <CustomDropdown disabled value={divisionId} options={divisionOptions} />
+                    )}
+                  />
+                </Grid>
+                <Grid size={6}>
+                  <FormItem
+                    label={t('LBL00013', '_Period')}
+                    labelAlign='right'
+                    labelSize='middle'
+                    className={styles.searchPeriod}
+                    render={() => (
+                      <DatePickerCalendar
+                        usecase='date-range-multi'
+                        elevation
+                        size='small'
+                        value={period}
+                        onChange={date => {
+                          if (Array.isArray(date) && date.length === 2) {
+                            setPeriod([date[0] as Dayjs, date[1] as Dayjs]);
+                          }
+                        }}
+                      />
+                    )}
+                  />
+                </Grid>
+                <Grid size={6}>
+                  <FormItem
+                    label={t('LBL00092', '_Report Type')}
+                    labelAlign='right'
+                    labelSize='middle'
+                    render={() => (
+                      <CustomDropdown
+                        value={versionType}
+                        options={dmfTypeOptions}
+                        onChange={(_, option) => {
+                          setVersionType(option);
+                        }}
+                      />
+                    )}
+                  />
+                </Grid>
+                <Grid size={6}>
+                  <FormItem
+                    label={t('LBL00656', '_Description')}
+                    labelAlign='right'
+                    labelSize='middle'
+                    render={() => (
+                      <InputField
+                        fullWidth
+                        value={description}
+                        onChange={e => setDescription(e.target.value)}
+                      />
+                    )}
+                  />
+                </Grid>
+              </>
+            }
+          />
           {/* 버전 리스트 grid — AS-IS InitSpread_X (.cs L156) 의 8 컬럼 매핑 */}
           <div className={styles.gridWrapper}>
             <FlexGrid
@@ -299,6 +306,25 @@ export const ContributeVersionModal = ({ open, onClose, onSelect }: Props) => {
                     onClose();
                   }
                 });
+
+                g.formatItem.addHandler((_s, e: FormatItemEventArgs) => {
+                  const row = e.row;
+                  const col = e.col;
+                  const cell = e.cell;
+                  const cellType = e.panel.cellType;
+
+                  if (cellType === CellType.RowHeader && col === 0) {
+                    if (col === 0) {
+                      const rowNum = row + 1;
+                      cell.textContent = rowNum.toString();
+                      if (rowNum % 2 === 0) {
+                        cell.style.backgroundColor = '#F7F7F8';
+                      } else {
+                        cell.style.backgroundColor = '#FFFFFF';
+                      }
+                    }
+                  }
+                });
               }}
               itemsSource={rows}
               autoGenerateColumns={false}
@@ -307,23 +333,29 @@ export const ContributeVersionModal = ({ open, onClose, onSelect }: Props) => {
               {/* AS-IS .cs L161~168 의 8 컬럼 (DIVISION_ID/VER_CRE_SEQ/YYYYMMDD 은 visible=false) */}
               <FlexGridColumn binding='VERSION_NO' header='Version' width={220} />
               <FlexGridColumn binding='VERSION_DESCRIPTION' header='Description' width={300} />
-              <FlexGridColumn binding='VERSION_TYPE' header='Type' width={100} />
-              <FlexGridColumn binding='MAX(CREATED_BY)' header='Create By' width={100} />
+              <FlexGridColumn binding='VERSION_TYPE' header='Type' width={117} />
+              <FlexGridColumn binding='MAX(CREATED_BY)' header='Create By' width={120} />
               <FlexGridColumn binding='MAX(CREATION_DATE)' header='Create Date' width={150} />
             </FlexGrid>
           </div>
 
-          <div className={styles.actionBar}>
-            <button
-              type='button'
-              className={`${styles.actionButton} ${styles.primary}`}
+          <div className={styles.buttonWrapper}>
+            <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel={t('LBL00627', '_Close')}
+              onClick={onClose}
+            />
+            <Button
+              appearance='contained'
+              buttonLabel={t('LBL00716', '_OK')}
+              iconComponent={<ControlConfirmIcon size='small' />}
+              iconPosition='leading'
+              priority='primary'
+              size='medium'
               onClick={handleConfirm}
-            >
-              선택
-            </button>
-            <button type='button' className={styles.actionButton} onClick={onClose}>
-              닫기
-            </button>
+            />
           </div>
         </div>
       }

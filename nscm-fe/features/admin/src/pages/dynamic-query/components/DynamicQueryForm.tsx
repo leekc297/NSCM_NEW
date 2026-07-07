@@ -1,4 +1,9 @@
+// SYS0013 Register 탭 검색 Form — DESIGN §1.2: Report Name / Description / Role.
+// Role 콤보 = admin USER_GR (useTabComboQueries 'UserGroup') + 'ALL' 선두.
+import { useEffect } from 'react';
+
 import { CustomDropdown, SearchArea } from '@shared/components';
+import { useTabComboQueries } from '@shared/hooks';
 import { FormItem, InputField } from '@shared/lges';
 import { Grid } from '@shared/mui';
 
@@ -8,35 +13,43 @@ interface Props {
   onSearch: () => void;
 }
 
-const CATEGORY_OPTIONS = [
-  { label: 'All', value: 'ALL' },
-  { label: 'Demand', value: 'DM' },
-  { label: 'SCM', value: 'SCM' },
-  { label: 'Admin', value: 'ADMIN' },
-];
-
 export const DynamicQueryForm = ({ onSearch }: Props) => {
   const { t } = useTranslation();
   const searchCondition = useDynamicQueryStore(s => s.searchCondition);
   const setSearchCondition = useDynamicQueryStore(s => s.setSearchCondition);
   const openSearchArea = useDynamicQueryStore(s => s.openSearchArea);
 
+  const [group] = useTabComboQueries({ filters: ['UserGroup'] });
+  const roleOptions = [
+    { label: t('LBL00721', 'All'), value: 'ALL' },
+    ...(group?.map(item => ({ label: item.NAME, value: item.CODE })) ?? []),
+  ];
+
+  // 영속 store(tab) 에 남은 비유효 role(예: 이전 stale 콤보의 연도값)을 콤보 로드 후 ALL 로 정규화.
+  useEffect(() => {
+    if (!group) return;
+    const valid = new Set<string>(['ALL', ...group.map(g => String(g.CODE))]);
+    if (!valid.has(String(searchCondition.role))) {
+      setSearchCondition({ role: 'ALL' });
+    }
+  }, [group, searchCondition.role, setSearchCondition]);
+
   return (
     <SearchArea
-      searchButtonLabel={t('LBL00112', '_Search')}
+      searchButtonLabel={t('LBL00722', 'Search')}
       isHidden={!openSearchArea}
       onSearch={onSearch}
       conditions={
         <>
           <Grid size={3}>
             <FormItem
-              label={t('LBL00650', 'Query Name')}
+              label={t('LBL00718', 'Report Name')}
               labelAlign='right'
               render={() => (
                 <InputField
                   fullWidth
-                  value={searchCondition.queryName}
-                  onChange={e => setSearchCondition({ queryName: e.target.value })}
+                  value={searchCondition.reportName}
+                  onChange={e => setSearchCondition({ reportName: e.target.value })}
                   onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
@@ -44,15 +57,29 @@ export const DynamicQueryForm = ({ onSearch }: Props) => {
           </Grid>
           <Grid size={3}>
             <FormItem
-              label={t('LBL00651', 'Category')}
+              label={t('LBL00719', 'Description')}
+              labelAlign='right'
+              render={() => (
+                <InputField
+                  fullWidth
+                  value={searchCondition.description}
+                  onChange={e => setSearchCondition({ description: e.target.value })}
+                  onKeyDown={e => e.key === 'Enter' && onSearch()}
+                />
+              )}
+            />
+          </Grid>
+          <Grid size={3}>
+            <FormItem
+              label={t('LBL00720', 'Role')}
               labelAlign='right'
               render={() => (
                 <CustomDropdown
                   isInput={false}
-                  value={searchCondition.category}
-                  options={CATEGORY_OPTIONS}
+                  value={searchCondition.role || 'ALL'}
+                  options={roleOptions}
                   onChange={(_, value) =>
-                    setSearchCondition({ category: typeof value === 'string' ? value : 'ALL' })
+                    setSearchCondition({ role: typeof value === 'string' ? value : 'ALL' })
                   }
                 />
               )}

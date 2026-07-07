@@ -1,0 +1,63 @@
+// SYS0013 Dynamic Query — Designer(View) 좌우 분할 패널 레이아웃 (DESIGN TABPAGE2)
+// 참조: sales-site-project-model customPanelGroup 패턴.
+
+// View 탭 본문 — 상단 메타폼(auto) + 패널(flex:1) 세로 배치, TabItem 전체 높이 채움 (2026-06-28).
+.viewBody {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  gap: 8px;
+}
+
+// 좌우 분할 패널 — 메타폼 아래 남은 높이 전부 사용 (magic vh calc 제거).
+.designerPanelGroup {
+  flex: 1;
+  min-height: 0;
+  gap: 16px;
+
+  [class*='wj-flexgrid'] {
+    max-height: 100%;
+  }
+}
+
+// 좌측 정의 영역 — Column / Condition / SQL 세로 스택 (비율 4:3:3, 사용자 요구 2026-06-28)
+.leftPane {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden; // 4:2:4 가 패널 높이에 정확히 분배 → 좌측 전체 vscroll 제거 (2026-06-28)
+}
+
+// 좌측 각 섹션 (TitleArea + grid) — flex-grow 로 4:3:3 분할
+.leftSection {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  gap: 4px;
+}
+
+// 좌측 비율 Columns : Condition : SQL = 4 : 2 : 4 (사용자 요구 2026-06-28)
+.grow4 {
+  flex: 4 1 0;
+}
+
+.grow2 {
+  flex: 2 1 0;
+}
+
+// 섹션 내 grid/viewer 영역 — 남은 공간 채움
+.gridFill {
+  flex: 1;
+  min-height: 0;
+}
+
+// 우측 결과 미리보기 영역
+.rightPane {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: auto;
+}

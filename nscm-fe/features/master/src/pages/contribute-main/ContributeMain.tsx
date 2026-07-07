@@ -65,7 +65,7 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
     }
     setFilters();
     void fetchStaticColumns();
-    refetch?.();
+    void refetch?.();
   };
 
   // AS-IS SaveData() 1:1 매핑 (DMF0043_Contribute_Main.cs L333~):
@@ -158,8 +158,9 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
       });
       if (!ok) return;
       const trim = (s: string) => (s.startsWith('^') ? s.substring(1) : s);
-      try {
-        await apiClient.post(`/${MENU_ID}/main/SAVE/call-proc`, {
+
+      await apiClient
+        .post(`/${MENU_ID}/ContributeMain/SAVE/call-proc`, {
           activeFlag: trim(buf.activeFlag),
           verSeq: trim(buf.verSeq),
           departmentId: trim(buf.departmentId),
@@ -173,12 +174,22 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
           contributionType: trim(buf.contributionType),
           contributionRatio: trim(buf.contributionRatio),
           createdBy: trim(buf.createdBy),
+        })
+        .then(res => {
+          console.log('SUCCESS?', res);
+          if (res.status === 200) {
+            void setAlert({ type: 'alert', content: t('MSG00002', '저장이 완료되었습니다.') });
+          } else {
+            void setAlert({
+              type: 'alert',
+              content: t('MSG00003', '저장 중 오류가 발생했습니다.'),
+            });
+          }
+          refetch?.();
+        })
+        .catch(e => {
+          refetch?.();
         });
-        void setAlert({ type: 'alert', content: t('MSG_SAVE_DONE', '저장이 완료되었습니다.') });
-        refetch?.();
-      } catch {
-        void setAlert({ type: 'alert', content: t('MSG_SAVE_FAIL', '저장 중 오류가 발생했습니다.') });
-      }
     })();
   };
 
@@ -200,14 +211,15 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
   ];
 
   // 화면 진입 + Year 자동 선택 직후 자동 조회 trigger (AS-IS Form_Load + InitControls)
-  useEffect(() => {
-    if (searchParams.verSeq && !filters[SHEETS.MAIN]) {
-      setFilters();
-    }
-  }, [searchParams.verSeq]);
+  // useEffect(() => {
+  //   if (searchParams.verSeq && !filters[SHEETS.MAIN]) {
+  //     setFilters();
+  //   }
+  // }, [searchParams.verSeq]);
 
   // 화면 mount 시 admin SHEET_COLUMNS (BASE 6 컬럼) 동적 fetch.
   useEffect(() => {
+    console.log('initialized', initialized);
     if (!initialized) void fetchStaticColumns();
   }, [initialized]);
 
@@ -234,11 +246,7 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
         customButtons={customButtons}
       />
       <div className={styles.gridContainer}>
-        <ContributeMainGrid
-          gridRef={gridRef}
-          gridFilterRef={gridFilterRef}
-          data={rows}
-        />
+        <ContributeMainGrid gridRef={gridRef} gridFilterRef={gridFilterRef} data={rows} />
       </div>
       <ContributeVersionModal
         open={versionModalOpen}

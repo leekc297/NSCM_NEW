@@ -3,7 +3,7 @@ import { useEffect, useMemo } from 'react';
 import { apiClient } from '@foundation/apis';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
-import { Button, Checkbox, FormItem, InputField } from '@shared/lges';
+import { Button, Checkbox, FormItem, InputField, Label } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 
@@ -107,10 +107,11 @@ export const ContributeViewForm = ({ onSearch, onOpenVersionPopup }: Props) => {
       onSearch={onSearch}
       conditions={
         <>
-          <Grid size={4}>
+          <Grid size={3}>
             <FormItem
-              label={t('LBL00086', 'Year')}
+              label={t('LBL00086', '_Year')}
               labelAlign='right'
+              labelSize='middle'
               required
               render={() => (
                 <CustomDropdown
@@ -127,10 +128,11 @@ export const ContributeViewForm = ({ onSearch, onOpenVersionPopup }: Props) => {
               )}
             />
           </Grid>
-          <Grid size={4}>
+          <Grid size={3}>
             <FormItem
-              label={t('LBL00606', 'Version')}
+              label={t('LBL00653', '_Version')}
               labelAlign='right'
+              labelSize='middle'
               required
               render={() => (
                 <InputField
@@ -154,22 +156,11 @@ export const ContributeViewForm = ({ onSearch, onOpenVersionPopup }: Props) => {
               )}
             />
           </Grid>
-          <Grid size={4}>
+          <Grid size={3}>
             <FormItem
-              label={t('LBL00087', 'Customer Group')}
+              label={t('LBL00088', '_제품군')}
               labelAlign='right'
-              render={() => (
-                <InputField
-                  value={searchParams.endCustReport}
-                  onChange={e => setSearchParams({ endCustReport: e.target.value })}
-                />
-              )}
-            />
-          </Grid>
-          <Grid size={4}>
-            <FormItem
-              label={t('LBL00088', 'Product Group')}
-              labelAlign='right'
+              labelSize='middle'
               render={() => (
                 <CustomDropdown
                   value={searchParams.productGroup}
@@ -179,10 +170,25 @@ export const ContributeViewForm = ({ onSearch, onOpenVersionPopup }: Props) => {
               )}
             />
           </Grid>
-          <Grid size={4}>
+          <Grid size={3}>
             <FormItem
-              label={t('LBL00607', 'Biz Type')}
+              label={t('LBL00087', '_고객군')}
               labelAlign='right'
+              labelSize='middle'
+              render={() => (
+                <InputField
+                  style={{ width: '100%' }}
+                  value={searchParams.endCustReport}
+                  onChange={e => setSearchParams({ endCustReport: e.target.value })}
+                />
+              )}
+            />
+          </Grid>
+          <Grid size={3}>
+            <FormItem
+              label={t('LBL00657', '_Biz')}
+              labelAlign='right'
+              labelSize='middle'
               render={() => (
                 <CustomDropdown
                   value={searchParams.bizType}
@@ -192,31 +198,27 @@ export const ContributeViewForm = ({ onSearch, onOpenVersionPopup }: Props) => {
               )}
             />
           </Grid>
-          <Grid size={4}>
+          <Grid className={styles.customGrid}>
             <FormItem
-              label={t('LBL00609', 'Million')}
-              labelAlign='right'
               render={() => (
-                <Checkbox
-                  checked={searchParams.millionYn === 'Y'}
-                  onChange={checked =>
-                    setSearchParams({ millionYn: checked ? 'Y' : 'N' })
-                  }
-                />
+                <div className={styles.customCheckbox}>
+                  <Checkbox
+                    checked={searchParams.millionYn === 'Y'}
+                    onChange={checked => setSearchParams({ millionYn: checked ? 'Y' : 'N' })}
+                  />
+                  <Label labelText={t('LBL00654', '_M$')} depth='sub' />
+                </div>
               )}
             />
-          </Grid>
-          <Grid size={4}>
             <FormItem
-              label={t('LBL00610', 'Consistency Check')}
-              labelAlign='right'
               render={() => (
-                <Checkbox
-                  checked={searchParams.compatibilityYn === 'Y'}
-                  onChange={checked =>
-                    setSearchParams({ compatibilityYn: checked ? 'Y' : 'N' })
-                  }
-                />
+                <div className={styles.customCheckbox}>
+                  <Checkbox
+                    checked={searchParams.compatibilityYn === 'Y'}
+                    onChange={checked => setSearchParams({ compatibilityYn: checked ? 'Y' : 'N' })}
+                  />
+                  <Label labelText={t('LBL00655', '_정합성 체크')} depth='sub' />
+                </div>
               )}
             />
           </Grid>

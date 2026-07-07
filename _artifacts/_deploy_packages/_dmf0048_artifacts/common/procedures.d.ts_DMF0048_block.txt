@@ -1,0 +1,122 @@
+  DMF0048: {
+    'Sales Monitoring': {
+      // PKG_DMF0048.P_DMF0048_GET_DM_PLN_SALES_MONITORING PROC_M(SORT_ORD 1~20 IN) 와 정확히 일치
+      //   (ALL_ARGUMENTS 실측 2026-07-04 — _deploy_packages/DMF0048_SALES_MONITORING_20260704/04_VERIFY).
+      request: {
+        divisionId: string; // 1  P_DIVISION_ID
+        deptId: string; // 2  P_DEPT_ID (Team — 콤마 delim, 빈값 'ALL')
+        endCustomer: string; // 3  P_END_CUSTOMER
+        scmSiteId: string; // 4  P_SCM_SITE_ID (Sales Site)
+        projectCode: string; // 5  P_PROJECT_CODE (빈값 '' = 전체)
+        itemId: string; // 6  P_ITEM_ID (LIKE 부분일치)
+        itemType: string; // 7  P_ITEM_TYPE
+        fromYyyymmdd: string; // 8  P_FROM_YYYYMMDD
+        nowYyyymmdd: string; // 9  P_NOW_YYYYMMDD (AS-IS sNowDate = 오늘)
+        toYyyymmdd: string; // 10 P_TO_YYYYMMDD
+        createdBy: string; // 11 P_CREATED_BY (BE 세션 자동)
+        plantSiteId: string; // 12 P_PLANT_SITE_ID
+        biztype: string; // 13 P_BIZTYPE
+        owner: string; // 14 P_OWNER
+        internalYn: string; // 15 P_INTERNAL_YN (Include Internal Txn)
+        userinfo: string; // 16 P_USERINFO (AS-IS NowGroupID — GET_ADMIN_GROUP 판정)
+        bucket: string; // 17 P_BUCKET ('DAILY'/'WEEKLY'/'MONTHLY' full-word)
+        userDeptId: string; // 18 P_USER_DEPT_ID (JV Planner 전용 — 일반 공란)
+        sesUserId: string; // 19 P_USER_ID (BE 세션 자동)
+        mnuId: string; // 20 P_MENU_ID (BE 메뉴 자동)
+      };
+      response: {
+        // O_RC1 — wide format (식별 컬럼 + 동적 PIVOT M_/W_/D_ 컬럼 + EDIT_YN). 스모크 실측 2026-07-04:
+        //   Div40 724행/59cols, Div81 1,236행 (04_VERIFY/002_smoke_results.txt).
+        o_rc1: {
+          DIVISION_ID: string;
+          END_CUSTOMER: string;
+          END_CUSTOMER40: string;
+          SCM_SITE_ID: string;
+          PROJECT_CODE: string;
+          GROUP_ID: string;
+          ITEM_ID: string;
+          TEXT: string;
+          KWH_CELL: string | number;
+          KWH_MODULE: string | number;
+          KWH_PACK: string | number;
+          NICK_NAME: string;
+          INCOTERMS: string;
+          FCST_TYPE: string;
+          DOM_EXP: string;
+          COMPANY_ID: string;
+          CELL_PROD_SITE_ID: string;
+          CURRENCY: string;
+          PLANT_SITE_ID: string;
+          MEASURE: string;
+          SORT_ORDER_NO: string | number;
+          // 행 편집 플래그 — read-only 화면이라 미사용 (기록: __asis-mapping__.md)
+          EDIT_YN: string;
+          [key: string]: string | number;
+        };
+        // O_RC2 — 현재/전주 주차 정보 (헤더 초록 강조 + Color 과거 회색 판정 입력).
+        o_rc2: {
+          THIS_YYYYMM: string; // 'M_'||현재월 binding
+          THIS_YYYYMMWW: string; // 'W_'||현재주 binding
+          BASIS_DATE: string;
+          PRE_YYYYMM: string;
+          PRE_YYYYMMWW: string;
+          BASIS_YYYYMM: string;
+          ISO_WEEK: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    spreadTitle: {
+      // DMF0048_GET_SPREAD_TITLE PROC_M (5 IN + o_rc1) — 2026-07-04 O_RC1 복원 변환분.
+      request: {
+        startYyyymmdd: string; // 1 P_START_YYYYMMDD
+        endYyyymmdd: string; // 2 P_END_YYYYMMDD
+        createdBy: string; // 3 P_CREATED_BY (BE 세션 자동)
+        divisionId: string; // 4 P_DIVISION_ID
+        bucket: string; // 5 P_BUCKET ('DAILY' 일 때만 D_ 생성)
+      };
+      response: {
+        // O_RC1 — SHEET_COLUMNS(division 필터) + 달력 기간컬럼 UNION (스모크 실측 48행/22cols).
+        o_rc1: {
+          PROGRAM_ID: string;
+          SHEET_NAME: string;
+          COLUMN_NAME: string; // binding (M_yyyymm / W_yyyymm+ISO_WEEK / D_yyyymmdd / 정적컬럼명)
+          COLUMN_LABEL_NAME: string;
+          SORT_ORDER_NO: string | number;
+          SMALL_CLASS_LABEL_NAME: string;
+          LARGE_CLASS_LABEL_NAME: string;
+          DAY_CODE: string;
+          COLUMN_WIDTH: string | number;
+          CELL_CONTROL_OBJECT_TYPE_CODE: string;
+          HORIZONTAL_ALIGN_CODE: string;
+          VISIBLE_FLAG: string;
+          DIVISION_ID: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    dayRange: {
+      // PR_GET_DAY_RANGE PROC_M (2 IN + o_rc1/o_rc2) — 기본 조회구간 (AS-IS GetDayRange p_month=6).
+      request: {
+        createdBy: string; // 1 P_CREATED_BY (BE 세션 자동)
+        month: string; // 2 P_MONTH (AS-IS 6 고정 — "7개월에서 6개월로 변경" .cs L994)
+      };
+      response: {
+        // o_rc1 = ISO 주 정렬 범위 (AS-IS Tables[0], 미사용) / o_rc2 = 월 경계 범위 (AS-IS Tables[1] 사용분)
+        o_rc1: { DAY_RANGE: string; [key: string]: string | number };
+        o_rc2: { DAY_RANGE: string; [key: string]: string | number };
+      };
+    };
+  };
+  /**
+   * CustomerFcstUpload — DMF0014 (Customer FCST Upload)
+   *
+   * 사내 Oracle PKG_DMF0014 ALL_ARGUMENTS 실측 (2026-07-04 —
+   * _deploy_packages/DMF0014_CUST_FCST_UPLOAD_20260704/04_VERIFY/001_all_arguments.txt).
+   * SHEETS:
+   * - `FCST Upload`  (메인 — 식별 13 + EDIT_FLAG/EDIT_YN + 동적 D_ 기간 컬럼.
+   *                   SHT_NM = SCM_ADM_EXCEL_COLUMNS 기존 등록명 그대로 — excel-upload 체인 키)
+   * - `spreadTitle`  (동적 기간 헤더 — 전 버킷 D_ 접두: WEEKLY=주 시작일 / MONTHLY=월 시작일)
+   * - `dayRange`     (PR_GET_DAY_RANGE 재사용 — DMF0048 dayRange 와 동일 계약)
+   * SAVE(P_DMF0014_SAVE_CUST_FCST_UPLOAD_DATA 17 IN '^'delim)는 apiClient.post 직접 — 타입 미등재.
+   */

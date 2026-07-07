@@ -36,7 +36,9 @@ const today = new Date();
 const oneMonthBefore = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
 
 const initSearch: SearchCondition = {
+  divisionId: 'ALL',
   userId: '',
+  department: '',
   startDate: fmt(oneMonthBefore),
   endDate: fmt(today),
   status: 'REQUEST',

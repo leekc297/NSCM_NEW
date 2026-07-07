@@ -2,7 +2,7 @@ import { apiClient } from '@foundation/apis';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { createPersistedStoreWithTab } from '@shared/stores';
 
-import { MENU_ID, SHEETS } from './dynamic-query.constants';
+import { MENU_ID, SHEETS, SHEET_INDEX } from './dynamic-query.constants';
 import type { SearchCondition } from './dynamic-query.types';
 
 type StaticColumnsBySheet = {
@@ -10,7 +10,6 @@ type StaticColumnsBySheet = {
   [SHEETS.RESULT]: RawFlexGridColumnConfig[];
   [SHEETS.COLUMNS]: RawFlexGridColumnConfig[];
   [SHEETS.PARAMETERS]: RawFlexGridColumnConfig[];
-  [SHEETS.HISTORY]: RawFlexGridColumnConfig[];
 };
 
 type FiltersBySheet = {
@@ -18,7 +17,6 @@ type FiltersBySheet = {
   [SHEETS.RESULT]?: ProcRequest<MENU_ID, SHEETS.RESULT>;
   [SHEETS.COLUMNS]?: ProcRequest<MENU_ID, SHEETS.COLUMNS>;
   [SHEETS.PARAMETERS]?: ProcRequest<MENU_ID, SHEETS.PARAMETERS>;
-  [SHEETS.HISTORY]?: ProcRequest<MENU_ID, SHEETS.HISTORY>;
 };
 
 interface DynamicQueryState {
@@ -26,6 +24,8 @@ interface DynamicQueryState {
   filters: FiltersBySheet;
   searchCondition: SearchCondition;
   openSearchArea: boolean;
+  // 상단 Register / View(Designer) 탭 (DESIGN TABPAGE1/2). 행 선택 → Designer 자동 전환.
+  activePage: SHEET_INDEX;
   selectedQueryId: string;
   staticColumns: StaticColumnsBySheet;
   // SQL Tab editable — 사용자가 SQLViewer 에서 수정한 SQL. 선택된 row 변경 시 mainRow.DQ_TEXT 로 동기화.
@@ -43,13 +43,24 @@ interface DynamicQueryState {
   mainTempInsertCounter: number;
   mainInsertedRows: Record<string, unknown>[];
   // Columns Tab CRUD (Stage 5b) — key = COLUMN_NAME (or TEMP_C_<n>).
-  columnsPendingChanges: Record<string, { crudType: 'I' | 'M' | 'D'; row: Record<string, unknown> }>;
+  columnsPendingChanges: Record<
+    string,
+    { crudType: 'I' | 'M' | 'D'; row: Record<string, unknown> }
+  >;
   columnsTempCounter: number;
   columnsInsertedRows: Record<string, unknown>[];
   // Parameters Tab CRUD (Stage 5c) — key = PARAMETER_ID (or TEMP_P_<n>).
-  parametersPendingChanges: Record<string, { crudType: 'I' | 'M' | 'D'; row: Record<string, unknown> }>;
+  parametersPendingChanges: Record<
+    string,
+    { crudType: 'I' | 'M' | 'D'; row: Record<string, unknown> }
+  >;
   parametersTempCounter: number;
   parametersInsertedRows: Record<string, unknown>[];
+  // Role(다중선택 역할) — View MetaForm. roleSelection=현재 선택, roleOriginal=로드 시점(저장 diff용),
+  //   roleSourceId=현재 roles 가 속한 DQ_ID(쿼리 변경 시 재init/미저장 reset).
+  roleSelection: string[];
+  roleOriginal: string[];
+  roleSourceId: string;
 }
 
 interface DynamicQueryAction {
@@ -58,6 +69,7 @@ interface DynamicQueryAction {
   setFilter: () => void;
   setExecuteFilter: (sqlText: string) => void;
   setOpenSearchArea: (open?: boolean) => void;
+  setActivePage: (page: SHEET_INDEX) => void;
   setSelectedQueryId: (id: string) => void;
   setEditedSqlText: (sqlText: string, sourceId: string) => void;
   setParameterValue: (parameterId: string, value: string) => void;
@@ -77,6 +89,9 @@ interface DynamicQueryAction {
   trackParametersModify: (parameterId: string, row: Record<string, unknown>) => void;
   trackParametersDelete: (parameterId: string) => void;
   clearParametersPending: () => void;
+  // Role(역할 다중선택).
+  setRoleSelection: (roles: string[]) => void;
+  initRoles: (roles: string[], sourceId: string) => void;
   // 전체 pending 비우기 (SAVE 성공 후).
   clearAllPending: () => void;
   fetchSearchConditions: () => Promise<void>;
@@ -84,8 +99,9 @@ interface DynamicQueryAction {
 }
 
 const initSearch: SearchCondition = {
-  queryName: '',
-  category: 'ALL',
+  reportName: '',
+  description: '',
+  role: 'ALL',
 };
 
 export const useDynamicQueryStore = createPersistedStoreWithTab<
@@ -96,13 +112,13 @@ export const useDynamicQueryStore = createPersistedStoreWithTab<
     filters: {},
     searchCondition: { ...initSearch },
     openSearchArea: true,
+    activePage: SHEET_INDEX.REGISTER,
     selectedQueryId: '',
     staticColumns: {
       [SHEETS.MAIN]: [],
       [SHEETS.RESULT]: [],
       [SHEETS.COLUMNS]: [],
       [SHEETS.PARAMETERS]: [],
-      [SHEETS.HISTORY]: [],
     },
     editedSqlText: '',
     editedSqlSourceId: '',
@@ -117,11 +133,15 @@ export const useDynamicQueryStore = createPersistedStoreWithTab<
     parametersPendingChanges: {},
     parametersTempCounter: 0,
     parametersInsertedRows: [],
+    roleSelection: [],
+    roleOriginal: [],
+    roleSourceId: '',
 
     reset: () => {
       set(state => {
         state.filters = {};
         state.searchCondition = { ...initSearch };
+        state.activePage = SHEET_INDEX.REGISTER;
         state.selectedQueryId = '';
         state.editedSqlText = '';
         state.editedSqlSourceId = '';
@@ -136,6 +156,9 @@ export const useDynamicQueryStore = createPersistedStoreWithTab<
         state.parametersPendingChanges = {};
         state.parametersTempCounter = 0;
         state.parametersInsertedRows = [];
+        state.roleSelection = [];
+        state.roleOriginal = [];
+        state.roleSourceId = '';
       });
     },
     setSearchCondition: params => {
@@ -167,18 +190,35 @@ export const useDynamicQueryStore = createPersistedStoreWithTab<
         state.openSearchArea = open ?? !state.openSearchArea;
       });
     },
+    setActivePage: page => {
+      set(state => {
+        state.activePage = page;
+      });
+    },
     setSelectedQueryId: id => {
       set(state => {
+        const changed = state.selectedQueryId !== id;
         state.selectedQueryId = id;
+        // SQL_ID 변경 시 저장 안 된 columns/parameters Insert/Delete 즉시 제거 (사용자 요구 2026-06-28).
+        //   (이전 query 의 미저장 행이 다른 query 화면에 남지 않도록)
+        if (changed) {
+          state.columnsPendingChanges = {};
+          state.columnsTempCounter = 0;
+          state.columnsInsertedRows = [];
+          state.parametersPendingChanges = {};
+          state.parametersTempCounter = 0;
+          state.parametersInsertedRows = [];
+        }
         // 신규 INSERT row (TEMP_*) 는 child fetch trigger 안 함 — DQ_ID 부재로 SP fail (ORA-01722).
         if (id && !id.startsWith('TEMP_')) {
           state.filters[SHEETS.COLUMNS] = { dqId: id } as ProcRequest<MENU_ID, SHEETS.COLUMNS>;
-          state.filters[SHEETS.PARAMETERS] = { dqId: id } as ProcRequest<MENU_ID, SHEETS.PARAMETERS>;
-          state.filters[SHEETS.HISTORY] = { dqId: id } as ProcRequest<MENU_ID, SHEETS.HISTORY>;
+          state.filters[SHEETS.PARAMETERS] = { dqId: id } as ProcRequest<
+            MENU_ID,
+            SHEETS.PARAMETERS
+          >;
         } else {
           delete state.filters[SHEETS.COLUMNS];
           delete state.filters[SHEETS.PARAMETERS];
-          delete state.filters[SHEETS.HISTORY];
         }
       });
     },
@@ -320,6 +360,19 @@ export const useDynamicQueryStore = createPersistedStoreWithTab<
         state.parametersInsertedRows = [];
       });
     },
+    setRoleSelection: roles => {
+      set(state => {
+        state.roleSelection = roles;
+      });
+    },
+    initRoles: (roles, sourceId) => {
+      // 쿼리 선택/변경 시 현재 역할로 초기화 (미저장 변경은 자연 reset).
+      set(state => {
+        state.roleSelection = roles;
+        state.roleOriginal = roles;
+        state.roleSourceId = sourceId;
+      });
+    },
     clearAllPending: () => {
       set(state => {
         state.mainPendingChanges = {};
@@ -334,7 +387,7 @@ export const useDynamicQueryStore = createPersistedStoreWithTab<
       });
     },
     fetchStaticColumns: async () => {
-      const [main, columns, parameters, history] = await Promise.all([
+      const [main, columns, parameters] = await Promise.all([
         apiClient.post<RawFlexGridColumnConfig[]>(`/admin/menu/${MENU_ID}/column`, {
           sheetNm: SHEETS.MAIN,
         }),
@@ -344,9 +397,6 @@ export const useDynamicQueryStore = createPersistedStoreWithTab<
         apiClient.post<RawFlexGridColumnConfig[]>(`/admin/menu/${MENU_ID}/column`, {
           sheetNm: SHEETS.PARAMETERS,
         }),
-        apiClient.post<RawFlexGridColumnConfig[]>(`/admin/menu/${MENU_ID}/column`, {
-          sheetNm: SHEETS.HISTORY,
-        }),
       ]);
       set(state => {
         state.staticColumns = {
@@ -354,7 +404,6 @@ export const useDynamicQueryStore = createPersistedStoreWithTab<
           [SHEETS.RESULT]: [],
           [SHEETS.COLUMNS]: columns.data.result,
           [SHEETS.PARAMETERS]: parameters.data.result,
-          [SHEETS.HISTORY]: history.data.result,
         };
       });
     },

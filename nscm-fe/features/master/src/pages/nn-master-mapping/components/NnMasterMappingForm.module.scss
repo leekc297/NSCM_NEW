@@ -1,3 +1,33 @@
+body .formItem {
+  @include respond-to('HD') {
+    grid-template-columns: 50px auto;
+
+    & > div:first-of-type {
+      width: 50px;
+    }
+  }
+
+  @include respond-to('FHD') {
+    grid-template-columns: 140px auto;
+
+    & > div:first-of-type {
+      width: 140px;
+    }
+  }
+}
+
+.customCheckbox {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.customGrid {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 // AS-IS DMF0072_NNMasterMapping 검색 폼 — SearchArea + FormItem + InputField + endAdornment Button.
 // reference: ContributeViewForm.module.scss (DMF0043_01) / SalesSiteProjectModelForm.module.scss (DMF0005)
 //

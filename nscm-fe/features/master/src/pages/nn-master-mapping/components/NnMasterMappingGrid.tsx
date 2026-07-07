@@ -4,6 +4,7 @@ import {
   CellType,
   type CellRangeEventArgs,
   type FlexGrid,
+  type FormatItemEventArgs,
 } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useRef, useState, type MutableRefObject } from 'react';
@@ -30,14 +31,24 @@ interface NnMasterMappingGridProps {
 //   - column-dependent 머지: HierarchicalMergeManager (utils/nn-master-mapping.merge.ts)
 //   - cell edit: EditTracker 표준 (CRUD_TYPE='M' 자동 마킹)
 //   - dblClick → Modal 분기: column meta 의 _modalKey 기반
+// 행(row)의 DATA_TYPE_CODE='SCM' 일 때만 편집 허용할 컬럼 binding (인라인 편집 + 더블클릭 팝업 공통).
+//   ※ 향후 5개까지 확장 시 이 set 에 binding 만 추가하면 beginningEdit / handleGridDblClick 양쪽에 동시 적용됨.
+const EDITABLE_ONLY_WHEN_SCM = new Set([
+  'MAPPING_ITEM_ID',
+  'VALID_START_DATE',
+  'VALID_END_DATE',
+  'ACTIVE_YN',
+]);
+
 export const NnMasterMappingGrid = ({
   gridRef,
   gridFilterRef,
   data,
   searchCondition,
 }: NnMasterMappingGridProps) => {
-  const editTrackerRef =
-    useRef<EditTracker<ResponseData<MENU_ID, SHEETS.MAIN>> | undefined>(undefined);
+  const editTrackerRef = useRef<EditTracker<ResponseData<MENU_ID, SHEETS.MAIN>> | undefined>(
+    undefined
+  );
   // admin SHEET_COLUMNS 메타 (BE PR_GET_SHEET_COLUMN_LIST 응답) — 룰 #65 ui-category-setup-column-meta 표준.
   //   080_DMF0072_dynamic_property_management.sql 사내 적용 완료 (2026-06-20) → BE 가 23 row 반환.
   //   admin UI Category Setup 의 VISIBLE_FLAG 변경이 즉시 반영됨 (FE hardcoded fallback 제거 완료).
@@ -55,6 +66,71 @@ export const NnMasterMappingGrid = ({
     if (!g) return;
     g.mergeManager = new HierarchicalMergeManager();
     g.invalidate();
+  }, [staticColumns]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // 편집 차단 규칙 (모두 "그 행의 DATA_TYPE_CODE 값" 기준 — beginningEdit = cell-level 편집 제어)
+  //  (1) DATA_TYPE_CODE='ERP' 행은 편집 불가 (기존)
+  //  (2) 대상 컬럼(EDITABLE_ONLY_WHEN_SCM)은 행의 DATA_TYPE_CODE === 'SCM' 일 때만 편집 가능
+  useEffect(() => {
+    const g = gridRef.current;
+    if (!g) return;
+
+    const handleBeginningEdit = (
+      s: FlexGrid<ResponseData<MENU_ID, SHEETS.MAIN>>,
+      e: CellRangeEventArgs
+    ) => {
+      const rowData = s.rows[e.row].dataItem as (WijmoRowItem & { CRUD_TYPE?: string }) | null;
+
+      // (1) ERP 행 편집 불가
+      if (rowData && rowData?.DATA_TYPE_CODE === 'ERP') {
+        e.cancel = true;
+        return;
+      }
+
+      // (2) 행의 DATA_TYPE_CODE 가 SCM 이 아니면 대상 컬럼 편집 차단
+      const binding = s.columns[e.col]?.binding;
+      if (binding && EDITABLE_ONLY_WHEN_SCM.has(binding) && rowData?.DATA_TYPE_CODE !== 'SCM') {
+        e.cancel = true;
+      }
+    };
+
+    g.beginningEdit.addHandler(handleBeginningEdit);
+
+    return () => {
+      g.beginningEdit.removeHandler(handleBeginningEdit);
+    };
+    // staticColumns 가 채워진(=그리드 초기화 완료) 뒤에 핸들러가 등록되도록 트리거 (머지 useEffect 와 동일 패턴)
+  }, [staticColumns]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // 편집 가능/불가 시각 구분 — 대상 컬럼은 행 DATA_TYPE_CODE='SCM' 일 때만 편집색(wj-cell-editable),
+  //   아니면 비편집색(wj-cell-non-editable) + 팝업 아이콘 제거.
+  //   formatEditableColumns(컬럼 메타 기준) 뒤에 실행되어 "행 조건"으로 덮어씀.
+  useEffect(() => {
+    const g = gridRef.current;
+    if (!g) return;
+
+    const handleFormatItem = (
+      s: FlexGrid<ResponseData<MENU_ID, SHEETS.MAIN>>,
+      e: FormatItemEventArgs
+    ) => {
+      if (e.panel.cellType !== CellType.Cell) return;
+      const binding = s.columns[e.col]?.binding;
+      if (!binding || !EDITABLE_ONLY_WHEN_SCM.has(binding)) return;
+
+      const rowData = s.rows[e.row]?.dataItem as WijmoRowItem | null;
+      const editable = rowData?.DATA_TYPE_CODE === 'SCM';
+
+      e.cell.classList.toggle('wj-cell-editable', editable);
+      e.cell.classList.remove('wj-cell-non-editable'); // 이전 버전 잔재 제거
+      if (!editable) e.cell.classList.remove('wj-cell-popup');
+    };
+
+    g.formatItem.addHandler(handleFormatItem);
+    g.invalidate();
+
+    return () => {
+      g.formatItem.removeHandler(handleFormatItem);
+    };
   }, [staticColumns]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // cellEditEnded — EditTracker 표준 (DataGrid 가 자동 invalidate)
@@ -85,6 +161,13 @@ export const NnMasterMappingGrid = ({
     const dataItem = GridUtils.getRow(g, ht.row);
     const binding = GridUtils.getBinding(g, ht.col);
     if (!dataItem || !binding) return;
+
+    // 대상 컬럼은 행의 DATA_TYPE_CODE='SCM' 일 때만 편집(popup) 허용 — beginningEdit 인라인 차단과 일관
+    if (
+      EDITABLE_ONLY_WHEN_SCM.has(binding as string) &&
+      (dataItem as WijmoRowItem).DATA_TYPE_CODE !== 'SCM'
+    )
+      return;
 
     const isInsert = dataItem.CRUD_TYPE === CRUD_TYPE.INSERT;
     const isMappingItem = binding === 'MAPPING_ITEM_ID';

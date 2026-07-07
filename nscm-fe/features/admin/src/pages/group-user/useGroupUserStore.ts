@@ -8,16 +8,12 @@ type StaticColumnsBySheet = {
   [SHEETS.MAIN]: RawFlexGridColumnConfig[];
   [SHEETS.USER_INFO]: RawFlexGridColumnConfig[];
   [SHEETS.DIVISION]: RawFlexGridColumnConfig[];
-  [SHEETS.PLANT]: RawFlexGridColumnConfig[];
-  [SHEETS.CUSTOMER]: RawFlexGridColumnConfig[];
 };
 
 type FiltersBySheet = {
   [SHEETS.MAIN]?: ProcRequest<MENU_ID, SHEETS.MAIN>;
   [SHEETS.USER_INFO]?: ProcRequest<MENU_ID, SHEETS.USER_INFO>;
   [SHEETS.DIVISION]?: ProcRequest<MENU_ID, SHEETS.DIVISION>;
-  [SHEETS.PLANT]?: ProcRequest<MENU_ID, SHEETS.PLANT>;
-  [SHEETS.CUSTOMER]?: ProcRequest<MENU_ID, SHEETS.CUSTOMER>;
 };
 
 interface SearchParamProps {
@@ -54,8 +50,6 @@ const initState: GroupUserState = {
     [SHEETS.MAIN]: [],
     [SHEETS.USER_INFO]: [],
     [SHEETS.DIVISION]: [],
-    [SHEETS.PLANT]: [],
-    [SHEETS.CUSTOMER]: [],
   },
   selectedUserGrId: '',
   selectedUserId: '',
@@ -85,8 +79,6 @@ export const useGroupUserStore = createPersistedStoreWithTab<GroupUserState & Gr
           SHEETS.USER_INFO
         >;
         state.filters[SHEETS.DIVISION] = undefined;
-        state.filters[SHEETS.PLANT] = undefined;
-        state.filters[SHEETS.CUSTOMER] = undefined;
       });
     },
     setSelectedUserId: id => {
@@ -98,20 +90,10 @@ export const useGroupUserStore = createPersistedStoreWithTab<GroupUserState & Gr
           userId: id,
           unitTpCd: UNIT_TP_CD.DIVISION,
         } as ProcRequest<MENU_ID, SHEETS.DIVISION>;
-        state.filters[SHEETS.PLANT] = {
-          userGrId,
-          userId: id,
-          unitTpCd: UNIT_TP_CD.PLANT,
-        } as ProcRequest<MENU_ID, SHEETS.PLANT>;
-        state.filters[SHEETS.CUSTOMER] = {
-          userGrId,
-          userId: id,
-          unitTpCd: UNIT_TP_CD.CUSTOMER,
-        } as ProcRequest<MENU_ID, SHEETS.CUSTOMER>;
       });
     },
     fetchStaticColumns: async () => {
-      const [main, userInfo, division, plant, customer] = await Promise.all([
+      const [main, userInfo, division] = await Promise.all([
         apiClient.post<RawFlexGridColumnConfig[]>(`/admin/menu/${MENU_ID}/column`, {
           sheetNm: SHEETS.MAIN,
         }),
@@ -121,20 +103,12 @@ export const useGroupUserStore = createPersistedStoreWithTab<GroupUserState & Gr
         apiClient.post<RawFlexGridColumnConfig[]>(`/admin/menu/${MENU_ID}/column`, {
           sheetNm: SHEETS.DIVISION,
         }),
-        apiClient.post<RawFlexGridColumnConfig[]>(`/admin/menu/${MENU_ID}/column`, {
-          sheetNm: SHEETS.PLANT,
-        }),
-        apiClient.post<RawFlexGridColumnConfig[]>(`/admin/menu/${MENU_ID}/column`, {
-          sheetNm: SHEETS.CUSTOMER,
-        }),
       ]);
       set(state => {
         state.staticColumns = {
           [SHEETS.MAIN]: main.data.result,
           [SHEETS.USER_INFO]: userInfo.data.result,
           [SHEETS.DIVISION]: division.data.result,
-          [SHEETS.PLANT]: plant.data.result,
-          [SHEETS.CUSTOMER]: customer.data.result,
         };
         state.initialized = true;
       });
