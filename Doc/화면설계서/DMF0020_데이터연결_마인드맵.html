@@ -1,0 +1,114 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DMF0020 데이터연결 마인드맵</title>
+<style>
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;font-family:"Segoe UI","Malgun Gothic",sans-serif;background:#0f1720;color:#e6edf3;font-size:14px;display:flex;flex-direction:column;height:100vh;overflow:hidden}
+header{padding:10px 20px;background:#161f2b;border-bottom:2px solid #1f4e79;flex:0 0 auto}
+h1{margin:0;font-size:17px;color:#7fb3e6}
+.sub{font-size:11.5px;color:#8b98a8;margin-top:3px}
+.callout{margin:8px 20px 0;padding:8px 12px;background:#2a2416;border:1px solid #6b5a1f;border-radius:6px;font-size:11.5px;line-height:1.6;flex:0 0 auto;max-height:22vh;overflow:auto}
+.callout b{color:#e6c76b}
+.callout ul{margin:4px 0 0;padding-left:18px}
+.callout li{margin:2px 0}
+.badge{display:inline-block;padding:1px 7px;border-radius:10px;font-size:10px;font-weight:600;white-space:nowrap}
+.b-HARD{background:#5a1e1e;color:#ff9b9b} .b-LOOKUP{background:#1e3a5a;color:#8fc6ff}
+.b-DB{background:#1e4a2e;color:#8fe0a8} .b-sp{background:#3a2a5a;color:#c9a8ff}
+.b-DIV{background:#243b4a;color:#9fd8e6} .b-GRP{background:#3a2f1e;color:#e6c76b}
+.b-AXIS{background:#20283a;color:#bcd3e8} .b-def{background:#33383f;color:#c7d0da}
+.mapwrap{position:relative;flex:1 1 auto;min-height:0;display:flex;flex-direction:column}
+.ztool{position:absolute;top:10px;right:14px;z-index:20;display:flex;gap:5px;background:#131b25cc;padding:5px;border-radius:8px;border:1px solid #263241}
+.ztool button{width:32px;height:30px;border-radius:5px;border:1px solid #2a3746;background:#1a2430;color:#c7d0da;cursor:pointer;font-size:15px}
+.ztool button:hover{background:#22303f}
+.zlvl{min-width:46px;text-align:center;color:#8b98a8;font-size:11px;line-height:30px}
+.searchbar{position:absolute;top:10px;left:14px;z-index:20;display:flex;gap:6px}
+.searchbar input{padding:6px 10px;border-radius:6px;border:1px solid #2a3746;background:#0f1720ee;color:#e6edf3;width:240px}
+.searchbar .hc{color:#8b98a8;font-size:11px;line-height:30px}
+.canvas{flex:1 1 auto;min-height:0;overflow:hidden;cursor:grab;background:radial-gradient(circle at 20% 20%,#141d29,#0f1720)}
+.canvas.drag{cursor:grabbing}
+.stage{transform-origin:0 0;padding:60px 40px;display:inline-block;will-change:transform}
+.mm .nw{display:flex;align-items:center}
+.mm .kids{display:flex;flex-direction:column;justify-content:center;margin-left:40px;position:relative}
+.mm .nw.collapsed>.kids{display:none}
+.mm .kids>.nw{position:relative}
+.mm .kids>.nw::before{content:'';position:absolute;left:-20px;top:50%;width:20px;border-top:2px solid #33526b}
+.mm .kids>.nw::after{content:'';position:absolute;left:-20px;top:0;bottom:0;border-left:2px solid #33526b}
+.mm .kids>.nw:first-child::after{top:50%;bottom:0}
+.mm .kids>.nw:last-child::after{top:0;bottom:50%}
+.mm .kids>.nw:only-child::after{display:none}
+.mm .kids::before{content:'';position:absolute;left:-40px;top:50%;width:40px;border-top:2px solid #33526b}
+.mnode{background:#18222e;border:1px solid #2a3a4a;border-left:4px solid #3d5a78;border-radius:8px;padding:7px 11px;margin:5px 0;max-width:520px;box-shadow:0 1px 4px #0006;position:relative}
+.mnode.d0{border-left-color:#e6c76b;background:#20283a} .mnode.d1{border-left-color:#7fb3e6}
+.mnode.d2{border-left-color:#8fe0a8} .mnode.d3{border-left-color:#c9a8ff} .mnode.d4{border-left-color:#ffb38f}
+.mnode.hit{outline:2px solid #e6c76b;background:#3a3420}
+.mnode .tog{position:absolute;left:-9px;top:50%;transform:translateY(-50%);width:18px;height:18px;line-height:16px;text-align:center;background:#22303f;border:1px solid #3d5a78;border-radius:50%;color:#9fd8e6;font-size:11px;cursor:pointer;z-index:2;user-select:none}
+.mlbl{font-weight:600;font-size:13px;color:#e6edf3;display:block}
+.mbadges{display:inline-flex;gap:3px;flex-wrap:wrap;margin-top:3px}
+.mnote{display:block;font-size:11px;color:#93a1b1;margin-top:3px;line-height:1.5}
+</style></head><body>
+<header>
+<h1>DMF0020 Sales Price — 데이터연결 마인드맵 <span style="font-size:12px;color:#8b98a8;font-weight:400">(FE→API→SP→Lookup lineage + 실측 축(Division/권한/가격·환율/버전) + 편집제어)</span></h1>
+<div class="sub">원천 = AS-IS .cs 3,969줄(Forms.UIL/Master 정본) + SP ALL_SOURCE(PKG_DMF0020 4,609/GET 1,194/SAVE 1,131) + 사내 DB 실측 · hook #105 §2.5 · 2026-07-09. 태그=값 출처(HARD/LOOKUP/DB/sp). 노드 클릭=접기/펼치기, 휠=확대, 드래그=이동.</div>
+</header>
+<div class="callout"><b>⚠ 격차·확인필요 (실측 — 편집제어=사업부(Division) 단위 · 40·81 편집불가(DM_UI_EDITABLE_DIVISION=N) · 시간락 없음 · FCST_TYPE 분기 없음)</b><ul><li>FE editableDivision.ts 주석의 출처 lookup 'DM_EDITABLE_DIVISION_ALLOW' 는 DB 0행 — 실 원천은 DM_UI_EDITABLE_DIVISION(lock-list). FE는 editableSet allow-model, DB는 lock-list model → 세만틱 반전 주의.</li><li>FE 주석은 '82만 편집가능/81_UC 등 제약'이라 기술하나, DB DM_UI_EDITABLE_DIVISION 은 40·81 exact 2행만 잠금(81_UC/81_HD 등 서브 division은 미등재=편집가능). 운영 메타와 FE 주석 불일치 — 메타 기준(40·81 잠금)이 SP 진실.</li><li>GET_ADMIN_GROUP_MEASURE·DM_UI_EDITABLE_MEASURE(DMF0020) 0행 → 메저/시간 단위 편집제어 미채택(division-gate 전용).</li><li>FUTUREMEASURE lookup(4행)은 SP에서 전부 주석처리 — 현재 measure 원천은 SCM_MST_SHEET_MEASURE. lineage에는 레거시로만 표기.</li><li>FCST_TYPE 축 없음 — 판가 화면. SALES_TYPE_CODE는 저장 분류일 뿐 FCST 분기 아님(축으로 생성하지 않음).</li><li>CASCADE 메커니즘 혼재: ByDivision 콤보(Team/BizType/EndCustomer40)=FE 필터 / EndCustomer·Site·PlantSite=SQL @바인드. 재소싱 트리거 TO-BE 정합 필요.</li></ul></div>
+<div class="mapwrap">
+  <div class="searchbar"><input id="s" placeholder="🔍 노드 검색 (라벨·태그·설명)"><span class="hc" id="hc"></span></div>
+  <div class="ztool"><button data-z="out">－</button><span class="zlvl" id="zl">100%</span><button data-z="in">＋</button>
+    <button data-z="fit" title="화면맞춤">⛶</button><button data-z="exp" title="전체펼침">⊞</button><button data-z="col" title="전체접기">⊟</button></div>
+  <div class="canvas" id="cv"><div class="stage"><div class="mm" id="mm"></div></div></div>
+</div>
+<script>
+const TREE = {"l": "DMF0020 Sales Price", "t": ["root"], "n": "판가 화면 데이터연결 lineage — 실제 분기 4축(FCST_TYPE 제외)", "c": [{"l": "lineage (API·SP 매핑)", "t": ["lineage"], "n": "버튼→API_M(12)→SP·PROC_M(4) 데이터연결", "c": [{"l": "main.SEARCH → DMF0020_GET_SCM_MST_FUTURE_PRICE", "t": ["sp"], "n": "판가 그리드 조회(PIVOT). 편집=DM_UI_EDITABLE_DIVISION lock-list"}, {"l": "main.SAVE → DMF0020_SAVE_SCM_MST_FUTURE_PRICE_ALL", "t": ["sp"], "n": "'^'구분 bulk 저장 (LOC/KRW/USD/RTF 3쌍 measure)"}, {"l": "main.SPREAD_TITLE_DATE → DMF0020_GET_SPREAD_TITLE_DATE", "t": ["sp"], "n": "PIVOT 주차 헤더 타이틀 날짜"}, {"l": "priceBatch.SEARCH → DMF0020_GET_SCM_MST_FUTURE_PRICE", "t": ["sp"], "n": "일괄입력 조회(main과 동일 SP)"}, {"l": "priceBatch.SAVE → DMF0020_SAVE_SCM_MST_FUTURE_PRICE_POPUP", "t": ["sp"], "n": "일괄입력 저장"}, {"l": "salesPriceRange.SEARCH → PKG_DMF0020.P_DMF0020_GET_SCM_MST_FUTURE_PRICE_POPUP", "t": ["sp"], "n": "범위 조회 (SALES_PRICE_RANGE_RATE lookup)"}, {"l": "salesPriceRange.SAVE → PKG_DMF0020.P_DMF0020_SAVE_SCM_MST_FUTURE_PRICE_CONVERSION", "t": ["sp"], "n": "범위 환산 저장"}, {"l": "salesPriceTemplate.SEARCH → PKG_DMF0020.P_DMF0020_GET_SALES_PRICE_TEMPLATE", "t": ["sp"], "n": "템플릿(권한그룹/소유부서/팀매핑 lookup)"}, {"l": "exchange.SEARCH → PKG_DMF0020.P_DMF0020_GET_FUTUREPRICE_INFO", "t": ["sp"], "n": "환율 조회 + EDIT_YN(USER_MNU_EDIT_AUTH_V, UNIT_TP_CD=D)"}, {"l": "exchange.SAVE → PKG_DMF0020.P_DMF0020_SAVE_DM_MST_EXCHANGE_RATE_ALL", "t": ["sp"], "n": "환율 저장→성공 후 SAVE_SCM_MST_FUTURE_PRICE_CONVERSION 연쇄(판가 재환산)"}, {"l": "titleSet.SEARCH → DMF0002_GET_TITLESET_POPUP (PROC_SELECT)", "t": ["sp"], "n": "공용 컬럼셋 팝업"}, {"l": "version.SEARCH → DMF0073_GET_VERSION_SALESPRICE (PROC_SELECT)", "t": ["sp"], "n": "버전 조회(④축)"}]}, {"l": "① Division", "t": ["axis"], "n": "사업부 단위 데이터·편집 게이트. FCST_TYPE 아님.", "c": [{"l": "Divisions (14)", "t": ["t"], "n": "40/81/81_HD/HG/HM/ST/UC/82/EE/EE_HD/HG/HM/ST/UC"}, {"l": "편집잠금 40·81", "t": ["n"], "n": "DM_UI_EDITABLE_DIVISION EDIT_YN=N(2행) → 40,81 편집불가"}, {"l": "그 외 편집가능", "t": ["n"], "n": "82/EE계열/81_xx 서브 등 미등재=편집가능"}, {"l": "40/82 소형·81% 자동차 소유부서 필터", "t": ["n"], "n": "GET_SALES_PRICE_TEMPLATE: 40·82=SITE_ITEM OWNER, 81%=+PM_TEAM_MAPPING"}]}, {"l": "② 사용자권한", "t": ["axis"], "n": "5 사용자그룹 × 버튼 매핑 + division-gate 편집권", "c": [{"l": "사용자그룹 5 (52행)", "t": ["n"], "n": "ADMIN/DM ADMIN/DM Planner/DM Viewer/GUEST"}, {"l": "버튼(sheet별) 14 매핑", "t": ["n"], "n": "main:SEARCH/SAVE/INSERT/DELETE/SPREAD_TITLE_DATE + 팝업 SEARCH/SAVE"}, {"l": "GET_ADMIN_GROUP(9) ADMIN 판정", "t": ["n"], "n": "SEGMENT2=ALL,SEGMENT1=ADMIN + DM Planner 확장"}, {"l": "DM_OWNER_DEPT(3) LEVEL_1/2", "t": ["n"], "n": "소유부서 레벨 권한"}, {"l": "division-gate 편집", "t": ["n"], "n": "권한 있어도 40·81 division은 편집불가(잠금 우선)"}]}, {"l": "③ 가격·메저", "t": ["axis"], "n": "판가 measure LOC/KRW/USD/RTF + 환율 SP 연동", "c": [{"l": "SHEET_MEASURE (4)", "t": ["n"], "n": "RTF_SYS_RP(RTF)/KRW/USD/LOC"}, {"l": "통화 코드", "t": ["n"], "n": "DMF0020_CURRENCY(9) — main/exchange 통화"}, {"l": "환율 EXCHANGE_RATE", "t": ["n"], "n": "exchange 팝업 조회/저장 → 판가 재환산(CONVERSION) 연쇄"}, {"l": "범위율 SALES_PRICE_RANGE_RATE(4)", "t": ["n"], "n": "salesPriceRange 범위 환산율"}, {"l": "판매유형 SALES_TYPE_CODE(14)", "t": ["n"], "n": "SAVE_ALL 저장 분류(내수/수출 등) — FCST_TYPE 아님"}]}, {"l": "④ 버전", "t": ["axis"], "n": "판가 버전 스냅샷 (DMF0073 연계)", "c": [{"l": "version.SEARCH → DMF0073_GET_VERSION_SALESPRICE", "t": ["sp"], "n": "VersionBySalesPrice 팝업 — 버전별 판가 스냅샷 조회"}]}, {"l": "⛓ CASCADE 필터 (조회조건·GRID 종속제약)", "t": ["AXIS:CASCADE"], "n": "콤보 선택 → 하위 콤보 재조회/재필터. 종속 메커니즘 2종: SQL 바인드(@param) vs FE 필터(DIVISION_ID 반환열). 한눈에 보기.", "c": [{"l": "[조회조건] Division (BigFilter MyDivision → CODE=40 고정)", "t": ["src:조회조건", "ROOT"], "n": "조회조건 cascade 최상위 — 선택 시 하위 재소싱", "c": [{"l": "→ Team (clbTeam · TeambyDivision)", "t": ["CMBO", "FE필터"], "n": "DIVISION_ID 반환열 FE 필터(SQL 바인드=@langCd 만). Division 변경 시 재필터", "c": [{"l": "→ End Customer (clbCustomer · EndCustomerByDivisionDept)", "t": ["CMBO", "SQL:@divisionId,@deptId"], "n": "Division+Team 종속(SQL 바인드). Team 변경 시 재조회", "c": [{"l": "→ Sales Site (clbSalesSite · SiteByEndCustomer)", "t": ["CMBO", "SQL:@divisionId,@endCustomer"], "n": "End Customer 종속(SQL 바인드). Customer 변경 시 재조회"}]}]}, {"l": "→ Biz Type (clbBizType · BizTypeByDivision)", "t": ["CMBO", "FE필터"], "n": "DIVISION_ID 반환열 FE 필터"}, {"l": "→ End Customer 40경로 (EndCustomerByDivision40)", "t": ["CMBO", "FE필터"], "n": "40 전용 경로 — static SQL + FE Division 필터"}]}, {"l": "[조회조건] 비종속 조건", "t": ["static"], "n": "cascade 아님", "c": [{"l": "Model / Nickname (txtItem + ItemByDivision 모달)", "t": ["MODAL"]}, {"l": "Version (btnSPVer · DMF0073_VersionBySalesPrice)", "t": ["MODAL", "DB:DMF0073"]}, {"l": "Period (PR_GET_DAY_RANGE 6개월) · Bucket(Weekly/Monthly)", "t": ["고정(SP)"]}]}, {"l": "[GRID 셀] 편집행 콤보 20셀 (2시트: Sales Price / Sales Price Save All)", "t": ["DB:SHEET_COLUMNS"], "n": "셀 변경 시 하위 콤보 재소싱 — 조회조건과 동일 cascade 사슬을 행 단위로", "c": [{"l": "DEPT_ID → TeambyDivision", "t": ["CMBO", "FE필터"]}, {"l": "END_CUSTOMER → EndCustomerByDivisionDept", "t": ["CMBO", "SQL:@divisionId,@deptId"], "n": "Division+Dept 종속"}, {"l": "END_CUSTOMER40 → EndCustomerByDivision40", "t": ["CMBO", "FE필터"]}, {"l": "SCM_SITE_ID → SiteByEndCustomer", "t": ["CMBO", "SQL:@divisionId,@endCustomer"], "n": "End Customer 종속"}, {"l": "BIZ_TYPE_NAME → BizTypeByDivision", "t": ["CMBO", "FE필터"]}, {"l": "PLANT_SITE_ID → FromSiteByDivision", "t": ["CMBO", "SQL:@divisionId"], "n": "Division 종속(SQL 바인드)"}, {"l": "INCOTERMS·DOM_EXP·CURRENCY(CurrencyList)·FCST_TYPE(FCST_TYPE_NOT_FREE) → static(비종속)", "t": ["static"], "n": "고정 목록 — cascade 없음"}]}, {"l": "⚠ 메커니즘 주의", "t": ["확인필요"], "n": "ByDivision 콤보 3종(Team/EndCustomer40/BizType)은 SQL @divisionId 미사용 → DIVISION_ID 반환열로 FE 클라이언트 필터. SQL 바인드 cascade(EndCustomer/Site/PlantSite)와 혼재 — TO-BE 재소싱 트리거 정합 확인."}]}]};
+function badgeClass(t){
+  if(t.startsWith('HARD'))return'b-HARD'; if(t.startsWith('LOOKUP'))return'b-LOOKUP';
+  if(t.startsWith('DB'))return'b-DB'; if(t.startsWith('sp'))return'b-sp';
+  if(t.startsWith('DIV')||t.startsWith('BTN')||t.startsWith('MENU')||t.startsWith('URL')||t.startsWith('API'))return'b-DIV';
+  if(t.startsWith('GRP')||t.startsWith('EDIT')||t.startsWith('STATUS'))return'b-GRP';
+  if(t.startsWith('AXIS')||t.startsWith('MEAS')||t.startsWith('CROSS')||t.startsWith('SRC'))return'b-AXIS'; return'b-def';
+}
+function renderNode(node,depth){
+  const nw=document.createElement('div'); nw.className='nw';
+  const box=document.createElement('div'); box.className='mnode d'+Math.min(depth,4);
+  const hasC=node.c&&node.c.length;
+  if(hasC){const tg=document.createElement('span');tg.className='tog';tg.textContent='－';
+    tg.onclick=e=>{e.stopPropagation();nw.classList.toggle('collapsed');tg.textContent=nw.classList.contains('collapsed')?'＋':'－';};
+    box.appendChild(tg);}
+  const lbl=document.createElement('span');lbl.className='mlbl';lbl.textContent=node.l;box.appendChild(lbl);
+  if(node.t){const bs=document.createElement('span');bs.className='mbadges';
+    node.t.forEach(t=>{const b=document.createElement('span');b.className='badge '+badgeClass(t);b.textContent=t;bs.appendChild(b);});box.appendChild(bs);}
+  if(node.n){const nn=document.createElement('span');nn.className='mnote';nn.textContent=node.n;box.appendChild(nn);}
+  box._text=(node.l+' '+(node.n||'')+' '+((node.t||[]).join(' '))).toLowerCase();
+  nw.appendChild(box);
+  if(hasC){const kids=document.createElement('div');kids.className='kids';
+    node.c.forEach(ch=>kids.appendChild(renderNode(ch,depth+1)));nw.appendChild(kids);}
+  return nw;
+}
+const mm=document.getElementById('mm');
+(node=>{const ch=node.c||[];if(ch.length===1&&!node.t&&!node.n){mm.appendChild(renderNode(ch[0],0));}
+  else mm.appendChild(renderNode(node,0));})(TREE);
+const cv=document.getElementById('cv'), stage=cv.querySelector('.stage'), zl=document.getElementById('zl');
+const st={scale:1,tx:0,ty:0};
+function apply(){stage.style.transform='translate('+st.tx+'px,'+st.ty+'px) scale('+st.scale+')';zl.textContent=Math.round(st.scale*100)+'%';}
+function zoomAt(cx,cy,f){const ns=Math.min(2.5,Math.max(0.2,st.scale*f));const r=cv.getBoundingClientRect();
+  const px=cx-r.left,py=cy-r.top;st.tx=px-(px-st.tx)*(ns/st.scale);st.ty=py-(py-st.ty)*(ns/st.scale);st.scale=ns;apply();}
+function fit(){const sw=stage.scrollWidth,sh=stage.scrollHeight,cw=cv.clientWidth,ch=cv.clientHeight;
+  if(!sw||!sh)return;const s=Math.min(cw/sw,ch/sh,1)*0.96;st.scale=s;st.tx=Math.max(0,(cw-sw*s)/2);st.ty=Math.max(10,(ch-sh*s)/2);apply();}
+cv.addEventListener('wheel',e=>{e.preventDefault();zoomAt(e.clientX,e.clientY,e.deltaY<0?1.12:0.89);},{passive:false});
+let dr=false,lx=0,ly=0;
+cv.addEventListener('mousedown',e=>{if(e.target.classList.contains('tog'))return;dr=true;lx=e.clientX;ly=e.clientY;cv.classList.add('drag');});
+window.addEventListener('mousemove',e=>{if(!dr)return;st.tx+=e.clientX-lx;st.ty+=e.clientY-ly;lx=e.clientX;ly=e.clientY;apply();});
+window.addEventListener('mouseup',()=>{dr=false;cv.classList.remove('drag');});
+function expandColl(open){cv.querySelectorAll('.nw').forEach(nw=>{if(nw.querySelector(':scope>.kids')){nw.classList.toggle('collapsed',!open);
+  const tg=nw.querySelector(':scope>.mnode>.tog');if(tg)tg.textContent=open?'－':'＋';}});}
+document.querySelectorAll('.ztool button').forEach(b=>b.onclick=()=>{const a=b.dataset.z;
+  if(a==='in')zoomAt(cv.clientWidth/2,cv.clientHeight/2,1.2);else if(a==='out')zoomAt(cv.clientWidth/2,cv.clientHeight/2,0.83);
+  else if(a==='fit')fit();else if(a==='exp'){expandColl(true);fit();}else if(a==='col'){expandColl(false);fit();}});
+const s=document.getElementById('s'),hc=document.getElementById('hc');
+s.oninput=()=>{const q=s.value.trim().toLowerCase();let h=0;
+  cv.querySelectorAll('.mnode').forEach(m=>{m.classList.remove('hit');if(q&&m._text&&m._text.includes(q)){m.classList.add('hit');h++;
+    let p=m.parentElement;while(p&&!p.classList.contains('mm')){if(p.classList.contains('nw')){p.classList.remove('collapsed');
+      const tg=p.querySelector(':scope>.mnode>.tog');if(tg)tg.textContent='－';}p=p.parentElement;}}});
+  hc.textContent=q?h+' 일치':'';};
+requestAnimationFrame(fit);
+</script></body></html>

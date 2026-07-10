@@ -1,0 +1,109 @@
+// SYS0013 SQL Query 편집 모달 — TO-BE 표준 (정본: PriceBatchInputModal.module.scss 패턴).
+//   dialogContent flex column → bodyRow(좌 Query / 우 그리드 2단) → 하단 buttonWrapper.
+.dialogContent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 4px 0;
+  // bounded 컨테이너화 — CustomDialog 높이 안에서 flex 분배해야 grid viewport bounded → vscroll 생성.
+  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.hint {
+  font-size: 12px;
+  color: #8c6d1f;
+  background: #fff8e1;
+  border: 1px solid #f0e0a0;
+  border-radius: 4px;
+  padding: 6px 10px;
+}
+
+// 본문 — 좌 Query(60%) / 우 Column+Condition(40%) (AS-IS 캡쳐 배치 비율)
+.bodyRow {
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+  gap: 12px;
+}
+
+.queryPane {
+  display: flex;
+  flex-direction: column;
+  flex: 6 1 0;
+  min-width: 0;
+  min-height: 0;
+  gap: 4px;
+}
+
+.gridsPane {
+  display: flex;
+  flex-direction: column;
+  flex: 4 1 0;
+  min-width: 0;
+  min-height: 0;
+  gap: 8px;
+}
+
+.gridSection {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  gap: 4px;
+}
+
+// AS-IS 캡쳐 — Column 그리드가 Condition 보다 큼
+.gridGrowCol {
+  flex: 6 1 0;
+}
+
+.gridGrowCond {
+  flex: 4 1 0;
+}
+
+// 표준 gridWrapper — min-height:0 = flex 자식 축소 허용 → bounded viewport → vscroll 생성.
+.gridWrapper {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  border: 1px solid #e0e4e9;
+  border-radius: 4px;
+  overflow: hidden;
+  background: white;
+
+  [class*='wj-flexgrid'] {
+    max-height: 100%;
+    height: 100%;
+  }
+}
+
+.sqlTextarea {
+  flex: 1;
+  min-height: 0;
+  padding: 12px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+    'Courier New', monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  border: 1px solid #e0e4e9;
+  border-radius: 4px;
+  background: #ffffff;
+  resize: none;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow: auto;
+
+  &[readonly] {
+    background: #f5f5f5;
+    color: #555555;
+  }
+}
+
+// 표준 buttonWrapper — 하단 우측 정렬 (Close / OK)
+.buttonWrapper {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-top: 5px;
+}

@@ -1,11 +1,28 @@
+// ⭐ 박스 + 돋보기 버튼 flex 정렬 (master SearchFields PopupSearchInput 표준 1:1).
+//   컨테이너는 .input 폭(상하 조회조건과 동일) — 박스는 남은 폭 전부, 버튼은 우측 끝 고정.
+//   구 endAdornment 절대배치(right:-40px, 박스 밖 돌출)는 폐기 → 버튼까지 우측끝선 정합.
 .inputWithSearch {
-  & > div:first-child {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  & > :first-child {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  // hook #94 — 전 객체 높이 36px (CustomDropdown / DatePicker 동일)
+  :global {
+    .MuiInputBase-root,
+    .MuiOutlinedInput-root,
+    input {
+      height: 36px;
+      min-height: 36px;
+    }
   }
   & button {
-    position: absolute;
-    right: -40px;
+    flex: 0 0 auto;
+    height: 36px;
   }
 }
 

@@ -260,9 +260,32 @@ export const SalesSiteField = ({ value, onChange, division, gridSize }: MultiFie
 // ====================================================================================
 // 5. PlantSiteField (size=4, combo=SalesSite 재사용 — Plant Site combo BE 미등록)
 // ====================================================================================
-export const PlantSiteField = ({ value, onChange, division, gridSize }: MultiFieldProps) => {
+// ⭐ Plant Site — combo `PlantSitebyEndCustomer` (Division + EndCustomer 서버측 @바인드).
+//   Enable = 81 계열만 (40/82 disabled). 값 quoting 의무 (BE makeComboQuery raw 치환).
+//   룰: hooks/messaging-api-and-search-fields-mandatory §3.1 + memory feedback_search_fields_catalog.
+export const PlantSiteField = ({
+  value,
+  onChange,
+  division,
+  endCustomer,
+  gridSize,
+}: MultiFieldProps & { endCustomer?: string }) => {
   const L = useL();
-  const [salesSites] = useTabComboQueries({ filters: ['SalesSite'] });
+  // Enable = 81 계열만 (81/81_UC/81_HM/81_ST/81_HD/81_HG). 40·82 = 비활성.
+  const disabled = !division?.startsWith('81');
+  const q = (v?: string): string => `'${v && v.trim() !== '' ? v : 'ALL'}'`;
+  // 서버측 바인드 cascade — division/endCustomer 변경 시 queryKey 갱신 → 재조회 (81* 만 조회)
+  const [plantSites] = useTabComboQueries({
+    filters: [
+      { comboId: 'PlantSitebyEndCustomer', divisionId: q(division), endCustomer: q(endCustomer) },
+    ],
+    enabled: !disabled,
+  });
+  // PlantSitebyEndCustomer 반환열 = CODE/NAME 만 (서버 필터 완료) → division 재필터 불요
+  const options = ((plantSites ?? []) as Array<Record<string, string>>).map(r => ({
+    label: String(r.NAME ?? r.CODE ?? ''),
+    value: String(r.CODE ?? ''),
+  }));
   return (
     <Grid size={gridSize ?? 4}>
       <FormItem
@@ -274,11 +297,12 @@ export const PlantSiteField = ({ value, onChange, division, gridSize }: MultiFie
             allOption
             useClearIcon
             limitTags={1}
+            disabled={disabled}
             value={value.join(',')}
-            options={toOptions(salesSites as never, division)}
-            onChange={(_, options) =>
+            options={options}
+            onChange={(_, opts) =>
               onChange(
-                String(options ?? '')
+                String(opts ?? '')
                   .split(',')
                   .filter(Boolean)
               )

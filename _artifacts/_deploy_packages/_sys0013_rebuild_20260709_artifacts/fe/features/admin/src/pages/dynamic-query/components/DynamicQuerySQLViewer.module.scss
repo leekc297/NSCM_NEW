@@ -1,0 +1,18 @@
+// SYS0013 SQL Viewer/Editor textarea (inline style 금지 대체)
+.sqlTextarea {
+  width: 100%;
+  height: 100%; // 섹션(gridFill) 채움 — min-height 제거로 좌측 vscroll 방지
+  min-height: 0;
+  padding: 12px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+    'Courier New', monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  background: #ffffff;
+  resize: vertical;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow: auto;
+}

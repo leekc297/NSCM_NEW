@@ -29,7 +29,12 @@ import {
 } from '../sales-future-price.constants';
 import type { FuturePriceRow } from '../sales-future-price.types';
 import styles from '../SalesFuturePrice.module.scss';
-import { type ExchangeRateMap, getExchangeRate } from '../salesPriceExchange';
+import {
+  currencyCodesFromRateMap,
+  type ExchangeRateMap,
+  getExchangeRate,
+  isExchangeTargetMeasure,
+} from '../salesPriceExchange';
 import type { MeasureMeta } from '../useSalesFuturePriceStore';
 import { groupKeyOf } from '../utils/futurePriceGroup';
 
@@ -601,6 +606,10 @@ export const SalesFuturePriceGrid = ({
         const locRaw = (row as Record<string, unknown>)[binding];
         const locPrice = locRaw == null || locRaw === '' ? '0' : String(locRaw as string | number);
         const erMap = exchangeRateMapRef.current;
+        // ⭐ AS-IS 정합(사용자 실측 2026-07-08) — LOC 입력 시 통화 measure(KRW/USD)만 환율 재계산.
+        //   RTF(RTF_SYS_RP)는 시스템 생성 measure(이동계획 판가) → 변경하지 않음(재조회 시 시스템 값이 정본).
+        //   판정 = 환율 데이터의 통화코드 집합(하드코딩 금지). 미로드 시 기존 동작.
+        const currencyCodes = currencyCodesFromRateMap(erMap);
         const isInsert = row.CRUD_TYPE === 'I';
         const gid = row.INSERT_GROUP_ID;
         const gkey = isInsert ? '' : groupKeyOf(row as Record<string, unknown>);
@@ -611,6 +620,7 @@ export const SalesFuturePriceGrid = ({
             : item.CRUD_TYPE !== 'I' && groupKeyOf(item as Record<string, unknown>) === gkey;
           if (!isSibling) continue;
           const sm = String(item.MEASURE ?? '');
+          if (!isExchangeTargetMeasure(currencyCodes, sm, baseCur)) continue; // RTF 등 비통화 measure 미변경
           (item as Record<string, unknown>)[binding] = erMap
             ? getExchangeRate(erMap, div, baseCur, sm, yyyymm, locPrice, null)
             : locPrice;

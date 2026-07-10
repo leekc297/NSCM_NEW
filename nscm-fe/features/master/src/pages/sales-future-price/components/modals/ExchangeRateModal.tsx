@@ -6,7 +6,6 @@ import {
   type FormatItemEventArgs,
   type GridPanel,
   MergeManager,
-  Row,
 } from '@mescius/wijmo.grid';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
@@ -108,14 +107,20 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
     enabled: open,
   });
 
-  const allRows = (data?.o_rc1 ?? []) as unknown as ExchangeRow[];
-  // ⭐ Currency KRW 만 조회 (2026-07-07 사용자 요구) + Division 필터(고정 division).
-  const filteredRows = allRows.filter(r => {
-    if (String(r.CURRENCY ?? '').toUpperCase() !== 'KRW') return false;
-    if (divisionId && divisionId !== 'ALL' && String(r.DIVISION_ID ?? '') !== divisionId)
-      return false;
-    return true;
-  });
+  // ⭐ 성능(2026-07-08, 메인 그리드 동일 사유) — allRows/filteredRows 참조 안정화(useMemo).
+  //   CustomDialog 는 open=false 라도 content 를 mount 하므로, 렌더 본문 계산이면 "메인 화면"의 매
+  //   리렌더마다 KRW 필터 루프가 재실행되고 pivotRows(useMemo deps=filteredRows)까지 매번 재계산 →
+  //   숨겨진 모달 grid 가 itemsSource 재바인딩을 반복(메인 조회 표시 지연에 가산). 데이터 변경 시에만 재계산.
+  const filteredRows = useMemo<ExchangeRow[]>(() => {
+    const allRows = (data?.o_rc1 ?? []) as unknown as ExchangeRow[];
+    // ⭐ Currency KRW 만 조회 (2026-07-07 사용자 요구) + Division 필터(고정 division).
+    return allRows.filter(r => {
+      if (String(r.CURRENCY ?? '').toUpperCase() !== 'KRW') return false;
+      if (divisionId && divisionId !== 'ALL' && String(r.DIVISION_ID ?? '') !== divisionId)
+        return false;
+      return true;
+    });
+  }, [data, divisionId]);
 
   // ===== long → wide pivot (사용자 요구 2026-06-03: AS-IS 2단 헤더 YYYY/MM) =====
   const { pivotRows, ymKeys } = useMemo(() => {
@@ -148,6 +153,50 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
 
   const fixedBindings = useMemo(() => EXCHANGE_RATE_COLUMNS.map(c => c.key), []);
 
+  // ⭐ 성능(2026-07-08) — grid 컬럼 prop 참조 안정화. JSX inline .map 은 매 렌더 새 배열 →
+  //   DataGrid(memo) 무력화 → (open=false mount 포함) 부모 리렌더마다 columnGroups 전체 재적용.
+  const gridStaticColumns = useMemo<RawFlexGridColumnConfig[]>(
+    () =>
+      EXCHANGE_RATE_COLUMNS.map(
+        (c): RawFlexGridColumnConfig => ({
+          colNm: c.key,
+          colLblNm: c.header,
+          colWth: c.width,
+          horzAlgnCd: c.align,
+          fixed: true,
+          visible: true,
+          display: true,
+          inputTpCd: CELL_INPUT_EDIT_TYPE.SEARCH_ONLY,
+        })
+      ),
+    []
+  );
+  // ⭐ 대상 년월 2단 헤더 (AS-IS 1:1, 2026-07-08 사용자 요구) — 1단 년도('2026') / 2단 월('07').
+  //   구 방식(수동 Row push + formatItem 텍스트 치환 + 헤더 수평 머지)은 wrapper columnGroups
+  //   재적용에 깨지기 쉬움 → 메인 그리드와 동일한 표준 nested columnGroups(년 그룹→월 leaf)로 재구성.
+  const gridDynamicColumns = useMemo<FlexGridColumnConfig[]>(() => {
+    const byYear = new Map<string, FlexGridColumnConfig[]>();
+    for (const ym of ymKeys) {
+      const y = ym.slice(0, 4);
+      if (!byYear.has(y)) byYear.set(y, []);
+      byYear.get(y)!.push({
+        binding: `M_${ym}`,
+        header: ym.slice(4, 6), // 2단 = 월 (AS-IS '07','08'…)
+        width: 90,
+        align: 'right',
+        format: 'n2',
+        isReadOnly: true,
+        allowSorting: false,
+        visible: true,
+      });
+    }
+    return [...byYear.entries()].map(([y, cols]) => ({
+      header: y, // 1단 = 년도 (AS-IS '2026' — 같은 년도 월들을 수평 span)
+      align: 'center',
+      columns: cols,
+    }));
+  }, [ymKeys]);
+
   // ⭐ #70 — DataGrid `initialized` prop deprecated(wrapper 미호출) → useEffect + gridRef 로 이동.
   //   2단 column header(YYYY/MM) + 좌측 fixed 머지 + 동적 YYYY horizontal 머지 + Division/Currency cell 머지.
   useEffect(() => {
@@ -156,21 +205,19 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
     //   Wijmo grid 는 panel 을 지연 초기화하므로 columnHeaders 가 null 일 수 있다 → guard 필수.
     if (!g || !g.columnHeaders) return;
 
-    if (g.columnHeaders.rows.length === 1) g.columnHeaders.rows.push(new Row());
-    g.columnHeaders.rows.defaultSize = 25;
+    // ⭐ 2단 헤더는 gridDynamicColumns 의 nested 그룹(년→월)이 네이티브로 구성 (수동 Row push /
+    //   formatItem 텍스트 치환 / 헤더 수평 머지 제거 — wrapper columnGroups 재적용에도 안정).
+    //   헤더 높이는 아래 별도 상시 정규화 효과(raf 루프)가 전담 — PriceBatchInputModal 검증 패턴.
 
     const formatHandler = (_s: unknown, e: FormatItemEventArgs) => {
       if (e.panel.cellType === CellType.ColumnHeader) {
-        const binding = e.panel.columns[e.col]?.binding ?? '';
-        if (/^M_\d{6}$/.test(binding)) {
-          if (e.row === 0) e.cell.textContent = binding.slice(2, 6);
-          else if (e.row === 1) e.cell.textContent = binding.slice(6, 8);
-          e.cell.style.textAlign = 'center';
-        } else if (fixedBindings.includes(binding)) {
-          const meta = EXCHANGE_RATE_COLUMNS.find(c => c.key === binding);
-          e.cell.textContent = meta?.header ?? binding;
-          e.cell.style.textAlign = 'center';
-        }
+        e.cell.style.textAlign = 'center'; // 년/월/고정 헤더 중앙 정렬 (AS-IS)
+      }
+      // ⭐ No. 코너 헤더 라벨 (사용자 요구 2026-07-08) — rowHeader 순번 컬럼의 TopLeft 에 'No.' 표기
+      //   (선례 ContributeViewGrid setCellData 패턴 1:1. 머지는 ExchangeMerge TopLeft 분기가 전담.)
+      if (e.panel.cellType === CellType.TopLeft) {
+        if (e.panel.getCellData(0, 0, false) !== 'No.') e.panel.setCellData(0, 0, 'No.');
+        e.cell.style.textAlign = 'center';
       }
     };
     g.formatItem.addHandler(formatHandler);
@@ -182,22 +229,29 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
         const col = panel.columns[c];
         if (!col) return null;
         const binding = col.binding ?? '';
+        // ⭐ No. 코너(TopLeft) — rowHeader(순번+상태) × 2단 헤더 전체를 가로/세로 단일 머지
+        //   (사용자 요구 2026-07-08. 라벨 'No.' 는 formatHandler 의 setCellData 가 전담.)
+        if (panel.cellType === CellType.TopLeft) {
+          return new CellRange(0, 0, panel.rows.length - 1, panel.columns.length - 1);
+        }
         if (panel.cellType === CellType.ColumnHeader) {
-          if (fixedBindings.includes(binding)) return new CellRange(0, c, 1, c);
-          if (/^M_\d{6}$/.test(binding) && r === 0) {
-            const yyyy = binding.slice(2, 6);
+          // 고정컬럼 = 2단 세로 span (년/월 그룹이 만든 2행 전체 높이 사용)
+          if (fixedBindings.includes(binding)) {
+            return new CellRange(0, c, panel.rows.length - 1, c);
+          }
+          // ⭐ 동적 1단(년도) 수평 머지 (사용자 요구 2026-07-08) — 커스텀 MergeManager 설치 시
+          //   nested 그룹의 네이티브 span 이 무효화되므로 수동 머지 의무 (형제 PriceBatchInputModal
+          //   BatchMergeManager 동일 패턴). binding 'M_yyyymm' 의 년도(slice 2..6)가 같은 연속
+          //   구간을 r=0 에서 span. r=1(월 leaf)은 단일 셀.
+          if (binding.startsWith('M_') && r === 0) {
+            const yearOf = (b: string): string => (b.startsWith('M_') ? b.slice(2, 6) : '');
+            const y = yearOf(binding);
             let c1 = c,
               c2 = c;
-            while (c1 > 0) {
-              const pb = panel.columns[c1 - 1].binding ?? '';
-              if (/^M_\d{6}$/.test(pb) && pb.slice(2, 6) === yyyy) c1--;
-              else break;
-            }
-            while (c2 < panel.columns.length - 1) {
-              const nb = panel.columns[c2 + 1].binding ?? '';
-              if (/^M_\d{6}$/.test(nb) && nb.slice(2, 6) === yyyy) c2++;
-              else break;
-            }
+            while (c1 > 0 && yearOf(panel.columns[c1 - 1]?.binding ?? '') === y) c1--;
+            while (c2 < panel.columns.length - 1 && yearOf(panel.columns[c2 + 1]?.binding ?? '') === y)
+              c2++;
+            if (c1 === c2) return null;
             return new CellRange(0, c1, 0, c2);
           }
           return null;
@@ -237,6 +291,59 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
       }
     };
   }, [open, pivotRows, ymKeys, fixedBindings]);
+
+  // ⭐⭐ 헤더 총높이 48px 상시 정규화 (2단=24×2 — "2단 기준으로 줄여서", 사용자 요구 2026-07-08).
+  //   1회 설정/updatedLayout 등록만으로는 부족 — CustomDialog open 애니메이션 중 wijmo 가 헤더를
+  //   늦게 build 하면 이후 정적이라 updatedLayout 이 안 떠 기본높이(28×2)가 잔존 (PriceBatchInputModal
+  //   에서 검증된 재발 경로). → open 동안 raf 루프가 살아있는 grid 인스턴스에 재부착 + 매 프레임
+  //   정규화(guard: 이미 목표면 skip → 프레임당 속성 비교 수준 비용).
+  useEffect(() => {
+    if (!open) return;
+    let raf = 0;
+    let attached: FlexGridType<PivotRow> | null = null;
+    const normalizeHeader = () => {
+      const g = gridRef.current;
+      if (!g) return;
+      const headerRows = g.columnHeaders?.rows;
+      if (!headerRows || headerRows.length === 0) return;
+      const per = Math.round(48 / headerRows.length); // 2단=24 / 1단=48
+      const ok =
+        Math.round(headerRows.defaultSize) === per &&
+        Array.from({ length: headerRows.length }).every(
+          (_, i) => Math.round(headerRows[i]?.height ?? 0) === per
+        );
+      if (ok) return;
+      headerRows.defaultSize = per;
+      for (let i = 0; i < headerRows.length; i++) headerRows[i].height = per;
+    };
+    const loop = () => {
+      const g = gridRef.current;
+      if (g && g !== attached) {
+        try {
+          attached?.updatedLayout.removeHandler(normalizeHeader);
+        } catch {
+          /* destroyed instance */
+        }
+        g.updatedLayout.addHandler(normalizeHeader);
+        attached = g;
+      }
+      try {
+        normalizeHeader();
+      } catch {
+        /* unmount race */
+      }
+      raf = requestAnimationFrame(loop);
+    };
+    loop();
+    return () => {
+      cancelAnimationFrame(raf);
+      try {
+        attached?.updatedLayout.removeHandler(normalizeHeader);
+      } catch {
+        /* unmount race */
+      }
+    };
+  }, [open]);
 
   const handleFind = () => {
     if (periodFrom > periodTo) {
@@ -311,29 +418,8 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
               gridRef={gridRef}
               className={styles.grid}
               itemsSource={pivotRows}
-              staticColumns={EXCHANGE_RATE_COLUMNS.map(
-                (c): RawFlexGridColumnConfig => ({
-                  colNm: c.key,
-                  colLblNm: c.header,
-                  colWth: c.width,
-                  horzAlgnCd: c.align,
-                  fixed: true,
-                  visible: true,
-                  display: true,
-                  inputTpCd: CELL_INPUT_EDIT_TYPE.SEARCH_ONLY,
-                })
-              )}
-              dynamicColumns={ymKeys.map(
-                (ym): FlexGridColumnConfig => ({
-                  binding: `M_${ym}`,
-                  header: ym,
-                  width: 90,
-                  align: 'right',
-                  format: 'n2',
-                  isReadOnly: true,
-                  allowSorting: false,
-                })
-              )}
+              staticColumns={gridStaticColumns}
+              dynamicColumns={gridDynamicColumns}
               autoGenerateColumns={false}
               frozenColumns={fixedBindings.length}
               allowSorting={false}

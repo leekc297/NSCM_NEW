@@ -1,6 +1,6 @@
 import { type FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useMemo, useState } from 'react';
 
 import { apiClient } from '@foundation/apis';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
@@ -94,9 +94,11 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
   const searchParams = useErpEdiMasterStore(s => s.searchParams);
   const setSearchParams = useErpEdiMasterStore(s => s.setSearchParams);
   const setSummaryFilters = useErpEdiMasterStore(s => s.setSummaryFilters);
+  const setUpdateHistoryFilter = useErpEdiMasterStore(s => s.setUpdateHistoryFilter);
   const setRepairFilter = useErpEdiMasterStore(s => s.setRepairFilter);
   const setSalesSiteOnly = useErpEdiMasterStore(s => s.setSalesSiteOnly);
   const setSspmOnly = useErpEdiMasterStore(s => s.setSspmOnly);
+  const clearSubFilters = useErpEdiMasterStore(s => s.clearSubFilters);
   const setSalesSiteFilters = useErpEdiMasterStore(s => s.setSalesSiteFilters);
   const setSspmFilters = useErpEdiMasterStore(s => s.setSspmFilters);
   const repairContext = useErpEdiMasterStore(s => s.repairContext);
@@ -186,9 +188,10 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // initialized 후 summary/repair filters 자동 세팅
+  // 첫 진입 시 Summary/Repair 자동 조회 막음 (2026-07-02 사용자 요구) — Update History(Form 상단
+  //   Last Update)만 조회. Summary/Repair 는 사용자가 Search/조회를 눌러 setSummaryFilters() 호출 시 조회.
   useEffect(() => {
-    if (initialized && !filters[SHEETS.SUMMARY]) setSummaryFilters();
+    if (initialized && !filters[SHEETS.UPDATE_HISTORY]) setUpdateHistoryFilter();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialized]);
 
@@ -230,10 +233,14 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
   };
 
   // SummaryGrid onDblClick: (sFlag, division, senderName)
+  //   Repair 재조회 시 이전 Repair 선택 기반의 하단 SalesSite/SSPM 은 stale → 함께 클리어 (2026-07-02).
   const handleSummaryDoubleClick = (sFlag: string, _division: string, senderName: string) => {
     setSearchParams({ senderName, flag: sFlag });
     setRepairFilter();
     setRepairContext(undefined);
+    // 하단 두 그리드 filter 제거 → salesSiteRows/sspmRows useMemo 가 [] 반환 → itemsSource 변경으로
+    //   Wijmo 가 컬렉션 재생성(빈 그리드). 재조회도 막힘(enabled=false).
+    clearSubFilters();
   };
 
   // RepairGrid onDblClick — AS-IS .cs L1973 단일 sheet 분기 (성능 — 2 SP → 1 SP).
@@ -316,19 +323,39 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   // V11 fix (2026-06-20): typo dead code `?? salesSiteData?.o_rc1` 제거 → 도메인 표준 `?? []`.
   // (no-use-before-define: handleSave 보다 먼저 선언)
-  const summaryRows = summaryData?.o_rc1 ?? [];
-  const repairRows = repairData?.o_rc1 ?? [];
+  const summaryRows = !filters[SHEETS.SUMMARY] ? [] : (summaryData?.o_rc1 ?? []);
+  const repairRows = !filters[SHEETS.REPAIR] ? [] : (repairData?.o_rc1 ?? []);
   // #1 (2026-06-28): salesSite GET OUT 커서명 = O_RESULT_CURSOR (DMF0008_GET_SALES_SITE) — `.o_rc1` 아님.
   //   sspm 은 o_rc1(OPEN O_RC1 FOR SELECT). casing 무관 fallback.
-  const salesSiteRows =
-    ((salesSiteData as Record<string, unknown>)?.O_RESULT_CURSOR as
-      | ResponseData<MENU_ID, SHEETS.SALES_SITE, 'o_rc1'>[]
-      | undefined) ??
-    ((salesSiteData as Record<string, unknown>)?.o_result_cursor as
-      | ResponseData<MENU_ID, SHEETS.SALES_SITE, 'o_rc1'>[]
-      | undefined) ??
-    [];
-  const sspmRows = sspmData?.o_rc1 ?? [];
+  // ⚠️ TEMP MASK (2026-07-02, 저장테스트용): salesSite/sspm 조회행 EDIT_FLAG 를 'Y' 로 강제.
+  //   SP(DMF0008_GET_SALES_SITE) 리터럴 버그로 EDIT_FLAG 가 항상 'N' → 편집/insert 차단됨.
+  //   근본 해결(SP fix) 전까지 임시로 마스크. ⛔ 저장테스트 후 제거 예정 (grep: "TEMP MASK").
+  // ⚠️ useMemo 필수 (2026-07-02): itemsSource 참조가 매 렌더마다 바뀌면 Wijmo 가 CollectionView 를
+  //   재생성 → GridAction.addRow 로 추가한 신규 행이 다른 그리드 클릭(리렌더) 시 소멸. 데이터 원천이
+  //   실제로 바뀔 때만(salesSiteData/sspmData) 새 배열 생성하도록 memoize.
+  // filter 가 없으면(초기/clearSubFilters 후) 빈 배열 확정 — react-query 캐시 잔존 데이터 재주입 방지.
+  const salesSiteRows = useMemo(
+    () =>
+      !filters[SHEETS.SALES_SITE]
+        ? []
+        : (
+            ((salesSiteData as Record<string, unknown>)?.O_RESULT_CURSOR as
+              | ResponseData<MENU_ID, SHEETS.SALES_SITE, 'o_rc1'>[]
+              | undefined) ??
+            ((salesSiteData as Record<string, unknown>)?.o_result_cursor as
+              | ResponseData<MENU_ID, SHEETS.SALES_SITE, 'o_rc1'>[]
+              | undefined) ??
+            []
+          ).map(r => ({ ...r, EDIT_FLAG: 'Y' })),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [salesSiteData, filters[SHEETS.SALES_SITE]]
+  );
+  const sspmRows = useMemo(
+    () =>
+      !filters[SHEETS.SSPM] ? [] : (sspmData?.o_rc1 ?? []).map(r => ({ ...r, EDIT_FLAG: 'Y' })),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [sspmData, filters[SHEETS.SSPM]]
+  );
 
   // AS-IS SaveSalesSite/SaveSSPM — 변경행(CRUD_TYPE)만 ^-delim 누적 → 1회 POST(개별 param SP 가 내부 split).
   //   결과: salesSite=p_message_cursor[0].RESULT_MSG(에러 시 한글 메시지) / sspm=O_RESULT_CURSOR[0].RESULT_CODE('1'=성공).
@@ -364,6 +391,7 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
     }
     const payload: Record<string, string> = {};
     for (const [k, arr] of Object.entries(acc)) payload[k] = arr.join('^');
+    if (isSS) payload['deptId'] = '-';
 
     try {
       void setToast({ type: 'default', message: t('LBL00665', 'Loading...'), duration: 3000 });
@@ -475,7 +503,7 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
         </div>
 
         <div className={styles.repairCol} onClickCapture={() => setFocusedSheet(SHEETS.REPAIR)}>
-          <div className={styles.sectionTitle}>SCM 기준정보 정비 필요 리스트</div>
+          <div className={styles.sectionTitle}>List of SCM Master Data Requiring Maintenance</div>
           <ErpEdiMasterRepairGrid
             gridRef={repairGridRef}
             gridFilterRef={repairFilterRef}

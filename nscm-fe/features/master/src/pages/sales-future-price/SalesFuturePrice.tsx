@@ -1,6 +1,6 @@
 import type { FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { apiClient } from '@foundation/apis';
 import { IcExchangeRate, IcGridColumnSetup } from '@foundation/assets';
@@ -36,8 +36,10 @@ import type { FuturePriceRow } from './sales-future-price.types';
 import styles from './SalesFuturePrice.module.scss';
 import {
   buildExchangeRateMap,
+  currencyCodesFromRateMap,
   type ExchangeRateRow,
   getExchangeRate,
+  isExchangeTargetMeasure,
 } from './salesPriceExchange';
 import { useSalesFuturePriceStore } from './useSalesFuturePriceStore';
 import { isEditableDivision } from './utils/editableDivision';
@@ -200,6 +202,15 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   // ⭐ modal cascade (hook #59 §5 / AS-IS CellDoubleClick L3229~3294) — 팝업 필터는 조회조건이 아니라
   //   "클릭한 행의 상위 셀 값" (Form_Load(false, div, team, endCustomer, site, project[, item]) 1:1).
   const [popupRow, setPopupRow] = useState<FuturePriceRow | null>(null);
+  // ⭐ 성능(2026-07-08) — 참조 안정 콜백(useCallback). inline arrow 로 넘기면 매 렌더 새 함수 →
+  //   Grid 의 대형 useEffect(deps 에 onPopupCellDblClick 포함)가 렌더마다 재실행(핸들러 5종 재등록 +
+  //   new MergeManager + invalidate(true) 전체 리프레시). setState 함수들은 참조 고정이라 deps [].
+  const handlePopupCellDblClick = useCallback((modalKey: string, row: FuturePriceRow) => {
+    setPopupGroupId(row.INSERT_GROUP_ID ?? null);
+    setPopupRow(row); // cascade — 클릭 행의 상위 셀 값을 팝업 필터로 (AS-IS L3229~3247)
+    if (modalKey === 'PROJECT') setOpenProject(true);
+    else if (modalKey === 'ITEM') setOpenItem(true);
+  }, []);
 
   // ----- Button 10대 매핑 -----
   const handleSearch = () => {
@@ -342,9 +353,11 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
     // EditTracker 변경 셀 맵 — 'M' 행은 변경된 binding 만 전송 (AS-IS red cell 동등).
     const changedMap = editTrackerRef.current?.getOriginalValues();
 
-    // 환율 룩업 (AS-IS dtFuturePrice = GetFuturePriceInfo) — LOC → KRW/USD/RTF 재계산용.
+    // 환율 룩업 (AS-IS dtFuturePrice = GetFuturePriceInfo) — LOC → KRW/USD 재계산용.
     const erRows = (exchangeData as { o_rc1?: ExchangeRateRow[] })?.o_rc1 ?? [];
     const erMap = buildExchangeRateMap(erRows);
+    // RTF 등 비통화 measure 저장 제외 판정용 통화코드 집합 (환율 데이터 구동 — 하드코딩 금지).
+    const saveCurrencyCodes = currencyCodesFromRateMap(erMap);
 
     // 형제 measure 행 (LOC 제외) — insert: 같은 INSERT_GROUP_ID / edit: 같은 그룹 키 (spRowsAll).
     const siblingsOf = (locRow: FuturePriceRow): FuturePriceRow[] => {
@@ -428,10 +441,15 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         const locFlag = locPrice === '0' ? 'D' : isInsert ? 'I' : 'M';
         pushEntry(kr, 'LOC', yyyymmdd, locPrice, locFlag);
 
-        // 형제 measure (KRW/USD/RTF) — LOC 값 환율 재계산 (AS-IS GetExchangeRate).
+        // 형제 measure (KRW/USD) — LOC 값 환율 재계산 (AS-IS GetExchangeRate).
+        //   ⭐ RTF(RTF_SYS_RP) 제외 (AS-IS 실측 정합 2026-07-08): RTF 는 시스템 생성 measure(이동계획 판가)
+        //   — 저장 대상 아님. GET SP 적재도 COLUMN_NAME <> 'RTF_SYS_RP' 필터로 제외해 저장해도 쓰레기 행.
+        //   SAVE SP 3쌍 검증(HAVING COUNT(*) < 3)은 LOC/KRW/USD 3건으로 정확 충족.
+        //   판정 = 환율 통화코드 집합(하드코딩 금지, 미로드 시 기존 동작 보존).
         for (const sib of sibs) {
           const sm = toStr((sib as Record<string, unknown>).MEASURE);
           if (!sm) continue;
+          if (!isExchangeTargetMeasure(saveCurrencyCodes, sm, baseCur)) continue; // RTF 등 비통화 제외
           const sibRaw = (sib as Record<string, unknown>)[dk];
           const sibCur = sibRaw === undefined || sibRaw === null ? null : toStr(sibRaw);
           const sibPrice = getExchangeRate(erMap, div, baseCur, sm, yyyymm, locPrice, sibCur);
@@ -510,8 +528,18 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   // SP P_DMF0020_GET_SCM_MST_FUTURE_PRICE_M 결과 — wide format (28 fixed cols + 동적 W_/M_)
   // PIVOT 이 DB 단에서 처리되어 클라이언트 측 변환 불필요
-  const spRows = (data as { o_rc1?: FuturePriceRow[] })?.o_rc1 ?? [];
-  const rows: FuturePriceRow[] = [...insertedRows, ...spRows];
+  // ⭐ 성능(2026-07-08 사용자 보고: SP 1~3초 vs 화면 표시 지연) — spRows/rows 참조 안정화(useMemo).
+  //   구현: 매 렌더 새 배열 생성 → memo(DataGrid) 무력화 → 페이지가 리렌더될 때마다(토스트/isFetching/
+  //   콤보·메타 도착 등 조회 1회에 10회+) wrapper 가 itemsSource(CollectionView 재생성) +
+  //   columnGroups(전체 컬럼 트리 재구축) 를 반복 재적용 → 수 초 소모. 데이터 실제 변경 시에만 재바인딩되도록 고정.
+  const spRows = useMemo<FuturePriceRow[]>(
+    () => (data as { o_rc1?: FuturePriceRow[] })?.o_rc1 ?? [],
+    [data]
+  );
+  const rows = useMemo<FuturePriceRow[]>(
+    () => [...insertedRows, ...spRows],
+    [insertedRows, spRows]
+  );
 
   // ⭐ 저장 후 재조회 데이터 로드 시 방금 저장한 행으로 scroll + select
   //   (신규 행이 그리드 맨 위 → 저장/재조회 후 SP 정렬 위치로 이동해 "안 보임"으로 인지되는 문제 해소.
@@ -603,12 +631,7 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         staticColumns={staticColumns[SHEETS.MAIN]}
         staticMeasures={staticMeasures[SHEETS.MAIN]}
         exchangeRateMap={exchangeRateMap}
-        onPopupCellDblClick={(modalKey, row) => {
-          setPopupGroupId(row.INSERT_GROUP_ID ?? null);
-          setPopupRow(row); // cascade — 클릭 행의 상위 셀 값을 팝업 필터로 (AS-IS L3229~3247)
-          if (modalKey === 'PROJECT') setOpenProject(true);
-          else if (modalKey === 'ITEM') setOpenItem(true);
-        }}
+        onPopupCellDblClick={handlePopupCellDblClick}
       />
 
       {/* POPUP 6종 */}

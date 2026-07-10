@@ -118,6 +118,26 @@ grep -rn "gridWrap\|.gridWrap" features/**/modals/*.module.scss
 - 룰 23 §1 `@shared/components` CustomDialog (Dialog 아님)
 - hook `popup-asis-analysis.md` §SCSS 패턴 보강
 
+## §6.5 ⭐ customContentArea = fragment 도 bounded flex wrapper 필수 (2026-07-10)
+
+`customContentArea` 를 `<>...</>` **fragment** 로 넘기면 — `dialogCustomContentAreaWrapper` 가 `overflow:hidden` 이므로 content 초과분(특히 하단 그리드의 가로/세로 스크롤바)이 **잘린다**. content 를 **bounded flex column wrapper** 로 감싸고, 하단 그리드에 `flex:1; min-height:0` 을 줘야 스크롤바가 보인다.
+
+```tsx
+customContentArea={
+  <div className={styles.contentWrap}>   {/* fragment 금지 — wrapper 로 */}
+    <ProgressIndicator shape='circular' apprearance='infinite' open={loading} placement='parent' />
+    ... 상단 고정 영역 (flex-shrink:0) ...
+    <div className={styles.gridWrap}><DataGrid .../></div>   {/* flex:1 min-height:0 */}
+  </div>
+}
+```
+```scss
+.contentWrap { position:relative; display:flex; flex-direction:column; min-height:0; max-height:68vh; overflow:hidden; }
+.gridWrap    { flex:1 1 auto; min-height:150px; }   // DataGrid(height:100%) 채움 → 하단 스크롤바 표시
+```
+- `position:relative` = `ProgressIndicator placement='parent'`(스피너) 앵커 겸용.
+- `max-height:68vh` = viewport 초과 방지 (modaless content-sized dialog 하단 잘림 방지).
+
 ## §7. 사용자 사고 사례
 
 | 사례 | 사고 | Fix |
@@ -125,3 +145,4 @@ grep -rn "gridWrap\|.gridWrap" features/**/modals/*.module.scss
 | DMF0020 ExchangeRate v1 | position='overflow' + min-height: 70vh | position='basic' + height: 100% + flex-shrink: 0 + min-height: 0 |
 | DMF0020 PriceBatch v1 | min-height: 70vh + bottomRow 잘림 | flex layout + flex-shrink: 0 on bottomRow |
 | DMF0020 ColumnTitleSet v1~v2 | min-height: 65vh + bottomRow 잘림 (Default/OK/Cancel) | min-height 제거 + bottomRow flex-shrink: 0 |
+| DMF0074/0014 FcstUploadModal (2026-07-10) | customContentArea fragment + Error Detail 그리드 하단 가로스크롤바 잘림 | contentWrap bounded flex(max-height:68vh) + errorGridWrap flex:1 min-height:150px (§6.5) |

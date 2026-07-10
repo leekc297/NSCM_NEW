@@ -101,6 +101,27 @@ END;
 
 **Step 5**: root cause fix 후 EXCEPTION 핸들러를 운영 표준으로 복원 (또는 SCM_SYS_LOG 미존재 환경은 디버그 친화 유지).
 
+### §4.5 ⭐ `-9994` / `InvocationTargetException: null` 래퍼 벗기기 (2026-07-08 신설 — DMF0014 사고)
+
+BE 응답 `-9994 "Sql Error"` 나 로그의 `InvocationTargetException: null` 은 **실오류를 가린 Java 래퍼**다
+(`getMessage()`=null 만 저장됨). **판정 근거로 쓰지 말 것** — 권한(GRANT) 단정 금지.
+
+실오류 확보 경로 (우선순위):
+
+1. **`SCM_COM_SYS_LOG.EXCT_MSG_CTN`** — SystemLog aspect 가 `NCommonDAO.selectList: <전체 ORA 체인>` 을 저장 (SQL 로만 확보 가능, LENA/서버 접근 불필요):
+```sql
+SELECT TO_CHAR(CREATION_DATE,'HH24:MI:SS') T, MNU_ID, MNU_BTN_CD, SUBSTR(EXCT_MSG_CTN,1,1000) REAL_ERROR
+  FROM SCM_COM_SYS_LOG
+ WHERE MNU_ID='<MENU>' AND EXCT_MSG_CTN IS NOT NULL AND CREATION_DATE > SYSDATE - 1/24
+ ORDER BY CREATION_DATE DESC FETCH FIRST 5 ROWS ONLY;
+```
+2. BE 콘솔/파일 로그 전체 스택의 **`Caused by:`** 줄 (dev WAS = `/logs001/lena/1.3/nscmwas01-8080/nscm.log`).
+3. ⚠️ `SCM_COM_SQL_LOG.EXCEPTION` 은 래퍼 문자열로 잘려 저장 — 이 경로는 실오류 확보 불가.
+
+**격리 판정** (BE 문제 vs SP/DB 문제): 실패 payload 그대로 **anonymous block 으로 SP 직접 호출** —
+BE 접속 계정(SCMD_APP)으로도 실행. 직접호출 OK + BE 만 실패 = BE 경유 시에만 달라지는 것(세션 NLS 등,
+`oracle-nls-implicit-conversion.md` #109) 의심. 직접호출도 실패 = SQLERRM 그대로 root cause.
+
 ---
 
 ## §5 자동 검증 grep

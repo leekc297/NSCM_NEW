@@ -1,10 +1,19 @@
-# Hook — UI Category Setup `DIVISION_ID` 기반 컬럼 표시 (FE 토큰 필터)
+# Hook — UI Category Setup `DIVISION_ID` 기반 컬럼 표시 (DIVISION_ID 직접 사용)
 
 > ⚠ **Grid 가 admin 컬럼 메타를 동적 fetch 하는 신규/수정 화면 작업 시 적용**
 > `SCM_MST_SHEET_COLUMNS.DIVISION_ID` 에 값이 있으면 **선택한 division 이 그 리스트에 포함될 때만** 컬럼 표시,
 > 공란/NULL 이면 **항상 표시**. division 무관 하드코딩 컬럼 노출 금지.
 
-작성: 2026-06-27 (사용자 명시 요구 — DMF0020 기준 룰화)
+> ⭐ **개정 (2026-07-10 · 사용자 명시 — DMF0074 기준)**: `DIVISION_ID` 를 **직접 사용**한다.
+> 현행 `PKG_NSCM_UI_COM_MENU` 컬럼 목록 SP 가 **P_DIVISION_ID 서버측 토큰 필터를 지원**
+> (BODY L164/214 `AND (P_DIVISION_ID IS NULL OR C.DIVISION_ID IS NULL OR INSTR(','||C.DIVISION_ID||',', ','||P_DIVISION_ID||',') > 0)`)
+> — FE 는 `/admin/menu/{ID}/column` body 에 `divisionId` 를 **전달만** 하면 된다 (조회 division, 미선택 시 null=전체).
+> **§3-1 의 ATTRIBUTE3 복사 방식은 DEPRECATED** — 신규 화면에서 ATTRIBUTE3 복사·FE attribute3 필터 금지.
+> 로컬 토큰 필터는 **fallback 하드코딩 스냅샷 경로에만** 유지(§3-2 의 정확 토큰 일치 규칙 동일).
+> Division 변경 후 조회 시 컬럼 재fetch 필수 (handleSearch 에서 fetchStaticColumns 재호출 — divisionId 반영).
+> 정본 구현 = DMF0074 `useMetalLinkPriceStore.fetchStaticColumns` + `MetalLinkPriceGrid`.
+
+작성: 2026-06-27 (사용자 명시 요구 — DMF0020 기준 룰화) · 개정: 2026-07-10 (DIVISION_ID 직접 사용)
 상위 룰: `anti-simplification.md` / `ui-category-setup-no-arbitrary-data.md` (#78)
 관련 룰: `ui-category-setup-column-meta.md` (#65) / `_tobe/08_column_meta.md`
 관련 메모리:

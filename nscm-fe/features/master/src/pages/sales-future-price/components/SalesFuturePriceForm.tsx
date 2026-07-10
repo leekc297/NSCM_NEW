@@ -123,6 +123,7 @@ export const SalesFuturePriceForm = ({ onSearch, onVersionOpen, hasInsertRows }:
             value={sc.plantSiteIds}
             onChange={v => set({ plantSiteIds: v })}
             division={sc.divisionId}
+            endCustomer={sc.endCustomers.length > 0 ? sc.endCustomers.join(',') : undefined}
           />
           <PeriodField
             gridSize={3}

@@ -23,7 +23,8 @@
 4. (UI 작업 시) §3 UI-MANDATORY 체크리스트를 PRE-WRITE 로 통과
 ```
 
-> **카운트 단일 소스**: hook 총수 = **107** (`Doc/_rules_v2/hooks/*.md` 실측, 2026-07-08 — #105 screen-analysis-workbook-standard + #106 oracle-bulk-clob-buffer + **#107 sp-hang-runaway-loop-diagnosis**). 어떤 문서든 카운트를 별도 보유하지 말 것 — 본 파일 §4 와 00_INDEX 만 카운트를 가진다. (진단 R-2)
+> **카운트 단일 소스**: hook 총수 = **109** (`Doc/_rules_v2/hooks/*.md` 실측, 2026-07-08 — #107 sp-hang-runaway-loop-diagnosis + **#108 ui-grid-corner-no-header** + **#109 oracle-nls-implicit-conversion**). 어떤 문서든 카운트를 별도 보유하지 말 것 — 본 파일 §4 와 00_INDEX 만 카운트를 가진다. (진단 R-2)
+> ⚠️ 2026-07-08(오후): 신규 **#108 `ui-grid-corner-no-header`** (사용자 지정 공통 표준 — ①그리드 No. 코너(TopLeft) 가로/세로 전체 단일 머지 + 'No.' 라벨(setCellData 재귀 가드) ②커스텀 MergeManager 설치 = nested 그룹 네이티브 span 무효 → 동적 1단(년/년월) 수평 머지 수동 구현 의무. 정본 DMF0020 ExchangeRateModal) + 신규 **#109 `oracle-nls-implicit-conversion`** (암묵 형변환=세션 NLS 의존 — DATE 파라미터 원시값/단일인자 TO_DATE 금지. "SP직접호출·로컬 BE OK + 클라우드 WAS 만 ORA-01861" 시그니처 1순위 + -9994/InvocationTargetException 래퍼 진단(SCM_COM_SYS_LOG.EXCT_MSG_CTN) + 사내·클라우드 동시배포. 부록 C-11 신설(함정 11종). DMF0014 저장) = **109**.
 > ⚠️ 2026-07-08: 신규 **#107 `sp-hang-runaway-loop-diagnosis`** (SP hang·폭주 진단 — ①GTT `TRUNCATE`(DDL) 동시세션 library cache·cursor·row cache mutex 경합 hang→전량 `DELETE` 치환+잔존 0 검증 ②MSSQL `@@FETCH_STATUS` 변환 누락 `WHILE V_FETCH_STATUS=0` 무한루프(10건 업로드에 INSERT 1,278만회)→FETCH 직후 `%NOTFOUND` 재할당 의무+grep 게이트(할당수=FETCH수) ③멈춘 세션 library cache pin=`CREATE OR REPLACE` 재배포 차단→DBA kill 선행(ORA-01031/ORA-00026)+배포 대기열 기법. 진단=V$SESSION event 3분류+V$SQL EXECUTIONS. 부록 C-2 확장+**C-10 신설(함정 10종)**. DMF0014 Excel Upload Lock) = **107**.
 > ⚠️ 2026-07-06: 신규 **#106 `oracle-bulk-clob-buffer`** (대량 조회/저장 CLOB 버퍼 — ①동적 PIVOT 누적 V_ITERATION/V_SQL_TEXT→CLOB ②'^' bulk 홀더 vp_*/V_P_*→CLOB(단일토큰 v_* 유지) ③진단 JSON_OBJECT=SELECT RETURNING CLOB INTO+DBMS_LOB.SUBSTR 4000 truncate, 23ai PL/SQL 대입 PLS-00684. DMF0014/0043/0048 3연발) = **106**.
 > ⚠️ 2026-07-02: 신규 #99 `oracle-save-payload-integrity` (Oracle SAVE SP delete-then-insert 저장 4대 규칙 — ①편집=`'M'`/신규='I'로 서버 "존재+'I'" 검증 우회 ②FE payload dedup 키=배포 SP GROUP BY 키 정확일치(COUNT>1=그룹 행수 오탐) ③신규 insert NOT NULL 컬럼 division별 placeholder 기본값(PLANT_SITE_ID '-') ④저장오류 근본원인=BE로그 ORA코드+USER_SOURCE(ALL_SOURCE 동명객체 주의) 확인, 추측금지 + 행간 중복검증 PK=전체키+MEASURE. DMF0020 저장 4연발 사고 후, 사용자 명시) = **99**.
@@ -70,7 +71,7 @@
 | **T07** | Button / CRUD / SubTitle hotkey / 추가·삭제·저장·sort·filter·condition·reset | `_tobe/09_subtitle_hotkey` + `_asis/00_framework/01_BaseForm` | ⭐⭐⭐ subtitle-button-actions-mandatory · screen-meta-and-permissions-mandatory(권한) + screen-shell-composition-mandatory + asis-button-mapping + search-button-when-no-searcharea |
 | **T08** | BE / Controller / Service / SP / cursor / mutation / SAVE SP | `_tobe/11_be_controller_service` + `12_metadata_sql` + **`Doc/03.Framework` BE API javadoc** | ⭐⭐ **oracle-db-workflow(진입)** + ⭐⭐ **be-api-contract-ui(UI 호출 계약)** + be-infrastructure-reuse + asis-coverage-check + procedure-dts-ssot-mandatory + sp-dual-cursor-pattern + mutation-onsuccess-defaults + proc-meta-signature-match + sp-body-minimal-change + sp-utl-call-stack-safety + sp-exception-handler-debug-friendly + sp-no-fake-data-extraction + sp-json-table-array-pattern + sp-patch-file-deploy + scmd-app-grant-mandatory |
 | **T09** | 메뉴 안 나옴 / MNU_URL / SHT_NM / 권한 없음 | `_tobe/13_routing_menu` | menu-not-displayed-debug + menu-button-dynamic-fetch |
-| **T10** | DB 오류 / ORA-xxxxx / PLS-xxxxx / 데이터 0건 / **날짜·메시지 검증 오탐** / **대량 조회·저장 실패(ORA-06502/40478)** / **업로드·저장 무반응(hang)** | `_dev_rules/21_TROUBLESHOOTING` + `_tobe/12_metadata_sql` | ⭐⭐ oracle-db-workflow §3 + sp-exception-handler-debug-friendly + sp-substr-zero-index-audit + oracle-cmbo-varname-quote + ⭐⭐ **oracle-bulk-clob-buffer(#106 — 대량 CLOB 버퍼)** + ⭐⭐ **sp-hang-runaway-loop-diagnosis(#107 — 무반응 hang·GTT TRUNCATE mutex·FETCH_STATUS 무한루프·재배포 pin 차단)** + db-error-asis-cross-check + sp-no-fake-data-extraction + pivot-dynamic-column-nvl + ⭐⭐⭐ **screen-combo-validation-message-mandatory** (§2 V 날짜 표시↔검증 형식 / §3 M 메시지 코드 충돌) |
+| **T10** | DB 오류 / ORA-xxxxx / PLS-xxxxx / 데이터 0건 / **날짜·메시지 검증 오탐** / **대량 조회·저장 실패(ORA-06502/40478)** / **업로드·저장 무반응(hang)** | `_dev_rules/21_TROUBLESHOOTING` + `_tobe/12_metadata_sql` | ⭐⭐ oracle-db-workflow §3 + sp-exception-handler-debug-friendly + sp-substr-zero-index-audit + oracle-cmbo-varname-quote + ⭐⭐ **oracle-bulk-clob-buffer(#106 — 대량 CLOB 버퍼)** + ⭐⭐ **sp-hang-runaway-loop-diagnosis(#107 — 무반응 hang·GTT TRUNCATE mutex·FETCH_STATUS 무한루프·재배포 pin 차단)** + ⭐⭐ **oracle-nls-implicit-conversion(#109 — "클라우드만 실패"=세션 NLS 암묵변환 / -9994·InvocationTargetException 래퍼 진단)** + db-error-asis-cross-check + sp-no-fake-data-extraction + pivot-dynamic-column-nvl + ⭐⭐⭐ **screen-combo-validation-message-mandatory** (§2 V 날짜 표시↔검증 형식 / §3 M 메시지 코드 충돌) |
 | **T11** | Figma URL | `_dev_rules/31_FIGMA_DESIGN_INTEGRATION` | (figma-mapping-check — v1) |
 | **T12** | Git push / 백업 / 원복 | `_dev_rules/28_GIT_MULTI_REMOTE` + `30_LOCAL_BACKUP_RESTORE` | destructive-git-ops |
 | **T13** | CSV 적재 / Oracle 적재 | `_dev_rules/29_LOCAL_DB_CSV_IMPORT` | (없음) |
@@ -121,6 +122,7 @@
   - [ ] `<DataGrid initialized={...}>` 사용 금지 (wrapper 가 호출 안 함, deprecated). ⭐ **모든 wijmo 이벤트 핸들러** (`formatItem` / `cellEditEnded` / `beginningEdit` / `loadedRows` / `cellEditEnding` / `selectionChanged` / `gotFocus`) 등록은 `useEffect` + `gridRef.current` (`internalRef` 단독 금지) + dependency `[staticColumns, dynamicColumns]` (`[]` 1회 금지 — mount 시점 ref undefined → 미등록 사고) + cleanup 의무
   - [ ] Grid row interface 는 `extends WijmoRowItem` + 모든 fields non-optional + 인덱스 시그니처 `string | number` 만
   - [ ] dynamicColumns 의 group + 모든 leaf 객체에 `allowSorting:false`, `allowMerging:false` 명시 + DataGrid `allowMerging` prop 결정 매트릭스 따라 명시
+  - [ ] ⭐⭐ **No. 코너 헤더 공통 표준** (ui-grid-corner-no-header #108): rowHeader(순번) 쓰는 모든 그리드 — TopLeft 패널 전체 **가로/세로 단일 머지 + 'No.' 라벨**(setCellData 재귀 가드+중앙 정렬). 커스텀 MergeManager 사용 시 **동적 1단(년/년월) 수평 머지 수동 구현**(nested 그룹 네이티브 span 가정 금지 — 설치 시 무효화됨)
   - [ ] admin 메타 INSERT 작성 전 `desc TABLE_NAME` 으로 NULLABLE='N' 컬럼 인벤토리 확인 + INSERT column list 매핑 (`VALID_YN` 등 누락 방지)
   - [ ] dynamicColumns 의 group + 모든 leaf 객체에 **`height`** 명시 — `HEIGHT_BY_COLUMN_DEPTH` 캐노니컬 정합 (1단=48 / **2단=24** / 3단=16). DataGrid wrapper 가 staticColumns 만 자동 처리 → dynamicColumns 누락 시 wijmo default 48 × N (cell 96 rowspan 사고). DMF0007 wrapper 동작 정합. (`packages/foundation/src/utils/columnMapping.ts:27-29`)
   - [ ] ⭐⭐⭐ **디자인 필수 — 조회조건 객체 높이 36px 동일화** (search-condition-height-uniformity #94): Dropdown/Popup InputField/Text/DatePicker/Date input **모든** 조회조건 객체 높이 = **36px** (Main UI + Popup 동일). Main UI=표준 searchFields/CustomDropdown(자동) / Popup raw `<select>`·`<input type=date>`=`height:36px; box-sizing:border-box` / **DatePicker=`.datePickerFix` wrapper 로 전 레벨(MuiBox/FormControl/OutlinedInput) 36 강제** (design-system small 28px overflow 보정 — `sx` forward 안 됨). 조회조건은 **Figma 기준 1단 4개** = 카탈로그 필드 `gridSize` additive prop(default 보존)로 `gridSize={3}`.
@@ -155,9 +157,9 @@
 
 ---
 
-## §4. Hook 카탈로그 (전체 107 / Full Catalog) — 단일 카운트 소스
+## §4. Hook 카탈로그 (전체 109 / Full Catalog) — 단일 카운트 소스
 
-> 본문 위치: `Doc/_rules_v2/hooks/<name>.md`. 카운트 = 본 파일 상단 "카운트 단일 소스" 문단 참조 (**107**, 2026-07-08 실측 — 본 §4 내 중복 카운트 표기는 2026-07-03 정리로 제거, 갱신은 상단 문단+본 헤더+말미 SSOT 3곳 동시). 정렬: 파일명 알파벳순(진단 R-4) — 단 #70 이후는 등재 시점 순 표 끝 배치.
+> 본문 위치: `Doc/_rules_v2/hooks/<name>.md`. 카운트 = 본 파일 상단 "카운트 단일 소스" 문단 참조 (**109**, 2026-07-08 실측 — 본 §4 내 중복 카운트 표기는 2026-07-03 정리로 제거, 갱신은 상단 문단+본 헤더+말미 SSOT 3곳 동시). 정렬: 파일명 알파벳순(진단 R-4) — 단 #70 이후는 등재 시점 순 표 끝 배치.
 > 분류: 🅒 공통 · 🆄 UI/화면 · 🅖 Grid/Wijmo · 🅕 Search/Form · 🅟 Popup/Modal · 🅑 BE/SP/Oracle · 🅓 DB적용/Deploy · 🅖it Git/Infra
 
 | # | Hook | 분류 | 트리거 | 한 줄 요약 |
@@ -192,6 +194,8 @@
 | 28 | mutation-onsuccess-defaults | 🅑 | T01/T08 | mutate onSuccess override 시 default invalidate+toast 명시 |
 | 106 | oracle-bulk-clob-buffer | 🅑 | T08/T10/T19 | ⭐⭐ 대량 조회/저장 CLOB 버퍼 — 동적 PIVOT 누적(V_ITERATION/V_SQL_TEXT)+'^' bulk 홀더(vp_*/V_P_*)→CLOB / 진단 JSON_OBJECT=SELECT RETURNING CLOB INTO+DBMS_LOB.SUBSTR truncate(23ai PLS-00684). ORA-06502/40478. DMF0014/0043/0048 (2026-07-06) |
 | 107 | sp-hang-runaway-loop-diagnosis | 🅑 | T08/T10/T19 | ⭐⭐ **SP hang·폭주 진단** — 업로드/저장 무반응(BE 무응답) 시 V$SESSION event 3분류(mutex 경합/무한루프 폭주/정상 락 대기). ①GTT `TRUNCATE`(DDL) 동시세션 library cache·cursor·row cache mutex 경합 hang → 전량 `DELETE FROM` 치환+DBA_SOURCE 잔존 0 검증(부록 C-2 확장) ②`@@FETCH_STATUS` 변환 누락 `WHILE V_FETCH_STATUS=0` 무한루프(10건 업로드에 INSERT 12,786,821회 — V$SQL EXECUTIONS 진단) → FETCH 직후 `%NOTFOUND` 재할당 의무+grep 게이트(할당수=FETCH수, 부록 C-10 신설) ③멈춘 세션 library cache pin = `CREATE OR REPLACE` 재배포 차단(LAST_DDL_TIME 미변경 신호) → DBA kill 선행(SCM_MGR ORA-01031 / stale SERIAL# ORA-00026)+배포 대기열 기법+구버전 SP 動作 중 사용자 재시도 금지 안내. DMF0014 Excel Upload Lock (2026-07-08) |
+| 108 | ui-grid-corner-no-header | 🆄 | T01/T01M | ⭐⭐ **그리드 No. 코너 헤더 공통 표준 (사용자 지정)** — ①TopLeft 패널 전체(순번+상태 × 다단 헤더) **가로/세로 단일 머지** + **'No.' 라벨**(formatItem setCellData, 현재값 비교 재귀 가드) + 중앙 정렬 + `allowMerging=All` prop ②⚠️ **커스텀 MergeManager 설치 = nested columnGroups 네이티브 span 무효** → 동적 1단(년/년월/주차) 수평 머지를 binding 그룹키로 **수동 구현 의무**("네이티브 span" 가정 금지). 정본 DMF0020 ExchangeRateModal / 선례 ContributeViewGrid·PriceBatchInputModal (2026-07-08) |
+| 109 | oracle-nls-implicit-conversion | 🅑 | T08/T10/T19 | ⭐⭐ **암묵 형변환 = 세션 NLS 의존 폭탄** — DATE 파라미터에 문자열/숫자 직접 전달·단일 인자 `TO_DATE(x)`·무마스크 `TO_CHAR(date)` 금지(항상 명시 마스크). 판정 시그니처: **SP 직접호출 OK + 로컬 BE OK + 클라우드 WAS 만 ORA-01861**(세션 NLS_DATE_FORMAT 차이 — 권한/BE빌드 단정 금지). -9994/`InvocationTargetException:null`=래퍼 → `SCM_COM_SYS_LOG.EXCT_MSG_CTN`/BE 콘솔 `Caused by:` 로 실오류 확보. fix=명시 마스크 최소 diff + 동종 전수 sweep + **사내·클라우드 동시 배포**. 부록 C-11. DMF0014 저장 PR_DM_PLN L1322 (2026-07-08) |
 | 29 | oracle-cmbo-varname-quote | 🅑 | T08/T10 | CMBO_SQL_M `@varName` → `TO_CHAR()` wrap (ORA-01722 방지) |
 | 30 | oracle-db-workflow | 🅑 | T08/T10/T18/T19 | ⭐⭐ Oracle SP/DB 단일 진입점 (8 타입 + 증상→원인) |
 | 31 | oracle-sp-perf-anti-patterns | 🅑 | T08/T10/T19 | ⭐⭐ MSSQL→Oracle 6 성능 룰 (REGEXP/split/lookup/index/SARGable) |
@@ -373,5 +377,5 @@ UI mandatory 의 POST-WRITE grep 중 기계 검증 가능한 패턴을 `check-fe
 
 > 단일 진실 소스 / Single Source of Truth:
 > - 진입 / Entry: 루트 `CLAUDE.md` → 본 파일 → `00_INDEX.md`
-> - 카운트 / Count: 본 §4 (= 107) + `00_INDEX.md` (동기화 의무)
+> - 카운트 / Count: 본 §4 (= 109) + `00_INDEX.md` (동기화 의무)
 > - UI 누락 방지 / UI no-omission: 본 §3 체크리스트 (PR 게이트 §7 통합)

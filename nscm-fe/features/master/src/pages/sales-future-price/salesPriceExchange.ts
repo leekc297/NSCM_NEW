@@ -37,6 +37,32 @@ export const buildExchangeRateMap = (rows: ExchangeRateRow[]): ExchangeRateMap =
   return map;
 };
 
+// ⭐ 환율 재계산 "대상 measure" 판정 (AS-IS 실측 정합 2026-07-08 — 사용자 확인: LOC 입력 시 RTF 미변경):
+//   RTF(RTF_SYS_RP)는 통화가 아니라 시스템 생성 measure(이동계획 판가 — GET SP 가 DM_PLN_SALES_PLAN 에서
+//   생성, 저장 대상 아님. GET 적재 필터도 COLUMN_NAME <> 'RTF_SYS_RP' 로 제외) → LOC 편집 재계산/저장에서 제외.
+//   판정은 하드코딩 대신 환율 데이터(CURRENCY/UNIT_CURRENCY 코드 집합) 기반 — KRW/USD 는 포함, RTF 는 자동 제외.
+export const currencyCodesFromRateMap = (map: ExchangeRateMap | undefined | null): Set<string> => {
+  const set = new Set<string>();
+  if (!map) return set;
+  for (const key of map.keys()) {
+    const parts = key.split('|'); // div|CURRENCY|UNIT_CURRENCY|yyyymm
+    if (parts[1]) set.add(parts[1]);
+    if (parts[2]) set.add(parts[2]);
+  }
+  return set;
+};
+
+// 형제 measure 가 환율 재계산 대상인지 — base 통화와 동일하거나 환율 코드 집합에 존재.
+//   집합이 비어있으면(환율 데이터 미로드) 기존 동작 보존(전체 대상) — 화면 작동 보장.
+export const isExchangeTargetMeasure = (
+  currencyCodes: Set<string>,
+  measure: string,
+  baseCurrency: string
+): boolean => {
+  if (currencyCodes.size === 0) return true; // fallback — 환율 미로드 시 기존 동작
+  return measure === baseCurrency || currencyCodes.has(measure);
+};
+
 // AS-IS GetExchangeRate(sDIVISION_ID, sBaseER=Currency, sTargetER=Measure, sYYYYMM, sValue, sTargetVal)
 //   1. base == target  → 원래 값 리턴
 //   2. CURRENCY=target  AND UNIT_CURRENCY=base → EXCHANGE_PRICE * value

@@ -1,0 +1,1817 @@
+{
+ "taken_note": "P1.1 rollback baseline",
+ "api_m": [
+  {
+   "API_ID": "API_SYS0013_EXECUTE_QUERY",
+   "API_TP_CD": "POST",
+   "API_MSG_ID": "MSG_API_SYS0013_RESULT_EXECUTE",
+   "API_MSG_DESC": "AS-IS: PR_DM_ADM_DQ_EXECUTE_HIST",
+   "API_URL": "PKG_SYS0013.P_SYS0013_EXECUTE_QUERY",
+   "USE_YN": "Y",
+   "CREATED_BY": "SYSTEM",
+   "CREATION_DATE": "2026-06-10T16:50:31",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-26T00:00:00"
+  },
+  {
+   "API_ID": "API_SYS0013_GET_COLUMNS",
+   "API_TP_CD": "POST",
+   "API_MSG_ID": "MSG_API_SYS0013_COLUMNS_RETRIEVE",
+   "API_MSG_DESC": "AS-IS: DMF0027_GET_DM_TMP_DYNAMIC_QUERY_COLUMNS",
+   "API_URL": "PKG_SYS0013.P_SYS0013_GET_COLUMNS",
+   "USE_YN": "Y",
+   "CREATED_BY": "SYSTEM",
+   "CREATION_DATE": "2026-06-10T16:50:31",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-26T00:00:00"
+  },
+  {
+   "API_ID": "API_SYS0013_GET_HISTORY",
+   "API_TP_CD": "POST",
+   "API_MSG_ID": "MSG_API_SYS0013_HISTORY_RETRIEVE",
+   "API_MSG_DESC": "AS-IS: execution history list",
+   "API_URL": "SYS0013_GET_HISTORY",
+   "USE_YN": "Y",
+   "CREATED_BY": "SYSTEM",
+   "CREATION_DATE": "2026-06-10T16:50:31",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-26T00:00:00"
+  },
+  {
+   "API_ID": "API_SYS0013_GET_PARAMETERS",
+   "API_TP_CD": "POST",
+   "API_MSG_ID": "MSG_API_SYS0013_PARAMETERS_RETRIEVE",
+   "API_MSG_DESC": "AS-IS: DMF0027_GET_DM_TMP_DYNAMIC_QUERY_PARAMETERS",
+   "API_URL": "PKG_SYS0013.P_SYS0013_GET_PARAMETERS",
+   "USE_YN": "Y",
+   "CREATED_BY": "SYSTEM",
+   "CREATION_DATE": "2026-06-10T16:50:31",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-26T00:00:00"
+  },
+  {
+   "API_ID": "API_SYS0013_GET_QUERY_LIST",
+   "API_TP_CD": "POST",
+   "API_MSG_ID": "MSG_API_SYS0013_MAIN_RETRIEVE",
+   "API_MSG_DESC": "AS-IS: DMF0027_GET_DM_TMP_DYNAMIC_QUERY_LIST",
+   "API_URL": "PKG_SYS0013.P_SYS0013_GET_QUERY_LIST",
+   "USE_YN": "Y",
+   "CREATED_BY": "SYSTEM",
+   "CREATION_DATE": "2026-06-10T16:50:31",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-26T00:00:00"
+  },
+  {
+   "API_ID": "API_SYS0013_SAVE_COLUMNS",
+   "API_TP_CD": "POST",
+   "API_MSG_ID": "MSG_API_SYS0013_MAIN_SAVE",
+   "API_MSG_DESC": "AS-IS: PR_DM_ADM_DQ_CREATE_COLUMN",
+   "API_URL": "PKG_SYS0013.P_SYS0013_SAVE_COLUMNS",
+   "USE_YN": "Y",
+   "CREATED_BY": "SYSTEM",
+   "CREATION_DATE": "2026-06-10T16:50:31",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-26T00:00:00"
+  },
+  {
+   "API_ID": "API_SYS0013_SAVE_PARAMETERS",
+   "API_TP_CD": "POST",
+   "API_MSG_ID": "MSG_API_SYS0013_MAIN_SAVE",
+   "API_MSG_DESC": "AS-IS: PR_DM_ADM_DQ_CREATE_PARAMETER",
+   "API_URL": "PKG_SYS0013.P_SYS0013_SAVE_PARAMETERS",
+   "USE_YN": "Y",
+   "CREATED_BY": "SYSTEM",
+   "CREATION_DATE": "2026-06-10T16:50:31",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-26T00:00:00"
+  },
+  {
+   "API_ID": "API_SYS0013_SAVE_QUERY",
+   "API_TP_CD": "POST",
+   "API_MSG_ID": "MSG_API_SYS0013_MAIN_SAVE",
+   "API_MSG_DESC": "AS-IS: PR_DM_ADM_DQ_CREATE",
+   "API_URL": "PKG_SYS0013.P_SYS0013_SAVE_QUERY_LIST",
+   "USE_YN": "Y",
+   "CREATED_BY": "SYSTEM",
+   "CREATION_DATE": "2026-06-10T16:50:31",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-26T00:00:00"
+  },
+  {
+   "API_ID": "API_SYS0013_SAVE_USER_GROUP",
+   "API_TP_CD": "POST",
+   "API_MSG_ID": "MSG_API_SYS0013_MAIN_SAVE",
+   "API_MSG_DESC": "AS-IS: SCM_ADM_DQ_USER_GROUP role save",
+   "API_URL": "SYS0013_SAVE_USER_GROUP",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-28T15:53:36",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-28T15:53:36"
+  }
+ ],
+ "proc_m": [
+  {
+   "PROC_NM": "PKG_SYS0013.P_SYS0013_EXECUTE_QUERY",
+   "COL_NM": "sqlText",
+   "DATA_TP_CD": "VARCHAR",
+   "COL_TP_CD": "IN",
+   "SORT_ORD": 1,
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-21T09:04:41",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-21T09:04:41"
+  },
+  {
+   "PROC_NM": "PKG_SYS0013.P_SYS0013_EXECUTE_QUERY",
+   "COL_NM": "o_rc1",
+   "DATA_TP_CD": "CURSOR",
+   "COL_TP_CD": "OUT",
+   "SORT_ORD": 2,
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-21T09:04:41",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-21T09:04:41"
+  },
+  {
+   "PROC_NM": "PKG_SYS0013.P_SYS0013_EXECUTE_QUERY",
+   "COL_NM": "O_RESULT_CURSOR",
+   "DATA_TP_CD": "PROC_RESULT",
+   "COL_TP_CD": "OUT",
+   "SORT_ORD": 3,
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-21T09:04:41",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-21T09:04:41"
+  },
+  {
+   "PROC_NM": "PKG_SYS0013.P_SYS0013_GET_COLUMNS",
+   "COL_NM": "dqId",
+   "DATA_TP_CD": "VARCHAR",
+   "COL_TP_CD": "IN",
+   "SORT_ORD": 1,
+   "CREATED_BY": "system",
+   "CREATION_DATE": "2026-06-10T16:53:19",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T14:14:21"
+  },
+  {
+   "PROC_NM": "PKG_SYS0013.P_SYS0013_GET_COLUMNS",
+   "COL_NM": "o_rc1",
+   "DATA_TP_CD": "CURSOR",
+   "COL_TP_CD": "OUT",
+   "SORT_ORD": 2,
+   "CREATED_BY": "system",
+   "CREATION_DATE": "2026-06-10T16:53:19",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T14:32:34"
+  },
+  {
+   "PROC_NM": "PKG_SYS0013.P_SYS0013_GET_COLUMNS",
+   "COL_NM": "O_RESULT_CURSOR",
+   "DATA_TP_CD": "PROC_RESULT",
+   "COL_TP_CD": "OUT",
+   "SORT_ORD": 3,
+   "CREATED_BY": "system",
+   "CREATION_DATE": "2026-06-10T16:53:19",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T14:14:21"
+  },
+  {
+   "PROC_NM": "PKG_SYS0013.P_SYS0013_GET_PARAMETERS",
+   "COL_NM": "dqId",
+   "DATA_TP_CD": "VARCHAR",
+   "COL_TP_CD": "IN",
+   "SORT_ORD": 1,
+   "CREATED_BY": "system",
+   "CREATION_DATE": "2026-06-10T16:53:19",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T14:14:21"
+  },
+  {
+   "PROC_NM": "PKG_SYS0013.P_SYS0013_GET_PARAMETERS",
+   "COL_NM": "o_rc1",
+   "DATA_TP_CD": "CURSOR",
+   "COL_TP_CD": "OUT",
+   "SORT_ORD": 2,
+   "CREATED_BY": "system",
+   "CREATION_DATE": "2026-06-10T16:53:19",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T14:32:34"
+  },
+  {
+   "PROC_NM": "PKG_SYS0013.P_SYS0013_GET_PARAMETERS",
+   "COL_NM": "O_RESULT_CURSOR",
+   "DATA_TP_CD": "PROC_RESULT",
+   "COL_TP_CD": "OUT",
+   "SORT_ORD": 3,
+   "CREATED_BY": "system",
+   "CREATION_DATE": "2026-06-10T16:53:19",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T14:14:21"
+  },
+  {
+   "PROC_NM": "PKG_SYS0013.P_SYS0013_GET_QUERY_LIST",
+   "COL_NM": "dqId",
+   "DATA_TP_CD": "VARCHAR",
+   "COL_TP_CD": "IN",
+   "SORT_ORD": 1,
+   "CREATED_BY": "system",
+   "CREATION_DATE": "2026-06-10T16:53:07",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T14:14:21"
+  },
+  {
+   "PROC_NM": "PKG_SYS0013.P_SYS0013_GET_QUERY_LIST",
+   "COL_NM": "queryName",
+   "DATA_TP_CD": "VARCHAR",
+   "COL_TP_CD": "IN",
+   "SORT_ORD": 2,
+   "CREATED_BY": "system",
+   "CREATION_DATE": "2026-06-10T16:53:07",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T14:14:21"
+  },
+  {
+   "PROC_NM": "PKG_SYS0013.P_SYS0013_GET_QUERY_LIST",
+   "COL_NM": "category",
+   "DATA_TP_CD": "VARCHAR",
+   "COL_TP_CD": "IN",
+   "SORT_ORD": 3,
+   "CREATED_BY": "system",
+   "CREATION_DATE": "2026-06-10T16:53:07",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T14:14:21"
+  },
+  {
+   "PROC_NM": "PKG_SYS0013.P_SYS0013_GET_QUERY_LIST",
+   "COL_NM": "sesUserId",
+   "DATA_TP_CD": "VARCHAR",
+   "COL_TP_CD": "IN",
+   "SORT_ORD": 4,
+   "CREATED_BY": "system",
+   "CREATION_DATE": "2026-06-10T16:53:07",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T14:14:21"
+  },
+  {
+   "PROC_NM": "PKG_SYS0013.P_SYS0013_GET_QUERY_LIST",
+   "COL_NM": "mnuId",
+   "DATA_TP_CD": "VARCHAR",
+   "COL_TP_CD": "IN",
+   "SORT_ORD": 5,
+   "CREATED_BY": "system",
+   "CREATION_DATE": "2026-06-10T16:53:07",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T14:14:21"
+  },
+  {
+   "PROC_NM": "PKG_SYS0013.P_SYS0013_GET_QUERY_LIST",
+   "COL_NM": "o_rc1",
+   "DATA_TP_CD": "CURSOR",
+   "COL_TP_CD": "OUT",
+   "SORT_ORD": 6,
+   "CREATED_BY": "system",
+   "CREATION_DATE": "2026-06-10T16:53:07",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T14:32:34"
+  },
+  {
+   "PROC_NM": "PKG_SYS0013.P_SYS0013_GET_QUERY_LIST",
+   "COL_NM": "O_RESULT_CURSOR",
+   "DATA_TP_CD": "PROC_RESULT",
+   "COL_TP_CD": "OUT",
+   "SORT_ORD": 7,
+   "CREATED_BY": "system",
+   "CREATION_DATE": "2026-06-10T16:53:07",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T14:14:21"
+  },
+  {
+   "PROC_NM": "PKG_SYS0013.P_SYS0013_SAVE_COLUMNS",
+   "COL_NM": "pData",
+   "DATA_TP_CD": "CLOB",
+   "COL_TP_CD": "IN",
+   "SORT_ORD": 1,
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-21T10:19:35",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-21T10:19:35"
+  },
+  {
+   "PROC_NM": "PKG_SYS0013.P_SYS0013_SAVE_COLUMNS",
+   "COL_NM": "pUserId",
+   "DATA_TP_CD": "VARCHAR",
+   "COL_TP_CD": "IN",
+   "SORT_ORD": 2,
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-21T10:19:35",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-21T10:19:35"
+  },
+  {
+   "PROC_NM": "PKG_SYS0013.P_SYS0013_SAVE_COLUMNS",
+   "COL_NM": "o_rc1",
+   "DATA_TP_CD": "CURSOR",
+   "COL_TP_CD": "OUT",
+   "SORT_ORD": 3,
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-21T10:19:35",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-21T10:19:35"
+  },
+  {
+   "PROC_NM": "PKG_SYS0013.P_SYS0013_SAVE_COLUMNS",
+   "COL_NM": "O_RESULT_CURSOR",
+   "DATA_TP_CD": "PROC_RESULT",
+   "COL_TP_CD": "OUT",
+   "SORT_ORD": 4,
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-21T10:19:35",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-21T10:19:35"
+  },
+  {
+   "PROC_NM": "PKG_SYS0013.P_SYS0013_SAVE_PARAMETERS",
+   "COL_NM": "pData",
+   "DATA_TP_CD": "CLOB",
+   "COL_TP_CD": "IN",
+   "SORT_ORD": 1,
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-21T10:19:35",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-21T10:19:35"
+  },
+  {
+   "PROC_NM": "PKG_SYS0013.P_SYS0013_SAVE_PARAMETERS",
+   "COL_NM": "pUserId",
+   "DATA_TP_CD": "VARCHAR",
+   "COL_TP_CD": "IN",
+   "SORT_ORD": 2,
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-21T10:19:35",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-21T10:19:35"
+  },
+  {
+   "PROC_NM": "PKG_SYS0013.P_SYS0013_SAVE_PARAMETERS",
+   "COL_NM": "o_rc1",
+   "DATA_TP_CD": "CURSOR",
+   "COL_TP_CD": "OUT",
+   "SORT_ORD": 3,
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-21T10:19:35",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-21T10:19:35"
+  },
+  {
+   "PROC_NM": "PKG_SYS0013.P_SYS0013_SAVE_PARAMETERS",
+   "COL_NM": "O_RESULT_CURSOR",
+   "DATA_TP_CD": "PROC_RESULT",
+   "COL_TP_CD": "OUT",
+   "SORT_ORD": 4,
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-21T10:19:35",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-21T10:19:35"
+  },
+  {
+   "PROC_NM": "PKG_SYS0013.P_SYS0013_SAVE_QUERY_LIST",
+   "COL_NM": "pData",
+   "DATA_TP_CD": "CLOB",
+   "COL_TP_CD": "IN",
+   "SORT_ORD": 1,
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-21T10:19:35",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-21T10:19:35"
+  },
+  {
+   "PROC_NM": "PKG_SYS0013.P_SYS0013_SAVE_QUERY_LIST",
+   "COL_NM": "pUserId",
+   "DATA_TP_CD": "VARCHAR",
+   "COL_TP_CD": "IN",
+   "SORT_ORD": 2,
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-21T10:19:35",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-21T10:19:35"
+  },
+  {
+   "PROC_NM": "PKG_SYS0013.P_SYS0013_SAVE_QUERY_LIST",
+   "COL_NM": "o_rc1",
+   "DATA_TP_CD": "CURSOR",
+   "COL_TP_CD": "OUT",
+   "SORT_ORD": 3,
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-21T10:19:35",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-21T10:19:35"
+  },
+  {
+   "PROC_NM": "PKG_SYS0013.P_SYS0013_SAVE_QUERY_LIST",
+   "COL_NM": "O_RESULT_CURSOR",
+   "DATA_TP_CD": "PROC_RESULT",
+   "COL_TP_CD": "OUT",
+   "SORT_ORD": 4,
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-21T10:19:35",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-21T10:19:35"
+  },
+  {
+   "PROC_NM": "PR_DM_ADM_DQ_EXECUTE_HIST",
+   "COL_NM": "dqId",
+   "DATA_TP_CD": "VARCHAR",
+   "COL_TP_CD": "IN",
+   "SORT_ORD": 1,
+   "CREATED_BY": "system",
+   "CREATION_DATE": "2026-06-10T16:53:19",
+   "LAST_UPDATED_BY": "system",
+   "LAST_UPDATE_DATE": "2026-06-10T16:53:19"
+  },
+  {
+   "PROC_NM": "PR_DM_ADM_DQ_EXECUTE_HIST",
+   "COL_NM": "dqText",
+   "DATA_TP_CD": "VARCHAR",
+   "COL_TP_CD": "IN",
+   "SORT_ORD": 2,
+   "CREATED_BY": "system",
+   "CREATION_DATE": "2026-06-10T16:53:19",
+   "LAST_UPDATED_BY": "system",
+   "LAST_UPDATE_DATE": "2026-06-10T16:53:19"
+  },
+  {
+   "PROC_NM": "PR_DM_ADM_DQ_EXECUTE_HIST",
+   "COL_NM": "sesUserId",
+   "DATA_TP_CD": "VARCHAR",
+   "COL_TP_CD": "IN",
+   "SORT_ORD": 3,
+   "CREATED_BY": "system",
+   "CREATION_DATE": "2026-06-10T16:53:19",
+   "LAST_UPDATED_BY": "system",
+   "LAST_UPDATE_DATE": "2026-06-10T16:53:19"
+  },
+  {
+   "PROC_NM": "PR_DM_ADM_DQ_EXECUTE_HIST",
+   "COL_NM": "updatedBy",
+   "DATA_TP_CD": "VARCHAR",
+   "COL_TP_CD": "IN",
+   "SORT_ORD": 4,
+   "CREATED_BY": "system",
+   "CREATION_DATE": "2026-06-10T16:53:19",
+   "LAST_UPDATED_BY": "system",
+   "LAST_UPDATE_DATE": "2026-06-10T16:53:19"
+  },
+  {
+   "PROC_NM": "SYS0013_GET_HISTORY",
+   "COL_NM": "dqId",
+   "DATA_TP_CD": "VARCHAR",
+   "COL_TP_CD": "IN",
+   "SORT_ORD": 1,
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-15T15:39:45",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T15:39:45"
+  },
+  {
+   "PROC_NM": "SYS0013_GET_HISTORY",
+   "COL_NM": "sesUserId",
+   "DATA_TP_CD": "VARCHAR",
+   "COL_TP_CD": "IN",
+   "SORT_ORD": 2,
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-15T15:39:45",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T15:39:45"
+  },
+  {
+   "PROC_NM": "SYS0013_GET_HISTORY",
+   "COL_NM": "mnuId",
+   "DATA_TP_CD": "VARCHAR",
+   "COL_TP_CD": "IN",
+   "SORT_ORD": 3,
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-15T15:39:45",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T15:39:45"
+  },
+  {
+   "PROC_NM": "SYS0013_GET_HISTORY",
+   "COL_NM": "o_rc1",
+   "DATA_TP_CD": "CURSOR",
+   "COL_TP_CD": "OUT",
+   "SORT_ORD": 4,
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-15T15:39:45",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T15:39:45"
+  },
+  {
+   "PROC_NM": "SYS0013_GET_HISTORY",
+   "COL_NM": "O_RESULT_CURSOR",
+   "DATA_TP_CD": "PROC_RESULT",
+   "COL_TP_CD": "OUT",
+   "SORT_ORD": 5,
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-15T15:39:45",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T15:39:45"
+  },
+  {
+   "PROC_NM": "SYS0013_SAVE_COLUMNS",
+   "COL_NM": "data",
+   "DATA_TP_CD": "CLOB",
+   "COL_TP_CD": "IN",
+   "SORT_ORD": 1,
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-15T15:49:51",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T15:49:51"
+  },
+  {
+   "PROC_NM": "SYS0013_SAVE_COLUMNS",
+   "COL_NM": "o_rc1",
+   "DATA_TP_CD": "CURSOR",
+   "COL_TP_CD": "OUT",
+   "SORT_ORD": 2,
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-15T15:49:51",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T15:49:51"
+  },
+  {
+   "PROC_NM": "SYS0013_SAVE_PARAMETERS",
+   "COL_NM": "data",
+   "DATA_TP_CD": "CLOB",
+   "COL_TP_CD": "IN",
+   "SORT_ORD": 1,
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-15T15:49:51",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T15:49:51"
+  },
+  {
+   "PROC_NM": "SYS0013_SAVE_PARAMETERS",
+   "COL_NM": "o_rc1",
+   "DATA_TP_CD": "CURSOR",
+   "COL_TP_CD": "OUT",
+   "SORT_ORD": 2,
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-15T15:49:51",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T15:49:51"
+  },
+  {
+   "PROC_NM": "SYS0013_SAVE_QUERY",
+   "COL_NM": "data",
+   "DATA_TP_CD": "CLOB",
+   "COL_TP_CD": "IN",
+   "SORT_ORD": 1,
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-15T15:49:51",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T15:49:51"
+  },
+  {
+   "PROC_NM": "SYS0013_SAVE_QUERY",
+   "COL_NM": "o_rc1",
+   "DATA_TP_CD": "CURSOR",
+   "COL_TP_CD": "OUT",
+   "SORT_ORD": 2,
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-15T15:49:51",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T15:49:51"
+  },
+  {
+   "PROC_NM": "SYS0013_SAVE_USER_GROUP",
+   "COL_NM": "dqId",
+   "DATA_TP_CD": "VARCHAR",
+   "COL_TP_CD": "IN",
+   "SORT_ORD": 1,
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-28T15:53:36",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-28T15:53:36"
+  },
+  {
+   "PROC_NM": "SYS0013_SAVE_USER_GROUP",
+   "COL_NM": "groupId",
+   "DATA_TP_CD": "VARCHAR",
+   "COL_TP_CD": "IN",
+   "SORT_ORD": 2,
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-28T15:53:36",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-28T15:53:36"
+  },
+  {
+   "PROC_NM": "SYS0013_SAVE_USER_GROUP",
+   "COL_NM": "validYn",
+   "DATA_TP_CD": "VARCHAR",
+   "COL_TP_CD": "IN",
+   "SORT_ORD": 3,
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-28T15:53:36",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-28T15:53:36"
+  },
+  {
+   "PROC_NM": "SYS0013_SAVE_USER_GROUP",
+   "COL_NM": "createdBy",
+   "DATA_TP_CD": "VARCHAR",
+   "COL_TP_CD": "IN",
+   "SORT_ORD": 4,
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-28T15:53:36",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-28T15:53:36"
+  },
+  {
+   "PROC_NM": "SYS0013_SAVE_USER_GROUP",
+   "COL_NM": "lastUpdatedBy",
+   "DATA_TP_CD": "VARCHAR",
+   "COL_TP_CD": "IN",
+   "SORT_ORD": 5,
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-28T15:53:36",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-28T15:53:36"
+  },
+  {
+   "PROC_NM": "SYS0013_SAVE_USER_GROUP",
+   "COL_NM": "o_rc1",
+   "DATA_TP_CD": "CURSOR",
+   "COL_TP_CD": "OUT",
+   "SORT_ORD": 6,
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-28T15:53:36",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-28T15:53:36"
+  }
+ ],
+ "btn_mpg": [
+  {
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "columns",
+   "MNU_BTN_CD": "DELETE",
+   "API_ID": null,
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-15T13:07:50",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T13:07:50"
+  },
+  {
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "columns",
+   "MNU_BTN_CD": "INSERT",
+   "API_ID": null,
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-15T13:07:50",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T13:07:50"
+  },
+  {
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "columns",
+   "MNU_BTN_CD": "SAVE",
+   "API_ID": "API_SYS0013_SAVE_COLUMNS",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-15T15:23:39",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T15:23:39"
+  },
+  {
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "columns",
+   "MNU_BTN_CD": "SEARCH",
+   "API_ID": "API_SYS0013_GET_COLUMNS",
+   "USE_YN": "Y",
+   "CREATED_BY": "SYSTEM",
+   "CREATION_DATE": "2026-06-10T16:50:31",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T14:32:34"
+  },
+  {
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "history",
+   "MNU_BTN_CD": "SEARCH",
+   "API_ID": "API_SYS0013_GET_HISTORY",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-15T15:23:39",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T15:23:39"
+  },
+  {
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "main",
+   "MNU_BTN_CD": "DELETE",
+   "API_ID": null,
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-15T13:07:50",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T13:07:50"
+  },
+  {
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "main",
+   "MNU_BTN_CD": "INSERT",
+   "API_ID": null,
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-15T13:07:50",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T13:07:50"
+  },
+  {
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "main",
+   "MNU_BTN_CD": "SAVE",
+   "API_ID": "API_SYS0013_SAVE_QUERY",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-15T15:23:39",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T15:23:39"
+  },
+  {
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "main",
+   "MNU_BTN_CD": "SEARCH",
+   "API_ID": "API_SYS0013_GET_QUERY_LIST",
+   "USE_YN": "Y",
+   "CREATED_BY": "SYSTEM",
+   "CREATION_DATE": "2026-06-10T16:50:31",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T14:32:34"
+  },
+  {
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "parameters",
+   "MNU_BTN_CD": "DELETE",
+   "API_ID": null,
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-15T13:07:50",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T13:07:50"
+  },
+  {
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "parameters",
+   "MNU_BTN_CD": "INSERT",
+   "API_ID": null,
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-15T13:07:50",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T13:07:50"
+  },
+  {
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "parameters",
+   "MNU_BTN_CD": "SAVE",
+   "API_ID": "API_SYS0013_SAVE_PARAMETERS",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-15T15:23:39",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T15:23:39"
+  },
+  {
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "parameters",
+   "MNU_BTN_CD": "SEARCH",
+   "API_ID": "API_SYS0013_GET_PARAMETERS",
+   "USE_YN": "Y",
+   "CREATED_BY": "SYSTEM",
+   "CREATION_DATE": "2026-06-10T16:50:31",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T14:32:34"
+  },
+  {
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "result",
+   "MNU_BTN_CD": "EXECUTE",
+   "API_ID": "API_SYS0013_EXECUTE_QUERY",
+   "USE_YN": "Y",
+   "CREATED_BY": "SYSTEM",
+   "CREATION_DATE": "2026-06-10T16:50:31",
+   "LAST_UPDATED_BY": "SYSTEM",
+   "LAST_UPDATE_DATE": "2026-06-10T16:50:31"
+  },
+  {
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "userGroup",
+   "MNU_BTN_CD": "SAVE",
+   "API_ID": "API_SYS0013_SAVE_USER_GROUP",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-28T15:53:36",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-28T15:53:36"
+  }
+ ],
+ "gr_btn": [
+  {
+   "USER_GR_ID": "ADMIN",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "columns",
+   "MNU_BTN_CD": "DELETE",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-15T13:07:50",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T13:07:50"
+  },
+  {
+   "USER_GR_ID": "ADMIN",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "columns",
+   "MNU_BTN_CD": "INSERT",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-15T13:07:50",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T13:07:50"
+  },
+  {
+   "USER_GR_ID": "ADMIN",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "columns",
+   "MNU_BTN_CD": "SAVE",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-21T10:20:13",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-21T10:20:13"
+  },
+  {
+   "USER_GR_ID": "ADMIN",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "columns",
+   "MNU_BTN_CD": "SEARCH",
+   "USE_YN": "Y",
+   "CREATED_BY": "system",
+   "CREATION_DATE": "2026-06-10T16:52:57",
+   "LAST_UPDATED_BY": "system",
+   "LAST_UPDATE_DATE": "2026-06-10T16:52:57"
+  },
+  {
+   "USER_GR_ID": "ADMIN",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "history",
+   "MNU_BTN_CD": "SEARCH",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-15T15:23:39",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T15:23:39"
+  },
+  {
+   "USER_GR_ID": "ADMIN",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "lookupDetail",
+   "MNU_BTN_CD": "SAVE",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-15T11:38:43",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T11:38:43"
+  },
+  {
+   "USER_GR_ID": "ADMIN",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "lookupDetail",
+   "MNU_BTN_CD": "SEARCH",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-15T11:38:43",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T11:38:43"
+  },
+  {
+   "USER_GR_ID": "ADMIN",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "lookupMaster",
+   "MNU_BTN_CD": "SAVE",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-15T11:38:43",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T11:38:43"
+  },
+  {
+   "USER_GR_ID": "ADMIN",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "lookupMaster",
+   "MNU_BTN_CD": "SEARCH",
+   "USE_YN": "N",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-15T11:38:43",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T11:38:43"
+  },
+  {
+   "USER_GR_ID": "ADMIN",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "main",
+   "MNU_BTN_CD": "DELETE",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-15T13:07:50",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T13:07:50"
+  },
+  {
+   "USER_GR_ID": "ADMIN",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "main",
+   "MNU_BTN_CD": "INSERT",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-15T13:07:50",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T13:07:50"
+  },
+  {
+   "USER_GR_ID": "ADMIN",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "main",
+   "MNU_BTN_CD": "SAVE",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-21T10:20:12",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-21T10:20:12"
+  },
+  {
+   "USER_GR_ID": "ADMIN",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "main",
+   "MNU_BTN_CD": "SEARCH",
+   "USE_YN": "Y",
+   "CREATED_BY": "system",
+   "CREATION_DATE": "2026-06-10T16:52:57",
+   "LAST_UPDATED_BY": "system",
+   "LAST_UPDATE_DATE": "2026-06-10T16:52:57"
+  },
+  {
+   "USER_GR_ID": "ADMIN",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "parameters",
+   "MNU_BTN_CD": "DELETE",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-15T13:07:50",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T13:07:50"
+  },
+  {
+   "USER_GR_ID": "ADMIN",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "parameters",
+   "MNU_BTN_CD": "INSERT",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-15T13:07:50",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T13:07:50"
+  },
+  {
+   "USER_GR_ID": "ADMIN",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "parameters",
+   "MNU_BTN_CD": "SAVE",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-21T10:20:14",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-21T10:20:14"
+  },
+  {
+   "USER_GR_ID": "ADMIN",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "parameters",
+   "MNU_BTN_CD": "SEARCH",
+   "USE_YN": "Y",
+   "CREATED_BY": "system",
+   "CREATION_DATE": "2026-06-10T16:52:57",
+   "LAST_UPDATED_BY": "system",
+   "LAST_UPDATE_DATE": "2026-06-10T16:52:57"
+  },
+  {
+   "USER_GR_ID": "ADMIN",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "result",
+   "MNU_BTN_CD": "EXECUTE",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-21T07:50:57",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-21T07:50:57"
+  },
+  {
+   "USER_GR_ID": "DM ADMIN",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "columns",
+   "MNU_BTN_CD": "SAVE",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-21T10:20:13",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-21T10:20:13"
+  },
+  {
+   "USER_GR_ID": "DM ADMIN",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "main",
+   "MNU_BTN_CD": "SAVE",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-21T10:20:12",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-21T10:20:12"
+  },
+  {
+   "USER_GR_ID": "DM ADMIN",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "parameters",
+   "MNU_BTN_CD": "SAVE",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-21T10:20:14",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-21T10:20:14"
+  },
+  {
+   "USER_GR_ID": "DM ADMIN",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "result",
+   "MNU_BTN_CD": "EXECUTE",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-21T07:50:57",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-21T07:50:57"
+  },
+  {
+   "USER_GR_ID": "DM Viewer",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "columns",
+   "MNU_BTN_CD": "SAVE",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-21T10:20:13",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-21T10:20:13"
+  },
+  {
+   "USER_GR_ID": "DM Viewer",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "main",
+   "MNU_BTN_CD": "SAVE",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-21T10:20:12",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-21T10:20:12"
+  },
+  {
+   "USER_GR_ID": "DM Viewer",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "parameters",
+   "MNU_BTN_CD": "SAVE",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-21T10:20:14",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-21T10:20:14"
+  },
+  {
+   "USER_GR_ID": "DM Viewer",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "result",
+   "MNU_BTN_CD": "EXECUTE",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-21T07:50:57",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-21T07:50:57"
+  },
+  {
+   "USER_GR_ID": "GUEST",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "columns",
+   "MNU_BTN_CD": "SAVE",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-21T10:20:13",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-21T10:20:13"
+  },
+  {
+   "USER_GR_ID": "GUEST",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "main",
+   "MNU_BTN_CD": "SAVE",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-21T10:20:12",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-21T10:20:12"
+  },
+  {
+   "USER_GR_ID": "GUEST",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "parameters",
+   "MNU_BTN_CD": "SAVE",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-21T10:20:13",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-21T10:20:13"
+  },
+  {
+   "USER_GR_ID": "GUEST",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "result",
+   "MNU_BTN_CD": "EXECUTE",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-21T07:50:57",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-21T07:50:57"
+  },
+  {
+   "USER_GR_ID": "SCM PI Admin",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "columns",
+   "MNU_BTN_CD": "DELETE",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-15T13:07:50",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T13:07:50"
+  },
+  {
+   "USER_GR_ID": "SCM PI Admin",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "columns",
+   "MNU_BTN_CD": "INSERT",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-15T13:07:50",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T13:07:50"
+  },
+  {
+   "USER_GR_ID": "SCM PI Admin",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "columns",
+   "MNU_BTN_CD": "SAVE",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-21T10:20:13",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-21T10:20:13"
+  },
+  {
+   "USER_GR_ID": "SCM PI Admin",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "columns",
+   "MNU_BTN_CD": "SEARCH",
+   "USE_YN": "Y",
+   "CREATED_BY": "system",
+   "CREATION_DATE": "2026-06-10T16:52:57",
+   "LAST_UPDATED_BY": "system",
+   "LAST_UPDATE_DATE": "2026-06-10T16:52:57"
+  },
+  {
+   "USER_GR_ID": "SCM PI Admin",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "history",
+   "MNU_BTN_CD": "SEARCH",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-15T15:23:39",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T15:23:39"
+  },
+  {
+   "USER_GR_ID": "SCM PI Admin",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "main",
+   "MNU_BTN_CD": "DELETE",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-15T13:07:50",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T13:07:50"
+  },
+  {
+   "USER_GR_ID": "SCM PI Admin",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "main",
+   "MNU_BTN_CD": "INSERT",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-15T13:07:50",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T13:07:50"
+  },
+  {
+   "USER_GR_ID": "SCM PI Admin",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "main",
+   "MNU_BTN_CD": "SAVE",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-21T10:20:12",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-21T10:20:12"
+  },
+  {
+   "USER_GR_ID": "SCM PI Admin",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "main",
+   "MNU_BTN_CD": "SEARCH",
+   "USE_YN": "Y",
+   "CREATED_BY": "system",
+   "CREATION_DATE": "2026-06-10T16:52:57",
+   "LAST_UPDATED_BY": "system",
+   "LAST_UPDATE_DATE": "2026-06-10T16:52:57"
+  },
+  {
+   "USER_GR_ID": "SCM PI Admin",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "parameters",
+   "MNU_BTN_CD": "DELETE",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-15T13:07:50",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T13:07:50"
+  },
+  {
+   "USER_GR_ID": "SCM PI Admin",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "parameters",
+   "MNU_BTN_CD": "INSERT",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-15T13:07:50",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-15T13:07:50"
+  },
+  {
+   "USER_GR_ID": "SCM PI Admin",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "parameters",
+   "MNU_BTN_CD": "SAVE",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-21T10:20:14",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-21T10:20:14"
+  },
+  {
+   "USER_GR_ID": "SCM PI Admin",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "parameters",
+   "MNU_BTN_CD": "SEARCH",
+   "USE_YN": "Y",
+   "CREATED_BY": "system",
+   "CREATION_DATE": "2026-06-10T16:52:57",
+   "LAST_UPDATED_BY": "system",
+   "LAST_UPDATE_DATE": "2026-06-10T16:52:57"
+  },
+  {
+   "USER_GR_ID": "SCM PI Admin",
+   "MNU_ID": "SYS0013",
+   "SHT_NM": "result",
+   "MNU_BTN_CD": "EXECUTE",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-21T07:50:58",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-21T07:50:58"
+  }
+ ],
+ "msg_max": [
+  {
+   "MX_MSG": "MSG99999"
+  }
+ ],
+ "lbl_max": [
+  {
+   "MX_LBL": "LBL00760"
+  }
+ ],
+ "SCM_ADM_DQ_LIST_H": [
+  {
+   "COLUMN_NAME": "HISTORY_SEQ",
+   "DATA_TYPE": "NUMBER",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "DQ_ID",
+   "DATA_TYPE": "NUMBER",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "DIVISION_ID",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "DQ_NAME",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "DESCRIPTION",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "DQ_TEXT",
+   "DATA_TYPE": "CLOB",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "VALID_YN",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "ADMIN_ONLY_YN",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "CREATED_BY",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "CREATION_DATE",
+   "DATA_TYPE": "DATE",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "LAST_UPDATED_BY",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "LAST_UPDATE_DATE",
+   "DATA_TYPE": "DATE",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE1",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE2",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE3",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE4",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE5",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE6",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE7",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE8",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE9",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE10",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  }
+ ],
+ "SCM_ADM_DQ_COLUMN_H": [
+  {
+   "COLUMN_NAME": "HISTORY_SEQ",
+   "DATA_TYPE": "NUMBER",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "DQ_ID",
+   "DATA_TYPE": "NUMBER",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "COLUMN_NAME",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "VALUE_YN",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "VALUE_TYPE",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "VALID_YN",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "CREATED_BY",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "CREATION_DATE",
+   "DATA_TYPE": "DATE",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "LAST_UPDATED_BY",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "LAST_UPDATE_DATE",
+   "DATA_TYPE": "DATE",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE1",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE2",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE3",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE4",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE5",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE6",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE7",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE8",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE9",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE10",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  }
+ ],
+ "SCM_ADM_DQ_PARAMETER_H": [
+  {
+   "COLUMN_NAME": "HISTORY_SEQ",
+   "DATA_TYPE": "NUMBER",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "DQ_ID",
+   "DATA_TYPE": "NUMBER",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "PARAMETER_ID",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "PARAMETER_TYPE",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "OPERATION_ID",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "VALID_YN",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "REP_YN",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "CREATED_BY",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "CREATION_DATE",
+   "DATA_TYPE": "DATE",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "LAST_UPDATED_BY",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "LAST_UPDATE_DATE",
+   "DATA_TYPE": "DATE",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE1",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE2",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE3",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE4",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE5",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE6",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE7",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE8",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE9",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE10",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  }
+ ],
+ "SCM_ADM_DQ_USER_GROUP_H": [
+  {
+   "COLUMN_NAME": "HISTORY_SEQ",
+   "DATA_TYPE": "NUMBER",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "DQ_ID",
+   "DATA_TYPE": "NUMBER",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "GROUP_ID",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "VALID_YN",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "CREATED_BY",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "CREATION_DATE",
+   "DATA_TYPE": "DATE",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "LAST_UPDATED_BY",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "LAST_UPDATE_DATE",
+   "DATA_TYPE": "DATE",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE1",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE2",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE3",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE4",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE5",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE6",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE7",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE8",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE9",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE10",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  }
+ ],
+ "SCM_ADM_DQ_EXECUTE_H": [
+  {
+   "COLUMN_NAME": "HISTORY_SEQ",
+   "DATA_TYPE": "NUMBER",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "DQ_ID",
+   "DATA_TYPE": "NUMBER",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "DQ_TEXT",
+   "DATA_TYPE": "CLOB",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "CREATED_BY",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "CREATION_DATE",
+   "DATA_TYPE": "DATE",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "LAST_UPDATED_BY",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "LAST_UPDATE_DATE",
+   "DATA_TYPE": "DATE",
+   "NULLABLE": "N"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE1",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE2",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE3",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE4",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE5",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE6",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE7",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE8",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE9",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  },
+  {
+   "COLUMN_NAME": "ATTRIBUTE10",
+   "DATA_TYPE": "VARCHAR2",
+   "NULLABLE": "Y"
+  }
+ ]
+}

@@ -1,0 +1,114 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DMF0044 데이터연결 마인드맵</title>
+<style>
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;font-family:"Segoe UI","Malgun Gothic",sans-serif;background:#0f1720;color:#e6edf3;font-size:14px;display:flex;flex-direction:column;height:100vh;overflow:hidden}
+header{padding:10px 20px;background:#161f2b;border-bottom:2px solid #1f4e79;flex:0 0 auto}
+h1{margin:0;font-size:17px;color:#7fb3e6}
+.sub{font-size:11.5px;color:#8b98a8;margin-top:3px}
+.callout{margin:8px 20px 0;padding:8px 12px;background:#2a2416;border:1px solid #6b5a1f;border-radius:6px;font-size:11.5px;line-height:1.6;flex:0 0 auto;max-height:22vh;overflow:auto}
+.callout b{color:#e6c76b}
+.callout ul{margin:4px 0 0;padding-left:18px}
+.callout li{margin:2px 0}
+.badge{display:inline-block;padding:1px 7px;border-radius:10px;font-size:10px;font-weight:600;white-space:nowrap}
+.b-HARD{background:#5a1e1e;color:#ff9b9b} .b-LOOKUP{background:#1e3a5a;color:#8fc6ff}
+.b-DB{background:#1e4a2e;color:#8fe0a8} .b-sp{background:#3a2a5a;color:#c9a8ff}
+.b-DIV{background:#243b4a;color:#9fd8e6} .b-GRP{background:#3a2f1e;color:#e6c76b}
+.b-AXIS{background:#20283a;color:#bcd3e8} .b-def{background:#33383f;color:#c7d0da}
+.mapwrap{position:relative;flex:1 1 auto;min-height:0;display:flex;flex-direction:column}
+.ztool{position:absolute;top:10px;right:14px;z-index:20;display:flex;gap:5px;background:#131b25cc;padding:5px;border-radius:8px;border:1px solid #263241}
+.ztool button{width:32px;height:30px;border-radius:5px;border:1px solid #2a3746;background:#1a2430;color:#c7d0da;cursor:pointer;font-size:15px}
+.ztool button:hover{background:#22303f}
+.zlvl{min-width:46px;text-align:center;color:#8b98a8;font-size:11px;line-height:30px}
+.searchbar{position:absolute;top:10px;left:14px;z-index:20;display:flex;gap:6px}
+.searchbar input{padding:6px 10px;border-radius:6px;border:1px solid #2a3746;background:#0f1720ee;color:#e6edf3;width:240px}
+.searchbar .hc{color:#8b98a8;font-size:11px;line-height:30px}
+.canvas{flex:1 1 auto;min-height:0;overflow:hidden;cursor:grab;background:radial-gradient(circle at 20% 20%,#141d29,#0f1720)}
+.canvas.drag{cursor:grabbing}
+.stage{transform-origin:0 0;padding:60px 40px;display:inline-block;will-change:transform}
+.mm .nw{display:flex;align-items:center}
+.mm .kids{display:flex;flex-direction:column;justify-content:center;margin-left:40px;position:relative}
+.mm .nw.collapsed>.kids{display:none}
+.mm .kids>.nw{position:relative}
+.mm .kids>.nw::before{content:'';position:absolute;left:-20px;top:50%;width:20px;border-top:2px solid #33526b}
+.mm .kids>.nw::after{content:'';position:absolute;left:-20px;top:0;bottom:0;border-left:2px solid #33526b}
+.mm .kids>.nw:first-child::after{top:50%;bottom:0}
+.mm .kids>.nw:last-child::after{top:0;bottom:50%}
+.mm .kids>.nw:only-child::after{display:none}
+.mm .kids::before{content:'';position:absolute;left:-40px;top:50%;width:40px;border-top:2px solid #33526b}
+.mnode{background:#18222e;border:1px solid #2a3a4a;border-left:4px solid #3d5a78;border-radius:8px;padding:7px 11px;margin:5px 0;max-width:520px;box-shadow:0 1px 4px #0006;position:relative}
+.mnode.d0{border-left-color:#e6c76b;background:#20283a} .mnode.d1{border-left-color:#7fb3e6}
+.mnode.d2{border-left-color:#8fe0a8} .mnode.d3{border-left-color:#c9a8ff} .mnode.d4{border-left-color:#ffb38f}
+.mnode.hit{outline:2px solid #e6c76b;background:#3a3420}
+.mnode .tog{position:absolute;left:-9px;top:50%;transform:translateY(-50%);width:18px;height:18px;line-height:16px;text-align:center;background:#22303f;border:1px solid #3d5a78;border-radius:50%;color:#9fd8e6;font-size:11px;cursor:pointer;z-index:2;user-select:none}
+.mlbl{font-weight:600;font-size:13px;color:#e6edf3;display:block}
+.mbadges{display:inline-flex;gap:3px;flex-wrap:wrap;margin-top:3px}
+.mnote{display:block;font-size:11px;color:#93a1b1;margin-top:3px;line-height:1.5}
+</style></head><body>
+<header>
+<h1>DMF0044 Sales Reports — 데이터연결 마인드맵 <span style="font-size:12px;color:#8b98a8;font-weight:400">(FE→SP→Lookup lineage + 실측 축(Division/권한 이중게이트/FCST/메저/버전/CASCADE) + 편집제어)</span></h1>
+<div class="sub">원천 = AS-IS .cs 1,483줄(DMF0044_Sales_Reports Forms.UIL 정본) + SP ALL_SOURCE(PKG_DMF0044 BODY 6,180/GET 638/SAVE_C_CF 1,603/VERSION_COPY 2,386) + 사내 DB 실측 · hook #105 §2.5 · 2026-07-10. 태그=값 출처(HARD/LOOKUP/DB/sp). 노드 클릭=접기/펼치기, 휠=확대, 드래그=이동.</div>
+</header>
+<div class="callout"><b>⚠ 격차·확인필요 (실측 — 편집제어=이중 게이트: Layer A EDIT_FLAG 행계산(GET_ADMIN_GROUP 9) + Layer B division-gate(USER_MNU_EDIT_AUTH_V 49) · DM_UI_EDITABLE·시간락 미해당 · 전부 VALID)</b><ul><li>API_M=0 / PROC_M=0 / MNU_BTN_MPG=0 / USER_GR_MNU_BTN_MPG=0 — 버튼권한·API·PROC 시그니처 메타 전부 미배선(TO-BE 배선 필요)</li><li>SALES_SITE_REPORT_GROUP(count:0) / DM_CAR_QTY_FORD(count:0) — SP 참조되나 룩업 데이터 0행(정직 표기)</li><li>비호출 팝업 3종: 버전 팝업(GET_VERSION_POPUP/GET_COPY_VERSION_POPUP/GET_SALES_VERSION_POPUP)·환율 팝업(GET_SCM_MST_EXCHANGE_RATE_POPUP/_DATA) 는 API_M 미배선으로 FE 미연결 상태</li><li>FE 미전환 — DMF0044 React 화면 미구현(SHEET_COLUMNS/MEASURE 메타·SP 는 사내 존재, FE 라우트 slug 'dmf0044' 임시)</li><li>Forms.UIL vs Plan.UIL 병존 — AS-IS 두 UIL(MDF Reports 46 + MDFVerpopup 12) 시트가 단일 PROGRAM_ID='DMF0044' 로 통합, 버전팝업 시트 별도 관리</li><li>INVALID 없음 — ALL_OBJECTS DMF0044 INVALID 0건(PKG/SP 전량 VALID)</li><li>MNU_URL='dmf0044' 임시 slug — sales-reports 3-SET(route-paths/Router/MNU_URL) 정합 교체 검토</li></ul></div>
+<div class="mapwrap">
+  <div class="searchbar"><input id="s" placeholder="🔍 노드 검색 (라벨·태그·설명)"><span class="hc" id="hc"></span></div>
+  <div class="ztool"><button data-z="out">－</button><span class="zlvl" id="zl">100%</span><button data-z="in">＋</button>
+    <button data-z="fit" title="화면맞춤">⛶</button><button data-z="exp" title="전체펼침">⊞</button><button data-z="col" title="전체접기">⊟</button></div>
+  <div class="canvas" id="cv"><div class="stage"><div class="mm" id="mm"></div></div></div>
+</div>
+<script>
+const TREE = {"l": "lineage", "t": ["root"], "n": "DMF0044 Sales Reports — 데이터연결 lineage (이중 편집게이트)", "c": [{"l": "lineage-axis", "t": ["branch"], "n": "데이터흐름 축: FE컨트롤 → API_M(미등록) → PKG_DMF0044(17 PROC) → Lookup/Table", "c": [{"l": "lineage-axis", "t": ["src:FE"], "n": "FE 그리드 셀 컨트롤: FPComboBox 15 / FPNumber 4 / FPText 1 / 미지정 38 (SHEET_COLUMNS 58, INPUT_TP_CD 전량 'S')"}, {"l": "lineage-axis", "t": ["DB"], "n": "API_M=0 / PROC_M=0 / MNU_BTN_MPG=0 — SP 직접호출 경로 메타 미배선(TO-BE 배선 필요)"}, {"l": "lineage-axis", "t": ["sp:"], "n": "PKG_DMF0044 17 PROC: GET_SALES_REPORTS_DATA(본조회) / GET_SPREAD_TITLE(동적PIVOT 타이틀) / GET_MEASURE / GET_TEXTBOX / GET_VERSION_POPUP·GET_COPY_VERSION_POPUP·GET_SALES_VERSION_POPUP(버전팝업 3) / GET_SCM_MST_EXCHANGE_RATE_POPUP(_DATA)(환율팝업 2) / SAVE_SALES_PLAN_REPORT_C(_CF)·SAVE_BIZ_PLAN_VERSION_COPY·SAVE_SALES_PLAN_VERSION_COPY·SAVE_DM_EXCHANGE_RATE_REPORT·SAVE_TEXTBOX / BP_REPORT_*_CREATE"}, {"l": "lineage-axis", "t": ["DB"], "n": "데이터소스: GT_F044_T(GTT)·GT_F044_SELECT_MEASURE(GTT)·GT_F044_PJT·GT_F044_DM_MST_ITEM_SINGLE_V + SCM_ADM_LOOKUP_MASTER_DETAIL(룩업) + SCM_MST_SHEET_COLUMNS/MEASURE(메타)"}]}, {"l": "①Division", "t": ["branch"], "n": "Division 주축 (40 / 81계열 / 82 / EE) — 14 valid", "c": [{"l": "①Division", "t": ["DB"], "n": "SCM_MST_DIVISION 14행(VALID_YN='Y'): 40/81/81_UC/81_HM/81_ST/81_HD/81_HG/82/EE/EE_UC/EE_HM/EE_ST/EE_HD/EE_HG"}, {"l": "①Division", "t": ["sp:"], "n": "SP 분기: DIVISION_ID='40'(End Cust/Project) vs LIKE '81%'(자동차 PJT/PRODUCT_GROUP_NAME) vs 82(ESS/ENERGE) — PKG_BODY L1945~1947"}, {"l": "①Division", "t": ["DB"], "n": "SHEET_COLUMNS.DIVISION_ID 콤마토큰 → division 별 컬럼 노출(40 전용 다수, 81계열 공유, 82 ITEM_USE 등)"}]}, {"l": "②사용자권한", "t": ["branch"], "n": "⭐ 이중 편집게이트 (Layer A ADMIN EDIT_FLAG + Layer B EDIT_AUTH_V division)", "c": [{"l": "②사용자권한", "t": ["sp:src:L1752"], "n": "Layer A ①: GET_ADMIN_GROUP 룩업(9행) — P_USER_GROUP 이 SEGMENT2='ALL' 행 SEGMENT1 에 존재 시 V_GROUP_ID='ADMIN' (PKG_BODY L1752~1767)"}, {"l": "②사용자권한", "t": ["sp:src:L1953"], "n": "Layer A ②: EDIT_FLAG = CASE WHEN V_GROUP_ID='ADMIN' AND DATA_TYPE='2' THEN 'Y' ELSE 'N'(40·81 파생 블록 L1953) / CASE WHEN V_GROUP_ID='ADMIN' THEN 'Y' ELSE 'N'(ESS 블록 L2084) — 셀 편집표시"}, {"l": "②사용자권한", "t": ["DB:src:L2203"], "n": "Layer B: SCM_ADM_USER_MNU_EDIT_AUTH_V INNER JOIN (USER_ID/MNU_ID/UNIT_TP_CD='D' → A.DIVISION_ID=T2.UNIT_ID) — 조회 자체를 편집권한(EDIT_YN='Y') 보유 division 으로 게이팅. DMF0044=49행 전부 EDIT_YN='Y'/UNIT_TP_CD='D' (PKG_BODY L2203~2210)"}, {"l": "②사용자권한", "t": ["DB"], "n": "화면진입=USER_GR_MNU_MPG 3그룹(ADMIN/DM ADMIN/DM Viewer). API_M/PROC_M/MNU_BTN_MPG=0 → 편집통제는 순수 SP 이중게이트"}, {"l": "②사용자권한", "t": ["HARD"], "n": "effective: ADMIN=본인 편집권한 division 편집구간 전행 편집가능 / 일반 편집권한자=행 조회되나 EDIT_FLAG='N'(읽기전용) / 편집권한 없는 division=행 미조회"}]}, {"l": "③FCST_TYPE", "t": ["branch"], "n": "FCST Type (SALES_TYPE_CODE 14 + FcstType/DM_LOOKUP_DIV 콤보)", "c": [{"l": "③FCST_TYPE", "t": ["LOOKUP"], "n": "SALES_TYPE_CODE 룩업 14행 — SAVE SP(VERSION_COPY L732) FCST 유형 매핑"}, {"l": "③FCST_TYPE", "t": ["DB"], "n": "FCST_TYPE 컬럼(81계열) CELL_COMBO_DATA_TYPE='FcstType' ATTRIBUTE2='60'(width) — 정적 콤보"}, {"l": "③FCST_TYPE", "t": ["SQL:@param"], "n": "40 BIZ_TYPE 는 DM_LOOKUP_DIV(@param1=40,@param2=LOOKUP_TYPE) cascade / 82 ITEM_USE 는 DM_LOOKUP_DIV(@param1=DM_ITEM_USE)"}]}, {"l": "④메저", "t": ["branch"], "n": "Measure (SHEET_MEASURE 18 · DMF0044/MDF Reports)", "c": [{"l": "④메저", "t": ["DB"], "n": "SCM_MST_SHEET_MEASURE PROGRAM_ID='DMF0044' SHEET='MDF Reports' 18행 (division 별 DIVISION_ID 토큰 노출)"}, {"l": "④메저", "t": ["sp:"], "n": "GT_F044_SELECT_MEASURE(GTT) JOIN GT_F044_T ON MEASURE — 동적 PIVOT SORT_ORDER_NO 순 (PKG_BODY L2199~2201)"}, {"l": "④메저", "t": ["DB"], "n": "MEASURE 그리드 셀 콤보 = DMF0044_MDF_MEASURE(SQL_ID, ATTRIBUTE2='600' width). GET_MEASURE PROC 별도"}]}, {"l": "⑤버전", "t": ["branch"], "n": "Version (SP_VERSION_NO 파라미터 + 버전/복사 팝업 3 + 환율 팝업 2)", "c": [{"l": "⑤버전", "t": ["sp:"], "n": "P_SP_VERSION_NO IN 파라미터(PKG L119) → 조회/저장 버전 스코프"}, {"l": "⑤버전", "t": ["sp:"], "n": "버전 팝업 3 PROC: GET_VERSION_POPUP / GET_COPY_VERSION_POPUP / GET_SALES_VERSION_POPUP — United/Copy/MDF(MDFVerpopup 시트 12컬럼)"}, {"l": "⑤버전", "t": ["sp:"], "n": "버전 복사 저장: SAVE_BIZ_PLAN_VERSION_COPY / SAVE_SALES_PLAN_VERSION_COPY (SALES_PLAN_ITEM_ID·SALES_PLAN_CATCHUP·SALES_REPORT_SETTING 룩업 다수 참조)"}]}, {"l": "⛓CASCADE", "t": ["branch"], "n": "⛓ CASCADE 콤보 14 distinct / 15 컬럼 (DM_LOOKUP_DIV 사슬 1종 + 정적 13)", "c": [{"l": "⛓CASCADE", "t": ["SQL:@param"], "n": "⛓ 진짜 cascade = DM_LOOKUP_DIV(@param1,@param2) 2컬럼: BIZ_TYPE(ATTRIBUTE1='40'→@param1=40) · ITEM_USE(ATTRIBUTE1='DM_ITEM_USE'). SPREAD_TITLE 가 ATTRIBUTE1→combo param 배선"}, {"l": "⛓CASCADE", "t": ["DB"], "n": "⛓ 정적 13: MEASURE=DMF0044_MDF_MEASURE / FCST_TYPE=FcstType / CURRENCY=CurrencyList / COMPANY_ID=DM_COMPANY / BIZ_TYPE_NAME40=DmBizType / COUNTRY_CODE=COUNTRY_MST / APPLICATION=APPLICATION / END_CUST_REPORT=END_CUST_REPORT / SOLDTO_CUST_REPORT=SOLD_TO_CUST_REPORT / CUST_GROUP_DTL=CUST_GROUP_DTL / APPLICATION_GR=DMF0005_REPORT_GROUP1 / PRODUCT_DETAILS=DMF0005_REPORT_GROUP4 / CELL_MODEL_INFO=DMF0005_REPORT_GROUP6"}, {"l": "⛓CASCADE", "t": ["LOOKUP"], "n": "⛓ 콤보 소스 대량: END_CUST_REPORT 780 / SOLD_TO_CUST_REPORT 657 / DM_ITEM_USE_EX 80 / APPLICATION 34 / CUST_GROUP_DTL 15 / DM_COMPANY 18"}]}]};
+function badgeClass(t){
+  if(t.startsWith('HARD'))return'b-HARD'; if(t.startsWith('LOOKUP'))return'b-LOOKUP';
+  if(t.startsWith('DB'))return'b-DB'; if(t.startsWith('sp'))return'b-sp';
+  if(t.startsWith('DIV')||t.startsWith('BTN')||t.startsWith('MENU')||t.startsWith('URL')||t.startsWith('API'))return'b-DIV';
+  if(t.startsWith('GRP')||t.startsWith('EDIT')||t.startsWith('STATUS'))return'b-GRP';
+  if(t.startsWith('AXIS')||t.startsWith('MEAS')||t.startsWith('CROSS')||t.startsWith('SRC'))return'b-AXIS'; return'b-def';
+}
+function renderNode(node,depth){
+  const nw=document.createElement('div'); nw.className='nw';
+  const box=document.createElement('div'); box.className='mnode d'+Math.min(depth,4);
+  const hasC=node.c&&node.c.length;
+  if(hasC){const tg=document.createElement('span');tg.className='tog';tg.textContent='－';
+    tg.onclick=e=>{e.stopPropagation();nw.classList.toggle('collapsed');tg.textContent=nw.classList.contains('collapsed')?'＋':'－';};
+    box.appendChild(tg);}
+  const lbl=document.createElement('span');lbl.className='mlbl';lbl.textContent=node.l;box.appendChild(lbl);
+  if(node.t){const bs=document.createElement('span');bs.className='mbadges';
+    node.t.forEach(t=>{const b=document.createElement('span');b.className='badge '+badgeClass(t);b.textContent=t;bs.appendChild(b);});box.appendChild(bs);}
+  if(node.n){const nn=document.createElement('span');nn.className='mnote';nn.textContent=node.n;box.appendChild(nn);}
+  box._text=(node.l+' '+(node.n||'')+' '+((node.t||[]).join(' '))).toLowerCase();
+  nw.appendChild(box);
+  if(hasC){const kids=document.createElement('div');kids.className='kids';
+    node.c.forEach(ch=>kids.appendChild(renderNode(ch,depth+1)));nw.appendChild(kids);}
+  return nw;
+}
+const mm=document.getElementById('mm');
+(node=>{const ch=node.c||[];if(ch.length===1&&!node.t&&!node.n){mm.appendChild(renderNode(ch[0],0));}
+  else mm.appendChild(renderNode(node,0));})(TREE);
+const cv=document.getElementById('cv'), stage=cv.querySelector('.stage'), zl=document.getElementById('zl');
+const st={scale:1,tx:0,ty:0};
+function apply(){stage.style.transform='translate('+st.tx+'px,'+st.ty+'px) scale('+st.scale+')';zl.textContent=Math.round(st.scale*100)+'%';}
+function zoomAt(cx,cy,f){const ns=Math.min(2.5,Math.max(0.2,st.scale*f));const r=cv.getBoundingClientRect();
+  const px=cx-r.left,py=cy-r.top;st.tx=px-(px-st.tx)*(ns/st.scale);st.ty=py-(py-st.ty)*(ns/st.scale);st.scale=ns;apply();}
+function fit(){const sw=stage.scrollWidth,sh=stage.scrollHeight,cw=cv.clientWidth,ch=cv.clientHeight;
+  if(!sw||!sh)return;const s=Math.min(cw/sw,ch/sh,1)*0.96;st.scale=s;st.tx=Math.max(0,(cw-sw*s)/2);st.ty=Math.max(10,(ch-sh*s)/2);apply();}
+cv.addEventListener('wheel',e=>{e.preventDefault();zoomAt(e.clientX,e.clientY,e.deltaY<0?1.12:0.89);},{passive:false});
+let dr=false,lx=0,ly=0;
+cv.addEventListener('mousedown',e=>{if(e.target.classList.contains('tog'))return;dr=true;lx=e.clientX;ly=e.clientY;cv.classList.add('drag');});
+window.addEventListener('mousemove',e=>{if(!dr)return;st.tx+=e.clientX-lx;st.ty+=e.clientY-ly;lx=e.clientX;ly=e.clientY;apply();});
+window.addEventListener('mouseup',()=>{dr=false;cv.classList.remove('drag');});
+function expandColl(open){cv.querySelectorAll('.nw').forEach(nw=>{if(nw.querySelector(':scope>.kids')){nw.classList.toggle('collapsed',!open);
+  const tg=nw.querySelector(':scope>.mnode>.tog');if(tg)tg.textContent=open?'－':'＋';}});}
+document.querySelectorAll('.ztool button').forEach(b=>b.onclick=()=>{const a=b.dataset.z;
+  if(a==='in')zoomAt(cv.clientWidth/2,cv.clientHeight/2,1.2);else if(a==='out')zoomAt(cv.clientWidth/2,cv.clientHeight/2,0.83);
+  else if(a==='fit')fit();else if(a==='exp'){expandColl(true);fit();}else if(a==='col'){expandColl(false);fit();}});
+const s=document.getElementById('s'),hc=document.getElementById('hc');
+s.oninput=()=>{const q=s.value.trim().toLowerCase();let h=0;
+  cv.querySelectorAll('.mnode').forEach(m=>{m.classList.remove('hit');if(q&&m._text&&m._text.includes(q)){m.classList.add('hit');h++;
+    let p=m.parentElement;while(p&&!p.classList.contains('mm')){if(p.classList.contains('nw')){p.classList.remove('collapsed');
+      const tg=p.querySelector(':scope>.mnode>.tog');if(tg)tg.textContent='－';}p=p.parentElement;}}});
+  hc.textContent=q?h+' 일치':'';};
+requestAnimationFrame(fit);
+</script></body></html>

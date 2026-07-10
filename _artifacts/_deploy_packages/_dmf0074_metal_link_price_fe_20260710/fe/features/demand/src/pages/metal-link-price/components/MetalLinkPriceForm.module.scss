@@ -1,0 +1,74 @@
+// ⭐ 박스 + 돋보기 버튼 flex 정렬 (master SearchFields PopupSearchInput 표준 1:1 —
+//   customer-fcst-upload 형제 scss 동일). hook #94 — 전 객체 높이 36px.
+.inputWithSearch {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  & > :first-child {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  :global {
+    .MuiInputBase-root,
+    .MuiOutlinedInput-root,
+    input {
+      height: 36px;
+      min-height: 36px;
+    }
+  }
+  & button {
+    flex: 0 0 auto;
+    height: 36px;
+  }
+}
+
+// ⭐ hook #94 — Plan Date 월 피커 2개(From~To) 높이 36px 동일화 (DMF0048 datePickerFix 선례)
+.monthRange {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  & > span {
+    flex: 0 0 auto;
+    color: #6b7684;
+  }
+  & > div {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  :global {
+    .MuiInputBase-root,
+    .MuiOutlinedInput-root,
+    input {
+      height: 36px;
+      min-height: 36px;
+    }
+  }
+}
+
+@include respond-to('FHD') {
+  body .formItem {
+    grid-template-columns: 100px auto;
+    & > div:first-child {
+      width: 100px;
+    }
+  }
+  body .input {
+    width: 85%;
+  }
+}
+
+@include respond-to('HD') {
+  body .formItem {
+    grid-template-columns: 100px auto;
+    & > div:first-child {
+      width: 100px;
+    }
+  }
+  body .input {
+    width: 100%;
+  }
+}

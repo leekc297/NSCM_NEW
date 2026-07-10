@@ -139,6 +139,11 @@ interface PriceBatchRow {
   [key: string]: string | number | undefined;
 }
 
+// ⭐ 성능(2026-07-08, 메인 그리드 동일 사유) — 미조회/빈 결과의 rows 를 항상 "같은" 빈 배열 참조로 반환.
+//   매 렌더 새 [] 를 만들면 DataGrid(memo) 가 깨져 부모 리렌더(콤보 7종 도착 등)마다
+//   itemsSource(CollectionView 재생성)+columnGroups(전 컬럼 트리 재구축) 재적용이 반복됨.
+const EMPTY_ROWS: PriceBatchRow[] = [];
+
 // AS-IS DMF0020_SaveSalesFuturePrice_Popup.cs (2,614줄) + 캡쳐 Doc/ui_cap/DMF0020_Price_batch.png 정밀 매핑
 //   SP: P_DMF0020_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP (bucketType='W' — 기간 주차 W_yyyymmdd 반환)
 //   Header: Div + Sales Site + Project popup + Model popup + Period
@@ -338,14 +343,20 @@ export const PriceBatchInputModal = ({
     enabled: !!open && !!periodFrom && !!periodTo,
   });
 
-  const allRows = (data?.o_rc1 ?? []) as unknown as PriceBatchRow[];
+  // ⭐ 성능(2026-07-08) — allRows 참조 안정화(useMemo). `data?.o_rc1 ?? []` 를 렌더 본문에서 만들면
+  //   data 미도착 동안 매 렌더 새 배열 → rows useMemo 재계산 연쇄 → 그리드 재바인딩 반복.
+  const allRows = useMemo<PriceBatchRow[]>(
+    () => (data?.o_rc1 ?? EMPTY_ROWS) as unknown as PriceBatchRow[],
+    [data]
+  );
   // 추가 client-side filter (사용자 명시 검색조건)
   //   ⭐ 이 Modal 은 LOC Measure 만 등록 사용 (AS-IS GET_MEASURE_COUNTINFO_SAVE_PRICE = LOC only) → LOC 행만 표시.
   const rows = useMemo(
     () =>
       // ⭐ 미조회(재진입 초기) 상태면 빈 그리드 → 헤더 단단(1단)로 리셋 + 이전 데이터/입력 비표시.
+      //   EMPTY_ROWS 상수 반환 = 참조 안정(매번 새 [] 생성 금지 — DataGrid memo 보존).
       !searched
-        ? []
+        ? EMPTY_ROWS
         : allRows.filter(r => {
             if (String(r.MEASURE ?? '').toUpperCase() !== 'LOC') return false;
             if (salesSite && salesSite !== 'ALL' && String(r.SCM_SITE_ID ?? '') !== salesSite)

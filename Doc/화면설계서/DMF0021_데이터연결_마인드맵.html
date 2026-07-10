@@ -1,0 +1,114 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DMF0021 데이터연결 마인드맵</title>
+<style>
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;font-family:"Segoe UI","Malgun Gothic",sans-serif;background:#0f1720;color:#e6edf3;font-size:14px;display:flex;flex-direction:column;height:100vh;overflow:hidden}
+header{padding:10px 20px;background:#161f2b;border-bottom:2px solid #1f4e79;flex:0 0 auto}
+h1{margin:0;font-size:17px;color:#7fb3e6}
+.sub{font-size:11.5px;color:#8b98a8;margin-top:3px}
+.callout{margin:8px 20px 0;padding:8px 12px;background:#2a2416;border:1px solid #6b5a1f;border-radius:6px;font-size:11.5px;line-height:1.6;flex:0 0 auto;max-height:22vh;overflow:auto}
+.callout b{color:#e6c76b}
+.callout ul{margin:4px 0 0;padding-left:18px}
+.callout li{margin:2px 0}
+.badge{display:inline-block;padding:1px 7px;border-radius:10px;font-size:10px;font-weight:600;white-space:nowrap}
+.b-HARD{background:#5a1e1e;color:#ff9b9b} .b-LOOKUP{background:#1e3a5a;color:#8fc6ff}
+.b-DB{background:#1e4a2e;color:#8fe0a8} .b-sp{background:#3a2a5a;color:#c9a8ff}
+.b-DIV{background:#243b4a;color:#9fd8e6} .b-GRP{background:#3a2f1e;color:#e6c76b}
+.b-AXIS{background:#20283a;color:#bcd3e8} .b-def{background:#33383f;color:#c7d0da}
+.mapwrap{position:relative;flex:1 1 auto;min-height:0;display:flex;flex-direction:column}
+.ztool{position:absolute;top:10px;right:14px;z-index:20;display:flex;gap:5px;background:#131b25cc;padding:5px;border-radius:8px;border:1px solid #263241}
+.ztool button{width:32px;height:30px;border-radius:5px;border:1px solid #2a3746;background:#1a2430;color:#c7d0da;cursor:pointer;font-size:15px}
+.ztool button:hover{background:#22303f}
+.zlvl{min-width:46px;text-align:center;color:#8b98a8;font-size:11px;line-height:30px}
+.searchbar{position:absolute;top:10px;left:14px;z-index:20;display:flex;gap:6px}
+.searchbar input{padding:6px 10px;border-radius:6px;border:1px solid #2a3746;background:#0f1720ee;color:#e6edf3;width:240px}
+.searchbar .hc{color:#8b98a8;font-size:11px;line-height:30px}
+.canvas{flex:1 1 auto;min-height:0;overflow:hidden;cursor:grab;background:radial-gradient(circle at 20% 20%,#141d29,#0f1720)}
+.canvas.drag{cursor:grabbing}
+.stage{transform-origin:0 0;padding:60px 40px;display:inline-block;will-change:transform}
+.mm .nw{display:flex;align-items:center}
+.mm .kids{display:flex;flex-direction:column;justify-content:center;margin-left:40px;position:relative}
+.mm .nw.collapsed>.kids{display:none}
+.mm .kids>.nw{position:relative}
+.mm .kids>.nw::before{content:'';position:absolute;left:-20px;top:50%;width:20px;border-top:2px solid #33526b}
+.mm .kids>.nw::after{content:'';position:absolute;left:-20px;top:0;bottom:0;border-left:2px solid #33526b}
+.mm .kids>.nw:first-child::after{top:50%;bottom:0}
+.mm .kids>.nw:last-child::after{top:0;bottom:50%}
+.mm .kids>.nw:only-child::after{display:none}
+.mm .kids::before{content:'';position:absolute;left:-40px;top:50%;width:40px;border-top:2px solid #33526b}
+.mnode{background:#18222e;border:1px solid #2a3a4a;border-left:4px solid #3d5a78;border-radius:8px;padding:7px 11px;margin:5px 0;max-width:520px;box-shadow:0 1px 4px #0006;position:relative}
+.mnode.d0{border-left-color:#e6c76b;background:#20283a} .mnode.d1{border-left-color:#7fb3e6}
+.mnode.d2{border-left-color:#8fe0a8} .mnode.d3{border-left-color:#c9a8ff} .mnode.d4{border-left-color:#ffb38f}
+.mnode.hit{outline:2px solid #e6c76b;background:#3a3420}
+.mnode .tog{position:absolute;left:-9px;top:50%;transform:translateY(-50%);width:18px;height:18px;line-height:16px;text-align:center;background:#22303f;border:1px solid #3d5a78;border-radius:50%;color:#9fd8e6;font-size:11px;cursor:pointer;z-index:2;user-select:none}
+.mlbl{font-weight:600;font-size:13px;color:#e6edf3;display:block}
+.mbadges{display:inline-flex;gap:3px;flex-wrap:wrap;margin-top:3px}
+.mnote{display:block;font-size:11px;color:#93a1b1;margin-top:3px;line-height:1.5}
+</style></head><body>
+<header>
+<h1>DMF0021 Sales Plan — 데이터연결 마인드맵 <span style="font-size:12px;color:#8b98a8;font-weight:400">(FE→SP→Lookup lineage + 4축 분기·종속 + 편집제어)</span></h1>
+<div class="sub">원천 = AS-IS .cs 5,599줄(Forms.UIL 정본) + SP ALL_SOURCE(PKG_DMF0021 1,480/GET DATAEX 1,744/SAVE 1,295) + 사내 DB 실측 · hook #105 §2.5 · 2026-07-09. 태그=값 출처(HARD/LOOKUP/DB/sp). 노드 클릭=접기/펼치기, 휠=확대, 드래그=이동.</div>
+</header>
+<div class="callout"><b>⚠ 격차·확인필요 (실측 — RTF_SYS_RP=SCP Planner·월/토 16시 락·컷오프 전만 / SalesAmt_LOC=시간무관 / 편집룩업 이원화)</b><ul><li>SCM_ADM_API_M(DMF0021)=0행, SCM_ADM_PROC_M(DMF0021)=0행 → TO-BE API/PROC 미배선. 신규 화면 등록 필요.</li><li>SCM_ADM_MNU_BTN_MPG_M(DMF0021)=0행, SCM_ADM_USER_GR_MNU_BTN_MPG_M(DMF0021)=0행 → SEARCH/SAVE 버튼권한 미배선.</li><li>DM_UI_EDITABLE_MEASURE / DM_UI_EDITABLE_DIVISION SEGMENT1='DMF0021'=0행 → 신방식 편집제어 미적용. 구방식 GAM 만 실효(편집규칙 이원화).</li><li>EE 계열 6 division(EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC) 은 GET_ADMIN_GROUP_MEASURE(DMF0021) 미등록 → 비ADMIN EE 사용자 편집메저 0.</li><li>RTF_SYS_RP 는 division 82 미등록(SalesAmt_LOC 만 82 편집) → 82 는 RTF 편집불가.</li><li>BP_FCST_TYPE(25)/MKT_FCST_MEASURE(24)/CUTOFF_USE_MEASURE(17)/PLAN_TIME(16) 는 DMF0021 SP 미참조(__NOT_REF) = 거버넌스/타화면용.</li><li>CASCADE 메커니즘 혼재: ByDivision 콤보=FE 필터 / EndCustomer·Site·PlantSite=SQL @바인드. 재소싱 트리거 TO-BE 정합 필요.</li></ul></div>
+<div class="mapwrap">
+  <div class="searchbar"><input id="s" placeholder="🔍 노드 검색 (라벨·태그·설명)"><span class="hc" id="hc"></span></div>
+  <div class="ztool"><button data-z="out">－</button><span class="zlvl" id="zl">100%</span><button data-z="in">＋</button>
+    <button data-z="fit" title="화면맞춤">⛶</button><button data-z="exp" title="전체펼침">⊞</button><button data-z="col" title="전체접기">⊟</button></div>
+  <div class="canvas" id="cv"><div class="stage"><div class="mm" id="mm"></div></div></div>
+</div>
+<script>
+const TREE = {"l": "DMF0021 Lineage Root", "c": [{"l": "DMF0021 Sales Plan — 데이터연결 lineage", "t": ["MENU:DMF0021", "URL:sales-plan"], "n": "AS-IS SP: GET_DM_PLN_SALES_PLAN_DATAEX(조회 PIVOT) / SAVE_DM_PLN_SALES_PLAN_ALL(저장) / GET_SPREAD_TITLE(동적컬럼) / GET_SALES_PLAN_MEASUREINFO(/2)(메저). ⚠ 배선격차: SCM_ADM_API_M=0행, SCM_ADM_PROC_M=0행, MNU_BTN_MPG_M=0행, USER_GR_MNU_BTN_MPG_M=0행 => TO-BE 미배선(신규 화면 등록 필요).", "c": [{"l": "[SEARCH] 조회 → AS-IS GET_DM_PLN_SALES_PLAN_DATAEX", "t": ["BTN:SEARCH", "sp:GET_DM_PLN_SALES_PLAN_DATAEX", "DB:SCM_ADM_API_M(0)", "GAP:미배선"], "n": "TO-BE API_M/PROC_M 미등록(0행). 조회 PIVOT: p_bucket(DAILY/WEEKLY/MONTHLY), from~now~to 집계."}, {"l": "[SAVE] 저장 → AS-IS SAVE_DM_PLN_SALES_PLAN_ALL", "t": ["BTN:SAVE", "sp:SAVE_DM_PLN_SALES_PLAN_ALL", "DB:SCM_ADM_MNU_BTN_MPG_M(0)", "GAP:미배선"], "n": "'^' bulk payload 저장. RTF_SYS_RP: RMA=+QTY / 非RMA=-QTY 검증(L456/468). ETC=DM_PLN_SALES_ETC_PLAN."}, {"l": "동적컬럼/메저 → GET_SPREAD_TITLE + GET_SALES_PLAN_MEASUREINFO", "t": ["sp:GET_SPREAD_TITLE", "sp:GET_SALES_PLAN_MEASUREINFO", "DB:SCM_MST_SHEET_MEASURE(48)"], "n": "DM_SALES_PLAN_MEASURE 룩업 + SHEET_MEASURE 48행으로 measure 컬럼/버킷 타이틀 생성."}]}, {"l": "① Division 축 (14)", "t": ["AXIS:DIVISION", "DB:SCM_MST_DIVISION"], "n": "SCM_MST_DIVISION 14행 = 40 / 81계열(7: 81,81_HD/HG/HM/ST/UC) / 82 / EE계열(6). ATTRIBUTE3=division group(40/81/82/EE), ATTRIBUTE4=maker(LG/HD/HG/HM/ST/UC). 편집 실효 division = GAM(DMF0021) SEGMENT3 = {40,81,81_*,82} 8종. EE 6종 미등록.", "c": [{"l": "40 Mobility & IT Battery", "t": ["DIV:40", "DB:SCM_MST_DIVISION", "EDIT:LOC+RTF 양쪽 편집대상"], "n": "GAM: SalesAmt_LOC 4권한 + RTF_SYS_RP 3권한 모두 40 등록. RTF 40=MON 1600 락."}, {"l": "81 / 81_HD·HG·HM·ST·UC Automotive (7)", "t": ["DIV:81계열", "DB:SCM_MST_DIVISION", "EDIT:LOC+RTF"], "n": "GAM 등록: LOC(81,81_*) + RTF(81,81_*). RTF 81=SAT 1600 / 81_*=MON 1600 락(SEGMENT5 flag=Y)."}, {"l": "82 ESS Battery", "t": ["DIV:82", "DB:SCM_MST_DIVISION", "EDIT:LOC-only"], "n": "⭐ SalesAmt_LOC 만 82 등록(4권한) → RTF_SYS_RP 는 82 미등록(편집불가). RTF 시간락 대상 아님."}, {"l": "EE / EE_HD·HG·HM·ST·UC Electrode (6)", "t": ["DIV:EE계열", "DB:SCM_MST_DIVISION", "EDIT:GAM 미등록→편집불가"], "n": "⚠ GAP: EE 6 division 은 GAM(DMF0021) 전무 → 비ADMIN EE 사용자 편집메저 0. ADMIN 만 편집(GET_ADMIN_GROUP)."}]}, {"l": "② 사용자권한 축", "t": ["AXIS:AUTH"], "n": "편집제어 = (1) GET_ADMIN_GROUP(SEGMENT2='ALL') → v_group_id='ADMIN' 전편집 (2) GET_ADMIN_GROUP_MEASURE(SEGMENT2='DMF0021') → v_EDIT_AUTH_SalesAmt_LOC / v_EDIT_AUTH_RTF_SYS_RP. MNU_BTN_MPG_M/USER_GR_MNU_BTN_MPG_M = 0행(버튼권한 미배선).", "c": [{"l": "ADMIN (GET_ADMIN_GROUP)", "t": ["GRP:ADMIN", "LOOKUP:GET_ADMIN_GROUP", "sp:DATAEX L243-254"], "n": "GET_ADMIN_GROUP SEGMENT1=user, SEGMENT2='ALL' COUNT>0 → v_group_id='ADMIN' → 전 division/measure 편집."}, {"l": "SalesAmt_LOC 편집권한 4그룹", "t": ["GRP:LOC-4", "LOOKUP:GET_ADMIN_GROUP_MEASURE", "HARD:v_EDIT_AUTH_SalesAmt_LOC", "sp:DATAEX L260-273"], "n": "GAM SEGMENT4=SalesAmt_LOC → ['ADMIN', 'DM ADMIN', 'DM Planner', 'SCM PI Admin'] × div ['40', '81', '81_HD', '81_HG', '81_HM', '81_ST', '81_UC', '82'] (32행, 시간락 없음)."}, {"l": "RTF_SYS_RP 편집권한 3그룹", "t": ["GRP:RTF-3", "LOOKUP:GET_ADMIN_GROUP_MEASURE", "HARD:v_EDIT_AUTH_RTF_SYS_RP", "sp:DATAEX L275-287"], "n": "GAM SEGMENT4=RTF_SYS_RP → ['ADMIN', 'SCM PI Admin', 'SCP Planner'] × div ['40', '81', '81_HD', '81_HG', '81_HM', '81_ST', '81_UC'] (21행). ⭐ SCP Planner 포함. MON/SAT 1600 락."}, {"l": "팀/부서 매핑 (PM_TEAM_MAPPING / TMM_MEASURE_ADMIN)", "t": ["LOOKUP:PM_TEAM_MAPPING(375)", "LOOKUP:TMM_MEASURE_ADMIN(70)", "sp:DATAEX L294-311/L390-399"], "n": "PM_TEAM_MAPPING: 사용자 부서→팀 LISTAGG(v_dept_list). TMM_MEASURE_ADMIN: TMM_FCST 메저 사용자 권한."}, {"l": "버튼권한 미배선 (0행)", "t": ["DB:SCM_ADM_MNU_BTN_MPG_M(0)", "DB:SCM_ADM_USER_GR_MNU_BTN_MPG_M(0)", "GAP:미등록"], "n": "SEARCH/SAVE 버튼-그룹 매핑 미등록 → TO-BE 신규 등록 필요(SHT_NM='Sales Plan')."}]}, {"l": "③ FCST_TYPE 축", "t": ["AXIS:FCST", "LOOKUP:SALES_TYPE_CODE(14)", "LOOKUP:BP_FCST_TYPE(25)__NOT_REF"], "n": "FCST_TYPE 값 = SALES_TYPE_CODE 룩업 14종(AS/ASF/ETC/MPS/RMA/Recall/SDC/SDF/SMC/SMF/SPF/TST/WS/WSF). SAVE SP 참조=SALES_TYPE_CODE(메시지용 SEGMENT2). BP_FCST_TYPE(25)=거버넌스, DMF0021 SP 미참조(__NOT_REF).", "c": [{"l": "ETC (신규 입력 대상)", "t": ["FCST:ETC", "sp:SAVE DM_PLN_SALES_ETC_PLAN", "HARD:Insert=ETC"], "n": "신규 행 Insert 는 ETC 매출 → DM_PLN_SALES_ETC_PLAN(_H). 40+ETC=달 마지막날 버킷(L185-186)."}, {"l": "RMA (부호 검증)", "t": ["FCST:RMA", "sp:SAVE L456/L468", "HARD:RTF_SYS_RP 부호"], "n": "RTF_SYS_RP 저장 검증: RMA=+QTY(>0) / 非RMA=-QTY(<0) 규칙."}, {"l": "그 외 11종 (AS/ASF/MPS/Recall/SDC/SDF/SMC/SMF/SPF/TST/WS/WSF)", "t": ["FCST:기타", "LOOKUP:SALES_TYPE_CODE"], "n": "조회/집계 대상. 신규 입력 불가(ETC 만). V_FCST_TYPE<>'ETC' 필터(L508)로 기존분과 구분."}]}, {"l": "④ 메저 축 (SHEET_MEASURE 48 + 편집 2메저)", "t": ["AXIS:MEASURE", "DB:SCM_MST_SHEET_MEASURE(48)", "LOOKUP:DM_SALES_PLAN_MEASURE(2)"], "n": "SHEET_MEASURE 48행(division별 measure 컬럼). 편집대상 2메저 = SalesAmt_LOC 계열 / RTF_SYS_RP 계열. DM_SALES_PLAN_MEASURE 룩업(2): Catch_Up, SalesAmt_LOC.", "c": [{"l": "SalesAmt_LOC 계열", "t": ["MSR:SalesAmt_LOC", "EDIT:v_EDIT_AUTH_SalesAmt_LOC", "DIV:40/81계열/82"], "n": "편집키 메저. 파생: SalesAmt_LOC_40 / _Catch_Up / _User + KRW/USD 환산. 4권한×8div(82 포함) 편집. 시간락 없음."}, {"l": "RTF_SYS_RP 계열", "t": ["MSR:RTF_SYS_RP", "EDIT:v_EDIT_AUTH_RTF_SYS_RP", "DIV:40/81계열(82 제외)"], "n": "편집키 메저. 파생: RTF_SYS_RP_CAR / _CELL / RTF_ENERGY 등. 3권한×7div(82 제외). MON/SAT 1600 시간락."}, {"l": "조회전용 메저 (나머지)", "t": ["MSR:조회전용", "DB:SCM_MST_SHEET_MEASURE"], "n": "MKT_FCST계열/CUST_FCST/SCM_FCST/TMM_FCST/RTF_PR/Catch_Up 등 = 표시/집계용(편집키 아님). SHEET_COLUMNS 66 전량 INPUT_TP_CD='S'."}]}, {"l": "⑤ 편집제어 매트릭스 (권한×Division×메저×일시)", "t": ["AXIS:EDITMATRIX"], "n": "실효 편집 = GAM(DMF0021) 53행. SalesAmt_LOC(무락) + RTF_SYS_RP(MON/SAT 1600 락). ADMIN 은 전편집.", "c": [{"l": "SalesAmt_LOC: 4권한 × 8div × 시간락 없음", "t": ["MSR:SalesAmt_LOC", "LOOKUP:GET_ADMIN_GROUP_MEASURE", "TIME:무락"], "n": "groups=['ADMIN', 'DM ADMIN', 'DM Planner', 'SCM PI Admin'] / divisions=['40', '81', '81_HD', '81_HG', '81_HM', '81_ST', '81_UC', '82'] / time_lock_rows=0."}, {"l": "RTF_SYS_RP: 3권한 × 7div × MON/SAT 1600 락", "t": ["MSR:RTF_SYS_RP", "LOOKUP:GET_ADMIN_GROUP_MEASURE", "TIME:MON/SAT@1600"], "n": "groups=['ADMIN', 'SCM PI Admin', 'SCP Planner'] / divisions=['40', '81', '81_HD', '81_HG', '81_HM', '81_ST', '81_UC'] / time_lock_rows=21."}, {"l": "시간락 규칙 (RTF_SYS_RP)", "t": ["TIME:GAM ATTRIBUTE1=요일/ATTRIBUTE2=시각", "SEGMENT5=flag"], "n": "GAM row: ATTRIBUTE1=요일(MON/SAT), ATTRIBUTE2=시각(1600), SEGMENT5=flag(Y/-). 40=MON / 81=SAT / 81_*=MON, 전 1600. 해당 요일 컷오프 시각 이후 편집잠금."}, {"l": "이원화 격차 (신방식 미적용)", "t": ["GAP:DM_UI_EDITABLE_*=0", "LOOKUP:GET_ADMIN_GROUP_MEASURE=실효"], "n": "DM_UI_EDITABLE_MEASURE / DM_UI_EDITABLE_DIVISION SEGMENT1='DMF0021' = 0행(신방식 미적용). 실효 편집제어 = 구방식 GET_ADMIN_GROUP + GET_ADMIN_GROUP_MEASURE 뿐."}]}, {"l": "⛓ CASCADE 필터 (조회조건·GRID 종속제약)", "t": ["AXIS:CASCADE"], "n": "콤보 선택→하위 재조회/재필터. SQL 바인드(@param) vs FE 필터(DIVISION_ID열) 혼재. 한눈에 보기.", "c": [{"l": "[조회조건] Division → Team → End Customer → Sales Site", "t": ["src:조회조건", "ROOT"], "n": "판매계획 조회 cascade", "c": [{"l": "→ Team (clbTeam · TeambyDivision)", "t": ["CMBO", "FE필터"]}, {"l": "→ End Customer (clbCustomer · EndCustomerByDivisionDept)", "t": ["CMBO", "SQL:@divisionId,@deptId"], "n": "Division+Team 종속", "c": [{"l": "→ Sales Site (clbSalesSite · SiteByEndCustomer_InnerCode)", "t": ["CMBO", "SQL:@divisionId,@endCustomer"], "n": "End Customer 종속"}]}, {"l": "→ Biz Type (BizTypeByDivision · 40=DmBizType)", "t": ["CMBO", "FE필터"]}]}, {"l": "[조회조건] 비종속: Model/Item(모달)·Version·Period·Bucket", "t": ["static"]}, {"l": "[GRID 셀] 편집행 콤보 (Sales Plan)", "t": ["DB:SHEET_COLUMNS"], "n": "셀 변경 시 하위 재소싱", "c": [{"l": "DEPT_ID→DeptId · DIVISION_ID→Division · COMPANY_ID→DM_COMPANY", "t": ["CMBO"]}, {"l": "END_CUSTOMER→EndCustomerByDivisionDept(+40) · SCM_SITE_ID→SiteByEndCustomer_InnerCode", "t": ["CMBO", "SQL"]}, {"l": "BIZ_TYPE_NAME→BizTypeByDivision · BIZ_TYPE_NAME40→DmBizType · PLANT_SITE_ID→FromSiteByDivision", "t": ["CMBO", "SQL:@divisionId"]}, {"l": "FCST_TYPE→FcstType(Insert=ETC) · CELL_PROD_SITE_ID · INCOTERMS·DOM_EXP·INTERNAL_YN→YesOrNo(static)", "t": ["CMBO", "static"]}]}, {"l": "⚠ 메커니즘 주의", "t": ["확인필요"], "n": "EndCustomer(EndCustomerByDivisionDept @divisionId,@deptId)·Site(SiteByEndCustomer @divisionId,@endCustomer)·PlantSite(FromSiteByDivision @divisionId)=SQL @바인드 cascade / Team·BizType·EndCustomer40(ByDivision)=DIVISION_ID 반환열 FE 필터. 혼재 — TO-BE 재소싱 트리거 정합 확인."}]}]};
+function badgeClass(t){
+  if(t.startsWith('HARD'))return'b-HARD'; if(t.startsWith('LOOKUP'))return'b-LOOKUP';
+  if(t.startsWith('DB'))return'b-DB'; if(t.startsWith('sp'))return'b-sp';
+  if(t.startsWith('DIV')||t.startsWith('BTN')||t.startsWith('MENU')||t.startsWith('URL')||t.startsWith('API'))return'b-DIV';
+  if(t.startsWith('GRP')||t.startsWith('EDIT')||t.startsWith('STATUS'))return'b-GRP';
+  if(t.startsWith('AXIS')||t.startsWith('MEAS')||t.startsWith('CROSS')||t.startsWith('SRC'))return'b-AXIS'; return'b-def';
+}
+function renderNode(node,depth){
+  const nw=document.createElement('div'); nw.className='nw';
+  const box=document.createElement('div'); box.className='mnode d'+Math.min(depth,4);
+  const hasC=node.c&&node.c.length;
+  if(hasC){const tg=document.createElement('span');tg.className='tog';tg.textContent='－';
+    tg.onclick=e=>{e.stopPropagation();nw.classList.toggle('collapsed');tg.textContent=nw.classList.contains('collapsed')?'＋':'－';};
+    box.appendChild(tg);}
+  const lbl=document.createElement('span');lbl.className='mlbl';lbl.textContent=node.l;box.appendChild(lbl);
+  if(node.t){const bs=document.createElement('span');bs.className='mbadges';
+    node.t.forEach(t=>{const b=document.createElement('span');b.className='badge '+badgeClass(t);b.textContent=t;bs.appendChild(b);});box.appendChild(bs);}
+  if(node.n){const nn=document.createElement('span');nn.className='mnote';nn.textContent=node.n;box.appendChild(nn);}
+  box._text=(node.l+' '+(node.n||'')+' '+((node.t||[]).join(' '))).toLowerCase();
+  nw.appendChild(box);
+  if(hasC){const kids=document.createElement('div');kids.className='kids';
+    node.c.forEach(ch=>kids.appendChild(renderNode(ch,depth+1)));nw.appendChild(kids);}
+  return nw;
+}
+const mm=document.getElementById('mm');
+(node=>{const ch=node.c||[];if(ch.length===1&&!node.t&&!node.n){mm.appendChild(renderNode(ch[0],0));}
+  else mm.appendChild(renderNode(node,0));})(TREE);
+const cv=document.getElementById('cv'), stage=cv.querySelector('.stage'), zl=document.getElementById('zl');
+const st={scale:1,tx:0,ty:0};
+function apply(){stage.style.transform='translate('+st.tx+'px,'+st.ty+'px) scale('+st.scale+')';zl.textContent=Math.round(st.scale*100)+'%';}
+function zoomAt(cx,cy,f){const ns=Math.min(2.5,Math.max(0.2,st.scale*f));const r=cv.getBoundingClientRect();
+  const px=cx-r.left,py=cy-r.top;st.tx=px-(px-st.tx)*(ns/st.scale);st.ty=py-(py-st.ty)*(ns/st.scale);st.scale=ns;apply();}
+function fit(){const sw=stage.scrollWidth,sh=stage.scrollHeight,cw=cv.clientWidth,ch=cv.clientHeight;
+  if(!sw||!sh)return;const s=Math.min(cw/sw,ch/sh,1)*0.96;st.scale=s;st.tx=Math.max(0,(cw-sw*s)/2);st.ty=Math.max(10,(ch-sh*s)/2);apply();}
+cv.addEventListener('wheel',e=>{e.preventDefault();zoomAt(e.clientX,e.clientY,e.deltaY<0?1.12:0.89);},{passive:false});
+let dr=false,lx=0,ly=0;
+cv.addEventListener('mousedown',e=>{if(e.target.classList.contains('tog'))return;dr=true;lx=e.clientX;ly=e.clientY;cv.classList.add('drag');});
+window.addEventListener('mousemove',e=>{if(!dr)return;st.tx+=e.clientX-lx;st.ty+=e.clientY-ly;lx=e.clientX;ly=e.clientY;apply();});
+window.addEventListener('mouseup',()=>{dr=false;cv.classList.remove('drag');});
+function expandColl(open){cv.querySelectorAll('.nw').forEach(nw=>{if(nw.querySelector(':scope>.kids')){nw.classList.toggle('collapsed',!open);
+  const tg=nw.querySelector(':scope>.mnode>.tog');if(tg)tg.textContent=open?'－':'＋';}});}
+document.querySelectorAll('.ztool button').forEach(b=>b.onclick=()=>{const a=b.dataset.z;
+  if(a==='in')zoomAt(cv.clientWidth/2,cv.clientHeight/2,1.2);else if(a==='out')zoomAt(cv.clientWidth/2,cv.clientHeight/2,0.83);
+  else if(a==='fit')fit();else if(a==='exp'){expandColl(true);fit();}else if(a==='col'){expandColl(false);fit();}});
+const s=document.getElementById('s'),hc=document.getElementById('hc');
+s.oninput=()=>{const q=s.value.trim().toLowerCase();let h=0;
+  cv.querySelectorAll('.mnode').forEach(m=>{m.classList.remove('hit');if(q&&m._text&&m._text.includes(q)){m.classList.add('hit');h++;
+    let p=m.parentElement;while(p&&!p.classList.contains('mm')){if(p.classList.contains('nw')){p.classList.remove('collapsed');
+      const tg=p.querySelector(':scope>.mnode>.tog');if(tg)tg.textContent='－';}p=p.parentElement;}}});
+  hc.textContent=q?h+' 일치':'';};
+requestAnimationFrame(fit);
+</script></body></html>

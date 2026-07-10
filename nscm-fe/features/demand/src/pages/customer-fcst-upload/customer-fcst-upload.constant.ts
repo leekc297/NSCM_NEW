@@ -101,5 +101,8 @@ export const SAVE_KEYS = [
   'itemId',
   'yyyymmdd',
   'qty',
-  'createdBy',
+  // ⭐ 'createdBy' 금지 (2026-07-08 ORA-01400 사고) — BE(BaseService)가 세션 단일값으로 덮어써
+  //   '^'×N 배열이 1토큰으로 붕괴 → SP split 시 2행째부터 CREATED_BY NULL → DM_PLN_CUSTOMER_PSI ORA-01400.
+  //   DMF0020 표준 선례(createdByList)와 동일 — PROC_M COL_NM(SORT 17)도 'createdByList' 로 정렬(필수 동시배포).
+  'createdByList',
 ] as const;

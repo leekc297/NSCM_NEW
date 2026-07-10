@@ -38,6 +38,7 @@ export const ROUTE_PATHS = {
   DMF0043: 'contribute-main',
   DMF0043_01: 'contribute-view',
   DMF0048: 'sales-monitoring',
+  DMF0074: 'metal-link-price',
   DMF0082: 'forecast-price',
   REPORT: 'report',
   WATERFALL: 'waterfall',

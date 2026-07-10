@@ -14,6 +14,7 @@ export const ErpEdiMasterForm = () => {
   const searchParams = useErpEdiMasterStore(state => state.searchParams);
   const setSearchParams = useErpEdiMasterStore(state => state.setSearchParams);
   const setSummaryFilters = useErpEdiMasterStore(state => state.setSummaryFilters);
+  const clearAllGrids = useErpEdiMasterStore(state => state.clearAllGrids);
   const fetchStaticColumns = useErpEdiMasterStore(state => state.fetchStaticColumns);
   const updateHistory = useErpEdiMasterStore(state => state.updateHistory);
 
@@ -26,6 +27,7 @@ export const ErpEdiMasterForm = () => {
       searchButtonLabel={t('LBL00112', '_Search')}
       isHidden={!openSearchArea}
       onSearch={() => {
+        clearAllGrids();
         setSummaryFilters();
         void fetchStaticColumns();
       }}
@@ -43,6 +45,8 @@ export const ErpEdiMasterForm = () => {
                   options={divisions?.map(item => ({ label: item.NAME, value: item.CODE })) ?? []}
                   onChange={(_, option) => {
                     setSearchParams({ divisionId: option });
+                    clearAllGrids();
+                    void fetchStaticColumns();
                   }}
                 />
               )}

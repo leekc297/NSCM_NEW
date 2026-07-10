@@ -1,4 +1,4 @@
-// SYS0013 Register 탭 검색 Form — DESIGN §1.2: Report Name / Description / Role.
+// SYS0013 Register 탭 검색 Form — 라벨 = AS-IS 정본 (Report Name / Description / Role).
 // Role 콤보 = admin USER_GR (useTabComboQueries 'UserGroup') + 'ALL' 선두.
 import { useEffect } from 'react';
 
@@ -25,7 +25,7 @@ export const DynamicQueryForm = ({ onSearch }: Props) => {
     ...(group?.map(item => ({ label: item.NAME, value: item.CODE })) ?? []),
   ];
 
-  // 영속 store(tab) 에 남은 비유효 role(예: 이전 stale 콤보의 연도값)을 콤보 로드 후 ALL 로 정규화.
+  // 영속 store(tab) 에 남은 비유효 role 값을 콤보 로드 후 ALL 로 정규화 (stale persist 가드).
   useEffect(() => {
     if (!group) return;
     const valid = new Set<string>(['ALL', ...group.map(g => String(g.CODE))]);

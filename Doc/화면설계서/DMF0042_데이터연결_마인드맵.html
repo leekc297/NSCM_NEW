@@ -1,0 +1,114 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DMF0042 데이터연결 마인드맵</title>
+<style>
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;font-family:"Segoe UI","Malgun Gothic",sans-serif;background:#0f1720;color:#e6edf3;font-size:14px;display:flex;flex-direction:column;height:100vh;overflow:hidden}
+header{padding:10px 20px;background:#161f2b;border-bottom:2px solid #1f4e79;flex:0 0 auto}
+h1{margin:0;font-size:17px;color:#7fb3e6}
+.sub{font-size:11.5px;color:#8b98a8;margin-top:3px}
+.callout{margin:8px 20px 0;padding:8px 12px;background:#2a2416;border:1px solid #6b5a1f;border-radius:6px;font-size:11.5px;line-height:1.6;flex:0 0 auto;max-height:22vh;overflow:auto}
+.callout b{color:#e6c76b}
+.callout ul{margin:4px 0 0;padding-left:18px}
+.callout li{margin:2px 0}
+.badge{display:inline-block;padding:1px 7px;border-radius:10px;font-size:10px;font-weight:600;white-space:nowrap}
+.b-HARD{background:#5a1e1e;color:#ff9b9b} .b-LOOKUP{background:#1e3a5a;color:#8fc6ff}
+.b-DB{background:#1e4a2e;color:#8fe0a8} .b-sp{background:#3a2a5a;color:#c9a8ff}
+.b-DIV{background:#243b4a;color:#9fd8e6} .b-GRP{background:#3a2f1e;color:#e6c76b}
+.b-AXIS{background:#20283a;color:#bcd3e8} .b-def{background:#33383f;color:#c7d0da}
+.mapwrap{position:relative;flex:1 1 auto;min-height:0;display:flex;flex-direction:column}
+.ztool{position:absolute;top:10px;right:14px;z-index:20;display:flex;gap:5px;background:#131b25cc;padding:5px;border-radius:8px;border:1px solid #263241}
+.ztool button{width:32px;height:30px;border-radius:5px;border:1px solid #2a3746;background:#1a2430;color:#c7d0da;cursor:pointer;font-size:15px}
+.ztool button:hover{background:#22303f}
+.zlvl{min-width:46px;text-align:center;color:#8b98a8;font-size:11px;line-height:30px}
+.searchbar{position:absolute;top:10px;left:14px;z-index:20;display:flex;gap:6px}
+.searchbar input{padding:6px 10px;border-radius:6px;border:1px solid #2a3746;background:#0f1720ee;color:#e6edf3;width:240px}
+.searchbar .hc{color:#8b98a8;font-size:11px;line-height:30px}
+.canvas{flex:1 1 auto;min-height:0;overflow:hidden;cursor:grab;background:radial-gradient(circle at 20% 20%,#141d29,#0f1720)}
+.canvas.drag{cursor:grabbing}
+.stage{transform-origin:0 0;padding:60px 40px;display:inline-block;will-change:transform}
+.mm .nw{display:flex;align-items:center}
+.mm .kids{display:flex;flex-direction:column;justify-content:center;margin-left:40px;position:relative}
+.mm .nw.collapsed>.kids{display:none}
+.mm .kids>.nw{position:relative}
+.mm .kids>.nw::before{content:'';position:absolute;left:-20px;top:50%;width:20px;border-top:2px solid #33526b}
+.mm .kids>.nw::after{content:'';position:absolute;left:-20px;top:0;bottom:0;border-left:2px solid #33526b}
+.mm .kids>.nw:first-child::after{top:50%;bottom:0}
+.mm .kids>.nw:last-child::after{top:0;bottom:50%}
+.mm .kids>.nw:only-child::after{display:none}
+.mm .kids::before{content:'';position:absolute;left:-40px;top:50%;width:40px;border-top:2px solid #33526b}
+.mnode{background:#18222e;border:1px solid #2a3a4a;border-left:4px solid #3d5a78;border-radius:8px;padding:7px 11px;margin:5px 0;max-width:520px;box-shadow:0 1px 4px #0006;position:relative}
+.mnode.d0{border-left-color:#e6c76b;background:#20283a} .mnode.d1{border-left-color:#7fb3e6}
+.mnode.d2{border-left-color:#8fe0a8} .mnode.d3{border-left-color:#c9a8ff} .mnode.d4{border-left-color:#ffb38f}
+.mnode.hit{outline:2px solid #e6c76b;background:#3a3420}
+.mnode .tog{position:absolute;left:-9px;top:50%;transform:translateY(-50%);width:18px;height:18px;line-height:16px;text-align:center;background:#22303f;border:1px solid #3d5a78;border-radius:50%;color:#9fd8e6;font-size:11px;cursor:pointer;z-index:2;user-select:none}
+.mlbl{font-weight:600;font-size:13px;color:#e6edf3;display:block}
+.mbadges{display:inline-flex;gap:3px;flex-wrap:wrap;margin-top:3px}
+.mnote{display:block;font-size:11px;color:#93a1b1;margin-top:3px;line-height:1.5}
+</style></head><body>
+<header>
+<h1>DMF0042 Business Plan — 데이터연결 마인드맵 <span style="font-size:12px;color:#8b98a8;font-weight:400">(FE→SP→Lookup lineage + 실측 축(Division/권한/CAR·CELL·ENERGY/FCST/메저/CASCADE) + 편집제어)</span></h1>
+<div class="sub">원천 = AS-IS .cs 3,477줄(DMF0042_1_BizPlan 정본) + SP ALL_SOURCE(PKG_DMF0042 4,577/GET 1,126/SAVE_BP_FCST 1,302) + 사내 DB 실측 · hook #105 §2.5 · 2026-07-09. 태그=값 출처(HARD/LOOKUP/DB/sp). 노드 클릭=접기/펼치기, 휠=확대, 드래그=이동.</div>
+</header>
+<div class="callout"><b>⚠ 격차·확인필요 (실측 — 편집제어=EDIT_FLAG 행계산(DMF0003 계열) · CAR/CELL/ENERGY 파생(81→CAR/CELL·82→ENERGY) · ⚠SAVE_BP_FCST INVALID)</b><ul><li>MNU_BTN_MPG_M / USER_GR_MNU_BTN_MPG_M / API_M / PROC_M 모두 0 — TO-BE 배선 필요(버튼권한·API·PROC 시그니처)</li><li>GET_ADMIN_GROUP_MEASURE(SEG2=DMF0042)=0, DM_UI_EDITABLE_MEASURE/DIVISION(SEG1=DMF0042)=0 — DMF0042 는 measure/division 편집룩업 미사용, EDIT_FLAG(SP 행계산) 방식</li><li>MKT_FCST_MEASURE/CUTOFF_USE_MEASURE/PLAN_TIME 은 DMF0042 GET/SAVE SP 에서 직접 참조 안됨(__NOT_REF) — 유관 화면 공용 카탈로그</li><li>REPORT_GROUP1~8 타깃 SCM_MST_SITE_ITEM 부재 → NULL 대체(GET SP L312 TODO)</li><li>MNU_URL='dmf0042' 임시 slug — business-plan 교체 필요(3-SET 정합)</li></ul></div>
+<div class="mapwrap">
+  <div class="searchbar"><input id="s" placeholder="🔍 노드 검색 (라벨·태그·설명)"><span class="hc" id="hc"></span></div>
+  <div class="ztool"><button data-z="out">－</button><span class="zlvl" id="zl">100%</span><button data-z="in">＋</button>
+    <button data-z="fit" title="화면맞춤">⛶</button><button data-z="exp" title="전체펼침">⊞</button><button data-z="col" title="전체접기">⊟</button></div>
+  <div class="canvas" id="cv"><div class="stage"><div class="mm" id="mm"></div></div></div>
+</div>
+<script>
+const TREE = {"l": "lineage", "t": ["root"], "n": "DMF0042 Business Plan — 데이터연결 lineage", "c": [{"l": "lineage", "t": ["axis"], "n": "실제 축(§2.5-2): Division(주축) · 사용자권한(NowGroupID/EDIT_FLAG) · CAR/CELL/ENERGY 파생 · FCST_TYPE(BP_FCST_TYPE) · 메저(9) · CASCADE(9콤보)"}, {"l": "①Division", "t": ["branch"], "n": "Division 주축 (40 / 81·81_JV / 82)", "c": [{"l": "①Division", "t": ["DB"], "n": "SCM_MST_DIVISION 14행 (VALID_YN='Y')"}, {"l": "①Division", "t": ["sp:"], "n": "GET SP 분기: p_division_id='40' THEN … ELSE(81/82) (L347/L499)"}, {"l": "①Division", "t": ["HARD"], "n": "40=End Customer=PROJECT_CODE / 81·82=별도 라벨·정렬(ATTRIBUTE2~5)"}, {"l": "①Division", "t": ["DB"], "n": "SHEET_COLUMNS.DIVISION_ID 콤마토큰 → division 별 컬럼 노출"}]}, {"l": "②사용자권한", "t": ["branch"], "n": "사용자권한 (NowGroupID=ADMIN · EDIT_FLAG)", "c": [{"l": "②사용자권한", "t": ["LOOKUP"], "n": "GET_ADMIN_GROUP (SEG2='ALL',SEG1=user) → v_group_id='ADMIN'"}, {"l": "②사용자권한", "t": ["LOOKUP"], "n": "PM_TEAM_MAPPING (SEG1=DEPT_ID→SEG3) → v_dept_id 팀"}, {"l": "②사용자권한", "t": ["sp:"], "n": "EDIT_FLAG = 행 DEPT_ID==v_dept_id OR ADMIN → 'Y'/'N' (L369/L557)"}, {"l": "②사용자권한", "t": ["DB"], "n": "MNU_BTN_MPG_M=0 / USER_GR_MNU_BTN_MPG_M=0 / API_M=0 / PROC_M=0 (버튼·API·PROC 메타 미등록 — SP 내부 통제)"}]}, {"l": "③CAR/CELL/ENERGY", "t": ["branch"], "n": "파생계산 (81→CAR/CELL ÷ · 82→ENERGY ×)", "c": [{"l": "③CAR/CELL/ENERGY", "t": ["sp:"], "n": "81 CAR_QTY = QTY ÷ CELL_PER_CAR(Cell) / ÷(CELL_PER_CAR/CELL_PER_MODULE)(Module) / Pack=QTY (PKG L2296~2396)"}, {"l": "③CAR/CELL/ENERGY", "t": ["sp:"], "n": "82 ENERGY = ENERGE_WH(원값)/ENERGE_KWH(÷1000), QTY×ENERGE (GET SP L167/L261)"}, {"l": "③CAR/CELL/ENERGY", "t": ["DB"], "n": "파생 컬럼: CELL_PER_CAR/MODULE_PER_CAR/CELL_PER_MODULE/CELL_PER_PACK/UNIT_ENERGY/ENERGE_WH (SHEET_COLUMNS)"}, {"l": "③CAR/CELL/ENERGY", "t": ["HARD"], "n": "40=파생없음(CELL_PER_CAR=0 상수)"}]}, {"l": "④FCST_TYPE", "t": ["branch"], "n": "FCST Type (BP_FCST_TYPE 25 division-scoped)", "c": [{"l": "④FCST_TYPE", "t": ["LOOKUP"], "n": "BP_FCST_TYPE (SEG1=division 40/81/82, SEG2=code, SEG3=name) 25행"}, {"l": "④FCST_TYPE", "t": ["DB"], "n": "FCST_TYPE 컬럼 SHEET_COLUMNS.ATTRIBUTE1='BP_FCST_TYPE' → DM_LOOKUP_DIV @param2 배선(GET_SPREAD_TITLE L611~613)"}, {"l": "④FCST_TYPE", "t": ["sp:"], "n": "GRID 셀 콤보 CELL_COMBO_DATA_TYPE='DM_LOOKUP_DIV' @param1=divisionId @param2=BP_FCST_TYPE (division-scoped)"}]}, {"l": "⑤메저", "t": ["branch"], "n": "Measure (SHEET_MEASURE 9)", "c": [{"l": "⑤메저", "t": ["DB"], "n": "MKT_FCST/Business_Plan/KRW/USD/LOC/SalesAmt_KRW/USD/LOC/CAR_QTY (SORT 5~80)"}, {"l": "⑤메저", "t": ["sp:"], "n": "GT_DMF0042_SELECT_MEASURE ← SHEET_MEASURE WHERE DIVISION_ID LIKE '%div%' (GET SP L333)"}, {"l": "⑤메저", "t": ["LOOKUP"], "n": "MKT_FCST_MEASURE(24)/CUTOFF_USE_MEASURE(17)/PLAN_TIME(16) 참조 룩업(__NOT_REF in DMF0042 SP — 카탈로그 보존)"}]}, {"l": "⛓CASCADE", "t": ["branch"], "n": "⛓ CASCADE 콤보 9종 (조회조건 사슬 + GRID 셀 콤보)", "c": [{"l": "⛓CASCADE", "t": ["sp:"], "n": "⛓ Division → Dept(DeptId) → EndCustomer(EndCustomerByDivisionDept @divisionId) → Site(SiteByEndCustomer @divisionId,@endCustomer)  [SQL@바인드]"}, {"l": "⛓CASCADE", "t": ["sp:"], "n": "⛓ FromSiteByDivision(@divisionId=Plant) · DMF0042_BP_Measure(@divisionId) — SQL@바인드"}, {"l": "⛓CASCADE", "t": ["sp:"], "n": "⛓ FCST_TYPE=DM_LOOKUP_DIV(@param1,@param2) division-scoped — GRID 셀 콤보"}, {"l": "⛓CASCADE", "t": ["LOOKUP"], "n": "⛓ Incoterms/IncotermsEdit=static LOOKUP INCOTERMS (바인드 없음 — static 메커니즘)"}, {"l": "⛓CASCADE", "t": ["HARD"], "n": "⛓ EndCustomerByDivision40=division '40' 하드코딩 · FE필터=@divisionId 주석분(FE 필터 vs SQL 바인드 구분)"}]}]};
+function badgeClass(t){
+  if(t.startsWith('HARD'))return'b-HARD'; if(t.startsWith('LOOKUP'))return'b-LOOKUP';
+  if(t.startsWith('DB'))return'b-DB'; if(t.startsWith('sp'))return'b-sp';
+  if(t.startsWith('DIV')||t.startsWith('BTN')||t.startsWith('MENU')||t.startsWith('URL')||t.startsWith('API'))return'b-DIV';
+  if(t.startsWith('GRP')||t.startsWith('EDIT')||t.startsWith('STATUS'))return'b-GRP';
+  if(t.startsWith('AXIS')||t.startsWith('MEAS')||t.startsWith('CROSS')||t.startsWith('SRC'))return'b-AXIS'; return'b-def';
+}
+function renderNode(node,depth){
+  const nw=document.createElement('div'); nw.className='nw';
+  const box=document.createElement('div'); box.className='mnode d'+Math.min(depth,4);
+  const hasC=node.c&&node.c.length;
+  if(hasC){const tg=document.createElement('span');tg.className='tog';tg.textContent='－';
+    tg.onclick=e=>{e.stopPropagation();nw.classList.toggle('collapsed');tg.textContent=nw.classList.contains('collapsed')?'＋':'－';};
+    box.appendChild(tg);}
+  const lbl=document.createElement('span');lbl.className='mlbl';lbl.textContent=node.l;box.appendChild(lbl);
+  if(node.t){const bs=document.createElement('span');bs.className='mbadges';
+    node.t.forEach(t=>{const b=document.createElement('span');b.className='badge '+badgeClass(t);b.textContent=t;bs.appendChild(b);});box.appendChild(bs);}
+  if(node.n){const nn=document.createElement('span');nn.className='mnote';nn.textContent=node.n;box.appendChild(nn);}
+  box._text=(node.l+' '+(node.n||'')+' '+((node.t||[]).join(' '))).toLowerCase();
+  nw.appendChild(box);
+  if(hasC){const kids=document.createElement('div');kids.className='kids';
+    node.c.forEach(ch=>kids.appendChild(renderNode(ch,depth+1)));nw.appendChild(kids);}
+  return nw;
+}
+const mm=document.getElementById('mm');
+(node=>{const ch=node.c||[];if(ch.length===1&&!node.t&&!node.n){mm.appendChild(renderNode(ch[0],0));}
+  else mm.appendChild(renderNode(node,0));})(TREE);
+const cv=document.getElementById('cv'), stage=cv.querySelector('.stage'), zl=document.getElementById('zl');
+const st={scale:1,tx:0,ty:0};
+function apply(){stage.style.transform='translate('+st.tx+'px,'+st.ty+'px) scale('+st.scale+')';zl.textContent=Math.round(st.scale*100)+'%';}
+function zoomAt(cx,cy,f){const ns=Math.min(2.5,Math.max(0.2,st.scale*f));const r=cv.getBoundingClientRect();
+  const px=cx-r.left,py=cy-r.top;st.tx=px-(px-st.tx)*(ns/st.scale);st.ty=py-(py-st.ty)*(ns/st.scale);st.scale=ns;apply();}
+function fit(){const sw=stage.scrollWidth,sh=stage.scrollHeight,cw=cv.clientWidth,ch=cv.clientHeight;
+  if(!sw||!sh)return;const s=Math.min(cw/sw,ch/sh,1)*0.96;st.scale=s;st.tx=Math.max(0,(cw-sw*s)/2);st.ty=Math.max(10,(ch-sh*s)/2);apply();}
+cv.addEventListener('wheel',e=>{e.preventDefault();zoomAt(e.clientX,e.clientY,e.deltaY<0?1.12:0.89);},{passive:false});
+let dr=false,lx=0,ly=0;
+cv.addEventListener('mousedown',e=>{if(e.target.classList.contains('tog'))return;dr=true;lx=e.clientX;ly=e.clientY;cv.classList.add('drag');});
+window.addEventListener('mousemove',e=>{if(!dr)return;st.tx+=e.clientX-lx;st.ty+=e.clientY-ly;lx=e.clientX;ly=e.clientY;apply();});
+window.addEventListener('mouseup',()=>{dr=false;cv.classList.remove('drag');});
+function expandColl(open){cv.querySelectorAll('.nw').forEach(nw=>{if(nw.querySelector(':scope>.kids')){nw.classList.toggle('collapsed',!open);
+  const tg=nw.querySelector(':scope>.mnode>.tog');if(tg)tg.textContent=open?'－':'＋';}});}
+document.querySelectorAll('.ztool button').forEach(b=>b.onclick=()=>{const a=b.dataset.z;
+  if(a==='in')zoomAt(cv.clientWidth/2,cv.clientHeight/2,1.2);else if(a==='out')zoomAt(cv.clientWidth/2,cv.clientHeight/2,0.83);
+  else if(a==='fit')fit();else if(a==='exp'){expandColl(true);fit();}else if(a==='col'){expandColl(false);fit();}});
+const s=document.getElementById('s'),hc=document.getElementById('hc');
+s.oninput=()=>{const q=s.value.trim().toLowerCase();let h=0;
+  cv.querySelectorAll('.mnode').forEach(m=>{m.classList.remove('hit');if(q&&m._text&&m._text.includes(q)){m.classList.add('hit');h++;
+    let p=m.parentElement;while(p&&!p.classList.contains('mm')){if(p.classList.contains('nw')){p.classList.remove('collapsed');
+      const tg=p.querySelector(':scope>.mnode>.tog');if(tg)tg.textContent='－';}p=p.parentElement;}}});
+  hc.textContent=q?h+' 일치':'';};
+requestAnimationFrame(fit);
+</script></body></html>

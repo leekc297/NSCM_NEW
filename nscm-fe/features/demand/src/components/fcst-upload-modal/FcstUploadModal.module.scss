@@ -1,3 +1,16 @@
+// ⭐ 2-Step 검증 스피너 오버레이 + bounded 레이아웃 (사용자 요구 2026-07-10).
+//   dialogCustomContentAreaWrapper 는 overflow:hidden 이라 content 초과분이 잘림 →
+//   contentWrap 을 viewport 기준(max-height) flex column 으로 bound → Error Detail 그리드가
+//   남은 공간을 채우고 하단 가로/세로 스크롤바가 잘리지 않도록. position:relative = 스피너 앵커.
+.contentWrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  max-height: 68vh;
+  overflow: hidden;
+}
+
 .inputContainer {
   // ⭐ 파일 선택 시 FileUploader 가 2행(클립+용량 / 파일칩)으로 커진다. 고정높이(구 48px) 금지 →
   //   min-height + 넉넉한 상하 padding 으로 2행 수용(상단 클립·6KB/10MB 잘림 + 하단 넘침 방지, 2026-07-07).
@@ -39,5 +52,17 @@
 .statusInput {
   & > div {
     border: none !important;
+  }
+}
+
+// ⭐ Error Detail 그리드 — flex:1 로 contentWrap 남은 공간 채움 (min-height 로 최소 표시 보장).
+//   wijmo grid(height:100%) 가 이 컨테이너를 채워 하단 가로/세로 스크롤바 정상 표시 (잘림 방지).
+.errorGridWrap {
+  flex: 1 1 auto;
+  min-height: 150px;
+  width: 100%;
+
+  & > div {
+    height: 100%;
   }
 }

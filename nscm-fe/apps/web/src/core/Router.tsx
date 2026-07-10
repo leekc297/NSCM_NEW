@@ -99,6 +99,9 @@ const MktFcstPageWithTab = LazyLoader(() =>
 const SalesMonitoringPageWithTab = LazyLoader(() =>
   import('@demand/sales-monitoring').then(m => ({ default: m.SalesMonitoring }))
 );
+const MetalLinkPricePageWithTab = LazyLoader(() =>
+  import('@demand/metal-link-price').then(m => ({ default: m.MetalLinkPrice }))
+);
 
 // @report
 const SalesPlanWaterfallWithTab = LazyLoader(() =>
@@ -282,6 +285,11 @@ export const router: RemixRouter = createBrowserRouter([
               {
                 path: ROUTE_PATHS.DMF0014,
                 element: <CustomerFcstUploadPageWithTab />,
+              },
+              // DMF0074 — Metal Link Price (메탈 판가 연동). ROUTE_PATHS.DMF0074='metal-link-price' = MNU_URL 정합(필수).
+              {
+                path: ROUTE_PATHS.DMF0074,
+                element: <MetalLinkPricePageWithTab />,
               },
             ],
           },

@@ -59,9 +59,12 @@ _{SCREEN_ID}_artifacts/                                      ← 워크스페이
 
 | 항목 | 규약 | 예시 |
 |---|---|---|
-| 폴더 이름 | `_{SCREEN_ID 소문자}_artifacts` 또는 `_{SCREEN_ID 대문자}_artifacts` | `_dmf0020_artifacts` |
+| ⭐ **폴더 이름 (2026-07-10 사용자 명시 — 이관 대상 폴더 표준)** | **`{PROGRAM_ID}_{YYYYMMDD}_{HHMM}`** (대문자 · 대상일자 · 생성시각) | `DMF0020_20260710_1708` |
+| (구) 폴더 이름 | `_{SCREEN_ID 소문자}_artifacts` (레거시 — 신규 이관 폴더는 위 규칙 사용) | `_dmf0020_artifacts` |
 | SQL 파일 prefix `{NN}` | MENU_ID 의 숫자 부분 (예: DMF0020 → `20`) | `20_DMF0020_*` |
 | 압축파일명 | `{SCREEN_ID}_To-Be_{YYYYMMDD}.zip` | `DMF0020_To-Be_20260522.zip` |
+
+> ⭐ **이관 대상 폴더 생성 규칙 (2026-07-10)**: 클라우드 이관 폴더는 `{PROGRAM_ID}_{YYYYMMDD}_{HHMM}` 형식으로 생성한다. 화면 여러 개면 각각 별도 폴더. 시각(HHMM)은 폴더 생성 시각. PowerShell `Get-Date -Format 'yyyyMMdd_HHmm'` 사용(런타임 시각 — 하드코딩 금지).
 
 ### 2.2 ❌ 포함 금지
 

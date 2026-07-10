@@ -13,6 +13,12 @@ INSERT/MERGE 전 `user_tab_columns WHERE nullable='N'` 로 필수컬럼 확인 �
 - DMF0020 사고 계보와 동일(컬럼 추측/NOT NULL 미검증). DDL 안 본 컬럼 추측 금지([[feedback_ddl_grep_before_sql]]).
 - 멱등: `MERGE WHEN NOT MATCHED` 또는 `NOT EXISTS`.
 
+## §1.1 ⭐ 감사컬럼 값 = `'admin'` 만 (claude 포함 ID 절대 금지) — 사용자 명시 2026-07-10
+- `CREATED_BY` / `LAST_UPDATED_BY` 리터럴 = **반드시 `'admin'`**. `claude_dmf0074_fe`·`claude_sys0013_rebuild` 처럼 **claude 가 들어간 ID 금지** (AI 도구명이 운영 감사데이터에 남으면 안 됨).
+- 작성 직후 grep 게이트: `grep -rnE "'claude" *.sql` **= 0 건** (post-write 의무).
+- 이미 적재된 잔재 교정 = `_artifacts/_deploy_packages/_shared_cmbo/FIX_created_by_claude_to_admin.sql` (전 메타테이블 `WHERE CREATED_BY LIKE 'claude%' OR LAST_UPDATED_BY LIKE 'claude%' → 'admin'`, 멱등). 사내 147행 교정 완료(2026-07-10) + 클라우드 폴더 `98_FIX_*` 동봉.
+- ⚠️ SP 본문 변경이력 주석의 "Claude" 는 코드 주석 → 대상 아님(감사 컬럼 리터럴만). ([[feedback_meta_audit_column_admin_only]])
+
 ## §2. LBL 코드 할당 정책 (명칭 = 동일명칭 재사용 / 없으면 신규)
 1. **동일 명칭이 권위 원천(`SCM_ADM_MSG_M`)에 있으면 그 코드 재사용** (예 User ID(Name)=LBL00339).
 2. 없으면 **권위 DB 최대 LBL 이후** 신규 — ⚠️ **FE `public/locales/*.json` 의 stray 코드(DB 미등록)도 회피**. DB max=658 인데 FE에 659~670 stray 점유 → 신규는 **DB·FE 양쪽 충돌 없는 첫 번호**(671+)부터.
@@ -34,6 +40,7 @@ INSERT/MERGE 전 `user_tab_columns WHERE nullable='N'` 로 필수컬럼 확인 �
 ## §5. 자기 점검
 ```
 ✅ INSERT 대상 테이블 NOT NULL 컬럼 전수 포함? (특히 MSG_TP_CD/USE_YN)
+✅ CREATED_BY/LAST_UPDATED_BY = 'admin' 만? grep "'claude" = 0 건? (§1.1)
 ✅ 신규 LBL = 동일명칭 재사용? 아니면 DB·FE 양쪽 max+1?
 ✅ PROC_M COL_NM=camelCase / SORT_ORD=SP positional 일치?
 ✅ corp 변경 = 멱등(MERGE/NOT EXISTS) + 적용 후 count 검증?

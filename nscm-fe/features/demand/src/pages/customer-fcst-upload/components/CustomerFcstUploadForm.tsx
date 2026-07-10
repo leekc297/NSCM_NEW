@@ -1,3 +1,4 @@
+import { PlantSiteField } from 'features/master/src/components';
 import type { Dispatch, SetStateAction } from 'react';
 
 import dayjs from '@foundation/dayjs';
@@ -31,7 +32,8 @@ export const CustomerFcstUploadForm = ({
 
   // ComboId — SCM_ADM_CMBO_SQL_M 등록명 사용 (2026-07-02 전수 대조).
   //   PlanSite → SalesPlant (PLANT sites + DIVISION_ID 컬럼 반환 — DMF0003 선례) / Bucket → BucketType (BUCKET_TYPE_CODE lookup)
-  const [myDivision, teambyDivision, endCustomer, salesSite, customsHandbook, plantSite, bucket] =
+  // Plant Site 는 카탈로그 PlantSiteField (PlantSitebyEndCustomer 바인드) — 여기서 제외.
+  const [myDivision, teambyDivision, endCustomer, salesSite, customsHandbook, bucket] =
     useTabComboQueries({
       filters: [
         'MyDivision',
@@ -39,7 +41,6 @@ export const CustomerFcstUploadForm = ({
         'EndCustomer',
         'SalesSite',
         'CustomsHandbook',
-        'SalesPlant',
         'BucketType',
       ],
     });
@@ -176,59 +177,40 @@ export const CustomerFcstUploadForm = ({
               className={styles.formItem}
             />
           </Grid>
-          <Grid size={3}>
-            <FormItem
-              label={t('LBL00005', '_Plant Site')}
-              labelAlign='right'
-              render={() => (
-                <CustomDropdown
-                  value={searchParams.plantSite}
-                  defaultValue='ALL'
-                  multiple
-                  allOption
-                  useClearIcon
-                  disabled={isDivRestricted} // ⭐ division 81*/82 만 활성 (사용자 요구)
-                  options={
-                    plantSite
-                      ?.filter(item => item.DIVISION_ID === searchParams.divisionId)
-                      ?.map(item => ({ label: item.NAME, value: item.CODE })) ?? []
-                  }
-                  onChange={(_, options) => {
-                    setSearchParams({ plantSite: options });
-                  }}
-                  className={styles.input}
-                />
-              )}
-              labelSize='long'
-              className={styles.formItem}
-            />
-          </Grid>
+          {/* ⭐ Plant Site — 카탈로그 PlantSiteField (combo PlantSitebyEndCustomer · Division+EndCustomer
+              바인드 cascade · Enable=81 계열만 40/82 비활성). 2026-07-10 사용자 요구 (AS-IS 정합) */}
+          <PlantSiteField
+            gridSize={3}
+            value={searchParams.plantSite ? searchParams.plantSite.split(',').filter(Boolean) : []}
+            onChange={v => setSearchParams({ plantSite: v.join(',') })}
+            division={searchParams.divisionId}
+            endCustomer={searchParams.endCustomer || undefined}
+          />
           <Grid size={3}>
             <FormItem
               label={t('LBL00617', 'Project')}
               labelAlign='right'
               render={() => (
-                <InputField
-                  fullWidth
-                  // ⭐ AS-IS: Project 는 division 81*/82 만 활성 (40 등 비활성) — 입력/팝업 버튼 모두 잠금
-                  disabled={isDivRestricted}
-                  className={clsx(styles.inputWithSearch, styles.input)}
-                  value={searchParams.project}
-                  onChange={event => setSearchParams({ project: event.target.value })}
-                  InputProps={{
-                    endAdornment: (
-                      <Button
-                        appearance='outlined'
-                        priority='normal'
-                        disabled={isDivRestricted}
-                        iconComponent={<FunctionSearchIcon appearance='lined' />}
-                        onClick={() => {
-                          if (!isDivRestricted) setOpenPrjByDivisionModal(true);
-                        }}
-                      />
-                    ),
-                  }}
-                />
+                // ⭐ 박스 + 돋보기 버튼을 flex 로 나란히 (endAdornment 절대배치 폐기) — master SearchFields
+                //   PopupSearchInput 표준 1:1. 컨테이너 .input 폭 + 36px 높이로 상하 조회조건과 우측끝·높이 정합.
+                <div className={clsx(styles.inputWithSearch, styles.input)}>
+                  <InputField
+                    fullWidth
+                    // ⭐ AS-IS: Project 는 division 81*/82 만 활성 (40 등 비활성) — 입력/팝업 버튼 모두 잠금
+                    disabled={isDivRestricted}
+                    value={searchParams.project}
+                    onChange={event => setSearchParams({ project: event.target.value })}
+                  />
+                  <Button
+                    appearance='outlined'
+                    priority='normal'
+                    disabled={isDivRestricted}
+                    iconComponent={<FunctionSearchIcon appearance='lined' />}
+                    onClick={() => {
+                      if (!isDivRestricted) setOpenPrjByDivisionModal(true);
+                    }}
+                  />
+                </div>
               )}
               labelSize='long'
               className={styles.formItem}
@@ -297,22 +279,19 @@ export const CustomerFcstUploadForm = ({
               label={t('LBL00003', '_Model/Nickname')}
               labelAlign='right'
               render={() => (
-                <InputField
-                  fullWidth
-                  className={clsx(styles.inputWithSearch, styles.input)}
-                  value={searchParams.modelNickname}
-                  onChange={event => setSearchParams({ modelNickname: event.target.value })}
-                  InputProps={{
-                    endAdornment: (
-                      <Button
-                        appearance='outlined'
-                        priority='normal'
-                        iconComponent={<FunctionSearchIcon appearance='lined' />}
-                        onClick={() => setOpenModelByDivisionModal(true)}
-                      />
-                    ),
-                  }}
-                />
+                <div className={clsx(styles.inputWithSearch, styles.input)}>
+                  <InputField
+                    fullWidth
+                    value={searchParams.modelNickname}
+                    onChange={event => setSearchParams({ modelNickname: event.target.value })}
+                  />
+                  <Button
+                    appearance='outlined'
+                    priority='normal'
+                    iconComponent={<FunctionSearchIcon appearance='lined' />}
+                    onClick={() => setOpenModelByDivisionModal(true)}
+                  />
+                </div>
               )}
               labelSize='long'
               className={styles.formItem}

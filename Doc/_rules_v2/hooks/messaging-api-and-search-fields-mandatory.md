@@ -113,7 +113,7 @@ import { apiClient, mockApiClient } from '@foundation/apis';
 | 2 | `TeamField` | `MultiFieldProps` (value, onChange, division) | Team multi dropdown — division cascade |
 | 3 | `EndCustomerField` | `MultiFieldProps` | End Customer multi — division cascade |
 | 4 | `SalesSiteField` | `MultiFieldProps` | Sales Site multi |
-| 5 | `PlantSiteField` | `MultiFieldProps` | Plant Site multi |
+| 5 | `PlantSiteField` | `MultiFieldProps` (+ `endCustomer`) | ⭐ Plant Site multi — **combo `PlantSitebyEndCustomer`**(Division+EndCustomer @바인드) · **Enable=81 계열만**(40/82 disabled). §3.1 참조 |
 | 6 | `BizTypeField` | `Omit<MultiFieldProps, 'division'>` | Biz Type (no cascade) |
 | 7 | `ProjectField` | `PopupFieldProps` (value, onValueChange, onOpenPopup) | Project — InputField + popup trigger |
 | 8 | `ItemField` | `ItemFieldProps extends PopupFieldProps` | Model/Item — popup |
@@ -154,6 +154,18 @@ import {
   division={searchParams.divisionId}
 />
 ```
+
+### 3.1 ⭐ Plant Site 조회조건 룰 (2026-07-10 사용자 명시 — 필수)
+- **Plant Site 조회조건 콤보 = `PlantSitebyEndCustomer` 반드시 사용** (구 `SalesSite`/`SalesPlant` 재사용 금지).
+  - 종속 = Division **+ End Customer** 서버측 `@divisionId`/`@endCustomer` 바인드 (AS-IS `UserPlantSiteByEndCustomer` 1:1). 반환열 CODE/NAME 만.
+  - **Enable = 81 계열만** — `disabled = !division.startsWith('81')` (40·82 비활성). Division 변경 시 값 clear.
+  - 적용 = DMF0074/DMF0020/DMF0014. 정본 = `PlantSiteField`(SearchFields.tsx) — `endCustomer` prop 추가.
+
+### 3.2 ⭐ @param 바인드 콤보 값 quoting 의무 (일반 — 모든 바인드 콤보)
+- `useTabComboQueries({ filters: [{ comboId, @param키: 값 }] })` 로 **서버측 @바인드 콤보** 호출 시 — **사용자 파라미터 값은 FE 가 `'`+값+`'` 로 감싸 전달**.
+- **Why**: BE `BaseService.makeComboQuery` 는 SQL 의 `@(\w+)` 를 `getOrDefault(key,"''")` 로 **raw 치환**(따옴표 미부여). 세션 파라미터(sesUserId/sesLangCd)만 BE 가 quoting. 사용자 파라미터를 raw 로 보내면 `81_UC` 등 underscore division 이 `',' || 81_UC || ','` (unquoted) → **ORA 파싱오류**. `40`/`81`/`82` 순수 숫자는 우연히 통과.
+- 헬퍼: `const q = v => `'${v?.trim() ? v : 'ALL'}'`;` (빈값 = `'ALL'` — SQL `NVL(TRIM(@x),'ALL')='ALL'` 분기). queryKey 에 ComboParam 전체 포함 → 값 변경 시 자동 재조회.
+- ⚠ 세션 파라미터는 FE quoting 금지(이중따옴표). ⚠ 바인드 콤보 반환열=CODE/NAME 만 → FE 재필터 불요. 상세 = 메모리 `feedback_bind_combo_value_quoting`.
 
 ### 3.4 의무 사항
 - 신규 화면 Form 작성 시 **카탈로그 우선 사용** — 메모리 `feedback_search_fields_catalog.md` cross-ref

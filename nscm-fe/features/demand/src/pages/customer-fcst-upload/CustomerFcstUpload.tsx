@@ -6,6 +6,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { apiClient } from '@foundation/apis';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { useQueryClient } from '@foundation/query-client';
+import type { EditTracker } from '@foundation/utils';
 import { Alert, MainTitle, SubTitle } from '@shared/components';
 import { useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
 import { useMessageStore, useSessionStore } from '@shared/stores';
@@ -30,6 +31,8 @@ export const CustomerFcstUpload = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   const gridRef = useRef<FlexGrid<CustomerFcstUploadRow>>();
   const gridFilterRef = useRef<FlexGridFilter>();
+  // ⭐ 그리드 공용 EditTracker — 변경 셀의 단일 진실원('M' 표기와 동일 출처). 저장 payload 는 여기서 도출.
+  const editTrackerRef = useRef<EditTracker<CustomerFcstUploadRow>>();
   const setAlert = useMessageStore.getState().setAlert;
   const setToast = useMessageStore.getState().setToast;
   const queryClient = useQueryClient();
@@ -98,6 +101,7 @@ export const CustomerFcstUpload = ({ tabId, title }: PageProps<MENU_ID>) => {
   useEffect(() => {
     clearFilters();
     saveEntriesRef.current.clear();
+    editTrackerRef.current?.clearChanges();
     void fetchStaticColumns();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabId]);
@@ -131,6 +135,7 @@ export const CustomerFcstUpload = ({ tabId, title }: PageProps<MENU_ID>) => {
     void setToast({ message: t('LBL00665', '_Loading...'), type: 'default', duration: 2000 });
     setHasSearched(true);
     saveEntriesRef.current.clear(); // AS-IS FindData dtSave.Clear() 1:1
+    editTrackerRef.current?.clearChanges();
     setFilters();
     void queryClient.invalidateQueries({ queryKey: [MENU_ID] });
     void fetchStaticColumns();
@@ -211,7 +216,60 @@ export const CustomerFcstUpload = ({ tabId, title }: PageProps<MENU_ID>) => {
   // ----- F7 Save — AS-IS SaveData 1:1: 'M' 고정 + 17 키 '^'delim payload -----
   //   ^delim 다건이므로 apiClient.post 직접 (useProcMutation array unfold 안 함 — 표준 선례)
   const handleSave = async () => {
-    const entries = [...saveEntriesRef.current.values()];
+    // ⭐ 근본 수정 (2026-07-08) — 저장 payload 를 그리드 공용 EditTracker 에서 직접 도출한다.
+    //   기존 별도 수집 ref(saveEntriesRef)는 편집↔저장 사이 재렌더/재등록 타이밍에 취약해
+    //   2행 이후 편집분이 유실("저장할 데이터 없음") → EditTracker('M' 표기와 동일·안정 출처)로 일원화.
+    //   (1) 열린 편집기 강제 커밋 → (2) EditTracker 변경맵 순회로 D_ 기간 셀 net 변경만 수집.
+    gridRef.current?.finishEditing(true);
+
+    const toStr = (v: unknown): string =>
+      typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '';
+    const changed = editTrackerRef.current?.getOriginalValues();
+    const entries: SaveEntry[] = [];
+    if (changed) {
+      for (const [item, fields] of changed) {
+        const rec = item as unknown as Record<string, unknown>;
+        for (const binding of Object.keys(fields)) {
+          if (!/^D_\d{8}$/.test(binding)) continue; // 편집 가능 셀 = 동적 D_ 기간 셀만
+          // 필수 11건 검증 (AS-IS spdMain_Changed 1:1) — 저장 시점 재검증
+          for (const chk of requiredChecks) {
+            if (toStr(item[chk.key]) === '') {
+              void setAlert({
+                type: 'alert',
+                content: t(MSG.REQUIRED_VALUE, '_{0} value is required.').replace('{0}', chk.label),
+              });
+              return;
+            }
+          }
+          if (toStr(item.PLANT_SITE_ID) === '' && toStr(item.DIVISION_ID) === '81') {
+            void setAlert({
+              type: 'alert',
+              content: t(MSG.REQUIRED_VALUE, '_{0} value is required.').replace('{0}', 'Plant Site*'),
+            });
+            return;
+          }
+          const qtyRaw = toStr(rec[binding]).replace(/,/g, '');
+          const qty = qtyRaw === '' ? '0' : String(parseInt(qtyRaw, 10) || 0);
+          entries.push({
+            divisionId: toStr(item.DIVISION_ID),
+            scmSiteId: toStr(item.SCM_SITE_ID),
+            customerProjectCode: toStr(item.CUSTOMER_PROJECT_CODE),
+            customerModel: toStr(item.CUSTOMER_MODEL),
+            incoterms: toStr(item.INCOTERMS),
+            fcstType: toStr(item.FCST_TYPE),
+            domExp: toStr(item.DOM_EXP),
+            measureGroup: toStr(item.MEASURE_GROUP),
+            measure: toStr(item.MEASURE),
+            plantSiteId: toStr(item.PLANT_SITE_ID),
+            uploadUom: toStr(item.UPLOAD_UOM),
+            projectCode: toStr(item.PROJECT_CODE),
+            itemId: toStr(item.ITEM_ID),
+            yyyymmdd: binding.replace('D_', ''),
+            qty,
+          });
+        }
+      }
+    }
     if (entries.length === 0) {
       void setAlert({ type: 'alert', content: t(MSG.NO_SAVE_DATA, '_No data to save.') });
       return;
@@ -220,7 +278,9 @@ export const CustomerFcstUpload = ({ tabId, title }: PageProps<MENU_ID>) => {
     if (!ok) return;
 
     const sesUserId = useSessionStore.getState().session.userId ?? '';
-    const rows = entries.map(e => ({ ...e, activeFlag: 'M', createdBy: sesUserId }));
+    // ⭐ createdByList — BE 가 가로채지 않는 키명 (createdBy 는 BE 세션 단일값으로 덮여 '^'×N 배열이
+    //   1토큰으로 붕괴 → SP split 2행째부터 CREATED_BY NULL → ORA-01400. DMF0020 선례 동일, 2026-07-08).
+    const rows = entries.map(e => ({ ...e, activeFlag: 'M', createdByList: sesUserId }));
     const payload = Object.fromEntries(
       SAVE_KEYS.map(k => [k, rows.map(r => r[k]).join('^')])
     );
@@ -240,6 +300,7 @@ export const CustomerFcstUpload = ({ tabId, title }: PageProps<MENU_ID>) => {
       }
       void setToast({ message: t('MSG00606', '_Saved.'), type: 'success' });
       saveEntriesRef.current.clear();
+      editTrackerRef.current?.clearChanges();
       // AS-IS SaveData 성공 후 FindButton() 재조회 1:1
       void queryClient.invalidateQueries({ queryKey: [MENU_ID] });
     } catch (e) {
@@ -298,6 +359,7 @@ export const CustomerFcstUpload = ({ tabId, title }: PageProps<MENU_ID>) => {
       <CustomerFcstUploadGrid
         gridRef={gridRef}
         gridFilterRef={gridFilterRef}
+        editTrackerRef={editTrackerRef}
         data={rows}
         spreadTitle={spreadTitleRows}
         onCellEdited={handleCellEdited}
@@ -333,10 +395,32 @@ export const CustomerFcstUpload = ({ tabId, title }: PageProps<MENU_ID>) => {
         }}
         callFromCell={false}
       />
-      {/* AS-IS btnExcelUpload_Click — 공통 ExcelUploadForm("DMF0014", 'FCST Upload') 1:1 */}
+      {/* AS-IS btnExcelUpload_Click — 공통 ExcelUploadForm("DMF0014", 'FCST Upload') 1:1.
+          ⭐ 2-Step (사용자 요구 2026-07-10): [Upload]=검증·분류 / [OK]=저장(onSave — mode=1 call-proc).
+          SP 게이트 복원(P_MODE>0)으로 mode=0 은 검증만, mode=1 이 DM_PLN_CUSTOMER_PSI 적재. 전량 게이트. */}
       <FcstUploadModal
         open={openFcstUploadModal}
         modalClose={() => setOpenFcstUploadModal(false)}
+        onSave={async () => {
+          // PKG_DMF0014.P_DMF0014_CUST_FCST_EXCEL_UPLOAD(mode=1) — 검증 통과분 적재.
+          //   createdBy=BE 세션 자동 · V_CREATION_DATE=MAX(최신 배치 자동 선택).
+          const sesUserId = useSessionStore.getState().session.userId ?? '';
+          try {
+            const res = await apiClient.post<Record<string, unknown>>(
+              `/${MENU_ID}/${SHEETS.MAIN}/UPLOAD_SAVE/call-proc`,
+              { mode: 1, createdBy: sesUserId, programId: MENU_ID, sheetName: SHEETS.MAIN }
+            );
+            const code = Number((res.data as { code?: string })?.code ?? 0);
+            const inner = (res.data?.result as { o_result_cursor?: { CODE?: string; MSG?: string }[] })
+              ?.o_result_cursor?.[0];
+            if (res.status >= 400 || code || (inner && inner.CODE !== '0')) {
+              return { ok: false, message: inner?.MSG || (res.data as { message?: string })?.message };
+            }
+            return { ok: true };
+          } catch (e) {
+            return { ok: false, message: e instanceof Error ? e.message : undefined };
+          }
+        }}
         onUploaded={() => {
           void queryClient.invalidateQueries({ queryKey: [MENU_ID] });
         }}

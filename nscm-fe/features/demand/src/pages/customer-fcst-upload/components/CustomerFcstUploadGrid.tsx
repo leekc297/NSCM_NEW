@@ -10,6 +10,7 @@ import { type MutableRefObject, useEffect, useMemo } from 'react';
 
 import { CELL_CONTROL_TYPE, CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
+import type { EditTracker } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 
 import { MAIN_COLUMNS } from '../customer-fcst-upload.constant';
@@ -19,6 +20,8 @@ import { useCustomerFcstUploadStore } from '../useCustomerFcstUploadStore';
 interface CustomerFcstUploadGridProps {
   gridRef: MutableRefObject<FlexGrid<CustomerFcstUploadRow> | undefined>;
   gridFilterRef: MutableRefObject<FlexGridFilter | undefined>;
+  // 그리드 공용 EditTracker 노출 — 저장 시 변경 셀의 단일 진실원으로 사용 (메인이 payload 도출)
+  editTrackerRef: MutableRefObject<EditTracker<CustomerFcstUploadRow> | undefined>;
   data: CustomerFcstUploadRow[];
   // PKG_DMF0014.P_DMF0014_GET_SPREAD_TITLE o_rc1 — 동적 D_ 기간 컬럼 (라벨/그룹) 정본
   spreadTitle: SpreadTitleRow[];
@@ -40,6 +43,7 @@ interface MergedColumnMeta {
 export const CustomerFcstUploadGrid = ({
   gridRef,
   gridFilterRef,
+  editTrackerRef,
   data,
   spreadTitle,
   onCellEdited,
@@ -307,6 +311,7 @@ export const CustomerFcstUploadGrid = ({
     <DataGrid<CustomerFcstUploadRow>
       key={mainStaticColumns.map(c => c.colNm).join(',')}
       gridRef={gridRef}
+      editTrackerRef={editTrackerRef}
       staticColumns={mainStaticColumns}
       dynamicColumns={dynamicColumns}
       itemsSource={data}

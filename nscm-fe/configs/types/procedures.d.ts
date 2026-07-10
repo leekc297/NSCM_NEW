@@ -481,6 +481,108 @@ interface RawProcedureMap extends Base {
       };
     };
   };
+  /**
+   * MetalLinkPrice — DMF0074 (Metal Link Price · 메탈 판가 연동)
+   *
+   * 사내 Oracle PKG_DMF0074 ALL_ARGUMENTS 실측 (2026-07-10 — hook #105 분석 산출물 d74_realdata).
+   * SHEETS:
+   * - `Metal Link Price` (메인 — Base 16 + 메탈 6그룹×7원소 42 + EDIT_YN. 조회전용 —
+   *                       SHT_NM = SCM_ADM_EXCEL_COLUMNS 기존 등록명 그대로 — excel-upload 체인 키)
+   * - `template`         (Excel Form 템플릿 조회 — P_DMF0074_GET_METAL_LINK_TEMPLATE, division-gate 동일)
+   * - `version`          (DMF0073_GET_VERSION_SALESPRICE 공유 — DMF0020 version 시트와 동일 계약)
+   * 저장 = Excel Upload 스테이징 단일 경로(P_DMF0074_EXCEL_UPLOAD — FileController excel-upload 체인) — 타입 미등재.
+   * 편집제어 = 단일 division-gate (SCM_ADM_USER_MNU_EDIT_AUTH_V INNER JOIN — 행 하드필터 + EDIT_YN).
+   */
+  DMF0074: {
+    'Metal Link Price': {
+      // PKG_DMF0074.P_DMF0074_GET_METAL_LINK_PRICE PROC_M(SORT_ORD 1~12 IN) 정확 일치
+      request: {
+        divisionId: string; // 1  P_DIVISION_ID (단일 필수 — MSG00097)
+        deptId: string; // 2  P_DEPT_ID (Team — 콤마 delim, 빈값 'ALL')
+        endCustomer: string; // 3  P_END_CUSTOMER
+        scmSiteId: string; // 4  P_SCM_SITE_ID (Sales Site)
+        plantSiteId: string; // 5  P_PLANT_SITE_ID (81* 전용 — 82/40 '')
+        projectCode: string; // 6  P_PROJECT_CODE (텍스트 raw — 40 비활성 '')
+        itemId: string; // 7  P_ITEM_ID (Model/Nickname 텍스트 raw)
+        fromYyyymmdd: string; // 8  P_FROM_YYYYMMDD (YYYYMM — 월 범위, 기본 당월)
+        toYyyymmdd: string; // 9  P_TO_YYYYMMDD (YYYYMM — 기본 +6개월)
+        versionType: string; // 10 P_VERSION_TYPE ('Current' 또는 버전NO 콤마 최대 2 — MSG00283/00255)
+        sesUserId: string; // 11 P_USER_ID (BE 세션 자동 — division-gate 키)
+        mnuId: string; // 12 P_MENU_ID (BE 메뉴 자동 — division-gate 키)
+      };
+      response: {
+        // O_RC1 — Base 16 + 메탈 42(6그룹×Ni/Co/Li2CO3/LIOH/Al/Mn/Cu suffix 1~7) + EDIT_YN
+        o_rc1: {
+          DIVISION_ID: string;
+          PLAN_YYYYMM: string;
+          DEPT_ID: string; // hidden (width 0)
+          DEPT_NAME: string;
+          END_CUSTOMER: string;
+          PROJECT_CODE: string; // DIVISION_ID 토큰에 40 없음 — 소형 미표시
+          PROJECT_NAME: string;
+          PLANT_SITE_ID: string; // hidden
+          ITEM_ID: string;
+          METAL_LINK_YN: string;
+          SCM_SITE_ID: string;
+          CURRENCY: string;
+          FCST_TYPE_CODE: string; // hidden
+          FCST_TYPE: string;
+          METAL_EXCEPTION_YN: string;
+          ENERGY: string | number;
+          EDIT_YN: string; // 단일 division-gate 프로젝션 (그리드 셀 편집에 사용 금지 — 조회전용)
+          [key: string]: string | number; // APPLY_PRICE_TYPE_CODE1~7 / FROM_PERIOD1~7 / TO_PERIOD1~7 / CONTRACT_UNIT1~7 / METAL_APPLY1~7 / METAL_REQR1~7
+        };
+      };
+    };
+    template: {
+      // PKG_DMF0074.P_DMF0074_GET_METAL_LINK_TEMPLATE PROC_M (1 IN + 세션 2 + o_rc1/O_RESULT)
+      request: {
+        divisionId: string; // 1 P_DIVISION_ID (부모 화면 division 고정 전달)
+        sesUserId: string; // 2 P_USER_ID (BE 세션 자동)
+        mnuId: string; // 3 P_MENU_ID (BE 메뉴 자동)
+      };
+      response: {
+        // O_RC1 — 업로드 대상 조합 (measure 열 '-' placeholder) + EDIT_YN. 0건 = MRF:Y 버전 부재 MSG
+        o_rc1: {
+          DIVISION_ID: string;
+          PLAN_YYYYMM: string;
+          DEPT_NAME: string;
+          END_CUSTOMER: string;
+          ITEM_ID: string;
+          EDIT_YN: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    version: {
+      // DMF0073_GET_VERSION_SALESPRICE PROC_M 공유 (DMF0020 version 시트와 동일 9-arg 계약)
+      request: {
+        startYyyymmdd: string;
+        endYyyymmdd: string;
+        createdBy: string;
+        divisionId: string;
+        versionType: string; // AS-IS DMF0074 btnSPVer = 'SP' 고정
+        description: string;
+      };
+      response: {
+        o_rc1: {
+          CODE: string;
+          VERSION_NO: string;
+          VERSION_DESCRIPTION: string;
+          VERSION_TYPE: string;
+          EDI_APPLY: string;
+          VER_CRE_SEQ: string | number;
+          YYYYMMDD: string;
+          CREATED_BY: string;
+          CREATION_DATE: string;
+          MONTHLY_ROLLING_FCST: string;
+          EDITABLE: string;
+          EDIT_YN: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+  };
   DMF0003: {
     'Mkt Fcst': {
       // DMF0003_GET_MKT_FCST_DATA PROC_M(SORT_ORD 1~22) IN 파라미터와 정확히 일치 (camelCase).
@@ -2492,6 +2594,109 @@ interface RawProcedureMap extends Base {
           CODE: string;
           NAME: string;
           [key: string]: string;
+        };
+      };
+    };
+  };
+  /**
+   * dynamic query (AS-IS SCM0005 — PKG_SYS0013, 2026-07-09 재개발)
+   */
+  SYS0013: {
+    main: {
+      request: {
+        reportName: string;
+        description: string;
+        role: string;
+      };
+      response: {
+        o_rc1: {
+          DQ_ID: string;
+          DQ_NAME: string;
+          DQ_TEXT: string;
+          DESCRIPTION: string;
+          DIVISION_ID: string;
+          VALID_YN: string;
+          ADMIN_ONLY_YN: string;
+          GROUP_ID: string;
+          GROUP_NAME: string;
+          EDIT_YN: string;
+          CREATED_BY: string;
+          CREATION_DATE: string;
+          [key: string]: string;
+        };
+      };
+    };
+    // EXECUTE — PKG_SYS0013.P_SYS0013_GET_DYNAMIC_QUERYS(P_SQL_TEXT) 동적 SELECT 결과.
+    result: {
+      request: {
+        sqlText: string;
+      };
+      response: {
+        o_rc1: {
+          [key: string]: string | number;
+        };
+      };
+    };
+    columns: {
+      request: {
+        dqId: string;
+      };
+      response: {
+        o_rc1: {
+          DQ_ID: number;
+          COLUMN_NAME: string;
+          VALUE_YN: string;
+          VALUE_TYPE: string;
+          VALID_YN: string;
+          SEQNO: string;
+          AGGREGATE: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    parameters: {
+      request: {
+        dqId: string;
+      };
+      response: {
+        o_rc1: {
+          DQ_ID: number;
+          PARAMETER_ID: string;
+          PARAMETER_TYPE: string;
+          OPERATION_ID: string;
+          VALID_YN: string;
+          REP_YN: string;
+          SEQNO: string;
+          DEFAULT_VALUE: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    // Role 저장 — P_SYS0013_SAVE_USER_GROUP (scalar 시그니처, 그룹별 단건 MERGE).
+    userGroup: {
+      request: {
+        dqId: string;
+        groupId: string;
+        validYn: string;
+        createdBy: string;
+        lastUpdatedBy: string;
+      };
+      response: {
+        o_rc1: {
+          CODE: string;
+        };
+      };
+    };
+    // 실행이력 기록 — P_SYS0013_EXECUTE_HIST (격차② 배선).
+    history: {
+      request: {
+        dqId: string;
+        dqText: string;
+        updatedBy: string;
+      };
+      response: {
+        o_rc1: {
+          CODE: string;
         };
       };
     };

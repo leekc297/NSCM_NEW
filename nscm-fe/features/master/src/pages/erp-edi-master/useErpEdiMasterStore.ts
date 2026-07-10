@@ -55,12 +55,17 @@ interface ErpEdiMasterAction {
   setSearchParams: (params: Partial<SearchCondition>) => void;
   /** DMF0004 표준 명칭 (Form 호출). Summary + Repair filters 동시 set */
   setSummaryFilters: () => void;
+  /** 첫 진입 시 Summary/Repair 자동 조회 없이 Update History(Form 상단 Last Update)만 조회 */
+  setUpdateHistoryFilter: () => void;
   setRepairFilter: () => void;
   /** AS-IS .cs L1973~1981 — dblclick 컬럼 위치별 SALES_SITE 또는 SSPM 단일 조회 */
   setSalesSiteOnly: () => void;
   setSspmOnly: () => void;
   /** @deprecated AS-IS 와 다른 동작 — 둘 다 fire 하여 성능 저하. setSalesSiteOnly/setSspmOnly 사용. */
   setSubFilter: () => void;
+  /** Summary 더블클릭 시 하단 SalesSite/SSPM 그리드 filter 제거 (재조회 방지 + stale 데이터 정리) */
+  clearSubFilters: () => void;
+  clearAllGrids: () => void;
   setRepairContext: (ctx: RepairContext | undefined) => void;
   setSalesSiteFilters: (input: {
     divisionId: string;
@@ -145,6 +150,16 @@ export const useErpEdiMasterStore = createPersistedStoreWithTab<
         };
       });
     },
+    // 첫 진입 전용 — Summary/Repair 자동 조회 없이 Update History(Form 상단 Last Update)만 조회
+    setUpdateHistoryFilter: () => {
+      const sesUserId = useSessionStore.getState().session.userId ?? '';
+      set(state => {
+        state.filters[SHEETS.UPDATE_HISTORY] = {
+          sesUserId,
+          menuId: MENU_ID,
+        };
+      });
+    },
     // AS-IS spdSummary_CellDoubleClick (.cs L1887) → FindData_SubRepair_New (.cs L1051)
     setRepairFilter: () => {
       const sesUserId = useSessionStore.getState().session.userId ?? '';
@@ -208,6 +223,21 @@ export const useErpEdiMasterStore = createPersistedStoreWithTab<
           sesUserId,
           menuId: MENU_ID,
         };
+      });
+    },
+    // Summary 더블클릭 시 하단 SalesSite/SSPM filter 제거 (enabled=false → 재조회 방지)
+    clearSubFilters: () => {
+      set(state => {
+        state.filters[SHEETS.SALES_SITE] = undefined;
+        state.filters[SHEETS.SSPM] = undefined;
+      });
+    },
+    clearAllGrids: () => {
+      set(state => {
+        state.filters[SHEETS.SUMMARY] = undefined;
+        state.filters[SHEETS.REPAIR] = undefined;
+        state.filters[SHEETS.SALES_SITE] = undefined;
+        state.filters[SHEETS.SSPM] = undefined;
       });
     },
     setSalesSiteFilters: input => {
@@ -274,11 +304,12 @@ export const useErpEdiMasterStore = createPersistedStoreWithTab<
         }
       };
       const divId = get().searchParams.divisionId === '40' ? '40' : undefined;
+      const sspmDivId = get().searchParams.divisionId || undefined;
       const [summary, repair, salesSite, sspm] = await Promise.all([
         fetchOne(SHEETS.SUMMARY, { divisionId: divId }),
         fetchOne(SHEETS.REPAIR),
         fetchOne(SHEETS.SALES_SITE),
-        fetchOne(SHEETS.SSPM),
+        fetchOne(SHEETS.SSPM, { divisionId: sspmDivId }),
       ]);
       set(state => {
         state.staticColumns = { summary, repair, salesSite, sspm };

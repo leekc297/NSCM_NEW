@@ -149,6 +149,7 @@ export const ErpEdiMasterSspmGrid = ({
             salesSite: 'ALL',
             owner: '',
           }}
+          multiCheckbox
         />
       )}
     </>

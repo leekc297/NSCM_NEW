@@ -88,7 +88,7 @@ Read: Doc/_rules_v2/00_INDEX.md                      ← 상세 카탈로그 (ho
 | 30 | 로컬 환경 백업/원복 |
 | 31 | Figma → React |
 | 32 | Claude(Code) Oracle 직결 (SQLcl MCP / python-oracledb / docker sqlplus) |
-| `Doc/_analysis/db_migration/01` | DB MSSQL→Oracle 변환 룰 (부록 C 실전 함정 10종) |
+| `Doc/_analysis/db_migration/01` | DB MSSQL→Oracle 변환 룰 (부록 C 실전 함정 11종) |
 | `Doc/_analysis/db_migration/02` | SP 변환·검증 6-Stage 파이프라인 |
 
 > 룰 v1 나머지 24 룰 (00 / 01 / 03~20 / 23~27) 은 `Doc/_dev_rules/_archive/` 이동 완료. 직접 참조 금지.
@@ -252,7 +252,7 @@ return Dmf0099Response.listOf(data);
 | 경로 | 내용 |
 |---|---|
 | `Doc/_analysis/INDEX.md` | 도메인 분석 자료 진입점 |
-| `Doc/_analysis/db_migration/01_MSSQL_to_Oracle_Conversion_Rules.md` | DB 변환 규칙 (⭐ 부록 C 실전 함정 10종) |
+| `Doc/_analysis/db_migration/01_MSSQL_to_Oracle_Conversion_Rules.md` | DB 변환 규칙 (⭐ 부록 C 실전 함정 11종) |
 | `Doc/_analysis/db_migration/02_SP_CONVERSION_PIPELINE.md` | ⭐ SP 변환·검증 6-Stage 파이프라인 (2026-06-11) |
 | `_analysis/_FOLDER_MAP.md` | ⭐ Cowork 분석 산출물 폴더 매핑표 |
 | `_analysis/Screen_POPUP_SP_Tables_Matrix.xlsx` | ⭐ 통합 매트릭스 (3,318행 / 395 화면 / 710 SP / 355 Tables) |

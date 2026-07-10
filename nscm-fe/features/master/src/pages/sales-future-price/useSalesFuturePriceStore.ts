@@ -169,8 +169,14 @@ export const useSalesFuturePriceStore = createPersistedStoreWithTab<State & Acti
           `/admin/menu/${MENU_ID}/column`,
           { sheetNm: ADMIN_SHEET_NAME[SHEETS.MAIN] ?? SHEETS.MAIN, divisionId }
         );
+        const next = res.data.result ?? [];
         set(state => {
-          state.staticColumns[SHEETS.MAIN] = res.data.result ?? [];
+          // ⭐ 성능(2026-07-08) — 내용 동일(관리자 변경 없음) 시 set 생략 → 참조 유지.
+          //   매 Search refetch 가 동일 내용의 새 배열을 set 하면 Grid 의 visibleColumns 참조가 바뀌어
+          //   핸들러 재등록 + invalidate(true) 전체 리프레시가 불필요하게 반복됨. admin 변경 시엔 즉시 반영(기존 동작).
+          if (JSON.stringify(state.staticColumns[SHEETS.MAIN]) !== JSON.stringify(next)) {
+            state.staticColumns[SHEETS.MAIN] = next;
+          }
         });
       } catch {
         // BE 메타 미등록 시 화면이 안 깨지도록 silent fallback — 기존 MAIN_COLUMNS 하드코딩 유지
@@ -185,8 +191,12 @@ export const useSalesFuturePriceStore = createPersistedStoreWithTab<State & Acti
           `/admin/menu/${MENU_ID}/column`,
           { sheetNm: ADMIN_SHEET_NAME[SHEETS.PRICE_BATCH] ?? SHEETS.PRICE_BATCH, divisionId }
         );
+        const next = res.data.result ?? [];
         set(state => {
-          state.staticColumns[SHEETS.PRICE_BATCH] = res.data.result ?? [];
+          // 내용 동일 시 set 생략 — 참조 안정화 (MAIN 과 동일 사유, 2026-07-08).
+          if (JSON.stringify(state.staticColumns[SHEETS.PRICE_BATCH]) !== JSON.stringify(next)) {
+            state.staticColumns[SHEETS.PRICE_BATCH] = next;
+          }
         });
       } catch {
         // silent fallback — 배치 모달 FALLBACK_FIXED 유지
@@ -207,7 +217,11 @@ export const useSalesFuturePriceStore = createPersistedStoreWithTab<State & Acti
         );
         set(state => {
           sheets.forEach((s, i) => {
-            state.staticMeasures[s] = responses[i].data.result ?? [];
+            const next = responses[i].data.result ?? [];
+            // 내용 동일 시 set 생략 — measureDataMap 재생성/Grid 리렌더 방지 (참조 안정화, 2026-07-08).
+            if (JSON.stringify(state.staticMeasures[s]) !== JSON.stringify(next)) {
+              state.staticMeasures[s] = next;
+            }
           });
         });
       } catch {

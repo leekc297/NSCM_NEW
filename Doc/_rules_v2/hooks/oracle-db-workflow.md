@@ -11,7 +11,7 @@
 
 | 작업 타입 | 필독 순서 |
 |---|---|
-| **A. MSSQL → Oracle SP 신규 변환** | `Doc/_analysis/db_migration/01_MSSQL_to_Oracle_Conversion_Rules.md` (부록 C 함정 10종 + ⭐ §7 성능 안티패턴 5룰) → `oracle-sp-perf-anti-patterns.md` (5 성능 룰 정밀) → `02_SP_CONVERSION_PIPELINE.md` (6-Stage 파이프라인) → 본 hook §1/§2 |
+| **A. MSSQL → Oracle SP 신규 변환** | `Doc/_analysis/db_migration/01_MSSQL_to_Oracle_Conversion_Rules.md` (부록 C 함정 11종 + ⭐ §7 성능 안티패턴 5룰) → `oracle-sp-perf-anti-patterns.md` (5 성능 룰 정밀) → `02_SP_CONVERSION_PIPELINE.md` (6-Stage 파이프라인) → 본 hook §1/§2 |
 | **B. 신규 GET SP 작성 (조회)** | `sp-dual-cursor-pattern.md` §1 → `proc-meta-signature-match.md` §1 → `sheet-columns-binding-match.md` §1 → `sp-exception-handler-debug-friendly.md` §2 |
 | **C. 신규 SAVE/MUTATION SP 작성** | `sp-dual-cursor-pattern.md` §1.3 (단일 cursor 허용) → `proc-meta-signature-match.md` §1 → 부록 C 함정: SUBSTR-0 / TRUNCATE GT / ^-delim bulk |
 | **D. 기존 SP 보강 (cursor/EXCEPTION 추가)** | `sp-body-minimal-change.md` §1 (DBMS_METADATA.GET_DDL 원본 + 최소 변경) → `sp-utl-call-stack-safety.md` (SUBPROGRAM 사용 시) → `sp-exception-handler-debug-friendly.md` |
@@ -29,7 +29,7 @@
 3. **SHEET_COLUMNS**: COLUMN_NAME = SP SELECT alias case-sensitive 일치 — `sheet-columns-binding-match.md`
 4. **Body 변경**: 원본 추출 후 최소 변경 (diff 5줄 초과 시 분리 작업) — `sp-body-minimal-change.md`
 5. **EXCEPTION**: 개발 = SQLCODE/SQLERRM/BACKTRACE 노출 / 운영 = generic + LOG — `sp-exception-handler-debug-friendly.md`
-6. **함정 회피**: 부록 C 10종 (SUBSTR-0 / TRUNCATE GT(+mutex hang) / LISTAGG OVERFLOW / JSON CLOB / GTT DELETE / cursor mismatch / ''=NULL / CMBO quote / ^-delim / **FETCH_STATUS 무한루프**)
+6. **함정 회피**: 부록 C 11종 (SUBSTR-0 / TRUNCATE GT(+mutex hang) / LISTAGG OVERFLOW / JSON CLOB / GTT DELETE / cursor mismatch / ''=NULL / CMBO quote / ^-delim / **FETCH_STATUS 무한루프** / **NLS 암묵 형변환(C-11, #109)**)
 7. ⭐ **성능 안티패턴 5 룰** (MSSQL → Oracle 변환 의무): `oracle-sp-perf-anti-patterns.md` — (1) column 안 REGEXP_SUBSTR/CONNECT BY → FROM 분리 (2) 분리자 split → GT 적재 (3) MASTER lookup → LEFT JOIN (4) GT MAIN KEY INDEX (5) WHERE 함수 → SARGable
 
 ## §2 POST-WRITE 검증 의무 (작성 직후 — 생략 금지)
@@ -70,6 +70,9 @@
 | 업로드/저장 무반응 (BE 무응답, FE hang — 파일 수신·파싱은 정상) | SP 내 GTT `TRUNCATE`(DDL) 동시세션 mutex 경합 (library cache/cursor/row cache) | sp-hang-runaway-loop-diagnosis §1·§2 + 부록 C-2 |
 | 소량 입력인데 SP 영원히 실행 (V$SQL EXECUTIONS 수백만 폭증) | `@@FETCH_STATUS` 변환 누락 — `WHILE V_FETCH_STATUS=0` 재할당 없음 → 무한 루프 | sp-hang-runaway-loop-diagnosis §3 + 부록 C-10 |
 | `CREATE OR REPLACE` 재배포가 안 끝남 (LAST_DDL_TIME 미변경) | 멈춘 세션이 SP library cache pin 보유 → DBA kill 선행 (SCM_MGR ORA-01031 / stale SERIAL# ORA-00026) | sp-hang-runaway-loop-diagnosis §4 |
+| **로컬 BE·SP직접호출 OK, 클라우드 BE 만 실패** (ORA-01861 등) | **암묵 형변환 = 세션 NLS 의존** — DATE 파라미터 원시값/단일인자 TO_DATE. 권한·BE빌드 단정 금지 | oracle-nls-implicit-conversion(#109) + 부록 C-11 |
+| BE 응답 `-9994` / 로그 `InvocationTargetException: null` | **래퍼가 실오류를 가림** — `SCM_COM_SYS_LOG.EXCT_MSG_CTN`(전체 ORA 체인) 또는 BE 콘솔 `Caused by:` 로 확보 (SCM_COM_SQL_LOG.EXCEPTION 은 null 로 잘림) | sp-exception-handler-debug-friendly §4.5 |
+| 업로드 기간(동적) 컬럼 값이 스테이징에서 전부 빈값 → 'Invalid ... Bucket' 류 검증 실패 | `SCM_ADM_EXCEL_COLUMNS.HEADER_CONTENT` 파이프 수 < 파일 컬럼 수 — BE 가 파이프 수만큼만 매핑(초과분 절단). 사내↔클라우드 메타 불일치 1순위 | 사내값 대조 후 UPDATE 동기 (DMF0014 13_HEADER_SYNC 선례) |
 
 ## §4 자기 점검 (작업 종료 직전)
 
