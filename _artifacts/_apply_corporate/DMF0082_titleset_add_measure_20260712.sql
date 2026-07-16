@@ -1,0 +1,24 @@
+-- DMF0082 MEASURE 컬럼 미표시 보정 (2026-07-12)
+--   근본원인: 그리드는 DISPLAY_FLAG(=사용자 TITLESET_USER 'C' 포함 여부, PR_GET_SHEET_COLUMN_LIST L139-142)로
+--             렌더 게이트(DataGrid.tsx L110 `.filter(c=>c.display)`). MEASURE 는 VISIBLE_FLAG='N' 이던 시절
+--             titleset 이 생성되어 43명 전원 'C' titleset 에 MEASURE 부재 → DISPLAY_FLAG='N' → 숨김.
+--   (대소문자 sheet_name 문제 아님 — 'FcstNPrice' 로 조회 시 0컬럼 실측. 소문자 'fcstNPrice' 정상.)
+--   MEASURE 는 필수컬럼(USER_SELECTABLE_FLAG='N', FIXED_FLAG='Y') → 전 titleset 에 존재해야 함.
+--   기존 'C' titleset 보유 사용자 전원에 MEASURE 1행 추가 (SORT_ORDER_NO=85 — ITEM_ID(80) 직후). 멱등.
+
+INSERT INTO SCM_MGR.SCM_MST_TITLESET_USER
+  (USER_ID, PROGRAM_ID, SHEET_NAME, USER_INQUIRY_COLUMN_TYPE_CODE, COLUMN_NAME, SORT_ORDER_NO,
+   SUB_TOTAL_FLAG, DATA_SORT_METHOD_CODE, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+SELECT DISTINCT T.USER_ID, 'DMF0082', 'fcstNPrice', 'C', 'MEASURE', 85,
+   'N', 'ASC', 'admin', SYSDATE, 'admin', SYSDATE
+  FROM SCM_MGR.SCM_MST_TITLESET_USER T
+ WHERE T.PROGRAM_ID = 'DMF0082'
+   AND T.SHEET_NAME = 'fcstNPrice'
+   AND T.USER_INQUIRY_COLUMN_TYPE_CODE = 'C'
+   AND NOT EXISTS (
+        SELECT 1 FROM SCM_MGR.SCM_MST_TITLESET_USER X
+         WHERE X.USER_ID = T.USER_ID AND X.PROGRAM_ID = 'DMF0082'
+           AND X.SHEET_NAME = 'fcstNPrice' AND X.USER_INQUIRY_COLUMN_TYPE_CODE = 'C'
+           AND X.COLUMN_NAME = 'MEASURE');
+
+COMMIT;

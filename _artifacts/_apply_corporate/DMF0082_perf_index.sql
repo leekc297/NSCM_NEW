@@ -1,0 +1,19 @@
+-- ============================================================================
+-- DMF0082 PERF 2026-07-12 : LAST_DATA_SETUP GTT lateral-lookup indexes
+--   Root cause: LEFT JOIN LATERAL (... FETCH FIRST 1) full-scanned these GTTs
+--   once per output row (163,530x) -> 10.9M buffer gets / ~34s.
+--   These are Global Temporary Tables (SYS$SESSION); index is a shared schema
+--   object, data stays per-session. Safe, no result change.
+-- Keys = the 8 lateral equality columns + CREATE_DATE (for ORDER BY DESC FETCH 1)
+-- ============================================================================
+CREATE INDEX SCM_MGR.IX_GT82_LDS_PRICE_PERF   ON SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_PRICE
+  (DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS, MEASURE, CREATE_DATE);
+
+CREATE INDEX SCM_MGR.IX_GT82_LDS_FCST_PERF    ON SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_FCST
+  (DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS, MEASURE, CREATE_DATE);
+
+CREATE INDEX SCM_MGR.IX_GT82_LDS_PRICE_C_PERF ON SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_PRICE_C
+  (DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS, MEASURE, CREATE_DATE);
+
+CREATE INDEX SCM_MGR.IX_GT82_LDS_FCST_C_PERF  ON SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_FCST_C
+  (DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS, MEASURE, CREATE_DATE);

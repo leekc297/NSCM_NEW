@@ -1,0 +1,38 @@
+-- =====================================================================
+-- DMF0042 P3 — TITLESET_USER SHEET_NAME 병합: 'bizPlan' → 'Biz Plan' (2026-07-15)
+-- 근거 (실측 2026-07-15): SCM_MST_TITLESET_USER PROGRAM_ID='DMF0042' = 'bizPlan' 168행 단독
+--   (충돌 'Biz Plan' 0건). SP 리터럴 'Biz Plan' 6곳 / 'bizPlan' 0건 실측 → rename 방향 확정.
+--   SHEET_COLUMNS(63) / SHEET_MEASURE(9) = 'Biz Plan' 정본과 표기 통일 (DMF0021 P2 선례).
+-- 복합키: USER_ID + PROGRAM_ID + SHEET_NAME + USER_INQUIRY_COLUMN_TYPE_CODE + COLUMN_NAME
+-- 멱등: 재실행 시 'bizPlan' 0건 → 전 구문 0행.
+-- =====================================================================
+
+-- 백업 (CTAS — 재실행 시 ORA-00955 기존재 무시하고 진행)
+CREATE TABLE SCM_MGR.TITLESET_USER_BAK_DMF0042_0715 AS
+SELECT * FROM SCM_MGR.SCM_MST_TITLESET_USER WHERE PROGRAM_ID = 'DMF0042';
+
+-- 1) 충돌 정리: 동일 복합키로 'Biz Plan' 행이 이미 있으면 그 행 삭제 (운영분 'bizPlan' 우선)
+--    실측 0건 예상 — 멱등 안전장치 (DMF0021 P2 패턴)
+DELETE FROM SCM_MGR.SCM_MST_TITLESET_USER t
+WHERE t.PROGRAM_ID = 'DMF0042' AND t.SHEET_NAME = 'Biz Plan'
+AND EXISTS (
+    SELECT 1 FROM SCM_MGR.SCM_MST_TITLESET_USER s
+    WHERE s.PROGRAM_ID = t.PROGRAM_ID AND s.SHEET_NAME = 'bizPlan'
+      AND s.USER_ID = t.USER_ID
+      AND s.USER_INQUIRY_COLUMN_TYPE_CODE = t.USER_INQUIRY_COLUMN_TYPE_CODE
+      AND s.COLUMN_NAME = t.COLUMN_NAME
+);
+
+-- 2) 병합 rename
+UPDATE SCM_MGR.SCM_MST_TITLESET_USER
+SET SHEET_NAME = 'Biz Plan', LAST_UPDATED_BY = 'admin', LAST_UPDATE_DATE = SYSDATE
+WHERE PROGRAM_ID = 'DMF0042' AND SHEET_NAME = 'bizPlan';
+
+COMMIT;
+
+-- 검증: 'bizPlan' 잔존 0건 / 'Biz Plan' = 168건
+SELECT SHEET_NAME, COUNT(*) FROM SCM_MGR.SCM_MST_TITLESET_USER
+WHERE PROGRAM_ID = 'DMF0042' GROUP BY SHEET_NAME;
+
+-- 원복: DELETE FROM SCM_MGR.SCM_MST_TITLESET_USER WHERE PROGRAM_ID='DMF0042';
+--       INSERT INTO SCM_MGR.SCM_MST_TITLESET_USER SELECT * FROM SCM_MGR.TITLESET_USER_BAK_DMF0042_0715; COMMIT;

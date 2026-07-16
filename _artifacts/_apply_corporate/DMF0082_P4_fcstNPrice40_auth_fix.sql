@@ -1,0 +1,38 @@
+-- =====================================================================
+-- DMF0082 — 조회 "권한없음" fix (2026-07-12)
+-- 원인: FE 조회 시트 = 'fcstNPrice_40' (SHEET_COLUMNS/procedures.d.ts 등록명) 인데
+--       BTN_MPG/USER_GR 는 'fcstNPrice' 만 보유 → checkMenuBtnAuth HAS_AUTH='N'
+--       (메모리 sht_nm_incomplete_migration 사고 패턴). API 는 기존 것 재사용.
+-- =====================================================================
+
+MERGE INTO SCM_MGR.SCM_ADM_MNU_BTN_MPG_M t
+USING (
+  SELECT 'DMF0082' MNU_ID, 'fcstNPrice_40' SHT_NM, 'SEARCH' MNU_BTN_CD, 'P_DMF0082_GET_MAIN_DATA' API_ID FROM DUAL
+  UNION ALL SELECT 'DMF0082', 'fcstNPrice_40', 'SAVE', 'DMF0082_SAVE' FROM DUAL
+) s
+ON (t.MNU_ID = s.MNU_ID AND t.SHT_NM = s.SHT_NM AND t.MNU_BTN_CD = s.MNU_BTN_CD)
+WHEN MATCHED THEN UPDATE SET t.API_ID = s.API_ID, t.USE_YN = 'Y',
+  t.LAST_UPDATED_BY = 'admin', t.LAST_UPDATE_DATE = SYSDATE
+WHEN NOT MATCHED THEN INSERT (MNU_ID, SHT_NM, MNU_BTN_CD, API_ID, USE_YN,
+  CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+VALUES (s.MNU_ID, s.SHT_NM, s.MNU_BTN_CD, s.API_ID, 'Y',
+  'admin', SYSDATE, 'admin', SYSDATE);
+
+MERGE INTO SCM_MGR.SCM_ADM_USER_GR_MNU_BTN_MPG_M t
+USING (
+  SELECT g.USER_GR_ID, 'DMF0082' MNU_ID, 'fcstNPrice_40' SHT_NM, b.MNU_BTN_CD
+  FROM (SELECT 'ADMIN' USER_GR_ID FROM DUAL
+        UNION ALL SELECT 'DM ADMIN' FROM DUAL
+        UNION ALL SELECT 'DM Viewer' FROM DUAL) g
+  CROSS JOIN (SELECT 'SEARCH' MNU_BTN_CD FROM DUAL UNION ALL SELECT 'SAVE' FROM DUAL) b
+  WHERE NOT (g.USER_GR_ID = 'DM Viewer' AND b.MNU_BTN_CD = 'SAVE') -- Viewer 는 조회만 (기존 fcstNPrice 패턴)
+) s
+ON (t.USER_GR_ID = s.USER_GR_ID AND t.MNU_ID = s.MNU_ID AND t.SHT_NM = s.SHT_NM AND t.MNU_BTN_CD = s.MNU_BTN_CD)
+WHEN MATCHED THEN UPDATE SET t.USE_YN = 'Y',
+  t.LAST_UPDATED_BY = 'admin', t.LAST_UPDATE_DATE = SYSDATE
+WHEN NOT MATCHED THEN INSERT (USER_GR_ID, MNU_ID, SHT_NM, MNU_BTN_CD, USE_YN,
+  CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+VALUES (s.USER_GR_ID, s.MNU_ID, s.SHT_NM, s.MNU_BTN_CD, 'Y',
+  'admin', SYSDATE, 'admin', SYSDATE);
+
+COMMIT;

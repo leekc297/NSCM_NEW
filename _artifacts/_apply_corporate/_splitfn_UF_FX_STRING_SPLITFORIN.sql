@@ -1,0 +1,42 @@
+
+  CREATE OR REPLACE EDITIONABLE FUNCTION "SCM_MGR"."UF_FX_STRING_SPLITFORIN" 
+(
+    P_STRING     IN VARCHAR2
+  , P_DELIMITER  IN VARCHAR2
+)
+RETURN T_STR_TAB PIPELINED
+/*
+ * FUNCTION NAME : UF_FX_STRING_SPLITFORIN
+ * DESCRIPTION   : IN절용 구분자 분리(재귀 CTE)
+ * PROGRAM HISTORY
+ *--------------------------------------------------------------
+ * 2026-07-03   ZIONEX  [PJ202650304]  NextSCM Migration
+ */
+AS
+BEGIN
+
+  IF P_STRING IS NOT NULL THEN
+
+    FOR R IN (
+        WITH SPLIT(STPOS, ENDPOS) AS (
+            SELECT 0 AS STPOS, INSTR(P_STRING, P_DELIMITER) AS ENDPOS
+              FROM DUAL
+            UNION ALL
+            SELECT ENDPOS + 1, INSTR(P_STRING, P_DELIMITER, ENDPOS + 1)
+              FROM SPLIT
+             WHERE ENDPOS > 0
+        )
+        SELECT SUBSTR(P_STRING,
+                      GREATEST(STPOS, 1),
+                      (COALESCE(NULLIF(ENDPOS, 0), LENGTH(P_STRING) + 1) - STPOS) - (GREATEST(STPOS, 1) - STPOS)
+                     ) AS DATA
+          FROM SPLIT
+    ) LOOP
+        PIPE ROW (TRIM(R.DATA));
+    END LOOP;
+
+  END IF;
+
+    RETURN;
+
+END;

@@ -23,7 +23,7 @@
 4. (UI 작업 시) §3 UI-MANDATORY 체크리스트를 PRE-WRITE 로 통과
 ```
 
-> **카운트 단일 소스**: hook 총수 = **113** (`Doc/_rules_v2/hooks/*.md` 실측, 2026-07-15 — #113 ui-category-division-direct-compare 신설[Grid Column 하드코딩·화이트리스트·attr 우회 금지, DIVISION_ID 서버 직접 비교 — 사용자 명시]. 직전 2026-07-13: #110~#112). 어떤 문서든 카운트를 별도 보유하지 말 것 — 본 파일 §4 와 00_INDEX 만 카운트를 가진다. (진단 R-2)
+> **카운트 단일 소스**: hook 총수 = **114** (`Doc/_rules_v2/hooks/*.md` 실측, 2026-07-16 — **#114 msg-id-asis-tobe-conversion 신설**[AS-IS MSG_ID 그대로 사용 절대 금지 — AS-IS 문구 확보→대조표 매칭 컬럼→사내 실측으로 TO-BE ID EXACT 재사용/신규 채번/동일 유지 3분기 + 사용 ID 전수 실문구 대사. 공통 61코드 중 54(89%) 의미 재배정 실측. 사용자 명시]. 직전 2026-07-15: #113 ui-category-division-direct-compare 신설[Grid Column 하드코딩·화이트리스트·attr 우회 금지, DIVISION_ID 서버 직접 비교 — 사용자 명시]. 2026-07-13: #110~#112). 어떤 문서든 카운트를 별도 보유하지 말 것 — 본 파일 §4 와 00_INDEX 만 카운트를 가진다. (진단 R-2)
 >
 > ⚠️ 2026-07-13(저녁): 신규 **#112 `search-condition-asis-tobe-catalog`** (SCP·DM 화면 조회조건 AS-IS↔TO-BE 카탈로그 적용 의무 — 원천 `Doc/SCP_DM_화면별 조회조건 정리_260122_v0.4.xlsx` List 시트 **953행/99화면 전수** MD 변환 = `_rules_v2/_mapping/search_conditions_scp_dm.md`. 조회조건 작성 전 해당 화면 표 전 행 대조 + 명칭 표준화 rename 13쌍[Div→Div./Model→Model/Nickname/Project→PJT/Valid→Active 등] + 다중선택 표준=검색+ALL버튼 + 팝업 통합[모→메1/프1→프2] + 공통기능화 검토 203행=SearchArea 승계 금지 + Sun-Set 8화면 사전 보고 + 카운트 일치 보고 의무. 사용자 명시) = **112**.
 >
@@ -162,9 +162,9 @@
 
 ---
 
-## §4. Hook 카탈로그 (전체 112 / Full Catalog) — 단일 카운트 소스
+## §4. Hook 카탈로그 (전체 114 / Full Catalog) — 단일 카운트 소스
 
-> 본문 위치: `Doc/_rules_v2/hooks/<name>.md`. 카운트 = 본 파일 상단 "카운트 단일 소스" 문단 참조 (**113**, 2026-07-15 실측 — 본 §4 내 중복 카운트 표기는 2026-07-03 정리로 제거, 갱신은 상단 문단+본 헤더+말미 SSOT 3곳 동시). 정렬: 파일명 알파벳순(진단 R-4) — 단 #70 이후는 등재 시점 순 표 끝 배치.
+> 본문 위치: `Doc/_rules_v2/hooks/<name>.md`. 카운트 = 본 파일 상단 "카운트 단일 소스" 문단 참조 (**114**, 2026-07-16 실측 — 본 §4 내 중복 카운트 표기는 2026-07-03 정리로 제거, 갱신은 상단 문단+본 헤더+말미 SSOT 3곳 동시). 정렬: 파일명 알파벳순(진단 R-4) — 단 #70 이후는 등재 시점 순 표 끝 배치.
 > 분류: 🅒 공통 · 🆄 UI/화면 · 🅖 Grid/Wijmo · 🅕 Search/Form · 🅟 Popup/Modal · 🅑 BE/SP/Oracle · 🅓 DB적용/Deploy · 🅖it Git/Infra
 
 | # | Hook | 분류 | 트리거 | 한 줄 요약 |
@@ -204,6 +204,8 @@
 | 110 | sp-multiselect-filter-and-conversion-pitfalls | 🅑 | T08/T10/T19 | ⭐⭐ **멀티선택 필터 GTT+skip + SP 변환 3대 폭발/오정합** — 필터 표준: 값 있음=GTT 사전적재 후 INNER JOIN(또는 ALL)/빈값·'ALL'=조건 자체 skip('' = Oracle NULL — `=''` 필터는 전행 탈락 버그). 변환 3대: ①split-in-join decorrelate=카테시안 폭발(184M) → 물리 GTT 사전 분해 ②조인키 부재 LEFT JOIN=카테시안+GROUP BY N배 뻥튀기 ③INSERT 컬럼목록↔SELECT 오정렬(ORA-12899/조용한 컬럼 뒤섞임). DMF0082 SavePricePeriod 0행·594s→5,966행·9s (2026-07-13) |
 | 111 | oracle-sp-perf-correlated-setbased-and-live-redeploy | 🅑 | T08/T10/T19 | ⭐⭐ **상관쿼리→set-based + 라이브 PKG 재배포 운영** — §A 상관 UPDATE→MERGE 사전집계 / per-row LATERAL `FETCH FIRST 1`→`GROUP BY MAX...KEEP(DENSE_RANK LAST)` / 상관 IN(split)→물리 GTT. §B 진단=V$SQL 문장별 귀속→DBMS_XPLAN.DISPLAY_CURSOR→SQL_MONITOR(hang 신호 'Free private memory to OS'). §C 라이브 재배포=라이브러리 캐시 배타락 → BE 프로세스 종료+DDL_LOCK_TIMEOUT(SCM_MGR 에 ALTER SYSTEM 권한 없음). §D 집계 GTT NUMBER 정밀도≥소스(ORA-01438). §E diminishing returns(와이드 범위=큰 중간결과 한계 명시). §F FE 짝=BE boolean vs 'Y' 문자열/division-반응형 정적컬럼(폭0 숨김 금지). DMF0082 조회 (2026-07-13) |
 | 112 | search-condition-asis-tobe-catalog | 🅕 | T01/T01M/T03/T05 | ⭐⭐ **SCP·DM 조회조건 AS-IS↔TO-BE 카탈로그 적용 의무 (사용자 지정)** — 카탈로그 = `_rules_v2/_mapping/search_conditions_scp_dm.md`(원천 xlsx List 시트 **953행/99화면 전수** 변환). 조회조건 작성 전 해당 화면 표 **전 행 대조**: To-Be 명칭·유형·기능·팝업 그대로(임의 결정 금지) + 명칭 표준화 rename 13쌍(Div→**Div.**/Model→**Model/Nickname**/Project→**PJT**/Valid→**Active**/Version→**Ver.** 등) + 다중선택 표준=**검색+ALL버튼** + 팝업 통합(모1~3→메1/프1→프2) + **공통기능화 검토 203행=SearchArea 승계 금지**(버튼·체크박스 — 사용자 확인) + **Sun-Set 8화면 사전 보고** + 조회조건 삭제 11행 미구현 + 카운트 일치 보고(__asis-mapping__). To-Be 필수값 미확정 한계 명시. (2026-07-13) |
+| 113 | ui-category-division-direct-compare | 🅕 | T01/T01M | ⭐⭐ **Grid 정적 컬럼 표시 표준 (사용자 지정 2026-07-15)** — DIVISION_ID 가시성 = PR_GET_SHEET_COLUMN_LIST/MEASURE_LIST 서버 직접 비교(divisionId 전송 + division 변경 재fetch). ❌ ATTRIBUTE1/3 클라 비교(#92 구방식) ❌ 컬럼·measure 하드코딩/화이트리스트/FALLBACK. FE 필터=visible&&display 2 boolean, ColumnSetting 로컬 반영=display. 정본 sales-plan(DMF0021). (§4 표 소급 등재 2026-07-16 — 상단 카운트만 있고 표 행 누락 drift 정정) |
+| 114 | msg-id-asis-tobe-conversion | 🅕 | T01/T01M/T08/T18 (MSG 이관·등록·매핑) | ⭐⭐⭐ **AS-IS MSG_ID 그대로 사용 절대 금지 (사용자 지정 2026-07-16)** — AS-IS↔TO-BE 공통 61코드 중 **54(89%) 의미 재배정** 실측(예: AS-IS MSG00001 '필수 입력'↔TO-BE '저장 하시겠습니까?'). 의무 4단계: ①AS-IS 실문구 확보(ID만 금지) → ②대조표 `_artifacts/MESSAGE_ASIS_vs_TOBE_대조.xlsx` 'AS-IS 한글 일치 TO-BE MSG_ID' 컬럼 확인(재매핑 확정 14건: MSG00004→00672/00006→00003/00097→00667/00133→00004/00225→00666/00259→00662/00464→00671 등) → ③사내 `SCM_ADM_MSG_M` 실측 3분기(동일 문구 존재=**TO-BE ID EXACT 재사용** / 부재=**MAX 실측+1 신규 채번**+KO/EN/CN MERGE[#98 §7] / ID·문구 모두 일치[7건뿐]=유지) → ④POST-WRITE: 사용 MSG grep 전수 → 사내 실문구 대사 표 보고(fallback 텍스트 신뢰 금지). ❌ 기존 TO-BE ID 에 AS-IS 문구 UPDATE(전 화면 오염). `__asis-mapping__` 에 AS-IS→TO-BE 변환 관계 명시. DMF0003 재채번 사고(6/28→7/11 재정합) |
 | 29 | oracle-cmbo-varname-quote | 🅑 | T08/T10 | CMBO_SQL_M `@varName` → `TO_CHAR()` wrap (ORA-01722 방지) |
 | 30 | oracle-db-workflow | 🅑 | T08/T10/T18/T19 | ⭐⭐ Oracle SP/DB 단일 진입점 (8 타입 + 증상→원인) |
 | 31 | oracle-sp-perf-anti-patterns | 🅑 | T08/T10/T19 | ⭐⭐ MSSQL→Oracle 6 성능 룰 (REGEXP/split/lookup/index/SARGable) |
@@ -385,5 +387,5 @@ UI mandatory 의 POST-WRITE grep 중 기계 검증 가능한 패턴을 `check-fe
 
 > 단일 진실 소스 / Single Source of Truth:
 > - 진입 / Entry: 루트 `CLAUDE.md` → 본 파일 → `00_INDEX.md`
-> - 카운트 / Count: 본 §4 (= 112) + `00_INDEX.md` (동기화 의무)
+> - 카운트 / Count: 본 §4 (= 114) + `00_INDEX.md` (동기화 의무)
 > - UI 누락 방지 / UI no-omission: 본 §3 체크리스트 (PR 게이트 §7 통합)
