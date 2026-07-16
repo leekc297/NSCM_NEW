@@ -19,7 +19,8 @@ const testTab: Omit<Menu, 'children'> = {
   mnuDesc: 'test',
 };
 
-const testFilter: ProcRequest<PROC_NAME, 'fcstNPrice_40'> = {
+// DMF0082 sheet 개명(fcstNPrice_40 → FcstNPrice, AS-IS 정본 sheet_name) 정합 — 2026-07-13.
+const testFilter: ProcRequest<PROC_NAME, 'FcstNPrice'> = {
   divisionId: '40',
   deptId: 'ALL',
   endCustomer: 'ALL',

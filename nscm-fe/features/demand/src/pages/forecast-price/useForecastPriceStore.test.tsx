@@ -76,12 +76,12 @@ describe('useForecastPriceStore', () => {
     const { result } = renderHook(() => useForecastPriceStore(s => s));
 
     act(() => {
-      result.current.setSearchParams({ teamId: 'TEAM-A', itemId: 'ITEM-1' });
+      result.current.setSearchParams({ deptIds: ['TEAM-A'], itemIds: ['ITEM-1'] });
     });
 
     expect(result.current.searchParams.divisionId).toBe('40');
-    expect(result.current.searchParams.teamId).toBe('TEAM-A');
-    expect(result.current.searchParams.itemId).toBe('ITEM-1');
+    expect(result.current.searchParams.deptIds).toStrictEqual(['TEAM-A']);
+    expect(result.current.searchParams.itemIds).toStrictEqual(['ITEM-1']);
   });
 
   it('setOpenSearchArea toggles and supports explicit value', () => {

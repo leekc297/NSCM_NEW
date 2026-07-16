@@ -125,24 +125,61 @@ export const MAIN_COLUMNS: MainColumnMeta[] = [
 export const TEMPLATE_EXCEL_PREFIX = 'DMF0074_Template';
 export const MAIN_EXCEL_PREFIX = 'DMF0074_MetalLinkPrice';
 
-// Excel Upload 체인 — SCM_ADM_EXCEL_COLUMNS.HEADER_CONTENT 실측 (2026-07-10).
-//   DIV=40 은 formId 'DMF0074_40' (Project 2열 없는 11열 카탈로그).
+// Excel Upload 체인 — SCM_ADM_EXCEL_COLUMNS.HEADER_CONTENT 실측 (2026-07-10 메탈 42열 확장 적용).
+//   DIV=40 은 formId 'DMF0074_40' (Project 2열 없는 53열 카탈로그) / 그 외 55열.
+//   ⚠️ 아래 header 문자열은 HEADER_CONTENT 토큰과 1바이트도 달라선 안 된다 —
+//      BE 는 엑셀 1행 헤더명으로 값을 찾으므로(ExcelUtils.convertExcelToJson) 불일치 = 해당 열 전량 탈락.
 export const UPLOAD_FORM_ID = { DEFAULT: 'DMF0074', DIV40: 'DMF0074_40' } as const;
-export const UPLOAD_HEADERS_DEFAULT = [
-  'Div',
-  'Plan Date',
-  'Team',
-  'End Customer',
-  'Project Code',
-  'Project',
-  'Model Code',
-  'Metal Link',
-  'Sales Site',
-  'Currency',
-  'FCST type',
-  'Exception',
-  'Energy',
+
+export interface UploadColumn {
+  header: string;
+  key: string;
+}
+
+const UPLOAD_BASE_DEFAULT: UploadColumn[] = [
+  { header: 'Div', key: 'DIVISION_ID' },
+  { header: 'Plan Date', key: 'PLAN_YYYYMM' },
+  { header: 'Team', key: 'DEPT_NAME' },
+  { header: 'End Customer', key: 'END_CUSTOMER' },
+  { header: 'Project Code', key: 'PROJECT_CODE' },
+  { header: 'Project', key: 'PROJECT_NAME' },
+  { header: 'Model Code', key: 'ITEM_ID' },
+  { header: 'Metal Link', key: 'METAL_LINK_YN' },
+  { header: 'Sales Site', key: 'SCM_SITE_ID' },
+  { header: 'Currency', key: 'CURRENCY' },
+  { header: 'FCST type', key: 'FCST_TYPE' },
+  { header: 'Exception', key: 'METAL_EXCEPTION_YN' },
+  { header: 'Energy', key: 'ENERGY' },
 ];
-export const UPLOAD_HEADERS_DIV40 = UPLOAD_HEADERS_DEFAULT.filter(
-  h => h !== 'Project Code' && h !== 'Project'
+
+// 메탈 42 — 업로드 헤더 토큰은 "그룹 고유명 + 원소명" (그리드 2단 헤더의 하위명 Ni/Co… 는 6회 중복이라 사용 불가)
+const METAL_UPLOAD_GROUP_TOKEN: Record<string, string> = {
+  APPLY_PRICE_TYPE_CODE: 'Key',
+  FROM_PERIOD: 'PeriodFr',
+  TO_PERIOD: 'PeriodTo',
+  CONTRACT_UNIT: 'ContractPrice',
+  METAL_APPLY: 'ChangePrice',
+  METAL_REQR: 'MetalIndex',
+};
+const UPLOAD_METAL_COLUMNS: UploadColumn[] = METAL_GROUPS.flatMap(g =>
+  METAL_ELEMENTS.map<UploadColumn>(el => ({
+    header: `${METAL_UPLOAD_GROUP_TOKEN[g.prefix]}_${el.label}`,
+    key: `${g.prefix}${el.suffix}`,
+  }))
 );
+
+export const UPLOAD_COLUMNS_DEFAULT: UploadColumn[] = [
+  ...UPLOAD_BASE_DEFAULT,
+  ...UPLOAD_METAL_COLUMNS,
+];
+export const UPLOAD_COLUMNS_DIV40: UploadColumn[] = [
+  ...UPLOAD_BASE_DEFAULT.filter(c => c.header !== 'Project Code' && c.header !== 'Project'),
+  ...UPLOAD_METAL_COLUMNS,
+];
+
+export const UPLOAD_HEADERS_DEFAULT = UPLOAD_COLUMNS_DEFAULT.map(c => c.header);
+export const UPLOAD_HEADERS_DIV40 = UPLOAD_COLUMNS_DIV40.map(c => c.header);
+
+// 템플릿 SP 는 사용자가 채울 열(Plan Date / Energy / 메탈 42)을 '-' 로 내려준다
+//   (PKG_DMF0074 L780 "날짜는 빈칸으로 내려받게"). 업로드 검증은 '-' 를 값으로 인식하므로 export 시 빈칸으로 치환한다.
+export const TEMPLATE_BLANK_PLACEHOLDER = '-';

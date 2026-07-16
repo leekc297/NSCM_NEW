@@ -21,7 +21,7 @@ export const parseSspSyncMap = (
   divisionId: string
 ): Record<string, SspSyncState> => {
   // AS-IS L1415 — Division 40·82 만 SSP 동기화 색 (실 sync 데이터는 40 MKT_FCST_RP).
-  if (divisionId !== DIVISION.MOBILITY && divisionId !== DIVISION.POWER) return {};
+  if (divisionId !== DIVISION.MOBILITY && divisionId !== DIVISION.ESS) return {};
   const raw = (row as Record<string, unknown> | undefined)?.ATTR1;
   if (typeof raw !== 'string' || raw === '') return {};
 

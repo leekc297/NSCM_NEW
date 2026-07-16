@@ -65,17 +65,5 @@ export const PR_HISTORY_COLUMNS: RawFlexGridColumnConfig[] = [
   { colNm: 'ITEM_DETAIL', colLblNm: 'Item Detail', colWth: 220, horzAlgnCd: 'L', display: true, visible: true, inputTpCd: CELL_INPUT_EDIT_TYPE.SEARCH_ONLY },
 ];
 
-// MasterChgPopup grid — DMF0003_MatsterChgPopup.cs (동적 spread title — TO-BE SP 부재로 fallback).
-//   ⚠️ GET SP(DMF0000_GET_MASTER_CHG_POPUP) 사내 미존재 → 38_*.md 차단 handoff. fallback 컬럼만.
-export const MASTER_CHG_COLUMNS: RawFlexGridColumnConfig[] = [
-  { colNm: 'SCM_SITE_ID', colLblNm: 'Sales Site', colWth: 100, horzAlgnCd: 'L', display: true, visible: true, inputTpCd: CELL_INPUT_EDIT_TYPE.SEARCH_ONLY },
-  { colNm: 'END_CUSTOMER', colLblNm: 'End Customer', colWth: 110, horzAlgnCd: 'L', display: true, visible: true, inputTpCd: CELL_INPUT_EDIT_TYPE.SEARCH_ONLY },
-  { colNm: 'PROJECT_CODE', colLblNm: 'Project Code', colWth: 100, horzAlgnCd: 'L', display: true, visible: true, inputTpCd: CELL_INPUT_EDIT_TYPE.SEARCH_ONLY },
-  { colNm: 'MODEL', colLblNm: 'Model', colWth: 140, horzAlgnCd: 'L', display: true, visible: true, inputTpCd: CELL_INPUT_EDIT_TYPE.SEARCH_ONLY },
-  { colNm: 'FCST_TYPE', colLblNm: 'FCST Type', colWth: 90, horzAlgnCd: 'L', display: true, visible: true, inputTpCd: CELL_INPUT_EDIT_TYPE.SEARCH_ONLY },
-  { colNm: 'INCOTERMS', colLblNm: 'Incoterms', colWth: 80, horzAlgnCd: 'L', display: true, visible: true, inputTpCd: CELL_INPUT_EDIT_TYPE.SEARCH_ONLY },
-  { colNm: 'DOM_EXP', colLblNm: 'Customs Handbook', colWth: 120, horzAlgnCd: 'L', display: true, visible: true, inputTpCd: CELL_INPUT_EDIT_TYPE.SEARCH_ONLY },
-  { colNm: 'NewINCOTERMS', colLblNm: 'New Incoterms', colWth: 110, horzAlgnCd: 'L', display: true, visible: true, inputTpCd: CELL_INPUT_EDIT_TYPE.OPTIONAL },
-  { colNm: 'NewFCSTType', colLblNm: 'New FCST_TYPE', colWth: 110, horzAlgnCd: 'L', display: true, visible: true, inputTpCd: CELL_INPUT_EDIT_TYPE.OPTIONAL },
-  { colNm: 'NewDOM_EXP', colLblNm: 'New DOM_EXP', colWth: 110, horzAlgnCd: 'L', display: true, visible: true, inputTpCd: CELL_INPUT_EDIT_TYPE.OPTIONAL },
-];
+// (MASTER_CHG_COLUMNS 제거 — 2026-07-13 사용자 결정: Master Change 버튼·기능 전체 삭제.
+//  AS-IS DMF0003_MatsterChgPopup 미이관 확정. 복원 필요 시 git history 참조.)

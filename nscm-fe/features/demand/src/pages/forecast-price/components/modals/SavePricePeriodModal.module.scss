@@ -1,0 +1,57 @@
+// SavePricePeriodModal — 표준 모달 레이아웃 (형제 ExchangeRateModal / DMF0020 PriceBatchInputModal 동일)
+//   SearchArea → gridWrapper → 하단 buttonWrapper.
+.dialogContent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 4px 0;
+  // ⭐ bounded 컨테이너화 — CustomDialog 높이 안에서 flex 분배해야 grid viewport bounded → vscroll 생성.
+  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.gridWrapper {
+  position: relative;
+  // ⭐ min-height:0 = flex 자식 축소 허용 → wijmo grid 가 bounded viewport 확보 → 세로 스크롤바 생성.
+  flex: 1 1 auto;
+  min-height: 0;
+  border: 1px solid #e0e4e9;
+  border-radius: 4px;
+  overflow: hidden;
+  background: white;
+}
+
+.grid {
+  height: 100%;
+  width: 100%;
+
+  // ⭐ 다단(3단) 헤더 셀이 16px row 안에 맞도록 타이포 보정 (행 높이는 48px 정규화 효과가 전담).
+  :global {
+    .wj-colheaders .wj-cell {
+      line-height: 14px;
+      padding: 1px 4px;
+      font-size: 11px;
+    }
+
+    // AS-IS PJ20200138 — COL_LIST(범위초과) 주차 셀 Pink 표기 (Color.Pink 1:1).
+    .wj-cell.overRangeCell {
+      background: #ffc0cb !important;
+    }
+  }
+}
+
+.buttonWrapper {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-top: 5px;
+}
+
+// Project / Model popup 조회 — InputField(박스) + 우측 별도 조회 버튼 (catalog PopupSearchInput 동일).
+.popupRow {
+  display: flex;
+  align-items: stretch;
+  gap: 4px;
+  width: 100%;
+}

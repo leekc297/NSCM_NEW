@@ -71,6 +71,10 @@ interface State {
   // ⭐ Phase 2b — main query O_RC2(8주 bucket) / O_RC3(현재 주차) 보관 (편집 cutoff 산출 입력).
   bucketInfo: BucketInfo | null;
   currentWeekInfo: CurrentWeekInfo | null;
+  // ⭐ P1-③ — 로그인 사용자 W/S Planner 그룹 소속 여부 (CMBO MktFcstWsPlannerYn 실측).
+  //   AS-IS L1679: NowGroupID=='DM Planner (W/S)' → p_as_yn 'Y' 강제. TO-BE 는 세션 groupId 부재로
+  //   USER_ID→그룹 소속(SCM_ADM_USER_GR_MPG_M) 실측값을 사용. true = AS 강제(체크박스 잠금).
+  wsPlannerYn: boolean;
 }
 
 interface Action {
@@ -83,6 +87,8 @@ interface Action {
   fetchStaticMeasures: () => Promise<void>;
   // main query 응답의 O_RC2/O_RC3 보관 (cutoff 산출용).
   setCalendarInfo: (bucketInfo: BucketInfo | null, currentWeekInfo: CurrentWeekInfo | null) => void;
+  // ⭐ P1-③ — W/S Planner 여부 반영 (CMBO 응답). true 시 asYn 강제 + 체크박스 잠금.
+  setWsPlannerYn: (yn: boolean) => void;
   // ColumnSettingModal onSave — 사용자 선택 column 만 visible='Y', 나머지 'N'.
   applyColumnVisibility: (sheetName: keyof StaticColumnsBySheet, visibleKeys: string[]) => void;
   // ⭐ #3 — MeasureSelectModal onSave — 표시할 measure 코드 목록 적용 (null = 전체).
@@ -145,6 +151,7 @@ const initState: State = {
   visibleMeasures: emptyVisibleMeasures,
   bucketInfo: null,
   currentWeekInfo: null,
+  wsPlannerYn: false,
 };
 
 export const useMktFcstStore = createPersistedStoreWithTab<State & Action>((set, get) => ({
@@ -198,7 +205,8 @@ export const useMktFcstStore = createPersistedStoreWithTab<State & Action>((set,
           //   'MKT FCST 미등록 제외', Div82 전용 기본 checked). qtyOverZero 연동은 잘못 — 실측 div82
           //   Y=175행 vs N=1,165행 (극적 차이 — Sales Price 미등록 조합 제외 필터).
           invalidExec: c.invalidYn ? 'Y' : 'N', // 17
-          asYn: c.asYn ? 'Y' : 'N', // 18
+          // ⭐ P1-③ — AS-IS L1679: W/S Planner 그룹이면 asYn 'Y' 강제(체크박스 무관). 그 외 체크박스 값.
+          asYn: c.asYn || get().wsPlannerYn ? 'Y' : 'N', // 18
           userDeptId: '', // 19 BE 세션 부서 자동
           senderCode: j(c.senderCodes), // 20
           sesUserId, // 21 BE 자동
@@ -276,6 +284,15 @@ export const useMktFcstStore = createPersistedStoreWithTab<State & Action>((set,
     set(state => {
       state.bucketInfo = bucketInfo;
       state.currentWeekInfo = currentWeekInfo;
+    }),
+
+  // ⭐ P1-③ — W/S Planner 여부 반영 (AS-IS L1679). W/S Planner 이면 asYn 강제 checked
+  //   (구 cboAS.Checked=true·Enabled=false 이식). 조회/저장 payload 가 sc.asYn 을 공유하므로
+  //   searchCondition.asYn 자체를 true 로 고정한다.
+  setWsPlannerYn: yn =>
+    set(state => {
+      state.wsPlannerYn = yn;
+      if (yn) state.searchCondition.asYn = true;
     }),
 
   // ColumnSettingModal OK — 사용자 선택 column 만 visible (visible='Y'), 나머지 'N'.

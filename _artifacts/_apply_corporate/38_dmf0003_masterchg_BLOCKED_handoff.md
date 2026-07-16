@@ -1,5 +1,11 @@
 # DMF0003 MasterChgPopup (Incoterms 변경) — BE/SP 차단 handoff (2026-06-28)
 
+> ⛔ **종결 (2026-07-13, 사용자 결정)**: Master Change 버튼·기능 **전체 삭제**로 확정.
+> FE(MasterChgModal/버튼/컬럼상수/LBL00701/MSG00653) 제거 + 사내 메타(BTN_MPG/API_M/USER_GR/MSG_M 11행)
+> 삭제 = `A3_dmf0003_masterchg_full_removal.py`. 아래 "필요 작업" 은 더 이상 진행하지 않음.
+> (참고: 2026-07-13 실측 시 GET SP 는 SCM_MGR 에 VALID 로 이관돼 있었고, SAVE SP 는 hook #107
+> FETCH_STATUS 무한루프 결함 보유 — SP 들은 AS-IS 자산으로 보존, 화면 기능만 제거.)
+
 > Phase 2e 4번 MasterChgPopup. FE 모달 shell 은 작성되었으나 **SP 부재로 기능 미완**.
 > SP/BE 수정은 본 작업 scope 밖 (제약: BE(Java)/SP 수정 금지). 사용자 검토 후 SP 작업 필요.
 

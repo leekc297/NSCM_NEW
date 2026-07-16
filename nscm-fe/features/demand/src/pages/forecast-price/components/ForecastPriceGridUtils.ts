@@ -6,7 +6,9 @@ import { isNonEditableDateColumn, type EditTracker } from '@foundation/utils';
 
 dayjs.extend(isoWeek);
 
-export const editableMeasures = new Set(['MKT_FCST', 'SCM_FCST', 'LOC']);
+// AS-IS 권한 4분기 대상 measure (bEDIT_AUTH_SCM_FCST/MKT_FCST/LOC/VMI_IN_REQ — .cs L119~122).
+//   배분(divideBy*)은 MKT_FCST/SCM_FCST 만, LOC=allocate, VMI_In_Req=배분 없이 단일 셀 편집.
+export const editableMeasures = new Set(['MKT_FCST', 'SCM_FCST', 'LOC', 'VMI_In_Req']);
 
 const isPrimitive = (value: unknown): value is WijmoPrimitive => {
   return (

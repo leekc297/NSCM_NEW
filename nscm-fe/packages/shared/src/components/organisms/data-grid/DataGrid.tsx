@@ -34,6 +34,14 @@ interface DataGridProps<T extends WijmoRowItem = WijmoRowItem> extends FlexGridP
   useAggregationRow?: boolean;
   aggregationRowPlacement?: 'above' | 'below';
   /**
+   * 자동 콤보(cellCtrlObjTpCd=COMBO)의 SQL 바인드 파라미터(@mnuId / @divisionId 등) 해소용 공통 파라미터.
+   * comboId 와 함께 admin/combo 로 전달되어 @키 치환에 사용됨.
+   * ⚠ BE makeComboQuery 는 raw 치환이므로 **문자열 리터럴 값은 작은따옴표로 감싸 전달**해야 함
+   *   (예: { mnuId: "'DMF0048'" } → PROGRAM_ID = 'DMF0048'). BE resolveComboBoxDataMaps 와 동일 규약.
+   * 미지정 시 기존 동작(파라미터 없는 콤보만 정상) — 회귀 0. 미사용 콤보는 여분 파라미터를 무시(무해).
+   */
+  comboParams?: Record<string, string>;
+  /**
    * 다단(2단/3단) 헤더 행 높이(px). 미지정(default)이면 Wijmo 기본 동작 — 기존 화면 무영향(회귀 0).
    * 지정 시 columnHeaders 의 모든 헤더 row 를 이 높이로 강제(예: 3단 헤더 총높이 48px → 16 전달).
    * 화면 useEffect/CSS 로는 wrapper 의 columnGroups 재적용에 덮여 무효 → wrapper-level 적용만 유효.
@@ -62,6 +70,7 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
   useResultColumns = false,
   useAggregationRow = false,
   aggregationRowPlacement = 'below',
+  comboParams = {},
   allowMerging = AllowMerging.ColumnHeaders,
   selectionMode = SelectionMode.MultiRange,
   initialized,
@@ -92,18 +101,19 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
     setHandleUppercase,
   } = useDataGridUtils<T>();
 
-  const comboIds = staticColumns
+  // 자동 콤보 필터 — comboId + comboParams(@mnuId/@divisionId 등) 를 함께 전달해 파라미터 콤보 해소.
+  //   (기존엔 comboId 만 전달 → @mnuId 필요 콤보가 빈 결과가 되던 문제 fix. comboParams 미지정 시 종전과 동일)
+  const comboFilters = staticColumns
     .filter(
       column =>
         column.display && column.cellCtrlObjTpCd === CELL_CONTROL_TYPE.COMBO && column.cellCboDataTp
     )
-    .map(column => {
-      const comboId = String(column.cellCboDataTp);
-      return comboId;
-    });
+    .map(column => ({ comboId: String(column.cellCboDataTp), ...comboParams }));
 
-  const comboQueries = useTabComboQueries({ filters: comboIds });
-  const comboQueryMap = Object.fromEntries(comboIds.map((f, i) => [comboIds[i], comboQueries[i]]));
+  const comboQueries = useTabComboQueries({ filters: comboFilters });
+  const comboQueryMap = Object.fromEntries(
+    comboFilters.map((filter, i) => [filter.comboId, comboQueries[i]])
+  );
 
   const mappedStaticColumns = mapRawColumnsToWijmoColumns(
     staticColumns

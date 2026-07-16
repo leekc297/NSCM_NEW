@@ -35,6 +35,8 @@ export const ROUTE_PATHS = {
   DMF0008: 'erp-edi-master',
   DMF0014: 'customer-fcst-upload',
   DMF0020: 'sales-future-price',
+  DMF0021: 'sales-plan',
+  DMF0042: 'business-plan',
   DMF0043: 'contribute-main',
   DMF0043_01: 'contribute-view',
   DMF0048: 'sales-monitoring',
@@ -44,4 +46,9 @@ export const ROUTE_PATHS = {
   WATERFALL: 'waterfall',
   DMF0022: 'sales-plan-waterfall',
   DMF0072: 'nn-master-mapping',
+  // SCP(Supply) 도메인 — 2026-07-13 SCP0013 신규 (MNU_M 트리 신설과 3-SET 정합.
+  //   중간 메뉴 = 'Supply Plan'(MNU00013, AS-IS 메뉴 체계) → slug 'supply-plan')
+  SUPPLY: 'supply',
+  SUPPLY_PLAN: 'supply-plan',
+  SCP0013: 'production-plan-line',
 } as const;

@@ -57,6 +57,10 @@ interface Props {
   title?: string;
   /** 이전에 OK 했던 visible column 키 목록 (popup 재진입 시 좌/우 상태 복원) */
   initialVisibleKeys?: string[];
+  /** dual list 좌측 상단 라벨 (예: 'Invisible') — 미지정 시 라벨 없음(기존 사용처 무영향) */
+  leftTitle?: string;
+  /** dual list 우측 상단 라벨 (예: 'Visible') */
+  rightTitle?: string;
 }
 
 export const ColumnSettingModal = ({
@@ -70,6 +74,8 @@ export const ColumnSettingModal = ({
   onSave,
   title = 'Column Setting',
   initialVisibleKeys,
+  leftTitle,
+  rightTitle,
 }: Props) => {
   const setAlert = useMessageStore.getState().setAlert;
 
@@ -297,6 +303,8 @@ export const ColumnSettingModal = ({
             rightItems={userRows}
             leftColumns={BASE_COLUMNS}
             rightColumns={USER_COLUMNS}
+            leftTitle={leftTitle}
+            rightTitle={rightTitle}
             itemKey='COLUMN_NAME'
             checkedLeft={checkedLeft}
             checkedRight={checkedRight}

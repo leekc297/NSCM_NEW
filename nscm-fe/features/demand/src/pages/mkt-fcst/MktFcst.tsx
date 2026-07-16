@@ -21,8 +21,6 @@ import { useSessionStore } from '@shared/stores';
 import { MktFcstForm } from './components/MktFcstForm';
 import { MktFcstGrid } from './components/MktFcstGrid';
 import {
-  MasterChgModal,
-  type MasterChgParams,
   MeasureSelectModal,
   PrHistoryModal,
   type PrHistoryParams,
@@ -69,6 +67,7 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
   const fetchStaticColumns = useMktFcstStore(s => s.fetchStaticColumns);
   const fetchStaticMeasures = useMktFcstStore(s => s.fetchStaticMeasures);
   const setCalendarInfo = useMktFcstStore(s => s.setCalendarInfo);
+  const setWsPlannerYn = useMktFcstStore(s => s.setWsPlannerYn);
   const bucketInfo = useMktFcstStore(s => s.bucketInfo);
   const currentWeekInfo = useMktFcstStore(s => s.currentWeekInfo);
   const applyColumnVisibility = useMktFcstStore(s => s.applyColumnVisibility);
@@ -81,7 +80,9 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
   // ⭐ 편집 가능 division (메타 구동) — CMBO 'MktFcstEditableDivision'(lookup DM_EDITABLE_DIVISION_ALLOW,
   //   SEGMENT1='DMF0003' → 편집가능 division CODE). 현행 업무규칙: 82 만 편집 가능(40/81/81_*/EE* 편집제약).
   //   메타 미적용/빈 응답 시 fallback = {'82'} (하드코딩 금지 원칙상 메타 우선, fallback 은 규칙 기본값 1건).
-  const [editableDivRows] = useTabComboQueries({ filters: ['MktFcstEditableDivision'] });
+  const [editableDivRows, userEditDivRows, wsPlannerRows] = useTabComboQueries({
+    filters: ['MktFcstEditableDivision', 'MktFcstUserEditDivision', 'MktFcstWsPlannerYn'],
+  });
   const editableSet = useMemo(() => {
     const codes = (editableDivRows ?? [])
       .map(r => {
@@ -91,8 +92,34 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
       .filter(Boolean);
     return codes.length > 0 ? new Set(codes) : new Set(['82']);
   }, [editableDivRows]);
-  // 현재 조회 division 이 편집 가능한지 — 셀 편집(그리드) + Insert/Delete/Save 버튼 표시의 division 게이트.
-  const editable = isEditableDivision(sc.divisionId, editableSet);
+  // ⭐ G6 — 그룹×Division EDIT_YN (CMBO 'MktFcstUserEditDivision' = SCM_ADM_USER_GR_UNIT_AUTH_MPG_M
+  //   @sesUserId, EDIT_YN='Y', OR 규칙: 여러 그룹 중 하나라도 Y 면 편집). 사용자별 편집가능 division 집합.
+  //   비어 있으면(미응답/미등록) 관대 통과 — 기존 division 게이트만 적용(회귀 0).
+  const userEditSet = useMemo(() => {
+    const codes = (userEditDivRows ?? [])
+      .map(r => {
+        const code = (r as { CODE?: unknown }).CODE;
+        return typeof code === 'string' ? code.trim() : '';
+      })
+      .filter(Boolean);
+    return new Set(codes);
+  }, [userEditDivRows]);
+  // 현재 조회 division 이 편집 가능한지 — 셀 편집(그리드) + Insert/Delete/Save 버튼 표시의 게이트.
+  //   ⭐ 2단 AND: (1) division 편집허용(editableSet=DM_UI_EDITABLE_DIVISION, 현행 82)
+  //   (2) 사용자 그룹권한(userEditSet=UNIT_AUTH EDIT_YN). userEditSet 비면 (2) 생략(관대).
+  const editable =
+    isEditableDivision(sc.divisionId, editableSet) &&
+    (userEditSet.size === 0 || userEditSet.has((sc.divisionId ?? '').trim()));
+
+  // ⭐ P1-③ — 로그인 사용자 W/S Planner 여부 반영 (CMBO 'MktFcstWsPlannerYn' 단일행 CODE='Y'/'N').
+  //   AS-IS L1679: W/S Planner 이면 AS(asYn) 강제. 세션 groupId 부재 → USER_ID→그룹 소속 실측(SP).
+  const wsPlannerCode = useMemo(() => {
+    const code = (wsPlannerRows ?? [])[0] as { CODE?: unknown } | undefined;
+    return typeof code?.CODE === 'string' ? code.CODE.trim() : '';
+  }, [wsPlannerRows]);
+  useEffect(() => {
+    if (wsPlannerCode) setWsPlannerYn(wsPlannerCode === 'Y');
+  }, [wsPlannerCode, setWsPlannerYn]);
 
   // ⭐ 명시 조회 게이트 (persist 안 됨 — 컴포넌트 로컬). 마운트 시 persist 된 stale filters 로
   //   SP 가 자동 발사되어 NULL payload → ORA-00936 나던 사고 차단. Search 클릭 후에만 쿼리 enable.
@@ -141,6 +168,44 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabId]);
 
+  // ⭐ TITLESET 서버 영구 저장 (AS-IS DM0002_TitleSetForm OK → SCM_MST_TITLESET_USER 1:1, DMF0048 패턴).
+  //   기존 sessionStorage(탭 단위) 만이라 탭 재오픈 시 Column/Measure 선택이 분실되던 것을 서버 저장으로 해결.
+  //   SCM0002_SET_TITLESET_POPUP: '^' delim 다건(DELETE 후 INSERT), P_USER_ID = BE 세션 자동.
+  //   ^delim 다건 SAVE 는 apiClient.post 직접 (useProcMutation array unfold 회피 — 표준 선례).
+  const saveTitleSet = async (
+    columnType: 'C' | 'M',
+    saveRows: { name: string; sortOrderNo: number; subTotalFlag?: string; sortMethodCode?: string }[]
+  ): Promise<boolean> => {
+    try {
+      const payload = {
+        programId: MENU_ID,
+        sheetName: SHEETS.MAIN,
+        columnType,
+        activeFlag: saveRows.map(() => 'Y').join('^'),
+        columnName: saveRows.map(r => r.name).join('^'),
+        sortOrderNo: saveRows.map((r, i) => String(r.sortOrderNo || i + 1)).join('^'),
+        subTotalFlag: saveRows.map(r => r.subTotalFlag ?? 'N').join('^'),
+        sortMethodCode: saveRows.map(r => r.sortMethodCode ?? 'ASC').join('^'),
+      };
+      const res = await apiClient.post<Record<string, unknown>>(
+        `/${MENU_ID}/titleSet/SAVE/call-proc`,
+        payload
+      );
+      if (res.status >= 400 || Number(res.data?.code)) {
+        const reason =
+          (res.data as { message?: string })?.message?.trim() ||
+          t('MSG00618', '_An error occurred while saving.');
+        void setAlert({ type: 'alert', content: reason });
+        return false;
+      }
+      return true;
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : t('MSG00618', '_An error occurred while saving.');
+      void setAlert({ type: 'alert', content: msg });
+      return false;
+    }
+  };
+
   // 신규 행 추적 (CRUD_TYPE='I')
   const [insertedRows, setInsertedRows] = useState<MktFcstRow[]>([]);
 
@@ -151,12 +216,12 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
   const [openItem, setOpenItem] = useState(false);
   const [popupGroupId, setPopupGroupId] = useState<string | null>(null);
 
-  // ⭐ Phase 2e POPUP state — SSP compare / SSP result / PR / PR history / MasterChg.
+  // ⭐ Phase 2e POPUP state — SSP compare / SSP result / PR / PR history.
+  //   (MasterChg 는 2026-07-13 사용자 결정으로 기능 전체 삭제 — AS-IS btnIncotermsChg 미이관 확정.)
   const [sspCompareParams, setSspCompareParams] = useState<SspSyncCompareParams | null>(null);
   const [sspResultRows, setSspResultRows] = useState<SspSyncResultRow[]>([]);
   const [prParams, setPrParams] = useState<PrModalParams | null>(null);
   const [prHistoryParams, setPrHistoryParams] = useState<PrHistoryParams | null>(null);
-  const [masterChgParams, setMasterChgParams] = useState<MasterChgParams | null>(null);
 
   // ⭐ #3 — Column / Measure 선택 모달 open state.
   const [openColumnSetting, setOpenColumnSetting] = useState(false);
@@ -352,17 +417,6 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
     });
   };
 
-  // ⭐ Phase 2e — MASTER_CHG customButton (AS-IS btnIncotermsChg, .cs L5359~5372).
-  const handleMasterChg = () => {
-    setMasterChgParams({
-      divisionId: sc.divisionId,
-      deptId: sc.deptIds.join('^'),
-      endCustomer: sc.endCustomers.join('^'),
-      scmSiteId: sc.scmSiteIds.join('^'),
-      projectCode: sc.projectCodes.join('^'),
-    });
-  };
-
   // SubTitle 공통버튼 — insert/delete/save 핸들러 연결 + 미명시(sort/filter/condition/resetCondition/excel)는
   //   SubTitle DefaultButtonActions 가 자동 활성 (hook #64). hasButton 권한 분기.
   // ⭐ 버튼 게이트 = 권한(hasButton) × division 편집허용(editable). 편집제약 division(82 외)은
@@ -375,11 +429,6 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
     manual: false,
     upload: false,
   };
-
-  // ⭐ #4 — Master Change 버튼 미표시 (렌더 제외). MasterChgModal/handleMasterChg/import 는 유지하되
-  //   customButtons 에서 제외 — Master Change 는 사내 SP(DMF0000_GET_MASTER_CHG_POPUP) 미적용 상태로
-  //   기능 확인(BLOCKED handoff 38) 후 복원 예정. handleMasterChg 는 복원 시 재사용 위해 보존.
-  void handleMasterChg; // #4 — 버튼 미표시 동안 미사용 (복원 시 customButtons 에 재추가).
 
   // ⭐ #3 — Insert 옆 Column / Measure 버튼 (SubTitle customButtons). hasButton 권한 분기.
   //   Column  : 공용 ColumnSettingModal(DMF0002_GET_TITLESET_POPUP + fallback) → applyColumnVisibility.
@@ -411,19 +460,21 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
       : []),
   ];
 
-  const spRows = (data as { o_rc1?: MktFcstRow[] })?.o_rc1 ?? [];
-  // ⭐ #3 — Measure 선택 필터. visibleMeasures null = 전체 표시. 선택 시 MEASURE 가 목록에 포함된 행만.
-  //   Insert 행은 항상 표시(편집 중 행 숨김 방지).
-  const mainVisibleMeasures = visibleMeasures[SHEETS.MAIN];
-  const rows: MktFcstRow[] = useMemo(() => {
-    const all = [...insertedRows, ...spRows];
-    if (!mainVisibleMeasures) return all;
-    const allow = new Set(mainVisibleMeasures);
-    return all.filter(
-      r => r.CRUD_TYPE === 'I' || typeof r.MEASURE !== 'string' || allow.has(r.MEASURE)
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [insertedRows, spRows, mainVisibleMeasures]);
+  const spRows = useMemo<MktFcstRow[]>(
+    () => (data as { o_rc1?: MktFcstRow[] })?.o_rc1 ?? [],
+    [data]
+  );
+  // ⭐ Measure 종속 확장은 SP(DMF0003_GET_MKT_FCST_DATA) 단일 출처 — 사용자 저장 메저 선택
+  //   (SCM_MST_TITLESET_USER 'M')을 base 로 종속 메저를 서버에서 확장한다:
+  //     CUST_FCST → EDI 계열(Immidiate/Commercial_Agreement/…) / MKT_FCST_RP(Div82) → VMI 계열
+  //     (RTF_SYS_RP/VMI_In_Plan/VMI_In_Req/VMI_Inv) / AS 계열 = as_yn='Y'.
+  //   따라서 FE 는 SP 반환 measure 집합을 그대로 렌더한다(클라이언트 measure 행 필터 금지 —
+  //   과거 visibleMeasures 필터가 SP 가 붙인 종속 메저를 잘라 숨기던 버그를 제거, AS-IS parity).
+  //   메저 선택 변경은 모달 OK 의 saveTitleSet('M') + invalidateQueries 재조회로 SP 에서 반영됨.
+  const rows: MktFcstRow[] = useMemo(
+    () => [...insertedRows, ...spRows],
+    [insertedRows, spRows]
+  );
 
   return (
     <div className={styles.container}>
@@ -532,7 +583,7 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
         callFromCell={true}
       />
 
-      {/* ⭐ Phase 2e POPUP — SSP 비교 / SSP 동기화 결과 / PR / PR 이력 / MasterChg */}
+      {/* ⭐ Phase 2e POPUP — SSP 비교 / SSP 동기화 결과 / PR / PR 이력 */}
       <SspSyncCompareModal
         open={!!sspCompareParams}
         modalClose={() => setSspCompareParams(null)}
@@ -554,12 +605,6 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
         modalClose={() => setPrHistoryParams(null)}
         params={prHistoryParams}
       />
-      <MasterChgModal
-        open={!!masterChgParams}
-        modalClose={() => setMasterChgParams(null)}
-        params={masterChgParams}
-      />
-
       {/* ⭐ #3 — Column 설정 (공용 ColumnSettingModal, DMF0002_GET_TITLESET_POPUP + fallback). */}
       <ColumnSettingModal
         open={openColumnSetting}
@@ -570,12 +615,26 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
         divisionId={sc.divisionId}
         fallbackColumns={MAIN_COLUMNS.map(c => ({ key: c.key, header: c.header, width: c.width }))}
         title={t('LBL00711', '_Column')}
-        onSave={(settings: ColumnSettingRow[]) =>
+        leftTitle={t('LBL00764', 'Invisible')}
+        rightTitle={t('LBL00765', 'Visible')}
+        onSave={(settings: ColumnSettingRow[]) => {
+          // 로컬 즉시 반영 + 서버 영구 저장('C') → 성공 시 admin 메타 재fetch (개인화 기준 재계산).
           applyColumnVisibility(
             SHEETS.MAIN,
             settings.map(s => s.COLUMN_NAME)
-          )
-        }
+          );
+          void saveTitleSet(
+            'C',
+            settings.map(s => ({
+              name: s.COLUMN_NAME,
+              sortOrderNo: Number(s.SORT_ORDER_NO ?? 0),
+              subTotalFlag: s.SUB_TOTAL_FLAG,
+              sortMethodCode: s.USER_SORT_METHOD_CODE,
+            }))
+          ).then(ok => {
+            if (ok) void fetchStaticColumns();
+          });
+        }}
       />
 
       {/* ⭐ #3 — Measure 선택 (staticMeasures 실데이터 토글 → 그리드 measure 행 필터). */}
@@ -584,7 +643,21 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
         modalClose={() => setOpenMeasureSelect(false)}
         measures={staticMeasures[SHEETS.MAIN]}
         visibleMeasures={visibleMeasures[SHEETS.MAIN]}
-        onApply={codes => applyVisibleMeasures(SHEETS.MAIN, codes)}
+        onApply={codes => {
+          // 로컬 행 필터 + 서버 영구 저장('M'). 저장 후 measure 재fetch + 메인 쿼리 invalidate
+          //   (메인 SP 가 TITLESET 'M' 으로 measure 행을 필터하므로 신규 선택이 서버에서 반영됨).
+          applyVisibleMeasures(SHEETS.MAIN, codes);
+          const all = staticMeasures[SHEETS.MAIN].map(m => m.colNm);
+          const selected = codes ?? all;
+          void saveTitleSet(
+            'M',
+            selected.map((name, i) => ({ name, sortOrderNo: i + 1 }))
+          ).then(ok => {
+            if (!ok) return;
+            void fetchStaticMeasures();
+            void queryClient.invalidateQueries({ queryKey: [MENU_ID] });
+          });
+        }}
       />
     </div>
   );

@@ -16,7 +16,7 @@ export type DivisionKind = 'D40' | 'D81' | 'D82';
 export const divisionKindOf = (divisionId: string): DivisionKind => {
   const d = (divisionId ?? '').trim();
   if (d.startsWith('81')) return 'D81';
-  if (d === DIVISION.POWER) return 'D82';
+  if (d === DIVISION.ESS) return 'D82';
   return 'D40';
 };
 

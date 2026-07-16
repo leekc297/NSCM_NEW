@@ -48,6 +48,16 @@ Reference 화면: **DMF0004 / DMF0005 / DMF0006 / DMF0007**
 - division 변경 후 하위 dropdown 의 이전 값이 남아서 그 값으로 메인 grid 조회 → 결과 mismatch
 - 사용자 경험: "분명히 division 바꿨는데 grid 결과가 이상" → root cause
 
+### 1.4 ⭐ Division 변경 시 **Grid 데이터 초기화(비움) 의무** (사용자 명시 2026-07-14)
+
+> "UI 개발/보완 시 조회조건 중 division 을 변경하면 Grid 초기화 되도록 해주세요."
+
+- Division onChange 핸들러에서 하위 combo 'ALL' reset(§1.2)과 **함께** 화면의 **모든 grid 데이터를 초기화(빈 상태)** 한다 — 이전 division 조회 결과가 화면에 남아 새 조건과 mismatch 로 보이는 것 자체를 차단.
+- 동반 초기화: **CRUD pending(EditTracker 미저장 변경분) reset** (hook #97 부모키 변경 시 CRUD reset 과 동일 메커니즘) + 조회 상태 플래그(조회됨 표시/카운트) 초기화.
+- 구현 위치: Form 의 division onChange → store 액션 1곳 (예: `setSearchParams({divisionId, …하위 'ALL'})` + `clearSheetData()` / query 결과는 refetch 트리거가 아니라 **비움** — 재조회는 사용자의 Search 버튼).
+- 적용 범위: **신규(T01) 의무 + 보완/수정(T01M) 시 미적용 화면 정정** (일괄 audit 아님 — 수정 시 적용, hook #91 방식).
+- 선례: hook #89 **P**(DMF0020 — Div 변경 시 검색조건 초기화+그리드 비움+disabled) 의 일반화 — 이제 특정 화면이 아닌 **전 화면 공통 의무**.
+
 ---
 
 ## §2. Form §2 — Multi-level filter composition (`&&` 조합 N 단)
@@ -190,6 +200,7 @@ const handleAutoSalesSite = (s: FlexGrid<...>, e: CellRangeEventArgs) => {
 
 ```
 [ ] 1. Form 에 Division 변경 onChange 핸들러 단일 setSearchParams 안에서 하위 'ALL' reset?
+[ ] 1-1. ⭐ Division 변경 시 grid 데이터 초기화(비움) + CRUD pending reset? (§1.4 — 2026-07-14 의무)
 [ ] 2. Multi-level filter 의 'ALL' sentinel 처리 (===  'ALL' OR includes(CODE))?
 [ ] 3. Dedup 시 Map 기반 + 복합 unique key (`${col1}|${col2}`)?
 [ ] 4. useTabComboQueries 1 round-trip + client-side filter (useTabComboQuery N 회 X)?

@@ -34,6 +34,10 @@ interface Props<T extends Record<string, string | number>> {
   onMoveLeft: () => void;
   /** 우측 grid 행 D&D 순서 이동 — 재정렬된 key 배열(위→아래) 전달 */
   onReorderRight?: (orderedKeys: string[]) => void;
+  /** 좌측 grid 상단 라벨 (예: 'Unvisible') — 미지정 시 라벨 없음(기존 사용처 무영향) */
+  leftTitle?: string;
+  /** 우측 grid 상단 라벨 (예: 'Visible') */
+  rightTitle?: string;
 }
 
 export const ColumnSelectDualList = <T extends Record<string, string | number>>({
@@ -51,6 +55,8 @@ export const ColumnSelectDualList = <T extends Record<string, string | number>>(
   onMoveRight,
   onMoveLeft,
   onReorderRight,
+  leftTitle,
+  rightTitle,
 }: Props<T>) => {
   // 우측 grid D&D 상태
   const [dragKey, setDragKey] = useState<string | null>(null);
@@ -177,6 +183,7 @@ export const ColumnSelectDualList = <T extends Record<string, string | number>>(
   return (
     <div className={styles.dualListContainer}>
       <div className={styles.sideTable}>
+        {leftTitle && <div className={styles.dualTitle}>{leftTitle}</div>}
         {renderTable(leftItems, leftColumns, checkedLeft, onToggleLeft, onToggleAllLeft)}
       </div>
 
@@ -190,6 +197,7 @@ export const ColumnSelectDualList = <T extends Record<string, string | number>>(
       </div>
 
       <div className={styles.sideTable}>
+        {rightTitle && <div className={styles.dualTitle}>{rightTitle}</div>}
         {renderTable(rightItems, rightColumns, checkedRight, onToggleRight, onToggleAllRight, true)}
       </div>
     </div>

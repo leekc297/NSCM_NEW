@@ -22,7 +22,10 @@ import {
   DIVISION,
   GRID_CASCADE_CLEAR,
   GRID_CASCADE_FILTERS,
+  GRID_EDIT_COMBO,
   MAIN_COLUMNS,
+  MEASURE_MODEL_CLEAR_COLS,
+  MEASURE_MODEL_KEEP,
   MSG,
   PR_MENU_LABELS,
 } from '../mkt-fcst.constants';
@@ -132,8 +135,6 @@ export const MktFcstGrid = ({
   onSspCompareRef.current = onSspCompare;
   // ⭐ 현재 주/월 binding — formatItem(대형 effect deps 미포함) 이 최신값 참조하도록 ref 미러.
   //   AS-IS chkColor=false 경로 (평문 .cs L5654~5687): 현재 W_/M_ 컬럼 헤더 초록 Bold 강조.
-  const currentWeekInfoRef = useRef(currentWeekInfo);
-  currentWeekInfoRef.current = currentWeekInfo;
   // bPasteContinue (AS-IS spdMain_EditChange L5411) — paste 연계 플래그.
   const pasteContinueRef = useRef(false);
 
@@ -143,6 +144,25 @@ export const MktFcstGrid = ({
     () => buildEditCutoff(bucketInfo ?? null, currentWeekInfo ?? null),
     [bucketInfo, currentWeekInfo]
   );
+
+  // ⭐ P2-① 현재기간 binding 집합 — 헤더 초록 Bold(기존) + 데이터셀 초록 테두리(신규) 공통 판정.
+  //   당월 M_(THIS_YYYYMM) / 당주 W_(THIS_YYYYMMWW) 는 O_RC3, 당일 D_ 는 클라이언트 오늘 날짜 파생
+  //   (O_RC3 에 daily 필드 부재 → Daily bucket 현재일 강조 보강). 조회 응답(currentWeekInfo) 갱신 시 재산출.
+  const currentPeriodBindings = useMemo<Set<string>>(() => {
+    const s = new Set<string>();
+    const m = (currentWeekInfo?.THIS_YYYYMM ?? '').trim();
+    const w = (currentWeekInfo?.THIS_YYYYMMWW ?? '').trim();
+    if (m) s.add(m);
+    if (w) s.add(w);
+    const now = new Date();
+    const ymd = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(
+      now.getDate()
+    ).padStart(2, '0')}`;
+    s.add(`D_${ymd}`);
+    return s;
+  }, [currentWeekInfo]);
+  const currentPeriodBindingsRef = useRef(currentPeriodBindings);
+  currentPeriodBindingsRef.current = currentPeriodBindings;
 
   // ⭐ admin staticColumns 우선, 없으면 MAIN_COLUMNS hardcode fallback (BE 실패 시 화면 작동 보장)
   const mergedColumns = useMemo<MergedColumnMeta[]>(() => {
@@ -249,6 +269,32 @@ export const MktFcstGrid = ({
     dataMapsRef.current = dataMaps;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [comboSig, dataMaps]);
+
+  // ⭐ 편집 전용 콤보 (MEASURE=MktFcstEditMeasure @div / INCOTERMS=IncotermsEdit) — 편집 진입 시 dataMap 스왑,
+  //   cellEditEnded 시 조회 표시 dataMap 으로 원복. divisionParam=true 는 FE quoting('값') 전달(BE raw 치환 대응).
+  const editComboEntries = useMemo(() => Object.entries(GRID_EDIT_COMBO), []);
+  const editComboResults = useTabComboQueries({
+    filters: editComboEntries.map(([, cfg]) =>
+      cfg.divisionParam ? { comboId: cfg.comboId, divisionId: `'${division}'` } : cfg.comboId
+    ),
+  });
+  const editComboSig = editComboResults
+    .map((r, i) => `${editComboEntries[i]?.[0]}#${r?.length ?? 'x'}`)
+    .join(',');
+  const editDataMaps = useMemo<Record<string, DataMap | null>>(() => {
+    const m: Record<string, DataMap | null> = {};
+    editComboEntries.forEach(([binding], i) => {
+      const arr = (editComboResults[i] ?? []) as unknown as Record<string, unknown>[];
+      m[binding] = arr.length > 0 ? new DataMap(arr, 'CODE', 'NAME') : null;
+    });
+    return m;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editComboSig]);
+  const editDataMapsRef = useRef<Record<string, DataMap | null>>({});
+  useEffect(() => {
+    editDataMapsRef.current = editDataMaps;
+  }, [editDataMaps]);
+
   // 편집 시작 셀의 (binding, oldVal) — cellEditEnded 에서 실제 값 변경 여부 판정(불필요 clear 방지).
   const editingCellRef = useRef<{ binding: string; oldVal: unknown } | null>(null);
 
@@ -457,11 +503,8 @@ export const MktFcstGrid = ({
         // ⭐ AS-IS chkColor=false 경로 1:1 (평문 .cs L5654~5687, 실행 화면 기본 상태) —
         //   현재 월(M_당월)/현재 주(W_당주) 컬럼 헤더를 초록 Bold 강조. O_RC3(THIS_YYYYMM/THIS_YYYYMMWW)
         //   binding 정확 일치로 판정 (AS-IS 는 tag yyyymm+iso_week 비교 — 동일 산출값).
-        const cw = currentWeekInfoRef.current;
         const isCurrentPeriod =
-          !!col.binding &&
-          (col.binding === (cw?.THIS_YYYYMM ?? '').trim() ||
-            col.binding === (cw?.THIS_YYYYMMWW ?? '').trim());
+          !!col.binding && currentPeriodBindingsRef.current.has(col.binding);
         e.cell.style.color = isCurrentPeriod ? '#1e8449' : '';
         e.cell.style.fontWeight = isCurrentPeriod ? '700' : '';
         return;
@@ -479,6 +522,12 @@ export const MktFcstGrid = ({
       //   비활성 bucket(Daily 의 W_/M_ 등) = White(클래스 없음). 전체회색·inline 금지.
       //   (SSP 동기화 PaleGreen/PapayaWhip 색은 Phase 2c — 본 단계 미적용.)
       if (isDyn) {
+        // ⭐ P2-① 현재기간(당월/당주/당일) 세로 테두리 — 배경색과 독립(편집 Yellow·동기화색과 공존).
+        toggleClass(
+          e.cell,
+          'mkt-cell-current-period',
+          currentPeriodBindingsRef.current.has(col.binding)
+        );
         const state = evalDynCell({
           binding: col.binding,
           row: rowItem,
@@ -511,6 +560,12 @@ export const MktFcstGrid = ({
         toggleClass(e.cell, 'wj-cell-non-editable', false);
         return;
       }
+
+      // ⭐ 종속 메저 단계별 indent (2026-07-13 사용자 요구 — AS-IS UP_FX_GetCommonDataList 'Measure'
+      //   parity: 1단계 ' └ ' / 2단계(EDI 하위 세부) '    └ ' 공백4). 표시명은 admin 콤보
+      //   dataMap('Measure' CMBO_SQL)에서 오며, 선행 공백이 HTML 에서 collapse 되면 전부 동일
+      //   단계로 보이는 사고 → MEASURE 셀만 white-space 보존 (다른 컬럼 영향 0).
+      if (col.binding === 'MEASURE') e.cell.style.whiteSpace = 'pre';
 
       // Fixed col cell coloring — Insert 행의 IM/IO = Yellow, 그 외 White
       if (meta) {
@@ -569,6 +624,12 @@ export const MktFcstGrid = ({
           binding,
           oldVal: row ? (row as Record<string, unknown>)[binding] : undefined,
         };
+        // ⭐ 편집 전용 콤보 스왑 (MEASURE=편집가능 measure / INCOTERMS=유효 Incoterms). 조회 표시는 전체
+        //   dataMap, 편집 후보만 유효분으로 교체 (AS-IS 편집/조회 이원화). cellEditEnded 에서 원복.
+        if (GRID_EDIT_COMBO[binding] && editDataMapsRef.current[binding]) {
+          col.dataMap = editDataMapsRef.current[binding];
+          return;
+        }
         const cascade = GRID_CASCADE_FILTERS[binding];
         if (meta._ctrlType === 'FPComboBox' && cascade && row) {
           const src = comboRowsRef.current[binding] ?? [];
@@ -694,6 +755,11 @@ export const MktFcstGrid = ({
       if (GRID_CASCADE_FILTERS[binding] && dataMapsRef.current[binding]) {
         col.dataMap = dataMapsRef.current[binding];
       }
+      // ⭐ 편집 전용 콤보 원복 (MEASURE/INCOTERMS) — 편집 후보(유효분) dataMap 을 전체 표시 dataMap 으로
+      //   되돌린다. 원복 누락 시 조회 표시에서 편집목록 밖 CODE 명칭 변환 손실.
+      if (GRID_EDIT_COMBO[binding] && dataMapsRef.current[binding]) {
+        col.dataMap = dataMapsRef.current[binding];
+      }
 
       // ===== (B) 동적 셀(D_/W_/M_) 재계산 cascade (보강스펙 §2, AS-IS L3282~4175) =====
       if (dynKindOf(binding) && /^[MWD]_/.test(binding)) {
@@ -731,6 +797,21 @@ export const MktFcstGrid = ({
             clearTargets.forEach(k => {
               rec[k] = '';
             });
+          }
+        }
+      }
+      // ⭐ MEASURE 변경 시 model(품목) 컬럼 clear (AS-IS: measure 교체 시 종속 model 재선택 강제).
+      //   예외 = MEASURE_MODEL_KEEP(AS_In_Req/BNPIn) 은 model 유지. 같은 INSERT_GROUP 형제 행 일괄.
+      if (binding === 'MEASURE' && changed) {
+        const nextMeasure = toCellStr(newVal);
+        if (!MEASURE_MODEL_KEEP.includes(nextMeasure)) {
+          for (const item of view.items) {
+            if (item.CRUD_TYPE === 'I' && item.INSERT_GROUP_ID === gid) {
+              const rec = item as Record<string, unknown>;
+              MEASURE_MODEL_CLEAR_COLS.forEach(k => {
+                rec[k] = '';
+              });
+            }
           }
         }
       }
@@ -1088,7 +1169,7 @@ export const MktFcstGrid = ({
     };
   }, [sumYn, summaryBindings, drillBindings, dynBindings, gridRef]);
 
-  // ⭐ 현재 주/월 헤더 강조(O_RC3) — 조회 응답 갱신 시 formatItem 재실행 (currentWeekInfoRef 최신값 반영).
+  // ⭐ 현재 주/월/일 헤더·테두리 강조 — 조회 응답 갱신 시 formatItem 재실행 (currentPeriodBindings 최신값 반영).
   useEffect(() => {
     const g = (gridRef as { current: FlexGridType<MktFcstRow> | null } | null)?.current;
     g?.invalidate(true);

@@ -102,10 +102,21 @@ const SalesMonitoringPageWithTab = LazyLoader(() =>
 const MetalLinkPricePageWithTab = LazyLoader(() =>
   import('@demand/metal-link-price').then(m => ({ default: m.MetalLinkPrice }))
 );
+const SalesPlanPageWithTab = LazyLoader(() =>
+  import('@demand/sales-plan').then(m => ({ default: m.SalesPlan }))
+);
+const BusinessPlanPageWithTab = LazyLoader(() =>
+  import('@demand/business-plan').then(m => ({ default: m.BusinessPlan }))
+);
 
 // @report
 const SalesPlanWaterfallWithTab = LazyLoader(() =>
   import('@report/sales-plan-waterfall').then(m => ({ default: m.SalesPlanWaterfall }))
+);
+
+// @supply
+const ProductionPlanLineWithTab = LazyLoader(() =>
+  import('@supply/production-plan-line').then(m => ({ default: m.ProductionPlanLine }))
 );
 
 // etc.
@@ -291,6 +302,16 @@ export const router: RemixRouter = createBrowserRouter([
                 path: ROUTE_PATHS.DMF0074,
                 element: <MetalLinkPricePageWithTab />,
               },
+              // DMF0021 — Sales Plan (판매계획). ROUTE_PATHS.DMF0021='sales-plan' = SCM_ADM_MNU_M.MNU_URL 정합(필수 — 라우트 3-SET).
+              {
+                path: ROUTE_PATHS.DMF0021,
+                element: <SalesPlanPageWithTab />,
+              },
+              // DMF0042 — Business Plan (사업계획). ROUTE_PATHS.DMF0042='business-plan' = MNU_URL 정합(P1 교체 — 라우트 3-SET).
+              {
+                path: ROUTE_PATHS.DMF0042,
+                element: <BusinessPlanPageWithTab />,
+              },
             ],
           },
         ],
@@ -304,6 +325,22 @@ export const router: RemixRouter = createBrowserRouter([
               {
                 path: ROUTE_PATHS.DMF0022,
                 element: <SalesPlanWaterfallWithTab />,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        // SCP(Supply) 도메인 — 2026-07-13 SCP0013 신설 (MNU_M 트리: Supply > Supply_Plan > SCP0013).
+        path: ROUTE_PATHS.SUPPLY,
+        children: [
+          {
+            path: ROUTE_PATHS.SUPPLY_PLAN,
+            children: [
+              // SCP0013 — Production Plan Line. ROUTE_PATHS.SCP0013='production-plan-line' = MNU_URL 정합(필수).
+              {
+                path: ROUTE_PATHS.SCP0013,
+                element: <ProductionPlanLineWithTab />,
               },
             ],
           },

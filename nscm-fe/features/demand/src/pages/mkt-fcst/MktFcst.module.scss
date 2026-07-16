@@ -48,6 +48,14 @@
   background: #ffefd5 !important; // Color.PapayaWhip
 }
 
+// ⭐ P2-① 현재기간(당월/당주/당일) 컬럼 강조 테두리 — AS-IS 헤더 초록 Bold 와 짝을 이루는 데이터셀 세로 레일.
+//   좌·우 초록 border 로 컬럼 전체를 감싸는 시각(배경색 미변경 → 편집 Yellow/동기화색과 공존). !important 로
+//   Wijmo 기본 셀 border 를 이긴다.
+:global(.mkt-cell-current-period) {
+  border-left: 2px solid #1e8449 !important;
+  border-right: 2px solid #1e8449 !important;
+}
+
 // ⭐ Phase 2e POPUP 모달 공통 레이아웃 (CustomDialog customContentArea 안).
 .modalContentWrapper {
   display: flex;

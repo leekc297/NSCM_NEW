@@ -10,7 +10,15 @@ import { FileExceldownloadIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
-import { MENU_ID, MSG, SHEETS, TEMPLATE_EXCEL_PREFIX } from '../../metal-link-price.constants';
+import {
+  MENU_ID,
+  MSG,
+  SHEETS,
+  TEMPLATE_BLANK_PLACEHOLDER,
+  TEMPLATE_EXCEL_PREFIX,
+  UPLOAD_COLUMNS_DEFAULT,
+  UPLOAD_COLUMNS_DIV40,
+} from '../../metal-link-price.constants';
 import type { MetalLinkTemplateRow } from '../../metal-link-price.types';
 import { MetalLinkPriceGrid } from '../MetalLinkPriceGrid';
 
@@ -22,7 +30,8 @@ import styles from './MetalLinkTemplateModal.module.scss';
 //   - SP = PKG_DMF0074.P_DMF0074_GET_METAL_LINK_TEMPLATE (divisionId 단일 — 부모 division 고정.
 //     division-gate 동일 적용 L837: 권한 없는 사업부 = 행 미반환).
 //   - 0건 = MSG00656 (이번 주 Sales Plan Waterfall MRF 'Y' 버전 부재 — AS-IS 팝업 L229 구 MSG00427 의도)
-//   - Excel Download(아이콘 버튼) = GridAction.excelDownload ('-' placeholder 포함 그대로 export)
+//   - Excel Download(아이콘 버튼) = GridAction.flatExcelDownload — 업로드 양식(HEADER_CONTENT) 과
+//     동일한 평탄 헤더 1행 + '-' placeholder 는 빈칸으로 치환 (그대로 두면 업로드 검증에서 값으로 인식)
 //   ⭐ 표준 디자인 (사용자 요구 2026-07-10): 상단 SearchArea(Div 고정 + Search) /
 //     하단 [Excel Download 아이콘] + [Close 맨 오른쪽]
 interface MetalLinkTemplateModalProps {
@@ -105,10 +114,13 @@ export const MetalLinkTemplateModal = ({
     setHasSearched(true);
   };
 
-  // ⭐ 템플릿 다운로드 = 그리드 Excel export (AS-IS 팝업 Excel 버튼 1:1)
+  // 업로드 양식 = HEADER_CONTENT 토큰과 1:1 (DIV=40 은 Project 2열 제외 → 53열)
+  const uploadColumns = divisionId === '40' ? UPLOAD_COLUMNS_DIV40 : UPLOAD_COLUMNS_DEFAULT;
+
+  // ⭐ 템플릿 다운로드 = 업로드 양식 그대로의 평탄 헤더 1행 export.
+  //   그리드 export(2단 병합 헤더)는 BE 이름 기반 매핑과 호환되지 않아 사용하지 않는다.
   const handleExcel = () => {
-    const g = gridRef.current;
-    if (!g || rows.length === 0) {
+    if (rows.length === 0) {
       void setAlert({
         type: 'alert',
         content: t(
@@ -118,7 +130,23 @@ export const MetalLinkTemplateModal = ({
       });
       return;
     }
-    void GridAction.excelDownload(g, TEMPLATE_EXCEL_PREFIX);
+    // SP placeholder '-' 는 사용자가 채울 빈칸 — 값으로 업로드되면 검증에서 탈락하므로 제거
+    const exportRows = rows.map(row =>
+      Object.fromEntries(
+        uploadColumns.map(({ key }) => {
+          const value = row[key];
+          return [key, value === TEMPLATE_BLANK_PLACEHOLDER ? '' : (value ?? '')];
+        })
+      )
+    );
+    void GridAction.flatExcelDownload(exportRows, uploadColumns, TEMPLATE_EXCEL_PREFIX).catch(
+      (error: unknown) => {
+        void setAlert({
+          type: 'alert',
+          content: error instanceof Error ? error.message : 'Excel download failed.',
+        });
+      }
+    );
   };
 
   return (

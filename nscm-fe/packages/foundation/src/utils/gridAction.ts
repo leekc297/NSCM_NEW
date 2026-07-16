@@ -6,10 +6,12 @@ import { FlexGridXlsxConverter } from '@mescius/wijmo.grid.xlsx';
 import {
   HAlign,
   VAlign,
+  Workbook,
   WorkbookCell,
   WorkbookFont,
   WorkbookRow,
   WorkbookStyle,
+  WorkSheet,
 } from '@mescius/wijmo.xlsx';
 import dayjs from 'dayjs';
 
@@ -175,6 +177,75 @@ export const GridAction = {
   // F10: Reset personalized condition
   resetPersonalizedCondition: async (menuId: string) => {
     await apiClient.post(`/admin/menu/${menuId}/search-conditions/reset`);
+  },
+
+  // Excel Upload 양식 다운로드 — 그리드가 아닌 데이터에서 직접 만드는 평탄 헤더 1행 export.
+  //   BE ExcelUtils.convertExcelToJson 은 엑셀 1행을 헤더 키로 사용(이름 기반 매핑)하므로
+  //   2단 병합 헤더(하위명 중복)로는 업로드 매핑이 불가능하다.
+  //   전 셀 문자열 — 숫자 셀이면 POI getNumericCellValue 가 '0.0' 을 돌려 SP 정수 검증에서 탈락한다.
+  //   저장은 saveAsync 필수 — Workbook.save() 는 JSZip 2.x 전용이라 현재 3.x 환경에서 동작하지 않는다.
+  flatExcelDownload: (
+    rows: ReadonlyArray<Record<string, string | number | null | undefined>>,
+    columns: ReadonlyArray<{ header: string; key: string }>,
+    fileNamePrefix: string
+  ): Promise<void> => {
+    const headerFont = new WorkbookFont();
+    headerFont.family = 'Spoqa Han Sans Neo';
+    headerFont.size = 12;
+    headerFont.bold = true;
+
+    // format '@' (텍스트) 필수 — 없으면 wijmo 가 '40' / '202607' / '0' 을 숫자 셀로 기록하고
+    //   POI getNumericCellValue 가 '40.0' 을 돌려줘 업로드 검증(정수·날짜)에서 전량 탈락한다.
+    const headerStyle = new WorkbookStyle();
+    headerStyle.font = headerFont;
+    headerStyle.hAlign = HAlign.Center;
+    headerStyle.vAlign = VAlign.Center;
+    headerStyle.format = '@';
+
+    const textStyle = new WorkbookStyle();
+    textStyle.format = '@';
+
+    const toCell = (value: string, style: WorkbookStyle) => {
+      const cell = new WorkbookCell();
+      cell.value = value;
+      cell.style = style;
+      return cell;
+    };
+
+    // cells / rows / sheets 는 readonly 배열 — 재할당이 아닌 push 로 채운다.
+    const buildRow = (values: string[], style: WorkbookStyle) => {
+      const sheetRow = new WorkbookRow();
+      values.forEach(value => sheetRow.cells.push(toCell(value, style)));
+      return sheetRow;
+    };
+
+    const sheet = new WorkSheet();
+    sheet.name = 'Sheet1';
+    sheet.rows.push(
+      buildRow(
+        columns.map(column => column.header),
+        headerStyle
+      )
+    );
+    rows.forEach(row =>
+      sheet.rows.push(buildRow(columns.map(column => String(row[column.key] ?? '')), textStyle))
+    );
+
+    const workbook = new Workbook();
+    workbook.sheets.push(sheet);
+
+    return new Promise<void>((resolve, reject) => {
+      workbook.saveAsync(
+        `${fileNamePrefix}_${dayjs().format('YYYYMMDD_hhmmss')}.xlsx`,
+        () => resolve(),
+        (reason?: unknown) =>
+          reject(
+            reason instanceof Error
+              ? reason
+              : new Error(typeof reason === 'string' ? reason : 'xlsx save failed')
+          )
+      );
+    });
   },
 
   // F11 : Excel download

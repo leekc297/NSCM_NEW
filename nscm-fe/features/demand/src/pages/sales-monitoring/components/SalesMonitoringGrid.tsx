@@ -18,6 +18,7 @@ import {
   BUCKET_PREFIX,
   BUCKET_TYPE,
   MAIN_COLUMNS,
+  MENU_ID,
 } from '../sales-monitoring.constants';
 import type { CurrentWeekInfo, SalesMonitoringRow, SpreadTitleRow } from '../sales-monitoring.types';
 import styles from '../SalesMonitoring.module.scss';
@@ -25,6 +26,12 @@ import { dynKindOf, getDynKey, HierarchicalMergeManager } from '../utils/sales-m
 
 // 동적 컬럼 kind 서열 — M(월)=0 상위 … D(일)=2 하위 (AS-IS SetSpreadColumn 표시 매트릭스 판정)
 const DYN_RANK = { M: 0, W: 1, D: 2 } as const;
+
+// 자동 콤보 바인드 파라미터 — MEASURE 등 FPComboBox 콤보 SQL 의 @mnuId 해소용 (안정 참조).
+//   admin 'Measure' 콤보(WHERE PROGRAM_ID=@mnuId)가 DataGrid 자동 dataMap 으로 코드→명칭 표시되도록.
+//   ⚠ BE makeComboQuery 는 raw 치환(문자열 리터럴은 caller 가 quote) — BE resolveComboBoxDataMaps 도
+//     "'"+mnuId+"'" 로 wrap. 따라서 문자열 값은 작은따옴표로 감싸 전달 → PROGRAM_ID = 'DMF0048'.
+const COMBO_PARAMS = { mnuId: `'${MENU_ID}'` };
 
 interface Props {
   rows: SalesMonitoringRow[];
@@ -62,6 +69,10 @@ interface MergedColumnMeta {
   scale?: number;
   // hook #92 — admin DIVISION_ID(콤마 토큰 리스트) 가시성
   _divisionAllow?: string;
+  // admin CELL_CONTROL_OBJECT_TYPE_CODE / CELL_COMBO_DATA_TYPE — 공유 DataGrid 자동 콤보 dataMap 트리거.
+  //   cellCtrlObjTpCd===COMBO && cellCboDataTp 이면 DataGrid 가 useTabComboQueries 로 코드→명칭 자동 매핑.
+  cellCtrlObjTpCd?: CELL_CONTROL_TYPE;
+  cellCboDataTp?: string;
 }
 
 export const SalesMonitoringGrid = ({
@@ -97,6 +108,8 @@ export const SalesMonitoringGrid = ({
         fixed: false, // fallback — 메타 미응답 시에도 고정 없음 (admin FIXED_FLAG 위임 정책)
         scale: c.scale,
         _divisionAllow: c._divisionAllow,
+        cellCtrlObjTpCd: c._ctrlType as CELL_CONTROL_TYPE | undefined,
+        cellCboDataTp: c._comboKey,
       }));
     }
     return staticColumns.map(col => {
@@ -112,6 +125,9 @@ export const SalesMonitoringGrid = ({
         scale: col.scale ?? fb?.scale,
         // hook #92 — 1순위 ATTRIBUTE3(정식 복사값), 2순위 ATTRIBUTE1, 3순위 fallback 스냅샷 토큰
         _divisionAllow: col.attribute3?.trim() || col.attribute1?.trim() || fb?._divisionAllow,
+        // admin 콤보 메타 승계 (없으면 MAIN_COLUMNS fallback) → DataGrid 자동 dataMap
+        cellCtrlObjTpCd: col.cellCtrlObjTpCd ?? (fb?._ctrlType as CELL_CONTROL_TYPE | undefined),
+        cellCboDataTp: col.cellCboDataTp ?? fb?._comboKey,
       } as MergedColumnMeta;
     });
   }, [staticColumns]);
@@ -203,6 +219,10 @@ export const SalesMonitoringGrid = ({
         // read-only 화면 — 전 컬럼 'S' (사내 SHEET_COLUMNS INPUT_TP_CD 실측 전행 'S')
         inputTpCd: CELL_INPUT_EDIT_TYPE.SEARCH_ONLY,
         scale: c.scale,
+        // ⭐ 콤보 메타 승계 → 공유 DataGrid 자동 dataMap (MEASURE 등 FPComboBox 컬럼 코드→명칭 자동 표시).
+        //   inputTpCd='S'(읽기전용)여도 dataMap 은 표시 매핑만 담당 — 편집화되지 않음.
+        cellCtrlObjTpCd: c.cellCtrlObjTpCd,
+        cellCboDataTp: c.cellCboDataTp,
       })),
     [visibleColumns]
   );
@@ -529,6 +549,7 @@ export const SalesMonitoringGrid = ({
         gridRef={gridRef as never}
         staticColumns={mainStaticColumns}
         dynamicColumns={mainDynamicColumns}
+        comboParams={COMBO_PARAMS}
         itemsSource={rows as unknown as WijmoRowItem[]}
         autoGenerateColumns={false}
         allowSorting={true}

@@ -237,7 +237,8 @@ export const MeasureSelectModal = ({
       open={open}
       type='modal'
       position='basic'
-      size={840}
+      // ⭐ 가로 150% 확대 (840→1260) — Measure Name(flex 컬럼) 가독성 (사용자 요구 2026-07-11).
+      size={1260}
       handleClose={modalClose}
       disableButtonCancel
       title={t('LBL00712', '_Measure')}
@@ -248,6 +249,8 @@ export const MeasureSelectModal = ({
             rightItems={userRows}
             leftColumns={MEASURE_COLUMNS}
             rightColumns={MEASURE_COLUMNS}
+            leftTitle={t('LBL00764', 'Invisible')}
+            rightTitle={t('LBL00765', 'Visible')}
             itemKey='colNm'
             checkedLeft={checkedLeft}
             checkedRight={checkedRight}

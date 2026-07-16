@@ -18,6 +18,17 @@
   background: #fff;
 }
 
+// 좌/우 grid 상단 라벨 (Unvisible / Visible)
+.dualTitle {
+  flex: 0 0 auto;
+  padding: 6px 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #3d4543;
+  background: #f2f4f3;
+  border-bottom: 1px solid #e0e3e2;
+}
+
 .tableScroll {
   flex: 1 1 auto;
   min-height: 0;

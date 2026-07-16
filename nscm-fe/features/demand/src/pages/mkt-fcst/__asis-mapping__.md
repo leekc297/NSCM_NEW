@@ -170,7 +170,7 @@
 | 20 | spdMain_CellClick | L6405 | `MktFcstGrid.tsx` (PlantSite/82 분기) | ✅ |
 | 21 | contextMenuStrip1_ItemClicked | L5510~5753 | `MktFcstGrid.tsx` contextMenuHandler + `prContext.ts` | ✅ |
 | 22 | cboAS_CheckedChanged | L6871 | `MktFcstForm.tsx` AS 체크 + handleSave asFromSite | ✅ |
-| 23 | btnIncotermsChg | L5359 | `MktFcst.tsx` handleMasterChg (MasterChgModal) | ✅ |
+| 23 | btnIncotermsChg | L5359 | ❌ 기능 삭제 (2026-07-13 사용자 결정 — Master Change 버튼·기능 전체 제거, 미이관 확정) | ➖ |
 | 24 | btnOwner | L5374 | `MktFcst.tsx` OwnerByDivisionModal | ✅ |
 | 25 | btnProject | L… | `MktFcst.tsx` ProjectByDivisionModal | ✅ |
 | 26 | btnItemId | L… | `MktFcst.tsx` ItemByDivisionModal | ✅ |
@@ -185,7 +185,7 @@
 | 2 | SCM0002_ProjectbyDivision | CellDblClick/btnProject | `ProjectByDivisionModal` | ✅ |
 | 3 | DM0002_ItembyDivision | CellDblClick/btnItemId | `ItemByDivisionModal` | ✅ |
 | 4 | DM0020_OwnerbyDivision | btnOwner | `OwnerByDivisionModal` | ✅ |
-| 5 | DMF0003_MatsterChgPopup | btnIncotermsChg L5359 | `MasterChgModal` | ✅ |
+| 5 | DMF0003_MatsterChgPopup | btnIncotermsChg L5359 | ❌ 기능 삭제 (2026-07-13 사용자 결정 — 모달/버튼/메타 전체 제거) | ➖ |
 | 6 | DMF0003_PRPopup / PRHistoryPopup | contextMenu Request/View/History | `PrModal` / `PrHistoryModal` + `prContext.ts` | ✅ |
 | 7 | DMF0003_SspSyncComparePopUp | CellDblClick(Div40&MKT_FCST_RP&동기화색) L2628 | `SspSyncCompareModal` | ✅ |
 | 8 | DMF0003_SspSyncPopUp | SaveData 응답 L1610 | `SspSyncResultModal` | ✅ |
@@ -205,7 +205,7 @@
 | `components/MktFcstForm.tsx` | 수정 | 조회조건 라벨 재채번(Daily~Cell Qty=LBL00682~00691, Owner/ItemType 등 정확일치 재사용) |
 | `utils/mkt-fcst.prContext.ts` | 수정 | contextMenu 임시 LBL01910~01917 → 정식 LBL00702~00709 |
 | `components/MktFcstGrid.tsx` | 수정 | "선택 셀 없음" LBL01917 → LBL00709 |
-| `components/modals/{PrModal,PrHistoryModal,MasterChgModal,SspSync*}.tsx` | 수정 | 모달 헤더 LBL01900~01907 → LBL00694~00701 / PR·이력 MSG → MSG00649~00653 |
+| `components/modals/{PrModal,PrHistoryModal,SspSync*}.tsx` | 수정 | 모달 헤더 LBL01900~01907 → LBL00694~00700 / PR·이력 MSG → MSG00649~00652 (MasterChgModal 은 2026-07-13 기능 전체 삭제 — LBL00701/MSG00653 dead meta 정리) |
 | `MktFcst.tsx` | 수정 | 저장/삭제 MSG·LBL 공용 ID 정합(MSG00606/00618, LBL00665/00666 재사용) |
 | `public/locales/{KO,EN,CN}.json` | 수정 | 신규 49 키 등록 + 공용 5 키 + 임의 LBL019xx 제거 |
 | `_artifacts/_apply_corporate/40_dmf0003_i18n_register.py` | 신규 | 사내 SCM_ADM_MSG_M 멱등 등록 handoff(신규 49 + 공용 5 = 54키 × 3 lang = 162행, dry-run 기본) |

@@ -1,9 +1,18 @@
-import { ItemField, OwnerField, ProjectField } from 'features/master/src/components';
+import {
+  BizTypeField,
+  DivisionField,
+  EndCustomerField,
+  ItemField,
+  OwnerField,
+  PeriodField,
+  PlantSiteField,
+  ProjectField,
+  TeamField,
+} from 'features/master/src/components';
 
-import dayjs from '@foundation/dayjs';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
-import { Checkbox, DatePickerCalendar, FormItem } from '@shared/lges';
+import { Checkbox, FormItem } from '@shared/lges';
 import { Grid, Stack } from '@shared/mui';
 import { useMessageStore } from '@shared/stores';
 
@@ -31,6 +40,8 @@ export const MktFcstForm = ({ onSearch, insertedRowCount = 0 }: MktFcstFormProps
   const sc = useMktFcstStore(s => s.searchCondition);
   const set = useMktFcstStore(s => s.setSearchCondition);
   const openSearchArea = useMktFcstStore(s => s.openSearchArea);
+  // ⭐ P1-③ — W/S Planner 이면 AS 강제 checked·잠금 (AS-IS cboAS.Checked=true·Enabled=false, L324).
+  const wsPlannerYn = useMktFcstStore(s => s.wsPlannerYn);
 
   // ⭐ #6 — 조회조건 콤보 전체 데이터 로딩. 사내 SCM_ADM_CMBO_SQL_M 실측(2026-06-28, READ)으로
   //   "등록 SQL_ID + 필요 바인드(@divisionId/@sesUserId 등)" 를 확정해 정합:
@@ -44,34 +55,37 @@ export const MktFcstForm = ({ onSearch, insertedRowCount = 0 }: MktFcstFormProps
   //   ⭐ Sender Code 콤보 = SQL_ID 'SenderCode' (2026-07-02 신규 등록 — A2_dmf0003_sendercode_titleset_meta.sql,
   //      소스 lookup EDI_SENDER_CODE, AS-IS UP_FX_GetCommonDataList_DM 1:1). DIVISION_ID 컬럼 반환 → 클라 필터.
   //      DB 미적용 상태면 빈 옵션(ALL 만) — 가짜 옵션 생성 금지 유지.
-  const [
-    myDivision,
-    userTeamByDivision,
-    endCustomerByDivision,
-    scmSiteByEndCustomer,
-    bizType,
-    senderCode,
-    plantSite,
-    itemType,
-  ] = useTabComboQueries({
-    filters: [
-      'MyDivision',
-      { comboId: 'TeambyDivision' },
-      { comboId: 'EndCustomer' },
-      'ScmSitebyEndCustomer40',
-      'BizType',
-      'SenderCode',
-      { comboId: 'SalesPlant', divisionId: sc.divisionId },
-      'ItemType',
-    ],
+  // ⚠️ Plant Site 는 SalesPlant(division-only, 권한/cascade 미반영) 사용 금지 — 표준 PlantSiteField
+  //   카탈로그(PlantSitebyEndCustomer, 81 전용, Division+EndCustomer 서버 바인드)로 대체(아래 extraConditions).
+  // Division/Team/EndCustomer/BizType 은 표준 카탈로그 필드가 자체 fetch → Form 에서는 인라인 유지 필드만.
+  //   Sales Site = 'SalesSite'(AS 체크박스 통합 인라인) / SenderCode·ItemType(카탈로그 없음) / BucketType(D 포함 인라인).
+  const [scmSiteByEndCustomer, senderCode, itemType, bucketTypeCombo] = useTabComboQueries({
+    filters: ['SalesSite', 'SenderCode', 'ItemType', 'BucketType'],
   });
 
-  // TODO(Phase 2): DMF0003_GET_BUCKET_TYPE_CODE SP 호출로 옵션 로드. 임시 옵션.
-  const bucketOptions = [
+  // ⭐ G3 — Bucket 옵션 = CMBO 'BucketType'(LOOKUP_TYPE='BUCKET_TYPE_CODE') 동적 fetch.
+  //   ⚠️ CMBO CODE 는 풀워드(DAILY/WEEKLY/MONTHLY)라 BUCKET_TYPE enum('D'/'W'/'M')과 불일치 →
+  //      CODE 첫 글자로 enum 매핑(charAt(0): DAILY→D). label 은 CMBO NAME(i18n 아님) 대신 코드→LBL 유지.
+  //   CMBO 빈 응답 시 정적 fallback(3종 불변) — 화면 작동 보장.
+  const bucketLabelKey: Record<string, string> = {
+    [BUCKET_TYPE.DAILY]: 'LBL00682',
+    [BUCKET_TYPE.WEEKLY]: 'LBL00683',
+    [BUCKET_TYPE.MONTHLY]: 'LBL00684',
+  };
+  const bucketFallback = [
     { label: t('LBL00682', '_Daily'), value: BUCKET_TYPE.DAILY },
     { label: t('LBL00683', '_Weekly'), value: BUCKET_TYPE.WEEKLY },
     { label: t('LBL00684', '_Monthly'), value: BUCKET_TYPE.MONTHLY },
   ];
+  const bucketOptions =
+    bucketTypeCombo && bucketTypeCombo.length > 0
+      ? bucketTypeCombo
+          .map(item => {
+            const code = String(item.CODE ?? '').charAt(0) as BUCKET_TYPE;
+            return { label: t(bucketLabelKey[code] ?? '', String(item.NAME ?? code)), value: code };
+          })
+          .filter(o => o.value === BUCKET_TYPE.DAILY || o.value === BUCKET_TYPE.WEEKLY || o.value === BUCKET_TYPE.MONTHLY)
+      : bucketFallback;
 
   // 멀티 select dropdown 값 (^ delim string[] ↔ 단일 string). 카탈로그 부재로 단일선택 + ALL 패턴 사용.
   const firstOr = (arr: string[]): string => arr[0] ?? '';
@@ -84,118 +98,88 @@ export const MktFcstForm = ({ onSearch, insertedRowCount = 0 }: MktFcstFormProps
       onSearch={onSearch}
       conditions={
         <>
-          {/* Row 1 — Div* / Team / End Customer / Sales Site(+AS) */}
+          {/* Row 1 — Div* / Team / End Customer / Sales Site(+AS). Division/Team/EndCustomer = 표준 카탈로그. */}
+          {/* ⭐ Division — 종속필드 전면 reset(cascade) + division별 기본값(cellQty/invalid/bucket)은 onChange 커스텀. */}
+          <DivisionField
+            gridSize={3}
+            value={sc.divisionId}
+            onChange={option =>
+              set({
+                divisionId: option,
+                deptIds: [],
+                endCustomers: [],
+                scmSiteIds: [],
+                bizTypes: [],
+                plantSiteIds: [],
+                // Sender Code(81 전용) / Project(40 비활성) — division 변경 시 clear.
+                senderCodes: [],
+                projectCodes: [],
+                // Cell Qty 는 Div 40 전용 (AS-IS L2107/2140: 비40 = Enabled=false + Checked=false).
+                ...(option !== DIVISION.MOBILITY ? { cellQtyYn: false } : {}),
+                // Invalid(MKT FCST 미등록 제외)는 Div82 전용 — 82 진입 시 기본 checked (AS-IS L469~477).
+                invalidYn: option === DIVISION.ESS,
+                // G4 — Bucket 기본값: 82(ESS)=Daily / 그 외=Weekly (v1.7 §3, AS-IS OnShown).
+                bucketType: option === DIVISION.ESS ? BUCKET_TYPE.DAILY : BUCKET_TYPE.WEEKLY,
+              })
+            }
+          />
+          <TeamField
+            gridSize={3}
+            value={sc.deptIds}
+            onChange={v => set({ deptIds: v, endCustomers: [], scmSiteIds: [] })}
+            division={sc.divisionId}
+          />
+          <EndCustomerField
+            gridSize={3}
+            value={sc.endCustomers}
+            onChange={v => set({ endCustomers: v, scmSiteIds: [] })}
+            division={sc.divisionId}
+          />
           <Grid size={3}>
-            <FormItem
-              label={t('LBL00001', '_Div.')}
-              labelAlign='right'
-              render={() => (
-                <CustomDropdown
-                  mandatory
-                  value={sc.divisionId}
-                  options={myDivision?.map(item => ({ label: item.NAME, value: item.CODE })) ?? []}
-                  onChange={(_, option) => {
-                    set({
-                      divisionId: option,
-                      deptIds: [],
-                      endCustomers: [],
-                      scmSiteIds: [],
-                      bizTypes: [],
-                      plantSiteIds: [],
-                      // ⭐ B4 — Cell Qty 는 Div 40 전용 (AS-IS L2107/2140: 비40 = Enabled=false + Checked=false).
-                      ...(option !== DIVISION.MOBILITY ? { cellQtyYn: false } : {}),
-                      // ⭐ Invalid(MKT FCST 미등록 제외)는 Div82 전용 — 82 선택 시 기본 checked
-                      //   (AS-IS checkInvalidExec .cs L469~477: 82=Enabled+Checked true / 그 외 false).
-                      invalidYn: option === DIVISION.POWER,
-                    });
-                  }}
-                />
-              )}
-            />
-          </Grid>
-          <Grid size={3}>
-            <FormItem
-              label={t('LBL00044', '_Team')}
-              labelAlign='right'
-              render={() => (
-                <CustomDropdown
-                  allOption
-                  useClearIcon
-                  value={firstOr(sc.deptIds)}
-                  options={
-                    userTeamByDivision
-                      ?.filter(item => item.DIVISION_ID === sc.divisionId)
-                      .map(item => ({ label: item.NAME, value: item.CODE })) ?? []
-                  }
-                  onChange={(_, option) => set({ deptIds: toArr(option), endCustomers: [], scmSiteIds: [] })}
-                />
-              )}
-            />
-          </Grid>
-          <Grid size={3}>
-            <FormItem
-              label={t('LBL00080', '_End Customer')}
-              labelAlign='right'
-              render={() => (
-                <CustomDropdown
-                  allOption
-                  useClearIcon
-                  value={firstOr(sc.endCustomers)}
-                  options={
-                    endCustomerByDivision
-                      ?.filter(item => item.DIVISION_ID === sc.divisionId)
-                      .map(item => ({ label: item.NAME, value: item.CODE })) ?? []
-                  }
-                  onChange={(_, option) => set({ endCustomers: toArr(option), scmSiteIds: [] })}
-                />
-              )}
-            />
-          </Grid>
-          <Grid size={3}>
-            {/* ⭐ Sales Site dropdown + AS 체크박스 가로 배치 — AS 는 dropdown 오른쪽 옆(inline, SCSS .salesSiteCell). */}
+            {/* ⭐ Sales Site — 멀티선택(카탈로그 SalesSiteField 동등: SalesSite CMBO + DIVISION_ID 필터) +
+                AS 체크박스 가로 배치. SalesSiteField 는 AS 미지원 → AS 통합 위해 인라인 유지. */}
             <div className={styles.salesSiteCell}>
               <FormItem
                 label={t('LBL00011', '_Sales Site')}
                 labelAlign='right'
                 render={() => (
                   <CustomDropdown
+                    multiple
                     allOption
                     useClearIcon
-                    value={firstOr(sc.scmSiteIds)}
+                    limitTags={1}
+                    value={sc.scmSiteIds.join(',')}
                     options={
-                      scmSiteByEndCustomer?.map(item => ({ label: item.NAME, value: item.CODE })) ?? []
+                      scmSiteByEndCustomer
+                        ?.filter(item => !item.DIVISION_ID || item.DIVISION_ID === sc.divisionId)
+                        .map(item => ({ label: item.NAME, value: item.CODE })) ?? []
                     }
-                    onChange={(_, option) => set({ scmSiteIds: toArr(option) })}
+                    onChange={(_, options) =>
+                      set({ scmSiteIds: String(options ?? '').split(',').filter(Boolean) })
+                    }
                   />
                 )}
               />
               <span className={styles.salesSiteAs}>
                 <Checkbox
                   labelText={t('LBL00685', '_AS')}
-                  checked={sc.asYn}
+                  checked={sc.asYn || wsPlannerYn}
+                  disabled={wsPlannerYn}
                   onChange={checked => set({ asYn: checked })}
                 />
               </span>
             </div>
           </Grid>
 
-          {/* Row 2 — Biz Type* / Sender Code / Period* / Bucket* */}
+          {/* Row 2 — Biz Type*(카탈로그) / Sender Code(81 전용 인라인) / Period*(카탈로그) / Bucket*(D 포함 인라인) */}
+          <BizTypeField
+            gridSize={3}
+            value={sc.bizTypes}
+            onChange={v => set({ bizTypes: v })}
+          />
           <Grid size={3}>
-            <FormItem
-              label={t('LBL00085', '_Biz. Type')}
-              labelAlign='right'
-              render={() => (
-                <CustomDropdown
-                  allOption
-                  useClearIcon
-                  value={firstOr(sc.bizTypes)}
-                  options={bizType?.map(item => ({ label: item.NAME, value: item.CODE })) ?? []}
-                  onChange={(_, option) => set({ bizTypes: toArr(option) })}
-                />
-              )}
-            />
-          </Grid>
-          <Grid size={3}>
+            {/* ⭐ Sender Code — 81 계열 전용 enable (AS-IS clbEDISender Division==81 만 활성, .cs L469~).
+                40/82 비활성 + Division 변경 시 clear(onChange 종속 reset). */}
             <FormItem
               label={t('LBL00090', '_Sender Code')}
               labelAlign='right'
@@ -203,6 +187,7 @@ export const MktFcstForm = ({ onSearch, insertedRowCount = 0 }: MktFcstFormProps
                 <CustomDropdown
                   allOption
                   useClearIcon
+                  disabled={!sc.divisionId.startsWith('81')}
                   value={firstOr(sc.senderCodes)}
                   options={
                     senderCode
@@ -214,34 +199,15 @@ export const MktFcstForm = ({ onSearch, insertedRowCount = 0 }: MktFcstFormProps
               )}
             />
           </Grid>
+          <PeriodField
+            gridSize={3}
+            start={sc.startYyyymmdd}
+            end={sc.endYyyymmdd}
+            onChange={(start, end) => set({ startYyyymmdd: start, endYyyymmdd: end })}
+          />
           <Grid size={3}>
             <FormItem
-              label={t('LBL00013', '_Period')}
-              labelAlign='right'
-              render={() => (
-                <div className={styles.datePickerFix}>
-                  <DatePickerCalendar
-                    sx={{ width: '100%' }}
-                    usecase='date-range-multi'
-                    elevation
-                    size='large'
-                    value={[
-                      dayjs(sc.startYyyymmdd, 'YYYYMMDD'),
-                      dayjs(sc.endYyyymmdd, 'YYYYMMDD'),
-                    ]}
-                    onChange={date => {
-                      const start = date?.[0] ? dayjs(date[0]).format('YYYYMMDD') : sc.startYyyymmdd;
-                      const end = date?.[1] ? dayjs(date[1]).format('YYYYMMDD') : sc.endYyyymmdd;
-                      set({ startYyyymmdd: start, endYyyymmdd: end });
-                    }}
-                  />
-                </div>
-              )}
-            />
-          </Grid>
-          <Grid size={3}>
-            <FormItem
-              label={t('LBL00710', '_bucket')}
+              label={t('LBL00710', '_Bucket')}
               labelAlign='right'
               render={() => (
                 <CustomDropdown
@@ -271,6 +237,8 @@ export const MktFcstForm = ({ onSearch, insertedRowCount = 0 }: MktFcstFormProps
       extraConditions={
         <>
           {/* Row 3 — Project🔍 / Model🔍 (카탈로그 필드 + multiCheckbox, DMF0020 동일) / Plant Site / Item Type */}
+          {/* ⭐ Project — Division==='40' 비활성 (AS-IS btnProject Division==40 disabled, 소형사업부는
+              프로젝트 코드 관리 안함). DMF0020 은 숨김, DMF0003 은 disabled 로 레이아웃 유지. */}
           <ProjectField
             gridSize={3}
             value={sc.projectCodes}
@@ -280,6 +248,7 @@ export const MktFcstForm = ({ onSearch, insertedRowCount = 0 }: MktFcstFormProps
             endCustomers={sc.endCustomers}
             scmSiteIds={sc.scmSiteIds}
             projectCodes={sc.projectCodes}
+            disabled={sc.divisionId === DIVISION.MOBILITY}
             multiCheckbox
           />
           <ItemField
@@ -294,25 +263,15 @@ export const MktFcstForm = ({ onSearch, insertedRowCount = 0 }: MktFcstFormProps
             itemIds={sc.itemIds}
             multiCheckbox
           />
-          <Grid size={3}>
-            <FormItem
-              label={t('LBL00005', '_Plant Site')}
-              labelAlign='right'
-              render={() => (
-                <CustomDropdown
-                  allOption
-                  useClearIcon
-                  value={firstOr(sc.plantSiteIds)}
-                  options={
-                    plantSite
-                      ?.filter(item => item.DIVISION_ID === sc.divisionId)
-                      .map(item => ({ label: item.NAME, value: item.CODE })) ?? []
-                  }
-                  onChange={(_, option) => set({ plantSiteIds: toArr(option) })}
-                />
-              )}
-            />
-          </Grid>
+          {/* ⭐ Plant Site — 표준 카탈로그 PlantSiteField (PlantSitebyEndCustomer, 81 계열 전용 enable,
+              Division+EndCustomer 서버 바인드 + 값 quoting). 40/82 비활성. (메모리 룰 2026-07-10) */}
+          <PlantSiteField
+            gridSize={3}
+            value={sc.plantSiteIds}
+            onChange={v => set({ plantSiteIds: v })}
+            division={sc.divisionId}
+            endCustomer={sc.endCustomers.length > 0 ? sc.endCustomers.join(',') : undefined}
+          />
           <Grid size={3}>
             <FormItem
               label={t('LBL00068', '_Item Type')}
@@ -369,7 +328,7 @@ export const MktFcstForm = ({ onSearch, insertedRowCount = 0 }: MktFcstFormProps
                 <Checkbox
                   labelText={t('LBL00752', '_MKT FCST 미등록 제외')}
                   checked={sc.invalidYn}
-                  disabled={sc.divisionId !== DIVISION.POWER}
+                  disabled={sc.divisionId !== DIVISION.ESS}
                   onChange={checked => set({ invalidYn: checked })}
                 />
               </Stack>

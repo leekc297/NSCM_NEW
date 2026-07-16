@@ -23,7 +23,11 @@
 4. (UI 작업 시) §3 UI-MANDATORY 체크리스트를 PRE-WRITE 로 통과
 ```
 
-> **카운트 단일 소스**: hook 총수 = **109** (`Doc/_rules_v2/hooks/*.md` 실측, 2026-07-08 — #107 sp-hang-runaway-loop-diagnosis + **#108 ui-grid-corner-no-header** + **#109 oracle-nls-implicit-conversion**). 어떤 문서든 카운트를 별도 보유하지 말 것 — 본 파일 §4 와 00_INDEX 만 카운트를 가진다. (진단 R-2)
+> **카운트 단일 소스**: hook 총수 = **113** (`Doc/_rules_v2/hooks/*.md` 실측, 2026-07-15 — #113 ui-category-division-direct-compare 신설[Grid Column 하드코딩·화이트리스트·attr 우회 금지, DIVISION_ID 서버 직접 비교 — 사용자 명시]. 직전 2026-07-13: #110~#112). 어떤 문서든 카운트를 별도 보유하지 말 것 — 본 파일 §4 와 00_INDEX 만 카운트를 가진다. (진단 R-2)
+>
+> ⚠️ 2026-07-13(저녁): 신규 **#112 `search-condition-asis-tobe-catalog`** (SCP·DM 화면 조회조건 AS-IS↔TO-BE 카탈로그 적용 의무 — 원천 `Doc/SCP_DM_화면별 조회조건 정리_260122_v0.4.xlsx` List 시트 **953행/99화면 전수** MD 변환 = `_rules_v2/_mapping/search_conditions_scp_dm.md`. 조회조건 작성 전 해당 화면 표 전 행 대조 + 명칭 표준화 rename 13쌍[Div→Div./Model→Model/Nickname/Project→PJT/Valid→Active 등] + 다중선택 표준=검색+ALL버튼 + 팝업 통합[모→메1/프1→프2] + 공통기능화 검토 203행=SearchArea 승계 금지 + Sun-Set 8화면 사전 보고 + 카운트 일치 보고 의무. 사용자 명시) = **112**.
+>
+> ⚠️ 2026-07-13(DMF0082 조회/SavePrice 최적화): 신규 **#110 `sp-multiselect-filter-and-conversion-pitfalls`** (멀티선택 필터 GTT+skip[값있음=INNER/ALL·빈값=조건skip, 멀티값=GTT 사전적재] + SP 변환 3대 폭발/오정합[①split-in-join decorrelate 184M카테시안→물리GTT ②조인키부재 LEFT JOIN=2만행 카테시안+GROUP BY N배뻥튀기 ③INSERT목록↔SELECT 오정렬 ORA-12899] + Oracle `''=NULL` 필터버그. DMF0082 SavePricePeriod 0행·594s→5966행·9s) + 신규 **#111 `oracle-sp-perf-correlated-setbased-and-live-redeploy`** (§A 상관→set-based[상관UPDATE→MERGE 사전집계 / per-row LATERAL FETCH FIRST 1→GROUP BY MAX...KEEP DENSE_RANK LAST / 상관 IN(split)→물리GTT] §B 진단[V$SQL 문장별→DISPLAY_CURSOR→SQL_MONITOR, hang=Free private memory to OS] §C 라이브 재배포[라이브러리캐시 배타락→BE프로세스종료+DDL_LOCK_TIMEOUT, SCM_MGR ALTER SYSTEM 없음] §D 집계 GTT NUMBER≥소스[ORA-01438] §E diminishing returns[와이드범위=큰 중간결과] §F FE[BE boolean vs 'Y'문자열/division-반응형 컬럼/폭0 숨김]. DMF0082 조회, 사용자 명시) = **111**.
 > ⚠️ 2026-07-08(오후): 신규 **#108 `ui-grid-corner-no-header`** (사용자 지정 공통 표준 — ①그리드 No. 코너(TopLeft) 가로/세로 전체 단일 머지 + 'No.' 라벨(setCellData 재귀 가드) ②커스텀 MergeManager 설치 = nested 그룹 네이티브 span 무효 → 동적 1단(년/년월) 수평 머지 수동 구현 의무. 정본 DMF0020 ExchangeRateModal) + 신규 **#109 `oracle-nls-implicit-conversion`** (암묵 형변환=세션 NLS 의존 — DATE 파라미터 원시값/단일인자 TO_DATE 금지. "SP직접호출·로컬 BE OK + 클라우드 WAS 만 ORA-01861" 시그니처 1순위 + -9994/InvocationTargetException 래퍼 진단(SCM_COM_SYS_LOG.EXCT_MSG_CTN) + 사내·클라우드 동시배포. 부록 C-11 신설(함정 11종). DMF0014 저장) = **109**.
 > ⚠️ 2026-07-08: 신규 **#107 `sp-hang-runaway-loop-diagnosis`** (SP hang·폭주 진단 — ①GTT `TRUNCATE`(DDL) 동시세션 library cache·cursor·row cache mutex 경합 hang→전량 `DELETE` 치환+잔존 0 검증 ②MSSQL `@@FETCH_STATUS` 변환 누락 `WHILE V_FETCH_STATUS=0` 무한루프(10건 업로드에 INSERT 1,278만회)→FETCH 직후 `%NOTFOUND` 재할당 의무+grep 게이트(할당수=FETCH수) ③멈춘 세션 library cache pin=`CREATE OR REPLACE` 재배포 차단→DBA kill 선행(ORA-01031/ORA-00026)+배포 대기열 기법. 진단=V$SESSION event 3분류+V$SQL EXECUTIONS. 부록 C-2 확장+**C-10 신설(함정 10종)**. DMF0014 Excel Upload Lock) = **107**.
 > ⚠️ 2026-07-06: 신규 **#106 `oracle-bulk-clob-buffer`** (대량 조회/저장 CLOB 버퍼 — ①동적 PIVOT 누적 V_ITERATION/V_SQL_TEXT→CLOB ②'^' bulk 홀더 vp_*/V_P_*→CLOB(단일토큰 v_* 유지) ③진단 JSON_OBJECT=SELECT RETURNING CLOB INTO+DBMS_LOB.SUBSTR 4000 truncate, 23ai PL/SQL 대입 PLS-00684. DMF0014/0043/0048 3연발) = **106**.
@@ -100,7 +104,7 @@
 - [ ] **컴포넌트 재사용 (atomic-design-components)**: `@lges/design-system` + `@shared/components` 카탈로그 우선 검색(중복 작성 금지) + `useDataGridStore`(DEPRECATED) 0
 - [ ] **코드 Naming Rule (code-naming-convention-mandatory)**: 함수=동사 camelCase + boolean=`is/has/can` 접두 + 상수=SNAKE_CASE + 미사용 파라미터=`_` 접두 + 축약어 금지 + 파일/폴더 명명 표 준수 + 품질 게이트(Husky pre-push lint+type) 통과
 - [ ] **reference baseline 선정**: Tab형=DMF0004 / Panel형=DMF0005 / 단일 grid=DMF0006 중 시나리오 매칭 (screen-conventions-mandatory)
-- [ ] ⭐⭐⭐ **Figma 디자인 레이아웃 정합** (figma-layout-parity-mandatory): Figma MD(`Doc/_figma/screens/{ID}.md`) 존재 시 §5 레이아웃 구조 → 영역 매핑표 작성 후 **그 배치대로 구현(디자인-우선)**. MD 부재 시 Figma 추출 선행. geometry-only MD 금지(영역 의미 명시)
+- [ ] ⭐⭐⭐ **Figma 디자인 레이아웃 정합** (figma-layout-parity-mandatory): Figma MD(`Doc/_figma/screens/{ID}.md`) 존재 시 §5 레이아웃 구조 → 영역 매핑표 작성 후 **그 배치대로 구현(디자인-우선)**. MD 부재 시 Figma 추출 선행. geometry-only MD 금지(영역 의미 명시). ⚠️ **경계: Figma=디자인 참조 only — 정책(권한/편집/필수값/기능동작/Validation/콤보 값) 판단 금지, 정책 소스=AS-IS 원소스·DB 메타·분석서·사용자 확정** (#90 §1.5, 2026-07-14 사용자 명시)
 - [ ] **폴더/명명 4 cross-check**: MENU_ID = 폴더명 = `route-paths.ts` = DB `MNU_URL` 동일 (screen-conventions-mandatory §1.2 / popup-modal-and-routing-mandatory)
 - [ ] **동적 속성 3종 admin 데이터 확인** — 부재 시 신규 등록 의무 (ui-dynamic-property-management = master):
   - [ ] Menu Button Visible/Enable → SYS0009 매핑 (menu-button-dynamic-fetch)
@@ -108,10 +112,11 @@
   - [ ] Measure Code/Label/Sort/Valid → SYS0004
 - [ ] **Grid = 공용 DataGrid 만** 사용, FlexGrid JSX 직접 금지 (datagrid-shared-component-mandatory)
 - [ ] **Form = SearchArea/FormItem/CustomDropdown**, 2단(6필드) 초과 시 `extraConditions` 분리 (screen-shell-composition-mandatory / search-area-extra-conditions)
+- [ ] ⭐⭐ **SCP·DM 조회조건 = AS-IS↔TO-BE 카탈로그 전 행 대조** (search-condition-asis-tobe-catalog #112): `_rules_v2/_mapping/search_conditions_scp_dm.md`(953행/99화면) 에서 해당 화면 표 확인 — To-Be 명칭·유형·기능·팝업 그대로(명칭 표준: Div→**Div.**/Valid→**Active**/Project→**PJT** 등 13쌍) + 다중선택=**검색+ALL버튼** + 공통기능화 검토 행 SearchArea 승계 금지 + Sun-Set 8화면 사전 보고 + 카운트 일치 보고
 - [ ] **SubTitle hotkeyConfig 1 객체**로 11 버튼 자동 매핑 (subtitle-button-actions-mandatory)
 - [ ] **권한 분기**: `useTabBtnPermissions` + `hasButton(BTN_CD)` 각 액션 (screen-meta-and-permissions-mandatory)
 - [ ] **공용 popup = camelCase 폴더 + 5 파일 + MODAL_XXX(실제 MENU_ID)** (popup-modal-and-routing-mandatory)
-- [ ] **cascade**: Division 변경 시 하위 'ALL' reset + Map dedup + useTabComboQueries 1RT (cascade-combo-filter)
+- [ ] **cascade**: Division 변경 시 하위 'ALL' reset + Map dedup + useTabComboQueries 1RT (cascade-combo-filter) + ⭐ **Division 변경 시 Grid 데이터 초기화(비움)+CRUD pending reset 의무** (§1.4, 2026-07-14 사용자 명시 — 재조회는 Search 버튼)
   - [ ] ⭐ **Grid 셀 종속 combo/modal** (cascade-combo-filter §5-G): beginningEdit 행값 dataMap 스왑 + **cellEditEnded 전체 dataMap 원복 필수**(누락=타 행 명칭표시 사고) + 계단식 clear(oldVal 비교) + 관대 sentinel + modal preSearchParams=클릭 행값. 콤보 변경 시 사용처 역매핑 — **공유 콤보 SQL 컬럼 추가 금지**(중복표시), 필터 키 반환 콤보 재사용. cascade 정의=화면 constants (AS-IS 실측: 메타 PARAM 없음 — 화면 코드 결정 구조)
 - [ ] **messaging**: `useMessageStore`(alert/confirm/yesNoCancel/toast) — `window.alert` 직접 금지 (messaging-api-and-search-fields-mandatory)
 - [ ] **i18n 3언어 동시**(KO=EN 값 동일, CN fallback) + `LBL`+5자리 (screen-meta-and-permissions-mandatory / i18n-ko-en-alignment)
@@ -157,9 +162,9 @@
 
 ---
 
-## §4. Hook 카탈로그 (전체 109 / Full Catalog) — 단일 카운트 소스
+## §4. Hook 카탈로그 (전체 112 / Full Catalog) — 단일 카운트 소스
 
-> 본문 위치: `Doc/_rules_v2/hooks/<name>.md`. 카운트 = 본 파일 상단 "카운트 단일 소스" 문단 참조 (**109**, 2026-07-08 실측 — 본 §4 내 중복 카운트 표기는 2026-07-03 정리로 제거, 갱신은 상단 문단+본 헤더+말미 SSOT 3곳 동시). 정렬: 파일명 알파벳순(진단 R-4) — 단 #70 이후는 등재 시점 순 표 끝 배치.
+> 본문 위치: `Doc/_rules_v2/hooks/<name>.md`. 카운트 = 본 파일 상단 "카운트 단일 소스" 문단 참조 (**113**, 2026-07-15 실측 — 본 §4 내 중복 카운트 표기는 2026-07-03 정리로 제거, 갱신은 상단 문단+본 헤더+말미 SSOT 3곳 동시). 정렬: 파일명 알파벳순(진단 R-4) — 단 #70 이후는 등재 시점 순 표 끝 배치.
 > 분류: 🅒 공통 · 🆄 UI/화면 · 🅖 Grid/Wijmo · 🅕 Search/Form · 🅟 Popup/Modal · 🅑 BE/SP/Oracle · 🅓 DB적용/Deploy · 🅖it Git/Infra
 
 | # | Hook | 분류 | 트리거 | 한 줄 요약 |
@@ -168,7 +173,7 @@
 | 2 | asis-coverage-check | 🆄 | T01/T08 | AS-IS 4축(Event/API/Validation/Expression) 매핑 검증 |
 | 3 | asis-msg-inventory | 🅓 | T18 | AS-IS MSG[n] 인벤토리 → To-Be 등록 SQL 절차 |
 | 4 | be-infrastructure-reuse | 🅑 | T08/T01 | ⭐⭐ 신규 BE 작성 전 동적 SP 인프라 재사용 검색 의무 |
-| 5 | cascade-combo-filter | 🅕 | T05/T04 | ⭐⭐⭐ Division→하위 reset / Map dedup / 1RT / modal callback 5단계 + **§5-G Grid 셀 cascade**(beginningEdit 스왑+원복/계단식 clear/modal 행값 — 2026-07-03 DMF0020) |
+| 5 | cascade-combo-filter | 🅕 | T05/T04 | ⭐⭐⭐ Division→하위 reset + **§1.4 Div 변경 시 Grid 초기화(비움)+CRUD reset 의무(2026-07-14 사용자 명시)** / Map dedup / 1RT / modal callback 5단계 + **§5-G Grid 셀 cascade**(beginningEdit 스왑+원복/계단식 clear/modal 행값 — 2026-07-03 DMF0020) |
 | 6 | cascade-pattern-check | 🅕 | T01/T04 | 조회조건·grid cascade 패턴 (룰 07 §2.10) |
 | 7 | column-lookup-meta-standard | 🅖 | T04/T07 | ⭐⭐ dropdown=`CELL_COMBO_DATA_TYPE` 위치 / `INPUT_TP_CD` 5종(`MI` 금지) |
 | 8 | column-meta-rework-checklist | 🅖 | T01M/T04 | ⭐⭐ 기존 column 재작업 8 점검 |
@@ -196,6 +201,9 @@
 | 107 | sp-hang-runaway-loop-diagnosis | 🅑 | T08/T10/T19 | ⭐⭐ **SP hang·폭주 진단** — 업로드/저장 무반응(BE 무응답) 시 V$SESSION event 3분류(mutex 경합/무한루프 폭주/정상 락 대기). ①GTT `TRUNCATE`(DDL) 동시세션 library cache·cursor·row cache mutex 경합 hang → 전량 `DELETE FROM` 치환+DBA_SOURCE 잔존 0 검증(부록 C-2 확장) ②`@@FETCH_STATUS` 변환 누락 `WHILE V_FETCH_STATUS=0` 무한루프(10건 업로드에 INSERT 12,786,821회 — V$SQL EXECUTIONS 진단) → FETCH 직후 `%NOTFOUND` 재할당 의무+grep 게이트(할당수=FETCH수, 부록 C-10 신설) ③멈춘 세션 library cache pin = `CREATE OR REPLACE` 재배포 차단(LAST_DDL_TIME 미변경 신호) → DBA kill 선행(SCM_MGR ORA-01031 / stale SERIAL# ORA-00026)+배포 대기열 기법+구버전 SP 動作 중 사용자 재시도 금지 안내. DMF0014 Excel Upload Lock (2026-07-08) |
 | 108 | ui-grid-corner-no-header | 🆄 | T01/T01M | ⭐⭐ **그리드 No. 코너 헤더 공통 표준 (사용자 지정)** — ①TopLeft 패널 전체(순번+상태 × 다단 헤더) **가로/세로 단일 머지** + **'No.' 라벨**(formatItem setCellData, 현재값 비교 재귀 가드) + 중앙 정렬 + `allowMerging=All` prop ②⚠️ **커스텀 MergeManager 설치 = nested columnGroups 네이티브 span 무효** → 동적 1단(년/년월/주차) 수평 머지를 binding 그룹키로 **수동 구현 의무**("네이티브 span" 가정 금지). 정본 DMF0020 ExchangeRateModal / 선례 ContributeViewGrid·PriceBatchInputModal (2026-07-08) |
 | 109 | oracle-nls-implicit-conversion | 🅑 | T08/T10/T19 | ⭐⭐ **암묵 형변환 = 세션 NLS 의존 폭탄** — DATE 파라미터에 문자열/숫자 직접 전달·단일 인자 `TO_DATE(x)`·무마스크 `TO_CHAR(date)` 금지(항상 명시 마스크). 판정 시그니처: **SP 직접호출 OK + 로컬 BE OK + 클라우드 WAS 만 ORA-01861**(세션 NLS_DATE_FORMAT 차이 — 권한/BE빌드 단정 금지). -9994/`InvocationTargetException:null`=래퍼 → `SCM_COM_SYS_LOG.EXCT_MSG_CTN`/BE 콘솔 `Caused by:` 로 실오류 확보. fix=명시 마스크 최소 diff + 동종 전수 sweep + **사내·클라우드 동시 배포**. 부록 C-11. DMF0014 저장 PR_DM_PLN L1322 (2026-07-08) |
+| 110 | sp-multiselect-filter-and-conversion-pitfalls | 🅑 | T08/T10/T19 | ⭐⭐ **멀티선택 필터 GTT+skip + SP 변환 3대 폭발/오정합** — 필터 표준: 값 있음=GTT 사전적재 후 INNER JOIN(또는 ALL)/빈값·'ALL'=조건 자체 skip('' = Oracle NULL — `=''` 필터는 전행 탈락 버그). 변환 3대: ①split-in-join decorrelate=카테시안 폭발(184M) → 물리 GTT 사전 분해 ②조인키 부재 LEFT JOIN=카테시안+GROUP BY N배 뻥튀기 ③INSERT 컬럼목록↔SELECT 오정렬(ORA-12899/조용한 컬럼 뒤섞임). DMF0082 SavePricePeriod 0행·594s→5,966행·9s (2026-07-13) |
+| 111 | oracle-sp-perf-correlated-setbased-and-live-redeploy | 🅑 | T08/T10/T19 | ⭐⭐ **상관쿼리→set-based + 라이브 PKG 재배포 운영** — §A 상관 UPDATE→MERGE 사전집계 / per-row LATERAL `FETCH FIRST 1`→`GROUP BY MAX...KEEP(DENSE_RANK LAST)` / 상관 IN(split)→물리 GTT. §B 진단=V$SQL 문장별 귀속→DBMS_XPLAN.DISPLAY_CURSOR→SQL_MONITOR(hang 신호 'Free private memory to OS'). §C 라이브 재배포=라이브러리 캐시 배타락 → BE 프로세스 종료+DDL_LOCK_TIMEOUT(SCM_MGR 에 ALTER SYSTEM 권한 없음). §D 집계 GTT NUMBER 정밀도≥소스(ORA-01438). §E diminishing returns(와이드 범위=큰 중간결과 한계 명시). §F FE 짝=BE boolean vs 'Y' 문자열/division-반응형 정적컬럼(폭0 숨김 금지). DMF0082 조회 (2026-07-13) |
+| 112 | search-condition-asis-tobe-catalog | 🅕 | T01/T01M/T03/T05 | ⭐⭐ **SCP·DM 조회조건 AS-IS↔TO-BE 카탈로그 적용 의무 (사용자 지정)** — 카탈로그 = `_rules_v2/_mapping/search_conditions_scp_dm.md`(원천 xlsx List 시트 **953행/99화면 전수** 변환). 조회조건 작성 전 해당 화면 표 **전 행 대조**: To-Be 명칭·유형·기능·팝업 그대로(임의 결정 금지) + 명칭 표준화 rename 13쌍(Div→**Div.**/Model→**Model/Nickname**/Project→**PJT**/Valid→**Active**/Version→**Ver.** 등) + 다중선택 표준=**검색+ALL버튼** + 팝업 통합(모1~3→메1/프1→프2) + **공통기능화 검토 203행=SearchArea 승계 금지**(버튼·체크박스 — 사용자 확인) + **Sun-Set 8화면 사전 보고** + 조회조건 삭제 11행 미구현 + 카운트 일치 보고(__asis-mapping__). To-Be 필수값 미확정 한계 명시. (2026-07-13) |
 | 29 | oracle-cmbo-varname-quote | 🅑 | T08/T10 | CMBO_SQL_M `@varName` → `TO_CHAR()` wrap (ORA-01722 방지) |
 | 30 | oracle-db-workflow | 🅑 | T08/T10/T18/T19 | ⭐⭐ Oracle SP/DB 단일 진입점 (8 타입 + 증상→원인) |
 | 31 | oracle-sp-perf-anti-patterns | 🅑 | T08/T10/T19 | ⭐⭐ MSSQL→Oracle 6 성능 룰 (REGEXP/split/lookup/index/SARGable) |
@@ -259,7 +267,7 @@
 | 88 | issue-log-daily-workflow | 🅒 | (일일 이슈목록 정리) | 일일 이슈목록 정리·룰 후보 편입 절차 — "이슈목록 정리/이슈 룰 반영/**이슈목록 Rule 적용**" 요청 시 MD 정리(`_analysis/이슈목록_{날짜}.md`) → 룰 후보 `issue-feed-rules.md` 누적 → 사람 검토 후 정식 hook 승격. issue-feed-rules 짝 워크플로우 |
 | 89 | screen-grid-edit-merge-and-meta-mandatory | 🆄/🅕 | T01/T01M/T04/T05/T08/T10 | ⭐⭐⭐ **G** mergeManager=DataGrid props 직접 세팅(useEffect 주입 무시) + sameRow 머지 기준 `CRUD_TYPE`+`INSERT_GROUP_ID` + **E** 컬럼 편집범위=`INPUT_TP_CD`('IM'/'M') 메타 + 조건부 행잠금 `beginningEdit` + **A** 프로시저 JOIN 키 `SCM_ADM_MNU_BTN_MPG_M.API_ID`↔`SCM_ADM_API_M.API_ID` 매칭 + **P** Div 변경 reset+disabled(40/82)+period default(당월1일~6개월말일) + **M+** 비규격 메시지코드→표준(MSG00002/3). 이슈목록 2026-06-23 PM R-6~R-10 승격 |
 | 91 | sheet-name-asis-preserve-mandatory | 🆄/🅑 | T01/T01M/T04/T08 | ⭐⭐⭐ SHEET_NAME = AS-IS 원본 그대로 (개명 금지) — FE SHEETS value=AS-IS SHEET_NAME(DB SHEET_COLUMNS 또는 `.cs` SpdSheet) + SP/SHEET_COLUMNS/MNU_BTN.SHT_NM 5구간 일치. 개명 시 -9997/빈grid/권한없음(DMF0043 ContributeMain 사고 메커니즘). 기존 화면은 수정 시 정정(일괄 audit X). SYS0014(GroupInfo/UserInfo/Division↔main/userInfo/division) (2026-06-26 사용자 명시) |
-| 90 | figma-layout-parity-mandatory | 🆄 | T01/T01M/T11 | ⭐⭐⭐ Figma 디자인↔구현 레이아웃 정합 — 화면 Figma MD 영역 배치(상단조건/좌·우/상·하/영역 컨텐츠) 와 구현 일치 의무. **수정(T01M) 시 불일치면 레이아웃 교체 필수**(기능만 고치고 방치 금지). 신규(T01) 는 디자인-우선. Figma 추출 MD 는 "레이아웃 구조" 섹션(영역 의미) 포함 의무(geometry-only 금지). SYS0014 사고 (2026-06-26 사용자 명시) |
+| 90 | figma-layout-parity-mandatory | 🆄 | T01/T01M/T11 | ⭐⭐⭐ Figma 디자인↔구현 레이아웃 정합 — 화면 Figma MD 영역 배치(상단조건/좌·우/상·하/영역 컨텐츠) 와 구현 일치 의무. **수정(T01M) 시 불일치면 레이아웃 교체 필수**(기능만 고치고 방치 금지). 신규(T01) 는 디자인-우선. Figma 추출 MD 는 "레이아웃 구조" 섹션(영역 의미) 포함 의무(geometry-only 금지). **§1.5 경계: Figma=디자인 참조 only — 정책 판단 금지(2026-07-14 사용자 명시)**. SYS0014 사고 (2026-06-26 사용자 명시) |
 | 92 | column-division-id-visibility | 🅖 | T01/T01M/T04 | ⭐⭐⭐ admin `SCM_MST_SHEET_COLUMNS.DIVISION_ID`(콤마 토큰 리스트) 기반 컬럼 표시 — 값 있으면 선택 division 토큰 포함 시만 노출, 공란=항상. **SP/BE 무변경**: DIVISION_ID→free attribute(관례 ATTRIBUTE3) 복사 + FE `visibleColumns` 정확 토큰 매칭(substring 금지)+`divisionId` deps. DMF0020 master (2026-06-27 사용자 명시) |
 | 93 | grid-multi-tier-header-height | 🅖 | T01/T01M/T04 | ⭐⭐⭐ 다단(2단/3단) 헤더 높이 = **48px 고정** (1단48/2단24×2/3단16×3) — foundation `HEIGHT_BY_COLUMN_DEPTH`+Wijmo row=max(height). P-A matched(동적 height 미지정, DMF0007) / P-B mismatched(48/maxDepth 정규화+verticalSpan+rAF invalidate, DMF0020). 1단 높이 ×N 비대화 금지 (2026-06-27 사용자 명시) |
 | 94 | search-condition-height-uniformity | 🅖 | T01/T01M/T03 | ⭐⭐⭐ **디자인 필수** — 조회조건 모든 객체(Dropdown/Popup InputField/Text/DatePicker/Date input) 높이 = **36px 동일** (Main UI+Popup). Main UI=표준 searchFields/CustomDropdown 자동 / Popup raw select·date=`height:36px` / DatePicker=`.datePickerFix` wrapper 전 레벨(MuiBox/FormControl/OutlinedInput) 36 강제(design-system small 28 보정, sx forward 안 됨). + Figma 1단 4개=`gridSize` additive override(default 보존). DMF0020 (2026-06-27 사용자 명시) |
@@ -274,7 +282,7 @@
 | 102 | custom-context-menu-standard | 🅖 | T01/T01M/T04 | ⭐⭐ **커스텀 우클릭 메뉴 표준** — dismiss `mousedown {once:true}` 가 항목 click 의 mousedown 단계에서 메뉴 제거 → click 증발("우클릭 무반응"). 3종 세트: ①항목 실행=mousedown(좌클릭) ②dismiss=persistent+`contains` 가드 ③capture add/remove 플래그 일치(누적 방지). hitTest 조건 미충족 시 브라우저 기본 메뉴 유지 + 메뉴명 i18n. DMF0003 PR 메뉴 사고 (2026-07-03) |
 | 103 | pivot-header-drilldown | 🅖 | T01/T01M/T04 | ⭐⭐ **PIVOT 헤더 드릴다운**(SUM/M_ 헤더 dblclick→해당 월 W_ 펼침·접힘 / W_ 헤더→해당 주 D_ 토글, AS-IS L3416 1:1) — 전 버킷 컬럼(D/W/M) **상시 렌더**(SP 는 전체 반환) + 표시 규칙 rank 분리(활성=표시/상위합계=sumYn/하위=숨김) + 드릴 오버라이드 Map + 통합 applyDynVisibility(updatedLayout 재적용) + bucket/Sum/조회 변경 시 리셋. DMF0003 (2026-07-03) |
 | 104 | sp-side-effect-test-gate | 🅑 | T08/T10/T19 | ⭐⭐ **저장 SP 테스트 실행 게이트** — 실행 전 ALL_SOURCE 실측 3단(①내부 COMMIT ②DML 표면·채번 ③메일/연쇄 SP) → 판정: COMMIT 무 = rollback 검증 / 단순 INSERT = 정리 가능 시만 / **메일·연쇄·본테이블 UPDATE = 임의 실행 금지**(화면 E2E 위임 + 근거 라인 보고). DMF0003 SAVE_PRPOPUP (2026-07-03) |
-| 105 | screen-analysis-workbook-standard | 📘 | (분석서/설계서/**As-is 소스분석** 요청) | ⭐⭐ **화면별 분석 기본 룰 — UI분석서 10시트 + AS-IS DB 소스분석 + 가독성 + 개발용 MD** (2026-07-07 확장, 견본=DMF0003 v1.7). ① **UI+DB 동시 분석**: 8.SQL제약_SP(화면 실사용 SP 소스 제약 전수·유형별 grep 대사)/9.권한·Division·일자·편집 실측(**Lookup 전량**·SHEET_COLUMNS 편집플래그·Division EDIT_YN·편집가능/제약 규칙) 신규 + 7.API_SP에 **Function/호출PROC 인벤토리** — SP·PKG·Function·Lookup·Combo 전수(§1.5). ② **가독성**: 각 시트 "읽는 법" + 기술표 **"쉬운 설명(업무 관점)" 열**(정밀 데이터 보존). ③ **개발용 상세동작 MD**(`{ID}_{화면명}_상세동작_개발용.md`): 이벤트/액션 전수 ①→②③ 실측 → User 관점 변환 시트5 반영. ④ 단위테스트=**Division별 분기**. openpyxl+병렬 에이전트+카운트 대사(§5). |
+| 105 | screen-analysis-workbook-standard | 📘 | (화면설계서/분석서/**As-is 소스분석** 요청) | ⭐⭐ **화면설계서 기본 룰 — ⭐2026-07-15 신포맷 개정(견본=DMF0043 v1.0)**. **7시트**(개요/LAYOUT/조회조건·버튼/GRID/EVENT/VALIDATION/API·SP) + **전면 자연어 서술**(원시 코드·SQL·소스라인 미기재, 식별자=SP/PKG/FUNCTION/COLUMN/SHEET/MSG/테이블명만 원문). **"쉬운 설명" 열·"줄" 열 폐지**. **6.VALIDATION = 프로그램(P/G)+PKG/SP 검증 취합**(Division별·권한별·기타 축, 없는 축 정직 표기). 불변: **anti-simplification(전수·누락0)** + **§1.5 AS-IS DB 계층 전수분석**(SP/PKG/Function/Lookup/Combo·권한/Division/편집플래그 실측 → 6·7시트 자연어 반영) + **§5 카운트 대사**(재오픈 assert: 시트 7 / '쉬운설명'·'줄' 헤더 0건). ⚠ 구 11시트·"쉬운설명 열"·데이터연결 마인드맵(2026-07-09)은 **대체**(선택 산출) — 구 견본 DMF0003 v1.7/DMF0082 는 참고·이관 대상. |
 
 > ⚠️ 표 정렬은 파일명 알파벳순이지만 #70~#89 는 등재 시점 보존 위해 표 끝에 배치. 다음 정합 PR 시 알파벳순으로 재배치.
 
@@ -377,5 +385,5 @@ UI mandatory 의 POST-WRITE grep 중 기계 검증 가능한 패턴을 `check-fe
 
 > 단일 진실 소스 / Single Source of Truth:
 > - 진입 / Entry: 루트 `CLAUDE.md` → 본 파일 → `00_INDEX.md`
-> - 카운트 / Count: 본 §4 (= 109) + `00_INDEX.md` (동기화 의무)
+> - 카운트 / Count: 본 §4 (= 112) + `00_INDEX.md` (동기화 의무)
 > - UI 누락 방지 / UI no-omission: 본 §3 체크리스트 (PR 게이트 §7 통합)
