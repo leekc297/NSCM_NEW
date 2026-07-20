@@ -1,4 +1,4 @@
-# 32. Claude(Code) Oracle 직결 가이드 ⭐ 2026-06-11 신설
+﻿# 32. Claude(Code) Oracle 직결 가이드 ⭐ 2026-06-11 신설
 
 > **목적**: Claude Code 가 Oracle DB 작업(변환·컴파일·검증·진단) 시 DB 에 **직접** 질의할 수 있게 하여,
 > "SQL 작성 → 사용자가 DBeaver 실행 → 결과 복사 → Claude 해석" 왕복을 제거한다.
@@ -8,7 +8,7 @@
 
 | 환경 | 접속 | 비고 |
 |---|---|---|
-| 사내 Oracle (기본, 2026-06-10 전환 / 2026-06-15 IP 변경) | `121.162.245.167:2521/ESSCMD`, user `SCM_MGR` | 검증 기준 DB |
+| 사내 Oracle (기본, 2026-06-10 전환 / 2026-06-15 IP 변경 / 2026-06-17 Service Name 전환) | `121.162.245.167:2521/OCGSCMD_P01`, user `SCM_MGR` | 검증 기준 DB |
 | 로컬 Docker | `localhost:1521/FREEPDB1` (container `nscm-oracle`) | 보조/실험용 |
 
 ⚠️ **비밀번호 하드코딩 금지** — 환경변수 또는 `.env.asis`(gitignore) 사용. 신규 스크립트에 접속 문자열 literal 작성 금지.
@@ -23,7 +23,7 @@ Oracle 공식 SQLcl(25.2+) 에 내장된 MCP 서버. Claude Code 가 자연어 �
 # 1) SQLcl 설치 (Java 17+ 필요) — https://www.oracle.com/database/sqldeveloper/technologies/sqlcl/
 # 2) 저장 접속 생성 (비밀번호는 SQLcl secure store 에 저장됨)
 sql /nolog
-SQL> connect -save nscm_corp -savepwd SCM_MGR@121.162.245.167:2521/ESSCMD
+SQL> connect -save nscm_corp -savepwd SCM_MGR@121.162.245.167:2521/OCGSCMD_P01
 
 # 3) Claude Code 에 MCP 등록 (프로젝트 루트에서)
 claude mcp add sqlcl -- <SQLcl경로>/bin/sql -mcp
@@ -39,7 +39,7 @@ Windows 에 Oracle Instant Client 가 없어도 동작 (thin 모드). MCP 없이
 
 ```powershell
 pip install oracledb
-$env:NSCM_ORA_USER="SCM_MGR"; $env:NSCM_ORA_PASS="..."; $env:NSCM_ORA_DSN="121.162.245.167:2521/ESSCMD"
+$env:NSCM_ORA_USER="SCM_MGR"; $env:NSCM_ORA_PASS="..."; $env:NSCM_ORA_DSN="121.162.245.167:2521/OCGSCMD_P01"
 
 python _artifacts/_diagnostics/ora.py invalid                  # INVALID 목록
 python _artifacts/_diagnostics/ora.py compile PKG_DMF0043      # 컴파일 + USER_ERRORS

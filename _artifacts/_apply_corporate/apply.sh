@@ -1,4 +1,4 @@
-#!/bin/bash
+﻿#!/bin/bash
 # Apply SQL file to corporate Oracle DB via Docker exec sqlplus
 # Usage: ./apply.sh <sql_file> [log_label]
 #
@@ -10,7 +10,7 @@ SQL_FILE="$1"
 LABEL="${2:-$(basename "$SQL_FILE" .sql)}"
 LOG_DIR="C:/Projects/NSCM/_artifacts/_apply_corporate/_logs"
 LOG_FILE="$LOG_DIR/$(date +%Y%m%d_%H%M%S)_${LABEL}.log"
-CONN='SCM_MGR/"!SCMroqkf2026"@121.162.245.167:2521/ESSCMD'
+CONN='SCM_MGR/"!SCMroqkf2026"@121.162.245.167:2521/OCGSCMD_P01'
 
 if [ ! -f "$SQL_FILE" ]; then
   echo "[FAIL] file not found: $SQL_FILE"

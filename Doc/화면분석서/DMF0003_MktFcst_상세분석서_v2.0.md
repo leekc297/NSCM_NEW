@@ -16,10 +16,10 @@ DMF0003 은 **시장예측(MKT Forecast) 입력·조회 화면**이다. 사업�
 | 구분 | 소스 | 성격 | 본 분석 대상 |
 |---|---|---|---|
 | **DMF0003** (정본) | `GSCM.DM.Plan.UIL/DMF0003_MktFcst.cs` (5,920줄) | 평문 = **TO-BE 구현 기준** (PSI/Car 없음) | ✅ 주 분석 |
-| DMF0003_1 (변형) | `GSCM.DM.Forms.UIL/Plan/DMF0003_1_MktFcst/…` (7,104줄) | PSI(고객수요분석)+Car(시뮬레이션) 혼재본 | 이력·가시성 참조 |
-| DMF0003_T | (별도) | 별개 화면 (사용자 정정 2026-07-09) | 제외 |
+| DMF0003_1 | (별도 소스) | **별개 화면** — DMF0003 아님·변형본 아님 (사용자 확정 2026-07-16) | ⛔ 분석 관여 금지 |
+| DMF0003_T | (별도 소스) | **별개 화면** (사용자 정정 2026-07-09·재확정 2026-07-16) | ⛔ 분석 관여 금지 |
 
-> ⚠ `_1` 의 PSI/Car 상단 패널은 2026-07-03 결정으로 **TO-BE 제거**(구현·DB 등록분은 `_deploy_packages/DMF0003_PSI_20260703`, `_CAR_/_PR_20260703` 에 보존). 정본에는 애초에 없다. 단 SHEET_COLUMNS 에는 `psi` / `carFcst` / `Customer Demand Analysis` 시트 정의가 아직 남아 있음(실측, 아래 §5).
+> ⚠ SHEET_COLUMNS 에 `psi` / `carFcst` / `Customer Demand Analysis` 시트 정의가 남아 있으나(실측, §5) 이는 **별개 화면(DMF0003_1) 소속 잔존 메타**로 본 화면(DMF0003)과 무관하다.
 
 ### 기본 정보
 
@@ -43,14 +43,13 @@ DMF0003 은 **시장예측(MKT Forecast) 입력·조회 화면**이다. 사업�
 | Version Cut-Off | `VersionCutOffPopUp` (11화면 공용) | btnCutOff | `DMF0010_GET_DM_MDF_VERSION` | ✅ 유지 |
 | **Master Change** | `DMF0003_MatsterChgPopup` | btnIncotermsChg | `DMF0000_GET_MASTER_CHG_POPUP`(사내 미존재) | ⛔ **삭제(2026-07-13)** |
 | Project/Item/Owner byDivision | `SCM0002/DM0002/DM0020…` | 조회조건 팝업 | (콤보/팝업 SP) | ✅ 유지 |
-| PSI(CustDemandAnalysis) / Car | `_1` 전용 | — | PSI/Car 계열 | ⛔ 제거(_1 전용) |
 
 ---
 
 ## 2. 소스 인벤토리
 
 ### 2.1 이벤트 핸들러 (정본 26 · `__asis-mapping__.md` 4축 검증 기준)
-화면로드(Form_Load/OnShown/InitControls/DefineProperty/InitSpread), 조회조건 cascade(Division/Team/Customer 변경), 그리드(ComboSelChange/CellDoubleClick/Changed/CellClick/ClipboardPasted/KeyUp/우클릭 contextMenu), 버튼(Project/Item/Owner/Column/Measure/Bucket/IncotermsChg), 체크(chkColor/chkSum/cboAS). 4축 커버리지 = **Validation 152 / Expressions 130 / Events 26 / Popup 8** (정본 기준; _1 변형은 validation 154).
+화면로드(Form_Load/OnShown/InitControls/DefineProperty/InitSpread), 조회조건 cascade(Division/Team/Customer 변경), 그리드(ComboSelChange/CellDoubleClick/Changed/CellClick/ClipboardPasted/KeyUp/우클릭 contextMenu), 버튼(Project/Item/Owner/Column/Measure/Bucket/IncotermsChg), 체크(chkColor/chkSum/cboAS). 4축 커버리지 = **Validation 152 / Expressions 130 / Events 26 / Popup 8** (정본 기준).
 
 ### 2.2 호출 SP (FoxDataRequest)
 - 메인: `DMF0003_GET_MKT_FCST_DATA`(조회), `DMF0003_SAVE_MKT_FCST`(저장), `DMF0003_GET_SPREAD_TITLE`(기간 헤더), `DMF0003_GET_BUCKET_TYPE_CODE`, `PR_GET_DAY_RANGE`.
@@ -79,18 +78,7 @@ DMF0003 은 **시장예측(MKT Forecast) 입력·조회 화면**이다. 사업�
 - `DM Planner` → btnIncotermsChg 표시 + layoutControlItem7=Always (item6=chkColor 는 Never 유지 → **chkColor 숨김**)
 - default → btnIncotermsChg 숨김 + item6·item7 Never
 
-### 3.2 변형본(_1)의 PSI/Car 패널 은폐 (이력 — TO-BE 제거)
-
-`_1` 은 `splitContainer2.Panel1` 하위에 PSI(spdSub1)·Car(spdSub2) 블록을 두고, `InitSpread()` 에서 **`clbDivision`이 81 이 아니면 `Panel1Collapsed=true` + `tableLayoutPanel1.Height=0`** 로 전체 은폐한다(cs L550~563). 아래 13개 컨트롤은 개별 `Visible=true`이나 40/82 진입 시 **실효 숨김**이다.
-
-| 컨트롤(자식) | 부모 LAYER | 실효 표시 | 비고 |
-|---|---|---|---|
-| spdSub1(PSI), spdSub2(Car) | splitContainer2.Panel1 | 81만 표시 / 40·82 숨김 | 그리드 |
-| drpPeriodPSI, drpPeriodSimulation, btnFindPSI, btnReport | …Panel1 하위 usrLayoutControl4 | 동상 | PSI 조건/버튼 |
-| cmbCarMaker, cmbCarModel, cmbBizType, txtMarketShare, txtBizPerCar, btnCalculation, btnExcelUpload, drpPeriod1, lblExcelInfo(Label) | …Panel1 하위 usrLayoutControl3 | 동상 | Car 조건 |
-| btnUpDown | tableLayoutPanel1(Panel2) | division≠81 시 `Height=0` | 토글 |
-
-> **분석서 판정**: 정본에서 실효 은폐 = **cboCellQty(항상)·chkColor(권한)·btnIncotermsChg(권한, 기능삭제)**. PSI/Car 13종은 `_1` 전용이며 TO-BE 제거. '보이는 객체'로 오분류 금지.
+> **분석서 판정**: 정본에서 실효 은폐 = **cboCellQty(항상)·chkColor(권한)·btnIncotermsChg(권한, 기능삭제)**. '보이는 객체'로 오분류 금지.
 
 ---
 
@@ -203,7 +191,7 @@ GET_SPREAD_TITLE(메인 헤더), GET_MKT_FCST_COMPARE_POPUP(SSP 비교, 8 IN), S
 | 수정모드 | MSG00662 | 조회 후 수정모드 |
 | FcstType | MSG00664 | FcstType 코드 유효하지 않음(콤보 dataMap 단계 차단) |
 
-> 커버리지: 정본 validation.md **152건** — 직접 22 + inline/division 분기 121 + 미구현 9(Excel/legacy 내부, 사유 명시). _1 변형은 154건.
+> 커버리지: 정본 validation.md **152건** — 직접 22 + inline/division 분기 121 + 미구현 9(Excel/legacy 내부, 사유 명시).
 
 ---
 
@@ -272,24 +260,45 @@ GET_SPREAD_TITLE(메인 헤더), GET_MKT_FCST_COMPARE_POPUP(SSP 비교, 8 IN), S
 
 ---
 
-## 9. ⭐ 이전 소스 대비 차이점 (v1.7 baseline → 최신)
+## 9. ⭐ 이전 소스 대비 차이점 — AS-IS 실측 diff (GSCM_20260512 → GSCM)
 
-> AS-IS legacy `.cs` 자체는 무변경(mtime 2026-05-07~08). 실질 변경은 **FE(`mkt-fcst/`) + 사내 적용 아티팩트(`_apply_corporate/`)** 에서 발생.
+> **비교 기준 (사용자 지정 2026-07-16)**: 이전 = `C:\Projects\NSCM\GSCM_20260512` / 최신 = `C:\Projects\NSCM\GSCM`. DMF0003 파일(정본 프로젝트 파일 + POPUP 8종 — ⚠ DMF0003_1·DMF0003_T 는 별개 화면으로 대조 대상 아님) 대조 결과, **변경 파일 = 정본 `06.UIL/GSCM.DM.Forms.UIL/Plan/DMF0003_MktFcst/DMF0003_MktFcst.cs` (6,944 → 7,143줄, +199) + Designer.cs + csproj/resx** 뿐이다. Plan.UIL 평면본(구버전 사본)·POPUP 8종은 무변경.
 
-| # | 변경 | 내용 | 사유 | 근거 |
+### 9.1 [E20260402-001736] AS 관련 기능 개선 (2026-04-27, JSSBAE)
+
+| # | 영역 | 변경 내용 | 신규 요소 | TO-BE 반영(실측) |
 |---|---|---|---|---|
-| 1 | **Master Change 전체 삭제** | 버튼·모달·메타(MNU_BTN_MPG/API_M/MSG00653/LBL00701)·i18n 제거. SP 자산은 보존 | GET SP `DMF0000_GET_MASTER_CHG_POPUP` 사내 미존재 + SAVE OUT커서 부재 → BLOCKED | `38_…handoff.md`, `A3_…full_removal.py` |
-| 2 | **PSI/Car 상단패널 제거** | `_1` 전용 판정 → 정본 화면에서 제거 | 화면 구분 정정 | `_deploy_packages/DMF0003_PSI_20260703` |
-| 3 | **편집가능 Division=82 등록** | DM_UI_EDITABLE_DIVISION 82=Y INSERT + 사용자그룹 EDIT_YN OR 게이트 | 회의 "편집 권한 82만" | `DMF0003_editable_division_82.sql`(실측 반영) |
-| 4 | **Measure 콤보 indent 2단 복원 + 클라필터 제거 + SP 하한 클램프** | 종속 트리 공백4 복원 / SP 반환 그대로 렌더 / 빈행 643건 fix | 종속 measure 잘림·유령행 버그 | `A4_…`, patched_20260711 |
-| 5 | **W/S Planner AS 강제** | 구 cboAS 체크 → 그룹 판정 콤보(MktFcstWsPlannerYn) | AS 프로세스 이관 | `DMF0003_cmbo_ws_planner_yn.sql` |
-| 6 | **MSG/LBL 재채번** | 6/28 신규 폐기 → 사내 실 ID EXACT 재사용 + 부재분 MSG00660~666 | 사내 마스터 의미 정합 | `DMF0003_msg_register.sql` |
-| 7 | **Color 제거 · Freeze 메타 위임 · FcstType/CustomsHandbook param-less 콤보** | chkColor 미표시 고정 / FIXED_FLAG 위임 / 콤보 SQL 교체 | 표준화 | `__asis-mapping__.md` |
+| 1 | Measure 편집 권한 제한 | measure 세팅 시 **DM Planner (W/S)가 아니면 MKT_FCST_RP 만**(신규행). 81·82에서 W/S 아니면 AS_In_Req 제거. ComboSelChange 필터 조건 교정 | — | △ 부분 — FE 는 division별 편집 콤보로 위임 |
+| 2 | Spread 초기화 유형 분기 | `InitSpread(sType)`/`GetSpdTitle(stype)` — 첫 진입(LOAD)에만 AS FROM SITE 컬럼 강제 추가. SP `GET_SPREAD_TITLE` 에 **p_user_group·p_type** 추가 | SP 파라미터 +2 | ✗ 미반영 (사내 SP=4 IN) |
+| 3 | AS FROM SITE 필수 검증 | W/S류+81·82: 컬럼 없으면 MSG00113 / 저장 시 고객향 사이트+FCST TYPE AS·WS+빈값 → **MSG00476** (2곳) | **MSG00476 신규** | ✗ 미반영 (TO-BE MSG_M 부재, FE 는 MSG00663 만) |
+| 4 | FCST_TYPE 편집 콤보 권한 분기 | W/S = `FCST_TYPE`/'DM Planner (W/S)' lookup(Recall·RMA 포함) / 그 외 GetFcstType() | LOOKUP 파라미터 체계 변경 | ✗ 미반영 (TO-BE FcstType=param-less 단일) |
+| 5 | Sales Site 재로드 | 변경 시 GetSalesSite() 직접 호출로 교체 | — | ○ 유사 반영 (FE cascade) |
+| 6 | 공통 콤보 W/S 플래그 | 콤보 호출 PARAM5 = W/S 여부 'Y'/'N' | — | △ 부분 (FE=MktFcstWsPlannerYn) |
+
+### 9.2 [E20260604-000994] SCM FCST 신규 — 기준수요 관리 (2026-06-08, JSSBAE)
+
+| # | 영역 | 변경 내용 | 신규 요소 | TO-BE 반영(실측) |
+|---|---|---|---|---|
+| 7 | SCP Planner 편집 차단 | EditButton: SCP Planner+82·40 → MSG00096 / InsertRow: SCP Planner+81 → MSG00096 | MSG00096 재사용 | ✗ 미반영 (FE SCP Planner 분기 없음) |
+| 8 | SCP Planner 시간창(81) | LOOKUP `SCP_PLANNER_EDIT_FLAG` 로 수정 가능 시간 확인 → 불충족 **MSG00477** | **LOOKUP·MSG00477 신규** | ✗ 미반영 (둘 다 부재, 실측 0행) |
+| 9 | DM Planner류 시간창(81) | LOOKUP `DM_PLANNER_EDIT_FLAG` → 제한 시 **MSG00478**(제한권한·EDIT_DAYS·FROM~TO_TIME) | **LOOKUP·MSG00478 신규** | ✗ 미반영 (둘 다 부재) |
+| 10 | 저장 SP 권한 전달 | 저장 호출에 **p_authority**(로그인 권한 그룹) 추가 | SP 파라미터 +1 | ✗ 미반영 (FE payload 없음 → SAVE SP 시그니처 확인 필요) |
+
+### 9.3 Designer·프로젝트 파일
+- clbEDISender/lblEDISender(Sender Code) 정의 블록 재배치(Designer 재생성 — 속성 실질 동일, 동작 영향 없음). csproj TargetFramework v4.8→v4.6.1, resx 재생성.
+
+### 9.4 TO-BE 반영 격차 요약 (2026-07-16 실측)
+- **메시지 3종 미등록**: MSG00476/00477/00478 → hook #114 절차로 등록 필요
+- **LOOKUP 2종 부재**: SCP_PLANNER_EDIT_FLAG · DM_PLANNER_EDIT_FLAG → 마스터 등록+운영값 협의
+- **FE 미구현 4건**: SCP Planner 차단 / 시간창 게이트 2종 / FCST_TYPE 권한별 콤보(Recall·RMA) / p_authority
+- **SP 시그니처 확인 2건**: GET_SPREAD_TITLE(p_user_group·p_type) / SAVE_MKT_FCST(p_authority)
+- 위 격차는 AS-IS 2026-04~06 결재분이 TO-BE 이관 baseline(2026-05-12 스냅샷) **이후** 추가된 것 — 이관 범위 재협의 대상.
+
+> (참고 — TO-BE 측 변경 이력, 구 §9 내용) Master Change 삭제·PSI/Car 제거·편집 82 등록·Measure 콤보 fix(643행)·W/S AS강제·MSG 재채번·Color/Freeze/콤보 표준화 7건은 **FE·사내 적용 아티팩트의 변경**으로, 본 절의 AS-IS 소스 diff 와 구분된다.
 
 ---
 
 ## 10. 추출 한계 (정직)
 - 실 row 데이터는 **2026-07-16 사내 Oracle(OCGSCMD_P01) 실측** 기준. 운영 반영 시점에 따라 값이 갱신될 수 있음.
 - 메인 SEARCH 의 `API_M`(API_ID·API_URL) 원 row, PROC_M 22행 INSERT 스크립트는 리포지토리 미포함(FE `procedures.d.ts` 주석·PROC_M rename 스크립트로 매핑 확인).
-- `_1` 변형(PSI/Car)의 상세 라인은 정본과 오프셋 상이 — 본 분석은 정본 기준, PSI/Car 는 이력.
-- validation.md 152(정본)/154(_1) 병기 — 카운트 차이는 소스본 차이(PSI/Car 검증 2건).
+- validation 카운트 = 정본 152건 기준.

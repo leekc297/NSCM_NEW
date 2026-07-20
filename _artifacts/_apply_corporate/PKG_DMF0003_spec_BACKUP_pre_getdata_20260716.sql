@@ -1,0 +1,163 @@
+CREATE OR REPLACE PACKAGE           "PKG_DMF0003" IS
+/*
+ * Program ID   : PKG_DMF0003
+ * Description  : PKG_DMF0003
+ * Program History
+ *===========================================================================================================
+ *   Date       In Charge      Description
+ *===========================================================================================================
+ * 2026.03.12   kimcd       [PJ20264226] NextSCM Pilot 설계 및 개발
+ *                          UI 항목으로 Package로 전환
+ */
+
+    PROCEDURE P_DMF0003_GET_BUCKET_TYPE_CODE
+    (
+      O_RC1             OUT SYS_REFCURSOR,
+      O_RESULT_CURSOR   OUT SYS_REFCURSOR
+    );
+
+    PROCEDURE P_DMF0003_CAR_FCST_EXCEL_UPLOAD
+    (
+      P_MODE          IN  PLS_INTEGER,
+      P_CREATED_BY    IN  VARCHAR2,
+      O_RESULT_CURSOR OUT SYS_REFCURSOR
+    );
+
+    PROCEDURE P_DMF0003_GET_DM_ANL_CAR_PROPERTY
+    (
+      P_DIVISION_ID   IN VARCHAR2,
+      P_MAKER_NAME    IN VARCHAR2,
+      O_RC1           OUT SYS_REFCURSOR,
+      O_RC2           OUT SYS_REFCURSOR,
+      O_RC3           OUT SYS_REFCURSOR,
+      O_RESULT_CURSOR   OUT SYS_REFCURSOR
+    );
+
+    PROCEDURE P_DMF0003_GET_DM_ANL_CAR_REF
+    (
+        P_FROM_YYYYMMDD IN VARCHAR2,
+        P_TO_YYYYMMDD   IN VARCHAR2,
+        P_CAR_MAKER     IN VARCHAR2,
+        P_CAR_MODEL     IN VARCHAR2,
+        O_RC1           OUT SYS_REFCURSOR,
+        O_RC2           OUT SYS_REFCURSOR,
+        O_RC3           OUT SYS_REFCURSOR,
+        O_RESULT_CURSOR   OUT SYS_REFCURSOR
+    );
+
+    PROCEDURE P_DMF0003_GET_DM_ANL_MKT_PSI_DPINIT
+    (
+        P_DIVISION_ID   IN VARCHAR2,
+        P_PROJECT_CODE  IN VARCHAR2,
+        P_YYYYMM        IN VARCHAR2,
+        P_CREATED_BY    IN VARCHAR2,
+        P_END_CUSTOMER  IN VARCHAR2,
+        O_RC1           OUT SYS_REFCURSOR,
+        O_RESULT_CURSOR   OUT SYS_REFCURSOR
+    );
+
+    PROCEDURE P_DMF0003_GET_DM_ANL_MKT_PSI_DPRESULT
+    (
+        P_DIVISION_ID   IN VARCHAR2,
+        P_PROJECT_CODE  IN VARCHAR2,
+        P_YYYYMM        IN VARCHAR2,
+        P_CREATED_BY    IN VARCHAR2,
+        P_END_CUSTOMER  IN VARCHAR2,
+        O_RC1           OUT SYS_REFCURSOR,
+        O_RESULT_CURSOR   OUT SYS_REFCURSOR
+    );
+
+    PROCEDURE P_DMF0003_GET_SPREAD_TITLE
+    (
+        P_START_YYYYMMDD  IN VARCHAR2,
+        P_END_YYYYMMDD    IN VARCHAR2,
+        P_CREATED_BY      IN VARCHAR2,
+        P_DIVISION_ID     IN VARCHAR2,
+        O_RC1             OUT SYS_REFCURSOR,
+        O_RESULT_CURSOR   OUT SYS_REFCURSOR
+    );
+
+    PROCEDURE P_DMF0003_GET_MKT_FCST_COMPARE_POPUP
+    (
+        P_DIVISION_ID   IN VARCHAR2,
+        P_SCM_SITE_ID   IN VARCHAR2,
+        P_PROJECT_CODE  IN VARCHAR2,
+        P_ITEM_ID       IN VARCHAR2,
+        --[C20210225-000385] dom_exp, fcst_type, incoterms, yyyymmdd 추가
+        P_DOM_EXP       IN VARCHAR2,
+        P_FCST_TYPE     IN VARCHAR2,
+        P_INCOTERMS     IN VARCHAR2,
+        P_YYYYMMDD      IN VARCHAR2,
+        O_RC1           OUT SYS_REFCURSOR,
+        O_RESULT_CURSOR OUT SYS_REFCURSOR
+    );
+
+    PROCEDURE P_DMF0003_GET_QTY_TYPE_CODE
+    (
+        O_RC1             OUT SYS_REFCURSOR,
+        O_RESULT_CURSOR   OUT SYS_REFCURSOR
+    );
+
+    PROCEDURE P_DMF0003_GET_REPORT_BUCKET_TYPE_CODE
+    (
+        O_RC1             OUT SYS_REFCURSOR,
+        O_RESULT_CURSOR   OUT SYS_REFCURSOR
+    );
+
+    PROCEDURE P_DMF0003_GET_SPREAD_TITLE_CAR
+    (
+        P_START_YYYYMMDD  IN VARCHAR2,
+        P_END_YYYYMMDD    IN VARCHAR2,
+        P_CREATED_BY      IN VARCHAR2,
+        P_DIVISION_ID     IN VARCHAR2,
+        O_RC1             OUT SYS_REFCURSOR,
+        O_RESULT_CURSOR   OUT SYS_REFCURSOR
+    );
+
+    PROCEDURE P_DMF0003_GET_SPREAD_TITLE_PSI
+    (
+        P_START_YYYYMMDD  IN VARCHAR2,
+        P_END_YYYYMMDD    IN VARCHAR2,
+        P_CREATED_BY      IN VARCHAR2,
+        P_DIVISION_ID     IN VARCHAR2,
+        O_RC1             OUT SYS_REFCURSOR,
+        O_RESULT_CURSOR   OUT SYS_REFCURSOR
+    );
+
+    PROCEDURE P_DMF0003_GET_SPREAD_TITLE_PSI_POPUP
+    (
+        P_START_YYYYMMDD  IN VARCHAR2,
+        P_END_YYYYMMDD    IN VARCHAR2,
+        P_CREATED_BY      IN VARCHAR2,
+        P_DIVISION_ID     IN VARCHAR2,
+        O_RC1             OUT SYS_REFCURSOR,
+        O_RESULT_CURSOR   OUT SYS_REFCURSOR
+    );
+
+    PROCEDURE P_DMF0003_MKT_FCST_SALES_PLAN_SYNC
+    (
+        P_DIVISION_ID   IN VARCHAR2,
+        P_CREATED_BY    IN VARCHAR2,
+        O_RESULT_CURSOR OUT SYS_REFCURSOR
+    );
+
+    PROCEDURE P_DMF0003_SAVE_MKT_FCST_PK_DATA_UPDATE
+    (
+         P_DIVISION_ID        IN VARCHAR2
+        ,P_PROJECT_CODE       IN VARCHAR2
+        ,P_SCM_SITE_ID        IN VARCHAR2
+        ,P_ITEM_ID            IN VARCHAR2
+        ,P_DOM_EXP            IN VARCHAR2
+        ,P_FCST_TYPE          IN VARCHAR2
+        ,P_INCOTERMS          IN VARCHAR2
+        ,P_PLANT_SITE_ID      IN VARCHAR2
+        ,P_DOM_EXP_NEW        IN VARCHAR2
+        ,P_FCST_TYPE_NEW      IN VARCHAR2
+        ,P_INCOTERMS_NEW      IN VARCHAR2
+        ,P_PLANT_SITE_ID_NEW  IN VARCHAR2
+        ,P_CREATED_BY         IN VARCHAR2
+        ,O_RESULT_CURSOR      OUT SYS_REFCURSOR
+    );
+
+END PKG_DMF0003;
+/

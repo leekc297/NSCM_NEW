@@ -1,4 +1,4 @@
-# NSCM 통합 안전 기동 스크립트 (BE Spring Boot + FE Vite)
+﻿# NSCM 통합 안전 기동 스크립트 (BE Spring Boot + FE Vite)
 #
 # 2026-06-10: 사내 Oracle 직접 연결로 전환되어 Docker 기동 단계 제거.
 # 2026-06-15: 사내 Oracle IP 변경 10.20.100.153 → 121.162.245.167 (config-local.yml datasources[0] 참조)
