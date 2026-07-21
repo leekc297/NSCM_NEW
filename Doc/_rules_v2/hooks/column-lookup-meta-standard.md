@@ -64,7 +64,31 @@ Store fetchStaticColumns
   → wijmo cell editor 시작 시 dropdown 표시
 ```
 
-⚠ **FE 코드 변경 절대 불필요**. `useTabComboQueries` 별도 호출 작성 금지 — DataGrid wrapper 가 자동 처리.
+⚠ **FE 코드 변경 절대 불필요**(파라미터 없는 콤보 한정). `useTabComboQueries` 별도 호출 작성 금지 — DataGrid wrapper 가 자동 처리.
+
+### 1.3.1 ⭐ 콤보 SQL 이 `@파라미터` 를 쓰면 FE 가 값을 전달해야 한다 (2026-07-20 신설 — Measure 코드 표시 사고)
+
+> **증상**: Grid 콤보 셀이 **명칭(NAME) 대신 코드(CODE)** 로 표시됨. (예: DMF0003 MEASURE 컬럼이 'MKT_FCST_RP' 로 표시)
+> **근원**: BE `makeComboQuery`(BaseService)는 콤보 SQL 의 `@토큰` 을 **params 값으로 raw 치환하되, 맵에 없으면 `''` 로 치환**한다. 세션 주입은 `@sesUserId`/`@sesLangCd`(따옴표 포함) **2개뿐**. 따라서 `@mnuId`·`@divisionId` 등은 **FE 가 명시 전달하지 않으면 `''`** → 해당 조건행이 0건 → CODE→NAME 매핑 부재 → 그리드가 코드를 그대로 노출.
+
+| 콤보 SQL 내 토큰 | BE 자동 주입? | FE 전달 의무 |
+|---|---|---|
+| `@sesUserId` / `@sesLangCd` | ✅ (따옴표 포함) | 불요 |
+| `@mnuId` | ❌ | **필수** — `{ comboId, mnuId: \`'${MENU_ID}'\` }` |
+| `@divisionId` 등 기타 | ❌ | **필수** — 값 **따옴표 포함** `\`'${division}'\`` (BE raw 치환 — divisionParam quoting 규약) |
+
+**적용 (의무)**: 화면이 콤보 컬럼을 자동 배선할 때, `@mnuId` 를 쓰는 콤보(대표: `Measure` = `WHERE A.PROGRAM_ID = @mnuId`)가 하나라도 있으면 콤보 요청에 `mnuId` 를 **항상** 실어 보낸다. `@토큰` 없는 콤보는 잉여 파라미터를 무시하므로(makeComboQuery 는 SQL 내 존재 토큰만 치환) **전 콤보에 mnuId 를 실어도 회귀 0**:
+
+```ts
+// ✅ DMF0003 MktFcstGrid — 콤보 자동 배선에 mnuId 항상 전달
+const comboResults = useTabComboQueries({
+  filters: comboColumns.map(c => ({ comboId: c._comboKey as string, mnuId: `'${MENU_ID}'` })),
+});
+// ❌ 금지 — 파라미터 콤보인데 comboId 문자열만 전달 → @mnuId='' → 코드 표시
+//   filters: comboColumns.map(c => c._comboKey as string)
+```
+
+> **신규/보완 화면 공통 규칙**: Grid 콤보 셀은 **반드시 명칭(NAME)으로 표시**되어야 한다. 코드가 보이면 (1) 콤보 SQL 의 `@토큰` 미전달(본 항목) (2) 콤보 미등록/0행([[feedback_combo_registry_full_sync]]) (3) dataMap 미부착(hook #59 §5-G) 3가지를 순서대로 점검. 견본 정본 = DMF0003 `MktFcstGrid.tsx` comboResults. 관련 메모리 [[feedback_grid_combo_show_name_not_code]].
 
 ### 1.4 SQL_ID 인벤토리 (SCM_ADM_CMBO_SQL_M 등록 52종)
 

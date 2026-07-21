@@ -84,10 +84,22 @@
 | 행별 EDIT_FLAG (요일제한 종합 — PKG L2630) | isNonEditableCell (GridUtils) | ✅ |
 | SetEditList 금주 월요일 경계 (:9128) | editLock.thisWeekMondayYmd + isNonEditableDateColumn | ✅ |
 | bucket 별 편집컬럼 (M/W/D) | isNonEditableCell bucket 분기 | ✅ |
+| **M+4 월잠금** (list_EDIT_Month_M4 :9264 — MKT/SCM/VMI 월셀은 M+3 기준월 초과만 편집) | isNonEditableCell m3CutoffYyyymm 분기 (GET drop1 O_RC2 M3_CUTOFF_DATE) | ✅ **2026-07-20 보완(#4)** |
+| **SCM_FCST × RMA 잠금** (gate3 :9239) | isNonEditableCell FCST_TYPE='RMA' 분기 | ✅ **2026-07-20 보완(#5)** |
 | 월간→주간→일별 배분 (MKT/SCM_FCST) | divideByMonth/Week/Date (GridUtils — cellEditEnded 연결) | ✅ |
+| ↳ **월(M_) 배분 = 달력 기반** (Truncate(월합/MONTH_DAY_CNT)×WEEK_DAY_CNT + 월잔량 기존셀 가산 :7222/7320) | divideByMonth (GET drop4 O_RC5 MONTH_DAY_CNT/WEEK_DAY_CNT 소비) | ✅ **2026-07-20 교정(#1)** — 구: 가시 컬럼수 비례 |
+| **SALES_BUCKET 요일 캐스케이드** (Site/Incoterms 변경 :5862 → 행 BUCKET) | applySalesBucket (getCombo 'SalesBucket' — DM_MST_BUCKET_CONVERSION 룩업) | ✅ **2026-07-20 보완(#2)** |
+| ↳ **요일비트 규약 = SUN-first** (AS-IS/PKG BUCKET=SUN\|\|…\|\|SAT L3483) | dowSunFirst = dayjs().day() (구 isoWeekday()-1 MON-first 오독 교정) | ✅ **2026-07-20 교정(#2)** |
 | LOC 일괄할당 | allocateLoc | ✅ |
+| ↳ **LOC 월합 = 평균** (값 있는 주차 평균, 합계 아님 :6716) | allocateLoc W_ 분기 월(M_) 재계산 | ✅ **2026-07-20 보완(#3)** — 구: M_ 미갱신 |
 | 편집 Yellow / 과거 Gray (#95) | formatItem 클래스 토글 | ✅ |
+| **당주 녹색 보더** (Green BevelBorder :1970) | formatItem boxShadow inset(당월M_/당주W_/금주월D_) | ✅ **2026-07-20 보완(#12)** |
+| **NOTATION 행 숫자포맷** (INTEGER/POINT3 :1853) | formatItem — POINT3·LOC=소수3자리/그외 정수 | ✅ **2026-07-20 보완(#11)** |
 | Delete 키 범위 clear + 재배분 | keydown 핸들러 | ✅ |
+| **Insert 시드 10키 복사** (포커스 행 :2636) | handleInsert seed 복제(없으면 Measure=MKT_FCST) | ✅ **2026-07-20 보완(#9)** |
+| **Daily FCST 정수절삭** (:6094) | cellEditHandler D_ 입력 Math.trunc(MKT/SCM/VMI) | ✅ **2026-07-20 보완(#14)** |
+| **Bucket 전환 가드** (cboBucketType_Click MSG00227 :3361) | handleBucketChange — insertedRows>0 차단 | ✅ **2026-07-20 보완(#13)** |
+| **Insert 행 실시간 중복(MSG00260 :5878)** | cellEditHandler 8키 완전일치 감지→롤백+alert | ✅ **2026-07-20 보완(#10)** |
 
 ## 6. 팝업 (6종)
 
@@ -102,9 +114,11 @@
 
 ## 7. 잔여 (정직 보고 — 은폐 아님)
 
-1. **SSP Sync 비교 팝업** (Div40 전용 — spdMain_CellDoubleClick :3534/:3697 → DMF0003_GET_MKT_FCST_COMPARE_POPUP): mkt-fcst 의 SspSyncCompareModal 과 동일 기능이나 화면 간 직접 import 금지로 **복제 구현 필요**. 후속 사이클.
+1. **SSP Sync 비교 팝업** (Div40 전용 — spdMain_CellDoubleClick :3534/:3697 → DMF0003_GET_MKT_FCST_COMPARE_POPUP): mkt-fcst 의 SspSyncCompareModal 과 동일 기능이나 화면 간 직접 import 금지로 **복제 구현 필요**. ⏸ **2026-07-20 사용자 결정 = 보류** — 완전재현이 PKG_DMF0082 GET_MAIN_DATA 에 SSP_SYNC 수집+ATTR1 emit(라이브 핵심 조회 SP 개조)을 요구(실측: 현재 마커 전무). 라우트/SP(DMF0003_GET_MKT_FCST_COMPARE_POPUP, PROC_M)는 기존재라 후속 사이클에 route-only 또는 완전재현 택1.
 2. **SCMD_APP SYNONYM 3종** (Excel SP): SCM_MGR 에 CREATE ANY SYNONYM 권한 없음 — `_dmf0082_excel/05_synonym_scmd_app_user.sql` 을 SCMD_APP 접속으로 실행 필요 (GRANT EXECUTE 는 적용 완료).
 3. Version 원 SP `SCM0002_GET_VERSIONBYWATERFALLPOPUP` INVALID (ORA-01790 4곳) — DMF0073 공유 계약으로 대체 배선했으므로 비차단. 수리는 선택.
+4. **Insert 행 캐스케이드 콤보** (#7 — Measure 재조회 FCST_PRICE_EDIT_MEASURE / CELL_PROD_SITE_ID, AS-IS :5839~5860): ✅ **2026-07-21 구현**. Measure = 신규 CMBO `FcstPriceEditMeasure`(div/site/bucket 편집가능 measure, UP_FX L438 단일SELECT 변환) 등록 + FE hook #59 §5-G dataMap 스왑(Site 변경→행별 후보 캐시, MEASURE 편집 진입 시 스왑, 종료 시 원복). CELL_PROD_SITE_ID = 기존 CMBO(`CELL_PROD_SITE_ID`, SP_CELL_PROD_SITE)가 shared DataGrid 캐스케이드로 이미 item 필터.
+5. **고급 붙여넣기 1행→N행** (#8 — AS-IS :7864~8199): ✅ **achievable 범위 완료 / 행확장 = Wijmo 한계**. 셀별 붙여넣기(pastedCell→cellEditHandler)로 #2/#7 캐스케이드·#10 중복체크·수량 배분 모두 발동. **1행복사→N행확장은 Wijmo 가 whole-range 'pasted' 이벤트 미제공**(자매 mkt-fcst 도 동일 사유로 미구현, MktFcstGrid L1090 명시) — 플랫폼 한계로 parity 제외.
 
 ## 8. 게이트 결과 (2026-07-12)
 

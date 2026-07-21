@@ -4,7 +4,12 @@ import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/
 import { createPersistedStoreWithTab, useSessionStore } from '@shared/stores';
 
 import { MENU_ID, SAVE_PRICE_META_SHEET, SHEETS } from './forecast-price.constants';
-import type { MeasureAuthRow, SearchParamProps } from './forecast-price.types';
+import type {
+  CalendarRow,
+  MeasureAuthRow,
+  MonthInfoRow,
+  SearchParamProps,
+} from './forecast-price.types';
 
 /** SCM_MST_SHEET_MEASURE 동적 fetch row — /admin/menu/{MENU_ID}/measure (camelCase). */
 export interface MeasureMeta {
@@ -31,6 +36,10 @@ interface ForecastPriceState {
   measureAuth: Record<string, boolean>;
   // 현재 주차 binding (GET drop2 THIS_YYYYMMWW) — 과거 잠금 경계 산출 입력.
   thisYyyymmww: string;
+  // ⭐ 배분 캘린더 (GET drop4=O_RC5) — 'D_YYYYMMDD' → {monthDayCnt, weekDayCnt}. 월(M_) 배분(#1) 입력.
+  calendar: Record<string, { monthDayCnt: number; weekDayCnt: number }>;
+  // ⭐ M+3 기준월 'YYYYMM' (GET drop1=O_RC2 첫 행 M3_CUTOFF_DATE) — M+4 월잠금(#4) 입력.
+  m3CutoffYyyymm: string;
   // ⭐ SavePricePeriodModal 고정 컬럼 메타 (SHEET_NAME='Sales Price Save All' 25 컬럼 —
   //   admin UI Category Setup 동적 fetch, hook ui-category-setup-column-meta).
   savePriceColumns: RawFlexGridColumnConfig[];
@@ -48,6 +57,8 @@ interface ForecastPriceAction {
   setDateColumns: (dateColumns: FlexGridColumnConfig[]) => void;
   setMeasureAuth: (rows: MeasureAuthRow[]) => void;
   setThisYyyymmww: (v: string) => void;
+  setCalendar: (rows: CalendarRow[]) => void;
+  setM3Cutoff: (rows: MonthInfoRow[]) => void;
 }
 
 const initSearchParams: SearchParamProps = {
@@ -73,6 +84,8 @@ const initState: ForecastPriceState = {
   dateColumns: [],
   measureAuth: {},
   thisYyyymmww: '',
+  calendar: {},
+  m3CutoffYyyymm: '',
   savePriceColumns: [],
 };
 
@@ -209,6 +222,29 @@ export const useForecastPriceStore = createPersistedStoreWithTab<
     setThisYyyymmww: v => {
       set(state => {
         state.thisYyyymmww = v;
+      });
+    },
+    // drop4 (O_RC5) → 'D_YYYYMMDD' 키 배분 캘린더 맵.
+    setCalendar: rows => {
+      const cal: Record<string, { monthDayCnt: number; weekDayCnt: number }> = {};
+      rows.forEach(r => {
+        const ymd = typeof r.BASIS_YYYYMMDD === 'string' ? r.BASIS_YYYYMMDD : '';
+        if (ymd.length !== 8) return;
+        cal[`D_${ymd}`] = {
+          monthDayCnt: Number(r.MONTH_DAY_CNT ?? 0) || 0,
+          weekDayCnt: Number(r.WEEK_DAY_CNT ?? 0) || 0,
+        };
+      });
+      set(state => {
+        state.calendar = cal;
+      });
+    },
+    // drop1 (O_RC2) 첫 행 M3_CUTOFF_DATE 앞 6자리 = M+4 잠금 경계월.
+    setM3Cutoff: rows => {
+      const first = rows[0];
+      const cutoff = typeof first?.M3_CUTOFF_DATE === 'string' ? first.M3_CUTOFF_DATE.slice(0, 6) : '';
+      set(state => {
+        state.m3CutoffYyyymm = cutoff;
       });
     },
   }),

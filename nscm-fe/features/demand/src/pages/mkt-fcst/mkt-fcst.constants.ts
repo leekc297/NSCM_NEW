@@ -289,6 +289,24 @@ export const MSG = {
   REQUIRED_PERIOD: 'MSG00665',
   // 실적 미만 — "실적 수량보다 작은 숫자를 넣을 수 없습니다." (.cs L3844). MSG00225("0 이상")와 의미 상이 → 별도.
   BELOW_ACTUAL: 'MSG00666',
+  // ── AS-IS 최신 반영분 (E20260402-001736 / E20260604-000994, 2026-07-20) ──
+  // 권한 없음 — 사내 실재 공통 MSG00096 "사용 권한이 없습니다." (SCP Planner 편집/Insert 차단, .cs L828/L2531).
+  NO_AUTH: 'MSG00096',
+  // AS FROM SITE 필수 — MSG00476 (저장 시 W/S+고객향 사이트+FcstType AS·WS+빈값, .cs L2300~2329).
+  AS_FROM_SITE_REQUIRED: 'MSG00476',
+  // SCP Planner 시간창 — MSG00477 (Dmf0003ScpPlannerEditFlag 0행=차단, .cs L848~860. lookup 운영값 협의 대기).
+  SCP_TIME_WINDOW: 'MSG00477',
+  // DM Planner류 시간창 — MSG00478 5파라미터 {0}~{4}=LIMIT_AUTH/EDIT_DAYS/FROM_TIME/TO_TIME/AUTH (.cs L862~874).
+  DM_TIME_WINDOW: 'MSG00478',
+} as const;
+
+// ⭐ AS-IS 권한 그룹명 원문 (UserInfoContext["NowGroupID"] 비교 문자열 — .cs 정확 일치, 공백·괄호 포함).
+//   TO-BE 는 세션 그룹 부재 → CMBO 'MktFcstUserGroups'(USER_GR_MPG_M @sesUserId) membership 으로 판정.
+export const GROUP = {
+  WS_PLANNER: 'DM Planner (W/S)',
+  DM_PLANNER: 'DM Planner',
+  DM_ADMIN: 'DM ADMIN',
+  SCP_PLANNER: 'SCP Planner',
 } as const;
 
 // (PSI 고객수요분석 상수 블록 제거 — 2026-07-03 사용자 결정. DMF0003_PSI_20260703 패키지 보존.)
@@ -328,9 +346,16 @@ export const GRID_CASCADE_CLEAR: Record<string, readonly string[]> = {
 //   - INCOTERMS : IncotermsEdit (INCOTERMS lookup, VALID_YN='Y'+ATTRIBUTE2='Y' 유효분). 조회 = 'Incoterms'(전체).
 //   divisionParam=true → useTabComboQueries 에 divisionId(FE quoting '값') 전달 (BE raw 치환 대응).
 // ============================================================================
-export const GRID_EDIT_COMBO: Record<string, { comboId: string; divisionParam?: boolean }> = {
+export const GRID_EDIT_COMBO: Record<
+  string,
+  { comboId: string; divisionParam?: boolean; wsOnly?: boolean }
+> = {
   MEASURE: { comboId: 'MktFcstEditMeasure', divisionParam: true },
   INCOTERMS: { comboId: 'IncotermsEdit' },
+  // ⭐ [E20260402-001736] FCST_TYPE 편집 콤보 권한 분기 (.cs L2587~2605): W/S Planner 만
+  //   EDIT_MODE 6종(WS·WSF·AS·ASF+Recall·RMA = SALES_TYPE_CODE2 ∪ _ADD) 스왑. 그 외 그룹은
+  //   기존 'FcstType'(일반 12종) 조회 dataMap 그대로 (wsOnly=true → 비W/S 스왑 생략).
+  FCST_TYPE: { comboId: 'FcstTypeEditMode', wsOnly: true },
 };
 
 // ⭐ Measure 변경 시 Model 초기화 (AS-IS spdMain_ComboSelChange L3340~3363, 20231213).

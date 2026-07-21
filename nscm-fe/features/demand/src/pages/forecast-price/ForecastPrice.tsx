@@ -30,7 +30,13 @@ import {
   UPLOAD_HEADERS,
   UPLOAD_SHEET,
 } from './forecast-price.constants';
-import type { ForecastPriceRow, MeasureAuthRow, SpreadTitleRow } from './forecast-price.types';
+import type {
+  CalendarRow,
+  ForecastPriceRow,
+  MeasureAuthRow,
+  MonthInfoRow,
+  SpreadTitleRow,
+} from './forecast-price.types';
 import { useForecastPriceStore } from './useForecastPriceStore';
 import { saveExcelUpload, saveTitleSet, TITLESET_SHEET } from './utils/forecast-price.api';
 import { editableDayColumnsOf } from './utils/forecast-price.editLock';
@@ -67,6 +73,8 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   const fetchStaticColumns = useForecastPriceStore(state => state.fetchStaticColumns);
   const fetchStaticMeasures = useForecastPriceStore(state => state.fetchStaticMeasures);
   const setMeasureAuth = useForecastPriceStore(state => state.setMeasureAuth);
+  const setCalendar = useForecastPriceStore(state => state.setCalendar);
+  const setM3Cutoff = useForecastPriceStore(state => state.setM3Cutoff);
   const measureAuth = useForecastPriceStore(state => state.measureAuth);
   const staticMeasures = useForecastPriceStore(state => state.staticMeasures);
 
@@ -93,16 +101,19 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
     enabled: titleFilters !== undefined,
   });
 
-  // GET 부가 커서 반영 — drop3(measure 편집권한 EDIT_AUTH_YN = AS-IS bEDIT_AUTH_* 원천, 실측).
+  // GET 부가 커서 반영 — drop1(월정보 M3_CUTOFF=M+4 경계, #4) / drop3(measure 편집권한 EDIT_AUTH_YN =
+  //   AS-IS bEDIT_AUTH_* 원천) / drop4(배분 캘린더 MONTH_DAY_CNT·WEEK_DAY_CNT, #1).
   //   기준주차 경계는 editLock util 클라 계산(금주 월요일 — AS-IS L9133 동일 규칙).
   useEffect(() => {
     if (!data) return;
     const d = data as unknown as Record<string, unknown[]>;
     const authRows = (d.drop3 ?? []) as MeasureAuthRow[];
     if (authRows.length > 0) setMeasureAuth(authRows);
+    setM3Cutoff((d.drop1 ?? []) as MonthInfoRow[]);
+    setCalendar((d.drop4 ?? []) as CalendarRow[]);
     setInsertedRows([]); // 재조회 = pending insert reset (hook #97)
     editTrackerRef.current?.clearChanges();
-  }, [data, setMeasureAuth]);
+  }, [data, setMeasureAuth, setM3Cutoff, setCalendar]);
 
   const spreadTitle = useMemo(
     () => ((titleData as unknown as Record<string, unknown[]>)?.data ?? []) as SpreadTitleRow[],
@@ -154,27 +165,44 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   };
 
   // ── Insert (AS-IS InsertButton — Current 버전 조회 시에만) ──
+  //   ⭐ #9 시드 복사 (AS-IS L2636~2676): 포커스 행이 있으면 키 10종을 새 행에 복제, 없으면 Measure='MKT_FCST'.
   const handleInsert = () => {
     if (!isCurVersion) return;
-    const base = (data?.fcstNPrice ?? [])[0];
-    const baseDivision = typeof base?.DIVISION_ID === 'string' ? base.DIVISION_ID : '';
+    const g = gridRef.current;
+    const seed = g?.rows[g.selection.row]?.dataItem as WijmoRowItem | undefined;
+    const str = (v: unknown): string => (typeof v === 'string' ? v : '');
+    const baseDivision = str((data?.fcstNPrice ?? [])[0]?.DIVISION_ID);
     const newRow = {
       CRUD_TYPE: 'I',
-      DIVISION_ID: searchParams.divisionId || baseDivision,
-      END_CUSTOMER: '',
-      PROJECT_CODE: '',
+      DIVISION_ID: searchParams.divisionId || str(seed?.['DIVISION_ID']) || baseDivision,
+      END_CUSTOMER: str(seed?.['END_CUSTOMER']),
+      PROJECT_CODE: str(seed?.['PROJECT_CODE']),
       PLANT_SITE_ID: '',
-      SCM_SITE_ID: '',
-      ITEM_ID: '',
-      DOM_EXP: '',
-      FCST_TYPE: '',
-      INCOTERMS: '',
-      MEASURE: '',
-      CURRENCY: '',
-      CELL_PROD_SITE_ID: '',
+      SCM_SITE_ID: str(seed?.['SCM_SITE_ID']),
+      ITEM_ID: str(seed?.['ITEM_ID']),
+      DOM_EXP: str(seed?.['DOM_EXP']),
+      FCST_TYPE: str(seed?.['FCST_TYPE']),
+      INCOTERMS: str(seed?.['INCOTERMS']),
+      MEASURE: seed ? str(seed['MEASURE']) : 'MKT_FCST',
+      CURRENCY: str(seed?.['CURRENCY']),
+      CELL_PROD_SITE_ID: str(seed?.['CELL_PROD_SITE_ID']),
+      // 시드 행 BUCKET(요일비트) 승계 — 배분 요일 유지 (없으면 #2 캐스케이드/기본요일).
+      BUCKET: str(seed?.['BUCKET']),
       EDIT_FLAG: 'Y',
     } as unknown as ForecastPriceRow;
     setInsertedRows(prev => [newRow, ...prev]);
+  };
+
+  // ── Bucket 전환 가드 (AS-IS cboBucketType_Click :3361 — Insert 행 존재 시 MSG00227 차단) ── #13
+  const handleBucketChange = (bucket: string) => {
+    if (insertedRows.length > 0) {
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.BUCKET_CHANGE_BLOCK, '_Cannot change bucket while rows are inserted.'),
+      });
+      return;
+    }
+    setSearchParams({ bucketType: bucket });
   };
 
   // ── Delete (AS-IS DeleteButton — measure 4종 + 권한 검증 후 D 마킹 / I 행 즉시 제거) ──
@@ -315,6 +343,7 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
           void handleSubmit();
         }}
         onOpenVersionLookup={() => setVersionModalOpen(true)}
+        onBucketChange={handleBucketChange}
       />
       <SubTitle
         menuId={MENU_ID}
@@ -331,6 +360,9 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         data={gridRows}
         spreadTitle={spreadTitle}
         editTrackerRef={editTrackerRef}
+        onDuplicateKey={() => {
+          void setAlert({ type: 'alert', content: t(MSG.DUP_NEW_ROW, '_Duplicated new row.') });
+        }}
       />
 
       {/* Version 선택 (AS-IS SCM0002_VersionByWaterfallPopup — DMF0073 공유 계약) */}

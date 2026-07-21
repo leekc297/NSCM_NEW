@@ -58,6 +58,28 @@ Reference 화면: **DMF0004 / DMF0005 / DMF0006 / DMF0007**
 - 적용 범위: **신규(T01) 의무 + 보완/수정(T01M) 시 미적용 화면 정정** (일괄 audit 아님 — 수정 시 적용, hook #91 방식).
 - 선례: hook #89 **P**(DMF0020 — Div 변경 시 검색조건 초기화+그리드 비움+disabled) 의 일반화 — 이제 특정 화면이 아닌 **전 화면 공통 의무**.
 
+#### 1.4.1 구현 패턴 — 명시 조회 게이트(persist) 화면 표준 (2026-07-20 DMF0003 정본 추가)
+
+메인 그리드가 `useTabProcQuery`(react-query) 결과 + 신규행 로컬 state 로 구성되고 **Search 버튼으로만 조회**하는 화면(DMF0003·0020 계열)은, division 값 변화를 감지하는 effect 1곳에서 5가지를 초기화한다. (Form onChange 는 이미 하위 'ALL' reset 을 하므로, grid 비움은 division 값 감시 effect 로 분리해 중복·경합을 피한다.)
+
+```ts
+// DMF0003 MktFcst.tsx — Division 변경 = Grid 초기화 (feedback_division_change_grid_reset)
+const prevDivisionRef = useRef(sc.divisionId);
+useEffect(() => {
+  if (prevDivisionRef.current === sc.divisionId) return;   // 최초/무변화 skip
+  prevDivisionRef.current = sc.divisionId;
+  setHasSearched(false);                                   // ① 쿼리 disable(Search 전까지 자동조회 X)
+  setInsertedRows([]);                                     // ② 신규행(CRUD 'I') reset
+  editTrackerRef.current?.clearChanges();                  // ③ 편집 추적(EditTracker) reset
+  clearFilters();                                          // ④ filters 무효화(enabled=false)
+  queryClient.removeQueries({ queryKey: [MENU_ID] });      // ⑤ 이전 조회 캐시 제거 → 그리드 공백
+}, [sc.divisionId, clearFilters, queryClient]);
+```
+
+- 핵심: 재조회는 **절대 자동 트리거 금지** — 반드시 사용자의 Search 버튼(`setFilter()`+`setHasSearched(true)`). ⑤ 캐시 제거를 빠뜨리면 react-query 가 마지막 데이터를 계속 렌더해 그리드가 안 비워진다.
+- 컬럼 셋이 division 종속(hook #92/#113)인 화면은 division 변경 시 컬럼 가시성도 재평가되므로, grid 를 비우면 잔존 컬럼 mismatch 도 함께 해소된다.
+- POST-WRITE grep: `grep -n "prevDivisionRef\|removeQueries.*MENU_ID\|clearFilters" {screen}.tsx` — division 감시 effect 존재 확인.
+
 ---
 
 ## §2. Form §2 — Multi-level filter composition (`&&` 조합 N 단)

@@ -75,6 +75,10 @@ interface State {
   //   AS-IS L1679: NowGroupID=='DM Planner (W/S)' → p_as_yn 'Y' 강제. TO-BE 는 세션 groupId 부재로
   //   USER_ID→그룹 소속(SCM_ADM_USER_GR_MPG_M) 실측값을 사용. true = AS 강제(체크박스 잠금).
   wsPlannerYn: boolean;
+  // ⭐ [E20260402-001736] GET_SPREAD_TITLE p_type — 'LOAD' = 첫 진입/Division 변경 직후 첫 조회
+  //   (SP 가 DM Planner·W/S 에 AS_FROM_SITE 컬럼 자동추가), 이후 조회는 'COLUMN'.
+  //   AS-IS InitSpread(sType) 호출부 5곳 1:1: CreateSpread·Division 변경='LOAD' / 조회·컬럼/메저 팝업=''.
+  spreadTitleLoadPending: boolean;
 }
 
 interface Action {
@@ -152,6 +156,7 @@ const initState: State = {
   bucketInfo: null,
   currentWeekInfo: null,
   wsPlannerYn: false,
+  spreadTitleLoadPending: true,
 };
 
 export const useMktFcstStore = createPersistedStoreWithTab<State & Action>((set, get) => ({
@@ -159,6 +164,11 @@ export const useMktFcstStore = createPersistedStoreWithTab<State & Action>((set,
   reset: () => set(initState),
   setSearchCondition: p =>
     set(state => {
+      // ⭐ [E20260402-001736] Division 변경 = AS-IS cboDivision_SelectedIndexChanged 의 InitSpread("LOAD")
+      //   대응 — 다음 조회의 GET_SPREAD_TITLE p_type 을 'LOAD' 로 (AS_FROM_SITE 자동추가 분기 재실행).
+      if (p.divisionId !== undefined && p.divisionId !== get().searchCondition.divisionId) {
+        state.spreadTitleLoadPending = true;
+      }
       state.searchCondition = { ...get().searchCondition, ...p };
     }),
   setFilter: () => {
@@ -213,16 +223,19 @@ export const useMktFcstStore = createPersistedStoreWithTab<State & Action>((set,
           mnuId: MENU_ID, // 22 BE 자동
         },
         // ── DMF0003_GET_SPREAD_TITLE (6 IN) — 동적 PIVOT 기간 헤더 ──────────────
-        //   type='COLUMN' (조회 시점 기존 컬럼 메타. 'LOAD' = 첫 진입 AS_FROM_SITE 자동추가).
+        //   ⭐ [E20260402-001736] type: 첫 진입/Division 변경 후 첫 조회 = 'LOAD'
+        //   (SP 가 DM Planner·W/S 권한에 AS_FROM_SITE 컬럼 자동추가 — standalone SP L28~48 실측),
+        //   이후 조회 = 'COLUMN' (기존 컬럼 메타 유지).
         [SHEETS.SPREAD_TITLE]: {
           startYyyymmdd: c.startYyyymmdd,
           endYyyymmdd: c.endYyyymmdd,
           createdBy: sesUserId, // BE 자동(보강 전송)
           divisionId: c.divisionId,
           userGroup, // 세션 groupId (AS-IS NowGroupID 1:1)
-          type: 'COLUMN',
+          type: state.spreadTitleLoadPending ? 'LOAD' : 'COLUMN',
         },
       };
+      state.spreadTitleLoadPending = false;
     });
   },
   // mount 시 sessionStorage 의 이전 filters cache 무효화 — incomplete payload 재사용 회피.
@@ -296,7 +309,7 @@ export const useMktFcstStore = createPersistedStoreWithTab<State & Action>((set,
     }),
 
   // ColumnSettingModal OK — 사용자 선택 column 만 visible (visible='Y'), 나머지 'N'.
-  //   ⚠️ 사내 SCM_USR_TITLE_SET 영구 저장은 별도 SP 호출 의무 (Phase 후속).
+  //   서버 영구 저장은 MktFcst.saveTitleSet('C') 가 SCM0002_SET_TITLESET_POPUP 으로 수행(구현 완료).
   applyColumnVisibility: (sheetName, visibleKeys) => {
     set(state => {
       const cur = state.staticColumns[sheetName];

@@ -20,6 +20,8 @@ import { useForecastPriceStore } from '../useForecastPriceStore';
 interface ForecastPriceFormProps {
   onSubmit: () => void;
   onOpenVersionLookup: () => void;
+  // #13 — Bucket 전환은 페이지가 가드(Insert 행 존재 시 MSG00227). 미지정 시 직접 setSearchParams fallback.
+  onBucketChange?: (bucket: string) => void;
 }
 
 // ⭐ 조회조건 = 표준 카탈로그(@master/searchFields) 전면 사용 (T05 messaging-api-and-search-fields).
@@ -28,7 +30,11 @@ interface ForecastPriceFormProps {
 //   cboBucketType → 인라인(D 포함 3버킷 — 카탈로그 BucketField 는 W/M 만) / txtVersion+btnVersion
 //   → VersionField(팝업 전용) / cboQty·chkSum → 인라인 체크박스.
 //   Figma 1단 4필드 = gridSize 3 (hook #94 — 높이 36px 은 카탈로그/CustomDropdown 자동).
-export const ForecastPriceForm = ({ onSubmit, onOpenVersionLookup }: ForecastPriceFormProps) => {
+export const ForecastPriceForm = ({
+  onSubmit,
+  onOpenVersionLookup,
+  onBucketChange,
+}: ForecastPriceFormProps) => {
   const { t } = useTranslation();
 
   const searchParams = useForecastPriceStore(state => state.searchParams);
@@ -120,7 +126,9 @@ export const ForecastPriceForm = ({ onSubmit, onOpenVersionLookup }: ForecastPri
                   isInput={false}
                   value={searchParams.bucketType}
                   options={bucketOptions}
-                  onChange={(_, option) => setSearchParams({ bucketType: option })}
+                  onChange={(_, option) =>
+                    onBucketChange ? onBucketChange(option) : setSearchParams({ bucketType: option })
+                  }
                 />
               )}
             />

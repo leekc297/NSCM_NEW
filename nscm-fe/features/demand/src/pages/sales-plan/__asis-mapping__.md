@@ -380,6 +380,19 @@
 8. **NOTATION 'POINT' 소수 자릿수** — AS-IS 포맷 마스크 미실측 → 최대 1자리 가정 (INTEGER=0/POINT3=3 고정). E2E 82 division 표기 확인.
 9. **vitest 환경** — 로컬 node v24 + jsdom 비호환(MIMEType is not a constructor)으로 스토어 테스트 실행 불가 (기존 forecast-price 테스트도 동일 실패 — 사전 존재 환경 이슈).
 
+## 8. 최신분석(2026-07-20) 결재분 반영 (2026-07-21)
+
+FE 는 2026-07-15 UI분석서 v1.0 기준 빌드 → 이후 전수실측(제약매트릭스/주요이벤트) 이 명세한 두 결재분 반영:
+
+| 결재 | 항목 | 반영 | 파일 |
+|---|---|---|---|
+| **[E20260331-000648]** | SalesAmt_LOC 편집 = FCST_TYPE='ETC' 행만 (AS-IS L968) | ✅ measureGate 조건 추가(기존 비-ETC 행 잠금) | `utils/sales-plan.editLock.ts` |
+| **[E20260331-000648]** | RTF_SYS_RP 편집 = div 40 또는 81 만 (40→+81 확장, AS-IS L1041-1045) | ✅ measureGate division 게이트 추가 → **82 잘못열림 차단** | `utils/sales-plan.editLock.ts` |
+| **[E20260512-000502]** | 저장 p_cell_prod_site_id ← 81=FROM_SITE_ID (AS-IS L2466-2475 덮어쓰기) | ✅ identityOf 81 분기 (미치환 시 81 저장 손상) | `utils/sales-plan.save.ts` |
+| **[E20260512-000502]** | FROM_SITE_ID 컬럼 81 표시(display-only) + 컬럼-존재 체크(MSG00113) | ✅ SHEET_COLUMNS 81 행 등록(사내 적용) — GET SP(L1575-1576)는 기반환·SP 무변경 | `_artifacts/_apply_corporate/DMF0021_fromSiteId_meta_20260721.sql` |
+
+⚠️ **AS-IS 실측 교정**: FROM_SITE_ID / PLANT_SITE_ID 는 **값-필수 아님** — AS-IS 활성 SaveData 루프(L2225+) 는 FROM_SITE_ID 미검사, PLANT_SITE_ID 는 `//p_plant_site_id == ""` 주석. L723/L2043 은 컬럼-존재 체크(MSG00113)로 메타 등록(위 4행)으로 충족. → requiredFieldsFor 값-필수 13종 무변경.
+
 ## 7. 게이트 결과 (2026-07-15)
 
 - features/demand tsc --noEmit 0 errors / eslint 0 errors (warnings 5 = mkt-fcst 원본 동일 패턴: scss 상대 상위 import 2 + non-null 3) / 진입 SalesPlan.tsx 399줄(≤400 — SalesPlanModals 분리)

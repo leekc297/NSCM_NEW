@@ -31,7 +31,14 @@ import {
   SspSyncResultModal,
   type SspSyncResultRow,
 } from './components/modals';
-import { INSERT_DEFAULT_MEASURE, MAIN_COLUMNS, MENU_ID, MSG, SHEETS } from './mkt-fcst.constants';
+import {
+  GROUP,
+  INSERT_DEFAULT_MEASURE,
+  MAIN_COLUMNS,
+  MENU_ID,
+  MSG,
+  SHEETS,
+} from './mkt-fcst.constants';
 import type { MktFcstRow, SpreadTitleRow } from './mkt-fcst.types';
 import styles from './MktFcst.module.scss';
 import type { BucketInfo, CurrentWeekInfo } from './useMktFcstStore';
@@ -68,6 +75,7 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
   const fetchStaticMeasures = useMktFcstStore(s => s.fetchStaticMeasures);
   const setCalendarInfo = useMktFcstStore(s => s.setCalendarInfo);
   const setWsPlannerYn = useMktFcstStore(s => s.setWsPlannerYn);
+  const storeWsPlannerYn = useMktFcstStore(s => s.wsPlannerYn);
   const bucketInfo = useMktFcstStore(s => s.bucketInfo);
   const currentWeekInfo = useMktFcstStore(s => s.currentWeekInfo);
   const applyColumnVisibility = useMktFcstStore(s => s.applyColumnVisibility);
@@ -80,8 +88,15 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
   // ⭐ 편집 가능 division (메타 구동) — CMBO 'MktFcstEditableDivision'(lookup DM_EDITABLE_DIVISION_ALLOW,
   //   SEGMENT1='DMF0003' → 편집가능 division CODE). 현행 업무규칙: 82 만 편집 가능(40/81/81_*/EE* 편집제약).
   //   메타 미적용/빈 응답 시 fallback = {'82'} (하드코딩 금지 원칙상 메타 우선, fallback 은 규칙 기본값 1건).
-  const [editableDivRows, userEditDivRows, wsPlannerRows] = useTabComboQueries({
-    filters: ['MktFcstEditableDivision', 'MktFcstUserEditDivision', 'MktFcstWsPlannerYn'],
+  const [editableDivRows, userEditDivRows, wsPlannerRows, userGroupRows] = useTabComboQueries({
+    filters: [
+      'MktFcstEditableDivision',
+      'MktFcstUserEditDivision',
+      'MktFcstWsPlannerYn',
+      // ⭐ [E20260604-000994] 사용자 소속 그룹 전수 (AS-IS NowGroupID 대응 — membership 판정.
+      //   TO-BE 는 로그인 시 그룹 선택 개념이 없어 소속 여부로 게이트 적용. 겸직 사용자는 협의 항목).
+      'MktFcstUserGroups',
+    ],
   });
   const editableSet = useMemo(() => {
     const codes = (editableDivRows ?? [])
@@ -107,9 +122,7 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
   // 현재 조회 division 이 편집 가능한지 — 셀 편집(그리드) + Insert/Delete/Save 버튼 표시의 게이트.
   //   ⭐ 2단 AND: (1) division 편집허용(editableSet=DM_UI_EDITABLE_DIVISION, 현행 82)
   //   (2) 사용자 그룹권한(userEditSet=UNIT_AUTH EDIT_YN). userEditSet 비면 (2) 생략(관대).
-  const editable =
-    isEditableDivision(sc.divisionId, editableSet) &&
-    (userEditSet.size === 0 || userEditSet.has((sc.divisionId ?? '').trim()));
+  //   ⭐ [E20260604-000994] + (3) SCP Planner 편집 차단(82·40) — 아래 게이트 블록 뒤에서 산출.
 
   // ⭐ P1-③ — 로그인 사용자 W/S Planner 여부 반영 (CMBO 'MktFcstWsPlannerYn' 단일행 CODE='Y'/'N').
   //   AS-IS L1679: W/S Planner 이면 AS(asYn) 강제. 세션 groupId 부재 → USER_ID→그룹 소속 실측(SP).
@@ -120,6 +133,67 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
   useEffect(() => {
     if (wsPlannerCode) setWsPlannerYn(wsPlannerCode === 'Y');
   }, [wsPlannerCode, setWsPlannerYn]);
+
+  // ⭐ [E20260604-000994] 그룹 게이트 — CMBO 'MktFcstUserGroups'(USER_GR_MPG_M @sesUserId) membership.
+  const groupsSet = useMemo(() => {
+    const codes = (userGroupRows ?? [])
+      .map(r => {
+        const code = (r as { CODE?: unknown }).CODE;
+        return typeof code === 'string' ? code.trim() : '';
+      })
+      .filter(Boolean);
+    return new Set(codes);
+  }, [userGroupRows]);
+  const isScpPlanner = groupsSet.has(GROUP.SCP_PLANNER);
+  // 대표 DM류 그룹 (AS-IS 단일 NowGroupID 근사 — W/S > DM Planner > DM ADMIN 우선. .cs 비교 문자열 원문).
+  const dmFamilyGroup = useMemo(() => {
+    const priority = [GROUP.WS_PLANNER, GROUP.DM_PLANNER, GROUP.DM_ADMIN] as const;
+    return priority.find(g => groupsSet.has(g)) ?? '';
+  }, [groupsSet]);
+
+  // ⭐ 시간창 lookup 2종(.cs L848~874) + W/S FcstType 4종 + AS(비축)향 사이트 목록.
+  //   Dmf0003*EditFlag 데이터는 운영값 협의 대기(0행) — SCP=행 0=차단(AS-IS 보수 동작) / DM류=행 0=통과.
+  const [scpFlagRows, dmFlagRows, wsFcstTypeRows, asSiteRows] = useTabComboQueries({
+    filters: [
+      {
+        comboId: 'Dmf0003ScpPlannerEditFlag',
+        divisionId: `'${sc.divisionId}'`,
+        userGroup: `'${GROUP.SCP_PLANNER}'`,
+      },
+      {
+        comboId: 'Dmf0003DmPlannerEditFlag',
+        divisionId: `'${sc.divisionId}'`,
+        userGroup: `'${dmFamilyGroup}'`,
+      },
+      'FcstTypeWs',
+      { comboId: 'AS_FROM_SITE', param1: `'${sc.divisionId}'` },
+    ],
+  });
+
+  // SCP Planner 편집 차단 (.cs L828~834 Edit=82·40 prefix / L2531~2537 Insert=81) — MSG00096.
+  const scpEditBlocked =
+    isScpPlanner && (sc.divisionId.startsWith('82') || sc.divisionId.startsWith('40'));
+  const scpInsertBlocked = isScpPlanner && sc.divisionId.startsWith('81');
+  // SCP 시간창 (81 한정, lookup 행 0 = 수정 가능 시간 아님 — MSG00477).
+  const scpTimeBlocked =
+    isScpPlanner && sc.divisionId.startsWith('81') && (scpFlagRows ?? []).length === 0;
+  // DM류 시간창 — ⚠ AS-IS 원문 괄호 파리티(.cs L863): 81 제한이 'DM ADMIN' 에만 결합되고
+  //   DM Planner/W-S 는 전 division 에서 검사(주석 의도와 코드 불일치 — 원본 결함, 원문 그대로 이식).
+  const dmTimeRow = (dmFlagRows ?? [])[0] as { CODE?: unknown } | undefined;
+  const dmTimeBlocked =
+    !!dmFamilyGroup &&
+    (dmFamilyGroup !== GROUP.DM_ADMIN || sc.divisionId.startsWith('81')) &&
+    typeof dmTimeRow?.CODE === 'string' &&
+    dmTimeRow.CODE.length > 0;
+
+  // 현재 조회 division 이 편집 가능한지 — 셀 편집(그리드) + Insert/Delete/Save 버튼 표시의 게이트.
+  //   ⭐ 3단 AND: (1) division 편집허용(editableSet=DM_UI_EDITABLE_DIVISION, 현행 82)
+  //   (2) 사용자 그룹권한(userEditSet=UNIT_AUTH EDIT_YN. 비면 생략 — 관대)
+  //   (3) [E20260604-000994] SCP Planner 편집 차단(82·40 — .cs L828~834) 아님.
+  const editable =
+    isEditableDivision(sc.divisionId, editableSet) &&
+    (userEditSet.size === 0 || userEditSet.has((sc.divisionId ?? '').trim())) &&
+    !scpEditBlocked;
 
   // ⭐ 명시 조회 게이트 (persist 안 됨 — 컴포넌트 로컬). 마운트 시 persist 된 stale filters 로
   //   SP 가 자동 발사되어 NULL payload → ORA-00936 나던 사고 차단. Search 클릭 후에만 쿼리 enable.
@@ -209,6 +283,21 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
   // 신규 행 추적 (CRUD_TYPE='I')
   const [insertedRows, setInsertedRows] = useState<MktFcstRow[]>([]);
 
+  // ⭐ Division(조회조건) 변경 = Grid 초기화 의무 (memory feedback_division_change_grid_reset /
+  //   cascade-combo-filter §1.4). 재조회는 Search 버튼으로만. Division 이 바뀌면 이전 division 의
+  //   조회 결과·신규행·편집 추적을 즉시 비우고(잔존 데이터로 오편집/오저장 방지) 쿼리 캐시를 제거해
+  //   그리드를 공백으로 되돌린다. 컬럼 셋(division별 노출)도 division 기준으로 재평가된다.
+  const prevDivisionRef = useRef(sc.divisionId);
+  useEffect(() => {
+    if (prevDivisionRef.current === sc.divisionId) return;
+    prevDivisionRef.current = sc.divisionId;
+    setHasSearched(false); // 쿼리 disable — Search 전까지 자동 재조회 안 함
+    setInsertedRows([]); // CRUD(신규행) reset
+    editTrackerRef.current?.clearChanges(); // 편집 추적 reset
+    clearFilters(); // filters[MAIN/SPREAD] 무효화 (enabled=false)
+    queryClient.removeQueries({ queryKey: [MENU_ID] }); // 이전 조회 데이터 제거 → 그리드 공백
+  }, [sc.divisionId, clearFilters, queryClient]);
+
   // Insert cell popup state (Project / Model) + cell popup group 추적.
   //   ⭐ 조회조건 Project/Model/Owner popup 은 MktFcstForm 의 카탈로그 필드(ProjectField/ItemField/
   //     OwnerField + multiCheckbox) 가 자체 관리 — 화면 레벨 모달은 grid cell popup 전용 (DMF0020 동일).
@@ -246,10 +335,58 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
     void fetchStaticMeasures();
   };
 
+  // ⭐ [E20260402/E20260604] 편집 진입 공통 게이트 — AS-IS EditButton(L828~888) 검사 순서 1:1.
+  //   TO-BE 는 명시적 Edit 모드가 없어 Insert/Save 시점에 alert 게이트로 이식(셀 잠금은 editable 이 담당).
+  //   반환 false = 차단(alert 표시 완료).
+  const guardEditGates = (): boolean => {
+    // (1) SCP Planner 시간창(81) — lookup 행 0 = 수정 가능 시간 아님(.cs L848~860). 운영값 협의 대기
+    //     상태(0행)에서도 AS-IS 보수 동작(차단) 유지 — MSG00477.
+    if (scpTimeBlocked) {
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.SCP_TIME_WINDOW, '_SCP Planner 권한사용자의 수정 가능한 시간이 아닙니다.'),
+      });
+      return false;
+    }
+    // (2) DM Planner류 시간창 — lookup 행 존재 = 차단(.cs L862~874). MSG00478 5파라미터
+    //     ({0}~{4} = LIMIT_AUTH/EDIT_DAYS/FROM_TIME/TO_TIME/AUTH — CMBO CODE '^' 연결 순서).
+    if (dmTimeBlocked && typeof dmTimeRow?.CODE === 'string') {
+      const p = dmTimeRow.CODE.split('^');
+      let msg = t(
+        MSG.DM_TIME_WINDOW,
+        '_{0} 권한의 수정 가능 시간({1} {2}~{3}) 동안에는 {4} 권한으로 수정할 수 없습니다.'
+      );
+      p.forEach((v, i) => {
+        msg = msg.replace(`{${i}}`, v);
+      });
+      void setAlert({ type: 'alert', content: msg });
+      return false;
+    }
+    // (3) [E20260402] AS FROM SITE 컬럼 부재(.cs L876~888) — DM Planner/W-S/DM ADMIN + 81*/82
+    //     에서 그리드에 AS_FROM_SITE 컬럼이 없으면 MSG00113 (SP LOAD 분기가 자동추가하므로 정상 시 미발생).
+    if (dmFamilyGroup && (sc.divisionId.startsWith('81') || sc.divisionId === '82')) {
+      const hasAsFromSite = !!gridRef.current?.columns.find(c => c.binding === 'AS_FROM_SITE');
+      if (!hasAsFromSite) {
+        void setAlert({
+          type: 'alert',
+          content: t(MSG.REQUIRED_COLUMN, '_필수 입력 컬럼이 없습니다.'),
+        });
+        return false;
+      }
+    }
+    return true;
+  };
+
   // F8 Insert — AS-IS InsertRow(L2389~2509) 1:1 — 신규 행 1개 추가. CRUD_TYPE='I', Division=조회조건.
   //   Measure 는 편집 combo(SCM_MST_SHEET_MEASURE VALID_YN='Y' 동적, fallback MEASURE_FALLBACK)이고
   //   기본값 = 'MKT_FCST_RP' (AS-IS L2509 siMain.SetValue(Measure, "MKT_FCST_RP")). 좌측 키는 입력 가능.
   const handleInsert = () => {
+    // ⭐ [E20260604-000994] SCP Planner + 81 은 Insert 자체 차단(.cs L2531~2537) — MSG00096.
+    if (scpInsertBlocked) {
+      void setAlert({ type: 'alert', content: t(MSG.NO_AUTH, '_사용 권한이 없습니다.') });
+      return;
+    }
+    if (!guardEditGates()) return;
     // ⭐ 편집제약 division(82 외)은 Insert 불가 — 버튼도 미표시이나 방어 가드(40·81 등 Insert 자체 불가).
     if (!editable) return;
     const groupId = `I_${Date.now()}`;
@@ -290,6 +427,12 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   ^delim 다건이므로 apiClient.post 직접 호출 (useProcMutation 금지 — array unfold 안 함, memory
   //   feedback_save_sp_bulk_payload_apiclient_post). PROC_M COL_NM(camelCase) positional = SP signature.
   const handleSave = async () => {
+    // ⭐ [E20260604-000994] SCP Planner 편집 차단(82·40) + 시간창/AS FROM SITE 게이트 — 저장도 동일 진입 검사.
+    if (scpEditBlocked) {
+      void setAlert({ type: 'alert', content: t(MSG.NO_AUTH, '_사용 권한이 없습니다.') });
+      return;
+    }
+    if (!guardEditGates()) return;
     // ⭐ 저장 후 재조회 시 스크롤 top 유지용 — 현재 스크롤 위치 캡처 (AS-IS FindData 상단 유지).
     const savedScroll = gridRef.current?.scrollPosition ?? null;
     // (0) ⭐ Phase 2f — 저장 전 검증 (fnValidation/SetSaveData 동등). division 분기 필수/중복/수량/AS+ALL.
@@ -303,6 +446,37 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
     const asFromSite = sc.asYn ? sc.scmSiteIds.join('^') : '';
     const vr = validation.validateSaveRows(validateTargets, sc, sc.asYn, asFromSite);
     if (!vr.ok) return;
+
+    // ⭐ [E20260402-001736] AS FROM SITE 필수(.cs L2300~2329 — 신규행 'I' 경로): W/S Planner +
+    //   81*/82 + 고객향 사이트(AS(비축)향 목록 'AS_FROM_SITE' CMBO 의 NAME 미포함) + FcstType 이
+    //   W/S 4종('FcstTypeWs' = SALES_TYPE_CODE2) + AS_FROM_SITE 빈값 → MSG00476 차단.
+    //   (AS-IS 검사 주체는 조건식상 W/S 단독 — 주석("DM Planner,")과 코드 불일치, 원문 파리티.)
+    if (storeWsPlannerYn && (sc.divisionId.startsWith('81') || sc.divisionId === '82')) {
+      const strOf = (v: unknown): string =>
+        typeof v === 'string' ? v.trim() : typeof v === 'number' ? String(v) : '';
+      const asSiteNames = new Set(
+        (asSiteRows ?? []).map(r => strOf((r as { NAME?: unknown }).NAME)).filter(Boolean)
+      );
+      const wsTypes = new Set(
+        (wsFcstTypeRows ?? []).map(r => strOf((r as { CODE?: unknown }).CODE)).filter(Boolean)
+      );
+      for (const r of insertedRows) {
+        const rec = r as Record<string, unknown>;
+        const site = strOf(rec.SCM_SITE_ID);
+        const fcstType = strOf(rec.FCST_TYPE);
+        const rowAsFromSite = strOf(rec.AS_FROM_SITE);
+        if (site && !asSiteNames.has(site) && wsTypes.has(fcstType) && rowAsFromSite === '') {
+          void setAlert({
+            type: 'alert',
+            content: t(
+              MSG.AS_FROM_SITE_REQUIRED,
+              '_고객향 사이트로 Fcst Type을 AS 또는 WS로 등록하시는 경우 AS FROM SITE는 필수로 입력이 필요합니다.'
+            ),
+          });
+          return;
+        }
+      }
+    }
 
     // (1) 변경 셀 수집 — 신규 행(insertedRows) + EditTracker 추적 수정 행.
     const editedChanges = editTrackerRef.current?.getOriginalValues() as
@@ -318,7 +492,16 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
       createdBy: useSessionStore.getState().session.userId ?? '',
     });
 
-    const payload = buildSavePayload(unfoldRows, sc.bucketType);
+    // ⭐ [E20260604-000994] p_authority = 로그인 권한 그룹(.cs L2243~2244 sAuthority=NowGroupID).
+    //   TO-BE 근사: 세션 groupId → 대표 DM류 그룹 → SCP Planner → userId (조회 userGroup 배선과 동일 계보).
+    const scpGroup = isScpPlanner ? GROUP.SCP_PLANNER : '';
+    const authority =
+      useSessionStore.getState().session.groupId ||
+      dmFamilyGroup ||
+      scpGroup ||
+      useSessionStore.getState().session.userId ||
+      '';
+    const payload = buildSavePayload(unfoldRows, sc.bucketType, authority);
     if (!payload) {
       void setAlert({ type: 'alert', content: t(MSG.NO_SAVE_DATA, '_No data to save.') });
       return;

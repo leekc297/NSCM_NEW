@@ -114,15 +114,22 @@ export const evalSalesPlanDynCell = (params: {
 
   // ── R1 행 게이트 — measure × 권한 (+기존행 SALES_PLAN_ADJUST_YN='N_Y') ──
   const measure = typeof row?.MEASURE === 'string' ? row.MEASURE : '';
+  const fcstType = typeof row?.FCST_TYPE === 'string' ? row.FCST_TYPE : '';
   const isInsert = row?.CRUD_TYPE === 'I';
   if (!isInsert) {
     const adjustYn = typeof row?.SALES_PLAN_ADJUST_YN === 'string' ? row.SALES_PLAN_ADJUST_YN : '';
     if (adjustYn !== 'N_Y') return { editable: false, isPast };
   }
   const measureGate =
-    (measure === EDIT_MEASURE.SALES_AMT_LOC && auth.salesAmtLoc) ||
+    // ⭐ [E20260331-000648] SalesAmt_LOC = FCST_TYPE='ETC' 행만 편집 (AS-IS L968 / §7.1(2)).
+    //   Insert 행은 FCST_TYPE=ETC 강제라 무영향 — 기존 비-ETC 행만 잠금.
+    (measure === EDIT_MEASURE.SALES_AMT_LOC && auth.salesAmtLoc && fcstType === 'ETC') ||
     (measure === EDIT_MEASURE.CATCH_UP && isDiv40(divisionId)) ||
-    (measure === EDIT_MEASURE.RTF_SYS_RP && auth.rtfSysRp);
+    // ⭐ [E20260331-000648] RTF_SYS_RP 편집 = div 40 또는 81 만 (AS-IS L1041-1045 / §7.1(3)).
+    //   40→40+81 확장. 82 는 RTF 편집 대상 아님(권한 있어도 잠금).
+    (measure === EDIT_MEASURE.RTF_SYS_RP &&
+      auth.rtfSysRp &&
+      (isDiv40(divisionId) || isDiv81(divisionId)));
   if (!measureGate) return { editable: false, isPast };
 
   // ── R3/R4 기간 cutoff ──

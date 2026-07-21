@@ -1,0 +1,95 @@
+CREATE OR REPLACE PROCEDURE           "DMF0003_GET_DM_ANL_CAR_REF"
+(
+	p_from_yyyymmdd	VARCHAR2,
+	p_to_yyyymmdd	    VARCHAR2,
+	p_car_maker        VARCHAR2,
+	p_car_model	    VARCHAR2,
+	O_RC1 OUT SYS_REFCURSOR,
+	O_RC2 OUT SYS_REFCURSOR,
+	O_RC3 OUT SYS_REFCURSOR
+)
+AS
+/*
+ * Program ID   : DMF0003_GET_DM_ANL_CAR_REF
+ * Description  :
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ 2024.01.03		KJJ			엑셀 업로드시에 저장된 부가정보 조회 추가
+
+EXEC DMF0003_GET_DM_ANL_CAR_REF '20230701', '20240630', 'FORD', 'Ford Mustang Mach-E BEV'
+ 2026.06.08 ZIONEX [PJ202650304] NextSCM Migration : 전면 재작성 — 런타임 CREATE/DROP TABLE 제거(WITH SRC 인라인), 동적 PIVOT을 Oracle PIVOT(LISTAGG 컬럼리스트+바인드)으로 정정, 3개 결과셋 OUT 커서(O_RC1=분기목록/O_RC2=피벗/O_RC3=ATTRIBUTE) 반환
+ */
+	p_from_yyyyQQ VARCHAR2(6 CHAR);
+	p_to_yyyyQQ   VARCHAR2(6 CHAR);
+	V_COLUMNS     VARCHAR2(4000 CHAR);
+	V_SQL         VARCHAR2(32767 CHAR);
+BEGIN
+	-- BASIS_YYYYMMDD -> CALENDAR_YYYYQQ
+	BEGIN
+		SELECT CALENDAR_YYYYQQ INTO p_from_yyyyQQ FROM SCM_SYS_CALENDAR_M WHERE BASIS_YYYYMMDD = p_from_yyyymmdd FETCH FIRST 1 ROW ONLY;
+	EXCEPTION WHEN NO_DATA_FOUND THEN p_from_yyyyQQ := NULL;
+	END;
+	BEGIN
+		SELECT CALENDAR_YYYYQQ INTO p_to_yyyyQQ FROM SCM_SYS_CALENDAR_M WHERE BASIS_YYYYMMDD = p_to_yyyymmdd FETCH FIRST 1 ROW ONLY;
+	EXCEPTION WHEN NO_DATA_FOUND THEN p_to_yyyyQQ := NULL;
+	END;
+
+	-- 결과셋1 : 분기(YYYYQQ) 목록
+	OPEN O_RC1 FOR
+		SELECT DISTINCT YYYYQQ
+		FROM DM_ANL_CAR_FCST_REF
+		WHERE YYYYQQ BETWEEN p_from_yyyyQQ AND p_to_yyyyQQ
+		ORDER BY YYYYQQ ASC;
+
+	-- PIVOT IN 컬럼 리스트 생성 : '2023Q3' AS "2023Q3", '2023Q4' AS "2023Q4", ...
+	SELECT LISTAGG('''' || YYYYQQ || ''' AS "' || YYYYQQ || '"', ', ') WITHIN GROUP (ORDER BY YYYYQQ)
+	  INTO V_COLUMNS
+	FROM ( SELECT DISTINCT YYYYQQ FROM DM_ANL_CAR_FCST_REF WHERE YYYYQQ BETWEEN p_from_yyyyQQ AND p_to_yyyyQQ );
+
+	-- 결과셋2 : 동적 PIVOT (차량대수별 P/S/I + BIZ단위환산 P/S/I)
+	IF V_COLUMNS IS NULL THEN
+		OPEN O_RC2 FOR SELECT NULL AS MAKER_NAME FROM DUAL WHERE 1 = 0;
+	ELSE
+		V_SQL :=
+		'WITH SRC AS ('
+		|| ' SELECT MAKER_NAME, CAR_MODEL, YYYYQQ, P_QTY, S_QTY, I_QTY FROM DM_ANL_CAR_FCST_REF'
+		|| ' WHERE YYYYQQ BETWEEN :f AND :t AND MAKER_NAME = :mk AND (:md IS NULL OR CAR_MODEL = :md) )'
+		|| ' SELECT * FROM ('
+		|| '   SELECT PV.*, ''차량대수별'' AS MAJOR_CAT, ''P) 차량생산[R+P]'' AS MINOR_CAT FROM (SELECT MAKER_NAME, CAR_MODEL, YYYYQQ, P_QTY FROM SRC) PIVOT (SUM(P_QTY) FOR YYYYQQ IN (' || V_COLUMNS || ')) PV'
+		|| '   UNION ALL'
+		|| '   SELECT PV.*, ''차량대수별'' AS MAJOR_CAT, ''S) 차량판매[R+P]'' AS MINOR_CAT FROM (SELECT MAKER_NAME, CAR_MODEL, YYYYQQ, S_QTY FROM SRC) PIVOT (SUM(S_QTY) FOR YYYYQQ IN (' || V_COLUMNS || ')) PV'
+		|| '   UNION ALL'
+		|| '   SELECT PV.*, ''차량대수별'' AS MAJOR_CAT, ''I) 누적차량재고[R+P]'' AS MINOR_CAT FROM (SELECT MAKER_NAME, CAR_MODEL, YYYYQQ, I_QTY FROM SRC) PIVOT (SUM(I_QTY) FOR YYYYQQ IN (' || V_COLUMNS || ')) PV'
+		|| '   UNION ALL'
+		|| '   SELECT PV.*, ''BIZ단위환산'' AS MAJOR_CAT, ''P) 차량생산[R+P]'' AS MINOR_CAT FROM (SELECT MAKER_NAME, CAR_MODEL, YYYYQQ, 0 P_QTY FROM SRC) PIVOT (SUM(P_QTY) FOR YYYYQQ IN (' || V_COLUMNS || ')) PV'
+		|| '   UNION ALL'
+		|| '   SELECT PV.*, ''BIZ단위환산'' AS MAJOR_CAT, ''S) 차량판매[R+P]'' AS MINOR_CAT FROM (SELECT MAKER_NAME, CAR_MODEL, YYYYQQ, 0 S_QTY FROM SRC) PIVOT (SUM(S_QTY) FOR YYYYQQ IN (' || V_COLUMNS || ')) PV'
+		|| '   UNION ALL'
+		|| '   SELECT PV.*, ''BIZ단위환산'' AS MAJOR_CAT, ''I) 누적차량재고[R+P]'' AS MINOR_CAT FROM (SELECT MAKER_NAME, CAR_MODEL, YYYYQQ, 0 I_QTY FROM SRC) PIVOT (SUM(I_QTY) FOR YYYYQQ IN (' || V_COLUMNS || ')) PV'
+		|| ' ) AA ORDER BY AA.MAKER_NAME, AA.CAR_MODEL';
+
+		OPEN O_RC2 FOR V_SQL USING p_from_yyyyQQ, p_to_yyyyQQ, p_car_maker, p_car_model, p_car_model;
+	END IF;
+
+	-- 결과셋3 : 엑셀 추가정보 (Data Source / Basis Date)
+	OPEN O_RC3 FOR
+		SELECT MAX(ATTRIBUTE1) ATTRIBUTE1   --Data Source
+			 , MAX(ATTRIBUTE2) ATTRIBUTE2   --Basis Date
+		FROM DM_ANL_CAR_FCST_REF
+		WHERE CREATION_DATE =
+		(
+			SELECT MAX(CREATION_DATE)
+			FROM DM_ANL_CAR_FCST_REF
+			WHERE 1=1
+			AND YYYYQQ BETWEEN p_from_yyyyQQ AND p_to_yyyyQQ
+			AND MAKER_NAME = p_car_maker
+			AND CAR_MODEL = p_car_model
+		)
+		AND YYYYQQ BETWEEN p_from_yyyyQQ AND p_to_yyyyQQ
+		AND MAKER_NAME = p_car_maker
+		AND CAR_MODEL = p_car_model;
+
+END;
+/

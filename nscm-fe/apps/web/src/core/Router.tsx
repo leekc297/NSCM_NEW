@@ -49,6 +49,12 @@ const DynamicQueryListPageWithTab = LazyLoader(() =>
   import('@admin/dynamic-query').then(m => ({ default: m.DynamicQuery }))
 );
 
+// ⚠️ dynamic-query-new(SYS0013_01) — 로컬 repo 에 features/admin/src/pages/dynamic-query-new 폴더 부재
+//   (클라우드 신규 화면 — Router 만 선행 이관됨). 폴더 이관 후 본 블록 + 아래 라우트 블록 주석 해제. (2026-07-21)
+// const DynamicQueryNewListPageWithTab = LazyLoader(() =>
+//   import('@admin/dynamic-query-new').then(m => ({ default: m.DynamicQuery }))
+// );
+
 // @authority
 const AuthRequestPageWithTab = LazyLoader(() =>
   import('@authority/auth-request').then(m => ({ default: m.AuthRequest }))
@@ -93,30 +99,23 @@ const ForecastPricePageWithTab = LazyLoader(() =>
 const CustomerFcstUploadPageWithTab = LazyLoader(() =>
   import('@demand/customer-fcst-upload').then(m => ({ default: m.CustomerFcstUpload }))
 );
-const MktFcstPageWithTab = LazyLoader(() =>
-  import('@demand/mkt-fcst').then(m => ({ default: m.MktFcst }))
-);
 const SalesMonitoringPageWithTab = LazyLoader(() =>
   import('@demand/sales-monitoring').then(m => ({ default: m.SalesMonitoring }))
 );
 const MetalLinkPricePageWithTab = LazyLoader(() =>
   import('@demand/metal-link-price').then(m => ({ default: m.MetalLinkPrice }))
 );
+// ⭐ DMF0003 / DMF0021 — 로컬 개발 화면 라우트 재등록 (클라우드 Router 유지 + 3화면 메뉴 연동, 2026-07-21)
+const MktFcstPageWithTab = LazyLoader(() =>
+  import('@demand/mkt-fcst').then(m => ({ default: m.MktFcst }))
+);
 const SalesPlanPageWithTab = LazyLoader(() =>
   import('@demand/sales-plan').then(m => ({ default: m.SalesPlan }))
-);
-const BusinessPlanPageWithTab = LazyLoader(() =>
-  import('@demand/business-plan').then(m => ({ default: m.BusinessPlan }))
 );
 
 // @report
 const SalesPlanWaterfallWithTab = LazyLoader(() =>
   import('@report/sales-plan-waterfall').then(m => ({ default: m.SalesPlanWaterfall }))
-);
-
-// @supply
-const ProductionPlanLineWithTab = LazyLoader(() =>
-  import('@supply/production-plan-line').then(m => ({ default: m.ProductionPlanLine }))
 );
 
 // etc.
@@ -154,6 +153,20 @@ export const router: RemixRouter = createBrowserRouter([
                 path: ROUTE_PATHS.SYS0013,
                 element: <DynamicQueryListPageWithTab />,
               },
+              // ⚠️ dynamic-query-new(SYS0013_01) — 폴더 부재로 임시 비활성 (위 import 블록 참조). 폴더 이관 후 복구.
+              // {
+              //   path: ROUTE_PATHS.SYS0013_01,
+              //   element: <DynamicQueryNewListPageWithTab />,
+              // },
+              // SYS0002(User), SYS0014(Group User): 부모가 System → Admin_Menu 로 변경됨
+              {
+                path: ROUTE_PATHS.SYS0002,
+                element: <UserManagementPageWithTab />,
+              },
+              {
+                path: ROUTE_PATHS.SYS0014,
+                element: <GroupUserPage />,
+              },
             ],
           },
           {
@@ -162,10 +175,6 @@ export const router: RemixRouter = createBrowserRouter([
               {
                 path: ROUTE_PATHS.SYS0001,
                 element: <MessageManagementPageWithTab />,
-              },
-              {
-                path: ROUTE_PATHS.SYS0002,
-                element: <UserManagementPageWithTab />,
               },
               {
                 path: ROUTE_PATHS.SYS0003,
@@ -195,10 +204,7 @@ export const router: RemixRouter = createBrowserRouter([
                 path: ROUTE_PATHS.SYS0009,
                 element: <MenuBtnManagementPageWithTab />,
               },
-              {
-                path: ROUTE_PATHS.SYS0014,
-                element: <GroupUserPage />,
-              },
+              // SYS0015(Program): USE_YN=N(메뉴 비활성) — 직접 URL 접근 대비 라우트는 유지
               {
                 path: ROUTE_PATHS.SYS0015,
                 element: <ProgramPage />,
@@ -226,8 +232,9 @@ export const router: RemixRouter = createBrowserRouter([
         ],
       },
       {
-        path: ROUTE_PATHS.MASTER,
+        path: ROUTE_PATHS.DEMAND,
         children: [
+          // Demand_Master: 부모가 Master → Demand 로 변경 (Master 메뉴는 USE_YN=N 비활성)
           {
             path: ROUTE_PATHS.DEMAND_MASTER,
             children: [
@@ -269,11 +276,6 @@ export const router: RemixRouter = createBrowserRouter([
               },
             ],
           },
-        ],
-      },
-      {
-        path: ROUTE_PATHS.DEMAND,
-        children: [
           {
             path: ROUTE_PATHS.DEMAND_PLAN,
             children: [
@@ -281,20 +283,14 @@ export const router: RemixRouter = createBrowserRouter([
                 path: ROUTE_PATHS.DMF0082,
                 element: <ForecastPricePageWithTab />,
               },
-              // DMF0003 — MKT FCST (시장예측). 라우트 slug = 사내 SCM_ADM_MNU_M.MNU_URL='mkt_forecast' 정합(필수).
-              //   ROUTE_PATHS(foundation) 무수정 정책 → 리터럴 slug 사용 (DMF0014 'dmf0014' 동일 패턴).
+              // DMF0048 — Sales Monitoring (판매 모니터링).
               {
-                path: 'mkt_forecast',
-                element: <MktFcstPageWithTab />,
-              },
-              // DMF0048 — Sales Monitoring (판매 모니터링). ROUTE_PATHS.DMF0048='sales-monitoring' = SCM_ADM_MNU_M.MNU_URL 정합(필수).
-              {
-                path: ROUTE_PATHS.DMF0048,
+                path: ROUTE_PATHS.DMF0048, // ★ DMF0048
                 element: <SalesMonitoringPageWithTab />,
               },
-              // DMF0014 — Customer FCST Upload. ROUTE_PATHS.DMF0014='customer-fcst-upload' = MNU_URL 정합(필수).
+              // DMF0014 — Customer FCST Upload. slug = 'dmf0014'
               {
-                path: ROUTE_PATHS.DMF0014,
+                path: ROUTE_PATHS.DMF0014, // ★ DMF0014
                 element: <CustomerFcstUploadPageWithTab />,
               },
               // DMF0074 — Metal Link Price (메탈 판가 연동). ROUTE_PATHS.DMF0074='metal-link-price' = MNU_URL 정합(필수).
@@ -302,15 +298,15 @@ export const router: RemixRouter = createBrowserRouter([
                 path: ROUTE_PATHS.DMF0074,
                 element: <MetalLinkPricePageWithTab />,
               },
-              // DMF0021 — Sales Plan (판매계획). ROUTE_PATHS.DMF0021='sales-plan' = SCM_ADM_MNU_M.MNU_URL 정합(필수 — 라우트 3-SET).
+              // DMF0003 — MKT FCST (시장예측). slug 'mkt_forecast' = SCM_ADM_MNU_M.MNU_URL 정합(라우트 3-SET, 리터럴).
+              {
+                path: 'mkt_forecast',
+                element: <MktFcstPageWithTab />,
+              },
+              // DMF0021 — Sales Plan (판매계획). ROUTE_PATHS.DMF0021='sales-plan' = MNU_URL 정합(라우트 3-SET).
               {
                 path: ROUTE_PATHS.DMF0021,
                 element: <SalesPlanPageWithTab />,
-              },
-              // DMF0042 — Business Plan (사업계획). ROUTE_PATHS.DMF0042='business-plan' = MNU_URL 정합(P1 교체 — 라우트 3-SET).
-              {
-                path: ROUTE_PATHS.DMF0042,
-                element: <BusinessPlanPageWithTab />,
               },
             ],
           },
@@ -325,22 +321,6 @@ export const router: RemixRouter = createBrowserRouter([
               {
                 path: ROUTE_PATHS.DMF0022,
                 element: <SalesPlanWaterfallWithTab />,
-              },
-            ],
-          },
-        ],
-      },
-      {
-        // SCP(Supply) 도메인 — 2026-07-13 SCP0013 신설 (MNU_M 트리: Supply > Supply_Plan > SCP0013).
-        path: ROUTE_PATHS.SUPPLY,
-        children: [
-          {
-            path: ROUTE_PATHS.SUPPLY_PLAN,
-            children: [
-              // SCP0013 — Production Plan Line. ROUTE_PATHS.SCP0013='production-plan-line' = MNU_URL 정합(필수).
-              {
-                path: ROUTE_PATHS.SCP0013,
-                element: <ProductionPlanLineWithTab />,
               },
             ],
           },

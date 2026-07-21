@@ -26,12 +26,14 @@ import {
   MAIN_COLUMNS,
   MEASURE_MODEL_CLEAR_COLS,
   MEASURE_MODEL_KEEP,
+  MENU_ID,
   MSG,
   PR_MENU_LABELS,
 } from '../mkt-fcst.constants';
 import type { MktFcstRow, SpreadTitleRow } from '../mkt-fcst.types';
 import styles from '../MktFcst.module.scss';
 import type { BucketInfo, CurrentWeekInfo, MeasureMeta } from '../useMktFcstStore';
+import { useMktFcstStore } from '../useMktFcstStore';
 import { buildEditCutoff, dynKindOf, evalDynCell, thisWeekMondayYmd } from '../utils/mkt-fcst.editLock';
 import { getDynKey, HierarchicalMergeManager } from '../utils/mkt-fcst.merge';
 import {
@@ -239,8 +241,13 @@ export const MktFcstGrid = ({
     () => visibleColumns.filter(c => c._ctrlType === 'FPComboBox' && !!c._comboKey),
     [visibleColumns]
   );
+  //   ⭐ 2026-07-20 fix (Measure 코드 표시 사고) — 콤보 SQL 이 @mnuId 를 쓰면(예 'Measure':
+  //   `WHERE A.PROGRAM_ID = @mnuId`) BE(makeComboQuery)는 미주입 토큰을 ''로 치환 → 주력 measure
+  //   23행 0건 → CODE→NAME 매핑 부재 → 그리드가 measure '코드'를 그대로 표시. FE 가 mnuId 를
+  //   따옴표 포함 전달해야 정상(BE 는 값 raw 치환 — divisionParam 과 동일 quoting 규약).
+  //   @mnuId 없는 콤보는 잉여 파라미터 무시(makeComboQuery 는 SQL 내 존재 토큰만 치환) → 회귀 0.
   const comboResults = useTabComboQueries({
-    filters: comboColumns.map(c => c._comboKey as string),
+    filters: comboColumns.map(c => ({ comboId: c._comboKey as string, mnuId: `'${MENU_ID}'` })),
   });
   // dataMap 재생성 안정화 — comboId + row count 시그니처가 바뀔 때만 rebuild (DMF0020 동일).
   const comboSig = comboColumns
@@ -294,6 +301,37 @@ export const MktFcstGrid = ({
   useEffect(() => {
     editDataMapsRef.current = editDataMaps;
   }, [editDataMaps]);
+  // 편집 콤보 원본 rows (MEASURE W/S 분기 필터용 — dataMap 재구성 원천).
+  const editComboRowsRef = useRef<Record<string, Record<string, unknown>[]>>({});
+  useEffect(() => {
+    const byBinding: Record<string, Record<string, unknown>[]> = {};
+    editComboEntries.forEach(([binding], i) => {
+      byBinding[binding] = (editComboResults[i] ?? []) as unknown as Record<string, unknown>[];
+    });
+    editComboRowsRef.current = byBinding;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editComboSig]);
+
+  // ⭐ [E20260402-001736] W/S 분기 자료 — wsPlannerYn(store) + W/S FcstType 4종(FcstTypeWs =
+  //   SALES_TYPE_CODE2) + AS(비축)향 사이트 목록(AS_FROM_SITE CMBO, NAME=사이트).
+  //   용도: FCST_TYPE 편집콤보 wsOnly 스왑 / MEASURE 편집 후보 필터(1-a/1-b/1-c) /
+  //   AS_FROM_SITE 조건부 편집(#128~130 — FCST_TYPE 이 W/S 4종일 때만 활성).
+  const wsPlannerYn = useMktFcstStore(s => s.wsPlannerYn);
+  const wsPlannerRef = useRef(false);
+  wsPlannerRef.current = wsPlannerYn;
+  const [wsFcstTypeRows, asSiteRows] = useTabComboQueries({
+    filters: ['FcstTypeWs', { comboId: 'AS_FROM_SITE', param1: `'${division}'` }],
+  });
+  const wsFcstTypeSetRef = useRef<Set<string>>(new Set());
+  const asSiteNamesRef = useRef<Set<string>>(new Set());
+  useEffect(() => {
+    wsFcstTypeSetRef.current = new Set(
+      (wsFcstTypeRows ?? []).map(r => toCellStr((r as { CODE?: unknown }).CODE).trim()).filter(Boolean)
+    );
+    asSiteNamesRef.current = new Set(
+      (asSiteRows ?? []).map(r => toCellStr((r as { NAME?: unknown }).NAME).trim()).filter(Boolean)
+    );
+  }, [wsFcstTypeRows, asSiteRows]);
 
   // 편집 시작 셀의 (binding, oldVal) — cellEditEnded 에서 실제 값 변경 여부 판정(불필요 clear 방지).
   const editingCellRef = useRef<{ binding: string; oldVal: unknown } | null>(null);
@@ -415,6 +453,11 @@ export const MktFcstGrid = ({
   //     kind W: 2단=주차(small, 없으면 binding 파생)/3단='SUM' (Weekly 활성 + Daily 의 주합계 공통 —
   //             Daily 주합계는 같은 주 D_ leaf 들과 동일 주차 sub 에 합류, sub 내 첫 컬럼)
   //     kind D: 2단=주차/3단=일자(m.leaf)
+  // ⭐ sumYn 최신값 ref — 컬럼그룹 rebuild(조회/bucket 변경 시) 시점의 초기 visible 계산용.
+  //   (sumYn 토글 자체는 아래 imperative effect 가 rebuild 없이 flip — 스크롤/컬럼폭 보존 유지.)
+  const sumYnRef = useRef(sumYn);
+  sumYnRef.current = sumYn;
+
   const mainDynamicColumns = useMemo<FlexGridColumnConfig[]>(() => {
     if (dynColMetas.length === 0) return [];
     type LeafCol = FlexGridColumnConfig & { binding: string };
@@ -454,7 +497,15 @@ export const MktFcstGrid = ({
         allowMerging: false,
         allowResizing: true,
         allowSorting: false,
-        visible: true,
+        // ⭐ 초기 visible = 표시 규칙을 config 에 직접 반영 (2026-07-20 fix — 최초 조회 시 SUM 노출 사고):
+        //   wrapper 가 columnGroups 재적용 시 Column 을 config 값으로 재생성하므로, imperative 숨김만으로는
+        //   최초 렌더에서 상위 합계(SUM) 컬럼이 visible:true 로 나타났음. 규칙(활성=표시/상위 합계=sumYn/
+        //   하위=숨김)을 빌드 시점에 명시(visible 명시 자체는 Excel 대응 룰 유지 — 값만 규칙 반영).
+        //   sumYn 토글·드릴다운은 기존 imperative effect 가 계속 담당.
+        visible:
+          DYN_RANK[m.kind] < DYN_RANK[bucketPrefix]
+            ? sumYnRef.current
+            : DYN_RANK[m.kind] === DYN_RANK[bucketPrefix],
         height: 48, // 다단 헤더 높이(#93) — wrapper 가 staticColumns 만 자동 처리, 동적은 명시 의무.
         // ⭐ 동적 셀은 'S'(read-only) — Phase 2a 는 표시 전용. 편집(2b)은 beginningEdit 에서 명시 허용.
         _inputEditType: CELL_INPUT_EDIT_TYPE.SEARCH_ONLY,
@@ -608,6 +659,15 @@ export const MktFcstGrid = ({
       const isInsert = row?.CRUD_TYPE === 'I';
       const meta = visibleColumns.find(c => c.binding === binding);
 
+      // ⭐ [E20260402-001736] AS_FROM_SITE 조건부 편집 (#90~95/#128~130 격차 해소) —
+      //   W/S Planner 이고 행의 FCST_TYPE 이 W/S 4종(WS·WSF·AS·ASF)일 때만 편집 허용
+      //   (SP LOAD 분기가 추가한 동적 컬럼 — UT_DM_IF_00031/00038 시나리오 파리티).
+      if (binding === 'AS_FROM_SITE') {
+        const ft = row ? toCellStr((row as Record<string, unknown>).FCST_TYPE).trim() : '';
+        if (!(wsPlannerRef.current && wsFcstTypeSetRef.current.has(ft))) e.cancel = true;
+        return;
+      }
+
       if (meta) {
         if (!isInsert) {
           e.cancel = true;
@@ -624,9 +684,33 @@ export const MktFcstGrid = ({
           binding,
           oldVal: row ? (row as Record<string, unknown>)[binding] : undefined,
         };
-        // ⭐ 편집 전용 콤보 스왑 (MEASURE=편집가능 measure / INCOTERMS=유효 Incoterms). 조회 표시는 전체
-        //   dataMap, 편집 후보만 유효분으로 교체 (AS-IS 편집/조회 이원화). cellEditEnded 에서 원복.
-        if (GRID_EDIT_COMBO[binding] && editDataMapsRef.current[binding]) {
+        // ⭐ 편집 전용 콤보 스왑 (MEASURE=편집가능 measure / INCOTERMS=유효 Incoterms / FCST_TYPE=
+        //   W/S 전용 EDIT_MODE 6종). 조회 표시는 전체 dataMap, 편집 후보만 유효분으로 교체
+        //   (AS-IS 편집/조회 이원화). cellEditEnded 에서 원복.
+        const editCfg = GRID_EDIT_COMBO[binding];
+        //   [E20260402-001736] wsOnly(FCST_TYPE): 비W/S 는 스왑 생략 = 기존 'FcstType' 일반 12종
+        //   dataMap 그대로 (.cs L2587~2605 else 분기 = GetFcstType()).
+        if (editCfg && !(editCfg.wsOnly && !wsPlannerRef.current) && editDataMapsRef.current[binding]) {
+          // [E20260402-001736] MEASURE 편집 후보 W/S 분기 (.cs 1-a Form_Load/1-b InsertRow/1-c
+          //   ComboSelChange 교정 — 최종 적용 필터 재현):
+          //   · 사이트 확정 행: AS(비축)향 → AS_In_Req 만 / 고객향 → MKT_FCST_RP 만.
+          //   · 사이트 미정 + 비W/S + 81*/82 → AS_In_Req 제거(블랙리스트).
+          if (binding === 'MEASURE' && row) {
+            const src = editComboRowsRef.current[binding] ?? [];
+            const site = toCellStr((row as Record<string, unknown>).SCM_SITE_ID).trim();
+            const isDiv8182 = division.startsWith('81') || division === '82';
+            let candidates = src;
+            if (site) {
+              const only = asSiteNamesRef.current.has(site) ? 'AS_In_Req' : 'MKT_FCST_RP';
+              candidates = src.filter(cr => toCellStr(cr.CODE).trim() === only);
+            } else if (!wsPlannerRef.current && isDiv8182) {
+              candidates = src.filter(cr => toCellStr(cr.CODE).trim() !== 'AS_In_Req');
+            }
+            if (candidates.length > 0) {
+              col.dataMap = new DataMap(candidates, 'CODE', 'NAME');
+              return;
+            }
+          }
           col.dataMap = editDataMapsRef.current[binding];
           return;
         }

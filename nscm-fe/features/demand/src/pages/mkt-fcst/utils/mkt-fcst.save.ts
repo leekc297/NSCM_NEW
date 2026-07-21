@@ -47,6 +47,9 @@ export interface SaveProcPayload {
   createdBy: string;
   asFromSite: string;
   bucket: string;
+  // ⭐ [E20260604-000994] 저장 시 로그인 권한 그룹 (.cs L2243~2244 sAuthority=NowGroupID, SP 16번째 IN).
+  //   bucket 과 같은 단일값 (행 무관). SP p_authority DEFAULT NULL — 게이트 본문은 AS-IS 원문 확보 후.
+  authority: string;
 }
 
 type Row = Record<string, unknown>;
@@ -153,8 +156,12 @@ export const buildUnfoldRows = (params: {
   return out;
 };
 
-// SaveUnfoldRow[] → 15 키 ^delim payload. bucket 은 단일값(행 무관).
-export const buildSavePayload = (rows: SaveUnfoldRow[], bucket: string): SaveProcPayload | null => {
+// SaveUnfoldRow[] → 16 키 ^delim payload. bucket/authority 는 단일값(행 무관).
+export const buildSavePayload = (
+  rows: SaveUnfoldRow[],
+  bucket: string,
+  authority: string
+): SaveProcPayload | null => {
   if (rows.length === 0) return null;
   const join = (sel: (r: SaveUnfoldRow) => string): string => rows.map(sel).join('^');
   return {
@@ -173,5 +180,6 @@ export const buildSavePayload = (rows: SaveUnfoldRow[], bucket: string): SavePro
     createdBy: join(r => r.createdBy),
     asFromSite: join(r => r.asFromSite),
     bucket, // 단일값 (AS-IS p_bucket = cboBucketType.ControlValues)
+    authority, // 단일값 (AS-IS L2441 p_authority = sAuthority — 로그인 권한 그룹 원문)
   };
 };

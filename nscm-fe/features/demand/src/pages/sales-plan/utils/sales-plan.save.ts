@@ -13,7 +13,7 @@ import type { MSG } from '../sales-plan.constants';
 import { BUCKET_TYPE, EDIT_MEASURE } from '../sales-plan.constants';
 import type { SalesPlanRow } from '../sales-plan.types';
 
-import { isDiv40, readProjectSlot, readTextSlot } from './sales-plan.division';
+import { isDiv40, isDiv81, readProjectSlot, readTextSlot } from './sales-plan.division';
 import { dynKindOf, parseWeekTag } from './sales-plan.editLock';
 
 // SAVE 한 row(= 행 × 기간셀) 의 원시 값 — 모든 키는 SP positional 매핑 (16키).
@@ -109,7 +109,10 @@ const identityOf = (
   currency: str(row.CURRENCY),
   text: readTextSlot(row, divisionId),
   deptId: str(row.DEPT_ID),
-  cellProdSiteId: str(row.CELL_PROD_SITE_ID),
+  // ⭐ [E20260512-000502] p_cell_prod_site_id 슬롯 = 81 → FROM_SITE_ID / 40 → CELL_PROD_SITE_ID
+  //   (AS-IS SaveData L2466~2475: FromSiteId 컬럼 존재[=81] 시 sCellProdSiteId 를 FROM_SITE_ID 값으로 덮어씀).
+  //   미치환 시 81 저장이 빈 CELL_PROD_SITE_ID 로 저장되는 손상.
+  cellProdSiteId: isDiv81(divisionId) ? str(row.FROM_SITE_ID) : str(row.CELL_PROD_SITE_ID),
 });
 
 /**

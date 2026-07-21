@@ -44,3 +44,23 @@ export interface MeasureAuthRow {
   TODAY_LIMIT_YN?: string;
   TODAY_DAY_LIST?: string;
 }
+
+/**
+ * GET drop4 (= O_RC5 실측) 배분 캘린더 row — 월(M_) 수량 일별 배분(#1)·M+4 규칙 입력.
+ *   MONTH_DAY_CNT = 소속 월 전체 일수 / WEEK_DAY_CNT = 소속 ISO 주 일수 (AS-IS dtCalendarDetail Tables[4]).
+ */
+export interface CalendarRow {
+  BASIS_YYYYMMDD?: string;
+  MONTH_DAY_CNT?: number | string;
+  WEEK_DAY_CNT?: number | string;
+}
+
+/**
+ * GET drop1 (= O_RC2 실측) 월별 정보 row — M3_CUTOFF_DATE = M+3 기준일(ADD_MONTHS(첫월,3)).
+ *   첫 행 M3_CUTOFF_DATE 앞 6자리 = M+4 잠금 경계월 (AS-IS dtWeek.Rows[0]["MONTH_NAME"], #4).
+ */
+export interface MonthInfoRow {
+  BASIS_YYYYMM?: string;
+  MONTH_END_DATE?: string;
+  M3_CUTOFF_DATE?: string;
+}

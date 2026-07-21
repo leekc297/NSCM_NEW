@@ -1,15 +1,33 @@
-import { type FlexGrid, AllowMerging, CellType, SelectionMode } from '@mescius/wijmo.grid';
+import { type FlexGrid, AllowMerging, CellType, DataMap, SelectionMode } from '@mescius/wijmo.grid';
 import { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import type { MutableRefObject } from 'react';
 import { useEffect, useMemo, useRef } from 'react';
 
-import type { FlexGridColumnConfig } from '@foundation/models';
+import { apiClient } from '@foundation/apis';
+import dayjs from '@foundation/dayjs';
+import isoWeek from '@foundation/isoWeek';
+import type { ComboResponse, FlexGridColumnConfig } from '@foundation/models';
 import { EditTracker, isNonEditableDateColumn } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 
 import { AUTH_MEASURES } from '../forecast-price.constants';
 import type { ForecastPriceRow, SpreadTitleRow } from '../forecast-price.types';
 import { useForecastPriceStore } from '../useForecastPriceStore';
+import { thisWeekMondayYmd } from '../utils/forecast-price.editLock';
+
+dayjs.extend(isoWeek);
+
+// #10 중복체크 대상 키 8종 (AS-IS spdMain_Changed :5897~5946 — Insert 행 간 완전일치 판정).
+const DUP_KEY_COLS = [
+  'END_CUSTOMER',
+  'SCM_SITE_ID',
+  'ITEM_ID',
+  'DOM_EXP',
+  'FCST_TYPE',
+  'INCOTERMS',
+  'MEASURE',
+  'CELL_PROD_SITE_ID',
+] as const;
 
 import {
   allocateLoc,
@@ -18,6 +36,7 @@ import {
   divideByWeek,
   isNonEditableCell,
   toNumber,
+  type CalendarInfo,
 } from './ForecastPriceGridUtils';
 
 interface ForecastPriceGridProps {
@@ -26,6 +45,8 @@ interface ForecastPriceGridProps {
   data: ForecastPriceRow[];
   spreadTitle: SpreadTitleRow[];
   editTrackerRef: MutableRefObject<EditTracker | null>;
+  // #10 — Insert 행 키 중복(MSG00260) 발생 시 페이지 alert 호출.
+  onDuplicateKey?: () => void;
 }
 
 interface DynColMeta {
@@ -54,6 +75,7 @@ export const ForecastPriceGrid = ({
   data,
   spreadTitle,
   editTrackerRef,
+  onDuplicateKey,
 }: ForecastPriceGridProps) => {
   const monthMap = useRef<Map<string, Set<string>>>(new Map());
   const weekMap = useRef<Map<string, Set<string>>>(new Map());
@@ -64,6 +86,33 @@ export const ForecastPriceGrid = ({
   const measureAuth = useForecastPriceStore(state => state.measureAuth);
   const measureAuthRef = useRef(measureAuth);
   measureAuthRef.current = measureAuth;
+
+  // ⭐ 배분 캘린더(drop4, #1) / M+3 기준월(drop1, #4) — 핸들러가 재구독 없이 최신 참조 (measureAuth 패턴).
+  const calendar = useForecastPriceStore(state => state.calendar);
+  const m3CutoffYyyymm = useForecastPriceStore(state => state.m3CutoffYyyymm);
+  const calendarMapRef = useRef<Map<string, CalendarInfo>>(new Map());
+  calendarMapRef.current = useMemo(() => new Map(Object.entries(calendar)), [calendar]);
+  const m3CutoffRef = useRef(m3CutoffYyyymm);
+  m3CutoffRef.current = m3CutoffYyyymm;
+  const onDuplicateKeyRef = useRef(onDuplicateKey);
+  onDuplicateKeyRef.current = onDuplicateKey;
+  const bucketTypeParam = searchParams.bucketType;
+  const bucketTypeParamRef = useRef(bucketTypeParam);
+  bucketTypeParamRef.current = bucketTypeParam;
+
+  // ⭐ #7 Insert 행 편집가능 Measure 콤보 캐스케이드 (hook #59 §5-G / AS-IS L5839) —
+  //   Site 변경 시 FcstPriceEditMeasure(div/site/bucket) 조회해 행별 후보 캐시 → MEASURE 편집 진입 시
+  //   컬럼 dataMap 스왑(편집 후보=편집가능 measure), 편집 종료 시 원 dataMap(전체 표시용) 원복.
+  const editMeasuresRef = useRef<WeakMap<object, ComboResponse[]>>(new WeakMap());
+  const measureOrigDataMapRef = useRef<DataMap | null>(null);
+
+  // #12 당주(현재 기간) binding 집합 — 활성 버킷의 당월(M_)/당주(W_)/금주월요일(D_) 녹색 보더.
+  const currentPeriodRef = useRef<Set<string>>(new Set());
+  currentPeriodRef.current = useMemo(() => {
+    const ym = dayjs().format('YYYYMM');
+    const wk = String(dayjs().isoWeek()).padStart(2, '0');
+    return new Set([`M_${ym}`, `W_${ym}${wk}`, `D_${thisWeekMondayYmd()}`]);
+  }, []);
 
   // ── 동적 컬럼 메타 (SPREAD_TITLE 우선 / 0건 시 data row 키 union fallback — mkt-fcst 패턴) ──
   const dynColMetas = useMemo<DynColMeta[]>(() => {
@@ -241,7 +290,14 @@ export const ForecastPriceGrid = ({
       if (measureAuthRef.current[measure] === false) return false;
       const bucketName =
         bucketRef.current === 'M' ? 'Monthly' : bucketRef.current === 'D' ? 'Daily' : 'Weekly';
-      return !isNonEditableCell(g as FlexGrid, binding, dataItem, weekMap.current, bucketName);
+      return !isNonEditableCell(
+        g as FlexGrid,
+        binding,
+        dataItem,
+        weekMap.current,
+        bucketName,
+        m3CutoffRef.current
+      );
     };
 
     const cellEditableHandler = (
@@ -256,28 +312,129 @@ export const ForecastPriceGrid = ({
       }
       if (staticBindingSet.has(binding)) {
         // 정적 컬럼: Insert 행(CRUD_TYPE 존재)만 편집 (AS-IS: 기존 행 키 컬럼 잠금)
-        if (dataItem['CRUD_TYPE'] === undefined || dataItem['CRUD_TYPE'] === null) e.cancel = true;
+        const isInsert = dataItem['CRUD_TYPE'] !== undefined && dataItem['CRUD_TYPE'] !== null;
+        if (!isInsert) {
+          e.cancel = true;
+          return;
+        }
+        // #7 — MEASURE 편집 진입: 행별 편집가능 후보로 컬럼 dataMap 스왑 (원본은 1회만 백업 → 편집 종료 시 원복).
+        if (binding === 'MEASURE') {
+          const candidates = editMeasuresRef.current.get(dataItem);
+          const col = sender.columns[e.col];
+          if (candidates && candidates.length > 0 && col) {
+            if (!measureOrigDataMapRef.current) measureOrigDataMapRef.current = col.dataMap as DataMap;
+            col.dataMap = new DataMap(candidates as unknown[], 'CODE', 'NAME');
+          }
+        }
         return;
       }
       if (kindOf(binding) && !canEditCell(binding, dataItem)) e.cancel = true;
+    };
+
+    // ⭐ #2 SALES_BUCKET 캐스케이드 (AS-IS L5862~5874) — Insert 행에서 Sales Site / Incoterms 변경 시
+    //   배분 요일비트(SUN-first 7자리)를 조회해 행 BUCKET 에 세팅. 결과 없으면 '' → 배분은 기본요일 적용.
+    //   (BUCKET 은 divideBy*/allocateLoc 가 다음 수량 편집 때 읽음 — AS-IS 도 세팅만.)
+    const applySalesBucket = (dataItem: WijmoRowItem) => {
+      const div = String(dataItem['DIVISION_ID'] ?? '');
+      const site = String(dataItem['SCM_SITE_ID'] ?? '');
+      const inco = String(dataItem['INCOTERMS'] ?? '');
+      if (!div || !site || !inco) return; // 세 값 모두 있어야 조회 (AS-IS: div·site 채워졌을 때)
+      void apiClient
+        .getCombo({ comboId: 'SalesBucket', divisionId: div, scmSiteId: site, incoterms: inco })
+        .then(rows => {
+          const bucket = rows?.[0]?.CODE ?? '';
+          // '0000000'(매칭 0건 PIVOT) = 미설정 취급 → 기본요일 배분 (AS-IS '' 동작).
+          dataItem['BUCKET'] = bucket && bucket !== '0000000' ? bucket : '';
+        })
+        .catch(() => {
+          /* 룩업 미배선/오류 시 무시 → 기본요일 배분 유지 */
+        });
+    };
+
+    // #7 — Insert 행 Site 변경 시 편집가능 Measure 후보 재조회 → 행별 캐시 (MEASURE 편집 진입 시 사용).
+    const applyEditMeasures = (dataItem: WijmoRowItem) => {
+      const div = String(dataItem['DIVISION_ID'] ?? '');
+      const site = String(dataItem['SCM_SITE_ID'] ?? '');
+      if (!div || !site) return;
+      void apiClient
+        .getCombo({
+          comboId: 'FcstPriceEditMeasure',
+          divisionId: div,
+          scmSiteId: site,
+          bucketType: bucketTypeParamRef.current,
+        })
+        .then(rows => editMeasuresRef.current.set(dataItem, rows ?? []))
+        .catch(() => {
+          /* 룩업 오류 시 캐시 미설정 → 편집 진입 시 전체 Measure 콤보 유지 */
+        });
     };
 
     // 편집 종료 — 월/주/일 배분 (AS-IS spdMain_EditChange 분배 로직 1:1, GridUtils 재사용).
     const cellEditHandler = (sender: FlexGrid, e: { row: number; col: number; data?: unknown }) => {
       const binding = sender.columns[e.col]?.binding;
       const dataItem = sender.rows[e.row]?.dataItem as WijmoRowItem | undefined;
-      if (!binding || !dataItem || !kindOf(binding)) return;
-      const val = sender.getCellData(e.row, e.col, false) as WijmoPrimitive;
+      if (!binding || !dataItem) return;
+      // #7 — MEASURE 편집 종료: 스왑했던 dataMap 을 원본(전체 표시용)으로 원복 (취소 포함 커버).
+      if (binding === 'MEASURE' && measureOrigDataMapRef.current) {
+        const col = sender.columns[e.col];
+        if (col) col.dataMap = measureOrigDataMapRef.current;
+      }
+      const isInsertRow = dataItem['CRUD_TYPE'] !== undefined && dataItem['CRUD_TYPE'] !== null;
+      // #2 — Insert 행 Site/Incoterms 변경 → SALES_BUCKET 조회·세팅 (배분 요일 원천).
+      //   #7 — Site 변경 시 편집가능 Measure 후보도 재조회(행별 캐시).
+      if ((binding === 'SCM_SITE_ID' || binding === 'INCOTERMS') && isInsertRow) {
+        applySalesBucket(dataItem);
+        if (binding === 'SCM_SITE_ID') applyEditMeasures(dataItem);
+      }
+      // #10 — Insert 행 키 8종 변경 시 실시간 중복 검사 (AS-IS MSG00260 :5878). 중복이면 값 롤백 + alert.
+      if (isInsertRow && (DUP_KEY_COLS as readonly string[]).includes(binding)) {
+        const keyOf = (r: WijmoRowItem) => DUP_KEY_COLS.map(c => String(r[c] ?? '')).join('');
+        const full = DUP_KEY_COLS.every(c => String(dataItem[c] ?? '') !== '');
+        if (full) {
+          const myKey = keyOf(dataItem);
+          let dup = 0;
+          for (let r = 0; r < sender.rows.length; r++) {
+            const ri = sender.rows[r]?.dataItem as WijmoRowItem | undefined;
+            if (ri && ri['CRUD_TYPE'] !== undefined && ri['CRUD_TYPE'] !== null && keyOf(ri) === myKey)
+              dup += 1;
+          }
+          if (dup >= 2) {
+            sender.setCellData(e.row, e.col, (e.data ?? '') as WijmoPrimitive); // 롤백
+            onDuplicateKeyRef.current?.();
+          }
+        }
+      }
+      if (!kindOf(binding)) return;
+      let val = sender.getCellData(e.row, e.col, false) as WijmoPrimitive;
       const oldVal = (e.data ?? null) as WijmoPrimitive;
       if ((oldVal === undefined || oldVal === null) && (val === undefined || val === null || val === ''))
         return;
       const tracker = editTrackerRef.current;
       if (!tracker) return;
       const measure = dataItem['MEASURE'];
+      // #14 — Daily 버킷 D_ 직접 입력 시 FCST 3종은 정수 절삭 (AS-IS :6094~6103).
+      if (
+        binding.startsWith('D_') &&
+        (measure === 'MKT_FCST' || measure === 'SCM_FCST' || measure === 'VMI_In_Req')
+      ) {
+        const truncated = Math.trunc(toNumber(val));
+        if (truncated !== toNumber(val)) {
+          val = truncated;
+          sender.setCellData(e.row, e.col, truncated);
+        }
+      }
       // 배분 대상 = MKT_FCST/SCM_FCST 만 (AS-IS L498 실측). LOC=일괄할당. VMI_In_Req=단일 셀(배분 없음).
       if (measure === 'MKT_FCST' || measure === 'SCM_FCST') {
         if (binding.startsWith('M_'))
-          divideByMonth(binding, dataItem, val, monthMap.current, weekMap.current, tracker);
+          divideByMonth(
+            binding,
+            dataItem,
+            val,
+            monthMap.current,
+            weekMap.current,
+            calendarMapRef.current,
+            tracker
+          );
         else if (binding.startsWith('W_'))
           divideByWeek(binding, dataItem, val, oldVal, weekMap.current, tracker);
         else if (binding.startsWith('D_')) divideByDate(binding, dataItem, val, oldVal, tracker);
@@ -316,13 +473,22 @@ export const ForecastPriceGrid = ({
           'wj-cell-non-editable',
           isNonEditableDateColumn(binding, weekMap.current)
         );
-        // 숫자 표시 — 0/null 은 빈칸 (AS-IS 표시 규칙)
+        // #12 당주 녹색 보더 (AS-IS Green BevelBorder :1970~2017) — 활성 버킷 당월/당주/금주월요일 컬럼.
+        e.cell.style.boxShadow = currentPeriodRef.current.has(binding)
+          ? 'inset 2px 0 0 0 #2e7d32'
+          : '';
+        // #11 숫자 표시 — NOTATION(POINT3/LOC)=소수3자리 / INTEGER=정수. 0/null 은 빈칸 (AS-IS :1853~1924).
         if (!sender.editRange?.contains(e.row, e.col)) {
           const v = dataItem[binding];
-          e.cell.innerText =
-            v === undefined || v === null || v === 0 || v === ''
-              ? ''
-              : toNumber(v as WijmoPrimitive).toLocaleString();
+          if (v === undefined || v === null || v === 0 || v === '') {
+            e.cell.innerText = '';
+          } else {
+            const isPoint3 = dataItem['NOTATION'] === 'POINT3' || dataItem['MEASURE'] === 'LOC';
+            e.cell.innerText = toNumber(v as WijmoPrimitive).toLocaleString(undefined, {
+              minimumFractionDigits: isPoint3 ? 3 : 0,
+              maximumFractionDigits: isPoint3 ? 3 : 0,
+            });
+          }
         }
         return;
       }
@@ -356,7 +522,15 @@ export const ForecastPriceGrid = ({
             const measure = dataItem['MEASURE'];
             if (measure === 'MKT_FCST' || measure === 'SCM_FCST') {
               if (binding.startsWith('M_'))
-                divideByMonth(binding, dataItem, 0, monthMap.current, weekMap.current, tracker);
+                divideByMonth(
+                  binding,
+                  dataItem,
+                  0,
+                  monthMap.current,
+                  weekMap.current,
+                  calendarMapRef.current,
+                  tracker
+                );
               else if (binding.startsWith('W_'))
                 divideByWeek(binding, dataItem, 0, oldValue, weekMap.current, tracker);
               else if (binding.startsWith('D_'))

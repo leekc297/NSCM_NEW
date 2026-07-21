@@ -121,7 +121,7 @@
 | SUM헤더 (#1~5) | 5 | `MktFcstGrid.tsx` mainDynamicColumns (2단 nested 'SUM' 그룹) | ✅ |
 | 행잠금: 좌측 상세컬럼 read-only (#8~27, #34~70) | ~57 | 컬럼 메타 `_inputEditType='S'` + beginningEdit(non-insert cancel) | ✅ |
 | 행잠금: bucket×past 셀 잠금 (#28~33, #71~87) | ~23 | `editLock.ts` evalDynCell (Daily/Weekly/Monthly + Div40 8주) | ✅ |
-| 행잠금: AS_FROM_SITE 조건부 (#90~95, #128~130) | 9 | `MktFcstGrid.tsx` pastedCell(부분) — **잠금 자체 미구현** | ⚠️ gap |
+| 행잠금: AS_FROM_SITE 조건부 (#90~95, #128~130) | 9 | `MktFcstGrid.tsx` beginningEdit — W/S Planner + FCST_TYPE∈W/S 4종(FcstTypeWs)일 때만 편집 허용, 그 외 cancel (2026-07-20 E20260402 반영과 함께 해소) | ✅ |
 | 합계변수: iWeeklySum/iMonthlySum (#96~127, 일↔주↔월) | 32 | `recalc.ts` recalcDailyToWeekMonth / recalcWeeklyToDaily / recalcMonthlyToDaily | ✅ |
 
 ### 2.2 합계변수 32건 → recalc.ts 1:1 (핵심)
@@ -139,7 +139,7 @@
 
 > 2a~2d(editLock/recalc) 대조 결과 **합계 32 + bucket 잠금 23 + SUM헤더 5 + 좌측 read-only 57 = 117 은 이미 반영**.
 > **잔여 13 중**:
-> - **AS_FROM_SITE 조건부 잠금 9건(#90~95, #128~130)**: AS-IS 는 AS 콤보 선택/붙여넣기 시 AS_FROM_SITE 셀 잠금. To-Be 는 `pastedCell` 핸들러로 콤보 재설정만 처리하고 **AS_FROM_SITE 컬럼 자체의 동적 잠금은 미구현** — AS_FROM_SITE 컬럼은 SP 동적 컬럼(LOAD type 자동추가)로 컬럼 메타·BE 의존이라 별도. 사유: 컬럼 메타(`_inputEditType`)+AS 체크 상태 연동 = Phase 후속(BE AS_FROM_SITE 컬럼 적재 후).
+> - **AS_FROM_SITE 조건부 잠금 9건(#90~95, #128~130)**: ✅ **2026-07-20 해소** — `MktFcstGrid.tsx` beginningEdit 에 AS_FROM_SITE 분기 신설: W/S Planner(store wsPlannerYn) 이고 행 FCST_TYPE 이 W/S 4종(CMBO 'FcstTypeWs'=SALES_TYPE_CODE2)일 때만 편집, 그 외 cancel. 컬럼 자체는 GET_SPREAD_TITLE p_type='LOAD'(첫 진입/Division 변경) 분기가 자동추가(E20260402 — standalone SP 기구현 실측).
 > - **InsertRow 상세컬럼 잠금 일부(#46~67 의 CUST_GROUP/APPLICATION/ROUTE 등)**: To-Be 컬럼 메타에 미정의(동적 staticColumns 미적재) → admin SCM_MST_SHEET_COLUMNS 적재 시 `_inputEditType='S'` 로 자동 잠금. fallback MAIN_COLUMNS 에는 핵심 10 컬럼만 → 나머지는 메타 적재 의존(은폐 아님, 메타 주도).
 
 ---
@@ -291,3 +291,33 @@ AS-IS `Freeze(0, MEASURE 인덱스+1)` (좌측 식별 컬럼 블록 하드코드
 (관리 속성 "속성 단위" 하드코딩 금지, DMF0048 FIX 사고 후속 일괄 조치).
 사내 메타 실측: DMF0003 'Mkt Fcst' 67행 전행 FIXED_FLAG 공란 = 현재 고정 0.
 고정이 필요하면 admin SYS0004 에서 FIXED_FLAG='Y' 등록 (화면 수정 불요).
+
+---
+
+## §7. AS-IS 최신 반영분 (2026-07-20 — 이관 baseline 이후 결재 2건, UI분석서 v2.2 시트10 계보)
+
+> 원천: GSCM_20260512 ↔ GSCM diff 265줄 정독(.cs 6,944→7,143) + 사내 DB 실측. 상세 = work_reports/2026-07-20_DMF0003_asis_latest_reflect.md
+
+### [E20260402-001736] AS 관련 기능 개선 (2026-04-27)
+
+| # | AS-IS (.cs 최신 라인) | To-Be | 상태 |
+|---:|---|---|:--:|
+| 1 | Measure 편집 제한 — 비W/S: Form_Load(L313~329) MKT_FCST_RP 화이트리스트 / InsertRow(L2675~2691) AS_In_Req 제거 / ComboSelChange(L3465~3497) AS사이트=AS_In_Req만·고객향=MKT_FCST_RP만 | `MktFcstGrid.tsx` beginningEdit MEASURE 후보 필터(사이트 확정=단일 measure / 미정+비W/S 81*/82=AS_In_Req 제거) | ✅ |
+| 2 | InitSpread(sType) 5곳 — CreateSpread·Division변경='LOAD' / 조회·컬럼/메저팝업='' (L615~5777) + GET_SPREAD_TITLE p_user_group·p_type (L6336~6355) | `useMktFcstStore` spreadTitleLoadPending → filters type 'LOAD'/'COLUMN' (SP·PROC_M 은 기구현 실측 — standalone 6 IN VALID) | ✅ |
+| 3 | AS FROM SITE 필수 — MSG00113(EditButton L876~888, DM Planner/W-S/DM ADMIN+81*/82 컬럼부재) / MSG00476(SaveData L2300~2329, W/S+고객향+FcstType W/S 4종+빈값) | `MktFcst.tsx` guardEditGates(3) + handleSave MSG00476 검사(insertedRows) | ✅ |
+| 4 | FCST_TYPE 편집 콤보 분기(L2587~2605) — W/S=EDIT_MODE 6종 / 그 외 GetFcstType 12종 | `GRID_EDIT_COMBO.FCST_TYPE{wsOnly}` + CMBO 'FcstTypeEditMode'(SALES_TYPE_CODE2∪_ADD) | ✅ |
+| 5 | Sales Site 재로드 GetSalesSite (L2653~2656/L3103~3111) | 기존 콤보 레지스트리(division 반응형) 유사 반영 — cross-check 완료 | ✅ |
+| 6 | 공통 콤보 PARAM5 W/S 플래그 — GetSalesSite40(L7047~7066) 'Y'/'N' | 기존 'MktFcstWsPlannerYn' 계보 콤보가 W/S 반영 — 사이트40 콤보 파라미터는 콤보 SQL 위임 | △(콤보 SQL 확인 항목) |
+
+### [E20260604-000994] SCM FCST 기준수요 (2026-06-08)
+
+| # | AS-IS | To-Be | 상태 |
+|---:|---|---|:--:|
+| 7 | SCP Planner 차단 — Edit 82·40(L828~834) / Insert 81(L2531~2537) MSG00096 | `editable` 3단 AND(!scpEditBlocked) + handleInsert/handleSave MSG00096 | ✅ |
+| 8 | SCP 시간창(81) — LOOKUP SCP_PLANNER_EDIT_FLAG 행 0=차단 MSG00477 (L848~860) | guardEditGates(1) + CMBO 'Dmf0003ScpPlannerEditFlag' (⚠ lookup 데이터 0행 — 운영값 협의 대기, 0행=AS-IS 보수 동작 그대로 차단) | ✅(구조) |
+| 9 | DM류 시간창 — LOOKUP DM_PLANNER_EDIT_FLAG 행 존재=차단 MSG00478 5파라미터 (L862~874, ⚠ 괄호 원본결함: 81 제한이 DM ADMIN 에만 결합 — 원문 파리티 이식) | guardEditGates(2) + CMBO 'Dmf0003DmPlannerEditFlag' (^연결 5값. 데이터 0행=통과) | ✅(구조) |
+| 10 | SAVE p_authority 16번째 (L2421~2441) | SP P_AUTHORITY(DEFAULT NULL)+PROC_M authority 16+`buildSavePayload` authority — 사내 VALID 검증. ⚠ SP 내 저장 시간창 게이트 본문(AS-IS L597~686)은 MSSQL 원문 미확보로 후속(수신만) | ✅(부분) |
+
+### 그룹 판정 방식 (TO-BE 편차 — 명시)
+
+AS-IS `NowGroupID`(로그인 시 선택한 단일 그룹) ↔ TO-BE 는 그룹 선택 개념 부재 → CMBO 'MktFcstUserGroups'(USER_GR_MPG_M @sesUserId) **membership** 판정 + 대표 DM류 그룹 우선순위(W/S > DM Planner > DM ADMIN). 겸직 사용자는 게이트 중복 적용 가능 — 사내 실측(2026-07-20) SCP Planner 소속자 0명(신설 그룹, 배정 전)으로 현재 리스크 없음. 배정 시 협의 항목.
