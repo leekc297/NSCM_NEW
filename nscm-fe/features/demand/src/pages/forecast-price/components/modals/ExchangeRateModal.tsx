@@ -2,6 +2,7 @@ import {
   AllowMerging,
   CellRange,
   CellType,
+  DataMap,
   type FlexGrid as FlexGridType,
   type FormatItemEventArgs,
   type GridPanel,
@@ -16,9 +17,9 @@ import { CustomDialog, CustomDropdown, DataGrid, SearchArea } from '@shared/comp
 import { useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
 import { Button, FormItem, InputField } from '@shared/lges';
 import { Grid } from '@shared/mui';
-import { useMessageStore, useUIStore } from '@shared/stores';
+import { useMessageStore, useSessionStore, useUIStore } from '@shared/stores';
 
-import { EXCHANGE_RATE_COLUMNS, MENU_ID, SHEETS } from '../../forecast-price.constants';
+import { EXCHANGE_RATE_COLUMNS, MENU_ID, MSG, SHEETS } from '../../forecast-price.constants';
 
 import styles from './ExchangeRateModal.module.scss';
 
@@ -43,12 +44,20 @@ interface ExchangeRow {
   CURRENCY?: string;
   UNIT_CURRENCY?: string;
   EXCHANGE_PRICE?: number | string;
+  EDIT_YN?: string;
 }
 
 interface PivotRow {
   DIVISION_ID: string;
   CURRENCY: string;
   UNIT_CURRENCY: string;
+  // 사용자×메뉴×Division 편집권한 (SP SCM_ADM_USER_MNU_EDIT_AUTH_V JOIN — DMF0042 모달 동일 계보)
+  EDIT_YN: string;
+  // ⭐ wrapper 표준 행 편집 플래그 (foundation GridUtils.isEditableCell — 'N' = 행 잠금).
+  //   EDIT_YN 을 그대로 매핑해 wrapper 가 노란색(wj-cell-editable)+편집 허용을 자체 판정.
+  EDIT_FLAG: string;
+  // 'I' = Insert 신규 행 / '' = 기존 행 (AS-IS ActionTextBox FlagI/FlagM 대응 — CRUD_TYPE.INSERT)
+  CRUD_TYPE: string;
   [yyyymmKey: string]: string | number;
 }
 
@@ -57,11 +66,55 @@ interface PivotRow {
 //   (4 IN + 2 OUT cursor — AS-IS DMF0082_ForecastPrice.cs L3166. P1-7 DB 배선 SQL 등록 예정)
 //   long format → grid wide format / 동적 col binding = `M_yyyymm` (2-row header: YYYY / MM)
 //   좌측 fixed cols Restricted merge (Division / Currency)
+// ⭐ ADMIN 편집/저장 (2026-07-24 — AS-IS DMF0000_ExchangeRatePopup Edit/Insert/Save 1:1):
+//   게이트 = hasButton('EDIT') [ADMIN·DM ADMIN 만 매핑] × divisionId='40' × 행 EDIT_YN × 당월 이후.
+//   저장 = PKG_DMF0000.P_DMF0000_SAVE_EXCHANGE_POPUP_DATA '^' bulk 8키 → 성공 시 SP 내부에서
+//   Sales Price 재계산(PKG_DMF0020 CONVERSION) 후속 실행 → MSG00689 안내 + 재조회.
+//   Delete 기능 없음 (AS-IS 동일 — 사용자 확정 2026-07-24). 메타 배선 SQL =
+//   _artifacts/_apply_corporate/DMF0082_exchange_modal_save_wiring_20260724.sql (사내 적용 완료)
 export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPeriod }: Props) => {
   const { t } = useTranslation();
   const setAlert = useMessageStore.getState().setAlert;
   const gridRef = useRef<FlexGridType<PivotRow>>(undefined);
   const [divisionId, setDivisionId] = useState(defaultDivision);
+  const sesUserId = useSessionStore.getState().session.userId ?? '';
+
+  // ⭐ ADMIN 편집 게이트 (AS-IS DefineProperty L120~141 1:1, 2026-07-24) —
+  //   ① 그룹: futurePriceInfo 시트 EDIT/INSERT/SAVE 버튼이 ADMIN·DM ADMIN 그룹에만 매핑
+  //     (BPS I/F 'IF' 버튼 선례. 서버측은 CustomAuthorizationManager 가 시트단위 SAVE 권한 강제)
+  //   ② Division: AS-IS "40사업부만 수정이 가능하다" — divisionId='40' 에서만 편집 개방
+  //   셀 단위는 추가로 행 EDIT_YN('Y') × 당월 이후(ym >= curYm — AS-IS EditButton L271~280) 게이트.
+  const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
+  const canEdit = hasButton('EDIT') && divisionId === '40';
+
+  // 당월 기준 잠금 경계 (AS-IS this_YYYYMM = DateTime.Today "yyyyMM")
+  const curYm = useMemo(() => {
+    const d = new Date();
+    return `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}`;
+  }, []);
+
+  // Insert 신규 행 (AS-IS InsertRow L490~529 — DIVISION 고정 + Currency/Unit 콤보 편집)
+  const [insertedRows, setInsertedRows] = useState<PivotRow[]>([]);
+  // 편집 추적 — row 객체 → (ym → 값). 저장 성공/재조회/모달 재오픈 시 clear (DMF0042 모달 계보)
+  const editsRef = useRef<Map<PivotRow, Map<string, number>>>(new Map());
+  const [editCount, setEditCount] = useState(0);
+  const clearEdits = () => {
+    editsRef.current.clear();
+    setEditCount(0);
+    setInsertedRows([]);
+  };
+
+  // Currency 콤보 (AS-IS dtCurrency = Data.Common(CURRENCY_LIST) — 공유 CMBO 'CurrencyList' 소비만)
+  const [currencyRows] = useTabComboQueries({ filters: ['CurrencyList'] });
+  const currencyMap = useMemo(() => {
+    const arr = (currencyRows ?? []) as Array<{ CODE?: string; NAME?: string }>;
+    if (arr.length === 0) return null;
+    return new DataMap(
+      arr.map(r => ({ CODE: String(r.CODE ?? ''), NAME: String(r.NAME ?? r.CODE ?? '') })),
+      'CODE',
+      'NAME'
+    );
+  }, [currencyRows]);
 
   // Division dropdown — 권한 기반 MyDivision combo (grid 와 동일하게 Division_id + Division name 표기).
   const [myDivisions] = useTabComboQueries({ filters: ['MyDivision'] });
@@ -87,6 +140,9 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
       setDivisionId(defaultDivision);
       setPeriodFrom(defaultPeriod.start);
       setPeriodTo(defaultPeriod.end);
+      editsRef.current.clear();
+      setEditCount(0);
+      setInsertedRows([]);
     }
   }, [open, defaultDivision, defaultPeriod]);
 
@@ -112,7 +168,6 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
   // ⭐ BPS I/F (AS-IS DMF0000_ExchangeRatePopup.btnBPS_Click — ADMIN/DM ADMIN 만, hasButton('IF') 게이트).
   //   PR_SCM_MST_EXCHANGE_RATE_UI(batchYn='N') 래퍼 호출 → BPS 환율 인터페이스 갱신 → 성공/실패 알림 → 재조회.
   //   (공유 배치 proc PR_SCM_MST_EXCHANGE_RATE 는 미변경 — OUT 커서 보유 래퍼 신설로 배치 파손 회피.)
-  const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
   const setProgress = useUIStore.getState().setProgress;
   const [ifRunning, setIfRunning] = useState(false);
   const handleBpsIf = async () => {
@@ -173,7 +228,15 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
       ymSet.add(ym);
       const key = `${div}|${cur}|${uc}`;
       if (!groupMap.has(key)) {
-        groupMap.set(key, { DIVISION_ID: div, CURRENCY: cur, UNIT_CURRENCY: uc });
+        const editYn = String(r.EDIT_YN ?? 'N');
+        groupMap.set(key, {
+          DIVISION_ID: div,
+          CURRENCY: cur,
+          UNIT_CURRENCY: uc,
+          EDIT_YN: editYn,
+          EDIT_FLAG: editYn, // wrapper isEditableCell 표준 키 ('N' = 행 잠금)
+          CRUD_TYPE: '',
+        });
       }
       const row = groupMap.get(key)!;
       const price =
@@ -189,10 +252,15 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
     return { pivotRows: list, ymKeys: ymSorted };
   }, [filteredRows]);
 
+  // 조회 행 + Insert 신규 행 (AS-IS siMain.Insert() 행 추가 — 저장 성공/재조회 시 초기화)
+  const displayRows = useMemo(() => [...pivotRows, ...insertedRows], [pivotRows, insertedRows]);
+
   const fixedBindings = useMemo(() => EXCHANGE_RATE_COLUMNS.map(c => c.key), []);
 
   // ⭐ 성능(2026-07-08) — grid 컬럼 prop 참조 안정화. JSX inline .map 은 매 렌더 새 배열 →
   //   DataGrid(memo) 무력화 → (open=false mount 포함) 부모 리렌더마다 columnGroups 전체 재적용.
+  // ⭐ Currency/Unit = Insert 행에서만 편집 (AS-IS InsertRow 콤보 L502~503) — 표준 'IM'
+  //   (MANDATORY_INSERT_ONLY: CRUD_TYPE='I' 행만 wrapper 가 노란색+편집 개방). Division 은 항상 조회 전용.
   const gridStaticColumns = useMemo<RawFlexGridColumnConfig[]>(
     () =>
       EXCHANGE_RATE_COLUMNS.map(
@@ -204,10 +272,14 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
           fixed: true,
           visible: true,
           display: true,
-          inputTpCd: CELL_INPUT_EDIT_TYPE.SEARCH_ONLY,
+          inputTpCd:
+            canEdit && c.key !== 'DIVISION_ID'
+              ? CELL_INPUT_EDIT_TYPE.MANDATORY_INSERT_ONLY
+              : CELL_INPUT_EDIT_TYPE.SEARCH_ONLY,
+          uppercase: c.key !== 'DIVISION_ID', // AS-IS SaveData Trim().ToUpper() L386~387
         })
       ),
-    []
+    [canEdit]
   );
   // ⭐ 대상 년월 2단 헤더 (AS-IS 1:1, 2026-07-08 사용자 요구) — 1단 년도('2026') / 2단 월('07').
   //   구 방식(수동 Row push + formatItem 텍스트 치환 + 헤더 수평 머지)은 wrapper columnGroups
@@ -223,7 +295,12 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
         width: 90,
         align: 'right',
         format: 'n2',
-        isReadOnly: true,
+        // ⭐ 편집/노란색 = wrapper 표준 판정 (isEditableCell = 컬럼 _inputEditType × 행 EDIT_FLAG).
+        //   당월 이후만 OPTIONAL (AS-IS EditButton L271~280 — Division~당월전 Lock), 과거월/비편집 = S.
+        //   수동 wj-cell-editable 토글 금지 — wrapper formatEditableColumns 가 매 formatItem 재판정해
+        //   덮어씀 (2026-07-24 노란색 누락 원인).
+        _inputEditType:
+          canEdit && ym >= curYm ? CELL_INPUT_EDIT_TYPE.OPTIONAL : CELL_INPUT_EDIT_TYPE.SEARCH_ONLY,
         allowSorting: false,
         visible: true,
       });
@@ -233,7 +310,7 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
       align: 'center',
       columns: cols,
     }));
-  }, [ymKeys]);
+  }, [ymKeys, canEdit, curYm]);
 
   // ⭐ #70 — DataGrid `initialized` prop deprecated(wrapper 미호출) → useEffect + gridRef 로 이동.
   //   2단 column header(YYYY/MM) + 좌측 fixed 머지 + 동적 YYYY horizontal 머지 + Division/Currency cell 머지.
@@ -257,8 +334,52 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
         if (e.panel.getCellData(0, 0, false) !== 'No.') e.panel.setCellData(0, 0, 'No.');
         e.cell.style.textAlign = 'center';
       }
+      // 노란색(wj-cell-editable)은 wrapper formatEditableColumns 가 컬럼 _inputEditType ×
+      // 행 EDIT_FLAG/CRUD_TYPE 로 자체 판정 — 수동 토글 금지 (재판정에 덮어써 누락되는 사고).
     };
     g.formatItem.addHandler(formatHandler);
+
+    // ⭐ Insert 행 Currency/Unit = CURRENCY_LIST 콤보 (AS-IS InsertRow SetCellTypeCombo L502~503).
+    //   편집 허용/차단은 wrapper defaultEditHandler(isEditableCell)가 전담 — 여기서는 dataMap
+    //   스왑만 담당, cellEditEnded 에서 전체 원복 (hook #59 §5-G — 기존 행 명칭표시 오염 방지)
+    const beginningEditHandler = (
+      s: FlexGridType<PivotRow>,
+      e: { cancel: boolean; row: number; col: number }
+    ) => {
+      const binding = s.columns[e.col]?.binding ?? '';
+      if (binding !== 'CURRENCY' && binding !== 'UNIT_CURRENCY') return;
+      const item = s.rows[e.row]?.dataItem as PivotRow | undefined;
+      if (item?.CRUD_TYPE === 'I') {
+        const col = s.columns[e.col];
+        if (col && currencyMap) col.dataMap = currencyMap;
+      }
+    };
+    g.beginningEdit.addHandler(beginningEditHandler);
+
+    // 변경 수집 (AS-IS 빨간색 변경 셀만 저장 L391~417 대응) + Currency/Unit dataMap 원복·대문자 정규화
+    const cellEditEndedHandler = (s: FlexGridType<PivotRow>, e: { row: number; col: number }) => {
+      const binding = s.columns[e.col]?.binding ?? '';
+      const item = s.rows[e.row]?.dataItem as PivotRow | undefined;
+      if (!item) return;
+      if (binding === 'CURRENCY' || binding === 'UNIT_CURRENCY') {
+        const col = s.columns[e.col];
+        if (col) col.dataMap = undefined as never; // 전체 원복 — 기존 행 명칭표시 오염 방지
+        item[binding] = String(item[binding] ?? '')
+          .trim()
+          .toUpperCase(); // AS-IS SaveData Trim().ToUpper() L386~387
+        return;
+      }
+      if (!/^M_\d{6}$/.test(binding)) return;
+      const raw = String(item[binding] ?? '').replace(/,/g, '');
+      const value = raw === '' ? 0 : Number(raw); // AS-IS 빈값 → '0' (L401~402)
+      if (!Number.isFinite(value)) return;
+      const ym = binding.slice(2);
+      const ymMap = editsRef.current.get(item) ?? new Map<string, number>();
+      ymMap.set(ym, value);
+      editsRef.current.set(item, ymMap);
+      setEditCount([...editsRef.current.values()].reduce((n, m) => n + m.size, 0));
+    };
+    g.cellEditEnded.addHandler(cellEditEndedHandler);
 
     g.allowMerging = AllowMerging.All;
     for (let i = 0; i < g.columns.length; i++) g.columns[i].allowMerging = true;
@@ -324,11 +445,13 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
     return () => {
       try {
         g.formatItem?.removeHandler(formatHandler);
+        g.beginningEdit?.removeHandler(beginningEditHandler);
+        g.cellEditEnded?.removeHandler(cellEditEndedHandler);
       } catch {
         /* unmount race */
       }
     };
-  }, [open, pivotRows, ymKeys, fixedBindings]);
+  }, [open, displayRows, ymKeys, fixedBindings, canEdit, curYm, currencyMap]);
 
   // ⭐⭐ 헤더 총높이 48px 상시 정규화 (2단=24×2 — "2단 기준으로 줄여서", 사용자 요구 2026-07-08).
   //   1회 설정/updatedLayout 등록만으로는 부족 — CustomDialog open 애니메이션 중 wijmo 가 헤더를
@@ -388,7 +511,111 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
       void setAlert({ type: 'alert', content: t('MSG00108', '_시작 월이 종료 월보다 늦을 수 없습니다.') });
       return;
     }
+    clearEdits(); // AS-IS FindData = 재조회 시 편집 상태 초기화 (전체 Lock 복귀 L323)
     void refetch?.();
+  };
+
+  // ⭐ Insert (AS-IS InsertButton → InsertRow L490~529) — DIVISION 고정 + Currency/Unit 콤보 행 추가
+  const handleInsert = () => {
+    setInsertedRows(prev => [
+      ...prev,
+      {
+        DIVISION_ID: divisionId,
+        CURRENCY: '',
+        UNIT_CURRENCY: '',
+        EDIT_YN: 'Y',
+        EDIT_FLAG: 'Y',
+        CRUD_TYPE: 'I',
+      },
+    ]);
+  };
+
+  // ⭐ Save (AS-IS SaveButton → SaveData L284~488 1:1) — 변경 셀만 '^' bulk 전송.
+  //   SP = PKG_DMF0000.P_DMF0000_SAVE_EXCHANGE_POPUP_DATA (8 IN + O_RESULT_CURSOR — 기배포 본문 무수정).
+  //   '^' bulk = apiClient.post 직접 (useProcMutation array unfold 금지 — hook #99 계보).
+  //   감사 2키 = createdByBulk/lastUpdatedByBulk N-반복 (BE 가 'createdBy' 키를 세션 단일값으로
+  //   덮어쓰므로 별도 키명으로 등록 — PROC_M 배선 SQL 참조. AS-IS FE L414~415 반복 append 1:1).
+  const [saving, setSaving] = useState(false);
+  const handleSave = async () => {
+    if (saving) return;
+    // (1) Insert 행 필수값 (AS-IS L339~374 — Division/Currency/Unit 순 첫 결손 필드 알림)
+    for (const r of insertedRows) {
+      const missing = !r.DIVISION_ID
+        ? '[Division]'
+        : !r.CURRENCY
+          ? '[Currency]'
+          : !r.UNIT_CURRENCY
+            ? '[Unit]'
+            : '';
+      if (missing) {
+        void setAlert({
+          type: 'alert',
+          content: t(MSG.REQUIRED, '_{0} 값은 필수 입력 항목입니다.').replace('{0}', missing),
+        });
+        return;
+      }
+    }
+    // (2) 변경 셀 수집 — 행 단위 flag: Insert 행 'I' / 기존 행 'M' (AS-IS sActionFlag)
+    const entries: Array<{ row: PivotRow; ym: string; value: number }> = [];
+    for (const [row, ymMap] of editsRef.current) {
+      for (const [ym, value] of ymMap) entries.push({ row, ym, value });
+    }
+    if (entries.length === 0) {
+      void setAlert({ type: 'alert', content: t(MSG.NO_CHANGES, '_수정한 내용이 없습니다.') });
+      return;
+    }
+    // (3) Price 값 필수 — 전부 0/빈값이면 차단 (AS-IS L421~430 [EXCHANGE_PRICE])
+    if (entries.every(en => !en.value)) {
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.REQUIRED, '_{0} 값은 필수 입력 항목입니다.').replace('{0}', '[EXCHANGE_PRICE]'),
+      });
+      return;
+    }
+    setSaving(true);
+    setProgress(50); // SAVE SP 후속 Sales Price 재계산(CONVERSION) 포함 — 장기 실행 가능
+    try {
+      const join = (sel: (en: (typeof entries)[number]) => string): string =>
+        entries.map(sel).join('^');
+      const res = await apiClient.post<Record<string, unknown>>(
+        `/${MENU_ID}/futurePriceInfo/SAVE/call-proc`,
+        {
+          activeFlag: join(en => (en.row.CRUD_TYPE === 'I' ? 'I' : 'M')),
+          divisionId: join(en => en.row.DIVISION_ID),
+          yyyymmdd: join(en => `${en.ym}01`), // 사내 실측 — YYYYMMDD 전행 월 1일
+          currency: join(en => en.row.CURRENCY.trim().toUpperCase()),
+          unitCurrency: join(en => en.row.UNIT_CURRENCY.trim().toUpperCase()),
+          exchangePrice: join(en => String(en.value)),
+          createdByBulk: join(() => sesUserId),
+          lastUpdatedByBulk: join(() => sesUserId),
+        }
+      );
+      // 결과 = o_result_cursor[0] {CODE, MSG, EVENT} — CODE '0' 성공 / '-1' Validation (EVENT=사유)
+      const inner = (
+        res.data?.result as { o_result_cursor?: { CODE?: string; MSG?: string; EVENT?: string }[] }
+      )?.o_result_cursor?.[0];
+      const ok = res.status < 400 && !!inner && String(inner.CODE) === '0';
+      if (!ok) {
+        const reason = inner?.EVENT || inner?.MSG;
+        void setAlert({
+          type: 'alert',
+          content: reason || t(MSG.SAVE_ERROR, '_저장 중 오류가 발생했습니다.'),
+        });
+        return;
+      }
+      // AS-IS MSG00456 "Sales Price Recalculation is complete." → 재조회 (L478~480)
+      await setAlert({
+        type: 'alert',
+        content: t(MSG.PRICE_RECALC_DONE, '_Sales Price Recalculation is complete.'),
+      });
+      clearEdits();
+      void refetch?.();
+    } catch {
+      void setAlert({ type: 'alert', content: t(MSG.SAVE_ERROR, '_저장 중 오류가 발생했습니다.') });
+    } finally {
+      setProgress(100);
+      setSaving(false);
+    }
   };
 
   return (
@@ -455,7 +682,7 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
             <DataGrid<PivotRow>
               gridRef={gridRef}
               className={styles.grid}
-              itemsSource={pivotRows}
+              itemsSource={displayRows}
               staticColumns={gridStaticColumns}
               dynamicColumns={gridDynamicColumns}
               autoGenerateColumns={false}
@@ -476,6 +703,26 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
                 buttonLabel='BPS I/F'
                 disabled={ifRunning}
                 onClick={() => void handleBpsIf()}
+              />
+            )}
+            {/* AS-IS DefineProperty — ADMIN/DM ADMIN × Division 40 에서만 Insert/Save 노출 */}
+            {canEdit && hasButton('INSERT') && (
+              <Button
+                appearance='outlined'
+                priority='normal'
+                size='medium'
+                buttonLabel='Insert'
+                onClick={handleInsert}
+              />
+            )}
+            {canEdit && (
+              <Button
+                appearance='contained'
+                priority='primary'
+                size='medium'
+                buttonLabel={editCount > 0 ? `Save (${editCount})` : 'Save'}
+                disabled={saving}
+                onClick={() => void handleSave()}
               />
             )}
             <Button

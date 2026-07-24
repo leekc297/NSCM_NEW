@@ -99,6 +99,11 @@ export const MSG = {
   PERIOD_MONDAY: 'MSG00330', // 기간을 다시 선택하여 주십시오.(월요일) — AS-IS ID 승계 (P2 SQL 등록)
   PAST_PERIOD: 'MSG00409', // 과거 구간은 일괄입력이 불가합니다. — AS-IS ID 승계 (P2 SQL 등록)
   SAVED_COUNT: 'MSG00672', // [신규 채번] {0}개의 데이터가 저장되었습니다. (AS-IS MSG00004)
+  // ── ExchangeRateModal ADMIN 편집/저장 (AS-IS DMF0000_ExchangeRatePopup SaveData 2026-07-24) ──
+  //   AS-IS MSG00456 원문 1:1 — 사내 부재 → MSG00689 신규 채번 (max=MSG00688+1,
+  //   등록 SQL = _artifacts/_apply_corporate/DMF0082_exchange_modal_save_wiring_20260724.sql)
+  PRICE_RECALC_DONE: 'MSG00689', // Sales Price Recalculation is complete. (AS-IS MSG00456)
+  SAVE_ERROR: 'MSG00618', // 저장 중 오류가 발생했습니다. (SP 원문 메시지 부재 시 fallback — DMF0042 선례)
 } as const;
 
 /** ExchangeRateModal 좌측 고정 컬럼 메타 (DMF0020 EXCHANGE_RATE_COLUMNS 표준 1:1 — hook #96 단일문자 정렬코드). */

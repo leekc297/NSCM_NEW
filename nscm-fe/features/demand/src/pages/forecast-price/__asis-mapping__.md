@@ -45,6 +45,7 @@
 | SCM0001_GET_BIZ_TYPE_BY_DIVISION | BizType CMBO (카탈로그 내장) | ✅ |
 | PR_GET_DAY_RANGE | PeriodField 클라 계산 대체 | ✅ |
 | DMF0082_POPUP_GET_FUTUREPRICE_INFO | ExchangeRateModal + PROC_M/API/BTN 신규 배선 | ✅ 적용 |
+| **DMF0000_SAVE_EXCHANGE_POPUP_DATA** (8 IN '^' — AS-IS DMF0000_ExchangeRatePopup SaveData L440) | **PKG_DMF0000.P_DMF0000_SAVE_EXCHANGE_POPUP_DATA** (기배포 본문 무수정) + futurePriceInfo SAVE 배선 (`DMF0082_exchange_modal_save_wiring_20260724.sql` — API_M/PROC_M 9행/BTN SAVE·EDIT·INSERT×ADMIN·DM ADMIN/MSG00689). ⚠ PROC_M 감사 2키 = `createdByBulk`/`lastUpdatedByBulk` (BE 가 `createdBy` 키를 세션 단일값으로 덮어써 '^' N-토큰 파싱 SP 와 계약 충돌 → 별도 키명. AS-IS FE L414~415 반복 append 1:1) | ✅ 적용 (2026-07-24) |
 | UP_FX_GetCommonDataList_DM (6곳) | CMBO 등록명 (BucketType 등) | ✅ |
 | DMF0003_GET_BUCKET_TYPE_CODE | BucketType CMBO | ✅ |
 | DMF0003_GET_MKT_FCST_COMPARE_POPUP | ⏳ SSP 비교 팝업 — 잔여 (아래 §7) | ⏳ |
