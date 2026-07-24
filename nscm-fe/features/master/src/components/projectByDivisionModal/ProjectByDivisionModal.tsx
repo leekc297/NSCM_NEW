@@ -148,7 +148,9 @@ export const ProjectByDivisionModal = ({
       endCustomer: preSearchParams.endCustomer ?? 'ALL',
       salesSite: preSearchParams.salesSite ?? 'ALL',
       projectCode: '',
-      etc: 'N',
+      // ⭐ 2026-07-22 DMF0049 — etc 파라미터 하위호환 확장 (미전달 = 'N' 기존 동작.
+      //   AS-IS SCM0002_ProjectbyDivisionPopupEx ETC=true [PJ20200138] 대응 — BE COM0005 etc IN 기등록 실측).
+      etc: (preSearchParams as { etc?: string }).etc ?? 'N',
     });
     // 'ALL' sentinel(=projectCode 미선택, orAll 기본값)은 client-side 필터 대상이 아니므로 빈값 처리.
     //   (그대로 두면 PROJECT_CODE/NAME.includes('all') 로 0건 → div 81 등에서 데이터 미표시 버그)

@@ -5,7 +5,7 @@
     <resultMap id="menuResultMap" type="java.util.HashMap" />
 
     <select id="retrieveMenus" statementType="CALLABLE">
-		{ CALL SCM_MGR.PKG_NSCM_UI_COM_MENU.PR_GET_MENU_LIST(
+		{ CALL SCM_MGR.PR_GET_MENU_LIST_V2(
 			#{userId},
 			#{DATARESULT, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=menuResultMap}
 		) }

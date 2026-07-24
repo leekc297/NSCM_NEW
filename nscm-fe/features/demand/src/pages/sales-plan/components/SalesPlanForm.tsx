@@ -63,7 +63,9 @@ export const SalesPlanForm = ({
       filters: [
         'EndCustomer',
         'EndCustomerByDivision40',
-        'BizTypeByDivision',
+        // ⭐ 2026-07-23 AS-IS 정합(사용자 승인) — BIZ_TYPE_BPMS lookup(12종 고정) →
+        //   AS-IS SCM0001_GET_BIZ_TYPE_BY_DIVISION 1:1 (SCM_MST_PROJECT division별 distinct, @divisionId 바인드).
+        { comboId: 'BizTypeByDivision', divisionId: q(sc.divisionId) },
         'DmBizType',
         'ItemType',
         'BucketType',
@@ -151,6 +153,10 @@ export const SalesPlanForm = ({
             value={sc.deptIds}
             onChange={v => set({ deptIds: v, endCustomers: [], scmSiteIds: [] })}
             division={sc.divisionId}
+            // ⭐ 2026-07-23 조회조건 AS-IS 정합 — Team 소스를 AS-IS BigFilter 1:1 등록본
+            //   'UserTeamByDivision'(SITE_ITEM.OWNER 1번 토큰 사용자의 부서)으로 전환.
+            //   공유 'TeambyDivision'(DEPT_ID 직접)과 차집합 35/64 실측 (hook #117).
+            comboId='UserTeamByDivision'
           />
           <Grid size={3}>
             {/* ⭐ End Customer — 40 = 'EndCustomerByDivision40' 원천 스왑 (AS-IS InitControls L452 /
@@ -181,6 +187,11 @@ export const SalesPlanForm = ({
             value={sc.scmSiteIds}
             onChange={v => set({ scmSiteIds: v })}
             division={sc.divisionId}
+            // ⭐ 2026-07-23 AS-IS 정합(사용자 승인) — 'UserSiteByEndCustomer' 서버 바인드 전환:
+            //   EndCustomer/Team cascade + 40 owner-team 필터 + OPERATION_GROUP 'W' 제외 (hook #117).
+            comboId='UserSiteByEndCustomer'
+            endCustomer={sc.endCustomers.join(',')}
+            deptId={sc.deptIds.join(',')}
           />
 
           {/* Row 2 — Plant Site(40 비활성) / Biz Type(40 원천 스왑) / Period* / Bucket*(기본 Monthly) */}

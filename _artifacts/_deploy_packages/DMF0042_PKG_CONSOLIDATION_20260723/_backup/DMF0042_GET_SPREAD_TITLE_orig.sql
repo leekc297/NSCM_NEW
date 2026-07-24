@@ -1,0 +1,472 @@
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "SCM_MGR"."DMF0042_GET_SPREAD_TITLE" 
+(
+    p_start_yyyymmdd	VARCHAR2,
+    p_end_yyyymmdd		VARCHAR2,
+	p_created_by			VARCHAR2,
+	p_division_id			VARCHAR2
+    , p_user_id VARCHAR2
+    , p_menu_id VARCHAR2
+    , O_RC1  OUT  SYS_REFCURSOR
+    , O_RESULT_CURSOR OUT SYS_REFCURSOR
+)
+/*
+ * Program ID   : DMF0042_GET_SPREAD_TITLE
+ * Description  :
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2019/04/09	JYE			DMF0042_GET_SPREAD_TITLE
+ * 2020/04/07	P.C.I   	PJ20200138 전지 공급 대응력 향상을 위한 RTF 적확도 개선 - Division 추가
+ * 2020/08/06	hwi1993		item_use 가 안나와서 세팅 변경함
+ * 2020/10/15	hwi1993		C20201008-000332 bp 컬럼 정렬순서
+ * 2022/04/11	rosia27		과제PJ20216891RGM_JV
+ * 2026/03/15	김준규		[PJ20264226] NextSCM Pilot 설계 및 개발
+ */
+AS
+
+/*
+ * ========================================
+ * [변환검증] 2026-03-13 07:40:14
+ * 파일: dbo.DMF0042_GET_SPREAD_TITLE.sql
+ * ----------------------------------------
+ * ⚠ IF: IF:1  END IF:0  차이:+1
+ * ----------------------------------------
+ * IF 위치:     L50
+ * END IF 위치:
+ * BEGIN 위치:  L29
+ * END;  위치:  L411
+ * ----------------------------------------
+ * 수정 완료 후 이 주석 블록을 삭제하세요.
+ * ========================================
+ */
+
+
+    v_user_col_cnt INTEGER;
+    v_program_id VARCHAR2(4000 CHAR);
+    v_sheet_name VARCHAR2(4000 CHAR);
+    v_in_para_data VARCHAR2(4000);
+    V_LOG_TYPE    VARCHAR2(20) := NULL;
+    N_LOG_COUNT   NUMBER := 0;
+    V_LOG_MESSAGE VARCHAR2(4000 CHAR) := NULL;
+    V_DESCRIPTION VARCHAR2(4000 CHAR) := NULL;
+    D_EVENT_DATE  DATE := SYSDATE;
+    V_PROC_INPUT  CLOB := NULL;
+    V_SQL_CODE    VARCHAR2(100) := NULL;
+    V_SQL_ERRMSG  VARCHAR2(4000 CHAR) := NULL;
+    V_BACKTRACE   VARCHAR2(4000 CHAR) := NULL;
+    v_program_name VARCHAR2(150 CHAR) := $$PLSQL_UNIT;
+BEGIN
+
+    v_in_para_data := JSON_OBJECT(
+            'p_start_yyyymmdd' VALUE p_start_yyyymmdd,
+            'p_end_yyyymmdd' VALUE p_end_yyyymmdd,
+            'p_created_by' VALUE p_created_by,
+            'p_division_id' VALUE p_division_id
+          );
+
+	v_program_id := 'DMF0042';
+	v_sheet_name := 'Biz Plan';
+	v_user_col_cnt := 0;
+
+	SELECT COUNT(*)
+  INTO v_user_col_cnt
+	FROM   SCM_MST_TITLESET_USER U
+	WHERE  1 = 1
+	AND    U.PROGRAM_ID = v_program_id
+    AND    U.SHEET_NAME = v_sheet_name
+    AND    U.USER_ID    = p_created_by;
+
+	IF v_user_col_cnt > 0 THEN
+		OPEN O_RC1 FOR
+		SELECT C.PROGRAM_ID
+				, C.SHEET_NAME
+				, C.COLUMN_NAME
+				, CASE WHEN P_DIVISION_ID LIKE '81%'
+							THEN (CASE WHEN C.ATTRIBUTE4 = 'Y' THEN REPLACE(C.COLUMN_LABEL_NAME,'*','')  ||  '*'
+									   ELSE REPLACE(C.COLUMN_LABEL_NAME,'*','')
+								   END)
+					   WHEN P_DIVISION_ID = '82'
+							THEN (CASE WHEN C.ATTRIBUTE5 = 'Y' THEN REPLACE(C.COLUMN_LABEL_NAME,'*','')  ||  '*'
+									   ELSE REPLACE(C.COLUMN_LABEL_NAME,'*','')
+								   END)
+					   ELSE C.COLUMN_LABEL_NAME END		 AS COLUMN_LABEL_NAME --PJ20200138 Division별 필수 컬럼 기준 적용
+				--, C.SORT_ORDER_NO        --TO_CHAR(U.SORT_ORDER_NO) SORT_ORDER_NO
+				, CASE WHEN REGEXP_LIKE(U.SORT_ORDER_NO, '^\d+$') THEN TO_CHAR(U.SORT_ORDER_NO)
+						WHEN P_DIVISION_ID = '40' THEN TO_CHAR(C.SORT_ORDER_NO)
+					   WHEN P_DIVISION_ID LIKE '81%' THEN C.ATTRIBUTE2
+					   WHEN P_DIVISION_ID = '82' THEN C.ATTRIBUTE3
+					   END AS SORT_ORDER_NO --PJ20200138 Division별 정렬 기준 적용
+				, C.DATA_SORT_METHOD_CODE
+				, C.SMALL_CLASS_LABEL_NAME
+				, C.LARGE_CLASS_LABEL_NAME
+				, '' AS DAY_CODE
+				, C.FIXED_FLAG
+				, TO_CHAR(C.COLUMN_WIDTH) COLUMN_WIDTH
+				, C.CELL_CONTROL_OBJECT_TYPE_CODE
+				, C.CELL_COMBO_DATA_TYPE
+				, TO_CHAR(C.DATA_SCALE_NUMBER) DATA_SCALE_NUMBER
+				, TO_CHAR(C.DATA_MAX_LENGTH) DATA_MAX_LENGTH
+				, C.HORIZONTAL_ALIGN_CODE
+				, C.UPPERCASE_APPLY_FLAG
+				, C.VISIBLE_FLAG
+				, C.DEFAULT_FLAG
+				, C.USER_SELECTABLE_FLAG
+				, C.VALID_YN
+				, C.DIVISION_ID
+				, p_division_id ATTRIBUTE1		-- PJ20200138 COMMONDATALIST 에서 사용하도록 DIVISION 을 넣어준다.
+				, CASE WHEN CELL_COMBO_DATA_TYPE = 'DM_LOOKUP_DIV' THEN C.ATTRIBUTE1 ELSE '' END AS ATTRIBUTE2
+				, '' as ATTRIBUTE3
+				, C.ATTRIBUTE4
+				, C.ATTRIBUTE5
+				, tei.EDIT_YN
+		FROM   SCM_MST_TITLESET_USER U
+				, SCM_MST_SHEET_COLUMNS C
+		INNER JOIN TABLE(PKG_SCM_USER_MNU.PR_SCM_EDIT_YN(p_user_id, p_menu_id)) tei
+		   ON tei.UNIT_ID = C.DIVISION_ID
+		WHERE  1 = 1
+		AND    U.PROGRAM_ID  = C.PROGRAM_ID
+		AND    U.SHEET_NAME  = C.SHEET_NAME
+		AND    U.COLUMN_NAME = C.COLUMN_NAME
+		AND    U.PROGRAM_ID  = v_program_id
+		AND    U.SHEET_NAME  = v_sheet_name
+		AND    U.USER_ID     = p_created_by
+		AND    U.USER_INQUIRY_COLUMN_TYPE_CODE = 'C'
+		AND	 p_division_id IN (SELECT token FROM TABLE(fn_string_split(C.DIVISION_ID ,',')) )		-- 20180620 division 추가
+		UNION ALL
+		SELECT C.PROGRAM_ID
+				, C.SHEET_NAME
+				, C.COLUMN_NAME
+				, CASE WHEN P_DIVISION_ID LIKE '81%'
+							THEN (CASE WHEN C.ATTRIBUTE4 = 'Y' THEN REPLACE(C.COLUMN_LABEL_NAME,'*','')  ||  '*'
+									   ELSE REPLACE(C.COLUMN_LABEL_NAME,'*','')
+								   END)
+					   WHEN P_DIVISION_ID = '82'
+							THEN (CASE WHEN C.ATTRIBUTE5 = 'Y' THEN REPLACE(C.COLUMN_LABEL_NAME,'*','')  ||  '*'
+									   ELSE REPLACE(C.COLUMN_LABEL_NAME,'*','')
+								   END)
+					   ELSE C.COLUMN_LABEL_NAME END		 AS COLUMN_LABEL_NAME --PJ20200138 Division별 필수 컬럼 기준 적용
+				--, C.SORT_ORDER_NO        --TO_CHAR(U.SORT_ORDER_NO) SORT_ORDER_NO
+				, CASE WHEN P_DIVISION_ID = '40' THEN TO_CHAR(C.SORT_ORDER_NO)
+					   WHEN P_DIVISION_ID LIKE '81%' THEN C.ATTRIBUTE2
+					   WHEN P_DIVISION_ID = '82' THEN C.ATTRIBUTE3
+					   END AS SORT_ORDER_NO -- PJ20200138 Division별 정렬 기준 적용
+				, C.DATA_SORT_METHOD_CODE
+				, C.SMALL_CLASS_LABEL_NAME
+				, C.LARGE_CLASS_LABEL_NAME
+				, '' AS DAY_CODE
+				, C.FIXED_FLAG
+				, TO_CHAR(C.COLUMN_WIDTH) COLUMN_WIDTH
+				, C.CELL_CONTROL_OBJECT_TYPE_CODE
+				, C.CELL_COMBO_DATA_TYPE
+				, TO_CHAR(C.DATA_SCALE_NUMBER) DATA_SCALE_NUMBER
+				, TO_CHAR(C.DATA_MAX_LENGTH) DATA_MAX_LENGTH
+				, C.HORIZONTAL_ALIGN_CODE
+				, C.UPPERCASE_APPLY_FLAG
+				, C.VISIBLE_FLAG
+				, C.DEFAULT_FLAG
+				, C.USER_SELECTABLE_FLAG
+				, C.VALID_YN
+				, C.DIVISION_ID
+				, p_division_id ATTRIBUTE1		-- PJ20200138 COMMONDATALIST 에서 사용하도록 DIVISION 을 넣어준다.
+				, C.ATTRIBUTE2
+				, C.ATTRIBUTE3
+				, C.ATTRIBUTE4
+				, C.ATTRIBUTE5
+				, 'N' AS EDIT_YN
+		FROM   SCM_MST_SHEET_COLUMNS C
+		WHERE  1 = 1
+		AND    C.PROGRAM_ID  = v_program_id
+		AND    C.SHEET_NAME  = v_sheet_name
+		AND    C.VISIBLE_FLAG = 'N'
+		AND    C.DEFAULT_FLAG IS NULL
+		AND    C.VALID_YN     = 'Y'
+		AND	 p_division_id IN (SELECT token FROM TABLE(fn_string_split(C.DIVISION_ID ,',')) )		-- 20180620 division 추가
+
+		UNION ALL
+
+		SELECT v_program_id   AS PROGRAM_ID
+				, v_sheet_name SHEET_NAME
+				, T.COLUMN_NAME
+				, T.COLUMN_LABEL_NAME
+				, T.SORT_ORDER_NO
+				, CAST(NULL AS VARCHAR2(1))         AS DATA_SORT_METHOD_CODE
+				, T.SMALL_CLASS_LABEL_NAME
+				, T.LARGE_CLASS_LABEL_NAME
+				, CAST(NULL AS VARCHAR2(1)) AS DAY_CODE
+				, CAST(NULL AS VARCHAR2(1))         AS FIXED_FLAG
+				, TO_CHAR(50) COLUMN_WIDTH
+				, 'FPNumber' AS CELL_CONTROL_OBJECT_TYPE_CODE
+				, CAST(NULL AS VARCHAR2(1))         AS CELL_COMBO_DATA_TYPE
+				, '3'        AS DATA_SCALE_NUMBER
+				, CAST(NULL AS VARCHAR2(1))         AS DATA_MAX_LENGTH
+				, 'R'        AS HORIZONTAL_ALIGN_CODE
+				, 'Y'        AS UPPERCASE_APPLY_FLAG
+				, 'Y'        AS VISIBLE_FLAG
+				, ''         AS DEFAULT_FLAG
+				, ''         AS USER_SELECTABLE_FLAG
+				, ''         AS VALID_YN
+				, ''		 AS DIVISION_ID
+				, '' AS ATTRIBUTE1 -- PJ20200138
+				, '' AS ATTRIBUTE2
+				, '' AS ATTRIBUTE3
+				, '' AS ATTRIBUTE4
+				, '' AS ATTRIBUTE5
+				, 'N' AS EDIT_YN
+		FROM  (
+			SELECT * FROM (
+				-- Monthly
+				SELECT
+						'M_'  ||  A.BASIS_YYYYMM  AS COLUMN_NAME
+						, A.MONTH_NAME COLUMN_LABEL_NAME
+						, 'Q'  ||  TO_CHAR(TO_NUMBER(TO_CHAR(TO_DATE(A.BASIS_YYYYMM  ||  '01', 'YYYYMMDD'), 'Q'))) SMALL_CLASS_LABEL_NAME
+						, A.CALENDAR_YYYY LARGE_CLASS_LABEL_NAME
+						, BASIS_YYYYMM  ||  '01' AS SORT_ORDER_NO
+				FROM    SCM_SYS_CALENDAR_M A
+				WHERE  A.BASIS_YYYYMMDD >= p_start_yyyymmdd
+				AND    A.BASIS_YYYYMMDD <= p_end_yyyymmdd
+				GROUP BY
+						CALENDAR_YYYY
+						, A.BASIS_YYYYMM
+						, A.MONTH_NAME
+				UNION ALL
+				-- Quarterly
+				SELECT DISTINCT
+					'Q_'  ||  CALENDAR_YYYY  ||  '_'  ||  TO_CHAR(TO_NUMBER(TO_CHAR(TO_DATE(A.BASIS_YYYYMM  ||  '01', 'YYYYMMDD'), 'Q'))) COLUMN_NAME
+					, 'Q'  ||  TO_CHAR(TO_NUMBER(TO_CHAR(TO_DATE(A.BASIS_YYYYMM  ||  '01', 'YYYYMMDD'), 'Q'))) COLUMN_LABEL_NAME
+					, 'Q'  ||  TO_CHAR(TO_NUMBER(TO_CHAR(TO_DATE(A.BASIS_YYYYMM  ||  '01', 'YYYYMMDD'), 'Q'))) SMALL_CLASS_LABEL_NAME
+					, CALENDAR_YYYY LARGE_CLASS_LABEL_NAME
+					, CASE
+						WHEN TO_NUMBER(TO_CHAR(TO_DATE(A.BASIS_YYYYMM  ||  '01', 'YYYYMMDD'), 'Q')) = 1 THEN CALENDAR_YYYY  ||  '0100'
+						WHEN TO_NUMBER(TO_CHAR(TO_DATE(A.BASIS_YYYYMM  ||  '01', 'YYYYMMDD'), 'Q')) = 2 THEN CALENDAR_YYYY  ||  '0400'
+						WHEN TO_NUMBER(TO_CHAR(TO_DATE(A.BASIS_YYYYMM  ||  '01', 'YYYYMMDD'), 'Q')) = 3 THEN CALENDAR_YYYY  ||  '0700'
+						ELSE CALENDAR_YYYY  ||  '1000' END AS SORT_ORDER_NO
+				FROM    SCM_SYS_CALENDAR_M A
+				WHERE  A.BASIS_YYYYMMDD >= p_start_yyyymmdd
+				AND    A.BASIS_YYYYMMDD <= p_end_yyyymmdd
+
+				UNION ALL
+				-- Yearly
+				SELECT DISTINCT
+					'Y_'  ||  CALENDAR_YYYY AS COLUMN_NAME
+					, CALENDAR_YYYY COLUMN_LABEL_NAME
+					, CALENDAR_YYYY SMALL_CLASS_LABEL_NAME
+					, CALENDAR_YYYY LARGE_CLASS_LABEL_NAME
+					, CALENDAR_YYYY  ||  '0000' AS SORT_ORDER_NO
+				FROM    SCM_SYS_CALENDAR_M A
+				WHERE  A.BASIS_YYYYMMDD >= p_start_yyyymmdd
+				AND    A.BASIS_YYYYMMDD <= p_end_yyyymmdd
+			) MA
+		) T
+		ORDER BY SORT_ORDER_NO;
+
+	ELSE
+		OPEN O_RC1 FOR
+		SELECT C.PROGRAM_ID
+				, C.SHEET_NAME
+				, C.COLUMN_NAME
+				, CASE WHEN P_DIVISION_ID LIKE '81%'
+							THEN (CASE WHEN C.ATTRIBUTE4 = 'Y' THEN REPLACE(C.COLUMN_LABEL_NAME,'*','')  ||  '*'
+									   ELSE REPLACE(C.COLUMN_LABEL_NAME,'*','')
+								   END)
+					   WHEN P_DIVISION_ID = '82'
+							THEN (CASE WHEN C.ATTRIBUTE5 = 'Y' THEN REPLACE(C.COLUMN_LABEL_NAME,'*','')  ||  '*'
+									   ELSE REPLACE(C.COLUMN_LABEL_NAME,'*','')
+								   END)
+					   ELSE C.COLUMN_LABEL_NAME END		 AS COLUMN_LABEL_NAME --PJ20200138 Division별 필수 컬럼 기준 적용
+				--, C.SORT_ORDER_NO        --TO_CHAR(U.SORT_ORDER_NO) SORT_ORDER_NO
+				, CASE WHEN P_DIVISION_ID = '40' THEN TO_CHAR(C.SORT_ORDER_NO)
+					   WHEN P_DIVISION_ID LIKE '81%' THEN C.ATTRIBUTE2
+					   WHEN P_DIVISION_ID = '82' THEN C.ATTRIBUTE3
+					   END AS SORT_ORDER_NO
+				, C.DATA_SORT_METHOD_CODE
+				, C.SMALL_CLASS_LABEL_NAME
+				, C.LARGE_CLASS_LABEL_NAME
+				, '' AS DAY_CODE
+				, C.FIXED_FLAG
+				, TO_CHAR(C.COLUMN_WIDTH) COLUMN_WIDTH
+				, C.CELL_CONTROL_OBJECT_TYPE_CODE
+				, C.CELL_COMBO_DATA_TYPE
+				, TO_CHAR(C.DATA_SCALE_NUMBER) DATA_SCALE_NUMBER
+				, TO_CHAR(C.DATA_MAX_LENGTH) DATA_MAX_LENGTH
+				, C.HORIZONTAL_ALIGN_CODE
+				, C.UPPERCASE_APPLY_FLAG
+				, C.VISIBLE_FLAG
+				, C.DEFAULT_FLAG
+				, C.USER_SELECTABLE_FLAG
+				, C.VALID_YN
+				, C.DIVISION_ID
+				, p_division_id ATTRIBUTE1		-- PJ20200138 COMMONDATALIST 에서 사용하도록 DIVISION 을 넣어준다.
+				, CASE WHEN CELL_COMBO_DATA_TYPE = 'DM_LOOKUP_DIV' THEN C.ATTRIBUTE1 ELSE '' END AS ATTRIBUTE2
+				, '' as ATTRIBUTE3
+				, C.ATTRIBUTE4
+				, C.ATTRIBUTE5
+				, tei.EDIT_YN
+		FROM   SCM_MST_SHEET_COLUMNS C
+		INNER JOIN TABLE(PKG_SCM_USER_MNU.PR_SCM_EDIT_YN(p_user_id, p_menu_id)) tei
+		   ON tei.UNIT_ID = C.DIVISION_ID
+		WHERE  1 = 1
+		AND    C.PROGRAM_ID  = v_program_id
+		AND    C.SHEET_NAME  = v_sheet_name
+		AND    C.DEFAULT_FLAG = 'Y'
+		AND    C.VALID_YN     = 'Y'
+		AND	 p_division_id IN (SELECT token FROM TABLE(fn_string_split(C.DIVISION_ID ,',')) )		-- 20180620 division 추가
+
+		UNION ALL
+
+		SELECT C.PROGRAM_ID
+				, C.SHEET_NAME
+				, C.COLUMN_NAME
+				, CASE WHEN P_DIVISION_ID LIKE '81%'
+							THEN (CASE WHEN C.ATTRIBUTE4 = 'Y' THEN REPLACE(C.COLUMN_LABEL_NAME,'*','')  ||  '*'
+									   ELSE REPLACE(C.COLUMN_LABEL_NAME,'*','')
+								   END)
+					   WHEN P_DIVISION_ID = '82'
+							THEN (CASE WHEN C.ATTRIBUTE5 = 'Y' THEN REPLACE(C.COLUMN_LABEL_NAME,'*','')  ||  '*'
+									   ELSE REPLACE(C.COLUMN_LABEL_NAME,'*','')
+								   END)
+					   ELSE C.COLUMN_LABEL_NAME END		 AS COLUMN_LABEL_NAME --PJ20200138 Division별 필수 컬럼 기준 적용
+				--, C.SORT_ORDER_NO        --TO_CHAR(U.SORT_ORDER_NO) SORT_ORDER_NO
+				, CASE WHEN P_DIVISION_ID = '40' THEN TO_CHAR(C.SORT_ORDER_NO)
+					   WHEN P_DIVISION_ID LIKE '81%' THEN C.ATTRIBUTE2
+					   WHEN P_DIVISION_ID = '82' THEN C.ATTRIBUTE3
+					   END AS SORT_ORDER_NO -- PJ20200138 Division별 정렬 기준 적용
+				, C.DATA_SORT_METHOD_CODE
+				, C.SMALL_CLASS_LABEL_NAME
+				, C.LARGE_CLASS_LABEL_NAME
+				, '' AS DAY_CODE
+				, C.FIXED_FLAG
+				, TO_CHAR(C.COLUMN_WIDTH) COLUMN_WIDTH
+				, C.CELL_CONTROL_OBJECT_TYPE_CODE
+				, C.CELL_COMBO_DATA_TYPE
+				, TO_CHAR(C.DATA_SCALE_NUMBER) DATA_SCALE_NUMBER
+				, TO_CHAR(C.DATA_MAX_LENGTH) DATA_MAX_LENGTH
+				, C.HORIZONTAL_ALIGN_CODE
+				, C.UPPERCASE_APPLY_FLAG
+				, C.VISIBLE_FLAG
+				, C.DEFAULT_FLAG
+				, C.USER_SELECTABLE_FLAG
+				, C.VALID_YN
+				, C.DIVISION_ID
+				, p_division_id ATTRIBUTE1		-- PJ20200138 COMMONDATALIST 에서 사용하도록 DIVISION 을 넣어준다.
+				, CASE WHEN CELL_COMBO_DATA_TYPE = 'DM_LOOKUP_DIV' THEN C.ATTRIBUTE1 ELSE C.ATTRIBUTE1 END AS ATTRIBUTE2
+				, C.ATTRIBUTE3
+				, C.ATTRIBUTE4
+				, C.ATTRIBUTE5
+				, 'N' AS EDIT_YN
+		FROM   SCM_MST_SHEET_COLUMNS C
+		WHERE  1 = 1
+		AND    C.PROGRAM_ID  = v_program_id
+		AND    C.SHEET_NAME  = v_sheet_name
+		AND    C.VISIBLE_FLAG = 'N'
+		AND    C.DEFAULT_FLAG IS NULL
+		AND    C.VALID_YN     = 'Y'
+		AND	 p_division_id IN (SELECT token FROM TABLE(fn_string_split(C.DIVISION_ID ,',')) )		-- 20180620 division 추가
+
+		UNION ALL
+
+		SELECT v_program_id  AS PROGRAM_ID
+				, v_sheet_name SHEET_NAME
+				, T.COLUMN_NAME
+				, T.COLUMN_LABEL_NAME
+				, T.SORT_ORDER_NO
+				, CAST(NULL AS VARCHAR2(1))         AS DATA_SORT_METHOD_CODE
+				, T.SMALL_CLASS_LABEL_NAME
+				, T.LARGE_CLASS_LABEL_NAME
+				, CAST(NULL AS VARCHAR2(1)) AS DAY_CODE
+				, CAST(NULL AS VARCHAR2(1))         AS FIXED_FLAG
+				, TO_CHAR(50) COLUMN_WIDTH
+				, 'FPNumber' AS CELL_CONTROL_OBJECT_TYPE_CODE
+				, CAST(NULL AS VARCHAR2(1))         AS CELL_COMBO_DATA_TYPE
+				, '3'         AS DATA_SCALE_NUMBER
+				, CAST(NULL AS VARCHAR2(1))         AS DATA_MAX_LENGTH
+				, 'R'        AS HORIZONTAL_ALIGN_CODE
+				, 'Y'        AS UPPERCASE_APPLY_FLAG
+				, 'Y'        AS VISIBLE_FLAG
+				, ''         AS DEFAULT_FLAG
+				, ''         AS USER_SELECTABLE_FLAG
+				, ''         AS VALID_YN
+				, ''		 AS DIVISION_ID
+				, '' AS ATTRIBUTE1 -- PJ20200138
+				, '' AS ATTRIBUTE2
+				, '' AS ATTRIBUTE3
+				, '' AS ATTRIBUTE4
+				, '' AS ATTRIBUTE5
+				, 'N' AS EDIT_YN
+		FROM  (
+			SELECT * FROM (
+				-- Monthly
+				SELECT
+						'M_'  ||  A.BASIS_YYYYMM  AS COLUMN_NAME
+						, A.MONTH_NAME COLUMN_LABEL_NAME
+						, 'Q'  ||  TO_CHAR(TO_NUMBER(TO_CHAR(TO_DATE(A.BASIS_YYYYMM  ||  '01', 'YYYYMMDD'), 'Q'))) SMALL_CLASS_LABEL_NAME
+						, A.CALENDAR_YYYY LARGE_CLASS_LABEL_NAME
+						, BASIS_YYYYMM  ||  '01' AS SORT_ORDER_NO
+				FROM    SCM_SYS_CALENDAR_M A
+				WHERE  A.BASIS_YYYYMMDD >= p_start_yyyymmdd
+				AND    A.BASIS_YYYYMMDD <= p_end_yyyymmdd
+				GROUP BY
+						CALENDAR_YYYY
+						, A.BASIS_YYYYMM
+						, A.MONTH_NAME
+				UNION ALL
+				-- Quarterly
+				SELECT DISTINCT
+					'Q_'  ||  CALENDAR_YYYY  ||  '_'  ||  TO_CHAR(TO_NUMBER(TO_CHAR(TO_DATE(A.BASIS_YYYYMM  ||  '01', 'YYYYMMDD'), 'Q'))) COLUMN_NAME
+					, 'Q'  ||  TO_CHAR(TO_NUMBER(TO_CHAR(TO_DATE(A.BASIS_YYYYMM  ||  '01', 'YYYYMMDD'), 'Q'))) COLUMN_LABEL_NAME
+					, 'Q'  ||  TO_CHAR(TO_NUMBER(TO_CHAR(TO_DATE(A.BASIS_YYYYMM  ||  '01', 'YYYYMMDD'), 'Q'))) SMALL_CLASS_LABEL_NAME
+					, CALENDAR_YYYY LARGE_CLASS_LABEL_NAME
+					, CASE
+						WHEN TO_NUMBER(TO_CHAR(TO_DATE(A.BASIS_YYYYMM  ||  '01', 'YYYYMMDD'), 'Q')) = 1 THEN CALENDAR_YYYY  ||  '0100'
+						WHEN TO_NUMBER(TO_CHAR(TO_DATE(A.BASIS_YYYYMM  ||  '01', 'YYYYMMDD'), 'Q')) = 2 THEN CALENDAR_YYYY  ||  '0400'
+						WHEN TO_NUMBER(TO_CHAR(TO_DATE(A.BASIS_YYYYMM  ||  '01', 'YYYYMMDD'), 'Q')) = 3 THEN CALENDAR_YYYY  ||  '0700'
+						ELSE CALENDAR_YYYY  ||  '1000' END AS SORT_ORDER_NO
+				FROM    SCM_SYS_CALENDAR_M A
+				WHERE  A.BASIS_YYYYMMDD >= p_start_yyyymmdd
+				AND    A.BASIS_YYYYMMDD <= p_end_yyyymmdd
+
+				UNION ALL
+				-- Yearly
+				SELECT DISTINCT
+					'Y_'  ||  CALENDAR_YYYY AS COLUMN_NAME
+					, CALENDAR_YYYY COLUMN_LABEL_NAME
+					, CALENDAR_YYYY SMALL_CLASS_LABEL_NAME
+					, CALENDAR_YYYY LARGE_CLASS_LABEL_NAME
+					, CALENDAR_YYYY  ||  '0000' AS SORT_ORDER_NO
+				FROM    SCM_SYS_CALENDAR_M A
+				WHERE  A.BASIS_YYYYMMDD >= p_start_yyyymmdd
+				AND    A.BASIS_YYYYMMDD <= p_end_yyyymmdd
+			) MA
+		) T
+		ORDER BY SORT_ORDER_NO   ;
+
+	END IF;
+
+    OPEN O_RESULT_CURSOR FOR
+    SELECT '1' AS RESULT_CODE, CASE WHEN 1 = 2 THEN '-' ELSE NULL END AS RESULT_MSG, 'SUCCESS' AS ERR_EVENT FROM DUAL;
+EXCEPTION
+    WHEN OTHERS THEN
+        V_LOG_TYPE   := 'ERROR';
+        V_SQL_CODE   := TO_CHAR(SQLCODE);
+        V_SQL_ERRMSG := SQLERRM;
+        V_BACKTRACE  := DBMS_UTILITY.FORMAT_ERROR_BACKTRACE;
+        PR_SCM_SYS_LOG_BATCH($$PLSQL_UNIT,
+                            V_LOG_TYPE,
+                            N_LOG_COUNT,
+                            V_LOG_MESSAGE,
+                            V_DESCRIPTION,
+                            D_EVENT_DATE,
+                            V_PROC_INPUT,
+                            V_SQL_CODE,
+                            V_SQL_ERRMSG,
+                            V_BACKTRACE
+                            );
+    RAISE_APPLICATION_ERROR(-20001,
+        '[' || $$PLSQL_UNIT || '] SQLCODE=' || SQLCODE ||
+        ' / SQLERRM=' || SQLERRM ||
+        ' / BACKTRACE=' || DBMS_UTILITY.FORMAT_ERROR_BACKTRACE ||
+        ' / PARAMS=' || v_in_para_data
+    );
+END;
+/

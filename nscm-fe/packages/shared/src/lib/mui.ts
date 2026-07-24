@@ -12,5 +12,7 @@ export {
   Stack,
   type StackProps,
   useMediaQuery,
+  useTheme,
   InputAdornment,
+  Box,
 } from '@mui/material';

@@ -1,0 +1,68 @@
+{
+  "tokens": {
+    "dept2": [
+      "30234912",
+      "30277380"
+    ],
+    "site2": [
+      "ANDURIL_US_CZM",
+      "ATL_DE_RDG"
+    ],
+    "item": "--",
+    "proj": "-",
+    "owner": "-",
+    "endcust": "ANDURIL"
+  },
+  "scenarios": {
+    "S1_81_default_Y": {
+      "rows": 38183,
+      "sha256": "c864dbe8471cf6da8cdf2fd8612f99f92e4d695405f0680b519576b9f7ea493d",
+      "sec": 4.87
+    },
+    "S2_81_valid_ALL": {
+      "rows": 39742,
+      "sha256": "03a90264be4ea3b330dc92951d2a875b738f437920370775b90556ba3d37b2db",
+      "sec": 5.35
+    },
+    "S3_40_default_Y": {
+      "rows": 14820,
+      "sha256": "824a23942f03d9537e578e35eaf55c277bee3eacd54ba4356e1139bd0edf8b2b",
+      "sec": 2.16
+    },
+    "S4_82_default_Y": {
+      "rows": 34230,
+      "sha256": "f413364e9bf90567ed91dc3e441bcbd80ce00e9554ec783d82f25e95829a92c1",
+      "sec": 3.45
+    },
+    "S5_81_item": {
+      "rows": 24,
+      "sha256": "c864781377aa36e173f8c62c835ed72660b6ffb066ad4e95529eac0978baee8a",
+      "sec": 0.81
+    },
+    "S6_81_owner": {
+      "rows": 71,
+      "sha256": "f722e1a7dd9425dc17533849597bbc9ec39de305714bed678975412573b59ce0",
+      "sec": 1.01
+    },
+    "S7_81_dept": {
+      "rows": 714,
+      "sha256": "aae22151c961204b2b923f293c6854eb8675545c0c504e80408eaa9f38c1db91",
+      "sec": 0.94
+    },
+    "S8_81_site": {
+      "rows": 15,
+      "sha256": "0b9b328d2fdfd23a11713674598b60934220b687e8152f32f565b2713edca829",
+      "sec": 0.97
+    },
+    "S9_81_project": {
+      "rows": 1430,
+      "sha256": "e87f3e199e5d936a9cb9afd3790719c78cf9bda3bac396e4624e85f3254d4644",
+      "sec": 0.97
+    },
+    "S10_81_endcust": {
+      "rows": 5,
+      "sha256": "c8a2f2f45a8b594c4dba054d27f6dbe6ff23e2d9ff66a77ff0f196416da47735",
+      "sec": 0.96
+    }
+  }
+}

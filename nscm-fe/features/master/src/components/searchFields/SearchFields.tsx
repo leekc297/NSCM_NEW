@@ -161,9 +161,22 @@ export const DivisionField = ({ value, onChange, gridSize }: SingleFieldProps) =
 // ====================================================================================
 // 2. TeamField (size=4, combo=TeambyDivision)
 // ====================================================================================
-export const TeamField = ({ value, onChange, division, gridSize }: MultiFieldProps) => {
+export const TeamField = ({
+  value,
+  onChange,
+  division,
+  gridSize,
+  comboId,
+}: MultiFieldProps & {
+  /**
+   * ⭐ 2026-07-23 (DMF0003 조회조건 AS-IS 정합) — opt-in 콤보 대체.
+   * 기본 'TeambyDivision'(기존 화면 무영향). DMF0003 은 AS-IS BigFilter 1:1 등록본
+   * 'UserTeamByDivision'(SITE_ITEM.OWNER 1번 토큰 사용자의 부서 기준) 사용.
+   */
+  comboId?: string;
+}) => {
   const L = useL();
-  const [teams] = useTabComboQueries({ filters: ['TeambyDivision'] });
+  const [teams] = useTabComboQueries({ filters: [comboId ?? 'TeambyDivision'] });
   return (
     <Grid size={gridSize ?? 4}>
       <FormItem
@@ -194,9 +207,22 @@ export const TeamField = ({ value, onChange, division, gridSize }: MultiFieldPro
 // ====================================================================================
 // 3. EndCustomerField (size=4, combo=EndCustomer)
 // ====================================================================================
-export const EndCustomerField = ({ value, onChange, division, gridSize }: MultiFieldProps) => {
+export const EndCustomerField = ({
+  value,
+  onChange,
+  division,
+  gridSize,
+  comboId,
+}: MultiFieldProps & {
+  /**
+   * ⭐ 2026-07-23 (DMF0003 조회조건 AS-IS 정합) — opt-in 콤보 대체.
+   * 기본 'EndCustomer'(기존 화면 무영향). DMF0003 은 AS-IS BigFilter 1:1 등록본
+   * 'EndCustomerByDivision'(40=SITE_ITEM owner-dept PROJECT_CODE + lookup-only UNION) 사용.
+   */
+  comboId?: string;
+}) => {
   const L = useL();
-  const [endCustomers] = useTabComboQueries({ filters: ['EndCustomer'] });
+  const [endCustomers] = useTabComboQueries({ filters: [comboId ?? 'EndCustomer'] });
   return (
     <Grid size={gridSize ?? 4}>
       <FormItem
@@ -227,9 +253,51 @@ export const EndCustomerField = ({ value, onChange, division, gridSize }: MultiF
 // ====================================================================================
 // 4. SalesSiteField (size=4, combo=SalesSite)
 // ====================================================================================
-export const SalesSiteField = ({ value, onChange, division, gridSize }: MultiFieldProps) => {
+export const SalesSiteField = ({
+  value,
+  onChange,
+  division,
+  gridSize,
+  comboId,
+  endCustomer,
+  deptId,
+  asYn,
+}: MultiFieldProps & {
+  /**
+   * ⭐ 2026-07-23 (조회조건 AS-IS 정합, hook #117) — opt-in 서버 바인드 콤보 대체.
+   * comboId 지정 시 'UserSiteByEndCustomer'(AS-IS UP_FX SiteByEndCustomer/40 1:1) 형태의
+   * @divisionId/@endCustomer/@deptId/@asYn 바인드 콤보로 전환 — EndCustomer/Team cascade +
+   * 40 owner-team 필터 + OPERATION_GROUP 'W' 제외 (서버 필터 완료 → CODE/NAME 직결).
+   * 미지정 = 기존 'SalesSite' + division 클라 필터 (기존 사용처 무영향).
+   */
+  comboId?: string;
+  endCustomer?: string;
+  deptId?: string;
+  asYn?: boolean;
+}) => {
   const L = useL();
-  const [salesSites] = useTabComboQueries({ filters: ['SalesSite'] });
+  const q = (v?: string): string => `'${v && v.trim() !== '' ? v : 'ALL'}'`;
+  const [salesSites] = useTabComboQueries(
+    comboId
+      ? {
+          filters: [
+            {
+              comboId,
+              divisionId: q(division),
+              endCustomer: q(endCustomer),
+              deptId: q(deptId),
+              asYn: q(asYn ? 'Y' : 'N'),
+            },
+          ],
+        }
+      : { filters: ['SalesSite'] }
+  );
+  const options = comboId
+    ? ((salesSites ?? []) as Array<Record<string, string>>).map(r => ({
+        label: String(r.NAME ?? r.CODE ?? ''),
+        value: String(r.CODE ?? ''),
+      }))
+    : toOptions(salesSites as never, division);
   return (
     <Grid size={gridSize ?? 4}>
       <FormItem
@@ -242,7 +310,7 @@ export const SalesSiteField = ({ value, onChange, division, gridSize }: MultiFie
             useClearIcon
             limitTags={1}
             value={value.join(',')}
-            options={toOptions(salesSites as never, division)}
+            options={options}
             onChange={(_, options) =>
               onChange(
                 String(options ?? '')
@@ -317,9 +385,24 @@ export const PlantSiteField = ({
 // ====================================================================================
 // 6. BizTypeField (size=4, combo=BizType — SCM_ADM_LOOKUP_MASTER_DETAIL LOOKUP_TYPE='BIZ_TYPE')
 // ====================================================================================
-export const BizTypeField = ({ value, onChange, gridSize }: Omit<MultiFieldProps, 'division'>) => {
+export const BizTypeField = ({
+  value,
+  onChange,
+  gridSize,
+  comboId,
+  division,
+}: Omit<MultiFieldProps, 'division'> & {
+  /**
+   * ⭐ 2026-07-23 (DMF0003 조회조건 AS-IS 정합) — opt-in.
+   * comboId 기본 'BizType'(전역 lookup — 기존 화면 무영향). DMF0003 은 AS-IS BigFilter 1:1
+   * 'BizTypebyDivision'(DM_BIZ_TYPE(40) UNION SCM_MST_PROJECT BIZ_TYPE(비40), DIVISION_ID 반환) 사용.
+   * division 지정 시 DIVISION_ID 클라 필터 (미지정 = 무필터, 기존 동작 보존).
+   */
+  comboId?: string;
+  division?: string;
+}) => {
   const L = useL();
-  const [bizTypes] = useTabComboQueries({ filters: ['BizType'] });
+  const [bizTypes] = useTabComboQueries({ filters: [comboId ?? 'BizType'] });
   return (
     <Grid size={gridSize ?? 4}>
       <FormItem
@@ -332,7 +415,7 @@ export const BizTypeField = ({ value, onChange, gridSize }: Omit<MultiFieldProps
             useClearIcon
             limitTags={1}
             value={value.join(',')}
-            options={toOptions(bizTypes as never)}
+            options={toOptions(bizTypes as never, division)}
             onChange={(_, options) =>
               onChange(
                 String(options ?? '')

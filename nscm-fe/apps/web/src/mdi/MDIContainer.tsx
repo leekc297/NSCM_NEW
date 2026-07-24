@@ -1,16 +1,21 @@
-import { Outlet } from 'react-router-dom';
-
 import { useIsBusy } from '@foundation/query-client';
 import { clsx } from '@shared/clsx';
 import { ToastMessage, Alert } from '@shared/components';
 import { ProgressIndicator } from '@shared/lges';
-import { TabIdContext, useUIStore } from '@shared/stores';
+import { useUIStore } from '@shared/stores';
 
 import styles from './MDIContainer.module.scss';
 import { MDITabs } from './MDITabs';
+import { RouterSync } from './RouterSync';
 import { useMDIStore } from './useMDIStore';
+import { ViewContainer } from './ViewContainer';
 
-export const MDIContainer = () => {
+interface MDIContainerProps {
+  /** 404 로 진입한 경우 false — RouterSync 가 마운트 시 URL 을 덮어쓰지 않게 한다 */
+  mirrorRouteOnMount?: boolean;
+}
+
+export const MDIContainer = ({ mirrorRouteOnMount = true }: MDIContainerProps) => {
   const tabs = useMDIStore(state => state.tabs);
   const activeIndex = useMDIStore(state => state.activeIndex);
   const progress = useUIStore(state => state.progress);
@@ -21,9 +26,8 @@ export const MDIContainer = () => {
     <div className={styles.mdiContainer}>
       <MDITabs />
       <div className={styles.mdiContent}>
-        <TabIdContext.Provider value={tabs[activeIndex].tabId}>
-          <Outlet />
-        </TabIdContext.Provider>
+        <RouterSync mirrorOnMount={mirrorRouteOnMount} />
+        <ViewContainer />
         <ToastMessage />
         <Alert />
         <div className={clsx(styles.spinner, { [styles.open]: isBusy })}>

@@ -1,0 +1,7 @@
+// 체크박스 가로 배치 (Sum — Color 제거·Include Internal Txn 숨김·Cell Qty dead 제외, 2026-07-14 확정)
+.checkboxRow {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 36px; // hook #94 — 조회조건 객체 높이 36px 동일화
+}

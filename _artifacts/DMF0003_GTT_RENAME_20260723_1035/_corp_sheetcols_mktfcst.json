@@ -1,0 +1,404 @@
+[
+ {
+  "col": "DIVISION_ID",
+  "df": "Y",
+  "vy": "Y",
+  "so": 10
+ },
+ {
+  "col": "DIVISION_ID40",
+  "df": "Y",
+  "vy": "Y",
+  "so": 10
+ },
+ {
+  "col": "DEPT_ID",
+  "df": "N",
+  "vy": "Y",
+  "so": 20
+ },
+ {
+  "col": "DEPT_NAME_KO",
+  "df": "N",
+  "vy": "Y",
+  "so": 30
+ },
+ {
+  "col": "DEPT_NAME",
+  "df": "N",
+  "vy": "Y",
+  "so": 30
+ },
+ {
+  "col": "TEAM_ID",
+  "df": "N",
+  "vy": "Y",
+  "so": 40
+ },
+ {
+  "col": "TEAM_NAME_KO",
+  "df": "N",
+  "vy": "Y",
+  "so": 50
+ },
+ {
+  "col": "PROJECT_S_OP_REPORT",
+  "df": "N",
+  "vy": "Y",
+  "so": 55
+ },
+ {
+  "col": "END_CUSTOMER40",
+  "df": "Y",
+  "vy": "Y",
+  "so": 60
+ },
+ {
+  "col": "END_CUSTOMER",
+  "df": "Y",
+  "vy": "Y",
+  "so": 60
+ },
+ {
+  "col": "BIZ_TYPE",
+  "df": "N",
+  "vy": "Y",
+  "so": 70
+ },
+ {
+  "col": "SOLDTO_CUSTOMER",
+  "df": "N",
+  "vy": "Y",
+  "so": 80
+ },
+ {
+  "col": "COUNTRY_NAME",
+  "df": "N",
+  "vy": "Y",
+  "so": 90
+ },
+ {
+  "col": "CITY_NAME",
+  "df": "N",
+  "vy": "Y",
+  "so": 100
+ },
+ {
+  "col": "SCM_SITE_ID40",
+  "df": "Y",
+  "vy": "Y",
+  "so": 110
+ },
+ {
+  "col": "SCM_SITE_ID",
+  "df": "Y",
+  "vy": "Y",
+  "so": 110
+ },
+ {
+  "col": "PROJECT_CODE",
+  "df": "Y",
+  "vy": "Y",
+  "so": 120
+ },
+ {
+  "col": "PROJECT_NAME",
+  "df": "Y",
+  "vy": "Y",
+  "so": 130
+ },
+ {
+  "col": "PROJECT_STATUS",
+  "df": "N",
+  "vy": "Y",
+  "so": 131
+ },
+ {
+  "col": "PROJECT_OWNER",
+  "df": "Y",
+  "vy": "Y",
+  "so": 132
+ },
+ {
+  "col": "GROUP_ID",
+  "df": " ",
+  "vy": "Y",
+  "so": 135
+ },
+ {
+  "col": "ITEM_ID40",
+  "df": "Y",
+  "vy": "Y",
+  "so": 140
+ },
+ {
+  "col": "ITEM_ID",
+  "df": "Y",
+  "vy": "Y",
+  "so": 140
+ },
+ {
+  "col": "ITEM_NAME",
+  "df": "N",
+  "vy": "Y",
+  "so": 150
+ },
+ {
+  "col": "NICK_NAME",
+  "df": "Y",
+  "vy": "Y",
+  "so": 160
+ },
+ {
+  "col": "INCOTERMS",
+  "df": "Y",
+  "vy": "Y",
+  "so": 170
+ },
+ {
+  "col": "ITEM_TYPE",
+  "df": "N",
+  "vy": "Y",
+  "so": 180
+ },
+ {
+  "col": "FCST_TYPE",
+  "df": "Y",
+  "vy": "Y",
+  "so": 190
+ },
+ {
+  "col": "DOM_EXP",
+  "df": "Y",
+  "vy": "Y",
+  "so": 200
+ },
+ {
+  "col": "PLANT_SITE_ID",
+  "df": "Y",
+  "vy": "Y",
+  "so": 210
+ },
+ {
+  "col": "CUST_GROUP",
+  "df": "N",
+  "vy": "Y",
+  "so": 220
+ },
+ {
+  "col": "CUST_GROUP_DTL",
+  "df": "N",
+  "vy": "Y",
+  "so": 230
+ },
+ {
+  "col": "OWNER",
+  "df": "N",
+  "vy": "Y",
+  "so": 242
+ },
+ {
+  "col": "APPLICATION",
+  "df": "N",
+  "vy": "Y",
+  "so": 250
+ },
+ {
+  "col": "ROUTE",
+  "df": "N",
+  "vy": "Y",
+  "so": 260
+ },
+ {
+  "col": "MDM_PROJECT_NAME",
+  "df": "N",
+  "vy": "Y",
+  "so": 270
+ },
+ {
+  "col": "MIN_CAPACITY",
+  "df": "N",
+  "vy": "Y",
+  "so": 280
+ },
+ {
+  "col": "FORECAST_INFO_BIZ_TYPE",
+  "df": "N",
+  "vy": "Y",
+  "so": 290
+ },
+ {
+  "col": "FORECAST_INFO_PRODUCT_GROUP",
+  "df": "N",
+  "vy": "Y",
+  "so": 300
+ },
+ {
+  "col": "CELL_TYPE",
+  "df": "N",
+  "vy": "Y",
+  "so": 305
+ },
+ {
+  "col": "FORECAST_INFO_CELL_MODEL",
+  "df": "N",
+  "vy": "Y",
+  "so": 310
+ },
+ {
+  "col": "FORECAST_INFO_CELL_PACK_COUNT",
+  "df": "N",
+  "vy": "Y",
+  "so": 320
+ },
+ {
+  "col": "FORECAST_INFO_ALL",
+  "df": "N",
+  "vy": "Y",
+  "so": 330
+ },
+ {
+  "col": "FORECAST_INFO_SPEC",
+  "df": "N",
+  "vy": "Y",
+  "so": 331
+ },
+ {
+  "col": "FORECAST_INFOR_VERSION",
+  "df": "N",
+  "vy": "Y",
+  "so": 332
+ },
+ {
+  "col": "CELL_MODEL_NICK_NAME",
+  "df": "N",
+  "vy": "Y",
+  "so": 333
+ },
+ {
+  "col": "VMI_YN",
+  "df": "N",
+  "vy": "Y",
+  "so": 340
+ },
+ {
+  "col": "CELL_PER_CAR",
+  "df": "N",
+  "vy": "Y",
+  "so": 341
+ },
+ {
+  "col": "CELL_PER_MODULE",
+  "df": "N",
+  "vy": "Y",
+  "so": 342
+ },
+ {
+  "col": "MODULE_PER_CAR",
+  "df": "N",
+  "vy": "Y",
+  "so": 343
+ },
+ {
+  "col": "ENERGE",
+  "df": "N",
+  "vy": "Y",
+  "so": 350
+ },
+ {
+  "col": "CELL_QUANTITY",
+  "df": "N",
+  "vy": "Y",
+  "so": 351
+ },
+ {
+  "col": "EDIT_FLAG",
+  "df": " ",
+  "vy": "Y",
+  "so": 500
+ },
+ {
+  "col": "DMS_SALES",
+  "df": "N",
+  "vy": "Y",
+  "so": 510
+ },
+ {
+  "col": "DMS_CUSTOMER",
+  "df": "N",
+  "vy": "Y",
+  "so": 520
+ },
+ {
+  "col": "NEW_FLAG",
+  "df": " ",
+  "vy": "Y",
+  "so": 550
+ },
+ {
+  "col": "BUCKET",
+  "df": " ",
+  "vy": "Y",
+  "so": 551
+ },
+ {
+  "col": "MEASURE_GROUP",
+  "df": " ",
+  "vy": "Y",
+  "so": 600
+ },
+ {
+  "col": "ATTR1",
+  "df": " ",
+  "vy": "Y",
+  "so": 690
+ },
+ {
+  "col": "VMI_STD_DIO",
+  "df": " ",
+  "vy": "Y",
+  "so": 690
+ },
+ {
+  "col": "AS_YN",
+  "df": " ",
+  "vy": "Y",
+  "so": 691
+ },
+ {
+  "col": "SORT_KEY",
+  "df": " ",
+  "vy": "Y",
+  "so": 692
+ },
+ {
+  "col": "AS_FROM_SITE",
+  "df": "Y",
+  "vy": "Y",
+  "so": 693
+ },
+ {
+  "col": "LAST_UPDATE_DATE",
+  "df": "N",
+  "vy": "Y",
+  "so": 696
+ },
+ {
+  "col": "LAST_UPDATED_BY",
+  "df": "N",
+  "vy": "Y",
+  "so": 697
+ },
+ {
+  "col": "SENDER_NAME",
+  "df": "N",
+  "vy": "Y",
+  "so": 698
+ },
+ {
+  "col": "MEASURE",
+  "df": " ",
+  "vy": "Y",
+  "so": 700
+ }
+]

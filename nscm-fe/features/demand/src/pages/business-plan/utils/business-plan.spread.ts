@@ -103,7 +103,11 @@ export const applyCellChange = (params: {
     if (!q) return;
     const qTag = parseDynTag(q)!;
     const months = childMonths(qTag, dynBindings, thisMonth, false);
-    patches[q] = isBp ? months.reduce((s, b) => s + valOf(b), 0) : 0; // LOC = 상위 SUM 0 유지 (L2341)
+    // ⭐ 2026-07-21 G4 교정 — Monthly LOC 편집 시 Q_ = "편집 셀값" Int 반올림 copy (합산 아님):
+    //   신정본 L2371~2376 `dQuarterlySum = Convert.ToInt32(편집셀값)` → L2382 Q_ SetText.
+    //   (Y_ 는 0 유지 = 신정본 L2399~2404 파리티. Convert.ToInt32=half-even vs Math.round=half-up —
+    //   정확히 .5 인 극단만 ±1, 실무 무시 가능 수용.)
+    patches[q] = isBp ? months.reduce((s, b) => s + valOf(b), 0) : Math.round(input);
   };
   const rollupYear = (anyTag: DynTag): void => {
     const y = yearOf(anyTag, dynBindings);

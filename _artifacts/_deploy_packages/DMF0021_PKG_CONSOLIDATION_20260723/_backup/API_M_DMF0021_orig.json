@@ -1,0 +1,100 @@
+[
+ [
+  "Sales Plan",
+  "COLUMN_SETUP",
+  "DMF0021_main_COLUMN_SETUP",
+  "DMF0002_GET_TITLESET_POPUP",
+  "PROC_SELECT"
+ ],
+ [
+  "Sales Plan",
+  "DELETE",
+  "DMF0021_main_DELETE",
+  "DMF0021_GET_DM_PLN_SALES_PLAN_DATAEX",
+  "PROC_SELECT"
+ ],
+ [
+  "Sales Plan",
+  "EXCEL",
+  "DMF0021_main_EXCEL",
+  "DMF0021_GET_DM_PLN_SALES_PLAN_DATAEX",
+  "PROC_SELECT"
+ ],
+ [
+  "Sales Plan",
+  "FILTER",
+  "DMF0021_main_FILTER",
+  "DMF0021_GET_DM_PLN_SALES_PLAN_DATAEX",
+  "PROC_SELECT"
+ ],
+ [
+  "Sales Plan",
+  "INSERT",
+  "DMF0021_main_INSERT",
+  "DMF0021_GET_DM_PLN_SALES_PLAN_DATAEX",
+  "PROC_SELECT"
+ ],
+ [
+  "Sales Plan",
+  "MEASURE_SELECT",
+  "DMF0021_main_MEASURE_SELECT",
+  "DMF0002_GET_TITLESET_POPUP",
+  "PROC_SELECT"
+ ],
+ [
+  "Sales Plan",
+  "SAVE",
+  "DMF0021_main_SAVE",
+  "DMF0021_SAVE_DM_PLN_SALES_PLAN_ALL",
+  "PROC_SAVE"
+ ],
+ [
+  "Sales Plan",
+  "SEARCH",
+  "DMF0021_main_SEARCH",
+  "DMF0021_GET_DM_PLN_SALES_PLAN_DATAEX",
+  "PROC_SELECT"
+ ],
+ [
+  "Sales Plan",
+  "SORT",
+  "DMF0021_main_SORT",
+  "DMF0021_GET_DM_PLN_SALES_PLAN_DATAEX",
+  "PROC_SELECT"
+ ],
+ [
+  "dayRange",
+  "SEARCH",
+  "DMF0021_dayRange_SEARCH",
+  "PR_GET_DAY_RANGE",
+  "PROC_SELECT"
+ ],
+ [
+  "measureInfo",
+  "SEARCH",
+  "DMF0021_measureInfo_SEARCH",
+  "DMF0021_GET_SALES_PLAN_MEASUREINFO",
+  "PROC_SELECT"
+ ],
+ [
+  "spreadTitle",
+  "SEARCH",
+  "DMF0021_spreadTitle_SEARCH",
+  "DMF0021_GET_SPREAD_TITLE",
+  "PROC_SELECT"
+ ],
+ [
+  "titleSet",
+  "SAVE",
+  "DMF0021_titleSet_SAVE",
+  "SCM0002_SET_TITLESET_POPUP",
+  "PROC_SAVE"
+ ],
+ [
+  "titleSet",
+  "SEARCH",
+  "DMF0021_titleSet_SEARCH",
+  "DMF0002_GET_TITLESET_POPUP",
+  "PROC_SELECT"
+ ]
+]

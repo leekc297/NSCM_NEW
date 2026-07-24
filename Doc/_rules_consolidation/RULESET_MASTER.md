@@ -23,7 +23,7 @@
 4. (UI 작업 시) §3 UI-MANDATORY 체크리스트를 PRE-WRITE 로 통과
 ```
 
-> **카운트 단일 소스**: hook 총수 = **114** (`Doc/_rules_v2/hooks/*.md` 실측, 2026-07-16 — **#114 msg-id-asis-tobe-conversion 신설**[AS-IS MSG_ID 그대로 사용 절대 금지 — AS-IS 문구 확보→대조표 매칭 컬럼→사내 실측으로 TO-BE ID EXACT 재사용/신규 채번/동일 유지 3분기 + 사용 ID 전수 실문구 대사. 공통 61코드 중 54(89%) 의미 재배정 실측. 사용자 명시]. 직전 2026-07-15: #113 ui-category-division-direct-compare 신설[Grid Column 하드코딩·화이트리스트·attr 우회 금지, DIVISION_ID 서버 직접 비교 — 사용자 명시]. 2026-07-13: #110~#112). 어떤 문서든 카운트를 별도 보유하지 말 것 — 본 파일 §4 와 00_INDEX 만 카운트를 가진다. (진단 R-2)
+> **카운트 단일 소스**: hook 총수 = **118** (`Doc/_rules_v2/hooks/*.md` 실측, 2026-07-24 — **#118 mssql-ci-collation-parity**[MSSQL 암묵 등가 상실 2형: ①CI collation(대소문자) — 리터럴 비교 미매칭→DELETE 미작동/필터 전멸(DMF0003 VMI DELETE·MAKE_CUST_FCST 'Customer Fcst' 사고), fix=UPPER() IN+전 오브젝트 sweep(주석 오탐 배제) ②숫자→문자 표기('.0') 사문 REPLACE — AS-IS도 사문이면 주석의 설계 의도 복원이 정본. 검증=재현 실측 전후 대비]. 동시 보강: #115 §3 Measure 모달 SHEET_PRSL_YN 게이트(미등록=titleset 미반영 경로, 왕복 검증) / #117 §4 Cell Combo Data Type 축(양DB SHEET_COLUMNS diff·해석기 UP_FX_GetCommonDataList sys.sql_modules 확정·값 MINUS·동적 SetComboCol·사문 컨트롤·셀 콤보 ALL행=결함). 직전 2026-07-23: #115~#117 / 07-16: #114). 어떤 문서든 카운트를 별도 보유하지 말 것 — 본 파일 §4 와 00_INDEX 만 카운트를 가진다. (진단 R-2)
 >
 > ⚠️ 2026-07-13(저녁): 신규 **#112 `search-condition-asis-tobe-catalog`** (SCP·DM 화면 조회조건 AS-IS↔TO-BE 카탈로그 적용 의무 — 원천 `Doc/SCP_DM_화면별 조회조건 정리_260122_v0.4.xlsx` List 시트 **953행/99화면 전수** MD 변환 = `_rules_v2/_mapping/search_conditions_scp_dm.md`. 조회조건 작성 전 해당 화면 표 전 행 대조 + 명칭 표준화 rename 13쌍[Div→Div./Model→Model/Nickname/Project→PJT/Valid→Active 등] + 다중선택 표준=검색+ALL버튼 + 팝업 통합[모→메1/프1→프2] + 공통기능화 검토 203행=SearchArea 승계 금지 + Sun-Set 8화면 사전 보고 + 카운트 일치 보고 의무. 사용자 명시) = **112**.
 >
@@ -162,9 +162,9 @@
 
 ---
 
-## §4. Hook 카탈로그 (전체 114 / Full Catalog) — 단일 카운트 소스
+## §4. Hook 카탈로그 (전체 118 / Full Catalog) — 단일 카운트 소스
 
-> 본문 위치: `Doc/_rules_v2/hooks/<name>.md`. 카운트 = 본 파일 상단 "카운트 단일 소스" 문단 참조 (**114**, 2026-07-16 실측 — 본 §4 내 중복 카운트 표기는 2026-07-03 정리로 제거, 갱신은 상단 문단+본 헤더+말미 SSOT 3곳 동시). 정렬: 파일명 알파벳순(진단 R-4) — 단 #70 이후는 등재 시점 순 표 끝 배치.
+> 본문 위치: `Doc/_rules_v2/hooks/<name>.md`. 카운트 = 본 파일 상단 "카운트 단일 소스" 문단 참조 (**118**, 2026-07-24 실측 — 본 §4 내 중복 카운트 표기는 2026-07-03 정리로 제거, 갱신은 상단 문단+본 헤더+말미 SSOT 3곳 동시). 정렬: 파일명 알파벳순(진단 R-4) — 단 #70 이후는 등재 시점 순 표 끝 배치.
 > 분류: 🅒 공통 · 🆄 UI/화면 · 🅖 Grid/Wijmo · 🅕 Search/Form · 🅟 Popup/Modal · 🅑 BE/SP/Oracle · 🅓 DB적용/Deploy · 🅖it Git/Infra
 
 | # | Hook | 분류 | 트리거 | 한 줄 요약 |
@@ -206,6 +206,10 @@
 | 112 | search-condition-asis-tobe-catalog | 🅕 | T01/T01M/T03/T05 | ⭐⭐ **SCP·DM 조회조건 AS-IS↔TO-BE 카탈로그 적용 의무 (사용자 지정)** — 카탈로그 = `_rules_v2/_mapping/search_conditions_scp_dm.md`(원천 xlsx List 시트 **953행/99화면 전수** 변환). 조회조건 작성 전 해당 화면 표 **전 행 대조**: To-Be 명칭·유형·기능·팝업 그대로(임의 결정 금지) + 명칭 표준화 rename 13쌍(Div→**Div.**/Model→**Model/Nickname**/Project→**PJT**/Valid→**Active**/Version→**Ver.** 등) + 다중선택 표준=**검색+ALL버튼** + 팝업 통합(모1~3→메1/프1→프2) + **공통기능화 검토 203행=SearchArea 승계 금지**(버튼·체크박스 — 사용자 확인) + **Sun-Set 8화면 사전 보고** + 조회조건 삭제 11행 미구현 + 카운트 일치 보고(__asis-mapping__). To-Be 필수값 미확정 한계 명시. (2026-07-13) |
 | 113 | ui-category-division-direct-compare | 🅕 | T01/T01M | ⭐⭐ **Grid 정적 컬럼 표시 표준 (사용자 지정 2026-07-15)** — DIVISION_ID 가시성 = PR_GET_SHEET_COLUMN_LIST/MEASURE_LIST 서버 직접 비교(divisionId 전송 + division 변경 재fetch). ❌ ATTRIBUTE1/3 클라 비교(#92 구방식) ❌ 컬럼·measure 하드코딩/화이트리스트/FALLBACK. FE 필터=visible&&display 2 boolean, ColumnSetting 로컬 반영=display. 정본 sales-plan(DMF0021). (§4 표 소급 등재 2026-07-16 — 상단 카운트만 있고 표 행 누락 drift 정정) |
 | 114 | msg-id-asis-tobe-conversion | 🅕 | T01/T01M/T08/T18 (MSG 이관·등록·매핑) | ⭐⭐⭐ **AS-IS MSG_ID 그대로 사용 절대 금지 (사용자 지정 2026-07-16)** — AS-IS↔TO-BE 공통 61코드 중 **54(89%) 의미 재배정** 실측(예: AS-IS MSG00001 '필수 입력'↔TO-BE '저장 하시겠습니까?'). 의무 4단계: ①AS-IS 실문구 확보(ID만 금지) → ②대조표 `_artifacts/MESSAGE_ASIS_vs_TOBE_대조.xlsx` 'AS-IS 한글 일치 TO-BE MSG_ID' 컬럼 확인(재매핑 확정 14건: MSG00004→00672/00006→00003/00097→00667/00133→00004/00225→00666/00259→00662/00464→00671 등) → ③사내 `SCM_ADM_MSG_M` 실측 3분기(동일 문구 존재=**TO-BE ID EXACT 재사용** / 부재=**MAX 실측+1 신규 채번**+KO/EN/CN MERGE[#98 §7] / ID·문구 모두 일치[7건뿐]=유지) → ④POST-WRITE: 사용 MSG grep 전수 → 사내 실문구 대사 표 보고(fallback 텍스트 신뢰 금지). ❌ 기존 TO-BE ID 에 AS-IS 문구 UPDATE(전 화면 오염). `__asis-mapping__` 에 AS-IS→TO-BE 변환 관계 명시. DMF0003 재채번 사고(6/28→7/11 재정합) |
+| 115 | titleset-cache-immunization | 🅕 | T01/T01M/T08 (동적 PIVOT·Column Setting) | ⭐⭐⭐ **titleset 'C' 캐시 오염 면역화 (2026-07-23)** — 동적 PIVOT V_COLUMN 조립 SP 는 캐시 오염 면역 가드 의무: ①SP 커서 `NVL(DEFAULT_FLAG,'N') NOT IN ('-',' ')`+VALID='Y'+**MF_BASE 산출 whitelist**(❌ DEFAULT_FLAG='Y' 필터 — 'N'-flag 다수가 정당 산출[35/40], 과거 539→9행 파손) ②모달 `columnType='C'`+COLUMN_NAME dedup+`selectableOnly` opt-in ③미산출 컬럼 USER_SELECTABLE='N' 정정+SHEET_COLUMNS(PK 없음) 사내 정본 전면 동기. 검증=회귀 해시 동일+**오염 강제 주입 IMMUNE 테스트**. 일회성 캐시 DELETE=재오염 두더지잡기 금지. DMF0003 DEPT_ID(00904)/MEASURE(00918) 재발 사고 |
+| 116 | sp-parallel-dml-txn-guard | 🅕 | T08/T10/T18 (SP 변환·저장 오류) | ⭐⭐ **SP 도입부 ALTER SESSION PARALLEL DML = 트랜잭션 가드 의무 (2026-07-23)** — DML 후 내부 호출되는 SP 의 `DISABLE PARALLEL DML` 은 활성 트랜잭션 중 **ORA-12841**(진입점 단독 테스트는 통과 — E2E 잠재결함). fix=12841 허용 가드(`IF SQLCODE != -12841 THEN RAISE`; PDML 기본 비활성→기능 동일). 치환은 **비주석 라인만**(문자열 count 는 주석 오탐). 검증=`DBMS_TRANSACTION.LOCAL_TRANSACTION_ID(TRUE)` 재현+가드 오류0. ENABLE 은 경로 검토 후. sweep 의무(user_source 전수). DMF0003 div82 SAVE→SALES_PLAN_SYNC 사고 |
+| 117 | search-condition-datasource-asis-parity | 🅕 | T01/T01M/T03 (조회조건 데이터 소스) | ⭐⭐ **조회조건 데이터 추출 AS-IS 정합 + 공유 CMBO 보호 (2026-07-23)** — #112(명칭·유형)와 별개 축: 항목별 추출 쿼리 1:1. AS-IS 원천=`04.WSL/FoxQuery/{도메인}/Common/BigFilter.xml`(GetDMInnerTable 키) + `UP_FX_GetCommonDataList_*`/기본값 SP(.env.asis OBJECT_DEFINITION 실측). 불일치 의심=**양식 MINUS 실측 판정**(추측 금지). ⭐공유 `SCM_ADM_CMBO_SQL_M` 수정 전 **FE 소비자 전수 grep 의무**(조회조건+grid `_comboKey`+array-form) — 소비자 2+ or 바인드 변경 = **화면 전용 SQL_ID 신규 등록**(공유본 무변경), 카탈로그 필드는 opt-in prop(`comboId?`/`division?` 기본값 보존)만. DMF0003 P1~P6(BizType 81/82 전량 누락 등 6건)+SiteByEndCustomer 소비자 5곳 파급 사고 |
+| 118 | mssql-ci-collation-parity | 🅕 | T08/T10/T18 (SP 변환·중복/순서/필터 오류) | ⭐⭐ **MSSQL 암묵 등가 상실 함정 (2026-07-24)** — ①**CI collation**: MSSQL 대소문자 무시 전제 리터럴 비교가 Oracle CS 에서 미매칭 → DELETE 미작동(중복)/필터 전멸(배치 MAKE_CUST_FCST `'Customer Fcst'`≠실데이터 'Customer FCST' → EXCEL 상위 통합 통째 누락 "└ EXCEL만 표시" / DMF0003 VMI DELETE 대문자). fix=`UPPER(col) IN` + **전 오브젝트 sweep**(`user_source LIKE '%''리터럴''%'` — 주석 내부 매칭 오탐 금지, [Org.] 7종 오탐 선례) ②**'.0' 표기 사문 REPLACE**: numeric→varchar 표기 전제 로직이 int/TO_CHAR 에서 no-op → 정렬 동률. AS-IS 도 사문이면 **주석의 설계 의도 복원이 정본**(근거 README 명시). 검증=재현 실측 전후 대비·비주석 라인만 치환 |
 | 29 | oracle-cmbo-varname-quote | 🅑 | T08/T10 | CMBO_SQL_M `@varName` → `TO_CHAR()` wrap (ORA-01722 방지) |
 | 30 | oracle-db-workflow | 🅑 | T08/T10/T18/T19 | ⭐⭐ Oracle SP/DB 단일 진입점 (8 타입 + 증상→원인) |
 | 31 | oracle-sp-perf-anti-patterns | 🅑 | T08/T10/T19 | ⭐⭐ MSSQL→Oracle 6 성능 룰 (REGEXP/split/lookup/index/SARGable) |
@@ -387,5 +391,5 @@ UI mandatory 의 POST-WRITE grep 중 기계 검증 가능한 패턴을 `check-fe
 
 > 단일 진실 소스 / Single Source of Truth:
 > - 진입 / Entry: 루트 `CLAUDE.md` → 본 파일 → `00_INDEX.md`
-> - 카운트 / Count: 본 §4 (= 114) + `00_INDEX.md` (동기화 의무)
+> - 카운트 / Count: 본 §4 (= 118) + `00_INDEX.md` (동기화 의무)
 > - UI 누락 방지 / UI no-omission: 본 §3 체크리스트 (PR 게이트 §7 통합)

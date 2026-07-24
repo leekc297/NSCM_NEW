@@ -1,5 +1,9 @@
 .customPanelGroup {
-  height: calc(88vh - 220px) !important;
+  //height: calc(88vh - 220px) !important;
+  /* 페이지(.view)가 flex column 이 되면서 Result 영역은 flex:1 로 남은 높이를 받는다.
+  기존 calc(88vh - 220px) 고정 높이는 화면 크기에 따라 바닥에서 뜨거나 넘쳐서 제거. */
+  flex: 1 1 0 !important;
+  min-height: 0;
   gap: 24px;
   [class*='wj-flexgrid'] {
     max-height: 100%;

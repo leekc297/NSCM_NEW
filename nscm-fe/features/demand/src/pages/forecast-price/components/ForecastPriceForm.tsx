@@ -81,6 +81,8 @@ export const ForecastPriceForm = ({
             division={searchParams.divisionId}
             value={searchParams.deptIds}
             onChange={v => setSearchParams({ deptIds: v, endCustomers: [], salesSites: [] })}
+            // ⭐ 2026-07-23 AS-IS 정합 — owner 1번 토큰 부서 기준 (hook #117, 차집합 35/64 실측)
+            comboId='UserTeamByDivision'
           />
           <EndCustomerField
             gridSize={3}
@@ -93,13 +95,23 @@ export const ForecastPriceForm = ({
             division={searchParams.divisionId}
             value={searchParams.salesSites}
             onChange={v => setSearchParams({ salesSites: v })}
+            // ⭐ 2026-07-23 AS-IS 정합(사용자 승인) — 'UserSiteByEndCustomer' 서버 바인드 전환:
+            //   EndCustomer/Team cascade + 40 owner-team 필터 + OPERATION_GROUP 'W' 제외 (hook #117).
+            comboId='UserSiteByEndCustomer'
+            endCustomer={searchParams.endCustomers.join(',')}
+            deptId={searchParams.deptIds.join(',')}
           />
 
           {/* Row 2 — Biz Type / Model·Nickname(팝업) / Period / Bucket */}
+          {/* ⭐ 2026-07-23 AS-IS 정합 — AS-IS BigFilter BizType = DM_BIZ_TYPE(40) UNION
+              SCM_MST_PROJECT BIZ_TYPE(비40). 공유 'BizType'(lookup 3종)은 81/82 후보 누락 →
+              'BizTypebyDivision' + division 필터 (DMF0003 P1 동형, hook #117). */}
           <BizTypeField
             gridSize={3}
             value={searchParams.bizTypes}
             onChange={v => setSearchParams({ bizTypes: v })}
+            comboId='BizTypebyDivision'
+            division={searchParams.divisionId}
           />
           <ItemField
             gridSize={3}

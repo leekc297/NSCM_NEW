@@ -1,1 +1,0 @@
-export { DynamicQuery } from './DynamicQuery';

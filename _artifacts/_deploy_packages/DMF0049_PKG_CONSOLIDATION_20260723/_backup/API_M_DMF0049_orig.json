@@ -1,0 +1,135 @@
+[
+ [
+  "MDF Reports",
+  "COLUMN_SETUP",
+  "DMF0049_main_COLUMN_SETUP",
+  "DMF0002_GET_TITLESET_POPUP",
+  "PROC_SELECT"
+ ],
+ [
+  "MDF Reports",
+  "DELETE",
+  "DMF0049_main_DELETE",
+  "DMF0049_GET_SALES_ETC_REPORTS_DATA",
+  "PROC_SELECT"
+ ],
+ [
+  "MDF Reports",
+  "EXCEL",
+  "DMF0049_main_EXCEL",
+  "DMF0049_GET_SALES_ETC_REPORTS_DATA",
+  "PROC_SELECT"
+ ],
+ [
+  "MDF Reports",
+  "FILTER",
+  "DMF0049_main_FILTER",
+  "DMF0049_GET_SALES_ETC_REPORTS_DATA",
+  "PROC_SELECT"
+ ],
+ [
+  "MDF Reports",
+  "INSERT",
+  "DMF0049_main_INSERT",
+  "DMF0049_GET_SALES_ETC_REPORTS_DATA",
+  "PROC_SELECT"
+ ],
+ [
+  "MDF Reports",
+  "MEASURE_SELECT",
+  "DMF0049_main_MEASURE_SELECT",
+  "DMF0002_GET_TITLESET_POPUP",
+  "PROC_SELECT"
+ ],
+ [
+  "MDF Reports",
+  "SAVE",
+  "DMF0049_main_SAVE",
+  "DMF0049_SAVE_SALES_ETC_REPORT_C",
+  "PROC_SAVE"
+ ],
+ [
+  "MDF Reports",
+  "SEARCH",
+  "DMF0049_main_SEARCH",
+  "DMF0049_GET_SALES_ETC_REPORTS_DATA",
+  "PROC_SELECT"
+ ],
+ [
+  "MDF Reports",
+  "SORT",
+  "DMF0049_main_SORT",
+  "DMF0049_GET_SALES_ETC_REPORTS_DATA",
+  "PROC_SELECT"
+ ],
+ [
+  "MDF Reports",
+  "SP_VER",
+  "DMF0049_main_SP_VER",
+  "PKG_DMF0044.P_DMF0044_GET_SALES_VERSION_POPUP",
+  "PROC_SELECT"
+ ],
+ [
+  "measure",
+  "SEARCH",
+  "DMF0049_measure_SEARCH",
+  "PKG_DMF0049.P_DMF0049_GET_MEASURE",
+  "PROC_SELECT"
+ ],
+ [
+  "spreadTitle",
+  "SEARCH",
+  "DMF0049_spreadTitle_SEARCH",
+  "PKG_DMF0049.P_DMF0049_GET_SPREAD_TITLE",
+  "PROC_SELECT"
+ ],
+ [
+  "titleSet",
+  "SAVE",
+  "DMF0049_titleSet_SAVE",
+  "SCM0002_SET_TITLESET_POPUP",
+  "PROC_SAVE"
+ ],
+ [
+  "titleSet",
+  "SEARCH",
+  "DMF0049_titleSet_SEARCH",
+  "DMF0002_GET_TITLESET_POPUP",
+  "PROC_SELECT"
+ ],
+ [
+  "unitedVersion",
+  "ACTION",
+  "DMF0049_unitedVersion_ACTION",
+  "DMF0044_SAVE_SALES_PLAN_VERSION_COPY",
+  "PROC_SAVE"
+ ],
+ [
+  "unitedVersion",
+  "ACTION_BP",
+  "DMF0049_unitedVersion_ACTION_BP",
+  "PKG_DMF0044.P_DMF0044_SAVE_BIZ_PLAN_VERSION_COPY",
+  "PROC_SAVE"
+ ],
+ [
+  "unitedVersion",
+  "SEARCH",
+  "DMF0049_unitedVersion_SEARCH",
+  "PKG_DMF0044.P_DMF0044_GET_SALES_VERSION_POPUP",
+  "PROC_SELECT"
+ ],
+ [
+  "unitedVersion",
+  "TITLE",
+  "DMF0049_unitedVersion_TITLE",
+  "PKG_DMF0000.P_DMF0000_GET_COMMON_SPREAD_TITLE",
+  "PROC_SELECT"
+ ],
+ [
+  "unitedVersion",
+  "TRANSFER",
+  "DMF0049_unitedVersion_TRANSFER",
+  "DMF0044_MOBILE_REPORT_CREATE",
+  "PROC_SAVE"
+ ]
+]

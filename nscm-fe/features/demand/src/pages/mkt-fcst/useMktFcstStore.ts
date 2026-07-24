@@ -99,9 +99,14 @@ interface Action {
   applyVisibleMeasures: (sheetName: keyof VisibleMeasuresBySheet, measureCodes: string[] | null) => void;
 }
 
-const yyyymmdd = (d: Date) => d.toISOString().slice(0, 10).replace(/-/g, '');
-const today = yyyymmdd(new Date());
-const sixMonthsAhead = yyyymmdd(new Date(Date.now() + 180 * 24 * 3600 * 1000));
+// ⭐ 2026-07-23 조회조건 AS-IS 정합(전건 보완) — Period 기본값 = AS-IS PR_GET_DAY_RANGE(p_month=6) 1:1:
+//   "해당 월 1일 ~ (+6개월 시점 월의 1일 - 1일)" (예: 07-23 → 0701~1231).
+//   구현: 클라 달력 계산 (SP 재호출 불요 — 결정적). ⚠ toISOString 은 UTC 라 KST 자정 부근 하루 밀림 → 로컬 포맷.
+const yyyymmddLocal = (d: Date) =>
+  `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`;
+const now = new Date();
+const periodStart = yyyymmddLocal(new Date(now.getFullYear(), now.getMonth(), 1)); // 해당 월 1일
+const periodEnd = yyyymmddLocal(new Date(now.getFullYear(), now.getMonth() + 6, 0)); // +6개월 구간 마지막 날
 
 const initSearch: SearchCondition = {
   divisionId: DIVISION.MOBILITY,
@@ -110,8 +115,8 @@ const initSearch: SearchCondition = {
   scmSiteIds: [],
   bizTypes: [],
   senderCodes: [],
-  startYyyymmdd: today,
-  endYyyymmdd: sixMonthsAhead,
+  startYyyymmdd: periodStart,
+  endYyyymmdd: periodEnd,
   bucketType: BUCKET_TYPE.WEEKLY, // 조회조건 Bucket 초기값 = Weekly (사용자 지정 2026-06-29)
   projectCodes: [],
   itemIds: [],

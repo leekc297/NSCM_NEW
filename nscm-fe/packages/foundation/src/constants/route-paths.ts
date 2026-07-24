@@ -1,7 +1,5 @@
-/**
- * 라우트 경로 상수
- */
-
+// ⚠ 임시 복구 (2026-07-22) — 클라우드 공통 파일(Router.tsx/useMDIStore.ts 신아키텍처판) 반입분이
+//   ROUTE_PATHS 를 참조하여 복구. 폐기 정책(2026-07-21)은 유지 방향 — 클라우드 측 참조 제거 후 재삭제 예정.
 export const ROUTE_PATHS = {
   HOME: 'home',
   MASTER: 'master',
@@ -46,9 +44,11 @@ export const ROUTE_PATHS = {
   WATERFALL: 'waterfall',
   DMF0022: 'sales-plan-waterfall',
   DMF0072: 'nn-master-mapping',
-  // SCP(Supply) 도메인 — 2026-07-13 SCP0013 신규 (MNU_M 트리 신설과 3-SET 정합.
-  //   중간 메뉴 = 'Supply Plan'(MNU00013, AS-IS 메뉴 체계) → slug 'supply-plan')
   SUPPLY: 'supply',
   SUPPLY_PLAN: 'supply-plan',
   SCP0013: 'production-plan-line',
+  // 2026-07-22 신규 화면 (MNU_URL 정합)
+  DMF0003: 'mkt_forecast',
+  DMF0044: 'sales-reports',
+  DMF0049: 'etc-sales-reports',
 } as const;

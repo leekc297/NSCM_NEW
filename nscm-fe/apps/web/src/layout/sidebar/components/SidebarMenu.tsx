@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { IcMinus, IcPlus } from '@foundation/assets';
 import type { Menu } from '@foundation/models';
 import { clsx } from '@shared/clsx';
-import { useMessageStore } from '@shared/stores';
+import { useUIStore } from '@shared/stores';
 
 import { useMDIStore } from '../../../mdi/useMDIStore';
 
@@ -14,29 +14,28 @@ interface SidebarMenuProps {
   menu: Menu;
 }
 
-const MAXIUM_TAB_NUMBER = 10;
-
 export const SidebarMenu = ({ menu }: SidebarMenuProps) => {
   const { t } = useTranslation();
   const openTab = useMDIStore(state => state.openTab);
-  const tabs = useMDIStore(state => state.tabs);
-  const setAlert = useMessageStore(state => state.setAlert);
+  const sidebarOpenGroupId = useUIStore(state => state.sidebarOpenGroupId);
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
+  // 새 탭이 열려 이 그룹이 지목되면 펼친다.
+  // 접는 건 사용자 몫이라 여기서 강제로 닫지는 않는다.
+  useEffect(() => {
+    if (sidebarOpenGroupId && sidebarOpenGroupId === String(menu.mnuId)) setIsOpen(true);
+  }, [sidebarOpenGroupId, menu.mnuId]);
+
+  // 탭 개수 제한 없음 — 넘치는 탭은 MDITabs 의 좌우 화살표로 스크롤한다.
+  // (기존 10개 제한 + LBL00360/MSG00012 알림 제거)
   const handleMenuClick = (menu: Menu, isParentMenu: boolean = false) => {
     if (menu.children) {
       if (isParentMenu) setIsOpen(state => !state);
       return;
     }
 
-    if (tabs.length >= MAXIUM_TAB_NUMBER) {
-      void setAlert({
-        type: 'alert',
-        header: t('LBL00360', '_최대 화면 수 초과 알림'),
-        content: t('MSG00012', '_탭은 10개를 넘을 수 없습니다.'),
-      });
-    } else openTab(menu);
+    openTab(menu);
   };
 
   return (

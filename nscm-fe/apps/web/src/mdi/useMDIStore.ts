@@ -2,10 +2,9 @@
 import { ROUTE_PATHS } from '@foundation/constants';
 import type { Menu } from '@foundation/models';
 import { getUuid } from '@foundation/utils';
-import { createPersistedStore, useSessionStore } from '@shared/stores';
+import { createPersistedStore, useSessionStore, useUIStore } from '@shared/stores';
 
-import { router } from '../core/Router';
-
+import { MDI_TAB_MODE } from './mdi.config';
 import type { AnyTab } from './MDI.types';
 
 interface MDIState {
@@ -16,14 +15,11 @@ interface MDIState {
 interface MDIActions {
   openTab: (menu: Omit<Menu, 'children' | 'sortOrd'>) => void;
   setActiveTab: (tabIndex: number) => void;
+  setActiveByTabId: (tabId: string) => void;
   closeTab: (tabIndex: number) => void;
   closeOtherTabs: () => void;
   closeAllTabs: () => void;
 }
-
-const navigate = (path: string, tabIndex: number) => {
-  void router.navigate('/' + path, { state: tabIndex });
-};
 
 const homeTab: AnyTab = {
   tabId: 'tab-home',
@@ -44,27 +40,45 @@ export const useMDIStore = createPersistedStore<MDIState & MDIActions>(
     ...initMDIState,
     openTab: menu => {
       if (menu.mnuUrl === '/home') {
-        set(state => (state.activeIndex = 0));
+        set(state => {
+          state.activeIndex = 0;
+        });
         return;
       }
-      const existingTab = get().tabs.some(t => t.mnuId === menu.mnuId);
 
-      if (existingTab) {
-        // TODO: setMessage(이미 열린 탭이 있습니다. 또 여시겠습니까?)
+      // single 모드: 이미 열린 같은 메뉴가 있으면 새 탭 대신 그 탭으로 포커스
+      if (MDI_TAB_MODE === 'single') {
+        const existingIndex = get().tabs.findIndex(t => t.mnuId === menu.mnuId);
+        if (existingIndex >= 0) {
+          set(state => {
+            state.activeIndex = existingIndex;
+          });
+          return;
+        }
       }
 
       const tabId = getUuid();
+
+      const menuPath = useSessionStore.getState().findMenuPath(menu.mnuId as string);
+
+      // 사이드바를 이 메뉴에 맞춰 전환한다 — 링크/URL/즐겨찾기로 들어와도 좌측 메뉴가 따라오도록.
+      // path = [상단메뉴, (2레벨 그룹), ..., 리프] 이므로 path[0] 이 사이드바에 띄울 상단 메뉴,
+      // path[1] 은 펼쳐야 할 그룹이다(2단 메뉴면 path[1] 이 리프 자신이라 펼칠 그룹이 없다).
+      if (menuPath?.length) {
+        useUIStore
+          .getState()
+          .syncSidebarToMenu(
+            menuPath[0],
+            menuPath.length >= 3 ? String(menuPath[1].mnuId) : undefined
+          );
+      }
 
       const newTab: AnyTab = {
         tabId: tabId,
         mnuDesc: menu.mnuDesc,
         mnuId: menu.mnuId,
-        mnuUrl:
-          useSessionStore
-            .getState()
-            .findMenuPath(menu.mnuId as string)
-            ?.map(menu => menu.mnuUrl)
-            .join('/') ?? '',
+        routePath: menu.routePath,
+        mnuUrl: menuPath?.map(m => m.mnuUrl).join('/') ?? '',
         mnuMsgId: menu.mnuMsgId,
         closable: true,
       };
@@ -72,15 +86,18 @@ export const useMDIStore = createPersistedStore<MDIState & MDIActions>(
         state.tabs = [...state.tabs, newTab];
         state.activeIndex = state.tabs.length - 1;
       });
-      const { activeIndex, tabs } = get();
-      navigate(tabs[activeIndex].mnuUrl, activeIndex);
     },
     setActiveTab: tabIndex => {
       set(state => {
         state.activeIndex = tabIndex;
       });
-      const { activeIndex, tabs } = get();
-      navigate(tabs[activeIndex].mnuUrl, activeIndex);
+    },
+    setActiveByTabId: tabId => {
+      const idx = get().tabs.findIndex(t => t.tabId === tabId);
+      if (idx >= 0)
+        set(state => {
+          state.activeIndex = idx;
+        });
     },
     closeTab: tabIndex => {
       set(state => {
@@ -91,8 +108,6 @@ export const useMDIStore = createPersistedStore<MDIState & MDIActions>(
 
         if (state.activeIndex >= tabIndex) state.activeIndex -= 1;
       });
-      const { activeIndex, tabs } = get();
-      navigate(tabs[activeIndex].mnuUrl, activeIndex);
     },
     closeOtherTabs: () => {
       const { activeIndex, tabs } = get();
@@ -105,12 +120,9 @@ export const useMDIStore = createPersistedStore<MDIState & MDIActions>(
           state.activeIndex = 1;
         });
       }
-      navigate(tabs[activeIndex].mnuUrl, activeIndex);
     },
     closeAllTabs: () => {
       set({ ...initMDIState });
-      const { activeIndex, tabs } = get();
-      navigate(tabs[activeIndex].mnuUrl, activeIndex);
     },
   }),
   'MDI-store'

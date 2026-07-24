@@ -30,7 +30,6 @@ import {
   type BizPlanCutoff,
   dynKindOf,
   evalBizPlanDynCell,
-  existingRowStaticEditable,
   insertStaticEditable,
   parseDynTag,
   type ValidWindow,
@@ -391,11 +390,10 @@ export const BusinessPlanGrid = ({
       // ⭐ 콤보 dataMap 계층 indent 보존 (memory feedback_measure_combo_indent_whitespace)
       if (binding === 'MEASURE') e.cell.style.whiteSpace = 'pre';
 
-      // 정적 셀 — Insert 행 화이트리스트(R5) + 기존행 R6(Incoterms/FcstType) = Yellow. 팝업 셀 아이콘.
+      // 정적 셀 — Insert 행 화이트리스트(R5)만 Yellow. 기존행 정적 영역은 전량 잠금
+      //   (2026-07-21 G2 — 신정본 EditButton L649 LockRange 활성 / INCO·FCST unlock 블록 L651~667 전체 주석).
       if (rowItem) {
-        const editable = isInsert
-          ? insertStaticEditable(binding, rowItem, division)
-          : existingRowStaticEditable(binding, rowItem, division);
+        const editable = isInsert ? insertStaticEditable(binding, rowItem, division) : false;
         toggleClass(e.cell, 'wj-cell-editable', editable);
         toggleClass(e.cell, 'wj-cell-non-editable', false);
         const isModalCell =
@@ -434,12 +432,8 @@ export const BusinessPlanGrid = ({
       const row = s.rows[e.row].dataItem as BusinessPlanRow | undefined;
 
       if (staticBindingSet.has(binding)) {
-        // 정적 셀 — Insert 행 화이트리스트 + 기존행 R6(40 Incoterms/FcstType 조건 개방)
-        const allowed =
-          !!row &&
-          (row.CRUD_TYPE === 'I'
-            ? insertStaticEditable(binding, row, division)
-            : existingRowStaticEditable(binding, row, division));
+        // 정적 셀 — Insert 행 화이트리스트만. 기존행 = 전량 잠금 (G2 — 신정본 L649/L651~667 주석 파리티)
+        const allowed = !!row && row.CRUD_TYPE === 'I' && insertStaticEditable(binding, row, division);
         if (!allowed) {
           e.cancel = true;
           return;

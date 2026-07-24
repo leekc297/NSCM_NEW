@@ -1,0 +1,250 @@
+{
+ "DMF0044_GET_EXCHANGE_POPUP_SPREAD_TITLE": {
+  "API_M": [
+   {
+    "API_ID": "DMF0044_exchangeRate_TITLE",
+    "API_TP_CD": "PROC_SELECT",
+    "API_MSG_ID": "MSG_API_DMF0044_exchangeRate_TITLE",
+    "API_MSG_DESC": "DMF0044 환율 팝업 월 헤더 (p_year)",
+    "API_URL": "DMF0044_GET_EXCHANGE_POPUP_SPREAD_TITLE",
+    "USE_YN": "Y",
+    "CREATED_BY": "admin",
+    "CREATION_DATE": "2026-07-22 00:34:14",
+    "LAST_UPDATED_BY": "admin",
+    "LAST_UPDATE_DATE": "2026-07-22 00:34:14"
+   }
+  ],
+  "PROC_M": [
+   {
+    "PROC_NM": "DMF0044_GET_EXCHANGE_POPUP_SPREAD_TITLE",
+    "COL_NM": "year",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 1
+   },
+   {
+    "PROC_NM": "DMF0044_GET_EXCHANGE_POPUP_SPREAD_TITLE",
+    "COL_NM": "data",
+    "COL_TP_CD": "OUT",
+    "SORT_ORD": 2
+   },
+   {
+    "PROC_NM": "DMF0044_GET_EXCHANGE_POPUP_SPREAD_TITLE",
+    "COL_NM": "result",
+    "COL_TP_CD": "PROC_RESULT",
+    "SORT_ORD": 3
+   }
+  ]
+ },
+ "DMF0044_GET_SPREAD_TITLE": {
+  "API_M": [
+   {
+    "API_ID": "DMF0044_spreadTitle_SEARCH",
+    "API_TP_CD": "PROC_SELECT",
+    "API_MSG_ID": "MSG_API_DMF0044_spreadTitle_SEARCH",
+    "API_MSG_DESC": "DMF0044 동적 월 컬럼 헤더 (연 1/1~12/31)",
+    "API_URL": "DMF0044_GET_SPREAD_TITLE",
+    "USE_YN": "Y",
+    "CREATED_BY": "admin",
+    "CREATION_DATE": "2026-07-22 00:34:14",
+    "LAST_UPDATED_BY": "admin",
+    "LAST_UPDATE_DATE": "2026-07-22 00:34:14"
+   }
+  ],
+  "PROC_M": [
+   {
+    "PROC_NM": "DMF0044_GET_SPREAD_TITLE",
+    "COL_NM": "divisionId",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 1
+   },
+   {
+    "PROC_NM": "DMF0044_GET_SPREAD_TITLE",
+    "COL_NM": "sesUserId",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 2
+   },
+   {
+    "PROC_NM": "DMF0044_GET_SPREAD_TITLE",
+    "COL_NM": "startDt",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 3
+   },
+   {
+    "PROC_NM": "DMF0044_GET_SPREAD_TITLE",
+    "COL_NM": "endDt",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 4
+   },
+   {
+    "PROC_NM": "DMF0044_GET_SPREAD_TITLE",
+    "COL_NM": "data",
+    "COL_TP_CD": "OUT",
+    "SORT_ORD": 5
+   },
+   {
+    "PROC_NM": "DMF0044_GET_SPREAD_TITLE",
+    "COL_NM": "result",
+    "COL_TP_CD": "PROC_RESULT",
+    "SORT_ORD": 6
+   }
+  ]
+ },
+ "DMF0044_MOBILE_REPORT_CREATE": {
+  "API_M": [
+   {
+    "API_ID": "DMF0044_unitedVersion_TRANSFER",
+    "API_TP_CD": "PROC_SAVE",
+    "API_MSG_ID": "MSG_API_DMF0044_unitedVersion_TRANSFER",
+    "API_MSG_DESC": "DMF0044 United Transfer/Cancel (action T/C — GDW 전송)",
+    "API_URL": "DMF0044_MOBILE_REPORT_CREATE",
+    "USE_YN": "Y",
+    "CREATED_BY": "admin",
+    "CREATION_DATE": "2026-07-22 00:34:14",
+    "LAST_UPDATED_BY": "admin",
+    "LAST_UPDATE_DATE": "2026-07-22 00:34:14"
+   },
+   {
+    "API_ID": "DMF0049_unitedVersion_TRANSFER",
+    "API_TP_CD": "PROC_SAVE",
+    "API_MSG_ID": "MSG_API_DMF0049_unitedVersion_TRANSFER",
+    "API_MSG_DESC": "DMF0049 United Transfer/Cancel (공유)",
+    "API_URL": "DMF0044_MOBILE_REPORT_CREATE",
+    "USE_YN": "Y",
+    "CREATED_BY": "admin",
+    "CREATION_DATE": "2026-07-22 08:02:45",
+    "LAST_UPDATED_BY": "admin",
+    "LAST_UPDATE_DATE": "2026-07-22 08:04:27"
+   }
+  ],
+  "PROC_M": [
+   {
+    "PROC_NM": "DMF0044_MOBILE_REPORT_CREATE",
+    "COL_NM": "divisionId",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 1
+   },
+   {
+    "PROC_NM": "DMF0044_MOBILE_REPORT_CREATE",
+    "COL_NM": "versionNo",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 2
+   },
+   {
+    "PROC_NM": "DMF0044_MOBILE_REPORT_CREATE",
+    "COL_NM": "versionType",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 3
+   },
+   {
+    "PROC_NM": "DMF0044_MOBILE_REPORT_CREATE",
+    "COL_NM": "actionType",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 4
+   },
+   {
+    "PROC_NM": "DMF0044_MOBILE_REPORT_CREATE",
+    "COL_NM": "sesUserId",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 5
+   },
+   {
+    "PROC_NM": "DMF0044_MOBILE_REPORT_CREATE",
+    "COL_NM": "result",
+    "COL_TP_CD": "PROC_RESULT",
+    "SORT_ORD": 6
+   }
+  ]
+ },
+ "DMF0044_SAVE_SALES_PLAN_VERSION_COPY": {
+  "API_M": [
+   {
+    "API_ID": "DMF0044_unitedVersion_ACTION",
+    "API_TP_CD": "PROC_SAVE",
+    "API_MSG_ID": "MSG_API_DMF0044_unitedVersion_ACTION",
+    "API_MSG_DESC": "DMF0044 United 버전 액션 D/CP/CR (SP_W 계열)",
+    "API_URL": "DMF0044_SAVE_SALES_PLAN_VERSION_COPY",
+    "USE_YN": "Y",
+    "CREATED_BY": "admin",
+    "CREATION_DATE": "2026-07-22 00:34:14",
+    "LAST_UPDATED_BY": "admin",
+    "LAST_UPDATE_DATE": "2026-07-22 00:34:14"
+   },
+   {
+    "API_ID": "DMF0049_unitedVersion_ACTION",
+    "API_TP_CD": "PROC_SAVE",
+    "API_MSG_ID": "MSG_API_DMF0049_unitedVersion_ACTION",
+    "API_MSG_DESC": "DMF0049 United 액션 D/CP/CR (SP_W 계열 — DMF0044 SP 공유)",
+    "API_URL": "DMF0044_SAVE_SALES_PLAN_VERSION_COPY",
+    "USE_YN": "Y",
+    "CREATED_BY": "admin",
+    "CREATION_DATE": "2026-07-22 08:02:45",
+    "LAST_UPDATED_BY": "admin",
+    "LAST_UPDATE_DATE": "2026-07-22 08:04:27"
+   }
+  ],
+  "PROC_M": [
+   {
+    "PROC_NM": "DMF0044_SAVE_SALES_PLAN_VERSION_COPY",
+    "COL_NM": "divisionId",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 1
+   },
+   {
+    "PROC_NM": "DMF0044_SAVE_SALES_PLAN_VERSION_COPY",
+    "COL_NM": "versionNo",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 2
+   },
+   {
+    "PROC_NM": "DMF0044_SAVE_SALES_PLAN_VERSION_COPY",
+    "COL_NM": "versionDescription",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 3
+   },
+   {
+    "PROC_NM": "DMF0044_SAVE_SALES_PLAN_VERSION_COPY",
+    "COL_NM": "sesUserId",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 4
+   },
+   {
+    "PROC_NM": "DMF0044_SAVE_SALES_PLAN_VERSION_COPY",
+    "COL_NM": "resultDate",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 5
+   },
+   {
+    "PROC_NM": "DMF0044_SAVE_SALES_PLAN_VERSION_COPY",
+    "COL_NM": "actionType",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 6
+   },
+   {
+    "PROC_NM": "DMF0044_SAVE_SALES_PLAN_VERSION_COPY",
+    "COL_NM": "mvPlanYyyymm",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 7
+   },
+   {
+    "PROC_NM": "DMF0044_SAVE_SALES_PLAN_VERSION_COPY",
+    "COL_NM": "updateYn",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 8
+   },
+   {
+    "PROC_NM": "DMF0044_SAVE_SALES_PLAN_VERSION_COPY",
+    "COL_NM": "result",
+    "COL_TP_CD": "PROC_RESULT",
+    "SORT_ORD": 9
+   }
+  ]
+ },
+ "DMF0044_SALES_REPORT_DEPT_CREATE": {
+  "API_M": [],
+  "PROC_M": []
+ },
+ "DMF0044_SALES_REPORT_PRODUCT_CREATE": {
+  "API_M": [],
+  "PROC_M": []
+ }
+}

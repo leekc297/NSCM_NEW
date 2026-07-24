@@ -1,0 +1,145 @@
+/* ⚠ 임시 작성 (2026-07-22) — 클라우드 원본 Home.module.scss 미반입으로 클래스 전수 기반 작성.
+   클라우드 원본 확보 시 본 파일 교체. (Home.tsx 사용 클래스 20종 전부 정의 — vite 오류 방지 + 기본 레이아웃) */
+.homeWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: 100%;
+  padding: 16px;
+  overflow: auto;
+}
+
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.welcome {
+  font-weight: 600;
+}
+
+.devLogin {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  > :first-child {
+    width: 220px;
+  }
+}
+
+.panelGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  flex: 1;
+  min-height: 0;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.panelHeader {
+  padding: 10px 14px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.panelTitle {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.panelBody {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 6px 0;
+}
+
+.emptyText {
+  padding: 16px;
+  color: #999;
+  text-align: center;
+}
+
+.noticeRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 14px;
+  border-bottom: 1px solid #f3f3f3;
+}
+
+.noticeTitleArea {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.attachIcon {
+  flex: none;
+}
+
+.noticeTitle {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.noticeMeta {
+  display: flex;
+  gap: 12px;
+  flex: none;
+  color: #888;
+  font-size: 12px;
+}
+
+.noticeRegUser {
+  min-width: 60px;
+}
+
+.noticeRegDate {
+  min-width: 80px;
+}
+
+.favoriteRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  border-bottom: 1px solid #f3f3f3;
+}
+
+.favoriteLink {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: #1a5da6;
+  text-align: left;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.favoriteDelete {
+  background: none;
+  border: none;
+  cursor: pointer;
+  opacity: 0.6;
+
+  &:hover {
+    opacity: 1;
+  }
+}

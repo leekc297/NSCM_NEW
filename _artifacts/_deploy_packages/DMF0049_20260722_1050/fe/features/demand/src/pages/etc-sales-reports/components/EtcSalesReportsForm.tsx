@@ -1,0 +1,134 @@
+import { DivisionField } from 'features/master/src/components';
+
+import { CustomDropdown, SearchArea } from '@shared/components';
+import { useTabComboQueries } from '@shared/hooks';
+import { Button, FormItem, InputField } from '@shared/lges';
+import { Grid } from '@shared/mui';
+
+import { PLAN_RESULT, type PlanResult, type ReportType } from '../etc-sales-reports.constants';
+import { useEtcSalesReportsStore } from '../useEtcSalesReportsStore';
+
+import styles from './EtcSalesReportsForm.module.scss';
+
+interface EtcSalesReportsFormProps {
+  onSearch: () => void;
+  // ⭐ Division 변경 = Grid 초기화(비움) + CRUD reset 의무 (memory feedback_division_change_grid_reset)
+  onDivisionChange: () => void;
+  onOpenVersionModal: () => void; // btnSPVer '...' — United 팝업 (Version 주입)
+}
+
+// AS-IS DMF0049 조회조건 (주요이벤트 L17 전수 — Company 캐시만 제외. clbDivision 이중구독 승계 금지):
+//   Row1: Division*(카탈로그 MyDivision) / Report Type*(MDF_TYPE) / Year*(CALENDAR_YYYY) / Data Type*(MDF_TYPE2)
+//   Row2: Version(readonly + '...' 버튼 — United 팝업 주입. 조회·저장 필수키)
+//   ⭐ hook #94 — 1단 4개(Grid size={3}) + 36px. 버튼 3종(Measure/Exchange/Textbox)은 TitleArea(메인) 소관.
+//   ⚠ AS-IS clbDivision 이중 구독(Designer+코드 — InitSpread 2회) 은 승계 금지 — 단일 핸들러.
+export const EtcSalesReportsForm = ({
+  onSearch,
+  onDivisionChange,
+  onOpenVersionModal,
+}: EtcSalesReportsFormProps) => {
+  const { t } = useTranslation();
+
+  const sc = useEtcSalesReportsStore(s => s.searchCondition);
+  const set = useEtcSalesReportsStore(s => s.setSearchCondition);
+  const openSearchArea = useEtcSalesReportsStore(s => s.openSearchArea);
+
+  // 콤보 원천 (SCM_ADM_CMBO_SQL_M — MDF_TYPE 기등록 / MDF_TYPE2·CALENDAR_YYYY P4 신설 2026-07-22)
+  const [mdfType, calendarYyyy] = useTabComboQueries({
+    filters: ['MDF_TYPE', 'CALENDAR_YYYY'],
+  });
+
+  const toOptions = (rows: Array<Record<string, unknown>> | undefined) =>
+    ((rows ?? []) as unknown as Array<Record<string, string>>).map(r => ({
+      label: String(r.NAME ?? r.CODE ?? ''),
+      value: String(r.CODE ?? ''),
+    }));
+
+  return (
+    <SearchArea
+      isHidden={!openSearchArea}
+      searchButtonLabel={t('LBL00691', '_Search')}
+      onSearch={onSearch}
+      conditions={
+        <>
+          {/* Row 1 — Division* / Report Type* / Year* / Data Type* */}
+          <DivisionField
+            gridSize={3}
+            value={sc.divisionId}
+            onChange={v => {
+              // Version 은 division 종속(버전 목록이 division별) — 변경 시 초기화 (AS-IS 파리티)
+              set({ divisionId: v, versionNo: '', versionLabel: '' });
+              onDivisionChange();
+            }}
+          />
+          <Grid size={3}>
+            <FormItem
+              label={t('LBL00795', '_Report Type')}
+              labelAlign='right'
+              render={() => (
+                <CustomDropdown
+                  value={sc.mdfType}
+                  options={toOptions(mdfType)}
+                  onChange={(_, v) => set({ mdfType: String(v ?? '') as ReportType, versionNo: '', versionLabel: '' })}
+                />
+              )}
+            />
+          </Grid>
+          <Grid size={3}>
+            <FormItem
+              label={t('LBL00160', '_Year')}
+              labelAlign='right'
+              render={() => (
+                <CustomDropdown
+                  value={sc.yyyy}
+                  options={toOptions(calendarYyyy)}
+                  onChange={(_, v) => set({ yyyy: String(v ?? '') })}
+                />
+              )}
+            />
+          </Grid>
+          <Grid size={3}>
+            <FormItem
+              label={t('LBL00800', '_Plan/Result')}
+              labelAlign='right'
+              render={() => (
+                <CustomDropdown
+                  value={sc.planResult}
+                  options={[
+                    { label: 'Plan', value: PLAN_RESULT.PLAN },
+                    { label: 'Result', value: PLAN_RESULT.RESULT },
+                  ]}
+                  onChange={(_, v) => set({ planResult: String(v ?? '') as PlanResult })}
+                />
+              )}
+            />
+          </Grid>
+
+          {/* Row 2 — Version (readonly + '...' United 팝업. AS-IS txtSPVersion/btnSPVer 1:1) */}
+          <Grid size={6}>
+            <div className={styles.versionCell}>
+              <FormItem
+                label={
+                  sc.mdfType === 'REPORT_BP_M'
+                    ? t('LBL00797', '_BP Version')
+                    : t('LBL00798', '_SP Version')
+                }
+                labelAlign='right'
+                render={() => (
+                  <InputField
+                    value={sc.versionLabel}
+                    readOnly
+                    placeholder={t('MSG00283', '_Version을 선택하고 조회하세요.')}
+                  />
+                )}
+              />
+              <Button size='small' onClick={onOpenVersionModal}>
+                ...
+              </Button>
+            </div>
+          </Grid>
+        </>
+      }
+    />
+  );
+};

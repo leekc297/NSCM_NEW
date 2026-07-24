@@ -35,10 +35,14 @@
 - **락 대기 재배포 기법**: `ALTER SESSION SET DDL_LOCK_TIMEOUT=280;` 후 재배포를 백그라운드로 띄우면, 세션 종료 즉시 락을 잡아 배포 완료. (사용자에게 "BE 종료 + 재조회 멈춤" 안내 → 즉시 배포)
 - 재배포 전 **원본 백업**(`_backup/`), 후 **STATUS=VALID + errors=0 + 변경마커 grep + 행수 회귀** 검증.
 
-## §D. GTT/집계 NUMBER 정밀도 — 집계 대상 ≥ 소스
+## §D. GTT/집계 NUMBER 정밀도 — 수량/금액 = `NUMBER(30,10)` 표준 (⭐ 2026-07-22 사용자 확정 룰)
 
+- ⭐⭐ **수량(QTY)/금액(AMT)/율 파생 계열 컬럼의 GTT·중간테이블 SIZE 는 `NUMBER(30,10)` 로 지정한다. `NUMBER(20,10)` 신규 지정 금지.**
+  (20,10) = 정수부 10자리 → 금액 10^10(약 백억) 이상 유입 시 즉시 ORA-01438. 실측: DMF0082 클라우드 61,840,867,037.6 (11자리) 사고.
 - 소스 `NUMBER(30,10)` → 집계 대상 GTT `NUMBER(20,10)` 로 좁으면 큰 금액(≥10^10, MKT_AMT 등) 유입 시 **ORA-01438 → 조회 실패 → grid 전체 빈**(데이터 의존적, 간헐).
 - 집계·PIVOT 경유 컬럼 폭은 **소스와 동일 이상**. `ALTER TABLE gtt MODIFY (col NUMBER(30,10))` (GTT는 타세션 사용 중이면 ORA-14450 → 유휴 재시도).
+- ⭐ **이관 -955 skip 맹점 (2026-07-22 DMF0082 클라우드 사고)**: GTT DDL 을 "기존재 시 ORA-00955 skip" 멱등으로 이관하면, **대상 DB 에 구판(20,10) GTT 가 이미 있을 때 교정본(30,10)이 반영되지 않고 조용히 잔존** → 데이터 의존 ORA-01438 재발. 정밀도 교정이 포함된 이관에는 **DROP→재생성 REBUILD 파일**(`00A_GTT_REBUILD_<ID>.sql` — 미존재 -942 skip / 사용중 -14452 시 BE 재기동 안내) 동봉 + 배포 후 `all_tab_columns` 로 `data_precision=30` 검증 쿼리 명기. 정본: `_deploy_packages/DMF0082_20260722_1050/sp/00A_GTT_REBUILD_DMF0082.sql`.
+- **PRE-WRITE grep 의무**: GTT/TABLE DDL 작성·이관 직전 `grep -nE "NUMBER\(20,10\)" <ddl>.sql` → 수량/금액 계열 검출 시 (30,10) 교정 후 진행.
 
 ## §E. 와이드 범위 = 큰 중간결과 = diminishing returns
 

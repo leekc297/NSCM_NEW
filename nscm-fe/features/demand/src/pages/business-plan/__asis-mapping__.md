@@ -1,9 +1,23 @@
-# DMF0042 (Business Plan) — AS-IS ↔ TO-BE 매핑 (2026-07-15 신규 생성)
+# DMF0042 (Business Plan) — AS-IS ↔ TO-BE 매핑 (2026-07-15 신규 생성 / 2026-07-21 신정본 재대조 보완)
 
-> AS-IS 정본: `GSCM.DM.Forms.UIL\Plan\DMF0042_1_BizPlan\DMF0042_1_BizPlan.cs` 3,477줄 + Designer 1,613줄
-> (5벌 병존 중 _1 채택 — CELL_PER_CAR/MODULE_PER_CAR/UNIT_ENERGY 최신 + ExchangeRatePopup 배선).
-> 분석 정본: `Doc/_analysis/domain_DM/screens/DMF0042_1_BizPlan/validation.md`(99) + `expressions.md`(66)
-> + `Doc/화면설계서/DMF0042_BizPlan_UI분석서_v1.0.xlsx`(11시트) + `DMF0042_BizPlan_상세동작_개발용.md`(이벤트 28 전수).
+> ⭐ AS-IS 정본 = **base `GSCM.DM.Forms.UIL\Plan\DMF0042_BizPlan\DMF0042_BizPlan.cs` 3,563행** (2026-07-21 확정 —
+> DB 메타 단일 등록('DMF0042') 근거. 구정본 _1(3,477행) 기준이던 본 문서·FE 주석의 라인 인용은 신정본으로 갱신 중이며,
+> §0-B 갭 5건이 구→신정본 승계 오류 교정분).
+> 최신 분석 정본(2026-07-20): `Doc/화면분석서/DMF0042_BizPlan_제약매트릭스_상세.md` + `주요이벤트_상세분석.md`
+> + `DMF0042_BizPlan_UI분석서_v2.0.xlsx`(10시트 신표준). (구: v1.0 xlsx / 상세동작_개발용.md = _1 기준 — 참고용 강등.)
+> 분석 보조: `Doc/_analysis/domain_DM/screens/DMF0042_1_BizPlan/validation.md`(99) + `expressions.md`(66).
+
+## 0-B. 2026-07-21 최신분석(신정본) 재대조 — 갭 5건 교정 이력
+
+| # | 교정 | 근거(신정본) | 파일 |
+|---|---|---|---|
+| G1 | **비40/무효창 Q_/Y_ 직접입력 잠금** (구현이 개방하던 과잉 교정 — R4' 버킷축별 분기) | EditButton L604~615/L624~635 else LockColumn·InsertRow 동일 (M_ 은 else 없음=개방) | editLock.ts |
+| G2 | **구 R6 제거** — 기존행 INCO/FCST 조건 개방 블록은 신정본 L651~667 전체 주석(비활성). 기존행 정적 전량 잠금(L649) | EditButton L649~667 | editLock.ts + Grid |
+| G4 | Monthly LOC 편집 시 **Q_ 롤업 = 편집셀값 Int copy** (합산·0 아님. Y_=0 은 파리티) | L2371~2376 / L2399~2404 | spread.ts |
+| G8 | 필수값 — **81 에 FCST_TYPE/INCOTERMS 추가**, **82 의 PROJECT_CODE82 필수 제거** | SaveData L997~998 / L1024~1026 | division.ts |
+| G9 | **CELL_PROD_SITE 콤보(40)** — 조회 표시 코드→한글(ALL)+신규행 유효건(Y) 콤보. 메타 P7 SQL 세트 | InitSpread L392~397 [E20240731-000845] / InsertRow L1274~1278 [C20220513-000327] | constants + P7 SQL |
+| G5 | [개선] Set Price pending 차단(MSG00680) — AS-IS 가드 전무, 버튼 4종 통일 (사용자 승인) | btnSetPrice L3178~3199 (가드 없음 확인) | BusinessPlan.tsx |
+| — | 파리티 확인(무변경): 분모0 가드 기구현 / Cutoff 재조회 없음=파리티·Replace 재조회=기적용 / 6년 자동보정 기구현 / sRet passthrough 동등 | G3/G6/G7/G10 | — |
 > 사내 실측 계약(2026-07-15): PROC_M 116(12본) / API_M 23 / BTN_MPG 23 / USER_GR 60, MNU_URL=business-plan(P1),
 > 시트 키 'Biz Plan'/spreadTitle/dayRange/titleSet/exchangeRate/futurePrice(Data)/cutoffVersion/mdfVersion,
 > MAIN 16키+커서 2(data/calendar[40 유효구간]), SAVE = PKG 판 19키 '^' bulk (F-2 ①).

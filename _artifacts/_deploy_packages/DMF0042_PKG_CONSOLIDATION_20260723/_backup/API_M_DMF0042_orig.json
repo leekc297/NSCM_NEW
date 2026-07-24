@@ -1,0 +1,163 @@
+[
+ [
+  "Biz Plan",
+  "COLUMN_SETUP",
+  "DMF0042_main_COLUMN_SETUP",
+  "DMF0002_GET_TITLESET_POPUP",
+  "PROC_SELECT"
+ ],
+ [
+  "Biz Plan",
+  "CUTOFF",
+  "DMF0042_main_CUTOFF",
+  "DMF0042_SAVE_DM_PLN_BP_FCST_CUTOFF",
+  "PROC_SAVE"
+ ],
+ [
+  "Biz Plan",
+  "DELETE",
+  "DMF0042_main_DELETE",
+  "DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA",
+  "PROC_SELECT"
+ ],
+ [
+  "Biz Plan",
+  "EXCEL",
+  "DMF0042_main_EXCEL",
+  "DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA",
+  "PROC_SELECT"
+ ],
+ [
+  "Biz Plan",
+  "EXCHANGE_RATE",
+  "DMF0042_main_EXCHANGE_RATE",
+  "DMF0042_GET_EXCHANGE_PRICE",
+  "PROC_SELECT"
+ ],
+ [
+  "Biz Plan",
+  "FILTER",
+  "DMF0042_main_FILTER",
+  "DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA",
+  "PROC_SELECT"
+ ],
+ [
+  "Biz Plan",
+  "INSERT",
+  "DMF0042_main_INSERT",
+  "DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA",
+  "PROC_SELECT"
+ ],
+ [
+  "Biz Plan",
+  "MEASURE_SELECT",
+  "DMF0042_main_MEASURE_SELECT",
+  "DMF0002_GET_TITLESET_POPUP",
+  "PROC_SELECT"
+ ],
+ [
+  "Biz Plan",
+  "REPLACE",
+  "DMF0042_main_REPLACE",
+  "DMF0042_SAVE_DM_PLN_BP_REPLACE_BY_CUTOFF",
+  "PROC_SAVE"
+ ],
+ [
+  "Biz Plan",
+  "SAVE",
+  "DMF0042_main_SAVE",
+  "PKG_DMF0042.P_DMF0042_SAVE_DM_PLN_BP_FCST",
+  "PROC_SAVE"
+ ],
+ [
+  "Biz Plan",
+  "SEARCH",
+  "DMF0042_main_SEARCH",
+  "DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA",
+  "PROC_SELECT"
+ ],
+ [
+  "Biz Plan",
+  "SET_PRICE",
+  "DMF0042_main_SET_PRICE",
+  "DMF0042_SAVE_DM_PLN_BP_FCST_PRICE_CONV",
+  "PROC_SAVE"
+ ],
+ [
+  "Biz Plan",
+  "SORT",
+  "DMF0042_main_SORT",
+  "DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA",
+  "PROC_SELECT"
+ ],
+ [
+  "cutoffVersion",
+  "SEARCH",
+  "DMF0042_cutoffVersion_SEARCH",
+  "DMF0042_GET_DM_PLN_BP_CUTOFF_VERSION",
+  "PROC_SELECT"
+ ],
+ [
+  "dayRange",
+  "SEARCH",
+  "DMF0042_dayRange_SEARCH",
+  "PR_GET_DAY_RANGE",
+  "PROC_SELECT"
+ ],
+ [
+  "exchangeRate",
+  "SAVE",
+  "DMF0042_exchangeRate_SAVE",
+  "DMF0042_SAVE_DM_BP_EXCHANGE_RATE",
+  "PROC_SAVE"
+ ],
+ [
+  "exchangeRate",
+  "SEARCH",
+  "DMF0042_exchangeRate_SEARCH",
+  "DMF0042_GET_EXCHANGE_PRICE",
+  "PROC_SELECT"
+ ],
+ [
+  "futurePrice",
+  "SEARCH",
+  "DMF0042_futurePrice_SEARCH",
+  "DMF0042_GET_SCM_MST_FUTURE_PRICE_POPUP",
+  "PROC_SELECT"
+ ],
+ [
+  "futurePriceData",
+  "SEARCH",
+  "DMF0042_futurePriceData_SEARCH",
+  "DMF0042_GET_SCM_MST_FUTURE_PRICE_POPUP_DATA",
+  "PROC_SELECT"
+ ],
+ [
+  "mdfVersion",
+  "SEARCH",
+  "DMF0042_mdfVersion_SEARCH",
+  "DMF0042_GET_DM_MDF_VERSION",
+  "PROC_SELECT"
+ ],
+ [
+  "spreadTitle",
+  "SEARCH",
+  "DMF0042_spreadTitle_SEARCH",
+  "DMF0042_GET_SPREAD_TITLE",
+  "PROC_SELECT"
+ ],
+ [
+  "titleSet",
+  "SAVE",
+  "DMF0042_titleSet_SAVE",
+  "SCM0002_SET_TITLESET_POPUP",
+  "PROC_SAVE"
+ ],
+ [
+  "titleSet",
+  "SEARCH",
+  "DMF0042_titleSet_SEARCH",
+  "DMF0002_GET_TITLESET_POPUP",
+  "PROC_SELECT"
+ ]
+]

@@ -1,0 +1,605 @@
+[
+ {
+  "col": "DIVISION_ID",
+  "vis": "Y",
+  "dflt": "Y",
+  "usel": "N",
+  "fix": " ",
+  "vy": "Y",
+  "so": 10
+ },
+ {
+  "col": "DIVISION_ID40",
+  "vis": "Y",
+  "dflt": "Y",
+  "usel": "N",
+  "fix": " ",
+  "vy": "Y",
+  "so": 10
+ },
+ {
+  "col": "DEPT_ID",
+  "vis": "N",
+  "dflt": "N",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 20
+ },
+ {
+  "col": "DEPT_NAME_KO",
+  "vis": "N",
+  "dflt": "N",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 30
+ },
+ {
+  "col": "DEPT_NAME",
+  "vis": "N",
+  "dflt": "N",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 30
+ },
+ {
+  "col": "TEAM_ID",
+  "vis": "N",
+  "dflt": "N",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 40
+ },
+ {
+  "col": "TEAM_NAME_KO",
+  "vis": "N",
+  "dflt": "N",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 50
+ },
+ {
+  "col": "PROJECT_S_OP_REPORT",
+  "vis": "N",
+  "dflt": "N",
+  "usel": " ",
+  "fix": " ",
+  "vy": "Y",
+  "so": 55
+ },
+ {
+  "col": "END_CUSTOMER40",
+  "vis": "Y",
+  "dflt": "Y",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 60
+ },
+ {
+  "col": "END_CUSTOMER",
+  "vis": "Y",
+  "dflt": "Y",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 60
+ },
+ {
+  "col": "BIZ_TYPE",
+  "vis": "N",
+  "dflt": "N",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 70
+ },
+ {
+  "col": "SOLDTO_CUSTOMER",
+  "vis": "N",
+  "dflt": "N",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 80
+ },
+ {
+  "col": "COUNTRY_NAME",
+  "vis": "N",
+  "dflt": "N",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 90
+ },
+ {
+  "col": "CITY_NAME",
+  "vis": "N",
+  "dflt": "N",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 100
+ },
+ {
+  "col": "SCM_SITE_ID40",
+  "vis": "Y",
+  "dflt": "Y",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 110
+ },
+ {
+  "col": "SCM_SITE_ID",
+  "vis": "Y",
+  "dflt": "Y",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 110
+ },
+ {
+  "col": "PROJECT_CODE",
+  "vis": "Y",
+  "dflt": "Y",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 120
+ },
+ {
+  "col": "PROJECT_NAME",
+  "vis": "N",
+  "dflt": "Y",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 130
+ },
+ {
+  "col": "PROJECT_STATUS",
+  "vis": "N",
+  "dflt": "N",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 131
+ },
+ {
+  "col": "PROJECT_OWNER",
+  "vis": "N",
+  "dflt": "Y",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 132
+ },
+ {
+  "col": "GROUP_ID",
+  "vis": "N",
+  "dflt": " ",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 135
+ },
+ {
+  "col": "ITEM_ID40",
+  "vis": "Y",
+  "dflt": "Y",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 140
+ },
+ {
+  "col": "ITEM_ID",
+  "vis": "Y",
+  "dflt": "Y",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 140
+ },
+ {
+  "col": "ITEM_NAME",
+  "vis": "N",
+  "dflt": "N",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 150
+ },
+ {
+  "col": "NICK_NAME",
+  "vis": "Y",
+  "dflt": "Y",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 160
+ },
+ {
+  "col": "INCOTERMS",
+  "vis": "Y",
+  "dflt": "Y",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 170
+ },
+ {
+  "col": "ITEM_TYPE",
+  "vis": "N",
+  "dflt": "N",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 180
+ },
+ {
+  "col": "FCST_TYPE",
+  "vis": "Y",
+  "dflt": "Y",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 190
+ },
+ {
+  "col": "DOM_EXP",
+  "vis": "Y",
+  "dflt": "Y",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 200
+ },
+ {
+  "col": "PLANT_SITE_ID",
+  "vis": "Y",
+  "dflt": "Y",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 210
+ },
+ {
+  "col": "CUST_GROUP",
+  "vis": "N",
+  "dflt": "N",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 220
+ },
+ {
+  "col": "CUST_GROUP_DTL",
+  "vis": "N",
+  "dflt": "N",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 230
+ },
+ {
+  "col": "OWNER",
+  "vis": "N",
+  "dflt": "N",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 242
+ },
+ {
+  "col": "APPLICATION",
+  "vis": "N",
+  "dflt": "N",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 250
+ },
+ {
+  "col": "ROUTE",
+  "vis": "N",
+  "dflt": "N",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 260
+ },
+ {
+  "col": "MDM_PROJECT_NAME",
+  "vis": "N",
+  "dflt": "N",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 270
+ },
+ {
+  "col": "MIN_CAPACITY",
+  "vis": "N",
+  "dflt": "N",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 280
+ },
+ {
+  "col": "FORECAST_INFO_BIZ_TYPE",
+  "vis": "N",
+  "dflt": "N",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 290
+ },
+ {
+  "col": "FORECAST_INFO_PRODUCT_GROUP",
+  "vis": "N",
+  "dflt": "N",
+  "usel": "N",
+  "fix": " ",
+  "vy": "Y",
+  "so": 300
+ },
+ {
+  "col": "CELL_TYPE",
+  "vis": "N",
+  "dflt": "N",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 305
+ },
+ {
+  "col": "FORECAST_INFO_CELL_MODEL",
+  "vis": "N",
+  "dflt": "N",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 310
+ },
+ {
+  "col": "FORECAST_INFO_CELL_PACK_COUNT",
+  "vis": "N",
+  "dflt": "N",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 320
+ },
+ {
+  "col": "FORECAST_INFO_ALL",
+  "vis": "N",
+  "dflt": "N",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 330
+ },
+ {
+  "col": "FORECAST_INFO_SPEC",
+  "vis": "N",
+  "dflt": "N",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 331
+ },
+ {
+  "col": "FORECAST_INFOR_VERSION",
+  "vis": "N",
+  "dflt": "N",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 332
+ },
+ {
+  "col": "CELL_MODEL_NICK_NAME",
+  "vis": "N",
+  "dflt": "N",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 333
+ },
+ {
+  "col": "VMI_YN",
+  "vis": "N",
+  "dflt": "N",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 340
+ },
+ {
+  "col": "CELL_PER_CAR",
+  "vis": "N",
+  "dflt": "N",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 341
+ },
+ {
+  "col": "CELL_PER_MODULE",
+  "vis": "N",
+  "dflt": "N",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 342
+ },
+ {
+  "col": "MODULE_PER_CAR",
+  "vis": "N",
+  "dflt": "N",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 343
+ },
+ {
+  "col": "ENERGE",
+  "vis": "N",
+  "dflt": "N",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 350
+ },
+ {
+  "col": "CELL_QUANTITY",
+  "vis": "N",
+  "dflt": "N",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 351
+ },
+ {
+  "col": "EDIT_FLAG",
+  "vis": "N",
+  "dflt": " ",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 500
+ },
+ {
+  "col": "DMS_SALES",
+  "vis": "N",
+  "dflt": "N",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 510
+ },
+ {
+  "col": "DMS_CUSTOMER",
+  "vis": "N",
+  "dflt": "N",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 520
+ },
+ {
+  "col": "NEW_FLAG",
+  "vis": "N",
+  "dflt": " ",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 550
+ },
+ {
+  "col": "BUCKET",
+  "vis": "N",
+  "dflt": " ",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 551
+ },
+ {
+  "col": "MEASURE_GROUP",
+  "vis": "N",
+  "dflt": " ",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 600
+ },
+ {
+  "col": "ATTR1",
+  "vis": "N",
+  "dflt": " ",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 690
+ },
+ {
+  "col": "VMI_STD_DIO",
+  "vis": "N",
+  "dflt": " ",
+  "usel": "N",
+  "fix": " ",
+  "vy": "Y",
+  "so": 690
+ },
+ {
+  "col": "AS_YN",
+  "vis": "N",
+  "dflt": " ",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 691
+ },
+ {
+  "col": "SORT_KEY",
+  "vis": "N",
+  "dflt": " ",
+  "usel": " ",
+  "fix": " ",
+  "vy": "Y",
+  "so": 692
+ },
+ {
+  "col": "AS_FROM_SITE",
+  "vis": "Y",
+  "dflt": "Y",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 693
+ },
+ {
+  "col": "LAST_UPDATE_DATE",
+  "vis": "N",
+  "dflt": "N",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 696
+ },
+ {
+  "col": "LAST_UPDATED_BY",
+  "vis": "N",
+  "dflt": "N",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 697
+ },
+ {
+  "col": "SENDER_NAME",
+  "vis": "N",
+  "dflt": "N",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 698
+ },
+ {
+  "col": "MEASURE",
+  "vis": "Y",
+  "dflt": " ",
+  "usel": "Y",
+  "fix": " ",
+  "vy": "Y",
+  "so": 700
+ }
+]

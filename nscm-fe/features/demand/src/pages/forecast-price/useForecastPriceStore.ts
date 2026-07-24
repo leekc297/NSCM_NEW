@@ -68,8 +68,10 @@ const initSearchParams: SearchParamProps = {
   salesSites: [],
   bizTypes: [],
   itemIds: [],
-  startYyyymmdd: dayjs().format('YYYYMMDD'),
-  endYyyymmdd: dayjs().add(6, 'month').format('YYYYMMDD'),
+  // ⭐ 2026-07-23 조회조건 AS-IS 정합 — AS-IS PR_GET_DAY_RANGE(p_month=6) 1:1:
+  //   해당 월 1일 ~ (+6개월 시점 월의 1일 - 1일). (구: 당일~+6개월 당일 — DMF0003 P6 동형 차이)
+  startYyyymmdd: dayjs().startOf('month').format('YYYYMMDD'),
+  endYyyymmdd: dayjs().add(6, 'month').startOf('month').subtract(1, 'day').format('YYYYMMDD'),
   bucketType: 'W',
   versionType: 'Current',
   qtyYn: false,

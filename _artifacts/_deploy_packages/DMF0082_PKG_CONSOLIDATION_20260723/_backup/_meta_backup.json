@@ -1,0 +1,690 @@
+{
+ "DMF0082_EXCEL_UPLOAD": {
+  "API_M": [
+   {
+    "API_ID": "DMF0082_main_UPLOAD",
+    "API_TP_CD": "PROC",
+    "API_MSG_ID": "-",
+    "API_MSG_DESC": "DMF0082 Fcst&Price Excel Upload 검증분류 (mode=0)",
+    "API_URL": "DMF0082_EXCEL_UPLOAD",
+    "USE_YN": "Y",
+    "CREATED_BY": "admin",
+    "CREATION_DATE": "2026-07-12 13:29:13",
+    "LAST_UPDATED_BY": "admin",
+    "LAST_UPDATE_DATE": "2026-07-12 13:29:39"
+   },
+   {
+    "API_ID": "DMF0082_upload_SAVE",
+    "API_TP_CD": "PROC",
+    "API_MSG_ID": "-",
+    "API_MSG_DESC": "DMF0082 Excel Upload Save (mode>0 게이트)",
+    "API_URL": "DMF0082_EXCEL_UPLOAD",
+    "USE_YN": "Y",
+    "CREATED_BY": "admin",
+    "CREATION_DATE": "2026-07-12 13:29:13",
+    "LAST_UPDATED_BY": "admin",
+    "LAST_UPDATE_DATE": "2026-07-12 13:29:39"
+   }
+  ],
+  "PROC_M": [
+   {
+    "PROC_NM": "DMF0082_EXCEL_UPLOAD",
+    "COL_NM": "mode",
+    "DATA_TP_CD": "NUMBER",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 1
+   },
+   {
+    "PROC_NM": "DMF0082_EXCEL_UPLOAD",
+    "COL_NM": "createdBy",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 2
+   },
+   {
+    "PROC_NM": "DMF0082_EXCEL_UPLOAD",
+    "COL_NM": "o_result_cursor",
+    "DATA_TP_CD": "PROC_RESULT",
+    "COL_TP_CD": "OUT",
+    "SORT_ORD": 3
+   }
+  ]
+ },
+ "DMF0082_GET_EXCEL_UPLOAD_DATA": {
+  "API_M": [
+   {
+    "API_ID": "DMF0082_GET_UPLOAD_DATA",
+    "API_TP_CD": "PROC_SELECT",
+    "API_MSG_ID": "-",
+    "API_MSG_DESC": "DMF0082 Excel Upload 월별→Daily 전개 조회",
+    "API_URL": "DMF0082_GET_EXCEL_UPLOAD_DATA",
+    "USE_YN": "Y",
+    "CREATED_BY": "admin",
+    "CREATION_DATE": "2026-07-12 13:29:13",
+    "LAST_UPDATED_BY": "admin",
+    "LAST_UPDATE_DATE": "2026-07-12 13:29:39"
+   }
+  ],
+  "PROC_M": [
+   {
+    "PROC_NM": "DMF0082_GET_EXCEL_UPLOAD_DATA",
+    "COL_NM": "createdBy",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 1
+   },
+   {
+    "PROC_NM": "DMF0082_GET_EXCEL_UPLOAD_DATA",
+    "COL_NM": "o_rc1",
+    "DATA_TP_CD": "CURSOR",
+    "COL_TP_CD": "OUT",
+    "SORT_ORD": 2
+   },
+   {
+    "PROC_NM": "DMF0082_GET_EXCEL_UPLOAD_DATA",
+    "COL_NM": "o_rc2",
+    "DATA_TP_CD": "CURSOR",
+    "COL_TP_CD": "OUT",
+    "SORT_ORD": 3
+   },
+   {
+    "PROC_NM": "DMF0082_GET_EXCEL_UPLOAD_DATA",
+    "COL_NM": "o_result_cursor",
+    "DATA_TP_CD": "PROC_RESULT",
+    "COL_TP_CD": "OUT",
+    "SORT_ORD": 4
+   }
+  ]
+ },
+ "DMF0082_GET_MAIN_DATA_CURRENT": {
+  "API_M": [
+   {
+    "API_ID": "DMF0082_GET_CURRENT",
+    "API_TP_CD": "PROC_SELECT",
+    "API_MSG_ID": "-",
+    "API_MSG_DESC": "DMF0082 Current 버전 메인 조회",
+    "API_URL": "DMF0082_GET_MAIN_DATA_CURRENT",
+    "USE_YN": "Y",
+    "CREATED_BY": "admin",
+    "CREATION_DATE": "2026-07-12 13:29:13",
+    "LAST_UPDATED_BY": "admin",
+    "LAST_UPDATE_DATE": "2026-07-12 13:29:39"
+   }
+  ],
+  "PROC_M": [
+   {
+    "PROC_NM": "DMF0082_GET_MAIN_DATA_CURRENT",
+    "COL_NM": "divisionId",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 1
+   },
+   {
+    "PROC_NM": "DMF0082_GET_MAIN_DATA_CURRENT",
+    "COL_NM": "team",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 2
+   },
+   {
+    "PROC_NM": "DMF0082_GET_MAIN_DATA_CURRENT",
+    "COL_NM": "endCustomer",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 3
+   },
+   {
+    "PROC_NM": "DMF0082_GET_MAIN_DATA_CURRENT",
+    "COL_NM": "bizType",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 4
+   },
+   {
+    "PROC_NM": "DMF0082_GET_MAIN_DATA_CURRENT",
+    "COL_NM": "startDate",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 5
+   },
+   {
+    "PROC_NM": "DMF0082_GET_MAIN_DATA_CURRENT",
+    "COL_NM": "endDate",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 6
+   },
+   {
+    "PROC_NM": "DMF0082_GET_MAIN_DATA_CURRENT",
+    "COL_NM": "salesSite",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 7
+   },
+   {
+    "PROC_NM": "DMF0082_GET_MAIN_DATA_CURRENT",
+    "COL_NM": "itemId",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 8
+   },
+   {
+    "PROC_NM": "DMF0082_GET_MAIN_DATA_CURRENT",
+    "COL_NM": "version",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 9
+   },
+   {
+    "PROC_NM": "DMF0082_GET_MAIN_DATA_CURRENT",
+    "COL_NM": "qtyYn",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 10
+   },
+   {
+    "PROC_NM": "DMF0082_GET_MAIN_DATA_CURRENT",
+    "COL_NM": "sesUserId",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 11
+   },
+   {
+    "PROC_NM": "DMF0082_GET_MAIN_DATA_CURRENT",
+    "COL_NM": "userGroup",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 12
+   },
+   {
+    "PROC_NM": "DMF0082_GET_MAIN_DATA_CURRENT",
+    "COL_NM": "o_rc1",
+    "DATA_TP_CD": "CURSOR",
+    "COL_TP_CD": "OUT",
+    "SORT_ORD": 13
+   },
+   {
+    "PROC_NM": "DMF0082_GET_MAIN_DATA_CURRENT",
+    "COL_NM": "o_rc2",
+    "DATA_TP_CD": "CURSOR",
+    "COL_TP_CD": "OUT",
+    "SORT_ORD": 14
+   },
+   {
+    "PROC_NM": "DMF0082_GET_MAIN_DATA_CURRENT",
+    "COL_NM": "o_rc3",
+    "DATA_TP_CD": "CURSOR",
+    "COL_TP_CD": "OUT",
+    "SORT_ORD": 15
+   },
+   {
+    "PROC_NM": "DMF0082_GET_MAIN_DATA_CURRENT",
+    "COL_NM": "o_rc4",
+    "DATA_TP_CD": "CURSOR",
+    "COL_TP_CD": "OUT",
+    "SORT_ORD": 16
+   },
+   {
+    "PROC_NM": "DMF0082_GET_MAIN_DATA_CURRENT",
+    "COL_NM": "o_rc5",
+    "DATA_TP_CD": "CURSOR",
+    "COL_TP_CD": "OUT",
+    "SORT_ORD": 17
+   },
+   {
+    "PROC_NM": "DMF0082_GET_MAIN_DATA_CURRENT",
+    "COL_NM": "o_result_cursor",
+    "DATA_TP_CD": "PROC_RESULT",
+    "COL_TP_CD": "OUT",
+    "SORT_ORD": 18
+   }
+  ]
+ },
+ "DMF0082_GET_SPREAD_TITLE": {
+  "API_M": [
+   {
+    "API_ID": "DMF0082_spreadTitle_SEARCH",
+    "API_TP_CD": "PROC_SELECT",
+    "API_MSG_ID": "MSG_API_DMF0082_spreadTitle_SEARCH",
+    "API_MSG_DESC": "DMF0082 동적 시간축 컬럼 조회",
+    "API_URL": "DMF0082_GET_SPREAD_TITLE",
+    "USE_YN": "Y",
+    "CREATED_BY": "admin",
+    "CREATION_DATE": "2026-07-12 12:34:11",
+    "LAST_UPDATED_BY": "admin",
+    "LAST_UPDATE_DATE": "2026-07-12 12:34:11"
+   }
+  ],
+  "PROC_M": [
+   {
+    "PROC_NM": "DMF0082_GET_SPREAD_TITLE",
+    "COL_NM": "startYyyymmdd",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 1
+   },
+   {
+    "PROC_NM": "DMF0082_GET_SPREAD_TITLE",
+    "COL_NM": "endYyyymmdd",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 2
+   },
+   {
+    "PROC_NM": "DMF0082_GET_SPREAD_TITLE",
+    "COL_NM": "sesUserId",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 3
+   },
+   {
+    "PROC_NM": "DMF0082_GET_SPREAD_TITLE",
+    "COL_NM": "divisionId",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 4
+   },
+   {
+    "PROC_NM": "DMF0082_GET_SPREAD_TITLE",
+    "COL_NM": "data",
+    "DATA_TP_CD": "CURSOR",
+    "COL_TP_CD": "OUT",
+    "SORT_ORD": 5
+   }
+  ]
+ },
+ "DMF0082_POPUP_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP": {
+  "API_M": [
+   {
+    "API_ID": "DMF0082_savePriceData_SEARCH",
+    "API_TP_CD": "PROC_SELECT",
+    "API_MSG_ID": "MSG_API_DMF0082_savePriceData_SEARCH",
+    "API_MSG_DESC": "DMF0082 Price 기간 일괄저장 팝업 조회 (LOC 주차 PIVOT)",
+    "API_URL": "DMF0082_POPUP_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP",
+    "USE_YN": "Y",
+    "CREATED_BY": "admin",
+    "CREATION_DATE": "2026-07-12 13:09:51",
+    "LAST_UPDATED_BY": "admin",
+    "LAST_UPDATE_DATE": "2026-07-12 13:09:51"
+   }
+  ],
+  "PROC_M": [
+   {
+    "PROC_NM": "DMF0082_POPUP_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP",
+    "COL_NM": "divisionId",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 1
+   },
+   {
+    "PROC_NM": "DMF0082_POPUP_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP",
+    "COL_NM": "deptId",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 2
+   },
+   {
+    "PROC_NM": "DMF0082_POPUP_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP",
+    "COL_NM": "endCustomer",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 3
+   },
+   {
+    "PROC_NM": "DMF0082_POPUP_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP",
+    "COL_NM": "scmSiteId",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 4
+   },
+   {
+    "PROC_NM": "DMF0082_POPUP_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP",
+    "COL_NM": "plantSiteId",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 5
+   },
+   {
+    "PROC_NM": "DMF0082_POPUP_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP",
+    "COL_NM": "projectCode",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 6
+   },
+   {
+    "PROC_NM": "DMF0082_POPUP_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP",
+    "COL_NM": "itemId",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 7
+   },
+   {
+    "PROC_NM": "DMF0082_POPUP_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP",
+    "COL_NM": "customerProjectCode",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 8
+   },
+   {
+    "PROC_NM": "DMF0082_POPUP_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP",
+    "COL_NM": "customerModel",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 9
+   },
+   {
+    "PROC_NM": "DMF0082_POPUP_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP",
+    "COL_NM": "fromYyyymmdd",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 10
+   },
+   {
+    "PROC_NM": "DMF0082_POPUP_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP",
+    "COL_NM": "toYyyymmdd",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 11
+   },
+   {
+    "PROC_NM": "DMF0082_POPUP_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP",
+    "COL_NM": "biztype",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 12
+   },
+   {
+    "PROC_NM": "DMF0082_POPUP_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP",
+    "COL_NM": "sesUserId",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 13
+   },
+   {
+    "PROC_NM": "DMF0082_POPUP_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP",
+    "COL_NM": "userGroup",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 14
+   },
+   {
+    "PROC_NM": "DMF0082_POPUP_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP",
+    "COL_NM": "owner",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 15
+   },
+   {
+    "PROC_NM": "DMF0082_POPUP_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP",
+    "COL_NM": "overRange",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 16
+   },
+   {
+    "PROC_NM": "DMF0082_POPUP_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP",
+    "COL_NM": "invalidExec",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 17
+   },
+   {
+    "PROC_NM": "DMF0082_POPUP_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP",
+    "COL_NM": "data",
+    "DATA_TP_CD": "CURSOR",
+    "COL_TP_CD": "OUT",
+    "SORT_ORD": 18
+   }
+  ]
+ },
+ "DMF0082_POPUP_GET_SPREAD_TITLE_SAVE_PRICE": {
+  "API_M": [
+   {
+    "API_ID": "DMF0082_savePriceTitle_SEARCH",
+    "API_TP_CD": "PROC_SELECT",
+    "API_MSG_ID": "MSG_API_DMF0082_savePriceTitle_SEARCH",
+    "API_MSG_DESC": "DMF0082 Price 기간 일괄저장 팝업 시간축(W_주차) 조회",
+    "API_URL": "DMF0082_POPUP_GET_SPREAD_TITLE_SAVE_PRICE",
+    "USE_YN": "Y",
+    "CREATED_BY": "admin",
+    "CREATION_DATE": "2026-07-12 13:09:51",
+    "LAST_UPDATED_BY": "admin",
+    "LAST_UPDATE_DATE": "2026-07-12 13:09:51"
+   }
+  ],
+  "PROC_M": [
+   {
+    "PROC_NM": "DMF0082_POPUP_GET_SPREAD_TITLE_SAVE_PRICE",
+    "COL_NM": "startYyyymmdd",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 1
+   },
+   {
+    "PROC_NM": "DMF0082_POPUP_GET_SPREAD_TITLE_SAVE_PRICE",
+    "COL_NM": "endYyyymmdd",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 2
+   },
+   {
+    "PROC_NM": "DMF0082_POPUP_GET_SPREAD_TITLE_SAVE_PRICE",
+    "COL_NM": "sesUserId",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 3
+   },
+   {
+    "PROC_NM": "DMF0082_POPUP_GET_SPREAD_TITLE_SAVE_PRICE",
+    "COL_NM": "divisionId",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 4
+   },
+   {
+    "PROC_NM": "DMF0082_POPUP_GET_SPREAD_TITLE_SAVE_PRICE",
+    "COL_NM": "data",
+    "DATA_TP_CD": "CURSOR",
+    "COL_TP_CD": "OUT",
+    "SORT_ORD": 5
+   }
+  ]
+ },
+ "DMF0082_SAVE_MAIN_DATA": {
+  "API_M": [
+   {
+    "API_ID": "DMF0082_SAVE",
+    "API_TP_CD": "PROC_SAVE",
+    "API_MSG_ID": "-",
+    "API_MSG_DESC": "메인데이터 저장",
+    "API_URL": "DMF0082_SAVE_MAIN_DATA",
+    "USE_YN": "Y",
+    "CREATED_BY": "SYSTEM",
+    "CREATION_DATE": "2026-02-09 16:15:06",
+    "LAST_UPDATED_BY": "story55",
+    "LAST_UPDATE_DATE": "2026-03-18 14:06:34"
+   }
+  ],
+  "PROC_M": [
+   {
+    "PROC_NM": "DMF0082_SAVE_MAIN_DATA",
+    "COL_NM": "activeFlag",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 1
+   },
+   {
+    "PROC_NM": "DMF0082_SAVE_MAIN_DATA",
+    "COL_NM": "divisionId",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 2
+   },
+   {
+    "PROC_NM": "DMF0082_SAVE_MAIN_DATA",
+    "COL_NM": "projectCode",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 3
+   },
+   {
+    "PROC_NM": "DMF0082_SAVE_MAIN_DATA",
+    "COL_NM": "endCustomer",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 4
+   },
+   {
+    "PROC_NM": "DMF0082_SAVE_MAIN_DATA",
+    "COL_NM": "scmSiteId",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 5
+   },
+   {
+    "PROC_NM": "DMF0082_SAVE_MAIN_DATA",
+    "COL_NM": "itemId",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 6
+   },
+   {
+    "PROC_NM": "DMF0082_SAVE_MAIN_DATA",
+    "COL_NM": "domExp",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 7
+   },
+   {
+    "PROC_NM": "DMF0082_SAVE_MAIN_DATA",
+    "COL_NM": "fcstType",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 8
+   },
+   {
+    "PROC_NM": "DMF0082_SAVE_MAIN_DATA",
+    "COL_NM": "incoterms",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 9
+   },
+   {
+    "PROC_NM": "DMF0082_SAVE_MAIN_DATA",
+    "COL_NM": "measure",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 10
+   },
+   {
+    "PROC_NM": "DMF0082_SAVE_MAIN_DATA",
+    "COL_NM": "plantSite",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 11
+   },
+   {
+    "PROC_NM": "DMF0082_SAVE_MAIN_DATA",
+    "COL_NM": "cellProdSiteId",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 12
+   },
+   {
+    "PROC_NM": "DMF0082_SAVE_MAIN_DATA",
+    "COL_NM": "yyyymmdd",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 13
+   },
+   {
+    "PROC_NM": "DMF0082_SAVE_MAIN_DATA",
+    "COL_NM": "currency",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 14
+   },
+   {
+    "PROC_NM": "DMF0082_SAVE_MAIN_DATA",
+    "COL_NM": "qty",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 15
+   },
+   {
+    "PROC_NM": "DMF0082_SAVE_MAIN_DATA",
+    "COL_NM": "createdBy",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 16
+   },
+   {
+    "PROC_NM": "DMF0082_SAVE_MAIN_DATA",
+    "COL_NM": "o_rc1",
+    "DATA_TP_CD": "CURSOR",
+    "COL_TP_CD": "OUT",
+    "SORT_ORD": 17
+   }
+  ]
+ },
+ "DMF0082_POPUP_GET_FUTUREPRICE_INFO": {
+  "API_M": [
+   {
+    "API_ID": "DMF0082_futurePriceInfo_SEARCH",
+    "API_TP_CD": "PROC_SELECT",
+    "API_MSG_ID": "MSG_API_DMF0082_futurePriceInfo_SEARCH",
+    "API_MSG_DESC": "DMF0082 환율(Exchange Rate) 팝업 조회",
+    "API_URL": "DMF0082_POPUP_GET_FUTUREPRICE_INFO",
+    "USE_YN": "Y",
+    "CREATED_BY": "admin",
+    "CREATION_DATE": "2026-07-12 12:34:11",
+    "LAST_UPDATED_BY": "admin",
+    "LAST_UPDATE_DATE": "2026-07-12 12:34:11"
+   }
+  ],
+  "PROC_M": [
+   {
+    "PROC_NM": "DMF0082_POPUP_GET_FUTUREPRICE_INFO",
+    "COL_NM": "startYyyymmdd",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 1
+   },
+   {
+    "PROC_NM": "DMF0082_POPUP_GET_FUTUREPRICE_INFO",
+    "COL_NM": "endYyyymmdd",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 2
+   },
+   {
+    "PROC_NM": "DMF0082_POPUP_GET_FUTUREPRICE_INFO",
+    "COL_NM": "sesUserId",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 3
+   },
+   {
+    "PROC_NM": "DMF0082_POPUP_GET_FUTUREPRICE_INFO",
+    "COL_NM": "mnuId",
+    "DATA_TP_CD": "VARCHAR",
+    "COL_TP_CD": "IN",
+    "SORT_ORD": 4
+   },
+   {
+    "PROC_NM": "DMF0082_POPUP_GET_FUTUREPRICE_INFO",
+    "COL_NM": "o_rc1",
+    "DATA_TP_CD": "CURSOR",
+    "COL_TP_CD": "OUT",
+    "SORT_ORD": 5
+   },
+   {
+    "PROC_NM": "DMF0082_POPUP_GET_FUTUREPRICE_INFO",
+    "COL_NM": "o_result_cursor",
+    "DATA_TP_CD": "PROC_RESULT",
+    "COL_TP_CD": "OUT",
+    "SORT_ORD": 6
+   }
+  ]
+ }
+}

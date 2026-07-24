@@ -200,16 +200,23 @@ export const recalcWeeklyToDaily = (
       if (isD(b) && acc.get(b) != null && acc.sspSyncOf(b) !== 'A') acc.set(b, null);
       if (!isD(b)) break;
     }
-    // sDefaultDay 미확보(Phase 2c 입력 없음) → 비동기화 가능 첫 D_ 에 합 적재 (AS-IS sDefaultDay 동치 근사).
-    //   ⚠️ AS-IS 는 마스터 DefaultBucketDay 요일(.cs L1449) 사용 — 미연동분(아래 보고).
+    // ⭐ 룰2 정합(2026-07-21 공통 배분 룰) — 적용요일 없음 폴백 = "월요일" D_ 셀에 전량.
+    //   주 범위에 월요일이 없거나(월경계 분할 주) 월요일이 SSP 동기화('A') 셀이면 첫 비동기화 D_ 로 폴백.
+    //   (구 코드 = 첫 비동기화 D_ 근사 / AS-IS 는 마스터 DefaultBucketDay(.cs L1449) — 룰 확정으로 월요일 표준화.)
+    let mondayIdx = -1;
+    let firstIdx = -1;
     for (let i = startCol; i < cols.length; i++) {
       const b = cols[i];
-      if (isD(b) && acc.sspSyncOf(b) !== 'A') {
-        acc.set(b, dailyQty);
+      if (!isD(b)) break;
+      if (acc.sspSyncOf(b) === 'A') continue;
+      if (firstIdx < 0) firstIdx = i;
+      if (dayOfWeekOf(b) === 1) {
+        mondayIdx = i;
         break;
       }
-      if (!isD(b)) break;
     }
+    const targetIdx = mondayIdx >= 0 ? mondayIdx : firstIdx;
+    if (targetIdx >= 0) acc.set(cols[targetIdx], dailyQty);
   }
 
   // ── Monthly Sum 재집계 (.cs L3746~3768) ──

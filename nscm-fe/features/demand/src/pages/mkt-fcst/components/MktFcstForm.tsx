@@ -41,7 +41,8 @@ export const MktFcstForm = ({ onSearch, insertedRowCount = 0 }: MktFcstFormProps
   const set = useMktFcstStore(s => s.setSearchCondition);
   const openSearchArea = useMktFcstStore(s => s.openSearchArea);
   // ⭐ P1-③ — W/S Planner 이면 AS 강제 checked·잠금 (AS-IS cboAS.Checked=true·Enabled=false, L324).
-  const wsPlannerYn = useMktFcstStore(s => s.wsPlannerYn);
+  //   AS 체크박스 비표시(2026-07-21)로 본 컴포넌트 내 참조 없음 — store 강제(asYn=true) 로직은 유지. 재노출 시 주석 해제.
+  // const wsPlannerYn = useMktFcstStore(s => s.wsPlannerYn);
 
   // ⭐ #6 — 조회조건 콤보 전체 데이터 로딩. 사내 SCM_ADM_CMBO_SQL_M 실측(2026-06-28, READ)으로
   //   "등록 SQL_ID + 필요 바인드(@divisionId/@sesUserId 등)" 를 확정해 정합:
@@ -59,8 +60,25 @@ export const MktFcstForm = ({ onSearch, insertedRowCount = 0 }: MktFcstFormProps
   //   카탈로그(PlantSitebyEndCustomer, 81 전용, Division+EndCustomer 서버 바인드)로 대체(아래 extraConditions).
   // Division/Team/EndCustomer/BizType 은 표준 카탈로그 필드가 자체 fetch → Form 에서는 인라인 유지 필드만.
   //   Sales Site = 'SalesSite'(AS 체크박스 통합 인라인) / SenderCode·ItemType(카탈로그 없음) / BucketType(D 포함 인라인).
-  const [scmSiteByEndCustomer, senderCode, itemType, bucketTypeCombo] = useTabComboQueries({
-    filters: ['SalesSite', 'SenderCode', 'ItemType', 'BucketType'],
+  // ⭐ 2026-07-23 조회조건 AS-IS 정합(전건 보완) — Sales Site 를 AS-IS UP_FX SiteByEndCustomer/40 1:1
+  //   등록본 'SiteByEndCustomer_DMF0003' 서버 바인드로 전환:
+  //   - 비40: Division+EndCustomer cascade / 40: Team(deptId)+Project(=endCustomers) cascade (AS-IS Param1/2)
+  //   - AS 분기: asYn='Y' 시 AS_SITE_PLANT lookup UNION(SITE_DESCRIPTION 표기, 선두 정렬 — AS-IS Param5)
+  //   - OPERATION_GROUP='W' 제외 포함. 바인드 값 quoting 의무(BE raw 치환 — feedback_bind_combo_value_quoting).
+  const q = (v?: string): string => `'${v && v.trim() !== '' ? v : 'ALL'}'`;
+  const [scmSiteByEndCustomer] = useTabComboQueries({
+    filters: [
+      {
+        comboId: 'SiteByEndCustomer_DMF0003',
+        divisionId: q(sc.divisionId),
+        endCustomer: q(sc.endCustomers.join(',')),
+        deptId: q(sc.deptIds.join(',')),
+        asYn: q(sc.asYn ? 'Y' : 'N'),
+      },
+    ],
+  });
+  const [senderCode, itemType, bucketTypeCombo] = useTabComboQueries({
+    filters: ['SenderCode', 'ItemType', 'BucketType'],
   });
 
   // ⭐ G3 — Bucket 옵션 = CMBO 'BucketType'(LOOKUP_TYPE='BUCKET_TYPE_CODE') 동적 fetch.
@@ -118,22 +136,26 @@ export const MktFcstForm = ({ onSearch, insertedRowCount = 0 }: MktFcstFormProps
                 ...(option !== DIVISION.MOBILITY ? { cellQtyYn: false } : {}),
                 // Invalid(MKT FCST 미등록 제외)는 Div82 전용 — 82 진입 시 기본 checked (AS-IS L469~477).
                 invalidYn: option === DIVISION.ESS,
-                // G4 — Bucket 기본값: 82(ESS)=Daily / 그 외=Weekly (v1.7 §3, AS-IS OnShown).
-                bucketType: option === DIVISION.ESS ? BUCKET_TYPE.DAILY : BUCKET_TYPE.WEEKLY,
+                // Bucket 기본값: 전 Division = Weekly (사용자 확정 2026-07-22 — 구 82(ESS)=Daily 분기 폐기).
+                bucketType: BUCKET_TYPE.WEEKLY,
               })
             }
           />
+          {/* ⭐ 2026-07-23 AS-IS 정합 — Team/EndCustomer 를 AS-IS BigFilter 1:1 등록본으로 전환
+              (UserTeamByDivision = owner 1번 토큰 부서 / EndCustomerByDivision = 40 lookup-only UNION 포함) */}
           <TeamField
             gridSize={3}
             value={sc.deptIds}
             onChange={v => set({ deptIds: v, endCustomers: [], scmSiteIds: [] })}
             division={sc.divisionId}
+            comboId='UserTeamByDivision'
           />
           <EndCustomerField
             gridSize={3}
             value={sc.endCustomers}
             onChange={v => set({ endCustomers: v, scmSiteIds: [] })}
             division={sc.divisionId}
+            comboId='EndCustomerByDivision'
           />
           <Grid size={3}>
             {/* ⭐ Sales Site — 멀티선택(카탈로그 SalesSiteField 동등: SalesSite CMBO + DIVISION_ID 필터) +
@@ -149,10 +171,10 @@ export const MktFcstForm = ({ onSearch, insertedRowCount = 0 }: MktFcstFormProps
                     useClearIcon
                     limitTags={1}
                     value={sc.scmSiteIds.join(',')}
+                    // 서버 바인드(division/endCustomer/deptId/asYn) 필터 완료 → CODE/NAME 직결.
                     options={
-                      scmSiteByEndCustomer
-                        ?.filter(item => !item.DIVISION_ID || item.DIVISION_ID === sc.divisionId)
-                        .map(item => ({ label: item.NAME, value: item.CODE })) ?? []
+                      scmSiteByEndCustomer?.map(item => ({ label: item.NAME, value: item.CODE })) ??
+                      []
                     }
                     onChange={(_, options) =>
                       set({ scmSiteIds: String(options ?? '').split(',').filter(Boolean) })
@@ -160,6 +182,9 @@ export const MktFcstForm = ({ onSearch, insertedRowCount = 0 }: MktFcstFormProps
                   />
                 )}
               />
+              {/* ⭐ AS 체크박스 — 사용자 요청(2026-07-21)으로 비표시.
+                  asYn 상태·검색 payload('Y'/'N')·W/S Planner 강제(asYn=true)·save asFromSite 로직은 전부 유지(무회귀).
+                  재노출 시 아래 블록 주석 해제.
               <span className={styles.salesSiteAs}>
                 <Checkbox
                   labelText={t('LBL00685', '_AS')}
@@ -167,15 +192,19 @@ export const MktFcstForm = ({ onSearch, insertedRowCount = 0 }: MktFcstFormProps
                   disabled={wsPlannerYn}
                   onChange={checked => set({ asYn: checked })}
                 />
-              </span>
+              </span> */}
             </div>
           </Grid>
 
           {/* Row 2 — Biz Type*(카탈로그) / Sender Code(81 전용 인라인) / Period*(카탈로그) / Bucket*(D 포함 인라인) */}
+          {/* ⭐ 2026-07-23 AS-IS 정합 — BizType 을 AS-IS BigFilter 1:1(DM_BIZ_TYPE(40) UNION
+              SCM_MST_PROJECT BIZ_TYPE(비40)) 등록본 + division 필터로 전환 (81/82 후보 누락 해소) */}
           <BizTypeField
             gridSize={3}
             value={sc.bizTypes}
             onChange={v => set({ bizTypes: v })}
+            comboId='BizTypebyDivision'
+            division={sc.divisionId}
           />
           <Grid size={3}>
             {/* ⭐ Sender Code — 81 계열 전용 enable (AS-IS clbEDISender Division==81 만 활성, .cs L469~).
@@ -189,9 +218,13 @@ export const MktFcstForm = ({ onSearch, insertedRowCount = 0 }: MktFcstFormProps
                   useClearIcon
                   disabled={!sc.divisionId.startsWith('81')}
                   value={firstOr(sc.senderCodes)}
+                  // ⭐ 2026-07-23 AS-IS 정합 — AS-IS 는 SEGMENT1='81' 고정(81 계열 전부 동일 목록)이므로
+                  //   정확 일치 대신 prefix 매칭(81_HD 등 변형 division 도 '81' 행 표시). NAME=ATTRIBUTE1(제조사명).
                   options={
                     senderCode
-                      ?.filter(item => !item.DIVISION_ID || item.DIVISION_ID === sc.divisionId)
+                      ?.filter(
+                        item => !item.DIVISION_ID || sc.divisionId.startsWith(String(item.DIVISION_ID))
+                      )
                       .map(item => ({ label: item.NAME, value: item.CODE })) ?? []
                   }
                   onChange={(_, option) => set({ senderCodes: toArr(option) })}

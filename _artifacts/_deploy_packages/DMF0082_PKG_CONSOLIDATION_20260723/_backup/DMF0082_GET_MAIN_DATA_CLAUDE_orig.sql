@@ -1,0 +1,1205 @@
+CREATE OR REPLACE EDITIONABLE PROCEDURE "SCM_MGR"."DMF0082_GET_MAIN_DATA_CLAUDE" (
+    p_division_id    IN VARCHAR2,
+    p_team_id        IN VARCHAR2,
+    p_customer       IN VARCHAR2,
+    p_biz_type       IN VARCHAR2,
+    p_from_yyyymmdd  IN VARCHAR2,
+    p_to_yyyymmdd    IN VARCHAR2,
+    p_scm_site_id    IN VARCHAR2,
+    p_item_id        IN VARCHAR2,
+    p_version_type   IN VARCHAR2,
+    p_qty_yn         IN VARCHAR2,
+    p_created_by     IN VARCHAR2,
+    p_user_group     IN VARCHAR2,
+    o_cursor1        OUT SYS_REFCURSOR,
+    o_cursor2        OUT SYS_REFCURSOR,
+    o_cursor3        OUT SYS_REFCURSOR,
+    o_cursor4        OUT SYS_REFCURSOR,
+    o_cursor5        OUT SYS_REFCURSOR
+) AS
+/*=====================================================================================================================================================
+ * Program ID  : DMF0082_GET_MAIN_DATA
+ * Description : Procedure 작성 가이드
+ * Usage       : Procedure 작성 시 참조하세요!
+ * Parameter   :
+ *=====================================================================================================================================================
+ * Date         In Charge    Description
+ *=====================================================================================================================================================
+ * 2026.01.09   park.choyi   Initial Release
+ * 2026.01.XX   Converted    MS SQL to Oracle 19c
+ *===================================================================================================================================================*/
+
+    -- LOG 용 변수 설정
+    v_program_name      VARCHAR2(150) := 'DMF0082_GET_MAIN_DATA';
+    v_log_type          VARCHAR2(30);
+    n_log_count         NUMBER := 0;
+    v_log_message       VARCHAR2(1000);
+    v_description       VARCHAR2(500);
+    d_event_date        TIMESTAMP;
+
+    -- 사용자 컬럼 및 메저 세팅 관련 변수
+    v_user_col_cnt      NUMBER;
+    v_user_mea_cnt      NUMBER;
+    va_program_id       VARCHAR2(50) := 'DMF0082';
+    va_sheet_name       VARCHAR2(50) := 'FcstNPrice';
+
+    -- BUCKET 관련 변수
+    v_exp_yyyymmdd      VARCHAR2(8);
+    v_pv_list           CLOB;
+    v_pv_col_list       CLOB;
+    v_pv_column_name    VARCHAR2(100);
+    v_pv_name           VARCHAR2(50);
+    v_sort_order_no     VARCHAR2(50);
+
+    -- 날짜 변수
+    v_from_yyyymmdd     VARCHAR2(8);
+    v_to_yyyymmdd       VARCHAR2(8);
+    v_from_result       VARCHAR2(8);
+    v_to_result         VARCHAR2(8);
+    v_user_time_zone    VARCHAR2(50);
+
+    -- 동적 쿼리 변수
+    v_column            CLOB := '';
+    v_groupby           CLOB := '';
+    v_orderby           CLOB := '';
+    v_sql_text          CLOB;
+
+    -- 커서 변수
+    v_cur_column_name   VARCHAR2(100);
+    v_cur_program_id    VARCHAR2(10);
+    v_cur_sheet_name    VARCHAR2(100);
+    v_cur_sort_order_no VARCHAR2(50);
+
+    -- 권한 변수
+    v_group_id          VARCHAR2(50) := '';
+
+    -- 커서 선언
+    CURSOR c_bucket IS
+        SELECT '[D_' || A.BASIS_YYYYMMDD || '] AS D_' || A.BASIS_YYYYMMDD AS COLUMN_NAME,
+               '[D_' || A.BASIS_YYYYMMDD || ']' AS PV_NAME,
+               A.BASIS_YYYYMMDD || '_31' AS SORT_ORDER_NO
+        FROM SCM_SYS_CALENDAR_M A
+        WHERE A.BASIS_YYYYMMDD >= p_from_yyyymmdd
+          AND A.BASIS_YYYYMMDD <= v_exp_yyyymmdd
+        UNION ALL
+        SELECT '[W_' || A.BASIS_YYYYMM || A.ISO_WEEK || '] AS W_' || A.BASIS_YYYYMM || A.ISO_WEEK AS COLUMN_NAME,
+               '[W_' || A.BASIS_YYYYMM || A.ISO_WEEK || ']' AS PV_NAME,
+               A.BASIS_START_DATE || '_21' AS SORT_ORDER_NO
+        FROM SCM_SYS_CALENDAR_M A
+        WHERE A.BASIS_YYYYMMDD >= p_from_yyyymmdd
+          AND A.BASIS_YYYYMMDD <= p_to_yyyymmdd
+        GROUP BY A.BASIS_YYYYMM, A.ISO_WEEK, A.BASIS_START_DATE
+        UNION ALL
+        SELECT '[M_' || A.BASIS_YYYYMM || '] AS M_' || A.BASIS_YYYYMM AS COLUMN_NAME,
+               '[M_' || A.BASIS_YYYYMM || ']' AS PV_NAME,
+               MIN(A.BASIS_START_DATE) || '_01' AS SORT_ORDER_NO
+        FROM SCM_SYS_CALENDAR_M A
+        WHERE A.BASIS_YYYYMMDD >= p_from_yyyymmdd
+          AND A.BASIS_YYYYMMDD <= p_to_yyyymmdd
+        GROUP BY A.BASIS_YYYYMM
+        ORDER BY 3;
+
+    CURSOR c_title IS
+        SELECT U.PROGRAM_ID,
+               U.SHEET_NAME,
+               U.COLUMN_NAME,
+               CASE
+                   WHEN U.COLUMN_NAME = 'LAST_UPDATE_DATE' THEN '800'
+                   WHEN U.COLUMN_NAME = 'LAST_UPDATED_BY'  THEN '560'
+                   ELSE U.SORT_ORDER_NO
+               END AS SORT_ORDER_NO
+        FROM SCM_MST_TITLESET_USER U,
+             SCM_MST_SHEET_COLUMNS C
+        WHERE U.PROGRAM_ID = C.PROGRAM_ID
+          AND U.SHEET_NAME = C.SHEET_NAME
+          AND U.COLUMN_NAME = C.COLUMN_NAME
+          AND U.PROGRAM_ID = va_program_id
+          AND U.SHEET_NAME = va_sheet_name
+          AND U.USER_ID = p_created_by
+          AND U.USER_INQUIRY_COLUMN_TYPE_CODE = 'C'
+        UNION ALL
+        SELECT C.PROGRAM_ID,
+               C.SHEET_NAME,
+               C.COLUMN_NAME,
+               CASE
+                   WHEN C.COLUMN_NAME = 'GROUP_ID' THEN NVL(U.SORT_ORDER_NO, 85) - 0.5
+                   ELSE TO_CHAR(C.SORT_ORDER_NO)
+               END AS SORT_ORDER_NO
+        FROM SCM_MST_SHEET_COLUMNS C
+        LEFT OUTER JOIN SCM_MST_TITLESET_USER U
+          ON U.PROGRAM_ID = C.PROGRAM_ID
+         AND U.SHEET_NAME = C.SHEET_NAME
+         AND U.USER_INQUIRY_COLUMN_TYPE_CODE = 'C'
+         AND U.COLUMN_NAME = 'ITEM_ID'
+         AND U.USER_ID = p_created_by
+        WHERE C.PROGRAM_ID = va_program_id
+          AND C.SHEET_NAME = va_sheet_name
+          AND C.DEFAULT_FLAG = ''
+          AND C.VALID_YN = 'Y'
+        ORDER BY 4;
+
+BEGIN
+    -- 트랜잭션 격리 수준 설정 (Oracle은 기본적으로 READ COMMITTED)
+    -- SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED; -- Oracle에서는 불필요
+
+    DBMS_OUTPUT.PUT_LINE(v_program_name || ' : A001--' || TO_CHAR(SYSTIMESTAMP, 'YYYY-MM-DD HH24:MI:SS') || ' DMF0082_GET_MAIN_DATA 조회쿼리 시작');
+
+    -- 시작 LOG
+    v_log_type := 'START';
+    v_log_message := '########## Start of procedure ##########';
+    v_description := '';
+    d_event_date := SYSTIMESTAMP;
+
+    -- PR_DM_SYS_LOG_BATCH 프로시저 호출 (Oracle 버전으로 변환 필요)
+    -- EXEC PR_DM_SYS_LOG_BATCH(v_program_name, v_log_type, n_log_count, v_log_message, v_description, d_event_date, p_created_by);
+
+    -- 사용자 컬럼 처리 시작
+    DBMS_OUTPUT.PUT_LINE(v_program_name || ' : A002--' || TO_CHAR(SYSTIMESTAMP, 'YYYY-MM-DD HH24:MI:SS') || ' 사용자 컬럼 처리 (START)');
+
+    SELECT COUNT(*)
+    INTO v_user_col_cnt
+    FROM SCM_MST_TITLESET_USER U
+    WHERE U.PROGRAM_ID = va_program_id
+      AND U.SHEET_NAME = va_sheet_name
+      AND U.USER_INQUIRY_COLUMN_TYPE_CODE = 'C'
+      AND U.USER_ID = p_created_by;
+
+    IF v_user_col_cnt = 0 THEN
+        INSERT INTO SCM_MST_TITLESET_USER
+        (USER_ID, PROGRAM_ID, SHEET_NAME, USER_INQUIRY_COLUMN_TYPE_CODE, COLUMN_NAME,
+         SORT_ORDER_NO, SUB_TOTAL_FLAG, DATA_SORT_METHOD_CODE, CREATED_BY, CREATION_DATE,
+         LAST_UPDATED_BY, LAST_UPDATE_DATE)
+        SELECT p_created_by, C.PROGRAM_ID, C.SHEET_NAME, 'C', C.COLUMN_NAME,
+               C.SORT_ORDER_NO, 'N', '', p_created_by, SYSTIMESTAMP,
+               p_created_by, SYSTIMESTAMP
+        FROM SCM_MST_SHEET_COLUMNS C
+        WHERE C.PROGRAM_ID = va_program_id
+          AND C.SHEET_NAME = va_sheet_name
+          AND C.DEFAULT_FLAG = 'Y'
+          AND C.VALID_YN = 'Y';
+        COMMIT;
+    END IF;
+
+    DBMS_OUTPUT.PUT_LINE(v_program_name || ' : A002--' || TO_CHAR(SYSTIMESTAMP, 'YYYY-MM-DD HH24:MI:SS') || ' 사용자 컬럼 처리 (END)');
+
+    -- 사용자 메저 처리 시작
+    DBMS_OUTPUT.PUT_LINE(v_program_name || ' : A003--' || TO_CHAR(SYSTIMESTAMP, 'YYYY-MM-DD HH24:MI:SS') || ' 사용자 메저 처리 (START)');
+
+    SELECT COUNT(*)
+    INTO v_user_mea_cnt
+    FROM SCM_MST_TITLESET_USER U
+    WHERE U.PROGRAM_ID = va_program_id
+      AND U.SHEET_NAME = va_sheet_name
+      AND U.USER_INQUIRY_COLUMN_TYPE_CODE = 'M'
+      AND U.USER_ID = p_created_by;
+
+    IF v_user_mea_cnt = 0 THEN
+        INSERT INTO SCM_MST_TITLESET_USER
+        (USER_ID, PROGRAM_ID, SHEET_NAME, USER_INQUIRY_COLUMN_TYPE_CODE, COLUMN_NAME,
+         SORT_ORDER_NO, SUB_TOTAL_FLAG, DATA_SORT_METHOD_CODE, CREATED_BY, CREATION_DATE,
+         LAST_UPDATED_BY, LAST_UPDATE_DATE)
+        SELECT p_created_by, C.PROGRAM_ID, C.SHEET_NAME, 'M', C.COLUMN_NAME,
+               C.SORT_ORDER_NO, 'N', '', p_created_by, SYSTIMESTAMP,
+               p_created_by, SYSTIMESTAMP
+        FROM SCM_MST_SHEET_MEASURE C
+        WHERE C.PROGRAM_ID = va_program_id
+          AND C.SHEET_NAME = va_sheet_name
+          AND C.DEFAULT_FLAG = 'Y'
+          AND C.VALID_YN = 'Y';
+        COMMIT;
+    END IF;
+
+    DBMS_OUTPUT.PUT_LINE(v_program_name || ' : A003--' || TO_CHAR(SYSTIMESTAMP, 'YYYY-MM-DD HH24:MI:SS') || ' 사용자 메저 처리 (END)');
+
+    -- BUCKET 관련 세팅 시작
+    DBMS_OUTPUT.PUT_LINE(v_program_name || ' : A004--' || TO_CHAR(SYSTIMESTAMP, 'YYYY-MM-DD HH24:MI:SS') || ' BUCKET 만들기 (START)');
+
+    v_exp_yyyymmdd := TO_CHAR(TO_DATE(p_from_yyyymmdd, 'YYYYMMDD') + 350, 'YYYYMMDD');
+
+    v_pv_list := '';
+    v_pv_col_list := '';
+
+    OPEN c_bucket;
+    LOOP
+        FETCH c_bucket INTO v_pv_column_name, v_pv_name, v_sort_order_no;
+        EXIT WHEN c_bucket%NOTFOUND;
+
+        IF v_pv_col_list != '' THEN
+            v_pv_col_list := v_pv_col_list || ',';
+        END IF;
+        v_pv_col_list := v_pv_col_list || v_pv_column_name;
+
+        IF v_pv_list != '' THEN
+            v_pv_list := v_pv_list || ',';
+        END IF;
+        v_pv_list := v_pv_list || v_pv_name;
+    END LOOP;
+    CLOSE c_bucket;
+
+    DBMS_OUTPUT.PUT_LINE(v_program_name || ' : A004--' || TO_CHAR(SYSTIMESTAMP, 'YYYY-MM-DD HH24:MI:SS') || ' BUCKET 만들기 (END)');
+
+    -- 임시 테이블 생성 (Oracle GTT 사용)
+    -- 실제 운영 환경에서는 GTT를 미리 생성해두고 사용하는 것이 좋습니다.
+    -- 여기서는 동적으로 생성하는 방식으로 표현했습니다.
+
+    EXECUTE IMMEDIATE 'TRUNCATE TABLE TEMP_DM_MST_ITEM_SINGLE_V';
+    EXECUTE IMMEDIATE 'TRUNCATE TABLE TEMPSITEITEMALL';
+    EXECUTE IMMEDIATE 'TRUNCATE TABLE TEMPSITEITEM';
+    EXECUTE IMMEDIATE 'TRUNCATE TABLE TEMPSELECTMEASURE';
+    EXECUTE IMMEDIATE 'TRUNCATE TABLE T_LAST_DATA_SETUP_FCST';
+    EXECUTE IMMEDIATE 'TRUNCATE TABLE T_LAST_DATA_SETUP_PRICE';
+    EXECUTE IMMEDIATE 'TRUNCATE TABLE T_WS_FCST';
+    EXECUTE IMMEDIATE 'TRUNCATE TABLE TEMPFCSTNPRICE';
+    EXECUTE IMMEDIATE 'TRUNCATE TABLE CAL_MONTH_END_DATE';
+    EXECUTE IMMEDIATE 'TRUNCATE TABLE CAL_WEEK_END_DATE';
+    EXECUTE IMMEDIATE 'TRUNCATE TABLE MF_SP';
+    EXECUTE IMMEDIATE 'TRUNCATE TABLE TEMP_ADMIN_GROUP_MEASURE';
+
+    -- #TEMP_DM_MST_ITEM_SINGLE_V 생성
+    INSERT INTO TEMP_DM_MST_ITEM_SINGLE_V
+    SELECT *
+    FROM DM_MST_ITEM_SINGLE_V
+    WHERE DIVISION_ID = '40'
+      AND ACTIVE_FLAG = 'Y';
+    COMMIT;
+
+    -- #TempSiteItemAll 생성
+    DBMS_OUTPUT.PUT_LINE(v_program_name || ' : A006_6--' || TO_CHAR(SYSTIMESTAMP, 'YYYY-MM-DD HH24:MI:SS') || ' #TempSiteItemAll (START)');
+
+    INSERT INTO TEMPSITEITEMALL
+    SELECT F.DIVISION_ID, F.PROJECT_CODE, F.SCM_SITE_ID, F.ITEM_ID, T2.NICK_NAME,
+           F.PROJECT_CODE, F.ATTRIBUTE5 AS CELL_MODEL,
+           S.END_CUSTOMER, S.SOLDTO_CUSTOMER,
+           I.COUNTRY, I.COUNTRY_NAME, H.CITY, H.CITY_NAME,
+           (SELECT LISTAGG(USER_NAME_EN, ',') WITHIN GROUP (ORDER BY USER_NAME_EN)
+            FROM (SELECT DISTINCT ZA.USER_NAME_EN
+                  FROM SCM_MST_SSO_USER_INFO ZA,
+                       (SELECT REGEXP_SUBSTR(F.OWNER, '[^,]+', 1, LEVEL) AS TOKEN
+                        FROM DUAL
+                        CONNECT BY LEVEL <= REGEXP_COUNT(F.OWNER, ',') + 1) ZB
+                  WHERE ZA.USER_ID = ZB.TOKEN) XA) AS OWNER,
+           J.USER_NAME_EN AS PROJECT_OWNER, J.USER_ID, T2.ITEM_NAME, T2.ITEM_TYPE,
+           F.CUST_GROUP, F.CUST_GROUP_DTL, F.APPLICATION, F.ROUTE, T2.MDM_PROJECT_NAME,
+           T2.MIN_CAPACITY,
+           CASE WHEN F.ITEM_ID = LOOKA.MODEL THEN LOOKA.BIZ_TYPE ELSE T2.FORECAST_INFO_BIZ_TYPE END AS FORECAST_INFO_BIZ_TYPE,
+           T2.FORECAST_INFO_PRODUCT_GROUP, LOOK.NAME AS CELL_TYPE,
+           CASE WHEN F.ITEM_ID = LOOKA.MODEL THEN LOOKA.CELL_PACK_COUNT ELSE T2.FORECAST_INFO_CELL_PACK_COUNT END AS FORECAST_INFO_CELL_PACK_COUNT,
+           T2.FORECAST_INFO_SPEC || T2.FORECAST_INFOR_VERSION AS FORECAST_INFO_ALL,
+           T2.FORECAST_INFO_SPEC, T2.FORECAST_INFOR_VERSION,
+           NVL(T4.NICK_NAME, '') AS CELL_MODEL_NICK_NAME, S.VMI_YN,
+           NVL(F.ATTRIBUTE1, '') AS DMS_SALES, NVL(F.ATTRIBUTE2, '') AS DMS_CUSTOMER,
+           TEAM.DEPT_ID, TEAM.DEPT_NAME_KO, F.VALID_YN
+    FROM SCM_MST_SITE_ITEM F
+    INNER JOIN TEMP_DM_MST_ITEM_SINGLE_V T2
+      ON F.DIVISION_ID = T2.DIVISION_ID
+     AND F.ITEM_ID = T2.ITEM_ID
+    INNER JOIN (SELECT DISTINCT '%' || REGEXP_SUBSTR(p_item_id, '[^,]+', 1, LEVEL) || '%' AS TST
+                FROM DUAL
+                CONNECT BY LEVEL <= REGEXP_COUNT(p_item_id, ',') + 1) B
+      ON F.ITEM_ID LIKE B.TST OR T2.NICK_NAME LIKE B.TST
+    INNER JOIN SCM_MST_SITE S
+      ON F.DIVISION_ID = S.DIVISION_ID
+     AND F.SCM_SITE_ID = S.SCM_SITE_ID
+     AND S.SITE_TYPE = 'SALES'
+    INNER JOIN SCM_MST_CITY H ON S.CITY = H.CITY
+    INNER JOIN SCM_MST_COUNTRY I ON S.COUNTRY = I.COUNTRY
+    LEFT JOIN (SELECT B.USER_ID, B.USER_NAME, B.USER_NAME_EN, B.DEPT_ID, C.DEPT_NAME_KO
+               FROM SCM_MST_SSO_USER_INFO B
+               INNER JOIN SCM_MST_SSO_DEPT_INFO C ON B.DEPT_ID = C.DEPT_ID) TEAM
+      ON TEAM.USER_ID = (SELECT REGEXP_SUBSTR(F.OWNER, '[^,]+', 1, 1) FROM DUAL)
+    LEFT JOIN SCM_MST_SSO_USER_INFO J
+      ON SUBSTR(F.OWNER, 1, CASE WHEN INSTR(F.OWNER, ',') = 0 THEN LENGTH(F.OWNER) ELSE INSTR(F.OWNER, ',') - 1 END) = J.USER_ID
+    LEFT JOIN SCM_MST_SSO_DEPT_INFO K
+      ON CASE WHEN F.DIVISION_ID = '40' THEN J.DEPT_ID ELSE S.DEPT_ID END = K.DEPT_ID
+    LEFT JOIN (SELECT SEGMENT1 AS CODE, SEGMENT2 AS NAME
+               FROM SCM_ADM_LOOKUP_MASTER_DETAIL
+               WHERE LOOKUP_TYPE = 'CELL_TYPE') LOOK
+      ON LOOK.CODE = T2.CELL_TYPE
+    LEFT JOIN TEMP_DM_MST_ITEM_SINGLE_V T4
+      ON T2.DIVISION_ID = T4.DIVISION_ID
+     AND NVL(T2.FORECAST_INFO_CELL_MODEL, '') = T4.ITEM_ID
+    LEFT JOIN (SELECT MODEL, BIZ_TYPE, CELL_PACK_COUNT, MODEL_RANK
+               FROM (SELECT SEGMENT2 AS MODEL, SEGMENT3 AS BIZ_TYPE, SEGMENT4 AS CELL_PACK_COUNT,
+                            RANK() OVER (PARTITION BY SEGMENT2 ORDER BY DISPLAY_SEQ DESC) AS MODEL_RANK
+                     FROM SCM_ADM_LOOKUP_MASTER_DETAIL
+                     WHERE LOOKUP_TYPE = 'DM_BIZ_TYPE_40'
+                       AND SEGMENT1 = '40')
+               WHERE MODEL_RANK = 1) LOOKA
+      ON LOOKA.MODEL = F.ITEM_ID
+    WHERE F.DIVISION_ID = '40'
+      AND CASE WHEN p_scm_site_id = 'ALL' THEN p_scm_site_id ELSE F.SCM_SITE_ID END IN
+          (SELECT REGEXP_SUBSTR(p_scm_site_id, '[^,]+', 1, LEVEL)
+           FROM DUAL
+           CONNECT BY LEVEL <= REGEXP_COUNT(p_scm_site_id, ',') + 1)
+      AND CASE WHEN p_customer = 'ALL' THEN p_customer ELSE F.PROJECT_CODE END IN
+          (SELECT REGEXP_SUBSTR(p_customer, '[^,]+', 1, LEVEL)
+           FROM DUAL
+           CONNECT BY LEVEL <= REGEXP_COUNT(p_customer, ',') + 1)
+      AND CASE WHEN p_biz_type = 'ALL' THEN p_biz_type
+               WHEN F.ITEM_ID = LOOKA.MODEL THEN LOOKA.BIZ_TYPE
+               ELSE T2.FORECAST_INFO_BIZ_TYPE END IN
+          (SELECT REGEXP_SUBSTR(p_biz_type, '[^,]+', 1, LEVEL)
+           FROM DUAL
+           CONNECT BY LEVEL <= REGEXP_COUNT(p_biz_type, ',') + 1);
+    COMMIT;
+
+    DBMS_OUTPUT.PUT_LINE(v_program_name || ' : A006_6--' || TO_CHAR(SYSTIMESTAMP, 'YYYY-MM-DD HH24:MI:SS') || ' #TempSiteItemAll (END)');
+
+    -- #TempSiteItem 생성
+    DBMS_OUTPUT.PUT_LINE(v_program_name || ' : A006_7--' || TO_CHAR(SYSTIMESTAMP, 'YYYY-MM-DD HH24:MI:SS') || ' #TempSiteItem (START)');
+
+    INSERT INTO TEMPSITEITEM
+    SELECT DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, NICK_NAME, PROJECT_NAME,
+           MAX(CELL_MODEL) AS CELL_MODEL,
+           MAX(END_CUSTOMER) AS END_CUSTOMER,
+           MAX(SOLDTO_CUSTOMER) AS SOLDTO_CUSTOMER,
+           MAX(COUNTRY) AS COUNTRY,
+           MAX(COUNTRY_NAME) AS COUNTRY_NAME,
+           MAX(CITY) AS CITY,
+           MAX(CITY_NAME) AS CITY_NAME,
+           MAX(OWNER) AS OWNER,
+           MAX(PROJECT_OWNER) AS PROJECT_OWNER,
+           MAX(USER_ID) AS USER_ID,
+           MAX(ITEM_NAME) AS ITEM_NAME,
+           MAX(ITEM_TYPE) AS ITEM_TYPE,
+           MAX(CUST_GROUP) AS CUST_GROUP,
+           MAX(CUST_GROUP_DTL) AS CUST_GROUP_DTL,
+           MAX(APPLICATION) AS APPLICATION,
+           MAX(ROUTE) AS ROUTE,
+           MAX(MDM_PROJECT_NAME) AS MDM_PROJECT_NAME,
+           MAX(MIN_CAPACITY) AS MIN_CAPACITY,
+           MAX(FORECAST_INFO_BIZ_TYPE) AS FORECAST_INFO_BIZ_TYPE,
+           MAX(FORECAST_INFO_PRODUCT_GROUP) AS FORECAST_INFO_PRODUCT_GROUP,
+           MAX(CELL_TYPE) AS CELL_TYPE,
+           MAX(FORECAST_INFO_CELL_PACK_COUNT) AS FORECAST_INFO_CELL_PACK_COUNT,
+           MAX(FORECAST_INFO_ALL) AS FORECAST_INFO_ALL,
+           MAX(FORECAST_INFO_SPEC) AS FORECAST_INFO_SPEC,
+           MAX(FORECAST_INFOR_VERSION) AS FORECAST_INFOR_VERSION,
+           MAX(CELL_MODEL_NICK_NAME) AS CELL_MODEL_NICK_NAME,
+           MAX(VMI_YN) AS VMI_YN,
+           MAX(DMS_SALES) AS DMS_SALES,
+           MAX(DMS_CUSTOMER) AS DMS_CUSTOMER,
+           MAX(DEPT_ID) AS DEPT_ID,
+           MAX(DEPT_NAME_KO) AS DEPT_NAME_KO,
+           MAX(ITEM_VALID_YN) AS ITEM_VALID_YN
+    FROM TEMPSITEITEMALL
+    GROUP BY DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, NICK_NAME, PROJECT_NAME;
+    COMMIT;
+
+    -- 인덱스 생성 (실제로는 GTT에 미리 정의)
+    -- CREATE INDEX IDX1_TEMPSITEITEM ON TEMPSITEITEM(DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID);
+
+    DBMS_OUTPUT.PUT_LINE(v_program_name || ' : A006_7--' || TO_CHAR(SYSTIMESTAMP, 'YYYY-MM-DD HH24:MI:SS') || ' #TempSiteItem (END)');
+
+    -- 날짜 변수 세팅
+    SELECT TIMEZONE INTO v_user_time_zone
+    FROM TB_FX_User
+    WHERE UserID = p_created_by;
+
+    -- v_from_yyyymmdd: 당주 월요일
+    SELECT MIN(C.BASIS_YYYYMMDD) INTO v_from_yyyymmdd
+    FROM SCM_SYS_CALENDAR_M C,
+         (SELECT DISTINCT ISO_YYYYWW
+          FROM SCM_SYS_CALENDAR_M
+          WHERE BASIS_YYYYMMDD = TO_CHAR(SYSTIMESTAMP, 'YYYYMMDD')) T
+    WHERE C.ISO_YYYYWW = T.ISO_YYYYWW;
+
+    -- FROM 실적
+    SELECT C.BASIS_START_DATE INTO v_from_result
+    FROM SCM_SYS_CALENDAR_M C
+    WHERE C.BASIS_YYYYMMDD = p_from_yyyymmdd
+    AND ROWNUM = 1;
+
+    -- TO 실적
+    SELECT C.BASIS_START_DATE INTO v_to_result
+    FROM SCM_SYS_CALENDAR_M C
+    WHERE C.BASIS_YYYYMMDD = p_to_yyyymmdd
+    AND ROWNUM = 1;
+
+    IF v_from_yyyymmdd > v_from_result THEN
+        v_to_yyyymmdd := p_to_yyyymmdd;
+        v_to_result := v_from_yyyymmdd;
+    ELSIF v_from_yyyymmdd <= v_from_result THEN
+        v_to_yyyymmdd := p_to_yyyymmdd;
+        v_from_result := '19000101';
+        v_to_result := '19000101';
+    ELSIF v_from_yyyymmdd > v_to_result THEN
+        v_from_yyyymmdd := '19000101';
+        v_to_yyyymmdd := '19000101';
+        v_from_result := p_from_yyyymmdd;
+        v_to_result := p_to_yyyymmdd;
+    ELSIF v_from_yyyymmdd = v_to_result THEN
+        v_to_yyyymmdd := v_from_yyyymmdd;
+        v_from_result := p_from_yyyymmdd;
+        v_to_result := p_to_yyyymmdd;
+    END IF;
+
+    DBMS_OUTPUT.PUT_LINE(va_program_id || ' : A007--' || TO_CHAR(SYSTIMESTAMP, 'YYYY-MM-DD HH24:MI:SS') ||
+                         ' 날짜 변수 > v_from_yyyymmdd : ' || v_from_yyyymmdd ||
+                         ' v_to_yyyymmdd : ' || v_to_yyyymmdd ||
+                         ' v_from_result : ' || v_from_result ||
+                         ' v_to_result : ' || v_to_result);
+
+    -- TempSelectMeasure 생성
+    INSERT INTO TEMPSELECTMEASURE
+    SELECT DISTINCT U.PROGRAM_ID, U.SHEET_NAME, U.USER_ID, U.COLUMN_NAME AS MEASURE_GROUP,
+           U.COLUMN_NAME AS MEASURE,
+           NVL(SMSM.ATTRIBUTE5, U.COLUMN_NAME) AS RESULT_MEASURE,
+           U.SORT_ORDER_NO
+    FROM SCM_MST_TITLESET_USER U
+    JOIN SCM_MST_SHEET_MEASURE SMSM
+      ON U.PROGRAM_ID =
+DBMS_OUTPUT.PUT_LINE(va_program_id || ' : A008--' || TO_CHAR(SYSTIMESTAMP, 'YYYY-MM-DD HH24:MI:SS') || ' #TempSelectMeasure 만들기 성공');
+
+-- LOC, KRW, FCST_GAP을 위한 필수 메저 추가
+INSERT INTO TEMPSELECTMEASURE
+WITH W_TARGET_MEASURE AS (
+    SELECT A.PROGRAM_ID, A.SHEET_NAME, 'LOC' AS TARGET_MEASURE,
+           A.COLUMN_NAME AS MEASURE_GROUP, A.COLUMN_NAME AS MEASURE,
+           A.COLUMN_NAME AS RESULT_MEASURE, A.SORT_ORDER_NO
+    FROM SCM_MST_SHEET_MEASURE A
+    WHERE A.PROGRAM_ID = va_program_id
+      AND A.SHEET_NAME = va_sheet_name
+      AND A.COLUMN_NAME IN ('RTF_SYS_RP', 'MKT_AMT_LOC')
+    UNION ALL
+    SELECT A.PROGRAM_ID, A.SHEET_NAME, 'KRW' AS TARGET_MEASURE,
+           A.COLUMN_NAME AS MEASURE_GROUP, A.COLUMN_NAME AS MEASURE,
+           A.COLUMN_NAME AS RESULT_MEASURE, A.SORT_ORDER_NO
+    FROM SCM_MST_SHEET_MEASURE A
+    WHERE A.PROGRAM_ID = va_program_id
+      AND A.SHEET_NAME = va_sheet_name
+      AND A.COLUMN_NAME IN ('RTF_SYS_RP', 'MKT_AMT_KRW')
+    UNION ALL
+    SELECT A.PROGRAM_ID, A.SHEET_NAME, 'FCST_GAP' AS TARGET_MEASURE,
+           A.COLUMN_NAME AS MEASURE_GROUP, A.COLUMN_NAME AS MEASURE,
+           A.COLUMN_NAME AS RESULT_MEASURE, A.SORT_ORDER_NO
+    FROM SCM_MST_SHEET_MEASURE A
+    WHERE A.PROGRAM_ID = va_program_id
+      AND A.SHEET_NAME = va_sheet_name
+      AND A.COLUMN_NAME IN ('MKT_FCST', 'SCM_FCST')
+)
+SELECT DISTINCT W.PROGRAM_ID, W.SHEET_NAME, 'DM_ADMIN' AS USER_ID,
+       W.MEASURE_GROUP, W.MEASURE, W.RESULT_MEASURE, W.SORT_ORDER_NO
+FROM W_TARGET_MEASURE W
+JOIN TEMPSELECTMEASURE T
+  ON W.PROGRAM_ID = T.PROGRAM_ID
+ AND W.SHEET_NAME = T.SHEET_NAME
+ AND W.TARGET_MEASURE = T.MEASURE
+WHERE NOT EXISTS (SELECT 1 FROM TEMPSELECTMEASURE X WHERE X.MEASURE = W.MEASURE);
+COMMIT;
+
+-- LOC 메저 강제 추가
+INSERT INTO TEMPSELECTMEASURE
+SELECT A.PROGRAM_ID, A.SHEET_NAME, 'DM_ADMIN' AS USER_ID,
+       A.COLUMN_NAME AS MEASURE_GROUP, A.COLUMN_NAME AS MEASURE,
+       A.COLUMN_NAME AS RESULT_MEASURE, A.SORT_ORDER_NO
+FROM SCM_MST_SHEET_MEASURE A
+WHERE A.PROGRAM_ID = va_program_id
+  AND A.SHEET_NAME = va_sheet_name
+  AND A.COLUMN_NAME = 'LOC'
+  AND NOT EXISTS (SELECT 1 FROM TEMPSELECTMEASURE X WHERE X.MEASURE = A.COLUMN_NAME);
+COMMIT;
+
+-- VERSION CURRENT 처리
+IF INSTR(p_version_type, 'CURRENT') > 0 THEN
+    DBMS_OUTPUT.PUT_LINE(va_program_id || ' : A009--' || TO_CHAR(SYSTIMESTAMP, 'YYYY-MM-DD HH24:MI:SS') || ' #T_LAST_DATA_SETUP_FCST 만들기 시작');
+
+    -- T_LAST_DATA_SETUP_FCST 생성
+    INSERT INTO T_LAST_DATA_SETUP_FCST
+    SELECT X.DIVISION_ID, X.PROJECT_CODE, X.SCM_SITE_ID, X.ITEM_ID, X.DOM_EXP,
+           X.FCST_TYPE, X.INCOTERMS, X.MEASURE, X.LAST_UPDATE_DATE, X.LAST_UPDATED_BY
+    FROM (
+        SELECT A.DIVISION_ID, A.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID, A.DOM_EXP,
+               A.FCST_TYPE, A.INCOTERMS, A.MEASURE,
+               TO_CHAR(A.LAST_UPDATE_DATE, 'YYYYMMDD') AS LAST_UPDATE_DATE,
+               A.LAST_UPDATED_BY,
+               ROW_NUMBER() OVER (PARTITION BY A.DIVISION_ID, A.PROJECT_CODE, A.SCM_SITE_ID,
+                                               A.ITEM_ID, A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, A.MEASURE
+                                  ORDER BY A.LAST_UPDATE_DATE DESC) AS RN
+        FROM DM_PLN_CFM_MKT_DEMAND_PLAN A
+        INNER JOIN TEMPSELECTMEASURE B
+          ON A.MEASURE = CASE
+                            WHEN B.MEASURE IN ('MKT_FCST_RP_CAR', 'MKT_FCST_RP_CELL') THEN 'MKT_FCST_PP'
+                            WHEN B.MEASURE IN ('RTF_RP_CAR','RTF_SYS_RP_CAR','RTF_RP_CELL','RTF_SYS_RP_CELL','RTF_ENERGY') THEN 'RTF'
+                            ELSE B.MEASURE
+                         END
+        WHERE A.DIVISION_ID = p_division_id
+          AND A.YYYYMMDD >= TO_CHAR(ADD_MONTHS(TO_DATE(p_from_yyyymmdd, 'YYYYMMDD'), -12), 'YYYYMMDD')
+          AND A.YYYYMMDD <= p_to_yyyymmdd
+    ) X
+    WHERE NVL(X.PROJECT_CODE, '') != ''
+      AND NVL(X.SCM_SITE_ID, '') != ''
+      AND NVL(X.ITEM_ID, '') != ''
+      AND X.RN = 1;
+    COMMIT;
+
+    DBMS_OUTPUT.PUT_LINE(va_program_id || ' : A009--' || TO_CHAR(SYSTIMESTAMP, 'YYYY-MM-DD HH24:MI:SS') || ' #T_LAST_DATA_SETUP_FCST 만들기 종료');
+
+    -- T_LAST_DATA_SETUP_PRICE 생성
+    DBMS_OUTPUT.PUT_LINE(va_program_id || ' : A010--' || TO_CHAR(SYSTIMESTAMP, 'YYYY-MM-DD HH24:MI:SS') || ' #T_LAST_DATA_SETUP_PRICE 만들기 시작');
+
+    INSERT INTO T_LAST_DATA_SETUP_PRICE
+    SELECT X.DIVISION_ID, X.PROJECT_CODE, X.SCM_SITE_ID, X.ITEM_ID, X.DOM_EXP,
+           X.FCST_TYPE, X.INCOTERMS, X.MEASURE, X.LAST_UPDATE_DATE, X.LAST_UPDATED_BY
+    FROM (
+        SELECT A.DIVISION_ID, A.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID, A.DOM_EXP,
+               A.FCST_TYPE, A.INCOTERMS, A.MEASURE,
+               TO_CHAR(A.LAST_UPDATE_DATE, 'YYYYMMDD') AS LAST_UPDATE_DATE,
+               A.LAST_UPDATED_BY,
+               ROW_NUMBER() OVER (PARTITION BY A.DIVISION_ID, A.PROJECT_CODE, A.SCM_SITE_ID,
+                                               A.ITEM_ID, A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, A.MEASURE
+                                  ORDER BY A.LAST_UPDATE_DATE DESC) AS RN
+        FROM DM_PLN_CFM_SELLING_PRICE A
+        INNER JOIN TEMPSELECTMEASURE B ON A.MEASURE = B.MEASURE
+        WHERE A.DIVISION_ID = p_division_id
+          AND A.YYYYMMDD >= TO_CHAR(ADD_MONTHS(TO_DATE(p_from_yyyymmdd, 'YYYYMMDD'), -12), 'YYYYMMDD')
+          AND A.YYYYMMDD <= p_to_yyyymmdd
+    ) X
+    WHERE NVL(X.PROJECT_CODE, '') != ''
+      AND NVL(X.SCM_SITE_ID, '') != ''
+      AND NVL(X.ITEM_ID, '') != ''
+      AND X.RN = 1;
+    COMMIT;
+
+    DBMS_OUTPUT.PUT_LINE(va_program_id || ' : A011--' || TO_CHAR(SYSTIMESTAMP, 'YYYY-MM-DD HH24:MI:SS') || ' #T_LAST_DATA_SETUP_PRICE 만들기 종료');
+END IF;
+
+-- T_WS_FCST 생성
+INSERT INTO T_WS_FCST
+SELECT SEGMENT1
+FROM SCM_ADM_LOOKUP_MASTER_DETAIL
+WHERE LOOKUP_TYPE = 'SALES_TYPE_CODE';
+COMMIT;
+
+DBMS_OUTPUT.PUT_LINE(va_program_id || ' : A016--' || TO_CHAR(SYSTIMESTAMP, 'YYYY-MM-DD HH24:MI:SS') || ' #T_WS_FCST 만들기 성공');
+
+-- TempFcstNPrice 생성 (주요 데이터)
+-- 이 부분은 매우 길어서 핵심 부분만 표현합니다
+IF INSTR(p_version_type, 'CURRENT') > 0 THEN
+    DBMS_OUTPUT.PUT_LINE(va_program_id || ' : A017--' || TO_CHAR(SYSTIMESTAMP, 'YYYY-MM-DD HH24:MI:SS') || ' #TempFcstNPrice 만들기 시작 - VERSION - CURRENT');
+
+    -- DM_PLN_CFM_MKT_DEMAND_PLAN 데이터 삽입
+    INSERT INTO TEMPFCSTNPRICE
+    (DIVISION_ID, PROJECT_CODE, END_CUSTOMER, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE,
+     INCOTERMS, MEASURE, PLANT_SITE_ID, CELL_PROD_SITE_ID, YYYYMMDD, QTY, MEASURE_GROUP,
+     CELL_MODEL, NICK_NAME, DMS_SALES, DMS_CUSTOMER, OWNER, DEPT_ID, DEPT_NAME_KO,
+     FORECAST_INFO_CELL_PACK_COUNT, ITEM_TYPE, PROJECT_NAME, PROJECT_OWNER, SOLDTO_CUSTOMER,
+     COUNTRY_NAME, CITY_NAME, ITEM_NAME, VMI_YN, CUST_GROUP, CUST_GROUP_DTL, APPLICATION,
+     ROUTE, MDM_PROJECT_NAME, MIN_CAPACITY, FORECAST_INFO_BIZ_TYPE, CELL_TYPE,
+     FORECAST_INFO_ALL, FORECAST_INFO_SPEC, FORECAST_INFOR_VERSION, CELL_MODEL_NICK_NAME,
+     SORT_ORDER_NO, CREATE_DATE, LAST_UPDATED_BY, CURRENCY, VERSION_NO, CUTOFF_YYYYMMDD, NOTATION)
+    SELECT A.DIVISION_ID, A.PROJECT_CODE, A.END_CUSTOMER, A.SCM_SITE_ID, A.ITEM_ID, A.DOM_EXP,
+           A.FCST_TYPE, A.INCOTERMS,
+           CASE
+               WHEN A.MEASURE IN ('MKT_FCST_RP_CAR', 'MKT_FCST_RP_CELL') THEN 'MKT_FCST_PP'
+               ELSE A.MEASURE
+           END AS MEASURE,
+           A.PLANT_SITE_ID, A.CELL_PROD_SITE_ID, A.YYYYMMDD, A.QTY, B.MEASURE_GROUP,
+           C.CELL_MODEL, C.NICK_NAME, C.DMS_SALES, C.DMS_CUSTOMER, C.OWNER, C.DEPT_ID, C.DEPT_NAME_KO,
+           C.FORECAST_INFO_CELL_PACK_COUNT, C.ITEM_TYPE, C.PROJECT_NAME, C.PROJECT_OWNER,
+           C.SOLDTO_CUSTOMER, C.COUNTRY_NAME, C.CITY_NAME, C.ITEM_NAME, C.VMI_YN, C.CUST_GROUP,
+           C.CUST_GROUP_DTL, C.APPLICATION, C.ROUTE, C.MDM_PROJECT_NAME, C.MIN_CAPACITY,
+           C.FORECAST_INFO_BIZ_TYPE, C.CELL_TYPE, C.FORECAST_INFO_ALL, C.FORECAST_INFO_SPEC,
+           C.FORECAST_INFOR_VERSION, C.CELL_MODEL_NICK_NAME, B.SORT_ORDER_NO,
+           LD.CREATE_DATE, LD.LAST_UPDATED_BY, '' AS CURRENCY, 'CURRENT' AS VERSION_NO,
+           NULL AS CUTOFF_YYYYMMDD,
+           CASE
+               WHEN A.MEASURE IN ('KRW', 'USD', 'LOC', 'MKT_AMT_LOC', 'MKT_AMT_KRW') THEN 'POINT3'
+               ELSE 'INTEGER'
+           END AS NOTATION
+    FROM DM_PLN_CFM_MKT_DEMAND_PLAN A
+    INNER JOIN TEMPSELECTMEASURE B
+      ON A.MEASURE = CASE
+                        WHEN B.MEASURE IN ('RTF_RP_CAR','RTF_SYS_RP_CAR','RTF_RP_CELL','RTF_SYS_RP_CELL','RTF_ENERGY') THEN 'RTF'
+                        WHEN B.MEASURE IN ('RTF_SYS_RP_CAR','RTF_SYS_RP_CELL','RTF_ENERGY') THEN 'RTF_SYS_RP'
+                        ELSE B.MEASURE
+                     END
+    LEFT JOIN (SELECT CREATE_DATE, LAST_UPDATED_BY, DIVISION_ID, PROJECT_CODE, SCM_SITE_ID,
+                      ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS, MEASURE,
+                      ROW_NUMBER() OVER (PARTITION BY DIVISION_ID, PROJECT_CODE, SCM_SITE_ID,
+                                                     ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS, MEASURE
+                                        ORDER BY CREATE_DATE DESC) AS RN
+               FROM T_LAST_DATA_SETUP_FCST) LD
+      ON LD.DIVISION_ID = A.DIVISION_ID
+     AND LD.PROJECT_CODE = A.PROJECT_CODE
+     AND LD.SCM_SITE_ID = A.SCM_SITE_ID
+     AND LD.ITEM_ID = A.ITEM_ID
+     AND LD.DOM_EXP = A.DOM_EXP
+     AND LD.FCST_TYPE = A.FCST_TYPE
+     AND LD.INCOTERMS = A.INCOTERMS
+     AND LD.MEASURE = A.MEASURE
+     AND LD.RN = 1
+    INNER JOIN TEMPSITEITEM C
+      ON A.DIVISION_ID = C.DIVISION_ID
+     AND A.PROJECT_CODE = C.PROJECT_CODE
+     AND A.SCM_SITE_ID = C.SCM_SITE_ID
+     AND A.ITEM_ID = C.ITEM_ID
+     AND C.ITEM_VALID_YN = 'Y'
+    INNER JOIN T_WS_FCST D ON A.FCST_TYPE = D.FCST_TYPE
+    WHERE A.DIVISION_ID = p_division_id
+      AND CASE WHEN p_scm_site_id = 'ALL' THEN p_scm_site_id ELSE A.SCM_SITE_ID END IN
+          (SELECT REGEXP_SUBSTR(p_scm_site_id, '[^,]+', 1, LEVEL)
+           FROM DUAL
+           CONNECT BY LEVEL <= REGEXP_COUNT(p_scm_site_id, ',') + 1)
+      AND A.YYYYMMDD BETWEEN v_from_yyyymmdd AND v_to_yyyymmdd
+      AND ((A.MEASURE != 'SCM_FCST' AND A.QTY != 0) OR (A.MEASURE = 'SCM_FCST'));
+
+    -- DM_PLN_CFM_SELLING_PRICE 데이터 삽입
+    INSERT INTO TEMPFCSTNPRICE
+    (DIVISION_ID, PROJECT_CODE, END_CUSTOMER, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE,
+     INCOTERMS, MEASURE, PLANT_SITE_ID, CELL_PROD_SITE_ID, YYYYMMDD, QTY, MEASURE_GROUP,
+     CELL_MODEL, NICK_NAME, DMS_SALES, DMS_CUSTOMER, OWNER, DEPT_ID, DEPT_NAME_KO,
+     FORECAST_INFO_CELL_PACK_COUNT, ITEM_TYPE, PROJECT_NAME, PROJECT_OWNER, SOLDTO_CUSTOMER,
+     COUNTRY_NAME, CITY_NAME, ITEM_NAME, VMI_YN, CUST_GROUP, CUST_GROUP_DTL, APPLICATION,
+     ROUTE, MDM_PROJECT_NAME, MIN_CAPACITY, FORECAST_INFO_BIZ_TYPE, CELL_TYPE,
+     FORECAST_INFO_ALL, FORECAST_INFO_SPEC, FORECAST_INFOR_VERSION, CELL_MODEL_NICK_NAME,
+     SORT_ORDER_NO, CREATE_DATE, LAST_UPDATED_BY, CURRENCY, VERSION_NO, CUTOFF_YYYYMMDD, NOTATION)
+    SELECT A.DIVISION_ID, A.PROJECT_CODE, A.END_CUSTOMER, A.SCM_SITE_ID, A.ITEM_ID, A.DOM_EXP,
+           A.FCST_TYPE, A.INCOTERMS, A.MEASURE, A.PLANT_SITE_ID, A.CELL_PROD_SITE_ID, A.YYYYMMDD,
+           NVL(A.PRICE, 0) AS QTY, B.MEASURE_GROUP,
+           C.CELL_MODEL, C.NICK_NAME, C.DMS_SALES, C.DMS_CUSTOMER, C.OWNER, C.DEPT_ID, C.DEPT_NAME_KO,
+           C.FORECAST_INFO_CELL_PACK_COUNT, C.ITEM_TYPE, C.PROJECT_NAME, C.PROJECT_OWNER,
+           C.SOLDTO_CUSTOMER, C.COUNTRY_NAME, C.CITY_NAME, C.ITEM_NAME, C.VMI_YN, C.CUST_GROUP,
+           C.CUST_GROUP_DTL, C.APPLICATION, C.ROUTE, C.MDM_PROJECT_NAME, C.MIN_CAPACITY,
+           C.FORECAST_INFO_BIZ_TYPE, C.CELL_TYPE, C.FORECAST_INFO_ALL, C.FORECAST_INFO_SPEC,
+           C.FORECAST_INFOR_VERSION, C.CELL_MODEL_NICK_NAME, B.SORT_ORDER_NO,
+           LD.CREATE_DATE, LD.LAST_UPDATED_BY, A.CURRENCY, 'CURRENT' AS VERSION_NO,
+           NULL AS CUTOFF_YYYYMMDD,
+           CASE
+               WHEN A.MEASURE IN ('KRW', 'USD', 'LOC', 'MKT_AMT_LOC', 'MKT_AMT_KRW') THEN 'POINT3'
+               ELSE 'INTEGER'
+           END AS NOTATION
+    FROM DM_PLN_CFM_SELLING_PRICE A
+    INNER JOIN TEMPSELECTMEASURE B ON A.MEASURE = B.MEASURE
+    LEFT JOIN (SELECT CREATE_DATE, LAST_UPDATED_BY, DIVISION_ID, PROJECT_CODE, SCM_SITE_ID,
+                      ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS, MEASURE,
+                      ROW_NUMBER() OVER (PARTITION BY DIVISION_ID, PROJECT_CODE, SCM_SITE_ID,
+                                                     ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS, MEASURE
+                                        ORDER BY CREATE_DATE DESC) AS RN
+               FROM T_LAST_DATA_SETUP_PRICE) LD
+      ON LD.DIVISION_ID = A.DIVISION_ID
+     AND LD.PROJECT_CODE = A.PROJECT_CODE
+     AND LD.SCM_SITE_ID = A.SCM_SITE_ID
+     AND LD.ITEM_ID = A.ITEM_ID
+     AND LD.DOM_EXP = A.DOM_EXP
+     AND LD.FCST_TYPE = A.FCST_TYPE
+     AND LD.INCOTERMS = A.INCOTERMS
+     AND LD.MEASURE = A.MEASURE
+     AND LD.RN = 1
+    INNER JOIN TEMPSITEITEM C
+      ON A.DIVISION_ID = C.DIVISION_ID
+     AND A.PROJECT_CODE = C.PROJECT_CODE
+     AND A.SCM_SITE_ID = C.SCM_SITE_ID
+     AND A.ITEM_ID = C.ITEM_ID
+     AND C.ITEM_VALID_YN = 'Y'
+    INNER JOIN T_WS_FCST D ON A.FCST_TYPE = D.FCST_TYPE
+    WHERE A.DIVISION_ID = p_division_id
+      AND CASE WHEN p_scm_site_id = 'ALL' THEN p_scm_site_id ELSE A.SCM_SITE_ID END IN
+          (SELECT REGEXP_SUBSTR(p_scm_site_id, '[^,]+', 1, LEVEL)
+           FROM DUAL
+           CONNECT BY LEVEL <= REGEXP_COUNT(p_scm_site_id, ',') + 1)
+      AND A.YYYYMMDD BETWEEN v_to_result AND v_to_yyyymmdd;
+
+    -- DM_PLN_SALES_PLAN_RESULT 실적 데이터 삽입
+    INSERT INTO TEMPFCSTNPRICE
+    (DIVISION_ID, PROJECT_CODE, END_CUSTOMER, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE,
+     INCOTERMS, MEASURE, PLANT_SITE_ID, CELL_PROD_SITE_ID, YYYYMMDD, QTY, MEASURE_GROUP,
+     CELL_MODEL, NICK_NAME, DMS_SALES, DMS_CUSTOMER, OWNER, DEPT_ID, DEPT_NAME_KO,
+     FORECAST_INFO_CELL_PACK_COUNT, ITEM_TYPE, PROJECT_NAME, PROJECT_OWNER, SOLDTO_CUSTOMER,
+     COUNTRY_NAME, CITY_NAME, ITEM_NAME, VMI_YN, CUST_GROUP, CUST_GROUP_DTL, APPLICATION,
+     ROUTE, MDM_PROJECT_NAME, MIN_CAPACITY, FORECAST_INFO_BIZ_TYPE, CELL_TYPE,
+     FORECAST_INFO_ALL, FORECAST_INFO_SPEC, FORECAST_INFOR_VERSION, CELL_MODEL_NICK_NAME,
+     SORT_ORDER_NO, CREATE_DATE, LAST_UPDATED_BY, CURRENCY, VERSION_NO, CUTOFF_YYYYMMDD, NOTATION)
+    SELECT A.DIVISION_ID, A.PROJECT_CODE, A.PROJECT_CODE AS END_CUSTOMER, A.SCM_SITE_ID,
+           A.ITEM_ID, A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, B.MEASURE AS MEASURE,
+           A.PLANT_SITE_ID, A.CELL_PROD_SITE_ID, A.YYYYMMDD, A.QTY, B.MEASURE_GROUP,
+           C.CELL_MODEL, C.NICK_NAME, C.DMS_SALES, C.DMS_CUSTOMER, C.OWNER, C.DEPT_ID, C.DEPT_NAME_KO,
+           C.FORECAST_INFO_CELL_PACK_COUNT, C.ITEM_TYPE, C.PROJECT_NAME, C.PROJECT_OWNER,
+           C.SOLDTO_CUSTOMER, C.COUNTRY_NAME, C.CITY_NAME, C.ITEM_NAME, C.VMI_YN, C.CUST_GROUP,
+           C.CUST_GROUP_DTL, C.APPLICATION, C.ROUTE, C.MDM_PROJECT_NAME, C.MIN_CAPACITY,
+           C.FORECAST_INFO_BIZ_TYPE, C.CELL_TYPE, C.FORECAST_INFO_ALL, C.FORECAST_INFO_SPEC,
+           C.FORECAST_INFOR_VERSION, C.CELL_MODEL_NICK_NAME, B.SORT_ORDER_NO,
+           LD.CREATE_DATE, LD.LAST_UPDATED_BY,
+           CASE WHEN A.MEASURE LIKE 'VMI%' THEN '' ELSE A.CURRENCY END AS CURRENCY,
+           'CURRENT' AS VERSION_NO, NULL AS CUTOFF_YYYYMMDD,
+           CASE
+               WHEN A.MEASURE IN ('KRW', 'USD', 'LOC', 'MKT_AMT_LOC', 'MKT_AMT_KRW') THEN 'POINT3'
+               ELSE 'INTEGER'
+           END AS NOTATION
+    FROM DM_PLN_SALES_PLAN_RESULT A
+    INNER JOIN TEMPSELECTMEASURE B ON A.MEASURE = B.RESULT_MEASURE
+    LEFT JOIN (SELECT CREATE_DATE, LAST_UPDATED_BY, DIVISION_ID, PROJECT_CODE, SCM_SITE_ID,
+                      ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS, MEASURE,
+                      ROW_NUMBER() OVER (PARTITION BY DIVISION_ID, PROJECT_CODE, SCM_SITE_ID,
+                                                     ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS, MEASURE
+                                        ORDER BY CREATE_DATE DESC) AS RN
+               FROM T_LAST_DATA_SETUP_FCST) LD
+      ON LD.DIVISION_ID = A.DIVISION_ID
+     AND LD.PROJECT_CODE = A.PROJECT_CODE
+     AND LD.SCM_SITE_ID = A.SCM_SITE_ID
+     AND LD.ITEM_ID = A.ITEM_ID
+     AND LD.DOM_EXP = A.DOM_EXP
+     AND LD.FCST_TYPE = A.FCST_TYPE
+     AND LD.INCOTERMS = A.INCOTERMS
+     AND LD.MEASURE = A.MEASURE
+     AND LD.RN = 1
+    INNER JOIN TEMPSITEITEM C
+      ON A.DIVISION_ID = C.DIVISION_ID
+     AND A.PROJECT_CODE = C.PROJECT_CODE
+     AND A.SCM_SITE_ID = C.SCM_SITE_ID
+     AND A.ITEM_ID = C.ITEM_ID
+     AND C.ITEM_VALID_YN = 'Y'
+    INNER JOIN T_WS_FCST D ON A.FCST_TYPE = D.FCST_TYPE
+    WHERE A.DIVISION_ID = p_division_id
+      AND CASE WHEN p_scm_site_id = 'ALL' THEN p_scm_site_id ELSE A.SCM_SITE_ID END IN
+          (SELECT REGEXP_SUBSTR(p_scm_site_id, '[^,]+', 1, LEVEL)
+           FROM DUAL
+           CONNECT BY LEVEL <= REGEXP_COUNT(p_scm_site_id, ',') + 1)
+      AND A.YYYYMMDD >= p_from_yyyymmdd
+      AND A.YYYYMMDD < v_to_result
+      AND A.QTY != 0;
+    COMMIT;
+
+    -- CURRENCY 업데이트
+    UPDATE TEMPFCSTNPRICE A
+    SET CURRENCY = (SELECT DISTINCT SP.CURRENCY
+                    FROM TEMPFCSTNPRICE SP
+                    WHERE SP.DIVISION_ID = A.DIVISION_ID
+                      AND SP.PROJECT_CODE = A.PROJECT_CODE
+                      AND SP.SCM_SITE_ID = A.SCM_SITE_ID
+                      AND SP.PLANT_SITE_ID = A.PLANT_SITE_ID
+                      AND SP.ITEM_ID = A.ITEM_ID
+                      AND SP.INCOTERMS = A.INCOTERMS
+                      AND SP.DOM_EXP = A.DOM_EXP
+                      AND SP.FCST_TYPE = A.FCST_TYPE
+                      AND SP.CELL_PROD_SITE_ID = A.CELL_PROD_SITE_ID
+                      AND SP.YYYYMMDD BETWEEN v_to_result AND v_to_yyyymmdd
+                      AND SP.MEASURE = 'LOC'
+                      AND ROWNUM = 1)
+    WHERE A.YYYYMMDD BETWEEN p_from_yyyymmdd AND v_to_yyyymmdd
+      AND NVL(A.CURRENCY, '') = ''
+      AND A.MEASURE NOT LIKE 'VMI%';
+    COMMIT;
+
+    -- LOC, KRW 단가 계산
+    INSERT INTO TEMPFCSTNPRICE
+    (DIVISION_ID, PROJECT_CODE, END_CUSTOMER, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE,
+     INCOTERMS, MEASURE, PLANT_SITE_ID, CELL_PROD_SITE_ID, YYYYMMDD, QTY, MEASURE_GROUP,
+CELL_MODEL, NICK_NAME, DMS_SALES, DMS_CUSTOMER, OWNER, DEPT_ID, DEPT_NAME_KO,
+     FORECAST_INFO_CELL_PACK_COUNT, ITEM_TYPE, PROJECT_NAME, PROJECT_OWNER, SOLDTO_CUSTOMER,
+     COUNTRY_NAME, CITY_NAME, ITEM_NAME, VMI_YN, CUST_GROUP, CUST_GROUP_DTL, APPLICATION,
+     ROUTE, MDM_PROJECT_NAME, MIN_CAPACITY, FORECAST_INFO_BIZ_TYPE, CELL_TYPE,
+     FORECAST_INFO_ALL, FORECAST_INFO_SPEC, FORECAST_INFOR_VERSION, CELL_MODEL_NICK_NAME,
+     SORT_ORDER_NO, CREATE_DATE, LAST_UPDATED_BY, CURRENCY, VERSION_NO, CUTOFF_YYYYMMDD, NOTATION)
+    SELECT A.DIVISION_ID, A.PROJECT_CODE, A.PROJECT_CODE AS END_CUSTOMER, A.SCM_SITE_ID,
+           A.ITEM_ID, A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, D.MEASURE, A.PLANT_SITE_ID,
+           A.CELL_PROD_SITE_ID, A.YYYYMMDD,
+           CASE D.MEASURE
+               WHEN 'LOC' THEN
+                   CASE WHEN SUM(CASE WHEN A.MEASURE = 'RTF_SYS_RP' THEN A.QTY ELSE 0 END) != 0
+                        THEN SUM(CASE WHEN A.MEASURE = 'MKT_AMT_LOC' THEN A.QTY ELSE 0 END) /
+                             SUM(CASE WHEN A.MEASURE = 'RTF_SYS_RP' THEN A.QTY ELSE 0 END)
+                        ELSE 0
+                   END
+               WHEN 'KRW' THEN
+                   CASE WHEN SUM(CASE WHEN A.MEASURE = 'RTF_SYS_RP' THEN A.QTY ELSE 0 END) != 0
+                        THEN SUM(CASE WHEN A.MEASURE = 'MKT_AMT_KRW' THEN A.QTY ELSE 0 END) /
+                             SUM(CASE WHEN A.MEASURE = 'RTF_SYS_RP' THEN A.QTY ELSE 0 END)
+                        ELSE 0
+                   END
+           END AS QTY,
+           MAX(D.MEASURE_GROUP) AS MEASURE_GROUP,
+           MAX(A.CELL_MODEL) AS CELL_MODEL, MAX(A.NICK_NAME) AS NICK_NAME,
+           MAX(A.DMS_SALES) AS DMS_SALES, MAX(A.DMS_CUSTOMER) AS DMS_CUSTOMER,
+           MAX(A.OWNER) AS OWNER, MAX(A.DEPT_ID) AS DEPT_ID, MAX(A.DEPT_NAME_KO) AS DEPT_NAME_KO,
+           MAX(A.FORECAST_INFO_CELL_PACK_COUNT) AS FORECAST_INFO_CELL_PACK_COUNT,
+           MAX(A.ITEM_TYPE) AS ITEM_TYPE, MAX(A.PROJECT_NAME) AS PROJECT_NAME,
+           MAX(A.PROJECT_OWNER) AS PROJECT_OWNER, MAX(A.SOLDTO_CUSTOMER) AS SOLDTO_CUSTOMER,
+           MAX(A.COUNTRY_NAME) AS COUNTRY_NAME, MAX(A.CITY_NAME) AS CITY_NAME,
+           MAX(A.ITEM_NAME) AS ITEM_NAME, MAX(A.VMI_YN) AS VMI_YN,
+           MAX(A.CUST_GROUP) AS CUST_GROUP, MAX(A.CUST_GROUP_DTL) AS CUST_GROUP_DTL,
+           MAX(A.APPLICATION) AS APPLICATION, MAX(A.ROUTE) AS ROUTE,
+           MAX(A.MDM_PROJECT_NAME) AS MDM_PROJECT_NAME, MAX(A.MIN_CAPACITY) AS MIN_CAPACITY,
+           MAX(A.FORECAST_INFO_BIZ_TYPE) AS FORECAST_INFO_BIZ_TYPE, MAX(A.CELL_TYPE) AS CELL_TYPE,
+           MAX(A.FORECAST_INFO_ALL) AS FORECAST_INFO_ALL, MAX(A.FORECAST_INFO_SPEC) AS FORECAST_INFO_SPEC,
+           MAX(A.FORECAST_INFOR_VERSION) AS FORECAST_INFOR_VERSION,
+           MAX(A.CELL_MODEL_NICK_NAME) AS CELL_MODEL_NICK_NAME, MAX(D.SORT_ORDER_NO) AS SORT_ORDER_NO,
+           MAX(A.CREATE_DATE) AS CREATE_DATE, MAX(A.LAST_UPDATED_BY) AS LAST_UPDATED_BY,
+           MAX(A.CURRENCY) AS CURRENCY, 'CURRENT' AS VERSION_NO, NULL AS CUTOFF_YYYYMMDD,
+           CASE
+               WHEN D.MEASURE IN ('KRW', 'USD', 'LOC', 'MKT_AMT_LOC', 'MKT_AMT_KRW') THEN 'POINT3'
+               ELSE 'INTEGER'
+           END AS NOTATION
+    FROM TEMPFCSTNPRICE A
+    JOIN TEMPSELECTMEASURE D ON D.MEASURE IN ('LOC', 'KRW')
+    WHERE A.MEASURE IN ('RTF_SYS_RP', 'MKT_AMT_LOC', 'MKT_AMT_KRW')
+      AND A.YYYYMMDD >= p_from_yyyymmdd
+      AND A.YYYYMMDD < v_to_result
+    GROUP BY A.DIVISION_ID, A.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID, A.DOM_EXP,
+             A.FCST_TYPE, A.INCOTERMS, A.PLANT_SITE_ID, A.CELL_PROD_SITE_ID,
+             A.CURRENCY, A.YYYYMMDD, D.MEASURE;
+    COMMIT;
+
+    DBMS_OUTPUT.PUT_LINE(va_program_id || ' : A018--' || TO_CHAR(SYSTIMESTAMP, 'YYYY-MM-DD HH24:MI:SS') || ' #TempFcstNPrice 만들기 종료 - VERSION - CURRENT');
+END IF;
+
+-- DM_ADMIN 사용자 메저 삭제
+DELETE FROM TEMPFCSTNPRICE A
+WHERE EXISTS (SELECT 1
+              FROM TEMPSELECTMEASURE B
+              WHERE A.MEASURE = B.MEASURE
+                AND B.USER_ID = 'DM_ADMIN');
+COMMIT;
+
+-- C_TITLE 커서 처리
+DBMS_OUTPUT.PUT_LINE(va_program_id || ' : A025--' || TO_CHAR(SYSTIMESTAMP, 'YYYY-MM-DD HH24:MI:SS') || ' #C_TITLE 커서 실행 시작');
+
+OPEN c_title;
+LOOP
+    FETCH c_title INTO v_cur_program_id, v_cur_sheet_name, v_cur_column_name, v_cur_sort_order_no;
+    EXIT WHEN c_title%NOTFOUND;
+
+    IF v_column = '' THEN
+        v_column := v_cur_column_name;
+        v_groupby := ' GROUP BY ' || v_cur_column_name;
+        v_orderby := ' ORDER BY SORT_KEY, ' ||
+                     CASE WHEN v_cur_column_name NOT IN ('SORT_KEY', 'EDIT_FLAG')
+                          THEN v_cur_column_name
+                          ELSE ''
+                     END;
+    ELSE
+        v_column := v_column || ', ' || v_cur_column_name;
+        v_groupby := v_groupby || ', ' || v_cur_column_name;
+        v_orderby := v_orderby ||
+                     CASE WHEN v_cur_column_name NOT IN ('SORT_KEY', 'EDIT_FLAG')
+                          THEN ', ' || v_cur_column_name
+                          ELSE ''
+                     END;
+    END IF;
+END LOOP;
+CLOSE c_title;
+
+v_column := v_column || ',[NOTATION]';
+v_groupby := v_groupby || ', EDIT_FLAG, SORT_ORDER_NO';
+v_orderby := REPLACE(v_orderby, 'MEASURE_GROUP', ' CAST(SORT_ORDER_NO AS NUMBER(10,2))');
+v_orderby := REPLACE(v_orderby, ', MEASURE', '');
+
+DBMS_OUTPUT.PUT_LINE(va_program_id || ' : A026--' || TO_CHAR(SYSTIMESTAMP, 'YYYY-MM-DD HH24:MI:SS') || ' #C_TITLE 커서 실행 종료');
+
+-- 권한 그룹 설정
+SELECT COUNT(1) INTO n_log_count
+FROM SCM_ADM_LOOKUP_MASTER_DETAIL
+WHERE LOOKUP_TYPE = 'GET_ADMIN_GROUP'
+  AND VALID_YN = 'Y'
+  AND SEGMENT1 = p_user_group
+  AND SEGMENT2 = 'ALL';
+
+IF n_log_count > 0 THEN
+    v_group_id := 'ADMIN';
+END IF;
+
+-- 권한 그룹 메저 처리 (임시 테이블 사용)
+EXECUTE IMMEDIATE 'TRUNCATE TABLE TEMP_INTO_GROUP_MEASURE';
+EXECUTE IMMEDIATE 'TRUNCATE TABLE TEMP_ADMIN_GROUP_MEASURE';
+
+INSERT INTO TEMP_INTO_GROUP_MEASURE
+SELECT B.USER_GROUP, B.DIVISION_ID, B.MEASURE, B.DAYS, B.FROM_TIME, B.TO_TIME,
+       REGEXP_SUBSTR(B.LIMIT_MEASURE, '[^,]+', 1, LEVEL) AS LIMIT_MEASURE
+FROM (SELECT A.SEGMENT1 AS USER_GROUP, A.SEGMENT3 AS DIVISION_ID,
+             A.SEGMENT4 AS MEASURE,
+             REGEXP_SUBSTR(A.ATTRIBUTE1, '[^,]+', 1, LEVEL) AS DAYS,
+             A.ATTRIBUTE2 AS FROM_TIME, A.ATTRIBUTE3 AS TO_TIME,
+             A.ATTRIBUTE4 AS LIMIT_MEASURE
+      FROM SCM_ADM_LOOKUP_MASTER_DETAIL A
+      WHERE A.LOOKUP_TYPE = 'GET_ADMIN_GROUP_MEASURE'
+        AND A.VALID_YN = 'Y'
+        AND A.SEGMENT1 = p_user_group
+        AND A.SEGMENT2 = va_program_id
+        AND A.SEGMENT3 = p_division_id
+      CONNECT BY LEVEL <= REGEXP_COUNT(A.ATTRIBUTE1, ',') + 1
+             AND PRIOR A.ROWID = A.ROWID
+             AND PRIOR DBMS_RANDOM.VALUE IS NOT NULL) B
+WHERE B.DAYS = CASE
+                  WHEN NVL(TRIM(B.DAYS), '') = '' THEN B.DAYS
+                  ELSE CASE TO_CHAR(SYSDATE, 'DY', 'NLS_DATE_LANGUAGE=ENGLISH')
+                          WHEN 'SUN' THEN 'SUN'
+                          WHEN 'MON' THEN 'MON'
+                          WHEN 'TUE' THEN 'TUE'
+                          WHEN 'WED' THEN 'WED'
+                          WHEN 'THU' THEN 'THU'
+                          WHEN 'FRI' THEN 'FRI'
+                          WHEN 'SAT' THEN 'SAT'
+                       END
+               END
+  AND B.FROM_TIME <= CASE
+                        WHEN NVL(TRIM(B.FROM_TIME), '') = '' THEN B.FROM_TIME
+                        ELSE SUBSTR(REPLACE(TO_CHAR(SYSDATE, 'HH24:MI'), ':', ''), 1, 4)
+                     END
+  AND B.TO_TIME >= CASE
+                      WHEN NVL(TRIM(B.TO_TIME), '') = '' THEN B.TO_TIME
+                      ELSE SUBSTR(REPLACE(TO_CHAR(SYSDATE, 'HH24:MI'), ':', ''), 1, 4)
+                   END
+CONNECT BY LEVEL <= REGEXP_COUNT(B.LIMIT_MEASURE, ',') + 1
+       AND PRIOR B.ROWID = B.ROWID
+       AND PRIOR DBMS_RANDOM.VALUE IS NOT NULL;
+COMMIT;
+
+INSERT INTO TEMP_ADMIN_GROUP_MEASURE
+SELECT A.MEASURE,
+       CASE WHEN NVL(B.MEASURE, '') = '' THEN 'N' ELSE 'Y' END AS EDIT_FLAG
+FROM (SELECT A.SEGMENT4 AS MEASURE
+      FROM SCM_ADM_LOOKUP_MASTER_DETAIL A
+      WHERE A.LOOKUP_TYPE = 'GET_ADMIN_GROUP_MEASURE'
+        AND A.VALID_YN = 'Y'
+        AND A.SEGMENT2 = va_program_id
+      GROUP BY A.SEGMENT4) A
+LEFT OUTER JOIN (SELECT B.MEASURE
+                 FROM TEMP_INTO_GROUP_MEASURE B
+                 GROUP BY B.MEASURE) B ON A.MEASURE = B.MEASURE;
+COMMIT;
+
+-- LIMIT_MEASURE 처리
+UPDATE TEMP_ADMIN_GROUP_MEASURE A
+SET EDIT_FLAG = 'N'
+WHERE EXISTS (SELECT 1
+              FROM TEMP_INTO_GROUP_MEASURE B
+              WHERE A.MEASURE = B.LIMIT_MEASURE
+                AND NVL(B.LIMIT_MEASURE, '') != '');
+COMMIT;
+
+-- CAL_MONTH_END_DATE 생성
+DBMS_OUTPUT.PUT_LINE(va_program_id || ' : A027--' || TO_CHAR(SYSTIMESTAMP, 'YYYY-MM-DD HH24:MI:SS') || ' #CAL_MONTH_END_DATE 만들기 시작');
+
+INSERT INTO CAL_MONTH_END_DATE
+SELECT MAX(BASIS_YYYYMMDD) AS MONTH_END_DATE
+FROM SCM_SYS_CALENDAR_M
+WHERE BASIS_YYYYMMDD BETWEEN p_from_yyyymmdd AND p_to_yyyymmdd
+GROUP BY BASIS_YYYYMM;
+COMMIT;
+
+DBMS_OUTPUT.PUT_LINE(va_program_id || ' : A027--' || TO_CHAR(SYSTIMESTAMP, 'YYYY-MM-DD HH24:MI:SS') || ' #CAL_MONTH_END_DATE 만들기 종료');
+
+-- CAL_WEEK_END_DATE 생성
+DBMS_OUTPUT.PUT_LINE(va_program_id || ' : A028--' || TO_CHAR(SYSTIMESTAMP, 'YYYY-MM-DD HH24:MI:SS') || ' #CAL_WEEK_END_DATE 만들기 시작');
+
+INSERT INTO CAL_WEEK_END_DATE
+SELECT MAX(BASIS_YYYYMMDD) AS WEEK_END_DATE
+FROM SCM_SYS_CALENDAR_M
+WHERE BASIS_YYYYMMDD BETWEEN p_from_yyyymmdd AND p_to_yyyymmdd
+GROUP BY ISO_YYYYWW || PARTIAL_WEEK_NAME;
+COMMIT;
+
+DBMS_OUTPUT.PUT_LINE(va_program_id || ' : A028--' || TO_CHAR(SYSTIMESTAMP, 'YYYY-MM-DD HH24:MI:SS') || ' #CAL_WEEK_END_DATE 만들기 종료');
+
+-- MF_SP 임시 테이블 생성
+DBMS_OUTPUT.PUT_LINE(va_program_id || ' : A029--' || TO_CHAR(SYSTIMESTAMP, 'YYYY-MM-DD HH24:MI:SS') || ' #MF_SP 임시테이블 만들기 시작');
+
+INSERT INTO MF_SP
+SELECT A.DIVISION_ID, A.SCM_SITE_ID, A.PLANT_SITE_ID, A.PROJECT_CODE, A.ITEM_ID,
+       A.INCOTERMS, A.FCST_TYPE, A.DOM_EXP, A.MEASURE, A.END_CUSTOMER, A.NICK_NAME,
+       A.DMS_SALES, A.DMS_CUSTOMER, C.BASIS_YYYYMM AS YYYYMM,
+       C.BASIS_YYYYMM || C.ISO_WEEK AS YYYYMMWW, C.BASIS_YYYYMMDD AS YYYYMMDD,
+       C.DAYOFWEEK, A.CELL_MODEL AS FORECAST_INFO_CELL_MODEL, A.DEPT_ID AS TEAM_ID,
+       A.DEPT_NAME_KO AS TEAM_NAME_KO, A.ITEM_TYPE, A.PROJECT_NAME, A.PROJECT_OWNER,
+       A.OWNER, A.SOLDTO_CUSTOMER, A.COUNTRY_NAME, A.CITY_NAME, A.ITEM_NAME, A.VMI_YN,
+       A.CELL_PROD_SITE_ID, A.CUST_GROUP, A.CUST_GROUP_DTL, A.APPLICATION, A.ROUTE,
+       A.MDM_PROJECT_NAME, A.MIN_CAPACITY, A.FORECAST_INFO_BIZ_TYPE, A.CELL_TYPE,
+       A.FORECAST_INFO_CELL_PACK_COUNT, A.FORECAST_INFO_ALL, A.FORECAST_INFO_SPEC,
+       A.FORECAST_INFOR_VERSION, A.CELL_MODEL_NICK_NAME, CAST(A.QTY AS NUMBER(36,10)) AS QTY,
+       CASE WHEN C2.MONTH_END_DATE IS NOT NULL THEN 'Y' ELSE 'N' END AS MONTH_END_YN,
+       CASE WHEN C3.WEEK_END_DATE IS NOT NULL THEN 'Y' ELSE 'N' END AS WEEK_END_YN,
+       CASE
+           WHEN MA.DEPT_ID IS NOT NULL
+                AND A.MEASURE_GROUP NOT IN ('CUST_FCST_2', 'CUST_FCST_3', 'TMM_FCST')
+                AND A.MEASURE = M1.SEGMENT3 THEN 'Y'
+           WHEN v_group_id = 'ADMIN'
+                AND A.MEASURE_GROUP != 'TMM_FCST'
+                AND A.MEASURE = M1.SEGMENT3 THEN 'Y'
+           ELSE 'N'
+       END AS EDIT_FLAG,
+       A.SORT_ORDER_NO, A.MEASURE_GROUP, 'N' AS NEW_FLAG,
+       NVL(BK.BUCKET, '0000000') AS BUCKET, 999 AS SORT_KEY,
+       CASE WHEN NVL(A.CREATE_DATE, '') = '' THEN ' ' ELSE A.CREATE_DATE END AS LAST_UPDATE_DATE,
+       CASE WHEN NVL(A.LAST_UPDATED_BY, '') = '' THEN ' ' ELSE A.LAST_UPDATED_BY END AS LAST_UPDATED_BY,
+       A.NOTATION, A.CURRENCY, A.VERSION_NO, A.CUTOFF_YYYYMMDD
+FROM TEMPFCSTNPRICE A
+INNER JOIN SCM_SYS_CALENDAR_M C ON C.BASIS_YYYYMMDD = A.YYYYMMDD
+LEFT OUTER JOIN CAL_MONTH_END_DATE C2 ON A.YYYYMMDD = C2.MONTH_END_DATE
+LEFT OUTER JOIN CAL_WEEK_END_DATE C3 ON A.YYYYMMDD = C3.WEEK_END_DATE
+LEFT JOIN SCM_ADM_LOOKUP_MASTER_DETAIL M1
+  ON A.DIVISION_ID = M1.SEGMENT2
+ AND A.MEASURE = M1.SEGMENT3
+ AND M1.LOOKUP_TYPE = 'DM_UI_EDITABLE_MEASURE'
+ AND M1.SEGMENT1 = 'DMF0082'
+ AND M1.ATTRIBUTE2 = 'Y'
+ AND M1.VALID_YN = 'Y'
+LEFT OUTER JOIN (SELECT DIVISION_ID, SCM_SITE_ID, INCOTERMS,
+                        NVL(MAX(CASE WHEN YYYYMMDD = 'SUN' THEN
+                               CASE WHEN BUCKET_PER = 'Y' THEN '1' ELSE '0' END END), '0') ||
+                        NVL(MAX(CASE WHEN YYYYMMDD = 'MON' THEN
+                               CASE WHEN BUCKET_PER = 'Y' THEN '1' ELSE '0' END END), '0') ||
+                        NVL(MAX(CASE WHEN YYYYMMDD = 'TUE' THEN
+                               CASE WHEN BUCKET_PER = 'Y' THEN '1' ELSE '0' END END), '0') ||
+                        NVL(MAX(CASE WHEN YYYYMMDD = 'WED' THEN
+                               CASE WHEN BUCKET_PER = 'Y' THEN '1' ELSE '0' END END), '0') ||
+                        NVL(MAX(CASE WHEN YYYYMMDD = 'THU' THEN
+                               CASE WHEN BUCKET_PER = 'Y' THEN '1' ELSE '0' END END), '0') ||
+                        NVL(MAX(CASE WHEN YYYYMMDD = 'FRI' THEN
+                               CASE WHEN BUCKET_PER = 'Y' THEN '1' ELSE '0' END END), '0') ||
+                        NVL(MAX(CASE WHEN YYYYMMDD = 'SAT' THEN
+                               CASE WHEN BUCKET_PER = 'Y' THEN '1' ELSE '0' END END), '0') AS BUCKET
+                 FROM DM_MST_BUCKET_CONVERSION
+                 WHERE DIVISION_ID = p_division_id
+                 GROUP BY DIVISION_ID, SCM_SITE_ID, INCOTERMS) BK
+  ON A.DIVISION_ID = BK.DIVISION_ID
+ AND A.SCM_SITE_ID = BK.SCM_SITE_ID
+ AND A.INCOTERMS = BK.INCOTERMS
+LEFT OUTER JOIN (SELECT LOOK.SEGMENT3 AS DEPT_ID
+                 FROM TB_FX_User USR
+                 INNER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL LOOK
+                   ON USR.DEPT_ID = LOOK.SEGMENT1
+                  AND LOOK.LOOKUP_TYPE = 'PM_TEAM_MAPPING'
+                  AND LOOK.VALID_YN = 'Y'
+                 WHERE USR.UserID = p_created_by
+                 UNION
+                 SELECT DEPT_ID
+                 FROM TB_FX_User
+                 WHERE UserID = p_created_by) MA
+  ON A.DEPT_ID = MA.DEPT_ID
+WHERE CASE WHEN p_team_id = 'ALL' THEN p_team_id ELSE A.DEPT_ID END IN
+      (SELECT REGEXP_SUBSTR(p_team_id, '[^,]+', 1, LEVEL)
+       FROM DUAL
+       CONNECT BY LEVEL <= REGEXP_COUNT(p_team_id, ',') + 1);
+COMMIT;
+
+DBMS_OUTPUT.PUT_LINE(va_program_id || ' : A030--' || TO_CHAR(SYSTIMESTAMP, 'YYYY-MM-DD HH24:MI:SS') || ' #MF_SP 임시테이블 만들기 종료');
+
+-- QTY 필터링
+IF p_qty_yn = 'Y' THEN
+    DELETE FROM MF_SP SP
+    WHERE NOT EXISTS (
+        SELECT 1
+        FROM (SELECT DIVISION_ID, SCM_SITE_ID, PROJECT_CODE, ITEM_ID, INCOTERMS,
+                     FCST_TYPE, DOM_EXP, END_CUSTOMER, CELL_PROD_SITE_ID
+              FROM MF_SP
+              WHERE MEASURE IN ('MKT_FCST', 'SCM_FCST')
+              GROUP BY DIVISION_ID, SCM_SITE_ID, PROJECT_CODE, ITEM_ID, INCOTERMS,
+                       FCST_TYPE, DOM_EXP, END_CUSTOMER, CELL_PROD_SITE_ID
+              HAVING SUM(QTY) != 0) TT
+        WHERE TT.DIVISION_ID = SP.DIVISION_ID
+          AND TT.SCM_SITE_ID = SP.SCM_SITE_ID
+          AND TT.PROJECT_CODE = SP.PROJECT_CODE
+          AND TT.ITEM_ID = SP.ITEM_ID
+          AND TT.INCOTERMS = SP.INCOTERMS
+          AND TT.FCST_TYPE = SP.FCST_TYPE
+          AND TT.DOM_EXP = SP.DOM_EXP
+          AND TT.END_CUSTOMER = SP.END_CUSTOMER
+          AND TT.CELL_PROD_SITE_ID = SP.CELL_PROD_SITE_ID
+    );
+    COMMIT;
+END IF;
+
+-- 동적 쿼리 생성
+DBMS_OUTPUT.PUT_LINE(va_program_id || ' : A031--' || TO_CHAR(SYSTIMESTAMP, 'YYYY-MM-DD HH24:MI:SS') || ' 동적 쿼리문 변경 시작');
+
+-- Oracle에서는 PIVOT을 사용하거나, CASE WHEN으로 변환해야 합니다.
+-- 여기서는 간단히 커서로 리턴하는 방식으로 표현합니다.
+
+v_sql_text :=
+'SELECT ' || v_column || ', SORT_ORDER_NO, ' || v_pv_col_list || '
+ FROM (
+     SELECT ' || v_column || ', F.SORT_ORDER_NO, ''D_'' || F.YYYYMMDD AS YYYYMMDD, F.QTY
+     FROM MF_SP F
+     WHERE (F.MEASURE NOT IN (''SCM_FCST'', ''FCST_GAP'') AND F.QTY <> 0)
+        OR (F.MEASURE IN (''SCM_FCST'', ''FCST_GAP''))
+     UNION ALL
+     SELECT ' || v_column || ', F.SORT_ORDER_NO, ''W_'' || F.YYYYMMWW AS YYYYMMDD,
+            CASE WHEN F.MEASURE IN (''BALANCE'', ''VMI_Inv'', ''AS_Inv'') AND F.WEEK_END_YN = ''Y''
+                 THEN SUM(F.QTY) ELSE SUM(F.QTY) END AS QTY
+     FROM MF_SP F
+     WHERE F.MEASURE NOT IN (''KRW'', ''USD'', ''LOC'')
+       AND ((F.MEASURE NOT IN (''SCM_FCST'', ''FCST_GAP'') AND F.QTY <> 0)
+            OR (F.MEASURE IN (''SCM_FCST'', ''FCST_GAP'')))
+     ' || v_groupby || ', F.YYYYMMWW, F.WEEK_END_YN
+     UNION ALL
+     SELECT ' || v_column || ', F.SORT_ORDER_NO, ''W_'' || F.YYYYMMWW AS YYYYMMDD, AVG(QTY) AS QTY
+     FROM MF_SP F
+     WHERE F.MEASURE IN (''KRW'', ''USD'', ''LOC'')
+     ' || v_groupby || ', F.YYYYMMWW
+     UNION ALL
+     SELECT ' || v_column || ', F.SORT_ORDER_NO, ''M_'' || F.YYYYMM AS YYYYMMDD,
+            CASE WHEN F.MEASURE IN (''BALANCE'', ''VMI_Inv'', ''AS_Inv'') AND F.MONTH_END_YN = ''Y''
+                 THEN SUM(F.QTY) ELSE SUM(F.QTY) END AS QTY
+     FROM MF_SP F
+     WHERE F.MEASURE NOT IN (''KRW'', ''USD'', ''LOC'')
+       AND ((F.MEASURE NOT IN (''SCM_FCST'', ''FCST_GAP'') AND F.QTY <> 0)
+            OR (F.MEASURE IN (''SCM_FCST'', ''FCST_GAP'')))
+     ' || v_groupby || ', F.YYYYMM, F.MONTH_END_YN
+     UNION ALL
+     SELECT ' || v_column || ', F.SORT_ORDER_NO, ''M_'' || F.YYYYMM AS YYYYMMDD, AVG(QTY) AS QTY
+     FROM MF_SP F
+     WHERE F.MEASURE IN (''KRW'', ''USD'', ''LOC'')
+     ' || v_groupby || ', F.YYYYMM
+ ) F
+ PIVOT (SUM(QTY) FOR YYYYMMDD IN (' || v_pv_list || '))
+ ' || v_orderby;
+
+DBMS_OUTPUT.PUT_LINE(va_program_id || ' : A032--' || TO_CHAR(SYSTIMESTAMP, 'YYYY-MM-DD HH24:MI:SS') || ' 동적 쿼리문 변경 종료');
+
+-- 첫번째 결과셋
+DBMS_OUTPUT.PUT_LINE(va_program_id || ' : A033--' || TO_CHAR(SYSTIMESTAMP, 'YYYY-MM-DD HH24:MI:SS') || ' 첫번째 DataTable 시작');
+OPEN o_cursor1 FOR v_sql_text;
+DBMS_OUTPUT.PUT_LINE(va_program_id || ' : A034--' || TO_CHAR(SYSTIMESTAMP, 'YYYY-MM-DD HH24:MI:SS') || ' 첫번째 DataTable 종료');
+
+-- 두번째 결과셋
+DBMS_OUTPUT.PUT_LINE(va_program_id || ' : A035--' || TO_CHAR(SYSTIMESTAMP, 'YYYY-MM-DD HH24:MI:SS') || ' 두번째 DataTable 시작');
+OPEN o_cursor2 FOR
+    SELECT MONTH_NAME, ISO_WEEK
+    FROM (SELECT MONTH_NAME, ISO_WEEK,
+                 ROW_NUMBER() OVER (ORDER BY BASIS_YYYYMMDD) AS RN
+          FROM SCM_SY
+-- 세번째 결과셋
+--DBMS_OUTPUT.PUT_LINE(va_program_id || ' : A036--' || TO_CHAR(SYSTIMESTAMP, 'YYYY-MM-DD HH24:MI:SS') || ' 세번째 DataTable 시작');
+OPEN o_cursor3 FOR
+    SELECT 'M_' || A.BASIS_YYYYMM AS THIS_YYYYMM,
+           'W_' || A.BASIS_YYYYMM || A.ISO_WEEK AS THIS_YYYYMMWW,
+           A.BASIS_DATE,
+           'M_' || B.BASIS_YYYYMM AS PRE_YYYYMM,
+           'W_' || B.BASIS_YYYYMM || B.ISO_WEEK AS PRE_YYYYMMWW,
+           A.BASIS_YYYYMM, A.ISO_WEEK
+    FROM (SELECT BASIS_YYYYMM, ISO_WEEK, BASIS_DATE
+          FROM SCM_SYS_CALENDAR_M
+          WHERE BASIS_YYYYMMDD = TO_CHAR(SYSDATE, 'YYYYMMDD')) A
+    JOIN (SELECT BASIS_YYYYMM, ISO_WEEK, BASIS_DATE
+          FROM SCM_SYS_CALENDAR_M
+          WHERE BASIS_YYYYMMDD = TO_CHAR(SYSDATE - 7, 'YYYYMMDD')) B ON 1=1;
+DBMS_OUTPUT.PUT_LINE(va_program_id || ' : A037--' || TO_CHAR(SYSTIMESTAMP, 'YYYY-MM-DD HH24:MI:SS') || ' 세번째 DataTable 종료');
+
+-- 네번째 결과셋
+DBMS_OUTPUT.PUT_LINE(va_program_id || ' : A037--' || TO_CHAR(SYSTIMESTAMP, 'YYYY-MM-DD HH24:MI:SS') || ' 네번째 DataTable 시작');
+OPEN o_cursor4 FOR
+    SELECT MEASURE, EDIT_FLAG
+    FROM TEMP_ADMIN_GROUP_MEASURE;
+DBMS_OUTPUT.PUT_LINE(va_program_id || ' : A038--' || TO_CHAR(SYSTIMESTAMP, 'YYYY-MM-DD HH24:MI:SS') || ' 네번째 DataTable 종료');
+
+-- 다섯번째 결과셋
+DBMS_OUTPUT.PUT_LINE(va_program_id || ' : A039--' || TO_CHAR(SYSTIMESTAMP, 'YYYY-MM-DD HH24:MI:SS') || ' 다섯번째 DataTable 시작');
+OPEN o_cursor5 FOR
+    SELECT BASIS_YYYYMMDD, BASIS_YYYYMM,
+           CASE WHEN SUBSTR(BASIS_START_DATE, 7, 2) = '01' THEN 'Y' ELSE 'N' END AS FIRST_WEEK_FLAG,
+           CASE WHEN SUBSTR(TO_CHAR(TO_DATE(BASIS_START_DATE, 'YYYYMMDD') + 7, 'YYYYMMDD'), 1, 6) =
+                     SUBSTR(BASIS_START_DATE, 1, 6)
+                THEN 'N' ELSE 'Y' END AS END_MONTH_FLAG,
+           COUNT(*) OVER (PARTITION BY BASIS_YYYYMM) AS MONTH_DAY_CNT,
+           COUNT(*) OVER (PARTITION BY ISO_YYYYWW || PARTIAL_WEEK_NAME) AS WEEK_DAY_CNT,
+           ISO_YYYYWW
+    FROM SCM_SYS_CALENDAR_M
+    WHERE BASIS_YYYYMMDD BETWEEN p_from_yyyymmdd AND p_to_yyyymmdd
+    ORDER BY BASIS_YYYYMMDD;
+DBMS_OUTPUT.PUT_LINE(va_program_id || ' : A039--' || TO_CHAR(SYSTIMESTAMP, 'YYYY-MM-DD HH24:MI:SS') || ' 다섯번째 DataTable 종료');
+EXCEPTION
+WHEN OTHERS THEN
+DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+DBMS_OUTPUT.PUT_LINE('Error Code: ' || SQLCODE);
+RAISE;
+END DMF0082_GET_MAIN_DATA_claude;

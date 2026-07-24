@@ -1,0 +1,55 @@
+CREATE OR REPLACE EDITIONABLE PROCEDURE "SCM_MGR"."Z_DMF0082_DIAG2" (
+    p_from_yyyymmdd IN  VARCHAR2,
+    p_to_yyyymmdd   IN  VARCHAR2,
+    o_pv_list       OUT VARCHAR2,
+    o_pv_col_list   OUT VARCHAR2,
+    o_count         OUT NUMBER
+) IS
+    V_EXP_YYYYMMDD   VARCHAR2(8 CHAR);
+    V_PV_COLUMN_NAME VARCHAR2(100 CHAR);
+    V_PV_NAME        VARCHAR2(200 CHAR);
+    V_SORT_ORDER_NO  VARCHAR2(50 CHAR);
+    V_CNT            NUMBER := 0;
+    V_PV_LIST        VARCHAR2(32767);
+    V_PV_COL_LIST    VARCHAR2(32767);
+    CURSOR C_BUCKET IS
+        SELECT 'D_' || A.BASIS_YYYYMMDD AS COLUMN_NAME
+             , '''D_' || A.BASIS_YYYYMMDD || ''' AS D_' || A.BASIS_YYYYMMDD AS PV_NAME
+             , A.BASIS_YYYYMMDD || '_31' AS SORT_ORDER_NO
+        FROM SCM_MGR.SCM_SYS_CALENDAR_M A
+        WHERE A.BASIS_YYYYMMDD >= p_from_yyyymmdd AND A.BASIS_YYYYMMDD <= V_EXP_YYYYMMDD
+        UNION ALL
+        SELECT 'W_' || A.BASIS_YYYYMM || LPAD(A.ISO_WEEK,2,'0') AS COLUMN_NAME
+             , '''W_' || A.BASIS_YYYYMM || LPAD(A.ISO_WEEK,2,'0') || ''' AS W_' || A.BASIS_YYYYMM || LPAD(A.ISO_WEEK,2,'0') AS PV_NAME
+             , A.BASIS_START_DATE || '_21' AS SORT_ORDER_NO
+        FROM SCM_MGR.SCM_SYS_CALENDAR_M A
+        WHERE A.BASIS_YYYYMMDD >= p_from_yyyymmdd AND A.BASIS_YYYYMMDD <= p_to_yyyymmdd
+        GROUP BY A.BASIS_YYYYMM, A.ISO_WEEK, A.BASIS_START_DATE
+        UNION ALL
+        SELECT 'M_' || A.BASIS_YYYYMM AS COLUMN_NAME
+             , '''M_' || A.BASIS_YYYYMM || ''' AS M_' || A.BASIS_YYYYMM AS PV_NAME
+             , MIN(A.BASIS_START_DATE) || '_01' AS SORT_ORDER_NO
+        FROM SCM_MGR.SCM_SYS_CALENDAR_M A
+        WHERE A.BASIS_YYYYMMDD >= p_from_yyyymmdd AND A.BASIS_YYYYMMDD <= p_to_yyyymmdd
+        GROUP BY A.BASIS_YYYYMM
+        ORDER BY SORT_ORDER_NO;
+BEGIN
+    V_EXP_YYYYMMDD := TO_CHAR(TO_DATE(p_from_yyyymmdd, 'YYYYMMDD') + (50 * 7), 'YYYYMMDD');
+    OPEN C_BUCKET;
+    LOOP
+        FETCH C_BUCKET INTO V_PV_COLUMN_NAME, V_PV_NAME, V_SORT_ORDER_NO;
+        EXIT WHEN C_BUCKET%NOTFOUND;
+        V_CNT := V_CNT + 1;
+        IF V_PV_COL_LIST IS NULL THEN
+            V_PV_COL_LIST := V_PV_COLUMN_NAME;
+            V_PV_LIST     := V_PV_NAME;
+        ELSE
+            V_PV_COL_LIST := V_PV_COL_LIST || ',' || V_PV_COLUMN_NAME;
+            V_PV_LIST     := V_PV_LIST     || ',' || V_PV_NAME;
+        END IF;
+    END LOOP;
+    CLOSE C_BUCKET;
+    o_pv_list     := SUBSTR(V_PV_LIST, 1, 4000);
+    o_pv_col_list := SUBSTR(V_PV_COL_LIST, 1, 4000);
+    o_count       := V_CNT;
+END Z_DMF0082_DIAG2

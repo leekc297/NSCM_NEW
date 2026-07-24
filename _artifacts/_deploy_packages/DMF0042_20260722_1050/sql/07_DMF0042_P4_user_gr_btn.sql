@@ -1,0 +1,65 @@
+-- =====================================================================
+-- DMF0042 P4 — USER_GR_MNU_BTN 60행 (2026-07-15)
+-- 접근그룹 실측: ADMIN / DM ADMIN / DM Viewer (MNU 접근권 2026-02-09 기부여)
+-- 정책 (플랜 §F P4 + F-2 ②):
+--   ADMIN     = 23버튼 전체
+--   DM ADMIN  = 21 (main CUTOFF·REPLACE 제외 — AS-IS ADMIN 전용 게이트)
+--   DM Viewer = 16 (main INSERT/DELETE/SAVE/SET_PRICE/CUTOFF/REPLACE + exchangeRate SAVE 제외
+--                — 편집성 전부 제외. titleSet SAVE 는 표시설정 저장이라 부여, DMF0003/0048/0082 선례.
+--                exchangeRate/futurePrice/cutoffVersion/mdfVersion SEARCH 는 조회성 부여)
+--   합계 = 23 + 21 + 16 = 60행
+-- 멱등 MERGE / 감사 'admin'
+-- =====================================================================
+MERGE INTO SCM_MGR.SCM_ADM_USER_GR_MNU_BTN_MPG_M t
+USING (
+  SELECT g.USER_GR_ID, 'DMF0042' MNU_ID, b.SHT_NM, b.MNU_BTN_CD
+  FROM (SELECT 'ADMIN' USER_GR_ID FROM DUAL
+        UNION ALL SELECT 'DM ADMIN' FROM DUAL
+        UNION ALL SELECT 'DM Viewer' FROM DUAL) g
+  CROSS JOIN (
+    SELECT 'Biz Plan' SHT_NM, 'SEARCH' MNU_BTN_CD FROM DUAL
+    UNION ALL SELECT 'Biz Plan', 'INSERT' FROM DUAL
+    UNION ALL SELECT 'Biz Plan', 'DELETE' FROM DUAL
+    UNION ALL SELECT 'Biz Plan', 'SAVE' FROM DUAL
+    UNION ALL SELECT 'Biz Plan', 'EXCEL' FROM DUAL
+    UNION ALL SELECT 'Biz Plan', 'FILTER' FROM DUAL
+    UNION ALL SELECT 'Biz Plan', 'SORT' FROM DUAL
+    UNION ALL SELECT 'Biz Plan', 'COLUMN_SETUP' FROM DUAL
+    UNION ALL SELECT 'Biz Plan', 'MEASURE_SELECT' FROM DUAL
+    UNION ALL SELECT 'Biz Plan', 'SET_PRICE' FROM DUAL
+    UNION ALL SELECT 'Biz Plan', 'CUTOFF' FROM DUAL
+    UNION ALL SELECT 'Biz Plan', 'REPLACE' FROM DUAL
+    UNION ALL SELECT 'Biz Plan', 'EXCHANGE_RATE' FROM DUAL
+    UNION ALL SELECT 'spreadTitle', 'SEARCH' FROM DUAL
+    UNION ALL SELECT 'dayRange', 'SEARCH' FROM DUAL
+    UNION ALL SELECT 'titleSet', 'SEARCH' FROM DUAL
+    UNION ALL SELECT 'titleSet', 'SAVE' FROM DUAL
+    UNION ALL SELECT 'exchangeRate', 'SEARCH' FROM DUAL
+    UNION ALL SELECT 'exchangeRate', 'SAVE' FROM DUAL
+    UNION ALL SELECT 'futurePrice', 'SEARCH' FROM DUAL
+    UNION ALL SELECT 'futurePriceData', 'SEARCH' FROM DUAL
+    UNION ALL SELECT 'cutoffVersion', 'SEARCH' FROM DUAL
+    UNION ALL SELECT 'mdfVersion', 'SEARCH' FROM DUAL
+  ) b
+  WHERE NOT (g.USER_GR_ID = 'DM ADMIN'
+             AND b.SHT_NM = 'Biz Plan' AND b.MNU_BTN_CD IN ('CUTOFF', 'REPLACE'))
+    AND NOT (g.USER_GR_ID = 'DM Viewer'
+             AND ((b.SHT_NM = 'Biz Plan' AND b.MNU_BTN_CD IN
+                    ('INSERT', 'DELETE', 'SAVE', 'SET_PRICE', 'CUTOFF', 'REPLACE'))
+               OR (b.SHT_NM = 'exchangeRate' AND b.MNU_BTN_CD = 'SAVE')))
+) s
+ON (t.USER_GR_ID = s.USER_GR_ID AND t.MNU_ID = s.MNU_ID AND t.SHT_NM = s.SHT_NM AND t.MNU_BTN_CD = s.MNU_BTN_CD)
+WHEN MATCHED THEN UPDATE SET t.USE_YN = 'Y',
+  t.LAST_UPDATED_BY = 'admin', t.LAST_UPDATE_DATE = SYSDATE
+WHEN NOT MATCHED THEN INSERT (USER_GR_ID, MNU_ID, SHT_NM, MNU_BTN_CD, USE_YN,
+  CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+VALUES (s.USER_GR_ID, s.MNU_ID, s.SHT_NM, s.MNU_BTN_CD, 'Y',
+  'admin', SYSDATE, 'admin', SYSDATE);
+
+COMMIT;
+
+-- 검증: 그룹별 건수 (기대: ADMIN 23 / DM ADMIN 21 / DM Viewer 16 = 60)
+SELECT USER_GR_ID, COUNT(*) FROM SCM_MGR.SCM_ADM_USER_GR_MNU_BTN_MPG_M
+WHERE MNU_ID = 'DMF0042' GROUP BY USER_GR_ID ORDER BY USER_GR_ID;
+
+-- 원복: DELETE FROM SCM_MGR.SCM_ADM_USER_GR_MNU_BTN_MPG_M WHERE MNU_ID='DMF0042'; COMMIT;

@@ -21,6 +21,7 @@ public class MenuDto {
     private String mnuId;
     private String upprMnuId;
     private String mnuUrl;
+    private String routePath;
     private String mnuMsgId;
     private String mnuDesc;
     private BigDecimal sortOrd;
@@ -37,6 +38,7 @@ public class MenuDto {
     		.mnuId((String) data.get("MNU_ID"))
     		.upprMnuId((String) data.get("UPPR_MNU_ID"))
     		.mnuUrl((String) data.get("MNU_URL"))
+            .routePath((String) data.get("ROUTE_PATH"))
     		.mnuMsgId((String) data.get("MNU_MSG_ID"))
     		.mnuDesc((String) data.get("MNU_DESC"))
     		.sortOrd((BigDecimal) data.get("SORT_ORD"))

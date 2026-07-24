@@ -1,6 +1,19 @@
 import { i18n, I18nextProvider } from '@foundation/i18n';
-import { queryClient, PersistQueryClientProvider, idbPersister } from '@foundation/query-client';
+import {
+  queryClient,
+  setQueryErrorHandler,
+  PersistQueryClientProvider,
+  idbPersister,
+  CACHE_MAX_AGE,
+} from '@foundation/query-client';
 import { ThemeSwitchProvider } from '@shared/lges';
+import { useMessageStore } from '@shared/stores';
+
+// 조회(useQuery) 실패 전역 알림 — 타임아웃/네트워크 오류 등이 조용히 사라지지 않도록
+// 공통 메시지 박스(Alert)로 노출한다. (저장 계열은 useProcMutation 자체 onError 가 담당)
+setQueryErrorHandler(error => {
+  void useMessageStore.getState().setAlert({ type: 'alert', content: error.message });
+});
 
 interface ProvidersProps {
   children: React.ReactNode;
@@ -10,7 +23,7 @@ export const Providers = ({ children }: ProvidersProps) => {
   return (
     <PersistQueryClientProvider
       client={queryClient}
-      persistOptions={{ persister: idbPersister, maxAge: 1000 * 60 * 60 * 8 }}
+      persistOptions={{ persister: idbPersister, maxAge: CACHE_MAX_AGE }}
     >
       <I18nextProvider i18n={i18n}>
         <ThemeSwitchProvider initialThemeMode='system'>{children}</ThemeSwitchProvider>

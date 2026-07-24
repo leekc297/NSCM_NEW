@@ -1,0 +1,27 @@
+// Measure 선택 모달 (공용 ColumnSelectDualList — sales-monitoring measureDualContainer 표준 동일)
+.measureDualContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 4px 2px;
+  height: 460px;
+  min-height: 350px;
+  max-height: 68vh;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.measureDualContainer > div:first-child {
+  flex: 1 1 auto;
+  min-height: 250px;
+  overflow: hidden;
+}
+
+.measureActionBar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 6px 2px 2px;
+  flex-shrink: 0;
+}

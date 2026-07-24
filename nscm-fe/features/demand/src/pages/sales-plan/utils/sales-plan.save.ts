@@ -9,12 +9,14 @@
 //   16키 = PROC_M COL_NM (createdBy/lastUpdatedBy 감사 2 는 BE 세션 자동주입 — payload 제외).
 //   '^' bulk 다건 = apiClient.post 직접 (useProcMutation array unfold 회피 표준 —
 //   memory feedback_save_sp_bulk_payload_apiclient_post).
+import { distributeMonthToWeeks, isoWeeksOfMonth } from '@shared/bucket-distribution';
+
 import type { MSG } from '../sales-plan.constants';
 import { BUCKET_TYPE, EDIT_MEASURE } from '../sales-plan.constants';
 import type { SalesPlanRow } from '../sales-plan.types';
 
 import { isDiv40, isDiv81, readProjectSlot, readTextSlot } from './sales-plan.division';
-import { dynKindOf, parseWeekTag } from './sales-plan.editLock';
+import { dynKindOf } from './sales-plan.editLock';
 
 // SAVE 한 row(= 행 × 기간셀) 의 원시 값 — 모든 키는 SP positional 매핑 (16키).
 export interface SaveUnfoldRow {
@@ -28,7 +30,7 @@ export interface SaveUnfoldRow {
   fcstType: string;
   incoterms: string;
   measure: string;
-  yyyymmdd: string; // M_yyyymm→yyyymm01 / W_yyyymm+ww→해당 ISO주 월요일(월경계 clamp) / D_→그대로
+  yyyymmdd: string; // ⭐ 버킷 태그 원문 (M_yyyymm / W_yyyymm+ww) — SP 가 SUBSTR 파싱해 날짜 확정 (bindingToSaveTag 참조)
   qty: string;
   currency: string;
   text: string; // 81=TEXT / 40·82=TEXT4082
@@ -58,38 +60,16 @@ const qtyOf = (v: unknown): string => {
   return Number.isFinite(n) ? String(n) : '0';
 };
 
-// ISO 주차(년, 주) → 해당 주 월요일 yyyymmdd (UTC 산술 — 시차 오차 배제)
-const mondayOfIsoWeek = (year: number, week: number): string => {
-  // 1/4 이 항상 ISO 1주차 — 그 주 월요일 기준 + (week-1)*7
-  const jan4 = new Date(Date.UTC(year, 0, 4));
-  const day = jan4.getUTCDay() || 7;
-  const monday = new Date(jan4);
-  monday.setUTCDate(jan4.getUTCDate() - (day - 1) + (week - 1) * 7);
-  return `${monday.getUTCFullYear()}${String(monday.getUTCMonth() + 1).padStart(2, '0')}${String(
-    monday.getUTCDate()
-  ).padStart(2, '0')}`;
-};
-
-// 기간 binding → 저장 기준일 yyyymmdd.
-//   M_yyyymm → 월 1일 / W_yyyymm+ww → ISO주 월요일 (월경계 분할 주는 월 1일로 clamp —
-//   GET_SPREAD_TITLE 이 월경계에서 주를 분할하므로 셀의 월 컨텍스트 보존) / D_yyyymmdd → 그대로.
-export const bindingToYyyymmdd = (binding: string): string | null => {
+// ⭐ 기간 binding → 저장 태그 (2026-07-21 정정 — SP 파싱 규약 실측):
+//   SAVE SP(DMF0021_SAVE_DM_PLN_SALES_PLAN_ALL L179~183)는 P_YYYYMMDD 슬롯을 "날짜"가 아니라
+//   버킷 태그 원문으로 파싱한다 — SUBSTR(1,1)=버킷('M'/'W') / SUBSTR(3,6)=yyyymm / SUBSTR(-2)=ISO주차.
+//   따라서 그리드 binding(M_yyyymm / W_yyyymm+ww 2자리)을 "그대로" 전송해야 정합.
+//   (구 코드의 M→yyyymm01 / W→ISO월요일 변환은 SP 가 버킷 '2' 로 오파싱하는 결함이었음.)
+//   날짜 확정(월요일/월초 clamp·40+ETC 월말일)은 SP 내부(L185~217)가 수행 — 룰2 폴백(월요일)도 SP 담당.
+export const bindingToSaveTag = (binding: string): string | null => {
   const kind = dynKindOf(binding);
-  if (kind === 'M') return `${binding.slice(2)}01`;
-  if (kind === 'D') return binding.slice(2);
-  if (kind === 'W') {
-    const w = parseWeekTag(binding);
-    if (!w) return null;
-    // ISO 주차의 소속 연도 — 1월의 52/53주는 전년도, 12월의 1주는 익년도
-    let year = Number(w.ym.slice(0, 4));
-    const month = Number(w.ym.slice(4, 6));
-    if (month === 1 && w.wk >= 52) year -= 1;
-    if (month === 12 && w.wk === 1) year += 1;
-    const monday = mondayOfIsoWeek(year, w.wk);
-    const monthStart = `${w.ym}01`;
-    return monday < monthStart ? monthStart : monday;
-  }
-  return null;
+  if (kind === 'M' || kind === 'W') return binding;
+  return null; // D_ 는 편집 차단(R2) — 저장 미발생
 };
 
 // 행 identity 16키 중 기간 무관 13키 추출 (division 분기 — AS-IS SaveData 필드값 추출 1:1).
@@ -139,18 +119,36 @@ export const buildUnfoldRows = (params: {
     rowFlag: 'I' | 'M',
     lineNo: number
   ): SaveBuildError | null => {
-    const yyyymmdd = bindingToYyyymmdd(binding);
-    if (!yyyymmdd) return null;
+    const tag = bindingToSaveTag(binding);
+    if (!tag) return null;
     const qty = qtyOf(row[binding]);
     const identity = identityOf(row, divisionId);
-    // 40 + Catch_Up 음수 차단 (AS-IS L2587 — MSG00085 {0}=0)
+    // 40 + Catch_Up 음수 차단 (AS-IS L2587 — MSG00085 {0}=0) — 배분 전 월/주 입력값 기준(분배값 동일 부호)
     if (d40 && identity.measure === EDIT_MEASURE.CATCH_UP && Number(qty) < 0) {
       return { msgId: msg.catchupMinZero, param: '0' };
+    }
+    // ⭐ 룰1 (2026-07-21 공통 배분 룰) — 월 수량/금액 입력 → 주별 "월내 일수" Rate 배분,
+    //   끝자리(±)=마지막 주차. 주별 W_ 태그로 분할 전송 → SP Weekly 경로(월∩주 DELETE + 주 첫날
+    //   [=월요일/월초 clamp] 저장 = 룰2 폴백)가 처리 — SP 무변경.
+    //   예외: 40+ETC 는 월말일 단일저장 결재([E20250520-000605]) 보존 → 배분 없이 M 태그 그대로.
+    if (dynKindOf(binding) === 'M' && !(d40 && identity.fcstType === 'ETC')) {
+      const unit = identity.measure === EDIT_MEASURE.SALES_AMT_LOC ? 0.001 : 1; // 금액=소수3, 수량=정수
+      const dist = distributeMonthToWeeks(Number(qty), isoWeeksOfMonth(binding.slice(2)), unit);
+      for (const w of dist) {
+        out.push({
+          activeFlag: w.qty === 0 ? 'D' : rowFlag, // 0 주차 = 'D' (해당 주 삭제 — 월 대체 의미 보존)
+          ...identity,
+          yyyymmdd: w.key,
+          qty: String(w.qty),
+        });
+      }
+      void lineNo;
+      return null;
     }
     out.push({
       activeFlag: qty === '0' ? 'D' : rowFlag, // 값 '0' → 'D' 전환 (L2571)
       ...identity,
-      yyyymmdd,
+      yyyymmdd: tag,
       qty,
     });
     void lineNo;

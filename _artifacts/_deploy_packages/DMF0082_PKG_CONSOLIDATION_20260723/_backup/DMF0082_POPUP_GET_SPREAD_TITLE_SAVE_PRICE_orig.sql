@@ -1,0 +1,266 @@
+CREATE OR REPLACE EDITIONABLE PROCEDURE "SCM_MGR"."DMF0082_POPUP_GET_SPREAD_TITLE_SAVE_PRICE" 
+(
+ p_start_dt      IN VARCHAR2,
+ p_end_dt        IN VARCHAR2,
+ p_created_by    IN VARCHAR2,
+ p_division_id   IN VARCHAR2,
+ O_RESULT_CURSOR OUT SYS_REFCURSOR
+/****************************************************************************************************/
+)
+AS
+    p_program_id VARCHAR2(50 CHAR) := 'DMF0082';
+    p_sheet_name VARCHAR2(50 CHAR) := 'Sales Price Save All';
+    i_Count INTEGER := 0;
+BEGIN
+
+
+    SELECT  Count(*)
+  INTO i_Count
+    FROM   SCM_MST_TITLESET_USER U
+    --     , SCM_MST_SHEET_COLUMNS C
+    WHERE  1 = 1
+    --AND    U.PROGRAM_ID  = C.PROGRAM_ID
+    --AND    U.SHEET_NAME  = C.SHEET_NAME
+    --AND    U.COLUMN_NAME = C.COLUMN_NAME
+    AND    U.PROGRAM_ID  = p_program_id
+    AND    U.SHEET_NAME  = p_sheet_name
+    AND    U.USER_ID     = p_created_by
+    AND    U.USER_INQUIRY_COLUMN_TYPE_CODE = 'C';
+
+ -- 2.
+ --IF i_Count = 0
+ BEGIN
+  -- 일반 데이터 칼럼
+  OPEN O_RESULT_CURSOR FOR
+  SELECT
+     C.PROGRAM_ID
+         , C.SHEET_NAME
+         , C.COLUMN_NAME
+         , C.COLUMN_LABEL_NAME
+         , TO_CHAR(C.SORT_ORDER_NO) AS SORT_ORDER_NO       --TO_CHAR(U.SORT_ORDER_NO) AS SORT_ORDER_NO
+         , C.DATA_SORT_METHOD_CODE
+         , C.SMALL_CLASS_LABEL_NAME
+         , C.LARGE_CLASS_LABEL_NAME
+   , '' AS DAY_CODE
+         , C.FIXED_FLAG
+         , C.COLUMN_WIDTH
+         , C.CELL_CONTROL_OBJECT_TYPE_CODE
+         , C.CELL_COMBO_DATA_TYPE
+         , TO_CHAR(C.DATA_SCALE_NUMBER)
+         , TO_CHAR(C.DATA_MAX_LENGTH)
+         , C.HORIZONTAL_ALIGN_CODE
+         , C.UPPERCASE_APPLY_FLAG
+         , C.VISIBLE_FLAG
+         , C.DEFAULT_FLAG
+         , C.USER_SELECTABLE_FLAG
+         , C.VALID_YN
+   --, CASE C.VALID_YN  WHEN 'Y' THEN -- 20180607 추가
+   --  CASE FN_GET_DIVISION_YN(C.DIVISION_ID, p_division_id) WHEN 'Y' THEN C.VISIBLE_FLAG ELSE 'N' END
+   -- ELSE C.VALID_YN END VALID_YN
+   , '0' AS SEQ
+   --INTO GT_DMF0_TitleO
+   FROM SCM_MST_SHEET_COLUMNS C
+   WHERE 1 = 1
+    AND    C.PROGRAM_ID  = p_program_id
+    AND    C.SHEET_NAME  = p_sheet_name
+    AND    ( C.DEFAULT_FLAG = 'Y' OR
+     (    C.VISIBLE_FLAG = 'N'
+     AND    C.DEFAULT_FLAG IS NULL
+     AND    C.VALID_YN     = 'Y'
+     )
+     )
+    AND p_division_id IN (SELECT token FROM TABLE(fn_string_split(C.DIVISION_ID ,',')) )  -- 20180604 division 추가
+  -- 날짜 데이터 칼럼
+  UNION ALL
+  SELECT
+   p_program_id   AS PROGRAM_ID
+   , p_sheet_name AS SHEET_NAME
+   , MA.COLUMN_NAME
+   , MA.COLUMN_LABEL_NAME
+   , MA.SORT_ORDER_NO
+   , ''         AS DATA_SORT_METHOD_CODE
+   , MA.SMALL_CLASS_LABEL_NAME
+   , MA.LARGE_CLASS_LABEL_NAME
+   , MA.DAY_CODE
+   , ''         AS FIXED_FLAG
+   , 120         AS COLUMN_WIDTH
+   , MA.CELL_CONTROL_OBJECT_TYPE_CODE   --'FPNumber' AS CELL_CONTROL_OBJECT_TYPE_CODE
+   , ''         AS CELL_COMBO_DATA_TYPE
+   --, '2'         AS DATA_SCALE_NUMBER
+   , '3'         AS DATA_SCALE_NUMBER -- 20181029
+   , ''         AS DATA_MAX_LENGTH
+   , 'R'        AS HORIZONTAL_ALIGN_CODE
+   , 'Y'        AS UPPERCASE_APPLY_FLAG
+   , 'Y'        AS VISIBLE_FLAG
+   , ''         AS DEFAULT_FLAG
+   , ''         AS USER_SELECTABLE_FLAG
+   , ''         AS VALID_YN
+   , ''   AS DIVISION_ID
+  FROM  (
+   SELECT
+    'W_'  ||  MIN(BASIS_START_DATE)    AS COLUMN_NAME
+    , SUBSTR(BASIS_START_DATE, 5, 4)  AS COLUMN_LABEL_NAME
+    , WEEK_NAME          AS SMALL_CLASS_LABEL_NAME
+    , MONTH_NAME         AS LARGE_CLASS_LABEL_NAME
+    , ''             AS DAY_CODE
+    , MIN(BASIS_START_DATE)      AS SORT_ORDER_NO
+    , 'FPNumber'          AS CELL_CONTROL_OBJECT_TYPE_CODE
+   FROM SCM_SYS_CALENDAR_M
+   WHERE  BASIS_YYYYMMDD >= p_start_dt
+    AND    BASIS_YYYYMMDD <= p_end_dt
+   GROUP BY BASIS_YYYYMM, WEEK_NAME, SUBSTR(BASIS_START_DATE, 5, 4), MONTH_NAME
+
+   UNION ALL
+
+   SELECT
+    'M_'  ||  MIN(BASIS_START_DATE)    AS COLUMN_NAME
+    , SUBSTR(BASIS_START_DATE, 5, 4)  AS COLUMN_LABEL_NAME
+    , WEEK_NAME          AS SMALL_CLASS_LABEL_NAME
+    , MONTH_NAME         AS LARGE_CLASS_LABEL_NAME
+    , ''             AS DAY_CODE
+    , MIN(BASIS_START_DATE)      AS SORT_ORDER_NO
+    , 'FPNumber'          AS CELL_CONTROL_OBJECT_TYPE_CODE
+   FROM SCM_SYS_CALENDAR_M
+   WHERE  BASIS_YYYYMMDD >= p_start_dt
+    AND BASIS_YYYYMMDD <= p_end_dt
+    AND CALENDAR_DAY = '01'
+   GROUP BY BASIS_YYYYMM, WEEK_NAME, SUBSTR(BASIS_START_DATE, 5, 4), MONTH_NAME
+
+  ) MA
+  ORDER BY SORT_ORDER_NO, COLUMN_LABEL_NAME, COLUMN_NAME;
+
+--  ORDER BY SEQ, SORT_ORDER_NO
+
+ END;
+ --ELSE --IF i_Count <> 0
+ --BEGIN
+ -- -- 일반 데이터 칼럼
+ -- SELECT U.PROGRAM_ID
+ --   , U.SHEET_NAME
+ --   , U.COLUMN_NAME
+ --   , C.COLUMN_LABEL_NAME
+ --   , U.SORT_ORDER_NO        --TO_CHAR(U.SORT_ORDER_NO) AS SORT_ORDER_NO
+ --   , U.DATA_SORT_METHOD_CODE
+ --   , C.SMALL_CLASS_LABEL_NAME
+ --   , C.LARGE_CLASS_LABEL_NAME
+ --   , '' AS DAY_CODE
+ --   , C.FIXED_FLAG
+ --   , C.COLUMN_WIDTH
+ --   , C.CELL_CONTROL_OBJECT_TYPE_CODE
+ --   , C.CELL_COMBO_DATA_TYPE
+ --   , C.DATA_SCALE_NUMBER
+ --   , C.DATA_MAX_LENGTH
+ --   , C.HORIZONTAL_ALIGN_CODE
+ --   , C.UPPERCASE_APPLY_FLAG
+ --   , C.VISIBLE_FLAG
+ --   , C.DEFAULT_FLAG
+ --   , C.USER_SELECTABLE_FLAG
+ --   --, C.VALID_YN
+ --   , CASE C.VALID_YN  WHEN 'Y' THEN -- 20180607 추가
+ --    CASE FN_GET_DIVISION_YN(C.DIVISION_ID, p_division_id) WHEN 'Y' THEN C.VISIBLE_FLAG ELSE 'N' END
+ --   ELSE C.VALID_YN END VALID_YN
+ --   , 1 AS SEQ
+ -- FROM   SCM_MST_TITLESET_USER U
+ --   , SCM_MST_SHEET_COLUMNS C
+ -- WHERE  1 = 1
+ -- AND    U.PROGRAM_ID  = C.PROGRAM_ID
+ -- AND    U.SHEET_NAME  = C.SHEET_NAME
+ -- AND    U.COLUMN_NAME = C.COLUMN_NAME
+ -- AND    U.PROGRAM_ID  = p_program_id
+ -- AND    U.SHEET_NAME  = p_sheet_name
+ -- AND    U.USER_ID     = p_created_by
+ -- AND    U.USER_INQUIRY_COLUMN_TYPE_CODE = 'C'
+ -- AND p_division_id IN (SELECT token FROM TABLE(fn_string_split(C.DIVISION_ID ,',')) )  -- 20180604 division 추가
+ -- UNION ALL
+ -- SELECT C.PROGRAM_ID
+ --   , C.SHEET_NAME
+ --   , C.COLUMN_NAME
+ --   , C.COLUMN_LABEL_NAME
+ --   , C.SORT_ORDER_NO        --TO_CHAR(U.SORT_ORDER_NO) AS SORT_ORDER_NO
+ --   , C.DATA_SORT_METHOD_CODE
+ --   , C.SMALL_CLASS_LABEL_NAME
+ --   , C.LARGE_CLASS_LABEL_NAME
+ --   , '' AS DAY_CODE
+ --   , C.FIXED_FLAG
+ --   , C.COLUMN_WIDTH
+ --   , C.CELL_CONTROL_OBJECT_TYPE_CODE
+ --   , C.CELL_COMBO_DATA_TYPE
+ --   , C.DATA_SCALE_NUMBER
+ --   , C.DATA_MAX_LENGTH
+ --   , C.HORIZONTAL_ALIGN_CODE
+ --   , C.UPPERCASE_APPLY_FLAG
+ --   , C.VISIBLE_FLAG
+ --   , C.DEFAULT_FLAG
+ --   , C.USER_SELECTABLE_FLAG
+ --   , C.VALID_YN
+ --   , 2 AS SEQ
+ -- FROM   SCM_MST_SHEET_COLUMNS C
+ -- WHERE  1 = 1
+ -- AND    C.PROGRAM_ID  = p_program_id
+ -- AND    C.SHEET_NAME  = p_sheet_name
+ -- AND    C.VISIBLE_FLAG = 'N'
+ -- AND    C.DEFAULT_FLAG IS NULL
+ -- AND    C.VALID_YN     = 'Y'
+ -- AND p_division_id IN (SELECT token FROM TABLE(fn_string_split(C.DIVISION_ID ,',')) )  -- 20180604 division 추가
+ -- --ORDER BY SEQ, SORT_ORDER_NO
+ -- -- 날짜 데이터 칼럼
+ -- UNION ALL
+ -- SELECT
+ --  p_program_id   AS PROGRAM_ID
+ --  , p_sheet_name AS SHEET_NAME
+ --  , MA.COLUMN_NAME
+ --  , MA.COLUMN_LABEL_NAME
+ --  , MA.SORT_ORDER_NO
+ --  , ''         AS DATA_SORT_METHOD_CODE
+ --  , MA.SMALL_CLASS_LABEL_NAME
+ --  , MA.LARGE_CLASS_LABEL_NAME
+ --  , MA.DAY_CODE
+ --  , ''         AS FIXED_FLAG
+ --  , 120         AS COLUMN_WIDTH
+ --  , MA.CELL_CONTROL_OBJECT_TYPE_CODE   --'FPNumber' AS CELL_CONTROL_OBJECT_TYPE_CODE
+ --  , ''         AS CELL_COMBO_DATA_TYPE
+ --  --, '2'         AS DATA_SCALE_NUMBER
+ --  , '3'         AS DATA_SCALE_NUMBER -- 20181029
+ --  , ''         AS DATA_MAX_LENGTH
+ --  , 'R'        AS HORIZONTAL_ALIGN_CODE
+ --  , 'Y'        AS UPPERCASE_APPLY_FLAG
+ --  , 'Y'        AS VISIBLE_FLAG
+ --  , ''         AS DEFAULT_FLAG
+ --  , ''         AS USER_SELECTABLE_FLAG
+ --  , ''         AS VALID_YN
+ --  , ''   AS DIVISION_ID
+ -- FROM  (
+ --  SELECT
+ --   'W_' + MIN(BASIS_START_DATE)    AS COLUMN_NAME
+ --   , SUBSTR(BASIS_START_DATE, 5, 4)  AS COLUMN_LABEL_NAME
+ --   , WEEK_NAME          AS SMALL_CLASS_LABEL_NAME
+ --   , MONTH_NAME         AS LARGE_CLASS_LABEL_NAME
+ --   , ''             AS DAY_CODE
+ --   , MIN(BASIS_START_DATE)      AS SORT_ORDER_NO
+ --   , 'FPNumber'          AS CELL_CONTROL_OBJECT_TYPE_CODE
+ --  FROM SCM_SYS_CALENDAR_M
+ --  WHERE  BASIS_YYYYMMDD >= p_start_dt
+ --   AND    BASIS_YYYYMMDD <= p_end_dt
+ --  GROUP BY BASIS_YYYYMM, WEEK_NAME, SUBSTR(BASIS_START_DATE, 5, 4), MONTH_NAME
+
+ --  UNION ALL
+
+ --  SELECT
+ --   'M_' + MIN(BASIS_START_DATE)    AS COLUMN_NAME
+ --   , SUBSTR(BASIS_START_DATE, 5, 4)  AS COLUMN_LABEL_NAME
+ --   , WEEK_NAME          AS SMALL_CLASS_LABEL_NAME
+ --   , MONTH_NAME         AS LARGE_CLASS_LABEL_NAME
+ --   , ''             AS DAY_CODE
+ --   , MIN(BASIS_START_DATE)      AS SORT_ORDER_NO
+ --   , 'FPNumber'          AS CELL_CONTROL_OBJECT_TYPE_CODE
+ --  FROM SCM_SYS_CALENDAR_M
+ --  WHERE  BASIS_YYYYMMDD >= p_start_dt
+ --   AND BASIS_YYYYMMDD <= p_end_dt
+ --   AND CALENDAR_DAY = '01'
+ --  GROUP BY BASIS_YYYYMM, WEEK_NAME, SUBSTR(BASIS_START_DATE, 5, 4), MONTH_NAME
+
+ -- ) MA
+ -- ORDER BY SORT_ORDER_NO, COLUMN_LABEL_NAME, COLUMN_NAME
+ --END
+
+END;

@@ -1,0 +1,2387 @@
+CREATE OR REPLACE EDITIONABLE PROCEDURE "SCM_MGR"."DMF0044_SAVE_SALES_PLAN_VERSION_COPY" 
+(
+    p_division_id          IN  VARCHAR2,
+    p_version_no           IN  VARCHAR2,
+    p_version_description  IN  VARCHAR2,
+    p_created_by           IN  VARCHAR2,
+    p_result_date          IN  VARCHAR2,    -- 실적기준일
+    p_action_type          IN  VARCHAR2,    -- D:삭제, CR:생성, CP:복사
+    p_mv_plan_yyyymm       IN  VARCHAR2,    -- 이동계획 월
+    p_update_yn            IN  VARCHAR2,    -- Y일 경우 마스터들을 최신 데이터로 업데이트
+    O_RESULT_CURSOR        OUT SYS_REFCURSOR
+)
+/****************************************************************************************************/
+/* Program ID  : DMF0044_SAVE_SALES_PLAN_VERSION_COPY                                               */
+/* Description : MDF REPORT (DM_PLN_SALES_PLAN_C -> DM_PLN_SALES_PLAN_REPORT_C) VERSION COPY        */
+/* History     : 2019/05/22 KHSONG Initial [PJ20189106] ~ 2020/12/08 P.C.I (원본 이력 보존)         */
+/*               2026.06.08 변환 [PJ20264226] NextSCM Pilot 재변환(깨진 자동변환 정정:               */
+/*               선언부 구조역전/NCHAR/인라인DECLARE/GOTO->예외/ISNUMERIC/ISDATE/NOLOCK/SELECT대입)   */
+/****************************************************************************************************/
+IS
+    v_program_name VARCHAR2(150 CHAR) := 'DMF0044_SAVE_SALES_PLAN_VERSION_COPY';
+    v_log_type VARCHAR2(30 CHAR);
+    n_log_count INTEGER := 0;
+    v_log_message VARCHAR2(1000 CHAR);
+    v_description VARCHAR2(500 CHAR);
+    d_event_date DATE;
+    n_delete_count INTEGER := 0;
+    n_merge_count INTEGER := 0;
+    v_version_type VARCHAR2(50 CHAR);
+    v_Ori_Version VARCHAR2(30 CHAR);
+    v_cp_VERSION_NO VARCHAR2(30 CHAR);
+    v_cp_CUTOFF_TYPE VARCHAR2(20 CHAR);
+    v_cp_CUTOFF_YYYYMMDD VARCHAR2(8 CHAR);
+    V_RESULT_YEAR_CNT VARCHAR2(1 CHAR);
+    V_MAX_ETC_RESULT_VERSION_NO VARCHAR2(30 CHAR);
+    V_ETC_RESULT_MONTH VARCHAR2(6 CHAR);
+    V_MAX_DATA_SEQ INTEGER;
+    c_ER_version VARCHAR2(100 CHAR);
+    v_plan_start_yyyymmdd VARCHAR2(08 CHAR);
+    c_cutoff_yyyymmdd VARCHAR2(08 CHAR);
+    v_ETC_DEPARTMENT_ID VARCHAR2(30 CHAR);
+    v_ETC_DEPARTMENT_NAME VARCHAR2(100 CHAR);
+    v_rp_version VARCHAR2(2 CHAR);
+    V_RPT_SEQ INTEGER;
+    v_version_x VARCHAR2(50 CHAR);
+    V_VERSION_NO_VMI VARCHAR2(50 CHAR);
+    V_MON_CNT INTEGER;
+    v_cnt_1  INTEGER := 0;
+
+    -- [재변환] 흩어진 인라인 선언 통합 (BEGIN 뒤 선언 구조역전 해소, NCHAR->VARCHAR2)
+    d_Result_Date         VARCHAR2(8 CHAR);  -- 실적구간 판단 기준일자
+    v_err_mv_version_no   VARCHAR2(30 CHAR); -- 기 존재하는 이동계획버전
+    v_cp_MIN_YYYYMMDD     VARCHAR2(8 CHAR);  -- 해당 버전 시작일자(실적 복사 시작점)
+    V_VERSION_DATE        VARCHAR2(8 CHAR);
+    V_NEW_VERSION_NO      VARCHAR2(50 CHAR);
+    V_ORI_CUTOFF_VERSION  VARCHAR2(50 CHAR);
+    V_SP_BP               VARCHAR2(2 CHAR);
+    V_ETC_CUTOFF_TYPE     VARCHAR2(20 CHAR);
+    V_ETC_CUTOFF_YYYYMMDD VARCHAR2(8 CHAR);
+
+    -- [재변환] 검증실패 처리용 (GOTO ERR_RTN 대체)
+    e_validation   EXCEPTION;
+    v_result_msg   VARCHAR2(4000 CHAR);
+
+BEGIN
+    -- 프로그램명 설정 (패키지 이관 대응)
+    IF UTL_CALL_STACK.SUBPROGRAM(1).COUNT > 1 THEN
+        v_program_name := $$PLSQL_UNIT || '.' || UTL_CALL_STACK.SUBPROGRAM(1)(2);
+    ELSE
+        v_program_name := $$PLSQL_UNIT;
+    END IF;
+
+    -- 시작 LOG
+    v_log_type    := 'START';
+    v_log_message := '########## Start of procedure ##########';
+    v_description := '';
+    d_event_date  := SYSDATE;
+    BEGIN SCM_MGR.PR_SCM_SYS_LOG_BATCH(v_program_name, v_log_type, n_log_count, v_log_message, v_description, d_event_date); END;
+    v_log_message := NULL;
+
+    -- 실적 시작년수 룩업 (없으면 NULL 유지)
+    BEGIN
+        SELECT ATTRIBUTE1 INTO V_RESULT_YEAR_CNT
+        FROM SCM_ADM_LOOKUP_MASTER_DETAIL
+        WHERE LOOKUP_TYPE = 'SALES_REPORT_SETTING'
+            AND segment1 = 'Result_Start_Year_Cnt'
+            AND segment2 = p_division_id;
+    EXCEPTION WHEN NO_DATA_FOUND THEN V_RESULT_YEAR_CNT := NULL;
+    END;
+
+    IF REGEXP_LIKE(V_RESULT_YEAR_CNT, '^[+-]?[0-9]+(\.[0-9]+)?$') THEN
+        v_cp_MIN_YYYYMMDD := TO_CHAR(ADD_MONTHS(SYSDATE, (-1 * V_RESULT_YEAR_CNT)*12), 'YYYYMMDD') || '0101';
+    END IF;
+
+
+	-- 버전 유형 확인
+	SELECT VERSION_TYPE
+  INTO v_version_type
+	FROM DM_MDF_VERSION
+	WHERE DIVISION_ID = p_division_id
+		AND VERSION_NO = p_version_no;
+
+	IF v_version_type IS NULL THEN
+		SELECT VERSION_TYPE
+		  INTO v_version_type
+		FROM DM_MST_VERSION
+		WHERE DIVISION_ID = p_division_id
+			AND VERSION_NO = p_version_no;
+	END IF;
+
+	-- PJ202001380 Future Price Version_No 구분
+	/*
+
+
+
+	-- 변수값 셋팅
+	-- ----------------------------------------------------------------------------------------------------------------------------------------
+	-- Weekly Cutoff 환율 Version No 조회 (40,81 : 화요일 /82 : SP Version과 동일)
+	IF v_version_type NOT LIKE 'REPORT%' AND p_division_id IN ('40', '81') AND  SUBSTR(p_version_no, 1, 4) = 'SP_W' THEN
+			c_cutoff_yyyymmdd := SUBSTR(p_version_no,6,8);
+			v_plan_start_yyyymmdd := TO_CHAR(FN_NEXT_DAY(c_cutoff_yyyymmdd, 'MON') + (-7), 'YYYYMMDD');   -- 월요일
+			SELECT NVL(MAX(VERSION_NO), p_version_no)
+			  INTO c_ER_version
+			FROM   DM_MST_VERSION
+			WHERE  DIVISION_ID  = p_division_id
+			and    yyyymmdd    >= v_plan_start_yyyymmdd
+			and    yyyymmdd    <= c_cutoff_yyyymmdd
+			and    version_type = 'SP_W'
+			and    CREATED_BY   = 'WITHOUT_SP_W';
+	ELSE
+			c_ER_version := p_version_no;
+	END IF;
+
+	-- ----------------------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	-- 시작 LOG  (START)
+	v_log_type := 'START';
+	v_log_message := '########## Start of procedure ##########';
+	v_description := NULL;
+	d_event_date := SYSTIMESTAMP;
+	PR_DM_SYS_LOG_BATCH(v_program_name, v_log_type, n_log_count, v_log_message, v_description, d_event_date, p_created_by);
+	v_log_message := NULL      ;  /* -- <- 변수 재사용을 위하여 초기화해야함 --*/
+	-- 시작 LOG  (END)
+
+	-- 트랜잭션 (START)
+
+	-- ------------------------------------------------------------------------------------------------------------------------
+    -- (BEGIN TRY) 메인 BEGIN/EXCEPTION 블록으로 통합
+	-- ------------------------------------------------------------------------------------------------------------------------
+		-- Div 에 관계없이 여기에 넣고, 나중에 집계하면서 Div 별 처리한다.
+		EXECUTE IMMEDIATE 'TRUNCATE TABLE GT_DMF0_VERSION_COPY';
+
+		EXECUTE IMMEDIATE 'TRUNCATE TABLE GT_DMF0_REPORT';
+
+		EXECUTE IMMEDIATE 'TRUNCATE TABLE GT_DMF0_MEASURE';
+
+	--[E20230906-001160]_DM SINGLE VIEW 수정
+	/* TODO:GTT:GT_DMF0044_ITEM_SINGLE_V-->GT_DMF0044_ITEM_SINGLE_V */
+	INSERT INTO GT_DMF0044_ITEM_SINGLE_V
+	SELECT DISTINCT ITEM_ID,ITEM_CLASS_NAME
+			, CASE WHEN REGEXP_LIKE(ENERGE, '^[+-]?[0-9]+(\.[0-9]+)?$') THEN TO_NUMBER(ENERGE) ELSE 0 END AS ENERGY
+			, CASE WHEN REGEXP_LIKE(CELL_QUANTITY, '^[+-]?[0-9]+(\.[0-9]+)?$') THEN TO_NUMBER(CELL_QUANTITY) ELSE 0 END AS CELL_QUANTITY
+			, FORECAST_INFO_BIZ_TYPE	-- 소형 BIZ_TYPE ( 부자재 매출 제거에 사용 )
+			, FORECAST_INFO_SPEC, NICK_NAME,FORECAST_INFO_CELL_MODEL, FORECAST_INFO_CELL_PACK_COUNT
+	FROM (
+			SELECT	T1.DIVISION_ID, T1.ITEM_ID
+				  , MAX(T1.ITEM_CLASS_NAME)						AS ITEM_CLASS_NAME			--해당 컬럼이 NULL인 경우가 잇으므로 하나로 통일
+				  , MAX(T1.ENERGE)  							AS ENERGE
+				  , MAX(T1.CELL_QUANTITY)						AS CELL_QUANTITY
+				  , MAX(T2.FORECAST_INFO_BIZ_TYPE)				AS FORECAST_INFO_BIZ_TYPE
+				  , MAX(T2.FORECAST_INFO_SPEC)					AS FORECAST_INFO_SPEC
+				  , MAX(T1.NICK_NAME)							AS NICK_NAME				--닉네임이 NULL인 경우가 있으므로 하나로 통일
+				  , MAX(T2.FORECAST_INFO_CELL_MODEL)			AS FORECAST_INFO_CELL_MODEL
+				  , MAX(T2.FORECAST_INFO_CELL_PACK_COUNT)		AS FORECAST_INFO_CELL_PACK_COUNT
+			FROM SCM_MST_ITEM_SN T1
+			INNER JOIN ( SELECT DIVISION_ID, SUBSTR(ITEM_ID, 1, 12) AS ITEM_ID
+							, MAX(FORECAST_INFO_BIZ_TYPE) AS FORECAST_INFO_BIZ_TYPE
+							, MAX(FORECAST_INFO_SPEC) AS FORECAST_INFO_SPEC
+							, MAX(FORECAST_INFO_CELL_MODEL) AS FORECAST_INFO_CELL_MODEL
+							, MAX(FORECAST_INFO_CELL_PACK_COUNT) AS FORECAST_INFO_CELL_PACK_COUNT
+						 FROM  SCM_MST_ITEM_SN T2
+					 WHERE	DIVISION_ID =  p_division_id
+						 GROUP BY DIVISION_ID, SUBSTR(ITEM_ID, 1, 12)
+					   ) T2
+					ON T1.DIVISION_ID = T2.DIVISION_ID
+				   AND SUBSTR(T1.ITEM_ID, 1, 12) = T2.ITEM_ID
+			WHERE 1=1
+			AND		T1.DIVISION_ID = p_division_id
+			GROUP BY T1.DIVISION_ID, T1.ITEM_ID
+			) G;
+
+
+	-- --------------------------------------------------------------------------------------
+	--                               20191002 KHSONG 조회시 DB Lock 현상으로 로직수정 (END)
+	-- --------------------------------------------------------------------------------------
+	/* (MSSQL CLUSTERED INDEX 제거 — Oracle GTT는 별도 인덱스 불필요) */
+	-- ---------------------------------------------------------------------------------------
+	--                      20190326 속도개선 ITEM_SINGLE_V TEMP TABLE 사용 (END)
+	-- ---------------------------------------------------------------------------------------
+	-- ---------------------------------------------------------------------------------------
+	-- 20190326 오류개선 STUFF시 정렬오류로 멀티OWNER가 분리되는 오류발생으로 TEMP사용 (START)
+	-- ---------------------------------------------------------------------------------------
+	/* TODO:GTT:GT_DMF0_SCM_MST_SITE_ITEM-->GT_DMF0_SCM_MST_SITE_ITEM */
+	INSERT INTO GT_DMF0_SCM_MST_SITE_ITEM
+	SELECT DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID
+		, CASE WHEN REGEXP_LIKE(CELL_PER_CAR, '^[+-]?[0-9]+(\.[0-9]+)?$') THEN TO_NUMBER(CELL_PER_CAR) ELSE 0 END AS CELL_PER_CAR
+		, CASE WHEN REGEXP_LIKE(CELL_PER_MODULE, '^[+-]?[0-9]+(\.[0-9]+)?$') THEN TO_NUMBER(CELL_PER_MODULE) ELSE 0 END AS CELL_PER_MODULE
+		--, CURRENCY, LIABILITY_PERIOD
+		--, SALES_PLAN_ADJUST_YN, ITEM_HRCY_ID, VALID_YN, BPMS_EXIST, CUST_GROUP, CUST_GROUP_DTL, OWNER, APPLICATION
+		--, ROUTE, ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5, ATTRIBUTE6, ATTRIBUTE7, ATTRIBUTE8
+		--, ATTRIBUTE9, ATTRIBUTE10, REPORT_GROUP1, REPORT_GROUP2, REPORT_GROUP3, REPORT_GROUP4, REPORT_GROUP5, REPORT_GROUP6
+		--, REPORT_GROUP7, REPORT_GROUP8, OS_CORP, CONTRIBUTION_TYPE, EDI_LT, SCP_VMI_LT
+		--, FN_GET_DM_MKT_OWNER_NAME (SMSI.OWNER, ',', 'EN' )		     AS OWNER_NAME
+		--, FN_GET_DM_MKT_OWNER_NAME (SMSI.OWNER, ',', 'KO' )		     AS OWNER_NAME_KO
+		--,(	SELECT SU.DEPT_ID
+		--	FROM SCM_MST_SSO_USER_INFO SU
+		--	WHERE SU.USER_ID = (SELECTtoken FROM TABLE(fn_string_split(SMSI.owner, ','))) ) DEPT_ID
+	FROM SCM_MST_SITE_ITEM SMSI
+	WHERE SMSI.Division_id = p_division_id;
+
+		-- 실적 기준일 지정
+		IF p_action_type = 'CR' THEN
+			BEGIN
+				SELECT TO_CHAR(FN_NEXT_DAY(TO_DATE(YYYYMMDD,'YYYYMMDD'), 'MON') - 7, 'YYYYMMDD')
+				  INTO d_Result_Date
+				FROM DM_MST_VERSION
+				WHERE DIVISION_ID = p_division_id AND VERSION_NO = p_version_no;
+			EXCEPTION WHEN NO_DATA_FOUND THEN d_Result_Date := NULL;
+			END;
+		ELSIF p_action_type = 'CP' THEN
+			d_Result_Date := REPLACE(p_result_date, '-', '');   -- 미입력 시 NULL
+			-- 말일자이면 해당월(YYYYMM), 아니면 직전월
+			IF d_Result_Date IS NOT NULL THEN
+				V_ETC_RESULT_MONTH := CASE WHEN d_Result_Date = TO_CHAR(LAST_DAY(TO_DATE(d_Result_Date,'YYYYMMDD')),'YYYYMMDD')
+									THEN SUBSTR(d_Result_Date, 1, 6)
+									ELSE TO_CHAR(ADD_MONTHS(TO_DATE(d_Result_Date,'YYYYMMDD'), -1), 'YYYYMM')
+								END;
+			END IF;
+		END IF;
+
+		IF NOT VALIDATE_CONVERSION(NVL(V_ETC_RESULT_MONTH,'x')||'01' AS DATE,'YYYYMMDD') = 1 THEN
+			V_ETC_RESULT_MONTH := TO_CHAR(SYSDATE, 'YYYYMM');
+		END IF;
+
+		-- ------------------------------------------------------------------
+		--                       Validation (BEGIN)
+		-- ------------------------------------------------------------------
+		-- DIVISION 유효성
+		SELECT COUNT(*) INTO v_cnt_1 FROM SCM_MST_DIVISION WHERE DIVISION_ID = p_division_id;
+		IF v_cnt_1 = 0 THEN v_log_type := 'DIVISION_INVALID'; RAISE e_validation; END IF;
+
+		-- 기능과 버전 불일치 (CP,D)
+		IF p_action_type IN ('CP','D') THEN
+			SELECT COUNT(*) INTO v_cnt_1 FROM DM_MDF_VERSION WHERE DIVISION_ID = p_division_id AND VERSION_NO = p_version_no;
+			IF v_cnt_1 = 0 THEN v_log_type := 'VERSION_NO_INVALID'; RAISE e_validation; END IF;
+		END IF;
+
+		IF p_action_type = 'CR' THEN
+			SELECT COUNT(*) INTO v_cnt_1 FROM DM_MST_VERSION WHERE DIVISION_ID = p_division_id AND VERSION_NO = p_version_no;
+			IF v_cnt_1 = 0 THEN v_log_type := 'VERSION_NO_INVALID'; RAISE e_validation; END IF;
+		END IF;
+
+		-- 삭제인데 SEND_YN='Y'
+		IF p_action_type = 'D' THEN
+			SELECT COUNT(*) INTO v_cnt_1 FROM DM_MDF_VERSION WHERE DIVISION_ID = p_division_id AND VERSION_NO = p_version_no AND SEND_YN = 'Y';
+			IF v_cnt_1 > 0 THEN v_log_type := 'VERSION_NO_INVALID'; RAISE e_validation; END IF;
+		END IF;
+
+		-- 이동계획 중복 (D)
+		IF VALIDATE_CONVERSION(p_mv_plan_yyyymm||'01' AS DATE,'YYYYMMDD') = 1 AND p_action_type = 'D' THEN
+			SELECT COUNT(*) INTO v_cnt_1 FROM DM_MDF_VERSION
+			WHERE SEND_YN <> 'D' AND MV_PLAN_YYYYMM = p_mv_plan_yyyymm AND DIVISION_ID = p_division_id;
+			IF v_cnt_1 > 0 THEN
+				SELECT MAX(VERSION_NO) INTO v_err_mv_version_no FROM DM_MDF_VERSION
+				WHERE SEND_YN <> 'D' AND MV_PLAN_YYYYMM = p_mv_plan_yyyymm AND DIVISION_ID = p_division_id;
+				IF v_err_mv_version_no IS NOT NULL THEN
+					v_log_type := '이동계획 중복';
+					v_description := '이미 해당월의 이동계획이 있습니다.[' || RTRIM(v_err_mv_version_no) || ']';
+					RAISE e_validation;
+				END IF;
+			END IF;
+		END IF;
+
+		-- 1~3 담당 외에는 기타로 묶기 위애서 기타 부서코드를 찾는다.
+
+		SELECT SEGMENT1, SEGMENT2
+		  INTO V_ETC_DEPARTMENT_ID, v_ETC_DEPARTMENT_NAME
+		FROM SCM_ADM_LOOKUP_MASTER_DETAIL A
+		WHERE A.LOOKUP_TYPE = 'MDF_DEPARTMENT'
+			AND A.SEGMENT3 = 'Y'
+			AND A.ATTRIBUTE1 = 'Y';
+
+
+		-- --------------------------------------------------------------------------------------------------
+		--										   Validation (END)
+		-- --------------------------------------------------------------------------------------------------
+		-- --------------------------------------------------------------------------------------------------
+		--						     MDF VERSION MST INSERT (BEGIN)
+		-- --------------------------------------------------------------------------------------------------
+		V_VERSION_DATE := TO_CHAR(SYSDATE, 'YYYYMMDD'); -- 채번 기준일자
+
+		--[PJ2024-50611] Sales Report 생성 시 Catcu_Up 수량 더해줌 START
+		--CATCH_UP 메저를 가진 데이터셋 생성
+		/* TODO:GTT:GT_DMF0_PLAN_C_CATCHUP-->GT_DMF0_PLAN_C_CATCHUP */
+		INSERT INTO GT_DMF0_PLAN_C_CATCHUP
+		SELECT *
+		FROM
+		(
+			SELECT
+				A.DIVISION_ID
+				,A.VERSION_NO
+				, 'REPORT_' || (CASE WHEN A.CUTOFF_TYPE = 'SP_M' THEN 'SP_W' ELSE A.CUTOFF_TYPE END) AS CUTOFF_TYPE
+				,A.CUTOFF_YYYYMMDD
+				,A.PROJECT_CODE
+				,A.SCM_SITE_ID
+				,A.ITEM_ID
+				,A.DOM_EXP
+				,A.FCST_TYPE
+				,A.INCOTERMS
+				,A.CURRENCY
+				,A.MEASURE AS ORG_MEASURE
+				,CASE WHEN A.MEASURE = 'Catch_Up' THEN 'RTF_SYS_RP'
+					  WHEN A.MEASURE = 'SalesAmt_KRW_Catch_Up' THEN 'SalesAmt_KRW'
+					  WHEN A.MEASURE = 'SalesAmt_LOC_Catch_Up' THEN 'SalesAmt_LOC'
+					  WHEN A.MEASURE = 'SalesAmt_USD_Catch_Up' THEN 'SalesAmt_USD'
+				 END AS MEASURE -- RTF_ALLOCATION 과 매핑을 위한 MEASURE로 변경
+				 ,A.PLANT_SITE_ID
+				,A.YYYYMMDD
+				,A.QTY
+				,B.SALES_COMPANY AS COMPANY_ID
+				,B.ATTRIBUTE1 AS SOLDTO_CUST_REPORT
+				--,'' AS CELL_PROD_SITE
+				,'-' AS CELL_PROD_SITE--[PJ2025-50017]LGES SCM DM 소형사업부 매출계획 동기화 개선 : CELL_PROD_SITE_ID 추가, 주요 테이블 변경
+				--FROM DM_PLN_SALES_PLAN_C A
+				FROM DM_PLN_SALES_ETC_PLAN_C A --[PJ2024-50611] 기타매출, Catch Up 테이블 분리 : 테이블 변경
+				JOIN SCM_MST_SITE_ITEM B  ON B.DIVISION_ID = A.DIVISION_ID AND B.PROJECT_CODE = A.PROJECT_CODE AND B.SCM_SITE_ID = A.SCM_SITE_ID AND B.ITEM_ID = A.ITEM_ID
+				WHERE A.VERSION_NO = p_version_no
+				AND A.DIVISION_ID = p_division_id
+				AND A.YYYYMMDD >= d_Result_Date
+				AND A.MEASURE IN (
+					SELECT SEGMENT2 FROM SCM_ADM_LOOKUP_MASTER_DETAIL
+					WHERE LOOKUP_TYPE = 'SALES_PLAN_CATCHUP'
+					AND SEGMENT1 = p_division_id
+					AND VALID_YN = 'Y'
+				)
+				UNION ALL
+				SELECT
+				A.DIVISION_ID
+				,A.VERSION_NO
+				, 'REPORT_' || (CASE WHEN A.CUTOFF_TYPE = 'SP_M' THEN 'SP_W' ELSE A.CUTOFF_TYPE END) AS CUTOFF_TYPE
+				,A.CUTOFF_YYYYMMDD
+				,A.PROJECT_CODE
+				,A.SCM_SITE_ID
+				,A.ITEM_ID
+				,A.DOM_EXP
+				,A.FCST_TYPE
+				,A.INCOTERMS
+				,A.CURRENCY
+				,A.MEASURE AS ORG_MEASURE
+				,CASE WHEN A.MEASURE = 'Catch_Up' THEN 'MKT_FCST'
+				 END AS MEASURE -- RTF_ALLOCATION 과 매핑을 위한 MEASURE로 변경
+				 ,A.PLANT_SITE_ID
+				,A.YYYYMMDD
+				,A.QTY
+				,B.SALES_COMPANY AS COMPANY_ID
+				,B.ATTRIBUTE1 AS SOLDTO_CUST_REPORT
+				--,'' AS CELL_PROD_SITE
+				--[PJ2025-50017]LGES SCM DM 소형사업부 매출계획 동기화 개선 : CELL_PROD_SITE_ID 추가, 주요 테이블 변경
+				,'-' AS CELL_PROD_SITE
+				--FROM DM_PLN_SALES_PLAN_C A
+				FROM DM_PLN_SALES_ETC_PLAN_C A --[PJ2024-50611] 기타매출, Catch Up 테이블 분리 : 테이블 변경
+				JOIN SCM_MST_SITE_ITEM B  ON B.DIVISION_ID = A.DIVISION_ID AND B.PROJECT_CODE = A.PROJECT_CODE AND B.SCM_SITE_ID = A.SCM_SITE_ID AND B.ITEM_ID = A.ITEM_ID
+				WHERE A.VERSION_NO = p_version_no
+				AND A.DIVISION_ID = p_division_id
+				AND A.YYYYMMDD >= d_Result_Date
+				AND A.MEASURE = 'Catch_Up'
+				AND A.cutoff_type = 'SP_W'
+			) A;
+		--[PJ2024-50611] Sales Report 생성 시 Catcu_Up 수량 더해줌 END
+
+
+		-- 버전처리
+		-- 버전처리 (생성)
+		IF p_action_type = 'CR' THEN
+			SELECT NVL(MAX(VER_CRE_SEQ),0) + 1
+			  INTO V_RPT_SEQ
+			FROM DM_MDF_VERSION
+			WHERE DIVISION_ID = p_division_id
+				AND TO_CHAR(CREATION_DATE, 'YYYYMMDD') = V_VERSION_DATE;
+
+			-- [C20201014-000098] SP_M추가 ( LIKE '%SP_W' -> LIKE '%SP%' )
+			SELECT CASE WHEN VERSION_TYPE LIKE '%SP%' THEN 'SP' ELSE 'BP' END
+			  INTO V_SP_BP
+			FROM DM_MST_VERSION
+			WHERE DIVISION_ID = p_division_id AND VERSION_NO = P_VERSION_NO;
+
+			-- 최종 버전 셋팅
+			V_NEW_VERSION_NO := CASE WHEN VALIDATE_CONVERSION(p_mv_plan_yyyymm||'01' AS DATE,'YYYYMMDD') = 1 THEN 'RP_' ELSE 'R_' END
+				|| SUBSTR(V_SP_BP, 1, 1) || '_' || V_VERSION_DATE || '_V'
+				|| LPAD(TO_CHAR(V_RPT_SEQ), 3, '0');
+
+			INSERT INTO DM_MDF_VERSION (
+				DIVISION_ID,VERSION_NO,VERSION_DESCRIPTION,VERSION_TYPE,SEND_YN,YYYYMMDD,VER_CRE_SEQ,ORI_VERSION_NO, ORI_CUTOFF_VERSION_NO, MV_PLAN_YYYYMM
+				,CREATED_BY,CREATION_DATE,LAST_UPDATED_BY,LAST_UPDATE_DATE,ATTRIBUTE1,ATTRIBUTE2,ATTRIBUTE3,ATTRIBUTE4,ATTRIBUTE5)
+			SELECT p_division_id, V_NEW_VERSION_NO, p_version_description
+				, 'REPORT_'||(CASE WHEN VERSION_TYPE = 'SP_M' THEN 'SP_W' ELSE VERSION_TYPE END)
+				,'N', YYYYMMDD, V_RPT_SEQ, VERSION_NO, VERSION_NO, p_mv_plan_yyyymm
+				,p_created_by,SYSDATE,p_created_by,SYSDATE,'CR',NULL,NULL,NULL,NULL
+			FROM DM_MST_VERSION
+			WHERE DIVISION_ID = p_division_id AND VERSION_NO = p_version_no;
+
+			--[PJ20200138] 환율 정보 copy
+			IF V_SP_BP = 'SP' THEN
+				INSERT INTO DM_PLN_SALES_REPORT_EXCHANGE_C (
+					DIVISION_ID, VERSION_NO, CUTOFF_TYPE, CUTOFF_YYYYMMDD, YYYYMMDD, CURRENCY, UNIT_CURRENCY, EXCHANGE_PRICE, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE
+					, ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5, ATTRIBUTE6, ATTRIBUTE7, ATTRIBUTE8, ATTRIBUTE9, ATTRIBUTE10)
+				SELECT DIVISION_ID, V_NEW_VERSION_NO
+					, 'REPORT_'||(CASE WHEN CUTOFF_TYPE = 'SP_M' THEN 'SP_W' ELSE CUTOFF_TYPE END)
+					, CUTOFF_YYYYMMDD, YYYYMMDD, CURRENCY, UNIT_CURRENCY, EXCHANGE_PRICE, CREATED_BY, CREATION_DATE, p_created_by, SYSDATE
+					, ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5, ATTRIBUTE6, ATTRIBUTE7, ATTRIBUTE8, ATTRIBUTE9, ATTRIBUTE10
+				FROM DM_MST_EXCHANGE_RATE_C
+				WHERE DIVISION_ID = p_division_id AND VERSION_NO = p_version_no;
+			ELSE
+				INSERT INTO DM_PLN_SALES_REPORT_EXCHANGE_C (
+					DIVISION_ID, VERSION_NO, CUTOFF_TYPE, CUTOFF_YYYYMMDD, YYYYMMDD, CURRENCY, UNIT_CURRENCY, EXCHANGE_PRICE, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE
+					, ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5, ATTRIBUTE6, ATTRIBUTE7, ATTRIBUTE8, ATTRIBUTE9, ATTRIBUTE10)
+				SELECT DIVISION_ID, V_NEW_VERSION_NO
+					, 'REPORT_'||CUTOFF_TYPE
+					, CUTOFF_YYYYMMDD, YYYYMMDD, CURRENCY, UNIT_CURRENCY, EXCHANGE_PRICE, CREATED_BY, CREATION_DATE, p_created_by, SYSDATE
+					, ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5, ATTRIBUTE6, ATTRIBUTE7, ATTRIBUTE8, ATTRIBUTE9, ATTRIBUTE10
+				FROM DM_BP_EXCHANGE_RATE_C
+				WHERE DIVISION_ID = p_division_id AND VERSION_NO = p_version_no;
+			END IF;
+		END IF;
+
+		-- 버전처리 (복사)
+		IF p_action_type = 'CP' THEN
+			SELECT NVL(MAX(VER_CRE_SEQ),0) + 1 INTO V_RPT_SEQ
+			FROM DM_MDF_VERSION
+			WHERE DIVISION_ID = p_division_id AND TO_CHAR(CREATION_DATE,'YYYYMMDD') = V_VERSION_DATE;
+
+			SELECT CASE WHEN VERSION_TYPE LIKE '%SP%' THEN 'SP' ELSE 'BP' END INTO V_SP_BP
+			FROM DM_MDF_VERSION
+			WHERE DIVISION_ID = p_division_id AND VERSION_NO = P_VERSION_NO;
+
+			V_NEW_VERSION_NO := CASE WHEN VALIDATE_CONVERSION(p_mv_plan_yyyymm||'01' AS DATE,'YYYYMMDD') = 1 THEN 'RP_' ELSE 'R_' END
+				|| SUBSTR(V_SP_BP,1,1) || '_' || V_VERSION_DATE || '_V'
+				|| LPAD(TO_CHAR(V_RPT_SEQ),3,'0') || '_C';
+
+			INSERT INTO DM_MDF_VERSION
+				(DIVISION_ID,VERSION_NO,VERSION_DESCRIPTION,VERSION_TYPE,SEND_YN,YYYYMMDD,VER_CRE_SEQ,ORI_VERSION_NO,ORI_CUTOFF_VERSION_NO, ETC_RESULT_MONTH, MV_PLAN_YYYYMM
+				,CREATED_BY,CREATION_DATE,LAST_UPDATED_BY,LAST_UPDATE_DATE,ATTRIBUTE1,ATTRIBUTE2,ATTRIBUTE3,ATTRIBUTE4,ATTRIBUTE5)
+			SELECT p_division_id, V_NEW_VERSION_NO, p_version_description, VERSION_TYPE, 'N', YYYYMMDD
+				, V_RPT_SEQ, P_VERSION_NO, ORI_CUTOFF_VERSION_NO, V_ETC_RESULT_MONTH, p_mv_plan_yyyymm
+				, p_created_by, SYSDATE, p_created_by, SYSDATE, 'CP', p_result_date, NULL, NULL, NULL
+			FROM DM_MDF_VERSION
+			WHERE DIVISION_ID = p_division_id AND VERSION_NO = P_VERSION_NO;
+
+			--[PJ20200138] 환율 정보 copy (기존 REPORT 환율을 신버전으로 복사; 원본 SP/ELSE 동일 로직)
+			INSERT INTO DM_PLN_SALES_REPORT_EXCHANGE_C
+				( DIVISION_ID, VERSION_NO, CUTOFF_TYPE, CUTOFF_YYYYMMDD, YYYYMMDD, CURRENCY, UNIT_CURRENCY, EXCHANGE_PRICE, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE
+				, ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5, ATTRIBUTE6, ATTRIBUTE7, ATTRIBUTE8, ATTRIBUTE9, ATTRIBUTE10)
+			SELECT DIVISION_ID, V_NEW_VERSION_NO, CUTOFF_TYPE, CUTOFF_YYYYMMDD, YYYYMMDD, CURRENCY, UNIT_CURRENCY, EXCHANGE_PRICE, CREATED_BY, CREATION_DATE, p_created_by, SYSDATE
+				, ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5, ATTRIBUTE6, ATTRIBUTE7, ATTRIBUTE8, ATTRIBUTE9, ATTRIBUTE10
+			FROM DM_PLN_SALES_REPORT_EXCHANGE_C
+			WHERE DIVISION_ID = p_division_id AND VERSION_NO = p_version_no;
+		END IF;
+
+		-- 삭제
+		IF p_action_type = 'D' THEN
+			UPDATE DM_MDF_VERSION SET SEND_YN = 'D'
+			WHERE DIVISION_ID = p_division_id AND VERSION_NO = p_version_no;
+
+			DELETE FROM DM_PLN_SALES_PLAN_REPORT_C WHERE DIVISION_ID = p_division_id AND VERSION_NO = p_version_no;
+			DELETE FROM DM_PLN_BP_FCST_REPORT_C   WHERE DIVISION_ID = p_division_id AND VERSION_NO = p_version_no;
+			DELETE FROM DM_PLN_SALES_REPORT_EXCHANGE_C WHERE DIVISION_ID = p_division_id AND VERSION_NO = p_version_no;
+		END IF;
+
+
+		INSERT INTO GT_DMF0_MEASURE ( PLAN_RESULT, I_MEASURE, O_MEASURE, CALC_YN, QTY_AMT, SRC_TABLE )
+		SELECT SEGMENT3, SEGMENT4, SEGMENT5
+			, CASE WHEN SEGMENT4 <> SEGMENT5 AND ATTRIBUTE2 IS NOT NULL THEN 'Y' ELSE '' END, ATTRIBUTE2, ATTRIBUTE1
+		FROM SCM_ADM_LOOKUP_MASTER_DETAIL
+		WHERE LOOKUP_TYPE = 'DM_SALES_REPORT_' || p_action_type
+			AND SEGMENT1 = P_DIVISION_ID
+			AND SEGMENT2 = V_SP_BP;
+
+	--SELECT P_DIVISION_ID , P_ACTION_TYPE, V_SP_BP
+
+--SELECT 'X', 0
+		-- --------------------------------------------------------------------------------------------------
+		--                                                                        요청VERSION COPY (BEGIN)
+		-- --------------------------------------------------------------------------------------------------
+		IF p_action_type IN ( 'CR', 'CP' ) THEN
+
+			IF p_action_type = 'CR' THEN
+
+				-- [C20210315-000347]
+				SELECT VERSION_TYPE,
+    YYYYMMDD
+  INTO v_cp_CUTOFF_TYPE, v_cp_CUTOFF_YYYYMMDD
+				FROM DM_MDF_VERSION
+				WHERE DIVISION_ID = p_division_id
+					AND VERSION_NO = V_NEW_VERSION_NO;
+
+				/* 20190916, SCM_SITE_ID 가 NULL 인 데이터는 제외한다. */
+				IF V_SP_BP = 'SP' THEN
+					INSERT INTO GT_DMF0_VERSION_COPY (DIVISION_ID, VERSION_NO,CUTOFF_TYPE,CUTOFF_YYYYMMDD,PROJECT_CODE,SCM_SITE_ID,ITEM_ID
+							,DOM_EXP,FCST_TYPE,INCOTERMS,CURRENCY,MEASURE,PLANT_SITE_ID,YYYYMMDD,QTY, COMPANY_ID, SOLDTO_CUST_REPORT
+							,CELL_PROD_SITE	)--[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+					SELECT A.DIVISION_ID, A.VERSION_NO
+					        , 'REPORT_' || (CASE WHEN A.CUTOFF_TYPE = 'SP_M' THEN 'SP_W' ELSE A.CUTOFF_TYPE END) AS CUTOFF_TYPE -- [C20201014-000098] CUTOFF_TYPE이 SP_M인 경우 SP_W로 변경
+							, A.CUTOFF_YYYYMMDD, B.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID
+							, A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, NVL(A.CURRENCY, NULL) AS CURRENCY, M.O_MEASURE, A.PLANT_SITE_ID, A.YYYYMMDD
+							, SUM(A.QTY) AS QTY
+							, B.SALES_COMPANY AS COMPANY_ID
+							, B.ATTRIBUTE1
+							--, '' AS CELL_PROD_SITE --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+							--[PJ2025-50017]LGES SCM DM 소형사업부 매출계획 동기화 개선 : CELL_PROD_SITE_ID 추가, 주요 테이블 변경
+							, A.CELL_PROD_SITE_ID AS CELL_PROD_SITE
+					FROM DM_PLN_SALES_PLAN_C A
+					JOIN SCM_MST_SITE_ITEM B  ON B.DIVISION_ID = A.DIVISION_ID AND B.PROJECT_CODE = A.PROJECT_CODE AND B.SCM_SITE_ID = A.SCM_SITE_ID AND B.ITEM_ID = A.ITEM_ID
+					LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL C  ON A.ITEM_ID = C.SEGMENT1 AND A.DIVISION_ID = C.SEGMENT3 AND C.LOOKUP_TYPE = 'SALES_PLAN_ITEM_ID' -- 20190906 Sales Plan에서 기타매출 등록한 것 제외
+					LEFT OUTER JOIN SCM_MST_COMPANY_SN D  ON A.SCM_SITE_ID = D.COMPANY_ID
+					JOIN SCM_MST_SITE E ON A.DIVISION_ID = E.DIVISION_ID AND A.SCM_SITE_ID = E.SCM_SITE_ID
+					JOIN GT_DMF0_MEASURE M ON A.MEASURE = M.I_MEASURE AND M.PLAN_RESULT = 'PLAN' AND M.CALC_YN = ''
+					WHERE	A.VERSION_NO = p_version_no
+						AND A.DIVISION_ID = p_division_id
+						AND A.YYYYMMDD >= d_Result_Date -- 미래구간
+						AND C.LOOKUP_TYPE IS NULL
+						AND D.COMPANY_ID IS NULL
+						AND A.FCST_TYPE <> 'ETC'--[PJ2024-50611] Sales Report 생성 시 ETC 제외
+						--마이그레이션 된 데이터 지우면 조건삭제
+						AND A.MEASURE NOT IN
+						(
+							SELECT SEGMENT2 FROM SCM_ADM_LOOKUP_MASTER_DETAIL
+							WHERE LOOKUP_TYPE = 'SALES_PLAN_CATCHUP'
+							AND VALID_YN = 'Y'
+						)
+					GROUP BY A.DIVISION_ID, A.VERSION_NO, A.CUTOFF_TYPE, A.CUTOFF_YYYYMMDD, B.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID, A.DOM_EXP
+						, A.FCST_TYPE, A.INCOTERMS, NVL(A.CURRENCY, NULL), M.O_MEASURE, A.PLANT_SITE_ID, A.YYYYMMDD
+						, B.SALES_COMPANY, B.ATTRIBUTE1
+						, A.CELL_PROD_SITE_ID --[PJ2025-50017]LGES SCM DM 소형사업부 매출계획 동기화 개선 : CELL_PROD_SITE_ID 추가, 주요 테이블 변경
+					--[PJ2024-50611] 기타매출, Catch Up 테이블 분리 : 신규 테이블 추가 START
+					UNION ALL
+					SELECT A.DIVISION_ID, A.VERSION_NO
+					        , 'REPORT_' || (CASE WHEN A.CUTOFF_TYPE = 'SP_M' THEN 'SP_W' ELSE A.CUTOFF_TYPE END) AS CUTOFF_TYPE -- [C20201014-000098] CUTOFF_TYPE이 SP_M인 경우 SP_W로 변경
+							, A.CUTOFF_YYYYMMDD, B.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID
+							, A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, NVL(A.CURRENCY, NULL) AS CURRENCY, M.O_MEASURE, A.PLANT_SITE_ID, A.YYYYMMDD
+							, SUM(A.QTY) AS QTY
+							, B.SALES_COMPANY AS COMPANY_ID
+							, B.ATTRIBUTE1
+							--, '' AS CELL_PROD_SITE --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+							--[PJ2025-50017]LGES SCM DM 소형사업부 매출계획 동기화 개선 : CELL_PROD_SITE_ID 추가, 주요 테이블 변경
+							, '-' AS CELL_PROD_SITE
+					FROM DM_PLN_SALES_ETC_PLAN_C A
+					JOIN SCM_MST_SITE_ITEM B  ON B.DIVISION_ID = A.DIVISION_ID AND B.PROJECT_CODE = A.PROJECT_CODE AND B.SCM_SITE_ID = A.SCM_SITE_ID AND B.ITEM_ID = A.ITEM_ID
+					LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL C  ON A.ITEM_ID = C.SEGMENT1 AND A.DIVISION_ID = C.SEGMENT3 AND C.LOOKUP_TYPE = 'SALES_PLAN_ITEM_ID' -- 20190906 Sales Plan에서 기타매출 등록한 것 제외
+					LEFT OUTER JOIN SCM_MST_COMPANY_SN D  ON A.SCM_SITE_ID = D.COMPANY_ID
+					JOIN SCM_MST_SITE E ON A.DIVISION_ID = E.DIVISION_ID AND A.SCM_SITE_ID = E.SCM_SITE_ID
+					JOIN GT_DMF0_MEASURE M ON A.MEASURE = M.I_MEASURE AND M.PLAN_RESULT = 'PLAN' AND M.CALC_YN = ''
+					WHERE	A.VERSION_NO = p_version_no
+						AND A.DIVISION_ID = p_division_id
+						AND A.YYYYMMDD >= d_Result_Date -- 미래구간
+						AND C.LOOKUP_TYPE IS NULL
+						AND D.COMPANY_ID IS NULL
+						AND A.FCST_TYPE <> 'ETC'--[PJ2024-50611] Sales Report 생성 시 ETC 제외
+						AND A.MEASURE IN
+						(
+							SELECT SEGMENT2 FROM SCM_ADM_LOOKUP_MASTER_DETAIL
+							WHERE LOOKUP_TYPE = 'SALES_PLAN_CATCHUP'
+							AND VALID_YN = 'Y'
+						)
+					GROUP BY A.DIVISION_ID, A.VERSION_NO, A.CUTOFF_TYPE, A.CUTOFF_YYYYMMDD, B.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID, A.DOM_EXP
+						, A.FCST_TYPE, A.INCOTERMS, NVL(A.CURRENCY, NULL), M.O_MEASURE, A.PLANT_SITE_ID, A.YYYYMMDD
+						, B.SALES_COMPANY, B.ATTRIBUTE1
+					--[PJ2024-50611] 기타매출, Catch Up 테이블 분리 : 신규 테이블 추가 END
+					-- ------
+					UNION ALL
+					-- ------
+					SELECT A.DIVISION_ID, A.VERSION_NO
+					     , 'REPORT_' || (CASE WHEN A.CUTOFF_TYPE = 'SP_M' THEN 'SP_W' ELSE A.CUTOFF_TYPE END) AS CUTOFF_TYPE -- [C20201014-000098] CUTOFF_TYPE이 SP_M인 경우 SP_W로 변경
+						 , A.CUTOFF_YYYYMMDD, B.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID
+						 , A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS
+						 , CASE WHEN( NVL(A.CURRENCY, NULL) = '-' ) THEN ''   -- [C20210315-000347]
+														ELSE NVL(A.CURRENCY, NULL) END
+														AS CURRENCY
+
+						 , M.O_MEASURE AS MEASURE, A.PLANT_SITE_ID, A.YYYYMMDD, SUM(A.QTY) AS QTY
+						 , A.COMPANY_ID
+						 , B.ATTRIBUTE1
+						 --, '' AS CELL_PROD_SITE --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+						 --, '-' AS CELL_PROD_SITE --[PJ2025-50017]LGES SCM DM 소형사업부 매출계획 동기화 개선 : CELL_PROD_SITE_ID 추가, 주요 테이블 변경
+						 , A.CELL_PROD_SITE_ID			--[PJ2025-50188] 매출실적 CELL_PROD_SITE_ID 추가
+					FROM DM_PLN_SALES_PLAN_RESULT_C A
+					JOIN SCM_MST_SITE_ITEM B  ON B.DIVISION_ID = A.DIVISION_ID AND B.PROJECT_CODE = A.PROJECT_CODE AND B.SCM_SITE_ID = A.SCM_SITE_ID AND B.ITEM_ID = A.ITEM_ID
+					LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL C  ON A.ITEM_ID = C.SEGMENT1 AND A.DIVISION_ID = C.SEGMENT3 AND C.LOOKUP_TYPE = 'SALES_PLAN_ITEM_ID' -- 20190906 Sales Plan에서 기타매출 등록한 것 제외
+					LEFT OUTER JOIN SCM_MST_COMPANY_SN D  ON A.SCM_SITE_ID = D.COMPANY_ID
+					JOIN GT_DMF0_MEASURE M ON A.MEASURE = M.I_MEASURE AND M.PLAN_RESULT = 'RESULT' AND M.CALC_YN = '' AND M.SRC_TABLE = 'DM_PLN_SALES_PLAN_RESULT_C'
+					WHERE	A.VERSION_NO = p_version_no
+						AND A.DIVISION_ID = p_division_id
+						AND A.YYYYMMDD < d_Result_Date   -- 과거실적구간으로 추출
+						AND C.LOOKUP_TYPE IS NULL
+						AND D.COMPANY_ID IS NULL
+					GROUP BY A.DIVISION_ID, A.VERSION_NO, A.CUTOFF_TYPE, A.CUTOFF_YYYYMMDD, B.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID, A.DOM_EXP
+						, A.FCST_TYPE, A.INCOTERMS, NVL(A.CURRENCY, NULL), M.O_MEASURE, A.PLANT_SITE_ID, A.YYYYMMDD, A.COMPANY_ID
+						, A.COMPANY_ID, B.ATTRIBUTE1
+						, A.CELL_PROD_SITE_ID			--[PJ2025-50188] 매출실적 CELL_PROD_SITE_ID 추가
+					-- ------
+					UNION ALL -- 실적은 SalesAmt_USD 가 없어서 생성해준다.
+					-- ------
+					SELECT A.DIVISION_ID, A.VERSION_NO
+					     , 'REPORT_' || (CASE WHEN A.CUTOFF_TYPE = 'SP_M' THEN 'SP_W' ELSE A.CUTOFF_TYPE END) AS CUTOFF_TYPE -- [C20201014-000098] CUTOFF_TYPE이 SP_M인 경우 SP_W로 변경
+						 , A.CUTOFF_YYYYMMDD, B.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID
+						 , A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, NVL(A.CURRENCY, NULL) AS CURRENCY, 'SalesAmt_USD' AS Measure ,A.PLANT_SITE_ID, A.YYYYMMDD
+						 , SUM(CASE	WHEN NVL(FP.EXCHANGE_PRICE,0) = 0 THEN 0
+										ELSE A.QTY/NVL(FP.EXCHANGE_PRICE,0)
+										END) AS QTY
+						 , A.COMPANY_ID, B.ATTRIBUTE1
+						 --, '' AS CELL_PROD_SITE --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+						 --,'-' AS CELL_PROD_SITE --[PJ2025-50017]LGES SCM DM 소형사업부 매출계획 동기화 개선 : CELL_PROD_SITE_ID 추가, 주요 테이블 변경
+						 , A.CELL_PROD_SITE_ID			--[PJ2025-50188] 매출실적 CELL_PROD_SITE_ID 추가
+					FROM DM_PLN_SALES_PLAN_RESULT_C A
+					JOIN SCM_MST_SITE_ITEM B  ON B.DIVISION_ID = A.DIVISION_ID AND B.PROJECT_CODE = A.PROJECT_CODE AND B.SCM_SITE_ID = A.SCM_SITE_ID AND B.ITEM_ID = A.ITEM_ID
+					LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL C  ON A.ITEM_ID = C.SEGMENT1 AND A.DIVISION_ID = C.SEGMENT3 AND C.LOOKUP_TYPE = 'SALES_PLAN_ITEM_ID' -- 20190906 Sales Plan에서 기타매출 등록한 것 제외
+					LEFT OUTER JOIN SCM_MST_COMPANY_SN D  ON A.SCM_SITE_ID = D.COMPANY_ID
+					LEFT OUTER JOIN DM_PLN_SALES_REPORT_EXCHANGE_C FP
+							 ON A.DIVISION_ID = FP.DIVISION_ID AND SUBSTR(A.YYYYMMDD,1,6) || '01' = FP.YYYYMMDD AND FP.UNIT_CURRENCY = 'USD'  AND FP.VERSION_NO = V_NEW_VERSION_NO
+					WHERE	A.VERSION_NO = p_version_no
+						AND A.MEASURE IN ('SalesAmt_KRW')
+						AND A.CURRENCY <> 'USD'
+						AND A.DIVISION_ID = p_division_id
+						AND A.YYYYMMDD < d_Result_Date   -- 과거실적구간으로 추출
+						AND C.LOOKUP_TYPE IS NULL
+						AND D.COMPANY_ID IS NULL
+					GROUP BY A.DIVISION_ID, A.VERSION_NO, A.CUTOFF_TYPE, A.CUTOFF_YYYYMMDD, B.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID, A.DOM_EXP
+						, A.FCST_TYPE, A.INCOTERMS, NVL(A.CURRENCY, NULL), A.MEASURE, A.PLANT_SITE_ID, A.YYYYMMDD, A.COMPANY_ID, B.ATTRIBUTE1
+						, A.CELL_PROD_SITE_ID			--[PJ2025-50188] 매출실적 CELL_PROD_SITE_ID 추가
+					-- ------
+					UNION ALL -- 실적은 SalesAmt_USD 가 없어서 생성해준다. ( LOC = USD 인 경우 )
+					-- ------
+					SELECT A.DIVISION_ID, A.VERSION_NO
+					     , 'REPORT_' || (CASE WHEN A.CUTOFF_TYPE = 'SP_M' THEN 'SP_W' ELSE A.CUTOFF_TYPE END) AS CUTOFF_TYPE -- [C20201014-000098] CUTOFF_TYPE이 SP_M인 경우 SP_W로 변경
+						 , A.CUTOFF_YYYYMMDD, B.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID
+						 , A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, NVL(A.CURRENCY, NULL) AS CURRENCY, 'SalesAmt_USD' AS Measure ,A.PLANT_SITE_ID, A.YYYYMMDD
+						 ,SUM(A.QTY) AS QTY
+						, A.COMPANY_ID, B.ATTRIBUTE1
+						--, '' AS CELL_PROD_SITE --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+						--,'-' AS CELL_PROD_SITE --[PJ2025-50017]LGES SCM DM 소형사업부 매출계획 동기화 개선 : CELL_PROD_SITE_ID 추가, 주요 테이블 변경
+						 , A.CELL_PROD_SITE_ID			--[PJ2025-50188] 매출실적 CELL_PROD_SITE_ID 추가
+					FROM DM_PLN_SALES_PLAN_RESULT_C A
+					JOIN SCM_MST_SITE_ITEM B  ON B.DIVISION_ID = A.DIVISION_ID AND B.PROJECT_CODE = A.PROJECT_CODE AND B.SCM_SITE_ID = A.SCM_SITE_ID AND B.ITEM_ID = A.ITEM_ID
+					LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL C  ON A.ITEM_ID = C.SEGMENT1 AND A.DIVISION_ID = C.SEGMENT3 AND C.LOOKUP_TYPE = 'SALES_PLAN_ITEM_ID' -- 20190906 Sales Plan에서 기타매출 등록한 것 제외
+					LEFT OUTER JOIN SCM_MST_COMPANY_SN D  ON A.SCM_SITE_ID = D.COMPANY_ID
+					WHERE	A.VERSION_NO = p_version_no
+						AND A.MEASURE IN ('SalesAmt_LOC')
+						AND A.CURRENCY = 'USD'
+						AND A.DIVISION_ID = p_division_id
+						AND A.YYYYMMDD < d_Result_Date   -- 과거실적구간으로 추출
+						AND C.LOOKUP_TYPE IS NULL
+						AND D.COMPANY_ID IS NULL
+					GROUP BY A.DIVISION_ID, A.VERSION_NO, A.CUTOFF_TYPE, A.CUTOFF_YYYYMMDD, B.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID, A.DOM_EXP
+						, A.FCST_TYPE, A.INCOTERMS, NVL(A.CURRENCY, NULL), A.MEASURE, A.PLANT_SITE_ID, A.YYYYMMDD, A.COMPANY_ID, B.ATTRIBUTE1
+						, A.CELL_PROD_SITE_ID			--[PJ2025-50188] 매출실적 CELL_PROD_SITE_ID 추가
+					--Start [C20201014-000094] 82 사업부 비물동 구분코드 추가
+					-- ------
+					UNION ALL
+					-- ------
+					SELECT A.DIVISION_ID, A.VERSION_NO
+					        , 'REPORT_' || (CASE WHEN A.CUTOFF_TYPE = 'SP_M' THEN 'SP_W' ELSE A.CUTOFF_TYPE END) AS CUTOFF_TYPE -- [C20201014-000098] CUTOFF_TYPE이 SP_M인 경우 SP_W로 변경
+							, A.CUTOFF_YYYYMMDD, B.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID
+							, A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, NVL(A.CURRENCY, NULL) AS CURRENCY, M.O_MEASURE, A.PLANT_SITE_ID, A.YYYYMMDD
+							, SUM(A.QTY) AS QTY
+							, B.SALES_COMPANY AS COMPANY_ID
+							, B.ATTRIBUTE1
+							--, '' AS CELL_PROD_SITE --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+							, A.CELL_PROD_SITE_ID AS CELL_PROD_SITE --[PJ2025-50017]LGES SCM DM 소형사업부 매출계획 동기화 개선 : CELL_PROD_SITE_ID 추가, 주요 테이블 변경
+					FROM DM_PLN_SALES_PLAN_C A
+					LEFT OUTER JOIN SCM_MST_SITE_ITEM B  ON B.DIVISION_ID = A.DIVISION_ID AND B.PROJECT_CODE = A.PROJECT_CODE AND B.SCM_SITE_ID = A.SCM_SITE_ID AND B.ITEM_ID = A.ITEM_ID
+					JOIN SCM_ADM_LOOKUP_MASTER_DETAIL C  ON A.ITEM_ID = C.SEGMENT1 AND A.DIVISION_ID = C.SEGMENT3 AND C.LOOKUP_TYPE = 'SALES_PLAN_ITEM_ID'
+					LEFT OUTER JOIN SCM_MST_COMPANY_SN D  ON A.SCM_SITE_ID = D.COMPANY_ID
+					JOIN SCM_MST_SITE E ON A.DIVISION_ID = E.DIVISION_ID AND A.SCM_SITE_ID = E.SCM_SITE_ID
+					JOIN GT_DMF0_MEASURE M ON A.MEASURE = M.I_MEASURE AND M.PLAN_RESULT = 'PLAN' AND M.CALC_YN = ''
+					WHERE	A.VERSION_NO  = p_version_no
+						AND A.DIVISION_ID = p_division_id
+						AND A.YYYYMMDD   >= d_Result_Date -- 미래구간
+						AND D.COMPANY_ID IS NULL
+						AND A.DIVISION_ID = '82'
+						AND NVL(A.QTY,0) <> 0
+						AND A.FCST_TYPE <> 'ETC'--[PJ2024-50611] Sales Report 생성 시 ETC 제외
+					GROUP BY A.DIVISION_ID, A.VERSION_NO, A.CUTOFF_TYPE, A.CUTOFF_YYYYMMDD, B.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID, A.DOM_EXP
+						, A.FCST_TYPE, A.INCOTERMS, NVL(A.CURRENCY, NULL), M.O_MEASURE, A.PLANT_SITE_ID, A.YYYYMMDD
+							, B.SALES_COMPANY
+						, B.ATTRIBUTE1
+						, A.CELL_PROD_SITE_ID --[PJ2025-50017]LGES SCM DM 소형사업부 매출계획 동기화 개선 : CELL_PROD_SITE_ID 추가, 주요 테이블 변경
+					-- ------
+					UNION ALL
+					-- ------
+					SELECT A.DIVISION_ID, A.VERSION_NO
+					     , 'REPORT_' || (CASE WHEN A.CUTOFF_TYPE = 'SP_M' THEN 'SP_W' ELSE A.CUTOFF_TYPE END) AS CUTOFF_TYPE -- [C20201014-000098] CUTOFF_TYPE이 SP_M인 경우 SP_W로 변경
+						 , A.CUTOFF_YYYYMMDD, B.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID
+						 , A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, NVL(A.CURRENCY, NULL) AS CURRENCY, M.O_MEASURE AS MEASURE, A.PLANT_SITE_ID, A.YYYYMMDD, SUM(A.QTY) AS QTY
+						 , A.COMPANY_ID, B.ATTRIBUTE1
+						 --, '' AS CELL_PROD_SITE --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+						 --,'-' AS CELL_PROD_SITE --[PJ2025-50017]LGES SCM DM 소형사업부 매출계획 동기화 개선 : CELL_PROD_SITE_ID 추가, 주요 테이블 변경
+						 , A.CELL_PROD_SITE_ID			--[PJ2025-50188] 매출실적 CELL_PROD_SITE_ID 추가
+					FROM DM_PLN_SALES_PLAN_RESULT_C A
+					LEFT OUTER JOIN SCM_MST_SITE_ITEM B  ON B.DIVISION_ID = A.DIVISION_ID AND B.PROJECT_CODE = A.PROJECT_CODE AND B.SCM_SITE_ID = A.SCM_SITE_ID AND B.ITEM_ID = A.ITEM_ID
+					JOIN SCM_ADM_LOOKUP_MASTER_DETAIL C  ON A.ITEM_ID = C.SEGMENT1 AND A.DIVISION_ID = C.SEGMENT3 AND C.LOOKUP_TYPE = 'SALES_PLAN_ITEM_ID'
+					LEFT OUTER JOIN SCM_MST_COMPANY_SN D  ON A.SCM_SITE_ID = D.COMPANY_ID
+					JOIN GT_DMF0_MEASURE M ON A.MEASURE = M.I_MEASURE AND M.PLAN_RESULT = 'RESULT' AND M.CALC_YN = '' AND M.SRC_TABLE = 'DM_PLN_SALES_PLAN_RESULT_C'
+					WHERE	A.VERSION_NO  = p_version_no
+						AND A.DIVISION_ID = p_division_id
+						AND A.YYYYMMDD    < d_Result_Date   -- 과거실적구간으로 추출
+						--AND C.LOOKUP_TYPE IS NULL
+						AND D.COMPANY_ID IS NULL
+						AND A.DIVISION_ID = '82'
+						AND NVL(A.QTY,0) <> 0
+					GROUP BY A.DIVISION_ID, A.VERSION_NO, A.CUTOFF_TYPE, A.CUTOFF_YYYYMMDD, B.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID, A.DOM_EXP
+						, A.FCST_TYPE, A.INCOTERMS, NVL(A.CURRENCY, NULL), M.O_MEASURE, A.PLANT_SITE_ID, A.YYYYMMDD, A.COMPANY_ID
+						, A.COMPANY_ID, B.ATTRIBUTE1
+						, A.CELL_PROD_SITE_ID;			--[PJ2025-50188] 매출실적 CELL_PROD_SITE_ID 추가
+					--End [C20201014-000094] 82 사업부 비물동 구분코드 추가
+
+					-- 소형 처리( 무상건 제외 )
+					-- [C20210315-000140]
+					IF p_division_id = '40' THEN
+						DELETE FROM GT_DMF0_VERSION_COPY A
+						WHERE EXISTS (
+							SELECT 1 FROM SCM_ADM_LOOKUP_MASTER_DETAIL B
+							WHERE A.FCST_TYPE = B.SEGMENT1 AND B.LOOKUP_TYPE = 'SALES_TYPE_CODE' AND B.SEGMENT4 = 'FREE'
+						);
+					END IF;
+
+					-- RTF_SCP 처리
+					IF p_division_id like '81%' THEN
+						INSERT INTO GT_DMF0_VERSION_COPY (DIVISION_ID, VERSION_NO,CUTOFF_TYPE,CUTOFF_YYYYMMDD,PROJECT_CODE,SCM_SITE_ID,ITEM_ID
+								, DOM_EXP,FCST_TYPE,INCOTERMS,CURRENCY,MEASURE,PLANT_SITE_ID,YYYYMMDD,QTY, COMPANY_ID, SOLDTO_CUST_REPORT
+							    , CELL_PROD_SITE	)--[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+						SELECT A.DIVISION_ID, A.VERSION_NO, 'REPORT_SP_W' as Cutoff_Type, A.CUTOFF_YYYYMMDD, B.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID
+								, A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, '' AS CURRENCY, M.O_MEASURE AS MEASURE, A.PLANT_SITE_ID, A.YYYYMMDD
+								, SUM(A.QTY) AS QTY
+								, E.COMPANY_ID AS COMPANY_ID, B.ATTRIBUTE1
+								--, '' AS CELL_PROD_SITE --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+								--, '-' AS CELL_PROD_SITE --[PJ2025-50017]LGES SCM DM 소형사업부 매출계획 동기화 개선 : CELL_PROD_SITE_ID 추가, 주요 테이블 변경
+								, A.CELL_PROD_SITE_ID			--[PJ2025-50188] 매출실적 CELL_PROD_SITE_ID 추가
+						FROM DM_PLN_MKT_FCST_RESULT_C A
+						JOIN SCM_MST_SITE_ITEM B  ON B.DIVISION_ID = A.DIVISION_ID AND B.PROJECT_CODE = A.PROJECT_CODE AND B.SCM_SITE_ID = A.SCM_SITE_ID AND B.ITEM_ID = A.ITEM_ID
+						LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL C  ON A.ITEM_ID = C.SEGMENT1 AND A.DIVISION_ID = C.SEGMENT3 AND C.LOOKUP_TYPE = 'SALES_PLAN_ITEM_ID' -- 20190906 Sales Plan에서 기타매출 등록한 것 제외
+						LEFT OUTER JOIN SCM_MST_COMPANY_SN D  ON A.SCM_SITE_ID = D.COMPANY_ID
+						JOIN SCM_MST_SITE E ON A.DIVISION_ID = E.DIVISION_ID AND A.SCM_SITE_ID = E.SCM_SITE_ID
+						JOIN GT_DMF0_MEASURE M ON A.MEASURE = M.I_MEASURE AND M.PLAN_RESULT = 'PLAN' AND M.CALC_YN = '' AND M.SRC_TABLE = 'DM_PLN_MKT_FCST_RESULT_C'
+						WHERE	A.VERSION_NO = 'MF_'  ||  SUBSTR(p_version_no,4,15)
+							AND A.DIVISION_ID = p_division_id
+							AND A.YYYYMMDD < d_Result_Date   -- 과거실적구간으로 추출
+							AND A.YYYYMMDD >= v_cp_MIN_YYYYMMDD
+							AND C.LOOKUP_TYPE IS NULL
+							AND D.COMPANY_ID IS NULL
+						GROUP BY A.DIVISION_ID, A.VERSION_NO, A.CUTOFF_TYPE, A.CUTOFF_YYYYMMDD, B.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID, A.DOM_EXP
+							, A.FCST_TYPE, A.INCOTERMS, M.O_MEASURE, A.PLANT_SITE_ID, A.YYYYMMDD
+							, E.COMPANY_ID, B.ATTRIBUTE1
+							, A.CELL_PROD_SITE_ID;			--[PJ2025-50188] 매출실적 CELL_PROD_SITE_ID 추가
+					END IF;
+					-- [C20210315-000347]
+					IF p_division_id = '40' THEN
+
+						-- SP 버전은 v002 등으로 재생성하더라도 보통 mf_w 는 v001 로 그대로 있으므로 끝자리는 고정한다.
+						V_VERSION_NO_VMI := 'MF_W_' || TO_CHAR(FN_NEXT_DAY(SUBSTR(p_version_no,6,8), 'MON') + (-6), 'YYYYMMDD')  -- 당주 월요일 이후인건만 추출
+												 || '_V001';
+
+						INSERT INTO GT_DMF0_VERSION_COPY (DIVISION_ID, VERSION_NO,CUTOFF_TYPE,CUTOFF_YYYYMMDD,PROJECT_CODE,SCM_SITE_ID,ITEM_ID
+							, DOM_EXP,FCST_TYPE,INCOTERMS,CURRENCY,MEASURE,PLANT_SITE_ID,YYYYMMDD,QTY, COMPANY_ID, SOLDTO_CUST_REPORT
+							, CELL_PROD_SITE	)--[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+						SELECT A.DIVISION_ID, A.VERSION_NO
+								, v_cp_CUTOFF_TYPE  , v_cp_CUTOFF_YYYYMMDD --	, 'REPORT_SP_W' as Cutoff_Type , A.CUTOFF_YYYYMMDD
+								, B.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID
+								, A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, '' AS CURRENCY, M.O_MEASURE AS MEASURE, A.PLANT_SITE_ID, A.YYYYMMDD
+								, SUM(A.QTY) AS QTY
+								,'' AS COMPANY_ID  --, E.COMPANY_ID AS COMPANY_ID
+								, B.ATTRIBUTE1
+								--, '' AS CELL_PROD_SITE --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+								, A.CELL_PROD_SITE_ID AS CELL_PROD_SITE
+						--[PJ2025-50017]LGES SCM DM 소형사업부 매출계획 동기화 개선 : CELL_PROD_SITE_ID 추가, 주요 테이블 변경
+						--FROM DM_PLN_MKT_FCST_C A
+						FROM DM_PLN_CFM_MKT_DEMAND_PLAN_C A
+						JOIN SCM_MST_SITE_ITEM B  ON B.DIVISION_ID = A.DIVISION_ID AND B.PROJECT_CODE = A.PROJECT_CODE AND B.SCM_SITE_ID = A.SCM_SITE_ID AND B.ITEM_ID = A.ITEM_ID
+						LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL C  ON A.ITEM_ID = C.SEGMENT1 AND A.DIVISION_ID = C.SEGMENT3 AND C.LOOKUP_TYPE = 'SALES_PLAN_ITEM_ID' -- 20190906 Sales Plan에서 기타매출 등록한 것 제외
+						LEFT OUTER JOIN SCM_MST_COMPANY_SN D  ON A.SCM_SITE_ID = D.COMPANY_ID
+						JOIN SCM_MST_SITE E ON A.DIVISION_ID = E.DIVISION_ID AND A.SCM_SITE_ID = E.SCM_SITE_ID
+						JOIN GT_DMF0_MEASURE M ON A.MEASURE = M.I_MEASURE AND M.PLAN_RESULT = 'PLAN' AND M.CALC_YN = '' AND M.SRC_TABLE = 'DM_PLN_MKT_FCST_C'
+						WHERE	A.VERSION_NO = V_VERSION_NO_VMI
+							AND A.DIVISION_ID = p_division_id
+							AND A.YYYYMMDD >= d_Result_Date   -- 미래구간
+							AND MEASURE IN ('VMI_In_Plan', 'VMI_In_Req')
+							AND C.LOOKUP_TYPE IS NULL
+							AND D.COMPANY_ID IS NULL
+						GROUP BY A.DIVISION_ID, A.VERSION_NO, A.CUTOFF_TYPE, A.CUTOFF_YYYYMMDD, B.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID, A.DOM_EXP
+							, A.FCST_TYPE, A.INCOTERMS, M.O_MEASURE, A.PLANT_SITE_ID, A.YYYYMMDD
+							, E.COMPANY_ID, B.ATTRIBUTE1
+							, A.CELL_PROD_SITE_ID; --[PJ2025-50017]LGES SCM DM 소형사업부 매출계획 동기화 개선 : CELL_PROD_SITE_ID 추가, 주요 테이블 변경
+
+						-- MKT FCST 테이블에서 데이터를 가져오면 Currency 및 Company_id 가 없어서 업데이트 해준다.
+						-- 여기에서 하고 최종 INSERT INTO 전에 한 번 더 해준다.
+						-- (MSSQL UPDATE...FROM...JOIN → Oracle MERGE. ON절 갱신컬럼 ORA-38104 회피 위해 필터는 WHEN MATCHED WHERE 로)
+						MERGE INTO GT_DMF0_VERSION_COPY A
+						USING ( SELECT PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS, SUBSTR(YYYYMMDD, 1, 6) AS YYYYMM
+									, MAX(CURRENCY) AS CURRENCY
+								FROM DM_PLN_SALES_PLAN_C A
+								WHERE A.VERSION_NO = p_version_no
+									AND A.DIVISION_ID = p_division_id
+									AND A.YYYYMMDD >= d_Result_Date -- 미래구간
+								GROUP BY PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS, SUBSTR(YYYYMMDD, 1, 6)
+							) B ON ( A.PROJECT_CODE = B.PROJECT_CODE
+								AND A.SCM_SITE_ID	= B.SCM_SITE_ID
+								AND A.ITEM_ID		= B.ITEM_ID
+								AND A.DOM_EXP		= B.DOM_EXP
+								AND A.FCST_TYPE		= B.FCST_TYPE
+								AND A.INCOTERMS		= B.INCOTERMS
+								AND SUBSTR(A.YYYYMMDD, 1, 6)	= B.YYYYMM )
+						WHEN MATCHED THEN UPDATE SET A.CURRENCY = B.CURRENCY
+							WHERE A.MEASURE IN ('VMI_In_Plan', 'VMI_In_Req')
+								AND A.CURRENCY IS NULL;
+
+						MERGE INTO GT_DMF0_VERSION_COPY A
+						USING ( SELECT PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS
+									, MAX(CURRENCY) AS CURRENCY
+								FROM DM_PLN_SALES_PLAN_C A
+								WHERE A.VERSION_NO = p_version_no
+									AND A.DIVISION_ID = p_division_id
+									AND A.YYYYMMDD >= d_Result_Date -- 미래구간
+								GROUP BY PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS
+							) B ON ( A.PROJECT_CODE = B.PROJECT_CODE
+								AND A.SCM_SITE_ID	= B.SCM_SITE_ID
+								AND A.ITEM_ID		= B.ITEM_ID
+								AND A.DOM_EXP		= B.DOM_EXP
+								AND A.FCST_TYPE		= B.FCST_TYPE
+								AND A.INCOTERMS		= B.INCOTERMS )
+						WHEN MATCHED THEN UPDATE SET A.CURRENCY = B.CURRENCY
+							WHERE A.MEASURE IN ('VMI_In_Plan', 'VMI_In_Req')
+								AND A.CURRENCY IS NULL;
+
+						MERGE INTO GT_DMF0_VERSION_COPY A
+						USING SCM_MST_SITE_ITEM B
+						ON ( A.DIVISION_ID = B.DIVISION_ID AND A.PROJECT_CODE = B.PROJECT_CODE AND A.SCM_SITE_ID = B.SCM_SITE_ID AND A.ITEM_ID = B.ITEM_ID )
+						WHEN MATCHED THEN UPDATE SET A.COMPANY_ID = B.SALES_COMPANY;
+					END IF;
+				ELSE
+					INSERT INTO GT_DMF0_VERSION_COPY (DIVISION_ID, VERSION_NO,CUTOFF_TYPE,CUTOFF_YYYYMMDD,PROJECT_CODE,SCM_SITE_ID,ITEM_ID
+						, DOM_EXP,FCST_TYPE,INCOTERMS,CURRENCY,MEASURE,PLANT_SITE_ID,YYYYMMDD,QTY, COMPANY_ID, SOLDTO_CUST_REPORT, DEPT_ID, ITEM_USE, END_CUSTOMER
+							, CELL_PROD_SITE	)--[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+					SELECT A.DIVISION_ID, A.VERSION_NO
+					    , 'REPORT_' ||  A.CUTOFF_TYPE AS CUTOFF_TYPE
+						, A.CUTOFF_YYYYMMDD
+						, A.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID, A.DOM_EXP
+						, A.FCST_TYPE, '' AS INCOTERMS, A.CURRENCY, A.MEASURE,A.PLANT_SITE_ID
+						, A.YYYYMM  ||	'01', SUM(A.QTY) AS QTY
+						, NVL(B.SALES_COMPANY, NULL) AS COMPANY_ID
+						, B.ATTRIBUTE1
+						, CASE WHEN A.DIVISION_ID <> '40' THEN A.DEPT_ID ELSE NULL END AS DEPT_ID
+						, NVL(A.ITEM_USE, NULL) AS ITEM_USE, NVL(A.END_CUSTOMER, NULL) AS END_CUSTOMER
+						, A.CELL_PROD_SITE --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+					FROM DM_PLN_BP_FCST_C A
+					LEFT OUTER JOIN SCM_MST_SITE_ITEM B  ON B.DIVISION_ID = A.DIVISION_ID AND B.PROJECT_CODE = A.PROJECT_CODE AND B.SCM_SITE_ID = A.SCM_SITE_ID AND B.ITEM_ID = A.ITEM_ID
+					LEFT OUTER JOIN SCM_MST_SITE C	ON A.DIVISION_ID = C.DIVISION_ID AND A.SCM_SITE_ID = C.SCM_SITE_ID
+					JOIN ( SELECT DISTINCT I_MEASURE FROM GT_DMF0_MEASURE ) M ON A.MEASURE = M.I_MEASURE
+					WHERE A.VERSION_NO = p_version_no
+					--AND MEASURE IN ('SalesAmt_KRW', 'SalesAmt_LOC', 'SalesAmt_USD', 'Business_Plan','CAR_QTY')
+					AND A.DIVISION_ID = p_division_id
+					GROUP BY A.DIVISION_ID, A.VERSION_NO, A.CUTOFF_TYPE, A.CUTOFF_YYYYMMDD
+						, A.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID, A.DOM_EXP
+						, A.FCST_TYPE, A.CURRENCY, A.MEASURE, A.PLANT_SITE_ID
+						, A.YYYYMM, B.ATTRIBUTE1
+						--[C20201125-000012] COMPANY_ID 변경(Site -> Sales Site Project Model)
+						--, NVL(C.COMPANY_ID, NULL)
+						, NVL(B.SALES_COMPANY, NULL)
+						, CASE WHEN A.DIVISION_ID <> '40' THEN A.DEPT_ID ELSE NULL END
+						, NVL(A.ITEM_USE, NULL), NVL(A.END_CUSTOMER, NULL), A.CELL_PROD_SITE; --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+				END IF;
+			ELSIF p_action_type = 'CP' THEN
+				SELECT VERSION_TYPE,
+    YYYYMMDD
+  INTO v_cp_CUTOFF_TYPE, v_cp_CUTOFF_YYYYMMDD
+				FROM DM_MDF_VERSION
+				WHERE VERSION_NO = p_version_no;
+
+				SELECT A.VERSION_NO, MIN(A.YYYYMMDD)
+				  INTO v_cp_VERSION_NO, v_cp_MIN_YYYYMMDD
+				FROM DM_PLN_SALES_PLAN_REPORT_C A
+				WHERE	A.VERSION_NO = p_version_no
+					and A.Cutoff_type = v_cp_CUTOFF_TYPE
+					and A.Data_type = '1'
+				GROUP BY A.VERSION_NO;
+
+				-- 실적 불러오기 처리시, 실적의 시작일자를 CUTOFF 일자를 기준으로 룩업에 세팅된 개월수만큼 전으로 가서 가져온다.
+
+				SELECT TO_NUMBER(SEGMENT3)
+				  INTO V_MON_CNT
+				FROM SCM_ADM_LOOKUP_MASTER_DETAIL A
+				WHERE LOOKUP_TYPE = 'DMF0044_CONFIG'
+					AND SEGMENT1 = P_DIVISION_ID
+					AND SEGMENT2 = 'RESULT_START_PERIOD';
+
+				v_cp_MIN_YYYYMMDD := TO_CHAR(ADD_MONTHS(TO_DATE(v_cp_CUTOFF_YYYYMMDD, 'YYYYMMDD'), V_MON_CNT * -1), 'YYYYMMDD');
+				-- ----------------------------------------------------------------------------------------------------
+				BEGIN
+					-- 실적불러오기 선택을 하지 않은 순수한 복사시에만 기존 마스터 그대로 유지가 가능함. 아니면 항상 마스터 최신화 적용됨
+					IF ( P_UPDATE_YN <> 'Y' AND d_Result_Date IS NULL) THEN
+						INSERT INTO DM_PLN_SALES_PLAN_REPORT_C
+							 ( DATA_TYPE, DIVISION_ID, VERSION_NO, CUTOFF_TYPE, CUTOFF_YYYYMMDD
+							 , DEPARTMENT_ID, DEPARTMENT_NAME, DEPT_ID, DEPT_NAME, END_CUST_REPORT
+							 , CUST_REPORT, PRODUCT_GROUP, PROJECT_CODE, SCM_SITE_ID, ITEM_ID
+							 , DOM_EXP, FCST_TYPE, INCOTERMS, MEASURE, PLANT_SITE_ID
+							 , YYYYMMDD, CURRENCY, QTY, CREATED_BY, CREATION_DATE
+							 , LAST_UPDATED_BY, LAST_UPDATE_DATE, ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3
+							 , ATTRIBUTE4, ATTRIBUTE5, ATTRIBUTE6, ATTRIBUTE7, ATTRIBUTE8
+							 , ATTRIBUTE9, ATTRIBUTE10, COMPANY_ID
+							 -- 2021.7.23
+							 , SOLDTO_CUST_REPORT
+							 , OWNER_NAME, CUST_GROUP_DTL, PRODUCT_DETAILS, FORECAST_INFO_SPEC, NICK_NAME
+							 , FORECAST_INFO_CELL_MODEL, FORECAST_INFO_CELL_PACK_COUNT, FORECAST_INFO_BIZ_TYPE, COMPANY_NAME, APPLICATION
+							 , APPLICATION_GR, COUNTRY_KR_NAME, ROUTE
+							 , CELL_PROD_SITE	)--[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+						SELECT A.DATA_TYPE, A.DIVISION_ID, V_NEW_VERSION_NO, A.CUTOFF_TYPE, A.CUTOFF_YYYYMMDD
+							 , A.DEPARTMENT_ID, A.DEPARTMENT_NAME, A.DEPT_ID, A.DEPT_NAME, A.END_CUST_REPORT
+							 , A.CUST_REPORT, A.PRODUCT_GROUP, A.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID
+							 , A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, M.O_MEASURE, A.PLANT_SITE_ID
+							 , A.YYYYMMDD, A.CURRENCY, A.QTY, p_created_by, SYSDATE
+							 , p_created_by, SYSDATE, A.ATTRIBUTE1, A.ATTRIBUTE2, A.ATTRIBUTE3
+							 , A.ATTRIBUTE4, A.ATTRIBUTE5, A.ATTRIBUTE6, A.ATTRIBUTE7, A.ATTRIBUTE8
+							 , A.ATTRIBUTE9, A.ATTRIBUTE10, A.COMPANY_ID
+							 , A.SOLDTO_CUST_REPORT
+							 , A.OWNER_NAME, A.CUST_GROUP_DTL, A.PRODUCT_DETAILS, A.FORECAST_INFO_SPEC, A.NICK_NAME
+							 , A.FORECAST_INFO_CELL_MODEL, A.FORECAST_INFO_CELL_PACK_COUNT, A.FORECAST_INFO_BIZ_TYPE, A.COMPANY_NAME, A.APPLICATION
+							 , A.APPLICATION_GR, A.COUNTRY_KR_NAME, A.ROUTE
+							 , A.CELL_PROD_SITE --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+						FROM   DM_PLN_SALES_PLAN_REPORT_C A
+						JOIN GT_DMF0_MEASURE M ON A.MEASURE = M.I_MEASURE AND M.PLAN_RESULT = 'PLAN' AND M.CALC_YN = ''
+						WHERE A.VERSION_NO = p_version_no
+							AND A.DATA_TYPE = '1'
+							AND A.DIVISION_ID = p_division_id
+							AND A.YYYYMMDD > d_Result_Date; -- 미래구간
+					ELSE
+						INSERT INTO DM_PLN_SALES_PLAN_REPORT_C
+							 ( DATA_TYPE, DIVISION_ID, VERSION_NO, CUTOFF_TYPE, CUTOFF_YYYYMMDD
+							 , DEPARTMENT_ID, DEPARTMENT_NAME, DEPT_ID, DEPT_NAME, END_CUST_REPORT
+							 , CUST_REPORT, PRODUCT_GROUP, PROJECT_CODE, SCM_SITE_ID, ITEM_ID
+							 , DOM_EXP, FCST_TYPE, INCOTERMS, MEASURE, PLANT_SITE_ID
+							 , YYYYMMDD, CURRENCY, QTY, CREATED_BY, CREATION_DATE
+							 , LAST_UPDATED_BY, LAST_UPDATE_DATE, ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3
+							 , ATTRIBUTE4, ATTRIBUTE5, ATTRIBUTE6, ATTRIBUTE7, ATTRIBUTE8
+							 , ATTRIBUTE9, ATTRIBUTE10, COMPANY_ID
+							 -- 2021.7.23
+							 , SOLDTO_CUST_REPORT
+							 , OWNER_NAME, CUST_GROUP_DTL, PRODUCT_DETAILS, FORECAST_INFO_SPEC, NICK_NAME
+							 , FORECAST_INFO_CELL_MODEL, FORECAST_INFO_CELL_PACK_COUNT, FORECAST_INFO_BIZ_TYPE, COMPANY_NAME, APPLICATION
+							 , APPLICATION_GR, COUNTRY_KR_NAME, ROUTE
+							 , CELL_PROD_SITE	)--[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+						SELECT A.DATA_TYPE, A.DIVISION_ID, V_NEW_VERSION_NO, A.CUTOFF_TYPE, A.CUTOFF_YYYYMMDD
+							 , CASE WHEN LK1.SEGMENT1 IS NULL  THEN v_ETC_DEPARTMENT_ID ELSE A.DEPARTMENT_ID END AS DEPARTMENT_ID
+							 , CASE WHEN LK1.SEGMENT1 IS NULL  THEN v_ETC_DEPARTMENT_NAME ELSE LK1.SEGMENT2 END AS DEPARTMENT_NAME
+							 , A.DEPT_ID, LK2.SEGMENT2 AS DEPT_NAME, A.END_CUST_REPORT
+							 , A.CUST_REPORT, A.PRODUCT_GROUP, A.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID
+							 , A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, M.O_MEASURE, A.PLANT_SITE_ID
+							 , A.YYYYMMDD, A.CURRENCY, A.QTY, p_created_by, SYSDATE
+							 , p_created_by, SYSDATE
+							 , CASE WHEN NVL(NULL/*SITE_ITEM.REPORT_GROUP 미존재(Oracle마이그레이션)→NULL*/, NULL) IS NOT NULL THEN NVL(NULL/*SITE_ITEM.REPORT_GROUP 미존재(Oracle마이그레이션)→NULL*/, NULL) ELSE NVL(NULL/*SITE_ITEM.REPORT_GROUP 미존재(Oracle마이그레이션)→NULL*/, NULL) END
+							 , A.ATTRIBUTE2, A.ATTRIBUTE3
+							 , A.ATTRIBUTE4, A.ATTRIBUTE5, A.ATTRIBUTE6, A.ATTRIBUTE7, A.ATTRIBUTE8
+							 , A.ATTRIBUTE9, A.ATTRIBUTE10, A.COMPANY_ID
+							 , B.ATTRIBUTE1 AS SOLDTO_CUST_REPORT
+							 , FN_GET_DM_MKT_OWNER_NAME (B.OWNER, ',', 'KO' )		 AS OWNER_NAME
+							 , B.CUST_GROUP_DTL
+							 , CASE WHEN NVL(NULL/*SITE_ITEM.REPORT_GROUP 미존재(Oracle마이그레이션)→NULL*/, NULL) IS NOT NULL THEN NVL(NULL/*SITE_ITEM.REPORT_GROUP 미존재(Oracle마이그레이션)→NULL*/, NULL) ELSE NVL(NULL/*SITE_ITEM.REPORT_GROUP 미존재(Oracle마이그레이션)→NULL*/, NULL) END AS PRODUCT_DETAILS
+							 , C.FORECAST_INFO_SPEC, C.NICK_NAME
+							 , NULL/*SITE_ITEM.REPORT_GROUP 미존재(Oracle마이그레이션)→NULL*/ AS FORECAST_INFO_CELL_MODEL, C.FORECAST_INFO_CELL_PACK_COUNT, C.FORECAST_INFO_BIZ_TYPE
+							 , D.SEGMENT2, B.APPLICATION, NULL/*SITE_ITEM.REPORT_GROUP 미존재(Oracle마이그레이션)→NULL*/ AS APPLICATION_GR, F.COUNTRY_KR_NAME, B.ROUTE
+							 , A.CELL_PROD_SITE --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+						FROM   DM_PLN_SALES_PLAN_REPORT_C A
+						LEFT OUTER JOIN SCM_MST_SITE_ITEM B ON A.DIVISION_ID = B.DIVISION_ID AND A.PROJECT_CODE = B.PROJECT_CODE AND A.SCM_SITE_ID = B.SCM_SITE_ID AND A.ITEM_ID = B.ITEM_ID
+						LEFT OUTER JOIN GT_DMF0044_ITEM_SINGLE_V C ON A.ITEM_ID = C.ITEM_ID
+						LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL D ON A.COMPANY_ID = D.SEGMENT1 AND D.LOOKUP_TYPE = 'DM_COMPANY'
+						LEFT OUTER JOIN SCM_MST_SITE E ON A.DIVISION_ID = E.DIVISION_ID AND A.SCM_SITE_ID = E.SCM_SITE_ID
+						LEFT OUTER JOIN SCM_MST_COUNTRY F ON E.COUNTRY = F.COUNTRY
+						JOIN GT_DMF0_MEASURE M ON A.MEASURE = M.I_MEASURE AND M.PLAN_RESULT = 'PLAN' AND M.CALC_YN = ''
+						LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL LK1 ON A.DEPARTMENT_ID = LK1.SEGMENT1 AND LK1.LOOKUP_TYPE = 'MDF_DEPARTMENT'
+													 ||  CASE WHEN A.DIVISION_ID= '40' THEN '' ELSE '_'  ||  A.DIVISION_ID END AND LK1.VALID_YN = 'Y' AND LK1.SEGMENT3 = 'Y'
+						LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL LK2 ON A.DEPT_ID = LK2.SEGMENT1 AND LK2.LOOKUP_TYPE = 'DMF0044_DEPARTMENT_TEAM2'
+													 ||  CASE WHEN A.DIVISION_ID= '40' THEN '' ELSE '_'  ||  A.DIVISION_ID END AND LK2.VALID_YN = 'Y'
+						WHERE A.VERSION_NO = p_version_no
+							AND A.DATA_TYPE = '1'
+							AND A.DIVISION_ID = p_division_id
+							AND A.YYYYMMDD > d_Result_Date; -- 미래구간
+
+					END IF;
+					-- --------
+					--UNION ALL -- 여기부터는 실적구간
+					-- --------
+					BEGIN
+
+						INSERT INTO GT_DMF0_VERSION_COPY (DIVISION_ID, VERSION_NO,CUTOFF_TYPE,CUTOFF_YYYYMMDD,PROJECT_CODE,SCM_SITE_ID,ITEM_ID
+								, DOM_EXP,FCST_TYPE,INCOTERMS,CURRENCY,MEASURE,PLANT_SITE_ID,YYYYMMDD,QTY, COMPANY_ID, SOLDTO_CUST_REPORT
+								, CELL_PROD_SITE	)--[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+						SELECT A.DIVISION_ID, v_cp_VERSION_NO, v_cp_CUTOFF_TYPE, v_cp_CUTOFF_YYYYMMDD, A.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID
+							 , A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, NVL(A.CURRENCY, NULL) AS CURRENCY, M.O_MEASURE AS MEASURE, A.PLANT_SITE_ID, A.YYYYMMDD
+							 , SUM(QTY) AS QTY
+							 , A.COMPANY_ID, B.ATTRIBUTE1
+							 --, '' AS CELL_PROD_SITE --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+							 --,'-' AS CELL_PROD_SITE --[PJ2025-50017]LGES SCM DM 소형사업부 매출계획 동기화 개선 : CELL_PROD_SITE_ID 추가, 주요 테이블 변경
+							, A.CELL_PROD_SITE_ID			--[PJ2025-50188] 매출실적 CELL_PROD_SITE_ID 추가
+						FROM DM_PLN_SALES_PLAN_RESULT A
+						LEFT OUTER JOIN SCM_MST_SITE_ITEM B  ON B.DIVISION_ID = A.DIVISION_ID AND B.PROJECT_CODE = A.PROJECT_CODE AND B.SCM_SITE_ID = A.SCM_SITE_ID AND B.ITEM_ID = A.ITEM_ID
+						LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL C  ON A.ITEM_ID = C.SEGMENT1 AND A.DIVISION_ID = C.SEGMENT3 AND C.LOOKUP_TYPE = 'SALES_PLAN_ITEM_ID' -- 20190906 Sales Plan에서 기타매출 등록한 것 제외
+						LEFT OUTER JOIN SCM_MST_COMPANY_SN D  ON A.SCM_SITE_ID = D.COMPANY_ID
+						JOIN GT_DMF0_MEASURE M ON A.MEASURE = M.I_MEASURE AND M.PLAN_RESULT = 'RESULT' AND M.CALC_YN = ''
+						WHERE	A.DIVISION_ID = p_division_id
+							AND A.YYYYMMDD <= d_Result_Date   -- 과거실적구간으로 추출
+							AND NVL(d_Result_Date, NULL) IS NOT NULL
+							AND A.YYYYMMDD >= v_cp_MIN_YYYYMMDD
+							AND C.LOOKUP_TYPE IS NULL
+							AND D.COMPANY_ID IS NULL
+						GROUP BY A.DIVISION_ID, A.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID, A.DOM_EXP
+							, A.FCST_TYPE, A.INCOTERMS, NVL(A.CURRENCY, NULL), M.O_MEASURE, A.PLANT_SITE_ID, A.YYYYMMDD, A.COMPANY_ID, B.ATTRIBUTE1
+							, A.CELL_PROD_SITE_ID			--[PJ2025-50188] 매출실적 CELL_PROD_SITE_ID 추가
+						-- ------
+						UNION ALL -- 실적은 SalesAmt_USD 가 없어서 생성해준다.
+						-- ------
+						SELECT A.DIVISION_ID, v_cp_VERSION_NO, v_cp_CUTOFF_TYPE, v_cp_CUTOFF_YYYYMMDD, A.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID
+							 , A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, NVL(A.CURRENCY, NULL) AS CURRENCY, 'SalesAmt_USD' AS MEASURE, A.PLANT_SITE_ID, A.YYYYMMDD
+							 , SUM(CASE	WHEN NVL(FP.EXCHANGE_PRICE,0) = 0 THEN 0
+										ELSE A.QTY/NVL(FP.EXCHANGE_PRICE,0)
+										END) AS QTY
+							 , A.COMPANY_ID, B.ATTRIBUTE1
+							 --, '' AS CELL_PROD_SITE --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+							 --,'-' AS CELL_PROD_SITE --[PJ2025-50017]LGES SCM DM 소형사업부 매출계획 동기화 개선 : CELL_PROD_SITE_ID 추가, 주요 테이블 변경
+							, A.CELL_PROD_SITE_ID			--[PJ2025-50188] 매출실적 CELL_PROD_SITE_ID 추가
+						FROM DM_PLN_SALES_PLAN_RESULT A
+						LEFT OUTER JOIN SCM_MST_SITE_ITEM B  ON B.DIVISION_ID = A.DIVISION_ID AND B.PROJECT_CODE = A.PROJECT_CODE AND B.SCM_SITE_ID = A.SCM_SITE_ID AND B.ITEM_ID = A.ITEM_ID
+						LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL C  ON A.ITEM_ID = C.SEGMENT1 AND A.DIVISION_ID = C.SEGMENT3 AND C.LOOKUP_TYPE = 'SALES_PLAN_ITEM_ID' -- 20190906 Sales Plan에서 기타매출 등록한 것 제외
+						LEFT OUTER JOIN SCM_MST_COMPANY_SN D  ON A.SCM_SITE_ID = D.COMPANY_ID
+						LEFT OUTER JOIN DM_PLN_SALES_REPORT_EXCHANGE_C FP
+								 ON A.DIVISION_ID = FP.DIVISION_ID AND SUBSTR(A.YYYYMMDD,1,6) || '01' = FP.YYYYMMDD AND FP.UNIT_CURRENCY = 'USD' AND FP.VERSION_NO = V_NEW_VERSION_NO
+						WHERE	A.MEASURE = 'SalesAmt_KRW'
+							AND A.CURRENCY <> 'USD'
+							AND A.DIVISION_ID = p_division_id
+							AND A.YYYYMMDD <= d_Result_Date   -- 과거실적구간으로 추출
+							AND NVL(d_Result_Date, NULL) IS NOT NULL
+							AND A.YYYYMMDD >= v_cp_MIN_YYYYMMDD
+							AND C.LOOKUP_TYPE IS NULL
+							AND D.COMPANY_ID IS NULL
+						GROUP BY A.DIVISION_ID, A.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID, A.DOM_EXP
+							, A.FCST_TYPE, A.INCOTERMS, NVL(A.CURRENCY, NULL),  A.PLANT_SITE_ID, A.YYYYMMDD, A.COMPANY_ID, B.ATTRIBUTE1
+							, A.CELL_PROD_SITE_ID			--[PJ2025-50188] 매출실적 CELL_PROD_SITE_ID 추가
+						-- ------
+						UNION ALL -- 실적은 SalesAmt_USD 가 없어서 생성해준다.	( LOC = USD )
+						-- ------
+						SELECT A.DIVISION_ID, v_cp_VERSION_NO, v_cp_CUTOFF_TYPE, v_cp_CUTOFF_YYYYMMDD, A.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID
+							 , A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, NVL(A.CURRENCY, NULL) AS CURRENCY, 'SalesAmt_USD' AS MEASURE, A.PLANT_SITE_ID, A.YYYYMMDD
+							 , SUM(A.QTY) AS QTY
+							 , A.COMPANY_ID, B.ATTRIBUTE1
+							 --, '' AS CELL_PROD_SITE --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+							 --,'-' AS CELL_PROD_SITE --[PJ2025-50017]LGES SCM DM 소형사업부 매출계획 동기화 개선 : CELL_PROD_SITE_ID 추가, 주요 테이블 변경
+							, A.CELL_PROD_SITE_ID			--[PJ2025-50188] 매출실적 CELL_PROD_SITE_ID 추가
+						FROM DM_PLN_SALES_PLAN_RESULT A
+						LEFT OUTER JOIN SCM_MST_SITE_ITEM B  ON B.DIVISION_ID = A.DIVISION_ID AND B.PROJECT_CODE = A.PROJECT_CODE AND B.SCM_SITE_ID = A.SCM_SITE_ID AND B.ITEM_ID = A.ITEM_ID
+						LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL C  ON A.ITEM_ID = C.SEGMENT1 AND A.DIVISION_ID = C.SEGMENT3 AND C.LOOKUP_TYPE = 'SALES_PLAN_ITEM_ID' -- 20190906 Sales Plan에서 기타매출 등록한 것 제외
+						LEFT OUTER JOIN SCM_MST_COMPANY_SN D  ON A.SCM_SITE_ID = D.COMPANY_ID
+						WHERE	A.MEASURE = 'SalesAmt_LOC'
+							AND A.CURRENCY = 'USD'
+							AND A.DIVISION_ID = p_division_id
+							AND A.YYYYMMDD <= d_Result_Date   -- 과거실적구간으로 추출
+							AND NVL(d_Result_Date, NULL) IS NOT NULL
+							AND A.YYYYMMDD >= v_cp_MIN_YYYYMMDD
+							AND C.LOOKUP_TYPE IS NULL
+							AND D.COMPANY_ID IS NULL
+						GROUP BY A.DIVISION_ID, A.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID, A.DOM_EXP
+							, A.FCST_TYPE, A.INCOTERMS, NVL(A.CURRENCY, NULL),  A.PLANT_SITE_ID, A.YYYYMMDD, A.COMPANY_ID, B.ATTRIBUTE1
+							, A.CELL_PROD_SITE_ID			--[PJ2025-50188] 매출실적 CELL_PROD_SITE_ID 추가
+						--Start [C20201014-000094] 82 사업부 비물동 구분코드 추가
+						-- ------
+						UNION ALL
+						-- ------
+						SELECT A.DIVISION_ID, v_cp_VERSION_NO, v_cp_CUTOFF_TYPE, v_cp_CUTOFF_YYYYMMDD, A.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID
+							 , A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, NVL(A.CURRENCY, NULL) AS CURRENCY, M.O_MEASURE AS MEASURE, A.PLANT_SITE_ID, A.YYYYMMDD
+							 , SUM(QTY) AS QTY
+							 , A.COMPANY_ID, B.ATTRIBUTE1
+							 --, '' AS CELL_PROD_SITE --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+							 --,'-' AS CELL_PROD_SITE --[PJ2025-50017]LGES SCM DM 소형사업부 매출계획 동기화 개선 : CELL_PROD_SITE_ID 추가, 주요 테이블 변경
+							, A.CELL_PROD_SITE_ID			--[PJ2025-50188] 매출실적 CELL_PROD_SITE_ID 추가
+						FROM DM_PLN_SALES_PLAN_RESULT A
+						LEFT OUTER JOIN SCM_MST_SITE_ITEM B  ON B.DIVISION_ID = A.DIVISION_ID AND B.PROJECT_CODE = A.PROJECT_CODE AND B.SCM_SITE_ID = A.SCM_SITE_ID AND B.ITEM_ID = A.ITEM_ID
+						JOIN SCM_ADM_LOOKUP_MASTER_DETAIL C  ON A.ITEM_ID = C.SEGMENT1 AND A.DIVISION_ID = C.SEGMENT3 AND C.LOOKUP_TYPE = 'SALES_PLAN_ITEM_ID'
+						LEFT OUTER JOIN SCM_MST_COMPANY_SN D  ON A.SCM_SITE_ID = D.COMPANY_ID
+						JOIN GT_DMF0_MEASURE M ON A.MEASURE = M.I_MEASURE AND M.PLAN_RESULT = 'RESULT' AND M.CALC_YN = ''
+						WHERE	A.DIVISION_ID = p_division_id
+							AND A.YYYYMMDD   <= d_Result_Date   -- 과거실적구간으로 추출
+							AND NVL(d_Result_Date, NULL) IS NOT NULL
+							AND A.YYYYMMDD	 >= v_cp_MIN_YYYYMMDD
+							AND D.COMPANY_ID IS NULL
+							AND A.DIVISION_ID = '82'
+							AND NVL(A.QTY,0) <> 0
+						GROUP BY A.DIVISION_ID, A.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID, A.DOM_EXP
+							, A.FCST_TYPE, A.INCOTERMS, NVL(A.CURRENCY, NULL), M.O_MEASURE, A.PLANT_SITE_ID, A.YYYYMMDD, A.COMPANY_ID, B.ATTRIBUTE1
+							, A.CELL_PROD_SITE_ID			--[PJ2025-50188] 매출실적 CELL_PROD_SITE_ID 추가
+						-- ------
+						UNION ALL -- 실적은 SalesAmt_USD 가 없어서 생성해준다.
+						-- ------
+						SELECT A.DIVISION_ID, v_cp_VERSION_NO, v_cp_CUTOFF_TYPE, v_cp_CUTOFF_YYYYMMDD, A.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID
+							 , A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, NVL(A.CURRENCY, NULL) AS CURRENCY, 'SalesAmt_USD' AS MEASURE, A.PLANT_SITE_ID, A.YYYYMMDD
+							 , SUM(CASE	WHEN NVL(FP.EXCHANGE_PRICE,0) = 0 THEN 0
+										ELSE A.QTY/NVL(FP.EXCHANGE_PRICE,0)
+										END) AS QTY
+							 , A.COMPANY_ID, B.ATTRIBUTE1
+							 --, '' AS CELL_PROD_SITE --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+							 --,'-' AS CELL_PROD_SITE --[PJ2025-50017]LGES SCM DM 소형사업부 매출계획 동기화 개선 : CELL_PROD_SITE_ID 추가, 주요 테이블 변경
+							, A.CELL_PROD_SITE_ID			--[PJ2025-50188] 매출실적 CELL_PROD_SITE_ID 추가
+						FROM DM_PLN_SALES_PLAN_RESULT A
+						LEFT OUTER JOIN SCM_MST_SITE_ITEM B  ON B.DIVISION_ID = A.DIVISION_ID AND B.PROJECT_CODE = A.PROJECT_CODE AND B.SCM_SITE_ID = A.SCM_SITE_ID AND B.ITEM_ID = A.ITEM_ID
+						JOIN SCM_ADM_LOOKUP_MASTER_DETAIL C  ON A.ITEM_ID = C.SEGMENT1 AND A.DIVISION_ID = C.SEGMENT3 AND C.LOOKUP_TYPE = 'SALES_PLAN_ITEM_ID'
+						LEFT OUTER JOIN SCM_MST_COMPANY_SN D  ON A.SCM_SITE_ID = D.COMPANY_ID
+						LEFT OUTER JOIN DM_PLN_SALES_REPORT_EXCHANGE_C FP
+								 ON A.DIVISION_ID = FP.DIVISION_ID AND SUBSTR(A.YYYYMMDD,1,6) || '01' = FP.YYYYMMDD AND FP.UNIT_CURRENCY = 'USD' AND FP.VERSION_NO = V_NEW_VERSION_NO
+						WHERE	A.MEASURE = 'SalesAmt_KRW'
+							AND A.CURRENCY <> 'USD'
+							AND A.DIVISION_ID = p_division_id
+							AND A.YYYYMMDD	 <= d_Result_Date
+							AND NVL(d_Result_Date, NULL) IS NOT NULL
+							AND A.YYYYMMDD	 >= v_cp_MIN_YYYYMMDD
+							AND D.COMPANY_ID IS NULL
+							AND A.DIVISION_ID = '82'
+							AND NVL(A.QTY,0) <> 0
+						GROUP BY A.DIVISION_ID, A.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID, A.DOM_EXP
+							, A.FCST_TYPE, A.INCOTERMS, NVL(A.CURRENCY, NULL),  A.PLANT_SITE_ID, A.YYYYMMDD, A.COMPANY_ID, B.ATTRIBUTE1
+							, A.CELL_PROD_SITE_ID			--[PJ2025-50188] 매출실적 CELL_PROD_SITE_ID 추가
+						-- ------
+						UNION ALL -- 실적은 SalesAmt_USD 가 없어서 생성해준다. ( LOC = USD )
+						-- ------
+						SELECT A.DIVISION_ID, v_cp_VERSION_NO, v_cp_CUTOFF_TYPE, v_cp_CUTOFF_YYYYMMDD, A.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID
+							 , A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, NVL(A.CURRENCY, NULL) AS CURRENCY, 'SalesAmt_USD' AS MEASURE, A.PLANT_SITE_ID, A.YYYYMMDD
+							 , SUM(A.QTY) AS QTY
+							 , A.COMPANY_ID, B.ATTRIBUTE1
+							 --, '' AS CELL_PROD_SITE --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+							 --,'-' AS CELL_PROD_SITE --[PJ2025-50017]LGES SCM DM 소형사업부 매출계획 동기화 개선 : CELL_PROD_SITE_ID 추가, 주요 테이블 변경
+							, A.CELL_PROD_SITE_ID			--[PJ2025-50188] 매출실적 CELL_PROD_SITE_ID 추가
+						FROM DM_PLN_SALES_PLAN_RESULT A
+						LEFT OUTER JOIN SCM_MST_SITE_ITEM B  ON B.DIVISION_ID = A.DIVISION_ID AND B.PROJECT_CODE = A.PROJECT_CODE AND B.SCM_SITE_ID = A.SCM_SITE_ID AND B.ITEM_ID = A.ITEM_ID
+						JOIN SCM_ADM_LOOKUP_MASTER_DETAIL C  ON A.ITEM_ID = C.SEGMENT1 AND A.DIVISION_ID = C.SEGMENT3 AND C.LOOKUP_TYPE = 'SALES_PLAN_ITEM_ID'
+						LEFT OUTER JOIN SCM_MST_COMPANY_SN D  ON A.SCM_SITE_ID = D.COMPANY_ID
+						LEFT OUTER JOIN DM_PLN_SALES_REPORT_EXCHANGE_C FP
+								 ON A.DIVISION_ID = FP.DIVISION_ID AND SUBSTR(A.YYYYMMDD,1,6) || '01' = FP.YYYYMMDD AND FP.UNIT_CURRENCY = 'USD' AND FP.VERSION_NO = V_NEW_VERSION_NO
+						WHERE	A.MEASURE = 'SalesAmt_LOC'
+							AND A.CURRENCY = 'USD'
+							AND A.DIVISION_ID = p_division_id
+							AND A.YYYYMMDD	 <= d_Result_Date
+							AND NVL(d_Result_Date, NULL) IS NOT NULL
+							AND A.YYYYMMDD	 >= v_cp_MIN_YYYYMMDD
+							--AND C.LOOKUP_TYPE IS NULL
+							AND D.COMPANY_ID IS NULL
+							AND A.DIVISION_ID = '82'
+							AND NVL(A.QTY,0) <> 0
+						GROUP BY A.DIVISION_ID, A.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID, A.DOM_EXP
+							, A.FCST_TYPE, A.INCOTERMS, NVL(A.CURRENCY, NULL),  A.PLANT_SITE_ID, A.YYYYMMDD, A.COMPANY_ID, B.ATTRIBUTE1
+							, A.CELL_PROD_SITE_ID;			--[PJ2025-50188] 매출실적 CELL_PROD_SITE_ID 추가
+						--End [C20201014-000094] 82 사업부 비물동 구분코드 추가
+
+						-- RTF_SCP 처리
+						IF p_division_id like '81%' THEN
+							INSERT INTO GT_DMF0_VERSION_COPY (DIVISION_ID, VERSION_NO,CUTOFF_TYPE,CUTOFF_YYYYMMDD,PROJECT_CODE,SCM_SITE_ID,ITEM_ID
+									  , DOM_EXP,FCST_TYPE,INCOTERMS,CURRENCY,MEASURE,PLANT_SITE_ID,YYYYMMDD,QTY, COMPANY_ID, SOLDTO_CUST_REPORT
+									  , CELL_PROD_SITE	)--[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+							SELECT A.DIVISION_ID, A.VERSION_NO, 'REPORT_SP_W' as Cutoff_Type, A.CUTOFF_YYYYMMDD, B.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID
+								 , A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, '' AS CURRENCY, M.O_MEASURE, A.PLANT_SITE_ID, A.YYYYMMDD
+								 , SUM(A.QTY) AS QTY
+								 , B.SALES_COMPANY AS COMPANY_ID
+								 , B.ATTRIBUTE1
+								 --, '' AS CELL_PROD_SITE --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+								 --, '-' AS CELL_PROD_SITE --[PJ2025-50017]LGES SCM DM 소형사업부 매출계획 동기화 개선 : CELL_PROD_SITE_ID 추가, 주요 테이블 변경
+								, A.CELL_PROD_SITE_ID			--[PJ2025-50188] 매출실적 CELL_PROD_SITE_ID 추가
+							FROM DM_PLN_MKT_FCST_RESULT_C A
+							JOIN SCM_MST_SITE_ITEM B  ON B.DIVISION_ID = A.DIVISION_ID AND B.PROJECT_CODE = A.PROJECT_CODE AND B.SCM_SITE_ID = A.SCM_SITE_ID AND B.ITEM_ID = A.ITEM_ID
+							LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL C  ON A.ITEM_ID = C.SEGMENT1 AND A.DIVISION_ID = C.SEGMENT3 AND C.LOOKUP_TYPE = 'SALES_PLAN_ITEM_ID' -- 20190906 Sales Plan에서 기타매출 등록한 것 제외
+							LEFT OUTER JOIN SCM_MST_COMPANY_SN D  ON A.SCM_SITE_ID = D.COMPANY_ID
+							JOIN SCM_MST_SITE E ON A.DIVISION_ID = E.DIVISION_ID AND A.SCM_SITE_ID = E.SCM_SITE_ID
+							JOIN GT_DMF0_MEASURE M ON A.MEASURE = M.I_MEASURE AND M.PLAN_RESULT = 'PLAN' AND M.CALC_YN = '' AND M.SRC_TABLE = 'DM_PLN_MKT_FCST_RESULT_C'
+							WHERE	A.VERSION_NO = 'MF_'  ||  SUBSTR(p_version_no,4,15)
+								AND A.DIVISION_ID = p_division_id
+								AND A.YYYYMMDD < d_Result_Date   -- 과거실적구간으로 추출
+								AND NVL(d_Result_Date, NULL) IS NOT NULL
+								AND A.YYYYMMDD >= v_cp_MIN_YYYYMMDD
+								AND C.LOOKUP_TYPE IS NULL
+								AND D.COMPANY_ID IS NULL
+							GROUP BY A.DIVISION_ID, A.VERSION_NO, A.CUTOFF_TYPE, A.CUTOFF_YYYYMMDD, B.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID, A.DOM_EXP
+								, A.FCST_TYPE, A.INCOTERMS, M.O_MEASURE, A.PLANT_SITE_ID, A.YYYYMMDD
+								, B.SALES_COMPANY
+								, B.ATTRIBUTE1
+								, A.CELL_PROD_SITE_ID;			--[PJ2025-50188] 매출실적 CELL_PROD_SITE_ID 추가
+						END IF;
+					END;
+
+				END;
+
+			END IF;
+
+			-- ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+			-- DIV 별로 키값에 맞춰서 묶어준다. ( YYYYMMDD 때문에 단순 MAX 처리로는 안되고, 키값전체를 이용해서 정리해줘야 한다. )
+			-- Scm_site_id 와 Project Code 를 뭉친다.
+			-- ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+			IF P_DIVISION_ID = '40' THEN
+
+				-- [PJ2024-50611] 소형 매출 프로세스 개선
+				IF (p_action_type IN ('CR') AND V_SP_BP = 'SP') THEN
+				/*
+					-- TODO:GTT:GT_DMF0_VERSION_COPY_RTF_ALLOC (구 RTF 로직 — 주석 보존)
+					INSERT INTO GT_DMF0_VERSION_COPY_RTF_ALLOC
+					SELECT DIVISION_ID, VERSION_NO, CUTOFF_TYPE, CUTOFF_YYYYMMDD, PROJECT_CODE, SCM_SITE_ID, ITEM_ID
+						 , DOM_EXP, FCST_TYPE, INCOTERMS, CURRENCY, MEASURE, PLANT_SITE_ID, YYYYMMDD, QTY
+						 , COMPANY_ID, SOLDTO_CUST_REPORT, DEPT_ID, ITEM_USE, END_CUSTOMER, CELL_PROD_SITE
+					FROM GT_DMF0_VERSION_COPY
+					WHERE DIVISION_ID = P_DIVISION_ID
+					AND   MEASURE IN ('RTF_SYS_RP','VMI_In_Plan','SalesAmt_KRW','SalesAmt_LOC','SalesAmt_USD');
+
+					-- TODO:GTT:GT_DMF0_VERSION_COPY_RTF_ALLOC (구 RTF 로직 — 주석 보존)
+					INSERT INTO GT_DMF0_VERSION_COPY_RTF_ALLOC
+					SELECT	 DISTINCT DIVISION_ID, VERSION_NO, CUTOFF_TYPE, CUTOFF_YYYYMMDD, PROJECT_CODE, SCM_SITE_ID, ITEM_ID
+							,DOM_EXP, FCST_TYPE, INCOTERMS, CURRENCY, MEASURE, PLANT_SITE_ID, YYYYMMDD, QTY, COMPANY_ID, SOLDTO_CUST_REPORT
+							,DEPT_ID,ITEM_USE, END_CUSTOMER, CELL_PROD_SITE
+					FROM GT_DMF0_VERSION_COPY_RTF_ALLOC;
+
+					DELETE GT_DMF0_VERSION_COPY
+					WHERE DIVISION_ID	= P_DIVISION_ID
+					AND   YYYYMMDD		> d_Result_Date
+					AND   MEASURE IN ('RTF_SYS_RP','VMI_In_Plan','SalesAmt_KRW','SalesAmt_LOC','SalesAmt_USD');
+
+					INSERT INTO GT_DMF0_VERSION_COPY
+					(
+						   DIVISION_ID, VERSION_NO, CUTOFF_TYPE, CUTOFF_YYYYMMDD, PROJECT_CODE, SCM_SITE_ID, ITEM_ID
+						 , DOM_EXP, FCST_TYPE, INCOTERMS, CURRENCY, MEASURE, PLANT_SITE_ID, YYYYMMDD, QTY
+						 , COMPANY_ID, SOLDTO_CUST_REPORT, DEPT_ID, ITEM_USE, END_CUSTOMER, CELL_PROD_SITE
+					)
+					SELECT A.DIVISION_ID, A.VERSION_NO,A.CUTOFF_TYPE,A.CUTOFF_YYYYMMDD,A.PROJECT_CODE,A.SCM_SITE_ID,A.ITEM_ID
+							,A.DOM_EXP,A.FCST_TYPE,A.INCOTERMS,A.CURRENCY,A.MEASURE
+							,B.PLANT_SITE_ID
+							,B.YYYYMMDD
+							,B.QTY, A.COMPANY_ID, A.SOLDTO_CUST_REPORT
+							,A.DEPT_ID,A.ITEM_USE, A.END_CUSTOMER
+							--, B.FROM_SITE_ID AS CELL_PROD_SITE
+							,B.CELL_PROD_SITE_ID AS CELL_PROD_SITE
+					FROM GT_DMF0_VERSION_COPY_RTF_ALLOC A
+					--INNER JOIN DM_PLN_RTF_ALLOCATION_C B
+					--[PJ2025-50017]LGES SCM DM 소형사업부 매출계획 동기화 개선 : CELL_PROD_SITE_ID 추가, 주요 테이블 변경
+					 INNER JOIN DM_PLN_SALES_PLAN_C B
+					ON	A.DIVISION_ID	= B.DIVISION_ID
+					AND A.PROJECT_CODE  = B.PROJECT_CODE
+					AND A.SCM_SITE_ID   = B.SCM_SITE_ID
+					AND A.ITEM_ID	    = B.ITEM_ID
+					AND A.DOM_EXP	    = B.DOM_EXP
+					AND A.FCST_TYPE     = B.FCST_TYPE
+					AND A.INCOTERMS     = B.INCOTERMS
+					AND A.MEASURE		= B.MEASURE
+					AND A.YYYYMMDD		= B.YYYYMMDD
+					WHERE A.DIVISION_ID = P_DIVISION_ID
+					AND   A.YYYYMMDD	> d_Result_Date
+					AND   B.MEASURE IN ('RTF_SYS_RP','VMI_In_Plan','SalesAmt_KRW','SalesAmt_LOC','SalesAmt_USD')
+					AND   B.VERSION_NO = p_version_no
+					AND   B.CUTOFF_TYPE	= v_version_type;
+					*/
+					--[PJ2024-50611] Sales Report 생성 시 Catcu_Up 수량 더해줌 START
+					MERGE INTO GT_DMF0_VERSION_COPY A
+							USING GT_DMF0_PLAN_C_CATCHUP B
+							ON   (	A.DIVISION_ID = B.DIVISION_ID
+								AND A.VERSION_NO = B.VERSION_NO
+								AND A.CUTOFF_TYPE= B.CUTOFF_TYPE
+								AND A.CUTOFF_YYYYMMDD= B.CUTOFF_YYYYMMDD
+								AND A.PROJECT_CODE = B.PROJECT_CODE
+								AND A.SCM_SITE_ID = B.SCM_SITE_ID
+								AND A.ITEM_ID = B.ITEM_ID
+								AND A.DOM_EXP = B.DOM_EXP
+								AND A.FCST_TYPE= B.FCST_TYPE
+								AND A.INCOTERMS = B.INCOTERMS
+								AND A.CURRENCY = B.CURRENCY
+								AND A.MEASURE = B.MEASURE
+								AND A.PLANT_SITE_ID = B.PLANT_SITE_ID
+								AND A.YYYYMMDD = B.YYYYMMDD
+								AND A.COMPANY_ID = B.COMPANY_ID
+								AND A.SOLDTO_CUST_REPORT = B.SOLDTO_CUST_REPORT
+								AND A.CELL_PROD_SITE = B.CELL_PROD_SITE
+								)
+							WHEN MATCHED THEN
+								UPDATE SET
+									A.QTY = A.QTY + B.QTY
+							WHEN NOT MATCHED THEN
+								INSERT
+								(
+								   DIVISION_ID, VERSION_NO, CUTOFF_TYPE, CUTOFF_YYYYMMDD, PROJECT_CODE, SCM_SITE_ID, ITEM_ID
+								 , DOM_EXP, FCST_TYPE, INCOTERMS, CURRENCY, MEASURE, PLANT_SITE_ID, YYYYMMDD, QTY
+								 , COMPANY_ID, SOLDTO_CUST_REPORT, DEPT_ID, ITEM_USE, END_CUSTOMER, CELL_PROD_SITE
+									)
+								VALUES
+								(
+									B.DIVISION_ID
+									,B.VERSION_NO
+									,B.CUTOFF_TYPE
+									,B.CUTOFF_YYYYMMDD
+									,B.PROJECT_CODE
+									,B.SCM_SITE_ID
+									,B.ITEM_ID
+									,B.DOM_EXP
+									,B.FCST_TYPE
+									,B.INCOTERMS
+									,B.CURRENCY
+									,B.MEASURE
+									,B.PLANT_SITE_ID
+									,B.YYYYMMDD
+									,B.QTY
+									,B.COMPANY_ID
+									,B.SOLDTO_CUST_REPORT
+									,'','',''
+									,B.CELL_PROD_SITE
+								);
+						--[PJ2024-50611] Sales Report 생성 시 Catcu_Up 수량 더해줌 END
+				END IF;
+
+				-- 월별로 하나의 날짜로 변환시킴
+				UPDATE GT_DMF0_VERSION_COPY
+				SET YYYYMMDD = SUBSTR(YYYYMMDD, 1, 6)  ||  '01';
+
+
+				-- VMI 의 경우 통화가 빠진 데이터가 있어서 여기서 업데이트 해준다.
+				MERGE INTO GT_DMF0_VERSION_COPY A
+				USING ( SELECT PROJECT_CODE,SCM_SITE_ID,ITEM_ID,DOM_EXP,FCST_TYPE,INCOTERMS,CURRENCY, COMPANY_ID, SOLDTO_CUST_REPORT, DEPT_ID, END_CUSTOMER
+						FROM GT_DMF0_VERSION_COPY
+						WHERE CURRENCY IS NOT NULL
+						GROUP BY PROJECT_CODE,SCM_SITE_ID,ITEM_ID,DOM_EXP,FCST_TYPE,INCOTERMS,CURRENCY, COMPANY_ID, SOLDTO_CUST_REPORT, DEPT_ID, END_CUSTOMER
+					) B ON ( A.PROJECT_CODE = B.PROJECT_CODE
+						AND A.SCM_SITE_ID = B.SCM_SITE_ID
+						AND A.ITEM_ID = B.ITEM_ID
+						AND A.DOM_EXP = B.DOM_EXP
+						AND A.FCST_TYPE = B.FCST_TYPE
+						AND A.INCOTERMS = B.INCOTERMS
+						AND A.COMPANY_ID = B.COMPANY_ID
+						AND NVL(A.SOLDTO_CUST_REPORT, NULL) = NVL(B.SOLDTO_CUST_REPORT, NULL)
+						AND A.DEPT_ID = B.DEPT_ID
+						AND NVL(A.END_CUSTOMER, NULL) = NVL(B.END_CUSTOMER, NULL) )
+				WHEN MATCHED THEN UPDATE SET A.CURRENCY = B.CURRENCY
+					WHERE A.CURRENCY IS NULL;
+
+				MERGE INTO GT_DMF0_VERSION_COPY A
+				USING ( SELECT DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, MAX(CURRENCY) AS CURRENCY, DOM_EXP, FCST_TYPE, INCOTERMS
+						FROM DM_PLN_CFM_SELLING_PRICE A
+						WHERE YYYYMMDD > d_Result_Date AND A.DIVISION_ID = P_DIVISION_ID
+						GROUP BY DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS
+					) B ON ( A.DIVISION_ID = B.DIVISION_ID
+						AND A.PROJECT_CODE = B.PROJECT_CODE
+						AND A.SCM_SITE_ID = B.SCM_SITE_ID
+						AND A.ITEM_ID = B.ITEM_ID
+						AND A.DOM_EXP = B.DOM_EXP
+						AND A.FCST_TYPE = B.FCST_TYPE
+						AND A.INCOTERMS = B.INCOTERMS )
+				WHEN MATCHED THEN UPDATE SET A.CURRENCY = B.CURRENCY
+					WHERE A.CURRENCY IS NULL;
+
+				INSERT INTO GT_DMF0_REPORT (CUTOFF_TYPE, CUTOFF_YYYYMMDD
+						  , DEPARTMENT_ID, DEPARTMENT_NAME, DEPT_ID, DEPT_NAME
+						  , CUST_REPORT, END_CUST_REPORT, PRODUCT_GROUP
+						  , PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS, MEASURE
+						  , PLANT_SITE_ID, YYYYMMDD, CURRENCY, QTY, COMPANY_ID, ATTRIBUTE1, SOLDTO_CUST_REPORT
+						  , APPLICATION, CUST_GROUP_DTL, COUNTRY
+						  , CELL_PROD_SITE	)--[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+				SELECT A.CUTOFF_TYPE, A.CUTOFF_YYYYMMDD
+						, D.UPPER_DEPT_ID AS DEPARTMENT_ID, E.SEGMENT2 AS DEPARTMENT_NAME
+						, D.DEPT_ID AS DEPT_ID, F.SEGMENT2 AS DEPT_NAME
+						, NVL(NULL/*SITE_ITEM.REPORT_GROUP 미존재(Oracle마이그레이션)→NULL*/, NULL)	AS CUST_REPORT    -- (DMS)판매처
+						, NVL(B.attribute2, NULL)	AS END_CUST_REPORT  -- (DMS)고객군
+						, NVL(NULL/*SITE_ITEM.REPORT_GROUP 미존재(Oracle마이그레이션)→NULL*/, NULL)	AS PRODUCT_GROUP
+						, B.PROJECT_CODE, A.SCM_SITE_ID
+						, A.ITEM_ID, A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, A.MEASURE
+						, A.PLANT_SITE_ID, A.YYYYMMDD, A.CURRENCY
+						--[C20210304-000196] 소형 부자재 및 전극 매출 수량 표기(biz_type is null 제외)
+						/*, CASE WHEN V.FORECAST_INFO_BIZ_TYPE IS NULL AND ( A.MEASURE LIKE '%RTF%' OR A.MEASURE LIKE '%MKT_FCST%' ) THEN 0
+								ELSE A.QTY END AS QTY*/
+						, A.QTY AS QTY
+						, NVL(A.COMPANY_ID, NULL) AS COMPANY_ID
+						, CASE WHEN NVL(NULL/*SITE_ITEM.REPORT_GROUP 미존재(Oracle마이그레이션)→NULL*/, NULL) IS NOT NULL THEN NVL(NULL/*SITE_ITEM.REPORT_GROUP 미존재(Oracle마이그레이션)→NULL*/, NULL) ELSE NVL(NULL/*SITE_ITEM.REPORT_GROUP 미존재(Oracle마이그레이션)→NULL*/, NULL) END	AS ATTRIBUTE1
+						, NVL(A.SOLDTO_CUST_REPORT, NULL)
+						, B.APPLICATION, B.CUST_GROUP_DTL
+						, G.COUNTRY
+						, A.CELL_PROD_SITE --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+				FROM GT_DMF0_VERSION_COPY A
+				JOIN SCM_MST_SITE_ITEM B ON A.DIVISION_ID = B.DIVISION_ID AND A.SCM_SITE_ID = B.SCM_SITE_ID AND A.PROJECT_CODE = B.PROJECT_CODE AND A.ITEM_ID = B.ITEM_ID
+				JOIN SCM_MST_SSO_USER_INFO C ON SUBSTR(B.OWNER, 1, CASE WHEN INSTR(B.OWNER, ',') > 0 THEN INSTR(B.OWNER, ',')-1 ELSE LENGTH(B.OWNER) END) = C.USER_ID
+				JOIN SCM_MST_SSO_DEPT_INFO D ON C.DEPT_ID = D.DEPT_ID
+				LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL E ON D.UPPER_DEPT_ID = E.SEGMENT1 AND E.LOOKUP_TYPE = 'MDF_DEPARTMENT' AND E.VALID_YN = 'Y'
+				LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL F ON D.DEPT_ID = F.SEGMENT1 AND F.LOOKUP_TYPE = 'DMF0044_DEPARTMENT_TEAM2' AND F.VALID_YN = 'Y'
+				JOIN SCM_MST_SITE G ON B.DIVISION_ID = G.DIVISION_ID AND B.SCM_SITE_ID = G.SCM_SITE_ID
+				LEFT OUTER JOIN GT_DMF0044_ITEM_SINGLE_V V ON A.ITEM_ID = V.ITEM_ID;
+
+				-- 1~3 담당 외에는 기타로 묶는다.
+				UPDATE GT_DMF0_REPORT A
+				SET A.DEPARTMENT_ID = v_ETC_DEPARTMENT_ID
+				WHERE NOT EXISTS ( SELECT 1 FROM SCM_ADM_LOOKUP_MASTER_DETAIL B
+					WHERE A.DEPARTMENT_ID = B.SEGMENT1 AND B.LOOKUP_TYPE = 'MDF_DEPARTMENT' AND B.SEGMENT3 = 'Y' AND B.VALID_YN = 'Y' );
+
+--SELECT * FROM GT_DMF0_REPORT WHERE MEASURE = 'MKT_FCST'
+				-- 인서트
+				INSERT INTO DM_PLN_SALES_PLAN_REPORT_C (
+					  DATA_TYPE, DIVISION_ID, VERSION_NO, CUTOFF_TYPE, CUTOFF_YYYYMMDD
+					, DEPARTMENT_ID, DEPARTMENT_NAME, DEPT_ID, DEPT_NAME
+					, CUST_REPORT, END_CUST_REPORT, PRODUCT_GROUP, PROJECT_CODE, SCM_SITE_ID
+					, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS, MEASURE
+					, PLANT_SITE_ID,YYYYMMDD,CURRENCY,QTY, COMPANY_ID
+					, CREATED_BY,CREATION_DATE,LAST_UPDATED_BY,LAST_UPDATE_DATE,ATTRIBUTE1
+					-- 2021.7.23
+					, SOLDTO_CUST_REPORT
+					, OWNER_NAME, CUST_GROUP_DTL, PRODUCT_DETAILS, FORECAST_INFO_SPEC, NICK_NAME
+					, FORECAST_INFO_CELL_MODEL, FORECAST_INFO_CELL_PACK_COUNT, FORECAST_INFO_BIZ_TYPE, COMPANY_NAME, APPLICATION
+					, APPLICATION_GR, COUNTRY_KR_NAME, ROUTE
+					, ATTRIBUTE3	-- CELL MODEL
+					, CELL_PROD_SITE	)--[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+				SELECT A.DATA_TYPE, P_DIVISION_ID AS DIVISION_ID, V_NEW_VERSION_NO AS VERSION_NO, A.CUTOFF_TYPE, A.CUTOFF_YYYYMMDD
+					 , A.DEPARTMENT_ID, A.DEPARTMENT_NAME, A.DEPT_ID, A.DEPT_NAME
+					 , A.CUST_REPORT, A.END_CUST_REPORT, A.PRODUCT_GROUP, A.PROJECT_CODE, A.SCM_SITE_ID
+					 , A.ITEM_ID, A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, A.MEASURE
+					 , A.PLANT_SITE_ID, A.YYYYMMDD, A.CURRENCY, A.QTY, A.COMPANY_ID
+					 , p_created_by AS CREATED_BY, SYSDATE AS CREATION_DATE, p_created_by AS LAST_UPDATED_BY, SYSDATE AS LAST_UPDATE_DATE, A.ATTRIBUTE1
+					 , B.ATTRIBUTE1 AS SOLDTO_CUST_REPORT
+					 , FN_GET_DM_MKT_OWNER_NAME (B.OWNER, ',', 'KO' ) AS OWNER_NAME
+					 , A.CUST_GROUP_DTL
+					 , CASE WHEN NVL(NULL/*SITE_ITEM.REPORT_GROUP 미존재(Oracle마이그레이션)→NULL*/, NULL) IS NOT NULL THEN NVL(NULL/*SITE_ITEM.REPORT_GROUP 미존재(Oracle마이그레이션)→NULL*/, NULL) ELSE NVL(NULL/*SITE_ITEM.REPORT_GROUP 미존재(Oracle마이그레이션)→NULL*/, NULL) END AS PRODUCT_DETAILS
+					 , C.FORECAST_INFO_SPEC, C.NICK_NAME
+					 , NULL/*SITE_ITEM.REPORT_GROUP 미존재(Oracle마이그레이션)→NULL*/ AS FORECAST_INFO_CELL_MODEL, C.FORECAST_INFO_CELL_PACK_COUNT, C.FORECAST_INFO_BIZ_TYPE
+					 , D.SEGMENT2, A.APPLICATION, NULL/*SITE_ITEM.REPORT_GROUP 미존재(Oracle마이그레이션)→NULL*/ AS APPLICATION_GR, F.COUNTRY_KR_NAME, B.ROUTE
+					 , B.ATTRIBUTE5 AS CELL_MODEL
+					 , A.CELL_PROD_SITE --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+				FROM (
+					SELECT '1' AS DATA_TYPE, P_DIVISION_ID AS DIVISION_ID, B.CUTOFF_TYPE, B.CUTOFF_YYYYMMDD
+							, A.DEPARTMENT_ID, A.DEPARTMENT_NAME, A.DEPT_ID, A.DEPT_NAME, A.CUST_REPORT
+							, A.END_CUST_REPORT, A.PRODUCT_GROUP
+							, FN_SCM_SPLIT(A.MIX_VAL, 1, '^') AS PROJECT_CODE
+							, FN_SCM_SPLIT(A.MIX_VAL, 2, '^') AS SCM_SITE_ID
+							, A.ITEM_ID, A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, B.MEASURE
+							, A.PLANT_SITE_ID, B.YYYYMMDD, A.CURRENCY, SUM(B.QTY) as QTY, A.COMPANY_ID
+							, B.ATTRIBUTE1
+							, A.APPLICATION, A.CUST_GROUP_DTL
+							, A.COUNTRY
+							, B.CELL_PROD_SITE --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+					FROM (
+						-- 병합처리를 위해 키 중 병합되지 않은 키만 분리 ( 하지만 SCM_SITE_ID-PROJECT_CODE-ITEM_ID 간의 관계는 유지되어야 함
+						--- 그냥 MAX로 조합할 경우 SCM_MST_SITE_ITEM 에 JOIN 이 안됨 )
+						SELECT A.DEPARTMENT_ID, A.DEPARTMENT_NAME, A.DEPT_ID, A.DEPT_NAME
+							, A.CUST_REPORT, A.END_CUST_REPORT, A.PRODUCT_GROUP, A.ITEM_ID, A.CURRENCY, A.COMPANY_ID, A.SOLDTO_CUST_REPORT
+							, MAX((NVL(A.PROJECT_CODE, NULL) || '^' || NVL(A.SCM_SITE_ID, NULL))) AS MIX_VAL
+							, MAX(A.DOM_EXP) AS DOM_EXP
+							, MAX(A.FCST_TYPE) AS FCST_TYPE, MAX(A.INCOTERMS) AS INCOTERMS, MAX(A.PLANT_SITE_ID) AS PLANT_SITE_ID
+							, A.APPLICATION, A.CUST_GROUP_DTL, A.COUNTRY
+						FROM GT_DMF0_REPORT A
+						LEFT OUTER JOIN SCM_MST_SITE B ON A.DIVISION_ID = B.DIVISION_ID AND A.SCM_SITE_ID = B.SCM_SITE_ID
+						LEFT OUTER JOIN SCM_MST_COUNTRY C ON B.COUNTRY = C.COUNTRY
+						GROUP BY A.DEPARTMENT_ID, A.DEPARTMENT_NAME, A.DEPT_ID, A.DEPT_NAME
+							, A.CUST_REPORT, A.END_CUST_REPORT, A.PRODUCT_GROUP, A.ITEM_ID, A.CURRENCY, A.COMPANY_ID, A.SOLDTO_CUST_REPORT
+							, A.APPLICATION, A.CUST_GROUP_DTL, A.COUNTRY
+						) A
+					JOIN GT_DMF0_REPORT B ON A.DEPARTMENT_ID = B.DEPARTMENT_ID
+							AND A.DEPARTMENT_NAME = B.DEPARTMENT_NAME
+							AND A.DEPT_ID = B.DEPT_ID
+							AND A.DEPT_NAME = B.DEPT_NAME
+							AND A.CUST_REPORT = B.CUST_REPORT
+							AND A.END_CUST_REPORT = B.END_CUST_REPORT
+							AND A.PRODUCT_GROUP = B.PRODUCT_GROUP
+							AND A.ITEM_ID = B.ITEM_ID
+							AND A.CURRENCY = B.CURRENCY
+							AND A.COMPANY_ID = B.COMPANY_ID
+							AND A.SOLDTO_CUST_REPORT = B.SOLDTO_CUST_REPORT
+							AND A.APPLICATION = B.APPLICATION
+							AND A.CUST_GROUP_DTL = B.CUST_GROUP_DTL
+							AND A.COUNTRY = B.COUNTRY
+					GROUP BY B.CUTOFF_TYPE, B.CUTOFF_YYYYMMDD
+							, A.DEPARTMENT_ID, A.DEPARTMENT_NAME, A.DEPT_ID, A.DEPT_NAME
+							, A.CUST_REPORT, A.END_CUST_REPORT, A.PRODUCT_GROUP
+							, A.ITEM_ID, A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, B.MEASURE
+							, A.PLANT_SITE_ID, B.YYYYMMDD, A.CURRENCY, A.COMPANY_ID, B.ATTRIBUTE1
+							, A.APPLICATION, A.CUST_GROUP_DTL
+							, A.MIX_VAL, A.COUNTRY, B.CELL_PROD_SITE --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+					) A
+					LEFT OUTER JOIN SCM_MST_SITE_ITEM B ON A.DIVISION_ID = B.DIVISION_ID AND A.PROJECT_CODE = B.PROJECT_CODE AND A.SCM_SITE_ID = B.SCM_SITE_ID AND A.ITEM_ID = B.ITEM_ID
+					LEFT OUTER JOIN GT_DMF0044_ITEM_SINGLE_V C ON A.ITEM_ID = C.ITEM_ID
+					LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL D ON A.COMPANY_ID = D.SEGMENT1 AND D.LOOKUP_TYPE = 'DM_COMPANY'
+					LEFT OUTER JOIN SCM_MST_SITE E ON A.DIVISION_ID = E.DIVISION_ID AND A.SCM_SITE_ID = E.SCM_SITE_ID
+					LEFT OUTER JOIN SCM_MST_COUNTRY F ON A.COUNTRY = F.COUNTRY;
+
+			ELSIF P_DIVISION_ID like '81%' THEN
+				IF V_SP_BP = 'SP' THEN
+					-- 자동차는 팀 없는 건은 전송하지 않음.
+					INSERT INTO GT_DMF0_REPORT (CUTOFF_TYPE, CUTOFF_YYYYMMDD
+							  , DEPARTMENT_ID, DEPARTMENT_NAME, DEPT_ID, DEPT_NAME
+							  , PROJECT_CODE, FCST_TYPE, PLANT_SITE_ID, ITEM_ID, SCM_SITE_ID
+							  , INCOTERMS, CURRENCY
+							  , MEASURE, YYYYMMDD, QTY
+							  , DOM_EXP, COMPANY_ID
+							  , CUST_REPORT, END_CUST_REPORT, PRODUCT_GROUP
+							  , CELL_PROD_SITE) --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+					SELECT A.CUTOFF_TYPE, A.CUTOFF_YYYYMMDD
+						 , D.UPPER_DEPT_ID AS DEPARTMENT_ID, NVL(E.SEGMENT2, NULL) AS DEPARTMENT_NAME
+						 , D.DEPT_ID AS DEPT_ID, NVL(F.SEGMENT2, NULL) AS DEPT_NAME
+						 , NVL(B.PROJECT_CODE, NULL), NVL(A.FCST_TYPE, NULL), NVL(A.PLANT_SITE_ID, NULL), NVL(A.ITEM_ID, NULL), NVL(A.SCM_SITE_ID, NULL)
+						 , NVL(A.INCOTERMS, NULL), NVL(A.CURRENCY, NULL)
+						 , A.MEASURE, A.YYYYMMDD, A.QTY
+						 , NVL(A.DOM_EXP, NULL), NVL(A.COMPANY_ID, NULL) AS COMPANY_ID
+						 , ''	AS CUST_REPORT    -- (DMS)판매처
+						 , ''	AS END_CUST_REPORT  --
+						 , ''	AS PRODUCT_GROUP
+						 , A.CELL_PROD_SITE --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+					FROM GT_DMF0_VERSION_COPY A
+					JOIN SCM_MST_SITE_ITEM B ON A.DIVISION_ID = B.DIVISION_ID AND A.SCM_SITE_ID = B.SCM_SITE_ID AND A.PROJECT_CODE = B.PROJECT_CODE AND A.ITEM_ID = B.ITEM_ID
+					JOIN SCM_MST_SITE C ON A.DIVISION_ID = C.DIVISION_ID AND A.SCM_SITE_ID = C.SCM_SITE_ID
+					JOIN SCM_MST_SSO_DEPT_INFO D ON C.DEPT_ID = D.DEPT_ID
+					JOIN SCM_ADM_LOOKUP_MASTER_DETAIL E ON D.UPPER_DEPT_ID = E.SEGMENT1 AND E.LOOKUP_TYPE = 'MDF_DEPARTMENT'  ||  p_division_id
+					JOIN SCM_ADM_LOOKUP_MASTER_DETAIL F ON D.DEPT_ID = F.SEGMENT1 AND F.LOOKUP_TYPE = 'DMF0044_DEPARTMENT_TEAM2'  ||  p_division_id
+					JOIN SCM_ADM_LOOKUP_MASTER_DETAIL G ON A.FCST_TYPE = G.SEGMENT1 AND G.LOOKUP_TYPE = 'SALES_TYPE_CODE' AND G.SEGMENT4 <> 'FREE';
+				ELSE
+					INSERT INTO GT_DMF0_REPORT (CUTOFF_TYPE, CUTOFF_YYYYMMDD
+							, DEPARTMENT_ID, DEPARTMENT_NAME, DEPT_ID, DEPT_NAME
+							, PROJECT_CODE, FCST_TYPE, PLANT_SITE_ID, ITEM_ID, SCM_SITE_ID
+							, INCOTERMS, CURRENCY
+							, MEASURE, YYYYMMDD, QTY
+							, DOM_EXP, COMPANY_ID
+							, CUST_REPORT, END_CUST_REPORT, PRODUCT_GROUP
+							, CELL_PROD_SITE) --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+					SELECT A.CUTOFF_TYPE, A.CUTOFF_YYYYMMDD
+							, D.UPPER_DEPT_ID AS DEPARTMENT_ID, NVL(E.SEGMENT2, NULL) AS DEPARTMENT_NAME
+							, D.DEPT_ID AS DEPT_ID, NVL(F.SEGMENT2, NULL) AS DEPT_NAME
+							, NVL(A.PROJECT_CODE, NULL), NVL(A.FCST_TYPE, NULL), NVL(A.PLANT_SITE_ID, NULL), NVL(A.ITEM_ID, NULL), NVL(A.SCM_SITE_ID, NULL)
+							, NVL(A.INCOTERMS, NULL), NVL(A.CURRENCY, NULL)
+							, A.MEASURE, A.YYYYMMDD, A.QTY
+							, NVL(A.DOM_EXP, NULL), NVL(A.COMPANY_ID, NULL) AS COMPANY_ID
+							, ''	AS CUST_REPORT    -- (DMS)판매처
+							, A.END_CUSTOMER	AS END_CUST_REPORT  --
+							, ''	AS PRODUCT_GROUP
+						    , A.CELL_PROD_SITE --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+					FROM GT_DMF0_VERSION_COPY A
+					JOIN SCM_MST_SSO_DEPT_INFO D ON A.DEPT_ID = D.DEPT_ID
+					JOIN SCM_ADM_LOOKUP_MASTER_DETAIL E ON D.UPPER_DEPT_ID = E.SEGMENT1 AND E.LOOKUP_TYPE = 'MDF_DEPARTMENT'  ||  p_division_id
+					JOIN SCM_ADM_LOOKUP_MASTER_DETAIL F ON D.DEPT_ID = F.SEGMENT1 AND F.LOOKUP_TYPE = 'DMF0044_DEPARTMENT_TEAM2'  ||  p_division_id
+					LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL G ON A.FCST_TYPE = G.SEGMENT1 AND G.LOOKUP_TYPE = 'SALES_TYPE_CODE' AND G.SEGMENT4 <> 'FREE';
+				END IF;
+--select * from GT_DMF0_MEASURE
+--select measure, count(*) from GT_DMF0_VERSION_COPY group by measure
+--select measure, count(*) from GT_DMF0_REPORT group by measure
+
+				INSERT INTO DM_PLN_SALES_PLAN_REPORT_C (
+					  DATA_TYPE, DIVISION_ID, VERSION_NO, CUTOFF_TYPE, CUTOFF_YYYYMMDD
+					, DEPARTMENT_ID, DEPARTMENT_NAME, DEPT_ID, DEPT_NAME
+					, CUST_REPORT, END_CUST_REPORT, PRODUCT_GROUP, PROJECT_CODE, SCM_SITE_ID
+					, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS, MEASURE
+					, PLANT_SITE_ID,YYYYMMDD,CURRENCY,QTY, COMPANY_ID
+					, CREATED_BY,CREATION_DATE,LAST_UPDATED_BY,LAST_UPDATE_DATE
+					, CELL_PROD_SITE) --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+				SELECT '1' AS DATA_TYPE, P_DIVISION_ID, V_NEW_VERSION_NO, B.CUTOFF_TYPE, B.CUTOFF_YYYYMMDD
+						, A.DEPARTMENT_ID, A.DEPARTMENT_NAME, A.DEPT_ID, A.DEPT_NAME
+						, B.CUST_REPORT, B.END_CUST_REPORT, B.PRODUCT_GROUP, A.PROJECT_CODE, A.SCM_SITE_ID
+						, A.ITEM_ID, A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, B.MEASURE
+						, A.PLANT_SITE_ID, SUBSTR(B.YYYYMMDD, 1, 6)  ||  '01' AS YYYYMMDD, A.CURRENCY, SUM(B.QTY) as QTY, A.COMPANY_ID
+						,'mdf_batch',SYSDATE,'mdf_batch',SYSDATE
+						, B.CELL_PROD_SITE --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+				FROM (
+					-- 병합처리를 위해 키 중 병합되지 않은 키만 분리
+					SELECT A.DEPARTMENT_ID, A.DEPARTMENT_NAME, A.DEPT_ID, A.DEPT_NAME
+						, A.PROJECT_CODE, A.FCST_TYPE, A.PLANT_SITE_ID, A.ITEM_ID, A.SCM_SITE_ID
+						, A.INCOTERMS, A.CURRENCY
+						, MAX(A.DOM_EXP) AS DOM_EXP, MAX(A.COMPANY_ID) AS COMPANY_ID
+					FROM GT_DMF0_REPORT A
+					GROUP BY A.DEPARTMENT_ID, A.DEPARTMENT_NAME, A.DEPT_ID, A.DEPT_NAME
+						, A.PROJECT_CODE, A.FCST_TYPE, A.PLANT_SITE_ID, A.ITEM_ID, A.SCM_SITE_ID
+						, A.INCOTERMS, A.CURRENCY
+					) A
+				JOIN GT_DMF0_REPORT B ON A.DEPARTMENT_ID = B.DEPARTMENT_ID
+						AND A.DEPARTMENT_NAME = B.DEPARTMENT_NAME
+						AND A.DEPT_ID = B.DEPT_ID
+						AND A.DEPT_NAME = B.DEPT_NAME
+						AND A.PROJECT_CODE = B.PROJECT_CODE
+						AND A.FCST_TYPE = B.FCST_TYPE
+						AND A.PLANT_SITE_ID = B.PLANT_SITE_ID
+						AND A.ITEM_ID = B.ITEM_ID
+						AND A.SCM_SITE_ID = B.SCM_SITE_ID
+						AND A.INCOTERMS = B.INCOTERMS
+						AND A.CURRENCY = B.CURRENCY
+				GROUP BY B.CUTOFF_TYPE, B.CUTOFF_YYYYMMDD
+						, A.DEPARTMENT_ID, A.DEPARTMENT_NAME, A.DEPT_ID, A.DEPT_NAME
+						, B.CUST_REPORT, B.END_CUST_REPORT, B.PRODUCT_GROUP, A.PROJECT_CODE, A.SCM_SITE_ID
+						, A.ITEM_ID, A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, B.MEASURE
+						, A.PLANT_SITE_ID, SUBSTR(B.YYYYMMDD, 1, 6), A.CURRENCY, A.COMPANY_ID, B.CELL_PROD_SITE; --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+
+			ELSIF P_DIVISION_ID = '82' THEN
+
+				IF V_SP_BP = 'SP' THEN
+					INSERT INTO GT_DMF0_REPORT (CUTOFF_TYPE, CUTOFF_YYYYMMDD
+							, DEPARTMENT_ID, DEPARTMENT_NAME, DEPT_ID, DEPT_NAME
+							, PROJECT_CODE, FCST_TYPE, PLANT_SITE_ID, ITEM_ID, SCM_SITE_ID
+							, INCOTERMS, CURRENCY
+							, MEASURE, YYYYMMDD, QTY
+							, DOM_EXP, COMPANY_ID
+							, CUST_REPORT, END_CUST_REPORT, PRODUCT_GROUP
+							, CELL_PROD_SITE) --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+					SELECT A.CUTOFF_TYPE, A.CUTOFF_YYYYMMDD
+							, D.UPPER_DEPT_ID AS DEPARTMENT_ID, NVL(E.SEGMENT2, NULL) AS DEPARTMENT_NAME
+							, D.DEPT_ID AS DEPT_ID, NVL(F.SEGMENT2, NULL) AS DEPT_NAME
+							, NVL(B.PROJECT_CODE, NULL), NVL(A.FCST_TYPE, NULL), NVL(A.PLANT_SITE_ID, NULL), NVL(A.ITEM_ID, NULL), NVL(A.SCM_SITE_ID, NULL)
+							, NVL(A.INCOTERMS, NULL), NVL(A.CURRENCY, NULL)
+							, A.MEASURE, A.YYYYMMDD, A.QTY
+							, NVL(A.DOM_EXP, NULL), NVL(A.COMPANY_ID, NULL) AS COMPANY_ID
+							, ''	AS CUST_REPORT    -- (DMS)판매처
+							, ''	AS END_CUST_REPORT  --
+							, ''	AS PRODUCT_GROUP
+							, A.CELL_PROD_SITE --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+					FROM GT_DMF0_VERSION_COPY A
+					JOIN SCM_MST_SITE_ITEM B ON A.DIVISION_ID = B.DIVISION_ID AND A.SCM_SITE_ID = B.SCM_SITE_ID AND A.PROJECT_CODE = B.PROJECT_CODE AND A.ITEM_ID = B.ITEM_ID
+					JOIN SCM_MST_SITE C ON A.DIVISION_ID = C.DIVISION_ID AND A.SCM_SITE_ID = C.SCM_SITE_ID
+					JOIN SCM_MST_SSO_DEPT_INFO D ON C.DEPT_ID = D.DEPT_ID
+					LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL E ON D.UPPER_DEPT_ID = E.SEGMENT1 AND E.LOOKUP_TYPE = 'MDF_DEPARTMENT_82'
+					LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL F ON D.DEPT_ID = F.SEGMENT1 AND F.LOOKUP_TYPE = 'DMF0044_DEPARTMENT_TEAM2_82'
+				    -- ------
+					UNION ALL --[C20201014-000094] 82 사업부 비물동 구분코드 추가
+					-- ------
+					SELECT A.CUTOFF_TYPE, A.CUTOFF_YYYYMMDD
+					        --[C20201014-000094] 82 사업부 비물동 구분코드 추가 (NVL(D.UPPER_DEPT_ID, NULL),  NVL(D.DEPT_ID, NULL))
+							, NVL(D.UPPER_DEPT_ID, NULL) AS DEPARTMENT_ID, NVL(E.SEGMENT2, NULL) AS DEPARTMENT_NAME
+							, NVL(D.DEPT_ID, NULL) AS DEPT_ID, NVL(F.SEGMENT2, NULL) AS DEPT_NAME
+							, NVL(B.PROJECT_CODE, NULL), NVL(A.FCST_TYPE, NULL), NVL(A.PLANT_SITE_ID, NULL), NVL(A.ITEM_ID, NULL), NVL(A.SCM_SITE_ID, NULL)
+							, NVL(A.INCOTERMS, NULL), NVL(A.CURRENCY, NULL)
+							, A.MEASURE, A.YYYYMMDD, A.QTY
+							, NVL(A.DOM_EXP, NULL), NVL(A.COMPANY_ID, NULL) AS COMPANY_ID
+							, ''	AS CUST_REPORT    -- (DMS)판매처
+							, ''	AS END_CUST_REPORT  --
+							, ''	AS PRODUCT_GROUP
+							, A.CELL_PROD_SITE --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+					FROM GT_DMF0_VERSION_COPY A
+					--[C20201014-000094] 82 사업부 비물동 구분코드 추가 (JOIN -> LEFT OUTER JOIN)
+					LEFT OUTER JOIN SCM_MST_SITE_ITEM B ON A.DIVISION_ID = B.DIVISION_ID AND A.SCM_SITE_ID = B.SCM_SITE_ID AND A.PROJECT_CODE = B.PROJECT_CODE AND A.ITEM_ID = B.ITEM_ID
+					LEFT OUTER JOIN SCM_MST_SITE C ON A.DIVISION_ID = C.DIVISION_ID AND A.SCM_SITE_ID = C.SCM_SITE_ID
+					LEFT OUTER JOIN SCM_MST_SSO_DEPT_INFO D ON C.DEPT_ID = D.DEPT_ID
+					LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL E ON D.UPPER_DEPT_ID = E.SEGMENT1 AND E.LOOKUP_TYPE = 'MDF_DEPARTMENT_82'
+					LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL F ON D.DEPT_ID = F.SEGMENT1 AND F.LOOKUP_TYPE = 'DMF0044_DEPARTMENT_TEAM2_82'
+					--[C20201014-000094] 82 사업부 비물동 구분코드 추가
+					JOIN SCM_ADM_LOOKUP_MASTER_DETAIL G  ON A.ITEM_ID = G.SEGMENT1 AND A.DIVISION_ID = G.SEGMENT3 AND G.LOOKUP_TYPE = 'SALES_PLAN_ITEM_ID'
+					WHERE A.DIVISION_ID = '82';
+				ELSE
+					INSERT INTO GT_DMF0_REPORT (CUTOFF_TYPE, CUTOFF_YYYYMMDD
+							, DEPARTMENT_ID, DEPARTMENT_NAME, DEPT_ID, DEPT_NAME
+							, PROJECT_CODE, FCST_TYPE, PLANT_SITE_ID, ITEM_ID, SCM_SITE_ID
+							, INCOTERMS, CURRENCY
+							, MEASURE, YYYYMMDD, QTY
+							, DOM_EXP, COMPANY_ID
+							, CUST_REPORT, END_CUST_REPORT, PRODUCT_GROUP
+							, CELL_PROD_SITE) --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+					SELECT A.CUTOFF_TYPE, A.CUTOFF_YYYYMMDD
+							, D.UPPER_DEPT_ID AS DEPARTMENT_ID, NVL(E.SEGMENT2, NULL) AS DEPARTMENT_NAME
+							, D.DEPT_ID AS DEPT_ID, NVL(F.SEGMENT2, NULL) AS DEPT_NAME
+							, A.ITEM_USE AS PROJECT_CODE, '' AS FCST_TYPE, '' AS PLANT_SITE_ID, '' AS ITEM_ID, '' AS SCM_SITE_ID
+							, '' AS INCOTERMS, NVL(A.CURRENCY, NULL)
+							, A.MEASURE, A.YYYYMMDD, A.QTY
+							, NVL(A.DOM_EXP, NULL), NVL(A.COMPANY_ID, NULL) AS COMPANY_ID
+							, ''	AS CUST_REPORT    -- (DMS)판매처
+							, ''	AS END_CUST_REPORT  --
+							, ''	AS PRODUCT_GROUP
+							, A.CELL_PROD_SITE --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+					FROM GT_DMF0_VERSION_COPY A
+					LEFT OUTER JOIN SCM_MST_SSO_DEPT_INFO D ON A.DEPT_ID = D.DEPT_ID
+					LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL E ON D.UPPER_DEPT_ID = E.SEGMENT1 AND E.LOOKUP_TYPE = 'MDF_DEPARTMENT_82'
+					LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL F ON D.DEPT_ID = F.SEGMENT1 AND F.LOOKUP_TYPE = 'DMF0044_DEPARTMENT_TEAM2_82';
+
+				END IF;
+
+				INSERT INTO DM_PLN_SALES_PLAN_REPORT_C (
+					  DATA_TYPE, DIVISION_ID, VERSION_NO, CUTOFF_TYPE, CUTOFF_YYYYMMDD
+					, DEPARTMENT_ID, DEPARTMENT_NAME, DEPT_ID, DEPT_NAME
+					, CUST_REPORT, END_CUST_REPORT, PRODUCT_GROUP, PROJECT_CODE, SCM_SITE_ID
+					, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS, MEASURE
+					, PLANT_SITE_ID,YYYYMMDD,CURRENCY,QTY, COMPANY_ID
+					, CREATED_BY,CREATION_DATE,LAST_UPDATED_BY,LAST_UPDATE_DATE
+					, CELL_PROD_SITE) --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+				SELECT '1' AS DATA_TYPE, P_DIVISION_ID, V_NEW_VERSION_NO, B.CUTOFF_TYPE, B.CUTOFF_YYYYMMDD
+						, A.DEPARTMENT_ID, A.DEPARTMENT_NAME, A.DEPT_ID, A.DEPT_NAME
+						, B.CUST_REPORT, B.END_CUST_REPORT, B.PRODUCT_GROUP, A.PROJECT_CODE, A.SCM_SITE_ID
+						, A.ITEM_ID, A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, B.MEASURE
+						, A.PLANT_SITE_ID, SUBSTR(B.YYYYMMDD, 1, 6)  ||  '01', A.CURRENCY, SUM(B.QTY) as QTY, A.COMPANY_ID
+						,p_created_by, SYSDATE, p_created_by, SYSDATE
+						, B.CELL_PROD_SITE --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+				FROM (
+					-- 병합처리를 위해 키 중 병합되지 않은 키만 분리
+					SELECT A.DEPARTMENT_ID, A.DEPARTMENT_NAME, A.DEPT_ID, A.DEPT_NAME
+						, A.PROJECT_CODE, A.INCOTERMS, A.CURRENCY, A.SCM_SITE_ID, A.ITEM_ID
+						, MAX(A.FCST_TYPE) AS FCST_TYPE, MAX(A.PLANT_SITE_ID) AS PLANT_SITE_ID
+						, MAX(A.DOM_EXP) AS DOM_EXP, MAX(A.COMPANY_ID) AS COMPANY_ID
+					FROM GT_DMF0_REPORT A
+					GROUP BY A.DEPARTMENT_ID, A.DEPARTMENT_NAME, A.DEPT_ID, A.DEPT_NAME
+						, A.PROJECT_CODE, A.ITEM_ID, A.SCM_SITE_ID
+						, A.INCOTERMS, A.CURRENCY
+					) A
+				JOIN GT_DMF0_REPORT B ON A.DEPARTMENT_ID = B.DEPARTMENT_ID
+						AND A.DEPARTMENT_NAME = B.DEPARTMENT_NAME
+						AND A.DEPT_ID = B.DEPT_ID
+						AND A.DEPT_NAME = B.DEPT_NAME
+						AND A.PROJECT_CODE = B.PROJECT_CODE
+						AND A.ITEM_ID = B.ITEM_ID
+						AND A.SCM_SITE_ID = B.SCM_SITE_ID
+						AND A.INCOTERMS = B.INCOTERMS
+						AND A.CURRENCY = B.CURRENCY
+				GROUP BY B.CUTOFF_TYPE, B.CUTOFF_YYYYMMDD
+						, A.DEPARTMENT_ID, A.DEPARTMENT_NAME, A.DEPT_ID, A.DEPT_NAME
+						, B.CUST_REPORT, B.END_CUST_REPORT, B.PRODUCT_GROUP, A.PROJECT_CODE, A.SCM_SITE_ID
+						, A.ITEM_ID, A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, B.MEASURE
+						, A.PLANT_SITE_ID, SUBSTR(B.YYYYMMDD, 1, 6), A.CURRENCY, A.COMPANY_ID, B.CELL_PROD_SITE; --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+
+
+--SELECT SQL%ROWCOUNT AS ROW_CNT
+--SELECT * FROM GT_DMF0_VERSION_COPY
+--SELECT * FROM GT_DMF0_REPORT
+
+			END IF;
+
+			-- --------------------------------------------------------------------------------------------------
+			--		PRICE 메저 생성
+			-- --------------------------------------------------------------------------------------------------
+DBMS_OUTPUT.PUT_LINE('B');
+				-- LOC 메저는 CP, CR 관계없이 추가한다. ( 실적구간때문에 Loc 메저를 새로 만들어야 하는데, 기존 계획구간에는 Loc 메저가 있을 수도 있어서 복사시에는 Loc 를 복사하지 않고, 여기에서 한꺼번에 새로 만들어준다.
+				-- RTF 가 있는 품목들에 대해서 Unit Price ( LOC ) 를 만들어준다. SalesAmt_LOC / Unit Price ( LOCAL )
+				INSERT INTO DM_PLN_SALES_PLAN_REPORT_C
+				(  DATA_TYPE, DIVISION_ID, VERSION_NO, CUTOFF_TYPE, CUTOFF_YYYYMMDD
+				 , DEPARTMENT_ID, DEPARTMENT_NAME, DEPT_ID, DEPT_NAME, END_CUST_REPORT
+				 , CUST_REPORT, PRODUCT_GROUP, PROJECT_CODE, SCM_SITE_ID, ITEM_ID
+				 , DOM_EXP, FCST_TYPE, INCOTERMS, MEASURE, PLANT_SITE_ID
+				 , YYYYMMDD, CURRENCY, QTY, CREATED_BY, CREATION_DATE
+				 , LAST_UPDATED_BY, LAST_UPDATE_DATE, ATTRIBUTE1, COMPANY_ID
+				 -- 2021.7.23
+				 , SOLDTO_CUST_REPORT, OWNER_NAME, CUST_GROUP_DTL, PRODUCT_DETAILS, FORECAST_INFO_SPEC
+				 , NICK_NAME, FORECAST_INFO_CELL_MODEL, FORECAST_INFO_CELL_PACK_COUNT, FORECAST_INFO_BIZ_TYPE, COMPANY_NAME
+				 , APPLICATION, APPLICATION_GR, COUNTRY_KR_NAME, ROUTE, ATTRIBUTE3
+				 , CELL_PROD_SITE) --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+				SELECT A.DATA_TYPE, A.DIVISION_ID ,A.VERSION_NO ,A.CUTOFF_TYPE ,A.CUTOFF_YYYYMMDD
+					 , A.DEPARTMENT_ID, A.DEPARTMENT_NAME, A.DEPT_ID, A.DEPT_NAME, A.END_CUST_REPORT
+					 , A.CUST_REPORT, A.PRODUCT_GROUP, A.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID
+					 , MAX(A.DOM_EXP) AS DOM_EXP, MAX(A.FCST_TYPE) AS FCST_TYPE, MAX(A.INCOTERMS) AS INCOTERMS, 'LOC' AS MEASURE, MAX(A.PLANT_SITE_ID) AS PLANT_SITE_ID
+					 , A.YYYYMM  || '01' AS YYYYMMDD, A.CURRENCY
+					 , CASE WHEN SUM(A.Qty) <> 0 THEN ROUND(SUM(B.Qty) / SUM(A.Qty), 3)
+							ELSE 0 END AS Qty
+					 , p_created_by, SYSDATE, p_created_by, SYSDATE, MAX(A.ATTRIBUTE1) AS ATTRIBUTE1
+					 , NVL(A.COMPANY_ID, NULL) AS COMPANY_ID
+					 -- 2021.7.23
+					 , MAX(A.SOLDTO_CUST_REPORT) AS SOLDTO_CUST_REPORT, MAX(A.OWNER_NAME) AS OWNER_NAME, MAX(A.CUST_GROUP_DTL) AS CUST_GROUP_DTL, MAX(A.PRODUCT_DETAILS) AS PRODUCT_DETAILS
+					 , MAX(A.FORECAST_INFO_SPEC) AS FORECAST_INFO_SPEC, MAX(A.NICK_NAME) AS NICK_NAME, MAX(A.FORECAST_INFO_CELL_MODEL) AS FORECAST_INFO_CELL_MODEL, MAX(A.FORECAST_INFO_CELL_PACK_COUNT) AS FORECAST_INFO_CELL_PACK_COUNT
+					 , MAX(A.FORECAST_INFO_BIZ_TYPE) AS FORECAST_INFO_BIZ_TYPE, MAX(A.COMPANY_NAME) AS COMPANY_NAME, MAX(A.APPLICATION) AS APPLICATION, MAX(A.APPLICATION_GR) AS APPLICATION_GR, A.COUNTRY_KR_NAME
+					 , MAX(A.ROUTE) AS ROUTE, MAX(A.ATTRIBUTE3) AS CELL_MODEL
+					 , A.CELL_PROD_SITE --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+				FROM (
+					SELECT DATA_TYPE, DIVISION_ID, VERSION_NO, CUTOFF_TYPE, CUTOFF_YYYYMMDD, DEPARTMENT_ID, DEPARTMENT_NAME
+						 , DEPT_ID, DEPT_NAME, END_CUST_REPORT, CUST_REPORT, PRODUCT_GROUP, SCM_SITE_ID, ITEM_ID
+						 , DOM_EXP, FCST_TYPE, INCOTERMS, MEASURE, PLANT_SITE_ID, SUBSTR(YYYYMMDD, 1, 6) AS YYYYMM, CURRENCY, SUM(QTY) AS QTY
+						 , ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4
+						 , ATTRIBUTE5, ATTRIBUTE6, ATTRIBUTE7, ATTRIBUTE8, ATTRIBUTE9, ATTRIBUTE10, COMPANY_ID, PROJECT_CODE
+						 , SOLDTO_CUST_REPORT
+						 , OWNER_NAME, CUST_GROUP_DTL, PRODUCT_DETAILS, FORECAST_INFO_SPEC, NICK_NAME
+						 , FORECAST_INFO_CELL_MODEL, FORECAST_INFO_CELL_PACK_COUNT, FORECAST_INFO_BIZ_TYPE, COMPANY_NAME, APPLICATION
+						 , APPLICATION_GR, COUNTRY_KR_NAME, ROUTE, CELL_PROD_SITE --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+					FROM DM_PLN_SALES_PLAN_REPORT_C A
+					JOIN GT_DMF0_MEASURE M ON A.MEASURE = M.I_MEASURE AND M.PLAN_RESULT = 'LOC' AND M.QTY_AMT = 'QTY'
+					WHERE DIVISION_ID = P_DIVISION_ID
+						--AND MEASURE IN ( 'RTF', 'Business_Plan')
+						AND VERSION_NO = V_NEW_VERSION_NO
+					GROUP BY  DATA_TYPE, DIVISION_ID, VERSION_NO, CUTOFF_TYPE, CUTOFF_YYYYMMDD, DEPARTMENT_ID, DEPARTMENT_NAME
+						, DEPT_ID, DEPT_NAME, END_CUST_REPORT, CUST_REPORT, PRODUCT_GROUP, SCM_SITE_ID, ITEM_ID
+						, DOM_EXP, FCST_TYPE, INCOTERMS, MEASURE, PLANT_SITE_ID, SUBSTR(YYYYMMDD, 1, 6), CURRENCY
+						, ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4
+						, ATTRIBUTE5, ATTRIBUTE6, ATTRIBUTE7, ATTRIBUTE8, ATTRIBUTE9, ATTRIBUTE10, COMPANY_ID, PROJECT_CODE
+						, SOLDTO_CUST_REPORT
+						, OWNER_NAME, CUST_GROUP_DTL, PRODUCT_DETAILS, FORECAST_INFO_SPEC, NICK_NAME
+						, FORECAST_INFO_CELL_MODEL, FORECAST_INFO_CELL_PACK_COUNT, FORECAST_INFO_BIZ_TYPE, COMPANY_NAME, APPLICATION
+						, APPLICATION_GR, COUNTRY_KR_NAME, ROUTE, A.CELL_PROD_SITE --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+						) A
+				JOIN (
+					SELECT DATA_TYPE, DIVISION_ID, VERSION_NO, CUTOFF_TYPE, CUTOFF_YYYYMMDD, DEPARTMENT_ID, DEPARTMENT_NAME
+						, DEPT_ID, DEPT_NAME, END_CUST_REPORT, CUST_REPORT, PRODUCT_GROUP, SCM_SITE_ID, ITEM_ID
+						, DOM_EXP, FCST_TYPE, INCOTERMS, MEASURE, PLANT_SITE_ID, SUBSTR(YYYYMMDD, 1, 6) AS YYYYMM, CURRENCY, SUM(QTY) AS QTY
+						, ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4
+						, ATTRIBUTE5, ATTRIBUTE6, ATTRIBUTE7, ATTRIBUTE8, ATTRIBUTE9, ATTRIBUTE10, COMPANY_ID, PROJECT_CODE
+						, SOLDTO_CUST_REPORT
+						, OWNER_NAME, CUST_GROUP_DTL, PRODUCT_DETAILS, FORECAST_INFO_SPEC, NICK_NAME
+						, FORECAST_INFO_CELL_MODEL, FORECAST_INFO_CELL_PACK_COUNT, FORECAST_INFO_BIZ_TYPE, COMPANY_NAME, APPLICATION
+						, APPLICATION_GR, COUNTRY_KR_NAME, ROUTE, CELL_PROD_SITE --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+					FROM DM_PLN_SALES_PLAN_REPORT_C A
+					JOIN GT_DMF0_MEASURE M ON A.MEASURE = M.I_MEASURE AND M.PLAN_RESULT = 'LOC' AND M.QTY_AMT = 'AMT'
+					WHERE DIVISION_ID = P_DIVISION_ID
+						--AND MEASURE = 'SalesAmt_LOC'
+						AND VERSION_NO = V_NEW_VERSION_NO
+					GROUP BY DATA_TYPE, DIVISION_ID, VERSION_NO, CUTOFF_TYPE, CUTOFF_YYYYMMDD, DEPARTMENT_ID, DEPARTMENT_NAME
+						, DEPT_ID, DEPT_NAME, END_CUST_REPORT, CUST_REPORT, PRODUCT_GROUP, SCM_SITE_ID, ITEM_ID
+						, DOM_EXP, FCST_TYPE, INCOTERMS, MEASURE, PLANT_SITE_ID, SUBSTR(YYYYMMDD, 1, 6), CURRENCY
+						, ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4
+						, ATTRIBUTE5, ATTRIBUTE6, ATTRIBUTE7, ATTRIBUTE8, ATTRIBUTE9, ATTRIBUTE10, COMPANY_ID, PROJECT_CODE
+						, SOLDTO_CUST_REPORT
+						, OWNER_NAME, CUST_GROUP_DTL, PRODUCT_DETAILS, FORECAST_INFO_SPEC, NICK_NAME
+						, FORECAST_INFO_CELL_MODEL, FORECAST_INFO_CELL_PACK_COUNT, FORECAST_INFO_BIZ_TYPE, COMPANY_NAME, APPLICATION
+						, APPLICATION_GR, COUNTRY_KR_NAME, ROUTE, CELL_PROD_SITE --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+						) B ON A.PROJECT_CODE = B.PROJECT_CODE AND A.DIVISION_ID = B.DIVISION_ID AND A.SCM_SITE_ID = B.SCM_SITE_ID AND A.ITEM_ID = B.ITEM_ID
+										AND A.YYYYMM = B.YYYYMM AND A.COMPANY_ID = B.COMPANY_ID AND A.CURRENCY = B.CURRENCY AND A.INCOTERMS = B.INCOTERMS
+										AND A.COUNTRY_KR_NAME = B.COUNTRY_KR_NAME
+										AND A.CELL_PROD_SITE  = B.CELL_PROD_SITE			--[PJ2024-50611] 소형 매출 프로세스 개선
+				GROUP BY   A.DATA_TYPE, A.DIVISION_ID,A.VERSION_NO,A.CUTOFF_TYPE,A.CUTOFF_YYYYMMDD,A.DEPARTMENT_ID,A.DEPARTMENT_NAME,A.DEPT_ID,A.DEPT_NAME,A.END_CUST_REPORT,A.CUST_REPORT,A.PRODUCT_GROUP
+							,A.PROJECT_CODE,A.SCM_SITE_ID,A.ITEM_ID,A.MEASURE,A.YYYYMM, A.CURRENCY, NVL(A.COMPANY_ID, NULL), A.COUNTRY_KR_NAME, A.CELL_PROD_SITE; --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+
+DBMS_OUTPUT.PUT_LINE('C');
+
+			-- 자동차 : KRW, USD 메저 생성
+			IF ( P_DIVISION_ID LIKE '81%' ) THEN
+					-- KRW
+				INSERT INTO DM_PLN_SALES_PLAN_REPORT_C
+					 ( DATA_TYPE, DIVISION_ID, VERSION_NO, CUTOFF_TYPE, CUTOFF_YYYYMMDD
+					 , DEPARTMENT_ID, DEPARTMENT_NAME, DEPT_ID, DEPT_NAME, END_CUST_REPORT
+					 , CUST_REPORT, PRODUCT_GROUP, PROJECT_CODE, SCM_SITE_ID, ITEM_ID
+					 , DOM_EXP, FCST_TYPE, INCOTERMS, MEASURE, PLANT_SITE_ID
+					 , YYYYMMDD, CURRENCY, QTY, CREATED_BY, CREATION_DATE
+					 , LAST_UPDATED_BY, LAST_UPDATE_DATE, ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3
+					 , ATTRIBUTE4, ATTRIBUTE5, ATTRIBUTE6, ATTRIBUTE7, ATTRIBUTE8
+					 , ATTRIBUTE9, ATTRIBUTE10, COMPANY_ID
+					 , CELL_PROD_SITE )--[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+				SELECT A.DATA_TYPE, A.DIVISION_ID, A.VERSION_NO, A.CUTOFF_TYPE, A.CUTOFF_YYYYMMDD
+					 , A.DEPARTMENT_ID, A.DEPARTMENT_NAME, A.DEPT_ID, A.DEPT_NAME, A.END_CUST_REPORT
+					 , A.CUST_REPORT, A.PRODUCT_GROUP, A.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID
+					 , A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, 'KRW' AS MEASURE, A.PLANT_SITE_ID
+					 , A.YYYYMMDD, A.CURRENCY
+					 , A.QTY * EX.EXCHANGE_PRICE
+					 , p_created_by, SYSDATE, p_created_by, SYSDATE
+					 , A.ATTRIBUTE1, A.ATTRIBUTE2, A.ATTRIBUTE3, A.ATTRIBUTE4, A.ATTRIBUTE5
+					 , A.ATTRIBUTE6, A.ATTRIBUTE7, A.ATTRIBUTE8, A.ATTRIBUTE9, A.ATTRIBUTE10, A.COMPANY_ID
+					 , A.CELL_PROD_SITE --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+				FROM (
+					SELECT DATA_TYPE, DIVISION_ID, VERSION_NO, CUTOFF_TYPE, CUTOFF_YYYYMMDD
+						 , DEPARTMENT_ID, DEPARTMENT_NAME, DEPT_ID, DEPT_NAME, END_CUST_REPORT
+						 , CUST_REPORT, PRODUCT_GROUP, PROJECT_CODE, SCM_SITE_ID, ITEM_ID
+						 , DOM_EXP, FCST_TYPE, INCOTERMS, MEASURE, PLANT_SITE_ID
+						 , YYYYMMDD, CURRENCY, QTY
+						 , ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5
+						 , ATTRIBUTE6, ATTRIBUTE7, ATTRIBUTE8, ATTRIBUTE9, ATTRIBUTE10, COMPANY_ID
+						 , CELL_PROD_SITE --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+					FROM DM_PLN_SALES_PLAN_REPORT_C A
+					WHERE DIVISION_ID = P_DIVISION_ID
+						AND MEASURE = 'LOC'
+						AND VERSION_NO = V_NEW_VERSION_NO
+						) A
+				JOIN DM_PLN_SALES_REPORT_EXCHANGE_C EX ON A.DIVISION_ID = EX.DIVISION_ID AND A.CUTOFF_TYPE = EX.CUTOFF_TYPE
+									AND A.CUTOFF_YYYYMMDD = EX.CUTOFF_YYYYMMDD AND EX.CURRENCY = 'KRW' AND A.CURRENCY = EX.UNIT_CURRENCY
+									AND A.YYYYMMDD = EX.YYYYMMDD AND EX.VERSION_NO = V_NEW_VERSION_NO;
+
+DBMS_OUTPUT.PUT_LINE('D');
+					-- USD
+				INSERT INTO DM_PLN_SALES_PLAN_REPORT_C
+					 ( DATA_TYPE, DIVISION_ID, VERSION_NO, CUTOFF_TYPE, CUTOFF_YYYYMMDD
+					 , DEPARTMENT_ID, DEPARTMENT_NAME, DEPT_ID, DEPT_NAME, END_CUST_REPORT
+					 , CUST_REPORT, PRODUCT_GROUP, PROJECT_CODE, SCM_SITE_ID, ITEM_ID
+					 , DOM_EXP, FCST_TYPE, INCOTERMS, MEASURE, PLANT_SITE_ID
+					 , YYYYMMDD, CURRENCY, QTY, CREATED_BY, CREATION_DATE
+					 , LAST_UPDATED_BY, LAST_UPDATE_DATE, ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3
+					 , ATTRIBUTE4, ATTRIBUTE5, ATTRIBUTE6, ATTRIBUTE7, ATTRIBUTE8
+					 , ATTRIBUTE9, ATTRIBUTE10, COMPANY_ID
+					 , CELL_PROD_SITE )--[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+				SELECT A.DATA_TYPE, A.DIVISION_ID, A.VERSION_NO, A.CUTOFF_TYPE, A.CUTOFF_YYYYMMDD
+					, A.DEPARTMENT_ID, A.DEPARTMENT_NAME, A.DEPT_ID, A.DEPT_NAME, A.END_CUST_REPORT
+					, A.CUST_REPORT, A.PRODUCT_GROUP, A.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID
+					, A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, 'USD' AS MEASURE, A.PLANT_SITE_ID
+					, A.YYYYMMDD, A.CURRENCY
+					, CASE WHEN NVL(EX.EXCHANGE_PRICE, 0) <> 0 THEN ROUND( A.QTY / EX.EXCHANGE_PRICE, 3)
+							ELSE 0 END AS QTY
+					, p_created_by, SYSDATE, p_created_by, SYSDATE
+					, A.ATTRIBUTE1, A.ATTRIBUTE2, A.ATTRIBUTE3, A.ATTRIBUTE4, A.ATTRIBUTE5
+					, A.ATTRIBUTE6, A.ATTRIBUTE7, A.ATTRIBUTE8, A.ATTRIBUTE9, A.ATTRIBUTE10, A.COMPANY_ID
+					, A.CELL_PROD_SITE --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+				FROM (
+					SELECT DATA_TYPE, DIVISION_ID, VERSION_NO, CUTOFF_TYPE, CUTOFF_YYYYMMDD
+						 , DEPARTMENT_ID, DEPARTMENT_NAME, DEPT_ID, DEPT_NAME, END_CUST_REPORT
+						 , CUST_REPORT, PRODUCT_GROUP, PROJECT_CODE, SCM_SITE_ID, ITEM_ID
+						 , DOM_EXP, FCST_TYPE, INCOTERMS, MEASURE, PLANT_SITE_ID
+						 , YYYYMMDD, CURRENCY, QTY
+						 , ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5
+						 , ATTRIBUTE6, ATTRIBUTE7, ATTRIBUTE8, ATTRIBUTE9, ATTRIBUTE10, COMPANY_ID
+						 , CELL_PROD_SITE --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+					FROM DM_PLN_SALES_PLAN_REPORT_C A
+					WHERE DIVISION_ID = P_DIVISION_ID
+						AND MEASURE = 'KRW'
+						AND VERSION_NO = V_NEW_VERSION_NO
+						) A
+				JOIN DM_PLN_SALES_REPORT_EXCHANGE_C EX ON A.DIVISION_ID = EX.DIVISION_ID AND A.CUTOFF_TYPE = EX.CUTOFF_TYPE
+									AND A.CUTOFF_YYYYMMDD = EX.CUTOFF_YYYYMMDD AND EX.CURRENCY = 'KRW' AND EX.UNIT_CURRENCY = 'USD'
+									AND A.YYYYMMDD = EX.YYYYMMDD AND EX.VERSION_NO = V_NEW_VERSION_NO;
+
+
+			END IF;
+
+DBMS_OUTPUT.PUT_LINE('E');
+			-- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+			-- 사업부별 메저 생성 ( 사업부별로 특성이 있는 메저들은 수량메저들이고, 40은 없음
+			-- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+			IF ( P_DIVISION_ID LIKE '81%' ) THEN
+				IF ( p_action_type = 'CP' ) THEN
+					DELETE FROM DM_PLN_SALES_PLAN_REPORT_C
+					WHERE DIVISION_ID = P_DIVISION_ID AND VERSION_NO = V_NEW_VERSION_NO AND MEASURE IN ( 'RTF_SYS_RP_CAR', 'RTF_SYS_RP_CELL');
+				END IF;
+
+				INSERT INTO DM_PLN_SALES_PLAN_REPORT_C
+					 ( DATA_TYPE, DIVISION_ID, VERSION_NO, CUTOFF_TYPE, CUTOFF_YYYYMMDD
+					 , DEPARTMENT_ID, DEPARTMENT_NAME, DEPT_ID, DEPT_NAME, END_CUST_REPORT
+					 , CUST_REPORT, PRODUCT_GROUP, PROJECT_CODE, SCM_SITE_ID, ITEM_ID
+					 , DOM_EXP, FCST_TYPE, INCOTERMS, MEASURE, PLANT_SITE_ID
+					 , YYYYMMDD, CURRENCY, QTY, CREATED_BY, CREATION_DATE
+					 , LAST_UPDATED_BY, LAST_UPDATE_DATE, ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3
+					 , ATTRIBUTE4, ATTRIBUTE5, ATTRIBUTE6, ATTRIBUTE7, ATTRIBUTE8
+					 , ATTRIBUTE9, ATTRIBUTE10, COMPANY_ID
+					 , CELL_PROD_SITE ) --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+				SELECT A.DATA_TYPE, A.DIVISION_ID, A.VERSION_NO, A.CUTOFF_TYPE, A.CUTOFF_YYYYMMDD
+					 , A.DEPARTMENT_ID, A.DEPARTMENT_NAME, A.DEPT_ID, A.DEPT_NAME, A.END_CUST_REPORT
+					 , A.CUST_REPORT, A.PRODUCT_GROUP, C.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID
+					 , A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, M.O_MEASURE, A.PLANT_SITE_ID
+					 , A.YYYYMMDD, A.CURRENCY
+					 , CASE WHEN M.O_MEASURE IN ('RTF_SYS_RP_CAR', 'RTF_CAR') THEN
+								CASE WHEN INSTR(B.ITEM_CLASS_NAME, 'Cell') > 0 AND C.CELL_PER_CAR > 0 THEN A.QTY / C.CELL_PER_CAR
+									WHEN  INSTR(B.ITEM_CLASS_NAME, 'Module') > 0  AND C.CELL_PER_CAR > 0 AND C.CELL_PER_MODULE > 0 THEN A.QTY/ ( C.CELL_PER_CAR/ C.CELL_PER_MODULE )
+									WHEN  INSTR(B.ITEM_CLASS_NAME, 'Pack') > 0  THEN A.QTY
+									ELSE 0
+								END
+							WHEN M.O_MEASURE IN ('RTF_SYS_RP_CELL','RTF_CELL') THEN
+								CASE WHEN INSTR(B.ITEM_CLASS_NAME, 'Cell') > 0 AND C.CELL_PER_CAR > 0 THEN A.QTY
+									WHEN ( INSTR(B.ITEM_CLASS_NAME, 'Module') > 0 OR INSTR(B.ITEM_CLASS_NAME, 'Pack') > 0 ) AND C.CELL_PER_MODULE > 0 THEN A.QTY * C.CELL_PER_MODULE
+									ELSE 0
+								END
+						END AS QTY
+					 , p_created_by AS CREATED_BY, SYSDATE AS CREATION_DATE, p_created_by AS LAST_UPDATED_BY, SYSDATE AS LAST_UPDATE_DATE
+					 , A.ATTRIBUTE1, A.ATTRIBUTE2, A.ATTRIBUTE3
+					 , A.ATTRIBUTE4, A.ATTRIBUTE5, A.ATTRIBUTE6, A.ATTRIBUTE7, A.ATTRIBUTE8
+					 , A.ATTRIBUTE9, A.ATTRIBUTE10, A.COMPANY_ID
+					 , A.CELL_PROD_SITE --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+				FROM   DM_PLN_SALES_PLAN_REPORT_C A
+				JOIN GT_DMF0044_ITEM_SINGLE_V B ON A.ITEM_ID = B.ITEM_ID
+				JOIN GT_DMF0_SCM_MST_SITE_ITEM C ON A.DIVISION_ID = C.DIVISION_ID AND A.PROJECT_CODE = C.PROJECT_CODE AND A.SCM_SITE_ID = C.SCM_SITE_ID AND A.ITEM_ID = C.ITEM_ID
+				JOIN SCM_MST_SITE D ON A.DIVISION_ID = D.DIVISION_ID AND A.SCM_SITE_ID = D.SCM_SITE_ID
+				JOIN GT_DMF0_MEASURE M ON A.MEASURE = M.I_MEASURE AND M.O_MEASURE IN ( 'RTF_SYS_RP_CAR', 'RTF_SYS_RP_CELL','RTF_CAR', 'RTF_CELL' ) AND M.PLAN_RESULT = 'PLAN'
+				LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL LK1 ON D.END_CUSTOMER = LK1.SEGMENT1 AND LK1.LOOKUP_TYPE = 'DM_CAR_QTY_FORD' AND A.ITEM_ID = LK1.SEGMENT3
+				WHERE A.DIVISION_ID = P_DIVISION_ID AND A.VERSION_NO = V_NEW_VERSION_NO
+					AND ( M.O_MEASURE NOT IN ( 'RTF_SYS_RP_CAR', 'RTF_CAR') OR LK1.SEGMENT1 IS NULL ) -- FORD 환산건은 별도 처리
+					AND D.END_CUSTOMER = 'FORD'
+				-- FORD 환산건 추가
+				UNION ALL
+				SELECT A.DATA_TYPE, A.DIVISION_ID, A.VERSION_NO, A.CUTOFF_TYPE, A.CUTOFF_YYYYMMDD
+					 , A.DEPARTMENT_ID, A.DEPARTMENT_NAME, A.DEPT_ID, A.DEPT_NAME, A.END_CUST_REPORT
+					 , A.CUST_REPORT, A.PRODUCT_GROUP, C.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID
+					 , A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, M.O_MEASURE, A.PLANT_SITE_ID
+					 , A.YYYYMMDD, A.CURRENCY
+					 , ROUND(SUM(TO_NUMBER(C.CELL_PER_MODULE) * TO_NUMBER(A.QTY))/MAX(LK1.SEGMENT4), 0) AS QTY
+					 , p_created_by AS CREATED_BY, SYSDATE AS CREATION_DATE, p_created_by AS LAST_UPDATED_BY, SYSDATE AS LAST_UPDATE_DATE
+					 , A.ATTRIBUTE1, A.ATTRIBUTE2, A.ATTRIBUTE3
+					 , A.ATTRIBUTE4, A.ATTRIBUTE5, A.ATTRIBUTE6, A.ATTRIBUTE7, A.ATTRIBUTE8
+					 , A.ATTRIBUTE9, A.ATTRIBUTE10, A.COMPANY_ID
+					 , A.CELL_PROD_SITE --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+				FROM   DM_PLN_SALES_PLAN_REPORT_C A
+				JOIN GT_DMF0044_ITEM_SINGLE_V B ON A.ITEM_ID = B.ITEM_ID
+				JOIN GT_DMF0_SCM_MST_SITE_ITEM C ON A.DIVISION_ID = C.DIVISION_ID AND A.PROJECT_CODE = C.PROJECT_CODE AND A.SCM_SITE_ID = C.SCM_SITE_ID AND A.ITEM_ID = C.ITEM_ID
+				JOIN SCM_MST_SITE D ON A.DIVISION_ID = D.DIVISION_ID AND A.SCM_SITE_ID = D.SCM_SITE_ID
+				JOIN GT_DMF0_MEASURE M ON A.MEASURE = M.I_MEASURE AND M.O_MEASURE IN ( 'RTF_SYS_RP_CAR', 'RTF_CAR' ) AND M.PLAN_RESULT = 'PLAN'
+				LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL LK1 ON D.END_CUSTOMER = LK1.SEGMENT1 AND LK1.LOOKUP_TYPE = 'DM_CAR_QTY_FORD' AND A.ITEM_ID = LK1.SEGMENT3
+				WHERE A.DIVISION_ID = P_DIVISION_ID AND A.VERSION_NO = V_NEW_VERSION_NO
+					AND ( M.O_MEASURE IN ( 'RTF_SYS_RP_CAR', 'RTF_CAR') AND LK1.SEGMENT1 IS NOT NULL ) -- FORD 환산건
+					AND D.END_CUSTOMER = 'FORD'
+				GROUP BY A.DATA_TYPE, A.DIVISION_ID, A.VERSION_NO, A.CUTOFF_TYPE, A.CUTOFF_YYYYMMDD
+					 , A.DEPARTMENT_ID, A.DEPARTMENT_NAME, A.DEPT_ID, A.DEPT_NAME, A.END_CUST_REPORT
+					 , A.CUST_REPORT, A.PRODUCT_GROUP, C.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID
+					 , A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, M.O_MEASURE, A.PLANT_SITE_ID
+					 , A.YYYYMMDD, A.CURRENCY
+					 , A.ATTRIBUTE1, A.ATTRIBUTE2, A.ATTRIBUTE3
+					 , A.ATTRIBUTE4, A.ATTRIBUTE5, A.ATTRIBUTE6, A.ATTRIBUTE7, A.ATTRIBUTE8
+					 , A.ATTRIBUTE9, A.ATTRIBUTE10, A.COMPANY_ID
+					 , A.CELL_PROD_SITE; --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+
+			ELSIF P_DIVISION_ID = '82' THEN
+				IF ( p_action_type = 'CP' ) THEN
+					DELETE FROM DM_PLN_SALES_PLAN_REPORT_C
+					WHERE DIVISION_ID = P_DIVISION_ID AND VERSION_NO = V_NEW_VERSION_NO AND MEASURE IN ( 'RTF_SYS_RP_CAR', 'RTF_SYS_RP_CELL');
+				END IF;
+
+DBMS_OUTPUT.PUT_LINE('F');
+				INSERT INTO DM_PLN_SALES_PLAN_REPORT_C
+					 ( DATA_TYPE, DIVISION_ID, VERSION_NO, CUTOFF_TYPE, CUTOFF_YYYYMMDD
+					 , DEPARTMENT_ID, DEPARTMENT_NAME, DEPT_ID, DEPT_NAME, END_CUST_REPORT
+					 , CUST_REPORT, PRODUCT_GROUP, PROJECT_CODE, SCM_SITE_ID, ITEM_ID
+					 , DOM_EXP, FCST_TYPE, INCOTERMS, MEASURE, PLANT_SITE_ID
+					 , YYYYMMDD, CURRENCY, QTY, CREATED_BY, CREATION_DATE
+					 , LAST_UPDATED_BY, LAST_UPDATE_DATE, ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3
+					 , ATTRIBUTE4, ATTRIBUTE5, ATTRIBUTE6, ATTRIBUTE7, ATTRIBUTE8
+					 , ATTRIBUTE9, ATTRIBUTE10, COMPANY_ID
+					 , CELL_PROD_SITE	)--[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+				SELECT A.DATA_TYPE, A.DIVISION_ID, A.VERSION_NO, A.CUTOFF_TYPE, A.CUTOFF_YYYYMMDD
+					 , A.DEPARTMENT_ID, A.DEPARTMENT_NAME, A.DEPT_ID, A.DEPT_NAME, A.END_CUST_REPORT
+					 , A.CUST_REPORT, A.PRODUCT_GROUP, A.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID
+					 , A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, M.O_MEASURE, A.PLANT_SITE_ID
+					 , A.YYYYMMDD, A.CURRENCY
+					 , CASE WHEN M.O_MEASURE IN ('RTF_CELL', 'RTF_SYS_RP_CELL') THEN A.QTY * B.CELL_QUANTITY
+							WHEN M.O_MEASURE IN ('RTF_ENG', 'RTF_SYS_RP_ENG')	THEN A.QTY * B.ENERGY/1000	-- ENERGY 컬럼값이 KWh 이므로 1,000 으로 나눠준다.
+							END AS QTY
+					 , p_created_by AS CREATED_BY, SYSDATE AS CREATION_DATE, p_created_by AS LAST_UPDATED_BY, SYSDATE AS LAST_UPDATE_DATE
+					 , A.ATTRIBUTE1, A.ATTRIBUTE2, A.ATTRIBUTE3
+					 , A.ATTRIBUTE4, A.ATTRIBUTE5, A.ATTRIBUTE6, A.ATTRIBUTE7, A.ATTRIBUTE8
+					 , A.ATTRIBUTE9, A.ATTRIBUTE10, A.COMPANY_ID
+					 , A.CELL_PROD_SITE --[E20240429-000397]_[공급 SCM PI팀] Sales Report화면 Cell Prod Site(셀 생산지) 칼럼 추가요청
+				FROM   DM_PLN_SALES_PLAN_REPORT_C A
+				JOIN GT_DMF0044_ITEM_SINGLE_V B ON A.ITEM_ID = B.ITEM_ID
+				JOIN GT_DMF0_MEASURE M ON A.MEASURE = M.I_MEASURE AND M.O_MEASURE IN ( 'RTF_CELL', 'RTF_ENG','RTF_SYS_RP_CELL', 'RTF_SYS_RP_ENG' ) AND M.PLAN_RESULT = 'PLAN' --[C20201208-000087] ESS 'RTF'(RTF_MKT) -> 'RTF_SYS_RP'(RTF_SCP) 적용
+				WHERE A.DIVISION_ID = P_DIVISION_ID AND A.VERSION_NO = V_NEW_VERSION_NO
+					--and a.item_id = 'EABB00252AA'
+					--and a.yyyymmdd = '20191101'
+					--and a.scm_site_id = 'Fluence_US_SAN'
+
+				order by measure;
+DBMS_OUTPUT.PUT_LINE('G');
+
+
+			END IF;
+			--RAISE_APPLICATION_ERROR(-20001, 'TEST')
+
+			-- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+			-- 사업부별 메저 끝
+			-- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+			-- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+			-- 기타매출 복사 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+			-- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+			/*
+				기타매출 테이블에서 기타매출 테이블로 복사한다.
+				COPY 시에는 실적 기준일이 있을 경우에는 해당 기준일을 기준으로 이전월은 실적으로 보고 해당 기간까지는 실적버전을 복사하고, 이 후 기간은 원본버전을 그대로 복사한다.
+			              실적 기준일이 없을 경우에는 그냥 복사한다.
+				CREATE 시에는 최신 버전을 그대로 복사한다.
+			*/
+			-- (인라인 DECLARE 제거: V_ETC_CUTOFF_TYPE/YYYYMMDD는 선언부에 이미 선언됨)
+			SELECT MAX(CUTOFF_TYPE), MAX(CUTOFF_YYYYMMDD)
+			  INTO V_ETC_CUTOFF_TYPE, V_ETC_CUTOFF_YYYYMMDD
+			FROM DM_PLN_SALES_PLAN_REPORT_C
+			WHERE DIVISION_ID = P_DIVISION_ID
+				AND VERSION_NO = V_NEW_VERSION_NO;
+
+--select V_ETC_CUTOFF_TYPE, V_ETC_CUTOFF_YYYYMMDD, V_NEW_VERSION_NO
+			IF p_action_type = 'CR' THEN
+
+				INSERT INTO DM_PLN_SALES_ETC_REPORT_C (
+					VERSION_NO, DIVISION_ID, DATA_SEQ, CUTOFF_TYPE, CUTOFF_YYYYMMDD, DEPARTMENT_ID, DEPT_ID, END_CUST_REPORT, CUST_REPORT, SOLDTO_CODE, SOLDTO_CUST_REPORT
+					, PRODUCT_DETAILS, CELL_MODEL_INFO, BIZ_TYPE, APPLICATION_GR, APPLICATION, COUNTRY_CODE, PRODUCT_GROUP, PROJECT_CODE, PROJECT_NAME, SCM_SITE_ID, ITEM_ID
+					, DOM_EXP, FCST_TYPE, INCOTERMS, MEASURE, PLANT_SITE_ID, YYYYMMDD, CURRENCY, COMPANY_ID, QTY, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE
+					, ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5, ATTRIBUTE6, ATTRIBUTE7, ATTRIBUTE8, ATTRIBUTE9, ATTRIBUTE10
+					-- 2021.07.23
+					, OWNER_NAME, CUST_GROUP_DTL, FORECAST_INFO_SPEC, NICK_NAME
+					, FORECAST_INFO_CELL_PACK_COUNT, COMPANY_NAME, COUNTRY_KR_NAME, ROUTE
+					, DEPARTMENT_NAME, DEPT_NAME
+					 )
+				SELECT V_NEW_VERSION_NO, A.DIVISION_ID, A.DATA_SEQ, V_ETC_CUTOFF_TYPE, V_ETC_CUTOFF_YYYYMMDD
+					, CASE WHEN P_DIVISION_ID = '40' AND LK1.SEGMENT1 IS NULL THEN v_ETC_DEPARTMENT_ID ELSE A.DEPARTMENT_ID END AS DEPARTMENT_ID
+					, CASE WHEN P_DIVISION_ID = '40' AND LK1.SEGMENT1 IS NULL THEN v_ETC_DEPARTMENT_ID ELSE A.DEPT_ID END AS DEPT_ID
+					, A.END_CUST_REPORT, A.CUST_REPORT, A.SOLDTO_CODE, A.SOLDTO_CUST_REPORT
+					, A.PRODUCT_DETAILS, A.CELL_MODEL_INFO, A.BIZ_TYPE, A.APPLICATION_GR, A.APPLICATION, A.COUNTRY_CODE, A.PRODUCT_GROUP, A.PROJECT_CODE, A.PROJECT_NAME, A.SCM_SITE_ID, A.ITEM_ID
+					, A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, A.MEASURE, A.PLANT_SITE_ID, A.YYYYMMDD, A.CURRENCY, A.COMPANY_ID, A.QTY
+					, p_created_by AS CREATED_BY, SYSDATE AS CREATION_DATE, p_created_by AS LAST_UPDATED_BY, SYSDATE AS LAST_UPDATE_DATE
+					, A.ATTRIBUTE1, A.ATTRIBUTE2, A.ATTRIBUTE3, A.ATTRIBUTE4, A.ATTRIBUTE5, A.ATTRIBUTE6, A.ATTRIBUTE7, A.ATTRIBUTE8, A.ATTRIBUTE9, A.ATTRIBUTE10
+					-- 2021.07.23
+					, FN_GET_DM_MKT_OWNER_NAME (B.OWNER, ',', 'KO' )		AS OWNER_NAME
+					, B.CUST_GROUP_DTL, C.FORECAST_INFO_SPEC
+					, NVL(LK3.ATTRIBUTE1, C.NICK_NAME ) AS NICK_NAME
+					, NVL(CASE WHEN REGEXP_LIKE(LK3.ATTRIBUTE2, '^[+-]?[0-9]+(\.[0-9]+)?$') THEN TO_NUMBER(LK3.ATTRIBUTE2) ELSE 0 END, C.FORECAST_INFO_CELL_PACK_COUNT ) AS FORECAST_INFO_CELL_PACK_COUNT
+					, D.SEGMENT2, F.COUNTRY_KR_NAME, B.ROUTE
+					, CASE WHEN P_DIVISION_ID = '40' AND LK1.SEGMENT1 IS NULL THEN v_ETC_DEPARTMENT_NAME ELSE LK1.SEGMENT2 END AS DEPARTMENT_NAME
+					, CASE WHEN P_DIVISION_ID = '40' AND LK1.SEGMENT1 IS NULL THEN v_ETC_DEPARTMENT_NAME ELSE LK2.SEGMENT2 END AS DEPT_NAME
+				FROM DM_PLN_SALES_ETC_REPORT_C A
+				LEFT OUTER JOIN SCM_MST_SITE_ITEM B ON A.DIVISION_ID = B.DIVISION_ID AND A.PROJECT_CODE = B.PROJECT_CODE AND A.SCM_SITE_ID = B.SCM_SITE_ID AND A.ITEM_ID = B.ITEM_ID
+				LEFT OUTER JOIN GT_DMF0044_ITEM_SINGLE_V C ON A.ITEM_ID = C.ITEM_ID
+				LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL D ON A.COMPANY_ID = D.SEGMENT1 AND D.LOOKUP_TYPE = 'DM_COMPANY'
+				--LEFT OUTER JOIN SCM_MST_SITE E ON A.DIVISION_ID = E.DIVISION_ID AND A.SCM_SITE_ID = E.SCM_SITE_ID
+				LEFT OUTER JOIN SCM_MST_COUNTRY F ON A.COUNTRY_CODE = F.COUNTRY
+				LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL LK1 ON A.DEPARTMENT_ID = LK1.SEGMENT1 AND LK1.LOOKUP_TYPE = 'MDF_DEPARTMENT' ||  CASE WHEN A.DIVISION_ID= '40' THEN '' ELSE '_'  ||  A.DIVISION_ID END AND LK1.SEGMENT3 = 'Y'
+				LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL LK2 ON A.DEPT_ID = LK2.SEGMENT1 AND LK2.LOOKUP_TYPE = 'DMF0044_DEPARTMENT_TEAM2' ||  CASE WHEN A.DIVISION_ID= '40' THEN '' ELSE '_'  ||  A.DIVISION_ID END
+				LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL LK3 ON A.DIVISION_ID = LK3.SEGMENT1 AND A.ITEM_ID = LK3.SEGMENT2 AND LK3.LOOKUP_TYPE = 'DM_SR_ETC_MODEL'
+				WHERE A.DIVISION_ID = P_DIVISION_ID
+					AND A.VERSION_NO = ( SELECT A.VERSION_NO
+										FROM DM_MDF_VERSION A
+										JOIN (
+											SELECT MAX(A.CREATION_DATE) AS CREATION_DATE
+											FROM DM_MDF_VERSION A
+											JOIN DM_PLN_SALES_ETC_REPORT_C B ON A.DIVISION_ID = B.DIVISION_ID AND A.VERSION_NO = B.VERSION_NO
+											WHERE A.DIVISION_ID = P_DIVISION_ID
+											) B ON A.CREATION_DATE = B.CREATION_DATE
+										WHERE A.DIVISION_ID = P_DIVISION_ID
+										ORDER BY A.VERSION_NO DESC
+										FETCH FIRST 1 ROWS ONLY
+										);
+--RAISE_APPLICATION_ERROR(-20001, 'SS')
+DBMS_OUTPUT.PUT_LINE('H');
+
+			ELSIF p_action_type = 'CP' THEN
+				IF D_RESULT_DATE IS NULL THEN
+					INSERT INTO DM_PLN_SALES_ETC_REPORT_C (
+						VERSION_NO, DIVISION_ID, DATA_SEQ, CUTOFF_TYPE, CUTOFF_YYYYMMDD, DEPARTMENT_ID, DEPT_ID, END_CUST_REPORT, CUST_REPORT, SOLDTO_CODE, SOLDTO_CUST_REPORT
+						, PRODUCT_DETAILS, CELL_MODEL_INFO, BIZ_TYPE, APPLICATION_GR, APPLICATION, COUNTRY_CODE, PRODUCT_GROUP, PROJECT_CODE, PROJECT_NAME, SCM_SITE_ID, ITEM_ID
+						, DOM_EXP, FCST_TYPE, INCOTERMS, MEASURE, PLANT_SITE_ID, YYYYMMDD, CURRENCY, COMPANY_ID, QTY, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE
+						, ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5, ATTRIBUTE6, ATTRIBUTE7, ATTRIBUTE8, ATTRIBUTE9, ATTRIBUTE10
+						, COMPANY_NAME, COUNTRY_KR_NAME, CUST_GROUP_DTL, DEPARTMENT_NAME, DEPT_NAME
+						, FORECAST_INFO_CELL_PACK_COUNT, FORECAST_INFO_SPEC, NICK_NAME, OWNER_NAME, ROUTE
+						  )
+					SELECT V_NEW_VERSION_NO, A.DIVISION_ID, A.DATA_SEQ, V_ETC_CUTOFF_TYPE, V_ETC_CUTOFF_YYYYMMDD, A.DEPARTMENT_ID, A.DEPT_ID, A.END_CUST_REPORT, A.CUST_REPORT, A.SOLDTO_CODE, A.SOLDTO_CUST_REPORT
+						, A.PRODUCT_DETAILS, A.CELL_MODEL_INFO, A.BIZ_TYPE, A.APPLICATION_GR, A.APPLICATION, A.COUNTRY_CODE, A.PRODUCT_GROUP, A.PROJECT_CODE, A.PROJECT_NAME, A.SCM_SITE_ID, A.ITEM_ID
+						, A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, A.MEASURE, A.PLANT_SITE_ID, A.YYYYMMDD, A.CURRENCY, A.COMPANY_ID, A.QTY
+						, p_created_by AS CREATED_BY, SYSDATE AS CREATION_DATE, p_created_by AS LAST_UPDATED_BY, SYSDATE AS LAST_UPDATE_DATE
+						, A.ATTRIBUTE1, A.ATTRIBUTE2, A.ATTRIBUTE3, A.ATTRIBUTE4, A.ATTRIBUTE5, A.ATTRIBUTE6, A.ATTRIBUTE7, A.ATTRIBUTE8, A.ATTRIBUTE9, A.ATTRIBUTE10
+						, CASE WHEN p_update_yn = 'Y' AND NVL(D.SEGMENT2, NULL) IS NOT NULL THEN D.SEGMENT2 ELSE A.COMPANY_NAME END AS COMPANY_NAME
+						, CASE WHEN p_update_yn = 'Y' AND NVL(F.COUNTRY_KR_NAME, NULL) IS NOT NULL THEN F.COUNTRY_KR_NAME ELSE A.COUNTRY_KR_NAME END AS COUNTRY_KR_NAME
+						, CASE WHEN p_update_yn = 'Y' AND NVL(B.CUST_GROUP_DTL, NULL) IS NOT NULL THEN B.CUST_GROUP_DTL ELSE A.CUST_GROUP_DTL END AS CUST_GROUP_DTL
+						, CASE WHEN p_update_yn = 'Y' AND P_DIVISION_ID = '40' AND NVL(LK1.SEGMENT2, NULL) IS NOT NULL THEN LK1.SEGMENT2
+								WHEN p_update_yn = 'Y' AND P_DIVISION_ID = '40' AND LK1.SEGMENT1 IS NULL THEN v_ETC_DEPARTMENT_NAME
+								ELSE A.DEPARTMENT_NAME
+								END AS DEPARTMENT_NAME
+						, CASE WHEN p_update_yn = 'Y' AND P_DIVISION_ID = '40' AND NVL(LK2.SEGMENT2, NULL) IS NOT NULL THEN LK2.SEGMENT2
+								WHEN p_update_yn = 'Y' AND P_DIVISION_ID = '40' AND LK2.SEGMENT1 IS NULL THEN v_ETC_DEPARTMENT_NAME
+								ELSE A.DEPT_NAME
+								END AS DEPT_NAME
+						, CASE WHEN p_update_yn = 'Y' AND CASE WHEN REGEXP_LIKE(LK3.ATTRIBUTE2, '^[+-]?[0-9]+(\.[0-9]+)?$') THEN TO_NUMBER(LK3.ATTRIBUTE2)
+																ELSE NVL(C.FORECAST_INFO_CELL_PACK_COUNT,0)
+																END <> 0
+											THEN CASE WHEN REGEXP_LIKE(LK3.ATTRIBUTE2, '^[+-]?[0-9]+(\.[0-9]+)?$') THEN TO_NUMBER(LK3.ATTRIBUTE2)
+																ELSE NVL(C.FORECAST_INFO_CELL_PACK_COUNT,0) END
+								ELSE A.FORECAST_INFO_CELL_PACK_COUNT END AS FORECAST_INFO_CELL_PACK_COUNT
+						, CASE WHEN p_update_yn = 'Y' AND NVL(C.FORECAST_INFO_SPEC, NULL) IS NOT NULL THEN C.FORECAST_INFO_SPEC ELSE A.FORECAST_INFO_SPEC END AS FORECAST_INFO_SPEC
+						, CASE WHEN p_update_yn = 'Y' AND NVL(LK3.ATTRIBUTE1, C.NICK_NAME ) IS NOT NULL THEN NVL(LK3.ATTRIBUTE1, C.NICK_NAME ) ELSE A.NICK_NAME END AS NICK_NAME
+						, CASE WHEN p_update_yn = 'Y' AND NVL(FN_GET_DM_MKT_OWNER_NAME (B.OWNER, ',', 'KO' ),'') IS NOT NULL THEN FN_GET_DM_MKT_OWNER_NAME (B.OWNER, ',', 'KO' ) ELSE A.OWNER_NAME END AS OWNER_NAME
+						, CASE WHEN p_update_yn = 'Y' AND NVL(B.ROUTE, NULL) IS NOT NULL THEN B.ROUTE ELSE A.ROUTE END AS ROUTE
+					FROM DM_PLN_SALES_ETC_REPORT_C A
+					LEFT OUTER JOIN SCM_MST_SITE_ITEM B ON A.DIVISION_ID = B.DIVISION_ID AND A.PROJECT_CODE = B.PROJECT_CODE AND A.SCM_SITE_ID = B.SCM_SITE_ID AND A.ITEM_ID = B.ITEM_ID
+					LEFT OUTER JOIN GT_DMF0044_ITEM_SINGLE_V C ON A.ITEM_ID = C.ITEM_ID
+					LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL D ON A.COMPANY_ID = D.SEGMENT1 AND D.LOOKUP_TYPE = 'DM_COMPANY'
+					--LEFT OUTER JOIN SCM_MST_SITE E ON A.DIVISION_ID = E.DIVISION_ID AND A.SCM_SITE_ID = E.SCM_SITE_ID
+					LEFT OUTER JOIN SCM_MST_COUNTRY F ON A.COUNTRY_CODE = F.COUNTRY
+					LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL LK1 ON A.DEPARTMENT_ID = LK1.SEGMENT1 AND LK1.LOOKUP_TYPE = 'MDF_DEPARTMENT' ||  CASE WHEN A.DIVISION_ID= '40' THEN '' ELSE '_'  ||  A.DIVISION_ID END AND LK1.SEGMENT3 = 'Y'
+					LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL LK2 ON A.DEPT_ID = LK2.SEGMENT1 AND LK2.LOOKUP_TYPE = 'DMF0044_DEPARTMENT_TEAM2' ||  CASE WHEN A.DIVISION_ID= '40' THEN '' ELSE '_'  ||  A.DIVISION_ID END
+					LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL LK3 ON A.DIVISION_ID = LK3.SEGMENT1 AND A.ITEM_ID = LK3.SEGMENT2 AND LK3.LOOKUP_TYPE = 'DM_SR_ETC_MODEL'
+					WHERE A.DIVISION_ID = P_DIVISION_ID
+						AND A.VERSION_NO = P_VERSION_NO;
+DBMS_OUTPUT.PUT_LINE('I');
+				ELSE  -- 실적기준일이 있는 복사일 경우 ( 최신화는 UI 에서 강제체크됨 )
+
+					-- 실적을 복사할 버전을 찾는다.
+					SELECT MIN(A.VERSION_NO)
+  INTO V_MAX_ETC_RESULT_VERSION_NO
+					FROM DM_MDF_VERSION A
+					JOIN ( SELECT DIVISION_ID, MIN(ETC_RESULT_MONTH) AS ETC_RESULT_MONTH
+							FROM DM_MDF_VERSION
+							WHERE DIVISION_ID = P_DIVISION_ID
+								AND ETC_RESULT_MONTH >= V_ETC_RESULT_MONTH
+								AND VERSION_NO <> V_NEW_VERSION_NO
+								AND VERSION_TYPE LIKE 'REPORT_SP%'
+								AND SEND_YN <> 'D'
+							GROUP BY DIVISION_ID
+						) B ON A.DIVISION_ID = B.DIVISION_ID
+							AND A.ETC_RESULT_MONTH = B.ETC_RESULT_MONTH
+							AND A.VERSION_NO <> V_NEW_VERSION_NO
+					WHERE A.VERSION_TYPE LIKE 'REPORT_SP%'
+						AND A.SEND_YN <> 'D';
+
+					-- LOOKUP 에 복사할 버전이 지정되어있으면 해당 버전을 사용한다.
+					SELECT COUNT(1) SEGMENT2
+					INTO v_cnt_1
+					FROM SCM_ADM_LOOKUP_MASTER_DETAIL A
+					WHERE LOOKUP_TYPE = 'DM_SR_ETC_VERSION'
+					AND SEGMENT1 = P_DIVISION_ID
+					AND SEGMENT2 IS NOT NULL;
+					IF v_cnt_1 > 0 THEN
+
+						SELECT SEGMENT2
+						  INTO V_MAX_ETC_RESULT_VERSION_NO
+						FROM SCM_ADM_LOOKUP_MASTER_DETAIL A
+						WHERE LOOKUP_TYPE = 'DM_SR_ETC_VERSION'
+							AND SEGMENT1 = P_DIVISION_ID
+							AND SEGMENT2 IS NOT NULL;
+
+						SELECT COUNT(*) INTO v_cnt_1
+						FROM DM_MDF_VERSION
+						WHERE DIVISION_ID = P_DIVISION_ID
+						AND VERSION_NO = V_MAX_ETC_RESULT_VERSION_NO;
+						IF v_cnt_1 = 0 THEN
+							v_log_type := 'INVALID_ETC_VERSION';
+							RAISE e_validation;
+						END IF;
+					END IF;  -- v_cnt_1>0 (룩업 ETC 버전 지정) 블록 종료 [MSSQL 2448]
+
+
+					SELECT MAX(DATA_SEQ)
+  INTO V_MAX_DATA_SEQ
+					FROM DM_PLN_SALES_ETC_REPORT_C A
+					WHERE A.DIVISION_ID = P_DIVISION_ID
+						AND A.VERSION_NO = V_NEW_VERSION_NO;
+DBMS_OUTPUT.PUT_LINE('J');
+--SELECT V_MAX_ETC_RESULT_VERSION_NO, V_NEW_VERSION_NO, V_ETC_RESULT_MONTH, V_MAX_DATA_SEQ
+
+					INSERT INTO DM_PLN_SALES_ETC_REPORT_C (
+						VERSION_NO, DIVISION_ID, DATA_SEQ, CUTOFF_TYPE, CUTOFF_YYYYMMDD, DEPARTMENT_ID, DEPT_ID, END_CUST_REPORT, CUST_REPORT, SOLDTO_CODE, SOLDTO_CUST_REPORT
+						, PRODUCT_DETAILS, CELL_MODEL_INFO, BIZ_TYPE, APPLICATION_GR, APPLICATION, COUNTRY_CODE, PRODUCT_GROUP, PROJECT_CODE, PROJECT_NAME, SCM_SITE_ID, ITEM_ID
+						, DOM_EXP, FCST_TYPE, INCOTERMS, MEASURE, PLANT_SITE_ID, YYYYMMDD, CURRENCY, COMPANY_ID, QTY, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE
+						, ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5, ATTRIBUTE6, ATTRIBUTE7, ATTRIBUTE8, ATTRIBUTE9, ATTRIBUTE10
+						-- 2021.07.23
+						, OWNER_NAME, CUST_GROUP_DTL, FORECAST_INFO_SPEC, NICK_NAME
+						, FORECAST_INFO_CELL_PACK_COUNT, COMPANY_NAME, COUNTRY_KR_NAME, ROUTE
+						, DEPARTMENT_NAME, DEPT_NAME
+						 )
+					SELECT A.VERSION_NO, A.DIVISION_ID, A.DATA_SEQ, A.CUTOFF_TYPE, A.CUTOFF_YYYYMMDD
+
+						-- 최신화가 아닐 경우 기존 값 복사, 일치하는 부서가 없으면 DEAFULT 기타 부서로 세팅
+						, CASE WHEN P_DIVISION_ID = '40' AND LK1.SEGMENT1 IS NULL THEN v_ETC_DEPARTMENT_ID ELSE A.DEPARTMENT_ID END AS DEPARTMENT_ID
+						, CASE WHEN P_DIVISION_ID = '40' AND LK1.SEGMENT1 IS NULL THEN v_ETC_DEPARTMENT_ID ELSE A.DEPT_ID END AS DEPT_ID
+						, A.END_CUST_REPORT, A.CUST_REPORT, A.SOLDTO_CODE, A.SOLDTO_CUST_REPORT
+						, A.PRODUCT_DETAILS, A.CELL_MODEL_INFO, A.BIZ_TYPE, A.APPLICATION_GR, A.APPLICATION, A.COUNTRY_CODE, A.PRODUCT_GROUP, A.PROJECT_CODE, A.PROJECT_NAME, A.SCM_SITE_ID, A.ITEM_ID
+						, A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, A.MEASURE, A.PLANT_SITE_ID, A.YYYYMMDD, A.CURRENCY, A.COMPANY_ID, A.QTY, A.CREATED_BY, A.CREATION_DATE, A.LAST_UPDATED_BY, A.LAST_UPDATE_DATE
+						, A.ATTRIBUTE1, A.ATTRIBUTE2, A.ATTRIBUTE3, A.ATTRIBUTE4, A.ATTRIBUTE5, A.ATTRIBUTE6, A.ATTRIBUTE7, A.ATTRIBUTE8, A.ATTRIBUTE9, A.ATTRIBUTE10
+						-- 2021.07.23
+						, FN_GET_DM_MKT_OWNER_NAME (B.OWNER, ',', 'KO' )       AS OWNER_NAME
+						, B.CUST_GROUP_DTL, C.FORECAST_INFO_SPEC
+						, NVL(LK3.ATTRIBUTE1, C.NICK_NAME ) AS NICK_NAME
+						, NVL(CASE WHEN REGEXP_LIKE(LK3.ATTRIBUTE2, '^[+-]?[0-9]+(\.[0-9]+)?$') THEN TO_NUMBER(LK3.ATTRIBUTE2) ELSE 0 END, C.FORECAST_INFO_CELL_PACK_COUNT) AS FORECAST_INFO_CELL_PACK_COUNT
+						, D.SEGMENT2, F.COUNTRY_KR_NAME, B.ROUTE
+
+						, CASE WHEN P_DIVISION_ID = '40' AND LK1.SEGMENT1 IS NULL THEN v_ETC_DEPARTMENT_NAME ELSE LK1.SEGMENT2 END AS DEPARTMENT_NAME
+						, CASE WHEN P_DIVISION_ID = '40' AND LK1.SEGMENT1 IS NULL THEN v_ETC_DEPARTMENT_NAME ELSE LK2.SEGMENT2 END AS DEPT_NAME
+					FROM (
+						SELECT
+							  V_NEW_VERSION_NO AS VERSION_NO, DIVISION_ID
+							, DENSE_RANK() OVER (
+									ORDER BY DEPARTMENT_ID, DEPT_ID, END_CUST_REPORT, CUST_REPORT, SOLDTO_CODE, SOLDTO_CUST_REPORT
+									, PRODUCT_DETAILS, CELL_MODEL_INFO, BIZ_TYPE, APPLICATION_GR, APPLICATION, COUNTRY_CODE, PRODUCT_GROUP, PROJECT_CODE, PROJECT_NAME
+									, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS, PLANT_SITE_ID, CURRENCY, COMPANY_ID
+									, ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5, ATTRIBUTE6, ATTRIBUTE7, ATTRIBUTE8, ATTRIBUTE9, ATTRIBUTE10
+										 ) AS DATA_SEQ
+							, V_ETC_CUTOFF_TYPE AS CUTOFF_TYPE, V_ETC_CUTOFF_YYYYMMDD AS CUTOFF_YYYYMMDD, DEPARTMENT_ID, DEPT_ID, END_CUST_REPORT, CUST_REPORT, SOLDTO_CODE, SOLDTO_CUST_REPORT
+							, PRODUCT_DETAILS, CELL_MODEL_INFO, BIZ_TYPE, APPLICATION_GR, APPLICATION, COUNTRY_CODE, PRODUCT_GROUP, PROJECT_CODE, PROJECT_NAME, SCM_SITE_ID, ITEM_ID
+							, DOM_EXP, FCST_TYPE, INCOTERMS, MEASURE, PLANT_SITE_ID, YYYYMMDD, CURRENCY, COMPANY_ID, QTY
+							, p_created_by AS CREATED_BY, SYSDATE AS CREATION_DATE, p_created_by AS LAST_UPDATED_BY, SYSDATE AS LAST_UPDATE_DATE
+							, ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5, ATTRIBUTE6, ATTRIBUTE7, ATTRIBUTE8, ATTRIBUTE9, ATTRIBUTE10
+							, OWNER_NAME, CUST_GROUP_DTL, FORECAST_INFO_SPEC, NICK_NAME
+							, FORECAST_INFO_CELL_PACK_COUNT, COMPANY_NAME, COUNTRY_KR_NAME, ROUTE
+							, DEPARTMENT_NAME, DEPT_NAME
+						FROM (
+							-- 계획구간
+							SELECT DIVISION_ID
+								, CUTOFF_TYPE, /* CUTOFF_YYYYMMDD ,*/ DEPARTMENT_ID, DEPT_ID, END_CUST_REPORT, CUST_REPORT, SOLDTO_CODE, SOLDTO_CUST_REPORT
+								, PRODUCT_DETAILS, CELL_MODEL_INFO, BIZ_TYPE, APPLICATION_GR, APPLICATION, COUNTRY_CODE, PRODUCT_GROUP, PROJECT_CODE, PROJECT_NAME, SCM_SITE_ID, ITEM_ID
+								, DOM_EXP, FCST_TYPE, INCOTERMS, MEASURE, PLANT_SITE_ID, YYYYMMDD, CURRENCY, COMPANY_ID, QTY, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE
+								, ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5, ATTRIBUTE6, ATTRIBUTE7, ATTRIBUTE8, ATTRIBUTE9, ATTRIBUTE10
+								, OWNER_NAME, CUST_GROUP_DTL, FORECAST_INFO_SPEC, NICK_NAME
+								, FORECAST_INFO_CELL_PACK_COUNT, COMPANY_NAME, COUNTRY_KR_NAME, ROUTE
+								, DEPARTMENT_NAME, DEPT_NAME
+							FROM DM_PLN_SALES_ETC_REPORT_C A
+							WHERE A.DIVISION_ID = P_DIVISION_ID
+								AND A.VERSION_NO = P_VERSION_NO
+								AND A.YYYYMMDD > d_Result_Date
+							-- 실적구간
+							UNION ALL
+							SELECT A.DIVISION_ID, CUTOFF_TYPE, /* CUTOFF_YYYYMMDD ,*/ DEPARTMENT_ID, DEPT_ID, END_CUST_REPORT, CUST_REPORT, SOLDTO_CODE, SOLDTO_CUST_REPORT
+								, PRODUCT_DETAILS, CELL_MODEL_INFO, BIZ_TYPE, APPLICATION_GR, APPLICATION, COUNTRY_CODE, PRODUCT_GROUP, PROJECT_CODE, PROJECT_NAME, SCM_SITE_ID, ITEM_ID
+								, DOM_EXP, FCST_TYPE, INCOTERMS, MEASURE, PLANT_SITE_ID, YYYYMMDD, CURRENCY, COMPANY_ID, QTY, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE
+								, ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5, ATTRIBUTE6, ATTRIBUTE7, ATTRIBUTE8, ATTRIBUTE9, ATTRIBUTE10
+								, OWNER_NAME, CUST_GROUP_DTL, FORECAST_INFO_SPEC, NICK_NAME
+								, FORECAST_INFO_CELL_PACK_COUNT, COMPANY_NAME, COUNTRY_KR_NAME, ROUTE
+								, DEPARTMENT_NAME, DEPT_NAME
+							FROM DM_PLN_SALES_ETC_REPORT_C A
+							WHERE A.DIVISION_ID = P_DIVISION_ID
+								AND A.VERSION_NO = V_MAX_ETC_RESULT_VERSION_NO
+								AND A.YYYYMMDD <= d_Result_Date
+							) A
+						) A
+					LEFT OUTER JOIN SCM_MST_SITE_ITEM B ON A.DIVISION_ID = B.DIVISION_ID AND A.PROJECT_CODE = B.PROJECT_CODE AND A.SCM_SITE_ID = B.SCM_SITE_ID AND A.ITEM_ID = B.ITEM_ID
+					LEFT OUTER JOIN GT_DMF0044_ITEM_SINGLE_V C ON A.ITEM_ID = C.ITEM_ID
+					LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL D ON A.COMPANY_ID = D.SEGMENT1 AND D.LOOKUP_TYPE = 'DM_COMPANY'
+					--LEFT OUTER JOIN SCM_MST_SITE E ON A.DIVISION_ID = E.DIVISION_ID AND A.SCM_SITE_ID = E.SCM_SITE_ID
+					LEFT OUTER JOIN SCM_MST_COUNTRY F ON A.COUNTRY_CODE = F.COUNTRY
+					LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL LK1 ON A.DEPARTMENT_ID = LK1.SEGMENT1 AND LK1.LOOKUP_TYPE = 'MDF_DEPARTMENT' ||  CASE WHEN A.DIVISION_ID= '40' THEN '' ELSE '_'  ||  A.DIVISION_ID END AND LK1.SEGMENT3 = 'Y'
+					LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL LK2 ON A.DEPT_ID = LK2.SEGMENT1 AND LK2.LOOKUP_TYPE = 'DMF0044_DEPARTMENT_TEAM2' ||  CASE WHEN A.DIVISION_ID= '40' THEN '' ELSE '_'  ||  A.DIVISION_ID END
+					LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL LK3 ON A.DIVISION_ID = LK3.SEGMENT1 AND A.ITEM_ID = LK3.SEGMENT2 AND LK3.LOOKUP_TYPE = 'DM_SR_ETC_MODEL';
+
+				END IF;
+			END IF;  -- p_action_type CR/CP (ETC 매출 복사) 종료 [MSSQL 2542]
+
+
+			-- 1~3 담당이 아니면 기타로 처리
+			IF P_DIVISION_ID = '40' THEN
+				UPDATE DM_PLN_SALES_ETC_REPORT_C A
+				SET A.DEPARTMENT_ID = v_ETC_DEPARTMENT_ID
+				  , A.DEPT_ID       = v_ETC_DEPARTMENT_ID
+				WHERE A.DIVISION_ID = P_DIVISION_ID
+				  AND A.VERSION_NO = V_NEW_VERSION_NO
+				  AND NOT EXISTS ( SELECT 1 FROM SCM_ADM_LOOKUP_MASTER_DETAIL B
+					WHERE A.DEPARTMENT_ID = B.SEGMENT1 AND B.LOOKUP_TYPE = 'MDF_DEPARTMENT' AND B.SEGMENT3 = 'Y' );
+			END IF;
+
+--VERSION_NO, DIVISION_ID, DATA_SEQ, CUTOFF_TYPE, CUTOFF_YYYYMMDD, DEPARTMENT_ID, DEPT_ID, END_CUST_REPORT, CUST_REPORT, SOLDTO_CODE, SOLDTO_CUST_REPORT
+--, PRODUCT_DETAILS, CELL_MODEL_INFO, BIZ_TYPE, APPLICATION_GR, APPLICATION, COUNTRY_CODE, PRODUCT_GROUP, PROJECT_CODE, PROJECT_NAME, SCM_SITE_ID, ITEM_ID
+--, DOM_EXP, FCST_TYPE, INCOTERMS, MEASURE, PLANT_SITE_ID, YYYYMMDD, CURRENCY, COMPANY_ID, QTY, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE
+--, ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5, ATTRIBUTE6, ATTRIBUTE7, ATTRIBUTE8, ATTRIBUTE9, ATTRIBUTE10
+
+
+			-- 기타매출 복사 끝 ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+--[E20230906-001160] GDW 송신용 데이터 Lookup 수정 특정 상품에 대한 BIZ_TYPE과 COUNT 정보를 변환하여 저장되도록 요청 20230907
+DBMS_OUTPUT.PUT_LINE('K');
+			BEGIN
+			MERGE INTO DM_PLN_SALES_PLAN_REPORT_C A
+			USING ( SELECT A.MODEL, A.BIZ_TYPE, A.CELL_PACK_COUNT, A.MODEL_RANK, A.DIVISION_ID
+					FROM (
+						SELECT SEGMENT2 AS MODEL, SEGMENT3 AS BIZ_TYPE, SEGMENT4 AS CELL_PACK_COUNT, SEGMENT1 AS DIVISION_ID
+						     , RANK() OVER (PARTITION BY SEGMENT2 ORDER BY DISPLAY_SEQ DESC) MODEL_RANK
+						FROM SCM_ADM_LOOKUP_MASTER_DETAIL
+						WHERE LOOKUP_TYPE = 'DM_BIZ_TYPE_40'
+					) A
+					WHERE MODEL_RANK = '1'
+				) LOOKA
+			ON ( LOOKA.MODEL = A.ITEM_ID AND LOOKA.DIVISION_ID = A.DIVISION_ID )
+			WHEN MATCHED THEN UPDATE SET A.FORECAST_INFO_CELL_PACK_COUNT = LOOKA.CELL_PACK_COUNT
+				, A.FORECAST_INFO_BIZ_TYPE = LOOKA.BIZ_TYPE
+				WHERE A.DIVISION_ID = '40' AND A.VERSION_NO = V_NEW_VERSION_NO;
+
+			END;
+
+
+		END IF;  -- 요청VERSION COPY (CR,CP) 래퍼 종료
+
+
+    -- IF @V_TRANCOUNT > 0
+
+-- 트랜잭션 (COMMIT)
+    -- 트랜잭션 종료 (COMMIT) - 프로시저 종료 직전 1회
+    COMMIT;
+
+    -- 수행결과 성공 DISPLAY
+    OPEN O_RESULT_CURSOR FOR
+    SELECT '0' AS CODE, 'SUCCESS' AS MSG, TO_CHAR(n_merge_count) AS EVENT FROM DUAL;
+
+    -- 종료 LOG
+    v_log_type := 'END';
+    v_log_message := '########## END of procedure ##########';
+    v_description := 'delete_count: ' || TO_CHAR(n_delete_count) || ' / merge_count: ' || TO_CHAR(n_merge_count);
+    d_event_date := SYSDATE;
+    BEGIN SCM_MGR.PR_SCM_SYS_LOG_BATCH(v_program_name, v_log_type, n_log_count, v_log_message, v_description, d_event_date); END;
+
+EXCEPTION
+    -- 검증 실패 (구 GOTO ERR_RTN): 롤백 + 메시지 결과셋 반환 후 정상 종료 (원본 동등, 에러 raise 안함)
+    WHEN e_validation THEN
+        ROLLBACK;
+        v_result_msg := CASE v_log_type
+            WHEN 'DIVISION_INVALID'    THEN 'Division 값이 존재하지 않습니다.'
+            WHEN 'VERSION_NO_INVALID'  THEN 'VERSION 값이 존재하지 않습니다.'
+            WHEN 'INVALID_ETC_VERSION' THEN '룩업에 설정된 ETC 버전이 잘못되었습니다.'
+            WHEN '이동계획 중복'        THEN v_description
+            ELSE NVL(v_log_message, '저장할 수 없습니다.') END;
+        v_log_message := '########## END of procedure ##########';
+        d_event_date := SYSDATE;
+        BEGIN SCM_MGR.PR_SCM_SYS_LOG_BATCH(v_program_name, v_log_type, n_log_count, v_log_message, v_result_msg, d_event_date); END;
+        OPEN O_RESULT_CURSOR FOR
+        SELECT '1' AS CODE, v_result_msg AS MSG, NULL AS EVENT FROM DUAL;
+    -- 실제 런타임 오류: 롤백 + 표준 에러로그 + 전파
+    WHEN OTHERS THEN
+        ROLLBACK;
+        v_log_type := 'ERROR';
+        v_log_message := 'EXCEPTION';
+        v_description := '';
+        d_event_date := SYSDATE;
+        DECLARE
+            V_SQL_CODE   VARCHAR2(100 CHAR)  := TO_CHAR(SQLCODE);
+            V_SQL_ERRMSG VARCHAR2(1000 CHAR) := SQLERRM;
+            V_BACKTRACE  VARCHAR2(4000 CHAR) := DBMS_UTILITY.FORMAT_ERROR_BACKTRACE;
+            V_PROC_INPUT VARCHAR2(4000 CHAR);
+        BEGIN
+            V_PROC_INPUT := JSON_OBJECT(
+                'p_division_id' VALUE p_division_id, 'p_version_no' VALUE p_version_no,
+                'p_version_description' VALUE p_version_description, 'p_created_by' VALUE p_created_by,
+                'p_result_date' VALUE p_result_date, 'p_action_type' VALUE p_action_type,
+                'p_mv_plan_yyyymm' VALUE p_mv_plan_yyyymm, 'p_update_yn' VALUE p_update_yn);
+            BEGIN SCM_MGR.PR_SCM_SYS_LOG_BATCH(v_program_name, v_log_type, n_log_count, v_log_message,
+                v_description, d_event_date, V_PROC_INPUT, V_SQL_CODE, V_SQL_ERRMSG, V_BACKTRACE); END;
+            RAISE_APPLICATION_ERROR(-20001,
+                '[' || v_program_name || '] SQLCODE=' || V_SQL_CODE || ' / SQLERRM=' || V_SQL_ERRMSG ||
+                ' / BACKTRACE=' || V_BACKTRACE || ' / PARAMS=' || V_PROC_INPUT);
+        END;
+END DMF0044_SAVE_SALES_PLAN_VERSION_COPY;
+/

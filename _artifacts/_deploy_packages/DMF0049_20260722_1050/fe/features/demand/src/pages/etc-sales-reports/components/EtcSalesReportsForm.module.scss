@@ -1,0 +1,11 @@
+/* DMF0044 조회조건 — Version readonly + '...' 버튼 가로 배치 (hook #94 36px 정합) */
+.versionCell {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  > :first-child {
+    flex: 1;
+    min-width: 0;
+  }
+}

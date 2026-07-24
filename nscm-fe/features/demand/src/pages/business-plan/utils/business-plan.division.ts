@@ -98,9 +98,12 @@ export const requiredFieldsFor = (divisionId: string): RequiredField[] => {
     fields.push({ col: 'ITEM_ID', lblKey: 'LBL00669', fallback: 'Model' });
     fields.push({ col: 'DEPT_ID', fallback: 'Team' });
     fields.push({ col: 'END_CUSTOMER', lblKey: 'LBL00080', fallback: 'End Customer' });
+    // ⭐ 2026-07-21 G8 교정 — 신정본 SaveData L997~998: 81 도 FCST_TYPE/INCOTERMS 필수 (구정본 승계 누락분)
+    fields.push({ col: 'FCST_TYPE', fallback: 'FcstType' });
+    fields.push({ col: 'INCOTERMS', lblKey: 'LBL00024', fallback: 'Incoterms' });
   } else {
-    // 82 — MinColumnChk L3323~3333: DEPT_ID/UNIT_ENERGY/CURRENCY/MEASURE (+PROJECT_CODE82 저장 슬롯)
-    fields.push({ col: 'PROJECT_CODE82', fallback: 'Project', read: r => readProjectSlot(r, divisionId) });
+    // 82 — ⭐ 2026-07-21 G8 교정: 신정본 SaveData L1024~1026 = DEPT_ID/CURRENCY/UNIT_ENERGY 만.
+    //   PROJECT_CODE82 는 저장 슬롯일 뿐 필수 아님 (구현이 필수로 요구하던 과잉 제거 — AS-IS 는 공란 저장 허용).
     fields.push({ col: 'DEPT_ID', fallback: 'Team' });
     fields.push({ col: 'UNIT_ENERGY', fallback: 'Unit Energy' });
   }

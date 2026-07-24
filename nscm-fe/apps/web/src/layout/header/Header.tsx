@@ -35,7 +35,8 @@ export const Header = () => {
         {session.menus?.map(menu => (
           <Link
             className={clsx(styles.menuLink, {
-              [styles.selected]: menu === sidebarMenu,
+              // 참조 비교하면 sessionStorage 에서 복원된 sidebarMenu 는 별개 객체라 항상 어긋난다
+              [styles.selected]: !!menu.mnuId && menu.mnuId === sidebarMenu?.mnuId,
             })}
             to='#'
             onClick={() => handleClickMenu(menu)}

@@ -1,15 +1,19 @@
-// ⭐ DMF0042 — 편집/잠금 규칙 엔진 R1~R7 (expressions 103건 조건부잠금 집약 — __asis-mapping__.md 전행 대조).
-//   근거(라인 = AS-IS DMF0042_1_BizPlan.cs 3,477줄 정본):
-//     R1 행 게이트   : EditButton L646 — EDIT_FLAG=='Y' 행 × Measure∈{Business_Plan, LOC} 만 수량영역 unlock.
-//                      (KRW/USD/SalesAmt_*/CAR_QTY/MKT_FCST = SP 파생 — 전체 잠금. InsertRow L1336 동일)
-//     R2 버킷 게이트 : EditButton L556~614 — 활성 버킷 축(M_/Q_/Y_)만 편집, 나머지 축 잠금.
-//     R3 금년 잠금   : L648~660 — 금년 이전 컬럼 잠금 (기준 = 금주 월요일 GetThisWeekMonday L3023 — FE 산정,
+// ⭐ DMF0042 — 편집/잠금 규칙 엔진 R1~R5+R7 (expressions 103건 조건부잠금 집약 — __asis-mapping__.md 전행 대조).
+//   근거(라인 = AS-IS 신정본 base DMF0042_BizPlan.cs 3,563행 — 2026-07-20 최신분석 2본으로 재대조.
+//   ⚠ 구정본 _1(3,477행) 기준이던 라인 인용을 신정본으로 전면 갱신 — 2026-07-21 보완):
+//     R1 행 게이트   : EditButton L644~ — EDIT_FLAG=='Y' 행 × Measure∈{Business_Plan, LOC} 만 수량영역 unlock.
+//                      (KRW/USD/SalesAmt_*/CAR_QTY/MKT_FCST = SP 파생 — 전체 잠금. InsertRow 동일)
+//     R2 버킷 게이트 : EditButton L582~637 — 활성 버킷 축(M_/Q_/Y_)만 편집, 나머지 축 잠금.
+//     R3 금년 잠금   : L670~689 — 금년 이전 컬럼 잠금 (기준 = 금주 월요일 GetThisWeekMonday — FE 산정,
 //                      조회 파라미터 p_now_yyyymmdd 와 동일 값).
-//     R4 40 유효구간 : L564~614 — 40 && 커서2 VALID_YN=='Y' 시 버킷별 구간(START/END_YYYYMM·YYYYQQ·YYYY)
-//                      밖 잠금. 81/82 = 커서2 NULL(lookup DM_LONG_PLAN 미등재) → 구간 게이트 미적용(파리티).
-//     R5 Insert 화이트리스트: InsertRow L1218~1409 — 메타 컬럼 전량 잠금 + division별 개방 소수 컬럼만.
-//     R6 Incoterms/FcstType 조건 개방: L628~642 — EDIT_FLAG=='Y' && Measure=='Business_Plan' && 40 &&
-//                      Incoterms=='' && FcstType=='' 일 때만 unlock.
+//     R4' 버킷축별 유효구간 (2026-07-21 G1 교정 — 신정본 EditButton L582~637 / InsertRow L1406~1461 1:1):
+//                      M_  = 40 && VALID_YN=='Y' && 구간 비공란일 때만 구간 밖 잠금 — else 없음(비40 전면 개방, L588).
+//                      Q_/Y_ = 40 && VALID_YN=='Y' && 구간 비공란 && 구간 내 에서만 개방 —
+//                              그 외 무조건 잠금 (L612~615 / L632~635 else LockColumn).
+//                      ⚠ 구현이 "81/82 = 게이트 미적용(통과)"이던 것은 구정본 승계 오류 — 81/82 는 Q_/Y_ 직접입력 불가가 파리티.
+//     R5 Insert 화이트리스트: InsertRow — 메타 컬럼 전량 잠금 + division별 개방 소수 컬럼만.
+//     (구 R6 삭제 — 2026-07-21 G2: 기존행 Incoterms/FcstType 조건 개방 블록은 신정본 L651~667 이 17행 전체 주석(비활성).
+//      L649 LockRange 가 살아 있어 기존행 정적 영역은 예외 없이 전량 잠금 = 파리티.)
 //     R7 3색       : 편집 Yellow / 과거 Gray / 기본 White (#95) — Grid formatItem 이 소비.
 import { BUCKET_TYPE, EDIT_MEASURE } from '../business-plan.constants';
 import type { BusinessPlanRow, CutoffWindow } from '../business-plan.types';
@@ -144,20 +148,25 @@ export const evalBizPlanDynCell = (params: {
   // ── R3 금년 이전 잠금 (L648~660 — 금년 이후 컬럼만 unlock) ──
   if (tag.year < cutoff.thisYear) return { editable: false, isPast };
 
-  // ── R4 40 유효구간 (L564~614 — 40 && VALID_YN='Y' 시 버킷별 구간 밖 잠금. 81/82 = window NULL 통과) ──
-  if (isDiv40(divisionId) && window?.validYn) {
-    if (tag.kind === 'M' && window.startYyyymm && window.endYyyymm) {
+  // ── R4' 버킷축별 유효구간 (2026-07-21 G1 교정 — 신정본 EditButton L582~637 / InsertRow L1406~1461 1:1) ──
+  //   R2 통과 후이므로 tag.kind === 활성 버킷 축.
+  //   M_  : 40+유효창(비공란)일 때만 구간 밖 잠금 — else 없음 = 비40/무효창 전면 개방 (L588 if only).
+  //   Q_/Y_: "40 && VALID_YN=='Y' && start/end 비공란 && 구간 내" 에서만 개방 — 그 외 무조건 잠금
+  //          (L612~615 / L632~635 else LockColumn — 81/82 는 커서2 0행이라 항상 else = 잠금).
+  //   비교: M=6자/Q='yyyyq' 5자/Y=4자 고정폭 문자열 = 수치 비교와 동치.
+  if (tag.kind === 'M') {
+    if (isDiv40(divisionId) && window?.validYn && window.startYyyymm && window.endYyyymm) {
       const ym = binding.slice(2);
       if (ym < window.startYyyymm || ym > window.endYyyymm) return { editable: false, isPast };
     }
-    if (tag.kind === 'Q' && window.startYyyyqq && window.endYyyyqq) {
-      const qq = `${tag.year}${tag.quarter}`;
-      if (qq < window.startYyyyqq || qq > window.endYyyyqq) return { editable: false, isPast };
+  } else {
+    const start = tag.kind === 'Q' ? window?.startYyyyqq : window?.startYyyy;
+    const end = tag.kind === 'Q' ? window?.endYyyyqq : window?.endYyyy;
+    if (!isDiv40(divisionId) || !window?.validYn || !start || !end) {
+      return { editable: false, isPast };
     }
-    if (tag.kind === 'Y' && window.startYyyy && window.endYyyy) {
-      const y = String(tag.year);
-      if (y < window.startYyyy || y > window.endYyyy) return { editable: false, isPast };
-    }
+    const v = tag.kind === 'Q' ? `${tag.year}${tag.quarter}` : String(tag.year);
+    if (v < start || v > end) return { editable: false, isPast };
   }
 
   return { editable: true, isPast };
@@ -213,18 +222,9 @@ export const insertStaticEditable = (
   }
 };
 
-// ⭐ R6 — 기존행 Incoterms/FcstType 조건 개방 (AS-IS EditButton L628~642 1:1):
-//   EDIT_FLAG=='Y' && Measure=='Business_Plan' && 40 && 두 값 모두 공란일 때만.
-export const existingRowStaticEditable = (
-  binding: string,
-  row: BusinessPlanRow,
-  divisionId: string
-): boolean => {
-  if (binding !== 'INCOTERMS' && binding !== 'FCST_TYPE') return false;
-  if (!isDiv40(divisionId)) return false;
-  const editFlag = typeof row.EDIT_FLAG === 'string' ? row.EDIT_FLAG : '';
-  const measure = typeof row.MEASURE === 'string' ? row.MEASURE : '';
-  const inco = typeof row.INCOTERMS === 'string' ? row.INCOTERMS.trim() : '';
-  const fcst = typeof row.FCST_TYPE === 'string' ? row.FCST_TYPE.trim() : '';
-  return editFlag === 'Y' && measure === EDIT_MEASURE.BUSINESS_PLAN && inco === '' && fcst === '';
-};
+// (구 R6 existingRowStaticEditable 삭제 — 2026-07-21 G2 교정)
+//   신정본 base EditButton L651~667: "Business Plan 일 경우만 Incoterms 등의 컬럼을 열어준다" 블록이
+//   17행 전체 주석(비활성)이고 L649 LockRange(정적 영역 전량 잠금)만 활성 —
+//   기존행 INCOTERMS/FCST_TYPE 은 예외 없이 잠금이 파리티. (구정본 _1 의 활성 블록을 승계했던 오류 제거.)
+//   ⚠ 파리티 수용 리스크: 40 기존행 INCO/FCST 공란이면 수량 수정 후 저장 시 필수값 alert(MSG00429)
+//   dead-end — AS-IS(MSG00310) 동일 동작.

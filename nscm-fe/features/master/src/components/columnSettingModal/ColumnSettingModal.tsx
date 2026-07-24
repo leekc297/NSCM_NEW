@@ -61,6 +61,15 @@ interface Props {
   leftTitle?: string;
   /** dual list 우측 상단 라벨 (예: 'Visible') */
   rightTitle?: string;
+  /**
+   * ⭐ 2026-07-23 (DMF0003 DEPT_ID/MEASURE titleset 오염 사고) — opt-in 후보 필터.
+   * true 시 BE 후보에서 (1) USER_SELECTABLE_FLAG!=='Y' (선택 불가 컬럼)
+   * (2) DEFAULT_FLAG가 ' '/'-' (고정컬럼 — SP branch②가 항상 포함하므로 사용자 선택 대상 아님)
+   * 를 제외한다. 고정/선택불가 컬럼이 titleset 'C' 에 저장되면 동적 PIVOT 에서
+   * ORA-00918(중복)/ORA-00904(미산출) 를 유발하므로 후보 자체를 차단.
+   * 기본 undefined = 기존 사용처(DMF0020/0043) 무영향.
+   */
+  selectableOnly?: boolean;
 }
 
 export const ColumnSettingModal = ({
@@ -76,6 +85,7 @@ export const ColumnSettingModal = ({
   initialVisibleKeys,
   leftTitle,
   rightTitle,
+  selectableOnly,
 }: Props) => {
   const setAlert = useMessageStore.getState().setAlert;
 
@@ -113,7 +123,22 @@ export const ColumnSettingModal = ({
     };
 
     if (beRows.length > 0) {
-      return beRows.map((r, i) => {
+      // ⭐ 2026-07-23 (DMF0003 사고) — ① selectableOnly 후보 필터 (고정/선택불가 컬럼 제외)
+      //   ② COLUMN_NAME dedup (BE 메타 중복행 유입 시 dual list 중복 표시·이동/체크 오동작 방어.
+      //      itemKey=COLUMN_NAME 이므로 중복 키 = 양쪽 이동/렌더 사고. 첫 행 유지).
+      const seen = new Set<string>();
+      const candidates = beRows.filter(r => {
+        const colName = String(r.COLUMN_NAME ?? '');
+        if (!colName || seen.has(colName)) return false;
+        if (selectableOnly) {
+          const selectable = String(r.USER_SELECTABLE_FLAG ?? 'Y');
+          const defFlag = String(r.DEFAULT_FLAG ?? 'N');
+          if (selectable !== 'Y' || defFlag === ' ' || defFlag === '-') return false;
+        }
+        seen.add(colName);
+        return true;
+      });
+      return candidates.map((r, i) => {
         const colName = String(r.COLUMN_NAME ?? '');
         const beFlag = String(r.USER_FLAG ?? r.VISIBLE_FLAG ?? 'Y');
         return {
@@ -144,7 +169,7 @@ export const ColumnSettingModal = ({
       SUB_TOTAL_FLAG: 'N',
       SORT_ORDER_NO: i + 1,
     }));
-  }, [beRows, fallbackColumns, initialVisibleKeys]);
+  }, [beRows, fallbackColumns, initialVisibleKeys, selectableOnly]);
 
   const [rows, setRows] = useState<ColumnSettingRow[]>([]);
 

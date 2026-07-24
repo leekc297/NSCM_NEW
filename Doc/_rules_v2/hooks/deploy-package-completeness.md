@@ -66,6 +66,13 @@
    → grep -oE '\w+\.NEXTVAL' 03_SP_PKG/*.sql + 02_DB_DDL/*.sql
    → 사내 USER_OBJECTS 에서 실제 이름 확인 (추측 금지 — NSCM 표준: history = `_H` suffix, `HIST` 비표준)
    → 누락 시 DBMS_METADATA.GET_DDL('TABLE'/'SEQUENCE', ...) 추출 + GRANT/SYNONYM 동봉
+
+☐ ⭐⭐ GTT/TABLE DDL 수량·금액 컬럼 NUMBER(30,10) 표준? (2026-07-22 신설 — 사용자 확정 룰)
+   → grep -nE "NUMBER\(20,10\)" 이관 DDL 전체 — 수량(QTY)/금액(AMT)/율 계열 검출 시 (30,10) 교정 의무
+   → (20,10)=정수부 10자리 → 백억(10^10) 이상 금액에서 ORA-01438 (실측: DMF0082 클라우드 61.8B 사고)
+   → ⚠ -955 skip 멱등 DDL 은 대상 DB 의 구판 GTT 를 갱신하지 못함 — 정밀도 교정 포함 이관은
+     DROP→재생성 REBUILD 파일(00A_GTT_REBUILD_<ID>.sql) 동봉 + 배포 후 all_tab_columns 검증 쿼리 명기
+   → 상세: oracle-sp-perf-correlated-setbased-and-live-redeploy.md §D
 ```
 
 ### §1.5 ⭐ barrel re-export 파일 PATCH 안내문 표준 (2026-06-15 신설)
@@ -202,7 +209,19 @@ ls _artifacts/_deploy_packages/{화면}/04_Verify/*_Diagnose.sql        # Diagno
 
 ---
 
+## §4.6 ⭐ 2026-07-23 DMF0003/0049 클라우드 이관 사고 3건으로 추가된 의무
+
+| # | 의무 | 사고 근거 |
+|---|---|---|
+| 1 | **FE 변경분은 `fe/` 폴더에 repo 상대경로로 동봉** — README 에 경로 나열만 하고 파일 미동봉 금지. 동일 파일을 복수 패키지가 포함하면 "최신 스냅샷(양쪽 변경 포함)" 명시 + 함께 적용 권장 문구 | DMF0003 SEARCHCOND/IMMUNIZE 패키지 FE 3파일 누락 — 사용자 지적 |
+| 2 | **PKG SPEC/BODY 는 문장마다 `/` 종결자** — GET_DDL('PACKAGE') 원문은 spec+body 가 구분자 없이 연결됨 → 스크립트 실행 시 `PLS-00103: 심볼 "CREATE"`. 파일 생성 시 CREATE 문 수 == `/` 수 검증 | DMF0049 PKG_DMF0049_FULL_fixed 1차 실행 실패 |
+| 3 | **교차 PKG 의존은 PREREQ 로 동봉 + 번호 순서 파일명** — 본 PKG BODY 가 타 PKG 멤버를 호출하면(`PKG_A.P_...`) 그 PKG SPEC/BODY+GTT 를 `01_PREREQ_*` 로 폴더에 포함(이미 적용 환경은 skip 무해 명시). PKG BODY 는 반드시 **live 최신본 덤프**(구판 스냅샷 재사용 금지 — standalone 호출 잔존판이 클라우드에서 PLS-00201) | DMF0049 BODY 가 SCM_MGR.DMF0044_MOBILE_REPORT_CREATE(클라우드 미존재) 호출 → PLS-00201 |
+| 4 | 같은 PKG 를 여러 패키지가 갱신 중이면 **최신 BODY 단일본이 어느 패키지인지 README 상호 명기** | DMF0003 IMMUNIZE ↔ ORA12841_FIX BODY 중복 |
+
+---
+
 ## §5. 변경 이력
 
 - **2026-06-02 작성** (DMF0072/0008/0043/0043_01 deploy zip 누락 4건 사후 보강 작업 — 사용자 명시 요구)
 - **2026-07-02 §4.5 신설** (DMF0020 SAVE '후속 보강' 잔류 → 클라우드 저장 불능 / SYS0012 PROC_M MERGE ORA-00001 사고)
+- **2026-07-23 §4.6 신설** (DMF0003 FE 동봉 누락·DMF0049 `/`구분자 PLS-00103·교차 PKG PLS-00201 — 사용자 룰화 요구)

@@ -300,8 +300,11 @@ export const BusinessPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
     }
   };
 
-  // ⭐ Set Price — 가격→금액 환산 (AS-IS btnSetPrice L3115~3136 1:1: MSG00678 confirm → SP → 재조회)
+  // ⭐ Set Price — 가격→금액 환산 (AS-IS btnSetPrice: MSG00678 confirm → SP → 재조회)
   const handleSetPrice = async () => {
+    // [개선] pending 차단 (2026-07-21 사용자 승인 — AS-IS 는 가드 전무라 미저장 변경이 재조회로 소실.
+    //   Exchange/Cutoff/Replace 와 MSG00680 통일. 파리티 이탈 의도 명시.)
+    if (!validation.validateNoPending(hasPendingChanges()).ok) return;
     const confirmed = await setAlert({
       type: 'confirm',
       content: t(MSG.SET_PRICE_CONFIRM, '_변경된 환율을 적용하시겠습니까?'),

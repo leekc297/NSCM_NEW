@@ -31,3 +31,7 @@
     z-index: 999; /* 본문 내용보다 위에 오도록 */
   }
 }
+/* viewRegistry 미등록 화면 안내 (2026-07-21 — 클라우드 Router 셸 전용 전환) */
+.viewNotRegistered {
+  padding: 24px;
+}

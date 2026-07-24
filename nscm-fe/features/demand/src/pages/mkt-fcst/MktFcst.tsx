@@ -794,8 +794,14 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
         modalClose={() => setOpenColumnSetting(false)}
         menuId={MENU_ID}
         sheetName={SHEETS.MAIN}
-        columnType={SHEETS.MAIN}
+        // ⭐ 2026-07-23 정정 — columnType 은 TITLESET_USER.USER_INQUIRY_COLUMN_TYPE_CODE('C'=Column).
+        //   기존 SHEETS.MAIN('Mkt Fcst') 전달 → DMF0002_GET_TITLESET_POPUP 의 usr CTE 0행
+        //   → 저장한 선택이 재오픈 시 항상 DEFAULT 로 복원되던 결함(저장 미유지) fix.
+        columnType='C'
         divisionId={sc.divisionId}
+        // ⭐ 2026-07-23 — 고정컬럼(MEASURE 등 branch② 전담)/선택불가 컬럼(DEPT_ID 등 MF_BASE 미산출)
+        //   후보 제외. titleset 'C' 오염 → 조회 ORA-00918/00904 사고 재발 방지 (SP 면역 가드와 2중).
+        selectableOnly
         fallbackColumns={MAIN_COLUMNS.map(c => ({ key: c.key, header: c.header, width: c.width }))}
         title={t('LBL00711', '_Column')}
         leftTitle={t('LBL00764', 'Invisible')}
