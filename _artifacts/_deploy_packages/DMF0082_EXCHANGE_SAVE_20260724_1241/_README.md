@@ -13,7 +13,7 @@
 | 2 | `sp/01_PKG_DMF0000_SPEC.sql` | PKG_DMF0000 SPEC | 사내 live 최신 덤프 (2026-07-24) |
 | 3 | `sp/02_PKG_DMF0000_BODY.sql` | PKG_DMF0000 BODY (5 proc — SAVE 포함) | 본문 무수정 원칙 — 사내 정본 그대로 |
 | 4 | `sp/03_GRANT_SYNONYM.sql` | SCMD_APP EXECUTE + SYNONYM | 멱등 |
-| 5 | `sql/01_wiring_meta_cloud.sql` | API_M / PROC_M(DELETE→INSERT) / BTN×2테이블 / MSG00689 | 멱등 + 기존 row UPDATE 보정 동반 |
+| 5 | `sql/01_wiring_meta_cloud.sql` | API_M / PROC_M / BTN×2테이블 / MSG00689 | **INSERT-only (전 문장 NOT EXISTS — 기존재 무수정, 사용자 확정 2026-07-24)** |
 | 6 | `90_DIAGNOSE/90_VERIFY.sql` | 적용 후 검증 (기대값 주석) | 전 항목 기대값 일치 확인 |
 | 7 | `fe/` | FE 2파일 스냅샷 | 아래 FE 절 참조 (locale json 은 이관 제외 — 사용자 확정) |
 
