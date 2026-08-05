@@ -5,10 +5,10 @@ config:
     databaseType: oracle
 #    driverClassName: oracle.jdbc.OracleDriver
 #    jdbc-url: jdbc:oracle:thin:@10.34.220.81:2521:ESSCMD
-    driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-    jdbc-url: jdbc:log4jdbc:oracle:thin:@10.34.220.81:2521:ESSCMD
-    username: SCMD_APP
-    password: "!SCMroqkf2026"
+    driverClassName: oracle.jdbc.OracleDriver
+    jdbc-url: jdbc:oracle:thin:@//10.34.222.16:2521/OCGSCMQ_P01
+    username: SCMP_APP
+    password: "!ScMpaP_wndls@"
     maxPoolSize: 10
     minIdel: 10
 #    connectionTestQuery: "select 1 from dual"
@@ -28,8 +28,8 @@ config:
     configLocations: "classpath:/mybatis/mybatis-config.xml"
 
   domain:
-    fe: "http://localhost:3000/"
-    be: "http://localhost:8080/"
+    fe: "http://10.32.192.50:8090/"
+    be: "http://10.32.192.50:8080/"
 
   sso:
     service-name: "LESAGSCMUIDOA01"

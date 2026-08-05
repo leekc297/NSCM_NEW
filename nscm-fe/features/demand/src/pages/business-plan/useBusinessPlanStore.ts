@@ -31,6 +31,8 @@ interface State {
   staticMeasures: MeasureMeta[];
   // MeasureSelectModal 선택 measure(표시 대상). null = 미설정(전체 표시).
   visibleMeasures: string[] | null;
+  // ⭐ ColumnLayoutModal 개인화 보관 (null = 미설정). fetchStaticColumns 재조회 후 재적용 기준.
+  userColumnLayout: ColumnLayoutSetting[] | null;
   // ⭐ MAIN 커서 2 보관 — 40 편집 유효구간 (81/82 = lookup DM_LONG_PLAN 미등재 → NULL. FE NULL 방어 승계).
   cutoffWindow: CutoffWindow | null;
   // PR_GET_DAY_RANGE 1회 적용 가드 (AS-IS drpPeriod.InitValue L308 — p_month=7)
@@ -51,9 +53,49 @@ interface Action {
   // PR_GET_DAY_RANGE o_rc2 DAY_RANGE('yyyymmdd:yyyymmdd') → 기본 Period (당월 1일 ~ +7개월 말일)
   applyDayRange: (range?: string) => void;
   applyColumnVisibility: (visibleKeys: string[]) => void;
+  // ⭐ ColumnLayoutModal 개인화 적용 (DMF0003 mkt-fcst 방식 1:1 — 표시/순서 + 폭/색).
+  applyColumnLayout: (settings: ColumnLayoutSetting[]) => void;
   applyVisibleMeasures: (measureCodes: string[] | null) => void;
   setAuthGroup: (group: string) => void;
 }
+
+/** ColumnLayoutModal 개인화 1행 — 표시/순서/폭/색 (DMF0003·DMF0082 선례 1:1). */
+export interface ColumnLayoutSetting {
+  colNm: string;
+  visible: boolean;
+  width: number;
+  cellColor: string;
+  textColor: string;
+  order: number;
+}
+
+// 개인화 목록을 admin 컬럼 메타에 적용 — visible/display 양방향 + 폭·색 + 순서.
+//   ⚠️ visible 만 바꾸면 공통 DataGrid 의 display 경로가 남아 컬럼이 안 사라진다 (DMF0003 선례).
+const applyLayoutToColumns = (
+  cols: RawFlexGridColumnConfig[],
+  settings: ColumnLayoutSetting[]
+): RawFlexGridColumnConfig[] => {
+  const byCol = new Map(settings.map(s => [s.colNm, s]));
+  return cols
+    .map(c => {
+      const s = byCol.get(c.colNm);
+      // 개인화 목록에 없는 컬럼 = 사용자가 비표시로 저장한 것.
+      if (!s) return { ...c, visible: false, display: false };
+      return {
+        ...c,
+        visible: s.visible,
+        display: s.visible,
+        colWth: s.width,
+        cellColor: s.cellColor,
+        textColor: s.textColor,
+      };
+    })
+    .sort(
+      (a, b) =>
+        (byCol.get(a.colNm)?.order ?? Number.MAX_SAFE_INTEGER) -
+        (byCol.get(b.colNm)?.order ?? Number.MAX_SAFE_INTEGER)
+    );
+};
 
 // ⭐ 금주 월요일 (AS-IS GetThisWeekMonday L3023~3042 1:1 — p_now_yyyymmdd + editLock cutoff 공통 원천)
 export const thisWeekMonday = (): string => {
@@ -91,6 +133,7 @@ const initState: State = {
   staticColumns: [],
   staticMeasures: [],
   visibleMeasures: null,
+  userColumnLayout: null,
   cutoffWindow: null,
   dayRangeApplied: false,
   authGroup: '',
@@ -229,6 +272,21 @@ export const useBusinessPlanStore = createPersistedStoreWithTab<State & Action>(
           ...c,
           display: visibleSet.has(c.colNm),
         }));
+      });
+    },
+
+    // ⭐ ColumnLayoutModal OK — 표시/순서 + 폭/색 개인화 적용 (DMF0003 방식으로 교체 2026-07-30).
+    //   userColumnLayout 은 fetchStaticColumns 재조회 후 재적용 기준이자 팝업 재진입 복원값이다.
+    applyColumnLayout: settings => {
+      set(state => {
+        const layout = settings
+          .filter(s => s.visible)
+          .sort((a, b) => a.order - b.order)
+          .map((s, i) => ({ ...s, order: i + 1 }));
+        state.userColumnLayout = layout;
+        const cur = state.staticColumns;
+        if (!cur || cur.length === 0) return;
+        state.staticColumns = applyLayoutToColumns(cur, layout);
       });
     },
 

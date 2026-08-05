@@ -1,14 +1,15 @@
 import {
   BizTypeField,
   DivisionField,
-  EndCustomerField,
   ItemField,
   PeriodField,
+  PlantSiteField,
   SalesSiteField,
   TeamField,
   VersionField,
 } from 'features/master/src/components';
 
+import type { ComboResponse } from '@foundation/models';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { Checkbox, FormItem } from '@shared/lges';
@@ -43,7 +44,11 @@ export const ForecastPriceForm = ({
 
   // Bucket 옵션 = CMBO 'BucketType' 동적 fetch (DMF0003_GET_BUCKET_TYPE_CODE 1:1 — CMBO 등록명).
   //   CODE 풀워드(DAILY/WEEKLY/MONTHLY) → 첫 글자 enum 매핑. 빈 응답 시 정적 fallback 3종.
-  const [bucketTypeCombo] = useTabComboQueries({ filters: ['BucketType'] });
+  // ⭐ End Customer 콤보 = division + 선택 팀(DEPT_ID) cascade 필터용 (MetalLinkPriceForm 동일 패턴).
+  //   catalog EndCustomerField 는 division 필터만 지원 → 인라인 CustomDropdown 으로 팀 cascade 처리.
+  const [bucketTypeCombo, endCustomerCombo] = useTabComboQueries({
+    filters: ['BucketType', 'EndCustomer'],
+  });
   const bucketOptions =
     bucketTypeCombo && bucketTypeCombo.length > 0
       ? bucketTypeCombo
@@ -72,6 +77,7 @@ export const ForecastPriceForm = ({
                 deptIds: [],
                 endCustomers: [],
                 salesSites: [],
+                plantSiteIds: [],
                 itemIds: [],
               })
             }
@@ -81,37 +87,55 @@ export const ForecastPriceForm = ({
             division={searchParams.divisionId}
             value={searchParams.deptIds}
             onChange={v => setSearchParams({ deptIds: v, endCustomers: [], salesSites: [] })}
-            // ⭐ 2026-07-23 AS-IS 정합 — owner 1번 토큰 부서 기준 (hook #117, 차집합 35/64 실측)
-            comboId='UserTeamByDivision'
           />
-          <EndCustomerField
-            gridSize={3}
-            division={searchParams.divisionId}
-            value={searchParams.endCustomers}
-            onChange={v => setSearchParams({ endCustomers: v, salesSites: [] })}
-          />
+          {/* End Customer — division + 선택 팀(DEPT_ID) cascade 필터 (MetalLinkPriceForm L118~143 1:1).
+              팀 변경 시 옵션 재조회 + 하위(Sales Site) clear. */}
+          <Grid size={3}>
+            <FormItem
+              label={t('LBL00080', '_End Customer')}
+              labelAlign='right'
+              render={() => (
+                <CustomDropdown
+                  multiple
+                  allOption
+                  useClearIcon
+                  limitTags={1}
+                  value={searchParams.endCustomers.join(',')}
+                  options={
+                    endCustomerCombo
+                      ?.filter(
+                        (item: ComboResponse) =>
+                          item.DIVISION_ID === searchParams.divisionId &&
+                          (searchParams.deptIds.length === 0 ||
+                            !item.DEPT_ID ||
+                            searchParams.deptIds.includes(item.DEPT_ID))
+                      )
+                      ?.map((item: ComboResponse) => ({ label: item.NAME, value: item.CODE })) ?? []
+                  }
+                  onChange={(_, selected) =>
+                    setSearchParams({
+                      endCustomers: String(selected ?? '')
+                        .split(',')
+                        .filter(Boolean),
+                      salesSites: [],
+                    })
+                  }
+                />
+              )}
+            />
+          </Grid>
           <SalesSiteField
             gridSize={3}
             division={searchParams.divisionId}
             value={searchParams.salesSites}
             onChange={v => setSearchParams({ salesSites: v })}
-            // ⭐ 2026-07-23 AS-IS 정합(사용자 승인) — 'UserSiteByEndCustomer' 서버 바인드 전환:
-            //   EndCustomer/Team cascade + 40 owner-team 필터 + OPERATION_GROUP 'W' 제외 (hook #117).
-            comboId='UserSiteByEndCustomer'
-            endCustomer={searchParams.endCustomers.join(',')}
-            deptId={searchParams.deptIds.join(',')}
           />
 
           {/* Row 2 — Biz Type / Model·Nickname(팝업) / Period / Bucket */}
-          {/* ⭐ 2026-07-23 AS-IS 정합 — AS-IS BigFilter BizType = DM_BIZ_TYPE(40) UNION
-              SCM_MST_PROJECT BIZ_TYPE(비40). 공유 'BizType'(lookup 3종)은 81/82 후보 누락 →
-              'BizTypebyDivision' + division 필터 (DMF0003 P1 동형, hook #117). */}
           <BizTypeField
             gridSize={3}
             value={searchParams.bizTypes}
             onChange={v => setSearchParams({ bizTypes: v })}
-            comboId='BizTypebyDivision'
-            division={searchParams.divisionId}
           />
           <ItemField
             gridSize={3}
@@ -139,7 +163,9 @@ export const ForecastPriceForm = ({
                   value={searchParams.bucketType}
                   options={bucketOptions}
                   onChange={(_, option) =>
-                    onBucketChange ? onBucketChange(option) : setSearchParams({ bucketType: option })
+                    onBucketChange
+                      ? onBucketChange(option)
+                      : setSearchParams({ bucketType: option })
                   }
                 />
               )}
@@ -149,8 +175,25 @@ export const ForecastPriceForm = ({
       }
       extraConditions={
         <>
-          {/* Row 3 — Version*(팝업 전용) / Sum·Qty ≥ 0 체크박스 */}
-          <VersionField gridSize={3} value={searchParams.versionType} onOpenPopup={onOpenVersionLookup} />
+          {/* Row 3 — Version*(팝업 전용) / Plant Site(81 전용) / Sum·Qty ≥ 0 체크박스 */}
+          <VersionField
+            gridSize={3}
+            value={searchParams.versionType}
+            onOpenPopup={onOpenVersionLookup}
+          />
+          {/* ⭐ Plant Site — 표준 카탈로그 PlantSiteField (DMF0003 MktFcstForm 1:1 — 콤보
+              PlantSitebyEndCustomer, Division+EndCustomer 서버 바인드). 81 계열만 enable, 40/82 비활성. */}
+          <PlantSiteField
+            gridSize={3}
+            value={searchParams.plantSiteIds}
+            onChange={v => setSearchParams({ plantSiteIds: v })}
+            division={searchParams.divisionId}
+            endCustomer={
+              searchParams.endCustomers.length > 0
+                ? searchParams.endCustomers.join(',')
+                : undefined
+            }
+          />
           <Grid size={3} sx={{ display: 'flex', alignItems: 'center' }}>
             <Stack direction='row' spacing={1} alignItems='center' sx={{ width: '100%' }}>
               <Checkbox

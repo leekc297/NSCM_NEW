@@ -14,13 +14,12 @@ import dayjs from '@foundation/dayjs';
 import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
 import { DataGrid } from '@shared/components';
 
-import {
-  BUCKET_PREFIX,
-  BUCKET_TYPE,
-  MAIN_COLUMNS,
-  MENU_ID,
-} from '../sales-monitoring.constants';
-import type { CurrentWeekInfo, SalesMonitoringRow, SpreadTitleRow } from '../sales-monitoring.types';
+import { BUCKET_PREFIX, BUCKET_TYPE, MAIN_COLUMNS, MENU_ID } from '../sales-monitoring.constants';
+import type {
+  CurrentWeekInfo,
+  SalesMonitoringRow,
+  SpreadTitleRow,
+} from '../sales-monitoring.types';
 import styles from '../SalesMonitoring.module.scss';
 import { dynKindOf, getDynKey, HierarchicalMergeManager } from '../utils/sales-monitoring.merge';
 
@@ -185,7 +184,14 @@ export const SalesMonitoringGrid = ({
     }
     return [...set].sort().map<DynColMeta>(b => {
       const dyn = getDynKey(b);
-      return { binding: b, kind: dyn.kind!, large: dyn.ym, small: dyn.sub, leaf: dyn.leaf, sort: 0 };
+      return {
+        binding: b,
+        kind: dyn.kind!,
+        large: dyn.ym,
+        small: dyn.sub,
+        leaf: dyn.leaf,
+        sort: 0,
+      };
     });
   }, [spreadTitle, rows]);
 
@@ -247,7 +253,8 @@ export const SalesMonitoringGrid = ({
         m.kind === 'M'
           ? 'SUM'
           : m.kind === 'W'
-            ? (m.small ||
+            ? (
+                m.small ||
                 (/^W_\d{7,9}$/.test(m.binding) && !/^W_\d{8}$/.test(m.binding)
                   ? `W${m.binding.slice(8)}`
                   : getDynKey(m.binding).sub)
@@ -373,10 +380,7 @@ export const SalesMonitoringGrid = ({
 
     // read-only 가드 — 전 셀 편집 차단 (wrapper 'S' 처리 + 명시 cancel 이중 방어.
     //   AS-IS: FindButton/ExcelButton 만 override, 저장 스택 데드코드 — 사용자 확정 2026-07-04)
-    const beginningEditHandler = (
-      _s: FlexGridType<SalesMonitoringRow>,
-      e: { cancel: boolean }
-    ) => {
+    const beginningEditHandler = (_s: FlexGridType<SalesMonitoringRow>, e: { cancel: boolean }) => {
       e.cancel = true;
     };
     g.beginningEdit.addHandler(beginningEditHandler);
@@ -554,6 +558,7 @@ export const SalesMonitoringGrid = ({
         autoGenerateColumns={false}
         allowSorting={true}
         allowMerging={AllowMerging.All}
+        isReadOnly={true}
       />
     </div>
   );

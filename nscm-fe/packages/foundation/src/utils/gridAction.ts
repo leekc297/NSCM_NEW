@@ -228,7 +228,12 @@ export const GridAction = {
       )
     );
     rows.forEach(row =>
-      sheet.rows.push(buildRow(columns.map(column => String(row[column.key] ?? '')), textStyle))
+      sheet.rows.push(
+        buildRow(
+          columns.map(column => String(row[column.key] ?? '')),
+          textStyle
+        )
+      )
     );
 
     const workbook = new Workbook();
@@ -425,9 +430,7 @@ export const GridAction = {
 
           let colIdx = 0;
           // 단일 visible leaf 를 따라 내려가며 반환(분기=leaf 2개 이상이면 null).
-          const singleVisibleLeaf = (
-            node: FlexGridColumnConfig
-          ): FlexGridColumnConfig | null => {
+          const singleVisibleLeaf = (node: FlexGridColumnConfig): FlexGridColumnConfig | null => {
             if (!node.columns?.length) return node;
             const vis = node.columns.filter(child => visibleLeafCount(child) > 0);
             if (vis.length !== 1) return null;

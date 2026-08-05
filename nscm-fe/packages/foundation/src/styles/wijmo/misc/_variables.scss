@@ -82,7 +82,8 @@ $wj-sort-index-txt: #00648F !default; // Sort index color
 $wj-cell: $wj-bkg !default; // cell background
 
 //$wj-cell-alt: safedarken($wj-cell, 3%) !default; // alternating cell background
-$wj-cell-alt: #F7F7F8 !default;//safedarken($wj-cell, 3%) !default; // alternating cell background
+//$wj-cell-alt: #F7F7F8 !default;//safedarken($wj-cell, 3%) !default; // alternating cell background
+$wj-cell-alt: $wj-cell !default; // 그리드 셀 색상 흰색 통일 , 2026-07-09
 
 $wj-cell-frz: null !default; // frozen cell background
 $wj-cell-frz-alt: null !default; // alternating frozen cell background

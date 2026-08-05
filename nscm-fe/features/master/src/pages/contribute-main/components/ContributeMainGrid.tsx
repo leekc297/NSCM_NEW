@@ -104,7 +104,7 @@ const buildDynamicColumns = (data: MainRow[], chkYear: boolean): FlexGridColumnC
       allowSorting: false,
       allowMerging: false,
       height: 24,
-      visible: true, // ⭐ Excel 다단헤더 export 시 visible 미명시=undefined→hidden 방지 (gridAction §223, DMF0048 선례)
+      visible: true,
       columns: [
         {
           binding: leaf.binding,
@@ -115,7 +115,7 @@ const buildDynamicColumns = (data: MainRow[], chkYear: boolean): FlexGridColumnC
           allowSorting: false,
           allowMerging: false,
           height: 24,
-          visible: true, // ⭐ Excel export leaf 숨김 방지 (gridAction new Column({visible: columnGroup.visible}))
+          visible: true,
           _inputEditType: isRbu999
             ? CELL_INPUT_EDIT_TYPE.SEARCH_ONLY
             : CELL_INPUT_EDIT_TYPE.OPTIONAL,

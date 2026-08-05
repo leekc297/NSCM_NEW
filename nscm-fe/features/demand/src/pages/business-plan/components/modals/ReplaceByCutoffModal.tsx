@@ -1,4 +1,8 @@
-import { CellType, type FlexGrid as FlexGridType, type FormatItemEventArgs } from '@mescius/wijmo.grid';
+import {
+  CellType,
+  type FlexGrid as FlexGridType,
+  type FormatItemEventArgs,
+} from '@mescius/wijmo.grid';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
@@ -77,7 +81,7 @@ export const ReplaceByCutoffModal = ({ open, modalClose, divisionId, range }: Pr
     enabled: open,
   });
   const versionRows = useMemo<MdfVersionRow[]>(
-    () => ((data as { data?: MdfVersionRow[] } | undefined)?.data ?? []),
+    () => (data as { data?: MdfVersionRow[] } | undefined)?.data ?? [],
     [data]
   );
 
@@ -123,7 +127,10 @@ export const ReplaceByCutoffModal = ({ open, modalClose, divisionId, range }: Pr
     const sel = gridRef.current?.selectedItems[0] as MdfVersionRow | undefined;
     const versionNo = sel ? String(sel.VERSION_NO ?? '') : '';
     if (!versionNo) {
-      void setAlert({ type: 'alert', content: t(MSG.REQUIRED_COLUMN, '_필수 입력 컬럼이 없습니다.') });
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.REQUIRED_COLUMN, '_필수 입력 컬럼이 없습니다.'),
+      });
       return;
     }
     const confirmed = await setAlert({

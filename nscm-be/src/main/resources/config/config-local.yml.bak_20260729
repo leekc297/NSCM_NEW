@@ -1,0 +1,87 @@
+# [local profile 설정]
+config:
+  datasources[0]: # ORACLE
+    databaseName: nscm_oracle
+    databaseType: oracle
+#    driverClassName: oracle.jdbc.OracleDriver
+#    jdbc-url: jdbc:oracle:thin:@10.34.220.81:2521:ESSCMD
+#    driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+#    jdbc-url: jdbc:log4jdbc:oracle:thin:@//10.34.222.16:2521/OCGSCMD_P01
+    #driverClassName: oracle.jdbc.OracleDriver
+    #jdbc-url: jdbc:oracle:thin:@//10.34.222.16:2521/OCGSCMD_P01
+    driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    jdbc-url: jdbc:log4jdbc:oracle:thin:@10.34.222.16:2521/OCGSCMD_P01
+    username: SCMP_APP
+    password: "!ScMpaP_wndls@"
+    maxPoolSize: 10
+    minIdel: 10
+  # connectionTestQuery: "select 1 from dual"
+    mapperLocations: classpath:/sql/**/*.xml
+    configLocations: classpath:/mybatis/mybatis-config.xml
+  datasources[1]: # MS-SQL
+    databaseName: nscm_mssql
+    databaseType: mssql
+    driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    jdbc-url: jdbc:log4jdbc:sqlserver://165.244.95.223:1433;databaseName=NSCM_DEV;encrypt=false;trustServerCertificate=true
+    username: scp_mgr_dev
+    password: 1234qwer
+    maxPoolSize: 10
+    minIdel: 10
+#    connectionTestQuery: "select 1"
+    mapperLocations: "classpath:/sql/**/*.xml"
+    configLocations: "classpath:/mybatis/mybatis-config.xml"
+
+  domain:
+    fe: "http://localhost:3000/"
+    be: "http://localhost:8080/"
+
+  sso:
+    service-name: "LESAGSCMUIDOA01"
+    server-url: "http://nscm-server.dev.lgensol.com"
+    server-port: "7070"
+    nls-url: "http://gssodev.lgensol.com"
+    nls-port: "8001"
+    nls-login-url-suffix: "/nls3/clientLogin.jsp"
+    nls-logout-url-suffix: "/nls3/NCLogout.jsp"
+    nls-error-url-suffix: "/nls3/error.jsp"
+    ascp-url-suffix: "/sso/login_exec"
+    nd-url: "http://gssodev.lgensol.com:5480"
+    sso-domain: ".lgensol.com"
+    toa: "1"
+#    redirect-suffix: "" # ascp-url-suffix 사용하면 될듯?
+    cookie-session-timeout: 3000000
+    timeout: 15000
+    provider-list:
+      - "ssodev.lgensol.com"
+      - "ssolesdev.lgchem.com"
+      - "gssodev.ultiumcell.com"
+      - "gssodev.lgensol.com"
+      - "sso.lgensol.com"
+      - "ssoles.lgchem.com"
+      - "gsso.lgensol.com"
+      - "gssoles.lgchem.com"
+      - "gsso.ultiumcell.com"
+
+# logback-spring.xml에서 import되는 property
+logging:
+  level:
+    root: INFO
+    nscm: INFO
+    sql: WARN
+  file:
+    path: ./logs
+    name: nscm
+  pattern: "%d{HH:mm:ss} %-5level %X{txId} %X{requestUri} %logger{50} - %msg%n"
+  max-history: 30 # day
+
+sap:
+  jco:
+    destination-name: SAP_NSCM_DEST_TEST
+    ashost: "10.31.134.32"        # SAP App. IP 주소 or 호스트
+    sysnr: "00"                   # 시스템 번호 서버내의 인스턴스 번호
+    client: "110"                 # 클라이언트 번호
+    user: "IF_GSCM_01"            # SAP 접속 아이디
+    passwd: "Lgensolgscm2023#"    # SAP 접속 패스워드
+    lang: "EN"                    # 언어 설정(+) (+)는 옵션
+    pool_capacity: "10"           # Default 커넥션 유지수량
+    peak_limit: "20"              # max 커넥션 수

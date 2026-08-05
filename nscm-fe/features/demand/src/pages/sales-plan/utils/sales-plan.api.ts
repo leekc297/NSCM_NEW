@@ -64,15 +64,32 @@ export const callSaveSalesPlan = async (
           | undefined)
       : undefined;
   const first = rows?.[0];
-  if (first && typeof first === 'object') {
-    const firstVal = Object.values(first as Record<string, unknown>).find(
-      v => typeof v === 'string' && String(v).trim() !== ''
-    );
-    if (typeof firstVal === 'string' && firstVal.trim().toLowerCase() !== 'success') {
-      // 'messageCode^addmessage' 분해 (AS-IS L2776~2782)
-      const [msgCode, ...rest] = firstVal.split('^');
-      return { ok: false, msgCode: msgCode.trim(), addMessage: rest.join('^').trim() || undefined };
-    }
-  }
-  return { ok: true };
+  const values =
+    first && typeof first === 'object' ? Object.values(first as Record<string, unknown>) : [first];
+  const resultValues = values.filter(
+    value =>
+      (typeof value === 'string' && value.trim() !== '') ||
+      (typeof value === 'number' && Number.isFinite(value))
+  );
+  if (resultValues.length === 0) return { ok: true };
+
+  const status = String(resultValues[0]).trim();
+  if (status === '0' || status.toLowerCase() === 'success') return { ok: true };
+
+  const following = resultValues
+    .slice(1)
+    .map(value => String(value).trim())
+    .filter(Boolean);
+  const errorText =
+    status === '-1' ? following.join('^') : status.startsWith('-1^') ? status.slice(3) : status;
+  const [candidateCode, ...rest] = errorText.split('^');
+  const msgCode = candidateCode.trim();
+  const isMessageCode = /^MSG\d+$/i.test(msgCode);
+  return {
+    ok: false,
+    msgCode: isMessageCode ? msgCode : undefined,
+    addMessage: isMessageCode
+      ? rest.join('^').trim() || following.join('^').trim() || undefined
+      : [errorText, ...following].filter(Boolean).join('^').trim() || undefined,
+  };
 };

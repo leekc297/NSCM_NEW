@@ -1,105 +1,94 @@
-// 2026.02.23 Minyong Lee : SSO 개발 임시 중단, QA 서버 구비 시 재개 예정
+package com.lgcns.nscm.admin.user;
 
-// package com.lgcns.nscm.admin.user;
+import java.io.IOException;
 
-// import java.io.IOException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.web.context.SecurityContextRepository;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 
-// import org.springframework.beans.factory.annotation.Value;
-// import org.springframework.stereotype.Controller;
-// import org.springframework.web.bind.annotation.GetMapping;
-// import org.springframework.web.bind.annotation.RequestMapping;
-// import org.springframework.web.bind.annotation.RestController;
+import com.lgcns.nscm.framework.property.CommonProperties;
+import com.lgcns.nscm.framework.security.CustomUserDetailsService;
+import com.lgcns.nscm.framework.security.SsoService;
 
-// import com.initech.eam.jakarta.nls.CookieManager;
-// import com.initech.eam.smartenforcer.SECode;
-// import com.lgcns.nscm.admin.auth.AuthService;
-// import com.lgcns.nscm.admin.menu.MenuController;
-// import com.lgcns.nscm.admin.menu.MenuService;
-// import com.lgcns.nscm.framework.annotation.AuthCheck;
-// import com.lgcns.nscm.framework.annotation.AuthCheck.Type;
-// import com.lgcns.nscm.framework.property.CommonProperties;
-// import com.lgcns.nscm.framework.security.SsoService;
-// import com.lgcns.nscm.general.GeneralService;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
-// import io.swagger.v3.oas.annotations.tags.Tag;
-// import jakarta.servlet.http.HttpServletRequest;
-// import jakarta.servlet.http.HttpServletResponse;
-// import jakarta.servlet.http.HttpSession;
-// import lombok.RequiredArgsConstructor;
-// import lombok.extern.slf4j.Slf4j;
+/**
+ * SSO 진입점. SSO 포탈 인증 사용자를 Spring Security 세션으로 로그인 처리 후 FE로 redirect.
+ * 플로우: SSO ID 조회 → 쿠키 검증 → 사용자 조회 → SecurityContext 세션 저장 → FE redirect
+ */
+@Slf4j
+@Controller
+@Tag(name = "0. SSO")
+@RequiredArgsConstructor
+public class SsoController {
 
-// @Slf4j
-// @Controller
-// @RequestMapping
-// @Tag(name = "0. SSO")
-// @RequiredArgsConstructor
-// public class SsoController {
+    /** 사용자 조회 실패(쿠키검증 통과 후 DB 오류 등) 에러코드. 미등록 사용자는 게스트로 로그인되므로 여기 해당하지 않는다. */
+    static final int ERROR_CODE_USER_NOT_FOUND = 999;
 
-//     private final SsoService ssoService;
-//     private final CommonProperties properties;
-// //    private final SessionService sessionService;
+    private final SsoService ssoService;
+    private final CustomUserDetailsService userDetailsService;
+    private final SecurityContextRepository securityContextRepository;
+    private final CommonProperties properties;
 
-// //    @Value("${domain.be}")
-// //    private String DOMAIN_BE;
-// //    @Value("${domain.fe}")
-// //    private String DOMAIN_FE;
-// //    private String REDIRECT_SUFFIX = "api/v1/sso/login_exec";
+    /** SSO Agent 표준 진입 URL (config.sso.ascp-url-suffix와 일치해야 함) */
+    @GetMapping("/sso/login_exec")
+    public void loginExec(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-// //    @GetMapping(value = "/v1/sso/redirect-url", produces = MediaType.APPLICATION_JSON_VALUE)
-// //    public ResponseEntity<CommonResponseVO> ssoRedirectUrl(HttpServletRequest request, HttpServletResponse response)
-// //            throws Exception {
-// //        String redirectUrl = DOMAIN_BE + REDIRECT_SUFFIX;
-// //        return new ResponseEntity<>(
-// //                CommonResponseVO.builder()
-// //                        .successOrNot(CommonConstants.YES_FLAG)
-// //                        .statusCode(StatusCodeConstants.SUCCESS)
-// //                        .data(redirectUrl)
-// //                        .build(),
-// //                HttpStatus.OK);
-// //    }
+        // 1. Nexess 쿠키에서 SSO ID 조회 — 없으면 SSO 로그인 페이지로
+        String ssoId = ssoService.getSsoId(request);
+        if (ssoId == null || ssoId.isEmpty()) {
+            ssoService.goLoginPage(response);
+            return;
+        }
 
-//     @AuthCheck(Type.NONE)
-//     @GetMapping("/sso/login")
-//     public void loginExec(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
+        // 2. 쿠키 유효성 검증 — 실패 시 SSO 에러 페이지로
+        String retCode = ssoService.verifySession(request, response);
+        if (!SsoService.RET_CODE_SUCCESS.equals(retCode)) {
+            log.warn("SSO 쿠키 검증 실패. ssoId={}, retCode={}", ssoId, retCode);
+            ssoService.goErrorPage(response, parseRetCode(retCode));
+            return;
+        }
 
-//         System.out.println("=== Request ===");
-//         System.out.println(request.toString());
-//         System.out.println("=== Response ===");
-//         System.out.println(response.toString());
-//         System.out.println("=== Session ===");
-//         System.out.println(session.toString());
+        // 3. NSCM 사용자 조회 — 미등록자는 loadUserByUsername이 게스트로 폴백 로그인시킴.
+        //    여기 예외는 조회 실패(DB 오류 등)만 해당한다.
+        UserDetails userDetails;
+        try {
+            userDetails = userDetailsService.loadUserByUsername(ssoId);
+        } catch (UsernameNotFoundException e) {
+            log.warn("SSO 사용자 조회 실패. ssoId={}", ssoId);
+            ssoService.goErrorPage(response, ERROR_CODE_USER_NOT_FOUND);
+            return;
+        }
 
-//         String ssoId = ssoService.getSsoId(request);
-//         System.out.println("[login_exec] sso_id = " + ssoId);
+        // 4. Spring Security 인증 컨텍스트를 세션에 저장 (/user/login과 동일한 세션 상태)
+        Authentication authentication =
+                new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        SecurityContext context = SecurityContextHolder.createEmptyContext();
+        context.setAuthentication(authentication);
+        SecurityContextHolder.setContext(context);
+        securityContextRepository.saveContext(context, request, response);
 
-//         if (ssoId == null || ssoId.isEmpty()) {
-//             ssoService.goLoginPage(request, response);
-//             return;
-//         }
+        log.info("SSO 로그인 성공. userId={}", ssoId);
 
-// //        String retCode = ssoService.getEamSessionCheck(request, response);
-// //        System.out.println("[login_exec] retCode = " + retCode);
-// //
-// //        if (!"0".equals(retCode)) {
-// //            ssoService.goErrorPage(response, Integer.parseInt(retCode));
-// //            return;
-// //        }
-// //
-// //        String eamId = (String) session.getAttribute("SSO_ID");
-// //        if (eamId == null || eamId.isEmpty()) {
-// //            session.setAttribute("SSO_ID", ssoId);
-// //        }
-// //
-// //        System.out.println("SSO Success");
+        // 5. FE로 이동
+        response.sendRedirect(properties.getDomain().getFe());
+    }
 
-//         return;
-
-// //        String ip1 = NetworkUtil.getClientIP(request);
-// //        String ip2 = CookieManager.getCookieValue(SECode.USER_IP, request);
-// //        System.out.println("NetworkUtil.getClientIP(request): " + ip1);
-// //        System.out.println("CookieManager.getCookieValue(SECode.USER_IP, request): " + ip2);
-// //        UserSessionVO userSession = sessionService.createUserSession(ssoId, "en", ip1);
-// //        session.setAttribute(CommonConstants.HTTP_SESSION_KEY, userSession);
-// //        response.sendRedirect(DOMAIN_FE);
-//     }
-// }
+    private int parseRetCode(String retCode) {
+        try {
+            return Integer.parseInt(retCode);
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+    }
+}

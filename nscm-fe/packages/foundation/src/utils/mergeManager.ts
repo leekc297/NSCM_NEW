@@ -3,6 +3,33 @@ import type { FlexGrid, GridPanel } from '@mescius/wijmo.grid';
 
 import { CRUD_TYPE } from '@foundation/constants';
 
+// 좌측 상단 No 영역을 컬럼 헤더 높이만큼 병합
+const getTopLeftMergedRange = (panel: GridPanel, col: number): CellRange | null => {
+  const lastRow = panel.rows.length - 1;
+  return lastRow > 0 ? new CellRange(0, col, lastRow, col) : null;
+};
+
+class TopLeftMergeManager extends MergeManager {
+  constructor(private readonly delegate: MergeManager) {
+    super();
+  }
+
+  getMergedRange(
+    panel: GridPanel,
+    currentRow: number,
+    currentCol: number,
+    clip: boolean = true
+  ): CellRange | null {
+    if (panel.cellType === CellType.TopLeft) return getTopLeftMergedRange(panel, currentCol);
+    return this.delegate.getMergedRange(panel, currentRow, currentCol, clip);
+  }
+}
+
+export const ensureTopLeftMergeManager = (grid: FlexGrid): void => {
+  if (grid.mergeManager instanceof TopLeftMergeManager) return;
+  grid.mergeManager = new TopLeftMergeManager(grid.mergeManager);
+};
+
 export class CustomMergeManager<T extends WijmoRowItem = WijmoRowItem> extends MergeManager {
   private readonly _mergeKeyCache = new Map<string, string>();
 
@@ -47,45 +74,6 @@ export class CustomMergeManager<T extends WijmoRowItem = WijmoRowItem> extends M
 
     this._mergeKeyCache.set(cacheKey, key);
     return key;
-  }
-
-  private _getTopLeftMergedRange(
-    panel: GridPanel,
-    currentRow: number,
-    currentCol: number
-  ): CellRange | null {
-    const rng = new CellRange(currentRow, currentCol);
-
-    for (let rightCol = rng.col; rightCol < panel.columns.length - 1; rightCol++) {
-      if (
-        panel.getCellData(rng.row, rightCol, true) !==
-        panel.getCellData(rng.row, rightCol + 1, true)
-      )
-        break;
-      rng.col2 = rightCol + 1;
-    }
-    for (let leftCol = rng.col; leftCol > 0; leftCol--) {
-      if (
-        panel.getCellData(rng.row, leftCol, true) !== panel.getCellData(rng.row, leftCol - 1, true)
-      )
-        break;
-      rng.col = leftCol - 1;
-    }
-
-    for (let downRow = rng.row; downRow < panel.rows.length - 1; downRow++) {
-      if (
-        panel.getCellData(downRow, rng.col, true) !== panel.getCellData(downRow + 1, rng.col, true)
-      )
-        break;
-      rng.row2 = downRow + 1;
-    }
-    for (let upRow = rng.row; upRow > 0; upRow--) {
-      if (panel.getCellData(upRow, rng.col, true) !== panel.getCellData(upRow - 1, rng.col, true))
-        break;
-      rng.row = upRow - 1;
-    }
-
-    return rng;
   }
 
   private _isSameHorizontalRange(
@@ -199,8 +187,7 @@ export class CustomMergeManager<T extends WijmoRowItem = WijmoRowItem> extends M
     const cellType = panel.cellType;
     const mergeType = panel.grid.allowMerging;
 
-    if (cellType === CellType.TopLeft)
-      return this._getTopLeftMergedRange(panel, currentRow, currentCol);
+    if (cellType === CellType.TopLeft) return getTopLeftMergedRange(panel, currentCol);
     if (mergeType === AllowMerging.None) return null;
     if (cellType === CellType.ColumnHeader)
       return this._getColumnHeaderMergedRange(panel, currentRow, currentCol);

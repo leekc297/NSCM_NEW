@@ -62,7 +62,8 @@ export const CustomDropdown = ({
   const optionIndexMapRef = useRef<Map<string, number>>(new Map());
   const lastIndexRef = useRef<number | null>(null);
 
-  const splitValueSet = new Set(value?.trim().split(',') ?? []);
+  // const splitValueSet = new Set(value?.trim().split(',') ?? []);
+  const splitValueSet = new Set(value?.trim().split(',').filter(Boolean) ?? []);
 
   // TODO: 성능 개선 필요해보임, mockHeavyDropdown 기준 버벅거림 있음 - 강민재
   const isAllSelected = splitValueSet.size > 0 && splitValueSet.size === options.length;
@@ -105,7 +106,9 @@ export const CustomDropdown = ({
     if (
       (reason !== 'selectOption' && reason !== 'removeOption') ||
       dropdownValue === undefined ||
-      !clickedOptionValue
+      // SELECT ALL 옵션의 value 는 빈 문자열('')이라 !clickedOptionValue 로 거르면 안 된다.
+      // (옵션 클릭이 없을 때만, 즉 details 미존재일 때만 통과)
+      clickedOptionValue === undefined
     )
       return newValue;
 

@@ -16,3 +16,7 @@ export enum RESPONSE_SET {
 export enum UNIT_TP_CD {
   DIVISION = 'D',
 }
+
+export enum POPUP_SHEETS {
+  DIVISION_POPUP = 'DivisionPopup',
+}

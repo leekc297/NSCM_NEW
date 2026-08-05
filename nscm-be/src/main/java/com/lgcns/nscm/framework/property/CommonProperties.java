@@ -63,6 +63,10 @@ public class CommonProperties {
     public static class Mybatis {
     	private final boolean loggingEnabled;
     	private final boolean loggingOnlyError;
+    	private final int queueCapacity;
+    	private final int batchSize;
+    	private final int logPoolSize;
+    	private final long flushIntervalMs;
     }
 
     @Getter

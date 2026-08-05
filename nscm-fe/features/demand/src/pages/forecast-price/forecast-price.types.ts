@@ -11,6 +11,8 @@ export interface SearchParamProps {
   deptIds: string[];
   endCustomers: string[];
   salesSites: string[];
+  // Plant Site — Div81 계열 전용 조회조건 (DMF0003 PlantSiteField 1:1, 40/82 비활성 = 항상 'ALL')
+  plantSiteIds: string[];
   bizTypes: string[];
   itemIds: string[];
   startYyyymmdd: string;

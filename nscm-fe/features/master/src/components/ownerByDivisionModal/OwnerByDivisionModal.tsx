@@ -18,11 +18,19 @@ import { useOwnerByDivisionModalStore } from './ownerByDivisionModalStore';
 interface OwnerByDivisionModalProps {
   open: boolean;
   modalClose: () => void;
-  setSelectedValue: (owners: string) => void;
+  // DMF0008 (2026-07-08): cell dblClick 시 OWNER(코드) + USER_NM(이름) 자동 채움 의무 — optional 추가 인자
+  setSelectedValue: (owners: string, ownerNames?: string) => void;
   preSearchParams: ProcRequest<MODAL_OWNER_BY_DIVISION, MODAL_SHEET_OWNER_BY_DIVISION>;
   ownerId?: string;
   // ⭐ 멀티 선택 모드(옵션). true 시 체크박스 컬럼으로 선택(재기동 시 carry/프리체크 없음).
   multiCheckbox?: boolean;
+}
+
+interface OwnerComboOption {
+  CODE: string;
+  NAME: string;
+  DIVISION_ID?: string;
+  DEPT_ID?: string;
 }
 
 export const OwnerByDivisionModal = ({
@@ -44,13 +52,22 @@ export const OwnerByDivisionModal = ({
   const staticColumns = useOwnerByDivisionModalStore(state => state.staticColumns);
   const fetchStaticColumns = useOwnerByDivisionModalStore(state => state.fetchStaticColumns);
 
-  const [divisions, teams, endCustomers, salesSites] = useTabComboQueries({
-    filters: ['MyDivision', 'TeambyDivision', 'EndCustomer', 'SalesSite'],
+  const [divisions, teams, endCustomers, endCustomers40, salesSites] = useTabComboQueries({
+    filters: [
+      'MyDivision',
+      'TeambyDivision',
+      'EndCustomer',
+      'EndCustomerByDivision40',
+      'SalesSite',
+    ],
   });
 
   const [searchParam, setSearchParam] = useState<
     ProcRequest<MODAL_OWNER_BY_DIVISION, MODAL_SHEET_OWNER_BY_DIVISION>
   >({} as ProcRequest<MODAL_OWNER_BY_DIVISION, MODAL_SHEET_OWNER_BY_DIVISION>);
+  const ownerEndCustomers = (searchParam.divisionId === '40' ? endCustomers40 : endCustomers) as
+    | OwnerComboOption[]
+    | undefined;
 
   const [modalFilters, setModalFilters] = useState<{
     owner: string;
@@ -79,15 +96,19 @@ export const OwnerByDivisionModal = ({
 
   const handleSubmit = () => {
     if (multiCheckbox) {
-      // 체크박스 모드 — 체크된(row.isSelected) 행의 OWNER 수집.
+      // 체크박스 모드 — 체크된(row.isSelected) 행의 OWNER(코드) + USER_NM(이름) 수집.
       const grid = gridRef.current;
       if (!grid) return;
       const ids: string[] = [];
+      const names: string[] = [];
       for (const row of grid.rows) {
-        const it = row?.dataItem as { OWNER?: string } | undefined;
-        if (row?.isSelected && it?.OWNER) ids.push(it.OWNER);
+        const it = row?.dataItem as { OWNER?: string; USER_NM?: string } | undefined;
+        if (row?.isSelected && it?.OWNER) {
+          ids.push(it.OWNER);
+          names.push(it.USER_NM ?? '');
+        }
       }
-      setSelectedValue(ids.join(','));
+      setSelectedValue(ids.join(','), names.join(','));
       modalClose();
       return;
     }
@@ -101,8 +122,9 @@ export const OwnerByDivisionModal = ({
     if (!selections) return;
 
     const owners = selections.map(item => item.OWNER).join(',');
+    const ownerNames = selections.map(item => item.USER_NM ?? '').join(',');
 
-    setSelectedValue(owners);
+    setSelectedValue(owners, ownerNames);
     modalClose();
   };
 
@@ -116,7 +138,7 @@ export const OwnerByDivisionModal = ({
     const dataItem = GridUtils.getRow(grid, ht.row);
     if (!dataItem) return;
 
-    setSelectedValue(dataItem.OWNER);
+    setSelectedValue(dataItem.OWNER, dataItem.USER_NM ?? '');
     modalClose();
   };
 
@@ -202,14 +224,17 @@ export const OwnerByDivisionModal = ({
                         options={
                           [
                             ...new Map(
-                              endCustomers
+                              ownerEndCustomers
                                 ?.filter(
                                   item =>
-                                    item.DIVISION_ID === searchParam.divisionId &&
-                                    (searchParam.deptId === 'ALL' ||
-                                      searchParam.deptId?.split(',').includes(item.DEPT_ID))
+                                    searchParam.divisionId === '40' ||
+                                    (item.DIVISION_ID === searchParam.divisionId &&
+                                      (searchParam.deptId === 'ALL' ||
+                                        searchParam.deptId
+                                          ?.split(',')
+                                          .includes(item.DEPT_ID ?? '')))
                                 )
-                                .map(item => [`${item.DIVISION_ID}|${item.CODE}`, item])
+                                .map(item => [`${item.DIVISION_ID ?? '40'}|${item.CODE}`, item])
                             ).values(),
                           ].map(item => ({ label: item.NAME, value: item.CODE })) ?? []
                         }

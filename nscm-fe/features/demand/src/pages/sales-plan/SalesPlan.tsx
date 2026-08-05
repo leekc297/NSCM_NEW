@@ -8,7 +8,7 @@ import { useQueryClient } from '@foundation/query-client';
 import type { EditTracker } from '@foundation/utils';
 import { MainTitle, SubTitle } from '@shared/components';
 import { useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
-import { useMessageStore } from '@shared/stores';
+import { useMessageStore, useSessionStore } from '@shared/stores';
 
 import { SalesPlanForm } from './components/SalesPlanForm';
 import { SalesPlanGrid } from './components/SalesPlanGrid';
@@ -18,12 +18,13 @@ import type { MeasureInfoRow, SalesPlanRow, SpreadTitleRow } from './sales-plan.
 import styles from './SalesPlan.module.scss';
 import { useSalesPlanStore } from './useSalesPlanStore';
 import { callSaveSalesPlan } from './utils/sales-plan.api';
+import { resolveSalesPlanAuthGroup } from './utils/sales-plan.auth';
 import { buildSavePayload, buildUnfoldRows } from './utils/sales-plan.save';
 import { useSalesPlanValidation } from './utils/sales-plan.validate';
 
 // AS-IS DMF0021_SalesPlan (Demand > Demand Plan > Sales Plan / 판매계획 — Forms.UIL 5,599줄 정본 1:1).
 //   Division 3종(40/81*/82) 단일 화면 — 조회 = PKG_DMF0021.P_DMF0021_GET_DM_PLN_SALES_PLAN_DATAEX
-//   (17 IN + 커서 3: data/calendar/editAuth) / 저장 = P_DMF0021_SAVE_DM_PLN_SALES_PLAN_ALL(16키 '^' bulk —
+//   (17 IN + 커서 3: data/calendar/editAuth) / 저장 = P_DMF0021_SAVE_DM_PLN_SALES_PLAN_ALL(18키 '^' bulk —
 //   수량 배분(월→주→일)·중복검증·MERGE 는 SP 내장, FE 재구현 금지) / 동적 3단 헤더 = GET_SPREAD_TITLE.
 //   구조 골격 = forecast-price(DMF0082), 그리드·유틸 실체 = mkt-fcst(DMF0003) — 2026-07-14 플랜 확정.
 //   SubTitle 공통버튼: search/insert/delete/save + excel/filter/sort/condition/reset(자동, hook #64) +
@@ -61,6 +62,7 @@ export const SalesPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
   // ⭐ 명시 조회 게이트 (persist 안 됨 — 컴포넌트 로컬). 마운트 시 persist 된 stale filters 로
   //   SP 가 자동 발사되어 NULL payload 사고 차단 (DMF0003 2026-06-29 계보). Search 클릭 후에만 enable.
   const [hasSearched, setHasSearched] = useState(false);
+  const [isPending, setIsPending] = useState(false);
 
   // ⭐ 기본 Period — PR_GET_DAY_RANGE o_rc2 (당월 1일~+6개월 말일. AS-IS drpPeriod.InitValue L511 1:1)
   const dayRangeFilters = useMemo(() => ({ createdBy: '', month: '6' }), []);
@@ -78,7 +80,7 @@ export const SalesPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
   }, [dayRangeData]);
 
   // 메인 그리드 SP — P_DMF0021_GET_DM_PLN_SALES_PLAN_DATAEX (17 IN + 커서 3). wide format.
-  const { data, refetch } = useTabProcQuery<MENU_ID, SHEETS.MAIN>({
+  const { data, refetch, isFetching } = useTabProcQuery<MENU_ID, SHEETS.MAIN>({
     menuId: MENU_ID,
     sheetName: SHEETS.MAIN,
     tabId,
@@ -87,7 +89,10 @@ export const SalesPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
   });
 
   // 동적 3단 헤더 SP — P_DMF0021_GET_SPREAD_TITLE (4 IN). 기간 컬럼(M_/W_/D_) 구조의 1차 소스.
-  const { data: spreadTitleData } = useTabProcQuery<MENU_ID, SHEETS.SPREAD_TITLE>({
+  const { data: spreadTitleData, isFetching: isSpreadTitleFetching } = useTabProcQuery<
+    MENU_ID,
+    SHEETS.SPREAD_TITLE
+  >({
     menuId: MENU_ID,
     sheetName: SHEETS.SPREAD_TITLE,
     tabId,
@@ -97,34 +102,38 @@ export const SalesPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
   const spreadTitleRows = (spreadTitleData as { data?: SpreadTitleRow[] } | undefined)?.data ?? [];
 
   // Insert 행 Measure 콤보 — P_DMF0021_GET_SALES_PLAN_MEASUREINFO (division 종속, 기본 SalesAmt_LOC).
-  const measureInfoFilters = useMemo(() => ({ divisionId: sc.divisionId }), [sc.divisionId]);
+  const measureInfoFilters = useMemo(() => ({}), []);
   const { data: measureInfoData } = useTabProcQuery<MENU_ID, SHEETS.MEASURE_INFO>({
     menuId: MENU_ID,
     sheetName: SHEETS.MEASURE_INFO,
     tabId,
     filters: measureInfoFilters,
-    enabled: !!sc.divisionId,
+    enabled: true,
   });
-  const measureInfoRows =
-    (measureInfoData as { data?: MeasureInfoRow[] } | undefined)?.data ?? [];
+  const measureInfoRows = (measureInfoData as { data?: MeasureInfoRow[] } | undefined)?.data ?? [];
 
-  // ⭐ P_USERINFO 권한 그룹 — 세션에 그룹 부재(2026-07-15 실측: 유령 필드 session.groupId) →
-  //   CMBO 'SalesPlanUserAuthGroup'(보유 그룹 × GET_ADMIN_GROUP_MEASURE 교집합, ADMIN 우선) 1행 주입.
-  //   미매칭(0행) = 편집권한 없는 사용자 → sesUserId fallback (store) = EDIT_AUTH 'N' 정상 동작.
-  const [authGroupCombo] = useTabComboQueries({ filters: ['SalesPlanUserAuthGroup'] });
+  // P_USERINFO 권한 그룹 — AS-IS NowGroupID 등가. CMBO 'SalesPlanUserAuthGroup' 결과가 정본이며,
+  // session.groupId(유령 필드)는 참조하지 않는다 (UI분석서 v2.1 시트9 C29 — ghost field 사고 대응).
+  const [authGroupCombo, userDeptCombo] = useTabComboQueries({
+    filters: ['SalesPlanUserAuthGroup', 'SalesPlanUserDept'],
+  });
   const setAuthGroup = useSalesPlanStore(s => s.setAuthGroup);
+  const setUserDeptId = useSalesPlanStore(s => s.setUserDeptId);
   const authGroup = useSalesPlanStore(s => s.authGroup);
+  const userDeptId = useSalesPlanStore(s => s.userDeptId);
+  const comboReady = userDeptCombo !== undefined && authGroupCombo !== undefined;
   useEffect(() => {
-    const first = (authGroupCombo ?? [])[0] as { CODE?: string } | undefined;
-    if (first?.CODE) setAuthGroup(String(first.CODE));
-  }, [authGroupCombo, setAuthGroup]);
+    const dept = (userDeptCombo ?? [])[0] as { CODE?: string } | undefined;
+    setAuthGroup(resolveSalesPlanAuthGroup(authGroupCombo));
+    setUserDeptId(dept?.CODE ? String(dept.CODE) : '');
+  }, [authGroupCombo, userDeptCombo, setAuthGroup, setUserDeptId]);
   // ⭐ race 방어 (2026-07-15 — 40 RTF 편집불가 사고): 콤보 도착 전 Search(또는 persist filters 재사용)로
   //   userGroup=사용자ID 조회가 이미 나갔으면 editAuth='N' 응답이 화면에 남는다 → 그룹 확정(변경) 시
   //   filters 재생성(setFilter — 새 queryKey)으로 자동 재조회해 editAuth 를 갱신.
   useEffect(() => {
-    if (authGroup && filters[SHEETS.MAIN]) setFilter();
+    if (comboReady && filters[SHEETS.MAIN]) setFilter();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [authGroup]);
+  }, [comboReady, authGroup, userDeptId]);
 
   // 신규 행 추적 (CRUD_TYPE='I')
   const [insertedRows, setInsertedRows] = useState<SalesPlanRow[]>([]);
@@ -157,7 +166,7 @@ export const SalesPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
   // 셀 모달 state (PROJECT 81·82 / ITEM 40+Catch_Up — AS-IS spdMain_CellDoubleClick L3834/3863)
   const [openProject, setOpenProject] = useState(false);
   const [openItem, setOpenItem] = useState(false);
-  const [popupGroupId, setPopupGroupId] = useState<string | null>(null);
+  const [popupRow, setPopupRow] = useState<SalesPlanRow | null>(null);
 
   // Column / Measure 선택 모달 open state
   const [openColumnSetting, setOpenColumnSetting] = useState(false);
@@ -165,6 +174,15 @@ export const SalesPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   // ----- validation (조회 V-S1~S3 / Bucket V-E3 / 저장 V-V1 — division 분기) -----
   const validation = useSalesPlanValidation();
+  const isWorkInProgress = !comboReady || isFetching || isSpreadTitleFetching || isPending;
+  const blockIfWorking = (): boolean => {
+    if (!isWorkInProgress) return false;
+    void setAlert({
+      type: 'alert',
+      content: t(MSG.WORK_IN_PROGRESS, '_The previous operation is still in progress.'),
+    });
+    return true;
+  };
 
   // 변경분 존재 여부 — Bucket 변경 가드(MSG00227) 입력 (신규 행 + EditTracker 변경 셀)
   const hasPendingChanges = () =>
@@ -174,6 +192,7 @@ export const SalesPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   ⚠️ refetch?.() 직접 호출 금지 — stale closure filters 로 첫 호출 NULL payload 사고
   //   (memory feedback_search_refetch_stale_closure). setFilter(queryKey 변경) + enabled 만으로 fetch.
   const handleSearch = () => {
+    if (blockIfWorking()) return;
     const vr = validation.validateFind(sc);
     if (!vr.ok) {
       // V-S3 — 3년 초과 시 종료일 = 시작일+3년 보정 (AS-IS L1481 Value2 보정 후 차단)
@@ -203,6 +222,7 @@ export const SalesPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   권한 게이트: EDIT_AUTH_SALESAMT_LOC='Y'(기타매출 편집권한자)만 — 무권한 silent 무시(L2854).
   //   기본값: MEASURE=SalesAmt_LOC(L2926) + FCST_TYPE=ETC 고정(L2944). Daily 버킷 = 편집 불가(MSG00361).
   const handleInsert = () => {
+    if (isPending) return;
     if ((editAuth?.EDIT_AUTH_SALESAMT_LOC ?? '') !== 'Y') return; // silent (AS-IS L2854~2857)
     if (sc.bucketType === BUCKET_TYPE.DAILY) {
       void setAlert({
@@ -223,6 +243,7 @@ export const SalesPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
   // F9 Delete — AS-IS DeleteButton(L673~679) 1:1 — Action='I'(신규 삽입행)만 즉시 제거.
   //   DB 조회행은 무동작(silent) — 저장행 삭제는 셀 0 저장(SP 'D' 전환) 경로만 (DMF0082 와 상이).
   const handleDelete = () => {
+    if (isPending) return;
     const g = gridRef.current;
     if (!g) return;
     const sel = g.selectedItems[0] as SalesPlanRow | undefined;
@@ -233,10 +254,14 @@ export const SalesPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
   };
 
   // F7 Save — AS-IS SaveData(L1922~2828) 1:1. ⚠ 저장확인 없음 — 즉시 저장 (MSG00012 부재, 사용자 확정).
-  //   검증(V-V1 필수 13종) → 16키 '^' bulk 조립(Catch_Up 음수/라인 변경 0건 조립 검증) →
+  //   검증(V-V1 필수 13종) → 18키 '^' bulk 조립(Catch_Up 음수/라인 변경 0건 조립 검증) →
   //   apiClient.post 직접 → 결과 'messageCode^addmessage' 분해 → 성공 MSG00002 + 재조회(스크롤 복원).
   const handleSave = async () => {
+    if (blockIfWorking()) return;
     const savedScroll = gridRef.current?.scrollPosition ?? null;
+    const savedSelection = gridRef.current?.selection
+      ? { row: gridRef.current.selection.row, col: gridRef.current.selection.col }
+      : null;
     const changedMap =
       (editTrackerRef.current?.getOriginalValues() as
         | Map<SalesPlanRow, Record<string, unknown>>
@@ -244,7 +269,11 @@ export const SalesPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
     const editedRows = [...changedMap.keys()].filter(r => r.CRUD_TYPE !== 'I');
 
     // (0) 변경 0건 + 필수 13종 division×measure 분기 (MSG00004 / MSG00429 {0})
-    const vr = validation.validateSaveRows([...insertedRows, ...editedRows], sc.divisionId);
+    const vr = validation.validateSaveRows(
+      [...insertedRows, ...editedRows],
+      sc.divisionId,
+      staticColumns
+    );
     if (!vr.ok) return;
 
     // (1) (행 × 변경 기간셀) unfold — 활성 버킷 셀만, 빈값→'0'→'D', Catch_Up 음수/라인 무변경 검증
@@ -265,13 +294,15 @@ export const SalesPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
       });
       return;
     }
-    const payload = buildSavePayload(build.rows);
+    const auditUserId = useSessionStore.getState().session.userId ?? '';
+    const payload = buildSavePayload(build.rows, auditUserId);
     if (!payload) {
       void setAlert({ type: 'alert', content: t(MSG.NO_CHANGES, '_수정한 내용이 없습니다.') });
       return;
     }
 
     void setToast({ message: t('LBL00665', '_Loading...'), type: 'default', duration: 3000 });
+    setIsPending(true);
     try {
       const res = await callSaveSalesPlan(payload);
       if (!res.ok) {
@@ -288,15 +319,25 @@ export const SalesPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
       void queryClient.invalidateQueries({ queryKey: [MENU_ID] });
       await (refetch?.() ?? Promise.resolve());
       // 재조회 후 스크롤 위치 복원 (AS-IS FindData(false, updRow, actCol) 셀 위치 복원 — best-effort)
-      if (savedScroll) {
+      if (savedScroll || savedSelection) {
         window.requestAnimationFrame(() => {
           const g = gridRef.current;
-          if (g) g.scrollPosition = savedScroll;
+          if (!g) return;
+          if (savedScroll) g.scrollPosition = savedScroll;
+          if (savedSelection && g.rows.length > 0 && g.columns.length > 0) {
+            const row = Math.min(Math.max(savedSelection.row, 0), g.rows.length - 1);
+            const col = Math.min(Math.max(savedSelection.col, 0), g.columns.length - 1);
+            g.select(row, col);
+            g.scrollIntoView(row, col);
+          }
         });
       }
     } catch (e) {
-      const msg = e instanceof Error ? e.message : t(MSG.SAVE_ERROR, '_저장 중 오류가 발생했습니다.');
+      const msg =
+        e instanceof Error ? e.message : t(MSG.SAVE_ERROR, '_저장 중 오류가 발생했습니다.');
       void setAlert({ type: 'alert', content: msg });
+    } finally {
+      setIsPending(false);
     }
   };
 
@@ -339,10 +380,7 @@ export const SalesPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
   const spRows = useMemo<SalesPlanRow[]>(() => mainData?.data ?? [], [mainData]);
   // ⭐ measure 행 필터는 서버(TITLESET 'M') 단일 출처 — 모달 OK 의 saveTitleSet('M') + invalidate 재조회로
   //   반영 (클라이언트 measure 행 필터 금지 — DMF0003 종속 메저 잘림 사고 계보).
-  const rows: SalesPlanRow[] = useMemo(
-    () => [...insertedRows, ...spRows],
-    [insertedRows, spRows]
-  );
+  const rows: SalesPlanRow[] = useMemo(() => [...insertedRows, ...spRows], [insertedRows, spRows]);
 
   return (
     <div className={styles.container}>
@@ -377,18 +415,20 @@ export const SalesPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
       <SalesPlanGrid
         rows={rows}
         gridRef={gridRef as never}
+        tabId={tabId}
         gridFilterRef={gridFilterRef}
         editTrackerRef={editTrackerRef}
         divisionId={sc.divisionId}
         bucketType={sc.bucketType}
         sumYn={sc.sumYn}
+        currentYyyymmdd={filters[SHEETS.MAIN]?.nowYyyymmdd ?? ''}
         staticColumns={staticColumns}
         spreadTitle={spreadTitleRows}
         calendarInfo={calendarInfo}
         editAuth={editAuth}
         measureInfoRows={measureInfoRows}
         onPopupCellDblClick={(modalKey, row) => {
-          setPopupGroupId(row.INSERT_GROUP_ID ?? null);
+          setPopupRow(row);
           if (modalKey === 'ITEM') setOpenItem(true);
           else setOpenProject(true);
         }}
@@ -401,15 +441,25 @@ export const SalesPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
         openItem={openItem}
         openColumnSetting={openColumnSetting}
         openMeasureSelect={openMeasureSelect}
+        popupRow={popupRow}
         onClose={(key: SalesPlanModalKey) =>
-          ({ PROJECT: setOpenProject, ITEM: setOpenItem, COLUMN: setOpenColumnSetting, MEASURE: setOpenMeasureSelect })[key](false)
+          ({
+            PROJECT: setOpenProject,
+            ITEM: setOpenItem,
+            COLUMN: setOpenColumnSetting,
+            MEASURE: setOpenMeasureSelect,
+          })[key](false)
         }
         applyToInsertRow={patch => {
+          const popupGroupId = popupRow?.INSERT_GROUP_ID;
           if (!popupGroupId) return;
           setInsertedRows(prev =>
             prev.map(r => (r.INSERT_GROUP_ID === popupGroupId ? { ...r, ...patch } : r))
           );
-          setPopupGroupId(null);
+          setPopupRow(null);
+        }}
+        onMeasureSaved={() => {
+          if (hasSearched) void refetch();
         }}
       />
     </div>

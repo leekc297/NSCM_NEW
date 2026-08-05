@@ -1,0 +1,76 @@
+PROCEDURE         P_SYS0012_GET_APPROVAL_LIST (
+    P_SES_USER_ID    IN  VARCHAR2,
+    P_USER_ID        IN  VARCHAR2,
+    P_START_DATE     IN  VARCHAR2,
+    P_END_DATE       IN  VARCHAR2,
+    P_STATUS         IN  VARCHAR2,
+    P_DIVISION_ID    IN  VARCHAR2,
+    P_DEPARTMENT     IN  VARCHAR2,
+    O_RC             OUT SYS_REFCURSOR,
+    O_RESULT_CURSOR  OUT SYS_REFCURSOR
+)
+AS
+    -- 2026-07-02 보완: PROC_M(9) positional 정합 — P_DIVISION_ID/P_DEPARTMENT IN 추가 (구 5 IN → PLS-00306 원인).
+    --   조회조건 5종(Div/UserID(Name)/Department/Approval Result/Request Date) + AS-IS 기준 GRID 컬럼 확장:
+    --   COMPANY_ID/WORKING_NAME/SSO_LOCATE(SCM_MST_SSO_USER_INFO) + DEPARTMENT(SSO_DEPT_INFO.DEPT_NAME_KO)
+    --   + AUTHORITY(SCM_ADM_USER_GR_M.USER_GR_NM) / APPROVED_BY = AUTH_REQUEST.APPROVAL_USER 우선.
+    V_STATUS  VARCHAR2(20) := NVL(P_STATUS, 'REQUEST');
+BEGIN
+    OPEN O_RC FOR
+    SELECT
+        (T.USER_ID || ':' || T.GROUP_ID || ':' || T.DIVISION_ID || ':' || T.PLANT_ID) AS REQUEST_ID,
+        T.USER_ID                                                AS USER_ID,
+        NVL(S.USER_NAME, NVL(U.USER_NM, T.USER_ID))              AS USER_NAME,
+        NVL(S.COMPANY_ID, '')                                    AS COMPANY_ID,
+        NVL(S.WORKING_NAME, '')                                  AS WORKING_NAME,
+        NVL(TRIM(S.SSO_LOCATE), '')                              AS SSO_LOCATE,
+        NVL(D.DEPT_NAME_KO, NVL(S.DEPT_ID, ''))                  AS DEPARTMENT,
+        T.GROUP_ID                                               AS GROUP_ID,
+        NVL(G.USER_GR_NM, T.GROUP_ID)                            AS AUTHORITY,
+        T.DIVISION_ID                                            AS DIVISION_ID,
+        TO_CHAR(T.CREATION_DATE, 'YYYY-MM-DD')                   AS REQUEST_DATE,
+        CASE
+          WHEN T.APPROVAL_RESULT = 'APPROVED'   THEN 'APPROVED'
+          WHEN T.APPROVAL_RESULT = 'REJECT'     THEN 'REJECTED'
+          WHEN T.APPROVAL_RESULT = 'REQUESTING' THEN 'REQUEST'
+          ELSE 'REQUEST'
+        END                                                      AS STATUS,
+        NVL(T.APPROVAL_USER, NVL(T.LAST_UPDATED_BY, ''))         AS APPROVED_BY,
+        CASE WHEN T.APPROVAL_RESULT IN ('APPROVED', 'REJECT')
+             THEN TO_CHAR(T.LAST_UPDATE_DATE, 'YYYY-MM-DD HH24:MI')
+             ELSE ''
+        END                                                      AS APPROVED_DATE,
+        NVL(T.REJECT_REASON, '')                                 AS REASON
+    FROM SCM_MGR.SCM_MST_AUTH_REQUEST T
+    LEFT JOIN SCM_MGR.SCM_ADM_USER_M        U ON U.USER_ID = T.USER_ID
+    LEFT JOIN SCM_MGR.SCM_MST_SSO_USER_INFO S ON S.USER_ID = T.USER_ID
+    LEFT JOIN SCM_MGR.SCM_MST_SSO_DEPT_INFO D ON D.DEPT_ID = S.DEPT_ID AND D.VALID_YN = 'Y'
+    LEFT JOIN SCM_MGR.SCM_ADM_USER_GR_M     G ON G.USER_GR_ID = T.GROUP_ID
+    WHERE (P_USER_ID IS NULL
+           OR UPPER(T.USER_ID) LIKE '%' || UPPER(P_USER_ID) || '%'
+           OR UPPER(NVL(S.USER_NAME, NVL(U.USER_NM, ''))) LIKE '%' || UPPER(P_USER_ID) || '%')
+      AND (NVL(P_DIVISION_ID, 'ALL') = 'ALL' OR T.DIVISION_ID = P_DIVISION_ID)
+      AND (P_DEPARTMENT IS NULL
+           OR UPPER(NVL(D.DEPT_NAME_KO, NVL(S.DEPT_ID, ''))) LIKE '%' || UPPER(P_DEPARTMENT) || '%')
+      AND (P_START_DATE IS NULL OR P_START_DATE = '' OR T.CREATION_DATE >= TO_DATE(P_START_DATE, 'YYYYMMDD'))
+      AND (P_END_DATE   IS NULL OR P_END_DATE   = '' OR T.CREATION_DATE <  TO_DATE(P_END_DATE,   'YYYYMMDD') + 1)
+      AND (
+          (V_STATUS = 'ALL' AND T.APPROVAL_RESULT IN ('REQUESTING', 'APPROVED', 'REJECT'))
+       OR (V_STATUS = 'REQUEST'  AND T.APPROVAL_RESULT = 'REQUESTING')
+       OR (V_STATUS = 'APPROVED' AND T.APPROVAL_RESULT = 'APPROVED')
+       OR (V_STATUS = 'REJECTED' AND T.APPROVAL_RESULT = 'REJECT')
+      )
+    ORDER BY T.CREATION_DATE DESC, T.USER_ID;
+
+    OPEN O_RESULT_CURSOR FOR
+    SELECT '0' AS CODE, 'SUCCESS' AS MSG FROM DUAL;
+EXCEPTION
+    WHEN OTHERS THEN
+        DECLARE
+            V_ERR VARCHAR2(4000) := SUBSTR(SQLERRM, 1, 4000);
+        BEGIN
+            OPEN O_RC FOR SELECT NULL AS DUMMY FROM DUAL WHERE 1=0;
+            OPEN O_RESULT_CURSOR FOR
+            SELECT '-1' AS CODE, V_ERR AS MSG FROM DUAL;
+        END;
+END P_SYS0012_GET_APPROVAL_LIST;

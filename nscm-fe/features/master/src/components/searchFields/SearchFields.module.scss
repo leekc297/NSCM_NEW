@@ -35,3 +35,28 @@
     }
   }
 }
+
+// 기간(시작일/종료일)을 각각 독립 달력(usecase='date') 2개로 분리 배치.
+//   dual-range 달력 대신 필드별로 각자 팝업이 뜨도록 구성.
+.periodSplit {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  width: 100%;
+
+  // ⭐ Mui DatePicker(TextField)는 기본 고정 너비라, flex 로 늘리면(wrapper 만 커지고
+  //   입력창은 안 커져) 오른쪽에 큰 빈 공간이 생김 → 과도한 간격.
+  //   각 필드를 '자기 너비(auto)'로 두고 왼쪽에 붙여, gridSize 와 무관하게 간격을 일정하게 유지.
+  .datePickerFix {
+    flex: 0 0 auto;
+    width: 110px;
+    min-width: 0;
+  }
+
+  .periodSep {
+    flex: 0 0 auto;
+    color: var(--gray-400, #98a2b3);
+    user-select: none;
+  }
+}

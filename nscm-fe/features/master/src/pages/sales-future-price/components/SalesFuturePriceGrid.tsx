@@ -36,6 +36,7 @@ import {
   isExchangeTargetMeasure,
 } from '../salesPriceExchange';
 import type { MeasureMeta } from '../useSalesFuturePriceStore';
+import { applyStaticCellBackground } from '../utils/cellBackground';
 import { groupKeyOf } from '../utils/futurePriceGroup';
 
 interface Props {
@@ -85,6 +86,8 @@ interface MergedColumnMeta {
   _inputEditType?: 'S' | 'M' | 'O' | 'IM' | 'IO';
   _modalKey?: string;
   _comboKey?: string;
+  cellColor?: string;
+  textColor?: string;
   // hook #92 column-division-id-visibility — admin DIVISION_ID(콤마 토큰 리스트) 복사값(ATTRIBUTE3).
   //   공란/undefined = 항상 표시 / 값 있으면 선택 division 토큰 포함 시만 표시.
   _divisionAllow?: string;
@@ -192,6 +195,8 @@ export const SalesFuturePriceGrid = ({
         _modalKey: sc.attribute1 ?? fb?._modalKey,
         // ⭐ 콤보 SQL_ID = UI Category Setup 의 CELL_COMBO_DATA_TYPE(cellCboDataTp). 삭제(NULL) 시 콤보 미적용(상수 fallback 제거).
         _comboKey: sc.cellCboDataTp ?? sc.attribute2,
+        cellColor: sc.cellColor,
+        textColor: sc.textColor,
       } as MergedColumnMeta;
     });
   }, [staticColumns]);
@@ -416,18 +421,17 @@ export const SalesFuturePriceGrid = ({
       //     wrapper formatEditableColumns 가 'S' 동적 col 의 editable 을 먼저 끄지만 feature 가 나중 실행 → 우선.
       if (isDyn) {
         // ⭐ backcolor 규칙 (사용자 명시 2026-06-28):
-        //   - LOC measure 행의 동적 셀만 색상 대상. 비-LOC(RTF/KRW/USD) 동적 셀 = White(클래스 없음).
-        //   - LOC: 현재/미래 주차 = Yellow(편집가능) / 과거 주차(이번 주 월요일 이전) = Gray(편집불가, AS-IS L893~921).
-        //   gray(wj-cell-non-editable)는 LOC 과거주차에만 적용 — 그 외 비편집은 회색칠 금지(기본 White).
-        if (!isLocRow) {
-          toggleClass(e.cell, 'wj-cell-editable', false);
-          toggleClass(e.cell, 'wj-cell-non-editable', false);
-          return;
-        }
+        //   - 과거 주차/월은 MEASURE 와 무관하게 Gray(편집불가, AS-IS L893~921).
+        //   - 현재/미래 주차/월은 LOC 행만 Yellow(편집가능), 비-LOC(RTF/KRW/USD)는 White.
         const tag = col.binding.slice(2);
         const isPast = col.binding.startsWith('M_')
           ? tag < todayCutoff.month
           : tag < todayCutoff.week;
+        if (!isLocRow) {
+          toggleClass(e.cell, 'wj-cell-editable', false);
+          toggleClass(e.cell, 'wj-cell-non-editable', isPast);
+          return;
+        }
         // 편집제약 division(메타 LOOKUP 구동, 82만 편집) 은 편집가능(노란) 표시 안 함.
         toggleClass(e.cell, 'wj-cell-editable', !isPast && editable);
         toggleClass(e.cell, 'wj-cell-non-editable', isPast);
@@ -461,9 +465,10 @@ export const SalesFuturePriceGrid = ({
         toggleClass(e.cell, 'wj-cell-non-editable', false);
         // ⭐ 전용 클래스 is-insert-editable 로 solid Yellow 보장(scss `.grid` scope !important).
         toggleClass(e.cell, 'is-insert-editable', editableForInsert);
-        // ⭐ 최종 보장 (2026-06-30) — inline !important 배경은 모든 스타일시트·핸들러 순서를 이김(Wijmo 표준 셀 포맷).
-        if (editableForInsert) e.cell.style.setProperty('background-color', '#fff8cd', 'important');
-        else e.cell.style.removeProperty('background-color');
+        applyStaticCellBackground(e.cell, { editableForInsert, cellColor: meta.cellColor });
+        // 개인화 글자색 — 지정 시 적용, 없으면 잔존 제거(셀 재활용 대비).
+        if (meta.textColor) e.cell.style.setProperty('color', meta.textColor, 'important');
+        else e.cell.style.removeProperty('color');
         // ⭐ FPModal 팝업셀 아이콘 = DMF0006 과 동일(MUI OpenInNew). (2026-07-01 사용자 요구: 구 🔍 이모지 → DMF0006 모양)
         //   DMF0020 module scss 의 wj-cell-popup override(그라데이션 배경 + '↗') 및 insert 노란배경과 충돌 방지 위해
         //   wj-cell-popup 클래스는 쓰지 않고, 전용 span(.popup-icon + styles.popupIcon)으로 동일 SVG 아이콘만 렌더.
@@ -562,9 +567,7 @@ export const SalesFuturePriceGrid = ({
         }
         // AS-IS L893~921 — LOC 라도 과거 주차/월(이번 주 월요일 이전)은 lock (formatItem gray 와 동일 cutoff).
         const tag = binding.slice(2);
-        const isPast = binding.startsWith('M_')
-          ? tag < todayCutoff.month
-          : tag < todayCutoff.week;
+        const isPast = binding.startsWith('M_') ? tag < todayCutoff.month : tag < todayCutoff.week;
         if (isPast) {
           e.cancel = true; // 과거 주차/월 편집 차단
           return;
@@ -583,8 +586,28 @@ export const SalesFuturePriceGrid = ({
     };
     g.beginningEdit.addHandler(beginningEditHandler);
 
+    const pastingCellHandler = (
+      s: FlexGridType<FuturePriceRow>,
+      e: { cancel: boolean; row: number; col: number }
+    ) => {
+      if (!editable) return; // 편집제약 division — wrapper cancel 유지
+      const binding = s.columns[e.col].binding ?? '';
+      if (!/^[WM]_/.test(binding)) return; // 정적 col 은 wrapper 판정 유지 (insert IM/IO 는 wrapper 가 이미 허용)
+      const row = s.rows[e.row].dataItem as FuturePriceRow | undefined;
+      if (String(row?.MEASURE ?? '') !== 'LOC') return; // LOC 행만
+      const tag = binding.slice(2);
+      const isPast = binding.startsWith('M_') ? tag < todayCutoff.month : tag < todayCutoff.week;
+      if (isPast) return; // 과거 주차/월
+      if (String(row?.CURRENCY ?? '').trim() === '') return; // 통화 미설정 (alert 는 편집 진입 시에만)
+      e.cancel = false; // LOC + 현재/미래 + 통화 있음 → 붙여넣기 허용
+    };
+    g.pastingCell.addHandler(pastingCellHandler);
+
     // Insert row 편집 종료 시 — 같은 INSERT_GROUP_ID 4 measure row 동기화.
-    const cellEditEndedHandler = (s: FlexGridType<FuturePriceRow>, e: { row: number; col: number }) => {
+    const cellEditEndedHandler = (
+      s: FlexGridType<FuturePriceRow>,
+      e: { row: number; col: number }
+    ) => {
       const col = s.columns[e.col];
       const binding = col.binding ?? '';
       // ⭐ cascade 스왑 원복 — beginningEdit 에서 행 컨텍스트로 필터된 dataMap 을 전체 dataMap 으로
@@ -661,6 +684,7 @@ export const SalesFuturePriceGrid = ({
       s.invalidate(true);
     };
     g.cellEditEnded.addHandler(cellEditEndedHandler);
+    g.pastedCell.addHandler(cellEditEndedHandler);
 
     const dblclickHandler = (ev: MouseEvent) => {
       const ht = g.hitTest(ev);
@@ -736,7 +760,8 @@ export const SalesFuturePriceGrid = ({
             if (ra.CRUD_TYPE === 'I' || rb.CRUD_TYPE === 'I') return false;
             return leftBindings.every(
               k =>
-                ((ra as Record<string, string>)[k] ?? '') === ((rb as Record<string, string>)[k] ?? '')
+                ((ra as Record<string, string>)[k] ?? '') ===
+                ((rb as Record<string, string>)[k] ?? '')
             );
           };
           let r1 = r,
@@ -806,7 +831,17 @@ export const SalesFuturePriceGrid = ({
         /* unmount race */
       }
       try {
+        g.pastingCell?.removeHandler(pastingCellHandler);
+      } catch {
+        /* unmount race */
+      }
+      try {
         g.cellEditEnded?.removeHandler(cellEditEndedHandler);
+      } catch {
+        /* unmount race */
+      }
+      try {
+        g.pastedCell?.removeHandler(cellEditEndedHandler);
       } catch {
         /* unmount race */
       }
@@ -954,7 +989,9 @@ export const SalesFuturePriceGrid = ({
     <div className={styles.gridContainer} ref={gridBoxRef}>
       <DataGrid
         // ⭐ key prop — staticColumns 의 sCls/lCls 메타 변경 시 wrapper re-mount 강제.
-        key={mainStaticColumns.map(c => `${c.colNm}|${c.sClsLblNm ?? ''}|${c.lClsLblNm ?? ''}`).join(',')}
+        key={mainStaticColumns
+          .map(c => `${c.colNm}|${c.sClsLblNm ?? ''}|${c.lClsLblNm ?? ''}`)
+          .join(',')}
         className={styles.grid}
         gridRef={gridRef as never}
         // ⚠️ gridFilterRef 는 공용 DataGrid 에 전달하지 않음 — 피처가 FlexGridFilter 직접 소유(위 effect)해

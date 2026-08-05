@@ -266,10 +266,7 @@ export type Measure4 = (typeof MEASURE_4)[number];
 //   / SiteByEndCustomer=DIVISION_ID+END_CUSTOMER. 관대 통과: 콤보 row 에 필터 키 컬럼이 없거나(NULL)
 //   행의 상위 값이 비어 있으면 통과 (searchFields toOptions 관용구 + 사내 SITE.DEPT_ID 미이관 —
 //   EndCustomer 의 team 필터는 데이터 적재 시 자동 활성. __asis-mapping__ §cascade 근거).
-export const GRID_CASCADE_FILTERS: Record<
-  string,
-  { rowKey: string; comboKey: string }[]
-> = {
+export const GRID_CASCADE_FILTERS: Record<string, { rowKey: string; comboKey: string }[]> = {
   DEPT_ID: [{ rowKey: 'DIVISION_ID', comboKey: 'DIVISION_ID' }],
   END_CUSTOMER: [
     { rowKey: 'DIVISION_ID', comboKey: 'DIVISION_ID' },

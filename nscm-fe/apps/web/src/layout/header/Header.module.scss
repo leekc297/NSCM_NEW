@@ -43,7 +43,7 @@
     .full {
       align-self: end;
       margin-left: 0.75rem;
-      width: 160px;
+      width: auto;
       height: 51px;
       display: flex;
       align-items: flex-start;
@@ -53,6 +53,7 @@
       span {
         line-height: 1.125rem;
         display: inline-block;
+        white-space: nowrap;
 
         &.ko {
           color: $navTopTextSysNamePrimary;

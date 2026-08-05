@@ -1,7 +1,11 @@
-import { CellType, type FlexGrid as FlexGridType, type FormatItemEventArgs } from '@mescius/wijmo.grid';
+import {
+  CellType,
+  type FlexGrid as FlexGridType,
+  type FormatItemEventArgs,
+} from '@mescius/wijmo.grid';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
+import { CELL_INPUT_EDIT_TYPE, type BUTTON_TYPE } from '@foundation/constants';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 import type { EditTracker } from '@foundation/utils';
 import { CustomDialog, DataGrid } from '@shared/components';
@@ -23,12 +27,10 @@ interface Props {
   versionNo: string;
 }
 
-// ⭐ Exchange Rate 팝업 — AS-IS DMF0044_SalesReportExchangePopup(721행):
-//   조회 = GET_SCM_MST_EXCHANGE_RATE_POPUP_DATA (통화쌍 × 월 피벗 M_yyyymm) + 월 헤더
-//   (GET_EXCHANGE_POPUP_SPREAD_TITLE p_year — 여기서는 데이터 키 union 으로 동적 컬럼 산출).
-//   저장 = SAVE_DM_EXCHANGE_RATE_REPORT '^' 7키 (9 IN − 감사 2 BE주입). Red(변경) 셀만.
-//   과거연도 조회 시 현재월 이전 컬럼 입력 차단 (L-29 L631~650). price ''→'0', '0'→'D'.
-//   정책④(2026-07-22): 종료 후 메인 재조회 없음 — AS-IS 파리티 (blnOK 재조회 주석 L1446~1454).
+// Exchange Rate 팝업
+// 조회는 통화쌍(SEARCH), 월별 환율 데이터(SEARCH_DATA), 연도별 월 헤더(TITLE)를 조합한다.
+// 저장은 변경된 월별 값을 행 단위 데이터로 변환한 뒤 SAVE 프로시저에 일괄 전달한다.
+// 과거 월과 EDIT_YN이 N인 행은 수정할 수 없다.
 export const ExchangeRateModal = ({ open, modalClose, divisionId, year, versionNo }: Props) => {
   const { t } = useTranslation();
   const setAlert = useMessageStore.getState().setAlert;
@@ -38,7 +40,7 @@ export const ExchangeRateModal = ({ open, modalClose, divisionId, year, versionN
 
   const sesUserId = useSessionStore.getState().session.userId ?? '';
   const filters = useMemo(
-    () => ({ divisionId, year, versionNo, userId: sesUserId, mnuId: MENU_ID }),
+    () => ({ divisionId, year, sesUserId, versionNo, userId: sesUserId, mnuId: MENU_ID }),
     [divisionId, year, versionNo, sesUserId]
   );
   const { data, refetch } = useTabProcQuery<MENU_ID, SHEETS.EXCHANGE_RATE>({
@@ -47,20 +49,71 @@ export const ExchangeRateModal = ({ open, modalClose, divisionId, year, versionN
     tabId: MENU_ID,
     filters,
     enabled: open && versionNo !== '',
+    queryOptions: { staleTime: 0 },
   });
-  const rateRows = useMemo<ExchangeRateRow[]>(
-    () => ((data as { data?: ExchangeRateRow[] } | undefined)?.data ?? []),
-    [data]
-  );
+  const { data: detailData, refetch: refetchDetail } = useTabProcQuery<
+    MENU_ID,
+    SHEETS.EXCHANGE_RATE
+  >({
+    menuId: MENU_ID,
+    sheetName: SHEETS.EXCHANGE_RATE,
+    procedureAction: 'SEARCH_DATA' as BUTTON_TYPE,
+    tabId: `${MENU_ID}-exchange-rate-data`,
+    filters,
+    enabled: open && versionNo !== '',
+    queryOptions: { staleTime: 0 },
+  });
+  const { data: titleData } = useTabProcQuery<MENU_ID, SHEETS.EXCHANGE_RATE>({
+    menuId: MENU_ID,
+    sheetName: SHEETS.EXCHANGE_RATE,
+    procedureAction: 'TITLE' as BUTTON_TYPE,
+    tabId: `${MENU_ID}-exchange-rate-title`,
+    filters,
+    enabled: open && versionNo !== '',
+    queryOptions: { staleTime: 0 },
+  });
+  const rateRows = useMemo<ExchangeRateRow[]>(() => {
+    const baseRows = (data as { data?: ExchangeRateRow[] } | undefined)?.data ?? [];
+    const detailRows = (detailData as { data?: ExchangeRateRow[] } | undefined)?.data ?? [];
+    const rowMap = new Map<string, ExchangeRateRow>();
 
-  // 정적 3컬럼 + 동적 월 컬럼 (데이터 키 union — M_yyyymm)
+    const getKey = (row: ExchangeRateRow) =>
+      [row.DIVISION_ID, row.CURRENCY, row.UNIT_CURRENCY].map(toCellStr).join('|');
+
+    for (const row of baseRows) rowMap.set(getKey(row), { ...row });
+    for (const detail of detailRows) {
+      const key = getKey(detail);
+      const row = rowMap.get(key) ?? { ...detail };
+      const date = toCellStr((detail as Record<string, unknown>).YYYYMMDD)
+        .replace(/^D/i, '')
+        .replace(/\D/g, '');
+      const price = Number((detail as Record<string, unknown>).EXCHANGE_PRICE);
+      if (date.length >= 6 && !Number.isNaN(price)) row[`M_${date.slice(0, 6)}`] = price;
+      rowMap.set(key, row);
+    }
+
+    return [...rowMap.values()].sort((a, b) =>
+      getKey(a).localeCompare(getKey(b), undefined, { numeric: true })
+    );
+  }, [data, detailData]);
+
+  // 고정 3개 컬럼과 조회 연도의 동적 월 컬럼(M_yyyymm)
   const monthBindings = useMemo<string[]>(() => {
     const set = new Set<string>();
+    const titleRows =
+      (titleData as { data?: Array<Record<string, unknown>> } | undefined)?.data ?? [];
+    for (const row of titleRows) {
+      const titleYear = toCellStr(row.CALENDAR_YYYY);
+      const titleMonth = toCellStr(row.CALENDAR_MONTH).padStart(2, '0');
+      if (/^\d{4}$/.test(titleYear) && /^\d{2}$/.test(titleMonth)) {
+        set.add(`M_${titleYear}${titleMonth}`);
+      }
+    }
     for (const r of rateRows) {
       for (const k of Object.keys(r)) if (/^M_\d{6}$/.test(k)) set.add(k);
     }
     return [...set].sort();
-  }, [rateRows]);
+  }, [rateRows, titleData]);
 
   const staticCols = useMemo<RawFlexGridColumnConfig[]>(
     () =>
@@ -90,7 +143,7 @@ export const ExchangeRateModal = ({ open, modalClose, divisionId, year, versionN
     [monthBindings]
   ) as never[];
 
-  // 과거연도 조회 시 현재월 이전 입력 차단 (AS-IS L-29) + No. 코너
+  // 과거 월과 편집 권한이 없는 행의 입력을 차단하고 No. 헤더를 표시한다.
   useEffect(() => {
     const g = gridRef.current;
     if (!g || !g.columnHeaders) return;
@@ -100,6 +153,11 @@ export const ExchangeRateModal = ({ open, modalClose, divisionId, year, versionN
       e: { cancel: boolean; row: number; col: number }
     ) => {
       const binding = s.columns[e.col]?.binding ?? '';
+      const rowData = s.rows[e.row]?.dataItem as ExchangeRateRow | undefined;
+      if (toCellStr(rowData?.EDIT_YN) !== 'Y') {
+        e.cancel = true;
+        return;
+      }
       if (/^M_\d{6}$/.test(binding) && binding < thisMonth) e.cancel = true;
     };
     const formatHandler = (_s: unknown, e: FormatItemEventArgs) => {
@@ -120,8 +178,8 @@ export const ExchangeRateModal = ({ open, modalClose, divisionId, year, versionN
     };
   }, [open, monthBindings]);
 
-  // ⭐ 저장 — EditTracker 변경 셀 unfold → '^' 7키 (activeFlag/divisionId/versionNo/yyyymmdd/
-  //   currency/unitCurrency/exchangePrice — createdBy/lastUpdatedBy BE주입). '0'→'D'.
+  // EditTracker의 변경 셀을 월별 저장 행으로 펼쳐 '^' 구분 일괄 데이터로 전달한다.
+  // 빈 값은 0으로 저장하며 0은 삭제 플래그(D)로 처리한다.
   const handleSave = async () => {
     if (saving) return;
     const changes = editTrackerRef.current?.getOriginalValues() as
@@ -145,7 +203,7 @@ export const ExchangeRateModal = ({ open, modalClose, divisionId, year, versionN
       }
     });
     if (rows.length === 0) {
-      void setAlert({ type: 'alert', content: t(MSG.NO_CHANGES, '_수정한 내용이 없습니다.') });
+      void setAlert({ type: 'alert', content: t(MSG.NO_CHANGES, '_수정된 내용이 없습니다.') });
       return;
     }
     setSaving(true);
@@ -155,12 +213,15 @@ export const ExchangeRateModal = ({ open, modalClose, divisionId, year, versionN
       for (const k of keys) payload[k] = rows.map(r => r[k]).join('^');
       const res = await callSaveExchangeRate(payload);
       if (!res.ok) {
-        void setAlert({ type: 'alert', content: res.message || t(MSG.SAVE_ERROR, '_저장 중 오류가 발생했습니다.') });
+        void setAlert({
+          type: 'alert',
+          content: res.message || t(MSG.SAVE_ERROR, '_저장 중 오류가 발생했습니다.'),
+        });
         return;
       }
       void setAlert({ type: 'alert', content: t(MSG.SAVED, '_성공적으로 저장되었습니다.') });
       editTrackerRef.current?.clearChanges();
-      void refetch?.();
+      void Promise.all([refetch?.(), refetchDetail?.()]);
     } finally {
       setSaving(false);
     }
@@ -194,9 +255,21 @@ export const ExchangeRateModal = ({ open, modalClose, divisionId, year, versionN
             />
           </div>
           <div className={styles.modalButtonWrapper}>
-            <Button appearance='contained' priority='primary' size='medium' buttonLabel='Save'
-              disabled={saving} onClick={() => void handleSave()} />
-            <Button appearance='outlined' priority='normal' size='medium' buttonLabel='Close' onClick={modalClose} />
+            <Button
+              appearance='contained'
+              priority='primary'
+              size='medium'
+              buttonLabel='Save'
+              disabled={saving}
+              onClick={() => void handleSave()}
+            />
+            <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel='Close'
+              onClick={modalClose}
+            />
           </div>
         </div>
       }

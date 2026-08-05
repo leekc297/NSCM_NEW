@@ -4,7 +4,7 @@ import type { BUCKET_TYPE, MENU_ID, SHEETS } from './sales-plan.constants';
 //   Row1: Division*(단일) / Team / End Customer(40=ByDivision40 스왑) / Sales Site
 //   Row2: Plant Site(40 비활성) / Biz Type(40=DmBizType 스왑) / Period* / Bucket*(기본 Monthly)
 //   Row3: Project🔍(40 비활성) / Model🔍 / Owner🔍 / Item Type
-//   체크박스: Sum(즉시 토글) — Color 제거(2026-07-14 사용자 확정) / Include Internal Txn 숨김('N' 배선만) /
+//   체크박스: Sum / Color / Include Internal Txn /
 //   Cell Qty dead 제외.
 export interface SearchCondition {
   divisionId: string; // 필수 — Division 단일 콤보 (MSG00097)
@@ -20,7 +20,9 @@ export interface SearchCondition {
   startYyyymmdd: string; // Period.start (필수 — PR_GET_DAY_RANGE 당월 1일)
   endYyyymmdd: string; // Period.end (필수 — +6개월 말일)
   bucketType: BUCKET_TYPE; // Bucket (필수 — 기본 Monthly, AS-IS DefineProperty L543)
+  colorYn: boolean;
   sumYn: boolean; // Sum — 상위 버킷 합계 컬럼(M_/W_) 표시 토글 (FE 전용, AS-IS chkSum L4419)
+  internalYn: boolean; // Include Internal Txn — 내부거래 포함 조회조건
 }
 
 // 메인 그리드 행 (PIVOT wide format — 정적 66 admin 메타 + 동적 M_/W_/D_ 컬럼)

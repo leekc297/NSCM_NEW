@@ -1,5 +1,11 @@
 import { toggleClass } from '@mescius/wijmo';
-import { CellType, type FlexGrid, type FormatItemEventArgs } from '@mescius/wijmo.grid';
+import {
+  CellRange,
+  CellType,
+  type CellRangeEventArgs,
+  type FlexGrid,
+  type FormatItemEventArgs,
+} from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useState, type MutableRefObject } from 'react';
 
@@ -68,6 +74,32 @@ export const ErpEdiMasterSspmGrid = ({
     toggleClass(args.cell, 'wj-cell-editable', YELLOW_HIGHLIGHT_COLUMNS.has(binding));
   };
 
+  const handleCellEditEnded = (
+    grid: FlexGrid<ResponseData<MENU_ID, SHEETS.SSPM>>,
+    e: CellRangeEventArgs
+  ) => {
+    const dataItem = GridUtils.getRow(grid, e.row);
+    const binding = GridUtils.getBinding(grid, e.col);
+    if (!dataItem || !binding) return;
+    if (dataItem.CRUD_TYPE !== CRUD_TYPE.INSERT) return;
+
+    // cascade 안 cascade 방지 (deferUpdate 로 batch — 룰 07 §2.10.8)
+    grid.deferUpdate(() => {
+      if (binding === 'DEPT_ID') {
+        // Team 변경 → 뒤 두 단계(End Customer + SCM Sale Site) 모두 클리어
+        dataItem.END_CUSTOMER = '';
+        dataItem.END_CUSTOMER40 = '';
+        dataItem.SCM_SITE_ID = '';
+        dataItem.SCM_SITE_ID40 = '';
+      } else if (binding === 'END_CUSTOMER' || binding === 'END_CUSTOMER40') {
+        // End Customer 변경 → SCM Sale Site 클리어
+        dataItem.SCM_SITE_ID = '';
+        dataItem.SCM_SITE_ID40 = '';
+      }
+    });
+    grid.refreshRange(new CellRange(e.row, 0, e.row, -1));
+  };
+
   const setProject = (projects: string, projectsNames?: string) => {
     const dataItem = GridUtils.getRow(gridRef.current, clickedRow);
     if (!dataItem) return;
@@ -93,6 +125,9 @@ export const ErpEdiMasterSspmGrid = ({
   };
 
   const dataItem = GridUtils.getRow(gridRef.current, clickedRow);
+  const cascadeDeptId = dataItem?.DEPT_ID || 'ALL';
+  const cascadeEndCustomer = dataItem?.END_CUSTOMER40 || dataItem?.END_CUSTOMER || 'ALL';
+  const cascadeSalesSite = dataItem?.SCM_SITE_ID40 || dataItem?.SCM_SITE_ID || 'ALL';
 
   return (
     <>
@@ -103,6 +138,8 @@ export const ErpEdiMasterSspmGrid = ({
         staticColumns={staticColumns}
         dblClick={handleDblClick}
         formatItem={handleFormatItem}
+        cellEditEnded={handleCellEditEnded}
+        isReadOnly={true}
       />
       {openProjectModal && (
         <ProjectByDivisionModal
@@ -111,9 +148,9 @@ export const ErpEdiMasterSspmGrid = ({
           setSelectedValue={setProject}
           preSearchParams={{
             divisionId: dataItem?.DIVISION_ID ?? '',
-            deptId: 'ALL',
-            endCustomer: 'ALL',
-            salesSite: 'ALL',
+            deptId: cascadeDeptId,
+            endCustomer: cascadeEndCustomer,
+            salesSite: cascadeSalesSite,
             projectCode: '',
           }}
           callFromCell
@@ -126,10 +163,10 @@ export const ErpEdiMasterSspmGrid = ({
           setSelectedValue={setItem}
           preSearchParams={{
             divisionId: dataItem?.DIVISION_ID ?? '',
-            deptId: 'ALL',
-            endCustomer: 'ALL',
-            salesSite: 'ALL',
-            projectCode: 'ALL',
+            deptId: cascadeDeptId,
+            endCustomer: cascadeEndCustomer,
+            salesSite: cascadeSalesSite,
+            projectCode: dataItem?.PROJECT_CODE || 'ALL',
             activeFlag: 'ALL',
             itemId: '',
           }}
@@ -143,10 +180,10 @@ export const ErpEdiMasterSspmGrid = ({
           setSelectedValue={setOwner}
           preSearchParams={{
             divisionId: dataItem?.DIVISION_ID ?? '',
-            deptId: 'ALL',
-            endCustomer: 'ALL',
-            projectCode: 'ALL',
-            salesSite: 'ALL',
+            deptId: cascadeDeptId,
+            endCustomer: cascadeEndCustomer,
+            projectCode: dataItem?.PROJECT_CODE || 'ALL',
+            salesSite: cascadeSalesSite,
             owner: '',
           }}
           multiCheckbox

@@ -1,15 +1,12 @@
-import { ItemField, OwnerField, ProjectField } from 'features/master/src/components';
+import { ItemField, OwnerField, PeriodField, ProjectField } from 'features/master/src/components';
 
-import dayjs from '@foundation/dayjs';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
-import { Checkbox, DatePickerCalendar, FormItem } from '@shared/lges';
-import { Grid, Stack } from '@shared/mui';
+import { FormItem } from '@shared/lges';
+import { Grid } from '@shared/mui';
 
 import { BUCKET_TYPE } from '../sales-monitoring.constants';
 import { useSalesMonitoringStore } from '../useSalesMonitoringStore';
-
-import styles from './SalesMonitoringForm.module.scss';
 
 interface SalesMonitoringFormProps {
   onSearch: () => void;
@@ -32,18 +29,25 @@ export const SalesMonitoringForm = ({ onSearch }: SalesMonitoringFormProps) => {
   // 조회조건 콤보 — 사내 SCM_ADM_CMBO_SQL_M 등록명 (DIVISION_ID/DEPT_ID 반환 콤보는 클라 cascade 필터)
   //   ⭐ Sales Site = 'SalesSite'(DIVISION_ID+DEPT_ID+PROJECT_CODE 반환) 로 교체 (2026-07-07).
   //     구 'ScmSitebyEndCustomer40' 은 div40 하드코딩 + 컬럼 미반환 → cascade 불가(타 division 오조회).
-  const [myDivision, teamByDivision, endCustomerByDivision, scmSiteByEndCustomer, bizType, plantSite, itemType] =
-    useTabComboQueries({
-      filters: [
-        'MyDivision',
-        { comboId: 'TeambyDivision' },
-        { comboId: 'EndCustomer' },
-        'SalesSite',
-        'BizType',
-        { comboId: 'SalesPlant', divisionId: sc.divisionId },
-        'ItemType',
-      ],
-    });
+  const [
+    myDivision,
+    teamByDivision,
+    endCustomerByDivision,
+    scmSiteByEndCustomer,
+    bizType,
+    plantSite,
+    itemType,
+  ] = useTabComboQueries({
+    filters: [
+      'MyDivision',
+      { comboId: 'TeambyDivision' },
+      { comboId: 'EndCustomer' },
+      'SalesSite',
+      'BizType',
+      { comboId: 'SalesPlant', divisionId: sc.divisionId },
+      'ItemType',
+    ],
+  });
 
   // ⭐ cascade 하위 필터 기준 — 선택된 Team(단일). deptIds 비어있으면(ALL) Team 필터 미적용.
   const selDept = sc.deptIds[0] ?? '';
@@ -99,6 +103,8 @@ export const SalesMonitoringForm = ({ onSearch }: SalesMonitoringFormProps) => {
               labelAlign='right'
               render={() => (
                 <CustomDropdown
+                  multiple
+                  limitTags={1}
                   allOption
                   useClearIcon
                   value={firstOr(sc.deptIds)}
@@ -121,6 +127,8 @@ export const SalesMonitoringForm = ({ onSearch }: SalesMonitoringFormProps) => {
               labelAlign='right'
               render={() => (
                 <CustomDropdown
+                  multiple
+                  limitTags={1}
                   allOption
                   useClearIcon
                   value={firstOr(sc.endCustomers)}
@@ -148,6 +156,8 @@ export const SalesMonitoringForm = ({ onSearch }: SalesMonitoringFormProps) => {
               labelAlign='right'
               render={() => (
                 <CustomDropdown
+                  multiple
+                  limitTags={1}
                   allOption
                   useClearIcon
                   value={firstOr(sc.scmSiteIds)}
@@ -168,28 +178,13 @@ export const SalesMonitoringForm = ({ onSearch }: SalesMonitoringFormProps) => {
           </Grid>
 
           {/* Row 2 — Period* / Bucket* / 체크박스 3종 (Figma Row2 1:1 — Search 버튼은 SearchArea 자체) */}
-          <Grid size={3}>
-            <FormItem
-              label={t('LBL00013', '_Period')}
-              labelAlign='right'
-              render={() => (
-                <div className={styles.datePickerFix}>
-                  <DatePickerCalendar
-                    sx={{ width: '100%' }}
-                    usecase='date-range-multi'
-                    elevation
-                    size='large'
-                    value={[dayjs(sc.startYyyymmdd, 'YYYYMMDD'), dayjs(sc.endYyyymmdd, 'YYYYMMDD')]}
-                    onChange={date => {
-                      const start = date?.[0] ? dayjs(date[0]).format('YYYYMMDD') : sc.startYyyymmdd;
-                      const end = date?.[1] ? dayjs(date[1]).format('YYYYMMDD') : sc.endYyyymmdd;
-                      set({ startYyyymmdd: start, endYyyymmdd: end });
-                    }}
-                  />
-                </div>
-              )}
-            />
-          </Grid>
+          {/* 공용 카탈로그 PeriodField(@master/searchFields) — SalesPrice 등 타 화면과 동일 DateRange. */}
+          <PeriodField
+            gridSize={3}
+            start={sc.startYyyymmdd}
+            end={sc.endYyyymmdd}
+            onChange={(start, end) => set({ startYyyymmdd: start, endYyyymmdd: end })}
+          />
           <Grid size={3}>
             <FormItem
               label={t('LBL00710', '_Bucket')}
@@ -204,41 +199,14 @@ export const SalesMonitoringForm = ({ onSearch }: SalesMonitoringFormProps) => {
               )}
             />
           </Grid>
-          <Grid size={6}>
-            <div className={styles.checkboxRow}>
-              <Stack direction='row' spacing={2} alignItems='center'>
-                {/* AS-IS chkSum — 상위 합계(M_/W_) 컬럼 표시 토글 (SetSpreadColumn, 조회 없이 즉시 반영) */}
-                <Checkbox
-                  labelText={t('LBL00687', '_Sum')}
-                  checked={sc.sumYn}
-                  onChange={checked => set({ sumYn: checked })}
-                />
-                {/* AS-IS chkColor — 과거(실적) 구간 회색 표시 (setResultPeriod, 조회 없이 즉시 반영) */}
-                <Checkbox
-                  labelText={t('LBL00688', '_Color')}
-                  checked={sc.colorYn}
-                  onChange={checked => set({ colorYn: checked })}
-                />
-                {/* AS-IS InternalYN — p_internal_yn (내부거래 포함, 조회 조건) */}
-                <Checkbox
-                  labelText={t('LBL00753', '_Include Internal Txn')}
-                  checked={sc.internalYn}
-                  onChange={checked => set({ internalYn: checked })}
-                />
-              </Stack>
-            </div>
-          </Grid>
-        </>
-      }
-      extraConditions={
-        <>
-          {/* 확장 Row 3 — Item Type / Biz. Type / PJT🔍 / Model·Nickname🔍 (Figma 확장영역 1:1) */}
           <Grid size={3}>
             <FormItem
               label={t('LBL00068', '_Item Type')}
               labelAlign='right'
               render={() => (
                 <CustomDropdown
+                  multiple
+                  limitTags={1}
                   allOption
                   useClearIcon
                   value={firstOr(sc.itemTypes)}
@@ -254,6 +222,8 @@ export const SalesMonitoringForm = ({ onSearch }: SalesMonitoringFormProps) => {
               labelAlign='right'
               render={() => (
                 <CustomDropdown
+                  multiple
+                  limitTags={1}
                   allOption
                   useClearIcon
                   value={firstOr(sc.bizTypes)}
@@ -267,6 +237,11 @@ export const SalesMonitoringForm = ({ onSearch }: SalesMonitoringFormProps) => {
               )}
             />
           </Grid>
+        </>
+      }
+      extraConditions={
+        <>
+          {/* 확장 Row PJT🔍 / Model·Nickname🔍 (Figma 확장영역 1:1) */}
           {/* PJT / Model·Nickname — 조회조건 표준 카탈로그(@master/searchFields) + 체크박스 멀티선택 popup
               (AS-IS txtProject+btnProject / txtItemId+btnItemId 1:1 — popup 은 카탈로그 필드 자체 관리) */}
           <ProjectField

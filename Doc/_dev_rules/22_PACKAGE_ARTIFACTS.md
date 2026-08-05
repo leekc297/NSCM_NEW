@@ -46,10 +46,8 @@ _{SCREEN_ID}_artifacts/                                      ← 워크스페이
 │               └── ...
 │
 ├── sql/                                                      ← DB 메타 등록 SQL (이관 대상)
-│   ├── {NN}_{SCREEN_ID}_Registration.sql                     ← SQL*Plus
-│   ├── {NN}_{SCREEN_ID}_Registration_DBeaver.sql             ← DBeaver 등록
-│   ├── {NN}_{SCREEN_ID}_Registration_DBeaver_Verify.sql      ← 검증 (UNION ALL 단일 SELECT)
-│   └── {NN}_{SCREEN_ID}_Registration_DBeaver_Diagnose.sql    ← 진단
+│   └── {NN}_{SCREEN_ID}_Registration.sql                     ← SQL*Plus/SQLcl 단일본
+│       (⚠️ 2026-07-29 사용자 지시: DBeaver 변형(_DBeaver/_Verify/_Diagnose) 생성 금지 — 구 4-파일 세트 폐기)
 │
 ├── _README.md                                                ← ⭐ 적용 절차서 (필수)
 └── _COMMON_FILES_GUIDE.md                                    ← ⭐ 공통 파일 수정 가이드 (필수)
@@ -112,7 +110,7 @@ To-Be 도메인: `{domain}` | slug: `{slug}` | URL: `/{path}/{slug}`
 ## 3. 적용 순서 (클라우드 환경) — 7 step
 ### Step 1. 환경 확인 (git branch)
 ### Step 2. As-Is SP → Oracle PKG 변환 + 컴파일 (별도 작업)
-### Step 3. DB 메타 등록 SQL 실행 (SQL*Plus 또는 DBeaver)
+### Step 3. DB 메타 등록 SQL 실행 (SQL*Plus/SQLcl — DBeaver 변형 미제공, 2026-07-29)
 ### Step 4. FE 파일 복사 (robocopy / cp -r)
 ### Step 5. 공통 파일 수정 (_COMMON_FILES_GUIDE.md 참조)
 ### Step 6. 빌드 검증 (pnpm gen:procedures && pnpm build)
@@ -253,7 +251,7 @@ $zip.Dispose()
 
 1. `unzip {SCREEN_ID}_To-Be_{YYYYMMDD}.zip`
 2. `git checkout -b feat/{kebab-screen-id}` (clean state 권장)
-3. `sql/{NN}_{SCREEN_ID}_Registration_DBeaver.sql` 실행 (DBeaver) → `_Verify.sql` 결과 7행 모두 통과 확인
+3. `sql/{NN}_{SCREEN_ID}_Registration.sql` 실행 (SQL*Plus/SQLcl) → 스크립트 내 검증 SELECT 통과 확인
 4. `cp -r fe/features/{domain}/src/pages/{kebab-page} nscm-fe/features/{domain}/src/pages/`
 5. `_COMMON_FILES_GUIDE.md` §1~§4 patch 적용 (수동)
 6. `cd nscm-fe && pnpm install && pnpm gen:procedures && pnpm lint:fix && pnpm type-check && pnpm build`
@@ -266,7 +264,7 @@ $zip.Dispose()
 ```
 [ ] 폴더 명명 _{screen_id}_artifacts 규약 준수
 [ ] fe/ 안의 폴더 구조가 nscm-fe 상대 경로와 정확히 일치 (features/{domain}/src/pages/{kebab})
-[ ] sql/ 안에 4-파일 세트 모두 포함 (.sql + _DBeaver.sql + _Verify.sql + _Diagnose.sql)
+[ ] sql/ 안에 SQL*Plus/SQLcl 단일본 포함 (DBeaver 변형 생성 금지 — 2026-07-29)
 [ ] _README.md 의 §3 적용 순서가 7-step 으로 명확
 [ ] _COMMON_FILES_GUIDE.md 의 4 파일 patch 가 Before/After 형식
 [ ] __asis-mapping__.md 가 FE 폴더 안에 포함 (룰 09 §3)
@@ -362,7 +360,7 @@ sqlplus -s SCM_MGR/<pw>@<dsn> <<< "SELECT OBJECT_NAME, STATUS FROM USER_OBJECTS 
 [ ] POPUP modal 카운트 == BTN_MPG (popup sheet) 카운트?
 [ ] 화면 전용 SP body 모두 03_SP_PKG/ 에?
 [ ] wrapper / 공용 SP body 도 03_SP_PKG/ 에 (비고: 공용 — 환경 사전 확인)?
-[ ] 메타 보강 SQL 4-파일 세트 (sql + DBeaver + Verify + Diagnose) 작성?
+[ ] 메타 보강 SQL 단일본(.sql) 작성? (DBeaver 변형 생성 금지 — 2026-07-29)
 [ ] BLOCK 6 사후 카운트가 인벤토리 카운트와 1:1 정합?
 [ ] 멱등 검증 (재실행 시 0 rows created — NOT EXISTS 차단)?
 ```

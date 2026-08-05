@@ -1,4 +1,4 @@
-import { toggleClass } from '@mescius/wijmo';
+import { Aggregate, toggleClass } from '@mescius/wijmo';
 import {
   AllowMerging,
   CellType,
@@ -7,12 +7,21 @@ import {
   type FormatItemEventArgs,
 } from '@mescius/wijmo.grid';
 import { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { type MutableRefObject, type Ref, useEffect, useMemo, useRef } from 'react';
+import styles from 'features/demand/src/pages/sales-plan/SalesPlan.module.scss';
+import {
+  type MutableRefObject,
+  type Ref,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
 import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
 import type { EditTracker } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
-import { useTabComboQueries } from '@shared/hooks';
+import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
 import { useMessageStore } from '@shared/stores';
 
 import {
@@ -30,7 +39,12 @@ import type {
   SalesPlanRow,
   SpreadTitleRow,
 } from '../sales-plan.types';
-import styles from '../SalesPlan.module.scss';
+import {
+  buildSalesPlanComboContext,
+  buildSalesPlanComboFilter,
+  isSalesPlanRowDependentCombo,
+  salesPlanComboContextKey,
+} from '../utils/sales-plan.comboContext';
 import { isDiv40 } from '../utils/sales-plan.division';
 import {
   buildCutoff,
@@ -54,6 +68,7 @@ const DYN_RANK = { M: 0, W: 1, D: 2 } as const;
 interface Props {
   rows: SalesPlanRow[];
   gridRef: Ref<FlexGridType<SalesPlanRow>>;
+  tabId: string;
   // F4 Filter — 피처가 FlexGridFilter 직접 소유. 동적(M_/W_/D_) 컬럼 필터 cancel + 필터후 머지/높이 재적용.
   gridFilterRef?: MutableRefObject<FlexGridFilter | undefined>;
   // F7 Save — EditTracker 로 변경 셀 추적(Red 마킹 단일 소스) + 비-insert 행 자동 CRUD_TYPE='M' 마킹.
@@ -64,6 +79,7 @@ interface Props {
   bucketType?: BUCKET_TYPE;
   // Sum 체크박스 — 상위 버킷 합계 컬럼(M_/W_) 표시 토글 (AS-IS chkSum L4419 — 조회 없이 즉시 반영).
   sumYn?: boolean;
+  currentYyyymmdd?: string;
   // admin SYS0004 UI Category Setup 동적 메타 (SHEET_COLUMNS 66건 — division 서버 필터, 하드코딩 fallback 없음).
   staticColumns?: RawFlexGridColumnConfig[];
   // P_DMF0021_GET_SPREAD_TITLE 결과 — 동적 3단 헤더(라벨/정렬/구조)의 1차 소스.
@@ -98,12 +114,14 @@ const formatByNotation = (v: unknown, notation: string): string => {
 export const SalesPlanGrid = ({
   rows,
   gridRef,
+  tabId,
   gridFilterRef,
   editTrackerRef,
   onPopupCellDblClick,
   divisionId,
   bucketType = BUCKET_TYPE.MONTHLY,
   sumYn = false,
+  currentYyyymmdd = '',
   staticColumns,
   spreadTitle,
   calendarInfo,
@@ -113,6 +131,65 @@ export const SalesPlanGrid = ({
   const { t } = useTranslation();
   const setAlert = useMessageStore.getState().setAlert;
   const division = divisionId ?? '';
+  const [rowComboContext, setRowComboContext] = useState(() =>
+    buildSalesPlanComboContext(undefined, division)
+  );
+  const [hasInsertComboContext, setHasInsertComboContext] = useState(false);
+  const rowComboContextRef = useRef(rowComboContext);
+  const syncRowComboContext = useCallback(
+    (row?: SalesPlanRow) => {
+      const next = buildSalesPlanComboContext(row, division);
+      setHasInsertComboContext(row?.CRUD_TYPE === 'I');
+      rowComboContextRef.current = next;
+      setRowComboContext(prev =>
+        salesPlanComboContextKey(prev) === salesPlanComboContextKey(next) ? prev : next
+      );
+    },
+    [division]
+  );
+  useEffect(() => syncRowComboContext(), [syncRowComboContext]);
+
+  // 신규행 Model은 COM0008 ItemByDivision 결과를 드롭다운으로 제공한다.
+  const itemDropdownFilters = useMemo<ProcRequest<'COM0008', 'itemByDivision'>>(
+    () => ({
+      divisionId: rowComboContext.divisionId || 'ALL',
+      deptId: rowComboContext.deptId || 'ALL',
+      endCustomer: rowComboContext.endCustomer || 'ALL',
+      salesSite: rowComboContext.scmSiteId || 'ALL',
+      projectCode: rowComboContext.projectCode || 'ALL',
+      itemId: '',
+      activeFlag: 'Y',
+    }),
+    [rowComboContext]
+  );
+  const { data: itemDropdownData } = useTabProcQuery<'COM0008', 'itemByDivision'>({
+    menuId: 'COM0008',
+    sheetName: 'itemByDivision',
+    tabId: `${tabId}-sales-plan-item-dropdown`,
+    filters: itemDropdownFilters,
+    enabled: hasInsertComboContext && !!rowComboContext.divisionId,
+  });
+  const itemDropdownRows = useMemo(() => itemDropdownData?.o_rc1 ?? [], [itemDropdownData]);
+  const itemDropdownMap = useMemo<DataMap | null>(() => {
+    if (itemDropdownRows.length === 0) return null;
+    return new DataMap(
+      itemDropdownRows.map(item => ({
+        CODE: item.ITEM_ID,
+        NAME: item.NICK_NAME
+          ? `${item.ITEM_ID} / ${item.NICK_NAME}`
+          : item.ITEM_NAME
+            ? `${item.ITEM_ID} / ${item.ITEM_NAME}`
+            : item.ITEM_ID,
+      })),
+      'CODE',
+      'NAME'
+    );
+  }, [itemDropdownRows]);
+  const itemDropdownMapRef = useRef<DataMap | null>(null);
+  const itemDropdownRowsRef = useRef(itemDropdownRows);
+  itemDropdownMapRef.current = itemDropdownMap;
+  itemDropdownRowsRef.current = itemDropdownRows;
+
   const bucketPrefix =
     bucketType === BUCKET_TYPE.MONTHLY ? 'M' : bucketType === BUCKET_TYPE.DAILY ? 'D' : 'W';
 
@@ -128,8 +205,10 @@ export const SalesPlanGrid = ({
     const w = (calendarInfo?.THIS_YYYYMMWW ?? '').toString().trim();
     if (m) s.add(m.startsWith('M_') ? m : `M_${m}`);
     if (w) s.add(w.startsWith('W_') ? w : `W_${w}`);
+    const d = String(calendarInfo?.BASIS_DATE ?? currentYyyymmdd).replace(/[^0-9]/g, '');
+    if (/^\d{8}$/.test(d)) s.add(`D_${d}`);
     return s;
-  }, [calendarInfo]);
+  }, [calendarInfo, currentYyyymmdd]);
   const currentPeriodBindingsRef = useRef(currentPeriodBindings);
   currentPeriodBindingsRef.current = currentPeriodBindings;
 
@@ -156,8 +235,7 @@ export const SalesPlanGrid = ({
     [visibleColumns]
   );
 
-  // ===== Grid 내 combo column dropdown — UI Category 메타(cellCboDataTp) 기반 (DMF0020/0003 표준) =====
-  //   콤보 SQL 은 파라미터 없는 등록명만 사용 (BE makeComboQuery raw 치환 — DMF0003 2026-07-03 실측 근거).
+  // ===== Grid 내 combo column dropdown — 표시용 전체 콤보 + 편집용 행 종속 콤보 =====
   const comboColumns = useMemo(
     () =>
       visibleColumns.filter(
@@ -165,12 +243,21 @@ export const SalesPlanGrid = ({
       ),
     [visibleColumns]
   );
-  const comboResults = useTabComboQueries({
-    filters: comboColumns.map(c => c.cellCboDataTp as string),
-  });
-  const comboSig = comboColumns
-    .map((c, i) => `${c.cellCboDataTp}#${comboResults[i]?.length ?? 'x'}`)
-    .join(',');
+  const displayComboContext = useMemo(
+    () => buildSalesPlanComboContext(undefined, division),
+    [division]
+  );
+  const comboFilters = useMemo(
+    () =>
+      comboColumns.map(c =>
+        buildSalesPlanComboFilter(c.colNm, c.cellCboDataTp as string, displayComboContext, false)
+      ),
+    [comboColumns, displayComboContext]
+  );
+  const comboResults = useTabComboQueries({ filters: comboFilters });
+  const comboSig = `${comboColumns.map(c => `${c.colNm}:${c.cellCboDataTp}`).join(',')}::${JSON.stringify(
+    comboResults
+  )}`;
   const dataMaps = useMemo<Record<string, DataMap | null>>(() => {
     const m: Record<string, DataMap | null> = {};
     comboColumns.forEach((c, i) => {
@@ -181,7 +268,6 @@ export const SalesPlanGrid = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [comboSig]);
 
-  // cascade 스왑용 콤보 원본 rows + 전체 dataMap 원복 ref 미러 (핸들러 useEffect deps 밖 참조).
   const comboRowsRef = useRef<Record<string, Record<string, unknown>[]>>({});
   const dataMapsRef = useRef<Record<string, DataMap | null>>({});
   useEffect(() => {
@@ -194,6 +280,37 @@ export const SalesPlanGrid = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [comboSig, dataMaps]);
 
+  const rowComboColumns = useMemo(
+    () => comboColumns.filter(c => isSalesPlanRowDependentCombo(c.colNm)),
+    [comboColumns]
+  );
+  const rowComboFilters = useMemo(
+    () =>
+      rowComboColumns.map(c =>
+        buildSalesPlanComboFilter(c.colNm, c.cellCboDataTp as string, rowComboContext, true)
+      ),
+    [rowComboColumns, rowComboContext]
+  );
+  const rowComboResults = useTabComboQueries({ filters: rowComboFilters });
+  const rowComboContextKey = salesPlanComboContextKey(rowComboContext);
+  const rowComboSig = `${rowComboContextKey}::${JSON.stringify(rowComboResults)}`;
+  const rowDataMaps = useMemo<Record<string, DataMap | null>>(() => {
+    const m: Record<string, DataMap | null> = {};
+    rowComboColumns.forEach((c, i) => {
+      const arr = rowComboResults[i] ?? [];
+      m[c.colNm] = arr.length > 0 ? new DataMap(arr, 'CODE', 'NAME') : null;
+    });
+    return m;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rowComboSig]);
+  const rowDataMapsRef = useRef<Record<string, DataMap | null>>({});
+  const loadedRowComboContextRef = useRef('');
+  useEffect(() => {
+    rowDataMapsRef.current = rowDataMaps;
+    loadedRowComboContextRef.current = rowComboResults.every(result => result !== undefined)
+      ? rowComboContextKey
+      : '';
+  }, [rowComboContextKey, rowComboResults, rowDataMaps]);
   // ⭐ 편집 전용 콤보 (hook #59 §5-G — 편집 진입 시 스왑, cellEditEnded 원복):
   //   CURRENCY = 'CurrencyList' (AS-IS dtCurrencyList L3000) / MEASURE = measureInfo SP (L2925) /
   //   FCST_TYPE(Catch_Up) = 'FcstType' 전체에서 ETC 제외 클라 필터 (L4903).
@@ -236,23 +353,30 @@ export const SalesPlanGrid = ({
     small: string;
     leaf: string;
     sort: number;
+    dayCode: string;
   };
   const dynColMetas = useMemo<DynColMeta[]>(() => {
     const kindOf = (b: string): 'M' | 'W' | 'D' | null =>
       /^M_\d{6}$/.test(b) ? 'M' : /^W_\d{7,10}$/.test(b) ? 'W' : /^D_\d{8}$/.test(b) ? 'D' : null;
     // (1) GET_SPREAD_TITLE 우선
-    const titleRows = (spreadTitle ?? []).filter(r => !!kindOf(String(r.COLUMN_NAME ?? '')));
-    if (titleRows.length > 0) {
-      return titleRows
-        .map<DynColMeta>(r => ({
-          binding: String(r.COLUMN_NAME),
-          kind: kindOf(String(r.COLUMN_NAME))!,
+    const titleMetas = (spreadTitle ?? []).flatMap<DynColMeta>(r => {
+      const binding = String(r.COLUMN_NAME ?? '');
+      const kind = kindOf(binding);
+      if (!kind) return [];
+      return [
+        {
+          binding,
+          kind,
           large: String(r.LARGE_CLASS_LABEL_NAME ?? ''),
           small: String(r.SMALL_CLASS_LABEL_NAME ?? ''),
           leaf: String(r.COLUMN_LABEL_NAME ?? ''),
           sort: Number(r.SORT_ORDER_NO ?? 0),
-        }))
-        .sort((a, b) => a.sort - b.sort || a.binding.localeCompare(b.binding));
+          dayCode: String(r.DAY_CODE ?? ''),
+        },
+      ];
+    });
+    if (titleMetas.length > 0) {
+      return titleMetas.sort((a, b) => a.sort - b.sort || a.binding.localeCompare(b.binding));
     }
     // (2) fallback — 데이터 row 키 union (라벨 = binding 파생)
     if (!rows || rows.length === 0) return [];
@@ -262,14 +386,51 @@ export const SalesPlanGrid = ({
         if (kindOf(k)) set.add(k);
       }
     }
-    return [...set].sort().map<DynColMeta>(b => {
-      const dyn = getDynKey(b);
-      return { binding: b, kind: kindOf(b)!, large: dyn.ym, small: dyn.sub, leaf: dyn.leaf, sort: 0 };
+    return [...set].sort().flatMap<DynColMeta>(binding => {
+      const kind = kindOf(binding);
+      if (!kind) return [];
+      const dyn = getDynKey(binding);
+      return [
+        {
+          binding,
+          kind,
+          large: dyn.ym,
+          small: dyn.sub,
+          leaf: dyn.leaf,
+          sort: 0,
+          dayCode: '',
+        },
+      ];
     });
   }, [spreadTitle, rows]);
 
   // binding 순서 목록 + 표시 규칙 rank 분리 (활성 bucket=표시 / 상위 합계=sumYn / 하위=드릴 전용 — DMF0003 1:1)
   const dynBindings = useMemo<string[]>(() => dynColMetas.map(m => m.binding), [dynColMetas]);
+  const weekendCodeByBinding = useMemo(() => {
+    const result = new Map<string, 'SAT' | 'SUN'>();
+    dynColMetas
+      .filter(meta => meta.kind === 'D')
+      .forEach(meta => {
+        const code = meta.dayCode.trim().toUpperCase();
+        if (code.includes('SAT')) result.set(meta.binding, 'SAT');
+        else if (code.includes('SUN')) result.set(meta.binding, 'SUN');
+        else {
+          const yyyymmdd = meta.binding.slice(2);
+          const day = new Date(
+            Date.UTC(
+              Number(yyyymmdd.slice(0, 4)),
+              Number(yyyymmdd.slice(4, 6)) - 1,
+              Number(yyyymmdd.slice(6, 8))
+            )
+          ).getUTCDay();
+          if (day === 6) result.set(meta.binding, 'SAT');
+          if (day === 0) result.set(meta.binding, 'SUN');
+        }
+      });
+    return result;
+  }, [dynColMetas]);
+  const weekendCodeByBindingRef = useRef(weekendCodeByBinding);
+  weekendCodeByBindingRef.current = weekendCodeByBinding;
   const summaryBindings = useMemo<string[]>(
     () => dynColMetas.filter(m => DYN_RANK[m.kind] < DYN_RANK[bucketPrefix]).map(m => m.binding),
     [dynColMetas, bucketPrefix]
@@ -304,14 +465,19 @@ export const SalesPlanGrid = ({
         m.kind === 'M'
           ? 'SUM'
           : m.kind === 'W'
-            ? (m.small ||
+            ? (
+                m.small ||
                 (/^W_\d{7,9}$/.test(m.binding) && !/^W_\d{8}$/.test(m.binding)
                   ? `W${m.binding.slice(8)}`
                   : getDynKey(m.binding).sub)
               ).trim() || 'SUM'
             : (m.small || getDynKey(m.binding).sub).trim() || 'SUM';
-      if (!bucket.subs.has(subKey)) bucket.subs.set(subKey, []);
-      bucket.subs.get(subKey)!.push({
+      let subColumns = bucket.subs.get(subKey);
+      if (!subColumns) {
+        subColumns = [];
+        bucket.subs.set(subKey, subColumns);
+      }
+      subColumns.push({
         binding: m.binding,
         // 3단(leaf) 라벨 — M/W 합계는 'SUM' / D=일자(m.leaf).
         header: m.kind === 'D' ? m.leaf || m.small || 'SUM' : 'SUM',
@@ -324,6 +490,8 @@ export const SalesPlanGrid = ({
         visible: true,
         height: 48, // 다단 헤더 높이(#93) — wrapper 가 staticColumns 만 자동 처리, 동적은 명시 의무.
         _display: true,
+        aggregate: Aggregate.Sum,
+        format: '#,##0.###',
       });
     });
     // sub 정렬: 'SUM'(월합계) 최우선 → 주차 오름차순. leaf 정렬: 합계(M/W) 먼저 → 일자 binding 순.
@@ -359,11 +527,31 @@ export const SalesPlanGrid = ({
     // 홀짝 zebra (#95)
     if (g.alternatingRowStep !== 1) g.alternatingRowStep = 1;
 
-    // ⭐ footer Sum 미표시 — 사용자 확정 2026-07-15 "Grid Footer Summary Visible = false".
-    //   (AS-IS InitSpreadFooterSum 은 있었으나 TO-BE 제외. 기 생성분(HMR 잔재) 도 숨김)
+    // ⭐ AS-IS InitSpreadFooterSum 복원 — 동적 기간 컬럼의 하단 합계를 표시.
+    //   DataGrid useAggregationRow + 동적 leaf Aggregate.Sum 조합으로 구현.
     for (let i = 0; i < g.columnFooters.rows.length; i++) {
-      g.columnFooters.rows[i].visible = false;
+      g.columnFooters.rows[i].visible = true;
     }
+
+    // 현재기간 강조는 화면에 표시된 가장 하위 버킷에만 적용한다.
+    // Monthly에서 Weekly를 펼치면 M_ SUM은 제외하고 W_ 당주만 강조한다.
+    const shouldHighlightCurrentPeriod = (binding: string): boolean => {
+      if (!currentPeriodBindingsRef.current.has(binding)) return false;
+      const kind = dynKindOf(binding);
+      if (kind !== 'M' && kind !== 'W') return true;
+      const rank = DYN_RANK[kind];
+      const index = dynBindings.indexOf(binding);
+      if (index < 0) return true;
+      for (let i = index + 1; i < dynBindings.length; i++) {
+        const childBinding = dynBindings[i];
+        const childKind = dynKindOf(childBinding);
+        if (!childKind) continue;
+        const childRank = DYN_RANK[childKind];
+        if (childRank <= rank) break;
+        if (childRank === rank + 1 && g.getColumn(childBinding)?.visible) return false;
+      }
+      return true;
+    };
 
     const formatHandler = (_s: FlexGridType<SalesPlanRow>, e: FormatItemEventArgs) => {
       // #108 — No. 코너 헤더 (TopLeft 단일 라벨)
@@ -378,9 +566,18 @@ export const SalesPlanGrid = ({
       if (e.panel.cellType === CellType.ColumnHeader) {
         e.cell.style.textAlign = 'center';
         // ⭐ 당월 M_/당주 W_ 헤더 Green Bold (AS-IS chkColor OFF 기본 — 커서 2 기준. Color 체크박스 제거 확정)
-        const isCurrentPeriod = !!col.binding && currentPeriodBindingsRef.current.has(col.binding);
-        e.cell.style.color = isCurrentPeriod ? '#1e8449' : '';
-        e.cell.style.fontWeight = isCurrentPeriod ? '700' : '';
+        const showCurrentPeriod = !!col.binding && shouldHighlightCurrentPeriod(col.binding);
+        const weekendCode = col.binding
+          ? weekendCodeByBindingRef.current.get(col.binding)
+          : undefined;
+        e.cell.style.color = showCurrentPeriod
+          ? '#1e8449'
+          : weekendCode === 'SAT'
+            ? '#1565c0'
+            : weekendCode === 'SUN'
+              ? '#d32f2f'
+              : '';
+        e.cell.style.fontWeight = showCurrentPeriod ? '700' : '';
         return;
       }
       if (e.panel.cellType !== CellType.Cell) return;
@@ -393,7 +590,7 @@ export const SalesPlanGrid = ({
 
       if (isDyn) {
         // 당주/당월 컬럼 세로 레일 (배경색과 독립 — 편집 Yellow 와 공존)
-        toggleClass(e.cell, 'sp-cell-current-period', currentPeriodBindingsRef.current.has(binding));
+        toggleClass(e.cell, 'sp-cell-current-period', shouldHighlightCurrentPeriod(binding));
         // ⭐ editLock R1~R4 — 편집가능 Yellow / 과거 Gray / 그 외 White (#95 — 전체회색·inline 금지)
         const state = evalSalesPlanDynCell({
           binding,
@@ -403,14 +600,17 @@ export const SalesPlanGrid = ({
           cutoff,
           auth,
         });
-        toggleClass(e.cell, 'wj-cell-editable', state.editable);
-        toggleClass(e.cell, 'wj-cell-non-editable', !state.editable && state.isPast);
+        const editable = state.editable;
+        toggleClass(e.cell, 'wj-cell-editable', editable);
+        toggleClass(e.cell, 'wj-cell-non-editable', false);
         // ⭐ 변경 셀 Red (AS-IS Dsdm_Changed L3948 — EditTracker 단일 소스 + 신규 행 입력 셀)
         const tracked =
           rowItem &&
-          (editTrackerRef?.current?.getOriginalValues() as
-            | Map<SalesPlanRow, Record<string, unknown>>
-            | undefined)?.get(rowItem)?.[binding] !== undefined;
+          (
+            editTrackerRef?.current?.getOriginalValues() as
+              | Map<SalesPlanRow, Record<string, unknown>>
+              | undefined
+          )?.get(rowItem)?.[binding] !== undefined;
         const insertInput = isInsert && rowItem?.[binding] != null && rowItem?.[binding] !== '';
         toggleClass(e.cell, 'sp-cell-changed', !!tracked || !!insertInput);
         // ⭐ 행별 NOTATION 숫자 포맷 (편집 중 셀 제외)
@@ -475,6 +675,21 @@ export const SalesPlanGrid = ({
           col.dataMap = measureInfoMapRef.current;
           return;
         }
+        if (binding === 'ITEM_ID') {
+          const expectedContext = buildSalesPlanComboContext(row, division);
+          const expectedKey = salesPlanComboContextKey(expectedContext);
+          if (salesPlanComboContextKey(rowComboContextRef.current) !== expectedKey) {
+            syncRowComboContext(row);
+            e.cancel = true;
+            return;
+          }
+          if (!itemDropdownMapRef.current) {
+            e.cancel = true;
+            return;
+          }
+          col.dataMap = itemDropdownMapRef.current;
+          return;
+        }
         if (binding === 'FCST_TYPE' && toCellStr(row.MEASURE) === EDIT_MEASURE.CATCH_UP) {
           const m = buildCatchUpFcstTypeMap(comboRowsRef.current[binding] ?? []);
           if (m) col.dataMap = m;
@@ -484,7 +699,23 @@ export const SalesPlanGrid = ({
           col.dataMap = editDataMapsRef.current[binding];
           return;
         }
-        // ⭐ cascade dataMap 스왑 — 행 컨텍스트(상위 셀 값)로 콤보 후보 필터 (관대 통과)
+        if (isSalesPlanRowDependentCombo(binding)) {
+          const expectedContext = buildSalesPlanComboContext(row, division);
+          const expectedKey = salesPlanComboContextKey(expectedContext);
+          if (salesPlanComboContextKey(rowComboContextRef.current) !== expectedKey) {
+            syncRowComboContext(row);
+            e.cancel = true;
+            return;
+          }
+          const rowMap = rowDataMapsRef.current[binding];
+          if (loadedRowComboContextRef.current !== expectedKey || !rowMap) {
+            e.cancel = true;
+            return;
+          }
+          col.dataMap = rowMap;
+          return;
+        }
+
         const cascade = GRID_CASCADE_FILTERS[binding];
         if (cascade && comboRowsRef.current[binding]) {
           const filtered = filterComboRowsByRow(comboRowsRef.current[binding], row, cascade);
@@ -515,6 +746,11 @@ export const SalesPlanGrid = ({
         e.cancel = !state.editable;
       }
     };
+    const selectionChangedHandler = (s: FlexGridType<SalesPlanRow>) => {
+      const row = s.rows[s.selection.row]?.dataItem as SalesPlanRow | undefined;
+      syncRowComboContext(row?.CRUD_TYPE === 'I' ? row : undefined);
+    };
+    g.selectionChanged.addHandler(selectionChangedHandler);
     g.beginningEdit.addHandler(beginningEditHandler);
     // 붙여넣기 게이트 — 편집 가드와 동일 판정 (AS-IS spdMain_KeyUp Ctrl+V 키영역 가드 L5431 대응)
     g.pastingCell.addHandler(beginningEditHandler as never);
@@ -529,13 +765,13 @@ export const SalesPlanGrid = ({
 
       // ⭐ 스왑 원복 (hook #59 §5-G — 원복 누락 시 필터 밖 CODE 보유 타 행 명칭 변환 파손. 취소도 커버)
       if (
-        (GRID_CASCADE_FILTERS[binding] ||
-          GRID_EDIT_COMBO[binding] ||
-          binding === 'MEASURE' ||
-          binding === 'FCST_TYPE') &&
-        dataMapsRef.current[binding]
+        GRID_CASCADE_FILTERS[binding] ||
+        GRID_EDIT_COMBO[binding] ||
+        binding === 'ITEM_ID' ||
+        binding === 'MEASURE' ||
+        binding === 'FCST_TYPE'
       ) {
-        col.dataMap = dataMapsRef.current[binding];
+        col.dataMap = dataMapsRef.current[binding] ?? null;
       }
 
       const row = s.rows[e.row].dataItem as SalesPlanRow | undefined;
@@ -592,6 +828,17 @@ export const SalesPlanGrid = ({
       if (binding === 'MEASURE' && changed) {
         applyMeasureSwitch(row, toCellStr(newVal), dynBindings);
       }
+      if (binding === 'ITEM_ID' && changed) {
+        const selected = itemDropdownRowsRef.current.find(
+          item => item.ITEM_ID === toCellStr(newVal)
+        );
+        if (selected) {
+          rec.NICK_NAME = selected.NICK_NAME ?? '';
+          rec.ITEM_NAME = selected.ITEM_NAME ?? '';
+          rec.ITEM_CLASS_NAME = selected.ITEM_CLASS_NAME ?? '';
+          rec.ITEM_TYPE = selected.ITEM_TYPE ?? '';
+        }
+      }
       // ⭐ cascade 계단 clear (hook #59 §5-G — 상위 콤보 값이 실제로 바뀐 경우만)
       const clearTargets = GRID_CASCADE_CLEAR[binding];
       if (clearTargets && changed) {
@@ -600,6 +847,7 @@ export const SalesPlanGrid = ({
         });
       }
       editingCellRef.current = null;
+      syncRowComboContext(row);
       s.invalidate(true);
     };
     g.cellEditEnded.addHandler(cellEditEndedHandler);
@@ -611,6 +859,8 @@ export const SalesPlanGrid = ({
     ) => {
       const b = s.columns[e.col]?.binding ?? '';
       if (b === 'ITEM_ID') {
+        const row = s.rows[e.row]?.dataItem as SalesPlanRow | undefined;
+        if (row) syncRowComboContext(row);
         for (let i = 0; i < s.columns.length; i++) {
           const c = s.columns[i];
           const dm = dataMapsRef.current[c.binding ?? ''];
@@ -691,6 +941,7 @@ export const SalesPlanGrid = ({
         /* unmount race */
       }
       try {
+        g.selectionChanged?.removeHandler(selectionChangedHandler);
         g.beginningEdit?.removeHandler(beginningEditHandler);
       } catch {
         /* unmount race */
@@ -732,6 +983,7 @@ export const SalesPlanGrid = ({
     division,
     bucketType,
     dataMaps,
+    syncRowComboContext,
   ]);
 
   // ⭐ hook #93 — 다단 헤더 총높이 48px 고정 (1단 48 / 2단 24×2 / 3단 16×3) + combo dataMap 재적용.
@@ -820,15 +1072,19 @@ export const SalesPlanGrid = ({
   useEffect(() => {
     const g = (gridRef as { current: FlexGridType<SalesPlanRow> | null } | null)?.current;
     g?.invalidate(true);
-  }, [calendarInfo, gridRef]);
+  }, [calendarInfo, currentYyyymmdd, weekendCodeByBinding, gridRef]);
 
   // ⭐ F4 Filter — 피처 소유 FlexGridFilter (동적 컬럼 필터 제외 + 필터후 머지/높이 재적용)
   useEffect(() => {
     const g = (gridRef as { current: FlexGridType<SalesPlanRow> | null } | null)?.current;
     if (!g || !gridFilterRef) return;
 
-    const isDynamic = (binding: string | null | undefined): boolean => /^[MWD]_/.test(binding ?? '');
-    const onFilterChanging = (_s: FlexGridFilter, e: { cancel: boolean; getColumn: () => { binding?: string | null } }) => {
+    const isDynamic = (binding: string | null | undefined): boolean =>
+      /^[MWD]_/.test(binding ?? '');
+    const onFilterChanging = (
+      _s: FlexGridFilter,
+      e: { cancel: boolean; getColumn: () => { binding?: string | null } }
+    ) => {
       if (isDynamic(e.getColumn()?.binding)) e.cancel = true;
     };
     const onFilterApplied = () => g.invalidate(true);
@@ -865,6 +1121,7 @@ export const SalesPlanGrid = ({
         autoGenerateColumns={false}
         allowSorting={true}
         allowMerging={AllowMerging.All}
+        useAggregationRow={true}
       />
     </div>
   );

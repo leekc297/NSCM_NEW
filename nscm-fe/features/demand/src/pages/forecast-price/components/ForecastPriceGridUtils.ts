@@ -122,10 +122,8 @@ export const divideByMonth = (
   dividedByWeek.forEach(weekInfo => {
     const cal = calendarMap.get(weekInfo.repDay);
     const monthDayCnt = cal?.monthDayCnt ?? monthDayCntFallback;
-    // ⭐ 룰1 정합(2026-07-21) — 주별 Rate = "그 주가 월내 기여하는 일수" 기준.
-    //   weekMap(그리드 주 그룹 = GET_SPREAD_TITLE 월경계 분할)의 실측 일수를 1차 사용.
-    //   (구 코드의 cal.weekDayCnt = SP O_RC5 의 ISO주 파티션 일수 — 조회범위/월경계에서 월내 일수와 어긋남.)
-    const weekDayCnt = weekMap.get(weekInfo.week)?.size ?? weekInfo.bucketDates.length;
+    const weekDayCnt =
+      cal?.weekDayCnt ?? weekMap.get(weekInfo.week)?.size ?? weekInfo.bucketDates.length;
     const weeklyQty = monthDayCnt > 0 ? Math.trunc(monthlySum / monthDayCnt) * weekDayCnt : 0;
 
     editTracker.storeChange(dataItem, weekInfo.week, dataItem[weekInfo.week], weeklyQty);
@@ -146,11 +144,9 @@ export const divideByMonth = (
   });
 
   // ── step3: 월 잔량 재분배 (직전 버킷주에 가산, .cs L7315~7365) ──
-  //   ⭐ 룰1 정합(2026-07-21) — 끝자리는 마지막 주차에서 "+,-" 처리: 음수 잔여(rate 초과 배분)도
-  //   마지막 주에 차감 반영해 월 총합 보존. (구 코드 remnant > 0 만 처리 → 초과분 방치 결함.)
   const remnant = monthlySum - distributedSum;
   const lastWeek = dividedByWeek[dividedByWeek.length - 1];
-  if (remnant !== 0 && lastWeek) {
+  if (remnant > 0 && lastWeek) {
     const cnt = lastWeek.bucketDates.length;
     let rem = remnant;
     lastWeek.bucketDates.forEach((bucketDate, idx) => {
@@ -186,12 +182,10 @@ export const divideByWeek = (
   const bucketValue = dataItem['BUCKET'];
   let bucketBinary: string = bucketValue === null ? '' : String(bucketValue);
 
-  // ⭐ 룰2 정합(2026-07-21) — 실제 적용요일(BUCKET)이 있으면 그대로 사용. 없을 때만 division 기본값.
-  //   (구 코드는 non-40 이면 실제 BUCKET 이 있어도 금요일 기본으로 덮어써 적용요일을 무시 — divideByMonth
-  //   의 기본값 분기와도 불일치했던 결함.)
-  if (bucketValue === '0000000' || bucketValue === null) {
-    bucketBinary = dataItem['DIVISION_ID'] === '40' ? DEFAULT_BUCKET_40 : DEFAULT_BUCKET_ETC;
-  }
+  if ((bucketValue === '0000000' && dataItem['DIVISION_ID'] === '40') || bucketValue === null)
+    bucketBinary = DEFAULT_BUCKET_40;
+  else if (bucketValue === '0000000' || dataItem['DIVISION_ID'] !== '40')
+    bucketBinary = DEFAULT_BUCKET_ETC;
 
   // 할당이 필요한 일자 계산 및 마지막 할당 일자
   weekMap.get(binding)?.forEach(dateColumn => {
@@ -214,15 +208,15 @@ export const divideByWeek = (
 
   let weekRemained: number = weekValue;
   if (allocOnlyLastDay) {
-    // ⭐ 룰2 정합(2026-07-21) — 적용요일이 하나도 없으면 "월요일" 에 전량 (주 범위에 월요일이
-    //   없는 월경계 분할 주는 첫 일자). 구 코드는 주 마지막 일자(토)에 전량 — 룰 위반 교정.
-    const dateColumns = [...(weekMap.get(binding) ?? [])];
-    const mondayColumn =
-      dateColumns.find(c => dowSunFirst(c.split('_')[1]) === MON_IDX) ?? dateColumns[0];
-    dateColumns.forEach(dateColumn => {
-      const v = dateColumn === mondayColumn ? weekValue : 0;
-      editTracker.storeChange(dataItem, dateColumn, dataItem[dateColumn], v);
-      dataItem[dateColumn] = v;
+    [...(weekMap.get(binding) ?? [])].forEach((dateColumn, index, array) => {
+      // 마지막 date column인 경우 모두 할당
+      if (index === array.length - 1) {
+        editTracker.storeChange(dataItem, dateColumn, dataItem[dateColumn], weekRemained);
+        dataItem[dateColumn] = weekValue;
+      } else {
+        editTracker.storeChange(dataItem, dateColumn, dataItem[dateColumn], 0);
+        dataItem[dateColumn] = 0;
+      }
     });
   } else {
     weekMap.get(binding)?.forEach(dateColumn => {
@@ -307,9 +301,8 @@ export const allocateLoc = (
         const dateString = dateColumn.split('_')[1];
         const dayValue = dowSunFirst(dateString);
 
-        // 월요일 — ⭐ 2026-07-21 교정: SUN-first 규약에서 0=일요일. 주(W_) 분기와 동일하게
-        //   MON_IDX(1) 로 정합 (구 코드 dayValue===0 은 일요일 할당 결함 — 주석 의도와 불일치).
-        if (dayValue === MON_IDX) {
+        // 월요일
+        if (dayValue === 0) {
           editTracker.storeChange(dataItem, dateColumn, dataItem[dateColumn], newValue);
           dataItem[dateColumn] = newValue;
         } else {

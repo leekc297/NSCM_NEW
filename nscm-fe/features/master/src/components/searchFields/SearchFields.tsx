@@ -27,7 +27,7 @@
 // ====================================================================================
 
 import dayjs, { type Dayjs } from 'dayjs';
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { CustomDropdown } from '@shared/components';
@@ -41,6 +41,7 @@ import { OwnerByDivisionModal } from '../ownerByDivisionModal/OwnerByDivisionMod
 import { ProjectByDivisionModal } from '../projectByDivisionModal/ProjectByDivisionModal';
 
 import styles from './SearchFields.module.scss';
+import { resolveDivisionAutoSelect } from './SearchFields.utils';
 
 // ====================================================================================
 // 표준 props
@@ -137,6 +138,21 @@ const PopupSearchInput = ({
 export const DivisionField = ({ value, onChange, gridSize }: SingleFieldProps) => {
   const L = useL();
   const [divisions] = useTabComboQueries({ filters: ['MyDivision'] });
+  const options = useMemo(
+    () =>
+      (divisions ?? []).map(item => ({
+        label: String(item.NAME),
+        value: String(item.CODE),
+      })),
+    [divisions]
+  );
+  // ⭐ 미보유 division 자동 보정 (SearchFields.utils 주석 참조) — 보유 Div 가 하나뿐인 계정에서
+  //   스토어 기본값('40' 등)이 옵션에 없어 콤보가 빈칸으로 보이던 문제. 유효값은 덮어쓰지 않는다.
+  useEffect(() => {
+    const next = resolveDivisionAutoSelect(options, value);
+    if (next !== null) onChange(next);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [options, value]);
   return (
     <Grid size={gridSize ?? 4}>
       <FormItem
@@ -146,10 +162,7 @@ export const DivisionField = ({ value, onChange, gridSize }: SingleFieldProps) =
         render={() => (
           <CustomDropdown
             value={value}
-            options={(divisions ?? []).map(item => ({
-              label: String(item.NAME),
-              value: String(item.CODE),
-            }))}
+            options={options}
             onChange={(_, option) => onChange(String(option))}
           />
         )}
@@ -213,16 +226,27 @@ export const EndCustomerField = ({
   division,
   gridSize,
   comboId,
+  deptIds,
 }: MultiFieldProps & {
   /**
    * ⭐ 2026-07-23 (DMF0003 조회조건 AS-IS 정합) — opt-in 콤보 대체.
    * 기본 'EndCustomer'(기존 화면 무영향). DMF0003 은 AS-IS BigFilter 1:1 등록본
    * 'EndCustomerByDivision'(40=SITE_ITEM owner-dept PROJECT_CODE + lookup-only UNION) 사용.
+   * ⭐ 2026-08-04 — deptIds opt-in: AS-IS 검색 Customer 콤보의 Team(DEPT_ID) 클라 필터 재현
+   *   (BigFilter EndCustomerByDivision — GetDMInnerTable DEPT_ID 필터). 콤보의 DEPT_ID 컬럼과
+   *   관대 매칭(콤보 행 DEPT_ID 공란=통과). 미전달 = 기존 동작(무영향).
    */
   comboId?: string;
+  deptIds?: string[];
 }) => {
   const L = useL();
   const [endCustomers] = useTabComboQueries({ filters: [comboId ?? 'EndCustomer'] });
+  const deptSet = deptIds && deptIds.length > 0 ? new Set(deptIds) : null;
+  const deptFiltered = deptSet
+    ? ((endCustomers ?? []) as Array<Record<string, string>>).filter(
+        r => !r.DEPT_ID || deptSet.has(r.DEPT_ID)
+      )
+    : endCustomers;
   return (
     <Grid size={gridSize ?? 4}>
       <FormItem
@@ -235,7 +259,7 @@ export const EndCustomerField = ({
             useClearIcon
             limitTags={1}
             value={value.join(',')}
-            options={toOptions(endCustomers as never, division)}
+            options={toOptions(deptFiltered as never, division)}
             onChange={(_, options) =>
               onChange(
                 String(options ?? '')
@@ -266,9 +290,11 @@ export const SalesSiteField = ({
   /**
    * ⭐ 2026-07-23 (조회조건 AS-IS 정합, hook #117) — opt-in 서버 바인드 콤보 대체.
    * comboId 지정 시 'UserSiteByEndCustomer'(AS-IS UP_FX SiteByEndCustomer/40 1:1) 형태의
-   * @divisionId/@endCustomer/@deptId/@asYn 바인드 콤보로 전환 — EndCustomer/Team cascade +
+   * @divisionId/@endCustomer/@deptId 바인드 콤보로 전환 — EndCustomer/Team cascade +
    * 40 owner-team 필터 + OPERATION_GROUP 'W' 제외 (서버 필터 완료 → CODE/NAME 직결).
    * 미지정 = 기존 'SalesSite' + division 클라 필터 (기존 사용처 무영향).
+   * ⭐ 2026-08-04 — CMBO 의 @asYn 게이트 제거(AS-IS E20260211-001189 정합): AS 사이트는
+   *   전 사용자 무조건 포함. asYn prop/바인드는 SQL 에 토큰이 없어 no-op (호환 유지용 존치).
    */
   comboId?: string;
   endCustomer?: string;
@@ -663,31 +689,55 @@ interface PeriodFieldProps {
   end: string;
   onChange: (start: string, end: string) => void;
   gridSize?: number;
+  // 라벨 커스터마이즈 (미지정 시 표준 'Period'). 예: 승인관리 'Request Date'.
+  label?: string;
 }
-export const PeriodField = ({ start, end, onChange, gridSize }: PeriodFieldProps) => {
+export const PeriodField = ({ start, end, onChange, gridSize, label }: PeriodFieldProps) => {
   const L = useL();
-  const value: [Dayjs, Dayjs] = [toDayjs(start), end ? toDayjs(end) : dayjs().add(90, 'day')];
+  // 시작일/종료일을 각각 독립 달력(usecase='date') 2개로 분리.
+  //   필드별로 자기 팝업이 뜨며, 종료일은 시작일 이후만 선택 가능(mindate).
+  const startValue = start ? toDayjs(start) : null;
+  const endValue = end ? toDayjs(end) : null;
   return (
     <Grid size={gridSize ?? 8}>
       <FormItem
-        label={L('LBL00505', 'Period')}
+        label={label ?? L('LBL00505', 'Period')}
         labelAlign='right'
         required
         render={() => (
           // ⭐ 디자인 기준 높이 36px 정합 (표준 CustomDropdown/InputField 동일).
           //   design-system 내부 클래스 비의존 — wrapper CSS 로 input/inputbase 높이 강제.
-          <div className={styles.datePickerFix}>
-            <DatePickerCalendar
-              usecase='date-range-multi'
-              elevation
-              size='small'
-              value={value}
-              onChange={
-                ((date: [Dayjs, Dayjs]) => {
-                  onChange(date[0]?.format('YYYYMMDD') ?? '', date[1]?.format('YYYYMMDD') ?? '');
-                }) as never
-              }
-            />
+          <div className={styles.periodSplit}>
+            <div className={styles.datePickerFix}>
+              <DatePickerCalendar
+                usecase='date'
+                elevation
+                size='small'
+                format='YYYY.MM.DD'
+                value={startValue}
+                onChange={
+                  ((date: Dayjs | null) => {
+                    onChange(date?.format('YYYYMMDD') ?? '', end);
+                  }) as never
+                }
+              />
+            </div>
+            <span className={styles.periodSep}>~</span>
+            <div className={styles.datePickerFix}>
+              <DatePickerCalendar
+                usecase='date'
+                elevation
+                size='small'
+                format='YYYY.MM.DD'
+                value={endValue}
+                mindate={startValue ?? undefined}
+                onChange={
+                  ((date: Dayjs | null) => {
+                    onChange(start, date?.format('YYYYMMDD') ?? '');
+                  }) as never
+                }
+              />
+            </div>
           </div>
         )}
       />
@@ -741,18 +791,28 @@ interface VersionFieldProps {
   value: string;
   onOpenPopup: () => void;
   gridSize?: number;
+  /** 라벨 override — 화면별 Version 명칭이 다른 경우(DMF0044/0049 BP/SP Version). 미전달 = LBL00513 'Version' */
+  label?: string;
+  /** value 가 빈 값일 때 표시할 문자열. 미전달 = 'Current' (DMF0020 기존 동작 보존) */
+  emptyText?: string;
 }
-export const VersionField = ({ value, onOpenPopup, gridSize }: VersionFieldProps) => {
+export const VersionField = ({
+  value,
+  onOpenPopup,
+  gridSize,
+  label,
+  emptyText,
+}: VersionFieldProps) => {
   const L = useL();
   return (
     <Grid size={gridSize ?? 6}>
       <FormItem
-        label={L('LBL00513', 'Version')}
+        label={label ?? L('LBL00513', 'Version')}
         labelAlign='right'
         required
         render={() => (
           <PopupSearchInput
-            value={value || 'Current'}
+            value={value || (emptyText ?? 'Current')}
             onValueChange={() => {
               /* Version 은 popup 선택만, 직접 입력 안 함 */
             }}

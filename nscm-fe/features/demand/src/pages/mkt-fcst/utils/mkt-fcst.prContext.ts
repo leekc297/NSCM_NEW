@@ -50,8 +50,7 @@ export interface PrContextOptions {
 }
 
 // D_yyyymmdd → yyyymmdd 추출.
-const ymdOf = (binding: string): string =>
-  binding.startsWith('D_') ? binding.slice(2) : '';
+const ymdOf = (binding: string): string => (binding.startsWith('D_') ? binding.slice(2) : '');
 
 const isDailyCol = (binding: string): boolean => /^D_\d{8}$/.test(binding);
 

@@ -29,9 +29,6 @@ export type SpreadTitleRow = ResponseData<MENU_ID, SHEETS.SPREAD_TITLE, 'data'>;
 // Measure 2행 블록 정의 (PKG.P_DMF0044_GET_MEASURE — Insert 강제 세팅 원천)
 export type MeasureRow = ResponseData<MENU_ID, SHEETS.MEASURE, 'data'>;
 
-// United 버전 팝업 행 (SEND_YN = Transfer/Cancel/Delete 게이트)
-export type UnitedVersionRow = ResponseData<MENU_ID, SHEETS.UNITED_VERSION, 'data'>;
-
 // Exchange Rate 팝업 행 (통화쌍 × 월 피벗)
 export type ExchangeRateRow = ResponseData<MENU_ID, SHEETS.EXCHANGE_RATE, 'data'>;
 

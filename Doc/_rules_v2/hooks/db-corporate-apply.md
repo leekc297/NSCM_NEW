@@ -10,7 +10,7 @@
 
 - "사내 DB 적용해줘 / 클라우드 적용 / cloud apply / corporate apply"
 - "Docker 적용분을 사내에 / 양쪽 DB 동기화"
-- 사내 DB (`121.162.245.167:2521/OCGSCMD_P01`, 2026-06-15 IP 변경 · 2026-06-17 Service Name 전환) 에 SQL 실행 요청
+- 사내 DB (`100.65.143.121:1521/OCGSCMD_P01`, 2026-06-15 IP 변경 · 2026-06-17 Service Name 전환 · 2026-07-27 IP:PORT 변경) 에 SQL 실행 요청
 - Docker 와 사내 DB row count 차이 검토 후 patch 작업
 
 ---
@@ -21,7 +21,7 @@
 ```bash
 # 단일 SQL 실행
 tr -d '\r' < script.sql | docker exec -i nscm-oracle bash -c \
-  "sqlplus -L -S 'SCM_MGR/\"!SCMroqkf2026\"@121.162.245.167:2521/OCGSCMD_P01'" > log.log 2>&1
+  "sqlplus -L -S 'SCM_MGR/\"!SCMroqkf2026\"@100.65.143.121:1521/OCGSCMD_P01'" > log.log 2>&1
 ```
 
 ### 1.2 핵심 요소

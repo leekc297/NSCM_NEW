@@ -123,13 +123,13 @@ export const ContributeViewGrid = ({ gridRef, gridFilterRef, data }: Props) => {
   const fixedBindings = ['YYYYMM', 'DEPARTMENT_NAME', 'DEPT_NAME', 'CUST_REPORT'];
 
   const onFormatItem = (s: FlexGrid, e: FormatItemEventArgs) => {
-    if (e.panel.cellType === CellType.Cell) {
-      const colName = s.columns[e.col].binding;
+    // if (e.panel.cellType === CellType.Cell) {
+    //   const colName = s.columns[e.col].binding;
 
-      if (fixedBindings.includes(colName as string)) {
-        e.cell.style.backgroundColor = '#F7F7F8';
-      }
-    }
+    //   if (fixedBindings.includes(colName as string)) {
+    //     e.cell.style.backgroundColor = '#F7F7F8';
+    //   }
+    // }
 
     if (e.panel.cellType === CellType.TopLeft) {
       e.panel.setCellData(0, 0, 'No');

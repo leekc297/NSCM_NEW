@@ -18,7 +18,7 @@
 
 - `pnpm install` 자체 (Nexus 필요 — 그 시점엔 Nexus 가 살아있을 가능성). 위 fix 는 **`node_modules/` 가 이미 존재한다는 전제** 에서만 동작.
 - BE (`nscm-be/`) 환경 변경 — BE 는 변경 절대 금지 룰 (`feedback_be_no_modification_rule.md`).
-- Docker Oracle / 사내 Oracle 자체 (BE config 의 활성 jdbc-url 이 이미 사내 Oracle `121.162.245.167:2521/OCGSCMD_P01`).
+- Docker Oracle / 사내 Oracle 자체 (BE config 의 활성 jdbc-url 이 이미 사내 Oracle `100.65.143.121:1521/OCGSCMD_P01`, 2026-07-27 IP:PORT 변경).
 
 ## 3. 적용 후 확인
 

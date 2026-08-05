@@ -1,6 +1,7 @@
 package com.lgcns.nscm.admin.menu;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -23,6 +24,7 @@ import com.lgcns.nscm.admin.menu.dto.GridMeasure;
 import com.lgcns.nscm.admin.menu.dto.MenuAuthDto;
 import com.lgcns.nscm.admin.menu.dto.MenuDto;
 import com.lgcns.nscm.admin.menu.dto.SearchCondition;
+import com.lgcns.nscm.admin.menu.dto.TitleSetSaveRequest;
 import com.lgcns.nscm.admin.user.UserSession;
 import com.lgcns.nscm.framework.annotation.LoginUser;
 import com.lgcns.nscm.framework.base.BaseController;
@@ -111,6 +113,12 @@ public class MenuController extends BaseController {
 	public ResponseEntity<BaseResponse<Void>> saveSearchConditions(@LoginUser UserSession userSession, @PathVariable String mnuId, @RequestBody List<SearchCondition> searchConditions) throws Exception {
 		menuService.saveSearchCondition(userSession.getUserId(), mnuId, searchConditions);
 		return successResponseEntity();
+	}
+
+	@Operation(summary = "컬럼 개인화 저장", description = "공용 Column 팝업의 컬럼 표시/순서/폭/색을 저장합니다.")
+	@PostMapping(value="/admin/menu/{mnuId}/titleset", produces = "application/json; charset=UTF-8")
+	public ResponseEntity<BaseResponse<List<Map<String, Object>>>> saveTitleSet(@LoginUser UserSession userSession, @PathVariable String mnuId, @RequestBody TitleSetSaveRequest dto) throws Exception {
+		return successResponseEntity(menuService.saveTitleSet(userSession.getUserId(), mnuId, dto));
 	}
 
 	@Operation(summary = "검색조건 초기화", description = "검색조건을 초기화합니다.")

@@ -1,54 +1,11 @@
-// ⚠ 임시 복구 (2026-07-22) — 클라우드 공통 파일(Router.tsx/useMDIStore.ts 신아키텍처판) 반입분이
-//   ROUTE_PATHS 를 참조하여 복구. 폐기 정책(2026-07-21)은 유지 방향 — 클라우드 측 참조 제거 후 재삭제 예정.
+/**
+ * 라우트 경로 상수
+ *
+ * 화면(mnuId)별 경로 매핑은 DB 로 이관됨 — SCM_ADM_MNU_M.ROUTE_PATH
+ * (세션 메뉴 응답의 menu.routePath 를 viewRegistry.resolveView 가 해석).
+ * 여기에는 메뉴 데이터가 아닌 구조적 경로만 남긴다.
+ */
+
 export const ROUTE_PATHS = {
   HOME: 'home',
-  MASTER: 'master',
-  DEMAND: 'demand',
-  DEMAND_MASTER: 'demand-master',
-  DEMAND_PLAN: 'demand-plan',
-  ADMIN: 'admin',
-  ADMIN_MENU: 'admin-menu',
-  SYSTEM: 'system',
-  AUTHORITY: 'authority',
-  AUTH_MGMT: 'auth-mgmt',
-  SYS0001: 'message-management',
-  SYS0002: 'user-management',
-  SYS0003: 'menu-management',
-  SYS0004: 'ui-category',
-  SYS0005: 'procedure-management',
-  SYS0006: 'api-management',
-  SYS0007: 'group-management',
-  SYS0008: 'group-menu',
-  SYS0009: 'menu-button-management',
-  SYS0010: 'lookup',
-  SYS0011: 'auth-request',
-  SYS0012: 'auth-approval',
-  SYS0013: 'dynamic-query',
-  SYS0014: 'group-user',
-  SYS0015: 'program',
-  DMF0004: 'sales-site',
-  DMF0005: 'sales-site-project-model',
-  DMF0006: 'customer-model-mapping',
-  DMF0007: 'customer-fcst-master',
-  DMF0008: 'erp-edi-master',
-  DMF0014: 'customer-fcst-upload',
-  DMF0020: 'sales-future-price',
-  DMF0021: 'sales-plan',
-  DMF0042: 'business-plan',
-  DMF0043: 'contribute-main',
-  DMF0043_01: 'contribute-view',
-  DMF0048: 'sales-monitoring',
-  DMF0074: 'metal-link-price',
-  DMF0082: 'forecast-price',
-  REPORT: 'report',
-  WATERFALL: 'waterfall',
-  DMF0022: 'sales-plan-waterfall',
-  DMF0072: 'nn-master-mapping',
-  SUPPLY: 'supply',
-  SUPPLY_PLAN: 'supply-plan',
-  SCP0013: 'production-plan-line',
-  // 2026-07-22 신규 화면 (MNU_URL 정합)
-  DMF0003: 'mkt_forecast',
-  DMF0044: 'sales-reports',
-  DMF0049: 'etc-sales-reports',
 } as const;

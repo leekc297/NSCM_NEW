@@ -1,8 +1,12 @@
-// ViewContainer — 열린 탭(MDI) keep-alive 렌더러.
+// ViewContainer — 열린 탭(MDI) 지연 마운트(lazy keep-alive) 렌더러.
 //
-// 라우터가 활성 화면만 마운트하던 방식을 대체한다.
-// 열린 탭을 전부 마운트한 채 display 토글로 활성 탭만 노출 → 탭 전환 시
-// unmount/재조회/재초기화 없이 그리드 스크롤·입력·쿼리 캐시 상태가 그대로 유지된다.
+// "열려는 있으나 아직 한 번도 보지 않은 탭"은 마운트하지 않는다(useTabActivation).
+// 탭은 처음 활성화되는 순간 마운트되고, 그 뒤로는 display 토글로만 숨겨져 계속 살아있다 →
+// 탭 전환 시 unmount/재조회/재초기화 없이 그리드 스크롤·입력·쿼리 캐시 상태가 그대로 유지된다.
+//
+// 이 지연 마운트가 없으면, 새로고침 시 sessionStorage 에서 복원된 열린 탭이 전부 동시에
+// 마운트되어 모든 탭이 컬럼/그리드 조회를 터뜨린다. 활성화 이력은 저장하지 않으므로(useTabActivation)
+// 새로고침 후에는 활성 탭 하나만 마운트/조회되고, 나머지는 클릭하는 순간 로드된다.
 //
 // 각 화면은 자기 tabId 의 TabIdContext.Provider 로 감싼다
 // (createPersistedStoreWithTab 의 탭별 스토어 격리를 위해 필수).
@@ -18,6 +22,7 @@ import { HomePage } from '../pages/Home';
 import { NotFoundPage } from '../pages/NotFound';
 
 import { useMDIStore } from './useMDIStore';
+import { useTabActivation } from './useTabActivation';
 import styles from './ViewContainer.module.scss';
 import { resolveView, type AnyPage } from './viewRegistry';
 
@@ -65,6 +70,15 @@ export const ViewContainer = () => {
   const activeTabId = tabs[activeIndex]?.tabId;
   const { palette } = useTheme();
 
+  // 지연 마운트 이력 — 활성화된 적 있는 탭만 마운트한다(위 파일 주석 참고).
+  const activated = useTabActivation(state => state.activated);
+  const activate = useTabActivation(state => state.activate);
+
+  // 활성 탭은 항상 마운트 대상으로 이력에 등록한다.
+  useEffect(() => {
+    if (activeTabId) activate(activeTabId);
+  }, [activeTabId, activate]);
+
   // Page 영역 전체화면 (MainTitle 의 전체화면 아이콘이 토글) — 활성 탭 뷰에만 적용하는 공통 처리.
   const pageFullscreen = useUIStore(state => state.pageFullscreen);
   const setPageFullscreen = useUIStore(state => state.setPageFullscreen);
@@ -87,13 +101,20 @@ export const ViewContainer = () => {
   return (
     <div className={styles.viewport}>
       {tabs.map(tab => {
+        const isActive = tab.tabId === activeTabId;
+
+        // 지연 마운트: 활성 탭이거나 한 번이라도 활성화된 적 있는 탭만 마운트한다.
+        // (활성 탭은 위 effect 로 이력에 등록되지만, effect 는 렌더 후 실행되므로
+        //  최초 렌더에서 활성 탭이 빈 화면이 되지 않도록 isActive 도 함께 본다.)
+        const shouldMount = isActive || Boolean(activated[tab.tabId]);
+        if (!shouldMount) return null;
+
         // DB 메뉴 정보(routePath/mnuUrl)로 화면 컴포넌트 해석 — viewRegistry 참조
         const View =
           tab.mnuId === 'home'
             ? HomeView
             : resolveView({ routePath: tab.routePath, mnuUrl: tab.mnuUrl });
 
-        const isActive = tab.tabId === activeTabId;
         const isFullscreen = isActive && pageFullscreen;
 
         return (

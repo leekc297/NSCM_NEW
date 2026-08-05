@@ -31,6 +31,9 @@ public class SecurityUtil {
                     .userEngNm(userDetails.getUserEngNm())
                     .langCd(userDetails.getLangCd())
                     .menus(userDetails.getMenus())
+                    .isGuest(userDetails.isGuest())
+                    .groups(userDetails.getGroups())
+                    .div(userDetails.getDiv())
                     .build();
         }
 

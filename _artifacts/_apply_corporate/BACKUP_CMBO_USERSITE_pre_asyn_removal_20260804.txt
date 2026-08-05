@@ -1,0 +1,57 @@
+SQL_ID                    | BODY                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+--------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+SiteByEndCustomer_DMF0003 | SELECT CODE, NAME FROM (
+SELECT DISTINCT A.SCM_SITE_ID AS CODE, A.SCM_SITE_ID AS NAME, 2 AS SORT_ORDER
+FROM SCM_MST_SITE A
+WHERE A.SITE_TYPE = 'SALES' AND A.VALID_YN = 'Y' AND NVL(A.OPERATION_GROUP, ' ') <> 'W'
+  AND A.DIVISION_ID <> '40'
+  AND (NVL(TRIM(@divisionId), 'ALL') = 'ALL' OR INSTR(',' || @divisionId || ',', ',' || A.DIVISION_ID || ',') > 0)
+  AND (NVL(TRIM(@endCustomer), 'ALL') = 'ALL' OR INSTR(',' || @endCustomer || ',', ',' || A.END_CUSTOMER || ',') > 0)
+  AND A.DIVISION_ID IN (SELECT UNIT_ID FROM SCM_ADM_USER_GR_UNIT_AUTH_MPG_M WHERE USER_ID = @sesUserId AND UNIT_TP_CD = 'D' AND USE_YN = 'Y')
+UNION ALL
+SELECT DISTINCT A.SCM_SITE_ID, A.SCM_SITE_ID, 2
+FROM SCM_MST_SITE A
+LEFT JOIN SCM_MST_SITE_ITEM B ON A.DIVISION_ID = B.DIVISION_ID AND A.SCM_SITE_ID = B.SCM_SITE_ID
+LEFT JOIN (SELECT DISTINCT U.USER_ID, U.DEPT_ID FROM SCM_MST_SSO_USER_INFO U JOIN SCM_MST_SSO_DEPT_INFO D2 ON U.DEPT_ID = D2.DEPT_ID) C
+  ON B.OWNER = C.USER_ID
+WHERE A.SITE_TYPE = 'SALES' AND A.DIVISION_ID = '40' AND A.VALID_YN = 'Y' AND NVL(A.OPERATION_GROUP, ' ') <> 'W'
+  AND (NVL(TRIM(@divisionId), 'ALL') = 'ALL' OR INSTR(',' || @divisionId || ',', ',40,') > 0)
+  AND (NVL(TRIM(@deptId), 'ALL') = 'ALL' OR INSTR(',' || @deptId || ',', ',' || C.DEPT_ID || ',') > 0)
+  AND (NVL(TRIM(@endCustomer), 'ALL') = 'ALL' OR INSTR(',' || @endCustomer || ',', ',' || B.PROJECT_CODE || ',') > 0)
+  AND A.DIVISION_ID IN (SELECT UNIT_ID FROM SCM_ADM_USER_GR_UNIT_AUTH_MPG_M WHERE USER_ID = @sesUserId AND UNIT_TP_CD = 'D' AND USE_YN = 'Y')
+UNION ALL
+SELECT L.SEGMENT1, B.SITE_DESCRIPTION, 1
+FROM SCM_ADM_LOOKUP_MASTER_DETAIL L
+JOIN SCM_MST_SITE B ON L.SEGMENT3 = B.DIVISION_ID AND L.SEGMENT1 = B.SCM_SITE_ID
+WHERE L.LOOKUP_TYPE = 'AS_SITE_PLANT' AND L.VALID_YN = 'Y' AND B.VALID_YN = 'Y'
+  AND (NVL(TRIM(@divisionId), 'ALL') = 'ALL' OR INSTR(',' || @divisionId || ',', ',' || L.SEGMENT3 || ',') > 0)
+  AND NVL(TRIM(@asYn), 'N') = 'Y'
+) ORDER BY SORT_ORDER, CODE
+UserSiteByEndCustomer     | SELECT CODE, NAME FROM (
+SELECT DISTINCT A.SCM_SITE_ID AS CODE, A.SCM_SITE_ID AS NAME, 2 AS SORT_ORDER
+FROM SCM_MST_SITE A
+WHERE A.SITE_TYPE = 'SALES' AND A.VALID_YN = 'Y' AND NVL(A.OPERATION_GROUP, ' ') <> 'W'
+  AND A.DIVISION_ID <> '40'
+  AND (NVL(TRIM(@divisionId), 'ALL') = 'ALL' OR INSTR(',' || @divisionId || ',', ',' || A.DIVISION_ID || ',') > 0)
+  AND (NVL(TRIM(@endCustomer), 'ALL') = 'ALL' OR INSTR(',' || @endCustomer || ',', ',' || A.END_CUSTOMER || ',') > 0)
+  AND A.DIVISION_ID IN (SELECT UNIT_ID FROM SCM_ADM_USER_GR_UNIT_AUTH_MPG_M WHERE USER_ID = @sesUserId AND UNIT_TP_CD = 'D' AND USE_YN = 'Y')
+UNION ALL
+SELECT DISTINCT A.SCM_SITE_ID, A.SCM_SITE_ID, 2
+FROM SCM_MST_SITE A
+LEFT JOIN SCM_MST_SITE_ITEM B ON A.DIVISION_ID = B.DIVISION_ID AND A.SCM_SITE_ID = B.SCM_SITE_ID
+LEFT JOIN (SELECT DISTINCT U.USER_ID, U.DEPT_ID FROM SCM_MST_SSO_USER_INFO U JOIN SCM_MST_SSO_DEPT_INFO D2 ON U.DEPT_ID = D2.DEPT_ID) C
+  ON B.OWNER = C.USER_ID
+WHERE A.SITE_TYPE = 'SALES' AND A.DIVISION_ID = '40' AND A.VALID_YN = 'Y' AND NVL(A.OPERATION_GROUP, ' ') <> 'W'
+  AND (NVL(TRIM(@divisionId), 'ALL') = 'ALL' OR INSTR(',' || @divisionId || ',', ',40,') > 0)
+  AND (NVL(TRIM(@deptId), 'ALL') = 'ALL' OR INSTR(',' || @deptId || ',', ',' || C.DEPT_ID || ',') > 0)
+  AND (NVL(TRIM(@endCustomer), 'ALL') = 'ALL' OR INSTR(',' || @endCustomer || ',', ',' || B.PROJECT_CODE || ',') > 0)
+  AND A.DIVISION_ID IN (SELECT UNIT_ID FROM SCM_ADM_USER_GR_UNIT_AUTH_MPG_M WHERE USER_ID = @sesUserId AND UNIT_TP_CD = 'D' AND USE_YN = 'Y')
+UNION ALL
+SELECT L.SEGMENT1, B.SITE_DESCRIPTION, 1
+FROM SCM_ADM_LOOKUP_MASTER_DETAIL L
+JOIN SCM_MST_SITE B ON L.SEGMENT3 = B.DIVISION_ID AND L.SEGMENT1 = B.SCM_SITE_ID
+WHERE L.LOOKUP_TYPE = 'AS_SITE_PLANT' AND L.VALID_YN = 'Y' AND B.VALID_YN = 'Y'
+  AND (NVL(TRIM(@divisionId), 'ALL') = 'ALL' OR INSTR(',' || @divisionId || ',', ',' || L.SEGMENT3 || ',') > 0)
+  AND NVL(TRIM(@asYn), 'N') = 'Y'
+) ORDER BY SORT_ORDER, CODE
+(2 rows)

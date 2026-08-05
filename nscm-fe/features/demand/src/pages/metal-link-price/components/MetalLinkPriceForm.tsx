@@ -1,11 +1,11 @@
 import { PlantSiteField } from 'features/master/src/components';
+import { PeriodField } from 'features/master/src/components';
 import type { Dispatch, SetStateAction } from 'react';
 
-import dayjs from '@foundation/dayjs';
 import { clsx } from '@shared/clsx';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
-import { Button, DatePickerCalendar, FormItem, InputField } from '@shared/lges';
+import { Button, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 
@@ -129,7 +129,9 @@ export const MetalLinkPriceForm = ({
                       ?.filter(
                         item =>
                           item.DIVISION_ID === searchParams.divisionId &&
-                          (selTeams.length === 0 || !item.DEPT_ID || selTeams.includes(item.DEPT_ID))
+                          (selTeams.length === 0 ||
+                            !item.DEPT_ID ||
+                            selTeams.includes(item.DEPT_ID))
                       )
                       ?.map(item => ({ label: item.NAME, value: item.CODE })) ?? []
                   }
@@ -160,7 +162,9 @@ export const MetalLinkPriceForm = ({
                       ?.filter(
                         item =>
                           item.DIVISION_ID === searchParams.divisionId &&
-                          (selTeams.length === 0 || !item.DEPT_ID || selTeams.includes(item.DEPT_ID))
+                          (selTeams.length === 0 ||
+                            !item.DEPT_ID ||
+                            selTeams.includes(item.DEPT_ID))
                       )
                       ?.map(item => ({ label: item.NAME, value: item.CODE })) ?? []
                   }
@@ -174,15 +178,6 @@ export const MetalLinkPriceForm = ({
               className={styles.formItem}
             />
           </Grid>
-          {/* ⭐ Plant Site — 카탈로그 PlantSiteField (combo PlantSitebyEndCustomer · Division+EndCustomer
-              바인드 cascade · Enable=81 계열만). AS-IS UserPlantSiteByEndCustomer 1:1 */}
-          <PlantSiteField
-            gridSize={3}
-            value={searchParams.plantSite ? searchParams.plantSite.split(',').filter(Boolean) : []}
-            onChange={v => setSearchParams({ plantSite: v.join(',') })}
-            division={searchParams.divisionId}
-            endCustomer={searchParams.endCustomer || undefined}
-          />
           <Grid size={3}>
             <FormItem
               label={t('LBL00617', 'Project')}
@@ -235,33 +230,30 @@ export const MetalLinkPriceForm = ({
             />
           </Grid>
           <Grid size={3}>
+            <PeriodField
+              start={searchParams.fromYyyymm}
+              end={searchParams.toYyyymm}
+              onChange={(start, end) => setSearchParams({ fromYyyymm: start, toYyyymm: end })}
+            />
+          </Grid>
+          <Grid size={3}>
             <FormItem
-              label={t('LBL00013', '_Plan Date')}
+              label={t('LBL00653', 'Version')}
               labelAlign='right'
               required
               render={() => (
-                // AS-IS UsrMonthRangePicker 1:1 — 월 피커 From~To (기본 당월~+6개월 .cs L167)
-                <div className={clsx(styles.monthRange, styles.input)}>
-                  <DatePickerCalendar
-                    usecase='month'
-                    elevation
-                    size='large'
-                    locale='ko'
-                    value={dayjs(searchParams.fromYyyymm, 'YYYYMM')}
-                    onChange={date => {
-                      if (date) setSearchParams({ fromYyyymm: dayjs(date).format('YYYYMM') });
-                    }}
+                <div className={clsx(styles.inputWithSearch, styles.input)}>
+                  <InputField
+                    fullWidth
+                    // AS-IS txtVersion — 'Current' 수동 입력 유효 + 팝업 반환 (기본 'Current' .cs L222)
+                    value={searchParams.version}
+                    onChange={event => setSearchParams({ version: event.target.value })}
                   />
-                  <span>~</span>
-                  <DatePickerCalendar
-                    usecase='month'
-                    elevation
-                    size='large'
-                    locale='ko'
-                    value={dayjs(searchParams.toYyyymm, 'YYYYMM')}
-                    onChange={date => {
-                      if (date) setSearchParams({ toYyyymm: dayjs(date).format('YYYYMM') });
-                    }}
+                  <Button
+                    appearance='outlined'
+                    priority='normal'
+                    iconComponent={<FunctionSearchIcon appearance='lined' />}
+                    onClick={() => setOpenVersionModal(true)}
                   />
                 </div>
               )}
@@ -272,31 +264,19 @@ export const MetalLinkPriceForm = ({
         </>
       }
       extraConditions={
-        <Grid size={3}>
-          <FormItem
-            label={t('LBL00739', 'Version')}
-            labelAlign='right'
-            required
-            render={() => (
-              <div className={clsx(styles.inputWithSearch, styles.input)}>
-                <InputField
-                  fullWidth
-                  // AS-IS txtVersion — 'Current' 수동 입력 유효 + 팝업 반환 (기본 'Current' .cs L222)
-                  value={searchParams.version}
-                  onChange={event => setSearchParams({ version: event.target.value })}
-                />
-                <Button
-                  appearance='outlined'
-                  priority='normal'
-                  iconComponent={<FunctionSearchIcon appearance='lined' />}
-                  onClick={() => setOpenVersionModal(true)}
-                />
-              </div>
-            )}
-            labelSize='long'
-            className={styles.formItem}
+        <>
+          {/* <Grid size={3}> */}
+          {/* ⭐ Plant Site — 카탈로그 PlantSiteField (combo PlantSitebyEndCustomer · Division+EndCustomer
+              바인드 cascade · Enable=81 계열만). AS-IS UserPlantSiteByEndCustomer 1:1 */}
+          <PlantSiteField
+            gridSize={3}
+            value={searchParams.plantSite ? searchParams.plantSite.split(',').filter(Boolean) : []}
+            onChange={v => setSearchParams({ plantSite: v.join(',') })}
+            division={searchParams.divisionId}
+            endCustomer={searchParams.endCustomer || undefined}
           />
-        </Grid>
+          {/* </Grid> */}
+        </>
       }
     />
   );

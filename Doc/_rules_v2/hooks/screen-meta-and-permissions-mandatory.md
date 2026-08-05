@@ -286,6 +286,9 @@ diff <(echo "$KO_KEYS") <(echo "$EN_KEYS")
 | 10 | 신규 LBL 추가 후 `pnpm gen:i18n` 미실행 | type-check fail (key 미인식) |
 | 11 | Modal mount 패턴 임의 변경 (한 화면 안 A/B 혼용) | 사용자 UX 일관성 깨짐 — 화면 단위 동일 패턴 |
 | 12 | Modal mount 패턴 결정 사유 미명시 (주석 0) | PR review 시 의도 불명 |
+| **13** | ⭐⭐ **BTN_MPG 를 FE `SHEETS` enum 일부 시트만 등록** | **"화면 오픈 즉시 권한없음"** — FE 가 오픈 시 조회하는 보조 시트(dayRange/spreadTitle/titleSet/sqlText 등)가 BTN_MPG 에 없으면 `checkMenuBtnAuth` 가 `HAS_AUTH_YN='N'` 반환. **FE SHEETS enum 의 모든 시트 × 사용 버튼(SEARCH/SAVE…)을 BTN_MPG + USER_GR_MNU_BTN_MPG_M 양쪽에 등록** (2026-07-29 DMF0003 dayRange 사고 — 조회는 되는데 오픈 시 권한없음) |
+| **14** | ⭐ **권한 미러링 원본 메뉴를 실측 없이 지정** | 형제 화면이 **권한 0건**이면 미러링 결과도 0행 → 등록은 성공했는데 권한없음. 원본 메뉴의 `USER_GR_MNU_MPG_M` 보유 그룹 수를 **먼저 조회**하고 0 이면 실제 그룹을 가진 동급 메뉴로 교체 (2026-07-29 SYS0017 — SYS0016 원본이 0건이라 SYS0014 로 교체) |
+| **15** | ⭐ **재사용 LBL/MSG 의 실제 문구 미확인** | fallback 문구(`'_Add'`)만 보고 기존 키를 재사용하면 엉뚱한 라벨 노출. locales·MSG_M 에서 **실제 값 조회 후 의미 대조 의무** (2026-07-29 SYS0017 — LBL00073='Exfactory Date' 를 'Add' 로 오용) |
 
 ---
 
@@ -310,3 +313,9 @@ diff <(echo "$KO_KEYS") <(echo "$EN_KEYS")
 
 §5 PRE-WRITE 12 + §6 POST-WRITE grep 5 + §7 안티패턴 12 모두 PR 차단.
 사용자 cross-check 3 회차 (2026-06-18 "누락 없을 때까지").
+
+---
+
+## 변경 이력
+
+- 2026-07-29: **안티패턴 13~15 추가** — BTN_MPG 전 시트 등록 의무(DMF0003 dayRange 사고) / 권한 미러링 원본 실측(SYS0017) / 재사용 LBL·MSG 실제 문구 확인(SYS0017).

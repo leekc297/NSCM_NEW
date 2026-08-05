@@ -30,8 +30,8 @@ interface MetalLinkPriceAction {
 }
 
 // AS-IS drpPeriodMonth 기본 당월 ~ +6개월 (.cs L167~168 1:1). dayjs = 로컬 날짜 (UTC 금지).
-const thisMonth = dayjs().format('YYYYMM');
-const sixMonthsAhead = dayjs().add(6, 'month').format('YYYYMM');
+const thisMonth = dayjs().format('YYYYMMDD');
+const sixMonthsAhead = dayjs().add(6, 'month').format('YYYYMMDD');
 
 const initMetalLinkPriceState: MetalLinkPriceState = {
   initialized: false,

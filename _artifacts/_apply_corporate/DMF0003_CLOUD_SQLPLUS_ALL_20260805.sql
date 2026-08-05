@@ -1,0 +1,251 @@
+-- =============================================================================
+-- DMF0003_CLOUD_SQLPLUS_ALL_20260805.sql — 클라우드 전용 통합 실행본 (python 불필요, 이 파일 1개만 실행)
+--
+-- 포함 (사내 적용 완료분 전체 — 최종형):
+--   [패치1] Sales Site 검색콤보 asYn 게이트 제거 (AS 사이트 무조건 포함 — AS-IS E20260211-001189)
+--   [패치2] 셀 Sales Site 콤보 'SiteByEndCustomerAuth' + 'AsIncotermsEdit' + SHEET 전환
+--   [패치3] 셀 Customer 콤보 'EndCustomerByDivisionDeptAuth' + 'EndCustomerByDivision40Team' + SHEET 전환
+--   [패치4] 셀 Team 콤보 'TeambyDivisionAuth' + SHEET 전환 + (구버전 실행 이력 대비) NULL 관용 제거
+--   전부 CMBO/SHEET_COLUMNS 메타만 — 테이블 데이터 INSERT/UPDATE 없음. 멱등(재실행 안전).
+--   ※ 구 파일(DMF0003_CLOUD_SQLPLUS_20260804.sql / P8)을 아직 실행하지 않았어도 이 파일 1개로 충분.
+--
+-- ⭐ 실행 방법 — QA·DEV 2개 DB 에서 각각 1회씩:
+--   export NLS_LANG=KOREAN_KOREA.AL32UTF8
+--   sqlplus SCM_MGR/<암호>@//<호스트>:1521/OCGSCMD_P01
+--   SQL> @DMF0003_CLOUD_SQLPLUS_ALL_20260805.sql
+-- =============================================================================
+SET DEFINE OFF
+SET SQLBLANKLINES ON
+SET LINESIZE 200
+SET PAGESIZE 100
+
+PROMPT ===== [0] 접속 DB 실체 확인 (QA/DEV 어느 쪽인지) =====
+SELECT USER AS CONN_USER,
+       SYS_CONTEXT('USERENV','DB_NAME')     AS DB_NAME,
+       SYS_CONTEXT('USERENV','SERVER_HOST') AS SERVER_HOST
+FROM DUAL;
+
+PROMPT ===== [패치1] asYn 게이트 제거 (2행 기대, 기적용 시 0행) =====
+UPDATE SCM_MGR.SCM_ADM_CMBO_SQL_M
+   SET SQL_DTL_CTN     = REPLACE(SQL_DTL_CTN, CHR(10) || '  AND NVL(TRIM(@asYn), ''N'') = ''Y''', ''),
+       LAST_UPDATED_BY = 'admin',
+       LAST_UPDATE_DATE = SYSDATE
+ WHERE SQL_ID IN ('UserSiteByEndCustomer', 'SiteByEndCustomer_DMF0003')
+   AND DBMS_LOB.INSTR(SQL_DTL_CTN, '@asYn') > 0;
+
+COMMIT;
+
+PROMPT ===== [패치2-1] CMBO 'SiteByEndCustomerAuth' (1행 기대, 기존재 시 0행) =====
+INSERT INTO SCM_MGR.SCM_ADM_CMBO_SQL_M
+  (SQL_ID, MDU_DIVS_CD, SQL_NM, SQL_DTL_CTN, USE_YN,
+   CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+SELECT
+   'SiteByEndCustomerAuth'
+ , 'DM'
+ , 'DMF0003 셀 Sales Site (AS-IS Auth 1:1 부서제약)'
+ , 'SELECT DISTINCT A.DIVISION_ID, A.END_CUSTOMER, A.SCM_SITE_ID AS CODE, A.SCM_SITE_ID AS NAME' || CHR(10) ||
+   'FROM SCM_MST_SITE A' || CHR(10) ||
+   'WHERE A.SITE_TYPE = ''SALES''' || CHR(10) ||
+   '  AND A.VALID_YN = ''Y''' || CHR(10) ||
+   '  AND A.DIVISION_ID IN (SELECT UNIT_ID FROM SCM_ADM_USER_GR_UNIT_AUTH_MPG_M' || CHR(10) ||
+   '                        WHERE USER_ID = @sesUserId AND UNIT_TP_CD = ''D'' AND USE_YN = ''Y'')' || CHR(10) ||
+   '  AND ( EXISTS (SELECT 1 FROM SCM_ADM_USER_GR_MPG_M G' || CHR(10) ||
+   '                WHERE G.USER_ID = @sesUserId AND G.USER_GR_ID = ''ADMIN'' AND G.USE_YN = ''Y'')' || CHR(10) ||
+   '     OR A.DEPT_ID IN (' || CHR(10) ||
+   '          SELECT L.SEGMENT3 FROM SCM_ADM_LOOKUP_MASTER_DETAIL L' || CHR(10) ||
+   '          WHERE L.LOOKUP_TYPE = ''PM_TEAM_MAPPING'' AND L.VALID_YN = ''Y''' || CHR(10) ||
+   '            AND L.SEGMENT1 IN (SELECT U.DEPT_ID FROM TB_FX_USER U WHERE U.USERID = @sesUserId)' || CHR(10) ||
+   '          UNION' || CHR(10) ||
+   '          SELECT U.DEPT_ID FROM TB_FX_USER U WHERE U.USERID = @sesUserId))' || CHR(10) ||
+   'ORDER BY CODE'
+ , 'Y'
+ , 'admin', SYSDATE, 'admin', SYSDATE
+FROM DUAL
+WHERE NOT EXISTS (SELECT 1 FROM SCM_MGR.SCM_ADM_CMBO_SQL_M X WHERE X.SQL_ID = 'SiteByEndCustomerAuth');
+
+PROMPT ===== [패치2-2] CMBO 'AsIncotermsEdit' (1행 기대) =====
+INSERT INTO SCM_MGR.SCM_ADM_CMBO_SQL_M
+  (SQL_ID, MDU_DIVS_CD, SQL_NM, SQL_DTL_CTN, USE_YN,
+   CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+SELECT
+   'AsIncotermsEdit'
+ , 'DM'
+ , 'DMF0003 AS 사이트 전용 Incoterms 편집 (AS-IS AS_INCOTERMS lookup 1:1)'
+ , 'SELECT SEGMENT2 AS CODE, ATTRIBUTE1 AS NAME' || CHR(10) ||
+   'FROM SCM_ADM_LOOKUP_MASTER_DETAIL' || CHR(10) ||
+   'WHERE LOOKUP_TYPE = ''AS_INCOTERMS''' || CHR(10) ||
+   '  AND VALID_YN = ''Y''' || CHR(10) ||
+   '  AND SEGMENT1 = @divisionId' || CHR(10) ||
+   'ORDER BY SEGMENT2'
+ , 'Y'
+ , 'admin', SYSDATE, 'admin', SYSDATE
+FROM DUAL
+WHERE NOT EXISTS (SELECT 1 FROM SCM_MGR.SCM_ADM_CMBO_SQL_M X WHERE X.SQL_ID = 'AsIncotermsEdit');
+
+PROMPT ===== [패치3-1] CMBO 'EndCustomerByDivisionDeptAuth' (1행 기대) =====
+INSERT INTO SCM_MGR.SCM_ADM_CMBO_SQL_M
+  (SQL_ID, MDU_DIVS_CD, SQL_NM, SQL_DTL_CTN, USE_YN,
+   CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+SELECT
+   'EndCustomerByDivisionDeptAuth'
+ , 'DM'
+ , 'DMF0003 셀 End Customer (AS-IS Auth 1:1 부서제약)'
+ , 'SELECT DISTINCT A.DIVISION_ID, A.DEPT_ID, A.END_CUSTOMER AS CODE,' || CHR(10) ||
+   '       NVL(D.SEGMENT3, A.END_CUSTOMER) AS NAME' || CHR(10) ||
+   'FROM SCM_MST_SITE A' || CHR(10) ||
+   'LEFT JOIN SCM_ADM_LOOKUP_MASTER_DETAIL D' || CHR(10) ||
+   '  ON A.DIVISION_ID = D.SEGMENT1 AND A.END_CUSTOMER = D.SEGMENT2' || CHR(10) ||
+   ' AND D.LOOKUP_TYPE = ''END_CUSTOMER'' AND D.VALID_YN = ''Y''' || CHR(10) ||
+   'WHERE A.END_CUSTOMER IS NOT NULL' || CHR(10) ||
+   '  AND A.DIVISION_ID IN (SELECT UNIT_ID FROM SCM_ADM_USER_GR_UNIT_AUTH_MPG_M' || CHR(10) ||
+   '                        WHERE USER_ID = @sesUserId AND UNIT_TP_CD = ''D'' AND USE_YN = ''Y'')' || CHR(10) ||
+   '  AND ( EXISTS (SELECT 1 FROM SCM_ADM_USER_GR_MPG_M G' || CHR(10) ||
+   '                WHERE G.USER_ID = @sesUserId AND G.USER_GR_ID = ''ADMIN'' AND G.USE_YN = ''Y'')' || CHR(10) ||
+   '     OR A.DEPT_ID IN (' || CHR(10) ||
+   '          SELECT L.SEGMENT3 FROM SCM_ADM_LOOKUP_MASTER_DETAIL L' || CHR(10) ||
+   '          WHERE L.LOOKUP_TYPE = ''PM_TEAM_MAPPING'' AND L.VALID_YN = ''Y''' || CHR(10) ||
+   '            AND L.SEGMENT1 IN (SELECT U.DEPT_ID FROM TB_FX_USER U WHERE U.USERID = @sesUserId)' || CHR(10) ||
+   '          UNION' || CHR(10) ||
+   '          SELECT U.DEPT_ID FROM TB_FX_USER U WHERE U.USERID = @sesUserId))' || CHR(10) ||
+   'ORDER BY CODE'
+ , 'Y'
+ , 'admin', SYSDATE, 'admin', SYSDATE
+FROM DUAL
+WHERE NOT EXISTS (SELECT 1 FROM SCM_MGR.SCM_ADM_CMBO_SQL_M X WHERE X.SQL_ID = 'EndCustomerByDivisionDeptAuth');
+
+PROMPT ===== [패치3-2] CMBO 'EndCustomerByDivision40Team' (1행 기대) =====
+INSERT INTO SCM_MGR.SCM_ADM_CMBO_SQL_M
+  (SQL_ID, MDU_DIVS_CD, SQL_NM, SQL_DTL_CTN, USE_YN,
+   CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+SELECT
+   'EndCustomerByDivision40Team'
+ , 'DM'
+ , 'DMF0003 셀 End Customer 40 (AS-IS owner-dept team 축 1:1)'
+ , 'SELECT DIVISION_ID, DEPT_ID, CODE, NAME FROM (' || CHR(10) ||
+   'SELECT DISTINCT A.DIVISION_ID, C.DEPT_ID,' || CHR(10) ||
+   '       A.PROJECT_CODE AS CODE, NVL(D.SEGMENT3, A.PROJECT_CODE) AS NAME' || CHR(10) ||
+   'FROM SCM_MST_SITE_ITEM A' || CHR(10) ||
+   'JOIN SCM_MST_SSO_USER_INFO B' || CHR(10) ||
+   '  ON B.USER_ID = TRIM(CASE WHEN INSTR(A.OWNER, '','') > 0' || CHR(10) ||
+   '                           THEN SUBSTR(A.OWNER, 1, INSTR(A.OWNER, '','') - 1) ELSE A.OWNER END)' || CHR(10) ||
+   'JOIN SCM_MST_SSO_DEPT_INFO C ON C.DEPT_ID = B.DEPT_ID' || CHR(10) ||
+   'LEFT JOIN SCM_ADM_LOOKUP_MASTER_DETAIL D' || CHR(10) ||
+   '  ON A.DIVISION_ID = D.SEGMENT1 AND A.PROJECT_CODE = D.SEGMENT2' || CHR(10) ||
+   ' AND D.LOOKUP_TYPE = ''END_CUSTOMER'' AND D.VALID_YN = ''Y''' || CHR(10) ||
+   'WHERE A.DIVISION_ID = ''40'' AND A.VALID_YN = ''Y'' AND A.PROJECT_CODE IS NOT NULL' || CHR(10) ||
+   'UNION' || CHR(10) ||
+   'SELECT ''40'', ''-'', SEGMENT2, SEGMENT3' || CHR(10) ||
+   'FROM SCM_ADM_LOOKUP_MASTER_DETAIL' || CHR(10) ||
+   'WHERE LOOKUP_TYPE = ''END_CUSTOMER'' AND SEGMENT1 = ''40''' || CHR(10) ||
+   '  AND SEGMENT2 <> ''-'' AND VALID_YN = ''Y''' || CHR(10) ||
+   ') ORDER BY CODE'
+ , 'Y'
+ , 'admin', SYSDATE, 'admin', SYSDATE
+FROM DUAL
+WHERE NOT EXISTS (SELECT 1 FROM SCM_MGR.SCM_ADM_CMBO_SQL_M X WHERE X.SQL_ID = 'EndCustomerByDivision40Team');
+
+PROMPT ===== [패치4-1] CMBO 'TeambyDivisionAuth' (1행 기대) =====
+INSERT INTO SCM_MGR.SCM_ADM_CMBO_SQL_M
+  (SQL_ID, MDU_DIVS_CD, SQL_NM, SQL_DTL_CTN, USE_YN,
+   CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+SELECT
+   'TeambyDivisionAuth'
+ , 'DM'
+ , 'DMF0003 셀 Team (AS-IS Auth 4분기 1:1)'
+ , 'WITH ME AS (SELECT DEPT_ID FROM TB_FX_USER WHERE USERID = @sesUserId),' || CHR(10) ||
+   'MAPSET AS (SELECT L.SEGMENT3 AS DEPT_ID FROM SCM_ADM_LOOKUP_MASTER_DETAIL L' || CHR(10) ||
+   '           WHERE L.LOOKUP_TYPE = ''PM_TEAM_MAPPING'' AND L.VALID_YN = ''Y''' || CHR(10) ||
+   '             AND L.SEGMENT1 IN (SELECT DEPT_ID FROM ME)' || CHR(10) ||
+   '           UNION SELECT DEPT_ID FROM ME),' || CHR(10) ||
+   'F AS (SELECT (SELECT COUNT(*) FROM MAPSET) AS TEAM_CNT,' || CHR(10) ||
+   '             (SELECT COUNT(*) FROM SCM_ADM_USER_GR_MPG_M G' || CHR(10) ||
+   '              WHERE G.USER_ID = @sesUserId AND G.USER_GR_ID = ''ADMIN'' AND G.USE_YN = ''Y'') AS IS_ADMIN' || CHR(10) ||
+   '      FROM DUAL)' || CHR(10) ||
+   'SELECT DISTINCT DIVISION_ID, CODE, NAME FROM (' || CHR(10) ||
+   'SELECT A.DIVISION_ID, B.DEPT_ID AS CODE, B.DEPT_NAME_KO AS NAME' || CHR(10) ||
+   'FROM SCM_MST_SITE A JOIN SCM_MST_SSO_DEPT_INFO B ON A.DEPT_ID = B.DEPT_ID CROSS JOIN F' || CHR(10) ||
+   'WHERE A.SITE_TYPE = ''SALES'' AND A.DIVISION_ID <> ''40'' AND F.TEAM_CNT <= 1' || CHR(10) ||
+   '  AND A.DIVISION_ID IN (SELECT UNIT_ID FROM SCM_ADM_USER_GR_UNIT_AUTH_MPG_M' || CHR(10) ||
+   '                        WHERE USER_ID = @sesUserId AND UNIT_TP_CD = ''D'' AND USE_YN = ''Y'')' || CHR(10) ||
+   '  AND (F.IS_ADMIN > 0 OR B.DEPT_ID IN (SELECT DEPT_ID FROM ME))' || CHR(10) ||
+   'UNION' || CHR(10) ||
+   'SELECT ''40'', C.DEPT_ID, C.DEPT_NAME_KO' || CHR(10) ||
+   'FROM SCM_MST_SITE_ITEM A JOIN SCM_MST_SSO_USER_INFO B ON A.OWNER = B.USER_ID' || CHR(10) ||
+   'JOIN SCM_MST_SSO_DEPT_INFO C ON B.DEPT_ID = C.DEPT_ID CROSS JOIN F' || CHR(10) ||
+   'WHERE A.DIVISION_ID = ''40'' AND F.TEAM_CNT <= 1' || CHR(10) ||
+   '  AND (F.IS_ADMIN > 0 OR C.DEPT_ID IN (SELECT DEPT_ID FROM ME))' || CHR(10) ||
+   'UNION' || CHR(10) ||
+   'SELECT A.DIVISION_ID, B.DEPT_ID, B.DEPT_NAME_KO' || CHR(10) ||
+   'FROM SCM_MST_SITE A JOIN SCM_MST_SSO_DEPT_INFO B ON A.DEPT_ID = B.DEPT_ID CROSS JOIN F' || CHR(10) ||
+   'WHERE A.SITE_TYPE = ''SALES'' AND A.DIVISION_ID <> ''40'' AND F.TEAM_CNT > 1' || CHR(10) ||
+   '  AND B.DEPT_ID IN (SELECT DEPT_ID FROM MAPSET)' || CHR(10) ||
+   'UNION' || CHR(10) ||
+   'SELECT A.DIVISION_ID, B2.DEPT_ID, B2.DEPT_NAME_KO' || CHR(10) ||
+   'FROM SCM_MST_SITE A' || CHR(10) ||
+   'JOIN SCM_MST_SITE_ITEM I ON A.DIVISION_ID = I.DIVISION_ID AND A.SCM_SITE_ID = I.SCM_SITE_ID' || CHR(10) ||
+   'JOIN SCM_MST_SSO_USER_INFO SU ON SU.USER_ID = I.OWNER' || CHR(10) ||
+   'JOIN SCM_MST_SSO_DEPT_INFO B2 ON B2.DEPT_ID = SU.DEPT_ID CROSS JOIN F' || CHR(10) ||
+   'WHERE A.SITE_TYPE = ''SALES'' AND A.DIVISION_ID = ''40'' AND F.TEAM_CNT > 1' || CHR(10) ||
+   '  AND B2.DEPT_ID IN (SELECT DEPT_ID FROM MAPSET)' || CHR(10) ||
+   ') ORDER BY CODE'
+ , 'Y'
+ , 'admin', SYSDATE, 'admin', SYSDATE
+FROM DUAL
+WHERE NOT EXISTS (SELECT 1 FROM SCM_MGR.SCM_ADM_CMBO_SQL_M X WHERE X.SQL_ID = 'TeambyDivisionAuth');
+
+PROMPT ===== [패치4-2] SHEET_COLUMNS 셀 콤보 전환 4건 (각 1행 기대, 기적용 시 0행) =====
+UPDATE SCM_MGR.SCM_MST_SHEET_COLUMNS
+   SET CELL_COMBO_DATA_TYPE = 'SiteByEndCustomerAuth',
+       LAST_UPDATED_BY = 'admin', LAST_UPDATE_DATE = SYSDATE
+ WHERE PROGRAM_ID = 'DMF0003' AND SHEET_NAME = 'Mkt Fcst' AND COLUMN_NAME = 'SCM_SITE_ID'
+   AND CELL_COMBO_DATA_TYPE = 'SiteByEndCustomer';
+
+UPDATE SCM_MGR.SCM_MST_SHEET_COLUMNS
+   SET CELL_COMBO_DATA_TYPE = 'EndCustomerByDivisionDeptAuth',
+       LAST_UPDATED_BY = 'admin', LAST_UPDATE_DATE = SYSDATE
+ WHERE PROGRAM_ID = 'DMF0003' AND SHEET_NAME = 'Mkt Fcst' AND COLUMN_NAME = 'END_CUSTOMER'
+   AND CELL_COMBO_DATA_TYPE = 'EndCustomerByDivisionDept';
+
+UPDATE SCM_MGR.SCM_MST_SHEET_COLUMNS
+   SET CELL_COMBO_DATA_TYPE = 'EndCustomerByDivision40Team',
+       LAST_UPDATED_BY = 'admin', LAST_UPDATE_DATE = SYSDATE
+ WHERE PROGRAM_ID = 'DMF0003' AND SHEET_NAME = 'Mkt Fcst' AND COLUMN_NAME = 'END_CUSTOMER40'
+   AND CELL_COMBO_DATA_TYPE = 'EndCustomerByDivision40';
+
+UPDATE SCM_MGR.SCM_MST_SHEET_COLUMNS
+   SET CELL_COMBO_DATA_TYPE = 'TeambyDivisionAuth',
+       LAST_UPDATED_BY = 'admin', LAST_UPDATE_DATE = SYSDATE
+ WHERE PROGRAM_ID = 'DMF0003' AND SHEET_NAME = 'Mkt Fcst' AND COLUMN_NAME = 'TEAM_ID'
+   AND CELL_COMBO_DATA_TYPE = 'TeambyDivision';
+
+PROMPT ===== [패치4-3] (구버전 실행 이력 대비) NULL 관용 제거 — 최초 실행 DB 는 0행 정상 =====
+UPDATE SCM_MGR.SCM_ADM_CMBO_SQL_M
+   SET SQL_DTL_CTN = REPLACE(SQL_DTL_CTN, 'A.DEPT_ID IS NULL' || CHR(10) || '     OR ', ''),
+       LAST_UPDATED_BY = 'admin', LAST_UPDATE_DATE = SYSDATE
+ WHERE SQL_ID IN ('SiteByEndCustomerAuth', 'EndCustomerByDivisionDeptAuth')
+   AND DBMS_LOB.INSTR(SQL_DTL_CTN, 'A.DEPT_ID IS NULL') > 0;
+
+COMMIT;
+
+PROMPT ===== [검증1] asYn 잔존 0 + AS branch 존치 =====
+SELECT SQL_ID,
+       DBMS_LOB.INSTR(SQL_DTL_CTN, '@asYn')         AS ASYN_REMAIN,
+       DBMS_LOB.INSTR(SQL_DTL_CTN, 'AS_SITE_PLANT') AS AS_BRANCH
+FROM   SCM_MGR.SCM_ADM_CMBO_SQL_M
+WHERE  SQL_ID IN ('UserSiteByEndCustomer', 'SiteByEndCustomer_DMF0003');
+
+PROMPT ===== [검증2] CMBO 5본 등록 + NULL 관용 잔존 0 =====
+SELECT SQL_ID, USE_YN, DBMS_LOB.INSTR(SQL_DTL_CTN, 'DEPT_ID IS NULL') AS NULL_TOL
+FROM   SCM_MGR.SCM_ADM_CMBO_SQL_M
+WHERE  SQL_ID IN ('SiteByEndCustomerAuth','AsIncotermsEdit',
+                  'EndCustomerByDivisionDeptAuth','EndCustomerByDivision40Team','TeambyDivisionAuth');
+
+PROMPT ===== [검증3] DMF0003 셀 콤보 최종 배선 (5행 기대) =====
+SELECT COLUMN_NAME, CELL_COMBO_DATA_TYPE
+FROM   SCM_MGR.SCM_MST_SHEET_COLUMNS
+WHERE  PROGRAM_ID = 'DMF0003' AND SHEET_NAME = 'Mkt Fcst'
+  AND  COLUMN_NAME IN ('TEAM_ID','END_CUSTOMER','END_CUSTOMER40','SCM_SITE_ID','SCM_SITE_ID40');
+
+PROMPT ===== 완료 — 기대값: 검증1 ASYN_REMAIN=0/AS_BRANCH>0, 검증2 NULL_TOL=0, 검증3 =====
+PROMPT ===== TEAM_ID=TeambyDivisionAuth / END_CUSTOMER=EndCustomerByDivisionDeptAuth / =====
+PROMPT ===== END_CUSTOMER40=EndCustomerByDivision40Team / SCM_SITE_ID=SiteByEndCustomerAuth / SCM_SITE_ID40=SiteByEndCustomer =====

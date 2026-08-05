@@ -50,6 +50,7 @@ export const GroupGrid = ({ gridRef, gridFilterRef, setActiveTab, data }: GroupG
       staticColumns={staticColumns.group ?? []}
       gotFocus={handleFocus}
       dblClick={handleDblClick}
+      isReadOnly={true}
     />
   );
 };

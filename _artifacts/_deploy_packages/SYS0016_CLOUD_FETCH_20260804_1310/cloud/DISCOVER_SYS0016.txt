@@ -1,0 +1,241 @@
+===== [A] 메타 배선 기반 (권위 축) — BTN_MPG -> API_M =====
+
+SHT_NM                 MNU_BTN_CD     API_ID                           API_TP_CD                                          API_URL
+---------------------- -------------- -------------------------------- -------------------------------------------------- ------------------------------------------------------------
+main                   SAVE           API_SYS0016_SAVE_NOTICE_CONTENT_ POST                                               PKG_SYS0016.P_SYS0016_SAVE_NOTICE_CONTENT_MASTER
+                                      MASTER
+
+main                   SEARCH         API_SYS0016_GET_NOTICE_CONTENT_M POST                                               PKG_SYS0016.P_SYS0016_GET_NOTICE_CONTENT_MASTER
+                                      ASTER
+
+===== [B] 명칭 기반 객체 =====
+
+OBJECT_NAME                              OBJECT_TYPE             STATUS  CREATED
+---------------------------------------- ----------------------- ------- ----------------
+PKG_SYS0016                              PACKAGE                 VALID   2026-07-20 10:13
+PKG_SYS0016                              PACKAGE BODY            VALID   2026-07-20 10:14
+===== [C] 의존 폐포 (축A+B 유닛 -> 재귀 참조 객체; SYS/표준 제외) =====
+
+명령의 36 행에서 시작하는 중 오류 발생 -
+WITH units (NAME) AS (
+    SELECT DISTINCT REGEXP_SUBSTR(A.API_URL, '[^.]+', 1, 1)
+    FROM   SCM_MGR.SCM_ADM_MNU_BTN_MPG_M B
+    JOIN   SCM_MGR.SCM_ADM_API_M A ON A.API_ID = B.API_ID
+    WHERE  B.MNU_ID = 'SYS0016' AND A.API_URL IS NOT NULL
+    UNION
+    SELECT OBJECT_NAME FROM ALL_OBJECTS
+    WHERE  OWNER='SCM_MGR' AND OBJECT_NAME LIKE '%SYS0016%'
+    AND    OBJECT_TYPE IN ('PACKAGE','PACKAGE BODY','PROCEDURE','FUNCTION','TRIGGER')
+),
+clo (OWNER, NAME, TYPE) AS (
+    SELECT D.REFERENCED_OWNER, D.REFERENCED_NAME, D.REFERENCED_TYPE
+    FROM   ALL_DEPENDENCIES D JOIN units U ON D.NAME = U.NAME
+    WHERE  D.OWNER = 'SCM_MGR' AND D.REFERENCED_OWNER NOT IN ('SYS','PUBLIC','SYSTEM')
+    UNION
+    SELECT D.REFERENCED_OWNER, D.REFERENCED_NAME, D.REFERENCED_TYPE
+    FROM   ALL_DEPENDENCIES D JOIN clo C
+           ON D.OWNER = C.OWNER AND D.NAME = C.NAME
+    WHERE  D.REFERENCED_OWNER NOT IN ('SYS','PUBLIC','SYSTEM')
+)
+SELECT C.OWNER, C.NAME, C.TYPE,
+       NVL((SELECT MAX(T.TEMPORARY) FROM ALL_TABLES T
+            WHERE T.OWNER=C.OWNER AND T.TABLE_NAME=C.NAME),'-') GTT_YN
+FROM   clo C
+ORDER BY C.TYPE, C.NAME
+오류 발생 명령행: 46 열: 1
+오류 보고 -
+SQL 오류: ORA-32040: 순환 WITH 절 요소 CLO에서 UNION ALL이 누락되었습니다.
+
+https://docs.oracle.com/error-help/db/ora-32040/32040. 00000 -  "missing UNION ALL in recursive WITH clause element %s"
+*Cause:    The specified WITH clause element referred to itself (recursive)
+           but did not use a UNION ALL operation.
+*Action:   Rewrite the recursive WITH clause element to use a UNION ALL
+           operation.
+*Params:   1) WITH_clause_name
+
+More Details :
+https://docs.oracle.com/error-help/db/ora-32040/
+===== [D] 배선 메타 카운트 (로컬 90_VERIFY 대조 기준값) =====
+
+T                            C
+------------------- ----------
+MNU_M                        1
+BTN_MPG                      2
+API_M                        2
+USER_GR_MNU_MPG              1
+USER_GR_MNU_BTN_MPG          4
+PROC_M                       9
+SHEET_COLUMNS               13
+SHEET_MEASURE                0
+===== [D-2] MSG/LBL 후보 (작업 기간 신규 등록분 — 03 스크립트 DEFINE 과 동일 기준) =====
+
+MSG_ID                                             MSG_TP_CD            LANG_CD    CREATED_BY                     DT
+-------------------------------------------------- -------------------- ---------- ------------------------------ ----------
+LBL00416                                           LBL                  CN         minyonglee1                    2026-07-30
+LBL00416                                           LBL                  EN         minyonglee1                    2026-07-30
+LBL00416                                           LBL                  KO         minyonglee1                    2026-07-30
+LBL00417                                           LBL                  CN         minyonglee1                    2026-07-30
+LBL00417                                           LBL                  EN         minyonglee1                    2026-07-30
+LBL00417                                           LBL                  KO         minyonglee1                    2026-07-30
+LBL00418                                           LBL                  CN         minyonglee1                    2026-07-30
+LBL00418                                           LBL                  EN         minyonglee1                    2026-07-30
+LBL00418                                           LBL                  KO         minyonglee1                    2026-07-30
+LBL00774                                           LBL                  CN         admin                          2026-07-30
+LBL00774                                           LBL                  EN         admin                          2026-07-30
+LBL00774                                           LBL                  KO         admin                          2026-07-30
+LBL00775                                           LBL                  CN         admin                          2026-07-30
+LBL00775                                           LBL                  EN         admin                          2026-07-30
+LBL00775                                           LBL                  KO         admin                          2026-07-30
+LBL00776                                           LBL                  CN         admin                          2026-07-30
+LBL00776                                           LBL                  EN         admin                          2026-07-30
+LBL00776                                           LBL                  KO         admin                          2026-07-30
+LBL00777                                           LBL                  CN         admin                          2026-07-30
+LBL00777                                           LBL                  EN         admin                          2026-07-30
+LBL00777                                           LBL                  KO         admin                          2026-07-30
+LBL00778                                           LBL                  CN         admin                          2026-07-30
+LBL00778                                           LBL                  EN         admin                          2026-07-30
+LBL00778                                           LBL                  KO         admin                          2026-07-30
+LBL00779                                           LBL                  CN         admin                          2026-07-30
+LBL00779                                           LBL                  EN         admin                          2026-07-30
+LBL00779                                           LBL                  KO         admin                          2026-07-30
+LBL00780                                           LBL                  CN         admin                          2026-07-30
+LBL00780                                           LBL                  EN         admin                          2026-07-30
+LBL00780                                           LBL                  KO         admin                          2026-07-30
+LBL00781                                           LBL                  CN         admin                          2026-07-30
+LBL00781                                           LBL                  EN         admin                          2026-07-30
+LBL00781                                           LBL                  KO         admin                          2026-07-30
+LBL00782                                           LBL                  CN         admin                          2026-07-30
+LBL00782                                           LBL                  EN         admin                          2026-07-30
+LBL00782                                           LBL                  KO         admin                          2026-07-30
+LBL00783                                           LBL                  CN         admin                          2026-07-30
+LBL00783                                           LBL                  EN         admin                          2026-07-30
+LBL00783                                           LBL                  KO         admin                          2026-07-30
+LBL00794                                           LBL                  CN         admin                          2026-07-30
+LBL00794                                           LBL                  EN         admin                          2026-07-30
+LBL00794                                           LBL                  KO         admin                          2026-07-30
+LBL00795                                           LBL                  CN         admin                          2026-07-30
+LBL00795                                           LBL                  EN         admin                          2026-07-30
+LBL00795                                           LBL                  KO         admin                          2026-07-30
+LBL00796                                           LBL                  CN         admin                          2026-07-30
+LBL00796                                           LBL                  EN         admin                          2026-07-30
+LBL00796                                           LBL                  KO         admin                          2026-07-30
+LBL00797                                           LBL                  CN         admin                          2026-07-30
+LBL00797                                           LBL                  EN         admin                          2026-07-30
+LBL00797                                           LBL                  KO         admin                          2026-07-30
+LBL00798                                           LBL                  CN         admin                          2026-07-30
+LBL00798                                           LBL                  EN         admin                          2026-07-30
+LBL00798                                           LBL                  KO         admin                          2026-07-30
+LBL00799                                           LBL                  CN         admin                          2026-07-30
+LBL00799                                           LBL                  EN         admin                          2026-07-30
+LBL00799                                           LBL                  KO         admin                          2026-07-30
+LBL00800                                           LBL                  CN         admin                          2026-07-30
+LBL00800                                           LBL                  EN         admin                          2026-07-30
+LBL00800                                           LBL                  KO         admin                          2026-07-30
+LBL00844                                           LBL                  CN         admin                          2026-07-30
+LBL00844                                           LBL                  EN         admin                          2026-07-30
+LBL00844                                           LBL                  KO         admin                          2026-07-30
+LBL00845                                           LBL                  CN         admin                          2026-07-30
+LBL00845                                           LBL                  EN         admin                          2026-07-30
+LBL00845                                           LBL                  KO         admin                          2026-07-30
+LBL00846                                           LBL                  CN         admin                          2026-07-30
+LBL00846                                           LBL                  EN         admin                          2026-07-30
+LBL00846                                           LBL                  KO         admin                          2026-07-30
+LBL00847                                           LBL                  CN         admin                          2026-07-30
+LBL00847                                           LBL                  EN         admin                          2026-07-30
+LBL00847                                           LBL                  KO         admin                          2026-07-30
+LBL00848                                           LBL                  CN         admin                          2026-07-30
+LBL00848                                           LBL                  EN         admin                          2026-07-30
+LBL00848                                           LBL                  KO         admin                          2026-07-30
+LBL00849                                           LBL                  CN         admin                          2026-07-30
+LBL00849                                           LBL                  EN         admin                          2026-07-30
+LBL00849                                           LBL                  KO         admin                          2026-07-30
+LBL00850                                           LBL                  CN         admin                          2026-07-30
+LBL00850                                           LBL                  EN         admin                          2026-07-30
+LBL00850                                           LBL                  KO         admin                          2026-07-30
+LBL00851                                           LBL                  CN         admin                          2026-07-30
+LBL00851                                           LBL                  EN         admin                          2026-07-30
+LBL00851                                           LBL                  KO         admin                          2026-07-30
+MNU00690                                           MNU                  CN         admin                          2026-07-30
+MNU00690                                           MNU                  EN         admin                          2026-07-30
+MNU00690                                           MNU                  KO         admin                          2026-07-30
+MSG00026                                           MSG                  CN         minyonglee1                    2026-07-30
+MSG00026                                           MSG                  EN         minyonglee1                    2026-07-30
+MSG00026                                           MSG                  KO         minyonglee1                    2026-07-30
+MSG00027                                           MSG                  CN         minyonglee1                    2026-07-30
+MSG00027                                           MSG                  EN         minyonglee1                    2026-07-30
+MSG00027                                           MSG                  KO         minyonglee1                    2026-07-30
+MSG00690                                           MSG                  CN         admin                          2026-07-30
+MSG00690                                           MSG                  EN         admin                          2026-07-30
+MSG00690                                           MSG                  KO         admin                          2026-07-30
+MSG00691                                           MSG                  CN         admin                          2026-07-30
+MSG00691                                           MSG                  EN         admin                          2026-07-30
+MSG00691                                           MSG                  KO         admin                          2026-07-30
+MSG00692                                           MSG                  CN         admin                          2026-07-30
+MSG00692                                           MSG                  EN         admin                          2026-07-30
+MSG00692                                           MSG                  KO         admin                          2026-07-30
+MSG00693                                           MSG                  CN         admin                          2026-07-30
+MSG00693                                           MSG                  EN         admin                          2026-07-30
+MSG00693                                           MSG                  KO         admin                          2026-07-30
+MSG00694                                           MSG                  CN         admin                          2026-07-30
+MSG00694                                           MSG                  EN         admin                          2026-07-30
+MSG00694                                           MSG                  KO         admin                          2026-07-30
+MSG00695                                           MSG                  CN         admin                          2026-07-30
+MSG00695                                           MSG                  EN         admin                          2026-07-30
+MSG00695                                           MSG                  KO         admin                          2026-07-30
+MSG00696                                           MSG                  CN         admin                          2026-07-30
+MSG00696                                           MSG                  EN         admin                          2026-07-30
+MSG00696                                           MSG                  KO         admin                          2026-07-30
+MSG00697                                           MSG                  CN         admin                          2026-07-30
+MSG00697                                           MSG                  EN         admin                          2026-07-30
+MSG00697                                           MSG                  KO         admin                          2026-07-30
+MSG00698                                           MSG                  CN         admin                          2026-07-30
+MSG00698                                           MSG                  EN         admin                          2026-07-30
+MSG00698                                           MSG                  KO         admin                          2026-07-30
+MSG00699                                           MSG                  CN         admin                          2026-07-30
+MSG00699                                           MSG                  EN         admin                          2026-07-30
+MSG00699                                           MSG                  KO         admin                          2026-07-30
+MSG00700                                           MSG                  CN         admin                          2026-07-30
+MSG00700                                           MSG                  EN         admin                          2026-07-30
+MSG00700                                           MSG                  KO         admin                          2026-07-30
+MSG00701                                           MSG                  CN         admin                          2026-07-30
+MSG00701                                           MSG                  EN         admin                          2026-07-30
+MSG00701                                           MSG                  KO         admin                          2026-07-30
+MSG00702                                           MSG                  CN         admin                          2026-07-30
+MSG00702                                           MSG                  EN         admin                          2026-07-30
+MSG00702                                           MSG                  KO         admin                          2026-07-30
+MSG_API_DMF0068_lookupProject_SEARCH               MSG                  CN         admin                          2026-07-30
+MSG_API_DMF0068_lookupProject_SEARCH               MSG                  EN         admin                          2026-07-30
+MSG_API_DMF0068_lookupProject_SEARCH               MSG                  KO         admin                          2026-07-30
+MSG_API_DMF0068_main_COLUMN_SETUP                  MSG                  CN         admin                          2026-07-30
+MSG_API_DMF0068_main_COLUMN_SETUP                  MSG                  EN         admin                          2026-07-30
+MSG_API_DMF0068_main_COLUMN_SETUP                  MSG                  KO         admin                          2026-07-30
+MSG_API_DMF0068_main_DELETE                        MSG                  CN         admin                          2026-07-30
+MSG_API_DMF0068_main_DELETE                        MSG                  EN         admin                          2026-07-30
+MSG_API_DMF0068_main_DELETE                        MSG                  KO         admin                          2026-07-30
+MSG_API_DMF0068_main_EDIT                          MSG                  CN         admin                          2026-07-30
+MSG_API_DMF0068_main_EDIT                          MSG                  EN         admin                          2026-07-30
+MSG_API_DMF0068_main_EDIT                          MSG                  KO         admin                          2026-07-30
+MSG_API_DMF0068_main_EXCEL                         MSG                  CN         admin                          2026-07-30
+MSG_API_DMF0068_main_EXCEL                         MSG                  EN         admin                          2026-07-30
+MSG_API_DMF0068_main_EXCEL                         MSG                  KO         admin                          2026-07-30
+MSG_API_DMF0068_main_FILTER                        MSG                  CN         admin                          2026-07-30
+MSG_API_DMF0068_main_FILTER                        MSG                  EN         admin                          2026-07-30
+MSG_API_DMF0068_main_FILTER                        MSG                  KO         admin                          2026-07-30
+MSG_API_DMF0068_main_INSERT                        MSG                  CN         admin                          2026-07-30
+MSG_API_DMF0068_main_INSERT                        MSG                  EN         admin                          2026-07-30
+MSG_API_DMF0068_main_INSERT                        MSG                  KO         admin                          2026-07-30
+MSG_API_DMF0068_main_SAVE                          MSG                  CN         admin                          2026-07-30
+MSG_API_DMF0068_main_SAVE                          MSG                  EN         admin                          2026-07-30
+MSG_API_DMF0068_main_SAVE                          MSG                  KO         admin                          2026-07-30
+MSG_API_DMF0068_main_SEARCH                        MSG                  CN         admin                          2026-07-30
+MSG_API_DMF0068_main_SEARCH                        MSG                  EN         admin                          2026-07-30
+MSG_API_DMF0068_main_SEARCH                        MSG                  KO         admin                          2026-07-30
+MSG_API_DMF0068_main_SORT                          MSG                  CN         admin                          2026-07-30
+MSG_API_DMF0068_main_SORT                          MSG                  EN         admin                          2026-07-30
+MSG_API_DMF0068_main_SORT                          MSG                  KO         admin                          2026-07-30
+MSG_API_DMF0068_main_SP_VER                        MSG                  CN         admin                          2026-07-30
+MSG_API_DMF0068_main_SP_VER                        MSG                  EN         admin                          2026-07-30
+MSG_API_DMF0068_main_SP_VER                        MSG                  KO         admin                          2026-07-30
+MSG_API_DMF0068_versionPopup_SEARCH                MSG                  CN         admin                          2026-07-30
+MSG_API_DMF0068_versionPopup_SEARCH                MSG                  EN         admin                          2026-07-30
+MSG_API_DMF0068_versionPopup_SEARCH                MSG                  KO         admin                          2026-07-30

@@ -33,12 +33,6 @@ export const useSessionStore = createPersistedStore<SessionState & SessionAction
           userId: userId,
         });
 
-        // 인터셉터가 500/403 을 reject 하지 않고 response 로 반환하므로 result 부재 = 로그인 실패
-        // (BE 미기동 시 vite proxy 500 → session=undefined + isLogin=true 로 Home 크래시 — 2026-07-15)
-        if (!sessionResult.data?.result) {
-          throw new Error(sessionResult.data?.message ?? 'login failed (no session result)');
-        }
-
         set(state => {
           state.session = sessionResult.data.result;
           state.isLogin = true;
@@ -56,10 +50,6 @@ export const useSessionStore = createPersistedStore<SessionState & SessionAction
     fetchSession: async () => {
       try {
         const sessionResult = await apiClient.get<UserSession>('/user/session');
-
-        if (!sessionResult.data?.result) {
-          throw new Error(sessionResult.data?.message ?? 'session fetch failed (no result)');
-        }
 
         set(state => {
           state.session = sessionResult.data.result;

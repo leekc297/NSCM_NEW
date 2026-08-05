@@ -1,11 +1,10 @@
-import { PlantSiteField } from 'features/master/src/components';
+import { PeriodField, PlantSiteField } from 'features/master/src/components';
 import type { Dispatch, SetStateAction } from 'react';
 
-import dayjs from '@foundation/dayjs';
 import { clsx } from '@shared/clsx';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
-import { Button, DatePickerCalendar, FormItem, InputField } from '@shared/lges';
+import { Button, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 
@@ -131,7 +130,9 @@ export const CustomerFcstUploadForm = ({
                       ?.filter(
                         item =>
                           item.DIVISION_ID === searchParams.divisionId &&
-                          (selTeams.length === 0 || !item.DEPT_ID || selTeams.includes(item.DEPT_ID))
+                          (selTeams.length === 0 ||
+                            !item.DEPT_ID ||
+                            selTeams.includes(item.DEPT_ID))
                       )
                       ?.map(item => ({ label: item.NAME, value: item.CODE })) ?? []
                   }
@@ -163,7 +164,9 @@ export const CustomerFcstUploadForm = ({
                       ?.filter(
                         item =>
                           item.DIVISION_ID === searchParams.divisionId &&
-                          (selTeams.length === 0 || !item.DEPT_ID || selTeams.includes(item.DEPT_ID))
+                          (selTeams.length === 0 ||
+                            !item.DEPT_ID ||
+                            selTeams.includes(item.DEPT_ID))
                       )
                       ?.map(item => ({ label: item.NAME, value: item.CODE })) ?? []
                   }
@@ -216,41 +219,13 @@ export const CustomerFcstUploadForm = ({
               className={styles.formItem}
             />
           </Grid>
-          <Grid size={3}>
-            <FormItem
-              label={t('LBL00013', '_Period')}
-              labelAlign='right'
-              required
-              render={() => (
-                // ⭐ 일자 잘림 방지 — DMF0048 선례: .datePickerFix 래퍼 + sx width 100% (overflow:hidden/ellipsis 제거)
-                <div className={styles.datePickerFix}>
-                  <DatePickerCalendar
-                    sx={{ width: '100%' }}
-                    usecase='date-range-multi'
-                    elevation
-                    size='large'
-                    locale='ko'
-                    value={[
-                      dayjs(searchParams.startYyyymmdd, 'YYYYMMDD'),
-                      dayjs(searchParams.endYyyymmdd, 'YYYYMMDD'),
-                    ]}
-                    onChange={date => {
-                      // dayjs 로컬 날짜 (toISOString UTC 금지 — DMF0048 A-3 선례)
-                      const start = date?.[0]
-                        ? dayjs(date[0]).format('YYYYMMDD')
-                        : searchParams.startYyyymmdd;
-                      const end = date?.[1]
-                        ? dayjs(date[1]).format('YYYYMMDD')
-                        : searchParams.endYyyymmdd;
-                      setSearchParams({ startYyyymmdd: start, endYyyymmdd: end });
-                    }}
-                  />
-                </div>
-              )}
-              labelSize='long'
-              className={styles.formItem}
-            />
-          </Grid>
+          {/* 공용 카탈로그 PeriodField(@master/searchFields) — SalesPrice 등 타 화면과 동일 DateRange. */}
+          <PeriodField
+            gridSize={3}
+            start={searchParams.startYyyymmdd}
+            end={searchParams.endYyyymmdd}
+            onChange={(start, end) => setSearchParams({ startYyyymmdd: start, endYyyymmdd: end })}
+          />
           <Grid size={3}>
             <FormItem
               label={t('LBL00710', '_Bucket')}

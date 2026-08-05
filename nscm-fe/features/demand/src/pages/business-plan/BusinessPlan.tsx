@@ -2,7 +2,7 @@ import type { FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { IcGridColumnSetup, IcMeasureSelect } from '@foundation/assets';
+import { IcExchangeRate, IcGridColumnSetup, IcMeasureSelect } from '@foundation/assets';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { useQueryClient } from '@foundation/query-client';
 import type { EditTracker } from '@foundation/utils';
@@ -208,7 +208,10 @@ export const BusinessPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
       sc.divisionId
     );
     if (measures.length === 0) {
-      void setAlert({ type: 'alert', content: t(MSG.REQUIRED_COLUMN, '_필수 입력 컬럼이 없습니다.') });
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.REQUIRED_COLUMN, '_필수 입력 컬럼이 없습니다.'),
+      });
       return;
     }
     const gid = `I_${Date.now()}`;
@@ -268,7 +271,10 @@ export const BusinessPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
     const payload = buildSavePayload(build.rows);
     if (!payload) {
       // 저장 대상 0건 (AS-IS L1087 MSG00275 → MSG00676)
-      void setAlert({ type: 'alert', content: t(MSG.NO_SAVE_TARGET, '_저장할 대상 데이터가 없습니다.') });
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.NO_SAVE_TARGET, '_저장할 대상 데이터가 없습니다.'),
+      });
       return;
     }
 
@@ -295,7 +301,8 @@ export const BusinessPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
         });
       }
     } catch (e) {
-      const msg = e instanceof Error ? e.message : t(MSG.SAVE_ERROR, '_저장 중 오류가 발생했습니다.');
+      const msg =
+        e instanceof Error ? e.message : t(MSG.SAVE_ERROR, '_저장 중 오류가 발생했습니다.');
       void setAlert({ type: 'alert', content: msg });
     }
   };
@@ -347,7 +354,11 @@ export const BusinessPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
     if (g) {
       const selection = g.selection;
       const tags: string[] = [];
-      for (let c = Math.min(selection.col, selection.col2); c <= Math.max(selection.col, selection.col2); c++) {
+      for (
+        let c = Math.min(selection.col, selection.col2);
+        c <= Math.max(selection.col, selection.col2);
+        c++
+      ) {
         const b = g.columns[c]?.binding ?? '';
         if (dynKindOf(b) === 'M') tags.push(b.slice(2));
       }
@@ -371,9 +382,11 @@ export const BusinessPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
     upload: false,
   };
 
-  // 커스텀 버튼 6종 — Set Price/Exchange Rate/Ver. Cutoff/Replace(F-2 ② 전부 노출 — 권한은 P4 hasButton)
-  //   + Column Setting/Measure Select (icon-only). 라벨 = 기존 LBL 재사용, 부재 시 영문 리터럴
-  //   (신규 LBL 채번 금지 — DMF0021 확정 승계).
+  // 커스텀 버튼 6종 — Set Price/Ver. Cutoff/Ver. Replace(F-2 ② 전부 노출 — 권한은 P4 hasButton)
+  //   + Exchange Rate/Column Setting/Measure Select (icon-only). 라벨 = 기존 LBL 재사용, 부재 시 영문
+  //   리터럴 (신규 LBL 채번 금지 — DMF0021 확정 승계).
+  //   ⭐ 배치 규약 (hook #120, 사용자 명시 2026-07-30): 텍스트 버튼 먼저, 그 뒤 아이콘 버튼을
+  //      왼쪽부터 **환율 → Grid Column Set → Measure** 순서로 고정. 환율은 항상 아이콘 형태.
   const customButtons = [
     ...(hasButton('SET_PRICE')
       ? [
@@ -382,16 +395,6 @@ export const BusinessPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
             title: 'Set Price',
             action: () => void handleSetPrice(),
             buttonLabel: 'Set Price',
-          },
-        ]
-      : []),
-    ...(hasButton('EXCHANGE_RATE')
-      ? [
-          {
-            label: t('LBL00661', 'Exchange Rate'),
-            title: t('LBL00661', 'Exchange Rate'),
-            action: handleExchangeRate,
-            buttonLabel: t('LBL00661', 'Exchange Rate'),
           },
         ]
       : []),
@@ -408,10 +411,21 @@ export const BusinessPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
     ...(hasButton('REPLACE')
       ? [
           {
-            label: 'Replace',
-            title: 'Replace',
+            label: 'Ver. Replace',
+            title: 'Ver. Replace',
             action: handleReplace,
-            buttonLabel: 'Replace',
+            buttonLabel: 'Ver. Replace',
+          },
+        ]
+      : []),
+    ...(hasButton('EXCHANGE_RATE')
+      ? [
+          {
+            label: t('LBL00661', 'Exchange Rate'),
+            title: t('LBL00661', 'Exchange Rate'),
+            action: handleExchangeRate,
+            iconComponent: <IcExchangeRate />,
+            buttonLabel: '',
           },
         ]
       : []),

@@ -125,7 +125,7 @@ export const MessageModal = ({
       customContentArea={
         <div className={styles.dialogContentWrapper}>
           <SearchArea
-            searchButtonLabel={t('LBL00112', '_Search')}
+            searchButtonLabel={t('LBL00722', '_Search')}
             conditions={
               <>
                 <Grid size={4}>

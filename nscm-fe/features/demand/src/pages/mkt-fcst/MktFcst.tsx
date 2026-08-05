@@ -1,10 +1,10 @@
 import type { FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import {
-  ColumnSettingModal,
-  type ColumnSettingRow,
+  ColumnLayoutModal,
   ItemByDivisionModal,
   ProjectByDivisionModal,
+  toColumnLayoutSettings,
 } from 'features/master/src/components';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
@@ -15,8 +15,7 @@ import { useQueryClient } from '@foundation/query-client';
 import type { EditTracker } from '@foundation/utils';
 import { MainTitle, SubTitle } from '@shared/components';
 import { useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
-import { useMessageStore } from '@shared/stores';
-import { useSessionStore } from '@shared/stores';
+import { useMessageStore, useSessionStore } from '@shared/stores';
 
 import { MktFcstForm } from './components/MktFcstForm';
 import { MktFcstGrid } from './components/MktFcstGrid';
@@ -35,6 +34,7 @@ import {
   GROUP,
   INSERT_DEFAULT_MEASURE,
   MAIN_COLUMNS,
+  MEASURE_MODEL_KEEP,
   MENU_ID,
   MSG,
   SHEETS,
@@ -55,9 +55,9 @@ import { useMktFcstValidation } from './utils/mkt-fcst.validate';
 export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
   const { t } = useTranslation();
 
-  const gridRef = useRef<FlexGridType<MktFcstRow>>(null);
+  const gridRef = useRef<FlexGridType<MktFcstRow>>(undefined);
   const gridFilterRef = useRef<FlexGridFilter>(undefined);
-  const editTrackerRef = useRef<EditTracker>(undefined);
+  const editTrackerRef = useRef<EditTracker<MktFcstRow>>(undefined);
 
   const setAlert = useMessageStore.getState().setAlert;
   const setToast = useMessageStore.getState().setToast;
@@ -73,14 +73,36 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
   const staticMeasures = useMktFcstStore(s => s.staticMeasures);
   const fetchStaticColumns = useMktFcstStore(s => s.fetchStaticColumns);
   const fetchStaticMeasures = useMktFcstStore(s => s.fetchStaticMeasures);
+  const fetchSearchConditions = useMktFcstStore(s => s.fetchSearchConditions);
   const setCalendarInfo = useMktFcstStore(s => s.setCalendarInfo);
   const setWsPlannerYn = useMktFcstStore(s => s.setWsPlannerYn);
   const storeWsPlannerYn = useMktFcstStore(s => s.wsPlannerYn);
   const bucketInfo = useMktFcstStore(s => s.bucketInfo);
   const currentWeekInfo = useMktFcstStore(s => s.currentWeekInfo);
-  const applyColumnVisibility = useMktFcstStore(s => s.applyColumnVisibility);
+  const applyColumnLayout = useMktFcstStore(s => s.applyColumnLayout);
+  const userColumnLayout = useMktFcstStore(s => s.userColumnLayout);
+  const originalStaticColumns = useMktFcstStore(s => s.originalStaticColumns);
+  const clearUserColumnLayout = useMktFcstStore(s => s.clearUserColumnLayout);
+  const fetchUserColumnLayout = useMktFcstStore(s => s.fetchUserColumnLayout);
   const visibleMeasures = useMktFcstStore(s => s.visibleMeasures);
   const applyVisibleMeasures = useMktFcstStore(s => s.applyVisibleMeasures);
+  const dayRangeApplied = useMktFcstStore(s => s.dayRangeApplied);
+  const applyDayRange = useMktFcstStore(s => s.applyDayRange);
+
+  const dayRangeFilters = useMemo(() => ({ createdBy: '', month: '6' }), []);
+  const { data: dayRangeData } = useTabProcQuery<MENU_ID, SHEETS.DAY_RANGE>({
+    menuId: MENU_ID,
+    sheetName: SHEETS.DAY_RANGE,
+    tabId,
+    filters: dayRangeFilters,
+    enabled: !dayRangeApplied,
+  });
+  useEffect(() => {
+    const range = (dayRangeData as { o_rc2?: { DAY_RANGE?: string }[] })?.o_rc2?.[0]?.DAY_RANGE;
+    if (!range) return;
+    applyDayRange(range); // 내부에서 dayRangeApplied 가드 + 1회 마킹
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dayRangeData]);
 
   // ui-dynamic-property-management — Menu Button 권한 동적 fetch
   const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
@@ -217,7 +239,15 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
     filters: filters[SHEETS.SPREAD_TITLE],
     enabled: hasSearched && !!filters[SHEETS.SPREAD_TITLE],
   });
-  const spreadTitleRows = (spreadTitleData as { o_rc1?: SpreadTitleRow[] })?.o_rc1 ?? [];
+  // ⭐ 참조 안정화 필수 — 미메모 시 o_rc1 부재 구간(조회 전 / division 변경 직후 / 재조회 중)에서
+  //   `?? []` 가 렌더마다 새 배열을 만들어 MktFcstGrid.dynColMetas → dynBindings → 동적 컬럼이
+  //   연쇄 재생성되고, DataGrid 의 columnGroups 가 재적용되어 컬럼이 깜빡인다.
+  //   검색조건(team/end customer 등) 입력만 해도 store 구독으로 이 컴포넌트가 리렌더되므로
+  //   메모가 없으면 "타이핑할 때마다 그리드가 깜빡"이 된다 (forecast-price 는 이미 메모 적용).
+  const spreadTitleRows = useMemo<SpreadTitleRow[]>(
+    () => (spreadTitleData as { o_rc1?: SpreadTitleRow[] } | undefined)?.o_rc1 ?? [],
+    [spreadTitleData]
+  );
 
   // ⭐ Phase 2b — main query 응답의 O_RC2(8주 bucket)·O_RC3(현재 주차) 를 store 에 보관.
   //   편집 cutoff(Daily 과거일 / Weekly·Monthly 현재월 / Div40 8주 잠금) 산출 입력 (보강스펙 §1/§5).
@@ -237,10 +267,17 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   (NULL divisionId/fromYyyymmdd → SP 동적SQL placeholder 빈치환 → ORA-00936 사고 차단. 2026-06-29)
   useEffect(() => {
     clearFilters();
+    void fetchSearchConditions();
     void fetchStaticColumns();
     void fetchStaticMeasures();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabId]);
+
+  useEffect(() => {
+    if (userColumnLayout !== null) return;
+    void fetchUserColumnLayout();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tabId, sc.divisionId, userColumnLayout]);
 
   // ⭐ TITLESET 서버 영구 저장 (AS-IS DM0002_TitleSetForm OK → SCM_MST_TITLESET_USER 1:1, DMF0048 패턴).
   //   기존 sessionStorage(탭 단위) 만이라 탭 재오픈 시 Column/Measure 선택이 분실되던 것을 서버 저장으로 해결.
@@ -248,7 +285,16 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   ^delim 다건 SAVE 는 apiClient.post 직접 (useProcMutation array unfold 회피 — 표준 선례).
   const saveTitleSet = async (
     columnType: 'C' | 'M',
-    saveRows: { name: string; sortOrderNo: number; subTotalFlag?: string; sortMethodCode?: string }[]
+    saveRows: {
+      name: string;
+      sortOrderNo: number;
+      subTotalFlag?: string;
+      sortMethodCode?: string;
+      // ⭐ 컬럼 개인화 확장분 (SCM_MST_TITLESET_USER 3컬럼) — Measure('M') 저장 시엔 미전달.
+      colWidth?: number;
+      cellColor?: string;
+      textColor?: string;
+    }[]
   ): Promise<boolean> => {
     try {
       const payload = {
@@ -260,6 +306,11 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
         sortOrderNo: saveRows.map((r, i) => String(r.sortOrderNo || i + 1)).join('^'),
         subTotalFlag: saveRows.map(r => r.subTotalFlag ?? 'N').join('^'),
         sortMethodCode: saveRows.map(r => r.sortMethodCode ?? 'ASC').join('^'),
+        // ⭐ 2026-07-27 BE 확장 — 폭/셀색/글자색 영구 저장 (forecast-price(DMF0082) 선례 1:1).
+        //   ⚠️ 키 이름은 PROC_M COL_NM(SP IN 파라미터) 과 정확히 일치해야 한다.
+        columnWidth: saveRows.map(r => String(r.colWidth ?? '')).join('^'),
+        cellColor: saveRows.map(r => r.cellColor ?? '').join('^'),
+        textColor: saveRows.map(r => r.textColor ?? '').join('^'),
       };
       const res = await apiClient.post<Record<string, unknown>>(
         `/${MENU_ID}/titleSet/SAVE/call-proc`,
@@ -274,7 +325,8 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
       }
       return true;
     } catch (e) {
-      const msg = e instanceof Error ? e.message : t('MSG00618', '_An error occurred while saving.');
+      const msg =
+        e instanceof Error ? e.message : t('MSG00618', '_An error occurred while saving.');
       void setAlert({ type: 'alert', content: msg });
       return false;
     }
@@ -296,7 +348,18 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
     editTrackerRef.current?.clearChanges(); // 편집 추적 reset
     clearFilters(); // filters[MAIN/SPREAD] 무효화 (enabled=false)
     queryClient.removeQueries({ queryKey: [MENU_ID] }); // 이전 조회 데이터 제거 → 그리드 공백
-  }, [sc.divisionId, clearFilters, queryClient]);
+
+    clearUserColumnLayout();
+    void fetchStaticColumns();
+    void fetchStaticMeasures();
+  }, [
+    sc.divisionId,
+    clearFilters,
+    queryClient,
+    clearUserColumnLayout,
+    fetchStaticColumns,
+    fetchStaticMeasures,
+  ]);
 
   // Insert cell popup state (Project / Model) + cell popup group 추적.
   //   ⭐ 조회조건 Project/Model/Owner popup 은 MktFcstForm 의 카탈로그 필드(ProjectField/ItemField/
@@ -304,6 +367,17 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
   const [openProject, setOpenProject] = useState(false);
   const [openItem, setOpenItem] = useState(false);
   const [popupGroupId, setPopupGroupId] = useState<string | null>(null);
+  // ⭐ Insert cell popup 을 연 행 — 팝업 조회조건 초기값(End Customer/Sales Site)을 그 행 값으로 채움.
+  const [popupRow, setPopupRow] = useState<MktFcstRow | null>(null);
+
+  // ⭐ 셀 팝업 조회조건 — 클릭 행의 셀 값을 그대로 전달 (sales-plan(DMF0021) 표준과 1:1).
+  //   값 있으면 trim, 없으면 fallback('ALL'). 공용 ProjectByDivisionModal 이 callFromCell 시 이 값으로 필터.
+  const rowValue = (key: string, fallback = 'ALL'): string => {
+    const value = (popupRow as Record<string, unknown> | null)?.[key];
+    if (value == null) return fallback;
+    if (typeof value === 'string') return value.trim() || fallback;
+    return typeof value === 'number' ? String(value) : fallback;
+  };
 
   // ⭐ Phase 2e POPUP state — SSP compare / SSP result / PR / PR history.
   //   (MasterChg 는 2026-07-13 사용자 결정으로 기능 전체 삭제 — AS-IS btnIncotermsChg 미이관 확정.)
@@ -315,6 +389,17 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
   // ⭐ #3 — Column / Measure 선택 모달 open state.
   const [openColumnSetting, setOpenColumnSetting] = useState(false);
   const [openMeasureSelect, setOpenMeasureSelect] = useState(false);
+
+  // ColumnLayoutModal 재진입 복원 — 현재 grid 상태(개인화 반영본).
+  const columnLayoutSettings = useMemo(
+    () => toColumnLayoutSettings(staticColumns[SHEETS.MAIN]),
+    [staticColumns]
+  );
+  // Default 버튼 원복 기준 — 개인화 적용 전 admin 메타 원본.
+  const columnLayoutDefaults = useMemo(
+    () => toColumnLayoutSettings(originalStaticColumns[SHEETS.MAIN]),
+    [originalStaticColumns]
+  );
 
   // ----- validation 152 정밀 매핑 hook (fnValidation/ValidationCheck/SetSaveData 동등) -----
   //   조회(MSG00097/00108/00164) + 저장(MSG00002/00043/00034/00366) + Bucket(MSG00227) division 분기.
@@ -331,8 +416,12 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
     setInsertedRows([]);
     setHasSearched(true); // 명시 조회 — 쿼리 enable
     setFilter(); // queryKey(filters) 갱신 → enabled 와 함께 react-query 자동 fetch (최신 payload)
-    void fetchStaticColumns();
-    void fetchStaticMeasures();
+    // ⚠️ 여기서 fetchStaticColumns()/fetchStaticMeasures() 를 다시 부르지 않는다.
+    //   admin 컬럼/메저 메타는 divisionId 에만 의존하므로 조회 때마다 재요청할 이유가 없고,
+    //   응답이 바이트 동일해도 store 가 매번 "새 배열"을 넣어 staticColumns 참조가 바뀐다
+    //   → mergedColumns → visibleColumns → mainStaticColumns → DataGrid.columnGroups 재적용
+    //   → Wijmo Column 재생성(폭/스크롤/dataMap 리셋 = 깜빡임). 갱신 시점은 mount 와
+    //   division 변경, 그리고 컬럼설정 팝업 저장 직후 뿐이다 (forecast-price 와 동일 정책).
   };
 
   // ⭐ [E20260402/E20260604] 편집 진입 공통 게이트 — AS-IS EditButton(L828~888) 검사 순서 1:1.
@@ -350,18 +439,19 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
     }
     // (2) DM Planner류 시간창 — lookup 행 존재 = 차단(.cs L862~874). MSG00478 5파라미터
     //     ({0}~{4} = LIMIT_AUTH/EDIT_DAYS/FROM_TIME/TO_TIME/AUTH — CMBO CODE '^' 연결 순서).
-    if (dmTimeBlocked && typeof dmTimeRow?.CODE === 'string') {
-      const p = dmTimeRow.CODE.split('^');
-      let msg = t(
-        MSG.DM_TIME_WINDOW,
-        '_{0} 권한의 수정 가능 시간({1} {2}~{3}) 동안에는 {4} 권한으로 수정할 수 없습니다.'
-      );
-      p.forEach((v, i) => {
-        msg = msg.replace(`{${i}}`, v);
-      });
-      void setAlert({ type: 'alert', content: msg });
-      return false;
-    }
+    //'_{0} 권한의 수정 가능 시간({1} {2}~{3}) 동안에는 {4} 권한으로 수정할 수 없습니다.'
+    // if (dmTimeBlocked && typeof dmTimeRow?.CODE === 'string') {
+    //   const p = dmTimeRow.CODE.split('^');
+    //   let msg = t(
+    //     MSG.DM_TIME_WINDOW,
+    //     '_{0} 권한의 수정 가능 시간({1} {2}~{3}) 동안에는 {4} 권한으로 수정할 수 없습니다.'
+    //   );
+    //   p.forEach((v, i) => {
+    //     msg = msg.replace(`{${i}}`, v);
+    //   });
+    //   void setAlert({ type: 'alert', content: msg });
+    //   return false;
+    // }
     // (3) [E20260402] AS FROM SITE 컬럼 부재(.cs L876~888) — DM Planner/W-S/DM ADMIN + 81*/82
     //     에서 그리드에 AS_FROM_SITE 컬럼이 없으면 MSG00113 (SP LOAD 분기가 자동추가하므로 정상 시 미발생).
     if (dmFamilyGroup && (sc.divisionId.startsWith('81') || sc.divisionId === '82')) {
@@ -390,7 +480,9 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
     // ⭐ 편집제약 division(82 외)은 Insert 불가 — 버튼도 미표시이나 방어 가드(40·81 등 Insert 자체 불가).
     if (!editable) return;
     const groupId = `I_${Date.now()}`;
-    const newRow: MktFcstRow = {
+    // 신규 행은 SP 산출 컬럼(EDIT_FLAG/MEASURE_GROUP/BUCKET 등)을 갖지 않는 의도적 부분 객체.
+    //   SP 응답 계약(base ResponseData)은 해당 컬럼을 required 로 선언하므로 명시 캐스팅.
+    const newRow = {
       CRUD_TYPE: 'I',
       INSERT_GROUP_ID: groupId,
       DIVISION_ID: sc.divisionId,
@@ -403,7 +495,7 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
       DOM_EXP: '',
       ITEM_TYPE: '',
       MEASURE: INSERT_DEFAULT_MEASURE,
-    };
+    } as MktFcstRow;
     setInsertedRows(prev => [newRow, ...prev]);
   };
 
@@ -438,9 +530,9 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
     // (0) ⭐ Phase 2f — 저장 전 검증 (fnValidation/SetSaveData 동등). division 분기 필수/중복/수량/AS+ALL.
     //   수정 행(EditTracker)도 dirty 후보 — collectionView 의 'M' 마킹 행 포함.
     const editTracker = editTrackerRef.current;
-    const changedRows = (editTracker?.getOriginalValues() as
-      | Map<MktFcstRow, Record<string, unknown>>
-      | undefined) ?? new Map<MktFcstRow, Record<string, unknown>>();
+    const changedRows =
+      (editTracker?.getOriginalValues() as Map<MktFcstRow, Record<string, unknown>> | undefined) ??
+      new Map<MktFcstRow, Record<string, unknown>>();
     const editedRows = [...changedRows.keys()].filter(r => r.CRUD_TYPE !== 'I');
     const validateTargets: MktFcstRow[] = [...insertedRows, ...editedRows];
     const asFromSite = sc.asYn ? sc.scmSiteIds.join('^') : '';
@@ -507,7 +599,13 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
       return;
     }
 
-    const ok = await setAlert({ type: 'confirm', content: t(MSG.CONFIRM_SAVE, '_Save changes?') });
+    const ok = await setAlert({
+      type: 'confirm',
+      content: t(MSG.CONFIRM_SAVE, '_{0} 행을 저장하시겠습니까?').replace(
+        '{0}',
+        String(unfoldRows.length)
+      ),
+    });
     if (!ok) return;
 
     void setToast({ message: t('LBL00665', '_Loading...'), type: 'default', duration: 3000 });
@@ -540,11 +638,12 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
       }
       // ⭐ Phase 2e — SAVE 응답 O_RC1(SSP 동기화 detail) 행 존재 시 SspSyncResultModal 표시
       //   (AS-IS .cs L1610~1617 — 동기화수량보다 작게 수정한 건 내역). result 안의 o_rc1 추출.
-      const syncRows = ((res.data?.result as { o_rc1?: SspSyncResultRow[] } | undefined)?.o_rc1 ??
-        []);
+      const syncRows =
+        (res.data?.result as { o_rc1?: SspSyncResultRow[] } | undefined)?.o_rc1 ?? [];
       if (syncRows.length > 0) setSspResultRows(syncRows);
     } catch (e) {
-      const msg = e instanceof Error ? e.message : t('MSG00618', '_An error occurred while saving.');
+      const msg =
+        e instanceof Error ? e.message : t('MSG00618', '_An error occurred while saving.');
       void setAlert({ type: 'alert', content: msg });
     }
   };
@@ -614,7 +713,7 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
   };
 
   // ⭐ #3 — Insert 옆 Column / Measure 버튼 (SubTitle customButtons). hasButton 권한 분기.
-  //   Column  : 공용 ColumnSettingModal(DMF0002_GET_TITLESET_POPUP + fallback) → applyColumnVisibility.
+  //   Column  : 공용 ColumnLayoutModal(DMF0002_GET_TITLESET_POPUP + fallback) → applyColumnLayout.
   //   Measure : MeasureSelectModal(staticMeasures 실데이터 토글) → 그리드 measure 행 필터.
   //   ⭐ 아이콘 = @foundation/assets 등록 아이콘 (DMF0020/DMF0043_01 과 동일 IcGridColumnSetup +
   //     전용 IcMeasureSelect). label/title = Tooltip + key 유지, buttonLabel='' 로 icon-only.
@@ -654,10 +753,7 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   따라서 FE 는 SP 반환 measure 집합을 그대로 렌더한다(클라이언트 measure 행 필터 금지 —
   //   과거 visibleMeasures 필터가 SP 가 붙인 종속 메저를 잘라 숨기던 버그를 제거, AS-IS parity).
   //   메저 선택 변경은 모달 OK 의 saveTitleSet('M') + invalidateQueries 재조회로 SP 에서 반영됨.
-  const rows: MktFcstRow[] = useMemo(
-    () => [...insertedRows, ...spRows],
-    [insertedRows, spRows]
-  );
+  const rows: MktFcstRow[] = useMemo(() => [...insertedRows, ...spRows], [insertedRows, spRows]);
 
   return (
     <div className={styles.container}>
@@ -684,12 +780,9 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
         customButtons={customButtons}
       />
 
-      {/* ⭐ 상단 PSI 분석 패널 제거 (2026-07-03 사용자 결정) — AS-IS 실행 화면(평문 DMF0003_MktFcst)에는
-          상단 분석영역이 없음(별개 변형 DMF0003_1_MktFcst 전용 기능). 구현분은 패키지
-          _deploy_packages/DMF0003_PSI_20260703/ 에 보존. */}
       <MktFcstGrid
         rows={rows}
-        gridRef={gridRef as never}
+        gridRef={gridRef}
         gridFilterRef={gridFilterRef}
         editTrackerRef={editTrackerRef}
         divisionId={sc.divisionId}
@@ -703,6 +796,7 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
         currentWeekInfo={currentWeekInfo}
         onPopupCellDblClick={(modalKey, row) => {
           setPopupGroupId(row.INSERT_GROUP_ID ?? null);
+          setPopupRow(row);
           if (modalKey === 'ITEM') setOpenItem(true);
           else if (modalKey === 'PROJECT') setOpenProject(true);
         }}
@@ -714,12 +808,25 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
       <ProjectByDivisionModal
         open={openProject}
         modalClose={() => setOpenProject(false)}
-        setSelectedValue={(projectCode, projectName) => {
+        setSelectedValue={(
+          projectCode,
+          projectName,
+          _projectStatus,
+          _bizTypeName,
+          projectOwner
+        ) => {
+          // ⭐ Project 선택 시 Project Name + Project Owner 자동 입력 (사용자 요구 2026-07-28 — AS-IS
+          //   dataItem.PROJECT_OWNER 1:1). sales-plan(DMF0021) 과 동일하게 PROJECT_OWNER 세팅.
           if (!popupGroupId) return;
           setInsertedRows(prev =>
             prev.map(r =>
               r.INSERT_GROUP_ID === popupGroupId
-                ? { ...r, PROJECT_CODE: projectCode, PROJECT_NAME: projectName ?? '' }
+                ? {
+                    ...r,
+                    PROJECT_CODE: projectCode,
+                    PROJECT_NAME: projectName ?? '',
+                    PROJECT_OWNER: projectOwner ?? '',
+                  }
                 : r
             )
           );
@@ -727,11 +834,13 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
         }}
         preSearchParams={
           {
-            divisionId: sc.divisionId,
-            deptId: 'ALL',
-            endCustomer: 'ALL',
-            salesSite: 'ALL',
-            projectCode: '',
+            divisionId: rowValue('DIVISION_ID', sc.divisionId),
+            // ⭐ 2026-08-05 AS-IS 정합 — 팝업 team 축 = 행 Team 셀 값 (.cs L3781 sTeam=row Team).
+            //   TEAM_ID(사용자 선택 셀) 우선, 부재 시 데이터 컬럼 DEPT_ID.
+            deptId: rowValue('TEAM_ID', rowValue('DEPT_ID')),
+            endCustomer: rowValue('END_CUSTOMER'),
+            salesSite: rowValue('SCM_SITE_ID'),
+            projectCode: rowValue('PROJECT_CODE', ''),
             etc: 'N',
           } as never
         }
@@ -741,9 +850,12 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
       <ItemByDivisionModal
         open={openItem}
         modalClose={() => setOpenItem(false)}
-        setSelectedValue={(itemId: string, itemName?: string, _itemType?: string, nickName?: string) => {
-          // ⭐ Model 선택 시 Model Name + Nickname 자동 입력 (사용자 요구 2026-07-03 — AS-IS 팝업 확정
-          //   자동채움 1:1). ITEM_NAME/NICK_NAME 메타는 'S'(표시전용) 로 전환 — 직접 편집 불가.
+        setSelectedValue={(
+          itemId: string,
+          itemName?: string,
+          _itemType?: string,
+          nickName?: string
+        ) => {
           if (!popupGroupId) return;
           setInsertedRows(prev =>
             prev.map(r =>
@@ -756,11 +868,17 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
         }}
         preSearchParams={
           {
-            divisionId: sc.divisionId,
-            deptId: 'ALL',
-            endCustomer: 'ALL',
-            salesSite: 'ALL',
+            divisionId: rowValue('DIVISION_ID', sc.divisionId),
+            // ⭐ 2026-08-05 AS-IS 정합 — 팝업 team 축 = 행 Team 셀 값 (.cs L3847 sTeam=row Team).
+            deptId: rowValue('TEAM_ID', rowValue('DEPT_ID')),
+            endCustomer: rowValue('END_CUSTOMER'),
+            salesSite: rowValue('SCM_SITE_ID'),
+            projectCode: rowValue('PROJECT_CODE', ''),
             itemId: '',
+            // ⭐ 2026-08-05 AS-IS 정합 [E20231019-001234] — MDM 사용중지 모델 제외 플래그 1:1:
+            //   DMF0003 은 'Y' 전달 + measure 가 AS_In_Req/BNPIn 이면 ''(로직 미적용)
+            //   (AS-IS DM0002 팝업 L248~250 chk_Measure 리셋 이식 — 호출측 계산 전달).
+            activeFlag: MEASURE_MODEL_KEEP.includes(rowValue('MEASURE', '')) ? '' : 'Y',
           } as never
         }
         callFromCell={true}
@@ -788,40 +906,60 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
         modalClose={() => setPrHistoryParams(null)}
         params={prHistoryParams}
       />
-      {/* ⭐ #3 — Column 설정 (공용 ColumnSettingModal, DMF0002_GET_TITLESET_POPUP + fallback). */}
-      <ColumnSettingModal
+      {/* ⭐ #3 — Column 설정 (공용 ColumnLayoutModal — 표시/순서 + Width/Cell·Text Color 개인화).
+          DMF0002_GET_TITLESET_POPUP + fallback. forecast-price(DMF0082) 선례 1:1. */}
+      <ColumnLayoutModal
         open={openColumnSetting}
         modalClose={() => setOpenColumnSetting(false)}
         menuId={MENU_ID}
         sheetName={SHEETS.MAIN}
-        // ⭐ 2026-07-23 정정 — columnType 은 TITLESET_USER.USER_INQUIRY_COLUMN_TYPE_CODE('C'=Column).
-        //   기존 SHEETS.MAIN('Mkt Fcst') 전달 → DMF0002_GET_TITLESET_POPUP 의 usr CTE 0행
-        //   → 저장한 선택이 재오픈 시 항상 DEFAULT 로 복원되던 결함(저장 미유지) fix.
+        // ⭐ TITLESET_USER.USER_INQUIRY_COLUMN_TYPE_CODE 실측 값 = 'C'(컬럼)/'M'(measure).
+        //   sheetName('Mkt Fcst') 을 넘기면 아래 onSave 의 saveTitleSet('C') 저장분과 불일치 →
+        //   저장한 개인화가 영구 미조회 (SalesMonitoring 2026-07-04 동일 사고).
         columnType='C'
         divisionId={sc.divisionId}
-        // ⭐ 2026-07-23 — 고정컬럼(MEASURE 등 branch② 전담)/선택불가 컬럼(DEPT_ID 등 MF_BASE 미산출)
-        //   후보 제외. titleset 'C' 오염 → 조회 ORA-00918/00904 사고 재발 방지 (SP 면역 가드와 2중).
-        selectableOnly
         fallbackColumns={MAIN_COLUMNS.map(c => ({ key: c.key, header: c.header, width: c.width }))}
         title={t('LBL00711', '_Column')}
         leftTitle={t('LBL00764', 'Invisible')}
         rightTitle={t('LBL00765', 'Visible')}
-        onSave={(settings: ColumnSettingRow[]) => {
+        // ⭐ 재진입 복원 — 현재 grid 상태(개인화 반영본). 미전달 시 사용자 선택이 원복된다.
+        //   ⚠️ DB 응답이 우선이고 이 값은 BE 가 안 준 필드만 보완한다 (buildInitialRows 규칙).
+        initialSettings={columnLayoutSettings}
+        defaultSettings={columnLayoutDefaults}
+        onSave={settings => {
           // 로컬 즉시 반영 + 서버 영구 저장('C') → 성공 시 admin 메타 재fetch (개인화 기준 재계산).
-          applyColumnVisibility(
+          applyColumnLayout(
             SHEETS.MAIN,
-            settings.map(s => s.COLUMN_NAME)
+            settings.map(s => ({
+              colNm: s.COLUMN_NAME,
+              visible: s.USER_FLAG === 'Y',
+              width: s.COL_WIDTH,
+              cellColor: s.CELL_COLOR,
+              textColor: s.TEXT_COLOR,
+              order: s.SORT_ORDER_NO,
+            }))
           );
+          // titleSet 'C' 영구 저장 — 표시 column + 순서 + 폭/색 (BE 3컬럼 확장분 2026-07-27).
+          const visible = settings.filter(s => s.USER_FLAG === 'Y');
           void saveTitleSet(
             'C',
-            settings.map(s => ({
+            visible.map((s, i) => ({
               name: s.COLUMN_NAME,
-              sortOrderNo: Number(s.SORT_ORDER_NO ?? 0),
-              subTotalFlag: s.SUB_TOTAL_FLAG,
-              sortMethodCode: s.USER_SORT_METHOD_CODE,
+              sortOrderNo: i + 1,
+              colWidth: s.COL_WIDTH,
+              cellColor: s.CELL_COLOR,
+              textColor: s.TEXT_COLOR,
             }))
           ).then(ok => {
-            if (ok) void fetchStaticColumns();
+            // 실패는 saveTitleSet 내부에서 이미 alert — 여기선 캐시 갱신만 건너뛴다.
+            if (!ok) return;
+            // ⭐ 팝업 titleSet 조회 캐시 무효화 (필수). 전역 staleTime=Infinity 라 invalidate 없이는
+            //   재조회가 아예 안 일어나고, ColumnLayoutModal 의 buildInitialRows 는 BE 응답을
+            //   화면 상태(initialSettings)보다 우선하므로 "저장 전 USER_FLAG='N'" 이 그대로 이긴다
+            //   → 방금 표시로 옮긴 컬럼이 재진입 시 비표시로 보이는 사고 (2026-07-28 실측).
+            //   팝업 query 의 tabId = MENU_ID 이므로 이 prefix 로 매칭된다.
+            void queryClient.invalidateQueries({ queryKey: [MENU_ID] });
+            void fetchStaticColumns();
           });
         }}
       />

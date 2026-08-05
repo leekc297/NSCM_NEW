@@ -34,7 +34,11 @@ interface Props<T extends Record<string, string | number>> {
   onMoveLeft: () => void;
   /** 우측 grid 행 D&D 순서 이동 — 재정렬된 key 배열(위→아래) 전달 */
   onReorderRight?: (orderedKeys: string[]) => void;
-  /** 좌측 grid 상단 라벨 (예: 'Unvisible') — 미지정 시 라벨 없음(기존 사용처 무영향) */
+  /** 좌측 행 더블클릭 — 해당 행 1개를 우측으로 이동 (▶ 와 동일 동작) */
+  onRowDoubleClickLeft?: (key: string) => void;
+  /** 우측 행 더블클릭 — 해당 행 1개를 좌측으로 이동 (◀ 와 동일 동작) */
+  onRowDoubleClickRight?: (key: string) => void;
+  /** 좌측 grid 상단 라벨 (예: 'Invisible') — 미지정 시 라벨 없음(기존 사용처 무영향) */
   leftTitle?: string;
   /** 우측 grid 상단 라벨 (예: 'Visible') */
   rightTitle?: string;
@@ -55,6 +59,8 @@ export const ColumnSelectDualList = <T extends Record<string, string | number>>(
   onMoveRight,
   onMoveLeft,
   onReorderRight,
+  onRowDoubleClickLeft,
+  onRowDoubleClickRight,
   leftTitle,
   rightTitle,
 }: Props<T>) => {
@@ -83,7 +89,8 @@ export const ColumnSelectDualList = <T extends Record<string, string | number>>(
     checked: Set<string>,
     onToggle: (key: string) => void,
     onToggleAll: (checked: boolean) => void,
-    dnd = false
+    dnd = false,
+    onRowDoubleClick?: (key: string) => void
   ) => {
     const allChecked = items.length > 0 && items.every(r => checked.has(String(r[itemKey] ?? '')));
     return (
@@ -130,6 +137,7 @@ export const ColumnSelectDualList = <T extends Record<string, string | number>>(
                   className={cls}
                   draggable={dnd}
                   onClick={() => onToggle(rowKey)}
+                  onDoubleClick={onRowDoubleClick ? () => onRowDoubleClick(rowKey) : undefined}
                   onDragStart={dnd ? () => setDragKey(rowKey) : undefined}
                   onDragOver={
                     dnd
@@ -184,7 +192,15 @@ export const ColumnSelectDualList = <T extends Record<string, string | number>>(
     <div className={styles.dualListContainer}>
       <div className={styles.sideTable}>
         {leftTitle && <div className={styles.dualTitle}>{leftTitle}</div>}
-        {renderTable(leftItems, leftColumns, checkedLeft, onToggleLeft, onToggleAllLeft)}
+        {renderTable(
+          leftItems,
+          leftColumns,
+          checkedLeft,
+          onToggleLeft,
+          onToggleAllLeft,
+          false,
+          onRowDoubleClickLeft
+        )}
       </div>
 
       <div className={styles.moveButtons}>
@@ -198,7 +214,15 @@ export const ColumnSelectDualList = <T extends Record<string, string | number>>(
 
       <div className={styles.sideTable}>
         {rightTitle && <div className={styles.dualTitle}>{rightTitle}</div>}
-        {renderTable(rightItems, rightColumns, checkedRight, onToggleRight, onToggleAllRight, true)}
+        {renderTable(
+          rightItems,
+          rightColumns,
+          checkedRight,
+          onToggleRight,
+          onToggleAllRight,
+          true,
+          onRowDoubleClickRight
+        )}
       </div>
     </div>
   );

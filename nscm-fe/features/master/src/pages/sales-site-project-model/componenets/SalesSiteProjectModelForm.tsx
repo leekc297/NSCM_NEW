@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { Button, Checkbox, FormItem, InputField, Label } from '@shared/lges';
@@ -13,8 +14,6 @@ import {
 } from '../../../components';
 import { SHEET_INDEX } from '../sales-site-project-model.constants';
 import { useSalesSiteProjectModelStore } from '../useSalesSiteProjectModelStore';
-
-import styles from './SalesSiteProjectModelForm.module.scss';
 
 interface SalesSiteProjectModelFormProps {
   onSubmit: () => void;
@@ -66,7 +65,7 @@ export const SalesSiteProjectModelForm = ({
                 label={t('LBL00001', '_Div.')}
                 labelAlign='right'
                 required
-                className={styles.formItem}
+                className={commonStyles.formItem}
                 render={() => (
                   <CustomDropdown
                     value={searchParams.divisionId}
@@ -87,7 +86,7 @@ export const SalesSiteProjectModelForm = ({
               <FormItem
                 label={t('LBL00044', '_Team')}
                 labelAlign='right'
-                className={styles.formItem}
+                className={commonStyles.formItem}
                 render={() => (
                   <CustomDropdown
                     multiple
@@ -117,7 +116,7 @@ export const SalesSiteProjectModelForm = ({
               <FormItem
                 label={t('LBL00080', '_End Customer')}
                 labelAlign='right'
-                className={styles.formItem}
+                className={commonStyles.formItem}
                 render={() => (
                   <CustomDropdown
                     multiple
@@ -153,8 +152,7 @@ export const SalesSiteProjectModelForm = ({
               <FormItem
                 label={t('LBL00011', '_Sales Site')}
                 labelAlign='right'
-                className={styles.formItem}
-                width={searchParams.divisionId === '40' ? '100%' : 'calc(78% - 8px)'}
+                className={commonStyles.formItem}
                 render={() => (
                   <CustomDropdown
                     multiple
@@ -186,13 +184,13 @@ export const SalesSiteProjectModelForm = ({
             {searchParams.divisionId !== '40' && (
               <Grid size={3}>
                 <FormItem
-                  label={t('LBL00327', '_PJT')}
+                  label={t('LBL00617', '_PJT')}
                   labelAlign='right'
-                  className={styles.formItem}
+                  className={commonStyles.formItem}
                   render={() => (
                     <InputField
                       fullWidth
-                      className={styles.inputWithSearch}
+                      className={commonStyles.popupSearchField}
                       value={searchParams.projectCode}
                       InputProps={{
                         endAdornment: (
@@ -216,13 +214,13 @@ export const SalesSiteProjectModelForm = ({
             )}
             <Grid size={3}>
               <FormItem
-                label={t('LBL00003', '_Model / Nickname')}
+                label={t('LBL00508', 'Model / Nickname')}
                 labelAlign='right'
-                className={styles.formItem}
+                className={commonStyles.formItem}
                 render={() => (
                   <InputField
                     fullWidth
-                    className={styles.inputWithSearch}
+                    className={commonStyles.popupSearchField}
                     value={searchParams.itemId}
                     InputProps={{
                       endAdornment: (
@@ -247,11 +245,11 @@ export const SalesSiteProjectModelForm = ({
               <FormItem
                 label={t('LBL00082', '_Owner')}
                 labelAlign='right'
-                className={styles.formItem}
+                className={commonStyles.formItem}
                 render={() => (
                   <InputField
                     fullWidth
-                    className={styles.inputWithSearch}
+                    className={commonStyles.popupSearchField}
                     value={searchParams.owner}
                     InputProps={{
                       endAdornment: (
@@ -272,13 +270,13 @@ export const SalesSiteProjectModelForm = ({
                 )}
               />
             </Grid>
-            <Grid size={3} className={styles.customGrid}>
+            <Grid size={3} className={commonStyles.customGrid}>
               <FormItem
                 label={t('LBL00007', '_Active')}
                 labelAlign='right'
                 required
                 width='100%'
-                className={styles.formItem}
+                className={commonStyles.formItem}
                 render={() => (
                   <CustomDropdown
                     limitTags={1}
@@ -299,11 +297,11 @@ export const SalesSiteProjectModelForm = ({
               />
               {searchParams.divisionId !== '40' && (
                 <FormItem
-                  width='22%'
                   render={() => (
-                    <div className={styles.customCheckbox}>
+                    <div className={commonStyles.customCheckbox}>
                       <Checkbox
                         checked={openPurchaseGrid}
+                        sx={{ marginLeft: '15px' }}
                         onChange={checked => {
                           if (!checked) setActiveTab(SHEET_INDEX.PRODUCTION);
                           setOpenPurchaseGrid(checked);

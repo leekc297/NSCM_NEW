@@ -16,7 +16,11 @@ import { FcstUploadModal } from '../../components';
 import { CustomerFcstUploadForm } from './components/CustomerFcstUploadForm';
 import { CustomerFcstUploadGrid } from './components/CustomerFcstUploadGrid';
 import { MENU_ID, MSG, SAVE_KEYS, SHEETS } from './customer-fcst-upload.constant';
-import type { CustomerFcstUploadRow, SaveEntry, SpreadTitleRow } from './customer-fcst-upload.types';
+import type {
+  CustomerFcstUploadRow,
+  SaveEntry,
+  SpreadTitleRow,
+} from './customer-fcst-upload.types';
 import { useCustomerFcstUploadStore } from './useCustomerFcstUploadStore';
 
 // AS-IS DMF0014_CustFcstUpload (Demand > Demand Plan > Customer FCST Upload).
@@ -111,19 +115,28 @@ export const CustomerFcstUpload = ({ tabId, title }: PageProps<MENU_ID>) => {
     if (isFetching) return false;
     // MSG00097 — Division 필수 (.cs L566~571)
     if (!searchParams.divisionId) {
-      void setAlert({ type: 'alert', content: t(MSG.REQUIRE_DIVISION, '_Please select Division.') });
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.REQUIRE_DIVISION, '_Please select Division.'),
+      });
       return false;
     }
     // MSG00108 — 기간 역전 (.cs L577~581)
     if (Number(searchParams.startYyyymmdd) > Number(searchParams.endYyyymmdd)) {
-      void setAlert({ type: 'alert', content: t(MSG.PERIOD_INVERTED, '_Invalid period (start > end).') });
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.PERIOD_INVERTED, '_Invalid period (start > end).'),
+      });
       return false;
     }
     // MSG00164 — 기간 상한 2년 (.cs L583~590: Value1.AddYears(2) < Value2 — 문구(3년)/조건(2년)
     //   불일치는 AS-IS 자체 상태 1:1 보존)
     const limit = `${Number(searchParams.startYyyymmdd.slice(0, 4)) + 2}${searchParams.startYyyymmdd.slice(4)}`;
     if (Number(searchParams.endYyyymmdd) > Number(limit)) {
-      void setAlert({ type: 'alert', content: t(MSG.PERIOD_MAX, '_Please enter a period within 3 years.') });
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.PERIOD_MAX, '_Please enter a period within 3 years.'),
+      });
       return false;
     }
     return true;
@@ -244,7 +257,10 @@ export const CustomerFcstUpload = ({ tabId, title }: PageProps<MENU_ID>) => {
           if (toStr(item.PLANT_SITE_ID) === '' && toStr(item.DIVISION_ID) === '81') {
             void setAlert({
               type: 'alert',
-              content: t(MSG.REQUIRED_VALUE, '_{0} value is required.').replace('{0}', 'Plant Site*'),
+              content: t(MSG.REQUIRED_VALUE, '_{0} value is required.').replace(
+                '{0}',
+                'Plant Site*'
+              ),
             });
             return;
           }
@@ -274,16 +290,17 @@ export const CustomerFcstUpload = ({ tabId, title }: PageProps<MENU_ID>) => {
       void setAlert({ type: 'alert', content: t(MSG.NO_SAVE_DATA, '_No data to save.') });
       return;
     }
-    const ok = await setAlert({ type: 'confirm', content: t(MSG.CONFIRM_SAVE, '_Save the changes?') });
+    const ok = await setAlert({
+      type: 'confirm',
+      content: t(MSG.CONFIRM_SAVE, '_Save the changes?'),
+    });
     if (!ok) return;
 
     const sesUserId = useSessionStore.getState().session.userId ?? '';
     // ⭐ createdByList — BE 가 가로채지 않는 키명 (createdBy 는 BE 세션 단일값으로 덮여 '^'×N 배열이
     //   1토큰으로 붕괴 → SP split 2행째부터 CREATED_BY NULL → ORA-01400. DMF0020 선례 동일, 2026-07-08).
     const rows = entries.map(e => ({ ...e, activeFlag: 'M', createdByList: sesUserId }));
-    const payload = Object.fromEntries(
-      SAVE_KEYS.map(k => [k, rows.map(r => r[k]).join('^')])
-    );
+    const payload = Object.fromEntries(SAVE_KEYS.map(k => [k, rows.map(r => r[k]).join('^')]));
 
     void setToast({ message: t('LBL00665', '_Loading...'), type: 'default', duration: 3000 });
     try {
@@ -304,7 +321,8 @@ export const CustomerFcstUpload = ({ tabId, title }: PageProps<MENU_ID>) => {
       // AS-IS SaveData 성공 후 FindButton() 재조회 1:1
       void queryClient.invalidateQueries({ queryKey: [MENU_ID] });
     } catch (e) {
-      const msg = e instanceof Error ? e.message : t('MSG00618', '_An error occurred while saving.');
+      const msg =
+        e instanceof Error ? e.message : t('MSG00618', '_An error occurred while saving.');
       void setAlert({ type: 'alert', content: msg });
     }
   };
@@ -411,10 +429,14 @@ export const CustomerFcstUpload = ({ tabId, title }: PageProps<MENU_ID>) => {
               { mode: 1, createdBy: sesUserId, programId: MENU_ID, sheetName: SHEETS.MAIN }
             );
             const code = Number((res.data as { code?: string })?.code ?? 0);
-            const inner = (res.data?.result as { o_result_cursor?: { CODE?: string; MSG?: string }[] })
-              ?.o_result_cursor?.[0];
+            const inner = (
+              res.data?.result as { o_result_cursor?: { CODE?: string; MSG?: string }[] }
+            )?.o_result_cursor?.[0];
             if (res.status >= 400 || code || (inner && inner.CODE !== '0')) {
-              return { ok: false, message: inner?.MSG || (res.data as { message?: string })?.message };
+              return {
+                ok: false,
+                message: inner?.MSG || (res.data as { message?: string })?.message,
+              };
             }
             return { ok: true };
           } catch (e) {

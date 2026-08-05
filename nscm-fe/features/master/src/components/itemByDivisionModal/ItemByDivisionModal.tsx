@@ -22,6 +22,7 @@ interface ItemByDivisionModalProps {
   setSelectedValue: (
     items: string,
     itemName?: string,
+    itemClassName?: string,
     itemType?: string,
     nickName?: string
   ) => void;
@@ -155,6 +156,9 @@ export const ItemByDivisionModal = ({
       salesSite: preSearchParams.salesSite ?? 'ALL',
       projectCode: preSearchParams.projectCode ?? '',
       itemId: '',
+      // ⭐ 2026-08-05 AS-IS 정합 — P_MDMACTIVE_SW(PROC_M 'activeFlag', [E20231019-001234] MDM
+      //   사용중지 모델 제외) 통과. 미전달 호출처는 ''(기존 동작 — 로직 미적용) → 회귀 0.
+      activeFlag: preSearchParams.activeFlag ?? '',
     });
     setModalFilters({ itemId: preSearchParams.itemId ?? '' });
     setItemId(preSearchParams.itemId);

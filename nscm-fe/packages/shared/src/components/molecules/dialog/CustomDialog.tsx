@@ -1,10 +1,11 @@
 import type { DialogProps, PaperProps } from '@mui/material';
 import { Dialog as MuiDialog, Paper, Popover } from '@mui/material';
 import { Box } from '@mui/system';
-import { memo, type ReactNode, useCallback, useEffect, useRef, useState } from 'react';
+import { memo, type ReactNode, useCallback, useEffect, useId, useRef, useState } from 'react';
 import Draggable from 'react-draggable';
 
 import _ from '@foundation/lodash';
+import { DialogScopeContext, useDialogStore } from '@shared/stores';
 
 import DialogContentArea from './components/CustomDialogContent';
 import styles from './CustomDialog.module.scss';
@@ -33,8 +34,13 @@ export type DialogNavigationProps = {
   draggable?: boolean;
   /** 초기 다이얼로그 높이 (CSS 값, 예: '75vh' / 700). 미지정 시 기존 기본값 '50vh' 유지. */
   height?: string | number;
+  /** 헤더의 최대화 버튼 숨김 (기본 false — 기본 Dialog 는 최대화 가능) */
+  disableMaximize?: boolean;
+  /** size/height 1.5배 확대 미적용 (기본 false). 메시지(Alert) 등 원본 크기를 유지해야 하는 다이얼로그에서 사용 */
+  disableScale?: boolean;
 } & DialogProps;
 
+const DIALOG_SCALE = 1.5;
 const MAX_WIDTH = 2000;
 const MIN_WIDTH = 400;
 const MAX_HEIGHT = 1600;
@@ -46,6 +52,8 @@ interface DialogSizeRef {
   draggable: boolean;
   dialogSize: { width: number; height: string | number };
   handleResizeStart: (mouseEvent: React.MouseEvent) => void;
+  isMaximized: boolean;
+  disableScale: boolean;
 }
 
 const DraggablePaper = ({
@@ -54,7 +62,8 @@ const DraggablePaper = ({
 }: PaperProps & { sizeRef: React.RefObject<DialogSizeRef | null> }) => {
   const nodeRef = useRef<HTMLDivElement>(null);
   if (!sizeRef.current) return null;
-  const { draggable, dialogSize, handleResizeStart } = sizeRef.current;
+  const { draggable, dialogSize, handleResizeStart, isMaximized, disableScale } = sizeRef.current;
+  const scale = disableScale ? 1 : DIALOG_SCALE;
 
   const paperElement = (
     <Paper
@@ -62,17 +71,35 @@ const DraggablePaper = ({
       ref={nodeRef}
       style={{
         ...props.style,
-        width: dialogSize.width,
-        ...(draggable && { height: dialogSize.height }),
         position: 'relative',
+        // 최대화 시에는 인라인 크기를 주지 않아 MUI fullScreen 이 뷰포트를 채우도록 둔다.
+        ...(isMaximized
+          ? {}
+          : {
+              width:
+                typeof dialogSize.width === 'number'
+                  ? dialogSize.width * scale
+                  : `calc(${String(dialogSize.width)} * ${scale})`,
+              maxWidth: MAX_WIDTH,
+              ...(draggable && {
+                height:
+                  typeof dialogSize.height === 'number'
+                    ? dialogSize.height * scale
+                    : `calc(${String(dialogSize.height)} * ${scale})`,
+                maxHeight: MAX_HEIGHT,
+              }),
+            }),
       }}
     >
       {props.children}
-      {draggable && <Box onMouseDown={handleResizeStart} className={styles.resizeHandler} />}
+      {draggable && !isMaximized && (
+        <Box onMouseDown={handleResizeStart} className={styles.resizeHandler} />
+      )}
     </Paper>
   );
 
-  if (draggable) {
+  // 최대화 상태에서는 드래그 비활성(위치 고정)
+  if (draggable && !isMaximized) {
     return (
       <Draggable
         handle='#draggable-dialog-title'
@@ -105,12 +132,18 @@ const CustomDialogComponent = ({
   handleSubmit = () => _.noop(),
   draggable = true,
   height,
+  disableMaximize = false,
+  disableScale = false,
 }: DialogNavigationProps) => {
+  // 이 다이얼로그의 단축키 스코프 id. 열려 있는 동안 스택 최상위면 이 스코프의 SubTitle 단축키만 동작한다.
+  const scopeId = useId();
+
   // TODO: 최소, 최대 크기 미정.. 일단 400x300, 2000x1600 - 강민재
   const [dialogSize, setDialogSize] = useState<{ width: number; height: string | number }>({
     width: Number(size ?? DEFAULT_WIDTH),
     height: height ?? DEFAULT_HEIGHT,
   });
+  const [isMaximized, setIsMaximized] = useState(false);
   const isResizing = useRef(false);
   const startPos = useRef({ x: 0, y: 0 });
   const startSize = useRef<{ width: number; height: number }>({ width: 0, height: 0 });
@@ -156,7 +189,7 @@ const CustomDialogComponent = ({
     handleClose();
   };
 
-  sizeRef.current = { draggable, dialogSize, handleResizeStart };
+  sizeRef.current = { draggable, dialogSize, handleResizeStart, isMaximized, disableScale };
   const PaperComponent = useCallback(
     (paperProps: PaperProps) => <DraggablePaper {...paperProps} sizeRef={sizeRef} />,
     []
@@ -172,14 +205,26 @@ const CustomDialogComponent = ({
   }, [handleMouseMove, handleMouseUp]);
 
   useEffect(() => {
-    if (!open) setDialogSize({ width: Number(size ?? DEFAULT_WIDTH), height: height ?? DEFAULT_HEIGHT });
+    if (!open) {
+      setDialogSize({ width: Number(size ?? DEFAULT_WIDTH), height: height ?? DEFAULT_HEIGHT });
+      setIsMaximized(false);
+    }
   }, [open]);
 
+  // 열려 있는 동안만 단축키 스코프 스택에 등록. 닫히거나 언마운트되면 해제.
+  useEffect(() => {
+    if (!open) return;
+    const { pushScope, popScope } = useDialogStore.getState();
+    pushScope(scopeId);
+    return () => popScope(scopeId);
+  }, [open, scopeId]);
+
   return (
-    <div>
+    <DialogScopeContext.Provider value={scopeId}>
       {position === 'basic' ? (
         <MuiDialog
           open={open}
+          fullScreen={isMaximized}
           hideBackdrop={type === 'modaless'}
           PaperComponent={PaperComponent}
           className={styles.defaultDialog}
@@ -195,6 +240,8 @@ const CustomDialogComponent = ({
             handleSubmit={handleDialogSubmit}
             handleClose={handleClose}
             draggable={draggable}
+            isMaximized={isMaximized}
+            onToggleMaximize={disableMaximize ? undefined : () => setIsMaximized(v => !v)}
           />
         </MuiDialog>
       ) : (
@@ -238,7 +285,7 @@ const CustomDialogComponent = ({
           />
         </Popover>
       )}
-    </div>
+    </DialogScopeContext.Provider>
   );
 };
 

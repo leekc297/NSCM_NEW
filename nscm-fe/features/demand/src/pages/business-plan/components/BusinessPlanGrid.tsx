@@ -374,9 +374,11 @@ export const BusinessPlanGrid = ({
         // ⭐ 변경 셀 Red (AS-IS SetCellColor Red — EditTracker 단일 소스 + 신규 행 입력 셀)
         const tracked =
           rowItem &&
-          (editTrackerRef?.current?.getOriginalValues() as
-            | Map<BusinessPlanRow, Record<string, unknown>>
-            | undefined)?.get(rowItem)?.[binding] !== undefined;
+          (
+            editTrackerRef?.current?.getOriginalValues() as
+              | Map<BusinessPlanRow, Record<string, unknown>>
+              | undefined
+          )?.get(rowItem)?.[binding] !== undefined;
         const insertInput = isInsert && rowItem?.[binding] != null && rowItem?.[binding] !== '';
         toggleClass(e.cell, 'bp-cell-changed', !!tracked || !!insertInput);
         // ⭐ measure 별 숫자 포맷 (편집 중 셀 제외)
@@ -433,7 +435,8 @@ export const BusinessPlanGrid = ({
 
       if (staticBindingSet.has(binding)) {
         // 정적 셀 — Insert 행 화이트리스트만. 기존행 = 전량 잠금 (G2 — 신정본 L649/L651~667 주석 파리티)
-        const allowed = !!row && row.CRUD_TYPE === 'I' && insertStaticEditable(binding, row, division);
+        const allowed =
+          !!row && row.CRUD_TYPE === 'I' && insertStaticEditable(binding, row, division);
         if (!allowed) {
           e.cancel = true;
           return;

@@ -38,6 +38,7 @@ const EDITABLE_ONLY_WHEN_SCM = new Set([
   'VALID_START_DATE',
   'VALID_END_DATE',
   'ACTIVE_YN',
+  'DC_LEVEL', // 추가
 ]);
 
 export const NnMasterMappingGrid = ({
@@ -56,6 +57,9 @@ export const NnMasterMappingGrid = ({
 
   const [clickedRow, setClickedRow] = useState<number>(-1);
   const [clickedBinding, setClickedBinding] = useState<string | null>(null);
+  // 팝업 조회조건에 시드할 "클릭한 행의 값" — 검색영역(searchCondition) 값이 아니라 그 행 값 기준.
+  //   PROJECT_CODE/ITEM_ID 팝업은 해당 행의 END_CUSTOMER 로 필터되어 열려야 함(사용자 요구 2026-07-07).
+  const [clickedRowEndCustomer, setClickedRowEndCustomer] = useState<string>('');
   const [openCustomerModal, setOpenCustomerModal] = useState(false);
   const [openProjectModal, setOpenProjectModal] = useState(false);
   const [openItemModal, setOpenItemModal] = useState(false);
@@ -144,6 +148,17 @@ export const NnMasterMappingGrid = ({
     if (!dataItem) return;
     const newValue = grid.getCellData(e.row, e.col, false) as WijmoPrimitive;
     editTrackerRef.current?.storeChange(dataItem, binding, dataItem[binding], newValue);
+
+    // 연쇄 컬럼 리셋 — 상위(END_CUSTOMER) 변경 시 하위(SCM_SITE_ID) 초기화.
+    //  SCM_SITE_ID 콤보는 그 행의 DIVISION_ID+END_CUSTOMER 로 옵션이 필터되므로(060 combo),
+    //  상위가 바뀌면 기존 SCM_SITE_ID 는 새 옵션 집합에 없을 수 있어 반드시 리셋.
+    if (binding === 'END_CUSTOMER' && dataItem.SCM_SITE_ID !== '') {
+      editTrackerRef.current?.storeChange(dataItem, 'SCM_SITE_ID', dataItem.SCM_SITE_ID, '');
+      dataItem.SCM_SITE_ID = '';
+      // 바뀐 셀(SCM_SITE_ID) 하나만 즉시 갱신 — 전 행 refresh 는 머지 재계산으로 느림.
+      const siteCol = grid.columns.getColumn('SCM_SITE_ID')?.index ?? -1;
+      if (siteCol >= 0) grid.setCellData(e.row, siteCol, '', false, true);
+    }
   };
 
   // dblClick → Modal 분기 (column binding 기반)
@@ -177,6 +192,10 @@ export const NnMasterMappingGrid = ({
 
     setClickedRow(ht.row);
     setClickedBinding(binding as string);
+    // 그 행의 END_CUSTOMER 를 팝업 조회조건 시드로 사용 (없으면 검색영역 값으로 fallback).
+    setClickedRowEndCustomer(
+      ((dataItem as WijmoRowItem).END_CUSTOMER as string) || searchCondition.endCustomer
+    );
 
     if (binding === 'SOLDTO_CODE' || binding === 'SHIPTO_CODE') {
       setOpenCustomerModal(true);
@@ -244,7 +263,7 @@ export const NnMasterMappingGrid = ({
         preSearchParams={{
           divisionId: searchCondition.divisionId,
           deptId: searchCondition.deptId,
-          endCustomer: searchCondition.endCustomer,
+          endCustomer: clickedRowEndCustomer,
           salesSite: searchCondition.scmSiteId,
           projectCode: '',
           etc: 'N',

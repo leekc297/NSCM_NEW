@@ -354,10 +354,7 @@ export const dispatchRecalc = (params: {
     return r.belowActual ? { kind: 'belowActual' } : { kind: 'ok' };
   }
   // 주/월 버킷 + 일 수정 (.cs L4117)
-  if (
-    (bucketType === BUCKET_TYPE.WEEKLY || bucketType === BUCKET_TYPE.MONTHLY) &&
-    kind === 'D'
-  ) {
+  if ((bucketType === BUCKET_TYPE.WEEKLY || bucketType === BUCKET_TYPE.MONTHLY) && kind === 'D') {
     recalcDailyEditUnderWeekMonth(acc, editedBinding);
     return { kind: 'ok' };
   }

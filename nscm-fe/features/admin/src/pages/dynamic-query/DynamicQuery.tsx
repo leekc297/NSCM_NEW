@@ -1,86 +1,103 @@
-// SYS0013 Dynamic Query — 진입 컴포넌트 (2026-07-09 재개발).
-// 기준 스펙: Doc/화면설계서/SYS0013_DynamicQuery_상세동작_개발용.md (AS-IS SCM0005 이벤트 23종).
-// CRUD = 표준 EditTracker + GridAction / 저장 = useDynamicQuerySave (useProcMutation 수렴).
-import { type FlexGrid } from '@mescius/wijmo.grid';
+import type { FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
-import { apiClient } from '@foundation/apis';
-import type { BUTTON_TYPE } from '@foundation/constants';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
-import { useQueryClient } from '@foundation/query-client';
-import { GridAction, type EditTracker } from '@foundation/utils';
+import { queryClient } from '@foundation/query-client';
+import { GridAction, GridUtils } from '@foundation/utils';
 import { MainTitle, SubTitle, TabItem, TabWrapper } from '@shared/components';
-import { useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
+import { useProcMutation, useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
 import { TitleArea } from '@shared/lges';
-import { Panel, PanelGroup, PanelSeparator } from '@shared/panel';
-import { useMessageStore, useSessionStore } from '@shared/stores';
+import { PanelGroup, Panel, PanelSeparator } from '@shared/panel';
+import { useMessageStore } from '@shared/stores';
 
 import { DynamicQueryColumnsGrid } from './components/DynamicQueryColumnsGrid';
-import { DynamicQueryEditModal, type EditModalResult } from './components/DynamicQueryEditModal';
 import { DynamicQueryForm } from './components/DynamicQueryForm';
 import { DynamicQueryMainGrid } from './components/DynamicQueryMainGrid';
 import { DynamicQueryMetaForm } from './components/DynamicQueryMetaForm';
 import { DynamicQueryParametersGrid } from './components/DynamicQueryParametersGrid';
 import { DynamicQueryResultGrid } from './components/DynamicQueryResultGrid';
 import { DynamicQuerySQLViewer } from './components/DynamicQuerySQLViewer';
-import { MENU_ID, SHEETS, SHEET_INDEX } from './dynamic-query.constants';
-import { extractParamTokens, substituteParams } from './dynamic-query.payload';
-import type {
-  ColumnMetaRow,
-  ParameterMetaRow,
-  PendingQueryMeta,
-  QueryRow,
-  ResultRow,
-  ValidateColumnRow,
-} from './dynamic-query.types';
+import type { RESPONSE_SET } from './dynamic-query.constants';
+import { MENU_ID, SHEET_INDEX, SHEETS } from './dynamic-query.constants';
+import { replaceParamToken, toAtToken } from './dynamic-query.utils';
 import styles from './DynamicQuery.module.scss';
-import { useDynamicQuerySave } from './useDynamicQuerySave';
-import { useDynamicQueryStore } from './useDynamicQueryStore';
+import { useDynamicQueryStore, type ResultGridColumn } from './useDynamicQueryStore';
+
+interface ParamAndValue {
+  param: string;
+  value: string;
+  isUse: boolean;
+  operation: string;
+}
 
 export const DynamicQuery = ({ tabId, title }: PageProps<MENU_ID>) => {
-  const mainGridRef = useRef<FlexGrid<QueryRow>>(undefined);
-  const resultGridRef = useRef<FlexGrid<ResultRow>>(undefined);
-  const columnsGridRef = useRef<FlexGrid<ColumnMetaRow>>(undefined);
-  const parametersGridRef = useRef<FlexGrid<ParameterMetaRow>>(undefined);
-  const gridFilterRef = useRef<FlexGridFilter>(undefined);
-  const mainEditTrackerRef = useRef<EditTracker<QueryRow>>(undefined);
-  const columnsEditTrackerRef = useRef<EditTracker<ColumnMetaRow>>(undefined);
-  const parametersEditTrackerRef = useRef<EditTracker<ParameterMetaRow>>(undefined);
-
-  const initialized = useDynamicQueryStore(s => s.initialized);
-  const fetchSearchConditions = useDynamicQueryStore(s => s.fetchSearchConditions);
-  const fetchStaticColumns = useDynamicQueryStore(s => s.fetchStaticColumns);
-  const filters = useDynamicQueryStore(s => s.filters);
-  const setFilter = useDynamicQueryStore(s => s.setFilter);
-  const setExecuteFilter = useDynamicQueryStore(s => s.setExecuteFilter);
-  const openSearchArea = useDynamicQueryStore(s => s.openSearchArea);
-  const setOpenSearchArea = useDynamicQueryStore(s => s.setOpenSearchArea);
-  const activePage = useDynamicQueryStore(s => s.activePage);
-  const setActivePage = useDynamicQueryStore(s => s.setActivePage);
-  const selectedQueryId = useDynamicQueryStore(s => s.selectedQueryId);
-  const editedSqlText = useDynamicQueryStore(s => s.editedSqlText);
-  const parameterValues = useDynamicQueryStore(s => s.parameterValues);
-  const setRoleSelection = useDynamicQueryStore(s => s.setRoleSelection);
-  const initRoles = useDynamicQueryStore(s => s.initRoles);
-  const roleSourceId = useDynamicQueryStore(s => s.roleSourceId);
-  // View 탭 Columns/Condition CRUD — 공통 Insert/Delete 가 활성(클릭) 그리드 기준 라우팅 (hook #97).
-  const [focusedViewGrid, setFocusedViewGrid] = useState<'columns' | 'parameters'>('columns');
-  // SQL Query 편집 모달 (AS-IS 팝업 복원 — 2026-07-09): Insert(신규 자동 기동) / 더블클릭(수정).
-  const [editModalOpen, setEditModalOpen] = useState(false);
-  const [editTargetRow, setEditTargetRow] = useState<QueryRow | undefined>(undefined);
-  // 모달 OK 메타 — Save 시 diff(I/M/D) 계산 후 저장 체인 (신규 = NEW_DQ_IDS 채번, AS-IS 정합).
-  const pendingNewMetaRef = useRef<PendingQueryMeta | null>(null);
-  const sessionUserId = useSessionStore(s => s.session.userId);
-
+  // i18n
   const { t } = useTranslation();
   const setAlert = useMessageStore(s => s.setAlert);
-  const setToast = useMessageStore(s => s.setToast);
-  const queryClient = useQueryClient();
 
-  // ui-dynamic-property-management §3 — Menu Button 동적 fetch (BTN_MPG + USER_GR 권한).
+  // 버튼 권한 조회
   const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
 
+  // register 목록 그리드
+  const gridRef = useRef<FlexGrid>();
+  const gridFilterRef = useRef<FlexGridFilter>();
+
+  // veiw Tab 그리드
+  const columnsGridRef = useRef<FlexGrid>();
+  const parametersGridRef = useRef<FlexGrid>();
+  const resultGridRef = useRef<FlexGrid>();
+
+  // 검색 폼 오픈 여부 구분 값
+  const openSearchArea = useDynamicQueryStore(s => s.openSearchArea);
+  const setOpenSearchArea = useDynamicQueryStore(s => s.setOpenSearchArea);
+
+  // 아래 Filter들은 조작함으로써 실질적으로 useTabProcQuery을 동작시킴
+  const filters = useDynamicQueryStore(s => s.filters);
+  const setFilter = useDynamicQueryStore(s => s.setFilter);
+
+  // 그리드의 컬럼헤더 정보를 조회
+  const fetchStaticColumns = useDynamicQueryStore(s => s.fetchStaticColumns);
+
+  // 기본적인 화면 세팅이 끝났음을 알림.
+  const initialized = useDynamicQueryStore(s => s.initialized);
+
+  // 저장된 검색 조건를 조회
+  const fetchSearchConditions = useDynamicQueryStore(s => s.fetchSearchConditions);
+
+  // 활성화 된 탭
+  const activePage = useDynamicQueryStore(s => s.activePage);
+  const setActivePage = useDynamicQueryStore(s => s.setActivePage);
+
+  // Register탭 내 그리드에서 View셀을 더블 클릭했을 때 선택된 정보
+  const dynamicQueryMeta = useDynamicQueryStore(s => s.dynamicQueryMeta);
+
+  // 쿼리 저장 스토어
+  const sqlText = useDynamicQueryStore(s => s.sqlText);
+
+  // 쿼리 결과 컬럼 세팅
+  const setResultGridColumns = useDynamicQueryStore(s => s.setResultGridColumns);
+
+  // 쿼리 실행을 위한 필터
+  const setExecuteFilter = useDynamicQueryStore(s => s.setExecuteFilter);
+
+  // 신규 데이터 삽입시 임시로 DQ_ID를 따기 위한 스토어 함수
+  const getTempDqId = useDynamicQueryStore(s => s.getTempDqId);
+
+  // 신규 or 수정 중인 컬럼 및 파라미터
+  const saveColumnsAndParametersList = useDynamicQueryStore(s => s.saveColumnsAndParametersList);
+
+  // 저장 성공 후 편집 세션 정리 (setFilter 를 거치지 않는 재조회 경로에서 stale 세션 방지)
+  const clearSaveColumnsAndParametersList = useDynamicQueryStore(
+    s => s.clearSaveColumnsAndParametersList
+  );
+
+  // 테스트
+  // const setSaveColumnsAndParametersList = useDynamicQueryStore(
+  //   s => s.setSaveColumnsAndParametersList
+  // );
+
+  // Register 탭 그리드 조회
   const { data: mainData } = useTabProcQuery<MENU_ID, SHEETS.MAIN>({
     menuId: MENU_ID,
     sheetName: SHEETS.MAIN,
@@ -89,344 +106,433 @@ export const DynamicQuery = ({ tabId, title }: PageProps<MENU_ID>) => {
     enabled: !!filters[SHEETS.MAIN],
   });
 
-  const { data: resultData } = useTabProcQuery<MENU_ID, SHEETS.RESULT>({
-    menuId: MENU_ID,
-    sheetName: SHEETS.RESULT,
-    tabId,
-    filters: filters[SHEETS.RESULT],
-    // BTN_MPG_M(SYS0013, result, EXECUTE) → API_M(PKG_SYS0013.P_SYS0013_GET_DYNAMIC_QUERYS).
-    procedureAction: 'EXECUTE' as BUTTON_TYPE,
-    enabled: !!filters[SHEETS.RESULT],
-  });
-
+  // View 탭 Columns 그리드 조회
   const { data: columnsData } = useTabProcQuery<MENU_ID, SHEETS.COLUMNS>({
     menuId: MENU_ID,
     sheetName: SHEETS.COLUMNS,
     tabId,
     filters: filters[SHEETS.COLUMNS],
-    enabled: !!filters[SHEETS.COLUMNS] && !!selectedQueryId,
+    enabled: !!filters[SHEETS.COLUMNS],
   });
 
+  // View 탭 Condition 그리드 조회
   const { data: parametersData } = useTabProcQuery<MENU_ID, SHEETS.PARAMETERS>({
     menuId: MENU_ID,
     sheetName: SHEETS.PARAMETERS,
     tabId,
     filters: filters[SHEETS.PARAMETERS],
-    enabled: !!filters[SHEETS.PARAMETERS] && !!selectedQueryId,
+    enabled: !!filters[SHEETS.PARAMETERS],
   });
 
-  const mainRows = useMemo(() => (mainData?.o_rc1 ?? []) as QueryRow[], [mainData]);
-  const resultRows = useMemo(() => (resultData?.o_rc1 ?? []) as ResultRow[], [resultData]);
-  const columnsRows = useMemo(() => (columnsData?.o_rc1 ?? []) as ColumnMetaRow[], [columnsData]);
-  const parametersRows = useMemo(
-    () => (parametersData?.o_rc1 ?? []) as ParameterMetaRow[],
-    [parametersData]
-  );
-
-  const { handleSave } = useDynamicQuerySave({
+  const { data: resultData } = useTabProcQuery<MENU_ID, SHEETS.RESULT>({
+    menuId: MENU_ID,
+    sheetName: SHEETS.RESULT,
     tabId,
-    mainRows,
-    columnsRows,
-    parametersRows,
-    pendingNewMetaRef,
+    filters: filters[SHEETS.RESULT],
+    // 'EXECUTE' 는 BUTTON_TYPE enum 에 없는 DB 전용 action (result 커서 실제 실행).
+    //   기존 dynamic-query 화면과 동일하게 as never 로 전달한다.
+    procedureAction: 'EXECUTE' as never,
+    enabled: !!filters[SHEETS.RESULT],
   });
 
-  useEffect(() => {
-    if (!initialized) void fetchSearchConditions();
-    void fetchStaticColumns();
-    if (!filters[SHEETS.MAIN]) setFilter();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const { mutateAsync: mutateMain } = useProcMutation<MENU_ID, SHEETS.MAIN, RESPONSE_SET.OUTPUT>({
+    menuId: MENU_ID,
+    sheetName: SHEETS.MAIN,
+    tabId,
+  });
+
+  const { mutate: mutateColumns } = useProcMutation<MENU_ID, SHEETS.COLUMNS, RESPONSE_SET.OUTPUT>({
+    menuId: MENU_ID,
+    sheetName: SHEETS.COLUMNS,
+    tabId,
+  });
+
+  const { mutate: mutateParameters } = useProcMutation<
+    MENU_ID,
+    SHEETS.PARAMETERS,
+    RESPONSE_SET.OUTPUT
+  >({
+    menuId: MENU_ID,
+    sheetName: SHEETS.PARAMETERS,
+    tabId,
+  });
+
+  const buildParamLiteral = (rawValue: string, operationId: string): string => {
+    const v = String(rawValue ?? '').trim();
+    if (!v) return "''";
+    const escape = (s: string) => s.replace(/'/g, "''");
+    const op = (operationId || '=').toUpperCase();
+    if (op === 'LIKE') return `'%${escape(v)}%'`;
+    if (op === 'IN') {
+      const items = v
+        .split(',')
+        .map(x => x.trim())
+        .filter(x => x !== '')
+        .map(x => `'${escape(x)}'`)
+        .join(', ');
+      return items ? `(${items})` : "('')";
+    }
+    return `'${escape(v)}'`;
+  };
+
+  const excuteQuery = () => {
+    if (!sqlText) {
+      void setAlert({ type: 'alert', content: t('MSG00628', '_실행할 Query 를 선택하세요') });
+      return;
+    }
+
+    let columns = [] as ResultGridColumn[];
+    if (columnsGridRef.current) {
+      columns = columnsGridRef.current.rows
+        .toSorted((a, b) => {
+          const aSeq =
+            Number(
+              (a.dataItem as ResponseData<MENU_ID, SHEETS.COLUMNS, RESPONSE_SET.OUTPUT>).SEQNO
+            ) || 0;
+          const bSeq =
+            Number(
+              (b.dataItem as ResponseData<MENU_ID, SHEETS.COLUMNS, RESPONSE_SET.OUTPUT>).SEQNO
+            ) || 0;
+
+          return aSeq - bSeq;
+        })
+        .filter(
+          item =>
+            (item.dataItem as ResponseData<MENU_ID, SHEETS.COLUMNS, RESPONSE_SET.OUTPUT>)
+              .VALUE_YN === 'Y'
+        )
+        .map(item => {
+          const data = item.dataItem as ResponseData<MENU_ID, SHEETS.COLUMNS, RESPONSE_SET.OUTPUT>;
+
+          return { name: data.COLUMN_NAME, valueType: data.VALUE_TYPE };
+        });
+    }
+
+    setResultGridColumns(columns);
+
+    let parameters = [] as ParamAndValue[];
+    if (parametersGridRef.current) {
+      parameters = parametersGridRef.current.rows.map(item => {
+        const data = item.dataItem as ResponseData<MENU_ID, SHEETS.PARAMETERS, RESPONSE_SET.OUTPUT>;
+
+        return {
+          param: data.PARAMETER_ID,
+          value: data.VALUE ?? '',
+          isUse: data.VALID_YN === 'Y',
+          operation: data.OPERATION_ID ?? '=',
+        };
+      });
+    }
+
+    let sql = sqlText;
+    for (const item of parameters) {
+      const param = item.param.replace('@', '').replace(':', '');
+      const value = buildParamLiteral(item.value, item.isUse ? item.operation : '');
+      sql = replaceParamToken(sql, param, value);
+    }
+
+    // const leftover = findParamTokens(sql);
+    // if (leftover.length > 0) {
+    //   void setAlert({
+    //     type: 'alert',
+    //     content: t(
+    //       'MSG00631',
+    //       `_정의되지 않은 파라미터가 있습니다: ${leftover
+    //         .map(n => `@${n}`)
+    //         .join(', ')} — Condition 에 추가하세요.`
+    //     ),
+    //   });
+    //   return;
+    // }
+
+    setExecuteFilter(sql);
+    void queryClient.invalidateQueries({ queryKey: [tabId, SHEETS.RESULT] });
+  };
+
+  const customButtons =
+    hasButton('EXECUTE') && activePage === SHEET_INDEX.DESIGNER
+      ? [{ label: t('LBL00729', 'Execute'), action: excuteQuery }]
+      : [];
 
   const handleSearch = () => {
     setFilter();
-    // master hook §2.4 — Search 시 admin SYS0004 메타 refetch.
-    void fetchStaticColumns();
   };
 
-  // Register Insert — AS-IS InsertRow L944-959 정합 (VALID_YN/ADMIN_ONLY_YN 'Y' 기본, DQ_ID 서버 채번).
-  // 행 추가 직후 SQL Query 편집 모달 자동 기동 (AS-IS 신규 흐름 = Insert→편집 더블클릭→팝업의 축약).
   const handleInsert = () => {
-    const grid = mainGridRef.current;
-    if (!grid) return;
-    GridAction.addRow(grid, {
-      DQ_ID: '',
+    if (!gridRef.current) return;
+
+    GridAction.addRow(gridRef.current, {
+      DQ_ID: getTempDqId(), // 컬럼과 파라미터를 매칭하기 위한 유니크한 임시값
       DQ_NAME: '',
       DESCRIPTION: '',
-      DQ_TEXT: '',
-      DIVISION_ID: '-',
+      GROUP_NAME: 'ALL',
       VALID_YN: 'Y',
-      ADMIN_ONLY_YN: 'Y',
-      GROUP_ID: '',
-      GROUP_NAME: '',
+      DQ_TEXT: '',
     });
-    // addRow 는 선택행 위에 삽입 — 방금 추가된 미기입 신규(I) 행을 찾아 모달 대상 지정.
-    const items = grid.collectionView.items;
-    const newRow = items.find(r => r.CRUD_TYPE === 'I' && !r.DQ_ID && !r.DQ_NAME && !r.DQ_TEXT);
-    if (newRow) {
-      setEditTargetRow(newRow);
-      setEditModalOpen(true);
-    }
   };
 
-  // 더블클릭(수정) → 모달 (AS-IS 편집모드 더블클릭=SQL Query 팝업 정합).
-  const handleEditRow = (row: QueryRow) => {
-    setEditTargetRow(row);
-    setEditModalOpen(true);
-  };
-
-  // Register Delete — 확인 후 표준 removeRow (신규행 즉시 제거 / 기존행 'D' 마킹, 저장 시 확정).
   const handleDelete = () => {
-    const grid = mainGridRef.current;
-    if (!grid || !grid.selectedItems.length) {
-      void setAlert({ type: 'alert', content: t('MSG00014', '_삭제할 행을 선택하세요') });
-      return;
-    }
-    void (async () => {
-      const ok = await setAlert({
-        type: 'confirm',
-        // ⚠ MSG00012 는 '탭 10개 제한' 메시지 — 삭제 확인은 MSG00654 (2026-07-09 오인용 수정)
-        content: t('MSG00654', '_선택한 행을 삭제하시겠습니까?'),
-      });
-      if (!ok) return;
-      GridAction.removeRow(grid);
-    })();
-  };
+    if (!gridRef.current) return;
 
-  // View 공통 Insert/Delete — 활성(클릭) 그리드 라우팅.
-  const handleViewInsert = () => {
-    if (!selectedQueryId) {
+    const row = GridUtils.getSelectedRows(gridRef.current);
+    if (!row) {
       void setAlert({ type: 'alert', content: t('MSG00630', '_Query 를 선택하세요') });
       return;
     }
-    if (focusedViewGrid === 'parameters') {
-      if (!parametersGridRef.current) return;
-      GridAction.addRow(parametersGridRef.current, {
-        DQ_ID: Number(selectedQueryId),
-        PARAMETER_ID: '',
-        PARAMETER_TYPE: 'Parameter',
-        OPERATION_ID: '-',
-        VALID_YN: 'Y',
-        REP_YN: 'N',
-        SEQNO: '0',
-        DEFAULT_VALUE: '',
-      });
-    } else {
-      if (!columnsGridRef.current) return;
-      GridAction.addRow(columnsGridRef.current, {
-        DQ_ID: Number(selectedQueryId),
-        COLUMN_NAME: '',
-        VALUE_YN: 'Y',
-        VALUE_TYPE: 'System.String',
-        AGGREGATE: '',
-        VALID_YN: 'Y',
-        SEQNO: '0',
-      });
-    }
+
+    GridAction.removeRow(gridRef.current);
   };
 
-  const handleViewDelete = () => {
-    if (focusedViewGrid === 'parameters') {
-      const grid = parametersGridRef.current;
-      if (!grid || !grid.selectedItems.length) {
-        void setAlert({ type: 'alert', content: t('MSG00014', '_삭제할 행을 선택하세요') });
+  const handleSave = () => {
+    console.log(gridRef.current);
+    if (gridRef.current && gridRef.current?.rows.length > 0) {
+      // 신규 or 수정한 건들 중에 필수 값들이 비어있는건 아니지 체크
+      console.warn(
+        '[MAIN SAVE go-check] rows=',
+        gridRef.current?.rows.map(r => {
+          const d = r.dataItem as ResponseData<MENU_ID, SHEETS.MAIN, RESPONSE_SET.OUTPUT>;
+          return {
+            CRUD_TYPE: d?.CRUD_TYPE,
+            DQ_ID: d?.DQ_ID,
+            DQ_NAME: d?.DQ_NAME,
+            DESCRIPTION: d?.DESCRIPTION,
+            DQ_TEXT: d?.DQ_TEXT,
+          };
+        })
+      );
+      const go = gridRef.current?.rows.some(item => {
+        const data = item.dataItem as ResponseData<MENU_ID, SHEETS.MAIN, RESPONSE_SET.OUTPUT>;
+        return (
+          (data.CRUD_TYPE === 'I' || data.CRUD_TYPE === 'M') &&
+          (!data.DQ_NAME ||
+            data.DQ_NAME === '' ||
+            !data.DESCRIPTION ||
+            data.DESCRIPTION === '' ||
+            !data.DQ_TEXT ||
+            data.DQ_TEXT === '')
+        );
+      });
+
+      if (go) {
+        void setAlert({ type: 'alert', content: t('MSG00150', '_필수값을 입력하세요.') });
         return;
       }
-      GridAction.removeRow(grid);
-    } else {
-      const grid = columnsGridRef.current;
-      if (!grid || !grid.selectedItems.length) {
-        void setAlert({ type: 'alert', content: t('MSG00014', '_삭제할 행을 선택하세요') });
+
+      // SCM_ADM_DQ_LIST 테이블 내용에 해당하는 Regist그리드의신규, 수정, 삭제 대상이 되는 데이터들 저장용
+      const insertMainList = [] as ResponseData<MENU_ID, SHEETS.MAIN, RESPONSE_SET.OUTPUT>[];
+      const updateMainList = [] as ResponseData<MENU_ID, SHEETS.MAIN, RESPONSE_SET.OUTPUT>[];
+      const deleteMainList = [] as ResponseData<MENU_ID, SHEETS.MAIN, RESPONSE_SET.OUTPUT>[];
+
+      // Regist그리드의 신규 건에 속해 있는 데이터를 Insert 하고 리턴 받은 DQ_ID를 columns와 paremers에 세팅하기 위한 분별용
+      const mainList = [] as ResponseData<MENU_ID, SHEETS.MAIN, RESPONSE_SET.OUTPUT>[];
+
+      gridRef.current?.rows.forEach(item => {
+        const data = item.dataItem as ResponseData<MENU_ID, SHEETS.MAIN, RESPONSE_SET.OUTPUT>;
+        if (data.CRUD_TYPE === 'I') {
+          insertMainList.push({
+            CRUD_TYPE: 'I',
+            DQ_ID: undefined,
+            DIVISION_ID: '40', // 세션에서 현재 DIVISION 가져올 수 있는 공통 처리 필요.
+            DQ_NAME: data.DQ_NAME,
+            DESCRIPTION: data.DESCRIPTION,
+            DQ_TEXT: data.DQ_TEXT,
+            VALID_YN: data.VALID_YN,
+            ADMIN_ONLY_YN: data.ADMIN_ONLY_YN ?? 'N',
+            GROUP_NAME: data.GROUP_NAME,
+          });
+          mainList.push(data);
+        } else if (data.CRUD_TYPE === 'M') {
+          updateMainList.push({
+            CRUD_TYPE: 'M',
+            DQ_ID: Number(data.DQ_ID),
+            DIVISION_ID: '40', // 세션에서 현재 DIVISION 가져올 수 있는 공통 처리 필요.
+            DQ_NAME: data.DQ_NAME,
+            DESCRIPTION: data.DESCRIPTION,
+            DQ_TEXT: data.DQ_TEXT,
+            VALID_YN: data.VALID_YN,
+            ADMIN_ONLY_YN: data.ADMIN_ONLY_YN ?? 'N',
+            GROUP_NAME: data.GROUP_NAME,
+          });
+        } else if (data.CRUD_TYPE === 'D') {
+          deleteMainList.push({
+            CRUD_TYPE: 'D',
+            DQ_ID: Number(data.DQ_ID),
+            DIVISION_ID: '40', // 세션에서 현재 DIVISION 가져올 수 있는 공통 처리 필요.
+            DQ_NAME: data.DQ_NAME,
+            DESCRIPTION: data.DESCRIPTION,
+            DQ_TEXT: data.DQ_TEXT,
+            VALID_YN: data.VALID_YN,
+            ADMIN_ONLY_YN: data.ADMIN_ONLY_YN ?? 'N',
+            GROUP_NAME: data.GROUP_NAME,
+          });
+        }
+      });
+
+      const saveList = [...insertMainList, ...updateMainList, ...deleteMainList];
+
+      console.log(
+        '[MAIN SAVE] rows=',
+        gridRef.current?.rows.map(r => {
+          const d = r.dataItem as ResponseData<MENU_ID, SHEETS.MAIN, RESPONSE_SET.OUTPUT>;
+          return { CRUD_TYPE: d?.CRUD_TYPE, DQ_ID: d?.DQ_ID, DQ_NAME: d?.DQ_NAME };
+        }),
+        'insert=',
+        insertMainList.length,
+        'update=',
+        updateMainList.length,
+        'delete=',
+        deleteMainList.length
+      );
+
+      if (saveList.length === 0) {
+        void setAlert({ type: 'alert', content: t('MSG00003', '_변경된 내용이 없습니다.') });
         return;
       }
-      GridAction.removeRow(grid);
-    }
-  };
 
-  const selectedRow = useMemo<QueryRow | undefined>(
-    () => mainRows.find(r => String(r.DQ_ID) === String(selectedQueryId)),
-    [mainRows, selectedQueryId]
-  );
+      void (async () => {
+        const ok = await setAlert({
+          type: 'confirm',
+          content: t('MSG00617', `${saveList.length} 행을 저장하시겠습니까?`).replace(
+            '{0}',
+            `${saveList.length}`
+          ),
+        });
 
-  // SQL 뷰어 표시용 — 선택 쿼리 DQ_TEXT 에 파라미터 값 치환한 최종 SQL.
-  const baseSqlForViewer = useMemo(() => {
-    if (!selectedRow?.DQ_TEXT) return '';
-    return substituteParams(selectedRow.DQ_TEXT, parameterValues, parametersRows);
-  }, [selectedRow, parameterValues, parametersRows]);
+        if (!ok) return;
+        console.log(saveList);
 
-  // ── Execute + 실행이력 (격차② EXECUTE_HIST) ──────────────────────────────
-  // AS-IS L517-539: 실행 시 PR_DM_ADM_DQ_EXECUTE_HIST 기록, 이력 실패는 침묵(try/catch{}).
-  const pendingHistRef = useRef<{ dqId: string; sql: string } | null>(null);
+        // PKG_SYS0013.P_SYS0013_SAVE_QUERY_LIST 프로시저 내에서 삭제(CRUD_TYPE = D) 건은 COLUMNS와 PARAMETERS도 같이 삭제되도록 처리함.
+        const result = await mutateMain(saveList);
 
-  const handleExecute = () => {
-    if (!selectedQueryId) {
-      void setAlert({ type: 'alert', content: t('MSG00628', '_실행할 Query 를 선택하세요') });
-      return;
-    }
-    const sqlSource = (editedSqlText && editedSqlText.trim()) || selectedRow?.DQ_TEXT || '';
-    if (!sqlSource.trim()) {
-      void setAlert({ type: 'alert', content: t('MSG00628', '_실행할 Query 를 선택하세요') });
-      return;
-    }
-    const sqlText = substituteParams(sqlSource, parameterValues, parametersRows);
-    pendingHistRef.current = { dqId: selectedQueryId, sql: sqlText };
-    setExecuteFilter(sqlText);
-    void queryClient.invalidateQueries({ queryKey: [tabId, SHEETS.RESULT] });
-    setToast({ type: 'success', message: t('MSG00629', '_실행 완료') });
-  };
+        const saveCloumns = [] as ResponseData<MENU_ID, SHEETS.COLUMNS, RESPONSE_SET.OUTPUT>[];
+        const saveParameters = [] as ResponseData<
+          MENU_ID,
+          SHEETS.PARAMETERS,
+          RESPONSE_SET.OUTPUT
+        >[];
 
-  useEffect(() => {
-    const pending = pendingHistRef.current;
-    if (!pending || !resultData) return;
-    pendingHistRef.current = null;
-    // fire-and-forget — 이력 실패가 실행 결과를 막지 않음 (AS-IS catch{} 침묵 정합).
-    apiClient
-      .post(`/${MENU_ID}/${SHEETS.HISTORY}/EXECUTE/call-proc`, {
-        dqId: pending.dqId,
-        dqText: pending.sql,
-        updatedBy: sessionUserId ?? '',
-      })
-      .catch(() => undefined);
-  }, [resultData, sessionUserId]);
+        // 신규 건만!!
+        if (result.result) {
+          // 응답 타입이 mutaion은 어떤 타입인지 알수가 없다.
+          const res = result.result as unknown as { o_rc2: { DQ_ID: number }[] };
+          if (res.o_rc2.length > 0) {
+            const dqObjList = res.o_rc2;
 
-  // Validate 성공 시 Columns/Condition 자동채움 — AS-IS Confirm 정합 (정의가 빈 경우에만).
-  // 툴바 Validate 버튼과 편집 모달의 onValidated 가 공용.
-  const applyValidationAutoFill = (cols: ValidateColumnRow[], sqlSource: string) => {
-    const columnsGrid = columnsGridRef.current;
-    if (columnsGrid && columnsRows.length === 0 && cols.length > 0 && selectedQueryId) {
-      for (const [i, c] of cols.entries()) {
-        GridAction.addRow(
-          columnsGrid,
-          {
-            DQ_ID: Number(selectedQueryId),
-            COLUMN_NAME: c.COLUMN_NAME,
-            VALUE_YN: 'Y',
-            VALUE_TYPE: c.VALUE_TYPE,
-            AGGREGATE: '',
-            VALID_YN: 'Y',
-            SEQNO: String(i + 1),
-          },
-          'bottom'
-        );
-      }
-    }
-    const parametersGrid = parametersGridRef.current;
-    const tokens = extractParamTokens(sqlSource);
-    if (parametersGrid && parametersRows.length === 0 && tokens.length > 0 && selectedQueryId) {
-      for (const [i, token] of tokens.entries()) {
-        GridAction.addRow(
-          parametersGrid,
-          {
-            DQ_ID: Number(selectedQueryId),
-            PARAMETER_ID: token,
-            PARAMETER_TYPE: 'Parameter',
-            OPERATION_ID: '=',
-            VALID_YN: 'Y',
-            REP_YN: 'N',
-            SEQNO: String(i + 1),
-            DEFAULT_VALUE: '',
-          },
-          'bottom'
-        );
-      }
-    }
-  };
+            for (const [i, dqObj] of dqObjList.entries()) {
+              const newParent = mainList[i];
+              if (!newParent) continue;
+              // 임시 DQ_ID가 동일한지 확인
+              saveColumnsAndParametersList.forEach(item => {
+                if (item.DQ_ID === newParent.DQ_ID) {
+                  item.columns.forEach(col => {
+                    saveCloumns.push({
+                      SEQNO: col.SEQNO,
+                      COLUMN_NAME: col.COLUMN_NAME,
+                      VALID_YN: col.VALID_YN,
+                      DQ_ID: dqObj.DQ_ID,
+                      VALUE_YN: col.VALUE_YN,
+                      VALUE_TYPE: col.VALUE_TYPE,
+                      CRUD_TYPE: 'I',
+                      AGGREGATE: col.AGGREGATE,
+                    });
+                  });
 
-  // 편집 모달 OK — 대상 행 반영 + CRUD 마킹 + Column/Condition 최종 상태 보관 (AS-IS SetItem 정합).
-  // 실제 저장(diff I/M/D → SP 체인)은 공통 Save 가 수행.
-  const handleModalApply = (values: EditModalResult) => {
-    const row = editTargetRow;
-    if (!row) return;
-    row.DQ_NAME = values.dqName;
-    row.DESCRIPTION = values.description;
-    row.DQ_TEXT = values.dqText;
-    if (row.CRUD_TYPE !== 'I' && row.CRUD_TYPE !== 'D') row.CRUD_TYPE = 'M';
-    mainGridRef.current?.invalidate();
-    const isNew = row.CRUD_TYPE === 'I';
-    pendingNewMetaRef.current = {
-      row,
-      roles: values.roles,
-      colsFinal: values.colsFinal,
-      condsFinal: values.condsFinal,
-      colsOriginal: isNew
-        ? []
-        : columnsRows.map(c => ({
-            COLUMN_NAME: String(c.COLUMN_NAME ?? ''),
-            VALUE_TYPE: String(c.VALUE_TYPE ?? ''),
-            VALID_YN: String(c.VALID_YN ?? 'Y'),
-            SEQNO: String(c.SEQNO ?? '0'),
-            AGGREGATE: String(c.AGGREGATE ?? ''),
+                  item.parameters.forEach(params => {
+                    saveParameters.push({
+                      DQ_ID: dqObj.DQ_ID,
+                      PARAMETER_ID: toAtToken(params.PARAMETER_ID),
+                      PARAMETER_TYPE: params.PARAMETER_TYPE,
+                      OPERATION_ID: params.OPERATION_ID,
+                      VALID_YN: params.VALID_YN,
+                      REP_YN: params.REP_YN,
+                      SEQNO: params.SEQNO,
+                      CRUD_TYPE: 'I',
+                    });
+                  });
+                }
+              });
+            }
+          }
+        }
+
+        // 변경 건만!!
+        saveColumnsAndParametersList.forEach(item => {
+          if (item.CRUD_TYPE === 'M') {
+            item.columns.forEach(col => {
+              saveCloumns.push({
+                SEQNO: col.SEQNO,
+                COLUMN_NAME: col.COLUMN_NAME,
+                VALID_YN: col.VALID_YN,
+                DQ_ID: Number(item.DQ_ID),
+                VALUE_YN: col.VALUE_YN,
+                VALUE_TYPE: col.VALUE_TYPE,
+                CRUD_TYPE: col.CRUD_TYPE,
+                AGGREGATE: col.AGGREGATE,
+              });
+            });
+
+            item.parameters.forEach(params => {
+              saveParameters.push({
+                DQ_ID: Number(item.DQ_ID),
+                PARAMETER_ID: toAtToken(params.PARAMETER_ID),
+                PARAMETER_TYPE: params.PARAMETER_TYPE,
+                OPERATION_ID: params.OPERATION_ID,
+                VALID_YN: params.VALID_YN,
+                REP_YN: params.REP_YN,
+                SEQNO: params.SEQNO,
+                CRUD_TYPE: params.CRUD_TYPE,
+              });
+            });
+          }
+        });
+
+        // eslint-disable-next-line no-console
+        console.log(
+          '[CHILD SAVE] session=',
+          saveColumnsAndParametersList.map(s => ({
+            DQ_ID: s.DQ_ID,
+            CRUD_TYPE: s.CRUD_TYPE,
+            cols: s.columns.map(c => c.CRUD_TYPE),
+            params: s.parameters.map(p => p.CRUD_TYPE),
           })),
-      condsOriginal: isNew
-        ? []
-        : parametersRows.map(p => ({
-            PARAMETER_TYPE: String(p.PARAMETER_TYPE ?? 'Parameter'),
-            PARAMETER_ID: String(p.PARAMETER_ID ?? ''),
-            VALID_YN: String(p.VALID_YN ?? 'Y'),
-            SEQNO: String(p.SEQNO ?? '0'),
-            OPERATION_ID: String(p.OPERATION_ID ?? '='),
-            REP_YN: String(p.REP_YN ?? 'N'),
-            DEFAULT_VALUE: String(p.DEFAULT_VALUE ?? ''),
-          })),
-    };
-    // 기존 행 Role — diff 는 공통 Save(roleChanged 경로)가 처리.
-    if (!isNew && row.DQ_ID) {
-      const id = String(row.DQ_ID);
-      if (roleSourceId !== id) {
-        const original = String(row.GROUP_ID ?? '')
-          .split(',')
-          .map(s => s.trim())
-          .filter(s => s !== '' && s !== 'ALL');
-        initRoles(original, id);
-      }
-      setRoleSelection(values.roles);
-    }
-  };
-
-  // ── Validate (격차① — AS-IS 팝업 Confirm 'TOP 0' 검증 + 컬럼/@PARAM 자동추출) ──
-  const handleValidate = () => {
-    const sqlSource = (editedSqlText && editedSqlText.trim()) || selectedRow?.DQ_TEXT || '';
-    if (!sqlSource.trim()) {
-      void setAlert({ type: 'alert', content: t('MSG00628', '_실행할 Query 를 선택하세요') });
-      return;
-    }
-    // PARSE 는 bind 미지원 — 토큰을 '' literal 로 사전 치환.
-    const sqlText = substituteParams(sqlSource, parameterValues, parametersRows);
-    void (async () => {
-      try {
-        const response = await apiClient.post<{ o_rc1: ValidateColumnRow[] }>(
-          `/${MENU_ID}/${SHEETS.MAIN}/VALIDATE/call-proc`,
-          { sqlText }
+          'saveCloumns=',
+          saveCloumns.length,
+          saveCloumns.map(c => ({ DQ_ID: c.DQ_ID, COL: c.COLUMN_NAME, CRUD: c.CRUD_TYPE })),
+          'saveParameters=',
+          saveParameters.length,
+          saveParameters.map(p => ({ DQ_ID: p.DQ_ID, PID: p.PARAMETER_ID, CRUD: p.CRUD_TYPE }))
         );
-        const cols = response.data.result?.o_rc1 ?? [];
-        setToast({ type: 'success', message: t('MSG00655', '_Query 검증이 완료되었습니다.') });
-        // AS-IS Confirm 정합 — 정의가 빈 경우에만 자동채움 (기존 정의 덮어쓰기 금지).
-        applyValidationAutoFill(cols, sqlSource);
-      } catch (err) {
-        void setAlert({ type: 'alert', content: String((err as Error)?.message ?? err) });
-      }
-    })();
+
+        if (saveCloumns.length > 0) mutateColumns(saveCloumns);
+        if (saveParameters.length > 0) mutateParameters(saveParameters);
+
+        clearSaveColumnsAndParametersList();
+      })();
+    }
   };
 
-  // hasButton 게이트 — Insert/Delete 는 Register=main / View=활성 그리드 라우팅 (hook #97).
-  const isRegisterPage = activePage === SHEET_INDEX.REGISTER;
   const hotkeyConfig: HotkeyConfig = {
-    search: hasButton('SEARCH') ? handleSearch : false,
-    save: hasButton('SAVE') ? handleSave : false,
-    insert: hasButton('INSERT') ? (isRegisterPage ? handleInsert : handleViewInsert) : false,
-    delete: hasButton('DELETE') ? (isRegisterPage ? handleDelete : handleViewDelete) : false,
+    search: hasButton('SEARCH') && activePage === SHEET_INDEX.REGISTER ? handleSearch : false,
+    save: hasButton('SAVE') && activePage === SHEET_INDEX.REGISTER ? handleSave : false,
+    insert: hasButton('INSERT') && activePage === SHEET_INDEX.REGISTER ? handleInsert : false,
+    delete: hasButton('DELETE') && activePage === SHEET_INDEX.REGISTER ? handleDelete : false,
     condition: false,
     resetCondition: false,
     manual: false,
     upload: false,
   };
 
-  const customButtons = [
-    ...(hasButton('VALIDATE') && !isRegisterPage
-      ? [{ label: t('LBL00761', 'Validate'), action: handleValidate }]
-      : []),
-    ...(hasButton('EXECUTE') ? [{ label: t('LBL00729', 'Execute'), action: handleExecute }] : []),
-  ];
+  // 실제 조회된 데이터 갯수만!
+  const getCount = () => {
+    return (mainData?.o_rc1 ?? []).length;
+  };
+
+  // 초기 렌더링
+  useEffect(() => {
+    if (!initialized) void fetchSearchConditions();
+    void fetchStaticColumns();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -436,90 +542,73 @@ export const DynamicQuery = ({ tabId, title }: PageProps<MENU_ID>) => {
         openSearchArea={openSearchArea}
         toggleOpenSearchArea={setOpenSearchArea}
       />
-      {isRegisterPage && openSearchArea && <DynamicQueryForm onSearch={handleSearch} />}
+
+      {openSearchArea && <DynamicQueryForm onSearch={handleSearch} />}
 
       <SubTitle
         menuId={MENU_ID}
-        grid={
-          isRegisterPage
-            ? mainGridRef
-            : focusedViewGrid === 'parameters'
-              ? parametersGridRef
-              : columnsGridRef
-        }
+        grid={gridRef}
         gridFilter={gridFilterRef}
-        dataCount={
-          isRegisterPage
-            ? mainRows.length
-            : focusedViewGrid === 'parameters'
-              ? parametersRows.length
-              : columnsRows.length
-        }
+        dataCount={getCount()}
         excelFileName='DynamicQuery'
         useHotkey={true}
         hotkeyConfig={hotkeyConfig}
         customButtons={customButtons}
       />
 
-      <TabWrapper
-        persist
-        activeTabIndex={activePage}
-        setActiveTabIndex={i => setActivePage(i as SHEET_INDEX)}
-      >
-        {/* Register — Query 목록 (AS-IS tpRegister) */}
+      <TabWrapper persist activeTabIndex={activePage} setActiveTabIndex={i => setActivePage(i)}>
         <TabItem label={t('LBL00723', 'Register')}>
           <DynamicQueryMainGrid
-            gridRef={mainGridRef}
+            gridRef={gridRef}
             gridFilterRef={gridFilterRef}
-            editTrackerRef={mainEditTrackerRef}
-            data={mainRows}
-            activePage={activePage}
-            onEditRow={handleEditRow}
+            data={mainData?.o_rc1 ?? []}
+            goViewTab={() => setActivePage(SHEET_INDEX.DESIGNER)}
+            tabId={tabId}
           />
         </TabItem>
-
-        {/* View — Designer (AS-IS tpView: 좌 Columns/Condition/SQL + 우 Result) */}
         <TabItem label={t('LBL00724', 'View')}>
           <div className={styles.viewBody}>
-            <DynamicQueryMetaForm selectedRow={selectedRow} />
+            <DynamicQueryMetaForm dynamicQueryMeta={dynamicQueryMeta} />
             <PanelGroup className={styles.designerPanelGroup} orientation='horizontal'>
               <Panel defaultSize={55}>
-                <div className={styles.leftPane}>
-                  <div
-                    className={`${styles.leftSection} ${styles.grow4}`}
-                    onClickCapture={() => setFocusedViewGrid('columns')}
-                  >
-                    <TitleArea isSubTitle title={t('LBL00725', 'Columns')} depth='h4' />
-                    <div className={styles.gridFill}>
-                      <DynamicQueryColumnsGrid
-                        gridRef={columnsGridRef}
-                        editTrackerRef={columnsEditTrackerRef}
-                        data={columnsRows}
-                      />
+                <PanelGroup className={styles.leftPane} orientation='vertical'>
+                  <Panel defaultSize={40} minSize={15} style={{ overflow: 'hidden' }}>
+                    <div className={styles.leftSection}>
+                      <TitleArea isSubTitle title={t('LBL00725', 'Columns')} depth='h4' />
+                      <div className={styles.gridFill}>
+                        <DynamicQueryColumnsGrid
+                          gridRef={columnsGridRef}
+                          data={columnsData?.o_rc1 ?? []}
+                        />
+                      </div>
                     </div>
-                  </div>
+                  </Panel>
 
-                  <div
-                    className={`${styles.leftSection} ${styles.grow2}`}
-                    onClickCapture={() => setFocusedViewGrid('parameters')}
-                  >
-                    <TitleArea isSubTitle title={t('LBL00726', 'Condition')} depth='h4' />
-                    <div className={styles.gridFill}>
-                      <DynamicQueryParametersGrid
-                        gridRef={parametersGridRef}
-                        editTrackerRef={parametersEditTrackerRef}
-                        data={parametersRows}
-                      />
-                    </div>
-                  </div>
+                  <PanelSeparator className={styles.rowSplitBar} />
 
-                  <div className={`${styles.leftSection} ${styles.grow4}`}>
-                    <TitleArea isSubTitle title={t('LBL00727', 'SQL')} depth='h4' />
-                    <div className={styles.gridFill}>
-                      <DynamicQuerySQLViewer baseSql={baseSqlForViewer} />
+                  <Panel defaultSize={20} minSize={10} style={{ overflow: 'hidden' }}>
+                    <div className={styles.leftSection}>
+                      <TitleArea isSubTitle title={t('LBL00726', 'Condition')} depth='h4' />
+                      <div className={styles.gridFill}>
+                        <DynamicQueryParametersGrid
+                          gridRef={parametersGridRef}
+                          data={parametersData?.o_rc1 ?? []}
+                        />
+                      </div>
                     </div>
-                  </div>
-                </div>
+                  </Panel>
+
+                  <PanelSeparator className={styles.rowSplitBar} />
+
+                  <Panel defaultSize={40} minSize={15} style={{ overflow: 'hidden' }}>
+                    <div className={styles.leftSection}>
+                      <TitleArea isSubTitle title={t('LBL00727', 'SQL')} depth='h4' />
+                      <div className={styles.gridFill}>
+                        <DynamicQuerySQLViewer />
+                      </div>
+                    </div>
+                  </Panel>
+                </PanelGroup>
               </Panel>
 
               <PanelSeparator />
@@ -527,27 +616,13 @@ export const DynamicQuery = ({ tabId, title }: PageProps<MENU_ID>) => {
               <Panel defaultSize={45}>
                 <div className={styles.rightPane}>
                   <TitleArea isSubTitle title={t('LBL00728', 'Result')} depth='h4' />
-                  <DynamicQueryResultGrid
-                    gridRef={resultGridRef}
-                    data={resultRows}
-                    columnsMeta={columnsRows}
-                  />
+                  <DynamicQueryResultGrid gridRef={resultGridRef} data={resultData?.o_rc1 ?? []} />
                 </div>
               </Panel>
             </PanelGroup>
           </div>
         </TabItem>
       </TabWrapper>
-
-      {/* SQL Query 편집 모달 — AS-IS SCM0005_DynamicQueryListPopUp 디자인·기능 동일 (SYS0013_POPUP.png) */}
-      <DynamicQueryEditModal
-        open={editModalOpen}
-        targetRow={editTargetRow}
-        existingCols={columnsRows}
-        existingConds={parametersRows}
-        modalClose={() => setEditModalOpen(false)}
-        onApply={handleModalApply}
-      />
     </>
   );
 };

@@ -1,0 +1,62 @@
+/* DMF0044 / DMF0049 공용 Version 팝업 — AS-IS usrConditionPanel1(2단) + spdMain 구조 재현 */
+
+.contentWrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 8px;
+}
+
+.gridWrapper {
+  flex: 1;
+  min-height: 300px;
+  border: 1px solid #e0e4e9;
+  border-radius: 4px;
+  background: white;
+  overflow: hidden;
+  position: relative;
+}
+
+/* 2단 액션 바 — AS-IS usrLayoutControl2 2행(Row1 조회조건 / Row2 액션) 중 Row2 */
+.actionBar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 6px 8px;
+  border: 1px solid #e0e4e9;
+  border-radius: 4px;
+  background: #f7f8fa;
+}
+
+.actionBarSpacer {
+  flex: 1;
+}
+
+/* 체크박스 + 종속 입력 1쌍 (실적 포함 + 기준일 / 이동계획 + 계획월) */
+.checkField {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* 조회조건 Period from ~ to */
+.fieldRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  > span {
+    flex-shrink: 0;
+    font-size: 12px;
+    color: #5b6470;
+  }
+}
+
+/* ⭐ hook #94 — 조회조건/액션바 raw input 높이 36px 동일화 (design-system small 28px 보정) */
+.h36 {
+  input {
+    height: 36px;
+    box-sizing: border-box;
+  }
+}

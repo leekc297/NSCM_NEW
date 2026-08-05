@@ -103,6 +103,9 @@ export const SalesSite = ({ tabId, title }: PageProps<MENU_ID>) => {
     GridAction.addRow(gridRefs[activeTab].current, {
       DIVISION_ID: filters[SHEETS.SITE]?.divisionId ?? '81',
       SCM_SITE_ID: activeTab === SHEET_INDEX.SITE ? undefined : filters[SHEETS.CUSTOMER]?.salesSite,
+      VMI_YN: 'N',
+      VALID_YN: 'Y',
+      SHIP_PLAN_AUTO: 'N',
     });
   };
 

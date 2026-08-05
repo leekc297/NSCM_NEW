@@ -5,7 +5,7 @@ import { createPersistedStoreWithTab } from '@shared/stores';
 import type { ActiveGrid } from './lookup.constants';
 import { MENU_ID, SHEETS } from './lookup.constants';
 
-interface SearchParamProps {
+export interface SearchParamProps {
   lookupType: string;
   lookupGroup: string;
   validYn: string;
@@ -39,6 +39,7 @@ interface LookupAction {
   setSearchParams: (next: Partial<SearchParamProps>) => void;
   setFilters: () => void;
   setSubFilters: (lookupType: string) => void;
+  clearDetail: () => void;
   fetchStaticColumns: () => Promise<void>;
   setOpenSearchArea: (open?: boolean) => void;
   setActiveGrid: (grid: ActiveGrid) => void;
@@ -48,7 +49,7 @@ interface LookupAction {
   toggleSubGridReadOnly: () => void;
 }
 
-const initSearchParams: SearchParamProps = {
+export const initSearchParams: SearchParamProps = {
   lookupType: '',
   lookupGroup: '',
   validYn: 'Y',
@@ -96,7 +97,10 @@ const DYNAMIC_SUB_COLUMNS = [
 export const useLookupStore = createPersistedStoreWithTab<LookupState & LookupAction>(
   (set, get) => ({
     ...initLookupState,
-    reset: () => set(initLookupState),
+    reset: () =>
+      set(state => {
+        state.searchParams = { ...initSearchParams };
+      }),
     setSearchParams: next => {
       set(state => {
         state.searchParams = { ...get().searchParams, ...next };
@@ -116,6 +120,16 @@ export const useLookupStore = createPersistedStoreWithTab<LookupState & LookupAc
       set(state => {
         state.filters[SHEETS.LOOKUP_DETAIL] = { lookupType };
         state.selectedLookupType = lookupType;
+        state.subGridReadOnly = true;
+      });
+    },
+    // 조회 시 하단 detail 그리드 clear — 필터 해제(쿼리 비활성+key 변경 → detailData undefined) + 관련 state 초기화
+    clearDetail: () => {
+      set(state => {
+        state.filters[SHEETS.LOOKUP_DETAIL] = undefined;
+        state.selectedLookupType = '';
+        state.dynamicColumnLabels = {};
+        state.hiddenSubColumns = {};
         state.subGridReadOnly = true;
       });
     },

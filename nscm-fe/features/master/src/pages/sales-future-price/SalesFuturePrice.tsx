@@ -10,7 +10,7 @@ import { MainTitle, SubTitle } from '@shared/components';
 import { useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
-import { ColumnSettingModal, ItemByDivisionModal, ProjectByDivisionModal } from '../../components';
+import { ItemByDivisionModal, ProjectByDivisionModal, ColumnSettingModal } from '../../components';
 
 import { ExchangeRateModal } from './components/modals/ExchangeRateModal';
 import { PriceBatchInputModal } from './components/modals/PriceBatchInputModal';
@@ -85,6 +85,7 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   const setSearchCondition = useSalesFuturePriceStore(s => s.setSearchCondition);
   // ⭐ master hook §2.3 — Column/Measure 동적 fetch (admin SYS0004 UI Category Setup 변경 즉시 반영)
   const staticColumns = useSalesFuturePriceStore(s => s.staticColumns);
+  const originalStaticColumns = useSalesFuturePriceStore(s => s.originalStaticColumns);
   const staticMeasures = useSalesFuturePriceStore(s => s.staticMeasures);
   const fetchStaticColumns = useSalesFuturePriceStore(s => s.fetchStaticColumns);
   // ⭐ Batch 팝업 컬럼('Sales Price Save All')을 부모에서 division 단위로 선-fetch → 모달 open 시 metaBatch 준비완료
@@ -92,6 +93,7 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   const fetchBatchColumns = useSalesFuturePriceStore(s => s.fetchBatchColumns);
   const fetchStaticMeasures = useSalesFuturePriceStore(s => s.fetchStaticMeasures);
   const restoreSearchConditions = useSalesFuturePriceStore(s => s.restoreSearchConditions);
+  const applyColumnLayout = useSalesFuturePriceStore(s => s.applyColumnLayout);
   const applyColumnVisibility = useSalesFuturePriceStore(s => s.applyColumnVisibility);
 
   const validate = useSalesFuturePriceValidation();
@@ -237,7 +239,10 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
     // ⭐ isCurVersion 게이트 (MSG00448) — 과거버전 조회 상태에서는 Insert 불가.
     //   AS-IS EditButton(.cs L868~): txtVersion=='Current' 조회일 때만 편집/신규 허용.
     if (sc.versionId !== 'CURRENT') {
-      void setAlert({ type: 'alert', content: t(MSG.EDIT_NOT_CURRENT_VER, '_현재 버전이 아닙니다.') });
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.EDIT_NOT_CURRENT_VER, '_현재 버전이 아닙니다.'),
+      });
       return;
     }
     // AS-IS InsertRow L1815: siMain.Insert2(dtMeasureCount.Rows.Count) — measure 개수만큼 행 추가.
@@ -305,7 +310,10 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
     }
     // ⭐ isCurVersion 게이트 (MSG00448) — 과거버전 조회 상태에서는 저장 불가 (AS-IS L868 편집 대전제).
     if (sc.versionId !== 'CURRENT') {
-      void setAlert({ type: 'alert', content: t(MSG.EDIT_NOT_CURRENT_VER, '_현재 버전이 아닙니다.') });
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.EDIT_NOT_CURRENT_VER, '_현재 버전이 아닙니다.'),
+      });
       return;
     }
     const spRowsAll = (data as { o_rc1?: FuturePriceRow[] })?.o_rc1 ?? [];
@@ -317,7 +325,10 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
     const v = validate.validateSaveRows(targetRows, [...insertedRows, ...spRowsAll], sc);
     if (!v.ok) return;
 
-    const ok = await setAlert({ type: 'confirm', content: t(MSG.CONFIRM_SAVE, '_저장하시겠습니까?') });
+    const ok = await setAlert({
+      type: 'confirm',
+      content: t(MSG.CONFIRM_SAVE, '_저장하시겠습니까?'),
+    });
     if (!ok) return;
 
     void setToast({ message: t('LBL00665', 'Loading...'), type: 'default', duration: 3000 });
@@ -681,6 +692,49 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
           applyColumnVisibility(SHEETS.MAIN, visibleKeys);
         }}
       />
+      {/* <ColumnLayoutModal
+        open={openTitleSet}
+        modalClose={() => setOpenTitleSet(false)}
+        menuId={MENU_ID}
+        sheetName={ADMIN_SHEET_NAME[SHEETS.MAIN] ?? SHEETS.MAIN}
+        columnType='main'
+        divisionId={sc.divisionId}
+        fallbackColumns={MAIN_COLUMNS.map(c => ({ key: c.key, header: c.header, width: c.width }))}
+        initialSettings={(staticColumns[SHEETS.MAIN] ?? []).map((c, i) => ({
+          COLUMN_NAME: c.colNm,
+          COLUMN_LABEL_NAME: c.colLblNm ?? c.colNm,
+          USER_FLAG: c.visible === false ? 'N' : 'Y',
+          SORT_ORDER_NO: i + 1,
+          COL_WIDTH: c.colWth ?? 100,
+          CELL_COLOR: c.cellColor ?? '',
+          TEXT_COLOR: c.textColor ?? '',
+          isKey: (c.colLblNm ?? c.colNm).trim().endsWith('*'),
+        }))}
+        // ⭐ Default 버튼 원복 기준 — store 원본 스냅샷(originalStaticColumns = 맨 처음 DB 값, Save 로 mutate 안 됨).
+        defaultSettings={(originalStaticColumns[SHEETS.MAIN] ?? []).map((c, i) => ({
+          COLUMN_NAME: c.colNm,
+          COLUMN_LABEL_NAME: c.colLblNm ?? c.colNm,
+          USER_FLAG: c.visible === false ? 'N' : 'Y',
+          SORT_ORDER_NO: i + 1,
+          COL_WIDTH: c.colWth ?? 100,
+          CELL_COLOR: c.cellColor ?? '',
+          TEXT_COLOR: c.textColor ?? '',
+          isKey: (c.colLblNm ?? c.colNm).trim().endsWith('*'),
+        }))}
+        onSave={settings => {
+          applyColumnLayout(
+            SHEETS.MAIN,
+            settings.map(s => ({
+              colNm: s.COLUMN_NAME,
+              visible: s.USER_FLAG === 'Y',
+              width: s.COL_WIDTH,
+              cellColor: s.CELL_COLOR,
+              textColor: s.TEXT_COLOR,
+              order: s.SORT_ORDER_NO,
+            }))
+          );
+        }}
+      /> */}
       {/* Insert row popup — PROJECT (AS-IS .cs L2040 cellTypeImage + L2092/L2094 자동 채움) */}
       <ProjectByDivisionModal
         open={openProject}

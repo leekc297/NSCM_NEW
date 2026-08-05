@@ -5,11 +5,10 @@
     <settings>
         <setting name="jdbcTypeForNull" value="NULL"/>	<!-- null 허용 -->
         <setting name="defaultFetchSize" value="0"/>
-        <!-- callSettersOnNulls=true : cursor NULL 값도 result Map 에 포함 (DMF0043 PIVOT 전체 컬럼 보장, 2026-06-01) -->
-        <setting name="callSettersOnNulls" value="true"/>
 		<!-- 
         <setting name="mapUnderscoreToCamelCase" value="true"/>
         <setting name="lazyLoadingEnabled" value="true"/>
+        <setting name="callSettersOnNulls" value="true"/>
 		-->
     </settings>
 

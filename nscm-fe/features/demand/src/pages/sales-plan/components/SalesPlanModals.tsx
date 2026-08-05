@@ -5,9 +5,8 @@ import {
   ProjectByDivisionModal,
 } from 'features/master/src/components';
 
-import { useQueryClient } from '@foundation/query-client';
-
 import { MENU_ID, SHEETS } from '../sales-plan.constants';
+import type { SalesPlanRow } from '../sales-plan.types';
 import { useSalesPlanStore } from '../useSalesPlanStore';
 import { saveTitleSet } from '../utils/sales-plan.api';
 
@@ -21,9 +20,11 @@ interface SalesPlanModalsProps {
   openItem: boolean;
   openColumnSetting: boolean;
   openMeasureSelect: boolean;
+  popupRow: SalesPlanRow | null;
   onClose: (key: SalesPlanModalKey) => void;
   // 셀 모달 적용 — 부모가 INSERT_GROUP_ID 매칭 행에 patch 반영 (insertedRows 상태 갱신)
   applyToInsertRow: (patch: Record<string, unknown>) => void;
+  onMeasureSaved: () => void;
 }
 
 // ⭐ DMF0021 모달 4종 묶음 (진입 컴포넌트 분리 — components/ 분리 의무 진입≤400):
@@ -38,11 +39,12 @@ export const SalesPlanModals = ({
   openItem,
   openColumnSetting,
   openMeasureSelect,
+  popupRow,
   onClose,
   applyToInsertRow,
+  onMeasureSaved,
 }: SalesPlanModalsProps) => {
   const { t } = useTranslation();
-  const queryClient = useQueryClient();
 
   const staticColumns = useSalesPlanStore(s => s.staticColumns);
   const staticMeasures = useSalesPlanStore(s => s.staticMeasures);
@@ -52,27 +54,39 @@ export const SalesPlanModals = ({
   const applyColumnVisibility = useSalesPlanStore(s => s.applyColumnVisibility);
   const applyVisibleMeasures = useSalesPlanStore(s => s.applyVisibleMeasures);
 
+  const rowValue = (key: string, fallback = 'ALL'): string => {
+    const value = popupRow?.[key];
+    if (value == null) return fallback;
+    if (typeof value === 'string') return value.trim() || fallback;
+    return typeof value === 'number' ? String(value) : fallback;
+  };
+
   return (
     <>
       {/* 셀 모달 — PROJECT (81·82 신규행) */}
       <ProjectByDivisionModal
         open={openProject}
         modalClose={() => onClose('PROJECT')}
-        setSelectedValue={(projectCode, projectName) => {
+        setSelectedValue={(projectCode, projectName, projectStatus, bizTypeName, projectOwner) => {
           applyToInsertRow({
             PROJECT_CODE: projectCode,
             PROJECT_NAME: projectName ?? '',
+            PROJECT_STATUS: projectStatus ?? '',
+            BIZ_TYPE_NAME: bizTypeName ?? '',
+            PROJECT_OWNER: projectOwner ?? '',
             ITEM_ID: '',
             ITEM_CLASS_NAME: '',
+            ITEM_TYPE: '',
+            NICK_NAME: '',
           });
         }}
         preSearchParams={
           {
-            divisionId,
-            deptId: 'ALL',
-            endCustomer: 'ALL',
-            salesSite: 'ALL',
-            projectCode: '',
+            divisionId: rowValue('DIVISION_ID', divisionId),
+            deptId: rowValue('DEPT_ID'),
+            endCustomer: rowValue('END_CUSTOMER'),
+            salesSite: rowValue('SCM_SITE_ID'),
+            projectCode: rowValue('PROJECT_CODE', ''),
             etc: 'N',
           } as never
         }
@@ -83,16 +97,25 @@ export const SalesPlanModals = ({
       <ItemByDivisionModal
         open={openItem}
         modalClose={() => onClose('ITEM')}
-        setSelectedValue={(itemId: string, itemName?: string, _itemType?: string, nickName?: string) => {
-          applyToInsertRow({ ITEM_ID: itemId, ITEM_NAME: itemName ?? '', NICK_NAME: nickName ?? '' });
+        setSelectedValue={(itemId, itemName, itemClassName, nickName, itemType) => {
+          applyToInsertRow({
+            ITEM_ID: itemId,
+            ITEM_NAME: itemName ?? '',
+            ITEM_CLASS_NAME: itemClassName ?? '',
+            ITEM_TYPE: itemType ?? '',
+            NICK_NAME: nickName ?? '',
+          });
         }}
         preSearchParams={
           {
-            divisionId,
-            deptId: 'ALL',
-            endCustomer: 'ALL',
-            salesSite: 'ALL',
-            itemId: '',
+            divisionId: rowValue('DIVISION_ID', divisionId),
+            deptId: rowValue('DEPT_ID'),
+            endCustomer: rowValue('END_CUSTOMER40', rowValue('END_CUSTOMER')),
+            salesSite: rowValue('SCM_SITE_ID'),
+            projectCode: '',
+            itemId: rowValue('ITEM_ID', ''),
+            activeFlag: 'Y',
+            measure: rowValue('MEASURE', ''),
           } as never
         }
         callFromCell={true}
@@ -147,7 +170,7 @@ export const SalesPlanModals = ({
           ).then(ok => {
             if (!ok) return;
             void fetchStaticMeasures();
-            void queryClient.invalidateQueries({ queryKey: [MENU_ID] });
+            onMeasureSaved();
           });
         }}
       />

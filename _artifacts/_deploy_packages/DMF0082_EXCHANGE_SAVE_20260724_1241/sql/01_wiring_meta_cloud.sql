@@ -84,4 +84,22 @@ WHERE NOT EXISTS (
     SELECT 1 FROM SCM_ADM_MSG_M m WHERE m.MSG_ID = 'MSG00689' AND m.LANG_CD = t.LANG_CD
 );
 
+-- [5] MSG_M — MSG00454/MSG00455 (BPS I/F 성공/실패 안내 — ExchangeRateModal L198~203 사용 코드.
+--     사내 2026-08-02 등록 동기. 결함대장 D5: Doc/단위테스트/_결함대장_TestCases4.1.md. 기존재 시 무수정 skip)
+INSERT INTO SCM_ADM_MSG_M (MSG_ID, LANG_CD, MSG_NM, MSG_TP_CD, USE_YN,
+                           CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+SELECT t.MSG_ID, t.LANG_CD, t.MSG_NM, 'MSG', 'Y',
+       'admin', SYSDATE, 'admin', SYSDATE
+FROM (
+    SELECT 'MSG00454' AS MSG_ID, 'KO' AS LANG_CD, '환율 정보가 정상적으로 반영되었습니다.' AS MSG_NM FROM DUAL UNION ALL
+    SELECT 'MSG00454', 'EN', 'Exchange rate information has been applied successfully.' FROM DUAL UNION ALL
+    SELECT 'MSG00454', 'CN', '汇率信息已成功应用.' FROM DUAL UNION ALL
+    SELECT 'MSG00455', 'KO', '환율 정보 반영에 실패했습니다.' FROM DUAL UNION ALL
+    SELECT 'MSG00455', 'EN', 'Failed to apply exchange rate information.' FROM DUAL UNION ALL
+    SELECT 'MSG00455', 'CN', '汇率信息应用失败.' FROM DUAL
+) t
+WHERE NOT EXISTS (
+    SELECT 1 FROM SCM_ADM_MSG_M m WHERE m.MSG_ID = t.MSG_ID AND m.LANG_CD = t.LANG_CD
+);
+
 COMMIT;

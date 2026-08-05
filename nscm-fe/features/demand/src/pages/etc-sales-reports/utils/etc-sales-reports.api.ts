@@ -80,30 +80,5 @@ export const callProc = async (
 export const callSaveEtcReport = (payload: Record<string, string>): Promise<CallProcResult> =>
   callProc(SHEETS.MAIN, 'SAVE', payload);
 
-// United 버전 액션 — SP_W 계열: DMF0044_SAVE_SALES_PLAN_VERSION_COPY (8 IN — createdBy BE주입)
-export const callVersionAction = (params: {
-  divisionId: string;
-  versionNo: string;
-  versionDescription: string;
-  resultDate: string;
-  actionType: string; // 'D' / 'CP' / 'CR'
-  mvPlanYyyymm: string;
-  updateYn: string;
-}): Promise<CallProcResult> => callProc(SHEETS.UNITED_VERSION, 'ACTION', { ...params });
-
-// United 버전 액션 — BP_M 계열 분기: PKG.P_DMF0044_SAVE_BIZ_PLAN_VERSION_COPY (5 IN)
-export const callVersionActionBp = (params: {
-  divisionId: string;
-  versionNo: string;
-  versionDescription: string;
-  actionType: string;
-}): Promise<CallProcResult> => callProc(SHEETS.UNITED_VERSION, 'ACTION_BP', { ...params });
-
-// United Transfer/Cancel — DMF0044_MOBILE_REPORT_CREATE (action 'T'/'C' — GDW 전송)
-export const callTransfer = (params: {
-  divisionId: string;
-  versionNo: string;
-  versionType: string;
-  actionType: string;
-}): Promise<CallProcResult> => callProc(SHEETS.UNITED_VERSION, 'TRANSFER', { ...params });
+// United 버전 액션 3종은 공용 VersionModal(components/versionModal/version-modal.api.ts)로 이동 (2026-07-30)
 

@@ -28,7 +28,11 @@ export interface SaveRow {
 
 const str = (v: unknown): string => {
   if (v === undefined || v === null) return '';
-  return typeof v === 'string' ? v : typeof v === 'number' || typeof v === 'boolean' ? String(v) : '';
+  return typeof v === 'string'
+    ? v
+    : typeof v === 'number' || typeof v === 'boolean'
+      ? String(v)
+      : '';
 };
 
 const keyOf = (item: WijmoRowItem): Omit<SaveRow, 'activeFlag' | 'yyyymmdd' | 'qty'> => ({

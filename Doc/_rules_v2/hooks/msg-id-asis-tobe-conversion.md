@@ -102,6 +102,49 @@ grep -roE "MSG[0-9]{5}" {작성 파일들} | sort -u
 
 ---
 
+## §5. ⭐ 신규 채번 시 **3점 동시 반영 의무** (2026-07-30 신설 — DMF0068 누락 사고)
+
+> 신규 MSG/LBL/MNU 코드를 채번했으면 **아래 3곳을 같은 작업 단위에서** 반영한다. 하나라도 빠지면 결함.
+
+| # | 대상 | 실패 시 증상 |
+|---:|---|---|
+| 1 | 사내 `SCM_ADM_MSG_M` — **KO/EN/CN 3언어** | 메시지 관리 화면 미등재 / 클라우드 이관 시 원장 불일치 |
+| 2 | **`nscm-fe/public/locales/{KO,EN,CN}.json` 3파일** | ⛔ **화면에 fallback 문자열이 표시된다** |
+| 3 | 이관 패키지의 **`locales.{화면ID}_PATCH.json`** (+ 메타 INSERT SQL) | 클라우드에서 2번이 재발 — 이관해도 같은 증상 |
+
+⚠️ **2번이 런타임 원천이다.** i18n 은 `packages/foundation/src/lib/i18n.ts` 의
+`backend.loadPath: '/locales/{{lng}}.json'` **정적 파일만** 읽는다 —
+`SCM_ADM_MSG_M` 은 `t()` 의 소스가 **아니다**.
+따라서 **"사내 DB 에 넣었다" 는 화면 표시를 보장하지 않는다.**
+
+**사고 실측 (2026-07-30)**: SYS0017 19키는 3점 모두 반영됐으나, 같은 날 작업한 DMF0068 5키
+(`MSG00699~00702` / `LBL00783`)는 **DB 에만 있고 locales 3파일에 없었다** →
+`버전은 1개만 선택해 주세요` 등 검증 메시지 4건 + `Edit` 라벨이 fallback 표시 상태였다.
+
+### 검증 게이트 (채번 직후 / PR 전)
+
+```bash
+# ① DB 3언어 등록 (각 ID = 3행)
+#    SELECT MSG_ID, COUNT(*) FROM SCM_ADM_MSG_M WHERE MSG_ID IN (...) GROUP BY MSG_ID;  -- 전부 3
+# ② locales 3파일 존재 — 누락 0건이어야 한다
+grep -c '"MSG00699"' nscm-fe/public/locales/KO.json nscm-fe/public/locales/EN.json nscm-fe/public/locales/CN.json
+# ③ 이관 패키지에 PATCH 파일 동봉 여부
+```
+
+### `MSG_TP_CD` = **접두사와 일치** (동시 발견 결함)
+
+`MSG*`→`'MSG'` / `LBL*`→`'LBL'` / `MNU*`→`'MNU'`. 라벨을 `'MSG'` 로 넣으면
+메시지 관리 화면의 타입 필터·통계에서 라벨이 메시지로 집계된다(메타 무결성 결함).
+
+```sql
+-- 전수 스윕: 접두사 ↔ MSG_TP_CD 불일치 0행이어야 한다 (MSG_API_* 는 'API' 로 정상)
+SELECT DISTINCT MSG_ID, MSG_TP_CD FROM SCM_ADM_MSG_M
+ WHERE REGEXP_LIKE(MSG_ID,'^(MSG|LBL|MNU)[0-9]{5}$') AND MSG_TP_CD <> SUBSTR(MSG_ID,1,3);
+```
+
+---
+
 ## §4. 요약 (한 줄 룰)
 
 > **AS-IS 의 MSG_ID 는 "번호"가 아니라 "문구"로 이관한다.** ID 를 복사하지 말고, ① AS-IS 문구 확보 → ② 대조표 매칭 컬럼 확인 → ③ 사내 DB 실측으로 EXACT 재사용/신규 채번/동일 유지 3분기 → ④ 사용 ID 전수 실문구 대사 보고.
+> 채번했으면 **§5 3점 동시 반영**(DB 3언어 + locales 3파일 + 이관 PATCH) + `MSG_TP_CD` 접두사 일치.

@@ -7,13 +7,14 @@ import {
   type GridPanel,
   MergeManager,
 } from '@mescius/wijmo.grid';
+import dayjs, { type Dayjs } from 'dayjs';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
 import { CustomDialog, CustomDropdown, DataGrid, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
-import { Button, FormItem, InputField } from '@shared/lges';
+import { Button, DatePickerCalendar, FormItem } from '@shared/lges';
 import { Grid } from '@shared/mui';
 import { useMessageStore } from '@shared/stores';
 
@@ -34,6 +35,11 @@ const DIVISION_FALLBACK: Array<{ value: string; label: string }> = [
   { value: '81', label: '81 (ESS Battery)' },
   { value: '82', label: '82 (Power Tool)' },
 ];
+
+// Period(YYYYMM) ↔ dayjs — 메인 화면 PeriodField 와 동일하게 달력(DatePickerCalendar) 사용.
+//   customParseFormat plugin 미등록 환경 → 'YYYY-MM-01' 로 변환해 파싱. 저장/비교는 계속 YYYYMM.
+const ymToDayjs = (s: string): Dayjs | null =>
+  s && s.length === 6 ? dayjs(`${s.slice(0, 4)}-${s.slice(4, 6)}-01`) : null;
 
 interface ExchangeRow {
   DIVISION_ID?: string;
@@ -79,25 +85,31 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
 
   const [periodFrom, setPeriodFrom] = useState(defaultPeriod.start);
   const [periodTo, setPeriodTo] = useState(defaultPeriod.end);
+  // 조회에 실제 반영되는 "확정 기간": 달력 선택(periodFrom/To)은 UI 편집값일 뿐,
+  //   query key 로는 이 확정값만 사용 → 달력만 바꿨을 때 자동 재조회되지 않음. 최초 open + Search 버튼에서만 갱신.
+  const [queryPeriod, setQueryPeriod] = useState(defaultPeriod);
 
   useEffect(() => {
     if (open) {
       setDivisionId(defaultDivision);
       setPeriodFrom(defaultPeriod.start);
       setPeriodTo(defaultPeriod.end);
+      setQueryPeriod(defaultPeriod); // 최초 open: 확정 기간 세팅(= 자동 1회 조회)
     }
   }, [open, defaultDivision, defaultPeriod]);
 
   // sheet 'exchange' — SP PKG_DMF0020.P_DMF0020_GET_FUTUREPRICE_INFO (4 IN + 2 OUT, divisionId 인자 없음)
   //   filters useMemo 안정화 + enabled false + Find 트리거 (refetch loop 방지)
-  const startYyyymmdd = periodFrom.length === 6 ? `${periodFrom}01` : periodFrom;
-  const endYyyymmdd = periodTo.length === 6 ? `${periodTo}31` : periodTo;
+  //   query key 는 확정 기간(queryPeriod)만 참조 — 달력 편집(periodFrom/To)은 제외해야 자동 재조회 방지.
+  const startYyyymmdd =
+    queryPeriod.start.length === 6 ? `${queryPeriod.start}01` : queryPeriod.start;
+  const endYyyymmdd = queryPeriod.end.length === 6 ? `${queryPeriod.end}31` : queryPeriod.end;
   const filters = useMemo(
     () => ({ startYyyymmdd, endYyyymmdd }) as never,
     [startYyyymmdd, endYyyymmdd]
   );
   // ⭐ 자동조회 (2026-07-07 사용자 요구 — Batch Price Input 제외 전 modal 자동조회):
-  //   enabled=open → modal open 시 react-query 가 filters(기간)로 자동 fetch. Find 버튼은 재조회용 유지.
+  //   enabled=open → modal open 시 react-query 가 확정 기간으로 자동 fetch. Find 버튼은 재조회용 유지.
   //   (setFilter();refetch() 직접 발사 대신 enabled 구동 → stale-closure NULL 재조회 함정 회피.)
   const { data, refetch } = useTabProcQuery({
     menuId: MENU_ID,
@@ -249,7 +261,10 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
             let c1 = c,
               c2 = c;
             while (c1 > 0 && yearOf(panel.columns[c1 - 1]?.binding ?? '') === y) c1--;
-            while (c2 < panel.columns.length - 1 && yearOf(panel.columns[c2 + 1]?.binding ?? '') === y)
+            while (
+              c2 < panel.columns.length - 1 &&
+              yearOf(panel.columns[c2 + 1]?.binding ?? '') === y
+            )
               c2++;
             if (c1 === c2) return null;
             return new CellRange(0, c1, 0, c2);
@@ -347,9 +362,15 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
 
   const handleFind = () => {
     if (periodFrom > periodTo) {
-      void setAlert({ type: 'alert', content: t('MSG00108', '_시작 월이 종료 월보다 늦을 수 없습니다.') });
+      void setAlert({
+        type: 'alert',
+        content: t('MSG00108', '_시작 월이 종료 월보다 늦을 수 없습니다.'),
+      });
       return;
     }
+    // Search 시에만 편집 기간을 확정 기간에 반영 → query key 변경 시 자동 재조회.
+    //   확정값이 동일(기간 미변경)해 key 가 안 바뀌는 경우를 위해 refetch 도 명시 발사.
+    setQueryPeriod({ start: periodFrom, end: periodTo });
     refetch?.();
   };
 
@@ -393,18 +414,36 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
                     label={t('LBL00013', 'Period')}
                     labelAlign='right'
                     render={() => (
-                      <div className={styles.periodRange}>
-                        <InputField
-                          value={periodFrom}
-                          onChange={e => setPeriodFrom(e.target.value)}
-                          placeholder='YYYY-MM'
-                        />
-                        <span>~</span>
-                        <InputField
-                          value={periodTo}
-                          onChange={e => setPeriodTo(e.target.value)}
-                          placeholder='YYYY-MM'
-                        />
+                      // 부모 화면 Period 와 동일하게 시작월/종료월 각각 독립 월 달력(usecase='month') 사용.
+                      //   필드별로 자기 팝업이 뜨며 저장/조회 값은 계속 YYYYMM (onChange 에서 6자리 format).
+                      <div className={styles.periodSplit}>
+                        <div className={styles.datePickerFix}>
+                          <DatePickerCalendar
+                            usecase='month'
+                            elevation
+                            size='small'
+                            value={ymToDayjs(periodFrom)}
+                            onChange={
+                              ((date: Dayjs | null) => {
+                                setPeriodFrom(date?.format('YYYYMM') ?? '');
+                              }) as never
+                            }
+                          />
+                        </div>
+                        <span className={styles.periodSep}>~</span>
+                        <div className={styles.datePickerFix}>
+                          <DatePickerCalendar
+                            usecase='month'
+                            elevation
+                            size='small'
+                            value={ymToDayjs(periodTo)}
+                            onChange={
+                              ((date: Dayjs | null) => {
+                                setPeriodTo(date?.format('YYYYMM') ?? '');
+                              }) as never
+                            }
+                          />
+                        </div>
                       </div>
                     )}
                   />

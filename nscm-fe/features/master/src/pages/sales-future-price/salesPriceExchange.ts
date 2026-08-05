@@ -31,7 +31,8 @@ export const buildExchangeRateMap = (rows: ExchangeRateRow[]): ExchangeRateMap =
     const uc = String(r.UNIT_CURRENCY ?? '');
     const ym = String(r.YYYYMM ?? '');
     if (!div || !cur || !uc || !ym) continue;
-    const price = typeof r.EXCHANGE_PRICE === 'number' ? r.EXCHANGE_PRICE : Number(r.EXCHANGE_PRICE);
+    const price =
+      typeof r.EXCHANGE_PRICE === 'number' ? r.EXCHANGE_PRICE : Number(r.EXCHANGE_PRICE);
     if (!Number.isNaN(price)) map.set(erKey(div, cur, uc, ym), price);
   }
   return map;

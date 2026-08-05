@@ -11,7 +11,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 @Builder
@@ -48,12 +47,6 @@ public class GridColumn {
     private String attribute8;
     private String attribute9;
     private String attribute10;
-
-    // UI Category Setup 의 ATTRIBUTE1 이 SCM_ADM_CMBO_SQL_M 의 SQL_ID 이고
-    // CELL_CONTROL_OBJECT_TYPE_CODE='FPComboBox' 일 때 BE 가 자동 resolve 하여 채움.
-    // FE columnMapping.ts:161 `getDataMap(column.dataMap, column.attribute2)` 사용.
-    @Setter
-    private List<Map<String, Object>> dataMap;
 
     public static GridColumn of(Map<String, Object> data) {
     	return GridColumn.builder()

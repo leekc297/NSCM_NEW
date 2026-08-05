@@ -1,0 +1,24 @@
+{
+  "_INSTRUCTION": "nscm-fe/public/locales/{KO,EN,CN}.json 에 각 언어 객체의 5키를 머지한다. 파일 통째 교체 금지 — 기존 키 유지, 중복 키 덮어쓰기 금지. i18n(foundation/src/lib/i18n.ts)은 /locales/{lng}.json 만 읽으므로 SCM_ADM_MSG_M 등록만으로는 화면에 표시되지 않는다(DB 등록 + locales 3파일 = 2점 동시 의무).",
+  "KO": {
+    "MSG00699": "0보다 큰 정수를 입력하십시오.",
+    "MSG00700": "중첩된 기간이 있습니다.",
+    "MSG00701": "버전은 1개만 선택해 주세요.",
+    "MSG00702": "40번 사업부 전용 화면입니다.",
+    "LBL00783": "Edit"
+  },
+  "EN": {
+    "MSG00699": "Please enter an integer greater than 0.",
+    "MSG00700": "The period overlaps with an existing one.",
+    "MSG00701": "Please select only one version.",
+    "MSG00702": "This screen is available for Division 40 only.",
+    "LBL00783": "Edit"
+  },
+  "CN": {
+    "MSG00699": "请输入大于0的整数.",
+    "MSG00700": "存在重叠的期间.",
+    "MSG00701": "请只选择一个版本.",
+    "MSG00702": "本画面仅适用于40事业部.",
+    "LBL00783": "编辑"
+  }
+}

@@ -68,9 +68,12 @@ public class SystemLogAspect {
         Object result = null;
         try {
             result = joinPoint.proceed();
-            String resultJson = toJson(result);
-            if(bLog) log.info("END: {}.{}() | Result: {} | Time: {}ms",
-                     className, methodName, resultJson, (System.currentTimeMillis() - startTime));
+            // 대량 조회 결과의 직렬화 비용을 피하기 위해 debug 레벨이 켜진 경우에만 toJson 수행
+            if(bLog && log.isDebugEnabled()) {
+                String resultJson = toJson(result);
+                log.debug("END: {}.{}() | Result: {} | Time: {}ms",
+                        className, methodName, resultJson, (System.currentTimeMillis() - startTime));
+            }
 
             return result;
         } catch (Throwable throwable) {
@@ -107,14 +110,6 @@ public class SystemLogAspect {
 	        		MDC.put("buttonCd", obj[4].toString());
     	        }
             }
-    	}
-    	// ⭐ G3 PerfLog (Phase 7 A3, 2026-06-04) — @SystemLog(LogType.PERF) annotation 부착 method 의 duration 측정.
-    	// MDC 의 typeCd='PERF' 로 logback 의 별도 appender 분리 가능 (logback-spring.xml 의 PERF_LOG appender 추가).
-    	// FE usePerfTrace.measure() 와 통합 가능 — SCM_ADM_API_M 에 endpoint 메타 등록 시 GeneralController 가 라우팅.
-    	if(annoType.equals("PERF")) {
-    		// PERF 는 단순 duration 측정 — MDC typeCd 만 설정. log.info 의 Time: {}ms 가 자동 기록.
-    		// 추가 attribute 필요 시 (action / phase 등) 본 분기에서 MDC.put 호출.
-    		log.debug("PERF measure: {}.{}() start", className, methodName);
     	}
     	if(annoType.equals("EXCELUPLOAD")) {
     		if(className != null && className.equals("FileController")) {
@@ -156,9 +151,12 @@ public class SystemLogAspect {
         try {
 
             result = joinPoint.proceed();
-            String resultJson = toJson(result);
-            log.info("END: {}.{}() | Result: {} | Time: {}ms",
-                     className, methodName, resultJson, (System.currentTimeMillis() - startTime));
+            // 대량 조회 결과의 직렬화 비용을 피하기 위해 debug 레벨이 켜진 경우에만 toJson 수행
+            if(log.isDebugEnabled()) {
+                String resultJson = toJson(result);
+                log.debug("END: {}.{}() | Result: {} | Time: {}ms",
+                        className, methodName, resultJson, (System.currentTimeMillis() - startTime));
+            }
 
             return result;
         } catch (Throwable throwable) {

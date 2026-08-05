@@ -46,8 +46,8 @@
 
 // ⭐ 당주/당월 컬럼 강조 테두리 — 헤더 Green Bold 와 짝 (AS-IS 당주 Green Bevel 3px — chkColor OFF 기본 경로)
 :global(.sp-cell-current-period) {
-  border-left: 2px solid #1e8449 !important;
-  border-right: 2px solid #1e8449 !important;
+  border-left: 3px solid #1e8449 !important;
+  border-right: 3px solid #1e8449 !important;
 }
 
 // ⭐ FPModal 팝업셀 아이콘 (DMF0020/DMF0003 표준 — 전용 span .popup-icon + OpenInNew SVG mask.
@@ -69,32 +69,47 @@
   -webkit-mask-size: contain;
 }
 
-// ⭐ Measure 선택 모달 (공용 ColumnSelectDualList 양쪽 구성 — ColumnSettingModal 동일 레이아웃)
-.measureDualContainer {
+// 화면설계서 Measure Select — 단일 체크 목록 + OK/Cancel
+.measureChecklistContainer {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding: 4px 2px;
-  height: 460px;
-  min-height: 350px;
-  max-height: 68vh;
+  padding: 4px 2px 2px;
   box-sizing: border-box;
-  overflow: hidden;
 }
 
-// ColumnSelectDualList wrapper — flex 1 차지 (버튼바 제외) + min-height 보장
-.measureDualContainer > div:first-child {
-  flex: 1 1 auto;
-  min-height: 250px;
-  overflow: hidden;
+// 체크 목록 외곽 패널
+.measureChecklistPanel {
+  border: 1px solid #c7cdd4;
+  min-height: 190px;
+}
+
+.measureChecklistHeader {
+  padding: 7px 10px;
+  border-bottom: 1px solid #c7cdd4;
+  background: #eef1f4;
+  color: #20252a;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.measureChecklistBody {
+  max-height: 250px;
+  overflow-y: auto;
+  padding: 6px 10px;
+}
+
+.measureChecklistRow {
+  display: flex;
+  align-items: center;
+  min-height: 26px;
 }
 
 // 버튼바 — 우측 정렬 (표준 @shared/lges Button — ColumnSettingModal actionBar 동일)
-.measureActionBar {
+.measureChecklistActionBar {
   display: flex;
   gap: 8px;
   align-items: center;
   justify-content: flex-end;
-  padding: 6px 2px 2px;
-  flex-shrink: 0;
+  padding: 0 2px;
 }

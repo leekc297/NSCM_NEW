@@ -57,24 +57,31 @@ export const BusinessPlanForm = ({
   //   Bucket       = 'BucketType2' (BUCKET2_TYPE_CODE — MONTHLY/QUARTERLY/YEARLY. P5 신설)
   //   Plant Site   = 'PlantSitebyEndCustomer' (Division+EndCustomer 서버 바인드 + 값 quoting 의무)
   const q = (v?: string): string => `'${v && v.trim() !== '' ? v : 'ALL'}'`;
-  const [endCustomer, endCustomer40, bizTypeByDivision, dmBizType, itemType, bucketTypeCombo, plantSite] =
-    useTabComboQueries({
-      filters: [
-        'EndCustomer',
-        'EndCustomerByDivision40',
-        // ⭐ 2026-07-23 AS-IS 정합(사용자 승인) — BIZ_TYPE_BPMS lookup(12종 고정) →
-        //   AS-IS SCM0001_GET_BIZ_TYPE_BY_DIVISION 1:1 (SCM_MST_PROJECT division별 distinct, @divisionId 바인드).
-        { comboId: 'BizTypeByDivision', divisionId: q(sc.divisionId) },
-        'DmBizType',
-        'ItemType',
-        'BucketType2',
-        {
-          comboId: 'PlantSitebyEndCustomer',
-          divisionId: q(sc.divisionId),
-          endCustomer: q(sc.endCustomers.join(',')),
-        },
-      ],
-    });
+  const [
+    endCustomer,
+    endCustomer40,
+    bizTypeByDivision,
+    dmBizType,
+    itemType,
+    bucketTypeCombo,
+    plantSite,
+  ] = useTabComboQueries({
+    filters: [
+      'EndCustomer',
+      'EndCustomerByDivision40',
+      // ⭐ 2026-07-23 AS-IS 정합(사용자 승인) — BIZ_TYPE_BPMS lookup(12종 고정) →
+      //   AS-IS SCM0001_GET_BIZ_TYPE_BY_DIVISION 1:1 (SCM_MST_PROJECT division별 distinct, @divisionId 바인드).
+      { comboId: 'BizTypeByDivision', divisionId: q(sc.divisionId) },
+      'DmBizType',
+      'ItemType',
+      'BucketType2',
+      {
+        comboId: 'PlantSitebyEndCustomer',
+        divisionId: q(sc.divisionId),
+        endCustomer: q(sc.endCustomers.join(',')),
+      },
+    ],
+  });
 
   // 멀티 옵션 헬퍼 — NUMBER→String + DIVISION_ID 토큰 필터 (카탈로그 toOptions 동등)
   const toOptions = (rows: Array<Record<string, unknown>> | undefined, divisionId?: string) => {
@@ -111,7 +118,10 @@ export const BusinessPlanForm = ({
 
   const firstOr = (arr: string[]): string => arr[0] ?? '';
   const toArr = (v: string): string[] => (v ? [v] : []);
-  const toMulti = (v: string | undefined): string[] => String(v ?? '').split(',').filter(Boolean);
+  const toMulti = (v: string | undefined): string[] =>
+    String(v ?? '')
+      .split(',')
+      .filter(Boolean);
 
   return (
     <SearchArea

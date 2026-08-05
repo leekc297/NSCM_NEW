@@ -1,0 +1,72 @@
+PROCEDURE           "SCM0010_GET_NOTICE_CONTENT_MASTER"
+(
+    P_NOTICE_ID       IN  VARCHAR2,
+    O_RC1             OUT SYS_REFCURSOR,
+    O_RESULT_CURSOR   OUT SYS_REFCURSOR
+)
+/*
+ * Program ID   : SCM0010_GET_NOTICE_CONTENT_MASTER
+ * Description  : NOTICE MESSAGE 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/02/22   ygkim   Initial Release PJ20170278 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2026.03.24 김준규            [PJ20264226] NextSCM Pilot 설계 및 개발
+ * 2026.05.21  최용훈           MS-SQL -> Oracle 변환
+ *
+ */
+AS
+    V_PROC_INPUT    VARCHAR2(4000 CHAR);
+    V_BACKTRACE     VARCHAR2(4000 CHAR);
+    V_SQL_CODE      VARCHAR2(100 CHAR);
+    V_SQL_ERRMSG    VARCHAR2(1000 CHAR);
+    N_LOG_COUNT     PLS_INTEGER := 0;
+BEGIN
+
+    OPEN O_RC1 FOR
+    SELECT M.NOTICE_ID
+         , R.NOTICE_TITLE NOTICE_MAIN_TITLE
+         , M.LANGUAGE_CODE
+         , LD.SEGMENT2    LANGUAGE
+         , M.NOTICE_TITLE
+         , M.NOTICE_CONTENT
+    FROM SCM_ADM_NOTICE_CONTENT_MASTER               M
+             INNER JOIN SCM_ADM_NOTICE_MASTER        R
+             ON R.NOTICE_ID = M.NOTICE_ID
+             INNER JOIN SCM_ADM_LOOKUP_MASTER        LM
+             ON LM.LOOKUP_TYPE = 'LANGUAGE' AND LM.VALID_YN = 'Y'
+             INNER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL LD
+             ON LD.LOOKUP_TYPE = LM.LOOKUP_TYPE AND LD.SEGMENT1 = M.LANGUAGE_CODE AND LD.VALID_YN = 'Y'
+    WHERE M.NOTICE_ID = P_NOTICE_ID;
+
+    OPEN O_RESULT_CURSOR FOR
+    SELECT '0' AS CODE, 'SUCCESS' AS MSG, CASE WHEN 1 = 2 THEN '-' ELSE NULL END AS EVENT FROM DUAL;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        ROLLBACK;
+        V_SQL_CODE   := TO_CHAR(SQLCODE);
+        V_SQL_ERRMSG := SQLERRM;
+        V_PROC_INPUT := JSON_OBJECT(
+            'P_NICKNAME' VALUE P_NOTICE_ID
+        );
+        V_BACKTRACE  := DBMS_UTILITY.FORMAT_ERROR_BACKTRACE;
+
+        BEGIN
+            SCM_MGR.PR_SCM_SYS_LOG_BATCH(
+                $$PLSQL_UNIT, 'ERROR', N_LOG_COUNT, 'EXCEPTION',
+                '', SYSDATE, V_PROC_INPUT,
+                V_SQL_CODE, V_SQL_ERRMSG, V_BACKTRACE
+            );
+        END;
+
+        RAISE_APPLICATION_ERROR(-20001,
+            '[' || $$PLSQL_UNIT || '] SQLCODE=' || V_SQL_CODE ||
+            ' / SQLERRM=' || V_SQL_ERRMSG ||
+            ' / BACKTRACE=' || V_BACKTRACE ||
+            ' / PARAMS=' || V_PROC_INPUT
+        );
+        RAISE;
+
+END SCM0010_GET_NOTICE_CONTENT_MASTER;

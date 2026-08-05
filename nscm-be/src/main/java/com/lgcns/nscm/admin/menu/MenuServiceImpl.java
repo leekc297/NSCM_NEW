@@ -13,16 +13,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lgcns.nscm.admin.lookup.LookupService;
 import com.lgcns.nscm.admin.menu.dto.GridColumn;
 import com.lgcns.nscm.admin.menu.dto.GridMeasure;
 import com.lgcns.nscm.admin.menu.dto.MenuDto;
 import com.lgcns.nscm.admin.menu.dto.SearchCondition;
 import com.lgcns.nscm.admin.menu.dto.SearchConditionForDB;
+import com.lgcns.nscm.admin.menu.dto.TitleSetSaveRequest;
 import com.lgcns.nscm.framework.base.BaseService;
 import com.lgcns.nscm.framework.security.CustomUserDetails;
-
-import java.util.ArrayList;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,8 +31,6 @@ import lombok.extern.slf4j.Slf4j;
 public class MenuServiceImpl extends BaseService implements MenuService {
 
 	private final String nameSpace = "admin.menu.";
-
-	private final LookupService lookupService;
 
 	@Override
 	public List<MenuDto> retrieveMenus(String userId) throws Exception {
@@ -60,42 +56,7 @@ public class MenuServiceImpl extends BaseService implements MenuService {
 		Map<String, Object> result = selectList(nameSpace + "retrieveGridColumns", params);
 		List<Map<String, Object>> data = ((List<Map<String, Object>>) result.get(DEFAULT_DATA_RESULT));
 
-		List<GridColumn> columns = GridColumn.listOf(data);
-
-		// UI Category Setup 의 ATTRIBUTE1 이 SCM_ADM_CMBO_SQL_M 의 SQL_ID 이고
-		// CELL_CONTROL_OBJECT_TYPE_CODE='FPComboBox' 일 때 BE 가 자동 resolve.
-		// FE 는 메타만 받아 wijmo dropdown 으로 자동 렌더 (틀 제공 / Column 속성 = admin 관리).
-		resolveComboBoxDataMaps(columns, mnuId, divisionId);
-
-		return columns;
-	}
-
-	/**
-	 * cellCtrlObjTpCd='FPComboBox' AND attribute1=SQL_ID 컬럼들의 dataMap 을 자동 resolve.
-	 * 회귀 안전성: column 마다 try-catch — SQL_ID 미등록·실행 실패 시 해당 column 만 skip.
-	 * LookupService.retrieveCombo 재사용 (CMBO_SQL_M + execStmt).
-	 * null param 주의: makeComboQuery 가 params.getOrDefault(key, "''") 사용하므로 null value 입력 시 NPE.
-	 *                   값이 있을 때만 quote 로 wrap 해서 put.
-	 */
-	@SuppressWarnings("unchecked")
-	private void resolveComboBoxDataMaps(List<GridColumn> columns, String mnuId, String divisionId) {
-		for (GridColumn col : columns) {
-			if (!"FPComboBox".equals(col.getCellCtrlObjTpCd())) continue;
-			if (col.getAttribute1() == null || col.getAttribute1().isEmpty()) continue;
-			try {
-				Map<String, Object> p = new HashMap<>();
-				p.put("comboId", col.getAttribute1());
-				if (mnuId != null && !mnuId.isEmpty()) p.put("mnuId", "'" + mnuId + "'");
-				if (divisionId != null && !divisionId.isEmpty()) p.put("divisionId", "'" + divisionId + "'");
-				Map<String, Object> r = lookupService.retrieveCombo(p);
-				Object v = r.get(col.getAttribute1());
-				if (v instanceof List) col.setDataMap((List<Map<String, Object>>) v);
-			} catch (Exception e) {
-				// 해당 column 의 SQL_ID 미등록 또는 실행 실패 — skip (화면 진입 가능 보장).
-				log.warn("FPComboBox resolve skip (mnuId={}, col={}, sqlId={}): {}",
-						mnuId, col.getColNm(), col.getAttribute1(), e.getMessage());
-			}
-		}
+		return GridColumn.listOf(data);
 	}
 
 	@Override
@@ -176,5 +137,37 @@ public class MenuServiceImpl extends BaseService implements MenuService {
 		selectList(nameSpace + "resetSearchConditions", params);
 
 		return;
+	}
+
+	/**
+	 * 컬럼 개인화(titleSet) 저장 — 공용 Column 팝업 전용.
+	 *
+	 * <p>프로시저가 programId/sheetName 을 인자로 받아 메뉴 종속이 없으므로, 화면마다
+	 * SCM_ADM_MNU_BTN_MPG_M 에 (MNU_ID, 'titleSet', 'SAVE') 를 등록하는 대신 고정 매핑을 쓴다.
+	 * programId 는 path 의 mnuId, P_USER_ID 는 로그인 세션에서 채운다(클라이언트 신뢰 금지).
+	 *
+	 * <p>반환값 = 프로시저 첫 OUT 커서 행. 호출측(FE)이 기존과 동일하게 CODE 로 성공 여부를 판정한다.
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Map<String, Object>> saveTitleSet(String userId, String mnuId, TitleSetSaveRequest request) throws Exception {
+
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("programId", mnuId);
+		params.put("sheetName", request.getSheetName());
+		params.put("columnType", request.getColumnType());
+		params.put("activeFlag", request.getActiveFlag());
+		params.put("columnName", request.getColumnName());
+		params.put("sortOrderNo", request.getSortOrderNo());
+		params.put("subTotalFlag", request.getSubTotalFlag());
+		params.put("sortMethodCode", request.getSortMethodCode());
+		params.put("sesUserId", userId);
+		params.put("columnWidth", request.getColumnWidth());
+		params.put("cellColor", request.getCellColor());
+		params.put("textColor", request.getTextColor());
+
+		Map<String, Object> result = selectList(nameSpace + "saveTitleSet", params);
+
+		return (List<Map<String, Object>>) result.get(DEFAULT_DATA_RESULT);
 	}
 }

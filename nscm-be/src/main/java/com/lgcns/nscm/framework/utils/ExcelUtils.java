@@ -44,7 +44,14 @@ public class ExcelUtils {
         if (cell == null) return "";
         return switch (cell.getCellType()) {
             case STRING -> cell.getStringCellValue();
-            case NUMERIC -> DateUtil.isCellDateFormatted(cell) ? cell.getDateCellValue() : cell.getNumericCellValue();
+            case NUMERIC -> {
+                if (DateUtil.isCellDateFormatted(cell)) yield cell.getDateCellValue();
+                double d = cell.getNumericCellValue();
+                // 정수는 지수표기/소수점 없이 문자열화 (예: 20260720, 777).
+                //   double.toString 이면 20260720 -> "2.026072E7" 로 깨져 TO_DATE/TO_NUMBER 파싱 실패.
+                if (d == Math.rint(d) && !Double.isInfinite(d)) yield String.valueOf((long) d);
+                yield java.math.BigDecimal.valueOf(d).stripTrailingZeros().toPlainString();
+            }
             case BOOLEAN -> cell.getBooleanCellValue();
             case FORMULA -> cell.getCellFormula();
             default -> "";

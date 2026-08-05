@@ -1,0 +1,60 @@
+-- =============================================================================
+-- 02_DIAG_EDIT_GATE.sql — 클라우드 sqlplus 실행: wonqthanq 82 편집 게이트 7종 일괄 판정
+-- 편집 = [G1 PKG 보완] × [G2 SP ADMIN 판정] × [G3 편집 measure] × [G4 FE division 게이트]
+--        × [G5 FE 사용자 EDIT_YN 게이트] × [G6 버튼 권한] 전부 통과해야 함
+-- 사내 기준값 주석 병기 — 클라우드 결과가 다르면 그 게이트가 원인
+-- =============================================================================
+DEFINE UID = 'wonqthanq'
+SET PAGESIZE 100 LINESIZE 160
+
+PROMPT ===== [G1] PKG 보완 반영 (기대: 3) =====
+SELECT COUNT(*) AS AUTHGROUP_MARKS FROM ALL_SOURCE
+WHERE OWNER='SCM_MGR' AND NAME='PKG_DMF0003' AND TYPE='PACKAGE BODY' AND TEXT LIKE '%AUTHGROUP 2026-08-04%';
+
+PROMPT ===== [G2] SP ADMIN 확장판정 재현 (기대: 1 이상 — 0 이면 lookup/그룹매핑 부재) =====
+SELECT COUNT(*) AS ADMIN_JUDGE FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL
+WHERE LOOKUP_TYPE='GET_ADMIN_GROUP' AND VALID_YN='Y' AND SEGMENT2 IN ('ALL','DMF0003')
+  AND (SEGMENT1='&UID'
+       OR SEGMENT1 IN (SELECT USER_GR_ID FROM SCM_MGR.SCM_ADM_USER_GR_MPG_M
+                       WHERE USER_ID='&UID' AND USE_YN='Y'));
+
+PROMPT ----- [G2-a] 세부: 사용자 그룹 매핑 (기대: DM ADMIN 포함) -----
+SELECT USER_GR_ID, USE_YN FROM SCM_MGR.SCM_ADM_USER_GR_MPG_M WHERE USER_ID='&UID';
+PROMPT ----- [G2-b] 세부: GET_ADMIN_GROUP lookup (사내: ADMIN/DM ADMIN/DM Planner/DM Planner (W-S)/SCM PI Admin/SCP Planner + ALL) -----
+SELECT SEGMENT1, SEGMENT2, VALID_YN FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL
+WHERE LOOKUP_TYPE='GET_ADMIN_GROUP' ORDER BY SEGMENT1;
+
+PROMPT ===== [G3] 82 편집가능 measure (기대: AS_In_Req/BNPIn/MKT_FCST_RP 3행 'Y') =====
+SELECT SEGMENT2 AS MEASURE, SEGMENT5 AS EDIT_Y FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL
+WHERE LOOKUP_TYPE='MKT_FCST_MEASURE' AND SEGMENT1='82' AND VALID_YN='Y' ORDER BY SEGMENT2;
+
+PROMPT ===== [G4] FE division 게이트 lookup (기대: 82 행 ATTRIBUTE1='Y' — 0행이면 FE fallback 82 로 통과) =====
+SELECT SEGMENT2 AS DIV_ID, ATTRIBUTE1, VALID_YN FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL
+WHERE LOOKUP_TYPE='DM_UI_EDITABLE_DIVISION' AND SEGMENT1='DMF0003' ORDER BY SEGMENT2;
+
+PROMPT ===== [G5] FE 사용자 EDIT_YN 게이트 (기대: 82 행 EDIT_YN='Y' — 타 division 만 Y 면 82 차단!) =====
+SELECT UNIT_ID, EDIT_YN, USE_YN FROM SCM_MGR.SCM_ADM_USER_GR_UNIT_AUTH_MPG_M
+WHERE USER_ID='&UID' AND UNIT_TP_CD='D' ORDER BY UNIT_ID;
+
+PROMPT ===== [G6] 버튼 권한 (기대: DM ADMIN × Mkt Fcst = SAVE/INSERT/DELETE) =====
+SELECT USER_GR_ID, SHT_NM, MNU_BTN_CD FROM SCM_MGR.SCM_ADM_USER_GR_MNU_BTN_MPG_M
+WHERE MNU_ID='DMF0003' AND USER_GR_ID IN (SELECT USER_GR_ID FROM SCM_MGR.SCM_ADM_USER_GR_MPG_M WHERE USER_ID='&UID')
+ORDER BY SHT_NM, MNU_BTN_CD;
+
+PROMPT ===== [G7] SP 실판정 (기대: EDIT_Y_CNT > 0) =====
+-- GET SP 를 USER_ID 전달로 직접 호출 — EDIT_FLAG 'Y' 행수 확인
+SET SERVEROUTPUT ON
+DECLARE
+    r1 SYS_REFCURSOR; r2 SYS_REFCURSOR; r3 SYS_REFCURSOR; r4 SYS_REFCURSOR;
+    TYPE t_cur IS REF CURSOR;
+    v_cnt PLS_INTEGER := 0; v_y PLS_INTEGER := 0;
+BEGIN
+    SCM_MGR.PKG_DMF0003.P_DMF0003_GET_MKT_FCST_DATA(
+        '82','ALL','ALL','ALL','ALL','ALL','ALL','ALL','20260801','20260831',
+        '&UID','&UID','ALL','ALL','N','N','Y','N','','ALL','&UID','DMF0003',
+        r1, r2, r3, r4);
+    DBMS_OUTPUT.PUT_LINE('호출 성공 — 커서별 EDIT_FLAG 는 애플리케이션에서 확인');
+END;
+/
+PROMPT === 진단 끝 — 사내는 G1~G7 전부 통과 상태. 다른 값이 나온 게이트가 원인 ===
+PROMPT === 주의: PKG 적용 후 화면에서 반드시 "재조회(Search)" — 이전 조회 응답(EDIT_FLAG N)이 캐시됨 ===

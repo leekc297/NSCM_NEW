@@ -12,11 +12,12 @@ import { t } from '@foundation/i18n';
 import _ from '@foundation/lodash';
 import { CustomDialog, CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabLookupQueries, useTabProcQuery } from '@shared/hooks';
-import { Button, DatePickerCalendar, FormItem, InputField } from '@shared/lges';
+import { Button, FormItem, InputField } from '@shared/lges';
 import { ControlConfirmIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 import { useMessageStore } from '@shared/stores';
 
+import { PeriodField } from '../../../../components';
 import { MENU_ID, SHEETS } from '../../contribute-view.constants';
 
 import styles from './ContributeVersionModal.module.scss';
@@ -172,6 +173,12 @@ export const ContributeVersionModal = ({ open, onClose, onSelect }: Props) => {
     }
   }, [open]);
 
+  // popup open 시 기본 조건으로 자동 조회
+  useEffect(() => {
+    if (!open) return;
+    onSearch();
+  }, [open]);
+
   // AS-IS L331~353 SetItem: 선택 row 의 VERSION_NO 만 sVersions 로 전달
   const handleConfirm = () => {
     const g = gridRef.current;
@@ -226,27 +233,18 @@ export const ContributeVersionModal = ({ open, onClose, onSelect }: Props) => {
                     )}
                   />
                 </Grid>
-                <Grid size={6}>
-                  <FormItem
-                    label={t('LBL00013', '_Period')}
-                    labelAlign='right'
-                    labelSize='middle'
-                    className={styles.searchPeriod}
-                    render={() => (
-                      <DatePickerCalendar
-                        usecase='date-range-multi'
-                        elevation
-                        size='small'
-                        value={period}
-                        onChange={date => {
-                          if (Array.isArray(date) && date.length === 2) {
-                            setPeriod([date[0] as Dayjs, date[1] as Dayjs]);
-                          }
-                        }}
-                      />
-                    )}
-                  />
-                </Grid>
+                {/* 공용 카탈로그 PeriodField(@master/searchFields) — state 는 [Dayjs, Dayjs] 유지. */}
+                <PeriodField
+                  gridSize={6}
+                  start={period[0]?.format('YYYYMMDD') ?? ''}
+                  end={period[1]?.format('YYYYMMDD') ?? ''}
+                  onChange={(start, end) =>
+                    setPeriod([
+                      dayjs(`${start.slice(0, 4)}-${start.slice(4, 6)}-${start.slice(6, 8)}`),
+                      dayjs(`${end.slice(0, 4)}-${end.slice(4, 6)}-${end.slice(6, 8)}`),
+                    ])
+                  }
+                />
                 <Grid size={6}>
                   <FormItem
                     label={t('LBL00092', '_Report Type')}

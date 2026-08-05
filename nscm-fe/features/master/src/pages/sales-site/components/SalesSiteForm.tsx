@@ -1,3 +1,4 @@
+import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { Checkbox, FormItem, Label } from '@shared/lges';
@@ -5,8 +6,6 @@ import { Grid } from '@shared/mui';
 
 import { SHEET_INDEX } from '../sales-site.constants';
 import { useSalesSiteStore } from '../useSalesSiteStore';
-
-import styles from './SalesSiteForm.module.scss';
 
 interface SalesSiteFormProps {
   setActiveTab: (tab: SHEET_INDEX) => void;
@@ -41,9 +40,9 @@ export const SalesSiteForm = ({
       }}
       conditions={
         <>
-          <Grid size={4}>
+          <Grid size={3}>
             <FormItem
-              className={styles.customForm}
+              className={commonStyles.formItem}
               label={t('LBL00001', '_Div.')}
               labelAlign='right'
               required
@@ -63,9 +62,9 @@ export const SalesSiteForm = ({
               )}
             />
           </Grid>
-          <Grid size={4}>
+          <Grid size={3}>
             <FormItem
-              className={styles.customForm}
+              className={commonStyles.formItem}
               label={t('LBL00080', '_End Customer')}
               labelAlign='right'
               required
@@ -95,8 +94,9 @@ export const SalesSiteForm = ({
               )}
             />
           </Grid>
-          <Grid size={4}>
+          <Grid size={3}>
             <FormItem
+              className={commonStyles.formItem}
               label={t('LBL00081', '_Sold-To Customer')}
               labelAlign='right'
               labelSize='middle'
@@ -125,9 +125,9 @@ export const SalesSiteForm = ({
               )}
             />
           </Grid>
-          <Grid size={4}>
+          <Grid size={3}>
             <FormItem
-              className={styles.customForm}
+              className={commonStyles.formItem}
               label={t('LBL00011', '_Sales Site')}
               labelAlign='right'
               render={() => (
@@ -158,9 +158,9 @@ export const SalesSiteForm = ({
               )}
             />
           </Grid>
-          <Grid size={4}>
+          <Grid size={3}>
             <FormItem
-              className={styles.customForm}
+              className={commonStyles.formItem}
               label={t('LBL00007', '_Active')}
               labelAlign='right'
               render={() => (
@@ -184,10 +184,10 @@ export const SalesSiteForm = ({
               )}
             />
           </Grid>
-          <Grid className={styles.customGrid}>
+          <Grid size={3} className={commonStyles.customGrid}>
             <FormItem
               render={() => (
-                <div className={styles.customCheckbox}>
+                <div className={commonStyles.customCheckbox}>
                   <Checkbox
                     checked={openDetailGrid}
                     onChange={checked => {

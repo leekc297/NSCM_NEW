@@ -18,6 +18,9 @@ export interface RawFlexGridColumnConfig {
   visible?: boolean;
   display?: boolean;
   personalizable?: boolean;
+  // 개인화(ColumnLayoutModal) — 사용자 지정 셀 배경/글자색 hex ('' 또는 undefined = 기본색)
+  cellColor?: string;
+  textColor?: string;
   sClsLblNm?: string;
   lClsLblNm?: string;
   dataMap?: ComboResponse[];

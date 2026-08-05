@@ -76,6 +76,11 @@ export class HierarchicalMergeManager extends MergeManager {
     if (!col) return null;
     const binding = col.binding ?? '';
 
+    if (panel.cellType === CellType.TopLeft) {
+      const lastRow = panel.rows.length - 1;
+      return lastRow > 0 ? new CellRange(0, c, lastRow, c) : null;
+    }
+
     // ===== ① Data Cell — 좌측 fixed cols 계층 머지 (viewport row 제한) =====
     if (panel.cellType === CellType.Cell && this.fixedBindings.includes(binding)) {
       const view = panel.rows;

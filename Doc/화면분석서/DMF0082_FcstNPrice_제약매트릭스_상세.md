@@ -92,7 +92,16 @@
 | A-14 | 팝업 행 권한 예외 | `AUTHORITY_YN != "Y"` && Action=="I" && IsEditMode | W_ 컬럼 unlock + 키 컬럼 개별 재잠금(§6) + 전주 잠금(1096~1116) | popup 1034~1117 |
 | A-15 | 팝업 조회 SP | `p_userinfo = NowGroupID`, `p_created_by = UserId` | `DMF0082_POPUP_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP` | popup 1266~1267 |
 
-> **미존재 확인**: 과업 지시에 언급된 "팝업 ADMIN/DM ADMIN 게이트(MSG00096)"는 본 2개 소스 어디에도 존재하지 않음(`grep MSG00096` 0건). 해당 게이트는 이 화면이 호출하는 다른 팝업(예: `DMF0000_ExchangeRatePopup`) 소스에 있을 가능성이 있으며 본 문서 범위 밖 — 실측상 부재로 기록.
+> **미존재 확인 (본 2개 소스 한정)**: "팝업 ADMIN/DM ADMIN 게이트(MSG00096)"는 본 2개 소스 어디에도 존재하지 않음(`grep MSG00096` 0건).
+>
+> ⭐ **2026-07-30 정정 — 게이트는 실제로 존재한다.** 위 문장의 "본 문서 범위 밖"(호출되는 다른 팝업)을 후속 작업에서 "부재"로 읽어 **환율 팝업 편집 권한을 5그룹으로 판단한 오판**이 있었다. 원문 재확인 결과:
+>
+> | 근거 파일 | 위치 | 내용 |
+> |---|---|---|
+> | `GSCM/06.UIL/GSCM.DM.Plan.UIL/POPUP/DMF0000_ExchangeRatePopup.cs` | `DefineProperty()` **L112~143** | `switch(NowGroupID) { case "ADMIN": case "DM ADMIN": break; default: list.Add(Edit/Insert/Save); btnBPS.Dispose(); }` → **ADMIN·DM ADMIN 외 전 그룹은 Edit/Insert/Save + BPS I/F 버튼 숨김**. 이어서 `if (_division != "40" && list.Count == 0)` → ADMIN 계열도 **Division 40 에서만** 편집 가능. `btnButtonList.Set_ButtonVisibleFalse(list)` (list = 숨길 버튼) |
+>
+> 게이트 방식은 MSG00096 메시지가 아니라 **버튼 미표시**여서 `grep MSG00096` 로는 잡히지 않는다 — 메시지 검색만으로 권한 게이트 부재를 결론하면 안 된다.
+> TO-BE 반영: `futurePriceInfo` 시트 `EDIT`/`IF`/`SAVE` 를 **ADMIN·DM ADMIN 2그룹**으로 정정(2026-07-30 사내 적용, `_artifacts/_apply_corporate/DMF0082_exchange_edit_auth_admin_only_20260730.sql`). **메인 화면(`FcstNPrice`)의 편집 권한 5그룹은 무변경**(사용자 확정).
 
 ---
 

@@ -120,7 +120,7 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
   });
 
   const allRows = useMemo<ExchangeRow[]>(
-    () => ((data as { data?: ExchangeRow[] } | undefined)?.data ?? []),
+    () => (data as { data?: ExchangeRow[] } | undefined)?.data ?? [],
     [data]
   );
 
@@ -243,10 +243,7 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
     g.beginningEdit.addHandler(beginningEditHandler);
 
     // 편집 종료 — 변경 수집 ('^' bulk 저장 대상)
-    const cellEditEndedHandler = (
-      s: FlexGridType<PivotRow>,
-      e: { row: number; col: number }
-    ) => {
+    const cellEditEndedHandler = (s: FlexGridType<PivotRow>, e: { row: number; col: number }) => {
       const binding = s.columns[e.col]?.binding ?? '';
       if (!/^M_\d{6}$/.test(binding)) return;
       const item = s.rows[e.row]?.dataItem as PivotRow | undefined;
@@ -281,7 +278,10 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
             let c1 = c,
               c2 = c;
             while (c1 > 0 && yearOf(panel.columns[c1 - 1]?.binding ?? '') === y) c1--;
-            while (c2 < panel.columns.length - 1 && yearOf(panel.columns[c2 + 1]?.binding ?? '') === y)
+            while (
+              c2 < panel.columns.length - 1 &&
+              yearOf(panel.columns[c2 + 1]?.binding ?? '') === y
+            )
               c2++;
             if (c1 === c2) return null;
             return new CellRange(0, c1, 0, c2);
@@ -377,7 +377,10 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
 
   const handleFind = () => {
     if (periodFrom > periodTo) {
-      void setAlert({ type: 'alert', content: t(MSG.PERIOD_INVERTED, '_시작 월이 종료 월보다 늦을 수 없습니다.') });
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.PERIOD_INVERTED, '_시작 월이 종료 월보다 늦을 수 없습니다.'),
+      });
       return;
     }
     editsRef.current.clear();

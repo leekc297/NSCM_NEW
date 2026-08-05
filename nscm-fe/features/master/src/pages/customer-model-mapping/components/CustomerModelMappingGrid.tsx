@@ -1,10 +1,5 @@
 import { toggleClass } from '@mescius/wijmo';
-import {
-  CellRange,
-  CellType,
-  type FlexGrid,
-  type FormatItemEventArgs,
-} from '@mescius/wijmo.grid';
+import { CellRange, CellType, type FlexGrid, type FormatItemEventArgs } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useRef, useState, type MutableRefObject } from 'react';
 

@@ -1,8 +1,12 @@
 import { templateItemsSource, templateStaticColumns } from '@mock/data/template';
 
-import { useState } from 'react';
+import { ChartType, FlexChart } from '@mescius/wijmo.chart';
+import { PivotEngine } from '@mescius/wijmo.olap';
+import { PivotGrid, PivotPanel } from '@mescius/wijmo.react.olap';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { apiClient } from '@foundation/apis';
+import { API_CONFIG } from '@foundation/constants';
 import { i18n } from '@foundation/i18n';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { useQuery } from '@foundation/query-client';
@@ -20,6 +24,17 @@ import { Grid } from '@shared/mui';
 import { useMessageStore } from '@shared/stores';
 
 import { useMDIStore } from '../mdi/useMDIStore';
+
+import type { GanttTask } from './TemplatesGantt';
+import {
+  ganttTasks,
+  repeatGanttTasks,
+  getGanttTooltipContent,
+  formatRepeatGanttAxisLabel,
+  renderGanttProgress,
+  renderGanttDependencies,
+} from './TemplatesGantt';
+import { TreeViewExample } from './TemplatesTreeView';
 
 interface SearchParamsProps {
   텍스트: string;
@@ -39,6 +54,164 @@ const genBulkDropdown = (count: number = 10, txt?: string) => {
     result.push({ label: `${i}_${txt ?? 'lbl'}`, value: `${i}` });
   });
   return result;
+};
+
+const GanttChartExample = ({
+  title,
+  description,
+  items,
+  repeatAxis = false,
+  showProgress = false,
+  showDependencies = false,
+}: {
+  title: string;
+  description: string;
+  items: GanttTask[];
+  repeatAxis?: boolean;
+  showProgress?: boolean;
+  showDependencies?: boolean;
+}) => {
+  const chartRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!chartRef.current) {
+      return undefined;
+    }
+
+    const chart = new FlexChart(chartRef.current, {
+      itemsSource: items,
+      chartType: ChartType.Bar,
+      bindingX: repeatAxis ? 'index' : 'name',
+      series: [{ binding: 'start,end', name: '기간' }],
+      axisX: {
+        format: 'MM/dd',
+      },
+      axisY: {
+        majorGrid: false,
+        minorGrid: true,
+        reversed: true,
+        ...(repeatAxis ? { itemFormatter: formatRepeatGanttAxisLabel(items) } : {}),
+      },
+      plotMargin: repeatAxis ? 'auto auto auto 180' : 'auto',
+      tooltip: {
+        content: getGanttTooltipContent,
+      },
+      ...(showProgress ? { itemFormatter: renderGanttProgress } : {}),
+      ...(showDependencies ? { rendered: renderGanttDependencies } : {}),
+    });
+
+    return () => {
+      chart.dispose();
+    };
+  }, [items, repeatAxis, showDependencies, showProgress]);
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+      <h3>{title}</h3>
+      <span>{description}</span>
+      <div style={{ overflowX: 'auto' }}>
+        <div ref={chartRef} style={{ minWidth: '720px', height: '320px' }} />
+      </div>
+    </div>
+  );
+};
+
+/** 백엔드 POST /file/image-upload 응답 (BaseResponse.result) */
+interface ImageUploadResult {
+  fileId: string;
+  url: string;
+  fileName: string;
+  size: number;
+}
+
+/**
+ * 이미지 업로드 / 조회 샘플.
+ *
+ * 백엔드는 조회 경로를 상대경로(`/file/image/{fileId}`)로만 내려주므로
+ * 화면에서 API baseURL을 앞에 붙여 <img src>를 조립해야 한다.
+ */
+const ImageUploadExample = () => {
+  const [imageFile, setImageFile] = useState<File>();
+  const [uploadedImages, setUploadedImages] = useState<ImageUploadResult[]>([]);
+  const [uploading, setUploading] = useState(false);
+  const { setAlert, setToast } = useMessageStore();
+
+  const toImageSrc = (url: string) => `${API_CONFIG.BASE_URL}${url}`;
+
+  const handleUpload = async () => {
+    if (!imageFile) {
+      void setAlert({ type: 'alert', content: '업로드할 이미지를 선택하세요.' });
+      return;
+    }
+
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', imageFile);
+      formData.append('fileKdnCd', 'NOTICE');
+
+      // Content-Type을 직접 지정하지 않는다.
+      // apiClient가 FormData를 감지해 헤더를 지우고 브라우저가 boundary를 채우도록 위임한다.
+      const res = await apiClient.post<ImageUploadResult>('/file/image-upload', formData);
+
+      // 인터셉터가 403/500을 reject하지 않으므로 status와 code를 함께 확인한다.
+      if (res.status >= 400 || Number(res.data?.code)) {
+        void setAlert({
+          type: 'alert',
+          content: res.data?.message?.trim() || '이미지 업로드에 실패했습니다.',
+        });
+        return;
+      }
+
+      setUploadedImages(prev => [res.data.result, ...prev]);
+      setToast({ message: '이미지를 업로드했습니다.', type: 'success' });
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  return (
+    <section aria-labelledby='image-upload'>
+      <h2 id='image-upload'>이미지 업로드 / 보기</h2>
+      <p style={{ color: '#666', fontSize: '13px' }}>
+        jpg, jpeg, png, gif, webp / 최대 15MB. 서버가 확장자와 실제 파일 헤더(매직바이트)를 함께
+        검사합니다.
+      </p>
+
+      <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+        <input
+          type='file'
+          accept='image/jpeg,image/png,image/gif,image/webp'
+          onChange={e => setImageFile(e.target.files?.[0] || undefined)}
+        />
+        <button disabled={uploading} onClick={() => void handleUpload()}>
+          {uploading ? '업로드 중...' : '이미지 업로드'}
+        </button>
+      </div>
+
+      {uploadedImages.length > 0 && (
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', marginTop: '16px' }}>
+          {uploadedImages.map(image => (
+            <figure
+              key={image.fileId}
+              style={{ margin: 0, border: '1px solid #ddd', padding: '8px', width: '260px' }}
+            >
+              <img
+                src={toImageSrc(image.url)}
+                alt={image.fileName}
+                style={{ width: '100%', height: '160px', objectFit: 'contain' }}
+              />
+              <figcaption style={{ fontSize: '12px', wordBreak: 'break-all', marginTop: '8px' }}>
+                <div>{image.fileName}</div>
+                <div style={{ color: '#666' }}>{Math.round(image.size / 1024)} KB</div>
+                <div style={{ color: '#666' }}>{image.url}</div>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      )}
+    </section>
+  );
 };
 
 export const Templates = () => {
@@ -65,10 +238,37 @@ export const Templates = () => {
     {} as SearchParamsProps
   );
 
+  const sampleData = [
+    { item: 'A', account: '거래처1', month: '202601', qty: 100 },
+    { item: 'A', account: '거래처2', month: '202601', qty: 200 },
+    { item: 'B', account: '거래처1', month: '202602', qty: 300 },
+  ];
+
+  const pivotEngine = useMemo(() => {
+    return new PivotEngine({
+      itemsSource: sampleData,
+      rowFields: ['Item'],
+      columnFields: ['Month'],
+      valueFields: ['Qty'],
+      showRowTotals: 'Subtotals',
+      showColumnTotals: 'Subtotals',
+    });
+  }, []);
+
   return (
-    <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+    <div
+      style={{
+        height: '100%',
+        overflowY: 'auto',
+        padding: '20px',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '20px',
+      }}
+    >
       <h1>Templates</h1>
       <Divider />
+
       <section aria-labelledby='file-upload'>
         <h2>파일업로드</h2>
         <input type='file' onChange={e => setFile(e.target.files?.[0] || undefined)} />
@@ -451,6 +651,17 @@ export const Templates = () => {
         />
       </section>
       <Divider />
+      <h2>Pivot Table</h2>
+      <div style={{ display: 'flex', gap: '12px' }}>
+        <div style={{ width: '400px' }}>
+          <PivotPanel itemsSource={pivotEngine} />
+        </div>
+
+        <div style={{ flex: 1, height: '600px' }}>
+          <PivotGrid itemsSource={pivotEngine} />
+        </div>
+      </div>
+      <Divider />
       <MainTitle
         title='Message'
         menuId='SYS0001'
@@ -481,6 +692,33 @@ export const Templates = () => {
           staticColumns={templateStaticColumns as RawFlexGridColumnConfig[]}
         />
       </section>
+      <Divider />
+      <section aria-labelledby='wijmo-gantt-chart'>
+        <h2 id='wijmo-gantt-chart'>간트 차트 렌더링 예시</h2>
+        <GanttChartExample
+          title='기본 간트 차트'
+          description='작업 기간, 진행률, 작업 간 의존성을 함께 표시합니다.'
+          items={ganttTasks}
+          showProgress
+          showDependencies
+        />
+        <GanttChartExample
+          title='반복 작업 간트 차트'
+          description='같은 index 값을 가진 데이터 항목을 같은 작업 행에 반복 일정으로 표시합니다.'
+          items={repeatGanttTasks}
+          repeatAxis
+        />
+      </section>
+      <Divider />
+      <section aria-labelledby='wijmo-treeview'>
+        <h2 id='wijmo-treeview'>트리 메뉴(TreeView) 렌더링 예시</h2>
+        <span>
+          화면 중간의 세로 메뉴 패턴. 좌측 트리에서 노드를 선택하면 우측 상세 영역이 바뀝니다.
+        </span>
+        <TreeViewExample />
+      </section>
+      <Divider />
+      <ImageUploadExample />
     </div>
   );
 };

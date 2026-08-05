@@ -52,6 +52,11 @@ FE `t('MSG00689', fallback)` 은 locale 키 부재 시 코드 내 fallback 문�
 ('Sales Price Recalculation is complete.')로 표시되므로 기능 동작에는 지장 없음.
 클라우드측 locale 반영은 별도 절차로 진행.
 
+> **2026-08-02 추가 — sql/01 [5] 블록**: MSG00454/MSG00455 (BPS I/F 성공/실패 안내 — ExchangeRateModal 사용 코드가
+> 사내·locales 어디에도 미채번이던 결함 D5, `Doc/단위테스트/_결함대장_TestCases4.1.md`) 3개 언어 멱등 INSERT 동봉.
+> 사내는 2026-08-02 기적용(6행 검증 완료, `_apply_corporate/MSG00454_455_EXCHANGE_IF_20260802.sql`),
+> 로컬 locales 3종에도 동일 키 등록 완료. locale json 이관 제외 정책(2026-07-24)은 유지.
+
 ⚠ **최신 스냅샷 고지 (완전성 hook §4.6 #1)**: 위 2파일은 `DMF0082_20260722_1050` 패키지에도
 구판 스냅샷이 포함되어 있음 — **본 패키지 판이 최신**(이전 변경 + 2026-07-24 변경 포함).
 두 패키지를 함께 적용하는 경우 FE 는 반드시 본 패키지 판을 나중에(최종으로) 반영.

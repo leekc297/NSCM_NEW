@@ -54,7 +54,7 @@ const SSPM_SAVE_MAP: Record<string, string> = {
   salesCompany: 'SALES_COMPANY',
   salesPlant: 'SALES_PLANT',
   moduleVariant: 'MODULE_VARIANT',
-  incoterms: 'INCOTERMS',
+  incoterms: 'EDI',
 };
 // salesSite 필수 입력 (AS-IS MSG00002, .cs L1069~1119)
 const SS_MANDATORY: ReadonlyArray<{ field: string; label: string }> = [
@@ -121,6 +121,9 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
   // #3 (2026-06-28): Sort/Filter 는 마지막 클릭(포커스)한 그리드에 적용 — 4 그리드 중 선택.
   //   각 섹션 onClickCapture 로 갱신. 기본 = Summary(최상단).
   const [focusedSheet, setFocusedSheet] = useState<SHEETS>(SHEETS.SUMMARY);
+
+  const [ssRefreshNonce, setSsRefreshNonce] = useState(0);
+  const [sspmRefreshNonce, setSspmRefreshNonce] = useState(0);
 
   const { data: summaryData, refetch: refetchSummary } = useTabProcQuery<MENU_ID, SHEETS.SUMMARY>({
     menuId: MENU_ID,
@@ -292,7 +295,6 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
       GridAction.addRow(salesSiteGridRef.current, {
         ...EMPTY_SALES_SITE_ROW,
         DIVISION_ID: repairContext.division,
-        SSCM_SITE_ID: repairContext.gscmSalesSiteId,
         REP_SOLDTO_CODE: repairContext.erpSoldTo,
         REP_SHIPTO_CODE: repairContext.erpShipTo,
       });
@@ -348,13 +350,13 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
             []
           ).map(r => ({ ...r, EDIT_FLAG: 'Y' })),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [salesSiteData, filters[SHEETS.SALES_SITE]]
+    [salesSiteData, filters[SHEETS.SALES_SITE], ssRefreshNonce]
   );
   const sspmRows = useMemo(
     () =>
       !filters[SHEETS.SSPM] ? [] : (sspmData?.o_rc1 ?? []).map(r => ({ ...r, EDIT_FLAG: 'Y' })),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [sspmData, filters[SHEETS.SSPM]]
+    [sspmData, filters[SHEETS.SSPM], sspmRefreshNonce]
   );
 
   // AS-IS SaveSalesSite/SaveSSPM — 변경행(CRUD_TYPE)만 ^-delim 누적 → 1회 POST(개별 param SP 가 내부 split).
@@ -400,6 +402,13 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
         `/${MENU_ID}/${route}/SAVE/call-proc`,
         payload
       );
+      if (res.status >= 400 || Number(res.data?.code)) {
+        const reason =
+          (res.data as { message?: string })?.message?.trim() ||
+          t('MSG00618', '_저장 중 오류가 발생했습니다.');
+        void setAlert({ type: 'alert', content: reason });
+        return; // 편집/신규행 유지 — 사용자가 수정 후 재저장
+      }
       const result = (res.data?.result ?? {}) as Record<string, Record<string, string>[]>;
       if (isSS) {
         const m = String(result.p_message_cursor?.[0]?.RESULT_MSG ?? '').trim();
@@ -419,8 +428,13 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
         }
       }
       void setToast({ type: 'success', message: t('MSG00606', '_데이터가 저장되었습니다.') });
-      if (isSS) await refetchSalesSite?.();
-      else await refetchSspm?.();
+      if (isSS) {
+        await refetchSalesSite?.();
+        setSsRefreshNonce(n => n + 1);
+      } else {
+        await refetchSspm?.();
+        setSspmRefreshNonce(n => n + 1);
+      }
     } catch (e) {
       const msg = e instanceof Error ? e.message : t('MSG00618', '_저장 중 오류가 발생했습니다.');
       void setAlert({ type: 'alert', content: msg });
@@ -433,8 +447,8 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
   // → 명시 미정의 = 자동 활성 (F6 / F10).
   const hotkeyConfig: HotkeyConfig = {
     search: hasButton('SEARCH') ? setSummaryFilters : false,
-    save: hasButton('SAVE') ? handleSave : false,
-    insert: hasButton('INSERT') ? handleInsert : false,
+    save: false, //hasButton('SAVE') ? handleSave : false,
+    insert: false, //hasButton('INSERT') ? handleInsert : false,
     delete: hasButton('DELETE') ? handleDelete : false, // Delete(F9) — Figma 디자인 + 권한 메타(DELETE) 등록
     manual: false,
     upload: false,

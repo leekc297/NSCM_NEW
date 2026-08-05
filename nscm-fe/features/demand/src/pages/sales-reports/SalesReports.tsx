@@ -2,7 +2,7 @@ import type { FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { IcGridColumnSetup, IcMeasureSelect } from '@foundation/assets';
+import { IcExchangeRate, IcGridColumnSetup, IcMeasureSelect } from '@foundation/assets';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import type { EditTracker } from '@foundation/utils';
 import { MainTitle, SubTitle } from '@shared/components';
@@ -11,10 +11,7 @@ import { useMessageStore } from '@shared/stores';
 
 import { SalesReportsForm } from './components/SalesReportsForm';
 import { SalesReportsGrid } from './components/SalesReportsGrid';
-import {
-  type SalesReportsModalKey,
-  SalesReportsModals,
-} from './components/SalesReportsModals';
+import { type SalesReportsModalKey, SalesReportsModals } from './components/SalesReportsModals';
 import { DATA_TYPE, INSERT_ROW_DEFAULTS, MENU_ID, MSG, SHEETS } from './sales-reports.constants';
 import type { MeasureRow, SalesReportRow, SpreadTitleRow } from './sales-reports.types';
 import styles from './SalesReports.module.scss';
@@ -94,7 +91,7 @@ export const SalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
     enabled: hasSearched && !!filters[SHEETS.MEASURE],
   });
   const measureRows = useMemo<MeasureRow[]>(
-    () => ((measureData as { data?: MeasureRow[] } | undefined)?.data ?? []),
+    () => (measureData as { data?: MeasureRow[] } | undefined)?.data ?? [],
     [measureData]
   );
 
@@ -107,7 +104,6 @@ export const SalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
     // 재조회 = pending insert reset + EditTracker clear (hook #97)
     setInsertedRows([]);
     editTrackerRef.current?.clearChanges();
-     
   }, [mainData]);
 
   // mount 시 1회 admin 메타 fetch + persist filters 무효화
@@ -156,7 +152,10 @@ export const SalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
     if (sc.dataType !== DATA_TYPE.ETC) return; // silent (AS-IS 분기 return 파리티)
     const measures = measureRows.map(r => toCellStr(r.CODE)).filter(Boolean);
     if (measures.length === 0) {
-      void setAlert({ type: 'alert', content: t(MSG.REQUIRED_FIELD, '_{0} 값은 필수 입력 항목입니다.').replace('{0}', 'Measure') });
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.REQUIRED_FIELD, '_{0} 값은 필수 입력 항목입니다.').replace('{0}', 'Measure'),
+      });
       return;
     }
     const gid = `I_${Date.now()}`;
@@ -185,12 +184,18 @@ export const SalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
   const handleSave = async () => {
     const vv = validateVersionForAction(sc.versionNo);
     if (!vv.ok) {
-      void setAlert({ type: 'alert', content: t(vv.msgId!, '_Version을 검색 후 조회하신 후에 입력이 가능합니다.') });
+      void setAlert({
+        type: 'alert',
+        content: t(vv.msgId!, '_Version을 검색 후 조회하신 후에 입력이 가능합니다.'),
+      });
       return;
     }
     const va = validateNotAll(sc.dataType);
     if (!va.ok) {
-      void setAlert({ type: 'alert', content: t(va.msgId!, '_Data Type 이 ALL 인 상태에서는 편집할 수 없습니다.') });
+      void setAlert({
+        type: 'alert',
+        content: t(va.msgId!, '_Data Type 이 ALL 인 상태에서는 편집할 수 없습니다.'),
+      });
       return;
     }
     const savedScroll = gridRef.current?.scrollPosition ?? null;
@@ -236,7 +241,10 @@ export const SalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
       return;
     }
     if (build.rows.length === 0) {
-      void setAlert({ type: 'alert', content: t(MSG.NO_SAVE_TARGET, '_저장할 대상 데이터가 없습니다.') });
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.NO_SAVE_TARGET, '_저장할 대상 데이터가 없습니다.'),
+      });
       return;
     }
     const payload = buildBulkPayload(build.rows as unknown as Record<string, string>[]);
@@ -245,7 +253,8 @@ export const SalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
     try {
       const res = isEtc(sc.dataType) ? await callSaveEtc(payload) : await callSaveCutoff(payload);
       if (res.message) void setAlert({ type: 'alert', content: res.message });
-      else if (res.ok) void setAlert({ type: 'alert', content: t(MSG.SAVED, '_성공적으로 저장되었습니다.') });
+      else if (res.ok)
+        void setAlert({ type: 'alert', content: t(MSG.SAVED, '_성공적으로 저장되었습니다.') });
       if (res.ok) {
         setInsertedRows([]);
         editTrackerRef.current?.clearChanges();
@@ -253,7 +262,8 @@ export const SalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
         if (savedScroll && gridRef.current) gridRef.current.scrollPosition = savedScroll;
       }
     } catch (e) {
-      const msg = e instanceof Error ? e.message : t(MSG.SAVE_ERROR, '_저장 중 오류가 발생했습니다.');
+      const msg =
+        e instanceof Error ? e.message : t(MSG.SAVE_ERROR, '_저장 중 오류가 발생했습니다.');
       void setAlert({ type: 'alert', content: msg });
     }
   };
@@ -267,7 +277,10 @@ export const SalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
     }
     const vv = validateVersionForAction(sc.versionNo);
     if (!vv.ok) {
-      void setAlert({ type: 'alert', content: t(vv.msgId!, '_Version을 검색 후 조회하신 후에 입력이 가능합니다.') });
+      void setAlert({
+        type: 'alert',
+        content: t(vv.msgId!, '_Version을 검색 후 조회하신 후에 입력이 가능합니다.'),
+      });
       return;
     }
     setOpenModal('EXCHANGE');
@@ -277,7 +290,10 @@ export const SalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
   const handleTextbox = () => {
     const vv = validateVersionForAction(sc.versionNo);
     if (!vv.ok) {
-      void setAlert({ type: 'alert', content: t(vv.msgId!, '_Version을 검색 후 조회하신 후에 입력이 가능합니다.') });
+      void setAlert({
+        type: 'alert',
+        content: t(vv.msgId!, '_Version을 검색 후 조회하신 후에 입력이 가능합니다.'),
+      });
       return;
     }
     setOpenModal('TEXTBOX');
@@ -293,18 +309,10 @@ export const SalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
     upload: false,
   };
 
-  // 커스텀 버튼 — Exchange Rate / Text(82 전용 — AS-IS lci_btnTextBox D-1) + Column/Measure 아이콘
+  // 커스텀 버튼 — Text(82 전용 — AS-IS lci_btnTextBox D-1) + Exchange Rate/Column/Measure 아이콘
+  //   ⭐ 배치 규약 (hook #120, 사용자 명시 2026-07-30): 텍스트 버튼 먼저, 그 뒤 아이콘 버튼을
+  //      왼쪽부터 **환율 → Grid Column Set → Measure** 순서로 고정. 환율은 항상 아이콘 형태.
   const customButtons = [
-    ...(hasButton('EXCHANGE_RATE')
-      ? [
-          {
-            label: t('LBL00661', 'Exchange Rate'),
-            title: t('LBL00661', 'Exchange Rate'),
-            action: handleExchangeRate,
-            buttonLabel: t('LBL00661', 'Exchange Rate'),
-          },
-        ]
-      : []),
     ...(hasButton('TEXTBOX') && sc.divisionId === '82'
       ? [
           {
@@ -312,6 +320,17 @@ export const SalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
             title: 'Text',
             action: handleTextbox,
             buttonLabel: 'Text',
+          },
+        ]
+      : []),
+    ...(hasButton('EXCHANGE_RATE')
+      ? [
+          {
+            label: t('LBL00661', 'Exchange Rate'),
+            title: t('LBL00661', 'Exchange Rate'),
+            action: handleExchangeRate,
+            iconComponent: <IcExchangeRate />,
+            buttonLabel: '',
           },
         ]
       : []),

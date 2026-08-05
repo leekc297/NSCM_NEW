@@ -1,4 +1,4 @@
-import type { BUCKET_TYPE } from './mkt-fcst.constants';
+import type { BUCKET_TYPE, MENU_ID, SHEETS } from './mkt-fcst.constants';
 
 // AS-IS DMF0003 조회조건 13 + 체크박스 4 (DMF0003_MktFcst_LAYOUT.md §2):
 //   Row1: Div* / Team / End Customer / Sales Site(+AS 체크)
@@ -32,10 +32,15 @@ export interface SearchCondition {
 // 메인 그리드 행 (PIVOT wide format — 좌측 고정 + 동적 M_/W_/D_ 컬럼)
 //   CRUD_TYPE: 'I' (신규) / 'M' (수정) / 'D' (삭제)
 //   INSERT_GROUP_ID: Insert 시 같은 grouping (measure 묶음) 식별자
-export type MktFcstRow = Record<string, unknown> & {
+//   ⭐ forecast-price 방식 정렬(2026-07-24): SP 응답 계약(ResponseData<..., 'o_rc1'>)을 base 로 삼고,
+//     클라이언트에서만 부여하는 편집 마커(CRUD_TYPE / INSERT_GROUP_ID)를 optional 로 intersection.
+//     ResponseData 는 전 프로퍼티 required primitive + `[key:string]: string|number` 인덱스라
+//     WijmoRowItem(값=WijmoPrimitive) 제약을 충족 → 공용 DataGrid 제네릭 <DataGrid<MktFcstRow>>
+//     직접 사용 가능(itemsSource/gridRef/editTrackerRef 캐스팅 불필요). optional 마커는 intersection 이라
+//     인덱스 재선언 TS2411 을 유발하지 않음. MEASURE 는 base(ResponseData)에 이미 존재.
+export type MktFcstRow = ResponseData<MENU_ID, SHEETS.MAIN, 'o_rc1'> & {
   CRUD_TYPE?: 'I' | 'M' | 'D';
   INSERT_GROUP_ID?: string;
-  MEASURE?: string;
 };
 
 // 동적 컬럼 메타 (DMF0003_GET_SPREAD_TITLE O_RC1 결과 기반 — ora.py SP body 실측).

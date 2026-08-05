@@ -12,7 +12,13 @@
 //   분모 = AS-IS 1:1 (전체 하위 월 분모 + 잠금(실적) 월 기입 스킵 — 사용자 확정 2026-07-15 F-2 ③).
 import { EDIT_MEASURE } from '../business-plan.constants';
 
-import { type DynTag, dynKindOf, monthInQuarter, monthInYear, parseDynTag } from './business-plan.editLock';
+import {
+  type DynTag,
+  dynKindOf,
+  monthInQuarter,
+  monthInYear,
+  parseDynTag,
+} from './business-plan.editLock';
 
 export interface SpreadResult {
   // binding → 새 값 (입력 셀 자신 포함 — 소수 절삭 반영. null = clear)
@@ -95,8 +101,7 @@ export const applyCellChange = (params: {
   patches[binding] = input;
 
   // 반영 후 값 조회 헬퍼 (patches 우선)
-  const valOf = (b: string): number =>
-    b in patches ? (patches[b] ?? 0) : toNumber(rowValues[b]);
+  const valOf = (b: string): number => (b in patches ? (patches[b] ?? 0) : toNumber(rowValues[b]));
 
   const rollupQuarter = (mTag: DynTag): void => {
     const q = quarterOf(mTag, dynBindings);

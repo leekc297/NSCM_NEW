@@ -17,6 +17,8 @@ type ContentAreaProps = {
   handleSubmit?: () => void;
   handleClose?: () => void;
   draggable?: boolean;
+  isMaximized?: boolean;
+  onToggleMaximize?: () => void;
 };
 
 const CustomContentArea = ({
@@ -30,6 +32,8 @@ const CustomContentArea = ({
   handleSubmit,
   handleClose,
   draggable = true,
+  isMaximized,
+  onToggleMaximize,
 }: ContentAreaProps) => {
   const { palette } = useTheme();
   const { t } = useTranslation();
@@ -48,15 +52,35 @@ const CustomContentArea = ({
             </Typography>
           </div>
         )}
-        <ControlCloseIcon
-          size='default'
-          iconSize={20}
-          onClick={handleClose}
-          cursor='pointer'
-          sx={{
-            color: commonTextLight,
-          }}
-        />
+        <div className={styles.dialogHeaderActions}>
+          {/* {onToggleMaximize &&
+            (isMaximized ? (
+              <ControlMinimizeIcon
+                size='default'
+                iconSize={20}
+                onClick={onToggleMaximize}
+                cursor='pointer'
+                sx={{ color: commonTextLight }}
+              />
+            ) : (
+              <ControlMaximizeIcon
+                size='default'
+                iconSize={20}
+                onClick={onToggleMaximize}
+                cursor='pointer'
+                sx={{ color: commonTextLight }}
+              />
+            ))} */}
+          <ControlCloseIcon
+            size='default'
+            iconSize={20}
+            onClick={handleClose}
+            cursor='pointer'
+            sx={{
+              color: commonTextLight,
+            }}
+          />
+        </div>
       </div>
       {customHeaderSubTitle ??
         (subTitle && (

@@ -1,13 +1,22 @@
-import { type FlexGrid, AllowMerging, CellType, DataMap, SelectionMode } from '@mescius/wijmo.grid';
+import type { GridPanel } from '@mescius/wijmo.grid';
+import {
+  type FlexGrid,
+  AllowMerging,
+  CellRange,
+  CellType,
+  DataMap,
+  SelectionMode,
+} from '@mescius/wijmo.grid';
 import { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import type { MutableRefObject } from 'react';
 import { useEffect, useMemo, useRef } from 'react';
 
 import { apiClient } from '@foundation/apis';
+import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import dayjs from '@foundation/dayjs';
 import isoWeek from '@foundation/isoWeek';
 import type { ComboResponse, FlexGridColumnConfig } from '@foundation/models';
-import { EditTracker, isNonEditableDateColumn } from '@foundation/utils';
+import { CustomMergeManager, EditTracker, isNonEditableDateColumn } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 
 import { AUTH_MEASURES } from '../forecast-price.constants';
@@ -17,6 +26,62 @@ import { thisWeekMondayYmd } from '../utils/forecast-price.editLock';
 
 dayjs.extend(isoWeek);
 
+/** 동적 컬럼 헤더 머지 키 — dynamicColumns 의 그룹 구성(ym / sub)과 **동일 규칙**. */
+interface HeaderKey {
+  ym: string; // 1단 = 년월 (binding[2..8])
+  sub: string; // 2단 = 주차 그룹 (SPREAD_TITLE small, M_ 는 'SUM')
+}
+
+// ⭐ 동적 헤더 머지 — mkt-fcst `HierarchicalMergeManager` 규약 이식 (정본).
+//   [문제] 공용 `CustomMergeManager._getColumnHeaderMergedRange` 는 **셀 라벨이 같으면** 붙인다.
+//     동적 leaf 헤더는 W_·M_ 모두 리터럴 'SUM' 이라(dynamicColumns header 참조, mkt-fcst L492 동일)
+//     leaf 행의 SUM 들이 **가로로 한 덩어리**가 되고, M_ 는 세로 가드(_isSameHorizontalRange) 실패로
+//     'SUM' 이 두 줄로 쌓인다.
+//   [해결] 라벨이 아니라 **binding 파생 키**로 머지 (mkt-fcst 와 동일한 접근).
+//   ⚠️ 회귀 방지 — 2026-07-22 사고: TopLeft 를 전 범위 머지했다가 헤더 더블클릭 드릴다운이 죽었다.
+//     ⇒ **ColumnHeader 만** 재정의하고 TopLeft·Cell 은 super(기존 CustomMergeManager) 그대로 위임한다.
+//     드릴다운은 `hitTest` 의 ColumnHeader 좌표에 의존하는데, 2단 머지 원점이 W_ 컬럼으로 유지되므로
+//     (dynamicColumns 가 그룹 내 kindRank M<W<D 순 정렬 → W_ 가 D_ 보다 앞) 기존 동작과 동일하다.
+class FcstHeaderMergeManager extends CustomMergeManager<ForecastPriceRow> {
+  constructor(
+    grid: FlexGrid<ForecastPriceRow>,
+    private readonly getKeys: () => Map<string, HeaderKey>
+  ) {
+    super(grid);
+  }
+
+  getMergedRange(panel: GridPanel, r: number, c: number): CellRange | null {
+    // TopLeft / Cell = 기존 동작 유지 (회귀 0)
+    if (panel.cellType !== CellType.ColumnHeader) return super.getMergedRange(panel, r, c);
+
+    const keys = this.getKeys();
+    const bindingAt = (i: number): string => panel.columns[i]?.binding ?? '';
+    const b = bindingAt(c);
+    // 정적 컬럼 등 동적 대상이 아니면 기존 값기반 머지 유지 (헤더 세로 span 보존)
+    if (!keys.has(b)) return super.getMergedRange(panel, r, c);
+
+    const leafRow = panel.rows.length - 1;
+
+    // M_(월 SUM) — 1단 아래 전 행 세로 병합. 2·3단 라벨이 모두 'SUM' 이라 한 칸으로 보여야 한다.
+    if (b.startsWith('M_') && r >= 1) {
+      return leafRow <= 1 ? null : new CellRange(1, c, leafRow, c);
+    }
+    // leaf 행('SUM' / 일자) — 가로 병합 금지 (라벨 동일로 인한 오병합 차단)
+    if (r === leafRow) return null;
+
+    const keyOf = (i: number): string => {
+      const k = keys.get(bindingAt(i));
+      if (!k) return '\0';
+      return r === 0 ? k.ym : `${k.ym}|${k.sub}`;
+    };
+    const key = keyOf(c);
+    let c1 = c;
+    let c2 = c;
+    while (c1 > 0 && keyOf(c1 - 1) === key) c1--;
+    while (c2 < panel.columns.length - 1 && keyOf(c2 + 1) === key) c2++;
+    return c1 === c2 ? null : new CellRange(r, c1, r, c2);
+  }
+}
 // #10 중복체크 대상 키 8종 (AS-IS spdMain_Changed :5897~5946 — Insert 행 간 완전일치 판정).
 const DUP_KEY_COLS = [
   'END_CUSTOMER',
@@ -150,7 +215,10 @@ export const ForecastPriceGrid = ({
   //   활성 = 조회 bucketType (데이터 최정밀 아님 — Weekly 조회 시 D_ 존재해도 활성=W).
   //   상위(rank<활성) = SUM 합계 → chkSum(sumYn) 토글 / 하위(rank>활성) = 기본 숨김 → 헤더 더블클릭 드릴.
   //   tierH = 3단(D 존재)16 / 2단 24 (총 48px 고정, #93).
-  const bucketPrefix = (searchParams.bucketType || 'W').trim().charAt(0).toUpperCase() as 'M' | 'W' | 'D';
+  const bucketPrefix = (searchParams.bucketType || 'W').trim().charAt(0).toUpperCase() as
+    | 'M'
+    | 'W'
+    | 'D';
   const { hasDaily, tierH, summaryBindings, drillBindings, dynBindings } = useMemo(() => {
     const daily = dynColMetas.some(m => m.kind === 'D');
     const active = DYN_RANK[bucketPrefix] ?? DYN_RANK.W;
@@ -199,7 +267,10 @@ export const ForecastPriceGrid = ({
     // ⭐ 헤더 단수 동적 (#93 캐노니컬 + Figma DMF0082 Table 실측 정합):
     //   D_ 존재(Daily 조회) = 3단(년월>주차>일, 각 16px) / D_ 부재(W/M 조회) = 2단(년월>주차, 각 24px
     //   — Figma Table 프레임 실측 24+24=48 과 일치). hasDaily/tierH = 컴포넌트 스코프 파생.
-    const largeMap = new Map<string, { label: string; subs: Map<string, LeafCol[]>; order: number }>();
+    const largeMap = new Map<
+      string,
+      { label: string; subs: Map<string, LeafCol[]>; order: number }
+    >();
     const kindRank = { M: 0, W: 1, D: 2 } as const;
     dynColMetas.forEach((m, idx) => {
       const ymKey = m.binding.slice(2, 8);
@@ -222,6 +293,7 @@ export const ForecastPriceGrid = ({
         allowSorting: false,
         visible: true,
         height: tierH,
+        _inputEditType: CELL_INPUT_EDIT_TYPE.OPTIONAL,
         _display: true,
       });
     });
@@ -259,10 +331,46 @@ export const ForecastPriceGrid = ({
       }));
   }, [dynColMetas, hasDaily, tierH]);
 
-  const staticBindingSet = useMemo(
-    () => new Set(staticColumns.map(c => c.colNm)),
-    [staticColumns]
-  );
+  const staticBindingSet = useMemo(() => new Set(staticColumns.map(c => c.colNm)), [staticColumns]);
+
+  // ⭐ 컬럼 개인화 색 (ColumnLayoutModal 저장값) — binding → {cell, text}.
+  //   공용 columnMapping 은 colWth/visible 만 넘기고 색은 안 넘기므로 formatItem 이 직접 적용한다
+  //   (DMF0020 SalesFuturePriceGrid 선례 동일). ref 로 최신 맵 전달 — 핸들러 재등록 불필요.
+  const colorMetaRef = useRef<Map<string, { cell: string; text: string }>>(new Map());
+  colorMetaRef.current = useMemo(() => {
+    const m = new Map<string, { cell: string; text: string }>();
+    staticColumns.forEach(c => {
+      if (c.cellColor || c.textColor) {
+        m.set(c.colNm, { cell: c.cellColor ?? '', text: c.textColor ?? '' });
+      }
+    });
+    return m;
+  }, [staticColumns]);
+
+  // ⭐ 헤더 머지 키 — dynamicColumns 의 그룹 구성(ymKey / subKey)과 **동일 규칙**으로 산출.
+  //   (같은 규칙을 써야 머지 범위 = 실제 헤더 그룹 구조. 별도 파생 시 그룹 경계를 넘어 붙는다.)
+  const headerKeyMap = useMemo<Map<string, HeaderKey>>(() => {
+    const m = new Map<string, HeaderKey>();
+    dynColMetas.forEach((d: DynColMeta) => {
+      m.set(d.binding, {
+        ym: d.binding.slice(2, 8),
+        sub: d.kind === 'M' ? 'SUM' : (d.small || 'SUM').trim() || 'SUM',
+      });
+    });
+    return m;
+  }, [dynColMetas]);
+  // 매니저는 1회만 생성(super 가 grid 이벤트를 바인딩하므로 재생성 시 핸들러 누적) → ref 로 최신 맵 전달.
+  const headerKeyRef = useRef(headerKeyMap);
+  headerKeyRef.current = headerKeyMap;
+
+  // ⭐ 동적 헤더 머지 매니저 설치 (ColumnHeader 만 재정의 — TopLeft·Cell 은 super 위임).
+  useEffect(() => {
+    const g = gridRef.current;
+    if (!g) return;
+    if (g.mergeManager instanceof FcstHeaderMergeManager) return;
+    g.mergeManager = new FcstHeaderMergeManager(g, () => headerKeyRef.current);
+    g.invalidate(true);
+  }, [gridRef, staticColumns, dynamicColumns]);
 
   useEffect(() => {
     bucketRef.current = searchParams.bucketType;
@@ -322,7 +430,8 @@ export const ForecastPriceGrid = ({
           const candidates = editMeasuresRef.current.get(dataItem);
           const col = sender.columns[e.col];
           if (candidates && candidates.length > 0 && col) {
-            if (!measureOrigDataMapRef.current) measureOrigDataMapRef.current = col.dataMap as DataMap;
+            if (!measureOrigDataMapRef.current)
+              measureOrigDataMapRef.current = col.dataMap as DataMap;
             col.dataMap = new DataMap(candidates as unknown[], 'CODE', 'NAME');
           }
         }
@@ -395,7 +504,12 @@ export const ForecastPriceGrid = ({
           let dup = 0;
           for (let r = 0; r < sender.rows.length; r++) {
             const ri = sender.rows[r]?.dataItem as WijmoRowItem | undefined;
-            if (ri && ri['CRUD_TYPE'] !== undefined && ri['CRUD_TYPE'] !== null && keyOf(ri) === myKey)
+            if (
+              ri &&
+              ri['CRUD_TYPE'] !== undefined &&
+              ri['CRUD_TYPE'] !== null &&
+              keyOf(ri) === myKey
+            )
               dup += 1;
           }
           if (dup >= 2) {
@@ -407,7 +521,10 @@ export const ForecastPriceGrid = ({
       if (!kindOf(binding)) return;
       let val = sender.getCellData(e.row, e.col, false) as WijmoPrimitive;
       const oldVal = (e.data ?? null) as WijmoPrimitive;
-      if ((oldVal === undefined || oldVal === null) && (val === undefined || val === null || val === ''))
+      if (
+        (oldVal === undefined || oldVal === null) &&
+        (val === undefined || val === null || val === '')
+      )
         return;
       const tracker = editTrackerRef.current;
       if (!tracker) return;
@@ -448,16 +565,50 @@ export const ForecastPriceGrid = ({
 
     // 셀 표시 (#95 3색 표준 — 편집가능 Yellow / 기준주차 이전 잠금 Gray / 기본 White+zebra)
     //   + #108 No. 코너 헤더 (TopLeft 전체 단일 머지 + 'No.' 라벨, 재귀 가드).
-    const formatHandler = (sender: FlexGrid, e: {
-      panel: { cellType: CellType; rows: unknown };
-      row: number;
-      col: number;
-      cell: HTMLElement;
-    }) => {
+    const formatHandler = (
+      sender: FlexGrid,
+      e: {
+        panel: { cellType: CellType; rows: unknown };
+        row: number;
+        col: number;
+        cell: HTMLElement;
+      }
+    ) => {
       if (e.panel.cellType === CellType.TopLeft) {
-        if (e.cell.textContent !== 'No.') e.cell.textContent = 'No.';
+        // 코너 헤더 — row-header 첫 컬럼(번호)에만 'No.' 표시, 나머지(편집 그리드의 CRUD 상태 컬럼)는 공백.
+        //   편집 그리드는 rowHeaders 2컬럼이라 전 셀에 'No.' 를 찍으면 'No. No.' 로 보였다(#108).
+        //   Exchange Rate(읽기전용=1컬럼) 팝업처럼 코너에 'No.' 하나만 보이도록 한다.
+        const label = e.col === 0 ? 'No.' : '';
+        if (e.cell.textContent !== label) e.cell.textContent = label;
         e.cell.style.textAlign = 'center';
         e.cell.style.verticalAlign = 'middle';
+        return;
+      }
+      // ⭐ 당월·당주 헤더 초록 볼드 — **AS-IS 화면 캡처 기준** (사용자 확정 2026-07-22).
+      //   AS-IS 는 초록을 **헤더에만** 쓴다: 1단(년월)=당월 / 하위단=당주 **W_ 컬럼만**
+      //   (그 아래 leaf 'SUM' 은 같은 W_ binding 이라 함께 초록). 본문 셀에는 초록을 칠하지 않는다.
+      //   ⚠️ M_(당월 SUM)·D_ 는 제외 — 포함 시 초록이 4곳으로 번져 AS-IS 와 달라진다.
+      if (e.panel.cellType === CellType.ColumnHeader) {
+        const hb = sender.columns[e.col]?.binding ?? '';
+        if (!kindOf(hb)) return;
+        // 주말 일자 헤더 색 — 토요일 파랑 / 일요일 빨강 (D_ leaf 헤더 한정, 사용자 요구 2026-07-22).
+        //   D_ 는 3단 leaf(일자)에서만 자기 라벨이 보인다(상위 row 는 월/주 머지에 덮임) → leaf row 한정.
+        const leafRow = sender.columnHeaders.rows.length - 1;
+        if (hb.startsWith('D_') && e.row === leafRow) {
+          const ymd = hb.slice(2); // YYYYMMDD
+          const dow = dayjs(`${ymd.slice(0, 4)}-${ymd.slice(4, 6)}-${ymd.slice(6, 8)}`).day();
+          if (dow === 6)
+            e.cell.style.color = '#1565c0'; // 토
+          else if (dow === 0) e.cell.style.color = '#d32f2f'; // 일
+        }
+        const isGreen =
+          e.row === 0
+            ? hb.slice(2, 8) === dayjs().format('YYYYMM')
+            : hb.startsWith('W_') && currentPeriodRef.current.has(hb);
+        if (isGreen) {
+          e.cell.style.color = '#2e7d32';
+          e.cell.style.fontWeight = 'bold';
+        }
         return;
       }
       if (e.panel.cellType !== CellType.Cell) return;
@@ -473,10 +624,9 @@ export const ForecastPriceGrid = ({
           'wj-cell-non-editable',
           isNonEditableDateColumn(binding, weekMap.current)
         );
-        // #12 당주 녹색 보더 (AS-IS Green BevelBorder :1970~2017) — 활성 버킷 당월/당주/금주월요일 컬럼.
-        e.cell.style.boxShadow = currentPeriodRef.current.has(binding)
-          ? 'inset 2px 0 0 0 #2e7d32'
-          : '';
+        // #12 본문 셀 초록 보더 제거 — AS-IS 화면 캡처에는 본문에 초록 선이 없다(사용자 확정 2026-07-22).
+        //   당주 강조는 헤더 초록 볼드가 전담(위 ColumnHeader 분기). 잔여 inline 스타일 정리 위해 '' 유지.
+        e.cell.style.boxShadow = '';
         // #11 숫자 표시 — NOTATION(POINT3/LOC)=소수3자리 / INTEGER=정수. 0/null 은 빈칸 (AS-IS :1853~1924).
         if (!sender.editRange?.contains(e.row, e.col)) {
           const v = dataItem[binding];
@@ -495,6 +645,20 @@ export const ForecastPriceGrid = ({
       // 정적 컬럼: Insert 행만 Yellow
       const isInsert = dataItem['CRUD_TYPE'] !== undefined && dataItem['CRUD_TYPE'] !== null;
       e.cell.classList.toggle('wj-cell-editable', isInsert);
+      // ⭐ 개인화 색 — 우선순위: Insert 편집셀 Yellow(클래스) > 저장된 Cell Color > 기본(제거).
+      //   inline !important 라 클래스보다 세므로 insert 행에는 배경을 칠하지 않는다.
+      //   미지정 시 removeProperty 필수 — Wijmo 셀 재활용으로 이전 행 색이 남는다.
+      const personalColor = colorMetaRef.current.get(binding);
+      if (!isInsert && personalColor?.cell) {
+        e.cell.style.setProperty('background-color', personalColor.cell, 'important');
+      } else {
+        e.cell.style.removeProperty('background-color');
+      }
+      if (personalColor?.text) {
+        e.cell.style.setProperty('color', personalColor.text, 'important');
+      } else {
+        e.cell.style.removeProperty('color');
+      }
     };
 
     // Delete 키 — 선택 범위 일괄 clear + 배분 재계산 (AS-IS KeyUp Delete 1:1)
@@ -576,6 +740,21 @@ export const ForecastPriceGrid = ({
       applyDynVisibilityRef.current?.();
     };
 
+    // ⭐ 동적(M_/W_/D_) 헤더 정렬 차단 (사용자 요구 2026-07-22) — 주차/SUM 단일클릭 시 공용
+    //   DataGrid `setSortableColumnHeaderClick` 가 정렬을 걸고 `select(-1,-1)+scrollIntoView(0,0)` 로
+    //   그리드를 맨 앞으로 스크롤한다. 그 스크롤 탓에 뒤이은 dblclick 의 hitTest 가 앞쪽 컬럼을 집어
+    //   드릴다운(특히 October M_)이 죽는다. allowSorting=false 재설정은 columnGroups 재적용과 경쟁해
+    //   클릭 순간을 못 막으므로, **capture 단계**에서 동적 헤더 click 을 선점 차단한다.
+    //   (click 대상은 셀=하위 요소 → hostElement 의 capture 가 공용 bubble 핸들러보다 먼저 실행.
+    //    dblclick 은 건드리지 않아 드릴다운은 그대로 동작. 정적 컬럼 정렬은 유지 — kindOf 대상만 차단.)
+    const dynHeaderSortGuard = (ev: MouseEvent) => {
+      const ht = g.hitTest(ev);
+      if (ht.cellType !== CellType.ColumnHeader) return;
+      const hb = g.columns[ht.col]?.binding ?? '';
+      if (!kindOf(hb)) return;
+      ev.stopImmediatePropagation();
+    };
+
     g.beginningEdit.addHandler(cellEditableHandler);
     g.pastingCell.addHandler(cellEditableHandler);
     g.cellEditEnded.addHandler(cellEditHandler);
@@ -583,6 +762,8 @@ export const ForecastPriceGrid = ({
     g.formatItem.addHandler(formatHandler);
     g.hostElement.addEventListener('keydown', keydownHandler);
     g.hostElement.addEventListener('dblclick', dblclickHandler);
+    // capture 단계 등록 — 공용 setSortableColumnHeaderClick(bubble)보다 먼저 실행돼 정렬 선점 차단.
+    g.hostElement.addEventListener('click', dynHeaderSortGuard, true);
 
     return () => {
       g.beginningEdit.removeHandler(cellEditableHandler);
@@ -592,6 +773,7 @@ export const ForecastPriceGrid = ({
       g.formatItem.removeHandler(formatHandler);
       g.hostElement.removeEventListener('keydown', keydownHandler);
       g.hostElement.removeEventListener('dblclick', dblclickHandler);
+      g.hostElement.removeEventListener('click', dynHeaderSortGuard, true);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [staticColumns, dynamicColumns]);
@@ -643,6 +825,12 @@ export const ForecastPriceGrid = ({
         const col = g.columns[i];
         const b = col.binding ?? '';
         if (!dynSet.has(b)) continue;
+        // ⭐ 동적 컬럼 정렬 금지 (사용자 요구 2026-07-22) — 헤더 클릭 시 정렬이 걸려 드릴다운이
+        //   오작동한다. 공용 DataGrid 는 **컬럼 객체의 allowSorting** 으로 정렬 아이콘과 클릭을
+        //   판정하므로(dataGridUtils `formatSortableColumns` / `setSortableColumnHeaderClick`),
+        //   dynamicColumns config 의 allowSorting:false 가 columnGroups 재적용으로 되살아나도
+        //   여기서 매 updatedLayout 마다 다시 눌러 확정한다. 정적 컬럼은 정렬 유지(dynSet 만 대상).
+        if (col.allowSorting) col.allowSorting = false;
         const base = summarySet.has(b) ? sumYn : drillSet.has(b) ? false : true;
         const want = drillVisRef.current.get(b) ?? base;
         if (col.visible !== want) {

@@ -1,3 +1,5 @@
+export * from './columnLayoutModal/ColumnLayoutModal';
+export * from './columnLayoutModal/columnLayoutModal.utils';
 export * from './columnSettingModal/ColumnSettingModal';
 export * from './contributeRateModal/ContributeRateModal';
 export * from './contributeVersionModal/ContributeVersionModal';

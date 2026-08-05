@@ -43,7 +43,6 @@ for (const [file, loader] of Object.entries(PAGE_MODULES)) {
 const URL_ALIASES: Record<string, string> = {
   'ui-category': 'ui-catrgory-setup', // SYS0004 (폴더명 오타가 굳어진 케이스)
   'customer-fcst-master': 'customer-forecast-master', // DMF0007
-  mkt_forecast: 'mkt-fcst', // DMF0003 (MNU_URL=AS-IS 표기 'mkt_forecast' ↔ 폴더 kebab — 2026-07-22 로컬 병합)
 };
 
 /** 페이지 index.ts 는 화면 컴포넌트 1개를 export 한다(named 또는 default). */

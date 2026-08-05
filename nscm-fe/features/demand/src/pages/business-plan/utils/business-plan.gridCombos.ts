@@ -35,10 +35,7 @@ export const filterComboRowsByRow = (
 
 // Insert Measure 블록 원천 — CMBO 'DMF0042_BP_Measure' rows 를 division 토큰으로 클라 필터
 //   (AS-IS Data.Common("DMF0042_BP_Measure", division) 1:1 — DIVISION_ID 미보유 콤보는 전체 통과).
-export const measureBlockOf = (
-  rows: Record<string, unknown>[],
-  divisionId: string
-): string[] => {
+export const measureBlockOf = (rows: Record<string, unknown>[], divisionId: string): string[] => {
   const d = (divisionId ?? '').trim();
   return rows
     .filter(r => {

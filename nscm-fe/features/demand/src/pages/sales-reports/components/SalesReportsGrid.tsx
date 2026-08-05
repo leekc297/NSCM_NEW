@@ -1,4 +1,3 @@
-
 import type { FlexGrid as FlexGridType, FormatItemEventArgs } from '@mescius/wijmo.grid';
 import { AllowMerging, DataMap } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';

@@ -42,8 +42,10 @@ async function run() {
     });
 
     // 3. 파일 저장 (repoRoot/public/locales)
+    // 재생성 전 기존 디렉터리를 정리한다. (rm -rf 대신 크로스플랫폼 fs.rmSync 사용)
     const targetDir = path.resolve(__dirname, '../public/locales');
-    if (!fs.existsSync(targetDir)) fs.mkdirSync(targetDir, { recursive: true });
+    fs.rmSync(targetDir, { recursive: true, force: true });
+    fs.mkdirSync(targetDir, { recursive: true });
 
     Object.entries(locales).forEach(([lang, data]) => {
       console.log(lang);
@@ -66,8 +68,6 @@ async function run() {
   }
   return { success: true };
 }
-
-await run();
 
 const mockMessage = [
   {
@@ -176,3 +176,5 @@ const mockMessage = [
     langCd: 'KO',
   },
 ];
+
+await run();

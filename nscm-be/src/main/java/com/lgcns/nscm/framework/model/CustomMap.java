@@ -22,12 +22,6 @@ public class CustomMap extends HashMap<String, Object> {
 	 */
     public Object put(String key, Object value) {
 
-        // [Fix 2026-06-01] callSettersOnNulls=true 활성화 시 cursor NULL 컬럼이 들어옴.
-        // 아래 value.getClass() 호출이 NPE → null 은 그대로 저장하고 즉시 리턴.
-        if (value == null) {
-            return super.put(key, null);
-        }
-
     	// CLOB 변환 로직
         if (value instanceof java.sql.Clob) {
         	try {

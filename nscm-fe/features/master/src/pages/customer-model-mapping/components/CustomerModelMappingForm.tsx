@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { clsx } from '@shared/clsx';
+import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { Button, FormItem, InputField } from '@shared/lges';
@@ -9,8 +9,6 @@ import { Grid } from '@shared/mui';
 
 import { ItemByDivisionModal, ProjectByDivisionModal } from '../../../components';
 import { useCustomerModelMappingStore } from '../useCustomerModelMappingStore';
-
-import styles from './CustomerModelMappingForm.module.scss';
 
 export const CustomerModelMappingForm = () => {
   const { t } = useTranslation();
@@ -39,6 +37,7 @@ export const CustomerModelMappingForm = () => {
               <FormItem
                 label={t('LBL00001', '_Div.')}
                 labelAlign='right'
+                className={commonStyles.formItem}
                 render={() => (
                   <CustomDropdown
                     value={searchParams.divisionId}
@@ -48,17 +47,15 @@ export const CustomerModelMappingForm = () => {
                     onChange={(_, option) => {
                       setSearchParams({ divisionId: option });
                     }}
-                    className={styles.input}
                   />
                 )}
-                labelSize='long'
-                className={styles.formItem}
               />
             </Grid>
             <Grid size={3}>
               <FormItem
                 label={t('LBL00044', '_Team')}
                 labelAlign='right'
+                className={commonStyles.formItem}
                 render={() => (
                   <CustomDropdown
                     value={searchParams.deptId}
@@ -75,17 +72,15 @@ export const CustomerModelMappingForm = () => {
                     onChange={(_, option) => {
                       setSearchParams({ deptId: option });
                     }}
-                    className={styles.input}
                   />
                 )}
-                labelSize='long'
-                className={styles.formItem}
               />
             </Grid>
             <Grid size={3}>
               <FormItem
                 label={t('LBL00080', '_End Customer')}
                 labelAlign='right'
+                className={commonStyles.formItem}
                 render={() => (
                   <CustomDropdown
                     value={searchParams.endCustomer}
@@ -109,17 +104,15 @@ export const CustomerModelMappingForm = () => {
                     onChange={(_, options) => {
                       setSearchParams({ endCustomer: options });
                     }}
-                    className={styles.input}
                   />
                 )}
-                labelSize='long'
-                className={styles.formItem}
               />
             </Grid>
             <Grid size={3}>
               <FormItem
                 label={t('LBL00011', '_Sales Site')}
                 labelAlign='right'
+                className={commonStyles.formItem}
                 render={() => (
                   <CustomDropdown
                     value={searchParams.salesSite}
@@ -141,21 +134,19 @@ export const CustomerModelMappingForm = () => {
                     onChange={(_, options) => {
                       setSearchParams({ salesSite: options });
                     }}
-                    className={styles.input}
                   />
                 )}
-                labelSize='long'
-                className={styles.formItem}
               />
             </Grid>
             <Grid size={3}>
               <FormItem
-                label={t('LBL00327', '_Project')}
+                label={t('LBL00617', '_Project')}
                 labelAlign='right'
+                className={commonStyles.formItem}
                 render={() => (
                   <InputField
                     fullWidth
-                    className={clsx(styles.inputWithSearch, styles.input)}
+                    className={commonStyles.popupSearchField}
                     value={searchParams.projectCode}
                     onChange={event => setSearchParams({ projectCode: event.target.value })}
                     InputProps={{
@@ -175,18 +166,17 @@ export const CustomerModelMappingForm = () => {
                     onDoubleClick={() => setOpenPrjByDivisionModal(true)}
                   />
                 )}
-                labelSize='long'
-                className={styles.formItem}
               />
             </Grid>
             <Grid size={3}>
               <FormItem
-                label={t('LBL00003', '_Model/Nickname')}
+                label={t('LBL00508', 'Model / Nickname')}
                 labelAlign='right'
+                className={commonStyles.formItem}
                 render={() => (
                   <InputField
                     fullWidth
-                    className={clsx(styles.inputWithSearch, styles.input)}
+                    className={commonStyles.popupSearchField}
                     value={searchParams.itemId}
                     onChange={event => setSearchParams({ itemId: event.target.value })}
                     InputProps={{
@@ -206,8 +196,6 @@ export const CustomerModelMappingForm = () => {
                     onDoubleClick={() => setOpenModelByDivisionModal(true)}
                   />
                 )}
-                labelSize='long'
-                className={styles.formItem}
               />
             </Grid>
             <Grid size={3}>
@@ -217,29 +205,25 @@ export const CustomerModelMappingForm = () => {
                 render={() => (
                   <InputField
                     fullWidth
-                    className={styles.input}
                     value={searchParams.customerPJT}
                     onChange={event => setSearchParams({ customerPJT: event.target.value })}
                   />
                 )}
-                labelSize='long'
-                className={styles.formItem}
+                className={commonStyles.formItem}
               />
             </Grid>
             <Grid size={3}>
               <FormItem
                 label={t('LBL00084', '_Customer Model')}
                 labelAlign='right'
+                className={commonStyles.formItem}
                 render={() => (
                   <InputField
                     fullWidth
-                    className={styles.input}
                     value={searchParams.customerModel}
                     onChange={event => setSearchParams({ customerModel: event.target.value })}
                   />
                 )}
-                labelSize='long'
-                className={styles.formItem}
               />
             </Grid>
           </>
@@ -249,6 +233,7 @@ export const CustomerModelMappingForm = () => {
             <FormItem
               label={t('LBL00007', '_Active')}
               labelAlign='right'
+              className={commonStyles.formItem}
               render={() => (
                 <CustomDropdown
                   value={searchParams.activeFlag}
@@ -258,11 +243,8 @@ export const CustomerModelMappingForm = () => {
                   onChange={(_, option) => {
                     setSearchParams({ activeFlag: option });
                   }}
-                  className={styles.input}
                 />
               )}
-              labelSize='long'
-              className={styles.formItem}
             />
           </Grid>
         }

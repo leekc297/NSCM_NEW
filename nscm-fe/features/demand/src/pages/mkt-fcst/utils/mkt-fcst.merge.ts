@@ -1,9 +1,4 @@
-import {
-  CellRange,
-  CellType,
-  type GridPanel,
-  MergeManager,
-} from '@mescius/wijmo.grid';
+import { CellRange, CellType, type GridPanel, MergeManager } from '@mescius/wijmo.grid';
 
 // 동적 PIVOT 컬럼 키 파서 — M_yyyymm / W_yyyymmdd / D_yyyymmdd
 //   kind  : 'M'(월) / 'W'(주) / 'D'(일) / null(고정 컬럼)

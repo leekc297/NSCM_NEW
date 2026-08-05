@@ -1,13 +1,14 @@
-// RouterSync — 활성 탭 ↔ URL(#/view/:mnuId/:tabId) 양방향 동기화.
+// RouterSync — 활성 탭 ↔ URL(#/view/:mnuId) 양방향 동기화.
 //
 // 설계: 화면 렌더링은 ViewContainer(keep-alive)가 소유하고, 라우터는 URL 미러만 담당한다.
 //  - react-router 가 화면을 직접 렌더링하면 라우트 전환 시 unmount 되어 keep-alive 가 깨진다.
 //    URL 미러 방식은 이 충돌이 없다.
-//  - URL 식별자는 tabId(UUID) — 멀티/싱글 모드 모두에서 유일하다.
-//    (mnuId 는 탭이 닫혀 스토어에 없을 때 새로 여는 폴백용)
-//  - 탭 전환/오픈 → URL push (뒤로가기로 탭 이동 이력 탐색)
-//  - URL 변경(딥링크/뒤로가기/직접 입력) → 해당 tabId 활성화, 없으면 mnuId 로 오픈
-//  - MDI 스토어는 sessionStorage 영속 → 새로고침/뒤로가기 시 tabId 로 정확히 복원
+//  - URL 식별자는 mnuId(메뉴 코드)만 사용한다 — 주소창에 노출되므로 사람이 읽을 수 있는 값으로.
+//    같은 메뉴를 여러 탭으로 연 경우(멀티 모드) URL 은 그 탭들을 구분하지 못하지만,
+//    "어느 탭이 활성인지"는 MDI 스토어의 activeIndex(sessionStorage 영속)가 정확히 기억한다.
+//  - 탭 전환/오픈 → URL push (다른 메뉴로 이동 시 뒤로가기 이력 생성)
+//  - URL 변경(딥링크/뒤로가기/직접 입력) → 해당 mnuId 탭 활성화, 없으면 새로 오픈
+//  - MDI 스토어는 sessionStorage 영속 → 새로고침 시 activeIndex 로 활성 탭 복원
 import { useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -17,8 +18,7 @@ import { useMDIStore } from './useMDIStore';
 
 const VIEW_PREFIX = '/view/';
 
-export const getViewPath = (mnuId: string, tabId: string) =>
-  `${VIEW_PREFIX}${encodeURIComponent(mnuId)}/${encodeURIComponent(tabId)}`;
+export const getViewPath = (mnuId: string) => `${VIEW_PREFIX}${encodeURIComponent(mnuId)}`;
 
 interface RouterSyncProps {
   /**
@@ -51,7 +51,7 @@ export const RouterSync = ({ mirrorOnMount = true }: RouterSyncProps) => {
     if (!activeTab) return;
     if (isMount && !mirrorOnMount) return; // 404 진입 — URL 을 유지해야 NotFound 가 보인다
 
-    const target = getViewPath(String(activeTab.mnuId), activeTab.tabId);
+    const target = getViewPath(String(activeTab.mnuId));
     if (location.pathname !== target) navigate(target);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab?.tabId]);
@@ -60,21 +60,22 @@ export const RouterSync = ({ mirrorOnMount = true }: RouterSyncProps) => {
   useEffect(() => {
     if (!location.pathname.startsWith(VIEW_PREFIX)) return;
 
-    const [mnuIdRaw, tabIdRaw] = location.pathname.slice(VIEW_PREFIX.length).split('/');
+    const [mnuIdRaw] = location.pathname.slice(VIEW_PREFIX.length).split('/');
     const mnuId = decodeURIComponent(mnuIdRaw ?? '');
-    const tabId = decodeURIComponent(tabIdRaw ?? '');
-    if (!tabId) return;
+    if (!mnuId) return;
 
     const store = useMDIStore.getState();
-    if (tabId === store.tabs[store.activeIndex]?.tabId) return; // 이미 활성
+    // 이미 이 메뉴가 활성이면 유지 — 같은 메뉴의 다른 탭으로 강제 전환하지 않는다.
+    // (새로고침 시 activeIndex 로 복원된 정확한 탭을 URL 이 덮어쓰지 않게 하는 역할도 겸한다)
+    if (String(store.tabs[store.activeIndex]?.mnuId) === mnuId) return;
 
-    const idx = store.tabs.findIndex(t => t.tabId === tabId);
+    const idx = store.tabs.findIndex(t => String(t.mnuId) === mnuId);
     if (idx >= 0) {
-      store.setActiveByTabId(tabId);
+      store.setActiveTab(idx);
       return;
     }
 
-    // 스토어에 없는 tabId(공유 링크/스토리지 초기화) → mnuId 로 새로 오픈
+    // 스토어에 없는 메뉴(공유 링크/스토리지 초기화) → 새로 오픈
     const path = useSessionStore.getState().findMenuPath(mnuId);
     const leaf = path?.[path.length - 1];
     if (leaf) store.openTab(leaf);

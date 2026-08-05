@@ -1,5 +1,11 @@
 import { toggleClass } from '@mescius/wijmo';
-import { CellType, type FlexGrid, type FormatItemEventArgs } from '@mescius/wijmo.grid';
+import {
+  CellRange,
+  CellType,
+  type CellRangeEventArgs,
+  type FlexGrid,
+  type FormatItemEventArgs,
+} from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useState, type MutableRefObject } from 'react';
 
@@ -94,6 +100,65 @@ export const ErpEdiMasterSalesSiteGrid = ({
     gridRef.current?.refresh();
   };
 
+  const applyAutoScmSiteId = (
+    dataItem: ResponseData<MENU_ID, SHEETS.SALES_SITE, 'o_rc1'>
+  ): void => {
+    const soldTo = dataItem.SOLDTO_CUSTOMER ?? '';
+    const country = dataItem.COUNTRY ?? '';
+    const city = dataItem.CITY ?? '';
+    // (a) 3개 모두 입력된 경우에만 조합 (AS-IS: 하나라도 "" 이면 skip)
+    if (!soldTo || !country || !city) return;
+
+    const composed = `${soldTo}_${city.slice(0, 2)}_${city.slice(2, 5)}`;
+    // (b) 중복 검증 — grid 라이브 items(서버+신규 전체) 순회, 자기 자신은 객체 참조로 제외.
+    //   (index 대신 참조로 제외 — 정렬/필터 시 grid row index 와 view 순서가 어긋날 수 있음)
+    const items = gridRef.current?.collectionView?.items ?? data;
+    const isDuplicate = items.some(row => row !== dataItem && row?.SSCM_SITE_ID === composed);
+    if (isDuplicate) {
+      void setAlert({
+        type: 'alert',
+        content: t('MSG00060', '_동일 Sales Site 가 이미 존재합니다.'),
+      });
+      dataItem.SSCM_SITE_ID = '';
+      return;
+    }
+    dataItem.SSCM_SITE_ID = composed;
+  };
+
+  // AS-IS shtSALES_SITEDataModel_Changed(.cs L2511) 4-branch 를 Wijmo cellEditEnded 로 이관.
+  //   행 추가 후 셀을 직접 편집(SOLDTO/COUNTRY/CITY/COUNTRY_NAME/CITY_NAME)할 때 자동 발동.
+  //   신규 행(CRUD_TYPE='I')에만 적용 — 기존 조회 행은 편집 대상 아님.
+  const handleCellEditEnded = (
+    grid: FlexGrid<ResponseData<MENU_ID, SHEETS.SALES_SITE, 'o_rc1'>>,
+    e: CellRangeEventArgs
+  ) => {
+    const dataItem = GridUtils.getRow(grid, e.row);
+    const binding = GridUtils.getBinding(grid, e.col);
+    if (!dataItem || !binding) return;
+    if (dataItem.CRUD_TYPE !== CRUD_TYPE.INSERT) return;
+
+    // cascade 안 cascade 방지 (deferUpdate 로 batch — 룰 07 §2.10.8)
+    grid.deferUpdate(() => {
+      if (binding === 'SOLDTO_CUSTOMER' || binding === 'COUNTRY' || binding === 'CITY') {
+        // Branch (a)+(b): 자동 조합 + 중복 검증
+        applyAutoScmSiteId(dataItem);
+      } else if (binding === 'COUNTRY_NAME') {
+        // Branch (c): CountryName 이 비면 COUNTRY + CITY + CITY_NAME 연쇄 클리어
+        if (!(dataItem.COUNTRY_NAME ?? '')) {
+          dataItem.COUNTRY = '';
+          dataItem.CITY = '';
+          dataItem.CITY_NAME = '';
+        }
+      } else if (binding === 'CITY_NAME') {
+        // Branch (d): CityName 이 비면 CITY 클리어
+        if (!(dataItem.CITY_NAME ?? '')) {
+          dataItem.CITY = '';
+        }
+      }
+    });
+    grid.refreshRange(new CellRange(e.row, 0, e.row, -1));
+  };
+
   const setRegion = (
     countryCode: string,
     countryName: string,
@@ -106,23 +171,7 @@ export const ErpEdiMasterSalesSiteGrid = ({
     dataItem.COUNTRY_NAME = countryName;
     dataItem.CITY = cityCode;
     dataItem.CITY_NAME = cityName;
-    // F12a [IMMEDIATE] ✅: SCM_SITE_ID 자동 조합 (SOLDTO_CUSTOMER + "_" + CITY[0:2] + "_" + CITY[2:5])
-    if (dataItem.SOLDTO_CUSTOMER && cityCode.length >= 5) {
-      const composed = `${dataItem.SOLDTO_CUSTOMER}_${cityCode.slice(0, 2)}_${cityCode.slice(2, 5)}`;
-      // F12b [IMMEDIATE] ✅ V14: 동일 SSCM_SITE_ID 중복 검증 (자기 자신 제외)
-      const isDuplicate = data.some(
-        (row, idx) => idx !== clickedRow && row?.SSCM_SITE_ID === composed
-      );
-      if (isDuplicate) {
-        void setAlert({
-          type: 'alert',
-          content: t('MSG00607', '_동일 Sales Site 가 이미 존재합니다.'),
-        });
-        dataItem.SSCM_SITE_ID = '';
-      } else {
-        dataItem.SSCM_SITE_ID = composed;
-      }
-    }
+    applyAutoScmSiteId(dataItem);
     gridRef.current?.refresh();
   };
 
@@ -143,6 +192,8 @@ export const ErpEdiMasterSalesSiteGrid = ({
         staticColumns={staticColumns}
         dblClick={handleDblClick}
         formatItem={handleFormatItem}
+        cellEditEnded={handleCellEditEnded}
+        isReadOnly={true}
       />
       {openCustomerModal && (
         <CustomerModal

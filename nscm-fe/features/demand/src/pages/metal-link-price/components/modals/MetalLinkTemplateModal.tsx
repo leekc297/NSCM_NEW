@@ -98,7 +98,7 @@ export const MetalLinkTemplateModal = ({
         type: 'alert',
         content: t(
           MSG.TEMPLATE_EMPTY,
-          '_Monthly Rolling Forecast \'Y\' version does not exist in this week\'s Sales Plan Waterfall.'
+          "_Monthly Rolling Forecast 'Y' version does not exist in this week's Sales Plan Waterfall."
         ),
       });
     }
@@ -108,7 +108,10 @@ export const MetalLinkTemplateModal = ({
   const handleFind = () => {
     if (isFetching) return;
     if (!divisionId) {
-      void setAlert({ type: 'alert', content: t(MSG.REQUIRE_DIVISION, '_Please select Division.') });
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.REQUIRE_DIVISION, '_Please select Division.'),
+      });
       return;
     }
     setHasSearched(true);
@@ -125,7 +128,7 @@ export const MetalLinkTemplateModal = ({
         type: 'alert',
         content: t(
           MSG.TEMPLATE_EMPTY,
-          '_Monthly Rolling Forecast \'Y\' version does not exist in this week\'s Sales Plan Waterfall.'
+          "_Monthly Rolling Forecast 'Y' version does not exist in this week's Sales Plan Waterfall."
         ),
       });
       return;
@@ -198,7 +201,7 @@ export const MetalLinkTemplateModal = ({
                   appearance='outlined'
                   priority='normal'
                   size='medium'
-                  disabled={isFetching || rows.length === 0}
+                  // disabled={isFetching || rows.length === 0}
                   iconComponent={<FileExceldownloadIcon />}
                   onClick={handleExcel}
                 />

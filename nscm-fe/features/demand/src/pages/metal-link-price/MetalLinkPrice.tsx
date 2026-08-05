@@ -8,12 +8,12 @@ import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { useQueryClient } from '@foundation/query-client';
 import { Alert, MainTitle, SubTitle } from '@shared/components';
 import { useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
-import { FileExceldownloadIcon } from '@shared/lges-icons';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
 import { FcstUploadModal } from '../../components';
 
 import { MetalLinkPriceForm } from './components/MetalLinkPriceForm';
+import styles from './components/MetalLinkPriceForm.module.scss';
 import { MetalLinkPriceGrid } from './components/MetalLinkPriceGrid';
 import { MetalLinkTemplateModal } from './components/modals/MetalLinkTemplateModal';
 import { MetalLinkVersionModal } from './components/modals/MetalLinkVersionModal';
@@ -82,6 +82,18 @@ export const MetalLinkPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabId]);
 
+  // Division(조회조건) 변경 시 컬럼 재조회 + 그리드 초기화 — 조회 버튼 없이 즉시 반영 (SalesFuturePrice 선례).
+  //   초기 마운트/persist 복원은 제외 — 실제 division '변경' 시에만 동작.
+  //   clearFilters() → filters[MAIN] 제거 → useTabProcQuery enabled=false → rows 비움 (이전 division 결과 잔존 방지).
+  const prevDivisionRef = useRef(searchParams.divisionId);
+  useEffect(() => {
+    if (prevDivisionRef.current === searchParams.divisionId) return;
+    prevDivisionRef.current = searchParams.divisionId;
+    clearFilters();
+    void fetchStaticColumns(); // fetchStaticColumns 는 store 의 searchParams.divisionId 를 내부에서 읽음
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams.divisionId, clearFilters]);
+
   // ----- 조회 validation (AS-IS FindData L361~421 순서 1:1) -----
   const validateFind = (): boolean => {
     // MSG00137 — blnWork 이중실행 가드 (.cs L370): TanStack isFetching 1:1
@@ -105,12 +117,18 @@ export const MetalLinkPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
     }
     // MSG00108 — 기간 역전 (.cs L403)
     if (Number(searchParams.fromYyyymm) > Number(searchParams.toYyyymm)) {
-      void setAlert({ type: 'alert', content: t(MSG.PERIOD_INVERTED, '_Invalid period (start > end).') });
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.PERIOD_INVERTED, '_Invalid period (start > end).'),
+      });
       return false;
     }
     // MSG00097 — Division 공란 (.cs L421)
     if (!searchParams.divisionId) {
-      void setAlert({ type: 'alert', content: t(MSG.REQUIRE_DIVISION, '_Please select Division.') });
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.REQUIRE_DIVISION, '_Please select Division.'),
+      });
       return false;
     }
     return true;
@@ -150,7 +168,10 @@ export const MetalLinkPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   // 커스텀 버튼 — 'Excel Form'(템플릿 다운로드 모달). Division 미선택 시 진입 차단 (AS-IS MSG00097)
   const handleOpenTemplate = () => {
     if (!searchParams.divisionId) {
-      void setAlert({ type: 'alert', content: t(MSG.REQUIRE_DIVISION, '_Please select Division.') });
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.REQUIRE_DIVISION, '_Please select Division.'),
+      });
       return;
     }
     setOpenTemplateModal(true);
@@ -166,7 +187,7 @@ export const MetalLinkPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
               label: t('LBL00762', 'Excel Form'),
               action: handleOpenTemplate,
               // ⭐ Excel Download 아이콘 leading (FileExcelIcon 은 런타임 미표시 — 사용자 확인 2026-07-10 원복)
-              iconComponent: <FileExceldownloadIcon />,
+              // iconComponent: <FileExceldownloadIcon />,
               iconPosition: 'leading' as const,
             },
           ]
@@ -176,19 +197,21 @@ export const MetalLinkPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   );
 
   return (
-    <>
+    <div className={styles.container}>
       <MainTitle
         title={title}
         menuId={MENU_ID}
         openSearchArea={isOpenSearchArea}
         toggleOpenSearchArea={setOpenSearchArea}
       />
-      <MetalLinkPriceForm
-        onSubmit={handleSearch}
-        setOpenPrjByDivisionModal={setOpenPrjByDivisionModal}
-        setOpenModelByDivisionModal={setOpenModelByDivisionModal}
-        setOpenVersionModal={setOpenVersionModal}
-      />
+      <div style={{ flexShrink: 0 }}>
+        <MetalLinkPriceForm
+          onSubmit={handleSearch}
+          setOpenPrjByDivisionModal={setOpenPrjByDivisionModal}
+          setOpenModelByDivisionModal={setOpenModelByDivisionModal}
+          setOpenVersionModal={setOpenVersionModal}
+        />
+      </div>
       <SubTitle
         menuId={MENU_ID}
         grid={gridRef}
@@ -247,6 +270,8 @@ export const MetalLinkPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         open={openVersionModal}
         modalClose={() => setOpenVersionModal(false)}
         defaultDivision={searchParams.divisionId}
+        defaultPeriodFrom={searchParams.fromYyyymm}
+        defaultPeriodTo={searchParams.toYyyymm}
         onApply={versionIds => setSearchParams({ version: versionIds })}
       />
       {/* ⭐ AS-IS btnTemplate 'Excel Form' (.cs L704~713) — 전용 MetalLinkPricePopup 1:1
@@ -276,11 +301,15 @@ export const MetalLinkPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
               { mode: 1, createdBy: sesUserId, programId: uploadFormId, sheetName: SHEETS.MAIN }
             );
             const code = Number((res.data as { code?: string })?.code ?? 0);
-            const inner = (res.data?.result as { o_result_cursor?: { CODE?: string; MSG?: string }[] })
-              ?.o_result_cursor?.[0];
+            const inner = (
+              res.data?.result as { o_result_cursor?: { CODE?: string; MSG?: string }[] }
+            )?.o_result_cursor?.[0];
             // SP 반환 CODE!='0' = 실패 (전량 게이트 위반 등) — MSG passthrough
             if (res.status >= 400 || code || (inner && inner.CODE !== '0')) {
-              return { ok: false, message: inner?.MSG || (res.data as { message?: string })?.message };
+              return {
+                ok: false,
+                message: inner?.MSG || (res.data as { message?: string })?.message,
+              };
             }
             return { ok: true };
           } catch (e) {
@@ -292,6 +321,6 @@ export const MetalLinkPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         }}
       />
       <Alert />
-    </>
+    </div>
   );
 };

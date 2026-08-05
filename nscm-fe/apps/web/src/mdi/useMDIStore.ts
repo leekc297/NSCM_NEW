@@ -15,7 +15,6 @@ interface MDIState {
 interface MDIActions {
   openTab: (menu: Omit<Menu, 'children' | 'sortOrd'>) => void;
   setActiveTab: (tabIndex: number) => void;
-  setActiveByTabId: (tabId: string) => void;
   closeTab: (tabIndex: number) => void;
   closeOtherTabs: () => void;
   closeAllTabs: () => void;
@@ -91,13 +90,6 @@ export const useMDIStore = createPersistedStore<MDIState & MDIActions>(
       set(state => {
         state.activeIndex = tabIndex;
       });
-    },
-    setActiveByTabId: tabId => {
-      const idx = get().tabs.findIndex(t => t.tabId === tabId);
-      if (idx >= 0)
-        set(state => {
-          state.activeIndex = idx;
-        });
     },
     closeTab: tabIndex => {
       set(state => {

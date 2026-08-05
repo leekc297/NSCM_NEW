@@ -3,7 +3,6 @@ import { PeriodField } from 'features/master/src/components';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
-import dayjs from '@foundation/dayjs';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { CustomDialog, CustomDropdown, DataGrid, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
@@ -38,6 +37,9 @@ interface MetalLinkVersionModalProps {
   open: boolean;
   modalClose: () => void;
   defaultDivision: string;
+  // ⭐ 부모창(메인 조회조건) Period — 팝업 Period 기본값으로 사용 (YYYYMMDD)
+  defaultPeriodFrom: string;
+  defaultPeriodTo: string;
   onApply: (versionIds: string) => void;
 }
 
@@ -60,6 +62,8 @@ export const MetalLinkVersionModal = ({
   open,
   modalClose,
   defaultDivision,
+  defaultPeriodFrom,
+  defaultPeriodTo,
   onApply,
 }: MetalLinkVersionModalProps) => {
   const { t } = useTranslation();
@@ -77,22 +81,20 @@ export const MetalLinkVersionModal = ({
     });
   }, [myDivisions]);
 
-  // AS-IS Period — 오늘 ±3개월 (.cs L676 MultiTimeZone)
-  const [periodFrom, setPeriodFrom] = useState<string>(() =>
-    dayjs().subtract(3, 'month').format('YYYYMMDD')
-  );
-  const [periodTo, setPeriodTo] = useState<string>(() => dayjs().add(3, 'month').format('YYYYMMDD'));
+  // ⭐ Period 기본값 = 부모창(메인 조회조건) 날짜 (사용자 요구) — AS-IS 오늘±3개월(.cs L676) 대체.
+  const [periodFrom, setPeriodFrom] = useState<string>(defaultPeriodFrom);
+  const [periodTo, setPeriodTo] = useState<string>(defaultPeriodTo);
   const [divisionId, setDivisionId] = useState<string>(defaultDivision);
   const [description, setDescription] = useState<string>('');
 
   useEffect(() => {
     if (open) {
       setDivisionId(defaultDivision);
-      setPeriodFrom(dayjs().subtract(3, 'month').format('YYYYMMDD'));
-      setPeriodTo(dayjs().add(3, 'month').format('YYYYMMDD'));
+      setPeriodFrom(defaultPeriodFrom);
+      setPeriodTo(defaultPeriodTo);
       setDescription('');
     }
-  }, [open, defaultDivision]);
+  }, [open, defaultDivision, defaultPeriodFrom, defaultPeriodTo]);
 
   // DMF0073_GET_VERSION_SALESPRICE (9-arg — sesUserId/mnuId BE 자동).
   // ⭐ versionType 'SP_W' 고정 (2026-07-10 실측 정정 — SP 필터는 VERSION_TYPE 정확 토큰 매칭

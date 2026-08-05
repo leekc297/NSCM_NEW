@@ -167,6 +167,22 @@ class AxiosConfig {
     const response = await this.post<LookupResponse[], LookupParam>('admin/lookup', params);
     return response.data.result;
   }
+
+  async executeDynamicQuery<T = Record<string, unknown>>(sqlText: string): Promise<ApiResponse<T>> {
+    const response = await this.post<T, { sqlText: string }>('admin/dynamic-query/execute', {
+      sqlText,
+    });
+    return response.data;
+  }
+
+  async validateDynamicQuery<T = Record<string, unknown>>(
+    sqlText: string
+  ): Promise<ApiResponse<T>> {
+    const response = await this.post<T, { sqlText: string }>('admin/dynamic-query/validate', {
+      sqlText,
+    });
+    return response.data;
+  }
 }
 
 export const apiClient = new AxiosConfig(basicConfig);

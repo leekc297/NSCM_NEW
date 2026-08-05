@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from 'react';
 
 import { apiClient } from '@foundation/apis';
+import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
 import { Button, Checkbox, FormItem, InputField, Label } from '@shared/lges';
@@ -10,8 +11,6 @@ import { Grid } from '@shared/mui';
 import { MENU_ID, SHEETS } from '../contribute-view.constants';
 import type { VersionOption, ViewSearchCondition } from '../types';
 import { useContributeViewStore } from '../useContributeViewStore';
-
-import styles from './ContributeViewForm.module.scss';
 
 // admin /search-conditions 응답 row 의 paramNm 키 (ViewSearchCondition 의 string-valued 키만)
 type SearchParamProps = Pick<
@@ -53,15 +52,15 @@ export const ContributeViewForm = ({ onSearch, onOpenVersionPopup }: Props) => {
     [yearData]
   );
 
-  // AS-IS InitControls — 첫 옵션 자동 선택 + 검색조건 복원 (G1 personalize)
+  // AS-IS InitControls — 검색조건 복원 (G1 personalize). 최초 1회만 수행.
   useEffect(() => {
-    if (yearOptions.length > 0 && !searchParams.verSeq) {
-      const first = yearOptions[0];
-      setSearchParams({
-        verSeq: String(first.CODE ?? ''),
-        yyyy: String(first.NAME2 ?? first.NAME ?? '').substring(0, 4),
-      });
-    }
+    // if (yearOptions.length > 0 && !searchParams.verSeq) {
+    //   const first = yearOptions[0];
+    //   setSearchParams({
+    //     verSeq: String(first.CODE ?? ''),
+    //     yyyy: String(first.NAME2 ?? first.NAME ?? '').substring(0, 4),
+    //   });
+    // }
     void apiClient
       .get<
         { paramNm: keyof SearchParamProps; paramCtn: string }[]
@@ -76,7 +75,22 @@ export const ContributeViewForm = ({ onSearch, onOpenVersionPopup }: Props) => {
         }
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [yearOptions]);
+  }, []);
+
+  // AS-IS InitControls — 첫 옵션(max seq) 자동 선택.
+  // verSeq 가 비어있는 최초 진입뿐 아니라, Condition 저장 당시엔 유효했지만
+  // 이후 ContributeMain의 Version 팝업에서 삭제되어 더 이상 yearOptions 에 없는
+  // 경우(stale 값)도 함께 검증해서, 유효하지 않으면 max seq(첫 옵션)로 되돌린다.
+  useEffect(() => {
+    if (yearOptions.length === 0) return;
+    const exists = yearOptions.some(o => String(o.CODE) === searchParams.verSeq);
+    if (exists) return;
+    const first = yearOptions[0];
+    setSearchParams({
+      verSeq: String(first.CODE ?? ''),
+      yyyy: String(first.NAME2 ?? first.NAME ?? '').substring(0, 4),
+    });
+  }, [yearOptions, searchParams.verSeq]);
 
   const [reportGroup, dmBizType] = useTabComboQueries({
     filters: ['ReportGroup3', 'DmBizType'],
@@ -111,7 +125,7 @@ export const ContributeViewForm = ({ onSearch, onOpenVersionPopup }: Props) => {
             <FormItem
               label={t('LBL00086', '_Year')}
               labelAlign='right'
-              labelSize='middle'
+              className={commonStyles.formItem}
               required
               render={() => (
                 <CustomDropdown
@@ -132,12 +146,12 @@ export const ContributeViewForm = ({ onSearch, onOpenVersionPopup }: Props) => {
             <FormItem
               label={t('LBL00653', '_Version')}
               labelAlign='right'
-              labelSize='middle'
+              className={commonStyles.formItem}
               required
               render={() => (
                 <InputField
                   fullWidth
-                  className={styles.inputWithSearch}
+                  className={commonStyles.popupSearchField}
                   value={searchParams.versionNo}
                   InputProps={{
                     readOnly: true,
@@ -160,7 +174,7 @@ export const ContributeViewForm = ({ onSearch, onOpenVersionPopup }: Props) => {
             <FormItem
               label={t('LBL00088', '_제품군')}
               labelAlign='right'
-              labelSize='middle'
+              className={commonStyles.formItem}
               render={() => (
                 <CustomDropdown
                   value={searchParams.productGroup}
@@ -174,7 +188,7 @@ export const ContributeViewForm = ({ onSearch, onOpenVersionPopup }: Props) => {
             <FormItem
               label={t('LBL00087', '_고객군')}
               labelAlign='right'
-              labelSize='middle'
+              className={commonStyles.formItem}
               render={() => (
                 <InputField
                   style={{ width: '100%' }}
@@ -188,7 +202,7 @@ export const ContributeViewForm = ({ onSearch, onOpenVersionPopup }: Props) => {
             <FormItem
               label={t('LBL00657', '_Biz')}
               labelAlign='right'
-              labelSize='middle'
+              className={commonStyles.formItem}
               render={() => (
                 <CustomDropdown
                   value={searchParams.bizType}
@@ -198,26 +212,15 @@ export const ContributeViewForm = ({ onSearch, onOpenVersionPopup }: Props) => {
               )}
             />
           </Grid>
-          <Grid className={styles.customGrid}>
+          <Grid size={3} className={commonStyles.customGrid}>
             <FormItem
               render={() => (
-                <div className={styles.customCheckbox}>
+                <div className={commonStyles.customCheckbox}>
                   <Checkbox
                     checked={searchParams.millionYn === 'Y'}
                     onChange={checked => setSearchParams({ millionYn: checked ? 'Y' : 'N' })}
                   />
                   <Label labelText={t('LBL00654', '_M$')} depth='sub' />
-                </div>
-              )}
-            />
-            <FormItem
-              render={() => (
-                <div className={styles.customCheckbox}>
-                  <Checkbox
-                    checked={searchParams.compatibilityYn === 'Y'}
-                    onChange={checked => setSearchParams({ compatibilityYn: checked ? 'Y' : 'N' })}
-                  />
-                  <Label labelText={t('LBL00655', '_정합성 체크')} depth='sub' />
                 </div>
               )}
             />

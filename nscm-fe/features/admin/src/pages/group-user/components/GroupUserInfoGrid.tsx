@@ -17,10 +17,9 @@ interface Props {
   gridRef: MutableRefObject<FlexGrid | undefined>;
   gridFilterRef: MutableRefObject<FlexGridFilter | undefined>;
   data: UserInfoRow[];
-  onFocus?: () => void;
 }
 
-export const GroupUserInfoGrid = ({ gridRef, gridFilterRef, data, onFocus }: Props) => {
+export const GroupUserInfoGrid = ({ gridRef, gridFilterRef, data }: Props) => {
   const { t } = useTranslation();
   const editTrackerRef = useRef<EditTracker<UserInfoRow>>();
   const [clickedRow, setClickedRow] = useState<number>(-1);
@@ -29,6 +28,8 @@ export const GroupUserInfoGrid = ({ gridRef, gridFilterRef, data, onFocus }: Pro
 
   const staticColumns = useGroupUserStore(state => state.staticColumns[SHEETS.USER_INFO]);
   const setSelectedUserId = useGroupUserStore(state => state.setSelectedUserId);
+
+  const setFocusSeet = useGroupUserStore(state => state.setFocusSeet);
 
   const handleSelectionChanged = (g: FlexGrid) => {
     const row = g.selectedItems[0] as { USER_ID?: string } | undefined;
@@ -43,11 +44,11 @@ export const GroupUserInfoGrid = ({ gridRef, gridFilterRef, data, onFocus }: Pro
     const dataItem = GridUtils.getRow(grid, ht.row) as { CRUD_TYPE?: string } | undefined;
     if (!dataItem) return;
     const binding = GridUtils.getBinding(grid, ht.col);
-
-    if (binding === 'USER_ID' && dataItem.CRUD_TYPE !== CRUD_TYPE.INSERT) {
-      void setAlert({ type: 'alert', content: t('MSG00007', '_변경이 불가한 데이터입니다.') });
-      return;
-    }
+    // grid 더블 클릭 시 "변경이 불가한 데이터 입니다" 메세지 처리 삭제
+    // if (binding === 'USER_ID' && dataItem.CRUD_TYPE !== CRUD_TYPE.INSERT) {
+    //   void setAlert({ type: 'alert', content: t('MSG00007', '_변경이 불가한 데이터입니다.') });
+    //   return;
+    // }
     if (binding === 'USER_ID' && dataItem.CRUD_TYPE === CRUD_TYPE.INSERT) {
       setClickedRow(ht.row);
       setOpenSsoUser(true);
@@ -99,7 +100,7 @@ export const GroupUserInfoGrid = ({ gridRef, gridFilterRef, data, onFocus }: Pro
         selectionMode={SelectionMode.Row}
         selectionChanged={handleSelectionChanged}
         dblClick={handleDblClick}
-        gotFocus={() => onFocus?.()}
+        gotFocus={() => setFocusSeet(SHEETS.USER_INFO)}
       />
       <SsoUserModal
         open={openSsoUser}

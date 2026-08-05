@@ -109,6 +109,19 @@ export const useDataGridUtils = <T extends WijmoRowItem = WijmoRowItem>() => {
     grid.selectionChanging.addHandler(() => tooltip.hide());
   };
 
+  // 셀 데이터에 마우스오버 시 전체 값을 툴팁으로 표시(공통).
+  // formatItem 에서 cell 의 title 속성 설정 → 브라우저 네이티브 툴팁.
+  // 내용이 잘린 셀도 전체 값 확인 가능. 값이 없으면 title 제거.
+  const setCellTooltip = (grid: FlexGrid<T>) => {
+    grid.formatItem.addHandler((_sender, event: FormatItemEventArgs) => {
+      if (event.panel.cellType !== CellType.Cell) return;
+
+      const text = event.cell.textContent ?? '';
+      if (text) event.cell.title = text;
+      else event.cell.removeAttribute('title');
+    });
+  };
+
   const setAggregationRow = (grid: FlexGrid<T>, placement: 'above' | 'below') => {
     if (placement === 'below') {
       grid.columnFooters.rows.push(new GroupRow());
@@ -181,13 +194,21 @@ export const useDataGridUtils = <T extends WijmoRowItem = WijmoRowItem>() => {
   const formatEditableColumns = (grid: FlexGrid<T>, formatItemEventArgs: FormatItemEventArgs) => {
     const row = formatItemEventArgs.row;
     const col = formatItemEventArgs.col;
+    const cell = formatItemEventArgs.cell;
     const cellType = formatItemEventArgs.panel.cellType;
 
     if (cellType === CellType.RowHeader) {
       const rowHeaderCell = formatItemEventArgs.cell;
 
-      if (col === 0) formatItemEventArgs.cell.textContent = (row + 1).toString();
-      else if (!grid.isReadOnly && col === 1) {
+      if (col === 0) {
+        const rowNum = row + 1;
+        cell.textContent = rowNum.toString();
+        if (rowNum % 2 === 0) {
+          cell.style.backgroundColor = '#F7F7F8';
+        } else {
+          cell.style.backgroundColor = '#FFFFFF';
+        }
+      } else if (!grid.isReadOnly && col === 1) {
         delete rowHeaderCell.dataset.status;
         const dataItem = GridUtils.getRow(grid, row);
         if (!dataItem || !dataItem.CRUD_TYPE) return;
@@ -195,17 +216,13 @@ export const useDataGridUtils = <T extends WijmoRowItem = WijmoRowItem>() => {
         rowHeaderCell.dataset.status = dataItem['CRUD_TYPE'];
       }
     } else if (cellType === CellType.Cell) {
-      toggleClass(
-        formatItemEventArgs.cell,
-        'wj-cell-editable',
-        GridUtils.isEditableCell(grid, row, col)
-      );
+      toggleClass(cell, 'wj-cell-editable', GridUtils.isEditableCell(grid, row, col));
 
       const crudType = GridUtils.getRow(grid, row)?.CRUD_TYPE;
       const columnGroupProps = GridUtils.getColumn(grid, col);
 
       toggleClass(
-        formatItemEventArgs.cell,
+        cell,
         'wj-cell-popup',
         columnGroupProps?._ctrlType === CELL_CONTROL_TYPE.MODAL &&
           (columnGroupProps?._inputEditType === CELL_INPUT_EDIT_TYPE.MANDATORY ||
@@ -213,13 +230,29 @@ export const useDataGridUtils = <T extends WijmoRowItem = WijmoRowItem>() => {
             (columnGroupProps?._inputEditType?.startsWith('I') && crudType === CRUD_TYPE.INSERT))
       );
     } else if (cellType === CellType.ColumnHeader) {
-      if (row !== grid.columnHeaders.rows.length - 1) return;
+      // 필수(빨간 점)는 "실제 컬럼 라벨이 표시되는 헤더 셀"에만 적용한다.
+      //   - 단일/leaf 컬럼: 라벨은 맨 아래 헤더 행에 있음 (row === last).
+      //   - 좌측 고정 필수컬럼(3단 헤더에서 세로 머지): Wijmo 가 머지 셀을 맨 위(row 0) 앵커로 렌더 →
+      //     기존 `row === last` 가드에 걸려 누락(재조회 시 빨간 점 소실 사고). 세로 머지 앵커면 행 무관 적용.
+      //   - 그룹(상위) 헤더 셀은 가로 머지(row2===row)라 아래 두 조건 모두 불충족 → 오탐 없음.
+      const mergedRange = grid.getMergedRange(formatItemEventArgs.panel, row, col);
+      const isVerticalMerge = !!mergedRange && mergedRange.row2 > mergedRange.row;
+      const isLastHeaderRow = row === grid.columnHeaders.rows.length - 1;
+      if (!isLastHeaderRow && !isVerticalMerge) return;
+
       const inputEditType = GridUtils.getColumn(grid, col)?._inputEditType;
       const isMandatory =
         inputEditType === CELL_INPUT_EDIT_TYPE.MANDATORY ||
         inputEditType === CELL_INPUT_EDIT_TYPE.MANDATORY_INSERT_ONLY;
 
       toggleClass(formatItemEventArgs.cell, 'is-required', isMandatory);
+    } else if (cellType === CellType.TopLeft) {
+      // 왼쪽 상단 숫자 위 구석에 No 텍스트 삽입
+      if (row === 0 && col === 0) {
+        cell.textContent = 'No';
+        cell.style.textAlign = 'center';
+        cell.style.verticalAlign = 'middle';
+      }
     }
   };
 
@@ -350,16 +383,34 @@ export const useDataGridUtils = <T extends WijmoRowItem = WijmoRowItem>() => {
   };
 
   const setSortableColumnHeaderClick = (grid: FlexGrid<T>) => {
+    // 컬럼 너비 조절/컬럼 이동 드래그는 mouseup 후 click 도 함께 발생시켜서
+    // 그대로 두면 드래그 끝에 의도치 않게 정렬이 걸린다.
+    // → mousedown 지점과 비교해 임계값 이상 움직였으면 클릭으로 보지 않는다.
+    const DRAG_THRESHOLD_PX = 3;
+    let mouseDownPoint: { x: number; y: number } | null = null;
+
+    grid.hostElement.addEventListener('mousedown', (mouseEvent: MouseEvent) => {
+      mouseDownPoint = { x: mouseEvent.clientX, y: mouseEvent.clientY };
+    });
+
     grid.hostElement.addEventListener('click', (mouseEvent: MouseEvent) => {
+      const dragged =
+        !!mouseDownPoint &&
+        (Math.abs(mouseEvent.clientX - mouseDownPoint.x) > DRAG_THRESHOLD_PX ||
+          Math.abs(mouseEvent.clientY - mouseDownPoint.y) > DRAG_THRESHOLD_PX);
+      mouseDownPoint = null;
+      if (dragged) return;
+
       const target = mouseEvent.target as HTMLElement;
       const ht = grid.hitTest(mouseEvent);
       const column = grid.columns[ht.col];
-      if (ht.cellType !== CellType.ColumnHeader || !column?.allowSorting) return;
+      // allowSorting(F3) 여부와 무관하게 헤더 클릭이면 정렬. F3 는 아이콘 표시만 담당.
+      if (ht.cellType !== CellType.ColumnHeader || !column) return;
 
-      const clickedNativeSortIcon = !!target?.closest('.wj-glyph-up, .wj-glyph-down');
-      const clickedCustomIcon = !!target?.closest('.wj-sort-unsorted-icon');
-
-      if (!clickedNativeSortIcon && !clickedCustomIcon) return;
+      // 헤더 셀 아무 곳이나 클릭하면 정렬(아이콘/글자 무관).
+      // 단, 필터 아이콘 클릭은 제외 — 필터 팝업이 정상적으로 열려야 하므로.
+      const clickedFilterIcon = !!target?.closest('.wj-elem-filter, .wj-glyph-filter');
+      if (clickedFilterIcon) return;
 
       mouseEvent.preventDefault();
       mouseEvent.stopPropagation();
@@ -372,9 +423,17 @@ export const useDataGridUtils = <T extends WijmoRowItem = WijmoRowItem>() => {
       grid.collectionView.sortDescriptions.clear();
 
       if (!mouseEvent.ctrlKey) {
-        grid.collectionView.sortDescriptions.push(
-          new SortDescription(binding ?? '', sortDescription ? !sortDescription.ascending : true)
-        );
+        // AscDescNone 3-state 순환: 미정렬 → 오름 → 내림 → 미정렬
+        // - 미정렬(sortDescription 없음): 오름차순
+        // - 오름차순: 내림차순
+        // - 내림차순: 정렬 해제(push 하지 않음)
+        const nextAscending = !sortDescription ? true : sortDescription.ascending ? false : null;
+
+        if (nextAscending !== null) {
+          grid.collectionView.sortDescriptions.push(
+            new SortDescription(binding ?? '', nextAscending)
+          );
+        }
       }
 
       grid.select(-1, -1);
@@ -460,6 +519,7 @@ export const useDataGridUtils = <T extends WijmoRowItem = WijmoRowItem>() => {
 
   return {
     setSummaryTooltip,
+    setCellTooltip,
     setAggregationRow,
     setCheckbox,
     formatPopupIcon,

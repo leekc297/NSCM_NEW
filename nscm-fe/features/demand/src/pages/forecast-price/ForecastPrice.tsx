@@ -1,6 +1,6 @@
 import { type FlexGrid as TFlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { ColumnSettingModal } from 'features/master/src/components';
+import { ColumnLayoutModal, toColumnLayoutSettings } from 'features/master/src/components';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { apiClient } from '@foundation/apis';
@@ -9,7 +9,8 @@ import type { PageProps } from '@foundation/models';
 import { queryClient } from '@foundation/query-client';
 import type { EditTracker } from '@foundation/utils';
 import { MainTitle, SubTitle } from '@shared/components';
-import { useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
+import { useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
+import { FileExceldownloadIcon } from '@shared/lges-icons';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
 import { FcstUploadModal } from '../../components';
@@ -18,6 +19,7 @@ import { ForecastPriceForm } from './components/ForecastPriceForm';
 import { ForecastPriceGrid } from './components/ForecastPriceGrid';
 import {
   ExchangeRateModal,
+  ForecastTemplateModal,
   MeasureSelectModal,
   SavePricePeriodModal,
   VersionSelectModal,
@@ -58,6 +60,7 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   const [exchangeModalOpen, setExchangeModalOpen] = useState(false);
   const [savePriceModalOpen, setSavePriceModalOpen] = useState(false);
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
+  const [templateModalOpen, setTemplateModalOpen] = useState(false);
   const [insertedRows, setInsertedRows] = useState<ForecastPriceRow[]>([]);
 
   const { setAlert } = useMessageStore();
@@ -68,6 +71,7 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   const searchParams = useForecastPriceStore(state => state.searchParams);
   const setSearchParams = useForecastPriceStore(state => state.setSearchParams);
   const setFilters = useForecastPriceStore(state => state.setFilters);
+  const clearFilters = useForecastPriceStore(state => state.clearFilters);
   const isOpenSearchArea = useForecastPriceStore(state => state.isOpenSearchArea);
   const setOpenSearchArea = useForecastPriceStore(state => state.setOpenSearchArea);
   const fetchStaticColumns = useForecastPriceStore(state => state.fetchStaticColumns);
@@ -76,14 +80,50 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   const setCalendar = useForecastPriceStore(state => state.setCalendar);
   const setM3Cutoff = useForecastPriceStore(state => state.setM3Cutoff);
   const measureAuth = useForecastPriceStore(state => state.measureAuth);
+  const staticColumns = useForecastPriceStore(state => state.staticColumns);
+  const originalStaticColumns = useForecastPriceStore(state => state.originalStaticColumns);
   const staticMeasures = useForecastPriceStore(state => state.staticMeasures);
+  const fetchUserColumnLayout = useForecastPriceStore(state => state.fetchUserColumnLayout);
+  const applyColumnLayout = useForecastPriceStore(state => state.applyColumnLayout);
+  const authGroup = useForecastPriceStore(state => state.authGroup);
+  const setAuthGroup = useForecastPriceStore(state => state.setAuthGroup);
 
   // division-linked 메타(SHEET_COLUMNS/SHEET_MEASURE) — 81 전환 시 재fetch (fetch 는 호출 시점 divisionId 를 body 로 전송)
   useEffect(() => {
     fetchStaticColumns();
     fetchStaticMeasures();
+    // ⭐ 저장된 컬럼 개인화 복원 — BE PR_GET_SHEET_COLUMN_LIST 가 개인화를 반영하지 않으므로
+    //   (SHEET_PRSL_YN 미등록) FE 가 titleSet 'C' 를 직접 조회해 staticColumns 에 덧씌운다.
+    void fetchUserColumnLayout();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams.divisionId]);
+
+  // ⭐ Division 변경 = Grid 초기화 의무 (mkt-fcst/metal-link-price/sales-future-price 선례 1:1).
+  //   division 이 바뀌면 컬럼 셋(위 effect)만 갈리고 이전 division 의 조회 결과·신규행·편집 추적이
+  //   그대로 남아, 바뀐 컬럼에 옛 데이터가 얹힌 채로 오편집·오저장될 수 있다(2026-07-27 실측).
+  //   ⇒ 조회조건(filters/titleFilters)을 무효화해 그리드를 공백으로 되돌린다. 재조회는 Search(F5) 로만.
+  //   ⚠️ 초기 마운트/persist 복원은 제외 — 실제 division '변경' 시에만 동작(prevDivisionRef 가드).
+  const prevDivisionRef = useRef(searchParams.divisionId);
+  useEffect(() => {
+    if (prevDivisionRef.current === searchParams.divisionId) return;
+    prevDivisionRef.current = searchParams.divisionId;
+    setInsertedRows([]); // 신규(CRUD_TYPE='I') 행 reset
+    editTrackerRef.current?.clearChanges(); // 미저장 편집 추적 reset
+    clearFilters(); // filters/titleFilters 무효화 → useTabProcQuery enabled=false → rows/동적컬럼 비움
+  }, [searchParams.divisionId, clearFilters]);
+
+  // Column Setting 팝업 재진입 복원 — 현재 grid 상태(개인화 반영본).
+  //   ⚠️ DB 응답이 우선이고 이 값은 BE 가 안 준 필드만 보완한다 (buildInitialRows 규칙).
+  const columnLayoutSettings = useMemo(
+    () => toColumnLayoutSettings(staticColumns),
+    [staticColumns]
+  );
+
+  // Default 버튼 원복 기준 — 개인화 적용 전 admin 메타 원본.
+  const columnLayoutDefaults = useMemo(
+    () => toColumnLayoutSettings(originalStaticColumns),
+    [originalStaticColumns]
+  );
 
   const { data, refetch } = useTabProcQuery<MENU_ID, SHEETS.FCST_N_PRICE_40>({
     menuId: MENU_ID,
@@ -100,6 +140,26 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
     filters: titleFilters,
     enabled: titleFilters !== undefined,
   });
+
+  // ⭐ P_USERINFO 권한 그룹 — 세션 groupId 유령 필드(2026-07-15 실측) 대체. CMBO
+  //   'FcstPriceUserAuthGroup'(보유그룹 × GET_ADMIN_GROUP_MEASURE(DMF0082)/GET_ADMIN_GROUP(ALL) 교집합,
+  //   ADMIN 우선) 1행을 store.authGroup 에 주입 → setFilters 가 userGroup 으로 사용. 미매칭 = userId
+  //   fallback(=lookup 미매칭 = 편집권한 없음, 정상). sales-plan(DMF0021) 선례 1:1.
+  const [authGroupCombo] = useTabComboQueries({ filters: ['FcstPriceUserAuthGroup'] });
+  useEffect(() => {
+    const first = (authGroupCombo ?? [])[0] as { CODE?: string } | undefined;
+    if (first?.CODE) setAuthGroup(String(first.CODE));
+  }, [authGroupCombo, setAuthGroup]);
+  // ⭐ race 방어 (sales-plan '40 편집불가' 사고 동일): 콤보 도착 전 조회(또는 persist filters 재사용)로
+  //   userGroup=userId 조회가 이미 나갔으면 editAuth 미표시 응답이 남는다 → 그룹 확정 시 filters
+  //   재생성(setFilters — 새 queryKey)으로 자동 재조회해 measureAuth 를 갱신.
+  useEffect(() => {
+    if (authGroup && filters) {
+      const isSame = setFilters();
+      if (isSame) void refetch();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [authGroup]);
 
   // GET 부가 커서 반영 — drop1(월정보 M3_CUTOFF=M+4 경계, #4) / drop3(measure 편집권한 EDIT_AUTH_YN =
   //   AS-IS bEDIT_AUTH_* 원천) / drop4(배분 캘린더 MONTH_DAY_CNT·WEEK_DAY_CNT, #1).
@@ -128,14 +188,29 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   const editableDayColumns = useMemo(
     () =>
       editableDayColumnsOf(
-        spreadTitle
-          .map(r => String(r.COLUMN_NAME ?? ''))
-          .filter(b => /^D_\d{8}$/.test(b))
+        spreadTitle.map(r => String(r.COLUMN_NAME ?? '')).filter(b => /^D_\d{8}$/.test(b))
       ),
     [spreadTitle]
   );
 
   const isCurVersion = searchParams.versionType.trim() === 'Current';
+
+  // ⭐ 편집 가능 버전 판정 — 편집권한은 백엔드 PKG 가 행별 EDIT_FLAG 로 종합 산출(요일제한·버전
+  //   read-only 포함, types.ts drop3 주석). 과거(조회 전용) 버전은 전 행 EDIT_FLAG='N' 로 내려오므로
+  //   편집 가능 행이 하나라도 있으면 편집 버전으로 본다.
+  //   ⚠️ 문자열 versionType==='Current' 단독 판정은 불가 — 버전 팝업은 선택 시 VERSION_NO 를 넣어
+  //     (VersionSelectModal onApply) 편집 가능한 현재 버전조차 'Current' 가 아니게 된다. 따라서
+  //     기본/수동 Current(빈 결과 포함) 이거나, 조회 데이터에 편집가능 행이 있으면 편집 버전.
+  const isEditableVersion =
+    isCurVersion ||
+    ((data?.fcstNPrice ?? []) as WijmoRowItem[]).some(r => String(r.EDIT_FLAG ?? '') !== 'N');
+
+  // Excel Form / Excel Upload 버튼 노출 게이트 — division 81 계열 + 82
+  //   startsWith('81') = '81', '81_UC' 등 하위 사업부 포함.
+  //   ⭐ 82 편입 (사용자 지시 2026-07-30): "40은 현재와 같이 유지, 81·82 는 현재의 81 과 같이 수행"
+  //   — PKG_DMF0082 의 81 분기(GET/SAVE/판가팝업)에 82 를 포함시킨 변경과 짝. SavePricePeriodModal
+  //     L203 은 이미 `startsWith('81') || === '82'` 로 동일 판정 중.
+  const isDiv81 = searchParams.divisionId.startsWith('81') || searchParams.divisionId === '82';
 
   // ── Search (AS-IS FindButton — V1~V4 검증 후 조회) ──
   const handleSubmit = async () => {
@@ -167,7 +242,7 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   // ── Insert (AS-IS InsertButton — Current 버전 조회 시에만) ──
   //   ⭐ #9 시드 복사 (AS-IS L2636~2676): 포커스 행이 있으면 키 10종을 새 행에 복제, 없으면 Measure='MKT_FCST'.
   const handleInsert = () => {
-    if (!isCurVersion) return;
+    if (!isEditableVersion) return;
     const g = gridRef.current;
     const seed = g?.rows[g.selection.row]?.dataItem as WijmoRowItem | undefined;
     const str = (v: unknown): string => (typeof v === 'string' ? v : '');
@@ -223,7 +298,10 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
     }
     const measure = String(item['MEASURE'] ?? '');
     if (!(AUTH_MEASURES as readonly string[]).includes(measure) || measureAuth[measure] === false) {
-      await setAlert({ type: 'alert', content: t(MSG.MEASURE_NOT_EDITABLE, '_Not editable measure.') });
+      await setAlert({
+        type: 'alert',
+        content: t(MSG.MEASURE_NOT_EDITABLE, '_Not editable measure.'),
+      });
       return;
     }
     item['CRUD_TYPE'] = 'D';
@@ -238,7 +316,10 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
 
     const validationError = validateSaveRows(allRows, editableDayColumns);
     if (validationError === 'CURRENCY_REQUIRED') {
-      await setAlert({ type: 'alert', content: t(MSG.REQUIRED, '_{0} is required.').replace('{0}', 'Currency') });
+      await setAlert({
+        type: 'alert',
+        content: t(MSG.REQUIRED, '_{0} is required.').replace('{0}', 'Currency'),
+      });
       return;
     }
     if (validationError === 'QTY_PRICE_REQUIRED') {
@@ -258,13 +339,15 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
 
     const userId = useSessionStore.getState().session.userId ?? '';
     // '^' bulk payload — useProcMutation 의 array unfold 를 피해 call-proc 직접 (표준 패턴).
-    const res = await apiClient.post<{ CODE?: string; MSG?: string }[]>(
-      `/${MENU_ID}/FcstNPrice/SAVE/call-proc`,
-      buildSavePayload(saveRows, userId)
-    );
-    const result = (res.data.result ?? [])[0];
-    if (result && result.CODE !== undefined && String(result.CODE) !== '0') {
-      await setAlert({ type: 'alert', content: String(result.MSG ?? t(MSG.DUP_SAVE_ERROR, '_Save error.')) });
+    const res = await apiClient.post<{
+      o_rc1?: { RESULT_CODE?: string; RESULT_MSG?: string; ERR_EVENT?: string }[];
+    }>(`/${MENU_ID}/FcstNPrice/SAVE/call-proc`, buildSavePayload(saveRows, userId));
+    const result = (res.data?.result?.o_rc1 ?? [])[0];
+    if (result && String(result.RESULT_CODE ?? '') !== '0') {
+      await setAlert({
+        type: 'alert',
+        content: String(result.RESULT_MSG ?? t(MSG.DUP_SAVE_ERROR, '_Save error.')),
+      });
       return;
     }
     await setAlert({ type: 'alert', content: t(MSG.SAVED, '_Saved.') });
@@ -276,21 +359,36 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   const hotkeyConfig = {
     search: () => void handleSubmit(),
     manual: false as const, // Manual(F1) 버튼 미표시 (전체 삭제 방침 — 강민재)
-    ...(hasButton('SAVE')
+    // 추가/삭제/저장 = 저장권한(hasButton) AND **편집 가능 버전일 때만** 노출.
+    //   과거(조회 전용) 버전은 전 행 EDIT_FLAG='N' → isEditableVersion=false → 세 버튼 숨김(미렌더).
+    //   Insert 는 handleInsert 내부에도 동일 가드가 있으나, 버튼 자체를 숨겨 진입점을 원천 차단한다.
+    ...(hasButton('SAVE') && isEditableVersion
       ? {
           insert: handleInsert,
           delete: () => void handleDelete(),
           save: () => void handleSave(),
         }
       : { insert: false as const, delete: false as const, save: false as const }),
-    // Excel 업로드 — 버튼 미표시 (2026-07-12 요청). 기능/모달은 보존, 버튼만 숨김.
-    upload: false as const,
+    // Excel 업로드 — division 81 계열에서만 노출 (그 외는 숨김, 기능/모달은 보존).
+    upload: isDiv81 ? () => setUploadModalOpen(true) : (false as const),
   };
 
   // AS-IS 커스텀 4버튼 — icon-only (mkt-fcst/DMF0020 표준: buttonLabel='' + iconComponent,
   //   label/title=Tooltip). ⚠️ LBL 실측 대사 완료 — LBL00661/00712/00605 (직전 LBL00741/752/753 은
   //   View PR/MKT FCST 미등록 제외/Include Internal Txn 오매핑 사고 → 교정 2026-07-12).
   const customButtons = [
+    // ⭐ Excel Form(템플릿 다운로드 모달) — division 81 계열에서만 노출 (metal-link 'Excel Form' 이식).
+    ...(isDiv81
+      ? [
+          {
+            // SubTitle 이 buttonLabel={label} 기본 적용 → 아이콘 + 'Excel Form' 텍스트 (metal-link 동일 shape)
+            label: t('LBL00762', 'Excel Form'),
+            action: () => setTemplateModalOpen(true),
+            iconComponent: <FileExceldownloadIcon />,
+            iconPosition: 'leading' as const,
+          },
+        ]
+      : []),
     {
       // 명칭 = DMF0020 과 동일 'Price Batch Input' (LBL00662, 2026-07-12 요청)
       label: t('LBL00662', 'Price Batch Input'),
@@ -299,7 +397,10 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         // AS-IS V15: 수정모드(변경 존재) 시 차단 (MSG00669) 후 SavePricePeriodModal open
         const changed = editTrackerRef.current?.getOriginalValues();
         if (changed && changed.size > 0) {
-          void setAlert({ type: 'alert', content: t(MSG.EDIT_MODE_NO_INPUT, '_Not in edit mode.') });
+          void setAlert({
+            type: 'alert',
+            content: t(MSG.EDIT_MODE_NO_INPUT, '_Not in edit mode.'),
+          });
           return;
         }
         setSavePriceModalOpen(true);
@@ -310,8 +411,28 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
     {
       label: t('LBL00661', 'Exchange Rate'),
       title: t('LBL00661', 'Exchange Rate'),
-      action: () => setExchangeModalOpen(true),
+      // 편집모드(미저장 변경분 존재) 시 진입 차단 — AS-IS "Edit Mode 에서는 수행할 수 없습니다".
+      //   Price Batch Input 과 동일 가드 패턴(editTracker 변경분 검사).
+      action: () => {
+        const changed = editTrackerRef.current?.getOriginalValues();
+        if (changed && changed.size > 0) {
+          void setAlert({
+            type: 'alert',
+            content: t(MSG.EDIT_MODE_NO_ACTION, '_Edit Mode 에서는 수행할 수 없습니다.'),
+          });
+          return;
+        }
+        setExchangeModalOpen(true);
+      },
       iconComponent: <IcExchangeRate />,
+      buttonLabel: '',
+    },
+    // ⭐ 아이콘 배치 규약 (hook #119, 사용자 명시 2026-07-30): 환율 → Grid Column Set → Measure
+    {
+      label: t('LBL00605', 'Column Setting'),
+      title: t('LBL00605', 'Column Setting'),
+      action: () => setColumnModalOpen(true),
+      iconComponent: <IcGridColumnSetup />,
       buttonLabel: '',
     },
     {
@@ -319,13 +440,6 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
       title: t('LBL00712', '_Measure'),
       action: () => setMeasureModalOpen(true),
       iconComponent: <IcMeasureSelect />,
-      buttonLabel: '',
-    },
-    {
-      label: t('LBL00605', 'Column Setting'),
-      title: t('LBL00605', 'Column Setting'),
-      action: () => setColumnModalOpen(true),
-      iconComponent: <IcGridColumnSetup />,
       buttonLabel: '',
     },
   ];
@@ -370,6 +484,7 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         open={versionModalOpen}
         modalClose={() => setVersionModalOpen(false)}
         defaultDivision={searchParams.divisionId}
+        defaultPeriod={{ start: searchParams.startYyyymmdd, end: searchParams.endYyyymmdd }}
         onApply={versionIds => setSearchParams({ versionType: versionIds })}
       />
 
@@ -393,24 +508,53 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         }}
       />
 
-      {/* Column 설정 (AS-IS btnColumn — 공용 ColumnSettingModal + titleSet 'C') */}
-      <ColumnSettingModal
+      {/* Column 설정 (AS-IS btnColumn — 공용 ColumnLayoutModal + titleSet 'C') */}
+      <ColumnLayoutModal
         open={columnModalOpen}
         modalClose={() => setColumnModalOpen(false)}
         menuId={MENU_ID}
         sheetName={TITLESET_SHEET}
-        columnType={TITLESET_SHEET}
+        // ⭐ 'C' = 컬럼 개인화 (saveTitleSet 이 저장 시 쓰는 값과 반드시 동일해야 한다).
+        //   TITLESET_SHEET 를 넘기면 저장('C')과 조회('FcstNPrice')가 다른 키를 봐서 저장 결과가
+        //   재진입 시 사라진다(2026-07-27 실측). MktFcst/SalesMonitoring/ContributeView 도 'C'.
+        columnType='C'
         divisionId={searchParams.divisionId}
         title={t('LBL00753', '_Column')}
         leftTitle={t('LBL00764', 'Invisible')}
         rightTitle={t('LBL00765', 'Visible')}
-        onSave={(settings: { COLUMN_NAME: string }[]) => {
+        // 재진입 복원 — staticColumns 는 fetchUserColumnKeys/applyColumnLayout 로 개인화가 반영된 상태다.
+        initialSettings={columnLayoutSettings}
+        defaultSettings={columnLayoutDefaults}
+        onSave={settings => {
+          // ⭐ 로컬 즉시 반영 — BE 재조회로는 개인화가 돌아오지 않으므로 grid 반영은 store 가 담당한다
+          //   (mkt-fcst/sales-monitoring 선례 동일). 서버 저장은 다음 진입 때의 복원용.
+          applyColumnLayout(
+            settings.map(s => ({
+              colNm: s.COLUMN_NAME,
+              visible: s.USER_FLAG === 'Y',
+              width: s.COL_WIDTH,
+              cellColor: s.CELL_COLOR,
+              textColor: s.TEXT_COLOR,
+              order: s.SORT_ORDER_NO,
+            }))
+          );
+          // titleSet 'C' 영구 저장 — 표시 column + 순서 + 폭/색 (BE 3컬럼 확장분 2026-07-27).
+          const visible = settings.filter(s => s.USER_FLAG === 'Y');
           void saveTitleSet(
             'C',
-            settings.map((s, i) => ({ name: s.COLUMN_NAME, sortOrderNo: i + 1 }))
+            visible.map((s, i) => ({
+              name: s.COLUMN_NAME,
+              sortOrderNo: i + 1,
+              colWidth: s.COL_WIDTH,
+              cellColor: s.CELL_COLOR,
+              textColor: s.TEXT_COLOR,
+            }))
           ).then(ok => {
-            if (!ok) return;
-            fetchStaticColumns();
+            // 실패를 조용히 삼키면 '저장했는데 재진입 시 원복' 과 구분이 안 된다 — 반드시 알린다.
+            if (!ok) {
+              void setAlert({ type: 'alert', content: t(MSG.SAVE_ERROR, '_Save error.') });
+              return;
+            }
             void queryClient.invalidateQueries({ queryKey: [MENU_ID] });
           });
         }}
@@ -433,6 +577,14 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         defaultEndCustomers={searchParams.endCustomers}
         defaultSalesSites={searchParams.salesSites}
         onSaveResult={() => void queryClient.invalidateQueries({ queryKey: [MENU_ID] })}
+      />
+
+      {/* Excel Form (템플릿 다운로드 모달) — division 81 계열 전용. 현재는 빈 파일 스텁
+          (DMF0082 템플릿 백엔드 proc 배선 전 — ForecastTemplateModal 내 TODO 참조). */}
+      <ForecastTemplateModal
+        open={templateModalOpen}
+        modalClose={() => setTemplateModalOpen(false)}
+        divisionId={searchParams.divisionId}
       />
 
       {/* Excel Upload (AS-IS DMF0082_EXCEL_UPLOAD — 2-Step: Upload=검증분류 / OK=저장 mode=1.

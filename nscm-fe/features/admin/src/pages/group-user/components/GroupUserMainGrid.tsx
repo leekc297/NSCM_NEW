@@ -15,13 +15,13 @@ interface Props {
   gridRef: MutableRefObject<FlexGrid<MainRow> | undefined>;
   gridFilterRef: MutableRefObject<FlexGridFilter | undefined>;
   data: MainRow[];
-  onFocus?: () => void;
 }
 
-export const GroupUserMainGrid = ({ gridRef, gridFilterRef, data, onFocus }: Props) => {
+export const GroupUserMainGrid = ({ gridRef, gridFilterRef, data }: Props) => {
   const editTrackerRef = useRef<EditTracker<MainRow>>();
   const staticColumns = useGroupUserStore(state => state.staticColumns[SHEETS.MAIN]);
   const setSelectedUserGrId = useGroupUserStore(state => state.setSelectedUserGrId);
+  const setFocusSeet = useGroupUserStore(state => state.setFocusSeet);
 
   const handleSelectionChanged = (g: FlexGrid) => {
     const row = g.selectedItems[0] as { USER_GR_ID?: string } | undefined;
@@ -68,7 +68,8 @@ export const GroupUserMainGrid = ({ gridRef, gridFilterRef, data, onFocus }: Pro
       staticColumns={staticColumns}
       selectionMode={SelectionMode.Row}
       selectionChanged={handleSelectionChanged}
-      gotFocus={() => onFocus?.()}
+      gotFocus={() => setFocusSeet(SHEETS.MAIN)}
+      isReadOnly={true}
     />
   );
 };

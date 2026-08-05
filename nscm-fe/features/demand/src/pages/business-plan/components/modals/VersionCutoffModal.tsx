@@ -1,4 +1,8 @@
-import { CellType, type FlexGrid as FlexGridType, type FormatItemEventArgs } from '@mescius/wijmo.grid';
+import {
+  CellType,
+  type FlexGrid as FlexGridType,
+  type FormatItemEventArgs,
+} from '@mescius/wijmo.grid';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
@@ -75,7 +79,7 @@ export const VersionCutoffModal = ({ open, modalClose, divisionId, period }: Pro
     enabled: open,
   });
   const versionRows = useMemo<CutoffVersionRow[]>(
-    () => ((data as { data?: CutoffVersionRow[] } | undefined)?.data ?? []),
+    () => (data as { data?: CutoffVersionRow[] } | undefined)?.data ?? [],
     [data]
   );
 

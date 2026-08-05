@@ -21,6 +21,7 @@ export const Alert = () => {
       size={400}
       disableButtonCancel={alertProps.type !== 'confirm'}
       draggable={false}
+      disableScale
     />
   );
 };

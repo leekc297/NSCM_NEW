@@ -28,6 +28,7 @@ interface GroupUserState {
   selectedUserGrId: string;
   selectedUserId: string;
   isOpenSearchArea: boolean;
+  focusSheet: SHEETS;
 }
 
 interface GroupUserAction {
@@ -38,6 +39,7 @@ interface GroupUserAction {
   setSelectedUserId: (id: string) => void;
   fetchStaticColumns: () => Promise<void>;
   setOpenSearchArea: (open?: boolean) => void;
+  setFocusSeet: (sheet: SHEETS) => void;
 }
 
 const initSearch: SearchParamProps = { search: '' };
@@ -54,6 +56,7 @@ const initState: GroupUserState = {
   selectedUserGrId: '',
   selectedUserId: '',
   isOpenSearchArea: true,
+  focusSheet: SHEETS.MAIN,
 } as const;
 
 export const useGroupUserStore = createPersistedStoreWithTab<GroupUserState & GroupUserAction>(
@@ -116,6 +119,11 @@ export const useGroupUserStore = createPersistedStoreWithTab<GroupUserState & Gr
     setOpenSearchArea: open => {
       set(state => {
         state.isOpenSearchArea = open ?? !state.isOpenSearchArea;
+      });
+    },
+    setFocusSeet: sheet => {
+      set(state => {
+        state.focusSheet = sheet;
       });
     },
   }),

@@ -101,7 +101,9 @@ export const SalesPriceVersionModal = ({ open, modalClose, defaultDivision, onAp
   const [periodFrom, setPeriodFrom] = useState<string>(() =>
     dayjs().subtract(3, 'month').format('YYYYMMDD')
   );
-  const [periodTo, setPeriodTo] = useState<string>(() => dayjs().add(3, 'month').format('YYYYMMDD'));
+  const [periodTo, setPeriodTo] = useState<string>(() =>
+    dayjs().add(3, 'month').format('YYYYMMDD')
+  );
   // ⭐ Division = 메인 화면 조회 division 고정 — 수정 불가 (사용자 요구 2026-07-02)
   const [divisionId, setDivisionId] = useState<string>(defaultDivision);
   const [description, setDescription] = useState<string>('');
@@ -179,7 +181,10 @@ export const SalesPriceVersionModal = ({ open, modalClose, defaultDivision, onAp
     }
     const versionNos = selectedItems.map(r => String(r.VERSION_NO ?? r.CODE ?? '')).filter(Boolean);
     if (versionNos.length === 0) {
-      void setAlert({ type: 'alert', content: t('MSG00113', '_유효한 Version 이 선택되지 않았습니다.') });
+      void setAlert({
+        type: 'alert',
+        content: t('MSG00113', '_유효한 Version 이 선택되지 않았습니다.'),
+      });
       return;
     }
     onApply(versionNos.join(','));

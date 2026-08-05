@@ -1,6 +1,6 @@
 import { type FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { useQueryClient } from '@foundation/query-client';
@@ -13,9 +13,13 @@ import { useMessageStore } from '@shared/stores';
 import { GroupUserInfoGrid } from './components/GroupUserInfoGrid';
 import { GroupUserMainGrid } from './components/GroupUserMainGrid';
 import { GroupUserUnitGrid } from './components/GroupUserUnitGrid';
+import { DivisionModal } from './components/modals/DivisionModal';
 import { MENU_ID, SHEETS, UNIT_TP_CD } from './group-user.constants';
+import type { DivisionPopupRow } from './group-user.types';
 import styles from './GroupUser.module.scss';
 import { useGroupUserStore } from './useGroupUserStore';
+
+type UnitRow = ResponseData<MENU_ID, SHEETS.DIVISION>;
 
 const collectRowsWithSheet = (
   grid: FlexGrid | undefined,
@@ -24,8 +28,8 @@ const collectRowsWithSheet = (
 ): WijmoRowItem[] => {
   if (!grid) return [];
   const rows: WijmoRowItem[] = [];
-  for (let i = 0; i < grid.rows.length; i += 1) {
-    const item = grid.rows[i]?.dataItem as (WijmoRowItem & { CRUD_TYPE?: string }) | undefined;
+  for (const element of grid.rows) {
+    const item = element?.dataItem as (WijmoRowItem & { CRUD_TYPE?: string }) | undefined;
     if (!item?.CRUD_TYPE) continue;
     rows.push({ ...item, ...extra, SHT_NM: sheetName } as WijmoRowItem);
   }
@@ -45,34 +49,35 @@ export const GroupUser = ({ tabId, title }: PageProps<MENU_ID>) => {
   const userGridFilterRef = useRef<FlexGridFilter>();
   const divisionGridRef = useRef<FlexGrid>();
   const divisionGridFilterRef = useRef<FlexGridFilter>();
-  // 마지막 포커스/선택 그리드 — 상단 SubTitle Insert/Delete 가 이 그리드에 적용
-  const activeSheetRef = useRef<SHEETS>(SHEETS.MAIN);
 
   const filters = useGroupUserStore(state => state.filters);
   const setMainFilter = useGroupUserStore(state => state.setMainFilter);
   const fetchStaticColumns = useGroupUserStore(state => state.fetchStaticColumns);
-  const staticColumns = useGroupUserStore(state => state.staticColumns);
   const selectedUserGrId = useGroupUserStore(state => state.selectedUserGrId);
   const selectedUserId = useGroupUserStore(state => state.selectedUserId);
+
+  const focusSheet = useGroupUserStore(state => state.focusSheet);
+
+  const [openDivisionModal, setOpenDivisionModal] = useState<boolean>(false);
 
   const { data: mainData } = useTabProcQuery<MENU_ID, SHEETS.MAIN>({
     menuId: MENU_ID,
     sheetName: SHEETS.MAIN,
-    tabId,
+    tabId: SHEETS.MAIN,
     filters: filters[SHEETS.MAIN],
     enabled: !!filters[SHEETS.MAIN],
   });
   const { data: userData } = useTabProcQuery<MENU_ID, SHEETS.USER_INFO>({
     menuId: MENU_ID,
     sheetName: SHEETS.USER_INFO,
-    tabId,
+    tabId: SHEETS.USER_INFO,
     filters: filters[SHEETS.USER_INFO],
     enabled: !!filters[SHEETS.USER_INFO],
   });
   const { data: divisionData } = useTabProcQuery<MENU_ID, SHEETS.DIVISION>({
     menuId: MENU_ID,
     sheetName: SHEETS.DIVISION,
-    tabId,
+    tabId: SHEETS.DIVISION,
     filters: filters[SHEETS.DIVISION],
     enabled: !!filters[SHEETS.DIVISION],
   });
@@ -97,7 +102,7 @@ export const GroupUser = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   // — CRUD (상단 SubTitle 툴바 F8/F9 — activeSheetRef = 마지막 포커스/선택 그리드 대상) —
   const onInsert = () => {
-    if (activeSheetRef.current === SHEETS.USER_INFO) {
+    if (focusSheet === SHEETS.USER_INFO) {
       if (!selectedUserGrId) {
         void setAlert({ type: 'alert', content: t('MSG00625', '_먼저 Group 을 선택해 주십시오.') });
         return;
@@ -107,7 +112,7 @@ export const GroupUser = ({ tabId, title }: PageProps<MENU_ID>) => {
       }
       return;
     }
-    if (activeSheetRef.current === SHEETS.DIVISION) {
+    if (focusSheet === SHEETS.DIVISION) {
       if (!selectedUserGrId || !selectedUserId) {
         void setAlert({
           type: 'alert',
@@ -116,25 +121,18 @@ export const GroupUser = ({ tabId, title }: PageProps<MENU_ID>) => {
         return;
       }
       if (divisionGridRef.current) {
-        GridAction.addRow(divisionGridRef.current, {
-          USER_GR_ID: selectedUserGrId,
-          USER_ID: selectedUserId,
-          UNIT_TP_CD: UNIT_TP_CD.DIVISION,
-          UPPR_UNIT_ID: '-',
-          EDIT_YN: 'Y',
-          USE_YN: 'Y',
-        });
+        setOpenDivisionModal(true);
       }
       return;
     }
     if (mainGridRef.current) GridAction.addRow(mainGridRef.current, { USE_YN: 'Y' });
   };
   const onDelete = () => {
-    if (activeSheetRef.current === SHEETS.USER_INFO) {
-      if (userGridRef.current) GridAction.removeRow(userGridRef.current, true);
+    if (focusSheet === SHEETS.USER_INFO) {
+      if (userGridRef.current) GridAction.removeRow(userGridRef.current, false);
       return;
     }
-    if (activeSheetRef.current === SHEETS.DIVISION) {
+    if (focusSheet === SHEETS.DIVISION) {
       if (divisionGridRef.current) GridAction.removeRow(divisionGridRef.current, false);
       return;
     }
@@ -157,9 +155,19 @@ export const GroupUser = ({ tabId, title }: PageProps<MENU_ID>) => {
       void setAlert({ type: 'alert', content: t('MSG00627', '_변경 사항이 없습니다.') });
       return;
     }
+
     mutateSave(payload as ResponseData<MENU_ID, SHEETS.MAIN>[], {
       onSuccess: () => {
-        void queryClient.invalidateQueries({ queryKey: [tabId] });
+        // 데이터가 변경된 그리드만 다시 조회 할 수 있도록 처리
+        if (mainRows.length > 0) {
+          void queryClient.invalidateQueries({ queryKey: [SHEETS.MAIN] });
+        }
+        if (userRows.length > 0) {
+          void queryClient.invalidateQueries({ queryKey: [SHEETS.USER_INFO] });
+        }
+        if (divRows.length > 0) {
+          void queryClient.invalidateQueries({ queryKey: [SHEETS.DIVISION] });
+        }
         setToast({ type: 'success', message: t('MSG00002', '_성공적으로 저장되었습니다!') });
       },
     });
@@ -178,14 +186,103 @@ export const GroupUser = ({ tabId, title }: PageProps<MENU_ID>) => {
     upload: false,
   };
 
+  const closeDivisionModal = () => {
+    setOpenDivisionModal(false);
+  };
+
+  const selectDivisionModal = (divisionList: DivisionPopupRow[]) => {
+    if (divisionGridRef.current) {
+      const collectionView = divisionGridRef.current.collectionView;
+      const collection = collectionView.sourceCollection as UnitRow[];
+
+      // 팝업에서 선택한 값 중에 삭제 대상으로 지정한 데이터가 있으면 삭제를 취소하는 것으로 판단하여 삭제 플래스 삭제.
+      collection.forEach(item => {
+        if (item.CRUD_TYPE === 'D') {
+          divisionList.forEach(div => {
+            if (item.UNIT_ID === div.CODE && item.UNIT_NM === div.NAME) {
+              item.CRUD_TYPE = '';
+            }
+          });
+        }
+      });
+
+      const excludeIds = new Set(collection.map(item => item.UNIT_ID));
+      const newDivisionList = divisionList.filter(div => !excludeIds.has(div.CODE));
+
+      for (const newDiv of newDivisionList) {
+        GridAction.addRow(divisionGridRef.current, {
+          USER_GR_ID: selectedUserGrId,
+          USER_ID: selectedUserId,
+          UNIT_TP_CD: UNIT_TP_CD.DIVISION,
+          UNIT_ID: newDiv.CODE,
+          UNIT_NM: newDiv.NAME,
+          UPPR_UNIT_ID: '-',
+          EDIT_YN: 'Y',
+          USE_YN: 'Y',
+        });
+      }
+    }
+    setOpenDivisionModal(false);
+  };
+
+  const GroupGrid = useMemo(() => {
+    return (
+      <GroupUserMainGrid
+        gridRef={mainGridRef}
+        gridFilterRef={mainGridFilterRef}
+        data={mainData?.o_rc1 ?? []}
+      />
+    );
+  }, [mainGridRef, mainGridFilterRef, mainData]);
+
+  const UserGrid = useMemo(() => {
+    return (
+      <GroupUserInfoGrid
+        gridRef={userGridRef}
+        gridFilterRef={userGridFilterRef}
+        data={userData?.o_rc1 ?? []}
+      />
+    );
+  }, [userGridRef, userGridFilterRef, userData]);
+
+  const DivisionGrid = useMemo(() => {
+    return (
+      <GroupUserUnitGrid
+        gridRef={divisionGridRef}
+        gridFilterRef={divisionGridFilterRef}
+        data={divisionData?.o_rc1 ?? []}
+      />
+    );
+  }, [divisionGridRef, divisionGridFilterRef, divisionData]);
+
+  const getGridRef = () => {
+    if (focusSheet === SHEETS.DIVISION) {
+      return divisionGridRef;
+    } else if (focusSheet === SHEETS.USER_INFO) {
+      return userGridRef;
+    } else {
+      return mainGridRef;
+    }
+  };
+
+  const getGridFilterRef = () => {
+    if (focusSheet === SHEETS.DIVISION) {
+      return divisionGridFilterRef;
+    } else if (focusSheet === SHEETS.USER_INFO) {
+      return userGridFilterRef;
+    } else {
+      return mainGridFilterRef;
+    }
+  };
+
   return (
     <>
       {/* Figma 5934:143433 — 상단 검색조건 없음 + 그리드 헤더 버튼 없음 (figma-layout-parity-mandatory #90) */}
       <MainTitle title={title} menuId={MENU_ID} disableSearchArea />
       <SubTitle
         menuId={MENU_ID}
-        grid={mainGridRef}
-        gridFilter={mainGridFilterRef}
+        grid={getGridRef()}
+        gridFilter={getGridFilterRef()}
         dataCount={mainData?.o_rc1?.length ?? 0}
         excelFileName='GroupUser'
         hotkeyConfig={hotkeyConfig}
@@ -194,36 +291,25 @@ export const GroupUser = ({ tabId, title }: PageProps<MENU_ID>) => {
       <div className={styles.contents}>
         <div className={styles.leftCol}>
           <TitleArea isSubTitle title={t('LBL00357', 'Group Info')} depth='h4' />
-          <GroupUserMainGrid
-            gridRef={mainGridRef}
-            gridFilterRef={mainGridFilterRef}
-            data={mainData?.o_rc1 ?? []}
-            onFocus={() => (activeSheetRef.current = SHEETS.MAIN)}
-          />
+          {GroupGrid}
         </div>
         <div className={styles.rightCol}>
           <div className={styles.rightTop}>
             <TitleArea isSubTitle title={t('LBL00658', 'User Info')} depth='h4' />
-            <GroupUserInfoGrid
-              gridRef={userGridRef}
-              gridFilterRef={userGridFilterRef}
-              data={userData?.o_rc1 ?? []}
-              onFocus={() => (activeSheetRef.current = SHEETS.USER_INFO)}
-            />
+            {UserGrid}
           </div>
           <div className={styles.rightBottom}>
             <div className={styles.module}>
               <TitleArea isSubTitle title={t('LBL00641', 'Division')} depth='h4' />
-              <GroupUserUnitGrid
-                gridRef={divisionGridRef}
-                gridFilterRef={divisionGridFilterRef}
-                data={divisionData?.o_rc1 ?? []}
-                staticColumns={staticColumns[SHEETS.DIVISION]}
-                onFocus={() => (activeSheetRef.current = SHEETS.DIVISION)}
-              />
+              {DivisionGrid}
             </div>
           </div>
         </div>
+        <DivisionModal
+          open={openDivisionModal}
+          onClose={closeDivisionModal}
+          onSelect={selectDivisionModal}
+        />
       </div>
     </>
   );

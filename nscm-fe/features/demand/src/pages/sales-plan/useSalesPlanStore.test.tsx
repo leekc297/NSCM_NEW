@@ -3,12 +3,14 @@
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const { postMock } = vi.hoisted(() => ({
+const { getMock, postMock } = vi.hoisted(() => ({
+  getMock: vi.fn(),
   postMock: vi.fn(),
 }));
 
 vi.mock('@foundation/apis', () => ({
   apiClient: {
+    get: getMock,
     post: postMock,
   },
 }));
@@ -54,10 +56,11 @@ vi.mock('@shared/stores', async () => {
 });
 
 import { BUCKET_TYPE, MENU_ID, SHEETS } from './sales-plan.constants';
-import { useSalesPlanStore } from './useSalesPlanStore';
+import { resolveNowYyyymmdd, useSalesPlanStore } from './useSalesPlanStore';
 
 describe('useSalesPlanStore', () => {
   beforeEach(() => {
+    getMock.mockReset();
     postMock.mockReset();
   });
 
@@ -68,6 +71,8 @@ describe('useSalesPlanStore', () => {
     // 기본 Bucket = Monthly (AS-IS DefineProperty L543)
     expect(result.current.searchCondition.bucketType).toBe(BUCKET_TYPE.MONTHLY);
     expect(result.current.searchCondition.sumYn).toBe(false);
+    expect(result.current.searchCondition.colorYn).toBe(false);
+    expect(result.current.searchCondition.internalYn).toBe(false);
     // 기본 Period = 당월 1일 ~ +6개월 말일
     expect(result.current.searchCondition.startYyyymmdd.endsWith('01')).toBe(true);
     expect(result.current.openSearchArea).toBe(true);
@@ -76,6 +81,14 @@ describe('useSalesPlanStore', () => {
     expect(result.current.visibleMeasures).toBeNull();
     expect(result.current.calendarInfo).toBeNull();
     expect(result.current.editAuth).toBeNull();
+  });
+
+  it('resolves query now date with ASIS Monday and period boundaries', () => {
+    const today = new Date(2026, 6, 21);
+
+    expect(resolveNowYyyymmdd('20260701', '20260731', today)).toBe('20260720');
+    expect(resolveNowYyyymmdd('20260801', '20260831', today)).toBe('20260801');
+    expect(resolveNowYyyymmdd('20260701', '20260710', today)).toBe('20260711');
   });
 
   it('setSearchCondition merges partial values', () => {
@@ -99,7 +112,9 @@ describe('useSalesPlanStore', () => {
         deptIds: ['D1', 'D2'],
         projectCodes: ['PJT1'],
         bucketType: BUCKET_TYPE.WEEKLY,
+        internalYn: true,
       });
+      result.current.setUserDeptId('JV01');
       result.current.setFilter();
     });
 
@@ -109,9 +124,10 @@ describe('useSalesPlanStore', () => {
     expect(main?.endCustomer).toBe('ALL'); // 빈 멀티선택 = 'ALL' sentinel
     expect(main?.projectCode).toBe('PJT1'); // 텍스트 raw
     expect(main?.owner).toBe(''); // 텍스트 빈값 = ''
-    expect(main?.internalYn).toBe('N'); // Include Internal Txn 숨김 고정
+    expect(main?.internalYn).toBe('Y'); // Include Internal Txn 선택값 전달
     expect(main?.userGroup).toBe('DM ADMIN'); // 세션 NowGroupID — FE 필수 전달
     expect(main?.bucket).toBe('WEEKLY'); // full-word
+    expect(main?.userDeptId).toBe('JV01');
     expect(main?.nowYyyymmdd).toMatch(/^\d{8}$/);
     // sesUserId 는 BE 자동주입 — request 미포함
     expect(Object.keys(main ?? {})).not.toContain('sesUserId');
@@ -152,9 +168,22 @@ describe('useSalesPlanStore', () => {
     expect(result.current.searchCondition.endYyyymmdd).toBe('20270131');
   });
 
-  it('fetchStaticColumns calls admin column API with sheet/division', async () => {
+  it('fetchStaticColumns restores saved conditions with SalesPlan value types', async () => {
     const mockColumns = [{ colNm: 'DIVISION_ID', visible: true }];
     postMock.mockResolvedValue({ data: { result: mockColumns } });
+    getMock.mockResolvedValue({
+      data: {
+        result: [
+          { paramNm: 'divisionId', paramCtn: '81' },
+          { paramNm: 'deptIds', paramCtn: 'D1,D2' },
+          { paramNm: 'bucketType', paramCtn: 'W' },
+          { paramNm: 'colorYn', paramCtn: 'true' },
+          { paramNm: 'sumYn', paramCtn: 'false' },
+          { paramNm: 'startYyyymmdd', paramCtn: '20260701' },
+          { paramNm: 'endYyyymmdd', paramCtn: '20261231' },
+        ],
+      },
+    });
 
     const { result } = renderHook(() => useSalesPlanStore(s => s));
 
@@ -166,9 +195,19 @@ describe('useSalesPlanStore', () => {
       sheetNm: SHEETS.MAIN,
       divisionId: '40',
     });
+    expect(getMock).toHaveBeenCalledWith(`/admin/menu/${MENU_ID}/search-conditions`);
 
     await waitFor(() => {
       expect(result.current.staticColumns).toStrictEqual(mockColumns);
+      expect(result.current.searchCondition.divisionId).toBe('81');
+      expect(result.current.searchCondition.deptIds).toStrictEqual(['D1', 'D2']);
+      expect(result.current.searchCondition.bucketType).toBe(BUCKET_TYPE.WEEKLY);
+      expect(result.current.searchCondition.colorYn).toBe(true);
+      expect(result.current.searchCondition.sumYn).toBe(false);
+      expect(result.current.searchCondition.startYyyymmdd).toBe('20260701');
+      expect(result.current.searchCondition.endYyyymmdd).toBe('20261231');
+      expect(result.current.dayRangeApplied).toBe(true);
+      expect(result.current.initialized).toBe(true);
     });
   });
 

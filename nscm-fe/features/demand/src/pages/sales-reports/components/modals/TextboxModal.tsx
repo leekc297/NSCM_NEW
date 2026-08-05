@@ -45,14 +45,11 @@ export const TextboxModal = ({ open, modalClose, versionNo }: Props) => {
     enabled: open && versionNo !== '',
   });
   const rows = useMemo<TextboxRow[]>(
-    () => ((data as { data?: TextboxRow[] } | undefined)?.data ?? []),
+    () => (data as { data?: TextboxRow[] } | undefined)?.data ?? [],
     [data]
   );
 
-  const descKeys = useMemo(
-    () => Array.from({ length: 13 }, (_, i) => `DESCRIPTION${i + 1}`),
-    []
-  );
+  const descKeys = useMemo(() => Array.from({ length: 13 }, (_, i) => `DESCRIPTION${i + 1}`), []);
 
   const valueOf = (rowIdx: number, key: string): string =>
     edited[rowIdx]?.[key] ?? toCellStr((rows[rowIdx] as Record<string, unknown>)?.[key]);
@@ -82,7 +79,10 @@ export const TextboxModal = ({ open, modalClose, versionNo }: Props) => {
         });
         const res = await callSaveTextboxRow(payload);
         if (!res.ok) {
-          void setAlert({ type: 'alert', content: res.message || t(MSG.SAVE_ERROR, '_저장 중 오류가 발생했습니다.') });
+          void setAlert({
+            type: 'alert',
+            content: res.message || t(MSG.SAVE_ERROR, '_저장 중 오류가 발생했습니다.'),
+          });
           return;
         }
       }
@@ -138,9 +138,21 @@ export const TextboxModal = ({ open, modalClose, versionNo }: Props) => {
             </table>
           </div>
           <div className={styles.modalButtonWrapper}>
-            <Button appearance='contained' priority='primary' size='medium' buttonLabel='Save'
-              disabled={saving} onClick={() => void handleSave()} />
-            <Button appearance='outlined' priority='normal' size='medium' buttonLabel='Close' onClick={modalClose} />
+            <Button
+              appearance='contained'
+              priority='primary'
+              size='medium'
+              buttonLabel='Save'
+              disabled={saving}
+              onClick={() => void handleSave()}
+            />
+            <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel='Close'
+              onClick={modalClose}
+            />
           </div>
         </div>
       }

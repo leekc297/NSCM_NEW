@@ -224,13 +224,11 @@ export const SavePricePeriodModal = ({
       setPeriodFrom(from);
       setPeriodTo(to < from ? from : to);
     }
-  }, [
-    open,
-    defaultDivision,
-    defaultPeriod,
-    defaultEndCustomers,
-    defaultSalesSites,
-  ]);
+    // ⭐ 초기화는 **모달 open 전환 시에만** — deps 에 default* 를 넣으면 부모 리렌더(예: Save confirm
+    //   alert 표시)마다 새 참조(defaultPeriod={{...}})가 들어와 effect 가 재실행되고 searched=false 로
+    //   리셋 → 저장 확인 중에 그리드가 비워지는 문제(사용자 확인 2026-07-23). open 시점 값만 사용.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
 
   // ⭐ 고정 컬럼 = admin UI Category Setup 'Sales Price Save All' 메타를 **현재 Division 기준**으로 fetch.
   //   (구: defaultDivision 으로 1회만 fetch → Division 변경 시 컬럼 미갱신 + 실패 시 하드코딩 FALLBACK 잔존.
@@ -319,8 +317,8 @@ export const SavePricePeriodModal = ({
             itemId,
             customerProjectCode: '',
             customerModel: '',
-            fromYyyymmdd: periodFrom,
-            toYyyymmdd: periodTo,
+            fromYyyymmdd: snapMonday(periodFrom),
+            toYyyymmdd: snapMonday(periodTo),
             biztype: 'ALL',
             sesUserId,
             userGroup,
@@ -354,8 +352,8 @@ export const SavePricePeriodModal = ({
     () =>
       open
         ? ({
-            startYyyymmdd: periodFrom,
-            endYyyymmdd: periodTo,
+            startYyyymmdd: snapMonday(periodFrom),
+            endYyyymmdd: snapMonday(periodTo),
             sesUserId,
             divisionId,
           } satisfies ProcRequest<MENU_ID, SHEETS.SAVE_PRICE_TITLE>)
@@ -487,26 +485,28 @@ export const SavePricePeriodModal = ({
       void setAlert({ type: 'alert', content: t(MSG.WORK_IN_PROGRESS, '_Task in progress.') });
       return;
     }
+    // ⭐ 검증·조회·저장은 월요일 스냅값 기준 (선택 중엔 raw 보관 → 여기서 정렬).
+    const fromMon = snapMonday(periodFrom);
+    const toMon = snapMonday(periodTo);
     // 기간 역전 (AS-IS L1177 → MSG00108)
-    if (periodFrom > periodTo) {
+    if (fromMon > toMon) {
       void setAlert({ type: 'alert', content: t(MSG.PERIOD_ORDER, '_Invalid period.') });
       return;
     }
     // 과거구간 차단 — 이번 주 월요일 이전 시작 불가 (AS-IS L1195 → MSG00409)
-    if (periodFrom < snapMonday(todayYmd())) {
+    if (fromMon < snapMonday(todayYmd())) {
       void setAlert({ type: 'alert', content: t(MSG.PAST_PERIOD, '_Past period not allowed.') });
       return;
     }
-    // From/To 월요일 검증 (AS-IS L1203 → MSG00330)
-    if (periodFrom !== snapMonday(periodFrom) || periodTo !== snapMonday(periodTo)) {
-      void setAlert({ type: 'alert', content: t(MSG.PERIOD_MONDAY, '_Select Monday period.') });
-      return;
-    }
+    // (AS-IS L1203 MSG00330 "월요일 선택" 검증은 불필요 — 이제 snapMonday 로 항상 월요일 정렬됨)
     // Division 필수 (AS-IS L1224 MSG00097 → TO-BE MSG00667)
     if (!divisionId) {
       void setAlert({ type: 'alert', content: t(MSG.DIVISION_NO_AUTH, '_Select Division.') });
       return;
     }
+    // 조회 확정 시 표시값도 월요일 스냅으로 정렬 (선택 중엔 raw → Find 시점에 커밋).
+    if (periodFrom !== fromMon) setPeriodFrom(fromMon);
+    if (periodTo !== toMon) setPeriodTo(toMon);
     setSearched(true);
     void refetchTitle?.();
     void refetch?.();
@@ -872,8 +872,8 @@ export const SavePricePeriodModal = ({
         open={open}
         type='modal'
         position='basic'
-        size={1400}
-        height='75vh'
+        size={1160}
+        height='60vh'
         handleClose={modalClose}
         disableButtonCancel
         customHeaderTitle={
@@ -921,14 +921,23 @@ export const SavePricePeriodModal = ({
                     value={salesSites}
                     onChange={v => setSalesSites(v)}
                   />
-                  {/* Period — 월요일 스냅 (AS-IS drpDateTime_ValueChange L2790~2805) */}
+                  {/* Period — 월요일 스냅 (AS-IS drpDateTime 월요일 정렬).
+                      ⚠️ 첫 클릭(단일 날짜) 때 스냅하면 제어값이 픽커의 range 앵커와 어긋나 두번째 날짜
+                         클릭 시 첫 날짜가 지워진다(사용자 확인 2026-07-23). → 두 날짜가 모두 찍힌
+                         **완전한 range(start≠end)** 일 때만 월요일 스냅, 첫 클릭(단일)은 raw 로 보관.
+                         (조회/저장/검증은 별도로 snapMonday 적용 — 어떤 경우에도 월요일 정렬 보장.) */}
                   <PeriodField
                     gridSize={3}
                     start={periodFrom}
                     end={periodTo}
                     onChange={(start, end) => {
-                      setPeriodFrom(snapMonday(start));
-                      setPeriodTo(snapMonday(end));
+                      if (start && end && start !== end) {
+                        setPeriodFrom(snapMonday(start));
+                        setPeriodTo(snapMonday(end));
+                      } else {
+                        setPeriodFrom(start);
+                        setPeriodTo(end);
+                      }
                     }}
                   />
                   {/* Project — 81계열/82 만 활성 (AS-IS lblProject.Enabled). 팝업 = usrButton1 1:1 */}

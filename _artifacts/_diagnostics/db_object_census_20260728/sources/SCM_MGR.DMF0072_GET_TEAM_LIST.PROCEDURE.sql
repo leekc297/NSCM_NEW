@@ -1,0 +1,27 @@
+PROCEDURE           "DMF0072_GET_TEAM_LIST" (
+    P_DIVISION_ID VARCHAR2,
+    O_RC1 OUT SYS_REFCURSOR
+) AS
+BEGIN
+    -- As-Is SCM0001_GET_TEAM_BY_DIVISION 1:1 변환
+    --   - SCM_MST_SITE A (SITE_TYPE='SALES') ⋈ SCM_MST_SSO_DEPT_INFO B (DEPT_ID 매칭)
+    --   - P_DIVISION_ID 'ALL' 또는 콤마 split IN 매칭
+    --   - WITH(NOLOCK) 제거 (Oracle read consistency)
+    --   - XML split → UF_FX_STRING_SPLIT (메인 SP P_DMF0072_GET_NNMASTER_MAPPING 과 일관)
+    OPEN O_RC1 FOR
+      SELECT DISTINCT
+             B.DEPT_ID      AS CODE,
+             B.DEPT_NAME_KO AS NAME
+        FROM SCM_MGR.SCM_MST_SITE          A,
+             SCM_MGR.SCM_MST_SSO_DEPT_INFO B
+       WHERE A.SITE_TYPE = 'SALES'
+         AND A.DEPT_ID   = B.DEPT_ID
+         AND (P_DIVISION_ID IS NULL
+              OR P_DIVISION_ID = 'ALL'
+              OR A.DIVISION_ID IN (
+                  SELECT TOKEN FROM TABLE(SCM_MGR.UF_FX_STRING_SPLIT(P_DIVISION_ID, ','))
+                   WHERE TOKEN IS NOT NULL
+              )
+             )
+       ORDER BY 2;
+END DMF0072_GET_TEAM_LIST;

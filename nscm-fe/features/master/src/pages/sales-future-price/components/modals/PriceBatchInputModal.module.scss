@@ -13,8 +13,11 @@
 
 .gridWrapper {
   position: relative;
-  // ⭐ min-height:0 = flex 자식 축소 허용 → wijmo grid 가 bounded viewport 확보 → 세로 스크롤바 생성.
-  flex: 1 1 auto;
+  // flex-basis:0 (flex:1) — 조회 후 grid 내용이 커져도 "남은 높이"만 차지(형제 ExchangeRateModal 동일).
+  //   basis:auto 로 두면 데이터 로드 시 content 높이가 커져 고정높이(50vh) 모달에서 형제(SearchArea,
+  //   overflow:hidden)를 flex 축소시켜 조회조건이 잘리고 grid 가 위로 올라온 것처럼 보임.
+  // min-height:0 = flex 자식 축소 허용 → wijmo grid 가 bounded viewport 확보 → 세로 스크롤바 생성.
+  flex: 1;
   min-height: 0;
   border: 1px solid #e0e4e9;
   border-radius: 4px;

@@ -1,4 +1,4 @@
-import { toggleClass } from '@mescius/wijmo';
+import { Aggregate, toggleClass } from '@mescius/wijmo';
 import {
   AllowMerging,
   type CellRangeEventArgs,
@@ -8,9 +8,10 @@ import {
   type FormatItemEventArgs,
 } from '@mescius/wijmo.grid';
 import { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { type MutableRefObject, type Ref, useEffect, useMemo, useRef } from 'react';
+import { type MutableRefObject, useCallback, useEffect, useMemo, useRef } from 'react';
 
 import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
+import dayjs from '@foundation/dayjs';
 import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
 import type { EditTracker } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
@@ -34,7 +35,12 @@ import type { MktFcstRow, SpreadTitleRow } from '../mkt-fcst.types';
 import styles from '../MktFcst.module.scss';
 import type { BucketInfo, CurrentWeekInfo, MeasureMeta } from '../useMktFcstStore';
 import { useMktFcstStore } from '../useMktFcstStore';
-import { buildEditCutoff, dynKindOf, evalDynCell, thisWeekMondayYmd } from '../utils/mkt-fcst.editLock';
+import {
+  buildEditCutoff,
+  dynKindOf,
+  evalDynCell,
+  thisWeekMondayYmd,
+} from '../utils/mkt-fcst.editLock';
 import { getDynKey, HierarchicalMergeManager } from '../utils/mkt-fcst.merge';
 import {
   buildPrContextRequest,
@@ -50,11 +56,11 @@ const DYN_RANK = { M: 0, W: 1, D: 2 } as const;
 
 interface Props {
   rows: MktFcstRow[];
-  gridRef: Ref<FlexGridType<MktFcstRow>>;
+  gridRef: MutableRefObject<FlexGridType<MktFcstRow> | undefined>;
   // ⭐ F4 Filter — 피처가 FlexGridFilter 직접 소유. 동적(M_/W_/D_) 컬럼 필터 cancel + 필터후 머지/높이 재적용.
   gridFilterRef?: MutableRefObject<FlexGridFilter | undefined>;
   // F7 Save — EditTracker 로 변경 셀 추적 + 비-insert 행 자동 CRUD_TYPE='M' 마킹.
-  editTrackerRef?: MutableRefObject<EditTracker | undefined>;
+  editTrackerRef?: MutableRefObject<EditTracker<MktFcstRow> | undefined>;
   onPopupCellDblClick?: (modalKey: string, row: MktFcstRow) => void;
   // ⭐ Phase 2e — contextMenu PR (Request/View PR + History). 검증 통과 결과를 MktFcst.tsx 로 전달.
   onPrContext?: (action: PrContextAction, result: PrContextResult) => void;
@@ -97,8 +103,6 @@ interface MergedColumnMeta {
   _inputEditType?: 'S' | 'M' | 'O' | 'IM' | 'IO';
   _modalKey?: string;
   _comboKey?: string;
-  // hook #92 — admin DIVISION_ID(콤마 토큰 리스트) 복사값(ATTRIBUTE3).
-  _divisionAllow?: string;
 }
 
 export const MktFcstGrid = ({
@@ -135,17 +139,15 @@ export const MktFcstGrid = ({
   onPrContextRef.current = onPrContext;
   const onSspCompareRef = useRef(onSspCompare);
   onSspCompareRef.current = onSspCompare;
+  // ⭐ 부모(MktFcst)가 인라인 화살표로 넘기는 콜백 — 렌더마다 새 함수라 dep 에 넣으면
+  //   검색조건 한 글자만 바뀌어도 아래 대형 핸들러 effect 가 통째로 재등록된다(= 깜빡임).
+  //   ref 미러로 최신 참조만 전달하고 dep 에서는 제외한다 (onPrContext/onSspCompare 와 동일 패턴).
+  const onPopupCellDblClickRef = useRef(onPopupCellDblClick);
+  onPopupCellDblClickRef.current = onPopupCellDblClick;
   // ⭐ 현재 주/월 binding — formatItem(대형 effect deps 미포함) 이 최신값 참조하도록 ref 미러.
   //   AS-IS chkColor=false 경로 (평문 .cs L5654~5687): 현재 W_/M_ 컬럼 헤더 초록 Bold 강조.
   // bPasteContinue (AS-IS spdMain_EditChange L5411) — paste 연계 플래그.
   const pasteContinueRef = useRef(false);
-
-  // ⭐ 과거/Div40 8주 편집 cutoff (보강스펙 §1/§5) — O_RC2(8주 월)·O_RC3(현재 주) + 이번주 월요일.
-  //   formatItem(배경색) + beginningEdit(편집 cancel) 두 곳에서 동일 기준 공유 (DMF0020 패턴).
-  const editCutoff = useMemo(
-    () => buildEditCutoff(bucketInfo ?? null, currentWeekInfo ?? null),
-    [bucketInfo, currentWeekInfo]
-  );
 
   // ⭐ P2-① 현재기간 binding 집합 — 헤더 초록 Bold(기존) + 데이터셀 초록 테두리(신규) 공통 판정.
   //   당월 M_(THIS_YYYYMM) / 당주 W_(THIS_YYYYMMWW) 는 O_RC3, 당일 D_ 는 클라이언트 오늘 날짜 파생
@@ -205,30 +207,26 @@ export const MktFcstGrid = ({
         // ⭐ 콤보 SQL_ID = admin CELL_COMBO_DATA_TYPE(cellCboDataTp) 1순위 (hook column-lookup 표준 —
         //   FcstType/CustomsHandbook 등 admin 등록명 즉시 반영), 없으면 하드코딩 fallback.
         _comboKey: nb(col.cellCboDataTp) ?? fb?._comboKey,
-        // hook #92 — admin DIVISION_ID(콤마 토큰) 가시성.
-        //   1순위 ATTRIBUTE3 = DIVISION_ID 정식 복사값(handoff #41, sub-division 81_UC 등 전체 토큰).
-        //   2순위 ATTRIBUTE1 = corp 가 이미 보유한 cleaned division 토큰('40'/'81,82') — #41 미적용에도 즉시 동작.
-        //   둘 다 공란이면 항상 표시(division 무관 컬럼).
-        _divisionAllow: col.attribute3?.trim() || col.attribute1,
       } as MergedColumnMeta;
     });
   }, [staticColumns]);
 
   // visible=true + division 필터 (hook #92)
-  const visibleColumns = useMemo(
-    () =>
-      mergedColumns.filter(c => {
-        if (!c.visible) return false;
-        const allow = c._divisionAllow?.trim();
-        if (!allow) return true; // DIVISION_ID 공란 = 항상 표시
-        if (!divisionId) return true;
-        return allow
-          .split(',')
-          .map(s => s.trim())
-          .includes(divisionId);
-      }),
-    [mergedColumns, divisionId]
-  );
+  const visibleColumns = useMemo(() => mergedColumns.filter(c => c.visible), [mergedColumns]);
+
+  // ⭐ 컬럼 개인화 색 (ColumnLayoutModal 저장값) — binding → {cell, text}.
+  //   mergedColumns 는 폭/표시만 옮기고 색은 안 담으므로 formatItem 이 staticColumns 에서 직접 읽는다
+  //   (forecast-price/DMF0020 선례 동일). ref 로 최신 맵 전달 — 핸들러 재등록 불필요.
+  const colorMetaRef = useRef<Map<string, { cell: string; text: string }>>(new Map());
+  colorMetaRef.current = useMemo(() => {
+    const m = new Map<string, { cell: string; text: string }>();
+    (staticColumns ?? []).forEach(c => {
+      if (c.cellColor || c.textColor) {
+        m.set(c.colNm, { cell: c.cellColor ?? '', text: c.textColor ?? '' });
+      }
+    });
+    return m;
+  }, [staticColumns]);
   const fixedBindings = useMemo(() => visibleColumns.map(c => c.binding), [visibleColumns]);
 
   // ===== Grid 내 combo column dropdown — UI Category 메타(cellCboDataTp) 기반 (DMF0020 표준) =====
@@ -319,19 +317,40 @@ export const MktFcstGrid = ({
   const wsPlannerYn = useMktFcstStore(s => s.wsPlannerYn);
   const wsPlannerRef = useRef(false);
   wsPlannerRef.current = wsPlannerYn;
-  const [wsFcstTypeRows, asSiteRows] = useTabComboQueries({
-    filters: ['FcstTypeWs', { comboId: 'AS_FROM_SITE', param1: `'${division}'` }],
+  const [wsFcstTypeRows, asSiteRows, asIncotermsRows] = useTabComboQueries({
+    filters: [
+      'FcstTypeWs',
+      { comboId: 'AS_FROM_SITE', param1: `'${division}'` },
+      // ⭐ 2026-08-04 AS-IS 정합 — AS 사이트 행 Incoterms 편집 후보 (AS-IS UP_FX_DM 'AS_INCOTERMS'
+      //   AS분기 1:1, CMBO 'AsIncotermsEdit' @divisionId). 미등록/0행이면 스왑 생략(기존 IncotermsEdit).
+      { comboId: 'AsIncotermsEdit', divisionId: `'${division}'` },
+    ],
   });
   const wsFcstTypeSetRef = useRef<Set<string>>(new Set());
   const asSiteNamesRef = useRef<Set<string>>(new Set());
+  const asIncotermsRowsRef = useRef<Record<string, unknown>[]>([]);
   useEffect(() => {
     wsFcstTypeSetRef.current = new Set(
-      (wsFcstTypeRows ?? []).map(r => toCellStr((r as { CODE?: unknown }).CODE).trim()).filter(Boolean)
+      (wsFcstTypeRows ?? [])
+        .map(r => toCellStr((r as { CODE?: unknown }).CODE).trim())
+        .filter(Boolean)
     );
     asSiteNamesRef.current = new Set(
       (asSiteRows ?? []).map(r => toCellStr((r as { NAME?: unknown }).NAME).trim()).filter(Boolean)
     );
-  }, [wsFcstTypeRows, asSiteRows]);
+    asIncotermsRowsRef.current = (asIncotermsRows ?? []) as unknown as Record<string, unknown>[];
+  }, [wsFcstTypeRows, asSiteRows, asIncotermsRows]);
+
+  const isAsFromSiteEditable = useCallback((row: unknown, isInsert: boolean): boolean => {
+    if (!isInsert || !wsPlannerRef.current) return false;
+    const r = row as Record<string, unknown> | undefined;
+    // ⭐ 2026-08-04 AS-IS 정합 — 행 사이트가 AS(비축)향 사이트면 AS_FROM_SITE 비활성
+    //   (.cs L3566 outer 분기 + L6540~6557: AS 사이트 행 = AS_FROM_SITE clear+lock).
+    const site = toCellStr(r?.SCM_SITE_ID).trim();
+    if (site && asSiteNamesRef.current.has(site)) return false;
+    const ft = toCellStr(r?.FCST_TYPE).trim();
+    return wsFcstTypeSetRef.current.has(ft);
+  }, []);
 
   // 편집 시작 셀의 (binding, oldVal) — cellEditEnded 에서 실제 값 변경 여부 판정(불필요 clear 방지).
   const editingCellRef = useRef<{ binding: string; oldVal: unknown } | null>(null);
@@ -391,7 +410,14 @@ export const MktFcstGrid = ({
     }
     return [...set].sort().map<DynColMeta>(b => {
       const dyn = getDynKey(b);
-      return { binding: b, kind: kindOf(b)!, large: dyn.ym, small: dyn.sub, leaf: dyn.leaf, sort: 0 };
+      return {
+        binding: b,
+        kind: kindOf(b)!,
+        large: dyn.ym,
+        small: dyn.sub,
+        leaf: dyn.leaf,
+        sort: 0,
+      };
     });
   }, [spreadTitle, rows, allowedKinds]);
 
@@ -400,6 +426,19 @@ export const MktFcstGrid = ({
   // ⭐ B2 — 표시 규칙 rank 분리 (M=0 상위 … D=2 하위):
   //   활성 bucket kind = 항상 표시 / 상위(rank<bucket) = 합계 → sumYn 토글 /
   //   하위(rank>bucket) = 기본 숨김 → 헤더 더블클릭 드릴로만 표시.
+
+  const weekBindings = useMemo<string[]>(
+    () => dynColMetas.filter(d => d.kind === 'W').map(d => d.binding),
+    [dynColMetas]
+  );
+
+  // ⭐ 과거/Div40 8주 편집 cutoff (보강스펙 §1/§5) — O_RC2(8주 월)·O_RC3(현재 주) + 이번주 월요일.
+  //   formatItem(배경색) + beginningEdit(편집 cancel) 두 곳에서 동일 기준 공유 (DMF0020 패턴).
+  const editCutoff = useMemo(
+    () => buildEditCutoff(bucketInfo ?? null, currentWeekInfo ?? null, new Date(), weekBindings),
+    [bucketInfo, currentWeekInfo, weekBindings]
+  );
+
   const summaryBindings = useMemo<string[]>(
     () => dynColMetas.filter(m => DYN_RANK[m.kind] < DYN_RANK[bucketPrefix]).map(m => m.binding),
     [dynColMetas, bucketPrefix]
@@ -413,13 +452,13 @@ export const MktFcstGrid = ({
   const applyDynVisibilityRef = useRef<(() => void) | null>(null);
 
   // ⭐ DataGrid wrapper 의무. visibleColumns → staticColumns prop.
-  //   컬럼 고정(freeze)은 admin FIXED_FLAG 위임 (2026-07-04 사용자 지시 — hook ui-category-setup-column-meta
-  //   §12: AS-IS Freeze(0, MEASURE+1) 하드코드 재현 해제. 사내 메타 전행 공란 실측 = 고정 0.
-  //   admin SYS0004 에서 FIXED_FLAG='Y' 등록 시 화면 수정 없이 즉시 고정 — wrapper 가 _fixed findLastIndex+1 계산).
-  //   PIVOT 동적 컬럼(우측)은 dynamicColumns 로 별도 전달.
+  //   컬럼 고정(freeze) — 정적 컬럼(좌측: Div~MEASURE)은 전부 고정, 우측 동적 날짜 컬럼만 가로 스크롤
+  //   (2026-07-24 사용자 지시 — 스크롤 시 measure 등 정보 컬럼은 고정, 날짜 PIVOT 컬럼만 이동).
+  //   wrapper 가 frozenColumns = findLastIndex(_fixed)+1 계산 → 마지막 정적 컬럼만 fixed 표시하면
+  //   그 앞 정적 컬럼 전부(0..last)가 함께 고정. 동적 컬럼은 dynamicColumns 로 뒤에 붙어 스크롤 유지.
   const mainStaticColumns = useMemo<RawFlexGridColumnConfig[]>(
     () =>
-      visibleColumns.map(c => ({
+      visibleColumns.map((c, idx) => ({
         colNm: c.binding,
         colLblNm: c.header,
         colWth: c.width,
@@ -479,7 +518,8 @@ export const MktFcstGrid = ({
         m.kind === 'M'
           ? 'SUM'
           : m.kind === 'W'
-            ? (m.small ||
+            ? (
+                m.small ||
                 (/^W_\d{7,9}$/.test(m.binding) && !/^W_\d{8}$/.test(m.binding)
                   ? `W${m.binding.slice(8)}`
                   : getDynKey(m.binding).sub)
@@ -491,7 +531,8 @@ export const MktFcstGrid = ({
         // 3단(leaf) 라벨 — M/W 합계는 'SUM'(사용자 지정 2026-06-29/07-02) / D=일자(m.leaf).
         header: m.kind === 'D' ? m.leaf || m.small || 'SUM' : 'SUM',
         align: 'right',
-        format: 'n3',
+        format: '#,##0.###',
+        aggregate: Aggregate.Sum,
         width: 90,
         allowDragging: true,
         allowMerging: false,
@@ -506,8 +547,7 @@ export const MktFcstGrid = ({
           DYN_RANK[m.kind] < DYN_RANK[bucketPrefix]
             ? sumYnRef.current
             : DYN_RANK[m.kind] === DYN_RANK[bucketPrefix],
-        height: 48, // 다단 헤더 높이(#93) — wrapper 가 staticColumns 만 자동 처리, 동적은 명시 의무.
-        // ⭐ 동적 셀은 'S'(read-only) — Phase 2a 는 표시 전용. 편집(2b)은 beginningEdit 에서 명시 허용.
+        height: 48,
         _inputEditType: CELL_INPUT_EDIT_TYPE.SEARCH_ONLY,
         _display: true,
       });
@@ -535,7 +575,7 @@ export const MktFcstGrid = ({
             ),
           })),
       }));
-  }, [dynColMetas]);
+  }, [dynColMetas, bucketPrefix]);
 
   // ⭐ grid 핸들러 + mergeManager useEffect 분리 등록.
   useEffect(() => {
@@ -546,17 +586,43 @@ export const MktFcstGrid = ({
     if (g.alternatingRowStep !== 1) g.alternatingRowStep = 1;
 
     const formatHandler = (_s: FlexGridType<MktFcstRow>, e: FormatItemEventArgs) => {
+      if (e.panel.cellType === CellType.TopLeft) {
+        if (e.row === 0) {
+          e.cell.textContent = e.col === 0 ? 'No.' : '';
+          e.cell.style.textAlign = 'center';
+          if (e.panel.rows.length > 1) {
+            e.cell.style.height = `${e.panel.height}px`;
+            e.cell.style.lineHeight = `${e.panel.height}px`;
+            e.cell.style.zIndex = '1';
+          }
+        } else {
+          // 하위 행 — 확장된 상단 셀이 덮으므로 라벨만 제거.
+          e.cell.textContent = '';
+        }
+        return;
+      }
       const col = e.panel.columns[e.col];
       if (!col) return;
 
       if (e.panel.cellType === CellType.ColumnHeader) {
         e.cell.style.textAlign = 'center';
+        const hb = col.binding ?? '';
         // ⭐ AS-IS chkColor=false 경로 1:1 (평문 .cs L5654~5687, 실행 화면 기본 상태) —
         //   현재 월(M_당월)/현재 주(W_당주) 컬럼 헤더를 초록 Bold 강조. O_RC3(THIS_YYYYMM/THIS_YYYYMMWW)
         //   binding 정확 일치로 판정 (AS-IS 는 tag yyyymm+iso_week 비교 — 동일 산출값).
-        const isCurrentPeriod =
-          !!col.binding && currentPeriodBindingsRef.current.has(col.binding);
-        e.cell.style.color = isCurrentPeriod ? '#1e8449' : '';
+        const isCurrentPeriod = !!hb && currentPeriodBindingsRef.current.has(hb);
+        // 주말 일자 헤더 색 — 토요일 파랑 / 일요일 빨강 (D_ leaf 헤더 한정, forecast-price 동일 패턴).
+        //   D_ 는 3단 leaf(일자)에서만 자기 라벨이 보인다(상위 row 는 월/주 머지에 덮임) → leaf row 한정.
+        //   당월/당주 초록(W_/M_ 대상)과 컬럼이 겹치지 않으므로 초록이 아닐 때만 주말색을 판정한다.
+        let weekendColor = '';
+        if (!isCurrentPeriod && /^D_\d{8}$/.test(hb) && e.row === e.panel.rows.length - 1) {
+          const ymd = hb.slice(2); // YYYYMMDD
+          const dow = dayjs(`${ymd.slice(0, 4)}-${ymd.slice(4, 6)}-${ymd.slice(6, 8)}`).day();
+          if (dow === 6)
+            weekendColor = '#1565c0'; // 토 파랑
+          else if (dow === 0) weekendColor = '#d32f2f'; // 일 빨강
+        }
+        e.cell.style.color = isCurrentPeriod ? '#1e8449' : weekendColor;
         e.cell.style.fontWeight = isCurrentPeriod ? '700' : '';
         return;
       }
@@ -573,12 +639,12 @@ export const MktFcstGrid = ({
       //   비활성 bucket(Daily 의 W_/M_ 등) = White(클래스 없음). 전체회색·inline 금지.
       //   (SSP 동기화 PaleGreen/PapayaWhip 색은 Phase 2c — 본 단계 미적용.)
       if (isDyn) {
-        // ⭐ P2-① 현재기간(당월/당주/당일) 세로 테두리 — 배경색과 독립(편집 Yellow·동기화색과 공존).
         toggleClass(
           e.cell,
           'mkt-cell-current-period',
           currentPeriodBindingsRef.current.has(col.binding)
         );
+
         const state = evalDynCell({
           binding: col.binding,
           row: rowItem,
@@ -620,11 +686,14 @@ export const MktFcstGrid = ({
 
       // Fixed col cell coloring — Insert 행의 IM/IO = Yellow, 그 외 White
       if (meta) {
+        // ⭐ AS_FROM_SITE 는 FCST_TYPE 종속 (2.1.4) — beginningEdit 와 동일 판정 함수 사용.
         const editableForInsert =
-          isInsert &&
-          (meta._inputEditType === 'IM' ||
-            meta._inputEditType === 'IO' ||
-            meta._ctrlType === 'FPModal');
+          col.binding === 'AS_FROM_SITE'
+            ? isAsFromSiteEditable(rowItem, isInsert)
+            : isInsert &&
+              (meta._inputEditType === 'IM' ||
+                meta._inputEditType === 'IO' ||
+                meta._ctrlType === 'FPModal');
         toggleClass(e.cell, 'wj-cell-editable', editableForInsert);
         toggleClass(e.cell, 'wj-cell-non-editable', false);
         // ⭐ FPModal 팝업셀 아이콘 = DMF0020 과 동일(전용 span .popup-icon + MUI OpenInNew SVG mask —
@@ -644,6 +713,21 @@ export const MktFcstGrid = ({
         } else {
           e.cell.querySelector('.popup-icon')?.remove();
         }
+
+        // ⭐ 개인화 색 (ColumnLayoutModal) — 우선순위: Insert 편집셀 Yellow(클래스) > 저장된 Cell Color.
+        //   inline !important 라 클래스보다 세므로 편집 가능 Insert 셀에는 배경을 칠하지 않는다.
+        //   미지정 시 removeProperty 필수 — Wijmo 셀 재활용으로 이전 컬럼 색이 남는다.
+        const personalColor = colorMetaRef.current.get(col.binding);
+        if (!editableForInsert && personalColor?.cell) {
+          e.cell.style.setProperty('background-color', personalColor.cell, 'important');
+        } else {
+          e.cell.style.removeProperty('background-color');
+        }
+        if (personalColor?.text) {
+          e.cell.style.setProperty('color', personalColor.text, 'important');
+        } else {
+          e.cell.style.removeProperty('color');
+        }
       }
     };
     g.formatItem.addHandler(formatHandler);
@@ -659,12 +743,11 @@ export const MktFcstGrid = ({
       const isInsert = row?.CRUD_TYPE === 'I';
       const meta = visibleColumns.find(c => c.binding === binding);
 
-      // ⭐ [E20260402-001736] AS_FROM_SITE 조건부 편집 (#90~95/#128~130 격차 해소) —
-      //   W/S Planner 이고 행의 FCST_TYPE 이 W/S 4종(WS·WSF·AS·ASF)일 때만 편집 허용
-      //   (SP LOAD 분기가 추가한 동적 컬럼 — UT_DM_IF_00031/00038 시나리오 파리티).
+      // ⭐ [E20260402-001736] + 2.1.4 — AS_FROM_SITE 조건부 편집 (#90~95/#128~130 격차 해소).
+      //   W/S Planner + FCST_TYPE 이 W/S·A/S 4종 + "FCST Type 을 셋팅하는 행"(Insert) 일 때만 허용.
+      //   판정은 formatItem 과 공유 (isAsFromSiteEditable) — 색/입력 불일치 차단.
       if (binding === 'AS_FROM_SITE') {
-        const ft = row ? toCellStr((row as Record<string, unknown>).FCST_TYPE).trim() : '';
-        if (!(wsPlannerRef.current && wsFcstTypeSetRef.current.has(ft))) e.cancel = true;
+        if (!isAsFromSiteEditable(row, isInsert)) e.cancel = true;
         return;
       }
 
@@ -690,7 +773,11 @@ export const MktFcstGrid = ({
         const editCfg = GRID_EDIT_COMBO[binding];
         //   [E20260402-001736] wsOnly(FCST_TYPE): 비W/S 는 스왑 생략 = 기존 'FcstType' 일반 12종
         //   dataMap 그대로 (.cs L2587~2605 else 분기 = GetFcstType()).
-        if (editCfg && !(editCfg.wsOnly && !wsPlannerRef.current) && editDataMapsRef.current[binding]) {
+        if (
+          editCfg &&
+          !(editCfg.wsOnly && !wsPlannerRef.current) &&
+          editDataMapsRef.current[binding]
+        ) {
           // [E20260402-001736] MEASURE 편집 후보 W/S 분기 (.cs 1-a Form_Load/1-b InsertRow/1-c
           //   ComboSelChange 교정 — 최종 적용 필터 재현):
           //   · 사이트 확정 행: AS(비축)향 → AS_In_Req 만 / 고객향 → MKT_FCST_RP 만.
@@ -708,6 +795,16 @@ export const MktFcstGrid = ({
             }
             if (candidates.length > 0) {
               col.dataMap = new DataMap(candidates, 'CODE', 'NAME');
+              return;
+            }
+          }
+          // ⭐ 2026-08-04 AS-IS 정합 — AS(비축)향 사이트 행의 INCOTERMS 편집 후보 = AS 전용 lookup
+          //   (.cs L3442 GetIncotermsType → UP_FX_DM 'AS_INCOTERMS': AS_SITE_PLANT 사이트면 AS 전용,
+          //   아니면 일반). 'AsIncotermsEdit' 미등록/0행이면 스왑 생략 → 기존 IncotermsEdit 유지.
+          if (binding === 'INCOTERMS' && row) {
+            const site = toCellStr((row as Record<string, unknown>).SCM_SITE_ID).trim();
+            if (site && asSiteNamesRef.current.has(site) && asIncotermsRowsRef.current.length > 0) {
+              col.dataMap = new DataMap(asIncotermsRowsRef.current, 'CODE', 'NAME');
               return;
             }
           }
@@ -769,7 +866,8 @@ export const MktFcstGrid = ({
       // 변경 전 원본 (EditTracker storeChange 의 originalValue 용). dispatch 가 set 하는 셀만 추적.
       const toNum = (v: unknown): number | null => {
         if (v == null || v === '') return null;
-        const n = typeof v === 'number' ? v : Number(String(v as string | number).replace(/,/g, ''));
+        const n =
+          typeof v === 'number' ? v : Number(String(v as string | number).replace(/,/g, ''));
         return Number.isFinite(n) ? n : null;
       };
 
@@ -781,12 +879,7 @@ export const MktFcstGrid = ({
           rec[b] = value == null ? null : value;
           // EditTracker — 변경 셀 추적(비-insert 행 자동 'M'). originalValue=prev, newValue=신규.
           if (tracker && row.CRUD_TYPE !== 'I') {
-            tracker.storeChange(
-              row as never,
-              b,
-              (prev ?? null) as never,
-              (value ?? null) as never
-            );
+            tracker.storeChange(row as never, b, (prev ?? null) as never, (value ?? null) as never);
           }
         },
         bucket: bucketRaw,
@@ -884,6 +977,19 @@ export const MktFcstGrid = ({
           }
         }
       }
+      // ⭐ 2026-08-04 AS-IS 정합 — FCST_TYPE/SCM_SITE_ID 변경 후 AS_FROM_SITE 활성조건 미충족 시
+      //   값 clear (.cs L3588/3598 + L6556/6582: 비활성 전환 시 SetText("")). 활성 유지 시 값 보존
+      //   (AS/WS 타입 간 전환은 유지 — 무조건 clear 아님). 판정 = isAsFromSiteEditable 공유.
+      if ((binding === 'FCST_TYPE' || binding === 'SCM_SITE_ID') && changed) {
+        for (const item of view.items) {
+          if (item.CRUD_TYPE === 'I' && item.INSERT_GROUP_ID === gid) {
+            const rec = item as Record<string, unknown>;
+            if (toCellStr(rec.AS_FROM_SITE).trim() && !isAsFromSiteEditable(item, true)) {
+              rec.AS_FROM_SITE = '';
+            }
+          }
+        }
+      }
       // ⭐ MEASURE 변경 시 model(품목) 컬럼 clear (AS-IS: measure 교체 시 종속 model 재선택 강제).
       //   예외 = MEASURE_MODEL_KEEP(AS_In_Req/BNPIn) 은 model 유지. 같은 INSERT_GROUP 형제 행 일괄.
       if (binding === 'MEASURE' && changed) {
@@ -961,7 +1067,7 @@ export const MktFcstGrid = ({
       if (meta?._ctrlType !== 'FPModal' || meta._inputEditType !== 'IM') return;
       const row = g.rows[ht.row].dataItem as MktFcstRow | undefined;
       if (!row || row.CRUD_TYPE !== 'I') return;
-      if (meta._modalKey) onPopupCellDblClick?.(meta._modalKey, row);
+      if (meta._modalKey) onPopupCellDblClickRef.current?.(meta._modalKey, row);
     };
     g.hostElement.addEventListener('dblclick', dblclickHandler);
 
@@ -971,7 +1077,8 @@ export const MktFcstGrid = ({
     let contextMenuEl: HTMLDivElement | null = null;
     let dismissOutsideRef: ((e: MouseEvent) => void) | null = null;
     const removeContextMenu = () => {
-      if (contextMenuEl && contextMenuEl.parentNode) contextMenuEl.parentNode.removeChild(contextMenuEl);
+      if (contextMenuEl && contextMenuEl.parentNode)
+        contextMenuEl.parentNode.removeChild(contextMenuEl);
       contextMenuEl = null;
       if (dismissOutsideRef) {
         document.removeEventListener('mousedown', dismissOutsideRef);
@@ -980,7 +1087,7 @@ export const MktFcstGrid = ({
     };
     const handlePrAction = (action: PrContextAction) => {
       removeContextMenu();
-      const ranges = (g.selectedRanges ?? []);
+      const ranges = g.selectedRanges ?? [];
       // 선택 셀 평탄화 (CellRange[] → PrCell[]) — 가시 컬럼만.
       const cells: { rowIdx: number; binding: string }[] = [];
       for (const r of ranges) {
@@ -1074,7 +1181,10 @@ export const MktFcstGrid = ({
       document.addEventListener('mousedown', dismissOutside);
       document.addEventListener('contextmenu', dismissOutside);
     };
-    g.hostElement.addEventListener('contextmenu', contextMenuHandler, { capture: true });
+    // ⭐ 2026-07-27 사용자 요구 — 우클릭 PR 컨텍스트 메뉴 임시 비활성화(기능 보류, 향후 복구 가능).
+    //   아래 등록 한 줄만 주석 해제하면 원복. (핸들러 정의부는 그대로 보존)
+    // g.hostElement.addEventListener('contextmenu', contextMenuHandler, { capture: true });
+    void contextMenuHandler; // 미사용 경고 방지 — 향후 복구 대비 정의 보존
 
     // ⭐ Phase 2e — spdMain_EditChange (AS-IS .cs L5407~5413). Measure 좌측 무시 + bPasteContinue=true.
     const editChangeHandler = (_s: FlexGridType<MktFcstRow>, e: CellRangeEventArgs) => {
@@ -1134,8 +1244,8 @@ export const MktFcstGrid = ({
         /* unmount race */
       }
       try {
-        // add 와 동일한 capture 플래그로 해제 (불일치 시 미해제 → 리스너 누적)
-        g.hostElement?.removeEventListener('contextmenu', contextMenuHandler, { capture: true });
+        // ⭐ 2026-07-27 컨텍스트 메뉴 등록 비활성화에 맞춰 해제도 주석(등록 복구 시 함께 해제).
+        // g.hostElement?.removeEventListener('contextmenu', contextMenuHandler, { capture: true });
         removeContextMenu();
       } catch {
         /* unmount race */
@@ -1156,17 +1266,11 @@ export const MktFcstGrid = ({
         /* unmount race */
       }
     };
+    // ⚠️ onPopupCellDblClick 은 dep 에 넣지 않는다 — 부모의 인라인 화살표라 렌더마다 신규 참조가
+    //   되어 검색조건 입력만으로도 전 핸들러 해제/재등록 + HierarchicalMergeManager 재생성 +
+    //   invalidate(true) 가 돌아 그리드가 깜빡인다. 최신 참조는 onPopupCellDblClickRef 로 읽는다.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    visibleColumns,
-    dynBindings,
-    fixedBindings,
-    onPopupCellDblClick,
-    editCutoff,
-    division,
-    bucketType,
-    dataMaps,
-  ]);
+  }, [visibleColumns, dynBindings, fixedBindings, editCutoff, division, bucketType, dataMaps]);
 
   // ⭐ hook #93 — 다단 헤더 총높이 48px 고정 (1단 48 / 2단 24×2 / 3단 16×3) + combo dataMap 재적용.
   useEffect(() => {
@@ -1264,7 +1368,8 @@ export const MktFcstGrid = ({
     const g = (gridRef as { current: FlexGridType<MktFcstRow> | null } | null)?.current;
     if (!g || !gridFilterRef) return;
 
-    const isDynamic = (binding: string | null | undefined): boolean => /^[MWD]_/.test(binding ?? '');
+    const isDynamic = (binding: string | null | undefined): boolean =>
+      /^[MWD]_/.test(binding ?? '');
     const onFilterChanging = (_s: FlexGridFilter, e: CellRangeEventArgs) => {
       if (isDynamic(e.getColumn()?.binding)) e.cancel = true;
     };
@@ -1291,17 +1396,20 @@ export const MktFcstGrid = ({
 
   return (
     <div className={styles.gridContainer}>
-      <DataGrid
-        key={mainStaticColumns.map(c => c.colNm).join(',')}
+      {/* ⚠️ key 를 주지 말 것 — mainStaticColumns 기반 key 는 컬럼 메타가 재조회될 때마다
+          DataGrid 를 통째로 unmount/remount 시켜 가장 큰 깜빡임을 만든다. 컬럼 변경은
+          staticColumns/dynamicColumns prop 변화로 Wijmo 가 스스로 반영한다. */}
+      <DataGrid<MktFcstRow>
         className={styles.grid}
-        gridRef={gridRef as never}
-        editTrackerRef={editTrackerRef as never}
+        gridRef={gridRef}
+        editTrackerRef={editTrackerRef}
         staticColumns={mainStaticColumns}
         dynamicColumns={mainDynamicColumns}
-        itemsSource={rows as unknown as WijmoRowItem[]}
+        itemsSource={rows}
         autoGenerateColumns={false}
         allowSorting={true}
         allowMerging={AllowMerging.All}
+        useAggregationRow={false}
       />
     </div>
   );

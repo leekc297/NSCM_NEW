@@ -6,6 +6,7 @@ import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { MainTitle, SubTitle } from '@shared/components';
 import { useProcMutation, useSaveWithValidation, useTabProcQuery } from '@shared/hooks';
 import { Label } from '@shared/lges';
+import { Panel, PanelGroup, PanelSeparator } from '@shared/panel';
 
 import { ButtonGrid } from './components/ButtonGrid';
 import { GroupGrid } from './components/GroupGrid';
@@ -147,26 +148,31 @@ export const GroupMenu = ({ tabId, title }: PageProps<MENU_ID>) => {
             data={rows[SHEET_INDEX.GROUP]}
           />
         </div>
-        <div className={styles.subGridWrapper}>
-          <div className={styles.menuGridWrapper}>
-            <Label className={styles.labelGrid} labelText={t('LBL00356', '_Menu Item Info')} />
-            <MenuGrid
-              gridRef={gridRefs[SHEET_INDEX.MENU]}
-              gridFilterRef={gridFilterRefs[SHEET_INDEX.MENU]}
-              setActiveTab={setActiveTab}
-              data={menuGridCleared ? [] : rows[SHEET_INDEX.MENU]}
-            />
-          </div>
-          <div className={styles.buttonGridWrapper}>
-            <Label className={styles.labelGrid} labelText={t('LBL00355', '_Sheet Auth')} />
-            <ButtonGrid
-              gridRef={gridRefs[SHEET_INDEX.BUTTON]}
-              gridFilterRef={gridFilterRefs[SHEET_INDEX.BUTTON]}
-              setActiveTab={setActiveTab}
-              data={buttonGridCleared ? [] : rows[SHEET_INDEX.BUTTON]}
-            />
-          </div>
-        </div>
+        <PanelGroup className={styles.subGridWrapper} orientation='vertical'>
+          <Panel defaultSize={70} minSize={20}>
+            <div className={styles.menuGridWrapper}>
+              <Label className={styles.labelGrid} labelText={t('LBL00356', '_Menu Item Info')} />
+              <MenuGrid
+                gridRef={gridRefs[SHEET_INDEX.MENU]}
+                gridFilterRef={gridFilterRefs[SHEET_INDEX.MENU]}
+                setActiveTab={setActiveTab}
+                data={menuGridCleared ? [] : rows[SHEET_INDEX.MENU]}
+              />
+            </div>
+          </Panel>
+          <PanelSeparator className={styles.splitBar} />
+          <Panel defaultSize={30} minSize={15}>
+            <div className={styles.buttonGridWrapper}>
+              <Label className={styles.labelGrid} labelText={t('LBL00355', '_Sheet Auth')} />
+              <ButtonGrid
+                gridRef={gridRefs[SHEET_INDEX.BUTTON]}
+                gridFilterRef={gridFilterRefs[SHEET_INDEX.BUTTON]}
+                setActiveTab={setActiveTab}
+                data={buttonGridCleared ? [] : rows[SHEET_INDEX.BUTTON]}
+              />
+            </div>
+          </Panel>
+        </PanelGroup>
       </div>
     </>
   );

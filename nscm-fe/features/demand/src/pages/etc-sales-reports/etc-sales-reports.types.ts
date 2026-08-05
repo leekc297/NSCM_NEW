@@ -24,7 +24,6 @@ export type EtcSalesReportRow = Record<string, unknown> & {
 
 export type SpreadTitleRow = ResponseData<MENU_ID, SHEETS.SPREAD_TITLE, 'data'>;
 export type MeasureRow = ResponseData<MENU_ID, SHEETS.MEASURE, 'data'>;
-export type UnitedVersionRow = ResponseData<MENU_ID, SHEETS.UNITED_VERSION, 'data'>;
 
 export interface ValidationResult {
   ok: boolean;

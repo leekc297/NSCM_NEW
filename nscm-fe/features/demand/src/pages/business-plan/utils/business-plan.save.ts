@@ -69,11 +69,7 @@ const qtyOf = (v: unknown): string => {
 };
 
 // 수집 대상 Measure — AS-IS L866: Business_Plan / LOC / MKT_FCST 외 continue.
-const SAVE_MEASURES = new Set<string>([
-  EDIT_MEASURE.BUSINESS_PLAN,
-  EDIT_MEASURE.LOC,
-  'MKT_FCST',
-]);
+const SAVE_MEASURES = new Set<string>([EDIT_MEASURE.BUSINESS_PLAN, EDIT_MEASURE.LOC, 'MKT_FCST']);
 
 // 행 identity — 기간/수량 무관 16키 (division 슬롯 분기 — AS-IS SaveData L897~1057 1:1).
 const identityOf = (

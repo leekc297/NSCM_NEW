@@ -1,16 +1,18 @@
 import {
-  ColumnSettingModal,
-  type ColumnSettingRow,
+  ColumnLayoutModal,
   ProjectByDivisionModal,
 } from 'features/master/src/components';
+import { useMemo } from 'react';
 
+import type { ColumnLayoutRow } from '@shared/components';
+
+import { VersionModal } from '../../../components';
 import { MENU_ID, SHEETS } from '../etc-sales-reports.constants';
 import type { EtcSalesReportRow } from '../etc-sales-reports.types';
 import { useEtcSalesReportsStore } from '../useEtcSalesReportsStore';
 import { saveTitleSet } from '../utils/etc-sales-reports.api';
-import { toCellStr } from '../utils/etc-sales-reports.gridCombos';
 
-import { MeasureSelectModal, UnitedVersionModal } from './modals';
+import { MeasureSelectModal } from './modals';
 
 export type EtcSalesReportsModalKey = 'PROJECT' | 'COLUMN' | 'MEASURE' | 'VERSION';
 
@@ -33,7 +35,43 @@ export const EtcSalesReportsModals = ({
   projectTargetRow,
   onVersionSelect,
 }: EtcSalesReportsModalsProps) => {
-  const applyColumnVisibility = useEtcSalesReportsStore(s => s.applyColumnVisibility);
+  const staticColumns = useEtcSalesReportsStore(s => s.staticColumns);
+  const applyColumnLayout = useEtcSalesReportsStore(s => s.applyColumnLayout);
+  const userColumnLayout = useEtcSalesReportsStore(s => s.userColumnLayout);
+
+  // ColumnLayoutModal 재진입 복원값 / Default 버튼 기준값 (DMF0003 계약 1:1)
+  const labelOf = useMemo(
+    () => new Map(staticColumns.map(c => [c.colNm, c.colLblNm ?? c.colNm])),
+    [staticColumns]
+  );
+  const columnLayoutSettings = useMemo<ColumnLayoutRow[]>(
+    () =>
+      (userColumnLayout ?? []).map(s => ({
+        COLUMN_NAME: s.colNm,
+        COLUMN_LABEL_NAME: labelOf.get(s.colNm) ?? s.colNm,
+        USER_FLAG: s.visible ? 'Y' : 'N',
+        SORT_ORDER_NO: s.order,
+        COL_WIDTH: s.width,
+        CELL_COLOR: s.cellColor,
+        TEXT_COLOR: s.textColor,
+        isKey: false,
+      })),
+    [userColumnLayout, labelOf]
+  );
+  const columnLayoutDefaults = useMemo<ColumnLayoutRow[]>(
+    () =>
+      staticColumns.map((c, i) => ({
+        COLUMN_NAME: c.colNm,
+        COLUMN_LABEL_NAME: c.colLblNm ?? c.colNm,
+        USER_FLAG: c.visible === false ? 'N' : 'Y',
+        SORT_ORDER_NO: i + 1,
+        COL_WIDTH: c.colWth ?? 100,
+        CELL_COLOR: '',
+        TEXT_COLOR: '',
+        isKey: false,
+      })),
+    [staticColumns]
+  );
   const applyVisibleMeasures = useEtcSalesReportsStore(s => s.applyVisibleMeasures);
   const staticMeasures = useEtcSalesReportsStore(s => s.staticMeasures);
   const visibleMeasures = useEtcSalesReportsStore(s => s.visibleMeasures);
@@ -64,23 +102,47 @@ export const EtcSalesReportsModals = ({
         callFromCell={true}
       />
 
-      {/* Column Setting — 공용 (leftTitle/rightTitle 확장판) */}
-      <ColumnSettingModal
+      {/* ⭐ Column Setting — DMF0003(mkt-fcst) 방식으로 교체 (2026-07-30 사용자 지시).
+          공용 ColumnLayoutModal = 표시/순서 + Width/Cell·Text Color 개인화. */}
+      <ColumnLayoutModal
         open={openKey === 'COLUMN'}
         modalClose={onClose}
         menuId={MENU_ID}
         sheetName={SHEETS.MAIN}
         columnType='C'
         divisionId={divisionId}
+        fallbackColumns={staticColumns.map(c => ({
+          key: c.colNm,
+          header: c.colLblNm ?? c.colNm,
+          width: c.colWth ?? 100,
+        }))}
         title='Column Setting'
         leftTitle='Invisible'
         rightTitle='Visible'
-        onSave={(settings: ColumnSettingRow[]) => {
-          const keys = settings.map(s => toCellStr((s as Record<string, unknown>).COLUMN_NAME));
-          applyColumnVisibility(keys.filter(Boolean));
+        // 재진입 복원 — 현재 grid 상태(개인화 반영본). 미전달 시 사용자 선택이 원복된다.
+        initialSettings={columnLayoutSettings}
+        defaultSettings={columnLayoutDefaults}
+        onSave={settings => {
+          applyColumnLayout(
+            settings.map(s => ({
+              colNm: s.COLUMN_NAME,
+              visible: s.USER_FLAG === 'Y',
+              width: s.COL_WIDTH,
+              cellColor: s.CELL_COLOR,
+              textColor: s.TEXT_COLOR,
+              order: s.SORT_ORDER_NO,
+            }))
+          );
+          const visible = settings.filter(s => s.USER_FLAG === 'Y');
           void saveTitleSet(
             'C',
-            keys.filter(Boolean).map((name, i) => ({ name, sortOrderNo: i + 1 }))
+            visible.map((s, i) => ({
+              name: s.COLUMN_NAME,
+              sortOrderNo: i + 1,
+              colWidth: s.COL_WIDTH,
+              cellColor: s.CELL_COLOR,
+              textColor: s.TEXT_COLOR,
+            }))
           );
           onClose();
         }}
@@ -105,15 +167,15 @@ export const EtcSalesReportsModals = ({
         }}
       />
 
-      {/* United Version — Version 주입 (btnSPVer '...') */}
-      <UnitedVersionModal
+      {/* Version — DMF0044 와 공유하는 공용 팝업 (AS-IS DMF0044_United_VersionPopup 1본 공유 파리티) */}
+      <VersionModal
         open={openKey === 'VERSION'}
         modalClose={onClose}
+        menuId={MENU_ID}
         divisionId={divisionId}
-        mdfType={mdfType}
+        parentReportType={mdfType}
         onSelect={onVersionSelect}
       />
-
     </>
   );
 };

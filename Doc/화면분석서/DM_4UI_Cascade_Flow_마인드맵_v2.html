@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>DM 4UI Cascade/Filter Flow 마인드맵 v2 (AS-IS → TO-BE)</title>
+<style>
+  :root{
+    --bg:#f6f8fa; --panel:#ffffff; --line:#d0d7de; --txt:#1f2328; --sub:#57606a;
+    --d40:#8250df; --d81:#0969da; --d82:#1a7f37; --auth:#bf3989; --evt:#9a6700;
+    --ok:#1a7f37; --gap:#bf8700; --wait:#57606a; --no:#cf222e; --diff:#d1242f;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:'Malgun Gothic','Segoe UI',sans-serif;background:var(--bg);color:var(--txt);font-size:14px}
+  header{position:sticky;top:0;z-index:10;background:#24292f;color:#fff;padding:10px 16px}
+  header h1{margin:0 0 6px;font-size:15px}
+  header .meta{font-size:11px;color:#c9d1d9}
+  .toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px}
+  .tab{padding:6px 12px;border-radius:6px 6px 0 0;background:#444c56;color:#fff;border:none;cursor:pointer;font-size:13px;font-weight:bold}
+  .tab.active{background:var(--panel);color:var(--txt)}
+  .toolbar input{padding:5px 8px;border-radius:6px;border:1px solid var(--line);min-width:200px;font-size:13px}
+  .toolbar button.mini{padding:5px 10px;border-radius:6px;border:1px solid #57606a;background:#32383f;color:#fff;cursor:pointer;font-size:12px}
+  .legend{display:flex;flex-wrap:wrap;gap:6px;font-size:11px;margin-top:6px}
+  .legend span{padding:2px 7px;border-radius:10px;color:#fff}
+  main{display:grid;grid-template-columns:minmax(0,1fr) 440px;gap:0;height:calc(100vh - 122px)}
+  #tree{overflow:auto;padding:14px 18px;background:var(--panel)}
+  #detail{display:flex;flex-direction:column;border-left:1px solid var(--line);background:#fbfcfd;min-height:0}
+  .pane{flex:1 1 50%;min-height:0;overflow:auto;padding:12px 14px}
+  .pane.asis{border-bottom:3px double var(--line)}
+  .pane h3{margin:0 0 8px;font-size:13px;padding:4px 8px;border-radius:6px;color:#fff}
+  .pane.asis h3{background:#57606a}
+  .pane.tobe h3{background:#0969da}
+  .pane .memo{font-size:12.5px;line-height:1.7}
+  .memo code, #tree code{background:#eff2f5;border:1px solid var(--line);border-radius:4px;padding:0 4px;font-family:Consolas,monospace;font-size:11.5px}
+  .memo .arg{display:block;background:#0d1117;color:#e6edf3;border-radius:6px;padding:6px 9px;margin:5px 0;font-family:Consolas,monospace;font-size:11px;line-height:1.55;white-space:pre-wrap}
+  .memo .miss{color:#cf222e;font-weight:bold}
+  .pane.tobe .memo b{color:#0550ae}
+  .node{margin:1px 0}
+  .row{display:flex;align-items:flex-start;gap:6px;padding:3px 6px;border-radius:6px;cursor:pointer}
+  .row:hover{background:#eef2f6}
+  .row.sel{background:#ddf4ff;outline:1px solid #54aeff}
+  .tg{width:16px;height:16px;line-height:14px;text-align:center;border:1px solid var(--line);border-radius:4px;background:#fff;font-size:10px;flex:none;margin-top:2px;color:var(--sub)}
+  .tg.leaf{visibility:hidden}
+  .lbl{flex:1;min-width:0}
+  .kids{margin-left:20px;border-left:1px dotted #b6c2cf;padding-left:8px}
+  .hide{display:none}
+  .chip{display:inline-block;padding:0 6px;border-radius:9px;color:#fff;font-size:10.5px;margin-left:4px;vertical-align:1px;white-space:nowrap}
+  .c40{background:var(--d40)} .c81{background:var(--d81)} .c82{background:var(--d82)}
+  .cau{background:var(--auth)} .cev{background:var(--evt)}
+  .cok{background:var(--ok)} .cgap{background:var(--gap)} .cwait{background:var(--wait)} .cno{background:var(--no)}
+  .cx{background:#6e7781} .cdiff{background:var(--diff);font-weight:bold}
+  .hit{background:#fff8c5;border-radius:3px}
+  .sec>.row .lbl{font-weight:bold}
+  .dim{color:var(--sub);font-size:12px}
+</style>
+</head>
+<body>
+<header>
+  <h1>DM 4UI (DMF0003·0020·0021·0082) — Cascade/Filter Flow : 상단 AS-IS(ARG 명기) / 하단 TO-BE 실구현(미구현 명시)</h1>
+  <div class="meta">2026-08-05 v2 · AS-IS .cs 4본 전수(7,144/3,969/5,644/9,419줄)+BigFilter.xml+UP_FX 원문+lookup 실값 · 정본 MD 4본: Doc/화면분석서/DMF00{03,20,21,82}_조회조건_GRID_Cascade_Flow_ASIS_v1.0.md · 전 항목 표시 + <b>Δ 배지 = 4UI 간 상이 지점만 강조</b> · ❌ = TO-BE 미구현/부족</div>
+  <div class="toolbar">
+    <button class="tab active" id="tab03" onclick="setTab('03')">DMF0003 MktFcst</button>
+    <button class="tab" id="tab20" onclick="setTab('20')">DMF0020 FuturePrice</button>
+    <button class="tab" id="tab21" onclick="setTab('21')">DMF0021 SalesPlan</button>
+    <button class="tab" id="tab82" onclick="setTab('82')">DMF0082 Fcst&amp;Price</button>
+    <input id="q" placeholder="검색 (필드/ARG/콤보 키…)" oninput="doSearch()">
+    <button class="mini" onclick="expandAll(true)">전체 펼치기</button>
+    <button class="mini" onclick="expandAll(false)">전체 접기</button>
+  </div>
+  <div class="legend">
+    <span class="c40">40</span><span class="c81">81계열</span><span class="c82">82</span>
+    <span class="cau">권한</span><span class="cev">이벤트</span><span class="cdiff">Δ 4UI 차이</span>
+    <span class="cok">TO-BE ✅</span><span class="cgap">🔶부분/대기</span><span class="cwait">⏸데이터 대기</span><span class="cno">❌미구현/도달불가</span><span class="cx">미사용</span>
+  </div>
+</header>
+<main>
+  <div id="tree"></div>
+  <div id="detail">
+    <div class="pane asis"><h3>AS-IS — 분기·상세조건 (ARG 명·값)</h3><div class="memo" id="mAsis">트리 노드를 클릭하세요.</div></div>
+    <div class="pane tobe"><h3>TO-BE — 실제 구현 (Combo·Lookup·Filter·ARG / ❌미구현 명시)</h3><div class="memo" id="mTobe">노드 선택 시 실제 구현 위치·바인드 ARG·미구현 항목이 표시됩니다.</div></div>
+  </div>
+</main>
+<script>
+const B40=["40","c40"], B81=["81계열","c81"], B82=["82","c82"], AU=t=>[t,"cau"], EV=t=>[t,"cev"],
+      OK=["✅","cok"], GAP=["🔶","cgap"], WAIT=["⏸","cwait"], NO=["❌","cno"], DEAD=["도달불가","cno"], UNUSED=["미사용","cx"], DIFF=["Δ","cdiff"];
+const A=t=>`<span class="arg">${t}</span>`;
+
+const BF_ARG = A(`GetDMInnerTable(키, Filter)
+Filter["GROUP_ID"] = UserInfoContext["NowGroupID"]   // 로그인 선택 그룹
+Filter["USER_ID"]  = UserInfoContext.UserId
+(+케이스별) Filter["DIVISION_ID"]=sDivision / ["DEPT_ID"]=sTeam / ["END_CUSTOMER"]=sEndCustomer
+'ALL' → '' 치환 후 클라 RowFilter (Contains)`);
+
+// ═══════════════════════ DMF0003 ═══════════════════════
+const TREE03 = [
+{t:"⚠ Δ 4UI 차이 요약 (강조 안내 — 상세는 각 노드에 전부 표시)", b:[DIFF],
+ m:`아래 11개 지점만 4UI 간 상이(해당 노드에 Δ 배지). 그 외 전 항목은 트리에 동일 상세 수준으로 표시됨.<br>
+ ① 검색 Sales Site 계통(0003=UP_FX 혼용/0020·0021=BigFilter만/0082=40 고정 혼용) ② 0082 Division 40 고정 ③ 셀 Team(0020=비Auth·0021 DEPT셀 주석) ④ 셀 Item(0021=lookup 콤보) ⑤ AS/W-S 게이트=0003 고유 ⑥ SALES_BUCKET=0082 고유 ⑦ 기간 잠금 방식 상이 ⑧ 하위 clear 범위 상이 ⑨ 0020 포커스행 복제·MSG00447 ⑩ 0021 통화 콤보 ⑪ 편집권한 원천 상이`,
+ tb:`강조 전용 안내 노드 — 구현 상세는 각 노드 하단 참조.`},
+{t:"공통 축 — 콤보 3계통 · 권한", b:[AU("권한")],
+ m:`① <b>BigFilter</b>: 화면 로드 1회 <code>list_line_dm</code> 배치 → 캐시 9섹션. ${BF_ARG}② <b>UP_FX_GetCommonDataList</b>(기본판 L9918 — 셀 Auth 계열) ③ <b>_DM판</b>(L16661 — W 제외·AS 포함)<br>공통 SP ARG: ${A(`FoxDataRequest("DM.UP_FX_GetCommonDataList_DM")
+CODE=분기명, PARAM1~PARAM5 (분기별 의미 상이 — 각 노드 명기)
+권한: TB_FX_UserGroupAuthExtention WHERE GroupID LIKE '%'+PARAM3+'%'
+      AND UserID LIKE '%'+PARAM4+'%' AND AuthType='D'(JV Planner 시 'J')`)}부서제약: TB_FX_User.DEPT_ID + PM_TEAM_MAPPING(SEGMENT1=자기부서→SEGMENT3 허용부서)`,
+ tb:`<b>⭐ TO-BE 에 BigFilter 는 존재하지 않음</b> — AS-IS 캐시/UP_FX 를 불문하고 전 콤보는 <code>SCM_ADM_CMBO_SQL_M</code> 의 <b>SQL_ID</b> 로 조회(<code>useTabComboQueries</code>). ${A(`BE makeComboQuery: @토큰 raw 치환 → FE 는 값에 따옴표 포함 전달
+  예) divisionId: "'81'"  ('ALL' fallback: q(v)=v||'ALL')
+세션 자동 주입: @sesUserId·@langCd (따옴표 포함)`)}<b>권한 실구현</b>: division=<code>SCM_ADM_USER_GR_UNIT_AUTH_MPG_M</code>(USER_ID=@sesUserId, UNIT_TP_CD='D', USE_YN='Y' — 보유그룹 합집합 AUTHUNION) · ADMIN=<code>USER_GR_MPG_M</code> USER_GR_ID='ADMIN' 보유 · 부서=<code>TB_FX_USER</code>(USERID=@sesUserId)+PM_TEAM_MAPPING ⏸SITE.DEPT_ID 미적재<br>⚠ 클라우드 미실행: <code>DMF0003_CLOUD_SQLPLUS_ALL_20260805.sql</code>(QA·DEV)`},
+{t:"§1 조회조건 13필드", b:[], c:[
+ {t:"1. Division", b:[EV("초기"),OK],
+  m:`BigFilter <code>MyDivision</code> — ATTRIBUTE3≠'EE' + TB_FX(D/J). ${BF_ARG}<b>변경 파생</b>(.cs L3050~3153): 40=Project/PlantSite 비활성+CellQty 활성 / 82=InvalidExec 강제+PlantSite 비활성·clear / 81=EDISender·PlantSite 활성 / 공통=txtProject·txtItemId·txtOwner clear(L3160~3162)`,
+  tb:`✅ COMBO : <code>MyDivision</code>(DivisionField). ${A(`useTabComboQueries filters:['MyDivision']  // 파라미터 無 (@sesUserId 주입)
+onChange: set({divisionId:v, deptIds:[], endCustomers:[], scmSiteIds:[], plantSiteIds:[],
+  cellQtyYn(40만), invalidYn: v===ESS, ...})  // MktFcst.tsx L152~167`)}`},
+ {t:"2. Team", b:[EV("Division 변경"),OK],
+  m:`.cs L3036: <code>SetChangeControl("UserTeamByDivision", sDivision)</code> → 캐시 Tables[1] DIVISION_ID 클라 필터. owner(SITE_ITEM) 기반 팀 — 부서제약/그룹 분기 없음.`,
+  tb:`✅ COMBO : <code>TeambyDivision</code> (카탈로그 TeamField 기본 — comboId 미전달 실측. ⚠ 'UserTeamByDivision' 등재본은 opt-in 미사용). ${A(`TeamField division={sc.divisionId} → filters:['TeambyDivision'] / FILTER : DIVISION_ID=division`)}`},
+ {t:"3. End Customer", b:[EV("Div/Team 변경"),OK],
+  m:`.cs L3062/3095(Div)·L3178/3193(Team): <code>SetChangeControl("EndCustomerByDivision", sDivision, sTeam)</code> — Filter["DIVISION_ID"]+["DEPT_ID"] 클라 필터. 40=lookup END_CUSTOMER(SEGMENT2≠'-')=PROJECT 명.`,
+  tb:`✅ COMBO : <code>EndCustomer</code>(DIVISION_ID/DEPT_ID/NAME=lookup SEGMENT3 반환 — EndCustomerField 기본). ${A(`filters:['EndCustomer'] / division={sc.divisionId} deptIds={sc.deptIds}
+FILTER : DIVISION_ID=division / DEPT_ID∈deptIds(콤보 행 DEPT_ID 공란=통과)`)}`},
+ {t:"4. Sales Site ⭐ 3원천 혼용", b:[OK,DIFF],
+  m:`<b>Δ 0020/0021과 달리 UP_FX 사용.</b> 이벤트×division 매트릭스 — 하위 노드에 ARG 전부 명기. UP_FX_DM 공통: W 제외(<code>ISNULL(OPERATION_GROUP,'')≠'W'</code>) + AS_SITE_PLANT 무조건 UNION(SORT 1 선두·NAME=SITE_DESCRIPTION — asYn 게이트 [E20260211-001189] 주석).`,
+  tb:`✅ COMBO : <code>UserSiteByEndCustomer</code>(3부 UNION) 단일 reactive + 40 초기 스왑. ${A(`MktFcstForm L67~: useTabComboQueries filters:[ div40Initial
+ ? 'ScmSitebyEndCustomer40'          // div40 && deptIds/endCustomers 미선택
+ : { comboId:'UserSiteByEndCustomer',
+     divisionId:q(sc.divisionId), deptId:q(sc.deptIds.join(',')),
+     endCustomer:q(sc.endCustomers.join(',')) } ]   // q='값' 따옴표`)}asYn 게이트 제거됨 — 재도입 금지.`, c:[
+   {t:"초기/Customer 변경 → 81/82: UP_FX_DM(AS-IS) SiteByEndCustomer", b:[B81,B82,EV("이벤트"),AU("D/J")],
+    m:`.cs L555~558/L3209 GetSalesSite(): ${A(`CODE  = 'SiteByEndCustomer'
+PARAM1= clbDivision.ControlValues   // 예 '81' / '82' (콤마 다중)
+PARAM2= clbCustomer.ControlValues   // END_CUSTOMER 콤마 다중, ''/'ALL' 관대
+PARAM3= NowGroupID  → AuthType: 'JV Planner'면 'J' else 'D'
+PARAM4= UserId
+PARAM5= NowGroupID=='DM Planner (W/S)'?'Y':'N'  // SP가 무시(주석) — AS 무조건 포함`)}_DM판 L16785~16822.`,
+    tb:`✅ COMBO : <code>UserSiteByEndCustomer</code> (reactive 재조회). ${A(`@divisionId ← "'81'" / @endCustomer ← "'BMW,GM'" / @deptId(≠40 브랜치 미사용)
+@sesUserId ← 세션 (UNIT_AUTH 합집합 — JV 'J' 흡수)`)}`},
+   {t:"초기/Customer 변경 → 40: UP_FX_DM(AS-IS) SiteByEndCustomer40", b:[B40,EV("이벤트"),AU("D")],
+    m:`.cs L561/L3213 GetSalesSite40(): ${A(`CODE  = 'SiteByEndCustomer40'
+PARAM1= clbTeam.ControlValues       // ⭐ 팀(DEPT_ID) — division 아님!
+PARAM2= clbCustomer.ControlValues   // PROJECT_CODE
+PARAM3= NowGroupID / PARAM4= UserId / PARAM5= W/S 여부(무시)`)}owner 첫토큰→SSO 부서 팀필터 + lookup UNION은 PARAM2 'ALL'만. _DM판 L16825~16873.`,
+    tb:`✅ COMBO : <code>UserSiteByEndCustomer</code> (40 브랜치). ${A(`@deptId ← "'30175793'"(팀) / @endCustomer ← PROJECT 명`)}`},
+   {t:"Division 변경 → 81/82: UP_FX(AS-IS) · 40: BigFilter(AS-IS) ScmSitebyEndCustomer40", b:[EV("이벤트")],
+    m:`.cs L3110(81/82 — [E20260402-001736] BigFilter→UP_FX 교체)/L3071(40): <code>SetChangeControl("ScmSitebyEndCustomer40")</code> — 추가 Filter 없음. 전체 40 SALES·NAME=SITE_DESCRIPTION·W 포함.`,
+    tb:`✅ COMBO : <code>ScmSitebyEndCustomer40</code> (40 초기 스왑 — 파라미터 無) → 이후 COMBO : <code>UserSiteByEndCustomer</code> 복귀.`},
+   {t:"Team 변경 → BigFilter(AS-IS) UserSiteByEndCustomer (팀 필터=40만)", b:[EV("이벤트")],
+    m:`.cs L3185(81/82)/L3199(40): ${A(`SetChangeControl("UserSiteByEndCustomer", sDivision, sTeam, sEndCustomer)
+  81/82: sTeam = string.Empty   // 팀 미전달 = 무반응
+  40   : sTeam = clbTeam.ControlValues
+DataService L3891: DIVISION!='40'이면 DEPT_ID:='' (팀 필터 40 한정)`)}NAME=ID·W 미제외·AS 미포함.`,
+    tb:`✅ COMBO : <code>UserSiteByEndCustomer</code> — FILTER : @deptId(40 브랜치만 사용 → 81/82 팀 무반응·40 팀 필터 자동 재현).`}]},
+ {t:"5. Biz Type", b:[EV("Division 변경"),OK],
+  m:`.cs L3077/3117: <code>SetChangeControl("BizType", sDivision)</code>(DM_BIZ_TYPE lookup+40 PROJECT 원천). ⚠ 그리드 Division 셀 변경도 검색 BizType 재바인딩(L3346: GetBizTypebyDivision(clbDivision.ControlValues)).`,
+  tb:`✅ COMBO : <code>BizType</code>(카탈로그 BizTypeField 기본 — comboId 미전달 실측. ⚠ 'BizTypebyDivision' 등재본은 opt-in 미사용). 단일 division 조회라 셀→검색 재바인딩 불요.`},
+ {t:"6. Sender Code", b:[B81,EV("Division 변경"),OK],
+  m:`.cs L3046: <code>SetChangeControl("EdiSender")</code>(추가 Filter 없음). L3041 disable → L3145 81만 enable.`,
+  tb:`✅ COMBO : <code>SenderCode</code>(lookup EDI_SENDER_CODE·NAME=ATTRIBUTE1) — FILTER : DIVISION_ID / MktFcstForm 인라인, 81 전용 enable.`},
+ {t:"7. Period", b:[EV("초기"),OK],
+  m:`${A(`FoxDataRequest("DM.PR_GET_DAY_RANGE")
+p_created_by = UserId / p_month = 6   → 당월 1일 ~ +6개월 말일 (Tables[1])`)}`,
+  tb:`✅ PeriodField 초기값 FE 계산(월초~+6개월 말일, 로컬타임 포맷 — UTC 밀림 금지). DB 콤보 없음.`},
+ {t:"8. Bucket", b:[EV("초기/변경"),OK],
+  m:`<code>DMF0003_GET_BUCKET_TYPE_CODE</code>(파라미터 無 — D/W/M). 변경 시 SetSpreadColumn 표시 전환+당주 보더+EditButton 2회(Edit 유지) — 데이터 cascade 없음(L3218~3290).`,
+  tb:`✅ COMBO : <code>BucketType</code> + MktFcstGrid 렌더(Sum/드릴다운/당주 보더 — GET_SPREAD_TITLE 1차 소스).`},
+ {t:"9. Project (검색)", b:[B40,OK], m:`txtProject+btnProject — 40 비활성(L3052~3054)·Division 변경 clear(L3160). 조회 SP p_project_code.`, tb:`✅ payload(projectCode) + 40 disable.`},
+ {t:"10. Model/Nickname (검색 Item)", b:[OK], m:`txtItemId(+팝업) — Division 변경 clear(L3161). 조회 SP p_item_id.`, tb:`✅ ItemField + payload itemId.`},
+ {t:"11. Plant Site", b:[B81,EV("Division/초기"),OK],
+  m:`81만: <code>SetChangeControl("UserPlantSiteByEndCustomer", sDivision, "", clbCustomer.ControlValues)</code>(L3120~3127). BigFilter L210~223: SITE_TYPE='PLANT'+TB_FX 'D'(앞방향 LIKE <code>@GROUP_ID+'%'</code>). 40 비활성·82 비활성+clear(L3134).`,
+  tb:`✅ COMBO : <code>PlantSitebyEndCustomer</code>(PlantSiteField). ${A(`@divisionId·@endCustomer 서버 바인드 / 81 전용 enable, 40·82 disable+reset`)}`},
+ {t:"12. Item Type", b:[EV("초기"),OK], m:`GetItemType() → UP_FX CODE='ItemType'(파라미터 無).`, tb:`✅ COMBO : <code>ItemType</code>.`},
+ {t:"13. Owner", b:[B40,OK], m:`txtOwner(40 계열) — Division 변경 clear(L3162). 조회 SP p_owner.`, tb:`✅ payload owner.`}]},
+{t:"§2 GRID INSERT — 셀 콤보 체인 (ComboSelChange L3292~3930, 신규행 'I')", b:[EV("셀")], c:[
+ {t:"Division 셀 변경 → Team/Customer(40)/Site/Measure 재구성", b:[AU("Auth판")],
+  m:`L3298~3374: ${A(`Team    = Data.UserTeamByDivisionAuth(NowGroupID, UserId, sDivision)
+          → 기본판 CODE='TeambyDivisionAuth' (4분기: team_cnt≤1→ADMIN 전체/자기부서, >1→매핑∪자기부서)
+Customer= Data.UserEndCustomerByDivisionDeptAuth(NowGroupID, UserId, sDivision, sTeam)
+          → CODE='EndCustomerByDivisionDeptAuth' (SITE.DEPT_ID 팀필터+부서제약+NAME=lookup)
+Cust40  = Data.Common(EndCustomerByDivision40, sDivision, sTeam, NowGroupID, UserId)
+Site    = 81/82 Data.UserSiteByEndCustomerAuth(...) / 40 Data.UserSiteByEndCustomer(...)
+Measure = Data.Common(MktFcstEditMeasure, sDivisionID, sScmSiteID, sProjectCode, UserId, "")`)}+ PlantSite lock(81만 해제, L3349) + 검색 BizType 재바인딩(L3346).`,
+  tb:`✅ COMBO(셀 배선) : SHEET_COLUMNS('Mkt Fcst') + FILTER(cascade) : ${A(`TEAM_ID        = 'TeambyDivisionAuth'
+END_CUSTOMER   = 'EndCustomerByDivisionDeptAuth'
+END_CUSTOMER40 = 'EndCustomerByDivision40Team'
+SCM_SITE_ID    = 'SiteByEndCustomerAuth' / SCM_SITE_ID40 = 'SiteByEndCustomer'
+셀 fetch ARG: {comboId, mnuId:"'DMF0003'"}  // 행 파라미터는 cascade가 담당
+GRID_CASCADE_FILTERS.TEAM_ID=[{rowKey:'DIVISION_ID',comboKey:'DIVISION_ID'}]`)}⏸부서제약 발동=SITE.DEPT_ID 적재 후(현재 전건 NULL).`},
+ {t:"Team 셀 변경 → Customer(Auth)/Site(Auth) 재구성", b:[AU("Auth판")],
+  m:`L3375~3406: Customer=UserEndCustomerByDivisionDeptAuth(NowGroupID,UserId,sDivision,<b>sTeam=행 Team 셀</b>) → Site=UserSiteByEndCustomerAuth / 40측: EndCustomerByDivision40(sTeam 공백이면 clbTeam)+UserSiteByEndCustomer.`,
+  tb:`✅ ${A(`GRID_CASCADE_FILTERS.END_CUSTOMER  =[{DIVISION_ID},{rowKey:'TEAM_ID',comboKey:'DEPT_ID'}]
+GRID_CASCADE_FILTERS.END_CUSTOMER40=[{DIVISION_ID},{TEAM_ID→DEPT_ID}]
+(40Team판 lookup 행 DEPT_ID='-' → 팀 지정 시 자동 제외 = AS-IS UNION 조건 1:1)`)}`},
+ {t:"Customer/Customer40 셀 변경 → Site 재구성", b:[],
+  m:`L3407~3421: 81/82=UserSiteByEndCustomerAuth(NowGroupID,UserId,sDivision,행 Customer) / 40=UserSiteByEndCustomer(…,행 Customer40).`,
+  tb:`✅ ${A(`SCM_SITE_ID  =[{DIVISION_ID},{END_CUSTOMER}]
+SCM_SITE_ID40=[{DIVISION_ID},{rowKey:'END_CUSTOMER40',comboKey:'END_CUSTOMER'}]
+GRID_CASCADE_CLEAR.END_CUSTOMER(40)=['SCM_SITE_ID(40)']`)}`},
+ {t:"Site 셀 변경 → Project계열 clear + Incoterms(AS_INCOTERMS) + Measure 필터", b:[B81,B82],
+  m:`L3422~3517: ① Project/ProjectName/ProjectStatus/BizType SetText("") ② ${A(`GetIncotermsType(sDivisionID, sScmSiteID)
+= UP_FX_DM CODE='AS_INCOTERMS' PARAM1=division PARAM2=scmSiteId
+  → AS_SITE_PLANT 등재 사이트면 AS 전용 lookup(81:DAP/FCA/FOB·82:DAP/FOB), 아니면 일반`)}③ AS 사이트(AS_SITE_PLANT 13건) 행 → Measure=AS_In_Req만 / 비AS → MktFcstEditMeasure(div,site,project).`,
+  tb:`✅ ${A(`GRID_CASCADE_CLEAR.SCM_SITE_ID=['PROJECT_CODE','PROJECT_NAME','PROJECT_STATUS','BIZ_TYPE']
+AsIncotermsEdit fetch: {comboId:'AsIncotermsEdit', divisionId:"'81'"}
+beginningEdit: 행 SCM_SITE_ID ∈ asSiteNames(AS_FROM_SITE 콤보 NAME셋) → dataMap 스왑
+Measure 후보: AS향=AS_In_Req만 / 고객향=MKT_FCST_RP만 (editComboRows 필터)`)}`},
+ {t:"Site40 셀 변경 → Measure 재구성만 (clear 없음)", b:[B40],
+  m:`L3518~3528: Measure=MktFcstEditMeasure(sDivisionID=Division40, sScmSiteID=Site40, "", UserId, "").`,
+  tb:`✅ COMBO : <code>MktFcstEditMeasure</code>(편집 스왑). ${A(`GRID_EDIT_COMBO.MEASURE={comboId:'MktFcstEditMeasure', divisionParam:true}
+fetch ARG: divisionId:"'40'"`)}clear 체인 미등록(AS-IS 1:1).`},
+ {t:"Measure 셀 변경 → model 계열 clear (AS_In_Req/BNPIn 예외)", b:[],
+  m:`L3532~3556: 신규행('I') && measure∉{AS_In_Req,BNPIn} → ItemId/ItemId40/ItemName/ItemType/NickName SetText("").`,
+  tb:`✅ ${A(`MEASURE_MODEL_KEEP=['AS_In_Req','BNPIn']
+MEASURE_MODEL_CLEAR_COLS=[ITEM_ID,ITEM_ID40,ITEM_NAME,ITEM_TYPE,NICK_NAME]
+cellEditEnded: INSERT_GROUP 형제 행 일괄 clear`)}`},
+ {t:"FcstType 셀 변경 → AS_FROM_SITE 게이트", b:[AU("W/S")],
+  m:`L3557~3601: 사이트∈AS→항상 clear+lock / 비AS && FcstType∈${A(`GetLookupValues("FCST_TYPE","DM Planner (W/S)","","","","")
+→ _DM판: SALES_TYPE_CODE2 ∪ SALES_TYPE_CODE2_ADD = 실값 6종 {WS,WSF,AS,ASF,Recall,RMA}`)}→ 활성(AS_FROM_SITE 컬럼 없으면 MSG00472) / 그 외→clear+lock.`,
+  tb:`✅ ${A(`isAsFromSiteEditable = isInsert && wsPlanner(MktFcstUserGroups membership)
+  && 행 SCM_SITE_ID ∉ AS사이트 && FCST_TYPE ∈ FcstTypeWs(SALES_TYPE_CODE2)
+FCST_TYPE/SCM_SITE_ID 변경 후 활성조건 미충족만 조건부 clear (활성 유지 시 값 보존)
+편집콤보: FCST_TYPE={comboId:'FcstTypeEditMode', wsOnly:true}`)}`},
+ {t:"Project 셀 (SCM0002 팝업 — 6축)", b:[],
+  m:`L3767~3825: ${A(`SCM0002_ProjectbyDivisionPopupEx.Form_Load(false,
+  sDivision(행), sTeam(행 Team, 기본 'ALL'), sEndCustomer(행), sScmSite(행), sProject(행))
+→ SP SCM0002_GET_PROJECT_BY_DIVISION_POPUPEX
+  p_division_id/p_dept_id/p_end_customer/p_scm_site_id/p_project_code/p_etc`)}선택 시 Project/Name/Status/BizType/Owner 세팅.`,
+  tb:`✅ <code>ProjectByDivisionModal</code>: ${A(`preSearchParams = { divisionId: rowValue('DIVISION_ID', sc.divisionId),
+  deptId: rowValue('TEAM_ID', rowValue('DEPT_ID')),   // 2026-08-05 TEAM 우선
+  endCustomer: rowValue('END_CUSTOMER'), salesSite: rowValue('SCM_SITE_ID'),
+  projectCode: rowValue('PROJECT_CODE',''), etc:'N' }`)}콜백 PROJECT_CODE/NAME/OWNER 자동 세팅.`},
+ {t:"ItemId/ItemId40 셀 (DM0002 팝업 — 7축+MDM)", b:[],
+  m:`L3826~3930: ${A(`DM0002_ItembyDivisionPopupEx.Form_Load(false, div, team, customer, site, project,
+  item, mdmActive_Sw='Y', measure)
+팝업 L248~250: measure∈{AS_In_Req,BNPIn} → mdmActive_Sw='' (사용중지 모델 필터 미적용)
+→ SP DMF0002_GET_ITEM_BY_DIVISION_POPUPEx (…, p_mdmActive_Sw)`)}선택 시 ItemId/ItemName/ItemType/NickName 세팅.`,
+  tb:`✅ <code>ItemByDivisionModal</code>: ${A(`preSearchParams = { …6축 동일, itemId:'',
+  activeFlag: MEASURE_MODEL_KEEP.includes(rowValue('MEASURE','')) ? '' : 'Y' }
+→ PROC_M 'activeFlag' = P_COM0008…POPUP.P_MDMACTIVE_SW (PKG_COM0000 L1176 실사용)`)}`},
+ {t:"페이스트 (L6492~6594)", b:[EV("Paste")],
+  m:`Site40 → Measure 재구성 / Site(81/82) → Incoterms(AS_INCOTERMS)+AS=AS_In_Req만·비AS=MKT_FCST_RP만+FcstType 따라 AS_FROM_SITE 활성/clear.`,
+  tb:`✅ pastedCell dataMap 재부착 + 편집진입/렌더 동일 판정 함수(isAsFromSiteEditable·measure 필터) — 실질 동등.`},
+ {t:"Measure 후보 실데이터 (MktFcstEditMeasure)", b:[],
+  m:`기본판 L12635~12725: ${A(`PARAM1=division PARAM2=scmSiteId PARAM3=projectCode PARAM4=UserId PARAM5=지정measure
+① 82+PARAM5 → 해당 measure 단건
+② 일반 = MKT_FCST_MEASURE(SEGMENT4='Y', ATTRIBUTE2≠'Y' 비TMM, VMI 분기)
+        ∪ DM_MST_CUSTOMER_FCST measure ∪ TMM(TMM_MEASURE_ADMIN: SEGMENT2=project, SEGMENT4=UserId)`)}82 실값 8종: RTF·MKT_FCST_RP·RTF_SYS_RP·VMI_In_Plan·VMI_In_Req·VMI_Inv·BNPIn·AS_In_Req.`,
+  tb:`✅ COMBO(편집) : <code>MktFcstEditMeasure</code>(divisionId 따옴표) / COMBO(표시) : <code>Measure</code>(mnuId:"'DMF0003'" — 미전달 시 0행 사고).`}]},
+{t:"§2 GRID UPDATE — 편집 게이트 4단", b:[AU("권한")], c:[
+ {t:"① DM_UI_EDITABLE_DIVISION — 40 편집 금지", b:[B40],
+  m:`lookup 실값 ('DMF0003','40') — .cs L128 [PJ2025-50017] "40사업부 편집 금지". 81*/82만 진행.`,
+  tb:`✅ COMBO : <code>MktFcstEditableDivision</code>: ${A(`SELECT SEGMENT2 FROM lookup WHERE LOOKUP_TYPE='DM_UI_EDITABLE_DIVISION'
+ AND SEGMENT1='DMF0003' AND ATTRIBUTE1='Y'   // 현재 데이터: 82만 Y`)}`},
+ {t:"② 권한그룹 시간창 (SCP/DM류)", b:[AU("SCP/DM")],
+  m:`SCP Planner: <code>Dmf0003ScpPlannerEditFlag</code> lookup 0행=차단(MSG00477, .cs L848~860) / DM류: LIMIT_AUTH/EDIT_DAYS/FROM_TIME/TO_TIME 5파라미터(MSG00478, L862~874).`,
+  tb:`✅ 동일 lookup 2종 + MSG00477/478(constants MSG 맵).`},
+ {t:"③ 행 EDIT_FLAG (서버 산출)", b:[],
+  m:`${A(`조회 SP DMF0003_GET_MKT_FCST
+p_user_group = NowGroupID / p_created_by = UserId (외 조회조건 전체)
+→ GET_ADMIN_GROUP*(SEGMENT1=그룹, SEGMENT2='DMF0003') lookup 판정 → 행 EDIT_FLAG`)}`,
+  tb:`✅ PKG_DMF0003 v2: ${A(`그룹 판정 = SEGMENT1=P_USER_GROUP
+ OR SEGMENT1 IN (SELECT USER_GR_ID FROM USER_GR_MPG_M
+                 WHERE USER_ID IN (P_USER_GROUP, P_USER_ID, P_CREATED_BY))  // AUTHUNION`)}⚠ 클라우드 QA·DEV 적용 대기.`},
+ {t:"④ 과거 잠금 (bucket×컬럼)", b:[], m:`기준주차/당월 이전 D_/W_/M_ 태그 비교 lock + 실적 회색.`, tb:`✅ evalDynCell(bucket×measure×division×past matrix) + GET_SPREAD_TITLE.`}]}
+];
+
+// ═══════════════════════ DMF0020 ═══════════════════════
+const TREE20 = [
+TREE03[0],
+{t:"공통 축 — Δ Site=BigFilter만 · 권한=AUTHORITY_YN", b:[AU("권한"),DIFF],
+ m:`검색 Sales Site 전 이벤트 = <b>BigFilter UserSiteByEndCustomer만</b>(GetSalesSite 함수 없음) — W 미제외·AS 미포함·NAME=ID. 편집권한 = <b>AUTHORITY_YN</b>: ${A(`DMF0020_GET_SCM_MST_FUTURE_PRICE L677:
+CASE WHEN FN_GET_DEPT_LIST(P_CREATED_BY, PJT.DEPT_ID)='Y' OR V_GROUP_ID='ADMIN'
+     THEN 'Y' ELSE 'N' END AS AUTHORITY_YN
+V_GROUP_ID: L183~192 lookup GET_ADMIN_GROUP(SEGMENT2='ALL')
+  AND (SEGMENT1 = P_USERINFO OR SEGMENT1 = P_CREATED_BY)`)}`,
+ tb:`Site=COMBO : <code>SiteByEndCustomer</code> 계열(BigFilter 계보 정합 — AS 미포함 유지). 권한=SP AUTHORITY_YN 유지.<br>✅ 2026-08-05 등록 완료: ①AUTHUNION 확장(GET·SAVE_PRICE_POPUP — USER_ID IN (P_USERINFO,P_CREATED_BY) 보유그룹 합집합) ②COMBO : <code>SalesFuturePriceEditableDivision</code> 등록. ⏸lookup DMF0020 ATTRIBUTE1 전부 'N'(82 행 없음) — 편집 개방은 정책값 지정(데이터 결정) 대기`},
+{t:"§1 조회조건 13필드", b:[], c:[
+ {t:"1. Division (다중)", b:[EV("초기/변경"),OK],
+  m:`BigFilter MyDivision. 변경(L2465~2601): ${A(`SetChangeControl("UserTeamByDivision", sDivision)
+81/82: SetChangeControl("EndCustomerByDivision", sDivision, sTeam) + BizType 직접 SP 재조회
+  81: SetChangeControl("UserPlantSiteByEndCustomer", div, "", clbEndCustomer)
+  82: checkInvalidExec 활성 / PlantSite 비활성+clear
+40  : EndCustomerByDivision(div, clbTeam) / Project·PlantSite·InvalidExec 비활성
+공통: SetChangeControl("UserSiteByEndCustomer", div, "", sEndCustomer)
+     txtOwner/umltProject/umltModel clear · 81만 btnExcelUpload/btnTemplate 표시`)}<b>Δ Excel 버튼 81 전용.</b>`,
+  tb:`✅ COMBO : <code>MyDivision</code>(DivisionField) + reset + 81 전용 업로드 버튼.`},
+ {t:"2. Team", b:[EV("변경"),OK], m:`L3655~3680: EndCustomerByDivision(81·82=sTeam/40=clbTeam.ControlValues) → UserSiteByEndCustomer(div,"",sEndCustomer).`, tb:`✅ COMBO : <code>TeambyDivision</code>(TeamField 기본) + reset.`},
+ {t:"3. End Customer", b:[EV("변경"),OK], m:`L3539~3545: <code>SetChangeControl("UserSiteByEndCustomer", clbDivisions, "", clbEndCustomer)</code>.`, tb:`✅ COMBO : <code>EndCustomer</code>(EndCustomerField 기본).`},
+ {t:"4. Sales Site", b:[DIFF,OK], m:`<b>Δ 전 이벤트 BigFilter UserSiteByEndCustomer</b>(L2562/3543/3678) — UP_FX 미사용. ${BF_ARG}`, tb:`✅ <b>검색</b> COMBO : <code>SalesSite</code>(SalesSiteField 기본 — comboId 미전달 실측, DIVISION_ID/DEPT_ID/PROJECT_CODE 반환) — FILTER : DIVISION_ID=division. <b>셀</b> COMBO : <code>SiteByEndCustomer</code>(별도 — §2 참조). W 미제외·AS 미포함 = AS-IS 계보 정합.`},
+ {t:"5. Biz Type", b:[OK,DIFF], m:`BigFilter BizType + 81/82 시 ${A(`FoxDataRequest("SCM.SCM0001_GET_BIZ_TYPE_BY_DIVISION") p_division_id=division`)}재조회(L2499 — Δ 이중 원천).`, tb:`✅ COMBO : <code>BizType</code>(BizTypeField 기본).`},
+ {t:"6. Sender Code", b:[UNUSED], m:`조회조건 없음.`, tb:`— 구현 불요.`},
+ {t:"7. Period", b:[OK], m:`PR_GET_DAY_RANGE(drpDateTime — p_created_by/p_month).`, tb:`✅ PeriodField(FE 계산 — SQL_ID 없음).`},
+ {t:"8. Bucket", b:[OK], m:`DMF0003_GET_BUCKET_TYPE_CODE(공용, L3810).`, tb:`✅ COMBO : <code>BucketType</code>(BucketField).`},
+ {t:"9. Project", b:[B81,B82,OK], m:`umltProject — 81/82만(40 비활성 layoutControlItem6, L2544~2547)·Division 변경 clear.`, tb:`✅ payload + disable.`},
+ {t:"10. Model/Nickname", b:[B81,B82,OK], m:`umltModel — 81/82만·Division 변경 clear.`, tb:`✅ ItemField.`},
+ {t:"11. Plant Site", b:[B81,OK], m:`81만 UserPlantSiteByEndCustomer(L2514) · 82 비활성+clear(L2519~2523) · 40 비활성.`, tb:`✅ COMBO : <code>PlantSitebyEndCustomer</code>(PlantSiteField, 81 전용).`},
+ {t:"12. Item Type", b:[UNUSED], m:`조회조건 없음.`, tb:`— 구현 불요.`},
+ {t:"13. Owner", b:[OK], m:`txtOwner — Division 변경 clear(L2572).`, tb:`✅ payload(OwnerField — SQL_ID 없음).`},
+ {t:"+ InvalidExec(82)·usrDiscard(폐기 포함)", b:[DIFF,OK], m:`checkInvalidExec 82만 활성 / <b>usrDiscard(L3829) — Δ 0020 고유(폐기 포함 조회 토글)</b>.`, tb:`✅ invalidYn + discard 체크(SalesFuturePriceForm/types 구현).`}]},
+{t:"§2 GRID INSERT — 셀 cascade (ComboSelChange L2603~3110)", b:[EV("셀")], c:[
+ {t:"DIVISION_ID 셀 변경 → DEPT(비Auth Δ)/CUSTOMER(Auth)/SITE(Auth)/PLANT + 광범위 clear", b:[DIFF,AU("권한")],
+  m:`L2612~2680: ${A(`DEPT    = Data.UserTeamByDivision(NowGroupID, UserId, sDivision)   // Δ 비Auth판!
+CUSTOMER= Data.UserEndCustomerByDivisionDeptAuth(NowGroupID, UserId, sDivision, sTeam)
+CUST40  = Data.Common(EndCustomerByDivision40, sDivision, clbTeam, NowGroupID, UserId)
+SITE    = Data.UserSiteByEndCustomerAuth(NowGroupID, UserId, sDivision, sEndCustomer)
+PLANT   : 81만 unlock (L2660~2663)
+clear   : DEPT/END_CUSTOMER/SCM_SITE/PROJECT_CODE/PROJECT_NAME/ITEM_ID/ITEM_CLASS (SetText2)`)}`,
+  tb:`✅ COMBO(셀 배선) : 'Sales Price' 시트(IM/IO) — ${A(`DEPT_ID='TeambyDivision'(비Auth 유지=AS-IS 정합) END_CUSTOMER='EndCustomerByDivisionDept'
+END_CUSTOMER40='EndCustomerByDivision40' SCM_SITE_ID='SiteByEndCustomer'
+PLANT_SITE_ID='FromSiteByDivision' + GRID_CASCADE_FILTERS/CLEAR (hook #59 — Grid L539~)`)}`},
+ {t:"DEPT_ID 셀 변경 → Customer(Auth/40) → Site(Auth) + clear", b:[],
+  m:`L2681~2718: 81/82=UserEndCustomerByDivisionDeptAuth(…,행 DEPT) / 40=EndCustomerByDivision40 → UserSiteByEndCustomerAuth + END_CUSTOMER/SITE/PROJECT/ITEM clear.`,
+  tb:`✅ cascade+clear 구현(GRID_CASCADE_*).`},
+ {t:"END_CUSTOMER 셀 변경 → Site(Auth)+clear / END_CUSTOMER40 → Site(기본판)", b:[],
+  m:`L2719~2758: Site=UserSiteByEndCustomerAuth(…,행 Customer) + SITE/PROJECT/ITEM clear / 40측: UserSiteByEndCustomer.`,
+  tb:`✅ cascade+clear 구현.`},
+ {t:"SCM_SITE_ID 셀 변경 → PROJECT/ITEM clear", b:[DIFF],
+  m:`L2738~2748: PROJECT_CODE/PROJECT_NAME/ITEM_ID/ITEM_CLASS_NAME SetText2("") — Δ Incoterms/Measure 재구성 없음(0003과 상이).`,
+  tb:`✅ clear 구현.`},
+ {t:"INCOTERMS/FcstType/DomExp/CURRENCY 빈값 → 포커스행(sTempRow) 값 복제", b:[DIFF,NO],
+  m:`L2761~2780: 해당 셀 값이 ""이면 <code>siMain.GetValue(sTempRow, 해당컬럼)</code> 복제 — <b>Δ 0020 고유</b>.`,
+  tb:`<span class="miss">❌ 미구현</span> — TO-BE 는 신규행 기본값/콤보 선택 방식(포커스행 복제 없음). AS-IS 정합 필요 시 cellEditEnded 빈값 가드로 이식 가능(구현 여부 결정 필요).`},
+ {t:"PROJECT_CODE/ITEM_ID 셀 (팝업)", b:[],
+  m:`L3080/3089: SCM0002 Project 팝업 / Item 팝업 — 행 컨텍스트 전달(0003 동일 계열).`,
+  tb:`✅ ProjectByDivisionModal/ItemByDivisionModal(공용 — preSearchParams 행 컨텍스트).`},
+ {t:"CURRENCY 셀 클릭 — 기존행 변경 금지 (MSG00447)", b:[DIFF,OK],
+  m:`L3686~3691: Action≠'I' 행에서 CURRENCY 클릭 시 MSG00447 — <b>Δ 0020 고유</b>.`,
+  tb:`✅ 구현: SalesFuturePriceGrid L575 + useSalesFuturePriceValidation L175~178(MSG00447 — Currency 가드).`},
+ {t:"Raw_CellClick — PlantSiteByItem 콤보", b:[DIFF,NO],
+  m:`L3698~3713: PlantSite 셀 클릭 시 ${A(`Data.Common(PlantSiteByItem, "", sDivision, sProject, sItem)`)}(원소스 일부 주석 — [C20200525-000296]).`,
+  tb:`<span class="miss">❌ 미구현</span> — PlantSiteByItem 콤보 재구성 없음(현행 FromSiteByDivision 고정). AS-IS 자체도 부분 주석 — 필요 시 결정.`}]},
+{t:"§2 GRID UPDATE — 편집 게이트", b:[AU("권한")], c:[
+ {t:"① 40 편집 금지 (DM_UI_EDITABLE_DIVISION)", b:[B40,NO],
+  m:`lookup ('DMF0020','40') 등재 — AS-IS 기준 40 금지·81/82 가능.`,
+  tb:`✅ COMBO : <code>SalesFuturePriceEditableDivision</code> 등록 완료(2026-08-05 — MktFcstEditableDivision 동일 패턴). ⏸현 lookup 데이터로는 편집 division 0(정책값 지정 대기). 규약: ${A(`SELECT SEGMENT2 FROM lookup WHERE LOOKUP_TYPE='DM_UI_EDITABLE_DIVISION'
+ AND SEGMENT1='DMF0020' AND ATTRIBUTE1='Y'
+⚠ 현재 lookup: 40:N/81:N (82 행 없음) — ATTRIBUTE1 정책값 결정 필요(데이터 사항)`)}`},
+ {t:"② 행 AUTHORITY_YN (부서 매칭 OR ADMIN) — Δ 고유 축", b:[DIFF,GAP],
+  m:`${A(`DMF0020_GET_SCM_MST_FUTURE_PRICE
+P_USERINFO=NowGroupID / P_CREATED_BY=UserId
+L183~192: GET_ADMIN_GROUP(SEGMENT2='ALL') AND (SEGMENT1=P_USERINFO OR SEGMENT1=P_CREATED_BY)
+  → V_GROUP_ID='ADMIN'
+L677: FN_GET_DEPT_LIST(P_CREATED_BY, PJT.DEPT_ID)='Y' OR V_GROUP_ID='ADMIN' → AUTHORITY_YN`)}SAVE_PRICE_POPUP L49~59: 동일 lookup <code>AND SEGMENT1 = p_userinfo</code>(단일).`,
+  tb:`✅ SP AUTHORITY_YN 소비(FE 행 게이트) + <b>AUTHUNION 확장 완료</b>(2026-08-05): GET·POPUP 양쪽 <code>OR SEGMENT1 IN (SELECT USER_GR_ID FROM USER_GR_MPG_M WHERE USER_ID IN (P_USERINFO, P_CREATED_BY) AND USE_YN='Y')</code> — VALID·마커 1·시뮬(wonqthanq/minyonglee1=ADMIN 판정) 검증. ⚠클라우드 QA·DEV 적용 대기.`},
+ {t:"③ LOC(단가) 행 + 과거 잠금", b:[], m:`단가 계열 행 편집 + 과거일 lock.`, tb:`✅ isNonEditableCell 계열 + past-lock.`}]}
+];
+
+// ═══════════════════════ DMF0021 ═══════════════════════
+const TREE21 = [
+TREE03[0],
+{t:"공통 축 — Δ Site=BigFilter만 · ITEM=lookup 콤보 · 조회 SP 17 ARG", b:[AU("권한"),DIFF],
+ m:`검색 Site 전 이벤트=BigFilter. 조회 SP 전체 ARG(L1553~1573): ${A(`DMF0021_GET_DM_PLN_SALES_PLAN_DATAEx
+p_division_id/p_dept_id/p_end_customer/p_scm_site_id/p_project_code/p_item_id/p_item_type
+p_from_yyyymmdd/p_now_yyyymmdd/p_to_yyyymmdd/p_created_by=UserId/p_plant_site_id/p_biztype
+p_userinfo=NowGroupID/p_owner/p_internal_yn=InternalYN?'Y':'N'/p_bucket
+p_user_dept_id=UserInfoContext["Dept_ID"]  // ⚠ AS-IS SP도 선언만·사용 0 (실측)`)}`,
+ tb:`권한 COMBO : <code>SalesPlanUserAuthGroup</code>(@sesUserId — 보유그룹×GET_ADMIN_GROUP_MEASURE 교집합 ADMIN 우선 1행→store authGroup) + PKG_DMF0021 AUTHUNION 3곳+PLANTNORM 적용 완료.<br><span class="miss">잔여</span>: p_user_dept_id=AS-IS도 미사용 → <b>미구현이 정합(종결)</b> / 🔶 SalesPlanUserDept CMBO 미등재 / 🔶 82×RTF_SYS_RP lookup 의도 확인.`},
+{t:"§1 조회조건 13필드", b:[], c:[
+ {t:"1. Division (다중)", b:[EV("초기/변경"),OK],
+  m:`변경(L5136~5254): ${A(`SetChangeControl("UserTeamByDivision", sDivision)
+40 : BizType/EndCustomerByDivision(div, clbTeam) + Project·PlantSite 비활성·clear
+else: BizType/EndCustomerByDivision(div, sTeam) + Project·PlantSite 활성
+공통: UserSiteByEndCustomer(div,"",sEndCustomer)
+     + PlantSite = UserPlantSiteByDivision(div)   // Δ division 기반!
+     + txtProject/txtItemId/txtOwner clear`)}`,
+  tb:`✅ COMBO : <code>MyDivision</code>(DivisionField) + reset.`},
+ {t:"2. Team", b:[EV("변경"),OK],
+  m:`L5338~5388: EndCustomerByDivision → UserSiteByEndCustomer — ${A(`81/82: SetChangeControl("UserSiteByEndCustomer", div, "", sEndCustomer)   // 팀 미전달
+40   : SetChangeControl("UserSiteByEndCustomer", div, clbTeam, clbCustomer) // 팀 전달`)}`,
+  tb:`✅ COMBO : <code>TeambyDivision</code>(TeamField 기본) + reset.`},
+ {t:"3. End Customer", b:[EV("변경"),OK], m:`L5125~5134: UserSiteByEndCustomer(div,"",clbCustomer).`, tb:`✅ COMBO : <code>EndCustomer</code>(비40) + <code>EndCustomerByDivision40</code>(40 — SalesPlanForm filters 실측).`},
+ {t:"4. Sales Site", b:[DIFF,OK], m:`<b>Δ 전 이벤트 BigFilter UserSiteByEndCustomer</b>(L504/5130/5220/5367/5383).`, tb:`✅ comboContext: ${A(`{comboId:'SiteByEndCustomer', divisionId, deptId, endCustomer}  // 서버 바인드`)}`},
+ {t:"5. Biz Type", b:[OK], m:`BigFilter BizType(L452/474/5167/5189).`, tb:`✅ COMBO : <code>BizTypeByDivision</code> + 40 스왑 <code>DmBizType</code>(SalesPlanForm filters 실측).`},
+ {t:"6. Sender Code", b:[UNUSED], m:`조회조건 없음.`, tb:`— 구현 불요.`},
+ {t:"7. Period", b:[OK], m:`PR_GET_DAY_RANGE(L518/3411).`, tb:`✅ PeriodField(FE 계산 — SQL_ID 없음).`},
+ {t:"8. Bucket", b:[OK], m:`DMF0003_GET_BUCKET_TYPE_CODE + chkColor/chkSum.`, tb:`✅ COMBO : <code>BucketType</code> + Sum.`},
+ {t:"9. Project", b:[B81,B82,OK], m:`81/82만: btnProject → ${A(`SCM0002_ProjectbyDivisionPopupEx.Form_Load(false,
+  sDivision, clbTeam, clbCustomer, clbSalesSite, txtProject)  // L3530~3540`)}40 비활성+clear.`, tb:`✅ ProjectByDivisionModal(검색) + payload.`},
+ {t:"10. Model/Nickname", b:[OK], m:`txtItemId 텍스트 — Division 변경 clear(L5238).`, tb:`✅ ItemField.`},
+ {t:"11. Plant Site", b:[DIFF,OK], m:`초기=UserPlantSiteByEndCustomer(L511) / Division 변경=UserPlantSiteByDivision(L5227) — Δ 이벤트별 원천 상이 · 40 비활성+clear.`, tb:`✅ COMBO : <code>PlantSitebyEndCustomer</code>(@divisionId/@endCustomer 서버 바인드 — SalesPlanForm filters 실측).`},
+ {t:"12. Item Type", b:[OK], m:`GetItemType() 콤보(L520).`, tb:`✅ COMBO : <code>ItemType</code>.`},
+ {t:"13. Owner", b:[OK], m:`txtOwner — Division 변경 clear(L5239).`, tb:`✅ payload.`},
+ {t:"+ InternalYN · 통화 표시 콤보 KRW/USD/LOC (Δ) · 사전 로드", b:[DIFF,OK],
+  m:`InternalYN(p_internal_yn) / cboKRW·cboUSD·cboLOC(L5444~5472 — 통화 표시 토글) / ${A(`dtITEM_ID  = Data.Common(SALES_PLAN_ITEM_ID, NowGroupID, UserId)   // GUBUN 컬럼 포함
+dtCurrency = Data.Common(CURRENCY_LIST, NowGroupID, UserId)
+dtMearsure = DMF0021_GET_SALES_PLAN_MEASUREINFO (파라미터 無)`)}`,
+  tb:`✅ payload internalYn + 통화 표시 토글 + MEASUREINFO/CurrencyList 대응(SalesPlanGrid 편집콤보 스왑).`}]},
+{t:"§2 GRID INSERT — 셀 cascade (ComboSelChange L4531~4860)", b:[EV("셀")], c:[
+ {t:"DIVISION_ID 셀 변경 → DEPT(Auth)/CUSTOMER(Auth·40)/SITE(Auth)/PLANT/ITEM(GUBUN) + clear", b:[AU("Auth판"),DIFF],
+  m:`L4541~4623: ${A(`DEPT    = Data.UserTeamByDivisionAuth(NowGroupID, UserId, sDivision)
+CUSTOMER= Data.UserEndCustomerByDivisionDeptAuth(NowGroupID, UserId, sDivision, sTeam)
+CUST40  = Data.Common(EndCustomerByDivision40, "", clbTeam, NowGroupID, UserId)
+SITE    = Data.UserSiteByEndCustomerAuth(NowGroupID, UserId, sDivision, sEndCustomer)
+PLANT   = Data.UserPlantSiteByDivision(NowGroupID, UserId, sDivision)  81만 unlock
+ITEM    = dtITEM_ID.Select("GUBUN='82|81|40'")   // Δ lookup 콤보 (팝업 아님)
+clear   : DEPT/CUSTOMER/SITE/PROJECT/PROJECT_NAME/ITEM/TEXT/ITEM_CLASS`)}`,
+  tb:`✅ SalesPlanGrid 구현(FE fallback _inputEditType — ⚠ corp SHEET meta 는 전 컬럼 'S' 미등재 상태): cascade dataMap 스왑 + clear 체인 + ITEM division 필터.`},
+ {t:"DEPT_ID 셀 분기 — 전체 주석 (미동작)", b:[DIFF,DEAD],
+  m:`L4624~4686: 본문 전체 주석 — <b>Δ 0021 고유(팀 셀 변경 cascade 없음)</b>.`,
+  tb:`✅ AS-IS 정합 = 미구현 유지(주석 상태 재현).`},
+ {t:"END_CUSTOMER 셀 변경 → Site(Auth)+ITEM(GUBUN)+clear", b:[],
+  m:`L4687~4721: Site=UserSiteByEndCustomerAuth(…,행 Customer) + ITEM GUBUN 콤보 + SITE/PROJECT/ITEM/TEXT clear.`,
+  tb:`✅ cascade+clear 구현.`},
+ {t:"END_CUSTOMER40 셀 변경 → Site(기본판)+ITEM(40: Measure≠'Catch_Up'만)", b:[B40,DIFF],
+  m:`L4723~4750: Site=UserSiteByEndCustomer + ITEM: 40은 <b>행 MEASURE≠'Catch_Up'일 때만</b> 재구성(Δ).`,
+  tb:`✅ Catch_Up 분기 구현(SalesPlanGrid — ITEM 모달 40+Catch_Up 전용/FCST_TYPE Catch_Up ETC 제외 필터).`},
+ {t:"SCM_SITE_ID 셀 변경 → ITEM(GUBUN·Catch_Up 예외)+clear", b:[],
+  m:`L4751~4783: ITEM GUBUN 콤보(40 Catch_Up 예외) + PROJECT/ITEM/TEXT clear.`,
+  tb:`✅ 구현.`},
+ {t:"ITEM_ID 셀 변경 → ITEM_CLASS_NAME 자동 + CELL_PROD_SITE_ID 재구성", b:[],
+  m:`L4784~4813: ${A(`dtITEM_ID.Select("CODE='"+모델+"'") → NAME을 ITEM_CLASS_NAME 세팅
+CELL_PROD_SITE = Data.Common(CELL_PROD_SITE_ID, sDivision, sItemID, "", "", "")`)}`,
+  tb:`✅ 구현(SalesPlanGrid L838: rec.ITEM_CLASS_NAME=selected.ITEM_CLASS_NAME + CELL_PROD 콤보).`},
+ {t:"MEASURE 셀 변경 → 편집 시작 컬럼 재계산(당월 포함)", b:[],
+  m:`L4815~4860: i_EditStartCol = MEASURE+1 → M_ 태그면 당월(this_YYYYMM) 포함 시작.`,
+  tb:`✅ 편집콤보 스왑(MEASURE=measureInfo SP) + R6 Catch_Up↔SalesAmt_LOC 전환 + editLock 실시간 참조.`},
+ {t:"페이스트 → ITEM_ID: CELL_PROD_SITE_ID 재구성", b:[EV("Paste")],
+  m:`L5617~5641(활성본): ITEM_ID 셀 페이스트 시 CELL_PROD_SITE_ID 콤보 재구성. (L330 구본 병존.)`,
+  tb:`✅ 대응(편집진입 시 동일 판정).`}]},
+{t:"§2 GRID UPDATE — 편집 게이트 (EditButton L688~)", b:[AU("권한")], c:[
+ {t:"① 필수 컬럼 division별 상이 (Δ)", b:[DIFF],
+  m:`L710~742: 공통 DIVISION/SCM_SITE/ITEM/DomExp/FcstType/INCOTERMS/MEASURE/CURRENCY + ${A(`40: END_CUSTOMER40 · DEPT_ID(MSG00429 "Team") · CELL_PROD_SITE_ID
+81: PROJECT_CODE · TEXT · FromSiteId · PLANT_SITE_ID
+비40: END_CUSTOMER`)}`,
+  tb:`✅ 필수셋 검증 구현(division별 — SalesPlan validation).`},
+ {t:"② Weekly/Monthly 버킷만 편집 (Δ) + 40=당월부터", b:[DIFF],
+  m:`L745: W/M 만 SwitchLock 진행(Daily 편집 불가 — Δ). 40: M_ 태그 당월(this_YYYYMM)부터 list_EDIT_Month(L772~777).`,
+  tb:`✅ 버킷·당월 시작 편집 lock 구현.`},
+ {t:"③ 측정 권한 (MEASUREINFO + p_userinfo)", b:[AU("그룹")],
+  m:`${A(`DMF0021_GET_SALES_PLAN_MEASUREINFO / MEASUREINFO2 (파라미터 無)
+행 EDIT_FLAG: 조회 SP p_userinfo=NowGroupID → GET_ADMIN_GROUP_MEASURE 판정`)}`,
+  tb:`✅ PKG_DMF0021 AUTHUNION 3곳: ${A(`SEGMENT1=p_userinfo OR SEGMENT1 IN (SELECT USER_GR_ID FROM USER_GR_MPG_M
+ WHERE USER_ID IN (p_userinfo, p_created_by))  // userId 직전달도 동일 판정`)}+ PLANTNORM(RTF_SYS_RP 중복 133→17 해소). ⚠ 클라우드 미적용.`}]}
+];
+
+// ═══════════════════════ DMF0082 ═══════════════════════
+const TREE82 = [
+TREE03[0],
+{t:"⭐ 구조 — AS-IS Division='40' 고정", b:[B40,DIFF],
+ m:`InitControls L341~343: <code>dtDivision.Select("CODE = '40'")</code> 고정 · clbDivision 핸들러 L3039~3041 <b>빈 함수</b> · 81/82 분기=도달 불가 잔재. ${A(`GetSalesSite PARAM5 = ""   // Δ 0003과 달리 W/S 분기 없음 (cboAS 주석)`)}`,
+ tb:`<b>TO-BE 확장(확정 사양)</b>: DivisionField 40/81/82 — 82=81 동일 경로(PKG <code>v_is_81</code> 1지점이 19분기 지배)·Div81/40 테이블 분기(81 END_CUSTOMER=PROJECT_CODE)·division-반응형 정적컬럼. 81/82 구현 참조=본 40 Flow+DMF0003 문서.`},
+{t:"§1 조회조건 13필드", b:[], c:[
+ {t:"1. Division — 40 고정", b:[B40,EV("초기"),OK,DIFF], m:`BigFilter MyDivision → <code>Select("CODE='40'")</code>(L342). cascade 없음.`, tb:`✅(확장) COMBO : <code>MyDivision</code>(DivisionField 40/81/82) + reset(ForecastPriceForm L42~50).`},
+ {t:"2. Team", b:[EV("초기/변경"),OK], m:`초기 L347. Team 변경(L3043~3061): ${A(`SetChangeControl("EndCustomerByDivision", sDivision, clbTeam.ControlValues)
+SetChangeControl("UserSiteByEndCustomer", sDivision, clbTeam, clbCustomer)`)}`, tb:`✅ COMBO : <code>TeambyDivision</code>(TeamField 기본) + reset.`},
+ {t:"3. End Customer (=PROJECT 명)", b:[B40,EV("초기/Team 변경"),OK],
+  m:`BigFilter EndCustomerByDivision — 40 원천=lookup END_CUSTOMER(SEGMENT1='40', SEGMENT2≠'-').`,
+  tb:`✅ COMBO : <code>EndCustomer</code>(인라인 CustomDropdown): ${A(`filters:['BucketType','EndCustomer']
+FILTER : DIVISION_ID=divisionId / DEPT_ID∈deptIds  // ForecastPriceForm L62~88`)}`},
+ {t:"4. Sales Site (3원천)", b:[OK], m:`하위 3노드 ARG 참조.`, tb:`✅ <b>검색</b> COMBO : <code>SalesSite</code>(SalesSiteField 기본 — comboId 미전달 실측) — FILTER : DIVISION_ID=division. <b>셀 표시</b> COMBO : <code>SiteByEndCustomer</code>(FcstNPrice 시트).`, c:[
+   {t:"초기 로드 → BigFilter(AS-IS) ScmSitebyEndCustomer40", b:[EV("초기")], m:`L364: <code>SetChangeControl("ScmSitebyEndCustomer40")</code> — 전체 40 SALES·NAME=SITE_DESCRIPTION·W 포함.`, tb:`✅ COMBO : <code>ScmSitebyEndCustomer40</code> (0003 스왑 패턴 참조).`},
+   {t:"Team 변경 → BigFilter(AS-IS) UserSiteByEndCustomer", b:[EV("이벤트")], m:`L3058: Filter div/팀/customer — 40이라 팀 필터 유효.`, tb:`✅ COMBO : <code>UserSiteByEndCustomer</code> — FILTER : @deptId(팀).`},
+   {t:"Customer 변경 → UP_FX_DM(AS-IS) SiteByEndCustomer40", b:[EV("이벤트"),AU("D")],
+    m:`L3063~3073(항상 else 분기): ${A(`GetSalesSite40: CODE='SiteByEndCustomer40'
+PARAM1=clbTeam PARAM2=clbCustomer(=PROJECT) PARAM3=NowGroupID PARAM4=UserId PARAM5=""`)}(81/82 GetSalesSite 분기=도달 불가 잔재).`,
+    tb:`✅ COMBO : <code>UserSiteByEndCustomer</code> (40 브랜치 — @deptId=팀 / @endCustomer=PROJECT).`}]},
+ {t:"5. Biz Type", b:[OK,DIFF], m:`초기 L356 BigFilter BizType. 그리드 Division 셀 잔재=SCM0001 직접 SP(L3086 — Δ).`, tb:`✅ COMBO : <code>BizType</code>(BizTypeField 기본).`},
+ {t:"6. Sender Code", b:[UNUSED], m:`조회조건 없음(FindData 11파라미터에 부재).`, tb:`— 구현 불요.`},
+ {t:"7. Period (6개월)", b:[OK], m:`${A(`PR_GET_DAY_RANGE p_created_by=UserId p_month=6`)}조회 시 3년 검증(MSG00164, L1699).`, tb:`✅ PeriodField + 검증.`},
+ {t:"8. Bucket (Weekly 기본)", b:[OK],
+  m:`공용 BUCKET_TYPE_CODE·기본 Weekly(L399). 조회 후 ${A(`Data.Common(DefaultBucketDay, sDivision, cboBucketType.ControlValues)
+→ lookup DEFAULT_BUCKET_DAY (실값 40: MONTHLY=MON / WEEKLY=MON·4)`)}`,
+  tb:`✅ COMBO : <code>BucketType</code>(인라인 3버킷) + <code>@shared/bucket-distribution</code>(lookup 은 PKG 내부 사용).`},
+ {t:"9. Project", b:[UNUSED], m:`검색·그리드 없음(Customer=PROJECT 명 대체).`, tb:`— 구현 불요.`},
+ {t:"10. Model/Nickname (Item 텍스트)", b:[OK], m:`txtItemId — 조회 SP p_item_id.`, tb:`✅ ItemField.`},
+ {t:"11. Plant Site", b:[UNUSED], m:`검색 미사용(그리드 lock 잔재만).`, tb:`— (Save All 팝업 PLANT=FromSiteByDivision 별도).`},
+ {t:"12. Item Type", b:[UNUSED], m:`검색 미사용.`, tb:`— 그리드 표시 dataMap ItemType.`},
+ {t:"13. Owner", b:[UNUSED], m:`검색 미사용.`, tb:`— 구현 불요.`},
+ {t:"+ Version·Qty·Sum + 조회 SP 11 ARG", b:[OK],
+  m:`Version='Current' 기본(미선택 차단 MSG00283·<b>Current만 편집</b>) / cboQty / chkSum(L9046). ${A(`DMF0082_GET_MAIN_DATA (L1727~1738)
+p_division_id/p_team_id/p_customer/p_biz_type/p_from·to_yyyymmdd/p_scm_site_id
+p_item_id/p_version_type=txtVersion/p_qty_yn=cboQty?'Y':'N'
+p_created_by=UserId/p_user_group=NowGroupID`)}`,
+  tb:`✅ VersionField+Current 게이트 / payload qtyYn·sumYn / useTabProcQuery(filters 참조 동일성 — 인라인 객체 금지).`}]},
+{t:"§2 GRID INSERT — 신규행 초기 콤보 (L2555~2631) + 셀 cascade (L8201~8373)", b:[B40,EV("셀")], c:[
+ {t:"INSERT 초기: FcstType (W/S 그룹 분기)", b:[AU("W/S")],
+  m:`${A(`GetFcstType(): UP_FX_DM CODE='FCST_TYPE' PARAM1=NowGroupID
+PARAM1='DM Planner (W/S)' → SALES_TYPE_CODE2∪ADD 6종 {WS,WSF,AS,ASF,Recall,RMA}
+그 외 → SALES_TYPE_CODE 14종`)}`,
+  tb:`✅ 표시 콤보: 시트=<code>FCST_TYPE_NOT_ETC</code> / Save All=<code>FCST_TYPE_NOT_FREE</code>. W/S membership=그룹 CMBO.`},
+ {t:"INSERT 초기: Measure (FCST_PRICE_EDIT_MEASURE)", b:[],
+  m:`${A(`GetLookupValues("FCST_PRICE_EDIT_MEASURE","DMF0082",sDivision,sScmSiteID,cboBucketType,"")
+→ DM_UI_EDITABLE_MEASURE: SEGMENT1='DMF0082' AND ATTRIBUTE1='Y'(INSERT)
+  + VMI 분기(ATTRIBUTE3='Y'는 SITE.VMI_YN='Y'만) + Daily면 LOC 제외
+실값 40: MKT_FCST(Y)/SCM_FCST(N)/LOC(Y)/VMI_In_Req(Y·VMI만)`)}`,
+  tb:`✅ lookup 동일 + PKG drop3(O_RC4) AUTH_MEASURES{MKT_FCST,SCM_FCST,LOC,VMI_In_Req} / 표시 dataMap=<code>Measure</code>.`},
+ {t:"INSERT 초기: Customer/Site/Incoterms/CELL_PROD/CURRENCY + 포커스행 복사", b:[],
+  m:`${A(`Customer = EndCustomerByDivision40("", sTeam, NowGroupID, UserId)
+Site     = Data.UserSiteByEndCustomer(NowGroupID, UserId, sDivision, sEndCustomer) // 기본판
+Incoterms= GetLookupValues("INCOTERMS","ALL","Y","","","")  // 과거코드 제외
+CELL_PROD= Data.Common(CELL_PROD_SITE_ID, sDivision, sItemID)  // '-' + CELL PLANT
+CURRENCY = Data.Common(CURRENCY_LIST, NowGroupID, UserId)      // 10종
+bFocusYN : 포커스행 Division/Customer/Site/Item/Incoterms/FcstType/DomExp 복사`)}`,
+  tb:`<b>구조 재배치</b>: 시트 전 컬럼 'S' — 신규 등록=<b>Save All 팝업</b> — COMBO(팝업 배선) : 'Sales Price Save All' 시트 ${A(`DIVISION_ID='Division' DEPT_ID='DeptId' END_CUSTOMER='EndCustomerByDivisionDept'
+END_CUSTOMER40='EndCustomerByDivision40' SCM_SITE_ID='SiteByEndCustomer'
+BIZ_TYPE_NAME='BizTypeByDivision' FCST_TYPE='FCST_TYPE_NOT_FREE'
+INCOTERMS='Incoterms' CURRENCY='CurrencyList' PLANT_SITE_ID='FromSiteByDivision'`)}(AS-IS 셀 Insert 체인 자체는 ❌ 미이식 — Save All 재배치, 사용자 확정 운용)`},
+ {t:"셀: ScmSiteId/Incoterms 변경 → BUCKET 자동 세팅 (Δ 고유)", b:[DIFF],
+  m:`L8297~8342: ${A(`GetLookupValues("SALES_BUCKET", sDivision, sScmSiteID, sIncoterms, "", "")
+→ DM_MST_BUCKET_CONVERSION 요일 7자리(SUN~SAT, 예 0111110) PIVOT — 무데이터 ''
++ Measure = FCST_PRICE_EDIT_MEASURE 재구성`)}`,
+  tb:`✅ BUCKET 산출=PKG_DMF0082 내부(bucket-distribution 태그 원문 SUBSTR 규약) — FE 세팅 불요.`},
+ {t:"셀: Team/Customer 변경 → Customer/Site 재구성", b:[],
+  m:`L8266~8296: EndCustomerByDivision40(팀) → UserSiteByEndCustomer(기본판).`,
+  tb:`✅ 표시 dataMap: DeptId/EndCustomerByDivision40/SiteByEndCustomer (측정값 편집 구조 — 키 셀 편집 없음).`},
+ {t:"셀: Measure model reset — 전체 주석 (미적용 Δ) / Division 셀 — 도달 불가", b:[DIFF,DEAD],
+  m:`L8347~8370 주석(0003과 달리 model clear 미적용) / L8211~8264 Division 셀=도달 불가 잔재.`,
+  tb:`✅ AS-IS 정합=미적용 유지.`},
+ {t:"페이스트 (L7864~8201)", b:[EV("Paste")],
+  m:`M/I 행 && 노란(UnLock) 셀만. ${A(`Site  → Measure(FCST_PRICE_EDIT_MEASURE) + Incoterms(GetIncotermsType=AS_INCOTERMS)
+Item/CellProd → CELL_PROD_SITE_ID(div, item) 재구성
+Measure → 편집 measure 재구성 / 1행 복사→다행: 첫 행 키 복제`)}`,
+  tb:`✅ 측정값 편집 페이스트(isNonEditableCell 게이트 통과분만) — 키 셀 체계는 Save All 재배치.`}]},
+{t:"§2 GRID UPDATE — 편집 게이트 (활성 EditButton L1531~1610)", b:[AU("권한")], c:[
+ {t:"① Version='Current'만 (isCurVersion)", b:[], m:`L1534 — Current 외 편집 진입 차단.`, tb:`✅ VersionField 게이트.`},
+ {t:"② 조회 후 + 필수 9컬럼(40) 표시", b:[B40], m:`dtWeek 無=MSG00259 / Division·Customer·Site·Item·DomExp·FcstType·Incoterms·Measure·CELL_PROD_SITE_ID 미표시=MSG00113(L1543~1554).`, tb:`✅ (MSG00113 계보=SHEET_COLUMNS VISIBLE 정합 이력).`},
+ {t:"③ 과거 잠금 + 실적 회색(당월 흰색)", b:[], m:`Measure 이전 전체 lock → 실적일/당월 이전 D_/W_/M_ lock + Gainsboro(this_YYYYMM=White, L1588~1600).`, tb:`✅ isNonEditableCell past-lock + Backcolor 3색(hook #95).`},
+ {t:"④ Monthly×40: M+4 규칙 (Δ 고유)", b:[B40,DIFF],
+  m:`[PJ2025-50188] L1142~1153: MKT_FCST/SCM_FCST/VMI_In_Req=<b>M+4부터</b>(M~M+3 lock, 기준=dtWeek.MONTH_NAME) / LOC=당월(M)부터.`,
+  tb:`✅ PKG 기준월 반환 × FE 잠금 matrix(M+4/기준주차).`},
+ {t:"⑤ 행 EDIT_FLAG · measure 편집권 (서버)", b:[AU("그룹")],
+  m:`${A(`DMF0082_GET_MAIN_DATA p_user_group=NowGroupID / p_created_by=UserId
+→ GET_ADMIN_GROUP_MEASURE lookup — AUTH_MEASURES{MKT_FCST,SCM_FCST,LOC,VMI_In_Req}`)}`,
+  tb:`✅ ${A(`COMBO : 'FcstPriceUserAuthGroup'(@sesUserId) → store authGroup → p_user_group
+PKG_DMF0082 AUTHUNION 5곳: SEGMENT1=전달값 OR SEGMENT1 IN
+  (SELECT USER_GR_ID FROM USER_GR_MPG_M WHERE USER_ID IN (전달값, p_created_by))
+FE: isNonEditableCell = EDIT_FLAG × editableMeasures(drop3 O_RC4) × bucket × M+4`)}⚠ 클라우드 QA·DEV 미적용.`}]}
+];
+
+// ── 렌더러
+let cur='03', selEl=null;
+const TREES={ '03':TREE03, '20':TREE20, '21':TREE21, '82':TREE82 };
+function badge(b){return `<span class="chip ${b[1]}">${b[0]}</span>`;}
+function render(){
+  const data = TREES[cur];
+  const root = document.getElementById('tree');
+  root.innerHTML='';
+  const mk=(nodes,parent,depth)=>{
+    nodes.forEach(n=>{
+      const div=document.createElement('div'); div.className='node'+(depth===0?' sec':'');
+      const row=document.createElement('div'); row.className='row';
+      const kids=(n.c&&n.c.length)?n.c:null;
+      const tg=document.createElement('span'); tg.className='tg'+(kids?'':' leaf'); tg.textContent=kids?'−':'';
+      const lbl=document.createElement('span'); lbl.className='lbl';
+      lbl.innerHTML=`<span class="tt">${n.t}</span>`+(n.b||[]).map(badge).join('');
+      row.appendChild(tg); row.appendChild(lbl); div.appendChild(row);
+      let kbox=null;
+      if(kids){ kbox=document.createElement('div'); kbox.className='kids'; mk(kids,kbox,depth+1); div.appendChild(kbox); }
+      tg.onclick=(e)=>{ e.stopPropagation(); if(!kbox)return; kbox.classList.toggle('hide'); tg.textContent=kbox.classList.contains('hide')?'+':'−'; };
+      row.onclick=()=>{ if(selEl)selEl.classList.remove('sel'); row.classList.add('sel'); selEl=row; showDetail(n); };
+      n._row=row; n._kbox=kbox; n._tg=tg;
+      parent.appendChild(div);
+    });
+  };
+  mk(data,root,0);
+}
+function showDetail(n){
+  const head=`<div style="font-weight:bold;margin-bottom:6px">${n.t} ${(n.b||[]).map(badge).join('')}</div>`;
+  document.getElementById('mAsis').innerHTML = head + (n.m||'<span class="dim">(하위 노드를 펼쳐 세부 케이스를 확인하세요)</span>');
+  document.getElementById('mTobe').innerHTML = head + (n.tb||'<span class="dim">(상위 노드 또는 정본 MD 참조)</span>');
+}
+function setTab(t){ cur=t;
+  ['03','20','21','82'].forEach(k=>document.getElementById('tab'+k).classList.toggle('active',k===t));
+  selEl=null; render(); doSearch(); }
+function expandAll(open){
+  document.querySelectorAll('#tree .kids').forEach(k=>k.classList.toggle('hide',!open));
+  document.querySelectorAll('#tree .tg:not(.leaf)').forEach(t=>t.textContent=open?'−':'+');
+}
+function doSearch(){
+  const q=document.getElementById('q').value.trim().toLowerCase();
+  const data = TREES[cur];
+  const walk=(nodes)=>{
+    let any=false;
+    nodes.forEach(n=>{
+      const hitSelf = q && ((n.t+' '+(n.m||'')+' '+(n.tb||'')).toLowerCase().includes(q));
+      const hitKids = n.c?walk(n.c):false;
+      const tt=n._row.querySelector('.tt');
+      tt.classList.toggle('hit', !!(q&&hitSelf));
+      const show = !q || hitSelf || hitKids;
+      n._row.parentElement.style.display = show?'':'none';
+      if(q && hitKids && n._kbox){ n._kbox.classList.remove('hide'); n._tg.textContent='−'; }
+      any = any || show;
+    });
+    return any;
+  };
+  walk(data);
+}
+render();
+</script>
+</body>
+</html>

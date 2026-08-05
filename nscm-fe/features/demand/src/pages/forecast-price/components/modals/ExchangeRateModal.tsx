@@ -8,6 +8,7 @@ import {
   type GridPanel,
   MergeManager,
 } from '@mescius/wijmo.grid';
+import { PeriodField } from 'features/master/src/components';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { apiClient } from '@foundation/apis';
@@ -15,9 +16,9 @@ import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
 import { CustomDialog, CustomDropdown, DataGrid, SearchArea } from '@shared/components';
 import { useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
-import { Button, FormItem, InputField } from '@shared/lges';
+import { Button, FormItem } from '@shared/lges';
 import { Grid } from '@shared/mui';
-import { useMessageStore, useSessionStore, useUIStore } from '@shared/stores';
+import { useMessageStore, useUIStore, useSessionStore } from '@shared/stores';
 
 import { EXCHANGE_RATE_COLUMNS, MENU_ID, MSG, SHEETS } from '../../forecast-price.constants';
 
@@ -67,7 +68,14 @@ interface PivotRow {
 //   long format → grid wide format / 동적 col binding = `M_yyyymm` (2-row header: YYYY / MM)
 //   좌측 fixed cols Restricted merge (Division / Currency)
 // ⭐ ADMIN 편집/저장 (2026-07-24 — AS-IS DMF0000_ExchangeRatePopup Edit/Insert/Save 1:1):
-//   게이트 = hasButton('EDIT') [ADMIN·DM ADMIN 만 매핑] × divisionId='40' × 행 EDIT_YN × 당월 이후.
+//   게이트 = hasButton('EDIT') [ADMIN·DM ADMIN 만] × divisionId='40' × 행 EDIT_YN × 당월 이후.
+//   ⭐ 근거 (2026-07-30 원문 재확인):
+//     GSCM/06.UIL/GSCM.DM.Plan.UIL/POPUP/DMF0000_ExchangeRatePopup.cs DefineProperty() L112~143
+//     switch(NowGroupID) { case "ADMIN": case "DM ADMIN": break;
+//       default: list.Add(Edit/Insert/Save); btnBPS.Dispose(); }   ← 그 외 그룹은 버튼 전부 숨김
+//     + "40사업부만 수정이 가능하다" (list.Count==0 일 때만 Division 게이트 작동)
+//   ⚠️ 제약매트릭스 §2 의 "팝업 ADMIN 게이트 부재" 기록은 그 문서가 이 팝업을 **범위 밖**으로
+//     둔 탓이다 — "범위 밖"을 "부재"로 읽지 말 것 (2026-07-30 오판 선례).
 //   저장 = PKG_DMF0000.P_DMF0000_SAVE_EXCHANGE_POPUP_DATA '^' bulk 8키 → 성공 시 SP 내부에서
 //   Sales Price 재계산(PKG_DMF0020 CONVERSION) 후속 실행 → MSG00689 안내 + 재조회.
 //   Delete 기능 없음 (AS-IS 동일 — 사용자 확정 2026-07-24). 메타 배선 SQL =
@@ -79,9 +87,10 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
   const [divisionId, setDivisionId] = useState(defaultDivision);
   const sesUserId = useSessionStore.getState().session.userId ?? '';
 
-  // ⭐ ADMIN 편집 게이트 (AS-IS DefineProperty L120~141 1:1, 2026-07-24) —
-  //   ① 그룹: futurePriceInfo 시트 EDIT/INSERT/SAVE 버튼이 ADMIN·DM ADMIN 그룹에만 매핑
-  //     (BPS I/F 'IF' 버튼 선례. 서버측은 CustomAuthorizationManager 가 시트단위 SAVE 권한 강제)
+  // ⭐ ADMIN 편집 게이트 (AS-IS DefineProperty L112~143 1:1) —
+  //   ① 그룹: ADMIN·DM ADMIN 이 아니면 AS-IS 는 Edit/Insert/Save 를 전부 숨긴다.
+  //     메타 = futurePriceInfo 시트 EDIT/IF/SAVE (2026-07-30 ADMIN·DM ADMIN 2그룹으로 정정 적용).
+  //     서버측은 CustomAuthorizationManager 가 시트단위 SAVE 권한을 강제한다.
   //   ② Division: AS-IS "40사업부만 수정이 가능하다" — divisionId='40' 에서만 편집 개방
   //   셀 단위는 추가로 행 EDIT_YN('Y') × 당월 이후(ym >= curYm — AS-IS EditButton L271~280) 게이트.
   const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
@@ -144,16 +153,13 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
       setEditCount(0);
       setInsertedRows([]);
     }
-  }, [open, defaultDivision, defaultPeriod]);
+  }, [open, defaultDivision, defaultPeriod.start, defaultPeriod.end]);
 
   // sheet 'futurePriceInfo' — SP DMF0082_POPUP_GET_FUTUREPRICE_INFO (4 IN + 2 OUT, divisionId 인자 없음
   //   — sesUserId/mnuId BE 자동). filters useMemo 안정화 (refetch loop 방지)
   const startYyyymmdd = periodFrom.length === 6 ? `${periodFrom}01` : periodFrom;
   const endYyyymmdd = periodTo.length === 6 ? `${periodTo}31` : periodTo;
-  const filters = useMemo(
-    () => ({ startYyyymmdd, endYyyymmdd }),
-    [startYyyymmdd, endYyyymmdd]
-  );
+  const filters = useMemo(() => ({ startYyyymmdd, endYyyymmdd }), [startYyyymmdd, endYyyymmdd]);
   // ⭐ 자동조회 (2026-07-07 사용자 요구 — Batch Price Input 제외 전 modal 자동조회):
   //   enabled=open → modal open 시 react-query 가 filters(기간)로 자동 fetch. Find 버튼은 재조회용 유지.
   //   (setFilter();refetch() 직접 발사 대신 enabled 구동 → stale-closure NULL 재조회 함정 회피.)
@@ -166,6 +172,7 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
   });
 
   // ⭐ BPS I/F (AS-IS DMF0000_ExchangeRatePopup.btnBPS_Click — ADMIN/DM ADMIN 만, hasButton('IF') 게이트).
+  //   AS-IS 는 그 외 그룹에서 btnBPS.Dispose() 로 버튼 자체를 제거한다 (L112~143).
   //   PR_SCM_MST_EXCHANGE_RATE_UI(batchYn='N') 래퍼 호출 → BPS 환율 인터페이스 갱신 → 성공/실패 알림 → 재조회.
   //   (공유 배치 proc PR_SCM_MST_EXCHANGE_RATE 는 미변경 — OUT 커서 보유 래퍼 신설로 배치 파손 회피.)
   const setProgress = useUIStore.getState().setProgress;
@@ -408,7 +415,10 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
             let c1 = c,
               c2 = c;
             while (c1 > 0 && yearOf(panel.columns[c1 - 1]?.binding ?? '') === y) c1--;
-            while (c2 < panel.columns.length - 1 && yearOf(panel.columns[c2 + 1]?.binding ?? '') === y)
+            while (
+              c2 < panel.columns.length - 1 &&
+              yearOf(panel.columns[c2 + 1]?.binding ?? '') === y
+            )
               c2++;
             if (c1 === c2) return null;
             return new CellRange(0, c1, 0, c2);
@@ -508,7 +518,10 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
 
   const handleFind = () => {
     if (periodFrom > periodTo) {
-      void setAlert({ type: 'alert', content: t('MSG00108', '_시작 월이 종료 월보다 늦을 수 없습니다.') });
+      void setAlert({
+        type: 'alert',
+        content: t('MSG00108', '_시작 월이 종료 월보다 늦을 수 없습니다.'),
+      });
       return;
     }
     clearEdits(); // AS-IS FindData = 재조회 시 편집 상태 초기화 (전체 Lock 복귀 L323)
@@ -568,7 +581,10 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
     if (entries.every(en => !en.value)) {
       void setAlert({
         type: 'alert',
-        content: t(MSG.REQUIRED, '_{0} 값은 필수 입력 항목입니다.').replace('{0}', '[EXCHANGE_PRICE]'),
+        content: t(MSG.REQUIRED, '_{0} 값은 필수 입력 항목입니다.').replace(
+          '{0}',
+          '[EXCHANGE_PRICE]'
+        ),
       });
       return;
     }
@@ -653,27 +669,15 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
                     )}
                   />
                 </Grid>
-                <Grid size={6}>
-                  <FormItem
-                    label={t('LBL00013', 'Period')}
-                    labelAlign='right'
-                    render={() => (
-                      <div className={styles.periodRange}>
-                        <InputField
-                          value={periodFrom}
-                          onChange={e => setPeriodFrom(e.target.value)}
-                          placeholder='YYYY-MM'
-                        />
-                        <span>~</span>
-                        <InputField
-                          value={periodTo}
-                          onChange={e => setPeriodTo(e.target.value)}
-                          placeholder='YYYY-MM'
-                        />
-                      </div>
-                    )}
-                  />
-                </Grid>
+                <PeriodField
+                  gridSize={6}
+                  start={periodFrom}
+                  end={periodTo}
+                  onChange={(start, end) => {
+                    setPeriodFrom(start);
+                    setPeriodTo(end);
+                  }}
+                />
               </>
             }
           />
@@ -695,7 +699,7 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
             />
           </div>
           <div className={styles.buttonWrapper}>
-            {hasButton('IF') && (
+            {hasButton('IF') && divisionId.startsWith('40') && (
               <Button
                 appearance='outlined'
                 priority='normal'

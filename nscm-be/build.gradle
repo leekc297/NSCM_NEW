@@ -10,14 +10,10 @@ plugins {
 group = 'com.lgcns'
 version = '0.0.1-SNAPSHOT'
 description = 'nscm'
-
 java {
-    // 2026-05-26 로컬 개발: Java 21 toolchain 자동 다운로드 (시스템에 21 미설치 환경 대비)
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
     }
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
 }
 
 repositories {
@@ -93,14 +89,13 @@ dependencies {
 
     implementation 'org.apache.poi:poi-ooxml:5.2.3'								// 엑셀 파싱 2026.03.25
 
-    // LG Energy Solution SSO 라이브러리
-    // 2026.02.23 Minyong Lee : SSO 개발 임시 중단, QA 서버 구비 시 재개 예정
-//    implementation files('lib/sso/external_v4.2.1.00_LGEnSol_38.jar')
-//    implementation files('lib/sso/INICrypto_v4.2.8.jar')
-//    implementation files('lib/sso/jdom.jar')
-//    implementation files('lib/sso/log4j-1.2.16.jar')
-//    implementation files('lib/sso/poolit.jar')
-//    implementation files('lib/sso/xercesImpl.jar')
+    // LG Energy Solution SSO 라이브러리 (jakarta 지원 버전 - git c5191cc에서 복원)
+    implementation files('lib/sso/external_v4.2.1.00_LGEnSol_38.jar')
+    implementation files('lib/sso/INICrypto_v4.2.8.jar')
+    implementation files('lib/sso/jdom.jar')
+    implementation files('lib/sso/log4j-1.2.16.jar')
+    implementation files('lib/sso/poolit.jar')
+    implementation files('lib/sso/xercesImpl.jar')
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.junit.jupiter:junit-jupiter-params'

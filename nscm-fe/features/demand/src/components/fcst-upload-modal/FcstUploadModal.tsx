@@ -175,7 +175,8 @@ export const FcstUploadModal = ({
         onUploaded?.();
       }
     } catch (e) {
-      const msg = e instanceof Error ? e.message : t('MSG00618', '_An error occurred while saving.');
+      const msg =
+        e instanceof Error ? e.message : t('MSG00618', '_An error occurred while saving.');
       void setAlert({ type: 'alert', content: msg });
     } finally {
       uploadingRef.current = false;
@@ -209,12 +210,21 @@ export const FcstUploadModal = ({
   const handleSave = async () => {
     if (!onSave || savingRef.current) return;
     if (!classified) {
-      void setAlert({ type: 'alert', content: t('MSG00658', '_Please upload and validate the file first.') });
+      void setAlert({
+        type: 'alert',
+        content: t('MSG00658', '_Please upload and validate the file first.'),
+      });
       return;
     }
     if (Number(result.error || 0) > 0) {
       // 전량 게이트 (사용자 확정 2026-07-10) — 오류 행이 있으면 저장 차단
-      void setAlert({ type: 'alert', content: t('MSG00657', '_Cannot save while error rows exist. Please fix the file and re-upload.') });
+      void setAlert({
+        type: 'alert',
+        content: t(
+          'MSG00657',
+          '_Cannot save while error rows exist. Please fix the file and re-upload.'
+        ),
+      });
       return;
     }
     if (Number(result.success || 0) === 0) {
@@ -228,14 +238,18 @@ export const FcstUploadModal = ({
     try {
       const res = await onSave();
       if (!res.ok) {
-        void setAlert({ type: 'alert', content: res.message?.trim() || t('MSG00618', '_An error occurred while saving.') });
+        void setAlert({
+          type: 'alert',
+          content: res.message?.trim() || t('MSG00618', '_An error occurred while saving.'),
+        });
         return;
       }
       void setToast({ message: t('MSG00606', '_Saved.'), type: 'success' });
       onUploaded?.();
       handleClose();
     } catch (e) {
-      const msg = e instanceof Error ? e.message : t('MSG00618', '_An error occurred while saving.');
+      const msg =
+        e instanceof Error ? e.message : t('MSG00618', '_An error occurred while saving.');
       void setAlert({ type: 'alert', content: msg });
     } finally {
       savingRef.current = false;

@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 
 import com.lgcns.nscm.admin.auth.AuthService;
 import com.lgcns.nscm.framework.annotation.AuthCheck;
+import com.lgcns.nscm.framework.base.BaseConstants;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -89,11 +90,10 @@ public class CustomAuthorizationManager implements AuthorizationManager<RequestA
 
         if (segments.length < 4) return new AuthorizationDecision(false);
 
-        if (!_isValidAuthentication(auth) || !(auth.getPrincipal() instanceof CustomUserDetails)) {
-            return new AuthorizationDecision(false);
-        }
-
-        String userId = ((CustomUserDetails) auth.getPrincipal()).getUserId();
+        CustomUserDetails principal = (CustomUserDetails) auth.getPrincipal();
+        // 게스트는 메뉴를 공유 'Guest' 계정에서 빌려오므로 권한 판정도 'Guest' 기준으로 한다.
+        // (username 은 로그용 실제 사번이라 그대로 쓰면 권한이 없어 No Permission 이 됨)
+        String userId = principal.isGuest() ? BaseConstants.GUEST_USER_ID : principal.getUserId();
         String mnuId = segments[1];
         String shtNm = segments[2];
         String mnuBtnCd = segments[3];

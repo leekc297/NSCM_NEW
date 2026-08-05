@@ -4,21 +4,21 @@ import {
   OwnerField,
   PeriodField,
   ProjectField,
-  SalesSiteField,
   TeamField,
 } from 'features/master/src/components';
+import type { KeyboardEvent } from 'react';
 
+import type { ComboResponse } from '@foundation/models';
+import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { Checkbox, FormItem } from '@shared/lges';
-import { Grid, Stack } from '@shared/mui';
+import { Grid } from '@shared/mui';
 
 import { BUCKET_TYPE } from '../sales-plan.constants';
 import { useSalesPlanStore } from '../useSalesPlanStore';
 import { isDiv40 } from '../utils/sales-plan.division';
 import type { useSalesPlanValidation } from '../utils/sales-plan.validate';
-
-import styles from './SalesPlanForm.module.scss';
 
 interface SalesPlanFormProps {
   onSearch: () => void;
@@ -31,8 +31,11 @@ interface SalesPlanFormProps {
   validation: ReturnType<typeof useSalesPlanValidation>;
 }
 
-// AS-IS DMF0021 조회조건 12종 + Sum 체크박스 (UI분석서 v1.0 시트 3 전수 — 컨트롤 20 중 dead/숨김 제외).
-//   ⭐ hook #94 — 1단 4개(Grid size={3}) + 모든 객체 36px. Period = 카탈로그 PeriodField(datePickerFix 내장).
+// AS-IS DMF0021 조회조건 10종 + Sum 체크박스 (UI분석서 v1.0 시트 3 전수 — Color/Include Internal Txn 삭제 확정).
+//   ⭐ 2026-07-28 레이아웃 개편 — 확장영역(extraConditions) 폐지, 4줄 상시표시(size=3, 4개/줄):
+//     Row1 Div/Team/End Customer/Sales Site / Row2 Biz Type/Plant Site/Item Type /
+//     Row3 Period/Bucket/Project🔍/Model🔍(Bucket 우측) / Row4 Owner🔍/Sum 체크박스(Owner 우측).
+//     Period = 카탈로그 PeriodField(datePickerFix 내장).
 //   ⭐ 카탈로그(@master/searchFields): Division/Team/SalesSite/Project(40 비활성)/Model/Owner/Period.
 //     인라인 유지 필드(원천 스왑·division 분기 사유): End Customer(40=EndCustomerByDivision40 스왑) /
 //     Biz Type(40=DmBizType 스왑) / Plant Site(40 만 비활성 — 카탈로그 PlantSiteField 는 81 전용이라
@@ -58,32 +61,53 @@ export const SalesPlanForm = ({
   //   Bucket       = 'BucketType' (DMF0003_GET_BUCKET_TYPE_CODE — full-word CODE)
   //   Plant Site   = 'PlantSitebyEndCustomer' (Division+EndCustomer 서버 바인드 + 값 quoting 의무)
   const q = (v?: string): string => `'${v && v.trim() !== '' ? v : 'ALL'}'`;
-  const [endCustomer, endCustomer40, bizTypeByDivision, dmBizType, itemType, bucketTypeCombo, plantSite] =
-    useTabComboQueries({
-      filters: [
-        'EndCustomer',
-        'EndCustomerByDivision40',
-        // ⭐ 2026-07-23 AS-IS 정합(사용자 승인) — BIZ_TYPE_BPMS lookup(12종 고정) →
-        //   AS-IS SCM0001_GET_BIZ_TYPE_BY_DIVISION 1:1 (SCM_MST_PROJECT division별 distinct, @divisionId 바인드).
-        { comboId: 'BizTypeByDivision', divisionId: q(sc.divisionId) },
-        'DmBizType',
-        'ItemType',
-        'BucketType',
-        {
-          comboId: 'PlantSitebyEndCustomer',
-          divisionId: q(sc.divisionId),
-          endCustomer: q(sc.endCustomers.join(',')),
-        },
-      ],
-    });
+  const [
+    endCustomer,
+    endCustomer40,
+    bizTypeByDivision,
+    dmBizType,
+    itemType,
+    bucketTypeCombo,
+    salesSite,
+    plantSite,
+  ] = useTabComboQueries({
+    filters: [
+      'EndCustomer',
+      'EndCustomerByDivision40',
+      'BizTypeByDivision',
+      'DmBizType',
+      'ItemType',
+      'BucketType',
+      {
+        comboId: 'SiteByEndCustomer',
+        divisionId: q(sc.divisionId),
+        deptId: q(sc.deptIds.join(',')),
+        endCustomer: q(sc.endCustomers.join(',')),
+      },
+      {
+        comboId: 'PlantSitebyEndCustomer',
+        divisionId: q(sc.divisionId),
+        endCustomer: q(sc.endCustomers.join(',')),
+      },
+    ],
+  });
 
   // 멀티 옵션 헬퍼 — NUMBER→String + DIVISION_ID 토큰 필터 (카탈로그 toOptions 동등)
-  const toOptions = (rows: Array<Record<string, unknown>> | undefined, divisionId?: string) => {
+  const toOptions = (
+    rows: Array<Record<string, unknown>> | undefined,
+    divisionId?: string,
+    deptIds?: string[]
+  ) => {
     const arr = (rows ?? []) as unknown as Array<Record<string, string>>;
+    const selectedDepts = new Set(deptIds ?? []);
     return [
       ...new Map(
         arr
-          .filter(r => !divisionId || !r.DIVISION_ID || r.DIVISION_ID === divisionId)
+          .filter(
+            r =>
+              (!divisionId || !r.DIVISION_ID || r.DIVISION_ID === divisionId) &&
+              (selectedDepts.size === 0 || !r.DEPT_ID || selectedDepts.has(r.DEPT_ID))
+          )
           .map(r => [`${r.DIVISION_ID ?? ''}|${r.CODE ?? ''}`, r] as const)
       ).values(),
     ].map(r => ({ label: String(r.NAME ?? r.CODE ?? ''), value: String(r.CODE ?? '') }));
@@ -115,14 +139,43 @@ export const SalesPlanForm = ({
           )
       : bucketFallback;
 
-  const firstOr = (arr: string[]): string => arr[0] ?? '';
-  const toArr = (v: string): string[] => (v ? [v] : []);
-  const toMulti = (v: string | undefined): string[] => String(v ?? '').split(',').filter(Boolean);
+  const toMulti = (v: string | undefined): string[] =>
+    String(v ?? '')
+      .split(',')
+      .filter(Boolean);
+
+  // Project / Model(Nickname) 입력창에서 Enter를 누르면 기존 검색 버튼과 동일하게 모달을 연다.
+  // 검색 버튼의 기존 click 로직을 재사용하므로 입력 중인 값도 그대로 모달 검색조건에 전달된다.
+  const openFieldModalOnEnter = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.key !== 'Enter' || event.nativeEvent.isComposing) return;
+    if (!(event.target instanceof HTMLInputElement)) return;
+
+    const searchButton = event.currentTarget.querySelector<HTMLButtonElement>(
+      'button[aria-label*="search" i], button[title*="search" i], ' +
+        'button[aria-label*="조회"], button[title*="조회"]'
+    );
+    const searchIconButton = event.currentTarget
+      .querySelector<SVGElement>(
+        'svg[data-testid="SearchIcon"], svg[data-testid="ManageSearchIcon"], ' +
+          'svg[data-testid="FindInPageIcon"]'
+      )
+      ?.closest('button') as HTMLButtonElement | null;
+    const buttons =
+      event.currentTarget.querySelectorAll<HTMLButtonElement>('button:not(:disabled)');
+    const fallbackButton = buttons.length > 0 ? buttons[buttons.length - 1] : null;
+    const modalOpenButton = searchButton ?? searchIconButton ?? fallbackButton;
+
+    if (!modalOpenButton) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+    modalOpenButton.click();
+  };
 
   return (
     <SearchArea
       isHidden={!openSearchArea}
-      searchButtonLabel={t('LBL00691', '_Search')}
+      searchButtonLabel={t('LBL00112', '_Search')}
       onSearch={onSearch}
       conditions={
         <>
@@ -153,16 +206,12 @@ export const SalesPlanForm = ({
             value={sc.deptIds}
             onChange={v => set({ deptIds: v, endCustomers: [], scmSiteIds: [] })}
             division={sc.divisionId}
-            // ⭐ 2026-07-23 조회조건 AS-IS 정합 — Team 소스를 AS-IS BigFilter 1:1 등록본
-            //   'UserTeamByDivision'(SITE_ITEM.OWNER 1번 토큰 사용자의 부서)으로 전환.
-            //   공유 'TeambyDivision'(DEPT_ID 직접)과 차집합 35/64 실측 (hook #117).
-            comboId='UserTeamByDivision'
           />
           <Grid size={3}>
             {/* ⭐ End Customer — 40 = 'EndCustomerByDivision40' 원천 스왑 (AS-IS InitControls L452 /
                 clbDivision L5131). 변경 시 Sales Site 재조회 종속 clear (clbCustomer L5084). */}
             <FormItem
-              label={t('LBL00503', 'End Customer')}
+              label={t('LBL00080', '_End Customer')}
               labelAlign='right'
               render={() => (
                 <CustomDropdown
@@ -173,7 +222,8 @@ export const SalesPlanForm = ({
                   value={sc.endCustomers.join(',')}
                   options={toOptions(
                     (div40 ? endCustomer40 : endCustomer) as never,
-                    div40 ? undefined : sc.divisionId
+                    div40 ? undefined : sc.divisionId,
+                    div40 ? undefined : sc.deptIds
                   )}
                   onChange={(_, options) =>
                     set({ endCustomers: toMulti(String(options ?? '')), scmSiteIds: [] })
@@ -182,24 +232,50 @@ export const SalesPlanForm = ({
               )}
             />
           </Grid>
-          <SalesSiteField
-            gridSize={3}
-            value={sc.scmSiteIds}
-            onChange={v => set({ scmSiteIds: v })}
-            division={sc.divisionId}
-            // ⭐ 2026-07-23 AS-IS 정합(사용자 승인) — 'UserSiteByEndCustomer' 서버 바인드 전환:
-            //   EndCustomer/Team cascade + 40 owner-team 필터 + OPERATION_GROUP 'W' 제외 (hook #117).
-            comboId='UserSiteByEndCustomer'
-            endCustomer={sc.endCustomers.join(',')}
-            deptId={sc.deptIds.join(',')}
-          />
-
-          {/* Row 2 — Plant Site(40 비활성) / Biz Type(40 원천 스왑) / Period* / Bucket*(기본 Monthly) */}
           <Grid size={3}>
-            {/* ⭐ Plant Site — AS-IS 40 만 비활성+클리어 (InitControls L455~460), 81·82 활성.
-                카탈로그 PlantSiteField(81 전용 enable)와 상이 — 동일 CMBO 인라인 (shared prop 변경 금지). */}
             <FormItem
-              label={t('LBL00509', 'Plant Site')}
+              label={t('LBL00011', '_Sales Site')}
+              labelAlign='right'
+              render={() => (
+                <CustomDropdown
+                  multiple
+                  allOption
+                  useClearIcon
+                  limitTags={1}
+                  value={sc.scmSiteIds.join(',')}
+                  options={((salesSite ?? []) as Array<Record<string, string>>).map(r => ({
+                    label: String(r.NAME ?? r.CODE ?? ''),
+                    value: String(r.CODE ?? ''),
+                  }))}
+                  onChange={(_, options) => set({ scmSiteIds: toMulti(String(options ?? '')) })}
+                />
+              )}
+            />
+          </Grid>
+          {/* Row 2 — Biz Type(40 원천 스왑) / Plant Site / Item Type */}
+          <Grid size={3}>
+            <FormItem
+              label={t('LBL00085', '_Biz. Type')}
+              labelAlign='right'
+              render={() => (
+                <CustomDropdown
+                  multiple
+                  allOption
+                  useClearIcon
+                  limitTags={1}
+                  value={sc.bizTypes.join(',')}
+                  options={toOptions(
+                    (div40 ? dmBizType : bizTypeByDivision) as never,
+                    div40 ? undefined : sc.divisionId
+                  )}
+                  onChange={(_, options) => set({ bizTypes: toMulti(String(options ?? '')) })}
+                />
+              )}
+            />
+          </Grid>
+          <Grid size={3}>
+            <FormItem
+              label={t('LBL00005', '_Plant Site')}
               labelAlign='right'
               render={() => (
                 <CustomDropdown
@@ -219,9 +295,8 @@ export const SalesPlanForm = ({
             />
           </Grid>
           <Grid size={3}>
-            {/* ⭐ Biz Type — 40 = 'DmBizType' 원천 스왑 (AS-IS InitControls L445 / clbDivision L5124). */}
             <FormItem
-              label={t('LBL00504', 'Biz.Type')}
+              label={t('LBL00068', '_Item Type')}
               labelAlign='right'
               render={() => (
                 <CustomDropdown
@@ -229,16 +304,19 @@ export const SalesPlanForm = ({
                   allOption
                   useClearIcon
                   limitTags={1}
-                  value={sc.bizTypes.join(',')}
-                  options={toOptions(
-                    (div40 ? dmBizType : bizTypeByDivision) as never,
-                    div40 ? undefined : sc.divisionId
-                  )}
-                  onChange={(_, options) => set({ bizTypes: toMulti(String(options ?? '')) })}
+                  value={sc.itemTypes.join(',')}
+                  options={
+                    itemType?.map((item: ComboResponse) => ({
+                      label: item.NAME,
+                      value: item.CODE,
+                    })) ?? []
+                  }
+                  onChange={(_, options) => set({ itemTypes: toMulti(String(options ?? '')) })}
                 />
               )}
             />
           </Grid>
+          {/* Row 3 — Period* / Bucket* / Project🔍(Bucket 우측, 40 비활성) / Model🔍(Nickname) */}
           <PeriodField
             gridSize={3}
             start={sc.startYyyymmdd}
@@ -263,77 +341,61 @@ export const SalesPlanForm = ({
               )}
             />
           </Grid>
-        </>
-      }
-      extraConditions={
-        <>
-          {/* Row 3 — Project🔍(40 비활성) / Model🔍 / Owner🔍 / Item Type */}
-          {/* ⭐ Project — 40 비활성 (AS-IS btnProject 81·82 만 동작 L3491 + InitControls Disable L455). */}
-          <ProjectField
-            gridSize={3}
-            value={sc.projectCodes}
-            onChange={v => set({ projectCodes: v })}
-            division={sc.divisionId}
-            deptIds={sc.deptIds}
-            endCustomers={sc.endCustomers}
-            scmSiteIds={sc.scmSiteIds}
-            projectCodes={sc.projectCodes}
-            disabled={div40}
-            multiCheckbox
-          />
-          <ItemField
-            gridSize={3}
-            value={sc.itemIds}
-            onChange={v => set({ itemIds: v })}
-            division={sc.divisionId}
-            deptIds={sc.deptIds}
-            endCustomers={sc.endCustomers}
-            scmSiteIds={sc.scmSiteIds}
-            projectCodes={sc.projectCodes}
-            itemIds={sc.itemIds}
-            multiCheckbox
-          />
-          <OwnerField
-            gridSize={3}
-            value={sc.owners}
-            onChange={v => set({ owners: v })}
-            division={sc.divisionId}
-            deptIds={sc.deptIds}
-            endCustomers={sc.endCustomers}
-            scmSiteIds={sc.scmSiteIds}
-            projectCodes={sc.projectCodes}
-            owners={sc.owners}
-            multiCheckbox
-          />
-          <Grid size={3}>
+          <div style={{ display: 'contents' }} onKeyDownCapture={openFieldModalOnEnter}>
+            <ProjectField
+              gridSize={3}
+              value={sc.projectCodes}
+              onChange={v => set({ projectCodes: v })}
+              division={sc.divisionId}
+              deptIds={sc.deptIds}
+              endCustomers={sc.endCustomers}
+              scmSiteIds={sc.scmSiteIds}
+              projectCodes={sc.projectCodes}
+              disabled={div40}
+              multiCheckbox
+            />
+          </div>
+          <div style={{ display: 'contents' }} onKeyDownCapture={openFieldModalOnEnter}>
+            <ItemField
+              gridSize={3}
+              value={sc.itemIds}
+              onChange={v => set({ itemIds: v })}
+              division={sc.divisionId}
+              deptIds={sc.deptIds}
+              endCustomers={sc.endCustomers}
+              scmSiteIds={sc.scmSiteIds}
+              projectCodes={sc.projectCodes}
+              itemIds={sc.itemIds}
+              multiCheckbox
+            />
+          </div>
+          {/* Row 4 — Owner🔍 / Sum 체크박스(Owner 우측, sales-site-project-model Active·Detail 배치 참고) */}
+          <Grid size={3} className={commonStyles.customGrid}>
+            <OwnerField
+              gridSize={12}
+              value={sc.owners}
+              onChange={v => set({ owners: v })}
+              division={sc.divisionId}
+              deptIds={sc.deptIds}
+              endCustomers={sc.endCustomers}
+              scmSiteIds={sc.scmSiteIds}
+              projectCodes={sc.projectCodes}
+              owners={sc.owners}
+              multiCheckbox
+            />
             <FormItem
-              label={t('LBL00068', '_Item Type')}
-              labelAlign='right'
               render={() => (
-                <CustomDropdown
-                  allOption
-                  useClearIcon
-                  value={firstOr(sc.itemTypes)}
-                  options={itemType?.map(item => ({ label: item.NAME, value: item.CODE })) ?? []}
-                  onChange={(_, option) => set({ itemTypes: toArr(option) })}
-                />
+                <div className={commonStyles.customCheckbox}>
+                  <Checkbox
+                    labelText={t('LBL00687', '_Sum')}
+                    checked={sc.sumYn}
+                    sx={{ marginLeft: '15px' }}
+                    onChange={checked => set({ sumYn: checked })}
+                  />
+                </div>
               )}
             />
-          </Grid>
-
-          {/* Row 4 — 체크박스 Sum (Color 제거·Include Internal Txn 숨김 'N' 배선·Cell Qty dead 제외 —
-              2026-07-14 사용자 확정 + AS-IS InternalYN Visible=false / cboCellQty 무배선) */}
-          <Grid size={3}>
-            <div className={styles.checkboxRow}>
-              <Stack direction='row' spacing={2} alignItems='center'>
-                <Checkbox
-                  labelText={t('LBL00687', '_Sum')}
-                  checked={sc.sumYn}
-                  onChange={checked => set({ sumYn: checked })}
-                />
-              </Stack>
-            </div>
-          </Grid>
+          </Grid>{' '}
         </>
       }
     />

@@ -15,9 +15,10 @@
 
 .customCheckbox {
   display: flex;
+  height: 35px;
   gap: 4px;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .customGrid {

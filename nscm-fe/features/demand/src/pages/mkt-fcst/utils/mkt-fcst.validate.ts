@@ -36,12 +36,17 @@ export const useMktFcstValidation = () => {
   //   #30 MSG00097 Division 미선택 / #31 MSG00108 기간 역전 / #32 MSG00164 기간 3년 초과.
   const validateFind = (c: SearchCondition): ValidationResult => {
     if (!str(c.divisionId)) {
-      void setAlert({ type: 'alert', content: t(MSG.REQUIRE_DIVISION, '_Division 을 선택하세요.') });
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.REQUIRE_DIVISION, '_Division 을 선택하세요.'),
+      });
       return { ok: false, msgId: MSG.REQUIRE_DIVISION };
     }
     const start = str(c.startYyyymmdd);
     const end = str(c.endYyyymmdd);
-    if (!start || !end) {
+
+    const isValidYmd = (v: string) => /^\d{8}$/.test(v);
+    if (!isValidYmd(start) || !isValidYmd(end)) {
       void setAlert({
         type: 'alert',
         content: t(MSG.REQUIRED_PERIOD, '_조회 기간을 입력하세요.'),

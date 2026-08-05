@@ -97,6 +97,7 @@ export const ErpEdiMasterRepairGrid = ({
       staticColumns={staticColumns}
       dblClick={handleDblClick}
       formatItem={handleFormatItem}
+      isReadOnly={true}
     />
   );
 };

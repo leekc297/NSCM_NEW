@@ -103,8 +103,7 @@ export const callReplaceByCutoff = (params: {
   yyyymmFrom: string;
   yyyymmTo: string;
   versionNo: string;
-}): Promise<CallProcResult> =>
-  callProc(SHEETS.MAIN, 'REPLACE', { ...params });
+}): Promise<CallProcResult> => callProc(SHEETS.MAIN, 'REPLACE', { ...params });
 
 // Exchange Rate 저장 — DMF0042_SAVE_DM_BP_EXCHANGE_RATE ('^' bulk 6키 + 감사 2 BE주입)
 export const callSaveExchangeRate = (payload: Record<string, string>): Promise<CallProcResult> =>

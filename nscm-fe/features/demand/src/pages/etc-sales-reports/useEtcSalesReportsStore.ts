@@ -30,6 +30,8 @@ interface State {
   staticColumns: RawFlexGridColumnConfig[];
   staticMeasures: MeasureMeta[];
   visibleMeasures: string[] | null;
+  // ⭐ ColumnLayoutModal 개인화 보관 (null = 미설정). fetchStaticColumns 재조회 후 재적용 기준.
+  userColumnLayout: ColumnLayoutSetting[] | null;
   // ⭐ 조회 시점 고정 — 현재월 yyyymm (editLock 시점 경계. AS-IS iCurCol 산정 원천)
   thisMonth: string;
   // Result 조회 시 전월 스냅샷 (저장 P_RESULT_MONTH — AS-IS L602~609)
@@ -45,8 +47,47 @@ interface Action {
   fetchStaticColumns: () => Promise<void>;
   fetchStaticMeasures: () => Promise<void>;
   applyColumnVisibility: (visibleKeys: string[]) => void;
+  // ⭐ ColumnLayoutModal 개인화 적용 (DMF0003 mkt-fcst 방식 1:1).
+  applyColumnLayout: (settings: ColumnLayoutSetting[]) => void;
   applyVisibleMeasures: (measureCodes: string[] | null) => void;
 }
+
+/** ColumnLayoutModal 개인화 1행 — 표시/순서/폭/색 (DMF0003 mkt-fcst 방식 1:1, 2026-07-30 교체). */
+export interface ColumnLayoutSetting {
+  colNm: string;
+  visible: boolean;
+  width: number;
+  cellColor: string;
+  textColor: string;
+  order: number;
+}
+
+// 개인화 목록을 admin 컬럼 메타에 적용 — visible/display 양방향 + 폭·색 + 순서.
+//   ⚠️ visible 만 바꾸면 공통 DataGrid 의 display 경로가 남아 컬럼이 안 사라진다 (DMF0003 선례).
+const applyLayoutToColumns = (
+  cols: RawFlexGridColumnConfig[],
+  settings: ColumnLayoutSetting[]
+): RawFlexGridColumnConfig[] => {
+  const byCol = new Map(settings.map(s => [s.colNm, s]));
+  return cols
+    .map(c => {
+      const s = byCol.get(c.colNm);
+      if (!s) return { ...c, visible: false, display: false };
+      return {
+        ...c,
+        visible: s.visible,
+        display: s.visible,
+        colWth: s.width,
+        cellColor: s.cellColor,
+        textColor: s.textColor,
+      };
+    })
+    .sort(
+      (a, b) =>
+        (byCol.get(a.colNm)?.order ?? Number.MAX_SAFE_INTEGER) -
+        (byCol.get(b.colNm)?.order ?? Number.MAX_SAFE_INTEGER)
+    );
+};
 
 const initSearch: SearchCondition = {
   divisionId: DIVISION.MOBILITY,
@@ -64,6 +105,7 @@ const initState: State = {
   staticColumns: [],
   staticMeasures: [],
   visibleMeasures: null,
+  userColumnLayout: null,
   thisMonth: dayjs().format('YYYYMM'),
   resultMonth: '',
 };
@@ -171,6 +213,20 @@ export const useEtcSalesReportsStore = createPersistedStoreWithTab<State & Actio
       });
     },
 
+
+    // ⭐ ColumnLayoutModal OK — 표시/순서 + 폭/색 개인화 적용 (DMF0003 방식 교체 2026-07-30).
+    applyColumnLayout: settings => {
+      set(state => {
+        const layout = settings
+          .filter(s => s.visible)
+          .sort((a, b) => a.order - b.order)
+          .map((s, i) => ({ ...s, order: i + 1 }));
+        state.userColumnLayout = layout;
+        const cur = state.staticColumns;
+        if (!cur || cur.length === 0) return;
+        state.staticColumns = applyLayoutToColumns(cur, layout);
+      });
+    },
     applyVisibleMeasures: measureCodes => {
       set(state => {
         state.visibleMeasures = measureCodes;

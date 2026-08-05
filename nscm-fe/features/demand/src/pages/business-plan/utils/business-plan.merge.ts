@@ -1,9 +1,4 @@
-import {
-  CellRange,
-  CellType,
-  type GridPanel,
-  MergeManager,
-} from '@mescius/wijmo.grid';
+import { CellRange, CellType, type GridPanel, MergeManager } from '@mescius/wijmo.grid';
 
 // ⭐ DMF0042 — sales-plan/utils/sales-plan.merge.ts 복제 + DynKey 파서 Y_/Q_/M_ 교체 (2026-07-15 플랜 §B 확정
 //   — HierarchicalMergeManager 거의 그대로, 주(W_)/일(D_) 축 → 연(Y_)/분기(Q_) 축).

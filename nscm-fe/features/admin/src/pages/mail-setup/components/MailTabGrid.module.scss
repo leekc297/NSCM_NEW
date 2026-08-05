@@ -1,0 +1,39 @@
+.gridWrapper {
+  height: calc(100vh - 560px);
+  min-height: 240px;
+}
+
+.receiverPanel {
+  display: flex;
+  height: calc(100vh - 560px);
+  min-height: 240px;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.receiverSide {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.receiverSearch {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.receiverGrid {
+  min-height: 0;
+  flex: 1;
+}
+
+.transferButtons {
+  display: flex;
+  width: 44px;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+}

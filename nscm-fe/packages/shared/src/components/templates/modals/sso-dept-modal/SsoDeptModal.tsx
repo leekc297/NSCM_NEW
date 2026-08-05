@@ -100,7 +100,7 @@ export const SsoDeptModal = ({
       customContentArea={
         <div className={styles.dialogContentWrapper}>
           <SearchArea
-            searchButtonLabel={t('LBL00112', '_Search')}
+            searchButtonLabel={t('LBL00722', '_Search')}
             conditions={
               <Grid size={8}>
                 <FormItem

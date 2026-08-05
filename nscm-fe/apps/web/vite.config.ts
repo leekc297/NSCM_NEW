@@ -73,9 +73,6 @@ export default ({ mode }: { mode: string }) => {
           target: env.VITE_API_BASE_URL,
           changeOrigin: true,
           rewrite: path => path.replace(/^\/api/, ''),
-          // DMF0020 audit log CLOB 직렬화 30분 사고 — proxy timeout 도 30분.
-          timeout: 1800000,
-          proxyTimeout: 1800000,
         },
       },
     },

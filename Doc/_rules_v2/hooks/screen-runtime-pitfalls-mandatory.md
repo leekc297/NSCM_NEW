@@ -1,4 +1,4 @@
-# Hook — Screen Runtime Pitfalls (런타임 사고 5종 통합 차단)
+# Hook — Screen Runtime Pitfalls (런타임 사고 8종 통합 차단)
 
 > 작성 / Authored: 2026-06-19 (DMF0043 룰 전면 점검 작업 중 발견된 사고 패턴 통합)
 > 강도 / Strength: **PR 차단** — 발견 시 머지 거부
@@ -8,9 +8,9 @@ DMF0043 (Overseas Subs. Contribution Rate Reg.) 룰 전면 점검 작업 중 실
 
 ---
 
-## §0. 사고 카탈로그 — 7 분류
+## §0. 사고 카탈로그 — 8 분류
 
-**7 분류** (2026-06-19 갱신 — P6 다단 헤더 row 높이 / P7 동적 cell 편집 EDIT_FLAG 우회 추가)
+**8 분류** (2026-07-29 갱신 — P8 useTabProcQuery filters 참조 동일성 추가 / 2026-06-19 P6·P7 추가)
 
 | # | 사고 증상 | Root cause | 영향 |
 |---|---|---|---|
@@ -21,6 +21,7 @@ DMF0043 (Overseas Subs. Contribution Rate Reg.) 룰 전면 점검 작업 중 실
 | P5 | **admin 메타 INSERT 시 ORA-01400 (cannot insert NULL)** | DDL 의 NOT NULL 컬럼 (예: `VALID_YN`) 을 INSERT column list 에서 누락. 추측·다른 테이블 패턴 일반화 | 메타 적용 실패, 화면 데이터 0 |
 | P6 | **다단 헤더 시 row 높이가 1단과 같아 가독성/UI 정합 깨짐** | wijmo columnGroups 로 자동 row 추가되지만 default `defaultSize` 가 1단과 동일. DMF0007 customer-forecast-master 와 시각 정합 깨짐 | UI 일관성 사고 |
 | P7 | **동적 컬럼 셀이 편집되지 않음** (모든 row readonly) | BE 응답 row 의 `EDIT_FLAG='N'` → DataGrid wrapper 의 `setEditableColumns` 가 `beginningEdit.cancel = !isEditableCell` 처리. `GridUtils.isEditableCell` 의 OPTIONAL/MANDATORY 분기 = `editFlag !== 'N'` → false → 편집 차단 | 사용자 편집 불가 (저장 0 row) |
+| **P8** | **조회 후 스피너가 멈추지 않음** (동일 SEARCH 가 초 단위 무한 반복) | `useTabProcQuery` 의 `filters` 를 **인라인 객체 리터럴**로 전달 → `useCustomQueryClient.ts` 가 `prevKeyRef.current !== filters` **참조 비교**로 변경을 판정하므로 매 렌더 새 참조 = 항상 "변경" → removeQueries + 재요청 무한 루프 | 화면 사용 불가 + BE 부하 (2026-07-29 SYS0017 사고) |
 
 ---
 
@@ -622,15 +623,76 @@ grep -rn "beginningEdit\.addHandler" features/{domain}/src/pages/{screen}/compon
 
 ---
 
+## §8-B. P8 — `useTabProcQuery({ filters })` 참조 동일성 (인라인 객체 금지)
+
+### 8B.1 사실
+`packages/shared/src/hooks/useCustomQueryClient.ts` 의 `useTabProcQuery` 는 filters 변경을 **값이 아니라 참조**로 판정한다.
+
+```ts
+const isKeyChanged = prevKeyRef.current !== filters;   // 참조 비교
+```
+
+따라서 렌더마다 새로 만들어지는 객체를 넘기면 **항상 "변경됨"** 으로 판정되어 이전 쿼리 제거 + 재요청이 무한 반복된다.
+
+### 8B.2 안티패턴
+```tsx
+// ❌ 매 렌더 새 참조 → 무한 재조회(스피너 안 멈춤) + BE 부하
+const { data } = useTabProcQuery<MENU_ID, SHEETS.MESSAGE>({
+  menuId: MENU_ID, sheetName: SHEETS.MESSAGE, tabId,
+  filters: { useType: 'MAIL', categoryId: selectedCategoryId },
+  enabled: !!selectedCategoryId,
+});
+```
+
+### 8B.3 표준 — 2 패턴 중 택일
+```tsx
+// ✅ (A) store 보관 값 그대로 전달 (notice-setup 등 기존 화면 표준)
+const filters = useXxxStore(state => state.filters);   // setFilters() 로만 갱신
+
+// ✅ (B) useMemo 안정 참조
+const detailFilters = useMemo(
+  () => ({ useType: USE_TYPE_CODE, categoryId: selectedCategoryId }),
+  [selectedCategoryId]
+);
+```
+
+고빈도 이벤트(그리드 `selectionChanged` 등)가 store 를 갱신할 때는 **동일 값이면 set 을 건너뛰는 가드**를 store 액션에 둔다 — 불필요 리렌더 → 재조회 연쇄를 끊는다.
+
+```ts
+selectCategory: row => {
+  const nextId = row?.CATEGORY_ID ?? '';
+  if (get().selectedCategoryId === nextId) return;   // ← 가드
+  set(state => { state.selectedCategoryId = nextId; /* ... */ });
+},
+```
+
+### 8B.4 PRE-WRITE 체크
+- [ ] `useTabProcQuery` 의 `filters` 는 store 값 또는 `useMemo` 결과인가? (인라인 리터럴 0)
+- [ ] 그리드 selection/포커스 이벤트가 store 를 갱신한다면 동일 값 set-skip 가드가 있는가?
+
+### 8B.5 POST-WRITE grep (0 hit 의무)
+```bash
+# 화면 폴더 안 — useTabProcQuery 호출부의 인라인 filters 리터럴
+grep -nE "filters:\s*\{" features/**/pages/{screen}/**/*.tsx
+grep -nE "filters=\{\{" features/**/pages/{screen}/**/*.tsx
+```
+
+### 8B.6 진단 (증상 → 원인)
+"조회 후 스피너가 멈추지 않음" 신고 시 **BE 로그에서 동일 `mnuId`/`mnuBtnCd` 의 SEARCH 가 초 단위로 반복**되는지 먼저 확인한다. 반복이면 P8 이 1순위 (사고: 2026-07-29 SYS0017 Mail Setup — Message/selReceiver/sqlText 3곳 인라인 객체).
+
+---
+
 ## §9. cross-ref 메모리 entry
 
 - `feedback_ddl_grep_before_sql.md` — DDL 추측 금지 (P5 cross-ref)
 - `feedback_shared_global_prop_change_forbidden.md` — shared 변경 금지 (P2 의 fix 가 shared 변경이 아니라 화면 측 우회 패턴)
 - `feedback_regression_zero_mandatory.md` — Hard Boundary 6종 (전 사고 통합)
 - `feedback_datagrid_shared_component_mandatory.md` — DataGrid wrapper 사용 의무 (#60)
+- `feedback_tabprocquery_filters_reference_identity.md` — filters 참조 비교 (P8)
 
 ---
 
 ## §10. 변경 이력
 
 - 2026-06-19: 신규 작성 — DMF0043 룰 전면 점검 작업 중 발견된 5 사고 패턴 통합. 사용자 명시: "기존의 UI 수정요청에 대한 프로세스에 더해서 이 화면 기준으로 보완 후에 추가적으로 작업했던 내용들도 rule 로 반영해서 차후 화면 수정, 신규 생성 시 반영되도록".
+- 2026-07-29: **P8 추가** — `useTabProcQuery({filters})` 인라인 객체 → 무한 재조회(스피너 안 멈춤). SYS0017 Mail Setup 사고. 사용자 신고 → BE 로그 실측으로 확정, §8-B 신설 + RULESET_MASTER §3.1/§3.3 반영.

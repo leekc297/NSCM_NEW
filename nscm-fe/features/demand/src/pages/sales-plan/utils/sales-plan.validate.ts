@@ -8,12 +8,13 @@
 //     V-V3 변경 0건 (MSG00004 '수정한 내용이 없습니다') — Catch_Up 음수(MSG00085)·라인 변경 0건
 //       (MSG00146)은 조립 단계(sales-plan.save.ts buildUnfoldRows)에서 검증.
 //   SP 내장(재구현 금지): 중복검증/배분/MERGE — 결과 'messageCode^addmessage' split alert (api 헬퍼).
+import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { useMessageStore } from '@shared/stores';
 
 import { MSG } from '../sales-plan.constants';
 import type { SalesPlanRow, SearchCondition, ValidationResult } from '../sales-plan.types';
 
-import { requiredFieldsFor } from './sales-plan.division';
+import { isDiv81, requiredFieldsFor } from './sales-plan.division';
 
 const str = (v: unknown): string =>
   typeof v === 'string' ? v.trim() : typeof v === 'number' ? String(v) : '';
@@ -26,7 +27,10 @@ export const useSalesPlanValidation = () => {
   const validateFind = (c: SearchCondition): ValidationResult => {
     // #42 — Division 미선택 (L1513)
     if (!str(c.divisionId)) {
-      void setAlert({ type: 'alert', content: t(MSG.REQUIRE_DIVISION, '_Division 을 선택하세요.') });
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.REQUIRE_DIVISION, '_Division 을 선택하세요.'),
+      });
       return { ok: false, msgId: MSG.REQUIRE_DIVISION };
     }
     const start = str(c.startYyyymmdd);
@@ -69,7 +73,25 @@ export const useSalesPlanValidation = () => {
 
   // ===== 저장 1차 — 필수 13종 division×measure 분기 (SaveData L2198~2239 — validation.md #60~70/74~76) =====
   //   대상 = 신규(I) + 수정(M) 행. 첫 결손 필드로 MSG00429 {0} + 행 번호 병기.
-  const validateSaveRows = (rows: SalesPlanRow[], divisionId: string): ValidationResult => {
+  const validateSaveRows = (
+    rows: SalesPlanRow[],
+    divisionId: string,
+    staticColumns: RawFlexGridColumnConfig[]
+  ): ValidationResult => {
+    if (isDiv81(divisionId)) {
+      const columnSet = new Set(staticColumns.map(column => column.colNm?.toUpperCase()));
+      const missingColumns = ['FROM_SITE_ID', 'PLANT_SITE_ID'].filter(
+        column => !columnSet.has(column)
+      );
+      if (missingColumns.length > 0) {
+        void setAlert({
+          type: 'alert',
+          content: `${t(MSG.REQUIRED_COLUMN, '_Required input column is missing.')} (${missingColumns.join(', ')})`,
+        });
+        return { ok: false, msgId: MSG.REQUIRED_COLUMN, detail: missingColumns.join(',') };
+      }
+    }
+
     if (rows.length === 0) {
       // 변경 0건 (MSG00004 '수정한 내용이 없습니다')
       void setAlert({ type: 'alert', content: t(MSG.NO_CHANGES, '_수정한 내용이 없습니다.') });

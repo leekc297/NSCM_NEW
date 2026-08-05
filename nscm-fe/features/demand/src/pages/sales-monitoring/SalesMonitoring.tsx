@@ -118,7 +118,12 @@ export const SalesMonitoring = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   ^delim 다건 SAVE 는 apiClient.post 직접 (useProcMutation array unfold 안 함 — 표준 선례).
   const saveTitleSet = async (
     columnType: 'C' | 'M',
-    saveRows: { name: string; sortOrderNo: number; subTotalFlag?: string; sortMethodCode?: string }[]
+    saveRows: {
+      name: string;
+      sortOrderNo: number;
+      subTotalFlag?: string;
+      sortMethodCode?: string;
+    }[]
   ): Promise<boolean> => {
     try {
       const payload = {
@@ -144,7 +149,8 @@ export const SalesMonitoring = ({ tabId, title }: PageProps<MENU_ID>) => {
       }
       return true;
     } catch (e) {
-      const msg = e instanceof Error ? e.message : t('MSG00618', '_An error occurred while saving.');
+      const msg =
+        e instanceof Error ? e.message : t('MSG00618', '_An error occurred while saving.');
       void setAlert({ type: 'alert', content: msg });
       return false;
     }
@@ -154,23 +160,35 @@ export const SalesMonitoring = ({ tabId, title }: PageProps<MENU_ID>) => {
   const validateFind = (): boolean => {
     // MSG00137 — 이전 작업 실행 중 (AS-IS blnWork 가드)
     if (isFetching) {
-      void setAlert({ type: 'alert', content: t(MSG.WORK_IN_PROGRESS, '_이전 작업이 아직 실행 중입니다.') });
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.WORK_IN_PROGRESS, '_이전 작업이 아직 실행 중입니다.'),
+      });
       return false;
     }
     // MSG00097 — Division 필수 (AS-IS L671)
     if (!sc.divisionId) {
-      void setAlert({ type: 'alert', content: t(MSG.REQUIRE_DIVISION, '_Division 을 선택하세요.') });
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.REQUIRE_DIVISION, '_Division 을 선택하세요.'),
+      });
       return false;
     }
     // MSG00108 — 기간 역전 (AS-IS L638)
     if (Number(sc.startYyyymmdd) > Number(sc.endYyyymmdd)) {
-      void setAlert({ type: 'alert', content: t(MSG.PERIOD_INVERTED, '_조회 기간이 잘못되었습니다.') });
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.PERIOD_INVERTED, '_조회 기간이 잘못되었습니다.'),
+      });
       return false;
     }
     // MSG00164 — 3년 초과 (AS-IS L645: Value1.AddYears(3) < Value2)
     const limit = `${Number(sc.startYyyymmdd.slice(0, 4)) + 3}${sc.startYyyymmdd.slice(4)}`;
     if (Number(sc.endYyyymmdd) > Number(limit)) {
-      void setAlert({ type: 'alert', content: t(MSG.PERIOD_MAX_3YEAR, '_조회 기간은 3년 이내로 입력해주세요.') });
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.PERIOD_MAX_3YEAR, '_조회 기간은 3년 이내로 입력해주세요.'),
+      });
       return false;
     }
     return true;

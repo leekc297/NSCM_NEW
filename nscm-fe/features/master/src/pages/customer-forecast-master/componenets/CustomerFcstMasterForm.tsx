@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 
+import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { FormItem } from '@shared/lges';
@@ -37,11 +38,12 @@ export const CustomerFcstMasterForm = ({ onSubmit }: CustomerFcstMasterFormProps
       onSearch={onSubmit}
       conditions={
         <>
-          <Grid size={4}>
+          <Grid size={3}>
             <FormItem
               label={t('LBL00001', '_Div.')}
               labelAlign='right'
               required
+              className={commonStyles.formItem}
               render={() => (
                 <CustomDropdown
                   value={searchParams.divisionId}
@@ -57,11 +59,12 @@ export const CustomerFcstMasterForm = ({ onSubmit }: CustomerFcstMasterFormProps
               )}
             />
           </Grid>
-          <Grid size={4}>
+          <Grid size={3}>
             <FormItem
               label={t('LBL00032', '_Bucket Type')}
               labelAlign='right'
               required
+              className={commonStyles.formItem}
               render={() => (
                 <CustomDropdown
                   value={searchParams.bucketType}
@@ -75,11 +78,12 @@ export const CustomerFcstMasterForm = ({ onSubmit }: CustomerFcstMasterFormProps
               )}
             />
           </Grid>
-          <Grid size={4}>
+          <Grid size={3}>
             <FormItem
               label={t('LBL00080', '_End Customer')}
               labelAlign='right'
               required
+              className={commonStyles.formItem}
               render={() => (
                 <CustomDropdown
                   multiple
@@ -105,10 +109,11 @@ export const CustomerFcstMasterForm = ({ onSubmit }: CustomerFcstMasterFormProps
               )}
             />
           </Grid>
-          <Grid size={4}>
+          <Grid size={3}>
             <FormItem
               label={t('LBL00011', '_Sales Site')}
               labelAlign='right'
+              className={commonStyles.formItem}
               render={() => (
                 <CustomDropdown
                   multiple
@@ -134,10 +139,11 @@ export const CustomerFcstMasterForm = ({ onSubmit }: CustomerFcstMasterFormProps
               )}
             />
           </Grid>
-          <Grid size={4}>
+          <Grid size={3}>
             <FormItem
               label={t('LBL00007', '_Active')}
               labelAlign='right'
+              className={commonStyles.formItem}
               render={() => (
                 <CustomDropdown
                   allOption

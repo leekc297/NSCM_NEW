@@ -38,6 +38,16 @@
 | ② DIVISION_ID='--' (2글자) mismatch | sentinel 글자 DUMP byte 검증 누락 | 사내 `'-'` (Len=1) → 클라우드 `'--'` (Len=2) 깨짐 |
 | ③ `SCM_ADM_DQ_EXECUTE_HIST` ORA-00942 | SP 참조 테이블 이름 추측 | 실제 이름 `_H` suffix (NSCM 표준), 추측 `HIST` 로 02_DB_DDL 누락 |
 
+### §1.0-B ⭐ 2026-07-29 SYS0017 이관 취합으로 추가된 의무 (3건)
+
+| # | 의무 | 사유 (실측) |
+|---|---|---|
+| B1 | **`00_PRECHECK_CLOUD.sql` 동봉** (read-only 선판정, 패키지 최상단) | 클라우드에 참조 테이블·시퀀스·이력 SP·함수가 이미 있는지, 화면 메타가 0건인지 **적용 전에** 판정해야 어느 스크립트를 실행할지 결정 가능. 사내 실측만 믿고 적용하면 중복·충돌 발생 |
+| B2 | ⭐⭐ **신규 채번(MSG/LBL/MNU) 충돌 점검 섹션 필수** | 사내 MAX 기준으로 채번한 번호가 클라우드에서 이미 사용 중일 수 있음. PRECHECK 결과가 0 이 아니면 **그대로 적용 금지 — 생성기의 번호를 클라우드 MAX 로 재채번 후 SQL 재생성** |
+| B3 | **권한 미러링 원본 메뉴 실측 확인** | SYS0017 최초안은 형제 화면(SYS0016)을 미러링 원본으로 썼으나 **SYS0016 자체가 권한 0건** → 권한 2테이블이 0행으로 등록됨. 원본 메뉴의 그룹 보유 여부를 PRECHECK 로 확인하고, 0 이면 실제 그룹을 보유한 동급 메뉴로 교체 |
+
+> 사고 계보: 이 3건이 없으면 "사내에서는 정상, 클라우드에서만 실패" 또는 "적용은 성공했는데 화면 진입 시 권한없음" 이 재발한다.
+
 ### §1.1 6-종 인벤토리 작성
 
 ```
@@ -48,6 +58,15 @@
 ☐ FE POPUP modal 컴포넌트 모두 식별?
    → grep -rE "<\w+Modal" nscm-fe/features/.../{화면-slug}/
    → 공용 modal (master/src/components/) + 화면 전용 modal 분리
+
+☐ ⭐ 재사용 i18n 키(LBL/MSG)의 실제 문구 확인? (2026-07-29 SYS0017 사고)
+   → grep -rhoE "t\('(LBL|MSG)[0-9]{5}'" {화면-slug}/ | sort -u
+   → 각 키를 public/locales/{KO,EN,CN}.json + SCM_ADM_MSG_M 에서 **실제 값 조회**
+   → 의미가 맞는지 대조 (fallback 문구 '_Add' 만 보고 재사용 금지)
+   ※ 사고: LBL00073 을 'Add' 로 재사용했으나 실제 값은 'Exfactory Date',
+      LBL00074 는 'From Country' → 화면에 엉뚱한 라벨 노출. LBL00109/LBL00407 로 정정.
+   ※ locales 에는 있으나 SCM_ADM_MSG_M 에 없는 키(예: LBL00378/379/383)는
+      표시엔 문제없어도 **패키지 README 에 '재사용 자원 — 클라우드 존재 확인만' 으로 명시**
 
 ☐ 위 sheetName 별 BE SP 이름 cross-check?
    → SCM_ADM_MNU_BTN_MPG_M[MNU_ID, SHT_NM] → API_ID → SCM_ADM_API_M.API_URL = SP 이름
@@ -225,3 +244,4 @@ ls _artifacts/_deploy_packages/{화면}/04_Verify/*_Diagnose.sql        # Diagno
 - **2026-06-02 작성** (DMF0072/0008/0043/0043_01 deploy zip 누락 4건 사후 보강 작업 — 사용자 명시 요구)
 - **2026-07-02 §4.5 신설** (DMF0020 SAVE '후속 보강' 잔류 → 클라우드 저장 불능 / SYS0012 PROC_M MERGE ORA-00001 사고)
 - **2026-07-23 §4.6 신설** (DMF0003 FE 동봉 누락·DMF0049 `/`구분자 PLS-00103·교차 PKG PLS-00201 — 사용자 룰화 요구)
+- 2026-07-29: **§1.0-B 신설** — 00_PRECHECK_CLOUD 동봉 / 신규 채번 충돌 점검 / 권한 미러링 원본 실측 3건 + §1.1 에 재사용 i18n 키 실제 문구 확인 추가 (SYS0017 이관 취합).

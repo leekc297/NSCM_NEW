@@ -38,10 +38,8 @@ export const isSspSyncTarget = (divisionId: string, measure: string): boolean =>
 //   멤버십 검사. 현행 업무규칙: 82 만 편집 가능. 40 / 81 / 81_HD·HG·HM·ST·UC / EE·EE_* = 편집제약
 //   (셀 편집불가 + Insert/Delete/Save 버튼 미표시, 40·81 Insert 불가). 하드코딩 division 집합 금지 —
 //   편집가능 집합은 메타에서 fetch 해 주입(메타 부재 시 호출측 fallback = {'82'}).
-export const isEditableDivision = (
-  divisionId: string,
-  editableSet: ReadonlySet<string>
-): boolean => editableSet.has((divisionId ?? '').trim());
+export const isEditableDivision = (divisionId: string, editableSet: ReadonlySet<string>): boolean =>
+  editableSet.has((divisionId ?? '').trim());
 
 // row 의 identity 키 컬럼명 묶음 (division 분기). SAVE payload·중복검증 공용.
 //   project/scmSite/item 은 division 별 실 컬럼명(40=*_40)을 가리킨다.
@@ -86,10 +84,7 @@ export const readIdentity = (
 //   81  : + PlantSiteId
 //   82  : (PlantSite 제외 — 위 공통만)
 //   40  : Customer40/ScmSiteId40/ItemId40 계열(readIdentity 가 흡수) — PlantSite 제외.
-export const buildDuplicateKey = (
-  row: Record<string, unknown>,
-  divisionId: string
-): string => {
+export const buildDuplicateKey = (row: Record<string, unknown>, divisionId: string): string => {
   const id = readIdentity(row, divisionId);
   const parts = [
     str(row.DIVISION_ID) || divisionId,

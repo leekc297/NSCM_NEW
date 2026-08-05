@@ -12,12 +12,34 @@ import { BUCKET_TYPE, DIVISION } from '../mkt-fcst.constants';
 import type { MktFcstRow } from '../mkt-fcst.types';
 import type { BucketInfo, CurrentWeekInfo } from '../useMktFcstStore';
 
+// ⭐ Weekly 과거 판정 = "현재 주 컬럼(초록 강조)의 위치보다 앞이면 과거" — binding 파싱 전면 폐기.
+//   [왜 파싱을 버렸나 — 2026-07-24 실측 확정]
+//   Weekly binding 은 SP GET_SPREAD_TITLE L1961 `'W_' || BASIS_YYYYMM || ISO_WEEK` 인데,
+//   SCM_SYS_CALENDAR_M.ISO_WEEK 실데이터가 숫자 2자리가 아니라 **'W30' 문자열**이다(CSV 실측).
+//   → 실제 binding = 'W_202607W30' (중간에 문자 W 포함). 기존 `\d` 기반 정규식
+//     (/^W_\d+$/ · /^W_\d{7,9}$/ · /^W_\d{8}$/) 이 **전부 불일치**하여 어떤 비교 로직을 넣어도
+//     그 코드에 도달조차 못 했다(= Daily/Monthly 는 순수 숫자라 정상, Weekly 만 실패한 진짜 원인).
+//   [대신 쓰는 기준 — 이미 화면에서 검증된 것]
+//   헤더 초록 Bold 강조(MktFcstGrid formatItem L608~626)는 O_RC3 `THIS_YYYYMMWW` 와 컬럼 binding 을
+//   **문자열 그대로 비교**한다. THIS_YYYYMMWW 는 헤더 컬럼과 완전히 동일한 식
+//   (`'W_' || BASIS_YYYYMM || ISO_WEEK`, 08_procedures_01.sql:9411) 으로 생성되므로 일치가 보장된다.
+//   컬럼 순서는 SP SORT_ORDER_NO(=BASIS_START_DATE) 정렬 = 시간순 → 현재 주 index 앞 = 과거.
+//   ⇒ 형식이 바뀌어도 깨지지 않는다(파싱 0). 사용자 지시(2026-07-24): "초록색 체크하는 기준에 맞춰라".
+export const weekIndexOf = (binding: string, weekBindings: readonly string[]): number =>
+  weekBindings.indexOf(binding);
+
 // 이번 주 월요일 — AS-IS L857 (Sunday=0 → -6, 그 외 -(d-1)). JS getDay(Sun=0) ≡ .NET DayOfWeek.
 export const thisWeekMondayYmd = (today = new Date()): string => {
   const d = new Date(today);
   d.setHours(0, 0, 0, 0);
   const dow = d.getDay();
   d.setDate(d.getDate() + (dow === 0 ? -6 : -(dow - 1)));
+  return `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`;
+};
+
+// 오늘(당일) yyyymmdd — Daily 잠금 기준(당일 포함 이후만 편집, 2026-07-23 사용자 지시).
+export const todayYmd = (today = new Date()): string => {
+  const d = new Date(today);
   return `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`;
 };
 
@@ -39,23 +61,38 @@ export const dynKindOf = (binding: string): DynKind => {
 //                      Monthly 는 cutoff.month(yyyymm) 로 과거월 판정, Weekly 는 M_ 자체가 비활성이므로
 //                      본 binding 을 읽지 않는다. O_RC3 계약 보존을 위해 struct field 는 유지.
 export interface EditCutoff {
-  week: string; // yyyymmdd (이번 주 월요일)
+  today: string; // yyyymmdd (오늘/당일 — Daily 잠금 기준)
+  week: string; // yyyymmdd (이번 주 월요일 — 파생 계산용 보관)
   month: string; // yyyymm (이번 달)
   div40MonthCutoff: string | null; // yyyymm (O_RC2)
   thisMonthBinding: string | null; // 'M_yyyymm' (O_RC3)
+  // ⭐ Weekly 잠금 기준 2종 (헤더 초록 강조와 동일 출처 — 파싱 없음).
+  thisWeekBinding: string | null; // 'W_yyyymm+ISO_WEEK' 원문 (O_RC3 THIS_YYYYMMWW)
+  weekBindings: readonly string[]; // 화면에 그려진 W_ 컬럼 시간순 목록 (SP SORT_ORDER_NO 정렬)
+  thisWeekIndex: number; // weekBindings 내 현재 주 위치 (-1 = 미상 → Weekly 잠금 미적용)
 }
 
 export const buildEditCutoff = (
   bucketInfo: BucketInfo | null,
   currentWeekInfo: CurrentWeekInfo | null,
-  now = new Date()
+  now = new Date(),
+  weekBindings: readonly string[] = []
 ): EditCutoff => {
   const mondayYmd = thisWeekMondayYmd(now);
+  const thisWeekBinding = (currentWeekInfo?.THIS_YYYYMMWW ?? '').trim() || null;
   return {
+    today: todayYmd(now),
     week: mondayYmd,
-    month: mondayYmd.slice(0, 6),
+    // ⭐ month = 오늘(당일) 기준 yyyymm (이번 달). 이번 주 월요일이 지난달일 때도 '이번 달'이 정확하도록
+    //   mondayYmd.slice 가 아닌 todayYmd 로 산출 (2026-07-23 — 당일 포함 이후만 편집 규칙).
+    month: todayYmd(now).slice(0, 6),
     div40MonthCutoff: (bucketInfo?.BASIS_YYYYMM ?? '').trim() || null,
     thisMonthBinding: (currentWeekInfo?.THIS_YYYYMM ?? '').trim() || null,
+    thisWeekBinding,
+    weekBindings,
+    // 현재 주 컬럼 위치 = 초록 강조가 켜지는 그 컬럼. 못 찾으면 -1 → 과거 판정 자체를 하지 않는다
+    //   (SP 미응답/조회구간 밖 등에서 전 주차를 잘못 잠그는 것보다 열어두는 편이 안전 — AS-IS 기본 개방).
+    thisWeekIndex: thisWeekBinding ? weekBindings.indexOf(thisWeekBinding) : -1,
   };
 };
 
@@ -114,8 +151,9 @@ export const evalDynCell = (params: {
   //     Monthly : 현재월 M_ 활성 / D_·W_ 비활성.
   if (bucketType === BUCKET_TYPE.DAILY) {
     if (kind !== 'D') return { editable: false, isPast: false };
-    // 과거일 잠금 (이번 주 월요일 이전 일자).
-    const isPast = tag < cutoff.week;
+    // ⭐ 과거일 잠금 = 오늘(당일) 이전 일자 (2026-07-23 사용자 지시 — 당일 포함 이후만 편집).
+    //   기존 '이번 주 월요일' 기준은 이번 주 월~어제까지도 편집 허용 → 요구(오늘부터)와 불일치하여 today 로 교정.
+    const isPast = tag < cutoff.today;
     return { editable: !isPast, isPast };
   }
 
@@ -128,8 +166,16 @@ export const evalDynCell = (params: {
     //   따라서 현재월 M_ 라도 Weekly 에서는 편집 불가(노랑 금지) = White. (구현이 현재월 M_ 를 노랑으로
     //   칠하던 것은 AS-IS·프롬프트 스펙("Weekly=W_") 모두와 불일치 → 교정.)
     if (kind === 'D' || kind === 'M') return { editable: false, isPast: false };
-    // W_ — 과거 주(앞 6자리 yyyymm < 이번달, 또는 8자리 W_yyyymmdd < 이번주 월요일) 잠금.
-    const isPast = tag.length >= 8 ? tag.slice(0, 8) < cutoff.week : tag.slice(0, 6) < cutoff.month;
+    // ⭐ W_ 과거 주 잠금 = 헤더 초록 강조 컬럼(현재 주)보다 앞 위치 (2026-07-24 사용자 지시).
+    //   binding 파싱을 하지 않는다 — 실 binding 이 'W_202607W30'(중간에 문자 W) 이라 숫자 기반 파싱이
+    //   전부 불일치했던 것이 기존 실패 원인. 대신 화면이 이미 정확히 맞히고 있는 초록 기준
+    //   (O_RC3 THIS_YYYYMMWW 문자열 일치)의 컬럼 위치를 그대로 재사용한다.
+    //   컬럼 배열은 SP SORT_ORDER_NO(BASIS_START_DATE) 정렬 = 시간순이므로 index 비교로 과거가 확정된다.
+    //   thisWeekIndex < 0(현재 주 컬럼 미검출)이면 잠그지 않는다 — 오탐 잠금 방지.
+    if (cutoff.thisWeekIndex < 0) return { editable: true, isPast: false };
+    const idx = weekIndexOf(binding, cutoff.weekBindings);
+    // 목록에 없는 W_ 컬럼(-1)은 판정 불가 → 개방(위와 동일 안전측).
+    const isPast = idx >= 0 && idx < cutoff.thisWeekIndex;
     return { editable: !isPast, isPast };
   }
 

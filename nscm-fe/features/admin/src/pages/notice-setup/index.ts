@@ -1,0 +1,1 @@
+export { NoticeSetup } from './NoticeSetup';

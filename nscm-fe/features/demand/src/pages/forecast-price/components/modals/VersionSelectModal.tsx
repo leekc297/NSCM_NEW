@@ -7,22 +7,31 @@ import dayjs from '@foundation/dayjs';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { CustomDialog, CustomDropdown, DataGrid, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
-import { Button, FormItem, InputField } from '@shared/lges';
+import { Button, Checkbox, FormItem, InputField } from '@shared/lges';
 import { ControlConfirmIcon } from '@shared/lges-icons';
-import { Grid } from '@shared/mui';
+import { Grid, Stack } from '@shared/mui';
 import { useMessageStore } from '@shared/stores';
 
 import { MENU_ID, MSG, SHEETS } from '../../forecast-price.constants';
 
 import styles from './VersionSelectModal.module.scss';
 
-// AS-IS DMF0082 Version 선택 — DMF0073_VersionBySalesPricePopup 공유 (MetalLinkVersionModal 표준 1:1):
-//   popVersion.Form_Load(true, "SP", division, 오늘-3M, 오늘+3M).
+// AS-IS DMF0082 Version 선택 — ⭐ 2026-07-24 원본 재실측 정정:
+//   실제 AS-IS 팝업 = **SCM0002_VersionByWaterfallPopup** (제목 "Version Popup", MNU00179).
+//   호출 = DMF0082_FcstNPrice_Mgmt.cs btnVersion_Click L3755~3759
+//          popVersion.Form_Load(true, "MF_SP_SF", division, 조회 Period.start, 조회 Period.end)
+//          — [PJ2025-50188] 로 축 "MF_SP" → "MF_SP_SF" 변경 (SF 도 노출 요구).
 //   반환 콤마연결 버전 — 3개+ = MSG00255 미반영 / 1~2개 = txtVersion 반영. 'Current' 수동 입력 유효.
-//   SP = DMF0073_GET_VERSION_SALESPRICE (9-arg 공유 계약 — DMF0020/DMF0074 version 시트 동일.
-//   DB 배선 = P1-7 SQL 참조).
-//   ⭐ versionType 'SP_W' 고정 — AS-IS 'SP' 는 카테고리(체크박스로 _W 등 선택)였으나 TO-BE SP 는
-//     정확 토큰 매칭이라 'SP' 0행. DMF0020/DMF0074 검증 동작 1:1 (2026-07-10 실측 정정 승계)
+//   (구 주석의 DMF0073_VersionBySalesPricePopup 은 오기 — 그쪽은 Monthly Rolling Forecast 편집 팝업이며
+//    DMF0082 가 여는 팝업이 아니다. 컬럼/체크박스/제목이 달랐던 원인.)
+//
+//   ⭐ 조회 SP — 원 SP `SCM0002_GET_VERSIONBYWATERFALLPOPUP` 는 사내 INVALID(ORA-01790 4곳) 라
+//     **DMF0073_GET_VERSION_SALESPRICE (9-arg 공유 계약)** 로 대체 배선됨 (__asis-mapping__ §7-3).
+//     두 SP 모두 `VERSION_TYPE IN (분해(P_VERSION_TYPE, ','))` 정확 토큰 매칭이라,
+//     AS-IS SP 가 내부에서 하던 축→토큰 확장(PKG_SCM0002 L3759~3766)을 **FE 가 그대로 수행**한다.
+//       MF_SP_SF_D → SP_D,MF_D,SF_D / MF_SP_SF_W → SP_W,MF_W,SF_W / MF_SP_SF_M → SP_M,MF_M,SF_M
+//     ※ AS-IS .cs L229 가 덧붙이는 'ME_S' 는 SP 의 MF_SP_SF 분기가 V_VERSION_TYPE 만 사용해
+//        **버려지므로**(L3757~3770) TO-BE 도 붙이지 않는다.
 
 type VersionPopupRow = {
   CODE: string;
@@ -40,14 +49,18 @@ interface VersionSelectModalProps {
   open: boolean;
   modalClose: () => void;
   defaultDivision: string;
+  // 부모(메인 화면) 조회 기간 — 팝업 Period 기본값으로 그대로 승계. 미지정 시 오늘 ±3개월 fallback.
+  defaultPeriod?: { start: string; end: string };
   onApply: (versionIds: string) => void;
 }
 
+// AS-IS SCM0002_VersionByWaterfallPopup.InitSpread_X L166~177 — 표시 컬럼 1:1.
+//   DIVISION_ID / VER_CRE_SEQ / YYYYMMDD 는 AS-IS 도 visible=false. EDI_APPLY 는 sCode=='MF' 전용이라
+//   DMF0082(축 'MF_SP_SF') 에서는 미표시. MONTHLY_ROLLING_FCST 는 DMF0073 팝업 전용 컬럼이라 제거.
 const VERSION_COLUMNS: RawFlexGridColumnConfig[] = [
   { colNm: 'VERSION_NO', colLblNm: 'Version', colWth: 240 },
-  { colNm: 'VERSION_DESCRIPTION', colLblNm: 'Details', colWth: 300 },
+  { colNm: 'VERSION_DESCRIPTION', colLblNm: 'Description', colWth: 300 },
   { colNm: 'VERSION_TYPE', colLblNm: 'Type', colWth: 90 },
-  { colNm: 'MONTHLY_ROLLING_FCST', colLblNm: 'Monthly Rolling Forecast', colWth: 170 },
   { colNm: 'CREATED_BY', colLblNm: 'Create By', colWth: 110 },
   { colNm: 'CREATION_DATE', colLblNm: 'Create Date', colWth: 150 },
 ].map(c => ({
@@ -58,10 +71,24 @@ const VERSION_COLUMNS: RawFlexGridColumnConfig[] = [
   inputTpCd: CELL_INPUT_EDIT_TYPE.SEARCH_ONLY,
 })) as RawFlexGridColumnConfig[];
 
+/**
+ * AS-IS 축 'MF_SP_SF' 가 SP 내부에서 확장되는 실제 VERSION_TYPE 접두 3종
+ * (PKG_SCM0002.P_SCM0002_GET_VERSIONBYWATERFALLPOPUP L3759~3766 — 순서까지 원본 그대로).
+ */
+const VERSION_TYPE_PREFIXES = ['SP', 'MF', 'SF'] as const;
+
+/** 체크박스 → VERSION_TYPE 콤마 토큰. AS-IS SP 확장 순서(D 그룹 → W 그룹 → M 그룹) 유지. */
+const buildVersionType = (day: boolean, week: boolean, manual: boolean): string =>
+  [day ? 'D' : '', week ? 'W' : '', manual ? 'M' : '']
+    .filter(Boolean)
+    .flatMap(suffix => VERSION_TYPE_PREFIXES.map(prefix => `${prefix}_${suffix}`))
+    .join(',');
+
 export const VersionSelectModal = ({
   open,
   modalClose,
   defaultDivision,
+  defaultPeriod,
   onApply,
 }: VersionSelectModalProps) => {
   const { t } = useTranslation();
@@ -79,27 +106,40 @@ export const VersionSelectModal = ({
     });
   }, [myDivisions]);
 
-  // AS-IS Period — 오늘 ±3개월 (MetalLinkVersionModal MultiTimeZone 동일)
-  const [periodFrom, setPeriodFrom] = useState<string>(() =>
-    dayjs().subtract(3, 'month').format('YYYYMMDD')
-  );
-  const [periodTo, setPeriodTo] = useState<string>(() => dayjs().add(3, 'month').format('YYYYMMDD'));
+  // Period 기본값 — 부모(메인) 조회 기간을 그대로 승계. 미지정 시 오늘 ±3개월 fallback
+  //   (MetalLinkVersionModal MultiTimeZone 동일 규칙).
+  const defaultFrom = defaultPeriod?.start || dayjs().subtract(3, 'month').format('YYYYMMDD');
+  const defaultTo = defaultPeriod?.end || dayjs().add(3, 'month').format('YYYYMMDD');
+  const [periodFrom, setPeriodFrom] = useState<string>(defaultFrom);
+  const [periodTo, setPeriodTo] = useState<string>(defaultTo);
   const [divisionId, setDivisionId] = useState<string>(defaultDivision);
   const [description, setDescription] = useState<string>('');
+
+  // Day / Week / Manual — AS-IS Designer 기본값 = Week 만 Checked (chkWeek.Checked = true L149~150).
+  //   chkMonth 라벨은 'Manual' 이지만 토큰은 _M (AS-IS .cs L226~227) — 라벨/토큰 불일치는 원본 그대로 승계.
+  const [chkDay, setChkDay] = useState<boolean>(false);
+  const [chkWeek, setChkWeek] = useState<boolean>(true);
+  const [chkManual, setChkManual] = useState<boolean>(false);
 
   useEffect(() => {
     if (open) {
       setDivisionId(defaultDivision);
-      setPeriodFrom(dayjs().subtract(3, 'month').format('YYYYMMDD'));
-      setPeriodTo(dayjs().add(3, 'month').format('YYYYMMDD'));
+      setPeriodFrom(defaultFrom);
+      setPeriodTo(defaultTo);
       setDescription('');
+      setChkDay(false);
+      setChkWeek(true);
+      setChkManual(false);
     }
-  }, [open, defaultDivision]);
+  }, [open, defaultDivision, defaultFrom, defaultTo]);
 
   // DMF0073_GET_VERSION_SALESPRICE (9-arg — sesUserId/mnuId BE 자동. DB 배선 P1-7 SQL 참조).
-  // ⭐ versionType 'SP_W' 고정 (2026-07-10 실측 정정 승계 — SP 필터는 VERSION_TYPE 정확 토큰 매칭
-  //   (fn_string_split L89)이라 AS-IS 카테고리 'SP' 는 0행. 실데이터 = 'SP_W'.
-  //   DMF0020 SalesPriceVersionModal / DMF0074 MetalLinkVersionModal 검증 동작 1:1)
+  // ⭐ versionType = Day/Week/Manual 체크박스 → AS-IS SP 축 확장 결과 토큰 (파일 상단 주석 참조).
+  //   기본 Week = 'SP_W,MF_W,SF_W' (구 하드코딩 'SP_W' 는 MF_W/SF_W 누락 상태였음 — 원본 대비 결손).
+  //   전부 해제 = '' → VERSION_TYPE IN (빈 집합) 이라 실버전 0행. 'Current' 행은 SP 가 DUAL UNION 으로
+  //   항상 emit 하므로 AS-IS 와 동일하게 남는다.
+  const versionType = buildVersionType(chkDay, chkWeek, chkManual);
+
   const filters = useMemo(
     () =>
       open
@@ -108,11 +148,11 @@ export const VersionSelectModal = ({
             endYyyymmdd: periodTo,
             createdBy: '',
             divisionId,
-            versionType: 'SP_W',
+            versionType,
             description,
           }
         : undefined,
-    [open, divisionId, periodFrom, periodTo, description]
+    [open, divisionId, periodFrom, periodTo, versionType, description]
   );
 
   const { data, refetch, isLoading, isFetching } = useTabProcQuery<MENU_ID, SHEETS.VERSION>({
@@ -178,7 +218,8 @@ export const VersionSelectModal = ({
       customHeaderTitle={
         <div className='headerContainer'>
           <div className='headerDot' />
-          <h2 className='headerTitle'>{t('LBL00739', 'Sales Price Version')}</h2>
+          {/* AS-IS SCM0002_VersionByWaterfallPopup.Designer L503 this.Text = "Version Popup" (MNU00179) */}
+          <h2 className='headerTitle'>{t('MNU00179', 'Version Popup')}</h2>
         </div>
       }
       customContentArea={
@@ -211,6 +252,29 @@ export const VersionSelectModal = ({
                     setPeriodTo(end);
                   }}
                 />
+                {/* AS-IS chkDay / chkWeek / chkMonth(라벨 'Manual') — Designer L140~165 배치 순서 그대로.
+                    ForecastPriceForm Sum/Qty 체크박스와 동일 패턴 (Checkbox labelText + Stack row).
+                    size 5 = Div(3)+Period(4)+5 로 1행 12 컬럼을 채워 Description 이 2행으로 자연 개행
+                    → AS-IS 2행 폼(1행 Div/Period, 2행 체크박스/Description) 과 동일한 2행 구성. */}
+                <Grid size={2} sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Stack direction='row' spacing={1} alignItems='center' sx={{ width: '100%' }}>
+                    <Checkbox
+                      labelText={t('LBL00774', '_Day')}
+                      checked={chkDay}
+                      onChange={(checked: boolean) => setChkDay(checked)}
+                    />
+                    <Checkbox
+                      labelText={t('LBL00775', '_Week')}
+                      checked={chkWeek}
+                      onChange={(checked: boolean) => setChkWeek(checked)}
+                    />
+                    <Checkbox
+                      labelText={t('LBL00776', '_Manual')}
+                      checked={chkManual}
+                      onChange={(checked: boolean) => setChkManual(checked)}
+                    />
+                  </Stack>
+                </Grid>
                 <Grid size={3}>
                   <FormItem
                     label={t('LBL00608', 'Description')}

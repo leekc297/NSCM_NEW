@@ -2,7 +2,13 @@ import { apiClient } from '@foundation/apis';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { createPersistedStoreWithTab, useSessionStore } from '@shared/stores';
 
-import { ADMIN_SHEET_NAME, BUCKET_TYPE, DIVISION, MENU_ID, SHEETS } from './sales-future-price.constants';
+import {
+  ADMIN_SHEET_NAME,
+  BUCKET_TYPE,
+  DIVISION,
+  MENU_ID,
+  SHEETS,
+} from './sales-future-price.constants';
 import type { SearchCondition } from './sales-future-price.types';
 import { thisWeekMonday, yyyymmddOf } from './utils/futurePriceDate';
 
@@ -37,6 +43,7 @@ interface State {
   searchCondition: SearchCondition;
   openSearchArea: boolean;
   staticColumns: StaticColumnsBySheet;
+  originalStaticColumns: StaticColumnsBySheet;
   staticMeasures: StaticMeasuresBySheet;
 }
 
@@ -55,6 +62,18 @@ interface Action {
   restoreSearchConditions: () => Promise<void>;
   // ColumnSettingModal onSave — 사용자 선택 column 만 visible='Y', 나머지 'N'.
   applyColumnVisibility: (sheetName: keyof StaticColumnsBySheet, visibleKeys: string[]) => void;
+  // ColumnLayoutModal onSave — visible + width + order + cell/text color 를 한 번에 적용.
+  applyColumnLayout: (
+    sheetName: keyof StaticColumnsBySheet,
+    settings: {
+      colNm: string;
+      visible: boolean;
+      width: number;
+      cellColor: string;
+      textColor: string;
+      order: number;
+    }[]
+  ) => void;
 }
 
 // Period 초기값 = "당주 월요일" ~ (당주 월요일 + 1년 - 1일) (사용자 요구 2026-07-02 — 구 '당일' 기준에서 변경).
@@ -88,10 +107,13 @@ const initSearch: SearchCondition = {
   versionId: 'CURRENT',
 };
 
-const emptyCols: StaticColumnsBySheet = Object.values(SHEETS).reduce((acc, k) => {
-  (acc as Record<string, RawFlexGridColumnConfig[]>)[k] = [];
-  return acc;
-}, {} as StaticColumnsBySheet);
+const makeEmptyCols = (): StaticColumnsBySheet =>
+  Object.values(SHEETS).reduce((acc, k) => {
+    (acc as Record<string, RawFlexGridColumnConfig[]>)[k] = [];
+    return acc;
+  }, {} as StaticColumnsBySheet);
+
+const emptyCols: StaticColumnsBySheet = makeEmptyCols();
 
 const emptyMeasures: StaticMeasuresBySheet = Object.values(SHEETS).reduce((acc, k) => {
   (acc as Record<string, MeasureMeta[]>)[k] = [];
@@ -104,6 +126,7 @@ const initState: State = {
   searchCondition: initSearch,
   openSearchArea: true,
   staticColumns: emptyCols,
+  originalStaticColumns: makeEmptyCols(),
   staticMeasures: emptyMeasures,
 };
 
@@ -177,6 +200,7 @@ export const useSalesFuturePriceStore = createPersistedStoreWithTab<State & Acti
           if (JSON.stringify(state.staticColumns[SHEETS.MAIN]) !== JSON.stringify(next)) {
             state.staticColumns[SHEETS.MAIN] = next;
           }
+          state.originalStaticColumns[SHEETS.MAIN] = next;
         });
       } catch {
         // BE 메타 미등록 시 화면이 안 깨지도록 silent fallback — 기존 MAIN_COLUMNS 하드코딩 유지
@@ -287,6 +311,31 @@ export const useSalesFuturePriceStore = createPersistedStoreWithTab<State & Acti
           ...c,
           visible: visibleSet.has(c.colNm),
         }));
+      });
+    },
+    applyColumnLayout: (sheetName, settings) => {
+      set(state => {
+        const cur = state.staticColumns[sheetName];
+        if (!cur || cur.length === 0) return;
+        const byCol = new Map(settings.map(s => [s.colNm, s]));
+        const next = cur.map(c => {
+          const s = byCol.get(c.colNm);
+          if (!s) return { ...c, visible: false };
+          return {
+            ...c,
+            visible: s.visible,
+            colWth: s.width,
+            cellColor: s.cellColor,
+            textColor: s.textColor,
+          };
+        });
+        // 팝업 순서대로 재정렬 — grid 는 배열 순서를 컬럼 순서로 사용. 미매칭 컬럼은 뒤로.
+        next.sort(
+          (a, b) =>
+            (byCol.get(a.colNm)?.order ?? Number.MAX_SAFE_INTEGER) -
+            (byCol.get(b.colNm)?.order ?? Number.MAX_SAFE_INTEGER)
+        );
+        state.staticColumns[sheetName] = next;
       });
     },
   }),

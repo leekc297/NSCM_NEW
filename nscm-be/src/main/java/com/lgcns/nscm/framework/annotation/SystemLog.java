@@ -40,7 +40,6 @@ public @interface SystemLog {
         SYSTEM,
         LOOKUP,
         COMBO,
-        EXCELUPLOAD,
-        PERF   // ⭐ G3 — 성능 측정 (FE usePerfTrace 와 통합, 2026-06-04 Phase 7 A3)
+        EXCELUPLOAD
     }
 }

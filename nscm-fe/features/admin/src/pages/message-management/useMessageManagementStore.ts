@@ -83,10 +83,13 @@ export const useMessageManagementStore = createPersistedStoreWithTab<
       );
 
       if (param.data.result?.length > 0) {
-        const searchParams = param.data.result.reduce((acc, curr) => {
-          acc[curr.paramNm] = curr.paramCtn;
-          return acc;
-        }, {} as SearchParamProps);
+        const searchParams = param.data.result.reduce(
+          (acc, curr) => {
+            acc[curr.paramNm] = curr.paramCtn;
+            return acc;
+          },
+          { ...initMessageManagementParam, useYn: '' } as SearchParamProps
+        );
 
         set(state => {
           state.searchParams = searchParams;

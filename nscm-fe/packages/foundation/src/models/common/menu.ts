@@ -2,8 +2,8 @@ export interface Menu {
   mnuId: string | MenuId;
   upprMnuId?: string | null;
   mnuUrl: string;
-  // ⭐ SCM_ADM_MNU_M.ROUTE_PATH — 전체 라우트 경로(계층 MNU_URL join). 메뉴 클릭 네비게이션 원천.
-  routePath?: string;
+  /** 화면 모듈 경로 (DB SCM_ADM_MNU_M.ROUTE_PATH, 예: 'master/sales-site') — viewRegistry 해석 1순위 */
+  routePath?: string | null;
   mnuMsgId: translation;
   mnuDesc: string;
   favorite?: boolean;

@@ -25,7 +25,10 @@ export const useBusinessPlanValidation = () => {
   const validateFind = (c: SearchCondition): ValidationResult => {
     // #10 — Division 미선택 (L697)
     if (!str(c.divisionId)) {
-      void setAlert({ type: 'alert', content: t(MSG.REQUIRE_DIVISION, '_Division 을 선택하세요.') });
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.REQUIRE_DIVISION, '_Division 을 선택하세요.'),
+      });
       return { ok: false, msgId: MSG.REQUIRE_DIVISION };
     }
     const start = str(c.startYyyymmdd);

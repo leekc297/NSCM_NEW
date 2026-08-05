@@ -1,23 +1,16 @@
-import dayjs, { type Dayjs } from 'dayjs';
+import { PeriodField } from 'features/master/src/components';
 import { useMemo } from 'react';
 
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
-import { DatePickerCalendar, FormItem, InputField } from '@shared/lges';
+import { FormItem, InputField } from '@shared/lges';
 import { Grid } from '@shared/mui';
 
 import { useAuthApprovalStore } from '../useAuthApprovalStore';
 
-import styles from './AuthApprovalForm.module.scss';
-
 interface Props {
   onSearch: () => void;
 }
-
-const toDayjs = (yyyymmdd: string): Dayjs =>
-  yyyymmdd && yyyymmdd.length === 8
-    ? dayjs(`${yyyymmdd.slice(0, 4)}-${yyyymmdd.slice(4, 6)}-${yyyymmdd.slice(6, 8)}`)
-    : dayjs();
 
 // SYS0012 조회조건 5종 (AS-IS SCM0009 이미지 기준 + NSCM 표준 4/행, 사용자 요구 2026-06-28):
 //   Div / User ID(Name) / Department / Request Date / Approval Result
@@ -49,8 +42,6 @@ export const AuthApprovalForm = ({ onSearch }: Props) => {
     { label: t('LBL00635', 'Rejected'), value: 'REJECTED' },
   ];
 
-  const periodValue: [Dayjs, Dayjs] = [toDayjs(sc.startDate), toDayjs(sc.endDate)];
-
   return (
     <SearchArea
       searchButtonLabel={t('LBL00112', '_Search')}
@@ -58,7 +49,7 @@ export const AuthApprovalForm = ({ onSearch }: Props) => {
       onSearch={onSearch}
       conditions={
         <>
-          <Grid size={3}>
+          <Grid size={2}>
             <FormItem
               label={t('LBL00675', 'Div')}
               labelAlign='right'
@@ -118,32 +109,14 @@ export const AuthApprovalForm = ({ onSearch }: Props) => {
               )}
             />
           </Grid>
-          <Grid size={2}>
-            <FormItem
-              label={t('LBL00677', 'Request Date')}
-              labelAlign='right'
-              required
-              render={() => (
-                // hook #94 — DatePicker 높이 36px 동일화 (wrapper 전레벨 강제)
-                <div className={styles.datePickerFix}>
-                  <DatePickerCalendar
-                    usecase='date-range-multi'
-                    elevation
-                    size='small'
-                    value={periodValue}
-                    onChange={
-                      ((date: [Dayjs, Dayjs]) => {
-                        setSc({
-                          startDate: date[0]?.format('YYYYMMDD') ?? '',
-                          endDate: date[1]?.format('YYYYMMDD') ?? '',
-                        });
-                      }) as never
-                    }
-                  />
-                </div>
-              )}
-            />
-          </Grid>
+          {/* 공용 카탈로그 PeriodField(@master/searchFields) — 라벨만 'Request Date'로 오버라이드. */}
+          <PeriodField
+            gridSize={2}
+            label={t('LBL00677', 'Request Date')}
+            start={sc.startDate}
+            end={sc.endDate}
+            onChange={(start, end) => setSc({ startDate: start, endDate: end })}
+          />
         </>
       }
     />

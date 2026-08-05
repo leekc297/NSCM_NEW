@@ -1,6 +1,7 @@
 package com.lgcns.nscm.framework.dao;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.stereotype.Repository;
 
 import com.lgcns.nscm.framework.interceptor.QueryLogInterceptor;
+import com.lgcns.nscm.framework.interceptor.SqlLogWriter;
 import com.lgcns.nscm.framework.property.CommonProperties;
 import com.lgcns.nscm.framework.property.CommonProperties.Datasource;
 import com.lgcns.nscm.framework.utils.NullUtils;
@@ -44,6 +46,8 @@ public class NDBConnection implements InitializingBean, DisposableBean, NDaoInte
 
 	private Map<String, HikariDataSource> mDatasource = new LinkedHashMap();				// DataSource List
 	private static Map<String, SqlSessionFactory> mSessionFactory = new LinkedHashMap();	// Session Factory List
+	private List<SqlLogWriter> mLogWriters = new ArrayList<>();							// SQL 로그 워커 (DataSource별)
+	private List<HikariDataSource> mLogDatasource = new ArrayList<>();					// 로그 전용 풀 (DataSource별)
 
 
 	@Override
@@ -68,14 +72,46 @@ public class NDBConnection implements InitializingBean, DisposableBean, NDaoInte
 			if (sqlConType.equals("JNDI")) InitJNDI();
 			else InitDBCP();
 		} catch (Exception e) {
+			// 예외를 삼키면 DB 연결이 0개인 상태로 기동에 성공한 것처럼 보이고,
+			// 이후 모든 쿼리가 getSessionFactory()에서 NoSuchElementException으로 죽는다.
+			log.error("[NDBConnection] DB 초기화 실패. 등록된 DataSource가 없습니다.", e);
 			bRtn = false;
+		}
+		if (mSessionFactory.isEmpty()) {
+			log.error("[NDBConnection] SqlSessionFactory가 하나도 생성되지 않았습니다. config.datasources 설정을 확인하세요.");
+		} else {
+			log.info("[NDBConnection] 등록된 DataSource: {}", mSessionFactory.keySet());
 		}
 		return bRtn;
 	}
 
 	private void clean() {
 		cleanFactory();
-		cleanDataSource();
+		cleanLogWriters();		// writer 종료 → 잔여 로그 flush (로그풀 살아있을 때)
+		cleanLogDataSource();	// 로그 전용 풀 종료
+		cleanDataSource();		// 업무 풀 종료
+	}
+
+	private void cleanLogWriters() {
+		for (SqlLogWriter w : mLogWriters) {
+			try {
+				w.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		mLogWriters.clear();
+	}
+
+	private void cleanLogDataSource() {
+		for (HikariDataSource ds : mLogDatasource) {
+			try {
+				ds.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		mLogDatasource.clear();
 	}
 
 	private void cleanFactory() {
@@ -130,7 +166,7 @@ public class NDBConnection implements InitializingBean, DisposableBean, NDaoInte
 			HikariDataSource ds = (HikariDataSource) envCtx.lookup(sDbNm);
 
 			mDatasource.put(sDbNm, ds);
-			mSessionFactory.put(sDbNm, getSqlSesF(ds, sSqlPath, sSqlConfPath));
+			mSessionFactory.put(sDbNm, getSqlSesF(ds, sSqlPath, sSqlConfPath, null));
 		}
 	}
 
@@ -199,9 +235,29 @@ public class NDBConnection implements InitializingBean, DisposableBean, NDaoInte
 				prop.setProperty("defaultRowPrefetch", "100");
 				hikariConfig.setDataSourceProperties(prop);
 
+				// 4. [성능 최적화] GTT(임시테이블) DML redo 제거 (TEMP_UNDO)
+				// 세션이 GTT 를 처음 사용하기 전에 설정되어야 유효하므로 커넥션 생성 시점에 1회 실행합니다.
+				if ("oracle".equalsIgnoreCase(sDbTp)) {
+					hikariConfig.setConnectionInitSql("ALTER SESSION SET TEMP_UNDO_ENABLED = TRUE");
+				}
+
 				HikariDataSource ds = new HikariDataSource(hikariConfig);
 				mDatasource.put(sDbNm, ds);
-				mSessionFactory.put(sDbNm, getSqlSesF(ds, sSqlPath, sSqlConfPath));
+
+				SqlLogWriter logWriter = null;
+				if (commonProperties.getMybatis().isLoggingEnabled()) {
+					HikariDataSource logDs = createLogDataSource(dbInfo);
+					mLogDatasource.add(logDs);
+					logWriter = new SqlLogWriter(
+							logDs,
+							commonProperties.getMybatis().getQueueCapacity(),
+							commonProperties.getMybatis().getBatchSize(),
+							commonProperties.getMybatis().getFlushIntervalMs());
+					logWriter.start();
+					mLogWriters.add(logWriter);
+				}
+
+				mSessionFactory.put(sDbNm, getSqlSesF(ds, sSqlPath, sSqlConfPath, logWriter));
 				log.info("["+sqlConType+": "+sDbNm+"("+sDbTp+")] create sqlSessionFactory. ");
 			} catch (NamingException e) {
 				log.error("["+sqlConType+": "+sDbNm+"("+sDbTp+")] is NamingException. "+e.getMessage());
@@ -216,7 +272,26 @@ public class NDBConnection implements InitializingBean, DisposableBean, NDaoInte
 		}
 	}
 
-	private SqlSessionFactory getSqlSesF(DataSource dataSource, String sqlPath, String sqlConfPath) throws Exception {
+	/** 로그 전용 소형 HikariDataSource 생성. 업무 풀과 분리되어 로깅이 업무 커넥션과 경쟁하지 않게 한다. */
+	private HikariDataSource createLogDataSource(Datasource dbInfo) {
+		int logPoolSize = commonProperties.getMybatis().getLogPoolSize();
+		HikariConfig cfg = new HikariConfig();
+		cfg.setPoolName("sql-log-" + dbInfo.getDatabaseName());
+		cfg.setDriverClassName(dbInfo.getDriverClassName());
+		cfg.setJdbcUrl(dbInfo.getJdbcUrl());
+		cfg.setUsername(dbInfo.getUsername());
+		cfg.setPassword(dbInfo.getPassword());
+		cfg.setMaximumPoolSize(logPoolSize);
+		cfg.setMinimumIdle(1);
+		cfg.setConnectionTimeout(10000);	// 로그 풀은 빠르게 실패시킨다
+		cfg.setValidationTimeout(1000);
+		if (!NullUtils.isNone(dbInfo.getConnectionTestQuery())) {
+			cfg.setConnectionTestQuery(dbInfo.getConnectionTestQuery());
+		}
+		return new HikariDataSource(cfg);
+	}
+
+	private SqlSessionFactory getSqlSesF(DataSource dataSource, String sqlPath, String sqlConfPath, SqlLogWriter sqlLogWriter) throws Exception {
 
 	    SqlSessionFactoryBean sessionFactoryBean = new SqlSessionFactoryBean();
 
@@ -235,9 +310,9 @@ public class NDBConnection implements InitializingBean, DisposableBean, NDaoInte
 	        sessionFactoryBean.setConfigLocation(applicationContext.getResource(sqlConfPath));
 	    }
 
-	    // 4. 로그데이터를 위해 QueryLogInterceptor에 데이터셋 추가
-	    if (commonProperties.getMybatis().isLoggingEnabled()){
-	    	sessionFactoryBean.setPlugins(new QueryLogInterceptor(dataSource, commonProperties));
+	    // 4. 로그데이터를 위해 QueryLogInterceptor에 SqlLogWriter 주입
+	    if (commonProperties.getMybatis().isLoggingEnabled() && sqlLogWriter != null){
+	    	sessionFactoryBean.setPlugins(new QueryLogInterceptor(sqlLogWriter, commonProperties.getMybatis().isLoggingOnlyError()));
         }
 
 	    return sessionFactoryBean.getObject();

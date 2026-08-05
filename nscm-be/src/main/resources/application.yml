@@ -54,6 +54,7 @@ config:
     skip-uris:
       - /health-check
       - /test/**
+      - /sso/**
 
   # 파일 경로
   file:
@@ -77,6 +78,10 @@ config:
   mybatis:
     logging-enabled: true
     logging-only-error: false
+    queue-capacity: 10000
+    batch-size: 500
+    log-pool-size: 2
+    flush-interval-ms: 1000
 
 # Swagger UI 접속 경로 설정 (기본값: /swagger-ui/index.html)
 springdoc:

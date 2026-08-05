@@ -1,0 +1,144 @@
+PROCEDURE         SCM_ADM_SAVE_MAIL_SEND_BATCH_LOG
+
+(
+   V_USE_TYPE_CODE		VARCHAR2
+  ,P_CATEGORY_ID	    INTEGER
+  ,P_SEGMENT1			VARCHAR2
+  ,P_SEGMENT2			VARCHAR2  DEFAULT NULL
+  ,P_SEGMENT3			VARCHAR2  DEFAULT NULL
+  ,P_SEGMENT4			VARCHAR2  DEFAULT NULL
+  ,P_SEGMENT5			VARCHAR2  DEFAULT NULL
+  ,P_SEGMENT6			VARCHAR2  DEFAULT NULL
+  ,P_SEGMENT7			VARCHAR2  DEFAULT NULL
+  ,P_SEGMENT8			VARCHAR2  DEFAULT NULL
+  ,P_SEGMENT9			VARCHAR2  DEFAULT NULL
+  ,P_SEGMENT10			VARCHAR2  DEFAULT NULL
+  ,P_SEND_PGM			VARCHAR2  DEFAULT NULL
+  ,P_RECEIVER_ID		VARCHAR2  DEFAULT NULL
+)
+/*
+ * Program ID   : SCM_ADM_SAVE_MAIL_SEND_BATCH_LOG
+ * Description  : MAIL 발송 BATCH LOG 저장
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/03/07   ygkim   Initial Release PJ20170278 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2026/03/23   김준규   [PJ20264226] NextSCM Pilot 설계 및 개발
+ *
+ */
+AS
+
+    V_PROGRAM_NAME VARCHAR2(150 CHAR) := $$PLSQL_UNIT;
+    V_LOG_TYPE VARCHAR2(30 CHAR);
+    N_LOG_COUNT INTEGER := 0;
+    V_LOG_MESSAGE VARCHAR2(1000 CHAR);
+    V_DESCRIPTION VARCHAR2(500 CHAR);
+    D_EVENT_DATE DATE;
+    V_DISPATCH_SERIAL_NO INTEGER;
+    V_IN_PARA_DATA CLOB;
+    V_STEP         VARCHAR2(4000 CHAR) := NULL;
+BEGIN
+
+    IF UTL_CALL_STACK.SUBPROGRAM(1).COUNT > 1 THEN
+        V_PROGRAM_NAME := $$PLSQL_UNIT || '.' || UTL_CALL_STACK.SUBPROGRAM(1)(2);
+    END IF;
+
+    V_IN_PARA_DATA := JSON_OBJECT(
+        'v_use_type_code' VALUE V_USE_TYPE_CODE,
+        'p_category_id' VALUE P_CATEGORY_ID,
+        'p_segment1' VALUE P_SEGMENT1,
+        'p_segment2' VALUE P_SEGMENT2,
+        'p_segment3' VALUE P_SEGMENT3,
+        'p_segment4' VALUE P_SEGMENT4,
+        'p_segment5' VALUE P_SEGMENT5,
+        'p_segment6' VALUE P_SEGMENT6,
+        'p_segment7' VALUE P_SEGMENT7,
+        'p_segment8' VALUE P_SEGMENT8,
+        'p_segment9' VALUE P_SEGMENT9,
+        'p_segment10' VALUE P_SEGMENT10,
+        'p_send_pgm' VALUE P_SEND_PGM,
+        'p_receiver_id' VALUE P_RECEIVER_ID
+    );
+
+	-- LOG 용 변수 설정
+	-- BEGIN TRY (Oracle: EXCEPTION 블록으로 대체)
+
+			-- 시작 LOG
+		V_LOG_TYPE := 'START';
+		V_LOG_MESSAGE := '########## Start of procedure ##########';
+		V_DESCRIPTION := P_CATEGORY_ID;
+		D_EVENT_DATE := SYSTIMESTAMP;
+		PR_SCM_SYS_LOG_BATCH(V_PROGRAM_NAME, V_LOG_TYPE, N_LOG_COUNT, V_LOG_MESSAGE, V_DESCRIPTION, D_EVENT_DATE);
+
+		BEGIN
+			SELECT SEQ1_SCM_ADM_SMS_MAIL_SEND_LOG.NEXTVAL INTO V_DISPATCH_SERIAL_NO FROM DUAL;
+
+			INSERT INTO SCM_ADM_SMS_MAIL_SEND_LOG
+			    (DISPATCH_SERIAL_NO
+				,USE_TYPE_CODE
+				,CATEGORY_ID
+				,SEGMENT1
+				,SEGMENT2
+				,SEGMENT3
+				,SEGMENT4
+				,SEGMENT5
+				,SEGMENT6
+				,SEGMENT7
+				,SEGMENT8
+				,SEGMENT9
+				,SEGMENT10
+				,SEND_DATE
+				,SEND_MAIL_ERROR_LOG_DESC
+				,RECEIVE_USER_ID
+				,CREATED_BY
+				,CREATION_DATE
+				,LAST_UPDATED_BY
+				,LAST_UPDATE_DATE
+			) VALUES
+			(
+				V_DISPATCH_SERIAL_NO
+				,V_USE_TYPE_CODE
+				,P_CATEGORY_ID
+				,P_SEGMENT1
+				,P_SEGMENT2
+				,P_SEGMENT3
+				,P_SEGMENT4
+				,P_SEGMENT5
+				,P_SEGMENT6
+				,P_SEGMENT7
+				,P_SEGMENT8
+				,P_SEGMENT9
+				,P_SEGMENT10
+				,SYSDATE
+				,P_SEND_PGM
+				,P_RECEIVER_ID
+				,'SYSTEM'
+				,SYSDATE
+				,'SYSTEM'
+				,SYSDATE
+			);
+		END;
+		-- 결과코드, 결과 카운트 반환
+			--SELECT  'S' AS result_code ;
+	-- END TRY
+
+    COMMIT;
+
+	EXCEPTION
+	    WHEN OTHERS THEN
+        ROLLBACK;
+        PR_SCM_SYS_LOG_BATCH(
+            V_PROGRAM_NAME, 'E', 0, SQLERRM, NULL, SYSDATE,
+            P_IN_PARA_DATA => V_IN_PARA_DATA,
+            P_SQL_ERR_CODE => SQLCODE,
+            P_SQL_ERR_MSG  => SQLERRM,
+            P_SQL_BACKTRACE => DBMS_UTILITY.FORMAT_ERROR_BACKTRACE
+        );
+        RAISE_APPLICATION_ERROR(-20001,
+            '[' || V_PROGRAM_NAME || '] SQLCODE=' || SQLCODE ||
+            ' / SQLERRM=' || SQLERRM ||
+            ' / BACKTRACE=' || DBMS_UTILITY.FORMAT_ERROR_BACKTRACE ||
+            ' / PARAMS=' || V_IN_PARA_DATA
+        );
+END;

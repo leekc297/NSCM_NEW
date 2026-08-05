@@ -47,10 +47,32 @@ export enum RESPONSE_SET {
  */
 export const UPLOAD_SHEET = 'FcstNPrice' as const;
 export const UPLOAD_HEADERS = [
-  'Div', 'End Customer', 'Sales Site', 'Model', 'Incoterms', 'FCST Type', 'Customs Handbook',
-  'Cell Prod Site', 'Currency', 'Measure', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9', 'M10', 'M11',
-  'M12', 'M13', 'M14', 'M15', 'M16',
+  'Div',
+  'End Customer',
+  'Sales Site',
+  'Model',
+  'Incoterms',
+  'FCST Type',
+  'Customs Handbook',
+  'Cell Prod Site',
+  'Currency',
+  'Measure',
+  'M4',
+  'M5',
+  'M6',
+  'M7',
+  'M8',
+  'M9',
+  'M10',
+  'M11',
+  'M12',
+  'M13',
+  'M14',
+  'M15',
+  'M16',
 ] as const;
+
+export const TEMPLATE_EXCEL_PREFIX = 'DMF0082_Template';
 
 /** AS-IS cboBucketType 3종 (Daily 포함 — 카탈로그 BucketField 는 W/M 만이라 인라인 렌더). */
 export const BUCKET_FALLBACK = [

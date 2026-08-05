@@ -1,0 +1,1401 @@
+﻿DQ_ID,DIVISION_ID,DQ_NAME,DESCRIPTION,DQ_TEXT,VALID_YN,ADMIN_ONLY_YN,CREATED_BY,CREATION_DATE,LAST_UPDATED_BY,LAST_UPDATE_DATE,ATTRIBUTE1,ATTRIBUTE2,ATTRIBUTE3,ATTRIBUTE4,ATTRIBUTE5,ATTRIBUTE6,ATTRIBUTE7,ATTRIBUTE8,ATTRIBUTE9,ATTRIBUTE10
+13,-,ERP Sales Result SITE un-mapping,ERP 매출실적 정보중에서 site 정보가 연결되지 못한 정보,"SELECT distinct COMPANY_ID, A.DIVISION_ID, SALES_WORK_PLACE_NAME AS SALES_WORK_PLACE , SALES_YYYYMM, SALES_POSTING_DATE, PROJECT_CODE,COST_ITEM_NAME, ITEM_ID, CUSTOMER_CODE, CUSTOMER_NAME,  SHIPTO_CODE, SHIPTO_DESCRIPTION, SALES_TYPE, INCOTERMS, LGS_ROUTE_NAME, SALES_QTY, SALES_AMOUNT_SUM, CURRENCY, PLANT_ID ,PROFIT_CENTER_NAME, PARTNER_PROFIT_CENTER_NAME, SALES_USER_NAME
+  FROM dm_dnm_sales_result_if A
+ WHERE (a.sales_site_id IS NULL OR a.sales_site_id = '-' OR a.sales_site_id IN ('N', '-'))
+   and (a.customer_code IS NOT NULL AND a.customer_code <> '-')
+AND A.SALES_WORK_PLACE <> N'82AS'
+   and a.division_id = :PARAM1
+
+
+/*
+SELECT COMPANY_ID, A.DIVISION_ID, SALES_WORK_PLACE_NAME as SALES_WORK_PLACE , RESULT_YYYYMM, SALES_POSTING_DATE, PROJECT_CODE,COST_ITEM_NAME, ITEM_ID, CUSTOMER_CODE, CUSTOMER_NAME,  SHIPTO_CODE, SHIPTO_DESCRIPTION, SALES_TYPE, INCOTERMS, LGS_ROUTE_NAME, SALES_QTY, SALES_AMOUNT_SUM, CURRENCY, PLANT_ID ,PROFIT_CENTER_NAME, PARTNER_PROFIT_CENTER_NAME, SALES_USER_NAME
+  FROM INF_MGR.XIF_ERP_SALES_RESULT_R A
+      ,(
+	     SELECT DIVISION_ID, MAX(IFSEQNO) MAX_IFSEQNO
+		   FROM INF_MGR.XIF_ERP_SALES_RESULT_R
+		  WHERE DIVISION_ID  = :PARAM1
+         GROUP BY DIVISION_ID 
+	   ) B
+ WHERE IFSEQNO = B.MAX_IFSEQNO
+   AND A.IFSEQNO = B.MAX_IFSEQNO
+   AND TRANSFER_FLAG = 'X'
+   AND A.DIVISION_ID = B.DIVISION_ID
+*/",Y,Y,zytchoi,2018-04-18 18:08:40,MSSQL2ORA_FILL,2026-06-30 15:32:04,,,,,,,,,,
+14,-,ERP Sales Result Project unmapping,ERP 매출실적에서 Project 정보가 Mapping 되지 못한 실적 정보,"SELECT DIVISION_ID
+		,PROJECT_CODE
+		,SALES_SITE_ID
+		,PLANT_SITE_ID
+	/*	,SITE_ITEM_MAPPING_YN */
+		,ITEM_ID
+	/*	,DOM_EXP */
+		,INCOTERMS
+	/*	,MEASURE */
+		,CURRENCY
+		,sales_posting_date
+		,FCST_TYPE
+		,sales_qty
+		,customer_code
+		,SHIPTO_CODE
+                        ,SALES_USER_NAME
+		,(
+		   SELECT COUNT(DISTINCT PROJECT_CODE)
+		     FROM SCM_MST_SITE_ITEM SI
+			WHERE SI.DIVISION_ID = A.DIVISION_ID
+			  AND SI.SCM_SITE_ID = A.SALES_SITE_ID
+			  AND SI.ITEM_ID = A.ITEM_ID
+		  ) SITE_ITEM_PROJECT_COUNT
+		,(
+		   SELECT COUNT(DISTINCT PROJECT_CODE)
+		     FROM SCM_MST_SITE_ITEM SI
+			WHERE SI.DIVISION_ID = A.DIVISION_ID
+		/*	  AND SI.SCM_SITE_ID = A.SALES_SITE_ID */
+			  AND SI.ITEM_ID = A.ITEM_ID
+		  ) ITEM_PROJECT_COUNT
+  FROM dm_dnm_sales_result_if A
+ WHERE (PROJECT_CODE IS NULL OR PROJECT_CODE IN ('N', '-'))
+   AND ITEM_ID <> 'ETC'
+   AND SALES_WORK_PLACE <> '82AS'
+   AND DIVISION_ID = :PARAM1",Y,Y,zytchoi,2018-04-18 18:15:06,MSSQL2ORA_FILL,2026-06-30 15:32:04,,,,,,,,,,
+16,-,sales site shipto check,sales site 모니터링용,"select 'SHIPTO_중복' TYPE, w.* 
+      ,( 
+				 select LISTAGG(dept_name_ko, ',') WITHIN GROUP (ORDER BY dept_name_ko) 
+				   from ( 
+						select distinct z.dept_name_ko 
+						  from scm_mst_site_item x 
+							  ,SCM_MST_SSO_USER_INFO y 
+							  ,SCM_MST_SSO_DEPT_INFO z 
+						 where x.division_id = w.division_id 
+						   and x.scm_site_id = w.scm_site_id 
+						   and x.owner = y.user_id 
+						   and y.dept_id = z.dept_id 
+						   and x.valid_yn = 'Y' 
+					   ) 
+	   ) TEAM 
+      ,( 
+				 select LISTAGG(user_job_name, ',') WITHIN GROUP (ORDER BY user_job_name) 
+				   from ( 
+						select distinct y.user_name || '' || y.job_name user_job_name 
+						  from scm_mst_site_item x 
+							  ,SCM_MST_SSO_USER_INFO y 
+							  ,SCM_MST_SSO_DEPT_INFO z 
+						 where x.division_id = w.division_id 
+						   and x.scm_site_id = w.scm_site_id 
+						   and x.owner = y.user_id 
+						   and y.dept_id = z.dept_id 
+						   and x.valid_yn = 'Y' 
+					   ) 
+	   ) OWNER 
+from  ( 
+    select a.division_id, a.scm_site_id, a.country, a.city, b.soldto_code, substr(soldto_code,1,2) soldto_country, b.shipto_code, substr(shipto_code,1,2) shipto_country 
+		from scm_mst_site a 
+			,scm_mst_site_customer b 
+		where a.SCM_SITE_ID = b.scm_site_id 
+		and a.site_type = 'SALES' 
+		and a.valid_yn = 'Y' 
+		and a.valid_yn = b.VALID_YN 
+    )  w 
+	,( 
+    select b.DIVISION_ID, b.soldto_code, b.shipto_code 
+		from scm_mst_site a 
+			,scm_mst_site_customer b 
+		where a.SCM_SITE_ID = b.scm_site_id 
+		and a.site_type = 'SALES' 
+		and a.valid_yn = 'Y' 
+		and a.valid_yn = b.VALID_YN 
+		group by b.DIVISION_ID, b.soldto_code, b.shipto_code 
+		having count( distinct a.scm_site_id) > 1 
+	) y 
+where w.SHIPTO_CODE = y.SHIPTO_CODE 
+and w.SOLDTO_CODE = y.SOLDTO_CODE 
+and w.DIVISION_ID    = y.DIVISION_ID 
+UNION ALL 
+select 'Multi_shipto' TYPE, x.* 
+      ,( 
+				 select LISTAGG(DEPT_NAME_KO, ',') WITHIN GROUP (ORDER BY DEPT_NAME_KO) 
+				   from ( 
+						SELECT DISTINCT Z.DEPT_NAME_KO 
+						  FROM SCM_MST_SITE_ITEM X2 
+							  ,SCM_MST_SSO_USER_INFO Y 
+							  ,SCM_MST_SSO_DEPT_INFO Z 
+						 WHERE X2.DIVISION_ID = X.DIVISION_ID 
+						   AND X2.SCM_SITE_ID = X.SCM_SITE_ID 
+						   AND X2.OWNER = Y.USER_ID 
+						   AND Y.DEPT_ID = Z.DEPT_ID 
+						   AND X2.VALID_YN = 'Y' 
+					   ) 
+	   ) TEAM 
+      ,( 
+				 select LISTAGG(USER_JOB_NAME, ',') WITHIN GROUP (ORDER BY USER_JOB_NAME) 
+				   from ( 
+						SELECT DISTINCT Y.USER_NAME || '' || Y.JOB_NAME USER_JOB_NAME 
+						  FROM SCM_MST_SITE_ITEM X2 
+							  ,SCM_MST_SSO_USER_INFO Y 
+							  ,SCM_MST_SSO_DEPT_INFO Z 
+						 WHERE X2.DIVISION_ID = X.DIVISION_ID 
+						   AND X2.SCM_SITE_ID = X.SCM_SITE_ID 
+						   AND X2.OWNER = Y.USER_ID 
+						   AND Y.DEPT_ID = Z.DEPT_ID 
+						   AND X2.VALID_YN = 'Y' 
+					   ) 
+	   ) OWNER 
+  from ( 
+		select a.division_id, a.scm_site_id, a.country, a.city, b.soldto_code, substr(soldto_code,1,2) soldto_country, b.shipto_code, substr(shipto_code,1,2) shipto_country 
+				  from scm_mst_site a 
+					  ,scm_mst_site_customer b 
+				 where a.SCM_SITE_ID = b.scm_site_id 
+				   and a.site_type = 'SALES' 
+				   and a.valid_yn = 'Y' 
+				   and a.valid_yn = b.VALID_YN 
+			 )  x 
+ where x.scm_site_id in ( 
+				select scm_site_id 
+				  from ( 
+select a.division_id, a.scm_site_id, a.country, a.city, b.soldto_code, substr(soldto_code,1,2) soldto_country, b.shipto_code, substr(shipto_code,1,2) shipto_country 
+		  from scm_mst_site a 
+			  ,scm_mst_site_customer b 
+		 where a.SCM_SITE_ID = b.scm_site_id 
+		   and a.site_type = 'SALES' 
+		   and a.valid_yn = 'Y' 
+		   and a.valid_yn = b.VALID_YN 
+     )  y 
+				 where x.division_id = y.division_id 
+				group by scm_site_id 
+				having count( shipto_code) > 1 
+   ) ",Y,Y,zytchoi,2018-05-16 17:50:15,DQ_NEWLINE_FIX,2026-06-25 16:20:18,,,,,,,,,,
+21,-,Batch Job Monitoring,Batch Job Monitoring,"SELECT /* TOP 10000 */ 
+       program_name 
+      ,batch_type 
+      ,log_type 
+      ,log_count 
+      ,log_message 
+      ,description 
+      ,TO_CHAR(creation_date, 'YYYY-MM-DD HH24:MI:SS') creation_date 
+      ,batch_period 
+FROM (SELECT md.segment1 program_name 
+            ,md.segment2 batch_type 
+            ,log_type 
+            ,log_count 
+            ,lb.log_message 
+            ,lb.description 
+            ,lb.creation_date 
+            ,md.description batch_period 
+            ,1 display_order 
+      FROM   scm_adm_lookup_master_detail md 
+      LEFT JOIN   scm_sys_log_batch lb 
+      ON     lb.program_name = md.segment1 
+      AND    TO_CHAR(lb.creation_date, 'YYYYMMDD') = FN_SCM_SYS_NVL(:PARAM_YYYYMMDD, TO_CHAR(SYSDATE, 'YYYYMMDD')) 
+      AND    (log_type= 'ERROR' OR SUBSTR(log_type, 1, 3) = 'END') 
+      WHERE  md.lookup_type = 'SCM_SYS_LOG_BATCH_ANL' 
+      AND    md.segment2 = 'RFC' 
+      AND    md.valid_yn = 'Y' 
+      UNION 
+      SELECT md.segment1 program_name 
+            ,md.segment2 batch_type 
+            ,log_type 
+            ,log_count 
+            ,lb.log_message 
+            ,lb.description 
+            ,lb.creation_date 
+            ,md.description batch_period 
+            ,2 display_order 
+      FROM   scm_adm_lookup_master_detail md 
+      LEFT JOIN   scm_sys_log_batch lb 
+      ON     lb.program_name = md.segment1 
+      AND    TO_CHAR(lb.creation_date, 'YYYYMMDD') = FN_SCM_SYS_NVL(:PARAM_YYYYMMDD, TO_CHAR(SYSDATE, 'YYYYMMDD')) 
+      AND    log_type IN ('ERROR', 'APPEND') 
+      WHERE  md.lookup_type = 'SCM_SYS_LOG_BATCH_ANL' 
+      AND    md.segment2 = 'INF' 
+      AND    md.valid_yn = 'Y' 
+      UNION 
+      SELECT md.segment1 program_name 
+            ,md.segment2 batch_type 
+            ,log_type 
+            ,log_count 
+            ,lb.log_message 
+            ,lb.description 
+            ,lb.creation_date 
+            ,md.description batch_period 
+            ,3 display_order 
+      FROM   scm_adm_lookup_master_detail md 
+      LEFT JOIN   scm_sys_log_batch lb 
+      ON     lb.program_name = md.segment1 
+      AND    TO_CHAR(lb.creation_date, 'YYYYMMDD') = FN_SCM_SYS_NVL(:PARAM_YYYYMMDD, TO_CHAR(SYSDATE, 'YYYYMMDD')) 
+      WHERE  md.lookup_type = 'SCM_SYS_LOG_BATCH_ANL' 
+      AND    md.segment2 = 'BAT' 
+      AND    md.valid_yn = 'Y') A 
+WHERE (:PARAM_CHECK_NEEDED IS NULL OR (:PARAM_CHECK_NEEDED = 'Y' AND log_type = 'ERROR' OR log_type IS NULL)) 
+AND   (:PARAM_BATCH_TYPE IS NULL OR :PARAM_BATCH_TYPE = batch_type) 
+AND   (:PARAM_PROGRAM_NAME IS NULL OR :PARAM_PROGRAM_NAME = program_name) 
+/* ORDER BY display_order, program_name, creation_date */ ",Y,Y,wisdomena,2018-05-22 15:37:07,MSSQL2ORA_FILL,2026-06-30 15:32:04,,,,,,,,,,
+22,-,출하실적,출하실적 조회,"SELECT COMPANY_ID 
+            ,DIVISION_ID 
+	,PLANT_ID 
+	,ITEM_ID 
+            ,CASE EXFACTORY_STATUS WHEN 'D10' THEN N'생성' 
+	                                           WHEN 'D20' THEN N'공장출고' 
+				       WHEN 'D30' THEN N'운송중' 
+				       WHEN 'D40' THEN N'매출' 
+				       WHEN 'D90' THEN N'삭제' 
+				       END STATUS 
+	,PROJECT_CODE 
+            ,TRANSPORT_MODE_ERP 
+	,TRANSPORT_MODE 
+	,INCOTERMS 
+	,FROM_SCM_SITE_ID 
+	,TO_SCM_SITE_ID 
+	,PLANT_ISSUE_DATE 
+	,ORDER_QTY 
+	,EXFACTORY_QTY 
+	,UOM 
+	,ORDER_CREATE_DATE 
+	,ON_BOARD_DATE 
+	,ACTUAL_EXFACTORY_DATE 
+	,SYSTEM_EXFACTORY_DATE 
+	,DELIVERY_POSTING_DATE 
+	,EXFACTORY_DATE AS GSCP_EXFACTORY_DATE 
+	,ORDER_NO 
+	,ORDER_ITEM_SEQ 
+	,ORDER_TYPE_NAME 
+	,DELIVERY_NO 
+	,DELIVERY_ITEM_SEQ 
+	,SOLDTO_CODE 
+	,SHIPTO_CODE 
+FROM SCM_DNM_EXFACTORY_RESULT 
+WHERE DIVISION_ID = :PARAM_DIVISION_ID 
+AND   EXFACTORY_DATE >= FN_SCM_SYS_NVL(:PARAM_EXFACTORY_DATE_FROM, TO_CHAR(((SYSDATE) + (-1)), 'YYYYMMDD')) 
+AND   EXFACTORY_DATE <= FN_SCM_SYS_NVL(:PARAM_EXFACTORY_DATE_TO, TO_CHAR(((SYSDATE) + (-1)), 'YYYYMMDD')) 
+AND   (:PARAM_ITEM_ID IS NULL OR ITEM_ID LIKE :PARAM_ITEM_ID) 
+AND   NVL(EXFACTORY_STATUS, 'D90') NOT IN ('D90' ,'D10') -- D90: DO삭제 , D10:DO생성 
+AND  STORAGE_ID NOT IN ('6000' ,'799A') --상품창고제외 
+AND   STORAGE_ID NOT IN (SELECT SEGMENT1 
+			     FROM SCM_ADM_LOOKUP_MASTER_DETAIL 
+			     WHERE LOOKUP_TYPE = 'SSP_SHIP_RESULT_EXCEPT_STORAGE' 
+			     AND VALID_YN = 'Y' 
+			     ) -- 사외 창고 제외 LOOKUP 관리 ",Y,Y,wisdomena,2018-05-29 12:02:14,MSSQL2ORA_FILL,2026-06-30 15:32:04,,,,,,,,,,
+1,-,2MKT FCST Adjust Report,MKT FCST Adjust Report,"SELECT DIVISION_ID 
+     , C.DEPT_NAME_KO 
+	 , B.USER_NAME 
+     , PROJECT_CODE 
+     , A.CREATED_BY 
+     , COUNT(1) COUNTS 
+	 , TO_CHAR(A.LAST_UPDATE_DATE, 'YYYYMMDD')  MODIFY_DATE 
+	 , ( select x.iso_yyyyww from SCM_SYS_CALENDAR_M x where x.BASIS_YYYYMMDD = TO_CHAR(A.LAST_UPDATE_DATE, 'YYYYMMDD') ) yyyyww 
+	 , case TO_CHAR(A.LAST_UPDATE_DATE, 'D') when '1' then 'SUN' 
+	                                         when '2' then 'MON' 
+											 when '3' then 'TUE' 
+											 when '4' then 'WED' 
+											 when '5' then 'THU' 
+											 when '6' then 'FRI' 
+											 when '7' then 'SAT' end day_of_week 
+	 , TO_CHAR(A.LAST_UPDATE_DATE, 'HH24') hour 
+     , TO_CHAR(MAX(A.LAST_UPDATE_DATE), 'YYYY-MM-DD HH24:MI:SS')  LAST_UPDATE_DATE 
+FROM DM_PLN_MKT_FCST_H            A 
+   ,SCM_MST_SSO_USER_INFO B 
+   ,SCM_MST_SSO_DEPT_INFO C 
+WHERE A.CREATED_BY = B.USER_ID 
+  AND B.DEPT_ID = C.DEPT_ID 
+  AND A.last_update_date > SYSDATE - 14 
+GROUP BY DIVISION_ID 
+     , C.DEPT_NAME_KO 
+	 , B.USER_NAME 
+     , PROJECT_CODE 
+     , A.CREATED_BY 
+	 , TO_CHAR(A.LAST_UPDATE_DATE, 'YYYYMMDD') 
+	 , TO_CHAR(A.LAST_UPDATE_DATE, 'D') 
+	 , TO_CHAR(A.LAST_UPDATE_DATE, 'HH24') ",Y,Y,zytchoi,2018-03-30 16:01:24,DQ_NEWLINE_FIX,2026-06-25 16:20:18,,,,,,,,,,
+44,-,소형 1개 이상의 SOLDTO가 연결된 Sales SITE,소형 1개 이상의 SOLDTO가 연결된 Sales SITE,"select b.division_id, b.scm_site_id, count(distinct soldto_code) SOLDTO_COUNT 
+      ,( 
+	        select listagg(distinct cu.soldto_code || ' : ' || cu.SOLDTO_DESCRIPTION, ',') 
+				          within group (order by cu.soldto_code || ' : ' || cu.SOLDTO_DESCRIPTION) 
+				  from scm_mst_customer cu 
+				      ,scm_mst_site_customer sc 
+				 where cu.division_id = sc.division_id 
+				   and cu.soldto_code = sc.soldto_code 
+				   and sc.scm_site_id = b.scm_site_id 
+				   and sc.division_id = b.division_id 
+	   ) SOLD_TO 
+      ,( 
+				 select listagg(distinct z.dept_name_ko, ',') 
+				          within group (order by z.dept_name_ko) 
+				  from scm_mst_site_item x 
+					  ,SCM_MST_SSO_USER_INFO y 
+					  ,SCM_MST_SSO_DEPT_INFO z 
+				 where x.division_id = b.division_id 
+				   and x.scm_site_id = b.scm_site_id 
+				   and x.owner = y.user_id 
+				   and y.dept_id = z.dept_id 
+				   and x.valid_yn = 'Y' 
+	   ) TEAM 
+      ,( 
+				 select listagg(distinct y.user_name || '' || y.job_name, ',') 
+				          within group (order by y.user_name || '' || y.job_name) 
+				  from scm_mst_site_item x 
+					  ,SCM_MST_SSO_USER_INFO y 
+					  ,SCM_MST_SSO_DEPT_INFO z 
+				 where x.division_id = b.division_id 
+				   and x.scm_site_id = b.scm_site_id 
+				   and x.owner = y.user_id 
+				   and y.dept_id = z.dept_id 
+				   and x.valid_yn = 'Y' 
+	   ) OWNER 
+  from scm_mst_site_customer a 
+      ,scm_mst_site b 
+ where a.division_id = b.division_id 
+   and a.scm_site_id = b.scm_site_id 
+   and a.valid_yn = 'Y' 
+   and b.site_type = 'SALES' 
+   and a.division_id = '40' 
+group by b.division_id, b.scm_site_id 
+having count(distinct soldto_code) > 1 ",Y,Y,zytchoi,2018-11-07 09:14:31,DQ_NEWLINE_FIX,2026-06-25 16:20:18,,,,,,,,,,
+52,-,MKT_FCST 수정이력 조회,MKT_FCST 수정이력 조회,"/*################### 입력샘플 필독! ###################
+1. 사업부                       : = '81'                          OR  (공백일경우 모든 사업부 검색)
+2. PROJECT                  : = 'A15JR7002'               OR  (공백일경우 모든 PROJECT 검색)
+3. SITE                         : = 'MAGNA_AT_GRZ'     OR  (공백일경우 모든 SITE 검색)
+4. ITEM                        : = 'APJLRX590-A1-D01'  OR  (공백일경우 모든 ITEM 검색)
+5. 값을 입력한날짜(시작) : = '20190101'                  OR  (공백일경우 과거 8주 검색)
+6. 값을 입력한날짜(끝)    : = '20190131'                 OR  (공백일경우 금일까지 검색)
+*/
+
+SELECT DIVISION_ID,HISTORY_SEQ,PROJECT_CODE,SCM_SITE_ID,ITEM_ID,DOM_EXP,FCST_TYPE,INCOTERMS,MEASURE,PLANT_SITE_ID,YYYYMMDD,QTY
+		,LAST_UPDATED_BY AS MODIFY_ID
+		,(SELECT B.USER_NAME FROM SCM_MST_SSO_USER_INFO B WHERE A.LAST_UPDATED_BY = B.USER_ID FETCH FIRST 1 ROWS ONLY) AS MODIFY_USER_NAME
+		,TO_CHAR(LAST_UPDATE_DATE, 'YYYY-MM-DD HH24:MI:SS')  AS MODIFY_DATE
+
+	FROM DM_PLN_MKT_FCST_H A 	WHERE 1=1
+		AND ( :PARAM_DIVSION_ID IS NULL OR A.DIVISION_ID = :PARAM_DIVSION_ID )
+		AND ( :PARAM_PROJECT_CODE IS NULL OR A.PROJECT_CODE = :PARAM_PROJECT_CODE )
+		AND ( :PARAM_SCM_SITE_ID IS NULL OR A.SCM_SITE_ID = :PARAM_SCM_SITE_ID )
+		AND ( :PARAM_ITEM_ID IS NULL OR A.ITEM_ID = :PARAM_ITEM_ID )
+		/* 날짜조건이 N/A일경우 지난주 월요일부터 데이터만 조회 */
+		AND TO_CHAR(A.LAST_UPDATE_DATE, 'YYYYMMDD')	>=
+		( CASE WHEN :PARAM_FROM_DATE IS NULL	THEN TO_CHAR(FN_NEXT_DAY(SYSDATE, 'MON') + (-7*8), 'YYYYMMDD')
+		ELSE :PARAM_FROM_DATE END )
+		/* 날짜조건이 N/A일경우 오늘까지의 데이터만 조회 */
+		AND TO_CHAR(A.LAST_UPDATE_DATE, 'YYYYMMDD')	<=
+		( CASE WHEN :PARAM_TO_DATE IS NULL THEN TO_CHAR(SYSDATE, 'YYYYMMDD') ELSE :PARAM_TO_DATE END)
+		AND MEASURE IN ('MKT_FCST','RTF')",Y,Y,songkeeho,2019-01-24 16:17:47,MSSQL2ORA_TOGNULL,2026-06-30 15:32:04,,,,,,,,,,
+26,-,SITE_SHIPTO_없는_MKTFCST조회,SITE_SHIPTO_없는_MKTFCST조회,"select distinct a.division_id, project_code, a.scm_site_id, a.item_id, fcst_type, a.incoterms, a.plant_site_id, a.YYYYMMDD,  lt_total, x.SHIPTO_CODE as rep_shipto_code ,TO_CHAR(((FN_NEXT_DAY(SYSDATE, 'MON')) + (NVL(lt_total, 0)+(7*4))), 'YYYYMMDD') as exfactory_fix_period
+   from DM_PLN_MKT_FCST a 
+   inner join scm_mst_site s 
+   on a.division_id = s.division_id
+   and a.scm_site_id = s.scm_site_id
+   and s.valid_yn = 'Y'
+   left join SCM_MST_SITE_CUSTOMER x  
+     on a.division_id = x.division_id
+	 and a.scm_site_id    = x.scm_site_id
+	 and x.valid_yn = 'Y'
+	 and x.rep_yn = 'Y'
+   left join (
+			select division_id, case when division_id = '82' then '' else from_site end from_site , to_site, incoterms, min(lt_total) lt_total
+			  from SCP_MST_BOD_V 
+			 where priority = 1
+			 group by division_id, case when division_id = '82' then '' else from_site end , to_site, incoterms
+             ) bod  
+     on a.division_id    = bod.division_id
+	 and a.PLANT_SITE_ID = bod.from_site
+	 and a.SCM_SITE_ID   = bod.to_site
+	 and a.INCOTERMS     = bod.incoterms
+  where a.MEASURE = 'MKT_FCST'
+	AND a.YYYYMMDD >= TO_CHAR(((FN_NEXT_DAY(SYSDATE, 'MON')) + (-7*1)), 'YYYYMMDD')   -- 당주 월요일부터
+	AND a.YYYYMMDD < TO_CHAR(((FN_NEXT_DAY(SYSDATE, 'MON')) + (NVL(lt_total, 0)+(7*3))), 'YYYYMMDD')   -- BOD LT + 4W
+	and a.qty > 0
+ 	and x.SHIPTO_CODE is null",Y,Y,zytchoi,2018-06-27 11:37:19,MSSQL2ORA_V2,2026-06-25 13:43:06,,,,,,,,,,
+27,-,ESS CEG Sales Result,ESS CEG Sales Result,"select A.COMPANY_ID 
+      ,DIVISION_ID 
+      ,A.RESULT_YYYYMM 
+      ,SALES_POSTING_DATE 
+      ,ITEM_TYPE 
+      ,CUSTOMER_CODE 
+      ,CUSTOMER_NAME 
+      ,CURRENCY 
+      ,SALES_AMOUNT_FOR AS AMT_LOCAL 
+      ,SALES_AMOUNT_SUM AS AMT_KRW 
+      ,UOM 
+      ,SALES_QTY 
+      ,ITEM_ID 
+      ,SHIPTO_CODE 
+      ,SHIPTO_DESCRIPTION 
+      ,COUNTRY 
+      ,COUNTRY_NAME 
+      ,SHIPTO_CITY_NAME 
+      ,SHIPTO_ZONE_CODE 
+      ,SHIPTO_ZONE_NAME 
+      ,RBU_CUSTOMER 
+      ,INCOTERMS 
+  FROM INF_MGR.XIF_ERP_SALES_RESULT_R a 
+      ,( 
+		select COMPANY_ID, RESULT_YYYYMM, max(ifseqno) ifseqno 
+		  FROM INF_MGR.XIF_ERP_SALES_RESULT_R 
+		 where DIVISION_ID = '82' 
+                         /* ""E20260102-000848""_GERP -> NERP로 변환되면서, 변경 I/F는 구코드도 존재하므로 IN으로 변경 (START) */ 
+		 /* and COMPANY_ID = 'G690' */ 
+		 AND COMPANY_ID IN ('G690', 'EG00') 
+                         /* ""E20260102-000848""_GERP -> NERP로 변환되면서, 변경 I/F는 구코드도 존재하므로 IN으로 변경 (END) */ 
+		 group by COMPANY_ID, RESULT_YYYYMM 
+	   ) b 
+ where a.IFSEQNO = b.ifseqno 
+   and a.RESULT_YYYYMM = b.RESULT_YYYYMM 
+   and a.COMPANY_ID = b.COMPANY_ID 
+   /* ""E20260102-000848""_GERP -> NERP로 변환되면서, 변경 I/F는 구코드도 존재하므로 IN으로 변경 (START) */ 
+   /* and a.SHIPTO_CODE <> 'G690' */ 
+  AND A.SHIPTO_CODE NOT IN ('G690', 'EG00') 
+   /* ""E20260102-000848""_GERP -> NERP로 변환되면서, 변경 I/F는 구코드도 존재하므로 IN으로 변경 (END) */ 
+   and a.RESULT_YYYYMM = :PARAM1 
+   and a.DIVISION_ID = '82' 
+   /* and (a.COST_ITEM IS NULL OR a.COST_ITEM = '-') */ ",Y,Y,zytchoi,2018-07-03 18:45:40,MSSQL2ORA_FIX2,2026-06-30 18:56:28,,,,,,,,,,
+30,-,"소형 실적 Mapping 시 누락 Soldto, Shipto","소형 실적 Mapping 시 누락 Soldto, Shipto","SELECT DISTINCT SALES_YYYYMM,  COMPANY_ID, A.DIVISION_ID, CUSTOMER_CODE, CUSTOMER_NAME,  SHIPTO_CODE, SHIPTO_DESCRIPTION,SALES_WORK_PLACE,SALES_WORK_PLACE_NAME
+      ,CURRENCY
+      ,MAT_GROUP
+      ,MAT_GROUP_DESC
+	  ,LGS_ROUTE_NAME
+	  ,ITEM_ID
+	  ,(
+	    SELECT 'Y'
+		  FROM SCM_MST_CUSTOMER  Z
+		 WHERE Z.DIVISION_ID = A.DIVISION_ID
+		   AND Z.SOLDTO_CODE = A.CUSTOMER_CODE
+		   AND Z.SHIPTO_CODE = A.SHIPTO_CODE
+	    ) MDM_EXIST
+      ,COST_ITEM_NAME 
+  FROM DM_DNM_SALES_RESULT_IF A 
+ WHERE 1=1
+   --AND (A.COST_ITEM_NAME IS NULL OR A.COST_ITEM_NAME = '-')
+   --AND A.LGS_ROUTE_NAME IN (N'내수',N'직수출')
+   AND A.LGS_ROUTE_NAME IN (N'내수',N'직수출',N'Export',N'Domestic',N'Local',N'내수로컬')
+   AND LENGTH(A.CUSTOMER_CODE) > 4 
+   AND A.DIVISION_ID = :PARAM_DIVSION_ID
+  --  AND SALES_YYYYMM >= '201808'
+   AND (A.SALES_SITE_ID IS NULL OR A.SALES_SITE_ID = '-' OR A.SALES_SITE_ID IN ('-', 'N'))
+   AND (
+	    SELECT COUNT(1)
+		  FROM SCM_MST_SITE_CUSTOMER  Z
+		      ,SCM_MST_SITE Y
+		 WHERE Z.DIVISION_ID = A.DIVISION_ID
+		   AND Z.SOLDTO_CODE = A.CUSTOMER_CODE
+		   AND Z.SHIPTO_CODE = A.SHIPTO_CODE
+		   AND Z.VALID_YN = 'Y'
+		   AND Z.DIVISION_ID = Y.DIVISION_ID
+		   AND Z.SCM_SITE_ID = Y.SCM_SITE_ID
+		   AND Y.SITE_TYPE = 'SALES'
+	    ) = 0
+
+GROUP BY SALES_YYYYMM,  COMPANY_ID, A.DIVISION_ID, CUSTOMER_CODE, CUSTOMER_NAME,  SHIPTO_CODE, SHIPTO_DESCRIPTION,SALES_WORK_PLACE,SALES_WORK_PLACE_NAME
+      ,CURRENCY
+      ,MAT_GROUP
+      ,MAT_GROUP_DESC
+	  ,LGS_ROUTE_NAME
+	  ,ITEM_ID
+      ,COST_ITEM_NAME 
+HAVING SUM(SALES_QTY) <> 0
+
+/*
+ SELECT DISTINCT COMPANY_ID, A.DIVISION_ID, CUSTOMER_CODE, CUSTOMER_NAME,  SHIPTO_CODE, SHIPTO_DESCRIPTION,SALES_WORK_PLACE,SALES_WORK_PLACE_NAME
+      ,CURRENCY
+      ,MAT_GROUP
+      ,MAT_GROUP_DESC
+	  ,LGS_ROUTE_NAME
+	  ,ITEM_ID
+	  ,(
+	    SELECT 'Y'
+		  FROM SCM_MST_CUSTOMER  Z
+		 WHERE Z.DIVISION_ID = A.DIVISION_ID
+		   AND Z.SOLDTO_CODE = A.CUSTOMER_CODE
+		   AND Z.SHIPTO_CODE = A.SHIPTO_CODE
+	    ) MDM_EXIST
+  FROM INF_MGR.XIF_ERP_SALES_RESULT_R A 
+      ,(
+	     SELECT DIVISION_ID, MAX(IFSEQNO) MAX_IFSEQNO
+		   FROM INF_MGR.XIF_ERP_SALES_RESULT_R 
+		--  WHERE DIVISION_ID  = N'40' 
+                          WHERE  DIVISION_ID   = :PARAM_DIVSION_ID
+         GROUP BY DIVISION_ID 
+	   ) B
+ WHERE IFSEQNO = B.MAX_IFSEQNO
+   AND A.IFSEQNO = B.MAX_IFSEQNO
+   AND TRANSFER_FLAG = 'X'
+   AND A.DIVISION_ID = B.DIVISION_ID
+   AND (A.COST_ITEM_NAME IS NULL OR A.COST_ITEM_NAME = '-')
+   AND A.LGS_ROUTE_NAME IN (N'내수',N'직수출')
+   AND LENGTH(A.CUSTOMER_CODE) > 4 
+
+UNION 
+
+  SELECT DISTINCT COMPANY_ID, A.DIVISION_ID, CUSTOMER_CODE, CUSTOMER_NAME,  A.SHIPTO_CODE, SHIPTO_DESCRIPTION,SALES_WORK_PLACE,SALES_WORK_PLACE_NAME
+      ,CURRENCY
+      ,MAT_GROUP
+      ,MAT_GROUP_DESC
+	  ,LGS_ROUTE_NAME
+	  ,ITEM_ID
+	  ,(
+	    SELECT 'Y'
+		  FROM SCM_MST_CUSTOMER  Z
+		 WHERE Z.DIVISION_ID = A.DIVISION_ID
+		   AND Z.SOLDTO_CODE = A.CUSTOMER_CODE
+		   AND Z.SHIPTO_CODE = A.SHIPTO_CODE
+	    ) MDM_EXIST
+  FROM INF_MGR.XIF_ERP_SALES_RESULT_R A 
+      ,(
+	     SELECT DIVISION_ID, MAX(IFSEQNO) MAX_IFSEQNO
+		   FROM INF_MGR.XIF_ERP_SALES_RESULT_R 
+		  -- WHERE DIVISION_ID  = N'40' 
+                           WHERE DIVISION_ID = :PARAM_DIVSION_ID
+         GROUP BY DIVISION_ID 
+	   ) B
+	  ,(
+			SELECT DISTINCT A.DIVISION_ID, SOLDTO_CODE,  SHIPTO_CODE
+			  FROM DM_DNM_SALES_RESULT A
+			 WHERE DIVISION_ID = '40'
+			   AND SALES_SITE_ID = 'N'
+			   AND YYYYMMDD >= '20180801'
+	   ) C
+ WHERE IFSEQNO = B.MAX_IFSEQNO
+   AND A.IFSEQNO = B.MAX_IFSEQNO
+   AND A.DIVISION_ID = B.DIVISION_ID
+   AND (A.COST_ITEM_NAME IS NULL OR A.COST_ITEM_NAME = '-')
+   AND A.LGS_ROUTE_NAME IN (N'내수',N'직수출')
+   AND LENGTH(A.CUSTOMER_CODE) > 4 
+
+   AND A.CUSTOMER_CODE = C.SOLDTO_CODE
+   AND A.SHIPTO_CODE = C.SHIPTO_CODE
+   AND A.DIVISION_ID = C.DIVISION_ID
+*/",Y,Y,zytchoi,2018-07-23 10:41:37,MSSQL2ORA_FILL,2026-06-30 15:32:04,,,,,,,,,,
+33,-,(MDM) Soldto-Shipto Mapping,(MDM) Soldto-Shipto Mapping,"SELECT DIVISION_ID
+      ,SOLDTO_CODE
+      ,SHIPTO_CODE
+      ,SOLDTO_DESCRIPTION
+      ,SOLDTO_ADDRESS
+      ,SOLDTO_COUNTRY
+      ,SOLDTO_REGION
+      ,SOLDTO_REGION_NAME
+      ,SOLDTO_CITY_NAME
+      ,SHIPTO_DESCRIPTION
+      ,SHIPTO_ADDRESS
+      ,SHIPTO_COUNTRY
+      ,SHIPTO_REGION
+      ,SHIPTO_REGION_NAME
+      ,SHIPTO_CITY_NAME
+      ,VALID_YN
+      ,CITY
+  FROM SCM_MST_CUSTOMER
+ where VALID_YN = 'Y'",Y,Y,zytchoi,2018-07-31 11:14:36,MSSQL2ORA_V2,2026-06-25 13:43:06,,,,,,,,,,
+36,-,Sales Result Query Detail,매출 Raw,"SELECT * FROM
+		(
+
+SELECT a.*, b.owner, c.dept_name_ko, c.USER_NAME || ' ' || c.job_name USER_NAME
+           ,((a.system_input_date) - (a.sales_posting_date)) SALES_LT
+  FROM DM_DNM_SALES_RESULT_IF a
+  left join scm_mst_site_item b
+    on a.division_id = b.division_id
+	and a.project_code = b.project_code
+	and a.sales_site_id = b.scm_site_id
+	and a.item_id = b.item_id
+  left join (
+			SELECT B.USER_ID, B.USER_NAME, B.USER_NAME_EN, B.DEPT_ID, C.DEPT_NAME_KO , c.upper_dept_id , b.JOB_NAME
+			FROM SCM_MST_SSO_USER_INFO B
+			INNER JOIN SCM_MST_SSO_DEPT_INFO C
+			ON B.DEPT_ID = C.DEPT_ID
+	        ) c
+     on c.USER_ID   IN (SELECT token FROM (SELECT REGEXP_SUBSTR(b.owner,'[^,]+',1,LEVEL) token FROM DUAL CONNECT BY REGEXP_SUBSTR(b.owner,'[^,]+',1,LEVEL) IS NOT NULL) WHERE ROWNUM = 1)
+ WHERE ( :PARAM_DIVSION_ID IS NULL OR a.DIVISION_ID = :PARAM_DIVSION_ID )
+   AND ( :PARAM_SALES_YYYYMM IS NULL OR a.SALES_YYYYMM = :PARAM_SALES_YYYYMM )
+   AND ( :PARAM_SALES_SITE_ID IS NULL OR a.SALES_SITE_ID = :PARAM_SALES_SITE_ID )
+   AND ( :PARAM_ITEM_ID IS NULL OR a.ITEM_ID = :PARAM_ITEM_ID )
+  AND A.SALES_QTY <> 0
+		) AA",Y,Y,zytchoi,2018-10-17 11:52:29,MSSQL2ORA_TOGNULL,2026-06-30 15:32:04,,,,,,,,,,
+42,-,Company 정보 불일치 건,Company 정보 불일치 건,"SELECT distinct
+        COMPANY_ID,DIVISION_ID,CUSTOMER_CODE,CUSTOMER_NAME,SHIPTO_CODE,SHIPTO_DESCRIPTION,SALES_SITE_ID
+	   ,(
+	      select b.COMPANY_ID
+		    from scm_mst_site b
+		   where a.division_id = b.division_id
+		     and a.SALES_SITE_ID = b.scm_site_id
+	    ) SALES_SITE_COMPANY_ID
+	   ,CASE WHEN COMPANY_ID =  (
+	      select b.COMPANY_ID
+		    from scm_mst_site b
+		   where a.division_id = b.division_id
+		     and a.SALES_SITE_ID = b.scm_site_id
+	    ) THEN 'SAME' ELSE 'DIFF' END DIFF
+
+      ,(
+					 SELECT LISTAGG(dept_name_ko, ',') WITHIN GROUP (ORDER BY dept_name_ko)
+					   FROM (
+						select distinct z.dept_name_ko
+						  from scm_mst_site_item x
+							  ,SCM_MST_SSO_USER_INFO y
+							  ,SCM_MST_SSO_DEPT_INFO z
+						 where x.division_id = a.division_id
+						   and x.scm_site_id = a.SALES_SITE_ID
+						   and x.owner = y.user_id
+						   and y.dept_id = z.dept_id
+						   and x.valid_yn = 'Y'
+					   )
+	   ) TEAM
+      ,(
+					 SELECT LISTAGG(user_name || '' || job_name, ',') WITHIN GROUP (ORDER BY user_name || '' || job_name)
+					   FROM (
+						select distinct y.user_name, y.job_name
+						  from scm_mst_site_item x
+							  ,SCM_MST_SSO_USER_INFO y
+							  ,SCM_MST_SSO_DEPT_INFO z
+						 where x.division_id = a.division_id
+						   and x.scm_site_id = a.SALES_SITE_ID
+						   and x.owner = y.user_id
+						   and y.dept_id = z.dept_id
+						   and x.valid_yn = 'Y'
+					   )
+	   ) OWNER
+
+  FROM DM_DNM_SALES_RESULT_IF a
+ WHERE 1=1
+   and ( :PARAM_DIVSION_ID IS NULL OR division_id = :PARAM_DIVSION_ID )
+   AND (COST_ITEM_NAME IS NULL OR COST_ITEM_NAME = '-')
+   and LENGTH(CUSTOMER_CODE) > 4
+AND A.LGS_ROUTE_NAME IN (N'내수',N'직수출')
+   and sales_yyyymm >= substr( TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'YYYYMMDD') , 1,6)",Y,Y,zytchoi,2018-11-05 14:30:48,MSSQL2ORA_TOGNULL,2026-06-30 15:32:04,,,,,,,,,,
+67,-,ESS (G540) Sales Result,ESS (G540) Sales Result,"/* ""C20200514-000253"" GSCM-DQ 해외법인 LGCAU(G540) 실적확인기능 추가 요청 */ 
+SELECT A.COMPANY_ID 
+      ,DIVISION_ID 
+      ,A.RESULT_YYYYMM 
+      ,SALES_POSTING_DATE 
+      ,ITEM_TYPE 
+      ,CUSTOMER_CODE 
+      ,CUSTOMER_NAME 
+      ,CURRENCY 
+      ,SALES_AMOUNT_FOR AS AMT_LOCAL 
+      ,SALES_AMOUNT_SUM AS AMT_KRW 
+      ,DOC_CURRENCY AS CURRENCY_AUD 
+      ,DOC_AMT_FOR AS AMT_LOCAL_AUD 
+      ,DOC_AMT_KRW AS AMT_KRW_AUD 
+      ,UOM 
+      ,SALES_QTY 
+      ,ITEM_ID 
+      ,SHIPTO_CODE 
+      ,SHIPTO_DESCRIPTION 
+      ,COUNTRY 
+      ,COUNTRY_NAME 
+      ,SHIPTO_CITY_NAME 
+      ,SHIPTO_ZONE_CODE 
+      ,SHIPTO_ZONE_NAME 
+      ,RBU_CUSTOMER 
+      ,INCOTERMS 
+  FROM INF_MGR.XIF_ERP_SALES_RESULT_R A 
+      ,( 
+		SELECT COMPANY_ID, RESULT_YYYYMM, MAX(IFSEQNO) IFSEQNO 
+		  FROM INF_MGR.XIF_ERP_SALES_RESULT_R 
+		 WHERE DIVISION_ID = '82' 
+		 /* ""E20260102-000848""_GERP -> NERP로 변환되면서, 변경 I/F는 구코드도 존재하므로 IN으로 변경 (START) */ 
+		 /* AND COMPANY_ID = 'G540' */ 
+		  AND COMPANY_ID IN ('G540', 'AU00') 
+		 /* ""E20260102-000848""_GERP -> NERP로 변환되면서, 변경 I/F는 구코드도 존재하므로 IN으로 변경 (END) */ 
+		 GROUP BY COMPANY_ID, RESULT_YYYYMM 
+	   ) B 
+ WHERE A.IFSEQNO = B.IFSEQNO 
+   AND A.RESULT_YYYYMM = B.RESULT_YYYYMM 
+   AND A.COMPANY_ID = B.COMPANY_ID 
+   /* ""E20260102-000848""_GERP -> NERP로 변환되면서, 변경 I/F는 구코드도 존재하므로 IN으로 변경 (START) */ 
+   /* AND A.SHIPTO_CODE <> 'G540' */ 
+   AND A.SHIPTO_CODE NOT IN ('G540', 'AU00') 
+   /* ""E20260102-000848""_GERP -> NERP로 변환되면서, 변경 I/F는 구코드도 존재하므로 IN으로 변경 (END) */ 
+   AND A.RESULT_YYYYMM = :PARAM1 
+   AND A.DIVISION_ID = '82' 
+   /* AND (A.COST_ITEM IS NULL OR A.COST_ITEM = '-') */ ",Y,Y,choiya2,2020-06-02 11:15:14,MSSQL2ORA_FIX2,2026-06-30 18:56:29,,,,,,,,,,
+68,-,"ESS REQ, CIQ FCST By Current","ESS 출하요청, CIQ FCST By Current","SELECT DT.DIVISION_ID , DT.DEPT_NAME_KO , DT.SOLDTO_CUSTOMER , DT.SCM_SITE_ID , DT.PLANT_SITE_ID 
+     , DT.PROJECT_CODE , DT.PROJECT_NAME , DT.PROJECT_OWNER ,DT.PROJECT_OWNER_KO, DT.ITEM_ID 
+     , DT.ITEM_NAME , DT.FCST_TYPE , DT.INCOTERMS , DT.DUE_DATE_MKT , DT.QTY , DT.ENERGY , DT.CELL_QUANTITY 
+     , DT.BOD_ID , DT.DAYS_MON, DT.DAYS_TUE, DT.DAYS_WED, DT.DAYS_THU, DT.DAYS_FRI, DT.DAYS_SAT, DT.DAYS_SUN 
+     , DT.LT_TOTAL, DT.OSP_LT 
+   , TO_CHAR(((DT.SHIP_PLAN_CAL) + ((CASE WHEN DT.INCOTERMS IN ('A01','Z01','Z04','EXW','FCA','FAS') 
+                                       THEN 0 ELSE DT.VOYAGE_CHECK_LT END + DT.SHIP_LT_TOTAL) * -1)), 'YYYYMMDD')  AS SHIP_REQ_DATE 
+   , TO_CHAR(((DT.SHIP_PLAN_CAL) + ((CASE WHEN DT.INCOTERMS IN ('A01','Z01','Z04','EXW','FCA','FAS') 
+	                                THEN 0 ELSE DT.VOYAGE_CHECK_LT END + DT.SHIP_LT_TOTAL + DT.OSP_LT) * -1)), 'YYYYMMDD')  AS CIQ_DATE 
+FROM   ( 
+        SELECT 
+               A.DIVISION_ID , A.DEPT_NAME_KO , A.SOLDTO_CUSTOMER , A.SCM_SITE_ID , A.PLANT_SITE_ID 
+             , A.PROJECT_CODE , A.PROJECT_NAME , A.PROJECT_OWNER ,A.PROJECT_OWNER_KO, A.ITEM_ID 
+             , A.ITEM_NAME , A.FCST_TYPE , A.INCOTERMS , A.DUE_DATE_MKT , A.QTY , A.ENERGY , A.CELL_QUANTITY 
+             , A.BOD_ID , A.DAYS_MON, A.DAYS_TUE, A.DAYS_WED, A.DAYS_THU, A.DAYS_FRI, A.DAYS_SAT, A.DAYS_SUN 
+             , A.LT_DEPARTURE_INLAND , A.LT_WAIT_SHIPPING , A.LT_VOYAGE , A.LT_LAY_OFF_CLEARANCE 
+             , A.LT_ARRIVAL_INLAND, A.SHIP_LT_TOTAL_ORIGIN , A.SHIP_LT_TOTAL , A.LT_TOTAL 
+             , A.LT_INLAND , A.GAP_LT, NVL(LT.LT_DAY, 0) AS OSP_LT 
+             , ((TO_DATE(A.DUE_DATE_MKT,'YYYYMMDD')) + (A.GAP_LT * -1)) AS SHIP_PLAN_CAL 
+             , TO_CHAR(((TO_DATE(A.DUE_DATE_MKT,'YYYYMMDD')) + (A.GAP_LT * -1)), 'D') AS DAY_IDX 
+             , CASE /*  ① 일요일인 경우 */ 
+                    WHEN TO_CHAR(((TO_DATE(A.DUE_DATE_MKT,'YYYYMMDD')) + (A.GAP_LT * -1)), 'D') = 1 
+                    THEN CASE WHEN A.DAYS_SUN = 'Y' THEN 0 ELSE CASE WHEN A.DAYS_SAT = 'Y' THEN 1 ELSE 
+                         CASE WHEN A.DAYS_FRI = 'Y' THEN 2 ELSE CASE WHEN A.DAYS_THU = 'Y' THEN 3 ELSE 
+                         CASE WHEN A.DAYS_WED = 'Y' THEN 4 ELSE CASE WHEN A.DAYS_TUE = 'Y' THEN 5 ELSE 
+                         CASE WHEN A.DAYS_MON = 'Y' THEN 6 ELSE 0 
+                         END END END END END END END 
+                    /*  ② 월요일인 경우 */ 
+                    WHEN TO_CHAR(((TO_DATE(A.DUE_DATE_MKT,'YYYYMMDD')) + (A.GAP_LT * -1)), 'D') = 2 
+                    THEN CASE WHEN A.DAYS_MON = 'Y' THEN 0 ELSE CASE WHEN A.DAYS_SUN = 'Y' THEN 1 ELSE 
+                         CASE WHEN A.DAYS_SAT = 'Y' THEN 2 ELSE CASE WHEN A.DAYS_FRI = 'Y' THEN 3 ELSE 
+                         CASE WHEN A.DAYS_THU = 'Y' THEN 4 ELSE CASE WHEN A.DAYS_WED = 'Y' THEN 5 ELSE 
+                         CASE WHEN A.DAYS_TUE = 'Y' THEN 6 ELSE 0 
+                         END END END END END END END 
+                    /*  ③ 화요일인 경우 */ 
+                    WHEN TO_CHAR(((TO_DATE(A.DUE_DATE_MKT,'YYYYMMDD')) + (A.GAP_LT * -1)), 'D') = 3 
+                    THEN CASE WHEN A.DAYS_TUE = 'Y' THEN 0 ELSE CASE WHEN A.DAYS_MON = 'Y' THEN 1 ELSE 
+                         CASE WHEN A.DAYS_SUN = 'Y' THEN 2 ELSE CASE WHEN A.DAYS_SAT = 'Y' THEN 3 ELSE 
+                         CASE WHEN A.DAYS_FRI = 'Y' THEN 4 ELSE CASE WHEN A.DAYS_THU = 'Y' THEN 5 ELSE 
+                         CASE WHEN A.DAYS_WED = 'Y' THEN 6 ELSE 0 
+                         END END END END END END END 
+                    /*  ④ 수요일인 경우 */ 
+                    WHEN TO_CHAR(((TO_DATE(A.DUE_DATE_MKT,'YYYYMMDD')) + (A.GAP_LT * -1)), 'D') = 4 
+                    THEN CASE WHEN A.DAYS_WED = 'Y' THEN 0 ELSE CASE WHEN A.DAYS_TUE = 'Y' THEN 1 ELSE 
+                         CASE WHEN A.DAYS_MON = 'Y' THEN 2 ELSE CASE WHEN A.DAYS_SUN = 'Y' THEN 3 ELSE 
+                         CASE WHEN A.DAYS_SAT = 'Y' THEN 4 ELSE CASE WHEN A.DAYS_FRI = 'Y' THEN 5 ELSE 
+                         CASE WHEN A.DAYS_THU = 'Y' THEN 6 ELSE 0 
+                    END END END END END END END 
+                    /*  ⑤ 목요일인 경우 */ 
+                    WHEN TO_CHAR(((TO_DATE(A.DUE_DATE_MKT,'YYYYMMDD')) + (A.GAP_LT * -1)), 'D') = 5 
+                    THEN CASE WHEN A.DAYS_THU = 'Y' THEN 0 ELSE CASE WHEN A.DAYS_WED = 'Y' THEN 1 ELSE 
+                         CASE WHEN A.DAYS_TUE = 'Y' THEN 2 ELSE CASE WHEN A.DAYS_MON = 'Y' THEN 3 ELSE 
+                         CASE WHEN A.DAYS_SUN = 'Y' THEN 4 ELSE CASE WHEN A.DAYS_SAT = 'Y' THEN 5 ELSE 
+                         CASE WHEN A.DAYS_FRI = 'Y' THEN 6 ELSE 0 
+                    END END END END END END END 
+                    /*  ⑥ 금요일인 경우 */ 
+                    WHEN TO_CHAR(((TO_DATE(A.DUE_DATE_MKT,'YYYYMMDD')) + (A.GAP_LT * -1)), 'D') = 6 
+                    THEN CASE WHEN A.DAYS_FRI = 'Y' THEN 0 ELSE CASE WHEN A.DAYS_THU = 'Y' THEN 1 ELSE 
+                         CASE WHEN A.DAYS_WED = 'Y' THEN 2 ELSE CASE WHEN A.DAYS_TUE = 'Y' THEN 3 ELSE 
+                         CASE WHEN A.DAYS_MON = 'Y' THEN 4 ELSE CASE WHEN A.DAYS_SUN = 'Y' THEN 5 ELSE 
+                         CASE WHEN A.DAYS_SAT = 'Y' THEN 6 ELSE 0 
+                    END END END END END END END 
+                    /*  ⑦ 토요일인 경우 */ 
+                    WHEN TO_CHAR(((TO_DATE(A.DUE_DATE_MKT,'YYYYMMDD')) + (A.GAP_LT * -1)), 'D') = 7 
+                    THEN CASE WHEN A.DAYS_SAT = 'Y' THEN 0 ELSE CASE WHEN A.DAYS_FRI = 'Y' THEN 1 ELSE 
+                         CASE WHEN A.DAYS_THU = 'Y' THEN 2 ELSE CASE WHEN A.DAYS_WED = 'Y' THEN 3 ELSE 
+                         CASE WHEN A.DAYS_TUE = 'Y' THEN 4 ELSE CASE WHEN A.DAYS_MON = 'Y' THEN 5 ELSE 
+                         CASE WHEN A.DAYS_SUN = 'Y' THEN 6 ELSE 0 
+                    END END END END END END END 
+                    ELSE 0 
+               END  AS VOYAGE_CHECK_LT 
+      , A.BOD_VALID_YN 
+ 
+        FROM   ( 
+ 
+                SELECT MK.DIVISION_ID , MK.DEPT_NAME_KO , MK.SOLDTO_CUSTOMER , MK.SCM_SITE_ID , MK.PLANT_SITE_ID 
+                     , MK.PROJECT_CODE , MK.PROJECT_NAME , MK.PROJECT_OWNER ,MK.PROJECT_OWNER_KO, MK.ITEM_ID 
+                     , MK.ITEM_NAME , MK.FCST_TYPE , MK.INCOTERMS , MK.DUE_DATE_MKT , MK.QTY , MK.ENERGY , MK.CELL_QUANTITY 
+                     , BD.BOD_ID , BD.DAYS_MON, BD.DAYS_TUE, BD.DAYS_WED, BD.DAYS_THU, BD.DAYS_FRI, BD.DAYS_SAT, BD.DAYS_SUN 
+                     , BD.LT_DEPARTURE_INLAND , BD.LT_WAIT_SHIPPING , BD.LT_VOYAGE , BD.LT_LAY_OFF_CLEARANCE 
+                     , BD.LT_ARRIVAL_INLAND, BD.SHIP_LT_TOTAL_ORIGIN , BD.SHIP_LT_TOTAL , BD.LT_TOTAL 
+                     , BD.LT_INLAND , BD.GAP_LT, BD.BOD_VALID_YN 
+                FROM   ( 
+                        SELECT A.DIVISION_ID , C.DEPT_NAME_KO , B.SOLDTO_CUSTOMER , A.SCM_SITE_ID , PR.PLANT_SITE_ID 
+                             , A.PROJECT_CODE , D.PROJECT_NAME , D.PROJECT_OWNER 
+                             , ( 
+                                SELECT Z.USER_NAME 
+                                FROM   SCM_MST_SSO_USER_INFO Z 
+                                WHERE  Z.USER_ID = D.PROJECT_OWNER 
+                               ) AS PROJECT_OWNER_KO 
+                             , A.ITEM_ID , IT.ITEM_NAME , A.FCST_TYPE , A.INCOTERMS , A.YYYYMMDD  AS DUE_DATE_MKT 
+                             , A.QTY , IT.ENERGE  AS ENERGY , IT.CELL_QUANTITY 
+                        FROM   DM_PLN_MKT_FCST A 
+                               LEFT OUTER JOIN 
+                               ( 
+                                SELECT PR.DIVISION_ID, PR.PLANT_SITE_ID, PR.ITEM_ID 
+                                FROM   SCM_MST_SITE_ITEM_PRIORITY PR 
+                                WHERE  DIVISION_ID = '82' 
+                                AND    VALID_YN = 'Y' 
+                                /*AND    TO_CHAR(SYSDATE, 'YYYYMMDD') BETWEEN FROM_YYYYMMDD AND TO_YYYYMMDD*/ 
+                                AND TO_YYYYMMDD >= TO_CHAR(SYSDATE, 'YYYYMMDD') 
+                                AND    (PLANT_SITE_ID LIKE '%-P' OR PLANT_SITE_ID LIKE '%-A') 
+                                GROUP  BY PR.DIVISION_ID, PR.PLANT_SITE_ID, PR.ITEM_ID 
+                               ) PR 
+                               ON  A.DIVISION_ID = PR.DIVISION_ID 
+                               AND A.ITEM_ID     = PR.ITEM_ID 
+                             , SCM_MST_SITE B 
+                             , SCM_MST_SSO_DEPT_INFO C 
+                             , SCM_MST_PROJECT D 
+                             , SCM_MST_SITE E 
+                             , DM_MST_ITEM_SINGLE_V IT 
+                        WHERE  A.DIVISION_ID = '82' 
+                        AND    A.MEASURE     IN ('MKT_FCST', 'AS_IN_REQ') 
+                        AND    A.DIVISION_ID = B.DIVISION_ID 
+                        AND    B.VALID_YN = 'Y' 
+                        AND    A.SCM_SITE_ID = B.SCM_SITE_ID 
+                        AND    B.DEPT_ID = C.DEPT_ID 
+                        AND    A.PROJECT_CODE = D.PROJECT_CODE 
+                        AND    A.DIVISION_ID  = E.DIVISION_ID 
+                        AND    A.SCM_SITE_ID  = E.SCM_SITE_ID 
+                        AND    A.DIVISION_ID = IT.DIVISION_ID 
+                        AND    A.ITEM_ID     = IT.ITEM_ID 
+                        AND    IT.ITEM_TYPE  = 'P' 
+                        AND    A.QTY         > 0 
+                        AND    E.VMI_YN      = 'N' 
+                        AND    A.YYYYMMDD    >= TO_CHAR(((FN_NEXT_DAY(SYSDATE, 'MON')) + (-7)), 'YYYYMMDD') 
+                        AND  (:PARAM_ITEM_ID IS NULL OR A.ITEM_ID = :PARAM_ITEM_ID) 
+                        AND  (:PARAM_PROJECT_CODE IS NULL OR A.PROJECT_CODE = :PARAM_PROJECT_CODE) 
+                        UNION  ALL 
+ 
+                        SELECT A.DIVISION_ID , C.DEPT_NAME_KO , B.SOLDTO_CUSTOMER , A.SCM_SITE_ID , PR.PLANT_SITE_ID 
+                             , A.PROJECT_CODE , D.PROJECT_NAME , D.PROJECT_OWNER 
+                             , ( 
+                                SELECT Z.USER_NAME 
+                                FROM   SCM_MST_SSO_USER_INFO Z 
+                                WHERE  Z.USER_ID = D.PROJECT_OWNER 
+                               ) AS PROJECT_OWNER_KO 
+                             , A.ITEM_ID , IT.ITEM_NAME , A.FCST_TYPE , A.INCOTERMS , A.YYYYMMDD  AS DUE_DATE_MKT 
+                             , A.QTY , IT.ENERGE  AS ENERGY , IT.CELL_QUANTITY 
+                        FROM   DM_PLN_MKT_FCST A 
+                               LEFT OUTER JOIN 
+                               ( 
+                                SELECT PR.DIVISION_ID, PR.PLANT_SITE_ID, PR.ITEM_ID 
+                                FROM   SCM_MST_SITE_ITEM_PRIORITY PR 
+                                WHERE  DIVISION_ID = '82' 
+                                AND    VALID_YN = 'Y' 
+                                /*AND    TO_CHAR(SYSDATE, 'YYYYMMDD') BETWEEN FROM_YYYYMMDD AND TO_YYYYMMDD*/ 
+                                AND TO_YYYYMMDD >= TO_CHAR(SYSDATE, 'YYYYMMDD') 
+                                AND    (PLANT_SITE_ID LIKE '%-P' OR PLANT_SITE_ID LIKE '%-A') 
+                                GROUP  BY PR.DIVISION_ID, PR.PLANT_SITE_ID, PR.ITEM_ID 
+                               ) PR 
+                               ON  A.DIVISION_ID = PR.DIVISION_ID 
+                               AND A.ITEM_ID     = PR.ITEM_ID 
+                             , SCM_MST_SITE B 
+                             , SCM_MST_SSO_DEPT_INFO C 
+                             , SCM_MST_PROJECT D 
+                             , SCM_MST_SITE E 
+                             , DM_MST_ITEM_SINGLE_V IT 
+                        WHERE  A.DIVISION_ID = '82' 
+                        AND    A.MEASURE     = 'VMI_IN_REQ' 
+                        AND    A.DIVISION_ID = B.DIVISION_ID 
+                        AND    B.VALID_YN = 'Y' 
+                        AND    A.SCM_SITE_ID = B.SCM_SITE_ID 
+                        AND    B.DEPT_ID = C.DEPT_ID 
+                        AND    A.PROJECT_CODE = D.PROJECT_CODE 
+                        AND    A.DIVISION_ID  = E.DIVISION_ID 
+                        AND    A.SCM_SITE_ID  = E.SCM_SITE_ID 
+                        AND    A.DIVISION_ID = IT.DIVISION_ID 
+                        AND    A.ITEM_ID     = IT.ITEM_ID 
+                        AND    IT.ITEM_TYPE  = 'P' 
+                        AND    A.QTY         > 0 
+                        AND    A.YYYYMMDD    >= TO_CHAR(((FN_NEXT_DAY(SYSDATE, 'MON')) + (-7)), 'YYYYMMDD') 
+                        AND    E.VMI_YN      = 'Y' 
+                        AND  (:PARAM_ITEM_ID IS NULL OR A.ITEM_ID = :PARAM_ITEM_ID) 
+                        AND  (:PARAM_PROJECT_CODE IS NULL OR A.PROJECT_CODE = :PARAM_PROJECT_CODE) 
+                       ) MK 
+                       LEFT OUTER JOIN 
+                       ( 
+                       SELECT DISTINCT 
+                              A.BOD_ID, A.DIVISION_ID, A.FROM_SITE, A.TO_SITE, A.INCOTERMS, B.ITEM_ID 
+                            , A.DAYS_MON, A.DAYS_TUE, A.DAYS_WED, A.DAYS_THU, A.DAYS_FRI, A.DAYS_SAT, A.DAYS_SUN 
+                            , A.LT_DEPARTURE_INLAND, A.LT_WAIT_SHIPPING, A.LT_VOYAGE, A.LT_LAY_OFF_CLEARANCE 
+                            , A.LT_ARRIVAL_INLAND, A.SHIP_LT_TOTAL_ORIGIN, A.SHIP_LT_TOTAL, A.LT_TOTAL 
+                            , A.LT_DEPARTURE_INLAND + A.LT_WAIT_SHIPPING AS LT_INLAND 
+                            , CASE WHEN A.LT_TOTAL <= A.LT_DEPARTURE_INLAND + A.LT_WAIT_SHIPPING 
+                                   THEN 0 
+                                   ELSE A.LT_TOTAL - (A.LT_DEPARTURE_INLAND + A.LT_WAIT_SHIPPING) 
+                              END  AS GAP_LT 
+                            , ROW_NUMBER() OVER (PARTITION BY A.DIVISION_ID, A.FROM_SITE, A.TO_SITE, A.INCOTERMS, B.ITEM_ID ORDER BY A.PRIORITY, A.LT_TOTAL DESC, A.BOD_ID) AS BOD_PRIORITY 
+                            , B.VALID_YN AS BOD_VALID_YN 
+                       FROM   SCP_MST_BOD_V A 
+                            , SCP_MST_BOD_ITEM B 
+                       WHERE  A.DIVISION_ID     = '82' 
+                       AND    A.DIVISION_ID     = B.DIVISION_ID 
+                       AND    A.BOD_ID          = B.BOD_ID 
+                       AND    A.BOD_VALID_YN    = 'Y' 
+                       /*AND    B.VALID_YN        = 'Y'*/ 
+                       ) BD 
+                       ON  MK.DIVISION_ID = BD.DIVISION_ID 
+                       AND MK.SCM_SITE_ID = BD.TO_SITE 
+                       AND MK.PLANT_SITE_ID = BD.FROM_SITE 
+                       AND MK.INCOTERMS     = BD.INCOTERMS 
+                       AND MK.ITEM_ID       = BD.ITEM_ID 
+                       AND BD.BOD_PRIORITY  = 1 
+ 
+               ) A 
+               LEFT OUTER JOIN 
+               SCP_MST_OPERATION_LT LT 
+               ON  A.DIVISION_ID     = LT.DIVISION_ID 
+               AND A.PLANT_SITE_ID   = LT.SCM_SITE_ID 
+               AND A.ITEM_ID         = LT.ITEM_ID 
+               AND LT.LT_OPERATION   = 'OSP_LT' 
+       ) DT 
+ WHERE NVL(DT.BOD_VALID_YN, 'Y') = 'Y' 
+/*ORDER  BY 1,3,4,5*/ ",Y,Y,jsheo,2020-07-21 10:12:36,MSSQL2ORA_FILL,2026-06-30 15:32:04,,,,,,,,,,
+74,-,ESS ESMI(G380) Sales Result,ESS ESMI(G380) Sales Result,"/* ""C20210106-000227"" GSCM 북미 ESMI 법인 매출 확인 */ 
+SELECT A.COMPANY_ID 
+      ,DIVISION_ID 
+      ,A.RESULT_YYYYMM 
+      ,SALES_POSTING_DATE 
+      ,ITEM_TYPE 
+      ,CUSTOMER_CODE 
+      ,CUSTOMER_NAME 
+      ,CURRENCY 
+      ,SALES_AMOUNT_FOR AS AMT_LOCAL 
+      ,SALES_AMOUNT_SUM AS AMT_KRW 
+      ,UOM 
+      ,SALES_QTY 
+      ,ITEM_ID 
+      ,SHIPTO_CODE 
+      ,SHIPTO_DESCRIPTION 
+      ,COUNTRY 
+      ,COUNTRY_NAME 
+      ,SHIPTO_CITY_NAME 
+      ,SHIPTO_ZONE_CODE 
+      ,SHIPTO_ZONE_NAME 
+      ,RBU_CUSTOMER 
+      ,INCOTERMS 
+  FROM INF_MGR.XIF_ERP_SALES_RESULT_R A 
+      ,( 
+		SELECT COMPANY_ID, RESULT_YYYYMM, MAX(IFSEQNO) IFSEQNO 
+		  FROM INF_MGR.XIF_ERP_SALES_RESULT_R 
+		 WHERE DIVISION_ID = '82' 
+		 /* ""E20260102-000848""_GERP -> NERP로 변환되면서, 변경 I/F는 구코드도 존재하므로 IN으로 변경 (START) */ 
+		 /* AND COMPANY_ID = 'G380' */ 
+		 AND COMPANY_ID IN ('G380', 'MI00') 
+		 /* ""E20260102-000848""_GERP -> NERP로 변환되면서, 변경 I/F는 구코드도 존재하므로 IN으로 변경 (END) */ 
+		 GROUP BY COMPANY_ID, RESULT_YYYYMM 
+	   ) B 
+ WHERE A.IFSEQNO = B.IFSEQNO 
+   AND A.RESULT_YYYYMM = B.RESULT_YYYYMM 
+   AND A.COMPANY_ID = B.COMPANY_ID 
+  /* ""E20260102-000848""_GERP -> NERP로 변환되면서, 변경 I/F는 구코드도 존재하므로 IN으로 변경 (START) */ 
+  /* AND A.SHIPTO_CODE <> 'G380' */ 
+  AND A.SHIPTO_CODE IN ('G380', 'MI00') 
+  /* ""E20260102-000848""_GERP -> NERP로 변환되면서, 변경 I/F는 구코드도 존재하므로 IN으로 변경 (END) */ 
+   AND A.RESULT_YYYYMM = :PARAM1 
+   AND A.DIVISION_ID = '82' ",Y,Y,choiya2,2021-01-11 13:16:55,MSSQL2ORA_FIX2,2026-06-30 18:56:29,,,,,,,,,,
+86,-,User Menu Access Count_Period,사용자 일자별 메뉴접속 Count_기간,"select 
+       CASE a.MenuID WHEN 'Sales Site Project M' THEN 'Sales Site Project Model' 
+	                 WHEN 'Customer Model Mappi' THEN 'Customer Model Mapping' 
+					 ELSE a.MenuID END MENU_ID 
+	  ,a.UserID 
+      ,us.USER_NAME 
+	  , max( (case when dept.DEPT_NAME_KO is not null then dept.DEPT_NAME_KO else us.WORKING_NAME end ) ) DEPT_NAME_KO 
+	  ,TO_CHAR(LocalTimeStamp, 'YYYYMMDD') LOGIN_DATE 
+	  ,count(1) counts 
+      /*,COUNT(1) OVER(ORDER BY a.UserID) sum_count*/ 
+ from  TB_FX_MenuConnectLog a 
+      left outer join SCM_MST_SSO_USER_INFO us 
+	  on (a.UserID = us.USER_ID) 
+      left outer join SCM_MST_SSO_DEPT_INFO dept 
+	  on (us.DEPT_ID = dept.DEPT_ID) 
+ where 1=1 
+   and a.UserID = us.USER_ID 
+   and dept.DEPT_NAME_KO not like 'LG CNS%' 
+   and TO_CHAR(LocalTimeStamp, 'YYYYMMDD') >= '20180330' 
+   and (a.menuid IS NOT NULL AND a.menuid <> '-') 
+   and TO_CHAR(LocalTimeStamp, 'YYYYMMDD') between :PARAM_FROMDATE and :PARAM_TODATE 
+group by a.MenuID 
+	  ,a.UserID 
+      ,us.USER_NAME 
+	  ,TO_CHAR(LocalTimeStamp, 'YYYYMMDD') ",Y,Y,attackgo,2022-01-11 17:48:24,MSSQL2ORA_FILL,2026-06-30 15:32:04,,,,,,,,,,
+90,-,SITE_SHIPTO_SOLDTO,"SALES SITE 의 모든 SHIPTO, SOLDTO 를 조회","SELECT A.DIVISION_ID, A.SCM_SITE_ID, A.SITE_DESCRIPTION, B.SOLDTO_CODE, B.SHIPTO_CODE, A.VALID_YN AS SITE_VALID_YN, B.REP_YN, B.VALID_YN AS SOLDTO_SHIPTO_VALID_YN, C.PROJECT_CODE 
+FROM SCM_MST_SITE A 
+JOIN SCM_MST_SITE_CUSTOMER B ON A.DIVISION_ID = B.DIVISION_ID AND A.SCM_SITE_ID = B.SCM_SITE_ID 
+LEFT OUTER JOIN ( SELECT DISTINCT DIVISION_ID, SCM_SITE_ID, PROJECT_CODE 
+                    FROM SCM_MST_SITE_ITEM 
+                    ) C ON A.DIVISION_ID = C.DIVISION_ID AND A.SCM_SITE_ID = C.SCM_SITE_ID 
+WHERE A.SITE_TYPE = 'SALES' 
+ 
+ ",Y,Y,hwi1993,2022-03-04 15:38:42,DQ_NEWLINE_FIX,2026-06-25 16:20:18,,,,,,,,,,
+91,-,DM ERP 실적 원본,DM ERP 매출실적 원본 중 최신데이터 전체를 조회,"SELECT 
+IFSEQNO, COMPANY_ID, DIVISION_ID, RESULT_YYYYMM, RESULT_YYYYMMDD, RESULT_HHMMSS, SALES_TYPE, SALES_DEPT, SALES_WORK_PLACE, SALES_WORK_PLACE_NAME 
+, SALES_GROUP, SALES_GROUP_NAME, SALES_POSTING_DATE, COST_ITEM, COST_ITEM_NAME, SALES_TYPE_2, VALUATION_CLASS, ITEM_TYPE, CUSTOMER_CODE, CUSTOMER_NAME 
+, CUSTOMER_PROJECT_NAME, CUSTOMER_ITEM_NAME, BIZ_TYPE, PROJECT_CODE, PROJECT_NAME, CELL_TYPE, CAR_MODEL, QTY_CELL_BY_PACK, Z_TYPE, Z_CODE, SALES_REGION 
+, DISTRIBUTION_CHANNEL, LGS_ROUTE_NAME, CONNECT_NAME, CAR_QTY, CELL_QTY, SALES_PRICE, CURRENCY, SALES_AMOUNT_FOR, SALES_AMOUNT_SUM, UOM, SALES_QTY 
+, SALES_USER, SALES_USER_NAME, MAT_GROUP, MAT_GROUP_DESC, ITEM_ID, BIZ_TYPE_2, APP, USAGE, SALES_TEAM, ESS_PM, PLANT_ID, SHIPTO_CODE, SHIPTO_DESCRIPTION 
+, COUNTRY, COUNTRY_NAME, SHIPTO_CITY_NAME, SHIPTO_ZONE_CODE, SHIPTO_ZONE_NAME, RBU_CUSTOMER, INCOTERMS, PROFIT_CENTER_ID, PROFIT_CENTER_NAME, PARTNER_PROFIT_CENTER_ID 
+, PARTNER_PROFIT_CENTER_NAME, ITEM_TEXT, AFFILIATE_CODE, SALES_SEQ, SALES_KEY, CUSTOMER_GROUP_CODE, CUSTOMER_GROUP_NAME, CELL_CODE, DELEGATE_MODEL_ID 
+, DELEGATE_MODEL_NAME, C_P_MODEL_ID, C_P_MODEL_NAME, LRREGULAR_CODE, LRREGULAR_NAME, MACHINE_CODE, MACHINE_NAME, LINE_ID, LINE_NAME, TCO, CREATE_DATE 
+, CREATE_TIME, CREATE_USER_ID, UPDATE_DATE, UPDATE_TIME, UPDATE_USER_ID, TRANSFER_DATE, TRANSFER_TIME, TRANSFER_USER_ID, TRANSFER_FLAG, ATTRIBUTE1 
+, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5, ATTRIBUTE6, ATTRIBUTE7, ATTRIBUTE8, ATTRIBUTE9, ATTRIBUTE10, ATTRIBUTE11, ATTRIBUTE12, ATTRIBUTE13 
+, ATTRIBUTE14, ATTRIBUTE15, SYSTEM_INPUT_DATE, SYSTEM_INPUT_TIME, DOC_CURRENCY, DOC_AMT_FOR, DOC_AMT_KRW, FKDAT, SO_NO, POSNN AS ""주문품목번호"", VGBEL AS ""납품문서번호"", VGPOS, TKNUM AS ""선적번호"" 
+, RBELN AS ""빌링문서번호"", RPOSN, SALES_EXCHRATE_M, SALES_AMOUNT_SUM_M 
+FROM XIF_ERP_SALES_RESULT_R_SN 
+WHERE IFSEQNO IN ( SELECT MAX(IFSEQNO) FROM XIF_ERP_SALES_RESULT_R_SN ) 
+    AND DIVISION_ID = :PARAM_DIVISION_ID ",Y,Y,hwi1993,2022-03-10 13:41:57,DQ_NEWLINE_FIX,2026-06-25 16:20:18,,,,,,,,,,
+92,-,메뉴 접속이력,메뉴별 접속이력,"SELECT A.MENUID, CASE WHEN DEPT_NAME_KO LIKE '소형%' THEN '소형' WHEN DEPT_NAME_KO LIKE '자동차%' THEN '자동차' WHEN  DEPT_NAME_KO LIKE 'ESS%' THEN 'ESS' ELSE '' END AS Div_Name, C.DEPT_NAME_KO, USERID, B.USER_NAME 
+, SUM(A.VIEWCNT) AS VIEW_CNT, CNNTDATE 
+FROM TB_FX_MenuConnect A 
+JOIN SCM_MST_SSO_USER_INFO B ON A.UserID = B.USER_ID 
+JOIN SCM_MST_SSO_DEPT_INFO C ON B.DEPT_ID = C.DEPT_ID 
+WHERE CNNTDATE LIKE :PARAM_YEAR || '%' 
+AND MENUID LIKE '%' || :PARAM_MENU || '%' 
+GROUP BY A.MENUID, CASE WHEN DEPT_NAME_KO LIKE '소형%' THEN '소형' WHEN DEPT_NAME_KO LIKE '자동차%' THEN '자동차' WHEN  DEPT_NAME_KO LIKE 'ESS%' THEN 'ESS' ELSE '' END, C.DEPT_NAME_KO, USERID, B.USER_NAME, CNNTDATE ",Y,Y,hwi1993,2022-03-16 16:09:20,DQ_NEWLINE_FIX,2026-06-25 16:20:18,,,,,,,,,,
+106,-,ESS CEG Sales Result_N,ESS CEG Sales Result,"SELECT A.COMPANY_ID
+      ,A.DIVISION_ID
+      ,A.SALES_YYYYMM
+      ,A.SALES_POSTING_DATE
+      ,A.ITEM_TYPE
+      ,A.CUSTOMER_CODE
+      ,A.CUSTOMER_NAME
+      ,A.CURRENCY
+      ,A.SALES_AMOUNT_FOR AS AMT_LOCAL
+      ,A.SALES_AMOUNT_SUM AS AMT_KRW
+      ,A.UOM
+      ,A.SALES_QTY
+      ,A.ITEM_ID
+      ,A.SHIPTO_CODE
+      ,A.SHIPTO_DESCRIPTION
+      ,A.COUNTRY
+      ,A.COUNTRY_NAME
+      ,A.SHIPTO_CITY_NAME
+      ,A.SHIPTO_ZONE_CODE
+      ,A.SHIPTO_ZONE_NAME
+      ,A.RBU_CUSTOMER
+      ,A.INCOTERMS
+  FROM DM_DNM_SALES_RESULT_IF  A     
+  WHERE 1=1
+  --""E20260102-000848""_GERP -> NERP로 변환되면서, 신코드로 변경 (START)
+  --AND COMPANY_ID = 'G690'
+  --AND A.SHIPTO_CODE <> 'G690'
+  AND COMPANY_ID = 'EG00'
+  AND A.SHIPTO_CODE <> 'EG00'
+  --""E20260102-000848""_GERP -> NERP로 변환되면서, 신코드로 변경 (END)
+   AND A.SALES_YYYYMM = :PARAM1
+   AND A.DIVISION_ID = '82'
+   AND A.CUSTOMER_CODE <> 'C100'",Y,Y,chano0612,2023-06-07 09:09:33,MSSQL2ORA_V2,2026-06-25 13:43:06,,,,,,,,,,
+107,-,ESS (G540) Sales Result_N,ESS (G540) Sales Result,"SELECT A.COMPANY_ID
+      ,A.DIVISION_ID
+      ,A.SALES_YYYYMM
+      ,A.SALES_POSTING_DATE
+      ,A.ITEM_TYPE
+      ,A.CUSTOMER_CODE
+      ,A.CUSTOMER_NAME
+      ,A.CURRENCY
+      ,A.SALES_AMOUNT_FOR AS AMT_LOCAL
+      ,A.SALES_AMOUNT_SUM AS AMT_KRW
+      ,A.CURRENCY AS CURRENCY_AUD
+      ,A.SALES_AMOUNT_FOR AS AMT_LOCAL_AUD
+      ,A.SALES_AMOUNT_SUM AS AMT_KRW_AUD
+      ,A.UOM
+      ,A.SALES_QTY
+      ,A.ITEM_ID
+      ,A.SHIPTO_CODE
+      ,A.SHIPTO_DESCRIPTION
+      ,A.COUNTRY
+      ,A.COUNTRY_NAME
+      ,A.SHIPTO_CITY_NAME
+      ,A.SHIPTO_ZONE_CODE
+      ,A.SHIPTO_ZONE_NAME
+      ,A.RBU_CUSTOMER
+      ,A.INCOTERMS
+  FROM DM_DNM_SALES_RESULT_IF  A     
+  WHERE 1=1
+  --""E20260102-000848""_GERP -> NERP로 변환되면서, 신코드로 변경 (START)
+  --AND A.COMPANY_ID = 'G540'
+  --AND A.SHIPTO_CODE <> 'G540'
+  AND A.COMPANY_ID = 'AU00'
+  AND A.SHIPTO_CODE <> 'AU00'
+  --""E20260102-000848""_GERP -> NERP로 변환되면서, 신코드로 변경 (END)
+   AND A.SALES_YYYYMM = :PARAM1
+   AND A.DIVISION_ID = '82'",Y,Y,chano0612,2023-06-07 09:12:44,MSSQL2ORA_V2,2026-06-25 13:43:06,,,,,,,,,,
+108,-,ESS ESMI(G380) Sales Result_N,ESS ESMI(G380) Sales Result,"/* GSCM 북미 ESMI 법인 매출 확인 */ 
+SELECT A.COMPANY_ID 
+      ,A.DIVISION_ID 
+      ,A.SALES_YYYYMM 
+      ,A.SALES_POSTING_DATE 
+      ,A.ITEM_TYPE 
+      ,A.CUSTOMER_CODE 
+      ,A.CUSTOMER_NAME 
+      ,A.CURRENCY 
+      ,A.SALES_AMOUNT_FOR AS AMT_LOCAL 
+      ,A.SALES_AMOUNT_SUM AS AMT_KRW 
+      ,A.UOM 
+      ,A.SALES_QTY 
+      ,A.ITEM_ID 
+      ,A.SHIPTO_CODE 
+      ,A.SHIPTO_DESCRIPTION 
+      ,A.COUNTRY 
+      ,A.COUNTRY_NAME 
+      ,A.SHIPTO_CITY_NAME 
+      ,A.SHIPTO_ZONE_CODE 
+      ,A.SHIPTO_ZONE_NAME 
+      ,A.RBU_CUSTOMER 
+      ,A.INCOTERMS 
+  FROM DM_DNM_SALES_RESULT_IF A 
+  WHERE 1=1 
+  /* ""E20260102-000848""_GERP -> NERP로 변환되면서, 신코드로 변경 (START) */ 
+  /* AND A.COMPANY_ID = 'G380' */ 
+  /* AND A.SHIPTO_CODE <> 'G380' */ 
+  AND A.COMPANY_ID = 'MI00' 
+  AND A.SHIPTO_CODE <> 'MI00' 
+  /* ""E20260102-000848""_GERP -> NERP로 변환되면서, 신코드로 변경 (END) */ 
+   AND A.SALES_YYYYMM = :PARAM1 
+   AND A.DIVISION_ID = '82' ",Y,Y,chano0612,2023-06-07 09:15:00,MSSQL2ORA_FIX2,2026-06-30 18:56:29,,,,,,,,,,
+110,-,Sales_Billing_Delay_List,빌링처리 지연목록 조회,"SELECT CUSTOMER_NAME, PLANT_ID, ITEM_ID, SALES_QTY, SALES_POSTING_DATE, B.WEEK_NAME AS POSTING_WEEK, B.DAYOFWEEK AS POSING_DAYOFWEEK, SYSTEM_INPUT_DATE, SYSTEM_INPUT_TIME
+     , C.WEEK_NAME AS INPUT_WEEK, C.DAYOFWEEK AS INPUT_DAYOFWEEK
+     , ((TO_DATE(SYSTEM_INPUT_DATE, 'YYYYMMDD')) - (TO_DATE(SALES_POSTING_DATE, 'YYYYMMDD'))) AS D_PERIOD_PROC
+     , CAST(C.ISO_WEEK AS INTEGER) - CAST(B.ISO_WEEK AS INTEGER) AS W_PERIOD_PROC
+	 , COMPANY_ID, RESULT_YYYYMM, SALES_TYPE, CUSTOMER_CODE
+	 ,NVL((SELECT END_CUSTOMER FROM SCM_MST_SITE S2 
+                WHERE S2.DIVISION_ID = :PARAM_DIVSION_ID
+                  AND S2.SCM_SITE_ID = ( SELECT SCM_SITE_ID FROM SCM_MST_SITE_CUSTOMER S 
+                                          WHERE S.SOLDTO_CODE = A.CUSTOMER_CODE
+                                            AND S.SHIPTO_CODE = A.SHIPTO_CODE
+                                            AND S.DIVISION_ID = :PARAM_DIVSION_ID
+                                            AND S.VALID_YN = 'Y'
+                                       )
+              ), (SELECT END_CUSTOMER FROM SCM_MST_SITE S2 
+                WHERE S2.DIVISION_ID = :PARAM_DIVSION_ID
+                  AND S2.SCM_SITE_ID = (  SELECT MAX(SCM_SITE_ID) FROM SCM_MST_SITE_CUSTOMER S 
+                                           WHERE S.SOLDTO_CODE = A.CUSTOMER_CODE
+                                             AND S.DIVISION_ID = :PARAM_DIVSION_ID
+                                             AND S.VALID_YN = 'Y'
+                                       )
+              )) AS END_CUSTOEMR
+     , SHIPTO_CODE, SHIPTO_DESCRIPTION
+	 , INCOTERMS, ATTRIBUTE3 AS SALES_TYPE_DESC, SO_NO, POSNN, VGBEL, VGPOS, TKNUM, RBELN, RPOSN
+	FROM XIF_ERP_SALES_RESULT_R_SN A ,
+		 SCM_SYS_CALENDAR_M B  ,
+		 SCM_SYS_CALENDAR_M C  
+	WHERE 1=1
+	AND A.SALES_POSTING_DATE = B.BASIS_YYYYMMDD
+	AND A.SYSTEM_INPUT_DATE = C.BASIS_YYYYMMDD
+	AND A.DIVISION_ID = :PARAM_DIVSION_ID
+	AND A.SYSTEM_INPUT_DATE = :PARAM_SYSTEM_INPUT_DATE
+	AND (:PARAM_ITEM_ID IS NULL OR A.ITEM_ID LIKE :PARAM_ITEM_ID || '%')
+    AND A.SALES_POSTING_DATE < A.SYSTEM_INPUT_DATE
+	AND CONCAT(A.IFSEQNO,A.RESULT_YYYYMM)
+       IN ( SELECT CONCAT(B.IFSEQNO,B.RESULT_YYYYMM)
+              FROM (SELECT MAX(IFSEQNO) IFSEQNO , RESULT_YYYYMM FROM XIF_ERP_SALES_RESULT_R_SN 
+                     WHERE DIVISION_ID  = :PARAM_DIVSION_ID
+                    GROUP BY  RESULT_YYYYMM
+                   ) B
+          )
+ /*   AND  CONCAT(A.SO_NO,POSNN, RBELN, RPOSN) 
+       IN   -- 최초 빌링일만 가져옴. ( 취소후 빌링한건 어케하나? )
+         (SELECT CONCAT(A.SO_NO,POSNN, RBELN, RPOSN)
+          FROM (
+                SELECT COMPANY_ID,SO_NO,POSNN,
+                       CASE WHEN SO_SUM = RBELN_SUM THEN ''
+                       ELSE VGBEL
+                       END VGBEL,
+                       MIN(RBELN) RBELN, MIN(RPOSN) RPOSN
+                FROM (-- 분할납부의 경우 납품문서별 최초빌링, 그외 SO,POSNN별 최초빌링
+                       SELECT COMPANY_ID,SO_NO,POSNN, VGBEL, RBELN, RPOSN,
+                              SUM(SALES_QTY)  OVER (PARTITION BY A.SO_NO,POSNN) SO_SUM,
+                              ABS(SUM(SALES_QTY)  OVER (PARTITION BY A.SO_NO,POSNN,RBELN ORDER BY RBELN)) RBELN_SUM
+                         FROM XIF_ERP_SALES_RESULT_R_SN A 
+                        WHERE 1=1
+                          AND A.DIVISION_ID = :PARAM_DIVSION_ID
+                          AND CONCAT(A.IFSEQNO,A.RESULT_YYYYMM) 
+                            IN ( SELECT CONCAT(B.IFSEQNO,B.RESULT_YYYYMM)
+                                   FROM (
+                                         SELECT MAX(IFSEQNO) IFSEQNO , RESULT_YYYYMM
+                                           FROM XIF_ERP_SALES_RESULT_R_SN 
+                                          WHERE DIVISION_ID  = :PARAM_DIVSION_ID
+                                         GROUP BY  RESULT_YYYYMM
+                                        ) B
+                               )
+                     ) A
+                GROUP BY  COMPANY_ID,SO_NO, POSNN ,
+                          CASE WHEN SO_SUM = RBELN_SUM THEN ''
+                          ELSE VGBEL
+                          END
+                HAVING SUM(SO_SUM) > 0
+               ) A
+         )*/",Y,Y,blueeos,2023-10-04 16:58:05,MSSQL2ORA_LIKEPCT,2026-06-30 15:32:04,,,,,,,,,,
+115,-,ESS KWh 판가 계산 (SalesPlan),"ESS 프로젝트 별 KWh 판가 계산(LOC,USD)","/* SALESPLAN */ 
+SELECT TF.* 
+FROM ( 
+	SELECT TT.DIVISION_ID, TT.DEPT_ID, TT.TEAM, TT.SCM_SITE_ID, TT.PROJECT_CODE, TT.PROJECT_NAME, TT.CURRENCY/*, TT.VERSION_NO*/ 
+		, SUBSTR(TT.YYYYMM,1,4) AS YYYY 
+		, SUM(TT.RTF_QTY)		   AS RTF_QTY 
+		, SUM(TT.MKT_FCST_QTY)	   AS MKT_FCST_QTY 
+		, SUM(TT.SALES_AMT_LOC)	   AS SALES_AMT_LOC 
+		, SUM(TT.MKT_AMT_LOC)	   AS MKT_AMT_LOC 
+		, SUM(TT.RTF_ENERGY_)	   AS RTF_ENERGY_ 
+		, SUM(TT.MKT_ENERGY_)	   AS MKT_ENERGY_ 
+		, SUM(TT.SALES_AMT_LOC) / CASE WHEN SUM(TT.RTF_ENERGY_) = 0 THEN 1 ELSE SUM(TT.RTF_ENERGY_) END / 1000 AS LOC_PER_KWH_SALES_AMOUNT   /* $/KWH_SALES AMOUNT.(LOC) */ 
+		, SUM(TT.MKT_AMT_LOC)   / CASE WHEN SUM(TT.MKT_ENERGY_) = 0 THEN 1 ELSE SUM(TT.MKT_ENERGY_) END / 1000 AS LOC_PER_KWH_MKTFCST_AMOUNT /* $/KWH_MKT FCST AMOUNT.(LOC) */ 
+		/* ▶ 조회 기간의 각 월 별 LOC화 통화를 USD로 변환금액사용 */ 
+		, SUM(TT.RTF_LOC_USD_CONVERT) / CASE WHEN SUM(TT.RTF_ENERGY_) = 0 THEN 1 ELSE SUM(TT.RTF_ENERGY_) END / 1000 AS USD_PER_KWH_SALES_AMOUNT   /* $/KWH_SALES AMOUNT.(USD) */ 
+		, SUM(TT.MKT_LOC_USD_CONVERT) / CASE WHEN SUM(TT.MKT_ENERGY_) = 0 THEN 1 ELSE SUM(TT.MKT_ENERGY_) END / 1000 AS USD_PER_KWH_MKTFCST_AMOUNT /* $/KWH_MKT FCST AMOUNT.(USD) */ 
+	FROM ( 
+		SELECT T.DIVISION_ID, T.DEPT_ID, T.TEAM, T.SCM_SITE_ID, T.PROJECT_CODE,T.PROJECT_NAME, T.CURRENCY , T.ITEM_ID, T.ENERGE 
+			, SUBSTR(YYYYMMDD, 1,6)	AS YYYYMM 
+			, SUM(MKT_FCST_QTY)			AS MKT_FCST_QTY 
+			, SUM(RTF_QTY)				AS RTF_QTY 
+			, SUM(SALES_AMT_LOC)		AS SALES_AMT_LOC 
+			, SUM(MKT_AMT_LOC)			AS MKT_AMT_LOC 
+			, SUM(MKT_ENERGY_)			AS MKT_ENERGY_ 
+			, SUM(RTF_ENERGY_)			AS RTF_ENERGY_ 
+			/* 월별환율정보 */ 
+			, MAX(EXCHANGE_PRICE_USD) AS RATE_USD 
+			, MAX(EXCHANGE_PRICE_EUR) AS RATE_EUR 
+			, MAX(EXCHANGE_PRICE_INR) AS RATE_INR 
+			, MAX(EXCHANGE_PRICE_AUD) AS RATE_AUD 
+			, MAX(EXCHANGE_PRICE_JPY) AS RATE_JPY 
+			, MAX(EXCHANGE_PRICE_RMB) AS RATE_RMB 
+			, CASE WHEN (CASE WHEN REGEXP_LIKE(MAX(T.ENERGE),'^""0-9""+(\.""0-9""+)?$') THEN 1 ELSE 0 END)  > 0 
+				   THEN SUM(T.SALES_AMT_LOC)  / CASE WHEN SUM(T.RTF_ENERGY_) = 0 THEN 1 ELSE SUM(T.RTF_ENERGY_) END   / CASE WHEN NVL(AVG(T.EXCHANGE_PRICE_USD), 0) = 0 THEN 1 ELSE MAX(T.EXCHANGE_PRICE_USD) END / 1000 
+			  ELSE 0 END AS CALC1_1 
+			, CASE WHEN (CASE WHEN REGEXP_LIKE(MAX(T.ENERGE),'^""0-9""+(\.""0-9""+)?$') THEN 1 ELSE 0 END)  > 0 
+				   THEN (SUM(T.SALES_AMT_LOC) / CASE WHEN SUM(T.RTF_ENERGY_) = 0 THEN 1 ELSE SUM(T.RTF_ENERGY_) END   / CASE WHEN NVL(AVG(T.EXCHANGE_PRICE_USD), 0) = 0 THEN 1 ELSE MAX(T.EXCHANGE_PRICE_USD) END / 1000) * SUM(RTF_QTY) 
+			  ELSE 0 END AS CALC1_2 
+ 
+			, SUM(SALES_AMT_LOC) * CASE WHEN T.CURRENCY = 'EUR' THEN MAX(T.EXCHANGE_PRICE_EUR) 
+										WHEN T.CURRENCY = 'AUD' THEN MAX(T.EXCHANGE_PRICE_AUD) 
+										WHEN T.CURRENCY = 'INR' THEN MAX(T.EXCHANGE_PRICE_INR) 
+										WHEN T.CURRENCY = 'JPY' THEN MAX(T.EXCHANGE_PRICE_JPY) 
+										WHEN T.CURRENCY = 'RMB' THEN MAX(T.EXCHANGE_PRICE_RMB) 
+										WHEN T.CURRENCY = 'USD' THEN MAX(T.EXCHANGE_PRICE_USD) 
+									ELSE 1 END 
+									/ CASE WHEN MAX(T.EXCHANGE_PRICE_USD) = 0 THEN 1 ELSE MAX(T.EXCHANGE_PRICE_USD) END 
+			  AS RTF_LOC_USD_CONVERT 
+			, SUM(MKT_AMT_LOC)   * CASE WHEN T.CURRENCY = 'EUR' THEN MAX(T.EXCHANGE_PRICE_EUR) 
+										WHEN T.CURRENCY = 'AUD' THEN MAX(T.EXCHANGE_PRICE_AUD) 
+										WHEN T.CURRENCY = 'INR' THEN MAX(T.EXCHANGE_PRICE_INR) 
+										WHEN T.CURRENCY = 'JPY' THEN MAX(T.EXCHANGE_PRICE_JPY) 
+										WHEN T.CURRENCY = 'RMB' THEN MAX(T.EXCHANGE_PRICE_RMB) 
+										WHEN T.CURRENCY = 'USD' THEN MAX(T.EXCHANGE_PRICE_USD) 
+									ELSE 1 END 
+									/ CASE WHEN MAX(T.EXCHANGE_PRICE_USD) = 0 THEN 1 ELSE MAX(T.EXCHANGE_PRICE_USD) END 
+			  AS MKT_LOC_USD_CONVERT 
+		FROM ( 
+			SELECT TA.DIVISION_ID, TB.DEPT_ID, N.DEPT_NAME_KO AS TEAM, TA.PROJECT_CODE,TC.PROJECT_NAME, TA.SCM_SITE_ID, TA.ITEM_ID , TA.DOM_EXP, TA.FCST_TYPE , TA.INCOTERMS, TA.PLANT_SITE_ID 
+				, D.ENERGE 
+				, TC.CURRENCY 
+				, YYYYMMDD 
+				, SUM(CASE WHEN TA.MEASURE = 'MKT_FCST'     AND TA.GUBUN = 'P'  THEN TA.QTY ELSE 0 END) + SUM(CASE WHEN TA.MEASURE = 'RTF_SYS_RP' AND TA.GUBUN = 'R'  THEN TA.QTY ELSE 0 END) AS MKT_FCST_QTY /* (R+P) */ 
+				, SUM(CASE WHEN TA.MEASURE = 'RTF_SYS_RP'   THEN TA.QTY ELSE 0 END) AS RTF_QTY 
+				, SUM(CASE WHEN TA.MEASURE = 'SALESAMT_LOC' THEN TA.QTY ELSE 0 END) AS SALES_AMT_LOC 
+				, SUM(CASE WHEN TA.MEASURE = 'MKT_AMT_LOC'  THEN TA.QTY ELSE 0 END) AS MKT_AMT_LOC 
+				/*""E20240731-000856""_""공급 SCM PI팀"" Wh → KWh 환산 로직개선*/ 
+				, CASE WHEN (CASE WHEN REGEXP_LIKE(MAX(D.ENERGE),'^""0-9""+(\.""0-9""+)?$') THEN 1 ELSE 0 END)  > 0 
+				/*		THEN (MAX(D.ENERGE) * SUM(CASE WHEN TA.MEASURE = 'RTF_SYS_RP' AND TA.GUBUN = 'R'  THEN TA.QTY ELSE 0 END + CASE WHEN TA.MEASURE = 'MKT_FCST' 
+						AND TA.GUBUN = 'P'  THEN TA.QTY ELSE 0 END)) / 1000 
+						ELSE 0 END  AS MKT_ENERGY_			*/ 
+						THEN ((CAST(MAX(D.ENERGE) AS NUMBER(15,4)))/1000 * SUM(CASE WHEN TA.MEASURE = 'RTF_SYS_RP' AND TA.GUBUN = 'R'  THEN TA.QTY ELSE 0 END + CASE WHEN TA.MEASURE = 'MKT_FCST' 
+						AND TA.GUBUN = 'P'  THEN TA.QTY ELSE 0 END))/1000 
+						ELSE 0 END  AS MKT_ENERGY_ 
+				/*""E20240731-000856""_""공급 SCM PI팀"" Wh → KWh 환산 로직개선*/ 
+				/*, CASE WHEN ISNUMERIC(MAX(D.ENERGE))  > 0 
+						THEN (MAX(D.ENERGE) * SUM(CASE WHEN TA.MEASURE = 'RTF_SYS_RP' THEN TA.QTY ELSE 0 END)) / 1000 
+						ELSE 0 END  AS RTF_ENERGY_*/ 
+				, CASE WHEN (CASE WHEN REGEXP_LIKE(MAX(D.ENERGE),'^""0-9""+(\.""0-9""+)?$') THEN 1 ELSE 0 END)  > 0 
+						THEN ((CAST(MAX(D.ENERGE) AS NUMBER(15,4)))/1000 * SUM(CASE WHEN TA.MEASURE = 'RTF_SYS_RP' THEN TA.QTY ELSE 0 END)) / 1000 
+						ELSE 0 END  AS RTF_ENERGY_ 
+				, CASE WHEN (CASE WHEN REGEXP_LIKE(MAX(D.ENERGE),'^""0-9""+(\.""0-9""+)?$') THEN 1 ELSE 0 END)  > 0 
+						THEN SUM(CASE WHEN TA.MEASURE = 'SALESAMT_LOC' THEN TA.QTY ELSE 0 END) 
+						ELSE 0 END AS ENERGE_SALES_AMT_LOC 
+				, CASE WHEN (CASE WHEN REGEXP_LIKE(MAX(D.ENERGE),'^""0-9""+(\.""0-9""+)?$') THEN 1 ELSE 0 END)  > 0 
+						THEN SUM(CASE WHEN TA.MEASURE = 'MKT_AMT_LOC'  THEN TA.QTY ELSE 0 END) 
+						ELSE 0 END AS ENERGE_MKT_AMT_LOC 
+				/* 월별 환율 */ 
+				, MAX(EXCHANGE.EXCHANGE_PRICE_AUD) AS EXCHANGE_PRICE_AUD 
+				, MAX(EXCHANGE.EXCHANGE_PRICE_EUR) AS EXCHANGE_PRICE_EUR 
+				, MAX(EXCHANGE.EXCHANGE_PRICE_INR) AS EXCHANGE_PRICE_INR 
+				, MAX(EXCHANGE.EXCHANGE_PRICE_JPY) AS EXCHANGE_PRICE_JPY 
+				, MAX(EXCHANGE.EXCHANGE_PRICE_RMB) AS EXCHANGE_PRICE_RMB 
+				, MAX(EXCHANGE.EXCHANGE_PRICE_USD) AS EXCHANGE_PRICE_USD 
+			FROM ( 
+				SELECT 'P' AS GUBUN 
+					, DIVISION_ID,PROJECT_CODE,SCM_SITE_ID,ITEM_ID,DOM_EXP,FCST_TYPE,INCOTERMS 
+					, MEASURE,PLANT_SITE_ID ,YYYYMMDD,QTY,ATTRIBUTE1,ATTRIBUTE2,ATTRIBUTE3,ATTRIBUTE4,ATTRIBUTE5,ATTRIBUTE6,ATTRIBUTE7 
+					, ATTRIBUTE8,ATTRIBUTE9,ATTRIBUTE10 
+					, CREATED_BY,CREATION_DATE,LAST_UPDATED_BY,LAST_UPDATE_DATE 
+				FROM DM_PLN_SALES_PLAN A 
+				WHERE 1=1 
+				AND DIVISION_ID = '82' 
+				AND YYYYMMDD  >= TO_CHAR(((FN_NEXT_DAY( SYSDATE, 'MON')) + (-7)), 'YYYYMMDD')  /*당주월요일*/ 
+				AND YYYYMMDD  <= :PARAM_TO_DATE 
+				AND QTY <> 0 
+				UNION ALL 
+				SELECT 'R' AS GUBUN 
+					, DIVISION_ID,PROJECT_CODE,SCM_SITE_ID,ITEM_ID,DOM_EXP,FCST_TYPE,INCOTERMS 
+					, MEASURE,PLANT_SITE_ID ,YYYYMMDD,QTY,ATTRIBUTE1,ATTRIBUTE2,ATTRIBUTE3,ATTRIBUTE4,ATTRIBUTE5,ATTRIBUTE6,ATTRIBUTE7 
+					, ATTRIBUTE8,ATTRIBUTE9,ATTRIBUTE10 
+					, CREATED_BY,CREATION_DATE,LAST_UPDATED_BY,LAST_UPDATE_DATE 
+				FROM DM_PLN_SALES_PLAN_RESULT A 
+				WHERE 1=1 
+				AND DIVISION_ID = '82' 
+				AND YYYYMMDD >= :PARAM_FROM_DATE 
+				AND YYYYMMDD <  TO_CHAR(((FN_NEXT_DAY( SYSDATE, 'MON')) + (-7)), 'YYYYMMDD')  /*당주월요일*/ 
+				AND QTY <> 0 
+			) TA 
+			INNER JOIN 
+			( 
+				SELECT B.DIVISION_ID, B.SCM_SITE_ID, B.SITE_TYPE, B.DEPT_ID, B.VALID_YN  , B.END_CUSTOMER 
+						,B.COUNTRY , B.CITY , B.VMI_YN , B.SOLDTO_CUSTOMER 
+				FROM SCM_MST_SITE B 
+				WHERE 1=1 
+				AND DIVISION_ID			= '82' 
+				AND NVL(VALID_YN, '') = 'Y' 
+			) TB ON TA.DIVISION_ID = TB.DIVISION_ID 
+				AND TA.SCM_SITE_ID = TB.SCM_SITE_ID 
+			INNER JOIN 
+			(   /* PROJECT_NAME 추출 */ 
+				SELECT C.DIVISION_ID, C.PROJECT_CODE, C.PROJECT_NAME, C.BIZ_TYPE, C.BIZ_TYPE_NAME  , C.PROJECT_STATUS , C.PROJECT_OWNER , C.CURRENCY 
+				FROM SCM_MST_PROJECT C 
+				WHERE 1=1 
+				AND DIVISION_ID      = '82' 
+			) TC ON TA.DIVISION_ID   = TC.DIVISION_ID 
+				AND TA.PROJECT_CODE  = TC.PROJECT_CODE 
+			LEFT OUTER JOIN 
+			(  /* ENERGE 값 산출 */ 
+				SELECT A.DIVISION_ID, A.ITEM_ID, ENERGE 
+				FROM DM_MST_ITEM_SINGLE_V A 
+				WHERE A.DIVISION_ID	 = '82' 
+			) D ON TA.DIVISION_ID = D.DIVISION_ID AND TA.ITEM_ID = D.ITEM_ID 
+			LEFT OUTER JOIN 
+			( 
+				SELECT DIVISION_ID 
+					, SUBSTR(YYYYMMDD, 1,6)  AS YYYYMM 
+					, MAX(CASE WHEN UNIT_CURRENCY = 'AUD' THEN EXCHANGE_PRICE ELSE 0  END) AS EXCHANGE_PRICE_AUD 
+					, MAX(CASE WHEN UNIT_CURRENCY = 'EUR' THEN EXCHANGE_PRICE ELSE 0  END) AS EXCHANGE_PRICE_EUR 
+					, MAX(CASE WHEN UNIT_CURRENCY = 'INR' THEN EXCHANGE_PRICE ELSE 0  END) AS EXCHANGE_PRICE_INR 
+					, MAX(CASE WHEN UNIT_CURRENCY = 'JPY' THEN EXCHANGE_PRICE ELSE 0  END) AS EXCHANGE_PRICE_JPY 
+					, MAX(CASE WHEN UNIT_CURRENCY = 'RMB' THEN EXCHANGE_PRICE ELSE 0  END) AS EXCHANGE_PRICE_RMB 
+					, MAX(CASE WHEN UNIT_CURRENCY = 'USD' THEN EXCHANGE_PRICE ELSE 0  END) AS EXCHANGE_PRICE_USD 
+				FROM DM_MST_EXCHANGE_RATE 
+				WHERE DIVISION_ID ='82' /*'82'*/ 
+				AND CURRENCY      = 'KRW' 
+				GROUP BY DIVISION_ID, SUBSTR(YYYYMMDD, 1,6) 
+			) EXCHANGE ON EXCHANGE.DIVISION_ID = TA.DIVISION_ID 
+					  AND EXCHANGE.YYYYMM = SUBSTR(TA.YYYYMMDD,1,6) 
+			/* 부서정보 산출 : CASE WHEN TA.DIVISION_ID = '40' THEN TD.DEPT_ID ELSE TB.DEPT_ID END = N.DEPT_ID */ 
+			LEFT OUTER JOIN SCM_MST_SSO_DEPT_INFO N ON  TB.DEPT_ID = N.DEPT_ID 
+			WHERE 1=1 
+			AND TA.DIVISION_ID = '82' 
+			AND CASE WHEN :PARAM_SCM_SITE_ID IS NULL	 THEN :PARAM_SCM_SITE_ID  ELSE TA.SCM_SITE_ID  END	IN ( SELECT REGEXP_SUBSTR(:PARAM_SCM_SITE_ID,'""^,""+',1,LEVEL) TOKEN FROM DUAL CONNECT BY REGEXP_SUBSTR(:PARAM_SCM_SITE_ID,'""^,""+',1,LEVEL) IS NOT NULL ) 
+			AND ( CASE WHEN :PARAM_PROJECT_CODE IS NULL THEN :PARAM_PROJECT_CODE ELSE TA.PROJECT_CODE END  IN ( SELECT REGEXP_SUBSTR(:PARAM_PROJECT_CODE,'""^,""+',1,LEVEL) TOKEN FROM DUAL CONNECT BY REGEXP_SUBSTR(:PARAM_PROJECT_CODE,'""^,""+',1,LEVEL) IS NOT NULL) 
+			   OR CASE WHEN :PARAM_PROJECT_CODE IS NULL THEN :PARAM_PROJECT_CODE ELSE TC.PROJECT_NAME END  IN ( SELECT REGEXP_SUBSTR(:PARAM_PROJECT_CODE,'""^,""+',1,LEVEL) TOKEN FROM DUAL CONNECT BY REGEXP_SUBSTR(:PARAM_PROJECT_CODE,'""^,""+',1,LEVEL) IS NOT NULL)) 
+			AND CASE WHEN :PARAM_TEAM IS NULL THEN :PARAM_TEAM ELSE N.DEPT_NAME_KO END  IN ( SELECT REGEXP_SUBSTR(:PARAM_TEAM,'""^,""+',1,LEVEL) TOKEN FROM DUAL CONNECT BY REGEXP_SUBSTR(:PARAM_TEAM,'""^,""+',1,LEVEL) IS NOT NULL) 
+			AND N.DEPT_ID != 'CORP' AND NVL(TA.PROJECT_CODE, '') != '' 
+			AND CASE WHEN :PARAM_FROM_DATE IS NULL THEN 1 ELSE 2 END =  CASE WHEN :PARAM_FROM_DATE IS NULL THEN 2 ELSE 2 END 
+			GROUP BY TA.DIVISION_ID,TA.PROJECT_CODE, TC.PROJECT_NAME, TA.SCM_SITE_ID, TA.ITEM_ID, TA.DOM_EXP, TA.FCST_TYPE , TA.INCOTERMS, TA.PLANT_SITE_ID,  TA.YYYYMMDD, D.ENERGE, TC.CURRENCY, TB.DEPT_ID, N.DEPT_NAME_KO 
+		) T 
+		WHERE T.DIVISION_ID = '82' 
+		GROUP BY T.DIVISION_ID, T.PROJECT_CODE, T.PROJECT_NAME, T.SCM_SITE_ID, T.CURRENCY , T.ITEM_ID, T.ENERGE, T.DOM_EXP, T.FCST_TYPE , T.INCOTERMS, T.PLANT_SITE_ID 
+			   , SUBSTR(YYYYMMDD, 1,6), T.DEPT_ID, T.TEAM 
+	) TT 
+	WHERE TT.DIVISION_ID = '82' 
+	GROUP BY TT.DIVISION_ID, TT.DEPT_ID, TT.TEAM, TT.SCM_SITE_ID, TT.PROJECT_CODE, TT.PROJECT_NAME , TT.CURRENCY, SUBSTR(TT.YYYYMM, 1,4) 
+	HAVING SUM(TT.RTF_ENERGY_) > 0 
+) TF ",Y,Y,hmyong,2023-10-20 12:22:23,MSSQL2ORA_FIX2,2026-06-30 18:56:29,,,,,,,,,,
+189,-,실적 Mapping시 기준정보 없는 대상정보 조회(202606생성 TEST진행중),(TEST_JSSBAE),"SELECT A.DIVISION_ID, A.RESULT_YYYYMMDD, A.SALES_POSTING_DATE, A.CUSTOMER_CODE AS ERP_SOLDTO_CODE, A.SHIPTO_CODE AS ERP_SHIPTO_CODE 
+	 , A.SO_NO AS SALES_ORDER, A.ITEM_ID, A.PROJECT_CODE, TT.SCM_SITE_ID, TT.SALES_SITE_VALID, TT.SCM_SOLDTO_CODE, TT.SCM_SHIPTO_CODE, TT.SCM_SOLDTO_SHIPTO_VALID 
+FROM INF_MGR.XIF_ERP_SALES_RESULT_R A 
+INNER JOIN ( SELECT MAX(IFSEQNO) AS IFSEQNO FROM INF_MGR.XIF_ERP_SALES_RESULT_R) T 
+		ON A.IFSEQNO = T.IFSEQNO 
+INNER JOIN ( SELECT * FROM DM_DNM_SALES_RESULT_IF  WHERE NVL(SALES_SITE_ID, '')= '') P 
+		ON A.DIVISION_ID		= P.DIVISION_ID 
+	   AND A.SO_NO				= P.SO_NO 
+	   AND A.CUSTOMER_CODE		= P.CUSTOMER_CODE 
+	   AND A.SHIPTO_CODE		= P.SHIPTO_CODE 
+	   AND A.SALES_POSTING_DATE	= P.SALES_POSTING_DATE 
+	   AND A.ITEM_ID			= P.ITEM_ID 
+	   AND A.PROJECT_CODE		= P.PROJECT_CODE 
+LEFT OUTER JOIN ( 	SELECT A.DIVISION_ID, A.SCM_SITE_ID, A.VALID_YN AS SALES_SITE_VALID 
+						 , B.SOLDTO_CODE AS SCM_SOLDTO_CODE, B.SHIPTO_CODE AS SCM_SHIPTO_CODE, B.VALID_YN AS SCM_SOLDTO_SHIPTO_VALID 
+					FROM SCM_MST_SITE A 
+					INNER JOIN SCM_MST_SITE_CUSTOMER B 
+							ON A.DIVISION_ID = B.DIVISION_ID 
+						   AND A.SCM_SITE_ID = B.SCM_SITE_ID ) TT 
+			  ON A.DIVISION_ID		= TT.DIVISION_ID 
+			 AND A.CUSTOMER_CODE	= TT.SCM_SOLDTO_CODE 
+			 AND A.SHIPTO_CODE		= TT.SCM_SHIPTO_CODE 
+WHERE A.SALES_QTY <> 0 
+AND A.DIVISION_ID			= CASE WHEN NVL(:PARAM_DIVSION_ID, '') = '' THEN A.DIVISION_ID ELSE :PARAM_DIVSION_ID END 
+AND A.CUSTOMER_CODE			= CASE WHEN NVL(:PARAM_ERP_SOLDTO_CODE, '') = '' THEN A.CUSTOMER_CODE ELSE :PARAM_ERP_SOLDTO_CODE END 
+AND A.SHIPTO_CODE			= CASE WHEN NVL(:PARAM_ERP_SHIPTO_CODE, '') = '' THEN A.SHIPTO_CODE ELSE :PARAM_ERP_SHIPTO_CODE END 
+AND A.SO_NO					= CASE WHEN NVL(:PARAM_SALES_ORDER, '') = '' THEN A.SO_NO ELSE :PARAM_SALES_ORDER END 
+AND A.ITEM_ID				= CASE WHEN NVL(:PARAM_ITEM_ID, '') = '' THEN A.ITEM_ID ELSE :PARAM_ITEM_ID END 
+AND A.RESULT_YYYYMMDD		= CASE WHEN NVL(:PARAM_RESULT_YYYYMMDD, '') = '' THEN A.RESULT_YYYYMMDD ELSE :PARAM_RESULT_YYYYMMDD END 
+AND A.SALES_POSTING_DATE	= CASE WHEN NVL(:PARAM_SALES_POSTING_DATE, '') = '' THEN A.SALES_POSTING_DATE ELSE :PARAM_SALES_POSTING_DATE END ",Y,Y,jssbae,2026-06-22 09:37:10,DQ_NEWLINE_FIX,2026-06-25 16:20:18,,,,,,,,,,

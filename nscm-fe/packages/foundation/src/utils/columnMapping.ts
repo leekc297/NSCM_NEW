@@ -42,6 +42,16 @@ const getDataType = (ctrlType: CELL_CONTROL_TYPE): DataType | undefined => {
   }
 };
 
+const getFormat = (
+  ctrlType: CELL_CONTROL_TYPE | undefined,
+  scale: number | undefined
+): string | undefined => {
+  // TODO: 숫자 외의 다른 format 필요 시 추가 - 강민재
+  if (ctrlType === CELL_CONTROL_TYPE.NUMBER && scale) return `n${scale}`;
+  if (ctrlType === CELL_CONTROL_TYPE.NUMBER_TEXT) return 'd0';
+  return undefined;
+};
+
 const getEditor = (ctrlType: CELL_CONTROL_TYPE): Control | undefined => {
   switch (ctrlType) {
     // TODO: 테스트 필요, 투머치면 빼기
@@ -143,10 +153,7 @@ const toLeafColumn = (column: RawFlexGridColumnConfig): FlexGridColumnConfig => 
   allowResizing: true,
   allowSorting: false,
   // TODO: 숫자 외의 다른 format 필요 시 추가 - 강민재
-  format:
-    column.cellCtrlObjTpCd === CELL_CONTROL_TYPE.NUMBER && column.scale
-      ? `n${column.scale}`
-      : undefined,
+  format: getFormat(column.cellCtrlObjTpCd, column.scale),
   width: column.colWth,
   visible: column.visible,
   _inputEditType: column.inputTpCd,

@@ -1,0 +1,50 @@
+-- =============================================================================
+-- 00B_GATE_ITEM1_AGGREGATE.sql — ⭐⭐ 적용 가능 게이트 (항목1 접두필터 집계 보존)
+--   ⚠ READ-ONLY. 계정: SCM_MGR
+--   div 81 은 2026-07-31 확인 완료(0/0). ★ 40 / 82 가 이 게이트의 미확인분입니다.
+--   ⭐ 판정: 세 division 모두 집계_불일치=0 AND 키_불일치=0 → 01 적용 가능
+--            하나라도 >0 → ⛔ 적용 중단, 결과 회신
+--   (접두 집합 GROUP BY 선계산 + JOIN — 상관 서브쿼리 없음, 사내 실측 0.49초)
+-- =============================================================================
+SET LINESIZE 220
+SET PAGESIZE 100
+SPOOL DMF0082_GATE_ITEM1.txt
+
+WITH P AS (
+  SELECT DIVISION_ID, SUBSTR(ITEM_ID,1,12) K
+    FROM SCM_MST_SITE_ITEM
+   WHERE DIVISION_ID IN ('40','81','82')
+   GROUP BY DIVISION_ID, SUBSTR(ITEM_ID,1,12)),
+BEFORE_AGG AS (
+  SELECT DIVISION_ID, SUBSTR(ITEM_ID,1,12) K,
+         MAX(FORECAST_INFO_PRODUCT_GROUP)   C1, MAX(FORECAST_INFO_CELL_MODEL)      C2,
+         MAX(FORECAST_INFO_CELL_PACK_COUNT) C3, MAX(FORECAST_INFO_SPEC)            C4,
+         MAX(FORECAST_INFOR_VERSION)        C5, MAX(CELL_TYPE)                     C6
+    FROM SCM_ITEM_M_SN
+   WHERE DIVISION_ID IN ('40','81','82') AND ACTIVE_FLAG = 'Y'
+   GROUP BY DIVISION_ID, SUBSTR(ITEM_ID,1,12)),
+AFTER_AGG AS (
+  SELECT T.DIVISION_ID, SUBSTR(T.ITEM_ID,1,12) K,
+         MAX(FORECAST_INFO_PRODUCT_GROUP)   C1, MAX(FORECAST_INFO_CELL_MODEL)      C2,
+         MAX(FORECAST_INFO_CELL_PACK_COUNT) C3, MAX(FORECAST_INFO_SPEC)            C4,
+         MAX(FORECAST_INFOR_VERSION)        C5, MAX(CELL_TYPE)                     C6
+    FROM SCM_ITEM_M_SN T
+    JOIN P ON  P.DIVISION_ID = T.DIVISION_ID
+           AND P.K           = SUBSTR(T.ITEM_ID,1,12)
+   WHERE T.DIVISION_ID IN ('40','81','82') AND T.ACTIVE_FLAG = 'Y'
+   GROUP BY T.DIVISION_ID, SUBSTR(T.ITEM_ID,1,12)),
+DIFF  AS (SELECT * FROM AFTER_AGG MINUS SELECT * FROM BEFORE_AGG),
+KDIFF AS (SELECT DIVISION_ID, K FROM AFTER_AGG MINUS SELECT DIVISION_ID, K FROM BEFORE_AGG)
+SELECT A.DIVISION_ID                AS DIVISION,
+       A.CNT                        AS 필터후_그룹수,
+       NVL(D.CNT, 0)                AS 집계_불일치,
+       NVL(KD.CNT, 0)               AS 키_불일치
+  FROM      (SELECT DIVISION_ID, COUNT(*) CNT FROM AFTER_AGG GROUP BY DIVISION_ID) A
+  LEFT JOIN (SELECT DIVISION_ID, COUNT(*) CNT FROM DIFF      GROUP BY DIVISION_ID) D
+         ON D.DIVISION_ID = A.DIVISION_ID
+  LEFT JOIN (SELECT DIVISION_ID, COUNT(*) CNT FROM KDIFF     GROUP BY DIVISION_ID) KD
+        ON KD.DIVISION_ID = A.DIVISION_ID
+ ORDER BY A.DIVISION_ID;
+
+SPOOL OFF
+-- 사내 확정치: 40 = 4,267/0/0 · 81 = 2,164/0/0 (클라우드 81 = 2,171/0/0 확인 완료)

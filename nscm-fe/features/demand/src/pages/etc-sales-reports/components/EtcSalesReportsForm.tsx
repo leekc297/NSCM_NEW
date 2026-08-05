@@ -1,8 +1,8 @@
-import { DivisionField } from 'features/master/src/components';
+import { DivisionField, VersionField } from 'features/master/src/components';
 
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
-import { Button, FormItem, InputField } from '@shared/lges';
+import { FormItem } from '@shared/lges';
 import { Grid } from '@shared/mui';
 
 import { PLAN_RESULT, type PlanResult, type ReportType } from '../etc-sales-reports.constants';
@@ -104,29 +104,21 @@ export const EtcSalesReportsForm = ({
             />
           </Grid>
 
-          {/* Row 2 — Version (readonly + '...' United 팝업. AS-IS txtSPVersion/btnSPVer 1:1) */}
-          <Grid size={6}>
-            <div className={styles.versionCell}>
-              <FormItem
-                label={
-                  sc.mdfType === 'REPORT_BP_M'
-                    ? t('LBL00797', '_BP Version')
-                    : t('LBL00798', '_SP Version')
-                }
-                labelAlign='right'
-                render={() => (
-                  <InputField
-                    value={sc.versionLabel}
-                    readOnly
-                    placeholder={t('MSG00283', '_Version을 선택하고 조회하세요.')}
-                  />
-                )}
-              />
-              <Button size='small' onClick={onOpenVersionModal}>
-                ...
-              </Button>
-            </div>
-          </Grid>
+          {/* Row 2 — Version — 표준 VersionField 로 교체 (2026-07-30 사용자 지시).
+              이전엔 FormItem 밖에 '...' 텍스트 Button 을 둔 커스텀 div(versionCell — scss 미정의)로
+              조회조건 표준(PopupSearchInput + 우상단 검색 아이콘 버튼)을 벗어나 있었다.
+              라벨은 BP/SP 구분이 있어 label prop 으로만 오버라이드하고(기본값 LBL00513 보존),
+              미선택 상태는 'Current' 가 아니므로 emptyText='' 로 둔다. */}
+          <VersionField
+            value={sc.versionLabel}
+            onOpenPopup={onOpenVersionModal}
+            label={
+              sc.mdfType === 'REPORT_BP_M'
+                ? t('LBL00797', '_BP Version')
+                : t('LBL00798', '_SP Version')
+            }
+            emptyText=''
+          />
         </>
       }
     />

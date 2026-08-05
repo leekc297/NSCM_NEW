@@ -1,8 +1,23 @@
-"NCommonDAO.selectList: ORA-20001: [PKG_DMF0003.P_DMF0003_SAVE_MKT_FCST] SQLCODE=-20001 / SQLERRM=ORA-20001: [PKG_DMF0003] SQLCODE=-12841 / SQLERRM=ORA-12841: 트랜잭션안에 세션 병렬 DML 상태를 고칠 수 없습니다 / BACKTRACE=ORA-06512: "SCM_MGR.PKG_DMF0003",  13241행
- / PARAMS={"P_DIVISION_ID":"82","P_CREATED_BY":"minyonglee1"} / BACKTRACE=ORA-06512: "SCM_MGR.PKG_DMF0003",  13608행
-ORA-06512: "SCM_MGR.PKG_DMF0003",  11857행
- / PARAMS={"P_ACTIVE_FLAG":"M^M","P_DIVISION_ID":"82^82","P_PROJECT_CODE":"G-25-078^G-25-078","P_SCM_SITE_ID":"8minute Energy_US_PQA^8minute Energy_US_PQA","P_ITEM_ID":"EP096636PFBA-AA0^EP096636PFBA-AA0","P_DOM_EXP":"E^E","P_FCST_TYPE":"SPF^SPF","P_INCOTERMS":"DDP^DDP","P_MEASURE":"MKT_FCST_RP^MKT_FCST_RP","P_PLANT_SITE_ID":"--^--","P_YYYYMMDD":"20260724^20260720","P_QTY":"5000^20000","P_CREATED_BY":"minyonglee1^minyonglee1","P_AS_FROM_SITE":"^","P_BUCKET":"W"}
-ORA-06512: "SCM_MGR.PKG_DMF0003",  11983행
-ORA-06512:  1행
-
-https://docs.oracle.com/error-help/db/ora-20001/"
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+86/9      PL/SQL: SQL Statement ignored
+86/21     PL/SQL: ORA-00942: 테이블 또는 뷰 이(가) 존재하지 않습니다.
+166/9     PL/SQL: SQL Statement ignored
+177/18    PL/SQL: ORA-00942: 테이블 또는 뷰 이(가) 존재하지 않습니다.
+196/5     PL/SQL: SQL Statement ignored
+196/17    PL/SQL: ORA-00942: 테이블 또는 뷰 이(가) 존재하지 않습니다.
+201/5     PL/SQL: SQL Statement ignored
+201/17    PL/SQL: ORA-00942: 테이블 또는 뷰 이(가) 존재하지 않습니다.
+265/5     PL/SQL: SQL Statement ignored
+326/20    PL/SQL: ORA-00942: 테이블 또는 뷰 이(가) 존재하지 않습니다.
+508/9     PL/SQL: SQL Statement ignored
+550/20    PL/SQL: ORA-00942: 테이블 또는 뷰 이(가) 존재하지 않습니다.
+575/9     PL/SQL: SQL Statement ignored
+604/14    PL/SQL: ORA-00942: 테이블 또는 뷰 이(가) 존재하지 않습니다.
+694/17    PL/SQL: SQL Statement ignored
+694/47    PL/SQL: ORA-00942: 테이블 또는 뷰 이(가) 존재하지 않습니다.
+695/9     PL/SQL: Statement ignored
+695/36    PLS-00364: 루프 인덱스 변수 'REC'의 사용이 부적당합니다
+708/13    PL/SQL: SQL Statement ignored
+708/25    PL/SQL: ORA-00942: 테이블 또는 뷰 이(가) 존재하지 않습니다.
+오류: 컴파일러 로그를 확인하십시오.

@@ -154,7 +154,7 @@ export const GRID_EDIT_COMBO: Record<string, { comboId: string }> = {
   //   (신정본 InsertRow L1274~1278 GetCellProdSite(...,"Y") [C20220513-000327]).
   //   조회 표시(코드→한글)는 SHEET_COLUMNS 메타 FPComboBox='DMF0042CellProdSite'(ALL) 가 담당
   //   ([E20240731-000845] InitSpread L392~397) — P7 SQL 와 반드시 세트 적용(원복 로직이 표시 dataMap 전제).
-  CELL_PROD_SITE: { comboId: 'DMF0042CellProdSiteValid' },
+  CELL_PROD_SITE: { comboId: 'CellProdSiteValid' },
 };
 
 // Ver. Cutoff / Replace 버전 타입 고정값 (AS-IS LoadDataDiv "BP_M" — [27]/[28])

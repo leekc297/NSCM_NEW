@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { apiClient } from '@foundation/apis';
+import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabProcQuery, useTabComboQueries } from '@shared/hooks';
 import { Button, FormItem, InputField } from '@shared/lges';
@@ -11,8 +12,6 @@ import { ItemByDivisionModal, ProjectByDivisionModal } from '../../../components
 import { FALLBACK_ALL, MENU_ID, SHEETS } from '../nn-master-mapping.constants';
 import type { SearchCondition } from '../nn-master-mapping.types';
 import { useNnMasterMappingStore } from '../useNnMasterMappingStore';
-
-import styles from './NnMasterMappingForm.module.scss';
 
 interface Props {
   onSearch: () => void;
@@ -161,7 +160,7 @@ export const NnMasterMappingForm = ({ onSearch }: Props) => {
         <>
           <Grid size={3}>
             <FormItem
-              className={styles.formItem}
+              className={commonStyles.formItem}
               label={t('LBL00614', 'Data Type')}
               labelAlign='right'
               labelSize='middle'
@@ -177,7 +176,7 @@ export const NnMasterMappingForm = ({ onSearch }: Props) => {
           </Grid>
           <Grid size={3}>
             <FormItem
-              className={styles.formItem}
+              className={commonStyles.formItem}
               label={t('LBL00663', 'Div')}
               labelAlign='right'
               labelSize='middle'
@@ -195,7 +194,7 @@ export const NnMasterMappingForm = ({ onSearch }: Props) => {
           </Grid>
           <Grid size={3}>
             <FormItem
-              className={styles.formItem}
+              className={commonStyles.formItem}
               label={t('LBL00044', 'Team')}
               labelAlign='right'
               labelSize='middle'
@@ -215,7 +214,7 @@ export const NnMasterMappingForm = ({ onSearch }: Props) => {
           </Grid>
           <Grid size={3}>
             <FormItem
-              className={styles.formItem}
+              className={commonStyles.formItem}
               label={t('LBL00616', 'End Customer')}
               labelAlign='right'
               labelSize='middle'
@@ -233,14 +232,14 @@ export const NnMasterMappingForm = ({ onSearch }: Props) => {
           </Grid>
           <Grid size={3}>
             <FormItem
-              className={styles.formItem}
+              className={commonStyles.formItem}
               label={t('LBL00617', 'Project')}
               labelAlign='right'
               labelSize='middle'
               render={() => (
                 <InputField
                   fullWidth
-                  className={styles.inputWithSearch}
+                  className={commonStyles.popupSearchField}
                   value={sc.projectCode}
                   onChange={e => set({ projectCode: e.target.value })}
                   InputProps={{
@@ -271,11 +270,11 @@ export const NnMasterMappingForm = ({ onSearch }: Props) => {
               label={t('LBL00618', 'Model/Nickname').replace('/', '/\n')}
               labelAlign='right'
               labelSize='middle'
-              className={styles.formItem}
+              className={commonStyles.formItem}
               render={() => (
                 <InputField
                   fullWidth
-                  className={styles.inputWithSearch}
+                  className={commonStyles.popupSearchField}
                   value={sc.itemId}
                   onChange={e => set({ itemId: e.target.value })}
                   InputProps={{
@@ -300,7 +299,7 @@ export const NnMasterMappingForm = ({ onSearch }: Props) => {
           {/* Sales Site 는 extraConditions (3단) 로 분리 — 펼침/닫기 토글 표시 */}
           <Grid size={3}>
             <FormItem
-              className={styles.formItem}
+              className={commonStyles.formItem}
               label={t('LBL00619', 'Sales Site')}
               labelAlign='right'
               labelSize='middle'

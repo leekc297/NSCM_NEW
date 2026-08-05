@@ -453,12 +453,18 @@ export const PriceBatchInputModal = ({
     }
     // MSG00409 — 이번 주 월요일보다 시작일이 이전이면 과거구간 일괄입력 불가 (AS-IS L1178-1182).
     if (periodFrom < snapMonday(todayYmd())) {
-      void setAlert({ type: 'alert', content: t('MSG00409', '_과거구간은 일괄입력이 불가합니다.') });
+      void setAlert({
+        type: 'alert',
+        content: t('MSG00409', '_과거구간은 일괄입력이 불가합니다.'),
+      });
       return;
     }
     // MSG00330 — From/To 둘 다 월요일이어야 함 (AS-IS L1186-1191).
     if (periodFrom !== snapMonday(periodFrom) || periodTo !== snapMonday(periodTo)) {
-      void setAlert({ type: 'alert', content: t('MSG00330', '_기간은 월요일 단위로 선택해야 합니다.') });
+      void setAlert({
+        type: 'alert',
+        content: t('MSG00330', '_기간은 월요일 단위로 선택해야 합니다.'),
+      });
       return;
     }
     if (!divisionId) {
@@ -479,7 +485,10 @@ export const PriceBatchInputModal = ({
       return v !== undefined && v !== null && String(v).trim() !== '';
     });
     if (targets.length === 0) {
-      void setAlert({ type: 'alert', content: t('MSG00113', '_일괄입력 Price 를 입력 후 저장하세요.') });
+      void setAlert({
+        type: 'alert',
+        content: t('MSG00113', '_일괄입력 Price 를 입력 후 저장하세요.'),
+      });
       return;
     }
 
@@ -589,9 +598,10 @@ export const PriceBatchInputModal = ({
     const seenRow = new Set<string>(); // (업무키+주차+measure) 최종 중복 안전망 (SP count>1 원천 차단)
 
     for (const r of uniqueTargets) {
-      const batch = String(r.PRICE_ALL ?? '')
-        .replace(/,/g, '')
-        .trim() || '0';
+      const batch =
+        String(r.PRICE_ALL ?? '')
+          .replace(/,/g, '')
+          .trim() || '0';
       const div = String(r.DIVISION_ID ?? '');
       const cur = String(r.CURRENCY ?? '');
       for (const m of MEAS) {
@@ -601,8 +611,7 @@ export const PriceBatchInputModal = ({
           if (seenRow.has(rowKey)) continue;
           seenRow.add(rowKey);
           const ym = ymd.slice(0, 6);
-          const raw =
-            m === 'LOC' ? batch : getExchangeRate(erMap, div, cur, m, ym, batch, '0');
+          const raw = m === 'LOC' ? batch : getExchangeRate(erMap, div, cur, m, ym, batch, '0');
           const price = raw === '' ? '0' : raw;
           // ⭐ AS-IS SaveData 정합 — active_flag 는 "배치 입력값(batch)" 기준 전 measure 동일.
           //   batch=='0' → 'D'(삭제). batch!='0' → 'M'(수정).
@@ -954,8 +963,7 @@ export const PriceBatchInputModal = ({
         open={open}
         type='modal'
         position='basic'
-        size={1400}
-        height='75vh'
+        size={1100}
         handleClose={modalClose}
         disableButtonCancel
         customHeaderTitle={
@@ -996,7 +1004,10 @@ export const PriceBatchInputModal = ({
                       render={() => (
                         <CustomDropdown
                           value={salesSite}
-                          options={[{ label: t('LBL00632', 'All'), value: 'ALL' }, ...salesSiteOptions]}
+                          options={[
+                            { label: t('LBL00632', 'All'), value: 'ALL' },
+                            ...salesSiteOptions,
+                          ]}
                           onChange={(_, option) => setSalesSite(String(option))}
                         />
                       )}

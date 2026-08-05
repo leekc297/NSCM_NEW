@@ -1,0 +1,8 @@
+① 정적: 동적SQL 보유 유닛 35 / 추출 객체행 343 / 추출0(수동확인) 2
+   SCM_MGR.PKG_SYS0013 (dyn_points=3, 추출 0 — 수동확인)
+   SCM_MGR.PR_DM_MST_SITE_CUSTOMER_HIST (dyn_points=1, ALTER SESSION만 — 객체무관, 확인불요)
+② V$: 670행
+③ AWR: 귀속 266행 / 귀속불가 SQL 객체행 4338 (한계 기재)
+④ SQL_LOG: 테이블 52종
+콤보: UI매핑 콤보 234 / 파싱0 콤보 ['DbSchema', 'ColumnControlType', 'YesOrNo', 'InOrOut', 'sysAggregateOptions', 'sysOperationOptions']
+SYS0013 등록쿼리: 66객체행 / 파싱0 DQ_ID []

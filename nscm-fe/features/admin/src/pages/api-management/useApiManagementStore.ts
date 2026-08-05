@@ -79,10 +79,13 @@ export const useApiManagementStore = createPersistedStoreWithTab<
         );
 
         if (param.data.result?.length > 0) {
-          const searchParams = param.data.result.reduce((acc, curr) => {
-            acc[curr.paramNm] = curr.paramCtn;
-            return acc;
-          }, {} as SearchParamProps);
+          const searchParams = param.data.result.reduce(
+            (acc, curr) => {
+              acc[curr.paramNm] = curr.paramCtn;
+              return acc;
+            },
+            { ...initApiManagementParam, useYn: '' } as SearchParamProps
+          );
 
           set(state => {
             state.searchParams = searchParams;

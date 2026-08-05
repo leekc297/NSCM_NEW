@@ -58,8 +58,8 @@ const baseConfig = [
       'no-multiple-empty-lines': ['error', { max: 1 }], // 빈줄 2줄 이상 금지
       'no-console': ['warn', { allow: ['warn', 'error'] }], // 개발 console.log 금지
       eqeqeq: ['error', 'always', { null: 'ignore' }], // 자동 수정 + null 허용
-      quotes: ['error', 'single'],
-      'jsx-quotes': ['error', 'prefer-single'], // JSX에서도 싱글 쿼테션 사용
+      quotes: ['warn', 'single'],
+      'jsx-quotes': ['warn', 'prefer-single'], // JSX에서도 싱글 쿼테션 사용
       semi: ['error', 'always'],
       'func-style': ['error', 'expression'], // 일반 함수를 화살표 함수로 강제
 

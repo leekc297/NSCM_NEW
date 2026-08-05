@@ -61,8 +61,7 @@ export const requiredFieldsFor = (divisionId: string, measure: string): Required
   if (!d40) fields.push({ col: 'PROJECT_CODE', fallback: 'Project' });
   if (d40) fields.push({ col: 'END_CUSTOMER40', lblKey: 'LBL00080', fallback: 'End Customer' });
   if (d40 && !catchUp) fields.push({ col: 'DEPT_ID', fallback: 'Team' });
-  if (d81)
-    fields.push({ col: 'TEXT', fallback: 'Text', read: r => readTextSlot(r, divisionId) });
+  if (d81) fields.push({ col: 'TEXT', fallback: 'Text', read: r => readTextSlot(r, divisionId) });
   // ⚠️ [E20260512-000502] FROM_SITE_ID / PLANT_SITE_ID 는 값-필수 아님 — AS-IS 활성 SaveData 루프(L2225+)는
   //   FROM_SITE_ID 미검사, PLANT_SITE_ID 는 `//p_plant_site_id == ""` 주석처리. L723/L2043 은 컬럼-존재
   //   체크(MSG00113)로 메타(#5 SHEET_COLUMNS 81 등록)로 충족. 값-필수 13종은 현행 그대로.

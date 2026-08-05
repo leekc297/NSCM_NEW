@@ -45,26 +45,37 @@ export const SearchBar = ({ onSearch }: Props) => {
     [yearData]
   );
 
-  // AS-IS InitControls — 첫 옵션 자동 선택.
+  // // AS-IS InitControls — 첫 옵션 자동 선택.
+  // useEffect(() => {
+  //   if (yearOptions.length === 0) return;
+  //   if (searchParams.verSeq) return;
+  //   const first = yearOptions[0];
+  //   setSearchParams({
+  //     verSeq: String(first.CODE ?? ''),
+  //     yyyy: String(first.NAME2 ?? first.NAME ?? '').substring(0, 4),
+  //   });
+  // }, [yearOptions]);
+
+  // useEffect(() => {
+  //   if (searchParams.verSeq === '' && yearOptions.length > 0) {
+  //     const first = yearOptions[0];
+  //     setSearchParams({
+  //       verSeq: String(first.CODE ?? ''),
+  //       yyyy: String(first.NAME2 ?? first.NAME ?? '').substring(0, 4),
+  //     });
+  //   }
+  // }, [searchParams.verSeq]);
+
   useEffect(() => {
     if (yearOptions.length === 0) return;
-    if (searchParams.verSeq) return;
+    const exists = yearOptions.some(o => String(o.CODE) === searchParams.verSeq);
+    if (exists) return;
     const first = yearOptions[0];
     setSearchParams({
       verSeq: String(first.CODE ?? ''),
       yyyy: String(first.NAME2 ?? first.NAME ?? '').substring(0, 4),
     });
-  }, [yearOptions]);
-
-  useEffect(() => {
-    if (searchParams.verSeq === '' && yearOptions.length > 0) {
-      const first = yearOptions[0];
-      setSearchParams({
-        verSeq: String(first.CODE ?? ''),
-        yyyy: String(first.NAME2 ?? first.NAME ?? '').substring(0, 4),
-      });
-    }
-  }, [searchParams.verSeq]);
+  }, [yearOptions, searchParams.verSeq]);
 
   return (
     <SearchArea

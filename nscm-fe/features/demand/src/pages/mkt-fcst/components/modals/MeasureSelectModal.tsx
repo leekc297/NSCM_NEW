@@ -65,33 +65,26 @@ export const MeasureSelectModal = ({
 
   // 표시 후보 measure — staticMeasures(BE camelCase) → 0개 시 fallback(코드만, 라벨=코드).
   //   SP 가 이미 VALID_YN='Y' 필터 + SORT_ORDER_NO 정렬 → FE 정렬/필터 불필요(순서 보존).
-  const sourceRows = useMemo(() => {
-    // ⭐ 2026-07-23 (DMF0003 ColumnSetting 사고 동일 계열 방어) — colNm dedup.
-    //   BE 메타에 중복행이 유입되면 dual list 키(colNm) 충돌 → 중복 표시·이동/체크 오동작.
-    //   첫 행 유지. (titleset 'M' 저장은 메인 SP 가 SHEET_MEASURE VALID_YN='Y' 조인으로 면역)
-    const seen = new Set<string>();
-    const dedup = measures.filter(m => {
-      if (!m.colNm || seen.has(m.colNm)) return false;
-      seen.add(m.colNm);
-      return true;
-    });
-    return dedup.length > 0
-      ? dedup.map(m => ({
-          colNm: m.colNm,
-          colLblNm: m.colLblNm || m.colNm,
-          sClsLblNm: m.sClsLblNm ?? '',
-          personalizable: (m.personalizable ?? true) ? 'Y' : 'N',
-          display: (m.display ?? false) ? 'Y' : 'N',
-        }))
-      : // BE 미적재 degrade — 코드만 존재(라벨/분류/기본값 없음). 사용자 인지용.
-        MEASURE_FALLBACK.map(code => ({
-          colNm: code,
-          colLblNm: code,
-          sClsLblNm: '',
-          personalizable: 'Y',
-          display: 'N',
-        }));
-  }, [measures]);
+  const sourceRows = useMemo(
+    () =>
+      measures.length > 0
+        ? measures.map(m => ({
+            colNm: m.colNm,
+            colLblNm: m.colLblNm || m.colNm,
+            sClsLblNm: m.sClsLblNm ?? '',
+            personalizable: (m.personalizable ?? true) ? 'Y' : 'N',
+            display: (m.display ?? false) ? 'Y' : 'N',
+          }))
+        : // BE 미적재 degrade — 코드만 존재(라벨/분류/기본값 없음). 사용자 인지용.
+          MEASURE_FALLBACK.map(code => ({
+            colNm: code,
+            colLblNm: code,
+            sClsLblNm: '',
+            personalizable: 'Y',
+            display: 'N',
+          })),
+    [measures]
+  );
 
   // visibleMeasures 미설정(null) 시 display(DEFAULT_FLAG) 기본, 설정 시 그 목록으로 표시측 복원.
   //   personalizable='N' 행은 항상 기본값 고정(사용자 토글 가드).

@@ -61,15 +61,6 @@ interface Props {
   leftTitle?: string;
   /** dual list 우측 상단 라벨 (예: 'Visible') */
   rightTitle?: string;
-  /**
-   * ⭐ 2026-07-23 (DMF0003 DEPT_ID/MEASURE titleset 오염 사고) — opt-in 후보 필터.
-   * true 시 BE 후보에서 (1) USER_SELECTABLE_FLAG!=='Y' (선택 불가 컬럼)
-   * (2) DEFAULT_FLAG가 ' '/'-' (고정컬럼 — SP branch②가 항상 포함하므로 사용자 선택 대상 아님)
-   * 를 제외한다. 고정/선택불가 컬럼이 titleset 'C' 에 저장되면 동적 PIVOT 에서
-   * ORA-00918(중복)/ORA-00904(미산출) 를 유발하므로 후보 자체를 차단.
-   * 기본 undefined = 기존 사용처(DMF0020/0043) 무영향.
-   */
-  selectableOnly?: boolean;
 }
 
 export const ColumnSettingModal = ({
@@ -85,7 +76,6 @@ export const ColumnSettingModal = ({
   initialVisibleKeys,
   leftTitle,
   rightTitle,
-  selectableOnly,
 }: Props) => {
   const setAlert = useMessageStore.getState().setAlert;
 
@@ -123,22 +113,7 @@ export const ColumnSettingModal = ({
     };
 
     if (beRows.length > 0) {
-      // ⭐ 2026-07-23 (DMF0003 사고) — ① selectableOnly 후보 필터 (고정/선택불가 컬럼 제외)
-      //   ② COLUMN_NAME dedup (BE 메타 중복행 유입 시 dual list 중복 표시·이동/체크 오동작 방어.
-      //      itemKey=COLUMN_NAME 이므로 중복 키 = 양쪽 이동/렌더 사고. 첫 행 유지).
-      const seen = new Set<string>();
-      const candidates = beRows.filter(r => {
-        const colName = String(r.COLUMN_NAME ?? '');
-        if (!colName || seen.has(colName)) return false;
-        if (selectableOnly) {
-          const selectable = String(r.USER_SELECTABLE_FLAG ?? 'Y');
-          const defFlag = String(r.DEFAULT_FLAG ?? 'N');
-          if (selectable !== 'Y' || defFlag === ' ' || defFlag === '-') return false;
-        }
-        seen.add(colName);
-        return true;
-      });
-      return candidates.map((r, i) => {
+      return beRows.map((r, i) => {
         const colName = String(r.COLUMN_NAME ?? '');
         const beFlag = String(r.USER_FLAG ?? r.VISIBLE_FLAG ?? 'Y');
         return {
@@ -169,7 +144,7 @@ export const ColumnSettingModal = ({
       SUB_TOTAL_FLAG: 'N',
       SORT_ORDER_NO: i + 1,
     }));
-  }, [beRows, fallbackColumns, initialVisibleKeys, selectableOnly]);
+  }, [beRows, fallbackColumns, initialVisibleKeys]);
 
   const [rows, setRows] = useState<ColumnSettingRow[]>([]);
 
@@ -274,6 +249,41 @@ export const ColumnSettingModal = ({
     setCheckedLeft(new Set());
   };
 
+  // 더블클릭 — 해당 행 1개만 우측(User)으로 이동 (▶ 와 동일 동작, 체크상태 무관)
+  const moveOneToUser = (key: string) => {
+    setRows(prev => {
+      let maxSeq = Math.max(0, ...prev.filter(r => r.USER_FLAG === 'Y').map(r => r.SORT_ORDER_NO));
+      return prev.map(r => {
+        if (r.USER_FLAG === 'N' && r.COLUMN_NAME === key) {
+          maxSeq += 1;
+          return { ...r, USER_FLAG: 'Y', SORT_ORDER_NO: maxSeq };
+        }
+        return r;
+      });
+    });
+    setCheckedLeft((prev: Set<string>) => {
+      const next = new Set(prev);
+      next.delete(key);
+      return next;
+    });
+  };
+
+  // 더블클릭 — 해당 행 1개만 좌측(Base)으로 이동 (◀ 와 동일 동작, 체크상태 무관)
+  const moveOneToBase = (key: string) => {
+    setRows(prev =>
+      prev.map(r =>
+        r.USER_FLAG === 'Y' && r.COLUMN_NAME === key
+          ? { ...r, USER_FLAG: 'N', SORT_ORDER_NO: 0 }
+          : r
+      )
+    );
+    setCheckedRight((prev: Set<string>) => {
+      const next = new Set(prev);
+      next.delete(key);
+      return next;
+    });
+  };
+
   const moveToBase = () => {
     if (checkedRight.size === 0) {
       void setAlert({ type: 'alert', content: '우측 column 선택' });
@@ -340,6 +350,8 @@ export const ColumnSettingModal = ({
             onMoveRight={moveToUser}
             onMoveLeft={moveToBase}
             onReorderRight={reorderRight}
+            onRowDoubleClickLeft={moveOneToUser}
+            onRowDoubleClickRight={moveOneToBase}
           />
 
           {/* 버튼바 — 조회조건 팝업 표준 버튼과 동일. Default·Cancel=outlined, OK=contained+ConfirmIcon. */}

@@ -64,6 +64,7 @@ export const ErpEdiMasterSummaryGrid = ({
       itemsSource={data}
       staticColumns={staticColumns}
       dblClick={handleDblClick}
+      isReadOnly={true}
     />
   );
 };

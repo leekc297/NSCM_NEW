@@ -1,0 +1,93 @@
+PROCEDURE           "SCM0006_SAVE_RECIPIENT_MASTER_U"
+(
+    P_USE_TYPE            IN VARCHAR2,
+    P_MODULE                IN VARCHAR2,
+    P_SUBMODULE            IN VARCHAR2,
+    P_CATEGORY_ID        IN VARCHAR2,
+    P_SQL                IN VARCHAR2,
+    P_LAST_UPDATED_BY    IN VARCHAR2,
+    O_RC1             OUT SYS_REFCURSOR,
+    O_RESULT_CURSOR   OUT SYS_REFCURSOR
+)
+/*
+ * PROGRAM ID   : SCM0006_SAVE_RECIPIENT_MASTER_U
+ * DESCRIPTION  : MAIL SET MASTER SQL LONG TEXT UPDATE
+ * PROGRAM HISTORY
+ *===================================================================================================
+ *   DATE       IN CHARGE      DESCRIPTION
+ *===================================================================================================
+ * 2018/01/30   YGKIM   INITIAL RELEASE PJ20170278 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2026.05.21  최용훈           MS-SQL -> Oracle 변환
+ *
+ */
+AS
+    V_PROGRAM_NAME VARCHAR2(150 CHAR) := 'SCM0006_SAVE_RECIPIENT_MASTER_U';
+    V_LOG_TYPE VARCHAR2(30 CHAR);
+    V_LOG_MESSAGE VARCHAR2(1000 CHAR);
+    V_DESCRIPTION VARCHAR2(500 CHAR);
+    D_EVENT_DATE DATE;
+
+    V_PROC_INPUT    VARCHAR2(4000 CHAR);
+    V_BACKTRACE     VARCHAR2(4000 CHAR);
+    V_SQL_CODE      VARCHAR2(100 CHAR);
+    V_SQL_ERRMSG    VARCHAR2(1000 CHAR);
+    N_LOG_COUNT     PLS_INTEGER := 0;
+BEGIN
+
+    -- 시작 LOG
+    V_LOG_TYPE := 'START';
+    V_LOG_MESSAGE := '########## Start of procedure ##########';
+    V_DESCRIPTION := NULL;
+    D_EVENT_DATE := SYSTIMESTAMP;
+    PR_SCM_SYS_LOG_BATCH(V_PROGRAM_NAME, V_LOG_TYPE, N_LOG_COUNT, V_LOG_MESSAGE, V_DESCRIPTION, D_EVENT_DATE);
+
+    UPDATE SCM_ADM_RECIPIENT_LIST
+       SET SQL_LONG_TEXT = P_SQL
+          ,LAST_UPDATED_BY = P_LAST_UPDATED_BY
+          ,LAST_UPDATE_DATE = SYSDATE
+    WHERE USE_TYPE_CODE = P_USE_TYPE
+      AND MODULE_CODE = P_MODULE
+      AND SUB_MODULE_CODE = P_SUBMODULE
+      AND CATEGORY_ID = P_CATEGORY_ID;
+
+    V_LOG_TYPE := 'END';
+    V_LOG_MESSAGE := '########## END of procedure ##########';
+    V_DESCRIPTION := NULL;
+    D_EVENT_DATE := SYSTIMESTAMP;
+    PR_SCM_SYS_LOG_BATCH(V_PROGRAM_NAME, V_LOG_TYPE, N_LOG_COUNT, V_LOG_MESSAGE, V_DESCRIPTION, D_EVENT_DATE);
+
+    OPEN O_RESULT_CURSOR FOR
+    SELECT '0' AS CODE, 'SUCCESS' AS MSG, CASE WHEN 1 = 2 THEN '-' ELSE NULL END AS EVENT FROM DUAL;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        ROLLBACK;
+        V_SQL_CODE   := TO_CHAR(SQLCODE);
+        V_SQL_ERRMSG := SQLERRM;
+        V_PROC_INPUT := JSON_OBJECT(
+            'P_USE_TYPE' VALUE P_USE_TYPE,
+            'P_MODULE' VALUE P_MODULE,
+            'P_SUBMODULE' VALUE P_SUBMODULE,
+            'P_CATEGORY_ID' VALUE P_CATEGORY_ID,
+            'P_SQL' VALUE P_SQL,
+            'P_LAST_UPDATED_BY' VALUE P_LAST_UPDATED_BY
+        );
+        V_BACKTRACE  := DBMS_UTILITY.FORMAT_ERROR_BACKTRACE;
+
+        BEGIN
+            SCM_MGR.PR_SCM_SYS_LOG_BATCH(
+                $$PLSQL_UNIT, 'ERROR', N_LOG_COUNT, 'EXCEPTION',
+                '', SYSDATE, V_PROC_INPUT,
+                V_SQL_CODE, V_SQL_ERRMSG, V_BACKTRACE
+            );
+        END;
+
+        RAISE_APPLICATION_ERROR(-20001,
+            '[' || $$PLSQL_UNIT || '] SQLCODE=' || V_SQL_CODE ||
+            ' / SQLERRM=' || V_SQL_ERRMSG ||
+            ' / BACKTRACE=' || V_BACKTRACE ||
+            ' / PARAMS=' || V_PROC_INPUT
+        );
+        RAISE;
+
+END SCM0006_SAVE_RECIPIENT_MASTER_U;

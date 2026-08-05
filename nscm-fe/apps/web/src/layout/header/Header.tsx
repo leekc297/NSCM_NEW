@@ -15,6 +15,8 @@ export const Header = () => {
   const setSidebarMenu = useUIStore(state => state.setSidebarMenu);
   const sidebarMenu = useUIStore(state => state.sidebarMenu);
 
+  const displayName = session.langCd === 'KO' ? session.userNm : session.userEngNm;
+
   const handleClickMenu = (menu: Menu) => {
     setSidebarOpen(true);
     setSidebarMenu(menu);
@@ -48,11 +50,8 @@ export const Header = () => {
       </nav>
       <div className={styles.userInfoWrapper}>
         <LanguageButton />
-        <Avatar alt='개발자1' src='이미지' size='xsmall' />
-        {/* TODO: 테스트용 화면 링크 삭제 */}
-        <Link to='/ui'>
-          <span>{session.langCd === 'KO' ? session.userNm : session.userEngNm}</span>
-        </Link>
+        <Avatar alt={displayName} textAvatar={displayName} size='xsmall' />
+        <span>{displayName}</span>
       </div>
     </header>
   );

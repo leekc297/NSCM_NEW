@@ -17,6 +17,12 @@
   cursor: default !important;
 }
 
+.dialogHeaderActions {
+  display: flex;
+  align-items: center;
+  column-gap: $space-sm;
+}
+
 .dialogDefaultHeaderTitleWrapper {
   @include flex-between;
   column-gap: $space-sm;
@@ -61,4 +67,4 @@
   min-width: 56px;
   height: 36px;
   padding: $space-sm 12px;
-}
+}

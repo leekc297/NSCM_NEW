@@ -1,9 +1,4 @@
-import {
-  CellRange,
-  CellType,
-  type GridPanel,
-  MergeManager,
-} from '@mescius/wijmo.grid';
+import { CellRange, CellType, type GridPanel, MergeManager } from '@mescius/wijmo.grid';
 
 // ⭐ DMF0021 — mkt-fcst/utils/mkt-fcst.merge.ts 1단계 복제 (2026-07-14 플랜 확정 — 공용 승격은 후속,
 //   mkt-fcst 무수정 원칙. DMF0021 GET_SPREAD_TITLE 은 DMF0003 과 동일 계열 W_yyyymm+ISO_WEEK 형식).

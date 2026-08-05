@@ -76,4 +76,3 @@ export interface ValidationResult {
   detail?: string;
   rowIdx?: number;
 }
-

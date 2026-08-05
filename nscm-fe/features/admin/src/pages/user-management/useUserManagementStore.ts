@@ -80,10 +80,14 @@ export const useUserManagementStore = createPersistedStoreWithTab<
       );
 
       if (param.data.result?.length > 0) {
-        const searchParams = param.data.result.reduce((acc, curr) => {
-          acc[curr.paramNm] = curr.paramCtn;
-          return acc;
-        }, {} as SearchParamProps);
+        // 저장된 조건이 있으면 기본값이 아닌 빈 값에서 시작 — 응답에 없는 항목은 ''로 남아야 함
+        const searchParams = param.data.result.reduce(
+          (acc, curr) => {
+            acc[curr.paramNm] = curr.paramCtn;
+            return acc;
+          },
+          { ...initUserManagementParam, useYn: '' } as SearchParamProps
+        );
 
         set(state => {
           state.searchParams = searchParams;

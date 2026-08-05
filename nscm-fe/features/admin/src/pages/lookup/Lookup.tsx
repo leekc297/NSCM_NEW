@@ -10,6 +10,7 @@ import { GridAction } from '@foundation/utils';
 import { MainTitle, SubTitle } from '@shared/components';
 import { useProcMutation, useSaveWithValidation, useTabProcQuery } from '@shared/hooks';
 import { TitleArea } from '@shared/lges';
+import { Panel, PanelGroup, PanelSeparator } from '@shared/panel';
 import { useMessageStore } from '@shared/stores';
 
 import { LookupDetailGrid } from './components/LookupDetailGrid';
@@ -45,6 +46,7 @@ export const Lookup = ({ tabId, title }: PageProps<MENU_ID>) => {
   const fetchStaticColumns = useLookupStore(state => state.fetchStaticColumns);
   const activeGrid = useLookupStore(state => state.activeGrid);
   const setFilters = useLookupStore(state => state.setFilters);
+  const clearDetail = useLookupStore(state => state.clearDetail);
   const selectedLookupType = useLookupStore(state => state.selectedLookupType);
   const masterStaticColumns = useLookupStore(state => state.staticColumns.lookupMaster);
   const detailStaticColumns = useLookupStore(state => state.staticColumns.lookupDetail);
@@ -116,6 +118,8 @@ export const Lookup = ({ tabId, title }: PageProps<MENU_ID>) => {
     const next = { ...searchParams };
     if (_.isEqual(next, filters[SHEETS.LOOKUP_MASTER])) void refetchMaster();
     else setFilters();
+    // 조회 시 하단 detail 그리드는 항상 clear (재조회 분기에서도 비워지도록)
+    clearDetail();
     // ⭐ master hook §2.4 — Search 시 admin SYS0004 메타 refetch (admin 변경 즉시 반영)
     void fetchStaticColumns();
   };
@@ -214,25 +218,30 @@ export const Lookup = ({ tabId, title }: PageProps<MENU_ID>) => {
       />
       <div className={styles.outerModule}>
         <TitleArea isSubTitle title={t('LBL00636', 'Lookup Type')} depth='h4' />
-        <div className={styles.tableWrapper}>
-          <div className={styles.masterGrid}>
-            <LookupMasterGrid
-              gridRef={masterGridRef}
-              gridFilterRef={masterGridFilterRef}
-              data={masterData?.o_rc ?? []}
-            />
-          </div>
-          <div className={styles.innerModule}>
-            <TitleArea isSubTitle title={t('LBL00637', 'Lookup Values')} depth='h4' />
-            <div className={styles.detailGrid}>
-              <LookupDetailGrid
-                gridRef={detailGridRef}
-                gridFilterRef={detailGridFilterRef}
-                data={detailData?.o_rc ?? []}
+        <PanelGroup className={styles.tableWrapper} orientation='vertical'>
+          <Panel defaultSize={70} minSize={20}>
+            <div className={styles.masterGrid}>
+              <LookupMasterGrid
+                gridRef={masterGridRef}
+                gridFilterRef={masterGridFilterRef}
+                data={masterData?.o_rc ?? []}
               />
             </div>
-          </div>
-        </div>
+          </Panel>
+          <PanelSeparator className={styles.splitBar} />
+          <Panel defaultSize={30} minSize={15}>
+            <div className={styles.innerModule}>
+              <TitleArea isSubTitle title={t('LBL00637', 'Lookup Values')} depth='h4' />
+              <div className={styles.detailGrid}>
+                <LookupDetailGrid
+                  gridRef={detailGridRef}
+                  gridFilterRef={detailGridFilterRef}
+                  data={detailData?.o_rc ?? []}
+                />
+              </div>
+            </div>
+          </Panel>
+        </PanelGroup>
       </div>
     </>
   );

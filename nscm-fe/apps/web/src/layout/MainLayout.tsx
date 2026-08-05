@@ -6,6 +6,7 @@ import { NotFoundPage } from '../pages/NotFound';
 import { Header } from './header/Header';
 import styles from './MainLayout.module.scss';
 import { Sidebar } from './sidebar/Sidebar';
+import { useGuestNotice } from './useGuestNotice';
 
 interface MainLayoutProps {
   /** 알 수 없는 경로 — 앱 셸(헤더/사이드바)은 유지한 채 컨텐츠 영역에 404 를 표시한다 */
@@ -13,6 +14,7 @@ interface MainLayoutProps {
 }
 
 export const MainLayout = ({ notFound = false }: MainLayoutProps) => {
+  useGuestNotice(); // 게스트 로그인 시 "권한 없음 → 권한신청" 안내
   return (
     <>
       <Header />

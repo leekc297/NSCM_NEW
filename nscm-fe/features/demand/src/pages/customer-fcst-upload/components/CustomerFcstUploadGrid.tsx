@@ -194,10 +194,7 @@ export const CustomerFcstUploadGrid = ({
     g.beginningEdit.addHandler(beginningEditHandler);
 
     // ⭐ spdMain_Changed(CellsUpdated) 1:1 — 편집 종료 셀을 메인으로 통지 (검증+수집은 메인 소관)
-    const cellEditEndedHandler = (
-      _s: FlexGrid<CustomerFcstUploadRow>,
-      e: CellRangeEventArgs
-    ) => {
+    const cellEditEndedHandler = (_s: FlexGrid<CustomerFcstUploadRow>, e: CellRangeEventArgs) => {
       const binding = _s.columns[e.col]?.binding ?? '';
       if (!dynBindings.has(binding)) return;
       const item = (_s.rows[e.row] as { dataItem?: CustomerFcstUploadRow }).dataItem;
@@ -317,6 +314,7 @@ export const CustomerFcstUploadGrid = ({
       itemsSource={data}
       autoGenerateColumns={false}
       allowSorting={true}
+      isReadOnly={true}
     />
   );
 };

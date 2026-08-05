@@ -23,7 +23,7 @@
 4. (UI 작업 시) §3 UI-MANDATORY 체크리스트를 PRE-WRITE 로 통과
 ```
 
-> **카운트 단일 소스**: hook 총수 = **118** (`Doc/_rules_v2/hooks/*.md` 실측, 2026-07-24 — **#118 mssql-ci-collation-parity**[MSSQL 암묵 등가 상실 2형: ①CI collation(대소문자) — 리터럴 비교 미매칭→DELETE 미작동/필터 전멸(DMF0003 VMI DELETE·MAKE_CUST_FCST 'Customer Fcst' 사고), fix=UPPER() IN+전 오브젝트 sweep(주석 오탐 배제) ②숫자→문자 표기('.0') 사문 REPLACE — AS-IS도 사문이면 주석의 설계 의도 복원이 정본. 검증=재현 실측 전후 대비]. 동시 보강: #115 §3 Measure 모달 SHEET_PRSL_YN 게이트(미등록=titleset 미반영 경로, 왕복 검증) / #117 §4 Cell Combo Data Type 축(양DB SHEET_COLUMNS diff·해석기 UP_FX_GetCommonDataList sys.sql_modules 확정·값 MINUS·동적 SetComboCol·사문 컨트롤·셀 콤보 ALL행=결함). 직전 2026-07-23: #115~#117 / 07-16: #114). 어떤 문서든 카운트를 별도 보유하지 말 것 — 본 파일 §4 와 00_INDEX 만 카운트를 가진다. (진단 R-2)
+> **카운트 단일 소스**: hook 총수 = **122** (`Doc/_rules_v2/hooks/*.md` 실측, 2026-08-04 — **#122 cloud-ui-db-object-fetch**[클라우드에서 생성한 UI 의 DB 객체 → 로컬(사내) 역이관 표준: 발견 4축(배선 메타 권위/명칭 LIKE/의존 폐포 재귀=GTT·TYPE 자급/배선 메타 8테이블) → DDL 원문 추출(적용순 정렬·무수정) → 메타 INSERT-only 에미터 → 로컬 적용(GRANT/SYNONYM) → DISCOVER↔VERIFY 카운트 1:1 대조 의무. 템플릿 정본 = `_artifacts/_deploy_packages/SYS0016_CLOUD_FETCH_20260804_1310/`(DEFINE 교체 재사용). 사용자 명시]. 같은 날 — **#121 form-common-styles-mandatory**[SearchArea 조회조건·입력 폼(FormItem/InputField/Checkbox) 스타일 = `@foundation/styles/common-styles.module.scss` 공용 클래스 의무(`formItem`=전 FormItem 필수 HD 50/FHD 140 라벨 칼럼+min-width:0 / `customGrid` / `customCheckbox` / `popupSearchField`) — 페이지 로컬 scss 에 폼 레이아웃 신설 금지(라벨 폭·높이·브레이크포인트 단일 소스). 정본 SalesSiteForm.tsx. ⚠️ SearchFields 카탈로그 필드는 미부착 — 인라인 FormItem 과 한 행 혼용 시 라벨 폭 정합 확인. 사용자 명시]. 직전 2026-07-30 — **#120 ui-title-icon-buttons-standard**[환율(Exchange Rate) 버튼 = **항상 아이콘**(`IcExchangeRate`+`buttonLabel:''`, 텍스트 버튼 금지) + 복수 아이콘 순서 = 왼쪽부터 **환율 → Grid Column Set → Measure** 고정 + 텍스트 버튼은 아이콘 앞. 적용: DMF0044/0042 텍스트→아이콘 전환·DMF0082 순서 교정·DMF0020(2026-07-01 확정 순서) 유지. 사용자 명시]. 같은 날 — **#119 oracle-null-sentinel-and-notnull-default**[MSSQL `ISNULL(x,'')` 의 두 의도(JOIN 키 정규화 / NOT NULL 컬럼 채우기)가 Oracle 빈문자=NULL 로 **양쪽 다 깨진다**. 센티널 = **`'-'` 통일**(사용자 확정). 비교·JOIN=**양변** `NVL(x,'-')`(한쪽만 보정 금지) 또는 `IS NOT NULL` / NOT NULL 컬럼 INSERT=`NVL(x,'-')`·숫자 `NVL(x,0)`·DATE 는 `SYSDATE`(⛔`TO_CHAR(SYSDATE,..)`=ORA-01861) / 표시·대입은 유지. `ALL_TAB_COLUMNS NULLABLE='N'` 인벤토리 선행 + INSERT 컬럼↔식 **위치 1:1** 대조. 정정 파서는 **주석 인식 의무**(컬럼목록 뒤 주석 → 28중 23 누락 실측 / 식 말줄 주석 → 닫는 괄호 다음 줄 / 후행 개행 보존 = 라인수 대조). 오탐=`NVL(x,NULL)`·`'%'||p||'%'`. DMF0044 477건 정정. 부록 C-7/C-12]. 직전 2026-07-24 — **#118 mssql-ci-collation-parity**[MSSQL 암묵 등가 상실 2형: ①CI collation(대소문자) — 리터럴 비교 미매칭→DELETE 미작동/필터 전멸(DMF0003 VMI DELETE·MAKE_CUST_FCST 'Customer Fcst' 사고), fix=UPPER() IN+전 오브젝트 sweep(주석 오탐 배제) ②숫자→문자 표기('.0') 사문 REPLACE — AS-IS도 사문이면 주석의 설계 의도 복원이 정본. 검증=재현 실측 전후 대비]. 동시 보강: #115 §3 Measure 모달 SHEET_PRSL_YN 게이트(미등록=titleset 미반영 경로, 왕복 검증) / #117 §4 Cell Combo Data Type 축(양DB SHEET_COLUMNS diff·해석기 UP_FX_GetCommonDataList sys.sql_modules 확정·값 MINUS·동적 SetComboCol·사문 컨트롤·셀 콤보 ALL행=결함). 직전 2026-07-23: #115~#117 / 07-16: #114). 어떤 문서든 카운트를 별도 보유하지 말 것 — 본 파일 §4 와 00_INDEX 만 카운트를 가진다. (진단 R-2)
 >
 > ⚠️ 2026-07-13(저녁): 신규 **#112 `search-condition-asis-tobe-catalog`** (SCP·DM 화면 조회조건 AS-IS↔TO-BE 카탈로그 적용 의무 — 원천 `Doc/SCP_DM_화면별 조회조건 정리_260122_v0.4.xlsx` List 시트 **953행/99화면 전수** MD 변환 = `_rules_v2/_mapping/search_conditions_scp_dm.md`. 조회조건 작성 전 해당 화면 표 전 행 대조 + 명칭 표준화 rename 13쌍[Div→Div./Model→Model/Nickname/Project→PJT/Valid→Active 등] + 다중선택 표준=검색+ALL버튼 + 팝업 통합[모→메1/프1→프2] + 공통기능화 검토 203행=SearchArea 승계 금지 + Sun-Set 8화면 사전 보고 + 카운트 일치 보고 의무. 사용자 명시) = **112**.
 >
@@ -67,15 +67,15 @@
 |---:|---|---|---|
 | **T01** | 신규 화면 / DMFxxxx 생성 / 화면 추가 / **"신규 생성"·"신규 UI"** | ⭐ **ui-work-entry-playbook §2 (트리거 시 플레이북 전문 = 요청문과 동등 적용)** + `_tobe/01~10` 전부 + `_asis/00_framework/01~07` + `_asis/02_screens/__TEMPLATE__` + **`Doc/03.Framework` 공식 FE 설계서/인수인계서** | ⭐⭐⭐ **framework-foundation-entry(아키텍처 진입)** · **mdi-tab-isolation-mandatory** · **procedure-dts-ssot-mandatory** · atomic-design-components + screen-conventions-mandatory · screen-shell-composition-mandatory · regression-zero-mandatory · datagrid-shared-component-mandatory · screen-meta-and-permissions-mandatory · screen-additional-skills-mandatory + ui-dynamic-property-management(master) + menu-button-dynamic-fetch + ui-category-setup-column-meta + screen-create-checklist + screen-entry-asis-baseline + components-folder-pattern + pre-write/post-write + **screen-completion-gate(종료)** |
 | **T01M** | **기존 화면 수정 / column 재작업 / 속성 변경 / "보완"·"보완요청"** | ⭐ **ui-work-entry-playbook §1 (트리거 시 전면 점검·교정 플레이북 전문 = 요청문과 동등 적용 — 준수 점검표 의무)** + 해당 화면 룰 + `_tobe/08_column_meta` | ⭐⭐⭐ **regression-zero-mandatory**(Hard Boundary) + **column-meta-rework-checklist**(8 점검) + datagrid-shared-component-mandatory + pivot-dynamic-column-nvl + screen-completion-gate |
-| **T02** | AS-IS 화면 분석 / .cs 분석 / **UI분석서·화면분석서 생성 / 화면설계서 생성** | `_asis/02_screens/__TEMPLATE__` + `_asis/00_framework/01_BaseForm` | popup-asis-analysis + ⭐⭐ **screen-analysis-workbook-standard(#105 — UI분석서=§1-C 10시트[전체흐름+제약매트릭스 내부구조, 단위테스트 제외] / 화면설계서=§1-A 8시트. 정본 DMF0003_UI분석서_v2.1)** |
+| **T02** | AS-IS 화면 분석 / .cs 분석 / **UI분석서·화면분석서 생성 / 화면설계서 생성** | `_asis/02_screens/__TEMPLATE__` + `_asis/00_framework/01_BaseForm` | popup-asis-analysis + ⭐⭐ **screen-analysis-workbook-standard(#105 — UI분석서=§1-C 10시트[전체흐름+제약매트릭스 내부구조, 단위테스트 제외] / 화면설계서=§1-A 8시트 + **§1-D EVENT 목차+선행MD 전문 승계 / §1-E 가로 머지**. 정본 DMF0003_UI분석서_v2.1, 설계서 견본 DMF0042·0044·0049 v1.1)** |
 | **T03** | Popup 분석 / popup 매핑 | `_asis/01_popups/__POPUP_TEMPLATE__` + `00_inventory` + `_tobe/10_popup_modal` | popup-asis-analysis |
 | **T04** | Grid / DataGrid / 컬럼 메타 / dropdown / lookup / column setting popup / drill-down / **머지·편집 제어** | `_tobe/07_datagrid` + `08_column_meta` + `09 §12` + `Doc/wijmo-flexgrid-guide` + `-api-reference` | ⭐⭐⭐ datagrid-shared-component-mandatory · grid-cell-interaction-patterns-mandatory + grid-column-meta + ui-category-setup-column-meta + column-lookup-meta-standard + grid-column-setting-popup-pattern + grid-interaction-patterns + sheet-columns-binding-match + wijmo-flexgrid-entry(진입) + wijmo-insert-cell-dropdown + wijmo-merge-sticky-content + runtime-error-prevention + ⭐⭐⭐ **screen-grid-edit-merge-and-meta-mandatory** (#89 — G mergeManager=props 직접 세팅 + sameRow `CRUD_TYPE`/`INSERT_GROUP_ID` · E `INPUT_TP_CD`+조건부 `beginningEdit` 행잠금 · A `API_ID` JOIN 정합, 이슈목록 2026-06-23 PM R-6~R-10 승격) + ⭐⭐⭐ **column-division-id-visibility** (#92 — DIVISION_ID 콤마 토큰 기반 컬럼 표시, SP/BE 무변경=ATTRIBUTE3 복사+FE 토큰 필터, 2026-06-27) + ⭐⭐⭐ **grid-multi-tier-header-height** (#93 — 다단 헤더 높이 48px 고정, 1단×N 비대화 금지, foundation HEIGHT_BY_COLUMN_DEPTH+DMF0007 P-A/P-B, 2026-06-27) + ⭐⭐⭐ **grid-cell-backcolor-standard** (#95 — cell 배경 3색 표준: 기본 White+zebra / 편집 Yellow(wj-cell-editable) / 잠금 Gray(wj-cell-non-editable, 특수만). 전체 회색·inline 배경 금지, 2026-06-28) + ⭐⭐ **column-align-code-standard** (#96 — HORIZONTAL_ALIGN_CODE 단일문자 C/L/R, 전체단어 금지, 2026-06-28) + ⭐⭐ **common-button-grid-routing** (#97 — 공통버튼 hotkeyConfig 표시 + 자체 toolbar 금지 + 활성그리드 라우팅 + No 컬럼 2방식 + CRUD pending 부모키 reset, 2026-06-28) |
 | **T05** | 조회조건 / SearchArea / Form / combo / cascade / dropdown reset / **모달 콤보 옵션** / **객체 높이·배치** | `_tobe/06_search_area` + searchFields 카탈로그 | ⭐⭐⭐ messaging-api-and-search-fields-mandatory · cascade-combo-filter · screen-shell-composition-mandatory + search-area-extra-conditions + search-button-when-no-searcharea + cascade-pattern-check + ⭐⭐⭐ **screen-combo-validation-message-mandatory** (§1 L — 콤보/모달 옵션 룩업 조회, 하드코딩 금지) + search-area-button-position-and-toggle + ⭐⭐⭐ **search-condition-height-uniformity** (#94 — 디자인 필수: 모든 조회조건 객체 높이 36px 동일 Main UI+Popup + DatePicker wrapper 36 강제 + Figma 1단 4개 gridSize, 2026-06-27) |
 | **T06** | Modal / Popup / 공용 modal | `_tobe/10_popup_modal` + `01 §1.5(modals/)` | ⭐⭐⭐ popup-modal-and-routing-mandatory + popup-asis-analysis + popup-dialog-layout + modal-callback-cascade-check + components-folder-pattern + grid-column-setting-popup-pattern |
 | **T07** | Button / CRUD / SubTitle hotkey / 추가·삭제·저장·sort·filter·condition·reset | `_tobe/09_subtitle_hotkey` + `_asis/00_framework/01_BaseForm` | ⭐⭐⭐ subtitle-button-actions-mandatory · screen-meta-and-permissions-mandatory(권한) + screen-shell-composition-mandatory + asis-button-mapping + search-button-when-no-searcharea |
-| **T08** | BE / Controller / Service / SP / cursor / mutation / SAVE SP | `_tobe/11_be_controller_service` + `12_metadata_sql` + **`Doc/03.Framework` BE API javadoc** | ⭐⭐ **oracle-db-workflow(진입)** + ⭐⭐ **be-api-contract-ui(UI 호출 계약)** + be-infrastructure-reuse + asis-coverage-check + procedure-dts-ssot-mandatory + sp-dual-cursor-pattern + mutation-onsuccess-defaults + proc-meta-signature-match + sp-body-minimal-change + sp-utl-call-stack-safety + sp-exception-handler-debug-friendly + sp-no-fake-data-extraction + sp-json-table-array-pattern + sp-patch-file-deploy + scmd-app-grant-mandatory |
+| **T08** | BE / Controller / Service / SP / cursor / mutation / SAVE SP | `_tobe/11_be_controller_service` + `12_metadata_sql` + **`Doc/03.Framework` BE API javadoc** | ⭐⭐ **oracle-db-workflow(진입)** + ⭐⭐ **be-api-contract-ui(UI 호출 계약)** + be-infrastructure-reuse + asis-coverage-check + procedure-dts-ssot-mandatory + sp-dual-cursor-pattern + mutation-onsuccess-defaults + proc-meta-signature-match + sp-body-minimal-change + sp-utl-call-stack-safety + sp-exception-handler-debug-friendly + sp-no-fake-data-extraction + sp-json-table-array-pattern + sp-patch-file-deploy + scmd-app-grant-mandatory + ⭐⭐ **oracle-null-sentinel-and-notnull-default(#119 — MSSQL `ISNULL(x,'')` → 섬티넬 `'-'` / NOT NULL 초기값)** |
 | **T09** | 메뉴 안 나옴 / MNU_URL / SHT_NM / 권한 없음 | `_tobe/13_routing_menu` | menu-not-displayed-debug + menu-button-dynamic-fetch |
-| **T10** | DB 오류 / ORA-xxxxx / PLS-xxxxx / 데이터 0건 / **날짜·메시지 검증 오탐** / **대량 조회·저장 실패(ORA-06502/40478)** / **업로드·저장 무반응(hang)** | `_dev_rules/21_TROUBLESHOOTING` + `_tobe/12_metadata_sql` | ⭐⭐ oracle-db-workflow §3 + sp-exception-handler-debug-friendly + sp-substr-zero-index-audit + oracle-cmbo-varname-quote + ⭐⭐ **oracle-bulk-clob-buffer(#106 — 대량 CLOB 버퍼)** + ⭐⭐ **sp-hang-runaway-loop-diagnosis(#107 — 무반응 hang·GTT TRUNCATE mutex·FETCH_STATUS 무한루프·재배포 pin 차단)** + ⭐⭐ **oracle-nls-implicit-conversion(#109 — "클라우드만 실패"=세션 NLS 암묵변환 / -9994·InvocationTargetException 래퍼 진단)** + db-error-asis-cross-check + sp-no-fake-data-extraction + pivot-dynamic-column-nvl + ⭐⭐⭐ **screen-combo-validation-message-mandatory** (§2 V 날짜 표시↔검증 형식 / §3 M 메시지 코드 충돌) |
+| **T10** | DB 오류 / ORA-xxxxx / PLS-xxxxx / 데이터 0건 / **날짜·메시지 검증 오탐** / **대량 조회·저장 실패(ORA-06502/40478)** / **업로드·저장 무반응(hang)** | `_dev_rules/21_TROUBLESHOOTING` + `_tobe/12_metadata_sql` | ⭐⭐ oracle-db-workflow §3 + sp-exception-handler-debug-friendly + sp-substr-zero-index-audit + oracle-cmbo-varname-quote + ⭐⭐ **oracle-bulk-clob-buffer(#106 — 대량 CLOB 버퍼)** + ⭐⭐ **sp-hang-runaway-loop-diagnosis(#107 — 무반응 hang·GTT TRUNCATE mutex·FETCH_STATUS 무한루프·재배포 pin 차단)** + ⭐⭐ **oracle-nls-implicit-conversion(#109 — "클라우드만 실패"=세션 NLS 암묵변환 / -9994·InvocationTargetException 래퍼 진단)** + db-error-asis-cross-check + sp-no-fake-data-extraction + pivot-dynamic-column-nvl + ⭐⭐⭐ **screen-combo-validation-message-mandatory** (§2 V 날짜 표시↔검증 형식 / §3 M 메시지 코드 충돌) + ⭐⭐ **oracle-null-sentinel-and-notnull-default(#119 — MSSQL `ISNULL(x,'')` → 섬티넬 `'-'` / NOT NULL 초기값)** |
 | **T11** | Figma URL | `_dev_rules/31_FIGMA_DESIGN_INTEGRATION` | (figma-mapping-check — v1) |
 | **T12** | Git push / 백업 / 원복 | `_dev_rules/28_GIT_MULTI_REMOTE` + `30_LOCAL_BACKUP_RESTORE` | destructive-git-ops |
 | **T13** | CSV 적재 / Oracle 적재 | `_dev_rules/29_LOCAL_DB_CSV_IMPORT` | (없음) |
@@ -89,6 +89,29 @@
 | **T00** | (모든 작업 공통) | — | pre-write · post-write · pre-submit · file-write-fallback · destructive-git-ops · type-check-error-patterns · react-query-foundation-reexport · relative-import-order |
 
 > **진단 반영(C-3)**: 유지 룰 v1 표는 §5 1곳에서만 보유. T10~T19 의 `_dev_rules/NN` 참조는 §5 표를 단일 출처로 본다.
+
+---
+
+## §2.5 ⭐ 카테고리 축 (주제별 룰 묶음) / Thematic Category Axis — 2026-07-30 신설 (사용자 요구)
+
+> 트리거 매트릭스(§2 — 작업 유형 축)와 **직교하는 주제 축**. "UI 디자인 관련 룰 전부 / EDIT 권한 관련 전부"처럼 **주제로 모아서 적용**할 때 사용 — 적용 누락·오류 저감 목적.
+> **진입점**: `Doc/_rules_v2/_categories/00_CATEGORY_MAP.md` (hook 120 전수 분류표 + 커버리지 검증식 보유).
+> 원칙: 카테고리 파일 = 포인터 인덱스(본문 복제 없음) / 카운트는 본 파일 §4 만 보유 / 다중 소속 허용 / **신규 hook 신설 시 §4·00_INDEX 와 함께 카테고리 맵·해당 카테고리 파일 동시 등재 의무**.
+
+| 코드 | 카테고리 (`_rules_v2/_categories/`) | 주제 |
+|---|---|---|
+| 01 | `01_ui_design_layout.md` | UI 디자인·레이아웃 (36px/48px/3색/No.코너/아이콘 버튼/Figma 정합) |
+| 02 | `02_auth_edit_control.md` | 권한·Edit 제어 (hasButton/EDIT_YN/editLock/권한 게이트 3형) |
+| 03 | `03_grid_column_meta.md` | Grid·컬럼 메타·Wijmo |
+| 04 | `04_search_condition_combo.md` | 조회조건·콤보·cascade |
+| 05 | `05_popup_modal.md` | 팝업·모달·라우팅 |
+| 06 | `06_screen_architecture.md` | 화면 골격·타입·명명·런타임 |
+| 07 | `07_i18n_msg.md` | i18n·MSG/LBL |
+| 08 | `08_admin_meta_wiring.md` | admin 메타·배선 |
+| 09 | `09_sp_db_conversion.md` | SP·DB 변환·성능 |
+| 10 | `10_diagnosis_troubleshoot.md` | 진단·트러블슈팅 (증상→룰 역인덱스) |
+| 11 | `11_asis_parity.md` | AS-IS 분석·정합 |
+| 12 | `12_process_ops.md` | 프로세스·운영·배포 |
 
 ---
 
@@ -112,6 +135,7 @@
   - [ ] Measure Code/Label/Sort/Valid → SYS0004
 - [ ] **Grid = 공용 DataGrid 만** 사용, FlexGrid JSX 직접 금지 (datagrid-shared-component-mandatory)
 - [ ] **Form = SearchArea/FormItem/CustomDropdown**, 2단(6필드) 초과 시 `extraConditions` 분리 (screen-shell-composition-mandatory / search-area-extra-conditions)
+- [ ] ⭐⭐ **폼 스타일 = 공용 common-styles 클래스만** (form-common-styles-mandatory #121): 모든 `<FormItem>` 에 `className={commonStyles.formItem}`(`@foundation/styles/common-styles.module.scss` — HD 50/FHD 140 라벨 칼럼+min-width:0) + 체크박스 셀=`customGrid`/`customCheckbox` + 팝업 검색 InputField=`popupSearchField`. **페이지 로컬 scss 에 폼/인풋 레이아웃 신설 금지**(대체 후 dead 파일 삭제 — 그리드/모달/셀 컬러링 등 화면 고유 스타일만 로컬 유지). 정본 SalesSiteForm.tsx. ⚠️ SearchFields 카탈로그 필드는 미부착 — 인라인 FormItem 혼용 행 라벨 폭 확인
 - [ ] ⭐⭐ **SCP·DM 조회조건 = AS-IS↔TO-BE 카탈로그 전 행 대조** (search-condition-asis-tobe-catalog #112): `_rules_v2/_mapping/search_conditions_scp_dm.md`(953행/99화면) 에서 해당 화면 표 확인 — To-Be 명칭·유형·기능·팝업 그대로(명칭 표준: Div→**Div.**/Valid→**Active**/Project→**PJT** 등 13쌍) + 다중선택=**검색+ALL버튼** + 공통기능화 검토 행 SearchArea 승계 금지 + Sun-Set 8화면 사전 보고 + 카운트 일치 보고
 - [ ] **SubTitle hotkeyConfig 1 객체**로 11 버튼 자동 매핑 (subtitle-button-actions-mandatory)
 - [ ] **권한 분기**: `useTabBtnPermissions` + `hasButton(BTN_CD)` 각 액션 (screen-meta-and-permissions-mandatory)
@@ -122,7 +146,8 @@
 - [ ] **i18n 3언어 동시**(KO=EN 값 동일, CN fallback) + `LBL`+5자리 (screen-meta-and-permissions-mandatory / i18n-ko-en-alignment)
 - [ ] **import 규약**: `@tanstack/react-query`→`@foundation/query-client` re-export, 상대경로 정렬, `@foundation/lodash` (react-query-foundation-reexport / relative-import-order)
 - [ ] **타입 self-check 17 패턴** (type-check-error-patterns)
-- [ ] ⭐ **런타임 사고 7종 사전 차단** (screen-runtime-pitfalls-mandatory):
+- [ ] ⭐ **런타임 사고 8종 사전 차단** (screen-runtime-pitfalls-mandatory):
+  - [ ] ⭐⭐ **`useTabProcQuery({ filters })` 에 인라인 객체 리터럴 전달 금지** (2026-07-29 SYS0017 사고) — `useCustomQueryClient.ts` 는 filters 를 **참조 비교**(`prevKeyRef.current !== filters`)하므로 매 렌더 새 객체가 생기면 removeQueries+재요청이 무한 반복(스피너 안 멈춤). **store 보관 값** 또는 `useMemo` 안정 참조만 전달. 그리드 `selectionChanged` 처럼 고빈도 이벤트가 store 를 갱신할 때는 **동일 값이면 set 을 건너뛰는 가드**를 store 액션에 둔다. 진단: BE 로그에 동일 `mnuId`/`mnuBtnCd` SEARCH 가 초 단위 반복이면 1순위.
   - [ ] zustand selector 의 `?? []` / `?? {}` fallback 사용 금지 — store 초기값에 stable 참조 명시
   - [ ] `<DataGrid initialized={...}>` 사용 금지 (wrapper 가 호출 안 함, deprecated). ⭐ **모든 wijmo 이벤트 핸들러** (`formatItem` / `cellEditEnded` / `beginningEdit` / `loadedRows` / `cellEditEnding` / `selectionChanged` / `gotFocus`) 등록은 `useEffect` + `gridRef.current` (`internalRef` 단독 금지) + dependency `[staticColumns, dynamicColumns]` (`[]` 1회 금지 — mount 시점 ref undefined → 미등록 사고) + cleanup 의무
   - [ ] Grid row interface 는 `extends WijmoRowItem` + 모든 fields non-optional + 인덱스 시그니처 `string | number` 만
@@ -140,7 +165,7 @@
 - [ ] **column 재작업 8 점검**: SP NVL / minimal change / patch 종결자 / admin 동기 / binding 매칭 / shared prop / anti-simplification / 사후검증 (column-meta-rework-checklist)
 - [ ] **dynamic 컬럼 NVL wrap**: PIVOT NULL → 키 누락 사고 방지 (pivot-dynamic-column-nvl)
 - [ ] **공용 prop 추가는 분리 PR** + 4 도메인 regression 0 (regression-zero-mandatory)
-- [ ] ⭐ 런타임 사고 7종 (screen-runtime-pitfalls-mandatory) — 신규 화면 동일 적용
+- [ ] ⭐ 런타임 사고 8종 (screen-runtime-pitfalls-mandatory) — 신규 화면 동일 적용
 
 ### 3.3 POST-WRITE grep (작성 직후 자동 검증)
 - [ ] `<FlexGrid` / `<FlexGridColumn` 직접 JSX = 0 (datagrid-shared-component-mandatory)
@@ -151,6 +176,7 @@
 - [ ] 진입 Page ≤ 400 라인 (components-folder-pattern)
 - [ ] ⭐ 런타임 사고 grep (screen-runtime-pitfalls-mandatory):
   - [ ] `useStore\(s => s\.\w+ \?\? ` = 0 (selector fallback 안티패턴)
+  - [ ] `useTabProcQuery` 호출부에 `filters:\s*\{` / `filters=\{\{` 인라인 리터럴(useMemo 밖) = 0
   - [ ] `<DataGrid[^/]*initialized=` = 0 (deprecated prop 사용 금지)
   - [ ] Grid row interface 가 `extends WijmoRowItem` 누락된 곳 = 0
 
@@ -162,9 +188,9 @@
 
 ---
 
-## §4. Hook 카탈로그 (전체 118 / Full Catalog) — 단일 카운트 소스
+## §4. Hook 카탈로그 (전체 120 / Full Catalog) — 단일 카운트 소스
 
-> 본문 위치: `Doc/_rules_v2/hooks/<name>.md`. 카운트 = 본 파일 상단 "카운트 단일 소스" 문단 참조 (**118**, 2026-07-24 실측 — 본 §4 내 중복 카운트 표기는 2026-07-03 정리로 제거, 갱신은 상단 문단+본 헤더+말미 SSOT 3곳 동시). 정렬: 파일명 알파벳순(진단 R-4) — 단 #70 이후는 등재 시점 순 표 끝 배치.
+> 본문 위치: `Doc/_rules_v2/hooks/<name>.md`. 카운트 = 본 파일 상단 "카운트 단일 소스" 문단 참조 (**119**, 2026-07-30 실측 — 본 §4 내 중복 카운트 표기는 2026-07-03 정리로 제거, 갱신은 상단 문단+본 헤더+말미 SSOT 3곳 동시). 정렬: 파일명 알파벳순(진단 R-4) — 단 #70 이후는 등재 시점 순 표 끝 배치.
 > 분류: 🅒 공통 · 🆄 UI/화면 · 🅖 Grid/Wijmo · 🅕 Search/Form · 🅟 Popup/Modal · 🅑 BE/SP/Oracle · 🅓 DB적용/Deploy · 🅖it Git/Infra
 
 | # | Hook | 분류 | 트리거 | 한 줄 요약 |
@@ -182,7 +208,7 @@
 | 11 | db-corporate-apply | 🅓 | T18 | 사내 DB 적용 (docker sqlplus + CRLF 우회 + 카테고리 분류) |
 | 12 | db-error-asis-cross-check | 🅑 | T10 | DB 오류 시 AS-IS MSSQL 직접 cross-check |
 | 13 | db-schema-divergence-check | 🅓 | T18 | Docker vs 사내 Oracle 8 schema 차이 PRE-CHECK |
-| 14 | deploy-package-completeness | 🅓 | T16 | PRE/POST deploy 인벤토리 + 사후 보강 |
+| 14 | deploy-package-completeness | 🅓 | T16 | PRE/POST deploy 인벤토리 + 사후 보강 + **§1.0-B 클라우드 PRECHECK·채번충돌·권한원본 실측(2026-07-29)** |
 | 15 | destructive-git-ops | 🅖it | 전체 | filter-branch/force-push/reset --hard 전 승인 의무 |
 | 16 | fe-cloud-type-lint-readiness | 🅓 | T01/T18 | FE 클라우드 type/lint 통과 5 패턴 |
 | 17 | file-write-fallback | 🅒 | 전체 | 파일 작성 실패 시 fallback 절차 |
@@ -205,11 +231,15 @@
 | 111 | oracle-sp-perf-correlated-setbased-and-live-redeploy | 🅑 | T08/T10/T19 | ⭐⭐ **상관쿼리→set-based + 라이브 PKG 재배포 운영** — §A 상관 UPDATE→MERGE 사전집계 / per-row LATERAL `FETCH FIRST 1`→`GROUP BY MAX...KEEP(DENSE_RANK LAST)` / 상관 IN(split)→물리 GTT. §B 진단=V$SQL 문장별 귀속→DBMS_XPLAN.DISPLAY_CURSOR→SQL_MONITOR(hang 신호 'Free private memory to OS'). §C 라이브 재배포=라이브러리 캐시 배타락 → BE 프로세스 종료+DDL_LOCK_TIMEOUT(SCM_MGR 에 ALTER SYSTEM 권한 없음). §D 집계 GTT NUMBER 정밀도≥소스(ORA-01438). §E diminishing returns(와이드 범위=큰 중간결과 한계 명시). §F FE 짝=BE boolean vs 'Y' 문자열/division-반응형 정적컬럼(폭0 숨김 금지). DMF0082 조회 (2026-07-13) |
 | 112 | search-condition-asis-tobe-catalog | 🅕 | T01/T01M/T03/T05 | ⭐⭐ **SCP·DM 조회조건 AS-IS↔TO-BE 카탈로그 적용 의무 (사용자 지정)** — 카탈로그 = `_rules_v2/_mapping/search_conditions_scp_dm.md`(원천 xlsx List 시트 **953행/99화면 전수** 변환). 조회조건 작성 전 해당 화면 표 **전 행 대조**: To-Be 명칭·유형·기능·팝업 그대로(임의 결정 금지) + 명칭 표준화 rename 13쌍(Div→**Div.**/Model→**Model/Nickname**/Project→**PJT**/Valid→**Active**/Version→**Ver.** 등) + 다중선택 표준=**검색+ALL버튼** + 팝업 통합(모1~3→메1/프1→프2) + **공통기능화 검토 203행=SearchArea 승계 금지**(버튼·체크박스 — 사용자 확인) + **Sun-Set 8화면 사전 보고** + 조회조건 삭제 11행 미구현 + 카운트 일치 보고(__asis-mapping__). To-Be 필수값 미확정 한계 명시. (2026-07-13) |
 | 113 | ui-category-division-direct-compare | 🅕 | T01/T01M | ⭐⭐ **Grid 정적 컬럼 표시 표준 (사용자 지정 2026-07-15)** — DIVISION_ID 가시성 = PR_GET_SHEET_COLUMN_LIST/MEASURE_LIST 서버 직접 비교(divisionId 전송 + division 변경 재fetch). ❌ ATTRIBUTE1/3 클라 비교(#92 구방식) ❌ 컬럼·measure 하드코딩/화이트리스트/FALLBACK. FE 필터=visible&&display 2 boolean, ColumnSetting 로컬 반영=display. 정본 sales-plan(DMF0021). (§4 표 소급 등재 2026-07-16 — 상단 카운트만 있고 표 행 누락 drift 정정) |
-| 114 | msg-id-asis-tobe-conversion | 🅕 | T01/T01M/T08/T18 (MSG 이관·등록·매핑) | ⭐⭐⭐ **AS-IS MSG_ID 그대로 사용 절대 금지 (사용자 지정 2026-07-16)** — AS-IS↔TO-BE 공통 61코드 중 **54(89%) 의미 재배정** 실측(예: AS-IS MSG00001 '필수 입력'↔TO-BE '저장 하시겠습니까?'). 의무 4단계: ①AS-IS 실문구 확보(ID만 금지) → ②대조표 `_artifacts/MESSAGE_ASIS_vs_TOBE_대조.xlsx` 'AS-IS 한글 일치 TO-BE MSG_ID' 컬럼 확인(재매핑 확정 14건: MSG00004→00672/00006→00003/00097→00667/00133→00004/00225→00666/00259→00662/00464→00671 등) → ③사내 `SCM_ADM_MSG_M` 실측 3분기(동일 문구 존재=**TO-BE ID EXACT 재사용** / 부재=**MAX 실측+1 신규 채번**+KO/EN/CN MERGE[#98 §7] / ID·문구 모두 일치[7건뿐]=유지) → ④POST-WRITE: 사용 MSG grep 전수 → 사내 실문구 대사 표 보고(fallback 텍스트 신뢰 금지). ❌ 기존 TO-BE ID 에 AS-IS 문구 UPDATE(전 화면 오염). `__asis-mapping__` 에 AS-IS→TO-BE 변환 관계 명시. DMF0003 재채번 사고(6/28→7/11 재정합) |
+| 114 | msg-id-asis-tobe-conversion | 🅕 | T01/T01M/T08/T18 (MSG 이관·등록·매핑) | ⭐⭐⭐ **AS-IS MSG_ID 그대로 사용 절대 금지 (사용자 지정 2026-07-16)** — AS-IS↔TO-BE 공통 61코드 중 **54(89%) 의미 재배정** 실측(예: AS-IS MSG00001 '필수 입력'↔TO-BE '저장 하시겠습니까?'). 의무 4단계: ①AS-IS 실문구 확보(ID만 금지) → ②대조표 `_artifacts/MESSAGE_ASIS_vs_TOBE_대조.xlsx` 'AS-IS 한글 일치 TO-BE MSG_ID' 컬럼 확인(재매핑 확정 14건: MSG00004→00672/00006→00003/00097→00667/00133→00004/00225→00666/00259→00662/00464→00671 등) → ③사내 `SCM_ADM_MSG_M` 실측 3분기(동일 문구 존재=**TO-BE ID EXACT 재사용** / 부재=**MAX 실측+1 신규 채번**+KO/EN/CN MERGE[#98 §7] / ID·문구 모두 일치[7건뿐]=유지) → ④POST-WRITE: 사용 MSG grep 전수 → 사내 실문구 대사 표 보고(fallback 텍스트 신뢰 금지). ❌ 기존 TO-BE ID 에 AS-IS 문구 UPDATE(전 화면 오염). `__asis-mapping__` 에 AS-IS→TO-BE 변환 관계 명시. DMF0003 재채번 사고(6/28→7/11 재정합) ⊕ **§5 신설(2026-07-30)**: 신규 채번 시 **3점 동시 반영 의무** = ①사내 `SCM_ADM_MSG_M` 3언어 ②**`nscm-fe/public/locales/{KO,EN,CN}.json` 3파일** ③이관 패키지 `locales.{화면ID}_PATCH.json`. ⚠️ **런타임 원천은 locales JSON** (i18n `loadPath:'/locales/{{lng}}.json'` — `SCM_ADM_MSG_M` 은 `t()` 소스 아님) → "DB 에 넣었다" ≠ 화면 표시. DMF0068 5키(MSG00699~702/LBL00783) locales 누락 실사고. + **`MSG_TP_CD` = 접두사 일치**(LBL→'LBL'; LBL00783 을 'MSG' 로 넣은 결함 정정) — 전수 스윕 SQL 포함 |
 | 115 | titleset-cache-immunization | 🅕 | T01/T01M/T08 (동적 PIVOT·Column Setting) | ⭐⭐⭐ **titleset 'C' 캐시 오염 면역화 (2026-07-23)** — 동적 PIVOT V_COLUMN 조립 SP 는 캐시 오염 면역 가드 의무: ①SP 커서 `NVL(DEFAULT_FLAG,'N') NOT IN ('-',' ')`+VALID='Y'+**MF_BASE 산출 whitelist**(❌ DEFAULT_FLAG='Y' 필터 — 'N'-flag 다수가 정당 산출[35/40], 과거 539→9행 파손) ②모달 `columnType='C'`+COLUMN_NAME dedup+`selectableOnly` opt-in ③미산출 컬럼 USER_SELECTABLE='N' 정정+SHEET_COLUMNS(PK 없음) 사내 정본 전면 동기. 검증=회귀 해시 동일+**오염 강제 주입 IMMUNE 테스트**. 일회성 캐시 DELETE=재오염 두더지잡기 금지. DMF0003 DEPT_ID(00904)/MEASURE(00918) 재발 사고 |
 | 116 | sp-parallel-dml-txn-guard | 🅕 | T08/T10/T18 (SP 변환·저장 오류) | ⭐⭐ **SP 도입부 ALTER SESSION PARALLEL DML = 트랜잭션 가드 의무 (2026-07-23)** — DML 후 내부 호출되는 SP 의 `DISABLE PARALLEL DML` 은 활성 트랜잭션 중 **ORA-12841**(진입점 단독 테스트는 통과 — E2E 잠재결함). fix=12841 허용 가드(`IF SQLCODE != -12841 THEN RAISE`; PDML 기본 비활성→기능 동일). 치환은 **비주석 라인만**(문자열 count 는 주석 오탐). 검증=`DBMS_TRANSACTION.LOCAL_TRANSACTION_ID(TRUE)` 재현+가드 오류0. ENABLE 은 경로 검토 후. sweep 의무(user_source 전수). DMF0003 div82 SAVE→SALES_PLAN_SYNC 사고 |
 | 117 | search-condition-datasource-asis-parity | 🅕 | T01/T01M/T03 (조회조건 데이터 소스) | ⭐⭐ **조회조건 데이터 추출 AS-IS 정합 + 공유 CMBO 보호 (2026-07-23)** — #112(명칭·유형)와 별개 축: 항목별 추출 쿼리 1:1. AS-IS 원천=`04.WSL/FoxQuery/{도메인}/Common/BigFilter.xml`(GetDMInnerTable 키) + `UP_FX_GetCommonDataList_*`/기본값 SP(.env.asis OBJECT_DEFINITION 실측). 불일치 의심=**양식 MINUS 실측 판정**(추측 금지). ⭐공유 `SCM_ADM_CMBO_SQL_M` 수정 전 **FE 소비자 전수 grep 의무**(조회조건+grid `_comboKey`+array-form) — 소비자 2+ or 바인드 변경 = **화면 전용 SQL_ID 신규 등록**(공유본 무변경), 카탈로그 필드는 opt-in prop(`comboId?`/`division?` 기본값 보존)만. DMF0003 P1~P6(BizType 81/82 전량 누락 등 6건)+SiteByEndCustomer 소비자 5곳 파급 사고 |
 | 118 | mssql-ci-collation-parity | 🅕 | T08/T10/T18 (SP 변환·중복/순서/필터 오류) | ⭐⭐ **MSSQL 암묵 등가 상실 함정 (2026-07-24)** — ①**CI collation**: MSSQL 대소문자 무시 전제 리터럴 비교가 Oracle CS 에서 미매칭 → DELETE 미작동(중복)/필터 전멸(배치 MAKE_CUST_FCST `'Customer Fcst'`≠실데이터 'Customer FCST' → EXCEL 상위 통합 통째 누락 "└ EXCEL만 표시" / DMF0003 VMI DELETE 대문자). fix=`UPPER(col) IN` + **전 오브젝트 sweep**(`user_source LIKE '%''리터럴''%'` — 주석 내부 매칭 오탐 금지, [Org.] 7종 오탐 선례) ②**'.0' 표기 사문 REPLACE**: numeric→varchar 표기 전제 로직이 int/TO_CHAR 에서 no-op → 정렬 동률. AS-IS 도 사문이면 **주석의 설계 의도 복원이 정본**(근거 README 명시). 검증=재현 실측 전후 대비·비주석 라인만 치환 |
+| 120 | ui-title-icon-buttons-standard | 🆄 | T01/T01M/T07 | ⭐⭐ **타이틀 아이콘 버튼 표준 (사용자 지정 2026-07-30)** — 환율(Exchange Rate) 버튼 = **항상 아이콘**(`IcExchangeRate`+`buttonLabel:''`, 텍스트 버튼 금지, Tooltip=LBL00661) + 복수 아이콘 순서 = 왼쪽부터 **환율 → Grid Column Set → Measure** 고정 + 텍스트 버튼은 아이콘 앞. 적용: DMF0044/0042 전환·DMF0082 교정·DMF0020 유지 |
+| 122 | cloud-ui-db-object-fetch | 🅑 | T16/T18 (클라우드→로컬 역이관) | ⭐⭐ **클라우드 생성 UI DB 객체 역이관 표준 (사용자 지정 2026-08-04)** — 발견 4축(①BTN_MPG→API_M 배선 권위=공용 SP 포착 ②명칭 LIKE ③ALL_DEPENDENCIES 재귀 폐포=GTT/TYPE 자급 ④배선 메타 8테이블+MSG 신규분) → 클라우드 3스크립트(DISCOVER 보고/DDL 원문 적용순 추출/메타 INSERT-only 범용 에미터) → 로컬 적용(DDL→SCMD_APP GRANT/SYNONYM→메타→VERIFY) → **DISCOVER↔VERIFY 카운트 1:1 대조 의무**. ❌명칭 1패턴 추출·DDL 수기수정·메타 수기작성·UPDATE 동봉. 템플릿 정본 SYS0016_CLOUD_FETCH_20260804_1310 (DEFINE UI_ID 교체 재사용) |
+| 121 | form-common-styles-mandatory | 🆄 | T01/T01M/T05 | ⭐⭐ **폼 공용 스타일 의무 (사용자 지정 2026-08-04)** — SearchArea 조회조건·입력 폼(FormItem/InputField/Checkbox) = `@foundation/styles/common-styles.module.scss` 공용 클래스만: `formItem`(전 FormItem 필수 — HD 50px/FHD 140px 라벨 칼럼+`min-width:0` 칩 오버플로 방지)/`customGrid`(라벨 없는 Grid 셀 세로정렬)/`customCheckbox`(가로 배치)/`popupSearchField`(팝업 검색 InputField). **페이지 로컬 `*.module.scss` 폼 레이아웃 신설 금지**(공용으로 대체 후 dead 파일 삭제 — 화면 고유=그리드/모달/셀 컬러링만 로컬). 정본 `sales-site/components/SalesSiteForm.tsx`. ⚠️ SearchFields 카탈로그 필드(DivisionField 등)는 내부 미부착 — 인라인 FormItem 과 한 행 혼용 시 라벨 폭 어긋남 확인 |
+| 119 | oracle-null-sentinel-and-notnull-default | 🅕 | T08/T10/T18/T19 (MSSQL→Oracle 변환·변환본 결함 정정·NOT NULL INSERT) | ⭐⭐ **널 센티널 `'-'` 과 NOT NULL 초기값 (2026-07-30 사용자 확정)** — MSSQL `ISNULL(x,'')` 은 ①JOIN·비교 정규화 ②NOT NULL 컬럼 채우기 두 의도인데 Oracle 빈문자=NULL 이라 **둘 다 깨진다**(오류 없이 조용히 틀림). 센티널 **`'-'` 통일**(NULL≡`'-'`). **비교·JOIN**: `NVL(x,'')<>''`→`IS NOT NULL` / `=''`→`IS NULL` / `<>'LIT'`→`(x IS NULL OR x<>'LIT')` / JOIN 키→**양변** `NVL(a,'-')=NVL(b,'-')` (⛔한쪽만 보정 금지) / 센티널 리터럴 비교→`NVL(x,'-')='-'`. **NOT NULL INSERT**: 문자 `NVL(x,'-')`·숫자 `NVL(x,0)`·DATE 는 `SYSDATE`(⛔`TO_CHAR(SYSDATE,..)`=ORA-01861). **표시(SELECT 출력)·대입(`V_X:=''`)은 유지**. 절차=`ALL_TAB_COLUMNS NULLABLE='N'` 인벤토리 선행(추측 금지) + INPUT 컬럼목록↔SELECT 식 **위치 1:1** 대조(개수 불일치는 skip 말고 오류로 노출). 정정 파서 **주석 인식 의무** — 컬럼목록 뒤 주석(28중 **23 누락** 실측)/식 말줄 주석 시 닫는 괄호 **다음 줄**/후행 개행 보존(주석이 다음 항목 삼킴) → **정정 전후 라인수 대조**. 오탐=`NVL(x,NULL)` no-op·`'%'\|\|p\|\|'%'`(Oracle `\|\|` 는 NULL=빈문자, `'%%'` 매치). 판정 근거=AS-IS 원문(`Doc/_legacy_source/DB_DDL/AsIs_LGCE_SCMDEV_SP*_DDL.sql`), 불명확=보류 보고. DMF0044 **477건** 정정(회귀 0). 부록 **C-7/C-12** |
 | 29 | oracle-cmbo-varname-quote | 🅑 | T08/T10 | CMBO_SQL_M `@varName` → `TO_CHAR()` wrap (ORA-01722 방지) |
 | 30 | oracle-db-workflow | 🅑 | T08/T10/T18/T19 | ⭐⭐ Oracle SP/DB 단일 진입점 (8 타입 + 증상→원인) |
 | 31 | oracle-sp-perf-anti-patterns | 🅑 | T08/T10/T19 | ⭐⭐ MSSQL→Oracle 6 성능 룰 (REGEXP/split/lookup/index/SARGable) |
@@ -391,5 +421,6 @@ UI mandatory 의 POST-WRITE grep 중 기계 검증 가능한 패턴을 `check-fe
 
 > 단일 진실 소스 / Single Source of Truth:
 > - 진입 / Entry: 루트 `CLAUDE.md` → 본 파일 → `00_INDEX.md`
-> - 카운트 / Count: 본 §4 (= 118) + `00_INDEX.md` (동기화 의무)
+> - 카운트 / Count: 본 §4 (= 120) + `00_INDEX.md` (동기화 의무)
+> - 주제 축 / Thematic axis: §2.5 → `_rules_v2/_categories/00_CATEGORY_MAP.md` (hook 전수 분류 — 신규 hook 등재 시 동시 갱신)
 > - UI 누락 방지 / UI no-omission: 본 §3 체크리스트 (PR 게이트 §7 통합)

@@ -266,7 +266,11 @@ export const useSalesMonitoringStore = createPersistedStoreWithTab<State & Actio
       if (get().dayRangeApplied) return;
       const [start, end] = range.split(':');
       set(state => {
-        state.searchCondition = { ...state.searchCondition, startYyyymmdd: start, endYyyymmdd: end };
+        state.searchCondition = {
+          ...state.searchCondition,
+          startYyyymmdd: start,
+          endYyyymmdd: end,
+        };
         state.dayRangeApplied = true;
       });
     },

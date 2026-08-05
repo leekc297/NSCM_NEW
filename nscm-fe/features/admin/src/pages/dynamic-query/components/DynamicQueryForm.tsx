@@ -1,7 +1,3 @@
-// SYS0013 Register 탭 검색 Form — 라벨 = AS-IS 정본 (Report Name / Description / Role).
-// Role 콤보 = admin USER_GR (useTabComboQueries 'UserGroup') + 'ALL' 선두.
-import { useEffect } from 'react';
-
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { FormItem, InputField } from '@shared/lges';
@@ -15,24 +11,15 @@ interface Props {
 
 export const DynamicQueryForm = ({ onSearch }: Props) => {
   const { t } = useTranslation();
+  // 검색 조건
   const searchCondition = useDynamicQueryStore(s => s.searchCondition);
   const setSearchCondition = useDynamicQueryStore(s => s.setSearchCondition);
+
+  // 검색 폼 닫히고 열리는 구분 값
   const openSearchArea = useDynamicQueryStore(s => s.openSearchArea);
 
   const [group] = useTabComboQueries({ filters: ['UserGroup'] });
-  const roleOptions = [
-    { label: t('LBL00721', 'All'), value: 'ALL' },
-    ...(group?.map(item => ({ label: item.NAME, value: item.CODE })) ?? []),
-  ];
-
-  // 영속 store(tab) 에 남은 비유효 role 값을 콤보 로드 후 ALL 로 정규화 (stale persist 가드).
-  useEffect(() => {
-    if (!group) return;
-    const valid = new Set<string>(['ALL', ...group.map(g => String(g.CODE))]);
-    if (!valid.has(String(searchCondition.role))) {
-      setSearchCondition({ role: 'ALL' });
-    }
-  }, [group, searchCondition.role, setSearchCondition]);
+  const roleOptions = group?.map(item => ({ label: item.NAME, value: item.CODE })) ?? [];
 
   return (
     <SearchArea
@@ -75,12 +62,15 @@ export const DynamicQueryForm = ({ onSearch }: Props) => {
               labelAlign='right'
               render={() => (
                 <CustomDropdown
-                  isInput={false}
-                  value={searchCondition.role || 'ALL'}
+                  multiple
+                  allOption
+                  useClearIcon
+                  limitTags={1}
+                  value={searchCondition.role}
                   options={roleOptions}
-                  onChange={(_, value) =>
-                    setSearchCondition({ role: typeof value === 'string' ? value : 'ALL' })
-                  }
+                  onChange={(_, options) => {
+                    setSearchCondition({ role: options });
+                  }}
                 />
               )}
             />

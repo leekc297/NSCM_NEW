@@ -1,0 +1,46 @@
+FUNCTION SCM_ARR_SPL_CNT
+(
+    P_STRING     IN VARCHAR2   /* 분리할 문자열 */
+  , P_SPLITCHAR  IN VARCHAR2   /* 구분할 문자 */
+)
+RETURN VARCHAR2
+/*
+ * FUNCTION NAME : SCM_ARR_SPL_CNT
+ * DESCRIPTION   : 구분자로 분리되는 요소 개수 반환
+ * PROGRAM HISTORY
+ *--------------------------------------------------------------
+ * 2026-07-03   ZIONEX  [PJ202650304]  NextSCM Migration
+ */
+AS
+
+    V_TEMP           VARCHAR2(32767 CHAR);
+    V_LENGTH         PLS_INTEGER;
+    V_CURRENT_INDEX  PLS_INTEGER;
+    V_NEXT_INDEX     PLS_INTEGER;
+    V_MAXLOOP_CNT    PLS_INTEGER;
+
+BEGIN
+
+    V_LENGTH        := LENGTH(RTRIM(P_STRING));
+    V_CURRENT_INDEX := 1;
+    V_NEXT_INDEX    := 1;
+    V_MAXLOOP_CNT   := 0;
+
+    WHILE V_NEXT_INDEX > 0 LOOP
+
+        V_NEXT_INDEX := INSTR(P_STRING, P_SPLITCHAR, V_CURRENT_INDEX);
+
+        IF V_NEXT_INDEX = 0 THEN
+            V_TEMP := SUBSTR(P_STRING, V_CURRENT_INDEX, (V_LENGTH - V_CURRENT_INDEX + 1));
+        ELSE
+            V_TEMP := SUBSTR(P_STRING, V_CURRENT_INDEX, (V_NEXT_INDEX - V_CURRENT_INDEX));
+            V_CURRENT_INDEX := V_NEXT_INDEX + 1;
+        END IF;
+
+        V_MAXLOOP_CNT := V_MAXLOOP_CNT + 1;
+
+    END LOOP;
+
+    RETURN V_MAXLOOP_CNT;
+
+END;

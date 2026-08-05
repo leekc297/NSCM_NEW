@@ -1,11 +1,13 @@
 package com.lgcns.nscm.admin.menu;
 
 import java.util.List;
+import java.util.Map;
 
 import com.lgcns.nscm.admin.menu.dto.GridColumn;
 import com.lgcns.nscm.admin.menu.dto.GridMeasure;
 import com.lgcns.nscm.admin.menu.dto.MenuDto;
 import com.lgcns.nscm.admin.menu.dto.SearchCondition;
+import com.lgcns.nscm.admin.menu.dto.TitleSetSaveRequest;
 
 public interface MenuService {
 
@@ -17,5 +19,6 @@ public interface MenuService {
 	List<SearchCondition> retrieveSearchCondition(String userId, String mnuId) throws Exception;
 	void saveSearchCondition(String userId, String mnuId, List<SearchCondition> searchConditions) throws Exception;
 	void resetSearchCondition(String userId, String mnuId) throws Exception;
+	List<Map<String, Object>> saveTitleSet(String userId, String mnuId, TitleSetSaveRequest request) throws Exception;
 
 }

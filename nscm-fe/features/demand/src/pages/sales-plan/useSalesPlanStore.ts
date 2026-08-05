@@ -25,6 +25,7 @@ export interface MeasureMeta {
 }
 
 interface State {
+  initialized: boolean;
   filters: FiltersBySheet;
   searchCondition: SearchCondition;
   openSearchArea: boolean;
@@ -37,10 +38,11 @@ interface State {
   editAuth: EditAuthInfo | null;
   // PR_GET_DAY_RANGE 1회 적용 가드 (AS-IS drpPeriod.InitValue — DMF0014 dayRangeApplied 동일)
   dayRangeApplied: boolean;
-  // ⭐ P_USERINFO 용 권한 그룹 (AS-IS NowGroupID 등가). 세션에 그룹 정보 부재 실측(2026-07-15 —
-  //   /user/login·UserSession·PR_GET_NSCM_USER 전 계층 0건) → CMBO 'SalesPlanUserAuthGroup'
-  //   (USER_GR_MPG_M × GET_ADMIN_GROUP_MEASURE 교집합, ADMIN 우선) 1행을 SalesPlan.tsx 가 주입.
+  // P_USERINFO 용 권한 그룹 (AS-IS NowGroupID 등가). CMBO 'SalesPlanUserAuthGroup' 결과가 정본이며,
+  // session.groupId(유령 필드)는 참조하지 않는다 (UI분석서 v2.1 시트9 C29 — ghost field 사고 대응).
   authGroup: string;
+  // Current user department for P_USER_DEPT_ID (JV Planner authority).
+  userDeptId: string;
 }
 
 interface Action {
@@ -60,6 +62,7 @@ interface Action {
   // MeasureSelectModal onSave — 표시할 measure 코드 목록 적용 (null = 전체).
   applyVisibleMeasures: (measureCodes: string[] | null) => void;
   setAuthGroup: (group: string) => void;
+  setUserDeptId: (deptId: string) => void;
 }
 
 // 기본 Period — 당월 1일 ~ +6개월 말일 (AS-IS PR_GET_DAY_RANGE p_month=6 동등 dayjs 계산.
@@ -67,8 +70,36 @@ interface Action {
 const monthStart = dayjs().startOf('month').format('YYYYMMDD');
 const sixMonthsEnd = dayjs().add(6, 'month').endOf('month').format('YYYYMMDD');
 
+const yyyymmddOf = (date: Date): string =>
+  `${date.getFullYear()}${String(date.getMonth() + 1).padStart(2, '0')}${String(
+    date.getDate()
+  ).padStart(2, '0')}`;
+
+export const resolveNowYyyymmdd = (
+  startYyyymmdd: string,
+  endYyyymmdd: string,
+  today = new Date()
+): string => {
+  const day = today.getDay();
+  const monday = new Date(today);
+  monday.setDate(today.getDate() + (day === 0 ? -6 : -(day - 1)));
+
+  let nowYyyymmdd = yyyymmddOf(monday);
+  if (startYyyymmdd >= nowYyyymmdd) nowYyyymmdd = startYyyymmdd;
+  if (endYyyymmdd < nowYyyymmdd) {
+    const end = new Date(
+      Number(endYyyymmdd.slice(0, 4)),
+      Number(endYyyymmdd.slice(4, 6)) - 1,
+      Number(endYyyymmdd.slice(6, 8))
+    );
+    end.setDate(end.getDate() + 1);
+    nowYyyymmdd = yyyymmddOf(end);
+  }
+  return nowYyyymmdd;
+};
+
 const initSearch: SearchCondition = {
-  divisionId: DIVISION.MOBILITY,
+  divisionId: useSessionStore.getState().session.div || DIVISION.MOBILITY,
   deptIds: [],
   endCustomers: [],
   scmSiteIds: [],
@@ -81,10 +112,13 @@ const initSearch: SearchCondition = {
   startYyyymmdd: monthStart,
   endYyyymmdd: sixMonthsEnd,
   bucketType: BUCKET_TYPE.MONTHLY, // 기본 Monthly (AS-IS DefineProperty L543 — DMF0082 Weekly 와 상이)
+  colorYn: false,
   sumYn: false, // AS-IS InitControls L487 uncheck
+  internalYn: false,
 };
 
 const initState: State = {
+  initialized: false,
   filters: {},
   searchCondition: initSearch,
   openSearchArea: true,
@@ -95,15 +129,86 @@ const initState: State = {
   editAuth: null,
   dayRangeApplied: false,
   authGroup: '',
+  userDeptId: '',
+};
+
+type SavedSearchCondition = {
+  paramNm: keyof SearchCondition;
+  paramCtn: string;
+};
+
+const ARRAY_SEARCH_CONDITIONS: ReadonlySet<keyof SearchCondition> = new Set([
+  'deptIds',
+  'endCustomers',
+  'scmSiteIds',
+  'plantSiteIds',
+  'itemTypes',
+  'bizTypes',
+  'projectCodes',
+  'itemIds',
+  'owners',
+]);
+
+const BOOLEAN_SEARCH_CONDITIONS: ReadonlySet<keyof SearchCondition> = new Set([
+  'colorYn',
+  'sumYn',
+  'internalYn',
+]);
+
+const parseSavedSearchConditions = (params: SavedSearchCondition[]): Partial<SearchCondition> => {
+  const restored: Partial<SearchCondition> = {};
+
+  for (const { paramNm, paramCtn } of params) {
+    if (!(paramNm in initSearch)) continue;
+
+    if (ARRAY_SEARCH_CONDITIONS.has(paramNm)) {
+      const values = paramCtn
+        .split(',')
+        .map(value => value.trim())
+        .filter(Boolean);
+      (restored as Record<string, unknown>)[paramNm] = values;
+      continue;
+    }
+
+    if (BOOLEAN_SEARCH_CONDITIONS.has(paramNm)) {
+      (restored as Record<string, unknown>)[paramNm] =
+        paramCtn.toLowerCase() === 'true' || paramCtn === 'Y';
+      continue;
+    }
+
+    if (paramNm === 'bucketType') {
+      if (Object.values(BUCKET_TYPE).includes(paramCtn as BUCKET_TYPE)) {
+        restored.bucketType = paramCtn as BUCKET_TYPE;
+      }
+      continue;
+    }
+
+    (restored as Record<string, unknown>)[paramNm] = paramCtn;
+  }
+
+  return restored;
 };
 
 export const useSalesPlanStore = createPersistedStoreWithTab<State & Action>(
   (set, get) => ({
     ...initState,
-    reset: () => set(initState),
+    reset: () =>
+      set(state => {
+        const staticMeasures = state.staticMeasures;
+        const authGroup = state.authGroup;
+        const userDeptId = state.userDeptId;
+        Object.assign(state, initState);
+        state.staticMeasures = staticMeasures;
+        state.authGroup = authGroup;
+        state.userDeptId = userDeptId;
+      }),
     setAuthGroup: group =>
       set(state => {
         state.authGroup = group;
+      }),
+    setUserDeptId: deptId =>
+      set(state => {
+        state.userDeptId = deptId;
       }),
     setSearchCondition: p =>
       set(state => {
@@ -115,10 +220,12 @@ export const useSalesPlanStore = createPersistedStoreWithTab<State & Action>(
       //   sesUserId(P_CREATED_BY) 는 BE 세션 자동주입 — request 미포함.
       //   ⚠ userGroup(P_USERINFO=NowGroupID)·userDeptId(P_USER_DEPT_ID) 는 BE 자동주입 대상이 아님 —
       //   FE payload 필수 (누락 시 SP 권한 필터 오동작. DMF0003 2026-07-02 사고 계보).
-      //   2026-07-15 실측: session.groupId 는 전 계층 부재(유령 필드) → authGroup(CMBO 조회 그룹) 사용.
-      //   fallback = USER_ID (그룹 미보유 사용자 = lookup 미매칭 = 편집권한 없음, 정상 동작).
-      const sesUserId = useSessionStore.getState().session.userId ?? '';
+      //   authGroup(CMBO 'SalesPlanUserAuthGroup' 정본)이 원천. session.groupId 는 유령 필드라 참조 금지
+      //   (UI분석서 v2.1 시트9 C29 — 2026-07-15 ghost field 사고 대응). CMBO 0행일 때만 본인 USER_ID로 최종 fallback.
+      const session = useSessionStore.getState().session;
+      const sesUserId = session.userId ?? '';
       const userGroup = get().authGroup || sesUserId;
+      const userDeptId = get().userDeptId;
       set(state => {
         // persist(sessionStorage) rehydrate 가 구버전 shape 일 수 있어 기본값 머지로 완전한 조회조건 보장
         //   (누락 필드 → SP NULL payload → ORA 사고 차단. DMF0003 2026-06-29 계보).
@@ -138,15 +245,15 @@ export const useSalesPlanStore = createPersistedStoreWithTab<State & Action>(
             itemId: raw(c.itemIds), // 6
             itemType: j(c.itemTypes), // 7
             fromYyyymmdd: c.startYyyymmdd, // 8
-            nowYyyymmdd: dayjs().format('YYYYMMDD'), // 9
+            nowYyyymmdd: resolveNowYyyymmdd(c.startYyyymmdd, c.endYyyymmdd), // 9
             toYyyymmdd: c.endYyyymmdd, // 10
             plantSiteId: j(c.plantSiteIds), // 11 (40 비활성 'ALL')
             bizType: j(c.bizTypes), // 12
             owner: raw(c.owners), // 13
-            internalYn: 'N', // 14 Include Internal Txn 숨김 — 항상 'N' (AS-IS Visible=false)
+            internalYn: c.internalYn ? 'Y' : 'N', // 14 Include Internal Txn
             userGroup, // 15 세션 NowGroupID (FE 필수 전달)
             bucket: BUCKET_WORD[c.bucketType], // 16 full-word
-            userDeptId: '', // 17 JV Planner 부서 — TO-BE 세션 deptId 부재 → '' (SP 내 무해 분기)
+            userDeptId, // 17 JV Planner 부서 — SalesPlanUserDept 전용 콤보에서 현재 사용자 부서 주입
           },
           // ── P_DMF0021_GET_SPREAD_TITLE (4 IN — sesUserId BE주입) ──
           [SHEETS.SPREAD_TITLE]: {
@@ -181,6 +288,25 @@ export const useSalesPlanStore = createPersistedStoreWithTab<State & Action>(
         );
         set(state => {
           state.staticColumns = result.data.result ?? [];
+        });
+
+        if (get().initialized) return;
+
+        const savedConditions = await apiClient.get<SavedSearchCondition[]>(
+          `/admin/menu/${MENU_ID}/search-conditions`
+        );
+        const savedParams = savedConditions.data.result ?? [];
+        const restored = parseSavedSearchConditions(savedParams);
+
+        set(state => {
+          if (savedParams.length > 0) {
+            state.searchCondition = { ...initSearch, ...restored };
+          }
+          state.filters = {};
+          if (restored.startYyyymmdd || restored.endYyyymmdd) {
+            state.dayRangeApplied = true;
+          }
+          state.initialized = true;
         });
       } catch {
         // BE 메타 미응답 시 silent — 빈 배열 유지 (console 금지 룰)

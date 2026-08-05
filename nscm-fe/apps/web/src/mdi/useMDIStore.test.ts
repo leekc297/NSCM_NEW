@@ -19,22 +19,6 @@ const testTab: Omit<Menu, 'children'> = {
   mnuDesc: 'test',
 };
 
-// DMF0082 sheet 개명(fcstNPrice_40 → FcstNPrice, AS-IS 정본 sheet_name) 정합 — 2026-07-13.
-const testFilter: ProcRequest<PROC_NAME, 'FcstNPrice'> = {
-  divisionId: '40',
-  deptId: 'ALL',
-  endCustomer: 'ALL',
-  salesSite: 'ALL',
-  bizType: 'ALL',
-  fromYyyymmdd: '20260101',
-  toYyyymmdd: '20260630',
-  itemId: '',
-  versionType: 'Current',
-  qtyYn: 'N',
-  sesUserId: 'TEST_USER',
-  userGroup: '',
-};
-
 describe('mdiStore', () => {
   beforeEach(() => {
     const { result } = renderHook(() => useMDIStore());

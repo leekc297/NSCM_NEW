@@ -25,9 +25,7 @@ export const buildCatchUpFcstTypeMap = (
 
 // Insert 행 MEASURE 편집 콤보 — GET_SALES_PLAN_MEASUREINFO (CODE/NAME/DISPLAY_SEQ) → DataMap.
 export const buildMeasureInfoMap = (rows: MeasureInfoRow[]): DataMap | null => {
-  const sorted = [...rows].sort(
-    (a, b) => Number(a.DISPLAY_SEQ ?? 0) - Number(b.DISPLAY_SEQ ?? 0)
-  );
+  const sorted = [...rows].sort((a, b) => Number(a.DISPLAY_SEQ ?? 0) - Number(b.DISPLAY_SEQ ?? 0));
   return sorted.length > 0
     ? new DataMap(sorted as unknown as Record<string, unknown>[], 'CODE', 'NAME')
     : null;

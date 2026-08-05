@@ -43,12 +43,33 @@ interface ForecastPriceState {
   // ⭐ SavePricePeriodModal 고정 컬럼 메타 (SHEET_NAME='Sales Price Save All' 25 컬럼 —
   //   admin UI Category Setup 동적 fetch, hook ui-category-setup-column-meta).
   savePriceColumns: RawFlexGridColumnConfig[];
+  // ⭐ P_USERINFO 권한 그룹 (CMBO 'FcstPriceUserAuthGroup' 1행) — 세션 groupId 유령 필드 대체.
+  //   2026-07-15 sales-plan(DMF0021) 선례. 미매칭 시 '' → setFilters 가 userId fallback.
+  authGroup: string;
+  // ⭐ 저장된 컬럼 개인화 (titleSet 'C') — 표시/순서 + width/색상.
+  //   저장 이력이 없으면 null → 서버 메타 기본값 그대로 사용.
+  userColumnLayout: ColumnLayoutSetting[] | null;
+  // ⭐ 개인화 적용 전 admin 메타 원본 — 팝업 Default 버튼의 원복 기준.
+  //   staticColumns 는 개인화로 mutate 되므로 별도 스냅샷이 필요하다.
+  originalStaticColumns: RawFlexGridColumnConfig[];
+}
+
+/** ColumnLayoutModal 개인화 1행 — 표시/순서/폭/색. */
+export interface ColumnLayoutSetting {
+  colNm: string;
+  visible: boolean;
+  width: number;
+  cellColor: string;
+  textColor: string;
+  order: number;
 }
 
 interface ForecastPriceAction {
   reset: () => void;
   setSearchParams: (searchParams: Partial<SearchParamProps>) => void;
   setFilters: () => boolean;
+  /** 조회조건 무효화 — division 전환 시 이전 division 조회결과가 그리드에 잔존하는 것을 막는다. */
+  clearFilters: () => void;
   setOpenSearchArea: (open?: boolean) => void;
   fetchStaticColumns: () => void;
   fetchStaticMeasures: () => void;
@@ -59,6 +80,11 @@ interface ForecastPriceAction {
   setThisYyyymmww: (v: string) => void;
   setCalendar: (rows: CalendarRow[]) => void;
   setM3Cutoff: (rows: MonthInfoRow[]) => void;
+  setAuthGroup: (group: string) => void;
+  /** 저장된 컬럼 개인화 복원 (진입 시 1회) — staticColumns 에 소급 적용. */
+  fetchUserColumnLayout: () => Promise<ColumnLayoutSetting[] | null>;
+  /** ColumnLayoutModal onSave — 표시/순서/width/색상을 staticColumns 에 즉시 반영. */
+  applyColumnLayout: (settings: ColumnLayoutSetting[]) => void;
 }
 
 const initSearchParams: SearchParamProps = {
@@ -66,12 +92,11 @@ const initSearchParams: SearchParamProps = {
   deptIds: [],
   endCustomers: [],
   salesSites: [],
+  plantSiteIds: [],
   bizTypes: [],
   itemIds: [],
-  // ⭐ 2026-07-23 조회조건 AS-IS 정합 — AS-IS PR_GET_DAY_RANGE(p_month=6) 1:1:
-  //   해당 월 1일 ~ (+6개월 시점 월의 1일 - 1일). (구: 당일~+6개월 당일 — DMF0003 P6 동형 차이)
   startYyyymmdd: dayjs().startOf('month').format('YYYYMMDD'),
-  endYyyymmdd: dayjs().add(6, 'month').startOf('month').subtract(1, 'day').format('YYYYMMDD'),
+  endYyyymmdd: dayjs().startOf('month').add(6, 'month').format('YYYYMMDD'),
   bucketType: 'W',
   versionType: 'Current',
   qtyYn: false,
@@ -89,6 +114,41 @@ const initState: ForecastPriceState = {
   calendar: {},
   m3CutoffYyyymm: '',
   savePriceColumns: [],
+  authGroup: '',
+  userColumnLayout: null,
+  originalStaticColumns: [],
+};
+
+// BE 가 폭을 안 내려줄 때의 기본 폭 (ColumnLayoutModal DEFAULT_COL_WIDTH 와 동일 계약).
+const DEFAULT_COL_WIDTH = 100;
+
+// ⚠️ BE PR_GET_SHEET_COLUMN_LIST 는 SHEET_PRSL_YN 미등록 화면에 개인화를 반영하지 않는다
+//   (DMF0003/DMF0043 실측 — mkt-fcst·sales-monitoring 선례 주석 동일). 따라서 titleSet 'C' 로
+//   저장한 개인화를 FE 가 직접 admin 메타에 덧씌운다. settings 순서 = 화면 컬럼 순서.
+const applyLayoutToColumns = (
+  cols: RawFlexGridColumnConfig[],
+  settings: ColumnLayoutSetting[]
+): RawFlexGridColumnConfig[] => {
+  const byCol = new Map(settings.map(s => [s.colNm, s]));
+  return cols
+    .map(c => {
+      const s = byCol.get(c.colNm);
+      // 개인화 목록에 없는 컬럼 = 사용자가 비표시로 저장한 것.
+      if (!s) return { ...c, visible: false, display: false };
+      return {
+        ...c,
+        visible: s.visible,
+        display: s.visible,
+        colWth: s.width,
+        cellColor: s.cellColor,
+        textColor: s.textColor,
+      };
+    })
+    .sort(
+      (a, b) =>
+        (byCol.get(a.colNm)?.order ?? Number.MAX_SAFE_INTEGER) -
+        (byCol.get(b.colNm)?.order ?? Number.MAX_SAFE_INTEGER)
+    );
 };
 
 // 멀티선택 → SP 파라미터: ⚠️ DMF0082 는 콤마 구분 (PKG_DMF0082 REGEXP_SUBSTR '[^,]+' 실측).
@@ -101,6 +161,10 @@ export const useForecastPriceStore = createPersistedStoreWithTab<
   (set, get) => ({
     ...initState,
     reset: () => set(initState),
+    setAuthGroup: (group: string) =>
+      set(state => {
+        state.authGroup = group;
+      }),
     setSearchParams: searchParams => {
       set(state => {
         state.searchParams = { ...get().searchParams, ...searchParams };
@@ -108,9 +172,12 @@ export const useForecastPriceStore = createPersistedStoreWithTab<
     },
     setFilters: () => {
       // AS-IS L1727~1738 1:1 — p_created_by=UserId / p_user_group=NowGroupID.
-      //   To-Be 세션 groupId 부재 시 USER_ID fallback (GET_ADMIN_GROUP lookup 이 USER_ID row 보유).
+      //   ⚠️ session.groupId 는 유령 필드(전 계층 부재, 2026-07-15 실측)라 항상 userId 가 전송돼
+      //   GET_ADMIN_GROUP_MEASURE(SEGMENT1=그룹명) 미매칭 → 편집권한 전무 사고(40 편집불가).
+      //   해법(sales-plan/DMF0021 선례): CMBO 'FcstPriceUserAuthGroup' 로 해석한 authGroup 사용.
+      //   미보유(0행) 시 userId fallback (= lookup 미매칭 = 편집권한 없음, 정상 동작).
       const sesUserId = useSessionStore.getState().session.userId ?? '';
-      const userGroup = useSessionStore.getState().session.groupId || sesUserId;
+      const userGroup = get().authGroup || sesUserId;
       // persist rehydrate 가 구버전 shape 일 수 있어 기본값 머지로 완전한 조회조건 보장.
       const sp: SearchParamProps = { ...initSearchParams, ...get().searchParams };
 
@@ -122,6 +189,8 @@ export const useForecastPriceStore = createPersistedStoreWithTab<
         fromYyyymmdd: sp.startYyyymmdd,
         toYyyymmdd: sp.endYyyymmdd,
         salesSite: joinComma(sp.salesSites),
+        // Plant Site (81 전용) — PROC_M 키 plantSiteId (DMF0003 동일 명칭). 40/82 = 'ALL'.
+        plantSiteId: joinComma(sp.plantSiteIds),
         itemId: sp.itemIds.length === 0 ? '' : sp.itemIds.join(','),
         versionType: sp.versionType,
         qtyYn: sp.qtyYn ? 'Y' : 'N',
@@ -145,6 +214,15 @@ export const useForecastPriceStore = createPersistedStoreWithTab<
       });
       return isSame;
     },
+    // ⭐ Division 전환 시 그리드 초기화 — filters/titleFilters 를 비우면 useTabProcQuery 의 queryKey 가
+    //   바뀌고 enabled=false 가 되어 이전 division 의 응답이 그리드에서 즉시 사라진다.
+    //   (mkt-fcst/metal-link-price/sales-future-price clearFilters 선례 1:1. 재조회는 Search 로만.)
+    clearFilters: () => {
+      set(state => {
+        state.filters = undefined;
+        state.titleFilters = undefined;
+      });
+    },
     setOpenSearchArea: open => {
       set(state => {
         state.isOpenSearchArea = open ?? !state.isOpenSearchArea;
@@ -161,12 +239,83 @@ export const useForecastPriceStore = createPersistedStoreWithTab<
             }
           );
           set(state => {
-            state.staticColumns = result.data.result;
+            // ⭐ 저장된 개인화가 있으면 admin 메타 위에 덧씌운다 — 안 하면 매 재조회마다
+            //   사용자가 저장한 표시/순서/폭/색이 관리자 기본값으로 되돌아간다.
+            const layout = get().userColumnLayout;
+            const fetched = result.data.result;
+            // 개인화 적용 전 원본 보관 — 팝업 Default 원복 기준 (개인화로 덮이지 않는다).
+            state.originalStaticColumns = fetched;
+            state.staticColumns =
+              layout && layout.length > 0 ? applyLayoutToColumns(fetched, layout) : fetched;
           });
         } catch {
           /* 메타 미적재 시 빈 배열 유지 — 화면은 fallback 없이 메타 주도 */
         }
       })();
+    },
+
+    // ⭐ 저장된 개인화 복원 — ColumnLayoutModal 이 쓰는 SP 와 동일 계약
+    //   (DMF0002_GET_TITLESET_POPUP / columnType='C'). USER_FLAG='Y' 행 = 사용자가 표시로 저장한 컬럼.
+    //   ⚠️ COLUMN_WIDTH/CELL_COLOR/TEXT_COLOR 는 BE 확장(SCM_MST_TITLESET_USER 3컬럼)으로 내려오는
+    //     사용자 값. 미지원/미저장이면 각각 관리자 폭·빈 문자열로 떨어져 기존 동작과 동일하다.
+    fetchUserColumnLayout: async () => {
+      try {
+        const res = await apiClient.post<{ o_rc1?: Record<string, string>[] }>(
+          `${MENU_ID}/titleSet/SEARCH/call-proc`,
+          {
+            programId: MENU_ID,
+            sheetName: SHEETS.FCST_N_PRICE_40,
+            columnType: 'C',
+            divisionId: get().searchParams.divisionId,
+          }
+        );
+        const rows = res.data.result?.o_rc1 ?? [];
+        // ⭐ 사용자 저장값 별칭 우선 — SP 는 관리자 기본값(COLUMN_WIDTH/SORT_ORDER_NO)과
+        //   사용자값(USER_COLUMN_WIDTH/USER_SORT_ORDER_NO)을 따로 내려준다(2026-07-27 실측).
+        const orderOf = (r: Record<string, string>): number =>
+          Number(r.USER_SORT_ORDER_NO ?? r.SORT_ORDER_NO ?? 0);
+        const layout = rows
+          .filter(r => String(r.USER_FLAG ?? '') === 'Y')
+          .sort((a, b) => orderOf(a) - orderOf(b))
+          .map((r, i) => {
+            const width = Number(r.USER_COLUMN_WIDTH ?? r.COLUMN_WIDTH ?? 0);
+            return {
+              colNm: String(r.COLUMN_NAME ?? ''),
+              visible: true,
+              width: Number.isFinite(width) && width > 0 ? width : DEFAULT_COL_WIDTH,
+              cellColor: String(r.CELL_COLOR ?? ''),
+              textColor: String(r.TEXT_COLOR ?? ''),
+              order: i + 1,
+            };
+          })
+          .filter(s => s.colNm);
+        if (layout.length === 0) return null;
+        set(state => {
+          state.userColumnLayout = layout;
+          // ⚠️ 이 조회는 fetchStaticColumns 와 독립 발사라 응답 순서가 보장되지 않는다.
+          //   /column 이 먼저 도착했으면 override 가 생략됐으므로 여기서 소급 적용한다.
+          if (state.staticColumns.length > 0) {
+            state.staticColumns = applyLayoutToColumns(state.staticColumns, layout);
+          }
+        });
+        return layout;
+      } catch {
+        // 개인화 조회 실패 = 기본 컬럼 세트로 동작 (화면 차단 금지, console 금지 룰)
+        return null;
+      }
+    },
+
+    // ColumnLayoutModal onSave — 서버 저장과 별개로 grid 에 즉시 반영 (표시/순서/width/색상).
+    applyColumnLayout: settings => {
+      set(state => {
+        // 표시 컬럼만 보관 — fetchStaticColumns 재조회 후 재적용 기준이자 팝업 재진입 복원값.
+        state.userColumnLayout = settings
+          .filter(s => s.visible)
+          .sort((a, b) => a.order - b.order)
+          .map((s, i) => ({ ...s, order: i + 1 }));
+        if (state.staticColumns.length === 0) return;
+        state.staticColumns = applyLayoutToColumns(state.staticColumns, state.userColumnLayout);
+      });
     },
     fetchStaticMeasures: () => {
       void (async () => {
@@ -244,7 +393,8 @@ export const useForecastPriceStore = createPersistedStoreWithTab<
     // drop1 (O_RC2) 첫 행 M3_CUTOFF_DATE 앞 6자리 = M+4 잠금 경계월.
     setM3Cutoff: rows => {
       const first = rows[0];
-      const cutoff = typeof first?.M3_CUTOFF_DATE === 'string' ? first.M3_CUTOFF_DATE.slice(0, 6) : '';
+      const cutoff =
+        typeof first?.M3_CUTOFF_DATE === 'string' ? first.M3_CUTOFF_DATE.slice(0, 6) : '';
       set(state => {
         state.m3CutoffYyyymm = cutoff;
       });
