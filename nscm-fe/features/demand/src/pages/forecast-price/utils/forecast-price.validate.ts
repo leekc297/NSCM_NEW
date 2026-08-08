@@ -1,4 +1,5 @@
 import { toNumber } from '../components/ForecastPriceGridUtils';
+import { PRICE_MEASURES as PRICE_MEASURE_LIST } from '../forecast-price.constants';
 
 /**
  * 저장 전 검증 — AS-IS fnValidation + SaveData 검증(.cs L2052~2075) 1:1.
@@ -9,7 +10,7 @@ export type SaveValidationError =
   | 'QTY_PRICE_REQUIRED' // 추가 행에 수량/가격 미입력 (MSG00670)
   | 'DUP_NEW_ROW'; // 신규 행 중복 조합 (MSG00260)
 
-const PRICE_MEASURES = new Set(['LOC', 'KRW', 'USD']);
+const PRICE_MEASURES = new Set<string>(PRICE_MEASURE_LIST);
 
 export const validateSaveRows = (
   gridRows: WijmoRowItem[],
@@ -22,6 +23,16 @@ export const validateSaveRows = (
     const measure = String(row['MEASURE'] ?? '');
     if (PRICE_MEASURES.has(measure) && !String(row['CURRENCY'] ?? '').trim()) {
       return 'CURRENCY_REQUIRED';
+    }
+  }
+
+  // V1-R — 역방향 (AS-IS `NO_DATA` 분기 이식, .cs L5639): PRICE 계열이 아닌데 CURRENCY 가 남아 있으면
+  //   저장 전에 비운다. AS-IS 는 콤보를 빈 목록으로 교체해 입력 자체를 막으므로 이 상태가 생기지 않는다
+  //   (측정 후 measure 를 바꾼 행에서 잔존 가능 — 원장 오염 방지용 정리).
+  for (const row of insertRows) {
+    const measure = String(row['MEASURE'] ?? '');
+    if (!PRICE_MEASURES.has(measure) && String(row['CURRENCY'] ?? '').trim()) {
+      row['CURRENCY'] = '';
     }
   }
 

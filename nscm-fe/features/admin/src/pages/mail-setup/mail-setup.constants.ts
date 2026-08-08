@@ -23,13 +23,6 @@ export enum SHEET_INDEX {
   SEL_RECEIVER = 3,
 }
 
-/** 저장 payload 행 상태 (AS-IS action 컬럼 I/M/D 와 동일) */
-export const ROW_STATUS = {
-  INSERT: 'I',
-  MODIFY: 'M',
-  DELETE: 'D',
-} as const;
-
 /** Mail Content 최대 바이트 — TO-BE 단일 기준(설계서 v1.0 격차 G1 확정: DB 컬럼 한계 4,000) */
 export const MAIL_CONTENT_MAX_BYTES = 4000;
 

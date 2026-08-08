@@ -16,21 +16,6 @@ export interface ReceiverSearchParams {
   dept: string;
 }
 
-/** 그리드 편집 상태 — AS-IS action 컬럼(I/M/D) 대체 (TO-BE 상시 편집 표준, 설계서 격차 G2) */
-export type RowStatus = 'I' | 'M' | 'D';
-
-export interface CategoryEditRow extends CategoryRow {
-  rowStatus?: RowStatus;
-}
-
-export interface MessageEditRow extends MessageRow {
-  rowStatus?: RowStatus;
-}
-
-export interface SelReceiverEditRow extends SelReceiverRow {
-  rowStatus?: RowStatus;
-}
-
 export interface ComboOption {
   CODE: string;
   NAME: string;

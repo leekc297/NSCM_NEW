@@ -25,6 +25,13 @@
 > `P_DMF0044_SAVE_SALES_PLAN_VERSION_COPY` 초입 버전유형 조회 2건 `SELECT VERSION_TYPE` → `SELECT MAX(VERSION_TYPE)`
 > (0행 NO_DATA_FOUND 방어). live 전문 diff 로 확인 후 `10_PKG_DMF0044_BODY.sql` 에 반영 완료 — 그 외 차이 0.
 > §3-A Step 0 게이트의 사내 기준 시각도 PKG_DMF0044 BODY 는 **07-31 10:39** 로 갱신해 판정할 것.
+> ⭐ **2026-08-05 15:49 PKG_DMF0042 BODY 재배포 반영**: `P_DMF0042_SAVE_DM_BP_EXCHANGE_RATE` '^' split 변환 파손
+> (1변수 통합 → 전 필드 NULL 적재·INVALID) 을 AS-IS 2변수(v_recv=나머지/v_=토큰) 패턴으로 복원 — `08_PKG_DMF0042_BODY.sql`
+> 동기화 완료(사내 기준시각 08-05 15:49). **동반 데이터**: `_apply_corporate/DMF0042_DM_BP_EXCHANGE_RATE_LOAD_20260805.sql`
+> (환율 원장 727행 — 클라우드도 0행이면 함께 적재. 멱등 NOT EXISTS).
+> ⭐ **2026-08-05 16:15 PKG_DMF0042 BODY 재배포(2차)**: `P_DMF0042_GET_DM_MDF_VERSION` 의
+> `NVL(ATTRIBUTE1,NULL)<>'MOVE'`(hook #119 — NULL 버전 전멸) → `CHR(0)` 센티널 정정. `08_` 재동기화(기준시각 08-05 16:15).
+> **동반 메타**: `_apply_corporate/MSG00400_401_REPLACE_CUTOFF_20260805.sql` (Replace 확인/완료 MSG 6행 — 문구 신설·AS-IS 원문 미확보 한계 명시).
 
 ---
 

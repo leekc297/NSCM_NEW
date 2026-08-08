@@ -31,3 +31,13 @@
 - ❌ "더 짧으니까/관례상" 임의 소문자·축약.
 
 > 짝: `sheet-columns-binding-match`(#54, SHEET_COLUMNS↔SP alias) / `screen-meta-and-permissions-mandatory`(#68) / `menu-not-displayed-debug`(SHT_NM mismatch 디버깅).
+
+---
+
+## [2026-08-07 사용자 재확정] 신규 생성(T01)에도 동일 적용 — 반드시 준수
+
+> 사용자 지시 원문: "UI 신규생성 시 기존의 sheet name 을 변경하지 않고 동일 명칭으로 사용하는 것도 Rule 로 반드시 지켜지도록 해주세요."
+
+- 신규 화면 작성 시 SHEET_NAME 은 **AS-IS 원본 명칭 그대로**(DB `SCM_MST_SHEET_COLUMNS.SHEET_NAME` 또는 `.cs` SpdSheet 명) — camelCase 화·번역·축약 등 어떤 개명도 금지.
+- 적용 5구간 동시 일치: FE `SHEETS` enum value · SP(V_SHEET_NAME/PROC 배선) · `SCM_MST_SHEET_COLUMNS` · `SCM_MST_SHEET_MEASURE` · `SCM_ADM_MNU_BTN_MPG_M.SHT_NM`.
+- PRE-WRITE 시 AS-IS sheet name 실측(메타 SELECT 또는 .cs) 후 시작 — 추측 명명 금지.

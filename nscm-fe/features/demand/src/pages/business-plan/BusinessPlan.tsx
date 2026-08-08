@@ -8,7 +8,7 @@ import { useQueryClient } from '@foundation/query-client';
 import type { EditTracker } from '@foundation/utils';
 import { MainTitle, SubTitle } from '@shared/components';
 import { useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
-import { useMessageStore } from '@shared/stores';
+import { useMessageStore, useSessionStore } from '@shared/stores';
 
 import {
   INSERT_MEASURE_COMBO_ID,
@@ -268,7 +268,10 @@ export const BusinessPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
       });
       return;
     }
-    const payload = buildSavePayload(build.rows);
+    const payload = buildSavePayload(
+      build.rows,
+      useSessionStore.getState().session.userId ?? ''
+    );
     if (!payload) {
       // 저장 대상 0건 (AS-IS L1087 MSG00275 → MSG00676)
       void setAlert({

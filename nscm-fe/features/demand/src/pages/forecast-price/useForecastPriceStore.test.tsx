@@ -161,5 +161,10 @@ describe('useForecastPriceStore', () => {
     expect(result.current.filters?.qtyYn).toBe('N');
     expect(result.current.filters?.sesUserId).toBe('TEST_USER');
     expect(result.current.titleFilters?.divisionId).toBe('40');
+    // [UICATEGORY 2026-08-07] Plant Site 배선 + Project/Owner/SenderCode (SP IN 13~16, 빈 배열 = 'ALL')
+    expect(result.current.filters?.plantSiteId).toBe('ALL');
+    expect(result.current.filters?.projectCode).toBe('ALL');
+    expect(result.current.filters?.owner).toBe('ALL');
+    expect(result.current.filters?.senderCode).toBe('ALL');
   });
 });

@@ -55,12 +55,13 @@
 </head>
 <body>
 <header>
-  <h1>DM 4UI (DMF0003·0020·0021·0082) — Cascade/Filter Flow : 상단 AS-IS(ARG 명기) / 하단 TO-BE 실구현(미구현 명시)</h1>
-  <div class="meta">2026-08-05 v2 · AS-IS .cs 4본 전수(7,144/3,969/5,644/9,419줄)+BigFilter.xml+UP_FX 원문+lookup 실값 · 정본 MD 4본: Doc/화면분석서/DMF00{03,20,21,82}_조회조건_GRID_Cascade_Flow_ASIS_v1.0.md · 전 항목 표시 + <b>Δ 배지 = 4UI 간 상이 지점만 강조</b> · ❌ = TO-BE 미구현/부족</div>
+  <h1>DM 5UI (DMF0003·0020·0021·0042·0082) — Cascade/Filter Flow : 상단 AS-IS(ARG 명기) / 하단 TO-BE 실구현(미구현 명시)</h1>
+  <div class="meta">2026-08-05 v2 · AS-IS .cs 4본 전수(7,144/3,969/5,644/9,419줄)+BigFilter.xml+UP_FX 원문+lookup 실값 · 정본 MD: Doc/화면분석서/DMF00{03,20,21,82}_조회조건_GRID_Cascade_Flow_ASIS_v1.0.md + <b>DMF0042_BizPlan_Cascade_Filter_전수.md</b> (+0042 탭 2026-08-05) · 전 항목 표시 + <b>Δ 배지 = 4UI 간 상이 지점만 강조</b> · ❌ = TO-BE 미구현/부족</div>
   <div class="toolbar">
     <button class="tab active" id="tab03" onclick="setTab('03')">DMF0003 MktFcst</button>
     <button class="tab" id="tab20" onclick="setTab('20')">DMF0020 FuturePrice</button>
     <button class="tab" id="tab21" onclick="setTab('21')">DMF0021 SalesPlan</button>
+    <button class="tab" id="tab42" onclick="setTab('42')">DMF0042 BizPlan</button>
     <button class="tab" id="tab82" onclick="setTab('82')">DMF0082 Fcst&amp;Price</button>
     <input id="q" placeholder="검색 (필드/ARG/콤보 키…)" oninput="doSearch()">
     <button class="mini" onclick="expandAll(true)">전체 펼치기</button>
@@ -524,9 +525,65 @@ PKG_DMF0082 AUTHUNION 5곳: SEGMENT1=전달값 OR SEGMENT1 IN
 FE: isNonEditableCell = EDIT_FLAG × editableMeasures(drop3 O_RC4) × bucket × M+4`)}⚠ 클라우드 QA·DEV 미적용.`}]}
 ];
 
+// ═══════════════════════ DMF0042 (2026-08-05 신규 탭 — 정본: DMF0042_BizPlan_Cascade_Filter_전수.md) ═══════════════════════
+const TREE42 = [
+{t:"공통 축 — 정본 .cs(2026-05-06 판)·배선 실측·조회 SP 16 ARG", b:[AU("권한")],
+ m:`배선: Division/Bucket=DefineProperty L372~373, Team/Customer=<b>Designer L773/L733</b>(활성). ⚠ Bucket 은 Designer L538 + DefineProperty L373 <b>이중 배선</b>(핸들러 2회 — 멱등 무해).<br>조회 SP(L804~819): ${A(`DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA (16 ARG)
+p_division_id/p_dept_id/p_end_customer/p_scm_site_id/p_project_code/p_item_id/p_item_type
+p_from_yyyymmdd/p_now_yyyymmdd(금주 월요일)/p_to_yyyymmdd/p_created_by/p_plant_site_id
+p_biztype/p_userinfo=NowGroupID/p_owner/p_qty_yn(cboQty dead='N')`)}`,
+ tb:`✅ store setFilter 16키 파리티(sesUserId BE주입) + P_USERINFO=CMBO BizPlanUserAuthGroup. ⚠ 콤보류 필터='ALL' sentinel(빈 ''=CASE-IN 전멸 — SP 직접 호출 시 주의, FE j() 정상).`},
+{t:"§1 조회조건 cascade (14필드)", b:[], c:[
+ {t:"1. Division (단일)", b:[EV("변경"),OK],
+  m:`변경(L1485~1570): InitSpread+InitSaveDataTable → Team=UserTeamByDivision → div분기 ${A(`40 : BizType=DM_BIZ_TYPE(전역) / EC=EndCustomerByDivision40(div,team) / Project·PlantSite 비활성
+81*: BizType=GetBizTypebyDivision / EC=UserEndCustomerByDivisionDept(div,team) / 활성
+82 : 81 동일 (Measure '82')`)}→ Site=UserSiteByEndCustomer → PlantSite=<b>UserPlantSiteByDivision(div — EC 무관)</b> → Bucket·ItemType·Currency 재바인딩 → <b>Period=GetDayRange(7개월) 재설정 L1554</b> → txtProject/txtItemId/txtOwner 클리어.`,
+  tb:`✅ DivisionField onChange 전면 reset + Grid 초기화. <b>Period 기본값 리셋 = 2026-08-05 보완(F-1)</b> — store defaultPeriod(서버 dayRange 보관) 로 리셋.`},
+ {t:"2. Team", b:[EV("변경"),OK],
+  m:`L1572~1596: 81*/82 = EC=UserEndCustomerByDivisionDept(div,team) → Site=UserSiteByEndCustomer(div,EC현재값) / 40 = EC=EndCustomerByDivision40(div,team) → Site=<b>SiteByEndCustomer40(div,team,EC)</b>.`,
+  tb:`✅ TeamField(comboId=UserTeamByDivision) onChange EC·Site clear. <b>81/82 EC 의 team 반영 = 2026-08-05 보완(F-2)</b> — 'EndCustomer' CMBO 행 DEPT_ID 클라 필터. <span class="miss">⏸ 40 EC(F-3)</span>: CMBO 'EndCustomerByDivision40' 가 DEPT_ID 미반환 — 확장 SQL 승인 대기(<code>DMF0042_CMBO_EC40_DEPTID_20260805.sql</code>).`},
+ {t:"3. End Customer", b:[EV("변경"),OK],
+  m:`L1598~1610: 81*/82 = Site=UserSiteByEndCustomer(div,EC) / 40 = SiteByEndCustomer40(div,team,EC).`,
+  tb:`✅ EC onChange Site clear + SalesSiteField(comboId=UserSiteByEndCustomer, endCustomer/deptId 서버 바인드 — 07-23 정합 hook #117).`},
+ {t:"4. Plant Site", b:[DIFF,OK],
+  m:`<b>Δ 양 지점 모두 UserPlantSiteByDivision(div)</b> — EC 무관 (0021 은 이벤트별 원천 상이였음).`,
+  tb:`✅ <b>2026-08-05 보완(F-4)</b> — 'PlantSitebyEndCustomer' endCustomer 항상 'ALL'(division 만) = AS-IS 파리티. 40 비활성 ✓.`},
+ {t:"5. Bucket (M/Q/Y) + Sum", b:[EV("변경"),OK],
+  m:`Bucket 변경(L1612~1626): SetSpreadColumn(버킷 visible L490~522) + 편집모드면 EditButton×2. I행 존재 시 MSG00227 차단(L3026). Sum(L2895): Monthly=Q_/Y_ 표시 토글 / Quarterly=Y_.`,
+  tb:`✅ validateBucketChange(MSG00227) + applyDynVisibility + editLock 재평가. CMBO 'BucketType2'.`},
+ {t:"6. 나머지 (Period/Project/Model/Owner/ItemType/BizType)", b:[OK],
+  m:`cascade 없음 — 값만 SP 파라미터. Project/Model/Owner 는 Division 변경 시 클리어(L1567~1569). Project 팝업(81·82)=SCM0002_ProjectbyDivisionPopupEx.`,
+  tb:`✅ 카탈로그 필드 + Division reset 에 포함. BizType 40=DmBizType/비40=BizTypeByDivision 스왑 ✓.`}]},
+{t:"§2 Grid 수정항목 — 수정 가능 column × cascade/filter", b:[], c:[
+ {t:"① 수정 가능 column 매트릭스", b:[AU("editLock")],
+  m:`<b>DB행</b>: EDIT_FLAG='Y' && MEASURE∈{Business_Plan,LOC} 행의 데이터 셀만(활성 버킷 축 + 40 컷오프 유효창 + 과거연도 잠금 — EditButton L563~697). 키영역(0~MEASURE) 전 잠금.<br><b>신규행(I)</b>: 콤보=DEPT_ID40/DEPT_ID·EC·EC40·SCM_SITE_ID40/81/82·CURRENCY·BIZ_TYPE_NAME81·CELL_PROD_SITE(40) / 팝업=PROJECT_CODE(81)·PROJECT_CODE82(82)·ITEM_ID·ITEM_ID40 / 텍스트=INCOTERMS·FCST_TYPE·UNIT_ENERGY(82) / 파생 40종 잠금(InsertRow L1296~1388).`,
+  tb:`✅ insertStaticEditable 화이트리스트(R5) + evalBizPlanDynCell(R1~R4) + 기존행 정적 전량 잠금(G2 신정본 파리티). <b>MEASURE = 정적 마지막 상시 표시 + ColumnSetting 제외(2026-08-05 사용자 확정)</b>.`},
+ {t:"② 신규행 콤보 원천 (InsertRow L1236~1278)", b:[],
+  m:`${A(`DEPT_ID40(40)/DEPT_ID(비40) = UserTeamByDivisionAuth
+END_CUSTOMER/END_CUSTOMER40   = dtCustomer(조회조건과 동일 div분기 원천)
+SCM_SITE_ID40 = UserSiteByEndCustomerAuth / SCM_SITE_ID81·82 = UserSiteByEndCustomer
+CURRENCY = CURRENCY_LIST (2회 중복 세팅) / BIZ_TYPE_NAME81 = lookup DM_BIZ_TYPE_81
+CELL_PROD_SITE(40) = GetCellProdSite('Y')  // 조회 표시 콤보는 'ALL' 판(InitSpread L392)`)}`,
+  tb:`✅ SHEET_COLUMNS cellCboDataTp(FPComboBox) + GRID_EDIT_COMBO(CURRENCY=CurrencyList / CELL_PROD_SITE=CellProdSiteValid 편집 스왑).`},
+ {t:"③ 콤보 셀 cascade — 40 전용 2단 (ComboSelChange L1628~1659)", b:[B40,EV("셀 변경")],
+  m:`${A(`END_CUSTOMER40 변경 → 같은 행 SCM_SITE_ID40 콤보 재바인딩 = UserSiteByEndCustomer(40, EC행값)
+DEPT_ID40 변경   → END_CUSTOMER40 재바인딩 = EndCustomerByDivision40(40, team행값)
+                   (행값 빈값 = 조회조건 Team 폴백 L1645~1648) → SCM_SITE_ID40 까지 2단`)}값 클리어 없음(재바인딩만). 81/82 grid cascade 없음.`,
+  tb:`✅ GRID_CASCADE_FILTERS dataMap 스왑(hook #59 §5-G — 관대 통과): SCM_SITE_ID40=[DIVISION_ID, END_CUSTOMER40↔END_CUSTOMER]. <b>END_CUSTOMER40 에 DEPT_ID40 키 = 2026-08-05 선반영(G-1)</b> — CMBO DEPT_ID 확장(F-3 승인) 시 즉시 발효. Δ Team 폴백 → 관대 통과 정책.`},
+ {t:"④ 셀 팝업 cascade (CellDoubleClick L1661~1861)", b:[EV("더블클릭")],
+  m:`${A(`ITEM(ITEM_ID/ITEM_ID40, 편집모드+I행만 L1706) : 반영 = 클릭셀+ITEM_ID+ITEM_ID40+ITEM_NAME
+PROJECT(PROJECT_CODE 81, 가드 없음)   : 반영 = 클릭셀+PROJECT_NAME+BIZ_TYPE_NAME81
+PROJECT82(PROJECT_CODE82, 가드 없음)  : 반영 = 클릭셀+PROJECT_NAME+BIZ_TYPE_NAME82
+사전 필터 = 행값 DEPT_ID/EC/SCM_SITE/PROJECT (팝업별 상이)`)}헤더 더블클릭 = Y_→Q_·M_ / Q_→M_ 드릴 토글.`,
+  tb:`✅ Project/Item 모달(I행만 — 안전 강화 Δ). <b>BIZ_TYPE_NAME81/82 자동 채움 = 2026-08-05 보완(G-2)</b>(더블클릭 경로 bizTypeName, 미제공 시 기존값 보존). Δ 사전필터='ALL' 고정(2026-07-03 사용자 확정) / ITEM 팝업 NICK_NAME 추가·PROJECT 팝업 ITEM clear = TO-BE 확장.`},
+ {t:"⑤ 값 변경 cascade — 배분·롤업 (spdMain_Changed)", b:[EV("셀 값")],
+  m:`Red(dirty) 셀만. Business_Plan=정수 split(몫 균등+나머지 마지막 달, MSG00289 소수 절삭) / LOC 등=copy(Q_→M_ 동일값, Y_→"0"). 6분기 매트릭스 = 주요이벤트 md §1 정본.`,
+  tb:`✅ utils/business-plan.spread.ts 순수함수 + EditTracker patch 전량 추적 + MSG00679.`}]}
+];
+
 // ── 렌더러
 let cur='03', selEl=null;
-const TREES={ '03':TREE03, '20':TREE20, '21':TREE21, '82':TREE82 };
+const TREES={ '03':TREE03, '20':TREE20, '21':TREE21, '42':TREE42, '82':TREE82 };
 function badge(b){return `<span class="chip ${b[1]}">${b[0]}</span>`;}
 function render(){
   const data = TREES[cur];
@@ -557,7 +614,7 @@ function showDetail(n){
   document.getElementById('mTobe').innerHTML = head + (n.tb||'<span class="dim">(상위 노드 또는 정본 MD 참조)</span>');
 }
 function setTab(t){ cur=t;
-  ['03','20','21','82'].forEach(k=>document.getElementById('tab'+k).classList.toggle('active',k===t));
+  ['03','20','21','42','82'].forEach(k=>document.getElementById('tab'+k).classList.toggle('active',k===t));
   selEl=null; render(); doSearch(); }
 function expandAll(open){
   document.querySelectorAll('#tree .kids').forEach(k=>k.classList.toggle('hide',!open));

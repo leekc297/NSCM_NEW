@@ -3,12 +3,10 @@ import {
   ItemByDivisionModal,
   ProjectByDivisionModal,
 } from 'features/master/src/components';
-
 import { useMemo } from 'react';
 
-import type { ColumnLayoutRow } from '@shared/components';
-
 import { useQueryClient } from '@foundation/query-client';
+import type { ColumnLayoutRow } from '@shared/components';
 
 import { MENU_ID, SHEETS } from '../business-plan.constants';
 import { useBusinessPlanStore } from '../useBusinessPlanStore';
@@ -89,9 +87,11 @@ export const BusinessPlanModals = ({
     () => new Map(staticColumns.map(c => [c.colNm, c.colLblNm ?? c.colNm])),
     [staticColumns]
   );
+  // ⭐ MEASURE 는 Column Setting 목록에서 제외 — 그리드가 정적 컬럼 마지막에 상시 표시한다
+  //   (2026-08-05 사용자 확정). titleset 'C' 저장에서도 제외해 SP ColList 중복(ORA-00960) 오염을 차단.
   const columnLayoutSettings = useMemo<ColumnLayoutRow[]>(
     () =>
-      (userColumnLayout ?? []).map(s => ({
+      (userColumnLayout ?? []).filter(s => s.colNm !== 'MEASURE').map(s => ({
         COLUMN_NAME: s.colNm,
         COLUMN_LABEL_NAME: labelOf.get(s.colNm) ?? s.colNm,
         USER_FLAG: s.visible ? 'Y' : 'N',
@@ -105,7 +105,7 @@ export const BusinessPlanModals = ({
   );
   const columnLayoutDefaults = useMemo<ColumnLayoutRow[]>(
     () =>
-      staticColumns.map((c, i) => ({
+      staticColumns.filter(c => c.colNm !== 'MEASURE').map((c, i) => ({
         COLUMN_NAME: c.colNm,
         COLUMN_LABEL_NAME: c.colLblNm ?? c.colNm,
         USER_FLAG: c.visible === false ? 'N' : 'Y',
@@ -126,7 +126,8 @@ export const BusinessPlanModals = ({
       <ProjectByDivisionModal
         open={openProject}
         modalClose={() => onClose('PROJECT')}
-        setSelectedValue={(projectCode, projectName) => {
+        setSelectedValue={(projectCode, projectName, _projectStatus, bizTypeName) => {
+          // ⭐ BIZ_TYPE_NAME81/82 자동 채움 — AS-IS L1807~1808/L1857~1858 (popProject.BizType 반영)
           applyToInsertBlock(
             div40
               ? { PROJECT_CODE: projectCode, PROJECT_NAME: projectName ?? '' }
@@ -134,12 +135,15 @@ export const BusinessPlanModals = ({
                 ? {
                     PROJECT_CODE82: projectCode,
                     PROJECT_NAME: projectName ?? '',
+                    // 더블클릭 단일선택 경로만 bizTypeName 제공 — 미제공(멀티 OK) 시 기존값 보존
+                    ...(bizTypeName !== undefined ? { BIZ_TYPE_NAME82: bizTypeName } : {}),
                     ITEM_ID: '',
                     ITEM_CLASS_NAME: '',
                   }
                 : {
                     PROJECT_CODE: projectCode,
                     PROJECT_NAME: projectName ?? '',
+                    ...(bizTypeName !== undefined ? { BIZ_TYPE_NAME81: bizTypeName } : {}),
                     ITEM_ID: '',
                     ITEM_CLASS_NAME: '',
                   }
@@ -198,11 +202,13 @@ export const BusinessPlanModals = ({
         sheetName={SHEETS.MAIN}
         columnType='C'
         divisionId={divisionId}
-        fallbackColumns={staticColumns.map(c => ({
-          key: c.colNm,
-          header: c.colLblNm ?? c.colNm,
-          width: c.colWth ?? 100,
-        }))}
+        fallbackColumns={staticColumns
+          .filter(c => c.colNm !== 'MEASURE')
+          .map(c => ({
+            key: c.colNm,
+            header: c.colLblNm ?? c.colNm,
+            width: c.colWth ?? 100,
+          }))}
         title={t('LBL00711', '_Column')}
         leftTitle={t('LBL00764', 'Invisible')}
         rightTitle={t('LBL00765', 'Visible')}
@@ -221,7 +227,7 @@ export const BusinessPlanModals = ({
               order: s.SORT_ORDER_NO,
             }))
           );
-          const visible = settings.filter(s => s.USER_FLAG === 'Y');
+          const visible = settings.filter(s => s.USER_FLAG === 'Y' && s.COLUMN_NAME !== 'MEASURE');
           void saveTitleSet(
             'C',
             visible.map((s, i) => ({
@@ -274,12 +280,12 @@ export const BusinessPlanModals = ({
         defaultPeriod={{ start: period.start.slice(0, 6), end: period.end.slice(0, 6) }}
       />
 
-      {/* Ver. Cutoff — 'BP_M' 고정 (AS-IS L2857. 팝업 자체 저장 — blnOK 후 처리 없음 L2862) */}
+      {/* Ver. Cutoff — 'BP_M' 고정 (AS-IS L2857. 팝업 자체 저장 — blnOK 후 처리 없음 L2862).
+          Period 는 팝업 자체 기본값(오늘~+5개월 — AS-IS Form_Load L106~108) */}
       <VersionCutoffModal
         open={openCutoff}
         modalClose={() => onClose('CUTOFF')}
         divisionId={divisionId}
-        period={{ from: period.start.slice(0, 6), to: period.end.slice(0, 6) }}
       />
 
       {/* Replace by Cutoff — 선택 M_ 범위 from/to (AS-IS L3465. 실행 후 메인 재조회) */}

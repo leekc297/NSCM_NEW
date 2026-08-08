@@ -159,6 +159,12 @@ describe('useBusinessPlanStore', () => {
 
     const { result } = renderHook(() => useBusinessPlanStore(s => s));
 
+    // ⚠ 스토어는 `it` 블록 간 공유된다(mock storeRegistry) — 앞선 setFilter 테스트가 divisionId='82' 를
+    //   남긴다. 초기값 '40' 에 의존하면 **실행 순서에 종속**되므로 전제를 명시적으로 세운다.
+    act(() => {
+      result.current.setSearchCondition({ divisionId: '40' });
+    });
+
     await act(async () => {
       await result.current.fetchStaticColumns();
     });

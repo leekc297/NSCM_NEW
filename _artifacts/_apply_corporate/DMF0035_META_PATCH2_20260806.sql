@@ -1,0 +1,42 @@
+-- ============================================================================================
+-- [E20260806-WF] DMF0035 메타 패치2 (2026-08-06)
+--   1) LBL00852~854 신규 채번 — Version 모달 Day/Week/Manual 체크박스 라벨.
+--      사유: LBL00774~776 은 SYS0017 Mail Setup 점유(오라벨 노출) — DB 무수정, 재채번(3점 동시 반영 #114).
+--      KO=EN 통일 규약. LBL max=00851 실측·충돌 0.
+--   2) CMBO 'ReportBucketType' 신설 — AS-IS DMF0003_GET_REPORT_BUCKET_TYPE_CODE
+--      = LOOKUP 'REPORT_BUCKET_TYPE_CODE'(사내 4행 실측: DAILY/WEEKLY/MONTHLY/ONLY_WEEKLY).
+--      공유 CMBO 'BucketType'(BUCKET_TYPE_CODE 3행) 무수정 원칙 — 신규 등록으로 격차 해소.
+--      형식 = 기존 BucketType CMBO(MDU_DIVS_CD='ALL') 동형.
+-- ============================================================================================
+MERGE INTO SCM_ADM_MSG_M M
+USING (
+    SELECT 'LBL00852' AS MSG_ID, L.LANG_CD, 'Day' AS MSG_NM FROM (SELECT 'KO' LANG_CD FROM DUAL UNION ALL SELECT 'EN' FROM DUAL UNION ALL SELECT 'CN' FROM DUAL) L
+    UNION ALL
+    SELECT 'LBL00853', L.LANG_CD, 'Week' FROM (SELECT 'KO' LANG_CD FROM DUAL UNION ALL SELECT 'EN' FROM DUAL UNION ALL SELECT 'CN' FROM DUAL) L
+    UNION ALL
+    SELECT 'LBL00854', L.LANG_CD, 'Manual' FROM (SELECT 'KO' LANG_CD FROM DUAL UNION ALL SELECT 'EN' FROM DUAL UNION ALL SELECT 'CN' FROM DUAL) L
+) S
+ON (M.MSG_ID = S.MSG_ID AND M.LANG_CD = S.LANG_CD)
+WHEN NOT MATCHED THEN INSERT
+    (MSG_ID, LANG_CD, MSG_NM, MSG_DESC, MSG_TP_CD, USE_YN,
+     CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+VALUES
+    (S.MSG_ID, S.LANG_CD, S.MSG_NM,
+     'Waterfall Version popup Day/Week/Manual checkbox label (DMF0035/DMF0082, 2026-08-06)',
+     'LBL', 'Y', 'admin', SYSDATE, 'admin', SYSDATE)
+/
+MERGE INTO SCM_ADM_CMBO_SQL_M M
+USING (SELECT 'ReportBucketType' AS SQL_ID, 'ALL' AS MDU_DIVS_CD FROM DUAL) S
+ON (M.SQL_ID = S.SQL_ID AND M.MDU_DIVS_CD = S.MDU_DIVS_CD)
+WHEN NOT MATCHED THEN INSERT
+    (SQL_ID, MDU_DIVS_CD, SQL_NM, SQL_DTL_CTN, USE_YN, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+VALUES
+    ('ReportBucketType', 'ALL', 'Report Bucket (AS-IS DMF0003_GET_REPORT_BUCKET_TYPE_CODE — ONLY_WEEKLY 포함)',
+     'SELECT SEGMENT1  AS CODE
+      , SEGMENT2  AS NAME
+FROM   SCM_ADM_LOOKUP_MASTER_DETAIL
+WHERE  1 = 1
+AND    LOOKUP_TYPE = ''REPORT_BUCKET_TYPE_CODE''
+ORDER BY DISPLAY_SEQ',
+     'Y', 'admin', SYSDATE, 'admin', SYSDATE)
+/

@@ -1,4 +1,4 @@
-# Hook — Screen Runtime Pitfalls (런타임 사고 8종 통합 차단)
+# Hook — Screen Runtime Pitfalls (런타임 사고 9종 통합 차단)
 
 > 작성 / Authored: 2026-06-19 (DMF0043 룰 전면 점검 작업 중 발견된 사고 패턴 통합)
 > 강도 / Strength: **PR 차단** — 발견 시 머지 거부
@@ -8,9 +8,9 @@ DMF0043 (Overseas Subs. Contribution Rate Reg.) 룰 전면 점검 작업 중 실
 
 ---
 
-## §0. 사고 카탈로그 — 8 분류
+## §0. 사고 카탈로그 — 9 분류
 
-**8 분류** (2026-07-29 갱신 — P8 useTabProcQuery filters 참조 동일성 추가 / 2026-06-19 P6·P7 추가)
+**9 분류** (2026-08-06 갱신 — P9 상호배타 prop 함정 추가[SYS0017 감사] / 2026-07-29 P8 useTabProcQuery filters 참조 동일성 추가 / 2026-06-19 P6·P7 추가)
 
 | # | 사고 증상 | Root cause | 영향 |
 |---|---|---|---|
@@ -22,6 +22,7 @@ DMF0043 (Overseas Subs. Contribution Rate Reg.) 룰 전면 점검 작업 중 실
 | P6 | **다단 헤더 시 row 높이가 1단과 같아 가독성/UI 정합 깨짐** | wijmo columnGroups 로 자동 row 추가되지만 default `defaultSize` 가 1단과 동일. DMF0007 customer-forecast-master 와 시각 정합 깨짐 | UI 일관성 사고 |
 | P7 | **동적 컬럼 셀이 편집되지 않음** (모든 row readonly) | BE 응답 row 의 `EDIT_FLAG='N'` → DataGrid wrapper 의 `setEditableColumns` 가 `beginningEdit.cancel = !isEditableCell` 처리. `GridUtils.isEditableCell` 의 OPTIONAL/MANDATORY 분기 = `editFlag !== 'N'` → false → 편집 차단 | 사용자 편집 불가 (저장 0 row) |
 | **P8** | **조회 후 스피너가 멈추지 않음** (동일 SEARCH 가 초 단위 무한 반복) | `useTabProcQuery` 의 `filters` 를 **인라인 객체 리터럴**로 전달 → `useCustomQueryClient.ts` 가 `prevKeyRef.current !== filters` **참조 비교**로 변경을 판정하므로 매 렌더 새 참조 = 항상 "변경" → removeQueries + 재요청 무한 루프 | 화면 사용 불가 + BE 부하 (2026-07-29 SYS0017 사고) |
+| **P9** | **모달에 OK/Cancel(공통 footer) 이 안 보임** | `CustomDialog` 의 **상호배타 prop 함정** — `customContentArea` 지정 시 `CustomDialogContent` 가 삼항 분기로 **공통 OK/Cancel footer 자체를 렌더하지 않음** → 자체 footer 미구현이면 저장/닫기 경로 소실 | 팝업 저장·확정 기능 전체 소실 (2026-08-06 SYS0017 감사 — E05 OK→SAVE_MASTER_U 실행 불가) |
 
 ---
 
@@ -682,6 +683,67 @@ grep -nE "filters=\{\{" features/**/pages/{screen}/**/*.tsx
 
 ---
 
+## §8-C. P9 — 공용 컴포넌트 **상호배타 prop 함정** (`customContentArea` = 공통 footer 미렌더) — 2026-08-06 SYS0017 감사 계기 신설
+
+### 8C.1 사실
+
+- `CustomDialog` 의 content 렌더(`CustomDialogContent`, 삼항 분기)는 **`customContentArea` 지정 시 공통 OK/Cancel footer 를 아예 렌더하지 않는다** — 상호배타 prop (children 경로에서만 공통 footer 렌더).
+- 컴파일·타입 전부 통과 + 모달도 뜨므로 **런타임에 열어보기 전까지 발견 불가** — pre-write §0.2 는 "없는 심볼" import 만 검사해 이 계약 위반을 잡지 못했다 (SYS0017 감사 (e): 게이트 공백).
+
+### 8C.2 안티패턴
+
+```tsx
+// ❌ customContentArea 지정 + 자체 footer 없음 → OK/Cancel 소실 → 저장(E05 OK→SAVE)·닫기 경로 소실
+<CustomDialog size={800} customHeaderTitle={t('LBL...')} handleClose={onClose}
+  customContentArea={<div>{/* grid/form ... 버튼 없음 */}</div>} />
+```
+
+### 8C.3 표준 — `customContentArea` 사용 시 **자체 footer 구현 의무** (정본: forecast-price `ExchangeRateModal`)
+
+```tsx
+// ✅ customContentArea 내부 마지막에 자체 footer (OK/Cancel — 공통 버튼 스타일 재사용)
+<CustomDialog ... customContentArea={
+  <div className={styles.wrap}>
+    {/* content ... */}
+    <div className={styles.footer}>
+      <Button onClick={handleSave}>{t('LBL00366') /* OK/Save */}</Button>
+      <Button variant="outlined" onClick={onClose}>{t('LBL00627') /* Close */}</Button>
+    </div>
+  </div>
+} />
+```
+
+- 대안: footer 가 공통형이면 `customContentArea` 를 쓰지 말고 children 경로(공통 footer 자동)로 작성.
+
+### 8C.4 ⭐ 상호배타 prop 함정 표 (유사 함정 발견 시 **본 표에 행 추가** — 확장 규약)
+
+> 공용 컴포넌트에서 "prop A 지정 = 기본 동작 B 소실" 형태의 상호배타 계약을 발견하면 즉시 아래 표에 등재한다
+> (컴포넌트 / prop / 소실되는 기본 동작 / 화면 측 의무 / 정본). 등재 = pre-write §0.2 계약 확인 대상 자동 편입.
+
+| 컴포넌트 | prop | 지정 시 소실되는 기본 동작 | 화면 측 의무 | 정본 |
+|---|---|---|---|---|
+| `CustomDialog` | `customContentArea` | 공통 OK/Cancel footer (CustomDialogContent 삼항) | 자체 footer 구현 (8C.3) | forecast-price `ExchangeRateModal` |
+| (발견 시 추가) | | | | |
+
+### 8C.5 PRE-WRITE 체크
+
+- [ ] 공용 컴포넌트에 낯선 prop 을 지정하기 전 **소스에서 조건 분기(삼항/early return)를 확인** — 그 prop 이 기본 렌더 경로를 대체하는지(상호배타) 판정
+- [ ] `customContentArea` 지정 모달 = 자체 footer(OK/Cancel) 포함 여부 확인
+- [ ] 8C.4 표의 등재 함정 전수 확인
+
+### 8C.6 POST-WRITE grep (+ G6-1 런타임 확인 의무)
+
+```bash
+# customContentArea 사용 모달 검출 → 각 hit 파일에 자체 footer(Button onClick={handleSave|onClose}) 존재 확인
+grep -rln "customContentArea" features/{domain}/src/pages/{screen}/ | while read f; do
+  grep -qE "className=\{?.*footer|<Button" "$f" || echo "⛔ $f: customContentArea + 자체 footer 부재 의심 (P9)"
+done
+```
+
+- grep 은 의심 검출까지 — 최종 판정은 **screen-completion-gate §0.5 G6-1 (모달 전수 열어 footer 확인)** 런타임 증명.
+
+---
+
 ## §9. cross-ref 메모리 entry
 
 - `feedback_ddl_grep_before_sql.md` — DDL 추측 금지 (P5 cross-ref)
@@ -696,3 +758,4 @@ grep -nE "filters=\{\{" features/**/pages/{screen}/**/*.tsx
 
 - 2026-06-19: 신규 작성 — DMF0043 룰 전면 점검 작업 중 발견된 5 사고 패턴 통합. 사용자 명시: "기존의 UI 수정요청에 대한 프로세스에 더해서 이 화면 기준으로 보완 후에 추가적으로 작업했던 내용들도 rule 로 반영해서 차후 화면 수정, 신규 생성 시 반영되도록".
 - 2026-07-29: **P8 추가** — `useTabProcQuery({filters})` 인라인 객체 → 무한 재조회(스피너 안 멈춤). SYS0017 Mail Setup 사고. 사용자 신고 → BE 로그 실측으로 확정, §8-B 신설 + RULESET_MASTER §3.1/§3.3 반영.
+- 2026-08-06: **P9 추가** — `CustomDialog customContentArea` 상호배타 prop = 공통 OK/Cancel footer 미렌더 → 자체 footer 의무 + 상호배타 prop 함정 확장 표(8C.4). SYS0017 근본원인 감사 (e) 게이트 공백 보강. screen-completion-gate §0.5 G6-1 짝.

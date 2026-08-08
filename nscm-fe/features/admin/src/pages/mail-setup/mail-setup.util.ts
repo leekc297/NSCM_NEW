@@ -1,4 +1,9 @@
-import { CYCLE, CYCLE_DETAIL_PARENT, MAIL_CONTENT_MAX_BYTES } from './mail-setup.constants';
+import {
+  CYCLE,
+  CYCLE_DETAIL_PARENT,
+  MAIL_CONTENT_MAX_BYTES,
+  USE_TYPE_CODE,
+} from './mail-setup.constants';
 import type { ComboOption } from './mail-setup.types';
 
 /** '^' 구분 bulk payload — AS-IS CString.AppendString 과 동일 규약 */
@@ -48,8 +53,9 @@ export const validateCyclePeriod = (row: {
   return row.DETAIL_CLASS_CODE ? undefined : 'MSG00696';
 };
 
+/** Category 신규 행 기본값 — AS-IS InsertRow(L723~747): ACTIVE_FLAG='Y' + UseTypeCode 'MAIL' 고정(L35) */
 export const createEmptyCategory = (): Record<string, string> => ({
-  USE_TYPE_CODE: '',
+  USE_TYPE_CODE,
   MODULE_CODE: '',
   SUB_MODULE_CODE: '',
   CATEGORY_ID: '',

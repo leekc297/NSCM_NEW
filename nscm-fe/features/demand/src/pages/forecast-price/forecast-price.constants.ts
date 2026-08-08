@@ -25,6 +25,11 @@ export enum SHEETS {
   //   저장  = 기배선 fcstNPrice SAVE (DMF0082_SAVE_MAIN_DATA 16 IN '^' bulk) 재사용.
   SAVE_PRICE_DATA = 'savePriceData',
   SAVE_PRICE_TITLE = 'savePriceTitle',
+  // Column/Measure Setting 개인화 영구 저장 (공유 모달이 리터럴 'titleSet' 으로 호출 —
+  //   `@master/components/columnSettingModal` :96 / `columnLayoutModal` :108).
+  //   화면 코드가 직접 참조하진 않지만 BTN_MPG(titleSet SEARCH/SAVE) 배선의 소유 시트이므로 등재한다
+  //   (미등재 시 배선 체커 L7 이 "FE SHEETS 미사용" 으로 잡는다. sales-plan/sales-reports 등 동일 규약).
+  TITLE_SET = 'titleSet',
 }
 
 /**
@@ -80,6 +85,58 @@ export const BUCKET_FALLBACK = [
   { label: 'Weekly', value: 'W', lblKey: 'LBL00683' },
   { label: 'Monthly', value: 'M', lblKey: 'LBL00684' },
 ] as const;
+
+/**
+ * ⭐ 편집 전용 콤보 (AS-IS `UP_FX_GetCommonDataList(_DM)` 계통 이식 — 2026-08-08).
+ *
+ * AS-IS 는 **조회 표시**와 **편집 후보**를 다른 원천에서 얻는다. TO-BE 는 표시용 콤보를
+ * `SHEET_COLUMNS.CELL_COMBO_DATA_TYPE` 메타로 바인딩하고, 편집 진입(`beginningEdit`) 시에만
+ * 아래 편집판으로 dataMap 을 스왑한 뒤 편집 종료(`cellEditEnded`)에 원복한다.
+ *
+ * ⚠️ **메타를 편집판으로 바꾸면 안 된다.** 편집 후보 ⊊ 표시 후보이므로, 메타를 바꾸면 원장에 남아 있는
+ *   폐지 코드 행이 CODE→NAME 변환에 실패해 raw 코드로 표시된다(정본 DMF0003 이 이원화한 이유).
+ *   부수 효과로 공유 CMBO 소비 화면(Incoterms 36시트 / DOM_EXP 13시트 / DeptId 13시트) 회귀도 0이 된다.
+ *
+ * - `INCOTERMS`  : AS-IS `GetLookupValues("INCOTERMS","ALL","Y")` = `ATTRIBUTE2='Y'`(EDIT_YN) 한정.
+ *                  표시용 `Incoterms` 는 VALID 16종 전부라 폐지 6종까지 선택 가능했다
+ *                  (AS-IS 수정건 [E20250919-001699] 회귀분).
+ * - `DOM_EXP`    : AS-IS `UP_FX_GetCommonDataList_DM @Code='DM_CUSTOMS_HANDBOOK'` = lookup
+ *                  `DM_CUSTOMS_HANDBOOK_40`. 표시용 `DOM_EXP`(lookup 'DOM/EXP')는 코드 도메인이 더 넓다.
+ *
+ * ⛔ `TEAM_ID` 는 **대상 아님**(2026-08-08 판정). AS-IS 는 `Data.UserTeamByDivisionAuth`(권한 4분기)로
+ *   셀 콤보를 구성하지만, TO-BE 는 TEAM_ID 를 저장하지 않는다 — `PKG_DMF0082.P_DMF0082_SAVE_MAIN_DATA`
+ *   IN 17종에 teamId 없음(실측) = 조회 결과에서 파생되는 **표시 전용** 컬럼.
+ *   저장되지 않는 컬럼에 권한 필터를 걸면 이득 없이 위험만 생긴다: `TeambyDivisionAuth` 실측 행수는
+ *   hongjae.kim 0 / jiwon.park 3 / wonqthanq 0 / bpark416 0 / minyonglee1 29 로, 다수 계정에서 0행이라
+ *   빈 콤보가 된다. → 표시용 `DeptId` 유지.
+ *
+ * ⭐ `divisions` — **AS-IS 가 적용하던 범위에만 적용한다**(2026-08-08 원장 실측 근거).
+ *   AS-IS DMF0082 는 division 40 전용 화면이었고, INCOTERMS EDIT_YN / DM_CUSTOMS_HANDBOOK_40 은
+ *   40 을 전제로 큐레이션된 목록이다. TO-BE 확장분(81/82)에 그대로 걸면 **실제로 쓰는 코드가 막힌다**:
+ *     · 81 원장 INCOTERMS 76.9만 행 중 14.9만(19%)이 EDIT_YN='N' (Z02 14.4만 · Z01 · Z04 · A01 · DAT)
+ *     · DOM_EXP: 40 은 'E' 뿐이지만 81 은 'D' 1.7만 행, 82 는 'D' 2,034 행 보유
+ *   → 40 만 AS-IS 큐레이션 적용, 81/82 는 표시용 전체 목록 유지(확장 영역 = AS-IS 규칙 부재).
+ *   권한 필터(TEAM_ID)는 코드 큐레이션이 아니라 사용자 권한이므로 전 division 적용.
+ */
+export const GRID_EDIT_COMBO: Record<
+  string,
+  { comboId: string; divisionParam?: boolean; rowFilterKey?: string; divisions?: string[] }
+> = {
+  INCOTERMS: { comboId: 'IncotermsEdit', divisions: ['40'] },
+  DOM_EXP: { comboId: 'CustomsHandbook', divisions: ['40'] },
+  // PLANT_SITE_ID(81 계열 전용, SAVE IN `plantSite`) — 표시용 메타 경로는 @divisionId 미전달이라
+  //   관대형 폴백으로 **전 division 플랜트**가 뜬다. 편집 진입 시에만 division 한정 목록으로 스왑.
+  //   (AS-IS `Data.UserPlantSiteByDivision` 호출은 주석 상태[C20200525-000296]이므로 TO-BE 확장 영역 —
+  //    표시용은 건드리지 않아 기존 값의 명칭 변환은 그대로 유지된다.)
+  PLANT_SITE_ID: { comboId: 'PlantByDivisionCompany', divisionParam: true },
+};
+
+/**
+ * PRICE 계열 measure — CURRENCY 입력 대상 (AS-IS `NO_DATA` 분기, .cs L5628/L5639).
+ * AS-IS 는 Insert 행 MEASURE 가 LOC 계열이면 `CURRENCY_LIST`, 아니면 `NO_DATA`(빈 목록)로 콤보를 교체해
+ * 통화 입력 자체를 막는다. `utils/forecast-price.validate.ts` 의 정방향 검증과 짝을 이룬다.
+ */
+export const PRICE_MEASURES = ['LOC', 'KRW', 'USD'] as const;
 
 /**
  * ⭐ 편집 가능 measure (AS-IS bEDIT_AUTH_* 4분기 대상 — L802~825).

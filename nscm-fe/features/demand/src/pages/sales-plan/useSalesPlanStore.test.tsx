@@ -125,7 +125,10 @@ describe('useSalesPlanStore', () => {
     expect(main?.projectCode).toBe('PJT1'); // 텍스트 raw
     expect(main?.owner).toBe(''); // 텍스트 빈값 = ''
     expect(main?.internalYn).toBe('Y'); // Include Internal Txn 선택값 전달
-    expect(main?.userGroup).toBe('DM ADMIN'); // 세션 NowGroupID — FE 필수 전달
+    // ⭐ userGroup 원천 = authGroup (CMBO 'SalesPlanUserAuthGroup' 정본) → 미설정 시 session.userId 폴백.
+    //   `session.groupId` 는 **유령 필드**라 참조하지 않는다 (2026-08-04 확정 / useSalesPlanStore.ts:42, 221-227).
+    //   구 기대값 'DM ADMIN' 은 groupId 참조 시절 산물 — jsdom 파손 기간 동안 미실행으로 방치돼 있었다.
+    expect(main?.userGroup).toBe('TEST_USER'); // authGroup 미설정 → sesUserId 폴백
     expect(main?.bucket).toBe('WEEKLY'); // full-word
     expect(main?.userDeptId).toBe('JV01');
     expect(main?.nowYyyymmdd).toMatch(/^\d{8}$/);
@@ -135,6 +138,17 @@ describe('useSalesPlanStore', () => {
     const title = result.current.filters[SHEETS.SPREAD_TITLE];
     expect(title?.divisionId).toBe('82');
     expect(title?.bucket).toBe('WEEKLY');
+  });
+
+  it('userGroup 은 authGroup 이 있으면 그 값을 쓴다 (session.groupId 유령 필드 미참조)', () => {
+    const { result } = renderHook(() => useSalesPlanStore(s => s));
+
+    act(() => {
+      result.current.setAuthGroup('DM ADMIN'); // CMBO 'SalesPlanUserAuthGroup' 산출값
+      result.current.setFilter();
+    });
+
+    expect(result.current.filters[SHEETS.MAIN]?.userGroup).toBe('DM ADMIN');
   });
 
   it('clearFilters empties filters (stale payload 재사용 차단)', () => {
@@ -186,6 +200,12 @@ describe('useSalesPlanStore', () => {
     });
 
     const { result } = renderHook(() => useSalesPlanStore(s => s));
+
+    // ⚠ 스토어는 `it` 블록 간 공유된다(mock storeRegistry) — 앞선 setFilter 테스트가 divisionId='82' 를
+    //   남긴다. 초기값 '40' 에 의존하면 **실행 순서에 종속**되므로 전제를 명시적으로 세운다.
+    act(() => {
+      result.current.setSearchCondition({ divisionId: '40' });
+    });
 
     await act(async () => {
       await result.current.fetchStaticColumns();

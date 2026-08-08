@@ -1,0 +1,24 @@
+-- =====================================================================================
+-- [E20260806-PERF] DMF0022 Waterfall — 인덱스 평가 결과 기록 (2026-08-06 최종)
+-- =====================================================================================
+-- 1) GTT 인덱스 2본: 사용자 승인으로 **적용 완료** → 정본/멱등 DDL 은
+--    `DMF0022_PKG_PERF_20260806_GTT_INDEX.sql` (클라우드 이관 동봉 대상). 본 파일에서는 제안 해제.
+--
+-- 2) 영구(업무) 테이블 인덱스: **생성하지 않음** — 승인 조건("기존 인덱스와 선두컬럼 중복이면
+--    생성하지 말고 보고")에 해당. 실측 근거:
+--
+--    (a) DM_PLN_SALES_PLAN_C (3,710,755행) — A024→A025 구간 INSERT (SQL_ID 0jg5q91v6uvm9, 7.62s 1회):
+--        HASH JOIN + FULL SCAN (E-Rows 2921K, 실제 산출 11,495행, buffer_gets 89,510).
+--        NL 전환용 후보 컬럼 (DIVISION_ID, VERSION_NO, MEASURE, CUTOFF_YYYYMMDD, YYYYMMDD ...) 은
+--        기존 IX_DM_PLN_SALES_PLAN_C_N3 (VERSION_NO, DIVISION_ID, YYYYMMDD, MEASURE, CUTOFF_YYYYMMDD)
+--        와 선두컬럼(VERSION_NO/DIVISION_ID) 중복 → 미생성. 현 hash+full 이 CBO 정선택
+--        (952 probe × 버전 slice 범위스캔이 더 비쌈)이고 화면 총소요 10.2s 로 목표(≤60s) 충족.
+--
+--    (b) SCM_MST_FUTURE_PRICE_C (3,147,602행) — T_PRICE INSERT (SQL_ID 2my5zrb62n8mq, 3.28s 1회):
+--        기존 IX01_SCM_MST_FUTURE_PRICE_C (DIVISION_ID, VERSION_NO, ...) NL 정상 사용 중.
+--        후보 인덱스도 동일 선두컬럼 → 미생성. FBI 필요 함수(FN_NEXT_DAY)는 GTT(RAW_DATA) 측
+--        컬럼에 적용되는 것이라 영구 테이블 FBI 대상 아님.
+--
+-- 결론: 영구 테이블 신규 인덱스 0건. 향후 데이터 증가로 (a) 구간이 재부상하면
+--       IX_DM_PLN_SALES_PLAN_C_N3 컬럼 재구성(중복 재편) 관점에서 재평가할 것.
+-- =====================================================================================

@@ -11,8 +11,6 @@ export interface SearchParamProps {
   deptIds: string[];
   endCustomers: string[];
   salesSites: string[];
-  // Plant Site — Div81 계열 전용 조회조건 (DMF0003 PlantSiteField 1:1, 40/82 비활성 = 항상 'ALL')
-  plantSiteIds: string[];
   bizTypes: string[];
   itemIds: string[];
   startYyyymmdd: string;
@@ -21,6 +19,11 @@ export interface SearchParamProps {
   versionType: string;
   qtyYn: boolean; // cboQty — Qty ≥ 0 만 조회
   sumYn: boolean; // chkSum — SUM 컬럼 표시
+  // [UICATEGORY 2026-08-07] DMF0003 파리티 조회조건 (SP IN 14~16 + plantSiteId 13 배선)
+  plantSiteIds: string[]; // Plant Site (81 계열 전용 — PlantSiteField 내부 게이트)
+  projectCodes: string[]; // Project 팝업 (COM0005, div 40 비활성)
+  owners: string[]; // Owner 팝업 (COM0006)
+  senderCodes: string[]; // Sender Code 콤보 (81 계열 전용, 단일+ALL)
 }
 
 /**

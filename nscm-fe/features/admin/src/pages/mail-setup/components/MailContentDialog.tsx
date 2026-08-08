@@ -1,4 +1,5 @@
 import { CustomDialog } from '@shared/components';
+import { Button } from '@shared/lges';
 import { useMessageStore } from '@shared/stores';
 
 import { MAIL_CONTENT_MAX_BYTES } from '../mail-setup.constants';
@@ -41,9 +42,9 @@ export const MailContentDialog = ({ onApply }: MailContentDialogProps) => {
       size={800}
       height='55vh'
       title={t('LBL00782', '_Mail Content *')}
-      disableButtonCancel={readOnly}
       handleClose={closeContentDialog}
-      handleSubmit={readOnly ? undefined : () => onApply(contentDraft)}
+      // customContentArea 사용 시 공통 하단 버튼이 렌더되지 않음 — 자체 footer 필수
+      //   (정본 forecast-price ExchangeRateModal buttonWrapper. 조회 모드는 OK 숨김 — AS-IS E11)
       customContentArea={
         <div className={styles.contentArea}>
           <textarea
@@ -53,6 +54,24 @@ export const MailContentDialog = ({ onApply }: MailContentDialogProps) => {
             maxLength={MAIL_CONTENT_MAX_BYTES}
             onChange={event => handleChange(event.target.value)}
           />
+          <div className={styles.buttonWrapper}>
+            <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel={t('LBL00107', '_Cancel')}
+              onClick={closeContentDialog}
+            />
+            {!readOnly && (
+              <Button
+                appearance='contained'
+                priority='primary'
+                size='medium'
+                buttonLabel={t('LBL00359', '_Confirm')}
+                onClick={() => onApply(contentDraft)}
+              />
+            )}
+          </div>
         </div>
       }
     />

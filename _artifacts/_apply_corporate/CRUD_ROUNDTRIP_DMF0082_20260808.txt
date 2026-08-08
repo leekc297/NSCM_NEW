@@ -1,0 +1,40 @@
+
+===== DIV 40 =====
+GET rows=17343 res=[('0', 'SUCCESS')]
+[40] key ITEM=MCSS22561-C1 SITE=BYD Electronics_CN_SZX PJT=NT | M=20260817(v0=65001.0) I=20260812
+  [M] 원장 pre  QTY=65001 rows=1
+  [M] SAVE +1  CALL_OK [('F', 'End Customer________ : NT\nSales site_____________ : BYD Electronics_CN_SZX\nModel________________ : MCSS22561-C1\nCustoms Handbook__ : E\nFcst Type_____________ : Mass\nIncoterms____________ : DAP\nPlant Site___________ : -\nCell Prod Site___________ : NJ01-A\nYYYYMMDD_________ : 20270601 ~ 20270801\n\nUnit Price Not Found !\n해당주차의 Sales Price 값을 입력하시기 바랍니다.\n미래구간 52주차까지 Sales Price 값이 모두 입력되어야 합니다.', 'Validation Check')]
+  [M] 원장 +1후 QTY=65001 rows=1  (기대 65002.0)
+  [M] SAVE 원복 CALL_OK [('F', 'End Customer________ : NT\nSales site_____________ : BYD Electronics_CN_SZX\nModel________________ : MCSS22561-C1\nCustoms Handbook__ : E\nFcst Type_____________ : Mass\nIncoterms____________ : DAP\nPlant Site___________ : -\nCell Prod Site___________ : NJ01-A\nYYYYMMDD_________ : 20270601 ~ 20270801\n\nUnit Price Not Found !\n해당주차의 Sales Price 값을 입력하시기 바랍니다.\n미래구간 52주차까지 Sales Price 값이 모두 입력되어야 합니다.', 'Validation Check')]
+  [M] 원장 원복 QTY=65001 rows=1  (기대 65001.0)
+  [I] 원장 pre  QTY=0 rows=0
+  [I] SAVE I=7  CALL_OK [('F', 'End Customer________ : NT\nSales site_____________ : BYD Electronics_CN_SZX\nModel________________ : MCSS22561-C1\nCustoms Handbook__ : E\nFcst Type_____________ : Mass\nIncoterms____________ : DAP\nPlant Site___________ : -\nCell Prod Site___________ : NJ01-A\nYYYYMMDD_________ : 20270601 ~ 20270801\n\nUnit Price Not Found !\n해당주차의 Sales Price 값을 입력하시기 바랍니다.\n미래구간 52주차까지 Sales Price 값이 모두 입력되어야 합니다.', 'Validation Check')]
+  [I] 원장 후   QTY=0 rows=0  (기대 7)
+  [D] SAVE D    CALL_OK [('0', 'SUCCESS', '3')]
+  [D] 원장 후   QTY=0 rows=0  (기대 0)
+  [RT] GET 재조회 D_20260817 = 65001.0 (기대 65001.0)
+
+===== DIV 81 =====
+GET rows=6518 res=[('0', 'SUCCESS')]
+[81] key ITEM=ACHP2005I-A1-101 SITE=MOBIS_US_MGM PJT=A22MZ1002 | M=20260814(v0=199584.0) I=20260812
+  [M] 원장 pre  QTY=199584 rows=1
+  [M] SAVE +1  CALL_OK [('0', 'SUCCESS', '1')]
+  [M] 원장 +1후 QTY=199585 rows=1  (기대 199585.0)
+  [M] SAVE 원복 CALL_OK [('0', 'SUCCESS', '1')]
+  [M] 원장 원복 QTY=199584 rows=1  (기대 199584.0)
+  [I] 원장 pre  QTY=0 rows=0
+  [I] SAVE I=7  CALL_OK [('0', 'SUCCESS', '1')]
+  [I] 원장 후   QTY=7 rows=1  (기대 7)
+  [D] SAVE D    CALL_OK [('0', 'SUCCESS', '1')]
+  [D] 원장 후   QTY=0 rows=1  (기대 0)
+  [D] 잔존 0행 1건 정리(사전 부재분 한정) — 커밋
+  [RT] GET 재조회 D_20260814 = 199584.0 (기대 199584.0)
+
+===== DIV 82 (저장 거부) =====
+  [82] SAVE 시도 CALL_OK [('F', '82 사업부는 조회 전용입니다. 저장할 수 없습니다.', 'Validation Check')]
+  [82] 원장 불변 확인 pre=(18, 1) post=(18, 1) 차단판정=True
+
+===== 종합 =====
+('40', {'M': False, 'I': False, 'D': True, 'RT': True})
+('81', {'M': True, 'I': True, 'D': True, 'RT': True})
+('82', {'BLOCK': True, 'LEDGER_SAME': True})

@@ -398,12 +398,17 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
     void setToast({ message: t('LBL00665', '_Loading...'), type: 'default', duration: 3000 });
     const join = (sel: (e: (typeof edits)[number]) => string): string => edits.map(sel).join('^');
     const res = await callSaveExchangeRate({
-      activeFlag: join(() => 'M'),
+      // AS-IS SaveData L510~511 — '0' 입력 = 해당 년월 환율 삭제('D'), 그 외 = upsert(MERGE)
+      activeFlag: join(e => (e.value === 0 ? 'D' : 'M')),
       divisionId: join(e => e.row.DIVISION_ID),
       yyyymmdd: join(e => `${e.ym}01`),
       currency: join(e => e.row.CURRENCY),
       unitCurrency: join(e => e.row.UNIT_CURRENCY),
       exchangePrice: join(e => String(e.value)),
+      // ⚠ 감사 2키 = FE 필수 전달 (BE 자동 주입은 sesUserId 키뿐 — 미전달 시 MERGE INSERT
+      //   CREATED_BY NOT NULL ORA-01400. AS-IS pUserID 행별 '^' 전달 L521~522 1:1)
+      createdBy: join(() => sesUserId),
+      lastUpdatedBy: join(() => sesUserId),
     });
     if (!res.ok) {
       void setAlert({
@@ -445,10 +450,12 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
                     label={t('LBL00663', 'Div')}
                     labelAlign='right'
                     render={() => (
+                      // ⭐ 화면 division 고정 — 비활성 (2026-08-05 사용자 지시. Ver.Cutoff 와 통일)
                       <CustomDropdown
                         value={divisionId}
                         options={divisionOptions}
                         onChange={(_, option) => setDivisionId(String(option))}
+                        disabled
                       />
                     )}
                   />

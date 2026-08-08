@@ -205,12 +205,12 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
     isCurVersion ||
     ((data?.fcstNPrice ?? []) as WijmoRowItem[]).some(r => String(r.EDIT_FLAG ?? '') !== 'N');
 
-  // Excel Form / Excel Upload 버튼 노출 게이트 — division 81 계열 + 82
-  //   startsWith('81') = '81', '81_UC' 등 하위 사업부 포함.
-  //   ⭐ 82 편입 (사용자 지시 2026-07-30): "40은 현재와 같이 유지, 81·82 는 현재의 81 과 같이 수행"
-  //   — PKG_DMF0082 의 81 분기(GET/SAVE/판가팝업)에 82 를 포함시킨 변경과 짝. SavePricePeriodModal
-  //     L203 은 이미 `startsWith('81') || === '82'` 로 동일 판정 중.
-  const isDiv81 = searchParams.divisionId.startsWith('81') || searchParams.divisionId === '82';
+  // Excel Form / Excel Upload 버튼 노출 게이트 — division 81(ESS Battery) 계열 전용
+  //   (SavePricePeriodModal 선례와 동일한 startsWith 매칭 — '81', '8110' 등 하위 사업부 포함).
+  const isDiv81 = searchParams.divisionId.startsWith('81');
+  // [UICATEGORY 2026-08-07] Division 82 = 조회 전용 (사용자 확정) — Insert/Delete/Save 버튼 차단.
+  //   서버 권위 = PKG EDIT_FLAG='N' 일괄 + SAVE V82-00 가드. FE 는 UX 게이트(진입점 원천 차단).
+  const isDiv82 = searchParams.divisionId === '82';
 
   // ── Search (AS-IS FindButton — V1~V4 검증 후 조회) ──
   const handleSubmit = async () => {
@@ -252,7 +252,9 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
       DIVISION_ID: searchParams.divisionId || str(seed?.['DIVISION_ID']) || baseDivision,
       END_CUSTOMER: str(seed?.['END_CUSTOMER']),
       PROJECT_CODE: str(seed?.['PROJECT_CODE']),
-      PLANT_SITE_ID: '',
+      // [CASCADE 2026-08-07] PLANT_SITE_ID 시드 승계 — 81 신규 행이 ''(공백)이면 V81-01(PLANT 공백) 저장 차단.
+      //   시드 행의 실값('WA00-P' 등)을 승계 (2026-08-07 SP 직접 I 실증은 시드 실값 경로였음).
+      PLANT_SITE_ID: str(seed?.['PLANT_SITE_ID']),
       SCM_SITE_ID: str(seed?.['SCM_SITE_ID']),
       ITEM_ID: str(seed?.['ITEM_ID']),
       DOM_EXP: str(seed?.['DOM_EXP']),
@@ -362,7 +364,8 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
     // 추가/삭제/저장 = 저장권한(hasButton) AND **편집 가능 버전일 때만** 노출.
     //   과거(조회 전용) 버전은 전 행 EDIT_FLAG='N' → isEditableVersion=false → 세 버튼 숨김(미렌더).
     //   Insert 는 handleInsert 내부에도 동일 가드가 있으나, 버튼 자체를 숨겨 진입점을 원천 차단한다.
-    ...(hasButton('SAVE') && isEditableVersion
+    //   [UICATEGORY 2026-08-07] div 82 = 조회 전용 — isCurVersion 이 true 여도 세 버튼 차단(!isDiv82).
+    ...(hasButton('SAVE') && isEditableVersion && !isDiv82
       ? {
           insert: handleInsert,
           delete: () => void handleDelete(),
@@ -389,24 +392,29 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
           },
         ]
       : []),
-    {
-      // 명칭 = DMF0020 과 동일 'Price Batch Input' (LBL00662, 2026-07-12 요청)
-      label: t('LBL00662', 'Price Batch Input'),
-      title: t('LBL00662', 'Price Batch Input'),
-      action: () => {
-        // AS-IS V15: 수정모드(변경 존재) 시 차단 (MSG00669) 후 SavePricePeriodModal open
-        const changed = editTrackerRef.current?.getOriginalValues();
-        if (changed && changed.size > 0) {
-          void setAlert({
-            type: 'alert',
-            content: t(MSG.EDIT_MODE_NO_INPUT, '_Not in edit mode.'),
-          });
-          return;
-        }
-        setSavePriceModalOpen(true);
-      },
-      buttonLabel: t('LBL00662', 'Price Batch Input'),
-    },
+    // [UICATEGORY 2026-08-07] div 82 = 조회 전용 — Price Batch Input(기간 일괄 저장 진입점)도 숨김 (사용자 지정)
+    ...(!isDiv82
+      ? [
+          {
+            // 명칭 = DMF0020 과 동일 'Price Batch Input' (LBL00662, 2026-07-12 요청)
+            label: t('LBL00662', 'Price Batch Input'),
+            title: t('LBL00662', 'Price Batch Input'),
+            action: () => {
+              // AS-IS V15: 수정모드(변경 존재) 시 차단 (MSG00669) 후 SavePricePeriodModal open
+              const changed = editTrackerRef.current?.getOriginalValues();
+              if (changed && changed.size > 0) {
+                void setAlert({
+                  type: 'alert',
+                  content: t(MSG.EDIT_MODE_NO_INPUT, '_Not in edit mode.'),
+                });
+                return;
+              }
+              setSavePriceModalOpen(true);
+            },
+            buttonLabel: t('LBL00662', 'Price Batch Input'),
+          },
+        ]
+      : []),
     // 환율(Exchange Rate) — 메저(Measure) 버튼 바로 옆으로 이동 (2026-07-12 요청)
     {
       label: t('LBL00661', 'Exchange Rate'),
@@ -427,19 +435,18 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
       iconComponent: <IcExchangeRate />,
       buttonLabel: '',
     },
-    // ⭐ 아이콘 배치 규약 (hook #119, 사용자 명시 2026-07-30): 환율 → Grid Column Set → Measure
-    {
-      label: t('LBL00605', 'Column Setting'),
-      title: t('LBL00605', 'Column Setting'),
-      action: () => setColumnModalOpen(true),
-      iconComponent: <IcGridColumnSetup />,
-      buttonLabel: '',
-    },
     {
       label: t('LBL00712', '_Measure'),
       title: t('LBL00712', '_Measure'),
       action: () => setMeasureModalOpen(true),
       iconComponent: <IcMeasureSelect />,
+      buttonLabel: '',
+    },
+    {
+      label: t('LBL00605', 'Column Setting'),
+      title: t('LBL00605', 'Column Setting'),
+      action: () => setColumnModalOpen(true),
+      iconComponent: <IcGridColumnSetup />,
       buttonLabel: '',
     },
   ];

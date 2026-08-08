@@ -17,6 +17,7 @@
 | 83 | [search-area-button-position-and-toggle](../hooks/search-area-button-position-and-toggle.md) | ⭐ | 검색버튼 위치 표준 + 3단↑ 조회조건 펼침/닫기 토글 |
 | 87 | [screen-combo-validation-message-mandatory](../hooks/screen-combo-validation-message-mandatory.md) §D | ⭐⭐⭐ | 다단 헤더 depth=DB 라벨 메타(`getColumnDepth`) — 화면 하드코딩 금지 |
 | 101 | [ui-work-entry-playbook](../hooks/ui-work-entry-playbook.md) | ⭐⭐⭐ | "보완"=전면 점검·교정 / "신규 생성"=14단계 3-way cross-check — UI 작업 진입 플레이북 |
+| 124 | [screen-asis-pre-analysis-mandatory](../hooks/screen-asis-pre-analysis-mandatory.md) §1① | ⭐⭐⭐ | UI 생성·보완 = **디자인 선행 분석 md**(#90 Figma MD+영역 매핑표) 포함 4영역 md 완비 전 구현 착수 금지 — 모달 레이아웃도 디자인 hook 동일 적용 (주 소속 11 — 01·05 공유) |
 
 ## Cross-ref
 - TO-BE 정밀: `_tobe/06_search_area.md` / `_tobe/07_datagrid.md` / `_tobe/00_SCREEN_ANATOMY.md`

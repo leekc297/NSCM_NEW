@@ -8,8 +8,14 @@
 | 38 | [pre-write](../hooks/pre-write.md) | 🅒 | 파일 작성 직전 체크리스트 |
 | 36 | [post-write](../hooks/post-write.md) | 🅒 | 작성 직후 grep 검증 |
 | 37 | [pre-submit](../hooks/pre-submit.md) | 🅒 | PR 제출 직전 통합 검증 (머지 게이트) |
-| 46 | [screen-completion-gate](../hooks/screen-completion-gate.md) | ⭐⭐ | 화면 종료 선언 전 **8 게이트** + 보고 양식 |
+| 46 | [screen-completion-gate](../hooks/screen-completion-gate.md) | ⭐⭐ | 화면 종료 선언 전 **8 게이트** + 보고 양식 + ⭐ **완료 선언 = ui_gate_runner 리포트 첨부 의무 (2026-08-07)** |
 | 101 | [ui-work-entry-playbook](../hooks/ui-work-entry-playbook.md) | ⭐⭐⭐ | "보완"/"신규 생성" 진입 절차 (카테고리 01·11 공유) |
+
+> ⭐ **실행 hook 7종 + 보조 검증 도구 3종 (2026-08-07)** — 단일 소스 = `RULESET_MASTER §6.1`:
+> 실행 hook 에 `check-ui-gates.ps1`(G-A~**G-E** — G-E=모달 확정버튼 부재 의심) · `check-meta-sql.ps1`(SHEET_COLUMNS CTRL/INPUT_TP_CD 값 단언) 추가.
+> 도구 = `_artifacts/_diagnostics/` `wiring_chain_check.py`(FE→BE→SP 체인+v2 액션·권한 축 L2A/L2P·`--all` 스윕) / `asis_mapping_gate.py`(EID 1:1
+> +CRUD·모달 매트릭스 `--init` 선생성·`--check [--matrix-only]` 게이트) / `ui_gate_runner.py`(5섹션 일괄 → `_artifacts/_gate_reports/{MNU_ID}_{ts}.md`).
+> 런타임 짝 = screen-completion-gate §0.5 **G6-6 모달별 CRUD 왕복** (2026-08-07 사용자 요구 "MAIN UI 와 모달의 CRUD 누락 0").
 
 ## B. 사내 DB 적용·이관 패키지
 | # | Hook | 강도 | 계율 1줄 |
@@ -31,6 +37,8 @@
 | 77 | [claude-md-changelog-policy](../hooks/claude-md-changelog-policy.md) | ⭐⭐ | CLAUDE.md §15 직접 추가 금지 — monthly archive 1-line + work_reports 분리 |
 | 86 | [issue-feed-rules](../hooks/issue-feed-rules.md) | 🅒 | 일일 이슈 → 룰 후보 append-only 피드 |
 | 88 | [issue-log-daily-workflow](../hooks/issue-log-daily-workflow.md) | 🅒 | 이슈목록 정리 → 룰 승격 절차 |
+| 125 | [ui-selfcheck-runtime-mandatory](../hooks/ui-selfcheck-runtime-mandatory.md) | ⭐⭐⭐ | **완료 선언 전 셀프 런타임 검증 의무** — SP 직접 CRUD 왕복 + HTTP E2E 러너(ui_http_e2e.py) 8축 + Division×역할 15계정 권한별 + 모달=MAIN 동등 5칸 + 3리포트 첨부 (주 소속 — 02·05 공유, 2026-08-07 사용자 지정) |
+| 126 | [verification-completion-honesty](../hooks/verification-completion-honesty.md) | ⭐⭐⭐ | **검증 완료 선언 정직성 계약** — 보고 3값(PASS/**ERROR**/FAIL): 미실행·미확인·환경파손·미적용 = ERROR(PASS 아님). 완료 판정식 5조건(9섹션 전수 실행 + 리포트 3종 + **신선도** + 적용축 사내/QA/DEV + 사용자축 명시) · ERROR 5칸 양식 · **게이트 자기검증**(역재현·커버리지 실측·절단 고지) · 환경오류≠통과. #124→#125→**#126 출구** (주 소속 — 11·10 공유, 2026-08-08 사용자 지정) |
 
 ## Cross-ref
 - 룰 v1 유지 8: 02(브랜치/커밋)/21(트러블슈팅)/**22(이관패키지)**/28(multi-remote)/29(CSV 적재)/30(백업/원복)/31(Figma)/32(Oracle 직결)

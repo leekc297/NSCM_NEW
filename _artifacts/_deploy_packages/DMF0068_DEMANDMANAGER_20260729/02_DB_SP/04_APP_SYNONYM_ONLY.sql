@@ -1,8 +1,9 @@
 -- ============================================================================
 -- 04_APP_SYNONYM_ONLY.sql  (PKG_DMF0068)
 --   ⛔ 【애플리케이션(BE 접속) 계정 세션에서만 실행】
---        · 클라우드 : **SCMP_APP**   ← 2026-07-30 확인 (SCMD_APP 아님)
---        · 사내     : SCMD_APP
+--        · 클라우드 QA  : **SCMQ_APP** ← 2026-08-06 사용자 확인
+--        · 클라우드 DEV : SCMP_APP    ← 2026-07-30 확인
+--        · 사내         : SCMD_APP
 --      SCM_MGR 로 실행하면 ORA-01031(권한 부족)로 실패한다.
 --   DMF0068 이관에서 **유일하게 SCM_MGR 이 아닌 계정이 필요한 작업**이다.
 --   선행: `01_PKG_DMF0068_SPEC.sql` → `02_PKG_DMF0068_BODY.sql` → `03_GRANT.sql`(SCM_MGR)
@@ -33,10 +34,10 @@ CREATE OR REPLACE SYNONYM PKG_DMF0068 FOR SCM_MGR.PKG_DMF0068;
 SELECT OWNER, SYNONYM_NAME, TABLE_OWNER, TABLE_NAME
   FROM ALL_SYNONYMS WHERE SYNONYM_NAME = 'PKG_DMF0068';
 
--- ── [4] 실제 호출 검증 (같은 세션 / SQLcl·SQL*Plus) ─────────────────────────
+-- ── [4] 실제 호출 검증 (같은 세션 / SQLcl·SQL*Plus) — 2026-08-06 시그니처 정정 (7 IN + 2 OUT)
 -- VAR rc1 REFCURSOR
 -- VAR rc2 REFCURSOR
--- EXEC PKG_DMF0068.P_DMF0068_GET_CONT_VIEW_VERSIONPOPUP('40','REPORT_SP_W','2025-07','2026-10',:rc1,:rc2);
+-- EXEC PKG_DMF0068.P_DMF0068_GET_CONT_VIEW_VERSIONPOPUP('20250801','20261130','40','REPORT_SP_W','','minyonglee1','DMF0068',:rc1,:rc2);
 -- PRINT rc1
 
 -- ── [4] 는 되는데 화면만 PLS-00201 이면 ─────────────────────────────────────

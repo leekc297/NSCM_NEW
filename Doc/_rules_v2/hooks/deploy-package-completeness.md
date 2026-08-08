@@ -48,6 +48,23 @@
 
 > 사고 계보: 이 3건이 없으면 "사내에서는 정상, 클라우드에서만 실패" 또는 "적용은 성공했는데 화면 진입 시 권한없음" 이 재발한다.
 
+### §1.0-C ⭐⭐ 메타 "값 단언" 3종 (2026-08-06 SYS0017 근본원인 감사 계기 신설)
+
+> **검증 = 카운트 아닌 값 단언.** SYS0017 7/29 패키지는 SHEET_COLUMNS 32행 "건수" 검증만으로 통과했으나
+> 32행 전부 `INPUT_TP_CD='IM'` + 콤보 CTRL `'C'`(비표준) 오등록이었다. 본문 표준 = **hook #98 §6** (단일 소스).
+
+| # | 의무 (SHEET_COLUMNS 등록·검증 SQL 포함 패키지 전부) | 방식 |
+|---|---|---|
+| 1 | **CTRL 화이트리스트 단언** — FE `packages/foundation/src/constants/column-config.ts` `CELL_CONTROL_TYPE` 실제 열거(`FP*` 14종)를 인용한 `NOT IN (...)` 검출 쿼리 동봉 (기대 0행 — `'C'`/`'S'` 검출 시 적용 중단) | #98 §6.1 SQL |
+| 2 | **INPUT_TP_CD 분포 대사** — 편집 화면의 전면 'IM' 일괄 금지. 시트별 목표 분포를 검증 스크립트 PROMPT 주석에 명기하고 화면설계서 5.GRID "편집 규칙" 컬럼과 1:1 대사 | #98 §6.2 SQL |
+| 3 | **값 단언 형식** — 검증 SQL 은 기대값(분포/화이트리스트)을 스크립트에 박은 단언 형식. 정본 = `_deploy_packages/SYS0017_MAILSETUP_PATCH_20260806/00_PRECHECK.sql` **[B-1]/[B-2]** | PRECHECK [B] 형식 |
+
+> ⭐ **자동화 2종 (2026-08-07 신설)**: ①SHEET_COLUMNS SQL 작성 시점에 실행 hook `.claude/hooks/check-meta-sql.ps1`
+> 이 CTRL 화이트리스트/INPUT_TP_CD 를 자동 차단 (본문 = hook #98 §6.2-T). ②이관 PRECHECK 보조 도구 =
+> `python _artifacts/_diagnostics/wiring_chain_check.py --menu {MNU_ID}` — 패키지 적용 **후** 배선 체인
+> (BTN_MPG→API_M→PROC_M→SP VALID→시그니처)을 실측 판정 (DMF0072 유형 = API_M 부재를 L3 에서 검출).
+> zip 동봉 검증 절차에 위 러너 실행 결과 요약을 README 에 기재 권장.
+
 ### §1.1 6-종 인벤토리 작성
 
 ```
@@ -245,3 +262,4 @@ ls _artifacts/_deploy_packages/{화면}/04_Verify/*_Diagnose.sql        # Diagno
 - **2026-07-02 §4.5 신설** (DMF0020 SAVE '후속 보강' 잔류 → 클라우드 저장 불능 / SYS0012 PROC_M MERGE ORA-00001 사고)
 - **2026-07-23 §4.6 신설** (DMF0003 FE 동봉 누락·DMF0049 `/`구분자 PLS-00103·교차 PKG PLS-00201 — 사용자 룰화 요구)
 - 2026-07-29: **§1.0-B 신설** — 00_PRECHECK_CLOUD 동봉 / 신규 채번 충돌 점검 / 권한 미러링 원본 실측 3건 + §1.1 에 재사용 i18n 키 실제 문구 확인 추가 (SYS0017 이관 취합).
+- 2026-08-06: **§1.0-C 신설** — 메타 "값 단언" 3종 (CTRL 화이트리스트 / INPUT_TP_CD 분포 대사 / PRECHECK [B] 단언 형식). SYS0017 근본원인 감사 계기 — 본문 = hook #98 §6.

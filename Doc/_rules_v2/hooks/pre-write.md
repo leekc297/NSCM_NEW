@@ -23,6 +23,9 @@
 - [ ] **DataGrid wrapper**: FlexGrid 직접 import 금지 → `DataGrid` (`@shared/components`)
 - [ ] **EditTracker.storeChange**: cell 변경 시 누락 금지
 - [ ] **CRUD_TYPE 가드**: modal cell 더블클릭 시 `CRUD_TYPE.INSERT` 가드 의무
+- [ ] ⭐ **저장 대상 행 판정 = `CRUD_TYPE` 전용** (hook #99 §0, SYS0017 2026-08-06 감사): 자체 상태필드(rowStatus/actionFlag/isNew 류) 신설 금지 — 공통버튼·EditTracker 마킹과 단절 → 저장 0건
+- [ ] ⭐ **`apiClient.post`(call-proc) 직접 호출 = 결과 판정 동반** (screen-completion-gate §1-3): `if (res.status >= 400 || Number(res.data.code))` — 인터셉터가 500/403 도 resolve (정본 business-plan.api.ts:71)
+- [ ] ⭐ **공용 컴포넌트 상호배타 prop 계약 확인** (screen-runtime-pitfalls **P9** §8C.4 표, SYS0017 감사): 낯선 prop 지정 전 소스 조건 분기 확인 — `CustomDialog customContentArea` 지정 = 공통 OK/Cancel footer 미렌더 → 자체 footer 구현 의무
 - [ ] **⭐ type-check-error-patterns** (`./type-check-error-patterns.md` §1~§5 17 패턴 self-check): `useTabProcQuery/useProcMutation` `tabId` 필수 / Modal `callFromCell` 필수 / `as XxxRow[]` direct cast 금지 (`as unknown as` 의무) / `DialogNavigationSize` number literal 만 / index sig `[key:string]: WijmoPrimitive` 의무 (optional `?: string` 금지)
 
 ### §0.3 BE `.java`

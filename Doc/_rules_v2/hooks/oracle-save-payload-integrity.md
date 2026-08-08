@@ -6,6 +6,28 @@
 > **배경 사고 (2026-07-01~02, DMF0020 Sales Future Price)**: 저장 오류 4연발 —
 > ① "동일 기간 두 개 이상 Currency" 오탐 ② MSG00043 중복 오탐 ③ ORA-01400 PLANT_SITE_ID NULL.
 > 모두 **FE 저장 payload가 배포 SP의 검증 규칙과 어긋나서** 발생. SP는 무변경으로 해결.
+>
+> **2026-08-06 SYS0017 근본원인 감사 계기 개정**: §0(저장 대상 행 판정 = `CRUD_TYPE` 전용) + §0.1(감사키 빈값 금지) 신설.
+
+---
+
+## §0. ⭐⭐⭐ 저장 대상 행 판정 = `CRUD_TYPE` **전용** (자체 상태필드 신설 절대 금지) — SYS0017 2026-08-06 감사 계기
+
+저장(dirty) 행 판정의 유일한 출처는 **`CRUD_TYPE`** 이다 — `GridAction.addRow`(INSERT 마킹) / `GridAction.removeRow`(DELETE 마킹) / **EditTracker `storeChange`**(cellEditEnded 시 `'M'` 자동 마킹) 가 이 필드에만 마킹한다.
+
+- ❌ **자체 상태필드(`rowStatus` / `ROW_STATUS` / `actionFlag` / `isNew` 류) 신설 금지** — 값이 I/M/D 로 같아도 **공통버튼(SubTitle INSERT/DELETE)·셀편집(EditTracker) 마킹과 단절**되어 사용자가 아무리 편집해도 자체 필드는 영원히 빈값 → **저장 payload 0건** (SYS0017 실사고: `row.rowStatus` 자체 상수 신설 → Insert/편집 저장 전멸. 주석 *"AS-IS action 컬럼(I/M/D) 대체 (TO-BE 상시 편집 표준)"* 이 표준 준수처럼 위장 — **주석은 준수의 증거가 아니다. 준수 = `CRUD_TYPE`/`GridAction`/`EditTracker` 표준 심볼 사용의 grep 으로 판정**).
+- ✅ dirty 판정 = `CRUD_TYPE` marker + CollectionView itemsAdded/Edited/Removed + `EditTracker.getOriginalValues()` 3-union (screen-runtime-pitfalls §2.7 표준).
+- ✅ AS-IS 의 action 컬럼(I/M/D)을 TO-BE 로 옮길 때도 **`CRUD_TYPE` 로 매핑**한다 (`@foundation/constants` `CRUD_TYPE.INSERT/MODIFY/DELETE`) — 동명·동값 별도 enum 재정의 금지.
+- **POST-WRITE grep (0 hit 의무)** — post-write §0.1 #18 과 동일:
+  ```bash
+  grep -rnE "rowStatus|ROW_STATUS|actionFlag|isNewRow" features/{domain}/src/pages/{screen}/
+  ```
+
+## §0.1. ⭐ '^' bulk 감사키 빈문자열 전송 금지 (SYS0017 2026-08-06 감사 계기)
+
+- ❌ `createdBy: joinBulk(changed.map(() => ''))` 처럼 **감사키를 빈문자열로 채워 전송 금지** — Oracle `''`=NULL → CREATED_BY NOT NULL 컬럼이면 ORA-01400, NVL 처리 SP 면 **silent 로 감사값 소실**.
+- ✅ 감사키 = 세션 사용자 (`useSessionStore` userId). call-proc 의 BE 자동 주입 키는 `sesUserId` 뿐 — `createdBy`/`createdByBulk` 류는 **FE 필수 전달** ([[feedback_callproc_audit_keys_fe_mandatory]]).
+- **POST-WRITE grep (0 hit 의무)**: `grep -rnE "map\(\(\) *=> *''\)|createdBy: *''" features/{domain}/src/pages/{screen}/`
 
 ---
 
@@ -71,16 +93,20 @@ PIVOT/measure 다행 화면은 한 item이 measure 행(RTF/KRW/USD/LOC) 여러 �
 | 6.5 | 중복검증 PK에 MEASURE 누락 | measure 다행 오탐(MSG00043) |
 | 6.6 | 로그·SP 미확인 채 원인 추측 | 헛수정 반복 (anti-simplification 위반) |
 | 6.7 | 오탐 회피하려 SP 수정 | 사내 원본과 divergence — 별도 검증·이관 부담 (FE 우회가 정답) |
+| 6.8 | 자체 행상태 필드(rowStatus 류) 신설 (§0) | 공통버튼·EditTracker 마킹과 단절 → 저장 payload 0건 (SYS0017) |
+| 6.9 | 감사키 빈문자열 전송 (§0.1) | ORA-01400 또는 감사값 silent 소실 (SYS0017) |
 
 ## §7. 적용 이력
 
 | 화면 | 적용 | 적용일 |
 |---|---|---|
 | DMF0020 (sales-future-price) | §1 배치 active_flag 'M' / §2 payload dedup+사전검증 / §3 PLANT_SITE_ID '-' / §5 중복검증 measure 포함 | 2026-07-01~02 |
+| SYS0017 (mail-setup) | §0 자체 rowStatus 제거→CRUD_TYPE 전환 / §0.1 감사키 세션 사용자 전달 (근본원인 감사 → 본 §0/§0.1 신설) | 2026-08-06 |
 
 ## Cross-ref
 - `oracle-db-workflow.md` (통합 진입 — 저장 SP 디버깅 분기)
 - `proc-meta-signature-match.md` (PROC_M positional ↔ SP signature)
 - `sp-dual-out-cursor-pattern` / `sp-cursor-name-response-key` (OUT 커서)
 - `db-error-asis-cross-check.md` (ORA 오류 AS-IS 대조)
-- 메모리: `feedback_asis_to_tobe_sp_no_omission`, `feedback_corporate_schema_dropped_col_save_default`, `feedback_ddl_grep_before_sql`
+- `screen-runtime-pitfalls-mandatory.md` §2.7 (dirty 3-union 표준 — §0 짝) / `post-write.md` §0.1 #18~#20 + §0.1-B (grep 게이트) / `screen-completion-gate.md` §1-3 (저장 결과 판정 의무)
+- 메모리: `feedback_asis_to_tobe_sp_no_omission`, `feedback_corporate_schema_dropped_col_save_default`, `feedback_ddl_grep_before_sql`, `feedback_callproc_audit_keys_fe_mandatory`

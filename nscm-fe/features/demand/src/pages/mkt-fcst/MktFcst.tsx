@@ -584,6 +584,30 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
       createdBy: useSessionStore.getState().session.userId ?? '',
     });
 
+    // ⭐ 식별키 공백 가드(수정 'M' 행) — 메인 SP 의 SELECT 컬럼은 titleset 'C' 로 동적 구성되므로,
+    //   식별키(Project 등)를 Column Setting 에서 제외한 채 조회한 데이터에는 해당 키가 아예 없다.
+    //   그 상태로 편집·저장하면 키가 ''(공백)로 나가 SP "Check Mandatory Columns" 검증에 걸린다
+    //   (2026-08-05 실사고 — 오류문구가 3개 컬럼만 언급해 원인 오인 소지). 원장 식별키는 전부
+    //   NOT NULL 실측이므로 수정 행의 공백 키 = 그리드 데이터 컬럼 부재 → MSG00113 차단(재조회 유도).
+    const missingKeyRow = unfoldRows.find(
+      r =>
+        r.activeFlag === 'M' &&
+        (!r.projectCode ||
+          !r.scmSiteId ||
+          !r.itemId ||
+          !r.domExp ||
+          !r.fcstType ||
+          !r.incoterms ||
+          !r.measure)
+    );
+    if (missingKeyRow) {
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.REQUIRED_COLUMN, '_필수 입력 컬럼이 없습니다.'),
+      });
+      return;
+    }
+
     // ⭐ [E20260604-000994] p_authority = 로그인 권한 그룹(.cs L2243~2244 sAuthority=NowGroupID).
     //   TO-BE 근사: 세션 groupId → 대표 DM류 그룹 → SCP Planner → userId (조회 userGroup 배선과 동일 계보).
     const scpGroup = isScpPlanner ? GROUP.SCP_PLANNER : '';
@@ -959,6 +983,12 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
             //   → 방금 표시로 옮긴 컬럼이 재진입 시 비표시로 보이는 사고 (2026-07-28 실측).
             //   팝업 query 의 tabId = MENU_ID 이므로 이 prefix 로 매칭된다.
             void queryClient.invalidateQueries({ queryKey: [MENU_ID] });
+            // ⭐ 메인 조회 쿼리 키는 [tabId(UUID), sheetName, ...] — [MENU_ID] prefix 와 매칭되지
+            //   않아 'C' 저장 후 그리드가 구 titleset SELECT 데이터로 남는다. 메인 SP 는 titleset 'C'
+            //   기준으로 SELECT 컬럼을 동적 구성하므로(V_COLUMN), 재조회 없이는 방금 추가한 컬럼의
+            //   데이터가 없어 편집·저장 시 식별키 공백 → SP "Check Mandatory Columns" 검증 실패
+            //   (2026-08-05 실사고: 17:00 조회 → 17:11 컬럼 추가 → 미재조회 저장 실패).
+            void queryClient.invalidateQueries({ queryKey: [tabId] });
             void fetchStaticColumns();
           });
         }}
@@ -983,6 +1013,9 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
             if (!ok) return;
             void fetchStaticMeasures();
             void queryClient.invalidateQueries({ queryKey: [MENU_ID] });
+            // ⭐ 메인 조회 쿼리 키 prefix = tabId(UUID) — 위 'C' 경로와 동일 사유로 [tabId] invalidate
+            //   가 있어야 메인 SP(TITLESET 'M' measure 필터) 재조회가 실제로 일어난다.
+            void queryClient.invalidateQueries({ queryKey: [tabId] });
           });
         }}
       />

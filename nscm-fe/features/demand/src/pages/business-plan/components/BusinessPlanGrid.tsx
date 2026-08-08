@@ -103,10 +103,16 @@ export const BusinessPlanGrid = ({
 
   // ⭐ 정적 컬럼 — admin(UI Category Setup) 메타 100% 주도. 하드코딩/화이트리스트/FALLBACK 금지 (hook #113).
   //   FE 는 VISIBLE_FLAG(admin 관리 노출) + DISPLAY_FLAG(사용자 Column Setup 선택) 만 반영.
-  const visibleColumns = useMemo<RawFlexGridColumnConfig[]>(
-    () => (staticColumns ?? []).filter(c => c.visible !== false && c.display !== false),
-    [staticColumns]
-  );
+  // ⭐ MEASURE 는 Column Setting 대상에서 제외하고 정적 컬럼 마지막에 항상 표시한다
+  //   (2026-08-05 사용자 확정 — admin 메타 VISIBLE_FLAG/개인화 display 와 무관하게 상시 노출).
+  const visibleColumns = useMemo<RawFlexGridColumnConfig[]>(() => {
+    const cols = staticColumns ?? [];
+    const base = cols.filter(
+      c => c.colNm !== 'MEASURE' && c.visible !== false && c.display !== false
+    );
+    const measure = cols.find(c => c.colNm === 'MEASURE');
+    return measure ? [...base, { ...measure, visible: true, display: true }] : base;
+  }, [staticColumns]);
   const fixedBindings = useMemo(() => visibleColumns.map(c => c.colNm), [visibleColumns]);
   const staticBindingSet = useMemo(() => new Set(fixedBindings), [fixedBindings]);
 

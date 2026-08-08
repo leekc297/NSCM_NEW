@@ -12,9 +12,11 @@
 | 105 | [screen-analysis-workbook-standard](../hooks/screen-analysis-workbook-standard.md) | ⭐⭐ | 화면설계서 8시트 / UI분석서 10시트 신포맷 + 0단계 선행 산출물(주요이벤트·제약매트릭스 MD) + 카운트 대사 |
 | 91 | [sheet-name-asis-preserve-mandatory](../hooks/sheet-name-asis-preserve-mandatory.md) | ⭐⭐⭐ | SHEET_NAME=AS-IS 원본 보존 (카테고리 08 공유) |
 | 112 | [search-condition-asis-tobe-catalog](../hooks/search-condition-asis-tobe-catalog.md) | ⭐⭐ | 조회조건 카탈로그 전 행 대조 (카테고리 04 공유) |
-| 117 | [search-condition-datasource-asis-parity](../hooks/search-condition-datasource-asis-parity.md) | ⭐⭐ | 추출 쿼리 AS-IS 1:1 — 불일치=MINUS 실측 판정 (카테고리 04 공유) |
+| 117 | [search-condition-datasource-asis-parity](../hooks/search-condition-datasource-asis-parity.md) | ⭐⭐ | 추출 쿼리 AS-IS 1:1 — 불일치=MINUS 실측 판정 (카테고리 04 공유). ⭐ **§5.5~§5.10**: UP_FX 3분할 완결(등록·배선·파라미터) + AS-IS 적용 **범위** 초과 금지(40 큐레이션↛81/82) + SAVE 파라미터 여부 선확인. ⭐ **§5.11** SP 프롤로그(첫 @Code 이전) 공통 변형 이식 의무 + **§5.12** AS-IS 호출 지점 수 N:N 대사(분기 SQL 만 맞추면 조용히 죽는다) — `combo_callsite_parity.py` 자동화·게이트 섹션 8 |
 | 114 | [msg-id-asis-tobe-conversion](../hooks/msg-id-asis-tobe-conversion.md) | ⭐⭐⭐ | AS-IS MSG_ID 그대로 복사 금지 (카테고리 07 공유) |
 | 101 | [ui-work-entry-playbook](../hooks/ui-work-entry-playbook.md) §2 | ⭐⭐⭐ | 신규 UI = 분석 MD 8종+xlsx+매트릭스+원시 .cs **3-way cross-check** |
+| 123 | [screen-modal-cascade-filter-analysis](../hooks/screen-modal-cascade-filter-analysis.md) | ⭐⭐⭐ | 신규 화면=Modal AS-IS 기능분석 선행 + Cascade/Filter 전수 md 생성·적용 / UI 보완=md 부재 시 선분석 (주 소속 — 04·05 공유) |
+| 124 | [screen-asis-pre-analysis-mandatory](../hooks/screen-asis-pre-analysis-mandatory.md) | ⭐⭐⭐ | UI 생성·보완 = **4영역(디자인·VALIDATION·EVENT·CRUD+종속 모달) AS-IS 선행 분석 md 완비 전 구현 착수 금지** + ⭐각 모달=MAIN UI 와 동일한 4영역 분석·점검(#123·#105·asis-coverage-check 우산 — 주 소속, 01·05 공유) |
 
 ## 필수 원천 (실측 순서)
 1. **원소스**: `GSCM/06.UIL/...`(최신 정본) vs `GSCM_20260512`(이전) — 메모리 `reference_asis_source_folders`. 화면 .cs + Designer.cs + **호출 팝업 .cs 별도**

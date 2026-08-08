@@ -92,7 +92,6 @@ const initSearchParams: SearchParamProps = {
   deptIds: [],
   endCustomers: [],
   salesSites: [],
-  plantSiteIds: [],
   bizTypes: [],
   itemIds: [],
   startYyyymmdd: dayjs().startOf('month').format('YYYYMMDD'),
@@ -101,6 +100,11 @@ const initSearchParams: SearchParamProps = {
   versionType: 'Current',
   qtyYn: false,
   sumYn: false,
+  // [UICATEGORY 2026-08-07] DMF0003 파리티 조회조건 — persist rehydrate 구버전 shape 보호(기본값 필수)
+  plantSiteIds: [],
+  projectCodes: [],
+  owners: [],
+  senderCodes: [],
 };
 
 const initState: ForecastPriceState = {
@@ -189,13 +193,16 @@ export const useForecastPriceStore = createPersistedStoreWithTab<
         fromYyyymmdd: sp.startYyyymmdd,
         toYyyymmdd: sp.endYyyymmdd,
         salesSite: joinComma(sp.salesSites),
-        // Plant Site (81 전용) — PROC_M 키 plantSiteId (DMF0003 동일 명칭). 40/82 = 'ALL'.
-        plantSiteId: joinComma(sp.plantSiteIds),
         itemId: sp.itemIds.length === 0 ? '' : sp.itemIds.join(','),
         versionType: sp.versionType,
         qtyYn: sp.qtyYn ? 'Y' : 'N',
         sesUserId,
         userGroup,
+        // [UICATEGORY 2026-08-07] Plant Site(기존 SP IN 13 — 미전송 결함 동시 수정) + Project/Owner/SenderCode(IN 14~16)
+        plantSiteId: joinComma(sp.plantSiteIds),
+        projectCode: joinComma(sp.projectCodes),
+        owner: joinComma(sp.owners),
+        senderCode: joinComma(sp.senderCodes),
       };
       const newTitleFilters: ProcRequest<MENU_ID, SHEETS.SPREAD_TITLE> = {
         startYyyymmdd: sp.startYyyymmdd,

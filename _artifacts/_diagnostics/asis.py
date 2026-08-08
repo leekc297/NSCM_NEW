@@ -30,12 +30,17 @@ def _rows(cur):
     cols = [d[0] for d in cur.description]
     return cols, cur.fetchall()
 
-def _print(cols, rows, limit=200):
+def _print(cols, rows, limit=None):
+    """전량 출력이 기본. ⚠️ 2026-08-08 이전에는 limit=200 으로 **말없이 잘라** 출력하면서
+    `(N rows)` 는 전체 건수를 찍어, 200행 넘는 조회에서 조용한 누락이 발생할 수 있었다.
+    절단이 필요하면 limit 을 명시하고, 잘린 사실을 반드시 고지한다."""
     print(" | ".join(cols))
     print("-+-".join("-" * len(c) for c in cols))
-    for r in rows[:limit]:
+    shown = rows if limit is None else rows[:limit]
+    for r in shown:
         print(" | ".join("" if v is None else str(v) for v in r))
-    print(f"({len(rows)} rows)")
+    cut = len(rows) - len(shown)
+    print(f"({len(rows)} rows" + (f" — {len(shown)} 표시 · ⚠ {cut} 행 생략" if cut else "") + ")")
 
 def main():
     a = sys.argv[1:]

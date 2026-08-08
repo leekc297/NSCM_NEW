@@ -14,6 +14,10 @@ PROCEDURE P_DMF0082_GET_MAIN_DATA
   , p_qty_yn         IN  VARCHAR2
   , p_created_by     IN  VARCHAR2
   , p_user_group     IN  VARCHAR2
+  , p_plant_site_id  IN  VARCHAR2 DEFAULT 'ALL'  /* [PLANT_SITE 2026-08-04] 조회조건 Plant Site (81 전용 — FE 40/82 비활성 'ALL') */
+  , p_project_code   IN  VARCHAR2 DEFAULT 'ALL'  /* [UICATEGORY 2026-08-07] 조회조건 Project (다중 콤마 토큰) */
+  , p_owner          IN  VARCHAR2 DEFAULT 'ALL'  /* [UICATEGORY 2026-08-07] 조회조건 Owner (다중 콤마 토큰) */
+  , p_sender_code    IN  VARCHAR2 DEFAULT 'ALL'  /* [UICATEGORY 2026-08-07] 조회조건 Sender Code — 실값 보유 행만 매칭, 무값 행 통과 (사용자 확정) */
   , O_RC1            OUT SYS_REFCURSOR
   , O_RC2            OUT SYS_REFCURSOR
   , O_RC3            OUT SYS_REFCURSOR
@@ -125,6 +129,7 @@ IS
 
     -- ===== C_TITLE 커서 =====
     CURSOR C_TITLE IS
+        SELECT * FROM ( --[SORTFIX 2026-08-04] 인라인뷰 (UNION ORDER BY 식 제약 ORA-01785 회피)
         SELECT U.PROGRAM_ID
              , U.SHEET_NAME
              , U.COLUMN_NAME
@@ -141,6 +146,23 @@ IS
         AND    U.SHEET_NAME  = VA_SHEET_NAME
         AND    U.USER_ID     = p_created_by
         AND    U.USER_INQUIRY_COLUMN_TYPE_CODE = 'C'
+        -- [UICATEGORY 2026-08-07] MF_SP 산출 whitelist — titleset 'C' 오염(미산출 컬럼) 유입 시 동적 SQL ORA-00904 차단
+        --   (DMF0003 TITLESET IMMUNIZE 파리티. 목록 = GT_DMF0082_MF_SP 전 컬럼 ∪ SRC0 파생 alias — GT ALTER 시 동기 의무)
+        AND    U.COLUMN_NAME IN (
+                 'DIVISION_ID','PROJECT_CODE','END_CUSTOMER','SCM_SITE_ID','ITEM_ID','DOM_EXP','FCST_TYPE','INCOTERMS'
+                ,'MEASURE','PLANT_SITE_ID','CELL_PROD_SITE_ID','BUCKET_TYPE','BUCKET_KEY','QTY','MEASURE_GROUP'
+                ,'CELL_MODEL','NICK_NAME','DMS_SALES','DMS_CUSTOMER','OWNER','DEPT_ID','DEPT_NAME_KO'
+                ,'FORECAST_INFO_CELL_PACK_COUNT','ITEM_TYPE','PROJECT_NAME','PROJECT_OWNER','BIZ_TYPE'
+                ,'SOLDTO_CUSTOMER','COUNTRY_NAME','CITY_NAME','PROJECT_STATUS','ITEM_NAME','VMI_YN'
+                ,'CUST_GROUP','CUST_GROUP_DTL','APPLICATION','ROUTE','MDM_PROJECT_NAME','MIN_CAPACITY'
+                ,'FORECAST_INFO_BIZ_TYPE','CELL_TYPE','FORECAST_INFO_ALL','FORECAST_INFO_SPEC'
+                ,'FORECAST_INFOR_VERSION','CELL_MODEL_NICK_NAME','CELL_PER_CAR','CELL_PER_MODULE'
+                ,'MODULE_PER_CAR','SORT_ORDER_NO','ENERGE','CELL_QUANTITY','AS_FROM_SITE'
+                ,'CREATE_DATE','LAST_UPDATED_BY','SENDER_CODE','SENDER_NAME','PROJECT_S_OP_REPORT'
+                ,'CURRENCY','VERSION_NO','CUTOFF_YYYYMMDD','NOTATION','EDIT_FLAG','SORT_KEY','GROUP_ID'
+                ,'SUN','MON','TUE','WED','THU','FRI','SAT','YYYYMM','YYYYMMWW','WEEK_END_YN','MONTH_END_YN'
+                ,'AS_YN','ATTR1','VMI_STD_DIO','NEW_FLAG'
+                ,'TEAM_ID','TEAM_NAME_KO','FORECAST_INFO_CELL_MODEL','LAST_UPDATE_DATE','BUCKET' )
         UNION ALL
         /* 2024/05/17 kcw3408 이동계획 판가 매출GROUP_ID(Item은 Group 기준으로 정렬) 추가) */
         SELECT C.PROGRAM_ID
@@ -169,9 +191,19 @@ IS
                    AND    U2.USER_ID     = p_created_by
                    AND    U2.USER_INQUIRY_COLUMN_TYPE_CODE = 'C'
                )
-        ORDER BY SORT_ORDER_NO;
+        ) ORDER BY TO_NUMBER(SORT_ORDER_NO); --[SORTFIX 2026-08-04] UI Category Setup 순번 수치정렬 (TO_CHAR 문자정렬 결함 교정 — DMF0003 TO_NUMBER 원형 파리티)
+
+    -- [2026-07-31 PARTITION PRUNING] SCM_MST_FUTURE_PRICE_C 는 CUTOFF_YYYYMMDD_DATE
+    --   (가상컬럼 TO_DATE(CUTOFF_YYYYMMDD,'YYYYMMDD')) 로 파티션되어 있다(클라우드).
+    --   조회 SQL 에 CUTOFF 조건이 없어 PARTITION RANGE ALL 로 전 파티션을 스캔했다.
+    --   선택된 버전의 CUTOFF 범위를 미리 구해 프루닝 조건으로 사용한다.
+    V_CUTOFF_FROM       VARCHAR2(8 CHAR);
+    V_CUTOFF_TO         VARCHAR2(8 CHAR);
 
 BEGIN
+    --[2026-07-31 클라우드 대응] GTT 동적샘플링 강제 — 클라우드 세션 기본값 0(GTT 무통계 파국계획, 사내 12초/클라우드 16분+ 실증) 방지.
+    --  Oracle 기본값 2 복원. 트랜잭션 무관 세션 파라미터(ENABLE PARALLEL DML 계열 아님 — ORA-12841 리스크 없음).
+    EXECUTE IMMEDIATE 'ALTER SESSION SET optimizer_dynamic_sampling = 2';
 
     V_PROC_INPUT := JSON_OBJECT(
         'p_division_id'   VALUE p_division_id,
@@ -185,7 +217,11 @@ BEGIN
         'p_version_type'  VALUE p_version_type,
         'p_qty_yn'        VALUE p_qty_yn,
         'p_created_by'    VALUE p_created_by,
-        'p_user_group'    VALUE p_user_group
+        'p_user_group'    VALUE p_user_group,
+        'p_plant_site_id' VALUE p_plant_site_id,
+        'p_project_code'  VALUE p_project_code,
+        'p_owner'         VALUE p_owner,
+        'p_sender_code'   VALUE p_sender_code
     );
 
     BEGIN
@@ -384,6 +420,17 @@ BEGIN
 
     DBMS_STATS.GATHER_TABLE_STATS(OWNNAME => 'SCM_MGR', TABNAME => 'GT_DMF0082_T_VERSION', NO_INVALIDATE => FALSE);
 
+    -- [2026-07-31 PARTITION PRUNING] 선택 버전의 CUTOFF 범위 산출
+    --   근거: VERSION_NO ↔ CUTOFF_YYYYMMDD 는 1:1 (사내 전 division 87버전 실측, 불일치 0),
+    --         DM_MST_VERSION.YYYYMMDD = SCM_MST_FUTURE_PRICE_C.CUTOFF_YYYYMMDD (81/81 일치).
+    --   따라서 아래 범위 조건은 **행을 걸러내지 않고** 파티션 프루닝만 유도한다.
+    SELECT NVL(MIN(B.YYYYMMDD),'00000000'), NVL(MAX(B.YYYYMMDD),'99999999')
+      INTO V_CUTOFF_FROM, V_CUTOFF_TO
+      FROM SCM_MGR.GT_DMF0082_T_VERSION V
+      JOIN SCM_MGR.DM_MST_VERSION B
+        ON B.VERSION_NO = V.VERSION_NO AND B.DIVISION_ID = p_division_id;
+
+
     /* Version 관련 세팅 종료 */
     /* Version 관련 세팅 종료 */
     /* Version 관련 세팅 종료 */
@@ -496,7 +543,17 @@ BEGIN
     --FROM FP_MGR.SCM_ITEM_M T1   -- linked server 원본 [LGCE_FP_TR].[DBO].[SCM_ITEM_M]
     FROM   SCM_MGR.SCM_ITEM_M_SN T1
     WHERE  T1.DIVISION_ID = p_division_id
-      AND  T1.ACTIVE_FLAG = 'Y';
+      AND  T1.ACTIVE_FLAG = 'Y'
+    --[2026-07-31 항목1] 최초 데이터 생성 시 **필요한 데이터만 추출**
+    --  site-item 에 존재하는 품목의 **12자리 접두 그룹**만 적재한다.
+    --  ⚠ 접두 단위인 이유: 하위 _B_V 가 GROUP BY SUBSTR(ITEM_ID,1,12) 로 MAX() 6컬럼을
+    --     집계하므로, ITEM_ID 정확 필터는 같은 접두를 공유하는 비소속 품목을 제거해
+    --     MAX() 값을 바꾼다. 접두 단위로 자르면 그룹이 통째로 포함/제외되어 집계 불변.
+    --  실측(div40): 98,346 -> 20,730 (-79%), _B_V MAX 6컬럼 차이 0건
+    AND  SUBSTR(T1.ITEM_ID,1,12) IN (
+           SELECT SUBSTR(S.ITEM_ID,1,12)
+             FROM SCM_MGR.SCM_MST_SITE_ITEM S
+            WHERE S.DIVISION_ID = p_division_id );
     -- #TEMP_DM_MST_ITEM_SINGLE_ORI_V 만들기 종료
 
     DBMS_STATS.GATHER_TABLE_STATS(OWNNAME => 'SCM_MGR', TABNAME => 'GT_DMF0082_MST_ITEM_SINGLE_ORI_V', NO_INVALIDATE => FALSE);
@@ -1124,6 +1181,7 @@ BEGIN
     INNER JOIN SCM_MGR.GT_DMF0082_T_VERSION V
         ON  V.VERSION_NO = A.VERSION_NO
     WHERE  A.DIVISION_ID = p_division_id
+    AND    A.CUTOFF_YYYYMMDD BETWEEN V_CUTOFF_FROM AND V_CUTOFF_TO  --[2026-07-31] 파티션 프루닝
     AND    A.YYYYMMDD BETWEEN p_from_yyyymmdd AND p_to_yyyymmdd
     GROUP BY A.DIVISION_ID, A.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID
            , A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, A.MEASURE;
@@ -1981,6 +2039,7 @@ BEGIN
         INNER JOIN SCM_MGR.GT_DMF0082_T_WS_FCST D ON D.FCST_TYPE=A.FCST_TYPE
         INNER JOIN SCM_MGR.GT_DMF0082_T_VERSION F ON F.VERSION_NO=A.VERSION_NO AND F.VERSION_NO LIKE 'MF%'
         WHERE  A.DIVISION_ID = p_division_id
+        AND    A.CUTOFF_YYYYMMDD BETWEEN V_CUTOFF_FROM AND V_CUTOFF_TO  --[2026-07-31] 파티션 프루닝
         AND    (p_scm_site_id='ALL' OR A.SCM_SITE_ID IN (
                     SELECT REGEXP_SUBSTR(p_scm_site_id,'[^,]+',1,LEVEL) FROM DUAL
                     CONNECT BY LEVEL<=REGEXP_COUNT(p_scm_site_id,',')+1))
@@ -2413,6 +2472,7 @@ BEGIN
         INNER JOIN SCM_MGR.GT_DMF0082_T_VERSION F
             ON  F.VERSION_NO=A.VERSION_NO AND F.VERSION_NO LIKE 'SF%'
         WHERE  A.DIVISION_ID = p_division_id
+        AND    A.CUTOFF_YYYYMMDD BETWEEN V_CUTOFF_FROM AND V_CUTOFF_TO  --[2026-07-31] 파티션 프루닝
         AND    (p_scm_site_id='ALL' OR A.SCM_SITE_ID IN (
                     SELECT REGEXP_SUBSTR(p_scm_site_id,'[^,]+',1,LEVEL) FROM DUAL
                     CONNECT BY LEVEL<=REGEXP_COUNT(p_scm_site_id,',')+1))
@@ -2540,6 +2600,7 @@ BEGIN
         INNER JOIN SCM_MGR.GT_DMF0082_T_WS_FCST D ON D.FCST_TYPE=A.FCST_TYPE
         INNER JOIN SCM_MGR.GT_DMF0082_T_VERSION F ON F.VERSION_NO=A.VERSION_NO AND F.VERSION_NO LIKE 'SP%'
         WHERE  A.DIVISION_ID = p_division_id
+        AND    A.CUTOFF_YYYYMMDD BETWEEN V_CUTOFF_FROM AND V_CUTOFF_TO  --[2026-07-31] 파티션 프루닝
         AND    (p_scm_site_id='ALL' OR A.SCM_SITE_ID IN (
                     SELECT REGEXP_SUBSTR(p_scm_site_id,'[^,]+',1,LEVEL) FROM DUAL
                     CONNECT BY LEVEL<=REGEXP_COUNT(p_scm_site_id,',')+1))
@@ -2675,7 +2736,8 @@ BEGIN
 
     -- [FIX 2026-07-13] 상관 서브쿼리 UPDATE(행별 GTT 재스캔 O(n^2), 넓은 조회범위서 PGA 폭증→"Free private memory to OS" hang)
     --   → MERGE 사전집계(키별 MAX(LOC CURRENCY) 1회 GROUP BY) + hash join 으로 O(n). 결과 동일(키별 MAX, 미매칭=NULL 유지).
-    MERGE INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A
+    MERGE /*+ LEADING(B) USE_HASH(A) */ INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A
+    --[2026-07-31 항목5] hash build 를 소형 집계뷰(B, ~6K행)로 고정 — 355K 와이드행 build 로 인한 TEMP 159MB spill 제거 (조인 입력 순서만 변경, 결과 불변)
     USING (
                SELECT DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, PLANT_SITE_ID, ITEM_ID
                     , INCOTERMS, DOM_EXP, FCST_TYPE, CELL_PROD_SITE_ID, MAX(CURRENCY) AS CURRENCY
@@ -2816,6 +2878,45 @@ BEGIN
     END IF;
 
     -- ====================================================================================================
+    -- [PLANT_SITE 2026-08-04] 조회조건 Plant Site 필터 (81 전용 — FE 40/82 비활성 = 'ALL')
+    --   스테이징 완료 후 GTT 단일 지점 필터 (measure 분기별 술어 살포 대신 — 누락 0 보장, DMF0082 SAVE 팝업 동일 split 함수)
+    -- ====================================================================================================
+
+    IF p_plant_site_id IS NOT NULL AND p_plant_site_id <> 'ALL' THEN
+        DELETE FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE
+        WHERE  PLANT_SITE_ID NOT IN (
+                   SELECT COLUMN_VALUE
+                   FROM   TABLE(UF_FX_String_SplitForIN(p_plant_site_id, ',')));
+    END IF;
+
+    -- ====================================================================================================
+    -- [UICATEGORY 2026-08-07] 조회조건 Project / Owner / Sender Code 필터 (PLANT_SITE 동형 — 스테이징 후 단일 지점)
+    -- ====================================================================================================
+
+    IF p_project_code IS NOT NULL AND p_project_code <> 'ALL' THEN
+        DELETE FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE
+        WHERE  NVL(PROJECT_CODE, ' ') NOT IN (
+                   SELECT COLUMN_VALUE
+                   FROM   TABLE(UF_FX_String_SplitForIN(p_project_code, ',')));
+    END IF;
+
+    IF p_owner IS NOT NULL AND p_owner <> 'ALL' THEN
+        DELETE FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE
+        WHERE  NVL(OWNER, ' ') NOT IN (
+                   SELECT COLUMN_VALUE
+                   FROM   TABLE(UF_FX_String_SplitForIN(p_owner, ',')));
+    END IF;
+
+    -- Sender Code = 실값 보유 행만 매칭 대상, 무값 행 통과 (사용자 확정 2026-08-07 — DMF0003 EDI 한정 의미론 승계)
+    IF p_sender_code IS NOT NULL AND p_sender_code <> 'ALL' THEN
+        DELETE FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE
+        WHERE  NVL(SENDER_CODE, ' ') <> ' '
+        AND    SENDER_CODE NOT IN (
+                   SELECT COLUMN_VALUE
+                   FROM   TABLE(UF_FX_String_SplitForIN(p_sender_code, ',')));
+    END IF;
+
+    -- ====================================================================================================
     -- C_TITLE 커서 — 동적 컬럼 목록 생성
     -- ====================================================================================================
 
@@ -2859,7 +2960,9 @@ BEGIN
         FROM   SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL
         WHERE  LOOKUP_TYPE = 'GET_ADMIN_GROUP'
         AND    VALID_YN    = 'Y'
-        AND    SEGMENT1    = p_user_group
+        AND (SEGMENT1 = p_user_group  --[AUTHUNION 2026-08-04] 보유그룹 합집합 판정 (사용자 확정)
+             OR SEGMENT1 IN (SELECT G.USER_GR_ID FROM SCM_MGR.SCM_ADM_USER_GR_MPG_M G
+                             WHERE G.USER_ID IN (p_user_group, p_created_by) AND G.USE_YN = 'Y'))
         AND    SEGMENT2    = 'ALL';
 
         IF V_ADMIN_CNT > 0 THEN
@@ -2880,7 +2983,9 @@ BEGIN
     FROM   SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL A
     WHERE  A.LOOKUP_TYPE = 'GET_ADMIN_GROUP_MEASURE'
     AND    A.VALID_YN    = 'Y'
-    AND    A.SEGMENT1    = p_user_group
+    AND (A.SEGMENT1 = p_user_group  --[AUTHUNION 2026-08-04] 보유그룹 합집합 판정 (사용자 확정)
+             OR A.SEGMENT1 IN (SELECT G.USER_GR_ID FROM SCM_MGR.SCM_ADM_USER_GR_MPG_M G
+                             WHERE G.USER_ID IN (p_user_group, p_created_by) AND G.USE_YN = 'Y'))
     AND    A.SEGMENT2    = VA_PROGRAM_ID
     AND    A.SEGMENT3    = p_division_id;
 
@@ -3069,7 +3174,153 @@ BEGIN
            , PVT.SUN, PVT.MON, PVT.TUE, PVT.WED, PVT.THU, PVT.FRI, PVT.SAT
            , CAL.YYYYMM, CAL.YYYYMMWW, CAL.WEEK_END_YN, CAL.MONTH_END_YN;
 
+    -- [UICATEGORY 2026-08-07] direct-path(APPEND) INSERT 직후 동일 테이블 DML = ORA-12838
+    --   → 통계 수집(내부 COMMIT — GTT SYS$SESSION PRESERVE 실측)을 먼저 수행한 뒤 Tier3 적재
     DBMS_STATS.GATHER_TABLE_STATS(OWNNAME => 'SCM_MGR', TABNAME => 'GT_DMF0082_MF_SP', NO_INVALIDATE => FALSE);
+
+    -- ====================================================================================================
+    -- [UICATEGORY 2026-08-07] Tier3 파리티 컬럼 적재 (DMF0003 MF_BASE 파생 이식 — 값 정책은 work report 참조)
+    --   NEW_FLAG    : DMF0003 파생(수요/판가 FULL OUTER JOIN 신규 판정)은 본 SP 스테이징 구조에 부재 → 'N' 고정 (한계 명시)
+    --   AS_YN       : DMF0003 LP_AS_YN 파리티 — 조회 Sales Site 가 AS_SITE_PLANT 룩업 포함 시 전행 'Y'
+    --   ATTR1       : 40=DM_PLN_MKT_FCST(MKT_FCST) 일자 동기화 마커 PIVOT / 82=DM_PLN_PR_DETAIL — 81 은 DMF0003 원문 미정의(NULL)
+    --   VMI_STD_DIO : 82=SCM_MST_SITE(VMI_YN^ATTRIBUTE5) — 40 은 DMF0003 원문 조인키 사문(KEY=ITEM↔조인=SITE)으로 미적재
+    -- ====================================================================================================
+
+    UPDATE SCM_MGR.GT_DMF0082_MF_SP SET NEW_FLAG = 'N';
+
+    DECLARE
+        V_AS_CNT NUMBER := 0;
+    BEGIN
+        IF p_scm_site_id IS NOT NULL AND p_scm_site_id <> 'ALL' THEN
+            SELECT COUNT(1) INTO V_AS_CNT
+            FROM   TABLE(UF_FX_String_SplitForIN(p_scm_site_id, ',')) A
+            JOIN   SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL B
+              ON   A.COLUMN_VALUE = B.SEGMENT1
+             AND   B.LOOKUP_TYPE  = 'AS_SITE_PLANT';
+        END IF;
+        UPDATE SCM_MGR.GT_DMF0082_MF_SP
+        SET    AS_YN = CASE WHEN V_AS_CNT > 0 THEN 'Y' ELSE 'N' END;
+    END;
+
+    IF p_division_id = '40' THEN
+        -- ATTR1 (40) — DMF0003 GT_DMF0003_T_SSP_SYNC 적재 로직 이식 (DM_PLN_MKT_FCST MKT_FCST 일자 P/A 마커 31 PIVOT)
+        MERGE INTO SCM_MGR.GT_DMF0082_MF_SP T
+        USING (
+            SELECT DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS
+                 , NVL(A1,'')  || '^' || NVL(A2,'')  || '^' || NVL(A3,'')  || '^' || NVL(A4,'')  || '^' || NVL(A5,'')
+                || '^' || NVL(A6,'')  || '^' || NVL(A7,'')  || '^' || NVL(A8,'')  || '^' || NVL(A9,'')  || '^' || NVL(A10,'')
+                || '^' || NVL(A11,'') || '^' || NVL(A12,'') || '^' || NVL(A13,'') || '^' || NVL(A14,'') || '^' || NVL(A15,'')
+                || '^' || NVL(A16,'') || '^' || NVL(A17,'') || '^' || NVL(A18,'') || '^' || NVL(A19,'') || '^' || NVL(A20,'')
+                || '^' || NVL(A21,'') || '^' || NVL(A22,'') || '^' || NVL(A23,'') || '^' || NVL(A24,'') || '^' || NVL(A25,'')
+                || '^' || NVL(A26,'') || '^' || NVL(A27,'') || '^' || NVL(A28,'') || '^' || NVL(A29,'') || '^' || NVL(A30,'')
+                || '^' || NVL(A31,'') AS ATTR1
+            FROM (
+                SELECT DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, A.FCST_TYPE, INCOTERMS
+                     , YYYYMMDD || '/'
+                       || CASE
+                              WHEN REGEXP_LIKE(NVL(ATTRIBUTE3,'0'),'^[0-9.]+$')
+                               AND A.QTY >
+                                   CASE WHEN REGEXP_LIKE(NVL(ATTRIBUTE3,'0'),'^[0-9.]+$')
+                                        THEN TO_NUMBER(ATTRIBUTE3) ELSE 0 END
+                                 + CASE WHEN REGEXP_LIKE(NVL(ATTRIBUTE2,'0'),'^[0-9.]+$')
+                                        THEN TO_NUMBER(ATTRIBUTE2) ELSE 0 END
+                              THEN 'P'
+                              ELSE 'A'
+                          END AS SYNC_YN
+                     , 'A' || TO_CHAR(
+                           ROW_NUMBER() OVER (
+                               PARTITION BY DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID,
+                                            DOM_EXP, A.FCST_TYPE, INCOTERMS
+                               ORDER BY YYYYMMDD
+                           )) AS ROW_NUM
+                FROM   SCM_MGR.DM_PLN_MKT_FCST A
+                WHERE  A.DIVISION_ID = p_division_id
+                  AND  A.MEASURE     = 'MKT_FCST'
+                  AND  A.YYYYMMDD   BETWEEN V_FROM_YYYYMMDD AND V_TO_YYYYMMDD
+                  AND  ( A.ATTRIBUTE4 IS NOT NULL OR A.ATTRIBUTE5 IS NOT NULL )
+                  AND  A.QTY <> 0
+            ) A
+            PIVOT (
+                MAX(SYNC_YN) FOR ROW_NUM IN (
+                    'A1'  A1,  'A2'  A2,  'A3'  A3,  'A4'  A4,  'A5'  A5,
+                    'A6'  A6,  'A7'  A7,  'A8'  A8,  'A9'  A9,  'A10' A10,
+                    'A11' A11, 'A12' A12, 'A13' A13, 'A14' A14, 'A15' A15,
+                    'A16' A16, 'A17' A17, 'A18' A18, 'A19' A19, 'A20' A20,
+                    'A21' A21, 'A22' A22, 'A23' A23, 'A24' A24, 'A25' A25,
+                    'A26' A26, 'A27' A27, 'A28' A28, 'A29' A29, 'A30' A30,
+                    'A31' A31
+                )
+            )
+        ) S
+        ON (    T.DIVISION_ID  = S.DIVISION_ID
+            AND T.PROJECT_CODE = S.PROJECT_CODE
+            AND T.SCM_SITE_ID  = S.SCM_SITE_ID
+            AND T.ITEM_ID      = S.ITEM_ID
+            AND T.DOM_EXP      = S.DOM_EXP
+            AND T.FCST_TYPE    = S.FCST_TYPE
+            AND T.INCOTERMS    = S.INCOTERMS)
+        WHEN MATCHED THEN UPDATE SET T.ATTR1 = S.ATTR1;
+
+    ELSIF p_division_id = '82' THEN
+        -- ATTR1 (82) — DMF0003 GT_DMF0003_T_BNP 적재 로직 이식 (DM_PLN_PR_DETAIL 일자 A 마커 31 PIVOT)
+        MERGE INTO SCM_MGR.GT_DMF0082_MF_SP T
+        USING (
+            SELECT DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS
+                 , NVL(A1,'')  || '^' || NVL(A2,'')  || '^' || NVL(A3,'')  || '^' || NVL(A4,'')  || '^' || NVL(A5,'')
+                || '^' || NVL(A6,'')  || '^' || NVL(A7,'')  || '^' || NVL(A8,'')  || '^' || NVL(A9,'')  || '^' || NVL(A10,'')
+                || '^' || NVL(A11,'') || '^' || NVL(A12,'') || '^' || NVL(A13,'') || '^' || NVL(A14,'') || '^' || NVL(A15,'')
+                || '^' || NVL(A16,'') || '^' || NVL(A17,'') || '^' || NVL(A18,'') || '^' || NVL(A19,'') || '^' || NVL(A20,'')
+                || '^' || NVL(A21,'') || '^' || NVL(A22,'') || '^' || NVL(A23,'') || '^' || NVL(A24,'') || '^' || NVL(A25,'')
+                || '^' || NVL(A26,'') || '^' || NVL(A27,'') || '^' || NVL(A28,'') || '^' || NVL(A29,'') || '^' || NVL(A30,'')
+                || '^' || NVL(A31,'') AS ATTR1
+            FROM (
+                SELECT DISTINCT DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID,
+                                DOM_EXP, FCST_TYPE, INCOTERMS
+                     , YYYYMMDD || '/A' AS SYNC_YN
+                     , 'A' || TO_CHAR(
+                           ROW_NUMBER() OVER (
+                               PARTITION BY DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID,
+                                            DOM_EXP, FCST_TYPE, INCOTERMS
+                               ORDER BY YYYYMMDD
+                           )) AS ROW_NUM
+                FROM   SCM_MGR.DM_PLN_PR_DETAIL A
+                WHERE  A.DIVISION_ID = p_division_id
+                  AND  A.YYYYMMDD   BETWEEN V_FROM_YYYYMMDD AND V_TO_YYYYMMDD
+            ) A
+            PIVOT (
+                MAX(SYNC_YN) FOR ROW_NUM IN (
+                    'A1'  A1,  'A2'  A2,  'A3'  A3,  'A4'  A4,  'A5'  A5,
+                    'A6'  A6,  'A7'  A7,  'A8'  A8,  'A9'  A9,  'A10' A10,
+                    'A11' A11, 'A12' A12, 'A13' A13, 'A14' A14, 'A15' A15,
+                    'A16' A16, 'A17' A17, 'A18' A18, 'A19' A19, 'A20' A20,
+                    'A21' A21, 'A22' A22, 'A23' A23, 'A24' A24, 'A25' A25,
+                    'A26' A26, 'A27' A27, 'A28' A28, 'A29' A29, 'A30' A30,
+                    'A31' A31
+                )
+            )
+        ) S
+        ON (    T.DIVISION_ID  = S.DIVISION_ID
+            AND T.PROJECT_CODE = S.PROJECT_CODE
+            AND T.SCM_SITE_ID  = S.SCM_SITE_ID
+            AND T.ITEM_ID      = S.ITEM_ID
+            AND T.DOM_EXP      = S.DOM_EXP
+            AND T.FCST_TYPE    = S.FCST_TYPE
+            AND T.INCOTERMS    = S.INCOTERMS)
+        WHEN MATCHED THEN UPDATE SET T.ATTR1 = S.ATTR1;
+
+        -- VMI_STD_DIO (82) — DMF0003 GT_DMF0003_VMI_DIO 82 분기 이식 (SCM_MST_SITE VMI_YN^ATTRIBUTE5, SCM_SITE_ID 키)
+        UPDATE SCM_MGR.GT_DMF0082_MF_SP T
+        SET    T.VMI_STD_DIO = (
+                   SELECT MAX(A.VMI_YN || '^' || NVL(TO_CHAR(A.ATTRIBUTE5),''))
+                   FROM   SCM_MGR.SCM_MST_SITE A
+                   WHERE  A.DIVISION_ID = '82'
+                   AND    A.SCM_SITE_ID = T.SCM_SITE_ID);
+    END IF;
+
+    -- [UICATEGORY 2026-08-07] Division 82 = 조회 전용 (사용자 확정) — 편집 서버 권위 차단
+    IF p_division_id = '82' THEN
+        UPDATE SCM_MGR.GT_DMF0082_MF_SP SET EDIT_FLAG = 'N';
+    END IF;
 
     -- ====================================================================================================
     -- [DEFECT_GUARD] PIVOT IN 리스트 비어있음 방어 — C_BUCKET 이 0행 반환 시 빈 결과셋 조기 반환
@@ -3154,7 +3405,7 @@ BEGIN
     [@V_ORDERBY]';
 
     -- SRC0 = MF_SP alias 투영 (TEAM_ID/FORECAST_INFO_CELL_MODEL/LAST_UPDATE_DATE/BUCKET — 기존 wrapper 동일)
-    V_SQL := REPLACE(V_SQL, '[@SRC0]', 'SELECT MSP.*, MSP.DEPT_ID AS TEAM_ID, MSP.CELL_MODEL AS FORECAST_INFO_CELL_MODEL, NVL(TO_CHAR(MSP.CREATE_DATE, ''YYYY-MM-DD HH24:MI:SS''), '' '') AS LAST_UPDATE_DATE, NVL(TO_CHAR(MSP.SUN),''0'')||NVL(TO_CHAR(MSP.MON),''0'')||NVL(TO_CHAR(MSP.TUE),''0'')||NVL(TO_CHAR(MSP.WED),''0'')||NVL(TO_CHAR(MSP.THU),''0'')||NVL(TO_CHAR(MSP.FRI),''0'')||NVL(TO_CHAR(MSP.SAT),''0'') AS BUCKET FROM SCM_MGR.GT_DMF0082_MF_SP MSP');
+    V_SQL := REPLACE(V_SQL, '[@SRC0]', 'SELECT MSP.*, MSP.DEPT_ID AS TEAM_ID, MSP.DEPT_NAME_KO AS TEAM_NAME_KO /*[UICATEGORY 2026-08-07]*/, MSP.CELL_MODEL AS FORECAST_INFO_CELL_MODEL, NVL(TO_CHAR(MSP.CREATE_DATE, ''YYYY-MM-DD HH24:MI:SS''), '' '') AS LAST_UPDATE_DATE, NVL(TO_CHAR(MSP.SUN),''0'')||NVL(TO_CHAR(MSP.MON),''0'')||NVL(TO_CHAR(MSP.TUE),''0'')||NVL(TO_CHAR(MSP.WED),''0'')||NVL(TO_CHAR(MSP.THU),''0'')||NVL(TO_CHAR(MSP.FRI),''0'')||NVL(TO_CHAR(MSP.SAT),''0'') AS BUCKET FROM SCM_MGR.GT_DMF0082_MF_SP MSP');
     V_SQL := REPLACE(V_SQL, '[@V_QTY_SUM]',     V_QTY_SUM);
     V_SQL := REPLACE(V_SQL, '[@V_PV_COL_LIST]', V_PV_COL_LIST);
     V_SQL := REPLACE(V_SQL, '[@V_PV_LIST]',     V_PV_LIST);
@@ -5435,6 +5686,10 @@ PROCEDURE P_DMF0082_GET_MAIN_DATA_CURRENT
   , p_qty_yn         IN  VARCHAR2
   , p_created_by     IN  VARCHAR2
   , p_user_group     IN  VARCHAR2
+  , p_plant_site_id  IN  VARCHAR2 DEFAULT 'ALL'  /* [PLANT_SITE 2026-08-04] 조회조건 Plant Site (81 전용 — FE 40/82 비활성 'ALL') */
+  , p_project_code   IN  VARCHAR2 DEFAULT 'ALL'  /* [UICATEGORY 2026-08-07] 조회조건 Project (다중 콤마 토큰) */
+  , p_owner          IN  VARCHAR2 DEFAULT 'ALL'  /* [UICATEGORY 2026-08-07] 조회조건 Owner (다중 콤마 토큰) */
+  , p_sender_code    IN  VARCHAR2 DEFAULT 'ALL'  /* [UICATEGORY 2026-08-07] 조회조건 Sender Code — 실값 보유 행만 매칭, 무값 행 통과 (사용자 확정) */
   , O_RC1            OUT SYS_REFCURSOR   /* 1) 동적 PIVOT 메인 데이터 */
   , O_RC2            OUT SYS_REFCURSOR   /* 2) M+3 월 MONTH_NAME/ISO_WEEK (Monthly 입력제한 기준) */
   , O_RC3            OUT SYS_REFCURSOR   /* 3) 현재/전주 주차 정보 */
@@ -5586,6 +5841,7 @@ IS
     -- C_TITLE : 선택한 bucket의 값인 MONTH 혹은 WEEK를 이용해서 동적인 컬럼을 만드는 커서
     --=============================================================================================================================
     CURSOR C_TITLE IS
+        SELECT * FROM ( --[SORTFIX 2026-08-04] 인라인뷰 (UNION ORDER BY 식 제약 ORA-01785 회피)
         SELECT U.PROGRAM_ID
              , U.SHEET_NAME
              , U.COLUMN_NAME
@@ -5602,6 +5858,20 @@ IS
         AND    U.SHEET_NAME  = VA_SHEET_NAME
         AND    U.USER_ID     = p_created_by
         AND    U.USER_INQUIRY_COLUMN_TYPE_CODE = 'C'
+        -- [UICATEGORY 2026-08-07] GTT_MF_SP 산출 whitelist — titleset 'C' 오염(미산출 컬럼) 유입 시 동적 SQL ORA-00904 차단
+        --   (DMF0003 TITLESET IMMUNIZE 파리티. 목록 = GTT_MF_SP 전 컬럼 — GTT ALTER 시 동기 의무)
+        AND    U.COLUMN_NAME IN (
+                 'DIVISION_ID','SCM_SITE_ID','PLANT_SITE_ID','PROJECT_CODE','ITEM_ID','INCOTERMS','FCST_TYPE','DOM_EXP'
+                ,'MEASURE','END_CUSTOMER','NICK_NAME','DMS_SALES','DMS_CUSTOMER','YYYYMM','YYYYMMWW','YYYYMMDD','DAYOFWEEK'
+                ,'FORECAST_INFO_CELL_MODEL','TEAM_ID','TEAM_NAME_KO','ITEM_TYPE','PROJECT_NAME','PROJECT_OWNER','OWNER'
+                ,'SOLDTO_CUSTOMER','COUNTRY_NAME','CITY_NAME','ITEM_NAME','VMI_YN','CELL_PROD_SITE_ID'
+                ,'CUST_GROUP','CUST_GROUP_DTL','APPLICATION','ROUTE','MDM_PROJECT_NAME','MIN_CAPACITY'
+                ,'FORECAST_INFO_BIZ_TYPE','CELL_TYPE','FORECAST_INFO_CELL_PACK_COUNT'
+                ,'FORECAST_INFO_ALL','FORECAST_INFO_SPEC','FORECAST_INFOR_VERSION','CELL_MODEL_NICK_NAME'
+                ,'QTY','MONTH_END_YN','WEEK_END_YN','EDIT_FLAG','SORT_ORDER_NO','MEASURE_GROUP','NEW_FLAG','BUCKET','SORT_KEY'
+                ,'LAST_UPDATE_DATE','LAST_UPDATED_BY','NOTATION','CURRENCY','VERSION_NO','CUTOFF_YYYYMMDD'
+                ,'AS_YN','ATTR1','VMI_STD_DIO','BIZ_TYPE','PROJECT_STATUS','ENERGE','CELL_QUANTITY'
+                ,'CELL_PER_CAR','CELL_PER_MODULE','MODULE_PER_CAR','SENDER_CODE','SENDER_NAME','PROJECT_S_OP_REPORT','AS_FROM_SITE' )
         UNION ALL
         /* 2024/05/17   kcw3408     이동계획 판가 매출GROUP_ID( Item은 Group 기준으로 정렬) 추가) */
         SELECT C.PROGRAM_ID
@@ -5619,11 +5889,24 @@ IS
         WHERE  1 = 1
         AND    C.PROGRAM_ID   = VA_PROGRAM_ID
         AND    C.SHEET_NAME   = VA_SHEET_NAME
-        AND    C.DEFAULT_FLAG IS NULL              /* AS-IS: C.DEFAULT_FLAG = '' (C-7: Oracle '' = NULL) */
+        AND    C.DEFAULT_FLAG = ' '  /* [UICATEGORY 2026-08-07 FIX] 구 "IS NULL" = 사문(DEFAULT_FLAG NOT NULL, 실값 ' ') → 고정컬럼(SORT_KEY 등) V_COLUMN 미포함
+                                        → ORDER BY SORT_KEY 가 상시 ORA-00904 (Current 조회 전면 파손 — 2026-08-07 실측). GET 의 L162 [FIX 2026-07-12] 와 규약 통일 */
         AND    C.VALID_YN     = 'Y'
-        ORDER BY SORT_ORDER_NO;
+        -- [UICATEGORY 2026-08-07] branch1(사용자 titleset 'C') 중복 컬럼 제외 — GET 동형 (V_COLUMN 중복 = ORA-00918 방어)
+        AND    NOT EXISTS (
+                   SELECT 1 FROM SCM_MGR.SCM_MST_TITLESET_USER U2
+                   WHERE  U2.PROGRAM_ID  = C.PROGRAM_ID
+                   AND    U2.SHEET_NAME  = C.SHEET_NAME
+                   AND    U2.COLUMN_NAME = C.COLUMN_NAME
+                   AND    U2.USER_ID     = p_created_by
+                   AND    U2.USER_INQUIRY_COLUMN_TYPE_CODE = 'C'
+               )
+        ) ORDER BY TO_NUMBER(SORT_ORDER_NO); --[SORTFIX 2026-08-04] UI Category Setup 순번 수치정렬 (TO_CHAR 문자정렬 결함 교정 — DMF0003 TO_NUMBER 원형 파리티)
 
 BEGIN
+    --[2026-07-31 클라우드 대응] GTT 동적샘플링 강제 — 클라우드 세션 기본값 0(GTT 무통계 파국계획, 사내 12초/클라우드 16분+ 실증) 방지.
+    --  Oracle 기본값 2 복원. 트랜잭션 무관 세션 파라미터(ENABLE PARALLEL DML 계열 아님 — ORA-12841 리스크 없음).
+    EXECUTE IMMEDIATE 'ALTER SESSION SET optimizer_dynamic_sampling = 2';
     --PRINT @v_program_name + ' : A001--' ... 'DMF0082_GET_MAIN_DATA_CURRENT 조회쿼리 시작'
     V_PROC_INPUT := JSON_OBJECT(
         'p_division_id'   VALUE p_division_id,
@@ -5637,7 +5920,11 @@ BEGIN
         'p_version_type'  VALUE p_version_type,
         'p_qty_yn'        VALUE p_qty_yn,
         'p_created_by'    VALUE p_created_by,
-        'p_user_group'    VALUE p_user_group
+        'p_user_group'    VALUE p_user_group,
+        'p_plant_site_id' VALUE p_plant_site_id,
+        'p_project_code'  VALUE p_project_code,
+        'p_owner'         VALUE p_owner,
+        'p_sender_code'   VALUE p_sender_code
     );
 
     --=============================================================================================================================
@@ -7131,6 +7418,31 @@ BEGIN
     -----------------------------------------------------------------------------------------------
     --[PJ2025-50188]소형 매출계획 동기화 개선 고도화 : 실적 Unit Price 로직 변경 END
     -----------------------------------------------------------------------------------------------
+
+    /* [PLANT_SITE 2026-08-04] 조회조건 Plant Site 필터 (81 전용 — FE 40/82 비활성 = 'ALL') — GTT 단일 지점 */
+    IF p_plant_site_id IS NOT NULL AND p_plant_site_id <> 'ALL' THEN
+        DELETE FROM SCM_MGR.GTT_TEMPFCSTNPRICE
+        WHERE  PLANT_SITE_ID NOT IN (
+                   SELECT COLUMN_VALUE
+                   FROM   TABLE(UF_FX_String_SplitForIN(p_plant_site_id, ',')));
+    END IF;
+
+    /* [UICATEGORY 2026-08-07] 조회조건 Project / Owner 필터 (PLANT_SITE 동형 — GTT 단일 지점).
+       Sender Code 는 본 스테이징에 SENDER_CODE 컬럼 원천 부재 → GTT_MF_SP 적재 후 지점에서 처리 (무값 통과 규칙상 현행 no-op) */
+    IF p_project_code IS NOT NULL AND p_project_code <> 'ALL' THEN
+        DELETE FROM SCM_MGR.GTT_TEMPFCSTNPRICE
+        WHERE  NVL(PROJECT_CODE, ' ') NOT IN (
+                   SELECT COLUMN_VALUE
+                   FROM   TABLE(UF_FX_String_SplitForIN(p_project_code, ',')));
+    END IF;
+
+    IF p_owner IS NOT NULL AND p_owner <> 'ALL' THEN
+        DELETE FROM SCM_MGR.GTT_TEMPFCSTNPRICE
+        WHERE  NVL(OWNER, ' ') NOT IN (
+                   SELECT COLUMN_VALUE
+                   FROM   TABLE(UF_FX_String_SplitForIN(p_owner, ',')));
+    END IF;
+
     DBMS_STATS.GATHER_TABLE_STATS(OWNNAME => 'SCM_MGR', TABNAME => 'GTT_TEMPFCSTNPRICE', NO_INVALIDATE => FALSE);
 
     --------------------------------------------------------------------------------------------------------------------------------------------------
@@ -7175,7 +7487,9 @@ BEGIN
     FROM   SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL
     WHERE  LOOKUP_TYPE = 'GET_ADMIN_GROUP'
     AND    VALID_YN = 'Y'
-    AND    SEGMENT1 = p_user_group
+    AND (SEGMENT1 = p_user_group  --[AUTHUNION 2026-08-04] 보유그룹 합집합 판정 (사용자 확정)
+             OR SEGMENT1 IN (SELECT G.USER_GR_ID FROM SCM_MGR.SCM_ADM_USER_GR_MPG_M G
+                             WHERE G.USER_ID IN (p_user_group, p_created_by) AND G.USE_YN = 'Y'))
     AND    SEGMENT2 = 'ALL';
     --AND SEGMENT3 = LEFT(@P_DIVISION_ID,2)
 
@@ -7210,7 +7524,9 @@ BEGIN
                                CONNECT BY LEVEL <= NVL(REGEXP_COUNT(A.ATTRIBUTE1, ','), 0) + 1) DT
            WHERE  A.LOOKUP_TYPE = 'GET_ADMIN_GROUP_MEASURE'
            AND    A.VALID_YN = 'Y'
-           AND    A.SEGMENT1 = p_user_group
+           AND (A.SEGMENT1 = p_user_group  --[AUTHUNION 2026-08-04] 보유그룹 합집합 판정 (사용자 확정)
+             OR A.SEGMENT1 IN (SELECT G.USER_GR_ID FROM SCM_MGR.SCM_ADM_USER_GR_MPG_M G
+                             WHERE G.USER_ID IN (p_user_group, p_created_by) AND G.USE_YN = 'Y'))
            AND    A.SEGMENT2 = VA_PROGRAM_ID
            AND    A.SEGMENT3 = p_division_id
           ) B
@@ -7290,7 +7606,11 @@ BEGIN
     , FORECAST_INFO_ALL, FORECAST_INFO_SPEC, FORECAST_INFOR_VERSION, CELL_MODEL_NICK_NAME
     , QTY, MONTH_END_YN, WEEK_END_YN, EDIT_FLAG
     , SORT_ORDER_NO, MEASURE_GROUP, NEW_FLAG, BUCKET, SORT_KEY
-    , LAST_UPDATE_DATE, LAST_UPDATED_BY, NOTATION, CURRENCY, VERSION_NO, CUTOFF_YYYYMMDD )
+    , LAST_UPDATE_DATE, LAST_UPDATED_BY, NOTATION, CURRENCY, VERSION_NO, CUTOFF_YYYYMMDD
+    /* [UICATEGORY 2026-08-07] 신규 컬럼 — 본 스테이징(GTT_TEMPFCSTNPRICE 49컬럼)에 원천 부재 → NULL 적재
+       (AS-IS Current 도 미제공. ORA-00904 차단 목적 — 실값은 GET(버전 조회) 경로가 제공) */
+    , AS_YN, ATTR1, VMI_STD_DIO, BIZ_TYPE, PROJECT_STATUS, ENERGE, CELL_QUANTITY
+    , CELL_PER_CAR, CELL_PER_MODULE, MODULE_PER_CAR, SENDER_CODE, SENDER_NAME, PROJECT_S_OP_REPORT, AS_FROM_SITE )
     SELECT A.DIVISION_ID
          , A.SCM_SITE_ID
          , A.PLANT_SITE_ID
@@ -7355,6 +7675,9 @@ BEGIN
          , A.CURRENCY
          , A.VERSION_NO
          , A.CUTOFF_YYYYMMDD
+         /* [UICATEGORY 2026-08-07] 신규 컬럼 NULL 적재 (스테이징 원천 부재 — 컬럼 목록 주석 참조) */
+         , NULL, NULL, NULL, NULL, NULL, NULL, NULL
+         , NULL, NULL, NULL, NULL, NULL, NULL, NULL
     FROM   SCM_MGR.GTT_TEMPFCSTNPRICE A
     INNER JOIN SCM_MGR.SCM_SYS_CALENDAR_M C
         ON C.BASIS_YYYYMMDD = A.YYYYMMDD
@@ -7404,6 +7727,20 @@ BEGIN
                 FROM   DUAL
                 CONNECT BY LEVEL <= NVL(REGEXP_COUNT(p_team_id, ','), 0) + 1));
     --OPTION (HASH JOIN)  → MSSQL 힌트 제거
+
+    /* [UICATEGORY 2026-08-07] Sender Code 필터 — 실값 보유 행만 매칭, 무값 행 통과 (현행 SENDER_CODE=NULL 적재라 no-op — 원천 확장 대비) */
+    IF p_sender_code IS NOT NULL AND p_sender_code <> 'ALL' THEN
+        DELETE FROM SCM_MGR.GTT_MF_SP
+        WHERE  NVL(SENDER_CODE, ' ') <> ' '
+        AND    SENDER_CODE NOT IN (
+                   SELECT COLUMN_VALUE
+                   FROM   TABLE(UF_FX_String_SplitForIN(p_sender_code, ',')));
+    END IF;
+
+    /* [UICATEGORY 2026-08-07] Division 82 = 조회 전용 (사용자 확정) — 편집 서버 권위 차단 */
+    IF p_division_id = '82' THEN
+        UPDATE SCM_MGR.GTT_MF_SP SET EDIT_FLAG = 'N';
+    END IF;
 
     DBMS_STATS.GATHER_TABLE_STATS(OWNNAME => 'SCM_MGR', TABNAME => 'GTT_MF_SP', NO_INVALIDATE => FALSE);
 
@@ -8121,7 +8458,9 @@ BEGIN
 	WHERE LOOKUP_TYPE = 'GET_ADMIN_GROUP'
 	AND VALID_YN = 'Y'
 	AND SEGMENT2 = 'ALL'  -- 'ALL'인경우 DM Planner (W/S) 제외 / 주석처리인경우 DM Planner (W/S) 포함
-	AND SEGMENT1 = p_userinfo;
+	AND (SEGMENT1 = p_userinfo  --[AUTHUNION 2026-08-04] 보유그룹 합집합 판정 (사용자 확정)
+	     OR SEGMENT1 IN (SELECT G.USER_GR_ID FROM SCM_MGR.SCM_ADM_USER_GR_MPG_M G
+	                     WHERE G.USER_ID IN (p_userinfo, p_created_by) AND G.USE_YN = 'Y'));
 
 	IF v_cnt_1 > 0 THEN
 		v_group_id := 'ADMIN';
@@ -9899,6 +10238,7 @@ PROCEDURE P_DMF0082_SAVE_MAIN_DATA
   , p_currency            IN VARCHAR2
   , p_qty                 IN VARCHAR2
   , p_created_by          IN VARCHAR2
+  , p_as_from_site        IN VARCHAR2 DEFAULT NULL  --[E20260805-AFS] AS FROM SITE(ATTRIBUTE10) — W/S AS 계열 저장 지원
   , O_RESULT_CURSOR       OUT SYS_REFCURSOR
 )
 /****** 개체: StoredProcedure [dbo].[DMF0082_SAVE_MAIN_DATA] 스크립트 날짜: 2026-04-22 오전 10:58:18 ******/
@@ -9931,6 +10271,8 @@ PROCEDURE P_DMF0082_SAVE_MAIN_DATA
  * 2026.03.10	JSSBAE		[E20260309-000271]_DMF0082 UI Sales Price 저장 로직 개선
  * 2026.07.14	admin		[DIV81] Division 81(LIKE '81%') 분기 — 81 테이블(DM_PLN_MKT_FCST/SCM_MST_FUTURE_PRICE) 직접 DML
  *                          + 81 전용 Validation(V81-00~11, 정본 DMF0003/DMF0020) + PR_DM_PLN_CFM_TO_MKT_FCST 게이트. 40 경로 원문 무수정.
+ * 2026.08.05	admin		[E20260805-AFS] p_as_from_site 신설(DEFAULT NULL) — AS 계열(W/S) AS FROM SITE(ATTRIBUTE10) 실제 저장.
+ *                          V81-11 신규 차단 가드 완화(AS FROM SITE 전달 시 허용) + 81 MERGE UPDATE 에 ATTRIBUTE10 조건부 갱신.
  *============================================================================================================================*/
 IS
     --=================================================================================================================================
@@ -9990,6 +10332,7 @@ IS
     v_p_currency        VARCHAR2(4000 CHAR);
     v_p_qty             VARCHAR2(4000 CHAR);
     v_p_created_by_raw  VARCHAR2(4000 CHAR);
+    v_p_as_from_site_raw VARCHAR2(4000 CHAR);  --[E20260805-AFS]
 
     -- 루프용 행별 변수
     v_active_flag       VARCHAR2(4000 CHAR);
@@ -10008,6 +10351,7 @@ IS
     v_currency          VARCHAR2(4000 CHAR);
     v_qty_str           VARCHAR2(4000 CHAR);
     v_p_created_by_val  VARCHAR2(4000 CHAR);
+    v_as_from_site      VARCHAR2(4000 CHAR);  --[E20260805-AFS]
 
     -- 내부 프로시저 호출용 커서 변수
     v_inner_result_cursor   SYS_REFCURSOR;
@@ -10029,6 +10373,7 @@ IS
     v_index_currency        NUMBER;
     v_index_qty             NUMBER;
     v_index_created_by      NUMBER;
+    v_index_as_from_site    NUMBER;  --[E20260805-AFS]
 
     i_count             NUMBER  := 0;
     v_idx               NUMBER  := 1;
@@ -10150,6 +10495,7 @@ BEGIN
     v_p_currency          := RTRIM(p_currency)          || '^';
     v_p_qty               := RTRIM(p_qty)               || '^';
     v_p_created_by_raw    := RTRIM(p_created_by)        || '^';
+    v_p_as_from_site_raw  := RTRIM(NVL(p_as_from_site, '')) || '^';  --[E20260805-AFS] 미전달(NULL)=전 행 공백 토큰
 
     -- COUNT를 구한다. 하나라도 들어오면 수치가 1이 된다.
     i_count := LENGTH(RTRIM(v_p_division_id)) - LENGTH(REPLACE(RTRIM(v_p_division_id), '^', ''));
@@ -10185,6 +10531,7 @@ BEGIN
             v_index_currency          := INSTR(v_p_currency,          '^');
             v_index_qty               := INSTR(v_p_qty,               '^');
             v_index_created_by        := INSTR(v_p_created_by_raw,    '^');
+            v_index_as_from_site      := INSTR(v_p_as_from_site_raw,  '^');  --[E20260805-AFS]
 
             v_active_flag       := SUBSTR(v_p_active_flag,       1, v_index_active_flag       - 1);
             v_p_division_id_val := SUBSTR(v_p_division_id,       1, v_index_division_id       - 1);
@@ -10202,6 +10549,7 @@ BEGIN
             v_currency          := SUBSTR(v_p_currency,          1, v_index_currency          - 1);
             v_qty_str           := SUBSTR(v_p_qty,               1, v_index_qty               - 1);
             v_p_created_by_val  := SUBSTR(v_p_created_by_raw,   1, v_index_created_by        - 1);
+            v_as_from_site      := SUBSTR(v_p_as_from_site_raw, 1, v_index_as_from_site      - 1);  --[E20260805-AFS] 토큰 소진 후엔 ''
 
             -- 나머지 문자열 갱신
             v_p_active_flag       := SUBSTR(v_p_active_flag,       LENGTH(RTRIM(v_active_flag)             || '^') + 1, LENGTH(RTRIM(v_p_active_flag)));
@@ -10220,6 +10568,7 @@ BEGIN
             v_p_currency          := SUBSTR(v_p_currency,          LENGTH(RTRIM(v_currency)                || '^') + 1, LENGTH(RTRIM(v_p_currency)));
             v_p_qty               := SUBSTR(v_p_qty,               LENGTH(RTRIM(v_qty_str)                 || '^') + 1, LENGTH(RTRIM(v_p_qty)));
             v_p_created_by_raw    := SUBSTR(v_p_created_by_raw,    LENGTH(RTRIM(v_p_created_by_val)        || '^') + 1, LENGTH(RTRIM(v_p_created_by_raw)));
+            v_p_as_from_site_raw  := SUBSTR(v_p_as_from_site_raw,  LENGTH(RTRIM(v_as_from_site)            || '^') + 1, LENGTH(RTRIM(v_p_as_from_site_raw)));  --[E20260805-AFS]
 
             -- [E20250522-001188]_해당 화면에서도 TRIM처리가 전혀 안되어 있어서 TRIM 처리 (START)
             v_active_flag       := TRIM(v_active_flag);
@@ -10239,6 +10588,7 @@ BEGIN
             v_qty_str           := TRIM(v_qty_str);
             v_currency          := TRIM(v_currency);
             v_p_created_by_val  := TRIM(v_p_created_by_val);
+            v_as_from_site      := TRIM(v_as_from_site);  --[E20260805-AFS]
             -- [E20250522-001188]_TRIM 처리 (END)
 
             BEGIN SCM_MGR.PR_DM_SYS_LOG_BATCH($$PLSQL_UNIT, 'ING', N_LOG_COUNT,
@@ -10257,7 +10607,8 @@ BEGIN
             , v_plant_site_id, v_cell_prod_site_id, v_yyyymmdd, v_currency
             , TO_NUMBER(NVL(v_qty_str, '0') DEFAULT 0 ON CONVERSION ERROR)
             , v_p_created_by_val
-            , '', '', '', '', '', '', '', '', '', '', '', '' );
+            --[E20260805-AFS] V_ATTRIBUTE10(10번째) = AS FROM SITE
+            , '', '', '', '', '', '', '', '', '', v_as_from_site, '', '' );
 
         END LOOP;
 
@@ -10285,6 +10636,16 @@ BEGIN
 
     IF v_div_cnt = 1 THEN
         SELECT MIN(DIVISION_ID) INTO V_DIVISION_ID FROM SCM_MGR.GT_PRDM1_T_MAIN;
+    END IF;
+
+    --==========================================================================================================================
+    -- [UICATEGORY 2026-08-07 V82-00] Division 82 = 조회 전용 (사용자 확정 2026-08-07) — 저장 전면 차단
+    --   (2026-07-30 "82=81 동일 경로" 저장 구현을 본 게이트가 상위에서 차단 — 하류 로직 무수정 보존)
+    --==========================================================================================================================
+    IF V_DIVISION_ID = '82' THEN
+        V_LOG_TYPE    := 'INVALID';
+        V_DESCRIPTION := '82 사업부는 조회 전용입니다. 저장할 수 없습니다.';
+        RAISE e_validation_error;
     END IF;
 
     IF (V_DIVISION_ID LIKE '81%' OR V_DIVISION_ID = '82') THEN
@@ -10446,8 +10807,12 @@ BEGIN
              AND A.PROJECT_CODE      = B.PROJECT_CODE
              AND A.END_CUSTOMER      = B.END_CUSTOMER
              AND A.SCM_SITE_ID       = B.SCM_SITE_ID
-             AND A.PLANT_SITE_ID     = B.PLANT_SITE_ID
-             AND A.CELL_PROD_SITE_ID = B.CELL_PROD_SITE_ID
+             --[SENTINEL3 2026-08-07] 센티널 변형 3형(' '/'-'/'--')='-' 통일 비교 (hook #119 §1.5 — 사용자 확정.
+             --  원장 PLANT/CELL 변형 혼재로 판가 52주 수집이 변형별 분열 → 판가 실존인데 Not Found 차단 실사고)
+             AND CASE WHEN TRIM(A.PLANT_SITE_ID) IS NULL OR A.PLANT_SITE_ID IN ('-','--') THEN '-' ELSE A.PLANT_SITE_ID END
+               = CASE WHEN TRIM(B.PLANT_SITE_ID) IS NULL OR B.PLANT_SITE_ID IN ('-','--') THEN '-' ELSE B.PLANT_SITE_ID END
+             AND CASE WHEN TRIM(A.CELL_PROD_SITE_ID) IS NULL OR A.CELL_PROD_SITE_ID IN ('-','--') THEN '-' ELSE A.CELL_PROD_SITE_ID END
+               = CASE WHEN TRIM(B.CELL_PROD_SITE_ID) IS NULL OR B.CELL_PROD_SITE_ID IN ('-','--') THEN '-' ELSE B.CELL_PROD_SITE_ID END
              AND A.ITEM_ID           = B.ITEM_ID
              AND A.DOM_EXP           = B.DOM_EXP
              AND A.FCST_TYPE         = B.FCST_TYPE
@@ -11046,8 +11411,11 @@ BEGIN
               AND A.PROJECT_CODE      = P.PROJECT_CODE
               AND A.END_CUSTOMER      = P.END_CUSTOMER
               AND A.SCM_SITE_ID       = P.SCM_SITE_ID
-              AND A.PLANT_SITE_ID     = P.PLANT_SITE_ID
-              AND A.CELL_PROD_SITE_ID = P.CELL_PROD_SITE_ID
+              --[SENTINEL3 2026-08-07] 변형 3형 통일 비교 (hook #119 §1.5 — T_PRICE 적재 조인과 동일 규약)
+              AND CASE WHEN TRIM(A.PLANT_SITE_ID) IS NULL OR A.PLANT_SITE_ID IN ('-','--') THEN '-' ELSE A.PLANT_SITE_ID END
+                = CASE WHEN TRIM(P.PLANT_SITE_ID) IS NULL OR P.PLANT_SITE_ID IN ('-','--') THEN '-' ELSE P.PLANT_SITE_ID END
+              AND CASE WHEN TRIM(A.CELL_PROD_SITE_ID) IS NULL OR A.CELL_PROD_SITE_ID IN ('-','--') THEN '-' ELSE A.CELL_PROD_SITE_ID END
+                = CASE WHEN TRIM(P.CELL_PROD_SITE_ID) IS NULL OR P.CELL_PROD_SITE_ID IN ('-','--') THEN '-' ELSE P.CELL_PROD_SITE_ID END
               AND A.ITEM_ID           = P.ITEM_ID
               AND A.DOM_EXP           = P.DOM_EXP
               AND A.FCST_TYPE         = P.FCST_TYPE
@@ -11862,8 +12230,8 @@ BEGIN
             RAISE e_validation_error;
         END IF;
 
-        -- V81-11. AS 계열 FCST TYPE 신규(I) 입력 차단 — 본 SP 는 AS FROM SITE(ATTRIBUTE10) 파라미터가 없어 불완전 저장 방지.
-        --  수정(M)은 MERGE 가 기존 ATTRIBUTE10 을 보존하므로 허용. (SALES_TYPE_CODE.ATTRIBUTE2='Y' = AS 계열 — DMF0003 규약)
+        -- V81-11. AS 계열 FCST TYPE 신규(I) — AS FROM SITE 미전달 행만 차단([E20260805-AFS] p_as_from_site 신설로 완화).
+        --  고객향 사이트(AS_SITE_PLANT 미등재) + AS 계열 + V_ATTRIBUTE10 공백 = 불완전 저장 차단 (DMF0003 MSG00476 계보).
         SELECT COUNT(1) INTO v_cnt_check
         FROM   SCM_MGR.GT_PRDM1_T_MAIN A
         JOIN   SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL C
@@ -11871,6 +12239,7 @@ BEGIN
          AND   C.LOOKUP_TYPE = 'SALES_TYPE_CODE'
          AND   C.ATTRIBUTE2  = 'Y'
         WHERE  A.ACTION = 'I'
+          AND  (A.V_ATTRIBUTE10 IS NULL OR TRIM(A.V_ATTRIBUTE10) = '')  --[E20260805-AFS] AS FROM SITE 전달 시 신규 허용
           AND  NOT EXISTS (
                    SELECT 1 FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL B
                    WHERE  A.SCM_SITE_ID = B.SEGMENT1
@@ -11881,7 +12250,7 @@ BEGIN
 
         IF v_cnt_check > 0 THEN
             V_LOG_TYPE    := 'INVALID';
-            V_DESCRIPTION := 'AS 관련 FCST TYPE 의 신규 입력은 본 화면에서 지원하지 않습니다 (AS FROM SITE 지정 불가). Mkt Fcst 화면을 사용하세요.';
+            V_DESCRIPTION := 'AS 관련 FCST TYPE 의 신규 입력은 AS FROM SITE 지정이 필요합니다.';  --[E20260805-AFS]
             RAISE e_validation_error;
         END IF;
 
@@ -12475,6 +12844,7 @@ BEGIN
         SET A.QTY              = NVL(B.QTY_PRICE, 0)
           , A.LAST_UPDATED_BY  = B.CREATED_BY
           , A.LAST_UPDATE_DATE = V_GETDATE
+          , A.ATTRIBUTE10      = NVL(NULLIF(B.V_ATTRIBUTE10, ''), A.ATTRIBUTE10)  --[E20260805-AFS] 값 전달 시 갱신, 미전달 시 보존
         WHEN NOT MATCHED THEN
         INSERT
         ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS, MEASURE, PLANT_SITE_ID, YYYYMMDD

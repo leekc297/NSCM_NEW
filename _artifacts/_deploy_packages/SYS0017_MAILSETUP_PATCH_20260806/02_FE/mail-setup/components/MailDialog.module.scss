@@ -1,0 +1,43 @@
+.contentArea {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  padding: 8px;
+}
+
+.textArea {
+  width: 100%;
+  min-height: 260px;
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #d5d9df;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1.5;
+  resize: none;
+
+  &:read-only {
+    background: #f5f6f8;
+  }
+}
+
+.sqlTextArea {
+  composes: textArea;
+  font-family: Consolas, 'Courier New', monospace;
+  white-space: pre;
+}
+
+// customContentArea 자체 footer — 정본 forecast-price ExchangeRateModal .buttonWrapper
+.buttonWrapper {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.dialogGuide {
+  margin: 0 0 6px;
+  color: #707781;
+  font-size: 12px;
+}

@@ -1,4 +1,16 @@
-CREATE OR REPLACE PACKAGE BODY           "PKG_DMF0042" IS
+-- ============================================================================
+-- PKG_DMF0042 BODY — 클라우드 ORA-00979 조치 + GT 표준 (2026-08-06)
+--   ① DEFAULT_FLAG 빈값 판정 관용화: RTRIM(x) IS NULL → RTRIM(x,' -') IS NULL (2곳,
+--      GET_DM_PLN_BUSINESS_PLAN_DATA branch①/② — 공백(' ')과 '-' 동일 취급.
+--      데이터 무수정 방침(2026-08-06 사용자 확정). SPREAD_TITLE 의 `IS NULL` 은
+--      사내에서도 공백 불통과(동작 일치)이므로 불변.
+--   ② v_ColList MEASURE 결여 방어 가드 1곳 (동적 PIVOT GROUP BY 정합 — ORA-00979 재발 차단)
+--   ③ GT/GTT 사용 5개 본문 BEGIN 직후 ALTER SESSION optimizer_dynamic_sampling=2
+--      (EXCHANGE_RATE/GET_DATA/PRICE_CONV×2/BP_FCST — 클라우드 파라미터 0 방어 표준)
+--   원본: 사내 live 2026-08-06 추출본 위 치환 (그 외 무수정). 사내·클라우드(QA·DEV) 공통 적용.
+-- ============================================================================
+CREATE OR REPLACE
+PACKAGE BODY           "PKG_DMF0042" IS
 
   PROCEDURE P_DMF0042_GET_DM_MDF_VERSION 
 (
@@ -73,8 +85,11 @@ BEGIN
 					(CASE WHEN p_division_id = 'ALL' THEN 'ALL' ELSE DIVISION_ID END) = P.token
 	               )
 		AND VERSION_TYPE like p_version_type  ||  '%'
-		AND VERSION_DESCRIPTION like p_version_description  ||  '%'
-		AND NVL(ATTRIBUTE1, NULL) <> 'MOVE'
+		-- [20260805] 검색어 미입력 시 전행 — AS-IS `NULL LIKE '%'` 탈락(파리티)을 사용자 지시로 보정(Δ)
+		AND ( p_version_description IS NULL OR VERSION_DESCRIPTION like p_version_description  ||  '%' )
+		-- [20260805 hook #119] NVL(x,NULL)<>'MOVE' 는 ATTRIBUTE1 NULL 행 전멸(항상 UNKNOWN) —
+		--   AS-IS ISNULL(x,'')<>'MOVE' 파리티 = CHR(0) 센티널 (본문 L110 BP_CUTOFF_VERSION 판과 동일 패턴)
+		AND NVL(ATTRIBUTE1, CHR(0)) <> 'MOVE'
 
   ORDER BY DIVISION_ID, VERSION_NO DESC;
 
@@ -1056,6 +1071,15 @@ AS
 
 
     v_recv_active_flag VARCHAR2(4000 CHAR);
+    -- [20260805 SPLIT-FIX] AS-IS 원본은 p_x(나머지)/v_x(토큰) 2변수 구조 — 변환본이 1변수로 합쳐
+    --   토큰 추출 직후 NULL 파괴(전 필드 NULL 적재→INVALID). v_recv_* = 나머지 보관용 복원.
+    v_recv_division_id VARCHAR2(4000 CHAR);
+    v_recv_YYYYMMDD VARCHAR2(4000 CHAR);
+    v_recv_CURRENCY VARCHAR2(4000 CHAR);
+    v_recv_UNIT_CURRENCY VARCHAR2(4000 CHAR);
+    v_recv_EXCHANGE_PRICE VARCHAR2(4000 CHAR);
+    v_recv_CREATED_BY VARCHAR2(4000 CHAR);
+    v_recv_LAST_UPDATED_BY VARCHAR2(4000 CHAR);
     v_active_flag VARCHAR2(4000 CHAR);
     v_division_id VARCHAR2(4000 CHAR);
     v_YYYYMMDD VARCHAR2(4000 CHAR);
@@ -1085,6 +1109,8 @@ AS
     v_index_LAST_UPDATED_BY INTEGER;
     v_in_para_data VARCHAR2(4000);
 BEGIN
+    --[E20260806-DS2] GT/GTT 사용 SP 표준 — 클라우드 optimizer_dynamic_sampling=0 방어 (2026-08-06 사용자 지시)
+    EXECUTE IMMEDIATE 'ALTER SESSION SET optimizer_dynamic_sampling = 2';
 
     v_in_para_data := JSON_OBJECT(
             'p_active_flag' VALUE p_active_flag,
@@ -1112,14 +1138,15 @@ BEGIN
 
 	v_delimiter := '^'; -- 데이터 구분자
 
-	v_active_flag := RTRIM(p_active_flag     )  ||  '^';
-	v_division_id := RTRIM(p_division_id     )  ||  '^';
-	v_YYYYMMDD := RTRIM(p_YYYYMMDD        )  ||  '^';
-	v_CURRENCY := RTRIM(p_CURRENCY        )  ||  '^';
-	v_UNIT_CURRENCY := RTRIM(p_UNIT_CURRENCY   )  ||  '^';
-	v_EXCHANGE_PRICE := RTRIM(p_EXCHANGE_PRICE  )  ||  '^';
-	v_CREATED_BY := RTRIM(p_CREATED_BY      )  ||  '^';
-	v_LAST_UPDATED_BY := RTRIM(p_LAST_UPDATED_BY )  ||  '^';
+	-- [20260805 SPLIT-FIX] 나머지 보관 변수(v_recv_*)에 적재 — 토큰(v_*)과 분리 (AS-IS @p_x/@v_x 1:1)
+	v_recv_active_flag := RTRIM(p_active_flag     )  ||  '^';
+	v_recv_division_id := RTRIM(p_division_id     )  ||  '^';
+	v_recv_YYYYMMDD := RTRIM(p_YYYYMMDD        )  ||  '^';
+	v_recv_CURRENCY := RTRIM(p_CURRENCY        )  ||  '^';
+	v_recv_UNIT_CURRENCY := RTRIM(p_UNIT_CURRENCY   )  ||  '^';
+	v_recv_EXCHANGE_PRICE := RTRIM(p_EXCHANGE_PRICE  )  ||  '^';
+	v_recv_CREATED_BY := RTRIM(p_CREATED_BY      )  ||  '^';
+	v_recv_LAST_UPDATED_BY := RTRIM(p_LAST_UPDATED_BY )  ||  '^';
 
 	-- LOG 용 변수 설정
 	DELETE FROM GT_SDBE_RESULTS;
@@ -1139,42 +1166,43 @@ BEGIN
 		-- BEGIN TRY (Oracle: EXCEPTION 블록으로 대체)
 	-- -----------------------------------------------------------------------------------------
 --###############################################  GT_SDBE_RESULTS 테이블에 split후 insert (START)
-WHILE LENGTH(v_DIVISION_ID) > 0 LOOP
+WHILE LENGTH(v_recv_division_id) > 0 LOOP
 
-    v_index_active_flag := INSTR(v_active_flag, '^');
-	v_index_division_id := INSTR(v_division_id, '^');
-	v_index_YYYYMMDD := INSTR(v_YYYYMMDD, '^');
-	v_index_CURRENCY := INSTR(v_CURRENCY, '^');
-	v_index_UNIT_CURRENCY := INSTR(v_UNIT_CURRENCY, '^');
-	v_index_EXCHANGE_PRICE := INSTR(v_EXCHANGE_PRICE, '^');
-	v_index_CREATED_BY := INSTR(v_CREATED_BY, '^');
-	v_index_LAST_UPDATED_BY := INSTR(v_LAST_UPDATED_BY, '^');
+    v_index_active_flag := INSTR(v_recv_active_flag, '^');
+	v_index_division_id := INSTR(v_recv_division_id, '^');
+	v_index_YYYYMMDD := INSTR(v_recv_YYYYMMDD, '^');
+	v_index_CURRENCY := INSTR(v_recv_CURRENCY, '^');
+	v_index_UNIT_CURRENCY := INSTR(v_recv_UNIT_CURRENCY, '^');
+	v_index_EXCHANGE_PRICE := INSTR(v_recv_EXCHANGE_PRICE, '^');
+	v_index_CREATED_BY := INSTR(v_recv_CREATED_BY, '^');
+	v_index_LAST_UPDATED_BY := INSTR(v_recv_LAST_UPDATED_BY, '^');
 
 	--확인  select v_index_DIVISION_ID as 'v_index_DIVISION_ID';
     IF v_index_DIVISION_ID > 0 THEN
-			v_active_flag := SUBSTR(v_active_flag, 1, v_index_active_flag - 1);
-			v_active_flag := SUBSTR(v_active_flag, LENGTH(v_active_flag  ||  '^') + 1);
+			-- [20260805 SPLIT-FIX] 토큰 = 나머지의 선두, 나머지 = 구분자 이후 (AS-IS 원본 1:1)
+			v_active_flag := SUBSTR(v_recv_active_flag, 1, v_index_active_flag - 1);
+			v_recv_active_flag := SUBSTR(v_recv_active_flag, v_index_active_flag + 1);
 
-			v_DIVISION_ID := SUBSTR(v_DIVISION_ID, 1, v_index_DIVISION_ID - 1);
-			v_DIVISION_ID := SUBSTR(v_DIVISION_ID, LENGTH(v_DIVISION_ID  ||  '^') + 1);
+			v_DIVISION_ID := SUBSTR(v_recv_DIVISION_ID, 1, v_index_DIVISION_ID - 1);
+			v_recv_DIVISION_ID := SUBSTR(v_recv_DIVISION_ID, v_index_DIVISION_ID + 1);
 
-			v_YYYYMMDD := SUBSTR(v_YYYYMMDD, 1, v_index_YYYYMMDD - 1);
-			v_YYYYMMDD := SUBSTR(v_YYYYMMDD, LENGTH(v_YYYYMMDD  ||  '^') + 1);
+			v_YYYYMMDD := SUBSTR(v_recv_YYYYMMDD, 1, v_index_YYYYMMDD - 1);
+			v_recv_YYYYMMDD := SUBSTR(v_recv_YYYYMMDD, v_index_YYYYMMDD + 1);
 
-			v_CURRENCY := SUBSTR(v_CURRENCY, 1, v_index_CURRENCY - 1);
-			v_CURRENCY := SUBSTR(v_CURRENCY, LENGTH(v_CURRENCY  ||  '^') + 1);
+			v_CURRENCY := SUBSTR(v_recv_CURRENCY, 1, v_index_CURRENCY - 1);
+			v_recv_CURRENCY := SUBSTR(v_recv_CURRENCY, v_index_CURRENCY + 1);
 
-			v_UNIT_CURRENCY := SUBSTR(v_UNIT_CURRENCY, 1, v_index_UNIT_CURRENCY - 1);
-			v_UNIT_CURRENCY := SUBSTR(v_UNIT_CURRENCY, LENGTH(v_UNIT_CURRENCY  ||  '^') + 1);
+			v_UNIT_CURRENCY := SUBSTR(v_recv_UNIT_CURRENCY, 1, v_index_UNIT_CURRENCY - 1);
+			v_recv_UNIT_CURRENCY := SUBSTR(v_recv_UNIT_CURRENCY, v_index_UNIT_CURRENCY + 1);
 
-			v_EXCHANGE_PRICE := SUBSTR(v_EXCHANGE_PRICE, 1, v_index_EXCHANGE_PRICE - 1);
-			v_EXCHANGE_PRICE := SUBSTR(v_EXCHANGE_PRICE, LENGTH(v_EXCHANGE_PRICE || '^') + 1);
+			v_EXCHANGE_PRICE := SUBSTR(v_recv_EXCHANGE_PRICE, 1, v_index_EXCHANGE_PRICE - 1);
+			v_recv_EXCHANGE_PRICE := SUBSTR(v_recv_EXCHANGE_PRICE, v_index_EXCHANGE_PRICE + 1);
 
-			v_CREATED_BY := SUBSTR(v_CREATED_BY, 1, v_index_CREATED_BY - 1);
-			v_CREATED_BY := SUBSTR(v_CREATED_BY, LENGTH(v_CREATED_BY  ||  '^') + 1);
+			v_CREATED_BY := SUBSTR(v_recv_CREATED_BY, 1, v_index_CREATED_BY - 1);
+			v_recv_CREATED_BY := SUBSTR(v_recv_CREATED_BY, v_index_CREATED_BY + 1);
 
-			v_LAST_UPDATED_BY := SUBSTR(v_LAST_UPDATED_BY, 1, v_index_LAST_UPDATED_BY - 1);
-			v_LAST_UPDATED_BY := SUBSTR(v_LAST_UPDATED_BY, LENGTH(v_LAST_UPDATED_BY  ||  '^') + 1);
+			v_LAST_UPDATED_BY := SUBSTR(v_recv_LAST_UPDATED_BY, 1, v_index_LAST_UPDATED_BY - 1);
+			v_recv_LAST_UPDATED_BY := SUBSTR(v_recv_LAST_UPDATED_BY, v_index_LAST_UPDATED_BY + 1);
 
 			INSERT INTO GT_SDBE_RESULTS (
 			                         active_flag
@@ -1196,7 +1224,9 @@ WHILE LENGTH(v_DIVISION_ID) > 0 LOOP
 									,v_LAST_UPDATED_BY
 			);
     ELSE
+			-- [20260805 SPLIT-FIX] 도달 불가 잔존 분기(모든 토큰이 '^' 종결) — 만약 도달 시 무한루프 방어
 			v_DIVISION_ID := p_DIVISION_ID;
+			v_recv_division_id := NULL;
 
 			INSERT INTO GT_SDBE_RESULTS (
 			                         active_flag
@@ -1728,6 +1758,8 @@ AS
 	v_to_yyyymm			VARCHAR2(6 CHAR);
 	v_valid_yn			VARCHAR2(1 CHAR);
 BEGIN
+	--[E20260806-DS2] GT/GTT 사용 SP 표준 — 클라우드 optimizer_dynamic_sampling=0 방어 (2026-08-06 사용자 지시)
+	EXECUTE IMMEDIATE 'ALTER SESSION SET optimizer_dynamic_sampling = 2';
 	v_ColList	:= NULL;     -- 원본 SET @ColList=''  (Oracle ''=NULL)
 	v_GroupList	:= NULL;
 	v_Prod		:= NULL;
@@ -2617,7 +2649,7 @@ BEGIN
 					   AND C.SHEET_NAME  = 'Biz Plan'
 					   AND ( C.DEFAULT_FLAG = 'Y' OR
 							(    C.VISIBLE_FLAG = 'N'
-							 AND RTRIM(C.DEFAULT_FLAG) IS NULL   -- 원본 C.DEFAULT_FLAG = '' (MSSQL 빈문자/후행공백 비교 → Oracle RTRIM IS NULL 로 보존)
+							 AND RTRIM(C.DEFAULT_FLAG, ' -') IS NULL   --[E20260806-00979] 빈값 판정: 공백(' ')과 '-' 동일 취급 (데이터 무수정 방침 — 클라우드 '-' 변형 흡수)
 							 AND C.VALID_YN     = 'Y'
 							))
 					 ORDER BY C.SORT_ORDER_NO ) LOOP
@@ -2648,7 +2680,7 @@ BEGIN
 								AND C.PROGRAM_ID  = p_program_id
 								AND C.SHEET_NAME  = 'Biz Plan'
 								AND C.VISIBLE_FLAG = 'N'
-								AND RTRIM(C.DEFAULT_FLAG) IS NULL   -- 원본 C.DEFAULT_FLAG = '' (MSSQL 빈문자/후행공백 비교 → Oracle RTRIM IS NULL 로 보존)
+								AND RTRIM(C.DEFAULT_FLAG, ' -') IS NULL   --[E20260806-00979] 빈값 판정: 공백(' ')과 '-' 동일 취급 (데이터 무수정 방침 — 클라우드 '-' 변형 흡수)
 								AND C.VALID_YN     = 'Y'
 								AND p_division_id IN (SELECT TOKEN FROM TABLE(FN_STRING_SPLIT(C.DIVISION_ID ,',')) )
 						) WHERE ROWNUM <= 100
@@ -2657,6 +2689,13 @@ BEGIN
 			v_ColList   := v_ColList   || '"' || rec.COLUMN_NAME || '",';
 			v_GroupList := v_GroupList || '"' || rec.COLUMN_NAME || '" ' || rec.DATA_SORT_METHOD_CODE || ',';
 		END LOOP;
+	END IF;
+
+	--[E20260806-00979] v_ColList MEASURE 결여 방어 — 동적 PIVOT 내부 서브쿼리의 CASE WHEN MEASURE 는
+	--  GROUP BY 에 MEASURE 가 있어야 유효(ORA-00979 클라우드 실사고 — 메타 변형 시에도 조회 보장).
+	IF v_ColList IS NULL OR INSTR(v_ColList, '"MEASURE"') = 0 THEN
+		v_ColList   := v_ColList   || '"MEASURE",';
+		v_GroupList := v_GroupList || '"MEASURE" ASC,';
 	END IF;
 
 	v_ColList   := SUBSTR(v_ColList,   1, LENGTH(v_ColList)  - 1);
@@ -3099,6 +3138,8 @@ AS
        WHERE B.MEASURE = 'LOC'
        ORDER BY B.ROW_COUNT;
 BEGIN
+    --[E20260806-DS2] GT/GTT 사용 SP 표준 — 클라우드 optimizer_dynamic_sampling=0 방어 (2026-08-06 사용자 지시)
+    EXECUTE IMMEDIATE 'ALTER SESSION SET optimizer_dynamic_sampling = 2';
 
 DBMS_OUTPUT.PUT_LINE('EXEC_001                                       =>  '  ||  TO_CHAR(SYSDATE));
 
@@ -3699,6 +3740,8 @@ END P_DMF0042_SAVE_DM_PLN_BP_FCST_PRICE_CONV;
         V_RESULT_CURSOR_SUB SYS_REFCURSOR;
         V_DUMMY        VARCHAR2(4000 CHAR) := NULL;
     BEGIN
+        --[E20260806-DS2] GT/GTT 사용 SP 표준 — 클라우드 optimizer_dynamic_sampling=0 방어 (2026-08-06 사용자 지시)
+        EXECUTE IMMEDIATE 'ALTER SESSION SET optimizer_dynamic_sampling = 2';
 
         V_IN_PARA_DATA := JSON_OBJECT('p_active_flag' VALUE P_ACTIVE_FLAG
                                      ,'p_DIVISION_ID' VALUE P_DIVISION_ID
@@ -4290,29 +4333,31 @@ END P_DMF0042_SAVE_DM_PLN_BP_FCST_PRICE_CONV;
                     FROM   GT_SDPB2_BP_FCST_4 B
                     WHERE  1 = 1
                     AND    B.ACTIVE_FLAG = 'D'
-                    AND    A.DIVISION_ID = B.DIVISION_ID
-                    AND    A.PROJECT_CODE = B.PROJECT_CODE
+                    -- [20260805 hook #119] B(GT)=FE 빈값이 NULL 로 적재 — 원장 A 는 전 키 NOT NULL('-' 정규화)
+                    --   raw 비교 시 NULL 행 매칭 전멸 → 'D' 삭제·중복제거가 무시됨. B 측만 NVL 정규화.
+                    AND    A.DIVISION_ID = NVL(B.DIVISION_ID, '-')
+                    AND    A.PROJECT_CODE = NVL(B.PROJECT_CODE, '-')
                           --AND A.PROJECT_NAME = B.PROJECT_NAME
-                    AND    A.SCM_SITE_ID = B.SCM_SITE_ID
-                    AND    A.PLANT_SITE_ID = B.PLANT_SITE_ID
-                    AND    A.ITEM_ID = B.ITEM_ID
-                    AND    A.CELL_PROD_SITE = B.CELL_PROD_SITE
-                    AND    A.FCST_TYPE = B.FCST_TYPE
-                    AND    A.INCOTERMS = B.INCOTERMS -- PJ20200138 Incoterms 삭제
+                    AND    A.SCM_SITE_ID = NVL(B.SCM_SITE_ID, '-')
+                    AND    A.PLANT_SITE_ID = NVL(B.PLANT_SITE_ID, '-')
+                    AND    A.ITEM_ID = NVL(B.ITEM_ID, '-')
+                    AND    A.CELL_PROD_SITE = NVL(B.CELL_PROD_SITE, '-')
+                    AND    A.FCST_TYPE = NVL(B.FCST_TYPE, '-')
+                    AND    A.INCOTERMS = NVL(B.INCOTERMS, '-') -- PJ20200138 Incoterms 삭제
                           -- -----------------------------------------------------------------------------------------------
                           -- PJ20200138 item_use, unit_energy 추가 (START)
-                    AND    A.ITEM_USE = B.ITEM_USE
-                    AND    A.UNIT_ENERGY = B.UNIT_ENERGY
+                    AND    A.ITEM_USE = NVL(B.ITEM_USE, '-')
+                    AND    A.UNIT_ENERGY = NVL(B.UNIT_ENERGY, 0)
                           -- PJ20200138 item_use, unit_energy 추가 (END)
                           -- -----------------------------------------------------------------------------------------------
-                    AND    A.MEASURE = B.MEASURE
-                    AND    A.YYYYMM = B.YYYYMM
+                    AND    A.MEASURE = NVL(B.MEASURE, '-')
+                    AND    A.YYYYMM = NVL(B.YYYYMM, '-')
                           -- -----------------------------------------------------------------------------------------------
                           -- 20190830 추가 (START)
-                    AND    A.DEPT_ID = B.DEPT_ID
-                    AND    A.END_CUSTOMER = B.END_CUSTOMER
-                    AND    A.BIZ_TYPE = B.BIZ_TYPE
-                    AND    A.CURRENCY = B.CURRENCY
+                    AND    A.DEPT_ID = NVL(B.DEPT_ID, '-')
+                    AND    A.END_CUSTOMER = NVL(B.END_CUSTOMER, '-')
+                    AND    A.BIZ_TYPE = NVL(B.BIZ_TYPE, '-')
+                    AND    A.CURRENCY = NVL(B.CURRENCY, '-')
                     -- 20190830 추가 (END)
                     -- -----------------------------------------------------------------------------------------------
                     );
@@ -4395,24 +4440,26 @@ END P_DMF0042_SAVE_DM_PLN_BP_FCST_PRICE_CONV;
         BEGIN
             DELETE FROM DM_PLN_BP_FCST A
             WHERE  A.MEASURE IN ('Business_Plan', 'LOC', 'CAR_QTY', 'MKT_FCST')
+            -- [20260805 hook #119] B(GT) 빈값=NULL → raw 비교 전멸 = 기존행 미삭제 → 아래 INSERT
+            --   NOT EXISTS 에 걸려 재수정이 조용히 무시(SUCCESS·미반영). B 측만 NVL 정규화.
             AND    EXISTS (SELECT 1
                     FROM   GT_SDPB2_BP_FCST_4 B
-                    WHERE  A.DIVISION_ID = B.DIVISION_ID
-                    AND    A.PROJECT_CODE = B.PROJECT_CODE
-                    AND    A.SCM_SITE_ID = B.SCM_SITE_ID
-                    AND    A.PLANT_SITE_ID = B.PLANT_SITE_ID
-                    AND    A.ITEM_ID = B.ITEM_ID
-                    AND    A.CELL_PROD_SITE = B.CELL_PROD_SITE
-                    AND    A.FCST_TYPE = B.FCST_TYPE
-                    AND    A.ITEM_USE = B.ITEM_USE
-                    AND    A.UNIT_ENERGY = B.UNIT_ENERGY
-                    AND    A.MEASURE = B.MEASURE
-                    AND    A.YYYYMM = B.YYYYMM
-                    AND    A.DEPT_ID = B.DEPT_ID
-                    AND    A.END_CUSTOMER = B.END_CUSTOMER
-                    AND    A.BIZ_TYPE = B.BIZ_TYPE
-                    AND    A.CURRENCY = B.CURRENCY
-                    AND    A.INCOTERMS = B.INCOTERMS);
+                    WHERE  A.DIVISION_ID = NVL(B.DIVISION_ID, '-')
+                    AND    A.PROJECT_CODE = NVL(B.PROJECT_CODE, '-')
+                    AND    A.SCM_SITE_ID = NVL(B.SCM_SITE_ID, '-')
+                    AND    A.PLANT_SITE_ID = NVL(B.PLANT_SITE_ID, '-')
+                    AND    A.ITEM_ID = NVL(B.ITEM_ID, '-')
+                    AND    A.CELL_PROD_SITE = NVL(B.CELL_PROD_SITE, '-')
+                    AND    A.FCST_TYPE = NVL(B.FCST_TYPE, '-')
+                    AND    A.ITEM_USE = NVL(B.ITEM_USE, '-')
+                    AND    A.UNIT_ENERGY = NVL(B.UNIT_ENERGY, 0)
+                    AND    A.MEASURE = NVL(B.MEASURE, '-')
+                    AND    A.YYYYMM = NVL(B.YYYYMM, '-')
+                    AND    A.DEPT_ID = NVL(B.DEPT_ID, '-')
+                    AND    A.END_CUSTOMER = NVL(B.END_CUSTOMER, '-')
+                    AND    A.BIZ_TYPE = NVL(B.BIZ_TYPE, '-')
+                    AND    A.CURRENCY = NVL(B.CURRENCY, '-')
+                    AND    A.INCOTERMS = NVL(B.INCOTERMS, '-'));
         END;
         DBMS_OUTPUT.PUT_LINE(V_PROGRAM_NAME || ' : A006-- :' || TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS'));
         BEGIN
@@ -5604,6 +5651,8 @@ END P_DMF0042_SAVE_DM_PLN_BP_FCST_PRICE_CONV;
             WHERE  B.MEASURE = 'LOC'
             ORDER  BY B.ROW_COUNT;
     BEGIN
+        --[E20260806-DS2] GT/GTT 사용 SP 표준 — 클라우드 optimizer_dynamic_sampling=0 방어 (2026-08-06 사용자 지시)
+        EXECUTE IMMEDIATE 'ALTER SESSION SET optimizer_dynamic_sampling = 2';
 
         DBMS_OUTPUT.PUT_LINE('EXEC_001                                       =>  ' || TO_CHAR(SYSDATE));
 

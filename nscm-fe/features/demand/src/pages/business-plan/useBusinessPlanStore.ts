@@ -37,6 +37,9 @@ interface State {
   cutoffWindow: CutoffWindow | null;
   // PR_GET_DAY_RANGE 1회 적용 가드 (AS-IS drpPeriod.InitValue L308 — p_month=7)
   dayRangeApplied: boolean;
+  // ⭐ 기본 Period 보관 — Division 변경 시 리셋 원천 (AS-IS cboDivision L1554 drpPeriod=GetDayRange 파리티).
+  //   서버 dayRange 도착 시 그 값으로 갱신, 미도착 시 FE 계산 기본값.
+  defaultPeriod: { start: string; end: string };
   // ⭐ P_USERINFO 용 권한 그룹 (AS-IS NowGroupID 등가) — CMBO 'BizPlanUserAuthGroup'(P5) 1행 주입.
   authGroup: string;
 }
@@ -129,6 +132,7 @@ const initSearch: SearchCondition = {
 const initState: State = {
   filters: {},
   searchCondition: initSearch,
+  defaultPeriod: { start: monthStart, end: sevenMonthsEnd },
   openSearchArea: true,
   staticColumns: [],
   staticMeasures: [],
@@ -258,6 +262,7 @@ export const useBusinessPlanStore = createPersistedStoreWithTab<State & Action>(
           endYyyymmdd: end,
         };
         state.dayRangeApplied = true;
+        state.defaultPeriod = { start, end };
       });
     },
 

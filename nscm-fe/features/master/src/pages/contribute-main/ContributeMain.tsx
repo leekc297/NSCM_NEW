@@ -176,19 +176,23 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
           createdBy: trim(buf.createdBy),
         })
         .then(res => {
-          console.log('SUCCESS?', res);
-          if (res.status === 200) {
-            void setAlert({ type: 'alert', content: t('MSG00002', '저장이 완료되었습니다.') });
-          } else {
+          //[E20260807-AUDIT] 저장 결과 판정 — axios 인터셉터가 오류도 resolve 하므로 status/code
+          //   직접 판정 (정본 business-plan.api.ts:71~74). 실패 시 SP message passthrough.
+          if (res.status >= 400 || Number((res.data as { code?: string })?.code)) {
+            const message = (res.data as { message?: string })?.message?.trim();
             void setAlert({
               type: 'alert',
-              content: t('MSG00003', '저장 중 오류가 발생했습니다.'),
+              content: message || t('MSG00003', '저장 중 오류가 발생했습니다.'),
             });
+          } else {
+            void setAlert({ type: 'alert', content: t('MSG00002', '저장이 완료되었습니다.') });
           }
-          refetch?.();
+          void refetch?.();
         })
-        .catch(e => {
-          refetch?.();
+        .catch(() => {
+          //[E20260807-AUDIT] 네트워크 등 reject 도 실패 alert (기존 무통보 → 판정 추가)
+          void setAlert({ type: 'alert', content: t('MSG00003', '저장 중 오류가 발생했습니다.') });
+          void refetch?.();
         });
     })();
   };

@@ -243,7 +243,7 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
       });
       if (!ok) return;
       try {
-        await apiClient.post(`/${MENU_ID}/main/SAVE/call-proc`, {
+        const res = await apiClient.post(`/${MENU_ID}/main/SAVE/call-proc`, {
           divisionId: searchCondition.divisionId,
           companyId: join('COMPANY_ID'),
           actType,
@@ -266,6 +266,16 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
           validFrom: join('VALID_START_DATE'),
           validTo: join('VALID_END_DATE'),
         });
+        //[E20260807-AUDIT] 저장 결과 판정 — axios 인터셉터가 오류도 resolve 하므로 status/code 직접
+        //   판정 (정본 business-plan.api.ts:71~74). 실패 시 SP message passthrough + 성공 alert 차단.
+        if (res.status >= 400 || Number((res.data as { code?: string })?.code)) {
+          const message = (res.data as { message?: string })?.message?.trim();
+          void setAlert({
+            type: 'alert',
+            content: message || t('MSG00618', '_저장 중 오류가 발생했습니다.'),
+          });
+          return;
+        }
         void setAlert({ type: 'alert', content: t('MSG00002', '_성공적으로 저장되었습니다.') });
         setInsertedRows([]);
         await refetch?.();

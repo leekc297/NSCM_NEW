@@ -14,11 +14,40 @@ export const editableMeasures = new Set(['MKT_FCST', 'SCM_FCST', 'LOC', 'VMI_In_
 //   는 일~토(index 0=SUN … 6=SAT) 규약. dayjs().day() (0=SUN..6=SAT) 로 조회해야 정합.
 //   ⚠️ 구 코드는 isoWeekday()-1 (MON-first) 로 읽어 SP 의 SUN-first 버킷과 1일 어긋남 → 교정.
 const dowSunFirst = (dateString: string): number => dayjs(dateString).day();
-// Division 별 기본 배분요일(요일비트, SUN-first, AS-IS 기본값): 40=월요일 / 그 외=금요일.
-const DEFAULT_BUCKET_40 = '0100000'; // MON (index1)
-const DEFAULT_BUCKET_ETC = '0000010'; // FRI (index5)
 // SUN-first 기준 월요일 index (LOC 기준일).
 const MON_IDX = 1;
+
+/**
+ * ⭐ 기본 배분요일 — AS-IS `sDefaultDay`(.cs L1773) → 요일비트 변환 (.cs L6024~6055 switch 1:1).
+ *
+ * AS-IS 원천 = lookup `DEFAULT_BUCKET_DAY` (SEGMENT1=division / SEGMENT2=MONTHLY|WEEKLY / SEGMENT3=요일)
+ * 를 `UP_FX_GetCommonDataList @Code='DefaultBucketDay'` 로 조회한 값이다.
+ * ⚠️ 구 코드는 `40=MON / 그 외=FRI` 를 상수로 박아 두었는데, 이는 **현재 마스터 데이터와 우연히 일치**할
+ *   뿐이며 division 을 추가하거나 운영이 요일을 바꾸면 즉시 어긋난다 → 마스터 조회로 교체(2026-08-08).
+ * 미지정/미조회 시 폴백 = MON (AS-IS switch 의 `default:` 와 동일 — FRI 아님).
+ */
+export const LOC_BUCKET_BITS = '0100000'; // AS-IS: MEASURE='LOC' 이면 무조건 월요일 (.cs L6008~6012)
+
+export const bucketBitsOfDay = (day: string | undefined): string => {
+  switch ((day ?? '').trim().toUpperCase()) {
+    case 'SUN':
+      return '1000000';
+    case 'MON':
+      return '0100000';
+    case 'TUE':
+      return '0010000';
+    case 'WED':
+      return '0001000';
+    case 'THU':
+      return '0000100';
+    case 'FRI':
+      return '0000010';
+    case 'SAT':
+      return '0000001';
+    default:
+      return '0100000'; // AS-IS default: 월요일
+  }
+};
 
 const isPrimitive = (value: unknown): value is WijmoPrimitive => {
   return (
@@ -74,15 +103,15 @@ export const divideByMonth = (
   monthMap: Map<string, Set<string>>,
   weekMap: Map<string, Set<string>>,
   calendarMap: Map<string, CalendarInfo>,
-  editTracker: EditTracker
+  editTracker: EditTracker,
+  defaultBucket: string
 ) => {
   const monthlySum = toNumber(newValue);
   const bucketValue = dataItem['BUCKET'];
   let bucketBinary: string = bucketValue === null ? '' : String(bucketValue);
 
-  if (bucketValue === '0000000' || bucketValue === null) {
-    bucketBinary = dataItem['DIVISION_ID'] === '40' ? DEFAULT_BUCKET_40 : DEFAULT_BUCKET_ETC;
-  }
+  // AS-IS .cs L6024: `if (strBucket == "" || strBucket == "0000000")` → sDefaultDay 적용.
+  if (bucketBinary === '' || bucketBinary === '0000000') bucketBinary = defaultBucket;
 
   // ── 각 주차의 버킷 일자 + 캘린더 조회용 대표일 수집 (비-버킷일은 0 초기화) ──
   const dividedByWeek: { week: string; bucketDates: string[]; repDay: string }[] = [];
@@ -172,7 +201,8 @@ export const divideByWeek = (
   newValue: WijmoPrimitive,
   oldValue: WijmoPrimitive,
   weekMap: Map<string, Set<string>>,
-  editTracker: EditTracker
+  editTracker: EditTracker,
+  defaultBucket: string
 ) => {
   let bucketDateCnt = 0;
   let allocOnlyLastDay = false;
@@ -182,10 +212,10 @@ export const divideByWeek = (
   const bucketValue = dataItem['BUCKET'];
   let bucketBinary: string = bucketValue === null ? '' : String(bucketValue);
 
-  if ((bucketValue === '0000000' && dataItem['DIVISION_ID'] === '40') || bucketValue === null)
-    bucketBinary = DEFAULT_BUCKET_40;
-  else if (bucketValue === '0000000' || dataItem['DIVISION_ID'] !== '40')
-    bucketBinary = DEFAULT_BUCKET_ETC;
+  // ⭐ 2026-08-08 결함 정정 — 구 코드는 `else if (… || DIVISION_ID !== '40')` 라서
+  //   **정상 요일비트('0001000' 등)를 보유한 81/82 행까지 금요일로 덮어썼다**(월배분과 결과 불일치).
+  //   AS-IS(.cs L6024)는 division 을 보지 않고 "비어있거나 0000000" 일 때만 기본요일을 적용한다.
+  if (bucketBinary === '' || bucketBinary === '0000000') bucketBinary = defaultBucket;
 
   // 할당이 필요한 일자 계산 및 마지막 할당 일자
   weekMap.get(binding)?.forEach(dateColumn => {
@@ -301,8 +331,10 @@ export const allocateLoc = (
         const dateString = dateColumn.split('_')[1];
         const dayValue = dowSunFirst(dateString);
 
-        // 월요일
-        if (dayValue === 0) {
+        // ⭐ 2026-08-08 결함 정정 — 월요일 판정이 `dayValue === 0`(=일요일)이었다.
+        //   AS-IS 는 MEASURE='LOC' 이면 버킷을 '0100000'(index1=MON)으로 고정한다(.cs L6008~6012).
+        //   주(W_) 분기는 이미 MON_IDX 를 쓰고 있어 월/주 결과가 서로 달랐다.
+        if (dayValue === MON_IDX) {
           editTracker.storeChange(dataItem, dateColumn, dataItem[dateColumn], newValue);
           dataItem[dateColumn] = newValue;
         } else {

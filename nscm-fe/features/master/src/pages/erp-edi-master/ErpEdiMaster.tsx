@@ -226,7 +226,13 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
   const handleStatusUpdate = async () => {
     try {
       void setToast({ type: 'default', message: t('LBL00665', 'Loading...'), duration: 3000 });
-      await apiClient.post(`/${MENU_ID}/main/STATUS_UPDATE/call-proc`, {});
+      const res = await apiClient.post(`/${MENU_ID}/main/STATUS_UPDATE/call-proc`, {});
+      //[E20260807-AUDIT] 결과 판정 의무 — 인터셉터는 500/403 도 resolve (false success 방지, gate §1-3)
+      if (res.status >= 400 || Number((res.data as { code?: string })?.code)) {
+        const spMsg = (res.data as { message?: string })?.message;
+        void setAlert({ type: 'alert', content: spMsg || 'Status Update 실패' });
+        return;
+      }
       void setToast({ type: 'success', message: 'Status Update 완료. 재조회합니다.' });
       await Promise.all([refetchSummary?.(), refetchRepair?.(), refetchHistory?.()]);
     } catch (e) {

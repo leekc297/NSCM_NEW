@@ -166,11 +166,18 @@ export const buildUnfoldRows = (params: {
   return { rows: out };
 };
 
-// SaveUnfoldRow[] → 19키 '^'delim payload (camelCase = PKG PROC_M COL_NM. 감사 2키 BE주입 제외).
-export const buildSavePayload = (rows: SaveUnfoldRow[]): Record<string, string> | null => {
+// SaveUnfoldRow[] → 21키 '^'delim payload (camelCase = PKG PROC_M COL_NM).
+//   ⚠ 감사 2키(createdBy/lastUpdatedBy)는 BE 가 주입하지 않는다 — BE 자동 주입은 sesUserId 키뿐
+//   (NDaoInterface L434 실측 2026-08-05. 미전달 시 NULL 바인딩 → 감사 NULL 저장. AS-IS pUserID 행별 전달 1:1).
+export const buildSavePayload = (
+  rows: SaveUnfoldRow[],
+  userId: string
+): Record<string, string> | null => {
   if (rows.length === 0) return null;
   const join = (sel: (r: SaveUnfoldRow) => string): string => rows.map(sel).join('^');
   return {
+    createdBy: join(() => userId),
+    lastUpdatedBy: join(() => userId),
     activeFlag: join(r => r.activeFlag),
     divisionId: join(r => r.divisionId),
     projectCode: join(r => r.projectCode),

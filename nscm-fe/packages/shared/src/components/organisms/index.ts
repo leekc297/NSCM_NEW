@@ -1,4 +1,6 @@
 export * from './data-grid/DataGrid';
+export * from './olap-pivot-grid/OlapPivotGrid';
+export * from './olap-pivot-grid/olapUtils';
 export * from './column-button/ColumnButton';
 export * from './main-title/MainTitle';
 export * from './sub-title/SubTitle';

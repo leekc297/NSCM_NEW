@@ -77,7 +77,43 @@ LINE_DEF=$(grep -n "const popupBtnStyle\s*=" "$F" | head -1 | cut -d: -f1)
 # 17. DataGrid<T> 의 T 가 WijmoRowItem constraint 만족하는지 확인 의무
 grep -nP '<DataGrid<' "$F" \
   && echo "ℹ DataGrid<T>: T extends WijmoRowItem 또는 [key:string]: WijmoPrimitive 의무 확인"
+
+# ===== ⭐ SYS0017 2026-08-06 감사 계기 신설 (#18~#21) =====
+
+# 18. 자체 행상태 필드 신설 검출 (hook #99 §0 — 저장 판정 = CRUD_TYPE 전용)
+grep -nE "rowStatus|ROW_STATUS|actionFlag|isNewRow" "$F" \
+  && echo "⛔ 자체 행상태 필드 — CRUD_TYPE(GridAction/EditTracker 마킹) 전용. 값이 I/M/D 로 같아도 공통버튼·셀편집과 단절 → 저장 0건 (SYS0017 실사고)"
+
+# 19. 결과 판정 없는 apiClient.post(call-proc) 검출 (screen-completion-gate §1-3)
+#     — call-proc 호출 후 5줄 안에 res.status/res.data.code 실패 분기가 없으면 위반
+grep -nA 5 "apiClient\.post(.*call-proc" "$F" | grep -qE "res\.status *>= *400|\.code\)" \
+  || { grep -q "apiClient\.post(.*call-proc" "$F" \
+       && echo "⛔ call-proc 저장 결과 무검증 — axios responseErrorInterceptor 는 500/403 도 resolve (false success). 정본 business-plan/utils/business-plan.api.ts:71"; }
+
+# 20. '^' bulk 감사키 빈문자열 검출 (hook #99 §0.1)
+grep -nE "map\(\(\) *=> *''\)|createdBy: *''" "$F" \
+  && echo "⛔ 감사키 빈문자열 — 세션 사용자(useSessionStore userId) FE 필수 전달 (BE 자동 주입은 sesUserId 뿐)"
 ```
+
+### §0.1-B ⭐ 정의-참조 게이트 (util 미배선 검출 — SYS0017 2026-08-06 감사 계기 신설)
+
+> 페이지 폴더 내 `util/*.ts`(`*.util.ts` 포함) 의 **export 함수별로 동일 폴더 안 import 참조를 grep** 한다.
+> **참조 0건 export = "미배선 의심" 으로 보고 의무** (삭제가 아니라 보고 — 배선 누락인지 dead code 인지 판정).
+> 근거: 정확한 시그니처의 util 이 존재하면 구현된 것처럼 보인다 — **절반 구현이 가장 위험하다**
+> (SYS0017 실측: util 10 export 중 5개 import 0건 — cascade/검증 함수를 정의만 하고 그리드 핸들러에 배선 안 함).
+> tsc `noUnusedLocals` 는 export 함수를 검출하지 못하므로 본 grep 이 유일한 검출기다.
+
+```bash
+# 화면 폴더 단위 실행 (util 파일 작성/수정 직후 + screen-completion-gate 진입 시)
+DIR="features/{domain}/src/pages/{screen}"
+for fn in $(grep -rhoE "^export (const|function) \w+" "$DIR"/*.util.ts "$DIR"/utils/*.ts 2>/dev/null | awk '{print $3}'); do
+  CNT=$(grep -rE "\b$fn\b" "$DIR" --include='*.ts' --include='*.tsx' \
+        | grep -v "\.util\.ts:" | grep -vE "utils/\w+\.ts:" | wc -l)
+  [ "$CNT" -eq 0 ] && echo "⚠ 미배선 의심: $fn — export 인데 동일 폴더 참조 0건 (배선 누락 or dead — 보고 의무)"
+done
+```
+
+- 판정: 미배선 의심 1건이라도 있으면 **"완료" 보고 전 각 건에 [배선 완료 위치 | dead 사유] 를 명시**. 무언 통과 금지.
 
 ### §0.2 BE `.java`
 
@@ -141,6 +177,7 @@ grep -cE "SHT_NM\s*=\s*'(futurePrice|salesSite)'" "$F"   # = 0
 
 | grep | 사고 메모리 |
 |---|---|
+| 자체 행상태 필드 (#18) / call-proc 무검증 (#19) / 감사키 빈값 (#20) / 정의-참조 게이트 (§0.1-B) | `2026-08-06_SYS0017_root_cause_audit.md` (hook #99 §0·§0.1 + screen-completion-gate §1-3) |
 | Box / Dialog import | `feedback_runtime_error_prevention.md` |
 | FlexGridColumnGroup single-child | `feedback_wijmo_columngroup_jsx_avoid.md` (룰 07 §3.2) |
 | NUMBER → String 누락 | `feedback_no_type_cast_around_runtime.md` (룰 07 §3.6) |

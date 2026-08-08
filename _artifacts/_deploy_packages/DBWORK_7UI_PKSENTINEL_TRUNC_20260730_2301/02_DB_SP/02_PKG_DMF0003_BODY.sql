@@ -1,6 +1,19 @@
-CREATE OR REPLACE PACKAGE BODY           "PKG_DMF0003" IS
+-- ============================================================================
+-- DMF0003 조회 멀티선택 구분자 정합: ',' 와 '^' 겸용 split (2026-08-05 사용자 확정)
+--   배경: FE 멀티선택은 TO-BE 표준 '^' join 인데 SP split 이 AS-IS ',' 단독이라
+--         2개 이상 선택 시 전체가 한 토큰 → 조회 전멸 (MODEL 외 10개 파라미터 동일).
+--   변경: P_ITEM_ID/LP_PROJECT_CODE/LP_SCM_SITE_ID/P_PLANT_SITE_ID/P_TEAM_ID/P_CUSTOMER/
+--         P_BIZ_TYPE/P_ITEM_TYPE/P_OWNER/P_SENDER_CODE 의 REGEXP '[^,]+' → '[^,^]+'
+--         (',' 또는 '^' 어느 쪽이 들어와도 토큰 분리 — 사용자 지시: 강제 '^' 단독 금지).
+--   변경 2 (hook #119 계보): SPLIT GT 적재 가드 10곳 NOT IN ('ALL','%','') → NOT IN ('ALL','%')
+--         — ''=NULL 이라 NOT IN 전체 UNKNOWN → GT 항상 0행 → 특정값 필터 시 EXISTS(빈 GT) 전멸.
+--   유지: F.OWNER/FF.OWNER/C.DIVISION_ID (데이터 컬럼 — 원천 데이터가 ',' 구분) 불변.
+--   원본: 사내 live 2026-08-05 추출본 위 치환 (본문 그 외 무수정).
+-- ============================================================================
+CREATE OR REPLACE
+PACKAGE BODY           "PKG_DMF0003" IS
 
-  PROCEDURE P_DMF0003_GET_DM_ANL_CAR_PROPERTY 
+  PROCEDURE P_DMF0003_GET_DM_ANL_CAR_PROPERTY
 (
 	p_division_id	VARCHAR2,
 	p_maker_name	VARCHAR2,
@@ -43,7 +56,7 @@ BEGIN
 END P_DMF0003_GET_DM_ANL_CAR_PROPERTY;
 
 
-  PROCEDURE P_DMF0003_GET_DM_ANL_CAR_REF 
+  PROCEDURE P_DMF0003_GET_DM_ANL_CAR_REF
 (
 	p_from_yyyymmdd	VARCHAR2,
 	p_to_yyyymmdd	    VARCHAR2,
@@ -139,7 +152,7 @@ BEGIN
 END P_DMF0003_GET_DM_ANL_CAR_REF;
 
 
-  PROCEDURE P_DMF0003_GET_DM_ANL_MKT_PSI_DPINIT 
+  PROCEDURE P_DMF0003_GET_DM_ANL_MKT_PSI_DPINIT
 (
 	p_division_id	VARCHAR2,
     p_project_code    VARCHAR2,
@@ -201,7 +214,7 @@ BEGIN
 END P_DMF0003_GET_DM_ANL_MKT_PSI_DPINIT;
 
 
-  PROCEDURE P_DMF0003_GET_DM_ANL_MKT_PSI_DPRESULT 
+  PROCEDURE P_DMF0003_GET_DM_ANL_MKT_PSI_DPRESULT
 (
 	p_division_id	VARCHAR2,
     p_project_code	 VARCHAR2,
@@ -289,7 +302,7 @@ BEGIN
 END P_DMF0003_GET_DM_ANL_MKT_PSI_DPRESULT;
 
 
-  PROCEDURE P_DMF0003_GET_MKT_FCST_COMPARE_POPUP 
+  PROCEDURE P_DMF0003_GET_MKT_FCST_COMPARE_POPUP
 (
     p_division_id    VARCHAR2,
     p_scm_site_id    VARCHAR2,
@@ -438,7 +451,7 @@ BEGIN
 END P_DMF0003_GET_MKT_FCST_COMPARE_POPUP;
 
 
-  PROCEDURE P_DMF0003_GET_SPREAD_TITLE 
+  PROCEDURE P_DMF0003_GET_SPREAD_TITLE
 (
 	  p_start_yyyymmdd		VARCHAR2
 	, p_end_yyyymmdd		VARCHAR2
@@ -456,6 +469,7 @@ AS
 	v_sheet_name   VARCHAR2(150 CHAR) := 'Mkt Fcst';
 	v_user_col_cnt INTEGER := 0;
 	v_as_cnt       INTEGER := 0;
+	v_grp_cnt      INTEGER := 0;  --[AUTHGROUP 2026-08-04] USER_ID 수신 시 보유 그룹 확장 판정용
 BEGIN
 	SELECT COUNT(*)
 	  INTO v_user_col_cnt
@@ -466,7 +480,13 @@ BEGIN
 	   AND U.USER_ID    = p_created_by;
 
 	--[E20260402-001736] DM Planner(W/S)/DM Planner 권한자 첫 LOAD 시 AS_FROM_SITE 컬럼 자동추가
-	IF ((p_user_group = 'DM Planner (W/S)' OR p_user_group = 'DM Planner')
+	--[AUTHGROUP 2026-08-04] p_user_group 에 USER_ID 수신 시(TO-BE 세션 그룹 부재) 보유 그룹으로 확장 판정
+	--  v2: 미지의 p_user_group 값이 와도 세션 사용자(p_created_by) 보유 그룹으로 판정.
+	SELECT COUNT(*) INTO v_grp_cnt
+	  FROM SCM_MGR.SCM_ADM_USER_GR_MPG_M
+	 WHERE USER_ID IN (p_user_group, p_created_by) AND USE_YN = 'Y'
+	   AND USER_GR_ID IN ('DM Planner (W/S)', 'DM Planner');
+	IF ((p_user_group = 'DM Planner (W/S)' OR p_user_group = 'DM Planner' OR v_grp_cnt > 0)
 	    AND (p_division_id = '82' OR SUBSTR(p_division_id, 1, 2) = '81')
 	    AND p_type = 'LOAD') THEN
 
@@ -632,7 +652,7 @@ BEGIN
 END P_DMF0003_GET_SPREAD_TITLE;
 
 
-  PROCEDURE P_DMF0003_GET_SPREAD_TITLE_CAR 
+  PROCEDURE P_DMF0003_GET_SPREAD_TITLE_CAR
 (
     p_start_yyyymmdd  VARCHAR2,
     p_end_yyyymmdd    VARCHAR2,
@@ -733,7 +753,7 @@ BEGIN
 END P_DMF0003_GET_SPREAD_TITLE_CAR;
 
 
-  PROCEDURE P_DMF0003_GET_SPREAD_TITLE_PSI 
+  PROCEDURE P_DMF0003_GET_SPREAD_TITLE_PSI
 (
     p_start_yyyymmdd  VARCHAR2,
     p_end_yyyymmdd    VARCHAR2,
@@ -834,7 +854,7 @@ BEGIN
 END P_DMF0003_GET_SPREAD_TITLE_PSI;
 
 
-  PROCEDURE P_DMF0003_GET_DM_ANL_MKT_PSI_AN_LOGIC 
+  PROCEDURE P_DMF0003_GET_DM_ANL_MKT_PSI_AN_LOGIC
 (
     p_division_id        IN  VARCHAR2,
     p_project_code       IN  VARCHAR2,
@@ -2316,7 +2336,7 @@ BEGIN
 END P_DMF0003_GET_DM_ANL_MKT_PSI_DATA;
 
 
-  PROCEDURE P_DMF0003_GET_PRPOPUP 
+  PROCEDURE P_DMF0003_GET_PRPOPUP
 (
 	p_POPUP_TYPE		VARCHAR2,
     p_division_id		VARCHAR2,
@@ -2656,7 +2676,7 @@ BEGIN
 END P_DMF0003_GET_PRPOPUP;
 
 
-  PROCEDURE P_DMF0003_GET_PR_HISTORY_POPUP 
+  PROCEDURE P_DMF0003_GET_PR_HISTORY_POPUP
 (
 	p_POPUP_TYPE		VARCHAR2,
     p_division_id		VARCHAR2,
@@ -2744,7 +2764,7 @@ BEGIN
 END P_DMF0003_GET_PR_HISTORY_POPUP;
 
 
-  PROCEDURE P_DMF0003_SAVE_DM_ANL_MKT_PSI_DETAIL 
+  PROCEDURE P_DMF0003_SAVE_DM_ANL_MKT_PSI_DETAIL
 /**
  * 2026/05/21 byunmj0223 LINE 2082, LINE2091 다른 테이블 조회 위해서는 DB LINK 생성 필요
  * 2026.08 -> 2026.06.08 ZIONEX [PJ202650304] NextSCM Migration : MSSQL 원본에서 블록주석(비활성)이던 I/F 전송 구간이 변환 시 잘못 활성화되어 ORA-00942 발생 → MSSQL과 동일하게 재비활성화(주석 복원). DB LINK/권한 부여 불필요.
@@ -5818,73 +5838,73 @@ BEGIN
 
     -- P_ITEM_ID
     INSERT INTO SCM_MGR.GT_DMF0003_SPLIT_ITEM_ID (TOK)
-    SELECT TRIM(REGEXP_SUBSTR(P_ITEM_ID,'[^,]+',1,LEVEL))
+    SELECT TRIM(REGEXP_SUBSTR(P_ITEM_ID,'[^,^]+',1,LEVEL))
     FROM   DUAL
-    WHERE  P_ITEM_ID IS NOT NULL AND P_ITEM_ID NOT IN ('ALL','%','')
-    CONNECT BY REGEXP_SUBSTR(P_ITEM_ID,'[^,]+',1,LEVEL) IS NOT NULL;
+    WHERE  P_ITEM_ID IS NOT NULL AND P_ITEM_ID NOT IN ('ALL','%')
+    CONNECT BY REGEXP_SUBSTR(P_ITEM_ID,'[^,^]+',1,LEVEL) IS NOT NULL;
 
     -- LP_PROJECT_CODE (P_PROJECT_CODE 의 사본)
     INSERT INTO SCM_MGR.GT_DMF0003_SPLIT_PROJECT_CODE (TOK)
-    SELECT TRIM(REGEXP_SUBSTR(LP_PROJECT_CODE,'[^,]+',1,LEVEL))
+    SELECT TRIM(REGEXP_SUBSTR(LP_PROJECT_CODE,'[^,^]+',1,LEVEL))
     FROM   DUAL
-    WHERE  LP_PROJECT_CODE IS NOT NULL AND LP_PROJECT_CODE NOT IN ('ALL','%','')
-    CONNECT BY REGEXP_SUBSTR(LP_PROJECT_CODE,'[^,]+',1,LEVEL) IS NOT NULL;
+    WHERE  LP_PROJECT_CODE IS NOT NULL AND LP_PROJECT_CODE NOT IN ('ALL','%')
+    CONNECT BY REGEXP_SUBSTR(LP_PROJECT_CODE,'[^,^]+',1,LEVEL) IS NOT NULL;
 
     -- LP_SCM_SITE_ID (P_SCM_SITE_ID 의 사본)
     INSERT INTO SCM_MGR.GT_DMF0003_SPLIT_SCM_SITE_ID (TOK)
-    SELECT TRIM(REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,]+',1,LEVEL))
+    SELECT TRIM(REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,^]+',1,LEVEL))
     FROM   DUAL
-    WHERE  LP_SCM_SITE_ID IS NOT NULL AND LP_SCM_SITE_ID NOT IN ('ALL','%','')
-    CONNECT BY REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,]+',1,LEVEL) IS NOT NULL;
+    WHERE  LP_SCM_SITE_ID IS NOT NULL AND LP_SCM_SITE_ID NOT IN ('ALL','%')
+    CONNECT BY REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,^]+',1,LEVEL) IS NOT NULL;
 
     -- P_PLANT_SITE_ID
     INSERT INTO SCM_MGR.GT_DMF0003_SPLIT_PLANT_SITE_ID (TOK)
-    SELECT TRIM(REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,]+',1,LEVEL))
+    SELECT TRIM(REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,^]+',1,LEVEL))
     FROM   DUAL
-    WHERE  P_PLANT_SITE_ID IS NOT NULL AND P_PLANT_SITE_ID NOT IN ('ALL','%','')
-    CONNECT BY REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,]+',1,LEVEL) IS NOT NULL;
+    WHERE  P_PLANT_SITE_ID IS NOT NULL AND P_PLANT_SITE_ID NOT IN ('ALL','%')
+    CONNECT BY REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,^]+',1,LEVEL) IS NOT NULL;
 
     -- P_TEAM_ID
     INSERT INTO SCM_MGR.GT_DMF0003_SPLIT_TEAM_ID (TOK)
-    SELECT TRIM(REGEXP_SUBSTR(P_TEAM_ID,'[^,]+',1,LEVEL))
+    SELECT TRIM(REGEXP_SUBSTR(P_TEAM_ID,'[^,^]+',1,LEVEL))
     FROM   DUAL
-    WHERE  P_TEAM_ID IS NOT NULL AND P_TEAM_ID NOT IN ('ALL','%','')
-    CONNECT BY REGEXP_SUBSTR(P_TEAM_ID,'[^,]+',1,LEVEL) IS NOT NULL;
+    WHERE  P_TEAM_ID IS NOT NULL AND P_TEAM_ID NOT IN ('ALL','%')
+    CONNECT BY REGEXP_SUBSTR(P_TEAM_ID,'[^,^]+',1,LEVEL) IS NOT NULL;
 
     -- P_CUSTOMER
     INSERT INTO SCM_MGR.GT_DMF0003_SPLIT_CUSTOMER (TOK)
-    SELECT TRIM(REGEXP_SUBSTR(P_CUSTOMER,'[^,]+',1,LEVEL))
+    SELECT TRIM(REGEXP_SUBSTR(P_CUSTOMER,'[^,^]+',1,LEVEL))
     FROM   DUAL
-    WHERE  P_CUSTOMER IS NOT NULL AND P_CUSTOMER NOT IN ('ALL','%','')
-    CONNECT BY REGEXP_SUBSTR(P_CUSTOMER,'[^,]+',1,LEVEL) IS NOT NULL;
+    WHERE  P_CUSTOMER IS NOT NULL AND P_CUSTOMER NOT IN ('ALL','%')
+    CONNECT BY REGEXP_SUBSTR(P_CUSTOMER,'[^,^]+',1,LEVEL) IS NOT NULL;
 
     -- P_BIZ_TYPE
     INSERT INTO SCM_MGR.GT_DMF0003_SPLIT_BIZ_TYPE (TOK)
-    SELECT TRIM(REGEXP_SUBSTR(P_BIZ_TYPE,'[^,]+',1,LEVEL))
+    SELECT TRIM(REGEXP_SUBSTR(P_BIZ_TYPE,'[^,^]+',1,LEVEL))
     FROM   DUAL
-    WHERE  P_BIZ_TYPE IS NOT NULL AND P_BIZ_TYPE NOT IN ('ALL','%','')
-    CONNECT BY REGEXP_SUBSTR(P_BIZ_TYPE,'[^,]+',1,LEVEL) IS NOT NULL;
+    WHERE  P_BIZ_TYPE IS NOT NULL AND P_BIZ_TYPE NOT IN ('ALL','%')
+    CONNECT BY REGEXP_SUBSTR(P_BIZ_TYPE,'[^,^]+',1,LEVEL) IS NOT NULL;
 
     -- P_ITEM_TYPE
     INSERT INTO SCM_MGR.GT_DMF0003_SPLIT_ITEM_TYPE (TOK)
-    SELECT TRIM(REGEXP_SUBSTR(P_ITEM_TYPE,'[^,]+',1,LEVEL))
+    SELECT TRIM(REGEXP_SUBSTR(P_ITEM_TYPE,'[^,^]+',1,LEVEL))
     FROM   DUAL
-    WHERE  P_ITEM_TYPE IS NOT NULL AND P_ITEM_TYPE NOT IN ('ALL','%','')
-    CONNECT BY REGEXP_SUBSTR(P_ITEM_TYPE,'[^,]+',1,LEVEL) IS NOT NULL;
+    WHERE  P_ITEM_TYPE IS NOT NULL AND P_ITEM_TYPE NOT IN ('ALL','%')
+    CONNECT BY REGEXP_SUBSTR(P_ITEM_TYPE,'[^,^]+',1,LEVEL) IS NOT NULL;
 
     -- P_OWNER
     INSERT INTO SCM_MGR.GT_DMF0003_SPLIT_OWNER (TOK)
-    SELECT TRIM(REGEXP_SUBSTR(P_OWNER,'[^,]+',1,LEVEL))
+    SELECT TRIM(REGEXP_SUBSTR(P_OWNER,'[^,^]+',1,LEVEL))
     FROM   DUAL
-    WHERE  P_OWNER IS NOT NULL AND P_OWNER NOT IN ('ALL','%','')
-    CONNECT BY REGEXP_SUBSTR(P_OWNER,'[^,]+',1,LEVEL) IS NOT NULL;
+    WHERE  P_OWNER IS NOT NULL AND P_OWNER NOT IN ('ALL','%')
+    CONNECT BY REGEXP_SUBSTR(P_OWNER,'[^,^]+',1,LEVEL) IS NOT NULL;
 
     -- P_SENDER_CODE
     INSERT INTO SCM_MGR.GT_DMF0003_SPLIT_SENDER_CODE (TOK)
-    SELECT TRIM(REGEXP_SUBSTR(P_SENDER_CODE,'[^,]+',1,LEVEL))
+    SELECT TRIM(REGEXP_SUBSTR(P_SENDER_CODE,'[^,^]+',1,LEVEL))
     FROM   DUAL
-    WHERE  P_SENDER_CODE IS NOT NULL AND P_SENDER_CODE NOT IN ('ALL','%','')
-    CONNECT BY REGEXP_SUBSTR(P_SENDER_CODE,'[^,]+',1,LEVEL) IS NOT NULL;
+    WHERE  P_SENDER_CODE IS NOT NULL AND P_SENDER_CODE NOT IN ('ALL','%')
+    CONNECT BY REGEXP_SUBSTR(P_SENDER_CODE,'[^,^]+',1,LEVEL) IS NOT NULL;
 
     -----------------------------------------------------------------------
     -- 권한그룹 LOOKUP 관리 [20200311 KHSONG C20200103-000586]
@@ -5897,7 +5917,14 @@ BEGIN
         WHERE  LOOKUP_TYPE = 'GET_ADMIN_GROUP'
           AND  VALID_YN    = 'Y'
           AND  SEGMENT2   IN ('ALL','DMF0003')
-          AND  SEGMENT1    = P_USER_GROUP;
+          --[AUTHGROUP 2026-08-04] P_USER_GROUP 에 USER_ID 수신 시(TO-BE 세션 그룹 부재 — FE 무수정 결정)
+          --  보유 그룹(SCM_ADM_USER_GR_MPG_M)으로 확장 판정. AS-IS 그룹명 직전달과 양립.
+          --  v2: P_USER_GROUP 에 미지의 값(구세대 FE/BE ghost groupId)이 와도 세션 사용자
+          --  (P_USER_ID/P_CREATED_BY) 보유 그룹으로 판정 — DB 단독으로 그룹 확정(사용자 확정 방향).
+          AND (SEGMENT1 = P_USER_GROUP
+               OR SEGMENT1 IN (SELECT USER_GR_ID FROM SCM_MGR.SCM_ADM_USER_GR_MPG_M
+                               WHERE USER_ID IN (P_USER_GROUP, P_USER_ID, P_CREATED_BY)
+                                 AND USE_YN = 'Y'));
         IF V_ADMIN_CNT > 0 THEN
             V_GROUP_ID := 'ADMIN';
         END IF;
@@ -6166,11 +6193,11 @@ BEGIN
         V_AS_CNT PLS_INTEGER := 0;
     BEGIN
         SELECT CAST(
-                   COLLECT(DISTINCT TRIM(REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,]+',1,LEVEL)))
+                   COLLECT(DISTINCT TRIM(REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,^]+',1,LEVEL)))
                AS SCM_MGR.T_STR_TAB)
         INTO   T_SCM_SITE_IDS
         FROM   DUAL
-        CONNECT BY REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,]+',1,LEVEL) IS NOT NULL;
+        CONNECT BY REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,^]+',1,LEVEL) IS NOT NULL;
 
         SELECT COUNT(DISTINCT A.COLUMN_VALUE) INTO V_AS_CNT
         FROM   TABLE(T_SCM_SITE_IDS) A
@@ -6227,20 +6254,20 @@ BEGIN
               AND  A.QTY <> 0
               AND  ( CASE WHEN LP_SCM_SITE_ID = 'ALL' THEN LP_SCM_SITE_ID
                           ELSE A.SCM_SITE_ID END
-                     IN (SELECT TRIM(REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,]+',1,LEVEL))
+                     IN (SELECT TRIM(REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,^]+',1,LEVEL))
                          FROM DUAL
-                         CONNECT BY REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,]+',1,LEVEL) IS NOT NULL) )
+                         CONNECT BY REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,^]+',1,LEVEL) IS NOT NULL) )
               AND  ( LP_PROJECT_CODE IS NULL
                      OR CASE WHEN LP_PROJECT_CODE = '' THEN LP_PROJECT_CODE
                           ELSE A.PROJECT_CODE END
-                     IN (SELECT TRIM(REGEXP_SUBSTR(LP_PROJECT_CODE,'[^,]+',1,LEVEL))
+                     IN (SELECT TRIM(REGEXP_SUBSTR(LP_PROJECT_CODE,'[^,^]+',1,LEVEL))
                          FROM DUAL
-                         CONNECT BY REGEXP_SUBSTR(LP_PROJECT_CODE,'[^,]+',1,LEVEL) IS NOT NULL) )
+                         CONNECT BY REGEXP_SUBSTR(LP_PROJECT_CODE,'[^,^]+',1,LEVEL) IS NOT NULL) )
               AND  ( CASE WHEN P_PLANT_SITE_ID = 'ALL' THEN P_PLANT_SITE_ID
                           ELSE A.PLANT_SITE_ID END
-                     IN (SELECT TRIM(REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,]+',1,LEVEL))
+                     IN (SELECT TRIM(REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,^]+',1,LEVEL))
                          FROM DUAL
-                         CONNECT BY REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,]+',1,LEVEL) IS NOT NULL) )
+                         CONNECT BY REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,^]+',1,LEVEL) IS NOT NULL) )
         ) A
         PIVOT (
             MAX(SYNC_YN) FOR ROW_NUM IN (
@@ -6705,16 +6732,16 @@ BEGIN
           -- [E20260211-001189] SCM_SITE_ID 조건 주석처리
           AND  ( CASE WHEN P_CUSTOMER = 'ALL' THEN P_CUSTOMER
                       ELSE S.END_CUSTOMER END
-                 IN (SELECT TRIM(REGEXP_SUBSTR(P_CUSTOMER,'[^,]+',1,LEVEL))
-                     FROM DUAL CONNECT BY REGEXP_SUBSTR(P_CUSTOMER,'[^,]+',1,LEVEL) IS NOT NULL) )
+                 IN (SELECT TRIM(REGEXP_SUBSTR(P_CUSTOMER,'[^,^]+',1,LEVEL))
+                     FROM DUAL CONNECT BY REGEXP_SUBSTR(P_CUSTOMER,'[^,^]+',1,LEVEL) IS NOT NULL) )
           AND  ( CASE WHEN P_ITEM_TYPE = 'ALL' THEN P_ITEM_TYPE
                       ELSE T2.ITEM_TYPE END
-                 IN (SELECT TRIM(REGEXP_SUBSTR(P_ITEM_TYPE,'[^,]+',1,LEVEL))
-                     FROM DUAL CONNECT BY REGEXP_SUBSTR(P_ITEM_TYPE,'[^,]+',1,LEVEL) IS NOT NULL) )
+                 IN (SELECT TRIM(REGEXP_SUBSTR(P_ITEM_TYPE,'[^,^]+',1,LEVEL))
+                     FROM DUAL CONNECT BY REGEXP_SUBSTR(P_ITEM_TYPE,'[^,^]+',1,LEVEL) IS NOT NULL) )
           AND  ( CASE WHEN P_BIZ_TYPE = 'ALL' THEN P_BIZ_TYPE
                       ELSE T3.BIZ_TYPE END
-                 IN (SELECT TRIM(REGEXP_SUBSTR(P_BIZ_TYPE,'[^,]+',1,LEVEL))
-                     FROM DUAL CONNECT BY REGEXP_SUBSTR(P_BIZ_TYPE,'[^,]+',1,LEVEL) IS NOT NULL) )
+                 IN (SELECT TRIM(REGEXP_SUBSTR(P_BIZ_TYPE,'[^,^]+',1,LEVEL))
+                     FROM DUAL CONNECT BY REGEXP_SUBSTR(P_BIZ_TYPE,'[^,^]+',1,LEVEL) IS NOT NULL) )
           -- ⭐ 룰 6: P_OWNER 'ALL' 분기 추가 + EXISTS GT_DMF0003_SPLIT_OWNER
           AND  ( P_OWNER IS NULL OR P_OWNER IN ('ALL','%','')
                    OR EXISTS (SELECT 1 FROM SCM_MGR.GT_DMF0003_SPLIT_OWNER O WHERE F.OWNER = O.TOK) )
@@ -6847,22 +6874,22 @@ BEGIN
           -- ⭐ 룰 2+6: LP_SCM_SITE_ID — CASE 패턴 유지 (Before 의 의미 1:1) — split 은 일반적인 동작 그대로
           AND  ( CASE WHEN LP_SCM_SITE_ID = 'ALL' THEN LP_SCM_SITE_ID
                       ELSE F.SCM_SITE_ID END
-                 IN (SELECT TRIM(REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,]+',1,LEVEL))
-                     FROM DUAL CONNECT BY REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,]+',1,LEVEL) IS NOT NULL) )
+                 IN (SELECT TRIM(REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,^]+',1,LEVEL))
+                     FROM DUAL CONNECT BY REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,^]+',1,LEVEL) IS NOT NULL) )
           AND  ( CASE WHEN P_CUSTOMER = 'ALL' THEN P_CUSTOMER
                       ELSE F.PROJECT_CODE END
-                 IN (SELECT TRIM(REGEXP_SUBSTR(P_CUSTOMER,'[^,]+',1,LEVEL))
-                     FROM DUAL CONNECT BY REGEXP_SUBSTR(P_CUSTOMER,'[^,]+',1,LEVEL) IS NOT NULL) )
+                 IN (SELECT TRIM(REGEXP_SUBSTR(P_CUSTOMER,'[^,^]+',1,LEVEL))
+                     FROM DUAL CONNECT BY REGEXP_SUBSTR(P_CUSTOMER,'[^,^]+',1,LEVEL) IS NOT NULL) )
           AND  ( CASE WHEN P_ITEM_TYPE = 'ALL' THEN P_ITEM_TYPE
                       ELSE T2.ITEM_TYPE END
-                 IN (SELECT TRIM(REGEXP_SUBSTR(P_ITEM_TYPE,'[^,]+',1,LEVEL))
-                     FROM DUAL CONNECT BY REGEXP_SUBSTR(P_ITEM_TYPE,'[^,]+',1,LEVEL) IS NOT NULL) )
+                 IN (SELECT TRIM(REGEXP_SUBSTR(P_ITEM_TYPE,'[^,^]+',1,LEVEL))
+                     FROM DUAL CONNECT BY REGEXP_SUBSTR(P_ITEM_TYPE,'[^,^]+',1,LEVEL) IS NOT NULL) )
           -- [E20230720-001573] BIZ_TYPE LOOKUP 우선 적용
           AND  ( CASE WHEN P_BIZ_TYPE = 'ALL' THEN P_BIZ_TYPE
                       WHEN F.ITEM_ID = LOOKA.MODEL THEN LOOKA.BIZ_TYPE
                       ELSE T2.FORECAST_INFO_BIZ_TYPE END
-                 IN (SELECT TRIM(REGEXP_SUBSTR(P_BIZ_TYPE,'[^,]+',1,LEVEL))
-                     FROM DUAL CONNECT BY REGEXP_SUBSTR(P_BIZ_TYPE,'[^,]+',1,LEVEL) IS NOT NULL) )
+                 IN (SELECT TRIM(REGEXP_SUBSTR(P_BIZ_TYPE,'[^,^]+',1,LEVEL))
+                     FROM DUAL CONNECT BY REGEXP_SUBSTR(P_BIZ_TYPE,'[^,^]+',1,LEVEL) IS NOT NULL) )
           -- ⭐ 룰 6: P_OWNER 'ALL' 분기 추가 + EXISTS GT_DMF0003_SPLIT_OWNER
           AND  ( P_OWNER IS NULL OR P_OWNER IN ('ALL','%','')
                    OR EXISTS (SELECT 1 FROM SCM_MGR.GT_DMF0003_SPLIT_OWNER O WHERE F.OWNER = O.TOK) )
@@ -7187,15 +7214,15 @@ BEGIN
           AND  F.YYYYMMDD    BETWEEN V_FROM_YYYYMMDD AND V_TO_YYYYMMDD
           AND  F.DIVISION_ID = P_DIVISION_ID
           AND  ( CASE WHEN LP_SCM_SITE_ID = 'ALL' THEN LP_SCM_SITE_ID ELSE F.SCM_SITE_ID END
-                 IN (SELECT TRIM(REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,]+',1,LEVEL)) FROM DUAL
-                     CONNECT BY REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,]+',1,LEVEL) IS NOT NULL)
+                 IN (SELECT TRIM(REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,^]+',1,LEVEL)) FROM DUAL
+                     CONNECT BY REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,^]+',1,LEVEL) IS NOT NULL)
                  OR
                  CASE WHEN LP_SCM_SITE_ID = 'ALL' THEN LP_SCM_SITE_ID ELSE T4.SEGMENT1 END
-                 IN (SELECT TRIM(REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,]+',1,LEVEL)) FROM DUAL
-                     CONNECT BY REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,]+',1,LEVEL) IS NOT NULL) )
+                 IN (SELECT TRIM(REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,^]+',1,LEVEL)) FROM DUAL
+                     CONNECT BY REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,^]+',1,LEVEL) IS NOT NULL) )
           AND  ( CASE WHEN P_PLANT_SITE_ID = 'ALL' THEN P_PLANT_SITE_ID ELSE F.PLANT_SITE_ID END
-                 IN (SELECT TRIM(REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,]+',1,LEVEL)) FROM DUAL
-                     CONNECT BY REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,]+',1,LEVEL) IS NOT NULL) )
+                 IN (SELECT TRIM(REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,^]+',1,LEVEL)) FROM DUAL
+                     CONNECT BY REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,^]+',1,LEVEL) IS NOT NULL) )
 
         -----------------------------------------------------------------------
         -- Block 1-B : CUST_FCST_EDI 계열 (EDI/RPA Sender 기반)
@@ -7292,11 +7319,11 @@ BEGIN
           AND  F.YYYYMMDD    BETWEEN GREATEST(V_TO_RESULT, V_FROM_YYYYMMDD) AND P_TO_YYYYMMDD  -- [FIX 2026-07-11] 실적없음 분기(V_TO_RESULT='19000101') 시 옛 EDI 이력 유입 차단 — 자식 하한 = 당주월요일 (AS-IS 배치 purge 환경과 동일 결과)
           AND  F.DIVISION_ID = P_DIVISION_ID
           AND  ( CASE WHEN LP_SCM_SITE_ID = 'ALL' THEN LP_SCM_SITE_ID ELSE F.SCM_SITE_ID END
-                 IN (SELECT TRIM(REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,]+',1,LEVEL)) FROM DUAL
-                     CONNECT BY REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,]+',1,LEVEL) IS NOT NULL) )
+                 IN (SELECT TRIM(REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,^]+',1,LEVEL)) FROM DUAL
+                     CONNECT BY REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,^]+',1,LEVEL) IS NOT NULL) )
           AND  ( CASE WHEN P_PLANT_SITE_ID = 'ALL' THEN P_PLANT_SITE_ID ELSE F.PLANT_SITE_ID END
-                 IN (SELECT TRIM(REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,]+',1,LEVEL)) FROM DUAL
-                     CONNECT BY REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,]+',1,LEVEL) IS NOT NULL) )
+                 IN (SELECT TRIM(REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,^]+',1,LEVEL)) FROM DUAL
+                     CONNECT BY REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,^]+',1,LEVEL) IS NOT NULL) )
           AND  ( CASE WHEN ( CASE WHEN F.MEASURE IN (
                                       'CUST_FCST_EDI','Immidiate','Planning_Forecast',
                                       'Commercial_Agreement','Firm_Temp',
@@ -7313,14 +7340,14 @@ BEGIN
                                    'CUST_FCST_EDI','Immidiate','Planning_Forecast',
                                    'Commercial_Agreement','Firm_Temp',
                                    'Manumacturing_Material_Temp','Material_Temp','Backorder')
-                               THEN P_SENDER_CODE ELSE 'ALL' END,'[^,]+',1,LEVEL))
+                               THEN P_SENDER_CODE ELSE 'ALL' END,'[^,^]+',1,LEVEL))
                       FROM DUAL
                       CONNECT BY REGEXP_SUBSTR(
                           CASE WHEN F.MEASURE IN (
                                    'CUST_FCST_EDI','Immidiate','Planning_Forecast',
                                    'Commercial_Agreement','Firm_Temp',
                                    'Manumacturing_Material_Temp','Material_Temp','Backorder')
-                               THEN P_SENDER_CODE ELSE 'ALL' END,'[^,]+',1,LEVEL) IS NOT NULL ) )
+                               THEN P_SENDER_CODE ELSE 'ALL' END,'[^,^]+',1,LEVEL) IS NOT NULL ) )
 
         -----------------------------------------------------------------------
         -- Block 1-C : Customer FCST (RPA/EXCEL 경로, Cust.FCST_RPA[P+P] / Cust.FCST_EXCEL[P+P] 으로 표시)
@@ -7412,11 +7439,11 @@ BEGIN
           AND  F.YYYYMMDD    BETWEEN V_FROM_YYYYMMDD AND V_TO_YYYYMMDD
           AND  F.DIVISION_ID  = P_DIVISION_ID
           AND  ( CASE WHEN LP_SCM_SITE_ID = 'ALL' THEN LP_SCM_SITE_ID ELSE F.SCM_SITE_ID END
-                 IN (SELECT TRIM(REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,]+',1,LEVEL)) FROM DUAL
-                     CONNECT BY REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,]+',1,LEVEL) IS NOT NULL) )
+                 IN (SELECT TRIM(REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,^]+',1,LEVEL)) FROM DUAL
+                     CONNECT BY REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,^]+',1,LEVEL) IS NOT NULL) )
           AND  ( CASE WHEN P_PLANT_SITE_ID = 'ALL' THEN P_PLANT_SITE_ID ELSE F.PLANT_SITE_ID END
-                 IN (SELECT TRIM(REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,]+',1,LEVEL)) FROM DUAL
-                     CONNECT BY REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,]+',1,LEVEL) IS NOT NULL) )
+                 IN (SELECT TRIM(REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,^]+',1,LEVEL)) FROM DUAL
+                     CONNECT BY REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,^]+',1,LEVEL) IS NOT NULL) )
 
         -----------------------------------------------------------------------
         -- Block 1-D : CUST_FCST 전용  [E20241126-000426]
@@ -7499,11 +7526,11 @@ BEGIN
           AND  F.YYYYMMDD    BETWEEN V_FROM_YYYYMMDD AND V_TO_YYYYMMDD
           AND  F.DIVISION_ID  = P_DIVISION_ID
           AND  ( CASE WHEN LP_SCM_SITE_ID = 'ALL' THEN LP_SCM_SITE_ID ELSE F.SCM_SITE_ID END
-                 IN (SELECT TRIM(REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,]+',1,LEVEL)) FROM DUAL
-                     CONNECT BY REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,]+',1,LEVEL) IS NOT NULL) )
+                 IN (SELECT TRIM(REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,^]+',1,LEVEL)) FROM DUAL
+                     CONNECT BY REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,^]+',1,LEVEL) IS NOT NULL) )
           AND  ( CASE WHEN P_PLANT_SITE_ID = 'ALL' THEN P_PLANT_SITE_ID ELSE F.PLANT_SITE_ID END
-                 IN (SELECT TRIM(REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,]+',1,LEVEL)) FROM DUAL
-                     CONNECT BY REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,]+',1,LEVEL) IS NOT NULL) );
+                 IN (SELECT TRIM(REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,^]+',1,LEVEL)) FROM DUAL
+                     CONNECT BY REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,^]+',1,LEVEL) IS NOT NULL) );
 
         -----------------------------------------------------------------------
         -- Block 2 : MKT_FCST_RP / MKT_FCST_RP_CAR / MKT_FCST_RP_CELL
@@ -7609,11 +7636,11 @@ BEGIN
                   AND  F.YYYYMMDD    BETWEEN V_FROM_YYYYMMDD AND V_TO_YYYYMMDD
                   AND  F.DIVISION_ID = P_DIVISION_ID
                   AND  ( CASE WHEN LP_SCM_SITE_ID = 'ALL' THEN LP_SCM_SITE_ID ELSE F.SCM_SITE_ID END
-                         IN (SELECT TRIM(REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,]+',1,LEVEL)) FROM DUAL
-                             CONNECT BY REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,]+',1,LEVEL) IS NOT NULL) )
+                         IN (SELECT TRIM(REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,^]+',1,LEVEL)) FROM DUAL
+                             CONNECT BY REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,^]+',1,LEVEL) IS NOT NULL) )
                   AND  ( CASE WHEN P_PLANT_SITE_ID = 'ALL' THEN P_PLANT_SITE_ID ELSE F.PLANT_SITE_ID END
-                         IN (SELECT TRIM(REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,]+',1,LEVEL)) FROM DUAL
-                             CONNECT BY REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,]+',1,LEVEL) IS NOT NULL) );
+                         IN (SELECT TRIM(REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,^]+',1,LEVEL)) FROM DUAL
+                             CONNECT BY REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,^]+',1,LEVEL) IS NOT NULL) );
             END IF;  -- Block 2 END
         END;
 
@@ -7741,11 +7768,11 @@ BEGIN
                   AND  F.YYYYMMDD    BETWEEN V_FROM_YYYYMMDD AND V_TO_YYYYMMDD
                   AND  F.DIVISION_ID = P_DIVISION_ID
                   AND  ( CASE WHEN LP_SCM_SITE_ID = 'ALL' THEN LP_SCM_SITE_ID ELSE F.SCM_SITE_ID END
-                         IN (SELECT TRIM(REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,]+',1,LEVEL)) FROM DUAL
-                             CONNECT BY REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,]+',1,LEVEL) IS NOT NULL) )
+                         IN (SELECT TRIM(REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,^]+',1,LEVEL)) FROM DUAL
+                             CONNECT BY REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,^]+',1,LEVEL) IS NOT NULL) )
                   AND  ( CASE WHEN P_PLANT_SITE_ID = 'ALL' THEN P_PLANT_SITE_ID ELSE F.PLANT_SITE_ID END
-                         IN (SELECT TRIM(REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,]+',1,LEVEL)) FROM DUAL
-                             CONNECT BY REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,]+',1,LEVEL) IS NOT NULL) );
+                         IN (SELECT TRIM(REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,^]+',1,LEVEL)) FROM DUAL
+                             CONNECT BY REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,^]+',1,LEVEL) IS NOT NULL) );
             END IF;  -- Block 3 END
         END;
 
@@ -7820,11 +7847,11 @@ BEGIN
                   AND  F.YYYYMMDD    BETWEEN V_FROM_YYYYMMDD AND V_TO_YYYYMMDD
                   AND  F.DIVISION_ID = P_DIVISION_ID
                   AND  ( CASE WHEN LP_SCM_SITE_ID = 'ALL' THEN LP_SCM_SITE_ID ELSE F.SCM_SITE_ID END
-                         IN (SELECT TRIM(REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,]+',1,LEVEL)) FROM DUAL
-                             CONNECT BY REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,]+',1,LEVEL) IS NOT NULL) )
+                         IN (SELECT TRIM(REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,^]+',1,LEVEL)) FROM DUAL
+                             CONNECT BY REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,^]+',1,LEVEL) IS NOT NULL) )
                   AND  ( CASE WHEN P_PLANT_SITE_ID = 'ALL' THEN P_PLANT_SITE_ID ELSE F.PLANT_SITE_ID END
-                         IN (SELECT TRIM(REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,]+',1,LEVEL)) FROM DUAL
-                             CONNECT BY REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,]+',1,LEVEL) IS NOT NULL) );
+                         IN (SELECT TRIM(REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,^]+',1,LEVEL)) FROM DUAL
+                             CONNECT BY REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,^]+',1,LEVEL) IS NOT NULL) );
             END IF;  -- Block 4 END
         END;
 
@@ -7950,11 +7977,11 @@ BEGIN
           AND  F.YYYYMMDD     < V_TO_RESULT
           AND  F.DIVISION_ID  = P_DIVISION_ID
           AND  ( CASE WHEN LP_SCM_SITE_ID = 'ALL' THEN LP_SCM_SITE_ID ELSE F.SCM_SITE_ID END
-                 IN (SELECT TRIM(REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,]+',1,LEVEL)) FROM DUAL
-                     CONNECT BY REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,]+',1,LEVEL) IS NOT NULL) )
+                 IN (SELECT TRIM(REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,^]+',1,LEVEL)) FROM DUAL
+                     CONNECT BY REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,^]+',1,LEVEL) IS NOT NULL) )
           AND  ( CASE WHEN P_PLANT_SITE_ID = 'ALL' THEN P_PLANT_SITE_ID ELSE F.PLANT_SITE_ID END
-                 IN (SELECT TRIM(REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,]+',1,LEVEL)) FROM DUAL
-                     CONNECT BY REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,]+',1,LEVEL) IS NOT NULL) )
+                 IN (SELECT TRIM(REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,^]+',1,LEVEL)) FROM DUAL
+                     CONNECT BY REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,^]+',1,LEVEL) IS NOT NULL) )
 
         -----------------------------------------------------------------------
         -- R-2: CUST_FCST_EDI 계열 (EDI Sender 포함)
@@ -8025,11 +8052,11 @@ BEGIN
           AND  F.YYYYMMDD     < V_TO_RESULT
           AND  F.DIVISION_ID  = P_DIVISION_ID
           AND  ( CASE WHEN LP_SCM_SITE_ID = 'ALL' THEN LP_SCM_SITE_ID ELSE F.SCM_SITE_ID END
-                 IN (SELECT TRIM(REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,]+',1,LEVEL)) FROM DUAL
-                     CONNECT BY REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,]+',1,LEVEL) IS NOT NULL) )
+                 IN (SELECT TRIM(REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,^]+',1,LEVEL)) FROM DUAL
+                     CONNECT BY REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,^]+',1,LEVEL) IS NOT NULL) )
           AND  ( CASE WHEN P_PLANT_SITE_ID = 'ALL' THEN P_PLANT_SITE_ID ELSE F.PLANT_SITE_ID END
-                 IN (SELECT TRIM(REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,]+',1,LEVEL)) FROM DUAL
-                     CONNECT BY REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,]+',1,LEVEL) IS NOT NULL) )
+                 IN (SELECT TRIM(REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,^]+',1,LEVEL)) FROM DUAL
+                     CONNECT BY REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,^]+',1,LEVEL) IS NOT NULL) )
           AND  ( CASE WHEN ( CASE WHEN F.MEASURE IN (
                                       'CUST_FCST_EDI','Immidiate','Planning_Forecast',
                                       'Commercial_Agreement','Firm_Temp',
@@ -8046,14 +8073,14 @@ BEGIN
                                    'CUST_FCST_EDI','Immidiate','Planning_Forecast',
                                    'Commercial_Agreement','Firm_Temp',
                                    'Manumacturing_Material_Temp','Material_Temp','Backorder')
-                               THEN P_SENDER_CODE ELSE 'ALL' END,'[^,]+',1,LEVEL))
+                               THEN P_SENDER_CODE ELSE 'ALL' END,'[^,^]+',1,LEVEL))
                       FROM DUAL
                       CONNECT BY REGEXP_SUBSTR(
                           CASE WHEN F.MEASURE IN (
                                    'CUST_FCST_EDI','Immidiate','Planning_Forecast',
                                    'Commercial_Agreement','Firm_Temp',
                                    'Manumacturing_Material_Temp','Material_Temp','Backorder')
-                               THEN P_SENDER_CODE ELSE 'ALL' END,'[^,]+',1,LEVEL) IS NOT NULL ) )
+                               THEN P_SENDER_CODE ELSE 'ALL' END,'[^,^]+',1,LEVEL) IS NOT NULL ) )
 
         -----------------------------------------------------------------------
         -- R-3: Customer FCST (RPA/EXCEL → Cust.FCST_RPA/EXCEL[P+P])
@@ -8122,11 +8149,11 @@ BEGIN
           AND  F.YYYYMMDD     < V_TO_RESULT
           AND  F.DIVISION_ID  = P_DIVISION_ID
           AND  ( CASE WHEN LP_SCM_SITE_ID = 'ALL' THEN LP_SCM_SITE_ID ELSE F.SCM_SITE_ID END
-                 IN (SELECT TRIM(REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,]+',1,LEVEL)) FROM DUAL
-                     CONNECT BY REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,]+',1,LEVEL) IS NOT NULL) )
+                 IN (SELECT TRIM(REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,^]+',1,LEVEL)) FROM DUAL
+                     CONNECT BY REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,^]+',1,LEVEL) IS NOT NULL) )
           AND  ( CASE WHEN P_PLANT_SITE_ID = 'ALL' THEN P_PLANT_SITE_ID ELSE F.PLANT_SITE_ID END
-                 IN (SELECT TRIM(REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,]+',1,LEVEL)) FROM DUAL
-                     CONNECT BY REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,]+',1,LEVEL) IS NOT NULL) )
+                 IN (SELECT TRIM(REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,^]+',1,LEVEL)) FROM DUAL
+                     CONNECT BY REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,^]+',1,LEVEL) IS NOT NULL) )
 
         -----------------------------------------------------------------------
         -- R-4: CUST_FCST 전용  [E20241126-000426]
@@ -8184,11 +8211,11 @@ BEGIN
           AND  F.YYYYMMDD     < V_TO_RESULT
           AND  F.DIVISION_ID  = P_DIVISION_ID
           AND  ( CASE WHEN LP_SCM_SITE_ID = 'ALL' THEN LP_SCM_SITE_ID ELSE F.SCM_SITE_ID END
-                 IN (SELECT TRIM(REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,]+',1,LEVEL)) FROM DUAL
-                     CONNECT BY REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,]+',1,LEVEL) IS NOT NULL) )
+                 IN (SELECT TRIM(REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,^]+',1,LEVEL)) FROM DUAL
+                     CONNECT BY REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,^]+',1,LEVEL) IS NOT NULL) )
           AND  ( CASE WHEN P_PLANT_SITE_ID = 'ALL' THEN P_PLANT_SITE_ID ELSE F.PLANT_SITE_ID END
-                 IN (SELECT TRIM(REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,]+',1,LEVEL)) FROM DUAL
-                     CONNECT BY REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,]+',1,LEVEL) IS NOT NULL) );
+                 IN (SELECT TRIM(REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,^]+',1,LEVEL)) FROM DUAL
+                     CONNECT BY REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,^]+',1,LEVEL) IS NOT NULL) );
 
         -----------------------------------------------------------------------
         -- Block R-5 : MKT_FCST_RP_CAR / MKT_FCST_RP_CELL
@@ -8288,11 +8315,11 @@ BEGIN
                   AND  F.YYYYMMDD     < V_TO_RESULT
                   AND  F.DIVISION_ID  = P_DIVISION_ID
                   AND  ( CASE WHEN LP_SCM_SITE_ID = 'ALL' THEN LP_SCM_SITE_ID ELSE F.SCM_SITE_ID END
-                         IN (SELECT TRIM(REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,]+',1,LEVEL)) FROM DUAL
-                             CONNECT BY REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,]+',1,LEVEL) IS NOT NULL) )
+                         IN (SELECT TRIM(REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,^]+',1,LEVEL)) FROM DUAL
+                             CONNECT BY REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,^]+',1,LEVEL) IS NOT NULL) )
                   AND  ( CASE WHEN P_PLANT_SITE_ID = 'ALL' THEN P_PLANT_SITE_ID ELSE F.PLANT_SITE_ID END
-                         IN (SELECT TRIM(REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,]+',1,LEVEL)) FROM DUAL
-                             CONNECT BY REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,]+',1,LEVEL) IS NOT NULL) );
+                         IN (SELECT TRIM(REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,^]+',1,LEVEL)) FROM DUAL
+                             CONNECT BY REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,^]+',1,LEVEL) IS NOT NULL) );
             END IF;  -- R-5 END
         END;
 
@@ -8420,11 +8447,11 @@ BEGIN
                   AND  F.YYYYMMDD     < V_TO_RESULT
                   AND  F.DIVISION_ID  = P_DIVISION_ID
                   AND  ( CASE WHEN LP_SCM_SITE_ID = 'ALL' THEN LP_SCM_SITE_ID ELSE F.SCM_SITE_ID END
-                         IN (SELECT TRIM(REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,]+',1,LEVEL)) FROM DUAL
-                             CONNECT BY REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,]+',1,LEVEL) IS NOT NULL) )
+                         IN (SELECT TRIM(REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,^]+',1,LEVEL)) FROM DUAL
+                             CONNECT BY REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,^]+',1,LEVEL) IS NOT NULL) )
                   AND  ( CASE WHEN P_PLANT_SITE_ID = 'ALL' THEN P_PLANT_SITE_ID ELSE F.PLANT_SITE_ID END
-                         IN (SELECT TRIM(REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,]+',1,LEVEL)) FROM DUAL
-                             CONNECT BY REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,]+',1,LEVEL) IS NOT NULL) );
+                         IN (SELECT TRIM(REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,^]+',1,LEVEL)) FROM DUAL
+                             CONNECT BY REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,^]+',1,LEVEL) IS NOT NULL) );
             END IF;  -- R-6 END
         END;
 
@@ -8507,11 +8534,11 @@ BEGIN
                   AND  F.YYYYMMDD     < V_TO_RESULT
                   AND  F.DIVISION_ID  = P_DIVISION_ID
                   AND  ( CASE WHEN LP_SCM_SITE_ID = 'ALL' THEN LP_SCM_SITE_ID ELSE F.SCM_SITE_ID END
-                         IN (SELECT TRIM(REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,]+',1,LEVEL)) FROM DUAL
-                             CONNECT BY REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,]+',1,LEVEL) IS NOT NULL) )
+                         IN (SELECT TRIM(REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,^]+',1,LEVEL)) FROM DUAL
+                             CONNECT BY REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,^]+',1,LEVEL) IS NOT NULL) )
                   AND  ( CASE WHEN P_PLANT_SITE_ID = 'ALL' THEN P_PLANT_SITE_ID ELSE F.PLANT_SITE_ID END
-                         IN (SELECT TRIM(REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,]+',1,LEVEL)) FROM DUAL
-                             CONNECT BY REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,]+',1,LEVEL) IS NOT NULL) );
+                         IN (SELECT TRIM(REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,^]+',1,LEVEL)) FROM DUAL
+                             CONNECT BY REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,^]+',1,LEVEL) IS NOT NULL) );
             END IF;  -- R-7 END
         END;
 
@@ -8578,11 +8605,11 @@ BEGIN
                 WHERE  F.YYYYMMDD   BETWEEN P_FROM_YYYYMMDD AND V_TO_YYYYMMDD
                   AND  F.DIVISION_ID  = P_DIVISION_ID
                   AND  ( CASE WHEN LP_SCM_SITE_ID = 'ALL' THEN LP_SCM_SITE_ID ELSE F.SCM_SITE_ID END
-                         IN (SELECT TRIM(REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,]+',1,LEVEL)) FROM DUAL
-                             CONNECT BY REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,]+',1,LEVEL) IS NOT NULL) )
+                         IN (SELECT TRIM(REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,^]+',1,LEVEL)) FROM DUAL
+                             CONNECT BY REGEXP_SUBSTR(LP_SCM_SITE_ID,'[^,^]+',1,LEVEL) IS NOT NULL) )
                   AND  ( CASE WHEN P_PLANT_SITE_ID = 'ALL' THEN P_PLANT_SITE_ID ELSE F.PLANT_SITE_ID END
-                         IN (SELECT TRIM(REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,]+',1,LEVEL)) FROM DUAL
-                             CONNECT BY REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,]+',1,LEVEL) IS NOT NULL) );
+                         IN (SELECT TRIM(REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,^]+',1,LEVEL)) FROM DUAL
+                             CONNECT BY REGEXP_SUBSTR(P_PLANT_SITE_ID,'[^,^]+',1,LEVEL) IS NOT NULL) );
             END IF;  -- R-8 END
         END;
 
@@ -10254,7 +10281,7 @@ BEGIN
                 , V_YYYYMMDD, V_QTY, V_CREATED_BY, V_ATTRIBUTE10 )
                 VALUES
                 ( V_ACTIVE_FLAG, V_DIVISION_ID, V_PROJECT_CODE, V_SCM_SITE_ID, V_ITEM_ID
-                , V_DOM_EXP, V_FCST_TYPE, V_INCOTERMS, V_MEASURE, V_PLANT_SITE_ID
+                , V_DOM_EXP, V_FCST_TYPE, V_INCOTERMS, V_MEASURE, NVL(V_PLANT_SITE_ID,'-')
                 , V_YYYYMMDD, TO_NUMBER(V_QTY), V_CREATED_BY
                 --[E20260211-001189]_index_as_from_site 원소스 주석처리 (START)
                 --, NVL(V_AS_FROM_PLANT,'-')
@@ -11254,7 +11281,7 @@ BEGIN
                               || '[FCST Type :' || RTRIM(V_ERR2_FCST) || ']'
                               || '[YYYYMMDd :' || RTRIM(V_ERR2_YYYY) || ']'
                               || CASE WHEN V_ERR_CNT > 1 THEN '외 ' || TO_CHAR(V_ERR_CNT-1) || '건' ELSE ' ' END
-                              || '은 기 Request 가 생성된 건입니다. 
+                              || '은 기 Request 가 생성된 건입니다.
  ADD History 팝업을 이용해서 수정해주세요';
                 V_INVALID := TRUE;
                 GOTO ERR_RTN;
@@ -11308,7 +11335,7 @@ BEGIN
                               || '[FCST Type :' || RTRIM(V_ATTR9_FCT) || ']'
                               || '[YYYYMMDd :' || RTRIM(V_ATTR9_YYY) || ']'
                               || CASE WHEN V_ERR_CNT > 1 THEN '외 ' || TO_CHAR(V_ERR_CNT-1) || '건' ELSE ' ' END
-                              || '은 기 Confirm ID 가 생성된 건입니다. 
+                              || '은 기 Confirm ID 가 생성된 건입니다.
  ADD History 팝업을 이용해서 수정해주세요';
                 V_INVALID := TRUE;
                 GOTO ERR_RTN;

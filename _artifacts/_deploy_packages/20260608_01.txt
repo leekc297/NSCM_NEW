@@ -1,23 +1,17 @@
-LINE/COL  ERROR
---------- -------------------------------------------------------------
-86/9      PL/SQL: SQL Statement ignored
-86/21     PL/SQL: ORA-00942: 테이블 또는 뷰 이(가) 존재하지 않습니다.
-166/9     PL/SQL: SQL Statement ignored
-177/18    PL/SQL: ORA-00942: 테이블 또는 뷰 이(가) 존재하지 않습니다.
-196/5     PL/SQL: SQL Statement ignored
-196/17    PL/SQL: ORA-00942: 테이블 또는 뷰 이(가) 존재하지 않습니다.
-201/5     PL/SQL: SQL Statement ignored
-201/17    PL/SQL: ORA-00942: 테이블 또는 뷰 이(가) 존재하지 않습니다.
-265/5     PL/SQL: SQL Statement ignored
-326/20    PL/SQL: ORA-00942: 테이블 또는 뷰 이(가) 존재하지 않습니다.
-508/9     PL/SQL: SQL Statement ignored
-550/20    PL/SQL: ORA-00942: 테이블 또는 뷰 이(가) 존재하지 않습니다.
-575/9     PL/SQL: SQL Statement ignored
-604/14    PL/SQL: ORA-00942: 테이블 또는 뷰 이(가) 존재하지 않습니다.
-694/17    PL/SQL: SQL Statement ignored
-694/47    PL/SQL: ORA-00942: 테이블 또는 뷰 이(가) 존재하지 않습니다.
-695/9     PL/SQL: Statement ignored
-695/36    PLS-00364: 루프 인덱스 변수 'REC'의 사용이 부적당합니다
-708/13    PL/SQL: SQL Statement ignored
-708/25    PL/SQL: ORA-00942: 테이블 또는 뷰 이(가) 존재하지 않습니다.
-오류: 컴파일러 로그를 확인하십시오.
+6	Mail Setup	조회조건 Module, Sub Module 세팅 안됨
+7	Mail Setup	조회조건 Module 선택 시 Sub Module 세팅되어야함
+8	Mail Setup	저장 msg 표준화. 현재 팝업으로 생성됨
+9	Mail Setup	[상단 gird] category ~ sub3 까지 edit/저장 가능 해야함
+10	Mail Setup	Main ~ Sub3는 Combo로 구성. 현재 grid는 코드가 보여지는 듯
+11	Mail Setup	Main ~ Sub3 는 순서대로 선택된 기준에 따라서 입력가능 컬럼 여부와 세팅되는 값이 다름. 
+가령 
+Main 이 Real Time이면 Sub1 까지만 입력 가능하고 RT만 선택. Sub2~3 입력불가
+Main 이 월 1회 면 일/시간/분(sub1~3) 
+Main 이 주 1회 면 요일/시간/분(sub1~3) 
+Main 이 일 1회 면 시간/분(sub1~2) Sub3 입력불가
+12	Mail Setup	View 팝업에서 OK / Cancel 버튼이 없음. OK 클릭 시 저장되어야 함
+13	Mail Setup	[Message Setup] 하단 tab : title, content edit/저장 가능해야함
+14	Mail Setup	[Message Setup] 하단 tab : insert 동작 안함 / 동일한 Language 입력 못함
+15	Mail Setup	[Mail Setup] tab 에서 조회버튼의 HOT KEY 동작이 암함
+16	Mail Setup	[Mail Setup] tab 에서 조회된 인원을 더블클릭하면 오른쪽 grid로 Insert 되고, [왼쪽 grid. All Receiver] grid에서는 빠져야 함
+17	Mail Setup	[Mail Setup] tab 에서 버튼을 눌러서 Insert 해도 저장은 안됨

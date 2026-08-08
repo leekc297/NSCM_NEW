@@ -1,0 +1,17 @@
+===== 40 재시험 (판가 커버리지 키) =====
+GET 40 rows=17343
+[40] key ITEM=MPCKRMVLTA16 SITE=LX INTL SINGAPORE_SG_SIN | M=20260817(v0=112.0) I=20260812
+  [M] 원장 pre  QTY=112 rows=1
+  [M] SAVE +1  CALL_OK [('0', 'SUCCESS', '3')]
+  [M] 원장 +1후 QTY=113 (기대 113.0)
+  [M] SAVE 원복 CALL_OK [('0', 'SUCCESS', '3')]
+  [M] 원장 원복 QTY=112 (기대 112.0)
+  [I] 원장 pre  QTY=0 rows=0
+  [I] SAVE I=7  CALL_OK [('0', 'SUCCESS', '3')]
+  [I] 원장 후   QTY=7 rows=1 (기대 7)
+  [D] SAVE D    CALL_OK [('0', 'SUCCESS', '3')]
+  [D] 원장 후   QTY=7 rows=1 (주 잔여수요=112.0 → 기대 행 유지 (주합계≠0 → M 재산출))
+  [D] 잔존 1건 정리 — 커밋
+  [RT] GET 재조회 D_20260817 = 112.0 (기대 112.0)
+
+== 40 재시험 종합: M=True I=True D=True RT=True

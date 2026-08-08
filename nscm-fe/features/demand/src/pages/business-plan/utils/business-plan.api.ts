@@ -77,7 +77,8 @@ export const callProc = async (
     // 숫자(건수) 반환 SP 는 성공 취급 — 문자열 오류문만 실패 passthrough
     return { ok: false, message: firstVal };
   }
-  return { ok: true };
+  // 성공 시 첫 값(건수/success)을 함께 반환 — Cutoff 결과 연결(MSG00675)·Replace 건수(MSG00401) 표시용
+  return { ok: true, message: firstVal };
 };
 
 // 메인 SAVE — PKG_DMF0042.P_DMF0042_SAVE_DM_PLN_BP_FCST ('^' bulk 19키 + 감사 2 BE주입)
@@ -88,21 +89,25 @@ export const callSaveBusinessPlan = (payload: Record<string, string>): Promise<C
 export const callSetPrice = (divisionId: string): Promise<CallProcResult> =>
   callProc(SHEETS.MAIN, 'SET_PRICE', { flag: '', divisionId });
 
-// Ver. Cutoff — DMF0042_SAVE_DM_PLN_BP_FCST_CUTOFF (verType='BP_M' — AS-IS L2857. createdBy BE주입)
+// Ver. Cutoff — DMF0042_SAVE_DM_PLN_BP_FCST_CUTOFF (verType='BP_M' — AS-IS L2857).
+//   ⚠ createdBy 는 FE 필수 전달 — BE 자동 주입은 sesUserId 키뿐. 미전달 시 NULL 바인딩 →
+//   PR_DM_PLN_VERSION_CREATE 채번 실패(CREATED_BY NOT NULL) → VERSION_NO NULL ORA-01400 (2026-08-05 실측).
 export const callCutoff = (
   divisionId: string,
   versionDescription: string,
-  verType: string
+  verType: string,
+  createdBy: string
 ): Promise<CallProcResult> =>
-  callProc(SHEETS.MAIN, 'CUTOFF', { divisionId, versionDescription, verType });
+  callProc(SHEETS.MAIN, 'CUTOFF', { divisionId, versionDescription, verType, createdBy });
 
-// Replace by Cutoff — DMF0042_SAVE_DM_PLN_BP_REPLACE_BY_CUTOFF (AS-IS L3465. createdBy BE주입)
+// Replace by Cutoff — DMF0042_SAVE_DM_PLN_BP_REPLACE_BY_CUTOFF (AS-IS L3465. createdBy FE 필수 전달 — 위 동일)
 export const callReplaceByCutoff = (params: {
   divisionId: string;
   versionType: string;
   yyyymmFrom: string;
   yyyymmTo: string;
   versionNo: string;
+  createdBy: string;
 }): Promise<CallProcResult> => callProc(SHEETS.MAIN, 'REPLACE', { ...params });
 
 // Exchange Rate 저장 — DMF0042_SAVE_DM_BP_EXCHANGE_RATE ('^' bulk 6키 + 감사 2 BE주입)

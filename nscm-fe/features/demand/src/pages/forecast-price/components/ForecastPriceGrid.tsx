@@ -18,10 +18,17 @@ import isoWeek from '@foundation/isoWeek';
 import type { ComboResponse, FlexGridColumnConfig } from '@foundation/models';
 import { CustomMergeManager, EditTracker, isNonEditableDateColumn } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
+import { useTabComboQueries } from '@shared/hooks';
 
-import { AUTH_MEASURES } from '../forecast-price.constants';
+import {
+  AUTH_MEASURES,
+  GRID_EDIT_COMBO,
+  MENU_ID,
+  PRICE_MEASURES,
+} from '../forecast-price.constants';
 import type { ForecastPriceRow, SpreadTitleRow } from '../forecast-price.types';
 import { useForecastPriceStore } from '../useForecastPriceStore';
+import { q } from '../utils/forecast-price.combo';
 import { thisWeekMondayYmd } from '../utils/forecast-price.editLock';
 
 dayjs.extend(isoWeek);
@@ -96,6 +103,7 @@ const DUP_KEY_COLS = [
 
 import {
   allocateLoc,
+  bucketBitsOfDay,
   divideByDate,
   divideByMonth,
   divideByWeek,
@@ -122,6 +130,10 @@ interface DynColMeta {
   leaf: string; // 3단 = 일자 (COLUMN_LABEL_NAME)
   sort: number;
 }
+
+/** 콤보 행의 임의 컬럼을 안전하게 문자열화 (원시값만 채택 — 객체는 빈 문자열로 관대 통과). */
+const comboCellStr = (v: unknown): string =>
+  typeof v === 'string' ? v.trim() : typeof v === 'number' ? String(v) : '';
 
 const kindOf = (b: string): 'M' | 'W' | 'D' | null =>
   /^M_\d{6}$/.test(b) ? 'M' : /^W_\d{7,10}$/.test(b) ? 'W' : /^D_\d{8}$/.test(b) ? 'D' : null;
@@ -165,11 +177,182 @@ export const ForecastPriceGrid = ({
   const bucketTypeParamRef = useRef(bucketTypeParam);
   bucketTypeParamRef.current = bucketTypeParam;
 
+  // ⭐ 기본 배분요일 (AS-IS sDefaultDay — .cs L1773 `Data.Common(Type.DefaultBucketDay, division, bucketType)`).
+  //   행 BUCKET 이 비었거나 '0000000' 일 때 적용되는 요일비트의 원천. 마스터 lookup DEFAULT_BUCKET_DAY
+  //   (SEGMENT1=division × SEGMENT2=MONTHLY|WEEKLY) 를 CMBO 'DefaultBucketDay' 로 조회한다.
+  //   ⚠️ 구 코드는 FE 상수(40=MON/그 외=FRI)로 박아 두어 마스터 변경·division 추가에 반응하지 못했다.
+  const [defaultBucketDayRows] = useTabComboQueries({
+    filters: [
+      {
+        comboId: 'DefaultBucketDay',
+        divisionId: q(searchParams.divisionId),
+        bucketType: q(bucketTypeParam),
+      },
+    ],
+    enabled: !!searchParams.divisionId,
+  });
+  const defaultBucketRef = useRef<string>(bucketBitsOfDay(undefined));
+  defaultBucketRef.current = bucketBitsOfDay(defaultBucketDayRows?.[0]?.CODE);
+
+  // ⭐ 편집 전용 콤보 프리페치 (정본 mkt-fcst MktFcstGrid:280-311 이식) — AS-IS UP_FX 계통의
+  //   "조회 표시 ↔ 편집 후보" 이원화. 진입 시 dataMap 스왑 → 종료 시 표시용으로 원복.
+  //   0행이면 null 로 두어 **스왑을 생략**한다(미등록/무권한 시 기존 동작 유지 = 회귀 0).
+  const editComboEntries = useMemo(() => Object.entries(GRID_EDIT_COMBO), []);
+  const editComboResults = useTabComboQueries({
+    filters: editComboEntries.map(([, cfg]) =>
+      cfg.divisionParam
+        ? { comboId: cfg.comboId, divisionId: q(searchParams.divisionId) }
+        : cfg.comboId
+    ),
+  });
+  const editComboSig = editComboResults
+    .map((r, i) => `${editComboEntries[i]?.[0]}#${r?.length ?? 'x'}`)
+    .join(',');
+  const editDataMapsRef = useRef<Record<string, DataMap | null>>({});
+  const editComboRowsRef = useRef<Record<string, Record<string, unknown>[]>>({});
+  useEffect(() => {
+    const maps: Record<string, DataMap | null> = {};
+    const rows: Record<string, Record<string, unknown>[]> = {};
+    editComboEntries.forEach(([binding], i) => {
+      const arr = (editComboResults[i] ?? []) as unknown as Record<string, unknown>[];
+      rows[binding] = arr;
+      maps[binding] = arr.length > 0 ? new DataMap(arr, 'CODE', 'NAME') : null;
+    });
+    editDataMapsRef.current = maps;
+    editComboRowsRef.current = rows;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editComboSig]);
+
+  // ⭐ AS 사이트 전용 Incoterms (AS-IS UP_FX_GetCommonDataList_DM @Code='AS_INCOTERMS', .cs L7923) —
+  //   행의 SCM_SITE_ID 가 AS(비축)향 사이트면 Incoterms 후보를 AS 전용 목록으로 교체한다.
+  //   AS-IS 는 `IF EXISTS(AS_SITE_PLANT …) … ELSE INCOTERMS` 로 분기하므로, TO-BE 도 AS 사이트 판정을
+  //   먼저 하고(AS_FROM_SITE) 매칭될 때만 스왑한다(0행이면 생략 → IncotermsEdit 유지). 정본 = mkt-fcst:320-342.
+  const [asSiteRows, asIncotermsRows] = useTabComboQueries({
+    filters: [
+      { comboId: 'AS_FROM_SITE', param1: q(searchParams.divisionId) },
+      { comboId: 'AsIncotermsEdit', divisionId: q(searchParams.divisionId) },
+    ],
+    enabled: !!searchParams.divisionId,
+  });
+  const asSiteNamesRef = useRef<Set<string>>(new Set());
+  const asIncotermsMapRef = useRef<DataMap | null>(null);
+  useEffect(() => {
+    asSiteNamesRef.current = new Set(
+      (asSiteRows ?? [])
+        .flatMap(r => [String(r.NAME ?? '').trim(), String(r.CODE ?? '').trim()])
+        .filter(Boolean)
+    );
+    const rows = (asIncotermsRows ?? []) as unknown as Record<string, unknown>[];
+    asIncotermsMapRef.current = rows.length > 0 ? new DataMap(rows, 'CODE', 'NAME') : null;
+  }, [asSiteRows, asIncotermsRows]);
+
+  // 스왑 전 원본(표시용) dataMap 백업 — binding 별 1회만 저장 후 편집 종료 시 원복.
+  const origDataMapRef = useRef<Record<string, DataMap | null>>({});
+
   // ⭐ #7 Insert 행 편집가능 Measure 콤보 캐스케이드 (hook #59 §5-G / AS-IS L5839) —
   //   Site 변경 시 FcstPriceEditMeasure(div/site/bucket) 조회해 행별 후보 캐시 → MEASURE 편집 진입 시
   //   컬럼 dataMap 스왑(편집 후보=편집가능 measure), 편집 종료 시 원 dataMap(전체 표시용) 원복.
   const editMeasuresRef = useRef<WeakMap<object, ComboResponse[]>>(new WeakMap());
   const measureOrigDataMapRef = useRef<DataMap | null>(null);
+  // D9 — 행별 Cell Prod Site 후보 캐시 (ITEM_ID 변경 시 재조회).
+  const cellProdSitesRef = useRef<WeakMap<object, ComboResponse[]>>(new WeakMap());
+  // 행별 Sales Site 후보 캐시 (END_CUSTOMER 변경 시 재조회).
+  const salesSitesRef = useRef<WeakMap<object, ComboResponse[]>>(new WeakMap());
+
+  // ⭐ #2 SALES_BUCKET 캐스케이드 (AS-IS L5862~5874) — Insert 행에서 Sales Site / Incoterms 변경 시
+  //   배분 요일비트(SUN-first 7자리)를 조회해 행 BUCKET 에 세팅. 결과 없으면 '' → 배분은 기본요일 적용.
+  //   (BUCKET 은 divideBy*/allocateLoc 가 다음 수량 편집 때 읽음 — AS-IS 도 세팅만.)
+  const applySalesBucket = (dataItem: WijmoRowItem) => {
+    const div = String(dataItem['DIVISION_ID'] ?? '');
+    const site = String(dataItem['SCM_SITE_ID'] ?? '');
+    const inco = String(dataItem['INCOTERMS'] ?? '');
+    if (!div || !site || !inco) return; // 세 값 모두 있어야 조회 (AS-IS: div·site 채워졌을 때)
+    void apiClient
+      .getCombo({
+        comboId: 'SalesBucket',
+        divisionId: q(div),
+        scmSiteId: q(site),
+        incoterms: q(inco),
+      })
+      .then(rows => {
+        const bucket = rows?.[0]?.CODE ?? '';
+        // '0000000'(매칭 0건 PIVOT) = 미설정 취급 → 기본요일 배분 (AS-IS '' 동작).
+        dataItem['BUCKET'] = bucket && bucket !== '0000000' ? bucket : '';
+      })
+      .catch((err: unknown) => {
+        // 폴백은 유지하되 무증상 금지 (hook #117 §5.8) — 실패 시 BUCKET 미세팅 → 기본요일 배분.
+        console.error('[combo] SalesBucket 조회 실패 — 기본요일 배분으로 폴백', err);
+      });
+  };
+
+  // #7 — Insert 행 Site 변경 시 편집가능 Measure 후보 재조회 → 행별 캐시 (MEASURE 편집 진입 시 사용).
+  const applyEditMeasures = (dataItem: WijmoRowItem) => {
+    const div = String(dataItem['DIVISION_ID'] ?? '');
+    const site = String(dataItem['SCM_SITE_ID'] ?? '');
+    if (!div || !site) return;
+    void apiClient
+      .getCombo({
+        comboId: 'FcstPriceEditMeasure',
+        divisionId: q(div),
+        scmSiteId: q(site),
+        bucketType: q(bucketTypeParamRef.current),
+      })
+      .then(rows => editMeasuresRef.current.set(dataItem, rows ?? []))
+      .catch((err: unknown) => {
+        // 폴백은 유지하되 무증상 금지 — 캐시 미설정 → 편집 진입 시 전체 Measure 콤보.
+        console.error('[combo] FcstPriceEditMeasure 조회 실패 — 전체 Measure 콤보로 폴백', err);
+      });
+  };
+
+  // ⭐ Insert 행 End Customer 변경 시 Sales Site 후보 재조회 (AS-IS
+  //   `Data.UserSiteByEndCustomer(division, endCustomer, …)` = `UP_FX_GetCommonDataList
+  //   @Code='SiteByEndCustomer'`, .cs L2580 InsertRow / L8237·8283·8294 ComboSelChange).
+  //   SCM_SITE_ID 는 SAVE IN 파라미터(scmSiteId)라 값이 잘못되면 원장에 그대로 들어간다.
+  //   CMBO 는 관대형(@t IS NULL OR …)이라 미전달 시 "전체 사이트"가 뜨는 조용한 폴백이었다.
+  const applySalesSites = (dataItem: WijmoRowItem) => {
+    const div = String(dataItem['DIVISION_ID'] ?? '');
+    const cust = String(dataItem['END_CUSTOMER'] ?? '');
+    if (!div) return;
+    void apiClient
+      .getCombo({ comboId: 'SiteByEndCustomer', divisionId: q(div), endCustomer: q(cust) })
+      .then(rows => salesSitesRef.current.set(dataItem, rows ?? []))
+      .catch((err: unknown) => {
+        console.error('[combo] SiteByEndCustomer 조회 실패 — 전체 목록으로 폴백', err);
+      });
+  };
+
+  // ⭐ D9 — Insert 행 Model(ITEM_ID) 변경 시 Cell Prod Site 후보 재조회 (AS-IS
+  //   `Data.Common(Type.CELL_PROD_SITE_ID, division, itemId)` = `UP_FX_GetCommonDataList @Code='CELL_PROD_SITE_ID'`,
+  //   .cs L5854). AS-IS SP 는 PARAM1(division) 유무로 분기해, 이벤트 호출 시 해당 품목의 BIZ_TYPE 이
+  //   CELL 이 아니면 '-'(Common) 만 남긴다. CMBO 가 여분 컬럼을 반환하지 않아 클라 필터가 불가 →
+  //   Measure 와 동일하게 행별 서버 재조회 + WeakMap 캐시로 처리한다.
+  const applyCellProdSites = (dataItem: WijmoRowItem) => {
+    const div = String(dataItem['DIVISION_ID'] ?? '');
+    const item = String(dataItem['ITEM_ID'] ?? '');
+    if (!div || !item) return;
+    void apiClient
+      .getCombo({ comboId: 'CELL_PROD_SITE_ID', divisionId: q(div), itemId: q(item) })
+      .then(rows => cellProdSitesRef.current.set(dataItem, rows ?? []))
+      .catch((err: unknown) => {
+        console.error('[combo] CELL_PROD_SITE_ID 조회 실패 — 전체 목록으로 폴백', err);
+      });
+  };
+
+  // ⭐ Insert 행 캐스케이드 프라이밍 (AS-IS InsertRow .cs L2621~2630 — 행 생성 시점에
+  //   Measure / Cell Prod Site / Sales Site 후보를 **시드 키로 즉시 재조회**한다).
+  //   구 코드는 SCM_SITE_ID 를 사용자가 다시 바꿀 때만 조회해, 시드 그대로 저장하는 정상 흐름에서
+  //   사이트 특성(VMI_YN) 기반 Measure 필터가 **한 번도 적용되지 않았다**.
+  const primedRowsRef = useRef<WeakSet<object>>(new WeakSet());
+  useEffect(() => {
+    for (const row of data ?? []) {
+      const item = row as unknown as WijmoRowItem;
+      if (item['CRUD_TYPE'] !== 'I' || primedRowsRef.current.has(item)) continue;
+      primedRowsRef.current.add(item);
+      applyEditMeasures(item);
+      applyCellProdSites(item);
+      applySalesSites(item);
+    }
+  }, [data]);
 
   // #12 당주(현재 기간) binding 집합 — 활성 버킷의 당월(M_)/당주(W_)/금주월요일(D_) 녹색 보더.
   const currentPeriodRef = useRef<Set<string>>(new Set());
@@ -434,48 +617,88 @@ export const ForecastPriceGrid = ({
               measureOrigDataMapRef.current = col.dataMap as DataMap;
             col.dataMap = new DataMap(candidates as unknown[], 'CODE', 'NAME');
           }
+          return;
+        }
+
+        // 행 단위 서버 재조회로 좁혀진 후보가 있으면 그것으로 스왑 (없으면 표시용 유지 = 회귀 0).
+        //   CELL_PROD_SITE_ID ← ITEM_ID 변경 / SCM_SITE_ID ← END_CUSTOMER 변경.
+        const rowScopedRef =
+          binding === 'CELL_PROD_SITE_ID'
+            ? cellProdSitesRef
+            : binding === 'SCM_SITE_ID'
+              ? salesSitesRef
+              : null;
+        if (rowScopedRef) {
+          const candidates = rowScopedRef.current.get(dataItem);
+          const rsCol = sender.columns[e.col];
+          if (candidates && candidates.length > 0 && rsCol) {
+            if (!(binding in origDataMapRef.current))
+              origDataMapRef.current[binding] = (rsCol.dataMap as DataMap) ?? null;
+            rsCol.dataMap = new DataMap(candidates as unknown[], 'CODE', 'NAME');
+          }
+          return;
+        }
+
+        // ⭐ UP_FX 편집 콤보 스왑 (2026-08-08) — 표시용 메타 콤보 → 편집 후보로 교체.
+        //   순서: ①AS 사이트 행의 Incoterms(AS 전용) ②행 컨텍스트 필터 ③기본 편집 콤보.
+        //   어느 단계든 후보 0건이면 스왑을 생략해 표시용 콤보를 그대로 쓴다(회귀 0).
+        const col = sender.columns[e.col];
+        const cfg = GRID_EDIT_COMBO[binding];
+        // divisions 지정 시 그 division 행에만 편집판을 적용 (AS-IS 적용 범위 밖은 표시용 전체 유지).
+        const rowDiv = String(dataItem['DIVISION_ID'] ?? '');
+        const editCfg = cfg && (!cfg.divisions || cfg.divisions.includes(rowDiv)) ? cfg : undefined;
+        if (col && editCfg) {
+          const backup = () => {
+            if (!(binding in origDataMapRef.current))
+              origDataMapRef.current[binding] = (col.dataMap as DataMap) ?? null;
+          };
+          // ① AS 사이트 행 → AS 전용 Incoterms (AS-IS AS_INCOTERMS 분기)
+          if (binding === 'INCOTERMS') {
+            const site = String(dataItem['SCM_SITE_ID'] ?? '').trim();
+            if (site && asSiteNamesRef.current.has(site) && asIncotermsMapRef.current) {
+              backup();
+              col.dataMap = asIncotermsMapRef.current;
+              return;
+            }
+          }
+          // ② 행 컨텍스트 필터 (관대 통과 — 행/콤보 어느 쪽 값이 비면 통과. 정본 mkt-fcst:814-832)
+          const src = editComboRowsRef.current[binding] ?? [];
+          const filterKey = editCfg.rowFilterKey;
+          if (filterKey && src.length > 0) {
+            const rv = String(dataItem[filterKey] ?? '').trim();
+            const filtered = src.filter(cr => {
+              const cv = comboCellStr(cr[filterKey]);
+              return !rv || rv === 'ALL' || !cv || rv === cv;
+            });
+            const dedup = [...new Map(filtered.map(cr => [comboCellStr(cr.CODE), cr])).values()];
+            if (dedup.length > 0) {
+              backup();
+              col.dataMap = new DataMap(dedup, 'CODE', 'NAME');
+              return;
+            }
+          }
+          // ③ 기본 편집 콤보
+          const editMap = editDataMapsRef.current[binding];
+          if (editMap) {
+            backup();
+            col.dataMap = editMap;
+          }
+          return;
+        }
+
+        // ⭐ D7 — CURRENCY: PRICE 계열 measure 가 아니면 빈 목록으로 교체해 입력을 차단
+        //   (AS-IS `UP_FX_GetCommonDataList_DM @Code='NO_DATA'` = `SELECT '' CODE, '' NAME`, .cs L5639).
+        if (binding === 'CURRENCY' && col) {
+          const measure = String(dataItem['MEASURE'] ?? '');
+          if (!(PRICE_MEASURES as readonly string[]).includes(measure)) {
+            if (!(binding in origDataMapRef.current))
+              origDataMapRef.current[binding] = (col.dataMap as DataMap) ?? null;
+            col.dataMap = new DataMap([], 'CODE', 'NAME');
+          }
         }
         return;
       }
       if (kindOf(binding) && !canEditCell(binding, dataItem)) e.cancel = true;
-    };
-
-    // ⭐ #2 SALES_BUCKET 캐스케이드 (AS-IS L5862~5874) — Insert 행에서 Sales Site / Incoterms 변경 시
-    //   배분 요일비트(SUN-first 7자리)를 조회해 행 BUCKET 에 세팅. 결과 없으면 '' → 배분은 기본요일 적용.
-    //   (BUCKET 은 divideBy*/allocateLoc 가 다음 수량 편집 때 읽음 — AS-IS 도 세팅만.)
-    const applySalesBucket = (dataItem: WijmoRowItem) => {
-      const div = String(dataItem['DIVISION_ID'] ?? '');
-      const site = String(dataItem['SCM_SITE_ID'] ?? '');
-      const inco = String(dataItem['INCOTERMS'] ?? '');
-      if (!div || !site || !inco) return; // 세 값 모두 있어야 조회 (AS-IS: div·site 채워졌을 때)
-      void apiClient
-        .getCombo({ comboId: 'SalesBucket', divisionId: div, scmSiteId: site, incoterms: inco })
-        .then(rows => {
-          const bucket = rows?.[0]?.CODE ?? '';
-          // '0000000'(매칭 0건 PIVOT) = 미설정 취급 → 기본요일 배분 (AS-IS '' 동작).
-          dataItem['BUCKET'] = bucket && bucket !== '0000000' ? bucket : '';
-        })
-        .catch(() => {
-          /* 룩업 미배선/오류 시 무시 → 기본요일 배분 유지 */
-        });
-    };
-
-    // #7 — Insert 행 Site 변경 시 편집가능 Measure 후보 재조회 → 행별 캐시 (MEASURE 편집 진입 시 사용).
-    const applyEditMeasures = (dataItem: WijmoRowItem) => {
-      const div = String(dataItem['DIVISION_ID'] ?? '');
-      const site = String(dataItem['SCM_SITE_ID'] ?? '');
-      if (!div || !site) return;
-      void apiClient
-        .getCombo({
-          comboId: 'FcstPriceEditMeasure',
-          divisionId: div,
-          scmSiteId: site,
-          bucketType: bucketTypeParamRef.current,
-        })
-        .then(rows => editMeasuresRef.current.set(dataItem, rows ?? []))
-        .catch(() => {
-          /* 룩업 오류 시 캐시 미설정 → 편집 진입 시 전체 Measure 콤보 유지 */
-        });
     };
 
     // 편집 종료 — 월/주/일 배분 (AS-IS spdMain_EditChange 분배 로직 1:1, GridUtils 재사용).
@@ -488,13 +711,36 @@ export const ForecastPriceGrid = ({
         const col = sender.columns[e.col];
         if (col) col.dataMap = measureOrigDataMapRef.current;
       }
+      // ⭐ UP_FX 편집 콤보 원복 — 스왑이 남으면 필터 밖 CODE 를 가진 **다른 행**의 명칭 변환이 깨진다
+      //   (편집 취소 경로도 cellEditEnded 를 타므로 여기서 일괄 원복. 정본 mkt-fcst:926-939).
+      if (binding in origDataMapRef.current) {
+        const col = sender.columns[e.col];
+        if (col) col.dataMap = origDataMapRef.current[binding] ?? null;
+      }
       const isInsertRow = dataItem['CRUD_TYPE'] !== undefined && dataItem['CRUD_TYPE'] !== null;
       // #2 — Insert 행 Site/Incoterms 변경 → SALES_BUCKET 조회·세팅 (배분 요일 원천).
       //   #7 — Site 변경 시 편집가능 Measure 후보도 재조회(행별 캐시).
       if ((binding === 'SCM_SITE_ID' || binding === 'INCOTERMS') && isInsertRow) {
         applySalesBucket(dataItem);
-        if (binding === 'SCM_SITE_ID') applyEditMeasures(dataItem);
       }
+      // ⭐ 편집가능 Measure 재조회 — AS-IS 는 **6개 지점**에서 재조회한다:
+      //   InsertRow(.cs L2621 — 위 프라이밍 effect) / 셀변경(L5841) / Paste(L7922·L8027) /
+      //   ComboSelChange Division(L8261) / ComboSelChange Sales Site·Incoterms(L8308).
+      //   후보는 서버(`FcstPriceEditMeasure`)가 **사이트 특성(SCM_MST_SITE.VMI_YN)** 과 bucket(D→LOC 제외)로
+      //   가리므로, 이 키들이 바뀌면 반드시 다시 물어야 한다. 구 코드는 SCM_SITE_ID 하나뿐이었다.
+      if (
+        (binding === 'SCM_SITE_ID' || binding === 'DIVISION_ID' || binding === 'INCOTERMS') &&
+        isInsertRow
+      ) {
+        applyEditMeasures(dataItem);
+      }
+      // D9 — Model(ITEM_ID) 변경 → Cell Prod Site 후보 재조회 (AS-IS .cs L5854).
+      //   Division 변경도 CMBO 바인드(@divisionId)에 들어가므로 함께 재조회.
+      if ((binding === 'ITEM_ID' || binding === 'DIVISION_ID') && isInsertRow)
+        applyCellProdSites(dataItem);
+      // End Customer 변경 → Sales Site 후보 재조회 (AS-IS .cs L8237·8283·8294).
+      if ((binding === 'END_CUSTOMER' || binding === 'DIVISION_ID') && isInsertRow)
+        applySalesSites(dataItem);
       // #10 — Insert 행 키 8종 변경 시 실시간 중복 검사 (AS-IS MSG00260 :5878). 중복이면 값 롤백 + alert.
       if (isInsertRow && (DUP_KEY_COLS as readonly string[]).includes(binding)) {
         const keyOf = (r: WijmoRowItem) => DUP_KEY_COLS.map(c => String(r[c] ?? '')).join('');
@@ -550,10 +796,19 @@ export const ForecastPriceGrid = ({
             monthMap.current,
             weekMap.current,
             calendarMapRef.current,
-            tracker
+            tracker,
+            defaultBucketRef.current
           );
         else if (binding.startsWith('W_'))
-          divideByWeek(binding, dataItem, val, oldVal, weekMap.current, tracker);
+          divideByWeek(
+            binding,
+            dataItem,
+            val,
+            oldVal,
+            weekMap.current,
+            tracker,
+            defaultBucketRef.current
+          );
         else if (binding.startsWith('D_')) divideByDate(binding, dataItem, val, oldVal, tracker);
       } else if (measure === 'LOC') {
         allocateLoc(binding, dataItem, val, monthMap.current, weekMap.current, tracker);
@@ -693,10 +948,19 @@ export const ForecastPriceGrid = ({
                   monthMap.current,
                   weekMap.current,
                   calendarMapRef.current,
-                  tracker
+                  tracker,
+                  defaultBucketRef.current
                 );
               else if (binding.startsWith('W_'))
-                divideByWeek(binding, dataItem, 0, oldValue, weekMap.current, tracker);
+                divideByWeek(
+                  binding,
+                  dataItem,
+                  0,
+                  oldValue,
+                  weekMap.current,
+                  tracker,
+                  defaultBucketRef.current
+                );
               else if (binding.startsWith('D_'))
                 divideByDate(binding, dataItem, 0, oldValue, tracker);
             } else if (measure === 'LOC') {
@@ -860,6 +1124,13 @@ export const ForecastPriceGrid = ({
       itemsSource={data}
       staticColumns={staticColumns}
       dynamicColumns={dynamicColumns}
+      // ⭐ 메타 셀 콤보의 @토큰 해소 (정본 mkt-fcst MktFcstGrid — 2026-07-20 measure 코드 표시 사고 대응).
+      //   `Measure` CMBO 는 `WHERE A.PROGRAM_ID = @mnuId` 라 미전달 시 '' 치환 → SHEET_MEASURE 0행 →
+      //   CODE→NAME 매핑 부재 → 그리드가 measure **코드를 raw 로 표시**한다(DMF0082 measure 14종 전부).
+      //   ⚠️ divisionId 는 넣지 않는다 — DataGrid 는 comboParams 를 전 셀 콤보에 일괄 spread 하므로
+      //     관대형(@divisionId IS NULL OR …) 콤보들이 한꺼번에 "전체"→"division 한정"으로 바뀐다.
+      //     행 단위 종속은 GRID_EDIT_COMBO 스왑 경로가 담당한다.
+      comboParams={{ mnuId: `'${MENU_ID}'` }}
       selectionMode={SelectionMode.MultiRange}
       allowMerging={AllowMerging.All}
       alternatingRowStep={1}

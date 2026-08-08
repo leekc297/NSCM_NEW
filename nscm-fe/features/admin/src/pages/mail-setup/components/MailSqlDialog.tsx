@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { CustomDialog } from '@shared/components';
 import { useTabProcQuery } from '@shared/hooks';
+import { Button } from '@shared/lges';
 
 import { MENU_ID, SHEETS, USE_TYPE_CODE } from '../mail-setup.constants';
 import { joinSqlText } from '../mail-setup.util';
@@ -59,7 +60,8 @@ export const MailSqlDialog = ({ tabId, onSave }: MailSqlDialogProps) => {
       height='60vh'
       title={`${t('LBL00780', '_SQL VIEW')} (${categoryDesc})`}
       handleClose={closeSqlDialog}
-      handleSubmit={() => onSave(sqlText)}
+      // customContentArea 사용 시 공통 하단 버튼이 렌더되지 않음 — 자체 footer 필수
+      //   (정본 forecast-price ExchangeRateModal buttonWrapper. OK=SAVE_RECIPIENT_MASTER_U 경로)
       customContentArea={
         <div className={styles.contentArea}>
           <textarea
@@ -67,6 +69,22 @@ export const MailSqlDialog = ({ tabId, onSave }: MailSqlDialogProps) => {
             value={sqlText}
             onChange={event => setSqlText(event.target.value)}
           />
+          <div className={styles.buttonWrapper}>
+            <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel={t('LBL00107', '_Cancel')}
+              onClick={closeSqlDialog}
+            />
+            <Button
+              appearance='contained'
+              priority='primary'
+              size='medium'
+              buttonLabel={t('LBL00359', '_Confirm')}
+              onClick={() => onSave(sqlText)}
+            />
+          </div>
         </div>
       }
     />

@@ -54,15 +54,16 @@ def fetch(cur, sql, binds=None):
     cols = [c[0] for c in cur.description]
     return cols, cur.fetchall()
 
-def show(cols, rows, limit=500):
+def show(cols, rows, limit=None):  # 전량 출력 기본 (2026-08-08 — 조용한 절단 제거)
     if cols is None:
         print("(no result set)"); return
-    w = [max(len(str(c)), *(len(str(r[i])) for r in rows[:limit])) if rows else len(str(c)) for i, c in enumerate(cols)]
+    lim = len(rows) if limit is None else limit
+    w = [max(len(str(c)), *(len(str(r[i])) for r in rows[:lim])) if rows else len(str(c)) for i, c in enumerate(cols)]
     print(" | ".join(str(c).ljust(w[i]) for i, c in enumerate(cols)))
     print("-+-".join("-" * x for x in w))
-    for r in rows[:limit]:
+    for r in rows[:lim]:
         print(" | ".join(str("" if v is None else v).ljust(w[i]) for i, v in enumerate(r)))
-    print(f"({len(rows)} rows{' — %d 표시' % limit if len(rows) > limit else ''})")
+    print(f"({len(rows)} rows" + (f' — {lim} 표시 · ⚠ {len(rows)-lim} 행 생략' if len(rows) > lim else '') + ')')
 
 def main():
     if len(sys.argv) < 2:

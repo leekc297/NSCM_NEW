@@ -21,7 +21,7 @@
 | 11 | [11_asis_parity.md](11_asis_parity.md) | AS-IS 분석·정합 | 4축 매핑/원소스 전량 Read/분석서 표준 |
 | 12 | [12_process_ops.md](12_process_ops.md) | 프로세스·운영·배포 | 게이트 3종/사내 적용/이관 패키지/git/로컬 |
 
-## 전수 분류표 (hook 122 — 커버리지 검증 원장)
+## 전수 분류표 (hook 126 — 커버리지 검증 원장)
 
 > 형식: `#번호 hook파일명 → 소속 카테고리(첫 번째 = 주 소속)`. RULESET_MASTER §4 번호 체계.
 
@@ -96,7 +96,7 @@
 | 67 | wijmo-flexgrid-entry | 03 |
 | 68 | wijmo-insert-cell-dropdown | 03 |
 | 69 | wijmo-merge-sticky-content | 03 |
-| 70 | screen-runtime-pitfalls-mandatory | 02, 06 |
+| 70 | screen-runtime-pitfalls-mandatory | 02, 06, 05 (P9 CustomDialog customContentArea — 2026-08-06 SYS0017 감사) |
 | 71 | framework-foundation-entry | 06 |
 | 72 | mdi-tab-isolation-mandatory | 06 |
 | 73 | procedure-dts-ssot-mandatory | 06 |
@@ -149,6 +149,10 @@
 | 120 | ui-title-icon-buttons-standard | 01 |
 | 121 | form-common-styles-mandatory | 01, 04 |
 | 122 | cloud-ui-db-object-fetch | 12, 08 |
+| 123 | screen-modal-cascade-filter-analysis | 11, 04, 05 |
+| 124 | screen-asis-pre-analysis-mandatory | 11, 01, 05 |
+| 125 | ui-selfcheck-runtime-mandatory | 12, 02, 05 |
+| 126 | verification-completion-honesty | 12, 11, 10 |
 
 ## 커버리지 검증 (신규 hook 등재 시 재실행 의무)
 
@@ -162,7 +166,10 @@ done
 # hook 파일 수 (RULESET_MASTER §4 카운트와 동일해야 함)
 ls Doc/_rules_v2/hooks/*.md | wc -l
 ```
-> 2026-07-30 검증 실측: 120 파일 / MISSING 0.
+> 2026-08-07 검증 실측: 123 파일 / MISSING 0. (2026-08-07 SYS0017 감사 보강 — 신설 hook 없음·카운트 불변, #70 에 카테고리 05 추가[P9])
+> 2026-08-08 **#126 verification-completion-honesty 신설** — 126 파일 / 카테고리 12(주)·11·10 / MISSING 0.
+> 2026-08-07(저녁) **#125 ui-selfcheck-runtime-mandatory 신설** — 125 파일 / 카테고리 12(주)·02·05 / MISSING 0.
+> 2026-08-07(오후) **#124 screen-asis-pre-analysis-mandatory 신설** — 124 파일 / 카테고리 11(주)·01·05 동시 등재 / MISSING 0.
 
 ## 비-hook 룰 자산의 카테고리 귀속 (참고)
 

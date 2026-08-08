@@ -10,6 +10,10 @@
 | 27 | [modal-callback-cascade-check](../hooks/modal-callback-cascade-check.md) | ⭐ | modal callback → 부모 cascade 전파 점검 |
 | 20 | [grid-column-setting-popup-pattern](../hooks/grid-column-setting-popup-pattern.md) | ⭐⭐ | Column 표시설정 popup 5단계 + 재진입 복원 |
 | 26 | [messaging-api-and-search-fields-mandatory](../hooks/messaging-api-and-search-fields-mandatory.md) | ⭐⭐⭐ | CustomDialog 7 size 표준 (+ useMessageStore — alert/confirm 직접 window.* 금지) |
+| 123 | [screen-modal-cascade-filter-analysis](../hooks/screen-modal-cascade-filter-analysis.md) §1 | ⭐⭐⭐ | 신규 화면 내 Modal = **AS-IS 팝업 .cs 기능분석 선행 후 구현** (게이트/SP 바인딩/저장 후처리/MSG — Cutoff·Replace SP 오배선 사고 계보) |
+| 70 | [screen-runtime-pitfalls-mandatory](../hooks/screen-runtime-pitfalls-mandatory.md) §8-C | ⭐⭐⭐ | **P9 상호배타 prop 함정** — `CustomDialog customContentArea` 지정 = 공통 OK/Cancel footer **미렌더** → 자체 footer 구현 의무(정본 forecast-price ExchangeRateModal) + §8C.4 함정 확장 표 + G6-1 모달 전수 런타임 확인 (2026-08-06 SYS0017 감사) |
+| 124 | [screen-asis-pre-analysis-mandatory](../hooks/screen-asis-pre-analysis-mandatory.md) §2 | ⭐⭐⭐ | ⭐ **각 모달 = MAIN UI 와 동일한 4영역(디자인·VALIDATION·EVENT·CRUD) 분석·점검 단위** — CRUD 매트릭스 행 체크만으로 완료 금지, `MODAL:` 행에 모달별 근거 링크 + G6-6 CRUD 왕복 (주 소속 11 — 01·05 공유, 2026-08-07) |
+| 125 | [ui-selfcheck-runtime-mandatory](../hooks/ui-selfcheck-runtime-mandatory.md) §4 | ⭐⭐⭐ | **모달 = MAIN UI 동등 실행 검증** — MODAL 행마다 [AS-IS 기능 대사·디자인·R·CUD 왕복·권한] 5칸 실증(빈 칸=미완료) + 모달 시트 API 전수 호출 — '형태만 모달' 차단 (주 소속 12, 2026-08-07) |
 
 ## Cross-ref
 - TO-BE 정밀: `_tobe/10_popup_modal.md` / `_tobe/13_routing_menu.md`

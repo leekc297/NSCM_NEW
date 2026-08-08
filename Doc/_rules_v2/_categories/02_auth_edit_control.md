@@ -14,6 +14,7 @@
 | 97 | [common-button-grid-routing](../hooks/common-button-grid-routing.md) | ⭐⭐ | 공통버튼 표시=hotkeyConfig 만(SubTitle 권한 비gating) + INSERT/DELETE 활성그리드 라우팅 |
 | 63 | [subtitle-button-actions-mandatory](../hooks/subtitle-button-actions-mandatory.md) | ⭐⭐⭐ | SubTitle 11버튼 = hotkeyConfig 1객체 자동 매핑 (hasButton 게이트 포함) |
 | 82 | [feature-button-meta-completeness](../hooks/feature-button-meta-completeness.md) | ⭐ | FE handler 있는데 버튼 미표시 = 버튼 메타(BTN_MPG) 등록 누락 점검 |
+| 125 | [ui-selfcheck-runtime-mandatory](../hooks/ui-selfcheck-runtime-mandatory.md) §5 | ⭐⭐⭐ | **권한별 실행 검증 의무** — Division×역할 공식 로스터 15계정(40/81/82 × Admin/Planner/(W/S)/Viewer/SCP) 전수 + 권한 2축(mnuBtnAuth 403 ↔ unitAuth editable↔EDIT_FLAG 분포) 실증 (주 소속 12) |
 
 ## Cross-ref
 - 권한 2 테이블: `SCM_ADM_USER_GR_MNU_BTN_MPG_M`(시트 단위) + `SCM_ADM_USER_GR_BTN_MPG_M` — 메모리 `reference_scm_adm_user_gr_btn_mpg_m`

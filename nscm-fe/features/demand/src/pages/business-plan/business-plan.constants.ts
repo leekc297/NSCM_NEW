@@ -116,6 +116,11 @@ export const MSG = {
   PENDING_BLOCK: 'MSG00680',
   // 저장 오류 공통 fallback — "저장 중 오류가 발생했습니다." (SP 원문 메시지 부재 시)
   SAVE_ERROR: 'MSG00618',
+  // Replace 확인 — AS-IS ReplaceByCutOffPopUp L474 MSG00400 ({0}년{1}월~{2}년{3}월 + {4}=버전).
+  //   ⚠ AS-IS 원문 미확보(MSSQL 미도달·클라우드 미러에도 미등재) — 문구 신설, 원문 확보 시 대사 (hook #114)
+  REPLACE_CONFIRM: 'MSG00400',
+  // Replace 완료 — AS-IS L511 MSG00401 ({0}건). 동일하게 문구 신설
+  REPLACE_DONE: 'MSG00401',
 } as const;
 
 // ============================================================================
@@ -130,8 +135,13 @@ export const GRID_CASCADE_FILTERS: Record<string, { rowKey: string; comboKey: st
     { rowKey: 'DIVISION_ID', comboKey: 'DIVISION_ID' },
     { rowKey: 'DEPT_ID', comboKey: 'DEPT_ID' },
   ],
-  // AS-IS L1577~1595 — DEPT_ID40 변경 시 END_CUSTOMER40 재설정 (EndCustomerByDivision40 원천)
-  END_CUSTOMER40: [{ rowKey: 'DIVISION_ID', comboKey: 'DIVISION_ID' }],
+  // AS-IS L1640~1658 — DEPT_ID40 변경 시 END_CUSTOMER40 재설정 (EndCustomerByDivision40(40, team행값)).
+  //   ⚠ CMBO 'EndCustomerByDivision40' 는 현재 DEPT_ID 미반환 → 관대 통과(전체 표시).
+  //   CMBO DEPT_ID 컬럼 확장(승인 대기 — 2026-08-05 대조 F-3/G-1) 시 본 필터가 즉시 발효된다.
+  END_CUSTOMER40: [
+    { rowKey: 'DIVISION_ID', comboKey: 'DIVISION_ID' },
+    { rowKey: 'DEPT_ID40', comboKey: 'DEPT_ID' },
+  ],
   // AS-IS L1568~1576 — END_CUSTOMER40 변경 시 SCM_SITE_ID40(SiteByEndCustomer) 재조회
   SCM_SITE_ID40: [
     { rowKey: 'DIVISION_ID', comboKey: 'DIVISION_ID' },
@@ -154,7 +164,9 @@ export const GRID_EDIT_COMBO: Record<string, { comboId: string }> = {
   //   (신정본 InsertRow L1274~1278 GetCellProdSite(...,"Y") [C20220513-000327]).
   //   조회 표시(코드→한글)는 SHEET_COLUMNS 메타 FPComboBox='DMF0042CellProdSite'(ALL) 가 담당
   //   ([E20240731-000845] InitSpread L392~397) — P7 SQL 와 반드시 세트 적용(원복 로직이 표시 dataMap 전제).
-  CELL_PROD_SITE: { comboId: 'CellProdSiteValid' },
+  //   ⚠ 등재명 = 'DMF0042CellProdSiteValid' (사내 CMBO_SQL_M 실측 2026-08-05 — 구 'CellProdSiteValid'
+  //   는 미등재 SQL_ID 라 조용한 빈 콤보였음. memory feedback_combo_registry_full_sync)
+  CELL_PROD_SITE: { comboId: 'DMF0042CellProdSiteValid' },
 };
 
 // Ver. Cutoff / Replace 버전 타입 고정값 (AS-IS LoadDataDiv "BP_M" — [27]/[28])

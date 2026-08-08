@@ -4,11 +4,15 @@ import { createPersistedStoreWithTab } from '@shared/stores';
 
 import { ALL, MENU_ID, SHEETS, USE_TYPE_CODE } from './mail-setup.constants';
 import type {
+  AllReceiverRow,
   CategoryRow,
   MailSearchParams,
   ReceiverSearchParams,
   ReceiverTab,
 } from './mail-setup.types';
+
+/** F5(조회) 분기 대상 포커스 영역 — AS-IS FindButton(E01)·Tx_Click(E13) 대응 */
+export type FocusedArea = 'category' | 'receiver';
 
 interface MailSetupState {
   initialized: boolean;
@@ -22,6 +26,10 @@ interface MailSetupState {
   selReceiverColumns: RawFlexGridColumnConfig[];
   isOpenSearchArea: boolean;
   activeTab: ReceiverTab;
+  /** F5 분기 — Receiver 탭 검색조건/All Receiver 포커스 시 'receiver' (E01/E13) */
+  focusedArea: FocusedArea;
+  /** ▶ 이동으로 좌측(All Receiver)에서 제거된 행 백업 — AS-IS dtAllReceiver (E14-4/E15) */
+  movedReceivers: AllReceiverRow[];
   selectedCategoryId: string;
   selectedCategoryDesc: string;
   selectedModuleCode: string;
@@ -42,6 +50,11 @@ interface MailSetupAction {
   fetchStaticColumns: () => Promise<void>;
   setOpenSearchArea: (open?: boolean) => void;
   setActiveTab: (tab: ReceiverTab) => void;
+  setFocusedArea: (area: FocusedArea) => void;
+  /** ▶ 이동 성공분 백업 push — 좌측 표시는 backup 제외 파생 목록이 담당 */
+  pushMovedReceivers: (rows: AllReceiverRow[]) => void;
+  /** ◀ 제거된 신규('I') 행 복원 — backup 에서 제거 → 좌측 목록 재등장 (E15) */
+  restoreMovedReceivers: (userIds: string[]) => void;
   selectCategory: (row?: CategoryRow) => void;
   openSqlDialog: () => void;
   closeSqlDialog: () => void;
@@ -68,6 +81,8 @@ const createInitialState = (): MailSetupState => ({
   selReceiverColumns: [],
   isOpenSearchArea: true,
   activeTab: 'message',
+  focusedArea: 'category',
+  movedReceivers: [],
   selectedCategoryId: '',
   selectedCategoryDesc: '',
   selectedModuleCode: '',
@@ -121,11 +136,17 @@ export const useMailSetupStore = createPersistedStoreWithTab<MailSetupState & Ma
         state.selectedCategoryDesc = '';
         state.selectedModuleCode = '';
         state.selectedSubModuleCode = '';
+        // E02-3 — 마스터 재조회 시 하위 영역 클리어 (AS-IS FindData_Main L391~393):
+        //   All_Receiver 조회 결과·▶ 이동 백업까지 초기화 (Message/Sel_Receiver 는 categoryId 리셋으로 비활성).
+        state.receiverFilters = undefined;
+        state.movedReceivers = [];
       });
     },
     setReceiverFilters: () => {
       set(state => {
         state.receiverFilters = { ...state.receiverSearchParams };
+        // AS-IS FindData_AllReceiver — 사용자 재조회 시 그리드·백업 초기화 (E03)
+        state.movedReceivers = [];
       });
     },
     fetchStaticColumns: async () => {
@@ -174,6 +195,28 @@ export const useMailSetupStore = createPersistedStoreWithTab<MailSetupState & Ma
     setActiveTab: tab => {
       set(state => {
         state.activeTab = tab;
+        // Message 탭에는 수신자 검색 영역이 없음 — F5 는 마스터 조회로 복귀 (E01)
+        if (tab === 'message') state.focusedArea = 'category';
+      });
+    },
+    setFocusedArea: area => {
+      set(state => {
+        state.focusedArea = area;
+      });
+    },
+    pushMovedReceivers: rows => {
+      set(state => {
+        const existing = new Set(state.movedReceivers.map(row => row.USERID));
+        state.movedReceivers = [
+          ...state.movedReceivers,
+          ...rows.filter(row => !existing.has(row.USERID)),
+        ];
+      });
+    },
+    restoreMovedReceivers: userIds => {
+      if (userIds.length === 0) return;
+      set(state => {
+        state.movedReceivers = state.movedReceivers.filter(row => !userIds.includes(row.USERID));
       });
     },
     selectCategory: row => {

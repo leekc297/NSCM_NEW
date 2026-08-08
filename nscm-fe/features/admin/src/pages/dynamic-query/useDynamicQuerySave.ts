@@ -99,6 +99,18 @@ export const useDynamicQuerySave = ({
     onError: noop,
   });
 
+  //[E20260807-AUDIT] call-proc 직접 호출 저장 결과 판정 — axios 인터셉터가 오류도 resolve 하므로
+  //   status/code 직접 판정 (정본 business-plan.api.ts:71~74). 실패 시 throw → handleSave catch 의
+  //   setAlert 로 SP message passthrough (message 부재 시 MSG00003 fallback).
+  const assertCallProcOk = (res: { status: number; data: unknown }) => {
+    if (res.status >= 400 || Number((res.data as { code?: string })?.code)) {
+      throw new Error(
+        (res.data as { message?: string })?.message?.trim() ||
+          t('MSG00003', '_저장에 실패하였습니다.')
+      );
+    }
+  };
+
   // saveWithValidation 을 검증 게이트로만 사용 — valid 시 mutate 콜백이 동기 호출되는 계약 이용.
   const validateSheet = <T,>(rows: T[], sheet: SHEETS.MAIN | SHEETS.COLUMNS | SHEETS.PARAMETERS) => {
     if (rows.length === 0) return true;
@@ -230,13 +242,14 @@ export const useDynamicQuerySave = ({
             // Role — 신규 행만 모달 메타로 저장 (기존 행은 roleChanged diff 경로).
             if (pendingMeta.row.CRUD_TYPE === 'I') {
               for (const groupId of pendingMeta.roles) {
-                await apiClient.post(`/${MENU_ID}/${SHEETS.USER_GROUP}/SAVE/call-proc`, {
+                const roleRes = await apiClient.post(`/${MENU_ID}/${SHEETS.USER_GROUP}/SAVE/call-proc`, {
                   dqId: targetId,
                   groupId,
                   validYn: 'Y',
                   createdBy: sessionUserId ?? '',
                   lastUpdatedBy: sessionUserId ?? '',
                 });
+                assertCallProcOk(roleRes); //[E20260807-AUDIT] 실패 시 성공 toast 차단
               }
             }
           }
@@ -265,13 +278,14 @@ export const useDynamicQuerySave = ({
             ...removed.map(g => ({ groupId: g, validYn: 'N' })),
           ];
           for (const rc of roleCalls) {
-            await apiClient.post(`/${MENU_ID}/${SHEETS.USER_GROUP}/SAVE/call-proc`, {
+            const roleRes = await apiClient.post(`/${MENU_ID}/${SHEETS.USER_GROUP}/SAVE/call-proc`, {
               dqId: selectedQueryId,
               groupId: rc.groupId,
               validYn: rc.validYn,
               createdBy: sessionUserId ?? '',
               lastUpdatedBy: sessionUserId ?? '',
             });
+            assertCallProcOk(roleRes); //[E20260807-AUDIT] 실패 시 성공 toast 차단
           }
         }
         setToast({ type: 'success', message: t('MSG00002', '_성공적으로 저장되었습니다!') });

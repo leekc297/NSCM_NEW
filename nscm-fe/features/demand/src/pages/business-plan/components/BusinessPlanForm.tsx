@@ -47,6 +47,7 @@ export const BusinessPlanForm = ({
   const sc = useBusinessPlanStore(s => s.searchCondition);
   const set = useBusinessPlanStore(s => s.setSearchCondition);
   const openSearchArea = useBusinessPlanStore(s => s.openSearchArea);
+  const defaultPeriod = useBusinessPlanStore(s => s.defaultPeriod);
 
   const div40 = isDiv40(sc.divisionId);
 
@@ -78,18 +79,30 @@ export const BusinessPlanForm = ({
       {
         comboId: 'PlantSitebyEndCustomer',
         divisionId: q(sc.divisionId),
-        endCustomer: q(sc.endCustomers.join(',')),
+        // ⭐ AS-IS 파리티 — DMF0042 는 양 지점 모두 UserPlantSiteByDivision(division 만,
+        //   InitControls L316·cboDivision L1548). EC 바인드 시 목록이 좁아져 AS-IS 와 어긋남 →
+        //   항상 'ALL' (2026-08-05 대조 F-4).
+        endCustomer: q(''),
       },
     ],
   });
 
-  // 멀티 옵션 헬퍼 — NUMBER→String + DIVISION_ID 토큰 필터 (카탈로그 toOptions 동등)
-  const toOptions = (rows: Array<Record<string, unknown>> | undefined, divisionId?: string) => {
+  // 멀티 옵션 헬퍼 — NUMBER→String + DIVISION_ID/DEPT_ID 토큰 필터 (카탈로그 toOptions 동등.
+  //   deptIds = Team cascade 반영: AS-IS UserEndCustomerByDivisionDept(div, team) 의 team 필터 1:1.
+  //   콤보 행 DEPT_ID 공란 또는 deptIds 미선택 = 통과 — 카탈로그 EndCustomerField 동일 규약)
+  const toOptions = (
+    rows: Array<Record<string, unknown>> | undefined,
+    divisionId?: string,
+    deptIds?: string[]
+  ) => {
     const arr = (rows ?? []) as unknown as Array<Record<string, string>>;
     return [
       ...new Map(
         arr
           .filter(r => !divisionId || !r.DIVISION_ID || r.DIVISION_ID === divisionId)
+          .filter(
+            r => !deptIds || deptIds.length === 0 || !r.DEPT_ID || deptIds.includes(r.DEPT_ID)
+          )
           .map(r => [`${r.DIVISION_ID ?? ''}|${r.CODE ?? ''}`, r] as const)
       ).values(),
     ].map(r => ({ label: String(r.NAME ?? r.CODE ?? ''), value: String(r.CODE ?? '') }));
@@ -148,6 +161,9 @@ export const BusinessPlanForm = ({
                 projectCodes: [],
                 itemIds: [],
                 owners: [],
+                // ⭐ Period 기본값 리셋 — AS-IS cboDivision L1554 drpPeriod.InitValue=GetDayRange() 파리티
+                startYyyymmdd: defaultPeriod.start,
+                endYyyymmdd: defaultPeriod.end,
               });
               onDivisionChange();
             }}
@@ -177,7 +193,11 @@ export const BusinessPlanForm = ({
                   value={sc.endCustomers.join(',')}
                   options={toOptions(
                     (div40 ? endCustomer40 : endCustomer) as never,
-                    div40 ? undefined : sc.divisionId
+                    div40 ? undefined : sc.divisionId,
+                    // ⭐ Team cascade — 81·82 = 'EndCustomer' 콤보 행 DEPT_ID 클라 필터 (AS-IS
+                    //   UserEndCustomerByDivisionDept(div, team) L1581). 40 은 CMBO 에 DEPT_ID
+                    //   미반환이라 관대 통과 — CMBO 확장(@deptId) 승인 대기 (2026-08-05 대조).
+                    sc.deptIds
                   )}
                   onChange={(_, options) =>
                     set({ endCustomers: toMulti(String(options ?? '')), scmSiteIds: [] })
