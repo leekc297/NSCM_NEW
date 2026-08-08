@@ -1,22 +1,263 @@
-# DMF0042 (Business Plan) — AS-IS ↔ TO-BE 매핑 (2026-07-15 신규 생성 / 2026-07-21 신정본 재대조 보완)
+# __asis-mapping__.md — EID 1:1 대사표 (asis-coverage-check §0.0/§0.1)
 
-> ⭐ AS-IS 정본 = **base `GSCM.DM.Forms.UIL\Plan\DMF0042_BizPlan\DMF0042_BizPlan.cs` 3,563행** (2026-07-21 확정 —
-> DB 메타 단일 등록('DMF0042') 근거. 구정본 _1(3,477행) 기준이던 본 문서·FE 주석의 라인 인용은 신정본으로 갱신 중이며,
-> §0-B 갭 5건이 구→신정본 승계 오류 교정분).
-> 최신 분석 정본(2026-07-20): `Doc/화면분석서/DMF0042_BizPlan_제약매트릭스_상세.md` + `주요이벤트_상세분석.md`
-> + `DMF0042_BizPlan_UI분석서_v2.0.xlsx`(10시트 신표준). (구: v1.0 xlsx / 상세동작_개발용.md = _1 기준 — 참고용 강등.)
-> 분석 보조: `Doc/_analysis/domain_DM/screens/DMF0042_1_BizPlan/validation.md`(99) + `expressions.md`(66).
+> 원천: `DMF0042_BizPlan_주요이벤트_상세분석.md`, `DMF0042_BizPlan_제약매트릭스_상세.md` · 생성: asis_mapping_gate.py --init
+> 상태 허용값: 미구현(초기) / 구현(구현 위치 필수) / 제외(사유 필수) / 해당없음(사유 필수 — 조회 전용 화면의 CRUD 행 등). 빈 칸 1개 = 게이트 실패.
+
+## 이벤트·제약 (EID 1:1)
+
+| ID | 요지 (원천 md 1줄) | 구현 위치 (파일:라인) | 사유 (미구현/제외/해당없음 시 필수) | 상태 |
+|---|---|---|---|---|
+| E01 | §1 spdMain_Changed — 셀 값 변경 (핸들러 `spdMain_Changed`, L1863~L2786) | utils/business-plan.spread.ts `applyCellChange` + components/BusinessPlanGrid.tsx cellEditEnded |  | 구현 |
+| E01-1 | §1.1 진입 가드 (L1865~L1874) | utils/business-plan.spread.ts `applyCellChange` 진입 가드 (editable 판정 = utils/business-plan.editLock.ts `evalBizPlanDynCell`) |  | 구현 |
+| E01-2 | §1.2 로컬 변수 준비 (L1879~L1903) | utils/business-plan.spread.ts `applyCellChange` 지역 변수 준비 |  | 구현 |
+| E01-3 | §1.3 Red(dirty) 색 가드 + 소수점 처리 MSG00289 (L1906~L1918) | components/BusinessPlanGrid.tsx 소수점 차단 MSG00289 → `MSG.BP_INTEGER_ONLY`(business-plan.constants.ts:109) |  | 구현 |
+| E01-4 | §1.4 Business_Plan 벌 (Int64 정수 연산, L1920~L2351) | utils/business-plan.spread.ts `applyCellChange` Business_Plan 정수 분기 |  | 구현 |
+| E01-5 | §1.5 비-Business_Plan 벌 (LOC 등, double 연산, L2352~L2783) | utils/business-plan.spread.ts 비 Business_Plan(LOC) double 분기 |  | 구현 |
+| E01-6 | §1.6 Red(dirty) 마킹 정리 | components/BusinessPlanGrid.tsx EditTracker `storeChange` 로 변경 이력 관리 | AS-IS 는 셀 ForeColor Red 로 dirty 표시 — TO-BE 는 EditTracker 가 등가 역할(플랫폼 차이) | 구현 |
+| E01-7 | §1.7 관련 보조 이벤트 | components/BusinessPlanGrid.tsx cellEditEnded / pastedCell 공유 경로 |  | 구현 |
+| E02 | §2 EditButton — F2 편집 잠금 재계산 (핸들러 `EditButton` override, L563~L697) | utils/business-plan.editLock.ts `evalBizPlanDynCell` (R1~R4' 종합) + components/BusinessPlanGrid.tsx formatItem/beginningEdit |  | 구현 |
+| E03 | §3 SaveData — F7 저장 payload 조립 (핸들러 `SaveData`, L862~L1209; 진입 `SaveButton` L699~L702) | utils/business-plan.save.ts `buildUnfoldRows`/`buildSavePayload` + utils/business-plan.api.ts 저장 호출 |  | 구현 |
+| E03-1 | §3.1 진입 가드 (L864~L873) | utils/business-plan.validate.ts `useBusinessPlanValidation` 진입 가드(MSG00113 필수 컬럼) |  | 구현 |
+| E03-2 | §3.2 payload 변수 (L875~L905) | utils/business-plan.save.ts `SaveUnfoldRow`/`SaveBuildResult` payload 변수 |  | 구현 |
+| E03-3 | §3.3 행 그룹 루프 (L907~L1144) | utils/business-plan.save.ts `buildUnfoldRows` 행 그룹 루프 |  | 구현 |
+| E03-4 | §3.4 변경(Red) 셀 수집 — 컬럼 루프 (L933~L1142) | utils/business-plan.save.ts `buildUnfoldRows` 변경 셀 수집 (EditTracker 변경분) |  | 구현 |
+| E03-5 | §3.5 사후 검증 (L1146~L1156) | utils/business-plan.validate.ts 사후 검증 (중복키 MSG00043 / 대상 0건 MSG00676) |  | 구현 |
+| E03-6 | §3.6 SP 호출 — '^' 21 param 조립 순서 (L1158~L1195) | utils/business-plan.save.ts `buildSavePayload` — '^' 21 param 조립 |  | 구현 |
+| E03-7 | §3.7 결과 처리 (L1194~L1207) | utils/business-plan.api.ts `callProc` 결과 판정 + 토스트 |  | 구현 |
+| E04 | §4 FindData — F5 조회 (핸들러 `FindData`, L745~L860; 진입 `FindButton` L539~L542) | useBusinessPlanStore.ts `setFilter`/`fetchStaticColumns` + BusinessPlan.tsx 조회 트리거 |  | 구현 |
+| E05 | §5 InsertRow — F8 행 삽입 (핸들러 `InsertRow`, L1211~L1480; 진입 `InsertButton` L544~L547) | components/BusinessPlanGrid.tsx Insert 행 생성 + utils/business-plan.gridCombos.ts 콤보 바인딩 |  | 구현 |
+| E06 | §6 spdMain_ComboSelChange — div40 2단 cascade (핸들러 L1628~L1659) | business-plan.constants.ts `GRID_CASCADE_FILTERS`(:131) + utils/business-plan.gridCombos.ts `filterComboRowsByRow` |  | 구현 |
+| E07 | §7 커스텀 액션 버튼 4종 | BusinessPlan.tsx hotkeyConfig 커스텀 액션 4종 |  | 구현 |
+| E07-1 | §7.1 btnSetPrice_Click — Set Price 환산 (L3178~L3199) | BusinessPlan.tsx Set Price → `MSG.SET_PRICE_CONFIRM`(business-plan.constants.ts:111) |  | 구현 |
+| E07-2 | §7.2 btnExchangeRate_Click — 환율 팝업 (L3048~L3068, [PJ20200138] Division 추가) | components/modals/ExchangeRateModal.tsx |  | 구현 |
+| E07-3 | §7.3 btnCutOff_Click — Version Cut-Off (L2903~L2929) | components/modals/VersionCutoffModal.tsx |  | 구현 |
+| E07-4 | §7.4 btnReplace_Click — Current 버전 특정 컷오프로 덮어쓰기 (L3470~L3562, [C20221025-000029]) | components/modals/ReplaceByCutoffModal.tsx |  | 구현 |
+| CA-01 | §1 `InitControls` / `sDivision=="40"` / `Substring(0,2)=="81"` / else | utils/business-plan.division.ts `divisionKindOf`／`isDiv40`·`isDiv81`·`isDiv82` + read*Slot 슬롯 분기 |  | 구현 |
+| CA-02 | §1 `InitSpread` / (파라미터 전달) | utils/business-plan.division.ts `divisionKindOf`／`isDiv40`·`isDiv81`·`isDiv82` + read*Slot 슬롯 분기 |  | 구현 |
+| CA-03 | §1 `InitSpread` / `clbDivision.ControlValues.Equals("40") && CELL_PROD_SITE 컬럼 존재` | utils/business-plan.division.ts `divisionKindOf`／`isDiv40`·`isDiv81`·`isDiv82` + read*Slot 슬롯 분기 |  | 구현 |
+| CA-04 | §1 `EditButton` (Monthly) / `sDivision=="40" && valid_YN=="Y"` | utils/business-plan.division.ts `divisionKindOf`／`isDiv40`·`isDiv81`·`isDiv82` + read*Slot 슬롯 분기 |  | 구현 |
+| CA-05 | §1 `EditButton` (Quarterly) / `sDivision=="40" && valid_YN=="Y" && start/end_YYYYQQ!=""` | utils/business-plan.division.ts `divisionKindOf`／`isDiv40`·`isDiv81`·`isDiv82` + read*Slot 슬롯 분기 |  | 구현 |
+| CA-06 | §1 `EditButton` (Yearly) / `sDivision=="40" && valid_YN=="Y" && start/end_YYYY!=""` | utils/business-plan.division.ts `divisionKindOf`／`isDiv40`·`isDiv81`·`isDiv82` + read*Slot 슬롯 분기 |  | 구현 |
+| CA-07 | §1 `SaveData` (Business_Plan 행 파라미터) / 셀 `DIVISION_ID=="40"` / `.Substring(0,2)=="81"` / … | utils/business-plan.division.ts `divisionKindOf`／`isDiv40`·`isDiv81`·`isDiv82` + read*Slot 슬롯 분기 |  | 구현 |
+| CA-08 | §1 `SaveData` (LOC 행 파라미터) / 동일 3분기(재실행) | utils/business-plan.division.ts `divisionKindOf`／`isDiv40`·`isDiv81`·`isDiv82` + read*Slot 슬롯 분기 |  | 구현 |
+| CA-09 | §1 `InsertRow` (Customer 소스) / `sDivision=="40"` / else | utils/business-plan.division.ts `divisionKindOf`／`isDiv40`·`isDiv81`·`isDiv82` + read*Slot 슬롯 분기 |  | 구현 |
+| CA-10 | §1 `InsertRow` (SalesSite 소스) / 3항 연산 `(sDivision=="40") ?` | utils/business-plan.division.ts `divisionKindOf`／`isDiv40`·`isDiv81`·`isDiv82` + read*Slot 슬롯 분기 |  | 구현 |
+| CA-11 | §1 `InsertRow` (Dept 콤보 배선) / `sDivision=="40"` / `!="40"` | utils/business-plan.division.ts `divisionKindOf`／`isDiv40`·`isDiv81`·`isDiv82` + read*Slot 슬롯 분기 |  | 구현 |
+| CA-12 | §1 `InsertRow` (CELL_PROD_SITE 콤보) / `sDivision=="40" && CELL_PROD_SITE 존재` | utils/business-plan.division.ts `divisionKindOf`／`isDiv40`·`isDiv81`·`isDiv82` + read*Slot 슬롯 분기 |  | 구현 |
+| CA-13 | §1 `InsertRow` (PROJECT_CODE 잠금) / `sDivision=="40" && PROJECT_CODE 존재` | utils/business-plan.division.ts `divisionKindOf`／`isDiv40`·`isDiv81`·`isDiv82` + read*Slot 슬롯 분기 |  | 구현 |
+| CA-14 | §1 `InsertRow` (PLANT_SITE_ID 잠금) / `sDivision.Substring(0,2)!="81"` | utils/business-plan.division.ts `divisionKindOf`／`isDiv40`·`isDiv81`·`isDiv82` + read*Slot 슬롯 분기 |  | 구현 |
+| CA-15 | §1 `InsertRow` (버킷 편집창) / #4~#6 과 동일 3벌 | utils/business-plan.division.ts `divisionKindOf`／`isDiv40`·`isDiv81`·`isDiv82` + read*Slot 슬롯 분기 |  | 구현 |
+| CA-16 | §1 `cboDivision_SelectedIndexChanged` / #1과 동일 3분기 | utils/business-plan.division.ts `divisionKindOf`／`isDiv40`·`isDiv81`·`isDiv82` + read*Slot 슬롯 분기 |  | 구현 |
+| CA-17 | §1 `clbTeam_SelectedIndexChanged` / `(Substring(0,2)=="81") \ | utils/business-plan.division.ts `divisionKindOf`／`isDiv40`·`isDiv81`·`isDiv82` + read*Slot 슬롯 분기 |  | 구현 |
+| CA-18 | §1 `clbCustomer_SelectedIndexChanged` / `(Substring(0,2)=="81") \ | utils/business-plan.division.ts `divisionKindOf`／`isDiv40`·`isDiv81`·`isDiv82` + read*Slot 슬롯 분기 |  | 구현 |
+| CA-19 | §1 `spdMain_ComboSelChange` / `sDivision=="40"` 한정 | utils/business-plan.division.ts `divisionKindOf`／`isDiv40`·`isDiv81`·`isDiv82` + read*Slot 슬롯 분기 |  | 구현 |
+| CA-20 | §1 `fnValidation` (키 수집) / `Substring(0,2)=="81"` / `=="40"` | utils/business-plan.division.ts `divisionKindOf`／`isDiv40`·`isDiv81`·`isDiv82` + read*Slot 슬롯 분기 |  | 구현 |
+| CA-21 | §1 `fnValidation` (내부 루프) / `Substring(0,2)=="81"` / `=="82"` / else | utils/business-plan.division.ts `divisionKindOf`／`isDiv40`·`isDiv81`·`isDiv82` + read*Slot 슬롯 분기 |  | 구현 |
+| CA-22 | §1 `MinColumnChk` / `Substring(0,2)=="81"` / `=="82"` / else | utils/business-plan.division.ts `divisionKindOf`／`isDiv40`·`isDiv81`·`isDiv82` + read*Slot 슬롯 분기 |  | 구현 |
+| CB-01 | §2.1 메인 / `btnCutOff` (Version. Cut-Off 버튼) | utils/business-plan.editLock.ts 권한 게이트(EDIT_FLAG) + BusinessPlan.tsx `useTabBtnPermissions`/`hasButton` + 콤보 권한 파라미터 |  | 구현 |
+| CB-02 | §2.1 메인 / `btnReplace_Click` (Replace by Cut-Off) | utils/business-plan.editLock.ts 권한 게이트(EDIT_FLAG) + BusinessPlan.tsx `useTabBtnPermissions`/`hasButton` + 콤보 권한 파라미터 |  | 구현 |
+| CB-03 | §2.1 팝업 / `DefineProperty` 버튼 리스트 | utils/business-plan.editLock.ts 권한 게이트(EDIT_FLAG) + BusinessPlan.tsx `useTabBtnPermissions`/`hasButton` + 콤보 권한 파라미터 |  | 구현 |
+| CB-04 | §2.1 팝업 / `EditButton` | utils/business-plan.editLock.ts 권한 게이트(EDIT_FLAG) + BusinessPlan.tsx `useTabBtnPermissions`/`hasButton` + 콤보 권한 파라미터 |  | 구현 |
+| CB-05 | §2.1 팝업 / `SaveButton` | utils/business-plan.editLock.ts 권한 게이트(EDIT_FLAG) + BusinessPlan.tsx `useTabBtnPermissions`/`hasButton` + 콤보 권한 파라미터 |  | 구현 |
+| CB-101 | §2.2 [원문 무번호] 메인 / Division 콤보 | utils/business-plan.editLock.ts 권한 게이트(EDIT_FLAG) + BusinessPlan.tsx `useTabBtnPermissions`/`hasButton` + 콤보 권한 파라미터 |  | 구현 |
+| CB-102 | §2.2 [원문 무번호] 메인 / Team 콤보 | utils/business-plan.editLock.ts 권한 게이트(EDIT_FLAG) + BusinessPlan.tsx `useTabBtnPermissions`/`hasButton` + 콤보 권한 파라미터 |  | 구현 |
+| CB-103 | §2.2 [원문 무번호] 메인 / End Customer 콤보 | utils/business-plan.editLock.ts 권한 게이트(EDIT_FLAG) + BusinessPlan.tsx `useTabBtnPermissions`/`hasButton` + 콤보 권한 파라미터 |  | 구현 |
+| CB-104 | §2.2 [원문 무번호] 메인 / Sales Site 콤보 | utils/business-plan.editLock.ts 권한 게이트(EDIT_FLAG) + BusinessPlan.tsx `useTabBtnPermissions`/`hasButton` + 콤보 권한 파라미터 |  | 구현 |
+| CB-105 | §2.2 [원문 무번호] 메인 / Plant Site 콤보 | utils/business-plan.editLock.ts 권한 게이트(EDIT_FLAG) + BusinessPlan.tsx `useTabBtnPermissions`/`hasButton` + 콤보 권한 파라미터 |  | 구현 |
+| CB-106 | §2.2 [원문 무번호] 메인 / Currency 콤보 | utils/business-plan.editLock.ts 권한 게이트(EDIT_FLAG) + BusinessPlan.tsx `useTabBtnPermissions`/`hasButton` + 콤보 권한 파라미터 |  | 구현 |
+| CB-107 | §2.2 [원문 무번호] 메인 / 신규행 Customer/Site/Team(Auth 계열) | utils/business-plan.editLock.ts 권한 게이트(EDIT_FLAG) + BusinessPlan.tsx `useTabBtnPermissions`/`hasButton` + 콤보 권한 파라미터 |  | 구현 |
+| CB-108 | §2.2 [원문 무번호] 메인 / 조회 SP 권한 파라미터 | utils/business-plan.editLock.ts 권한 게이트(EDIT_FLAG) + BusinessPlan.tsx `useTabBtnPermissions`/`hasButton` + 콤보 권한 파라미터 |  | 구현 |
+| CB-109 | §2.2 [원문 무번호] 팝업 / Division(My) 콤보 | utils/business-plan.editLock.ts 권한 게이트(EDIT_FLAG) + BusinessPlan.tsx `useTabBtnPermissions`/`hasButton` + 콤보 권한 파라미터 |  | 구현 |
+| CB-110 | §2.2 [원문 무번호] 팝업 / Currency 콤보 | utils/business-plan.editLock.ts 권한 게이트(EDIT_FLAG) + BusinessPlan.tsx `useTabBtnPermissions`/`hasButton` + 콤보 권한 파라미터 |  | 구현 |
+| CC-01 | §3 `Business_Plan`, `LOC` / `EditButton` | utils/business-plan.editLock.ts `EDIT_MEASURE` 비교(R1 행 게이트) + utils/business-plan.spread.ts measure별 연산 분기 |  | 구현 |
+| CC-02 | §3 `LOC` / `SaveData` 행 블록 선두 | utils/business-plan.editLock.ts `EDIT_MEASURE` 비교(R1 행 게이트) + utils/business-plan.spread.ts measure별 연산 분기 |  | 구현 |
+| CC-03 | §3 `Business_Plan`, `LOC`, `MKT_FCST` / `SaveData` 필터 | utils/business-plan.editLock.ts `EDIT_MEASURE` 비교(R1 행 게이트) + utils/business-plan.spread.ts measure별 연산 분기 |  | 구현 |
+| CC-04 | §3 `KRW`, `USD`, `SalesAmt_KRW`, `SalesAmt_USD`, `SalesAmt_LOC`, `CAR_QTY` / `InsertRow` | utils/business-plan.editLock.ts `EDIT_MEASURE` 비교(R1 행 게이트) + utils/business-plan.spread.ts measure별 연산 분기 |  | 구현 |
+| CC-05 | §3 (그 외 measure — Business_Plan/LOC/MKT_FCST) / `InsertRow` else | utils/business-plan.editLock.ts `EDIT_MEASURE` 비교(R1 행 게이트) + utils/business-plan.spread.ts measure별 연산 분기 |  | 구현 |
+| CC-06 | §3 `Business_Plan` / `spdMain_Changed` 소수점 검사 | utils/business-plan.editLock.ts `EDIT_MEASURE` 비교(R1 행 게이트) + utils/business-plan.spread.ts measure별 연산 분기 |  | 구현 |
+| CC-07 | §3 `Business_Plan` vs 그 외 / `spdMain_Changed` 합산/분배 대분기 | utils/business-plan.editLock.ts `EDIT_MEASURE` 비교(R1 행 게이트) + utils/business-plan.spread.ts measure별 연산 분기 |  | 구현 |
+| CC-08 | §3 MEASURE 셀 자체 / `InsertRow` | utils/business-plan.editLock.ts `EDIT_MEASURE` 비교(R1 행 게이트) + utils/business-plan.spread.ts measure별 연산 분기 |  | 구현 |
+| CC-09 | §3 (수집) / `fnValidation` | utils/business-plan.editLock.ts `EDIT_MEASURE` 비교(R1 행 게이트) + utils/business-plan.spread.ts measure별 연산 분기 |  | 구현 |
+| CC-10 | §3 `MKT_FCST` 취급 / — | utils/business-plan.editLock.ts `EDIT_MEASURE` 비교(R1 행 게이트) + utils/business-plan.spread.ts measure별 연산 분기 |  | 구현 |
+| CD-01 | §4 조회기간 역전 차단 / `from > to` | utils/business-plan.editLock.ts `buildCutoff`/`buildValidWindow` + `evalBizPlanDynCell` R2/R3/R4' |  | 구현 |
+| CD-02 | §4 조회기간 6년 제한 / `Value1+6년 < Value2` | utils/business-plan.editLock.ts `buildCutoff`/`buildValidWindow` + `evalBizPlanDynCell` R2/R3/R4' |  | 구현 |
+| CD-03 | §4 기준일(p_now) = 이번주 월요일 / 조회 시작일이 이번주 월요일 이후면 from 일, 종료일이 월요일 이전이면 to+1일, 그 외 이번주 월요일 | utils/business-plan.editLock.ts `buildCutoff`/`buildValidWindow` + `evalBizPlanDynCell` R2/R3/R4' |  | 구현 |
+| CD-04 | §4 Edit: 버킷 외 컬럼 잠금 / Monthly→M_ 아닌 컬럼 / Quarterly→Q_ 아닌 컬럼 / Yearly→Y_ 아닌 컬럼 | utils/business-plan.editLock.ts `buildCutoff`/`buildValidWindow` + `evalBizPlanDynCell` R2/R3/R4' |  | 구현 |
+| CD-05 | §4 Edit: 40 cutoff 편집창 / div=40 & VALID_YN=Y (Q/Y 는 start/end 존재 추가) | utils/business-plan.editLock.ts `buildCutoff`/`buildValidWindow` + `evalBizPlanDynCell` R2/R3/R4' |  | 구현 |
+| CD-06 | §4 Edit: Q_/Y_ 직접입력 차단(비40) / 40+VALID_YN 조건 미충족 시 else | utils/business-plan.editLock.ts `buildCutoff`/`buildValidWindow` + `evalBizPlanDynCell` R2/R3/R4' |  | 구현 |
+| CD-07 | §4 Edit: 과거 연도 행 잠금 / `올해 > int(tag.Substring(2,4))` (편집 개방 행 한정) | utils/business-plan.editLock.ts `buildCutoff`/`buildValidWindow` + `evalBizPlanDynCell` R2/R3/R4' |  | 구현 |
+| CD-08 | §4 Edit 해제 시 키영역 재잠금 / `!IsEditMode` | utils/business-plan.editLock.ts `buildCutoff`/`buildValidWindow` + `evalBizPlanDynCell` R2/R3/R4' |  | 구현 |
+| CD-09 | §4 InsertRow: 버킷·cutoff·과거연도 동일 3벌 / #4~#7 과 동일 로직 + 마지막에 과거 연도 무조건 잠금 | utils/business-plan.editLock.ts `buildCutoff`/`buildValidWindow` + `evalBizPlanDynCell` R2/R3/R4' |  | 구현 |
+| CD-10 | §4 버킷별 컬럼 표시 / BucketType 콤보 | utils/business-plan.editLock.ts `buildCutoff`/`buildValidWindow` + `evalBizPlanDynCell` R2/R3/R4' |  | 구현 |
+| CD-101 | §4 [원문 무번호] VALID_YN / `valid_YN` | utils/business-plan.editLock.ts `buildCutoff`/`buildValidWindow` + `evalBizPlanDynCell` R2/R3/R4' |  | 구현 |
+| CD-102 | §4 [원문 무번호] START_YYYYMM / END_YYYYMM / `start_YYYYMM`/`end_YYYYMM` | utils/business-plan.editLock.ts `buildCutoff`/`buildValidWindow` + `evalBizPlanDynCell` R2/R3/R4' |  | 구현 |
+| CD-103 | §4 [원문 무번호] START_YYYYQQ / END_YYYYQQ / `start_YYYYQQ`/`end_YYYYQQ` | utils/business-plan.editLock.ts `buildCutoff`/`buildValidWindow` + `evalBizPlanDynCell` R2/R3/R4' |  | 구현 |
+| CD-104 | §4 [원문 무번호] START_YYYY / END_YYYY / `start_YYYY`/`end_YYYY` | utils/business-plan.editLock.ts `buildCutoff`/`buildValidWindow` + `evalBizPlanDynCell` R2/R3/R4' |  | 구현 |
+| CD-11 | §4 헤더 더블클릭 드릴 / Y_ 헤더: 하위 Q_ 토글(+열린 M_ 접기); Q_ 헤더: 하위 M_ 토글 | utils/business-plan.editLock.ts `buildCutoff`/`buildValidWindow` + `evalBizPlanDynCell` R2/R3/R4' |  | 구현 |
+| CD-12 | §4 저장은 M_ 만 / tag 에 `Q_`/`Y_` 포함 시 skip | utils/business-plan.editLock.ts `buildCutoff`/`buildValidWindow` + `evalBizPlanDynCell` R2/R3/R4' |  | 구현 |
+| CD-13 | §4 분배 시 이번주 월요일 이전 보호 / 버킷 전체(M_ 없음) 분배 fallback 경로에서 `sResultDate(이번주 월요일) > 컬럼일자` → skip | utils/business-plan.editLock.ts `buildCutoff`/`buildValidWindow` + `evalBizPlanDynCell` R2/R3/R4' |  | 구현 |
+| CD-14 | §4 버킷 변경 게이트 / 신규행(FlagI) 존재 시 | utils/business-plan.editLock.ts `buildCutoff`/`buildValidWindow` + `evalBizPlanDynCell` R2/R3/R4' |  | 구현 |
+| CD-15 | §4 버킷 변경 시 Edit 유지 / Edit 모드에서 버킷 변경 | utils/business-plan.editLock.ts `buildCutoff`/`buildValidWindow` + `evalBizPlanDynCell` R2/R3/R4' |  | 구현 |
+| CD-16 | §4 Business_Plan 합산/분배 자동식 / Monthly 입력→Q/Y SUM 재계산; Quarterly 입력→하위 M_ 균등분배(나머지 마지막 달)+Y… | utils/business-plan.editLock.ts `buildCutoff`/`buildValidWindow` + `evalBizPlanDynCell` R2/R3/R4' |  | 구현 |
+| CE-01 | §5 컬럼 정의 / `DefColumns.FCST_TYPE` 정의. `FCST_TYPE40` 도 선언돼 있으나 **본문 사용처 0건**(선언만) | utils/business-plan.save.ts FCST_TYPE 필수값·직렬화 + utils/business-plan.editLock.ts 키영역 잠금 |  | 구현 |
+| CE-02 | §5 콤보 / **FCST_TYPE 셀 콤보 없음** — `SetCellTypeCombo` 대상 아님. 직접 텍스트 입력 | utils/business-plan.save.ts FCST_TYPE 필수값·직렬화 + utils/business-plan.editLock.ts 키영역 잠금 |  | 구현 |
+| CE-03 | §5 값 도메인 검증 / **검증 없음** — lookup 대조·형식 체크 부재. 빈 값 필수 체크만 존재(아래) | utils/business-plan.save.ts FCST_TYPE 필수값·직렬화 + utils/business-plan.editLock.ts 키영역 잠금 |  | 구현 |
+| CE-04 | §5 필수값 검사 / 저장 시 40 필수(L967), 81 필수(L997). **82는 필수 아님**(검사 목록에 없음) | utils/business-plan.save.ts FCST_TYPE 필수값·직렬화 + utils/business-plan.editLock.ts 키영역 잠금 |  | 구현 |
+| CE-05 | §5 컬럼 존재 필수 / `MinColumnChk`: 81(L3401)·40(L3437) 에서 FCST_TYPE 컬럼 미표시면 저장 진입 차단(MSG00113)… | utils/business-plan.save.ts FCST_TYPE 필수값·직렬화 + utils/business-plan.editLock.ts 키영역 잠금 |  | 구현 |
+| CE-06 | §5 저장 직렬화 특례 / `ParameterString`: INCOTERMS/FCST_TYPE 는 빈 값을 `" "`(공백 1자)로 치환 후 '^' 결합 | utils/business-plan.save.ts FCST_TYPE 필수값·직렬화 + utils/business-plan.editLock.ts 키영역 잠금 |  | 구현 |
+| CE-07 | §5 수집(무효) / `fnValidation` 에서 sFcstType 수집하나 실제 비교식은 주석(§8) | utils/business-plan.save.ts FCST_TYPE 필수값·직렬화 + utils/business-plan.editLock.ts 키영역 잠금 |  | 구현 |
+| CE-08 | §5 개방/잠금 / Edit 시 FCST_TYPE 열어주는 로직은 **전부 주석**(§8 — Business_Plan 행 INCOTERMS/FCST_TYPE 개… | utils/business-plan.save.ts FCST_TYPE 필수값·직렬화 + utils/business-plan.editLock.ts 키영역 잠금 |  | 구현 |
+| CF-01 | §6.1 FindData / `LockColumn(0, max, true)` | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-02 | §6.1 EditButton / `SwitchLock()` | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-03 | §6.1 EditButton / `LockColumn(iCol,iCol,true)` | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-04 | §6.1 EditButton / `LockColumn` | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-05 | §6.1 EditButton / `LockColumn` | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-06 | §6.1 EditButton / `LockColumn` | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-07 | §6.1 EditButton / `LockColumn` | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-08 | §6.1 EditButton / `LockColumn` | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-09 | §6.1 EditButton / `LockColumn` | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-10 | §6.1 EditButton / `LockColumn` | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-11 | §6.1 EditButton / `LockRange(iRow,0..MEASURE,true)` | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-12 | §6.1 EditButton / `LockRange` | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-13 | §6.1 EditButton / `LockRange(MEASURE+1..max)` | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-14 | §6.1 EditButton / `LockRange(0..MEASURE)` | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-15 | §6.1 DIVISION_ID (SetText 후) / 항상 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-16 | §6.1 PROJECT_CODE / div=40 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-17 | §6.1 CUST_GROUP / 존재 시 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-18 | §6.1 CUST_GROUP_DTL / 존재 시 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-19 | §6.1 OWNER / 존재 시 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-20 | §6.1 APPLICATION / 존재 시 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-21 | §6.1 ROUTE / 존재 시 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-22 | §6.1 BIZ_TYPE_NAME82 / 존재 시 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-23 | §6.1 BIZ_TYPE_NAME40 / 존재 시 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-24 | §6.1 ITEM_CLASS_NAME / 존재 시 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-25 | §6.1 ITEM_NAME / 존재 시 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-26 | §6.1 ITEM_TYPE / 존재 시 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-27 | §6.1 NICK_NAME / 존재 시 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-28 | §6.1 PLANT_SITE_ID / div 비81계열 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-29 | §6.1 VERSION_NO / 존재 시 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-30 | §6.1 FORECAST_INFO_PRODUCT_GROUP / 존재 시 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-31 | §6.1 FORECAST_INFO_CELL_PACK_COUNT / 존재 시 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-32 | §6.1 PRODUCT_GROUP_NAME / 존재 시 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-33 | §6.1 SHIPTO_DESCRIPTION / 존재 시 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-34 | §6.1 CELL_TYPE / 존재 시 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-35 | §6.1 INTERNAL_YN / 존재 시 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-36 | §6.1 COUNTRY_NAME / 존재 시 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-37 | §6.1 CITY_NAME / 존재 시 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-38 | §6.1 FORECAST_INFO_CELL_MODEL / 존재 시 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-39 | §6.1 FORECAST_INFO_SPEC / 존재 시 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-40 | §6.1 MDM_PROJECT_NAME / 존재 시 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-41 | §6.1 MIN_CAPACITY / 존재 시 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-42 | §6.1 VMI_YN / 존재 시 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-43 | §6.1 PRIORITY / 존재 시 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-44 | §6.1 DMS_SALES / 존재 시 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-45 | §6.1 DMS_CUSTOMER / 존재 시 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-46 | §6.1 REPORT_GROUP1 / 존재 시 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-47 | §6.1 REPORT_GROUP2 / 존재 시 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-48 | §6.1 REPORT_GROUP3 / 존재 시 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-49 | §6.1 REPORT_GROUP4 / 존재 시 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-50 | §6.1 REPORT_GROUP5 / 존재 시 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-51 | §6.1 REPORT_GROUP6 / 존재 시 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-52 | §6.1 REPORT_GROUP7 / 존재 시 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-53 | §6.1 REPORT_GROUP8 / 존재 시 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-54 | §6.1 EDIT_FLAG / 존재 시 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-55 | §6.1 CELL_PER_CAR / 존재 시 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-56 | §6.1 MODULE_PER_CAR / 존재 시 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-57 | §6.1 MEASURE (measure 명 SetText 후) / 항상 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-58 | §6.1 데이터 전체(MEASURE+1~max) / measure ∈ {KRW, USD, SalesAmt_KRW, SalesAmt_USD, SalesAmt_LO… | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-59 | §6.1 Monthly: 비 M_ 컬럼 / 그 외 measure | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-60 | §6.1 Monthly: 40 cutoff 창 밖 / 40 & VALID_YN=Y | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-61 | §6.1 Quarterly: 비 Q_ 컬럼 / — | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-62 | §6.1 Quarterly: 40 cutoff 창 밖 / 40 & 창 존재 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-63 | §6.1 Quarterly: Q_ 전체 / 40 조건 미충족 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-64 | §6.1 Yearly: 비 Y_ 컬럼 / — | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-65 | §6.1 Yearly: 40 cutoff 창 밖 / 40 & 창 존재 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-66 | §6.1 Yearly: Y_ 전체 / 40 조건 미충족 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CF-67 | §6.1 과거 연도 셀(데이터 컬럼) / 올해 > 태그 연도 | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx formatItem(배경색)/beginningEdit(cancel) |  | 구현 |
+| CG-01 | §7.1 Edit/Insert/Save 버튼 / 비 ADMIN/DM ADMIN | components/modals/ExchangeRateModal.tsx |  | 구현 |
+| CG-02 | §7.1 EditButton / 비 ADMIN/DM ADMIN | components/modals/ExchangeRateModal.tsx |  | 구현 |
+| CG-03 | §7.1 SaveButton / 비 ADMIN/DM ADMIN | components/modals/ExchangeRateModal.tsx |  | 구현 |
+| CG-04 | §7.3 EditButton / 키 컬럼 `LockColumn(DIVISION_ID~CURRENCY_UNITCURRENCY)` | components/modals/ExchangeRateModal.tsx |  | 구현 |
+| CG-05 | §7.3 EditButton / **과거 연도 컬럼 잠금**: 컬럼 6부터 태그(`D`+yyyyMMdd)의 연도(`Substring(1,4)`)가 올해 이상인 … | components/modals/ExchangeRateModal.tsx |  | 구현 |
+| CG-06 | §7.3 EditButton / 전월까지 잠금: 태그 YYYYMM ≥ 현재월인 첫 컬럼 직전까지 잠금 | components/modals/ExchangeRateModal.tsx |  | 구현 |
+| CG-07 | §7.3 InsertRow / 신규행 CURRENCY 셀 잠금(기본값 "KRW" 세팅 후) | components/modals/ExchangeRateModal.tsx |  | 구현 |
+| CG-08 | §7.3 InsertRow / 신규행 전월까지 `LockRange(CURRENCY_UNITCURRENCY .. i-1)` (컬럼 5부터 스캔) | components/modals/ExchangeRateModal.tsx |  | 구현 |
+| CG-09 | §7.3 DeleteButton / Action 빈 행 삭제 차단(`GetText(row,0)==""` → return) | components/modals/ExchangeRateModal.tsx |  | 구현 |
+| CH-01 | §8 메인 / EditButton 진입 |  | AS-IS §8 **비활성 인벤토리**(주석·미사용 코드) — 사문은 미이관이 파리티(hook: sp-body-no-rewrite 동일 원칙) | 제외 |
+| CH-02 | §8 메인 / EditButton 행 루프 |  | AS-IS §8 **비활성 인벤토리**(주석·미사용 코드) — 사문은 미이관이 파리티(hook: sp-body-no-rewrite 동일 원칙) | 제외 |
+| CH-03 | §8 메인 / EditButton |  | AS-IS §8 **비활성 인벤토리**(주석·미사용 코드) — 사문은 미이관이 파리티(hook: sp-body-no-rewrite 동일 원칙) | 제외 |
+| CH-04 | §8 메인 / InsertRow |  | AS-IS §8 **비활성 인벤토리**(주석·미사용 코드) — 사문은 미이관이 파리티(hook: sp-body-no-rewrite 동일 원칙) | 제외 |
+| CH-05 | §8 메인 / InsertRow |  | AS-IS §8 **비활성 인벤토리**(주석·미사용 코드) — 사문은 미이관이 파리티(hook: sp-body-no-rewrite 동일 원칙) | 제외 |
+| CH-06 | §8 메인 / SaveData |  | AS-IS §8 **비활성 인벤토리**(주석·미사용 코드) — 사문은 미이관이 파리티(hook: sp-body-no-rewrite 동일 원칙) | 제외 |
+| CH-07 | §8 메인 / fnValidation |  | AS-IS §8 **비활성 인벤토리**(주석·미사용 코드) — 사문은 미이관이 파리티(hook: sp-body-no-rewrite 동일 원칙) | 제외 |
+| CH-08 | §8 메인 / MinColumnChk |  | AS-IS §8 **비활성 인벤토리**(주석·미사용 코드) — 사문은 미이관이 파리티(hook: sp-body-no-rewrite 동일 원칙) | 제외 |
+| CH-09 | §8 메인 / spdMain_KeyUp |  | AS-IS §8 **비활성 인벤토리**(주석·미사용 코드) — 사문은 미이관이 파리티(hook: sp-body-no-rewrite 동일 원칙) | 제외 |
+| CH-10 | §8 메인 / btnIncotermsChg_Click |  | AS-IS §8 **비활성 인벤토리**(주석·미사용 코드) — 사문은 미이관이 파리티(hook: sp-body-no-rewrite 동일 원칙) | 제외 |
+| CH-11 | §8 메인 / DefColumns |  | AS-IS §8 **비활성 인벤토리**(주석·미사용 코드) — 사문은 미이관이 파리티(hook: sp-body-no-rewrite 동일 원칙) | 제외 |
+| CH-12 | §8 메인 / spdMain_CellDoubleClick |  | AS-IS §8 **비활성 인벤토리**(주석·미사용 코드) — 사문은 미이관이 파리티(hook: sp-body-no-rewrite 동일 원칙) | 제외 |
+| CH-13 | §8 팝업 / `InitSpread_X` |  | AS-IS §8 **비활성 인벤토리**(주석·미사용 코드) — 사문은 미이관이 파리티(hook: sp-body-no-rewrite 동일 원칙) | 제외 |
+| CH-14 | §8 팝업 / LoadData |  | AS-IS §8 **비활성 인벤토리**(주석·미사용 코드) — 사문은 미이관이 파리티(hook: sp-body-no-rewrite 동일 원칙) | 제외 |
+| CH-15 | §8 팝업 / SaveData |  | AS-IS §8 **비활성 인벤토리**(주석·미사용 코드) — 사문은 미이관이 파리티(hook: sp-body-no-rewrite 동일 원칙) | 제외 |
+| CI-101 | §9 [원문 무번호] MSG00097 / FindData | business-plan.constants.ts `MSG` 상수 맵(:83~118) + utils/business-plan.validate.ts/components/BusinessPlanGrid.tsx 발화 지점 — hook #114 재채번 대조 완료 |  | 구현 |
+| CI-102 | §9 [원문 무번호] MSG00108 / FindData | business-plan.constants.ts `MSG` 상수 맵(:83~118) + utils/business-plan.validate.ts/components/BusinessPlanGrid.tsx 발화 지점 — hook #114 재채번 대조 완료 |  | 구현 |
+| CI-103 | §9 [원문 무번호] MSG00276 / FindData | business-plan.constants.ts `MSG` 상수 맵(:83~118) + utils/business-plan.validate.ts/components/BusinessPlanGrid.tsx 발화 지점 — hook #114 재채번 대조 완료 |  | 구현 |
+| CI-104 | §9 [원문 무번호] MSG00113 / SaveData | business-plan.constants.ts `MSG` 상수 맵(:83~118) + utils/business-plan.validate.ts/components/BusinessPlanGrid.tsx 발화 지점 — hook #114 재채번 대조 완료 |  | 구현 |
+| CI-105 | §9 [원문 무번호] MSG00310 / SaveData | business-plan.constants.ts `MSG` 상수 맵(:83~118) + utils/business-plan.validate.ts/components/BusinessPlanGrid.tsx 발화 지점 — hook #114 재채번 대조 완료 |  | 구현 |
+| CI-106 | §9 [원문 무번호] MSG00275 / SaveData | business-plan.constants.ts `MSG` 상수 맵(:83~118) + utils/business-plan.validate.ts/components/BusinessPlanGrid.tsx 발화 지점 — hook #114 재채번 대조 완료 |  | 구현 |
+| CI-107 | §9 [원문 무번호] MSG00043 / SaveData | business-plan.constants.ts `MSG` 상수 맵(:83~118) + utils/business-plan.validate.ts/components/BusinessPlanGrid.tsx 발화 지점 — hook #114 재채번 대조 완료 |  | 구현 |
+| CI-108 | §9 [원문 무번호] MSG00004 / SaveData / 팝업 SaveData | business-plan.constants.ts `MSG` 상수 맵(:83~118) + utils/business-plan.validate.ts/components/BusinessPlanGrid.tsx 발화 지점 — hook #114 재채번 대조 완료 |  | 구현 |
+| CI-109 | §9 [원문 무번호] MSG00289 / spdMain_Changed | business-plan.constants.ts `MSG` 상수 맵(:83~118) + utils/business-plan.validate.ts/components/BusinessPlanGrid.tsx 발화 지점 — hook #114 재채번 대조 완료 |  | 구현 |
+| CI-110 | §9 [원문 무번호] MSG00002 / ValidationCheck(메인) / 팝업 SaveData | business-plan.constants.ts `MSG` 상수 맵(:83~118) + utils/business-plan.validate.ts/components/BusinessPlanGrid.tsx 발화 지점 — hook #114 재채번 대조 완료 |  | 구현 |
+| CI-111 | §9 [원문 무번호] MSG00227 / cboBucketType_Click | business-plan.constants.ts `MSG` 상수 맵(:83~118) + utils/business-plan.validate.ts/components/BusinessPlanGrid.tsx 발화 지점 — hook #114 재채번 대조 완료 |  | 구현 |
+| CI-112 | §9 [원문 무번호] MSG00142 / btnExchangeRate_Click | business-plan.constants.ts `MSG` 상수 맵(:83~118) + utils/business-plan.validate.ts/components/BusinessPlanGrid.tsx 발화 지점 — hook #114 재채번 대조 완료 |  | 구현 |
+| CI-113 | §9 [원문 무번호] MSG00282 / btnSetPrice_Click | business-plan.constants.ts `MSG` 상수 맵(:83~118) + utils/business-plan.validate.ts/components/BusinessPlanGrid.tsx 발화 지점 — hook #114 재채번 대조 완료 |  | 구현 |
+| CI-114 | §9 [원문 무번호] MSG00096 / 팝업 SaveButton | business-plan.constants.ts `MSG` 상수 맵(:83~118) + utils/business-plan.validate.ts/components/BusinessPlanGrid.tsx 발화 지점 — hook #114 재채번 대조 완료 |  | 구현 |
+| CI-115 | §9 [원문 무번호] (직접 MessageBox) / 팝업 EditButton "You don't have the permissions" / 팝업 SaveDat… | business-plan.constants.ts `MSG` 상수 맵(:83~118) + utils/business-plan.validate.ts/components/BusinessPlanGrid.tsx 발화 지점 — hook #114 재채번 대조 완료 |  | 구현 |
+| CJ-101 | §10 [원문 무번호] 1. Division 분기 / **22곳** |  | AS-IS §10 **카운트 요약표**(축별 추출 건수) — 제약이 아니라 집계 메타. 구현 대상 아님 | 해당없음 |
+| CJ-102 | §10 [원문 무번호] 2. 권한 — NowGroupID 스위치(실행·표시 차단) / **5곳** |  | AS-IS §10 **카운트 요약표**(축별 추출 건수) — 제약이 아니라 집계 메타. 구현 대상 아님 | 해당없음 |
+| CJ-103 | §10 [원문 무번호] 2. 권한 — NowGroupID 데이터 필터 파라미터 / **31개 호출**(메인 29 + 팝업 2) |  | AS-IS §10 **카운트 요약표**(축별 추출 건수) — 제약이 아니라 집계 메타. 구현 대상 아님 | 해당없음 |
+| CJ-104 | §10 [원문 무번호] 2. 권한 — EDIT_FLAG 소비 / **3곳**(활성) |  | AS-IS §10 **카운트 요약표**(축별 추출 건수) — 제약이 아니라 집계 메타. 구현 대상 아님 | 해당없음 |
+| CJ-105 | §10 [원문 무번호] 3. Measure 비교·제약 / **10항목** |  | AS-IS §10 **카운트 요약표**(축별 추출 건수) — 제약이 아니라 집계 메타. 구현 대상 아님 | 해당없음 |
+| CJ-106 | §10 [원문 무번호] 4. 기간·버킷 규칙 / **16항목** |  | AS-IS §10 **카운트 요약표**(축별 추출 건수) — 제약이 아니라 집계 메타. 구현 대상 아님 | 해당없음 |
+| CJ-107 | §10 [원문 무번호] 5. FCST_TYPE / **8항목** |  | AS-IS §10 **카운트 요약표**(축별 추출 건수) — 제약이 아니라 집계 메타. 구현 대상 아님 | 해당없음 |
+| CJ-108 | §10 [원문 무번호] 6. 잠금 활성 호출 / **73건** |  | AS-IS §10 **카운트 요약표**(축별 추출 건수) — 제약이 아니라 집계 메타. 구현 대상 아님 | 해당없음 |
+| CJ-109 | §10 [원문 무번호] 6. 잠금 비활성(주석) 호출 / **11건** |  | AS-IS §10 **카운트 요약표**(축별 추출 건수) — 제약이 아니라 집계 메타. 구현 대상 아님 | 해당없음 |
+| CJ-110 | §10 [원문 무번호] 7. 팝업 제약 / 권한 3 + 필수값 2 + 잠금·기간 9 + '^' 파라미터 8종 |  | AS-IS §10 **카운트 요약표**(축별 추출 건수) — 제약이 아니라 집계 메타. 구현 대상 아님 | 해당없음 |
+| CJ-111 | §10 [원문 무번호] 8. 비활성 인벤토리 / **15항목** |  | AS-IS §10 **카운트 요약표**(축별 추출 건수) — 제약이 아니라 집계 메타. 구현 대상 아님 | 해당없음 |
+| CJ-112 | §10 [원문 무번호] 9. 메시지 / MSG 14종 + 하드코딩 MessageBox 5류 |  | AS-IS §10 **카운트 요약표**(축별 추출 건수) — 제약이 아니라 집계 메타. 구현 대상 아님 | 해당없음 |
+| E01-4A | §1.4-A Monthly 버킷 + `M_` 컬럼 입력 (L1925~L1981) — 상위 Q_/Y_ 합계 갱신 | utils/business-plan.spread.ts Monthly M_ 입력 → 상위 Q_/Y_ 합계 갱신 |  | 구현 |
+| E01-4B | §1.4-B Quarterly 버킷 + `Q_` 컬럼 입력 (L1982~L2145) — 하위 월 균등분할 + Y_ 재합계 | utils/business-plan.spread.ts Quarterly Q_ 입력 → 하위 월 균등분할 + Y_ 재합계 |  | 구현 |
+| E01-4C | §1.4-C Yearly 버킷 + `Y_` 컬럼 입력 (L2146~L2350) — 월 분할 + Q_ 재합계 | utils/business-plan.spread.ts Yearly Y_ 입력 → 월 분할 + Q_ 재합계 |  | 구현 |
+| E01-5A | §1.5-A Monthly + `M_` (L2357~L2413) | utils/business-plan.spread.ts LOC Monthly M_ |  | 구현 |
+| E01-5B | §1.5-B Quarterly + `Q_` (L2414~L2577) | utils/business-plan.spread.ts LOC Quarterly Q_ |  | 구현 |
+| E01-5C | §1.5-C Yearly + `Y_` (L2578~L2782) | utils/business-plan.spread.ts LOC Yearly Y_ |  | 구현 |
+
+## CRUD·모달 매트릭스 (2026-08-07 축 — MAIN UI 와 모달의 CRUD 누락 0)
+
+| ID | 요지 (원천 md 1줄) | 구현 위치 (파일:라인) | 사유 (미구현/제외/해당없음 시 필수) | 상태 |
+|---|---|---|---|---|
+| CRUD:E03:SAVE | [SAVE] §3 SaveData — F7 저장 payload 조립 (핸들러 `SaveData`, L862~L1209; 진입 `SaveButton` L699~L702) | utils/business-plan.save.ts + utils/business-plan.api.ts — CRUD 왕복 검증 리포트 첨부 |  | 구현 |
+| CRUD:E04:SEARCH | [SEARCH] §4 FindData — F5 조회 (핸들러 `FindData`, L745~L860; 진입 `FindButton` L539~L542) | useBusinessPlanStore.ts `setFilter` + BusinessPlan.tsx |  | 구현 |
+| CRUD:E05:INSERT | [INSERT] §5 InsertRow — F8 행 삽입 (핸들러 `InsertRow`, L1211~L1480; 진입 `InsertButton` L544~L547) | components/BusinessPlanGrid.tsx Insert 행 + utils/business-plan.gridCombos.ts |  | 구현 |
+| MODAL:BusinessPlanModals | FE 실존 모달 (components/BusinessPlanModals.tsx) — 분석 md 근거 확인 필요(FE 단독이면 사유 기입) | components/BusinessPlanModals.tsx — 위 4모달의 컨테이너(자체 UI 없음) |  | 구현 |
+| MODAL:ExchangeRateModal | FE 실존 모달 (components/modals/ExchangeRateModal.tsx) — 분석 md 근거 확인 필요(FE 단독이면 사유 기입) | components/modals/ExchangeRateModal.tsx (AS-IS DMF0042_ExchangeRatePopup) |  | 구현 |
+| MODAL:MeasureSelectModal | FE 실존 모달 (components/modals/MeasureSelectModal.tsx) — 분석 md 근거 확인 필요(FE 단독이면 사유 기입) | components/modals/MeasureSelectModal.tsx |  | 구현 |
+| MODAL:ReplaceByCutOffPopUp | AS-IS 팝업 (분석 md) — TO-BE 모달 구현 위치 기입 의무 | components/modals/ReplaceByCutoffModal.tsx |  | 구현 |
+| MODAL:ReplaceByCutoffModal | FE 실존 모달 (components/modals/ReplaceByCutoffModal.tsx) — 분석 md 근거 확인 필요(FE 단독이면 사유 기입) | components/modals/ReplaceByCutoffModal.tsx (AS-IS ReplaceByCutOffPopUp) |  | 구현 |
+| MODAL:ShowDialog | AS-IS 팝업 (분석 md) — TO-BE 모달 구현 위치 기입 의무 |  | AS-IS `.ShowDialog()` 호출 관용구 — 개별 팝업이 아님(위 3모달의 호출 방식). 모달 실체 없음 | 해당없음 |
+| MODAL:VersionCutOffPopUp | AS-IS 팝업 (분석 md) — TO-BE 모달 구현 위치 기입 의무 | components/modals/VersionCutoffModal.tsx |  | 구현 |
+| MODAL:VersionCutoffModal | FE 실존 모달 (components/modals/VersionCutoffModal.tsx) — 분석 md 근거 확인 필요(FE 단독이면 사유 기입) | components/modals/VersionCutoffModal.tsx (AS-IS VersionCutOffPopUp) |  | 구현 |
 
 ## 0-B. 2026-07-21 최신분석(신정본) 재대조 — 갭 5건 교정 이력
 
-| # | 교정 | 근거(신정본) | 파일 |
-|---|---|---|---|
-| G1 | **비40/무효창 Q_/Y_ 직접입력 잠금** (구현이 개방하던 과잉 교정 — R4' 버킷축별 분기) | EditButton L604~615/L624~635 else LockColumn·InsertRow 동일 (M_ 은 else 없음=개방) | editLock.ts |
-| G2 | **구 R6 제거** — 기존행 INCO/FCST 조건 개방 블록은 신정본 L651~667 전체 주석(비활성). 기존행 정적 전량 잠금(L649) | EditButton L649~667 | editLock.ts + Grid |
-| G4 | Monthly LOC 편집 시 **Q_ 롤업 = 편집셀값 Int copy** (합산·0 아님. Y_=0 은 파리티) | L2371~2376 / L2399~2404 | spread.ts |
-| G8 | 필수값 — **81 에 FCST_TYPE/INCOTERMS 추가**, **82 의 PROJECT_CODE82 필수 제거** | SaveData L997~998 / L1024~1026 | division.ts |
-| G9 | **CELL_PROD_SITE 콤보(40)** — 조회 표시 코드→한글(ALL)+신규행 유효건(Y) 콤보. 메타 P7 SQL 세트 | InitSpread L392~397 [E20240731-000845] / InsertRow L1274~1278 [C20220513-000327] | constants + P7 SQL |
-| G5 | [개선] Set Price pending 차단(MSG00680) — AS-IS 가드 전무, 버튼 4종 통일 (사용자 승인) | btnSetPrice L3178~3199 (가드 없음 확인) | BusinessPlan.tsx |
+| ID | 요지 (원천 md 1줄) | 구현 위치 (파일:라인) | 사유 (미구현/제외/해당없음 시 필수) | 상태 |
+|---|---|---|---|---|
+| G1 | **비40/무효창 Q_/Y_ 직접입력 잠금** — R4' 버킷축별 분기 (근거: 신정본 EditButton L604~615／L624~635 else LockColumn, M_ 은 else 없음=개방) | utils/business-plan.editLock.ts `evalBizPlanDynCell` R4' 분기(:160~174) |  | 구현 |
+| G2 | **구 R6 제거** — 기존행 INCO/FCST 조건 개방 블록이 신정본 L651~667 전체 주석(비활성), 기존행 정적 전량 잠금(L649) | utils/business-plan.editLock.ts 키영역 잠금 + components/BusinessPlanGrid.tsx beginningEdit(:478) |  | 구현 |
+| G4 | Monthly LOC 편집 시 **Q_ 롤업 = 편집셀값 Int copy**(합산·0 아님. Y_=0 은 파리티) — 신정본 L2371~2376／L2399~2404 | utils/business-plan.spread.ts `applyCellChange` LOC Monthly 분기 |  | 구현 |
+| G8 | 필수값 — **81 에 FCST_TYPE／INCOTERMS 추가**, **82 의 PROJECT_CODE82 필수 제거** (신정본 SaveData L997~998／L1024~1026) | utils/business-plan.division.ts 슬롯 분기 + utils/business-plan.validate.ts 필수값 |  | 구현 |
+| G9 | **CELL_PROD_SITE 콤보(40)** — 표시 ALL(메타 FPComboBox)+편집 유효건 Y 이원화 (InitSpread L392~397／InsertRow L1274~1278) | business-plan.constants.ts `GRID_EDIT_COMBO.CELL_PROD_SITE`='DMF0042CellProdSiteValid' + 메타 P7 SQL |  | 구현 |
+| G5 | [개선] Set Price pending 차단(MSG00680) — AS-IS 가드 전무(btnSetPrice L3178~3199), 버튼 4종 통일 | BusinessPlan.tsx `handleSetPrice` + business-plan.constants.ts `MSG.PENDING_BLOCK`(:116) | AS-IS 대비 **의도적 개선**(사용자 승인 2026-07-21) — 파리티 초과분 | 구현 |
 | — | 파리티 확인(무변경): 분모0 가드 기구현 / Cutoff 재조회 없음=파리티·Replace 재조회=기적용 / 6년 자동보정 기구현 / sRet passthrough 동등 | G3/G6/G7/G10 | — |
 > 사내 실측 계약(2026-07-15): PROC_M 116(12본) / API_M 23 / BTN_MPG 23 / USER_GR 60, MNU_URL=business-plan(P1),
 > 시트 키 'Biz Plan'/spreadTitle/dayRange/titleSet/exchangeRate/futurePrice(Data)/cutoffVersion/mdfVersion,
@@ -136,3 +377,44 @@
 - vitest useBusinessPlanStore.test.tsx — 환경 이슈(Node v24 ↔ jsdom "MIMEType is not a constructor")로 실행 불가.
   기존 sales-plan 테스트도 동일 실패 실측 → 코드 무관 환경 회귀 (별도 인프라 이슈)
 - DB 적용: P0a/P0b + P1~P6 스크립트 작성 완료 — 일괄 승인 대기 (미적용)
+
+## AS-IS 이벤트 핸들러 인벤토리 (2026-08-08 축 — 분석서가 놓친 핸들러 차단)
+
+> 원천: `GSCM\06.UIL\GSCM.DM.Forms.UIL\Plan\DMF0042_BizPlan\DMF0042_BizPlan.cs` — `.cs` 에서 **기계 추출**한 UI 이벤트 핸들러 32개.
+> 대사표의 E번호는 **분석 md** 기준이라 분석서가 누락한 핸들러를 못 잡는다. 이 축이 그 구멍을 막는다.
+> 사문(빈 몸통) 핸들러는 **미이관이 파리티** — 상태 '제외' + 사유 기재로 통과시킨다.
+
+| ID | 요지 (원천 md 1줄) | 구현 위치 (파일:라인) | 사유 (미구현/제외/해당없음 시 필수) | 상태 |
+|---|---|---|---|---|
+| HANDLER:DeleteButton | AS-IS `DMF0042_BizPlan.cs:549` (라이브 10행) | BusinessPlan.tsx:382 `hotkeyConfig.delete` = hasButton('DELETE') ? handleDelete |  | 구현 |
+| HANDLER:EditButton | AS-IS `DMF0042_BizPlan.cs:563` (라이브 89행) | utils/business-plan.editLock.ts `evalBizPlanDynCell` + components/BusinessPlanGrid.tsx:431 formatItem / :478 beginningEdit |  | 구현 |
+| HANDLER:ExcelButton | AS-IS `DMF0042_BizPlan.cs:705` (라이브 25행) | BusinessPlan.tsx 공통 Excel 버튼(SubTitle 공통 기능) |  | 구현 |
+| HANDLER:FindButton | AS-IS `DMF0042_BizPlan.cs:539` (라이브 3행) · **사문(빈 몸통)** |  | AS-IS 라이브 3행 = `FindData()` 위임 래퍼(사문). TO-BE 는 hotkeyConfig.search 가 직접 조회 — 래퍼 불요 | 제외 |
+| HANDLER:FindData | AS-IS `DMF0042_BizPlan.cs:745` (라이브 87행) | useBusinessPlanStore.ts `setFilter`/`fetchStaticColumns` + BusinessPlan.tsx:380 hotkeyConfig.search |  | 구현 |
+| HANDLER:Form_Load | AS-IS `DMF0042_BizPlan.cs:223` (라이브 8행) | BusinessPlan.tsx mount useEffect (initSearch + dayRange + useTabComboQueries) |  | 구현 |
+| HANDLER:InsertButton | AS-IS `DMF0042_BizPlan.cs:544` (라이브 3행) · **사문(빈 몸통)** |  | AS-IS 라이브 3행 = `InsertRow()` 위임 래퍼(사문). TO-BE 는 hotkeyConfig.insert 가 직접 처리 | 제외 |
+| HANDLER:InsertRow | AS-IS `DMF0042_BizPlan.cs:1211` (라이브 226행) | components/BusinessPlanGrid.tsx Insert 행 생성 + utils/business-plan.gridCombos.ts 콤보 바인딩 + BusinessPlan.tsx:381 hotkeyConfig.insert |  | 구현 |
+| HANDLER:OnShown | AS-IS `DMF0042_BizPlan.cs:233` (라이브 4행) |  | AS-IS 라이브 4행 = sDivision 읽기만(실동작 없음) — 미이관이 파리티 | 제외 |
+| HANDLER:SaveButton | AS-IS `DMF0042_BizPlan.cs:699` (라이브 3행) · **사문(빈 몸통)** |  | AS-IS 라이브 3행 = `SaveData()` 위임 래퍼(사문). TO-BE 는 hotkeyConfig.save 가 직접 처리 | 제외 |
+| HANDLER:SaveData | AS-IS `DMF0042_BizPlan.cs:862` (라이브 257행) | utils/business-plan.save.ts `buildUnfoldRows`/`buildSavePayload` + BusinessPlan.tsx:383 hotkeyConfig.save |  | 구현 |
+| HANDLER:btnColumn_Click | AS-IS `DMF0042_BizPlan.cs:2870` (라이브 9행) | BusinessPlan.tsx:435-440 COLUMN_SETUP → `setOpenColumnSetting(true)` |  | 구현 |
+| HANDLER:btnCutOff_Click | AS-IS `DMF0042_BizPlan.cs:2903` (라이브 17행) | BusinessPlan.tsx:404 CUTOFF → components/modals/VersionCutoffModal.tsx |  | 구현 |
+| HANDLER:btnExchangeRate_Click | AS-IS `DMF0042_BizPlan.cs:3048` (라이브 16행) | BusinessPlan.tsx:424 EXCHANGE_RATE → components/modals/ExchangeRateModal.tsx |  | 구현 |
+| HANDLER:btnItemId_Click | AS-IS `DMF0042_BizPlan.cs:2847` (라이브 17행) | BusinessPlan.tsx ItemField + ItemByDivisionModal(@master 공용) |  | 구현 |
+| HANDLER:btnMeasure_Click | AS-IS `DMF0042_BizPlan.cs:2882` (라이브 9행) | BusinessPlan.tsx:446-451 MEASURE_SELECT → `setOpenMeasureSelect(true)` |  | 구현 |
+| HANDLER:btnOwner_Click | AS-IS `DMF0042_BizPlan.cs:3005` (라이브 14행) | BusinessPlan.tsx OwnerField + OwnerByDivisionModal(@master 공용) |  | 구현 |
+| HANDLER:btnProject_Click | AS-IS `DMF0042_BizPlan.cs:2825` (라이브 17행) | BusinessPlan.tsx ProjectField + ProjectByDivisionModal (40 disabled) |  | 구현 |
+| HANDLER:btnReplace_Click | AS-IS `DMF0042_BizPlan.cs:3470` (라이브 68행) | BusinessPlan.tsx:414 REPLACE → components/modals/ReplaceByCutoffModal.tsx |  | 구현 |
+| HANDLER:btnSetPrice_Click | AS-IS `DMF0042_BizPlan.cs:3178` (라이브 15행) | BusinessPlan.tsx:394-399 SET_PRICE → `handleSetPrice` (business-plan.constants.ts `MSG.SET_PRICE_CONFIRM`) |  | 구현 |
+| HANDLER:cboBucketType_Click | AS-IS `DMF0042_BizPlan.cs:3026` (라이브 10행) | useBusinessPlanStore.ts bucket 변경 가드 (business-plan.constants.ts `MSG.BUCKET_CHANGE_BLOCK` MSG00227) |  | 구현 |
+| HANDLER:cboBucketType_SelectedIndexChanged | AS-IS `DMF0042_BizPlan.cs:1612` (라이브 11행) | useBusinessPlanStore.ts bucketType → 동적 컬럼 visible + utils/business-plan.editLock.ts R2 버킷 게이트 재평가 |  | 구현 |
+| HANDLER:cboDivision_SelectedIndexChanged | AS-IS `DMF0042_BizPlan.cs:1485` (라이브 62행) | useBusinessPlanStore.ts `handleDivisionChange` — Grid 초기화 + CRUD reset + 메타 재fetch |  | 구현 |
+| HANDLER:chkSum_CheckedChanged | AS-IS `DMF0042_BizPlan.cs:2895` (라이브 6행) | useBusinessPlanStore.ts sumYn → summary 컬럼 visible 토글 (SP 미호출 = AS-IS 동일) |  | 구현 |
+| HANDLER:clbCustomer_SelectedIndexChanged | AS-IS `DMF0042_BizPlan.cs:1598` (라이브 11행) | BusinessPlan.tsx EndCustomer 인라인 onChange — scmSiteIds clear |  | 구현 |
+| HANDLER:clbTeam_SelectedIndexChanged | AS-IS `DMF0042_BizPlan.cs:1572` (라이브 21행) | BusinessPlan.tsx TeamField onChange — endCustomers/scmSiteIds clear |  | 구현 |
+| HANDLER:spdMain_CellDoubleClick | AS-IS `DMF0042_BizPlan.cs:1661` (라이브 167행) | components/BusinessPlanGrid.tsx:567-618 dblclick — 헤더 드릴다운(Y_/Q_/M_ 토글) + 셀 모달(PROJECT/ITEM) |  | 구현 |
+| HANDLER:spdMain_Changed | AS-IS `DMF0042_BizPlan.cs:1863` (라이브 770행) | components/BusinessPlanGrid.tsx:556 cellEditEnded → utils/business-plan.spread.ts `applyCellChange` |  | 구현 |
+| HANDLER:spdMain_ComboSelChange | AS-IS `DMF0042_BizPlan.cs:1628` (라이브 28행) | business-plan.constants.ts:131 `GRID_CASCADE_FILTERS` + utils/business-plan.gridCombos.ts `filterComboRowsByRow` |  | 구현 |
+| HANDLER:spdMain_EditChange | AS-IS `DMF0042_BizPlan.cs:3038` (라이브 4행) | components/BusinessPlanGrid.tsx:478 beginningEdit — 편집 진입 판정 |  | 구현 |
+| HANDLER:spdMain_KeyUp | AS-IS `DMF0042_BizPlan.cs:2806` (라이브 2행) · **사문(빈 몸통)** |  | AS-IS 라이브 2행 = 사문(빈 몸통). 미이관이 파리티 | 제외 |
+| HANDLER:spdMain_TopChange | AS-IS `DMF0042_BizPlan.cs:2799` (라이브 5행) |  | AS-IS 라이브 5행 = FarPoint 스크롤 동기 배관. Wijmo 는 가상 스크롤 네이티브 처리 — 플랫폼 차이 | 해당없음 |

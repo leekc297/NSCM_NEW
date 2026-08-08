@@ -184,10 +184,105 @@ def extract_ids(md_paths):
     return [(i, seen[i][0], seen[i][1]) for i in order]
 
 
-def count_noid_rows(md_paths):
+# ── 번호 체계(numbered) dialect ────────────────────────────────────────────────
+# hook #105 는 `## E01. …` 를 쓰지만, 일부 분석서는 **계층 번호**(`## 1.` / `### 2.1` / `#### 1.4-A`)와
+# **섹션별 번호 표**(`| 1 | …`)를 쓴다(DMF0042 실측). 원천 md 를 고쳐 쓰는 것은 위험하므로
+# **게이트가 이 방언을 읽는다.** 매핑은 결정적이고 역추적 가능해야 한다:
+#   `## 1.`      → E01           `### 2.1`  → E02-1        `#### 1.4-A` → E01-4A
+#   제약 표 행   → C{섹션문자}-{행번호}  (§1→CA, §2→CB, … 하위섹션은 상위 문자에 누적)
+# ⚠️ 어떤 방언을 썼는지 **항상 출력**한다 — 조용한 동작 변경 금지(hook #126 §5).
+RE_NUM_SECTION = re.compile(r"^(\d{1,2})(?:\.(\d{1,2}))?(?:\s*-\s*([A-Za-z]\d?))?\s*[.．]?\s+(.*)$")
+RE_TABLE_NUMROW = re.compile(r"^\|\s*(\d{1,3})\s*\|(.*)$")
+
+
+def _sec_letter(n: int) -> str:
+    """1→A, 2→B … 26→Z, 27→AA (상위 섹션 번호 → 문자 접두)."""
+    s = ""
+    while n > 0:
+        n, r = divmod(n - 1, 26)
+        s = chr(ord("A") + r) + s
+    return s
+
+
+NUMBERED_CONSUMED = set()   # 방언이 흡수한 표 행 원문 — count_noid_rows 중복 계상 방지
+
+
+def extract_ids_numbered(md_paths):
+    """계층 번호 방언 추출. 반환 형식은 `extract_ids` 와 동일."""
+    seen, order = {}, []
+    NUMBERED_CONSUMED.clear()
+
+    def add(_id, g, src):
+        if _id not in seen:
+            seen[_id] = (g, src)
+            order.append(_id)
+
+    for path in md_paths:
+        p = pathlib.Path(path)
+        text = p.read_text(encoding="utf-8", errors="ignore")
+        src = p.name
+        # 역할 판정 — 이벤트 문서면 E 계열, 그 외(제약/매트릭스)는 C 계열 표 행을 뽑는다.
+        is_event = any(k in src for k in ("주요이벤트", "상세동작", "이벤트"))
+        top, sub, subsub, cur_prefix = 0, 0, "", ""
+        noid_seq = {}   # 섹션접두 → 무번호 행 일련번호(100번대)
+        for line in text.splitlines():
+            hm = RE_HEADER.match(line)
+            if hm:
+                sm = RE_NUM_SECTION.match(hm.group(2).strip())
+                if not sm:
+                    continue
+                a, b, c, title = sm.group(1), sm.group(2), sm.group(3), sm.group(4)
+                top = int(a)
+                sub = int(b) if b else 0
+                subsub = (c or "").upper()
+                cur_prefix = "C" + _sec_letter(top)
+                if is_event:
+                    eid = "E%02d" % top
+                    if sub:
+                        eid += "-%d%s" % (sub, subsub)
+                    elif subsub:
+                        eid += "-%s" % subsub
+                    add(eid, gist("§%s %s" % (a + ("." + b if b else "") + ("-" + c if c else ""), title)), src)
+                continue
+            if is_event:
+                continue
+            s = line.strip()
+            if not cur_prefix or not s.startswith("|") or re.fullmatch(r"[-: |]+", s):
+                continue
+            sec = "%d%s" % (top, ("." + str(sub)) if sub else "")
+            nm = RE_TABLE_NUMROW.match(s)
+            if nm:
+                cells = [x.strip() for x in nm.group(2).split("|")]
+                cells = [x for x in cells if x and not re.fullmatch(r"[-: ]+", x)]
+                if not cells:
+                    continue
+                add("%s-%02d" % (cur_prefix, int(nm.group(1))),
+                    gist("§%s %s" % (sec, " / ".join(cells[:2]))), src)
+                NUMBERED_CONSUMED.add(s)
+                continue
+            # ⭐ ID 컬럼이 **없는** 데이터 표도 버리지 않는다(2026-08-09).
+            #   DMF0042 실측: §9 메시지 인벤토리 16 · §2.2 권한 파라미터 11 · §4 기간·버킷 6 =
+            #   전부 실제 제약인데 첫 셀이 숫자가 아니라 추출에서 빠졌다.
+            #   → 같은 섹션 안에서 **100번대 일련번호**를 부여한다(= "원문에 번호가 없던 행" 표식).
+            cells = [x.strip() for x in s.strip("|").split("|")]
+            if not cells or not cells[0]:
+                continue
+            head0 = cells[0].lstrip("*` ")
+            if head0.startswith(("#", "ID", "구분", "축", "대상", "항목", "파일", "컬럼", "위치", "MSG ID", "파라미터", "검사", "객체")):
+                continue                       # 표 헤더 행
+            noid_seq[cur_prefix] = noid_seq.get(cur_prefix, 100) + 1
+            add("%s-%03d" % (cur_prefix, noid_seq[cur_prefix]),
+                gist("§%s [원문 무번호] %s" % (sec, " / ".join(x for x in cells[:2] if x))), src)
+            NUMBERED_CONSUMED.add(s)
+    return [(i, seen[i][0], seen[i][1]) for i in order]
+
+
+def count_noid_rows(md_paths, numbered=False):
     """ID 컬럼이 없는 데이터 표 행 수 — 추출 대상이 아니므로 **건수를 보고**해 조용한 누락을 막는다.
 
     (예: DMF0082 §1.2 'division 파라미터 흐름' 10행 — 대상／파라미터／라인 3열, ID 없음)
+    ⚠ `numbered=True` = 계층 번호 방언이 `| 1 | …` 행을 **이미 흡수**했으므로 중복 계상하지 않는다
+      (2026-08-09: 미보정 시 DMF0042 에서 215건으로 과대보고 → 경고가 늑대소년이 된다).
     """
     n, srcs = 0, {}
     for path in md_paths:
@@ -196,6 +291,8 @@ def count_noid_rows(md_paths):
             if not s.startswith("|") or re.fullmatch(r"[-: |]+", s):
                 continue
             if RE_MAP_ROW.match(s) or RE_TABLE_RANGE.match(s):
+                continue
+            if numbered and (RE_TABLE_NUMROW.match(s) or s in NUMBERED_CONSUMED):
                 continue
             cells = [c for c in s.strip("|").split("|")]
             if len(cells) >= 3 and cells[0].strip() and not cells[0].strip().startswith(("#", "ID", "구분", "축", "대상", "항목")):
@@ -285,6 +382,14 @@ def cmd_init(md_paths, page_dir, out_override=None, allow_legacy=False):
         md_paths.extend(extra)
 
     ids = extract_ids(md_paths)
+    dialect = "hook#105 E번호"
+    if not ids:
+        # ⭐ 2026-08-09 — E번호가 0건이면 **버리기 전에** 계층 번호 방언을 시도한다.
+        #   (DMF0042 실측: 주요이벤트·제약매트릭스가 `## 1.` / `| 1 |` 체계라 구 로직은 0건 → 게이트 사각지대)
+        ids = extract_ids_numbered(md_paths)
+        if ids:
+            dialect = "계층 번호(numbered) 방언 — `## 1.`→E01 / `### 2.1`→E02-1 / 제약 표행→C{섹션문자}-{n}"
+    print("[dialect] %s · 추출 %d건" % (dialect, len(ids)))
     md_texts = {p.name: p.read_text(encoding="utf-8", errors="ignore") for p in md_paths}
     matrix = build_matrix_rows(ids, page_dir, md_texts)
     if not ids and not matrix:
@@ -362,7 +467,7 @@ def cmd_init(md_paths, page_dir, out_override=None, allow_legacy=False):
 
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text("\n".join(lines) + "\n", encoding="utf-8")
-    n_noid, noid_srcs = count_noid_rows(md_paths)
+    n_noid, noid_srcs = count_noid_rows(md_paths, numbered=dialect.startswith("계층"))
     if n_noid:
         print(f"[warn] ID 컬럼 없는 데이터 표 행 {n_noid}건 — **추출 대상 아님**. "
               f"제약으로 세야 하면 수기 ID 부여 후 추가할 것 (조용한 누락 방지): "
@@ -385,12 +490,22 @@ def cmd_init(md_paths, page_dir, out_override=None, allow_legacy=False):
 #   → 분석서가 놓친 핸들러는 게이트도 통과시킨다(2026-08-08 실측: DMF0082 AS-IS 핸들러 24개 중
 #      대사표가 이름으로 참조하는 것은 6개뿐이었다).
 #   본 축은 `.cs` 에서 핸들러를 **기계로 뽑아** 각각 구현/제외/해당없음+사유를 강제한다.
+# ⚠️ 2026-08-09 정정 — 구 정규식은 **닫힌 화이트리스트**였고, 열거에 없는 핸들러를 **조용히 버렸다.**
+#   DMF0042 정본 실측 누락 6종: spdMain_CellDoubleClick / spdMain_TopChange / OnShown /
+#   FindButton / InsertButton / SaveButton (전부 `.cs` 에 실재. hook #126 §5.1 '정규식 미매칭 무시').
+#   → ① 이벤트 접미는 **접두어 허용**(`_CellDoubleClick` = `Cell`+`DoubleClick`) ② BaseForm override 보강
+#      ③ 그래도 안 걸린 것은 버리지 말고 `residual_handlers()` 로 **미분류 후보 보고**(§3 잔여 노출).
 HANDLER_RE = re.compile(
-    r"_(Click|Changed|SelectedIndexChanged|ComboSelChange|ClipboardPasted|KeyUp|KeyDown"
-    r"|DoubleClick|CellClick|EditChange|Enter|Leave|Load|TextChanged|ValueChanged|CheckedChanged"
-    r"|Closing|Closed|Validating)$"
-    r"|^(InsertRow|SaveData|FindData|DeleteButton|EditButton|SetEditList|ExcelUpload|ExcelDownload)$"
+    r"_\w*?(Click|DoubleClick|Change|Changed|SelectedIndexChanged|ComboSelChange"
+    r"|ClipboardPasted|Pasted|Paste|KeyUp|KeyDown|EditChange|Enter|Leave|Load"
+    r"|TextChanged|ValueChanged|CheckedChanged|Closing|Closed|Validating|Scroll|LeaveCell|EnterCell|CellClick)$"
+    r"|^(InsertRow|SaveData|FindData|DeleteButton|EditButton|FindButton|InsertButton|SaveButton"
+    r"|NewButton|PrintButton|CopyButton|ExcelButton|SetEditList|ExcelUpload|ExcelDownload|OnShown|OnLoad)$"
 )
+
+# 핸들러 '후보' — 이벤트 시그니처(sender, EventArgs) 또는 BaseForm override 형태.
+#   HANDLER_RE 에 안 걸린 후보는 **삭제하지 않고 미분류로 보고**한다.
+HANDLER_CANDIDATE_RE = re.compile(r"^(?:On[A-Z]\w+|[a-z]\w*_[A-Z]\w+|\w+Button|\w+Data|\w+Row)$")
 # 사문(빈 몸통) 판정 — 라이브 코드가 이보다 적으면 "사문/스텁" 으로 표기(미이관이 파리티)
 HANDLER_DEAD_LINES = 3
 
@@ -403,17 +518,25 @@ def extract_handlers(menu):
     sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
     import combo_callsite_parity as CC
 
-    cs = CC.resolve_cs(menu)
+    # ⚠ resolve_cs 는 2026-08-09 부터 (path, 사유, 후보수, 후보목록) 4-튜플을 반환한다
+    #   (정본 레지스트리 + 다중후보 FAIL). 모호하면 path=None → 조용히 진행하지 않는다.
+    cs, canon_why, _ncand, _cands = CC.resolve_cs(menu)
     if not cs:
-        return None, None
+        return None, canon_why
     live = CC.strip_comments(cs.read_text(encoding="utf-8", errors="ignore"))
-    out = []
+    out, residual = [], []
     for name, s, e in CC.parse_methods(live):
-        if not HANDLER_RE.search(name):
-            continue
         body = live[s:e]
         n_live = sum(1 for l in body.splitlines() if l.strip())
-        out.append((name, live.count("\n", 0, s) + 1, n_live))
+        rec = (name, live.count("\n", 0, s) + 1, n_live)
+        if HANDLER_RE.search(name):
+            out.append(rec)
+        elif HANDLER_CANDIDATE_RE.match(name):
+            residual.append(rec)          # ⚠ 버리지 않는다 — 미분류로 보고
+    if residual:
+        print("  ⚠ 미분류 핸들러 후보 %d개 — HANDLER_RE 보강 또는 제외 사유 필요:" % len(residual))
+        for n, ln, nl in sorted(set(residual)):
+            print("      · %s (%s:%d, 라이브 %d행)" % (n, cs.name, ln, nl))
     return sorted(set(out)), cs
 
 

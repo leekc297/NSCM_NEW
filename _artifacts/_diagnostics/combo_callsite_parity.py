@@ -44,9 +44,28 @@ except Exception:
     pass
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-LEGACY = ROOT / "Doc" / "_legacy_source"
+# ⭐ AS-IS 원천 = **최신 소스 `GSCM/06.UIL`** (memory: asis-source-folders, 사용자 지정 2026-07-16).
+#   `Doc/_legacy_source/` 는 **그보다 이전의 부분 사본**이다 — 정본 판정에 쓰면 안 된다.
+#   (2026-08-09 실측: 구 코드가 legacy 를 읽고 DMF0042 구정본 3,477행을 집었다.)
+GSCM_UIL = ROOT / "GSCM" / "06.UIL"
+LEGACY = ROOT / "Doc" / "_legacy_source"      # GSCM 부재 시 폴백(리포트에 경고 표기)
 FE_ROOT = ROOT / "nscm-fe" / "features"
 REPORT_DIR = ROOT / "_artifacts" / "_gate_reports"
+
+# ⭐ AS-IS 정본 레지스트리 (2026-08-09 신설) — 자동 규칙으로 **유일 확정이 안 되는** 화면만 등록한다.
+#   값 = ROOT 기준 상대경로. 여기에 없고 자동 규칙도 모호하면 **FAIL**(조용한 임의 선택 금지).
+#   ⛔ 배경: 구 `resolve_cs()` 는 `rglob("{menu}_*.cs")` 의 `hits[0]` 을 그대로 썼다.
+#      DMF0042 는 후보가 10개였고 구정본 `DMF0042_1_BizPlan.cs`(3,477행)가 뽑혀
+#      전체 대사 결과(FAIL 5/WARN 6/PASS 3)가 무의미해졌다. hook #126 §5 "게이트 자기검증".
+ASIS_CANON = {
+    # DMF0043 = Contribute Main/View 2본이 같은 MENU_ID 를 공유 — 메인 화면이 정본.
+    "DMF0043": "GSCM/06.UIL/GSCM.DM.Forms.UIL/Master/DMF0043_Contribute_Main/DMF0043_Contribute_Main.cs",
+}
+
+# ⛔ `{MENU}_1_` / `{MENU}_2_` / `{MENU}_T_` 접미는 **변형본이 아니라 별개 화면**이다
+#   (사용자 확정 2026-07-16 — "DMF0003_1 / DMF0003_T 는 별개 화면, DMF0003 아님. 분석·대조 범위 어디에도 포함 금지").
+#   따라서 정본 탐색에서 **제외**한다. 이 규칙이 없으면 DMF0042 후보가 10개로 불어난다.
+SEPARATE_SCREEN_RE = re.compile(r"^[A-Z]{2,4}\d{4}_(?:\d+|T)_")
 
 # AS-IS CODE ↔ TO-BE SQL_ID 별칭 — 정규화(영숫자 소문자) 매칭이 안 되는 개명분.
 #   ⚠️ 여기에 없는 미매칭은 '미식별 WARN' 으로 노출된다(조용한 통과 금지).
@@ -234,9 +253,60 @@ def norm(s: str) -> str:
     return re.sub(r"[^a-z0-9]", "", s.lower())
 
 
+def _lines(p: pathlib.Path) -> int:
+    try:
+        return sum(1 for _ in p.open(encoding="utf-8", errors="ignore"))
+    except Exception:
+        return 0
+
+
+def _asis_candidates(menu: str, root: pathlib.Path):
+    """정본 후보 = 최신 소스의 메인 화면 `.cs` 만. 아래는 전부 **제외 근거 보유**."""
+    out = []
+    for p in root.rglob("%s*.cs" % menu):
+        if p.name.endswith(".Designer.cs"):
+            continue
+        if "POPUP" in p.parts:               # 팝업은 메인 화면이 아님
+            continue
+        if "_old" in p.stem or "복사본" in p.stem:
+            continue
+        if SEPARATE_SCREEN_RE.match(p.stem):  # `_1_`/`_T_` = 별개 화면 (사용자 확정)
+            continue
+        out.append(p)
+    return sorted(out)
+
+
 def resolve_cs(menu: str):
-    hits = [p for p in LEGACY.rglob("%s_*.cs" % menu) if not p.name.endswith(".Designer.cs")]
-    return hits[0] if hits else None
+    """AS-IS 정본 `.cs` 해석. 반환 = (path|None, 사유, 후보수, 후보목록).
+
+    우선순위:
+      1) `ASIS_CANON` 레지스트리 (명시 등록)
+      2) `*Forms.UIL` **폴더 단위** 프로젝트(`.../{stem}/{stem}.cs`) 가 유일한 경우
+         — memory asis-source-folders: "정본 = GSCM.DM.Forms.UIL/Plan/{화면}/ 프로젝트 폴더.
+           GSCM.DM.Plan.UIL 평면본은 구버전 사본으로 잔존(정본 아님)"
+      3) 후보가 애초에 1개
+      4) 그 외 = **모호 → None (FAIL)**. 임의 선택하지 않는다.
+    """
+    root, src_note = (GSCM_UIL, "") if GSCM_UIL.exists() else (LEGACY, " ⚠ 최신 소스 `GSCM/` 부재 — legacy 부분사본 사용")
+
+    reg = ASIS_CANON.get(menu)
+    if reg:
+        p = ROOT / reg
+        if p.exists():
+            return p, "레지스트리 등록" + src_note, 1, [p]
+        return None, "레지스트리 경로 부재: %s" % reg, 0, []
+
+    cands = _asis_candidates(menu, root)
+    if not cands:
+        return None, "후보 없음" + src_note, 0, []
+
+    forms = [p for p in cands if any("Forms.UIL" in s for s in p.parts) and p.parent.name == p.stem]
+    if len(forms) == 1:
+        return forms[0], "Forms.UIL 폴더단위 유일" + src_note, len(cands), cands
+    if len(cands) == 1:
+        return cands[0], "후보 유일" + src_note, 1, cands
+
+    return None, "⛔ 정본 모호 — 후보 %d개, ASIS_CANON 등록 필요" % len(cands), len(cands), cands
 
 
 def fe_pages():
@@ -249,9 +319,13 @@ def fe_pages():
 
 
 def analyze(menu, page_dir, meta_combos, combo_tokens):
-    cs = resolve_cs(menu)
+    cs, canon_why, ncand, cands = resolve_cs(menu)  # ⚠ 루프 내 `why` 와 섀도잉 금지
     if not cs:
-        return None, "AS-IS .cs 미발견 (%s_*.cs)" % menu, False
+        # ⛔ 모호·부재를 조용히 넘기지 않는다 — 후보 목록까지 리포트에 남겨 등록을 유도한다.
+        detail = "AS-IS 정본 미확정 — %s" % canon_why
+        if cands:
+            detail += "\n" + "\n".join("    · %s (%d행)" % (p.relative_to(ROOT).as_posix(), _lines(p)) for p in cands)
+        return None, detail, False
     asis = scan_asis(cs)
     tobe = scan_tobe(page_dir)
     tobe_norm = {norm(k): k for k in tobe}
@@ -313,7 +387,9 @@ def analyze(menu, page_dir, meta_combos, combo_tokens):
                 "commented": e["commented"], "kinds": e["kinds"],
             }
         )
-    return rows, str(cs.relative_to(ROOT)), shares_paste
+    src = "%s (%d행) — 선택 근거: %s / 후보 %d개" % (
+        cs.relative_to(ROOT).as_posix(), _lines(cs), canon_why, ncand)
+    return rows, src, shares_paste
 
 
 def main():
