@@ -1,0 +1,45 @@
+// 공용 Column Setting popup — Hybrid (BE SP + fallback FE meta)
+//   디자인 = 첨부 이미지 고정(체크박스|No|Column[|Sort] dual list + Default|Cancel|OK). 데이터만 동적.
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 4px 2px;
+  height: 460px;
+  min-height: 350px;
+  max-height: 68vh;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+// ColumnSelectDualList wrapper — flex 1 차지 (버튼바 제외) + min-height 보장
+.container > div:first-child {
+  flex: 1 1 auto;
+  min-height: 250px;
+  overflow: hidden;
+}
+
+// Sort 값(ASC/DESC) — 이미지의 plain 텍스트 (버튼 아님). 클릭 시 토글.
+.sortToggleBtn {
+  padding: 0;
+  background: none;
+  border: none;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+
+  &:hover {
+    color: #17919b;
+    text-decoration: underline;
+  }
+}
+
+// 버튼바 — 우측 정렬 (표준 @shared/lges Button 사용)
+.actionBar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 6px 2px 2px;
+  flex-shrink: 0;
+}

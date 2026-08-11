@@ -35,7 +35,11 @@ INSERT/MERGE 전 `user_tab_columns WHERE nullable='N'` 로 필수컬럼 확인 �
 - 신규 SP 작성 전 기존 SP/메타 재사용 우선([[feedback_be_infrastructure_reuse]], BE 변경 금지 [[feedback_be_no_modification_rule]]).
 
 ## §4. SHEET_NAME 대소문자 / AS-IS 잔존 sheet
-- 조회 proc `PKG_NSCM_UI_COM_MENU.PR_GET_SHEET_COLUMN_LIST` = `WHERE SHEET_NAME = :sheetNm`(case-sensitive). FE는 소문자/camel enum만 전송 → **AS-IS 대문자(snake)·구명칭 sheet 행은 dead data → 정리 가능**([[feedback_sheet_name_main_standard]]). 정리 시 CTAS 백업 후 DELETE.
+- 조회 proc `PKG_NSCM_UI_COM_MENU.PR_GET_SHEET_COLUMN_LIST` = `WHERE SHEET_NAME = :sheetNm`(case-sensitive). FE는 등록명 그대로 전송([[feedback_sheet_name_main_standard]]).
+- ⛔ **2026-08-10 사용자 확정 — `SHEET_NAME` 은 절대 변경 불가.** 구명칭·대소문자 상이 행이라도
+  **rename·DELETE 하지 않는다.** 종전 이 항목에 있던 "dead data 정리 가능 / CTAS 백업 후 DELETE" 지침은 **폐기**한다.
+  화면이 특정 시트를 안 쓰면 **행을 지우는 대신 화면이 올바른 SHEET_NAME 을 보내도록** 고친다.
+  (행 무효화가 정말 필요하면 §9-3 의 `VALID_YN='N'` UPDATE — 물리 DELETE 금지.)
 
 ## §5. 자기 점검
 ```
@@ -138,9 +142,12 @@ SELECT SHEET_NAME, INPUT_TP_CD, COUNT(*) CNT
 
 ---
 
-## §9. ⭐⭐⭐ 시트 메타 이관 SQL = MERGE INTO — DELETE 절대 금지 (2026-08-07 사용자 확정)
+## §9. ⭐⭐⭐ 시트 메타 이관 SQL = MERGE INTO — DELETE 절대 금지 (2026-08-07 · **2026-08-10 재확정**)
 
-> 사용자 지시 원문: "Meta SheetColumn 이관 sql 생성 시 Program_id, Sheet_name 기준으로 Delete 하는 문장 삭제하고 Merge into 로 이관 sql 생성 요청. Delete 하면서 기존의 데이터가 다 사라져서 문제가 발생한 케이스가 많으므로, 절대 Delete 는 하지 않도록 요청."
+> 사용자 지시 원문(2026-08-07): "Meta SheetColumn 이관 sql 생성 시 Program_id, Sheet_name 기준으로 Delete 하는 문장 삭제하고 Merge into 로 이관 sql 생성 요청. Delete 하면서 기존의 데이터가 다 사라져서 문제가 발생한 케이스가 많으므로, 절대 Delete 는 하지 않도록 요청."
+>
+> 사용자 지시 원문(**2026-08-10 재확정**): "SHEET NAME 은 절대 변경불가, 클라우드 이관시에도 SHEET_NAME 기준 일괄 삭제는 하면 안됩니다."
+> ⇒ ① `SHEET_NAME` **값 자체를 바꾸는 UPDATE 금지** ② `SHEET_NAME` 을 WHERE 에 건 **일괄 DELETE 금지**(§4 의 구 예외도 폐기).
 
 1. **대상**: `SCM_MST_SHEET_COLUMNS`·`SCM_MST_SHEET_MEASURE` 등 시트 메타 이관/동기 SQL 전부.
 2. ⛔ **`DELETE ... WHERE PROGRAM_ID=... [AND SHEET_NAME=...]` 문장 절대 금지** — 대상 DB(클라우드 등)에만 존재하는 행·운영 중 갱신분까지 소실되는 실사고 다수.

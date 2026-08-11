@@ -8,8 +8,6 @@ import { Grid } from '@shared/mui';
 import type { DataType, ReportType } from '../sales-reports.constants';
 import { useSalesReportsStore } from '../useSalesReportsStore';
 
-import styles from './SalesReportsForm.module.scss';
-
 interface SalesReportsFormProps {
   onSearch: () => void;
   // ⭐ Division 변경 = Grid 초기화(비움) + CRUD reset 의무 (memory feedback_division_change_grid_reset)
@@ -78,7 +76,7 @@ export const SalesReportsForm = ({
           </Grid>
           <Grid size={3}>
             <FormItem
-              label={t('LBL00160', '_Year')}
+              label={t('LBL00086', '_Year')}
               labelAlign='right'
               render={() => (
                 <CustomDropdown

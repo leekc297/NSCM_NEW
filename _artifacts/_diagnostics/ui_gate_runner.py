@@ -18,7 +18,8 @@ ui_gate_runner.py — 화면 완료 선언 단일 게이트 러너 (2026-08-07 �
   (9) 단위테스트 — 배분/편집판정 등 순수 함수의 **값**을 AS-IS 산식과 1:1 대사
   (4) 메타 값 단언 (SELECT only) — SCM_MST_SHEET_COLUMNS 해당 PROGRAM_ID:
       · CELL_CONTROL_OBJECT_TYPE_CODE 화이트리스트 = column-config.ts CELL_CONTROL_TYPE 실값
-        (FP* 14종) + NULL + 'S'(hidden 용도 실데이터 존재 — 감사 §5) — 그 외('C' 등) = FAIL
+        (FP* 14종) + NULL/공백(이관 표준 — 전수 4,884행/176화면 실측, FE 는 default 폴백으로 NULL 동치)
+        + 'S'(hidden 용도 실데이터 존재 — 감사 §5) — 그 외('C' 등) = FAIL
       · INPUT_TP_CD: CELL_INPUT_EDIT_TYPE {S,O,M,IO,IM} 외 코드 = FAIL /
         시트 전 행 단일 'IM' = WARN (편집 화면 전면 잠금 의심 — SYS0017 #4 계보)
 
@@ -261,16 +262,23 @@ def run_section7(menu, page_dir):
             #   · TRIM = NULL — CELL_COMBO_DATA_TYPE 이 공백 1칸인 "콤보 아님" 센티널 (실데이터 다수)
             #   · CTRL <> 'FPComboBox' — FPModal(ProjectByDivision 등)은 모달 검색 API 로 해소되며
             #     SCM_ADM_CMBO_SQL_M 대상이 아니다 (오탐 방지, 2026-08-08 실측)
-            """SELECT DISTINCT C.CELL_COMBO_DATA_TYPE
+            #   · ⭐ 2026-08-10 — VISIBLE_FLAG 집계를 함께 가져온다. 붙은 컬럼이 **전부 숨김**이면
+            #     그 콤보는 렌더 자체가 안 되므로 "토큰 미전달"이 결함이 아니다(오탐 차단).
+            """SELECT C.CELL_COMBO_DATA_TYPE,
+                      MAX(CASE WHEN NVL(C.VISIBLE_FLAG,'Y') = 'Y' THEN 1 ELSE 0 END) AS ANY_VISIBLE,
+                      LISTAGG(C.COLUMN_NAME, ',') WITHIN GROUP (ORDER BY C.COLUMN_NAME) AS COLS
                  FROM SCM_MGR.SCM_MST_SHEET_COLUMNS C
                 WHERE C.PROGRAM_ID = :m
                   AND TRIM(C.CELL_COMBO_DATA_TYPE) IS NOT NULL
                   AND C.CELL_CONTROL_OBJECT_TYPE_CODE = 'FPComboBox'
                   AND NVL(C.VALID_YN,'Y') = 'Y'
+                GROUP BY C.CELL_COMBO_DATA_TYPE
                 ORDER BY 1""",
             {"m": menu},
         )
-        combo_ids = [r[0] for r in cur.fetchall()]
+        _rows = cur.fetchall()
+        combo_ids = [r[0] for r in _rows]
+        hidden_only = {r[0]: r[2] for r in _rows if r[1] == 0}
         sqls = {}
         for cid in combo_ids:
             cur.execute(
@@ -299,6 +307,17 @@ def run_section7(menu, page_dir):
         missing = sorted(need - provided - dyn_params)
         dyn_only = sorted((need - provided) & dyn_params)
         verdict = "✅ PASS" if not dyn_only else "✅ PASS(동적)"
+        if missing and cid in hidden_only:
+            # 붙은 컬럼이 전부 VISIBLE_FLAG='N' — 사용자가 셀을 열 수 없어 콤보가 렌더되지 않는다.
+            # ⚠ 숨김 여부는 **AS-IS 메타와 대조**해 파리티를 확인한 뒤에만 이 경로를 신뢰할 것.
+            details.append(
+                f"| {cid} | {sorted(need) or '-'} | {sorted(server) or '-'} | "
+                f"{sorted(need & provided) or '-'} | {missing} | ✅ PASS(숨김) |"
+            )
+            details.append(
+                f"  ↳ 컬럼 `{hidden_only[cid]}` 전부 VISIBLE_FLAG='N' — 렌더 안 됨(토큰 미전달 무해)"
+            )
+            continue
         for t in missing:
             if _token_is_lenient(sql, t):
                 warns.append(f"CMBO '{cid}' 토큰 @{t} 미전달 — 관대형이라 무필터(전체 목록)로 동작. AS-IS 필터 의도 대조 필요")
@@ -464,10 +483,16 @@ def run_section4(menu, ctrl_whitelist):
     details.append("|---|---|---|---|")
     sheet_inputs = {}
     for sheet, ctrl, itp, cnt in rows:
-        details.append(f"| {sheet} | {ctrl} | {itp} | {cnt} |")
+        # ⭐ 2026-08-09 — 공백(CHR(32)) = **컨트롤 미지정**의 이관 표준값이다. NULL 과 동치로 취급한다.
+        #   실측 근거: SCM_MST_SHEET_COLUMNS 전수 4,884행 / 176 화면이 ' ' (NULL 은 598행 / 33 화면뿐).
+        #   FE 소비부(columnMapping.ts getDataType/getFormat/getEditor, DataGrid/dataGridUtils)는 전부
+        #   `=== CELL_CONTROL_TYPE.X` 동등비교 + default 폴백 → ' ' 는 NULL 과 동일하게 기본 텍스트 셀.
+        #   ⚠️ 공백만 동치다. 'C' 등 **미지의 코드**는 계속 FAIL (SYS0017 #5 계보 방어 유지).
+        ctrl_norm = "(NULL)" if (ctrl == "(NULL)" or not str(ctrl).strip()) else ctrl
+        details.append(f"| {sheet} | {'(공백)' if ctrl_norm == '(NULL)' and ctrl != '(NULL)' else ctrl} | {itp} | {cnt} |")
         sheet_inputs.setdefault(sheet, set()).add(itp)
-        if ctrl != "(NULL)" and ctrl not in ctrl_whitelist and ctrl != "S":
-            fails.append(f"CTRL '{ctrl}' ({sheet}, {cnt}행) — 화이트리스트(column-config.ts FP* {len(ctrl_whitelist)}종 + NULL + 'S') 밖 (SYS0017 #5 계보)")
+        if ctrl_norm != "(NULL)" and ctrl_norm not in ctrl_whitelist and ctrl_norm != "S":
+            fails.append(f"CTRL '{ctrl}' ({sheet}, {cnt}행) — 화이트리스트(column-config.ts FP* {len(ctrl_whitelist)}종 + NULL/공백 + 'S') 밖 (SYS0017 #5 계보)")
         if itp not in INPUT_TP_WHITELIST:
             fails.append(f"INPUT_TP_CD '{itp}' ({sheet}, {cnt}행) — CELL_INPUT_EDIT_TYPE {sorted(INPUT_TP_WHITELIST)} 밖")
     for sheet, itps in sheet_inputs.items():

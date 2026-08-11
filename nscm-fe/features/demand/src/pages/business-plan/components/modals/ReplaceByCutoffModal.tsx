@@ -161,7 +161,7 @@ export const ReplaceByCutoffModal = ({ open, modalClose, divisionId, range }: Pr
       type: 'confirm',
       content: t(
         MSG.REPLACE_CONFIRM,
-        "_'{0}년 {1}월 ~ {2}년 {3}월' 기간의 Current 데이터를 Cutoff 버전 [{4}] 데이터로 대체하시겠습니까?"
+        '_\'{0}년 {1}월 ~ {2}년 {3}월\' 기간의 Current 데이터를 Cutoff 버전 [{4}] 데이터로 대체하시겠습니까?'
       )
         .replace('{0}', from6.slice(0, 4))
         .replace('{1}', from6.slice(4, 6))

@@ -63,7 +63,7 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   const [templateModalOpen, setTemplateModalOpen] = useState(false);
   const [insertedRows, setInsertedRows] = useState<ForecastPriceRow[]>([]);
 
-  const { setAlert } = useMessageStore();
+  const { setAlert, setToast } = useMessageStore();
   const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
 
   const filters = useForecastPriceStore(state => state.filters);
@@ -214,6 +214,17 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   // ── Search (AS-IS FindButton — V1~V4 검증 후 조회) ──
   const handleSubmit = async () => {
+    // [공통 C2 2026-08-11] 수정 중 재조회 가드 — 통합테스트 1st Common "수정 중인 데이터가 있습니다.
+    //   새로 조회하시겠습니까? 팝업 호출 필요"(현재는 경고 없이 전환). MSG00703 신규 채번(3점 반영).
+    //   pending = editTracker 변경분(Price Batch Input 가드 동일 패턴) + 신규(I) 행.
+    const pendingChanges = editTrackerRef.current?.getOriginalValues();
+    if ((pendingChanges && Object.keys(pendingChanges).length > 0) || insertedRows.length > 0) {
+      const proceed = await setAlert({
+        type: 'confirm',
+        content: t('MSG00703', '_There are unsaved changes. Search again?'),
+      });
+      if (!proceed) return;
+    }
     if (!searchParams.divisionId) {
       await setAlert({ type: 'alert', content: t(MSG.DIVISION_NO_AUTH, '_Select Division.') });
       return;
@@ -268,6 +279,9 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
       EDIT_FLAG: 'Y',
     } as unknown as ForecastPriceRow;
     setInsertedRows(prev => [newRow, ...prev]);
+    // [공통 C1 2026-08-11] 필터링 상태에서 Insert 시 신규행이 그리드 필터에 걸려 화면에 안 보이는
+    //   문제(통합테스트 1st Common) — 활성 필터를 해제해 추가된 행이 즉시 보이게 한다.
+    gridFilterRef.current?.clear();
   };
 
   // ── Bucket 전환 가드 (AS-IS cboBucketType_Click :3361 — Insert 행 존재 시 MSG00227 차단) ── #13
@@ -352,7 +366,10 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
       });
       return;
     }
-    await setAlert({ type: 'alert', content: t(MSG.SAVED, '_Saved.') });
+    // [공통 C4 2026-08-11] 저장 완료 = 팝업 아닌 **토스트**(하단 중앙, 자동 소멸) — 통합테스트 1st
+    //   Common "별도 팝업으로 Alert 하지 않고 하단 중앙 메시지 표기 후 사라지도록"(LGES WDG 표준).
+    //   실패·검증 메시지는 종전대로 팝업 유지(사용자 확인 필요) — 완료 계열만 토스트.
+    setToast({ message: t(MSG.SAVED, '_Saved.') });
     tracker.clearChanges();
     setInsertedRows([]);
     void queryClient.invalidateQueries({ queryKey: [MENU_ID] });
@@ -415,7 +432,8 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
           },
         ]
       : []),
-    // 환율(Exchange Rate) — 메저(Measure) 버튼 바로 옆으로 이동 (2026-07-12 요청)
+    // ⭐ 아이콘 버튼 표준 순서 = **환율 → 컬럼설정 → 메저** (hook #120, 2026-08-10 사용자 재확정).
+    //   전 화면 동일 순서 — DMF0082/0044/0042/0049/0020 일괄 정렬.
     {
       label: t('LBL00661', 'Exchange Rate'),
       title: t('LBL00661', 'Exchange Rate'),
@@ -436,17 +454,17 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
       buttonLabel: '',
     },
     {
-      label: t('LBL00712', '_Measure'),
-      title: t('LBL00712', '_Measure'),
-      action: () => setMeasureModalOpen(true),
-      iconComponent: <IcMeasureSelect />,
-      buttonLabel: '',
-    },
-    {
       label: t('LBL00605', 'Column Setting'),
       title: t('LBL00605', 'Column Setting'),
       action: () => setColumnModalOpen(true),
       iconComponent: <IcGridColumnSetup />,
+      buttonLabel: '',
+    },
+    {
+      label: t('LBL00712', '_Measure'),
+      title: t('LBL00712', '_Measure'),
+      action: () => setMeasureModalOpen(true),
+      iconComponent: <IcMeasureSelect />,
       buttonLabel: '',
     },
   ];
@@ -481,9 +499,6 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         data={gridRows}
         spreadTitle={spreadTitle}
         editTrackerRef={editTrackerRef}
-        onDuplicateKey={() => {
-          void setAlert({ type: 'alert', content: t(MSG.DUP_NEW_ROW, '_Duplicated new row.') });
-        }}
       />
 
       {/* Version 선택 (AS-IS SCM0002_VersionByWaterfallPopup — DMF0073 공유 계약) */}
@@ -564,6 +579,14 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
             }
             void queryClient.invalidateQueries({ queryKey: [MENU_ID] });
           });
+          // [공통 C3 2026-08-11] 컬럼 추가/제외 적용 시 기존 조회 데이터가 있으면 Reset — 통합테스트
+          //   1st Common "기존에 조회된 데이터가 있을 경우 Reset 후 재조회 할 수 있도록 수정".
+          //   Division 변경 가드와 동일 3종 reset — 그리드 공백 후 Search 로 재조회.
+          if (filters !== undefined) {
+            setInsertedRows([]);
+            editTrackerRef.current?.clearChanges();
+            clearFilters();
+          }
         }}
       />
 

@@ -9,7 +9,7 @@ import {
 import { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { type MutableRefObject, type Ref, useEffect, useMemo, useRef } from 'react';
 
-import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
+import type { ComboParam, FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
 import type { EditTracker } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
@@ -34,7 +34,7 @@ import {
   parseDynTag,
   type ValidWindow,
 } from '../utils/business-plan.editLock';
-import { filterComboRowsByRow, toCellStr } from '../utils/business-plan.gridCombos';
+import { buildDataMap, filterComboRowsByRow, toCellStr } from '../utils/business-plan.gridCombos';
 import { HierarchicalMergeManager } from '../utils/business-plan.merge';
 import { applyCellChange } from '../utils/business-plan.spread';
 
@@ -138,17 +138,35 @@ export const BusinessPlanGrid = ({
       ),
     [visibleColumns]
   );
+  // ⭐ 셀 콤보 바인드 파라미터 — AS-IS 프레임워크 계약 1:1 (2026-08-09 보완).
+  //   AS-IS `SpreadInfo.cs:1975~1981` : 메타 콤보는 **커서 ATTRIBUTE1~5 를 sParam1~5 로** 넘긴다.
+  //   그 커서(`DMF0042_GET_SPREAD_TITLE`) 가 채우는 값 =
+  //     · ATTRIBUTE1 = `@p_division_id`  ("COMMONDATALIST 에서 사용하도록 DIVISION 을 넣어준다" 주석)
+  //     · ATTRIBUTE2 = `CASE WHEN CELL_COMBO_DATA_TYPE='DM_LOOKUP_DIV' THEN C.ATTRIBUTE1 ELSE '' END`
+  //   ⇒ **모든 메타 셀 콤보에 division**, `DM_LOOKUP_DIV` 에는 추가로 컬럼 ATTRIBUTE1(LOOKUP_TYPE).
+  //   TO-BE CMBO 는 named token 이라 division 계열 = `@divisionId`, DM_LOOKUP_DIV = `@param1`/`@param2`.
+  //   ⛔ 미전달 시 `DM_LOOKUP_DIV`(FCST_TYPE) 는 `B.SEGMENT1=@param1 AND A.LOOKUP_TYPE=@param2` 가
+  //      '' 비교가 되어 **항상 0행**(조용한 빈 콤보) — 2026-08-09 게이트 섹션 7 FAIL 실측.
+  //   BE makeComboQuery 는 raw 치환이므로 값은 작은따옴표로 감싼다(hook #117 §5.8). 여분 키는 무해.
+  //   값 quoting 헬퍼는 조회조건(BusinessPlanForm)과 **동일 규약**을 쓴다 — 빈 값은 'ALL' 센티널
+  //   (memory feedback_bind_combo_value_quoting: 빈 '' 는 CASE-IN 계열에서 전멸한다).
+  const q = (v?: string): string => `'${v && v.trim() !== '' ? v : 'ALL'}'`;
   const comboResults = useTabComboQueries({
-    filters: comboColumns.map(c => c.cellCboDataTp as string),
+    filters: comboColumns.map((c): ComboParam =>
+      c.cellCboDataTp === 'DM_LOOKUP_DIV'
+        ? { comboId: 'DM_LOOKUP_DIV', param1: q(division), param2: q(c.attribute1) }
+        : { comboId: c.cellCboDataTp as string, divisionId: q(division) }
+    ),
   });
+  // ⚠ division 을 시그니처에 포함한다 — 미포함 시 division 전환 후 행수가 우연히 같으면
+  //   useMemo 가 재계산되지 않아 **이전 division 의 dataMap 이 잔존**한다.
   const comboSig = comboColumns
-    .map((c, i) => `${c.cellCboDataTp}#${comboResults[i]?.length ?? 'x'}`)
+    .map((c, i) => `${c.cellCboDataTp}@${division}#${comboResults[i]?.length ?? 'x'}`)
     .join(',');
   const dataMaps = useMemo<Record<string, DataMap | null>>(() => {
     const m: Record<string, DataMap | null> = {};
     comboColumns.forEach((c, i) => {
-      const arr = comboResults[i] ?? [];
-      m[c.colNm] = arr.length > 0 ? new DataMap(arr, 'CODE', 'NAME') : null;
+      m[c.colNm] = buildDataMap((comboResults[i] ?? []) as unknown as Record<string, unknown>[]);
     });
     return m;
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -178,8 +196,7 @@ export const BusinessPlanGrid = ({
   const editDataMaps = useMemo<Record<string, DataMap | null>>(() => {
     const m: Record<string, DataMap | null> = {};
     editComboEntries.forEach(([binding], i) => {
-      const arr = (editComboResults[i] ?? []) as unknown as Record<string, unknown>[];
-      m[binding] = arr.length > 0 ? new DataMap(arr, 'CODE', 'NAME') : null;
+      m[binding] = buildDataMap((editComboResults[i] ?? []) as unknown as Record<string, unknown>[]);
     });
     return m;
     // eslint-disable-next-line react-hooks/exhaustive-deps

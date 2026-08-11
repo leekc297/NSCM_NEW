@@ -1,0 +1,327 @@
+{
+ "DMF0044": {
+  "columns": 62,
+  "measures": 18,
+  "api": 28,
+  "btn": 28,
+  "proc": 180,
+  "combos": 27,
+  "msg": 31,
+  "msg_rows": 75,
+  "auth_mnu": 3,
+  "auth_btn": 75,
+  "gtt": 19,
+  "combo_ids": [
+   "APPLICATION",
+   "CALENDAR_YYYY",
+   "COUNTRY_MST",
+   "CUST_GROUP_DTL",
+   "CurrencyList",
+   "DMF0005_REPORT_GROUP1",
+   "DMF0005_REPORT_GROUP2",
+   "DMF0005_REPORT_GROUP3",
+   "DMF0005_REPORT_GROUP4",
+   "DMF0005_REPORT_GROUP6",
+   "DMF0044_DEPARTMENT_TEAM",
+   "DMF0044_DEPARTMENT_TEAM2",
+   "DMF0044_ETC_SALE_RESULT_TYPE_40",
+   "DMF0044_MDF_DEPARTMENT",
+   "DMF0044_MDF_MEASURE",
+   "DM_COMPANY",
+   "DM_LOOKUP_DIV",
+   "Division",
+   "DmBizType",
+   "END_CUST_REPORT",
+   "FcstType",
+   "MDF_TYPE",
+   "MDF_TYPE2",
+   "MDF_TYPE_BP_POPUP",
+   "MDF_TYPE_SP_POPUP",
+   "Measure",
+   "SOLD_TO_CUST_REPORT"
+  ],
+  "locale_missing": [
+   "LBL00513",
+   "LBL00764",
+   "LBL00765"
+  ],
+  "files": [
+   "02_PKG_SPEC.sql",
+   "03_PKG_BODY.sql",
+   "01_GTT_DDL.sql",
+   "11_META_SHEET_COLUMNS.sql",
+   "12_META_SHEET_MEASURE.sql",
+   "10_META_WIRING.sql",
+   "13_META_CMBO_SQL.sql",
+   "14_META_MSG_LBL.sql",
+   "locales_PATCH.json",
+   "15_META_AUTH.sql",
+   "fe/"
+  ]
+ },
+ "DMF0049": {
+  "columns": 42,
+  "measures": 3,
+  "api": 19,
+  "btn": 19,
+  "proc": 119,
+  "combos": 24,
+  "msg": 26,
+  "msg_rows": 70,
+  "auth_mnu": 4,
+  "auth_btn": 70,
+  "gtt": 7,
+  "combo_ids": [
+   "APPLICATION",
+   "CALENDAR_YYYY",
+   "COUNTRY_MST",
+   "CurrencyList",
+   "DMF0005_REPORT_GROUP1",
+   "DMF0005_REPORT_GROUP2",
+   "DMF0005_REPORT_GROUP4",
+   "DMF0005_REPORT_GROUP6",
+   "DMF0044_DEPARTMENT_TEAM",
+   "DMF0044_DEPARTMENT_TEAM2",
+   "DMF0044_MDF_DEPARTMENT",
+   "DMF0044_MDF_MEASURE",
+   "DM_COMPANY",
+   "DM_LOOKUP_DIV",
+   "END_CUST_REPORT",
+   "EndCustomerByDivisionDept",
+   "FcstType",
+   "Incoterms",
+   "MDF_TYPE",
+   "MDF_TYPE_BP_POPUP",
+   "MDF_TYPE_SP_POPUP",
+   "Measure",
+   "ReportGroup3",
+   "SOLD_TO_CUST_REPORT"
+  ],
+  "locale_missing": [
+   "LBL00513",
+   "LBL00764",
+   "LBL00765"
+  ],
+  "files": [
+   "02_PKG_SPEC.sql",
+   "03_PKG_BODY.sql",
+   "01_GTT_DDL.sql",
+   "11_META_SHEET_COLUMNS.sql",
+   "12_META_SHEET_MEASURE.sql",
+   "10_META_WIRING.sql",
+   "13_META_CMBO_SQL.sql",
+   "14_META_MSG_LBL.sql",
+   "locales_PATCH.json",
+   "15_META_AUTH.sql",
+   "fe/"
+  ]
+ },
+ "UPFX": {
+  "combos": 41,
+  "ids": [
+   "APPLICATION",
+   "COUNTRY_MST",
+   "CUST_GROUP_DTL",
+   "DMF0005_DM_CONTRIBUTION_TYPE_CD",
+   "DMF0005_DM_OS_CORP_CD",
+   "DMF0005_REPORT_GROUP1",
+   "DMF0005_REPORT_GROUP2",
+   "DMF0005_REPORT_GROUP3",
+   "DMF0005_REPORT_GROUP4",
+   "DMF0005_REPORT_GROUP5",
+   "DMF0005_REPORT_GROUP6",
+   "DMF0005_REPORT_GROUP7",
+   "DMF0005_REPORT_GROUP8",
+   "DMF0041_MDF_Currency",
+   "DMF0041_MDF_Measure",
+   "DMF0041_MDF_Team",
+   "DMF0043_CUST_GROUP_DTL",
+   "DMF0043_END_CUST_REPORT",
+   "DMF0044_MDF_MEASURE",
+   "DM_COMPANY",
+   "DM_LOOKUP_DIV",
+   "DeptId",
+   "END_CUST_REPORT",
+   "FCST_TYPE_NOT_ETC",
+   "PRODUCTION_PROCESS",
+   "ROUTE",
+   "SOLD_TO_CUST_REPORT",
+   "UpperDeptId",
+   "SALES_PLAN_AMOUNT_KRW",
+   "SALES_PLAN_AMOUNT_LOC",
+   "SALES_PLAN_AMOUNT_USD",
+   "CALENDAR_YYYY",
+   "BizTypebyDivision",
+   "EndCustomerByDivision",
+   "UserTeamByDivision",
+   "SiteByEndCustomer_DMF0003",
+   "UserSiteByEndCustomer",
+   "FcstTypeByUserGroupDMF0082",
+   "DefaultBucketDay",
+   "DMF0044_DEPARTMENT_TEAM",
+   "DMF0044_ETC_SALE_RESULT_TYPE_40"
+  ],
+  "wiring": 119,
+  "screens": {
+   "DMF0003": [
+    "Mkt Fcst.CUST_GROUP_DTL → CUST_GROUP_DTL",
+    "Mkt Fcst.APPLICATION → APPLICATION",
+    "Mkt Fcst.ROUTE → ROUTE"
+   ],
+   "DMF0005": [
+    "production.PRODUCTION_PROCESS → PRODUCTION_PROCESS",
+    "production.ATTRIBUTE1 → SOLD_TO_CUST_REPORT",
+    "production.ATTRIBUTE2 → END_CUST_REPORT",
+    "production.CUST_GROUP_DTL → CUST_GROUP_DTL",
+    "production.APPLICATION → APPLICATION",
+    "production.ROUTE → ROUTE",
+    "production.REPORT_GROUP1 → DMF0005_REPORT_GROUP1",
+    "production.REPORT_GROUP2 → DMF0005_REPORT_GROUP2",
+    "production.REPORT_GROUP3 → DMF0005_REPORT_GROUP3",
+    "production.REPORT_GROUP4 → DMF0005_REPORT_GROUP4",
+    "production.REPORT_GROUP5 → DMF0005_REPORT_GROUP5",
+    "production.REPORT_GROUP6 → DMF0005_REPORT_GROUP6",
+    "production.REPORT_GROUP7 → DMF0005_REPORT_GROUP7",
+    "production.REPORT_GROUP8 → DMF0005_REPORT_GROUP8"
+   ],
+   "DMF0008": [
+    "sspm.ATTRIBUTE1 → SOLD_TO_CUST_REPORT",
+    "sspm.ATTRIBUTE2 → END_CUST_REPORT",
+    "sspm.CUST_GROUP_DTL → CUST_GROUP_DTL",
+    "sspm.APPLICATION → APPLICATION",
+    "sspm.ROUTE → ROUTE",
+    "sspm.REPORT_GROUP1 → DMF0005_REPORT_GROUP1",
+    "sspm.REPORT_GROUP2 → DMF0005_REPORT_GROUP2",
+    "sspm.REPORT_GROUP3 → DMF0005_REPORT_GROUP3",
+    "sspm.REPORT_GROUP4 → DMF0005_REPORT_GROUP4",
+    "sspm.REPORT_GROUP5 → DMF0005_REPORT_GROUP5",
+    "sspm.REPORT_GROUP6 → DMF0005_REPORT_GROUP6",
+    "sspm.REPORT_GROUP7 → DMF0005_REPORT_GROUP7",
+    "sspm.REPORT_GROUP8 → DMF0005_REPORT_GROUP8",
+    "sspm.OS_CORP → DMF0005_DM_OS_CORP_CD",
+    "sspm.CONTRIBUTION_TYPE → DMF0005_DM_CONTRIBUTION_TYPE_CD"
+   ],
+   "DMF0009": [
+    "Production.PRODUCTION_PROCESS → PRODUCTION_PROCESS",
+    "Production.ATTRIBUTE1 → SOLD_TO_CUST_REPORT",
+    "Production.ATTRIBUTE2 → END_CUST_REPORT",
+    "Production.CUST_GROUP_DTL → CUST_GROUP_DTL",
+    "Production.APPLICATION → APPLICATION",
+    "Production.ROUTE → ROUTE",
+    "Production.REPORT_GROUP1 → DMF0005_REPORT_GROUP1",
+    "Production.REPORT_GROUP2 → DMF0005_REPORT_GROUP2",
+    "Production.REPORT_GROUP3 → DMF0005_REPORT_GROUP3",
+    "Production.REPORT_GROUP4 → DMF0005_REPORT_GROUP4",
+    "Production.REPORT_GROUP5 → DMF0005_REPORT_GROUP5",
+    "Production.REPORT_GROUP6 → DMF0005_REPORT_GROUP6",
+    "Production.REPORT_GROUP7 → DMF0005_REPORT_GROUP7",
+    "Production.REPORT_GROUP8 → DMF0005_REPORT_GROUP8"
+   ],
+   "DMF0010": [
+    "Production.PRODUCTION_PROCESS → PRODUCTION_PROCESS",
+    "Production.ATTRIBUTE1 → SOLD_TO_CUST_REPORT",
+    "Production.ATTRIBUTE2 → END_CUST_REPORT",
+    "Production.CUST_GROUP_DTL → CUST_GROUP_DTL",
+    "Production.APPLICATION → APPLICATION",
+    "Production.ROUTE → ROUTE",
+    "Production.REPORT_GROUP1 → DMF0005_REPORT_GROUP1",
+    "Production.REPORT_GROUP2 → DMF0005_REPORT_GROUP2",
+    "Production.REPORT_GROUP3 → DMF0005_REPORT_GROUP3",
+    "Production.REPORT_GROUP4 → DMF0005_REPORT_GROUP4",
+    "Production.REPORT_GROUP5 → DMF0005_REPORT_GROUP5",
+    "Production.REPORT_GROUP6 → DMF0005_REPORT_GROUP6",
+    "Production.REPORT_GROUP7 → DMF0005_REPORT_GROUP7",
+    "Production.REPORT_GROUP8 → DMF0005_REPORT_GROUP8"
+   ],
+   "DMF0021": [
+    "Sales Plan.DEPT_ID → DeptId",
+    "Sales Plan.COMPANY_ID → DM_COMPANY"
+   ],
+   "DMF0022": [
+    "salesPlanWaterfall.DEPT_ID → DeptId",
+    "salesPlanWaterfall.COMPANY_ID → DM_COMPANY"
+   ],
+   "DMF0035": [
+    "Mkt Fcst Waterfall.DEPT_ID → DeptId"
+   ],
+   "DMF0041": [
+    "MDFSimulator.DEPARTMENT_ID → DMF0041_MDF_Team",
+    "MDFSimulator.UNIT_CURRENCY → DMF0041_MDF_Currency",
+    "MDFSimulator.MEASURE → DMF0041_MDF_Measure"
+   ],
+   "DMF0042": [
+    "Biz Plan.DEPT_ID → DeptId",
+    "Biz Plan.DEPT_ID40 → DeptId",
+    "Biz Plan.FCST_TYPE → DM_LOOKUP_DIV"
+   ],
+   "DMF0043": [
+    "ContributeMain.END_CUST_REPORT → DMF0043_END_CUST_REPORT",
+    "ContributeMain.SOLDTO_CUST_REPORT → DMF0043_CUST_GROUP_DTL",
+    "ContributeMain.PRODUCT_GROUP → DMF0005_REPORT_GROUP3"
+   ],
+   "DMF0044": [
+    "MDF Reports.END_CUST_REPORT → END_CUST_REPORT",
+    "MDF Reports.SOLDTO_CUST_REPORT → SOLD_TO_CUST_REPORT",
+    "MDF Reports.CUST_GROUP_DTL → CUST_GROUP_DTL",
+    "MDF Reports.PRODUCT_DETAILS → DMF0005_REPORT_GROUP4",
+    "MDF Reports.CELL_MODEL_INFO → DMF0005_REPORT_GROUP6",
+    "MDF Reports.COMPANY_ID → DM_COMPANY",
+    "MDF Reports.BIZ_TYPE → DM_LOOKUP_DIV",
+    "MDF Reports.APPLICATION_GR → DMF0005_REPORT_GROUP1",
+    "MDF Reports.APPLICATION → APPLICATION",
+    "MDF Reports.COUNTRY_CODE → COUNTRY_MST",
+    "MDF Reports.MEASURE → DMF0044_MDF_MEASURE",
+    "MDF Reports.ITEM_USE → DM_LOOKUP_DIV"
+   ],
+   "DMF0048": [
+    "Sales Monitoring.DEPT_ID → DeptId",
+    "Sales Monitoring.COMPANY_ID → DM_COMPANY"
+   ],
+   "DMF0049": [
+    "MDF Reports.END_CUST_REPORT → END_CUST_REPORT",
+    "MDF Reports.SOLDTO_CUST_REPORT → SOLD_TO_CUST_REPORT",
+    "MDF Reports.ITEM_ID → DM_LOOKUP_DIV",
+    "MDF Reports.PRODUCT_DETAILS → DMF0005_REPORT_GROUP4",
+    "MDF Reports.COMPANY_ID → DM_COMPANY",
+    "MDF Reports.BIZ_TYPE → DM_LOOKUP_DIV",
+    "MDF Reports.APPLICATION_GR → DMF0005_REPORT_GROUP1",
+    "MDF Reports.APPLICATION → APPLICATION",
+    "MDF Reports.COUNTRY_CODE → COUNTRY_MST",
+    "MDF Reports.CELL_MODEL_INFO → DMF0005_REPORT_GROUP6",
+    "MDF Reports.MEASURE → DMF0044_MDF_MEASURE",
+    "MDF Reports.ITEM_USE → DM_LOOKUP_DIV"
+   ],
+   "DMF0051": [
+    "Biz Plan Waterfall.DEPT_ID → DeptId",
+    "Biz Plan Waterfall.DEPT_ID40 → DeptId",
+    "Biz Plan Waterfall.INCOTERMS → DM_LOOKUP_DIV",
+    "Biz Plan Waterfall.FCST_TYPE → DM_LOOKUP_DIV"
+   ],
+   "DMF0051_1": [
+    "Biz Plan Waterfall.DEPT_ID → DeptId",
+    "Biz Plan Waterfall.DEPT_ID40 → DeptId",
+    "Biz Plan Waterfall.FCST_TYPE → FCST_TYPE_NOT_ETC"
+   ],
+   "DMF0072": [
+    "NNMasterMapping.FCST_TYPE → FCST_TYPE_NOT_ETC",
+    "main.FCST_TYPE → FCST_TYPE_NOT_ETC"
+   ],
+   "DMF0082": [
+    "FcstNPrice.TEAM_ID → DeptId",
+    "FcstNPrice.FCST_TYPE → FcstTypeByUserGroupDMF0082",
+    "FcstNPrice.CUST_GROUP_DTL → CUST_GROUP_DTL",
+    "FcstNPrice.APPLICATION → APPLICATION",
+    "FcstNPrice.ROUTE → ROUTE",
+    "Sales Price Save All.DEPT_ID → DeptId"
+   ],
+   "DMF1007": [
+    "Sales Plan.UPPER_DEPT_ID → UpperDeptId",
+    "Sales Plan.DEPT_ID → DeptId"
+   ],
+   "SCM0002_MasterChgPopup": [
+    "MasterChg Popup.FCST_TYPE → FCST_TYPE_NOT_ETC",
+    "MasterChg Popup.NewFCSTType → FCST_TYPE_NOT_ETC"
+   ]
+  }
+ }
+}

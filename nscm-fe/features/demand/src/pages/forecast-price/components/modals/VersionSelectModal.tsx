@@ -77,9 +77,11 @@ const VERSION_COLUMNS: RawFlexGridColumnConfig[] = [
  */
 const VERSION_TYPE_PREFIXES = ['SP', 'MF', 'SF'] as const;
 
-/** 체크박스 → VERSION_TYPE 콤마 토큰. AS-IS SP 확장 순서(D 그룹 → W 그룹 → M 그룹) 유지. */
-const buildVersionType = (day: boolean, week: boolean, manual: boolean): string =>
-  [day ? 'D' : '', week ? 'W' : '', manual ? 'M' : '']
+/** 체크박스 → VERSION_TYPE 콤마 토큰. AS-IS SP 확장 순서(D 그룹 → W 그룹) 유지.
+ *  ⭐ Manual(M 그룹) 축은 2026-08-11 제거 — 통합테스트 1st No.33 사용자 요구
+ *  "Manual 버튼은 삭제하고 Day, Week 버튼만 필요함" (AS-IS chkMonth 는 존재했으나 요구가 우선). */
+const buildVersionType = (day: boolean, week: boolean): string =>
+  [day ? 'D' : '', week ? 'W' : '']
     .filter(Boolean)
     .flatMap(suffix => VERSION_TYPE_PREFIXES.map(prefix => `${prefix}_${suffix}`))
     .join(',');
@@ -115,11 +117,10 @@ export const VersionSelectModal = ({
   const [divisionId, setDivisionId] = useState<string>(defaultDivision);
   const [description, setDescription] = useState<string>('');
 
-  // Day / Week / Manual — AS-IS Designer 기본값 = Week 만 Checked (chkWeek.Checked = true L149~150).
-  //   chkMonth 라벨은 'Manual' 이지만 토큰은 _M (AS-IS .cs L226~227) — 라벨/토큰 불일치는 원본 그대로 승계.
+  // Day / Week — AS-IS Designer 기본값 = Week 만 Checked (chkWeek.Checked = true L149~150).
+  //   ⭐ Manual(chkMonth) 은 2026-08-11 제거 — 통합테스트 No.33 "Day, Week 버튼만 필요"(사용자 요구).
   const [chkDay, setChkDay] = useState<boolean>(false);
   const [chkWeek, setChkWeek] = useState<boolean>(true);
-  const [chkManual, setChkManual] = useState<boolean>(false);
 
   useEffect(() => {
     if (open) {
@@ -129,7 +130,6 @@ export const VersionSelectModal = ({
       setDescription('');
       setChkDay(false);
       setChkWeek(true);
-      setChkManual(false);
     }
   }, [open, defaultDivision, defaultFrom, defaultTo]);
 
@@ -138,7 +138,7 @@ export const VersionSelectModal = ({
   //   기본 Week = 'SP_W,MF_W,SF_W' (구 하드코딩 'SP_W' 는 MF_W/SF_W 누락 상태였음 — 원본 대비 결손).
   //   전부 해제 = '' → VERSION_TYPE IN (빈 집합) 이라 실버전 0행. 'Current' 행은 SP 가 DUAL UNION 으로
   //   항상 emit 하므로 AS-IS 와 동일하게 남는다.
-  const versionType = buildVersionType(chkDay, chkWeek, chkManual);
+  const versionType = buildVersionType(chkDay, chkWeek);
 
   const filters = useMemo(
     () =>
@@ -252,10 +252,9 @@ export const VersionSelectModal = ({
                     setPeriodTo(end);
                   }}
                 />
-                {/* AS-IS chkDay / chkWeek / chkMonth(라벨 'Manual') — Designer L140~165 배치 순서 그대로.
-                    ForecastPriceForm Sum/Qty 체크박스와 동일 패턴 (Checkbox labelText + Stack row).
-                    size 5 = Div(3)+Period(4)+5 로 1행 12 컬럼을 채워 Description 이 2행으로 자연 개행
-                    → AS-IS 2행 폼(1행 Div/Period, 2행 체크박스/Description) 과 동일한 2행 구성. */}
+                {/* AS-IS chkDay / chkWeek — Designer L140~165 배치 순서 그대로.
+                    ⭐ Manual(chkMonth) 체크박스는 2026-08-11 제거(통합테스트 No.33 사용자 요구).
+                    ForecastPriceForm Sum/Qty 체크박스와 동일 패턴 (Checkbox labelText + Stack row). */}
                 <Grid size={2} sx={{ display: 'flex', alignItems: 'center' }}>
                   <Stack direction='row' spacing={1} alignItems='center' sx={{ width: '100%' }}>
                     <Checkbox
@@ -267,11 +266,6 @@ export const VersionSelectModal = ({
                       labelText={t('LBL00775', '_Week')}
                       checked={chkWeek}
                       onChange={(checked: boolean) => setChkWeek(checked)}
-                    />
-                    <Checkbox
-                      labelText={t('LBL00776', '_Manual')}
-                      checked={chkManual}
-                      onChange={(checked: boolean) => setChkManual(checked)}
                     />
                   </Stack>
                 </Grid>

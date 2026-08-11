@@ -8,8 +8,6 @@ import { Grid } from '@shared/mui';
 import { PLAN_RESULT, type PlanResult, type ReportType } from '../etc-sales-reports.constants';
 import { useEtcSalesReportsStore } from '../useEtcSalesReportsStore';
 
-import styles from './EtcSalesReportsForm.module.scss';
-
 interface EtcSalesReportsFormProps {
   onSearch: () => void;
   // ⭐ Division 변경 = Grid 초기화(비움) + CRUD reset 의무 (memory feedback_division_change_grid_reset)
@@ -76,7 +74,7 @@ export const EtcSalesReportsForm = ({
           </Grid>
           <Grid size={3}>
             <FormItem
-              label={t('LBL00160', '_Year')}
+              label={t('LBL00086', '_Year')}
               labelAlign='right'
               render={() => (
                 <CustomDropdown

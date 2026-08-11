@@ -28,6 +28,7 @@
 | 113 | [ui-category-division-direct-compare](../hooks/ui-category-division-direct-compare.md) | ⭐⭐ | DIVISION_ID 가시성=서버 직접 비교(divisionId 전송+재fetch). 하드코딩/화이트리스트/FALLBACK 금지 |
 | 8 | [column-meta-rework-checklist](../hooks/column-meta-rework-checklist.md) | ⭐⭐ | 기존 column 재작업 8 점검 |
 | 20 | [grid-column-setting-popup-pattern](../hooks/grid-column-setting-popup-pattern.md) | ⭐⭐ | Column 표시설정 popup 5단계 + 재진입 복원 |
+| 130 | [ui-meta-consumption-and-crud-path-coverage](../hooks/ui-meta-consumption-and-crud-path-coverage.md) | ⭐⭐⭐ | **메타 "존재" 가 아니라 "실소비"** — 컬럼명 배열 상수로 편집/잠금 결정 BLOCK(AS-IS `LockRange` → FE 상수 이식이 전형 함정, 파리티는 `INPUT_TP_CD` 값으로) + 셀 컨트롤 3요소(메타·트리거·파라미터) + 저장 경로 전수(신규행 C·조회 R 은 대체 불가) + 완료 선언 커버리지 표(안 본 축=ERROR) |
 | 115 | [titleset-cache-immunization](../hooks/titleset-cache-immunization.md) | ⭐⭐⭐ | titleset 'C' 캐시 오염 면역 3층(SP 가드+모달 dedup+메타 동기) — 일회성 DELETE 금지 |
 
 ## Cross-ref

@@ -46,3 +46,8 @@
 ## Cross-ref
 - 파이프라인: `Doc/_analysis/db_migration/01`(변환 룰 + 부록 C 함정) + `02`(6-Stage) · 룰 32(Oracle 직결 도구)
 - 메모리: `feedback_sp_*` 계열 다수 / `feedback_oracle_*` 계열 / `feedback_gtt_unprefixed_correlated_subquery_wipe` / `feedback_sp_empty_filter_null_like_join_wipe` / `feedback_ui_pkg_no_standalone_sp`(UI별 PKG 원칙)
+
+- ⭐⭐⭐ **#127 `oracle-nvl-null-antipattern`** (2026-08-10) — `NVL(x, NULL)` 금지. 표현식 → `NVL(x,'-')` / 술어 → NVL 제거. 신규 변환 + **기 변환분 보완 시 PKG 단위 전량**. ORA-00979 실사고(DMF0044 Version Create). `hooks/oracle-nvl-null-antipattern.md`
+- ⭐⭐⭐ **#128 `auth-by-userid-not-groupid`** (2026-08-10) — 권한 판정은 UI 가 넘긴 GROUP_ID 가 아니라 **USER_ID 로 `SCM_ADM_USER_GR_MPG_M` 을 조회한 보유 그룹 합집합**. `GET_ADMIN_GROUP` 룩업 단일 소스, 그룹명 하드코딩 금지. 검증 = 다중그룹·무권한 2축 실측. `hooks/auth-by-userid-not-groupid.md`
+- ⭐⭐⭐ **#129 `oracle-perf-fix-priority-order`** (2026-08-10) — 속도 개선 순서 = **①SELECT 목록 함수 제거(JOIN 치환) ②인덱스 SARGable 구문 ③힌트**. 힌트 우선 금지, 보고는 3순위 각각. `hooks/oracle-perf-fix-priority-order.md`
+- ⭐⭐⭐ **#131 `ui-save-idempotent-readback`** (2026-08-11) — **저장 멱등성**: PIVOT 조회 화면은 암묵 GROUP BY=SELECT 목록 전 컬럼 → 저장이 컬럼 하나만 원장과 다르게 써도 **유령 행**(행수 증가). 센티널은 **컬럼별 원장 분포로 결정**(`''`=Oracle NULL 방언·PROJECT_NAME 반례) / 마스터 덮어쓰기 파생컬럼(DEPT_NAME)은 원장 정규화 / PIVOT 표시값 되쓰기 금지(`modify_safe:False`). 완료 게이트 = **저장 전후 조회 행수 동일+식별자 중복 0 실측**. `hooks/ui-save-idempotent-readback.md`

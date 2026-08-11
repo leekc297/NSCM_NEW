@@ -3,15 +3,23 @@ import {
   type FlexGrid as FlexGridType,
   type FormatItemEventArgs,
 } from '@mescius/wijmo.grid';
+import dayjs, { type Dayjs } from 'dayjs';
+import { DivisionField, PeriodField } from 'features/master/src/components';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { apiClient } from '@foundation/apis';
-import dayjs from '@foundation/dayjs';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { useQuery } from '@foundation/query-client';
 import { CustomDialog, CustomDropdown, DataGrid, SearchArea } from '@shared/components';
-import { useTabLookupQuery, useTabProcQuery } from '@shared/hooks';
-import { Button, Checkbox, FormItem, InputField } from '@shared/lges';
+import { useTabBtnPermissions, useTabLookupQuery, useTabProcQuery } from '@shared/hooks';
+import {
+  Button,
+  Checkbox,
+  DatePickerCalendar,
+  FormItem,
+  InputField,
+  ProgressIndicator,
+} from '@shared/lges';
 import { Grid } from '@shared/mui';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
@@ -22,6 +30,7 @@ import {
   modeOfType,
   PARENT_REPORT_TYPE,
   VERSION_ACTION,
+  VERSION_BTN_CD,
   VERSION_META_PROGRAM_ID,
   VERSION_META_SHEET_NAME,
   VERSION_MODE,
@@ -52,6 +61,12 @@ interface Props {
 type VersionRow = ResponseData<'DMF0044', 'unitedVersion', 'data'>;
 
 const YYYYMMDD = /^\d{8}$/;
+
+// dayjs customParseFormat plugin 미등록 환경 → 하이픈 형태로 변환해서 파싱 (SearchFields.toDayjs 동일 규약)
+const ymdToDayjs = (s: string): Dayjs | null =>
+  YYYYMMDD.test(s) ? dayjs(`${s.slice(0, 4)}-${s.slice(4, 6)}-${s.slice(6, 8)}`) : null;
+const ymToDayjs = (s: string): Dayjs | null =>
+  /^\d{6}$/.test(s) ? dayjs(`${s.slice(0, 4)}-${s.slice(4, 6)}-01`) : null;
 
 // ⭐ DMF0044 / DMF0049 공용 Version 팝업 — AS-IS DMF0044_United_VersionPopup(727행) 1:1.
 //   두 화면이 동일 팝업 클래스를 공유(DMF0044_Sales_Reports.cs L1150 / DMF0049_Sales_ETC_Reports.cs L1236)
@@ -92,6 +107,14 @@ export const VersionModal = ({
 
   const [running, setRunning] = useState(false);
   const [selectedIdx, setSelectedIdx] = useState(-1);
+
+  // ⭐ 권한 = MAIN UI 와 동일 메커니즘 (hook #125 §4.1). 그룹명 하드코딩·session.groupId 금지.
+  //   AS-IS 는 팝업 액션을 ADMIN/DM ADMIN 으로 제한했고, 그 정책이 버튼권한 메타로 이관돼 있다
+  //   (SCM_ADM_USER_GR_MNU_BTN_MPG_M 실측: ACTION/ACTION_BP/TRANSFER = ADMIN·DM ADMIN 만 보유,
+  //    DM Viewer 는 미보유). 따라서 별도 판정식 없이 hasButton 만으로 AS-IS 파리티가 성립한다.
+  const { hasButton } = useTabBtnPermissions({ menuId, enabled: open });
+  const canAction = hasButton(VERSION_BTN_CD.ACTION); // Create / Copy / Delete
+  const canTransfer = hasButton(VERSION_BTN_CD.TRANSFER); // Transfer / Transfer Cancel
 
   const mode = modeOfType(versionType);
   const mvVisible = isMvVisibleType(versionType);
@@ -273,6 +296,14 @@ export const VersionModal = ({
   // ⭐ 액션 공통 — 행 선택 게이트 + SEND_YN 게이트 + confirm + SP 호출 (AS-IS btn*_Click L376~479)
   const runAction = async (action: string) => {
     if (running) return;
+    // 권한 2중 방어 — 버튼을 숨겨도(노출 게이트) 실행 경로에서 한 번 더 막는다.
+    //   AS-IS SaveButton 이 DefineProperty 와 별개로 그룹을 재검사하는 것과 같은 구조.
+    const isTransferAction =
+      action === VERSION_ACTION.TRANSFER || action === VERSION_ACTION.CANCEL;
+    if (isTransferAction ? !canTransfer : !canAction) {
+      void setAlert({ type: 'alert', content: t(VERSION_MSG.NO_AUTH, '_권한이 없습니다.') });
+      return;
+    }
     const row = getSelectedRow();
     // 행 미선택 = 무동작 (AS-IS SingleCheck L323 — MSG00279 알림은 주석 처리돼 있어 파리티 유지)
     if (!row) return;
@@ -384,13 +415,9 @@ export const VersionModal = ({
             onSearch={handleSearch}
             conditions={
               <>
-                <Grid size={2}>
-                  <FormItem
-                    label={t('LBL00663', 'Div')}
-                    labelAlign='right'
-                    render={() => <InputField value={divisionId} disabled />}
-                  />
-                </Grid>
+                {/* V-1 Division = 표준 카탈로그 DivisionField. AS-IS L119~120 `SelectedValue=_sDiv;
+                    Enabled=false` 1:1 — 부모 확정값이라 비활성(값은 부모가 소유). */}
+                <DivisionField value={divisionId} onChange={() => undefined} gridSize={2} disabled />
                 <Grid size={3}>
                   <FormItem
                     label={t('LBL00794', '_Type')}
@@ -404,27 +431,16 @@ export const VersionModal = ({
                     )}
                   />
                 </Grid>
-                <Grid size={4}>
-                  <FormItem
-                    label={t('LBL00013', 'Period')}
-                    labelAlign='right'
-                    render={() => (
-                      <div className={`${styles.fieldRow} ${styles.h36}`}>
-                        <InputField
-                          value={sdt}
-                          onChange={e => setSdt(e.target.value)}
-                          placeholder='YYYYMMDD'
-                        />
-                        <span>~</span>
-                        <InputField
-                          value={edt}
-                          onChange={e => setEdt(e.target.value)}
-                          placeholder='YYYYMMDD'
-                        />
-                      </div>
-                    )}
-                  />
-                </Grid>
+                {/* V-2 Period = 표준 카탈로그 PeriodField (AS-IS drpPeriod = UsrDateRangePicker) */}
+                <PeriodField
+                  start={sdt}
+                  end={edt}
+                  gridSize={4}
+                  onChange={(s, e) => {
+                    setSdt(s);
+                    setEdt(e);
+                  }}
+                />
                 <Grid size={3}>
                   <FormItem
                     label={t('LBL00799', '_Description')}
@@ -443,28 +459,43 @@ export const VersionModal = ({
 
           {/* 액션 바 — 모드별 버튼/옵션 (AS-IS ControlDisplay 가시성 규칙 1:1) */}
           <div className={styles.actionBar}>
-            {mode === VERSION_MODE.CREATE
+            {mode === VERSION_MODE.CREATE && canAction
               ? actionButton(t('LBL00844', '_Version Create'), VERSION_ACTION.CREATE)
               : null}
 
             {mode === VERSION_MODE.COPY ? (
               <>
-                {actionButton(t('LBL00845', '_Transfer'), VERSION_ACTION.TRANSFER)}
-                {actionButton(t('LBL00846', '_Transfer Cancel'), VERSION_ACTION.CANCEL)}
-                {actionButton(t('LBL00847', '_Version Delete'), VERSION_ACTION.DELETE)}
-                {actionButton(t('LBL00848', '_Version Copy'), VERSION_ACTION.COPY)}
+                {/* 권한 없는 액션 버튼은 숨긴다 (AS-IS Set_ButtonVisibleFalse 와 동일 방식) */}
+                {canTransfer
+                  ? actionButton(t('LBL00845', '_Transfer'), VERSION_ACTION.TRANSFER)
+                  : null}
+                {canTransfer
+                  ? actionButton(t('LBL00846', '_Transfer Cancel'), VERSION_ACTION.CANCEL)
+                  : null}
+                {canAction
+                  ? actionButton(t('LBL00847', '_Version Delete'), VERSION_ACTION.DELETE)
+                  : null}
+                {canAction ? actionButton(t('LBL00848', '_Version Copy'), VERSION_ACTION.COPY) : null}
                 <div className={styles.checkField}>
                   <Checkbox
                     labelText={t('LBL00849', '_Include Result')}
                     checked={includeResult}
                     onChange={handleIncludeResult}
                   />
-                  <div className={styles.h36}>
-                    <InputField
-                      value={basicDate}
+                  {/* V-3 실적 기준일 = 표준 일자 컴포넌트 (AS-IS BasicDate = UsrDatePicker) */}
+                  <div className={`${styles.datePickerFix} ${styles.actionDate}`}>
+                    <DatePickerCalendar
+                      usecase='date'
+                      elevation
+                      size='small'
+                      format='YYYY.MM.DD'
                       disabled={!includeResult}
-                      onChange={e => setBasicDate(e.target.value)}
-                      placeholder='YYYYMMDD'
+                      value={ymdToDayjs(basicDate)}
+                      onChange={
+                        ((date: Dayjs | null) => {
+                          setBasicDate(date?.format('YYYYMMDD') ?? '');
+                        }) as never
+                      }
                     />
                   </div>
                 </div>
@@ -479,12 +510,19 @@ export const VersionModal = ({
                   checked={includeMv}
                   onChange={handleIncludeMv}
                 />
-                <div className={styles.h36}>
-                  <InputField
-                    value={mvMonth}
+                {/* V-4 이동계획 계획월 = 표준 년월 컴포넌트 (AS-IS MvMonth = UsrMonthPicker) */}
+                <div className={`${styles.datePickerFix} ${styles.actionDate}`}>
+                  <DatePickerCalendar
+                    usecase='month'
+                    elevation
+                    size='small'
                     disabled={!includeMv}
-                    onChange={e => setMvMonth(e.target.value)}
-                    placeholder='YYYYMM'
+                    value={ymToDayjs(mvMonth)}
+                    onChange={
+                      ((date: Dayjs | null) => {
+                        setMvMonth(date?.format('YYYYMM') ?? '');
+                      }) as never
+                    }
                   />
                 </div>
               </div>
@@ -521,7 +559,18 @@ export const VersionModal = ({
             />
           </div>
 
+          {/* ⭐ 진행 스피너 (사용자 요구 2026-08-10) — Version Create / Copy / Delete / Transfer /
+              Transfer Cancel 는 SP 가 원장 수십만 행을 쓰느라 수 초~수 분 걸린다. 그동안 버튼만
+              disabled 되고 시각 피드백이 없어 "멈춘 것처럼" 보이던 문제.
+              gridWrapper=position:relative 이므로 placement='parent' 로 grid 위 중앙에 표시한다
+              (정본 = master/sales-future-price PriceBatchInputModal L1076~1083). */}
           <div className={styles.gridWrapper}>
+            <ProgressIndicator
+              shape='circular'
+              apprearance='infinite'
+              open={running}
+              placement='parent'
+            />
             <DataGrid<VersionRow>
               gridRef={gridRef}
               itemsSource={versionRows}

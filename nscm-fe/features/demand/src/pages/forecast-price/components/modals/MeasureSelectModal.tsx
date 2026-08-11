@@ -129,8 +129,8 @@ export const MeasureSelectModal = ({
         : new Set()
     );
 
+  // ⭐ Class 컬럼 제거 (2026-08-11 — 통합테스트 1st No.40 사용자 요구 "Measure Code, Measure Name만")
   const MEASURE_COLUMNS: DualListColumn<MeasureDualRow>[] = [
-    { key: 'sClsLblNm', header: 'Class', width: 70, align: 'left' },
     { key: 'colNm', header: 'Measure Code', width: 120, align: 'left' },
     { key: 'colLblNm', header: 'Measure Name', align: 'left' },
   ];

@@ -9,8 +9,13 @@ export interface VersionCallResult {
   message?: string;
 }
 
-// call-proc 응답 첫 커서 첫 문자열 값 추출 (SP OUT 은 'success' 또는 오류 문구를 그대로 실어 보낸다)
-const parseFirstValue = (data: unknown): string | undefined => {
+/** call-proc 응답의 SP 결과 커서 1행을 꺼낸다.
+ *  ⭐ 실측 응답 2형 (2026-08-10 HTTP 직접 호출):
+ *   · 정상   `{"MSG":"SUCCESS","CODE":"0","EVENT":"0"}`
+ *   · 검증실패 `{"CODE":"1","MSG":"VERSION 값이 존재하지 않습니다.","EVENT":null}`
+ *     (SP `WHEN e_validation` L9239~9240 — `SELECT '1' AS CODE, v_result_msg AS MSG …`)
+ *  HTTP 는 **양쪽 다 200 + envelope code '0'** 이므로 이 커서를 봐야만 실패를 알 수 있다. */
+const firstResultRow = (data: unknown): Record<string, unknown> | undefined => {
   const result = (data as { result?: unknown })?.result;
   const rows = Array.isArray(result)
     ? (result as unknown[])
@@ -20,12 +25,10 @@ const parseFirstValue = (data: unknown): string | undefined => {
           | undefined)
       : undefined;
   const first = rows?.[0];
-  if (!first || typeof first !== 'object') return undefined;
-  const firstVal = Object.values(first as Record<string, unknown>).find(
-    v => typeof v === 'string' && String(v).trim() !== ''
-  );
-  return typeof firstVal === 'string' ? firstVal.trim() : undefined;
+  return first && typeof first === 'object' ? (first as Record<string, unknown>) : undefined;
 };
+
+const str = (v: unknown): string => (typeof v === 'string' || typeof v === 'number' ? String(v) : '').trim();
 
 const callProc = async (
   menuId: string,
@@ -39,10 +42,16 @@ const callProc = async (
   if (res.status >= 400 || Number((res.data as { code?: string })?.code)) {
     return { ok: false, message: (res.data as { message?: string })?.message?.trim() };
   }
-  const firstVal = parseFirstValue(res.data);
-  if (firstVal && firstVal.toLowerCase() !== 'success' && String(Number(firstVal)) !== firstVal) {
-    return { ok: false, message: firstVal };
-  }
+  // ⚠️ 2026-08-10 실사고: 예전 구현은 "첫 문자열 값"을 뽑아 `String(Number(v)) !== v` 로 걸렀는데,
+  //   검증실패 응답은 CODE 가 먼저 와서 값이 `'1'` 이었고 `String(Number('1'))==='1'` 이라 조건이
+  //   무너져 **실패를 성공으로 판정**했다(Version Delete 가 "성공적으로 저장되었습니다" 를 띄우고
+  //   실제로는 아무 것도 지우지 않던 원인). ⇒ CODE 를 **이름으로 명시 확인**한다.
+  const row = firstResultRow(res.data);
+  if (!row) return { ok: true }; // 결과 커서를 안 내리는 SP(전송류) — HTTP 성공을 그대로 신뢰
+  const code = str(row.CODE);
+  const msg = str(row.MSG);
+  if (code !== '' && code !== '0') return { ok: false, message: msg || code };
+  if (msg !== '' && msg.toLowerCase() !== 'success') return { ok: false, message: msg };
   return { ok: true };
 };
 

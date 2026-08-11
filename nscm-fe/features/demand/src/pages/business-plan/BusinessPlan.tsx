@@ -421,6 +421,8 @@ export const BusinessPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
           },
         ]
       : []),
+    // ⭐ 아이콘 버튼 표준 순서 = **환율 → 컬럼설정 → 메저** (hook #120, 2026-08-10 사용자 재확정).
+    //   권한으로 일부가 빠져도 남은 것들의 상대 순서는 그대로 유지된다.
     ...(hasButton('EXCHANGE_RATE')
       ? [
           {

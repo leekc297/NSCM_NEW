@@ -213,7 +213,6 @@ export const useEtcSalesReportsStore = createPersistedStoreWithTab<State & Actio
       });
     },
 
-
     // ⭐ ColumnLayoutModal OK — 표시/순서 + 폭/색 개인화 적용 (DMF0003 방식 교체 2026-07-30).
     applyColumnLayout: settings => {
       set(state => {

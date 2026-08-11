@@ -1,0 +1,65 @@
+/* DMF0068 조회조건 — Version readonly + '...' 버튼 가로 배치 (hook #94 36px 정합) */
+.versionCell {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  > :first-child {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+/* 월 달력 높이 36px 정합 — design-system small(28px) 을 다른 조회조건과 맞춘다.
+   내부 emotion 해시 클래스 비의존 (Mui* 부분 일치 셀렉터). */
+.datePickerFix {
+  width: 100%;
+  height: 36px;
+  display: flex;
+  align-items: center;
+
+  :global {
+    [class*='MuiBox-root'],
+    [class*='MuiFormControl-root'],
+    [class*='MuiTextField-root'] {
+      height: 36px !important;
+      min-height: 36px !important;
+      box-sizing: border-box;
+    }
+
+    [class*='MuiOutlinedInput-root'],
+    [class*='MuiInputBase-root'] {
+      height: 36px !important;
+      min-height: 36px !important;
+      box-sizing: border-box;
+    }
+
+    [class*='MuiInputBase-input'],
+    input {
+      box-sizing: border-box;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+    }
+  }
+}
+
+/* 시작월 / 종료월 각각 독립 월 달력 배치 */
+.periodSplit {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  width: 100%;
+
+  .datePickerFix {
+    flex: 0 0 auto;
+    width: 110px;
+    min-width: 0;
+  }
+
+  .periodSep {
+    flex: 0 0 auto;
+    color: var(--gray-400, #98a2b3);
+    user-select: none;
+  }
+}

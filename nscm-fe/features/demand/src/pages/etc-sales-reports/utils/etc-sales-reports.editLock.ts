@@ -70,35 +70,33 @@ export const evalEtcReportCell = (params: {
   return { editable: measureOpen, isPast };
 };
 
-// ============================================================================
-// InsertRow 신규행 정적 컬럼 잠금 (L965~1024 division 분기 전수 — true=편집 가능)
-//   결함①(L997 ETC_DESCR 해제 가드가 CURRENCY 인덱스 검사) = 컬럼 자기판정으로 자연 교정
-//   (DMF0049 SHEET_COLUMNS 42행에 ETC_DESCR 부재 — 실효 차이 0).
-// ============================================================================
-const COMMON_LOCKED = new Set([
-  'T_DEPARTMENT_NAME',
-  'T_DEPT_NAME',
-  'CUTOFF_YYYYMMDD',
-  'NICK_NAME',
-  'BIZ_TYPE_NAME',
-  'DMS_CUSTOMER',
-  'MEASURE', // 세트 삽입 시 강제 세팅 — 사용자 선택 불가
-]);
-
-export const insertStaticEditable = (binding: string, divisionId: string): boolean => {
-  if (COMMON_LOCKED.has(binding)) return false;
-  if (divisionId.startsWith('81')) {
-    if (binding === 'FCST_TYPE' || binding === 'CELL_MODEL_INFO') return false; // L983~1003
-    return true;
+// ⭐ 정적 컬럼 편집 판정 — **UI Category Setup(`INPUT_TP_CD`) 단일 원천** (2026-08-11 전환.
+//   DMF0044 동일 전환 선례 — `sales-reports.editLock.ts` staticEditableByMeta).
+//   [이전] AS-IS `.cs` InsertRow(L965~1024) 의 division 분기 잠금 목록을 **하드코딩**하고
+//          기존행은 전량 잠금(L399~412)으로 판정했다 → 운영자가 admin 화면에서 정한
+//          `INPUT_TP_CD` 가 화면에 **무효화**됐다(실측: DMF0049 42컬럼 전부 'S'(Only Search)).
+//   [현재] 컬럼 메타의 `inputTpCd` 를 그대로 따른다. AS-IS 파리티는 **메타 값**으로 보존한다
+//          (InsertRow 가 잠그던 컬럼 = 'S', 신규행 입력 컬럼 = 'IM'/'IO' 로 등재).
+//   규약은 공용 `GridUtils.isEditableCell`(foundation/utils/gridUtils.ts)과 **동일**하다 —
+//   화면 게이트와 공용 게이트가 같은 메타·같은 규칙을 보므로 판정이 갈릴 수 없다.
+//     IM / IO → EDIT_FLAG!=='N' && CRUD_TYPE==='I'   (insert 시 입력. IM=필수·IO=선택)
+//     M  / O  → EDIT_FLAG!=='N'                       (전 행 입력)
+//     S / 미지정 → 편집 불가
+export const staticEditableByMeta = (
+  inputTpCd: string | undefined,
+  row: EtcSalesReportRow | undefined
+): boolean => {
+  if (!row) return false;
+  const editFlag = typeof row.EDIT_FLAG === 'string' ? row.EDIT_FLAG : '';
+  if (editFlag === 'N') return false;
+  switch (inputTpCd) {
+    case 'M':
+    case 'O':
+      return true;
+    case 'IM':
+    case 'IO':
+      return row.CRUD_TYPE === 'I';
+    default: // 'S' 및 미지정
+      return false;
   }
-  if (isDiv82(divisionId)) {
-    if (binding === 'ITEM_ID' || binding === 'CELL_MODEL_INFO') return false; // L1004~1024
-    return true;
-  }
-  // 40 — SCM_SITE_ID 잠금 (L978 공통 세트) 외 개방
-  if (binding === 'SCM_SITE_ID') return false;
-  return true;
 };
-
-// 기존행 정적 컬럼 — 전량 잠금 (AS-IS L399~412 전 행 키영역 잠금 — 예외 없음)
-export const existingStaticEditable = (): boolean => false;

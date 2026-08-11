@@ -1,0 +1,116 @@
+-- ============================================================================
+-- DMF0044 클라우드 이관 (2026-08-10 06:38) — 90 VERIFY
+--   ⚠️ QA·DEV **2 DB 각각** 실행. 전 항목 기대값 일치해야 완료.
+-- ============================================================================
+SET LINESIZE 200
+SET PAGESIZE 100
+
+PROMPT ===== [1] PKG_DMF0044 컴파일 상태 (기대: PACKAGE VALID / PACKAGE BODY VALID)
+SELECT OBJECT_TYPE, STATUS, TO_CHAR(LAST_DDL_TIME,'YYYY-MM-DD HH24:MI') LAST_DDL
+  FROM ALL_OBJECTS
+ WHERE OWNER = 'SCM_MGR' AND OBJECT_NAME = 'PKG_DMF0044'
+ ORDER BY OBJECT_TYPE;
+
+PROMPT ===== [2] 컴파일 에러 (기대 0행)
+SELECT LINE, POSITION, TEXT
+  FROM ALL_ERRORS
+ WHERE OWNER = 'SCM_MGR' AND NAME = 'PKG_DMF0044'
+ ORDER BY SEQUENCE;
+
+PROMPT ===== [3] 적용 마커 4종 (기대: AUTHUNION=1 / MERGE_ON=1 / PIVOTSEL=1 / PRODUCTDETAIL=2)
+SELECT SUM(CASE WHEN INSTR(TEXT,'AUTHUNION 2026-08-09') > 0 THEN 1 ELSE 0 END)          AS AUTHUNION,
+       SUM(CASE WHEN INSTR(TEXT,'20260805 MERGE-ON 파리티 복원') > 0 THEN 1 ELSE 0 END) AS MERGE_ON,
+       SUM(CASE WHEN INSTR(TEXT,'PIVOTSEL 2026-08-10') > 0 THEN 1 ELSE 0 END)           AS PIVOTSEL,
+       SUM(CASE WHEN INSTR(TEXT,'PRODUCTDETAIL 2026-08-10') > 0 THEN 1 ELSE 0 END)      AS PRODUCTDETAIL,
+       COUNT(*)                                                                          AS BODY_LINES
+  FROM ALL_SOURCE
+ WHERE OWNER = 'SCM_MGR' AND NAME = 'PKG_DMF0044' AND TYPE = 'PACKAGE BODY';
+-- BODY_LINES 기대 = 9,767 (사내 live 2026-08-10 PRODUCT_DETAIL 정정 반영 기준)
+
+PROMPT ===== [4] ⭐ PIVOT 정정 핵심 — 변수 2종 분리 확인
+--   기대 (사내 live 2026-08-10 실측으로 판정식까지 검증): 1 / 1 / 1
+--     IN_WITH_PROD  = 1  → PIVOT IN 절이 V_PROD (리터럴+별칭)
+--     SEL_WITH_COLS = 1  → 바깥 SELECT 목록이 V_COLS (식별자)
+--     PROD_NON_IN   = 1  → 남는 V_PROD 사용처는 `IF V_PROD IS NOT NULL …`(RTRIM 가드) **1곳뿐**
+--   ⛔ PROD_NON_IN 이 2 이상이면 바깥 SELECT 가 아직 V_PROD 를 쓰는 것 →
+--      전 셀 값이 컬럼명 문자열이 된다(컴파일은 VALID·조회 200 이라 육안 전까지 잠복). [4-1] 로 확인.
+SELECT SUM(CASE WHEN INSTR(TEXT,'FOR YYYYMM IN') > 0
+                 AND INSTR(TEXT,'V_PROD') > 0 THEN 1 ELSE 0 END)              AS IN_WITH_PROD,
+       SUM(CASE WHEN INSTR(TEXT,'V_COLS') > 0
+                 AND INSTR(TEXT,':=') = 0
+                 AND LTRIM(TEXT) NOT LIKE '--%' THEN 1 ELSE 0 END)            AS SEL_WITH_COLS,
+       SUM(CASE WHEN INSTR(TEXT,'V_PROD') > 0
+                 AND INSTR(TEXT,'V_PRODUCT') = 0
+                 AND INSTR(TEXT,'FOR YYYYMM') = 0
+                 AND INSTR(TEXT,':=') = 0
+                 AND LTRIM(TEXT) NOT LIKE '--%' THEN 1 ELSE 0 END)            AS PROD_NON_IN
+  FROM ALL_SOURCE
+ WHERE OWNER = 'SCM_MGR' AND NAME = 'PKG_DMF0044' AND TYPE = 'PACKAGE BODY';
+
+PROMPT ===== [4-1] 원문 육안 확인 (V_PROD / V_COLS 사용 라인 전량)
+SELECT LINE, RTRIM(TEXT) TEXT
+  FROM ALL_SOURCE
+ WHERE OWNER = 'SCM_MGR' AND NAME = 'PKG_DMF0044' AND TYPE = 'PACKAGE BODY'
+   AND (INSTR(TEXT,'V_PROD') > 0 OR INSTR(TEXT,'V_COLS') > 0)
+ ORDER BY LINE;
+-- 사내 정본(2026-08-10): 선언 2 · 초기화 2 · 루프 축적 2 · RTRIM 2 · 바깥 SELECT=V_COLS 1 · PIVOT IN=V_PROD 1
+
+PROMPT ===== [5] MERGE ON 센티널 정규화 키 (기대 **5행** — 사내 live 실측)
+--   L3987~3988 = ETC 선행 MERGE 2키 / L4035~4037 = 2026-08-09 복원 3키(DOM_EXP·CELL_MODEL_INFO·CELL_MODEL)
+SELECT LINE, RTRIM(TEXT) TEXT
+  FROM ALL_SOURCE
+ WHERE OWNER = 'SCM_MGR' AND NAME = 'PKG_DMF0044' AND TYPE = 'PACKAGE BODY'
+   AND (INSTR(TEXT,'A.DOM_EXP') > 0
+        OR INSTR(TEXT,'A.FORECAST_INFO_CELL_MODEL') > 0
+        OR INSTR(TEXT,'A.ATTRIBUTE3') > 0)
+   AND INSTR(TEXT,'NVL(NULLIF(TRIM') > 0
+ ORDER BY LINE;
+
+PROMPT ===== [6] AUTHUNION 판정식 — 보유그룹 합집합 (기대 1행, SEGMENT1 IN (SELECT …) 포함)
+SELECT LINE, RTRIM(TEXT) TEXT
+  FROM ALL_SOURCE
+ WHERE OWNER = 'SCM_MGR' AND NAME = 'PKG_DMF0044' AND TYPE = 'PACKAGE BODY'
+   AND INSTR(TEXT,'SCM_ADM_USER_GR_MPG_M') > 0
+ ORDER BY LINE;
+
+PROMPT ===== [7] CMBO 2종 등록 (기대 2행 · CREATED_BY='admin')
+SELECT SQL_ID, MDU_DIVS_CD, USE_YN, CREATED_BY, LENGTH(SQL_DTL_CTN) CTN_LEN
+  FROM SCM_MGR.SCM_ADM_CMBO_SQL_M
+ WHERE SQL_ID IN ('DMF0044_DEPARTMENT_TEAM','DMF0044_ETC_SALE_RESULT_TYPE_40')
+ ORDER BY 1;
+
+PROMPT ===== [8] CMBO 실행 결과 행수 (기대: DEPT_TEAM > 0 · ETC = 1)
+SELECT (SELECT COUNT(*) FROM SCM_MGR.SCM_MST_SSO_DEPT_INFO
+         WHERE VALID_YN='Y' AND UPPER_DEPT_ID IS NOT NULL)          AS DEPT_TEAM_ROWS,
+       (SELECT COUNT(*) FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL
+         WHERE LOOKUP_TYPE='DMF0044_ETC_SALE_RESULT_TYPE_40'
+           AND VALID_YN='Y')                                        AS ETC_ROWS
+  FROM DUAL;
+-- 사내 실측: DEPT_TEAM_ROWS = 9,626 / ETC_ROWS = 1
+
+PROMPT ===== [9] PROC_M — 조회 9 IN + ETC SAVE 21 IN (기대 GET=10행 포함 result / SAVE=22행)
+SELECT PROC_NM, COUNT(*) CNT
+  FROM SCM_MGR.SCM_ADM_PROC_M
+ WHERE PROC_NM IN ('PKG_DMF0044.P_DMF0044_GET_SALES_REPORTS_DATA',
+                   'PKG_DMF0044.P_DMF0044_SAVE_SALES_PLAN_REPORT_C',
+                   'PKG_DMF0044.P_DMF0044_SAVE_SALES_PLAN_REPORT_C_CF')
+ GROUP BY PROC_NM ORDER BY 1;
+-- 사내 실측 기대: GET_SALES_REPORTS_DATA **11** / SAVE_..._C **22** / SAVE_..._C_CF **24**
+-- ※ 본 패키지는 PROC_M 무변경 — 선행 패키지 적용 상태 확인용이다(불일치 시 선행 확인).
+
+PROMPT ===== [10] ⭐ 화면 실증 (BE 재기동 후 · 필수)
+-- 브라우저 또는 HTTP 로 DMF0044 조회 후 **동적 셀 M_yyyymm 값이 숫자**인지 확인한다.
+-- `"M_202501": "M_202501"` 처럼 컬럼명이 보이면 [4] 가 잘못 적용된 것 → 즉시 원복.
+
+PROMPT ===== [11] ⭐ PRODUCT_DETAIL NOT NULL 정정 — 빈 문자열 분기 잔존 0 (기대 0행)
+SELECT LINE, RTRIM(TEXT) TEXT
+  FROM ALL_SOURCE
+ WHERE OWNER = 'SCM_MGR' AND NAME = 'PKG_DMF0044' AND TYPE = 'PACKAGE BODY'
+   AND (INSTR(TEXT, 'NVL(A.ATTRIBUTE1,'''')') > 0 OR INSTR(TEXT, 'NVL(A.ATTRIBUTE2,'''')') > 0)
+ ORDER BY LINE;
+-- ⛔ 1행이라도 나오면 ORA-01400(NOT NULL) 재발. SELECT 와 GROUP BY 는 **쌍으로** 고쳐야 한다
+--    (한쪽만 고치면 ORA-00979). 정본 = 각 2건씩 `'-'`.
+
+PROMPT ===== [12] TRANSFER 실증 (BE 재기동 후 · 필수)
+-- DMF0044/DMF0049 의 unitedVersion TRANSFER 버튼을 눌러 오류 없이 완료되는지 확인한다.
+-- 정정 전에는 ORA-01400 으로 **항상 실패**했다.

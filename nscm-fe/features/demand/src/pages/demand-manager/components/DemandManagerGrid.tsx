@@ -37,7 +37,9 @@ interface Props {
 
 const toNumber = (v: unknown): number => {
   if (v == null || v === '') return 0;
-  const n = typeof v === 'number' ? v : Number(String(v).replace(/,/g, ''));
+  if (typeof v === 'number') return Number.isFinite(v) ? v : 0;
+  // 문자열 외(객체 등)는 0 — String(v) 직행은 '[object Object]'→NaN 경로라 금지 (no-base-to-string)
+  const n = typeof v === 'string' ? Number(v.replace(/,/g, '')) : NaN;
   return Number.isFinite(n) ? n : 0;
 };
 

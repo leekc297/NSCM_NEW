@@ -85,7 +85,8 @@ export class DemandManagerMergeManager extends MergeManager {
       const item = (view[i] as unknown as { dataItem?: Record<string, unknown> })?.dataItem;
       if (!item) return undefined;
       const k = item.KEYVALUE2 ?? item.INSERT_GROUP_ID;
-      const key = k == null ? '' : String(k);
+      // 문자/숫자만 키로 인정 (String(k) 직행 금지 — no-base-to-string)
+      const key = typeof k === 'string' ? k : typeof k === 'number' ? String(k) : '';
       return key === '' ? undefined : key;
     };
     const cur = keyOf(r);

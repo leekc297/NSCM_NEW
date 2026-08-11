@@ -57,6 +57,49 @@ RE_CONST_SHEETS = re.compile(r"const\s+SHEETS\s*=\s*\{(.*?)\n\}", re.S)
 RE_CONST_SHEET_NAME = re.compile(r"\bconst\s+SHEET_NAME\s*=\s*'([^']+)'")  # DMF0007 단일 시트 변형
 RE_STR_VAL = re.compile(r"[:=]\s*'([^']+)'")
 
+
+def strip_ts_comments(text: str) -> str:
+    """TS/JS 주석(`//`, `/* */`)을 **공백으로 치환**해 제거 (문자열·템플릿 리터럴 내부는 보존).
+
+    ⚠️ 2026-08-09 정정 — 주석을 지우지 않아 `enum SHEETS { ... }` **블록 주석 안의**
+      `P_CATE='BP'` 가 enum 멤버로 추출됐다(DMF0042 실측 → 존재하지 않는 시트 'BP' 로 L2 FAIL 오탐).
+      길이를 보존(공백 치환)해 다른 regex 의 span 계산과 어긋나지 않게 한다.
+    """
+    out = list(text)
+    i, n = 0, len(text)
+    quote = None  # 현재 열려 있는 따옴표 문자
+    while i < n:
+        c = text[i]
+        if quote:
+            if c == "\\":
+                i += 2
+                continue
+            if c == quote:
+                quote = None
+            i += 1
+            continue
+        if c in "'\"`":
+            quote = c
+            i += 1
+            continue
+        if c == "/" and i + 1 < n and text[i + 1] == "/":
+            while i < n and text[i] != "\n":
+                out[i] = " "
+                i += 1
+            continue
+        if c == "/" and i + 1 < n and text[i + 1] == "*":
+            while i < n and not (text[i] == "*" and i + 1 < n and text[i + 1] == "/"):
+                if text[i] != "\n":
+                    out[i] = " "
+                i += 1
+            for _ in range(2):
+                if i < n:
+                    out[i] = " "
+                    i += 1
+            continue
+        i += 1
+    return "".join(out)
+
 # 판정 정책: SEARCH/SAVE 버튼의 API 미배선 = FAIL (조회·저장 불통), 그 외 버튼 = WARN(FE-local 가능)
 API_MANDATORY_BTNS = {"SEARCH", "SAVE"}
 
@@ -107,7 +150,9 @@ def extract_fe_actions(folder, enum_map, single_sheet, page_menu_id=None):
     actions, hotkeys, dynamic, gate_codes = {}, {}, [], set()
     btn_gates = set()  # 페이지 전체 hasButton('X') — L3 UI 전용 버튼 판정용
     for f in sorted(list(folder.rglob("*.ts")) + list(folder.rglob("*.tsx"))):
-        text = f.read_text(encoding="utf-8", errors="ignore")
+        # 주석 제거(길이 보존) — 주석에 적힌 call-proc URL·hotkeyConfig 예시가 **실사용 액션**으로
+        #   집계되는 오탐 차단(2026-08-09, enum 'BP' 오탐과 동일 계보).
+        text = strip_ts_comments(f.read_text(encoding="utf-8", errors="ignore"))
         rel = str(f.relative_to(folder)).replace("\\", "/")
         covered_spans = []
         # ① call-proc 리터럴 (enum / SHEET_NAME / 시트 리터럴 / 전체 리터럴)
@@ -184,7 +229,8 @@ def scan_fe_pages():
         menu_id, sheets, enum_map, single_sheet = None, {}, {}, None
         const_files = sorted(folder.rglob("*.constants.ts"))
         for cf in const_files:
-            text = cf.read_text(encoding="utf-8", errors="ignore")
+            # 주석 제거본으로 시트/메뉴 추출 — 주석 속 `X='Y'` 를 enum 멤버로 오인하지 않게 한다(2026-08-09).
+            text = strip_ts_comments(cf.read_text(encoding="utf-8", errors="ignore"))
             m = RE_MENU_ID.search(text)
             if m and not menu_id:
                 menu_id = m.group(1)

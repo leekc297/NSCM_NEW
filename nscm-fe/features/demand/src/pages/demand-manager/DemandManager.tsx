@@ -143,7 +143,6 @@ export const DemandManager = ({ tabId, title }: PageProps<MENU_ID>) => {
     void fetchStaticColumns();
   };
 
-
   // F8 Insert — 언제나 2행 한 세트. 두 행에 같은 그룹 키를 주고 Measure 를 고정 배정한다
   const handleInsert = () => {
     const gid = newRowKey();
@@ -255,7 +254,6 @@ export const DemandManager = ({ tabId, title }: PageProps<MENU_ID>) => {
     manual: false,
     upload: false,
   };
-
 
   return (
     <div className={styles.container}>

@@ -1,0 +1,68 @@
+[
+  {
+    "COLUMN_NAME": "DEPARTMENT_ID",
+    "COLUMN_LABEL_NAME": "Department*",
+    "SORT_ORDER_NO": 30,
+    "VISIBLE_FLAG": "Y",
+    "INPUT_TP_CD": "IM",
+    "DIVISION_ID": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "USER_SELECTABLE_FLAG": "Y",
+    "DEFAULT_FLAG": "Y",
+    "LAST_UPDATED_BY": "admin"
+  },
+  {
+    "COLUMN_NAME": "T_DEPARTMENT_ID",
+    "COLUMN_LABEL_NAME": "Department*",
+    "SORT_ORDER_NO": 32,
+    "VISIBLE_FLAG": "Y",
+    "INPUT_TP_CD": "IO",
+    "DIVISION_ID": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "USER_SELECTABLE_FLAG": " ",
+    "DEFAULT_FLAG": "Y",
+    "LAST_UPDATED_BY": "admin"
+  },
+  {
+    "COLUMN_NAME": "T_DEPARTMENT_NAME",
+    "COLUMN_LABEL_NAME": "Department Name",
+    "SORT_ORDER_NO": 34,
+    "VISIBLE_FLAG": "Y",
+    "INPUT_TP_CD": "S",
+    "DIVISION_ID": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "USER_SELECTABLE_FLAG": " ",
+    "DEFAULT_FLAG": "Y",
+    "LAST_UPDATED_BY": "hmyong"
+  },
+  {
+    "COLUMN_NAME": "DEPT_ID",
+    "COLUMN_LABEL_NAME": "Team",
+    "SORT_ORDER_NO": 50,
+    "VISIBLE_FLAG": "Y",
+    "INPUT_TP_CD": "IO",
+    "DIVISION_ID": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "USER_SELECTABLE_FLAG": "Y",
+    "DEFAULT_FLAG": "Y",
+    "LAST_UPDATED_BY": "admin"
+  },
+  {
+    "COLUMN_NAME": "T_DEPT_ID",
+    "COLUMN_LABEL_NAME": "Team",
+    "SORT_ORDER_NO": 52,
+    "VISIBLE_FLAG": "Y",
+    "INPUT_TP_CD": "IO",
+    "DIVISION_ID": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "USER_SELECTABLE_FLAG": " ",
+    "DEFAULT_FLAG": "Y",
+    "LAST_UPDATED_BY": "admin"
+  },
+  {
+    "COLUMN_NAME": "T_DEPT_NAME",
+    "COLUMN_LABEL_NAME": "Team Name",
+    "SORT_ORDER_NO": 54,
+    "VISIBLE_FLAG": "Y",
+    "INPUT_TP_CD": "S",
+    "DIVISION_ID": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "USER_SELECTABLE_FLAG": " ",
+    "DEFAULT_FLAG": "Y",
+    "LAST_UPDATED_BY": "hmyong"
+  }
+]

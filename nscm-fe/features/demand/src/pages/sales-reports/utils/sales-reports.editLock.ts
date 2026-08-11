@@ -71,29 +71,36 @@ export const evalSalesReportCell = (params: {
   return { editable: d40 && isPast, isPast };
 };
 
-// ⭐ InsertRow 메타컬럼 잠금 12 (신정본 L997~1023 전수) — true = 잠금
-const INSERT_LOCKED_COLUMNS = new Set([
-  'DEPARTMENT_NAME',
-  'DEPT_NAME',
-  'CUTOFF_YYYYMMDD',
-  'NICK_NAME',
-  'SCM_SITE_ID',
-  'PROJECT_CODE',
-  'APPLICATION',
-  'BIZ_TYPE_NAME',
-  'BIZ_TYPE_NAME40',
-  'DMS_SALES',
-  'DMS_CUSTOMER',
-  'MEASURE', // 블록 삽입 시 강제 세팅 (L1021~1025) — 사용자 선택 불가
-]);
+// ⭐ 정적 컬럼 편집 판정 — **UI Category Setup(`INPUT_TP_CD`) 단일 원천** (2026-08-11 전환).
+//   [이전] AS-IS `.cs` InsertRow LockRange 12컬럼을 **하드코딩**해 "잠금 목록 외 전부 개방"으로 판정.
+//          → 운영자가 admin 화면에서 정한 `INPUT_TP_CD` 가 화면에 **무효화**됐다
+//            (실측: DMF0044 46컬럼 전부 'S'(Only Search) 인데 화면은 신규행 입력 가능).
+//   [현재] 컬럼 메타의 `inputTpCd` 를 그대로 따른다. AS-IS 파리티는 **메타 값**으로 보존한다
+//          (InsertRow 가 잠그던 컬럼 = 'S' 로 등재. 2026-08-11 메타 정합 적용 IM 1/IO 32/S 13).
+//   규약은 공용 `GridUtils.isEditableCell`(foundation/utils/gridUtils.ts)과 **동일**하다 —
+//   화면 게이트와 공용 게이트가 같은 메타·같은 규칙을 보므로 판정이 갈릴 수 없다.
+//     IM / IO → EDIT_FLAG!=='N' && CRUD_TYPE==='I'   (insert 시 입력. IM=필수·IO=선택)
+//     M  / O  → EDIT_FLAG!=='N'                       (전 행 입력)
+//     S / 미지정 → 편집 불가
+export const staticEditableByMeta = (
+  inputTpCd: string | undefined,
+  row: SalesReportRow | undefined
+): boolean => {
+  if (!row) return false;
+  const editFlag = typeof row.EDIT_FLAG === 'string' ? row.EDIT_FLAG : '';
+  if (editFlag === 'N') return false;
+  switch (inputTpCd) {
+    case 'M':
+    case 'O':
+      return true;
+    case 'IM':
+    case 'IO':
+      return row.CRUD_TYPE === 'I';
+    default: // 'S' 및 미지정
+      return false;
+  }
+};
 
-// Insert 행 정적 컬럼 편집 — 잠금 12 외 개방 (콤보/텍스트는 SHEET_COLUMNS 메타·cascade 가 담당)
-export const insertStaticEditable = (binding: string): boolean =>
-  !INSERT_LOCKED_COLUMNS.has(binding);
-
-// 기존행 정적 컬럼 — 전량 잠금 (AS-IS EditButton 키영역 LockRange — 예외 없음)
-export const existingStaticEditable = (): boolean => false;
-
-// 현재월 yyyymm (AS-IS iCurCol 산정 — Date 기준. 조회 시점 고정 위해 store 에서 1회 산출 권장)
-export const currentYyyymm = (d: Date): string =>
-  `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}`;
+// ※ 현재월(yyyymm)은 `useSalesReportsStore.thisMonth` 가 조회 시점에 `dayjs().format('YYYYMM')` 로
+//   1회 산출해 고정한다(state L36·L107·L150). 여기서 Date 기반 헬퍼를 따로 두면 산출 원천이 둘이 되어
+//   경계값이 어긋날 수 있으므로 두지 않는다.

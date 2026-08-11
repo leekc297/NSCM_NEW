@@ -135,7 +135,12 @@ const PopupSearchInput = ({
 // 1. DivisionField (필수, size=4, combo=MyDivision)
 //    AS-IS clbDivisions / DataService SetChangeControl("MyDivision")
 // ====================================================================================
-export const DivisionField = ({ value, onChange, gridSize }: SingleFieldProps) => {
+// disabled: 부모에서 division 이 확정돼 내려오는 모달용 (AS-IS DMF0044_United_VersionPopup L119~120
+//   `clbDivision.SelectedValue = _sDiv; clbDivision.Enabled = false` 1:1). 미지정 시 기존 동작 그대로.
+interface DivisionFieldProps extends SingleFieldProps {
+  disabled?: boolean;
+}
+export const DivisionField = ({ value, onChange, gridSize, disabled }: DivisionFieldProps) => {
   const L = useL();
   const [divisions] = useTabComboQueries({ filters: ['MyDivision'] });
   const options = useMemo(
@@ -148,11 +153,13 @@ export const DivisionField = ({ value, onChange, gridSize }: SingleFieldProps) =
   );
   // ⭐ 미보유 division 자동 보정 (SearchFields.utils 주석 참조) — 보유 Div 가 하나뿐인 계정에서
   //   스토어 기본값('40' 등)이 옵션에 없어 콤보가 빈칸으로 보이던 문제. 유효값은 덮어쓰지 않는다.
+  //   ⚠ disabled(부모 확정값)일 때는 보정하지 않는다 — 부모 화면 값을 모달이 뒤집으면 안 된다.
   useEffect(() => {
+    if (disabled) return;
     const next = resolveDivisionAutoSelect(options, value);
     if (next !== null) onChange(next);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [options, value]);
+  }, [options, value, disabled]);
   return (
     <Grid size={gridSize ?? 4}>
       <FormItem
@@ -163,6 +170,7 @@ export const DivisionField = ({ value, onChange, gridSize }: SingleFieldProps) =
           <CustomDropdown
             value={value}
             options={options}
+            disabled={disabled}
             onChange={(_, option) => onChange(String(option))}
           />
         )}

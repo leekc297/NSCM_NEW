@@ -1,0 +1,58 @@
+-- ============================================================================
+-- DMF0044 클라우드 이관 (2026-08-10 06:38) — 00 PRECHECK
+--   ⚠️ QA·DEV **2 DB 각각** 실행. 한 항목이라도 기대와 다르면 **적용 중단**.
+--   본 패키지는 선행 패키지(DBWORK_7UI / PKG_CONSOLIDATION / COMBO_ASIS_ALIGN)를
+--   전제로 하는 **증분**이다. 전제 미충족 상태에서 01 BODY 를 올리면 참조 오브젝트
+--   부재로 INVALID 가 된다.
+-- ============================================================================
+SET LINESIZE 200
+SET PAGESIZE 100
+
+PROMPT ===== [1] 선행 — PKG_DMF0044 SPEC/BODY 존재 (기대 2행, SPEC 은 VALID)
+SELECT OBJECT_TYPE, STATUS, TO_CHAR(LAST_DDL_TIME,'YYYY-MM-DD HH24:MI') LAST_DDL
+  FROM ALL_OBJECTS
+ WHERE OWNER = 'SCM_MGR' AND OBJECT_NAME = 'PKG_DMF0044'
+ ORDER BY OBJECT_TYPE;
+
+PROMPT ===== [2] 선행 — 본 BODY 가 참조하는 GTT 8종 (기대 8행 — 사내 live 실측)
+SELECT TABLE_NAME
+  FROM ALL_TABLES
+ WHERE OWNER = 'SCM_MGR'
+   AND TABLE_NAME IN ('GT_F044_T','GT_F044_SELECT_MEASURE','GT_F044_PJT',
+                      'GT_F044_DM_MST_ITEM_SINGLE_V','GT_F044_EXCHANGE_C',
+                      'GT_F044_REPORT_C','GT_DMF0044_DEPT_RPT_C','GT_DMF0044_ITEM_SINGLE_V')
+ ORDER BY 1;
+-- 8행 미만이면 GTT DDL 선행(`DMF0044_PKG_CONSOLIDATION_20260723` 5-Step 1) 미적용 → 적용 중단.
+
+PROMPT ===== [3] 02 CMBO 전제 — 원천 테이블/룩업 (기대: DEPT>0 · ETC_VALID=1)
+SELECT (SELECT COUNT(*) FROM SCM_MGR.SCM_MST_SSO_DEPT_INFO
+         WHERE VALID_YN = 'Y' AND UPPER_DEPT_ID IS NOT NULL)                 AS DEPT_ROWS,
+       (SELECT COUNT(*) FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL
+         WHERE LOOKUP_TYPE = 'DMF0044_ETC_SALE_RESULT_TYPE_40'
+           AND VALID_YN = 'Y')                                               AS ETC_VALID,
+       (SELECT COUNT(*) FROM SCM_MGR.SCM_ADM_CMBO_SQL_M
+         WHERE SQL_ID IN ('DMF0005_REPORT_GROUP2','DMF0005_REPORT_GROUP3'))  AS REPORT_GROUP_CMBO
+  FROM DUAL;
+-- ⚠ DEPT_ROWS = 0 이면 `SCM_MST_SSO_DEPT_INFO` 미적재 → DEPT_ID 콤보가 빈다(적용 중단·선행 확인).
+-- ⚠ ETC_VALID ≠ 1 이면 lookup `DMF0044_ETC_SALE_RESULT_TYPE_40` 의 '기타' 행(VALID_YN='Y') 부재.
+--    AS-IS 원본 9행 중 유효 1행뿐인 것이 정상이다(AS-IS DB 직접 대조 2026-08-10).
+-- ⚠ REPORT_GROUP_CMBO ≠ 2 이면 DMF0005 콤보 선행(COMBO_ASIS_ALIGN) 미적용.
+
+PROMPT ===== [4] 적용 대상 CMBO 2종 사전 상태 (기대 0행 = 신규 · 2행이면 02 는 멱등 skip)
+SELECT SQL_ID, USE_YN, CREATED_BY
+  FROM SCM_MGR.SCM_ADM_CMBO_SQL_M
+ WHERE SQL_ID IN ('DMF0044_DEPARTMENT_TEAM','DMF0044_ETC_SALE_RESULT_TYPE_40')
+ ORDER BY 1;
+
+PROMPT ===== [5] 현재 BODY 의 선행 마커 (적용 전 상태 기록용 — 0/0/0 이 정상)
+SELECT SUM(CASE WHEN INSTR(TEXT,'AUTHUNION 2026-08-09') > 0 THEN 1 ELSE 0 END)          AS AUTHUNION,
+       SUM(CASE WHEN INSTR(TEXT,'20260805 MERGE-ON 파리티 복원') > 0 THEN 1 ELSE 0 END) AS MERGE_ON,
+       SUM(CASE WHEN INSTR(TEXT,'PIVOTSEL 2026-08-10') > 0 THEN 1 ELSE 0 END)           AS PIVOTSEL
+  FROM ALL_SOURCE
+ WHERE OWNER = 'SCM_MGR' AND NAME = 'PKG_DMF0044' AND TYPE = 'PACKAGE BODY';
+
+PROMPT ===== [6] 원복본 확보 — 적용 전 BODY 를 반드시 별도 저장할 것
+-- SPOOL cloud_PKG_DMF0044_BODY_before_20260810.sql
+-- SELECT TEXT FROM ALL_SOURCE WHERE OWNER='SCM_MGR' AND NAME='PKG_DMF0044'
+--   AND TYPE='PACKAGE BODY' ORDER BY LINE;
+-- SPOOL OFF

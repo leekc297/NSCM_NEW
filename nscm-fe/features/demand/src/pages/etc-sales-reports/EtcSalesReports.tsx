@@ -2,7 +2,7 @@ import type { FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { IcGridColumnSetup, IcMeasureSelect } from '@foundation/assets';
+import { IcMeasureSelect } from '@foundation/assets';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import type { EditTracker } from '@foundation/utils';
 import { MainTitle, SubTitle } from '@shared/components';
@@ -58,9 +58,17 @@ export const EtcSalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   // ⭐ sEditMeasure — 기등록 범용 CMBO 'DM_LOOKUP_DIV'(param1=division, param2=DM_SR_ETC_CURRENCY).
   //   82='SalesAmt_KRW' 1행 / 40·81 빈값 (81 = 창 내에도 전 Measure 잠금 파리티).
+  //   ⚠ 2026-08-10 실측 정정: 값을 따옴표로 감싸지 않으면 BE raw 치환에서 식별자로 해석돼
+  //     **HTTP 500(-9994 Sql Error)** 이 난다(따옴표 O → 1행 / X → 500). 미따옴표 상태에서는
+  //     sEditMeasure 가 항상 빈값이라 82 편집 개방 판정이 통째로 무력화됐다.
+  const q = (v?: string): string => `'${v && v.trim() !== '' ? v : 'ALL'}'`;
   const [editMeasureRows] = useTabComboQueries({
     filters: [
-      { comboId: 'DM_LOOKUP_DIV', param1: sc.divisionId, param2: EDIT_MEASURE_LOOKUP } as never,
+      {
+        comboId: 'DM_LOOKUP_DIV',
+        param1: q(sc.divisionId),
+        param2: q(EDIT_MEASURE_LOOKUP),
+      } as never,
     ],
   });
   const sEditMeasure = String((editMeasureRows?.[0] as { CODE?: string } | undefined)?.CODE ?? '');
@@ -287,19 +295,20 @@ export const EtcSalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
     upload: false,
   };
 
-  // 커스텀 버튼 — Exchange Rate / Text(82 전용 — AS-IS lci_btnTextBox D-1) + Column/Measure 아이콘
+  // 커스텀 버튼 — 아이콘 1종 (DMF0049 는 환율 버튼 없음 — AS-IS 미보유)
+  // ⭐ 아이콘 버튼 표준 순서 = **환율 → 컬럼설정 → 메저** (hook #120, 2026-08-10 사용자 재확정).
+  //   3종 중 일부만 있는 화면도 **남은 것들의 상대 순서**를 지킨다 → 여기서는 메저만 남는다.
   const customButtons = [
-    ...(hasButton('COLUMN_SETUP')
-      ? [
-          {
-            label: t('LBL00605', 'Column Setting'),
-            title: t('LBL00605', 'Column Setting'),
-            action: () => setOpenModal('COLUMN'),
-            iconComponent: <IcGridColumnSetup />,
-            buttonLabel: '',
-          },
-        ]
-      : []),
+    // ⛔ Grid Column Set 버튼 **숨김** (2026-08-11 사용자 지시 — DMF0044 2026-08-10 선례 동일).
+    //   BTN_MPG 메타에는 COLUMN_SETUP 이 남아 있으나 이 화면에서는 노출하지 않는다.
+    //   모달(`COLUMN`)과 배선은 그대로 두어 되돌릴 때 이 블록만 복원하면 된다.
+    //   ⚠ 다시 노출하려면 아래 주석 블록 + `IcGridColumnSetup` import 를 함께 되살린다
+    //     (권한은 메타가 이미 허용 — hasButton('COLUMN_SETUP') = true).
+    // ...(hasButton('COLUMN_SETUP')
+    //   ? [{ label: t('LBL00605', 'Column Setting'), title: t('LBL00605', 'Column Setting'),
+    //        action: () => setOpenModal('COLUMN'), iconComponent: <IcGridColumnSetup />,
+    //        buttonLabel: '' }]
+    //   : []),
     ...(hasButton('MEASURE_SELECT')
       ? [
           {

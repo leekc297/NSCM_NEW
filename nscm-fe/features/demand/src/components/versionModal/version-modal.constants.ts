@@ -70,4 +70,7 @@ export const VERSION_MSG = {
   DELETE_ONLY_NC: 'MSG00687', // AS-IS 00320
   SAVED: 'MSG00002', // AS-IS 00004 저장 성공 재매핑
   SAVE_ERROR: 'MSG00618', // AS-IS 00006 실패 fallback
+  // ⭐ 권한 없음 — AS-IS DMF0044_SalesReportExchangePopup.SaveButton L402 가 쓰는 그 MSG 그대로.
+  //   locales 실값 확인(2026-08-10): KO '권한이 없습니다.' / EN 'No permission.'
+  NO_AUTH: 'MSG00096',
 } as const;

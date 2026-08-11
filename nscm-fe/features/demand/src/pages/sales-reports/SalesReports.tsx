@@ -2,7 +2,7 @@ import type { FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { IcExchangeRate, IcGridColumnSetup, IcMeasureSelect } from '@foundation/assets';
+import { IcExchangeRate, IcMeasureSelect } from '@foundation/assets';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import type { EditTracker } from '@foundation/utils';
 import { MainTitle, SubTitle } from '@shared/components';
@@ -17,6 +17,7 @@ import type { MeasureRow, SalesReportRow, SpreadTitleRow } from './sales-reports
 import styles from './SalesReports.module.scss';
 import { useSalesReportsStore } from './useSalesReportsStore';
 import { callSaveCutoff, callSaveEtc } from './utils/sales-reports.api';
+import { isDiv82 } from './utils/sales-reports.division';
 import { toCellStr } from './utils/sales-reports.gridCombos';
 import {
   buildBulkPayload,
@@ -150,7 +151,12 @@ export const SalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   2행 Measure 블록 삽입 — GET_MEASURE 결과(CODE 2행) 강제 세팅 (L1021~1025. 0건 = 차단).
   const handleInsert = () => {
     if (sc.dataType !== DATA_TYPE.ETC) return; // silent (AS-IS 분기 return 파리티)
-    const measures = measureRows.map(r => toCellStr(r.CODE)).filter(Boolean);
+    // ⭐ 중복 제거 필수 (2026-08-10 실사고 — Insert 시 16행 생성).
+    //   `P_DMF0044_GET_MEASURE` 가 `SCM_ADM_USER_MNU_EDIT_AUTH_V` 를 **INNER JOIN** 하는데
+    //   조인 조건이 measure 의 `DIVISION_ID` 콤마목록(8개)과 사용자 보유 권한(8행)이라
+    //   **measure 2행 × 권한 8행 = 16행**이 돌아온다(실측). SP 도 EXISTS+MAX 로 정정하지만,
+    //   FE 는 "measure 목록"이라는 의미상 **중복이 있을 수 없으므로** 여기서도 방어한다.
+    const measures = [...new Set(measureRows.map(r => toCellStr(r.CODE)).filter(Boolean))];
     if (measures.length === 0) {
       void setAlert({
         type: 'alert',
@@ -163,6 +169,13 @@ export const SalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
       CRUD_TYPE: 'I',
       INSERT_GROUP_ID: gid,
       DIVISION_ID: sc.divisionId,
+      // ⭐ CUTOFF_TYPE = 조회 Report Type (2026-08-11 실사고 정정).
+      //   신규행에 이 값이 없으면 저장 payload 가 빈값이 되어
+      //     ① ETC 원장 INSERT 가 ORA-01400 (CUTOFF_TYPE NOT NULL)
+      //     ② SP 의 `IF v_cutoff_type = 'REPORT_SP_W'` 분기가 통째로 skip 되어
+      //        PLAN 저장까지 **조용히 무동작**(성공 토스트만 뜨고 아무 데도 안 써짐)
+      //   GET 도 `R.CUTOFF_TYPE = P_MDF_TYPE` 로 거르므로 이 값이 있어야 재조회에 보인다.
+      CUTOFF_TYPE: sc.mdfType,
       MEASURE: measure,
       ...INSERT_ROW_DEFAULTS,
     }));
@@ -205,22 +218,26 @@ export const SalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
         | undefined) ?? new Map<SalesReportRow, Record<string, unknown>>();
 
     // 2행 세트 파트너 행 resolve (ETC — INSERT_GROUP_ID 공유 or 인접 SP 행)
+    //   ⭐ AS-IS 는 세트 대표행(짝수 index i)의 값으로 identity·CELL_MODEL_* 를 채운다(L552 `i += 2`).
+    //     변경이 홀수행에서 났을 수 있으므로 대표행 여부(isSetHead)까지 함께 넘긴다.
     const allRows: SalesReportRow[] = [...insertedRows, ...(mainData?.data ?? [])];
-    const pairOf = (row: SalesReportRow): SalesReportRow | undefined => {
+    const setInfoOf = (
+      row: SalesReportRow
+    ): { pair?: SalesReportRow; isSetHead: boolean } => {
       if (row.INSERT_GROUP_ID) {
-        return allRows.find(r => r !== row && r.INSERT_GROUP_ID === row.INSERT_GROUP_ID);
+        const members = allRows.filter(r => r.INSERT_GROUP_ID === row.INSERT_GROUP_ID);
+        return { pair: members.find(r => r !== row), isSetHead: members[0] === row };
       }
       const idx = allRows.indexOf(row);
-      // AS-IS 2행 세트 = 짝수행+홀수행 (i, i+1) — 인접 행이 파트너
-      const cand = idx % 2 === 0 ? allRows[idx + 1] : allRows[idx - 1];
-      return cand;
+      const isSetHead = idx % 2 === 0;
+      return { pair: allRows[isSetHead ? idx + 1 : idx - 1], isSetHead };
     };
 
     const targets = [
-      ...insertedRows.map(row => ({ row, changes: undefined, pair: pairOf(row) })),
+      ...insertedRows.map(row => ({ row, changes: undefined, ...setInfoOf(row) })),
       ...[...changedMap.entries()]
         .filter(([row]) => row.CRUD_TYPE !== 'I')
-        .map(([row, changes]) => ({ row, changes, pair: pairOf(row) })),
+        .map(([row, changes]) => ({ row, changes, ...setInfoOf(row) })),
     ];
     if (targets.length === 0) {
       void setAlert({ type: 'alert', content: t(MSG.NO_CHANGES, '_수정한 내용이 없습니다.') });
@@ -313,7 +330,7 @@ export const SalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   ⭐ 배치 규약 (hook #120, 사용자 명시 2026-07-30): 텍스트 버튼 먼저, 그 뒤 아이콘 버튼을
   //      왼쪽부터 **환율 → Grid Column Set → Measure** 순서로 고정. 환율은 항상 아이콘 형태.
   const customButtons = [
-    ...(hasButton('TEXTBOX') && sc.divisionId === '82'
+    ...(hasButton('TEXTBOX') && isDiv82(sc.divisionId)
       ? [
           {
             label: 'Text',
@@ -323,6 +340,8 @@ export const SalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
           },
         ]
       : []),
+    // ⭐ 아이콘 버튼 표준 순서 = **환율 → 컬럼설정 → 메저** (hook #120, 2026-08-10 사용자 재확정).
+    //   권한으로 일부가 빠져도 남은 것들의 상대 순서는 그대로 유지된다.
     ...(hasButton('EXCHANGE_RATE')
       ? [
           {
@@ -334,17 +353,16 @@ export const SalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
           },
         ]
       : []),
-    ...(hasButton('COLUMN_SETUP')
-      ? [
-          {
-            label: t('LBL00605', 'Column Setting'),
-            title: t('LBL00605', 'Column Setting'),
-            action: () => setOpenModal('COLUMN'),
-            iconComponent: <IcGridColumnSetup />,
-            buttonLabel: '',
-          },
-        ]
-      : []),
+    // ⛔ Grid Column Set 버튼 **숨김** (2026-08-10 사용자 지시).
+    //   BTN_MPG 메타에는 COLUMN_SETUP 이 남아 있으나 이 화면에서는 노출하지 않는다.
+    //   모달(`COLUMN`)과 배선은 그대로 두어 되돌릴 때 이 블록만 복원하면 된다.
+    //   ⚠ 다시 노출하려면 아래 주석 블록 + `IcGridColumnSetup` import 를 함께 되살린다
+    //     (권한은 메타가 이미 허용 — hasButton('COLUMN_SETUP') = true).
+    // ...(hasButton('COLUMN_SETUP')
+    //   ? [{ label: t('LBL00605', 'Column Setting'), title: t('LBL00605', 'Column Setting'),
+    //        action: () => setOpenModal('COLUMN'), iconComponent: <IcGridColumnSetup />,
+    //        buttonLabel: '' }]
+    //   : []),
     ...(hasButton('MEASURE_SELECT')
       ? [
           {
@@ -358,6 +376,10 @@ export const SalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
       : []),
   ];
 
+  // ⭐ 조회 결과를 **가공하지 않는다** (사용자 확정 2026-08-10:
+  //   "특별하게 처리하지말고 조회 시 EDIT_FLAG 을 사용하는 기존 패턴을 그대로 사용").
+  //   행 `EDIT_FLAG` 는 SP 가 준 값 그대로 두고, 공용 `DataGrid` 가 컬럼 `_inputEditType` 과 묶어
+  //   **색(노란색)과 편집 가능 여부를 하나의 기준으로** 결정한다.
   const spRows = useMemo<SalesReportRow[]>(() => mainData?.data ?? [], [mainData]);
   const rows: SalesReportRow[] = useMemo(
     () => [...insertedRows, ...spRows],

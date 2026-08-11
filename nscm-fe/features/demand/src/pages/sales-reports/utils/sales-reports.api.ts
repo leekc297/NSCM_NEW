@@ -57,7 +57,9 @@ const parseFirstValue = (data: unknown): string | undefined => {
   return typeof firstVal === 'string' ? firstVal.trim() : undefined;
 };
 
-export const callProc = async (
+// 내부 전용 — 외부 소비자는 아래 call* 래퍼를 쓴다(공용 `versionModal/version-modal.api.ts` 와 동일 규약).
+//   export 로 두면 미배선 export 로 잡힌다(반쪽 구현 함정, post-write $0.1-B).
+const callProc = async (
   sheet: string,
   btnCd: string,
   payload: Record<string, string>

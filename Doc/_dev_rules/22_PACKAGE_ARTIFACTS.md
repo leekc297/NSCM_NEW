@@ -369,6 +369,48 @@ sqlplus -s SCM_MGR/<pw>@<dsn> <<< "SELECT OBJECT_NAME, STATUS FROM USER_OBJECTS 
 
 ---
 
+## ⭐ 10. FE 이관 = "import 폐포(closure)" 단위 — 2026-08-11 신설 (클라우드 4라운드 실사고)
+
+> DMF0044/0049 클라우드 이관에서 **화면 폴더만 보낸 결과** 4라운드에 걸쳐 오류가 이어졌다:
+> ①`does not provide an export named 'VersionModal'`(barrel 미이관) ②tsc 8오류(공용 컴포넌트 구세대)
+> ③lint error(고아 파일 + 정정 전 판) ④사본 세대 불일치 재복사. **전부 패키지 구성 결함이었다.**
+
+### 10.1 이관 단위 = import 가 통과하는 **최상위 폴더**
+
+| 실사고 | 룰 |
+|---|---|
+| `versionModal/` 하위 폴더만 복사 → 화면은 **barrel**(`components/index.ts`) 경유 import 라 export 부재 크래시 | 하위 폴더가 아니라 **barrel 을 포함한 폴더 전체**(`components/`)가 단위. barrel 단독 교체도 금물 — barrel 이 export 하는 다른 모듈이 구본 환경에 없으면 더 크게 깨진다 |
+| `SearchFields.tsx` 구세대(`disabled`/`label` prop 없음) → tsc 4오류 | 화면 폴더의 **페이지 밖 import 를 전수 스캔**해 의존 세트를 동봉: `features/master/src/components`(공용 필드·모달) / `packages/shared/src/hooks` / `configs/types/procedures.d.ts` |
+| `procedures.d.ts` 누락 → `useTabProcQuery<MENU_ID>` 타입 붕괴 | 신규/수정 화면 블록이 있으면 **전체 교체본**으로 항상 동봉 |
+
+### 10.2 적용 = **삭제 후 복사** (복사-병합 금지)
+
+- 복사-병합은 **고아 파일**을 남긴다(실사고: 폐기된 `UnitedVersionModal.tsx` 가 양쪽 페이지에 잔존 →
+  TS2305 4건 + lint error). 폴더 교체는 반드시 "기존 폴더 삭제 → 패키지 폴더 복사" 순서.
+- 적용 후 대조: 패키지 `fe/{폴더}` 파일 목록과 대상 폴더 diff — **패키지에 없는 파일 = 삭제 대상**.
+
+### 10.3 lint/type-check 는 **리포 전체 게이트**다
+
+- 이관 화면이 깨끗해도 **범위 밖 화면의 error** 가 게이트를 막는다(실사고: demand-manager 5건).
+  사내에서 `eslint`/`tsc` **error 0** 을 만든 판을 패키지에 담고, 관련 정정 파일(범위 밖 화면 포함)도 동봉.
+- warning 은 게이트를 막지 않는다 — **사내 기준선과 같은 개수**면 세대 정렬의 증거로 판독한다.
+
+### 10.4 메타 SQL — MERGE(무 DELETE) + PK 부재 테이블 주의
+
+- **값 갱신이 목적**인 메타(SHEET_COLUMNS 등)는 `MERGE ... WHEN MATCHED UPDATE / NOT MATCHED INSERT`
+  — **DELETE 절 금지**(클라우드 고유 행 보호. 2026-08-11 사용자 확정. 2026-08-07 "MERGE 금지"는 DELETE 동반 사고가 원인).
+- `SCM_MST_SHEET_COLUMNS` 는 **PK 가 없다** — 완전 동일 키 물리 중복이 가능하고 MERGE 는 제거하지 못한다.
+  중복 표시 증상이 오면 ROWID dedup + 변형 키 제거 스크립트(정본 키 가드 필수 — `91_FIX_EXCHANGE_SHEET_DUP.sql` 선례).
+- 대량 블록 SQL 은 **사내에서 실행+ROLLBACK 드라이런**으로 문법·CLOB 을 실증한 뒤 동봉한다.
+- 적용 후 블록 누락 검증: 파일 블록 수 ↔ 대상 행 수 대조(실사고: 62블록 중 1블록 미반영 → DIVISION_ID 메타 행 누락).
+
+### 10.5 근본 해법 = git 동기화
+
+파일 단위 이관은 **세대 혼재를 구조적으로 재생산**한다. 반복 이관 상황이면 사내 push → 클라우드 pull
+(룰 28 Multi-Remote)로 전환을 우선 검토한다. 패키지는 DB 미연결 환경의 차선책이다.
+
+---
+
 ## 8. 관련 문서
 
 | 룰 | 주제 |

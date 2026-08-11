@@ -4,7 +4,8 @@ export type MENU_ID = typeof MENU_ID;
 // AS-IS DMF0049_Sales_ETC_Reports.cs (Demand > Demand Plan > Etc Sales Reports — 신정본 Forms.UIL 1,727행.
 //   Plan.UIL 변형 1,648행 대비 ExcelButton [E20240906]/YearSet SP화 [E20250121] 2건 신규):
 //   - DMF0044(Sales Reports) 파생 형제 — United 버전 팝업·버전 SP 5종·Team 룩업 공유. 고유 = ETC SP 4종 라인.
-//   - 메인 그리드 : 단일 시트 'MDF Reports'(SHEET_COLUMNS 42) + 동적 M_yyyymm 월축 + 연 span.
+//   - 메인 그리드 : 단일 시트 'MDF Reports'(SHEET_COLUMNS 42) + 동적 M_yyyymm 월축
+//     (**1단 평면 헤더** — AS-IS `.cs:265` iColumnHeaderRowCount=1. 2026-08-11 전환).
 //     division 별 Measure 세트행: 40=3(SalesAmt_LOC→SalesAmt_KRW→RTF_SYS_RP)/81계열=2/82=1.
 //   - 3축 분기: MDF Type(REPORT_SP_W/BP_M) × Plan-Result(정적 콤보) × Division(40/81*/82 — 81=startsWith).
 //   - 분석서(2026-07-20): Doc/화면분석서/DMF0049_EtcSalesReports_{제약매트릭스_상세,주요이벤트_상세분석}.md

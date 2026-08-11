@@ -57,7 +57,9 @@ const parseFirstValue = (data: unknown): string | undefined => {
   return typeof firstVal === 'string' ? firstVal.trim() : undefined;
 };
 
-export const callProc = async (
+// 내부 전용 — 외부 노출은 아래 의미 있는 래퍼(callSaveEtcReport 등)로만 한다.
+//   (DMF0044 `sales-reports/utils/sales-reports.api.ts:62` · 공용 `versionModal/version-modal.api.ts:30` 동형)
+const callProc = async (
   sheet: string,
   btnCd: string,
   payload: Record<string, string>

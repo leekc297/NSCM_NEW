@@ -418,3 +418,34 @@
 | HANDLER:spdMain_EditChange | AS-IS `DMF0042_BizPlan.cs:3038` (라이브 4행) | components/BusinessPlanGrid.tsx:478 beginningEdit — 편집 진입 판정 |  | 구현 |
 | HANDLER:spdMain_KeyUp | AS-IS `DMF0042_BizPlan.cs:2806` (라이브 2행) · **사문(빈 몸통)** |  | AS-IS 라이브 2행 = 사문(빈 몸통). 미이관이 파리티 | 제외 |
 | HANDLER:spdMain_TopChange | AS-IS `DMF0042_BizPlan.cs:2799` (라이브 5행) |  | AS-IS 라이브 5행 = FarPoint 스크롤 동기 배관. Wijmo 는 가상 스크롤 네이티브 처리 — 플랫폼 차이 | 해당없음 |
+
+## 토큰 대사표 (hook #117 §5.6 — 2026-08-09 실측)
+
+> AS-IS `UP_FX_GetCommonDataList(_DM)` 의 `@CODE + PARAM1~5` 에 대응하는 TO-BE 축.
+> **AS-IS 공급 계약 (정본 실측)**: `SpreadInfo.cs:1975~1981` 이 메타 셀 콤보에 커서 `ATTRIBUTE1~5` 를
+> `sParam1~5` 로 넘기고, 그 커서(`DMF0042_GET_SPREAD_TITLE`)는
+> `ATTRIBUTE1 = @p_division_id` ("COMMONDATALIST 에서 사용하도록 DIVISION 을 넣어준다" 주석) /
+> `ATTRIBUTE2 = CASE WHEN CELL_COMBO_DATA_TYPE='DM_LOOKUP_DIV' THEN C.ATTRIBUTE1 ELSE '' END` 로 채운다.
+> ⇒ **모든 메타 셀 콤보에 division**, `DM_LOOKUP_DIV` 에만 추가로 컬럼 `ATTRIBUTE1`(LOOKUP_TYPE).
+> BE `BaseService.makeComboQuery` 는 `@토큰` 을 **raw 문자열 치환**하고, 미전달 토큰은 `''` 로 채운다.
+> 서버 자동 주입 = `@sesUserId`/`@sesLangCd` 뿐(`/admin/combo` 단건 경로).
+> 비관대형(`COL = @t`) + 미전달 = **0행(조용한 빈 콤보)**.
+> FE 전달 지점 = `components/BusinessPlanGrid.tsx` `useTabComboQueries` (메타 셀 콤보 전량 1구독).
+
+| SQL_ID | 필요 토큰 | 서버 자동 | FE 전달 | 미전달 | 판정 | 미전달 사유 |
+|---|---|---|---|---|---|---|
+| DMF0042CellProdSite | - | - | - | - | ✅ |  |
+| DMF0042CellProdSiteValid | - | - | - | - | ✅ | 편집판(GRID_EDIT_COMBO) — 무파라미터 |
+| DMF0042_BP_Measure | divisionId | - | 동적: divisionId | - | ✅ (동적 전달) |  |
+| DM_LOOKUP_DIV | param1, param2 | - | param1=division, param2=컬럼 ATTRIBUTE1 | - | ✅ | **2026-08-09 정정** — 미전달 시 `B.SEGMENT1=@param1 AND A.LOOKUP_TYPE=@param2` 가 비관대형이라 FCST_TYPE 콤보가 항상 0행이었다 |
+| CurrencyList | - | - | - | - | ✅ | 편집판(GRID_EDIT_COMBO) — 무파라미터 |
+| DeptId | - | - | - | - | ✅ |  |
+| EndCustomerByDivision40 | - | - | - | - | ✅ |  |
+| EndCustomerByDivisionDept | deptId, divisionId | sesUserId | 동적: divisionId | deptId | ⚠ 관대형 | **행 스코프 토큰** — AS-IS 는 `SetCellTypeCombo` 로 행마다 재바인딩(L1233). TO-BE 는 `GRID_CASCADE_FILTERS.END_CUSTOMER`(DIVISION_ID+DEPT_ID) 로 `beginningEdit` 시 dataMap 스왑 = 행 컨텍스트 필터. 서버 전역 필터로 넘기면 표시용 CODE→NAME 이 깨진다(hook #117 §5.10) |
+| FromSiteByDivision | divisionId | - | 동적: divisionId | - | ✅ (동적 전달) |  |
+| Incoterms | - | - | - | - | ✅ | INCOTERMS82 표시판 |
+| IncotermsEdit | - | - | - | - | ✅ |  |
+| SiteByEndCustomer | divisionId, endCustomer | sesUserId | 동적: divisionId | endCustomer | ⚠ 관대형 | **행 스코프 토큰** — AS-IS 는 InsertRow/ComboSelChange 에서 행 EC 로 재바인딩(L1263·L1637·L1656). TO-BE 는 `GRID_CASCADE_FILTERS.SCM_SITE_ID40`(DIVISION_ID+END_CUSTOMER40) 스왑으로 동등 이상(신규행 포함) |
+
+> ⚠ 한계 — 위 2건의 행 스코프 토큰은 **서버 미전달이 의도된 설계**다. 서버에서 좁히면 원장에 남은
+> 값의 CODE→NAME 변환이 깨져 raw 코드로 표시된다([[feedback_edit_display_combo_dualization]]).

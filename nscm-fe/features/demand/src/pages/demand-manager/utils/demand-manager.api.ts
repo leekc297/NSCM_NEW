@@ -35,8 +35,11 @@ const toResult = (data: unknown, status: number): OrderProcResult => {
     return { ok: false, message: (data as { message?: string })?.message?.trim() };
   }
   const row = parseResultRow(data);
-  const code = row ? String(row.CODE ?? row.code ?? '') : '';
-  const event = row ? String(row.EVENT ?? row.event ?? '') : '';
+  // unknown 값은 문자/숫자만 채택 — String() 직행은 객체에서 '[object Object]' (no-base-to-string)
+  const cell = (x: unknown): string =>
+    typeof x === 'string' ? x : typeof x === 'number' ? String(x) : '';
+  const code = row ? cell(row.CODE ?? row.code) : '';
+  const event = row ? cell(row.EVENT ?? row.event) : '';
   if (code === '0') return { ok: true, code, count: event };
   return { ok: false, code: code || undefined, count: event || undefined };
 };

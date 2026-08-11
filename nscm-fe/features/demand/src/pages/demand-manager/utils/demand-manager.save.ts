@@ -1,5 +1,6 @@
 import { DIVISION_40, MEASURE_PAIR } from '../demand-manager.constants';
 import type { DemandManagerRow, SaveOrderRow } from '../demand-manager.types';
+
 import { validateNewRowPairs, validateSaveRow, type ValidateResult } from './demand-manager.validate';
 
 export interface BuildSaveResult {
@@ -26,7 +27,11 @@ const resolveMeasure = (row: DemandManagerRow): string => {
   return QTY_MEASURE;
 };
 
-const digitsOnly = (v: unknown): string => String(v ?? '').replace(/,/g, '').trim();
+const digitsOnly = (v: unknown): string => {
+  // 문자/숫자만 처리 — String(v) 직행은 객체에서 '[object Object]' (no-base-to-string)
+  const s = typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '';
+  return s.replace(/,/g, '').trim();
+};
 
 /**
  * 행 고유 키 생성.

@@ -11,6 +11,7 @@ import { MENU_ID, SHEETS } from '../sales-reports.constants';
 import type { SalesReportRow } from '../sales-reports.types';
 import { useSalesReportsStore } from '../useSalesReportsStore';
 import { saveTitleSet } from '../utils/sales-reports.api';
+import { toCellStr } from '../utils/sales-reports.gridCombos';
 
 import { ExchangeRateModal, MeasureSelectModal, TextboxModal } from './modals';
 
@@ -107,7 +108,10 @@ export const SalesReportsModals = ({
         preSearchParams={
           {
             divisionId,
-            deptId: 'ALL',
+            // ⭐ AS-IS 파리티 (L1316·L1319 `Form_Load(false, sDiv, sTeam, …)`) — 팝업은 **그 행의 팀**으로
+            //   필터한다. 'ALL' 하드코딩은 AS-IS 보다 넓은 후보를 보여주는 결함이었다.
+            //   모달은 `item.DEPT_ID`(코드)와 비교하므로 표시명이 아니라 코드를 넘긴다.
+            deptId: toCellStr((itemTargetRow as Record<string, unknown>)?.DEPT_ID).trim() || 'ALL',
             endCustomer: 'ALL',
             salesSite: 'ALL',
             itemId: '',

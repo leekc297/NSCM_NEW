@@ -94,8 +94,13 @@ const initSearchParams: SearchParamProps = {
   salesSites: [],
   bizTypes: [],
   itemIds: [],
+  // ⭐ 조회기간 기본값 = AS-IS `DM.PR_GET_DAY_RANGE(@p_month=6)` 두 번째 결과셋 1:1
+  //   (AsIs_LGCE_SCMDEV_SP2_DDL.sql:117212~117213 — "해당 월 1일 ~ @p_month 개월의 마지막 날").
+  //   FROM = 당월 1일 / TO = FROM +6개월 -1일 (= FROM 기준 5개월 후 달의 말일).
+  //   AS-IS .cs L3105 `request.Parameters["p_month"] = 6` (13→6 축소 [PJ2025-50188]).
+  //   ⚠️ 구현 `.add(6,'month')` 는 -1일 누락으로 AS-IS 보다 하루 길었다(2026-08-10 정정).
   startYyyymmdd: dayjs().startOf('month').format('YYYYMMDD'),
-  endYyyymmdd: dayjs().startOf('month').add(6, 'month').format('YYYYMMDD'),
+  endYyyymmdd: dayjs().startOf('month').add(6, 'month').subtract(1, 'day').format('YYYYMMDD'),
   bucketType: 'W',
   versionType: 'Current',
   qtyYn: false,

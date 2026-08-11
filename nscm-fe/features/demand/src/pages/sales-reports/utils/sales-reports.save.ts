@@ -102,35 +102,79 @@ const changedMonthBindings = (row: Rec, changes: Record<string, unknown> | undef
   return Object.keys(changes ?? {}).filter(k => dynKindOf(k) === 'M');
 };
 
+export interface EtcSaveTarget {
+  row: SalesReportRow;
+  changes?: Record<string, unknown>;
+  pair?: SalesReportRow;
+  /** AS-IS 루프의 짝수행(i) 인가 — identity 공급원이 되는 세트 대표행 (L552 `i += 2`) */
+  isSetHead?: boolean;
+}
+
 /**
- * ETC(Data Type=2) — 2행 Measure 세트 수집 (AS-IS L566~694: i+=2 루프, Red 셀만).
- *   TO-BE = EditTracker 변경 셀. 세트 파트너 행(cellModelInfo/cellModel)은 INSERT_GROUP_ID 또는
- *   인접 행에서 결정 — 호출측이 rowsPair(짝 행 resolve)를 공급.
+ * ETC(Data Type=2) — 2행 Measure 세트 수집 (AS-IS SaveData L552~694 1:1).
+ *
+ * ⭐ AS-IS 원문 구조 (2026-08-10 `.cs` 직접 대조로 정정):
+ *   · 루프는 **세트 단위**(`i += 2`)이고, 트리거는 `(i 셀 Red && 값≠'') || (i+1 셀 Red && 값≠'')`.
+ *   · 한 셀 변경 → **2 엔트리**를 보낸다 (L601·L638):
+ *       A) `p_measure = GetValue(i,   MEASURE)` · `p_qty = sQty`
+ *       B) `p_measure = GetValue(i+1, MEASURE)` · `p_qty = sQty2`
+ *     ⇒ 파트너 행 수량이 같이 안 가면 세트 한쪽이 **영구 미저장**된다.
+ *   · identity(부서/고객/제품군/통화/회사/…)·activeFlag 는 **양쪽 모두 행 i 값**을 쓴다.
+ *   · `p_cell_model_info` / `p_cell_model` = **행 i 의 CELL_MODEL_INFO / CELL_MODEL 컬럼**
+ *     (L607·L608, L643·L644 모두 `GetValue(i, ...)`). 파트너 MEASURE·수량이 아니다.
+ *     ⇒ SAVE SP 의 MERGE ON 이 `FORECAST_INFO_CELL_MODEL`/`ATTRIBUTE3` 를 키로 쓰므로
+ *       (2026-08-09 3키 복원분) 잘못 넣으면 UPDATE 가 아니라 **중복 INSERT** 가 된다.
  */
 export const buildEtcSaveRows = (params: {
-  targets: { row: SalesReportRow; changes?: Record<string, unknown>; pair?: SalesReportRow }[];
+  targets: EtcSaveTarget[];
   versionNo: string;
 }): SaveBuildResult<EtcSaveRow> => {
   const { targets, versionNo } = params;
   const out: EtcSaveRow[] = [];
+  const changesOf = new Map<SalesReportRow, Record<string, unknown> | undefined>(
+    targets.map(t => [t.row, t.changes])
+  );
+  const done = new Set<SalesReportRow>();
+
   for (const t of targets) {
-    const row = t.row as Rec;
-    const identity = identityOf(row);
-    // Department 필수 (AS-IS L572 — MSG00429 {0}=Department)
+    if (done.has(t.row)) continue; // 세트 파트너로 이미 처리됨 (AS-IS 는 세트당 1회 순회)
+    // 세트 대표행(i) 결정 — 변경이 홀수행에서 났으면 짝 행이 대표
+    const head = t.isSetHead === false && t.pair ? t.pair : t.row;
+    const partner = head === t.row ? t.pair : t.row;
+    done.add(head);
+    if (partner) done.add(partner);
+
+    const headRec = head as Rec;
+    const identity = identityOf(headRec);
+    // Department 필수 (AS-IS L570~575 — MSG00429 {0}=Department)
     if (identity.departmentId === '' && identity.departmentName === '') {
       return { rows: [], error: { ok: false, msgId: MSG.REQUIRED_FIELD, detail: 'Department' } };
     }
-    const pair = (t.pair ?? {}) as Rec;
-    for (const binding of changedMonthBindings(row, t.changes)) {
-      out.push({
-        activeFlag: row.CRUD_TYPE === 'I' ? 'I' : 'M',
-        ...identity,
-        versionNo,
-        yyyymmdd: binding.slice(2),
-        qty: qtyOf(row[binding]),
-        cellModelInfo: str(pair.MEASURE),
-        cellModel: qtyOf(pair[binding]),
-      });
+    const activeFlag = headRec.CRUD_TYPE === 'I' ? 'I' : 'M';
+    const cellModelInfo = str(headRec.CELL_MODEL_INFO);
+    const cellModel = str(headRec.CELL_MODEL);
+    // 트리거 셀 = 세트 양쪽 변경분의 합집합 (AS-IS OR 조건 파리티)
+    const bindings = [
+      ...new Set([
+        ...changedMonthBindings(headRec, changesOf.get(head)),
+        ...(partner ? changedMonthBindings(partner as Rec, changesOf.get(partner)) : []),
+      ]),
+    ].sort();
+
+    for (const binding of bindings) {
+      const emit = (src: Rec) =>
+        out.push({
+          activeFlag,
+          ...identity,
+          measure: str(src.MEASURE), // ⭐ identity 중 MEASURE 만 엔트리별로 덮어쓴다
+          versionNo,
+          yyyymmdd: binding.slice(2),
+          qty: qtyOf(src[binding]),
+          cellModelInfo,
+          cellModel,
+        });
+      emit(headRec);
+      if (partner) emit(partner as Rec);
     }
   }
   return { rows: out };

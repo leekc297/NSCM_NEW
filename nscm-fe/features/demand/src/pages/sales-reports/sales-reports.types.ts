@@ -15,7 +15,10 @@ export interface SearchCondition {
 
 // 메인 그리드 행 (PIVOT wide — 정적 46 admin 메타 + 동적 M_yyyymm 12컬럼. 2행 Measure 블록)
 //   CRUD_TYPE: 'I'(신규) / 'M'(수정 — EditTracker 마킹). INSERT_GROUP_ID: 2행 세트 식별자.
-//   EDIT_FLAG: 조회 SP 세팅 행 편집권 (4변수 매트릭스 입력 1 — 제약매트릭스 §3).
+//   EDIT_FLAG: 조회 SP 가 주는 행 편집권. **표준 경로**(공용 DataGrid `isEditableCell` =
+//     컬럼 `_inputEditType` × 행 `EDIT_FLAG`)가 색(노란색)과 편집 가능 여부를 함께 결정한다.
+//     ⚠️ 화면에서 이 값을 가공하거나 `wj-cell-editable` 를 직접 토글하지 말 것
+//        (2026-08-10 "노란데 편집 불가" 사고 — 색과 편집이 서로 다른 판정기를 보게 된다).
 export type SalesReportRow = Record<string, unknown> & {
   CRUD_TYPE?: 'I' | 'M' | 'D';
   INSERT_GROUP_ID?: string;

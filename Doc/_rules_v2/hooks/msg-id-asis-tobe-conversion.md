@@ -142,6 +142,21 @@ SELECT DISTINCT MSG_ID, MSG_TP_CD FROM SCM_ADM_MSG_M
  WHERE REGEXP_LIKE(MSG_ID,'^(MSG|LBL|MNU)[0-9]{5}$') AND MSG_TP_CD <> SUBSTR(MSG_ID,1,3);
 ```
 
+### §5.5 ⭐ 두 번째 실패형 — **미채번 코드 오선택** (2026-08-11 DMF0044·0049 실사고)
+
+> 사용자: "조회조건 Year Label 은 왜 계속 미등록인가요?" — 코드가 `t('LBL00160','_Year')` 를
+> 쓰는데 **`LBL00160` 은 DB 에도 locales 에도 존재한 적이 없는 코드**였다(채번 누락이 아니라 오선택).
+> 정본은 `LBL00086`(='Year'). 화면에는 fallback `_Year` 가 그대로 노출됐다.
+
+1. **`t()` 1번째 인자는 쓰기 전에 실존 검증** — `public/locales/{KO,EN,CN}.json` 3파일 grep.
+   기억·유추로 채번대에서 "그럴듯한 번호"를 고르는 행위 금지.
+2. **locales 정본 = `nscm-fe/public/locales/`** (vite `publicDir`). `apps/web/dist/locales/` 는
+   **구 빌드 산출물**이라 여기서 조회하면 오판한다(실측: 키 수·날짜 모두 다름).
+3. **fallback 문자열은 `_` 접두 관례를 지킨다** — `t('LBL00764','Invisible')` 처럼 평문 fallback 은
+   미등록 상태를 화면에서 **은폐**한다(`_` 가 붙어 있어야 육안 조기경보가 된다).
+4. **화면 완료 전 전수 스캔** — FE `t('LBL#####'|'MSG#####')` 전수 추출 ↔ locales 3파일 대조
+   (2026-08-11 전사 실측: 366코드 중 전 로케일 미등록 27종·CN 누락 5종이 이미 누적돼 있었다).
+
 ---
 
 ## §4. 요약 (한 줄 룰)

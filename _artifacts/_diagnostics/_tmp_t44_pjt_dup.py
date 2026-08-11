@@ -1,0 +1,98 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""2배 원인 확정 — GT_F044_PJT 적재문이 (DIVISION_ID, PROJECT_CODE) 유일성을 깨는가 (조회 전용)
+
+적재문(L1274~1284):
+    SELECT A.DIVISION_ID, A.PROJECT_CODE, A.PROJECT_NAME, A.PRODUCT_GROUP_NAME
+      FROM SCM_MST_PROJECT A
+      JOIN ( SELECT PROJECT_CODE, MAX(PROJECT_VER_SEQ) SEQ FROM SCM_MST_PROJECT
+              WHERE DIVISION_ID = :d GROUP BY PROJECT_CODE ) B
+        ON A.PROJECT_CODE = B.PROJECT_CODE AND A.PROJECT_VER_SEQ = B.SEQ
+     WHERE A.DIVISION_ID = :d
+소비 조인: LEFT OUTER JOIN GT_F044_PJT PJT ON R.DIVISION_ID=PJT.DIVISION_ID AND R.PROJECT_CODE=PJT.PROJECT_CODE
+⇒ (DIVISION_ID, PROJECT_CODE) 가 2행이면 조회 행이 2배가 되고 SUM(QTY) 도 2배가 된다.
+"""
+import sys, pathlib
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+from ora import conn_info, fetch, show
+import oracledb
+
+DIV, VER = '40', 'R_S_20260810_V010_C'
+u, p, d = conn_info()
+con = oracledb.connect(user=u, password=p, dsn=d)
+con.call_timeout = 300000
+cur = con.cursor()
+
+def sec(t): print("\n" + "=" * 118); print(t); print("=" * 118)
+
+LOAD = """
+SELECT A.DIVISION_ID, A.PROJECT_CODE, A.PROJECT_NAME, A.PRODUCT_GROUP_NAME
+  FROM SCM_MST_PROJECT A
+  JOIN ( SELECT PROJECT_CODE, MAX(PROJECT_VER_SEQ) AS SEQ
+           FROM SCM_MST_PROJECT WHERE DIVISION_ID = :d GROUP BY PROJECT_CODE ) B
+    ON A.PROJECT_CODE = B.PROJECT_CODE AND A.PROJECT_VER_SEQ = B.SEQ
+ WHERE A.DIVISION_ID = :d
+"""
+
+sec("[1] GT_F044_PJT 적재 결과의 (DIVISION_ID, PROJECT_CODE) 유일성")
+show(*fetch(cur, f"""
+SELECT COUNT(*) rows_, COUNT(DISTINCT DIVISION_ID||'|'||PROJECT_CODE) keys_,
+       COUNT(*) - COUNT(DISTINCT DIVISION_ID||'|'||PROJECT_CODE) surplus,
+       CASE WHEN COUNT(*) = COUNT(DISTINCT DIVISION_ID||'|'||PROJECT_CODE)
+            THEN 'OK (1:1)' ELSE '⛔ 중복 — 조회 행 증식' END verdict
+  FROM ({LOAD})""", {"d": DIV}))
+
+sec("[2] 중복 키 상위 (몇 배로 불어나는가)")
+show(*fetch(cur, f"""
+SELECT PROJECT_CODE, COUNT(*) cnt,
+       COUNT(DISTINCT PROJECT_NAME) distinct_name,
+       COUNT(DISTINCT PRODUCT_GROUP_NAME) distinct_pgroup
+  FROM ({LOAD})
+ GROUP BY PROJECT_CODE HAVING COUNT(*) > 1
+ ORDER BY cnt DESC, PROJECT_CODE FETCH FIRST 15 ROWS ONLY""", {"d": DIV}))
+
+sec("[3] 문제 행의 PROJECT_CODE 가 몇 건 매칭되는가 (2배의 직접 원인)")
+show(*fetch(cur, f"""
+WITH R AS (
+  SELECT DISTINCT DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID
+    FROM DM_PLN_SALES_PLAN_REPORT_C
+   WHERE DIVISION_ID=:d AND VERSION_NO=:v AND ITEM_ID='ETC' AND CUST_REPORT='IM'
+     AND MEASURE='SalesAmt_KRW' AND SUBSTR(YYYYMMDD,1,6)='202603' )
+SELECT R.PROJECT_CODE,
+       (SELECT COUNT(*) FROM ({LOAD}) P
+         WHERE P.DIVISION_ID=R.DIVISION_ID AND P.PROJECT_CODE=R.PROJECT_CODE) pjt_hits
+  FROM R""", {"d": DIV, "v": VER}))
+
+sec("[4] 원인 — SCM_MST_PROJECT 에 (DIVISION_ID, PROJECT_CODE, PROJECT_VER_SEQ) 가 여러 행인가")
+show(*fetch(cur, """
+SELECT COUNT(*) rows_,
+       COUNT(DISTINCT DIVISION_ID||'|'||PROJECT_CODE||'|'||PROJECT_VER_SEQ) key3,
+       COUNT(*) - COUNT(DISTINCT DIVISION_ID||'|'||PROJECT_CODE||'|'||PROJECT_VER_SEQ) surplus
+  FROM SCM_MST_PROJECT WHERE DIVISION_ID=:d""", {"d": DIV}))
+show(*fetch(cur, """
+SELECT cc.position, cc.column_name FROM all_constraints c
+  JOIN all_cons_columns cc ON cc.owner=c.owner AND cc.constraint_name=c.constraint_name
+ WHERE c.owner='SCM_MGR' AND c.table_name='SCM_MST_PROJECT' AND c.constraint_type='P'
+ ORDER BY cc.position"""))
+
+sec("[5] 다른 조인 후보 재확인 (SINGLE / LU / LK3 / LK4)")
+show(*fetch(cur, """
+WITH R AS (
+  SELECT DISTINCT DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, CELL_PROD_SITE
+    FROM DM_PLN_SALES_PLAN_REPORT_C
+   WHERE DIVISION_ID=:d AND VERSION_NO=:v AND ITEM_ID='ETC' AND CUST_REPORT='IM'
+     AND MEASURE='SalesAmt_KRW' AND SUBSTR(YYYYMMDD,1,6)='202603' )
+SELECT R.PROJECT_CODE, R.SCM_SITE_ID, R.CELL_PROD_SITE,
+       (SELECT COUNT(*) FROM DM_MST_ITEM_SINGLE_V V
+         WHERE V.DIVISION_ID=R.DIVISION_ID AND V.ITEM_ID=R.ITEM_ID) single_hits,
+       (SELECT COUNT(*) FROM (SELECT DISTINCT SEGMENT1,SEGMENT2,SEGMENT3,SEGMENT4 FROM SCM_ADM_LOOKUP_MASTER_DETAIL
+                               WHERE LOOKUP_TYPE='SALES_SITE_REPORT_GROUP') X
+         WHERE X.SEGMENT1=R.DIVISION_ID AND X.SEGMENT2=R.PROJECT_CODE
+           AND X.SEGMENT3=R.SCM_SITE_ID AND X.SEGMENT4=R.ITEM_ID) lu_hits,
+       (SELECT COUNT(*) FROM SCM_ADM_LOOKUP_MASTER_DETAIL L
+         WHERE L.SEGMENT1=R.PROJECT_CODE AND L.LOOKUP_TYPE='DM_ITEM_USE_EX') lk3_hits,
+       (SELECT COUNT(*) FROM SCM_ADM_LOOKUP_MASTER_DETAIL L
+         WHERE L.SEGMENT1=R.CELL_PROD_SITE AND L.LOOKUP_TYPE='SP_CELL_PROD_SITE') lk4_hits
+  FROM R""", {"d": DIV, "v": VER}))
+
+con.close()

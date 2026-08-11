@@ -59,21 +59,58 @@ python _artifacts/_diagnostics/ui_http_e2e.py --menu {MNU_ID}
 (예: 판가 52주 커버리지 보유 키, BIZ_TYPE NULL 행 부재 아이템, 권한 보유 사이트).
 충족 데이터가 없으면 **"데이터 대기"로 명시** — 코드 결함과 반드시 구분(무단 "정상" 판정 금지).
 
-## §4. ⭐ 모달 = MAIN UI 동등 검증 (사용자 명시 2026-08-07)
+## §4. ⭐ 모달 = MAIN UI 동등 검증 — **7축 전수** (2026-08-07 명시 · **2026-08-10 2차 강화**)
 
-**"모달의 모든 기능이 AS-IS 기준으로 동일하게 구현되어 있고 실행되는지" 반드시 확인.**
-`__asis-mapping__.md` 의 `MODAL:{이름}` 행마다 아래 4칸을 **실증 근거와 함께** 기입 — 빈 칸 1개 = 미완료:
+> 사용자 지시(2026-08-10 ①): **"각 UI 와 UI 에 사용되는 MODAL 에 대해서도 DESIGN 부터, 기능,
+> VALIDATION, EXPRESSION, CRUD 까지의 모든 검증을 진행하여야 한다. 반드시"**
+> 사용자 지시(2026-08-10 ②): **"권한이나 CASCADE FILTER 의 경우에도 MAIN UI 와 동일하게 적용되도록"**
+> ⇒ 5축 → **7축**(권한 · Cascade Filter 추가).
 
-| 칸 | 확인 내용 | 근거 형식 |
-|---|---|---|
-| **AS-IS 기능 대사** | AS-IS 팝업 `.cs` 기능 목록(오픈 게이트/조회 SP/그리드 구성/저장·확정 후처리/MSG) ↔ TO-BE 1:1 | 분석 md 절 + 구현 파일:라인 |
-| **디자인** | P9 자체 footer / 조회조건 36px / No. 코너 / 3색 / 아이콘 순서 | 파일:라인 |
-| **R (조회)** | 모달 시트 call-proc 실행 — 커서·행수 | `ui_http_e2e` G축 리포트 |
-| **CUD (있으면)** | 저장/확정 왕복 실행(원복) + 부모 반영 | 실행 로그 · 없으면 "조회 전용" 사유 |
-| **권한** | 모달 버튼 권한 게이트(hasButton/EDIT_YN) 역할별 | H축 리포트 |
+**MAIN UI 와 그 화면이 여는 모든 모달**을 **동일한 검증 단위**로 본다.
+`__asis-mapping__.md` 의 `MODAL:{이름}` 행마다 아래 **7축 전부**를 실증 근거와 함께 기입 — 빈 칸 1개 = 미완료.
 
+| # | 축 | 확인 내용 | 근거 형식 |
+|---|---|---|---|
+| 1 | **DESIGN** | AS-IS 레이아웃 1:1 — **조회조건 항목 누락 0**(AS-IS 에 있는 조건은 전부 존재) · 표준 컴포넌트 사용(Division/Period/일자/년월 = `@master/searchFields` 카탈로그, raw InputField 금지) · 36px · P9 footer · No. 코너 · 3색 · 아이콘 순서 | 파일:라인 + AS-IS `.cs`/캡쳐 대조 |
+| 2 | **기능(OPERATION)** | AS-IS 버튼·액션 **전수**를 **각각 1회 이상 실행**. 분기(Type/모드/division)가 있으면 **분기별로** 실행 | 실행 로그(HTTP status + 결과) |
+| 3 | **VALIDATION** | AS-IS 검증 메시지 전수(MSG ID·발동 조건) ↔ TO-BE 1:1, **실제 발동 확인** | MSG ID + 발동 지점 파일:라인 |
+| 4 | **EXPRESSION** | 잠금/활성·표시조건·자동세팅(LockRange·SetValue·ControlDisplay 계열) 1:1 | AS-IS 라인 + TO-BE 판정 함수 |
+| 5 | **CRUD** | C/U/D 각각 왕복 실행(원복 포함) + 부모 화면 반영. 없으면 "조회 전용" **사유 명시** | 실행 로그 · 원장 검증 |
+| 6 | ⭐ **권한(AUTH)** | §4.1 — MAIN UI 와 **동일 메커니즘**으로 버튼 노출·편집·저장이 갈리는지 | `useTabBtnPermissions` 호출 라인 + 권한별 실행 로그 |
+| 7 | ⭐ **CASCADE FILTER** | §4.2 — 상위 선택 변경 시 하위 콤보/그리드가 MAIN UI 와 **동일 규칙**으로 재필터·초기화 | 종속 매트릭스 + 실행 근거 |
+
+### §4.1 권한 축 — 모달도 MAIN UI 와 동일 메커니즘 (2026-08-10 신설)
+
+- ✅ **정본 메커니즘 = `useTabBtnPermissions({ menuId })` 의 `hasButton(MNU_BTN_CD)`** — MAIN UI 가 쓰는 그것을
+  모달도 **그대로** 쓴다. 모달만 다른 판정식(그룹명 하드코딩, prop 로 내려받은 boolean 등)을 쓰면 위반.
+- ⛔ **그룹명 하드코딩 금지** (`'ADMIN'`, `'DM ADMIN'` 문자열 비교). AS-IS 가 그룹명을 하드코딩했더라도
+  TO-BE 이관 vehicle 은 **버튼 권한 메타**(`SCM_ADM_MNU_BTN_M` + `SCM_ADM_USER_GR_BTN_MPG_M`)다.
+  ⇒ AS-IS 의 "ADMIN·DM ADMIN 만 Edit/Insert/Save" 는 **그 버튼 코드를 해당 그룹에만 부여**하는 메타로 이관한다.
+- ⛔ **`session.groupId` 로 판정 금지** — 유령 필드다. 그룹 판정이 불가피하면 **보유 권한그룹 합집합**
+  (AUTHUNION, 2026-08-04 확정)만 사용한다. [[feedback_session_groupid_ghost_field]]
+- ⚠ **AS-IS 팝업의 `IsPopup = true` 를 "권한 없음"으로 오독 금지.** AS-IS 에서 이 플래그는
+  *프레임워크 표준 버튼권한 체크를 건너뛴다*는 뜻이지 **권한이 없어도 된다**는 뜻이 아니다.
+  실제로 같은 프로젝트의 `DMF0044_SalesReportExchangePopup` 은 `IsPopup=true` 이면서도
+  `DefineProperty()`/`SaveButton()` 에서 그룹을 직접 검사한다(2중). 팝업별로 **원문을 읽어** 판정한다.
+- **검증**: §5 로스터 계정으로 **권한 있는 계정 = 버튼 보임·실행 성공** / **없는 계정 = 버튼 숨김·직접 호출 403**
+  둘 다 실측한다. 한쪽만 확인 = 미완료.
+
+### §4.2 Cascade Filter 축 — 모달도 MAIN UI 와 동일 규칙 (2026-08-10 신설)
+
+- 모달 안의 조회조건·셀 콤보도 MAIN UI 와 **동일한 종속 규칙**을 따른다:
+  Division 변경 → 하위 콤보 재조회 + **Grid 초기화 + CRUD reset** ([[feedback_division_change_grid_reset]]),
+  셀 콤보 파라미터(`param1`/`param2`)는 AS-IS `SpreadInfo` 계약대로 전달([[feedback_meta_cell_combo_param_contract]]),
+  상위 셀 편집 시 하위 셀 값 클리어(hook #59 §5-G 표준).
+- ⛔ 모달이라는 이유로 **콤보 파라미터 무전달**(조용한 0행 → CODE raw 표시) 금지 — MAIN UI 와 동일 검사 대상.
+- **검증**: 상위 값을 **최소 2개 값**으로 바꿔가며 하위 행수가 실제로 달라짐을 근거로 남긴다.
+
+- ⛔ **SEARCH 만 호출하고 "모달 검증 완료" 선언 금지.** 2026-08-10 실사고: DMF0044 `unitedVersion` 을
+  `modal_sheets` 의 **SEARCH 만** 돌려 PASS 처리했는데, 사용자가 화면에서 **Version Create 시 SQL ERROR** 를
+  발견했다. ACTION / ACTION_BP / TRANSFER 는 **한 번도 실행되지 않았다**.
+  ⇒ `ui_http_e2e` 의 `modal_sheets` 는 **버튼 전수**(`btn` 목록)를 돌려야 하며,
+  조회 전용이 아닌 모달은 §4-5 CRUD 축이 비면 **FAIL**로 판정한다.
 - MAIN UI 도 동일: **CRUD 6종 + 공통/특화 버튼 전수**가 실행 근거를 가져야 한다(hotkeyConfig 표시 버튼 = 각각 1회 이상 실행 또는 정당 사유).
-- "형태만 만든 모달" 차단 = 이 표의 AS-IS 기능 대사 칸이 핵심.
+- "형태만 만든 모달" 차단 = 위 표의 **기능·CRUD 축 실행 로그**가 핵심이다.
 
 ## §5. ⭐ 권한별(Division×역할) 테스트 의무 — 공식 로스터 (사용자 지정 2026-08-07)
 

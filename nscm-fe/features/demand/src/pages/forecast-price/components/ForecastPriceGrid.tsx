@@ -89,17 +89,8 @@ class FcstHeaderMergeManager extends CustomMergeManager<ForecastPriceRow> {
     return c1 === c2 ? null : new CellRange(r, c1, r, c2);
   }
 }
-// #10 중복체크 대상 키 8종 (AS-IS spdMain_Changed :5897~5946 — Insert 행 간 완전일치 판정).
-const DUP_KEY_COLS = [
-  'END_CUSTOMER',
-  'SCM_SITE_ID',
-  'ITEM_ID',
-  'DOM_EXP',
-  'FCST_TYPE',
-  'INCOTERMS',
-  'MEASURE',
-  'CELL_PROD_SITE_ID',
-] as const;
+// (구 #10 실시간 중복체크 키 8종 상수는 2026-08-11 제거 — 통합테스트 No.38 "저장 시점 검증" 요구.
+//  저장 시점 중복 판정은 ForecastPrice.handleSave + forecast-price.validate.ts 가 담당.)
 
 import {
   allocateLoc,
@@ -119,7 +110,6 @@ interface ForecastPriceGridProps {
   spreadTitle: SpreadTitleRow[];
   editTrackerRef: MutableRefObject<EditTracker | null>;
   // #10 — Insert 행 키 중복(MSG00260) 발생 시 페이지 alert 호출.
-  onDuplicateKey?: () => void;
 }
 
 interface DynColMeta {
@@ -152,7 +142,6 @@ export const ForecastPriceGrid = ({
   data,
   spreadTitle,
   editTrackerRef,
-  onDuplicateKey,
 }: ForecastPriceGridProps) => {
   const monthMap = useRef<Map<string, Set<string>>>(new Map());
   const weekMap = useRef<Map<string, Set<string>>>(new Map());
@@ -171,8 +160,6 @@ export const ForecastPriceGrid = ({
   calendarMapRef.current = useMemo(() => new Map(Object.entries(calendar)), [calendar]);
   const m3CutoffRef = useRef(m3CutoffYyyymm);
   m3CutoffRef.current = m3CutoffYyyymm;
-  const onDuplicateKeyRef = useRef(onDuplicateKey);
-  onDuplicateKeyRef.current = onDuplicateKey;
   const bucketTypeParam = searchParams.bucketType;
   const bucketTypeParamRef = useRef(bucketTypeParam);
   bucketTypeParamRef.current = bucketTypeParam;
@@ -286,6 +273,11 @@ export const ForecastPriceGrid = ({
   };
 
   // #7 — Insert 행 Site 변경 시 편집가능 Measure 후보 재조회 → 행별 캐시 (MEASURE 편집 진입 시 사용).
+  //   [No.63 2026-08-11] 후보 3분기(site 향)는 콤보 SQL 이 AS_SITE_PLANT 룩업으로 판정(서버 권위):
+  //   미입력=MKT+AS_In_Req+LOC / 고객향=MKT+LOC / 비축향=AS_In_Req+LOC (통합테스트 1st No.63 매트릭스 1:1).
+  const authGroup = useForecastPriceStore(state => state.authGroup);
+  const authGroupRef = useRef(authGroup);
+  authGroupRef.current = authGroup;
   const applyEditMeasures = (dataItem: WijmoRowItem) => {
     const div = String(dataItem['DIVISION_ID'] ?? '');
     const site = String(dataItem['SCM_SITE_ID'] ?? '');
@@ -297,7 +289,18 @@ export const ForecastPriceGrid = ({
         scmSiteId: q(site),
         bucketType: q(bucketTypeParamRef.current),
       })
-      .then(rows => editMeasuresRef.current.set(dataItem, rows ?? []))
+      .then(rows => {
+        // [No.63 그룹 축] AS-IS DMF0003_MktFcst.cs E20260402-001736 1:1 — 81계열/82 에서
+        //   DM Planner (W/S) 가 아니면 AS_In_Req 를 후보에서 제거한다.
+        let out = rows ?? [];
+        if (
+          (div.startsWith('81') || div === '82') &&
+          authGroupRef.current !== 'DM Planner (W/S)'
+        ) {
+          out = out.filter(r => String(r.CODE) !== 'AS_In_Req');
+        }
+        return editMeasuresRef.current.set(dataItem, out);
+      })
       .catch((err: unknown) => {
         // 폴백은 유지하되 무증상 금지 — 캐시 미설정 → 편집 진입 시 전체 Measure 콤보.
         console.error('[combo] FcstPriceEditMeasure 조회 실패 — 전체 Measure 콤보로 폴백', err);
@@ -515,6 +518,13 @@ export const ForecastPriceGrid = ({
   }, [dynColMetas, hasDaily, tierH]);
 
   const staticBindingSet = useMemo(() => new Set(staticColumns.map(c => c.colNm)), [staticColumns]);
+  // [No.35 2026-08-11] colNm → INPUT_TP_CD (UI Category Setup) — 신규행 입력 컬럼 판정의 단일 원천.
+  //   핸들러는 재등록 없이 ref 로 최신 맵을 본다 (measureAuth/calendar 패턴 동일).
+  const inputTpRef = useRef<Map<string, string>>(new Map());
+  inputTpRef.current = useMemo(
+    () => new Map(staticColumns.map(c => [c.colNm, String(c.inputTpCd ?? '')])),
+    [staticColumns]
+  );
 
   // ⭐ 컬럼 개인화 색 (ColumnLayoutModal 저장값) — binding → {cell, text}.
   //   공용 columnMapping 은 colWth/visible 만 넘기고 색은 안 넘기므로 formatItem 이 직접 적용한다
@@ -605,6 +615,15 @@ export const ForecastPriceGrid = ({
         // 정적 컬럼: Insert 행(CRUD_TYPE 존재)만 편집 (AS-IS: 기존 행 키 컬럼 잠금)
         const isInsert = dataItem['CRUD_TYPE'] !== undefined && dataItem['CRUD_TYPE'] !== null;
         if (!isInsert) {
+          e.cancel = true;
+          return;
+        }
+        // [No.35 2026-08-11] 신규행 입력 컬럼 = UI Category Setup `INPUT_TP_CD`(IM/IO/M/O) 한정 —
+        //   통합테스트 1st "As-Is 기준 입력 가능한 컬럼은 8개"(End Customer/Sales Site/Model/Incoterms/
+        //   FCST Type/Customs Handbook[DOM_EXP]/Cell Prod Site/Currency + Measure 콤보). 종전에는
+        //   Insert 행이면 **전 정적 컬럼**이 열려 있었다(hook #130 A 메타 실소비 — 하드코딩 아닌 메타 판정).
+        const inputTp = inputTpRef.current.get(binding);
+        if (!(inputTp === 'IM' || inputTp === 'IO' || inputTp === 'M' || inputTp === 'O')) {
           e.cancel = true;
           return;
         }
@@ -741,29 +760,10 @@ export const ForecastPriceGrid = ({
       // End Customer 변경 → Sales Site 후보 재조회 (AS-IS .cs L8237·8283·8294).
       if ((binding === 'END_CUSTOMER' || binding === 'DIVISION_ID') && isInsertRow)
         applySalesSites(dataItem);
-      // #10 — Insert 행 키 8종 변경 시 실시간 중복 검사 (AS-IS MSG00260 :5878). 중복이면 값 롤백 + alert.
-      if (isInsertRow && (DUP_KEY_COLS as readonly string[]).includes(binding)) {
-        const keyOf = (r: WijmoRowItem) => DUP_KEY_COLS.map(c => String(r[c] ?? '')).join('');
-        const full = DUP_KEY_COLS.every(c => String(dataItem[c] ?? '') !== '');
-        if (full) {
-          const myKey = keyOf(dataItem);
-          let dup = 0;
-          for (let r = 0; r < sender.rows.length; r++) {
-            const ri = sender.rows[r]?.dataItem as WijmoRowItem | undefined;
-            if (
-              ri &&
-              ri['CRUD_TYPE'] !== undefined &&
-              ri['CRUD_TYPE'] !== null &&
-              keyOf(ri) === myKey
-            )
-              dup += 1;
-          }
-          if (dup >= 2) {
-            sender.setCellData(e.row, e.col, (e.data ?? '') as WijmoPrimitive); // 롤백
-            onDuplicateKeyRef.current?.();
-          }
-        }
-      }
+      // #10 실시간 중복 검사(AS-IS MSG00260 :5878 파리티)는 **2026-08-11 제거** — 통합테스트 1st No.38
+      //   사용자 요구 "저장 버튼 클릭 시 중복 Validation 수행하도록 수정"(입력 즉시 팝업 금지).
+      //   중복 검증은 저장 시점 단일 경로 = ForecastPrice.handleSave 의 MSG00260(DUP_NEW_ROW) 검사 +
+      //   SP 측 검증이 담당한다. (AS-IS 원문은 실시간이었으나 문서 요구가 우선 — 대사표 No.38)
       if (!kindOf(binding)) return;
       let val = sender.getCellData(e.row, e.col, false) as WijmoPrimitive;
       const oldVal = (e.data ?? null) as WijmoPrimitive;

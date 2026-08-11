@@ -381,15 +381,32 @@ def cmd_init(md_paths, page_dir, out_override=None, allow_legacy=False):
         print(f"[auto] 제약매트릭스 md 자동 포함: {', '.join(e.name for e in extra)}")
         md_paths.extend(extra)
 
-    ids = extract_ids(md_paths)
-    dialect = "hook#105 E번호"
-    if not ids:
-        # ⭐ 2026-08-09 — E번호가 0건이면 **버리기 전에** 계층 번호 방언을 시도한다.
-        #   (DMF0042 실측: 주요이벤트·제약매트릭스가 `## 1.` / `| 1 |` 체계라 구 로직은 0건 → 게이트 사각지대)
-        ids = extract_ids_numbered(md_paths)
-        if ids:
-            dialect = "계층 번호(numbered) 방언 — `## 1.`→E01 / `### 2.1`→E02-1 / 제약 표행→C{섹션문자}-{n}"
-    print("[dialect] %s · 추출 %d건" % (dialect, len(ids)))
+    # ⭐ 방언 판정은 **md 파일 단위**로 한다 (2026-08-09 2차 정정).
+    #   ⛔ 구 로직은 md 전체 합집합이 0건일 때만 계층번호 방언으로 넘어갔다. 그래서
+    #     "제약 md 는 `A-1` 형식이라 87건이 잡히고, 주요이벤트 md 는 E번호 0건" 인 조합에서
+    #     **이벤트 축이 통째로 누락된 채 통과**했다(DMF0044 실측 — 이벤트 E 0 / 제약 87).
+    #     파일마다 양식이 다를 수 있으므로 파일별로 판정하고, 어떤 파일이 어느 방언인지 **항상 출력**한다.
+    ids, seen_ids, dialect_notes, used_numbered = [], set(), [], False
+    for p in md_paths:
+        part = extract_ids([p])
+        dname = "hook#105 E번호"
+        if not part:
+            part = extract_ids_numbered([p])
+            if part:
+                dname = "계층번호(numbered)"
+                used_numbered = True
+            else:
+                dname = "추출 0 (양식 미상)"
+        dialect_notes.append("%s=%s(%d건)" % (p.name, dname, len(part)))
+        for t in part:
+            if t[0] not in seen_ids:
+                seen_ids.add(t[0])
+                ids.append(t)
+    dialect = " / ".join(dialect_notes)
+    print("[dialect] %s · 합계 %d건" % (dialect, len(ids)))
+    for note in dialect_notes:
+        if "추출 0" in note:
+            print("  ⚠ %s — 이 파일의 축이 대사표에 **하나도 들어가지 않았다**. 양식 확인 필요" % note)
     md_texts = {p.name: p.read_text(encoding="utf-8", errors="ignore") for p in md_paths}
     matrix = build_matrix_rows(ids, page_dir, md_texts)
     if not ids and not matrix:
@@ -467,7 +484,7 @@ def cmd_init(md_paths, page_dir, out_override=None, allow_legacy=False):
 
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text("\n".join(lines) + "\n", encoding="utf-8")
-    n_noid, noid_srcs = count_noid_rows(md_paths, numbered=dialect.startswith("계층"))
+    n_noid, noid_srcs = count_noid_rows(md_paths, numbered=used_numbered)
     if n_noid:
         print(f"[warn] ID 컬럼 없는 데이터 표 행 {n_noid}건 — **추출 대상 아님**. "
               f"제약으로 세야 하면 수기 ID 부여 후 추가할 것 (조용한 누락 방지): "
@@ -591,6 +608,38 @@ def check_citations(page_dir, db_ids=None):
     page = pathlib.Path(page_dir)
     src = {f.name: f.read_text(encoding="utf-8", errors="ignore")
            for f in list(page.rglob("*.ts")) + list(page.rglob("*.tsx"))}
+
+    # ⭐ 2026-08-11 — 오탐 계보 "폴더밖 배선" 제거.
+    #   구현이 페이지 폴더 밖(공용 모달·shared 훅 등)에 있으면 인용도 워크스페이스 상대경로로 적는다
+    #   (예 `features/demand/src/components/versionModal/VersionModal.tsx`).
+    #   기존 구현은 페이지 폴더만 색인해 이런 정당한 인용을 전부 '미존재'로 찍었다
+    #   (실측: DMF0044 12건 / DMF0049 1건 — 파일은 모두 실재).
+    #   ⇒ **경로가 포함된 인용**은 FE 루트(nscm-fe) 기준으로 실재 확인하고, 그 파일 본문도 blob 에 넣는다.
+    #   ⚠ 경로 없는 맨 파일명(`save.ts` 같은 축약)은 **계속 엄격 판정** — 실제 축약 오인용을 잡아야 한다.
+    #   해석 기준(base)은 **모호하지 않은 절대 해석 2종만** 허용한다:
+    #     ① FE 루트           — `features/demand/src/components/versionModal/VersionModal.tsx` (DMF0049 표기)
+    #     ② 해당 feature 의 src — `components/versionModal/VersionModal.tsx`                   (DMF0044 표기)
+    #   두 표기 모두 실제 산출물에서 쓰이며 파일은 실재한다. 탐색(glob)이 아니라 고정 base 결합이라
+    #   동명이파일을 잘못 집는 일이 없다.
+    _rp = page.resolve()
+    fe_root = next((p for p in _rp.parents if p.name == "nscm-fe"), None)
+    feat_src = next((p for p in _rp.parents
+                     if p.name == "src" and p.parent.parent.name == "features"), None)
+    #     ③ 리포지토리 루트    — `nscm-fe/features/.../VersionModal.tsx` (DMF0044 E05 표기)
+    repo_root = fe_root.parent if fe_root is not None else None
+    bases = [b for b in (fe_root, feat_src, repo_root) if b is not None]
+    ext_src = {}
+
+    def _resolve_ext(tok):
+        """상대경로 인용 → 실재 파일 반환(없으면 None). 경로 없는 맨 파일명은 대상 아님."""
+        if "/" not in tok:
+            return None
+        for b in bases:
+            cand = b / tok
+            if cand.is_file():
+                return cand
+        return None
+
     blob = "\n".join(src.values())
     db_ids = db_ids or set()
     bad = []
@@ -606,10 +655,19 @@ def check_citations(page_dir, db_ids=None):
             continue
         total += 1
         loc = cells[1]
-        miss = [f for f in set(re.findall(r"([A-Za-z][\w.\-]*\.tsx?)", loc)) if f not in src]
+        # 경로 포함 인용(폴더밖 배선)을 먼저 해소 — 실재하면 본문을 심볼 대조용 blob 에 합류시킨다
+        row_blob = blob
+        for tok in set(re.findall(r"([A-Za-z][\w./\-]*\.tsx?)", loc)):
+            f = _resolve_ext(tok)
+            if f is not None:
+                if f.name not in ext_src:
+                    ext_src[f.name] = f.read_text(encoding="utf-8", errors="ignore")
+                row_blob += "\n" + ext_src[f.name]
+        miss = [f for f in set(re.findall(r"([A-Za-z][\w.\-]*\.tsx?)", loc))
+                if f not in src and f not in ext_src]
         # 백틱 심볼 — FE 소스에 없고 DB 식별자(CMBO SQL_ID 등)도 아니면 오인용
         miss += [s for s in set(re.findall(r"`([A-Za-z_$][\w$]*)`", loc))
-                 if s not in blob and s not in db_ids]
+                 if s not in row_blob and s not in db_ids]
         if miss:
             bad.append((m.group(1), miss))
     return total, bad

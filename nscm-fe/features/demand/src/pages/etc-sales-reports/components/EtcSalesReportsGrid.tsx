@@ -5,7 +5,8 @@ import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { FlexGridFilter as FlexGridFilterCtor } from '@mescius/wijmo.grid.filter';
 import { type MutableRefObject, type Ref, useEffect, useMemo, useRef } from 'react';
 
-import type { RawFlexGridColumnConfig } from '@foundation/models';
+import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
+import type { ComboParam, RawFlexGridColumnConfig } from '@foundation/models';
 import type { EditTracker } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
@@ -15,18 +16,19 @@ import styles from '../EtcSalesReports.module.scss';
 import {
   dynKindOf,
   evalEtcReportCell,
-  insertStaticEditable,
+  staticEditableByMeta,
 } from '../utils/etc-sales-reports.editLock';
 import {
   buildDataMap,
-  filterComboRowsByRow,
-  GRID_CASCADE_FILTERS,
+  cascadeClearColumns,
+  resolveDeptIdRows,
+  ROW_COMBO_IDS,
   toCellStr,
 } from '../utils/etc-sales-reports.gridCombos';
 import { EtcSalesReportsMergeManager } from '../utils/etc-sales-reports.merge';
 
-// ⭐ DMF0049 EtcSalesReportsGrid — sales-reports(DMF0044) Grid 이식 (M_ 단일축 · 2단 헤더 ·
-//   배분/롤업 없음 · 2행 Measure 블록은 행 데이터 차원 — Grid 는 셀 편집만).
+// ⭐ DMF0049 EtcSalesReportsGrid — sales-reports(DMF0044) Grid 이식 (M_ 단일축 · **1단 헤더**
+//   [월 라벨 '2025-01'] · 배분/롤업 없음 · 2행 Measure 블록은 행 데이터 차원 — Grid 는 셀 편집만).
 //   편집 게이트 = evalEtcReportCell 4변수 매트릭스 (EDIT_FLAG×Measure×Div×시점 + ALL 차단).
 //   AS-IS spdMain_Changed L1295~1302: 수치셀 빈값 → '0' 강제 (cellEditEnded 파리티).
 //   ITEM_ID 셀 더블클릭 → Item 팝업 (값 '기타매출' 제외 — 제약매트릭스 M-8 L93).
@@ -80,8 +82,22 @@ export const EtcSalesReportsGrid = ({
   const fixedBindings = useMemo(() => visibleColumns.map(c => c.colNm), [visibleColumns]);
   const staticBindingSet = useMemo(() => new Set(fixedBindings), [fixedBindings]);
 
+  // ⭐ 정적 컬럼도 **1단 헤더**로 강제 (2026-08-11 — DMF0044 2026-08-10 선례 이식).
+  //   공용 `packages/foundation/src/utils/columnMapping.ts` 의 `getColumnDepth` 는 메타의
+  //   `sClsLblNm`/`lClsLblNm` 만 보고 단수를 정하므로, 클래스 라벨이 채워진 행이 하나라도 있으면 2단이 된다.
+  //   ⚠ AS-IS 도 메타는 동일하고, `DMF0049_Sales_ETC_Reports.cs:265` 가
+  //     `CreateSheetHeaderColumnDtDiv(siMain, **1**, …)` 로 **iColumnHeaderRowCount = 1** 을 넘겨
+  //     **코드가 1단을 강제**한다(그 경우 클래스 라벨은 표시에 쓰이지 않는다).
+  //   ⇒ 메타(원본 라벨)는 **건드리지 않고**, 화면이 1단임을 선언한다 = AS-IS 계약 1:1.
   const mainStaticColumns = useMemo<RawFlexGridColumnConfig[]>(
-    () => visibleColumns.map(c => ({ ...c, visible: true, display: true })),
+    () =>
+      visibleColumns.map(c => ({
+        ...c,
+        visible: true,
+        display: true,
+        sClsLblNm: '',
+        lClsLblNm: '',
+      })),
     [visibleColumns]
   );
 
@@ -93,11 +109,23 @@ export const EtcSalesReportsGrid = ({
       ),
     [visibleColumns]
   );
+  // ⭐ AS-IS 콤보 파라미터 계약 (SpreadInfo.cs L1975~1981 ← DMF0049_GET_SPREAD_TITLE):
+  //   ATTRIBUTE1 = @p_division_id → param1 / CELL_COMBO_DATA_TYPE='DM_LOOKUP_DIV' 이면
+  //   컬럼 ATTRIBUTE1 → param2(LOOKUP_TYPE). 값은 따옴표로 감싼다(BE raw 치환 — 미따옴표 = ORA 오류).
+  //   ⚠ 2026-08-10 실측: 무전달 시 DM_LOOKUP_DIV 3컬럼 전부 **0행**(BIZ_TYPE/ITEM_ID/ITEM_USE)
+  //     → 그리드가 CODE 를 raw 로 표시. 전달 시 40 BIZ_TYPE 6 / 40 ITEM_ID 16 / 82 ITEM_USE 7.
+  const q = (v?: string): string => `'${v && v.trim() !== '' ? v : 'ALL'}'`;
   const comboResults = useTabComboQueries({
-    filters: comboColumns.map(c => c.cellCboDataTp as string),
+    filters: comboColumns.map((c): ComboParam =>
+      c.cellCboDataTp === 'DM_LOOKUP_DIV'
+        ? { comboId: 'DM_LOOKUP_DIV', param1: q(division), param2: q(c.attribute1) }
+        : { comboId: c.cellCboDataTp as string, divisionId: q(division) }
+    ),
   });
+  // ⚠ division 을 시그니처에 포함한다 — 미포함 시 division 전환 후 행수가 우연히 같으면
+  //   useMemo 가 재계산되지 않아 **이전 division 의 dataMap 이 잔존**한다(DMF0042 실측).
   const comboSig = comboColumns
-    .map((c, i) => `${c.cellCboDataTp}#${comboResults[i]?.length ?? 'x'}`)
+    .map((c, i) => `${c.cellCboDataTp}@${division}#${comboResults[i]?.length ?? 'x'}`)
     .join(',');
   const dataMaps = useMemo<Record<string, DataMap | null>>(() => {
     const m: Record<string, DataMap | null> = {};
@@ -120,16 +148,41 @@ export const EtcSalesReportsGrid = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [comboSig, dataMaps]);
 
+  // ===== 행별 콤보 — AS-IS `.cs` 런타임 SetCellTypeCombo 분 (메타에 컬럼이 없어 별도 구독) =====
+  //   DEPT_ID 부모키 후보(`DMF0044_DEPARTMENT_TEAM`). 화면 단위로 superset 을 받아
+  //   `beginningEdit` 에서 행 컨텍스트로 골라 스왑한다(hook #59 §5-G).
+  const [deptByDepartmentRows, custReportRows] = useTabComboQueries({
+    filters: [ROW_COMBO_IDS.DEPT_BY_DEPARTMENT, ROW_COMBO_IDS.CUST_REPORT],
+  });
+  const rowComboRef = useRef<Record<string, unknown>[]>([]);
+  useEffect(() => {
+    rowComboRef.current = (deptByDepartmentRows ?? []) as unknown as Record<string, unknown>[];
+  }, [deptByDepartmentRows]);
+  // CUST_REPORT 행별 콤보 (AS-IS L1346 `DMF0005_REPORT_GROUP2` — 파라미터 없음)
+  const custReportRef = useRef<Record<string, unknown>[]>([]);
+  useEffect(() => {
+    custReportRef.current = (custReportRows ?? []) as unknown as Record<string, unknown>[];
+  }, [custReportRows]);
+
   // ===== 동적 컬럼 메타 — GET_SPREAD_TITLE 우선, 부재 시 row 키 union fallback (M_ 단일축) =====
-  type DynColMeta = { binding: string; year: string; leaf: string; sort: number };
+  //   ⭐ 2026-08-11 — **1단 헤더**로 전환 (DMF0044 2026-08-10 선례 이식). AS-IS
+  //     `DMF0049_Sales_ETC_Reports.cs:265` 가 `CreateSheetHeaderColumnDtDiv(siMain, 1, …)` 로
+  //     **iColumnHeaderRowCount = 1** 을 넘긴다(2단 화면은 DMF0072/DMF0074 처럼 2를 넘긴다).
+  //     실제로 `PKG_DMF0049.P_DMF0049_GET_SPREAD_TITLE`(BODY L229~232) 은 LARGE/SMALL/COLUMN_LABEL_NAME
+  //     을 모두 `SCM_SYS_CALENDAR_M.MONTH_NAME`(= `2025-01`) **동일값**으로 주므로, 2단으로 묶으면
+  //     '2025-01' 그룹 아래 '2025-01' 1개짜리가 12개 생겼다(오구성).
+  type DynColMeta = { binding: string; label: string; sort: number };
   const dynColMetas = useMemo<DynColMeta[]>(() => {
     const titleRows = (spreadTitle ?? []).filter(r => dynKindOf(String(r.COLUMN_NAME ?? '')));
     if (titleRows.length > 0) {
       return titleRows
         .map<DynColMeta>(r => ({
           binding: String(r.COLUMN_NAME),
-          year: String(r.LARGE_CLASS_LABEL_NAME ?? String(r.COLUMN_NAME).slice(2, 6)),
-          leaf: String(r.COLUMN_LABEL_NAME ?? String(r.COLUMN_NAME).slice(6, 8)),
+          // 라벨 원천 = COLUMN_LABEL_NAME('2025-01'). 부재 시에만 binding 에서 yyyy-mm 합성.
+          label: String(
+            r.COLUMN_LABEL_NAME ??
+              `${String(r.COLUMN_NAME).slice(2, 6)}-${String(r.COLUMN_NAME).slice(6, 8)}`
+          ),
           sort: Number(r.SORT_ORDER_NO ?? 0),
         }))
         .sort((a, b) => a.sort - b.sort || a.binding.localeCompare(b.binding));
@@ -141,8 +194,7 @@ export const EtcSalesReportsGrid = ({
     }
     return [...set].sort().map<DynColMeta>(b => ({
       binding: b,
-      year: b.slice(2, 6),
-      leaf: b.slice(6, 8),
+      label: `${b.slice(2, 6)}-${b.slice(6, 8)}`,
       sort: 0,
     }));
   }, [spreadTitle, rows]);
@@ -152,16 +204,28 @@ export const EtcSalesReportsGrid = ({
   const lockCtxRef = useRef({ division, planResult, mdfType, yyyy, thisMonth, sEditMeasure, userGroup });
   lockCtxRef.current = { division, planResult, mdfType, yyyy, thisMonth, sEditMeasure, userGroup };
 
-  // ⭐ 동적 PIVOT 컬럼 — 2단 nested (연 span → 월 leaf). AS-IS CreateSheetHeaderColumnDtDiv 대응.
-  const mainDynamicColumns = useMemo(() => {
-    if (dynColMetas.length === 0) return [];
-    const yearMap = new Map<string, { header: string; columns: Record<string, unknown>[] }>();
-    dynColMetas.forEach(m => {
-      const y = m.binding.slice(2, 6);
-      if (!yearMap.has(y)) yearMap.set(y, { header: m.year || y, columns: [] });
-      yearMap.get(y)!.columns.push({
+  // ⭐ 정적 컬럼 입력형(UI Category Setup `INPUT_TP_CD`) — 편집·색 판정의 단일 원천.
+  //   핸들러가 effect 안에서 등록되므로 ref 미러로 최신 메타를 본다(lockCtxRef 와 동형).
+  const inputTpRef = useRef<Map<string, string | undefined>>(new Map());
+  inputTpRef.current = new Map(
+    visibleColumns.map(c => [c.colNm, c.inputTpCd as string | undefined])
+  );
+
+  // ⭐ 동적 PIVOT 컬럼 — **1단 평면**(AS-IS iColumnHeaderRowCount=1). nested columnGroups 사용 금지.
+  //   헤더 높이 48px 고정(hook #93) — 1단이므로 행 1개가 48을 그대로 갖는다.
+  //
+  //   ⚠️ **`_inputEditType` 필수** (DMF0044 2026-08-10 실사고 — "노란색인데 편집이 안 됨").
+  //   공용 `DataGrid` 가 `setEditableColumns()` 로 자체 `beginningEdit` 을 걸고
+  //   `GridUtils.isEditableCell()` 로 1차 판정하는데, 그 함수는 컬럼의 **`_inputEditType`** 만 본다
+  //   (정적 컬럼은 `mapColumn()` 이 `inputTpCd` → `_inputEditType` 으로 변환해 주지만,
+  //    **동적 컬럼은 raw 로 전달**되므로 `inputTpCd` 로 주면 변환되지 않아 `undefined` → `default: false`).
+  //   최종 판정은 아래 `beginningEdit` 의 `evalDyn`(제약매트릭스 §2~§6)이 하므로
+  //   **색(formatItem)과 편집 게이트가 같은 함수를 본다**(둘이 갈리면 "노란칸인데 못 고침"이 생긴다).
+  const mainDynamicColumns = useMemo(
+    () =>
+      dynColMetas.map(m => ({
         binding: m.binding,
-        header: m.leaf || m.binding.slice(6, 8),
+        header: m.label,
         align: 'right',
         width: 90,
         allowDragging: true,
@@ -169,17 +233,12 @@ export const EtcSalesReportsGrid = ({
         allowResizing: true,
         allowSorting: false,
         visible: true,
-        height: 48, // 다단 헤더(#93) — 동적 컬럼 명시 의무
+        height: 48,
         _display: true,
-      });
-    });
-    return [...yearMap.values()].map(yb => ({
-      header: yb.header,
-      align: 'center',
-      height: 48,
-      columns: yb.columns,
-    }));
-  }, [dynColMetas]) as never[];
+        _inputEditType: CELL_INPUT_EDIT_TYPE.OPTIONAL,
+      })),
+    [dynColMetas]
+  ) as never[];
 
   // ===== grid 핸들러 + mergeManager =====
   useEffect(() => {
@@ -213,6 +272,12 @@ export const EtcSalesReportsGrid = ({
       const binding = col?.binding ?? '';
       const rowItem = g.rows[e.row]?.dataItem as EtcSalesReportRow | undefined;
       if (dynKindOf(binding)) {
+        // ⚠️ **`editRange` 가드 필수** (DMF0044 2026-08-11 실사고 — "노란색인데 편집 불가").
+        //   `formatItem` 은 **편집 중인 셀에도 발생**한다(Wijmo 가 편집기 <input> 을 셀에 넣은 뒤 셀을 갱신).
+        //   가드 없이 `textContent` 를 대입하면 방금 삽입된 <input> 이 지워져, 판정은 정상인데
+        //   타이핑만 불가능한 상태가 된다. 자매 화면 3본(forecast-price/business-plan/sales-plan)과
+        //   DMF0044 가 모두 같은 가드를 갖고 있다.
+        if (g.editRange?.contains(e.row, e.col)) return; // 편집 중 셀은 건드리지 않는다
         const st = evalDyn(binding, rowItem);
         toggleClass(e.cell, 'wj-cell-editable', st.editable);
         toggleClass(e.cell, 'wj-cell-non-editable', !st.editable && st.isPast);
@@ -223,7 +288,8 @@ export const EtcSalesReportsGrid = ({
         return;
       }
       if (staticBindingSet.has(binding) && rowItem) {
-        const editable = rowItem.CRUD_TYPE === 'I' && insertStaticEditable(binding, lockCtxRef.current.division);
+        // 색상 판정도 편집 게이트와 **같은 함수**를 쓴다 — 두 곳이 갈리면 노란칸인데 못 고치는 상태가 생긴다
+        const editable = staticEditableByMeta(inputTpRef.current.get(binding), rowItem);
         toggleClass(e.cell, 'wj-cell-editable', editable);
       }
     };
@@ -238,16 +304,31 @@ export const EtcSalesReportsGrid = ({
       const binding = s.columns[e.col]?.binding ?? '';
       const row = s.rows[e.row]?.dataItem as EtcSalesReportRow | undefined;
       if (staticBindingSet.has(binding)) {
-        const allowed = !!row && row.CRUD_TYPE === 'I' && insertStaticEditable(binding, lockCtxRef.current.division);
+        // UI Category Setup `INPUT_TP_CD` 단일 원천 (IM/IO=신규행만, M/O=전 행, S=불가).
+        //   AS-IS InsertRow(L965~1024)·EditButton 키영역(L399~412) 잠금 파리티는 메타 값('S')으로
+        //   보존한다 — 여기 하드코딩 금지.
+        const allowed = staticEditableByMeta(inputTpRef.current.get(binding), row);
         if (!allowed) {
           e.cancel = true;
           return;
         }
-        // cascade 스왑 — DEPT_ID 는 DEPARTMENT_ID 값으로 필터 (AS-IS ComboSelChange M-6)
-        const cascade = GRID_CASCADE_FILTERS[binding];
-        const src = comboRowsRef.current[binding];
-        if (cascade && src && row) {
-          const dm = buildDataMap(filterComboRowsByRow(src, row, cascade));
+        // 행 컨텍스트 스왑 — DEPT_ID 후보를 AS-IS 2분기(L1268 / L1294)로 다시 고른다
+        if (binding === 'DEPT_ID' && row) {
+          const dm = buildDataMap(
+            resolveDeptIdRows(row, lockCtxRef.current.division, {
+              deptDefault: comboRowsRef.current.DEPT_ID ?? [],
+              deptByDepartment: rowComboRef.current,
+            })
+          );
+          if (dm) {
+            s.columns[e.col].dataMap = dm;
+            editingCellRef.current = { binding };
+          }
+        }
+        // CUST_REPORT — AS-IS 가 `.cs` 에서 붙이던 행별 콤보(L1346/1367/1597). 메타에 없으므로
+        //   화면이 구독해 편집 진입 시 스왑한다(편집 종료 시 cellEditEnded 가 원복).
+        if (binding === 'CUST_REPORT') {
+          const dm = buildDataMap(custReportRef.current);
           if (dm) {
             s.columns[e.col].dataMap = dm;
             editingCellRef.current = { binding };
@@ -272,6 +353,19 @@ export const EtcSalesReportsGrid = ({
       if (dynKindOf(binding) && row && (row[binding] == null || row[binding] === '')) {
         (row as Record<string, unknown>)[binding] = '0';
       }
+      // DEPARTMENT_ID / DEPT_ID 변경 → 종속 컬럼 clear (AS-IS 매트릭스 = cascadeClearColumns JSDoc)
+      //   ⚠ AS-IS 는 **DEPT_ID 자체를 지우지 않는다** — DMF0044 와 다른 지점이라 원문 그대로 따른다.
+      //     DEPT_ID 후보는 다음 편집 진입 시 `resolveDeptIdRows` 가 새 DEPARTMENT_ID 로 다시 고른다.
+      if (row) {
+        const clears = cascadeClearColumns(binding, row, lockCtxRef.current.division);
+        if (clears.length > 0) {
+          const rec = row as Record<string, unknown>;
+          clears.forEach(col => {
+            rec[col] = '';
+          });
+          s.invalidate();
+        }
+      }
       // cascade 원복
       if (editingCellRef.current?.binding === binding) {
         const orig = dataMapsRef.current[binding];
@@ -293,7 +387,12 @@ export const EtcSalesReportsGrid = ({
     };
     g.hostElement.addEventListener('dblclick', dblclickHandler);
 
-    const handleScrollInvalidate = () => g.invalidate();
+    // 스크롤 시 재렌더(merge 재계산용). ⚠ 편집 중에는 건너뛴다 — 편집기가 붙은 셀을 다시 그리면
+    //   입력이 끊긴다(위 formatItem editRange 가드와 같은 계열의 사고. DMF0044 2026-08-11 선례).
+    const handleScrollInvalidate = () => {
+      if (g.editRange) return;
+      g.invalidate();
+    };
     g.scrollPositionChanged.addHandler(handleScrollInvalidate);
 
     g.allowMerging = AllowMerging.All;
@@ -317,7 +416,8 @@ export const EtcSalesReportsGrid = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visibleColumns, dynBindings, fixedBindings, onProjectCellDblClick]);
 
-  // ⭐ hook #93 — 2단 헤더 총 48px (1단 연 24 + 2단 월 24) + combo dataMap 재적용 + Filter sanitize
+  // ⭐ hook #93 — 헤더 총 48px. DMF0049 는 **1단**이므로 행 1개가 48 을 그대로 갖는다
+  //   (2단 화면이면 24+24 로 자동 분배 — `48 / headerRows.length`). + combo dataMap 재적용 + Filter sanitize
   useEffect(() => {
     const g = (gridRef as { current: FlexGridType<EtcSalesReportRow> | null } | null)?.current;
     if (!g) return;
