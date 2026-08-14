@@ -1,0 +1,254 @@
+[
+ {
+  "no": null,
+  "gubun": "Common",
+  "ui": "전체 UI",
+  "div": "공통",
+  "test": "필터링한 상태에서 신규행 Insert 시 추가된 행 추가",
+  "result": "필터링한 상태에서 신규행 Insert 시 추가된 행이 보여지도록 수정",
+  "done": ""
+ },
+ {
+  "no": null,
+  "gubun": "Common",
+  "ui": "CRUD 가능한 전체 UI",
+  "div": "공통",
+  "test": "데이터 수정 중 다른 데이터 조회 시도",
+  "result": "수정 중인 데이터가 있습니다. 새로 조회하시겠습니까? 팝업 호출 필요\n\n현재는 Alert 없이 바로 데이터 전환됨",
+  "done": ""
+ },
+ {
+  "no": null,
+  "gubun": "Common",
+  "ui": "컬럼 추가/제외",
+  "div": "공통",
+  "test": "컬럼 추가/제외 적용 후 데이터 정상 여부 확인",
+  "result": "컬럼 추가/제외 시 기존에 조회된 데이터가 있을 경우 Reset 후 재조회 할 수 있도록 수정",
+  "done": ""
+ },
+ {
+  "no": null,
+  "gubun": "Common",
+  "ui": "전체 UI",
+  "div": "공통",
+  "test": "CRUD 완료에 대한 LGES WDG 표준 준수 여부 확인",
+  "result": "별도 팝업으로 CRUD 완료에 대한 내용을 Alert하지 않고 하단 중앙에 메시지로 표기 후 사라지도록 일괄 적용",
+  "done": ""
+ },
+ {
+  "no": null,
+  "gubun": "Common",
+  "ui": "전체 UI",
+  "div": "공통",
+  "test": "Excel Download 기능 정상 여부 확인",
+  "result": "모든 화면의 Excel Download 시 데이터가 Name으로 보여지는지 확인",
+  "done": ""
+ },
+ {
+  "no": null,
+  "gubun": "Common",
+  "ui": "전체 UI",
+  "div": "공통",
+  "test": "조회조건에서 데이터 다중 입력 후 조회 가능한지 확인",
+  "result": "Key-in이 가능한 조회조건일 경우 아래 예시처럼 데이터를 콤마와 함께 여러 건 입력할 경우 입력된 데이터가 모두 조회되도록 수정\n\n예시)\nModel 조회조건에서 ACEN1060I-A1, ACEN1060I-A1-100, ACEN1060I-A1-101 입력 후 조회하면 3건의 데이터가 조회되도록 수정",
+  "done": ""
+ },
+ {
+  "no": 33,
+  "gubun": "Demand Plan",
+  "ui": "FCST&PRICE MGMT",
+  "div": "공통",
+  "test": "버전 Popup UI 확인",
+  "result": "As-Is UI에 존재하지 않는 기능 버튼 삭제\n  : As-Is 버튼은 ㅁ Day / ㅁ Week / ㅁ Manual 버튼임 (Manual 버튼은 삭제하고 Day, Week 버튼만 필요함)\nㅁ Mail Setup\nㅁ Category\nㅁ Main",
+  "done": ""
+ },
+ {
+  "no": 34,
+  "gubun": "Demand Plan",
+  "ui": "FCST&PRICE MGMT",
+  "div": "공통",
+  "test": "컬럼 추가 후 데이터 조회",
+  "result": "모든 컬럼 추가 후 조회 시 Measure 영역을 화면에서 볼 수 없음\n컬럼 사이즈 조정 불가 현상 발생",
+  "done": ""
+ },
+ {
+  "no": 35,
+  "gubun": "Demand Plan",
+  "ui": "FCST&PRICE MGMT",
+  "div": 40,
+  "test": "신규 행 추가 시 입력 가능 컬럼 확인\n모든 컬럼 추가 후 Insert 버튼 클릭하여 신규 행 추가",
+  "result": "신규 행 추가 시 모든 컬럼에 대해 입력 가능\nAs-Is 기준으로 입력 가능한 컬럼은 아래 8개 항목임\n\nEnd Customer\nSales Site\nModel\nIncoterms\nFCST Type\nCustoms Handbook\nCell Prod Site\nCurrency",
+  "done": ""
+ },
+ {
+  "no": 36,
+  "gubun": "Demand Plan",
+  "ui": "FCST&PRICE MGMT",
+  "div": 40,
+  "test": "Current 버전에서 입력 가능 Measure 확인",
+  "result": "Current 버전일 경우 아래 Measure를 입력 가능해야하나 Unit Price(LOC)만 입력 가능\n\nMKT_FCST[R+P] - GET_ADMIN_GROUP_MEASURE 룩업 정보 기준으로 통제\nSCM_FCST[R+P] - GET_ADMIN_GROUP_MEASURE 룩업 정보 기준으로 통제\nUnit Price(LOC)",
+  "done": ""
+ },
+ {
+  "no": 37,
+  "gubun": "Demand Plan",
+  "ui": "FCST&PRICE MGMT",
+  "div": 40,
+  "test": "데이터 조회된 상태에서 조회조건 설정 후 재조회 가능 여부 확인\n\n40 Div 전체 데이터 조회 → Team 선택(IM1팀) → 재조회",
+  "result": "SQL 에러 발생\n\n조회조건 정상 동작 안함 (★ 전체 조회조건 점검 필요)",
+  "done": ""
+ },
+ {
+  "no": 38,
+  "gubun": "Demand Plan",
+  "ui": "FCST&PRICE MGMT",
+  "div": 40,
+  "test": "신규 행 추가 시 기존 데이터와 중복 Validation 수행 시점 확인",
+  "result": "신규 추가된 행이 저장되기 전인데 기존 데이터와 중복 Validation 여부를 체크하고 팝업 호출됨\n  : 저장 버튼 클릭 시 중복 Validation 수행하도록 수정",
+  "done": ""
+ },
+ {
+  "no": 39,
+  "gubun": "Demand Plan",
+  "ui": "FCST&PRICE MGMT",
+  "div": "81\n81_JV",
+  "test": "Div별 컬럼 정상여부 확인",
+  "result": "81, 81_JV Div의 경우 Cell Prod Site 컬럼이 조회되지 않아야 함\n  : 컬럼 셋팅 화면에서도 제외 \n\n81, 81_JV Div의 경우 Plant Site, AS From Site 컬럼이 조회되어야 함\n\n→ ★ Div별 Default 컬럼 As-Is 기준으로 적용 필요",
+  "done": ""
+ },
+ {
+  "no": 40,
+  "gubun": "Demand Plan",
+  "ui": "FCST&PRICE MGMT",
+  "div": "공통",
+  "test": "Measure Setting 팝업 화면 확인",
+  "result": "Measure Code, Measure Name만 보여지도록 수정\n  : Measure Class 컬럼 삭제\n\n컬럼 사이즈 조절 가능하도록 수정",
+  "done": ""
+ },
+ {
+  "no": 41,
+  "gubun": "Demand Plan",
+  "ui": "FCST&PRICE MGMT",
+  "div": "81\n81_JV\n40",
+  "test": "Current 버전에서 입력 가능 Measure 확인",
+  "result": "Current 버전일 경우 아래 Measure를 입력 가능해야하나 모두 입력 불가\n\nMKT_FCST[R+P] - GET_ADMIN_GROUP_MEASURE 룩업 정보 기준으로 통제\nSCM_FCST[R+P] - GET_ADMIN_GROUP_MEASURE 룩업 정보 기준으로 통제\nUnit Price(LOC)\nAS_In_Req - 81, 81_JV, 82 Div에서만 DM Planner(W/S) 권한일 경우에만 입력 가능\nVMI_In_Req - 40, 82 Div에서만 권한과 무관하게 Sales Site가 VMI = Y인 경우에만 입력 가능",
+  "done": ""
+ },
+ {
+  "no": 42,
+  "gubun": "Demand Plan",
+  "ui": "FCST&PRICE MGMT",
+  "div": 40,
+  "test": "신규 행 추가 시 FCST Type 선택 가능 항목 확인",
+  "result": "40 Div의 경우 FCST Type에서 W/S(Chargable), W/S(Free) 항목은 안보여야함\n\n★ Lookup Code : SALES_TYPE_CODE 기준으로 보여져야 함 (AS 전용여부 Y인 2건 제외한 모든 항목이 보여져야함)\n★ 현재는 SALES_TYPE_CODE2, SALES_TYPE_CODE2_ADD Lookup Code를 참고하고 있는 것 같음\n   : 해당 Lookup Code는 81, 81_Div의 DM Planner(W/S) 권한일 경우에만 사용",
+  "done": ""
+ },
+ {
+  "no": 43,
+  "gubun": "Demand Plan",
+  "ui": "FCST&PRICE MGMT",
+  "div": 40,
+  "test": "Daily Bucket으로 조회했을 경우 입력 가능한 Measure 확인",
+  "result": "Daily Bucket으로 조회했을 경우 Unit Price(LOC) Measure는 입력 불가하지만 아래 Measure는 입력 가능해야 함\n\nMKT_FCST[R+P]\nSCM_FCST[R+P]",
+  "done": ""
+ },
+ {
+  "no": 44,
+  "gubun": "Demand Plan",
+  "ui": "FCST&PRICE MGMT",
+  "div": 40,
+  "test": "Monthly Bucket으로 조회했을 경우 입력 가능한 Measure 확인",
+  "result": "Monthly Bucket으로 조회했을 경우 Unit Price(LOC) Measure는 당월부터 입력 가능해야 함\n\n아래 Measure들은 M+4월 부터 입력가능하며, 동시에 수정 가능하도록 보여질 수 없음\nMKT_FCST[R+P]\nSCM_FCST[R+P]",
+  "done": ""
+ },
+ {
+  "no": 45,
+  "gubun": "Demand Plan",
+  "ui": "FCST&PRICE MGMT",
+  "div": 40,
+  "test": "MKT FCST[R+P], Unit Price(LOC) 입력 Validation 로직 확인\n\n40 Div\n소형.마케팅.아시아2.인도/동남아팀\nLX INTL SINGAPORE\nLX INTL SINGAPORE_SG_SIN\nMPCKRMVLTA16\nCIF\nMass\nE\nCommon\nUSD",
+  "result": "MKT FCST[R+P] 수량이 입력되었을 경우 Unit Price(LOC) 미입력 상태에서도 데이터가 저장됨\n\n저장된 후 다른 데이터 입력 후 저장 시 52주 구간 내 판가 미입력 Validation 팝업 호출됨\n\n★ 애초에 Unit Price(LOC) 미입력 상태일 경우 저장 불가해야 함\n\n★★★ MS-SQL ↔ Orcle 데이터 관리 기준 차이로 동일 데이터를 서로 다른 데이터로 인식함\n   : Plant Site ID 컬럼",
+  "done": ""
+ },
+ {
+  "no": 46,
+  "gubun": "Demand Plan",
+  "ui": "FCST&PRICE MGMT",
+  "div": 40,
+  "test": "Bucket 유형별 MKT_FCST, Unit Price(LOC) 입력 가능여부 확인",
+  "result": "MKT_FCST[R+P]\nDaily Bucket일 경우 W+0의 월요일부터 입력 가능\nWeekly Bucket일 경우 MKT_FCST[R+P] Measure는 W+0 부터 입력 가능\nMonthly Bucket일 경우 M+4월 부터 입력 가능\n\nUnit Price(LOC)\nDaily Bucket일 경우 입력 불가\nWeekly Bucket일 경우 MKT_FCST[R+P] Measure는 W+0 부터 입력 가능\nMonthly Bucket일 경우 M+0월 부터 입력 가능",
+  "done": ""
+ },
+ {
+  "no": 47,
+  "gubun": "Demand Plan",
+  "ui": "FCST&PRICE MGMT",
+  "div": 40,
+  "test": "데이터 조회된 상태에서 데이터 입력 후 저장 가능여부 확인",
+  "result": "Bucket 변경을 여러 번 실행 후 데이터 입력하고 저장 시 SQL 에러 발생\n\nMonthly Bucket 상태에서 데이터 저장 시 SQL 에러 발생\nWeekly Bucket 상태에서 데이터 저장 시 SQL 에러 발생",
+  "done": ""
+ },
+ {
+  "no": 48,
+  "gubun": "Demand Plan",
+  "ui": "FCST&PRICE MGMT",
+  "div": 40,
+  "test": "Exchange Rate 팝업 기능 정상 여부 확인",
+  "result": "1. Exchange Rate 팝업 화면에서 데이터 수정 시 Save 버튼에 데이터 수정 건수가 표기됨\n  : 최초 화면 접속시에만 발생하는 현상\n\n2. 데이터 수정 후 Close 버튼으로 팝업창을 닫고 다시 팝업화면을 오픈하면 데이터가 그대로 남아있음\n\n3. 남아있는 데이터를 저장 시도하면 수정한 데이터가 없다고 팝업 호출됨\n\n4. BPS I/F 버튼 클릭 시 정상 동작하지 않음",
+  "done": ""
+ },
+ {
+  "no": 49,
+  "gubun": "Demand Plan",
+  "ui": "FCST&PRICE MGMT",
+  "div": 40,
+  "test": "기존 데이터에 없는 신규 데이터셋 입력 가능 여부 확인\n\nNT\nBYD Electronics_CN_SZX\nMCSS22561-C1\nDAP\nSpare Parts(FREE)\nE\nCommon\nUSD\nMKT_FCST[R+P] : 777\nUnit_Price(LOC) : 777",
+  "result": "수량, 판가 입력 후 저장하였으나 수량, 판가 미입력 팝업이 호출됨",
+  "done": ""
+ },
+ {
+  "no": 63,
+  "gubun": "Demand Plan",
+  "ui": "FCST&PRICE MGMT",
+  "div": 81,
+  "test": "DM Planner(W/S) 권한 사용자가 신규 행 Insert 후 데이터 입력 시 정상 동작 확인\n\n81 Div\nEG01-81-AS (비축향 Sales Site)\nAcme\nCIF\nWS(Chargeable)\nD\nUSD",
+  "result": "1. 비축향 Sales Site를 입력했을 경우, AS From Site 컬럼 비활성화여야하나 활성화 됨\n2. 고객향 Sales Site를 입력했을 경우, AS From Site 컬럼이 활성화되나 콤보 List 미작동 \n3. 선택 가능한 Measure는 아래와 같음 (현재는 SCM_FCST[R+P]가 선택 항목에 보여짐)\n\n[Sales Site를 아무것도 입력 안했을 경우]\nMKT_FCST[R+P]\nAS_In_Request[R+P]\nUnit_Price(LOC)\n\n[고객향 Sales Site를 입력했을 경우]\nMKT_FCST[R+P]\nUnit_Price(LOC)\n\n[비축향 Sales Site를 입력했을 경우]\nAS_In_Request[R+P]\nUnit_Price(LOC)\n\n★ 비축향 Sales Site 로직 참고 : \n참조프로시져: dbo.UP_FX_GetCommonDataList.StoredProcedure.sql\n- 참조코드: AS_FROM_SITE",
+  "done": ""
+ },
+ {
+  "no": 64,
+  "gubun": "Demand Plan",
+  "ui": "FCST&PRICE MGMT",
+  "div": 81,
+  "test": "신규 행 Insert 후 데이터 입력 시 End Customer 정상 Mapping 여부 확인",
+  "result": "End Customer 콤보 List에 40 Div 기준의 End Customer 리스트가 보여짐 (AJ상사는 40 Div의 End Customer)\n\nEND_CUSTOMER 룩업코드 기준으로 Div별 리스트를 구성할 수 있도록 수정 필요",
+  "done": ""
+ },
+ {
+  "no": 65,
+  "gubun": "Demand Plan",
+  "ui": "FCST&PRICE MGMT",
+  "div": 81,
+  "test": "81 Div의 MKT FCST 컬럼에서 존재하던 컬럼이 정상적으로 FCST&PRICE MGMT 화면에 반영되었는지 확인",
+  "result": "★★★★★ 81 Div가 기존 MKT FCST 화면에서 사용하는 컬럼과 Measure가 정상적으로 반영되어 있지 않음★★★★★\n\n예시)\n81 Div는 End Customer 컬럼 미사용, Project 컬럼 사용하는데 Project 컬럼 자체가 없음 (As-Is 29개 / 현재 21개 항목)\nCust FCST 관련 Measure 없음\n\n★ 예시 외에 모든 차이나는 부분 확인 후 반영 필요\n\n[dbo].[DMF0003_GET_MKT_FCST_DATA] 프로시저 로직 확인",
+  "done": ""
+ },
+ {
+  "no": 66,
+  "gubun": "Demand Plan",
+  "ui": "FCST&PRICE MGMT",
+  "div": 81,
+  "test": "Excel Form 버튼 정상 동작 여부 확인",
+  "result": "팝업 UI 호출 후 Search 버튼 클릭 시 데이터 조회되지 않음",
+  "done": ""
+ },
+ {
+  "no": 67,
+  "gubun": "Demand Plan",
+  "ui": "FCST&PRICE MGMT",
+  "div": 81,
+  "test": "Excel Upload 기능 정상 동작 확인",
+  "result": "Excel Upload 불가",
+  "done": ""
+ }
+]

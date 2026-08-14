@@ -86,7 +86,7 @@ RE_TABLE_DATA_NOID = re.compile(r"^\|\s*[`\"'\w][^|]{0,80}\|.*\|.*\|")
 #   DMF0082 대사표 17 EID 행 중 **11행을 조용히 무시**했다(2026-08-08 실측 — 오늘 정정한 E01-B·E08-C 포함).
 RE_MAP_ROW = re.compile(
     r"^\|\s*(E\d{1,3}(?:-[A-Za-z0-9]{1,3})?|[A-Z]{1,3}-?\d{1,3}"
-    r"|CRUD:[^|\s]+|MODAL:[^|\s]+|HANDLER:[^|\s]+)\s*\|(.*)$"
+    r"|CRUD:[^|\s]+|MODAL:[^|\s]+|HANDLER:[^|\s]+|COMMON:[^|\s]+)\s*\|(.*)$"
 )
 # 대사표 안에서 **ID 행처럼 보이는데 위 패턴에 안 걸리는** 행 탐지 — 조용한 누락 차단(2026-08-08 신설).
 RE_ID_LOOKALIKE = re.compile(r"^\|\s*([A-Za-z][\w]{0,4}[-_]?\d{1,3}[A-Za-z0-9]{0,2})\s*\|")
@@ -105,6 +105,29 @@ CRUD_KEYWORDS = [
     ("SEARCH", re.compile(r"조회|Find|Search|Show[A-Z]|검색", re.I)),
 ]
 RE_MD_POPUP = re.compile(r"\b([A-Za-z0-9_]*Pop[A-Z][A-Za-z0-9_]*|[A-Za-z0-9_]+(?:Modal|Dialog))\b")
+
+# ── ⭐ UI 공통(통합테스트) 체크 축 (2026-08-12 사용자 지정 — "대사표에 통합테스트의 UI 공통 부문
+#   항목도 항상 추가되도록") ──────────────────────────────────────────────────────────
+# 원천: `Doc/단위테스트_보완대상/통합테스트 사전점검_1st_20260806_공유용.xlsx` [수정사항] 시트
+#   **구분='Common' 6행**(행3~8 — UI명 '전체 UI'/'CRUD 가능한 전체 UI'/'컬럼 추가/제외').
+#   전 UI 공통 요구라서 개별 화면 분석 md 에는 등장하지 않는다 → 도구가 상수로 보유하고
+#   --init 이 항상 생성 + --check 가 **부재 시 FAIL** (조용한 미편입 차단).
+# ⚠ 항목 추가·개정 시 이 상수만 고치면 전 화면 --check 가 신규 행 부재를 잡아낸다.
+UI_COMMON_ITEMS = [
+    # ⚠ 2026-08-14 UC-01 **역전** (사용자 공통 수정사항) — 종전 "필터 clear" 구현은 요구 위반이다.
+    #   요구 원문: "필터가 걸린상태에서 Insert 처리해도 라인이 추가되도록 변경
+    #             (현상: 추가된 라인이 사라지거나, **필터가 풀리는** 현상이 발생)".
+    #   ⇒ 필터는 유지하고 신규행만 예외 통과 = `keepRowVisibleUnderFilter` (hook #133 §5).
+    ("COMMON:UC-01", "필터링 상태에서 신규행 Insert 시 필터를 **유지한 채** 추가 행이 보이도록 (keepRowVisibleUnderFilter — 필터 clear 금지, 1st 행3 + 2026-08-14 공통 수정사항①)"),
+    ("COMMON:UC-02", "데이터 수정 중 다른 데이터 조회 시도 = '수정 중인 데이터가 있습니다. 새로 조회하시겠습니까?' confirm (MSG00703 — 1st 행4)"),
+    ("COMMON:UC-03", "컬럼 추가/제외(Column/Measure 설정) 적용 시 기존 조회 데이터 Reset 후 재조회 유도 (hook #132 §2-2 — 1st 행5)"),
+    ("COMMON:UC-04", "CRUD 완료 알림 = Alert 아닌 하단 중앙 Toast 후 자동 소멸 (LGES WDG 표준·hook #132 §3 — 1st 행6)"),
+    ("COMMON:UC-05", "Excel Download 시 콤보 컬럼 데이터가 Code 아닌 Name 으로 출력 (gridAction dataMap 승계 — 1st 행7)"),
+    ("COMMON:UC-06", "Key-in 조회조건 = 콤마 구분 다중 입력 시 전건 조회 (1st 행8)"),
+    # 2026-08-14 신설 (사용자 공통 수정사항②) — "필터가 걸린상태에서 조회를 다시 눌러도 조회가 되고
+    #   / 필터도 적용 (현상: 조회하면 컬럼에 필터는 남아 있지만 필터가 풀린상태로 조회됨)".
+    ("COMMON:UC-07", "필터가 걸린 상태에서 재조회해도 조회되고 **필터도 그대로 적용** (rebindFilterColumns — 2026-08-14 공통 수정사항②)"),
+]
 
 
 def classify_crud(text):
@@ -478,6 +501,21 @@ def cmd_init(md_paths, page_dir, out_override=None, allow_legacy=False):
         lines.append(row)
         n_kept += 1
 
+    # ⭐ UI 공통(통합테스트) 체크 축 — 항상 생성 (2026-08-12 사용자 지정. 기입값 보존)
+    lines.append("")
+    lines.append("## UI 공통(통합테스트) 체크 축 (2026-08-12 — 전 화면 상시 6항목)")
+    lines.append("")
+    lines.append("> 원천: `Doc/단위테스트_보완대상/통합테스트 사전점검_1st_20260806_공유용.xlsx` 구분='Common' 6행.")
+    lines.append("> 화면 분석 md 에 없는 전 UI 공통 요구 — --check 가 부재 행을 FAIL 처리한다.")
+    lines.append("")
+    lines.append(header_cols)
+    lines.append("|---|---|---|---|---|")
+    for _id, g in UI_COMMON_ITEMS:
+        if _id in existing:
+            lines.append(existing.pop(_id))
+        else:
+            lines.append(f"| {_id} | {g} |  |  | {STATUS_INIT} |")
+
     if preserved:
         lines.append("")
         lines.extend(preserved)
@@ -739,6 +777,19 @@ def cmd_check(page_dir, matrix_only=False, handlers_only=False, citations=False)
         print(f"[FAIL] ID 행 꼴인데 파싱 불가 {len(unparsed)}건 — 대사표 ID 형식 또는 RE_MAP_ROW 확장 필요 "
               f"(조용한 누락 차단): {', '.join(sorted(set(unparsed)))}")
         return 1
+    # ⭐ UI 공통 축 부재 검증 (2026-08-12) — 전 화면 상시 6항목이 대사표에 없으면 FAIL.
+    #   (matrix/handlers 부분 판정 모드에서는 생략 — 전체 --check 에서만 강제)
+    if not matrix_only and not handlers_only:
+        present = set()
+        for line in target.read_text(encoding="utf-8", errors="ignore").splitlines():
+            m = RE_MAP_ROW.match(line.strip())
+            if m and m.group(1).startswith("COMMON:"):
+                present.add(m.group(1))
+        missing_common = [i for i, _ in UI_COMMON_ITEMS if i not in present]
+        if missing_common:
+            print(f"[FAIL] UI 공통(통합테스트) 축 부재 {len(missing_common)}건 — --init 재실행으로 섹션 생성 후 "
+                  f"전 행 판정 기입 의무 (2026-08-12 사용자 지정): {', '.join(missing_common)}")
+            return 1
     if total == 0:
         if matrix_only:
             print(f"[FAIL] {target} 에 CRUD·모달 매트릭스 행 0건 — 2026-08-07 축 미생성 (--init 재실행 필요)")

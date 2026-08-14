@@ -76,7 +76,13 @@ const getEditor = (ctrlType: CELL_CONTROL_TYPE): Control | undefined => {
   return undefined;
 };
 
-const parseBindingString = (bindingString?: string): Record<string, string> => {
+/**
+ * 셀 콤보 행 단위 필터 조건 (컬럼 메타 ATTRIBUTE2) 을 파싱한다.
+ * 문법: `'행컬럼:콤보컬럼'`, 조건이 여럿이면 콤마로 잇는다.
+ *   예) `'DIVISION_ID:DIVISION_ID,END_CUSTOMER:END_CUSTOMER'`
+ * 형식에 안 맞으면 조건 전체를 버린다(= 필터 없음). 오타가 조용히 잘못 좁히는 것보다 안전하다.
+ */
+export const parseComboFilterBindings = (bindingString?: string): Record<string, string> => {
   if (!bindingString?.trim()) return {};
 
   const entries = bindingString.split(',').map(token => token.trim());
@@ -100,28 +106,145 @@ const parseBindingString = (bindingString?: string): Record<string, string> => {
   return result;
 };
 
+/** 행의 상위 셀이 아직 안 채워진 상태 (null / undefined / 공백문자열). */
+const isBlankRowValue = (value: WijmoPrimitive): boolean =>
+  value === null || value === undefined || (typeof value === 'string' && value.trim() === '');
+
+/**
+ * 행 컨텍스트로 콤보 후보를 좁힌다 — 드롭다운 후보와 값 유효성 판정의 **단일 기준**.
+ * 표시(getDataMap)와 상위 변경 시 하위 값 정리(comboCascade)가 같은 함수를 써야 "드롭다운에 뜨는
+ * 값 = 셀에 남을 수 있는 값" 불변식이 유지된다.
+ */
+export const filterComboRowsByRowItem = (
+  comboRows: ComboResponse[],
+  bindingString: string | undefined,
+  rowItem: WijmoRowItem
+): ComboResponse[] => {
+  const filters = Object.entries(parseComboFilterBindings(bindingString));
+  if (filters.length <= 0) return comboRows;
+
+  return comboRows.filter(comboRow =>
+    filters.every(([bindingOfRow, keyOfDataMap]) => {
+      // 행의 상위 값이 비어 있으면 그 조건만 건너뛴다 — 아직 안 고른 상위 컬럼(End Customer 등)이
+      // 후보를 0건으로 만들면 하위 콤보를 영영 못 여는 교착이 된다. 상위를 고르면 그때부터 좁혀진다.
+      // 주의: 좁힘은 조건 단위다. Division 처럼 값이 항상 차 있는 조건은 그대로 엄격히 걸린다.
+      if (isBlankRowValue(rowItem[bindingOfRow])) return true;
+      return rowItem[bindingOfRow] === comboRow[keyOfDataMap];
+    })
+  );
+};
+
+/** 상위 콤보를 바꾼 뒤 후보 밖으로 밀려난 하위 셀. 되돌릴 원본을 함께 돌려준다(EditTracker 기록용). */
+export interface StaleComboCell {
+  binding: string;
+  previousValue: WijmoPrimitive;
+}
+
+/**
+ * 상위 콤보 변경으로 더 이상 고를 수 없게 된 하위 셀을 찾는다.
+ *
+ * 불변식: 셀 값은 언제나 그 시점 드롭다운 후보 안에 있다. 후보 판정은 표시(getDataMap)와 똑같이
+ * `filterComboRowsByRowItem` 을 쓴다 — 규칙이 갈리면 "드롭다운엔 없는데 셀엔 남아 있는" 값이 생긴다.
+ *
+ * 판정은 앞서 비운 결과를 반영해 이어간다 — 곧 사라질 값에 매달아 판정하면 안 된다.
+ * 다만 상위를 비우면 그 조건이 풀려 후보가 넓어지므로, 비움이 또 다른 비움을 부르지는 않는다
+ * (Team 변경 -> End Customer 이탈까지. 그때 Sales Site 는 End Customer 조건에서 풀려 유효하면 남는다).
+ *
+ * 값을 직접 지우지는 않는다. 호출부(DataGrid)가 EditTracker 기록과 함께 반영한다.
+ */
+export const findStaleComboCells = (
+  columns: RawFlexGridColumnConfig[],
+  /** 콤보 SQL_ID(cellCboDataTp) -> 조회된 rows. 미조회 컬럼은 키가 없거나 undefined. */
+  comboRowsByComboId: Record<string, ComboResponse[] | undefined>,
+  /** 편집이 끝난 행 (이미 새 값이 반영된 상태) */
+  row: WijmoRowItem,
+  /** 방금 바뀐 셀의 binding */
+  changedBinding: string
+): StaleComboCell[] => {
+  // 콤보 + 필터 조건을 모두 갖춘 컬럼만 대상. 조건 없는 콤보는 상위와 무관하다.
+  const dependents = columns
+    .map(column => ({
+      column,
+      filterKeys: Object.keys(parseComboFilterBindings(column.attribute2)),
+    }))
+    .filter(
+      ({ column, filterKeys }) =>
+        column.cellCtrlObjTpCd === CELL_CONTROL_TYPE.COMBO &&
+        !!column.cellCboDataTp &&
+        filterKeys.length > 0
+    );
+
+  const stale: StaleComboCell[] = [];
+  // 비운 값을 반영한 사본으로 뒤 컬럼 판정을 이어간다 (원본 row 는 호출부가 반영할 때까지 그대로).
+  let context: WijmoRowItem = row;
+
+  for (const { column, filterKeys } of dependents) {
+    const binding = column.colNm;
+    // 자기 자신은 대상이 아니다 (방금 고른 값을 스스로 지우면 안 된다).
+    if (binding === changedBinding || !filterKeys.includes(changedBinding)) continue;
+
+    const previousValue = context[binding];
+    if (isBlankRowValue(previousValue)) continue;
+
+    // 아직 콤보가 안 실린 컬럼은 판정 불가 — 미도착을 "후보 0건" 으로 오인해 지우면
+    // 조회 직후 멀쩡한 값이 통째로 날아간다.
+    const comboRows = comboRowsByComboId[column.cellCboDataTp as string];
+    if (!comboRows) continue;
+
+    const candidates = filterComboRowsByRowItem(comboRows, column.attribute2, context);
+    if (candidates.some(candidate => candidate.CODE === previousValue)) continue;
+
+    stale.push({ binding, previousValue });
+    context = { ...context, [binding]: '' };
+  }
+
+  return stale;
+};
+
 const getDataMap = (dataMap: ComboResponse[] | undefined, bindingString?: string) => {
   if (!dataMap || dataMap.length === 0) return undefined;
 
   const wjDataMap = new DataMap(dataMap, 'CODE', 'NAME');
   if (!bindingString) return wjDataMap;
 
-  const bindingMap = parseBindingString(bindingString);
-  const filters = Object.entries(bindingMap);
-  if (filters.length <= 0) return wjDataMap;
+  if (Object.keys(parseComboFilterBindings(bindingString)).length <= 0) return wjDataMap;
 
-  wjDataMap.getDisplayValues = (rowItem: WijmoRowItem) => {
-    return dataMap
-      .filter(dataMapItem =>
-        filters.every(
-          ([bindingOfRow, keyOfDataMap]) => rowItem[bindingOfRow] === dataMapItem[keyOfDataMap]
-        )
-      )
-      .map(item => item.NAME);
-  };
+  wjDataMap.getDisplayValues = (rowItem: WijmoRowItem) =>
+    filterComboRowsByRowItem(dataMap, bindingString, rowItem).map(item => item.NAME);
 
   return wjDataMap;
 };
+
+// ⭐ 라벨 끝 필수표시(`*`) 정규화 — AS-IS 잔재로 관리자 컬럼 메타의 라벨(colLblNm)에 `*` 가 그대로
+//   박혀 있는 화면(DMF0082 등)이 있다. 디자인 표준은 헤더 라벨 앞 빨간점(`is-required`, _grid.scss)이라
+//   `*` 로 등록된 화면만 표기가 달랐다. 라벨에서 `*` 를 떼고 `_requiredMark` 로 옮겨
+//   inputTpCd=M/IM 로 등록된 화면(SalesSite 등)과 같은 빨간점으로 그린다.
+//   ⚠️ `_inputEditType` 은 건드리지 않는다 — 편집가능 판정(gridUtils.isEditableCell)·팝업 아이콘의
+//     입력이라, 라벨의 `*` 만 보고 승격하면 읽기전용 컬럼이 편집 가능해진다.
+const REQUIRED_MARK_SUFFIX = /[*＊]\s*$/;
+
+/** 라벨 끝이 필수표시(`*`)인가. */
+export const hasRequiredMark = (label?: string): boolean => REQUIRED_MARK_SUFFIX.test(label ?? '');
+
+/** 라벨 끝 필수표시(`*`)를 떼어낸 표시용 라벨. */
+export const stripRequiredMark = (label?: string): string =>
+  (label ?? '').replace(REQUIRED_MARK_SUFFIX, '').trimEnd();
+
+/** 정규화된 raw 컬럼 — 라벨은 `*` 제거본, 원래 `*` 여부는 `_requiredMark` 로 보존. */
+interface NormalizedRawColumn extends RawFlexGridColumnConfig {
+  _requiredMark?: boolean;
+}
+
+// 그룹 라벨(sCls/lCls)까지 같은 규칙으로 벗겨야 한다 — getColumnDepth·그룹 매칭이 세 라벨의
+// 문자열 동일성으로 단수/그룹을 판정하므로, 일부만 벗기면 그룹이 쪼개진다.
+// undefined 는 undefined 로 유지 (THREE_DEPTH 의 `lClsLblNm ?? colLblNm` fallback 보존).
+const normalizeRequiredMark = (column: RawFlexGridColumnConfig): NormalizedRawColumn => ({
+  ...column,
+  colLblNm: stripRequiredMark(column.colLblNm),
+  sClsLblNm: column.sClsLblNm === undefined ? undefined : stripRequiredMark(column.sClsLblNm),
+  lClsLblNm: column.lClsLblNm === undefined ? undefined : stripRequiredMark(column.lClsLblNm),
+  _requiredMark: hasRequiredMark(column.colLblNm),
+});
 
 const getColumnDepth = (rawColumns: RawFlexGridColumnConfig[]) => {
   if (
@@ -144,7 +267,7 @@ const getColumnDepth = (rawColumns: RawFlexGridColumnConfig[]) => {
   return COLUMN_DEPTH.THREE_DEPTH;
 };
 
-const toLeafColumn = (column: RawFlexGridColumnConfig): FlexGridColumnConfig => ({
+const toLeafColumn = (column: NormalizedRawColumn): FlexGridColumnConfig => ({
   binding: column.colNm,
   header: column.colLblNm,
   align: alignMap[column.horzAlgnCd ?? 'L'],
@@ -157,6 +280,7 @@ const toLeafColumn = (column: RawFlexGridColumnConfig): FlexGridColumnConfig => 
   width: column.colWth,
   visible: column.visible,
   _inputEditType: column.inputTpCd,
+  _requiredMark: column._requiredMark,
   _ctrlType: column.cellCtrlObjTpCd,
   _ctrlData: column.cellCboDataTp,
   _fixed: column.fixed,
@@ -173,9 +297,49 @@ const toLeafColumn = (column: RawFlexGridColumnConfig): FlexGridColumnConfig => 
   wordWrap: column.cellCtrlObjTpCd === CELL_CONTROL_TYPE.MULTILINE_TEXT,
 });
 
+// 숫자 표시형식 판정 — 표준 숫자 서식(n3 / n0 / c2 / p1 / f2 …) 과 자리표시자 패턴('#,##0.###') 만.
+//   'd' 는 숫자(정수)와 날짜(short date) 양쪽 의미라 제외하고, 날짜 패턴(yyyy-MM-dd 등)도 대상 밖이다.
+const isNumericFormat = (format?: string): boolean => {
+  if (!format) return false;
+  return /^[ncpf]\d*$/i.test(format) || /^[#0][#0,.]*$/.test(format);
+};
+
+// Delete 키로 숫자 셀이 안 지워지던 문제 — Wijmo Column.isRequired 기본값 null 은
+//   "String 이 아닌 컬럼(숫자/날짜/불리언)은 필수" 로 해석된다(Column.getIsRequired).
+//   그리고 Delete 키 처리(_KeyboardHandler._deleteRange)는 `!col.getIsRequired(row)` 인 셀만 비운다
+//   → isRequired 미지정 숫자 컬럼은 편집 가능해도 Delete 가 통째로 무시된다.
+//   정적 컬럼은 toLeafColumn 이 isRequired:false 를 내려주지만, 화면이 직접 만드는 동적(주차/월)
+//   컬럼은 미지정이라 동적 그리드 전 화면에서 Delete 가 먹지 않았다. leaf 에만 기본값을 채운다.
+//   명시 지정(isRequired: true)은 그대로 둔다. 그룹 헤더는 binding 이 없어 대상 아님.
+// 함께 `_dynamic` 을 표식한다 — 정적 컬럼과 구분이 필요한 공통 동작(헤더 클릭 정렬 제외)의 판정 기준.
+//   컬럼의 allowSorting 은 F3 아이콘 토글용, 헤더 라벨은 관리자 메타(변경 가능)라 둘 다 쓸 수 없다.
+// 숫자 컬럼인데 셀이 비어 있으면 입력값이 문자열로 저장되던 문제 — 숫자 format 이면 dataType 도 채운다.
+//   Wijmo 는 Column.dataType 미지정 시 첫 행(items[0]) 값 하나로만 타입을 추론하고
+//   (FlexGrid._updateColumnTypes), 그래도 못 정하면 GridPanel.setCellData 가 `dataType ||
+//   getType(현재값)` 으로 대체한다. 편집하는 셀이 비어 있으면 getType(null)=Object 라 입력 문자열이
+//   변환 없이 그대로 들어가, 같은 컬럼에 number 와 string 이 섞이고 서식(n3)도 안 먹는다.
+//   동적(주차/월) 컬럼은 빈 셀이 흔해 이 경로를 상시로 탄다.
+//   주의: dataType=Number 면 숫자로 못 바꾸는 입력은 Wijmo 가 커밋을 거부한다(쓰레기 문자열 차단).
+//   명시 지정(dataType 직접 전달)은 그대로 둔다.
+export const normalizeDynamicColumns = (columns: FlexGridColumnConfig[]): FlexGridColumnConfig[] =>
+  columns.map(column =>
+    column.columns
+      ? { ...column, columns: normalizeDynamicColumns(column.columns) }
+      : {
+          ...column,
+          isRequired: column.isRequired ?? false,
+          ...(column.dataType == null && isNumericFormat(column.format)
+            ? { dataType: DataType.Number }
+            : {}),
+          _dynamic: true,
+        }
+  );
+
 export const mapRawColumnsToWijmoColumns = (
-  rawColumns: RawFlexGridColumnConfig[]
+  sourceColumns: RawFlexGridColumnConfig[]
 ): Array<FlexGridColumnConfig> => {
+  // 이후 depth 판정·그룹 매칭은 모두 정규화된 라벨 기준 (원본 `*` 라벨과 섞이면 그룹이 쪼개진다).
+  const rawColumns = sourceColumns.map(normalizeRequiredMark);
   const columnDepth = getColumnDepth(rawColumns);
 
   const mappedResult: Array<FlexGridColumnConfig> = [];

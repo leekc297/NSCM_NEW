@@ -100,7 +100,8 @@ export const useSalesPlanValidation = () => {
     for (let i = 0; i < rows.length; i++) {
       const r = rows[i] as Record<string, unknown>;
       const measure = str(r.MEASURE);
-      const required = requiredFieldsFor(divisionId, measure);
+      // [No.59] 81 TEXT 필수는 ETC 행만 — 행별 FCST_TYPE 전달
+      const required = requiredFieldsFor(divisionId, measure, str(r.FCST_TYPE));
       for (const field of required) {
         const value = field.read ? field.read(r) : str(r[field.col]);
         if (value === '') {

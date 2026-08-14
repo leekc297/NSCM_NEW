@@ -1,3 +1,4 @@
+import { TeamField } from 'features/master/src/components';
 import { useEffect, useMemo, useState } from 'react';
 
 import { apiClient } from '@foundation/apis';
@@ -60,13 +61,6 @@ export const NnMasterMappingForm = ({ onSearch }: Props) => {
     filters: {},
     enabled: true,
   });
-  const { data: teamData } = useTabProcQuery({
-    menuId: MENU_ID,
-    sheetName: SHEETS.TEAM,
-    tabId: MENU_ID,
-    filters: { divisionId: sc.divisionId },
-    enabled: !!sc.divisionId,
-  });
   const { data: ecData } = useTabProcQuery({
     menuId: MENU_ID,
     sheetName: SHEETS.END_CUSTOMER,
@@ -102,18 +96,6 @@ export const NnMasterMappingForm = ({ onSearch }: Props) => {
     [dtData]
   );
 
-  const teamOptions = useMemo(
-    () =>
-      (teamData?.o_rc1 ?? [])
-        .map(r => {
-          const code = String(r.CODE ?? '');
-          const name = String(r.NAME ?? code);
-          const label = code === name || name === '' ? code : `${code} (${name})`;
-          return { value: code, label };
-        })
-        .filter(o => o.value !== 'ALL' && o.value !== ''),
-    [teamData]
-  );
   const endCustomerOptions = useMemo(
     () =>
       (ecData?.o_rc1 ?? [])
@@ -192,26 +174,18 @@ export const NnMasterMappingForm = ({ onSearch }: Props) => {
               )}
             />
           </Grid>
-          <Grid size={3}>
-            <FormItem
-              className={commonStyles.formItem}
-              label={t('LBL00044', 'Team')}
-              labelAlign='right'
-              labelSize='middle'
-              render={() => (
-                <CustomDropdown
-                  multiple
-                  allOption
-                  useClearIcon
-                  options={teamOptions}
-                  value={sc.deptId}
-                  onChange={(_, v) =>
-                    set({ deptId: v || 'ALL', endCustomer: 'ALL', scmSiteId: 'ALL' })
-                  }
-                />
-              )}
-            />
-          </Grid>
+          <TeamField
+            gridSize={3}
+            value={sc.deptId && sc.deptId !== 'ALL' ? sc.deptId.split(',').filter(Boolean) : []}
+            onChange={v =>
+              set({
+                deptId: v.length > 0 ? v.join(',') : 'ALL',
+                endCustomer: 'ALL',
+                scmSiteId: 'ALL',
+              })
+            }
+            division={sc.divisionId}
+          />
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}

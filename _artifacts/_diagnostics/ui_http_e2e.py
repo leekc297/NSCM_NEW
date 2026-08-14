@@ -50,7 +50,11 @@ SCENARIOS = {
         "main_sheet": "FcstNPrice",
         "divisions": ["40", "81", "82"],
         "readonly_divisions": ["82"],  # 저장 차단 기대 (V82-00)
-        "key_columns": ["DIVISION_ID", "END_CUSTOMER", "SCM_SITE_ID", "ITEM_ID", "CELL_PROD_SITE_ID"],
+        "key_columns": ["DIVISION_ID", "END_CUSTOMER", "SCM_SITE_ID", "ITEM_ID"],
+        # division 별 추가 필수 키 — AS-IS 파리티로 노출 자체가 갈리는 컬럼은 여기서 분기한다.
+        #   CELL_PROD_SITE_ID: 통합테스트 No.39 "81/81_JV 는 Cell Prod Site 제외" → SHEET_COLUMNS
+        #   DIVISION_ID='40,82' (2026-08-11 보완). 전 division 공통 기대로 두면 81 이 오탐 FAIL 이 된다.
+        "key_columns_by_division": {"40": ["CELL_PROD_SITE_ID"], "82": ["CELL_PROD_SITE_ID"]},
         "combos": ["MyDivision", "BucketType", "EndCustomer", "SenderCode",
                    "FcstPriceUserAuthGroup", "SalesBucket", "CurrencyList",
                    "FcstTypeByUserGroupDMF0082"],
@@ -245,6 +249,214 @@ _BP_PERIOD = {"40": ("20260801", "20270331"),
 #   저장 = ETC(DataType=2) `SAVE_SALES_PLAN_REPORT_C` / Cutoff(=1) `..._C_CF` **이원화**
 #   ⚠ 조회에 **버전 필수**(V-5 MSG00283) — 시나리오는 원장 실측 버전을 쓴다.
 # ================================================================================
+# ====================================================================================
+# DMF0003 MKT FCST (2026-08-12 신설 — 정본 재대사 3축의 §6 실행 증명)
+# ====================================================================================
+SCENARIOS["DMF0003"] = {
+    "main_sheet": "Mkt Fcst",
+    "divisions": ["40", "81", "82"],
+    # 키 컬럼 — AS-IS 40 계열은 *40 접미 별도 컬럼(.cs DefColumns Division40/Customer40/…, 메타 실측
+    #   DIVISION_ID div='82,81*' vs DIVISION_ID40 div='40'). MEASURE 만 전 division 공통.
+    "key_columns": ["MEASURE", "DOM_EXP", "FCST_TYPE", "INCOTERMS"],
+    "key_columns_by_division": {
+        "40": ["DIVISION_ID40", "END_CUSTOMER40", "SCM_SITE_ID40", "ITEM_ID40"],
+        "81": ["DIVISION_ID", "SCM_SITE_ID", "ITEM_ID", "PLANT_SITE_ID", "PROJECT_CODE"],
+        "82": ["DIVISION_ID", "SCM_SITE_ID", "ITEM_ID", "PROJECT_CODE"],
+    },
+    # 파라미터 없는 콤보만 등재 (파라미터 필요분 — AS_FROM_SITE/AsIncotermsEdit/MktFcstEditMeasure/
+    #   PlantSiteByItem — 은 D2 셀 콤보 축 + 게이트 섹션7 이 대사).
+    "combos": ["MktFcstEditableDivision", "MktFcstUserEditDivision", "MktFcstWsPlannerYn",
+               "MktFcstUserGroups", "FcstTypeWs", "FcstTypeEditMode", "IncotermsEdit",
+               "CustomsHandbook"],
+    # ⚠ Dmf0003ScpPlannerEditFlag / Dmf0003DmPlannerEditFlag 는 시간 게이트 lookup — 운영값 미협의로
+    #   0행이 **정상 상태**(0행=차단/미차단 각 게이트 보수 동작). 0행 FAIL 축(combos)에 넣지 않는다.
+    "cell_combo_params": {"mnuId": "'DMF0003'"},
+    "cell_combo_notes": {
+        "AS_FROM_SITE": "페이지 단위 param1=division 전달(MktFcst.tsx L190) + Grid W/S 판정용 재조회",
+        "AsIncotermsEdit": "AS(비축)향 사이트 행 한정 스왑 — divisionId 는 Grid useTabComboQueries 가 전달",
+        "MktFcstEditMeasure": "GRID_EDIT_COMBO divisionParam=true — 편집 진입 스왑 전용",
+        "PlantSiteByItem": "행 단위 재조회(applyPlantSites — PROJECT_CODE/ITEM_ID 변경 트리거, 81* 전용)",
+        "SalesBucket": "타 화면(DMF0082) 전용 — DMF0003 은 BUCKET 을 GET 이 산출",
+        "PlantByDivisionCompany":
+            "@companyId 는 화면에 컨텍스트 없음(AS-IS 도 미전달 — DMF0082 동일 판정). 표시용 전체 목록이며 "
+            "편집 후보는 행 단위 PlantSiteByItem(project·item) 재조회가 좁힌다(CD-10)",
+        "SiteByEndCustomer": "@endCustomer 는 행 단위 cascade(GRID_CASCADE_FILTERS SCM_SITE_ID←END_CUSTOMER)가 "
+            "편집 진입 시 행 값으로 필터 — 페이지 일괄 전달 대상 아님",
+    },
+    "edit_flag_axes": "EDIT_FLAG(GET 산출, 행×measure) × 버킷/시점 잠금(editLock buildEditCutoff) × "
+                      "division 편집허용(DM_UI_EDITABLE_DIVISION — 현행 82만) × 그룹 게이트"
+                      "(SCP 82·40 차단 / SCP 81 시간창 / DM류 시간창 / W-S AS 축)",
+    # DMF0003_GET_MKT_FCST_DATA 22 IN (PROC_M SORT_ORD 순 — useMktFcstStore.ts:271~299 1:1)
+    "search_filters": lambda div, user, group: {
+        "divisionId": div,
+        "scmSiteId": "ALL", "plantSiteId": "ALL", "teamId": "ALL", "customer": "ALL",
+        "bizType": "ALL", "projectCode": "ALL", "itemId": "ALL",
+        "fromYyyymmdd": "20250801", "toYyyymmdd": "20260801",
+        "createdBy": user, "userGroup": group or user,
+        "itemType": "ALL", "owner": "ALL",
+        "qtyYn": "N", "cellYn": "N", "invalidExec": "Y" if div == "82" else "N",
+        "asYn": "N", "userDeptId": "", "senderCode": "ALL",
+        "sesUserId": user, "mnuId": "DMF0003",
+    },
+    "search_buttons": ["SEARCH"],
+    "aux_buttons": [],
+    "result_cursor": "o_rc1",
+    "modal_sheets": [
+        {"sheet": "spreadTitle", "btn": "SEARCH", "filters": lambda div, user, group: {
+            "startYyyymmdd": "20250801", "endYyyymmdd": "20260801", "createdBy": user,
+            "divisionId": div, "userGroup": group or user, "type": "LOAD",
+            "sesUserId": user, "mnuId": "DMF0003"}},
+        {"sheet": "dayRange", "btn": "SEARCH", "filters": lambda div, user, group: {
+            "createdBy": user, "month": "6", "sesUserId": user, "mnuId": "DMF0003"}},
+        # PR 팝업 GET 계열 — 존재하지 않는 키로도 HTTP 200/code 0 (0행) 이 정상 계약.
+        {"sheet": "prPopup", "btn": "SEARCH", "filters": lambda div, user, group: {
+            "popupType": "View_PR", "divisionId": div, "requestNo": "", "projectCode": "ALL",
+            "scmSiteId": "ALL", "itemId": "ALL", "domExp": "", "fcstType": "", "incoterms": "",
+            "plantSiteId": "", "yyyymmdd": "20260801", "planQty": "0", "createdBy": user,
+            "sesUserId": user, "mnuId": "DMF0003"}},
+        {"sheet": "prHistory", "btn": "SEARCH", "filters": lambda div, user, group: {
+            "popupType": "View_History", "divisionId": div, "requestNo": "", "projectCode": "ALL",
+            "scmSiteId": "ALL", "itemId": "ALL", "domExp": "", "fcstType": "", "incoterms": "",
+            "plantSiteId": "", "yyyymmdd": "20260801", "planQty": "0", "createdBy": user,
+            "sesUserId": user, "mnuId": "DMF0003"}},
+        {"sheet": "sspCompare", "btn": "SEARCH", "filters": lambda div, user, group: {
+            "divisionId": div, "scmSiteId": "", "projectCode": "", "itemId": "",
+            "domExp": "", "fcstType": "", "incoterms": "", "yyyymmdd": "20260801",
+            "sesUserId": user, "mnuId": "DMF0003"}},
+        {"sheet": "titleSet", "btn": "SEARCH", "filters": lambda div, user, group: {
+            "programId": "DMF0003", "sheetName": "Mkt Fcst", "columnType": "C",
+            "sesUserId": user, "divisionId": div, "mnuId": "DMF0003"}},
+    ],
+    "save_roundtrip": {
+        "division": "82",
+        "row_filter": lambda r: str(r.get("MEASURE") or "").strip() != "",
+        "cell_prefix": "D_",
+        "date_window": [],
+        "identity_keys": ("DIVISION_ID", "PROJECT_CODE", "SCM_SITE_ID", "ITEM_ID", "MEASURE"),
+        # ⛔ I/D 왕복 금지 — DMF0003 저장 SP 는 원장 DELETE 액션이 없고(신규행 삭제 = 화면 I 행 제거뿐),
+        #   'I' 로 넣은 행을 SP 로 되지울 방법이 없다. 남기면 실원장 오염(MF 버전 원장), 지우려면 직접
+        #   DML = hook #131/#104 위반. C 축은 화면 육안 확인 대상.
+        "insert_delete_safe": False,
+        "insert_delete_note":
+            "DMF0003 SAVE 는 MERGE(I/M 동일 경로) 뿐 — 원장 삭제 경로가 없어 I 왕복 후 원복 불가. "
+            "신규행 검증은 화면 Insert→Save→육안 + 단위테스트(buildUnfoldRows/validate)로 대체",
+        # ⛔ M 왕복 금지 — 조회가 주/월 롤업(합계) 표시라 러너가 읽는 셀값을 되쓰면 배분 로직(요일비트)을
+        #   거치지 않은 원장 직접 갱신이 되고, 저장 SP 가 이력(H)까지 남긴다. DMF0049 선례(hook #131).
+        "modify_safe": False,
+        "modify_note":
+            "MKT FCST 원장(DM_PLN_MKT_FCST — MF 버전 실데이터)은 W_/M_ 표시값이 D_ 합계라 되쓰기 "
+            "왕복이 원상 보존을 깨뜨린다. 일반 행 M 축은 전용 키 probe 가 대체(아래)",
+        # ⭐ M 왕복 전용 키 (2026-08-12 실 CRUD 권한 검증에서 생성한 테스트 소유 행 — QTY 0 잔존형).
+        #   division 82 / 실 CRUD 왕복 5회(생성·수정·차단2·원복)로 안전성 검증 완료된 키.
+        "modify_probe": {
+            "user": "ys_cho",
+            "note": "전용 키 82/C-25-017/DeltaX_KR_SEL/EP077170PCB1/MPS/DDP/D_20261123 — 실데이터 무접촉",
+            "probe_qty": 7,
+            "payload": lambda qty, user: {
+                "activeFlag": "M", "divisionId": "82", "projectCode": "C-25-017",
+                "scmSiteId": "DeltaX_KR_SEL", "itemId": "EP077170PCB1", "domExp": "E",
+                "fcstType": "MPS", "incoterms": "DDP", "measure": "MKT_FCST",
+                "plantSiteId": "--", "yyyymmdd": "20261123", "qty": str(qty),
+                "createdBy": user, "asFromSite": "", "bucket": "WEEKLY",
+                "authority": "DM Planner", "sesUserId": user, "mnuId": "DMF0003"},
+            "verify_filters": lambda user: {
+                "divisionId": "82", "scmSiteId": "ALL", "plantSiteId": "ALL", "teamId": "ALL",
+                "customer": "ALL", "bizType": "ALL", "projectCode": "C-25-017",
+                "itemId": "EP077170PCB1", "fromYyyymmdd": "20261101", "toYyyymmdd": "20261231",
+                "createdBy": user, "userGroup": user, "itemType": "ALL", "owner": "ALL",
+                "qtyYn": "N", "cellYn": "N", "invalidExec": "N", "asYn": "N",
+                "userDeptId": "", "senderCode": "ALL", "sesUserId": user, "mnuId": "DMF0003"},
+            # ⚠ 저장 measure 는 MKT_FCST 지만 GET 표시 measure 는 MKT_FCST_RP(롤업 표시명) — 실측.
+            "row_match": lambda r: (str(r.get("PROJECT_CODE") or "") == "C-25-017"
+                                    and str(r.get("ITEM_ID") or "") == "EP077170PCB1"
+                                    and str(r.get("MEASURE") or "").startswith("MKT_FCST")
+                                    and str(r.get("FCST_TYPE") or "") == "MPS"),
+            "cell": "D_20261123",
+        },
+        "payload": lambda row, ymd, qty, user: {},
+    },
+}
+
+# DMF0021 Sales Plan (2026-08-12 신설 — 전체 보완 3축의 §6 실행 증명)
+#   원장 = DM_PLN_SALES_PLAN(+ETC 별도 DM_PLN_SALES_ETC_PLAN — 저장 대상표≠조회 원천표 주의).
+#   SEARCH 성능: PERFHINT(2026-08-12) 후 81 데이터 경로 17s 실측 — 기간은 2개월로 제한.
+SCENARIOS["DMF0021"] = {
+    "main_sheet": "Sales Plan",  # 공백 quoted 키 (SP 리터럴·SHEET_COLUMNS 일치 — rename 불가)
+    "divisions": ["40", "81", "82"],
+    "key_columns": ["DIVISION_ID", "SCM_SITE_ID", "ITEM_ID", "MEASURE", "CURRENCY"],
+    "key_columns_by_division": {
+        "40": ["END_CUSTOMER40", "DEPT_ID", "CELL_PROD_SITE_ID", "COMPANY_ID"],
+        "81": ["PROJECT_CODE", "END_CUSTOMER", "TEXT", "FROM_SITE_ID", "PLANT_SITE_ID"],
+        "82": ["PROJECT_CODE", "END_CUSTOMER"],
+    },
+    "auth_group_combo": "SalesPlanUserAuthGroup",
+    "combos": ["CurrencyList", "ItemType", "DmBizType", "SalesPlanUserAuthGroup"],
+    "cell_combo_params": {"mnuId": "'DMF0021'"},
+    "cell_combo_notes": {
+        "SalesPlanItemId": "Insert Model = SALES_PLAN_ITEM_ID lookup (No.61-③ 신설) — @divisionId quoting 필수",
+        "FromSiteByDivision": "81 셀 PLANT_SITE_ID/FROM_SITE_ID — AS-IS UserPlantSiteByDivision 대응",
+        "CELL_PROD_SITE_ID": "@itemId 는 행 컨텍스트(comboContext itemId — ITEM 선택 후 재조회)로 전달. "
+                             "메타 자동 수집 시점엔 행 미확정이라 미전달이 정상 (AS-IS 도 ITEM 선택 후 재바인딩 L4806)",
+        "EndCustomerByDivisionDept": "@deptId 는 행 컨텍스트(comboContext deptId)로 전달 — 메타 수집 시점 "
+                                     "미전달 = division 전체 후보(폴백 계약과 동일). AS-IS InsertRow 권한판 선바인딩 대응",
+    },
+    # W/S 그룹은 DMF0021 편집 lookup(GET_ADMIN_GROUP_MEASURE) 미등재 → EDIT_AUTH 'N' → 후보 0행 = AS-IS 파리티.
+    #   (권한 명세 주석 AS-IS L931~935: ADMIN/SCM PI/SCP Planner/DM Planner/DM ADMIN 만 등재)
+    "edit_flag_all_n_ok": {
+        "miyeong.lee": "DM Planner (W/S) — SalesAmt_LOC·RTF lookup 미등재 그룹 (unitAuth true 는 메뉴 단위 합집합)",
+        "jaehyeok": "DM Planner (W/S) — 동일 (81 데이터에 후보 행이 있으면 PASS 로 대체됨)",
+    },
+    # 행 게이트 컬럼 — DMF0021 은 EDIT_FLAG 가 아니라 SALES_PLAN_ADJUST_YN('N_Y'=편집 후보, AS-IS L963).
+    "edit_flag_column": "SALES_PLAN_ADJUST_YN",
+    "edit_flag_editable_value": "N_Y",
+    "edit_flag_axes": "EDIT_AUTH 2종(MAIN 커서 3 — GET_ADMIN_GROUP_MEASURE AUTHUNION) × "
+                      "행 SALES_PLAN_ADJUST_YN='N_Y' × measure 3종(SalesAmt_LOC=ETC 한정/Catch_Up=40 M+3/"
+                      "RTF_SYS_RP=40·81+RTFGATE 시간창) × 버킷 상호배제 × 기간 cutoff(커서 2)",
+    # P_DMF0021_GET_DM_PLN_SALES_PLAN_DATAEX 17 IN (PROC_M SORT_ORD 순 — useSalesPlanStore.ts:238~257 1:1)
+    "search_filters": lambda div, user, group: {
+        "divisionId": div,
+        "deptId": "ALL", "endCustomer": "ALL", "scmSiteId": "ALL",
+        "projectCode": "", "itemId": "", "itemType": "ALL",
+        "fromYyyymmdd": "20260701", "nowYyyymmdd": "20260701", "toYyyymmdd": "20260831",
+        "plantSiteId": "ALL", "bizType": "ALL", "owner": "", "internalYn": "N",
+        "userGroup": group or user, "bucket": "Weekly", "userDeptId": "",
+        "sesUserId": user, "mnuId": "DMF0021",
+    },
+    "search_buttons": ["SEARCH"],
+    "aux_buttons": [],
+    "result_cursor": "data",
+    "modal_sheets": [
+        {"sheet": "spreadTitle", "btn": "SEARCH", "filters": lambda div, user, group: {
+            "startYyyymmdd": "20260701", "endYyyymmdd": "20260831",
+            "divisionId": div, "bucket": "Weekly", "sesUserId": user, "mnuId": "DMF0021"}},
+        {"sheet": "measureInfo", "btn": "SEARCH", "filters": lambda div, user, group: {
+            "sesUserId": user, "mnuId": "DMF0021"}},
+        {"sheet": "dayRange", "btn": "SEARCH", "filters": lambda div, user, group: {
+            "createdBy": user, "month": "6", "sesUserId": user, "mnuId": "DMF0021"}},
+    ],
+    "save_roundtrip": {
+        "division": "81",
+        "row_filter": lambda r: str(r.get("MEASURE") or "").strip() != "",
+        "cell_prefix": "W_",
+        "date_window": [],
+        "identity_keys": ("DIVISION_ID", "PROJECT_CODE", "SCM_SITE_ID", "ITEM_ID", "MEASURE"),
+        # ⛔ I/D 왕복 금지 — 신규 I 는 SP 내장 검증(판가 존재·중복)·division 필수값을 실데이터로
+        #   통과해야 하고, 0값 저장은 'D' 로 행 삭제되므로 임의 왕복이 원장 구성을 바꾼다.
+        "insert_delete_safe": False,
+        "insert_delete_note":
+            "DMF0021 SAVE 는 qty 0 = 'D'(행 삭제) 전환 — I→0 왕복은 가능해 보이나 SP 내장 검증"
+            "(판가/중복)을 실데이터 키로 통과해야 해 원장 오염 위험. 2026-08-12 실 CRUD 직접 검증으로 대체: "
+            "SalesAmt_LOC 실키 M(원값) SUCCESS + 원장 불변식(건수·QTY합) 동일 실측",
+        # ⛔ M 왕복 금지 — 표시값이 실데이터 원장. 대신 RTFGATE 부정 검증을 실 CRUD 로 수행(2026-08-12):
+        #   81 RTF 실키 M → CODE -1 'MSG00704^'(시간창 밖 차단) + 원장 불변 실측. GET 도 EDIT_AUTH 시간창 반영.
+        "modify_safe": False,
+        "modify_note":
+            "Sales Plan 원장(DM_PLN_SALES_PLAN 실데이터) — M 왕복은 이력·감사컬럼을 바꾼다. "
+            "2026-08-12 실 CRUD 직접 검증 완료(RTFGATE 차단 재현 + SalesAmt_LOC 통과 회귀 + 불변식)",
+        "payload": lambda row, ymd, qty, user: {},
+    },
+}
+
 SCENARIOS["DMF0044"] = {
         "main_sheet": "MDF Reports",
         # AS-IS 제약매트릭스 §1 실측 — 이 화면 division 비교는 40/82 2종뿐(81 분기 없음)
@@ -505,6 +717,52 @@ SCENARIOS["DMF0049"] = {
     },
 }
 
+# ---------------------------------------------------------------------------
+# SDM1010 Project Registration (2026-08-13 등록) — AS-IS 부재 순수 신규 (hook #134)
+#   조회 = PKG_SDM1010.P_SDM1010_GET_TAB1_PJT_REG (9 IN / OUT data·result)
+#   저장 = P_SDM1010_SAVE_TAB1_PJT_REG (sesUserId + data CLOB[JSON rows])
+#   ⚠ SAVE/REQ/CANCEL/POP SAVE 왕복은 `crud_roundtrip_sdm1010.py` 가 SP 직접으로 전담
+#     (2026-08-13 PASS 18/FAIL 0 — CLOB JSON 계약은 러너 F축 스칼라 모델과 불일치라 여기선 생략)
+SCENARIOS["SDM1010"] = {
+    "main_sheet": "TAB1",
+    "divisions": ["81"],
+    "key_columns": ["DPJT_KEY", "DIVISION_ID", "DPJT_NAME", "DPJT_REG_STATUS"],
+    "combos": ["MyDivision", "EndCustomerByDivision", "DpjtClass", "StackMethod",
+               "CellTypeByDivision", "BizTypeByDivision", "PlantByDivisionCompany", "EndCustomer"],
+    "cell_combo_params": {},
+    "cell_combo_notes": {
+        "PlantByDivisionCompany":
+            "SDM1010 은 company 조회조건이 없는 화면 — 설계서 콤보 지정이 'PlantByDivisionCompany' 뿐이고 "
+            "파라미터 명세 부재. @divisionId 만 전달(공유 콤보 SQL 은 @companyId 빈값=전체 허용 설계)이 의도 동작",
+    },
+    "edit_flag_axes": "행 상태 단일 축 — 신규(C) 또는 DPJT_REG_STATUS='DRAFT' 만 편집(제약 P-15/P-17). "
+                      "EDIT_FLAG 컬럼 없음(INPUT_TP_CD IM/IO × 상태 가드)",
+    "search_filters": lambda div, user, group: {
+        "divisionId": div, "endCustomer": "ALL", "dpjtAuthType": "ALL", "dpjtRegStatus": "ALL",
+        "regCompDateFr": "20260701", "regCompDateTo": "20260930",
+        "userGroup": group or user, "sesUserId": user, "mnuId": "SDM1010",
+    },
+    "search_buttons": ["SEARCH"],
+    "aux_buttons": [],
+    "result_cursor": "data",
+    "modal_sheets": [
+        {"sheet": "TAB2", "btn": "SEARCH", "filters": lambda div, user, group: {
+            "divisionId": div, "endCustomer": "ALL", "dpjtAuthType": "ALL", "dpjtRegStatus": "ALL",
+            "regCompDateFr": "20260701", "regCompDateTo": "20260930",
+            "sesUserId": user, "mnuId": "SDM1010"}},
+        {"sheet": "POP1_TREE", "btn": "SEARCH", "filters": lambda div, user, group: {
+            "sesUserId": user, "mnuId": "SDM1010"}},
+        {"sheet": "POP1_GRID1", "btn": "SEARCH", "filters": lambda div, user, group: {
+            "deptId": "30083990", "sesUserId": user, "mnuId": "SDM1010"}},
+        {"sheet": "POP1_GRID2", "btn": "SEARCH", "filters": lambda div, user, group: {
+            "dpjtKey": "-", "sesUserId": user, "mnuId": "SDM1010"}},
+        {"sheet": "POP1_GRID4", "btn": "SEARCH", "filters": lambda div, user, group: {
+            "dpjtKey": "-", "sesUserId": user, "mnuId": "SDM1010"}},
+        {"sheet": "POP2_GRID5", "btn": "SEARCH", "filters": lambda div, user, group: {
+            "dpjtKey": "-", "sesUserId": user, "mnuId": "SDM1010"}},
+    ],
+}
+
 
 def _this_week_monday():
     """금주 월요일 yyyymmdd — FE thisWeekMonday() 와 동일 원천(조회 P_NOW_YYYYMMDD)."""
@@ -733,13 +991,14 @@ def main():
         cols = (c.json() or {}).get("result") or [] if c.status_code == 200 else []
         meas = (m.json() or {}).get("result") or [] if m.status_code == 200 else []
         names = {str(x.get("colNm") or x.get("COLUMN_NAME") or "") for x in cols if isinstance(x, dict)}
-        missing = [k for k in sc["key_columns"] if k not in names]
+        req = list(sc["key_columns"]) + list((sc.get("key_columns_by_division") or {}).get(div, []))
+        missing = [k for k in req if k not in names]
         if c.status_code != 200 or not cols:
             rep.fail(f"div={div} column 메타 {c.status_code} rows={len(cols)}")
         elif missing:
             rep.fail(f"div={div} 필수 키 컬럼 부재: {missing} (컬럼 {len(cols)}개)")
         else:
-            rep.ok(f"div={div} column={len(cols)} / measure={len(meas)} / 필수 키 {len(sc['key_columns'])}종 전부 존재")
+            rep.ok(f"div={div} column={len(cols)} / measure={len(meas)} / 필수 키 {len(req)}종 전부 존재")
 
     rep.h("D. 콤보 전 키 (0행 = 조용한 빈콤보 검출)")
     cm = psess.post(f"{a.base}/admin/combo-muti",
@@ -945,13 +1204,58 @@ def main():
         #   ⚠ 이 분기는 M 뿐 아니라 **그 안에 중첩된 I/D 블록까지** 건너뛴다(I/D 는 M 후보 행을 기반으로
         #     동작하므로 분리 불가). 그래서 아래에서 `insert_delete_safe` 와의 정합을 함께 확인한다.
         elif sr.get("modify_safe") is False:
-            rep.warn("M 왕복 생략(파괴 위험) — %s" % sr.get(
+            # ⭐ 2026-08-12 — `modify_probe` 가 정의된 화면은 생략 대신 **전용 테스트 키 M 왕복**을 실행한다.
+            #   실데이터 행을 건드리는 일반 왕복과 달리, 실 CRUD 검증(권한별)에서 만들어 둔
+            #   테스트 소유 키(QTY 0 잔존형) 위에서만 쓰고-확인하고-0 으로 되돌린다.
+            probe = sr.get("modify_probe")
+            if probe:
+                pu = probe["user"]
+                psess2 = sessions.get(pu, (None, None))[0]
+                if psess2 is None:
+                    psess2 = requests.Session()
+                    psess2.post(f"{a.base}/user/login", json={"userId": pu}, timeout=30)
+                def probe_save(qty):
+                    return call_proc(psess2, a.base, a.menu, sc["main_sheet"], "SAVE",
+                                     probe["payload"](qty, pu))
+                def probe_cursor(r):
+                    body = (r.json() or {}).get("result") or {} if r.status_code == 200 else {}
+                    rc = body.get("O_RESULT_CURSOR") or []
+                    return (rc[0] if rc else {"CODE": "0", "MSG": "(빈 결과커서=성공)"})
+                def probe_read():
+                    # 매칭 행이 버킷/표시축으로 다행일 수 있어 셀값 **집합**으로 판정한다.
+                    f = probe["verify_filters"](pu)
+                    rr = call_proc(psess2, a.base, a.menu, sc["main_sheet"], "SEARCH", f)
+                    rs = ((rr.json() or {}).get("result") or {}).get(sc["result_cursor"]) or []
+                    vals = []
+                    for x in rs:
+                        if probe["row_match"](x):
+                            v = x.get(probe["cell"])
+                            if v not in (None, ""):
+                                vals.append(float(v))
+                    return vals
+                qv = probe.get("probe_qty", 7)
+                rep.note("M 왕복(전용 키) — %s" % probe.get("note", ""))
+                r1 = probe_cursor(probe_save(qv))
+                (rep.ok if str(r1.get("CODE")) == "0" else rep.fail)(
+                    f"M 저장(qty={qv}) 결과커서 CODE={r1.get('CODE')} {str(r1.get('MSG'))[:60]}")
+                a1 = probe_read()
+                (rep.ok if float(qv) in a1 else rep.fail)(
+                    f"재조회 반영 — cell {probe['cell']} 매칭행 값 {a1} (기대 {qv} 포함)")
+                r2 = probe_cursor(probe_save(0))
+                (rep.ok if str(r2.get("CODE")) == "0" else rep.fail)(
+                    f"원복 저장(qty=0) 결과커서 CODE={r2.get('CODE')}")
+                a2 = probe_read()
+                (rep.ok if float(qv) not in a2 else rep.fail)(
+                    f"재조회 원복 — cell {probe['cell']} 매칭행 값 {a2} (기대 {qv} 소거)")
+                rep.note("실데이터 무접촉 — 테스트 소유 키 한정. 일반 행 M/I/D 는 계속 차단(사유 아래)")
+            rep.warn("일반 행 M 왕복 생략(파괴 위험) — %s" % sr.get(
                 "modify_note", "이 화면의 SAVE 왕복은 원복해도 원상태로 돌아가지 않는다"))
             if sr.get("insert_delete_safe") is not False:
                 rep.warn("I/D 왕복도 함께 생략됨 — M 후보 행에 종속된 경로다. "
                          "의도한 것이면 `insert_delete_safe: False` 도 명시할 것(계약 정합)")
-            rep.note("⇒ M/I/D 축은 화면 육안 확인 대상. 원장 직접 검증이 필요하면 "
-                     "`save_mode: 'insert_first'`(우리가 만든 행 위에서만 왕복) 설계로 전환할 것")
+            if not probe:
+                rep.note("⇒ M/I/D 축은 화면 육안 확인 대상. 원장 직접 검증이 필요하면 "
+                         "`save_mode: 'insert_first'`(우리가 만든 행 위에서만 왕복) 설계로 전환할 것")
         elif not cand:
             rep.warn(f"div={sr['division']} 편집가능 행/일자 후보 없음 — SAVE 왕복 생략(데이터 전제조건 §3 확인)")
         else:
@@ -1092,23 +1396,27 @@ def main():
         #   명백한 모순만 본다. 축 대응표(edit_flag_axes)를 준 화면은 그 설명을 함께 남긴다.
         editable = unit_by_user.get(u, {}).get(rdiv)
         axes = sc.get("edit_flag_axes", "부서(DEPT_ID) 일치 OR 권한그룹 ADMIN")
+        # ⭐ 2026-08-12 — 행 게이트 컬럼은 화면마다 다르다 (DMF0021 = SALES_PLAN_ADJUST_YN 'N_Y').
+        #   시나리오 edit_flag_column/edit_flag_editable_value 로 오버라이드 (기본 EDIT_FLAG/'Y').
+        ef_col = sc.get("edit_flag_column", "EDIT_FLAG")
+        ef_yes = sc.get("edit_flag_editable_value", "Y")
         if rows and editable is not None:
-            ef = {str(x.get("EDIT_FLAG")) for x in rows if isinstance(x, dict)}
+            ef = {str(x.get(ef_col)) for x in rows if isinstance(x, dict)}
             if rdiv in sc.get("readonly_divisions", []):
-                (rep.ok if ef <= {"N"} else rep.fail)(
-                    f"[{u}] div{rdiv} 조회전용 — EDIT_FLAG={sorted(ef)} (기대 N)")
+                (rep.ok if ef_yes not in ef else rep.fail)(
+                    f"[{u}] div{rdiv} 조회전용 — {ef_col}={sorted(ef)} (기대 {ef_yes} 부재)")
             elif editable is False:
-                rep.ok(f"[{u}] unitAuth editable=false · EDIT_FLAG={sorted(ef)} "
+                rep.ok(f"[{u}] unitAuth editable=false · {ef_col}={sorted(ef)} "
                        f"— 행 단위 축({axes})으로 결정. 혼재 정상")
-            elif "Y" in ef:
-                rep.ok(f"[{u}] unitAuth editable=true · EDIT_FLAG={sorted(ef)} (편집 가능 행 존재)")
+            elif ef_yes in ef:
+                rep.ok(f"[{u}] unitAuth editable=true · {ef_col}={sorted(ef)} (편집 가능 행 존재)")
             else:
                 note = sc.get("edit_flag_all_n_ok", {}).get(u)
                 if note:
-                    # 전 행 'N' 이지만 **AS-IS 파리티로 검증된** 케이스 — 사유를 남기고 통과
-                    rep.ok(f"[{u}] EDIT_FLAG 전 행 'N' — AS-IS 파리티 확인됨: {note}")
+                    # 편집 후보 0행이지만 **AS-IS 파리티로 검증된** 케이스 — 사유를 남기고 통과
+                    rep.ok(f"[{u}] {ef_col} 편집 후보 0행 — AS-IS 파리티 확인됨: {note}")
                 else:
-                    rep.warn(f"[{u}] unitAuth editable=true 인데 EDIT_FLAG 전 행 'N' "
+                    rep.warn(f"[{u}] unitAuth editable=true 인데 {ef_col} 편집 후보('{ef_yes}') 0행 "
                              f"— 축({axes}) 어디에도 걸리지 않음. 데이터/권한 전제 확인")
 
         # [WS 2026-08-07] 그룹별 FCST_TYPE 콤보 화이트리스트 실증 (AS-IS 파리티)

@@ -8,6 +8,7 @@ import { useTabProcQuery } from '@shared/hooks';
 import { Button, FormItem, InputField } from '@shared/lges';
 import { ArrowChevron2Icon, ControlConfirmIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
+import { useMessageStore } from '@shared/stores';
 
 import { MODAL_OWNER, MODAL_SHEET_OWNER } from './owner-modal.constants';
 import styles from './OwnerModal.module.scss';
@@ -21,6 +22,8 @@ interface OwnerModalProps {
   ) => void;
   divisionId: string;
   ownerId?: string;
+  /** true 면 담당자를 한 명만 확정할 수 있다 — 2명 이상 선택 후 OK 시 경고하고 닫지 않는다. */
+  singleSelect?: boolean;
 }
 
 export const OwnerModal = ({
@@ -29,8 +32,10 @@ export const OwnerModal = ({
   setSelectedValue,
   divisionId,
   ownerId,
+  singleSelect = false,
 }: OwnerModalProps) => {
   const { t } = useTranslation();
+  const setAlert = useMessageStore.getState().setAlert;
 
   const candidateGridRef = useRef<
     FlexGrid<ResponseData<MODAL_OWNER, MODAL_SHEET_OWNER, 'o_rc1'>> | undefined
@@ -109,6 +114,14 @@ export const OwnerModal = ({
   };
 
   const handleSubmit = () => {
+    if (singleSelect && selectedUsers.length > 1) {
+      void setAlert({
+        type: 'alert',
+        content: t('MSG01000', 'Owner(sales)는 한명만 선택 가능합니다.'),
+      });
+      return;
+    }
+
     setSelectedValue(selectedUsers);
     modalClose();
   };
@@ -152,7 +165,7 @@ export const OwnerModal = ({
 
   return (
     <CustomDialog
-      size={1200}
+      size={800}
       type='modaless'
       position='basic'
       open={open}
@@ -190,7 +203,7 @@ export const OwnerModal = ({
               itemsSource={candidateUsers}
               dblClick={handleCandidateDblClick}
             />
-            <div>
+            <div className={styles.arrowButtonWrapper}>
               <Button
                 iconComponent={<ArrowChevron2Icon appearance='single' direction='right' />}
                 onClick={handleSelectUsers}
@@ -209,13 +222,13 @@ export const OwnerModal = ({
             />
           </div>
           <div className={styles.buttonWrapper}>
-            <Button
+            {/* <Button
               appearance='outlined'
               priority='normal'
               size='medium'
               buttonLabel='Default'
               onClick={() => {}}
-            />
+            /> */}
             <Button
               appearance='outlined'
               priority='normal'

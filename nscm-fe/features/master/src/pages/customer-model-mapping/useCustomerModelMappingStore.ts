@@ -1,6 +1,6 @@
 import { apiClient } from '@foundation/apis';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
-import { createPersistedStoreWithTab } from '@shared/stores';
+import { createPersistedStoreWithTab, useSessionStore } from '@shared/stores';
 
 import { MENU_ID, SHEETS } from './customer-model-mapping.constants';
 import type { SearchParamProps } from './customer-model-mapping.types';
@@ -25,7 +25,7 @@ const initCustomerModelMappingState: CustomerModelMappingState = {
   initialized: false,
   isOpenSearchArea: true,
   searchParams: {
-    divisionId: '40',
+    divisionId: useSessionStore.getState().session.div ?? '40',
     deptId: 'ALL',
     endCustomer: 'ALL',
     salesSite: 'ALL',

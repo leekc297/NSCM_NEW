@@ -1,0 +1,24 @@
+.dialogContentWrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.gridWrapper{
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+}
+.arrowButtonWrapper{
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0 8px;
+}
+.buttonWrapper{
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-top: 5px;
+}

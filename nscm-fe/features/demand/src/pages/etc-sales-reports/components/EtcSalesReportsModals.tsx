@@ -1,5 +1,6 @@
 import {
   ColumnLayoutModal,
+  MeasureSelectModal,
   ProjectByDivisionModal,
 } from 'features/master/src/components';
 import { useMemo } from 'react';
@@ -11,8 +12,6 @@ import { MENU_ID, SHEETS } from '../etc-sales-reports.constants';
 import type { EtcSalesReportRow } from '../etc-sales-reports.types';
 import { useEtcSalesReportsStore } from '../useEtcSalesReportsStore';
 import { saveTitleSet } from '../utils/etc-sales-reports.api';
-
-import { MeasureSelectModal } from './modals';
 
 export type EtcSalesReportsModalKey = 'PROJECT' | 'COLUMN' | 'MEASURE' | 'VERSION';
 
@@ -148,7 +147,8 @@ export const EtcSalesReportsModals = ({
         }}
       />
 
-      {/* Measure Select — business-plan 판 복제 (measures/visibleMeasures/onApply 계약) */}
+      {/* Measure Select — 공용 MeasureSelectModal (hook #132 §2-1 — 로컬 사본 제거·공용 정본 전환.
+          measures/visibleMeasures/onApply 계약 동일 — 저장 semantics 는 아래 onApply 가 그대로 소유) */}
       <MeasureSelectModal
         open={openKey === 'MEASURE'}
         modalClose={onClose}

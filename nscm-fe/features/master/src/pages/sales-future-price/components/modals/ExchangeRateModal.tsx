@@ -456,6 +456,7 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
             <DataGrid<PivotRow>
               gridRef={gridRef}
               className={styles.grid}
+              isReadOnly
               itemsSource={pivotRows}
               staticColumns={gridStaticColumns}
               dynamicColumns={gridDynamicColumns}

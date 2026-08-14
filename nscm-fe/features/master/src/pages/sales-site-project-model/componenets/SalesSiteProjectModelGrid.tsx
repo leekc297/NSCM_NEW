@@ -3,13 +3,23 @@ import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useRef, useState, type MutableRefObject } from 'react';
 
 import { CRUD_TYPE } from '@foundation/constants';
+import { t } from '@foundation/i18n';
 import { GridUtils, type EditTracker } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
+import { useMessageStore } from '@shared/stores';
 
 import { ItemByDivisionModal, OwnerModal, TeamModal, ProjectModal } from '../../../components';
 import type { MODAL_OWNER } from '../../../components/ownerModal/owner-modal.constants';
 import type { RESPONSE_SET, MENU_ID } from '../sales-site-project-model.constants';
-import { SHEETS, SHEET_INDEX } from '../sales-site-project-model.constants';
+import {
+  MODEL_POPUP_COLUMNS,
+  MODEL_POPUP_CONDITIONS,
+  MODEL_POPUP_WIDTH,
+  SHEETS,
+  SHEET_INDEX,
+  SINGLE_OWNER_DIVISIONS,
+} from '../sales-site-project-model.constants';
+import { useGridCombos } from '../sales-site-project-model.gridCombos';
 import { useSalesSiteProjectModelStore } from '../useSalesSiteProjectModelStore';
 
 interface SalesSiteProjectModelGridProps {
@@ -19,6 +29,11 @@ interface SalesSiteProjectModelGridProps {
   gridFilterRef: MutableRefObject<FlexGridFilter | undefined>;
   data: ResponseData<MENU_ID, SHEETS.PRODUCTION, RESPONSE_SET.PRODUCTION>[];
   setActiveTab: (tab: SHEET_INDEX) => void;
+  /**
+   * 하단(Purchase) 에 미저장 변경이 있는지 — 더블클릭 조회가 하단을 통째로 갈아끼우므로
+   * 그때만 호출해 판정한다. 판정 기준은 저장 대상(CRUD_TYPE)과 동일하게 부모가 가진다.
+   */
+  hasPurchaseChanges: () => boolean;
 }
 
 export const SalesSiteProjectModelGrid = ({
@@ -26,6 +41,7 @@ export const SalesSiteProjectModelGrid = ({
   gridFilterRef,
   data,
   setActiveTab,
+  hasPurchaseChanges,
 }: SalesSiteProjectModelGridProps) => {
   const editTrackerRef = useRef<
     EditTracker<ResponseData<MENU_ID, SHEETS.PRODUCTION, RESPONSE_SET.PRODUCTION>> | undefined
@@ -34,6 +50,7 @@ export const SalesSiteProjectModelGrid = ({
   const filters = useSalesSiteProjectModelStore(state => state.filters);
   const staticColumns = useSalesSiteProjectModelStore(state => state.staticColumns);
   const setPurchaseFilter = useSalesSiteProjectModelStore(state => state.setPurchaseFilter);
+  const setAlert = useMessageStore(state => state.setAlert);
 
   const [openTeamModal, setOpenTeamModal] = useState<boolean>(false);
   const [openOwnerModal, setOpenOwnerModal] = useState<boolean>(false);
@@ -42,6 +59,13 @@ export const SalesSiteProjectModelGrid = ({
   const [ownerOpenByPm, setOwnerOpenByPm] = useState<boolean>(false);
   const [clickedRow, setClickedRow] = useState(-1);
   const clickedDataItem = GridUtils.getRow(gridRef.current, clickedRow);
+
+  // 파라미터가 필요한 셀 콤보(Sales Plant 등) 적용 — 규칙은 sales-site-project-model.gridCombos 참조.
+  const gridComboHandlers = useGridCombos({
+    staticColumns: staticColumns[SHEETS.PRODUCTION],
+    data,
+    divisionId: filters[SHEETS.PRODUCTION]?.divisionId,
+  });
 
   const handleTeamSelected = (teamId: string, teamName?: string) => {
     if (!clickedDataItem) return;
@@ -89,6 +113,30 @@ export const SalesSiteProjectModelGrid = ({
 
       clickedDataItem.OWNER = owners;
       clickedDataItem.OWNER_NAME = ownersNames;
+
+      // COM0004(owner popup) 결과에 DEPT_ID/DEPT_NAME_KO 가 함께 내려와 별도 조회가 필요없다.
+      // 다중 선택이면 소속이 있는 첫 담당자 기준 — 소속이 비면 기존 팀 값을 지우지 않는다.
+      const ownerWithDept = selectedUsers.find(item => !!item.DEPT_ID);
+      if (ownerWithDept) {
+        const deptId = ownerWithDept.DEPT_ID;
+        const deptName = ownerWithDept.DEPT_NAME_KO ?? '';
+
+        editTrackerRef.current?.storeChange(
+          clickedDataItem,
+          'DEPT_ID',
+          clickedDataItem.DEPT_ID,
+          deptId
+        );
+        editTrackerRef.current?.storeChange(
+          clickedDataItem,
+          'TEAM_NAME',
+          clickedDataItem.TEAM_NAME,
+          deptName
+        );
+
+        clickedDataItem.DEPT_ID = deptId;
+        clickedDataItem.TEAM_NAME = deptName;
+      }
     }
 
     gridRef.current?.refreshRange(new CellRange(clickedRow, 0, clickedRow, -1));
@@ -191,6 +239,18 @@ export const SalesSiteProjectModelGrid = ({
 
     if (dataItem?.DIVISION_ID === '40' || GridUtils.isEditableCell(grid, ht.row, ht.col)) return;
 
+    // ⭐ 하단(Purchase) 에 미저장 변경이 있으면 조회를 막는다 —
+    //   이 더블클릭은 하단 데이터를 통째로 다시 조회하므로 그대로 두면 수정분이 조용히 사라진다.
+    //   저장/취소는 사용자가 직접 정하도록 confirm 이 아니라 alert(진행 불가)로 알린다.
+    if (hasPurchaseChanges()) {
+      void setAlert({
+        type: 'alert',
+        // 백엔드 메시지 코드가 아직 없어 MSG_NO_CHANGE 처럼 임시 키 + 기본문구로 둔다.
+        content: t('MSG_PURCHASE_EDITING', 'Purchase 수정 중이라 조회할 수 없습니다.'),
+      });
+      return;
+    }
+
     setClickedRow(ht.row);
     setPurchaseFilter({
       divisionId: dataItem.DIVISION_ID,
@@ -211,6 +271,7 @@ export const SalesSiteProjectModelGrid = ({
         allowMerging={AllowMerging.ColumnHeaders}
         gotFocus={handleFocus}
         dblClick={handleGridDblClick}
+        {...gridComboHandlers}
       />
       <TeamModal
         open={openTeamModal}
@@ -225,21 +286,37 @@ export const SalesSiteProjectModelGrid = ({
         setSelectedValue={handleOwnerSelected}
         divisionId={filters.production?.divisionId ?? '40'}
         ownerId={ownerOpenByPm ? clickedDataItem?.PRJ_OWNR_ID : clickedDataItem?.OWNER}
+        // Owner(Sales) 만 제한 대상 — PM 담당자(PRJ_OWNR_ID)는 여러 명 등록 가능.
+        // 신규 행은 DIVISION_ID 가 비어있을 수 있어 조회 조건으로 폴백.
+        singleSelect={
+          !ownerOpenByPm &&
+          SINGLE_OWNER_DIVISIONS[SHEETS.PRODUCTION].includes(
+            clickedDataItem?.DIVISION_ID || filters.production?.divisionId || ''
+          )
+        }
       />
       <ItemByDivisionModal
         open={openItemModal}
         modalClose={() => setOpenItemModal(false)}
         setSelectedValue={handleItemSelected}
+        // ⭐ 화면에 남긴 3개(Div / Model·Nickname / Item Type) 외에는 클릭한 행 값을 따라가지 않고
+        //   전부 기본값으로 연다 — 안 보이는 조건(Team/End Customer/Sales Site/Project)이 조회를
+        //   좁히면 사용자는 결과가 왜 비는지 알 수 없다. AS-IS 'Model by DivisionPopup' 과 동일.
         preSearchParams={{
           divisionId: clickedDataItem?.DIVISION_ID ?? 'ALL',
-          deptId: clickedDataItem?.DEPT_ID ?? 'ALL',
-          endCustomer: clickedDataItem?.END_CUSTOMER ?? 'ALL',
-          salesSite: clickedDataItem?.SCM_SITE_ID ?? 'ALL',
-          projectCode: clickedDataItem?.PROJECT_CODE ?? '',
+          deptId: 'ALL',
+          endCustomer: 'ALL',
+          salesSite: 'ALL',
+          projectCode: '',
           itemId: clickedDataItem?.ITEM_ID ?? '',
-          activeFlag: clickedDataItem?.MDM_ACTIVE ?? 'Y',
+          activeFlag: 'Y',
         }}
         callFromCell={true}
+        // ⭐ AS-IS 'Model by DivisionPopup' 동등 — 검색조건 3개 + 컬럼 5개.
+        //   둘 다 opt-in prop 이라 COM0008 의 다른 호출처는 영향 없다.
+        visibleConditions={MODEL_POPUP_CONDITIONS}
+        visibleColumns={MODEL_POPUP_COLUMNS}
+        dialogSize={MODEL_POPUP_WIDTH}
       />
       <ProjectModal
         open={openProjectModal}

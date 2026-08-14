@@ -1,19 +1,26 @@
 import type { FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 
 import { IcGridColumnSetup } from '@foundation/assets';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
+import { queryClient } from '@foundation/query-client';
 import { MainTitle, SubTitle } from '@shared/components';
 import { useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
 import { useMessageStore } from '@shared/stores';
 
-import { ColumnSettingModal } from '../../components';
+import { ColumnLayoutModal, saveTitleSet, toColumnLayoutSettings } from '../../components';
 
 import { ContributeViewForm } from './components/ContributeViewForm';
 import { ContributeViewGrid } from './components/ContributeViewGrid';
 import { ContributeVersionModal } from './components/modals/ContributeVersionModal';
-import { MENU_ID, SHEETS } from './contribute-view.constants';
+import {
+  MENU_ID,
+  SHEETS,
+  TITLESET_COLUMN_TYPE,
+  TITLESET_DIVISION,
+  TITLESET_SHEET,
+} from './contribute-view.constants';
 import styles from './ContributeView.module.scss';
 import { useContributeViewValidation } from './hooks/useContributeViewValidation';
 import type { SalesViewRow, ValidationCheckCount } from './types';
@@ -35,6 +42,7 @@ export const ContributeView = ({ tabId, title }: PageProps<MENU_ID>) => {
   const searchParams = useContributeViewStore(s => s.searchParams);
   const setSearchParams = useContributeViewStore(s => s.setSearchParams);
   const setFilters = useContributeViewStore(s => s.setFilters);
+  const clearFilters = useContributeViewStore(s => s.clearFilters);
   const initialized = useContributeViewStore(s => s.initialized);
   const fetchStaticColumns = useContributeViewStore(s => s.fetchStaticColumns);
   const openSearchArea = useContributeViewStore(s => s.openSearchArea);
@@ -44,8 +52,31 @@ export const ContributeView = ({ tabId, title }: PageProps<MENU_ID>) => {
   const setVersionPopupOpen = useContributeViewStore(s => s.setVersionPopupOpen);
   const columnSetPopupOpen = useContributeViewStore(s => s.columnSetPopupOpen);
   const setColumnSetPopupOpen = useContributeViewStore(s => s.setColumnSetPopupOpen);
-  const visibleBaseColumns = useContributeViewStore(s => s.visibleBaseColumns);
-  const setVisibleBaseColumns = useContributeViewStore(s => s.setVisibleBaseColumns);
+  const staticColumns = useContributeViewStore(s => s.staticColumns[SHEETS.MAIN]);
+  const originalStaticColumns = useContributeViewStore(s => s.originalStaticColumns[SHEETS.MAIN]);
+  const applyColumnLayout = useContributeViewStore(s => s.applyColumnLayout);
+
+  // ColumnLayoutModal 재진입 복원 — 현재 grid 상태(개인화 반영본).
+  //   ⚠️ DB 응답이 우선이고 이 값은 BE 가 안 준 필드만 보완한다 (buildInitialRows 규칙).
+  const columnLayoutSettings = useMemo(
+    () => toColumnLayoutSettings(staticColumns ?? []),
+    [staticColumns]
+  );
+  // Default 버튼 원복 기준 — 개인화 적용 전 admin 메타 원본.
+  const columnLayoutDefaults = useMemo(
+    () => toColumnLayoutSettings(originalStaticColumns ?? []),
+    [originalStaticColumns]
+  );
+  // titleSet SP 가 0건일 때의 fallback — admin 메타로 목록을 채워 빈 팝업을 막는다.
+  const columnFallback = useMemo(
+    () =>
+      (originalStaticColumns ?? []).map(c => ({
+        key: c.colNm,
+        header: c.colLblNm ?? c.colNm,
+        width: c.colWth ?? 100,
+      })),
+    [originalStaticColumns]
+  );
 
   const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
   const { validateVersionSelected, validateSearchResultEmpty } = useContributeViewValidation();
@@ -91,9 +122,15 @@ export const ContributeView = ({ tabId, title }: PageProps<MENU_ID>) => {
     setSearchParams({ versionNo });
   };
 
-  // AS-IS L481~482: ColumnSet popup OK → InitSpread() (= title sheet refetch via setFilters)
-  const handleColumnApply = () => {
-    setFilters();
+  // AS-IS L481~482: ColumnSet popup OK → InitSpread().
+  //   Column 설정 저장 = Grid 초기화 의무 (사용자 요구 2026-08-05) — 저장 즉시 표시 컬럼이
+  //   바뀌므로 이전 설정으로 조회해 둔 rows 를 그대로 두면 컬럼 구성과 데이터가 어긋난다.
+  //   filters 무효화(enabled=false + queryKey 변경)로 그리드를 비우고 재조회는 Search 로만.
+  //   removeQueries([tabId]) 필수 — queryKey 는 filters '값' 기반이라 동일 조건으로 다시
+  //   Search 하면 전역 staleTime=Infinity 캐시가 이전 설정으로 받은 rows 를 그대로 돌려준다.
+  const clearGridOnSettingChange = () => {
+    clearFilters();
+    queryClient.removeQueries({ queryKey: [tabId] });
   };
 
   const rows = (mainData?.o_rc1 ?? []) as SalesViewRow[];
@@ -185,17 +222,64 @@ export const ContributeView = ({ tabId, title }: PageProps<MENU_ID>) => {
         onClose={() => setVersionPopupOpen(false)}
         onSelect={handleVersionSelect}
       />
-      <ColumnSettingModal
+      {/* 컬럼 표시 설정 (AS-IS btnColumn_Click L473) — 공용 ColumnLayoutModal.
+          표시/순서에 더해 Width / Cell·Text Color 개인화까지 제공 (mkt-fcst·forecast-price 선례 1:1). */}
+      <ColumnLayoutModal
         open={columnSetPopupOpen}
         modalClose={() => setColumnSetPopupOpen(false)}
         menuId={MENU_ID}
-        sheetName='ContributeSalesList'
-        columnType='C'
-        divisionId='40'
-        initialVisibleKeys={visibleBaseColumns}
+        // ⚠️ 저장(saveTitleSet)·복원(fetchUserColumnLayout)과 반드시 같은 값 — 상수 한 곳에서만 가져온다.
+        sheetName={TITLESET_SHEET}
+        columnType={TITLESET_COLUMN_TYPE}
+        divisionId={TITLESET_DIVISION}
+        fallbackColumns={columnFallback}
+        title={t('LBL00605', 'Column Setting')}
+        leftTitle={t('LBL00764', 'Invisible')}
+        rightTitle={t('LBL00765', 'Visible')}
+        initialSettings={columnLayoutSettings}
+        defaultSettings={columnLayoutDefaults}
         onSave={settings => {
-          setVisibleBaseColumns(settings.map(s => s.COLUMN_NAME));
-          handleColumnApply();
+          // (0) 설정이 바뀌었으므로 이전 조회 rows 는 무효 — 그리드부터 비운다.
+          clearGridOnSettingChange();
+          // (1) 로컬 즉시 반영 — store 가 표시/순서/폭/색을 staticColumns 에 적용 → grid 즉시 갱신.
+          applyColumnLayout(
+            settings.map(s => ({
+              colNm: s.COLUMN_NAME,
+              visible: s.USER_FLAG === 'Y',
+              width: s.COL_WIDTH,
+              cellColor: s.CELL_COLOR,
+              textColor: s.TEXT_COLOR,
+              order: s.SORT_ORDER_NO,
+            }))
+          );
+          // (2) titleSet 영구 저장 — 표시 column + 순서 + 폭/색 (공용 엔드포인트).
+          const visible = settings.filter(s => s.USER_FLAG === 'Y');
+          void saveTitleSet({
+            menuId: MENU_ID,
+            sheetName: TITLESET_SHEET,
+            columnType: TITLESET_COLUMN_TYPE,
+            rows: visible.map((s, i) => ({
+              name: s.COLUMN_NAME,
+              sortOrderNo: i + 1,
+              colWidth: s.COL_WIDTH,
+              cellColor: s.CELL_COLOR,
+              textColor: s.TEXT_COLOR,
+            })),
+          }).then(ok => {
+            // 실패를 조용히 삼키면 '저장했는데 재진입 시 원복' 과 구분이 안 된다 — 반드시 알린다.
+            if (!ok) {
+              void setAlert({
+                type: 'alert',
+                content: t('MSG00618', '_An error occurred while saving.'),
+              });
+              return;
+            }
+            // ⭐ 팝업 titleSet 조회 캐시 무효화 (필수). 전역 staleTime=Infinity 라 invalidate 없이는
+            //   재조회가 아예 안 일어나고, buildInitialRows 는 BE 응답을 화면 상태보다 우선하므로
+            //   저장 전 값이 그대로 이겨서 재진입 시 원복된 것처럼 보인다.
+            //   팝업 query 의 tabId = MENU_ID 이므로 이 prefix 로 매칭된다.
+            void queryClient.invalidateQueries({ queryKey: [MENU_ID] });
+          });
         }}
       />
     </div>

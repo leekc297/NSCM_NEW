@@ -8,6 +8,8 @@ import { Button, FormItem, InputField } from '@shared/lges';
 import { ControlConfirmIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 
+import { SEARCH_POPUP_WIDTH } from '../searchFields/SearchFields.utils';
+
 import {
   MODAL_OWNER_BY_DIVISION,
   MODAL_SHEET_OWNER_BY_DIVISION,
@@ -128,6 +130,11 @@ export const OwnerByDivisionModal = ({
     modalClose();
   };
 
+  // ⭐ 더블클릭 = 그 행 하나로 확정 후 닫기 (체크박스 모드 포함 — 2026-08-06 사용자 요청).
+  //   구: dblClick={multiCheckbox ? undefined : handleDblClick} 로 체크박스 모드에서 핸들러 자체가
+  //   미장착이라 더블클릭해도 부모창에 값이 안 넘어갔다.
+  //   ⚠ 체크박스 모드에서 더블클릭하면 이미 체크해 둔 행들은 무시되고 더블클릭한 행만 전달된다
+  //     (여러 건을 넘기려면 체크 후 OK). 단건 선택의 빠른 경로로만 쓰는 규약.
   const handleDblClick = (mouseEvent: MouseEvent) => {
     const grid = gridRef.current;
     if (!grid) return;
@@ -155,7 +162,9 @@ export const OwnerByDivisionModal = ({
 
   return (
     <CustomDialog
-      size={1200}
+      // ⭐ 1200 → SEARCH_POPUP_WIDTH(900) — Model/Project 팝업과 폭 통일 (2026-08-06 사용자 요청).
+      //   CustomDialog 가 DIALOG_SCALE(1.5) 을 곱하므로 실제 폭 1800px → 1350px.
+      size={SEARCH_POPUP_WIDTH}
       type='modaless'
       position='basic'
       open={open}
@@ -292,7 +301,7 @@ export const OwnerByDivisionModal = ({
               useCheckbox={multiCheckbox}
               staticColumns={staticColumns}
               itemsSource={itemsSource}
-              dblClick={multiCheckbox ? undefined : handleDblClick}
+              dblClick={handleDblClick}
             />
           </div>
           <div className={styles.buttonWrapper}>

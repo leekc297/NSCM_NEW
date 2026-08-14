@@ -12,24 +12,33 @@ import type { MutableRefObject } from 'react';
 import { useEffect, useMemo, useRef } from 'react';
 
 import { apiClient } from '@foundation/apis';
-import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
+import { CELL_CONTROL_TYPE, CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import dayjs from '@foundation/dayjs';
 import isoWeek from '@foundation/isoWeek';
 import type { ComboResponse, FlexGridColumnConfig } from '@foundation/models';
-import { CustomMergeManager, EditTracker, isNonEditableDateColumn } from '@foundation/utils';
+import { CustomMergeManager, EditTracker, keepRowVisibleUnderFilter } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 
 import {
   AUTH_MEASURES,
+  CELL_MODAL_KEY,
   GRID_EDIT_COMBO,
   MENU_ID,
   PRICE_MEASURES,
 } from '../forecast-price.constants';
 import type { ForecastPriceRow, SpreadTitleRow } from '../forecast-price.types';
 import { useForecastPriceStore } from '../useForecastPriceStore';
+import { isAsFromSiteEditable } from '../utils/forecast-price.asFromSite';
 import { q } from '../utils/forecast-price.combo';
-import { thisWeekMondayYmd } from '../utils/forecast-price.editLock';
+import { isPastPeriodLocked, thisWeekMondayYmd } from '../utils/forecast-price.editLock';
+import {
+  AS_MEASURE,
+  isAsMeasureAllowed,
+  isMeasureEditableByAuth,
+  isWsFcstTypeEditCombo,
+  isWsOnlyFcstType,
+} from '../utils/forecast-price.wsAuth';
 
 dayjs.extend(isoWeek);
 
@@ -98,10 +107,17 @@ import {
   divideByDate,
   divideByMonth,
   divideByWeek,
+  isInsertRow,
   isNonEditableCell,
   toNumber,
   type CalendarInfo,
 } from './ForecastPriceGridUtils';
+
+/** MEASURE 컬럼 dataMap — 행별 후보 필터 설치 여부 표식. */
+type MeasureCandidateDataMap = DataMap & { rowScopedCandidates?: boolean };
+
+/** FCST Type 컬럼 dataMap — W/S 2종 제거 필터 설치 여부 표식. */
+type FcstTypeCandidateDataMap = DataMap & { wsFilteredCandidates?: boolean };
 
 interface ForecastPriceGridProps {
   gridRef: MutableRefObject<FlexGrid<ForecastPriceRow> | undefined>;
@@ -110,6 +126,11 @@ interface ForecastPriceGridProps {
   spreadTitle: SpreadTitleRow[];
   editTrackerRef: MutableRefObject<EditTracker | null>;
   // #10 — Insert 행 키 중복(MSG00260) 발생 시 페이지 alert 호출.
+  /**
+   * [No.65 2026-08-14] FPModal 셀 더블클릭 → 페이지가 검색 모달을 연다 (DMF0003 `onPopupCellDblClick` 1:1).
+   * 대상 = `CELL_MODAL_KEY` 에 등록된 binding × 메타 `FPModal`+`IM` × 신규행(CRUD_TYPE='I').
+   */
+  onPopupCellDblClick?: (modalKey: string, row: WijmoRowItem) => void;
 }
 
 interface DynColMeta {
@@ -132,6 +153,49 @@ const kindOf = (b: string): 'M' | 'W' | 'D' | null =>
 //   상위(rank<활성) = SUM 합계 컬럼 → chkSum(sumYn) 으로 표시 토글 (AS-IS chkSum / mkt-fcst 패턴 #92).
 const DYN_RANK = { M: 0, W: 1, D: 2 } as const;
 
+// 실적/계획 경계 초록 세로선 (사용자 요구 2026-07-29 — AS-IS 캡처 "실적구간 표기 초록선").
+//   AS-IS 는 실적구간(과거·회색)이 끝나고 계획구간이 시작되는 지점에 세로선 하나를 긋는다.
+//   선은 "당기 컬럼의 왼쪽 경계"에 그려지며 화면 전체에서 단 하나만 존재한다.
+//
+//   어느 컬럼이 그 당기 컬럼인가 — 근거 2건이 서로를 보완한다:
+//     ① 요청서: "(Monthly Bucket 조회 후 컬럼을 더블클릭하여 Weekly Bucket 으로 펼쳤을때)
+//        SUM 컬럼에는 표기 안되도록" → M_ SUM 이 보여도 W_ 당주가 펼쳐져 있으면 W_ 가 가져간다.
+//     ② AS-IS 캡처: 당주(W31)를 일자로 펼친 상태에서도 선은 여전히 W31 SUM 컬럼 왼쪽에 있다
+//        → 일자(D_)까지 내려가지는 않는다.
+//   합치면 규칙은 "M_ 보다 W_ 우선, 단 D_ 로는 안 내려감".
+//   주의: sales-plan(DMF0021) shouldHighlightCurrentPeriod 와 여기서 갈린다 — sales-plan 은 보이는
+//     최하위 버킷까지 내려가 D_ 당일로 강조를 옮긴다. DMF0082 는 위 ② 캡처를 따른다.
+//   D_ 는 폴백 전용(-1) — Daily 조회 + chkSum OFF 처럼 M_/W_ 당기 컬럼이 하나도 안 보일 때만 쓴다.
+const BOUNDARY_PREFERENCE = { M: 0, W: 1, D: -1 } as const;
+
+/**
+ * 초록 경계선을 그릴 컬럼 binding 하나를 고른다. 대상이 없으면 null.
+ * @param isVisible 드릴다운·chkSum 반영 — 호출 시점의 컬럼 가시성을 조회한다.
+ */
+const findActualBoundaryBinding = (
+  dynBindings: readonly string[],
+  currentPeriodBindings: ReadonlySet<string>,
+  isVisible: (binding: string) => boolean
+): string | null => {
+  let best: string | null = null;
+  let bestRank = -Infinity;
+  let dayFallback: string | null = null;
+
+  for (const binding of dynBindings) {
+    if (!currentPeriodBindings.has(binding)) continue;
+    const kind = kindOf(binding);
+    if (!kind || !isVisible(binding)) continue;
+
+    if (kind === 'D') {
+      dayFallback ??= binding;
+    } else if (BOUNDARY_PREFERENCE[kind] > bestRank) {
+      bestRank = BOUNDARY_PREFERENCE[kind];
+      best = binding;
+    }
+  }
+  return best ?? dayFallback;
+};
+
 // ⭐ DMF0082 메인 그리드 — AS-IS spdMain(FCST 행 + PRICE 행 병렬 단일 시트) 1:1.
 //   동적 시간축 = DMF0082_GET_SPREAD_TITLE (월>주>일 3단, mkt-fcst 패턴 이식) /
 //   편집 = 권한 4분기(measureAuth, GET drop3) × 행 EDIT_FLAG × bucket × 기준주차 이전 잠금 /
@@ -142,6 +206,7 @@ export const ForecastPriceGrid = ({
   data,
   spreadTitle,
   editTrackerRef,
+  onPopupCellDblClick,
 }: ForecastPriceGridProps) => {
   const monthMap = useRef<Map<string, Set<string>>>(new Map());
   const weekMap = useRef<Map<string, Set<string>>>(new Map());
@@ -214,33 +279,89 @@ export const ForecastPriceGrid = ({
   //   행의 SCM_SITE_ID 가 AS(비축)향 사이트면 Incoterms 후보를 AS 전용 목록으로 교체한다.
   //   AS-IS 는 `IF EXISTS(AS_SITE_PLANT …) … ELSE INCOTERMS` 로 분기하므로, TO-BE 도 AS 사이트 판정을
   //   먼저 하고(AS_FROM_SITE) 매칭될 때만 스왑한다(0행이면 생략 → IncotermsEdit 유지). 정본 = mkt-fcst:320-342.
-  const [asSiteRows, asIncotermsRows] = useTabComboQueries({
+  const [asSiteRows, asIncotermsRows, wsFcstTypeRows, fcstTypeEditRows] = useTabComboQueries({
     filters: [
       { comboId: 'AS_FROM_SITE', param1: q(searchParams.divisionId) },
       { comboId: 'AsIncotermsEdit', divisionId: q(searchParams.divisionId) },
+      // [No.63-② 2026-08-11] AS From Site 편집 활성 판정용 FCST Type 기준 목록.
+      //   AS-IS `GetLookupValues("FCST_TYPE", "DM Planner (W/S)")` → `UP_FX_GetCommonDataList_DM` L72~79 =
+      //   LOOKUP_TYPE 'SALES_TYPE_CODE2'(WS/WSF/AS/ASF 4종). TO-BE 등재본 = `FcstTypeWs`.
+      //   ⚠ 현재 사용자 그룹과 무관한 **고정 참조 목록**이다(FcstTypeByUserGroupDMF0082 와 용도가 다름).
+      { comboId: 'FcstTypeWs' },
+      // ⭐ [41번-② 2026-08-12] FCST Type **편집 후보** — division × W/S 그룹 분기를 서버가 판정한다.
+      //   표시용 셀 콤보(FcstTypeByUserGroupDMF0082)는 divisionId 를 못 받으므로 그대로 두고,
+      //   division 을 명시 전달하는 편집 전용 등록본을 따로 조회한다
+      //   (AsIncotermsEdit / FcstPriceEditMeasure 와 같은 "표시용 ↔ 편집용 이원화" 규약).
+      { comboId: 'FcstTypeEditDMF0082', divisionId: q(searchParams.divisionId) },
     ],
     enabled: !!searchParams.divisionId,
   });
   const asSiteNamesRef = useRef<Set<string>>(new Set());
+  // AS-IS 는 `dtAsSalesSite.Select("Name = '<SCM_SITE_ID>'")` 로 **NAME 만** 대조한다(.cs L3465·L3565).
+  //   실데이터도 원장 SCM_SITE_ID = 'WA00-81-AS' 형태(= 콤보 NAME)이고 CODE('...-W')로는 쓰이지 않는다.
+  //   위 `asSiteNamesRef`(NAME∪CODE)는 기존 Incoterms 스왑용이라 그대로 두고, 향 판정만 NAME 전용을 쓴다.
+  const asSiteNameOnlyRef = useRef<Set<string>>(new Set());
+  // [41번-②] 서버가 division × W/S 그룹으로 걸러 준 FCST Type 편집 후보 표시명.
+  //   0건이면(등록본 미배포 등) FE 규칙으로 degrade 한다 — 드롭다운을 비우지 않는다.
+  const fcstTypeEditNamesRef = useRef<string[]>([]);
   const asIncotermsMapRef = useRef<DataMap | null>(null);
+  const asFromSiteMapRef = useRef<DataMap | null>(null);
+  const wsFcstTypeSetRef = useRef<Set<string>>(new Set());
   useEffect(() => {
+    const siteRows = (asSiteRows ?? []) as unknown as Record<string, unknown>[];
     asSiteNamesRef.current = new Set(
-      (asSiteRows ?? [])
-        .flatMap(r => [String(r.NAME ?? '').trim(), String(r.CODE ?? '').trim()])
+      siteRows
+        .flatMap(r => [comboCellStr(r.NAME).trim(), comboCellStr(r.CODE).trim()])
         .filter(Boolean)
     );
+    asSiteNameOnlyRef.current = new Set(
+      siteRows.map(r => comboCellStr(r.NAME).trim()).filter(Boolean)
+    );
+    // AS-IS L2615~2616 `SetCellTypeCombo(AS_FROM_SITE, dtAsFromSite)` — 검출용과 **같은 목록**이 후보다.
+    asFromSiteMapRef.current = siteRows.length > 0 ? new DataMap(siteRows, 'CODE', 'NAME') : null;
     const rows = (asIncotermsRows ?? []) as unknown as Record<string, unknown>[];
     asIncotermsMapRef.current = rows.length > 0 ? new DataMap(rows, 'CODE', 'NAME') : null;
-  }, [asSiteRows, asIncotermsRows]);
+    wsFcstTypeSetRef.current = new Set(
+      ((wsFcstTypeRows ?? []) as unknown as Record<string, unknown>[])
+        .map(r => comboCellStr(r.CODE).trim())
+        .filter(Boolean)
+    );
+    fcstTypeEditNamesRef.current = (
+      (fcstTypeEditRows ?? []) as unknown as Record<string, unknown>[]
+    )
+      .map(r => comboCellStr(r.NAME) || comboCellStr(r.CODE))
+      .filter(Boolean);
+  }, [asSiteRows, asIncotermsRows, wsFcstTypeRows, fcstTypeEditRows]);
+
+  // ⭐ [No.63-① ② 2026-08-11] AS From Site 편집 활성 판정 — 계약·근거는 `forecast-price.asFromSite.ts`
+  //   (AS-IS `DMF0003_MktFcst.cs` [E20260211-001189] 1:1, 단위테스트 10건 동반).
+  const asFromSiteEditable = (dataItem: WijmoRowItem): boolean =>
+    isAsFromSiteEditable(
+      {
+        DIVISION_ID: dataItem['DIVISION_ID'],
+        SCM_SITE_ID: dataItem['SCM_SITE_ID'],
+        FCST_TYPE: dataItem['FCST_TYPE'],
+      },
+      {
+        asSiteNames: asSiteNameOnlyRef.current,
+        wsFcstTypes: wsFcstTypeSetRef.current,
+        fallbackDivisionId: searchParams.divisionId,
+      }
+    );
 
   // 스왑 전 원본(표시용) dataMap 백업 — binding 별 1회만 저장 후 편집 종료 시 원복.
   const origDataMapRef = useRef<Record<string, DataMap | null>>({});
+
+  // 'DM Planner (W/S)' 소속 여부 (CMBO 'MktFcstWsPlannerYn' → store) —
+  //   AS_In_Req measure 개방 / FCST Type W/S 후보 자격의 단일 원천. 핸들러는 ref 로 최신값을 본다.
+  const wsPlannerYn = useForecastPriceStore(state => state.wsPlannerYn);
+  const wsPlannerYnRef = useRef(wsPlannerYn);
+  wsPlannerYnRef.current = wsPlannerYn;
 
   // ⭐ #7 Insert 행 편집가능 Measure 콤보 캐스케이드 (hook #59 §5-G / AS-IS L5839) —
   //   Site 변경 시 FcstPriceEditMeasure(div/site/bucket) 조회해 행별 후보 캐시 → MEASURE 편집 진입 시
   //   컬럼 dataMap 스왑(편집 후보=편집가능 measure), 편집 종료 시 원 dataMap(전체 표시용) 원복.
   const editMeasuresRef = useRef<WeakMap<object, ComboResponse[]>>(new WeakMap());
-  const measureOrigDataMapRef = useRef<DataMap | null>(null);
   // D9 — 행별 Cell Prod Site 후보 캐시 (ITEM_ID 변경 시 재조회).
   const cellProdSitesRef = useRef<WeakMap<object, ComboResponse[]>>(new WeakMap());
   // 행별 Sales Site 후보 캐시 (END_CUSTOMER 변경 시 재조회).
@@ -275,9 +396,6 @@ export const ForecastPriceGrid = ({
   // #7 — Insert 행 Site 변경 시 편집가능 Measure 후보 재조회 → 행별 캐시 (MEASURE 편집 진입 시 사용).
   //   [No.63 2026-08-11] 후보 3분기(site 향)는 콤보 SQL 이 AS_SITE_PLANT 룩업으로 판정(서버 권위):
   //   미입력=MKT+AS_In_Req+LOC / 고객향=MKT+LOC / 비축향=AS_In_Req+LOC (통합테스트 1st No.63 매트릭스 1:1).
-  const authGroup = useForecastPriceStore(state => state.authGroup);
-  const authGroupRef = useRef(authGroup);
-  authGroupRef.current = authGroup;
   const applyEditMeasures = (dataItem: WijmoRowItem) => {
     const div = String(dataItem['DIVISION_ID'] ?? '');
     const site = String(dataItem['SCM_SITE_ID'] ?? '');
@@ -290,15 +408,16 @@ export const ForecastPriceGrid = ({
         bucketType: q(bucketTypeParamRef.current),
       })
       .then(rows => {
-        // [No.63 그룹 축] AS-IS DMF0003_MktFcst.cs E20260402-001736 1:1 — 81계열/82 에서
-        //   DM Planner (W/S) 가 아니면 AS_In_Req 를 후보에서 제거한다.
-        let out = rows ?? [];
-        if (
-          (div.startsWith('81') || div === '82') &&
-          authGroupRef.current !== 'DM Planner (W/S)'
-        ) {
-          out = out.filter(r => String(r.CODE) !== 'AS_In_Req');
-        }
+        // [No.63 그룹 축 / 41번] AS_In_Req 는 81 계열·82 + DM Planner(W/S) 에서만 후보로 남긴다.
+        //   ⭐ 판정은 셀 개방(canEditCell)과 **같은 함수**를 쓴다 — 후보로 고를 수 있는데 셀이 안 열리는
+        //   (또는 그 반대) 어긋남을 원천 차단. 구 코드는 authGroup(ADMIN 우선 단일 그룹) 문자열
+        //   비교라 W/S 겸직자가 ADMIN 으로 해석되면 후보에서 빠졌다.
+        const out = isAsMeasureAllowed({
+          wsPlannerYn: wsPlannerYnRef.current,
+          divisionId: div,
+        })
+          ? (rows ?? [])
+          : (rows ?? []).filter(r => String(r.CODE) !== AS_MEASURE);
         return editMeasuresRef.current.set(dataItem, out);
       })
       .catch((err: unknown) => {
@@ -357,6 +476,28 @@ export const ForecastPriceGrid = ({
     }
   }, [data]);
 
+  // ⭐ VMI_In_Req 개방 판정 입력 (현업 검수 41번 — "Sales Site 가 VMI = Y 인 경우만").
+  //   VMI_YN 은 사이트 마스터 조인 결과라 **조회행에만** 실린다. 신규행은 같은 Sales Site 를 쓰는
+  //   조회행에서 값을 승계한다(신규행 자체에는 조인 결과가 없다).
+  //   vmiProvided = 이번 조회 커서에 VMI_YN 컬럼이 실제로 있었는가 — 관리자가 컬럼 메타에서 내리면
+  //   값이 통째로 안 오므로, 그때 잠그면 40·82 VMI 행이 전부 막혀 퇴행한다(판정 보류).
+  const vmiBySiteRef = useRef<Map<string, string>>(new Map());
+  const vmiProvidedRef = useRef(false);
+  useEffect(() => {
+    const bySite = new Map<string, string>();
+    let provided = false;
+    for (const row of data ?? []) {
+      const item = row as unknown as WijmoRowItem;
+      if (!('VMI_YN' in item)) continue;
+      provided = true;
+      const site = String(item['SCM_SITE_ID'] ?? '').trim();
+      const yn = String(item['VMI_YN'] ?? '').trim();
+      if (site && yn && !bySite.has(site)) bySite.set(site, yn);
+    }
+    vmiBySiteRef.current = bySite;
+    vmiProvidedRef.current = provided;
+  }, [data]);
+
   // #12 당주(현재 기간) binding 집합 — 활성 버킷의 당월(M_)/당주(W_)/금주월요일(D_) 녹색 보더.
   const currentPeriodRef = useRef<Set<string>>(new Set());
   currentPeriodRef.current = useMemo(() => {
@@ -364,6 +505,11 @@ export const ForecastPriceGrid = ({
     const wk = String(dayjs().isoWeek()).padStart(2, '0');
     return new Set([`M_${ym}`, `W_${ym}${wk}`, `D_${thisWeekMondayYmd()}`]);
   }, []);
+
+  // 실적/계획 경계 초록 세로선을 그릴 컬럼 (사용자 요구 2026-07-29 — AS-IS "실적구간 표기 초록선").
+  //   화면 전체에서 단 하나. 드릴다운·chkSum 으로 컬럼 가시성이 바뀔 때마다 재산출되며(아래 가시성
+  //   useEffect), formatItem 은 이 값과 binding 을 비교만 한다 — 셀마다 후보 탐색을 돌리지 않는다.
+  const actualBoundaryRef = useRef<string | null>(null);
 
   // ── 동적 컬럼 메타 (SPREAD_TITLE 우선 / 0건 시 data row 키 union fallback — mkt-fcst 패턴) ──
   const dynColMetas = useMemo<DynColMeta[]>(() => {
@@ -483,7 +629,16 @@ export const ForecastPriceGrid = ({
         _display: true,
       });
     });
-    const subOrder = (k: string): number => (k === 'SUM' ? -1 : Number(k.replace(/\D/g, '') || 0));
+    // 주차 정렬 — 월 합계('SUM') 최우선 → 이월 주차('+Wnn') → 주차 번호 오름차순.
+    //   SP 가 월/연 경계에서 분할한 주차를 'Wnn+'(앞부분) / '+Wnn'(이어지는 뒷부분) 로 표기한다.
+    //   숫자만 뽑아 정렬하면 1월 그룹의 '+W53'(전년 53주차 잔여 = 1/1~1/3)이 53 으로 읽혀
+    //   'W01 W02 W03 W04 +W53' 처럼 맨 뒤로 밀린다 (2026-08-03 리포트). '+' 접두 = 이월 주차이므로
+    //   번호와 무관하게 그 월 그룹의 첫 주차로 보낸다.
+    const subOrder = (k: string): number => {
+      if (k === 'SUM') return Number.NEGATIVE_INFINITY;
+      const n = Number(k.replace(/\D/g, '') || 0);
+      return k.trim().startsWith('+') ? n - 1000 : n;
+    };
     const leafKind = (b: string): 'M' | 'W' | 'D' => kindOf(b) ?? 'D';
     return [...largeMap.values()]
       .sort((a, b) => a.order - b.order)
@@ -525,6 +680,28 @@ export const ForecastPriceGrid = ({
     () => new Map(staticColumns.map(c => [c.colNm, String(c.inputTpCd ?? '')])),
     [staticColumns]
   );
+
+  // ⭐ [No.65 2026-08-14] FPModal 셀 → 모달 키 맵. 메타(FPModal + IM)와 화면 등록(CELL_MODAL_KEY)이
+  //   **둘 다** 성립할 때만 담는다 — 메타만 보고 열면 모달이 없는 컬럼에서 빈 팝업이 뜨고,
+  //   상수만 보고 열면 관리자가 컬럼을 내린 뒤에도 계속 열린다(hook #130 메타 실소비 규약).
+  const modalCellRef = useRef<Map<string, string>>(new Map());
+  modalCellRef.current = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const c of staticColumns) {
+      const key = CELL_MODAL_KEY[c.colNm];
+      if (
+        key &&
+        c.cellCtrlObjTpCd === CELL_CONTROL_TYPE.MODAL &&
+        c.inputTpCd === CELL_INPUT_EDIT_TYPE.MANDATORY_INSERT_ONLY
+      ) {
+        map.set(c.colNm, key);
+      }
+    }
+    return map;
+  }, [staticColumns]);
+
+  const onPopupCellDblClickRef = useRef(onPopupCellDblClick);
+  onPopupCellDblClickRef.current = onPopupCellDblClick;
 
   // ⭐ 컬럼 개인화 색 (ColumnLayoutModal 저장값) — binding → {cell, text}.
   //   공용 columnMapping 은 colWth/visible 만 넘기고 색은 안 넘기므로 formatItem 이 직접 적용한다
@@ -569,6 +746,60 @@ export const ForecastPriceGrid = ({
     bucketRef.current = searchParams.bucketType;
   }, [searchParams.bucketType]);
 
+  // ⭐ 필터 유지 + 신규행 표시 (2026-08-12 사용자 요구 — "필터된 상태에서도 행추가가 가능해야 한다").
+  //   Wijmo 제약 2가지를 각각 처리한다.
+  //   ① FlexGridFilter 는 생성자에서 `itemsSourceChanged` 에 자기 clear() 를 건다. 이 화면은 Insert 마다
+  //      gridRows 를 새 배열로 만들어 itemsSource 가 갈리므로, 사용자가 건 필터가 매번 사라진다.
+  //      → 사용자가 필터를 적용할 때 filterDefinition(JSON)을 떠 두고, itemsSource 교체 후 되살린다.
+  //   ② 값이 빈 신규행은 필터 조건에 걸려 CollectionView 에서 빠진다.
+  //      → 공용 keepRowVisibleUnderFilter 로 wijmo 예외 집합(excludedRowsSet)에 등록한다.
+  //   순서 의무: apply() 가 예외 집합을 비우므로 **필터 복원 → 예외 등록 → refresh** 로 진행한다.
+  //   주의: 이 작업은 React effect(렌더 이후)에서만 한다. filterApplied 핸들러 안에서 refresh 를 부르면
+  //     wijmo apply() 도중 재진입이 되어 내부 인덱스가 어긋난다.
+  const filterDefinitionRef = useRef('');
+  useEffect(() => {
+    const gridFilter = gridFilterRef.current;
+    if (!gridFilter) return;
+    const rememberFilter = () => {
+      filterDefinitionRef.current = gridFilter.filterDefinition;
+    };
+    gridFilter.filterApplied.addHandler(rememberFilter);
+    return () => gridFilter.filterApplied.removeHandler(rememberFilter);
+  }, [gridFilterRef, dynamicColumns]);
+
+  useEffect(() => {
+    const g = gridRef.current;
+    if (!g) return;
+
+    const insertRows = (data ?? []).filter(
+      row => (row as unknown as WijmoRowItem)['CRUD_TYPE'] === 'I'
+    );
+    // ⭐ 신규행이 없다 = **조회 결과 교체**(Search). 이때는 필터를 복원하지 않는다 (2026-08-13 정정).
+    //   구 구현은 data 가 바뀔 때마다 무조건 복원해서 두 가지 문제가 있었다:
+    //     ① 새로 조회했는데 직전 필터가 되살아난다 (사용자 기대와 반대).
+    //     ② 조회로 컬럼 구성이 바뀌면 옛 filterDefinition 이 없는 컬럼을 가리켜 wijmo 내부
+    //        인덱스가 음수가 될 수 있다 → `Positive number expected`.
+    //   기억해 둔 정의도 함께 버린다 — 다음 조회에 유령 필터가 붙지 않게.
+    if (insertRows.length === 0) {
+      filterDefinitionRef.current = '';
+      return;
+    }
+
+    const gridFilter = gridFilterRef.current;
+    const savedFilter = filterDefinitionRef.current;
+    if (gridFilter && savedFilter && gridFilter.filterDefinition !== savedFilter) {
+      try {
+        gridFilter.filterDefinition = savedFilter; // setter 가 apply 까지 수행
+      } catch {
+        // 컬럼 구성이 바뀌어 정의를 못 붙이는 경우 — 필터 없이 진행 (화면 차단 금지).
+        filterDefinitionRef.current = '';
+      }
+    }
+
+    insertRows.forEach(row => keepRowVisibleUnderFilter(g, row));
+    g.collectionView?.refresh();
+  }, [gridRef, gridFilterRef, data]);
+
   // ── grid 핸들러 등록 (useEffect + gridRef, deps=[staticColumns, dynamicColumns], cleanup 의무) ──
   useEffect(() => {
     const g = gridRef.current;
@@ -582,13 +813,28 @@ export const ForecastPriceGrid = ({
       });
     }
 
-    // 편집 가능 판정 — AS-IS 권한 4분기(bEDIT_AUTH_*, GET drop3) + GridUtils 공통 판정.
+    // 편집 가능 판정 — measure 권한(41번 매트릭스) + GridUtils 시간축 판정.
     const canEditCell = (binding: string, dataItem: WijmoRowItem): boolean => {
       const measure = dataItem['MEASURE'];
       if (typeof measure !== 'string') return false;
-      // 권한 대상 measure(4종) 외 = 항상 read-only / 대상인데 그룹권한 N = 차단.
-      if (!(AUTH_MEASURES as readonly string[]).includes(measure)) return false;
-      if (measureAuthRef.current[measure] === false) return false;
+      // ⭐ measure 권한은 wsAuth 단일 판정 (2026-08-12 — 현업 검수 41번 배선).
+      //   구 코드는 AUTH_MEASURES 화이트리스트 + measureAuth 뿐이라 AS_In_Req 가 항상 잠기고,
+      //   VMI_In_Req 는 "권한과 무관" 요건과 달리 그룹권한을 탔다.
+      const rowSite = String(dataItem['SCM_SITE_ID'] ?? '').trim();
+      if (
+        !isMeasureEditableByAuth({
+          measure,
+          divisionId: String(dataItem['DIVISION_ID'] ?? '') || searchParams.divisionId,
+          wsPlannerYn: wsPlannerYnRef.current,
+          measureAuth: measureAuthRef.current,
+          vmiYn: dataItem['VMI_YN'] ?? vmiBySiteRef.current.get(rowSite),
+          vmiProvided: vmiProvidedRef.current,
+          // 엄격 'I' 판정 — 'M'(값 편집 마킹) 행을 신규행으로 세면 VMI_YN 미상일 때
+          //   isVmiMeasureAllowed 가 "신규행이니 통과"로 잘못 열어준다 (isInsertRow 주석).
+          isInsertRow: isInsertRow(dataItem),
+        })
+      )
+        return false;
       const bucketName =
         bucketRef.current === 'M' ? 'Monthly' : bucketRef.current === 'D' ? 'Daily' : 'Weekly';
       return !isNonEditableCell(
@@ -599,6 +845,100 @@ export const ForecastPriceGrid = ({
         bucketName,
         m3CutoffRef.current
       );
+    };
+
+    // MEASURE 컬럼 dataMap 에 행별 후보 필터를 1회 설치한다 (편집 진입 시 lazy — dataMap 은
+    //   메타/콤보 도착 후에야 채워지고 layout 재적용으로 새 인스턴스가 될 수 있다).
+    //   원본 getDisplayValues 는 보관해 두고, 행별 후보가 없으면 전체 목록으로 위임한다.
+    const installMeasureCandidateFilter = (dataMap?: DataMap) => {
+      if (!dataMap) return;
+      const map = dataMap as MeasureCandidateDataMap;
+      if (map.rowScopedCandidates) return;
+      map.rowScopedCandidates = true;
+      const allDisplayValues = map.getDisplayValues.bind(map) as (item?: unknown) => string[];
+      map.getDisplayValues = (item?: unknown): string[] => {
+        const candidates = item ? editMeasuresRef.current.get(item as object) : undefined;
+        if (candidates && candidates.length > 0) {
+          // 후보 코드를 전체 map 의 표시명으로 환산 (map 에 없는 코드만 콤보 NAME 으로 폴백).
+          return candidates.map(
+            candidate =>
+              map.getDisplayValue(String(candidate.CODE)) ||
+              String(candidate.NAME ?? candidate.CODE ?? '')
+          );
+        }
+        // ⭐ 서버 후보 0건 폴백 (2026-08-13 정정) — 룩업 `DM_UI_EDITABLE_MEASURE` 에 해당 division
+        //   행이 없으면 콤보가 0건을 준다(division 81 실측). 구 구현은 이때 **표시용 전체 목록**을
+        //   그대로 열어 `Balance`·`AS Inv.`·EDI 종속 메저(Immidiate/Planning_Forecast/…)처럼
+        //   신규행에 넣을 수 없는 measure 까지 고를 수 있었다.
+        //   ⇒ 화면이 아는 편집대상(AUTH_MEASURES)만 남긴다. 드롭다운을 비우지는 않아
+        //     룩업 미등록 환경에서도 최소 입력은 유지된다(기존 "비우지 않기" 규약 계승).
+        //   ⚠️ 판정은 표시명 → **코드**(getKeyValue) 방향으로 한다. 코드 → 표시명(getDisplayValue)
+        //     방향은 map 에 없는 코드에서 무엇을 돌려주는지가 wijmo 구현에 달려 있어(키 자체를 그대로
+        //     반환하기도 한다) 매칭이 조용히 실패한다 — 실제로 AS_In_Req 가 그렇게 누락됐다
+        //     (2026-08-13 division 81 실측). getKeyValue 는 wijmo 가 선택값을 코드로 되돌릴 때
+        //     쓰는 바로 그 함수라, 이 방향이면 "고를 수 있는 값 = 저장 가능한 값" 이 보장된다.
+        const all = allDisplayValues(item);
+        const narrowed = all.filter(name =>
+          (AUTH_MEASURES as readonly string[]).includes(String(map.getKeyValue(name) ?? '').trim())
+        );
+        return narrowed.length > 0 ? narrowed : all;
+      };
+    };
+
+    // ⭐ [41번-② 2026-08-12] FCST Type 편집 후보 — **division × W/S 그룹** 분기.
+    //   표시용 셀 콤보 'FcstTypeByUserGroupDMF0082' 는 **사용자 그룹만** 보고 division 을 보지 않아,
+    //   W/S 권한자가 Div 40 을 조회하면 SALES_TYPE_CODE2(W/S 2종 포함)가 그대로 노출됐다.
+    //   요구 원문: "SALES_TYPE_CODE2 … 는 81, 81_Div 의 DM Planner(W/S) 권한일 경우에 사용" /
+    //             "40 Div 의 경우 W/S(Chargable), W/S(Free) 는 안 보여야 함".
+    //   ⇒ 판정 권위는 **서버**(CMBO 'FcstTypeEditDMF0082', @divisionId 전달)로 옮겼다.
+    //     여기서는 그 결과를 표시 목록과 교집합해 드롭다운만 좁힌다.
+    //   ⚠️ dataMap 을 **교체하지 않고** getDisplayValues 만 덮는다 — 교체하면 기존 행에 저장된
+    //     W/S 값의 CODE→NAME 매핑이 깨진다(MEASURE 와 동일 규약).
+    const installFcstTypeCandidateFilter = (dataMap?: DataMap) => {
+      if (!dataMap) return;
+      const map = dataMap as FcstTypeCandidateDataMap;
+      if (map.wsFilteredCandidates) return;
+      map.wsFilteredCandidates = true;
+      const allDisplayValues = map.getDisplayValues.bind(map) as (item?: unknown) => string[];
+      // 서버 후보가 없거나 표시 목록과 라벨이 어긋날 때의 degrade — FE 규칙으로 W/S 2종만 제거.
+      //   (선택값을 코드로 되돌리는 건 표시 map 이므로, 표시 목록 밖 이름을 넣으면 매핑이 깨진다.)
+      const fallback = (values: string[]): string[] =>
+        isWsFcstTypeEditCombo({
+          wsPlannerYn: wsPlannerYnRef.current,
+          divisionId: searchParams.divisionId,
+        })
+          ? values
+          : values.filter(name => !isWsOnlyFcstType('', name));
+
+      map.getDisplayValues = (item?: unknown): string[] => {
+        const values = allDisplayValues(item);
+        const serverNames = fcstTypeEditNamesRef.current;
+        if (serverNames.length === 0) return fallback(values);
+        const allow = new Set(serverNames);
+        const narrowed = values.filter(name => allow.has(name));
+        return narrowed.length > 0 ? narrowed : fallback(values);
+      };
+    };
+
+    // ⭐ 정적 컬럼 편집 가능 판정 — 편집 차단(beginningEdit/pastingCell)과 셀 색칠(formatItem)이
+    //   **반드시 같은 함수**를 봐야 한다. 2026-08-11 No.35 로 편집 조건만 INPUT_TP_CD 로 좁히고
+    //   색칠은 isInsert 그대로 둬서, 조회전용(INPUT_TP_CD='S') 인 Nick Name/Team 등이 신규행에서
+    //   노랑(편집가능)으로 보이는데 편집은 막히는 어긋남이 생겼다 (2026-08-12 사용자 리포트).
+    const canEditStaticCell = (binding: string, dataItem: WijmoRowItem): boolean => {
+      // Insert 행(CRUD_TYPE==='I')만 편집 (AS-IS: 기존 행 키 컬럼 잠금).
+      //   주의: 'M'(값 편집으로 EditTracker 가 찍는 수정 마킹)을 Insert 로 세면 금액 한 번 고친 뒤
+      //     Model/Nick Name 등 키 컬럼이 통째로 열린다 — isInsertRow 주석(2026-07-31) 참고.
+      if (!isInsertRow(dataItem)) return false;
+      // [No.35 2026-08-11] 신규행 입력 컬럼 = UI Category Setup `INPUT_TP_CD`(IM/IO/M/O) 한정 —
+      //   통합테스트 1st "As-Is 기준 입력 가능한 컬럼은 8개"(End Customer/Sales Site/Model/Incoterms/
+      //   FCST Type/Customs Handbook[DOM_EXP]/Cell Prod Site/Currency + Measure 콤보).
+      const inputTp = inputTpRef.current.get(binding);
+      if (!(inputTp === 'IM' || inputTp === 'IO' || inputTp === 'M' || inputTp === 'O'))
+        return false;
+      // [No.63-① ② 2026-08-11] AS From Site — 메타는 IO 로 열되(전 division 공통 1값), 실제 활성은
+      //   division × Sales Site 향 × FCST Type 으로 좁힌다. 40 은 전부 차단되어 No.35(입력 8컬럼) 유지.
+      if (binding === 'AS_FROM_SITE') return asFromSiteEditable(dataItem);
+      return true;
     };
 
     const cellEditableHandler = (
@@ -612,30 +952,35 @@ export const ForecastPriceGrid = ({
         return;
       }
       if (staticBindingSet.has(binding)) {
-        // 정적 컬럼: Insert 행(CRUD_TYPE 존재)만 편집 (AS-IS: 기존 행 키 컬럼 잠금)
-        const isInsert = dataItem['CRUD_TYPE'] !== undefined && dataItem['CRUD_TYPE'] !== null;
-        if (!isInsert) {
+        // 편집 가부는 canEditStaticCell 단일 판정 (셀 색칠도 같은 함수를 본다).
+        if (!canEditStaticCell(binding, dataItem)) {
           e.cancel = true;
           return;
         }
-        // [No.35 2026-08-11] 신규행 입력 컬럼 = UI Category Setup `INPUT_TP_CD`(IM/IO/M/O) 한정 —
-        //   통합테스트 1st "As-Is 기준 입력 가능한 컬럼은 8개"(End Customer/Sales Site/Model/Incoterms/
-        //   FCST Type/Customs Handbook[DOM_EXP]/Cell Prod Site/Currency + Measure 콤보). 종전에는
-        //   Insert 행이면 **전 정적 컬럼**이 열려 있었다(hook #130 A 메타 실소비 — 하드코딩 아닌 메타 판정).
-        const inputTp = inputTpRef.current.get(binding);
-        if (!(inputTp === 'IM' || inputTp === 'IO' || inputTp === 'M' || inputTp === 'O')) {
-          e.cancel = true;
-          return;
-        }
-        // #7 — MEASURE 편집 진입: 행별 편집가능 후보로 컬럼 dataMap 스왑 (원본은 1회만 백업 → 편집 종료 시 원복).
-        if (binding === 'MEASURE') {
-          const candidates = editMeasuresRef.current.get(dataItem);
-          const col = sender.columns[e.col];
-          if (candidates && candidates.length > 0 && col) {
-            if (!measureOrigDataMapRef.current)
-              measureOrigDataMapRef.current = col.dataMap as DataMap;
-            col.dataMap = new DataMap(candidates as unknown[], 'CODE', 'NAME');
+        // AS From Site — 편집 허용 시 후보 목록(AS_FROM_SITE 콤보)으로 dataMap 스왑.
+        if (binding === 'AS_FROM_SITE') {
+          const asCol = sender.columns[e.col];
+          if (asCol && asFromSiteMapRef.current) {
+            if (!(binding in origDataMapRef.current))
+              origDataMapRef.current[binding] = (asCol.dataMap as DataMap) ?? null;
+            asCol.dataMap = asFromSiteMapRef.current;
           }
+          return;
+        }
+        // ⭐ #7 — MEASURE 편집 후보 제한. dataMap 을 **교체하지 않고** getDisplayValues 만 덮는다.
+        //   구 구현은 행별 후보(FcstPriceEditMeasure 3~4종)로 컬럼 dataMap 을 통째로 갈아끼웠다.
+        //   dataMap 은 컬럼 단위라 교체하는 순간 후보 밖 코드는 CODE→NAME 매핑을 잃고,
+        //   편집 중인 셀과 같은 컬럼의 다른 행이 전부 raw CODE('KRW')로 보였다 (2026-08-12 리포트).
+        //   wijmo 는 편집기 드롭다운을 만들 때 getDisplayValues(행 dataItem) 를 호출하므로,
+        //   전체 표시용 map 을 그대로 두고 후보만 좁히면 표시와 후보가 동시에 맞는다.
+        //   (measure 후보는 전체 목록의 부분집합이라 이 방식이 성립한다.)
+        if (binding === 'MEASURE') {
+          installMeasureCandidateFilter(sender.columns[e.col]?.dataMap as DataMap | undefined);
+          return;
+        }
+        // [41번-② 2026-08-12] FCST Type — W/S 자격이 없으면 후보에서 W/S 2종 제거 (division 게이트).
+        if (binding === 'FCST_TYPE') {
+          installFcstTypeCandidateFilter(sender.columns[e.col]?.dataMap as DataMap | undefined);
           return;
         }
 
@@ -725,21 +1070,17 @@ export const ForecastPriceGrid = ({
       const binding = sender.columns[e.col]?.binding;
       const dataItem = sender.rows[e.row]?.dataItem as WijmoRowItem | undefined;
       if (!binding || !dataItem) return;
-      // #7 — MEASURE 편집 종료: 스왑했던 dataMap 을 원본(전체 표시용)으로 원복 (취소 포함 커버).
-      if (binding === 'MEASURE' && measureOrigDataMapRef.current) {
-        const col = sender.columns[e.col];
-        if (col) col.dataMap = measureOrigDataMapRef.current;
-      }
+      // (MEASURE 는 dataMap 을 교체하지 않고 getDisplayValues 로 후보만 좁히므로 원복이 필요 없다.)
       // ⭐ UP_FX 편집 콤보 원복 — 스왑이 남으면 필터 밖 CODE 를 가진 **다른 행**의 명칭 변환이 깨진다
       //   (편집 취소 경로도 cellEditEnded 를 타므로 여기서 일괄 원복. 정본 mkt-fcst:926-939).
       if (binding in origDataMapRef.current) {
         const col = sender.columns[e.col];
         if (col) col.dataMap = origDataMapRef.current[binding] ?? null;
       }
-      const isInsertRow = dataItem['CRUD_TYPE'] !== undefined && dataItem['CRUD_TYPE'] !== null;
+      const isInsert = isInsertRow(dataItem);
       // #2 — Insert 행 Site/Incoterms 변경 → SALES_BUCKET 조회·세팅 (배분 요일 원천).
       //   #7 — Site 변경 시 편집가능 Measure 후보도 재조회(행별 캐시).
-      if ((binding === 'SCM_SITE_ID' || binding === 'INCOTERMS') && isInsertRow) {
+      if ((binding === 'SCM_SITE_ID' || binding === 'INCOTERMS') && isInsert) {
         applySalesBucket(dataItem);
       }
       // ⭐ 편집가능 Measure 재조회 — AS-IS 는 **6개 지점**에서 재조회한다:
@@ -749,17 +1090,29 @@ export const ForecastPriceGrid = ({
       //   가리므로, 이 키들이 바뀌면 반드시 다시 물어야 한다. 구 코드는 SCM_SITE_ID 하나뿐이었다.
       if (
         (binding === 'SCM_SITE_ID' || binding === 'DIVISION_ID' || binding === 'INCOTERMS') &&
-        isInsertRow
+        isInsert
       ) {
         applyEditMeasures(dataItem);
       }
       // D9 — Model(ITEM_ID) 변경 → Cell Prod Site 후보 재조회 (AS-IS .cs L5854).
       //   Division 변경도 CMBO 바인드(@divisionId)에 들어가므로 함께 재조회.
-      if ((binding === 'ITEM_ID' || binding === 'DIVISION_ID') && isInsertRow)
+      if ((binding === 'ITEM_ID' || binding === 'DIVISION_ID') && isInsert)
         applyCellProdSites(dataItem);
       // End Customer 변경 → Sales Site 후보 재조회 (AS-IS .cs L8237·8283·8294).
-      if ((binding === 'END_CUSTOMER' || binding === 'DIVISION_ID') && isInsertRow)
+      if ((binding === 'END_CUSTOMER' || binding === 'DIVISION_ID') && isInsert)
         applySalesSites(dataItem);
+      // [No.63-① ② 2026-08-11] Sales Site / FCST Type 변경으로 AS From Site 조건이 깨지면 **값도 비운다** —
+      //   AS-IS 는 잠글 때마다 `SetText(AS_FROM_SITE, "")` 를 함께 호출한다(.cs L3481·3506·3587·3597).
+      //   비우지 않으면 비축향으로 바꾼 뒤에도 이전 고객향 값이 payload 로 저장된다.
+      if (
+        (binding === 'SCM_SITE_ID' || binding === 'FCST_TYPE' || binding === 'DIVISION_ID') &&
+        isInsert &&
+        !asFromSiteEditable(dataItem) &&
+        String(dataItem['AS_FROM_SITE'] ?? '') !== ''
+      ) {
+        dataItem['AS_FROM_SITE'] = '';
+        sender.invalidate();
+      }
       // #10 실시간 중복 검사(AS-IS MSG00260 :5878 파리티)는 **2026-08-11 제거** — 통합테스트 1st No.38
       //   사용자 요구 "저장 버튼 클릭 시 중복 Validation 수행하도록 수정"(입력 즉시 팝업 금지).
       //   중복 검증은 저장 시점 단일 경로 = ForecastPrice.handleSave 의 MSG00260(DUP_NEW_ROW) 검사 +
@@ -874,14 +1227,22 @@ export const ForecastPriceGrid = ({
       if (kindOf(binding)) {
         const editable = canEditCell(binding, dataItem);
         e.cell.classList.toggle('wj-cell-editable', editable);
-        // 기준주차 이전 = 잠금 Gray (특수셀 한정 — 전체 회색 금지)
+        // 과거 구간(월=당월 전 / 주·일=금주 월요일 전) = 잠금 Gray (특수셀 한정 — 전체 회색 금지).
+        //   필수: 편집 차단(isNonEditableCell)과 같은 함수를 써야 색과 동작이 어긋나지 않는다.
+        //   판정 기준은 forecast-price.editLock.isPastPeriodLocked 주석이 단일 출처.
         e.cell.classList.toggle(
           'wj-cell-non-editable',
-          isNonEditableDateColumn(binding, weekMap.current)
+          isPastPeriodLocked(binding, weekMap.current)
         );
-        // #12 본문 셀 초록 보더 제거 — AS-IS 화면 캡처에는 본문에 초록 선이 없다(사용자 확정 2026-07-22).
-        //   당주 강조는 헤더 초록 볼드가 전담(위 ColumnHeader 분기). 잔여 inline 스타일 정리 위해 '' 유지.
+        // 실적/계획 경계 초록 세로선 — 당기 컬럼 왼쪽 한 줄만 (좌·우 레일인 sales-plan/mkt-fcst
+        //   와 다르다). 대상 판정 근거는 findActualBoundaryBinding 주석 참고.
+        //   (2026-07-22 에 "본문에 초록선 없음"으로 지웠던 것을 AS-IS 재확인 후 되살린 것이다.)
+        //   배경색·글자색과 같은 inline 방식 — sales-plan/mkt-fcst 는 !important CSS 클래스를 쓰지만
+        //   inline 은 그 자체로 Wijmo 기본 셀 border 를 이기므로 전용 스타일시트가 필요없다.
+        //   필수: 비대상 셀은 '' 로 되돌린다 — Wijmo 셀 재활용으로 이전 셀의 선이 남는다.
+        //   boxShadow 는 예전 레일 구현의 잔재 — 같은 이유로 계속 지운다.
         e.cell.style.boxShadow = '';
+        e.cell.style.borderLeft = binding === actualBoundaryRef.current ? '2px solid #1e8449' : '';
         // #11 숫자 표시 — NOTATION(POINT3/LOC)=소수3자리 / INTEGER=정수. 0/null 은 빈칸 (AS-IS :1853~1924).
         if (!sender.editRange?.contains(e.row, e.col)) {
           const v = dataItem[binding];
@@ -897,14 +1258,15 @@ export const ForecastPriceGrid = ({
         }
         return;
       }
-      // 정적 컬럼: Insert 행만 Yellow
-      const isInsert = dataItem['CRUD_TYPE'] !== undefined && dataItem['CRUD_TYPE'] !== null;
-      e.cell.classList.toggle('wj-cell-editable', isInsert);
-      // ⭐ 개인화 색 — 우선순위: Insert 편집셀 Yellow(클래스) > 저장된 Cell Color > 기본(제거).
-      //   inline !important 라 클래스보다 세므로 insert 행에는 배경을 칠하지 않는다.
+      // 정적 컬럼: **실제로 편집 가능한 셀만** Yellow — 편집 차단과 같은 판정을 쓴다.
+      //   신규행이라도 INPUT_TP_CD='S'(Nick Name/Team 등 조회전용)는 칠하지 않는다 (2026-08-12 정정).
+      const editable = canEditStaticCell(binding, dataItem);
+      e.cell.classList.toggle('wj-cell-editable', editable);
+      // ⭐ 개인화 색 — 우선순위: 편집가능셀 Yellow(클래스) > 저장된 Cell Color > 기본(제거).
+      //   inline !important 라 클래스보다 세므로 편집가능 셀에는 배경을 칠하지 않는다.
       //   미지정 시 removeProperty 필수 — Wijmo 셀 재활용으로 이전 행 색이 남는다.
       const personalColor = colorMetaRef.current.get(binding);
-      if (!isInsert && personalColor?.cell) {
+      if (!editable && personalColor?.cell) {
         e.cell.style.setProperty('background-color', personalColor.cell, 'important');
       } else {
         e.cell.style.removeProperty('background-color');
@@ -930,8 +1292,10 @@ export const ForecastPriceGrid = ({
             const binding = g.columns[col]?.binding;
             if (!binding || !dataItem || g.columns[col]?.isReadOnly) continue;
             if (staticBindingSet.has(binding)) {
-              if (dataItem['CRUD_TYPE'] !== undefined && dataItem['CRUD_TYPE'] !== null)
-                dataItem[binding] = null;
+              // Insert 행의 편집가능 정적 컬럼만 Delete 로 비운다 — 기존 행('M'/'D')의 키는 잠금 대상.
+              //   필수: 판정은 편집 진입(canEditStaticCell)과 같은 함수 — 타이핑은 막히는데 Delete 로는
+              //   지워지면 '입력불가컬럼'(INPUT_TP_CD='S')을 지킨 게 아니다 (2026-08-04).
+              if (canEditStaticCell(binding, dataItem)) dataItem[binding] = null;
               continue;
             }
             if (!kindOf(binding) || !canEditCell(binding, dataItem) || !dataItem[binding]) continue;
@@ -977,8 +1341,44 @@ export const ForecastPriceGrid = ({
     //   M_ 헤더 더블클릭 = 해당 월(다음 M_ 전까지) W_ 토글 + 보이는 D_ 접기.
     const dblclickHandler = (ev: MouseEvent) => {
       const ht = g.hitTest(ev);
+
+      // ⭐ [No.65 2026-08-14] FPModal 셀 더블클릭 → 검색 모달 (DMF0003 MktFcstGrid L1156~1160 1:1).
+      //   공용 DataGrid 는 FPModal 셀의 직접 편집을 취소하므로(dataGridUtils.setEditableColumns),
+      //   모달을 열어주지 않으면 그 컬럼은 **입력 수단이 없다** — 통합테스트 No.65 "Project 컬럼이 없음".
+      //   헤더 드릴다운 분기보다 먼저 본다 (셀 영역이라 서로 겹치지 않는다).
+      if (ht.cellType === CellType.Cell && ht.row >= 0 && ht.col >= 0) {
+        const cellBinding = g.columns[ht.col]?.binding ?? '';
+        const modalKey = modalCellRef.current.get(cellBinding);
+        if (modalKey) {
+          const item = g.rows[ht.row]?.dataItem as WijmoRowItem | undefined;
+          // 신규행만 — 조회행의 키 컬럼은 AS-IS 도 잠금(수정 대상 아님).
+          if (item && isInsertRow(item)) {
+            onPopupCellDblClickRef.current?.(modalKey, item);
+            return;
+          }
+        }
+      }
+
       if (ht.cellType !== CellType.ColumnHeader) return;
-      const hb = g.columns[ht.col]?.binding ?? '';
+      // 머지된 상위 헤더 → 그룹 대표 binding 복원 (사용자 보고 2026-07-29 "접기가 SUM 위에서만 먹힘").
+      //   hitTest 는 커서 아래 물리 컬럼을 준다(머지 원점이 아니다). 주를 일자로 펼치면 2단
+      //   'W31' 그룹이 [W_ SUM, D_27…D_31] 로 머지되고 라벨은 그 가운데 = D_ 컬럼들 위에 그려진다.
+      //   그대로 두면 hb 가 D_ 로 잡혀 아래 M/W 가드에 걸리고, 좌단(SUM) 위에서만 접기가 된다.
+      //   접기 전에는 그룹이 1칸이라 어디를 눌러도 W_ 가 잡히므로 펼치기만 되고 접기는 죽는 비대칭.
+      //     1단(년월) = M_${ym} 로 직접 산출 — chkSum OFF 로 M_ 컬럼이 숨어도 dynBindings 에는 있다
+      //       (머지 좌단을 쓰면 M_ 가 숨은 순간 첫 주 W_ 를 집어 월 드릴이 주 드릴로 바뀐다).
+      //     2단(주차) = 머지 범위 좌단 — dynamicColumns 가 그룹 내 M<W<D 로 정렬하므로 좌단이 W_.
+      //   leaf 행(주차/일자 낱개 컬럼)은 물리 컬럼이 곧 대상이라 손대지 않는다.
+      const leafRow = g.columnHeaders.rows.length - 1;
+      let hb = g.columns[ht.col]?.binding ?? '';
+      if (kindOf(hb) && ht.row < leafRow) {
+        if (ht.row === 0) {
+          hb = `M_${hb.slice(2, 8)}`;
+        } else {
+          const merged = g.getMergedRange(g.columnHeaders, ht.row, ht.col);
+          if (merged) hb = g.columns[merged.leftCol]?.binding ?? hb;
+        }
+      }
       const hk = kindOf(hb);
       if (hk !== 'M' && hk !== 'W') return;
       const idx = dynBindings.indexOf(hb);
@@ -1101,6 +1501,17 @@ export const ForecastPriceGrid = ({
           col.visible = want;
           changed = true;
         }
+      }
+      // 실적/계획 경계선 대상 재산출 — 가시성이 확정된 직후가 유일한 정확한 시점이다
+      //   (드릴다운/chkSum 이 곧 판정 입력). 값이 바뀌면 invalidate 를 강제해 formatItem 을 다시 태운다
+      //   — 컬럼 visible 이 그대로여도(첫 레이아웃 등) 선 위치는 바뀔 수 있다.
+      const boundary = findActualBoundaryBinding(dynBindings, currentPeriodRef.current, b => {
+        const col = g.getColumn(b);
+        return !!col && col.visible;
+      });
+      if (boundary !== actualBoundaryRef.current) {
+        actualBoundaryRef.current = boundary;
+        changed = true;
       }
       if (changed) g.invalidate(true);
     };

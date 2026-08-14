@@ -311,7 +311,7 @@ export const recalcMonthlyToDaily = (
 // 4) 주/월 버킷에서 D_ 직접 입력 → 주합·월합 재집계 (AS-IS L4117~4175, Div40)
 // ============================================================================
 //   Daily→Week/Month 합산과 동일 구조 (Div40 한정 분기지만 합 재집계는 동치).
-export const recalcDailyEditUnderWeekMonth = (acc: RecalcAccessor, editedBinding: string): void => {
+const recalcDailyEditUnderWeekMonth = (acc: RecalcAccessor, editedBinding: string): void => {
   // 합산 로직은 Daily 입력과 동일 (.cs L4121~4175 ≡ L3362~3410).
   recalcDailyToWeekMonth(acc, editedBinding);
 };

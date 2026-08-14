@@ -1,3 +1,4 @@
+import { TeamField } from 'features/master/src/components';
 import { useState } from 'react';
 
 import commonStyles from '@foundation/styles/common-styles.module.scss';
@@ -32,8 +33,8 @@ export const SalesSiteProjectModelForm = ({
   const setOpenPurchaseGrid = useSalesSiteProjectModelStore(state => state.setOpenPurchaseGrid);
   const setSearchParams = useSalesSiteProjectModelStore(state => state.setSearchParams);
 
-  const [divisions, teams, endCustomers, salesSites, yesOrNo] = useTabComboQueries({
-    filters: ['MyDivision', 'TeambyDivision', 'EndCustomer', 'SalesSite', 'YesOrNo'],
+  const [divisions, endCustomers, salesSites, yesOrNo] = useTabComboQueries({
+    filters: ['MyDivision', 'EndCustomer', 'SalesSite', 'YesOrNo'],
   });
 
   const [openProjectByDivisionModal, setOpenProjectByDivisionModal] = useState(false);
@@ -82,36 +83,22 @@ export const SalesSiteProjectModelForm = ({
                 )}
               />
             </Grid>
-            <Grid size={3}>
-              <FormItem
-                label={t('LBL00044', '_Team')}
-                labelAlign='right'
-                className={commonStyles.formItem}
-                render={() => (
-                  <CustomDropdown
-                    multiple
-                    allOption
-                    useClearIcon
-                    limitTags={1}
-                    value={searchParams.deptId}
-                    options={[
-                      ...new Map(
-                        (teams ?? [])
-                          .filter(item => item.DIVISION_ID === searchParams.divisionId)
-                          .map(item => [`${item.DIVISION_ID}|${item.CODE}`, item])
-                      ).values(),
-                    ].map(item => ({ label: item.NAME, value: item.CODE }))}
-                    onChange={(_, option) => {
-                      setSearchParams({
-                        deptId: option,
-                        endCustomer: 'ALL',
-                        salesSite: 'ALL',
-                      });
-                    }}
-                  />
-                )}
-              />
-            </Grid>
+            <TeamField
+              gridSize={3}
+              value={
+                searchParams.deptId && searchParams.deptId !== 'ALL'
+                  ? searchParams.deptId.split(',').filter(Boolean)
+                  : []
+              }
+              onChange={v =>
+                setSearchParams({
+                  deptId: v.length > 0 ? v.join(',') : 'ALL',
+                  endCustomer: 'ALL',
+                  salesSite: 'ALL',
+                })
+              }
+              division={searchParams.divisionId}
+            />
             <Grid size={3}>
               <FormItem
                 label={t('LBL00080', '_End Customer')}

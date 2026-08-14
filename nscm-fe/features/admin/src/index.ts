@@ -10,4 +10,3 @@ export * from './pages/user-management/UserManagement';
 export * from './pages/menu-button-management/MenuButtonManagement';
 export * from './pages/lookup/Lookup';
 export * from './pages/notice-setup/NoticeSetup';
-export * from './pages/mail-setup/MailSetup';

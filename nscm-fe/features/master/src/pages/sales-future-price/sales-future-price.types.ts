@@ -25,12 +25,15 @@ export interface SearchCondition {
 //   28 fixed cols + 동적 시간축 컬럼 (W_yyyymmdd 또는 M_yyyymm)
 //   CRUD_TYPE: 'I' (신규) / 'M' (수정) / 'D' (삭제)
 //   INSERT_GROUP_ID: Insert 시 같은 grouping (4 measure 묶음) 식별자
+//   COL_LIST: [PJ20200138] 범위를 초과하는 주차 목록 ("W_20260803,W_20260810" / 없으면 '-').
+//             조회조건 Search over range(P_OVER_RANGE='Y') 일 때만 SP 가 채운다 — utils/overRange.ts
 export type FuturePriceRow = Record<string, unknown> & {
   CRUD_TYPE?: 'I' | 'M' | 'D';
   INSERT_GROUP_ID?: string;
   MEASURE?: string;
   DIVISION_ID?: string;
   CURRENCY?: string;
+  COL_LIST?: string;
 };
 
 // 동적 시간축 컬럼 메타 (DMF0020_GET_SPREAD_TITLE_DATE 결과 기반)

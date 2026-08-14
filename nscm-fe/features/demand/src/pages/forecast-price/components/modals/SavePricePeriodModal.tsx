@@ -162,7 +162,7 @@ interface DynHdr {
  *    · CELL_PROD_SITE_ID 콤보(AS-IS L1329)는 미배선 — 이 팝업은 행 추가가 없어(I 행 0) 항상 잠김 표시 전용
  *  - SP: 조회 = DMF0082_POPUP_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP (17 IN — LOC 행만)
  *        시간축/저장주차 = DMF0082_POPUP_GET_SPREAD_TITLE_SAVE_PRICE (W_ 표시 / 'W_2%' 저장 — L2740)
- *        저장 = DMF0082_SAVE_MAIN_DATA 16 IN '^' bulk (기배선 fcstNPrice SAVE 라우트 재사용.
+ *        저장 = DMF0082_SAVE_MAIN_DATA 17 IN '^' bulk (기배선 fcstNPrice SAVE 라우트 재사용.
  *        KRW/USD 확장·qty 0 → 'D' 재판정은 SP 내부 처리 — SP L1394·L1556 실측)
  *  - AS-IS GET_WEEKDATA / GET_MEASURE_COUNTINFO(_SAVE_PRICE) 는 TO-BE 미배선:
  *    · dtWeek 잠금 분기(L1096)는 "시작일 < 이번주-7일" 전제인데 MSG00409 가 과거구간을 원천 차단 → 불달(dead)
@@ -512,7 +512,7 @@ export const SavePricePeriodModal = ({
     void refetch?.();
   };
 
-  // ===== Save (AS-IS SaveData L1454~2097 — 변경분 × 저장주차 확장, 16 IN '^' bulk) =====
+  // ===== Save (AS-IS SaveData L1454~2097 — 변경분 × 저장주차 확장, 17 IN '^' bulk) =====
   const handleSave = async () => {
     if (loading || saving) {
       void setAlert({ type: 'alert', content: t(MSG.WORK_IN_PROGRESS, '_Task in progress.') });
@@ -557,6 +557,9 @@ export const SavePricePeriodModal = ({
           incoterms: String(r.INCOTERMS ?? ''),
           measure: String(r.MEASURE ?? ''),
           plantSite: String(r.PLANT_SITE_ID ?? ''),
+          // 이 팝업 조회 커서에는 AS FROM SITE 개념이 없다 (기간 일괄 price 저장 전용).
+          //   NULL 이 아닌 공란을 보내 메인 화면 저장과 같은 MERGE 비교값을 유지한다.
+          asFromSite: '',
           cellProdSiteId: String(r.CELL_PROD_SITE_ID ?? ''),
           yyyymmdd,
           currency: String(r.CURRENCY ?? ''),

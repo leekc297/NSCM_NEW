@@ -247,7 +247,7 @@ export const ContributeVersionModal = ({ open, modalClose }: ContributeVersionMo
     const trim = (s: string) => (s.startsWith('^') ? s.substring(1) : s);
 
     try {
-      const res = await apiClient.post(`/${MODAL_VERSION}/version/SAVE/call-proc`, {
+      await apiClient.post(`/${MODAL_VERSION}/version/SAVE/call-proc`, {
         activeFlag: trim(buf.activeFlag),
         verSeq: trim(buf.verSeq),
         yyyy: trim(buf.yyyy),
@@ -256,16 +256,6 @@ export const ContributeVersionModal = ({ open, modalClose }: ContributeVersionMo
         validYn: trim(buf.validYn),
         createdBy: trim(buf.createdBy),
       });
-      //[E20260807-AUDIT] 저장 결과 판정 — axios 인터셉터가 오류도 resolve 하므로 status/code 직접
-      //   판정 (정본 business-plan.api.ts:71~74). 실패 시 SP message passthrough + 성공 alert 차단.
-      if (res.status >= 400 || Number((res.data as { code?: string })?.code)) {
-        const message = (res.data as { message?: string })?.message?.trim();
-        void setAlert({
-          type: 'alert',
-          content: message || t('MSG00003', '저장 중 오류가 발생했습니다.'),
-        });
-        return; // finally 에서 savingRef 해제
-      }
       void setAlert({ type: 'alert', content: t('MSG00002', '저장이 완료되었습니다.') });
       void queryClient.invalidateQueries({ queryKey: [MODAL_VERSION] });
       void refetch?.();

@@ -7,6 +7,7 @@ import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { GridAction } from '@foundation/utils';
 import { MainTitle, SubTitle, TabItem, TabWrapper } from '@shared/components';
 import { useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
+import { Panel, PanelGroup, PanelSeparator } from '@shared/panel';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
 import { ErpEdiMasterForm } from './components/ErpEdiMasterForm';
@@ -226,13 +227,7 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
   const handleStatusUpdate = async () => {
     try {
       void setToast({ type: 'default', message: t('LBL00665', 'Loading...'), duration: 3000 });
-      const res = await apiClient.post(`/${MENU_ID}/main/STATUS_UPDATE/call-proc`, {});
-      //[E20260807-AUDIT] 결과 판정 의무 — 인터셉터는 500/403 도 resolve (false success 방지, gate §1-3)
-      if (res.status >= 400 || Number((res.data as { code?: string })?.code)) {
-        const spMsg = (res.data as { message?: string })?.message;
-        void setAlert({ type: 'alert', content: spMsg || 'Status Update 실패' });
-        return;
-      }
+      await apiClient.post(`/${MENU_ID}/main/STATUS_UPDATE/call-proc`, {});
       void setToast({ type: 'success', message: 'Status Update 완료. 재조회합니다.' });
       await Promise.all([refetchSummary?.(), refetchRepair?.(), refetchHistory?.()]);
     } catch (e) {
@@ -489,7 +484,7 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
           : sspmFilterRef;
 
   return (
-    <div className={styles.container}>
+    <>
       <MainTitle
         title={title}
         menuId={MENU_ID}
@@ -510,58 +505,82 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
         customButtons={customButtons}
       />
 
-      {/* ⭐ Figma Top (527h) — Summary(좌 400) | Repair(우 1202) 2-컬럼 (2026-06-28) */}
-      <div className={styles.topRow}>
-        <div className={styles.summaryCol} onClickCapture={() => setFocusedSheet(SHEETS.SUMMARY)}>
-          <div className={styles.sectionTitle}>Summary</div>
-          <ErpEdiMasterSummaryGrid
-            gridRef={summaryGridRef}
-            gridFilterRef={summaryFilterRef}
-            data={summaryRows}
-            onDblClick={handleSummaryDoubleClick}
-          />
-        </div>
+      <PanelGroup className={styles.bodyPanelGroup} orientation='vertical'>
+        <Panel defaultSize={60} minSize={20}>
+          {/* Figma Top (527h) — Summary(좌 400) | Repair(우 1202) 2-컬럼 (2026-06-28) */}
+          <PanelGroup className={styles.topRow} orientation='horizontal'>
+            <Panel defaultSize={21.5} minSize={10}>
+              <div
+                className={styles.summaryCol}
+                onClickCapture={() => setFocusedSheet(SHEETS.SUMMARY)}
+              >
+                <div className={styles.sectionTitle}>Summary</div>
+                <ErpEdiMasterSummaryGrid
+                  gridRef={summaryGridRef}
+                  gridFilterRef={summaryFilterRef}
+                  data={summaryRows}
+                  onDblClick={handleSummaryDoubleClick}
+                />
+              </div>
+            </Panel>
 
-        <div className={styles.repairCol} onClickCapture={() => setFocusedSheet(SHEETS.REPAIR)}>
-          <div className={styles.sectionTitle}>List of SCM Master Data Requiring Maintenance</div>
-          <ErpEdiMasterRepairGrid
-            gridRef={repairGridRef}
-            gridFilterRef={repairFilterRef}
-            data={repairRows}
-            onDblClick={handleRepairDoubleClick}
-          />
-        </div>
-      </div>
+            <PanelSeparator className={styles.colSplitBar} />
 
-      {/* Figma 하단 Module (180h): Sales Site / SSPM 탭 */}
-      <div
-        className={styles.subSection}
-        onClickCapture={() =>
-          setFocusedSheet(activeTab === SHEET_INDEX.SALES_SITE ? SHEETS.SALES_SITE : SHEETS.SSPM)
-        }
-      >
-        <TabWrapper
-          persist
-          activeTabIndex={activeTab}
-          setActiveTabIndex={setActiveTab as (idx: number) => void}
-        >
-          <TabItem label='Sales Site'>
-            <ErpEdiMasterSalesSiteGrid
-              gridRef={salesSiteGridRef}
-              gridFilterRef={salesSiteFilterRef}
-              data={salesSiteRows}
-            />
-          </TabItem>
-          <TabItem label='SSPM'>
-            <ErpEdiMasterSspmGrid
-              gridRef={sspmGridRef}
-              gridFilterRef={sspmFilterRef}
-              data={sspmRows}
-            />
-          </TabItem>
-        </TabWrapper>
-      </div>
-    </div>
+            <Panel defaultSize={78.5} minSize={20}>
+              <div
+                className={styles.repairCol}
+                onClickCapture={() => setFocusedSheet(SHEETS.REPAIR)}
+              >
+                <div className={styles.sectionTitle}>
+                  List of SCM Master Data Requiring Maintenance
+                </div>
+                <ErpEdiMasterRepairGrid
+                  gridRef={repairGridRef}
+                  gridFilterRef={repairFilterRef}
+                  data={repairRows}
+                  onDblClick={handleRepairDoubleClick}
+                />
+              </div>
+            </Panel>
+          </PanelGroup>
+        </Panel>
+
+        <PanelSeparator className={styles.rowSplitBar} />
+
+        {/* Figma 하단 Module (180h): Sales Site / SSPM 탭 */}
+        <Panel defaultSize={40} minSize={10}>
+          <div
+            className={styles.subSection}
+            onClickCapture={() =>
+              setFocusedSheet(
+                activeTab === SHEET_INDEX.SALES_SITE ? SHEETS.SALES_SITE : SHEETS.SSPM
+              )
+            }
+          >
+            <TabWrapper
+              persist
+              activeTabIndex={activeTab}
+              setActiveTabIndex={setActiveTab as (idx: number) => void}
+            >
+              <TabItem label='Sales Site'>
+                <ErpEdiMasterSalesSiteGrid
+                  gridRef={salesSiteGridRef}
+                  gridFilterRef={salesSiteFilterRef}
+                  data={salesSiteRows}
+                />
+              </TabItem>
+              <TabItem label='SSPM'>
+                <ErpEdiMasterSspmGrid
+                  gridRef={sspmGridRef}
+                  gridFilterRef={sspmFilterRef}
+                  data={sspmRows}
+                />
+              </TabItem>
+            </TabWrapper>
+          </div>
+        </Panel>
+      </PanelGroup>
+    </>
   );
 };
 export default ErpEdiMaster;

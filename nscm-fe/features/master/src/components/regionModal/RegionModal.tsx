@@ -58,10 +58,16 @@ export const RegionModal = ({
     enabled: true,
   });
 
+  const countryKeyword = modalFilters.country.toLowerCase();
+  const cityKeyword = modalFilters.city.toLowerCase();
+
+  // Country/City 입력은 코드와 명칭 중 하나만 맞아도 통과
   const itemsSource = (regionData?.o_rc1 ?? []).filter(
     region =>
-      (region.COUNTRY_NAME ?? '').toLowerCase().includes(modalFilters.country.toLowerCase()) &&
-      (region.CITY_NAME ?? '').toLowerCase().includes(modalFilters.city.toLowerCase())
+      ((region.COUNTRY ?? '').toLowerCase().includes(countryKeyword) ||
+        (region.COUNTRY_NAME ?? '').toLowerCase().includes(countryKeyword)) &&
+      ((region.CITY ?? '').toLowerCase().includes(cityKeyword) ||
+        (region.CITY_NAME ?? '').toLowerCase().includes(cityKeyword))
   );
 
   const handleFilterChange = _.debounce((country: string, city: string) => {

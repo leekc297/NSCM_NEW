@@ -240,8 +240,12 @@ export const useDataGridUtils = <T extends WijmoRowItem = WijmoRowItem>() => {
       const isLastHeaderRow = row === grid.columnHeaders.rows.length - 1;
       if (!isLastHeaderRow && !isVerticalMerge) return;
 
-      const inputEditType = GridUtils.getColumn(grid, col)?._inputEditType;
+      const columnConfig = GridUtils.getColumn(grid, col);
+      const inputEditType = columnConfig?._inputEditType;
+      // `_requiredMark` = 관리자 메타 라벨이 `*` 로 필수를 표기하던 화면(DMF0082 등). columnMapping 이
+      // 라벨에서 `*` 를 떼고 넘겨주므로, inputTpCd=M/IM 로 등록된 화면과 동일하게 빨간점으로 그린다.
       const isMandatory =
+        columnConfig?._requiredMark === true ||
         inputEditType === CELL_INPUT_EDIT_TYPE.MANDATORY ||
         inputEditType === CELL_INPUT_EDIT_TYPE.MANDATORY_INSERT_ONLY;
 

@@ -3,6 +3,5 @@
 //   진입 페이지에서 직접 사용 (re-export 금지 — Hard Boundary).
 export { ExchangeRateModal } from './ExchangeRateModal';
 export { ForecastTemplateModal } from './ForecastTemplateModal';
-export { MeasureSelectModal } from './MeasureSelectModal';
 export { SavePricePeriodModal } from './SavePricePeriodModal';
 export { VersionSelectModal } from './VersionSelectModal';

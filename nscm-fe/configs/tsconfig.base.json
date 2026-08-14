@@ -32,6 +32,7 @@
       "@factory/*": ["features/factory/src/pages/*/index.ts"],
       "@shipping/*": ["features/shipping/src/pages/*/index.ts"],
       "@report/*": ["features/report/src/pages/*/index.ts"],
+      "@sdm/*": ["features/sdm/src/pages/*/index.ts"],
       "@foundation/*": [
         "packages/foundation/src/*/index.ts",
         "packages/foundation/src/lib/*.ts",

@@ -22,7 +22,7 @@ export enum SHEETS {
   //   DB 배선 = DMF0082_P2_savePrice_wiring.sql (PROC_M/API_M/BTN_MPG SHT_NM = 아래 value 그대로).
   //   조회  = DMF0082_POPUP_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP (17 IN + O_CURSOR — 실측 2026-07-12)
   //   시간축 = DMF0082_POPUP_GET_SPREAD_TITLE_SAVE_PRICE (4 IN + O_RESULT_CURSOR — W_/M_ 컬럼 + 저장 주차 목록)
-  //   저장  = 기배선 fcstNPrice SAVE (DMF0082_SAVE_MAIN_DATA 16 IN '^' bulk) 재사용.
+  //   저장  = 기배선 fcstNPrice SAVE (DMF0082_SAVE_MAIN_DATA 17 IN '^' bulk) 재사용.
   SAVE_PRICE_DATA = 'savePriceData',
   SAVE_PRICE_TITLE = 'savePriceTitle',
   // Column/Measure Setting 개인화 영구 저장 (공유 모달이 리터럴 'titleSet' 으로 호출 —
@@ -124,11 +124,45 @@ export const GRID_EDIT_COMBO: Record<
 > = {
   INCOTERMS: { comboId: 'IncotermsEdit', divisions: ['40'] },
   DOM_EXP: { comboId: 'CustomsHandbook', divisions: ['40'] },
+  // [No.64 2026-08-14] End Customer — 표시용 메타 콤보는 **전 division 합집합**(CODE→NAME 매핑 보존)이라
+  //   그대로 두면 81 로 조회해도 40 의 End Customer(예: 'AJ상사')를 고를 수 있다.
+  //   ⚠ 원인은 FE 가 아니라 메타였다: `FcstNPrice.END_CUSTOMER` 가 CMBO `EndCustomerByDivision40`
+  //     (SQL 안에 `A.DIVISION_ID='40'`·`SEGMENT1='40'` 하드코딩)을 전 division 에 물고 있었다.
+  //     → 메타는 division 상별 등재본 `EndCustomerByDivisionDMF0082` 로 교체(@divisionId 미전달 = 합집합),
+  //       편집 진입 시 여기서 division 을 명시 전달해 후보를 좁힌다.
+  //   요구 원문(통합테스트 1st No.64): "END_CUSTOMER 룩업코드 기준으로 Div별 리스트를 구성할 수 있도록 수정 필요".
+  //   실측: div40=1,067종(구 등재본과 **완전 동일** = 회귀 0) / 81=553 / 81_HG=227 / 82=1,534, 81·82 에 'AJ*' 0건.
+  END_CUSTOMER: { comboId: 'EndCustomerByDivisionDMF0082', divisionParam: true },
   // PLANT_SITE_ID(81 계열 전용, SAVE IN `plantSite`) — 표시용 메타 경로는 @divisionId 미전달이라
   //   관대형 폴백으로 **전 division 플랜트**가 뜬다. 편집 진입 시에만 division 한정 목록으로 스왑.
   //   (AS-IS `Data.UserPlantSiteByDivision` 호출은 주석 상태[C20200525-000296]이므로 TO-BE 확장 영역 —
   //    표시용은 건드리지 않아 기존 값의 명칭 변환은 그대로 유지된다.)
   PLANT_SITE_ID: { comboId: 'PlantByDivisionCompany', divisionParam: true },
+};
+
+/**
+ * ⭐ [No.65 2026-08-14] 셀 검색모달 키 — binding → 모달 식별자.
+ *
+ * 메타 `CELL_CONTROL_OBJECT_TYPE_CODE='FPModal'` 셀은 공용 DataGrid 가 **직접 편집을 취소**한다
+ * (`dataGridUtils.setEditableColumns` — beginningEdit 에서 `cancel=true`). 즉 모달을 열어주지 않으면
+ * 그 컬럼은 **입력 수단이 아예 없는 상태**가 된다.
+ *
+ * 통합테스트 1st No.65 "81 Div 는 Project 컬럼을 사용하는데 Project 컬럼 자체가 없음" 의 실제 정체가
+ * 이것이다 — 사내 메타 실측(2026-08-14): `DMF0082.FcstNPrice.PROJECT_CODE` =
+ * `FPModal` + `INPUT_TP_CD='IM'`(신규행 필수) + `DIVISION_ID='82,81,81_UC,81_HM,81_ST,81_HD,81_HG'`
+ * 로 **정상 등재**돼 있고 VISIBLE='Y' 인데, 그리드에 모달 배선이 없어 81 신규행에서 Project 를
+ * 넣을 방법이 없었다. (AS-IS DMF0003 은 `FPTextBox`+`INPUT_TP_CD='S'` 로 셀 입력 자체가 없고
+ * 별도 Project 검색팝업이 값을 넣는 구조 — TO-BE 는 그 팝업을 셀 모달로 승계했다.)
+ *
+ * ⚠️ 같은 메타의 `CELL_COMBO_DATA_TYPE='ProjectByDivision'` 은 **소비되지 않는다** — 공용 DataGrid 는
+ *   `cellCtrlObjTpCd === 'FPComboBox'` 일 때만 콤보 dataMap 을 만든다(DataGrid L142·L160).
+ *   그래서 그 CMBO 가 DB 에 미등재인 것은 이 결함의 원인이 아니다(등재해도 화면은 그대로).
+ *   근거 없는 콤보를 새로 등재하지 않고 **모달 배선**으로 푼 이유다.
+ *
+ * 정본 = DMF0003 `mkt-fcst.constants.ts` `_modalKey` / `MktFcstGrid` L1156~1160.
+ */
+export const CELL_MODAL_KEY: Readonly<Record<string, string>> = {
+  PROJECT_CODE: 'PROJECT',
 };
 
 /**
@@ -143,7 +177,7 @@ export const PRICE_MEASURES = ['LOC', 'KRW', 'USD'] as const;
  * 실제 편집 허용 여부는 GET drop3 커서(MEASURE+EDIT_FLAG, 사용자 그룹별)가 단일 출처 —
  * 이 집합은 "권한 판정 대상 measure" 화이트리스트 (그 외 measure = 항상 read-only).
  */
-export const AUTH_MEASURES = ['SCM_FCST', 'MKT_FCST', 'LOC', 'VMI_In_Req'] as const;
+export const AUTH_MEASURES = ['SCM_FCST', 'MKT_FCST', 'LOC', 'VMI_In_Req', 'AS_In_Req'] as const;
 
 /**
  * AS-IS MSG 매핑 — 사내 MSG_M 실문구 대사 완료 (2026-07-12, fallback 신뢰 금지 룰).
@@ -169,6 +203,9 @@ export const MSG = {
   EDIT_MODE_NO_INPUT: 'MSG00669', // [신규] 수정모드에서는 입력할 수 없습니다. (AS-IS MSG00408)
   QTY_PRICE_REQUIRED: 'MSG00670', // [신규] 추가된 행에 수량/가격 미입력 (AS-IS MSG00449)
   MEASURE_NOT_EDITABLE: 'MSG00671', // [신규] 수정할 수 없는 메져입니다. (AS-IS MSG00464)
+  // AS FROM SITE 필수 (현업 요청 2026-07-31, 81/82 신규 확장). 사내 기등록 ID 를 그대로 쓴다 —
+  //   DMF0003(MKT FCST)이 같은 규칙에 이미 사용 중이라 신규 채번이 아니다 (mkt-fcst.constants L306).
+  AS_FROM_SITE_REQUIRED: 'MSG00476',
   // ── SavePricePeriodModal (AS-IS DMF0082_SaveSalesFuturePrice_Popup MSG 전수 대사 2026-07-12) ──
   //   AS-IS 활성 10종: 00002→00429 / 00004→00672(신규) / 00043 동일 / 00097→00667 / 00108 동일 /
   //   00113 동일(Edit 모드 부재로 TO-BE 미사용) / 00133→00004 / 00137 동일 / 00330·00409 = ID 승계 신규 등록.
@@ -183,6 +220,9 @@ export const MSG = {
   //   등록 SQL = _artifacts/_apply_corporate/DMF0082_exchange_modal_save_wiring_20260724.sql)
   PRICE_RECALC_DONE: 'MSG00689', // Sales Price Recalculation is complete. (AS-IS MSG00456)
   SAVE_ERROR: 'MSG00618', // 저장 중 오류가 발생했습니다. (SP 원문 메시지 부재 시 fallback — DMF0042 선례)
+  // ── ForecastTemplateModal (Excel Form) 조회 0건 —
+  //   조회조건 기준 조회이므로 '업로드분 없음'(MSG00705)과 의미가 다르다 → 신규 채번(3점 동기 2026-08-13)
+  EXCEL_FORM_EMPTY: 'MSG00718',
 } as const;
 
 /** ExchangeRateModal 좌측 고정 컬럼 메타 (DMF0020 EXCHANGE_RATE_COLUMNS 표준 1:1 — hook #96 단일문자 정렬코드). */

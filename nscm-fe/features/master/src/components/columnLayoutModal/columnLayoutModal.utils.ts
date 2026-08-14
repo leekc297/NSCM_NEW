@@ -3,6 +3,8 @@ import type { ColumnLayoutRow } from '@shared/components';
 
 import type { ColumnSettingFallback } from '../columnSettingModal/ColumnSettingModal';
 
+import type { ColumnMetaRow } from './titleSet.api';
+
 export const DEFAULT_COL_WIDTH = 100;
 
 export const deriveIsKey = (label: string): boolean => label.trim().endsWith('*');
@@ -91,6 +93,45 @@ const hasWidth = (r: Record<string, string>): boolean =>
 
 const hasOrder = (r: Record<string, string>): boolean =>
   has(r.USER_SORT_ORDER_NO) || has(r.SORT_ORDER_NO);
+
+/**
+ * 팝업 목록에 올릴 컬럼인지 — admin 메타의 VISIBLE_FLAG(= 관리 노출 여부) 기준.
+ *
+ * ⭐ GET_TITLESET_POPUP 은 sheet 메타에 등록된 컬럼을 전부 내려주므로, 관리자가 노출 대상에서
+ *   뺀 컬럼(VISIBLE_FLAG='N')까지 좌측 Invisible 목록에 쌓인다 (2026-07-29 요청). 그리드는
+ *   VISIBLE_FLAG='N' 을 애초에 그리지 않으므로, 팝업에서도 선택지 자체에서 제외한다.
+ *
+ * ⚠️ 표시/비표시(좌·우) 판정은 여전히 USER_FLAG 다 — VISIBLE_FLAG 는 "목록에 존재하는가" 만 본다.
+ * ⚠️ 값이 안 내려온 행은 남긴다. VISIBLE_FLAG 를 커서에 포함하지 않는 SP 에서 ==='Y' 로 걸면
+ *   팝업이 통째로 비어버린다 (mapBeRow 가 USER_FLAG 부재 시 VISIBLE_FLAG 로 폴백하는 것과 동일한
+ *   방어). 이 경우 필터는 no-op 이므로 SP 쪽에서 걸러야 한다.
+ */
+export const isVisibleColumn = (r: Record<string, string>): boolean =>
+  !has(r.VISIBLE_FLAG) || String(r.VISIBLE_FLAG).toUpperCase() === 'Y';
+
+/**
+ * admin 메타에서 노출 금지된 컬럼명 집합 — `visible === false` (= VISIBLE_FLAG 'N').
+ *
+ * ⚠️ `display === false` 는 넣지 않는다. 그건 "기본 미표시"일 뿐 사용자가 켤 수 있어야 하므로
+ *   좌측 Invisible 목록에 남아야 한다. 둘을 섞으면 한 번 숨긴 컬럼을 영영 되살릴 수 없다.
+ * ⚠️ `visible` 미제공(undefined)은 제외하지 않는다 — 메타가 없을 때 목록이 통째로 비는 사고 방지.
+ */
+export const toHiddenColumnSet = (cols: Partial<ColumnMetaRow>[]): Set<string> =>
+  new Set(cols.filter(c => c.visible === false && c.colNm).map(c => String(c.colNm)));
+
+/**
+ * admin 메타에 등재된 컬럼명 집합 — **division 미등록 컬럼** 판정용 (2026-08-13 DMF0082 실사고).
+ *
+ * ⭐ GET_TITLESET_POPUP 은 divisionId 를 받아도 division 무관하게 sheet 전 컬럼을 내려준다
+ *   (DMF0082 실측 — div 40/81 동일 61행). 반면 컬럼 메타(PR_GET_SHEET_COLUMN_LIST)는 division
+ *   스코프라(40=49행/81=41행), 교집합을 취하지 않으면 해당 division 에 등록되지 않은 컬럼
+ *   (예: 40 의 PROJECT_CODE)이 팝업 양쪽 목록에 나타난다 — 그리드는 그리지도 않는 컬럼이다.
+ *
+ * ⚠️ 메타 0건이면 null — 필터 no-op (메타 조회 실패로 목록이 통째로 비는 사고 방지,
+ *   toHiddenColumnSet 의 undefined 방어와 동일 계보).
+ */
+export const toAllowedColumnSet = (cols: Partial<ColumnMetaRow>[]): Set<string> | null =>
+  cols.length === 0 ? null : new Set(cols.filter(c => c.colNm).map(c => String(c.colNm)));
 
 /** base 행에 settings 를 강제로 덮어쓴다 (Default 원복 등 — DB 값보다 우선시켜야 할 때). */
 export const overrideRows = (

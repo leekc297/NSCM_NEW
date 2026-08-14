@@ -1,5 +1,6 @@
 import type { FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
+import { type MeasureMeta, MeasureSelectModal } from 'features/master/src/components';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { IcMeasureSelect } from '@foundation/assets';
@@ -10,8 +11,7 @@ import { useMessageStore } from '@shared/stores';
 
 import { ProductionPlanLineForm } from './components/ProductionPlanLineForm';
 import { ProductionPlanLineGrid } from './components/ProductionPlanLineGrid';
-import { MeasureSelectModal } from './components/modals';
-import { BTN, MENU_ID, MSG, SHEETS } from './production-plan-line.constants';
+import { BTN, MEASURE_FALLBACK, MENU_ID, MSG, SHEETS } from './production-plan-line.constants';
 import type { ProductionPlanLineRow } from './production-plan-line.types';
 import styles from './ProductionPlanLine.module.scss';
 import { useProductionPlanLineStore } from './useProductionPlanLineStore';
@@ -85,6 +85,17 @@ export const ProductionPlanLine = ({ title }: PageProps<MENU_ID>) => {
 
   // ⭐ #3 — Measure 선택 모달 open state.
   const [openMeasureSelect, setOpenMeasureSelect] = useState(false);
+
+  // ⭐ 공용 MeasureSelectModal(hook #132 §2-1 정본)은 fallback 미내장(admin 적재가 정본) —
+  //   SCP0013 기존 동작(BE 메타 미적재 시 MEASURE_FALLBACK 6 코드 degrade, 라벨=코드)은
+  //   호출부에서 공급해 그대로 보존한다.
+  const measureItems = useMemo<MeasureMeta[]>(
+    () =>
+      staticMeasures[SHEETS.MAIN].length > 0
+        ? staticMeasures[SHEETS.MAIN]
+        : MEASURE_FALLBACK.map(code => ({ colNm: code, display: true })),
+    [staticMeasures]
+  );
 
   // SubTitle 공통버튼 — search 만 활성 (insert/delete/save 는 Phase B. manual/upload 명시 false).
   const hotkeyConfig: HotkeyConfig = {
@@ -179,11 +190,14 @@ export const ProductionPlanLine = ({ title }: PageProps<MENU_ID>) => {
         <ProductionPlanLineGrid gridRef={gridRef} rows={rows} />
       </div>
 
-      {/* ⭐ Measure 선택 (AS-IS btnMeasure → TitleSetForm 'SCP0013'/'LINE') */}
+      {/* ⭐ Measure 선택 (AS-IS btnMeasure → TitleSetForm 'SCP0013'/'LINE') —
+          공용 정본(features/master measureSelectModal, hook #132 §2-1). OK → 표시 measure
+          코드 목록(전체 선택 시 null)을 applyVisibleMeasures 로 적용 (titleSet 영구 저장은
+          SP 변환(T19) 후 Phase 소관 — 로컬 사본 시절부터 미배선, 동작 동일 보존). */}
       <MeasureSelectModal
         open={openMeasureSelect}
         modalClose={() => setOpenMeasureSelect(false)}
-        measures={staticMeasures[SHEETS.MAIN]}
+        measures={measureItems}
         visibleMeasures={visibleMeasures[SHEETS.MAIN]}
         onApply={codes => applyVisibleMeasures(SHEETS.MAIN, codes)}
       />

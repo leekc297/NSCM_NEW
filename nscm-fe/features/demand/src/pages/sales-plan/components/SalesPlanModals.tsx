@@ -1,7 +1,7 @@
 import {
-  ColumnSettingModal,
-  type ColumnSettingRow,
+  ColumnLayoutModal,
   ItemByDivisionModal,
+  MeasureSelectModal,
   ProjectByDivisionModal,
 } from 'features/master/src/components';
 
@@ -9,8 +9,6 @@ import { MENU_ID, SHEETS } from '../sales-plan.constants';
 import type { SalesPlanRow } from '../sales-plan.types';
 import { useSalesPlanStore } from '../useSalesPlanStore';
 import { saveTitleSet } from '../utils/sales-plan.api';
-
-import { MeasureSelectModal } from './modals';
 
 export type SalesPlanModalKey = 'PROJECT' | 'ITEM' | 'COLUMN' | 'MEASURE';
 
@@ -30,8 +28,8 @@ interface SalesPlanModalsProps {
 // ⭐ DMF0021 모달 4종 묶음 (진입 컴포넌트 분리 — components/ 분리 의무 진입≤400):
 //   ① PROJECT 셀 모달 (81·82 신규행 — AS-IS spdMain_CellDoubleClick L3834: Project/Name 세팅 + Item 클리어)
 //   ② ITEM 셀 모달 (40+Catch_Up 신규행 — L3863~3912: Item/NickName 세팅 [E20231019-001234])
-//   ③ Column 설정 (공용 ColumnSettingModal + titleSet 'C' — AS-IS btnColumn L4427 → InitSpread)
-//   ④ Measure 선택 (MeasureSelectModal + titleSet 'M' — AS-IS btnMeasure L4440. 메인 SP 가
+//   ③ Column 설정 (공용 ColumnLayoutModal + titleSet 'C' — AS-IS btnColumn L4427 → InitSpread)
+//   ④ Measure 선택 (공용 MeasureSelectModal + titleSet 'M' — AS-IS btnMeasure L4440. 메인 SP 가
 //     TITLESET 'M' 으로 measure 행을 필터하므로 저장 후 invalidate 재조회로 반영)
 export const SalesPlanModals = ({
   divisionId,
@@ -121,13 +119,16 @@ export const SalesPlanModals = ({
         callFromCell={true}
       />
 
-      {/* Column 설정 — 공용 ColumnSettingModal + titleSet 'C' 영구 저장 */}
-      <ColumnSettingModal
+      {/* ⭐ Column 설정 — 공용 ColumnLayoutModal + titleSet 'C' 영구 저장 (DMF0042 정본 1:1 전환).
+          ⚠️ columnType 은 반드시 'C' — TITLESET_USER.USER_INQUIRY_COLUMN_TYPE_CODE 실측값이
+            'C'(컬럼)/'M'(measure) 이다. 종전 sheetName('Sales Plan') 전달은 아래 saveTitleSet('C')
+            저장분과 키가 어긋나 저장한 개인화가 재진입 시 미조회되던 상태였다 (DMF0042 동일 계보). */}
+      <ColumnLayoutModal
         open={openColumnSetting}
         modalClose={() => onClose('COLUMN')}
         menuId={MENU_ID}
         sheetName={SHEETS.MAIN}
-        columnType={SHEETS.MAIN}
+        columnType='C'
         divisionId={divisionId}
         fallbackColumns={staticColumns.map(c => ({
           key: c.colNm,
@@ -137,17 +138,14 @@ export const SalesPlanModals = ({
         title={t('LBL00711', '_Column')}
         leftTitle={t('LBL00764', 'Invisible')}
         rightTitle={t('LBL00765', 'Visible')}
-        onSave={(settings: ColumnSettingRow[]) => {
+        onSave={settings => {
           // 로컬 즉시 반영 + 서버 영구 저장('C') → 성공 시 admin 메타 재fetch (개인화 기준 재계산)
-          applyColumnVisibility(settings.map(s => s.COLUMN_NAME));
+          //   공용 onSave 는 전체 컬럼(USER_FLAG Y/N)을 주므로 표시(Y)만 추려 종전 계약 유지.
+          const visible = settings.filter(s => s.USER_FLAG === 'Y');
+          applyColumnVisibility(visible.map(s => s.COLUMN_NAME));
           void saveTitleSet(
             'C',
-            settings.map(s => ({
-              name: s.COLUMN_NAME,
-              sortOrderNo: Number(s.SORT_ORDER_NO ?? 0),
-              subTotalFlag: s.SUB_TOTAL_FLAG,
-              sortMethodCode: s.USER_SORT_METHOD_CODE,
-            }))
+            visible.map((s, i) => ({ name: s.COLUMN_NAME, sortOrderNo: i + 1 }))
           ).then(ok => {
             if (ok) void fetchStaticColumns();
           });

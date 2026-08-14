@@ -811,19 +811,17 @@ export const BusinessPlanGrid = ({
   }, [dynBindings, visibleColumns, gridRef, gridFilterRef]);
 
   return (
-    <div className={styles.gridContainer}>
-      <DataGrid
-        key={mainStaticColumns.map(c => c.colNm).join(',')}
-        className={styles.grid}
-        gridRef={gridRef as never}
-        editTrackerRef={editTrackerRef as never}
-        staticColumns={mainStaticColumns}
-        dynamicColumns={mainDynamicColumns}
-        itemsSource={rows as unknown as WijmoRowItem[]}
-        autoGenerateColumns={false}
-        allowSorting={true}
-        allowMerging={AllowMerging.All}
-      />
-    </div>
+    <DataGrid
+      key={mainStaticColumns.map(c => c.colNm).join(',')}
+      className={styles.grid}
+      gridRef={gridRef as never}
+      editTrackerRef={editTrackerRef as never}
+      staticColumns={mainStaticColumns}
+      dynamicColumns={mainDynamicColumns}
+      itemsSource={rows as unknown as WijmoRowItem[]}
+      autoGenerateColumns={false}
+      allowSorting={true}
+      allowMerging={AllowMerging.All}
+    />
   );
 };

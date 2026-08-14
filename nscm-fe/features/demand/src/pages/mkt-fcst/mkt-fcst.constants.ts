@@ -9,7 +9,6 @@ export type MENU_ID = typeof MENU_ID;
 export enum SHEETS {
   MAIN = 'Mkt Fcst', // 메인 그리드 — wide format (동적 M_/W_/D_ 컬럼). 등록명 그대로(룰 #91 sheet-name-asis-preserve). corp handoff 42~45 가 BTN_MPG SHT_NM / SHEET_COLUMNS / SHEET_MEASURE / SP 를 'Mkt Fcst' 로 마이그레이션.
   SPREAD_TITLE = 'spreadTitle', // 동적 컬럼 메타 (기간 PIVOT 헤더)
-  MEASURE_COUNT = 'measureCount', // Item 별 Measure 개수 (Insert RowSpan)
   // ⭐ Phase 2e POPUP sheet (DMF0003 내부 sheet 확장 — corp BTN_MPG handoff 37_*.sql).
   SSP_COMPARE = 'sspCompare', // SSP↔MKT 비교 (DMF0003_GET_MKT_FCST_COMPARE_POPUP)
   PR_POPUP = 'prPopup', // PR 발행/조회 (GET/SAVE_PRPOPUP)
@@ -329,23 +328,13 @@ export const GROUP = {
 //   키 미보유 콤보(Div40 변형 등)는 자동 전체 통과 — 값 유실 없음.
 // ============================================================================
 export const GRID_CASCADE_FILTERS: Record<string, { rowKey: string; comboKey: string }[]> = {
-  // ⭐ 2026-08-04 AS-IS 정합 — TEAM_ID 셀 division cascade (.cs L3304 UserTeamByDivisionAuth(division)).
-  TEAM_ID: [{ rowKey: 'DIVISION_ID', comboKey: 'DIVISION_ID' }],
-  // ⭐ 2026-08-04 — TEAM_ID→DEPT_ID cascade 추가 (.cs L3313/L3325 team 파라미터 1:1).
-  //   콤보가 DEPT_ID 미반환이면 관대 통과(현행 무영향) — Auth판 CMBO(P8) 적용 시 활성.
-  END_CUSTOMER: [
-    { rowKey: 'DIVISION_ID', comboKey: 'DIVISION_ID' },
-    { rowKey: 'TEAM_ID', comboKey: 'DEPT_ID' },
-  ],
+  END_CUSTOMER: [{ rowKey: 'DIVISION_ID', comboKey: 'DIVISION_ID' }],
   SCM_SITE_ID: [
     { rowKey: 'DIVISION_ID', comboKey: 'DIVISION_ID' },
     { rowKey: 'END_CUSTOMER', comboKey: 'END_CUSTOMER' },
   ],
   // Div40 변형 — END_CUSTOMER40(값=PROJECT_CODE) / SCM_SITE_ID40. 콤보에 키 없으면 관대 통과.
-  END_CUSTOMER40: [
-    { rowKey: 'DIVISION_ID', comboKey: 'DIVISION_ID' },
-    { rowKey: 'TEAM_ID', comboKey: 'DEPT_ID' },
-  ],
+  END_CUSTOMER40: [{ rowKey: 'DIVISION_ID', comboKey: 'DIVISION_ID' }],
   SCM_SITE_ID40: [
     { rowKey: 'DIVISION_ID', comboKey: 'DIVISION_ID' },
     { rowKey: 'END_CUSTOMER40', comboKey: 'END_CUSTOMER' },
@@ -353,12 +342,9 @@ export const GRID_CASCADE_FILTERS: Record<string, { rowKey: string; comboKey: st
 };
 
 // 상위 콤보 값 변경 시 하위 셀 clear 체인 (같은 INSERT_GROUP 형제 행 포함 — DMF0020 동일).
-//   ⭐ 2026-08-04 AS-IS 정합 — SCM_SITE_ID(81/82) 변경 시 Project 계열+BizType clear (.cs L3422~3431).
-//   40(SCM_SITE_ID40)은 AS-IS 에 clear 없음(.cs L3518~3528 — Measure 콤보 재구성만) → 체인 미등록.
 export const GRID_CASCADE_CLEAR: Record<string, readonly string[]> = {
   END_CUSTOMER: ['SCM_SITE_ID'],
   END_CUSTOMER40: ['SCM_SITE_ID40'],
-  SCM_SITE_ID: ['PROJECT_CODE', 'PROJECT_NAME', 'PROJECT_STATUS', 'BIZ_TYPE'],
 };
 
 // ============================================================================

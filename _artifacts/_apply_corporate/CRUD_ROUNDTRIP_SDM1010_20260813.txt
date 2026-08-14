@@ -1,0 +1,20 @@
+  [PASS] 1. SAVE(I) CODE=0
+  [PASS] 1a. 원장 INSERT 실재+DRAFT+감사키
+  [PASS] 1g. 필수 누락 = REQUIRED 거부
+  [PASS] 1h. 중복 = DUPLICATE 거부
+  [PASS] 2. SAVE(M) 반영
+  [PASS] 3. 등록요청 = REQUEST+요청일
+  [PASS] 3g. REQUEST 행 M = 무효(가드)
+  [PASS] 3h. REQUEST 행 D = 무효(가드)
+  [PASS] 3i. REQUEST 행 재요청 = 0건
+  [PASS] 4. 요청취소 = DRAFT+요청일 NULL
+  [PASS] 5. 권한 저장 2건
+  [PASS] 5b. 권한 조회 2행
+  [PASS] 6. 승인→권한 반영 / 반려 상태
+  [PASS] 6b. 전량교체(1건 잔존) + P-24 제외자 요청 반려
+  [PASS] 7. MyWork 15컬럼+1행+Sample 값
+  [PASS] 8. 삭제 후 SDM_MST_DPJT_M 잔존 0
+  [PASS] 8. 삭제 후 SDM_MST_DPJT_AUTH_M 잔존 0
+  [PASS] 8. 삭제 후 SDM_MST_DPJT_AUTH_REQ_M 잔존 0
+
+== 총계: PASS 18 / FAIL 0

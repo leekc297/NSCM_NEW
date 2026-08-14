@@ -45,7 +45,9 @@ export const CustomerModelMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
     if (!gridRef.current) return;
 
     GridAction.addRow(gridRef.current, {
-      DIVISION_ID: filters?.divisionId ?? '81',
+      DIVISION_ID: searchParams.divisionId,
+      // 신규행 사용여부 기본값 Y (AS-IS 와 동일 — 저장 시 NULL 로 나가지 않도록)
+      VALID_YN: 'Y',
     });
   };
 

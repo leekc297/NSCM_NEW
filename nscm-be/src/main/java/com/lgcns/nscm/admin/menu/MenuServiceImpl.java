@@ -19,6 +19,7 @@ import com.lgcns.nscm.admin.menu.dto.MenuDto;
 import com.lgcns.nscm.admin.menu.dto.SearchCondition;
 import com.lgcns.nscm.admin.menu.dto.SearchConditionForDB;
 import com.lgcns.nscm.admin.menu.dto.TitleSetSaveRequest;
+import com.lgcns.nscm.admin.menu.dto.TitleSetSearchRequest;
 import com.lgcns.nscm.framework.base.BaseService;
 import com.lgcns.nscm.framework.security.CustomUserDetails;
 
@@ -137,6 +138,30 @@ public class MenuServiceImpl extends BaseService implements MenuService {
 		selectList(nameSpace + "resetSearchConditions", params);
 
 		return;
+	}
+
+	/**
+	 * 컬럼 개인화(titleSet) 조회 — 공용 Column 팝업 전용.
+	 *
+	 * <p>DMF0002_GET_TITLESET_POPUP 고정 매핑 — call-proc 경로는 화면마다
+	 * SCM_ADM_MNU_BTN_MPG_M 에 (MNU_ID, 'titleSet', 'SEARCH') 등록이 필요해 미등록 화면이 403 이 난다.
+	 * programId 는 path 의 mnuId, P_USER_ID 는 로그인 세션에서 채운다(클라이언트 신뢰 금지).
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Map<String, Object>> retrieveTitleSet(String userId, String mnuId, TitleSetSearchRequest request) throws Exception {
+
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("programId", mnuId);
+		params.put("sheetName", request.getSheetName());
+		params.put("columnType", request.getColumnType());
+		params.put("sesUserId", userId);
+		params.put("divisionId", request.getDivisionId());
+		params.put("menuId", mnuId);
+
+		Map<String, Object> result = selectList(nameSpace + "retrieveTitleSet", params);
+
+		return (List<Map<String, Object>>) result.get(DEFAULT_DATA_RESULT);
 	}
 
 	/**

@@ -37,8 +37,8 @@ interface State {
   staticColumns: StaticColumnsBySheet;
   staticMeasures: StaticMeasuresBySheet;
   visibleMeasures: VisibleMeasuresBySheet;
-  // ColumnSettingModal OK 결과 (표시 컬럼 키 목록). null = 미설정(BE display=DEFAULT/개인화 그대로).
-  //   모달 재진입 복원(initialVisibleKeys) + fetchStaticColumns 재조회 후 재적용에 사용.
+  // ColumnLayoutModal(공용) 저장 결과 (표시 컬럼 키 목록). null = 미설정(BE display=DEFAULT/개인화 그대로).
+  //   모달 재진입 복원(initialSettings) + fetchStaticColumns 재조회 후 재적용에 사용.
   userColumnKeys: string[] | null;
   // ⭐ A-4 — PR_GET_DAY_RANGE 기본 Period 적용 1회성 (persist — 탭 재진입 remount 시
   //   사용자가 변경한 Period 를 서버 기본값이 다시 덮던 사고 차단)
@@ -113,7 +113,7 @@ const initState: State = {
   dayRangeApplied: false,
 };
 
-// ColumnSettingModal 선택 override — 선택 컬럼은 display+visible 동시 true (사용자 명시 선택은
+// ColumnLayoutModal 선택 override — 선택 컬럼은 display+visible 동시 true (사용자 명시 선택은
 //   VISIBLE_FLAG='N' 숨김 데이터 컬럼 게이트보다 우선 — 예: MEASURE), 미선택은 display=false.
 const applyUserColumnOverride = (
   cols: RawFlexGridColumnConfig[],
@@ -240,7 +240,7 @@ export const useSalesMonitoringStore = createPersistedStoreWithTab<State & Actio
       }
     },
 
-    // ColumnSettingModal OK — 선택 column 만 표시 (display 갱신 + 선택 컬럼은 visible 도 true —
+    // ColumnLayoutModal 저장 — 선택 column 만 표시 (display 갱신 + 선택 컬럼은 visible 도 true —
     //   사용자 명시 선택이 VISIBLE_FLAG='N' 숨김 게이트보다 우선, 예: MEASURE). 선택 결과는
     //   userColumnKeys 로 보관 → 모달 재진입 복원 + Search 재조회 후 재적용 (2026-07-04 사용자 지적).
     applyColumnVisibility: (sheetName, visibleKeys) => {

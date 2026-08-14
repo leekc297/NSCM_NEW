@@ -1,6 +1,7 @@
 import {
   ColumnLayoutModal,
   ItemByDivisionModal,
+  MeasureSelectModal,
   ProjectByDivisionModal,
 } from 'features/master/src/components';
 import { useMemo } from 'react';
@@ -13,12 +14,7 @@ import { useBusinessPlanStore } from '../useBusinessPlanStore';
 import { saveTitleSet } from '../utils/business-plan.api';
 import { isDiv40 } from '../utils/business-plan.division';
 
-import {
-  ExchangeRateModal,
-  MeasureSelectModal,
-  ReplaceByCutoffModal,
-  VersionCutoffModal,
-} from './modals';
+import { ExchangeRateModal, ReplaceByCutoffModal, VersionCutoffModal } from './modals';
 
 export type BusinessPlanModalKey =
   | 'PROJECT'
@@ -45,6 +41,10 @@ interface BusinessPlanModalsProps {
   onRefetch: () => void;
   // 셀 모달 적용 — 부모가 INSERT_GROUP_ID 매칭 Measure 블록 전 행에 patch 반영
   applyToInsertBlock: (patch: Record<string, unknown>) => void;
+  // ⭐ Column/Measure 설정 저장 시 그리드 비움 (hook #132 §2-2 — Division 변경과 동일 초기화
+  //   규약. 이전 결과는 옛 구성으로 조회된 것이라 새 구성과 어긋남 → Search 재조회 유도.
+  //   자동 재조회(invalidateQueries/refetch) 금지, saveTitleSet 성패 무관 비움).
+  onSettingsApplied: () => void;
 }
 
 // ⭐ DMF0042 모달 7종 묶음 (진입 컴포넌트 분리 — components/ 분리 의무 진입≤400):
@@ -69,6 +69,7 @@ export const BusinessPlanModals = ({
   onClose,
   onRefetch,
   applyToInsertBlock,
+  onSettingsApplied,
 }: BusinessPlanModalsProps) => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
@@ -242,9 +243,12 @@ export const BusinessPlanModals = ({
             // ⭐ 팝업 titleSet 캐시 무효화 필수 — 전역 staleTime=Infinity 라 invalidate 없이는
             //   재조회가 안 일어나고, buildInitialRows 는 BE 응답을 화면 상태보다 우선하므로
             //   방금 표시로 옮긴 컬럼이 재진입 시 비표시로 보인다 (DMF0003 2026-07-28 실측 사고).
+            //   (메인 그리드 쿼리 키는 tabId UUID prefix 라 이 invalidate 에 미매칭 — 모달 캐시 전용)
             void queryClient.invalidateQueries({ queryKey: [MENU_ID] });
             void fetchStaticColumns();
           });
+          // hook #132 §2-2 — 저장 성패 무관 그리드 비움 (Search 재조회 유도)
+          onSettingsApplied();
         }}
       />
 
@@ -264,8 +268,11 @@ export const BusinessPlanModals = ({
           ).then(ok => {
             if (!ok) return;
             void fetchStaticMeasures();
+            // 모달 titleSet 캐시 무효화 전용 (메인 그리드 키는 tabId UUID prefix — 미매칭)
             void queryClient.invalidateQueries({ queryKey: [MENU_ID] });
           });
+          // hook #132 §2-2 — 저장 성패 무관 그리드 비움 (Search 재조회 유도)
+          onSettingsApplied();
         }}
       />
 

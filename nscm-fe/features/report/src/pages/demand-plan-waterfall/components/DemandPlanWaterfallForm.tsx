@@ -111,7 +111,7 @@ export const DemandPlanWaterfallForm = ({ onSubmit }: DemandPlanWaterfallFormPro
   return (
     <>
       <SearchArea
-        searchButtonLabel={t('LBL00691', 'Search')}
+        searchButtonLabel={t('LBL00112', '_Search')}
         isHidden={!isOpenSearchArea}
         onSearch={onSubmit}
         // 펼침(3단) 시 flex 축소로 내용이 SubTitle 위에 겹치는 것 방지 — 검색영역은 원 높이 유지,

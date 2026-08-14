@@ -10,6 +10,7 @@ import {
 import { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { type MutableRefObject, useCallback, useEffect, useMemo, useRef } from 'react';
 
+import { apiClient } from '@foundation/apis';
 import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import dayjs from '@foundation/dayjs';
 import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
@@ -321,14 +322,13 @@ export const MktFcstGrid = ({
     filters: [
       'FcstTypeWs',
       { comboId: 'AS_FROM_SITE', param1: `'${division}'` },
-      // ⭐ 2026-08-04 AS-IS 정합 — AS 사이트 행 Incoterms 편집 후보 (AS-IS UP_FX_DM 'AS_INCOTERMS'
-      //   AS분기 1:1, CMBO 'AsIncotermsEdit' @divisionId). 미등록/0행이면 스왑 생략(기존 IncotermsEdit).
+      // [CD-02 2026-08-12] AS(비축)향 사이트 행 전용 Incoterms (AS-IS AS_INCOTERMS lookup — .cs L3441·6517).
       { comboId: 'AsIncotermsEdit', divisionId: `'${division}'` },
     ],
   });
   const wsFcstTypeSetRef = useRef<Set<string>>(new Set());
   const asSiteNamesRef = useRef<Set<string>>(new Set());
-  const asIncotermsRowsRef = useRef<Record<string, unknown>[]>([]);
+  const asIncotermsMapRef = useRef<DataMap | null>(null);
   useEffect(() => {
     wsFcstTypeSetRef.current = new Set(
       (wsFcstTypeRows ?? [])
@@ -338,22 +338,50 @@ export const MktFcstGrid = ({
     asSiteNamesRef.current = new Set(
       (asSiteRows ?? []).map(r => toCellStr((r as { NAME?: unknown }).NAME).trim()).filter(Boolean)
     );
-    asIncotermsRowsRef.current = (asIncotermsRows ?? []) as unknown as Record<string, unknown>[];
+    const air = (asIncotermsRows ?? []) as unknown as Record<string, unknown>[];
+    asIncotermsMapRef.current = air.length > 0 ? new DataMap(air, 'CODE', 'NAME') : null;
   }, [wsFcstTypeRows, asSiteRows, asIncotermsRows]);
 
   const isAsFromSiteEditable = useCallback((row: unknown, isInsert: boolean): boolean => {
     if (!isInsert || !wsPlannerRef.current) return false;
-    const r = row as Record<string, unknown> | undefined;
-    // ⭐ 2026-08-04 AS-IS 정합 — 행 사이트가 AS(비축)향 사이트면 AS_FROM_SITE 비활성
-    //   (.cs L3566 outer 분기 + L6540~6557: AS 사이트 행 = AS_FROM_SITE clear+lock).
-    const site = toCellStr(r?.SCM_SITE_ID).trim();
-    if (site && asSiteNamesRef.current.has(site)) return false;
-    const ft = toCellStr(r?.FCST_TYPE).trim();
+    const rec = row as Record<string, unknown> | undefined;
+    // [CE-02 2026-08-12] 비축향(AS 사이트) 행은 항상 잠금 — AS-IS 는 잠금+값 클리어(.cs L3480~3483).
+    //   AS_FROM_SITE 콤보 NAME = AS 사이트 명(.cs `dtAsSalesSite.Select("Name = …")` 1:1).
+    const site = toCellStr(rec?.SCM_SITE_ID).trim();
+    // [통합테스트 1st No.56-① 2026-08-12] Sales Site 미입력 행은 잠금 — 고객향 사이트가
+    //   "선택된" 경우에만 활성(미입력 상태 활성은 결함 판정).
+    if (!site) return false;
+    if (asSiteNamesRef.current.has(site)) return false;
+    const ft = toCellStr(rec?.FCST_TYPE).trim();
     return wsFcstTypeSetRef.current.has(ft);
   }, []);
 
   // 편집 시작 셀의 (binding, oldVal) — cellEditEnded 에서 실제 값 변경 여부 판정(불필요 clear 방지).
   const editingCellRef = useRef<{ binding: string; oldVal: unknown } | null>(null);
+
+  // [CD-10 2026-08-12] 행별 Plant Site 후보 캐시 — PROJECT_CODE/ITEM_ID 변경 시 재조회
+  //   (AS-IS .cs L4157·4166·6614 — SalesPlant/PlantSiteByItem @division·project·item).
+  const plantSitesRef = useRef<WeakMap<object, Record<string, unknown>[]>>(new WeakMap());
+  const applyPlantSites = useCallback(
+    (row: Record<string, unknown>) => {
+      if (!division.startsWith('81')) return; // AS-IS: 81* 만 행별 재조회(.cs L4152·4161)
+      const q = (v: unknown): string => `'${toCellStr(v).trim()}'`;
+      void apiClient
+        .getCombo({
+          comboId: 'PlantSiteByItem',
+          divisionId: q(row.DIVISION_ID ?? division),
+          projectCode: q(row.PROJECT_CODE),
+          itemId: q(row.ITEM_ID),
+        })
+        .then(rows2 => {
+          plantSitesRef.current.set(row as object, (rows2 ?? []) as Record<string, unknown>[]);
+        })
+        .catch(() => {
+          // 폴백 무증상 금지(hook #117 §5.8) — 실패 시 캐시 미갱신 → 표준 콤보 유지
+        });
+    },
+    [division]
+  );
 
   // ⭐ 동적 기간 컬럼 메타 — GET_SPREAD_TITLE 결과를 1차 소스로 사용 (DMF0020 패턴).
   //   ⭐ Sum 체크박스(AS-IS chkSum L4723/4772/4782) — 활성 bucket 외에 상위 합계 prefix 도 함께 렌더:
@@ -770,6 +798,51 @@ export const MktFcstGrid = ({
         // ⭐ 편집 전용 콤보 스왑 (MEASURE=편집가능 measure / INCOTERMS=유효 Incoterms / FCST_TYPE=
         //   W/S 전용 EDIT_MODE 6종). 조회 표시는 전체 dataMap, 편집 후보만 유효분으로 교체
         //   (AS-IS 편집/조회 이원화). cellEditEnded 에서 원복.
+        // [CD-02 2026-08-12] AS(비축)향 사이트 행의 INCOTERMS = AS 전용 목록으로 스왑
+        //   (AS-IS GetIncotermsType=AS_INCOTERMS — ScmSiteId 변경 L3441·Paste L6517).
+        //   후보 0건이면 스왑 생략(표준 편집 콤보 유지 — 회귀 0).
+        if (binding === 'INCOTERMS' && row) {
+          const rowSite = toCellStr((row as Record<string, unknown>).SCM_SITE_ID).trim();
+          if (rowSite && asSiteNamesRef.current.has(rowSite) && asIncotermsMapRef.current) {
+            editingCellRef.current = {
+              binding,
+              oldVal: (row as Record<string, unknown>)[binding],
+            };
+            col.dataMap = asIncotermsMapRef.current;
+            return;
+          }
+        }
+        // [CD-10 2026-08-12] PLANT_SITE_ID — 행 project/item 으로 좁힌 후보 스왑
+        //   (AS-IS SalesPlant/PlantSiteByItem @project·item — .cs L4157·4166·6614).
+        //   행 단위 재조회 캐시(applyPlantSites — PROJECT_CODE/ITEM_ID 변경 트리거)가 채운다.
+        if (binding === 'PLANT_SITE_ID' && row) {
+          const candidates = plantSitesRef.current.get(row as object);
+          if (candidates && candidates.length > 0) {
+            editingCellRef.current = {
+              binding,
+              oldVal: (row as Record<string, unknown>)[binding],
+            };
+            col.dataMap = new DataMap(candidates, 'CODE', 'NAME');
+            return;
+          }
+        }
+        // [통합테스트 1st No.54 2026-08-12] 82 Div 는 WS(Chargeable)/WS(Free) FCST Type 선택 불가 —
+        //   W/S 편집콤보(EDIT_MODE 6종)·일반 콤보(SALES_TYPE_CODE 14종) 양쪽에서 WS/WSF 제거.
+        //   (AS-IS .cs 에는 없던 제약 — 통합테스트 사전점검 1st No.54 명시 요구. 81* 는 영향 0.)
+        if (binding === 'FCST_TYPE' && division === '82' && row) {
+          const wsSwap = wsPlannerRef.current && (editComboRowsRef.current[binding] ?? []).length > 0;
+          const src = wsSwap
+            ? (editComboRowsRef.current[binding] ?? [])
+            : (comboRowsRef.current[binding] ?? []);
+          const candidates = src.filter(cr => {
+            const code = toCellStr(cr.CODE).trim();
+            return code !== 'WS' && code !== 'WSF';
+          });
+          if (candidates.length > 0) {
+            col.dataMap = new DataMap(candidates, 'CODE', 'NAME');
+            return;
+          }
+        }
         const editCfg = GRID_EDIT_COMBO[binding];
         //   [E20260402-001736] wsOnly(FCST_TYPE): 비W/S 는 스왑 생략 = 기존 'FcstType' 일반 12종
         //   dataMap 그대로 (.cs L2587~2605 else 분기 = GetFcstType()).
@@ -795,16 +868,6 @@ export const MktFcstGrid = ({
             }
             if (candidates.length > 0) {
               col.dataMap = new DataMap(candidates, 'CODE', 'NAME');
-              return;
-            }
-          }
-          // ⭐ 2026-08-04 AS-IS 정합 — AS(비축)향 사이트 행의 INCOTERMS 편집 후보 = AS 전용 lookup
-          //   (.cs L3442 GetIncotermsType → UP_FX_DM 'AS_INCOTERMS': AS_SITE_PLANT 사이트면 AS 전용,
-          //   아니면 일반). 'AsIncotermsEdit' 미등록/0행이면 스왑 생략 → 기존 IncotermsEdit 유지.
-          if (binding === 'INCOTERMS' && row) {
-            const site = toCellStr((row as Record<string, unknown>).SCM_SITE_ID).trim();
-            if (site && asSiteNamesRef.current.has(site) && asIncotermsRowsRef.current.length > 0) {
-              col.dataMap = new DataMap(asIncotermsRowsRef.current, 'CODE', 'NAME');
               return;
             }
           }
@@ -977,19 +1040,6 @@ export const MktFcstGrid = ({
           }
         }
       }
-      // ⭐ 2026-08-04 AS-IS 정합 — FCST_TYPE/SCM_SITE_ID 변경 후 AS_FROM_SITE 활성조건 미충족 시
-      //   값 clear (.cs L3588/3598 + L6556/6582: 비활성 전환 시 SetText("")). 활성 유지 시 값 보존
-      //   (AS/WS 타입 간 전환은 유지 — 무조건 clear 아님). 판정 = isAsFromSiteEditable 공유.
-      if ((binding === 'FCST_TYPE' || binding === 'SCM_SITE_ID') && changed) {
-        for (const item of view.items) {
-          if (item.CRUD_TYPE === 'I' && item.INSERT_GROUP_ID === gid) {
-            const rec = item as Record<string, unknown>;
-            if (toCellStr(rec.AS_FROM_SITE).trim() && !isAsFromSiteEditable(item, true)) {
-              rec.AS_FROM_SITE = '';
-            }
-          }
-        }
-      }
       // ⭐ MEASURE 변경 시 model(품목) 컬럼 clear (AS-IS: measure 교체 시 종속 model 재선택 강제).
       //   예외 = MEASURE_MODEL_KEEP(AS_In_Req/BNPIn) 은 model 유지. 같은 INSERT_GROUP 형제 행 일괄.
       if (binding === 'MEASURE' && changed) {
@@ -1004,6 +1054,46 @@ export const MktFcstGrid = ({
             }
           }
         }
+      }
+      // ⭐ [CE-04 2026-08-12] AS 3축 조건 파기 시 값 클리어 — AS-IS 는 잠글 때마다 SetText("") 동반
+      //   (.cs L3478~3483 비축향 → MEASURE·AS_FROM_SITE 클리어 / L3506·3587·3597 비W-S FCST Type →
+      //   AS_FROM_SITE 클리어). 안 비우면 이전 값이 저장 payload 로 감(DMF0082 08-11 동일 계보 보완 선례).
+      if ((binding === 'SCM_SITE_ID' || binding === 'FCST_TYPE') && changed) {
+        const isDiv8182 = division.startsWith('81') || division === '82';
+        if (isDiv8182) {
+          for (const item of view.items) {
+            if (item.CRUD_TYPE !== 'I' || item.INSERT_GROUP_ID !== gid) continue;
+            const rec = item as Record<string, unknown>;
+            const site = toCellStr(rec.SCM_SITE_ID).trim();
+            const isAsSite = !!site && asSiteNamesRef.current.has(site);
+            const ft = toCellStr(rec.FCST_TYPE).trim();
+            const isWsFt = !!ft && wsFcstTypeSetRef.current.has(ft);
+            if (binding === 'SCM_SITE_ID' && isAsSite) {
+              // 비축향 전환 — MEASURE 후보가 AS_In_Req 단독으로 바뀌므로 기존 값 클리어(.cs L3478)
+              rec.MEASURE = '';
+            }
+            if (isAsSite || !isWsFt) {
+              // 비축향이거나 FCST Type 이 W/S 계열 아님 → AS_FROM_SITE 잠금 + 값 클리어
+              if (toCellStr(rec.AS_FROM_SITE).trim() !== '') rec.AS_FROM_SITE = '';
+            }
+          }
+        }
+      }
+      // ⭐ [CG-05 2026-08-12] I 행 키값 변경 → 수량 전부 클리어 (.cs L5319~5379 — 키가 바뀌면 기존
+      //   수량은 의미 없음. 남겨두면 잘못된 키로 저장됨). 정적 컬럼(수량 외) 값이 실제로 바뀐 경우만.
+      if (changed) {
+        for (const item of view.items) {
+          if (item.CRUD_TYPE !== 'I' || item.INSERT_GROUP_ID !== gid) continue;
+          const rec = item as Record<string, unknown>;
+          for (const b of dynBindings) {
+            if (rec[b] != null && rec[b] !== '') rec[b] = null;
+          }
+        }
+      }
+      // ⭐ [CD-10 2026-08-12] PROJECT_CODE/ITEM_ID 변경 → 행별 Plant Site 후보 재조회
+      //   (AS-IS .cs L4152~4170 — 81* 만). beginningEdit 의 PLANT_SITE_ID 스왑이 소비.
+      if ((binding === 'PROJECT_CODE' || binding === 'ITEM_ID') && changed) {
+        applyPlantSites(staticRow as unknown as Record<string, unknown>);
       }
       editingCellRef.current = null;
       s.invalidate(true);

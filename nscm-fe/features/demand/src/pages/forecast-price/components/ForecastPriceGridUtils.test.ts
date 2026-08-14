@@ -26,15 +26,32 @@ import {
 const tracker = () => ({ storeChange: vi.fn() }) as never;
 
 /** 2026-08-03(월) ~ 2026-08-09(일) 1주. dayjs().day(): 0=SUN … 6=SAT */
-const WEEK1 = ['D_20260803', 'D_20260804', 'D_20260805', 'D_20260806', 'D_20260807', 'D_20260808', 'D_20260809'];
-const WEEK2 = ['D_20260810', 'D_20260811', 'D_20260812', 'D_20260813', 'D_20260814', 'D_20260815', 'D_20260816'];
+const WEEK1 = [
+  'D_20260803',
+  'D_20260804',
+  'D_20260805',
+  'D_20260806',
+  'D_20260807',
+  'D_20260808',
+  'D_20260809',
+];
+const WEEK2 = [
+  'D_20260810',
+  'D_20260811',
+  'D_20260812',
+  'D_20260813',
+  'D_20260814',
+  'D_20260815',
+  'D_20260816',
+];
 
 const weekMap = () =>
   new Map<string, Set<string>>([
     ['W_2026081', new Set(WEEK1)],
     ['W_2026082', new Set(WEEK2)],
   ]);
-const monthMap = () => new Map<string, Set<string>>([['M_202608', new Set(['W_2026081', 'W_2026082'])]]);
+const monthMap = () =>
+  new Map<string, Set<string>>([['M_202608', new Set(['W_2026081', 'W_2026082'])]]);
 
 const row = (over: Record<string, unknown> = {}) =>
   ({ DIVISION_ID: '81', MEASURE: 'MKT_FCST', BUCKET: null, ...over }) as never;

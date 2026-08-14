@@ -19,10 +19,10 @@ export const divisionKindOf = (divisionId: string): DivisionKind => {
 
 export const isDiv40 = (divisionId: string): boolean => divisionKindOf(divisionId) === 'D40';
 export const isDiv81 = (divisionId: string): boolean => divisionKindOf(divisionId) === 'D81';
-export const isDiv82 = (divisionId: string): boolean => divisionKindOf(divisionId) === 'D82';
 
 // 81 시작 또는 82 = Project 계열 키 사용 (40 = END_CUSTOMER40 계열). AS-IS L2344/2355 동치.
-export const usesProjectKeys = (divisionId: string): boolean => !isDiv40(divisionId);
+//   (isDiv82/usesProjectKeys 외부 export 는 미소비라 내부 강등 — 게이트 §1 반쪽구현 함정, 2026-08-12)
+const usesProjectKeys = (divisionId: string): boolean => !isDiv40(divisionId);
 
 // 타입 안전 string 변환 — string/number 만 (객체는 ''). no-base-to-string 회피.
 const str = (v: unknown): string =>
@@ -52,7 +52,11 @@ export interface RequiredField {
   read?: (row: Record<string, unknown>) => string;
 }
 
-export const requiredFieldsFor = (divisionId: string, measure: string): RequiredField[] => {
+export const requiredFieldsFor = (
+  divisionId: string,
+  measure: string,
+  fcstType = ''
+): RequiredField[] => {
   const d40 = isDiv40(divisionId);
   const d81 = isDiv81(divisionId);
   const catchUp = measure === EDIT_MEASURE.CATCH_UP;
@@ -60,8 +64,15 @@ export const requiredFieldsFor = (divisionId: string, measure: string): Required
   fields.push({ col: 'DIVISION_ID', fallback: 'Division' });
   if (!d40) fields.push({ col: 'PROJECT_CODE', fallback: 'Project' });
   if (d40) fields.push({ col: 'END_CUSTOMER40', lblKey: 'LBL00080', fallback: 'End Customer' });
-  if (d40 && !catchUp) fields.push({ col: 'DEPT_ID', fallback: 'Team' });
-  if (d81) fields.push({ col: 'TEXT', fallback: 'Text', read: r => readTextSlot(r, divisionId) });
+  // ⭐ [통합테스트 1st No.61-④ 2026-08-12] Team 필수 해제 — 전 Div 입력 불가로 전환(마스터 파생 표시).
+  //   AS-IS L2227(40 & ≠Catch_Up 필수)은 40 이 Team 을 직접 입력하던 시절 계약. 입력 불가 컬럼을
+  //   필수로 두면 신규 행 저장이 항상 실패한다.
+  void catchUp;
+  // ⭐ [통합테스트 1st No.59 2026-08-12] 81 TEXT 필수 = FCST_TYPE='ETC'(DM_PLN_SALES_ETC_PLAN 경로) 행만.
+  //   AS-IS L2228 은 81 무조건이었으나 E20260331 로 RTF 행(DM_PLN_SALES_PLAN 경로)도 저장 대상이 되며
+  //   과검증이 됨 — RTF 수정 시 TEXT 필수 팝업 오발동(결함 원문 명시 요구).
+  if (d81 && fcstType === 'ETC')
+    fields.push({ col: 'TEXT', fallback: 'Text', read: r => readTextSlot(r, divisionId) });
   // ⚠️ [E20260512-000502] FROM_SITE_ID / PLANT_SITE_ID 는 값-필수 아님 — AS-IS 활성 SaveData 루프(L2225+)는
   //   FROM_SITE_ID 미검사, PLANT_SITE_ID 는 `//p_plant_site_id == ""` 주석처리. L723/L2043 은 컬럼-존재
   //   체크(MSG00113)로 메타(#5 SHEET_COLUMNS 81 등록)로 충족. 값-필수 13종은 현행 그대로.

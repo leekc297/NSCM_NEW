@@ -39,8 +39,21 @@ export const CustomListboxRow = ({
 
   const [{ key, ...optionProps }, , childLabel, , selected] = dataSet;
 
+  // optionProps(MUI 옵션 props)에 className(MuiAutocomplete-option)이 들어있어
+  // 스프레드가 styles.childItem 을 덮어썼다 → nowrap/ellipsis 가 적용 안 돼 긴 라벨이
+  // 2줄로 줄바꿈되고 행 높이가 react-window 고정 높이(ITEM_SIZE=36)를 넘겼다.
+  // className 을 스프레드 뒤에서 병합해 childItem(한 줄 고정)이 살아남게 한다.
+  const { className: optionClassName, ...restOptionProps } = optionProps as {
+    className?: string;
+  } & Record<string, unknown>;
+
   return (
-    <li className={styles.childItem} style={inlineStyle} key={key} {...optionProps}>
+    <li
+      {...restOptionProps}
+      className={[optionClassName, styles.childItem].filter(Boolean).join(' ')}
+      style={inlineStyle}
+      key={key}
+    >
       {multiple && <Checkbox checked={selected} />}
       {childLabel}
     </li>

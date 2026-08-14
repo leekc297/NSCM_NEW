@@ -8,6 +8,7 @@ import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 
 import { ItemByDivisionModal, ProjectByDivisionModal } from '../../../components';
+import { DIVISION_NO_PROJECT } from '../customer-model-mapping.constants';
 import { useCustomerModelMappingStore } from '../useCustomerModelMappingStore';
 
 export const CustomerModelMappingForm = () => {
@@ -17,6 +18,9 @@ export const CustomerModelMappingForm = () => {
   const setSearchParams = useCustomerModelMappingStore(state => state.setSearchParams);
   const setFilters = useCustomerModelMappingStore(state => state.setFilters);
   const isOpenSearchArea = useCustomerModelMappingStore(state => state.isOpenSearchArea);
+
+  // Division 40 은 Project 개념이 없어 조회조건 Project 를 잠근다 (입력·팝업 모두).
+  const isProjectDisabled = searchParams.divisionId === DIVISION_NO_PROJECT;
 
   const [openPrjByDivisionModal, setOpenPrjByDivisionModal] = useState<boolean>(false);
   const [openModelByDivisionModal, setOpenModelByDivisionModal] = useState<boolean>(false);
@@ -45,7 +49,9 @@ export const CustomerModelMappingForm = () => {
                       myDivision?.map(item => ({ label: item.NAME, value: item.CODE })) ?? []
                     }
                     onChange={(_, option) => {
-                      setSearchParams({ divisionId: option });
+                      // Project 코드는 Division 소속 값이라 Division 이 바뀌면 초기화한다
+                      //   (40 으로 바꿀 때 잠긴 칸에 이전 값이 남아 조회에 실려 가는 것도 함께 막힌다).
+                      setSearchParams({ divisionId: option, projectCode: '' });
                     }}
                   />
                 )}
@@ -147,6 +153,7 @@ export const CustomerModelMappingForm = () => {
                   <InputField
                     fullWidth
                     className={commonStyles.popupSearchField}
+                    disabled={isProjectDisabled}
                     value={searchParams.projectCode}
                     onChange={event => setSearchParams({ projectCode: event.target.value })}
                     InputProps={{
@@ -154,16 +161,17 @@ export const CustomerModelMappingForm = () => {
                         <Button
                           appearance='outlined'
                           priority='normal'
+                          disabled={isProjectDisabled}
                           iconComponent={
                             <FunctionSearchIcon
                               appearance='lined'
-                              onClick={() => setOpenPrjByDivisionModal(true)}
+                              onClick={() => !isProjectDisabled && setOpenPrjByDivisionModal(true)}
                             />
                           }
                         />
                       ),
                     }}
-                    onDoubleClick={() => setOpenPrjByDivisionModal(true)}
+                    onDoubleClick={() => !isProjectDisabled && setOpenPrjByDivisionModal(true)}
                   />
                 )}
               />

@@ -22,6 +22,38 @@ export const CONVERT_QTY_BINDINGS = {
 /** Model Type 필드 바인딩 (AS-IS ITEM_CLASS_NAME). */
 export const MODEL_TYPE_BINDING = 'ITEM_CLASS_NAME';
 
+/** PJT Code 필드 바인딩. */
+export const PROJECT_CODE_BINDING = 'PROJECT_CODE';
+
+/**
+ * Project 개념이 없는 Division (Mobility) — 조회조건 Project 입력/팝업 비활성 대상.
+ * MKT FCST(DMF0043) ProjectField 의 `disabled={sc.divisionId === DIVISION.MOBILITY}` 와 동일 규칙.
+ */
+export const DIVISION_NO_PROJECT = '40';
+
+/** Division 필드 바인딩. */
+export const DIVISION_BINDING = 'DIVISION_ID';
+
+/**
+ * 컬럼 메타 Param1(SCM_MST_SHEET_COLUMNS.ATTRIBUTE1) 의 허용 Division 목록 판정.
+ *
+ * 관리자 UI Category Setup 에서 해당 컬럼 Param1 에 콤마 목록을 넣으면 그 Division 에서만
+ * 편집/팝업이 열린다 (예: PROJECT_CODE 에 '81,81_UC,81_HM,81_ST,81_HD,81_HG,82' → 40 은 잠김).
+ * 값이 비어 있으면 제한 없음 — 메타 미등록 화면/컬럼은 종전대로 동작한다.
+ *
+ * 판정은 콤마 토큰 정확 일치다(substring 금지, 룰 #92 — sales-monitoring _divisionAllow 와 동일 규약).
+ * 그래서 81 하위 코드(81_HM 등)를 허용하려면 그 코드까지 목록에 적어야 한다.
+ */
+export const isDivisionAllowed = (allowList?: string, divisionId?: string): boolean => {
+  const allow = allowList?.trim();
+  if (!allow) return true;
+  if (!divisionId) return true;
+  return allow
+    .split(',')
+    .map(token => token.trim())
+    .includes(divisionId);
+};
+
 export interface ConvertQtyEditable {
   pack: boolean;
   module: boolean;

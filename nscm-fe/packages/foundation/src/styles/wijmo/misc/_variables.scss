@@ -100,7 +100,11 @@ $wj-cell-grp-bkg: safedarken($wj-hdr-bkg, 5%) !default; // group row background
 $wj-cell-grp-txt: $wj-hdr-txt !default; // group row foreground
 $wj-cell-frz-bdr-clr: safedarken($wj-hdr-bkg, 30%) !default; // frozen cell border color
 $wj-cell-frz-bdr: 1px solid $wj-cell-frz-bdr-clr !default; // frozen cell border
-$wj-cell-frz-bdr-vrt: $wj-cell-frz-bdr !default; // frozen area vertical border
+// NSCM 커스텀: 고정(Pin) 영역 경계를 굵은 세로 라인으로 강조 — 어디까지 고정인지 시각 표시
+//   (컨텍스트 메뉴 Pin Column / 컬럼 메타 _fixed 둘 다 해당. 원본은 $wj-cell-frz-bdr 과 동일 1px)
+//   ⚠ 이 파일은 @use "mixins" 네임스페이스라 bare safedarken() 은 평가되지 않고 CSS 리터럴로
+//     남는다(스톡 코드의 기존 결함 — 그래서 원래 고정 경계선이 안 보였다). mixins. 접두 필수.
+$wj-cell-frz-bdr-vrt: 3px solid mixins.safedarken($wj-hdr-bkg, 55%) !default; // frozen area vertical border
 $wj-cell-frz-bdr-hrz: $wj-cell-frz-bdr !default; // frozen area horizontal border
 
 $wj-tooltip: $wj-bkg !default; // tooltip background

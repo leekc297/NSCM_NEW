@@ -54,7 +54,9 @@ export const CustomDropdown = ({
   options,
   value,
   onChange,
-  limitTags = 2,
+  // 앱 표준: 칩 1개 + "+N". 명시적으로 넘기지 않은 화면(구 default 2)도 일관되게 맞춘다.
+  // 2개 이상 노출이 필요한 곳은 limitTags 를 직접 지정한다(예: Templates 데모).
+  limitTags = 1,
   allOption,
   ...props
 }: SingleProps<DropdownOption> | MultipleProps<DropdownOption>) => {
@@ -166,15 +168,28 @@ export const CustomDropdown = ({
               const { key, ...itemProps } = getTagProps({ index: valueIndex });
 
               return (
-                <Chip
-                  key={key}
-                  {...itemProps}
-                  sx={{ overflow: 'hidden' }}
-                  chipText={option.label}
-                  size='small'
-                  type='input'
-                  deletable
-                />
+                // span 래퍼: 남는 폭에 맞춰 줄고(flex), hover 시 전체 라벨 툴팁(title).
+                <span key={key} className={styles.chipClip} title={option.label}>
+                  <Chip
+                    {...itemProps}
+                    sx={{
+                      minWidth: 0,
+                      overflow: 'hidden',
+                      // 칩 내부 Box/Typography 가 줄어들며 라벨을 …로 자르게 한다.
+                      '& .MuiBox-root': { minWidth: 0 },
+                      '& .MuiTypography-root': {
+                        display: 'block',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                      },
+                    }}
+                    chipText={option.label}
+                    size='small'
+                    type='input'
+                    deletable
+                  />
+                </span>
               );
             })}
 
@@ -184,6 +199,8 @@ export const CustomDropdown = ({
                 type='input'
                 chipText={`+${hiddenCount}`}
                 sx={{
+                  // 항상 온전히 보이도록 축소 금지(+N 은 절대 잘리지 않는다).
+                  flexShrink: 0,
                   pointerEvents: 'none',
                 }}
               />

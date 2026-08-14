@@ -78,35 +78,8 @@
   padding-top: 4px;
 }
 
-// ⭐ #3 — Measure 선택 모달 (공용 ColumnSelectDualList 양쪽 구성 — ColumnSettingModal 동일 레이아웃)
-.measureDualContainer {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 4px 2px;
-  height: 460px;
-  min-height: 350px;
-  max-height: 68vh;
-  box-sizing: border-box;
-  overflow: hidden;
-}
-
-// ColumnSelectDualList wrapper — flex 1 차지 (버튼바 제외) + min-height 보장
-.measureDualContainer > div:first-child {
-  flex: 1 1 auto;
-  min-height: 250px;
-  overflow: hidden;
-}
-
-// 버튼바 — 우측 정렬 (표준 @shared/lges Button 사용, ColumnSettingModal actionBar 동일)
-.measureActionBar {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  justify-content: flex-end;
-  padding: 6px 2px 2px;
-  flex-shrink: 0;
-}
+// (measureDualContainer / measureActionBar 제거 — 2026-08-13 Measure 모달 공용 정본 전환:
+//  공용 features/master/src/components/measureSelectModal 이 자체 module.scss 를 소유.)
 
 // ⭐ FPModal 팝업셀 아이콘 = DMF0020 과 동일 (전용 span .popup-icon + MUI OpenInNew SVG mask —
 //   사용자 요구 2026-07-03). 구 :global(.wj-cell-popup) 그라데이션+'↗' override 는 제거,

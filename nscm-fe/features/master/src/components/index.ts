@@ -1,6 +1,8 @@
 export * from './columnLayoutModal/ColumnLayoutModal';
 export * from './columnLayoutModal/columnLayoutModal.utils';
+export * from './columnLayoutModal/titleSet.api';
 export * from './columnSettingModal/ColumnSettingModal';
+export * from './measureSelectModal/MeasureSelectModal';
 export * from './contributeRateModal/ContributeRateModal';
 export * from './contributeVersionModal/ContributeVersionModal';
 export * from './customerModal/CustomerModal';
@@ -10,6 +12,7 @@ export * from './ownerModal/OwnerModal';
 export * from './projectModal/ProjectModal';
 export * from './projectByDivisionModal/ProjectByDivisionModal';
 export * from './regionModal/RegionModal';
+export * from './versionModal/VersionModal';
 export * from './storageLocationModal/StorageLocationModal';
 export * from './teamModal/TeamModal';
 export * from './searchFields/SearchFields';

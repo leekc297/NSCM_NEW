@@ -3,10 +3,54 @@
 }
 
 .customDropdown {
+  // 필드 폭을 컨테이너(그리드 셀)에 고정 — 칩/내용이 많아도 이 폭을 넘지 않고,
+  // 내용이 짧아도 줄지 않아 항상 '원래 폭'을 유지한다. 넘치는 내용은 아래 overflow 로 잘림.
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+
   [class*='MuiInputBase-formControl'][class*='MuiAutocomplete-inputRoot'] {
     display: flex;
     flex-wrap: nowrap;
     align-items: center;
     white-space: nowrap;
+    // 선택 칩이 필드 밖(옆 필드)으로 넘쳐 침범하지 않도록 클리핑.
+    // endAdornment(화살표/클리어)는 position:absolute(right:9)라 잘리지 않는다.
+    overflow: hidden;
+    min-width: 0;
   }
+
+  // 칩 뒤의 빈 타이핑 input(MUI 기본 flex-grow:1)이 남는 폭을 가져가면
+  // 칩(.chipClip)이 그 폭을 못 써서 잘린다. 칩 뒤 input 만 grow:0 으로 눌러
+  // 남는 폭을 칩이 쓰게 한다. 단일 선택엔 chipClip 이 없어 값 표시 영향 없다.
+  .chipClip ~ [class*='MuiAutocomplete-input'] {
+    flex-grow: 0;
+  }
+
+  // 다중 선택('ALL')은 placeholder 로 표시된다. 디자인시스템 테마가
+  // input::placeholder 를 commonTextLighter(흐린 회색)로 강제 지정하고 있어,
+  // 값 텍스트(currentColor = commonTextBasic)와 같은 진한 색으로 맞춘다.
+  // 테마엔 !important 가 없으므로 이 규칙이 특이도/주입순서와 무관하게 이긴다.
+  // (disabled 필드는 currentColor 가 흐린 색이라 그대로 흐리게 유지됨 — 의도된 동작)
+  input::placeholder,
+  [class*='MuiInputBase-input']::placeholder {
+    color: currentColor !important;
+    opacity: 1 !important;
+  }
+}
+
+// 선택 칩 래퍼.
+// 디자인시스템 Chip 의 중첩 Box 구조 때문에 flex-basis:auto(콘텐츠 기준)가
+// 실제 라벨 폭보다 작게 측정돼, 폭이 남는데도 칩이 잘렸다(단일 선택도 잘림).
+// → 래퍼를 flex:1 1 auto 로 '남는 폭만큼 확장'시켜 used width 를 실제 가용폭으로
+//   만든다. 그러면 내부 Typography 가 그 폭 안에서 전체 라벨을 보여주고,
+//   폭이 진짜 모자랄 때만(좁은 필드) … 로 자른다.
+// title 속성으로 hover 시 전체 라벨을 네이티브 툴팁으로 보여준다.
+// (Chip 은 title prop 을 전달하지 않으므로 span 래퍼로 감싼다.)
+.chipClip {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
 }

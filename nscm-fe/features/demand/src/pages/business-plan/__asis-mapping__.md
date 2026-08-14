@@ -1,6 +1,6 @@
 # __asis-mapping__.md — EID 1:1 대사표 (asis-coverage-check §0.0/§0.1)
 
-> 원천: `DMF0042_BizPlan_주요이벤트_상세분석.md`, `DMF0042_BizPlan_제약매트릭스_상세.md` · 생성: asis_mapping_gate.py --init
+> 원천: `DMF0042_BizPlan_주요이벤트_상세분석.md`, `DMF0042_BizPlan_제약매트릭스_상세.md`, `DMF0042_BizPlan_Cascade_Filter_전수.md`(CF- 축) · 생성: asis_mapping_gate.py --init
 > 상태 허용값: 미구현(초기) / 구현(구현 위치 필수) / 제외(사유 필수) / 해당없음(사유 필수 — 조회 전용 화면의 CRUD 행 등). 빈 칸 1개 = 게이트 실패.
 
 ## 이벤트·제약 (EID 1:1)
@@ -241,7 +241,7 @@
 | CRUD:E05:INSERT | [INSERT] §5 InsertRow — F8 행 삽입 (핸들러 `InsertRow`, L1211~L1480; 진입 `InsertButton` L544~L547) | components/BusinessPlanGrid.tsx Insert 행 + utils/business-plan.gridCombos.ts |  | 구현 |
 | MODAL:BusinessPlanModals | FE 실존 모달 (components/BusinessPlanModals.tsx) — 분석 md 근거 확인 필요(FE 단독이면 사유 기입) | components/BusinessPlanModals.tsx — 위 4모달의 컨테이너(자체 UI 없음) |  | 구현 |
 | MODAL:ExchangeRateModal | FE 실존 모달 (components/modals/ExchangeRateModal.tsx) — 분석 md 근거 확인 필요(FE 단독이면 사유 기입) | components/modals/ExchangeRateModal.tsx (AS-IS DMF0042_ExchangeRatePopup) |  | 구현 |
-| MODAL:MeasureSelectModal | FE 실존 모달 (components/modals/MeasureSelectModal.tsx) — 분석 md 근거 확인 필요(FE 단독이면 사유 기입) | components/modals/MeasureSelectModal.tsx |  | 구현 |
+| MODAL:MeasureSelectModal | 공용 Measure 선택 모달 (hook #132 §2-1 — 2026-08-12 로컬 사본을 공용 승격·전환) | features/master/src/components/measureSelectModal/MeasureSelectModal.tsx (소비 = components/BusinessPlanModals.tsx) |  | 구현 |
 | MODAL:ReplaceByCutOffPopUp | AS-IS 팝업 (분석 md) — TO-BE 모달 구현 위치 기입 의무 | components/modals/ReplaceByCutoffModal.tsx |  | 구현 |
 | MODAL:ReplaceByCutoffModal | FE 실존 모달 (components/modals/ReplaceByCutoffModal.tsx) — 분석 md 근거 확인 필요(FE 단독이면 사유 기입) | components/modals/ReplaceByCutoffModal.tsx (AS-IS ReplaceByCutOffPopUp) |  | 구현 |
 | MODAL:ShowDialog | AS-IS 팝업 (분석 md) — TO-BE 모달 구현 위치 기입 의무 |  | AS-IS `.ShowDialog()` 호출 관용구 — 개별 팝업이 아님(위 3모달의 호출 방식). 모달 실체 없음 | 해당없음 |
@@ -295,8 +295,8 @@
 | Edit (F2) | 등록 제외 — 상시편집 + editLock R1~R7 대체 (DMF0021 선례) | ✅ |
 | Save (F7) | hotkeyConfig.save → handleSave (PKG 판 19키 '^' bulk — F-2 ①. 확인창 없음, 결과 passthrough L1138) | ✅ |
 | Excel (F12) | SubTitle EXCEL 공통 (DefaultButtonActions 자동) | ✅ |
-| btnColumn 'Column Show' | 커스텀 버튼(icon) → ColumnSettingModal + saveTitleSet('C') | ✅ |
-| btnMeasure 'Measure' | 커스텀 버튼(icon) → MeasureSelectModal + saveTitleSet('M') + invalidate 재조회 | ✅ |
+| btnColumn 'Column Show' | 커스텀 버튼(icon) → 공용 ColumnLayoutModal + saveTitleSet('C') | ✅ |
+| btnMeasure 'Measure' | 커스텀 버튼(icon) → 공용 MeasureSelectModal + saveTitleSet('M') + 그리드 비움(hook #132 §2-2 — Search 재조회 유도) | ✅ |
 | btnProject/btnItemId/btnOwner | 카탈로그 필드 팝업 (§1) | ✅ |
 | btnSetPrice (가격환산) | 커스텀 버튼 'Set Price' → MSG00678 confirm → SET_PRICE(PRICE_CONV 4p) → 결과 passthrough + 재조회 (L3115~3136) | ✅ |
 | btnExchangeRate | 커스텀 버튼(LBL00661) → pending 차단(MSG00680 — AS-IS MSG00142 L2989 용법) → ExchangeRateModal → 닫으면 재조회 | ✅ |
@@ -320,8 +320,8 @@
 | 9 | btnProject_Click (L2762~2782) | Project 팝업(81/82) → txtProject | ProjectField + 모달 (disabled=40) | ✅ |
 | 10 | btnItemId_Click (L2784~2805) | Item 팝업 → txtItemId | ItemField + 모달 | ✅ |
 | 11 | btnOwner_Click (L2942~2961) | Owner 팝업 → txtOwner | OwnerField + 모달 | ✅ |
-| 12 | btnColumn_Click (L2807~2817) | TitleSet 팝업(true=Column) → OK 시 InitSpread | ColumnSettingModal + saveTitleSet('C') + fetchStaticColumns | ✅ |
-| 13 | btnMeasure_Click (L2819~2830) | TitleSet 팝업(false=Measure) → OK 시 InitSpread | MeasureSelectModal + saveTitleSet('M') + invalidate 재조회 | ✅ |
+| 12 | btnColumn_Click (L2807~2817) | TitleSet 팝업(true=Column) → OK 시 InitSpread | 공용 ColumnLayoutModal + saveTitleSet('C') + fetchStaticColumns | ✅ |
+| 13 | btnMeasure_Click (L2819~2830) | TitleSet 팝업(false=Measure) → OK 시 InitSpread | 공용 MeasureSelectModal + saveTitleSet('M') + 그리드 비움(#132 §2-2 — AS-IS InitSpread 재조회 대신 명시 Search 유도, Δ 확정) | ✅ |
 | 14 | spdMain_Changed (L1800~2723) ⭐ | 수량 배분·롤업 — Business_Plan 정수(M롤업/Q균등분할+나머지끝/Y균등분할+실적스킵) / LOC copy / 소수 절삭 MSG00289 | cellEditEnded → utils/business-plan.spread.ts applyCellChange (순수함수 1:1) + EditTracker patch 전량 추적 + MSG00679 | ✅ |
 | 15 | spdMain_CellDoubleClick (L1598~1798) | 헤더: Y_→Q_ 토글+열린 M_ 접기 / Q_→M_ 토글 · 셀: I행 ITEM_ID(40)/ITEM_ID/PROJECT_CODE(81)/PROJECT_CODE82(82) 팝업 | Grid dblclick — 헤더 드릴(drillVisRef flip 1:1) + 셀 분기 → Project/Item 모달 (I행 한정 L1643) | ✅ |
 | 16 | spdMain_ComboSelChange (L1565~1596) | 40 전용 — END_CUSTOMER40→SCM_SITE_ID40 재조회 / DEPT_ID40→EC+Site 재설정 | beginningEdit cascade dataMap 스왑(hook #59 §5-G — SCM_SITE_ID40←END_CUSTOMER40 행값 필터) + cellEditEnded 원복 | ✅ |
@@ -371,12 +371,26 @@
 | 7 | Ver.Cutoff/Replace 모달 = 목록조회+실행 표준 재구성 | SP 계약(BP_M/from-to/versionNo) 1:1 — WinForms 레이아웃 비승계 |
 | 8 | MEASURE 컬럼 VISIBLE_FLAG='N' (사내 실측) — FE 메타 그대로 반영 | hook #113 메타 100% 주도 (하드코딩 강제표시 금지). admin 에서 'Y' 전환 시 즉시 노출 |
 
+## UI 공통(통합테스트) 체크 축 (2026-08-12 — 전 화면 상시 6항목)
+
+> 원천: `Doc/단위테스트_보완대상/통합테스트 사전점검_1st_20260806_공유용.xlsx` 구분='Common' 6행.
+> 화면 분석 md 에 없는 전 UI 공통 요구 — asis_mapping_gate --check 가 부재 행을 FAIL 처리한다.
+
+| ID | 요지(원천 1줄) | 구현 위치(파일:라인) | 사유 | 상태 |
+|---|---|---|---|---|
+| COMMON:UC-01 | 필터링 상태에서 신규행 Insert 시 추가 행이 보이도록 (그리드 필터 clear — 1st 행3) | BusinessPlan.tsx handleInsert `gridFilterRef.current?.clear()` (2026-08-12 보완 — DMF0021 C1 선례 1:1) |  | 구현 |
+| COMMON:UC-02 | 데이터 수정 중 다른 데이터 조회 시도 = MSG00703 confirm (1st 행4) | BusinessPlan.tsx handleSearch `hasPendingChanges()` → setAlert confirm MSG00703 (2026-08-12 보완 — DMF0021 C2 선례 1:1) |  | 구현 |
+| COMMON:UC-03 | 컬럼 추가/제외(Column/Measure 설정) 적용 시 기존 조회 데이터 Reset 후 재조회 유도 (hook #132 §2-2 — 1st 행5) | components/BusinessPlanModals.tsx onSettingsApplied → BusinessPlan.tsx 그리드 비움(insertedRows/editTracker/hasSearched/clearFilters) — 자동 재조회 금지 |  | 구현 |
+| COMMON:UC-04 | CRUD 완료 알림 = Alert 아닌 하단 중앙 Toast 후 자동 소멸 (LGES WDG·hook #132 §3 — 1st 행6) | BusinessPlan.tsx handleSave 성공 `setToast type:'success'` (MSG.SAVED) |  | 구현 |
+| COMMON:UC-05 | Excel Download 시 콤보 컬럼 데이터가 Code 아닌 Name 으로 출력 (1st 행7) | 공용 `packages/foundation/src/utils/gridAction.ts` excelDownload dataMap 승계(2026-08-12 공용 보완 — 전 화면 발효) + SubTitle excelFileName 경로 소비 |  | 구현 |
+| COMMON:UC-06 | Key-in 조회조건 = 콤마 구분 다중 입력 시 전건 조회 (1st 행8) | Project/Model/Owner keyin → PKG_DMF0042 SP 내 FN_STRING_SPLIT(DB 함수) 다중 매칭(P0c — 빈값 NULL 가드 포함, 2026-07-15 사내 검증) |  | 구현 |
+
 ## 7. 검증 이력
 
 - tsc(features/demand + foundation + apps/web) 0 / eslint --quiet 0 (2026-07-15)
-- vitest useBusinessPlanStore.test.tsx — 환경 이슈(Node v24 ↔ jsdom "MIMEType is not a constructor")로 실행 불가.
-  기존 sales-plan 테스트도 동일 실패 실측 → 코드 무관 환경 회귀 (별도 인프라 이슈)
-- DB 적용: P0a/P0b + P1~P6 스크립트 작성 완료 — 일괄 승인 대기 (미적용)
+- ~~vitest 환경 이슈로 실행 불가~~ → **환경 복구 후 정상 실행 중** (2026-08-11 jsdom 환경 복구 — 게이트 §9 에서 7 passed 실측, 2026-08-12 정정)
+- DB 적용: P0a/P0b + P1~P6 사내 반영 완료(2026-07-15) — 구 "승인 대기" 기록 정정
+- **2026-08-12 재점검**: hook #132 소급 4건(V1 페이지 래퍼 div / V2 DataGrid 래퍼 div / V3 MeasureSelectModal 공용 승격 / V4 설정 저장=그리드 비움·자동 재조회 제거) + 게이트 §3 NLS 해소(PROC_M `PR_GET_DAY_RANGE.month` VARCHAR→NUMBER — BE jdbcType=NUMERIC 바인딩, HTTP 실검증 200/code 0) + 단위테스트 xlsx 대조 결과 DMF0042 행 0건(해당 없음 확정)
 
 ## AS-IS 이벤트 핸들러 인벤토리 (2026-08-08 축 — 분석서가 놓친 핸들러 차단)
 

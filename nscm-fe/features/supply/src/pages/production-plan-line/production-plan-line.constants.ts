@@ -52,6 +52,7 @@ export const MEASURE = {
 } as const;
 
 // MeasureSelectModal fallback (BE 메타 미적재 degrade 용 — 코드만).
+//   공용 모달(features/master measureSelectModal)은 fallback 미내장 → ProductionPlanLine 호출부 공급.
 export const MEASURE_FALLBACK: string[] = Object.values(MEASURE);
 
 // MSG — 사내 SCM_ADM_MSG_M 정합 (기존 재사용 + 신규 채번 MSG00673~674, MAX 실측 2026-07-13 = MSG00672).

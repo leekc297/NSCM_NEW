@@ -331,6 +331,7 @@ export const ColumnSettingModal = ({
       handleClose={modalClose}
       disableButtonCancel
       title={title}
+      disableScale
       customContentArea={
         <div className={styles.container}>
           <ColumnSelectDualList<ColumnSettingRow>

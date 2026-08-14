@@ -177,7 +177,9 @@ export const insertStaticEditable = (
   const catchUp = measure === EDIT_MEASURE.CATCH_UP;
   switch (binding) {
     case 'DEPT_ID':
-      return d40 && !catchUp;
+      // ⭐ [통합테스트 1st No.61-④ 2026-08-12] Team = 전 Div 입력 불가 (사용자 명시 요구 —
+      //   AS-IS 40 개방(L2923~2926)을 뒤집음). 표시는 Sales Site Project Model 마스터의 Team 파생.
+      return false;
     case 'END_CUSTOMER':
       return !d40;
     case 'END_CUSTOMER40':

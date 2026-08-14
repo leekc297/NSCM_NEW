@@ -44,3 +44,10 @@ export const VALIDATION_MSG = {
   VERSION_REQUIRED: 'MSG00283', // FindData — 버전 미선택
   NOT_LOCK: 'MSG00266', // chkYear — sheet 잠금 상태 확인
 } as const;
+
+// 구분(RBU_0999) 컬럼 입력 제한 안내 — AS-IS 코드에는 없던 TO-BE 전용 메시지.
+//   숫자가 섞인 입력을 조용히 버리면 "데이터가 사라졌다" 로 보이므로 반드시 사유를 알린다.
+export const DIVISION_TEXT_ONLY_MSG = {
+  code: 'MSG_DIVISION_TEXT_ONLY',
+  fallback: '구분 컬럼에는 숫자를 입력할 수 없습니다. 문자만 입력해 주세요.',
+} as const;

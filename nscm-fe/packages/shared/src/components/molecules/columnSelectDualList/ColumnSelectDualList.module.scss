@@ -42,6 +42,26 @@
   font-size: 14px;
   color: #333;
 
+  // [No.40-② 2026-08-11] 컬럼 폭 조절 grip — resizableColumns 인 경우에만 붙는다.
+  thead th.resizableTh {
+    position: relative;
+  }
+
+  .resizeGrip {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 6px;
+    height: 100%;
+    cursor: col-resize;
+    user-select: none;
+    touch-action: none;
+
+    &:hover {
+      background: #c9d2dd;
+    }
+  }
+
   thead th {
     position: sticky;
     top: 0;

@@ -25,7 +25,7 @@ import type { BucketInfo, CurrentWeekInfo } from '../useMktFcstStore';
 //   (`'W_' || BASIS_YYYYMM || ISO_WEEK`, 08_procedures_01.sql:9411) 으로 생성되므로 일치가 보장된다.
 //   컬럼 순서는 SP SORT_ORDER_NO(=BASIS_START_DATE) 정렬 = 시간순 → 현재 주 index 앞 = 과거.
 //   ⇒ 형식이 바뀌어도 깨지지 않는다(파싱 0). 사용자 지시(2026-07-24): "초록색 체크하는 기준에 맞춰라".
-export const weekIndexOf = (binding: string, weekBindings: readonly string[]): number =>
+const weekIndexOf = (binding: string, weekBindings: readonly string[]): number =>
   weekBindings.indexOf(binding);
 
 // 이번 주 월요일 — AS-IS L857 (Sunday=0 → -6, 그 외 -(d-1)). JS getDay(Sun=0) ≡ .NET DayOfWeek.
@@ -38,7 +38,7 @@ export const thisWeekMondayYmd = (today = new Date()): string => {
 };
 
 // 오늘(당일) yyyymmdd — Daily 잠금 기준(당일 포함 이후만 편집, 2026-07-23 사용자 지시).
-export const todayYmd = (today = new Date()): string => {
+const todayYmd = (today = new Date()): string => {
   const d = new Date(today);
   return `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`;
 };

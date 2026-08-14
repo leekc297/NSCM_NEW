@@ -118,13 +118,60 @@ SELECT SHEET_NAME, INPUT_TP_CD, COUNT(*) CNT
 
 | 단계 | 의무 | 근거 사고 |
 |---|---|---|
-| 1 | **채번 = 사내 권위 DB 실측** — `SELECT MAX(MSG_ID) FROM SCM_ADM_MSG_M WHERE MSG_TP_CD='LBL'(/'MSG')` 를 **적용 직전** 실행해 max+1. ⚠ locales json 의 max 기준 금지 — json 은 DB 와 언싱크 | 2026-07-03 DMF0003 PR: json max(727) 기준 채번 → LBL00728~739 가 사내 타 화면(6-29 등록 'Result'/'Execute' 등) 선점분과 **충돌** → 740~751 재채번 |
+| 1 | **채번 = 사내 권위 DB 실측 + ⭐1000 대역 규칙** — `SELECT MAX(MSG_ID) FROM SCM_ADM_MSG_M WHERE MSG_TP_CD='LBL'(/'MSG') AND MSG_ID >= 'LBL01001'(/'MSG01001')` 를 **적용 직전** 실행해 max+1. 대역이 비어 있으면 **`LBL01001` / `MSG01001` 부터**. ⚠ locales json 의 max 기준 금지 — json 은 DB 와 언싱크 | 2026-07-03 DMF0003 PR: json max(727) 기준 채번 → LBL00728~739 가 사내 타 화면 선점분과 **충돌** → 740~751 재채번 / 2026-08-14: 전 대역 max+1 이 **클라우드에서 사용자가 신규 생성한 코드를 재사용** (아래 §7.1) |
 | 2 | **locales json 3종**(KO/EN/CN) 동시 추가 | — |
 | 3 | **사내 SCM_ADM_MSG_M 등록** (3 LANG × 키, 멱등 NOT EXISTS, NOT NULL 전수 §1) — 등록 SQL 을 이관 패키지 `02_META/` 에 파일로 보존 | 미등록 시 사내 런타임 fallback 노출 |
 | 4 | **클라우드 이관 패키지 포함** — 해당 화면 배포 패키지에 i18n 등록 SQL + locales 변경 파일 명시. README 이관 순서에 기재 | 사내만 등록하고 이관 누락 시 클라우드 fallback |
 
 - 멱등 skip-if-exists 는 **충돌 감지가 아니다** — 기존재 키를 skip 하면 FE 는 신규 의미, DB 는 구 의미로 갈라진다. 적용 스크립트는 `max+1 ≤ 신규 시작번호` assert 로 **채번 충돌 시 중단**해야 한다.
 - 텍스트 interpolation 은 react-i18next `{{var}}` 표기 — DB 등록 텍스트도 동일 표기로 저장.
+
+### §7.1 ⭐ Claude 채번 대역 = **01001 이상 전용** (사용자 확정 2026-08-14 — 절대 준수)
+
+> **적용 시점 = "신규 채번을 실제로 하는 경우"에 한한다.** (사용자 확정 2026-08-14)
+
+**Step 0 — 기존 코드 재사용 판정이 항상 먼저다.**
+
+| 분기 | 조건 | 조치 | 메타 INSERT(이관 SQL) |
+|---|---|---|---|
+| **(a) 재사용** | 같은 명칭·문구가 사내 `SCM_ADM_MSG_M` 에 이미 존재 | **그 코드를 그대로 사용** (새로 따지 말 것) | ❌ **불요** — 이미 원장·클라우드에 있는 코드다 |
+| **(b) 신규 채번** | 같은 명칭·문구가 없음 | 아래 1000 대역 규칙으로 채번 | ✅ **필요** — 이 신규분만 INSERT 문으로 작성해 이관 패키지에 동봉 |
+
+> ⇒ 이관 패키지의 i18n 메타 INSERT 대상 = **(b) 신규 채번분 only**. (a) 재사용분을 INSERT 에 섞으면
+> 기존 원장과 중복·의미 충돌을 만든다. 재사용분은 FE 참조만 하면 끝이다.
+> 문구 대조 절차(정규화 일치 판정)는 hook #114 §3 Step 3 이 단일 출처.
+
+**Step 1 — (b) 로 판정된 경우에만 적용하는 채번 규칙:**
+
+> **Claude(Code) 가 신규 생성하는 LBL/MSG 는 예외 없이 `LBL01001` / `MSG01001` 이상에서만 채번한다.**
+
+| # | 규칙 |
+|---:|---|
+| 1 | 채번식 = `MAX(코드) + 1` 을 **1000 대역 안에서만** 구한다 — `WHERE MSG_ID >= 'LBL01001'`(/`'MSG01001'`). 대역이 비어 있으면 시작값이 `LBL01001` / `MSG01001`. |
+| 2 | ❌ **1000 미만의 빈 번호(공번)를 메우지 말 것.** 앞번호가 비어 있어도 건너뛴다. |
+| 3 | ❌ 전 대역 `MAX(...)+1` 금지 (종전 방식). |
+| 4 | 사내 DB 만 보고 채번하되, **1000 대역은 Claude 전용 예약 구간**이므로 사내/클라우드 어느 쪽이 앞서 있어도 충돌하지 않는다. |
+
+**근거 사고 (2026-08-14 사용자 리포트)**: 사용자가 **클라우드에서 직접 신규 생성한 LBL/MSG 코드**는 사내 DB 에
+아직 없다. 이 상태에서 전 대역 `MAX+1` 로 채번하면 Claude 가 **그 코드와 같은 번호를 다시 발급**해
+"클라우드에서 사용자가 만든 코드를 Claude 가 재사용" 하는 현상이 발생했다(의미 2중화 → 전 화면 오염).
+1000 미만은 **사람(운영자)·클라우드 신규 생성 구간**, 1000 이상은 **Claude 채번 구간**으로 분리해 원천 차단한다.
+
+```sql
+-- 채번 실측 쿼리 (적용 직전 실행 — LBL / MSG 각각. 접두 3자 + 5자리라 문자열 비교로 정렬이 성립)
+-- ⚠ 판정은 MSG_TP_CD 가 아니라 **MSG_ID 접두**로 한다 — MSG_TP_CD='LBL' 인데 MSG_ID 가 'MSG…' 인
+--    오염행이 실재한다(사내 실측 2026-08-14).
+SELECT NVL(MAX(MSG_ID), 'LBL01000') AS CUR_MAX
+FROM   SCM_MGR.SCM_ADM_MSG_M
+WHERE  MSG_ID LIKE 'LBL%' AND MSG_ID >= 'LBL01001';   -- MSG 는 'MSG%' / 'MSG01001'
+-- → 다음 채번 = 'LBL' || LPAD(TO_NUMBER(SUBSTR(CUR_MAX, 4)) + 1, 5, '0')
+```
+
+**사내 실측 기준선 (2026-08-14)**: 전 대역 max = `LBL00862` / `MSG00718`, **1000 대역은 비어 있음** →
+다음 Claude 채번은 **`LBL01001`** · **`MSG01001`** 부터 시작한다.
+
+> 관련: `msg-id-asis-tobe-conversion.md`(#114 §3 Step 3-(b)) / `i18n-ko-en-alignment.md`(#44) /
+> 메모리 `feedback_i18n_new_code_three_point_sync`(3점 동시 반영).
 
 ## §8. SHEETS 시트 배선 완결성 (2026-07-03 신설 — DMF0003 sspCompare 미배선 사고)
 
@@ -142,18 +189,27 @@ SELECT SHEET_NAME, INPUT_TP_CD, COUNT(*) CNT
 
 ---
 
-## §9. ⭐⭐⭐ 시트 메타 이관 SQL = MERGE INTO — DELETE 절대 금지 (2026-08-07 · **2026-08-10 재확정**)
+## §9. ⭐⭐⭐ 시트 메타 **클라우드 이관** = SHEET_NAME 단위 삭제 후 **전체 재적재** (⭐ 2026-08-12 사용자 역전 확정)
 
-> 사용자 지시 원문(2026-08-07): "Meta SheetColumn 이관 sql 생성 시 Program_id, Sheet_name 기준으로 Delete 하는 문장 삭제하고 Merge into 로 이관 sql 생성 요청. Delete 하면서 기존의 데이터가 다 사라져서 문제가 발생한 케이스가 많으므로, 절대 Delete 는 하지 않도록 요청."
->
-> 사용자 지시 원문(**2026-08-10 재확정**): "SHEET NAME 은 절대 변경불가, 클라우드 이관시에도 SHEET_NAME 기준 일괄 삭제는 하면 안됩니다."
-> ⇒ ① `SHEET_NAME` **값 자체를 바꾸는 UPDATE 금지** ② `SHEET_NAME` 을 WHERE 에 건 **일괄 DELETE 금지**(§4 의 구 예외도 폐기).
+> **정책 역전 이력** (최신이 정본):
+> - 2026-08-07: "DELETE 금지 — MERGE INTO 로" (일부 삭제로 데이터 소실 사고 계보)
+> - 2026-08-10: "SHEET_NAME 기준 일괄 삭제 금지" 재확정
+> - **2026-08-12 (현행 정본)**: "SHEET_COLUMN 클라우드 이관 시 **SHEET_NAME 기준으로 삭제하고 전체 이관**하는 것으로 RULE 변경.
+>   그리고 **SHEET_NAME 은 현재의 NAME 을 변경하면 안 된다**." — 부분 MERGE(UPSERT)가 남기는 잔존 구행·논리키 어긋남이
+>   시트 단위 완전 교체보다 위험하다는 운영 확정. 07-08-07 계보의 "소실" 사고는 **삭제 범위 ≠ 삽입 범위**가 원인이었으므로,
+>   아래 2번 "전량 동봉" 불변식이 그 재발을 막는다(PROC_M 재정렬 관례와 동일 구조).
 
-1. **대상**: `SCM_MST_SHEET_COLUMNS`·`SCM_MST_SHEET_MEASURE` 등 시트 메타 이관/동기 SQL 전부.
-2. ⛔ **`DELETE ... WHERE PROGRAM_ID=... [AND SHEET_NAME=...]` 문장 절대 금지** — 대상 DB(클라우드 등)에만 존재하는 행·운영 중 갱신분까지 소실되는 실사고 다수.
-3. **정본 = `MERGE INTO`** (PK = PROGRAM_ID+SHEET_NAME+COLUMN_NAME):
-   - `WHEN MATCHED THEN UPDATE` — 비PK 속성 전체를 원천 실측 literal 로 동기(CREATED_BY/CREATION_DATE 는 보존, LAST_UPDATED_BY='admin'+SYSDATE 갱신)
-   - `WHEN NOT MATCHED THEN INSERT` — NOT NULL 전수(§1) 준수
-   - 행 제거가 정말 필요한 경우(폐기 컬럼) = `VALID_YN='N'` UPDATE 로 무효화 (물리 DELETE 금지), 예외는 사용자 명시 승인 시만.
-4. **경계**: `SCM_ADM_PROC_M` positional 재정렬은 기존 관례(해당 PROC_NM 한정 DELETE→INSERT + 전량 literal 동봉 = 소실 0) 유지 — 단 PROC_NM 보다 넓은 WHERE 금지.
-5. 선례: `DMF0082_UICATEGORY_20260807_1418/04_META_SHEET_COLUMNS.sql` (MERGE 재생성 정본).
+1. **대상**: `SCM_MST_SHEET_COLUMNS`·`SCM_MST_SHEET_MEASURE` 클라우드 이관/동기 SQL.
+2. **정본 방식 = 시트 단위 완전 교체** — 반드시 다음 불변식으로 생성한다:
+   - `DELETE FROM ... WHERE SHEET_NAME = '{시트}'` → 이어서 그 시트의 **사내 원천 전 행 INSERT**.
+   - ⭐ **삭제 범위 = 삽입 범위 (소실 0 불변식)**: DELETE 가 SHEET_NAME 전체(타 PROGRAM_ID 포함)를 지우므로,
+     INSERT 도 **그 SHEET_NAME 의 전 행 — 공유 시트면 타 PROGRAM_ID 행까지 전량 동봉**해야 한다
+     (예: 'Sales Plan' 은 DMF0021+DMF1007 공유 — DMF0021 행만 동봉하면 DMF1007 컬럼 소실 = 사고).
+   - INSERT 는 전 컬럼 **사내 실측 literal**(추측 금지 — anti-simplification §1). 감사 4컬럼 = 'admin'/SYSDATE.
+   - DELETE~INSERT~COMMIT 은 **한 파일·한 트랜잭션**으로(중간 실행 중단 = 시트 공백 상태 방지, 말미 행수 VERIFY 동봉).
+3. ⛔ **`SHEET_NAME` 값 자체를 바꾸는 UPDATE·개명 절대 금지** (2026-08-10 확정 유지·강화) — FE/SP/TITLESET 이
+   SHEET_NAME 문자열로 결합돼 있어 개명 = 전 소비처 파손. 시트명 변형(공백/대소문자) 신설도 금지
+   (feedback_titleset_sheetname_variant_measure_dup 계보).
+4. **경계**: `SCM_ADM_PROC_M` positional 재정렬 관례(해당 PROC_NM 한정 DELETE→INSERT + 전량 동봉) 유지.
+   **사내 내부** 시트 메타 정합(이관 아닌 보수)은 종전대로 MERGE/UPDATE 우선 — 본 §9 는 **클라우드 이관 SQL** 에 적용.
+5. 선례: `DMF0021_CLOUD_20260812/06_SHEET_META_SYNC.sql`·`DMF0082_CLOUD_20260812/06_SHEET_META_SYNC.sql` (v4 — 2026-08-12 재생성 정본).

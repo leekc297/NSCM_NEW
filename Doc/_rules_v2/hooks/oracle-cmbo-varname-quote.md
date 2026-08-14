@@ -105,3 +105,21 @@ WHERE LENGTH(TRIM(BIZ_TYPE_NAME)) > 0
 | DMF0020 CustomsHandbook v1 | `SEGMENT1 = @divisionId` + `<> ''` | `SEGMENT1 = TO_CHAR(@divisionId)` + `IS NOT NULL` |
 | DMF0020 FcstType v1 | 동일 | 동일 |
 | DMF0020 BizType v1 | `BIZ_TYPE_NAME <> ''` (Oracle '' = NULL → 0 rows) | `IS NOT NULL` 만 |
+
+
+## §추가 — CMBO SQL 의 SCM_MGR 객체 호출 = 스키마 접두 필수 (⭐ 2026-08-12 사용자 확정)
+
+> 사용자 확정 원문: "UI 에서는 SCM_MGR 을 사용하지 않고 다른 user 로 들어가서 사용합니다. 그래서 접두 포함은 반드시 지켜야 합니다."
+
+- CMBO(`SCM_ADM_CMBO_SQL_M`) 등 **BE 가 동적 실행하는 SQL** 에서 SCM_MGR 소유 **함수·타입·프로시저** 호출은
+  반드시 `SCM_MGR.` 접두 명시 — 예: `TABLE(SCM_MGR.FN_STRING_SPLIT(...))`.
+- **Why**: UI/BE 접속 계정 ≠ SCM_MGR — 무접두 호출은 사내(SCM_MGR 직결 검증)에선 통과하고
+  **클라우드에서만 ORA-00904 → `-9994`(InvocationTargetException 래퍼) 빈 콤보**로 터진다
+  (2026-08-12 TeambyDivision 실사고 — 테이블은 synonym 이 있어 무접두 관례가 통하지만 함수·타입은 아니다).
+- ⭐ **접두만으로 부족 — EXECUTE GRANT 도 세트** (2026-08-12 동일 사고 2차 원인): 접두를 붙여도
+  `SCMP_APP` 에 함수·반환 TYPE 의 EXECUTE 권한이 없으면 동일하게 -9994. 콤보에 SCM_MGR 함수 신규 사용 시
+  `GRANT EXECUTE ON SCM_MGR.{함수} TO SCMP_APP` + **TABLE() 반환 TYPE 2종도 GRANT** — 사내는 로컬 BE 가
+  SCM_MGR 직결이라 권한 갭이 절대 안 잡힌다(DBA_TAB_PRIVS 로 SCMP_APP 기준 정적 확인 의무).
+  선례 = `GRANT_FN_STRING_SPLIT_SCMP_APP_20260812.sql`.
+- 점검: 콤보 신규/수정 시 ①`SCM_MGR 보유 FUNCTION/TYPE/PACKAGE × 무접두 호출` 전수 스캔(주석 내 원문 인용은 예외)
+  ②접두 참조 객체 전수 × `DBA_TAB_PRIVS(GRANTEE='SCMP_APP')` 권한 대조. 검증은 사내 통과만으로 부족.

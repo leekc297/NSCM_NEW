@@ -8,7 +8,8 @@ import { DataGrid } from '@shared/components';
 import { OwnerModal } from '../../../components';
 import type { MODAL_OWNER } from '../../../components/ownerModal/owner-modal.constants';
 import type { MENU_ID, RESPONSE_SET } from '../sales-site-project-model.constants';
-import { SHEETS, SHEET_INDEX } from '../sales-site-project-model.constants';
+import { SHEETS, SHEET_INDEX, SINGLE_OWNER_DIVISIONS } from '../sales-site-project-model.constants';
+import { useGridCombos } from '../sales-site-project-model.gridCombos';
 import { useSalesSiteProjectModelStore } from '../useSalesSiteProjectModelStore';
 
 interface SalesSiteProjectModelPurchaseGridProps {
@@ -35,6 +36,14 @@ export const SalesSiteProjectModelPurchaseGrid = ({
   const [openOwnerModal, setOpenOwnerModal] = useState<boolean>(false);
   const [clickedRow, setClickedRow] = useState(-1);
   const clickedDataItem = GridUtils.getRow(gridRef.current, clickedRow);
+
+  // 파라미터가 필요한 셀 콤보(Sales Plant 등) 적용 — 규칙은 sales-site-project-model.gridCombos 참조.
+  // 하단은 상단 행 더블클릭으로 조회되므로 그 행의 division 이 곧 조회 조건이다.
+  const gridComboHandlers = useGridCombos({
+    staticColumns: staticColumns[SHEETS.PURCHASE],
+    data,
+    divisionId: filters[SHEETS.PURCHASE]?.divisionId,
+  });
 
   const handleOwnerSelected = (selectedUsers: ResponseData<MODAL_OWNER, 'owner', 'o_rc1'>[]) => {
     const owners = selectedUsers.map(item => item.USER_ID).join(',');
@@ -83,6 +92,7 @@ export const SalesSiteProjectModelPurchaseGrid = ({
         staticColumns={staticColumns[SHEETS.PURCHASE]}
         gotFocus={handleFocus}
         dblClick={handleUserIdCellClick}
+        {...gridComboHandlers}
       />
       {openOwnerModal && (
         <OwnerModal
@@ -91,6 +101,10 @@ export const SalesSiteProjectModelPurchaseGrid = ({
           setSelectedValue={handleOwnerSelected}
           divisionId={filters.purchase?.divisionId ?? '40'}
           ownerId={clickedDataItem?.OWNER}
+          // 신규 행은 DIVISION_ID 가 비어있을 수 있어 조회 조건으로 폴백.
+          singleSelect={SINGLE_OWNER_DIVISIONS[SHEETS.PURCHASE].includes(
+            clickedDataItem?.DIVISION_ID || filters.purchase?.divisionId || ''
+          )}
         />
       )}
     </>

@@ -6,7 +6,7 @@ import styles from './ColumnSelectDualList.module.scss';
 //   AS-IS DM0002_TitleSetForm_Popup.cs 의 Base/User dual list 동등 동작.
 //   HTML <table> 자체 구현(wijmo 의존 0). 체크박스 다중선택 + No 컬럼 + 이동(▶◀).
 //   ⭐ 우측(Visible) grid 는 행을 drag&drop 으로 위/아래 순서 이동 가능.
-//   사용 화면: ColumnSettingModal (DMF0020 / DMF0043_01)
+//   사용 화면: 공용 ColumnLayoutModal/MeasureSelectModal (구 ColumnSettingModal 폐기 — 2026-08-13)
 
 export interface DualListColumn<T> {
   key: keyof T;
@@ -42,6 +42,11 @@ interface Props<T extends Record<string, string | number>> {
   leftTitle?: string;
   /** 우측 grid 상단 라벨 (예: 'Visible') */
   rightTitle?: string;
+  /**
+   * 헤더 경계 드래그로 컬럼 폭 조절 (기본 false — 기존 사용처 무영향).
+   * 통합테스트 1st No.40-② "컬럼 사이즈 조절 가능하도록 수정"(Measure Setting 팝업) 대응.
+   */
+  resizableColumns?: boolean;
 }
 
 export const ColumnSelectDualList = <T extends Record<string, string | number>>({
@@ -63,10 +68,30 @@ export const ColumnSelectDualList = <T extends Record<string, string | number>>(
   onRowDoubleClickRight,
   leftTitle,
   rightTitle,
+  resizableColumns = false,
 }: Props<T>) => {
   // 우측 grid D&D 상태
   const [dragKey, setDragKey] = useState<string | null>(null);
   const [dragOverKey, setDragOverKey] = useState<string | null>(null);
+
+  // ⭐ [No.40-② 2026-08-11] 컬럼 폭 조절 — 헤더 우측 경계를 잡고 끌면 폭이 바뀐다.
+  //   좌/우 grid 를 독립 관리한다(키 = `${side}:${columnKey}`). 값이 없으면 기존 `col.width` 를 그대로 쓴다.
+  //   wijmo 를 쓰지 않는 순수 <table> 이라 pointer 이벤트로 직접 구현한다(table-layout: fixed 이므로
+  //   <col> 폭만 바꾸면 즉시 반영된다).
+  const [colWidths, setColWidths] = useState<Record<string, number>>({});
+  const MIN_COL_WIDTH = 48;
+  const startResize = (widthKey: string, startX: number, startWidth: number) => {
+    const onMove = (ev: PointerEvent) => {
+      const next = Math.max(MIN_COL_WIDTH, Math.round(startWidth + (ev.clientX - startX)));
+      setColWidths(prev => (prev[widthKey] === next ? prev : { ...prev, [widthKey]: next }));
+    };
+    const onUp = () => {
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+    };
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  };
 
   const handleDrop = (targetKey: string) => {
     const dk = dragKey;
@@ -84,6 +109,7 @@ export const ColumnSelectDualList = <T extends Record<string, string | number>>(
   };
 
   const renderTable = (
+    side: 'left' | 'right',
     items: T[],
     columns: DualListColumn<T>[],
     checked: Set<string>,
@@ -99,9 +125,10 @@ export const ColumnSelectDualList = <T extends Record<string, string | number>>(
           <colgroup>
             <col className={styles.checkCol} />
             <col className={styles.noCol} />
-            {columns.map((c, i) => (
-              <col key={i} style={c.width ? { width: c.width } : undefined} />
-            ))}
+            {columns.map((c, i) => {
+              const w = colWidths[`${side}:${String(c.key)}`] ?? c.width;
+              return <col key={i} style={w ? { width: w } : undefined} />;
+            })}
           </colgroup>
           <thead>
             <tr>
@@ -114,9 +141,32 @@ export const ColumnSelectDualList = <T extends Record<string, string | number>>(
                 />
               </th>
               <th className={styles.noCell}>No</th>
-              {columns.map(col => (
-                <th key={String(col.key)}>{col.header}</th>
-              ))}
+              {columns.map(col => {
+                const widthKey = `${side}:${String(col.key)}`;
+                return (
+                  <th key={String(col.key)} className={resizableColumns ? styles.resizableTh : undefined}>
+                    {col.header}
+                    {resizableColumns && (
+                      <span
+                        className={styles.resizeGrip}
+                        role='separator'
+                        aria-orientation='vertical'
+                        onClick={ev => ev.stopPropagation()}
+                        onPointerDown={ev => {
+                          ev.preventDefault();
+                          ev.stopPropagation();
+                          const th = (ev.target as HTMLElement).parentElement;
+                          startResize(
+                            widthKey,
+                            ev.clientX,
+                            colWidths[widthKey] ?? col.width ?? th?.offsetWidth ?? MIN_COL_WIDTH
+                          );
+                        }}
+                      />
+                    )}
+                  </th>
+                );
+              })}
             </tr>
           </thead>
           <tbody>
@@ -193,6 +243,7 @@ export const ColumnSelectDualList = <T extends Record<string, string | number>>(
       <div className={styles.sideTable}>
         {leftTitle && <div className={styles.dualTitle}>{leftTitle}</div>}
         {renderTable(
+          'left',
           leftItems,
           leftColumns,
           checkedLeft,
@@ -215,6 +266,7 @@ export const ColumnSelectDualList = <T extends Record<string, string | number>>(
       <div className={styles.sideTable}>
         {rightTitle && <div className={styles.dualTitle}>{rightTitle}</div>}
         {renderTable(
+          'right',
           rightItems,
           rightColumns,
           checkedRight,

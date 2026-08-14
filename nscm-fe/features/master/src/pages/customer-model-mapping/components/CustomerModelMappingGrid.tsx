@@ -1,5 +1,11 @@
 import { toggleClass } from '@mescius/wijmo';
-import { CellRange, CellType, type FlexGrid, type FormatItemEventArgs } from '@mescius/wijmo.grid';
+import {
+  AllowMerging,
+  CellRange,
+  CellType,
+  type FlexGrid,
+  type FormatItemEventArgs,
+} from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useRef, useState, type MutableRefObject } from 'react';
 
@@ -10,8 +16,11 @@ import { DataGrid } from '@shared/components';
 import { ItemByDivisionModal, ProjectByDivisionModal } from '../../../components';
 import {
   CONVERT_QTY_BINDINGS,
+  DIVISION_BINDING,
   getConvertQtyEditable,
+  isDivisionAllowed,
   MODEL_TYPE_BINDING,
+  PROJECT_CODE_BINDING,
   type MENU_ID,
   type SHEETS,
 } from '../customer-model-mapping.constants';
@@ -50,6 +59,16 @@ export const CustomerModelMappingGrid = ({
 
   const [clickedRow, setClickedRow] = useState(-1);
   const clickedDataItem = GridUtils.getRow(gridRef.current, clickedRow);
+
+  // PJT Code 를 쓸 수 있는 Division 목록 — 관리자 UI Category Setup 의 PROJECT_CODE 행 Param1.
+  //   미등록(빈 값)이면 제한 없음. 판정 규약은 isDivisionAllowed 주석 참조.
+  const projectCodeDivisionAllow = staticColumn?.find(
+    column => column.colNm === PROJECT_CODE_BINDING
+  )?.attribute1;
+
+  // 행의 Division 이 허용 목록 밖이면 PJT Code 를 잠근다 (인라인 편집 + 팝업 + 색상).
+  const isProjectCodeLocked = (row?: CustomerModelMappingRow): boolean =>
+    !isDivisionAllowed(projectCodeDivisionAllow, row?.[DIVISION_BINDING]);
 
   // ⭐ Model Type(ITEM_CLASS_NAME) 별 Convert Qty(Pack/Module/Cell) 조건부 편집제어.
   //   AS-IS DM0006_CustomerModelMapping.cs L289~307 / L1075~1089 재현. 공용 DataGrid wrapper 는
@@ -96,6 +115,45 @@ export const CustomerModelMappingGrid = ({
       g.formatItem?.removeHandler(formatHandler);
     };
   }, [gridRef, data]);
+
+  // Division 별 PJT Code 편집제어 — 허용 Division 은 컬럼 메타 Param1 에서 읽는다(코드 하드코딩 금지).
+  //   Convert Qty 제어와 같은 구성: beginningEdit(lock) + formatItem(gray). 팝업 차단은 handleGridDblclick.
+  useEffect(() => {
+    const g = gridRef.current;
+    if (!g) return;
+
+    const beginningEditHandler = (
+      s: FlexGrid<CustomerModelMappingRow>,
+      e: { cancel: boolean; row: number; col: number }
+    ) => {
+      if (s.columns[e.col]?.binding !== PROJECT_CODE_BINDING) return;
+      const row = s.rows[e.row]?.dataItem as CustomerModelMappingRow | undefined;
+      if (isProjectCodeLocked(row)) e.cancel = true;
+    };
+    g.beginningEdit.addHandler(beginningEditHandler);
+
+    // 잠긴 셀은 조회 전용 컬럼과 같은 흰색으로 둔다 — Yellow(편집색)와 팝업 아이콘만 걷어낸다.
+    //   Gray(wj-cell-non-editable) 는 쓰지 않는다(사용자 요청). 셀 DOM 은 재활용되므로 Convert Qty
+    //   셀에서 넘어온 Gray 가 남지 않도록 잠금 여부와 무관하게 매번 지운다.
+    const formatHandler = (_s: FlexGrid<CustomerModelMappingRow>, e: FormatItemEventArgs) => {
+      if (e.panel.cellType !== CellType.Cell) return;
+      if (e.panel.columns[e.col]?.binding !== PROJECT_CODE_BINDING) return;
+      toggleClass(e.cell, 'wj-cell-non-editable', false);
+      const row = e.panel.rows[e.row]?.dataItem as CustomerModelMappingRow | undefined;
+      if (!isProjectCodeLocked(row)) return;
+      toggleClass(e.cell, 'wj-cell-editable', false);
+      toggleClass(e.cell, 'wj-cell-popup', false);
+    };
+    g.formatItem.addHandler(formatHandler);
+    g.invalidate();
+
+    return () => {
+      g.beginningEdit?.removeHandler(beginningEditHandler);
+      g.formatItem?.removeHandler(formatHandler);
+    };
+    // isProjectCodeLocked 는 매 렌더 재생성이라 deps 에 넣으면 핸들러가 계속 재등록된다 —
+    //   판정 입력인 메타(Param1)와 데이터만 본다.
+  }, [gridRef, data, projectCodeDivisionAllow]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleProjectSelected = (projects: string, projectsNames?: string) => {
     if (!clickedDataItem || !projects) return;
@@ -162,7 +220,9 @@ export const CustomerModelMappingGrid = ({
 
     if (!dataItem) return;
 
-    if (binding === 'PROJECT_CODE') {
+    if (binding === PROJECT_CODE_BINDING) {
+      // 허용 Division 밖이면 팝업도 열지 않는다 (인라인 편집 차단과 일관).
+      if (isProjectCodeLocked(dataItem)) return;
       setClickedRow(ht.row);
       setOpenPrjByDivisionModal(true);
     } else if (binding === 'ITEM_ID' || binding === 'ITEM_CLASS_NAME') {
@@ -179,6 +239,7 @@ export const CustomerModelMappingGrid = ({
         editTrackerRef={editTrackerRef}
         itemsSource={data}
         staticColumns={staticColumn ?? []}
+        allowMerging={AllowMerging.All}
         dblClick={handleGridDblclick}
       />
       <ProjectByDivisionModal

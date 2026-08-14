@@ -10,16 +10,3 @@
   flex: 1;
   min-height: 0;
 }
-
-// MeasureSelectModal — dual list 컨테이너 + 하단 버튼바 (mkt-fcst 표준 클래스 로컬 정의)
-.measureDualContainer {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.measureActionBar {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-}

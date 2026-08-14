@@ -1,6 +1,10 @@
 import type { FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { ColumnSettingModal, type ColumnSettingRow } from 'features/master/src/components';
+import {
+  ColumnLayoutModal,
+  MeasureSelectModal,
+  toColumnLayoutSettings,
+} from 'features/master/src/components';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { apiClient } from '@foundation/apis';
@@ -11,7 +15,6 @@ import { MainTitle, SubTitle } from '@shared/components';
 import { useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
 import { useMessageStore } from '@shared/stores';
 
-import { MeasureSelectModal } from './components/MeasureSelectModal';
 import { SalesMonitoringForm } from './components/SalesMonitoringForm';
 import { SalesMonitoringGrid } from './components/SalesMonitoringGrid';
 import { MAIN_COLUMNS, MENU_ID, MSG, SHEETS } from './sales-monitoring.constants';
@@ -46,7 +49,6 @@ export const SalesMonitoring = ({ tabId, title }: PageProps<MENU_ID>) => {
   const fetchStaticColumns = useSalesMonitoringStore(s => s.fetchStaticColumns);
   const fetchStaticMeasures = useSalesMonitoringStore(s => s.fetchStaticMeasures);
   const applyColumnVisibility = useSalesMonitoringStore(s => s.applyColumnVisibility);
-  const userColumnKeys = useSalesMonitoringStore(s => s.userColumnKeys);
   const visibleMeasures = useSalesMonitoringStore(s => s.visibleMeasures);
   const applyVisibleMeasures = useSalesMonitoringStore(s => s.applyVisibleMeasures);
   const applyDayRange = useSalesMonitoringStore(s => s.applyDayRange);
@@ -112,6 +114,13 @@ export const SalesMonitoring = ({ tabId, title }: PageProps<MENU_ID>) => {
   // Column / Measure 선택 모달 open state
   const [openColumnSetting, setOpenColumnSetting] = useState(false);
   const [openMeasureSelect, setOpenMeasureSelect] = useState(false);
+
+  // ColumnLayoutModal 재진입 복원값 — 현재 grid 상태(개인화 반영본. store 가 userColumnKeys override 를
+  //   staticColumns 에 이미 적용). buildInitialRows 는 DB(titleSet) 우선 — BE 가 값을 안 준 필드만 보완.
+  const columnLayoutSettings = useMemo(
+    () => toColumnLayoutSettings(staticColumns[SHEETS.MAIN]),
+    [staticColumns]
+  );
 
   // ⭐ A-1 (2026-07-04) — TITLESET 서버 영구 저장 (AS-IS DM0002_TitleSetForm OK → SCM_MST_TITLESET_USER 1:1).
   //   SCM0002_SET_TITLESET_POPUP: '^' delim 다건(DELETE 후 INSERT), P_USER_ID = BE 세션 자동(sesUserId).
@@ -289,8 +298,9 @@ export const SalesMonitoring = ({ tabId, title }: PageProps<MENU_ID>) => {
         currentWeekInfo={currentWeekInfo}
       />
 
-      {/* Column 설정 (공용 ColumnSettingModal — AS-IS btnColumn → DM0002_TitleSetForm 1:1) */}
-      <ColumnSettingModal
+      {/* Column 설정 (공용 ColumnLayoutModal — AS-IS btnColumn → DM0002_TitleSetForm 1:1.
+          hook #132 §2-1 공용 정본 — DMF0042 BusinessPlanModals 배선 선례 1:1) */}
+      <ColumnLayoutModal
         open={openColumnSetting}
         modalClose={() => setOpenColumnSetting(false)}
         menuId={MENU_ID}
@@ -301,30 +311,35 @@ export const SalesMonitoring = ({ tabId, title }: PageProps<MENU_ID>) => {
         divisionId={sc.divisionId}
         fallbackColumns={MAIN_COLUMNS.map(c => ({ key: c.key, header: c.header, width: c.width }))}
         title={t('LBL00711', '_Column')}
-        // ⭐ 재진입 복원 — 이전 OK 결과 (미전달 시 서버 상태(DEFAULT/개인화)로 초기화되어
+        leftTitle={t('LBL00764', 'Invisible')}
+        rightTitle={t('LBL00765', 'Visible')}
+        // ⭐ 재진입 복원 — 현재 grid 상태 (미전달 시 서버 상태(DEFAULT/개인화)로 초기화되어
         //   사용자 선택이 원복되던 사고, 2026-07-04 사용자 지적)
-        initialVisibleKeys={userColumnKeys ?? undefined}
-        onSave={(settings: ColumnSettingRow[]) => {
+        initialSettings={columnLayoutSettings}
+        onSave={settings => {
+          // 표시(USER_FLAG='Y') 컬럼만 저장 대상 — ColumnLayoutModal onSave 는 비표시 행(0)도 반환.
+          const visible = settings.filter(s => s.USER_FLAG === 'Y');
           // 로컬 즉시 반영 + 서버 영구 저장('C') → 재조회 (BE display 가 개인화 기준으로 재계산)
           applyColumnVisibility(
             SHEETS.MAIN,
-            settings.map(s => s.COLUMN_NAME)
+            visible.map(s => s.COLUMN_NAME)
           );
           void saveTitleSet(
             'C',
-            settings.map(s => ({
-              name: s.COLUMN_NAME,
-              sortOrderNo: Number(s.SORT_ORDER_NO ?? 0),
-              subTotalFlag: s.SUB_TOTAL_FLAG,
-              sortMethodCode: s.USER_SORT_METHOD_CODE,
-            }))
+            visible.map(s => ({ name: s.COLUMN_NAME, sortOrderNo: s.SORT_ORDER_NO }))
           ).then(ok => {
-            if (ok) void fetchStaticColumns();
+            if (!ok) return;
+            // ⭐ 팝업 titleSet 캐시 무효화 필수 — 전역 staleTime=Infinity 라 invalidate 없이는
+            //   재진입 시 직전(저장 전) 캐시가 그대로 보인다 (DMF0003 2026-07-28 실측 —
+            //   DMF0042 정본 배선 동일. buildInitialRows 가 BE 응답을 화면 상태보다 우선).
+            void queryClient.invalidateQueries({ queryKey: [MENU_ID] });
+            void fetchStaticColumns();
           });
         }}
       />
 
-      {/* Measure 선택 (AS-IS btnMeasure → DM0002_TitleSetForm measure 모드 1:1) */}
+      {/* Measure 선택 (공용 MeasureSelectModal — AS-IS btnMeasure → DM0002_TitleSetForm measure 모드 1:1.
+          hook #132 §2-1 공용 정본 — 화면별 사본 금지) */}
       <MeasureSelectModal
         open={openMeasureSelect}
         modalClose={() => setOpenMeasureSelect(false)}

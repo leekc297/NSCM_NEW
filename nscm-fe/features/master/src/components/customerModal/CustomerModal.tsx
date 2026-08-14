@@ -1,7 +1,6 @@
 import { CellType, type FlexGrid } from '@mescius/wijmo.grid';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import _ from '@foundation/lodash';
 import { GridUtils } from '@foundation/utils';
 import { DataGrid, CustomDialog, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
@@ -50,38 +49,37 @@ export const CustomerModal = ({
     filters: ['MyDivision'],
   });
 
-  const EMPTY_FILTER = useMemo(
-    () => ({ divisionId: divisionId, soldTo: '', shipTo: '' }),
-    [divisionId]
-  );
-
-  const [modalFilters, setModalFilters] = useState<{
+  // 실제 조회 조건 — Search 버튼/Enter(그리고 팝업 오픈) 시에만 갱신되고, 그때 프로시저를 재호출한다.
+  //   (useTabProcQuery 는 filters 가 query key 라 값이 바뀌면 재조회)
+  const [searchParam, setSearchParam] = useState<{
     divisionId: string;
     soldTo: string;
     shipTo: string;
-  }>(EMPTY_FILTER);
+  }>({ divisionId: divisionId, soldTo: '', shipTo: '' });
+
+  // 입력 중인 값 — 조회하지 않고 로컬 state 에만 담아둔다.
+  const [soldToInput, setSoldToInput] = useState<string>('');
+  const [shipToInput, setShipToInput] = useState<string>('');
 
   const { data: customerData } = useTabProcQuery<MODAL_CUSTOMER>({
     menuId: MODAL_CUSTOMER,
     sheetName: MODAL_SHEET_CUSTOMER,
     tabId: MODAL_CUSTOMER,
-    filters: EMPTY_FILTER,
-    enabled: true,
+    filters: searchParam,
+    enabled: open,
   });
 
-  const itemsSource = (customerData?.o_rc1 ?? []).filter(
-    customer =>
-      (customer.SOLDTO_CODE ?? '').toLowerCase().includes(modalFilters.soldTo.toLowerCase()) &&
-      (customer.SHIPTO_CODE ?? '').toLowerCase().includes(modalFilters.shipTo.toLowerCase())
-  );
+  // 필터링은 프로시저(soldTo/shipTo 파라미터)가 하고, 그리드는 조회 결과를 그대로 보여준다.
+  //   useMemo — 매 렌더 새 배열이면 그리드가 re-bind 되어 스크롤·선택이 초기화된다.
+  const itemsSource = useMemo(() => customerData?.o_rc1 ?? [], [customerData]);
 
-  const handleFilterChange = _.debounce((soldTo: string, shipTo: string) => {
-    setModalFilters(filter => ({
-      divisionId: filter.divisionId,
-      soldTo: soldTo,
-      shipTo: shipTo,
+  const handleSearch = () => {
+    setSearchParam(param => ({
+      divisionId: param.divisionId,
+      soldTo: soldToInput,
+      shipTo: shipToInput,
     }));
-  }, 50);
+  };
 
   const handleDblClick = (mouseEvent: MouseEvent) => {
     const grid = gridRef.current;
@@ -107,11 +105,13 @@ export const CustomerModal = ({
 
   useEffect(() => {
     if (!open) return;
-    setModalFilters({
+    setSearchParam({
       divisionId: divisionId,
       soldTo: soldTo,
       shipTo: shipTo,
     });
+    setSoldToInput(soldTo);
+    setShipToInput(shipTo);
     if (!initialized) void fetchStaticColumns();
   }, [open]);
 
@@ -131,6 +131,8 @@ export const CustomerModal = ({
       customContentArea={
         <div className={styles.dialogContentWrapper}>
           <SearchArea
+            searchButtonLabel={t('LBL00664', 'Search')}
+            onSearch={handleSearch}
             conditions={
               <>
                 <Grid size={4}>
@@ -142,7 +144,7 @@ export const CustomerModal = ({
                         fullWidth
                         disabled
                         value={
-                          divisions?.find(item => item.CODE === modalFilters.divisionId)?.NAME ?? ''
+                          divisions?.find(item => item.CODE === searchParam.divisionId)?.NAME ?? ''
                         }
                       />
                     )}
@@ -156,8 +158,9 @@ export const CustomerModal = ({
                     render={() => (
                       <InputField
                         fullWidth
-                        value={modalFilters.soldTo}
-                        onChange={e => handleFilterChange(e.target.value, modalFilters.shipTo)}
+                        value={soldToInput}
+                        onChange={e => setSoldToInput(e.target.value)}
+                        onKeyDown={e => e.key === 'Enter' && handleSearch()}
                       />
                     )}
                   />
@@ -170,8 +173,9 @@ export const CustomerModal = ({
                     render={() => (
                       <InputField
                         fullWidth
-                        value={modalFilters.shipTo}
-                        onChange={e => handleFilterChange(modalFilters.soldTo, e.target.value)}
+                        value={shipToInput}
+                        onChange={e => setShipToInput(e.target.value)}
+                        onKeyDown={e => e.key === 'Enter' && handleSearch()}
                       />
                     )}
                   />

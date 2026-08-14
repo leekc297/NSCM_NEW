@@ -252,7 +252,9 @@ export const SalesPlanForm = ({
               )}
             />
           </Grid>
-          {/* Row 2 — Biz Type(40 원천 스왑) / Plant Site / Item Type */}
+          {/* Row 2 — Biz Type(40 원천 스왑) / Item Type / Period* / Bucket* (1단 필수 조건 —
+              2026-08-12 사용자 지시: 2단 접기/펼치기 표준(DMF0003/0082 파리티) 재배치.
+              Plant Site 는 2단(Row 3)으로 이동) */}
           <Grid size={3}>
             <FormItem
               label={t('LBL00085', '_Biz. Type')}
@@ -269,27 +271,6 @@ export const SalesPlanForm = ({
                     div40 ? undefined : sc.divisionId
                   )}
                   onChange={(_, options) => set({ bizTypes: toMulti(String(options ?? '')) })}
-                />
-              )}
-            />
-          </Grid>
-          <Grid size={3}>
-            <FormItem
-              label={t('LBL00005', '_Plant Site')}
-              labelAlign='right'
-              render={() => (
-                <CustomDropdown
-                  multiple
-                  allOption
-                  useClearIcon
-                  limitTags={1}
-                  disabled={div40}
-                  value={sc.plantSiteIds.join(',')}
-                  options={((plantSite ?? []) as Array<Record<string, string>>).map(r => ({
-                    label: String(r.NAME ?? r.CODE ?? ''),
-                    value: String(r.CODE ?? ''),
-                  }))}
-                  onChange={(_, options) => set({ plantSiteIds: toMulti(String(options ?? '')) })}
                 />
               )}
             />
@@ -316,7 +297,6 @@ export const SalesPlanForm = ({
               )}
             />
           </Grid>
-          {/* Row 3 — Period* / Bucket* / Project🔍(Bucket 우측, 40 비활성) / Model🔍(Nickname) */}
           <PeriodField
             gridSize={3}
             start={sc.startYyyymmdd}
@@ -341,6 +321,11 @@ export const SalesPlanForm = ({
               )}
             />
           </Grid>
+        </>
+      }
+      extraConditions={
+        <>
+          {/* Row 3 (2단) — Project🔍(40 비활성) / Model🔍(Nickname) / Plant Site */}
           <div style={{ display: 'contents' }} onKeyDownCapture={openFieldModalOnEnter}>
             <ProjectField
               gridSize={3}
@@ -369,7 +354,28 @@ export const SalesPlanForm = ({
               multiCheckbox
             />
           </div>
-          {/* Row 4 — Owner🔍 / Sum 체크박스(Owner 우측, sales-site-project-model Active·Detail 배치 참고) */}
+          <Grid size={3}>
+            <FormItem
+              label={t('LBL00005', '_Plant Site')}
+              labelAlign='right'
+              render={() => (
+                <CustomDropdown
+                  multiple
+                  allOption
+                  useClearIcon
+                  limitTags={1}
+                  disabled={div40}
+                  value={sc.plantSiteIds.join(',')}
+                  options={((plantSite ?? []) as Array<Record<string, string>>).map(r => ({
+                    label: String(r.NAME ?? r.CODE ?? ''),
+                    value: String(r.CODE ?? ''),
+                  }))}
+                  onChange={(_, options) => set({ plantSiteIds: toMulti(String(options ?? '')) })}
+                />
+              )}
+            />
+          </Grid>
+          {/* Row 4 (2단) — Owner🔍 / Sum 체크박스(Owner 우측) */}
           <Grid size={3} className={commonStyles.customGrid}>
             <OwnerField
               gridSize={12}
@@ -395,7 +401,7 @@ export const SalesPlanForm = ({
                 </div>
               )}
             />
-          </Grid>{' '}
+          </Grid>
         </>
       }
     />

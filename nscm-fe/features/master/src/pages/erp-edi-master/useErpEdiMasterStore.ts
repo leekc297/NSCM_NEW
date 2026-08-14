@@ -95,7 +95,7 @@ const initSearch: SearchCondition = (() => {
   return {
     fromYyyymmdd: fmtYyyymmdd(start),
     toYyyymmdd: fmtYyyymmdd(end),
-    divisionId: '40',
+    divisionId: useSessionStore.getState().session.div ?? '40',
     senderName: '',
     flag: 'ALL',
     selectedItemId: '',

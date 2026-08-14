@@ -12,6 +12,8 @@
 | 108 | [ui-grid-corner-no-header](../hooks/ui-grid-corner-no-header.md) | ⭐⭐ | rowHeader 그리드 = TopLeft 전체 단일 머지 + **'No.'** 라벨 + 중앙 정렬 |
 | 120 | [ui-title-icon-buttons-standard](../hooks/ui-title-icon-buttons-standard.md) | ⭐⭐ | **환율 버튼=항상 아이콘**(IcExchangeRate). 아이콘 순서=왼쪽부터 환율→GridColumnSet→Measure. 텍스트 버튼은 아이콘 앞 |
 | 121 | [form-common-styles-mandatory](../hooks/form-common-styles-mandatory.md) | ⭐⭐ | **폼 스타일=`@foundation` common-styles 공용 클래스만**(`formItem` 전 FormItem 필수/`customGrid`/`customCheckbox`/`popupSearchField`) — 로컬 scss 폼 레이아웃 신설 금지. 정본 SalesSiteForm |
+| 132 | [ui-layout-shell-modal-feedback-standard](../hooks/ui-layout-shell-modal-feedback-standard.md) | ⭐⭐⭐ | **레이아웃 셸 소유·공용 모달·저장 피드백**(2026-08-12 사용자 명시) — 페이지 최상위/DataGrid 래퍼 div ⛔(셸·DataGrid flex 계약) / Measure·Column 모달=공용 컴포넌트(사본 ⛔)+설정 저장 시 그리드 비움(자동 재조회 ⛔) / 저장 성공=Toast(Alert ⛔) |
+| 133 | [ui-common-testitem-mapping-axis](../hooks/ui-common-testitem-mapping-axis.md) | ⭐⭐⭐ | **통합테스트 UI 공통 6항목 = 대사표 상시 축**(2026-08-12 사용자 명시) — `COMMON:UC-01~06` 을 --init 자동 생성·--check 부재 FAIL. Insert 필터 clear/조회 MSG00703 confirm/설정 저장 그리드 비움/저장 Toast/Excel Name/콤마 다중 |
 | 96 | [column-align-code-standard](../hooks/column-align-code-standard.md) | ⭐⭐ | `HORIZONTAL_ALIGN_CODE`=단일문자 C/L/R ("Center" 전체단어 금지 — 정렬 silent 미적용) |
 | 34 | [popup-dialog-layout](../hooks/popup-dialog-layout.md) | ⭐ | CustomDialog 잘림·중앙 미표시 방지 레이아웃 |
 | 83 | [search-area-button-position-and-toggle](../hooks/search-area-button-position-and-toggle.md) | ⭐ | 검색버튼 위치 표준 + 3단↑ 조회조건 펼침/닫기 토글 |

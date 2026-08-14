@@ -148,11 +148,14 @@
 | 119 | oracle-null-sentinel-and-notnull-default | 09 |
 | 120 | ui-title-icon-buttons-standard | 01 |
 | 121 | form-common-styles-mandatory | 01, 04 |
+| 132 | ui-layout-shell-modal-feedback-standard | 01, 06 |
+| 133 | ui-common-testitem-mapping-axis | 01, 06 |
 | 122 | cloud-ui-db-object-fetch | 12, 08 |
 | 123 | screen-modal-cascade-filter-analysis | 11, 04, 05 |
 | 124 | screen-asis-pre-analysis-mandatory | 11, 01, 05 |
 | 125 | ui-selfcheck-runtime-mandatory | 12, 02, 05 |
 | 126 | verification-completion-honesty | 12, 11, 10 |
+| 134 | sdm-domain-development-standard | 12, 11, 06 |
 
 ## 커버리지 검증 (신규 hook 등재 시 재실행 의무)
 

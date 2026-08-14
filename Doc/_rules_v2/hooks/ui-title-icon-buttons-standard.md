@@ -81,3 +81,20 @@ done
 
 > ⚠️ 순서는 `customButtons` **배열 선언 순서**가 결정한다. `hasButton` 조건부 spread 를 쓰더라도
 > 선언 순서만 지키면 권한으로 일부가 빠져도 상대 순서가 유지된다.
+
+## §5. 조회(Search) 버튼 라벨 = `LBL00112` 고정 (의무 — ⭐ 2026-08-12 사용자 명시)
+
+SearchArea 의 조회 버튼 라벨은 **어느 화면에서든 `LBL00112`**('Search(F5)') 로 고정한다.
+
+```tsx
+searchButtonLabel={t('LBL00112', '_Search')}
+```
+
+- ⛔ `LBL00691`('Search') **사용 금지** — 2026-08-12 전수 정정(이탈 6화면: sales-reports /
+  etc-sales-reports / demand-manager / demand-plan-waterfall / sales-monitoring / production-plan-line).
+- 신규 화면 복사-붙여넣기 시 원본이 어느 화면이든 이 라벨만 유지한다.
+
+```bash
+# POST-WRITE grep — LBL00691 잔존 = 0 (generated-keys.d.ts 는 생성물이라 제외)
+grep -rn "LBL00691" features/ apps/ --include="*.tsx" | wc -l   # 기대 0
+```

@@ -8,6 +8,8 @@ import { Button, FormItem, InputField } from '@shared/lges';
 import { ControlConfirmIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 
+import { SEARCH_POPUP_WIDTH } from '../searchFields/SearchFields.utils';
+
 import {
   MODAL_PROJECT_BY_DIVISION,
   MODAL_SHEET_PROJECT_BY_DIVISION,
@@ -83,8 +85,15 @@ export const ProjectByDivisionModal = ({
     [projectData, modalFilters]
   );
 
-  // 자동필터 해제 — Search 버튼/Enter 시에만 modalFilters 반영 (입력 중 즉시필터 안 함).
-  const handleSearch = () => setModalFilters({ project: projectCode ?? '' });
+  // Search 버튼/Enter = 프로시저 재조회 (사용자 요구 2026-08-11).
+  //   구: 입력값을 client-side 필터로만 썼다 → 팝업이 열릴 때 받아 온 행 안에서만 찾을 수 있었고,
+  //   그 범위 밖의 Project 는 아무리 검색해도 안 나왔다. 이제 조회 파라미터에 실어 다시 조회한다.
+  //   화면 필터도 같은 키워드로 유지 — SP 가 파라미터를 무시하거나 넓게 내려줘도 결과가 좁혀 보인다.
+  const handleSearch = () => {
+    const keyword = projectCode ?? '';
+    setSearchParam(prev => ({ ...prev, projectCode: keyword }));
+    setModalFilters({ project: keyword });
+  };
 
   const handleSubmit = () => {
     if (multiCheckbox) {
@@ -119,6 +128,11 @@ export const ProjectByDivisionModal = ({
     modalClose();
   };
 
+  // ⭐ 더블클릭 = 그 행 하나로 확정 후 닫기 (체크박스 모드 포함 — 2026-08-06 사용자 요청).
+  //   구: dblClick={multiCheckbox ? undefined : handleDblClick} 로 체크박스 모드에서 핸들러가
+  //   미장착이라 더블클릭해도 부모창에 값이 안 넘어갔다 (Owner/Item ByDivision 팝업 동일 조치).
+  //   ⚠ 체크박스 모드에서 더블클릭하면 체크해 둔 행들은 무시되고 더블클릭한 행만 전달된다
+  //     (여러 건은 체크 후 OK). 단건 선택의 빠른 경로 규약.
   const handleDblClick = (mouseEvent: MouseEvent) => {
     const grid = gridRef.current;
     if (!grid) return;
@@ -163,7 +177,8 @@ export const ProjectByDivisionModal = ({
 
   return (
     <CustomDialog
-      size={1000}
+      // ⭐ 1000 → SEARCH_POPUP_WIDTH(900) — Owner/Model 팝업과 폭 통일 (2026-08-06 사용자 요청)
+      size={SEARCH_POPUP_WIDTH}
       type='modaless'
       position='basic'
       open={open}
@@ -307,7 +322,7 @@ export const ProjectByDivisionModal = ({
               useCheckbox={multiCheckbox}
               staticColumns={staticColumns}
               itemsSource={itemsSource}
-              dblClick={multiCheckbox ? undefined : handleDblClick}
+              dblClick={handleDblClick}
             />
           </div>
           <div className={styles.buttonWrapper}>

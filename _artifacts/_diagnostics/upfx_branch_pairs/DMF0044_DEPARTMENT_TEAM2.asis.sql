@@ -1,0 +1,173 @@
+	IF @Code = 'DMF0044_DEPARTMENT_TEAM2'
+
+	BEGIN
+
+
+
+		IF @Param1 <> ''
+
+		BEGIN
+
+			IF @Param1 = '40'
+
+			BEGIN
+
+				SELECT L.SEGMENT1  AS CODE
+
+					, L.SEGMENT2  AS NAME
+
+				FROM   [dbo].[SCM_ADM_LOOKUP_MASTER_DETAIL] L  WITH(NOLOCK)
+
+				WHERE  1 = 1
+
+				AND    L.LOOKUP_TYPE = 'DMF0044_DEPARTMENT_TEAM2'
+
+				AND    L.VALID_YN    = 'Y'
+
+				--AND	   L.SEGMENT3 = CASE WHEN @Param4 = 'Y' THEN 'Y' ELSE L.SEGMENT3 END
+
+				ORDER BY DISPLAY_SEQ
+
+			END
+
+			ELSE
+
+			BEGIN
+
+				SELECT L.SEGMENT1  AS CODE
+
+					, L.SEGMENT2  AS NAME
+
+				FROM   [dbo].[SCM_ADM_LOOKUP_MASTER_DETAIL] L  WITH(NOLOCK)
+
+				WHERE  1 = 1
+
+				AND    L.LOOKUP_TYPE = 'DMF0044_DEPARTMENT_TEAM2_' + RTRIM(@Param1)
+
+				AND    L.VALID_YN    = 'Y'
+
+				--AND	   L.SEGMENT3 = CASE WHEN @Param4 = 'Y' THEN 'Y' ELSE L.SEGMENT3 END
+
+				ORDER BY DISPLAY_SEQ
+
+			END
+
+		END
+
+		ELSE
+
+		BEGIN
+
+			SELECT L.SEGMENT1  AS CODE
+
+				, L.SEGMENT2  AS NAME
+
+			FROM   [dbo].[SCM_ADM_LOOKUP_MASTER_DETAIL] L  WITH(NOLOCK)
+
+			WHERE  1 = 1
+
+			AND    L.LOOKUP_TYPE = 'DMF0044_DEPARTMENT_TEAM2'
+
+			AND    L.VALID_YN    = 'Y'
+
+			--AND	   L.SEGMENT3 = CASE WHEN @Param4 = 'Y' THEN 'Y' ELSE L.SEGMENT3 END
+
+			ORDER BY DISPLAY_SEQ
+
+		END
+
+
+
+		--SELECT DISTINCT CODE, NAME
+
+		--FROM
+
+		--(
+
+		--	SELECT 'MDF' AS CODE, 'MDF' AS NAME
+
+		--	UNION
+
+		--	SELECT CODE, NAME
+
+		--	FROM (
+
+		--		SELECT CODE, NAME, ROW_NUMBER() OVER (PARTITION BY CODE ORDER BY CRDATE DESC) AS ROW_NUM
+
+		--		FROM (
+
+		--			SELECT DEPT_ID AS CODE, DEPT_NAME AS NAME, MAX(CREATION_DATE) AS CRDATE
+
+		--			FROM [DBO].[DM_PLN_SALES_PLAN_REPORT_C] WITH(NOLOCK)
+
+		--			WHERE DEPT_ID <> '' AND DEPT_NAME <> ''
+
+		--				AND DIVISION_ID = '40'
+
+		--				AND CUTOFF_YYYYMMDD >= CONVERT(CHAR(8), DATEADD(MONTH, -6, GETDATE()), 112)
+
+		--			GROUP BY DEPT_ID, DEPT_NAME
+
+		--			) A
+
+		--		) X
+
+		--	WHERE ROW_NUM = 1
+
+		--	UNION
+
+		--	SELECT CODE, NAME
+
+		--	FROM (
+
+		--		SELECT CODE, NAME, ROW_NUMBER() OVER (PARTITION BY CODE ORDER BY CRDATE DESC) AS ROW_NUM
+
+		--		FROM (
+
+		--			SELECT DEPT_ID AS CODE, DEPT_NAME AS NAME, MAX(CREATION_DATE) AS CRDATE
+
+		--			FROM DM_PLN_BP_FCST_REPORT_C WITH(NOLOCK)
+
+		--			WHERE DEPT_ID <> '' AND DEPT_NAME <> ''
+
+		--				AND DIVISION_ID = '40'
+
+		--				AND CUTOFF_YYYYMMDD >= CONVERT(CHAR(8), DATEADD(MONTH, -6, GETDATE()), 112)
+
+		--			GROUP BY DEPT_ID, DEPT_NAME
+
+		--			) A
+
+		--		) X
+
+		--	WHERE ROW_NUM = 1
+
+		--) MA
+
+		--ORDER BY NAME
+
+	END
+
+
+
+
+
+	/*===============================================
+
+	용		 도:  MDF Reports > Default 담당 조회(DEPARTMENT)
+
+	사 용 화 면:  DMF0044
+
+	변       수: -
+
+	최 초 작 성:  2019. 06. 03
+
+	개  발  자 :  JYE
+
+	최 종 작 성:
+
+	수  정  자 :
+
+	수 정 사 항:
+
+	===============================================*/

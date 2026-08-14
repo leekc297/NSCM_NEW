@@ -213,6 +213,24 @@ def _scan_combo_calls(page_dir: pathlib.Path):
                     dynamic_params.update(keys)
                 quote_viol += _check_quoting(rel, sql_id, pairs)
 
+        # (b2) ⭐ 2026-08-12 — **빌더 함수의 return 객체**도 수집 (DMF0021 comboContext 계보).
+        #     콤보 파라미터를 헬퍼(buildXxxComboFilter 등)가 조립해 useTabComboQueries 에 변수로
+        #     넘기는 화면은 (b) 호출-구간 스캔이 놓친다 → 런타임 실전달인데 '미전달 FAIL' 오탐.
+        #     `return { comboId: 'X', ... }` 형태만 수집(정의 상수 오탐 방지 — return 구문 한정).
+        for rm in re.finditer(r"\breturn\s*\{", text):
+            obj = _balanced_object(text, rm.end() - 1)
+            pairs = _top_level_pairs(obj)
+            cid_val = next((v for k, v in pairs if k == "comboId"), None)
+            if cid_val is None:
+                continue
+            lit = re.fullmatch(r"'([^']+)'", cid_val)
+            keys = {k for k, _ in pairs if k not in ("comboId", "enabled", "queryOptions")}
+            if lit:
+                params_by_combo.setdefault(lit.group(1), set()).update(keys)
+                quote_viol += _check_quoting(rel, lit.group(1), pairs)
+            else:
+                dynamic_params.update(keys)
+
         # (c) 빈 .catch — 콤보 호출의 조용한 실패 (hook #117 §5.8)
         for m in re.finditer(
             # 탐지 창 확대 (2026-08-08) — .then 체인이 길면 600자로는 빈 catch 를 놓친다

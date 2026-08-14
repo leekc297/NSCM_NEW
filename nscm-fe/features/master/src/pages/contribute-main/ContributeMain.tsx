@@ -3,6 +3,7 @@ import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { apiClient } from '@foundation/apis';
+import { CRUD_TYPE } from '@foundation/constants';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { MainTitle, SubTitle } from '@shared/components';
 import { useTabBtnPermissions, useTabProcQuery, useProcMutation } from '@shared/hooks';
@@ -16,7 +17,7 @@ import { MENU_ID, SHEETS, VALIDATION_MSG } from './contribute-main.constants';
 import styles from './ContributeMain.module.scss';
 import type { MainRow } from './types';
 import { useContributeMainStore } from './useContributeMainStore';
-import { findDataGuard, validChk, validChk2 } from './utils/validators';
+import { findDataGuard, formatPeriodLabel, validChk, validChk2 } from './utils/validators';
 
 export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
   const { t } = useTranslation();
@@ -69,14 +70,14 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
   };
 
   // AS-IS SaveData() 1:1 매핑 (DMF0043_Contribute_Main.cs L333~):
-  //   - 수정 행 (EDIT_FLAG='M') 만 처리
+  //   - 수정 행 (CRUD_TYPE='M') 만 처리 — EDIT_FLAG 는 행 잠금 판정값이라 마커로 쓰지 않는다
   //   - chkYear=false → M# 셀, chkYear=true → Y# 셀 (As-Is L394~395)
   //   - RBU_0999 (구분 컬럼) skip (As-Is L388)
   //   - 모든 dirty cell 을 ^ 구분 string 으로 누적 → SP 1회 호출
   //   - contributionType = 같은 row + 같은 period 의 RBU_0999 셀 값 (As-Is RetConType L872)
   const handleSave = () => {
     const rows = (mainData?.o_rc1 ?? []) as MainRow[];
-    const dirty = rows.filter(r => r.EDIT_FLAG === 'M');
+    const dirty = rows.filter(r => r.CRUD_TYPE === CRUD_TYPE.MODIFY);
 
     if (dirty.length === 0) {
       void setAlert({ type: 'alert', content: t('MSG_NO_CHANGE', '수정한 내용이 없습니다.') });
@@ -85,9 +86,14 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
 
     const v1 = validChk(dirty, searchParams.chkYear);
     if (!v1.ok) {
+      // 어느 기간이 몇으로 합산됐는지 붙인다 — 화면에 보이는 달은 100 인데 스크롤 밖의 다른 달이
+      //   걸린 경우, 기간 없이 "100% 가 아닙니다" 만 뜨면 사용자가 오탐과 구분할 수 없다.
+      const detail =
+        v1.period == null ? '' : ` (${formatPeriodLabel(v1.period)}: ${(v1.sum ?? 0).toFixed(2)})`;
       void setAlert({
         type: 'alert',
-        content: t(VALIDATION_MSG.RATIO_OUT_OF_RANGE, '입력 데이터의 합계가 100% 가 아닙니다.'),
+        content:
+          t(VALIDATION_MSG.RATIO_OUT_OF_RANGE, '입력 데이터의 합계가 100% 가 아닙니다.') + detail,
       });
       return;
     }
@@ -118,31 +124,49 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
     };
     let count = 0;
     dirty.forEach(row => {
+      // ⭐ 2026-08-11 — 값이 있는 셀만 보내던 것을 "입력한 period 는 8개 RBU 전부" 로 바꾼다.
+      //   AS-IS 스프레드는 빈 셀이 0.00 이라 편집한 달의 RBU 가 통째로 넘어갔고 SP 도 그 전제로
+      //   짜여 있다. TO-BE 는 SP 응답의 NULL 셀이 payload 에서 빠져 1월만 입력하면 셀 1개만
+      //   넘어가고 SQL 이 깨졌다. → 입력이 하나라도 있는 period 안의 빈 셀은 '0' 으로 채운다.
+      //   손대지 않은 달은 그대로 제외 (전 기간을 0 으로 덮어쓰지 않는다).
+      const rbuCodes = new Set<string>();
+      const touchedPeriods = new Set<string>();
       Object.entries(row).forEach(([key, val]) => {
         if (!key.startsWith(`${tag}#`)) return;
         const parts = key.split('#');
         if (parts.length !== 3) return;
         const [, period, osCorpCd] = parts;
-        if (osCorpCd.indexOf('999') >= 0) return;
-        const sQty = val == null ? '' : String(val);
-        if (sQty === '') return;
+        if (osCorpCd.indexOf('999') >= 0) return; // 구분 컬럼은 ratio 대상 아님
+        rbuCodes.add(osCorpCd);
+        if (val != null && val !== '') touchedPeriods.add(period);
+      });
+
+      [...touchedPeriods].sort().forEach(period => {
         const conTypeKey = `${tag}#${period}#RBU_0999`;
         const conType = (row as Record<string, string>)[conTypeKey] ?? '';
 
-        buf.activeFlag += '^' + (row.EDIT_FLAG ?? 'U');
-        buf.verSeq += '^' + (row.VER_SEQ ?? searchParams.verSeq);
-        buf.departmentId += '^' + (row.DEPARTMENT_ID ?? '');
-        buf.deptId += '^' + (row.DEPT_ID ?? '');
-        buf.endCustReport += '^' + (row.END_CUST_REPORT ?? '');
-        buf.soldtoCustReport += '^' + (row.SOLDTO_CUST_REPORT ?? '');
-        buf.productGroup += '^' + (row.PRODUCT_GROUP ?? '');
-        buf.dmBizType += '^' + (row.DM_BIZ_TYPE ?? '');
-        buf.yyyymm += '^' + period;
-        buf.osCorpCd += '^' + osCorpCd;
-        buf.contributionType += '^' + conType;
-        buf.contributionRatio += '^' + sQty;
-        buf.createdBy += '^' + sessionUserId;
-        count++;
+        [...rbuCodes].sort().forEach(osCorpCd => {
+          // MainRow 의 인덱스 시그니처가 WijmoPrimitive 라 별도 캐스팅 없이 안전하게 문자열화된다.
+          const val = row[`${tag}#${period}#${osCorpCd}`];
+          const sQty = val == null || val === '' ? '0' : String(val);
+
+          // SP 로 가는 activeFlag 는 기존과 동일한 'M' 을 유지한다 (마커를 CRUD_TYPE 으로
+          // 옮겼을 뿐 전송값을 바꾸지 않는다 — SP 계약 변경 금지).
+          buf.activeFlag += '^' + (row.CRUD_TYPE ?? CRUD_TYPE.MODIFY);
+          buf.verSeq += '^' + (row.VER_SEQ ?? searchParams.verSeq);
+          buf.departmentId += '^' + (row.DEPARTMENT_ID ?? '');
+          buf.deptId += '^' + (row.DEPT_ID ?? '');
+          buf.endCustReport += '^' + (row.END_CUST_REPORT ?? '');
+          buf.soldtoCustReport += '^' + (row.SOLDTO_CUST_REPORT ?? '');
+          buf.productGroup += '^' + (row.PRODUCT_GROUP ?? '');
+          buf.dmBizType += '^' + (row.DM_BIZ_TYPE ?? '');
+          buf.yyyymm += '^' + period;
+          buf.osCorpCd += '^' + osCorpCd;
+          buf.contributionType += '^' + conType;
+          buf.contributionRatio += '^' + sQty;
+          buf.createdBy += '^' + sessionUserId;
+          count++;
+        });
       });
     });
 
@@ -176,23 +200,19 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
           createdBy: trim(buf.createdBy),
         })
         .then(res => {
-          //[E20260807-AUDIT] 저장 결과 판정 — axios 인터셉터가 오류도 resolve 하므로 status/code
-          //   직접 판정 (정본 business-plan.api.ts:71~74). 실패 시 SP message passthrough.
-          if (res.status >= 400 || Number((res.data as { code?: string })?.code)) {
-            const message = (res.data as { message?: string })?.message?.trim();
+          console.log('SUCCESS?', res);
+          if (res.status === 200) {
+            void setAlert({ type: 'alert', content: t('MSG00002', '저장이 완료되었습니다.') });
+          } else {
             void setAlert({
               type: 'alert',
-              content: message || t('MSG00003', '저장 중 오류가 발생했습니다.'),
+              content: t('MSG00003', '저장 중 오류가 발생했습니다.'),
             });
-          } else {
-            void setAlert({ type: 'alert', content: t('MSG00002', '저장이 완료되었습니다.') });
           }
-          void refetch?.();
+          refetch?.();
         })
-        .catch(() => {
-          //[E20260807-AUDIT] 네트워크 등 reject 도 실패 alert (기존 무통보 → 판정 추가)
-          void setAlert({ type: 'alert', content: t('MSG00003', '저장 중 오류가 발생했습니다.') });
-          void refetch?.();
+        .catch(e => {
+          refetch?.();
         });
     })();
   };

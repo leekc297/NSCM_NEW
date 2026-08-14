@@ -28,7 +28,7 @@
 | E05-2 | §5.2 DMF0044_Sales_VersionPopUp (444행) — 구형. **현행 본화면에서는 호출 경로 없음** (btnSPVer 의 호출 코드가 주석… |  | AS-IS 호출 경로 없음(제약매트릭스 §0 실측: 팝업2 호출부 주석 / 팝업3 은 팝업2 경유만 / 팝업5 는 7파일 내 호출 0). 정책 확정 ② — dead 팝업 3종 이관 제외 | 제외 |
 | E05-3 | §5.3 DMF0044_Sales_VersionCopyPopUp (451행) — Sales_VersionPopUp 의 Copy 버튼에서만 진입 (현행 본화면 경… |  | AS-IS 호출 경로 없음(제약매트릭스 §0 실측: 팝업2 호출부 주석 / 팝업3 은 팝업2 경유만 / 팝업5 는 7파일 내 호출 0). 정책 확정 ② — dead 팝업 3종 이관 제외 | 제외 |
 | E05-4 | §5.4 DMF0044_MDFVersionPopUp (440행, 참고) — **본화면(정본) 어디에서도 인스턴스화되지 않음** (grep 실측: 정본 내 참조 … |  | AS-IS 호출 경로 없음(제약매트릭스 §0 실측: 팝업2 호출부 주석 / 팝업3 은 팝업2 경유만 / 팝업5 는 7파일 내 호출 0). 정책 확정 ② — dead 팝업 3종 이관 제외 | 제외 |
-| E05-5 | §5.5 보조 기능 | 버전창 Copy/Create/Delete/Transfer = components/versionModal/VersionModal.tsx / Exchange Rate = components/modals/ExchangeRateModal.tsx (버전 필수 MSG00688·ADMIN 저장) / Text 입력 = components/modals/TextboxModal.tsx (div82 전용) / Measure Show = components/modals/MeasureSelectModal.tsx / **ITEM(Model) 더블클릭 모델 선택 = SalesReportsGrid.tsx:392~401 dblclick → SalesReportsModals.tsx:93 ItemByDivisionModal**(2026-08-11 deptId 행값 전달 파리티 정정) | Exchange 팝업 종료 후 자동 재조회 없음 = AS-IS 파리티(정책④) | 구현 |
+| E05-5 | §5.5 보조 기능 | 버전창 Copy/Create/Delete/Transfer = components/versionModal/VersionModal.tsx / Exchange Rate = components/modals/ExchangeRateModal.tsx (버전 필수 MSG00688·ADMIN 저장) / Text 입력 = components/modals/TextboxModal.tsx (div82 전용) / Measure Show = 공용 features/master/src/components/measureSelectModal/MeasureSelectModal.tsx (호출부 SalesReportsModals.tsx onApply 가 titleSet 'M' 저장) / **ITEM(Model) 더블클릭 모델 선택 = SalesReportsGrid.tsx:392~401 dblclick → SalesReportsModals.tsx:93 ItemByDivisionModal**(2026-08-11 deptId 행값 전달 파리티 정정) | Exchange 팝업 종료 후 자동 재조회 없음 = AS-IS 파리티(정책④) | 구현 |
 | E06 | §6 DMF0044_SalesReportExchangePopup — 환율 팝업 (721행) | nscm-fe/features/demand/src/pages/sales-reports/components/modals/ExchangeRateModal.tsx |  | 구현 |
 | E07 | §7 DMF0044_SalesReport_TextboxPopup — 텍스트박스(월별 코멘트) 팝업 (453행) | nscm-fe/features/demand/src/pages/sales-reports/components/modals/TextboxModal.tsx (division 82 전용) |  | 구현 |
 | E08 | §8 본화면 그리드 이벤트 배선 전수 (실측: 코드 L206~L208 + Designer.cs grep) | nscm-fe/features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx — beginningEdit/cellEditEnded/formatItem/dblclick 배선 |  | 구현 |
@@ -139,7 +139,7 @@
 | MODAL:DMF0044_Sales_VersionPopUp | AS-IS 팝업 (분석 md) — TO-BE 모달 구현 위치 기입 의무 |  | AS-IS 호출 경로 없음(제약매트릭스 §0 실측: 팝업2 호출부 주석 / 팝업3 은 팝업2 경유만 / 팝업5 는 7파일 내 호출 0). 정책 확정 ② — dead 팝업 3종 이관 제외 | 제외 |
 | MODAL:ExchangeRateModal | FE 실존 모달 (components/modals/ExchangeRateModal.tsx) — 분석 md 근거 확인 필요(FE 단독이면 사유 기입) | nscm-fe/features/demand/src/pages/sales-reports/components/modals/ExchangeRateModal.tsx |  | 구현 |
 | MODAL:ImagePopUp | AS-IS 팝업 (분석 md) — TO-BE 모달 구현 위치 기입 의무 |  | AS-IS `siMain.ImagePopUp`(L203) = FarPoint 셀 이미지 리소스 — 모달 아님(추출 아티팩트) | 해당없음 |
-| MODAL:MeasureSelectModal | FE 실존 모달 (components/modals/MeasureSelectModal.tsx) — 분석 md 근거 확인 필요(FE 단독이면 사유 기입) | nscm-fe/features/demand/src/pages/sales-reports/components/modals/MeasureSelectModal.tsx |  | 구현 |
+| MODAL:MeasureSelectModal | FE 실존 모달 (공용 승격 — 로컬 사본 삭제, hook #132 §2-1) — 분석 md 근거 확인 필요(FE 단독이면 사유 기입) | nscm-fe/features/master/src/components/measureSelectModal/MeasureSelectModal.tsx (공용 — titleSet 'M' 저장은 호출부 SalesReportsModals.tsx onApply) |  | 구현 |
 | MODAL:PopUp | AS-IS 팝업 (분석 md) — TO-BE 모달 구현 위치 기입 의무 |  | md 본문의 일반 단어 매칭 — 실체 없음(추출 아티팩트) | 해당없음 |
 | MODAL:SalesReportsModals | FE 실존 모달 (components/SalesReportsModals.tsx) — 분석 md 근거 확인 필요(FE 단독이면 사유 기입) | nscm-fe/features/demand/src/pages/sales-reports/components/SalesReportsModals.tsx (모달 컨테이너) |  | 구현 |
 | MODAL:Sales_VersionPopUp | AS-IS 팝업 (분석 md) — TO-BE 모달 구현 위치 기입 의무 |  | AS-IS 호출 경로 없음(제약매트릭스 §0 실측: 팝업2 호출부 주석 / 팝업3 은 팝업2 경유만 / 팝업5 는 7파일 내 호출 0). 정책 확정 ② — dead 팝업 3종 이관 제외 | 제외 |
@@ -189,7 +189,7 @@
 | UnitedVersionModal | United_VersionPopup 727행 | 조회(당월-1~+5)/채택(SP_W·BP_M만, 더블클릭/OK)/액션 5종(T·C·D·CP — SEND_YN 게이트 MSG00685~687, confirm MSG00682/683/684, SP_W↔BP 분기 L300~304) | ✅ |
 | ExchangeRateModal | SalesReportExchangePopup 721행 | 조회 2종+월 피벗/과거월 차단(L-29)/저장 '^' 7키·'0'→'D' | ✅ |
 | TextboxModal | SalesReport_TextboxPopup 453행 (82) | GET 4커서(rc2 MONDAY)/13 코멘트/저장 행별 반복(정책③) | ✅ |
-| MeasureSelectModal | DM0002_TitleSetForm_Popup | business-plan 판 복제 (titleSet 'M') | ✅ |
+| MeasureSelectModal | DM0002_TitleSetForm_Popup | 공용 모달 (features/master/src/components/measureSelectModal — titleSet 'M' 저장은 호출부 SalesReportsModals.tsx onApply) | ✅ |
 
 ## 5. Validation/MSG 매핑 (hook #114 — AS-IS ID 직승계 금지, 사내 실측 3분기)
 | AS-IS | 용법 | TO-BE | 분기 |

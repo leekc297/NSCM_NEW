@@ -16,42 +16,96 @@
   min-height: 0;
 }
 
-// 3단 분리 — DMF0004 패턴 (height:0 + flex-grow N). 비율 3:3:4 (Summary 30% / Repair 30% / Tab 40%)
-// ⭐ Figma node 5883-159383 정합 (2026-06-28): Top(527h) = Summary(좌 400w) | Repair(우 1202w)
-//   2-컬럼 + 하단 Sub 탭(180h). Top:Sub = 527:180. Summary:Repair = 400:1202 (gap 24).
+// Figma node 5883-159383 정합 (2026-06-28): Top(527h) = Summary(좌 400w) | Repair(우 1202w)
+//   2-컬럼 + 하단 Sub 탭(180h). Top:Sub = 527:180. Summary:Repair = 400:1202.
+// 2026-08-11: flex-grow 기반 고정 3단 → PanelGroup 드래그 분할로 교체 (sales-site/lookup 패턴).
+//   크기는 Panel 의 defaultSize(%) 가 관리하므로 여기서는 flex-grow 를 쓰지 않는다.
+//   gap 도 두지 않는다 — 사이 간격/드래그 영역은 .rowSplitBar / .colSplitBar 가 담당.
+.bodyPanelGroup {
+  flex: 1 1 0;
+  min-height: 0;
+
+  [class*='wj-flexgrid'] {
+    max-height: 100%;
+  }
+}
+
+// 상단 Panel 안의 좌우 분할 그룹 — Panel 이 높이를 관리하므로 height:100%.
 .topRow {
-  height: 0;
-  flex-grow: 527; // Figma Top 높이
-  display: flex;
-  flex-direction: row;
-  gap: 24px; // Figma Top 내부 Spacing
+  height: 100%;
   min-height: 0;
 }
 
-.summaryCol {
-  flex-grow: 330; // Figma 좌 Module 400w
-  flex-basis: 0;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
+// Panel 직속 자식 — Panel 이 크기를 관리하므로 100% 로 채운다 (flex-grow 아님).
+.summaryCol,
 .repairCol {
-  flex-grow: 1202; // Figma 우 Module 1202w
-  flex-basis: 0;
+  height: 100%;
   min-width: 0;
+  min-height: 0;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
 .subSection {
-  height: 0;
-  flex-grow: 180; // Figma 하단 Module 180h (Tab 36 + Table 132)
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  min-height: 0;
+}
+
+// 상하 드래그 바(Separator). react-resizable-panels v4 Separator 는 기본 높이 0 + 커서 없음이라
+// 잡을 영역이 없다 → 여기서 두께/리사이즈 커서/중앙 구분선을 직접 부여해야 드래그가 동작한다.
+// (inline style 로 flexGrow/flexShrink:0 이 걸리므로 두께는 flex-basis 가 아닌 height/width 로 지정)
+.rowSplitBar {
+  height: 16px;
+  cursor: row-resize;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    top: 50%;
+    height: 2px;
+    transform: translateY(-50%);
+    background: #d8dde3;
+    border-radius: 1px;
+    transition: background 0.15s ease;
+  }
+
+  &:hover::before,
+  &[data-separator='hover']::before,
+  &[data-separator='active']::before {
+    background: #1976d2;
+  }
+}
+
+// 좌우 드래그 바 — .rowSplitBar 의 축만 바꾼 것. 폭 24px = Figma Top 내부 Spacing 유지.
+.colSplitBar {
+  width: 24px;
+  cursor: col-resize;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    left: 50%;
+    width: 2px;
+    transform: translateX(-50%);
+    background: #d8dde3;
+    border-radius: 1px;
+    transition: background 0.15s ease;
+  }
+
+  &:hover::before,
+  &[data-separator='hover']::before,
+  &[data-separator='active']::before {
+    background: #1976d2;
+  }
 }
 
 .sectionTitle {

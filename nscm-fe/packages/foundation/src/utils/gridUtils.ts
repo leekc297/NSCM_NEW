@@ -45,6 +45,29 @@ export const GridUtils = {
       .flatMap(smallGroup => smallGroup.columns ?? [smallGroup]);
     return flatColumns[index];
   },
+  /**
+   * 변경분(CRUD_TYPE 마킹된 행) 수집. 저장 대상 조립의 표준 API —
+   * 화면에서 `data.filter(i => i.CRUD_TYPE)` 를 직접 조립하지 말고 이것을 사용한다.
+   * collectionView.sourceCollection 기준이므로 필터로 숨겨진 행의 변경분도 포함된다.
+   */
+  getChangedRows: <T>(
+    grid: FlexGrid<T> | null | undefined,
+    crudType?: (typeof CRUD_TYPE)[keyof typeof CRUD_TYPE]
+  ): T[] => {
+    const source = (grid?.collectionView?.sourceCollection ?? []) as (T & WijmoRowItem)[];
+    return source.filter(item =>
+      crudType ? item.CRUD_TYPE === crudType : Boolean(item.CRUD_TYPE)
+    );
+  },
+  /**
+   * 미저장 변경 존재 여부. 편집 중인 셀(activeEditor)이 있으면 그 값 역시 아직
+   * 저장되지 않은 입력이므로 dirty 로 본다 (wingui isUpdated 의 commit-후-판정과 같은 취지).
+   */
+  isDirty: <T>(grid: FlexGrid<T> | null | undefined): boolean => {
+    if (!grid) return false;
+    if (grid.activeEditor) return true;
+    return GridUtils.getChangedRows(grid).length > 0;
+  },
   isEditableCell: <T>(grid: FlexGrid<T> | null | undefined, row: number, col: number) => {
     if (!grid) return false;
 

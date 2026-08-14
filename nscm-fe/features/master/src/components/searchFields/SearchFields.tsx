@@ -197,7 +197,14 @@ export const TeamField = ({
   comboId?: string;
 }) => {
   const L = useL();
-  const [teams] = useTabComboQueries({ filters: [comboId ?? 'TeambyDivision'] });
+  // ⭐ 2026-08-12 — divisionId 를 콤보 파라미터로 전달 (AS-IS 콜사이트 계약 = @Param1=division 재조회 1:1).
+  //   TeambyDivision 은 40 이 owner 경로 전용 분기(원문 ELSE)라, 미전달('ALL' 분기)로는 40 팀이
+  //   영원히 반환되지 않는다(40 SALES 사이트는 DEPT 미배정 설계). division 변경 = 쿼리키 변경 = 자동 재조회.
+  //   ⚠ BE makeComboQuery 는 raw 문자열 치환 — 작은따옴표 포함 전달 계약. 빈 division = '' = 'ALL' 분기(종전 동일).
+  //   @divisionId 토큰이 없는 콤보(UserTeamByDivision 등)는 전달해도 무해(치환 대상 없음 — 클라 필터가 동작).
+  const [teams] = useTabComboQueries({
+    filters: [{ comboId: comboId ?? 'TeambyDivision', divisionId: `'${division ?? ''}'` }],
+  });
   return (
     <Grid size={gridSize ?? 4}>
       <FormItem
@@ -803,6 +810,11 @@ interface VersionFieldProps {
   label?: string;
   /** value 가 빈 값일 때 표시할 문자열. 미전달 = 'Current' (DMF0020 기존 동작 보존) */
   emptyText?: string;
+  /**
+   * 직접 입력(key-in) 허용. 미전달 = 팝업 선택 전용 (기존 동작 그대로 — 회귀 0).
+   * 사용자가 친 문자열이 가공 없이 그대로 올라오므로, 조회키/표시문 매핑은 호출 측이 정한다.
+   */
+  onValueChange?: (v: string) => void;
 }
 export const VersionField = ({
   value,
@@ -810,8 +822,12 @@ export const VersionField = ({
   gridSize,
   label,
   emptyText,
+  onValueChange,
 }: VersionFieldProps) => {
   const L = useL();
+  // 주의: 직접 입력 가능한 경우 emptyText 를 value 로 넣지 않는다 — placeholder 성격의 문자열이
+  //   실제 입력값이 되어 타이핑하면 앞에 그대로 붙는다. 편집형은 빈 값을 빈 값으로 둔다.
+  const shownValue = value || (onValueChange ? '' : (emptyText ?? 'Current'));
   return (
     <Grid size={gridSize ?? 6}>
       <FormItem
@@ -820,10 +836,13 @@ export const VersionField = ({
         required
         render={() => (
           <PopupSearchInput
-            value={value || (emptyText ?? 'Current')}
-            onValueChange={() => {
-              /* Version 은 popup 선택만, 직접 입력 안 함 */
-            }}
+            value={shownValue}
+            onValueChange={
+              onValueChange ??
+              (() => {
+                /* 미전달 = popup 선택 전용, 직접 입력 안 함 */
+              })
+            }
             onOpenPopup={onOpenPopup}
           />
         )}

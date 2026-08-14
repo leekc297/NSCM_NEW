@@ -258,12 +258,12 @@ export const VersionSelectModal = ({
                 <Grid size={2} sx={{ display: 'flex', alignItems: 'center' }}>
                   <Stack direction='row' spacing={1} alignItems='center' sx={{ width: '100%' }}>
                     <Checkbox
-                      labelText={t('LBL00774', '_Day')}
+                      labelText='Day'
                       checked={chkDay}
                       onChange={(checked: boolean) => setChkDay(checked)}
                     />
                     <Checkbox
-                      labelText={t('LBL00775', '_Week')}
+                      labelText='Week'
                       checked={chkWeek}
                       onChange={(checked: boolean) => setChkWeek(checked)}
                     />

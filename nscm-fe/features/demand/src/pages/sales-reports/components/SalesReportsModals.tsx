@@ -1,6 +1,7 @@
 import {
   ColumnLayoutModal,
   ItemByDivisionModal,
+  MeasureSelectModal,
 } from 'features/master/src/components';
 import { useMemo } from 'react';
 
@@ -13,7 +14,7 @@ import { useSalesReportsStore } from '../useSalesReportsStore';
 import { saveTitleSet } from '../utils/sales-reports.api';
 import { toCellStr } from '../utils/sales-reports.gridCombos';
 
-import { ExchangeRateModal, MeasureSelectModal, TextboxModal } from './modals';
+import { ExchangeRateModal, TextboxModal } from './modals';
 
 export type SalesReportsModalKey =
   | 'ITEM'
@@ -166,7 +167,8 @@ export const SalesReportsModals = ({
         }}
       />
 
-      {/* Measure Select — business-plan 판 복제 (measures/visibleMeasures/onApply 계약) */}
+      {/* Measure Select — 공용 MeasureSelectModal (hook #132 §2-1 — 화면별 사본 금지).
+          titleSet 'M' 영구 저장은 이 호출부 onApply 소관 (measures/visibleMeasures/onApply 계약) */}
       <MeasureSelectModal
         open={openKey === 'MEASURE'}
         modalClose={onClose}

@@ -1,0 +1,35 @@
+// 표준 모달 레이아웃 (DMF0020 ExchangeRateModal 정본 동일) — SearchArea → grid → 하단 버튼.
+.dialogContentWrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.gridWrapper {
+  flex: 1;
+  min-height: 0;
+  border: 1px solid #e0e4e9;
+  border-radius: 4px;
+  background: white;
+  overflow: hidden;
+  position: relative;
+}
+
+.buttonWrapper {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-top: 5px;
+}
+
+// Period 범위(YYYY-MM ~ YYYY-MM) — InputField 2개 + 구분자, 36px 통일.
+.periodRange {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+}
+
+.grid {
+  height: 100%;
+}

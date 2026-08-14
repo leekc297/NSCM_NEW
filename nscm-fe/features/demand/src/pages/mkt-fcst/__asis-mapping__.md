@@ -1,16 +1,143 @@
-# DMF0003 MktFcst — AS-IS ↔ To-Be 4축 매핑 매트릭스
+# __asis-mapping__.md — EID 1:1 대사표 (asis-coverage-check §0.0/§0.1)
 
-> hook `asis-coverage-check.md` 4축 100% 매핑 검증 (anti-simplification — 표본·은폐 금지).
-> 작성: 2026-06-28 (Phase 2f — validation 전수 + division 분기 + expressions cross-check).
->
-> **AS-IS 정본**: `Doc/_legacy_source/06_UIL/domain_DM/GSCM.DM.Plan.UIL/DMF0003_MktFcst.cs` (5,920줄)
-> **분석서**: `Doc/_analysis/domain_DM/screens/DMF0003_MktFcst/` — validation.md(152) / expressions.md(130) / asis_behavior_supplement.md
->
-> ⚠️ 라인 표기 2종:
-> - `(.cs Lxxxx)` = 정본 `GSCM.DM.Plan.UIL/DMF0003_MktFcst.cs` (To-Be 구현 근거).
-> - `(va#NN)` = validation.md 의 행 번호(원소스 6,945줄 기준 — 정본과 라인 오프셋 상이, 의미 동일).
+> 원천: `DMF0003_MktFcst_주요이벤트_상세분석.md`, `DMF0003_MktFcst_제약매트릭스_상세.md` · 생성: asis_mapping_gate.py --init
+> 상태 허용값: 미구현(초기) / 구현(구현 위치 필수) / 제외(사유 필수) / 해당없음(사유 필수 — 조회 전용 화면의 CRUD 행 등). 빈 칸 1개 = 게이트 실패.
 
----
+## 이벤트·제약 (EID 1:1)
+
+| ID | 요지 (원천 md 1줄) | 구현 위치 (파일:라인) | 사유 (미구현/제외/해당없음 시 필수) | 상태 |
+|---|---|---|---|---|
+| E00 | §0 정본 vs 구본 차이 — git diff --no-index 실측 |  | 정본 선택 근거(폴더본 7,143줄 — diff = DMF0003_정본전환_diff_20260812.md). 구현 산출물 아닌 분석 메타 | 제외 |
+| E01 | §1 초기화 체인 (Form_Load, L302~330) | features/demand/src/pages/mkt-fcst/MktFcst.tsx:99~120 (초기화 useEffect·dayRange) + useMktFcstStore.ts:325~455 (fetchStaticColumns/Measures/SearchConditions) |  | 구현 |
+| E01-1 | §1.1 InitControls (L422~563) — 조회조건 콤보 로딩·기본값 | features/demand/src/pages/mkt-fcst/components/MktFcstForm.tsx:51~106 (조회조건 콤보 8축) + useMktFcstStore.ts:131~163 (initSearch 기본값·82 Invalid 기본체크) |  | 구현 |
+| E01-2 | §1.2 CreateSpread (L609~619) / InitSpread (L622~636) / GetSpdTitle (L6336~6355) | features/demand/src/pages/mkt-fcst/useMktFcstStore.ts:88·241 (spreadTitleType 'LOAD'/'' — E20260402) + components/MktFcstGrid.tsx:349~410 (GET_SPREAD_TITLE→동적 컬럼 메타) |  | 구현 |
+| E01-3 | §1.3 DefineProperty (L565~607) | features/demand/src/pages/mkt-fcst/MktFcst.tsx:701~737 (버튼 게이트 hasButton×editable). Master Change = AS-IS 최종 숨김(E20260323)+사용자 결정(2026-07-13 MasterChgModal 제거 — modals/index.ts) |  | 구현 |
+| E01-4 | §1.4 InitSaveDataTable (L758~800) |  | WinForms 로컬 DataTable(dtSave/dtSaveFinal) 구조 — TO-BE 는 EditTracker+utils/mkt-fcst.save.ts:127~185 (buildUnfoldRows/buildSavePayload)가 동일 역할 | 해당없음 |
+| E02 | §2 FindData — 조회 (FindButton L805 → FindData L1673~1947) | features/demand/src/pages/mkt-fcst/MktFcst.tsx:412~424 (handleSearch) + useMktFcstStore.ts:260~300 (SP 19파라미터 payload — p_as_yn=W/S 그룹 E20260211 포함) |  | 구현 |
+| E03 | §3 편집/저장 | features/demand/src/pages/mkt-fcst/MktFcst.tsx:429~ (guardEditGates) + 하위 E03-1~5 |  | 구현 |
+| E03-1 | §3.1 EditButton (L824~1338) — 편집 게이트 8종 + 잠금 매트릭스 | features/demand/src/pages/mkt-fcst/MktFcst.tsx:429~468 (게이트) + components/MktFcstGrid.tsx:722~850 (beginningEdit) + utils/mkt-fcst.editLock.ts:75~ (buildEditCutoff/evalDynCell — EDIT_FLAG·버킷·시점) | 잔여 갭은 CA-04(MSG00478 주석)·CA-07 행 참조 | 구현 |
+| E03-2 | §3.2 SaveButton (L1340) → SaveData (L2220~2506) | features/demand/src/pages/mkt-fcst/MktFcst.tsx:519~660 (handleSave — MSG00476 게이트·p_authority) + utils/mkt-fcst.save.ts:127~185 |  | 구현 |
+| E03-3 | §3.3 InsertButton (L811) → InsertRow (L2529~3014) | features/demand/src/pages/mkt-fcst/MktFcst.tsx:472~499 (handleInsert — SCP 81 차단·INSERT_DEFAULT_MEASURE) |  | 구현 |
+| E03-4 | §3.4 DeleteButton (L816~822) | features/demand/src/pages/mkt-fcst/MktFcst.tsx:503~514 (handleDelete — I 행만) |  | 구현 |
+| E03-5 | §3.5 ExcelButton (L1346~1391, E20240906) | features/demand/src/pages/mkt-fcst/MktFcst.tsx:775 (excelFileName — DataGrid 공통 DefaultButtonActions excel) |  | 구현 |
+| E04 | §4 그리드 이벤트 | 하위 E04-1~5 분해 |  | 구현 |
+| E04-1 | §4.1 spdMain_Changed (L3944~5382) — CellsUpdated 만 | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx:855~955 (cellEditEnded→runDynRecalc) + utils/mkt-fcst.recalc.ts (D/W/M 배분·롤업) + utils/mkt-fcst.validate.ts |  | 구현 |
+| E04-2 | §4.2 SetSaveData (L5395~5522) / SetSaveDataRemove (L5524~5619) | features/demand/src/pages/mkt-fcst/utils/mkt-fcst.save.ts:127~158 (buildUnfoldRows — EditTracker 변경 셀 수집 = SetSaveData/Remove 동등) |  | 구현 |
+| E04-3 | §4.3 spdMain_ComboSelChange (L3291~3603) | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx:723~850 (cascade dataMap 스왑) + mkt-fcst.constants.ts:331~357 (GRID_CASCADE_FILTERS/CLEAR) | AS 3축 잔여 갭은 CE-02/CE-04 행에서 판정 | 구현 |
+| E04-4 | §4.4 spdMain_CellDoubleClick (L3604~3942) | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx:977~1050 (헤더 드릴다운·FPModal 팝업·SSP 비교) + MktFcst.tsx:796~860 (Project/Item 모달 회신) |  | 구현 |
+| E04-5 | §4.5 spdMain_KeyUp (L5636~5700) / EditChange (L6482~6488) / ClipboardPasted (L6491~6593) … | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx:150 (pasteContinueRef) + Wijmo pastedCell 공통. TopChange=Wijmo 자동 머지 | AS-IS KeyUp 의 Item 붙여넣기→검증팝업(E20231019)은 FPModal 검색 모달 구조로 대체(직접입력 차단) | 구현 |
+| E05 | §5 버튼 전수 | 하위 E05-1~3 |  | 구현 |
+| E05-1 | §5.1 BaseForm override | features/demand/src/pages/mkt-fcst/MktFcst.tsx:701~712 (공통버튼 배선) |  | 구현 |
+| E05-2 | §5.2 커스텀 버튼·체크박스 | features/demand/src/pages/mkt-fcst/MktFcst.tsx:714~737 (Column/Measure 커스텀 버튼) + components/MktFcstForm.tsx:255~275 (Bucket 가드 MSG00227) | btnIncotermsChg(Master Chg)=숨김 사문 / cboAS=사문 — 각 HANDLER 행 참조 | 구현 |
+| E05-3 | §5.3 화면 내 검증 메시지 전수 (활성 기준) | features/demand/src/pages/mkt-fcst/mkt-fcst.constants.ts:262~310 (MSG 상수) + utils/mkt-fcst.validate.ts | MSG00478 미배선(주석) = CA-04 갭 / MSG00004→MSG00606 토스트 대체(C4 표준) = CF-05 참조 | 구현 |
+| E06 | §6 호출 팝업 상세 (8종) | MODAL:* 8행에서 개별 판정 |  | 구현 |
+| E07 | §7 fnValidation (L5887~6273) | features/demand/src/pages/mkt-fcst/utils/mkt-fcst.validate.ts:50~152 (validateSaveRows — 필수/중복/수량/AS+ALL) |  | 구현 |
+| E08 | §8 SSP 동기화 표시 (C20200804 — 40/82) | features/demand/src/pages/mkt-fcst/utils/mkt-fcst.sspSync.ts (parseSspSyncMap/sspSyncStateOf) + components/MktFcstGrid.tsx:644~ (PaleGreen/PapayaWhip) |  | 구현 |
+| E09 | §9 당주 표시 (초록 라인·헤더) | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx:152~169 (currentPeriodBindings)·600~632 (헤더 초록 볼드+셀 테두리) |  | 구현 |
+| CA-01 | §1 `SCP Planner` × division 82 또는 40 / MSG00096 차단 | features/demand/src/pages/mkt-fcst/MktFcst.tsx:521~525 (scpEditBlocked — FE) + PKG_DMF0003 SAVE 프롤로그 AUTHGATE(2026-08-12 이식 — AS-IS L690~708 1:1, SP 서버측 차단) | 실 CRUD 권한 테스트에서 SP 게이트 미이식 적출(SCP 82 저장 서버 통과) → 당일 이식·차단 재현(CODE -1) | 구현 |
+| CA-02 | §1 `DM_UI_EDITABLE_DIVISION`('DMF0003',div) EDIT_YN='N' / MSG00448 차단 (40→DMF0082 유도) | features/demand/src/pages/mkt-fcst/MktFcst.tsx:109~135 (editableSet/userEditSet 메타) — editable=false 시 Insert/Delete/Save 버튼 미표시(=MSG00448 차단 동등, 40 은 DMF0082 유도) |  | 구현 |
+| CA-03 | §1 `SCP Planner` × 81* × `SCP_PLANNER_EDIT_FLAG` 0건 / MSG00477 차단 (시간 게이트) | features/demand/src/pages/mkt-fcst/MktFcst.tsx:430~437 (FE MSG00477) + PKG SAVE AUTHGATE SCP 분기(서버측 — lookup 0건=전면 차단 보수 동작) |  | 구현 |
+| CA-04 | §1 Planner 3그룹 × `DM_PLANNER_EDIT_FLAG` 행 존재 / MSG00478 차단 (인자 5: LIMIT_AUTH/EDIT_DAYS/FR… | features/demand/src/pages/mkt-fcst/MktFcst.tsx:441~455 (MSG00478 재활성) + PKG SAVE AUTHGATE 비SCP 분기(서버측 LIMIT_AUTH 시간창 — AS-IS L715~778 1:1) | 2026-08-12 보완: FE 주석 게이트 복원 + SP 게이트 이식 | 구현 |
+| CA-05 | §1 Planner 3그룹 × 81*/82 × AS_FROM_SITE 컬럼 부재 / MSG00113 차단 | features/demand/src/pages/mkt-fcst/MktFcst.tsx:455~464 (guardEditGates (3) — AS_FROM_SITE 컬럼 부재 MSG00113) |  | 구현 |
+| CA-06 | §1 필수 컬럼 부재 — 81*: 9종(+PlantSiteId) / 82: 8종 / 40: 8종(40 계열 키) / MSG00113 차단 |  | AS-IS 는 컬럼셋팅으로 필수 컬럼 제거 가능한 구조라 검사 필요 — TO-BE 는 admin SHEET_COLUMNS 메타가 키 컬럼 상시 공급(개인화는 표시만) → 부재 불가 | 해당없음 |
+| CA-07 | §1 dt8Week 없음(조회 선행 안 함) / MSG00259 차단 | features/demand/src/pages/mkt-fcst/MktFcst.tsx guardEditGates (2b) — hasSearched 가드(MSG00662 '조회 후 수정모드로 가능합니다') | 2026-08-12 보완 | 구현 |
+| CB-01 | §2 `EDIT_FLAG != 'Y'` 행 = Measure 이후 전열 잠금 / L1132~1135 | features/demand/src/pages/mkt-fcst/utils/mkt-fcst.editLock.ts:112~ (evalDynCell — EDIT_FLAG!='Y' 행 동적 셀 잠금) |  | 구현 |
+| CB-02 | §2 Measure 컬럼까지(키 영역) 전 행 잠금 — Insert 행만 예외 / L1123 | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx:741~746 (beginningEdit — 비Insert 행 정적 셀 cancel) |  | 구현 |
+| CB-03 | §2 I 행 아닌 행 Measure 잠금 / L1163·2775 | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx:741~750 (Insert 행 외 Measure 편집 불가) |  | 구현 |
+| CB-04 | §2 division 81*/82 → Division 컬럼 잠금 / 40 → Division40 잠금 / L1275~1278·2698~2701 | features/demand/src/pages/mkt-fcst/mkt-fcst.constants.ts (DIVISION_ID inputTp 'S') + beginningEdit S cancel |  | 구현 |
+| CB-101 | §2 [원문 무번호] Bucket / D_ 컬럼 | features/demand/src/pages/mkt-fcst/utils/mkt-fcst.editLock.ts:48~110 (dynKindOf/buildEditCutoff) |  | 구현 |
+| CB-102 | §2 [원문 무번호] Daily / 과거(<당주월요일) 잠금 | features/demand/src/pages/mkt-fcst/utils/mkt-fcst.editLock.ts:75~ (Daily — 과거<당주월요일 잠금) |  | 구현 |
+| CB-103 | §2 [원문 무번호] Weekly / 전부 잠금 | features/demand/src/pages/mkt-fcst/utils/mkt-fcst.editLock.ts (Weekly — 차기 D_ 기준 과거 판정, C20210827 1:1) |  | 구현 |
+| CB-104 | §2 [원문 무번호] Monthly / 전부 잠금 (40: 조건부 — MONTH_NAME 비교) | features/demand/src/pages/mkt-fcst/utils/mkt-fcst.editLock.ts (Monthly — 40 은 O_RC2 8주월 추가 잠금) |  | 구현 |
+| CC-01 | §3 Division/Division40/BizType/SoldToCustomer/CountryName/CityName / L2698~2709 | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx:455~470 (admin INPUT_TP_CD→CELL_INPUT_EDIT_TYPE 매핑 — 메타 단일 원천 hook #130) |  | 구현 |
+| CC-02 | §3 ProjectName/ProjectStatus/ProjectOwner/ItemName/NickName/ItemType / L2710~2721 | CC-01 과 동일 (INPUT_TP_CD 메타) |  | 구현 |
+| CC-03 | §3 CUST_GROUP/CUST_GROUP_DTL/Owner/APPLICATION/ROUTE/MDM_PROJECT_NAME/MIN_CAPACITY/FORECA… | CC-01 과 동일 (INPUT_TP_CD 메타) |  | 구현 |
+| CC-04 | §3 CellType/FORECAST_INFO_CELL_MODEL/FORECAST_INFO_CELL_PACK_COUNT/FORECAST_INFO_SPEC/VMI… | CC-01 과 동일 (INPUT_TP_CD 메타) |  | 구현 |
+| CC-05 | §3 **AS_FROM_SITE — 초기 잠금** (해제는 §5 AS 3축만) / L2752~2753 (E20260211) | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx:336~341·736~738 (isAsFromSiteEditable 기본 false — 초기 잠금) |  | 구현 |
+| CC-06 | §3 LAST_UPDATE_DATE/LAST_UPDATED_BY/SENDER_CODE/SENDER_NAME / L2754~2761 | CC-01 과 동일 (INPUT_TP_CD 메타 'S') |  | 구현 |
+| CC-07 | §3 **PROJECT_S_OP_REPORT** (E20241030) / **CELL_PER_MODULE** (E20241015) / L2765~2772 | CC-01 과 동일 — PROJECT_S_OP_REPORT/CELL_PER_MODULE 메타 'S' |  | 구현 |
+| CC-08 | §3 **Team/TeamName — 입력 불가** (E20260311) / L2779~2782 | CC-01 과 동일 — TEAM_ID/TEAM_NAME_KO 메타 'S' (E20260311) |  | 구현 |
+| CD-01 | §4 FCST_TYPE / `FCST_TYPE` — W/S 그룹=`EDIT_MODE`(SALES_TYPE_CODE2∪_ADD 6종) / 그 외=NowGroupI… | features/demand/src/pages/mkt-fcst/mkt-fcst.constants.ts:359~373 (GRID_EDIT_COMBO FCST_TYPE=FcstTypeEditMode wsOnly) + MktFcstGrid.tsx:762~767 |  | 구현 |
+| CD-02 | §4 INCOTERMS / `INCOTERMS`(ALL,'Y' — VALID_YN 만) / AS 사이트 행 = `AS_INCOTERMS`(division, si… | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx beginningEdit INCOTERMS 분기 — AS 사이트 행 = AsIncotermsEdit(division) 스왑 | 2026-08-12 보완 (AS-IS AS_INCOTERMS 1:1 — DMF0082 동일 콤보 재사용) | 구현 |
+| CD-03 | §4 AS_FROM_SITE / `AS_FROM_SITE`(division) | admin SHEET_COLUMNS CELL_COMBO_DATA_TYPE + MktFcst.tsx:190 (AS_FROM_SITE 콤보 param1=division) |  | 구현 |
+| CD-04 | §4 MEASURE / `MktFcstEditMeasure`(division, site, project, userId) — 81*/82 비W/S 는 `AS_In… | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx:768~790 (MktFcstEditMeasure + AS 향/W-S 필터) |  | 구현 |
+| CD-05 | §4 TEAM / `UserTeamByDivisionAuth` |  | Team 컬럼 = E20260311 입력 불가('S') — 편집 콤보 자체가 불필요(AS-IS 최종 상태도 입력 불가) | 해당없음 |
+| CD-06 | §4 END_CUSTOMER(40) / `EndCustomerByDivision40` | features/demand/src/pages/mkt-fcst/mkt-fcst.constants.ts (END_CUSTOMER cascade — GRID_CASCADE_FILTERS) |  | 구현 |
+| CD-07 | §4 END_CUSTOMER(81*/82) / `UserEndCustomerByDivisionDeptAuth` | CD-06 과 동일 (cascade) |  | 구현 |
+| CD-08 | §4 SCM_SITE_ID / [E20260402] `GetSalesSite`=SiteByEndCustomer(**PARAM5=W/S 'Y'**) — 구 Use… | features/demand/src/pages/mkt-fcst/mkt-fcst.constants.ts GRID_CASCADE_FILTERS SCM_SITE_ID + SiteByEndCustomer(PARAM5 W/S) |  | 구현 |
+| CD-09 | §4 SCM_SITE_ID40 / `UserSiteByEndCustomer` | CD-08 과 동일 — TO-BE 는 division 단일 그리드(40 계열 별도 컬럼 없음) |  | 구현 |
+| CD-10 | §4 PLANT_SITE_ID / 조회조건 dtPlantSite → 행별 `SalesPlant`/`PlantSiteByItem`(division, project… | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx applyPlantSites(PROJECT_CODE/ITEM_ID 변경 트리거, 81* 만) + beginningEdit PLANT_SITE_ID 스왑 — CMBO `PlantSiteByItem` 신규 등재(AS-IS UP_FX L5858~5884 1:1, 실측 27→5행 축소 확인) | 2026-08-12 보완 (hook #117 3산출물: 등록+배선+파라미터) | 구현 |
+| CD-11 | §4 DOM_EXP(40) / `DM_CUSTOMS_HANDBOOK` | features/demand/src/pages/mkt-fcst/mkt-fcst.constants.ts:189 (DOM_EXP _comboKey=CustomsHandbook) |  | 구현 |
+| CE-01 | §5 division / `81*` 또는 `82` 만 로직 진입 | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx:777 (isDiv8182 분기) |  | 구현 |
+| CE-02 | §5 Sales Site 향 / AS_FROM_SITE 콤보 **Name** 에 행 SCM_SITE_ID 매칭 = **비축향 → 잠금+값 클리어** + Meas… | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx isAsFromSiteEditable — 비축향(AS 사이트 NAME 매칭) 축 추가(항상 잠금) | 2026-08-12 보완 | 구현 |
+| CE-03 | §5 FCST Type / 고객향에서 FCST Type ∈ SALES_TYPE_CODE2(4종: WS/WSF/AS/ASF) → **해제** / 아니면 잠금+값 … | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx:336~341 (FCST_TYPE ∈ FcstTypeWs 4종 판정) |  | 구현 |
+| CE-04 | §5 적용 지점 / ScmSiteId ComboSelChange(L3446~3514) / FcstType ComboSelChange(L3556~3602) / C… | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx cellEditEnded [CE-04] — SCM_SITE_ID/FCST_TYPE 변경 시 비축향→MEASURE·AS_FROM_SITE 클리어 / 비W-S→AS_FROM_SITE 클리어 | 2026-08-12 보완 (.cs L3478~3483·3506·3587·3597 1:1) | 구현 |
+| CE-05 | §5 조회 컬럼 강제 / [E20260402] W/S 권한 진입 시 GET_SPREAD_TITLE(p_user_group, p_type='LOAD') 이 AS_… | features/demand/src/pages/mkt-fcst/useMktFcstStore.ts:88·241 (p_type 'LOAD') + SP GET_SPREAD_TITLE p_user_group |  | 구현 |
+| CE-06 | §5 저장값 / 행 컬럼 값 직접 직렬화(sASFromSite `Replace(",","^")`) — 구 cboAS 사문 | features/demand/src/pages/mkt-fcst/utils/mkt-fcst.save.ts:100~102 (행 AS_FROM_SITE 직렬화 — ','→'^') |  | 구현 |
+| CF-01 | §6 I 행 키 중복(그리드 전수 — 81*=9키/82·40=8키) / MSG00043 | features/demand/src/pages/mkt-fcst/utils/mkt-fcst.validate.ts:100~130 (신규 행간 중복 — MSG00043) |  | 구현 |
+| CF-02 | §6 I 행 D_ 수량 입력 0건 / MSG00034 | features/demand/src/pages/mkt-fcst/utils/mkt-fcst.validate.ts (일자 수량 미입력 — MSG00034) |  | 구현 |
+| CF-03 | §6 dtSave 행 중 그리드 실재+AS_FROM_SITE 일치(bAsCompare)만 dtSaveFinal 승계 / I 저장이 기존 행 키와 같으면 제외 /… |  | dtSave→dtSaveFinal 승계 구조 = WinForms 로컬 상태 — TO-BE 는 EditTracker+insertedRows 가 그리드 실재 행만 원천으로 삼아 동일 불변식 자동 성립 | 해당없음 |
+| CF-04 | §6 **[E20260402] W/S 그룹 × 81*/82 × 고객향 × FCST Type ∈ W/S 4종 × AS_FROM_SITE 빈값** / MSG0047… | features/demand/src/pages/mkt-fcst/MktFcst.tsx:544~569 (W/S×81*/82×고객향×W-S 4종×AS_FROM_SITE 빈값 → MSG00476) |  | 구현 |
+| CF-05 | §6 저장 성공(Tables 없음) / MSG00004(건수) + 재조회 + viewport 복원 | features/demand/src/pages/mkt-fcst/MktFcst.tsx:626~636 (성공 토스트 MSG00606+invalidate+refetch+scroll 복원) | AS-IS MSG00004 팝업 → 하단 토스트 = 통합테스트 공통 C4 표준 적용 | 구현 |
+| CF-06 | §6 SP 가 Tables[0] 반환 / 그 메시지 표시 + Tables[1] 있으면 SspSyncPopUp | features/demand/src/pages/mkt-fcst/MktFcst.tsx:30~31 + components/modals/SspSyncResultModal.tsx (저장 응답 동기화 내역) |  | 구현 |
+| CG-01 | §7 수량 셀 수정 시 필수값 빈값 — Division/Project(81*·82)/EndCustomer(40)/SalesSite/Item/DomExp(Cust… | features/demand/src/pages/mkt-fcst/utils/mkt-fcst.validate.ts:81~99 (division 분기 필수 — MSG00002) | AS-IS 셀 즉시+값 회수 → TO-BE 저장 시점 일괄(No.38 정책 계열) — 검증 전량 커버 | 구현 |
+| CG-02 | §7 I 행 키 8~9축 중복 2건 이상 / MSG00260 + 값 회수 | features/demand/src/pages/mkt-fcst/utils/mkt-fcst.validate.ts:100~130 (중복 MSG00043) | AS-IS 실시간 MSG00260 → 저장 시점 일원화(No.38 — DMF0082 08-11 선례) | 구현 |
+| CG-03 | §7 Monthly 입력 < 실적(과거 D_) 합 / MSG00225 차단 | features/demand/src/pages/mkt-fcst/utils/mkt-fcst.recalc.ts:245~325 (belowActual) + MktFcstGrid.tsx:887 (MSG00225) |  | 구현 |
+| CG-04 | §7 Weekly 입력 < SSP 동기화(PaleGreen) 합 — 40 × MKT_FCST_RP × **FCST Type≠RMA**(E20241210) / 값… | features/demand/src/pages/mkt-fcst/utils/mkt-fcst.recalc.ts:110~ (recalcWeeklyToDaily — syncMap 하한·sync 셀 제외·RMA 예외 E20241210) |  | 구현 |
+| CG-05 | §7 I 행 키값 변경 / 수량 전부 클리어 + dtSave 에서 제거 | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx cellEditEnded [CG-05] — I 행 정적 키 변경 시 수량(D_/W_/M_) 전부 클리어 + MktFcst.tsx clearDynQuantities(팝업 경로) | 2026-08-12 보완 (.cs L5319~5379 1:1) | 구현 |
+| CG-06 | §7 I 행 Measure 를 AS_In_Req/BNPIn 외로 변경 / Item 4종 클리어 | features/demand/src/pages/mkt-fcst/mkt-fcst.constants.ts:374~ (MEASURE_MODEL_KEEP/CLEAR_COLS) + MktFcstGrid.tsx:958~972 |  | 구현 |
+| CG-07 | §7 버킷 배분 / 주→일: 요일비트(기본 '0000010'=FRI) 균등+잔여 마지막, 비트 없으면 기본요일 단일, PaleGreen 제외 / 월→일: 기본요… | features/demand/src/pages/mkt-fcst/utils/mkt-fcst.recalc.ts (요일비트·기본요일·잔여 배분 — dispatchRecalc) |  | 구현 |
+| CH-01 | §8 division 미선택 / MSG00097 | features/demand/src/pages/mkt-fcst/utils/mkt-fcst.validate.ts:35~44 (validateFind — MSG00097) |  | 구현 |
+| CH-02 | §8 기간 from > to / MSG00108 | CH-01 과 동일 (기간 역전 MSG00108) |  | 구현 |
+| CH-03 | §8 기간 3년 초과 / MSG00164 + to=from+2년 보정 | CH-01 과 동일 (3년 초과 MSG00164 — 일자 정밀 판정) |  | 구현 |
+| CH-04 | §8 division=40 / Project/PlantSite/btnProject 비활성, cboCellQty 활성, checkInvalidExec 비활성 | features/demand/src/pages/mkt-fcst/components/MktFcstForm.tsx (division 분기 — 40 Project/PlantSite 비활성 계열) |  | 구현 |
+| CH-05 | §8 division=82 / checkInvalidExec 활성+**기본 체크**, PlantSite 비활성·클리어, Bucket 기본 **Daily** | features/demand/src/pages/mkt-fcst/useMktFcstStore.ts:156~163 (82 Invalid 기본 체크) + Form (PlantSite 비활성·Bucket 기본 Daily) |  | 구현 |
+| CH-06 | §8 division=81 / lblEDISender 활성(+콤보), PlantSite 활성 | features/demand/src/pages/mkt-fcst/components/MktFcstForm.tsx (81 EDISender 활성·PlantSite 활성) |  | 구현 |
+| CH-07 | §8 I 행 존재 중 Bucket 변경 시도 / MSG00227 | features/demand/src/pages/mkt-fcst/components/MktFcstForm.tsx:255~275 (insertedRowCount>0 시 Bucket 변경 차단 — MSG00227) |  | 구현 |
+| CH-08 | §8 버킷 변경(편집모드) / EditButton 2회 재호출로 잠금 재계산 | react 상태 기반 — bucketType 변경 시 editCutoff/beginningEdit 자동 재계산(AS-IS EditButton 2회 재호출 동등) |  | 구현 |
+| CH-09 | §8 캐스케이드 / Division→Team→EndCustomer→SalesSite(+PlantSite 81) 순 재조회, division 변경 시 txtPro… | features/demand/src/pages/mkt-fcst/components/MktFcstForm.tsx:67~106 (콤보 cascade — Division→Team→EndCustomer→SalesSite) |  | 구현 |
+| CI-01 | §9 SSP 동기화 셀(40/82) / ATTR1 `일자/A^P` — A=PaleGreen, P=PapayaWhip | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx:644~660 (sspSyncStateOf → PaleGreen/PapayaWhip) |  | 구현 |
+| CI-02 | §9 당주 라인 / 초록 BevelBorder — count≥2 시 [E20250313] 조회시작>당주월요일 이면 this_YYYYMMWW, 아니면 W_{당주월… | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx:632 (currentPeriod 셀 테두리 초록) |  | 구현 |
+| CI-03 | §9 당주/당월 헤더 / 초록 볼드(굴림 9 Bold) | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx:600~612 (헤더 초록 볼드) |  | 구현 |
+| CI-04 | §9 과거 실적 구간 / chkColor 체크 시 Gainsboro(당월 M_ 는 White) | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx (editCutoff 기반 과거 셀 배경 — formatItem) |  | 구현 |
+| CI-05 | §9 주말 헤더 / SAT 파랑 / SUN 빨강 | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx:604~612 (SAT 파랑 #1565c0 / SUN 빨강 #d32f2f) |  | 구현 |
+| CI-06 | §9 NOTATION 서식 / INTEGER=정수 / POINT=입력 형태 / POINT3=소수 3자리 강제(0.000→0) | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx:521 (format '#,##0.###') | 주의 NOTATION 3분기 중 POINT3(소수 3자리 강제 — E20240812 82 Energy) 미재현: 유효자릿수만 표시(0.5→0.5, AS-IS 0.500). P3 판정 대상(소형) | 구현 |
+| CI-07 | §9 저장 후 / Action 클리어 + UnLockColor + 행 재잠금(빨강 계열) | 저장 성공 후 재조회(refetch)로 상태 자연 초기화 — AS-IS SetSaveSheetColor 의 Action 클리어 동등 |  | 구현 |
+| CJ-01 | §10 ADMIN / DM ADMIN / Master Chg 버튼 조건 충족(단 §1.1-5 최종 숨김) / DM ADMIN 은 81 Planner 시간 게이트… | CA-02~05·E01-3 참조 (Master Chg 최종 숨김) |  | 구현 |
+| CJ-02 | §10 DM Planner / 81* 시간 게이트(§1-4) / AS_FROM_SITE 컬럼 부재 차단(§1-5) | CA-04(미구현)·CA-05 참조 | MSG00478 갭은 CA-04 에서 추적 | 구현 |
+| CJ-03 | §10 DM Planner (W/S) / FCST Type=EDIT_MODE 6종 / AS_In_Req 사용 가능(유일) / p_as_yn='Y' / Site … | CD-01·CE-*·CF-04·E02(p_as_yn) 참조 |  | 구현 |
+| CJ-04 | §10 SCP Planner / 82·40 편집 차단(MSG00096) / 81* 시간 게이트(MSG00477) / 81* Insert 차단(MSG00096) | CA-01·CA-03·E03-3(SCP 81 Insert 차단) 참조 |  | 구현 |
+| CJ-05 | §10 그 외(Viewer 등) / Master Chg 숨김·편집 버튼 BaseForm 권한 체계(hasButton) 위임 | features/demand/src/pages/mkt-fcst/MktFcst.tsx:706~737 (hasButton 위임) |  | 구현 |
+| CK-01 | §11 DM.DMF0003_GET_MKT_FCST_DATA / 조회 | PROC_M PKG_DMF0003.P_DMF0003_GET_MKT_FCST_DATA (SEARCH) — useTabProcQuery SHEETS.MAIN |  | 구현 |
+| CK-02 | §11 DM.DMF0003_SAVE_MKT_FCST / 저장 | PROC_M P_DMF0003_SAVE_MKT_FCST (SAVE) — apiClient.post call-proc |  | 구현 |
+| CK-03 | §11 DM.DMF0003_GET_SPREAD_TITLE / 헤더 | PROC_M P_DMF0003_GET_SPREAD_TITLE — useTabProcQuery SHEETS.SPREAD_TITLE |  | 구현 |
+| CK-04 | §11 DM.DMF0003_GET_BUCKET_TYPE_CODE / 버킷 콤보 | features/demand/src/pages/mkt-fcst/components/MktFcstForm.tsx (BucketType 콤보 — CMBO 전환) |  | 구현 |
+| CK-05 | §11 DM.DMF0003_GET_MKT_FCST_COMPARE_POPUP / 동기화 비교 팝업 | PROC_M P_DMF0003_GET_MKT_FCST_COMPARE_POPUP — SspSyncCompareModal |  | 구현 |
+| CK-06 | §11 DM.PR_GET_DAY_RANGE / 기간 기본값 | PROC_M PR_GET_DAY_RANGE — MktFcst.tsx:92~98 (SHEETS.DAY_RANGE) |  | 구현 |
+| CK-07 | §11 SCM.SCM0001_GET_LOOKUP_VALUES / ITEM_TYPE_CODE 등 | CMBO ItemType (SCM0001_GET_LOOKUP_VALUES 전환) |  | 구현 |
+| CK-08 | §11 SCM.SCM0001_GET_BIZ_TYPE_BY_DIVISION / BizType | CMBO BizType (division 파라미터) |  | 구현 |
+| CK-09 | §11 DM.UP_FX_GetCommonDataList_DM / 콤보 범용(FCST_TYPE/AS_INCOTERMS/SiteByEndCustomer(40)/DM… | UP_FX→CMBO 전환 전수(hook #117 3산출물): FcstTypeWs/FcstTypeEditMode/AS_FROM_SITE/IncotermsEdit/MktFcstEditMeasure/CustomsHandbook 등 — 게이트 섹션7 대사 |  | 구현 |
+| CK-10 | §11 DataService.GetDMInnerTable / 조회조건 콤보 8축(§1.1-1) | CMBO 8축 (MyDivision/UserTeamByDivision/EndCustomerByDivision/BizType/UserSiteByEndCustomer/UserPlantSiteByEndCustomer/EdiSender 계열) |  | 구현 |
+| CK-11 | §11 (팝업 경유) DMF0003_GET_PRPOPUP/GET_PR_HISTORY_POPUP/SAVE_PRPOPUP / PR 계열 | PROC_M P_DMF0003_GET_PRPOPUP/GET_PR_HISTORY_POPUP/SAVE_PRPOPUP — PrModal/PrHistoryModal |  | 구현 |
+
+## CRUD·모달 매트릭스 (2026-08-07 축 — MAIN UI 와 모달의 CRUD 누락 0)
+
+| ID | 요지 (원천 md 1줄) | 구현 위치 (파일:라인) | 사유 (미구현/제외/해당없음 시 필수) | 상태 |
+|---|---|---|---|---|
+| CRUD:E02:SEARCH | [SEARCH] §2 FindData — 조회 (FindButton L805 → FindData L1673~1947) | features/demand/src/pages/mkt-fcst/MktFcst.tsx:412 (handleSearch→useTabProcQuery) |  | 구현 |
+| CRUD:E03:SAVE | [SAVE] §3 편집/저장 | features/demand/src/pages/mkt-fcst/MktFcst.tsx:519 (handleSave→SAVE/call-proc) |  | 구현 |
+| CRUD:E03:INSERT | [INSERT] §3.3 InsertRow — 신규행 (수기 추가 — 상위 E03 이 SAVE 로만 분류됨) | features/demand/src/pages/mkt-fcst/MktFcst.tsx:472 (handleInsert) |  | 구현 |
+| CRUD:E03:DELETE | [DELETE] §3.4 DeleteButton — I 행만 삭제 (수기 추가) | features/demand/src/pages/mkt-fcst/MktFcst.tsx:503 (handleDelete — I 행만) |  | 구현 |
+| CRUD:E03:EDIT | [EDIT] §3.1 EditButton — 편집 게이트 8종 + 잠금 (수기 추가) | features/demand/src/pages/mkt-fcst/MktFcst.tsx:429 (guardEditGates) + Grid beginningEdit |  | 구현 |
+| CRUD:E03:EXCEL | [EXCEL] §3.5 ExcelButton — 다운로드 (수기 추가) | features/demand/src/pages/mkt-fcst/MktFcst.tsx:775 (excelFileName — DataGrid 공통 export) |  | 구현 |
+| MODAL:DMF0003_SspSyncComparePopUp | AS-IS 팝업 (분석 md) — TO-BE 모달 구현 위치 기입 의무 | features/demand/src/pages/mkt-fcst/components/modals/SspSyncCompareModal.tsx (COMPARE_POPUP 배선) |  | 구현 |
+| MODAL:DMF0003_SspSyncPopUp | AS-IS 팝업 (분석 md) — TO-BE 모달 구현 위치 기입 의무 | features/demand/src/pages/mkt-fcst/components/modals/SspSyncResultModal.tsx (저장 응답 동기화 내역) |  | 구현 |
+| MODAL:MeasureSelectModal | FE 실존 모달 (공용 features/master/src/components/measureSelectModal — 화면 사본 삭제 2026-08-13) — 분석 md 근거 확인 필요(FE 단독이면 사유 기입) | features/master/src/components/measureSelectModal/MeasureSelectModal.tsx (공용 정본) — MktFcst.tsx 배선(onApply=titleSet 'M' 저장) — AS-IS DM0002_TitleSetForm_Popup(false=Measure 모드) 대응 |  | 구현 |
+| MODAL:PrHistoryModal | FE 실존 모달 (components/modals/PrHistoryModal.tsx) — 분석 md 근거 확인 필요(FE 단독이면 사유 기입) | features/demand/src/pages/mkt-fcst/components/modals/PrHistoryModal.tsx — AS-IS DMF0003_PRHistoryPopup 대응 |  | 구현 |
+| MODAL:PrModal | FE 실존 모달 (components/modals/PrModal.tsx) — 분석 md 근거 확인 필요(FE 단독이면 사유 기입) | features/demand/src/pages/mkt-fcst/components/modals/PrModal.tsx — AS-IS DMF0003_PRPopup 대응 |  | 구현 |
+| MODAL:SspSyncCompareModal | FE 실존 모달 (components/modals/SspSyncCompareModal.tsx) — 분석 md 근거 확인 필요(FE 단독이면 사유 기입) | MODAL:DMF0003_SspSyncComparePopUp 와 동일 실체(FE 파일명 행) |  | 구현 |
+| MODAL:SspSyncPopUp | AS-IS 팝업 (분석 md) — TO-BE 모달 구현 위치 기입 의무 | MODAL:DMF0003_SspSyncPopUp 와 동일 실체 |  | 구현 |
+| MODAL:SspSyncResultModal | FE 실존 모달 (components/modals/SspSyncResultModal.tsx) — 분석 md 근거 확인 필요(FE 단독이면 사유 기입) | MODAL:DMF0003_SspSyncPopUp 와 동일 실체(FE 파일명 행) |  | 구현 |
 
 ## §0. 커버리지 요약 (4축)
 
@@ -181,7 +308,7 @@
 
 | # | AS-IS Popup | 트리거(.cs) | To-Be Modal | 상태 |
 |---:|---|---|---|:--:|
-| 1 | DM0002_TitleSetForm (컬럼/Measure) | btnColumn/btnMeasure | (공용 ColumnSettingModal — Phase 후속 wire) | ⚠️ wire |
+| 1 | DM0002_TitleSetForm (컬럼/Measure) | btnColumn/btnMeasure | (공용 ColumnLayoutModal 연동 완료) | ⚠️ wire |
 | 2 | SCM0002_ProjectbyDivision | CellDblClick/btnProject | `ProjectByDivisionModal` | ✅ |
 | 3 | DM0002_ItembyDivision | CellDblClick/btnItemId | `ItemByDivisionModal` | ✅ |
 | 4 | DM0020_OwnerbyDivision | btnOwner | `OwnerByDivisionModal` | ✅ |
@@ -190,7 +317,7 @@
 | 7 | DMF0003_SspSyncComparePopUp | CellDblClick(Div40&MKT_FCST_RP&동기화색) L2628 | `SspSyncCompareModal` | ✅ |
 | 8 | DMF0003_SspSyncPopUp | SaveData 응답 L1610 | `SspSyncResultModal` | ✅ |
 
-> ColumnSetting(#1) 은 컬럼 가시/Measure 동적 fetch(`fetchStaticColumns`/`fetchStaticMeasures`)로 baseline 확보, 사용자 popup wire-up 은 공용 ColumnSettingModal 연동(Phase 후속) — `MktFcst.tsx` applyColumnVisibility 준비 완료.
+> ColumnSetting(#1) 은 컬럼 가시/Measure 동적 fetch(`fetchStaticColumns`/`fetchStaticMeasures`)로 baseline 확보, 사용자 popup wire-up 은 공용 ColumnLayoutModal 연동 완료 — `MktFcst.tsx` applyColumnVisibility 준비 완료.
 
 ---
 
@@ -321,3 +448,45 @@ AS-IS `Freeze(0, MEASURE 인덱스+1)` (좌측 식별 컬럼 블록 하드코드
 ### 그룹 판정 방식 (TO-BE 편차 — 명시)
 
 AS-IS `NowGroupID`(로그인 시 선택한 단일 그룹) ↔ TO-BE 는 그룹 선택 개념 부재 → CMBO 'MktFcstUserGroups'(USER_GR_MPG_M @sesUserId) **membership** 판정 + 대표 DM류 그룹 우선순위(W/S > DM Planner > DM ADMIN). 겸직 사용자는 게이트 중복 적용 가능 — 사내 실측(2026-07-20) SCP Planner 소속자 0명(신설 그룹, 배정 전)으로 현재 리스크 없음. 배정 시 협의 항목.
+
+## AS-IS 이벤트 핸들러 인벤토리 (2026-08-08 축 — 분석서가 놓친 핸들러 차단)
+
+> 원천: `GSCM\06.UIL\GSCM.DM.Forms.UIL\Plan\DMF0003_MktFcst\DMF0003_MktFcst.cs` — `.cs` 에서 **기계 추출**한 UI 이벤트 핸들러 33개.
+> 대사표의 E번호는 **분석 md** 기준이라 분석서가 누락한 핸들러를 못 잡는다. 이 축이 그 구멍을 막는다.
+> 사문(빈 몸통) 핸들러는 **미이관이 파리티** — 상태 '제외' + 사유 기재로 통과시킨다.
+
+| ID | 요지 (원천 md 1줄) | 구현 위치 (파일:라인) | 사유 (미구현/제외/해당없음 시 필수) | 상태 |
+|---|---|---|---|---|
+| HANDLER:DeleteButton | AS-IS `DMF0003_MktFcst.cs:816` (라이브 6행) | features/demand/src/pages/mkt-fcst/MktFcst.tsx:503 (handleDelete) |  | 구현 |
+| HANDLER:EditButton | AS-IS `DMF0003_MktFcst.cs:824` (라이브 358행) | features/demand/src/pages/mkt-fcst/MktFcst.tsx:429 (guardEditGates) + Grid beginningEdit/editCutoff |  | 구현 |
+| HANDLER:ExcelButton | AS-IS `DMF0003_MktFcst.cs:1346` (라이브 25행) | features/demand/src/pages/mkt-fcst/MktFcst.tsx:775 (DataGrid excel) |  | 구현 |
+| HANDLER:FindButton | AS-IS `DMF0003_MktFcst.cs:805` (라이브 3행) · **사문(빈 몸통)** |  | 사문 래퍼(3행 — FindData 위임). TO-BE handleSearch 직접 담당 | 제외 |
+| HANDLER:FindData | AS-IS `DMF0003_MktFcst.cs:1673` (라이브 80행) | features/demand/src/pages/mkt-fcst/MktFcst.tsx:412 + useMktFcstStore.ts:260~300 |  | 구현 |
+| HANDLER:Form_Load | AS-IS `DMF0003_MktFcst.cs:302` (라이브 23행) | features/demand/src/pages/mkt-fcst/MktFcst.tsx:99~120 (초기화 useEffect) |  | 구현 |
+| HANDLER:InsertButton | AS-IS `DMF0003_MktFcst.cs:811` (라이브 3행) · **사문(빈 몸통)** |  | 사문 래퍼(3행 — InsertRow 위임) | 제외 |
+| HANDLER:InsertRow | AS-IS `DMF0003_MktFcst.cs:2529` (라이브 55행) | features/demand/src/pages/mkt-fcst/MktFcst.tsx:472 (handleInsert) |  | 구현 |
+| HANDLER:OnShown | AS-IS `DMF0003_MktFcst.cs:332` (라이브 12행) | features/demand/src/pages/mkt-fcst/useMktFcstStore.ts (initSearch — 82 Daily/그 외 Weekly 기본 버킷) |  | 구현 |
+| HANDLER:SaveButton | AS-IS `DMF0003_MktFcst.cs:1340` (라이브 3행) · **사문(빈 몸통)** |  | 사문 래퍼(3행 — SaveData 위임) | 제외 |
+| HANDLER:SaveData | AS-IS `DMF0003_MktFcst.cs:2220` (라이브 199행) | features/demand/src/pages/mkt-fcst/MktFcst.tsx:519~660 + utils/mkt-fcst.save.ts |  | 구현 |
+| HANDLER:btnColumn_Click | AS-IS `DMF0003_MktFcst.cs:5749` (라이브 10행) | features/demand/src/pages/mkt-fcst/MktFcst.tsx:901~ (공용 ColumnLayoutModal) |  | 구현 |
+| HANDLER:btnIncotermsChg_Click | AS-IS `DMF0003_MktFcst.cs:6434` (라이브 11행) |  | Master Change — AS-IS 최종 숨김(E20260323) + 사용자 결정(2026-07-13 MasterChgModal 제거 — modals/index.ts 주석) | 제외 |
+| HANDLER:btnItemId_Click | AS-IS `DMF0003_MktFcst.cs:5725` (라이브 17행) | features/demand/src/pages/mkt-fcst/components/MktFcstForm.tsx (Model 조회조건 — 표준 검색 필드) |  | 구현 |
+| HANDLER:btnMeasure_Click | AS-IS `DMF0003_MktFcst.cs:5765` (라이브 10행) | features/master/src/components/measureSelectModal/MeasureSelectModal.tsx (공용 정본 — MktFcst.tsx 배선) |  | 구현 |
+| HANDLER:btnOwner_Click | AS-IS `DMF0003_MktFcst.cs:6449` (라이브 14행) | features/demand/src/pages/mkt-fcst/components/MktFcstForm.tsx (Owner 조회조건) |  | 구현 |
+| HANDLER:btnProject_Click | AS-IS `DMF0003_MktFcst.cs:5702` (라이브 17행) | features/demand/src/pages/mkt-fcst/components/MktFcstForm.tsx (Project 조회조건 — ProjectByDivisionModal) |  | 구현 |
+| HANDLER:cboAS_CheckedChanged | AS-IS `DMF0003_MktFcst.cs:7068` (라이브 11행) |  | 사문 — E20260211 로 cboAS 숨김(lciASCheck.ContentVisible=false). W/S 그룹 자동 판정 대체(store wsPlannerYn) | 제외 |
+| HANDLER:cboBucketType_Click | AS-IS `DMF0003_MktFcst.cs:6470` (라이브 10행) | features/demand/src/pages/mkt-fcst/components/MktFcstForm.tsx:255~275 (MSG00227 가드) |  | 구현 |
+| HANDLER:cboBucketType_SelectedIndexChanged | AS-IS `DMF0003_MktFcst.cs:3217` (라이브 49행) | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx (bucketPrefix 표시 규칙 — summaryBindings/drillBindings) |  | 구현 |
+| HANDLER:cboDivision_SelectedIndexChanged | AS-IS `DMF0003_MktFcst.cs:3019` (라이브 30행) | features/demand/src/pages/mkt-fcst/components/MktFcstForm.tsx (division 변경 cascade) + useMktFcstStore.ts:241 (spreadTitleType LOAD) |  | 구현 |
+| HANDLER:chkColor_CheckedChanged | AS-IS `DMF0003_MktFcst.cs:5628` (라이브 6행) | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx (formatItem 색 규칙 상시 적용) | AS-IS chkColor 토글 = 색 모드 전환 — TO-BE 단일 표준(과거 Gainsboro+당주 초록 상시) | 구현 |
+| HANDLER:chkSum_CheckedChanged | AS-IS `DMF0003_MktFcst.cs:5781` (라이브 6행) | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx:71 (Sum 체크박스 — sumYn 토글) |  | 구현 |
+| HANDLER:clbCustomer_SelectedIndexChanged | AS-IS `DMF0003_MktFcst.cs:3204` (라이브 11행) | features/demand/src/pages/mkt-fcst/components/MktFcstForm.tsx (EndCustomer→SalesSite cascade) |  | 구현 |
+| HANDLER:clbTeam_SelectedIndexChanged | AS-IS `DMF0003_MktFcst.cs:3166` (라이브 18행) | features/demand/src/pages/mkt-fcst/components/MktFcstForm.tsx (Team→EndCustomer→SalesSite cascade) |  | 구현 |
+| HANDLER:spdMain_CellClick | AS-IS `DMF0003_MktFcst.cs:6596` (라이브 74행) | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx (Measure 편집 진입 스왑 — beginningEdit 통합) | AS-IS CellClick 의 PlantSite 행별 재조회는 CD-10 갭에서 추적 | 구현 |
+| HANDLER:spdMain_CellDoubleClick | AS-IS `DMF0003_MktFcst.cs:3604` (라이브 255행) | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx:977~1050 (헤더 드릴다운+팝업+SSP 비교) |  | 구현 |
+| HANDLER:spdMain_Changed | AS-IS `DMF0003_MktFcst.cs:3944` (라이브 920행) | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx:855~955 (cellEditEnded→runDynRecalc) | 잔여 갭 CG-05(키변경 수량 클리어) 별도 추적 | 구현 |
+| HANDLER:spdMain_ClipboardPasted | AS-IS `DMF0003_MktFcst.cs:6491` (라이브 81행) | Wijmo pastedCell 공통 + cascade 재적용 | AS 3축 paste 재적용은 CE-04 갭에서 추적 | 구현 |
+| HANDLER:spdMain_ComboSelChange | AS-IS `DMF0003_MktFcst.cs:3291` (라이브 248행) | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx:723~850 (cascade)+cellEditEnded |  | 구현 |
+| HANDLER:spdMain_EditChange | AS-IS `DMF0003_MktFcst.cs:6482` (라이브 4행) | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx:150 (pasteContinueRef) |  | 구현 |
+| HANDLER:spdMain_KeyUp | AS-IS `DMF0003_MktFcst.cs:5636` (라이브 47행) | Wijmo 클립보드 공통(Ctrl+C/V) | Item 붙여넣기→팝업 재현은 FPModal 구조로 대체(E04-5 참조) | 구현 |
+| HANDLER:spdMain_TopChange | AS-IS `DMF0003_MktFcst.cs:5621` (라이브 5행) |  | FarPoint SmartColMerge 재적용 전용 — Wijmo wrapper 머지 매니저가 자동 유지 | 해당없음 |

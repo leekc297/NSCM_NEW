@@ -139,7 +139,7 @@ export const BusinessPlanForm = ({
   return (
     <SearchArea
       isHidden={!openSearchArea}
-      searchButtonLabel={t('LBL00691', '_Search')}
+      searchButtonLabel={t('LBL00112', '_Search')}
       onSearch={onSearch}
       conditions={
         <>
@@ -173,10 +173,13 @@ export const BusinessPlanForm = ({
             value={sc.deptIds}
             onChange={v => set({ deptIds: v, endCustomers: [], scmSiteIds: [] })}
             division={sc.divisionId}
-            // ⭐ 2026-07-23 조회조건 AS-IS 정합 — Team 소스를 AS-IS BigFilter 1:1 등록본
-            //   'UserTeamByDivision'(SITE_ITEM.OWNER 1번 토큰 사용자의 부서)으로 전환.
-            //   공유 'TeambyDivision'(DEPT_ID 직접)과 차집합 35/64 실측 (hook #117).
-            comboId='UserTeamByDivision'
+            // ⭐ 2026-08-13 Team 원천 오귀속 정정 — AS-IS clbTeam 은 C# 메서드명이
+            //   Data.UserTeamByDivision 이지만 실호출 UP_FX 는 'TeambyDivision'
+            //   (Data.cs L1076 CallBizCommonData("TeambyDivision", divisionID)).
+            //   2026-07-23 정합 때 메서드명을 CMBO 명으로 오귀속해 'UserTeamByDivision'
+            //   (SITE_ITEM.OWNER 파생 — @divisionId 토큰 없음)을 배선했고, 예전 조직 유입
+            //   + 현행 SALES 팀 누락(81: 98행 vs 정본 30행)이 실측됨. TeamField 기본
+            //   comboId = 'TeambyDivision'(FULLCONV v2) — DMF0082/0003 과 동일 경로.
           />
           <Grid size={3}>
             {/* ⭐ End Customer — 40 = 'EndCustomerByDivision40' 원천 스왑 (AS-IS InitControls L252~262).

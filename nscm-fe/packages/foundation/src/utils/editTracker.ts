@@ -4,6 +4,37 @@ import type { CellRangeEventArgs, FlexGrid, FormatItemEventArgs } from '@mescius
 
 import { CRUD_TYPE } from '@foundation/constants';
 
+type TrackedValue = WijmoPrimitive | undefined;
+
+/** "값이 비어 있다" 의 모든 표현 — 셀을 오가는 값의 타입은 아래처럼 제각각이다. */
+const isBlank = (value: TrackedValue): boolean =>
+  value === null || value === undefined || value === '';
+
+/**
+ * 원본값 == 현재값 판정. `===` 만으로 비교하면 **원래 값으로 되돌려도 수정상태(M)가 안 풀린다**.
+ * Wijmo 가 셀에 써 넣는 값의 타입이 편집 시점의 셀 상태에 따라 갈리기 때문이다.
+ *
+ * ① 빈 값 표현이 섞인다 — SP 결과 `null` / 응답에 아예 없던 컬럼 `undefined` /
+ *    Delete 키 `null` / 빈 문자열 커밋 `''`. 셋 다 화면상 "빈 칸" 인데 `===` 는 전부 다른 값이다.
+ * ② 숫자 컬럼이라도 **편집 직전 셀이 비어 있으면** Wijmo 가 컬럼 dataType 을 확정하지 못해
+ *    (`GridPanel.setCellData`: `dataType || getType(현재값)` → `getType(null)`=Object)
+ *    입력 문자열을 변환 없이 그대로 저장한다 → 원본 `61386`(number) vs 입력 `'61386'`(string).
+ *    ※ dataType 자체가 첫 행 값으로 추론되므로(`FlexGrid._updateColumnTypes` → `items[0]`),
+ *      첫 행이 빈 동적(주차/월) 컬럼은 이 경로를 항상 탄다.
+ *
+ * 숫자↔문자열은 **문자열이 그 숫자의 표준 표기일 때만** 같다고 본다.
+ * `'0100'` vs `100`, `'1,830'` vs `1830` 처럼 표기가 다르면 실제 변경일 수 있어 그대로 남긴다.
+ */
+const isSameValue = (a: TrackedValue, b: TrackedValue): boolean => {
+  if (a === b) return true;
+  if (isBlank(a) || isBlank(b)) return isBlank(a) && isBlank(b);
+  if (a instanceof Date && b instanceof Date) return a.getTime() === b.getTime();
+  const isCanonicalNumber = (num: number, text: string): boolean => String(num) === text.trim();
+  if (typeof a === 'number' && typeof b === 'string') return isCanonicalNumber(a, b);
+  if (typeof a === 'string' && typeof b === 'number') return isCanonicalNumber(b, a);
+  return false;
+};
+
 // TODO: binding 속성 fallback 고려..? - binding 속성 없는 column 없을듯 - 강민재
 export class EditTracker<T extends WijmoRowItem = WijmoRowItem> {
   private readonly _grid: FlexGrid<T>;
@@ -28,13 +59,16 @@ export class EditTracker<T extends WijmoRowItem = WijmoRowItem> {
       this._originalValues.set(item, editItem);
     }
 
-    const editValue = editItem[binding];
-    const actualOriginalValue = isUndefined(editValue) ? originalValue : editValue;
+    // 이미 기록된 원본이 있으면 그것이 기준. `editItem[binding] === undefined` 로 판정하면
+    // **원본이 undefined 인 셀**(응답에 없던 동적 컬럼 등)이 매번 "기록 없음" 으로 오인돼
+    // 편집 직전 값(=사용자가 방금 넣은 값)을 원본으로 덮어쓴다 → 되돌려도 영영 M 으로 남는다.
+    const hasOriginal = binding in editItem;
+    const actualOriginalValue = hasOriginal ? editItem[binding] : originalValue;
 
-    if (actualOriginalValue === newValue) {
+    if (isSameValue(actualOriginalValue, newValue)) {
       delete editItem[binding];
       if (Object.keys(editItem).length === 0) this._originalValues.delete(item);
-    } else if (isUndefined(editValue)) {
+    } else if (!hasOriginal) {
       editItem[binding] = originalValue;
     }
 
@@ -82,7 +116,38 @@ export class EditTracker<T extends WijmoRowItem = WijmoRowItem> {
     this._grid.invalidate();
   }
 
+  /** 셀 단위 수정(M) 기록 존재 여부. 신규(I)/삭제(D) 는 GridUtils.isDirty 가 CRUD_TYPE 로 판정한다. */
+  hasChanges(): boolean {
+    return this._originalValues.size > 0;
+  }
+
   getOriginalValues(): Map<T, Record<string, WijmoPrimitive>> {
     return this._originalValues;
   }
 }
+
+/**
+ * 편집 종료 시 비어 있는 수치셀을 '0' 으로 채운다 (AS-IS spdMain_Changed L1295~1302 파리티).
+ * 빈 셀에 Delete/공백 커밋이 들어와도 저장 payload 가 빈 문자열이 아닌 '0' 을 보내게 하는 규약.
+ *
+ * 주의: 이 함수는 EditTracker 의 cellEditEnded 핸들러 **뒤에** 실행된다 — 공용 DataGrid 가
+ *   그리드 생성(initialized) 시점에 EditTracker 를 먼저 걸고, 화면 핸들러는 mount 후
+ *   useEffect 에서 등록되기 때문이다(Wijmo Event 는 등록 순서대로 호출).
+ *
+ * 그래서 원본 기록 유무로 갈라야 한다.
+ *   - 기록 없음 = 현재 값이 곧 원본(= 원래 빈 셀). 여기서 storeChange 를 부르면 원본 ''(빈값) ·
+ *     새 값 '0' 을 넘기게 되는데 둘은 같은 값이 아니므로(빈값 vs 숫자 — '0100' 오탐 방지 규칙),
+ *     EditTracker 가 방금 푼 수정상태(M)가 **다시 켜진다**. 값만 채우고 추적하지 않는다.
+ *   - 기록 있음 = 원래 값이 있던 셀. '0' 을 새 값으로 넘겨 재판정한다 (원본이 0 이었으면 해제).
+ */
+export const fillEmptyCellWithZero = <T extends WijmoRowItem = WijmoRowItem>(
+  row: T,
+  binding: string,
+  tracker: EditTracker<T> | undefined
+): void => {
+  const originals = tracker?.getOriginalValues().get(row);
+  if (originals && binding in originals) {
+    tracker?.storeChange(row, binding, originals[binding], '0');
+  }
+  (row as WijmoRowItem)[binding] = '0';
+};

@@ -1,0 +1,188 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""DMF0082_CLOUD_20260814 마감 — 공용 FE 동봉 + PRECHECK/VERIFY 생성."""
+import io, pathlib, shutil, sys
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
+
+ROOT = pathlib.Path(r"C:\Projects\NSCM")
+PKG = ROOT / "_artifacts" / "_deploy_packages" / "DMF0082_CLOUD_20260814"
+FE = ROOT / "nscm-fe"
+MASTER = FE / "features/master/src/components"
+
+# DMF0082 가 import 하는 공용 컴포넌트 (로컬 사본 폐지분 포함)
+SHARED = ["measureSelectModal", "columnLayoutModal", "projectByDivisionModal", "itemByDivisionModal"]
+
+dst_root = PKG / "C_FE_SHARED"
+copied = []
+for name in SHARED:
+    src = MASTER / name
+    if not src.is_dir():
+        continue
+    for f in src.rglob("*"):
+        if f.is_file():
+            rel = f.relative_to(MASTER)
+            out = dst_root / rel
+            out.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(f, out)
+            copied.append(str(rel))
+# barrel 은 병합 대상 — 참조용으로만 동봉
+shutil.copy2(MASTER / "index.ts", dst_root / "index.ts.REFERENCE_MERGE_ONLY")
+print(f"[C_FE_SHARED] {len(copied)}파일 + index.ts(참조·병합전용)")
+
+PRECHECK = """-- ============================================================================
+-- DMF0082_CLOUD_20260814 / 00_PRECHECK_CLOUD.sql  (READ-ONLY — 적용 전 선판정)
+--   hook deploy-package-completeness §1.0-B(B1/B2/B3) + §1.0-C(값 단언 3종)
+--   ⚠ 아무것도 변경하지 않는다. 결과를 보고 적용 여부를 판단한다.
+-- ============================================================================
+SET DEFINE OFF
+SET SERVEROUTPUT ON SIZE UNLIMITED
+SET LINESIZE 200
+
+PROMPT ===== [A] 기준선 확인 — 08-12 패키지가 적용된 DB 인가 =====
+PROMPT   기대: EXCEL_UPLOAD 5-arg 존재(=08-12 적용됨). 0 이면 08-12 패키지 먼저 적용할 것.
+SELECT COUNT(*) AS EXCEL_UPLOAD_5ARG
+  FROM ALL_ARGUMENTS
+ WHERE OWNER='SCM_MGR' AND PACKAGE_NAME='PKG_DMF0082'
+   AND OBJECT_NAME='P_DMF0082_EXCEL_UPLOAD' AND ARGUMENT_NAME IS NOT NULL;
+
+PROMPT
+PROMPT ===== [B-1] CTRL 화이트리스트 단언 (기대 0행) =====
+PROMPT   FE CELL_CONTROL_TYPE(FP* 14종) 밖의 값이 있으면 적용 중단.
+SELECT SHEET_NAME, COLUMN_NAME, CELL_CONTROL_OBJECT_TYPE_CODE
+  FROM SCM_MGR.SCM_MST_SHEET_COLUMNS
+ WHERE PROGRAM_ID='DMF0082'
+   AND CELL_CONTROL_OBJECT_TYPE_CODE IS NOT NULL
+   AND TRIM(CELL_CONTROL_OBJECT_TYPE_CODE) IS NOT NULL
+   AND CELL_CONTROL_OBJECT_TYPE_CODE NOT IN
+       ('FPModal','FPComboBox','FPButton','FPDate','FPDateMonth','FPDateTime','FPDateText',
+        'FPCheckBox','FPNumberText','FPTextBox','FPPercent','FPText','FPNumber','FPMultiLineTextBox');
+
+PROMPT
+PROMPT ===== [B-2] INPUT_TP_CD 분포 대사 =====
+PROMPT   사내 기대(2026-08-14 실측): FcstNPrice = IO 9 / S 나머지, 'Sales Price Save All' = S 25.
+PROMPT   전면 'IM' 이 나오면 오등록 — 적용 중단.
+SELECT SHEET_NAME, INPUT_TP_CD, COUNT(*) CNT
+  FROM SCM_MGR.SCM_MST_SHEET_COLUMNS WHERE PROGRAM_ID='DMF0082'
+ GROUP BY SHEET_NAME, INPUT_TP_CD ORDER BY 1,2;
+
+PROMPT
+PROMPT ===== [B-3] measure 편집권한 룩업 현황 (적용 전) =====
+PROMPT   사내 기대: 116행 (40:15 / 81계열 각 14~15 / 82:11). 클라우드가 28행이면 08-14 미적용 상태.
+SELECT SEGMENT3 DIV, COUNT(*) CNT FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL
+ WHERE LOOKUP_TYPE='GET_ADMIN_GROUP_MEASURE' AND SEGMENT2='DMF0082'
+ GROUP BY SEGMENT3 ORDER BY 1;
+
+PROMPT
+PROMPT ===== [C] 신규 채번 충돌 점검 (§1.0-B B2) =====
+PROMPT   본 패키지는 **MSG/LBL 신규 채번 없음**(MSG00703/00705 = 기존 코드 재적용).
+PROMPT   기대: 아래 2건이 이미 있거나(=재적용 무해) 없거나(=신규 등록) 둘 다 정상.
+SELECT MSG_ID, COUNT(*) LANG_CNT FROM SCM_MGR.SCM_ADM_MSG_M
+ WHERE MSG_ID IN ('MSG00703','MSG00705') GROUP BY MSG_ID ORDER BY 1;
+
+PROMPT
+PROMPT ===== [D] 신규 콤보 3종 존재 여부 =====
+PROMPT   FcstTypeEditDMF0082 / EndCustomerByDivisionDMF0082 = 08-14 신설. 0 이면 신규 등록됨.
+SELECT SQL_ID, USE_YN FROM SCM_MGR.SCM_ADM_CMBO_SQL_M
+ WHERE SQL_ID IN ('FcstTypeByUserGroupDMF0082','FcstTypeEditDMF0082',
+                  'EndCustomerByDivisionDMF0082','TeambyDivision') ORDER BY 1;
+
+PROMPT
+PROMPT ===== [E] Excel Form SP/API (08-13 신설) 존재 여부 =====
+SELECT COUNT(*) PROC_ROWS FROM SCM_MGR.SCM_ADM_PROC_M
+ WHERE PROC_NM='PKG_DMF0082.P_DMF0082_GET_EXCEL_FORM_DATA';
+SELECT COUNT(*) API_ROWS FROM SCM_MGR.SCM_ADM_API_M WHERE API_ID='DMF0082_GET_EXCEL_FORM';
+"""
+
+VERIFY = """-- ============================================================================
+-- DMF0082_CLOUD_20260814 / 90_VERIFY.sql  (적용 후 값 단언)
+--   기대값을 스크립트에 박은 단언 형식 (hook #98 §6.3). 하나라도 어긋나면 원인 규명 후 재적용.
+-- ============================================================================
+SET DEFINE OFF
+SET SERVEROUTPUT ON SIZE UNLIMITED
+SET LINESIZE 200
+
+PROMPT ===== [1] PKG 컴파일 상태 — 기대: PACKAGE/PACKAGE BODY 모두 VALID =====
+SELECT OBJECT_TYPE, STATUS FROM ALL_OBJECTS
+ WHERE OWNER='SCM_MGR' AND OBJECT_NAME='PKG_DMF0082' ORDER BY 1;
+SELECT COUNT(*) AS COMPILE_ERRORS FROM ALL_ERRORS
+ WHERE OWNER='SCM_MGR' AND NAME='PKG_DMF0082';   -- 기대 0
+
+PROMPT
+PROMPT ===== [2] BODY 마커 — 기대: 4개 마커 각 1행 이상 =====
+SELECT 'E20260813-EXCELFORM'  AS MARKER, COUNT(*) CNT FROM ALL_SOURCE
+ WHERE OWNER='SCM_MGR' AND NAME='PKG_DMF0082' AND TYPE='PACKAGE BODY'
+   AND INSTR(TEXT,'E20260813-EXCELFORM')>0
+UNION ALL SELECT 'E20260813-UPLOADSAVE', COUNT(*) FROM ALL_SOURCE
+ WHERE OWNER='SCM_MGR' AND NAME='PKG_DMF0082' AND TYPE='PACKAGE BODY'
+   AND INSTR(TEXT,'E20260813-UPLOADSAVE')>0
+UNION ALL SELECT 'E20260814-CURMEASURE', COUNT(*) FROM ALL_SOURCE
+ WHERE OWNER='SCM_MGR' AND NAME='PKG_DMF0082' AND TYPE='PACKAGE BODY'
+   AND INSTR(TEXT,'E20260814-CURMEASURE')>0
+UNION ALL SELECT 'E20260814-FCSTNAME', COUNT(*) FROM ALL_SOURCE
+ WHERE OWNER='SCM_MGR' AND NAME='PKG_DMF0082' AND TYPE='PACKAGE BODY'
+   AND INSTR(TEXT,'E20260814-FCSTNAME')>0;
+
+PROMPT
+PROMPT ===== [3] measure 편집권한 룩업 — 기대: 합계 116행 =====
+SELECT COUNT(*) AS TOTAL_116 FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL
+ WHERE LOOKUP_TYPE='GET_ADMIN_GROUP_MEASURE' AND SEGMENT2='DMF0082';
+PROMPT   40 SCM_FCST 요일창 — 기대: WED / 0000 / 1700 (3행)
+SELECT SEGMENT1 GRP, ATTRIBUTE1 DAYS, ATTRIBUTE2 FR, ATTRIBUTE3 TO_
+  FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL
+ WHERE LOOKUP_TYPE='GET_ADMIN_GROUP_MEASURE' AND SEGMENT2='DMF0082'
+   AND SEGMENT3='40' AND SEGMENT4='SCM_FCST' ORDER BY 1;
+PROMPT   81 계열/82 grant — 기대: 81=15, 81_HD/HG/HM/ST/UC=15 각, 82=11
+SELECT SEGMENT3 DIV, COUNT(*) CNT FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL
+ WHERE LOOKUP_TYPE='GET_ADMIN_GROUP_MEASURE' AND SEGMENT2='DMF0082'
+ GROUP BY SEGMENT3 ORDER BY 1;
+
+PROMPT
+PROMPT ===== [4] 콤보 — 기대: 4종 전부 USE_YN='Y' =====
+SELECT SQL_ID, USE_YN, LENGTH(SQL_DTL_CTN) SQL_LEN FROM SCM_MGR.SCM_ADM_CMBO_SQL_M
+ WHERE SQL_ID IN ('FcstTypeByUserGroupDMF0082','FcstTypeEditDMF0082',
+                  'EndCustomerByDivisionDMF0082','TeambyDivision') ORDER BY 1;
+
+PROMPT
+PROMPT ===== [5] FCST Type 실행 단언 (No.42) =====
+PROMPT   기대: div40 = 12종(ETC 포함·WS/WSF 없음) / div81+W-S = 4종
+WITH X AS (
+  SELECT SEGMENT1 CODE FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL
+   WHERE LOOKUP_TYPE='SALES_TYPE_CODE' AND VALID_YN='Y' AND NVL(ATTRIBUTE2,' ')<>'Y')
+SELECT COUNT(*) AS DIV40_EXPECT_12 FROM X;
+
+PROMPT
+PROMPT ===== [6] End Customer 콤보 division 상별 (No.64) =====
+PROMPT   기대: 81 에 'AJ*'(40 전용 고객) 0건
+SELECT COUNT(*) AS AJ_IN_81_EXPECT_0
+  FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL
+ WHERE LOOKUP_TYPE='END_CUSTOMER' AND VALID_YN='Y'
+   AND SEGMENT1='81' AND SEGMENT2 LIKE 'AJ%';
+
+PROMPT
+PROMPT ===== [7] UI Category — 기대: COLUMNS 86행(FcstNPrice 61 + Save All 25) / MEASURE 22행 =====
+SELECT SHEET_NAME, COUNT(*) CNT FROM SCM_MGR.SCM_MST_SHEET_COLUMNS
+ WHERE PROGRAM_ID='DMF0082' GROUP BY SHEET_NAME ORDER BY 1;
+SELECT COUNT(*) AS MEASURE_22 FROM SCM_MGR.SCM_MST_SHEET_MEASURE WHERE PROGRAM_ID='DMF0082';
+PROMPT   END_CUSTOMER 콤보 재배선 — 기대: EndCustomerByDivisionDMF0082
+SELECT CELL_COMBO_DATA_TYPE FROM SCM_MGR.SCM_MST_SHEET_COLUMNS
+ WHERE PROGRAM_ID='DMF0082' AND SHEET_NAME='FcstNPrice' AND COLUMN_NAME='END_CUSTOMER';
+PROMPT   PROJECT_CODE 셀 컨트롤 — 기대: FPModal / INPUT_TP_CD=IM (No.65 모달 배선 전제)
+SELECT CELL_CONTROL_OBJECT_TYPE_CODE CTRL, INPUT_TP_CD, VISIBLE_FLAG, DIVISION_ID
+  FROM SCM_MGR.SCM_MST_SHEET_COLUMNS
+ WHERE PROGRAM_ID='DMF0082' AND SHEET_NAME='FcstNPrice' AND COLUMN_NAME='PROJECT_CODE';
+
+PROMPT
+PROMPT ===== [8] Excel Form 배선 — 기대: PROC 18행 / API 1행 =====
+SELECT COUNT(*) AS PROC_18 FROM SCM_MGR.SCM_ADM_PROC_M
+ WHERE PROC_NM='PKG_DMF0082.P_DMF0082_GET_EXCEL_FORM_DATA';
+SELECT COUNT(*) AS API_1 FROM SCM_MGR.SCM_ADM_API_M WHERE API_ID='DMF0082_GET_EXCEL_FORM';
+
+PROMPT
+PROMPT ===== [9] MSG — 기대: MSG00703/MSG00705 각 3언어 =====
+SELECT MSG_ID, COUNT(*) LANG_3 FROM SCM_MGR.SCM_ADM_MSG_M
+ WHERE MSG_ID IN ('MSG00703','MSG00705') GROUP BY MSG_ID ORDER BY 1;
+"""
+
+(PKG / "A_DB" / "00_PRECHECK_CLOUD.sql").write_text(PRECHECK, encoding="utf-8")
+(PKG / "A_DB" / "90_VERIFY.sql").write_text(VERIFY, encoding="utf-8")
+print("[written] 00_PRECHECK_CLOUD.sql / 90_VERIFY.sql")

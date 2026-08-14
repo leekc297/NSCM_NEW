@@ -269,6 +269,7 @@ export const SalesPriceVersionModal = ({ open, modalClose, defaultDivision, onAp
           <div className={styles.gridWrapper}>
             <DataGrid
               gridRef={gridRef as never}
+              isReadOnly
               itemsSource={rows as unknown as WijmoRowItem[]}
               staticColumns={VERSION_COLUMNS}
               autoGenerateColumns={false}

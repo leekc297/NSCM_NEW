@@ -1,0 +1,20 @@
+DMF0082 Excel Form / Excel Upload 기능 백업 — 2026-08-14
+복원 절차 = README_복원절차.md
+sha256(16)  path  bytes
+a0419f586afb1a4e  README_복원절차.md                                              9,072
+1c8e7ba1c67fb8e5  db/BASE_PKG_DMF0082_BODY_pre_feature.sql                  723,916
+4a3e548248c25229  db/BASE_PKG_DMF0082_SPEC_pre_feature.sql                    4,854
+fe3bf1e560f7ed3c  db/CURRENT_PKG_DMF0082_BODY.sql                           752,076
+f1df8e2eef494af0  db/CURRENT_PKG_DMF0082_SPEC.sql                             6,938
+3e52d33c9ff77d90  db_delta/D1_SPEC_GET_EXCEL_FORM_DATA.sql                    2,046
+7837a174ac36bd0c  db_delta/D2_BODY_GET_EXCEL_FORM_DATA.sql                   14,642
+16e2474fdfa00695  db_delta/D3_patch_uploadsave.py                            15,569
+2c3bfc9388451ba0  db_delta/D4_DELTA_SNIPPETS.sql                              5,085
+7dcda30f325b11a8  fe/ForecastPrice.tsx                                       32,348
+8e0cd55a48fa57dc  fe/forecast-price.constants.ts                             13,266
+1e34529f19d7b981  fe/modals/ForecastTemplateModal.module.scss                   954
+541f3029a8528903  fe/modals/ForecastTemplateModal.tsx                        10,112
+bcccc380364fa8f3  fe/utils/forecast-price.api.ts                              6,576
+3c2fe107e547bbc0  fe/utils/forecast-price.excelForm.test.ts                   4,291
+c9fd08202993bca3  fe/utils/forecast-price.excelForm.ts                        5,715
+8ea0d163e5c0ac68  meta/M1_META_EXCELFORM.sql                                  6,108

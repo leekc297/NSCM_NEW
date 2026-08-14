@@ -6,7 +6,7 @@ import { GridUtils } from '@foundation/utils';
 import { CustomDropdown, DataGrid, CustomDialog, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
 import { Button, FormItem, InputField } from '@shared/lges';
-import { CheckboxIcon } from '@shared/lges-icons';
+import { ControlConfirmIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 
 import { MODAL_PROJECT, MODAL_SHEET_PROJECT } from './project-modal-constants';
@@ -168,7 +168,22 @@ export const ProjectModal = ({
             />
           </div>
           <div className={styles.buttonWrapper}>
-            <Button iconComponent={<CheckboxIcon />} onClick={handleSubmit} />
+            <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel='Close'
+              onClick={modalClose}
+            />
+            <Button
+              appearance='contained'
+              buttonLabel='OK'
+              iconComponent={<ControlConfirmIcon size='small' />}
+              iconPosition='leading'
+              priority='primary'
+              size='medium'
+              onClick={handleSubmit}
+            />
           </div>
         </div>
       }

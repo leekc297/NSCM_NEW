@@ -3,6 +3,8 @@ import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import {
   ColumnLayoutModal,
   ItemByDivisionModal,
+  type MeasureMeta,
+  MeasureSelectModal,
   ProjectByDivisionModal,
   toColumnLayoutSettings,
 } from 'features/master/src/components';
@@ -20,7 +22,6 @@ import { useMessageStore, useSessionStore } from '@shared/stores';
 import { MktFcstForm } from './components/MktFcstForm';
 import { MktFcstGrid } from './components/MktFcstGrid';
 import {
-  MeasureSelectModal,
   PrHistoryModal,
   type PrHistoryParams,
   PrModal,
@@ -34,7 +35,7 @@ import {
   GROUP,
   INSERT_DEFAULT_MEASURE,
   MAIN_COLUMNS,
-  MEASURE_MODEL_KEEP,
+  MEASURE_FALLBACK,
   MENU_ID,
   MSG,
   SHEETS,
@@ -437,21 +438,30 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
       });
       return false;
     }
-    // (2) DM Planner류 시간창 — lookup 행 존재 = 차단(.cs L862~874). MSG00478 5파라미터
-    //     ({0}~{4} = LIMIT_AUTH/EDIT_DAYS/FROM_TIME/TO_TIME/AUTH — CMBO CODE '^' 연결 순서).
-    //'_{0} 권한의 수정 가능 시간({1} {2}~{3}) 동안에는 {4} 권한으로 수정할 수 없습니다.'
-    // if (dmTimeBlocked && typeof dmTimeRow?.CODE === 'string') {
-    //   const p = dmTimeRow.CODE.split('^');
-    //   let msg = t(
-    //     MSG.DM_TIME_WINDOW,
-    //     '_{0} 권한의 수정 가능 시간({1} {2}~{3}) 동안에는 {4} 권한으로 수정할 수 없습니다.'
-    //   );
-    //   p.forEach((v, i) => {
-    //     msg = msg.replace(`{${i}}`, v);
-    //   });
-    //   void setAlert({ type: 'alert', content: msg });
-    //   return false;
-    // }
+    // (2) [CA-04 2026-08-12 재활성] DM Planner류 시간창 — lookup 행 존재 = 차단(.cs L862~874).
+    //     MSG00478 5파라미터({0}~{4} = LIMIT_AUTH/EDIT_DAYS/FROM_TIME/TO_TIME/AUTH — CMBO CODE '^' 연결).
+    //     주석 상태로 남아 있던 게이트를 대사표 CA-04 판정에서 적출해 복원(운영 lookup 0행이면 미발동 — 무해).
+    if (dmTimeBlocked && typeof dmTimeRow?.CODE === 'string') {
+      const p = dmTimeRow.CODE.split('^');
+      let msg = t(
+        MSG.DM_TIME_WINDOW,
+        '_{0} 권한의 수정 가능 시간({1} {2}~{3}) 동안에는 {4} 권한으로 수정할 수 없습니다.'
+      );
+      p.forEach((v, i) => {
+        msg = msg.replace(`{${i}}`, v);
+      });
+      void setAlert({ type: 'alert', content: msg });
+      return false;
+    }
+    // (2b) [CA-07 2026-08-12] 조회 선행 — AS-IS 는 조회 없이 편집 불가(.cs L941~945, dt8Week 부재 =
+    //     구 MSG00259). Insert/Save 진입 전 조회 1회 강제.
+    if (!hasSearched) {
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.EDIT_AFTER_SEARCH, '_조회 후 수정모드로 가능합니다.'),
+      });
+      return false;
+    }
     // (3) [E20260402] AS FROM SITE 컬럼 부재(.cs L876~888) — DM Planner/W-S/DM ADMIN + 81*/82
     //     에서 그리드에 AS_FROM_SITE 컬럼이 없으면 MSG00113 (SP LOAD 분기가 자동추가하므로 정상 시 미발생).
     if (dmFamilyGroup && (sc.divisionId.startsWith('81') || sc.divisionId === '82')) {
@@ -470,6 +480,16 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
   // F8 Insert — AS-IS InsertRow(L2389~2509) 1:1 — 신규 행 1개 추가. CRUD_TYPE='I', Division=조회조건.
   //   Measure 는 편집 combo(SCM_MST_SHEET_MEASURE VALID_YN='Y' 동적, fallback MEASURE_FALLBACK)이고
   //   기본값 = 'MKT_FCST_RP' (AS-IS L2509 siMain.SetValue(Measure, "MKT_FCST_RP")). 좌측 키는 입력 가능.
+  // ⭐ [CG-05 2026-08-12] I 행 키값 변경 시 수량 클리어 — 팝업(Project/Item) 세팅 경로용.
+  //   그리드 직접 편집 경로는 MktFcstGrid cellEditEnded 가 담당(.cs L5319~5379 파리티).
+  const clearDynQuantities = (row: MktFcstRow): MktFcstRow => {
+    const rec = { ...row } as Record<string, unknown>;
+    for (const k of Object.keys(rec)) {
+      if (/^[DWM]_\d+$/.test(k) && rec[k] != null && rec[k] !== '') rec[k] = null;
+    }
+    return rec as MktFcstRow;
+  };
+
   const handleInsert = () => {
     // ⭐ [E20260604-000994] SCP Planner + 81 은 Insert 자체 차단(.cs L2531~2537) — MSG00096.
     if (scpInsertBlocked) {
@@ -583,30 +603,6 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
       divisionId: sc.divisionId,
       createdBy: useSessionStore.getState().session.userId ?? '',
     });
-
-    // ⭐ 식별키 공백 가드(수정 'M' 행) — 메인 SP 의 SELECT 컬럼은 titleset 'C' 로 동적 구성되므로,
-    //   식별키(Project 등)를 Column Setting 에서 제외한 채 조회한 데이터에는 해당 키가 아예 없다.
-    //   그 상태로 편집·저장하면 키가 ''(공백)로 나가 SP "Check Mandatory Columns" 검증에 걸린다
-    //   (2026-08-05 실사고 — 오류문구가 3개 컬럼만 언급해 원인 오인 소지). 원장 식별키는 전부
-    //   NOT NULL 실측이므로 수정 행의 공백 키 = 그리드 데이터 컬럼 부재 → MSG00113 차단(재조회 유도).
-    const missingKeyRow = unfoldRows.find(
-      r =>
-        r.activeFlag === 'M' &&
-        (!r.projectCode ||
-          !r.scmSiteId ||
-          !r.itemId ||
-          !r.domExp ||
-          !r.fcstType ||
-          !r.incoterms ||
-          !r.measure)
-    );
-    if (missingKeyRow) {
-      void setAlert({
-        type: 'alert',
-        content: t(MSG.REQUIRED_COLUMN, '_필수 입력 컬럼이 없습니다.'),
-      });
-      return;
-    }
 
     // ⭐ [E20260604-000994] p_authority = 로그인 권한 그룹(.cs L2243~2244 sAuthority=NowGroupID).
     //   TO-BE 근사: 세션 groupId → 대표 DM류 그룹 → SCP Planner → userId (조회 userGroup 배선과 동일 계보).
@@ -779,6 +775,18 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   메저 선택 변경은 모달 OK 의 saveTitleSet('M') + invalidateQueries 재조회로 SP 에서 반영됨.
   const rows: MktFcstRow[] = useMemo(() => [...insertedRows, ...spRows], [insertedRows, spRows]);
 
+  // ⭐ #3 — Measure 모달 데이터. 공용 MeasureSelectModal 은 하드코딩 fallback 금지(admin 적재가
+  //   정본 — hook #132 §2-1)라, 구 화면 사본에 내장돼 있던 MEASURE_FALLBACK degrade(BE 미적재 시
+  //   사내 실측 23 코드, 라벨=코드)를 호출부에서 보존한다 — 기존 동작 1:1 (공용 모달 기본값
+  //   colLblNm=colNm / sClsLblNm='' / personalizable=true / display=false 가 사본 fallback 행과 동일).
+  const measureModalItems = useMemo<MeasureMeta[]>(
+    () =>
+      staticMeasures[SHEETS.MAIN].length > 0
+        ? staticMeasures[SHEETS.MAIN]
+        : MEASURE_FALLBACK.map(code => ({ colNm: code })),
+    [staticMeasures]
+  );
+
   return (
     <div className={styles.container}>
       <MainTitle
@@ -845,12 +853,12 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
           setInsertedRows(prev =>
             prev.map(r =>
               r.INSERT_GROUP_ID === popupGroupId
-                ? {
+                ? clearDynQuantities({
                     ...r,
                     PROJECT_CODE: projectCode,
                     PROJECT_NAME: projectName ?? '',
                     PROJECT_OWNER: projectOwner ?? '',
-                  }
+                  })
                 : r
             )
           );
@@ -859,9 +867,7 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
         preSearchParams={
           {
             divisionId: rowValue('DIVISION_ID', sc.divisionId),
-            // ⭐ 2026-08-05 AS-IS 정합 — 팝업 team 축 = 행 Team 셀 값 (.cs L3781 sTeam=row Team).
-            //   TEAM_ID(사용자 선택 셀) 우선, 부재 시 데이터 컬럼 DEPT_ID.
-            deptId: rowValue('TEAM_ID', rowValue('DEPT_ID')),
+            deptId: rowValue('DEPT_ID'),
             endCustomer: rowValue('END_CUSTOMER'),
             salesSite: rowValue('SCM_SITE_ID'),
             projectCode: rowValue('PROJECT_CODE', ''),
@@ -884,7 +890,12 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
           setInsertedRows(prev =>
             prev.map(r =>
               r.INSERT_GROUP_ID === popupGroupId
-                ? { ...r, ITEM_ID: itemId, ITEM_NAME: itemName ?? '', NICK_NAME: nickName ?? '' }
+                ? clearDynQuantities({
+                    ...r,
+                    ITEM_ID: itemId,
+                    ITEM_NAME: itemName ?? '',
+                    NICK_NAME: nickName ?? '',
+                  })
                 : r
             )
           );
@@ -893,16 +904,11 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
         preSearchParams={
           {
             divisionId: rowValue('DIVISION_ID', sc.divisionId),
-            // ⭐ 2026-08-05 AS-IS 정합 — 팝업 team 축 = 행 Team 셀 값 (.cs L3847 sTeam=row Team).
-            deptId: rowValue('TEAM_ID', rowValue('DEPT_ID')),
+            deptId: rowValue('DEPT_ID'),
             endCustomer: rowValue('END_CUSTOMER'),
             salesSite: rowValue('SCM_SITE_ID'),
             projectCode: rowValue('PROJECT_CODE', ''),
             itemId: '',
-            // ⭐ 2026-08-05 AS-IS 정합 [E20231019-001234] — MDM 사용중지 모델 제외 플래그 1:1:
-            //   DMF0003 은 'Y' 전달 + measure 가 AS_In_Req/BNPIn 이면 ''(로직 미적용)
-            //   (AS-IS DM0002 팝업 L248~250 chk_Measure 리셋 이식 — 호출측 계산 전달).
-            activeFlag: MEASURE_MODEL_KEEP.includes(rowValue('MEASURE', '')) ? '' : 'Y',
           } as never
         }
         callFromCell={true}
@@ -983,22 +989,17 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
             //   → 방금 표시로 옮긴 컬럼이 재진입 시 비표시로 보이는 사고 (2026-07-28 실측).
             //   팝업 query 의 tabId = MENU_ID 이므로 이 prefix 로 매칭된다.
             void queryClient.invalidateQueries({ queryKey: [MENU_ID] });
-            // ⭐ 메인 조회 쿼리 키는 [tabId(UUID), sheetName, ...] — [MENU_ID] prefix 와 매칭되지
-            //   않아 'C' 저장 후 그리드가 구 titleset SELECT 데이터로 남는다. 메인 SP 는 titleset 'C'
-            //   기준으로 SELECT 컬럼을 동적 구성하므로(V_COLUMN), 재조회 없이는 방금 추가한 컬럼의
-            //   데이터가 없어 편집·저장 시 식별키 공백 → SP "Check Mandatory Columns" 검증 실패
-            //   (2026-08-05 실사고: 17:00 조회 → 17:11 컬럼 추가 → 미재조회 저장 실패).
-            void queryClient.invalidateQueries({ queryKey: [tabId] });
             void fetchStaticColumns();
           });
         }}
       />
 
-      {/* ⭐ #3 — Measure 선택 (staticMeasures 실데이터 토글 → 그리드 measure 행 필터). */}
+      {/* ⭐ #3 — Measure 선택 (공용 MeasureSelectModal — hook #132 §2-1 화면별 사본 금지.
+          titleSet 'M' 저장·캐시 invalidate·measure 재fetch 는 아래 onApply 소유 — BusinessPlanModals 선례 1:1). */}
       <MeasureSelectModal
         open={openMeasureSelect}
         modalClose={() => setOpenMeasureSelect(false)}
-        measures={staticMeasures[SHEETS.MAIN]}
+        measures={measureModalItems}
         visibleMeasures={visibleMeasures[SHEETS.MAIN]}
         onApply={codes => {
           // 로컬 행 필터 + 서버 영구 저장('M'). 저장 후 measure 재fetch + 메인 쿼리 invalidate
@@ -1013,9 +1014,6 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
             if (!ok) return;
             void fetchStaticMeasures();
             void queryClient.invalidateQueries({ queryKey: [MENU_ID] });
-            // ⭐ 메인 조회 쿼리 키 prefix = tabId(UUID) — 위 'C' 경로와 동일 사유로 [tabId] invalidate
-            //   가 있어야 메인 SP(TITLESET 'M' measure 필터) 재조회가 실제로 일어난다.
-            void queryClient.invalidateQueries({ queryKey: [tabId] });
           });
         }}
       />

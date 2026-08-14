@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { IcExchangeRate, IcGridColumnSetup, IcMeasureSelect } from '@foundation/assets';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { useQueryClient } from '@foundation/query-client';
+import { keepRowVisibleUnderFilter } from '@foundation/utils';
 import type { EditTracker } from '@foundation/utils';
 import { MainTitle, SubTitle } from '@shared/components';
 import { useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
@@ -18,7 +19,6 @@ import {
   SHEETS,
 } from './business-plan.constants';
 import type { BusinessPlanRow, SpreadTitleRow } from './business-plan.types';
-import styles from './BusinessPlan.module.scss';
 import { BusinessPlanForm } from './components/BusinessPlanForm';
 import { BusinessPlanGrid } from './components/BusinessPlanGrid';
 import { type BusinessPlanModalKey, BusinessPlanModals } from './components/BusinessPlanModals';
@@ -175,7 +175,16 @@ export const BusinessPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   // F5 Search — AS-IS FindData(L684~799) 1:1 검증(V-S1~S3) 후 조회.
   //   ⚠ refetch?.() 직접 호출 금지 — stale closure NULL payload 사고 (memory feedback_search_refetch_stale_closure).
-  const handleSearch = () => {
+  const handleSearch = async () => {
+    // [공통 UC-02 2026-08-12] 미저장 편집(신규행·수정) 잔존 시 confirm 가드 — 미가드 시
+    //   setInsertedRows([]) 가 변경분을 조용히 폐기 (통합테스트 1st Common — DMF0021 C2 선례 1:1)
+    if (hasPendingChanges()) {
+      const proceed = await setAlert({
+        type: 'confirm',
+        content: t('MSG00703', '_There are unsaved changes. Search again?'),
+      });
+      if (!proceed) return;
+    }
     const vr = validation.validateFind(sc);
     if (!vr.ok) {
       // V-S3 — 6년 초과 시 종료일 = 시작일+6년 보정 (AS-IS L711 Value2 보정 후 차단)
@@ -223,6 +232,13 @@ export const BusinessPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
       ...INSERT_ROW_DEFAULTS,
     }));
     setInsertedRows(prev => [...block, ...prev]);
+    // [공통 UC-01 — 2026-08-14 역전] 필터링 상태에서 Insert 해도 **필터를 유지한 채** 신규행이 보여야 한다.
+    //   ⛔ 구 구현 `gridFilterRef.current?.clear()` 는 사용자가 걸어둔 필터까지 날려서, 사용자가 보고한
+    //     "필터가 풀리는 현상"을 스스로 만들었다 (공통 수정사항① — hook #133 §5).
+    //   ⇒ 신규행만 wijmo 예외 집합(`_newAddedRowsSet`)에 등록해 필터 조건 검사를 건너뛰게 한다.
+    //   (유틸 시그니처는 `FlexGrid<WijmoRowItem>` 기준 — 행 타입이 좁아 캐스팅만 맞춘다.)
+    const grid = gridRef.current as unknown as FlexGridType<WijmoRowItem> | null;
+    if (grid) block.forEach(row => keepRowVisibleUnderFilter(grid, row as WijmoRowItem));
   };
 
   // F9 Delete — AS-IS DeleteButton(L525~537) 1:1 — Action='I' Measure 블록 전체 삭제.
@@ -466,7 +482,7 @@ export const BusinessPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
   );
 
   return (
-    <div className={styles.container}>
+    <>
       <MainTitle
         title={title}
         menuId={MENU_ID}
@@ -547,7 +563,15 @@ export const BusinessPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
           );
           setPopupGroupId(null);
         }}
+        onSettingsApplied={() => {
+          // hook #132 §2-2 — Column/Measure 설정 저장 = Division 변경과 동일 초기화 규약.
+          //   이전 결과는 옛 구성으로 조회된 것 → 비우고 Search 재조회 유도 (자동 재조회 금지).
+          setInsertedRows([]);
+          editTrackerRef.current?.clearChanges();
+          setHasSearched(false);
+          clearFilters();
+        }}
       />
-    </div>
+    </>
   );
 };

@@ -140,8 +140,13 @@ export const GRID_CASCADE_CLEAR: Record<string, readonly string[]> = {
 //   - CURRENCY: CMBO 'CurrencyList' (AS-IS dtCurrencyList=Data.Common CURRENCY_LIST 1:1 — DMF0020 선례 등록명).
 //   - FCST_TYPE(Catch_Up): 전체 'FcstType' 콤보에서 ETC 제외 클라 필터 (AS-IS FCST_TYPE(ETC 제외) L4903).
 // ============================================================================
-export const GRID_EDIT_COMBO: Record<string, { comboId: string }> = {
+export const GRID_EDIT_COMBO: Record<string, { comboId: string; divisionParam?: boolean }> = {
   CURRENCY: { comboId: 'CurrencyList' },
+  // [parity 2026-08-12] Catch_Up 개방 셀 편집 콤보 2종 — AS-IS 1:1 배선 보완:
+  //   DOM_EXP  = dtCustomsHandbook (AS-IS L4916, lookup DM_CUSTOMS_HANDBOOK — DMF0003 등록명 재사용)
+  //   INCOTERMS = GetIncotermsType(division, ...) = AS_INCOTERMS lookup (AS-IS L4934 — 'AsIncotermsEdit')
+  DOM_EXP: { comboId: 'CustomsHandbook' },
+  INCOTERMS: { comboId: 'AsIncotermsEdit', divisionParam: true },
 };
 
 // Catch_Up 전환 시 콤보 개방 3종 (AS-IS spdMain_ComboSelChange Measure 분기 L4865~4877 —

@@ -92,6 +92,33 @@ MENU_CODE_ALIAS = {
         "TeamByDivisionAuth": "DeptId",
         "SiteByEndCustomerAuth": "SiteByEndCustomer",
     },
+    "DMF0003": {
+        # 조회조건 (AS-IS InitControls·clbCustomer 변경) ↔ MktFcstForm 단일 콤보 (2026-08-12 판정)
+        #   근거: UserSiteByEndCustomer 토큰 = @divisionId·@deptId·@endCustomer·@sesUserId — 40 의
+        #   Team·Customer 축을 모두 받는다(DMF0042 동일 별칭 선례 "40 cascade 포함").
+        "SiteByEndCustomer40": "UserSiteByEndCustomer",
+        # lookup 동일 실측 (2026-08-12 CMBO SQL 원문 대조): MktFcstEditableDivision =
+        #   LOOKUP 'DM_UI_EDITABLE_DIVISION' / Dmf0003*EditFlag = 각 lookup 1:1.
+        "DM_UI_EDITABLE_DIVISION": "MktFcstEditableDivision",
+        "DM_PLANNER_EDIT_FLAG": "Dmf0003DmPlannerEditFlag",
+        "SCP_PLANNER_EDIT_FLAG": "Dmf0003ScpPlannerEditFlag",
+        # 행별 Plant Site (AS-IS spdMain_Changed L4157·4166 SalesPlant + CellClick L6614 PlantSiteByItem)
+        #   → TO-BE 신설 CMBO PlantSiteByItem(applyPlantSites — 2026-08-12 CD-10 보완)
+        "SalesPlant": "PlantSiteByItem",
+        "EndCustomerByDivision40": "EndCustomerByDivision",
+    },
+    "DMF0021": {
+        # InsertRow·ComboSelChange 권한 콤보 3종 (AS-IS L2910~2912·L4546~4690 권한판)
+        #   ↔ TO-BE 메타 비권한판 (comboContext.ts — DMF0042 동일 별칭 선례 2026-08-12)
+        "TeamByDivisionAuth": "DeptId",
+        "SiteByEndCustomerAuth": "SiteByEndCustomer",
+        "EndCustomerByDivisionDeptAuth": "EndCustomerByDivisionDept",
+        # 셀 PLANT_SITE_ID 콤보 (AS-IS UserPlantSiteByDivision L4576) ↔ FromSiteByDivision (comboContext)
+        "PlantSiteByDivision": "FromSiteByDivision",
+        # Catch_Up 개방 편집 콤보 (AS-IS L4916/L4934 — 2026-08-12 GRID_EDIT_COMBO 배선 보완)
+        "DM_CUSTOMS_HANDBOOK": "CustomsHandbook",
+        "AS_INCOTERMS": "AsIncotermsEdit",
+    },
     "DMF0044": {
         # AS-IS `.cs` L1224 `Data.Common(Type.DMF0044_MDF_ENDCUST_REPORT, false, "", "")` 는
         #   END_CUST_REPORT **컬럼**에 SetCellTypeCombo 로 재바인딩한다(파라미터 없음 = 전량 동일 목록).
@@ -108,9 +135,43 @@ MENU_CODE_ALIAS = {
 
 # 화면별 '이식 안 함' 판정 — 사유 없는 WARN 이 쌓이면 게이트가 무시된다(hook #117 §5.6 규약).
 DISPOSITION = {
+    "DMF0021": {
+        "SiteByEndCustomerAuth":
+            "AS-IS InsertRow 는 dtSalesSiteAuth(권한 전체)를 선바인딩(L2951~2954) 후 상위 셀 변경 시 "
+            "좁힘 — TO-BE 동등 2단: ①신규행 선택 시 selectionChanged→syncRowComboContext 가 행 컨텍스트 "
+            "(divisionId·deptId·endCustomer)로 SiteByEndCustomer 재조회(프라이밍) ②편집 진입 시 로딩 "
+            "미완이면 전역(division) 표시 콤보 폴백 개방(2026-08-12 No.61-① 보완 — AS-IS 선바인딩과 동일 "
+            "계약). 카운터가 selectionChanged 프라이밍 경로를 인식하지 못한 오탐 (SalesPlanGrid.tsx 실측)",
+        "CELL_PROD_SITE_ID":
+            "AS-IS 재바인딩 2이벤트(ITEM 변경 ComboSelChange L4806 / ClipboardPasted L5631) ↔ TO-BE "
+            "동등 2경로: pastedCellHandler(ITEM_ID 포함 paste 시 dataMap 재부착) + cellEditEnded 의 "
+            "syncRowComboContext(ITEM 변경 → rowCombo divisionId·itemId 재조회). 트리거 카운터가 "
+            "context 재조회 경로를 인식하지 못한 오탐 — 실배선 SalesPlanGrid.tsx 실측 (2026-08-12)",
+    },
     "DMF0082": {
         "NO_DATA": "AS-IS 는 빈 목록 콤보로 입력 차단 — TO-BE 는 빈 DataMap 스왑으로 동등 구현(콤보 불요)",
         "TeamByDivisionAuth": "TEAM_ID 는 SAVE 파라미터 부재 = 표시 전용 → 편집판 미적용(hook #117 §5.10)",
+    },
+    "DMF0003": {
+        "DM_VMI_YN":
+            "AS-IS 82×Site 변경 시 행 VMI_YN/VMI_STD_DIO 를 세팅(.cs L4114~4136)하나 그 소비처는 "
+            "①VMI-In Req 자동배분(C20201015 원복 사문) ②표시 — TO-BE 는 조회행 VMI_YN 을 GET 이 "
+            "반환하고 Insert 행 measure 후보는 서버(MktFcstEditMeasure @site, SCM_MST_SITE.VMI_YN)가 "
+            "가리므로 셀 세팅 자체가 불필요(표시 전용 잔재)",
+        "DefaultBucketDay":
+            "AS-IS FindData 말미 sDefaultDay 조회(.cs L1934) — TO-BE 는 division 기본 요일비트 상수"
+            "(DEFAULT_BUCKET_40=MON/ETC=FRI, AS-IS SP 기본값 1:1)를 recalc defaultBucket 으로 사용. "
+            "운영에서 기본요일을 바꾸는 경우가 생기면 CMBO 등재 후 bucketBitsOfDay 로 전환(후속)",
+        "MktFcstEditMeasure":
+            "TO-BE 트리거는 GRID_EDIT_COMBO 맵 경유(beginningEdit 스왑 — MktFcstGrid L723~) — "
+            "정적 `binding===` 매칭이 못 보는 동적 분기. 셀 콤보 파라미터 축(§7)이 실전달을 검증",
+        "MyDivision": "조회조건 Division 콤보 — MktFcstForm useTabComboQueries 상시 로딩(트리거 아님)",
+        "UserTeamByDivision": "조회조건 cascade — Form Division 변경 시 재조회(정적 매칭 한계)",
+        "EndCustomerByDivision": "조회조건 cascade — Form Team 변경 시 재조회(동일)",
+        "UserSiteByEndCustomer": "조회조건 cascade — Form Customer 변경 시 재조회(동일)",
+        "UserPlantSiteByEndCustomer": "조회조건 — 81 전용 PlantSiteField(동일)",
+        "EdiSender": "조회조건 — 81 전용 EDISender 콤보(동일)",
+        "EndCustomerByDivision40": "40 그리드 END_CUSTOMER40 셀 — admin 메타 CELL_COMBO_DATA_TYPE 자동 배선",
     },
     "DMF0049": {
         # ⭐ 2026-08-10 판정 — 근거 = AS-IS DB 직접 대조. DMF0049 `SCM_MST_SHEET_COLUMNS` 는

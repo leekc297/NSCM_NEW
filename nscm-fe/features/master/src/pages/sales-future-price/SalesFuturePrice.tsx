@@ -4,13 +4,19 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { apiClient } from '@foundation/apis';
 import { IcExchangeRate, IcGridColumnSetup } from '@foundation/assets';
-import type { HotkeyConfig, PageProps } from '@foundation/models';
+import type { HotkeyConfig, PageProps, RawFlexGridColumnConfig } from '@foundation/models';
+import { queryClient } from '@foundation/query-client';
 import type { EditTracker } from '@foundation/utils';
-import { MainTitle, SubTitle } from '@shared/components';
+import { type ColumnLayoutRow, MainTitle, SubTitle } from '@shared/components';
 import { useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
-import { ItemByDivisionModal, ProjectByDivisionModal, ColumnSettingModal } from '../../components';
+import {
+  ColumnLayoutModal,
+  ItemByDivisionModal,
+  ProjectByDivisionModal,
+  saveTitleSet,
+} from '../../components';
 
 import { ExchangeRateModal } from './components/modals/ExchangeRateModal';
 import { PriceBatchInputModal } from './components/modals/PriceBatchInputModal';
@@ -31,6 +37,8 @@ import {
   MENU_ID,
   MSG,
   SHEETS,
+  TITLESET_COLUMN_TYPE,
+  TITLESET_SHEET,
 } from './sales-future-price.constants';
 import type { FuturePriceRow } from './sales-future-price.types';
 import styles from './SalesFuturePrice.module.scss';
@@ -94,7 +102,36 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   const fetchStaticMeasures = useSalesFuturePriceStore(s => s.fetchStaticMeasures);
   const restoreSearchConditions = useSalesFuturePriceStore(s => s.restoreSearchConditions);
   const applyColumnLayout = useSalesFuturePriceStore(s => s.applyColumnLayout);
-  const applyColumnVisibility = useSalesFuturePriceStore(s => s.applyColumnVisibility);
+  const clearUserColumnLayout = useSalesFuturePriceStore(s => s.clearUserColumnLayout);
+
+  // ⭐ ColumnLayoutModal 행 변환 — 이 화면의 표시 게이트는 Grid 의 `visible` 이므로 display 는 보지 않는다
+  //   (공용 toColumnLayoutSettings 는 visible/display 를 함께 보므로 여기선 쓰지 않는다).
+  const toLayoutRows = useCallback(
+    (cols: RawFlexGridColumnConfig[]): ColumnLayoutRow[] =>
+      cols.map((c, i) => {
+        const label = c.colLblNm ?? c.colNm;
+        return {
+          COLUMN_NAME: c.colNm,
+          COLUMN_LABEL_NAME: label,
+          USER_FLAG: c.visible === false ? 'N' : 'Y',
+          SORT_ORDER_NO: i + 1,
+          COL_WIDTH: c.colWth ?? 100,
+          CELL_COLOR: c.cellColor ?? '',
+          TEXT_COLOR: c.textColor ?? '',
+          isKey: label.trim().endsWith('*'),
+        };
+      }),
+    []
+  );
+  // 재진입 복원 = 현재 grid 상태(개인화 반영본) / Default 원복 = admin 메타 원본.
+  const columnLayoutSettings = useMemo(
+    () => toLayoutRows(staticColumns[SHEETS.MAIN] ?? []),
+    [staticColumns, toLayoutRows]
+  );
+  const columnLayoutDefaults = useMemo(
+    () => toLayoutRows(originalStaticColumns[SHEETS.MAIN] ?? []),
+    [originalStaticColumns, toLayoutRows]
+  );
 
   const validate = useSalesFuturePriceValidation();
   const { t } = useTranslation();
@@ -134,7 +171,11 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   LOC 편집 시 KRW/USD/RTF 형제 measure 를 환율 재계산(AS-IS GetExchangeRate)해 3쌍 전송하기 위함.
   //   조회 기간(sc)으로 fetch — react-query 캐시. 저장 시 buildExchangeRateMap 으로 룩업.
   const exchangeFilters = useMemo(
-    () => ({ startYyyymmdd: sc.startYyyymmdd, endYyyymmdd: sc.endYyyymmdd }) as never,
+    () =>
+      ({
+        startYyyymmdd: `${sc.startYyyymmdd.slice(0, 6)}01`,
+        endYyyymmdd: sc.endYyyymmdd,
+      }) as never,
     [sc.startYyyymmdd, sc.endYyyymmdd]
   );
   const { data: exchangeData } = useTabProcQuery<MENU_ID, SHEETS.EXCHANGE>({
@@ -183,10 +224,26 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
     setInsertedRows([]);
     editTrackerRef.current?.clearChanges();
     clearFilters(); // filters[MAIN] 제거 → query disabled → spRows 비움
+    // ⭐ 컬럼 개인화 무효화 — TITLESET_USER 는 division 무관 1벌인데 컬럼 세트는 division 별로 다르다.
+    //   비우지 않으면 이전 division 레이아웃이 새 division 컬럼에 적용돼 전 컬럼이 숨는다.
+    clearUserColumnLayout();
     void fetchStaticColumns(sc.divisionId); // ⭐ division 변경 시 컬럼 재조회 (SP DIVISION_ID 서버측 필터)
     void fetchBatchColumns(sc.divisionId); // ⭐ Batch 팝업 컬럼도 division 동기화 (모달 open 깜박임 방지)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sc.divisionId, clearFilters]);
+
+  // Column 설정 저장 = Grid 초기화 의무 (사용자 요구 2026-08-05).
+  //   저장 즉시 표시 컬럼이 바뀌므로, 이전 설정으로 조회해 둔 rows 를 그대로 두면 화면의 컬럼
+  //   구성과 데이터가 어긋난다. 그리드를 공백으로 되돌리고 재조회는 Search 로만
+  //   (위 division 변경 초기화와 동일 정책).
+  //   removeQueries([tabId]) 필수 — queryKey 는 filters '값' 기반이라 동일 조건으로 다시
+  //   Search 하면 전역 staleTime=Infinity 캐시가 이전 설정으로 받은 rows 를 그대로 돌려준다.
+  const clearGridOnSettingChange = () => {
+    setInsertedRows([]);
+    editTrackerRef.current?.clearChanges();
+    clearFilters();
+    queryClient.removeQueries({ queryKey: [tabId] });
+  };
 
   // Modal open state
   const [openExchange, setOpenExchange] = useState(false);
@@ -272,7 +329,7 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         DOM_EXP: '',
         PLANT_SITE_ID: '',
         CURRENCY: '',
-        PRICE_EXIST: 'Y',
+        PRICE_EXIST: '',
         MEASURE: m,
       })
     );
@@ -670,8 +727,11 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         open={openRange}
         modalClose={() => setOpenRange(false)}
         rows={rangeRows}
+        // AS-IS 메인 .cs L1949 — 팝업이 닫힌 뒤 FindData() 재조회.
+        onSaved={() => refetch?.()}
       />
-      <ColumnSettingModal
+      {/* 컬럼 표시 설정 — 공용 ColumnLayoutModal (표시/순서 + Width / Cell·Text Color 개인화). */}
+      <ColumnLayoutModal
         open={openTitleSet}
         modalClose={() => setOpenTitleSet(false)}
         menuId={MENU_ID}
@@ -680,48 +740,14 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         columnType='main'
         divisionId={sc.divisionId}
         fallbackColumns={MAIN_COLUMNS.map(c => ({ key: c.key, header: c.header, width: c.width }))}
-        // ⭐ modal 재진입 시 이전 OK 상태 복원 — store.staticColumns 의 visible flag 기반.
-        //   ColumnSettingModal 의 initialRows useMemo 가 USER_FLAG='Y'/'N' 결정에 사용.
-        initialVisibleKeys={(staticColumns[SHEETS.MAIN] ?? [])
-          .filter(c => c.visible !== false)
-          .map(c => c.colNm)}
+        // ⭐ 재진입 복원 — 현재 grid 상태(개인화 반영본).
+        initialSettings={columnLayoutSettings}
+        // ⭐ Default 버튼 원복 기준 — 개인화 적용 전 admin 메타 원본(Save 로 mutate 안 됨).
+        defaultSettings={columnLayoutDefaults}
         onSave={settings => {
-          // 사용자 선택 column 만 visible — store.staticColumns 의 visible flag 적용 → grid 즉시 반영.
-          // ⚠️ 사내 SCM_USR_TITLE_SET 영구 저장은 별도 SP 호출 (Phase 후속).
-          const visibleKeys = settings.map(s => s.COLUMN_NAME);
-          applyColumnVisibility(SHEETS.MAIN, visibleKeys);
-        }}
-      />
-      {/* <ColumnLayoutModal
-        open={openTitleSet}
-        modalClose={() => setOpenTitleSet(false)}
-        menuId={MENU_ID}
-        sheetName={ADMIN_SHEET_NAME[SHEETS.MAIN] ?? SHEETS.MAIN}
-        columnType='main'
-        divisionId={sc.divisionId}
-        fallbackColumns={MAIN_COLUMNS.map(c => ({ key: c.key, header: c.header, width: c.width }))}
-        initialSettings={(staticColumns[SHEETS.MAIN] ?? []).map((c, i) => ({
-          COLUMN_NAME: c.colNm,
-          COLUMN_LABEL_NAME: c.colLblNm ?? c.colNm,
-          USER_FLAG: c.visible === false ? 'N' : 'Y',
-          SORT_ORDER_NO: i + 1,
-          COL_WIDTH: c.colWth ?? 100,
-          CELL_COLOR: c.cellColor ?? '',
-          TEXT_COLOR: c.textColor ?? '',
-          isKey: (c.colLblNm ?? c.colNm).trim().endsWith('*'),
-        }))}
-        // ⭐ Default 버튼 원복 기준 — store 원본 스냅샷(originalStaticColumns = 맨 처음 DB 값, Save 로 mutate 안 됨).
-        defaultSettings={(originalStaticColumns[SHEETS.MAIN] ?? []).map((c, i) => ({
-          COLUMN_NAME: c.colNm,
-          COLUMN_LABEL_NAME: c.colLblNm ?? c.colNm,
-          USER_FLAG: c.visible === false ? 'N' : 'Y',
-          SORT_ORDER_NO: i + 1,
-          COL_WIDTH: c.colWth ?? 100,
-          CELL_COLOR: c.cellColor ?? '',
-          TEXT_COLOR: c.textColor ?? '',
-          isKey: (c.colLblNm ?? c.colNm).trim().endsWith('*'),
-        }))}
-        onSave={settings => {
+          // (0) 설정이 바뀌었으므로 이전 조회 rows 는 무효 — 그리드부터 비운다.
+          clearGridOnSettingChange();
+          // (1) 로컬 즉시 반영 — store 가 visible + 순서 + width + 색을 staticColumns 에 적용 → grid 즉시 갱신.
           applyColumnLayout(
             SHEETS.MAIN,
             settings.map(s => ({
@@ -733,8 +759,37 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
               order: s.SORT_ORDER_NO,
             }))
           );
+          // (2) titleSet 영구 저장 — 표시 column + 순서 + 폭/색.
+          const visible = settings.filter(s => s.USER_FLAG === 'Y');
+          void saveTitleSet({
+            menuId: MENU_ID,
+            // ⚠️ 팝업이 조회에 쓰는 값과 동일해야 한다 — 상수 한 곳에서만 가져온다.
+            sheetName: TITLESET_SHEET,
+            columnType: TITLESET_COLUMN_TYPE,
+            rows: visible.map((s, i) => ({
+              name: s.COLUMN_NAME,
+              sortOrderNo: i + 1,
+              colWidth: s.COL_WIDTH,
+              cellColor: s.CELL_COLOR,
+              textColor: s.TEXT_COLOR,
+            })),
+          }).then(ok => {
+            // 실패를 조용히 삼키면 '저장했는데 재진입 시 원복' 과 구분이 안 된다 — 반드시 알린다.
+            if (!ok) {
+              void setAlert({
+                type: 'alert',
+                content: t('MSG00618', '_An error occurred while saving.'),
+              });
+              return;
+            }
+            // ⭐ 팝업 titleSet 조회 캐시 무효화 (필수). 전역 staleTime=Infinity 라 invalidate 없이는
+            //   재조회가 아예 안 일어나고, buildInitialRows 는 BE 응답을 화면 상태보다 우선하므로
+            //   저장 전 값이 그대로 이겨서 재진입 시 원복된 것처럼 보인다.
+            //   팝업 query 의 tabId = MENU_ID 이므로 이 prefix 로 매칭된다.
+            void queryClient.invalidateQueries({ queryKey: [MENU_ID] });
+          });
         }}
-      /> */}
+      />
       {/* Insert row popup — PROJECT (AS-IS .cs L2040 cellTypeImage + L2092/L2094 자동 채움) */}
       <ProjectByDivisionModal
         open={openProject}

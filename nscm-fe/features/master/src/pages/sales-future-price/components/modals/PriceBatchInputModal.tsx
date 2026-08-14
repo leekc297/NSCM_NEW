@@ -22,7 +22,12 @@ import { ControlConfirmIcon, FileExceldownloadIcon, FunctionSearchIcon } from '@
 import { Grid } from '@shared/mui';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
-import { ItemByDivisionModal, PeriodField, ProjectByDivisionModal } from '../../../../components';
+import {
+  ItemByDivisionModal,
+  PeriodField,
+  ProjectByDivisionModal,
+  SalesSiteField,
+} from '../../../../components';
 import { MENU_ID, SHEETS } from '../../sales-future-price.constants';
 import {
   buildExchangeRateMap,
@@ -30,7 +35,7 @@ import {
   getExchangeRate,
 } from '../../salesPriceExchange';
 import { useSalesFuturePriceStore } from '../../useSalesFuturePriceStore';
-import { isPeriodInverted } from '../../utils/futurePriceDate';
+import { fromYyyymmdd, isPeriodInverted, yyyymmddOf } from '../../utils/futurePriceDate';
 
 import styles from './PriceBatchInputModal.module.scss';
 
@@ -46,6 +51,25 @@ const snapMonday = (yyyymmdd: string): string => {
 const todayYmd = (): string => {
   const n = new Date();
   return `${n.getFullYear()}${String(n.getMonth() + 1).padStart(2, '0')}${String(n.getDate()).padStart(2, '0')}`;
+};
+
+// ⭐ No.30 — 일괄입력 저장 대상 주차를 "조회된 데이터(allRows)의 동적 컬럼"이 아니라 선택 Period 로
+//   직접 산출한다. 기존엔 GET SP 가 실제로 반환한 W_yyyymmdd 컬럼 집합에만 의존했는데, 그 컬럼 수가
+//   Period 전체를 못 채우면(예: 2026.08.03~2027.08.02 요청했는데 2027.06월까지만 반환) 저장도 그만큼만
+//   되어 "Period 기준으로 생성 안 됨" 증상이 재현된다. 주 시작일 판정 규칙은 SalesFuturePriceGrid
+//   dynBindings 와 동일(월요일 OR 월경계 분할로 생긴 월 1일) — 이 규칙은 날짜 계산만으로 결정되므로
+//   GET 응답에 기대지 않고 Period 양끝만으로 전 구간을 재현할 수 있다.
+const enumerateWeekStarts = (fromYmd: string, toYmd: string): string[] => {
+  const from = fromYyyymmdd(fromYmd);
+  const to = fromYyyymmdd(toYmd);
+  if (!from || !to) return [];
+  const result: string[] = [];
+  const cur = new Date(from);
+  while (cur <= to) {
+    if (cur.getDay() === 1 || cur.getDate() === 1) result.push(yyyymmddOf(cur));
+    cur.setDate(cur.getDate() + 1);
+  }
+  return result;
 };
 
 // ISO 주차 번호 (SalesFuturePriceGrid getDynKey 와 동일 로직) — 동적 주별 헤더 2단 라벨(Wxx)용.
@@ -166,7 +190,8 @@ export const PriceBatchInputModal = ({
   const gridWrapRef = useRef<HTMLDivElement>(null);
 
   const [divisionId, setDivisionId] = useState(defaultDivision);
-  const [salesSite, setSalesSite] = useState('ALL');
+  // ⭐ No.27 — 다중선택 지원 (2026-08-04). 빈 배열 = ALL. 공용 SalesSiteField(string[]) 계약과 정합.
+  const [salesSite, setSalesSite] = useState<string[]>([]);
   const [projectCode, setProjectCode] = useState('');
   const [itemId, setItemId] = useState('');
   const [periodFrom, setPeriodFrom] = useState(defaultPeriod.start);
@@ -188,7 +213,7 @@ export const PriceBatchInputModal = ({
     if (open) {
       // ⭐ 재진입 시 초기화 — 조회조건/조회여부 리셋(이전 입력·데이터 잔존 방지).
       setDivisionId(defaultDivision);
-      setSalesSite('ALL');
+      setSalesSite([]);
       setProjectCode('');
       setItemId('');
       setSearched(false);
@@ -253,17 +278,6 @@ export const PriceBatchInputModal = ({
   dataMapsRef.current = dataMaps;
 
   const divItems = (divQ ?? []) as ComboItem[];
-  // ⭐ Sales Site 옵션 — 메인 SalesSiteField.toOptions 동일: division 클라이언트 필터 + DIVISION_ID|CODE dedup.
-  const salesSiteOptions = useMemo(() => {
-    const arr = (ssQ ?? []) as unknown as Array<Record<string, string>>;
-    return [
-      ...new Map(
-        arr
-          .filter(r => !divisionId || !r.DIVISION_ID || r.DIVISION_ID === divisionId)
-          .map(r => [`${r.DIVISION_ID ?? ''}|${r.CODE ?? ''}`, r] as const)
-      ).values(),
-    ].map(r => ({ label: String(r.NAME ?? r.CODE ?? ''), value: String(r.CODE ?? '') }));
-  }, [ssQ, divisionId]);
 
   // ⭐ 고정 컬럼 = 'Sales Price Save All' 시트 메타 순수 구동 (2026-07-07 하드코딩 화이트리스트 제거).
   //   division 필터 = SP 서버측(DIVISION_ID 컬럼) → FE 는 visible 만 필터. 정렬 = SP 반환 순서(SORT_ORDER_NO).
@@ -301,7 +315,7 @@ export const PriceBatchInputModal = ({
             divisionId,
             deptId: 'ALL',
             endCustomer: 'ALL',
-            scmSiteId: salesSite || 'ALL',
+            scmSiteId: salesSite.length > 0 ? salesSite.join('^') : 'ALL',
             plantSiteId: 'ALL',
             projectCode: projectCode || 'ALL',
             itemId: itemId || 'ALL',
@@ -331,8 +345,13 @@ export const PriceBatchInputModal = ({
   });
 
   // ⭐ 환율 데이터 (메인 grid 저장과 동일 소스) — 저장 시 LOC → KRW/USD 재계산용.
+  //   ⭐ No.24 — periodFrom 이 월 중간(월요일 스냅)이면 그 달 환율행이 빠지는 문제(메인화면과 동일 원인) →
+  //   월초로 스냅해 조회 (SalesFuturePrice.tsx exchangeFilters 와 동일 처리).
   const exchangeFilters = useMemo(
-    () => (open ? ({ startYyyymmdd: periodFrom, endYyyymmdd: periodTo } as never) : undefined),
+    () =>
+      open
+        ? ({ startYyyymmdd: `${periodFrom.slice(0, 6)}01`, endYyyymmdd: periodTo } as never)
+        : undefined,
     [open, periodFrom, periodTo]
   );
   const { data: exchangeData } = useTabProcQuery<MENU_ID, SHEETS.EXCHANGE>({
@@ -359,7 +378,7 @@ export const PriceBatchInputModal = ({
         ? EMPTY_ROWS
         : allRows.filter(r => {
             if (String(r.MEASURE ?? '').toUpperCase() !== 'LOC') return false;
-            if (salesSite && salesSite !== 'ALL' && String(r.SCM_SITE_ID ?? '') !== salesSite)
+            if (salesSite.length > 0 && !salesSite.includes(String(r.SCM_SITE_ID ?? '')))
               return false;
             if (projectCode && !String(r.PROJECT_CODE ?? '').includes(projectCode)) return false;
             if (itemId && !String(r.ITEM_ID ?? '').includes(itemId)) return false;
@@ -548,17 +567,10 @@ export const PriceBatchInputModal = ({
       return true;
     });
 
-    // 기간 내 주차(W_yyyymmdd) — bucketType:'W' 조회 결과 o_rc1 의 동적 키에서 추출.
-    //   ⭐ 표시 주차(dynBindings)와 동일 필터(주 시작 = 월요일 OR 월 1일)만 저장 → 표시≠저장 불일치 제거(gap3).
-    const weeks = Array.from(
-      new Set(allRows.flatMap(r => Object.keys(r).filter(k => /^W_\d{8}$/.test(k))))
-    )
-      .map(k => k.slice(2))
-      .filter(ymd => {
-        const dt = new Date(Date.UTC(+ymd.slice(0, 4), +ymd.slice(4, 6) - 1, +ymd.slice(6, 8)));
-        return dt.getUTCDay() === 1 || dt.getUTCDate() === 1;
-      })
-      .sort();
+    // ⭐ No.30 — 기간 내 주차(W_yyyymmdd) 는 GET 응답의 동적 키가 아니라 선택 Period(periodFrom~periodTo)
+    //   로 직접 산출한다 (표시 주차(dynBindings)와 동일 규칙: 주 시작 = 월요일 OR 월 1일). GET 응답 컬럼에
+    //   기대면 그 응답이 Period 전체를 못 채웠을 때 저장도 같이 잘린다 — 위 enumerateWeekStarts 참조.
+    const weeks = enumerateWeekStarts(periodFrom, periodTo);
     if (weeks.length === 0) {
       void setAlert({ type: 'alert', content: t('MSG00108', '_조회된 주차가 없습니다.') });
       return;
@@ -674,14 +686,33 @@ export const PriceBatchInputModal = ({
 
   // ⭐ Excel Download — 공용 GridAction.excelDownload (backcolor 제외 + 숨김 컬럼 제외 표준).
   //   주별 동적 컬럼(W_yyyymmdd) 포함 화면 표시 그대로 export.
-  const handleExcel = () => {
+  const handleExcel = async () => {
     const g = gridRef.current;
     if (!g) return;
     if (rows.length === 0) {
       void setAlert({ type: 'alert', content: t('LBL00667', 'No data to save.') });
       return;
     }
-    void GridAction.excelDownload(g as never, t('LBL00662', 'Price Batch Input'));
+    // ⭐ No.29 — 공용 GridAction.excelDownload 는 export 용 Column 을 새로 만들며 화면의 combo
+    //   dataMap(코드→명칭)을 옮기지 않는다 → Team(DEPT_ID)이 원시 코드로 내려받아짐. 근본 수정은
+    //   공용 유틸(gridAction.ts) 쪽이지만 이번 작업 범위는 이 화면 안이므로, 내보내는 동안만 Team
+    //   값을 코드→명칭으로 치환한 사본을 바인딩했다가 끝나면 원본으로 되돌리는 방식으로 우회한다.
+    const teamNameOf = new Map(
+      ((teamQ ?? []) as unknown as Array<Record<string, string>>).map(
+        r => [String(r.CODE ?? ''), String(r.NAME ?? r.CODE ?? '')] as const
+      )
+    );
+    const exportRows = rows.map(r => ({
+      ...r,
+      DEPT_ID: teamNameOf.get(String(r.DEPT_ID ?? '')) ?? r.DEPT_ID,
+    }));
+    g.itemsSource = exportRows as unknown as typeof g.itemsSource;
+    try {
+      await GridAction.excelDownload(g as never, t('LBL00662', 'Price Batch Input'));
+    } finally {
+      // 화면 표시는 항상 원본(코드 그대로 유지 + dataMap 이 명칭 렌더) 바인딩으로 복원.
+      g.itemsSource = rows as unknown as typeof g.itemsSource;
+    }
   };
 
   // ⭐ #70 — DataGrid `initialized` prop deprecated → useEffect + gridRef.
@@ -997,22 +1028,13 @@ export const PriceBatchInputModal = ({
                       )}
                     />
                   </Grid>
-                  <Grid size={3}>
-                    <FormItem
-                      label={t('LBL00011', 'Sales Site')}
-                      labelAlign='right'
-                      render={() => (
-                        <CustomDropdown
-                          value={salesSite}
-                          options={[
-                            { label: t('LBL00632', 'All'), value: 'ALL' },
-                            ...salesSiteOptions,
-                          ]}
-                          onChange={(_, option) => setSalesSite(String(option))}
-                        />
-                      )}
-                    />
-                  </Grid>
+                  {/* No.27 — 단일선택→다중선택 (2026-08-04). 공용 SalesSiteField 재사용(메인 조회조건과 동일 계약). */}
+                  <SalesSiteField
+                    gridSize={3}
+                    value={salesSite}
+                    onChange={setSalesSite}
+                    division={divisionId}
+                  />
                   <Grid size={3}>
                     <FormItem
                       label={t('LBL00617', 'Project')}
@@ -1022,7 +1044,7 @@ export const PriceBatchInputModal = ({
                           <InputField
                             fullWidth
                             value={projectCode}
-                            InputProps={{ readOnly: true }}
+                            onChange={e => setProjectCode(e.target.value)}
                             onDoubleClick={() => setOpenProject(true)}
                           />
                           <Button
@@ -1044,7 +1066,7 @@ export const PriceBatchInputModal = ({
                           <InputField
                             fullWidth
                             value={itemId}
-                            InputProps={{ readOnly: true }}
+                            onChange={e => setItemId(e.target.value)}
                             onDoubleClick={() => setOpenItem(true)}
                           />
                           <Button
@@ -1137,7 +1159,9 @@ export const PriceBatchInputModal = ({
             divisionId,
             deptId: 'ALL',
             endCustomer: 'ALL',
-            salesSite: salesSite || 'ALL',
+            // ⭐ No.27 — salesSite 가 string[] 로 바뀜(다중선택). 이 팝업 내부 필터는 콤마 split
+            //   기준(ItemByDivisionModal searchParam.salesSite?.split(',') 과 동일 계약).
+            salesSite: salesSite.length > 0 ? salesSite.join(',') : 'ALL',
             projectCode: '',
             etc: 'N',
           } as never
@@ -1157,7 +1181,9 @@ export const PriceBatchInputModal = ({
             divisionId,
             deptId: 'ALL',
             endCustomer: 'ALL',
-            salesSite: salesSite || 'ALL',
+            // ⭐ No.27 — salesSite 가 string[] 로 바뀜(다중선택). 이 팝업 내부 필터는 콤마 split
+            //   기준(ItemByDivisionModal searchParam.salesSite?.split(',') 과 동일 계약).
+            salesSite: salesSite.length > 0 ? salesSite.join(',') : 'ALL',
             projectCode: projectCode || '',
             itemId: '',
           } as never

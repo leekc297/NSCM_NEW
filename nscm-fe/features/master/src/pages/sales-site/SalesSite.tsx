@@ -6,6 +6,7 @@ import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { GridAction } from '@foundation/utils';
 import { MainTitle, SubTitle, TabItem, TabWrapper } from '@shared/components';
 import { useProcMutation, useSaveWithValidation, useTabProcQuery } from '@shared/hooks';
+import { Panel, PanelGroup, PanelSeparator } from '@shared/panel';
 
 import { SalesSiteBucketGrid } from './components/SalesSiteBucketGrid';
 import { SalesSiteCustomerGrid } from './components/SalesSiteCustomerGrid';
@@ -100,11 +101,16 @@ export const SalesSite = ({ tabId, title }: PageProps<MENU_ID>) => {
   const handleInsert = () => {
     if (!gridRefs[activeTab].current) return;
 
+    const scmSiteId =
+      activeTab === SHEET_INDEX.SITE ? undefined : filters[SHEETS.CUSTOMER]?.salesSite;
+
+    // Rep 기본값은 N. Y 로 바꿀 때의 중복 검사는 Customer 그리드 cellEditEnded 에서 처리한다.
     GridAction.addRow(gridRefs[activeTab].current, {
       DIVISION_ID: filters[SHEETS.SITE]?.divisionId ?? '81',
-      SCM_SITE_ID: activeTab === SHEET_INDEX.SITE ? undefined : filters[SHEETS.CUSTOMER]?.salesSite,
+      SCM_SITE_ID: scmSiteId,
       VMI_YN: 'N',
       VALID_YN: 'Y',
+      REP_YN: 'N',
       SHIP_PLAN_AUTO: 'N',
     });
   };
@@ -181,46 +187,54 @@ export const SalesSite = ({ tabId, title }: PageProps<MENU_ID>) => {
         hotkeyConfig={hotkeyConfig}
         searchParam={searchParams}
       />
-      {/* <div className={styles.GridWrapper}> */}
-      <div className={styles.upperGrid}>
-        <SalesSiteGrid
-          gridRef={gridRefs[SHEET_INDEX.SITE]}
-          gridFilterRef={gridFilterRefs[SHEET_INDEX.SITE]}
-          data={siteData?.salesSite ?? []}
-          setActiveTab={setActiveTab}
-        />
-      </div>
+      {/* 상하 드래그 분할 — 초기 비율은 기존 flex-grow 5:3 을 그대로 옮긴 62.5 : 37.5.
+          Detail 체크 해제 시 아래 Panel/Separator 가 통째로 빠져 상단이 100% 를 차지한다. */}
+      <PanelGroup className={styles.tableWrapper} orientation='vertical'>
+        <Panel defaultSize={62.5} minSize={20}>
+          <div className={styles.upperGrid}>
+            <SalesSiteGrid
+              gridRef={gridRefs[SHEET_INDEX.SITE]}
+              gridFilterRef={gridFilterRefs[SHEET_INDEX.SITE]}
+              data={siteData?.salesSite ?? []}
+              setActiveTab={setActiveTab}
+            />
+          </div>
+        </Panel>
 
-      {openDetailGrid && (
-        <div className={styles.lowerGrid}>
-          <TabWrapper persist>
-            <TabItem label={t('LBL00314', '_Sales Customer')}>
-              <SalesSiteCustomerGrid
-                gridRef={gridRefs[SHEET_INDEX.CUSTOMER]}
-                gridFilterRef={gridFilterRefs[SHEET_INDEX.CUSTOMER]}
-                data={detailData?.salesCustomer ?? []}
-                setActiveTab={setActiveTab}
-              />
-            </TabItem>
-            <TabItem label={t('LBL00315', '_Sales Location')}>
-              <SalesSiteLocationGrid
-                gridRef={gridRefs[SHEET_INDEX.LOCATION]}
-                gridFilterRef={gridFilterRefs[SHEET_INDEX.LOCATION]}
-                data={detailData?.salesLocation ?? []}
-                setActiveTab={setActiveTab}
-              />
-            </TabItem>
-            <TabItem label={t('LBL00032', '_Sales Bucket')}>
-              <SalesSiteBucketGrid
-                gridRef={gridRefs[SHEET_INDEX.BUCKET]}
-                gridFilterRef={gridFilterRefs[SHEET_INDEX.BUCKET]}
-                data={detailData?.salesBucket ?? []}
-                setActiveTab={setActiveTab}
-              />
-            </TabItem>
-          </TabWrapper>
-        </div>
-      )}
+        {openDetailGrid && <PanelSeparator className={styles.splitBar} />}
+        {openDetailGrid && (
+          <Panel defaultSize={37.5} minSize={15}>
+            <div className={styles.lowerGrid}>
+              <TabWrapper persist>
+                <TabItem label={t('LBL00314', '_Sales Customer')}>
+                  <SalesSiteCustomerGrid
+                    gridRef={gridRefs[SHEET_INDEX.CUSTOMER]}
+                    gridFilterRef={gridFilterRefs[SHEET_INDEX.CUSTOMER]}
+                    data={detailData?.salesCustomer ?? []}
+                    setActiveTab={setActiveTab}
+                  />
+                </TabItem>
+                <TabItem label={t('LBL00315', '_Sales Location')}>
+                  <SalesSiteLocationGrid
+                    gridRef={gridRefs[SHEET_INDEX.LOCATION]}
+                    gridFilterRef={gridFilterRefs[SHEET_INDEX.LOCATION]}
+                    data={detailData?.salesLocation ?? []}
+                    setActiveTab={setActiveTab}
+                  />
+                </TabItem>
+                <TabItem label={t('LBL00032', '_Sales Bucket')}>
+                  <SalesSiteBucketGrid
+                    gridRef={gridRefs[SHEET_INDEX.BUCKET]}
+                    gridFilterRef={gridFilterRefs[SHEET_INDEX.BUCKET]}
+                    data={detailData?.salesBucket ?? []}
+                    setActiveTab={setActiveTab}
+                  />
+                </TabItem>
+              </TabWrapper>
+            </div>
+          </Panel>
+        )}
+      </PanelGroup>
     </>
   );
 };

@@ -64,21 +64,14 @@ export const MktFcstForm = ({ onSearch, insertedRowCount = 0 }: MktFcstFormProps
   //   카탈로그(PlantSitebyEndCustomer, 81 전용, Division+EndCustomer 서버 바인드)로 대체(아래 extraConditions).
   // Division/Team/EndCustomer/BizType 은 표준 카탈로그 필드가 자체 fetch → Form 에서는 인라인 유지 필드만.
   const q = (v?: string): string => `'${v && v.trim() !== '' ? v : 'ALL'}'`;
-  // ⭐ 2026-08-04 AS-IS 정합 — Division=40 + Team/Customer 미선택(=Division 변경 직후 상태)이면
-  //   AS-IS BigFilter 'ScmSitebyEndCustomer40'(전체 40, NAME=SITE_DESCRIPTION, .cs L3071) 1:1 재현.
-  //   Team/Customer 선택 시(=AS-IS Team/Customer 변경 이벤트) 'UserSiteByEndCustomer'(UP_FX 1:1) 복귀.
-  const div40Initial =
-    sc.divisionId === DIVISION.MOBILITY && sc.deptIds.length === 0 && sc.endCustomers.length === 0;
   const [scmSiteByEndCustomer, senderCode, itemType, bucketTypeCombo] = useTabComboQueries({
     filters: [
-      div40Initial
-        ? 'ScmSitebyEndCustomer40'
-        : {
-            comboId: 'UserSiteByEndCustomer',
-            divisionId: q(sc.divisionId),
-            deptId: q(sc.deptIds.join(',')),
-            endCustomer: q(sc.endCustomers.join(',')),
-          },
+      {
+        comboId: 'UserSiteByEndCustomer',
+        divisionId: q(sc.divisionId),
+        deptId: q(sc.deptIds.join(',')),
+        endCustomer: q(sc.endCustomers.join(',')),
+      },
       'SenderCode',
       'ItemType',
       'BucketType',
@@ -137,7 +130,7 @@ export const MktFcstForm = ({ onSearch, insertedRowCount = 0 }: MktFcstFormProps
   return (
     <SearchArea
       isHidden={!openSearchArea}
-      searchButtonLabel={t('LBL00691', '_Search')}
+      searchButtonLabel={t('LBL00112', '_Search')}
       onSearch={onSearch}
       conditions={
         <>
@@ -181,9 +174,6 @@ export const MktFcstForm = ({ onSearch, insertedRowCount = 0 }: MktFcstFormProps
             value={sc.endCustomers}
             onChange={v => set({ endCustomers: v, scmSiteIds: [] })}
             division={sc.divisionId}
-            // ⭐ 2026-08-04 AS-IS 정합 — Team 변경 시 Customer 목록 축소 (.cs L3178/3193
-            //   SetChangeControl("EndCustomerByDivision", div, team) DEPT_ID 클라 필터 1:1).
-            deptIds={sc.deptIds}
           />
           <Grid size={3}>
             <div className={styles.salesSiteCell}>

@@ -1,4 +1,5 @@
 import { apiClient } from '@foundation/apis';
+import dayjs from '@foundation/dayjs';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { createPersistedStoreWithTab, useSessionStore } from '@shared/stores';
 
@@ -8,9 +9,10 @@ import {
   DIVISION,
   MENU_ID,
   SHEETS,
+  TITLESET_COLUMN_TYPE,
+  TITLESET_SHEET,
 } from './sales-future-price.constants';
 import type { SearchCondition } from './sales-future-price.types';
-import { thisWeekMonday, yyyymmddOf } from './utils/futurePriceDate';
 
 // SP filter 로 변환된 payload — useTabProcQuery enabled 가드
 type FiltersBySheet = {
@@ -37,6 +39,16 @@ export interface MeasureMeta {
 type StaticColumnsBySheet = { [key in SHEETS]: RawFlexGridColumnConfig[] };
 type StaticMeasuresBySheet = { [key in SHEETS]: MeasureMeta[] };
 
+/** ColumnLayoutModal 개인화 1행 — 표시/순서/폭/색. */
+export interface ColumnLayoutSetting {
+  colNm: string;
+  visible: boolean;
+  width: number;
+  cellColor: string;
+  textColor: string;
+  order: number;
+}
+
 interface State {
   initialized: boolean;
   filters: FiltersBySheet;
@@ -45,6 +57,10 @@ interface State {
   staticColumns: StaticColumnsBySheet;
   originalStaticColumns: StaticColumnsBySheet;
   staticMeasures: StaticMeasuresBySheet;
+  // ⭐ ColumnLayoutModal OK 결과 (null = 미설정) — 표시/순서 + 폭/색.
+  //   fetchStaticColumns 는 Search 마다 admin 메타를 다시 덮으므로, 이 값으로 재적용하지 않으면
+  //   컬럼 설정 직후 조회 한 번에 개인화가 통째로 원복된다.
+  userColumnLayout: ColumnLayoutSetting[] | null;
 }
 
 interface Action {
@@ -60,33 +76,30 @@ interface Action {
   fetchStaticMeasures: () => Promise<void>;
   // F6 로 DB 저장한 개인화 조회조건을 진입 시 1회 복원 (initialized 가드 — 세션당 1회).
   restoreSearchConditions: () => Promise<void>;
-  // ColumnSettingModal onSave — 사용자 선택 column 만 visible='Y', 나머지 'N'.
-  applyColumnVisibility: (sheetName: keyof StaticColumnsBySheet, visibleKeys: string[]) => void;
+  // ⭐ 저장된 컬럼 개인화(titleSet) 복원 — fetchStaticColumns 가 await 후 메타에 적용.
+  //   반환값 = 복원된 개인화(없으면 null).
+  fetchUserColumnLayout: () => Promise<ColumnLayoutSetting[] | null>;
+  /**
+   * 컬럼 개인화 무효화 — division 전환 시 필수.
+   *
+   * ⚠️ SCM_MST_TITLESET_USER 에는 division 컬럼이 없어 개인화가 division 무관 1벌이다. 반면
+   *   컬럼 세트는 division 별로 다르다(SP DIVISION_ID 필터). 40 에서 저장한 레이아웃을 82 컬럼에
+   *   그대로 적용하면 "목록에 없는 컬럼 = 비표시" 규칙 때문에 전 컬럼이 사라진다.
+   *   → division 이 바뀌면 비우고, fetchStaticColumns 가 그 division 기준으로 다시 조회한다.
+   */
+  clearUserColumnLayout: () => void;
   // ColumnLayoutModal onSave — visible + width + order + cell/text color 를 한 번에 적용.
   applyColumnLayout: (
     sheetName: keyof StaticColumnsBySheet,
-    settings: {
-      colNm: string;
-      visible: boolean;
-      width: number;
-      cellColor: string;
-      textColor: string;
-      order: number;
-    }[]
+    settings: ColumnLayoutSetting[]
   ) => void;
 }
 
-// Period 초기값 = "당주 월요일" ~ (당주 월요일 + 1년 - 1일) (사용자 요구 2026-07-02 — 구 '당일' 기준에서 변경).
-//   월요일 산출은 AS-IS GetThisWeekMonday 정합 유틸 재사용 (일요일=이전 주 월요일).
-//   yyyymmddOf 는 local 기준 — 구 toISOString(UTC) 방식의 KST 저녁 하루 밀림도 함께 제거.
-const monday = thisWeekMonday();
-const periodStart = yyyymmddOf(monday);
-const oneYearMinusOneDay = (() => {
-  const d = new Date(monday);
-  d.setFullYear(d.getFullYear() + 1);
-  d.setDate(d.getDate() - 1);
-  return yyyymmddOf(d);
-})();
+// Period 초기값 = 당월 1일 ~ (당월 +5개월)의 말일 — forecast-price(useForecastPriceStore) 와 동일 산식.
+//   (구 '당주 월요일 ~ +1년-1일' 기준에서 변경.)
+const periodStart = dayjs().startOf('month').format('YYYYMMDD');
+// 종료일 = 시작월 +5개월의 말일 (예: 2026.07.01 → 2026.12.31)
+const periodEnd = dayjs().startOf('month').add(5, 'month').endOf('month').format('YYYYMMDD');
 
 const initSearch: SearchCondition = {
   divisionId: DIVISION.MOBILITY,
@@ -98,7 +111,7 @@ const initSearch: SearchCondition = {
   nickName: '',
   projectCodes: [],
   startYyyymmdd: periodStart,
-  endYyyymmdd: oneYearMinusOneDay,
+  endYyyymmdd: periodEnd,
   bizTypes: [],
   owners: [],
   bucketType: BUCKET_TYPE.WEEKLY,
@@ -128,6 +141,46 @@ const initState: State = {
   staticColumns: emptyCols,
   originalStaticColumns: makeEmptyCols(),
   staticMeasures: emptyMeasures,
+  userColumnLayout: null,
+};
+
+// BE 가 폭을 안 내려줄 때의 기본 폭 (ColumnLayoutModal DEFAULT_COL_WIDTH 와 동일 계약).
+const DEFAULT_COL_WIDTH = 100;
+
+// ColumnLayoutModal 개인화 override — 표시/순서/폭/색을 admin 메타 위에 덧씌운다.
+//   ⚠️ 표시 게이트는 이 화면 Grid 의 `visible` (SalesFuturePriceGrid.visibleColumns) — display 는 보지 않는다.
+const applyLayoutToColumns = (
+  cols: RawFlexGridColumnConfig[],
+  settings: ColumnLayoutSetting[]
+): RawFlexGridColumnConfig[] => {
+  const byCol = new Map(settings.map(s => [s.colNm, s]));
+  return (
+    cols
+      .map(c => {
+        const s = byCol.get(c.colNm);
+        // 개인화 목록에 없는 컬럼 = 사용자가 비표시로 저장한 것.
+        if (!s) return { ...c, visible: false };
+        return {
+          ...c,
+          visible: s.visible,
+          colWth: s.width,
+          cellColor: s.cellColor,
+          textColor: s.textColor,
+        };
+      })
+      // 팝업 순서대로 재정렬 — grid 는 배열 순서를 컬럼 순서로 사용. 미매칭 컬럼은 뒤로.
+      .sort((a, b) => {
+        const orderA =
+          a.colNm === 'MEASURE'
+            ? Number.MAX_SAFE_INTEGER
+            : (byCol.get(a.colNm)?.order ?? Number.MAX_SAFE_INTEGER);
+        const orderB =
+          b.colNm === 'MEASURE'
+            ? Number.MAX_SAFE_INTEGER
+            : (byCol.get(b.colNm)?.order ?? Number.MAX_SAFE_INTEGER);
+        return orderA - orderB;
+      })
+  );
 };
 
 export const useSalesFuturePriceStore = createPersistedStoreWithTab<State & Action>(
@@ -192,14 +245,23 @@ export const useSalesFuturePriceStore = createPersistedStoreWithTab<State & Acti
           `/admin/menu/${MENU_ID}/column`,
           { sheetNm: ADMIN_SHEET_NAME[SHEETS.MAIN] ?? SHEETS.MAIN, divisionId }
         );
+        // ⭐ 진입 시 개인화 복원 — 저장된 titleSet 을 먼저 조회해 override 를 확보한 뒤 메타에 적용.
+        //   (별도 effect 로 분리하면 메타 응답과 순서 경쟁 → 늦게 온 쪽이 덮어쓰는 사고.)
+        //   이미 있으면(모달 OK 직후 재조회) 서버 재조회 없이 그 값을 유지.
+        if (get().userColumnLayout === null) await get().fetchUserColumnLayout();
+
         const next = res.data.result ?? [];
         set(state => {
+          // ⭐ 컬럼 설정(OK) 이후 재조회(Search 등)가 개인화를 덮지 않도록 override 재적용.
+          const layout = get().userColumnLayout;
+          const applied = layout && layout.length > 0 ? applyLayoutToColumns(next, layout) : next;
           // ⭐ 성능(2026-07-08) — 내용 동일(관리자 변경 없음) 시 set 생략 → 참조 유지.
           //   매 Search refetch 가 동일 내용의 새 배열을 set 하면 Grid 의 visibleColumns 참조가 바뀌어
           //   핸들러 재등록 + invalidate(true) 전체 리프레시가 불필요하게 반복됨. admin 변경 시엔 즉시 반영(기존 동작).
-          if (JSON.stringify(state.staticColumns[SHEETS.MAIN]) !== JSON.stringify(next)) {
-            state.staticColumns[SHEETS.MAIN] = next;
+          if (JSON.stringify(state.staticColumns[SHEETS.MAIN]) !== JSON.stringify(applied)) {
+            state.staticColumns[SHEETS.MAIN] = applied;
           }
+          // 원본은 개인화를 적용하지 않은 admin 값 그대로 — 팝업 Default 원복 기준.
           state.originalStaticColumns[SHEETS.MAIN] = next;
         });
       } catch {
@@ -299,43 +361,75 @@ export const useSalesFuturePriceStore = createPersistedStoreWithTab<State & Acti
       }
     },
 
-    // ColumnSettingModal OK — 사용자 선택 column 만 visible (visible='Y'), 나머지 'N'.
-    //   Grid 의 visibleColumns useMemo 가 admin staticColumns 의 visible flag 를 사용 → 즉시 반영.
-    //   ⚠️ 사내 SCM_USR_TITLE_SET 영구 저장은 별도 SP 호출 의무 (Phase 후속).
-    applyColumnVisibility: (sheetName, visibleKeys) => {
-      set(state => {
-        const cur = state.staticColumns[sheetName];
-        if (!cur || cur.length === 0) return;
-        const visibleSet = new Set(visibleKeys);
-        state.staticColumns[sheetName] = cur.map(c => ({
-          ...c,
-          visible: visibleSet.has(c.colNm),
-        }));
-      });
+    // ⭐ 저장된 컬럼 개인화 복원 — ColumnLayoutModal 이 쓰는 SP 와 동일 계약
+    //   (DMF0002_GET_TITLESET_POPUP). 조회 키(sheetName/columnType)는 팝업·저장과 반드시 같은 상수를 쓴다.
+    //   USER_FLAG='Y' 행 = 사용자가 표시로 저장한 컬럼. 저장 이력이 없으면 null → admin 기본값 그대로.
+    //   ⚠️ SP 는 관리자 기본값(COLUMN_WIDTH/SORT_ORDER_NO)과 사용자값(USER_* 별칭)을 따로 내려준다 —
+    //     사용자값을 우선하지 않으면 저장한 폭/순서가 영원히 안 보인다 (2026-07-27 실측).
+    fetchUserColumnLayout: async () => {
+      try {
+        const res = await apiClient.post<{ o_rc1?: Record<string, string>[] }>(
+          `${MENU_ID}/titleSet/SEARCH/call-proc`,
+          {
+            programId: MENU_ID,
+            sheetName: TITLESET_SHEET,
+            columnType: TITLESET_COLUMN_TYPE,
+            divisionId: get().searchCondition.divisionId,
+          }
+        );
+        const rows = res.data.result?.o_rc1 ?? [];
+        const orderOf = (r: Record<string, string>): number =>
+          Number(r.USER_SORT_ORDER_NO ?? r.SORT_ORDER_NO ?? 0);
+        const layout = rows
+          .filter(r => String(r.USER_FLAG ?? '') === 'Y')
+          .sort((a, b) => orderOf(a) - orderOf(b))
+          .map((r, i) => {
+            const width = Number(r.USER_COLUMN_WIDTH ?? r.COLUMN_WIDTH ?? 0);
+            return {
+              colNm: String(r.COLUMN_NAME ?? ''),
+              visible: true,
+              width: Number.isFinite(width) && width > 0 ? width : DEFAULT_COL_WIDTH,
+              cellColor: String(r.CELL_COLOR ?? ''),
+              textColor: String(r.TEXT_COLOR ?? ''),
+              order: i + 1,
+            };
+          })
+          .filter(s => s.colNm);
+        if (layout.length === 0) return null;
+        set(state => {
+          state.userColumnLayout = layout;
+          // 메타가 이미 도착해 있으면 소급 적용 (호출 순서 무관하게 개인화가 유실되지 않게).
+          const cur = state.staticColumns[SHEETS.MAIN];
+          if (cur && cur.length > 0) {
+            state.staticColumns[SHEETS.MAIN] = applyLayoutToColumns(cur, layout);
+          }
+        });
+        return layout;
+      } catch {
+        // 개인화 조회 실패 = 기본 컬럼 세트로 동작 (화면 차단 금지, console 금지 룰)
+        return null;
+      }
     },
+
+    clearUserColumnLayout: () =>
+      set(state => {
+        state.userColumnLayout = null;
+      }),
+
+    // ColumnLayoutModal OK — 표시/순서/폭/색을 grid 에 즉시 반영.
+    //   Grid 의 visibleColumns useMemo 가 staticColumns 의 visible flag + 배열 순서를 사용 → 즉시 반영.
+    //   ⚠️ 사내 SCM_USR_TITLE_SET 영구 저장은 별도 SP 호출 의무 (Phase 후속) — 현재는 탭 수명 동안만 유지.
     applyColumnLayout: (sheetName, settings) => {
       set(state => {
+        // 표시 컬럼만 보관 — fetchStaticColumns 재조회 후 재적용 기준.
+        const layout = settings
+          .filter(s => s.visible)
+          .sort((a, b) => a.order - b.order)
+          .map((s, i) => ({ ...s, order: i + 1 }));
+        state.userColumnLayout = layout;
         const cur = state.staticColumns[sheetName];
         if (!cur || cur.length === 0) return;
-        const byCol = new Map(settings.map(s => [s.colNm, s]));
-        const next = cur.map(c => {
-          const s = byCol.get(c.colNm);
-          if (!s) return { ...c, visible: false };
-          return {
-            ...c,
-            visible: s.visible,
-            colWth: s.width,
-            cellColor: s.cellColor,
-            textColor: s.textColor,
-          };
-        });
-        // 팝업 순서대로 재정렬 — grid 는 배열 순서를 컬럼 순서로 사용. 미매칭 컬럼은 뒤로.
-        next.sort(
-          (a, b) =>
-            (byCol.get(a.colNm)?.order ?? Number.MAX_SAFE_INTEGER) -
-            (byCol.get(b.colNm)?.order ?? Number.MAX_SAFE_INTEGER)
-        );
-        state.staticColumns[sheetName] = next;
+        state.staticColumns[sheetName] = applyLayoutToColumns(cur, layout);
       });
     },
   }),

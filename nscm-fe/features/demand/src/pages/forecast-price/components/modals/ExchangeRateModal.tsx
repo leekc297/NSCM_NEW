@@ -2,7 +2,6 @@ import {
   AllowMerging,
   CellRange,
   CellType,
-  DataMap,
   type FlexGrid as FlexGridType,
   type FormatItemEventArgs,
   type GridPanel,
@@ -12,11 +11,11 @@ import { PeriodField } from 'features/master/src/components';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { apiClient } from '@foundation/apis';
-import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
+import { CELL_CONTROL_TYPE, CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
 import { CustomDialog, CustomDropdown, DataGrid, SearchArea } from '@shared/components';
 import { useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
-import { Button, FormItem } from '@shared/lges';
+import { Button, FormItem, ProgressIndicator } from '@shared/lges';
 import { Grid } from '@shared/mui';
 import { useMessageStore, useUIStore, useSessionStore } from '@shared/stores';
 
@@ -62,6 +61,20 @@ interface PivotRow {
   [yyyymmKey: string]: string | number;
 }
 
+// 서버 오류 본문에서 사람이 읽을 메시지를 뽑는다 (2026-08-13 신설).
+//   배경: foundation responseErrorInterceptor 는 403/500 을 reject 하지 않고 error.response 를
+//   그대로 돌려준다 (axios-interceptors.ts L53~55). 그래서 500 이 나도 catch 로 가지 않고 정상
+//   응답처럼 res 에 담겨 오는데, 기존 코드는 proc 결과 커서만 보고 없으면 고정 문구로 뭉갰다.
+//   즉 서버가 준 원인 문장을 화면이 손에 쥐고도 버려서, 원인 확인에 매번 DevTools 가 필요했다.
+const serverErrorText = (status: number, body: unknown): string => {
+  const bag = (body ?? {}) as Record<string, unknown>;
+  const nested = (bag.error ?? {}) as Record<string, unknown>;
+  for (const v of [bag.message, bag.error, bag.detail, bag.exception, nested.message]) {
+    if (typeof v === 'string' && v.trim()) return `[${status}] ${v.trim()}`;
+  }
+  return `[${status}]`;
+};
+
 // DMF0020 ExchangeRateModal (hook #108 No. 코너 정본) 구조/머지/코너 로직 1:1 —
 //   데이터 계약만 DMF0082 로 교체: SP = DMF0082_POPUP_GET_FUTUREPRICE_INFO
 //   (4 IN + 2 OUT cursor — AS-IS DMF0082_ForecastPrice.cs L3166. P1-7 DB 배선 SQL 등록 예정)
@@ -76,6 +89,11 @@ interface PivotRow {
 export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPeriod }: Props) => {
   const { t } = useTranslation();
   const setAlert = useMessageStore.getState().setAlert;
+  // CRUD 완료 알림 = 별도 팝업 대신 하단 중앙 토스트 (2026-08-13 사용자 지시).
+  //   진행 중 표시는 토스트가 아니라 아래 스피너 오버레이가 담당한다 — 공통 ToastMessage 는
+  //   스토어 고정 duration 으로 자동 닫히므로 오래 걸리는 작업 내내 붙잡아 둘 수 없고,
+  //   그걸 바꾸면 다른 화면의 토스트 동작까지 함께 바뀐다.
+  const setToast = useMessageStore.getState().setToast;
   const gridRef = useRef<FlexGridType<PivotRow>>(undefined);
   const [divisionId, setDivisionId] = useState(defaultDivision);
   const sesUserId = useSessionStore.getState().session.userId ?? '';
@@ -105,17 +123,9 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
     setInsertedRows([]);
   };
 
-  // Currency 콤보 (AS-IS dtCurrency = Data.Common(CURRENCY_LIST) — 공유 CMBO 'CurrencyList' 소비만)
-  const [currencyRows] = useTabComboQueries({ filters: ['CurrencyList'] });
-  const currencyMap = useMemo(() => {
-    const arr = (currencyRows ?? []) as Array<{ CODE?: string; NAME?: string }>;
-    if (arr.length === 0) return null;
-    return new DataMap(
-      arr.map(r => ({ CODE: String(r.CODE ?? ''), NAME: String(r.NAME ?? r.CODE ?? '') })),
-      'CODE',
-      'NAME'
-    );
-  }, [currencyRows]);
+  // Currency 콤보 (AS-IS dtCurrency = Data.Common(CURRENCY_LIST) — 공유 CMBO 'CurrencyList')는
+  //   여기서 직접 만들지 않는다. DataGrid wrapper 가 컬럼 메타(cellCboDataTp)를 보고 조회+부착까지
+  //   전담한다 — 아래 gridStaticColumns 주석 참조.
 
   // Division dropdown — 권한 기반 MyDivision combo (grid 와 동일하게 Division_id + Division name 표기).
   const [myDivisions] = useTabComboQueries({ filters: ['MyDivision'] });
@@ -182,14 +192,23 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
       const inner = (
         res.data?.result as { o_result_cursor?: { CODE?: string; RESULT_MSG?: string }[] }
       )?.o_result_cursor?.[0];
-      const ok = !!inner && String(inner.CODE) === '0';
-      await setAlert({
-        type: 'alert',
-        content: ok
-          ? t('MSG00454', '_환율 정보가 정상적으로 반영되었습니다.')
-          : t('MSG00455', '_환율 정보 반영에 실패했습니다.'),
-      });
-      if (ok) void refetch();
+      const ok = res.status < 400 && !!inner && String(inner.CODE) === '0';
+      // 실패 사유 우선순위: proc 결과 메시지 > 서버 오류 본문 > 고정 문구.
+      const failure =
+        inner?.RESULT_MSG ||
+        (res.status >= 400 ? serverErrorText(res.status, res.data) : '') ||
+        t('MSG00455', '_환율 정보 반영에 실패했습니다.');
+      // 완료는 별도 팝업(Alert) 대신 하단 중앙 토스트로 표기 후 사라진다 (2026-08-13 사용자 지시).
+      //   실패는 사용자가 원인을 읽고 확인해야 하므로 팝업을 유지한다.
+      if (ok) {
+        setToast({
+          message: t('MSG00454', '_환율 정보가 정상적으로 반영되었습니다.'),
+          type: 'success',
+        });
+        void refetch();
+      } else {
+        await setAlert({ type: 'alert', content: failure });
+      }
     } catch {
       await setAlert({ type: 'alert', content: t('MSG00455', '_환율 정보 반영에 실패했습니다.') });
     } finally {
@@ -274,7 +293,19 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
             canEdit && c.key !== 'DIVISION_ID'
               ? CELL_INPUT_EDIT_TYPE.MANDATORY_INSERT_ONLY
               : CELL_INPUT_EDIT_TYPE.SEARCH_ONLY,
-          uppercase: c.key !== 'DIVISION_ID', // AS-IS SaveData Trim().ToUpper() L386~387
+          // Currency/Unit 콤보 = wrapper 정식 경로로 위임 (2026-08-13, 형제 business-plan
+          //   ExchangeRateModal 과 동일 결론). DataGrid 는 cellCtrlObjTpCd=COMBO + cellCboDataTp 를
+          //   보고 콤보를 직접 조회해 new DataMap(rows,'CODE','NAME') 을 컬럼에 붙인다.
+          //   주의: 그 매핑 코드는 조건에 안 맞는 컬럼의 dataMap 을 항상 undefined 로 덮으므로
+          //   (DataGrid.tsx L494~497), 화면에서 col.dataMap 을 손으로 붙이면 컬럼 재적용 때마다
+          //   지워져 "드롭다운은 열리는데 선택이 안 먹는" 상태가 된다. 부착 주체를 하나로 둔다.
+          cellCtrlObjTpCd: c.key === 'DIVISION_ID' ? undefined : CELL_CONTROL_TYPE.COMBO,
+          cellCboDataTp: c.key === 'DIVISION_ID' ? undefined : 'CurrencyList',
+          // 금지: uppercase 를 켜지 않는다 — wrapper setHandleUppercase 가 cellEditEnded 에서
+          //   setCellData(r, c, v, coerce=true) 를 호출하는데, dataMap 이 붙은 컬럼에서 coerce 는
+          //   display→key 로 되돌리는 경로라 방금 고른 값을 덮어쓴다.
+          //   AS-IS SaveData Trim().ToUpper() 파리티는 cellEditEnded 에서 행 객체에 직접 적용.
+          uppercase: false,
         })
       ),
     [canEdit]
@@ -312,147 +343,161 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
 
   // ⭐ #70 — DataGrid `initialized` prop deprecated(wrapper 미호출) → useEffect + gridRef 로 이동.
   //   2단 column header(YYYY/MM) + 좌측 fixed 머지 + 동적 YYYY horizontal 머지 + Division/Currency cell 머지.
+  //
+  // 주의: 그리드가 준비될 때까지 재시도한다 (2026-08-13 — "기존 행을 수정했는데 저장 시 변경된
+  //   데이터가 없다고 뜬다" 의 원인). FlexGrid 는 조회 데이터가 도착한 뒤에 생성되는데 이 effect 는
+  //   그 전에 실행되고 끝난다. 예전처럼 `if (!g) return` 으로 포기하면 deps 가 다시 바뀌지 않는 한
+  //   cellEditEnded 가 영영 안 붙고, 그 상태에서 셀을 고치면 editsRef 가 비어 있어 Save 가
+  //   "수정한 내용이 없습니다" 로 막힌다. 셀이 빨간색으로 바뀌고 행에 M 이 붙는 것은 공통 wrapper
+  //   EditTracker 가 하는 일이라, 화면상으로는 수정이 반영된 것처럼 보여 더 헷갈린다.
+  //   (Insert 를 누르면 displayRows 가 바뀌어 그제서야 붙던 간헐 증상의 정체 — 형제 business-plan
+  //   ExchangeRateModal 이 2026-08-07 에 같은 사유로 재시도 방식으로 전환했다.)
   useEffect(() => {
-    const g = gridRef.current;
-    // ⭐ CustomDialog 는 open=false 라도 content 를 mount 한다. 숨겨진(host display:none) 상태의
-    //   Wijmo grid 는 panel 을 지연 초기화하므로 columnHeaders 가 null 일 수 있다 → guard 필수.
-    if (!g || !g.columnHeaders) return;
+    let raf = 0;
+    let cleanup: (() => void) | undefined;
 
-    // ⭐ 2단 헤더는 gridDynamicColumns 의 nested 그룹(년→월)이 네이티브로 구성 (수동 Row push /
-    //   formatItem 텍스트 치환 / 헤더 수평 머지 제거 — wrapper columnGroups 재적용에도 안정).
-    //   헤더 높이는 아래 별도 상시 정규화 효과(raf 루프)가 전담 — PriceBatchInputModal 검증 패턴.
+    const setup = (): boolean => {
+      const g = gridRef.current;
+      // ⭐ CustomDialog 는 open=false 라도 content 를 mount 한다. 숨겨진(host display:none) 상태의
+      //   Wijmo grid 는 panel 을 지연 초기화하므로 columnHeaders 가 null 일 수 있다 → guard 필수.
+      if (!g || !g.columnHeaders) return false;
 
-    const formatHandler = (_s: unknown, e: FormatItemEventArgs) => {
-      if (e.panel.cellType === CellType.ColumnHeader) {
-        e.cell.style.textAlign = 'center'; // 년/월/고정 헤더 중앙 정렬 (AS-IS)
-      }
-      // ⭐ No. 코너 헤더 라벨 (사용자 요구 2026-07-08) — rowHeader 순번 컬럼의 TopLeft 에 'No.' 표기
-      //   (선례 ContributeViewGrid setCellData 패턴 1:1. 머지는 ExchangeMerge TopLeft 분기가 전담.)
-      if (e.panel.cellType === CellType.TopLeft) {
-        if (e.panel.getCellData(0, 0, false) !== 'No.') e.panel.setCellData(0, 0, 'No.');
-        e.cell.style.textAlign = 'center';
-      }
-      // 노란색(wj-cell-editable)은 wrapper formatEditableColumns 가 컬럼 _inputEditType ×
-      // 행 EDIT_FLAG/CRUD_TYPE 로 자체 판정 — 수동 토글 금지 (재판정에 덮어써 누락되는 사고).
-    };
-    g.formatItem.addHandler(formatHandler);
+      // ⭐ 2단 헤더는 gridDynamicColumns 의 nested 그룹(년→월)이 네이티브로 구성 (수동 Row push /
+      //   formatItem 텍스트 치환 / 헤더 수평 머지 제거 — wrapper columnGroups 재적용에도 안정).
+      //   헤더 높이는 아래 별도 상시 정규화 효과(raf 루프)가 전담 — PriceBatchInputModal 검증 패턴.
 
-    // ⭐ Insert 행 Currency/Unit = CURRENCY_LIST 콤보 (AS-IS InsertRow SetCellTypeCombo L502~503).
-    //   편집 허용/차단은 wrapper defaultEditHandler(isEditableCell)가 전담 — 여기서는 dataMap
-    //   스왑만 담당, cellEditEnded 에서 전체 원복 (hook #59 §5-G — 기존 행 명칭표시 오염 방지)
-    const beginningEditHandler = (
-      s: FlexGridType<PivotRow>,
-      e: { cancel: boolean; row: number; col: number }
-    ) => {
-      const binding = s.columns[e.col]?.binding ?? '';
-      if (binding !== 'CURRENCY' && binding !== 'UNIT_CURRENCY') return;
-      const item = s.rows[e.row]?.dataItem as PivotRow | undefined;
-      if (item?.CRUD_TYPE === 'I') {
-        const col = s.columns[e.col];
-        if (col && currencyMap) col.dataMap = currencyMap;
-      }
-    };
-    g.beginningEdit.addHandler(beginningEditHandler);
-
-    // 변경 수집 (AS-IS 빨간색 변경 셀만 저장 L391~417 대응) + Currency/Unit dataMap 원복·대문자 정규화
-    const cellEditEndedHandler = (s: FlexGridType<PivotRow>, e: { row: number; col: number }) => {
-      const binding = s.columns[e.col]?.binding ?? '';
-      const item = s.rows[e.row]?.dataItem as PivotRow | undefined;
-      if (!item) return;
-      if (binding === 'CURRENCY' || binding === 'UNIT_CURRENCY') {
-        const col = s.columns[e.col];
-        if (col) col.dataMap = undefined as never; // 전체 원복 — 기존 행 명칭표시 오염 방지
-        item[binding] = String(item[binding] ?? '')
-          .trim()
-          .toUpperCase(); // AS-IS SaveData Trim().ToUpper() L386~387
-        return;
-      }
-      if (!/^M_\d{6}$/.test(binding)) return;
-      const raw = String(item[binding] ?? '').replace(/,/g, '');
-      const value = raw === '' ? 0 : Number(raw); // AS-IS 빈값 → '0' (L401~402)
-      if (!Number.isFinite(value)) return;
-      const ym = binding.slice(2);
-      const ymMap = editsRef.current.get(item) ?? new Map<string, number>();
-      ymMap.set(ym, value);
-      editsRef.current.set(item, ymMap);
-      setEditCount([...editsRef.current.values()].reduce((n, m) => n + m.size, 0));
-    };
-    g.cellEditEnded.addHandler(cellEditEndedHandler);
-
-    g.allowMerging = AllowMerging.All;
-    for (let i = 0; i < g.columns.length; i++) g.columns[i].allowMerging = true;
-    class ExchangeMerge extends MergeManager {
-      getMergedRange(panel: GridPanel, r: number, c: number, _clip = true): CellRange | null {
-        const col = panel.columns[c];
-        if (!col) return null;
-        const binding = col.binding ?? '';
-        // ⭐ No. 코너(TopLeft) — rowHeader(순번+상태) × 2단 헤더 전체를 가로/세로 단일 머지
-        //   (사용자 요구 2026-07-08. 라벨 'No.' 는 formatHandler 의 setCellData 가 전담.)
-        if (panel.cellType === CellType.TopLeft) {
-          return new CellRange(0, 0, panel.rows.length - 1, panel.columns.length - 1);
+      const formatHandler = (_s: unknown, e: FormatItemEventArgs) => {
+        if (e.panel.cellType === CellType.ColumnHeader) {
+          e.cell.style.textAlign = 'center'; // 년/월/고정 헤더 중앙 정렬 (AS-IS)
         }
-        if (panel.cellType === CellType.ColumnHeader) {
-          // 고정컬럼 = 2단 세로 span (년/월 그룹이 만든 2행 전체 높이 사용)
-          if (fixedBindings.includes(binding)) {
-            return new CellRange(0, c, panel.rows.length - 1, c);
+        // ⭐ No. 코너 헤더 라벨 (사용자 요구 2026-07-08) — rowHeader 순번 컬럼의 TopLeft 에 'No.' 표기
+        //   (선례 ContributeViewGrid setCellData 패턴 1:1. 머지는 ExchangeMerge TopLeft 분기가 전담.)
+        if (e.panel.cellType === CellType.TopLeft) {
+          if (e.panel.getCellData(0, 0, false) !== 'No.') e.panel.setCellData(0, 0, 'No.');
+          e.cell.style.textAlign = 'center';
+        }
+        // 노란색(wj-cell-editable)은 wrapper formatEditableColumns 가 컬럼 _inputEditType ×
+        // 행 EDIT_FLAG/CRUD_TYPE 로 자체 판정 — 수동 토글 금지 (재판정에 덮어써 누락되는 사고).
+      };
+      g.formatItem.addHandler(formatHandler);
+
+      // Insert 행 Currency/Unit = CURRENCY_LIST 콤보 (AS-IS InsertRow SetCellTypeCombo L502~503).
+      //   dataMap 부착은 wrapper 가 컬럼 메타로 전담(gridStaticColumns 주석) — 화면에서 수동
+      //   스왑/원복하지 않는다. 편집 허용/차단은 wrapper defaultEditHandler(isEditableCell)가
+      //   컬럼 inputTpCd(IM = Insert 행 전용) × 행 CRUD_TYPE 으로 판정한다.
+
+      // 변경 수집 (AS-IS 빨간색 변경 셀만 저장 L391~417 대응) + Currency/Unit dataMap 원복·대문자 정규화
+      const cellEditEndedHandler = (s: FlexGridType<PivotRow>, e: { row: number; col: number }) => {
+        const binding = s.columns[e.col]?.binding ?? '';
+        const item = s.rows[e.row]?.dataItem as PivotRow | undefined;
+        if (!item) return;
+        if (binding === 'CURRENCY' || binding === 'UNIT_CURRENCY') {
+          // 금지: 여기서 col.dataMap 을 원복하지 않는다 — 상시 부착이 드롭다운 동작의 전제.
+          //   값은 행 객체에 직접 쓴다 (setCellData 의 coerce 경로를 타지 않기 위함).
+          item[binding] = String(item[binding] ?? '')
+            .trim()
+            .toUpperCase(); // AS-IS SaveData Trim().ToUpper() L386~387
+          return;
+        }
+        if (!/^M_\d{6}$/.test(binding)) return;
+        const raw = String(item[binding] ?? '').replace(/,/g, '');
+        const value = raw === '' ? 0 : Number(raw); // AS-IS 빈값 → '0' (L401~402)
+        if (!Number.isFinite(value)) return;
+        const ym = binding.slice(2);
+        const ymMap = editsRef.current.get(item) ?? new Map<string, number>();
+        ymMap.set(ym, value);
+        editsRef.current.set(item, ymMap);
+        setEditCount([...editsRef.current.values()].reduce((n, m) => n + m.size, 0));
+      };
+      g.cellEditEnded.addHandler(cellEditEndedHandler);
+
+      g.allowMerging = AllowMerging.All;
+      for (let i = 0; i < g.columns.length; i++) g.columns[i].allowMerging = true;
+      class ExchangeMerge extends MergeManager {
+        getMergedRange(panel: GridPanel, r: number, c: number, _clip = true): CellRange | null {
+          const col = panel.columns[c];
+          if (!col) return null;
+          const binding = col.binding ?? '';
+          // ⭐ No. 코너(TopLeft) — rowHeader(순번+상태) × 2단 헤더 전체를 가로/세로 단일 머지
+          //   (사용자 요구 2026-07-08. 라벨 'No.' 는 formatHandler 의 setCellData 가 전담.)
+          if (panel.cellType === CellType.TopLeft) {
+            return new CellRange(0, 0, panel.rows.length - 1, panel.columns.length - 1);
           }
-          // ⭐ 동적 1단(년도) 수평 머지 (사용자 요구 2026-07-08) — 커스텀 MergeManager 설치 시
-          //   nested 그룹의 네이티브 span 이 무효화되므로 수동 머지 의무 (형제 PriceBatchInputModal
-          //   BatchMergeManager 동일 패턴). binding 'M_yyyymm' 의 년도(slice 2..6)가 같은 연속
-          //   구간을 r=0 에서 span. r=1(월 leaf)은 단일 셀.
-          if (binding.startsWith('M_') && r === 0) {
-            const yearOf = (b: string): string => (b.startsWith('M_') ? b.slice(2, 6) : '');
-            const y = yearOf(binding);
-            let c1 = c,
-              c2 = c;
-            while (c1 > 0 && yearOf(panel.columns[c1 - 1]?.binding ?? '') === y) c1--;
-            while (
-              c2 < panel.columns.length - 1 &&
-              yearOf(panel.columns[c2 + 1]?.binding ?? '') === y
-            )
-              c2++;
-            if (c1 === c2) return null;
-            return new CellRange(0, c1, 0, c2);
+          if (panel.cellType === CellType.ColumnHeader) {
+            // 고정컬럼 = 2단 세로 span (년/월 그룹이 만든 2행 전체 높이 사용)
+            if (fixedBindings.includes(binding)) {
+              return new CellRange(0, c, panel.rows.length - 1, c);
+            }
+            // ⭐ 동적 1단(년도) 수평 머지 (사용자 요구 2026-07-08) — 커스텀 MergeManager 설치 시
+            //   nested 그룹의 네이티브 span 이 무효화되므로 수동 머지 의무 (형제 PriceBatchInputModal
+            //   BatchMergeManager 동일 패턴). binding 'M_yyyymm' 의 년도(slice 2..6)가 같은 연속
+            //   구간을 r=0 에서 span. r=1(월 leaf)은 단일 셀.
+            if (binding.startsWith('M_') && r === 0) {
+              const yearOf = (b: string): string => (b.startsWith('M_') ? b.slice(2, 6) : '');
+              const y = yearOf(binding);
+              let c1 = c,
+                c2 = c;
+              while (c1 > 0 && yearOf(panel.columns[c1 - 1]?.binding ?? '') === y) c1--;
+              while (
+                c2 < panel.columns.length - 1 &&
+                yearOf(panel.columns[c2 + 1]?.binding ?? '') === y
+              )
+                c2++;
+              if (c1 === c2) return null;
+              return new CellRange(0, c1, 0, c2);
+            }
+            return null;
+          }
+          if (panel.cellType === CellType.Cell) {
+            if (binding === 'DIVISION_ID' || binding === 'CURRENCY') {
+              const view = panel.rows;
+              const ri = (i: number): PivotRow | undefined =>
+                view[i]?.dataItem as PivotRow | undefined;
+              if (!ri(r)) return null;
+              const sameRow = (a: number, b: number): boolean => {
+                const ra = ri(a);
+                const rb = ri(b);
+                if (!ra || !rb) return false;
+                if (binding === 'DIVISION_ID') return ra.DIVISION_ID === rb.DIVISION_ID;
+                return ra.DIVISION_ID === rb.DIVISION_ID && ra.CURRENCY === rb.CURRENCY;
+              };
+              let r1 = r,
+                r2 = r;
+              while (r1 > 0 && sameRow(r1 - 1, r)) r1--;
+              while (r2 < view.length - 1 && sameRow(r2 + 1, r)) r2++;
+              if (r1 === r2) return null;
+              return new CellRange(r1, c, r2, c);
+            }
           }
           return null;
         }
-        if (panel.cellType === CellType.Cell) {
-          if (binding === 'DIVISION_ID' || binding === 'CURRENCY') {
-            const view = panel.rows;
-            const ri = (i: number): PivotRow | undefined =>
-              view[i]?.dataItem as PivotRow | undefined;
-            if (!ri(r)) return null;
-            const sameRow = (a: number, b: number): boolean => {
-              const ra = ri(a);
-              const rb = ri(b);
-              if (!ra || !rb) return false;
-              if (binding === 'DIVISION_ID') return ra.DIVISION_ID === rb.DIVISION_ID;
-              return ra.DIVISION_ID === rb.DIVISION_ID && ra.CURRENCY === rb.CURRENCY;
-            };
-            let r1 = r,
-              r2 = r;
-            while (r1 > 0 && sameRow(r1 - 1, r)) r1--;
-            while (r2 < view.length - 1 && sameRow(r2 + 1, r)) r2++;
-            if (r1 === r2) return null;
-            return new CellRange(r1, c, r2, c);
-          }
-        }
-        return null;
       }
-    }
-    g.mergeManager = new ExchangeMerge();
-    g.invalidate(true);
+      g.mergeManager = new ExchangeMerge();
+      g.invalidate(true);
+
+      cleanup = () => {
+        try {
+          g.formatItem?.removeHandler(formatHandler);
+          g.cellEditEnded?.removeHandler(cellEditEndedHandler);
+        } catch {
+          /* unmount race */
+        }
+      };
+      return true;
+    };
+
+    // 그리드가 아직 없으면 다음 프레임에 다시 시도 — 붙을 때까지 포기하지 않는다.
+    const trySetup = () => {
+      if (setup()) return;
+      raf = requestAnimationFrame(trySetup);
+    };
+    trySetup();
 
     return () => {
-      try {
-        g.formatItem?.removeHandler(formatHandler);
-        g.beginningEdit?.removeHandler(beginningEditHandler);
-        g.cellEditEnded?.removeHandler(cellEditEndedHandler);
-      } catch {
-        /* unmount race */
-      }
+      cancelAnimationFrame(raf);
+      cleanup?.();
     };
-  }, [open, displayRows, ymKeys, fixedBindings, canEdit, curYm, currencyMap]);
+  }, [open, displayRows, ymKeys, fixedBindings, canEdit, curYm]);
 
   // ⭐⭐ 헤더 총높이 48px 상시 정규화 (2단=24×2 — "2단 기준으로 줄여서", 사용자 요구 2026-07-08).
   //   1회 설정/updatedLayout 등록만으로는 부족 — CustomDialog open 애니메이션 중 wijmo 가 헤더를
@@ -568,7 +613,42 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
       void setAlert({ type: 'alert', content: t(MSG.NO_CHANGES, '_수정한 내용이 없습니다.') });
       return;
     }
-    // (3) Price 값 필수 — 전부 0/빈값이면 차단 (AS-IS L421~430 [EXCHANGE_PRICE])
+    // (3) 신규 행 키 중복 차단 (2026-08-13) — SP 가 "중복된 데이터가 존재 합니다." 로 되던지는 건을
+    //   저장 전에 잡아 **어떤 키가 걸렸는지** 알려준다. SP 는 (Division, YYYYMMDD, Currency, Unit)
+    //   기준으로 판정하므로 여기서도 월 단위까지 포함해 같은 기준으로 본다.
+    //
+    //   주의: 대조 대상은 화면에 보이는 행(pivotRows)이 아니라 SP 원본 o_rc1 전체다.
+    //   이 그리드는 CURRENCY='KRW' 행만 표시하므로(위 filteredRows — 2026-07-07 사용자 요구),
+    //   예를 들어 USD/KRW 조합은 DB 에 있어도 화면에 안 보인다. "화면엔 중복이 없는데 SP 는 중복이라
+    //   한다"의 정체가 이 숨은 행이다. 보이는 행만 대조하면 같은 함정을 그대로 반복한다.
+    const dupKey = (div: string, ym: string, cur: string, unit: string): string =>
+      [div, ym, cur.trim().toUpperCase(), unit.trim().toUpperCase()].join('|');
+    const existingKeys = new Set(
+      ((data?.o_rc1 ?? []) as ExchangeRow[]).map(r =>
+        dupKey(
+          String(r.DIVISION_ID ?? ''),
+          String(r.YYYYMM ?? ''),
+          String(r.CURRENCY ?? ''),
+          String(r.UNIT_CURRENCY ?? '')
+        )
+      )
+    );
+    for (const en of entries) {
+      if (en.row.CRUD_TYPE !== 'I') continue; // 기존 행은 UPDATE — 중복 대상 아님
+      const key = dupKey(en.row.DIVISION_ID, en.ym, en.row.CURRENCY, en.row.UNIT_CURRENCY);
+      if (existingKeys.has(key)) {
+        void setAlert({
+          type: 'alert',
+          content: t(MSG.DUP_SAVE_ERROR, '_저장시 중복 오류가 발생하였습니다. {0}').replace(
+            '{0}',
+            ` [${en.row.DIVISION_ID} / ${en.ym} / ${en.row.CURRENCY} / ${en.row.UNIT_CURRENCY}]`
+          ),
+        });
+        return;
+      }
+      existingKeys.add(key); // Insert 행끼리의 중복도 같은 루프에서 걸린다
+    }
+    // (4) Price 값 필수 — 전부 0/빈값이면 차단 (AS-IS L421~430 [EXCHANGE_PRICE])
     if (entries.every(en => !en.value)) {
       void setAlert({
         type: 'alert',
@@ -603,17 +683,22 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
       )?.o_result_cursor?.[0];
       const ok = res.status < 400 && !!inner && String(inner.CODE) === '0';
       if (!ok) {
-        const reason = inner?.EVENT || inner?.MSG;
+        // 실패 사유 우선순위: SP 검증 메시지 > 서버 오류 본문(500 등) > 고정 문구.
+        const reason =
+          inner?.EVENT ||
+          inner?.MSG ||
+          (res.status >= 400 ? serverErrorText(res.status, res.data) : '');
         void setAlert({
           type: 'alert',
           content: reason || t(MSG.SAVE_ERROR, '_저장 중 오류가 발생했습니다.'),
         });
         return;
       }
-      // AS-IS MSG00456 "Sales Price Recalculation is complete." → 재조회 (L478~480)
-      await setAlert({
-        type: 'alert',
-        content: t(MSG.PRICE_RECALC_DONE, '_Sales Price Recalculation is complete.'),
+      // 저장 완료 = 별도 팝업 대신 하단 중앙 토스트 (2026-08-13 사용자 지시).
+      //   AS-IS MSG00456 "Sales Price Recalculation is complete." 문구는 그대로 승계.
+      setToast({
+        message: t(MSG.PRICE_RECALC_DONE, '_Sales Price Recalculation is complete.'),
+        type: 'success',
       });
       clearEdits();
       void refetch?.();
@@ -633,6 +718,13 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
       size={1200}
       handleClose={modalClose}
       disableButtonCancel
+      // 필수: Insert 행 Currency/Unit 셀 콤보 선택이 먹히게 하는 조건 (2026-07-30 이 화면 실측으로
+      //   확정된 원인 — CustomDialog L44~50 주석의 근거가 이 모달이다).
+      //   Wijmo 드롭다운 ListBox 는 MuiDialog-container 밖에 append 되고, MUI FocusTrap 이 포커스를
+      //   컨테이너로 되돌리는 순간 Wijmo 가 포커스 상실로 finishEditing() → 에디터(_edt)를 파괴한다.
+      //   그 뒤 항목을 클릭하면 finishEditing() 이 _edt null 로 조기 반환해 값이 조용히 버려지고
+      //   리스트만 닫힌다. 주의: 그리드/dataMap 쪽을 고쳐도 이 prop 없이는 동작하지 않는다.
+      disableEnforceFocus
       customHeaderTitle={
         <div className='headerContainer'>
           <div className='headerDot' />
@@ -689,6 +781,11 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
               allowMerging={AllowMerging.All}
             />
           </div>
+          {/* 진행 스피너 — 다른 화면의 조회 로딩(MDIContainer .spinner)과 같은 회색 딤 + 원형 스피너.
+              모달 안에 따로 두는 이유: 전역 표시는 앱 셸에 있어 다이얼로그 뒤에 깔려 안 보인다.
+              placement='parent' = commonBgDim 배경의 백드롭을 부모(.dialogContentWrapper) 기준으로
+              덮는다. 덮는 동안 그리드/버튼 클릭도 함께 막힌다 (중복 실행 방지). */}
+          <ProgressIndicator shape='circular' placement='parent' open={ifRunning || saving} />
           <div className={styles.buttonWrapper}>
             {hasButton('IF') && divisionId.startsWith('40') && (
               <Button

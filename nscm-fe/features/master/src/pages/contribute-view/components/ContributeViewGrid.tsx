@@ -7,7 +7,7 @@ import {
   type FlexGrid as FlexGridType,
 } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { type MutableRefObject, useMemo } from 'react';
+import { type MutableRefObject, useMemo, useRef } from 'react';
 
 import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import type { FlexGridColumnConfig } from '@foundation/models';
@@ -83,18 +83,23 @@ export const ContributeViewGrid = ({ gridRef, gridFilterRef, data }: Props) => {
   // 즉시 반영 (룰 #65 ui-category-setup-column-meta). 하드코딩 0.
   // ⚠️ hook #70 P1 — `?? []` fallback 금지 (매 render 새 array → re-render loop).
   //    store init 에 `[SHEETS.MAIN]: []` 명시 → undefined 안 됨.
-  const staticColumnsAll = useContributeViewStore(s => s.staticColumns[SHEETS.MAIN]);
-  const visibleBaseColumns = useContributeViewStore(s => s.visibleBaseColumns);
+  // ⭐ ColumnLayoutModal OK 결과(표시/순서/폭/색)는 store 의 applyColumnLayout 이 이미 반영해 둔다.
+  //   화면에서 별도 override 하지 않고 그대로 사용한다 (구 visibleBaseColumns 경로 제거).
+  const staticColumns = useContributeViewStore(s => s.staticColumns[SHEETS.MAIN]);
 
-  // ColumnSettingModal OK 결과 (visibleBaseColumns) 반영 — display flag 동적 override.
-  // 빈배열 = popup 사용 전 (전체 표시).
-  const staticColumns = useMemo(() => {
-    if (!staticColumnsAll || visibleBaseColumns.length === 0) return staticColumnsAll;
-    return staticColumnsAll.map(c => ({
-      ...c,
-      display: visibleBaseColumns.includes(c.colNm),
-    }));
-  }, [staticColumnsAll, visibleBaseColumns]);
+  // ⭐ 컬럼 개인화 색 (ColumnLayoutModal 저장값) — binding → {cell, text}.
+  //   공용 DataGrid 는 colWth/display 만 옮기고 색은 안 넘기므로 formatItem 이 직접 적용한다
+  //   (mkt-fcst/forecast-price 선례 동일). ref 로 최신 맵 전달 — 핸들러 재바인딩 무관.
+  const colorMetaRef = useRef<Map<string, { cell: string; text: string }>>(new Map());
+  colorMetaRef.current = useMemo(() => {
+    const m = new Map<string, { cell: string; text: string }>();
+    (staticColumns ?? []).forEach(c => {
+      if (c.cellColor || c.textColor) {
+        m.set(c.colNm, { cell: c.cellColor ?? '', text: c.textColor ?? '' });
+      }
+    });
+    return m;
+  }, [staticColumns]);
 
   // AS-IS InitSpread: DMF0043_GET_SALES_LIST_SPREAD_TITLE — 동적 컬럼 (지역×Type) 메타 fetch
   const { data: titleData } = useTabProcQuery({
@@ -112,8 +117,15 @@ export const ContributeViewGrid = ({ gridRef, gridFilterRef, data }: Props) => {
   );
 
   // SP titleData 의 dynamic 컬럼만 build (BASE 9 = admin staticColumns 가 처리)
+  //   ⚠️ isBase 판정용 이름 집합 — 비표시 컬럼도 BASE 로 남아야 동적 컬럼으로 새어나가지 않는다.
+  //     개인화는 표시/순서만 바꾸고 컬럼 membership 은 그대로라 staticColumns 를 그대로 쓴다.
   const columnMetas = useMemo<ColumnMeta[]>(
-    () => buildColumnMeta(titleRows, staticColumnsAll?.map(col => col.colNm) as string[]),
+    () =>
+      buildColumnMeta(
+        titleRows,
+        (staticColumns ?? []).map(col => col.colNm)
+      ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [titleRows]
   );
 
@@ -133,6 +145,23 @@ export const ContributeViewGrid = ({ gridRef, gridFilterRef, data }: Props) => {
 
     if (e.panel.cellType === CellType.TopLeft) {
       e.panel.setCellData(0, 0, 'No');
+      return;
+    }
+
+    // ⭐ 개인화 색 (ColumnLayoutModal 저장값) — 조회 전용 그리드라 편집 하이라이트와 경합 없음.
+    //   미지정 시 removeProperty 필수 — Wijmo 셀 재활용으로 이전 컬럼 색이 남는다.
+    if (e.panel.cellType === CellType.Cell) {
+      const personalColor = colorMetaRef.current.get(s.columns[e.col]?.binding ?? '');
+      if (personalColor?.cell) {
+        e.cell.style.setProperty('background-color', personalColor.cell, 'important');
+      } else {
+        e.cell.style.removeProperty('background-color');
+      }
+      if (personalColor?.text) {
+        e.cell.style.setProperty('color', personalColor.text, 'important');
+      } else {
+        e.cell.style.removeProperty('color');
+      }
     }
   };
 
@@ -221,7 +250,11 @@ export const ContributeViewGrid = ({ gridRef, gridFilterRef, data }: Props) => {
       gridFilterRef={gridFilterRef}
       staticColumns={staticColumns}
       dynamicColumns={dynamicColumns}
-      frozenColumns={staticColumns?.length ? staticColumns?.length - 1 : 0}
+      // ⭐ 2026-08-11 — frozenColumns 를 화면에서 지정하지 않는다(사용자 요구). 공용 DataGrid wrapper 가
+      //   admin SHEET_COLUMNS 의 Fixed(=_fixed) 마지막 컬럼까지 자동 고정한다
+      //   (`DataGrid.tsx` findLastIndex(_fixed)+1, display=false 컬럼 제외 후 계산이라 인덱스도 안전).
+      //   → 고정 범위 변경은 코드 수정 없이 admin 컬럼관리에서 Fixed 를 옮기면 된다.
+      //   현재 등록: DM_BIZ_TYPE(Biz) = Y → 년월 ~ Biz 고정.
       itemsSource={data}
       isReadOnly
       allowMerging={AllowMerging.All}

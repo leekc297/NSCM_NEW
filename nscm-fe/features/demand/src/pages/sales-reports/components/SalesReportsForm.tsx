@@ -45,7 +45,7 @@ export const SalesReportsForm = ({
   return (
     <SearchArea
       isHidden={!openSearchArea}
-      searchButtonLabel={t('LBL00691', '_Search')}
+      searchButtonLabel={t('LBL00112', '_Search')}
       onSearch={onSearch}
       conditions={
         <>

@@ -71,10 +71,12 @@ export const applyMeasureSwitch = (
     rec.ITEM_ID = ''; // 모달 전용 전환 + clear (L4870)
     rec.ITEM_CLASS_NAME = '';
     rec.NICK_NAME = '';
+    rec.DEPT_ID = ''; // Catch_Up 전환 시 팀 초기화+잠금 (AS-IS L4950~4951 — CC-12)
   } else {
     rec.FCST_TYPE = INSERT_DEFAULT_FCST_TYPE; // ETC 고정 (SalesAmt_LOC = 기타매출 제약)
     rec.DOM_EXP = '';
     rec.INCOTERMS = '';
+    rec.DEPT_ID = ''; // 복귀 시에도 초기화 후 재입력 (AS-IS L5004~5008 — CC-20)
   }
   // 기존 기간 입력 전체 초기화 (cutoff 스왑으로 무효화된 입력 제거)
   dynBindings.forEach(b => {

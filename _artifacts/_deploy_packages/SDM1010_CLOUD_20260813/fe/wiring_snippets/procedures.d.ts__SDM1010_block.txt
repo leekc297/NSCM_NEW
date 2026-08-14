@@ -1,0 +1,271 @@
+  /**
+   * ProjectReg — SDM1010 (Project Registration · 프로젝트 등록)
+   *
+   * ⭐ 2026-08-13 신본 PKG_SDM1010(외부 전달 정본 — KTJ 2026.08.06/08.12) 계약으로 전면 재작성.
+   *   원천 명세: scratchpad `PKG_SDM1010_NEW_CONTRACT.md` (15 SP 전량 — 커서 컬럼 순서 그대로 등재).
+   * SHEETS (SEARCH — 커서명 'data'):
+   * - `TAB1`       (§1 GET_TAB1_PJT_REG — 본인 MGMT_USER_ID 필터, 조회조건 없음. 35컬럼)
+   * - `TAB2`       (§5 GET_TAB2_PJT_LIST — 콤보 'ALL' 센티널 + 'YYYY-MM-DD' 기간. 36컬럼)
+   * - `POP1_TREE`  (§6 GET_POP_USER_ORG — 조직도. UPPER_DEPT_ID 트리)
+   * - `POP1_GRID1` (§7 GET_POP_USER_BY_DEPT — deptId 有=부서 모드 / 無=userInfo 부분일치·NULL=0행)
+   * - `POP1_GRID2` (§8 GET_POP_PJT_AUTH_WRITE — 입력(WRITE)·CONFIRM 사용자)
+   * - `POP1_GRID3` (§9 GET_POP_PJT_AUTH_READ — 조회(READ)·CONFIRM 사용자, §8 동형)
+   * - `POP1_GRID4` (§10 GET_POP_PJT_AUTH_REQ — 비CONFIRM(REQUEST/REJECT/NULL) 요청·이력)
+   * - `POP2_GRID5` (§14 GET_POP_MY_WORK — SAMPLE_*_DATE 는 서버 placeholder 하드코딩)
+   * - `period`     (§15 GET_PERIOD — TAB2 등록완료일 기본값. YMD_* 'YYYYMMDD' 문자열)
+   * SAVE / REQ / CANCEL / 모달 SAVE·REJECT (§2·§3·§4·§11·§12·§13) 는 **행별 단건** apiClient.post 직접
+   * (`features/sdm/src/pages/project-reg/utils/project-reg.api.ts` — 결과커서 CODE '0'+EVENT 건수 판정 의무)
+   * — 타입 미등재 (DMF0042/0044 SAVE 계열 관행 동일).
+   * sesUserId/mnuId 는 BE 세션 자동주입 — request 미포함. 미사용 IN 파라미터도 시그니처
+   * 충족을 위해 request 에 포함한다 (sesDivisionId 등 — PROC_M COL_NM 등재분, §18-8).
+   * 날짜 컬럼(SOP_DATE/REG_REQ_DATE/REG_COMP_DATE/SAMPLE_*)은 Oracle DATE 원형 → BE ISO 직렬화 수신.
+   */
+  SDM1010: {
+    TAB1: {
+      request: {
+        sesDivisionId: string; // 1 P_SES_DIVISION_ID (SP 내 주석 처리 — 시그니처 충족용 '')
+        userGroup: string; // 4 P_SES_USER_GR_ID (본문 미사용 — 시그니처 충족용 '')
+      };
+      response: {
+        // §1 O_CURSOR 35컬럼 — 순서 그대로. ⚠ `DPJT_ATUH_*` 오타 alias 가 패키지 정본 (§18-10)
+        data: {
+          DPJT_KEY: string;
+          DPJT_CODE: string;
+          DPJT_SEQ: string | number;
+          DIVISION_ID: string;
+          DIVISION_NAME: string;
+          DPJT_CLASS: string;
+          DPJT_CLASS_NAME: string;
+          END_CUSTOMER: string;
+          END_CUSTOMER_NAME: string;
+          DPJT_NAME: string;
+          CELL_TYPE: string;
+          CELL_TYPE_NAME: string;
+          STACK_METHOD: string;
+          STACK_METHOD_NAME: string;
+          BIZ_TYPE: string;
+          BIZ_TYPE_NAME: string;
+          SOP_DATE: string;
+          SOP_PLANT_ID: string;
+          SOP_PLANT_NAME: string;
+          DPJT_ATUH_REG_STR: string; // 리터럴 '권한등록' (링크 셀 텍스트)
+          DPJT_ATUH_REG_STATUS: string; // 파생 WRITING/COMPLETE
+          DPJT_ATUH_REG_STATUS_NAME: string;
+          DPJT_ATUH_REG_STATUS_COLOR_TYPE: string; // Gray/Amber/Green/Red (TAG 색 데이터 주도)
+          DEPT_ID: string;
+          DEPT_NAME: string;
+          DEPT_NAME_KO: string;
+          DEPT_NAME_EN: string;
+          DEPT_NAME_CN: string;
+          MGMT_USER_ID: string;
+          USER_NAME: string;
+          USER_NAME_EN: string;
+          DPJT_REG_STATUS: string; // DRAFT/WRITING/WAITING/COMPLETE/REJECT
+          DPJT_REG_STATUS_NAME: string;
+          DPJT_REG_STATUS_COLOR_TYPE: string;
+          REG_REQ_DATE: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    TAB2: {
+      request: {
+        divisionId: string; // 1 P_DIVISION_ID ('ALL' 허용)
+        endCustomer: string; // 2 P_END_CUSTOMER (= 값 OR 'ALL' — §5 등호 매칭·콤마 다중 불가)
+        dpjtAuthType: string; // 3 P_DPJT_AUTH_TYPE (ADMIN/WRITE/READ or 'ALL')
+        dpjtRegStatus: string; // 4 P_DPJT_REG_STATUS (or 'ALL')
+        regCompDateFr: string; // 5 P_REG_COMP_DATE_FR ('YYYY-MM-DD' — 둘 다 채우거나 둘 다 빈 값)
+        regCompDateTo: string; // 6 P_REG_COMP_DATE_TO ('YYYY-MM-DD' — 한쪽만 NULL=0행 §5)
+      };
+      response: {
+        // §5 O_CURSOR 36컬럼 — 순서 그대로 (조회 전용)
+        data: {
+          DPJT_KEY: string;
+          DPJT_CODE: string;
+          DPJT_SEQ: string | number;
+          MY_WORK: string; // 리터럴 'My Work' (링크 셀 텍스트)
+          DIVISION_ID: string;
+          DIVISION_NAME: string;
+          DPJT_CLASS: string;
+          DPJT_CLASS_NAME: string;
+          END_CUSTOMER: string;
+          END_CUSTOMER_NAME: string;
+          DPJT_NAME: string;
+          CELL_TYPE: string;
+          CELL_TYPE_NAME: string;
+          STACK_METHOD: string;
+          STACK_METHOD_NAME: string;
+          BIZ_TYPE: string;
+          BIZ_TYPE_NAME: string;
+          SOP_DATE: string;
+          SOP_PLANT_ID: string;
+          SOP_PLANT_NAME: string;
+          MGMT_USER_ID: string;
+          USER_NAME: string;
+          USER_NAME_EN: string;
+          DEPT_ID: string;
+          DEPT_NAME: string;
+          DEPT_NAME_KO: string;
+          DEPT_NAME_EN: string;
+          DEPT_NAME_CN: string;
+          DPJT_AUTH_TYPE: string; // ADMIN/WRITE/READ (파생 'NONE' — §5 CASE)
+          DPJT_AUTH_TYPE_NAME: string;
+          DPJT_REG_STATUS: string;
+          DPJT_REG_STATUS_NAME: string;
+          DPJT_REG_STATUS_COLOR_TYPE: string;
+          REG_COMP_DATE: string;
+          DPJT_DEVELOP_STATUS: string;
+          DPJT_DEVELOP_STATUS_NAME: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    POP1_TREE: {
+      request: {
+        sesDivisionId: string; // 1 P_SES_DIVISION_ID (본문 미사용 — 시그니처 충족용 '')
+      };
+      response: {
+        // §6 O_CURSOR 6컬럼 — 트리 빌더는 UPPER_DEPT_ID 로 부모 연결
+        data: {
+          LEVEL_NO: string | number;
+          DEPT_ID: string;
+          DEPT_NAME: string; // = DEPT_NAME_KO
+          UPPER_DEPT_ID: string;
+          USER_COUNT: string | number;
+          ORGN: string; // LPAD 들여쓰기 + DEPT_ID (표시용)
+          [key: string]: string | number;
+        };
+      };
+    };
+    POP1_GRID1: {
+      request: {
+        userInfo: string; // 1 P_USER_INFO (UPPER(ID||NAME) LIKE 부분일치 — NULL=0행 §7)
+        deptId: string; // 2 P_DEPT_ID (有=부서 모드·userInfo 무시 / 無=검색 모드)
+        sesDivisionId: string; // 3 P_SES_DIVISION_ID (미사용 — 시그니처 충족용 '')
+      };
+      response: {
+        // §7 O_CURSOR 6컬럼 (두 분기 동일)
+        data: {
+          USER_ID: string;
+          USER_NAME: string;
+          JOB_CODE: string;
+          JOB_NAME: string;
+          DEPT_ID: string;
+          DEPT_NAME: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    POP1_GRID2: {
+      request: {
+        dpjtKey: string; // 1 P_DPJT_KEY
+        sesDivisionId: string; // 2 P_SES_DIVISION_ID (미사용 — 시그니처 충족용 '')
+      };
+      response: {
+        // §8 O_CURSOR 7컬럼 — WRITE·CONFIRM 사용자
+        data: {
+          DPJT_KEY: string;
+          USER_ID: string;
+          USER_NAME: string;
+          JOB_CODE: string;
+          JOB_NAME: string;
+          DEPT_ID: string;
+          DEPT_NAME: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    POP1_GRID3: {
+      request: {
+        dpjtKey: string; // 1 P_DPJT_KEY
+        sesDivisionId: string; // 2 P_SES_DIVISION_ID (미사용 — 시그니처 충족용 '')
+      };
+      response: {
+        // §9 O_CURSOR 7컬럼 — READ·CONFIRM 사용자 (§8 동형)
+        data: {
+          DPJT_KEY: string;
+          USER_ID: string;
+          USER_NAME: string;
+          JOB_CODE: string;
+          JOB_NAME: string;
+          DEPT_ID: string;
+          DEPT_NAME: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    POP1_GRID4: {
+      request: {
+        dpjtKey: string; // 1 P_DPJT_KEY
+        sesDivisionId: string; // 2 P_SES_DIVISION_ID (미사용 — 시그니처 충족용 '')
+      };
+      response: {
+        // §10 O_CURSOR 12컬럼 — 비CONFIRM(REQUEST + REJECT·NULL 이력) 행. 처리 버튼은
+        //   DPJT_AUTH_STATUS='REQUEST' 행만 활성 (FE 렌더 — PROCESS 는 SP '' 리터럴)
+        data: {
+          DPJT_AUTH_STATUS: string; // REQUEST/REJECT/NULL('')
+          DPJT_AUTH_STATUS_NAME: string;
+          DPJT_KEY: string;
+          USER_ID: string;
+          USER_NAME: string;
+          JOB_CODE: string;
+          JOB_NAME: string;
+          DEPT_ID: string;
+          DEPT_NAME: string;
+          DPJT_AUTH_TYPE: string; // WRITE/READ (요청 권한)
+          DPJT_AUTH_TYPE_NAME: string;
+          PROCESS: string; // '' 리터럴 — 처리 버튼 렌더 placeholder (메타 ATTRIBUTE1='REQ_ACTION')
+          [key: string]: string | number;
+        };
+      };
+    };
+    POP2_GRID5: {
+      request: {
+        divisionId: string; // 1 P_DIVISION_ID (SP 필터 주석 처리 — 시그니처 충족용 '')
+        dpjtKey: string; // 2 P_DPJT_KEY (단건 필터)
+      };
+      response: {
+        // §14 O_CURSOR 17컬럼 — ⚠ SAMPLE_A~D_DATE 는 SP 하드코딩 placeholder (정오표 기록)
+        data: {
+          DPJT_KEY: string;
+          DPJT_CODE: string;
+          DPJT_SEQ: string | number;
+          DIVISION_ID: string;
+          DIVISION_NAME: string;
+          DPJT_CLASS: string;
+          DPJT_CLASS_NAME: string;
+          END_CUSTOMER: string;
+          END_CUSTOMER_NAME: string;
+          DPJT_NAME: string;
+          SAMPLE_A_DATE: string;
+          SAMPLE_B_DATE: string;
+          SAMPLE_C_DATE: string;
+          SAMPLE_D_DATE: string;
+          SOP_DATE: string;
+          SOP_PLANT_ID: string;
+          SOP_PLANT_NAME: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    period: {
+      request: {
+        frBucket: string; // 1 P_FR_BUCKET (D/W/M — PW/Y 미구현 §15)
+        frDateVal: string; // 2 P_FR_DATE_VAL (정수 문자열, 음수 가능)
+        frBucketType: string; // 3 P_FR_BUCKET_TYPE (S/E/C)
+        toBucket: string; // 4 P_TO_BUCKET (FR 과 동일 bucket 만 — §15 결함 ③ 회피)
+        toDateVal: string; // 5 P_TO_DATE_VAL
+        toBucketType: string; // 6 P_TO_BUCKET_TYPE (S/E/C — 'X'=From 만 반환)
+      };
+      response: {
+        // §15 O_CURSOR — YMD_* 'YYYYMMDD' 문자열 소비 (DATE_* 직렬화 포맷 의존 회피)
+        data: {
+          DATE_FR: string;
+          YMD_FR: string;
+          DATE_TO: string;
+          YMD_TO: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+  };

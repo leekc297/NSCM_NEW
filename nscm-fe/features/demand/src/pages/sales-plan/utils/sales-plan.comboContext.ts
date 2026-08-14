@@ -66,6 +66,11 @@ export const buildSalesPlanComboFilter = (
     case 'PLANT_SITE_ID':
       return { comboId: 'FromSiteByDivision', divisionId };
     default:
+      // [게이트 §7 2026-08-12] CMBO 'Measure' 는 @mnuId 비관대형(`= @mnuId`) — 미전달 시 '' 치환
+      //   → 0행(조용한 빈 콤보, measure 계층 표시명 소실). 메뉴 컨텍스트를 명시 전달한다.
+      if (metadataComboId === 'Measure') {
+        return { comboId: 'Measure', mnuId: "'DMF0021'" };
+      }
       return metadataComboId;
   }
 };

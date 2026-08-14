@@ -56,6 +56,10 @@ export interface FlexGridColumnConfig {
   isCollapsed?: boolean;
   columns?: FlexGridColumnConfig[];
   _inputEditType?: CELL_INPUT_EDIT_TYPE;
+  /** 화면이 직접 만든 동적(주차/월/일) 컬럼 — DataGrid 가 dynamicColumns leaf 에 자동으로 채운다. */
+  _dynamic?: boolean;
+  /** 관리자 메타 라벨 끝에 `*` 가 박혀 있던 컬럼 — 라벨에서 떼어내고 헤더 빨간점으로 표시한다. */
+  _requiredMark?: boolean;
   _ctrlType?: CELL_CONTROL_TYPE;
   _ctrlData?: string;
   _fixed?: boolean;

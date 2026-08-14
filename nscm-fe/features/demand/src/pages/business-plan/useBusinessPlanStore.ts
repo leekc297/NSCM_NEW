@@ -266,7 +266,7 @@ export const useBusinessPlanStore = createPersistedStoreWithTab<State & Action>(
       });
     },
 
-    // ColumnSettingModal OK — 사용자 선택 column 만 display (영구 저장은 titleSet SAVE 별도.
+    // ColumnLayoutModal OK — 사용자 선택 column 만 display (영구 저장은 titleSet SAVE 별도.
     //   visible 은 admin VISIBLE_FLAG 관리 노출 — 사용자 조작으로 덮어쓰지 않음).
     applyColumnVisibility: visibleKeys => {
       set(state => {

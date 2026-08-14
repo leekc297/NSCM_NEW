@@ -3,6 +3,9 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  // 진행 스피너(ProgressIndicator placement='parent')가 이 영역을 기준으로 덮는다.
+  //   position 이 없으면 absolute 기준이 위로 올라가 모달 밖까지 덮는다.
+  position: relative;
 }
 
 .gridWrapper {

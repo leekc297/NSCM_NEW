@@ -13,14 +13,38 @@ const { apiClient } = jiti(foundationAxiosPath);
 async function run() {
   console.log('🚀 다국어 동기화 스크립트 시작...');
 
+  // API 후보: env 지정 → 로컬 BE → 구주소. 전부 실패 시 기존 locales 를 지우지 않고 중단한다.
+  //   (2026-08-13 실사고 — 구주소 도달 불가 상태에서 목데이터가 실 locales 를 덮어써
+  //    전 화면 LBL 이 '_' fallback 으로 표시)
+  const apiCandidates = [
+    process.env.NSCM_I18N_API,
+    'http://127.0.0.1:8080/admin/message',
+    'http://10.34.220.80:8080/admin/message',
+  ].filter(Boolean);
+
   let messages;
-  try {
-    const response = await apiClient.get('http://10.34.220.80:8080/admin/message');
-    messages = response.data.result;
-  } catch {
+  for (const url of apiCandidates) {
+    try {
+      const response = await apiClient.get(url);
+      if (Array.isArray(response.data?.result) && response.data.result.length > 0) {
+        messages = response.data.result;
+        console.log(`✅ 메시지 원천: ${url} (${messages.length}건)`);
+        break;
+      }
+    } catch {
+      console.log(`⚠ API 실패: ${url}`);
+    }
+  }
+  if (!messages) {
+    const existing = path.resolve(__dirname, '../public/locales/KO.json');
+    if (fs.existsSync(existing)) {
+      console.error('❌ 모든 API 실패 — 기존 locales 보존을 위해 중단합니다. (목데이터 덮어쓰기 금지)');
+      process.exit(1);
+    }
     console.log('api 요청 실패. 목데이터로 동작합니다.');
     messages = mockMessage;
-  } finally {
+  }
+  {
     const koMap = new Map();
     const keyList = []; // 타입 생성을 위한 키 목록
     messages

@@ -57,7 +57,7 @@ interface Action {
   setCalendarInfo: (calendar: CalendarInfo | null, editAuth: EditAuthInfo | null) => void;
   // PR_GET_DAY_RANGE o_rc2 DAY_RANGE('yyyymmdd:yyyymmdd') → 기본 Period (당월 1일 ~ +6개월 말일)
   applyDayRange: (range?: string) => void;
-  // ColumnSettingModal onSave — 사용자 선택 column 만 visible='Y', 나머지 'N' (로컬 즉시 반영).
+  // ColumnLayoutModal onSave — 사용자 선택 column 만 visible='Y', 나머지 'N' (로컬 즉시 반영).
   applyColumnVisibility: (visibleKeys: string[]) => void;
   // MeasureSelectModal onSave — 표시할 measure 코드 목록 적용 (null = 전체).
   applyVisibleMeasures: (measureCodes: string[] | null) => void;
@@ -350,7 +350,7 @@ export const useSalesPlanStore = createPersistedStoreWithTab<State & Action>(
       });
     },
 
-    // ColumnSettingModal OK — 사용자 선택 column 만 visible (영구 저장은 titleSet SAVE 별도).
+    // ColumnLayoutModal OK — 사용자 선택 column 만 visible (영구 저장은 titleSet SAVE 별도).
     applyColumnVisibility: visibleKeys => {
       set(state => {
         const cur = state.staticColumns;

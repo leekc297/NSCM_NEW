@@ -223,33 +223,26 @@ export const ContributeVersionModal = ({ open, onClose, onSelect }: Props) => {
             onSearch={onSearch}
             conditions={
               <>
-                <Grid size={6}>
+                {/* ⭐ 조회조건 폭 축소 (사용자 요청) — 6(2열) → 4(3열).
+                    · 라벨 트랙은 전 항목 labelSize 기본값('short', 100px)로 통일한다.
+                      'middle'(140px) 을 섞으면 항목마다 입력박스 시작 x 가 40px 씩 어긋나고,
+                      PeriodField(공용 카탈로그)는 labelSize 를 받지 않아 항상 short 라 맞출 수도 없다.
+                    · size 하한은 PeriodField 가 잡는다: datepicker 110px×2 + gap/구분자(≈18px)
+                      = 238px 고정폭(SearchFields.module.scss .periodSplit) + 라벨 100px ≈ 350px.
+                      3열(size=4)까지는 여유가 있으나 4열(size=3)로 더 줄이면 datepicker 가 잘린다. */}
+                <Grid size={4}>
                   <FormItem
                     label={t('LBL00086', '_Year')}
                     labelAlign='right'
-                    labelSize='middle'
                     render={() => (
                       <CustomDropdown disabled value={divisionId} options={divisionOptions} />
                     )}
                   />
                 </Grid>
-                {/* 공용 카탈로그 PeriodField(@master/searchFields) — state 는 [Dayjs, Dayjs] 유지. */}
-                <PeriodField
-                  gridSize={6}
-                  start={period[0]?.format('YYYYMMDD') ?? ''}
-                  end={period[1]?.format('YYYYMMDD') ?? ''}
-                  onChange={(start, end) =>
-                    setPeriod([
-                      dayjs(`${start.slice(0, 4)}-${start.slice(4, 6)}-${start.slice(6, 8)}`),
-                      dayjs(`${end.slice(0, 4)}-${end.slice(4, 6)}-${end.slice(6, 8)}`),
-                    ])
-                  }
-                />
-                <Grid size={6}>
+                <Grid size={4}>
                   <FormItem
                     label={t('LBL00092', '_Report Type')}
                     labelAlign='right'
-                    labelSize='middle'
                     render={() => (
                       <CustomDropdown
                         value={versionType}
@@ -261,11 +254,22 @@ export const ContributeVersionModal = ({ open, onClose, onSelect }: Props) => {
                     )}
                   />
                 </Grid>
-                <Grid size={6}>
+                {/* 공용 카탈로그 PeriodField(@master/searchFields) — state 는 [Dayjs, Dayjs] 유지. */}
+                <PeriodField
+                  gridSize={4}
+                  start={period[0]?.format('YYYYMMDD') ?? ''}
+                  end={period[1]?.format('YYYYMMDD') ?? ''}
+                  onChange={(start, end) =>
+                    setPeriod([
+                      dayjs(`${start.slice(0, 4)}-${start.slice(4, 6)}-${start.slice(6, 8)}`),
+                      dayjs(`${end.slice(0, 4)}-${end.slice(4, 6)}-${end.slice(6, 8)}`),
+                    ])
+                  }
+                />
+                <Grid size={4}>
                   <FormItem
                     label={t('LBL00656', '_Description')}
                     labelAlign='right'
-                    labelSize='middle'
                     render={() => (
                       <InputField
                         fullWidth

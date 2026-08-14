@@ -45,6 +45,13 @@ export const ADMIN_SHEET_NAME: Partial<Record<SHEETS, string>> = {
   [SHEETS.PRICE_BATCH]: 'Sales Price Save All',
 };
 
+// ⭐ 컬럼 개인화(SCM_MST_TITLESET_USER) 조회/저장 키.
+//   ⚠️ 팝업 조회(ColumnLayoutModal) · 저장(saveTitleSet) · 진입 복원(fetchUserColumnLayout) 이
+//     **셋 다 같은 값**을 써야 한다. 하나라도 다르면 저장은 성공하는데 재진입 조회가 그 행을 못 찾아
+//     개인화가 사라진다 (forecast-price 2026-07-27 / sales-monitoring 2026-07-04 동일 사고).
+export const TITLESET_SHEET = ADMIN_SHEET_NAME[SHEETS.MAIN] ?? SHEETS.MAIN; // 'Sales Price'
+export const TITLESET_COLUMN_TYPE = 'main';
+
 // Bucket Type — AS-IS .cs L3823 cboBucketType_Click + Designer cboBucketType (Weekly / Monthly)
 export enum BUCKET_TYPE {
   WEEKLY = 'W',

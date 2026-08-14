@@ -44,8 +44,8 @@
 | 9 | `Dsdm_Changed` (L1390 — 셀 편집 시 Red + 월합계 재계산) | **N/A — read-only** (SHEET_COLUMNS INPUT_TP_CD 전행 'S' 실측 + 저장 미구현). beginningEdit cancel 이중 방어 | 근거 제외 |
 | 10 | `chkSum_CheckedChanged` (L1739 → SetSpreadColumn) | Form Sum 체크 → Grid applyDynVisibility (상위 합계 M_/W_ 표시 토글) | 1:1 |
 | 11 | `chkColor_CheckedChanged` (L1747 → SetSpreadColumn/setResultPeriod) | Form Color 체크 → Grid formatItem (과거 구간 회색 + 헤더 강조 해제) | 1:1 |
-| 12 | `btnColumn_Click` (L1755 — DM0002_TitleSetForm column 모드) | SubTitle customButton 'Column Setting' → 공용 `ColumnSettingModal` | 1:1 |
-| 13 | `btnMeasure_Click` (L1768 — DM0002_TitleSetForm measure 모드) | SubTitle customButton 'Measure' → `MeasureSelectModal` (SHEET_MEASURE 39행 dual list) | 1:1 |
+| 12 | `btnColumn_Click` (L1755 — DM0002_TitleSetForm column 모드) | SubTitle customButton 'Column Setting' → 공용 `ColumnLayoutModal` (features/master) | 1:1 |
+| 13 | `btnMeasure_Click` (L1768 — DM0002_TitleSetForm measure 모드) | SubTitle customButton 'Measure' → 공용 `MeasureSelectModal` (features/master — SHEET_MEASURE 39행 dual list) | 1:1 |
 | 14 | `clbCustomer_SelectedIndexChanged` (SetChangeControl) | Form End Customer onChange — 하위(Sales Site/Plant Site) cascade clear | 1:1 |
 | 15 | `clbDivision_SelectedIndexChanged` (SetChangeControl→GetBizTypebyDivision) | Form Div onChange — 하위 전체 cascade clear + 콤보 DIVISION_ID 클라 필터 | 1:1 |
 | 16 | `clbTeam_SelectedIndexChanged` (SetChangeControl) | Form Team onChange — 하위(End Customer/Sales Site) cascade clear | 1:1 |
@@ -115,7 +115,7 @@ SCM_MST_SHEET_COLUMNS.FIXED_FLAG 에 위임 (현재 사내 데이터 전행 공�
 
 | # | AS-IS Popup | TO-BE |
 |---|---|---|
-| 1 | `DM0002_TitleSetForm_Popup` (btnColumn/btnMeasure — column/measure 모드) | 공용 `ColumnSettingModal` (DMF0002_GET_TITLESET_POPUP, titleSet 시트 배선) + `MeasureSelectModal` (SHEET_MEASURE 동적) |
+| 1 | `DM0002_TitleSetForm_Popup` (btnColumn/btnMeasure — column/measure 모드) | 공용 `ColumnLayoutModal` (DMF0002_GET_TITLESET_POPUP, titleSet 시트 배선) + 공용 `MeasureSelectModal` (SHEET_MEASURE 동적) — 둘 다 features/master 공용 정본 |
 | 2 | `DM0020_OwnerbyDivisionPopup` (btnOwner) | `OwnerField` 카탈로그 필드 popup (공용 Owner popup) |
 
 (참고: `SCM0002_TitleSetForm_Popup` 은 AS-IS 소스에서 주석 처리 — Designer 부재로 분석 대상 제외됨.)
@@ -127,15 +127,15 @@ SCM_MST_SHEET_COLUMNS.FIXED_FLAG 에 위임 (현재 사내 데이터 전행 공�
 | SEARCH(F5) | FindButton override | handleSearch (validateFind→setFilter) | BTN행 ○ |
 | EXCEL(F12) | ExcelButton override | SubTitle EXCEL (client export) | BTN행 ○ |
 | SORT(F3)/FILTER(F4)/CONDITION(F6)/RESET(F10) | Framework 기본 | SubTitle DefaultButtonActions 자동 | SORT/FILTER BTN행 ○ |
-| COLUMN_SETUP | btnColumn | ColumnSettingModal customButton | BTN행 ○ |
-| MEASURE_SELECT | btnMeasure | MeasureSelectModal customButton | BTN행 ○ |
+| COLUMN_SETUP | btnColumn | 공용 ColumnLayoutModal customButton | BTN행 ○ |
+| MEASURE_SELECT | btnMeasure | 공용 MeasureSelectModal customButton | BTN행 ○ |
 | INSERT(F8)/DELETE(F9)/SAVE(F7)/EDIT(F2) | override 없음 (미구현) | hotkeyConfig false + BTN행 미등록 → hidden | 의도적 미등록 |
 
 ## §7 변경 파일 대장
 
 | 구분 | 파일 |
 |---|---|
-| FE 신규 | `features/demand/src/pages/sales-monitoring/` — index.ts / SalesMonitoring.tsx(+scss) / sales-monitoring.constants.ts / sales-monitoring.types.ts / useSalesMonitoringStore.ts / components/{SalesMonitoringForm.tsx(+scss), SalesMonitoringGrid.tsx, MeasureSelectModal.tsx} / utils/sales-monitoring.merge.ts / __asis-mapping__.md |
+| FE 신규 | `features/demand/src/pages/sales-monitoring/` — index.ts / SalesMonitoring.tsx(+scss) / sales-monitoring.constants.ts / sales-monitoring.types.ts / useSalesMonitoringStore.ts / components/{SalesMonitoringForm.tsx(+scss), SalesMonitoringGrid.tsx} / utils/sales-monitoring.merge.ts / __asis-mapping__.md (Measure/Column 모달 = features/master 공용 MeasureSelectModal/ColumnLayoutModal — 로컬 사본 삭제 2026-08-13) |
 | FE 수정 | `apps/web/src/core/Router.tsx` (lazy + 'dmf0048' 라우트) / `configs/types/procedures.d.ts` (DMF0048 블록) / `public/locales/{KO,EN,CN}.json` (LBL00753) |
 | DB SP | `_artifacts/_deploy_packages/DMF0048_SALES_MONITORING_20260704/01_SP/` 010~060 (INVALID 4건 정상화 + PKG PTT→WITH 패치 + GRANT) |
 | DB 메타 | 동 `02_META/` 010(API 9+PROC 34) / 020(BTN 9+권한 27) / 030(감사) / 040(LBL00753) |

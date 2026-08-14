@@ -38,6 +38,7 @@ import {
 import type { MeasureMeta } from '../useSalesFuturePriceStore';
 import { applyStaticCellBackground } from '../utils/cellBackground';
 import { groupKeyOf } from '../utils/futurePriceGroup';
+import { isOverRangeCell } from '../utils/overRange';
 
 interface Props {
   rows: FuturePriceRow[];
@@ -414,6 +415,14 @@ export const SalesFuturePriceGrid = ({
       const isDyn = !meta && /^[WM]_/.test(col.binding);
       const isInsert = rowItem?.CRUD_TYPE === 'I';
       const isLocRow = String(rowItem?.MEASURE ?? '') === 'LOC';
+
+      // 범위 초과 분홍 (AS-IS L1475~1488 [PJ20200138]) — SP 가 행마다 내려주는 COL_LIST 에 든
+      //   동적 컬럼(W_yyyymmdd) 셀만 분홍. COL_LIST 는 measure 무관 목록이라 같은 품목의 4행이
+      //   통째로 칠해진다(AS-IS 동일). 색 우선순위는 scss 담당 — 선택(하늘) > 분홍 > 노랑 > 회색.
+      //   주의: 정적 col 까지 포함해 매 셀 toggle 한다. Wijmo 는 셀 엘리먼트를 컬럼 간 재활용하므로
+      //   동적 분기 안에서만 끄면 정적 컬럼으로 넘어간 셀에 분홍이 잔존한다.
+      //   (정적 binding 은 COL_LIST 에 없으므로 항상 false 로 해제된다.)
+      toggleClass(e.cell, 'is-over-range', isOverRangeCell(rowItem, col.binding));
 
       // 동적 col — LOC row 만 editable (AS-IS L2108: Measure='LOC' 가 아니면 LockRange2)
       //   ⚠ Wijmo 셀 재활용 시 editable/non-editable 클래스가 한 셀에 동시 잔존 →
@@ -988,10 +997,11 @@ export const SalesFuturePriceGrid = ({
   return (
     <div className={styles.gridContainer} ref={gridBoxRef}>
       <DataGrid
-        // ⭐ key prop — staticColumns 의 sCls/lCls 메타 변경 시 wrapper re-mount 강제.
-        key={mainStaticColumns
-          .map(c => `${c.colNm}|${c.sClsLblNm ?? ''}|${c.lClsLblNm ?? ''}`)
-          .join(',')}
+        // ⚠️ key prop 금지 — sCls/lCls 는 이 화면에서 항상 undefined 라 실질 key 값은 colNm 목록뿐.
+        //   즉 컬럼 표시/순서만 바뀌어도(Column Setting 저장 등) 매번 wrapper 를 통째로 재마운트해
+        //   조회 완료 후 컬럼 추가 시 그리드가 재초기화되며 편집 가능 상태가 깨졌다(#23 회귀).
+        //   컬럼 변경은 staticColumns/dynamicColumns prop 변경만으로 반영 — 아래 useEffect(dep에
+        //   visibleColumns 포함)가 핸들러 재등록을 이미 전담하므로 remount 불필요.
         className={styles.grid}
         gridRef={gridRef as never}
         // ⚠️ gridFilterRef 는 공용 DataGrid 에 전달하지 않음 — 피처가 FlexGridFilter 직접 소유(위 effect)해

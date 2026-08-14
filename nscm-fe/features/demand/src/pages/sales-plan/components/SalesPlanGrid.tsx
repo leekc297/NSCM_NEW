@@ -1,4 +1,4 @@
-import { Aggregate, toggleClass } from '@mescius/wijmo';
+import { toggleClass } from '@mescius/wijmo';
 import {
   AllowMerging,
   CellType,
@@ -149,41 +149,20 @@ export const SalesPlanGrid = ({
   );
   useEffect(() => syncRowComboContext(), [syncRowComboContext]);
 
-  // 신규행 Model은 COM0008 ItemByDivision 결과를 드롭다운으로 제공한다.
-  const itemDropdownFilters = useMemo<ProcRequest<'COM0008', 'itemByDivision'>>(
-    () => ({
-      divisionId: rowComboContext.divisionId || 'ALL',
-      deptId: rowComboContext.deptId || 'ALL',
-      endCustomer: rowComboContext.endCustomer || 'ALL',
-      salesSite: rowComboContext.scmSiteId || 'ALL',
-      projectCode: rowComboContext.projectCode || 'ALL',
-      itemId: '',
-      activeFlag: 'Y',
-    }),
-    [rowComboContext]
-  );
-  const { data: itemDropdownData } = useTabProcQuery<'COM0008', 'itemByDivision'>({
-    menuId: 'COM0008',
-    sheetName: 'itemByDivision',
-    tabId: `${tabId}-sales-plan-item-dropdown`,
-    filters: itemDropdownFilters,
-    enabled: hasInsertComboContext && !!rowComboContext.divisionId,
+  // ⭐ [통합테스트 1st No.61-③ 2026-08-12] 신규행 Model = AS-IS `SALES_PLAN_ITEM_ID` lookup 1:1
+  //   (.cs L525 Data.Common(SALES_PLAN_ITEM_ID) + GUBUN division 분기 L3341~3352).
+  //   구 COM0008 itemByDivision(아이템 마스터 전체)은 오구현 — Insert 는 기타매출 특수코드
+  //   (ETC/Tooling/MDF 등 division 별 lookup 등재분)만 허용. CMBO 'SalesPlanItemId' 신설분 소비.
+  const [salesPlanItemRows] = useTabComboQueries({
+    filters: [{ comboId: 'SalesPlanItemId', divisionId: `'${division || 'ALL'}'` }],
   });
-  const itemDropdownRows = useMemo(() => itemDropdownData?.o_rc1 ?? [], [itemDropdownData]);
+  const itemDropdownRows = useMemo(
+    () => (salesPlanItemRows ?? []) as unknown as Record<string, unknown>[],
+    [salesPlanItemRows]
+  );
   const itemDropdownMap = useMemo<DataMap | null>(() => {
     if (itemDropdownRows.length === 0) return null;
-    return new DataMap(
-      itemDropdownRows.map(item => ({
-        CODE: item.ITEM_ID,
-        NAME: item.NICK_NAME
-          ? `${item.ITEM_ID} / ${item.NICK_NAME}`
-          : item.ITEM_NAME
-            ? `${item.ITEM_ID} / ${item.ITEM_NAME}`
-            : item.ITEM_ID,
-      })),
-      'CODE',
-      'NAME'
-    );
+    return new DataMap(itemDropdownRows, 'CODE', 'NAME');
   }, [itemDropdownRows]);
   const itemDropdownMapRef = useRef<DataMap | null>(null);
   const itemDropdownRowsRef = useRef(itemDropdownRows);
@@ -316,7 +295,10 @@ export const SalesPlanGrid = ({
   //   FCST_TYPE(Catch_Up) = 'FcstType' 전체에서 ETC 제외 클라 필터 (L4903).
   const editComboEntries = useMemo(() => Object.entries(GRID_EDIT_COMBO), []);
   const editComboResults = useTabComboQueries({
-    filters: editComboEntries.map(([, cfg]) => cfg.comboId),
+    // divisionParam=true 콤보는 FE quoting 전달 의무 (BE raw 치환 — hook oracle-cmbo-varname-quote)
+    filters: editComboEntries.map(([, cfg]) =>
+      cfg.divisionParam ? { comboId: cfg.comboId, divisionId: `'${division}'` } : cfg.comboId
+    ),
   });
   const editComboSig = editComboResults
     .map((r, i) => `${editComboEntries[i]?.[0]}#${r?.length ?? 'x'}`)
@@ -490,7 +472,7 @@ export const SalesPlanGrid = ({
         visible: true,
         height: 48, // 다단 헤더 높이(#93) — wrapper 가 staticColumns 만 자동 처리, 동적은 명시 의무.
         _display: true,
-        aggregate: Aggregate.Sum,
+        // [2026-08-12 사용자 지시] Grid Footer Summary 삭제 — aggregate 미지정
         format: '#,##0.###',
       });
     });
@@ -526,12 +508,6 @@ export const SalesPlanGrid = ({
 
     // 홀짝 zebra (#95)
     if (g.alternatingRowStep !== 1) g.alternatingRowStep = 1;
-
-    // ⭐ AS-IS InitSpreadFooterSum 복원 — 동적 기간 컬럼의 하단 합계를 표시.
-    //   DataGrid useAggregationRow + 동적 leaf Aggregate.Sum 조합으로 구현.
-    for (let i = 0; i < g.columnFooters.rows.length; i++) {
-      g.columnFooters.rows[i].visible = true;
-    }
 
     // 현재기간 강조는 화면에 표시된 가장 하위 버킷에만 적용한다.
     // Monthly에서 Weekly를 펼치면 M_ SUM은 제외하고 W_ 당주만 강조한다.
@@ -676,13 +652,7 @@ export const SalesPlanGrid = ({
           return;
         }
         if (binding === 'ITEM_ID') {
-          const expectedContext = buildSalesPlanComboContext(row, division);
-          const expectedKey = salesPlanComboContextKey(expectedContext);
-          if (salesPlanComboContextKey(rowComboContextRef.current) !== expectedKey) {
-            syncRowComboContext(row);
-            e.cancel = true;
-            return;
-          }
+          // [No.61-③] lookup 콤보(division 스코프 고정) — 행 컨텍스트 대기 없이 즉시 개방
           if (!itemDropdownMapRef.current) {
             e.cancel = true;
             return;
@@ -700,19 +670,26 @@ export const SalesPlanGrid = ({
           return;
         }
         if (isSalesPlanRowDependentCombo(binding)) {
+          // ⭐ [통합테스트 1st No.61-① 2026-08-12] 행 컨텍스트 미동기/로딩 미완 시 e.cancel 로
+          //   "콤보 무동작" 이 되던 결함 정정 — 전역(division 스코프) 표시 콤보로 폴백해 즉시 개방.
+          //   AS-IS 도 InsertRow 는 권한 범위 전체(dtSalesSiteAuth 등)를 선바인딩(L2951~2954) 후
+          //   상위 셀 변경 시 좁힘 — 폴백 = AS-IS 초기 상태와 동일 계약.
           const expectedContext = buildSalesPlanComboContext(row, division);
           const expectedKey = salesPlanComboContextKey(expectedContext);
           if (salesPlanComboContextKey(rowComboContextRef.current) !== expectedKey) {
-            syncRowComboContext(row);
+            syncRowComboContext(row); // 다음 편집을 위한 정밀 후보 재조회 (개방은 폴백으로 진행)
+          }
+          const rowMap =
+            loadedRowComboContextRef.current === expectedKey
+              ? rowDataMapsRef.current[binding]
+              : null;
+          const fallback = dataMapsRef.current[binding];
+          const dm = rowMap ?? fallback;
+          if (!dm) {
             e.cancel = true;
             return;
           }
-          const rowMap = rowDataMapsRef.current[binding];
-          if (loadedRowComboContextRef.current !== expectedKey || !rowMap) {
-            e.cancel = true;
-            return;
-          }
-          col.dataMap = rowMap;
+          col.dataMap = dm;
           return;
         }
 
@@ -829,14 +806,12 @@ export const SalesPlanGrid = ({
         applyMeasureSwitch(row, toCellStr(newVal), dynBindings);
       }
       if (binding === 'ITEM_ID' && changed) {
+        // [No.61-③] lookup 매칭 → ITEM_CLASS_NAME = NAME 자동세팅 (AS-IS ComboSelChange L4785~4794 1:1)
         const selected = itemDropdownRowsRef.current.find(
-          item => item.ITEM_ID === toCellStr(newVal)
+          item => toCellStr(item.CODE) === toCellStr(newVal)
         );
         if (selected) {
-          rec.NICK_NAME = selected.NICK_NAME ?? '';
-          rec.ITEM_NAME = selected.ITEM_NAME ?? '';
-          rec.ITEM_CLASS_NAME = selected.ITEM_CLASS_NAME ?? '';
-          rec.ITEM_TYPE = selected.ITEM_TYPE ?? '';
+          rec.ITEM_CLASS_NAME = toCellStr(selected.NAME);
         }
       }
       // ⭐ cascade 계단 clear (hook #59 §5-G — 상위 콤보 값이 실제로 바뀐 경우만)
@@ -1121,7 +1096,7 @@ export const SalesPlanGrid = ({
         autoGenerateColumns={false}
         allowSorting={true}
         allowMerging={AllowMerging.All}
-        useAggregationRow={true}
+        useAggregationRow={false} // [2026-08-12 사용자 지시] Footer Summary 삭제
       />
     </div>
   );

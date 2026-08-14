@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { IcGridColumnSetup, IcMeasureSelect } from '@foundation/assets';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { useQueryClient } from '@foundation/query-client';
+import { keepRowVisibleUnderFilter } from '@foundation/utils';
 import type { EditTracker } from '@foundation/utils';
 import { MainTitle, SubTitle } from '@shared/components';
 import { useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
@@ -191,8 +192,18 @@ export const SalesPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
   // F5 Search — AS-IS FindData(L1450~1632) 1:1 검증(V-S1~S3) 후 조회.
   //   ⚠️ refetch?.() 직접 호출 금지 — stale closure filters 로 첫 호출 NULL payload 사고
   //   (memory feedback_search_refetch_stale_closure). setFilter(queryKey 변경) + enabled 만으로 fetch.
-  const handleSearch = () => {
+  const handleSearch = async () => {
     if (blockIfWorking()) return;
+    // [공통 C2 2026-08-12] 수정 중 재조회 가드 — 통합테스트 1st Common "수정 중인 데이터가 있습니다.
+    //   새로 조회하시겠습니까?"(MSG00703). 미가드 시 setInsertedRows([]) 가 변경분을 조용히 폐기
+    //   (DMF0082 ForecastPrice 공통 C2 선례 1:1).
+    if (hasPendingChanges()) {
+      const proceed = await setAlert({
+        type: 'confirm',
+        content: t('MSG00703', '_There are unsaved changes. Search again?'),
+      });
+      if (!proceed) return;
+    }
     const vr = validation.validateFind(sc);
     if (!vr.ok) {
       // V-S3 — 3년 초과 시 종료일 = 시작일+3년 보정 (AS-IS L1481 Value2 보정 후 차단)
@@ -238,6 +249,13 @@ export const SalesPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
       ...INSERT_ROW_DEFAULTS,
     };
     setInsertedRows(prev => [newRow, ...prev]);
+    // [공통 UC-01 — 2026-08-14 역전] 필터링 상태에서 Insert 해도 **필터를 유지한 채** 신규행이 보여야 한다.
+    //   ⛔ 구 구현 `gridFilterRef.current?.clear()` 는 사용자가 걸어둔 필터까지 날려서, 사용자가 보고한
+    //     "필터가 풀리는 현상"을 스스로 만들었다 (공통 수정사항① — hook #133 §5).
+    //   ⇒ 신규행만 wijmo 예외 집합(`_newAddedRowsSet`)에 등록해 필터 조건 검사를 건너뛰게 한다.
+    //   (유틸 시그니처는 `FlexGrid<WijmoRowItem>` 기준 — 행 타입이 좁아 캐스팅만 맞춘다.)
+    const grid = gridRef.current as unknown as FlexGridType<WijmoRowItem> | null;
+    if (grid) keepRowVisibleUnderFilter(grid, newRow as WijmoRowItem);
   };
 
   // F9 Delete — AS-IS DeleteButton(L673~679) 1:1 — Action='I'(신규 삽입행)만 즉시 제거.
