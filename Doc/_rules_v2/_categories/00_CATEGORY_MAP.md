@@ -150,6 +150,7 @@
 | 121 | form-common-styles-mandatory | 01, 04 |
 | 132 | ui-layout-shell-modal-feedback-standard | 01, 06 |
 | 133 | ui-common-testitem-mapping-axis | 01, 06 |
+| 135 | excel-form-upload-standard | 01, 05, 08 |
 | 122 | cloud-ui-db-object-fetch | 12, 08 |
 | 123 | screen-modal-cascade-filter-analysis | 11, 04, 05 |
 | 124 | screen-asis-pre-analysis-mandatory | 11, 01, 05 |

@@ -3,63 +3,19 @@
 <mapper namespace="com.lgcns.nscm.admin.user">
 
     <resultMap id="userResultMap" type="java.util.HashMap" />
-
-    <!--
-      이관된 통합 프로시저 호출. Case 1(등록) / Case 2(SSO 명부 → 자동등록+GUEST 그룹) / Case 3(빈 커서).
-      Case 3(빈 커서)는 서비스단에서 null → 백엔드 게스트 폴백 로그인 처리.
-    -->
+    
     <select id="retrieveUser" statementType="CALLABLE">
 		{ CALL SCM_MGR.PKG_NSCM_UI_COM_USER.PR_GET_NSCM_USER(
 			#{userId},
 			#{DATARESULT, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=userResultMap}
 		) }
     </select>
-
+        
     <select id="updateLangCd" statementType="CALLABLE">
 		{ CALL SCM_MGR.PKG_NSCM_UI_COM_USER.PR_UPDATE_LANG_CD(
 			#{userId},
 			#{langCd}
 		) }
     </select>
-
-    <!--
-      사용자가 속한 그룹 권한명(USER_GR_NM) 목록. (프로시저 없이 조회)
-      ⚠️ 그룹 마스터 테이블명(SCM_ADM_USER_GR_M) 은 대상 스키마에 맞게 확인/수정할 것.
-      실패해도 로그인은 유지되도록 서비스단에서 안전 처리(빈 배열)한다.
-    -->
-    <select id="retrieveUserGroups" resultType="string">
-        SELECT G.USER_GR_NM
-        FROM   SCM_MGR.SCM_ADM_USER_GR_MPG_M M
-        JOIN   SCM_MGR.SCM_ADM_USER_GR_M     G ON G.USER_GR_ID = M.USER_GR_ID
-        WHERE  M.USER_ID = #{userId}
-          AND  M.USE_YN  = 'Y'
-          AND  G.USE_YN  = 'Y'
-        ORDER BY G.USER_GR_NM
-    </select>
-
-
-    <!--
-      로그인 사용자의 기본 사업부(권한 사업부 중 최상단 1건).
-      MyDivision 콤보 SQL 을 응용: 사용자 권한(SCM_ADM_USER_GR_UNIT_AUTH_MPG_M)으로 필터한 뒤
-      DIVISION_ID 정렬 최상단 1건을 기본값으로 사용. 없으면 null → FE 기본값 폴백.
-      실패해도 로그인은 유지되도록 서비스단에서 안전 처리(null)한다.
-    -->
-    <select id="retrieveUserDefaultDiv" resultType="string">
-        SELECT DIVISION_ID
-        FROM (
-            SELECT T1.DIVISION_ID
-            FROM   SCM_MGR.SCM_MST_DIVISION                 T1
-            JOIN   SCM_MGR.SCM_ADM_USER_GR_UNIT_AUTH_MPG_M  T2
-                   ON T1.DIVISION_ID = T2.UNIT_ID
-                  AND T2.UNIT_TP_CD  = 'D'
-            WHERE  T1.ATTRIBUTE3 &lt;&gt; 'EE'
-              AND  T1.VALID_YN = 'Y'
-              AND  T2.USE_YN   = 'Y'
-              AND  T2.USER_ID  = #{userId}
-            GROUP BY T1.DIVISION_ID, T1.ATTRIBUTE1
-            ORDER BY T1.DIVISION_ID || ' ' || MIN(T1.DIVISION_NAME)
-        )
-        WHERE ROWNUM = 1
-    </select>
-
+        
 </mapper>

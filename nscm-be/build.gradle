@@ -10,16 +10,20 @@ plugins {
 group = 'com.lgcns'
 version = '0.0.1-SNAPSHOT'
 description = 'nscm'
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
-}
+// ⭐ [로컬 2026-08-14] 이 PC 에는 JDK 17 만 설치돼 있어 21 로는 'invalid source release: 21' 로 컴파일 불가.
+//   ⚠ 클라우드 배포 시 VERSION_21 로 되돌릴 것 (아래 줄과 교체).
+// java.sourceCompatibility = JavaVersion.VERSION_21
+java.sourceCompatibility = JavaVersion.VERSION_17
 
 repositories {
-    // 2026-05-26 로컬 개발: 사내 Nexus 차단 → mavenCentral 대체
-    // 원본 (사내) : maven { url "http://10.94.57.6:8081/repository/maven-public/" }
+    // ⭐ [로컬 2026-08-14] 사내망에서 클라우드 Nexus(10.94.57.6) 미도달 → 공식 저장소 사용.
+    //   ⚠ 클라우드 배포 시 아래 nexus 블록의 주석을 풀고 mavenCentral() 을 주석 처리할 것.
     mavenCentral()
+    // maven {
+    //     allowInsecureProtocol true
+    //     credentials { username "anonymous" }
+    //     url "http://10.94.57.6:8081/repository/maven-public/"
+    // }
 }
 
 configurations.all {
@@ -89,13 +93,14 @@ dependencies {
 
     implementation 'org.apache.poi:poi-ooxml:5.2.3'								// 엑셀 파싱 2026.03.25
 
-    // LG Energy Solution SSO 라이브러리 (jakarta 지원 버전 - git c5191cc에서 복원)
-    implementation files('lib/sso/external_v4.2.1.00_LGEnSol_38.jar')
-    implementation files('lib/sso/INICrypto_v4.2.8.jar')
-    implementation files('lib/sso/jdom.jar')
-    implementation files('lib/sso/log4j-1.2.16.jar')
-    implementation files('lib/sso/poolit.jar')
-    implementation files('lib/sso/xercesImpl.jar')
+    // LG Energy Solution SSO 라이브러리
+    // 2026.02.23 Minyong Lee : SSO 개발 임시 중단, QA 서버 구비 시 재개 예정
+//    implementation files('lib/sso/external_v4.2.1.00_LGEnSol_38.jar')
+//    implementation files('lib/sso/INICrypto_v4.2.8.jar')
+//    implementation files('lib/sso/jdom.jar')
+//    implementation files('lib/sso/log4j-1.2.16.jar')
+//    implementation files('lib/sso/poolit.jar')
+//    implementation files('lib/sso/xercesImpl.jar')
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.junit.jupiter:junit-jupiter-params'

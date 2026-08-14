@@ -19,7 +19,10 @@ import { GridAction } from '@foundation/utils';
 import type { ButtonProps } from '@shared/lges';
 import { Button, TitleArea, Tooltip } from '@shared/lges';
 import {
+  confirmIfDirtyKey,
   DialogScopeContext,
+  scopeDirtyKey,
+  tabDirtyKey,
   useDialogStore,
   useMessageStore,
   useMotherStore,
@@ -31,6 +34,9 @@ const isHotKeyName = (key: string): key is keyof typeof Hotkeys => {
   return key in Hotkeys;
 };
 
+// @lges/design-system 의 SubTitleDepthType 과 동일하나 @shared/lges 에서 re-export 되지 않아 로컬 정의.
+type SubTitleDepthType = 'h3' | 'h4' | 'h5';
+
 type CustomButtonProps = ButtonProps & {
   label: string;
   action: () => void;
@@ -41,6 +47,20 @@ interface SubTitleProps {
   grid: RefObject<FlexGrid | undefined>;
   gridFilter: RefObject<FlexGridFilter | undefined>;
   dataCount: number;
+  /**
+   * 툴바 왼쪽에 표시할 영역 제목. 지정하면 이 줄이 곧 그리드의 제목 줄이 되므로,
+   * 화면이 그리드 위에 따로 TitleArea 를 두지 않아도 된다(제목/건수/버튼 한 줄).
+   * 미지정(기본 '')이면 종전과 동일하게 제목 없는 툴바 줄.
+   */
+  title?: string;
+  /** title 지정 시 제목 depth. 미지정이면 TitleArea 기본값. */
+  depth?: SubTitleDepthType;
+  /**
+   * 건수 표시(그리드 필터 반영) 기준 그리드. 미지정이면 grid.
+   * 그리드가 여럿이라 grid 가 포커스에 따라 바뀌는 화면에서, 제목 줄의 건수만 특정
+   * 그리드에 고정하고 싶을 때 지정한다(툴바 동작 대상은 그대로 grid).
+   */
+  countGrid?: RefObject<FlexGrid | undefined>;
   excelFileName?: string;
   useHotkey?: boolean;
   visible?: boolean;
@@ -55,6 +75,9 @@ const SubTitleComp = ({
   grid,
   gridFilter,
   dataCount,
+  title = '',
+  depth,
+  countGrid,
   excelFileName,
   useHotkey = true,
   visible = true,
@@ -74,8 +97,11 @@ const SubTitleComp = ({
   // 필터 적용 시 collectionView 기준 필터된 건수, 미적용 시 null (DB dataCount 사용)
   const [filteredCount, setFilteredCount] = useState<number | null>(null);
 
+  // 건수 기준 그리드 — 미지정이면 툴바 대상 그리드와 동일(종전 동작).
+  const countGridRef = countGrid ?? grid;
+
   useEffect(() => {
-    const gridInstance = grid.current;
+    const gridInstance = countGridRef.current;
     if (!gridInstance) return;
 
     // 현재 collectionView 기준으로 필터된 건수 재계산
@@ -112,7 +138,7 @@ const SubTitleComp = ({
       gridFilter.current?.filterChanged.removeHandler(recompute);
       boundView?.collectionChanged.removeHandler(recompute);
     };
-  }, [grid.current, gridFilter.current, dataCount]);
+  }, [countGridRef.current, gridFilter.current, dataCount]);
 
   // 필터 적용 시엔 0건이어도 명시 표시, 미적용 시엔 dataCount가 0이면 숨김
   const totalCasesValue =
@@ -148,7 +174,12 @@ const SubTitleComp = ({
         ),
     //[Hotkeys.F7]: () => alert('저장은 화면별로 구현하세요.'),
     [Hotkeys.F7]: () => undefined, // save 미구현 화면 — no-op (F5 와 동일한 이유)
-    [Hotkeys.F8]: () => grid.current && GridAction.addRow(grid.current, {}),
+    // 주의: addRow 의 반환값(신규행)을 그대로 돌려주지 말 것. grid prop 이 FlexGrid<any> 라
+    //   제네릭 T 가 any 로 추론되고, 핸들러 계약(HotkeyConfig = () => void)상 버려질 값이
+    //   any 로 새어 no-unsafe-return 이 걸린다.
+    [Hotkeys.F8]: () => {
+      if (grid.current) GridAction.addRow(grid.current, {});
+    },
     [Hotkeys.F9]: () =>
       new Proxy(() => grid.current && GridAction.removeRow(grid.current), {
         apply: target => {
@@ -185,6 +216,19 @@ const SubTitleComp = ({
 
   const buttonActions = { ...DefaultButtonActions, ...hotkeyConfig };
   if (searchAction) buttonActions[Hotkeys.F5] = searchAction;
+
+  // 조회(F5/Search 버튼) 미저장 변경 가드 — 조회는 그리드 데이터를 통째로 덮어쓰므로
+  //   dirty 면 confirm 후 실행한다. 화면이 주입한 search 액션을 여기서 공통으로 감싼다
+  //   (화면 코드 무수정). 다이얼로그 안 SubTitle 은 그 다이얼로그의 그리드만 검사한다.
+  const dirtyKey = scopeId === null ? tabDirtyKey(tabId) : scopeDirtyKey(scopeId);
+  const rawSearch = buttonActions[Hotkeys.F5];
+  if (typeof rawSearch === 'function' && rawSearch !== DefaultButtonActions[Hotkeys.F5]) {
+    buttonActions[Hotkeys.F5] = () => {
+      void confirmIfDirtyKey(dirtyKey, 'search').then(ok => {
+        if (ok) rawSearch();
+      });
+    };
+  }
 
   useEffect(() => {
     const hotkeyHandler = (keyboardEvent: KeyboardEvent) => {
@@ -225,7 +269,8 @@ const SubTitleComp = ({
         sx={{
           padding: '4px 0px',
         }}
-        title=''
+        title={title}
+        depth={depth}
         totalCases={totalCasesValue}
         isSubTitle
       />
@@ -238,7 +283,8 @@ const SubTitleComp = ({
         sx={{
           padding: '12px 0 4px 0',
         }}
-        title=''
+        title={title}
+        depth={depth}
         totalCases={totalCasesValue}
         isSubTitle
         rightButtons={
@@ -265,7 +311,11 @@ const SubTitleComp = ({
                     priority='normal'
                     size='small'
                     buttonLabel='Search(F5)'
-                    onClick={searchAction}
+                    // 직접 searchAction 을 호출하지 않는다 — 미저장 변경 가드가 감싼 F5 액션 경유
+                    onClick={() => {
+                      const action = buttonActions[Hotkeys.F5];
+                      if (typeof action === 'function') action();
+                    }}
                     iconComponent={<FunctionSearchIcon appearance='lined' iconSize={20} />}
                   />
                 </div>

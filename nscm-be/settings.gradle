@@ -1,16 +1,15 @@
 pluginManagement {
     repositories {
-        // 2026-05-26 로컬 개발: 사내 Nexus (10.94.57.6:8081) 접근 차단 → public 으로 대체
-        // 원본 (사내) :
-        //   maven { url "http://10.94.57.6:8081/repository/maven-public/"; allowInsecureProtocol true }
+        // ⭐ [로컬 2026-08-14] 사내망에서 클라우드 Nexus(10.94.57.6) 미도달 → 공식 저장소 사용.
+        //   ⚠ 클라우드 배포 시 아래 nexus 블록의 주석을 풀고 이 두 줄을 주석 처리할 것.
         gradlePluginPortal()
         mavenCentral()
+        // maven {
+        //     url "http://10.94.57.6:8081/repository/maven-public/"
+        //     credentials { username "anonymous" }
+        //     allowInsecureProtocol true
+        // }
     }
-}
-
-plugins {
-    // Foojay disco — JDK toolchain 자동 다운로드 (Java 21 등 부재 시 받아옴)
-    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.8.0'
 }
 
 rootProject.name = 'nscm'

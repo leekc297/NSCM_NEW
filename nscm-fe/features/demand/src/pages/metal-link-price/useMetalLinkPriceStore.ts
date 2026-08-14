@@ -37,8 +37,7 @@ const initMetalLinkPriceState: MetalLinkPriceState = {
   initialized: false,
   isOpenSearchArea: true,
   searchParams: {
-    // 기본 '40' — 저장된 개인화 Condition 이 있으면 fetchStaticColumns 에서 덮음 (사용자 요구 2026-07-10)
-    divisionId: '40',
+    divisionId: useSessionStore.getState().session.div ?? '40',
     team: '',
     endCustomer: '',
     salesSite: '',

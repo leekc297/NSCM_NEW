@@ -1,4 +1,4 @@
-import { PlantSiteField } from 'features/master/src/components';
+import { PlantSiteField, TeamField } from 'features/master/src/components';
 import { PeriodField } from 'features/master/src/components';
 import type { Dispatch, SetStateAction } from 'react';
 
@@ -38,8 +38,8 @@ export const MetalLinkPriceForm = ({
 
   // ComboId — SCM_ADM_CMBO_SQL_M 등록명 (DMF0014 형제 화면 파리티. DMF0074 자체 CMBO 등록 0 —
   //   AS-IS GetDMInnerTable 7종 chain 을 공용 콤보로 대체). Plant Site 는 카탈로그 PlantSiteField 사용.
-  const [myDivision, teambyDivision, endCustomer, salesSite] = useTabComboQueries({
-    filters: ['MyDivision', 'TeambyDivision', 'EndCustomer', 'SalesSite'],
+  const [myDivision, endCustomer, salesSite] = useTabComboQueries({
+    filters: ['MyDivision', 'EndCustomer', 'SalesSite'],
   });
 
   // cascade 하위 필터 기준 — 선택된 Team(멀티, 콤마조인)
@@ -86,33 +86,15 @@ export const MetalLinkPriceForm = ({
               className={styles.formItem}
             />
           </Grid>
-          <Grid size={3}>
-            <FormItem
-              label={t('LBL00044', '_Team')}
-              labelAlign='right'
-              render={() => (
-                <CustomDropdown
-                  value={searchParams.team}
-                  defaultValue='ALL'
-                  allOption
-                  useClearIcon
-                  multiple
-                  options={
-                    teambyDivision
-                      ?.filter(item => item.DIVISION_ID === searchParams.divisionId)
-                      ?.map(item => ({ label: item.NAME, value: item.CODE })) ?? []
-                  }
-                  onChange={(_, option) => {
-                    // AS-IS clbTeam SIC (.cs L238) — 하위(End Customer/Sales Site) cascade clear
-                    setSearchParams({ team: option, endCustomer: '', salesSite: '' });
-                  }}
-                  className={styles.input}
-                />
-              )}
-              labelSize='long'
-              className={styles.formItem}
-            />
-          </Grid>
+          <TeamField
+            gridSize={3}
+            value={searchParams.team ? searchParams.team.split(',').filter(Boolean) : []}
+            onChange={v =>
+              // AS-IS clbTeam SIC (.cs L238) — 하위(End Customer/Sales Site) cascade clear
+              setSearchParams({ team: v.join(','), endCustomer: '', salesSite: '' })
+            }
+            division={searchParams.divisionId}
+          />
           <Grid size={3}>
             <FormItem
               label={t('LBL00080', '_End Customer')}

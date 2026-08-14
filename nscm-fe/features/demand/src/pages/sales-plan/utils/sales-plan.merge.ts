@@ -98,18 +98,14 @@ export class HierarchicalMergeManager extends MergeManager {
       if (!cur) return null;
       // [DMF0003 No.57 계보 2026-08-12] 신규 Insert 행(CRUD_TYPE='I')은 머지 제외 —
       //   키 컬럼이 전부 빈값이라 '' === '' 로 행추가 횟수만큼 병합되어 보이는 결함(선제 이식).
-      if ((cur as Record<string, unknown>).CRUD_TYPE === 'I') return null;
+      if (cur.CRUD_TYPE === 'I') return null;
       const fixedIdx = this.fixedBindings.indexOf(binding);
       const leftBindings = this.fixedBindings.slice(0, fixedIdx + 1);
       const sameRow = (a: number, b: number): boolean => {
         const ra = rowItem(a);
         const rb = rowItem(b);
         if (!ra || !rb) return false;
-        if (
-          (ra as Record<string, unknown>).CRUD_TYPE === 'I' ||
-          (rb as Record<string, unknown>).CRUD_TYPE === 'I'
-        )
-          return false;
+        if (ra.CRUD_TYPE === 'I' || rb.CRUD_TYPE === 'I') return false;
         return leftBindings.every(
           k =>
             ((ra as Record<string, string>)[k] ?? '') === ((rb as Record<string, string>)[k] ?? '')

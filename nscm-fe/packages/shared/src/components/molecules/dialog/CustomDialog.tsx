@@ -5,7 +5,7 @@ import { memo, type ReactNode, useCallback, useEffect, useId, useRef, useState }
 import Draggable from 'react-draggable';
 
 import _ from '@foundation/lodash';
-import { DialogScopeContext, useDialogStore } from '@shared/stores';
+import { confirmIfScopeDirty, DialogScopeContext, useDialogStore } from '@shared/stores';
 
 import DialogContentArea from './components/CustomDialogContent';
 import styles from './CustomDialog.module.scss';
@@ -39,6 +39,16 @@ export type DialogNavigationProps = {
   /** size/height 1.5배 확대 미적용 (기본 false). 메시지(Alert) 등 원본 크기를 유지해야 하는 다이얼로그에서 사용 */
   disableScale?: boolean;
 } & DialogProps;
+
+/**
+ * ⭐ MUI 포커스 트랩 해제가 필요한 경우 (2026-07-30, DMF0082 ExchangeRateModal 실측):
+ *   Wijmo 그리드 셀 콤보의 드롭다운 ListBox 는 `MuiDialog-container` **밖**(`MuiDialog-root` 직하)에
+ *   append 된다. MUI FocusTrap(enforceFocus)은 트랩 외부로 나간 포커스를 즉시 컨테이너로 되돌리는데,
+ *   그 순간 Wijmo 가 포커스 상실로 `finishEditing()` 을 호출해 에디터(`_edt`)를 파괴한다.
+ *   이후 리스트 항목을 클릭해도 `finishEditing()` 이 `if (!this._edt || null == this._rng) return`
+ *   에 걸려 **선택값이 조용히 버려지고 리스트만 닫힌다**.
+ *   ⇒ 그리드 셀 콤보(dataMap)를 쓰는 다이얼로그는 `disableEnforceFocus` 를 켜야 한다.
+ */
 
 const DIALOG_SCALE = 1.5;
 const MAX_WIDTH = 2000;
@@ -134,6 +144,8 @@ const CustomDialogComponent = ({
   height,
   disableMaximize = false,
   disableScale = false,
+  // ⚠️ 이 컴포넌트는 나머지 props 를 MuiDialog 로 spread 하지 않는다 → 전달할 prop 은 명시 선언 필수.
+  disableEnforceFocus,
 }: DialogNavigationProps) => {
   // 이 다이얼로그의 단축키 스코프 id. 열려 있는 동안 스택 최상위면 이 스코프의 SubTitle 단축키만 동작한다.
   const scopeId = useId();
@@ -189,6 +201,14 @@ const CustomDialogComponent = ({
     handleClose();
   };
 
+  // ⭐ 닫기(X/Cancel) 미저장 변경 가드 — 이 다이얼로그 스코프의 그리드에 저장 안 한 변경이 있으면
+  //   confirm 후 닫는다. 확인(submit) 경로는 화면 로직이 변경분을 처리하므로 가드하지 않는다.
+  const handleGuardedClose = () => {
+    void confirmIfScopeDirty(scopeId).then(ok => {
+      if (ok) handleClose();
+    });
+  };
+
   sizeRef.current = { draggable, dialogSize, handleResizeStart, isMaximized, disableScale };
   const PaperComponent = useCallback(
     (paperProps: PaperProps) => <DraggablePaper {...paperProps} sizeRef={sizeRef} />,
@@ -228,6 +248,8 @@ const CustomDialogComponent = ({
           hideBackdrop={type === 'modaless'}
           PaperComponent={PaperComponent}
           className={styles.defaultDialog}
+          // 미지정 시 MUI 기본(false) 유지 — 기존 다이얼로그 동작 무변경. 상단 주석 참조.
+          disableEnforceFocus={disableEnforceFocus}
         >
           <DialogContentArea
             title={title}
@@ -238,7 +260,7 @@ const CustomDialogComponent = ({
             customHeaderSubTitle={customHeaderSubTitle}
             disableButtonCancel={disableButtonCancel}
             handleSubmit={handleDialogSubmit}
-            handleClose={handleClose}
+            handleClose={handleGuardedClose}
             draggable={draggable}
             isMaximized={isMaximized}
             onToggleMaximize={disableMaximize ? undefined : () => setIsMaximized(v => !v)}
@@ -248,7 +270,7 @@ const CustomDialogComponent = ({
         <Popover
           open={open}
           anchorEl={anchorEl}
-          onClose={handleClose}
+          onClose={handleGuardedClose}
           anchorOrigin={{
             vertical: isOutBound ? 'top' : 'bottom',
             horizontal: 'left',
@@ -281,7 +303,7 @@ const CustomDialogComponent = ({
             customHeaderSubTitle={customHeaderSubTitle}
             disableButtonCancel={disableButtonCancel}
             handleSubmit={handleDialogSubmit}
-            handleClose={handleClose}
+            handleClose={handleGuardedClose}
           />
         </Popover>
       )}

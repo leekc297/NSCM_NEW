@@ -1,4 +1,6 @@
 export * from './data-grid/DataGrid';
+export * from './data-grid/gridContextMenu';
+export * from './data-grid/titleSetApi';
 export * from './result-area/ResultArea';
 export * from './column-button/ColumnButton';
 export * from './main-title/MainTitle';

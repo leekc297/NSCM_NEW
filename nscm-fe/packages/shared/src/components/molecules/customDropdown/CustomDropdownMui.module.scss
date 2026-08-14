@@ -4,7 +4,7 @@
 
 .customDropdown {
   // 필드 폭을 컨테이너(그리드 셀)에 고정 — 칩/내용이 많아도 이 폭을 넘지 않고,
-  // 내용이 짧아도 줄지 않아 항상 '원래 폭'을 유지한다. 넘치는 내용은 아래 overflow 로 잘림.
+  // 내용이 짧아도 줄지 않아 항상 '원래 폭'을 유지한다. 넘치는 칩은 아래 chipClip 의 ellipsis 로 잘림.
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
@@ -14,17 +14,22 @@
     flex-wrap: nowrap;
     align-items: center;
     white-space: nowrap;
-    // 선택 칩이 필드 밖(옆 필드)으로 넘쳐 침범하지 않도록 클리핑.
-    // endAdornment(화살표/클리어)는 position:absolute(right:9)라 잘리지 않는다.
-    overflow: hidden;
+    // min-width:0 → 칩이 많아도 이 인풋루트가 FormItem 칼럼 안에서 줄어들 수 있게.
+    // ※ overflow:hidden 은 쓰지 않는다 — notchedOutline(fieldset, top:-5px)의
+    //   윗변 테두리가 잘려 '상단 라인 사라짐'이 발생한다. 칩은 아래 ellipsis 로 이미 잘리므로
+    //   넘침 클리핑이 불필요하다.
     min-width: 0;
   }
 
-  // 칩 뒤의 빈 타이핑 input(MUI 기본 flex-grow:1)이 남는 폭을 가져가면
-  // 칩(.chipClip)이 그 폭을 못 써서 잘린다. 칩 뒤 input 만 grow:0 으로 눌러
-  // 남는 폭을 칩이 쓰게 한다. 단일 선택엔 chipClip 이 없어 값 표시 영향 없다.
+  // 칩 뒤의 빈 타이핑 input 은 <input> 고유폭(size=20 → 약 180px)이 flex-basis:auto 로
+  // 잡혀, 폭이 남아도 그 ~180px 를 예약해 칩을 밀어 잘리게 만든다.
+  // 칩 뒤(chipClip 형제) input 의 basis 를 0 으로 만들어 예약을 없애면, 그 폭을 칩이 써서
+  // 넓은 필드에선 라벨 전체가 보이고 좁을 때만 … 로 잘린다. (min-width 로 최소 클릭영역은 유지)
+  // 단일 선택엔 chipClip 이 없어 이 셀렉터가 매칭되지 않으므로 값 표시엔 영향 없다.
   .chipClip ~ [class*='MuiAutocomplete-input'] {
     flex-grow: 0;
+    flex-basis: 0;
+    width: 0;
   }
 
   // 다중 선택('ALL')은 placeholder 로 표시된다. 디자인시스템 테마가
@@ -39,18 +44,16 @@
   }
 }
 
-// 선택 칩 래퍼.
-// 디자인시스템 Chip 의 중첩 Box 구조 때문에 flex-basis:auto(콘텐츠 기준)가
-// 실제 라벨 폭보다 작게 측정돼, 폭이 남는데도 칩이 잘렸다(단일 선택도 잘림).
-// → 래퍼를 flex:1 1 auto 로 '남는 폭만큼 확장'시켜 used width 를 실제 가용폭으로
-//   만든다. 그러면 내부 Typography 가 그 폭 안에서 전체 라벨을 보여주고,
-//   폭이 진짜 모자랄 때만(좁은 필드) … 로 자른다.
+// 선택 칩 래퍼 — 콘텐츠를 감싸며(hug), 폭이 모자랄 때만 … 로 잘린다.
+// flex:0 1 auto → 확장하지 않아 짧은 라벨 뒤 +N 이 바로 붙는다(여백 드리프트 없음).
+// 넓은 필드에서 라벨 전체가 보이는 건 위의 input basis:0 처리 덕분(input 이 폭을 예약 안 함).
+// min-width:0 → 좁을 때 콘텐츠보다 더 줄어 내부 Typography 가 … 로 자른다.
 // title 속성으로 hover 시 전체 라벨을 네이티브 툴팁으로 보여준다.
 // (Chip 은 title prop 을 전달하지 않으므로 span 래퍼로 감싼다.)
 .chipClip {
   display: inline-flex;
   align-items: center;
   min-width: 0;
-  flex: 1 1 auto;
+  flex: 0 1 auto;
   overflow: hidden;
 }

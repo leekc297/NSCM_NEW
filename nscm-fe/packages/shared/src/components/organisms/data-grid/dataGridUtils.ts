@@ -408,8 +408,22 @@ export const useDataGridUtils = <T extends WijmoRowItem = WijmoRowItem>() => {
       const target = mouseEvent.target as HTMLElement;
       const ht = grid.hitTest(mouseEvent);
       const column = grid.columns[ht.col];
-      // allowSorting(F3) 여부와 무관하게 헤더 클릭이면 정렬. F3 는 아이콘 표시만 담당.
       if (ht.cellType !== CellType.ColumnHeader || !column) return;
+
+      // 정렬은 F3(GridAction.toggleColumnSort)로 켠 컬럼에서만 걸린다 — 헤더를 클릭했다는
+      //   이유만으로 바로 정렬되는 동작은 금지. 단축키가 정렬 스위치이고, 클릭은 그 스위치가
+      //   켜진 컬럼에서만 오름/내림/해제를 순환시킨다.
+      // 전제: 정적 컬럼은 columnMapping.toLeafColumn 이 allowSorting:false 로 만들어 준다
+      //   (wijmo Column.allowSorting 기본값은 true — 화면이 직접 만든 컬럼은 켜진 채로 오지만
+      //   그런 컬럼은 아래 _dynamic 가드에서 걸린다).
+      if (!column.allowSorting) return;
+
+      // 동적(주차/월/일) 컬럼 헤더는 정렬하지 않는다 — 화면들이 이 헤더의 더블클릭을 드릴다운에
+      //   쓰는데, 정렬 끝의 select(-1,-1)+scrollIntoView(0,0) 가 그리드를 맨 앞으로 끌어당기면
+      //   뒤이은 dblclick 의 hitTest 가 앞쪽 컬럼을 집어 드릴다운이 깨진다.
+      //   판정은 DataGrid 가 dynamicColumns leaf 에 채우는 _dynamic — 컬럼의 allowSorting 은
+      //   F3 로 켜질 수 있고, 헤더 라벨은 관리자 메타(변경 가능)라 둘 다 판정에 쓸 수 없다.
+      if (GridUtils.getColumn(grid, ht.col)?._dynamic) return;
 
       // 헤더 셀 아무 곳이나 클릭하면 정렬(아이콘/글자 무관).
       // 단, 필터 아이콘 클릭은 제외 — 필터 팝업이 정상적으로 열려야 하므로.

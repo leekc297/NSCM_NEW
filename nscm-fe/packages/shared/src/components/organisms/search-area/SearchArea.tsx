@@ -9,7 +9,15 @@ import {
 import type { BoxProps, SxProps, Theme } from '@mui/material';
 import { Box, Collapse, Grid, useTheme } from '@mui/material';
 import _ from 'lodash';
-import React, { useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
+
+import {
+  confirmIfDirtyKey,
+  DialogScopeContext,
+  scopeDirtyKey,
+  tabDirtyKey,
+  useTabid,
+} from '@shared/stores';
 
 const makeSxArray = (sx: SxProps<Theme>): SxProps<Theme>[] => {
   return Array.isArray(sx) ? (sx as SxProps<Theme>[]) : [sx];
@@ -37,6 +45,8 @@ export type SearchAreaProps = BoxProps & {
   conditions?: React.ReactNode;
   extraConditions?: React.ReactNode;
   isCustomExtraCondition?: boolean;
+  // Search 버튼 바로 왼쪽에 배치할 화면별 커스텀 액션 버튼 (예: Version Create/Transfer 등).
+  extraButtons?: React.ReactNode;
 };
 
 export const SearchArea = ({
@@ -51,6 +61,7 @@ export const SearchArea = ({
   conditions,
   extraConditions,
   isCustomExtraCondition,
+  extraButtons,
 }: SearchAreaProps) => {
   const {
     palette: { semantic },
@@ -62,6 +73,20 @@ export const SearchArea = ({
   const buttonGroups = useRef<HTMLElement>();
 
   const [selectedOption, setSelectedOption] = useState<string>('');
+
+  // 조회 미저장 변경 가드 — 대부분 화면의 실제 조회 진입점은 SubTitle(F5)이 아니라
+  //   이 조회 버튼이므로 여기서도 감싼다(SubTitle 의 F5 가드와 동일 규약, 화면 무수정).
+  //   조회는 그리드 데이터를 통째로 덮어쓰므로 dirty 면 confirm 후 실행한다.
+  const tabId = useTabid();
+  const scopeId = useContext(DialogScopeContext);
+  const dirtyKey = scopeId === null ? tabDirtyKey(tabId) : scopeDirtyKey(scopeId);
+  const handleSearchClick = onSearch
+    ? () => {
+        void confirmIfDirtyKey(dirtyKey, 'search').then(ok => {
+          if (ok) onSearch();
+        });
+      }
+    : undefined;
 
   // isHidden 이어도 언마운트하지 않고 Collapse 로 접는다.
   // → 입력한 검색조건·확장(extraConditions) 상태가 그대로 보존된다.
@@ -133,13 +158,14 @@ export const SearchArea = ({
                   onClick={onResetCondition}
                 />
               )}
+              {extraButtons}
               {onSearch && (
                 <Button
                   size='medium'
                   appearance='contained'
                   priority='normal'
                   iconComponent={<FunctionSearchIcon appearance='lined' iconSize={20} />}
-                  onClick={onSearch}
+                  onClick={handleSearchClick}
                 >
                   {searchButtonLabel}
                 </Button>

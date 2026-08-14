@@ -19,9 +19,10 @@ import {
 } from 'react';
 
 import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
+import { rebindFilterColumns } from '@foundation/utils';
 import type { EditTracker } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
-import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
+import { useTabComboQueries } from '@shared/hooks';
 import { useMessageStore } from '@shared/stores';
 
 import {
@@ -979,6 +980,14 @@ export const SalesPlanGrid = ({
         const dm = dataMaps[col.binding ?? ''];
         if (dm && col.dataMap !== dm) col.dataMap = dm;
       }
+      // (0-c) ⭐ [공통 UC-07 2026-08-14] 필터가 걸린 상태에서 **재조회해도 필터가 유지**되도록 재바인딩.
+      //   wijmo 는 columnGroups 재대입마다 Column 객체를 새로 만드는데 FlexGridFilter 는 죽은 Column
+      //   참조를 붙든 채 남는다 → "헤더 필터 표시는 남아 있는데 조건은 풀린 상태로 조회" (요구 원문 증상).
+      //   공용 `rebindFilterColumns` 가 filterDefinition 왕복으로 현재 컬럼에 다시 묶고,
+      //   신규행 필터 예외 집합(keepRowVisibleUnderFilter 등록분)도 보존한다.
+      //   끊어진 필터가 있을 때만 동작하므로 매 updatedLayout 호출에도 되먹임이 없다(유틸 내부 가드).
+      //   (유틸 시그니처는 `FlexGrid<WijmoRowItem>` 기준 — 행 타입이 좁아 캐스팅만 맞춘다.)
+      rebindFilterColumns(g as unknown as FlexGridType<WijmoRowItem>, gridFilterRef?.current);
       const headerRows = g.columnHeaders?.rows;
       if (!headerRows || headerRows.length === 0) return;
       const rowCount = headerRows.length;

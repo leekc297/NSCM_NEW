@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity badRequestException(Exception e) {
-    	log.error("Error: {}", e.getMessage());
+    	log.error("SQL Error - cause: {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage(), e);
     	ErrorResponse error = ErrorResponse.builder()
     			.code(BaseConstants.SERVER_ERROR)
     			.message(BaseConstants.SERVER_ERROR_MSG)
@@ -38,7 +38,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity authenticationException(Exception e) {
-    	log.error("Error: {}", e.getMessage());
+    	log.error("SQL Error - cause: {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage(), e);
     	ErrorResponse error = ErrorResponse.builder()
     			.code(BaseConstants.AUTHENTICATION_ERROR)
     			.message(BaseConstants.AUTHENTICATION_ERROR_MSG)
@@ -50,7 +50,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity forbiddenException(Exception e) {
-    	log.error("Error: {}", e.getMessage());
+    	log.error("SQL Error - cause: {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage(), e);
     	ErrorResponse error = ErrorResponse.builder()
     			.code(BaseConstants.AUTHORIZATION_ERROR)
     			.message(BaseConstants.AUTHORIZATION_ERROR_MSG)
@@ -62,7 +62,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NoHandlerFoundException.class)
     public ResponseEntity notFoundException(Exception e) {
-    	log.error("Error: {}", e.getMessage());
+    	log.error("SQL Error - cause: {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage(), e);
     	ErrorResponse error = ErrorResponse.builder()
     			.code(BaseConstants.SERVER_ERROR)
     			.message(BaseConstants.SERVER_ERROR_MSG)
@@ -74,7 +74,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({NullPointerException.class, QueryTimeoutException.class, RuntimeException.class})
     public ResponseEntity internalServerErrorException(Exception e) {
-    	log.error("Error: {}", e.getMessage());
+    	log.error("SQL Error - cause: {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage(), e);
     	ErrorResponse error = ErrorResponse.builder()
     			.code(BaseConstants.SERVER_ERROR)
     			.message(BaseConstants.SERVER_ERROR_MSG)
@@ -87,7 +87,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(SystemException.class)
     public ResponseEntity systemException(SystemException e) {
-    	log.error("Error: {}", e.getMessage());
+    	log.error("SQL Error - cause: {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage(), e);
     	String code = BaseConstants.SYSTEM_ERROR;
     	String message = BaseConstants.SYSTEM_ERROR_MSG;
     	if(e.getCode() != null) code = e.getCode();
@@ -103,7 +103,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity businessException(BusinessException e) {
-    	log.error("Error: {}", e.getMessage());
+    	log.error("SQL Error - cause: {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage(), e);
     	String code = BaseConstants.BUSINESS_ERROR;
     	String message = BaseConstants.BUSINESS_ERROR_MSG;
     	if(e.getCode() != null) code = e.getCode();
@@ -119,7 +119,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(SqlException.class)
     public ResponseEntity sqlException(SqlException e) {
-    	log.error("Error: {}", e.getMessage());
+    	log.error("SQL Error - cause: {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage(), e);
     	String code = BaseConstants.SQL_ERROR;
     	String message = BaseConstants.SQL_ERROR_MSG;
 //    	if(e.getSqlCode() != null) code = e.getSqlCode();
@@ -135,7 +135,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity defaultException(Exception e) {
-    	log.error("Error: {}", e.getMessage());
+    	log.error("SQL Error - cause: {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage(), e);
     	ErrorResponse error = ErrorResponse.builder()
     			.code(BaseConstants.SERVER_ERROR)
     			.message(BaseConstants.SERVER_ERROR_MSG)

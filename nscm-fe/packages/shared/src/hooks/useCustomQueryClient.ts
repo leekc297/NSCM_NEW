@@ -4,9 +4,40 @@ import { useRef, useEffect } from 'react';
 import { apiClient } from '@foundation/apis';
 import { BUTTON_TYPE } from '@foundation/constants';
 import type { ComboParam, LookupParam, ComboResponse, LookupResponse } from '@foundation/models';
-import { useQuery, useMutation, useQueryClient, useQueries } from '@foundation/query-client';
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  useQueries,
+  VOLATILE_QUERY_OPTIONS,
+} from '@foundation/query-client';
 import type { UseQueryOptions } from '@foundation/query-client';
-import { useMessageStore } from '@shared/stores';
+import { useMessageStore, useSessionStore } from '@shared/stores';
+
+/**
+ * combo 캐시 키에 붙일 세션 스코프. 세션이 없으면(로그인 전 / 로그아웃 직후) null.
+ *
+ * 서버는 combo SQL(SCM_ADM_CMBO_SQL_M)의 @sesUserId / @sesLangCd 를 로그인 세션 값으로 치환해
+ * 결과를 만든다(LookupServiceImpl.retrieveCombo). 즉 같은 comboId 라도 계정/언어가 다르면 결과가 다르다.
+ * 전역 기본값이 staleTime: Infinity + gcTime 8h + IndexedDB 영속이라, 키에 계정이 없으면
+ * 재로그인 후에도 이전 계정의 combo 가 그대로 서빙된다. 그래서 키를 세션 단위로 분리한다.
+ *
+ * 세션이 없을 때 null 인 이유 — 로그아웃은 세션을 비우는데(useSessionStore.logout), MDI 는
+ * keep-alive 라 그 순간에도 화면(DataGrid)이 마운트된 채로 남아 있다. 스코프가 빈 문자열이면
+ * 그것도 유효한 키라서 콤보 전부가 캐시 미스 → 컬럼 수만큼 즉시 재조회되고, 서버 세션은 이미
+ * 끊긴 뒤라 전부 401 이 된다(retry:1 이라 요청은 2배, 전역 onError 알림까지 뜬다).
+ * 세션 없이는 애초에 조회할 값이 없으므로 스코프를 null 로 두고 아래에서 enabled 를 막는다.
+ */
+const useComboScope = () =>
+  useSessionStore(state =>
+    state.session?.userId ? `${state.session.userId}:${state.session.langCd ?? ''}` : null
+  );
+
+const buildComboQueryKey = (scope: string, param: ComboParam) =>
+  ['combo', scope, { ...param }] as const;
+
+const toComboParam = (filter: ComboParam | string): ComboParam =>
+  typeof filter === 'string' ? { comboId: filter } : filter;
 
 const buildTabQueryKey = <M extends MenuId, S extends SheetName<M>>(
   tabId: string,
@@ -138,13 +169,15 @@ export const useTabComboQuery = ({
   enabled?: boolean;
   queryOptions?: Omit<UseQueryOptions<ComboResponse[]>, 'queryKey' | 'queryFn'>;
 }) => {
-  const queryKey = buildTabQueryKey('combo', '', '', filters);
+  const scope = useComboScope();
+  const queryKey = buildComboQueryKey(scope ?? '', filters);
 
   return useQuery<ComboResponse[]>({
     queryKey,
     queryFn: () => apiClient.getCombo(filters),
-    enabled: enabled,
+    enabled: enabled && scope !== null,
     persister: queryOptions?.persister ?? undefined,
+    ...VOLATILE_QUERY_OPTIONS,
     ...queryOptions,
   });
 };
@@ -158,17 +191,15 @@ export const useTabComboQueries = ({
   enabled?: boolean;
   queryOptions?: Omit<UseQueryOptions<ComboResponse[]>, 'queryKey' | 'queryFn'>;
 }) => {
+  const scope = useComboScope();
+
   return useQueries({
     queries: filters.map(filter => ({
-      queryKey: buildTabQueryKey(
-        'combo',
-        '',
-        '',
-        typeof filter === 'string' ? { comboId: filter } : filter
-      ),
-      queryFn: () => apiClient.getCombo(typeof filter === 'string' ? { comboId: filter } : filter),
-      enabled: enabled,
+      queryKey: buildComboQueryKey(scope ?? '', toComboParam(filter)),
+      queryFn: () => apiClient.getCombo(toComboParam(filter)),
+      enabled: enabled && scope !== null,
       persister: queryOptions?.persister ?? undefined,
+      ...VOLATILE_QUERY_OPTIONS,
       ...queryOptions,
     })),
   }).map(item => item.data);
@@ -194,6 +225,7 @@ export const useTabLookupQuery = ({
     queryFn: () => apiClient.getLookup(filters),
     enabled: enabled,
     persister: queryOptions?.persister ?? undefined,
+    ...VOLATILE_QUERY_OPTIONS,
     ...queryOptions,
   });
 };
@@ -219,6 +251,7 @@ export const useTabLookupQueries = ({
         apiClient.getLookup(typeof filter === 'string' ? { lookupType: filter } : filter),
       enabled: enabled,
       persister: queryOptions?.persister ?? undefined,
+      ...VOLATILE_QUERY_OPTIONS,
       ...queryOptions,
     })),
   }).map(item => item.data);

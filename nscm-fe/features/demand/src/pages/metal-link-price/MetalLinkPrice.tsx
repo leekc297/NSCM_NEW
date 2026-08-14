@@ -270,8 +270,6 @@ export const MetalLinkPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         open={openVersionModal}
         modalClose={() => setOpenVersionModal(false)}
         defaultDivision={searchParams.divisionId}
-        defaultPeriodFrom={searchParams.fromYyyymm}
-        defaultPeriodTo={searchParams.toYyyymm}
         onApply={versionIds => setSearchParams({ version: versionIds })}
       />
       {/* ⭐ AS-IS btnTemplate 'Excel Form' (.cs L704~713) — 전용 MetalLinkPricePopup 1:1

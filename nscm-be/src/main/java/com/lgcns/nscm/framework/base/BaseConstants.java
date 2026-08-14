@@ -57,10 +57,6 @@ public class BaseConstants {
     public static final String BUSINESS_ERROR = "-9995";
     public static final String BUSINESS_ERROR_MSG = "Business Error";
 
-    /** 공유 게스트 계정 ID (미등록 사용자의 메뉴·권한 판정 기준). Oracle 대소문자 구분. */
-    public static final String GUEST_USER_ID = "Guest";
-    public static final String GUEST_GROUP_NM = "GUEST";
-
     public static final String SQL_ERROR = "-9994";
     public static final String SQL_ERROR_MSG = "Sql Error";
 

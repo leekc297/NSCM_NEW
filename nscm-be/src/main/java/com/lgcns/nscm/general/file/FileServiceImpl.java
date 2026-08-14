@@ -81,6 +81,34 @@ public class FileServiceImpl extends BaseService implements FileService {
 		return result;
 	}
 
+	/**
+	 * 엑셀 헤더 문자열이 버킷 시작일(YYYYMMDD)이면 8자리 문자열로 정규화해 돌려준다. 아니면 null.
+	 *
+	 * <p>1단 헤더 업로드에서 기간 컬럼을 식별하는 유일한 근거다. 사용자가 엑셀에서 편집·저장하면
+	 * 날짜 헤더가 숫자 셀이 되어 {@code 20260803.0} / {@code 2.0260803E7} 로 읽히므로, 원형 비교만
+	 * 하면 그 열 전량이 조용히 탈락한다(= 기간 컬럼 0개 → 전건 BUCKET 오류).
+	 *
+	 * <p>범위를 19000101~99991231 로 좁혀, 우연히 8자리인 코드성 헤더를 기간 컬럼으로 오인하지 않는다.
+	 */
+	private String normalizeYmdHeader(String header) {
+	    if (header == null) return null;
+	    String s = header.trim();
+	    if (s.isEmpty()) return null;
+	    if (!s.matches("[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?")) return null;
+	    long v;
+	    try {
+	        v = new java.math.BigDecimal(s).longValueExact();
+	    } catch (ArithmeticException | NumberFormatException e) {
+	        return null; // 소수부가 있는 실수 등 — 날짜가 아니다
+	    }
+	    if (v < 19000101L || v > 99991231L) return null;
+	    String ymd = Long.toString(v);
+	    int mm = Integer.parseInt(ymd.substring(4, 6));
+	    int dd = Integer.parseInt(ymd.substring(6, 8));
+	    if (mm < 1 || mm > 12 || dd < 1 || dd > 31) return null;
+	    return ymd;
+	}
+
 	private int getPipeCount(String input) {
         if (input == null || input.isEmpty()) return 0;
         String[] parts = input.split("\\|", -1);
@@ -129,15 +157,46 @@ public class FileServiceImpl extends BaseService implements FileService {
 	                .compareTo(tdr.get(b).toString().trim()));
 	        orderedCols.addAll(periodCols);
 	    } else {
-	        // 날짜 행 없는 업로드(단일 헤더) → 기존 동작: HEADER_CONTENT 토큰 순서 그대로
-	        for (String tk : targetKeys) orderedCols.add(tk.trim());
+	        // ⭐ [2026-08-14] 1단 헤더 업로드 — 기간 컬럼의 **헤더가 곧 버킷 시작일**(YYYYMMDD)이다.
+	        //   SP 는 V_TITLE(헤더행) 의 ATTRIBUTE14~ 에서 버킷을 읽으므로, 날짜 헤더가 그대로 실리면
+	        //   별도 일자행(2단) 없이도 업로드가 성립한다. (2단 지원 블록은 EXISTS 가드로 미동작)
+	        //   ⚠ 헤더가 항상 문자열로 오지는 않는다 — 사용자가 엑셀에서 편집·저장하면 날짜 헤더가
+	        //     숫자 셀로 바뀌어 '20260803.0' / '2.0260803E7' 로 읽힐 수 있다(같은 계열의 값 셀
+	        //     방어가 SP NORMALIZE 07-08 에 이미 있다). 원형 그대로만 보면 그 열 전량이 조용히
+	        //     탈락해 기간 컬럼 0개 → 아래 fallback 으로 빠지고 **전건 BUCKET 오류**가 된다.
+	        List<String> periodCols = new ArrayList<>();
+	        Map<String, Object> firstRow = excelList.isEmpty() ? null : excelList.get(0);
+	        if (firstRow != null) {
+	            for (String k : firstRow.keySet()) {
+	                if (normalizeYmdHeader(k) != null) periodCols.add(k);
+	            }
+	        }
+	        if (periodCols.isEmpty()) {
+	            // 날짜 헤더가 없는 업로드 → 기존 동작 보존: HEADER_CONTENT 토큰 순서 그대로.
+	            for (String tk : targetKeys) orderedCols.add(tk.trim());
+	        } else {
+	            // 식별 컬럼 = HEADER_CONTENT 토큰 중 **파일에 실재하는 것만**.
+	            //   stale 기간 토큰(W27 등)을 그대로 넣으면 빈 컬럼이 끼어 ATTRIBUTE 위치가 통째로 밀린다.
+	            for (String tk : targetKeys) {
+	                String key = tk.trim();
+	                if (firstRow.containsKey(key)) orderedCols.add(key);
+	            }
+	            // 시트 기간 순 — 표기(문자/숫자)가 섞여도 정규화한 YYYYMMDD 로 정렬한다.
+	            periodCols.sort((a, b) -> normalizeYmdHeader(a).compareTo(normalizeYmdHeader(b)));
+	            orderedCols.addAll(periodCols);
+	        }
 	    }
 
-	    // @TITLE(라벨) 행 — SP 는 버킷을 V_TITLE 이 아니라 날짜행에서 산출하므로 라벨만 싣는다.
+	    // @TITLE(라벨) 행. 2단 업로드에서는 SP 가 버킷을 날짜행에서 산출하므로 라벨만 싣지만,
+	    //   1단 업로드에서는 **이 행의 기간 컬럼이 곧 버킷 일자**다.
+	    //   ⭐ 숫자로 읽힌 날짜 헤더는 여기서 'YYYYMMDD' 로 되돌려 싣는다 — SP 가 TO_NUMBER 로 버티긴
+	    //     하지만, 원장/로그에 '2.0260803E7' 같은 표기가 남으면 추적이 어려워진다.
 	    Map<String, Object> headerMap = new LinkedHashMap<>();
 	    headerMap.put("UPLOAD_STAT", "@TITLE"); // 헤더 행 식별자
 	    for (int i = 0; i < orderedCols.size(); i++) {
-	        headerMap.put("_COL" + (i + 1), orderedCols.get(i));
+	        String col = orderedCols.get(i);
+	        String ymd = normalizeYmdHeader(col);
+	        headerMap.put("_COL" + (i + 1), ymd != null ? ymd : col);
 	    }
 	    transformedList.add(headerMap);
 

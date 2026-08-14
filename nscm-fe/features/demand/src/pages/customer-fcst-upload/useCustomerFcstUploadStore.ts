@@ -44,7 +44,7 @@ const initCustomerFcstUploadState: CustomerFcstUploadState = {
   initialized: false,
   isOpenSearchArea: true,
   searchParams: {
-    divisionId: '40',
+    divisionId: useSessionStore.getState().session.div ?? '40',
     team: '',
     endCustomer: '',
     salesSite: '',

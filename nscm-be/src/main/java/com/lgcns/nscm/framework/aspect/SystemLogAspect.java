@@ -68,12 +68,9 @@ public class SystemLogAspect {
         Object result = null;
         try {
             result = joinPoint.proceed();
-            // 대량 조회 결과의 직렬화 비용을 피하기 위해 debug 레벨이 켜진 경우에만 toJson 수행
-            if(bLog && log.isDebugEnabled()) {
-                String resultJson = toJson(result);
-                log.debug("END: {}.{}() | Result: {} | Time: {}ms",
-                        className, methodName, resultJson, (System.currentTimeMillis() - startTime));
-            }
+            String resultJson = toJson(result);
+            if(bLog) log.info("END: {}.{}() | Result: {} | Time: {}ms",
+                     className, methodName, resultJson, (System.currentTimeMillis() - startTime));
 
             return result;
         } catch (Throwable throwable) {
@@ -151,12 +148,9 @@ public class SystemLogAspect {
         try {
 
             result = joinPoint.proceed();
-            // 대량 조회 결과의 직렬화 비용을 피하기 위해 debug 레벨이 켜진 경우에만 toJson 수행
-            if(log.isDebugEnabled()) {
-                String resultJson = toJson(result);
-                log.debug("END: {}.{}() | Result: {} | Time: {}ms",
-                        className, methodName, resultJson, (System.currentTimeMillis() - startTime));
-            }
+            String resultJson = toJson(result);
+            log.info("END: {}.{}() | Result: {} | Time: {}ms",
+                     className, methodName, resultJson, (System.currentTimeMillis() - startTime));
 
             return result;
         } catch (Throwable throwable) {

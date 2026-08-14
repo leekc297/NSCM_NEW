@@ -366,13 +366,14 @@ export const GridAction = {
   addRow: <T extends WijmoRowItem = WijmoRowItem>(
     grid: FlexGrid<T>,
     defaultCopyProps: Partial<T>,
-    placement: 'below' | 'top' | 'bottom' | 'above' = 'above'
+    placement: 'below' | 'top' | 'bottom' | 'above' = 'above',
+    preserveMergeManager = false
   ) => {
-    if (grid.isReadOnly) return;
+    if (grid.isReadOnly) return undefined;
     const itemsSource = grid.itemsSource as T[];
     const editFlag = itemsSource.every(item => item?.EDIT_FLAG === 'N');
     // TODO: 조회 없이 (그리드에 데이터 없이) 추가할 때 handle 추가적으로 필요  - 강민재
-    if (itemsSource.length !== 0 && editFlag) return;
+    if (itemsSource.length !== 0 && editFlag) return undefined;
 
     let insertRowIndex: number = 0;
     const newRow = {
@@ -404,9 +405,10 @@ export const GridAction = {
     // 필터가 걸려 있어도 신규행은 보여야 한다 — refresh 전에 필터 예외로 등록.
     keepRowVisibleUnderFilter(grid, newRow);
 
-    grid.mergeManager = new CustomMergeManager(grid);
+    if (!preserveMergeManager) grid.mergeManager = new CustomMergeManager(grid);
     grid.collectionView.refresh();
     grid.invalidate();
+    return newRow;
   },
 
   // F9: Remove row

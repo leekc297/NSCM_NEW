@@ -98,7 +98,7 @@ export const MetalLinkTemplateModal = ({
         type: 'alert',
         content: t(
           MSG.TEMPLATE_EMPTY,
-          '_Monthly Rolling Forecast \'Y\' version does not exist in this week\'s Sales Plan Waterfall.'
+          "_Monthly Rolling Forecast 'Y' version does not exist in this week's Sales Plan Waterfall."
         ),
       });
     }
@@ -128,7 +128,7 @@ export const MetalLinkTemplateModal = ({
         type: 'alert',
         content: t(
           MSG.TEMPLATE_EMPTY,
-          '_Monthly Rolling Forecast \'Y\' version does not exist in this week\'s Sales Plan Waterfall.'
+          "_Monthly Rolling Forecast 'Y' version does not exist in this week's Sales Plan Waterfall."
         ),
       });
       return;

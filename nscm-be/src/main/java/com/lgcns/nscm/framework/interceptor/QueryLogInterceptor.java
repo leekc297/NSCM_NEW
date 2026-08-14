@@ -1,9 +1,14 @@
 package com.lgcns.nscm.framework.interceptor;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+
+import javax.sql.DataSource;
 
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
@@ -22,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lgcns.nscm.admin.user.UserSession;
+import com.lgcns.nscm.framework.property.CommonProperties;
 import com.lgcns.nscm.framework.utils.NullUtils;
 import com.lgcns.nscm.framework.utils.SecurityUtil;
 
@@ -45,20 +51,25 @@ import com.lgcns.nscm.framework.utils.SecurityUtil;
 public class QueryLogInterceptor implements Interceptor {
 
     private static final Logger log = LoggerFactory.getLogger(QueryLogInterceptor.class);
+    private static final ThreadLocal<Boolean> logging = ThreadLocal.withInitial(() -> false);
 
+    private final DataSource dataSource;
     private final ObjectMapper objectMapper = new ObjectMapper();
-    private final SqlLogWriter sqlLogWriter;
-    private final boolean loggingOnlyError;
+    private final CommonProperties commonProperties;
 
     private int thresholdMs = 0;
 
-    public QueryLogInterceptor(SqlLogWriter sqlLogWriter, boolean loggingOnlyError) {
-        this.sqlLogWriter = sqlLogWriter;
-        this.loggingOnlyError = loggingOnlyError;
+    public QueryLogInterceptor(DataSource dataSource, CommonProperties commonProperties) {
+        this.dataSource = dataSource;
+        this.commonProperties = commonProperties;
     }
 
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
+
+        if (Boolean.TRUE.equals(logging.get())) {
+            return invocation.proceed();
+        }
 
         long start = System.currentTimeMillis();
 
@@ -94,20 +105,60 @@ public class QueryLogInterceptor implements Interceptor {
             long end = System.currentTimeMillis();
             int elapsed = (int) (end - start);
 
-            // 주의: finally 안에서 절대 return 하지 않는다. finally 의 return 은 try 의 실제 쿼리 결과를 덮어쓴다.
-            boolean belowThreshold = thresholdMs > 0 && elapsed < thresholdMs;
-            boolean hasError = !NullUtils.isNone(exceptionMsg);
-            boolean skip = belowThreshold || (loggingOnlyError && !hasError);
-
-            if (!skip) {
-                String paramsJson = toJsonSafe(parameter);
-                UserSession userSession = SecurityUtil.getUserSession();
-                String userId = (userSession != null && userSession.getUserId() != null) ? userSession.getUserId() : "GUEST";
-                LocalDateTime now = LocalDateTime.now();
-
-                sqlLogWriter.offer(new SqlLogRecord(
-                        sqlId, sqlType, sqlText, elapsed, now, userId, paramsJson, resultCount, exceptionMsg));
+            if (thresholdMs > 0 && elapsed < thresholdMs) {
+                return null;
             }
+
+            String paramsJson = toJsonSafe(parameter);
+            UserSession userSession = SecurityUtil.getUserSession();
+            String userId =  (userSession != null && userSession.getUserId() != null) ? userSession.getUserId() : "GUEST";
+            LocalDateTime now = LocalDateTime.now();
+
+            // logging.set(true);
+            if(commonProperties.getMybatis().isLoggingOnlyError()) {
+            	if(!NullUtils.isNone(exceptionMsg)) insertSqlLog(sqlId, sqlType, sqlText, elapsed, now, userId, paramsJson, resultCount, exceptionMsg);
+            } else insertSqlLog(sqlId, sqlType, sqlText, elapsed, now, userId, paramsJson, resultCount, exceptionMsg);
+        }
+    }
+
+    private void insertSqlLog(String sqlId,
+                              String sqlType,
+                              String sqlText,
+                              int elapsedMs,
+                              LocalDateTime executeTime,
+                              String userId,
+                              String paramsJson,
+                              int resultCount,
+                              String exceptionMsg) {
+
+        String insertSql =
+            "INSERT INTO SCM_COM_SQL_LOG " +
+            " (SQL_ID, SQL_TYPE, SQL_TEXT, ELAPSED_MS, EXECUTE_TIME, CREATED_BY, PARAMS, RESULT_COUNT, EXCEPTION) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(insertSql)) {
+
+            ps.setString(1, sqlId);
+            ps.setString(2, sqlType);
+            ps.setString(3, sqlText);
+            ps.setInt(4, elapsedMs);
+            ps.setTimestamp(5, Timestamp.valueOf(executeTime));
+            ps.setString(6, userId);
+            ps.setString(7, paramsJson);
+
+            if (resultCount < 0) {
+                ps.setNull(8, java.sql.Types.INTEGER);
+            } else {
+                ps.setInt(8, resultCount);
+            }
+
+            ps.setString(9, exceptionMsg);
+
+            ps.executeUpdate();
+        } catch (Exception e) {
+            log.warn("Failed to insert SCM_COM_SQL_LOG. sqlId={}, elapsedMs={}, error={}",
+                    sqlId, elapsedMs, e.getMessage());
         }
     }
 

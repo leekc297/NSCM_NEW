@@ -1,4 +1,4 @@
-import { PeriodField, PlantSiteField } from 'features/master/src/components';
+import { PeriodField, PlantSiteField, TeamField } from 'features/master/src/components';
 import type { Dispatch, SetStateAction } from 'react';
 
 import { clsx } from '@shared/clsx';
@@ -32,17 +32,9 @@ export const CustomerFcstUploadForm = ({
   // ComboId — SCM_ADM_CMBO_SQL_M 등록명 사용 (2026-07-02 전수 대조).
   //   PlanSite → SalesPlant (PLANT sites + DIVISION_ID 컬럼 반환 — DMF0003 선례) / Bucket → BucketType (BUCKET_TYPE_CODE lookup)
   // Plant Site 는 카탈로그 PlantSiteField (PlantSitebyEndCustomer 바인드) — 여기서 제외.
-  const [myDivision, teambyDivision, endCustomer, salesSite, customsHandbook, bucket] =
-    useTabComboQueries({
-      filters: [
-        'MyDivision',
-        'TeambyDivision',
-        'EndCustomer',
-        'SalesSite',
-        'CustomsHandbook',
-        'BucketType',
-      ],
-    });
+  const [myDivision, endCustomer, salesSite, customsHandbook, bucket] = useTabComboQueries({
+    filters: ['MyDivision', 'EndCustomer', 'SalesSite', 'DOM_EXP', 'BucketType'],
+  });
 
   // ⭐ cascade 하위 필터 기준 — 선택된 Team(멀티, 콤마조인). 비어있으면 Team 필터 미적용.
   //   EndCustomer/SalesSite 콤보가 DEPT_ID 를 반환 → Division + Team 클라 cascade.
@@ -86,33 +78,15 @@ export const CustomerFcstUploadForm = ({
               className={styles.formItem}
             />
           </Grid>
-          <Grid size={3}>
-            <FormItem
-              label={t('LBL00044', '_Team')}
-              labelAlign='right'
-              render={() => (
-                <CustomDropdown
-                  value={searchParams.team}
-                  defaultValue='ALL'
-                  allOption
-                  useClearIcon
-                  multiple
-                  options={
-                    teambyDivision
-                      ?.filter(item => item.DIVISION_ID === searchParams.divisionId)
-                      ?.map(item => ({ label: item.NAME, value: item.CODE })) ?? []
-                  }
-                  onChange={(_, option) => {
-                    // AS-IS clbTeam_SelectedIndexChanged — 하위(End Customer/Sales Site) cascade clear
-                    setSearchParams({ team: option, endCustomer: '', salesSite: '' });
-                  }}
-                  className={styles.input}
-                />
-              )}
-              labelSize='long'
-              className={styles.formItem}
-            />
-          </Grid>
+          <TeamField
+            gridSize={3}
+            value={searchParams.team ? searchParams.team.split(',').filter(Boolean) : []}
+            onChange={v =>
+              // AS-IS clbTeam_SelectedIndexChanged — 하위(End Customer/Sales Site) cascade clear
+              setSearchParams({ team: v.join(','), endCustomer: '', salesSite: '' })
+            }
+            division={searchParams.divisionId}
+          />
           <Grid size={3}>
             <FormItem
               label={t('LBL00080', '_End Customer')}

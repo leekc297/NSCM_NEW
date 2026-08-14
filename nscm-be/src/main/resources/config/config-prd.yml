@@ -3,8 +3,8 @@ config:
   datasources[0]: # ORACLE
     databaseName: nscm_oracle(dev)
     databaseType: oracle
-    driverClassName: oracle.jdbc.OracleDriver
-    jdbc-url: jdbc:oracle:thin:@//10.34.222.16:2521/OCGSCMQ_P01
+    driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    jdbc-url: jdbc:log4jdbc:oracle:thin:@10.34.220.81:2521:ESSCMD
     username: SCMD_APP
     password: "!SCMroqkf2026"
     maxPoolSize: 10

@@ -16,33 +16,6 @@
 		VALUES(SYS_GUID() , #{fileName}, #{fileTpCd}, #{fileKdnCd}, #{ext}, #{size}, #{ctn, jdbcType=BLOB}, #{userId}, SYSDATE, #{userId}, SYSDATE);
 	</insert>
 	
-	<!-- 이미지 업로드: ATCH_FILE_ID를 애플리케이션에서 생성한 UUID로 저장한다.
-	     SYS_GUID()를 쓰면 insert 후 ID를 돌려받을 수 없어 조회 URL을 만들 수 없다. -->
-	<insert id="insertImageFile">
-		INSERT INTO SCM_MGR.SCM_COM_ATCH_FILE_M (ATCH_FILE_ID, ATCH_FILE_SAVE_NM, ATCH_FILE_TP_CD, ATCH_FILE_KDN_CD, ATCH_FILE_EFNM_NM, ATCH_FILE_SIZE, ATCH_FILE_CTN, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
-		VALUES(#{fileId}, #{fileName}, #{fileTpCd}, #{fileKdnCd}, #{ext}, #{size}, #{ctn, jdbcType=BLOB}, #{userId}, SYSDATE, #{userId}, SYSDATE)
-	</insert>
-
-	<!-- 이미지 조회.
-	     resultType="java.util.HashMap"으로 두면 BLOB이 byte[]가 아니라 oracle.sql.BLOB 로케이터로 담긴다.
-	     조회 후 SqlSession이 닫히면 로케이터를 읽을 수 없으므로,
-	     resultMap으로 jdbcType/javaType을 명시해 매핑 시점에 byte[]로 실체화한다. -->
-	<resultMap id="imageFileMap" type="java.util.HashMap">
-		<result property="ATCH_FILE_SAVE_NM" column="ATCH_FILE_SAVE_NM" javaType="java.lang.String"/>
-		<result property="ATCH_FILE_EFNM_NM" column="ATCH_FILE_EFNM_NM" javaType="java.lang.String"/>
-		<result property="ATCH_FILE_SIZE"    column="ATCH_FILE_SIZE"    javaType="java.lang.Long"/>
-		<result property="ATCH_FILE_CTN"     column="ATCH_FILE_CTN"     javaType="_byte[]" jdbcType="BLOB"/>
-	</resultMap>
-
-	<select id="selectImageFile" resultMap="imageFileMap">
-		SELECT  ATCH_FILE_SAVE_NM,
-		        ATCH_FILE_EFNM_NM,
-		        ATCH_FILE_SIZE,
-		        ATCH_FILE_CTN
-		  FROM  SCM_MGR.SCM_COM_ATCH_FILE_M
-		 WHERE  ATCH_FILE_ID = #{fileId}
-	</select>
-
     <update id="fileUploadTest">
         UPDATE  SCM_MGR.SCM_COM_ATCH_FILE_M
            SET  ATCH_FILE_SAVE_NM = #{name},

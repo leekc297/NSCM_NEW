@@ -98,9 +98,7 @@ public class LookupServiceImpl extends BaseService implements LookupService {
 			if(NullUtils.isNone(queryMap)) throw new BusinessException("Query is not exist.");
 
 			params.put("userId", "'"+SecurityUtil.getUserSession().getUserId()+"'");
-			params.put("sesUserId", "'"+SecurityUtil.getUserSession().getUserId()+"'");
 			params.put("langCd", "'"+SecurityUtil.getUserSession().getLangCd()+"'");
-			params.put("sesLangCd", "'"+SecurityUtil.getUserSession().getLangCd()+"'");
 			String query = makeComboQuery(((List<Map<String, Object> >) queryMap.get(DEFAULT_DATA_RESULT))
 										.get(0).get("SQL_DTL_CTN").toString()
 										, params);

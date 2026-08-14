@@ -103,17 +103,14 @@ export const ForecastTemplateModal = ({
   );
 
   // Search — [E20260813-EXCELFORM] FORM_DATA 배선. 메인 조회조건(filters)을 그대로 전달한다.
-  //   silent = 오픈 자동조회 경로(0건이어도 alert 없이 빈 양식 유지 — alert 는 명시 Search 시에만)
-  const handleFind = (silent = false) => {
+  const handleFind = () => {
     if (isFetching) return;
     if (!filters) {
       // 메인이 아직 조회되지 않았다 — 조회조건이 확정되기 전에는 양식 대상이 정의되지 않는다.
-      if (!silent) {
-        void setAlert({
-          type: 'alert',
-          content: t(MSG.EXCEL_FORM_EMPTY, '_No data found for the search conditions.'),
-        });
-      }
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.EXCEL_FORM_EMPTY, '_No data found for the search conditions.'),
+      });
       return;
     }
     setIsFetching(true);
@@ -121,15 +118,13 @@ export const ForecastTemplateModal = ({
       .then(({ ok, message, pivot }) => {
         setRows(ok ? pivot : []);
         if (!ok) {
-          if (!silent) {
-            void setAlert({
-              type: 'alert',
-              content: message || t(MSG.SAVE_ERROR, '_Search failed.'),
-            });
-          }
+          void setAlert({
+            type: 'alert',
+            content: message || t(MSG.SAVE_ERROR, '_Search failed.'),
+          });
           return;
         }
-        if (pivot.length === 0 && !silent) {
+        if (pivot.length === 0) {
           void setAlert({
             type: 'alert',
             content: t(MSG.EXCEL_FORM_EMPTY, '_No data found for the search conditions.'),
@@ -139,11 +134,9 @@ export const ForecastTemplateModal = ({
       .finally(() => setIsFetching(false));
   };
 
-  // ⭐ 오픈 시 자동 조회 — 메인이 이미 조회된 상태(filters 확정)에서만.
-  useEffect(() => {
-    if (open && filters) handleFind(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open]);
+  // ⭐ [2026-08-14 사용자 지시] 오픈 시 **자동조회 없음** — 모달을 연 뒤 [Search] 를 눌러야 조회한다.
+  //   (AS-IS 팝업류 표준 = 진입 시 자동조회 없음 · Search 명시 게이트 — 위 rows 초기화 주석과 동일 계열.
+  //    DMF0014 CustomerFcstTemplateModal 도 동일 전환 — hook #135 §3-6)
 
   // ⭐ 양식 다운로드 — 평탄 1행 헤더(토큰 원형) + 정보성 컬럼. M4~M16 은 입력용 빈칸.
   const handleExcel = () => {
@@ -188,7 +181,7 @@ export const ForecastTemplateModal = ({
               searchButtonLabel={
                 isFetching ? t('LBL00665', 'Loading...') : t('LBL00112', '_Search')
               }
-              onSearch={() => handleFind(false)}
+              onSearch={handleFind}
               conditions={
                 <>
                   <Grid size={3}>

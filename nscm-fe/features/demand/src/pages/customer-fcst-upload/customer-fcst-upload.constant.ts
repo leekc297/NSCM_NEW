@@ -47,6 +47,9 @@ export const MSG = {
   INSERT_BLOCKED: 'MSG00380',
   // Excel 업로드 완료 (기존 키 재사용)
   UPLOAD_DONE: 'MSG00265',
+  // [E20260814-EXCELFORM] Excel Form 조회 0건 — hook #135 §3-5 정본 키.
+  //   ⚠ MSG00705('업로드된 Excel 데이터가 없습니다')는 **의미가 반대**라 재사용 금지.
+  EXCEL_FORM_EMPTY: 'MSG00718',
 } as const;
 
 // Column 메타 (sales-monitoring MainColumnMeta 동일 형태)

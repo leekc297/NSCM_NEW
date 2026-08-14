@@ -52,7 +52,7 @@ public class TestController extends BaseController {
     @GetMapping("/health-check")
     public ResponseEntity healthCheck(@RequestHeader(value = "X-Request-ID", required = false) String requestId) throws Exception {
 		log.info("X-Request-ID : {}", requestId);
-		return successResponseEntity((Object) "API is Listening!!");
+		return successResponseEntity((Object) "API is Listening!");
     }
 
 	@Operation(summary = "단건 조회", description = "단건 조회")
