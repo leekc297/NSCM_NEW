@@ -19,6 +19,16 @@ import { buildColumnMeta, type ColumnMeta } from '../hooks/useContributeViewExpr
 import type { SalesViewRow, SpreadTitleRow } from '../types';
 import { useContributeViewStore } from '../useContributeViewStore';
 
+// 음수 값 글자색 (mkt-fcst / demand-manager 와 동일 톤)
+const NEGATIVE_COLOR = '#c0392b';
+
+const toNumber = (v: unknown): number => {
+  if (typeof v === 'number') return Number.isFinite(v) ? v : 0;
+  if (typeof v !== 'string' || v === '') return 0;
+  const n = Number(v.replace(/,/g, ''));
+  return Number.isFinite(n) ? n : 0;
+};
+
 interface Props {
   gridRef: MutableRefObject<FlexGridType<SalesViewRow> | undefined>;
   gridFilterRef?: MutableRefObject<FlexGridFilter | undefined>;
@@ -157,7 +167,15 @@ export const ContributeViewGrid = ({ gridRef, gridFilterRef, data }: Props) => {
       } else {
         e.cell.style.removeProperty('background-color');
       }
-      if (personalColor?.text) {
+      // 글자색 우선순위: 음수 빨강 > 개인화 Text Color (mkt-fcst 동일 규약).
+      // 정적/동적 컬럼 모두 대상 — 문자 컬럼은 toNumber 가 0 을 돌려주므로 자연히 음수 판정에서 빠진다.
+      // 필수: 음수가 아닐 때 반드시 지운다 — Wijmo 는 셀 DOM 을 재사용하므로 칠하기만 하면
+      // 스크롤 뒤 엉뚱한 셀에 색이 남는다.
+      // 필수: important 로 넣는다 — 조회 전용(non-editable) 셀 클래스가 color 를 !important 로 잡는다.
+      const rawValue: unknown = e.panel.getCellData(e.row, e.col, false);
+      if (toNumber(rawValue) < 0) {
+        e.cell.style.setProperty('color', NEGATIVE_COLOR, 'important');
+      } else if (personalColor?.text) {
         e.cell.style.setProperty('color', personalColor.text, 'important');
       } else {
         e.cell.style.removeProperty('color');

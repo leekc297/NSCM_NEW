@@ -29,8 +29,18 @@
   background: #f7f8fa;
 }
 
+/* 액션 바 안에서 옵션(좌)과 액션 버튼(우)을 가르는 신축 여백 */
 .actionBarSpacer {
   flex: 1;
+}
+
+/* OK / Close 줄 — 그리드 아래 우측 정렬 (기존 VersionModal .modalButtonWrapper 와 동일 규약) */
+.buttonWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-top: 5px;
 }
 
 /* 체크박스 + 종속 입력 1쌍 (실적 포함 + 기준일 / 이동계획 + 계획월) */

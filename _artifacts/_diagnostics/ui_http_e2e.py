@@ -457,6 +457,46 @@ SCENARIOS["DMF0021"] = {
     },
 }
 
+# DMF0074 Metal Link Price (2026-08-18 신설 — 4축 점검 대사표→기능검증→테스트→권한별)
+#   조회 전용 화면 (Insert/Delete/Edit/Save = AS-IS 빈 override → 버튼 미노출) → F축 SAVE 왕복 없음.
+#   저장 유일 경로 = Excel Upload 2-Step (별도 실측: _dmf0074_test_b/c — 원장 왕복 검증 완료 2026-08-16).
+#   행 접근통제 = SP 의 SCM_ADM_USER_MNU_EDIT_AUTH_V INNER JOIN 하드필터(PKG L452/L837) →
+#     무권한 division 은 rows=0 이 정상(EDIT_FLAG 컬럼 없음 — EDIT_YN 프로젝션만).
+SCENARIOS["DMF0074"] = {
+    "main_sheet": "Metal Link Price",
+    "divisions": ["40", "81", "82"],
+    # ⚠ METAL_KIND_CODE 는 컬럼이 아니다 — 광물 7종이 메탈 42열(Key_/PeriodFr_/…)로 PIVOT 되어
+    #   행 키에서 소멸한다(SHEET_COLUMNS BASE 16 실측). 2026-08-18 초기 시나리오 오탐 정정.
+    "key_columns": ["DIVISION_ID", "PLAN_YYYYMM", "ITEM_ID", "SCM_SITE_ID", "CURRENCY"],
+    "combos": ["MyDivision", "EndCustomer", "SalesSite"],
+    "cell_combo_params": {},
+    "cell_combo_notes": {},
+    # 행 게이트 컬럼 — 이 화면은 EDIT_FLAG 가 아니라 EDIT_YN(권한 뷰 프로젝션)
+    "edit_flag_column": "EDIT_YN",
+    "edit_flag_editable_value": "Y",
+    "edit_flag_axes": "단일 division-gate — SP INNER JOIN SCM_ADM_USER_MNU_EDIT_AUTH_V(USER×MNU×UNIT) "
+                      "행 하드필터 + EDIT_YN 프로젝션. 행별 EDIT_FLAG·measure·시간락 게이트 부재(AS-IS 파리티)",
+    # P_DMF0074_GET_METAL_LINK_PRICE 10 IN + 세션 2 (useMetalLinkPriceStore.ts:80~95 와 1:1)
+    "search_filters": lambda div, user, group: {
+        "divisionId": div, "deptId": "ALL", "endCustomer": "ALL", "scmSiteId": "ALL",
+        "plantSiteId": "ALL", "projectCode": "", "itemId": "",
+        # ⚠ 기간은 원장 실데이터를 덮어야 한다 — DM_BPS_METAL_LINK_PRICE 최신 PLAN_YYYYMM 실측:
+        #   40=202607 / 81 계열=202601 / 82=202512 (202608 이후는 전 division 0행).
+        #   미래 구간만 주면 rows=0 이 나와 "조회 경로 정상"과 "데이터 없음"이 구분되지 않는다.
+        "fromYyyymmdd": "202501", "toYyyymmdd": "202702",
+        "versionType": "Current", "sesUserId": user, "mnuId": "DMF0074",
+    },
+    "search_buttons": ["SEARCH"],
+    "aux_buttons": [],
+    "result_cursor": "o_rc1",
+    "modal_sheets": [
+        # Excel Form(템플릿) — P_DMF0074_GET_METAL_LINK_TEMPLATE (division 단일 param + 세션 2)
+        {"sheet": "template", "btn": "SEARCH", "filters": lambda div, user, group: {
+            "divisionId": div, "sesUserId": user, "mnuId": "DMF0074"}},
+    ],
+    # F축 없음 — 그리드 직접 SAVE 경로가 존재하지 않는 화면 (--no-save 로 실행)
+}
+
 SCENARIOS["DMF0044"] = {
         "main_sheet": "MDF Reports",
         # AS-IS 제약매트릭스 §1 실측 — 이 화면 division 비교는 40/82 2종뿐(81 분기 없음)
@@ -887,22 +927,54 @@ class R:
     def note(self, t):
         self.lines.append(f"- {t}"); print(f"  {t}")
 
+# ⭐ 2026-08-15 — 클라우드 BE 교체분 로그인 계약 변화 대응.
+#   구 BE: 미등록 ID 도 200 + `guest:true` 세션 → 'guest is not False' 단언이 유일한 방어였다.
+#   신 BE(Spring Security JsonLoginFilter): 미등록 ID = **HTTP 401 `-9998 Authentication Error`**
+#     (실측 2026-08-15), 성공 응답에 `guest`/`groups`/`div` 키가 **아예 없다**.
+#   → 구 단언을 그대로 두면 전 계정이 FAIL(무력화). 단언을 **약화하지 않고 원천을 옮긴다**:
+#     ① 401/비200 = 실패 ② result.userId 가 요청 ID 와 일치 ③ menus 비어 있지 않음(진짜 세션)
+#     ④ 구 BE 호환 — `guest:true` 가 오면 여전히 FAIL
+#     ⑤ groups/div 는 **DB 권위 원천**에서 채운다(SCM_ADM_USER_GR_MPG_M / USER_GR_UNIT_AUTH_MPG_M).
+#        로그인 응답의 표시명보다 정확하다(resolve_group 의 CMBO 우선 규약은 그대로).
+_GROUP_CACHE = {}
+
+def _db_user_context(user):
+    """USER_GR_MPG_M 보유 그룹 + UNIT_AUTH division — 권한 판정의 권위 원천."""
+    if user in _GROUP_CACHE:
+        return _GROUP_CACHE[user]
+    import oracledb
+    from ora import conn_info as _ci
+    u, pw, d = _ci()
+    with oracledb.connect(user=u, password=pw, dsn=d) as con:
+        cur = con.cursor()
+        cur.execute("""SELECT USER_GR_ID FROM SCM_MGR.SCM_ADM_USER_GR_MPG_M
+                        WHERE USER_ID = :1 AND USE_YN = 'Y' ORDER BY USER_GR_ID""", [user])
+        groups = [r[0] for r in cur.fetchall()]
+        cur.execute("""SELECT DISTINCT UNIT_ID FROM SCM_MGR.SCM_ADM_USER_GR_UNIT_AUTH_MPG_M
+                        WHERE USER_ID = :1 AND UNIT_TP_CD = 'D' ORDER BY UNIT_ID""", [user])
+        divs = [r[0] for r in cur.fetchall()]
+    _GROUP_CACHE[user] = (groups, divs)
+    return groups, divs
+
+
 def login(base, user, rep):
     sess = requests.Session()
     r = sess.post(f"{base}/user/login", json={"userId": user}, timeout=30)
     if r.status_code != 200:
-        rep.fail(f"[{user}] 로그인 HTTP {r.status_code}"); return None, None
+        body = (r.text or "")[:120]
+        rep.fail(f"[{user}] 로그인 HTTP {r.status_code} — {body}"); return None, None
     info = (r.json() or {}).get("result") or {}
-    # ⚠️ 실측 2026-08-07: 응답 키는 'guest'(불리언). 'isGuest' 는 **존재하지 않음** → None(falsy) 이라
-    #   isGuest 로 단언하면 미등록 ID 도 통과하는 무력 단언이 된다(실제로 겪음).
-    if info.get("guest") is not False:
-        rep.fail(f"[{user}] 게스트 폴백(guest={info.get('guest')}) — 미등록/GUEST 그룹 계정, 권한 검증 무의미")
-        return None, None
-    groups = info.get("groups") or []
+    if info.get("guest") is True:  # 구 BE 호환 가드
+        rep.fail(f"[{user}] 게스트 폴백(guest=True) — 권한 검증 무의미"); return None, None
+    if str(info.get("userId") or "") != user:
+        rep.fail(f"[{user}] 세션 userId 불일치({info.get('userId')}) — 로그인 무효"); return None, None
+    if not (info.get("menus") or []):
+        rep.fail(f"[{user}] 메뉴 0건 — 미등록/권한 없음 계정(권한 검증 무의미)"); return None, None
+    groups, divs = _db_user_context(user)
     if not groups:
-        rep.fail(f"[{user}] 보유 그룹 0건 — 권한 판정 불가")
-        return None, None
-    rep.ok(f"[{user}] 로그인 세션 획득 — groups={groups} div={info.get('div')}")
+        rep.fail(f"[{user}] 보유 그룹 0건(SCM_ADM_USER_GR_MPG_M) — 권한 판정 불가"); return None, None
+    info["groups"], info["div"] = groups, ",".join(divs)
+    rep.ok(f"[{user}] 로그인 세션 획득 — groups={groups} div={info['div'][:40]}")
     return sess, info
 
 def call_proc(sess, base, menu, sheet, btn, filters):
@@ -927,7 +999,7 @@ def main():
     rep.lines.append(f"> 러너: ui_http_e2e.py (hook #125 §2) · base={a.base} · users={users} · primary={primary}")
 
     sessions = {}
-    rep.h("A. 로그인 (isGuest 단언)")
+    rep.h("A. 로그인 (세션 실재 단언 — userId·menus + DB 그룹)")
     for u in users:
         sess, info = login(a.base, u, rep)
         if sess:
@@ -1001,17 +1073,25 @@ def main():
             rep.ok(f"div={div} column={len(cols)} / measure={len(meas)} / 필수 키 {len(req)}종 전부 존재")
 
     rep.h("D. 콤보 전 키 (0행 = 조용한 빈콤보 검출)")
-    cm = psess.post(f"{a.base}/admin/combo-muti",
-                    json={"comboList": [{"comboId": k} for k in sc["combos"]]}, timeout=120)
-    if cm.status_code != 200:
-        rep.fail(f"combo-muti HTTP {cm.status_code}")
-    else:
-        res = (cm.json() or {}).get("result") or {}
-        arr = res if isinstance(res, list) else [res.get(k) for k in sc["combos"]] if isinstance(res, dict) else []
-        for k, v in zip(sc["combos"], arr):
-            n = len(v) if isinstance(v, list) else -1
-            # 조회조건 콤보의 0행은 데이터 미적재 가능성이 있어 WARN 유지 (셀 콤보는 D2 에서 FAIL 승격)
-            (rep.warn if n <= 0 else rep.ok)(f"combo '{k}' rows={n}")
+    # ⭐ 2026-08-15 — **FE 와 같은 엔드포인트로 부른다**(`/admin/combo` 단건).
+    #   구현: `useTabComboQueries` → `apiClient.getCombo` → POST /admin/combo (콤보 1건당 1회).
+    #   ⚠ 종전 러너는 `/admin/combo-muti` 를 썼는데, BE `retrieveComboMuti` 는 세션 값을
+    #     `userId`/`langCd` 로 넣고 `retrieveCombo`(단건)만 `sesUserId`/`sesLangCd` 로 넣는다
+    #     (LookupServiceImpl L78·L100 실측). CMBO SQL 은 `@sesUserId` 를 쓰므로 muti 경로에서는
+    #     '' 치환 → **0행**. 화면은 멀쩡한데 러너만 WARN 을 뱉는 오탐이었다
+    #     (실측 2026-08-15: MktFcstUserGroups / MktFcstUserEditDivision — 단건 호출은 각각 6·8행).
+    for k in sc["combos"]:
+        r = psess.post(f"{a.base}/admin/combo", json={"comboId": k}, timeout=60)
+        if r.status_code != 200:
+            rep.fail(f"combo '{k}' HTTP {r.status_code}"); continue
+        body = r.json() or {}
+        if str(body.get("code")) != "0":
+            rep.fail(f"combo '{k}' code={body.get('code')} {body.get('message')}"); continue
+        res = body.get("result")
+        v = res.get(k) if isinstance(res, dict) else res
+        n = len(v) if isinstance(v, list) else -1
+        # 조회조건 콤보의 0행은 데이터 미적재 가능성이 있어 WARN 유지 (셀 콤보는 D2 에서 FAIL 승격)
+        (rep.warn if n <= 0 else rep.ok)(f"combo '{k}' rows={n}")
 
     rep.h("D2. 셀 콤보 — 메타 자동 수집 + FE 실전달 파라미터 (0행 = FAIL, hook #117 §5.6)")
     # 하드코딩 금지: 화면의 셀 콤보는 SHEET_COLUMNS 실측에서 수집한다(누락 원천 차단).
@@ -1235,18 +1315,29 @@ def main():
                     return vals
                 qv = probe.get("probe_qty", 7)
                 rep.note("M 왕복(전용 키) — %s" % probe.get("note", ""))
+                # ⭐ 2026-08-15 — 판정 기준 = **MAX** (사용자 확정).
+                #   이 probe 는 "내가 쓴 값이 그 셀에 그대로 보이는가" 를 본다. 표시 셀이 중복행
+                #   합산으로 부풀면 max 가 쓴 값보다 커진다 → 그건 **제품 결함**이지 판정 오류가 아니다.
+                #   (증분 방식은 채택하지 않는다 — 합산 자체를 정상으로 인정해 버려 부풀림을 못 잡는다.)
+                a0 = probe_read()
                 r1 = probe_cursor(probe_save(qv))
                 (rep.ok if str(r1.get("CODE")) == "0" else rep.fail)(
                     f"M 저장(qty={qv}) 결과커서 CODE={r1.get('CODE')} {str(r1.get('MSG'))[:60]}")
                 a1 = probe_read()
-                (rep.ok if float(qv) in a1 else rep.fail)(
-                    f"재조회 반영 — cell {probe['cell']} 매칭행 값 {a1} (기대 {qv} 포함)")
+                mx = max(a1) if a1 else None
+                (rep.ok if mx is not None and abs(mx - float(qv)) < 1e-6 else rep.fail)(
+                    f"재조회 반영 — cell {probe['cell']} max={mx} (기대 {qv}) 값 {a1}"
+                    + ("" if mx is None or mx <= float(qv) else
+                       f" ⚠ 부풀림 {mx/float(qv):.3g}배 — 표시 컬럼이 같은 행이 합산되고 있다"))
                 r2 = probe_cursor(probe_save(0))
                 (rep.ok if str(r2.get("CODE")) == "0" else rep.fail)(
                     f"원복 저장(qty=0) 결과커서 CODE={r2.get('CODE')}")
                 a2 = probe_read()
-                (rep.ok if float(qv) not in a2 else rep.fail)(
-                    f"재조회 원복 — cell {probe['cell']} 매칭행 값 {a2} (기대 {qv} 소거)")
+                # 원복 판정도 MAX 기준 — 쓴 값이 사라졌는지 본다(기준선 a0 로 복귀).
+                mx2 = max(a2) if a2 else None
+                base_mx = max(a0) if a0 else None
+                (rep.ok if (mx2 is None or abs(mx2 - float(qv)) > 1e-6) else rep.fail)(
+                    f"재조회 원복 — cell {probe['cell']} max={mx2} (기준선 {base_mx} 복귀, {qv} 소거) 값 {a2}")
                 rep.note("실데이터 무접촉 — 테스트 소유 키 한정. 일반 행 M/I/D 는 계속 차단(사유 아래)")
             rep.warn("일반 행 M 왕복 생략(파괴 위험) — %s" % sr.get(
                 "modify_note", "이 화면의 SAVE 왕복은 원복해도 원상태로 돌아가지 않는다"))

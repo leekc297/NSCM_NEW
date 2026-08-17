@@ -21,6 +21,12 @@ export const RESPONSE_SET = {
 } as const;
 export type RESPONSE_SET = (typeof RESPONSE_SET)[keyof typeof RESPONSE_SET];
 
+// TITLESET 개인화 구분 (SCM_MST_TITLESET_USER.USER_INQUIRY_COLUMN_TYPE_CODE 실측 2026-07-04).
+//   필수: 조회(fetchTitleSet)와 저장(saveTitleSet)이 같은 값을 써야 한다 — 하나라도 다르면
+//   저장은 되는데 재진입 조회가 그 행을 못 찾아 개인화가 사라진다.
+export const TITLESET_COLUMN_TYPE = 'C';
+export const TITLESET_MEASURE_TYPE = 'M';
+
 // Bucket Type — DMF0003_GET_BUCKET_TYPE_CODE 실측 (CODE='DAILY'/'WEEKLY'/'MONTHLY').
 //   ⚠️ DMF0003 화면('D'/'W'/'M')과 달리 DMF0048 SP 는 full-word 비교 (p_bucket = 'DAILY').
 export enum BUCKET_TYPE {

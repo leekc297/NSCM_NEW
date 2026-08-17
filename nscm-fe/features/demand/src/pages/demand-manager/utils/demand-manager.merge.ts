@@ -1,5 +1,7 @@
 import { CellRange, CellType, type GridPanel, MergeManager } from '@mescius/wijmo.grid';
 
+import { toCellStr } from '../demand-manager.constants';
+
 // ⭐ DMF0068 — 한 건이 Measure 2행으로 표현되므로 왼쪽 고정 컬럼(No / Project / 수주 기간)을
 //   세트 단위로 세로 병합한다. 병합 판정은 "같은 그룹 키(KEYVALUE2)" 를 기준으로 한다
 //   (프로젝트·기간 값이 같아도 그룹이 다르면 별개 건이므로 합치지 않는다).
@@ -84,9 +86,7 @@ export class DemandManagerMergeManager extends MergeManager {
     const keyOf = (i: number): string | undefined => {
       const item = (view[i] as unknown as { dataItem?: Record<string, unknown> })?.dataItem;
       if (!item) return undefined;
-      const k = item.KEYVALUE2 ?? item.INSERT_GROUP_ID;
-      // 문자/숫자만 키로 인정 (String(k) 직행 금지 — no-base-to-string)
-      const key = typeof k === 'string' ? k : typeof k === 'number' ? String(k) : '';
+      const key = toCellStr(item.KEYVALUE2 ?? item.INSERT_GROUP_ID);
       return key === '' ? undefined : key;
     };
     const cur = keyOf(r);

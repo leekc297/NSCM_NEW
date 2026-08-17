@@ -53,7 +53,6 @@
 //   Wijmo 기본 셀 border 를 이긴다.
 :global(.mkt-cell-current-period) {
   border-left: 2px solid #1e8449 !important;
-  border-right: 2px solid #1e8449 !important;
 }
 
 // ⭐ Phase 2e POPUP 모달 공통 레이아웃 (CustomDialog customContentArea 안).
@@ -77,9 +76,6 @@
   gap: 8px;
   padding-top: 4px;
 }
-
-// (measureDualContainer / measureActionBar 제거 — 2026-08-13 Measure 모달 공용 정본 전환:
-//  공용 features/master/src/components/measureSelectModal 이 자체 module.scss 를 소유.)
 
 // ⭐ FPModal 팝업셀 아이콘 = DMF0020 과 동일 (전용 span .popup-icon + MUI OpenInNew SVG mask —
 //   사용자 요구 2026-07-03). 구 :global(.wj-cell-popup) 그라데이션+'↗' override 는 제거,

@@ -1,8 +1,8 @@
 import { CELL_CONTROL_TYPE, CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 
-// ⭐ #3 — Measure 선택 모달은 공용 정본(features/master/src/components/measureSelectModal) 사용 —
-//   컬럼 정의는 공용 MeasureSelectModal.tsx 내부 DualListColumn(Class/Measure Code/Measure Name) 참조.
+// ⭐ #3 — Measure 선택 모달은 공용 ColumnSelectDualList(양쪽 구성) 사용 — 컬럼 정의는
+//   MeasureSelectModal.tsx 내부 DualListColumn(Class/Measure Code/Measure Name) 참조.
 //   (구 MEASURE_SELECT_COLUMNS(DataGrid useCheckbox 단일 grid) 는 dual list 전환으로 제거 — 2026-07-02)
 
 // ⭐ Phase 2e POPUP grid fallback 컬럼 메타 (AS-IS popup .cs InitSpread 1:1).

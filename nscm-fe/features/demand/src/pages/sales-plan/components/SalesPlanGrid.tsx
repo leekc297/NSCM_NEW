@@ -19,10 +19,10 @@ import {
 } from 'react';
 
 import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
-import { rebindFilterColumns } from '@foundation/utils';
 import type { EditTracker } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
+import { isoWeeksOfMonth } from '@shared/lib/bucket-distribution';
 import { useMessageStore } from '@shared/stores';
 
 import {
@@ -57,14 +57,28 @@ import {
 import {
   applyMeasureSwitch,
   buildCatchUpFcstTypeMap,
-  buildMeasureInfoMap,
   filterComboRowsByRow,
   toCellStr,
 } from '../utils/sales-plan.gridCombos';
-import { getDynKey, HierarchicalMergeManager } from '../utils/sales-plan.merge';
+import {
+  getDynKey,
+  getMonthWeekKeysInRange,
+  HierarchicalMergeManager,
+} from '../utils/sales-plan.merge';
 
 // 동적 컬럼 kind 서열 — M(월)=0 상위 … D(일)=2 하위. 표시 규칙/드릴다운 판정용 (DMF0003 동일).
 const DYN_RANK = { M: 0, W: 1, D: 2 } as const;
+
+// [통합테스트 1st No.61-④] Team(DEPT_ID) 파생 원천.
+//   Team 은 전 Div 입력 불가(insertStaticEditable false)라 스스로 값을 가질 수 없다 — 아래 컬럼의
+//   선택 행이 Sales Site Project Model 마스터의 DEPT_ID 를 함께 내려주면 그 값으로 Team 을 채운다.
+const TEAM_SOURCE_BINDINGS: readonly string[] = [
+  'SCM_SITE_ID',
+  'PROJECT_CODE',
+  'ITEM_ID',
+  'END_CUSTOMER',
+  'END_CUSTOMER40',
+];
 
 interface Props {
   rows: SalesPlanRow[];
@@ -81,6 +95,9 @@ interface Props {
   // Sum 체크박스 — 상위 버킷 합계 컬럼(M_/W_) 표시 토글 (AS-IS chkSum L4419 — 조회 없이 즉시 반영).
   sumYn?: boolean;
   currentYyyymmdd?: string;
+  // 조회 기간 — GET_SPREAD_TITLE 이 월 시작 주만 내려줄 때 월경계 주차 binding 보완용.
+  startYyyymmdd?: string;
+  endYyyymmdd?: string;
   // admin SYS0004 UI Category Setup 동적 메타 (SHEET_COLUMNS 66건 — division 서버 필터, 하드코딩 fallback 없음).
   staticColumns?: RawFlexGridColumnConfig[];
   // P_DMF0021_GET_SPREAD_TITLE 결과 — 동적 3단 헤더(라벨/정렬/구조)의 1차 소스.
@@ -90,6 +107,9 @@ interface Props {
   editAuth?: EditAuthInfo | null;
   // Insert 행 MEASURE 편집 콤보 (GET_SALES_PLAN_MEASUREINFO — 40 전용 편집, 기본 SalesAmt_LOC).
   measureInfoRows?: MeasureInfoRow[];
+  // MEASURE 표시 전체 CODE/LABEL (SCM_MST_SHEET_MEASURE 동적 fetch — 31건, 기존 저장 데이터 전 범위 포함).
+  //   CMBO 'Measure' 응답이 비면 이 값이 표시 dataMap 을 대신한다 (없으면 CODE 그대로 노출).
+  staticMeasures?: { colNm: string; colLblNm?: string }[];
 }
 
 // 숫자 변환 — 콤마 제거, 비숫자 0.
@@ -115,7 +135,7 @@ const formatByNotation = (v: unknown, notation: string): string => {
 export const SalesPlanGrid = ({
   rows,
   gridRef,
-  tabId,
+  // tabId 는 Props 계약상 유지(부모 전달) — 현재 그리드 내부 조회가 없어 소비하지 않는다.
   gridFilterRef,
   editTrackerRef,
   onPopupCellDblClick,
@@ -123,11 +143,14 @@ export const SalesPlanGrid = ({
   bucketType = BUCKET_TYPE.MONTHLY,
   sumYn = false,
   currentYyyymmdd = '',
+  startYyyymmdd = '',
+  endYyyymmdd = '',
   staticColumns,
   spreadTitle,
   calendarInfo,
   editAuth,
   measureInfoRows,
+  staticMeasures,
 }: Props) => {
   const { t } = useTranslation();
   const setAlert = useMessageStore.getState().setAlert;
@@ -135,12 +158,10 @@ export const SalesPlanGrid = ({
   const [rowComboContext, setRowComboContext] = useState(() =>
     buildSalesPlanComboContext(undefined, division)
   );
-  const [hasInsertComboContext, setHasInsertComboContext] = useState(false);
   const rowComboContextRef = useRef(rowComboContext);
   const syncRowComboContext = useCallback(
     (row?: SalesPlanRow) => {
       const next = buildSalesPlanComboContext(row, division);
-      setHasInsertComboContext(row?.CRUD_TYPE === 'I');
       rowComboContextRef.current = next;
       setRowComboContext(prev =>
         salesPlanComboContextKey(prev) === salesPlanComboContextKey(next) ? prev : next
@@ -205,6 +226,20 @@ export const SalesPlanGrid = ({
   const fixedBindings = useMemo(() => visibleColumns.map(c => c.colNm), [visibleColumns]);
   const staticBindingSet = useMemo(() => new Set(fixedBindings), [fixedBindings]);
 
+  // 컬럼 개인화 색 (ColumnLayoutModal 저장값) — binding → {cell, text}.
+  //   공용 DataGrid 는 colWth/display 만 옮기고 색은 안 넘기므로 formatItem 이 직접 적용한다
+  //   (mkt-fcst/forecast-price 선례 동일). ref 로 최신 맵 전달 — 핸들러 재등록 불필요.
+  const colorMetaRef = useRef<Map<string, { cell: string; text: string }>>(new Map());
+  colorMetaRef.current = useMemo(() => {
+    const m = new Map<string, { cell: string; text: string }>();
+    (staticColumns ?? []).forEach(c => {
+      if (c.cellColor || c.textColor) {
+        m.set(c.colNm, { cell: c.cellColor ?? '', text: c.textColor ?? '' });
+      }
+    });
+    return m;
+  }, [staticColumns]);
+
   const mainStaticColumns = useMemo<RawFlexGridColumnConfig[]>(
     () =>
       visibleColumns.map(c => ({
@@ -214,6 +249,17 @@ export const SalesPlanGrid = ({
       })),
     [visibleColumns]
   );
+
+  // MEASURE 표시 fallback — CMBO 'Measure'(mnuId 전달) 응답이 비면 SCM_MST_SHEET_MEASURE 로 대체한다.
+  //   기존 데이터의 MEASURE 값 전 범위(31종)는 Insert 콤보(measureInfoRows 3종)보다 넓어서,
+  //   fallback 이 없으면 Measure 컬럼이 CODE 그대로 노출된다.
+  const staticMeasuresMap = useMemo(() => {
+    const measureRows = (staticMeasures ?? []).map(m => ({
+      CODE: m.colNm,
+      NAME: m.colLblNm || m.colNm,
+    }));
+    return measureRows.length > 0 ? new DataMap(measureRows, 'CODE', 'NAME') : null;
+  }, [staticMeasures]);
 
   // ===== Grid 내 combo column dropdown — 표시용 전체 콤보 + 편집용 행 종속 콤보 =====
   const comboColumns = useMemo(
@@ -244,9 +290,11 @@ export const SalesPlanGrid = ({
       const arr = comboResults[i] ?? [];
       m[c.colNm] = arr.length > 0 ? new DataMap(arr, 'CODE', 'NAME') : null;
     });
+    // MEASURE — 콤보 응답이 없거나 0건이면 SHEET_MEASURE 메타로 대체 (CODE 노출 방지).
+    if (!m.MEASURE && staticMeasuresMap) m.MEASURE = staticMeasuresMap;
     return m;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [comboSig]);
+  }, [comboSig, staticMeasuresMap]);
 
   const comboRowsRef = useRef<Record<string, Record<string, unknown>[]>>({});
   const dataMapsRef = useRef<Record<string, DataMap | null>>({});
@@ -318,12 +366,19 @@ export const SalesPlanGrid = ({
     editDataMapsRef.current = editDataMaps;
   }, [editDataMaps]);
 
-  const measureInfoMap = useMemo(
-    () => buildMeasureInfoMap(measureInfoRows ?? []),
+  // Insert 행에서 고를 수 있는 measure 코드 (GET_SALES_PLAN_MEASUREINFO — 기본 3종).
+  //   dataMap 을 만들지 않고 '코드 집합' 으로만 쓴다 — 아래 installMeasureCandidateFilter 참조.
+  const measureInfoCodes = useMemo(
+    () =>
+      new Set(
+        (measureInfoRows ?? [])
+          .map(r => toCellStr((r as Record<string, unknown>).CODE).trim())
+          .filter(Boolean)
+      ),
     [measureInfoRows]
   );
-  const measureInfoMapRef = useRef<DataMap | null>(null);
-  measureInfoMapRef.current = measureInfoMap;
+  const measureInfoCodesRef = useRef<Set<string>>(measureInfoCodes);
+  measureInfoCodesRef.current = measureInfoCodes;
 
   // 편집 시작 셀의 (binding, oldVal) — cellEditEnded 에서 실제 값 변경 여부 판정(불필요 clear 방지).
   const editingCellRef = useRef<{ binding: string; oldVal: unknown } | null>(null);
@@ -359,6 +414,28 @@ export const SalesPlanGrid = ({
       ];
     });
     if (titleMetas.length > 0) {
+      // AS-IS 는 월 경계 주차를 양쪽 월에 모두 표시한다. TO-BE SP 가 주 시작 월에만
+      // 반환하는 경우(예: W_20261253만 존재) 조회기간에서 누락 binding만 보완한다.
+      if (titleMetas.some(meta => meta.kind === 'W')) {
+        const existing = new Set(titleMetas.map(meta => meta.binding));
+        const largeLabelByMonth = new Map(
+          titleMetas.map(meta => [meta.binding.slice(2, 8), meta.large] as const)
+        );
+        const maxSort = Math.max(...titleMetas.map(meta => meta.sort), 0);
+        getMonthWeekKeysInRange(startYyyymmdd, endYyyymmdd).forEach((binding, index) => {
+          if (existing.has(binding)) return;
+          const ym = binding.slice(2, 8);
+          titleMetas.push({
+            binding,
+            kind: 'W',
+            large: largeLabelByMonth.get(ym) || `${ym.slice(0, 4)}-${ym.slice(4)}`,
+            small: `W${binding.slice(8)}`,
+            leaf: '',
+            sort: maxSort + index + 1,
+            dayCode: '',
+          });
+        });
+      }
       return titleMetas.sort((a, b) => a.sort - b.sort || a.binding.localeCompare(b.binding));
     }
     // (2) fallback — 데이터 row 키 union (라벨 = binding 파생)
@@ -385,7 +462,7 @@ export const SalesPlanGrid = ({
         },
       ];
     });
-  }, [spreadTitle, rows]);
+  }, [spreadTitle, rows, startYyyymmdd, endYyyymmdd]);
 
   // binding 순서 목록 + 표시 규칙 rank 분리 (활성 bucket=표시 / 상위 합계=sumYn / 하위=드릴 전용 — DMF0003 1:1)
   const dynBindings = useMemo<string[]>(() => dynColMetas.map(m => m.binding), [dynColMetas]);
@@ -478,7 +555,14 @@ export const SalesPlanGrid = ({
       });
     });
     // sub 정렬: 'SUM'(월합계) 최우선 → 주차 오름차순. leaf 정렬: 합계(M/W) 먼저 → 일자 binding 순.
-    const subOrder = (k: string): number => (k === 'SUM' ? -1 : Number(k.replace(/\D/g, '') || 0));
+    //   주차는 숫자 크기가 아니라 그 달의 실제 시간순으로 놓는다 (연말·연초 W53→W01 역전 방지).
+    const subOrder = (label: string, leafCols: LeafCol[]): number => {
+      if (label === 'SUM') return -1;
+      const ym = leafCols[0]?.binding.slice(2, 8) ?? '';
+      const week = Number(label.replace(/\D/g, '') || 0);
+      const chronologicalIndex = isoWeeksOfMonth(ym).findIndex(item => item.isoWeek === week);
+      return chronologicalIndex >= 0 ? chronologicalIndex : week;
+    };
     const leafKind = (b: string): 'M' | 'W' | 'D' =>
       /^M_/.test(b) ? 'M' : /^W_/.test(b) ? 'W' : 'D';
     return [...largeMap.values()]
@@ -488,7 +572,7 @@ export const SalesPlanGrid = ({
         align: 'center',
         height: 48,
         columns: [...bucket.subs.entries()]
-          .sort(([a], [b]) => subOrder(a) - subOrder(b))
+          .sort(([a, aCols], [b, bCols]) => subOrder(a, aCols) - subOrder(b, bCols))
           .map(([subLabel, leafCols]) => ({
             header: subLabel,
             align: 'center',
@@ -530,10 +614,51 @@ export const SalesPlanGrid = ({
       return true;
     };
 
+    // 현재기간 rail — 당주 W_ 컬럼 하나만 대상 (당월 M_ SUM·당일 D_ 는 제외.
+    //   MktFcstGrid/SalesMonitoringGrid 동일 규칙). 헤더·데이터셀 공통 판정.
+    const isCurrentWeekRail = (binding: string): boolean =>
+      dynKindOf(binding) === 'W' && currentPeriodBindingsRef.current.has(binding);
+    // rail 그리기/지우기 — inline !important (CSS 클래스는 Wijmo 기본 셀 border 에 밀린다).
+    //   미대상 셀은 반드시 removeProperty — Wijmo 셀 재활용으로 이전 컬럼 선이 남는다.
+    //   필수: AS-IS 는 당주 왼쪽 경계 한 줄만 그린다 — 오른쪽 초록선/구 클래스 잔상은 항상 제거.
+    const applyRail = (cell: HTMLElement, on: boolean) => {
+      if (on) cell.style.setProperty('border-left', '2px solid #1e8449', 'important');
+      else cell.style.removeProperty('border-left');
+      cell.style.removeProperty('border-right');
+      toggleClass(cell, 'sp-cell-current-period', false);
+    };
+
+    // MEASURE 편집 후보 제한 — dataMap 을 교체하지 않고 getDisplayValues 만 덮는다
+    //   (DMF0082 ForecastPriceGrid 2026-08-12 선례 1:1).
+    //   금지: 편집 진입 시 col.dataMap 교체 — dataMap 은 컬럼 단위라 교체하는 순간 후보 밖 코드
+    //   (표시 31종 중 Insert 대상 3종만 남음)가 CODE→NAME 매핑을 잃는다. 그래서 드롭다운이
+    //   코드로 보이고 같은 컬럼의 다른 행까지 raw CODE 로 바뀐다.
+    //   wijmo 는 편집기 드롭다운을 만들 때 getDisplayValues(행 dataItem) 를 호출하므로,
+    //   표시용 전체 map 을 그대로 두고 후보만 좁히면 표시와 후보가 동시에 맞는다.
+    //   주의: 판정은 표시명 → 코드(getKeyValue) 방향 — 반대 방향은 map 에 없는 코드에서
+    //   wijmo 가 키를 그대로 돌려주기도 해 매칭이 조용히 실패한다.
+    type MeasureCandidateDataMap = DataMap & { rowScopedCandidates?: boolean };
+    const installMeasureCandidateFilter = (dataMap?: DataMap) => {
+      if (!dataMap) return;
+      const map = dataMap as MeasureCandidateDataMap;
+      if (map.rowScopedCandidates) return;
+      map.rowScopedCandidates = true;
+      const allDisplayValues = map.getDisplayValues.bind(map) as (item?: unknown) => string[];
+      map.getDisplayValues = (item?: unknown): string[] => {
+        const all = allDisplayValues(item);
+        const codes = measureInfoCodesRef.current;
+        if (codes.size === 0) return all; // SP 후보 미도착 — 전체 목록 유지(드롭다운을 비우지 않는다)
+        const narrowed = all.filter(name => codes.has(String(map.getKeyValue(name) ?? '').trim()));
+        return narrowed.length > 0 ? narrowed : all;
+      };
+    };
+
     const formatHandler = (_s: FlexGridType<SalesPlanRow>, e: FormatItemEventArgs) => {
       // #108 — No. 코너 헤더 (TopLeft 단일 라벨)
       if (e.panel.cellType === CellType.TopLeft) {
-        if (e.cell.textContent !== 'No.') e.cell.textContent = 'No.';
+        // 편집 그리드는 순번/상태 row header가 각각 존재하므로 첫 번째 열에만 표시한다.
+        const label = e.col === 0 ? 'No.' : '';
+        if (e.cell.textContent !== label) e.cell.textContent = label;
         e.cell.style.textAlign = 'center';
         return;
       }
@@ -555,19 +680,21 @@ export const SalesPlanGrid = ({
               ? '#d32f2f'
               : '';
         e.cell.style.fontWeight = showCurrentPeriod ? '700' : '';
+        // 당주 헤더 왼쪽에도 rail — 아래 데이터셀 border-left 와 한 줄로 이어진다.
+        applyRail(e.cell, isCurrentWeekRail(col.binding ?? ''));
         return;
       }
       if (e.panel.cellType !== CellType.Cell) return;
       if (!col.binding) return;
 
       const binding = col.binding;
+      // 당주 rail — 동적/정적 전 셀이 이 줄을 지나야 재활용 잔상이 남지 않는다 (isDyn 분기보다 앞).
+      applyRail(e.cell, isCurrentWeekRail(binding));
       const rowItem = (e.panel.rows[e.row] as unknown as { dataItem?: SalesPlanRow })?.dataItem;
       const isDyn = !staticBindingSet.has(binding) && !!dynKindOf(binding);
       const isInsert = rowItem?.CRUD_TYPE === 'I';
 
       if (isDyn) {
-        // 당주/당월 컬럼 세로 레일 (배경색과 독립 — 편집 Yellow 와 공존)
-        toggleClass(e.cell, 'sp-cell-current-period', shouldHighlightCurrentPeriod(binding));
         // ⭐ editLock R1~R4 — 편집가능 Yellow / 과거 Gray / 그 외 White (#95 — 전체회색·inline 금지)
         const state = evalSalesPlanDynCell({
           binding,
@@ -627,6 +754,24 @@ export const SalesPlanGrid = ({
         toggleClass(e.cell, 'wj-cell-editable', false);
         e.cell.querySelector('.popup-icon')?.remove();
       }
+
+      // 개인화 색 (ColumnLayoutModal 저장값) — 정적 컬럼만 (동적 기간 컬럼은 위에서 return).
+      //   우선순위: Insert 편집셀 Yellow(클래스) > 저장된 Cell Color. inline !important 라 클래스보다
+      //   세므로 편집 가능 Insert 셀에는 배경을 칠하지 않는다.
+      //   미지정 시 removeProperty 필수 — Wijmo 셀 재활용으로 이전 컬럼 색이 남는다.
+      const personalColor = colorMetaRef.current.get(binding);
+      const insertEditable =
+        !!rowItem && isInsert && insertStaticEditable(binding, rowItem, division);
+      if (!insertEditable && personalColor?.cell) {
+        e.cell.style.setProperty('background-color', personalColor.cell, 'important');
+      } else {
+        e.cell.style.removeProperty('background-color');
+      }
+      if (personalColor?.text) {
+        e.cell.style.setProperty('color', personalColor.text, 'important');
+      } else {
+        e.cell.style.removeProperty('color');
+      }
     };
     g.formatItem.addHandler(formatHandler);
 
@@ -647,9 +792,9 @@ export const SalesPlanGrid = ({
         }
         e.cancel = false;
         editingCellRef.current = { binding, oldVal: (row as Record<string, unknown>)[binding] };
-        // ⭐ 편집 전용 콤보 스왑 — MEASURE(measureInfo SP)/FCST_TYPE(Catch_Up ETC 제외)/CURRENCY(CurrencyList)
-        if (binding === 'MEASURE' && measureInfoMapRef.current) {
-          col.dataMap = measureInfoMapRef.current;
+        // ⭐ 편집 전용 콤보 — MEASURE(후보만 좁힘)/FCST_TYPE(Catch_Up ETC 제외)/CURRENCY(CurrencyList)
+        if (binding === 'MEASURE') {
+          installMeasureCandidateFilter(col.dataMap as DataMap | undefined);
           return;
         }
         if (binding === 'ITEM_ID') {
@@ -696,8 +841,13 @@ export const SalesPlanGrid = ({
 
         const cascade = GRID_CASCADE_FILTERS[binding];
         if (cascade && comboRowsRef.current[binding]) {
+          // mkt-fcst(EndCustomerByDivisionDept 동일 baseline) 1:1 — 무조건 재대입.
+          //   filtered 0건일 때 재대입을 건너뛰면 col.dataMap 이 편집 시작 전 표시용
+          //   전체(미필터) dataMap 에 그대로 남아 Div/Team cascade 가 항상 무력화된 것처럼
+          //   보인다(리포트: END_CUSTOMER 콤보가 전체 데이터로 보임). 0건도 그대로 반영해
+          //   현재 행 컨텍스트를 정확히 반영한다.
           const filtered = filterComboRowsByRow(comboRowsRef.current[binding], row, cascade);
-          if (filtered.length > 0) col.dataMap = new DataMap(filtered, 'CODE', 'NAME');
+          col.dataMap = new DataMap(filtered, 'CODE', 'NAME');
         }
         return;
       }
@@ -815,6 +965,23 @@ export const SalesPlanGrid = ({
           rec.ITEM_CLASS_NAME = toCellStr(selected.NAME);
         }
       }
+      // [통합테스트 1st No.61-④ 후반부] Team 파생 표시 — Sales Site / Project / Model(+End Customer)
+      //   선택 행이 마스터(Sales Site Project Model)의 DEPT_ID 를 함께 내려주면 Team 셀을 그 값으로
+      //   채운다. Team 은 입력 불가 컬럼이라 이 경로가 값의 유일한 출처다.
+      //   관대 규칙: 선택 행에 DEPT_ID 컬럼 자체가 없으면 종전 값을 유지한다 — 콤보 SQL 이 컬럼을
+      //   추가하는 순간 FE 수정 없이 자동 활성 (cascade 관대 통과와 동일 계약).
+      if (changed && TEAM_SOURCE_BINDINGS.includes(binding)) {
+        const sourceRows =
+          binding === 'ITEM_ID'
+            ? itemDropdownRowsRef.current
+            : (comboRowsRef.current[binding] ?? []);
+        const picked = sourceRows.find(r => toCellStr(r.CODE) === toCellStr(newVal));
+        if (picked && 'DEPT_ID' in picked) {
+          rec.DEPT_ID = toCellStr(picked.DEPT_ID);
+          if ('TEAM_NAME' in picked) rec.TEAM_NAME = toCellStr(picked.TEAM_NAME);
+        }
+      }
+
       // ⭐ cascade 계단 clear (hook #59 §5-G — 상위 콤보 값이 실제로 바뀐 경우만)
       const clearTargets = GRID_CASCADE_CLEAR[binding];
       if (clearTargets && changed) {
@@ -825,6 +992,13 @@ export const SalesPlanGrid = ({
       editingCellRef.current = null;
       syncRowComboContext(row);
       s.invalidate(true);
+      // 머지 참여 컬럼(fixedBindings) 값 재수정 시 병합 미해제 방지 (2026-08-05 리포트: 같은 값 입력
+      //   →병합 확인 후 다른 값으로 재수정해도 병합 유지). 콤보 에디터(dataMap) 커밋이 이 핸들러 실행
+      //   시점보다 한 프레임 늦게 반영되는 경우 invalidate(true) 가 아직 옛 값 기준으로 병합범위를
+      //   재계산해버려 새 값이 반영된 다음 프레임까지 재계산되지 않는다 — 한 번 더 강제 재계산한다.
+      if (changed && fixedBindings.includes(binding)) {
+        window.requestAnimationFrame(() => s.invalidate(true));
+      }
     };
     g.cellEditEnded.addHandler(cellEditEndedHandler);
     // ⭐ 붙여넣기 후 처리 (AS-IS spdMain_ClipboardPasted L5572~5596) — ITEM_ID 포함 시 종속
@@ -974,20 +1148,17 @@ export const SalesPlanGrid = ({
         const cleaned = f.filterColumns.filter(b => !/^[MWD]_/.test(b));
         if (cleaned.length !== f.filterColumns.length) f.filterColumns = cleaned;
       }
-      // (0-b) combo dataMap 재적용 — wrapper columnGroups 재적용이 col.dataMap 을 덮으므로 재부착(guard)
+      // (0-b) combo dataMap 재적용 — wrapper columnGroups 재적용이 col.dataMap 을 덮으므로 재부착(guard).
+      //   편집 중인 컬럼은 제외 — beginningEditHandler 가 스왑한 편집 전용 dataMap(SCM_SITE_ID 등
+      //   행종속 콤보 rowDataMaps / END_CUSTOMER 등 cascade dataMap / MEASURE·FCST_TYPE·ITEM_ID·
+      //   CURRENCY 편집 콤보)을 이 guard 가 표시용 dataMap(dataMaps — division 단위)으로 되돌려버리면
+      //   cascade 필터가 무력화된다 (updatedLayout 이 편집 중에도 재발화 — resize/invalidate/scroll 등).
       for (let i = 0; i < g.columns.length; i++) {
+        if (g.editRange && g.editRange.col === i) continue;
         const col = g.columns[i];
         const dm = dataMaps[col.binding ?? ''];
         if (dm && col.dataMap !== dm) col.dataMap = dm;
       }
-      // (0-c) ⭐ [공통 UC-07 2026-08-14] 필터가 걸린 상태에서 **재조회해도 필터가 유지**되도록 재바인딩.
-      //   wijmo 는 columnGroups 재대입마다 Column 객체를 새로 만드는데 FlexGridFilter 는 죽은 Column
-      //   참조를 붙든 채 남는다 → "헤더 필터 표시는 남아 있는데 조건은 풀린 상태로 조회" (요구 원문 증상).
-      //   공용 `rebindFilterColumns` 가 filterDefinition 왕복으로 현재 컬럼에 다시 묶고,
-      //   신규행 필터 예외 집합(keepRowVisibleUnderFilter 등록분)도 보존한다.
-      //   끊어진 필터가 있을 때만 동작하므로 매 updatedLayout 호출에도 되먹임이 없다(유틸 내부 가드).
-      //   (유틸 시그니처는 `FlexGrid<WijmoRowItem>` 기준 — 행 타입이 좁아 캐스팅만 맞춘다.)
-      rebindFilterColumns(g as unknown as FlexGridType<WijmoRowItem>, gridFilterRef?.current);
       const headerRows = g.columnHeaders?.rows;
       if (!headerRows || headerRows.length === 0) return;
       const rowCount = headerRows.length;
@@ -1050,7 +1221,12 @@ export const SalesPlanGrid = ({
         /* unmount race */
       }
     };
-  }, [sumYn, summaryBindings, drillBindings, dynBindings, gridRef]);
+    // 필수: visibleColumns — Column Setting 저장으로 static 컬럼 세트가 바뀌면 <DataGrid key=...>
+    //   가 Wijmo grid 인스턴스를 통째로 재생성한다(mainStaticColumns 는 visibleColumns 파생).
+    //   이 dep 이 없으면 새 grid 에는 이 이펙트가 재등록되지 않아, 동적 컬럼이 원본 정의값
+    //   (mainDynamicColumns 의 visible:true, 전 버킷 동시노출)으로 남아 Weekly/Daily 컬럼까지
+    //   함께 보여 "Bucket 이 Week 로 바뀐 것"처럼 보인다 (2026-08-05 리포트).
+  }, [sumYn, summaryBindings, drillBindings, dynBindings, visibleColumns, gridRef]);
 
   // ⭐ 당주/당월 헤더 강조 — 조회 응답(커서 2) 갱신 시 formatItem 재실행 (최신 binding 반영).
   useEffect(() => {

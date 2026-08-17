@@ -1,0 +1,344 @@
+{
+  "A_meta": [
+    {
+      "table": "SCM_ADM_API_M",
+      "rows": 8,
+      "columns": [
+        "API_ID(8)",
+        "API_MSG_ID(8)",
+        "API_MSG_DESC(8)",
+        "API_URL(7)"
+      ]
+    },
+    {
+      "table": "SCM_ADM_EXCEL_COLUMNS",
+      "rows": 2,
+      "columns": [
+        "PROGRAM_ID(2)",
+        "STORAGE_SQL_ID(2)"
+      ]
+    },
+    {
+      "table": "SCM_ADM_EXCEL_UPLOAD",
+      "rows": 548,
+      "columns": [
+        "PROGRAM_ID(548)"
+      ]
+    },
+    {
+      "table": "SCM_ADM_MNU_BTN_MPG_M",
+      "rows": 9,
+      "columns": [
+        "MNU_ID(9)",
+        "API_ID(9)"
+      ]
+    },
+    {
+      "table": "SCM_ADM_MNU_M",
+      "rows": 1,
+      "columns": [
+        "MNU_ID(1)"
+      ]
+    },
+    {
+      "table": "SCM_ADM_PROC_M",
+      "rows": 24,
+      "columns": [
+        "PROC_NM(24)"
+      ]
+    },
+    {
+      "table": "SCM_ADM_PROGRAM",
+      "rows": 1,
+      "columns": [
+        "PROGRAM_ID(1)",
+        "PROGRAM_PATH(1)",
+        "CLASS_NAME(1)"
+      ]
+    },
+    {
+      "table": "SCM_ADM_USER_GR_MNU_BTN_MPG_M",
+      "rows": 24,
+      "columns": [
+        "MNU_ID(24)"
+      ]
+    },
+    {
+      "table": "SCM_ADM_USER_GR_MNU_MPG_M",
+      "rows": 3,
+      "columns": [
+        "MNU_ID(3)"
+      ]
+    },
+    {
+      "table": "SCM_ADM_USER_MNU_SRCH_COND_M",
+      "rows": 4,
+      "columns": [
+        "MNU_ID(4)"
+      ]
+    },
+    {
+      "table": "SCM_MST_SHEET_COLUMNS",
+      "rows": 58,
+      "columns": [
+        "PROGRAM_ID(58)"
+      ]
+    },
+    {
+      "table": "SCM_MST_SHEET_COLUMNS_0408",
+      "rows": 58,
+      "columns": [
+        "PROGRAM_ID(58)"
+      ]
+    },
+    {
+      "table": "SCM_MST_SHEET_COLUMNS_260408",
+      "rows": 58,
+      "columns": [
+        "PROGRAM_ID(58)"
+      ]
+    }
+  ],
+  "B_objects": [
+    {
+      "type": "PACKAGE",
+      "name": "PKG_DMF0074",
+      "status": "VALID",
+      "gtt": false
+    },
+    {
+      "type": "PACKAGE BODY",
+      "name": "PKG_DMF0074",
+      "status": "VALID",
+      "gtt": false
+    },
+    {
+      "type": "PROCEDURE",
+      "name": "DMF0074_EXCEL_UPLOAD",
+      "status": "INVALID",
+      "gtt": false
+    },
+    {
+      "type": "PROCEDURE",
+      "name": "DMF0074_EXCEL_UPLOAD_KJJ_TEST",
+      "status": "INVALID",
+      "gtt": false
+    },
+    {
+      "type": "PROCEDURE",
+      "name": "DMF0074_EXCEL_UPLOAD_TEST2",
+      "status": "INVALID",
+      "gtt": false
+    },
+    {
+      "type": "PROCEDURE",
+      "name": "DMF0074_GET_METAL_LINK_PRICE",
+      "status": "VALID",
+      "gtt": false
+    },
+    {
+      "type": "PROCEDURE",
+      "name": "DMF0074_GET_METAL_LINK_TEMPLATE",
+      "status": "INVALID",
+      "gtt": false
+    },
+    {
+      "type": "PROCEDURE",
+      "name": "P_DMF0074_GET_METAL_LINK_PRICE",
+      "status": "INVALID",
+      "gtt": false
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DM74_TEMP_MST_ITEM",
+      "status": "VALID",
+      "gtt": true
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DM74_TEMP_MST_ITEM_ENERGY",
+      "status": "VALID",
+      "gtt": true
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DM74_TEMP_SP_ITEM",
+      "status": "VALID",
+      "gtt": true
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DM74_TEMP_VERSION_NO",
+      "status": "VALID",
+      "gtt": true
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DM74_TMP_APPLY_PRICE_TYPE",
+      "status": "VALID",
+      "gtt": true
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DM74_TMP_CONTRACT_UNIT",
+      "status": "VALID",
+      "gtt": true
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DM74_TMP_EXCEL_UPLOAD",
+      "status": "VALID",
+      "gtt": true
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DM74_TMP_EXCEL_UPLOAD_FINAL",
+      "status": "VALID",
+      "gtt": true
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DM74_TMP_EXCEL_UPLOAD_ITEM",
+      "status": "VALID",
+      "gtt": true
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DM74_TMP_EXCEL_UPLOAD_RAW",
+      "status": "VALID",
+      "gtt": true
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DM74_TMP_FROM_PERIOD",
+      "status": "VALID",
+      "gtt": true
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DM74_TMP_METAL_APPLY",
+      "status": "VALID",
+      "gtt": true
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DM74_TMP_METAL_LINK_PRICE",
+      "status": "VALID",
+      "gtt": true
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DM74_TMP_METAL_REQR",
+      "status": "VALID",
+      "gtt": true
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DM74_TMP_NOTUSE_CODE",
+      "status": "VALID",
+      "gtt": true
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DM74_TMP_SEARCHED_METAL_LINK_PRICE",
+      "status": "VALID",
+      "gtt": true
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DM74_TMP_TO_PERIOD",
+      "status": "VALID",
+      "gtt": true
+    },
+    {
+      "type": "dep:FUNCTION",
+      "name": "FN_NEXT_DAY",
+      "status": "-",
+      "gtt": false
+    },
+    {
+      "type": "dep:PACKAGE",
+      "name": "PKG_DMF0074",
+      "status": "-",
+      "gtt": false
+    },
+    {
+      "type": "dep:PROCEDURE",
+      "name": "PR_SCM_SYS_LOG_BATCH",
+      "status": "-",
+      "gtt": false
+    },
+    {
+      "type": "dep:VIEW",
+      "name": "DM_MST_ITEM_SINGLE_V",
+      "status": "-",
+      "gtt": false
+    },
+    {
+      "type": "dep:VIEW",
+      "name": "SCM_ADM_USER_MNU_EDIT_AUTH_V",
+      "status": "-",
+      "gtt": false
+    }
+  ],
+  "C_msg_lbl_mnu": {
+    "msg_codes": [
+      "MSG00002",
+      "MSG00049",
+      "MSG00097",
+      "MSG00108",
+      "MSG00137",
+      "MSG00255",
+      "MSG00265",
+      "MSG00283",
+      "MSG00427",
+      "MSG00614",
+      "MSG00656"
+    ],
+    "lbl_codes": [
+      "LBL00001",
+      "LBL00003",
+      "LBL00011",
+      "LBL00080",
+      "LBL00112",
+      "LBL00608",
+      "LBL00617",
+      "LBL00627",
+      "LBL00653",
+      "LBL00664",
+      "LBL00665",
+      "LBL00739",
+      "LBL00762",
+      "LBL00763"
+    ],
+    "msg_lbl_tables": [
+      "SCM_ADM_MSG_M"
+    ],
+    "existence": {
+      "SCM_ADM_MSG_M": {
+        "key": "MSG_ID",
+        "have": {
+          "MSG00002": 3,
+          "MSG00097": 3,
+          "MSG00108": 3,
+          "MSG00137": 3,
+          "MSG00255": 3,
+          "MSG00265": 3,
+          "MSG00283": 3,
+          "MSG00614": 3,
+          "MSG00656": 3
+        },
+        "missing": [
+          "MSG00049",
+          "MSG00427"
+        ]
+      }
+    },
+    "mnu": {
+      "SCM_ADM_MNU_M": 1,
+      "SCM_ADM_MNU_BTN_MPG_M": 8,
+      "SCM_ADM_USER_GR_MNU_BTN_MPG_M": 22,
+      "SCM_ADM_USER_GR_MNU_MPG_M": 3
+    }
+  }
+}

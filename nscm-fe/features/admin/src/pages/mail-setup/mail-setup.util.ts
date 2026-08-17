@@ -1,10 +1,14 @@
-import {
-  CYCLE,
-  CYCLE_DETAIL_PARENT,
-  MAIL_CONTENT_MAX_BYTES,
-  USE_TYPE_CODE,
-} from './mail-setup.constants';
+import { CYCLE, CYCLE_DETAIL_PARENT, MAIL_CONTENT_MAX_BYTES } from './mail-setup.constants';
 import type { ComboOption } from './mail-setup.types';
+
+/**
+ * 저장 대상 행 선별 — 편집 흔적의 단일 출처는 **CRUD_TYPE(I/M/D)** 이다.
+ * Insert(F8) `GridAction.addRow` 는 `CRUD_TYPE:'I'`, Delete(F9) `GridAction.removeRow` 는 'D',
+ * 셀 편집은 `EditTracker.storeChange` 가 'M' 을 찍는다(되돌리면 undefined 로 해제).
+ * 화면 전용 상태 필드를 따로 두면 이 흔적을 못 읽어 Save 가 조용히 0건으로 끝난다.
+ */
+export const pickChangedRows = <T extends WijmoRowItem>(rows?: T[]): T[] =>
+  rows?.filter(row => !!row.CRUD_TYPE) ?? [];
 
 /** '^' 구분 bulk payload — AS-IS CString.AppendString 과 동일 규약 */
 export const joinBulk = (values: (string | undefined | null)[]) =>
@@ -53,9 +57,8 @@ export const validateCyclePeriod = (row: {
   return row.DETAIL_CLASS_CODE ? undefined : 'MSG00696';
 };
 
-/** Category 신규 행 기본값 — AS-IS InsertRow(L723~747): ACTIVE_FLAG='Y' + UseTypeCode 'MAIL' 고정(L35) */
 export const createEmptyCategory = (): Record<string, string> => ({
-  USE_TYPE_CODE,
+  USE_TYPE_CODE: '',
   MODULE_CODE: '',
   SUB_MODULE_CODE: '',
   CATEGORY_ID: '',

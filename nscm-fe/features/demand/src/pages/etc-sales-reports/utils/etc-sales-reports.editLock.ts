@@ -38,8 +38,17 @@ export const evalEtcReportCell = (params: {
   sEditMeasure: string; // DM_LOOKUP_DIV(div,'DM_SR_ETC_CURRENCY') 첫 CODE — 없으면 ''
   userGroup: string;
 }): EtcReportCellState => {
-  const { binding, row, divisionId, planResult, mdfType, yyyy, thisMonth, sEditMeasure, userGroup } =
-    params;
+  const {
+    binding,
+    row,
+    divisionId,
+    planResult,
+    mdfType,
+    yyyy,
+    thisMonth,
+    sEditMeasure,
+    userGroup,
+  } = params;
   if (dynKindOf(binding) !== 'M') return LOCKED;
   const ym = binding.slice(2);
   const baseYm = baseYmOf(mdfType, thisMonth);

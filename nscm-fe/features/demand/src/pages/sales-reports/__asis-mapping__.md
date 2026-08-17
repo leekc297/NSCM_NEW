@@ -28,7 +28,7 @@
 | E05-2 | §5.2 DMF0044_Sales_VersionPopUp (444행) — 구형. **현행 본화면에서는 호출 경로 없음** (btnSPVer 의 호출 코드가 주석… |  | AS-IS 호출 경로 없음(제약매트릭스 §0 실측: 팝업2 호출부 주석 / 팝업3 은 팝업2 경유만 / 팝업5 는 7파일 내 호출 0). 정책 확정 ② — dead 팝업 3종 이관 제외 | 제외 |
 | E05-3 | §5.3 DMF0044_Sales_VersionCopyPopUp (451행) — Sales_VersionPopUp 의 Copy 버튼에서만 진입 (현행 본화면 경… |  | AS-IS 호출 경로 없음(제약매트릭스 §0 실측: 팝업2 호출부 주석 / 팝업3 은 팝업2 경유만 / 팝업5 는 7파일 내 호출 0). 정책 확정 ② — dead 팝업 3종 이관 제외 | 제외 |
 | E05-4 | §5.4 DMF0044_MDFVersionPopUp (440행, 참고) — **본화면(정본) 어디에서도 인스턴스화되지 않음** (grep 실측: 정본 내 참조 … |  | AS-IS 호출 경로 없음(제약매트릭스 §0 실측: 팝업2 호출부 주석 / 팝업3 은 팝업2 경유만 / 팝업5 는 7파일 내 호출 0). 정책 확정 ② — dead 팝업 3종 이관 제외 | 제외 |
-| E05-5 | §5.5 보조 기능 | 버전창 Copy/Create/Delete/Transfer = components/versionModal/VersionModal.tsx / Exchange Rate = components/modals/ExchangeRateModal.tsx (버전 필수 MSG00688·ADMIN 저장) / Text 입력 = components/modals/TextboxModal.tsx (div82 전용) / Measure Show = 공용 features/master/src/components/measureSelectModal/MeasureSelectModal.tsx (호출부 SalesReportsModals.tsx onApply 가 titleSet 'M' 저장) / **ITEM(Model) 더블클릭 모델 선택 = SalesReportsGrid.tsx:392~401 dblclick → SalesReportsModals.tsx:93 ItemByDivisionModal**(2026-08-11 deptId 행값 전달 파리티 정정) | Exchange 팝업 종료 후 자동 재조회 없음 = AS-IS 파리티(정책④) | 구현 |
+| E05-5 | §5.5 보조 기능 | 버전창 Copy/Create/Delete/Transfer = components/versionModal/VersionModal.tsx / Exchange Rate = components/modals/ExchangeRateModal.tsx (버전 필수 MSG00688·ADMIN 저장) / Text 입력 = components/modals/TextboxModal.tsx (div82 전용) / Measure Show = features/master/src/components/measureSelectModal/MeasureSelectModal.tsx / **ITEM(Model) 더블클릭 모델 선택 = SalesReportsGrid.tsx:392~401 dblclick → SalesReportsModals.tsx:93 ItemByDivisionModal**(2026-08-11 deptId 행값 전달 파리티 정정) | Exchange 팝업 종료 후 자동 재조회 없음 = AS-IS 파리티(정책④) / 공용 정본 승격(hook #132) 반영 — 인용 경로 정정 2026-08-15 | 구현 |
 | E06 | §6 DMF0044_SalesReportExchangePopup — 환율 팝업 (721행) | nscm-fe/features/demand/src/pages/sales-reports/components/modals/ExchangeRateModal.tsx |  | 구현 |
 | E07 | §7 DMF0044_SalesReport_TextboxPopup — 텍스트박스(월별 코멘트) 팝업 (453행) | nscm-fe/features/demand/src/pages/sales-reports/components/modals/TextboxModal.tsx (division 82 전용) |  | 구현 |
 | E08 | §8 본화면 그리드 이벤트 배선 전수 (실측: 코드 L206~L208 + Designer.cs grep) | nscm-fe/features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx — beginningEdit/cellEditEnded/formatItem/dblclick 배선 |  | 구현 |
@@ -139,7 +139,7 @@
 | MODAL:DMF0044_Sales_VersionPopUp | AS-IS 팝업 (분석 md) — TO-BE 모달 구현 위치 기입 의무 |  | AS-IS 호출 경로 없음(제약매트릭스 §0 실측: 팝업2 호출부 주석 / 팝업3 은 팝업2 경유만 / 팝업5 는 7파일 내 호출 0). 정책 확정 ② — dead 팝업 3종 이관 제외 | 제외 |
 | MODAL:ExchangeRateModal | FE 실존 모달 (components/modals/ExchangeRateModal.tsx) — 분석 md 근거 확인 필요(FE 단독이면 사유 기입) | nscm-fe/features/demand/src/pages/sales-reports/components/modals/ExchangeRateModal.tsx |  | 구현 |
 | MODAL:ImagePopUp | AS-IS 팝업 (분석 md) — TO-BE 모달 구현 위치 기입 의무 |  | AS-IS `siMain.ImagePopUp`(L203) = FarPoint 셀 이미지 리소스 — 모달 아님(추출 아티팩트) | 해당없음 |
-| MODAL:MeasureSelectModal | FE 실존 모달 (공용 승격 — 로컬 사본 삭제, hook #132 §2-1) — 분석 md 근거 확인 필요(FE 단독이면 사유 기입) | nscm-fe/features/master/src/components/measureSelectModal/MeasureSelectModal.tsx (공용 — titleSet 'M' 저장은 호출부 SalesReportsModals.tsx onApply) |  | 구현 |
+| MODAL:MeasureSelectModal | FE 실존 모달 (components/modals/MeasureSelectModal.tsx) — 분석 md 근거 확인 필요(FE 단독이면 사유 기입) | features/master/src/components/measureSelectModal/MeasureSelectModal.tsx |  | 구현 |
 | MODAL:PopUp | AS-IS 팝업 (분석 md) — TO-BE 모달 구현 위치 기입 의무 |  | md 본문의 일반 단어 매칭 — 실체 없음(추출 아티팩트) | 해당없음 |
 | MODAL:SalesReportsModals | FE 실존 모달 (components/SalesReportsModals.tsx) — 분석 md 근거 확인 필요(FE 단독이면 사유 기입) | nscm-fe/features/demand/src/pages/sales-reports/components/SalesReportsModals.tsx (모달 컨테이너) |  | 구현 |
 | MODAL:Sales_VersionPopUp | AS-IS 팝업 (분석 md) — TO-BE 모달 구현 위치 기입 의무 |  | AS-IS 호출 경로 없음(제약매트릭스 §0 실측: 팝업2 호출부 주석 / 팝업3 은 팝업2 경유만 / 팝업5 는 7파일 내 호출 0). 정책 확정 ② — dead 팝업 3종 이관 제외 | 제외 |
@@ -189,7 +189,7 @@
 | UnitedVersionModal | United_VersionPopup 727행 | 조회(당월-1~+5)/채택(SP_W·BP_M만, 더블클릭/OK)/액션 5종(T·C·D·CP — SEND_YN 게이트 MSG00685~687, confirm MSG00682/683/684, SP_W↔BP 분기 L300~304) | ✅ |
 | ExchangeRateModal | SalesReportExchangePopup 721행 | 조회 2종+월 피벗/과거월 차단(L-29)/저장 '^' 7키·'0'→'D' | ✅ |
 | TextboxModal | SalesReport_TextboxPopup 453행 (82) | GET 4커서(rc2 MONDAY)/13 코멘트/저장 행별 반복(정책③) | ✅ |
-| MeasureSelectModal | DM0002_TitleSetForm_Popup | 공용 모달 (features/master/src/components/measureSelectModal — titleSet 'M' 저장은 호출부 SalesReportsModals.tsx onApply) | ✅ |
+| MeasureSelectModal | DM0002_TitleSetForm_Popup | business-plan 판 복제 (titleSet 'M') | ✅ |
 
 ## 5. Validation/MSG 매핑 (hook #114 — AS-IS ID 직승계 금지, 사내 실측 3분기)
 | AS-IS | 용법 | TO-BE | 분기 |
@@ -303,3 +303,17 @@ clbDivision 이중구독 / btnSPVer 구 팝업 호출(L1156~1163 주석 — CUTO
 | HANDLER:clbType_SelectedIndexChanged | AS-IS `DMF0044_Sales_Reports.cs:1394` (라이브 8행) | nscm-fe/features/demand/src/pages/sales-reports/components/SalesReportsForm.tsx Type 변경 핸들러 |  | 구현 |
 | HANDLER:spdMain_CellDoubleClick | AS-IS `DMF0044_Sales_Reports.cs:1307` (라이브 17행) | nscm-fe/features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx dblclickHandler |  | 구현 |
 | HANDLER:spdMain_Changed | AS-IS `DMF0044_Sales_Reports.cs:1166` (라이브 114행) | nscm-fe/features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx cellEditEndedHandler |  | 구현 |
+
+## §UC. UI 공통(통합테스트) 축 — COMMON:UC-01~07 (hook #133, 2026-08-15 판정)
+
+> 단일 원천 = `_artifacts/_diagnostics/asis_mapping_gate.py::UI_COMMON_ITEMS`. 정본 화면 = DMF0042.
+
+| ID | 요지(원천 1줄) | 구현 위치(파일:라인) | 사유 | 상태 |
+|---|---|---|---|---|
+| COMMON:UC-01 | 필터링 상태에서 신규행 Insert 시 필터를 **유지한 채** 추가 행이 보이도록 (keepRowVisibleUnderFilter — 필터 clear 금지) | SalesReports.tsx handleInsert 말미 `keepRowVisibleUnderFilter` 블록별 등록 (2026-08-15 신설) |  | 구현 |
+| COMMON:UC-02 | 데이터 수정 중 다른 데이터 조회 시도 = MSG00703 confirm | SalesReports.tsx handleSearch 선두 `hasPendingChanges()` → setAlert confirm MSG00703, 취소 시 조회 중단 (2026-08-15 신설 — 종전 hasPendingChanges 는 저장 경로에서만 쓰였다) |  | 구현 |
+| COMMON:UC-03 | 컬럼 추가/제외(Column/Measure 설정) 적용 시 기존 조회 데이터 Reset 후 재조회 유도 | components/SalesReportsModals.tsx ColumnLayoutModal onSave 선두 `onMeasureApply()`(=resetGrid, 2026-08-15 보완 — Column 경로 누락분) + MeasureSelectModal onApply `onMeasureApply()` + SalesReports.tsx resetGrid |  | 구현 |
+| COMMON:UC-04 | CRUD 완료 알림 = Alert 아닌 하단 중앙 Toast 후 자동 소멸 | SalesReports.tsx handleSave 성공 `setToast type:'success'`(MSG.SAVED) — 실패/SP 메시지만 Alert |  | 구현 |
+| COMMON:UC-05 | Excel Download 시 콤보 컬럼 데이터가 Code 아닌 Name 으로 출력 | 공용 `packages/foundation/src/utils/gridAction.ts` excelDownload dataMap 승계(2026-08-12 공용 보완 — 전 화면 발효) ← SalesReports.tsx:448 `excelFileName='SalesReports'` 경로 소비 |  | 구현 |
+| COMMON:UC-06 | Key-in 조회조건 = 콤마 구분 다중 입력 시 전건 조회 | 해당없음 — 조회조건 전수(components/SalesReportsForm.tsx) = Division·Version·CustomDropdown 뿐, **자유입력(key-in) 필드가 0개**. 콤마 다중 입력 대상 자체가 없다 | 조회조건에 key-in 필드 부재(2026-08-15 폼 전수 확인) | 해당없음 |
+| COMMON:UC-07 | 필터가 걸린 상태에서 재조회해도 조회되고 **필터도 그대로 적용** (rebindFilterColumns) | components/SalesReportsGrid.tsx updatedLayout `(0-a2) rebindFilterColumns` — columnGroups 재대입으로 끊긴 Column 참조만 재바인딩(동적 M_ 는 직전 sanitize 로 제외 유지). 2026-08-15 신설 |  | 구현 |

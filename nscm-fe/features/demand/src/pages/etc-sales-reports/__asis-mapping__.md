@@ -28,7 +28,7 @@
 | E05-3 | §5.3 화면 내 검증 메시지 전수 (활성 기준) | features/demand/src/pages/etc-sales-reports/utils/etc-sales-reports.validate.ts:9~16 (MSG00283 조회 / MSG00688 저장·팝업 / MSG00096 편집권한) + features/demand/src/pages/etc-sales-reports/utils/etc-sales-reports.save.ts:126~129 (MSG00429 Department 필수) |  | 구현 |
 | E06 | §6 호출 팝업 상세 | features/demand/src/pages/etc-sales-reports/components/EtcSalesReportsModals.tsx:30~ (모달 4종 라우팅) |  | 구현 |
 | E06-1 | §6.1 DMF0044_United_VersionPopup (버전 선택 — btnSPVer) | features/demand/src/components/versionModal/VersionModal.tsx (공용 — DMF0044 와 1본 공유) ← features/demand/src/pages/etc-sales-reports/components/EtcSalesReportsModals.tsx:171 |  | 구현 |
-| E06-2 | §6.2 DM0002_TitleSetForm_Popup (Measure Setting — btnMeasure) | features/master/src/components/measureSelectModal/MeasureSelectModal.tsx (공용 — hook #132 §2-1) ← features/demand/src/pages/etc-sales-reports/components/EtcSalesReportsModals.tsx (MEASURE — 저장/재조회는 onApply 소유) |  | 구현 |
+| E06-2 | §6.2 DM0002_TitleSetForm_Popup (Measure Setting — btnMeasure) | features/master/src/components/measureSelectModal/MeasureSelectModal.tsx ← features/demand/src/pages/etc-sales-reports/components/EtcSalesReportsModals.tsx:152 |  | 구현 |
 | E06-3 | §6.3 SCM0002_ProjectbyDivisionPopupEx (Project 선택 — 그리드 PROJECT_CODE 더블클릭) | 공용 `ProjectByDivisionModal` ← features/demand/src/pages/etc-sales-reports/components/EtcSalesReportsModals.tsx:83 |  | 구현 |
 | L121 | 컬럼 상수 정의 (`DefColumns.FCST_TYPE`) | features/demand/src/pages/etc-sales-reports/etc-sales-reports.types.ts (EtcSalesReportRow) + SHEET_COLUMNS 메타(FCST_TYPE, DIVISION_ID='81*' 한정) |  | 구현 |
 | L344 | MSG00096 / Edit, DM Planner & Div≠82 | features/demand/src/pages/etc-sales-reports/utils/etc-sales-reports.editLock.ts:22~23 (isEditBlockedGroup) + features/demand/src/pages/etc-sales-reports/utils/etc-sales-reports.validate.ts:15~16 (MSG00096) |  | 구현 |
@@ -79,7 +79,7 @@
 | CRUD:E03:SAVE | [SAVE] §3 편집/저장 | features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx:203~ + features/demand/src/pages/etc-sales-reports/utils/etc-sales-reports.api.ts:81 (callSaveEtcReport → SHEETS.MAIN 'SAVE') + features/demand/src/pages/etc-sales-reports/utils/etc-sales-reports.save.ts:111~ (36키 '^' bulk) |  | 구현 |
 | MODAL:DMF0044_Sales_VersionPopUp | AS-IS 팝업 (분석 md) — TO-BE 모달 구현 위치 기입 의무 |  | AS-IS dead 팝업 — 2026-07-22 사용자 확정으로 이관 제외(활성 경로는 `DMF0044_United_VersionPopup` = 공용 VersionModal, E06-1) | 제외 |
 | MODAL:EtcSalesReportsModals | FE 실존 모달 (components/EtcSalesReportsModals.tsx) — 분석 md 근거 확인 필요(FE 단독이면 사유 기입) | features/demand/src/pages/etc-sales-reports/components/EtcSalesReportsModals.tsx (모달 4종 라우팅 — PROJECT/COLUMN/MEASURE/VERSION) |  | 구현 |
-| MODAL:MeasureSelectModal | 공용 Measure 선택 모달 (hook #132 §2-1 — 2026-08-13 로컬 사본 삭제·공용 정본 전환) | features/master/src/components/measureSelectModal/MeasureSelectModal.tsx (소비 = components/EtcSalesReportsModals.tsx) ← AS-IS §6.2 DM0002_TitleSetForm_Popup (Measure Setting). CRUD = 표시/선택 전용(저장은 개인화 titleSet 경유) |  | 구현 |
+| MODAL:MeasureSelectModal | FE 실존 모달 (components/modals/MeasureSelectModal.tsx) — 분석 md 근거 확인 필요(FE 단독이면 사유 기입) | features/master/src/components/measureSelectModal/MeasureSelectModal.tsx ← AS-IS §6.2 DM0002_TitleSetForm_Popup (Measure Setting). CRUD = 표시/선택 전용(저장은 개인화 titleSet 경유) |  | 구현 |
 | MODAL:ShowDialog | AS-IS 팝업 (분석 md) — TO-BE 모달 구현 위치 기입 의무 |  | AS-IS `ShowDialog` 는 팝업 호출 **공통 헬퍼**(WinForms API)이지 개별 팝업이 아니다 — TO-BE 대응 단위 없음(각 팝업은 E06-1~3 로 개별 대사) | 해당없음 |
 ## 0. 원본 결함 교정 이력 (2026-07-22 채택)
 | # | 결함 | 처리 |
@@ -172,7 +172,7 @@
 | HANDLER:InsertRow | AS-IS `DMF0049_Sales_ETC_Reports.cs:925` (라이브 139행) | features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx:168~189 (handleInsert — division 세트 블록 삽입) + features/demand/src/pages/etc-sales-reports/utils/etc-sales-reports.editLock.ts:88~101 (신규행 정적 컬럼 잠금) |  | 구현 |
 | HANDLER:SaveButton | AS-IS `DMF0049_Sales_ETC_Reports.cs:465` (라이브 3행) · **사문(빈 몸통)** |  | AS-IS 몸통이 비어 있는 사문(dead) 핸들러 — 실제 동작은 아래 대응 메서드가 담당한다. 이식 대상 아님 (→ `SaveData`) | 제외 |
 | HANDLER:SaveData | AS-IS `DMF0049_Sales_ETC_Reports.cs:629` (라이브 259행) | features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx:203~ (handleSave) + features/demand/src/pages/etc-sales-reports/utils/etc-sales-reports.save.ts:111~180 |  | 구현 |
-| HANDLER:btnMeasure_Click | AS-IS `DMF0049_Sales_ETC_Reports.cs:1543` (라이브 9행) | features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx:311~316 (MEASURE_SELECT hotkey → MEASURE 모달) + 공용 features/master/src/components/measureSelectModal/MeasureSelectModal.tsx (배선 = components/EtcSalesReportsModals.tsx onApply) |  | 구현 |
+| HANDLER:btnMeasure_Click | AS-IS `DMF0049_Sales_ETC_Reports.cs:1543` (라이브 9행) | features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx:311~316 (MEASURE_SELECT hotkey → MEASURE 모달) + features/master/src/components/measureSelectModal/MeasureSelectModal.tsx |  | 구현 |
 | HANDLER:btnSPVer_Click | AS-IS `DMF0049_Sales_ETC_Reports.cs:1234` (라이브 6행) | features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx:343 (onOpenVersionModal → VERSION) + features/demand/src/pages/etc-sales-reports/components/EtcSalesReportsForm.tsx:114 (btnSPVer '...') |  | 구현 |
 | HANDLER:clbDivision_SelectedIndexChanged | AS-IS `DMF0049_Sales_ETC_Reports.cs:1556` (라이브 8행) | features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx:157~164 (handleDivisionChange — Grid 초기화 + CRUD reset + 정적컬럼·Measure 재조회) ← features/demand/src/pages/etc-sales-reports/components/EtcSalesReportsForm.tsx:58~61 |  | 구현 |
 | HANDLER:clbPlanResult_SelectedIndexChanged | AS-IS `DMF0049_Sales_ETC_Reports.cs:1566` (라이브 7행) | features/demand/src/pages/etc-sales-reports/components/EtcSalesReportsForm.tsx:96~101 (planResult set) + features/demand/src/pages/etc-sales-reports/useEtcSalesReportsStore.ts:156~160 (resultMonth 스냅샷은 조회 시점에 확정) |  | 구현 |
@@ -218,3 +218,17 @@ BE 는 `@토큰` 을 **문자열 치환**하므로 값은 반드시 `'값'` 형�
 |---|---|---|---|
 | `EtcSalesReports.tsx` sEditMeasure `param1`/`param2` | 따옴표 없음 | `q()` 적용 | **따옴표 X → HTTP 500 (-9994 Sql Error)** / 따옴표 O → 1행(`SalesAmt_KRW`). 종전 상태에서는 `sEditMeasure` 가 **항상 빈값**이라 82 편집 개방 판정이 무력화돼 있었다 |
 | `EtcSalesReportsGrid.tsx` 메타 셀 콤보 | 전달 자체가 없음 | `q(division)` / `q(c.attribute1)` | 위 `DM_LOOKUP_DIV` 행 참조 |
+
+## §UC. UI 공통(통합테스트) 축 — COMMON:UC-01~07 (hook #133, 2026-08-15 판정)
+
+> 단일 원천 = `_artifacts/_diagnostics/asis_mapping_gate.py::UI_COMMON_ITEMS`. 정본 화면 = DMF0042.
+
+| ID | 요지(원천 1줄) | 구현 위치(파일:라인) | 사유 | 상태 |
+|---|---|---|---|---|
+| COMMON:UC-01 | 필터링 상태에서 신규행 Insert 시 필터를 **유지한 채** 추가 행이 보이도록 (keepRowVisibleUnderFilter — 필터 clear 금지) | EtcSalesReports.tsx handleInsert 말미 `keepRowVisibleUnderFilter` 블록별 등록 (2026-08-15 신설) |  | 구현 |
+| COMMON:UC-02 | 데이터 수정 중 다른 데이터 조회 시도 = MSG00703 confirm | EtcSalesReports.tsx handleSearch 선두 `hasPendingChanges()` → setAlert confirm MSG00703, 취소 시 조회 중단 (2026-08-15 신설 — 종전 hasPendingChanges 는 저장 경로에서만 쓰였다) |  | 구현 |
+| COMMON:UC-03 | 컬럼 추가/제외(Column/Measure 설정) 적용 시 기존 조회 데이터 Reset 후 재조회 유도 | components/EtcSalesReportsModals.tsx ColumnLayoutModal onSave 선두 `onGridReset()`(2026-08-15 보완 — Column 경로 누락분) + MeasureSelectModal onApply `onGridReset()` + EtcSalesReports.tsx `clearGridOnSettingChange` |  | 구현 |
+| COMMON:UC-04 | CRUD 완료 알림 = Alert 아닌 하단 중앙 Toast 후 자동 소멸 | EtcSalesReports.tsx handleSave 성공 `setToast type:'success'`(MSG.SAVED) — **2026-08-15 정정**(종전 `setAlert` 오사용 = hook #132 §3 위반) |  | 구현 |
+| COMMON:UC-05 | Excel Download 시 콤보 컬럼 데이터가 Code 아닌 Name 으로 출력 | 공용 `packages/foundation/src/utils/gridAction.ts` excelDownload dataMap 승계 ← EtcSalesReports.tsx:400 `excelFileName='EtcSalesReports'`(2026-08-15 정정 — 종전 'SalesReports' 는 DMF0044 복제 잔재로 두 화면 파일명이 동일했다) |  | 구현 |
+| COMMON:UC-06 | Key-in 조회조건 = 콤마 구분 다중 입력 시 전건 조회 | 해당없음 — 조회조건 전수(components/EtcSalesReportsForm.tsx) = Division·Version·CustomDropdown 뿐, **자유입력(key-in) 필드가 0개**. 콤마 다중 입력 대상 자체가 없다 | 조회조건에 key-in 필드 부재(2026-08-15 폼 전수 확인) | 해당없음 |
+| COMMON:UC-07 | 필터가 걸린 상태에서 재조회해도 조회되고 **필터도 그대로 적용** (rebindFilterColumns) | components/EtcSalesReportsGrid.tsx updatedLayout `(0-a2) rebindFilterColumns` — columnGroups 재대입으로 끊긴 Column 참조만 재바인딩(동적 M_ 는 직전 sanitize 로 제외 유지). 2026-08-15 신설 |  | 구현 |

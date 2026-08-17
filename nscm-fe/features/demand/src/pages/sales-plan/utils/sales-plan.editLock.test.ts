@@ -29,7 +29,14 @@ const row = (over: Record<string, unknown> = {}): SalesPlanRow =>
   }) as never;
 
 const evalCell = (binding: string, r: SalesPlanRow, div = '81', bucket = BUCKET_TYPE.MONTHLY) =>
-  evalSalesPlanDynCell({ binding, row: r, divisionId: div, bucketType: bucket, cutoff, auth: AUTH_BOTH });
+  evalSalesPlanDynCell({
+    binding,
+    row: r,
+    divisionId: div,
+    bucketType: bucket,
+    cutoff,
+    auth: AUTH_BOTH,
+  });
 
 describe('editLock — 기간 cutoff (제약매트릭스 §1.3/§4.1)', () => {
   it('M_: 40=당월 포함(≥) / 비40=익월부터(＞) — AS-IS L771~794', () => {

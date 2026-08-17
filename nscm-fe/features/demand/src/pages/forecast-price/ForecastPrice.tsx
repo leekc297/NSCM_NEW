@@ -17,7 +17,7 @@ import type { EditTracker } from '@foundation/utils';
 import { MainTitle, SubTitle } from '@shared/components';
 import { useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
 import { FileExceldownloadIcon } from '@shared/lges-icons';
-import { useMessageStore, useSessionStore } from '@shared/stores';
+import { useDirtyReset, useMessageStore, useSessionStore } from '@shared/stores';
 
 import { FcstUploadModal } from '../../components';
 
@@ -109,6 +109,11 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   const authGroup = useForecastPriceStore(state => state.authGroup);
   const setAuthGroup = useForecastPriceStore(state => state.setAuthGroup);
   const setWsPlannerYn = useForecastPriceStore(state => state.setWsPlannerYn);
+
+  // 이탈 가드(조회·탭 닫기·팝업 닫기) 확인 시 화면이 들고 있는 신규행 state 도 함께 버린다.
+  //   그리드 되돌리기는 DataGrid 가 자동 등록하지만, 그것은 itemsSource 배열에서 'I' 행을 지울 뿐이라
+  //   insertedRows 가 살아 있으면 다음 렌더의 gridRows useMemo 가 버린 행을 그대로 되살린다.
+  useDirtyReset(() => setInsertedRows([]));
 
   // division-linked 메타(SHEET_COLUMNS/SHEET_MEASURE) — 81 전환 시 재fetch (fetch 는 호출 시점 divisionId 를 body 로 전송)
   useEffect(() => {
@@ -303,18 +308,14 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   const isDiv82 = searchParams.divisionId === '82';
 
   // ── Search (AS-IS FindButton — V1~V4 검증 후 조회) ──
+  //   [공통 C2 2026-08-14 정정] 수정 중 재조회 가드(MSG 확인 팝업)는 여기서 하지 않는다.
+  //   조회 진입점 두 곳(SearchArea 조회 버튼 · SubTitle F5)이 이미 공통 가드
+  //   confirmIfDirtyKey(..., 'search') 로 감싸 confirm + 편집분 되돌리기까지 수행한다.
+  //   화면이 같은 검사를 한 번 더 하면 팝업이 2연속으로 뜬다 — 공통 가드가 확인 직후
+  //   discardDirtyKey 로 그리드만 되돌리고 화면 state(insertedRows)는 남기기 때문에
+  //   여기 검사가 다시 걸렸다(2번째 팝업은 MSG00703 = 닫기 문구라 "이 화면을 닫으시겠습니까?" 로 떴다).
+  //   화면 state 정리는 아래 useDirtyReset 등록이 담당한다.
   const handleSubmit = async () => {
-    // [공통 C2 2026-08-11] 수정 중 재조회 가드 — 통합테스트 1st Common "수정 중인 데이터가 있습니다.
-    //   새로 조회하시겠습니까? 팝업 호출 필요"(현재는 경고 없이 전환). MSG00703 신규 채번(3점 반영).
-    //   pending = editTracker 변경분(Price Batch Input 가드 동일 패턴) + 신규(I) 행.
-    const pendingChanges = editTrackerRef.current?.getOriginalValues();
-    if ((pendingChanges && Object.keys(pendingChanges).length > 0) || insertedRows.length > 0) {
-      const proceed = await setAlert({
-        type: 'confirm',
-        content: t('MSG00703', '_There are unsaved changes. Search again?'),
-      });
-      if (!proceed) return;
-    }
     if (!searchParams.divisionId) {
       await setAlert({ type: 'alert', content: t(MSG.DIVISION_NO_AUTH, '_Select Division.') });
       return;
@@ -541,7 +542,7 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
     tracker.clearChanges();
     setInsertedRows([]);
     void queryClient.invalidateQueries({ queryKey: [MENU_ID] });
-  };;
+  };
 
   const hotkeyConfig = {
     search: () => void handleSubmit(),
@@ -694,7 +695,13 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
       <ProjectByDivisionModal
         open={openProject}
         modalClose={() => setOpenProject(false)}
-        setSelectedValue={(projectCode, projectName, _projectStatus, _bizTypeName, projectOwner) => {
+        setSelectedValue={(
+          projectCode,
+          projectName,
+          _projectStatus,
+          _bizTypeName,
+          projectOwner
+        ) => {
           const target = popupRow as unknown as WijmoRowItem | null;
           if (target) {
             target['PROJECT_CODE'] = projectCode;
@@ -856,4 +863,4 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
       />
     </>
   );
-};;
+};

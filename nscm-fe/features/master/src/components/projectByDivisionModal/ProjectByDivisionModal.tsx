@@ -26,7 +26,11 @@ interface ProjectByDivisionModalProps {
     projectsNames?: string,
     projectStatus?: string,
     bizTypeName?: string,
-    projectOwner?: string // DMF0003 (2026-07-28): Project Owner 자동 채움 — 미사용 호출부는 무시 → 회귀 0
+    projectOwner?: string, // DMF0003 (2026-07-28): Project Owner 자동 채움 — 미사용 호출부는 무시 → 회귀 0
+    // DMF0021 (2026-08-14, 통합테스트 1st No.61-④): Team 자동 채움 — Team 은 입력 불가 컬럼이라
+    //   선택한 마스터 행의 팀을 그대로 내려줘야 화면에 표시된다. 미사용 호출부는 무시 → 회귀 0.
+    deptId?: string,
+    deptName?: string
   ) => void;
   preSearchParams: ProcRequest<MODAL_PROJECT_BY_DIVISION, MODAL_SHEET_PROJECT_BY_DIVISION>;
   // ⭐ 2026-07-03 — cell/Form 호출 모두 동일 5개 조건 표시 + preSearchParams 그대로 사용 (사용자 요구).
@@ -121,9 +125,16 @@ export const ProjectByDivisionModal = ({
 
     if (!selections) return;
 
+    const firstSelection = selections[0] as Record<string, unknown> | undefined;
     setSelectedValue(
       selections.map(item => item.PROJECT_CODE).join(','),
-      selections.map(item => item.PROJECT_NAME).join(',')
+      selections.map(item => item.PROJECT_NAME).join(','),
+      undefined,
+      undefined,
+      undefined,
+      // 단건 선택일 때만 팀을 넘긴다 — 다건은 어느 팀인지 확정할 수 없다.
+      selections.length === 1 ? ((firstSelection?.DEPT_ID as string) ?? undefined) : undefined,
+      selections.length === 1 ? ((firstSelection?.DEPT_NAME_KO as string) ?? undefined) : undefined
     );
     modalClose();
   };
@@ -148,7 +159,9 @@ export const ProjectByDivisionModal = ({
       dataItem.PROJECT_NAME,
       (dataItem as Record<string, unknown>).PROJECT_STATUS as string | undefined,
       (dataItem as Record<string, unknown>).BIZ_TYPE_NAME as string | undefined,
-      (dataItem as Record<string, unknown>).PROJECT_OWNER as string | undefined
+      (dataItem as Record<string, unknown>).PROJECT_OWNER as string | undefined,
+      (dataItem as Record<string, unknown>).DEPT_ID as string | undefined,
+      (dataItem as Record<string, unknown>).DEPT_NAME_KO as string | undefined
     );
     modalClose();
   };

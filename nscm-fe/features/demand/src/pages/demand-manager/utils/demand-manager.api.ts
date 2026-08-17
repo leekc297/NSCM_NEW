@@ -1,6 +1,6 @@
 import { apiClient } from '@foundation/apis';
 
-import { DIVISION_40, MENU_ID, SHEETS } from '../demand-manager.constants';
+import { DIVISION_40, MENU_ID, SHEETS, toCellStr } from '../demand-manager.constants';
 import type { SaveOrderRow } from '../demand-manager.types';
 
 // ⭐ 저장·삭제는 컬렉션 IN 을 바인딩할 수 없어 CLOB(JSON) 래퍼 멤버를 부른다.
@@ -35,11 +35,8 @@ const toResult = (data: unknown, status: number): OrderProcResult => {
     return { ok: false, message: (data as { message?: string })?.message?.trim() };
   }
   const row = parseResultRow(data);
-  // unknown 값은 문자/숫자만 채택 — String() 직행은 객체에서 '[object Object]' (no-base-to-string)
-  const cell = (x: unknown): string =>
-    typeof x === 'string' ? x : typeof x === 'number' ? String(x) : '';
-  const code = row ? cell(row.CODE ?? row.code) : '';
-  const event = row ? cell(row.EVENT ?? row.event) : '';
+  const code = row ? toCellStr(row.CODE ?? row.code) : '';
+  const event = row ? toCellStr(row.EVENT ?? row.event) : '';
   if (code === '0') return { ok: true, code, count: event };
   return { ok: false, code: code || undefined, count: event || undefined };
 };
@@ -57,9 +54,7 @@ export const callSaveOrderList = async (
 };
 
 /** 삭제 — PKG_DMF0068.P_DMF0068_DEL_ORDERLIST_JSON (그룹 키만 있으면 짝까지 지운다) */
-export const callDeleteOrderList = async (
-  groupKeys: string[]
-): Promise<OrderProcResult> => {
+export const callDeleteOrderList = async (groupKeys: string[]): Promise<OrderProcResult> => {
   const res = await apiClient.post<Record<string, unknown>>(
     `/${MENU_ID}/${SHEETS.MAIN}/DELETE/call-proc`,
     { data: groupKeys.map(k => ({ ATTRIBUTE2: k })) }

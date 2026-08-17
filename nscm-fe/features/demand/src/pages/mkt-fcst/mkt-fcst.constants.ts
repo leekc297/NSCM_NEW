@@ -9,6 +9,10 @@ export type MENU_ID = typeof MENU_ID;
 export enum SHEETS {
   MAIN = 'Mkt Fcst', // 메인 그리드 — wide format (동적 M_/W_/D_ 컬럼). 등록명 그대로(룰 #91 sheet-name-asis-preserve). corp handoff 42~45 가 BTN_MPG SHT_NM / SHEET_COLUMNS / SHEET_MEASURE / SP 를 'Mkt Fcst' 로 마이그레이션.
   SPREAD_TITLE = 'spreadTitle', // 동적 컬럼 메타 (기간 PIVOT 헤더)
+  // ⛔ [2026-08-15] MEASURE_COUNT('measureCount') 제거 — **미완성 배선 잔재**.
+  //   FE 는 상수 선언만 있고 호출부 0건이며, DB 도 BTN_MPG 0건 / PKG_DMF0003 내 SP 0건 /
+  //   PROC_M 0건 이었다(배선 체인 L2 FAIL). AS-IS 대사표에도 대응 항목이 없어 근거 없는
+  //   신규 기능이 되므로 완성이 아니라 제거로 정리한다(hook #124 — AS-IS 근거 없는 구현 금지).
   // ⭐ Phase 2e POPUP sheet (DMF0003 내부 sheet 확장 — corp BTN_MPG handoff 37_*.sql).
   SSP_COMPARE = 'sspCompare', // SSP↔MKT 비교 (DMF0003_GET_MKT_FCST_COMPARE_POPUP)
   PR_POPUP = 'prPopup', // PR 발행/조회 (GET/SAVE_PRPOPUP)
@@ -36,7 +40,6 @@ export const SSP_SYNC_MEASURE = 'MKT_FCST_RP' as const;
 export const RESPONSE_SET = {
   MAIN: 'o_rc1',
   SPREAD_TITLE: 'o_rc1',
-  MEASURE_COUNT: 'o_rc1',
 } as const;
 export type RESPONSE_SET = (typeof RESPONSE_SET)[keyof typeof RESPONSE_SET];
 
@@ -176,7 +179,9 @@ export const MAIN_COLUMNS: MainColumnMeta[] = [
     align: 'C',
     _ctrlType: 'FPComboBox',
     _inputEditType: 'IM',
-    _comboKey: 'FcstType',
+    // 조회 표시 = ETC 제외 목록. 편집(신규행)은 gridCombos GRID_EDIT_COMBO.FCST_TYPE 이 스왑한다.
+    //   실제 값은 admin UI Category Setup 의 cellCboDataTp 가 우선이고 이건 미등록 시 fallback.
+    _comboKey: 'FCST_TYPE_NOT_ETC',
   },
   {
     key: 'DOM_EXP',
@@ -236,6 +241,10 @@ export type MeasureFallback = (typeof MEASURE_FALLBACK)[number];
 
 // 신규 행 Insert 시 Measure 기본값 (AS-IS InsertRow L2509 siMain.SetValue(Measure, "MKT_FCST_RP")).
 export const INSERT_DEFAULT_MEASURE = 'MKT_FCST_RP' as const;
+
+// 비축향(AS) 사이트 행의 Measure (AS-IS ComboSelChange 1-c). 2026-08-14 요구로 값 강제만 재적용한다 —
+//   W/S Planner 가 AS 사이트를 고르면 이 값으로 셋팅. 후보 목록 1종 고정은 2026-08-10 결정대로 안 한다.
+export const AS_SITE_MEASURE = 'AS_In_Req' as const;
 
 // 좌측 Freeze — 정적(좌측 고정) 컬럼 전체를 frozen block 으로 처리.
 //   실제 frozenColumns 는 공용 DataGrid wrapper 가 staticColumns 의 fixed(=true) findLastIndex+1 로 계산.
@@ -320,52 +329,9 @@ export const GROUP = {
 
 // (PSI 고객수요분석 상수 블록 제거 — 2026-07-03 사용자 결정. DMF0003_PSI_20260703 패키지 보존.)
 
-// ============================================================================
-// ⭐ Grid 내 cascade filter (hook #59 §5-G — DMF0020 표준 이식, 사용자 요구 2026-07-03)
-//   콤보 편집 진입 시 같은 행의 상위 셀 값으로 콤보 후보를 클라 필터(dataMap 스왑).
-//   filter 키 = 콤보 SQL 반환 컬럼 실측: EndCustomerByDivisionDept(DIVISION_ID/DEPT_ID/CODE/NAME),
-//   SiteByEndCustomer(DIVISION_ID/END_CUSTOMER/CODE/NAME). 관대 통과(rv/cv 공란·'ALL' = 통과)라
-//   키 미보유 콤보(Div40 변형 등)는 자동 전체 통과 — 값 유실 없음.
-// ============================================================================
-export const GRID_CASCADE_FILTERS: Record<string, { rowKey: string; comboKey: string }[]> = {
-  END_CUSTOMER: [{ rowKey: 'DIVISION_ID', comboKey: 'DIVISION_ID' }],
-  SCM_SITE_ID: [
-    { rowKey: 'DIVISION_ID', comboKey: 'DIVISION_ID' },
-    { rowKey: 'END_CUSTOMER', comboKey: 'END_CUSTOMER' },
-  ],
-  // Div40 변형 — END_CUSTOMER40(값=PROJECT_CODE) / SCM_SITE_ID40. 콤보에 키 없으면 관대 통과.
-  END_CUSTOMER40: [{ rowKey: 'DIVISION_ID', comboKey: 'DIVISION_ID' }],
-  SCM_SITE_ID40: [
-    { rowKey: 'DIVISION_ID', comboKey: 'DIVISION_ID' },
-    { rowKey: 'END_CUSTOMER40', comboKey: 'END_CUSTOMER' },
-  ],
-};
-
-// 상위 콤보 값 변경 시 하위 셀 clear 체인 (같은 INSERT_GROUP 형제 행 포함 — DMF0020 동일).
-export const GRID_CASCADE_CLEAR: Record<string, readonly string[]> = {
-  END_CUSTOMER: ['SCM_SITE_ID'],
-  END_CUSTOMER40: ['SCM_SITE_ID40'],
-};
-
-// ============================================================================
-// ⭐ Grid 편집 전용 콤보 (조회 표시 dataMap 과 별개 — 편집 진입 시 스왑, cellEditEnded 원복).
-//   AS-IS DMF0003_MktFcst.cs: 편집 시 유효분만 후보(조회 표시는 전체 매핑).
-//   - MEASURE   : MktFcstEditMeasure (MKT_FCST_MEASURE lookup, @divisionId, VALID+TMM제외 — 82 편집 7종).
-//                 조회 표시 dataMap = 'Measure' CMBO(전체 measure 명칭). VMI(site) 세부는 후속.
-//   - INCOTERMS : IncotermsEdit (INCOTERMS lookup, VALID_YN='Y'+ATTRIBUTE2='Y' 유효분). 조회 = 'Incoterms'(전체).
-//   divisionParam=true → useTabComboQueries 에 divisionId(FE quoting '값') 전달 (BE raw 치환 대응).
-// ============================================================================
-export const GRID_EDIT_COMBO: Record<
-  string,
-  { comboId: string; divisionParam?: boolean; wsOnly?: boolean }
-> = {
-  MEASURE: { comboId: 'MktFcstEditMeasure', divisionParam: true },
-  INCOTERMS: { comboId: 'IncotermsEdit' },
-  // ⭐ [E20260402-001736] FCST_TYPE 편집 콤보 권한 분기 (.cs L2587~2605): W/S Planner 만
-  //   EDIT_MODE 6종(WS·WSF·AS·ASF+Recall·RMA = SALES_TYPE_CODE2 ∪ _ADD) 스왑. 그 외 그룹은
-  //   기존 'FcstType'(일반 12종) 조회 dataMap 그대로 (wsOnly=true → 비W/S 스왑 생략).
-  FCST_TYPE: { comboId: 'FcstTypeEditMode', wsOnly: true },
-};
+// ⭐ Grid 콤보(조회 표시 / 편집 전용 / cascade / 파라미터 규약)는 utils/mkt-fcst.gridCombos.ts 로 이관.
+//   GRID_CASCADE_FILTERS · GRID_CASCADE_CLEAR · GRID_EDIT_COMBO 는 그 파일에서 export 한다
+//   (콤보 정의를 한 파일에 모으는 표준 — etc-sales-reports.gridCombos 동형).
 
 // ⭐ Measure 변경 시 Model 초기화 (AS-IS spdMain_ComboSelChange L3340~3363, 20231213).
 //   신규행('I')에서 MEASURE 가 아래 예외(AS_In_Req/BNPIn)가 아니면 Model 계열 셀 clear

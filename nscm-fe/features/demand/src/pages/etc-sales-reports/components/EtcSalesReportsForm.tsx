@@ -67,7 +67,9 @@ export const EtcSalesReportsForm = ({
                 <CustomDropdown
                   value={sc.mdfType}
                   options={toOptions(mdfType)}
-                  onChange={(_, v) => set({ mdfType: String(v ?? '') as ReportType, versionNo: '', versionLabel: '' })}
+                  onChange={(_, v) =>
+                    set({ mdfType: String(v ?? '') as ReportType, versionNo: '', versionLabel: '' })
+                  }
                 />
               )}
             />

@@ -49,3 +49,6 @@ export const COMBO_ID = {
 } as const;
 
 export const ALL = 'ALL' as const;
+
+/** Category 그리드의 SQL VIEW 컬럼 binding — 셀 렌더링·팝업 오픈 판정의 공통 기준 */
+export const VIEW_BINDING = 'VIEW' as const;

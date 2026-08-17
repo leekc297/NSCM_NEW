@@ -34,6 +34,8 @@ interface SalesReportsModalsProps {
   // ITEM 셀 팝업 반영 대상 행 (Grid dblclick — 값 '기타매출' 제외)
   itemTargetRow: SalesReportRow | null;
   onVersionSelect: (versionNo: string, label: string) => void;
+  // Measure 선택 적용 직후 호출 — 부모의 Grid 초기화 (Measure 구성이 바뀌므로)
+  onMeasureApply: () => void;
 }
 
 // ⭐ DMF0044 모달 스위치 — United/Exchange/Textbox 전용 3종 + Item(공용)/Column/Measure(공용 승격분).
@@ -46,6 +48,7 @@ export const SalesReportsModals = ({
   onClose,
   itemTargetRow,
   onVersionSelect,
+  onMeasureApply,
 }: SalesReportsModalsProps) => {
   const staticColumns = useSalesReportsStore(s => s.staticColumns);
   const applyColumnLayout = useSalesReportsStore(s => s.applyColumnLayout);
@@ -142,6 +145,10 @@ export const SalesReportsModals = ({
         initialSettings={columnLayoutSettings}
         defaultSettings={columnLayoutDefaults}
         onSave={settings => {
+          // ⭐ [공통 UC-03, hook #132 §2-2] 컬럼 구성이 바뀌면 화면에 남은 결과는 새 구성과
+          //   어긋나므로 **그리드를 비운다**(자동 재조회 ⛔ — 재조회는 사용자가 Search 로).
+          //   Measure 적용 경로에는 이미 걸려 있었는데 Column 경로만 빠져 있었다(2026-08-15 보완).
+          onMeasureApply();
           applyColumnLayout(
             settings.map(s => ({
               colNm: s.COLUMN_NAME,
@@ -167,8 +174,7 @@ export const SalesReportsModals = ({
         }}
       />
 
-      {/* Measure Select — 공용 MeasureSelectModal (hook #132 §2-1 — 화면별 사본 금지).
-          titleSet 'M' 영구 저장은 이 호출부 onApply 소관 (measures/visibleMeasures/onApply 계약) */}
+      {/* Measure Select — business-plan 판 복제 (measures/visibleMeasures/onApply 계약) */}
       <MeasureSelectModal
         open={openKey === 'MEASURE'}
         modalClose={onClose}
@@ -184,6 +190,9 @@ export const SalesReportsModals = ({
           ).then(ok => {
             if (ok) void fetchStaticMeasures();
           });
+          // Grid 초기화는 개인화 저장(saveTitleSet) 성패와 무관하게 즉시 한다 — 선택은 이미
+          //   applyVisibleMeasures 로 반영됐으므로 화면에 남은 이전 결과가 곧바로 어긋난다.
+          onMeasureApply();
         }}
       />
 

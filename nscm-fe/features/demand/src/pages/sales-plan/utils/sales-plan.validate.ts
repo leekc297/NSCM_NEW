@@ -72,7 +72,9 @@ export const useSalesPlanValidation = () => {
   };
 
   // ===== 저장 1차 — 필수 13종 division×measure 분기 (SaveData L2198~2239 — validation.md #60~70/74~76) =====
-  //   대상 = 신규(I) + 수정(M) 행. 첫 결손 필드로 MSG00429 {0} + 행 번호 병기.
+  //   대상 = 신규(I) 행만 (2026-08-11 사용자 확정). 수정(M) 행은 조회 시점에 이미 빈 필수값을 가질 수
+  //   있어 셀 하나만 고쳐도 저장이 막히던 문제 — 필수값 검증은 Insert 경로 한정.
+  //   첫 결손 필드로 MSG00429 {0} + 행 번호 병기.
   const validateSaveRows = (
     rows: SalesPlanRow[],
     divisionId: string,
@@ -98,6 +100,7 @@ export const useSalesPlanValidation = () => {
       return { ok: false, msgId: MSG.NO_CHANGES };
     }
     for (let i = 0; i < rows.length; i++) {
+      if (rows[i].CRUD_TYPE !== 'I') continue; // 수정 행은 필수값 검증 제외 — 신규 행만 대상
       const r = rows[i] as Record<string, unknown>;
       const measure = str(r.MEASURE);
       // [No.59] 81 TEXT 필수는 ETC 행만 — 행별 FCST_TYPE 전달

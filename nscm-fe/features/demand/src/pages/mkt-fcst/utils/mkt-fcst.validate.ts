@@ -100,12 +100,14 @@ export const useMktFcstValidation = () => {
     const required = requiredFieldsFor(divisionId);
     for (let i = 0; i < dirty.length; i++) {
       const r = dirty[i] as Record<string, unknown>;
-      for (const [colKey, labelKey] of required) {
-        if (str(r[colKey]) === '') {
-          const label = t(labelKey, `_${labelKey}`);
+      for (const field of required) {
+        if (str(r[field.col]) === '') {
+          // 사내 미채번 컬럼(FCST Type 등)은 lblKey 없이 fallback 문구를 그대로 쓴다.
+          //   예전처럼 `_${labelKey}` 를 fallback 으로 주면 미등록 키가 '_LBL00679' 로 새어 나온다.
+          const label = field.lblKey ? t(field.lblKey, field.fallback) : field.fallback;
           void setAlert({
             type: 'alert',
-            content: `${t(MSG.REQUIRED_FIELD, '_[{0}] 은 필수 입력사항입니다.').replace('{0}', label)} (${i + 1})`,
+            content: t(MSG.REQUIRED_FIELD, '_[{0}] 은 필수 입력사항입니다.').replace('{0}', label),
           });
           return { ok: false, msgId: MSG.REQUIRED_FIELD, rowIdx: i };
         }

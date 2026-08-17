@@ -53,6 +53,7 @@ export const CustomerModelMappingGrid = ({
   >();
 
   const staticColumn = useCustomerModelMappingStore(state => state.staticColumn);
+  const divisionId = useCustomerModelMappingStore(state => state.searchParams.divisionId);
 
   const [openPrjByDivisionModal, setOpenPrjByDivisionModal] = useState<boolean>(false);
   const [openModelByDivisionModal, setOpenModelByDivisionModal] = useState<boolean>(false);
@@ -239,6 +240,7 @@ export const CustomerModelMappingGrid = ({
         editTrackerRef={editTrackerRef}
         itemsSource={data}
         staticColumns={staticColumn ?? []}
+        comboParams={{ divisionId: `'${divisionId}'` }}
         allowMerging={AllowMerging.All}
         dblClick={handleGridDblclick}
       />

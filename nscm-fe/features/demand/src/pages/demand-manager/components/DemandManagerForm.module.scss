@@ -51,9 +51,14 @@
   gap: 6px;
   width: 100%;
 
+  // ⭐ width 는 auto — 고정 폭(110px)을 주면 안 된다.
+  //   usecase='month' 달력은 내부 MUI TextField 고유 폭이 usecase='date' 보다 넓어
+  //   110px 박스에 들어가지 않고, 두 달력이 한 줄에 못 서서 2단으로 떨어진다.
+  //   (110px 은 usecase='date' 인 공용 PeriodField 기준값. 같은 month 배치를 쓰는
+  //    sales-future-price ExchangeRateModal 도 auto 를 쓴다 — 그쪽이 정본 선례.)
   .datePickerFix {
     flex: 0 0 auto;
-    width: 110px;
+    width: auto;
     min-width: 0;
   }
 

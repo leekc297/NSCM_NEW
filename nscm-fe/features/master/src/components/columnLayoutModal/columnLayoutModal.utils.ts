@@ -119,20 +119,6 @@ export const isVisibleColumn = (r: Record<string, string>): boolean =>
 export const toHiddenColumnSet = (cols: Partial<ColumnMetaRow>[]): Set<string> =>
   new Set(cols.filter(c => c.visible === false && c.colNm).map(c => String(c.colNm)));
 
-/**
- * admin 메타에 등재된 컬럼명 집합 — **division 미등록 컬럼** 판정용 (2026-08-13 DMF0082 실사고).
- *
- * ⭐ GET_TITLESET_POPUP 은 divisionId 를 받아도 division 무관하게 sheet 전 컬럼을 내려준다
- *   (DMF0082 실측 — div 40/81 동일 61행). 반면 컬럼 메타(PR_GET_SHEET_COLUMN_LIST)는 division
- *   스코프라(40=49행/81=41행), 교집합을 취하지 않으면 해당 division 에 등록되지 않은 컬럼
- *   (예: 40 의 PROJECT_CODE)이 팝업 양쪽 목록에 나타난다 — 그리드는 그리지도 않는 컬럼이다.
- *
- * ⚠️ 메타 0건이면 null — 필터 no-op (메타 조회 실패로 목록이 통째로 비는 사고 방지,
- *   toHiddenColumnSet 의 undefined 방어와 동일 계보).
- */
-export const toAllowedColumnSet = (cols: Partial<ColumnMetaRow>[]): Set<string> | null =>
-  cols.length === 0 ? null : new Set(cols.filter(c => c.colNm).map(c => String(c.colNm)));
-
 /** base 행에 settings 를 강제로 덮어쓴다 (Default 원복 등 — DB 값보다 우선시켜야 할 때). */
 export const overrideRows = (
   base: ColumnLayoutRow[],

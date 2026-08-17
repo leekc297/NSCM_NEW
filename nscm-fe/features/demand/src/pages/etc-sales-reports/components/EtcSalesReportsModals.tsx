@@ -1,7 +1,7 @@
 import {
   ColumnLayoutModal,
-  MeasureSelectModal,
   ProjectByDivisionModal,
+  MeasureSelectModal,
 } from 'features/master/src/components';
 import { useMemo } from 'react';
 
@@ -20,6 +20,9 @@ interface EtcSalesReportsModalsProps {
   mdfType: string;
   openKey: EtcSalesReportsModalKey | null;
   onClose: () => void;
+  // Measure 선택 적용 시 Grid 초기화 (조회결과·신규행·편집추적·쿼리캐시 reset — 재조회는 Search 로만).
+  //   Column Setting 이 다시 노출되면 그쪽 onSave 에서도 같은 콜백을 호출한다.
+  onGridReset: () => void;
   // PROJECT 셀 팝업 반영 대상 행 (Grid dblclick — SCM0002 ETC=true)
   projectTargetRow: EtcSalesReportRow | null;
   onVersionSelect: (versionNo: string, label: string) => void;
@@ -31,6 +34,7 @@ export const EtcSalesReportsModals = ({
   mdfType,
   openKey,
   onClose,
+  onGridReset,
   projectTargetRow,
   onVersionSelect,
 }: EtcSalesReportsModalsProps) => {
@@ -122,6 +126,10 @@ export const EtcSalesReportsModals = ({
         initialSettings={columnLayoutSettings}
         defaultSettings={columnLayoutDefaults}
         onSave={settings => {
+          // ⭐ [공통 UC-03, hook #132 §2-2] 컬럼 구성이 바뀌면 화면에 남은 결과는 새 구성과
+          //   어긋나므로 **그리드를 비운다**(자동 재조회 ⛔ — 재조회는 사용자가 Search 로).
+          //   Measure 적용 경로에는 이미 걸려 있었는데 Column 경로만 빠져 있었다(2026-08-15 보완).
+          onGridReset();
           applyColumnLayout(
             settings.map(s => ({
               colNm: s.COLUMN_NAME,
@@ -147,14 +155,14 @@ export const EtcSalesReportsModals = ({
         }}
       />
 
-      {/* Measure Select — 공용 MeasureSelectModal (hook #132 §2-1 — 로컬 사본 제거·공용 정본 전환.
-          measures/visibleMeasures/onApply 계약 동일 — 저장 semantics 는 아래 onApply 가 그대로 소유) */}
+      {/* Measure Select — business-plan 판 복제 (measures/visibleMeasures/onApply 계약) */}
       <MeasureSelectModal
         open={openKey === 'MEASURE'}
         modalClose={onClose}
         measures={staticMeasures}
         visibleMeasures={visibleMeasures}
         onApply={codes => {
+          onGridReset();
           applyVisibleMeasures(codes);
           const all = staticMeasures.map(m => m.colNm);
           const selected = codes ?? all;

@@ -66,7 +66,9 @@ export interface StaticColumnLike {
  *
  * 토큰 컬럼은 라벨이 아니라 **토큰 문자열**을 헤더로 쓴다. 그래야 업로드가 그 열을 찾는다.
  */
-export const buildExcelFormColumns = (staticColumns: readonly StaticColumnLike[]): ExcelFormColumn[] => {
+export const buildExcelFormColumns = (
+  staticColumns: readonly StaticColumnLike[]
+): ExcelFormColumn[] => {
   const used = new Set<string>();
   const cols: ExcelFormColumn[] = [];
 
@@ -125,9 +127,12 @@ export const toPreviewColumns = (
   })) as RawFlexGridColumnConfig[];
 
 /** 결과커서 판정 — DMF0082 는 RESULT_CODE/RESULT_MSG, 일부 SP 는 CODE/MSG (겸용). */
-export const pickResultCursor = (
-  inner?: { CODE?: string; MSG?: string; RESULT_CODE?: string; RESULT_MSG?: string }
-): { ok: boolean; message?: string } => {
+export const pickResultCursor = (inner?: {
+  CODE?: string;
+  MSG?: string;
+  RESULT_CODE?: string;
+  RESULT_MSG?: string;
+}): { ok: boolean; message?: string } => {
   if (!inner) return { ok: true };
   const code = inner.RESULT_CODE ?? inner.CODE;
   if (code === undefined || String(code) === '0') return { ok: true };

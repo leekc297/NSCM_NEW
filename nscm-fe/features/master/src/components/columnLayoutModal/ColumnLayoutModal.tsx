@@ -24,7 +24,6 @@ import {
   overrideRows,
   parseWidth,
   reorderRows,
-  toAllowedColumnSet,
   toHiddenColumnSet,
 } from './columnLayoutModal.utils';
 import { fetchColumnMeta, fetchTitleSet } from './titleSet.api';
@@ -146,11 +145,6 @@ export const ColumnLayoutModal = ({
 
   const excluded = useMemo(() => toHiddenColumnSet(metaRows ?? []), [metaRows]);
 
-  // ⭐ division 미등록 컬럼 제외 (2026-08-13 DMF0082 실사고 — titleSet SP 는 division 무관 전 컬럼
-  //   반환, 메타는 division 스코프. 교집합 없이는 40 에서 PROJECT_CODE 처럼 그리드에 없는 컬럼이
-  //   팝업에 등장). 메타 0건(null)이면 no-op — 조회 실패로 목록 전멸 방지.
-  const allowed = useMemo(() => toAllowedColumnSet(metaRows ?? []), [metaRows]);
-
   // ⚠️ 메타 조회도 loading 에 포함해야 한다 — 아래 latch 는 rows.length===0 일 때 1회만 돌므로,
   //   메타보다 titleSet 이 먼저 도착한 순간을 latch 하면 제외 대상이 그대로 좌측에 남는다.
   const loading = isLoading || isFetching || metaLoading || metaFetching;
@@ -158,9 +152,9 @@ export const ColumnLayoutModal = ({
   const initialRows = useMemo<ColumnLayoutRow[]>(
     () =>
       buildInitialRows(beRows, fallbackColumns, initialSettings).filter(
-        r => !excluded.has(r.COLUMN_NAME) && (allowed === null || allowed.has(r.COLUMN_NAME))
+        r => !excluded.has(r.COLUMN_NAME)
       ),
-    [beRows, fallbackColumns, initialSettings, excluded, allowed]
+    [beRows, fallbackColumns, initialSettings, excluded]
   );
 
   const [rows, setRows] = useState<ColumnLayoutRow[]>([]);

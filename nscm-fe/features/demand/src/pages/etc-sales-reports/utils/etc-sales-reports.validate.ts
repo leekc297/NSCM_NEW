@@ -13,4 +13,6 @@ export const validateVersionForAction = (versionNo: string): ValidationResult =>
   versionNo.trim() === '' ? { ok: false, msgId: MSG.REQUIRE_VERSION_ACTION } : { ok: true };
 
 export const validateEditGate = (userGroup: string, divisionId: string): ValidationResult =>
-  isEditBlockedGroup(userGroup, divisionId) ? { ok: false, msgId: MSG.NO_PERMISSION } : { ok: true };
+  isEditBlockedGroup(userGroup, divisionId)
+    ? { ok: false, msgId: MSG.NO_PERMISSION }
+    : { ok: true };

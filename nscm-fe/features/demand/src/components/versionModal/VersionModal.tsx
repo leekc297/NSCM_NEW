@@ -87,6 +87,7 @@ export const VersionModal = ({
 }: Props) => {
   const { t } = useTranslation();
   const setAlert = useMessageStore.getState().setAlert;
+  const setToast = useMessageStore.getState().setToast;
   const gridRef = useRef<FlexGridType<VersionRow>>(undefined);
   const sesUserId = useSessionStore.getState().session.userId ?? '';
 
@@ -96,7 +97,12 @@ export const VersionModal = ({
   const [edt, setEdt] = useState('');
   const [description, setDescription] = useState('');
   // 확정된 조회조건 — useTabProcQuery filters 참조 안정화 원천
-  const [applied, setApplied] = useState({ versionType: parentReportType, sdt: '', edt: '', description: '' });
+  const [applied, setApplied] = useState({
+    versionType: parentReportType,
+    sdt: '',
+    edt: '',
+    description: '',
+  });
 
   // 액션 옵션 (AS-IS chkResult / BasicDate / chkMV / MvMonth / chkUpdate)
   const [includeResult, setIncludeResult] = useState(false);
@@ -128,7 +134,12 @@ export const VersionModal = ({
     setSdt(initialSdt);
     setEdt(initialEdt);
     setDescription('');
-    setApplied({ versionType: parentReportType, sdt: initialSdt, edt: initialEdt, description: '' });
+    setApplied({
+      versionType: parentReportType,
+      sdt: initialSdt,
+      edt: initialEdt,
+      description: '',
+    });
     setIncludeResult(false);
     setBasicDate('');
     setIncludeMv(false);
@@ -140,9 +151,7 @@ export const VersionModal = ({
 
   // Type 콤보 — 부모 Report Type 으로 lookup 세트 분기 (AS-IS InitControls L130~137)
   const typeLookup =
-    parentReportType === PARENT_REPORT_TYPE.BP_M
-      ? VERSION_TYPE_LOOKUP.BP
-      : VERSION_TYPE_LOOKUP.SP;
+    parentReportType === PARENT_REPORT_TYPE.BP_M ? VERSION_TYPE_LOOKUP.BP : VERSION_TYPE_LOOKUP.SP;
   const { data: typeRows } = useTabLookupQuery({
     filters: { lookupType: typeLookup },
     enabled: open,
@@ -159,7 +168,12 @@ export const VersionModal = ({
   // ⭐ Grid 컬럼 = admin 동적 메타 (hook #113 — 하드코딩 금지). AS-IS GetSpdTitle L278 이
   //   p_program_id='DMF0044' 고정이므로 DMF0049 호출 시에도 DMF0044/MDFVerpopup 등록분을 읽는다.
   const { data: metaColumns } = useQuery<RawFlexGridColumnConfig[]>({
-    queryKey: ['version-modal-column', VERSION_META_PROGRAM_ID, VERSION_META_SHEET_NAME, divisionId],
+    queryKey: [
+      'version-modal-column',
+      VERSION_META_PROGRAM_ID,
+      VERSION_META_SHEET_NAME,
+      divisionId,
+    ],
     queryFn: async () => {
       const res = await apiClient.post<RawFlexGridColumnConfig[]>(
         `/admin/menu/${VERSION_META_PROGRAM_ID}/column`,
@@ -298,8 +312,7 @@ export const VersionModal = ({
     if (running) return;
     // 권한 2중 방어 — 버튼을 숨겨도(노출 게이트) 실행 경로에서 한 번 더 막는다.
     //   AS-IS SaveButton 이 DefineProperty 와 별개로 그룹을 재검사하는 것과 같은 구조.
-    const isTransferAction =
-      action === VERSION_ACTION.TRANSFER || action === VERSION_ACTION.CANCEL;
+    const isTransferAction = action === VERSION_ACTION.TRANSFER || action === VERSION_ACTION.CANCEL;
     if (isTransferAction ? !canTransfer : !canAction) {
       void setAlert({ type: 'alert', content: t(VERSION_MSG.NO_AUTH, '_권한이 없습니다.') });
       return;
@@ -375,7 +388,11 @@ export const VersionModal = ({
         });
         return;
       }
-      void setAlert({ type: 'alert', content: t(VERSION_MSG.SAVED, '_성공적으로 저장되었습니다.') });
+      // 성공은 Toast, 실패/SP 메시지는 Alert (자매 화면 동일 규약)
+      void setToast({
+        message: t(VERSION_MSG.SAVED, '_성공적으로 저장되었습니다.'),
+        type: 'success',
+      });
       void refetch?.();
     } finally {
       setRunning(false);
@@ -417,7 +434,7 @@ export const VersionModal = ({
               <>
                 {/* V-1 Division = 표준 카탈로그 DivisionField. AS-IS L119~120 `SelectedValue=_sDiv;
                     Enabled=false` 1:1 — 부모 확정값이라 비활성(값은 부모가 소유). */}
-                <DivisionField value={divisionId} onChange={() => undefined} gridSize={2} disabled />
+                <DivisionField value={divisionId} onChange={() => undefined} gridSize={2} />
                 <Grid size={3}>
                   <FormItem
                     label={t('LBL00794', '_Type')}
@@ -457,25 +474,12 @@ export const VersionModal = ({
             }
           />
 
-          {/* 액션 바 — 모드별 버튼/옵션 (AS-IS ControlDisplay 가시성 규칙 1:1) */}
-          <div className={styles.actionBar}>
-            {mode === VERSION_MODE.CREATE && canAction
-              ? actionButton(t('LBL00844', '_Version Create'), VERSION_ACTION.CREATE)
-              : null}
-
-            {mode === VERSION_MODE.COPY ? (
-              <>
-                {/* 권한 없는 액션 버튼은 숨긴다 (AS-IS Set_ButtonVisibleFalse 와 동일 방식) */}
-                {canTransfer
-                  ? actionButton(t('LBL00845', '_Transfer'), VERSION_ACTION.TRANSFER)
-                  : null}
-                {canTransfer
-                  ? actionButton(t('LBL00846', '_Transfer Cancel'), VERSION_ACTION.CANCEL)
-                  : null}
-                {canAction
-                  ? actionButton(t('LBL00847', '_Version Delete'), VERSION_ACTION.DELETE)
-                  : null}
-                {canAction ? actionButton(t('LBL00848', '_Version Copy'), VERSION_ACTION.COPY) : null}
+          {/* 액션 바 — 모드별 옵션/버튼 (AS-IS ControlDisplay 가시성 규칙 1:1).
+              배치는 왼쪽 옵션 · 오른쪽 버튼(spacer 로 분리), OK/Close 만 그리드 아래 우측에 둔다.
+              표시할 것이 하나도 없는 조합에서는 빈 회색 바가 남지 않게 통째로 감춘다. */}
+          {(mode === VERSION_MODE.COPY || mvVisible || canAction) && (
+            <div className={styles.actionBar}>
+              {mode === VERSION_MODE.COPY ? (
                 <div className={styles.checkField}>
                   <Checkbox
                     labelText={t('LBL00849', '_Include Result')}
@@ -499,65 +503,69 @@ export const VersionModal = ({
                     />
                   </div>
                 </div>
-              </>
-            ) : null}
+              ) : null}
 
-            {/* 이동계획 — SP 계열 Type 만 노출 (AS-IS L520 / L557) */}
-            {mvVisible ? (
-              <div className={styles.checkField}>
-                <Checkbox
-                  labelText={t('LBL00850', '_MV Plan')}
-                  checked={includeMv}
-                  onChange={handleIncludeMv}
-                />
-                {/* V-4 이동계획 계획월 = 표준 년월 컴포넌트 (AS-IS MvMonth = UsrMonthPicker) */}
-                <div className={`${styles.datePickerFix} ${styles.actionDate}`}>
-                  <DatePickerCalendar
-                    usecase='month'
-                    elevation
-                    size='small'
-                    disabled={!includeMv}
-                    value={ymToDayjs(mvMonth)}
-                    onChange={
-                      ((date: Dayjs | null) => {
-                        setMvMonth(date?.format('YYYYMM') ?? '');
-                      }) as never
-                    }
+              {/* 이동계획 — SP 계열 Type 만 노출 (AS-IS L520 / L557) */}
+              {mvVisible ? (
+                <div className={styles.checkField}>
+                  <Checkbox
+                    labelText={t('LBL00850', '_MV Plan')}
+                    checked={includeMv}
+                    onChange={handleIncludeMv}
                   />
+                  {/* V-4 이동계획 계획월 = 표준 년월 컴포넌트 (AS-IS MvMonth = UsrMonthPicker) */}
+                  <div className={`${styles.datePickerFix} ${styles.actionDate}`}>
+                    <DatePickerCalendar
+                      usecase='month'
+                      elevation
+                      size='small'
+                      disabled={!includeMv}
+                      value={ymToDayjs(mvMonth)}
+                      onChange={
+                        ((date: Dayjs | null) => {
+                          setMvMonth(date?.format('YYYYMM') ?? '');
+                        }) as never
+                      }
+                    />
+                  </div>
                 </div>
-              </div>
-            ) : null}
+              ) : null}
 
-            {/* 최신화 — COPY 모드만 (AS-IS LayoutControl_Update). 실적 포함 시 강제 Y·잠금 */}
-            {mode === VERSION_MODE.COPY ? (
-              <Checkbox
-                labelText={t('LBL00851', '_Latest')}
-                checked={updateLatest}
-                disabled={includeResult}
-                onChange={setUpdateLatest}
-              />
-            ) : null}
+              {/* 최신화 — COPY 모드만 (AS-IS LayoutControl_Update). 실적 포함 시 강제 Y·잠금 */}
+              {mode === VERSION_MODE.COPY ? (
+                <Checkbox
+                  labelText={t('LBL00851', '_Latest')}
+                  checked={updateLatest}
+                  disabled={includeResult}
+                  onChange={setUpdateLatest}
+                />
+              ) : null}
 
-            <div className={styles.actionBarSpacer} />
+              {/* 여기서부터 우측 정렬 — 옵션과 액션 버튼을 좌우로 가른다 */}
+              <div className={styles.actionBarSpacer} />
 
-            {mode === VERSION_MODE.COPY ? (
-              <Button
-                appearance='contained'
-                priority='primary'
-                size='medium'
-                buttonLabel='OK'
-                onClick={() => adopt(getSelectedRow())}
-              />
-            ) : null}
-            {/* ⚠️ Close = LBL00627 (LBL00062 는 'From Date' — 2026-07-30 오배정 실측 정정) */}
-            <Button
-              appearance='outlined'
-              priority='normal'
-              size='medium'
-              buttonLabel={t('LBL00627', 'Close')}
-              onClick={modalClose}
-            />
-          </div>
+              {/* 권한 없는 액션 버튼은 숨긴다 (AS-IS Set_ButtonVisibleFalse 와 동일 방식) */}
+              {mode === VERSION_MODE.CREATE && canAction
+                ? actionButton(t('LBL00844', '_Version Create'), VERSION_ACTION.CREATE)
+                : null}
+              {mode === VERSION_MODE.COPY ? (
+                <>
+                  {canTransfer
+                    ? actionButton(t('LBL00845', '_Transfer'), VERSION_ACTION.TRANSFER)
+                    : null}
+                  {canTransfer
+                    ? actionButton(t('LBL00846', '_Transfer Cancel'), VERSION_ACTION.CANCEL)
+                    : null}
+                  {canAction
+                    ? actionButton(t('LBL00847', '_Version Delete'), VERSION_ACTION.DELETE)
+                    : null}
+                  {canAction
+                    ? actionButton(t('LBL00848', '_Version Copy'), VERSION_ACTION.COPY)
+                    : null}
+                </>
+              ) : null}
+            </div>
+          )}
 
           {/* ⭐ 진행 스피너 (사용자 요구 2026-08-10) — Version Create / Copy / Delete / Transfer /
               Transfer Cancel 는 SP 가 원장 수십만 행을 쓰느라 수 초~수 분 걸린다. 그동안 버튼만
@@ -578,6 +586,27 @@ export const VersionModal = ({
               autoGenerateColumns={false}
               allowSorting={false}
               dblClick={handleGridDblClick}
+            />
+          </div>
+
+          {/* OK / Close 는 그리드 아래 우측 (기존 VersionModal .modalButtonWrapper 와 동일 배치) */}
+          <div className={styles.buttonWrapper}>
+            {mode === VERSION_MODE.COPY ? (
+              <Button
+                appearance='contained'
+                priority='primary'
+                size='medium'
+                buttonLabel='OK'
+                onClick={() => adopt(getSelectedRow())}
+              />
+            ) : null}
+            {/* 주의: Close = LBL00627 (LBL00062 는 'From Date' — 2026-07-30 오배정 실측 정정) */}
+            <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel={t('LBL00627', 'Close')}
+              onClick={modalClose}
             />
           </div>
         </div>

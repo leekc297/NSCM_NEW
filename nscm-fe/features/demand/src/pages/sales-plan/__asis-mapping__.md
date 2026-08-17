@@ -316,7 +316,7 @@
 | CRUD:E04:SAVE | [SAVE] §4 SaveData (F7) — 저장 (SaveButton L1125~1128 → SaveData, L1940~L2863) | features/demand/src/pages/sales-plan/SalesPlan.tsx (handleSave) + features/demand/src/pages/sales-plan/utils/sales-plan.save.ts:99~213 (18키 '^' bulk) |  | 구현 |
 | CRUD:E05:INSERT | [INSERT] §5 InsertRow (F8) — 신규 행 (InsertButton L674~677 → InsertRow, L2866~L3366) | features/demand/src/pages/sales-plan/SalesPlan.tsx:224~ (handleInsert — EDIT_AUTH 게이트) + features/demand/src/pages/sales-plan/useSalesPlanStore.ts |  | 구현 |
 | CRUD:E07:SEARCH | [SEARCH] §7 FindData (F5) — 조회 (FindButton L669~672 → FindData L1465~L1650, Draw L1652~L1938) | features/demand/src/pages/sales-plan/useSalesPlanStore.ts:221~ (17 IN + 커서3 fetch) + features/demand/src/pages/sales-plan/utils/sales-plan.validate.ts:27~59 |  | 구현 |
-| MODAL:MeasureSelectModal | FE 실존 모달 (components/SalesPlanModals.tsx — 공용 features/master MeasureSelectModal 배선) — 분석 md 근거 확인 필요(FE 단독이면 사유 기입) | features/demand/src/pages/sales-plan/components/SalesPlanModals.tsx (공용 MeasureSelectModal — AS-IS btnMeasure_Click L4480 measure 표시 선택 대응) |  | 구현 |
+| MODAL:MeasureSelectModal | FE 실존 모달 (components/modals/MeasureSelectModal.tsx) — 분석 md 근거 확인 필요(FE 단독이면 사유 기입) | features/demand/src/pages/sales-plan/components/modals/MeasureSelectModal.tsx (AS-IS btnMeasure_Click L4480 measure 표시 선택 대응) |  | 구현 |
 | MODAL:SalesPlanModals | FE 실존 모달 (components/SalesPlanModals.tsx) — 분석 md 근거 확인 필요(FE 단독이면 사유 기입) | features/demand/src/pages/sales-plan/components/SalesPlanModals.tsx (Project/Item/Owner 팝업 wrapper — AS-IS SCM0002/DM0002 대응) |  | 구현 |
 | MODAL:ShowDialog | AS-IS 팝업 (분석 md) — TO-BE 모달 구현 위치 기입 의무 | features/demand/src/pages/sales-plan/components/SalesPlanModals.tsx (ProjectByDivisionModal·ItemByDivisionModal — AS-IS SCM0002_ProjectbyDivisionPopupEx/DM0002_ItembyDivisionPopupEx) |  | 구현 |
 
@@ -341,7 +341,7 @@
 | 15 | InternalYN (숨김) | 숨김 유지 — internalYn='N' 고정 배선 (AS-IS Visible=false 1:1) | ✅ |
 | 16 | cboCellQty (dead) | 제외 (완전 dead — 코드 참조 0건) | ✅ |
 | 17 | cboKRW/cboUSD/cboLOC (dead 3) | 제외 (금액환산 폐기 잔재) | ✅ |
-| 18 | btnColumn / btnMeasure | 커스텀 버튼 2종 (icon-only) → ColumnLayoutModal / MeasureSelectModal(공용) + titleSet C/M | ✅ |
+| 18 | btnColumn / btnMeasure | 커스텀 버튼 2종 (icon-only) → ColumnSettingModal / MeasureSelectModal + titleSet C/M | ✅ |
 
 ## 2. 버튼 (AS-IS 11 — 공통 CRUD 6 + 조회조건 버튼 5)
 
@@ -378,7 +378,7 @@
 | 15 | btnProject_Click (D.499) | Project 팝업 (81·82 만) → txtProject | ProjectField + ProjectByDivisionModal (disabled=40) | ✅ |
 | 16 | btnItemId_Click (D.353) | Model 팝업 → txtItemId | ItemField + ItemByDivisionModal | ✅ |
 | 17 | btnOwner_Click (D.985) | Owner 팝업 → txtOwner | OwnerField + OwnerByDivisionModal | ✅ |
-| 18 | btnColumn_Click (D.463) | TitleSet 팝업(Column) → OK 시 InitSpread | ColumnLayoutModal(공용) + saveTitleSet(C) + fetchStaticColumns 재적용 | ✅ |
+| 18 | btnColumn_Click (D.463) | TitleSet 팝업(Column) → OK 시 InitSpread | ColumnSettingModal(공용) + saveTitleSet(C) + fetchStaticColumns 재적용 | ✅ |
 | 19 | btnMeasure_Click (D.426) | TitleSet 팝업(Measure) → OK 시 재구성 | MeasureSelectModal + saveTitleSet(M) + invalidateQueries 재조회(SP measure 필터) | ✅ |
 | 20 | Dsdm_Changed (코드배선 L583) | 가드(잠금/D_/빈 MEASURE 롤백) + 변경 셀 Red + 인접 SUM 터치 | cellEditEnded — V-C3 롤백 + EditTracker 추적(Red = sp-cell-changed) + footer 자동 집계 | ✅ |
 | 21 | spdMain_CellDoubleClick (D.158) | 헤더: M_/W_ 하위 접기/펼치기 · 셀: I행 PROJECT_CODE → Project 팝업 / 40+Catch_Up ITEM_ID → Item 팝업 | Grid dblclick — 헤더 드릴(drillVisRef flip) + 셀 분기 → ProjectByDivisionModal / ItemByDivisionModal (I행 한정) | ✅ |

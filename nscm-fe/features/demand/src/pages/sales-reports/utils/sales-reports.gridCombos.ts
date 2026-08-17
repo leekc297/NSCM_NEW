@@ -77,9 +77,7 @@ export const resolveDeptIdRows = (
   const department = toCellStr((row as Record<string, unknown>)?.DEPARTMENT_ID).trim();
   if (!department) return src.deptDefault;
   if (department === ETC_DEPARTMENT) return src.deptEtc;
-  return src.deptByDepartment.filter(
-    cr => toCellStr(cr.DEPARTMENT_ID).trim() === department
-  );
+  return src.deptByDepartment.filter(cr => toCellStr(cr.DEPARTMENT_ID).trim() === department);
 };
 
 /** DEPARTMENT_ID 변경 시 clear 대상 (AS-IS L1187~1191 / L1211~1215 — 양 분기 동일 5컬럼) */

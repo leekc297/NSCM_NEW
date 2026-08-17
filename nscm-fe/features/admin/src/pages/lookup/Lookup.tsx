@@ -195,8 +195,10 @@ export const Lookup = ({ tabId, title }: PageProps<MENU_ID>) => {
     upload: false,
   };
 
-  const dataCount =
-    activeGrid === 'sub' ? (detailData?.o_rc?.length ?? 0) : (masterData?.o_rc?.length ?? 0);
+  // 건수는 각 영역 제목 줄에 따로 표시한다 — 상단 툴바 줄이 곧 master(Lookup Type) 제목 줄이므로
+  // 포커스에 따라 숫자가 바뀌면 제목과 어긋난다. 툴바 동작 대상만 activeGrid 를 따른다.
+  const masterCount = masterData?.o_rc?.length ?? 0;
+  const detailCount = detailData?.o_rc?.length ?? 0;
 
   return (
     <>
@@ -211,13 +213,15 @@ export const Lookup = ({ tabId, title }: PageProps<MENU_ID>) => {
         menuId={MENU_ID}
         grid={activeGrid === 'sub' ? detailGridRef : masterGridRef}
         gridFilter={activeGrid === 'sub' ? detailGridFilterRef : masterGridFilterRef}
-        dataCount={dataCount}
+        countGrid={masterGridRef}
+        dataCount={masterCount}
+        title={t('LBL00636', 'Lookup Type')}
+        depth='h4'
         excelFileName='Lookup'
         hotkeyConfig={hotkeyConfig}
         searchParam={searchParams}
       />
       <div className={styles.outerModule}>
-        <TitleArea isSubTitle title={t('LBL00636', 'Lookup Type')} depth='h4' />
         <PanelGroup className={styles.tableWrapper} orientation='vertical'>
           <Panel defaultSize={70} minSize={20}>
             <div className={styles.masterGrid}>
@@ -231,7 +235,12 @@ export const Lookup = ({ tabId, title }: PageProps<MENU_ID>) => {
           <PanelSeparator className={styles.splitBar} />
           <Panel defaultSize={30} minSize={15}>
             <div className={styles.innerModule}>
-              <TitleArea isSubTitle title={t('LBL00637', 'Lookup Values')} depth='h4' />
+              <TitleArea
+                isSubTitle
+                title={t('LBL00637', 'Lookup Values')}
+                depth='h4'
+                totalCases={detailCount === 0 ? undefined : detailCount}
+              />
               <div className={styles.detailGrid}>
                 <LookupDetailGrid
                   gridRef={detailGridRef}

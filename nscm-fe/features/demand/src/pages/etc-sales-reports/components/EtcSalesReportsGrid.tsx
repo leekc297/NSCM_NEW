@@ -1,4 +1,3 @@
-
 import type { FlexGrid as FlexGridType, FormatItemEventArgs } from '@mescius/wijmo.grid';
 import { AllowMerging, DataMap } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
@@ -7,6 +6,7 @@ import { type MutableRefObject, type Ref, useEffect, useMemo, useRef } from 'rea
 
 import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import type { ComboParam, RawFlexGridColumnConfig } from '@foundation/models';
+import { rebindFilterColumns } from '@foundation/utils';
 import type { EditTracker } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
@@ -54,6 +54,14 @@ const toNumber = (v: unknown): number => {
   if (v == null || v === '') return 0;
   const n = typeof v === 'number' ? v : Number(toCellStr(v).replace(/,/g, ''));
   return Number.isFinite(n) ? n : 0;
+};
+
+// 음수 값 글자색 (DMF0003 mkt-fcst / demand-manager 와 동일 톤)
+const NEGATIVE_COLOR = '#c0392b';
+
+const paintNegative = (cell: HTMLElement, value: number): void => {
+  if (value < 0) cell.style.setProperty('color', NEGATIVE_COLOR, 'important');
+  else cell.style.removeProperty('color');
 };
 
 export const EtcSalesReportsGrid = ({
@@ -116,10 +124,11 @@ export const EtcSalesReportsGrid = ({
   //     → 그리드가 CODE 를 raw 로 표시. 전달 시 40 BIZ_TYPE 6 / 40 ITEM_ID 16 / 82 ITEM_USE 7.
   const q = (v?: string): string => `'${v && v.trim() !== '' ? v : 'ALL'}'`;
   const comboResults = useTabComboQueries({
-    filters: comboColumns.map((c): ComboParam =>
-      c.cellCboDataTp === 'DM_LOOKUP_DIV'
-        ? { comboId: 'DM_LOOKUP_DIV', param1: q(division), param2: q(c.attribute1) }
-        : { comboId: c.cellCboDataTp as string, divisionId: q(division) }
+    filters: comboColumns.map(
+      (c): ComboParam =>
+        c.cellCboDataTp === 'DM_LOOKUP_DIV'
+          ? { comboId: 'DM_LOOKUP_DIV', param1: q(division), param2: q(c.attribute1) }
+          : { comboId: c.cellCboDataTp as string, divisionId: q(division) }
     ),
   });
   // ⚠ division 을 시그니처에 포함한다 — 미포함 시 division 전환 후 행수가 우연히 같으면
@@ -201,7 +210,15 @@ export const EtcSalesReportsGrid = ({
   const dynBindings = useMemo(() => dynColMetas.map(m => m.binding), [dynColMetas]);
 
   // editLock 파라미터 ref 미러 (핸들러 공유)
-  const lockCtxRef = useRef({ division, planResult, mdfType, yyyy, thisMonth, sEditMeasure, userGroup });
+  const lockCtxRef = useRef({
+    division,
+    planResult,
+    mdfType,
+    yyyy,
+    thisMonth,
+    sEditMeasure,
+    userGroup,
+  });
   lockCtxRef.current = { division, planResult, mdfType, yyyy, thisMonth, sEditMeasure, userGroup };
 
   // ⭐ 정적 컬럼 입력형(UI Category Setup `INPUT_TP_CD`) — 편집·색 판정의 단일 원천.
@@ -285,12 +302,17 @@ export const EtcSalesReportsGrid = ({
         const v = rowItem?.[binding];
         const n = toNumber(v);
         e.cell.textContent = v == null || v === '' || n === 0 ? '' : n.toLocaleString();
+        // 음수 수량 = 빨간 글자 (mkt-fcst 동일 규약)
+        paintNegative(e.cell, n);
         return;
       }
       if (staticBindingSet.has(binding) && rowItem) {
         // 색상 판정도 편집 게이트와 **같은 함수**를 쓴다 — 두 곳이 갈리면 노란칸인데 못 고치는 상태가 생긴다
         const editable = staticEditableByMeta(inputTpRef.current.get(binding), rowItem);
         toggleClass(e.cell, 'wj-cell-editable', editable);
+        // 정적 컬럼의 수치도 음수면 빨간 글자. 문자 컬럼은 toNumber 가 0 을 돌려주므로
+        // 자연히 음수 판정에서 빠진다.
+        paintNegative(e.cell, toNumber(rowItem[binding]));
       }
     };
     g.formatItem.addHandler(formatHandler);
@@ -427,6 +449,15 @@ export const EtcSalesReportsGrid = ({
         const cleaned = f.filterColumns.filter(b => !/^M_/.test(b));
         if (cleaned.length !== f.filterColumns.length) f.filterColumns = cleaned;
       }
+      // (0-a2) [공통 UC-07, hook #133 §5] 재조회해도 사용자가 걸어둔 **필터가 유지**되어야 한다.
+      //   columnGroups 재대입이 Column 객체를 통째로 재생성해, FlexGridFilter 가 죽은 Column 을
+      //   붙든 채 남으면 "아이콘은 꺼졌는데 행은 걸러진" 상태가 된다. 끊긴 필터만 재바인딩한다
+      //   (끊긴 게 없으면 no-op — 되먹임 방지 가드는 유틸 내부). 위 sanitize 로 제외한 동적(M_)
+      //   컬럼은 이미 filterColumns 에서 빠져 되살아나지 않는다. 2026-08-15 보완.
+      rebindFilterColumns(
+        g as unknown as FlexGridType<WijmoRowItem>,
+        gridFilterRef?.current
+      );
       for (let i = 0; i < g.columns.length; i++) {
         const col = g.columns[i];
         const dm = dataMaps[col.binding ?? ''];
@@ -485,7 +516,7 @@ export const EtcSalesReportsGrid = ({
   }, [dynBindings, visibleColumns, gridRef, gridFilterRef]);
 
   return (
-    <div className={styles.gridContainer}>
+    <>
       <DataGrid
         key={mainStaticColumns.map(c => c.colNm).join(',')}
         className={styles.grid}
@@ -498,6 +529,6 @@ export const EtcSalesReportsGrid = ({
         allowSorting={true}
         allowMerging={AllowMerging.All}
       />
-    </div>
+    </>
   );
 };

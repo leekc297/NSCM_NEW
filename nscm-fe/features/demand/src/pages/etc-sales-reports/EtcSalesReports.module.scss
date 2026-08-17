@@ -63,7 +63,33 @@
   -webkit-mask-size: contain;
 }
 
-// (Measure 선택 모달 스타일은 공용 master/measureSelectModal 로 이동 — hook #132 §2-1)
+// ⭐ Measure 선택 모달 (공용 ColumnSelectDualList 양쪽 구성 — ColumnSettingModal 동일 레이아웃)
+.measureDualContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 4px 2px;
+  height: 460px;
+  min-height: 350px;
+  max-height: 68vh;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.measureDualContainer > div:first-child {
+  flex: 1 1 auto;
+  min-height: 250px;
+  overflow: hidden;
+}
+
+.measureActionBar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 6px 2px 2px;
+  flex-shrink: 0;
+}
 
 // ⭐ Ver. Cutoff / Replace 모달 공통 — SearchArea → grid → 하단 버튼 (ExchangeRateModal 정본 레이아웃)
 .modalContentWrapper {

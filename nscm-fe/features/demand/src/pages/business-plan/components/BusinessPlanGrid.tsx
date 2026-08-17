@@ -10,6 +10,7 @@ import { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { type MutableRefObject, type Ref, useEffect, useMemo, useRef } from 'react';
 
 import type { ComboParam, FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
+import { rebindFilterColumns } from '@foundation/utils';
 import type { EditTracker } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
@@ -706,6 +707,12 @@ export const BusinessPlanGrid = ({
         const cleaned = f.filterColumns.filter(b => !/^[YQM]_/.test(b));
         if (cleaned.length !== f.filterColumns.length) f.filterColumns = cleaned;
       }
+      // (0-a2) [공통 UC-07, hook #133 §5] 재조회해도 사용자가 걸어둔 **필터가 유지**되어야 한다.
+      //   columnGroups 재대입이 Column 객체를 통째로 재생성해, FlexGridFilter 가 죽은 Column 을
+      //   붙든 채 남으면 "아이콘은 꺼졌는데 행은 걸러진" 상태가 된다. 끊긴 필터만 재바인딩한다
+      //   (끊긴 게 없으면 no-op — 되먹임 방지 가드는 유틸 내부). 위 (0-a) 로 제외한 동적 컬럼은
+      //   이미 filterColumns 에서 빠졌으므로 여기서 되살아나지 않는다.
+      rebindFilterColumns(g as unknown as FlexGridType<WijmoRowItem>, gridFilterRef?.current);
       // (0-b) combo dataMap 재적용 — wrapper columnGroups 재적용이 col.dataMap 을 덮으므로 재부착(guard)
       for (let i = 0; i < g.columns.length; i++) {
         const col = g.columns[i];

@@ -5,7 +5,6 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { IcGridColumnSetup, IcMeasureSelect } from '@foundation/assets';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { useQueryClient } from '@foundation/query-client';
-import { keepRowVisibleUnderFilter } from '@foundation/utils';
 import type { EditTracker } from '@foundation/utils';
 import { MainTitle, SubTitle } from '@shared/components';
 import { useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
@@ -50,7 +49,9 @@ export const SalesPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
   const setOpenSearchArea = useSalesPlanStore(s => s.setOpenSearchArea);
   const staticColumns = useSalesPlanStore(s => s.staticColumns);
   const fetchStaticColumns = useSalesPlanStore(s => s.fetchStaticColumns);
+  const clearUserColumnLayout = useSalesPlanStore(s => s.clearUserColumnLayout);
   const fetchStaticMeasures = useSalesPlanStore(s => s.fetchStaticMeasures);
+  const staticMeasures = useSalesPlanStore(s => s.staticMeasures);
   const setCalendarInfo = useSalesPlanStore(s => s.setCalendarInfo);
   const calendarInfo = useSalesPlanStore(s => s.calendarInfo);
   const editAuth = useSalesPlanStore(s => s.editAuth);
@@ -212,10 +213,25 @@ export const SalesPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
     }
     void setToast({ message: t('LBL00665', '_Loading...'), type: 'default', duration: 2000 });
     setInsertedRows([]);
+    editTrackerRef.current?.clearChanges();
     setHasSearched(true);
     setFilter();
     void fetchStaticColumns();
     void fetchStaticMeasures();
+  };
+
+  // Column/Measure 설정 저장 = Grid 초기화 의무 (사용자 요구 2026-08-05).
+  //   저장 즉시 표시 컬럼/메저가 바뀌므로, 이전 설정으로 조회해 둔 rows 를 그대로 두면
+  //   화면의 컬럼 구성과 데이터가 어긋난다. 그리드를 공백으로 되돌리고 재조회는 Search 로만
+  //   (division 변경 초기화와 동일 정책, mkt-fcst MktFcst.tsx 정본).
+  //   필수: removeQueries([tabId]) — queryKey 는 filters '값' 기반이라 동일 조건으로 다시
+  //   Search 하면 전역 staleTime=Infinity 캐시가 이전 설정으로 받은 rows 를 그대로 돌려준다.
+  const clearGridOnSettingChange = () => {
+    setInsertedRows([]);
+    editTrackerRef.current?.clearChanges();
+    setHasSearched(false);
+    clearFilters();
+    queryClient.removeQueries({ queryKey: [tabId] });
   };
 
   // ⭐ Division 변경 = Grid 초기화(비움) + CRUD reset 의무 (memory feedback_division_change_grid_reset —
@@ -225,6 +241,9 @@ export const SalesPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
     editTrackerRef.current?.clearChanges();
     setHasSearched(false);
     clearFilters();
+    // 컬럼 개인화 무효화 — TITLESET_USER 는 division 무관 1벌인데 컬럼 세트는 division 별로 다르다.
+    //   비우지 않으면 이전 division 레이아웃이 새 division 컬럼을 전부 숨긴다.
+    clearUserColumnLayout();
     void fetchStaticColumns();
     void fetchStaticMeasures();
   };
@@ -249,13 +268,9 @@ export const SalesPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
       ...INSERT_ROW_DEFAULTS,
     };
     setInsertedRows(prev => [newRow, ...prev]);
-    // [공통 UC-01 — 2026-08-14 역전] 필터링 상태에서 Insert 해도 **필터를 유지한 채** 신규행이 보여야 한다.
-    //   ⛔ 구 구현 `gridFilterRef.current?.clear()` 는 사용자가 걸어둔 필터까지 날려서, 사용자가 보고한
-    //     "필터가 풀리는 현상"을 스스로 만들었다 (공통 수정사항① — hook #133 §5).
-    //   ⇒ 신규행만 wijmo 예외 집합(`_newAddedRowsSet`)에 등록해 필터 조건 검사를 건너뛰게 한다.
-    //   (유틸 시그니처는 `FlexGrid<WijmoRowItem>` 기준 — 행 타입이 좁아 캐스팅만 맞춘다.)
-    const grid = gridRef.current as unknown as FlexGridType<WijmoRowItem> | null;
-    if (grid) keepRowVisibleUnderFilter(grid, newRow as WijmoRowItem);
+    // [공통 C1 2026-08-12] 필터링 상태에서 Insert 시 신규행이 그리드 필터에 걸려 화면에 안 보이는
+    //   문제(통합테스트 1st Common) — 활성 필터를 해제해 추가된 행이 즉시 보이게 한다 (DMF0082 선례 1:1).
+    gridFilterRef.current?.clear();
   };
 
   // F9 Delete — AS-IS DeleteButton(L673~679) 1:1 — Action='I'(신규 삽입행)만 즉시 제거.
@@ -440,11 +455,14 @@ export const SalesPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
         bucketType={sc.bucketType}
         sumYn={sc.sumYn}
         currentYyyymmdd={filters[SHEETS.MAIN]?.nowYyyymmdd ?? ''}
+        startYyyymmdd={filters[SHEETS.SPREAD_TITLE]?.startYyyymmdd ?? ''}
+        endYyyymmdd={filters[SHEETS.SPREAD_TITLE]?.endYyyymmdd ?? ''}
         staticColumns={staticColumns}
         spreadTitle={spreadTitleRows}
         calendarInfo={calendarInfo}
         editAuth={editAuth}
         measureInfoRows={measureInfoRows}
+        staticMeasures={staticMeasures}
         onPopupCellDblClick={(modalKey, row) => {
           setPopupRow(row);
           if (modalKey === 'ITEM') setOpenItem(true);
@@ -476,9 +494,7 @@ export const SalesPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
           );
           setPopupRow(null);
         }}
-        onMeasureSaved={() => {
-          if (hasSearched) void refetch();
-        }}
+        onSettingChanged={clearGridOnSettingChange}
       />
     </div>
   );

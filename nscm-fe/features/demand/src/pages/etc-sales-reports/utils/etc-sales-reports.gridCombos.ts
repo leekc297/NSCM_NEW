@@ -66,9 +66,7 @@ export const resolveDeptIdRows = (
   if (!isDiv40(divisionId) || departmentName === ETC_DEPARTMENT || !departmentId) {
     return src.deptDefault;
   }
-  return src.deptByDepartment.filter(
-    cr => toCellStr(cr.DEPARTMENT_ID).trim() === departmentId
-  );
+  return src.deptByDepartment.filter(cr => toCellStr(cr.DEPARTMENT_ID).trim() === departmentId);
 };
 
 const CLEAR_FULL5 = ['ITEM_ID', 'NICK_NAME', 'END_CUST_REPORT', 'CUST_REPORT', 'PRODUCT_GROUP'];
@@ -106,8 +104,7 @@ export const cascadeClearColumns = (
 
   if (binding === 'DEPARTMENT_ID') {
     if (!isDiv40(divisionId)) return []; // 비40 = AS-IS 무동작
-    const isEtc =
-      toCellStr(rec.T_DEPARTMENT_NAME ?? rec.DEPARTMENT_NAME).trim() === ETC_DEPARTMENT;
+    const isEtc = toCellStr(rec.T_DEPARTMENT_NAME ?? rec.DEPARTMENT_NAME).trim() === ETC_DEPARTMENT;
     if (!isM) return CLEAR_FULL5;
     return isEtc ? [] : ['CUST_REPORT'];
   }

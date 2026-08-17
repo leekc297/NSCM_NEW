@@ -133,7 +133,7 @@ const today = yyyymmdd(new Date());
 const sixMonthsAhead = yyyymmdd(new Date(Date.now() + 180 * 24 * 3600 * 1000));
 
 const initSearch: SearchCondition = {
-  divisionId: DIVISION.MOBILITY,
+  divisionId: useSessionStore.getState().session.div ?? DIVISION.MOBILITY,
   deptIds: [],
   endCustomers: [],
   scmSiteIds: [],

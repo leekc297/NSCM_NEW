@@ -1,4 +1,10 @@
-import { ItemField, OwnerField, PeriodField, ProjectField } from 'features/master/src/components';
+import {
+  ItemField,
+  OwnerField,
+  PeriodField,
+  PlantSiteField,
+  ProjectField,
+} from 'features/master/src/components';
 
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
@@ -19,6 +25,12 @@ interface SalesMonitoringFormProps {
 //   ⭐ hook #94 — 1단 4개(Grid size={3}) + 모든 객체 36px. DatePicker = .datePickerFix wrapper.
 //   콤보 = 사내 CMBO 레지스트리 등록명 (mkt-fcst 검증 완료 ID 재사용 — 임의 발명 금지).
 //   (통화 콤보 KRW/USD/LOC 제외 — AS-IS 데드코드, 사용자 확정 2026-07-04)
+// ⭐ 콤보 파라미터 quoting — BE `makeComboQuery`(BaseService)가 SQL 의 `@key` 를 값으로 **raw 치환**한다.
+//   (LookupServiceImpl.retrieveCombo → sesUserId/sesLangCd 도 BE 가 "'"+v+"'" 로 직접 감싸 넣음)
+//   FE 가 따옴표를 붙이지 않으면 `= 81` 로 나가 조회 실패. 빈 값은 'ALL'.
+//   동일 규칙 선례: @master/searchFields `PlantSiteField` (SearchFields.tsx).
+const q = (v?: string): string => `'${v && v.trim() !== '' ? v : 'ALL'}'`;
+
 export const SalesMonitoringForm = ({ onSearch }: SalesMonitoringFormProps) => {
   const { t } = useTranslation();
 
@@ -29,29 +41,29 @@ export const SalesMonitoringForm = ({ onSearch }: SalesMonitoringFormProps) => {
   // 조회조건 콤보 — 사내 SCM_ADM_CMBO_SQL_M 등록명 (DIVISION_ID/DEPT_ID 반환 콤보는 클라 cascade 필터)
   //   ⭐ Sales Site = 'SalesSite'(DIVISION_ID+DEPT_ID+PROJECT_CODE 반환) 로 교체 (2026-07-07).
   //     구 'ScmSitebyEndCustomer40' 은 div40 하드코딩 + 컬럼 미반환 → cascade 불가(타 division 오조회).
+  //   ⭐ division 종속 콤보는 divisionId 를 q() 로 감싸 서버측 @divisionId 로 넘긴다 (raw 치환 → 따옴표 필수).
+  //     아래 클라이언트 DIVISION_ID 필터는 안전망으로 그대로 유지 (콤보 SQL 이 @divisionId 미사용이어도 회귀 0).
   const [
     myDivision,
     teamByDivision,
     endCustomerByDivision,
     scmSiteByEndCustomer,
     bizType,
-    plantSite,
     itemType,
   ] = useTabComboQueries({
     filters: [
       'MyDivision',
-      { comboId: 'TeambyDivision' },
-      { comboId: 'EndCustomer' },
-      'SalesSite',
-      'BizType',
-      { comboId: 'SalesPlant', divisionId: sc.divisionId },
+      { comboId: 'TeambyDivision', divisionId: q(sc.divisionId) },
+      { comboId: 'EndCustomer', divisionId: q(sc.divisionId) },
+      { comboId: 'SalesSite', divisionId: q(sc.divisionId) },
+      { comboId: 'BizType', divisionId: q(sc.divisionId) },
       'ItemType',
     ],
   });
 
   // ⭐ cascade 하위 필터 기준 — 선택된 Team(단일). deptIds 비어있으면(ALL) Team 필터 미적용.
   const selDept = sc.deptIds[0] ?? '';
-  // ⭐ AS-IS L338/1855 — Division '40' 은 Project / Plant Site 비활성 (lblProject/lblPlantSite Enabled=false).
+  // ⭐ AS-IS L338/1855 — Division '40' 은 Project 비활성.
   const isDiv40 = sc.divisionId === '40';
 
   // Bucket — AS-IS DMF0003_GET_BUCKET_TYPE_CODE 실측 (CODE=DAILY/WEEKLY/MONTHLY, 2026-07-04 스모크)
@@ -64,7 +76,6 @@ export const SalesMonitoringForm = ({ onSearch }: SalesMonitoringFormProps) => {
   // 멀티 select dropdown 값 (콤마 delim string[] ↔ 단일 string). 단일선택 + ALL 패턴 (mkt-fcst 동일)
   const firstOr = (arr: string[]): string => arr[0] ?? '';
   const toArr = (v: string): string[] => (v ? [v] : []);
-
   return (
     <SearchArea
       isHidden={!openSearchArea}
@@ -270,26 +281,14 @@ export const SalesMonitoringForm = ({ onSearch }: SalesMonitoringFormProps) => {
           />
 
           {/* 확장 Row 4 — Plant Site / Owner🔍 (AS-IS clbPlantSite / txtOwner+btnOwner 1:1) */}
-          <Grid size={3}>
-            <FormItem
-              label={t('LBL00005', '_Plant Site')}
-              labelAlign='right'
-              render={() => (
-                <CustomDropdown
-                  allOption
-                  useClearIcon
-                  disabled={isDiv40} // ⭐ AS-IS: Division 40 → Plant Site 비활성
-                  value={firstOr(sc.plantSiteIds)}
-                  options={
-                    plantSite
-                      ?.filter(item => !item.DIVISION_ID || item.DIVISION_ID === sc.divisionId)
-                      .map(item => ({ label: item.NAME, value: item.CODE })) ?? []
-                  }
-                  onChange={(_, option) => set({ plantSiteIds: toArr(option) })}
-                />
-              )}
-            />
-          </Grid>
+          {/* Plant Site는 MktFcstForm과 동일한 PlantSitebyEndCustomer cascade를 사용한다. */}
+          <PlantSiteField
+            gridSize={3}
+            value={sc.plantSiteIds}
+            onChange={v => set({ plantSiteIds: v })}
+            division={sc.divisionId}
+            endCustomer={sc.endCustomers.length > 0 ? sc.endCustomers.join(',') : undefined}
+          />
           <OwnerField
             gridSize={3}
             value={sc.owners}

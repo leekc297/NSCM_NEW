@@ -3,9 +3,9 @@ import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import {
   ColumnLayoutModal,
   ItemByDivisionModal,
-  type MeasureMeta,
   MeasureSelectModal,
   ProjectByDivisionModal,
+  saveTitleSet,
   toColumnLayoutSettings,
 } from 'features/master/src/components';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -14,6 +14,7 @@ import { apiClient } from '@foundation/apis';
 import { IcGridColumnSetup, IcMeasureSelect } from '@foundation/assets';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { useQueryClient } from '@foundation/query-client';
+import { keepRowVisibleUnderFilter, rebindFilterColumns } from '@foundation/utils';
 import type { EditTracker } from '@foundation/utils';
 import { MainTitle, SubTitle } from '@shared/components';
 import { useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
@@ -34,17 +35,17 @@ import {
 import {
   GROUP,
   INSERT_DEFAULT_MEASURE,
-  MAIN_COLUMNS,
   MEASURE_FALLBACK,
+  MAIN_COLUMNS,
   MENU_ID,
   MSG,
   SHEETS,
 } from './mkt-fcst.constants';
 import type { MktFcstRow, SpreadTitleRow } from './mkt-fcst.types';
-import styles from './MktFcst.module.scss';
 import type { BucketInfo, CurrentWeekInfo } from './useMktFcstStore';
 import { useMktFcstStore } from './useMktFcstStore';
 import { isEditableDivision } from './utils/mkt-fcst.division';
+import { applyCascadeClear, buildWsSupportComboFilters } from './utils/mkt-fcst.gridCombos';
 import { type PrContextAction, type PrContextResult, toCellStr } from './utils/mkt-fcst.prContext';
 import { buildSavePayload, buildUnfoldRows } from './utils/mkt-fcst.save';
 import { useMktFcstValidation } from './utils/mkt-fcst.validate';
@@ -76,8 +77,9 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
   const fetchStaticMeasures = useMktFcstStore(s => s.fetchStaticMeasures);
   const fetchSearchConditions = useMktFcstStore(s => s.fetchSearchConditions);
   const setCalendarInfo = useMktFcstStore(s => s.setCalendarInfo);
+  // wsPlannerYn 은 store 에 계속 적재한다(조회 p_as_yn 강제 / Measure 후보 필터가 소비).
+  //   이 화면 컴포넌트에서 직접 읽던 곳은 MSG00476 검사뿐이었고 2026-08-14 요구로 축이 빠졌다.
   const setWsPlannerYn = useMktFcstStore(s => s.setWsPlannerYn);
-  const storeWsPlannerYn = useMktFcstStore(s => s.wsPlannerYn);
   const bucketInfo = useMktFcstStore(s => s.bucketInfo);
   const currentWeekInfo = useMktFcstStore(s => s.currentWeekInfo);
   const applyColumnLayout = useMktFcstStore(s => s.applyColumnLayout);
@@ -188,8 +190,8 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
         divisionId: `'${sc.divisionId}'`,
         userGroup: `'${dmFamilyGroup}'`,
       },
-      'FcstTypeWs',
-      { comboId: 'AS_FROM_SITE', param1: `'${sc.divisionId}'` },
+      // W/S FcstType 4종 + AS(비축)향 사이트 — 그리드와 동일 정의 재사용(파라미터 규약 단일 출처).
+      ...buildWsSupportComboFilters(sc.divisionId),
     ],
   });
 
@@ -280,57 +282,11 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabId, sc.divisionId, userColumnLayout]);
 
-  // ⭐ TITLESET 서버 영구 저장 (AS-IS DM0002_TitleSetForm OK → SCM_MST_TITLESET_USER 1:1, DMF0048 패턴).
-  //   기존 sessionStorage(탭 단위) 만이라 탭 재오픈 시 Column/Measure 선택이 분실되던 것을 서버 저장으로 해결.
-  //   SCM0002_SET_TITLESET_POPUP: '^' delim 다건(DELETE 후 INSERT), P_USER_ID = BE 세션 자동.
-  //   ^delim 다건 SAVE 는 apiClient.post 직접 (useProcMutation array unfold 회피 — 표준 선례).
-  const saveTitleSet = async (
-    columnType: 'C' | 'M',
-    saveRows: {
-      name: string;
-      sortOrderNo: number;
-      subTotalFlag?: string;
-      sortMethodCode?: string;
-      // ⭐ 컬럼 개인화 확장분 (SCM_MST_TITLESET_USER 3컬럼) — Measure('M') 저장 시엔 미전달.
-      colWidth?: number;
-      cellColor?: string;
-      textColor?: string;
-    }[]
-  ): Promise<boolean> => {
-    try {
-      const payload = {
-        programId: MENU_ID,
-        sheetName: SHEETS.MAIN,
-        columnType,
-        activeFlag: saveRows.map(() => 'Y').join('^'),
-        columnName: saveRows.map(r => r.name).join('^'),
-        sortOrderNo: saveRows.map((r, i) => String(r.sortOrderNo || i + 1)).join('^'),
-        subTotalFlag: saveRows.map(r => r.subTotalFlag ?? 'N').join('^'),
-        sortMethodCode: saveRows.map(r => r.sortMethodCode ?? 'ASC').join('^'),
-        // ⭐ 2026-07-27 BE 확장 — 폭/셀색/글자색 영구 저장 (forecast-price(DMF0082) 선례 1:1).
-        //   ⚠️ 키 이름은 PROC_M COL_NM(SP IN 파라미터) 과 정확히 일치해야 한다.
-        columnWidth: saveRows.map(r => String(r.colWidth ?? '')).join('^'),
-        cellColor: saveRows.map(r => r.cellColor ?? '').join('^'),
-        textColor: saveRows.map(r => r.textColor ?? '').join('^'),
-      };
-      const res = await apiClient.post<Record<string, unknown>>(
-        `/${MENU_ID}/titleSet/SAVE/call-proc`,
-        payload
-      );
-      if (res.status >= 400 || Number(res.data?.code)) {
-        const reason =
-          (res.data as { message?: string })?.message?.trim() ||
-          t('MSG00618', '_An error occurred while saving.');
-        void setAlert({ type: 'alert', content: reason });
-        return false;
-      }
-      return true;
-    } catch (e) {
-      const msg =
-        e instanceof Error ? e.message : t('MSG00618', '_An error occurred while saving.');
-      void setAlert({ type: 'alert', content: msg });
-      return false;
-    }
+  // ⭐ TITLESET 서버 영구 저장 (AS-IS DM0002_TitleSetForm OK → SCM_MST_TITLESET_USER 1:1).
+  //   저장 실패를 사용자에게 알리는 공통 처리 — 조용히 삼키면 "저장했는데 재진입 시 원복" 과 구분이 안 된다.
+  //   실제 호출은 공용 saveTitleSet (POST /admin/menu/{mnuId}/titleset) 이 담당한다.
+  const alertSaveFailed = () => {
+    void setAlert({ type: 'alert', content: t('MSG00618', '_An error occurred while saving.') });
   };
 
   // 신규 행 추적 (CRUD_TYPE='I')
@@ -361,6 +317,20 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
     fetchStaticColumns,
     fetchStaticMeasures,
   ]);
+
+  // ⭐ Column/Measure 설정 저장 = Grid 초기화 의무 (사용자 요구 2026-08-05).
+  //   저장 즉시 표시 컬럼/메저가 바뀌므로, 이전 설정으로 조회해 둔 rows 를 그대로 두면
+  //   화면의 컬럼 구성과 데이터가 어긋난다. 조회 결과·신규행·편집 추적을 비우고 그리드를
+  //   공백으로 되돌린다 — 재조회는 Search 버튼으로만 (division 변경 초기화와 동일 정책).
+  //   ⚠️ removeQueries([tabId]) 필수 — queryKey 는 filters '값' 기반이라 동일 조건으로 다시
+  //      Search 하면 전역 staleTime=Infinity 캐시가 이전 설정으로 받은 rows 를 그대로 돌려준다.
+  const clearGridOnSettingChange = () => {
+    setHasSearched(false); // 쿼리 disable — Search 전까지 자동 재조회 안 함
+    setInsertedRows([]); // CRUD(신규행) reset
+    editTrackerRef.current?.clearChanges(); // 편집 추적 reset
+    clearFilters(); // filters[MAIN/SPREAD] 무효화 (enabled=false + queryKey 변경 → rows 비움)
+    queryClient.removeQueries({ queryKey: [tabId] }); // 이전 조회 결과 캐시 제거
+  };
 
   // Insert cell popup state (Project / Model) + cell popup group 추적.
   //   ⭐ 조회조건 Project/Model/Owner popup 은 MktFcstForm 의 카탈로그 필드(ProjectField/ItemField/
@@ -411,7 +381,18 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
   //      캡쳐해 그 값으로 fetch → 첫 호출이 NULL payload(ORA-00936/-9994), setFilter 후 queryKey 변경으로
   //      두번째가 정상 → "조회 시 최초 1회 에러" 사고. setFilter(=queryKey 변경) + hasSearched(=enabled) 만으로
   //      react-query 가 항상 "최신 filters" 로 1회 자동 fetch 하게 둔다.
-  const handleSearch = () => {
+  const handleSearch = async () => {
+    // [공통 UC-02] 미저장 편집(신규행·수정) 잔존 상태에서 재조회하면 아래 setInsertedRows([]) 와
+    //   editTracker reset 이 변경분을 **조용히 폐기**한다. 먼저 확인을 받는다.
+    //   (정본 = business-plan BusinessPlan.tsx:181 · hook #133 §5 UC-02 · MSG00703)
+    const pendingEdits = editTrackerRef.current?.getOriginalValues()?.size ?? 0;
+    if (insertedRows.length > 0 || pendingEdits > 0) {
+      const proceed = await setAlert({
+        type: 'confirm',
+        content: t('MSG00703', '_There are unsaved changes. Search again?'),
+      });
+      if (!proceed) return;
+    }
     if (!validation.validateFind(sc).ok) return;
     void setToast({ message: t('LBL00665', '_Loading...'), type: 'default', duration: 2000 });
     setInsertedRows([]);
@@ -438,30 +419,25 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
       });
       return false;
     }
-    // (2) [CA-04 2026-08-12 재활성] DM Planner류 시간창 — lookup 행 존재 = 차단(.cs L862~874).
-    //     MSG00478 5파라미터({0}~{4} = LIMIT_AUTH/EDIT_DAYS/FROM_TIME/TO_TIME/AUTH — CMBO CODE '^' 연결).
-    //     주석 상태로 남아 있던 게이트를 대사표 CA-04 판정에서 적출해 복원(운영 lookup 0행이면 미발동 — 무해).
-    if (dmTimeBlocked && typeof dmTimeRow?.CODE === 'string') {
-      const p = dmTimeRow.CODE.split('^');
-      let msg = t(
-        MSG.DM_TIME_WINDOW,
-        '_{0} 권한의 수정 가능 시간({1} {2}~{3}) 동안에는 {4} 권한으로 수정할 수 없습니다.'
-      );
-      p.forEach((v, i) => {
-        msg = msg.replace(`{${i}}`, v);
-      });
-      void setAlert({ type: 'alert', content: msg });
-      return false;
-    }
-    // (2b) [CA-07 2026-08-12] 조회 선행 — AS-IS 는 조회 없이 편집 불가(.cs L941~945, dt8Week 부재 =
-    //     구 MSG00259). Insert/Save 진입 전 조회 1회 강제.
-    if (!hasSearched) {
-      void setAlert({
-        type: 'alert',
-        content: t(MSG.EDIT_AFTER_SEARCH, '_조회 후 수정모드로 가능합니다.'),
-      });
-      return false;
-    }
+    // (2) DM Planner류 시간창 — lookup 행 존재 = 차단(.cs L862~874). MSG00478 5파라미터
+    //     ({0}~{4} = LIMIT_AUTH/EDIT_DAYS/FROM_TIME/TO_TIME/AUTH — CMBO CODE '^' 연결 순서).
+    //'_{0} 권한의 수정 가능 시간({1} {2}~{3}) 동안에는 {4} 권한으로 수정할 수 없습니다.'
+    // if (dmTimeBlocked && typeof dmTimeRow?.CODE === 'string') {
+    //   const p = dmTimeRow.CODE.split('^');
+    //   let msg = t(
+    //     MSG.DM_TIME_WINDOW,
+    //     '_{0} 권한의 수정 가능 시간({1} {2}~{3}) 동안에는 {4} 권한으로 수정할 수 없습니다.'
+    //   );
+    //   p.forEach((v, i) => {
+    //     msg = msg.replace(`{${i}}`, v);
+    //   });
+    //   void setAlert({ type: 'alert', content: msg });
+    //   return false;
+    // }
+    // (2b) [CA-07] 조회 선행 강제(.cs L941~945) — AS-IS 는 dt8Week(조회 결과 8주 데이터) 가 없으면
+    //     수정 모드 진입 자체를 막았다(구 MSG00259). TO-BE 는 Edit 모드가 없으므로 Insert/Save
+    //     진입 시점에 조회 1회를 강제한다 — MSG00662.
+    if (!validation.validateEditMode(hasSearched).ok) return false;
     // (3) [E20260402] AS FROM SITE 컬럼 부재(.cs L876~888) — DM Planner/W-S/DM ADMIN + 81*/82
     //     에서 그리드에 AS_FROM_SITE 컬럼이 없으면 MSG00113 (SP LOAD 분기가 자동추가하므로 정상 시 미발생).
     if (dmFamilyGroup && (sc.divisionId.startsWith('81') || sc.divisionId === '82')) {
@@ -480,16 +456,6 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
   // F8 Insert — AS-IS InsertRow(L2389~2509) 1:1 — 신규 행 1개 추가. CRUD_TYPE='I', Division=조회조건.
   //   Measure 는 편집 combo(SCM_MST_SHEET_MEASURE VALID_YN='Y' 동적, fallback MEASURE_FALLBACK)이고
   //   기본값 = 'MKT_FCST_RP' (AS-IS L2509 siMain.SetValue(Measure, "MKT_FCST_RP")). 좌측 키는 입력 가능.
-  // ⭐ [CG-05 2026-08-12] I 행 키값 변경 시 수량 클리어 — 팝업(Project/Item) 세팅 경로용.
-  //   그리드 직접 편집 경로는 MktFcstGrid cellEditEnded 가 담당(.cs L5319~5379 파리티).
-  const clearDynQuantities = (row: MktFcstRow): MktFcstRow => {
-    const rec = { ...row } as Record<string, unknown>;
-    for (const k of Object.keys(rec)) {
-      if (/^[DWM]_\d+$/.test(k) && rec[k] != null && rec[k] !== '') rec[k] = null;
-    }
-    return rec as MktFcstRow;
-  };
-
   const handleInsert = () => {
     // ⭐ [E20260604-000994] SCP Planner + 81 은 Insert 자체 차단(.cs L2531~2537) — MSG00096.
     if (scpInsertBlocked) {
@@ -517,6 +483,13 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
       MEASURE: INSERT_DEFAULT_MEASURE,
     } as MktFcstRow;
     setInsertedRows(prev => [newRow, ...prev]);
+
+    // [공통 UC-01 — 2026-08-14 역전] 필터링 상태에서 Insert 해도 **필터를 유지한 채** 신규행이 보여야 한다.
+    //   구 규약("Insert 시 필터 clear")은 사용자가 걸어둔 필터까지 날려 "필터가 풀린다"는 신고를 만들었다.
+    //   ⇒ 신규행만 wijmo 예외 집합(`_newAddedRowsSet`)에 등록해 필터 조건 검사를 건너뛰게 한다.
+    //   (정본 = business-plan BusinessPlan.tsx:241 · hook #133 §5 UC-01)
+    const grid = gridRef.current as unknown as FlexGridType<WijmoRowItem> | null;
+    if (grid) keepRowVisibleUnderFilter(grid, newRow as unknown as WijmoRowItem);
   };
 
   // F9 Delete — AS-IS DeleteButton(L795~801) 1:1 — 선택 행이 신규('I')일 때만 목록 제거.
@@ -532,6 +505,19 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
     const gid = sel.INSERT_GROUP_ID;
     if (gid) setInsertedRows(prev => prev.filter(r => r.INSERT_GROUP_ID !== gid));
     else setInsertedRows(prev => prev.filter(r => r !== sel));
+  };
+
+  // A-08 [CG-05] 키 값이 바뀐 신규 행의 수량(D_/W_/M_) 전량 클리어 (.cs L5319~5379).
+  //   Project/Item 팝업 세팅은 셀 편집을 거치지 않아 그리드 cellEditEnded 의 같은 규칙이 발동하지
+  //   않는다 — 팝업 확정 경로에서 한 번 더 적용한다. 동적 컬럼 목록(dynColMetas)은 그리드 내부에만
+  //   있으므로 행 키 접두어로 골라낸다 (D_/W_/M_ = SP 가 만드는 기간 컬럼 접두어 규약).
+  //   불변 갱신 — 팝업 확정부가 setInsertedRows 의 map 안에서 객체를 새로 만들어 쓰기 때문.
+  const clearDynQuantities = <T extends Record<string, unknown>>(row: T): T => {
+    const next: Record<string, unknown> = { ...row };
+    for (const k of Object.keys(next)) {
+      if (/^[MWD]_/.test(k)) next[k] = null;
+    }
+    return next as T;
   };
 
   // F7 Save — I/M 통합 저장. AS-IS SaveData(L2146~2366) + SetSaveData(L5205~5332) 1:1.
@@ -559,11 +545,14 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
     const vr = validation.validateSaveRows(validateTargets, sc, sc.asYn, asFromSite);
     if (!vr.ok) return;
 
-    // ⭐ [E20260402-001736] AS FROM SITE 필수(.cs L2300~2329 — 신규행 'I' 경로): W/S Planner +
+    // ⭐ [E20260402-001736] AS FROM SITE 필수(.cs L2300~2329 — 신규행 'I' 경로):
     //   81*/82 + 고객향 사이트(AS(비축)향 목록 'AS_FROM_SITE' CMBO 의 NAME 미포함) + FcstType 이
     //   W/S 4종('FcstTypeWs' = SALES_TYPE_CODE2) + AS_FROM_SITE 빈값 → MSG00476 차단.
-    //   (AS-IS 검사 주체는 조건식상 W/S 단독 — 주석("DM Planner,")과 코드 불일치, 원문 파리티.)
-    if (storeWsPlannerYn && (sc.divisionId.startsWith('81') || sc.divisionId === '82')) {
+    //   (AS-IS 검사 주체는 조건식상 W/S 단독 — 주석("DM Planner,")과 코드 불일치.)
+    //   2026-08-14 요구로 W/S Planner 축 제거 — 그리드 편집 게이트(isAsFromSiteEditable)에서 같은
+    //   축을 뺐으므로 저장 검사도 함께 푼다. 두 게이트는 축이 일치해야 한다: 입력은 열어 두고 필수
+    //   검사만 W/S 로 남기면 비 W/S 사용자가 빈값으로 저장해 버린다(반대면 못 채우는데 막힌다).
+    if (sc.divisionId.startsWith('81') || sc.divisionId === '82') {
       const strOf = (v: unknown): string =>
         typeof v === 'string' ? v.trim() : typeof v === 'number' ? String(v) : '';
       const asSiteNames = new Set(
@@ -724,7 +713,7 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
   // ⭐ 버튼 게이트 = 권한(hasButton) × division 편집허용(editable). 편집제약 division(82 외)은
   //   Insert/Delete/Save 미표시(false → SubTitle 버튼 숨김). Search 는 division 무관(조회 항상 가능).
   const hotkeyConfig: HotkeyConfig = {
-    search: hasButton('SEARCH') ? handleSearch : false,
+    search: hasButton('SEARCH') ? () => void handleSearch() : false,
     insert: editable && hasButton('INSERT') ? handleInsert : false,
     delete: editable && hasButton('DELETE') ? handleDelete : false,
     save: editable && hasButton('SAVE') ? handleSave : false,
@@ -732,23 +721,10 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
     upload: false,
   };
 
-  // ⭐ #3 — Insert 옆 Column / Measure 버튼 (SubTitle customButtons). hasButton 권한 분기.
-  //   Column  : 공용 ColumnLayoutModal(DMF0002_GET_TITLESET_POPUP + fallback) → applyColumnLayout.
+  // ⭐ #3 — Insert 옆 Measure / Column 버튼 (SubTitle customButtons). hasButton 권한 분기.
   //   Measure : MeasureSelectModal(staticMeasures 실데이터 토글) → 그리드 measure 행 필터.
-  //   ⭐ 아이콘 = @foundation/assets 등록 아이콘 (DMF0020/DMF0043_01 과 동일 IcGridColumnSetup +
-  //     전용 IcMeasureSelect). label/title = Tooltip + key 유지, buttonLabel='' 로 icon-only.
+  //   Column  : 공용 ColumnLayoutModal(DMF0002_GET_TITLESET_POPUP + fallback) → applyColumnLayout.
   const customButtons = [
-    ...(hasButton('COLUMN_SETUP')
-      ? [
-          {
-            label: t('LBL00605', 'Column Setting'),
-            title: t('LBL00605', 'Column Setting'),
-            action: () => setOpenColumnSetting(true),
-            iconComponent: <IcGridColumnSetup />,
-            buttonLabel: '',
-          },
-        ]
-      : []),
     ...(hasButton('MEASURE_SELECT')
       ? [
           {
@@ -756,6 +732,17 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
             title: t('LBL00712', '_Measure'),
             action: () => setOpenMeasureSelect(true),
             iconComponent: <IcMeasureSelect />,
+            buttonLabel: '',
+          },
+        ]
+      : []),
+    ...(hasButton('COLUMN_SETUP')
+      ? [
+          {
+            label: t('LBL00605', 'Column Setting'),
+            title: t('LBL00605', 'Column Setting'),
+            action: () => setOpenColumnSetting(true),
+            iconComponent: <IcGridColumnSetup />,
             buttonLabel: '',
           },
         ]
@@ -775,20 +762,8 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   메저 선택 변경은 모달 OK 의 saveTitleSet('M') + invalidateQueries 재조회로 SP 에서 반영됨.
   const rows: MktFcstRow[] = useMemo(() => [...insertedRows, ...spRows], [insertedRows, spRows]);
 
-  // ⭐ #3 — Measure 모달 데이터. 공용 MeasureSelectModal 은 하드코딩 fallback 금지(admin 적재가
-  //   정본 — hook #132 §2-1)라, 구 화면 사본에 내장돼 있던 MEASURE_FALLBACK degrade(BE 미적재 시
-  //   사내 실측 23 코드, 라벨=코드)를 호출부에서 보존한다 — 기존 동작 1:1 (공용 모달 기본값
-  //   colLblNm=colNm / sClsLblNm='' / personalizable=true / display=false 가 사본 fallback 행과 동일).
-  const measureModalItems = useMemo<MeasureMeta[]>(
-    () =>
-      staticMeasures[SHEETS.MAIN].length > 0
-        ? staticMeasures[SHEETS.MAIN]
-        : MEASURE_FALLBACK.map(code => ({ colNm: code })),
-    [staticMeasures]
-  );
-
   return (
-    <div className={styles.container}>
+    <>
       <MainTitle
         title={title}
         menuId={MENU_ID}
@@ -851,16 +826,23 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
           //   dataItem.PROJECT_OWNER 1:1). sales-plan(DMF0021) 과 동일하게 PROJECT_OWNER 세팅.
           if (!popupGroupId) return;
           setInsertedRows(prev =>
-            prev.map(r =>
-              r.INSERT_GROUP_ID === popupGroupId
-                ? clearDynQuantities({
-                    ...r,
-                    PROJECT_CODE: projectCode,
-                    PROJECT_NAME: projectName ?? '',
-                    PROJECT_OWNER: projectOwner ?? '',
-                  })
-                : r
-            )
+            prev.map(r => {
+              if (r.INSERT_GROUP_ID !== popupGroupId) return r;
+              const next = {
+                ...r,
+                PROJECT_CODE: projectCode,
+                PROJECT_NAME: projectName ?? '',
+                PROJECT_OWNER: projectOwner ?? '',
+              };
+              // A-08 [CG-05] Project 는 키 컬럼 — 실제로 바뀐 경우만 수량 전량 클리어.
+              //   주의: 같은 값 재선택으로 입력한 수량이 날아가면 안 된다(그리드 changed 게이트와 동일).
+              if (projectCode === r.PROJECT_CODE) return next;
+              // 상위 값 변경 = 하위 값 초기화(2026-08-14 스펙: Project Code 변경 -> Model).
+              //   필수: 팝업 선택은 cellEditEnded 를 타지 않으므로 여기서 직접 부른다 —
+              //   빼먹으면 Project 만 바뀌고 이전 Project 의 Model 이 그대로 남아 저장된다.
+              applyCascadeClear(next as Record<string, unknown>, 'PROJECT_CODE');
+              return clearDynQuantities(next);
+            })
           );
           setPopupGroupId(null);
         }}
@@ -888,16 +870,17 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
         ) => {
           if (!popupGroupId) return;
           setInsertedRows(prev =>
-            prev.map(r =>
-              r.INSERT_GROUP_ID === popupGroupId
-                ? clearDynQuantities({
-                    ...r,
-                    ITEM_ID: itemId,
-                    ITEM_NAME: itemName ?? '',
-                    NICK_NAME: nickName ?? '',
-                  })
-                : r
-            )
+            prev.map(r => {
+              if (r.INSERT_GROUP_ID !== popupGroupId) return r;
+              const next = {
+                ...r,
+                ITEM_ID: itemId,
+                ITEM_NAME: itemName ?? '',
+                NICK_NAME: nickName ?? '',
+              };
+              // A-08 [CG-05] Item(Model) 도 키 컬럼 — 실제로 바뀐 경우만 수량 전량 클리어.
+              return itemId === r.ITEM_ID ? next : clearDynQuantities(next);
+            })
           );
           setPopupGroupId(null);
         }}
@@ -957,6 +940,8 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
         initialSettings={columnLayoutSettings}
         defaultSettings={columnLayoutDefaults}
         onSave={settings => {
+          // 설정이 바뀌었으므로 이전 조회 rows 는 무효 — 그리드부터 비운다.
+          clearGridOnSettingChange();
           // 로컬 즉시 반영 + 서버 영구 저장('C') → 성공 시 admin 메타 재fetch (개인화 기준 재계산).
           applyColumnLayout(
             SHEETS.MAIN,
@@ -971,18 +956,23 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
           );
           // titleSet 'C' 영구 저장 — 표시 column + 순서 + 폭/색 (BE 3컬럼 확장분 2026-07-27).
           const visible = settings.filter(s => s.USER_FLAG === 'Y');
-          void saveTitleSet(
-            'C',
-            visible.map((s, i) => ({
+          void saveTitleSet({
+            menuId: MENU_ID,
+            // ⚠️ 팝업 조회(위 sheetName/columnType)와 반드시 같은 값이어야 한다.
+            sheetName: SHEETS.MAIN,
+            columnType: 'C',
+            rows: visible.map((s, i) => ({
               name: s.COLUMN_NAME,
               sortOrderNo: i + 1,
               colWidth: s.COL_WIDTH,
               cellColor: s.CELL_COLOR,
               textColor: s.TEXT_COLOR,
-            }))
-          ).then(ok => {
-            // 실패는 saveTitleSet 내부에서 이미 alert — 여기선 캐시 갱신만 건너뛴다.
-            if (!ok) return;
+            })),
+          }).then(ok => {
+            if (!ok) {
+              alertSaveFailed();
+              return;
+            }
             // ⭐ 팝업 titleSet 조회 캐시 무효화 (필수). 전역 staleTime=Infinity 라 invalidate 없이는
             //   재조회가 아예 안 일어나고, ColumnLayoutModal 의 buildInitialRows 는 BE 응답을
             //   화면 상태(initialSettings)보다 우선하므로 "저장 전 USER_FLAG='N'" 이 그대로 이긴다
@@ -994,29 +984,37 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
         }}
       />
 
-      {/* ⭐ #3 — Measure 선택 (공용 MeasureSelectModal — hook #132 §2-1 화면별 사본 금지.
-          titleSet 'M' 저장·캐시 invalidate·measure 재fetch 는 아래 onApply 소유 — BusinessPlanModals 선례 1:1). */}
+      {/* ⭐ #3 — Measure 선택 (staticMeasures 실데이터 토글 → 그리드 measure 행 필터). */}
       <MeasureSelectModal
         open={openMeasureSelect}
         modalClose={() => setOpenMeasureSelect(false)}
-        measures={measureModalItems}
+        measures={staticMeasures[SHEETS.MAIN]}
         visibleMeasures={visibleMeasures[SHEETS.MAIN]}
+        fallbackCodes={MEASURE_FALLBACK}
         onApply={codes => {
-          // 로컬 행 필터 + 서버 영구 저장('M'). 저장 후 measure 재fetch + 메인 쿼리 invalidate
-          //   (메인 SP 가 TITLESET 'M' 으로 measure 행을 필터하므로 신규 선택이 서버에서 반영됨).
+          // 설정이 바뀌었으므로 이전 조회 rows 는 무효 — 그리드부터 비운다.
+          //   (메인 SP 가 TITLESET 'M' 으로 measure 행을 필터하므로 신규 선택은 재조회로만 반영된다.)
+          clearGridOnSettingChange();
+          // 로컬 행 필터 + 서버 영구 저장('M'). 저장 후 measure 메타 재fetch.
           applyVisibleMeasures(SHEETS.MAIN, codes);
           const all = staticMeasures[SHEETS.MAIN].map(m => m.colNm);
           const selected = codes ?? all;
-          void saveTitleSet(
-            'M',
-            selected.map((name, i) => ({ name, sortOrderNo: i + 1 }))
-          ).then(ok => {
-            if (!ok) return;
+          void saveTitleSet({
+            menuId: MENU_ID,
+            sheetName: SHEETS.MAIN,
+            // Measure 개인화 — 폭/색은 대상이 아니라 미전달(빈 값으로 저장됨).
+            columnType: 'M',
+            rows: selected.map((name, i) => ({ name, sortOrderNo: i + 1 })),
+          }).then(ok => {
+            if (!ok) {
+              alertSaveFailed();
+              return;
+            }
             void fetchStaticMeasures();
             void queryClient.invalidateQueries({ queryKey: [MENU_ID] });
           });
         }}
       />
-    </div>
+    </>
   );
 };

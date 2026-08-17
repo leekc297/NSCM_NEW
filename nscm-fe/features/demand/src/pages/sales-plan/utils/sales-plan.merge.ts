@@ -1,5 +1,7 @@
 import { CellRange, CellType, type GridPanel, MergeManager } from '@mescius/wijmo.grid';
 
+import { isInsertRow } from '@foundation/utils';
+
 // ⭐ DMF0021 — mkt-fcst/utils/mkt-fcst.merge.ts 1단계 복제 (2026-07-14 플랜 확정 — 공용 승격은 후속,
 //   mkt-fcst 무수정 원칙. DMF0021 GET_SPREAD_TITLE 은 DMF0003 과 동일 계열 W_yyyymm+ISO_WEEK 형식).
 
@@ -23,6 +25,27 @@ const isoWeek = (yyyymmdd: string): number => {
   d.setUTCDate(d.getUTCDate() + 4 - day);
   const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
   return Math.ceil(((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
+};
+
+// AS-IS GET_SPREAD_TITLE 규약: 월 경계 주차는 달력 월별 binding 으로 각각 만든다.
+// 예: 2026-12-28~2027-01-03(ISO W53) -> W_20261253 + W_20270153.
+export const getMonthWeekKeysInRange = (startYyyymmdd: string, endYyyymmdd: string): string[] => {
+  if (!/^\d{8}$/.test(startYyyymmdd) || !/^\d{8}$/.test(endYyyymmdd)) return [];
+  const parse = (value: string) =>
+    new Date(
+      Date.UTC(Number(value.slice(0, 4)), Number(value.slice(4, 6)) - 1, Number(value.slice(6, 8)))
+    );
+  const start = parse(startYyyymmdd);
+  const end = parse(endYyyymmdd);
+  if (start > end) return [];
+
+  const keys: string[] = [];
+  for (const date = new Date(start); date <= end; date.setUTCDate(date.getUTCDate() + 1)) {
+    const yyyymmdd = date.toISOString().slice(0, 10).replace(/-/g, '');
+    const key = `W_${yyyymmdd.slice(0, 6)}${String(isoWeek(yyyymmdd)).padStart(2, '0')}`;
+    if (keys[keys.length - 1] !== key) keys.push(key);
+  }
+  return keys;
 };
 
 export const getDynKey = (binding: string): DynKey => {
@@ -98,14 +121,14 @@ export class HierarchicalMergeManager extends MergeManager {
       if (!cur) return null;
       // [DMF0003 No.57 계보 2026-08-12] 신규 Insert 행(CRUD_TYPE='I')은 머지 제외 —
       //   키 컬럼이 전부 빈값이라 '' === '' 로 행추가 횟수만큼 병합되어 보이는 결함(선제 이식).
-      if (cur.CRUD_TYPE === 'I') return null;
+      if (isInsertRow(cur)) return null;
       const fixedIdx = this.fixedBindings.indexOf(binding);
       const leftBindings = this.fixedBindings.slice(0, fixedIdx + 1);
       const sameRow = (a: number, b: number): boolean => {
         const ra = rowItem(a);
         const rb = rowItem(b);
         if (!ra || !rb) return false;
-        if (ra.CRUD_TYPE === 'I' || rb.CRUD_TYPE === 'I') return false;
+        if (isInsertRow(ra) || isInsertRow(rb)) return false;
         return leftBindings.every(
           k =>
             ((ra as Record<string, string>)[k] ?? '') === ((rb as Record<string, string>)[k] ?? '')

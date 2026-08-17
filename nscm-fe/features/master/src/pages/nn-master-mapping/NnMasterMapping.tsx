@@ -1,10 +1,11 @@
 import type { FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { apiClient } from '@foundation/apis';
 import { CRUD_TYPE } from '@foundation/constants';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
+import { GridAction } from '@foundation/utils';
 import { MainTitle, SubTitle } from '@shared/components';
 import { useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
 import { useMessageStore } from '@shared/stores';
@@ -34,11 +35,12 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
   const fetchStaticColumns = useNnMasterMappingStore(s => s.fetchStaticColumns);
 
   const setAlert = useMessageStore(s => s.setAlert);
+  const setToast = useMessageStore(s => s.setToast);
 
   const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
 
-  // 신규 행 별도 state — CRUD_TYPE='I' (As-Is L538-602 InsertRow 결과)
-  const [insertedRows, setInsertedRows] = useState<ResponseData<MENU_ID, SHEETS.MAIN>[]>([]);
+  const insertedRowsRef = useRef<ResponseData<MENU_ID, SHEETS.MAIN>[]>([]);
+  const [insertedRowCount, setInsertedRowCount] = useState(0);
 
   // 진입 시 자동조회 차단 — 사용자가 Search(F5) 를 눌러야 조회. mount 마다 false 라 persist 된 filters 도 무시됨.
   const [hasSearched, setHasSearched] = useState(false);
@@ -62,34 +64,54 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
     enabled: hasSearched && !!filters[SHEETS.MAIN],
   });
 
-  const spRows = data?.o_rc1 ?? [];
-  const rows = [...insertedRows, ...spRows];
+  const rows = useMemo<ResponseData<MENU_ID, SHEETS.MAIN>[]>(
+    () => [...insertedRowsRef.current, ...(data?.o_rc1 ?? [])],
+    [data]
+  );
+
+  const clearInsertedRows = () => {
+    const g = gridRef.current;
+    const source = g?.collectionView?.sourceCollection;
+    if (source) {
+      for (let i = source.length - 1; i >= 0; i--) {
+        if (source[i]?.CRUD_TYPE === CRUD_TYPE.INSERT) source.splice(i, 1);
+      }
+      g.collectionView.refresh();
+    }
+    insertedRowsRef.current = [];
+    setInsertedRowCount(0);
+  };
 
   const handleSearch = async () => {
     setHasSearched(true);
     setFilter();
     void fetchStaticColumns();
     await refetch?.();
-    setInsertedRows([]);
+    clearInsertedRows();
   };
 
   // AS-IS L538-602: InsertRow — DATA_TYPE='SCM' fixed, DIVISION=search div, ACTIVE_YN='Y' default
   const handleInsert = () => {
     const g = gridRef.current;
     if (!g) return;
-    const newRow = {
-      CRUD_TYPE: CRUD_TYPE.INSERT,
-      DATA_TYPE_CODE: 'SCM',
-      DIVISION_ID: searchCondition.divisionId,
-      ACTIVE_YN: 'Y',
-      SOLDTO_CODE: '',
-      SHIPTO_CODE: '',
-      PROJECT_CODE: '',
-      ITEM_ID: '',
-      MAPPING_ITEM_ID: '',
-    } as ResponseData<MENU_ID, SHEETS.MAIN>;
-    setInsertedRows(prev => [newRow, ...prev]);
-    g.refresh();
+    const newRow = GridAction.addRow(
+      g,
+      {
+        DATA_TYPE_CODE: 'SCM',
+        DIVISION_ID: searchCondition.divisionId,
+        ACTIVE_YN: 'Y',
+        SOLDTO_CODE: '',
+        SHIPTO_CODE: '',
+        PROJECT_CODE: '',
+        ITEM_ID: '',
+        MAPPING_ITEM_ID: '',
+      },
+      'above',
+      true
+    );
+    if (!newRow) return;
+    insertedRowsRef.current.unshift(newRow);
+    setInsertedRowCount(insertedRowsRef.current.length);
   };
 
   // AS-IS L275-279: 'I' (신규) 행만 삭제 가능
@@ -104,8 +126,9 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
       });
       return;
     }
-    setInsertedRows(prev => prev.filter(r => r !== sel));
-    g.refresh();
+    GridAction.removeRow(g, true);
+    insertedRowsRef.current = insertedRowsRef.current.filter(row => row !== sel);
+    setInsertedRowCount(insertedRowsRef.current.length);
   };
 
   // AS-IS L604-1015 SaveData() 1:1 — Validation + ^ join + apiClient.post + refetch
@@ -266,8 +289,8 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
           validFrom: join('VALID_START_DATE'),
           validTo: join('VALID_END_DATE'),
         });
-        void setAlert({ type: 'alert', content: t('MSG00002', '_성공적으로 저장되었습니다.') });
-        setInsertedRows([]);
+        setToast({ type: 'success', message: t('MSG00002', '_성공적으로 저장되었습니다!') });
+        clearInsertedRows();
         await refetch?.();
       } catch (e) {
         const msg = e instanceof Error ? e.message : t('MSG00618', '_저장 중 오류가 발생했습니다.');
@@ -302,7 +325,7 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
         menuId={MENU_ID}
         grid={gridRef}
         gridFilter={gridFilterRef}
-        dataCount={rows.length}
+        dataCount={(data?.o_rc1?.length ?? 0) + insertedRowCount}
         excelFileName='NnMasterMapping'
         useHotkey={true}
         hotkeyConfig={hotkeyConfig}

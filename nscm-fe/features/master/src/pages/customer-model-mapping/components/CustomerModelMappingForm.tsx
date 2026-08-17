@@ -26,7 +26,13 @@ export const CustomerModelMappingForm = () => {
   const [openModelByDivisionModal, setOpenModelByDivisionModal] = useState<boolean>(false);
 
   const [myDivision, teambyDivision, endCustomer, salesSite, yesOrNo] = useTabComboQueries({
-    filters: ['MyDivision', 'TeambyDivision', 'EndCustomer', 'SalesSite', 'YesOrNo'],
+    filters: [
+      'MyDivision',
+      { comboId: 'TeambyDivision', divisionId: `'${searchParams.divisionId}'` },
+      'EndCustomer',
+      'SalesSite',
+      'YesOrNo',
+    ],
   });
 
   return (
@@ -51,7 +57,13 @@ export const CustomerModelMappingForm = () => {
                     onChange={(_, option) => {
                       // Project 코드는 Division 소속 값이라 Division 이 바뀌면 초기화한다
                       //   (40 으로 바꿀 때 잠긴 칸에 이전 값이 남아 조회에 실려 가는 것도 함께 막힌다).
-                      setSearchParams({ divisionId: option, projectCode: '' });
+                      setSearchParams({
+                        divisionId: option,
+                        deptId: 'ALL',
+                        endCustomer: 'ALL',
+                        salesSite: 'ALL',
+                        projectCode: '',
+                      });
                     }}
                   />
                 )}
@@ -71,12 +83,19 @@ export const CustomerModelMappingForm = () => {
                     options={[
                       ...new Map(
                         (teambyDivision ?? [])
-                          .filter(item => item.DIVISION_ID === searchParams.divisionId)
+                          .filter(
+                            item =>
+                              !item.DIVISION_ID || item.DIVISION_ID === searchParams.divisionId
+                          )
                           .map(item => [`${item.DIVISION_ID}|${item.CODE}`, item])
                       ).values(),
                     ].map(item => ({ label: item.NAME, value: item.CODE }))}
                     onChange={(_, option) => {
-                      setSearchParams({ deptId: option });
+                      setSearchParams({
+                        deptId: option,
+                        endCustomer: 'ALL',
+                        salesSite: 'ALL',
+                      });
                     }}
                   />
                 )}

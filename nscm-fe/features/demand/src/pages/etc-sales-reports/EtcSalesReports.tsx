@@ -4,6 +4,8 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { IcMeasureSelect } from '@foundation/assets';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
+import { useQueryClient } from '@foundation/query-client';
+import { keepRowVisibleUnderFilter } from '@foundation/utils';
 import type { EditTracker } from '@foundation/utils';
 import { MainTitle, SubTitle } from '@shared/components';
 import { useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
@@ -15,13 +17,23 @@ import {
   type EtcSalesReportsModalKey,
   EtcSalesReportsModals,
 } from './components/EtcSalesReportsModals';
-import { EDIT_MEASURE_LOOKUP, INSERT_ROW_DEFAULTS, measureCntOf, MENU_ID, MSG, SHEETS } from './etc-sales-reports.constants';
+import {
+  EDIT_MEASURE_LOOKUP,
+  INSERT_ROW_DEFAULTS,
+  measureCntOf,
+  MENU_ID,
+  MSG,
+  SHEETS,
+} from './etc-sales-reports.constants';
 import type { MeasureRow, EtcSalesReportRow, SpreadTitleRow } from './etc-sales-reports.types';
-import styles from './EtcSalesReports.module.scss';
 import { useEtcSalesReportsStore } from './useEtcSalesReportsStore';
 import { callSaveEtcReport } from './utils/etc-sales-reports.api';
 import { toCellStr } from './utils/etc-sales-reports.gridCombos';
-import { buildBulkPayload, buildEtcReportSaveRows, type SaveTarget } from './utils/etc-sales-reports.save';
+import {
+  buildBulkPayload,
+  buildEtcReportSaveRows,
+  type SaveTarget,
+} from './utils/etc-sales-reports.save';
 import {
   validateEditGate,
   validateFind,
@@ -42,6 +54,7 @@ export const EtcSalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   const setAlert = useMessageStore.getState().setAlert;
   const setToast = useMessageStore.getState().setToast;
+  const queryClient = useQueryClient();
 
   const sc = useEtcSalesReportsStore(s => s.searchCondition);
   const setSearchCondition = useEtcSalesReportsStore(s => s.setSearchCondition);
@@ -107,7 +120,7 @@ export const EtcSalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
     enabled: hasSearched && !!filters[SHEETS.MEASURE],
   });
   const measureRows = useMemo<MeasureRow[]>(
-    () => ((measureData as { data?: MeasureRow[] } | undefined)?.data ?? []),
+    () => (measureData as { data?: MeasureRow[] } | undefined)?.data ?? [],
     [measureData]
   );
 
@@ -120,7 +133,6 @@ export const EtcSalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
     // 재조회 = pending insert reset + EditTracker clear (hook #97)
     setInsertedRows([]);
     editTrackerRef.current?.clearChanges();
-     
   }, [mainData]);
 
   // mount 시 1회 admin 메타 fetch + persist filters 무효화
@@ -139,7 +151,16 @@ export const EtcSalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
     insertedRows.length > 0 || (editTrackerRef.current?.getOriginalValues()?.size ?? 0) > 0;
 
   // F5 Search — Version 필수 (FindData L437 MSG00283)
-  const handleSearch = () => {
+  const handleSearch = async () => {
+    // ⭐ [공통 UC-02, hook #133] 수정 중 재조회 = MSG00703 confirm. 취소면 조회하지 않는다
+    //   (미저장 편집이 조용히 사라지는 것을 막는다). 2026-08-15 보완.
+    if (hasPendingChanges()) {
+      const proceed = await setAlert({
+        type: 'confirm',
+        content: t('MSG00703', '_수정 중인 데이터가 있습니다. 새로 조회하시겠습니까?'),
+      });
+      if (!proceed) return;
+    }
     const vr = validateFind(sc.versionNo);
     if (!vr.ok) {
       void setAlert({ type: 'alert', content: t(vr.msgId!, '_Version을 선택하고 조회하세요.') });
@@ -163,6 +184,14 @@ export const EtcSalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
     void fetchStaticMeasures();
   };
 
+  const clearGridOnSettingChange = () => {
+    setHasSearched(false); // 쿼리 disable — Search 전까지 자동 재조회 안 함
+    setInsertedRows([]); // CRUD(신규행) reset
+    editTrackerRef.current?.clearChanges(); // 편집 추적 reset
+    clearFilters(); // filters[MAIN/SPREAD_TITLE/MEASURE] 무효화 (enabled=false)
+    queryClient.removeQueries({ queryKey: [tabId] }); // 이전 조회 결과 캐시 제거
+  };
+
   // F8 Insert — G0 그룹 게이트(MSG00096) 후 division 세트(40=3/81=2/82=1) 블록 삽입
   //   (AS-IS InsertRow L934~939 — GET_MEASURE CODE 순서 강제 세팅. 0건 = 차단).
   const handleInsert = () => {
@@ -173,7 +202,10 @@ export const EtcSalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
     }
     const measures = measureRows.map(r => toCellStr(r.CODE)).filter(Boolean);
     if (measures.length === 0) {
-      void setAlert({ type: 'alert', content: t(MSG.REQUIRED_FIELD, '_{0} 값은 필수 입력 항목입니다.').replace('{0}', 'Measure') });
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.REQUIRED_FIELD, '_{0} 값은 필수 입력 항목입니다.').replace('{0}', 'Measure'),
+      });
       return;
     }
     const gid = `I_${Date.now()}`;
@@ -185,6 +217,11 @@ export const EtcSalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
       ...INSERT_ROW_DEFAULTS,
     }));
     setInsertedRows(prev => [...block, ...prev]);
+    // ⭐ [공통 UC-01, hook #133] 필터가 걸린 상태에서도 **필터를 유지한 채** 신규행이 보여야 한다.
+    //   ⛔ 필터 clear 금지 — 사용자가 걸어둔 필터까지 날아간다(2026-08-14 요구 역전).
+    //   신규행만 필터 예외로 등록한다(공용 `keepRowVisibleUnderFilter` — 유일 정본).
+    const grid = gridRef.current as unknown as FlexGridType<WijmoRowItem> | null;
+    if (grid) block.forEach(row => keepRowVisibleUnderFilter(grid, row as unknown as WijmoRowItem));
   };
 
   // F9 Delete — 신규(I) 2행 블록 전체 삭제. DB 조회행 무동작(silent — AS-IS Delete action 가드)
@@ -203,7 +240,10 @@ export const EtcSalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
   const handleSave = async () => {
     const vv = validateVersionForAction(sc.versionNo);
     if (!vv.ok) {
-      void setAlert({ type: 'alert', content: t(vv.msgId!, '_Version을 검색 후 조회하신 후에 입력이 가능합니다.') });
+      void setAlert({
+        type: 'alert',
+        content: t(vv.msgId!, '_Version을 검색 후 조회하신 후에 입력이 가능합니다.'),
+      });
       return;
     }
     const vg = validateEditGate(userGroup, sc.divisionId);
@@ -264,7 +304,10 @@ export const EtcSalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
       return;
     }
     if (build.rows.length === 0) {
-      void setAlert({ type: 'alert', content: t(MSG.NO_SAVE_TARGET, '_저장할 대상 데이터가 없습니다.') });
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.NO_SAVE_TARGET, '_저장할 대상 데이터가 없습니다.'),
+      });
       return;
     }
     const payload = buildBulkPayload(build.rows);
@@ -272,7 +315,10 @@ export const EtcSalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
     try {
       const res = await callSaveEtcReport(payload);
       if (res.message) void setAlert({ type: 'alert', content: res.message });
-      else if (res.ok) void setAlert({ type: 'alert', content: t(MSG.SAVED, '_성공적으로 저장되었습니다.') });
+      else if (res.ok)
+        // ⭐ [공통 UC-04, hook #132 §3] CRUD 완료 알림 = Alert ⛔ / 하단 중앙 Toast 후 자동 소멸.
+        //   (자매 화면 sales-reports·business-plan 과 동일 규약. 2026-08-15 정정)
+        void setToast({ message: t(MSG.SAVED, '_성공적으로 저장되었습니다.'), type: 'success' });
       if (res.ok) {
         setInsertedRows([]);
         editTrackerRef.current?.clearChanges();
@@ -280,14 +326,15 @@ export const EtcSalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
         if (savedScroll && gridRef.current) gridRef.current.scrollPosition = savedScroll;
       }
     } catch (e) {
-      const msg = e instanceof Error ? e.message : t(MSG.SAVE_ERROR, '_저장 중 오류가 발생했습니다.');
+      const msg =
+        e instanceof Error ? e.message : t(MSG.SAVE_ERROR, '_저장 중 오류가 발생했습니다.');
       void setAlert({ type: 'alert', content: msg });
     }
   };
 
   // Exchange Rate  // SubTitle 공통버튼 (미명시 = DefaultButtonActions 자동, hook #64)
   const hotkeyConfig: HotkeyConfig = {
-    search: hasButton('SEARCH') ? handleSearch : false,
+    search: hasButton('SEARCH') ? () => void handleSearch() : false,
     insert: hasButton('INSERT') ? handleInsert : false,
     delete: hasButton('DELETE') ? handleDelete : false,
     save: hasButton('SAVE') ? () => void handleSave() : false,
@@ -329,7 +376,7 @@ export const EtcSalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
   );
 
   return (
-    <div className={styles.container}>
+    <>
       <MainTitle
         title={title}
         menuId={MENU_ID}
@@ -350,7 +397,9 @@ export const EtcSalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
         grid={gridRef}
         gridFilter={gridFilterRef}
         dataCount={rows.length}
-        excelFileName='SalesReports'
+        // ⭐ [2026-08-15] 화면명 = 메뉴 실측 `SCM_ADM_MNU_M.MNU_DESC` = 'ETC Sales Reports'.
+        //   종전 'SalesReports' 는 DMF0044 판 복제 잔재라 두 화면의 Excel 파일명이 같아진다.
+        excelFileName='EtcSalesReports'
         useHotkey={true}
         hotkeyConfig={hotkeyConfig}
         searchParam={sc}
@@ -382,11 +431,12 @@ export const EtcSalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
         mdfType={sc.mdfType}
         openKey={openModal}
         onClose={() => setOpenModal(null)}
+        onGridReset={clearGridOnSettingChange}
         projectTargetRow={projectTargetRow}
         onVersionSelect={(versionNo, label) => {
           setSearchCondition({ versionNo, versionLabel: label });
         }}
       />
-    </div>
+    </>
   );
 };

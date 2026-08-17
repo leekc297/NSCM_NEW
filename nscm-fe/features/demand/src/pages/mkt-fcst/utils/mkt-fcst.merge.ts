@@ -1,5 +1,7 @@
 import { CellRange, CellType, type GridPanel, MergeManager } from '@mescius/wijmo.grid';
 
+import { CRUD_TYPE } from '@foundation/constants';
+
 // 동적 PIVOT 컬럼 키 파서 — M_yyyymm / W_yyyymmdd / D_yyyymmdd
 //   kind  : 'M'(월) / 'W'(주) / 'D'(일) / null(고정 컬럼)
 //   ym    : 'YYYY-MM' (1단 그룹 = 대상년월 머지 키)
@@ -87,21 +89,17 @@ export class HierarchicalMergeManager extends MergeManager {
         (view[i] as unknown as { dataItem?: Record<string, unknown> })?.dataItem;
       const cur = rowItem(r);
       if (!cur) return null;
-      // [통합테스트 1st No.57 2026-08-12] 신규 Insert 행(CRUD_TYPE='I')은 머지 제외 —
-      //   키 컬럼이 전부 빈값이라 '' === '' 로 행추가 횟수만큼 병합되어 보이는 결함.
-      //   AS-IS 신규행도 병합 없이 각각 표시.
-      if ((cur as Record<string, unknown>).CRUD_TYPE === 'I') return null;
+      // ⭐ insert 행은 머지 대상에서 제외 (공용 CustomMergeManager 규약과 동일).
+      //   신규행은 좌측 고정 컬럼이 비어 있어 서로 값이 같아지므로, 막지 않으면 추가한 행끼리
+      //   전부 한 칸으로 합쳐져 개별 입력이 불가능해진다. 위/아래 확장도 insert 행에서 끊는다.
+      const isInsert = (i: number): boolean => rowItem(i)?.CRUD_TYPE === CRUD_TYPE.INSERT;
+      if (isInsert(r)) return null;
       const fixedIdx = this.fixedBindings.indexOf(binding);
       const leftBindings = this.fixedBindings.slice(0, fixedIdx + 1);
       const sameRow = (a: number, b: number): boolean => {
         const ra = rowItem(a);
         const rb = rowItem(b);
         if (!ra || !rb) return false;
-        if (
-          (ra as Record<string, unknown>).CRUD_TYPE === 'I' ||
-          (rb as Record<string, unknown>).CRUD_TYPE === 'I'
-        )
-          return false;
         return leftBindings.every(
           k =>
             ((ra as Record<string, string>)[k] ?? '') === ((rb as Record<string, string>)[k] ?? '')
@@ -111,8 +109,8 @@ export class HierarchicalMergeManager extends MergeManager {
       const maxRow = panel.viewRange.row2;
       let r1 = r;
       let r2 = r;
-      while (r1 > minRow && sameRow(r1 - 1, r)) r1--;
-      while (r2 < maxRow && sameRow(r2 + 1, r)) r2++;
+      while (r1 > minRow && !isInsert(r1 - 1) && sameRow(r1 - 1, r)) r1--;
+      while (r2 < maxRow && !isInsert(r2 + 1) && sameRow(r2 + 1, r)) r2++;
       if (r1 === r2) return null;
       return new CellRange(r1, c, r2, c);
     }

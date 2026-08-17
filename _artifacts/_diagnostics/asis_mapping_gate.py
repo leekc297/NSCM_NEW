@@ -759,13 +759,37 @@ def cmd_check(page_dir, matrix_only=False, handlers_only=False, citations=False)
         else:
             residual.append((_id, f"상태='{status or STATUS_INIT}' — 미구현 잔여"))
     if citations:
+        # ⭐ 2026-08-15 — 오탐 계보 "DB 축 인용" 제거.
+        #   구현 근거가 **FE 코드가 아니라 DB 메타/객체**인 행이 있다(division 스코프 정적컬럼 =
+        #   SCM_MST_SHEET_COLUMNS.DIVISION_ID, 저장 SP 인자 = ALL_ARGUMENTS, SP 내부 자동행 = ALL_SOURCE).
+        #   기존 whitelist 는 CMBO SQL_ID 하나뿐이라 이런 **실재하는 DB 식별자**를 전부 '미존재'로 찍었다
+        #   (실측 2026-08-15 DMF0003: 5행 — MODULE_PER_CAR/CELL_PER_CAR/CELL_PER_MODULE/SENDER_NAME/
+        #    AS_YN/DMF0000_GET_MASTER_CHG_POPUP 전부 DB 실재).
+        #   ⇒ whitelist 를 **DB 에 실제로 있는 것만** 넓힌다. 없는 이름은 여전히 FAIL(허위 인용 차단).
+        #   SHEET_COLUMNS 는 대사표에 등장하는 PROGRAM_ID 로 스코프를 좁혀 무차별 통과를 막는다.
         import oracledb
         from ora import conn_info as _ci
+        _map_txt = (page / MAPPING_FILENAME).read_text(encoding="utf-8", errors="ignore")
+        prog_ids = sorted(set(re.findall(r"\b(DMF\d{4}|SCM\d{4}|SDM\d{4}|SYS\d{4})\b", _map_txt)))
         u, pw, d = _ci()
         with oracledb.connect(user=u, password=pw, dsn=d) as con:
             cur = con.cursor()
             cur.execute("SELECT SQL_ID FROM SCM_MGR.SCM_ADM_CMBO_SQL_M")
             db_ids = {r[0] for r in cur.fetchall()}
+            cur.execute("SELECT OBJECT_NAME FROM ALL_OBJECTS WHERE OWNER='SCM_MGR'")
+            db_ids |= {r[0] for r in cur.fetchall()}
+            cur.execute("SELECT PROCEDURE_NAME FROM ALL_PROCEDURES "
+                        "WHERE OWNER='SCM_MGR' AND PROCEDURE_NAME IS NOT NULL")
+            db_ids |= {r[0] for r in cur.fetchall()}
+            cur.execute("SELECT API_ID FROM SCM_MGR.SCM_ADM_API_M")
+            db_ids |= {r[0] for r in cur.fetchall()}
+            if prog_ids:
+                binds = {f"p{i}": v for i, v in enumerate(prog_ids)}
+                cur.execute("SELECT DISTINCT COLUMN_NAME FROM SCM_MGR.SCM_MST_SHEET_COLUMNS "
+                            f"WHERE PROGRAM_ID IN ({','.join(':' + k for k in binds)})", binds)
+                db_ids |= {r[0] for r in cur.fetchall()}
+        print(f"[인용] DB 식별자 whitelist {len(db_ids)}건 "
+              f"(CMBO SQL_ID + SCM_MGR 객체/프로시저 + API_M + SHEET_COLUMNS[{','.join(prog_ids) or '-'}])")
         n_tot, bad = check_citations(page_dir, db_ids)
         if bad:
             print(f"[FAIL] 인용 실재성 — 상태='구현' {n_tot}행 중 {len(bad)}행이 **존재하지 않는 파일/심볼**을 인용")

@@ -28,7 +28,8 @@ const firstResultRow = (data: unknown): Record<string, unknown> | undefined => {
   return first && typeof first === 'object' ? (first as Record<string, unknown>) : undefined;
 };
 
-const str = (v: unknown): string => (typeof v === 'string' || typeof v === 'number' ? String(v) : '').trim();
+const str = (v: unknown): string =>
+  (typeof v === 'string' || typeof v === 'number' ? String(v) : '').trim();
 
 const callProc = async (
   menuId: string,

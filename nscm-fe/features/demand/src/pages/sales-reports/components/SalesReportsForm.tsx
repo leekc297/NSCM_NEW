@@ -1,5 +1,6 @@
 import { DivisionField, VersionField } from 'features/master/src/components';
 
+import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { FormItem } from '@shared/lges';
@@ -63,6 +64,7 @@ export const SalesReportsForm = ({
             <FormItem
               label={t('LBL00795', '_Report Type')}
               labelAlign='right'
+              className={commonStyles.formItem}
               render={() => (
                 <CustomDropdown
                   value={sc.mdfType}
@@ -78,6 +80,7 @@ export const SalesReportsForm = ({
             <FormItem
               label={t('LBL00086', '_Year')}
               labelAlign='right'
+              className={commonStyles.formItem}
               render={() => (
                 <CustomDropdown
                   value={sc.yyyy}
@@ -91,6 +94,7 @@ export const SalesReportsForm = ({
             <FormItem
               label={t('LBL00796', '_Data Type')}
               labelAlign='right'
+              className={commonStyles.formItem}
               render={() => (
                 <CustomDropdown
                   value={sc.dataType}
@@ -109,6 +113,10 @@ export const SalesReportsForm = ({
           <VersionField
             value={sc.versionLabel}
             onOpenPopup={onOpenVersionModal}
+            // 직접 입력(key-in) 허용 — 친 문자열을 그대로 조회키(versionNo)로 쓴다.
+            //   팝업 선택은 표시문에 DESCRIPTION 이 붙지만 직접 입력은 원문이 곧 표시문이다.
+            //   존재하지 않는 버전을 치면 조회 0건으로 떨어진다(SP 판정 — FE 사전 검증 없음).
+            onValueChange={v => set({ versionNo: v, versionLabel: v })}
             label={
               sc.mdfType === 'REPORT_BP_M'
                 ? t('LBL00797', '_BP Version')

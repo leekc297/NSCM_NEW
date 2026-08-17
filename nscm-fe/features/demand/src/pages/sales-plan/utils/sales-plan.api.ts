@@ -5,35 +5,9 @@ import { apiClient } from '@foundation/apis';
 
 import { MENU_ID, SHEETS } from '../sales-plan.constants';
 
-// titleSet(SCM_MST_TITLESET_USER) 영구 저장 — SCM0002_SET_TITLESET_POPUP ('C'=Column / 'M'=Measure).
-//   AS-IS DM0002_TitleSetForm_Popup OK 1:1 (btnColumn L4427 / btnMeasure L4440 — DMF0003/0082 선례).
-export const saveTitleSet = async (
-  columnType: 'C' | 'M',
-  saveRows: { name: string; sortOrderNo?: number; subTotalFlag?: string; sortMethodCode?: string }[]
-): Promise<boolean> => {
-  if (saveRows.length === 0) return false;
-  try {
-    const payload = {
-      programId: MENU_ID,
-      sheetName: SHEETS.MAIN, // 'Sales Plan' — SP 리터럴·SHEET_COLUMNS/MEASURE 일치 (rename 불가 근거)
-      columnType,
-      activeFlag: saveRows.map(() => 'Y').join('^'),
-      columnName: saveRows.map(r => r.name).join('^'),
-      sortOrderNo: saveRows.map((r, i) => String(r.sortOrderNo ?? i + 1)).join('^'),
-      subTotalFlag: saveRows.map(r => r.subTotalFlag ?? 'N').join('^'),
-      sortMethodCode: saveRows.map(r => r.sortMethodCode ?? 'ASC').join('^'),
-    };
-    const res = await apiClient.post<{ CODE?: string }[]>(
-      `/${MENU_ID}/${SHEETS.TITLE_SET}/SAVE/call-proc`,
-      payload
-    );
-    if (res.status >= 400 || Number((res.data as { code?: string })?.code)) return false;
-    const row = (res.data.result ?? [])[0];
-    return !row || row.CODE === undefined || String(row.CODE) === '0';
-  } catch {
-    return false;
-  }
-};
+// titleSet(SCM_MST_TITLESET_USER) 영구 저장은 공용 유틸이 담당한다
+//   (features/master/src/components — saveTitleSet, POST /admin/menu/{mnuId}/titleset).
+//   화면마다 SCM_ADM_MNU_BTN_MPG_M 등록이 필요한 call-proc 경로 대신 공용 엔드포인트를 쓴다.
 
 // SAVE 결과 — AS-IS L2717~2794: 첫 셀 == 'success' 성공 / ≠ 'success' 는 'messageCode^addmessage'
 //   (SP 내장 중복검증 등 — [E20250520-000572] 통합 방식. msgCode = MSG ID → 호출측 t() 변환).

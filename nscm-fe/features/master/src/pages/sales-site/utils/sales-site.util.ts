@@ -22,9 +22,10 @@ export const expandByDayOfWeek = <T extends WijmoRowItem>(item: T): T[] => {
   }));
 };
 
-// Sales Site 채번 규칙: Sold To Customer + _ + Country + _ + City 코드의 뒤 3글자
-export const buildSalesSite = (row: WijmoRowItem) => {
-  const soldToCustomer = String(row['SOLDTO_CUSTOMER'] ?? '').trim();
+// Sales Site 채번 규칙: Sold To Customer(NAME) + _ + Country + _ + City 코드의 뒤 3글자
+//   SOLDTO_CUSTOMER 는 row 에 CODE 로만 저장되므로, NAME 은 콤보 목록에서 찾아 호출부가 넘겨준다.
+export const buildSalesSite = (row: WijmoRowItem, soldToCustomerName?: string) => {
+  const soldToCustomer = (soldToCustomerName ?? String(row['SOLDTO_CUSTOMER'] ?? '')).trim();
   const country = String(row['COUNTRY'] ?? '').trim();
   const city = String(row['CITY'] ?? '')
     .trim()
@@ -71,9 +72,10 @@ export const applySalesSite = <
   T extends ResponseData<MENU_ID, SHEETS.CUSTOMER> | ResponseData<MENU_ID, SHEETS.SITE>,
 >(
   row: T,
-  editTracker?: EditTracker<T>
+  editTracker?: EditTracker<T>,
+  soldToCustomerName?: string
 ) => {
-  const next = buildSalesSite(row);
+  const next = buildSalesSite(row, soldToCustomerName);
   editTracker?.storeChange(row, 'SCM_SITE_ID', row['SCM_SITE_ID'], next);
   row['SCM_SITE_ID'] = next;
 };

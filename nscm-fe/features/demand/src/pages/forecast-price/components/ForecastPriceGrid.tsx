@@ -770,6 +770,14 @@ export const ForecastPriceGrid = ({
   useEffect(() => {
     const g = gridRef.current;
     if (!g) return;
+    // 컬럼이 하나도 없는 그리드에는 적용할 것이 없다.
+    //   division 별 admin 컬럼 메타가 미적재면(예: 81 — /admin/menu/DMF0082/column 이 result:null)
+    //   staticColumns 가 빈 배열이 되고, 조회 결과까지 0건이면 동적 컬럼도 비어 columnGroups 가
+    //   통째로 빈 배열이 된다. 이 상태에서 아래 collectionView.refresh() 로 신규행을 밀어 넣으면
+    //   wijmo 가 컬럼 인덱스 -1 로 내부 계산을 하다 'Positive number expected.' 를 던져 화면이
+    //   에러 바운더리로 떨어진다 (2026-08-13 division 81 조회 0건 + 행추가 실측).
+    //   어차피 컬럼이 없어 신규행을 보여줄 수단도 없으므로 건너뛰는 것이 무손실이다.
+    if (g.columns.length === 0) return;
 
     const insertRows = (data ?? []).filter(
       row => (row as unknown as WijmoRowItem)['CRUD_TYPE'] === 'I'

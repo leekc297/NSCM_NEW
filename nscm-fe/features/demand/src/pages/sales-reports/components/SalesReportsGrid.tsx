@@ -6,6 +6,7 @@ import { type MutableRefObject, type Ref, useEffect, useMemo, useRef } from 'rea
 
 import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import type { ComboParam, RawFlexGridColumnConfig } from '@foundation/models';
+import { rebindFilterColumns } from '@foundation/utils';
 import type { EditTracker } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
@@ -116,10 +117,11 @@ export const SalesReportsGrid = ({
   const comboResults = useTabComboQueries({
     // 반환 타입 명시 — ComboParam 은 `[key: string]: string` 인덱스 시그니처라
     //   삼항 추론 union 의 `divisionId?: undefined` 가 대입 불가가 된다(TS2322).
-    filters: comboColumns.map((c): ComboParam =>
-      c.cellCboDataTp === 'DM_LOOKUP_DIV'
-        ? { comboId: 'DM_LOOKUP_DIV', param1: q(division), param2: q(c.attribute1) }
-        : { comboId: c.cellCboDataTp as string, divisionId: q(division) }
+    filters: comboColumns.map(
+      (c): ComboParam =>
+        c.cellCboDataTp === 'DM_LOOKUP_DIV'
+          ? { comboId: 'DM_LOOKUP_DIV', param1: q(division), param2: q(c.attribute1) }
+          : { comboId: c.cellCboDataTp as string, divisionId: q(division) }
     ),
   });
   // ⚠ division 을 시그니처에 포함한다 — 미포함 시 division 전환 후 행수가 우연히 같으면
@@ -209,10 +211,19 @@ export const SalesReportsGrid = ({
   const lockCtxRef = useRef({ division, dataType, thisMonth });
   lockCtxRef.current = { division, dataType, thisMonth };
 
+  // 주의: 콜백은 반드시 ref 미러로 받아 아래 대형 effect 의 deps 에서 뺀다.
+  //   부모가 인라인 화살표로 넘기면 렌더마다 identity 가 바뀌는데, 그게 deps 에 있으면
+  //   조회조건 콤보를 하나 바꿀 때마다(= 부모 리렌더) effect 가 재실행되어 말미의
+  //   `g.invalidate(true)` 가 셀 DOM 을 통째로 다시 그린다 = 화면 깜빡임 (2026-08-12).
+  const onItemCellDblClickRef = useRef(onItemCellDblClick);
+  onItemCellDblClickRef.current = onItemCellDblClick;
+
   // ⭐ 정적 컬럼 입력형(UI Category Setup `INPUT_TP_CD`) — 편집·색 판정의 단일 원천.
   //   핸들러가 effect 안에서 등록되므로 ref 미러로 최신 메타를 본다(lockCtxRef 와 동형).
   const inputTpRef = useRef<Map<string, string | undefined>>(new Map());
-  inputTpRef.current = new Map(visibleColumns.map(c => [c.colNm, c.inputTpCd as string | undefined]));
+  inputTpRef.current = new Map(
+    visibleColumns.map(c => [c.colNm, c.inputTpCd as string | undefined])
+  );
 
   // ⭐ 동적 PIVOT 컬럼 — **1단 평면**(AS-IS iColumnHeaderRowCount=1). nested columnGroups 사용 금지.
   //   헤더 높이 48px 고정(hook #93) — 1단이므로 행 1개가 48을 그대로 갖는다.
@@ -404,7 +415,7 @@ export const SalesReportsGrid = ({
       const row = g.rows[ht.row]?.dataItem as SalesReportRow | undefined;
       if (!row || binding !== 'ITEM_ID') return;
       if (toCellStr(row.ITEM_ID).trim() === '기타매출') return;
-      onItemCellDblClick?.(row);
+      onItemCellDblClickRef.current?.(row);
     };
     g.hostElement.addEventListener('dblclick', dblclickHandler);
 
@@ -434,8 +445,9 @@ export const SalesReportsGrid = ({
         /* unmount race */
       }
     };
+    // 재실행 조건은 컬럼 구성 변경뿐이다 — 콜백 identity 는 위 ref 미러로 끊었다.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [visibleColumns, dynBindings, fixedBindings, onItemCellDblClick]);
+  }, [visibleColumns, dynBindings, fixedBindings]);
 
   // ⭐ hook #93 — 헤더 총 48px. DMF0044 는 **1단**이므로 행 1개가 48 을 그대로 갖는다
   //   (2단 화면이면 24+24 로 자동 분배 — `48 / headerRows.length`). + combo dataMap 재적용 + Filter sanitize
@@ -448,6 +460,15 @@ export const SalesReportsGrid = ({
         const cleaned = f.filterColumns.filter(b => !/^M_/.test(b));
         if (cleaned.length !== f.filterColumns.length) f.filterColumns = cleaned;
       }
+      // (0-a2) [공통 UC-07, hook #133 §5] 재조회해도 사용자가 걸어둔 **필터가 유지**되어야 한다.
+      //   columnGroups 재대입이 Column 객체를 통째로 재생성해, FlexGridFilter 가 죽은 Column 을
+      //   붙든 채 남으면 "아이콘은 꺼졌는데 행은 걸러진" 상태가 된다. 끊긴 필터만 재바인딩한다
+      //   (끊긴 게 없으면 no-op — 되먹임 방지 가드는 유틸 내부). 위 sanitize 로 제외한 동적(M_)
+      //   컬럼은 이미 filterColumns 에서 빠져 되살아나지 않는다. 2026-08-15 보완.
+      rebindFilterColumns(
+        g as unknown as FlexGridType<WijmoRowItem>,
+        gridFilterRef?.current
+      );
       for (let i = 0; i < g.columns.length; i++) {
         const col = g.columns[i];
         const dm = dataMaps[col.binding ?? ''];
@@ -506,19 +527,17 @@ export const SalesReportsGrid = ({
   }, [dynBindings, visibleColumns, gridRef, gridFilterRef]);
 
   return (
-    <div className={styles.gridContainer}>
-      <DataGrid
-        key={mainStaticColumns.map(c => c.colNm).join(',')}
-        className={styles.grid}
-        gridRef={gridRef as never}
-        editTrackerRef={editTrackerRef as never}
-        staticColumns={mainStaticColumns}
-        dynamicColumns={mainDynamicColumns}
-        itemsSource={rows as unknown as WijmoRowItem[]}
-        autoGenerateColumns={false}
-        allowSorting={true}
-        allowMerging={AllowMerging.All}
-      />
-    </div>
+    <DataGrid
+      key={mainStaticColumns.map(c => c.colNm).join(',')}
+      className={styles.grid}
+      gridRef={gridRef as never}
+      editTrackerRef={editTrackerRef as never}
+      staticColumns={mainStaticColumns}
+      dynamicColumns={mainDynamicColumns}
+      itemsSource={rows as unknown as WijmoRowItem[]}
+      autoGenerateColumns={false}
+      allowSorting={true}
+      allowMerging={AllowMerging.All}
+    />
   );
 };

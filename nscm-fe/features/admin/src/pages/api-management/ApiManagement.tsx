@@ -22,6 +22,7 @@ export const ApiManagement = ({ tabId, title }: PageProps<MENU_ID>) => {
   const filters = useApiManagementStore(state => state.filters);
   const staticColumn = useApiManagementStore(state => state.staticColumns);
   const setFilters = useApiManagementStore(state => state.setFilters);
+  const setSearchParams = useApiManagementStore(state => state.setSearchParams);
   const fetchStaticColumns = useApiManagementStore(state => state.fetchStaticColumns);
   const isOpenSearchArea = useApiManagementStore(state => state.isOpenSearchArea);
   const setOpenSearchArea = useApiManagementStore(state => state.setOpenSearchArea);
@@ -31,6 +32,18 @@ export const ApiManagement = ({ tabId, title }: PageProps<MENU_ID>) => {
   const searchParams = useApiManagementStore(state => state.searchParams);
 
   const { saveWithValidation } = useSaveWithValidation();
+
+  // API ID 는 폼이 로컬 state 로 들고 있다 (key-in 마다 스토어를 쓰면 페이지 전체가 리렌더돼 입력이 밀림).
+  //   최신 입력값은 이 ref 로 읽고 조회 직전에 커밋한다.
+  //   필수: SubTitle 의 F5 리스너는 window 캡처 단계라 인풋 blur 보다 먼저 실행된다 —
+  //   커밋 없이 setFilters 를 부르면 방금 친 값이 빠진 채로 조회된다.
+  const apiIdInputRef = useRef(searchParams.apiId);
+  const handleSearch = () => {
+    if (apiIdInputRef.current !== searchParams.apiId) {
+      setSearchParams({ apiId: apiIdInputRef.current });
+    }
+    setFilters();
+  };
 
   const { data } = useTabProcQuery<MENU_ID>({
     menuId: MENU_ID,
@@ -94,7 +107,7 @@ export const ApiManagement = ({ tabId, title }: PageProps<MENU_ID>) => {
     insert: handleInsert,
     delete: handleDelete,
     save: onSave,
-    search: setFilters,
+    search: handleSearch,
     upload: false,
     manual: false,
   };
@@ -107,7 +120,7 @@ export const ApiManagement = ({ tabId, title }: PageProps<MENU_ID>) => {
         openSearchArea={isOpenSearchArea}
         toggleOpenSearchArea={setOpenSearchArea}
       />
-      <ApiManagementForm />
+      <ApiManagementForm onSearch={handleSearch} apiIdInputRef={apiIdInputRef} />
       <SubTitle
         menuId={MENU_ID}
         grid={gridRef}

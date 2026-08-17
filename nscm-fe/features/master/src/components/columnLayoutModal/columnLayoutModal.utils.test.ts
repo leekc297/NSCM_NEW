@@ -9,10 +9,8 @@ import {
   overrideRows,
   parseWidth,
   reorderRows,
-  toAllowedColumnSet,
   toColumnLayoutSettings,
   toggleDisplay,
-  toHiddenColumnSet,
 } from './columnLayoutModal.utils';
 
 const mk = (over: Partial<ColumnLayoutRow>): ColumnLayoutRow => ({
@@ -192,30 +190,5 @@ describe('columnLayoutModal.utils', () => {
     const next = reorderRows(rows, ['B', 'A']);
     expect(next.find(r => r.COLUMN_NAME === 'B')!.SORT_ORDER_NO).toBe(1);
     expect(next.find(r => r.COLUMN_NAME === 'A')!.SORT_ORDER_NO).toBe(2);
-  });
-});
-
-describe('toHiddenColumnSet / toAllowedColumnSet (division 스코프 메타 필터)', () => {
-  const meta = [
-    { colNm: 'DIVISION_ID', visible: true },
-    { colNm: 'PROJECT_CODE', visible: true },
-    { colNm: 'HIDDEN_COL', visible: false },
-    { colNm: 'NO_FLAG_COL' }, // visible 미제공 — 제외 금지
-  ];
-
-  it('toHiddenColumnSet: visible === false 만 담는다', () => {
-    expect([...toHiddenColumnSet(meta)]).toEqual(['HIDDEN_COL']);
-  });
-
-  it('toAllowedColumnSet: 메타 등재 컬럼 전부 (visible 무관 — 숨김 판정은 hidden 이 담당)', () => {
-    const allowed = toAllowedColumnSet(meta)!;
-    expect(allowed.has('PROJECT_CODE')).toBe(true);
-    expect(allowed.has('NO_FLAG_COL')).toBe(true);
-    // division 미등록 컬럼(메타에 없음) — DMF0082 div 40 의 PROJECT_CODE 계보 재현
-    expect(allowed.has('CELL_QUANTITY')).toBe(false);
-  });
-
-  it('toAllowedColumnSet: 메타 0건 = null (필터 no-op — 목록 전멸 방지)', () => {
-    expect(toAllowedColumnSet([])).toBeNull();
   });
 });

@@ -1,9 +1,4 @@
-import {
-  CellRange,
-  CellType,
-  type GridPanel,
-  MergeManager,
-} from '@mescius/wijmo.grid';
+import { CellRange, CellType, type GridPanel, MergeManager } from '@mescius/wijmo.grid';
 
 // ⭐ DMF0049 — sales-reports(DMF0044).merge.ts 이식 (M_ 단일 축 — **1단 헤더**).
 //   ① Data Cell  : 좌측 fixed cols 계층(상위 동일값) 세로 머지 (viewport row 제한 = sticky content).

@@ -231,6 +231,31 @@ def _scan_combo_calls(page_dir: pathlib.Path):
             else:
                 dynamic_params.update(keys)
 
+        # (b3) ⭐ 2026-08-15 — **화살표 함수의 즉시 반환 객체** `=> ({ comboId … })` 도 수집
+        #     (DMF0003 gridCombos 계보). (b2) 는 `return {` 구문만 봐서 이 형태를 통째로 놓쳤고,
+        #     그 결과 런타임에 실제로 싣는 토큰이 '미전달' 로 찍혔다
+        #     (실측 2026-08-15 DMF0003: buildGridComboFilter/buildEditComboFilter/buildParam 4곳의
+        #      `mnuId`·`param1`·`divisionId` 가 전부 오탐 FAIL/WARN).
+        #     comboId 가 리터럴이면 그 콤보에, 변수(shorthand 포함)면 dynamic_params 로 귀속한다.
+        for am in re.finditer(r"=>\s*\(\s*\{", text):
+            obj = _balanced_object(text, text.index("{", am.end() - 1))
+            pairs = _top_level_pairs(obj)
+            cid_val = next((v for k, v in pairs if k == "comboId"), None)
+            if cid_val is None:
+                continue
+            lit = re.fullmatch(r"'([^']+)'", cid_val)
+            keys = {k for k, _ in pairs if k not in ("comboId", "enabled", "queryOptions")}
+            if lit:
+                params_by_combo.setdefault(lit.group(1), set()).update(keys)
+                quote_viol += _check_quoting(rel, lit.group(1), pairs)
+            else:
+                # comboId 가 변수(`comboId` shorthand / `cfg.comboId`) — 어느 콤보인지 정적 귀속 불가.
+                # "이 화면이 그 토큰을 싣는다"는 사실만 남겨 판정을 완화한다((b) 동적 처리와 동일 규약).
+                #   ⚠ quoting 검사는 하지 않는다 — comboId 를 담은 **디스크립터 객체**
+                #     (`{ comboId, binding, rows, param }`)와 파라미터 객체를 정적으로 가를 수 없어
+                #     검사하면 정상 코드가 위반으로 찍힌다(2026-08-15 실측 5건). 리터럴 귀속 건만 검사.
+                dynamic_params.update(keys)
+
         # (c) 빈 .catch — 콤보 호출의 조용한 실패 (hook #117 §5.8)
         for m in re.finditer(
             # 탐지 창 확대 (2026-08-08) — .then 체인이 길면 600자로는 빈 catch 를 놓친다
@@ -256,7 +281,9 @@ def _check_quoting(rel: str, sql_id: str, pairs):
             continue
         if val.startswith("`'") or re.match(r"^`[^`]*'\$\{", val):
             continue
-        if re.match(r"^(q|quote|qs)\s*\(", val):
+        # ⭐ 2026-08-15 — 프로젝트 표준 quoting 헬퍼 `quoteParam(x)`(= `'` + x + `'`) 추가.
+        #   FE 전 화면이 이 헬퍼로 따옴표를 싣는데 whitelist 에 없어 정상 코드가 위반으로 찍혔다.
+        if re.match(r"^(q|quote|qs|quoteParam)\s*\(", val):
             continue
         if re.match(r"^[\d.]+$", val):
             continue

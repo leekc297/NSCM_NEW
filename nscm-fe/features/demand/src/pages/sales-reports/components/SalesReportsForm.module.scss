@@ -1,11 +1,192 @@
-/* DMF0044 조회조건 — Version readonly + '...' 버튼 가로 배치 (hook #94 36px 정합) */
-.versionCell {
+// 페이지 컨테이너/그리드 래퍼 클래스는 두지 않는다 — 화면은 <> 로 감싸고 세로 배치는 셸(.view,
+//   flex column)이, 그리드 높이는 공용 DataGrid 의 flex:1 1 0 이 맡는다. 자세한 규약은 AGENTS.md.
+.grid {
+  width: 100%;
+  height: 100%;
+
+  // 다단 헤더 셀 타이포 보정 (헤더 row 높이는 공용 DataGrid headerRowHeight / updatedLayout 효과가 전담).
+  :global {
+    .wj-colheaders .wj-cell {
+      line-height: 14px;
+      padding: 1px 4px;
+      font-size: 11px;
+    }
+  }
+}
+
+// 룰 #95 — cell coloring 3색 (편집 Yellow / 과거 잠금 Gray 특수셀만 / 기본 White+zebra)
+:global(.wj-cell-editable) {
+  background: #fff8cd !important;
+}
+
+:global(.wj-cell-non-editable) {
+  background: #f1f4f3 !important;
+  color: #5b6470 !important;
+}
+
+// ⭐ 변경 셀 Red 마킹 (AS-IS SetCellColor Red — 저장 대상 표시. EditTracker 단일 소스)
+:global(.bp-cell-changed) {
+  color: #d32f2f !important;
+  font-weight: 600;
+}
+
+// ⭐ FPModal 팝업셀 아이콘 (DMF0020/DMF0003 표준 — 전용 span .popup-icon + OpenInNew SVG mask.
+//   cell position override 금지(머지셀 파손) — span absolute 는 셀 기존 positioning anchor 사용)
+.popupIcon {
+  position: absolute;
+  top: 50%;
+  right: 5px;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  background-color: #5b5c5b;
+  pointer-events: none;
+
+  $svg-path: "M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z";
+  -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="#{$svg-path}"/></svg>') no-repeat center;
+  mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="#{$svg-path}"/></svg>') no-repeat center;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+}
+
+// ⭐ Measure 선택 모달 (공용 ColumnSelectDualList 양쪽 구성 — ColumnSettingModal 동일 레이아웃)
+.measureDualContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 4px 2px;
+  height: 460px;
+  min-height: 350px;
+  max-height: 68vh;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.measureDualContainer > div:first-child {
+  flex: 1 1 auto;
+  min-height: 250px;
+  overflow: hidden;
+}
+
+.measureActionBar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 6px 2px 2px;
+  flex-shrink: 0;
+}
+
+// ⭐ Ver. Cutoff / Replace 모달 공통 — SearchArea → grid → 하단 버튼 (ExchangeRateModal 정본 레이아웃)
+.modalContentWrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 8px;
+}
+
+.modalGridWrapper {
+  flex: 1;
+  min-height: 260px;
+  border: 1px solid #e0e4e9;
+  border-radius: 4px;
+  background: white;
+  overflow: hidden;
+  position: relative;
+}
+
+.modalButtonWrapper {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-top: 5px;
+}
+
+.modalFieldRow {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
 
-  > :first-child {
-    flex: 1;
-    min-width: 0;
+  > span {
+    flex-shrink: 0;
+    font-size: 12px;
+    color: #5b6470;
+  }
+}
+
+/* DMF0044 Textbox 팝업 — 13개월 코멘트 테이블.
+   AS-IS 는 월별 셀이 여러 줄 입력의 큰 칸이라 셀 크기를 그대로 맞추고,
+   넘치는 만큼은 팝업 크기를 키우지 않고 테이블 래퍼 안에서 가로·세로 스크롤로 흡수한다. */
+
+/* 팝업 컨텐츠 — height 가 아니라 max-height 로 잡는다.
+   공용 modalContentWrapper 의 height:100% 는 부모(다이얼로그 본문) 높이가 정해져야 먹는데
+   이 팝업은 그렇지 않아 내용만큼만 잡혔다. 그렇다고 height 를 고정하면 다이얼로그가 감당 못 해
+   Save/Close 가 잘린다. max-height 면 내용이 작을 땐 내용만큼, 넘칠 땐 표만 스크롤되고
+   버튼 줄은 항상 맨 아래에 남는다. */
+.textboxContentWrapper {
+  display: flex;
+  flex-direction: column;
+  max-height: 70vh;
+  gap: 8px;
+}
+
+.textboxTableWrapper {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+}
+
+.textboxTable {
+  border-collapse: collapse;
+  white-space: nowrap;
+
+  th,
+  td {
+    border: 1px solid var(--border-color, #ddd);
+    padding: 2px 4px;
+    min-width: 90px;
+  }
+
+  /* 월(YYYYMM) 열은 라벨만 — 좁게 고정 */
+  th:first-child,
+  td:first-child {
+    width: 90px;
+    text-align: center;
+  }
+
+  td {
+    vertical-align: top;
+  }
+}
+
+/* 코멘트 입력 칸 — AS-IS 캡쳐 기준 큰 칸.
+   크기를 td 가 아니라 이 래퍼가 갖는다: td 의 width/height 는 table auto layout 이 무시할 수 있고
+   (min-width 는 CSS 상 table-cell 에 적용되지 않는다), MUI 루트에 직접 준 CSS Module 클래스는
+   emotion 런타임 스타일과 특이도가 같아 밀릴 수 있다. 래퍼가 크기를 잡고 안쪽 MUI 요소를
+   100% 로 채우는 방식은 이 파일의 .datePickerFix / VersionModal 과 동일한 관용구다. */
+.textboxCell {
+  width: 300px;
+  height: 280px;
+
+  :global {
+    [class*='MuiFormControl-root'],
+    [class*='MuiInputBase-root'] {
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+    }
+
+    [class*='MuiInputBase-root'] {
+      align-items: flex-start;
+      padding: 4px 6px;
+    }
+
+    /* multiline 의 textarea 는 내용만큼만 자란다 — 칸 높이에 맞추고 넘치면 내부 스크롤 */
+    textarea {
+      height: 100% !important;
+      overflow: auto !important;
+      resize: none;
+      white-space: pre-wrap;
+    }
   }
 }

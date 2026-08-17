@@ -50,6 +50,10 @@ export const useNnMasterMappingStore = createPersistedStoreWithTab<State & Actio
     setSearchCondition: p =>
       set(state => {
         state.searchCondition = { ...get().searchCondition, ...p };
+        if (p.divisionId) {
+          state.filters = initState.filters;
+          void state.fetchStaticColumns();
+        }
       }),
     setFilter: () =>
       set(state => {

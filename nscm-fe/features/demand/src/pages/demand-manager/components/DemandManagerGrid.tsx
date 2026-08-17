@@ -12,6 +12,7 @@ import {
   EDITABLE_BINDINGS,
   MONTH_GROUP_HEADER,
   PAIR_FOLLOW_BINDINGS,
+  toCellStr,
 } from '../demand-manager.constants';
 import type { DemandManagerRow, LookupProjectRow, MonthColumnMeta } from '../demand-manager.types';
 import styles from '../DemandManager.module.scss';
@@ -37,17 +38,30 @@ interface Props {
 
 const toNumber = (v: unknown): number => {
   if (v == null || v === '') return 0;
-  if (typeof v === 'number') return Number.isFinite(v) ? v : 0;
-  // 문자열 외(객체 등)는 0 — String(v) 직행은 '[object Object]'→NaN 경로라 금지 (no-base-to-string)
-  const n = typeof v === 'string' ? Number(v.replace(/,/g, '')) : NaN;
+  const n = typeof v === 'number' ? v : Number(toCellStr(v).replace(/,/g, ''));
   return Number.isFinite(n) ? n : 0;
+};
+
+// 음수 값 글자색 (sales-monitoring / customer-fcst-upload 와 동일 톤)
+const NEGATIVE_COLOR = '#c0392b';
+
+/**
+ * 음수면 빨간 글자, 아니면 원복.
+ *
+ * 필수: 음수가 아닐 때 반드시 지운다 — Wijmo 는 셀 DOM 을 재사용하므로 칠하기만 하면
+ * 스크롤 뒤 엉뚱한 셀에 색이 남는다.
+ * 필수: important 로 넣는다 — 잠금 셀 규칙(.wj-cell-non-editable)이 color 를 !important 로
+ * 잡고 있어(전역 스타일) 일반 인라인 색은 밀린다.
+ */
+const paintNegative = (cell: HTMLElement, value: number) => {
+  if (value < 0) cell.style.setProperty('color', NEGATIVE_COLOR, 'important');
+  else cell.style.removeProperty('color');
 };
 
 /** 세트의 첫 행인지 — 바로 위 행과 그룹 키가 다르면 첫 행 */
 const isSetHead = (rows: DemandManagerRow[], idx: number): boolean => {
   if (idx <= 0) return true;
-  const key = (r: DemandManagerRow | undefined) =>
-    String(r?.KEYVALUE2 ?? r?.INSERT_GROUP_ID ?? '');
+  const key = (r: DemandManagerRow | undefined) => String(r?.KEYVALUE2 ?? r?.INSERT_GROUP_ID ?? '');
   return key(rows[idx]) !== key(rows[idx - 1]);
 };
 
@@ -75,10 +89,7 @@ export const DemandManagerGrid = ({
     () => fixedColumns.map(c => ({ ...c, visible: true, display: true })),
     [fixedColumns]
   );
-  const staticBindingSet = useMemo(
-    () => new Set(fixedColumns.map(c => c.colNm)),
-    [fixedColumns]
-  );
+  const staticBindingSet = useMemo(() => new Set(fixedColumns.map(c => c.colNm)), [fixedColumns]);
 
   // Project 셀 콤보 — PKG_DMF0068.P_DMF0068_GET_LOOKUPPROJECT (CODE/NAME)
   const projectDataMap = useMemo<DataMap | null>(() => {
@@ -165,12 +176,15 @@ export const DemandManagerGrid = ({
         const n = out ? 0 : toNumber(rowItem?.[binding]);
         e.cell.textContent = n === 0 ? '0' : n.toLocaleString();
         toggleClass(e.cell, 'wj-cell-non-editable', true);
+        paintNegative(e.cell, n);
         return;
       }
       if (staticBindingSet.has(binding)) {
         toggleClass(e.cell, 'wj-cell-editable', editableAt(binding, e.row));
         toggleClass(e.cell, 'wj-cell-non-editable', !editableAt(binding, e.row));
       }
+      // 수량 등 숫자 셀 음수 표시. 문자열 컬럼은 toNumber 가 0 을 돌려주므로 자연히 제외된다.
+      paintNegative(e.cell, toNumber(rowItem?.[binding]));
     };
     g.formatItem.addHandler(formatHandler);
 
@@ -182,6 +196,10 @@ export const DemandManagerGrid = ({
       e.cancel = !editableAt(binding, e.row);
     };
     g.beginningEdit.addHandler(beginningEditHandler as never);
+    // 붙여넣기도 같은 편집 규칙을 태운다. 공통 DataGrid 가 pastingCell 에 관리자 메타 기준
+    //   게이트를 걸어 두므로(dataGridUtils setEditableColumns), 화면 규칙으로 덮어쓰지 않으면
+    //   편집 가능한 셀인데도 붙여넣기만 막힌다.
+    g.pastingCell.addHandler(beginningEditHandler as never);
 
     // 세트 첫 행의 Project·수주기간을 고치면 짝 행에도 같은 값을 넣는다 (AS-IS Formula 연결)
     const cellEditEndedHandler = (
@@ -206,12 +224,16 @@ export const DemandManagerGrid = ({
       s.invalidate(true);
     };
     g.cellEditEnded.addHandler(cellEditEndedHandler as never);
+    // cellEditEnded 는 타이핑 편집에만 발생한다. 붙여넣기로 고친 경우에도 짝 행이 따라가야 한다.
+    g.pastedCell.addHandler(cellEditEndedHandler as never);
 
     return () => {
       try {
         g.formatItem.removeHandler(formatHandler);
         g.beginningEdit.removeHandler(beginningEditHandler as never);
+        g.pastingCell.removeHandler(beginningEditHandler as never);
         g.cellEditEnded.removeHandler(cellEditEndedHandler as never);
+        g.pastedCell.removeHandler(cellEditEndedHandler as never);
       } catch {
         /* unmount race */
       }

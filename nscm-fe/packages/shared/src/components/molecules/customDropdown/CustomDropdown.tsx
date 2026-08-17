@@ -50,8 +50,31 @@ const SINGLE_ALL_OPTION = {
   label: 'ALL',
 };
 
+/**
+ * ⭐ [2026-08-16] 콤보 옵션 **중복 제거** — 전 화면 일괄 적용 지점.
+ *
+ * Lookup/CMBO 계열 SQL 은 화면 표시용 CODE/NAME 외에 cascade 용 부가 컬럼
+ * (DIVISION_ID·DEPT_ID·END_CUSTOMER …)을 함께 반환한다. 그래서 **같은 CODE 가
+ * 부가 컬럼 값마다 여러 행**으로 온다(실측: SCM_MST_SITE 의 END_CUSTOMER 'LGESMI'
+ * = 8행/5부서). 화면이 그 행을 그대로 옵션으로 만들면 드롭다운에 같은 값이 여러 번 뜬다
+ * (사용자 신고 2026-08-16 — 클라우드 DMF0003 조회조건 End Customer 에 'LGE' 2회).
+ *
+ * ⚠ 데이터 계층(useTabComboQueries/apiClient)에서 지우면 **cascade 가 깨진다** —
+ *   부가 컬럼별 행이 하위 콤보를 좁히는 근거이기 때문. 그래서 **표시 직전인 여기**에서만
+ *   value 기준으로 first-wins 합친다(행 데이터는 그대로 보존).
+ * value 는 코드값이라 앞뒤 공백 변형도 같은 값으로 본다(TRIM 후 비교).
+ */
+const dedupeOptions = <T extends { value: string; label?: unknown }>(opts: T[]): T[] => {
+  const seen = new Map<string, T>();
+  for (const o of opts) {
+    const key = String(o?.value ?? '').trim();
+    if (!seen.has(key)) seen.set(key, o);
+  }
+  return seen.size === opts.length ? opts : [...seen.values()];
+};
+
 export const CustomDropdown = ({
-  options,
+  options: rawOptions,
   value,
   onChange,
   // 앱 표준: 칩 1개 + "+N". 명시적으로 넘기지 않은 화면(구 default 2)도 일관되게 맞춘다.
@@ -63,6 +86,9 @@ export const CustomDropdown = ({
   const internalListRef = useListRef(null);
   const optionIndexMapRef = useRef<Map<string, number>>(new Map());
   const lastIndexRef = useRef<number | null>(null);
+
+  // 표시 직전 중복 제거 (위 dedupeOptions 주석 참조 — 중복 없으면 원본 참조 그대로 반환)
+  const options = dedupeOptions(rawOptions);
 
   // const splitValueSet = new Set(value?.trim().split(',') ?? []);
   const splitValueSet = new Set(value?.trim().split(',').filter(Boolean) ?? []);

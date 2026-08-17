@@ -33,7 +33,11 @@ interface ItemByDivisionModalProps {
     itemName?: string,
     itemClassName?: string,
     itemType?: string,
-    nickName?: string
+    nickName?: string,
+    // DMF0021 (2026-08-14, 통합테스트 1st No.61-④): Team 자동 채움 — Team 은 입력 불가 컬럼이라
+    //   선택한 마스터 행의 팀을 그대로 내려줘야 화면에 표시된다. 미사용 호출부는 무시 → 회귀 0.
+    deptId?: string,
+    deptName?: string
   ) => void;
   preSearchParams: ProcRequest<MODAL_ITEM_BY_DIVISION, MODAL_SHEET_ITEM_BY_DIVISION>;
   callFromCell: boolean;
@@ -249,7 +253,16 @@ export const ItemByDivisionModal = ({
 
     // 단일 선택이면 Name/Type/NickName 도 함께 전달(dblClick 과 동일). 다중 선택은 첫 행 기준.
     const first = selections[0];
-    setSelectedValue(items, first?.ITEM_NAME, first?.ITEM_CLASS_NAME, first?.NICK_NAME);
+    setSelectedValue(
+      items,
+      first?.ITEM_NAME,
+      first?.ITEM_CLASS_NAME,
+      first?.NICK_NAME,
+      undefined,
+      // 단건 선택일 때만 팀을 넘긴다 — 다건은 어느 팀인지 확정할 수 없다.
+      selections.length === 1 ? first?.DEPT_ID : undefined,
+      selections.length === 1 ? first?.DEPT_NAME_KO : undefined
+    );
     modalClose();
   };
 
@@ -272,7 +285,10 @@ export const ItemByDivisionModal = ({
       dataItem.ITEM_ID,
       dataItem.ITEM_NAME,
       dataItem.ITEM_CLASS_NAME,
-      dataItem.NICK_NAME
+      dataItem.NICK_NAME,
+      undefined,
+      dataItem.DEPT_ID,
+      dataItem.DEPT_NAME_KO
     );
     modalClose();
   };

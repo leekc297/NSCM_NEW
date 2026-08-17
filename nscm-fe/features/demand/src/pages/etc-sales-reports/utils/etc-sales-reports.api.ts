@@ -83,4 +83,3 @@ export const callSaveEtcReport = (payload: Record<string, string>): Promise<Call
   callProc(SHEETS.MAIN, 'SAVE', payload);
 
 // United 버전 액션 3종은 공용 VersionModal(components/versionModal/version-modal.api.ts)로 이동 (2026-07-30)
-

@@ -87,6 +87,42 @@ const applyLayoutToColumns = (
     );
 };
 
+/** "조회한" 조건 스냅샷 — 편집·저장 게이트의 단일 기준 (조회조건 폼과 구분). */
+export interface SearchedCondition {
+  hasSearched: boolean;
+  divisionId: string;
+  mdfType: string;
+  yyyy: string;
+  versionNo: string;
+  dataType: string;
+}
+
+// filters[MAIN] = Search 클릭 시점에 setFilter() 가 굳힌 스냅샷이라 조회조건 폼(searchCondition)을
+//   바꿔도 움직이지 않는다. 게이트는 이 값만 본다.
+//   금지: 편집/저장 게이트에 searchCondition 을 직접 쓰지 말 것 — ALL 로 조회한 뒤 Data Type 콤보만
+//   바꿔도 재조회 없이 그리드가 편집 가능해진다(2026-08-12 사고).
+//   미조회 상태는 dataType='ALL' = 전면 잠금으로 떨어뜨린다(게이트0 기본값).
+export const resolveSearchedCondition = (
+  mainFilter: ProcRequest<MENU_ID, SHEETS.MAIN> | undefined
+): SearchedCondition =>
+  mainFilter
+    ? {
+        hasSearched: true,
+        divisionId: mainFilter.divisionId,
+        mdfType: mainFilter.mdfType,
+        yyyy: mainFilter.yyyy,
+        versionNo: mainFilter.spVersionNo,
+        dataType: mainFilter.dataType,
+      }
+    : {
+        hasSearched: false,
+        divisionId: '',
+        mdfType: '',
+        yyyy: '',
+        versionNo: '',
+        dataType: DATA_TYPE.ALL,
+      };
+
 const initSearch: SearchCondition = {
   divisionId: DIVISION.MOBILITY,
   mdfType: REPORT_TYPE.SP_W, // 기본 Report Type (AS-IS clbType MDF_TYPE 첫 항목)
@@ -128,7 +164,9 @@ export const useSalesReportsStore = createPersistedStoreWithTab<State & Action>(
             divisionId: c.divisionId, // 1
             mdfType: c.mdfType, // 2
             yyyy: c.yyyy, // 3
-            spVersionNo: c.versionNo, // 4 ⭐ United 팝업 주입 (필수)
+            // 4 United 팝업 주입 또는 직접 입력 (필수). trim 필수 — 직접 입력이라 앞뒤 공백이
+            //   섞일 수 있는데 validateFind 는 trim 후 판정하므로 그대로 넘기면 통과한 뒤 0건이 된다.
+            spVersionNo: c.versionNo.trim(),
             dataType: c.dataType, // 5
             userGroup: sesUserId, // 6 P_USER_GROUP
             userId: sesUserId, // 8

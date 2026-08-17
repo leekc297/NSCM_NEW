@@ -94,6 +94,20 @@ export const SalesMonitoringGrid = ({
   const colorYnRef = useRef(colorYn);
   colorYnRef.current = colorYn;
 
+  // ⭐ 컬럼 개인화 색 (ColumnLayoutModal 저장값) — binding → {cell, text}.
+  //   공용 DataGrid 는 colWth/display 만 옮기고 색은 안 넘기므로 formatItem 이 직접 적용한다
+  //   (mkt-fcst/forecast-price 선례 동일). ref 로 최신 맵 전달 — 핸들러 재등록 불필요.
+  const colorMetaRef = useRef<Map<string, { cell: string; text: string }>>(new Map());
+  colorMetaRef.current = useMemo(() => {
+    const m = new Map<string, { cell: string; text: string }>();
+    (staticColumns ?? []).forEach(c => {
+      if (c.cellColor || c.textColor) {
+        m.set(c.colNm, { cell: c.cellColor ?? '', text: c.textColor ?? '' });
+      }
+    });
+    return m;
+  }, [staticColumns]);
+
   // ⭐ admin staticColumns 우선 + MAIN_COLUMNS fallback 병합 (BE 실패 시 화면 작동 보장 — visible fallback 손실 금지)
   const mergedColumns = useMemo<MergedColumnMeta[]>(() => {
     if (!staticColumns || staticColumns.length === 0) {
@@ -334,6 +348,14 @@ export const SalesMonitoringGrid = ({
         const binding = col.binding ?? '';
         const cw = currentWeekInfoRef.current;
         const lastHeaderRow = e.panel.rows.length - 1;
+        // 현재기간 rail 의 헤더 구간 — 당주(W_) 헤더 왼쪽에도 같은 선을 그어 아래 데이터셀 border-left 와
+        //   한 줄로 이어지게 한다. 미대상 셀은 removeProperty 로 리셋 (Wijmo 셀 재활용 잔상 제거) →
+        //   아래 주말 헤더 early return 보다 먼저 세팅해야 재활용된 셀에 선이 남지 않는다.
+        if (dynKindOf(binding) === 'W' && binding === (cw?.THIS_YYYYMMWW ?? '').trim()) {
+          e.cell.style.setProperty('border-left', '2px solid #1e8449', 'important');
+        } else {
+          e.cell.style.removeProperty('border-left');
+        }
         // ⭐ D_ leaf(일자) 헤더 주말 색 — AS-IS SetSpreadHeaderSpan L1340~1343 (토=Blue/일=Red)
         if (e.row === lastHeaderRow && /^D_\d{8}$/.test(binding)) {
           const d = binding.slice(2);
@@ -364,6 +386,19 @@ export const SalesMonitoringGrid = ({
       const binding = col.binding ?? '';
       if (!binding) return;
 
+      // 현재기간 rail — 당주(W_ = o_rc2 THIS_YYYYMMWW) 컬럼 데이터셀 왼쪽 초록 2px 세로선 1줄.
+      //   당월 M_ SUM·당일 D_ 는 제외. Color 체크박스는 화면에서 제거됐으므로 무조건 그린다.
+      //   헤더 rail 과 동일하게 inline style 단일 소스 (CSS 클래스는 Wijmo 셀 border 에 밀려 미적용).
+      //   미대상 셀은 removeProperty 로 리셋 — 정적 컬럼 포함 전 셀이 이 줄을 지나므로 재활용 잔상 없음.
+      if (
+        dynKindOf(binding) === 'W' &&
+        binding === (currentWeekInfoRef.current?.THIS_YYYYMMWW ?? '').trim()
+      ) {
+        e.cell.style.setProperty('border-left', '2px solid #1e8449', 'important');
+      } else {
+        e.cell.style.removeProperty('border-left');
+      }
+
       // ⭐ Color 체크 시 과거(실적) 구간 회색 (AS-IS setResultPeriod 1:1 — 현재 월 White 예외는
       //   isPastBinding 의 '<' 비교가 자연 보장). #95 — 잠금 Gray 는 특수 목적 셀만 허용 → 본
       //   화면의 Gray = AS-IS 실적구간 표시 기능 그 자체 (read-only 화면, 편집 Yellow 없음).
@@ -375,6 +410,21 @@ export const SalesMonitoringGrid = ({
       // 식별 컬럼 — 클래스 없는 White + zebra (#95)
       toggleClass(e.cell, 'wj-cell-non-editable', false);
       toggleClass(e.cell, 'wj-cell-editable', false);
+
+      // ⭐ 개인화 색 (ColumnLayoutModal 저장값) — 정적 컬럼만 대상 (동적 기간 컬럼은 위에서 return).
+      //   read-only 화면이라 편집 하이라이트와 경합 없음. 미지정 시 removeProperty 필수 —
+      //   Wijmo 셀 재활용으로 이전 컬럼 색이 남는다.
+      const personalColor = colorMetaRef.current.get(binding);
+      if (personalColor?.cell) {
+        e.cell.style.setProperty('background-color', personalColor.cell, 'important');
+      } else {
+        e.cell.style.removeProperty('background-color');
+      }
+      if (personalColor?.text) {
+        e.cell.style.setProperty('color', personalColor.text, 'important');
+      } else {
+        e.cell.style.removeProperty('color');
+      }
     };
     g.formatItem.addHandler(formatHandler);
 

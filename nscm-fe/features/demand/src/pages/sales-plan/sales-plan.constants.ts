@@ -14,6 +14,15 @@ export enum SHEETS {
   TITLE_SET = 'titleSet', // Column/Measure Setting 영구 저장 (SCM0002_SET_TITLESET_POPUP 공유)
 }
 
+// 컬럼 개인화(SCM_MST_TITLESET_USER) 구분값 — USER_INQUIRY_COLUMN_TYPE_CODE.
+//   필수: 팝업 조회(ColumnLayoutModal) · 저장(saveTitleSet) · 진입 복원(fetchUserColumnLayout) 이
+//     셋 다 같은 값을 써야 한다. 하나라도 다르면 저장은 성공하는데 재진입 조회가 그 행을 못 찾아
+//     개인화가 사라진다.
+//   2026-07-29: 팝업이 SHEETS.MAIN('Sales Plan')으로 조회하고 저장은 'C' 로 하던 불일치를 교정
+//     (실측 값 = 'C'(컬럼)/'M'(measure). forecast-price 2026-07-27 / sales-monitoring 2026-07-04 동일 사고).
+export const TITLESET_COLUMN_TYPE = 'C';
+export const TITLESET_MEASURE_TYPE = 'M';
+
 // Bucket Type — AS-IS cboBucketType (DMF0003_GET_BUCKET_TYPE_CODE). 기본값 = Monthly (DefineProperty L543).
 export enum BUCKET_TYPE {
   DAILY = 'D',
@@ -113,7 +122,13 @@ export const GRID_CASCADE_FILTERS: Record<string, { rowKey: string; comboKey: st
     { rowKey: 'DIVISION_ID', comboKey: 'DIVISION_ID' },
     { rowKey: 'DEPT_ID', comboKey: 'DEPT_ID' },
   ],
-  END_CUSTOMER40: [{ rowKey: 'DIVISION_ID', comboKey: 'DIVISION_ID' }],
+  // 40 신규행 — EndCustomerByDivision40 콤보도 DEPT_ID 컬럼을 반환한다
+  //   (dmf0021/sql/05_DMF0021_combo.sql). END_CUSTOMER(비40)와 동일하게 DEPT_ID leg 반영 —
+  //   2026-08-05 리포트: Div 는 필터되는데 Team 만 반영 안 됨 (leg 누락).
+  END_CUSTOMER40: [
+    { rowKey: 'DIVISION_ID', comboKey: 'DIVISION_ID' },
+    { rowKey: 'DEPT_ID', comboKey: 'DEPT_ID' },
+  ],
   SCM_SITE_ID: [
     { rowKey: 'DIVISION_ID', comboKey: 'DIVISION_ID' },
     { rowKey: 'END_CUSTOMER', comboKey: 'END_CUSTOMER' },

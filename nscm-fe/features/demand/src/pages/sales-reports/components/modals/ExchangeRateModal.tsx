@@ -89,6 +89,7 @@ const stripD = (v: unknown): string => toCellStr(v).replace(/^D/i, '').trim();
 export const ExchangeRateModal = ({ open, modalClose, divisionId, year, versionNo }: Props) => {
   const { t } = useTranslation();
   const setAlert = useMessageStore.getState().setAlert;
+  const setToast = useMessageStore.getState().setToast;
   const gridRef = useRef<FlexGridType<ExchangeRatePivotRow>>(undefined);
   const editTrackerRef = useRef<EditTracker<ExchangeRatePivotRow> | undefined>(undefined);
   const sesUserId = useSessionStore.getState().session.userId ?? '';
@@ -186,8 +187,7 @@ export const ExchangeRateModal = ({ open, modalClose, divisionId, year, versionN
   //   AS-IS 는 컬럼 Tag 를 "D"+BASIS_START_DATE 로 잡고 저장 시 그 값을 그대로 P_YYYYMMDD 로 보낸다
   //   (L536). TO-BE 도 동일 규약을 유지해 월 1일 가정(yyyymm+'01') 을 만들지 않는다.
   const monthColumns = useMemo<MonthColumn[]>(() => {
-    const rows =
-      (titleData as { data?: Array<Record<string, unknown>> } | undefined)?.data ?? [];
+    const rows = (titleData as { data?: Array<Record<string, unknown>> } | undefined)?.data ?? [];
     const map = new Map<string, MonthColumn>();
     for (const r of rows) {
       const yyyymmdd = stripD(r.BASIS_START_DATE);
@@ -265,10 +265,10 @@ export const ExchangeRateModal = ({ open, modalClose, divisionId, year, versionN
   const { data: metaColumns } = useQuery<RawFlexGridColumnConfig[]>({
     queryKey: ['dmf0044-exchange-rate-column', MENU_ID, SHEETS.EXCHANGE_RATE, applied.divisionId],
     queryFn: async () => {
-      const res = await apiClient.post<RawFlexGridColumnConfig[]>(
-        `/admin/menu/${MENU_ID}/column`,
-        { sheetNm: SHEETS.EXCHANGE_RATE, divisionId: applied.divisionId }
-      );
+      const res = await apiClient.post<RawFlexGridColumnConfig[]>(`/admin/menu/${MENU_ID}/column`, {
+        sheetNm: SHEETS.EXCHANGE_RATE,
+        divisionId: applied.divisionId,
+      });
       return res.data.result ?? [];
     },
     enabled: open,
@@ -661,8 +661,10 @@ export const ExchangeRateModal = ({ open, modalClose, divisionId, year, versionN
         return;
       }
       // AS-IS L607 MessageHelper.GMessageBox("MSG00004", 건수) → 사내 MSG00002(저장 성공) 재매핑.
-      //   ⚠ 사내 MSG00002 는 {0} 치환자가 없어 AS-IS 의 "N개" 건수 표기는 재현하지 않는다.
-      void setAlert({ type: 'alert', content: t(MSG.SAVED, '_성공적으로 저장되었습니다.') });
+      //   주의: 사내 MSG00002 는 {0} 치환자가 없어 AS-IS 의 "N개" 건수 표기는 재현하지 않는다.
+      //   성공은 Toast (AGENTS.md 저장 피드백 규칙) — 저장 직후 팝업이 닫히므로 Alert 이면
+      //   확인 버튼 때문에 닫힘이 한 박자 늦는다.
+      void setToast({ message: t(MSG.SAVED, '_성공적으로 저장되었습니다.'), type: 'success' });
       // ⭐ 사용자 확정 (2026-08-10): Save = 저장 + 닫기 겸용 (OK 버튼 미사용).
       //   저장 성공 시에만 닫는다. 닫기 전 신규행/EditTracker reset 은 유지하고,
       //   AS-IS L609 의 저장 후 FindData 재조회는 어차피 닫히므로 발사하지 않는다(불필요 재조회 방지).

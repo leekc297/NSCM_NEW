@@ -20,6 +20,8 @@ import { useSalesPlanStore } from '../useSalesPlanStore';
 import { isDiv40 } from '../utils/sales-plan.division';
 import type { useSalesPlanValidation } from '../utils/sales-plan.validate';
 
+import styles from './SalesPlanForm.module.scss';
+
 interface SalesPlanFormProps {
   onSearch: () => void;
   // ⭐ Division 변경 = Grid 초기화(비움) + CRUD reset 의무 (memory feedback_division_change_grid_reset —
@@ -60,6 +62,18 @@ export const SalesPlanForm = ({
   //   Item Type    = 'ItemType' (SCM0001 ITEM_TYPE_CODE)
   //   Bucket       = 'BucketType' (DMF0003_GET_BUCKET_TYPE_CODE — full-word CODE)
   //   Plant Site   = 'PlantSitebyEndCustomer' (Division+EndCustomer 서버 바인드 + 값 quoting 의무)
+  // TeamField 의 전체 선택 해제 결과가 [], [''], ['ALL'] 등으로 내려올 수 있으므로
+  // 실제 Team ID만 남기고 나머지는 '미선택'([])으로 통일한다.
+  const normalizeDeptIds = (values: string[] | string | null | undefined): string[] => {
+    const items = Array.isArray(values) ? values : String(values ?? '').split(',');
+
+    return items
+      .map(value => String(value).trim())
+      .filter(value => value !== '' && value.toUpperCase() !== 'ALL');
+  };
+
+  const activeDeptIds = normalizeDeptIds(sc.deptIds);
+
   const q = (v?: string): string => `'${v && v.trim() !== '' ? v : 'ALL'}'`;
   const [
     endCustomer,
@@ -81,7 +95,7 @@ export const SalesPlanForm = ({
       {
         comboId: 'SiteByEndCustomer',
         divisionId: q(sc.divisionId),
-        deptId: q(sc.deptIds.join(',')),
+        deptId: q(activeDeptIds.join(',')),
         endCustomer: q(sc.endCustomers.join(',')),
       },
       {
@@ -201,12 +215,21 @@ export const SalesPlanForm = ({
               onDivisionChange();
             }}
           />
-          <TeamField
-            gridSize={3}
-            value={sc.deptIds}
-            onChange={v => set({ deptIds: v, endCustomers: [], scmSiteIds: [] })}
-            division={sc.divisionId}
-          />
+          {/* searchGrid — 칩 다중선택(Team)이 컬럼 min-content 폭을 밀어 옆 필드를 침범하는 것 방지 */}
+          <div className={styles.searchGrid}>
+            <TeamField
+              gridSize={3}
+              value={activeDeptIds}
+              onChange={v =>
+                set({
+                  deptIds: normalizeDeptIds(v),
+                  endCustomers: [],
+                  scmSiteIds: [],
+                })
+              }
+              division={sc.divisionId}
+            />
+          </div>
           <Grid size={3}>
             {/* ⭐ End Customer — 40 = 'EndCustomerByDivision40' 원천 스왑 (AS-IS InitControls L452 /
                 clbDivision L5131). 변경 시 Sales Site 재조회 종속 clear (clbCustomer L5084). */}
@@ -223,7 +246,7 @@ export const SalesPlanForm = ({
                   options={toOptions(
                     (div40 ? endCustomer40 : endCustomer) as never,
                     div40 ? undefined : sc.divisionId,
-                    div40 ? undefined : sc.deptIds
+                    div40 ? undefined : activeDeptIds
                   )}
                   onChange={(_, options) =>
                     set({ endCustomers: toMulti(String(options ?? '')), scmSiteIds: [] })

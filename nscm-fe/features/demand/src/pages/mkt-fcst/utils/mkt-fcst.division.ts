@@ -106,42 +106,54 @@ export const buildDuplicateKey = (row: Record<string, unknown>, divisionId: stri
   return parts.join('|');
 };
 
-// 신규 행의 필수 입력 컬럼 묶음 (division 분기, SetSaveData L4347~4409 1:1).
-//   각 [columnKey, labelKey(LBL)] — labelKey 는 i18n REQUIRED_FIELD(MSG00631) {0} 치환용.
-export type RequiredField = [columnKey: string, labelKey: string];
-
-// 컬럼 라벨 i18n 키 — 사내 SCM_ADM_MSG_M 정합 (2026-06-28 실측). 정확 텍스트 일치만 재사용.
-//   재사용: SalesSite/PlantSite/EndCustomer/Incoterms/Measure (사내 기존 LBL 정확 일치).
-//   신규(LBL00679+): Model / FCST Type / Customs Handbook (사내 미존재 → 정식 채번).
-const LBL = {
-  SALES_SITE: 'LBL00011', // 사내 'Sales Site' 정확 일치
-  MODEL: 'LBL00669', // 공용 'Model' (타화면 공유 — locale 기존) 재사용
-  PLANT_SITE: 'LBL00005', // 사내 'Plant Site' 정확 일치
-  END_CUSTOMER: 'LBL00080', // 사내 'End Customer' 정확 일치
-  INCOTERMS: 'LBL00024', // 사내 'Incoterms' 정확 일치
-  FCST_TYPE: 'LBL00679', // 신규 'FCST Type' (사내 미존재 → 정식 채번)
-  CUSTOMS_HANDBOOK: 'LBL00680', // 신규 'Customs Handbook'
-  MEASURE: 'LBL00310', // 사내 'Measure' 정확 일치
-} as const;
+// 신규 행의 필수 입력 컬럼 묶음 (division 분기).
+//   근거 = AS-IS SetSaveData L4347~4409 + 2026-08-10 업무 확정표(● 필수 / △ 조건부 / - 해당없음).
+//
+//     항목                        40   81계열  82    비고
+//     Division                    ●     ●      ●     여기 아님 — Insert 시 조회조건에서 항상 주입
+//     Project Code                -     ●      ●     ⚠️ AS-IS 에는 없던 항목 — 아래 주석 참조
+//     End Customer                ●     -      -     40 은 END_CUSTOMER40 계열
+//     Sales Site                  ●     ●      ●
+//     Item ID                     ●     ●      ●
+//     Customs Handbook(DOM_EXP)   ●     ●      ●     그리드 헤더 문구가 'Customs Handbook'
+//     FCST Type                   ●     ●      ●
+//     Incoterms                   ●     ●      ●
+//     Measure                     ●     ●      ●
+//     Plant Site                  -     ●      -     requiresPlantSite (L4365)
+//     AS From Site                -     △      △     여기 아님 — MktFcst.tsx MSG00476 (FCST Type=W/S 4종)
+//     기간 수량                    ●     ●      ●     여기 아님 — validateSaveRows (3) bInputCheck
+export interface RequiredField {
+  /** 빈 값인지 볼 행 컬럼 키. */
+  col: string;
+  /** i18n 라벨 키 — 사내 SCM_ADM_MSG_M 에 실제 등록된 키만. 미채번 컬럼은 생략한다. */
+  lblKey?: string;
+  /** lblKey 미지정/미등록 시 그대로 노출할 문구 — 그리드 헤더와 동일하게 유지. */
+  fallback: string;
+}
 
 export const requiredFieldsFor = (divisionId: string): RequiredField[] => {
   const fields: RequiredField[] = [];
   const cols = divisionKeyColumns(divisionId);
   if (usesProjectKeys(divisionId)) {
-    // 81·82 — SalesSite/Model 필수, 81 만 PlantSite 추가 (L4355~4369).
-    fields.push([cols.scmSite, LBL.SALES_SITE]);
-    fields.push([cols.item, LBL.MODEL]);
-    if (requiresPlantSite(divisionId)) fields.push(['PLANT_SITE_ID', LBL.PLANT_SITE]);
+    // 81·82 — ProjectCode/SalesSite/Model 필수, 81 만 PlantSite 추가 (L4355~4369).
+    //   ⚠️ Project Code 는 AS-IS L4355~4369 검증 목록에 없었다. 관리자 컬럼 메타는 필수(빨간 점)로
+    //     등록돼 있어 공란 저장이 그대로 통과했다 — 2026-08-10 업무 확정표로 81·82 필수 확정.
+    fields.push({ col: cols.project, lblKey: 'LBL00748', fallback: 'Project Code' });
+    fields.push({ col: cols.scmSite, lblKey: 'LBL00011', fallback: 'Sales Site' });
+    fields.push({ col: cols.item, lblKey: 'LBL00669', fallback: 'Model' });
+    if (requiresPlantSite(divisionId))
+      fields.push({ col: 'PLANT_SITE_ID', lblKey: 'LBL00005', fallback: 'Plant Site' });
   } else {
-    // 40 — EndCustomer40/SalesSite40/Model40 필수 (L4373~4387).
-    fields.push([cols.project, LBL.END_CUSTOMER]);
-    fields.push([cols.scmSite, LBL.SALES_SITE]);
-    fields.push([cols.item, LBL.MODEL]);
+    // 40 — EndCustomer40/SalesSite40/Model40 필수 (L4373~4387). Project Code 는 40 에서 필수 아님.
+    fields.push({ col: cols.project, lblKey: 'LBL00080', fallback: 'End Customer' });
+    fields.push({ col: cols.scmSite, lblKey: 'LBL00011', fallback: 'Sales Site' });
+    fields.push({ col: cols.item, lblKey: 'LBL00669', fallback: 'Model' });
   }
-  // 공통 필수 — Incoterms/FcstType/DomExp/Measure (L4390~4409).
-  fields.push(['INCOTERMS', LBL.INCOTERMS]);
-  fields.push(['FCST_TYPE', LBL.FCST_TYPE]);
-  fields.push(['DOM_EXP', LBL.CUSTOMS_HANDBOOK]);
-  fields.push(['MEASURE', LBL.MEASURE]);
+  // 공통 필수 — CustomsHandbook(DOM_EXP)/FcstType/Incoterms/Measure (L4390~4409).
+  fields.push({ col: 'DOM_EXP', lblKey: 'LBL00091', fallback: 'Customs Handbook' });
+  fields.push({ col: 'FCST_TYPE', lblKey: 'LBL00860', fallback: 'FCST Type' }); // 2026-08-10 채번
+
+  fields.push({ col: 'INCOTERMS', lblKey: 'LBL00024', fallback: 'Incoterms' });
+  fields.push({ col: 'MEASURE', lblKey: 'LBL00310', fallback: 'Measure' });
   return fields;
 };

@@ -411,3 +411,149 @@ arraysize=5000   fetch  8.36s  왕복   4회   ← 오히려 악화
 ⚠ **SP 시간은 실행마다 흔들린다**(위 계보 27~37초 — 버퍼 캐시 상태). fetch 를 비교할 때
    SP 시간은 통제 변수가 아니므로 **같은 조건 3회 이상 재서 중앙값**으로 본다.
 ⚠ 측정 도구는 **SP 와 fetch 를 분리 출력**해야 한다 — 정본 `_diagnostics/_0082_fetch_profile.py`.
+
+---
+
+## §9. 조회 쿼리 **참조 모델** — 정본 = DMF0082 (2026-08-15)
+
+> 사용자 지시: "DMF0082 의 튜닝내용을 RULE 로 정리해서 **조회 QUERY 에 대한 참조 모델**로 사용."
+
+화면 조회 SP 는 대개 **① 마스터/필터를 GTT 에 모으고 → ② 대형 원장과 조인해 스테이징 GTT 를 만들고
+→ ③ PIVOT 으로 최종 커서를 연다** 는 3단 파이프라인이다. 아래는 그 구조에서 반복적으로 나오는
+증상 → 원인 → 처방 카탈로그다. **증상이 같으면 원인도 같을 가능성이 높다.**
+
+### §9.1 증상별 처방표
+
+| # | 증상 | 실측 지표 | 원인 | 처방 |
+|---:|---|---|---|---|
+| **R1** | 조회가 끝나지 않음 / 수십 분 | `buffer_gets` 수천만인데 **결과 0행** · `latch: cache buffers chains` | GTT 추정 카디널리티 **1** → `MERGE JOIN CARTESIAN` + 대형표 **행별 NL** | 5순위 `LEADING(대형표) USE_HASH(GTT…)` 로 **조인순서 고정** |
+| **R2** | 조인 하나가 배수로 작용 | 플랜에 `MERGE JOIN CARTESIAN`, 등가 조건이 **1개뿐**인 조인 | 조인이 아니라 **필터**인데 조인으로 써서 곱집합 배수 발생 | 2순위 **EXISTS 세미조인** 전환 (⚠ 대상이 `DISTINCT` 적재라 유일함을 **실측 확인** 후) |
+| **R3** | 동일 항목이 N 벌로 표시 | 정적 컬럼 1개만 다른 행이 N 개 · 버킷값 **100% 동일** | 센티널 표기 분열 (`NULL`/`''`/`' '`/`'-'`/`'--'`/`CHR(0)`) | 스테이징에서 **정규화 + dedup 한 쌍** (§9.2) |
+| **R4** | 파라미터 쪼개는 함수가 반복 실행 | `TABLE(f(:b))` 가 한 패키지에 수십 곳 | PIPELINED 함수 재실행 + 카디널리티 고정 추정 | 2순위 **GTT 선적재**(§3.0) |
+| **R5** | SP 는 빨라졌는데 화면은 느림 | `fetch` 가 합계의 30%↑ | 행수 × 컬럼수 직렬화 + 왕복 | §8 fetch 축 (F1 전NULL 컬럼 → F2 arraysize → F3 행수) |
+
+### §9.2 R3 — 센티널 분열은 **정규화 단독 금지**
+
+⛔ 정규화만 하면 **값이 N 배가 된다.** 최종 SELECT 가 `PIVOT(SUM)` + `GROUP BY … 그 컬럼` 이면,
+갈라져 있던 N 행이 한 그룹으로 합쳐지며 **합산**된다.
+
+```sql
+-- ① 정규화
+UPDATE <스테이징 GTT> SET <컬럼> = '-'
+ WHERE <컬럼> IS NULL
+    OR TRIM(REPLACE(<컬럼>, CHR(0), '')) IS NULL
+    OR TRIM(REPLACE(<컬럼>, CHR(0), '')) IN ('-', '--');
+
+-- ② dedup (ROW_NUMBER — 상관 서브쿼리 금지)
+DELETE FROM <스테이징 GTT>
+ WHERE ROWID IN (SELECT RID FROM (
+         SELECT ROWID RID, ROW_NUMBER() OVER (PARTITION BY <키 전량> ORDER BY QTY DESC NULLS LAST, ROWID) RN
+         FROM <스테이징 GTT>) WHERE RN > 1);
+```
+
+**적용 전 필수 검증** — 중복 그룹의 값이 실제로 같은가.
+```sql
+SELECT COUNT(*) 중복그룹, SUM(CASE WHEN MN<>MX THEN 1 ELSE 0 END) 값상이그룹
+  FROM (SELECT COUNT(*) CNT, MIN(QTY) MN, MAX(QTY) MX FROM <GTT> GROUP BY <정규화 키> HAVING COUNT(*)>1);
+```
+값이 다른 그룹이 있으면 **어느 값을 남길지는 업무 판단**이다. 임의로 정하지 말고 확인한다.
+(DMF0082 실측: 중복 134,304 그룹 중 **16,395 그룹이 값 상이** — SUM/MAX/최신 중 사용자가 MAX 선택)
+
+### §9.3 원장을 고치려 하지 말 것 (PK 충돌)
+
+센티널을 **원장 UPDATE 로** 통일하려 하면 PK 충돌이 난다. DMF0082 실측:
+
+```
+DM_PLN_CFM_SELLING_PRICE   정규화 시 PK 충돌 360,735건 / 1,037,559행
+DM_PLN_MKT_FCST                            184,434건 /   501,947행
+DM_PLN_CFM_MKT_DEMAND_PLAN                  71,656건 /   324,319행
+```
+⇒ **조회 시점 정규화**(스테이징 GTT)가 정답이다. 원장 정리는 별건으로 분리한다.
+
+### §9.4 배치 위치 3원칙 (실패 계보)
+
+1. **조회조건 필터 뒤** — 앞에 두면 `p_x NOT IN (…)` 필터가 정규화된 값과 비교되어 조회 의미가 바뀐다.
+2. **어떤 `IF` 블록에도 넣지 않는다** — `IF p_team_id <> 'ALL' THEN` 안에 넣어 일반 조회에서
+   통째로 건너뛴 사고(2026-08-15). **배포 성공(errors=0)인데 결과 불변**이면 이걸 의심한다.
+3. **적용 확인은 결과가 아니라 스테이징으로** — 결과만 보면 "안 먹었다" 까지만 알 수 있다.
+   `같은 세션에서` GTT 를 직접 세면 어느 단계까지 갔는지 즉시 드러난다.
+
+### §9.5 재현이 최우선 — 파라미터는 **로그가 정본**
+
+조회 SP 는 파라미터 하나가 달라도 **0행이 빠르게 돌아와** 병목이 재현되지 않는다.
+FE 스토어 코드에서 추정하지 말고 **SP 입력 로그**(`SCM_SYS_LOG_BATCH.IN_PARA_DATA`)에서 가져온다.
+
+DMF0082 재현 실패 2회 계보:
+- 1차 — `p_item_id` 를 `'ALL'` 로 넣음 (실제 **NULL**)
+- 2차 — 필터를 `''`, `userGroup` 을 userId 로 넣음 (실제 **`'ALL'`** / **`'ADMIN'`**)
+
+### §9.6 정본 산출물
+
+```
+이관 패키지  _artifacts/_deploy_packages/DMF0082_PERF_CLOUD_20260815/
+사내 적용분  _artifacts/_apply_corporate/DMF0082_PERF_20260815/   (백업 4본 + 적용 SQL 5본)
+측정 도구    _diagnostics/_0082_measure.py       (시트별 elapsed — §0.4)
+             _diagnostics/_0082_ash_break.py     (SQL_ID 귀속 — §0.5)
+             _diagnostics/_0082_fetch_profile.py (fetch 분해 — §8)
+             _diagnostics/_0082_triple.py        (중복 컬럼 기여도 — §9.1 R3)
+```
+
+**성과**: 25분 미완 → **SP 12.9s + fetch 2.6s**, 결과 17,482행(중복 3벌) → **7,090행**.
+
+---
+
+## §10. **저장 SP** 참조 모델 — 정본 = DMF0003 P_DMF0003_SAVE_MKT_FCST (2026-08-15)
+
+§9 는 조회(GET) 참조 모델이다. 저장(SAVE)은 원장 DELETE→INSERT 가 중심이라 병목 계보가 다르다.
+**실측: 12.62s → 2.0~3.1s** (호출 8회 평균 ↔ 정정 후 3구간 실측 평균).
+
+### §10.1 R-S1 — 날짜/기간 조건이 **EXISTS 안**에 있으면 아우터는 전수 스캔이다 ⭐ 1순위
+
+```sql
+-- ⛔ 구본: 날짜가 EXISTS 안 → 아우터 접근조건이 못 된다
+DELETE FROM 원장 WHERE EXISTS (
+  SELECT 1 FROM GTT T WHERE 원장.K1=T.K1 ... AND 원장.YYYYMMDD >= TO_CHAR(FN_NEXT_DAY(SYSDATE,'MON')-7,'YYYYMMDD'));
+-- 플랜: INDEX FAST FULL SCAN PK(1,387,787행) → 행마다 GTT TABLE ACCESS FULL. cost 2,780,377
+
+-- ✅ 정정: ①아우터로 승격(등가) ②함수는 1회 계산 변수 ③작은 GTT 를 빌드로 쓰는 세미조인 고정
+v_cut := TO_CHAR(FN_NEXT_DAY(SYSDATE,'MON')-7,'YYYYMMDD');
+DELETE FROM 원장 WHERE 원장.YYYYMMDD >= v_cut
+  AND EXISTS (SELECT /*+ HASH_SJ DYNAMIC_SAMPLING(T 2) */ 1 FROM GTT T WHERE 원장.K1=T.K1 ...);
+```
+
+**등가 근거**: EXISTS 안의 조건이 **아우터 컬럼만** 참조하면 `EXISTS(A ∧ c) ≡ c ∧ EXISTS(A)`.
+(상관 컬럼이 섞인 조건은 승격 금지 — 반드시 참조 컬럼을 먼저 확인할 것.)
+
+**실측**: buffer gets/실행 **2,016,609 → 7**, 누적 59.34s → 0.01s.
+
+### §10.2 R-S2 — 검증 probe 가 거대 뷰를 먼저 만들게 두지 말 것
+
+`SELECT ... INTO ... WHERE ... AND ROWNUM=1` 형태의 **존재 검증** 한 방이 실행당 5.65s / 55,000 gets.
+원인은 §9 와 같은 계보 — **GTT 추정 카디널리티 1** 이라 옵티마이저가 큰 뷰(SCM_ITEM_M 642,256행 ×2 스캔,
+조인 추정 11억행)를 먼저 만들고 작은 GTT 를 나중에 붙인다.
+→ `/*+ LEADING(A) DYNAMIC_SAMPLING(A 2) */` 로 **작은 GTT 를 드라이빙**으로 고정 (실측 45.66s → 2.36s).
+⚠ `PUSH_PRED` 는 뷰 안 GROUP BY 때문에 효과 없음(42.45s) — **추정하지 말고 변형별로 실측**할 것.
+
+### §10.3 R-S3 — 저장 튜닝의 **등가 증명은 대칭차집합**으로
+
+저장은 틀리면 원장이 깨진다. "빨라졌다"만으로 채택 금지. 구본/정정본 **양방향 MINUS = 0** 을 증명한다.
+
+```sql
+SELECT COUNT(*) FROM ( (SELECT ROWID FROM 원장 WHERE <구본 술어>
+                        MINUS SELECT ROWID FROM 원장 WHERE <정정 술어>)
+                       UNION ALL
+                       (SELECT ROWID FROM 원장 WHERE <정정 술어>
+                        MINUS SELECT ROWID FROM 원장 WHERE <구본 술어>) );  -- 0 이어야 채택
+```
+DMF0003 실측: 대상 2,547행 동일 / 대칭차집합 **0행** / 같은 표본에서 112.43s → 5.25s.
+추가로 **E2E 저장 왕복**(M 저장 → 재조회 확인 → 원복 → 재조회 확인)까지 통과해야 완료.
+
+### §10.4 산출물
+
+```
+백업      _artifacts/_backup/DMF0003_SAVE_PERF_20260815/PKG_DMF0003_BODY_BEFORE.sql
+적용      _artifacts/_apply_corporate/PKG_DMF0003_SAVE_PERF_20260815.sql   (R-S1, 마커 E20260815-SAVEPERF)
+          _artifacts/_apply_corporate/PKG_DMF0003_SAVE_PERF2_20260815.sql  (R-S2, 마커 E20260815-SAVEPERF2)
+```
+⚠ 패키지 본문 추출/재배포 시 **CRLF 보존**(`open(..., newline='')`) — 텍스트모드로 쓰면 `\r\r\n` 이 되어
+앵커가 전부 어긋난다(2026-08-15 실착). 사내 적용 완료 / **클라우드 미적용**.

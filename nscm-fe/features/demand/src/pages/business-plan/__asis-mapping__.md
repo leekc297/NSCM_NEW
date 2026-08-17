@@ -378,12 +378,13 @@
 
 | ID | 요지(원천 1줄) | 구현 위치(파일:라인) | 사유 | 상태 |
 |---|---|---|---|---|
-| COMMON:UC-01 | 필터링 상태에서 신규행 Insert 시 추가 행이 보이도록 (그리드 필터 clear — 1st 행3) | BusinessPlan.tsx handleInsert `gridFilterRef.current?.clear()` (2026-08-12 보완 — DMF0021 C1 선례 1:1) |  | 구현 |
+| COMMON:UC-01 | 필터링 상태에서 신규행 Insert 시 추가 행이 보이도록 — ⭐ 필터 clear ⛔, **필터 유지 + 신규행만 예외 노출**(hook #133 UC-01 역전 2026-08-14) | BusinessPlan.tsx:8 import `keepRowVisibleUnderFilter` + :236~241 handleInsert (구 `gridFilterRef.current?.clear()` 제거 — 사용자 필터 파괴 정정) |  | 구현 |
 | COMMON:UC-02 | 데이터 수정 중 다른 데이터 조회 시도 = MSG00703 confirm (1st 행4) | BusinessPlan.tsx handleSearch `hasPendingChanges()` → setAlert confirm MSG00703 (2026-08-12 보완 — DMF0021 C2 선례 1:1) |  | 구현 |
 | COMMON:UC-03 | 컬럼 추가/제외(Column/Measure 설정) 적용 시 기존 조회 데이터 Reset 후 재조회 유도 (hook #132 §2-2 — 1st 행5) | components/BusinessPlanModals.tsx onSettingsApplied → BusinessPlan.tsx 그리드 비움(insertedRows/editTracker/hasSearched/clearFilters) — 자동 재조회 금지 |  | 구현 |
 | COMMON:UC-04 | CRUD 완료 알림 = Alert 아닌 하단 중앙 Toast 후 자동 소멸 (LGES WDG·hook #132 §3 — 1st 행6) | BusinessPlan.tsx handleSave 성공 `setToast type:'success'` (MSG.SAVED) |  | 구현 |
 | COMMON:UC-05 | Excel Download 시 콤보 컬럼 데이터가 Code 아닌 Name 으로 출력 (1st 행7) | 공용 `packages/foundation/src/utils/gridAction.ts` excelDownload dataMap 승계(2026-08-12 공용 보완 — 전 화면 발효) + SubTitle excelFileName 경로 소비 |  | 구현 |
 | COMMON:UC-06 | Key-in 조회조건 = 콤마 구분 다중 입력 시 전건 조회 (1st 행8) | Project/Model/Owner keyin → PKG_DMF0042 SP 내 FN_STRING_SPLIT(DB 함수) 다중 매칭(P0c — 빈값 NULL 가드 포함, 2026-07-15 사내 검증) |  | 구현 |
+| COMMON:UC-07 | 재조회해도 사용자가 걸어둔 **필터가 유지**되어야 한다 (hook #133 §5 신설 2026-08-14) | components/BusinessPlanGrid.tsx:13 import + :709~714 updatedLayout `(0-a2) rebindFilterColumns` — columnGroups 재대입으로 끊긴 Column 참조만 재바인딩(동적 Y_/Q_/M_ 는 (0-a) 에서 이미 제외되어 되살아나지 않음). 2026-08-15 보완 |  | 구현 |
 
 ## 7. 검증 이력
 

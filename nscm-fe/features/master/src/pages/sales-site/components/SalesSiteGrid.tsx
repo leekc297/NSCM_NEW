@@ -6,12 +6,13 @@ import {
   CellRange,
 } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { useRef, useState, type MutableRefObject } from 'react';
+import { useMemo, useRef, useState, type MutableRefObject } from 'react';
 
 import { CRUD_TYPE } from '@foundation/constants';
 import type { EditTracker } from '@foundation/utils';
 import { GridUtils } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
+import { useTabComboQueries } from '@shared/hooks';
 
 import { RegionModal } from '../../../components';
 import type { MENU_ID, SHEETS } from '../sales-site.constants';
@@ -40,6 +41,22 @@ export const SalesSiteGrid = ({
   const [clickedRow, setClickedRow] = useState<number>(-1);
   const [openRegionModal, setOpenRegionModal] = useState<boolean>(false);
 
+  // Sales Site 채번 시 SOLDTO_CUSTOMER(row 저장값=CODE) 대신 NAME 을 쓰기 위한 CODE→NAME 조회.
+  //   그리드 셀 콤보와 같은 comboId(cellCboDataTp) 를 재사용하므로 react-query 캐시가 공유된다.
+  const soldToCustomerComboId = staticColumns[RESPONSE_SET.SITE].find(
+    column => column.colNm === 'SOLDTO_CUSTOMER'
+  )?.cellCboDataTp;
+  const [soldToCustomerCombo] = useTabComboQueries({
+    filters: soldToCustomerComboId ? [soldToCustomerComboId] : [],
+    enabled: !!soldToCustomerComboId,
+  });
+  const soldToCustomerNameMap = useMemo(
+    () => new Map((soldToCustomerCombo ?? []).map(item => [item.CODE, item.NAME])),
+    [soldToCustomerCombo]
+  );
+  const getSoldToCustomerName = (dataItem: ResponseData<MENU_ID, SHEETS.SITE>) =>
+    soldToCustomerNameMap.get(String(dataItem.SOLDTO_CUSTOMER ?? ''));
+
   const setRegion = (
     countryCode: string,
     countryName: string,
@@ -61,7 +78,7 @@ export const SalesSiteGrid = ({
     dataItem.COUNTRY_NAME = countryName;
     dataItem.CITY = cityCode;
     dataItem.CITY_NAME = cityName;
-    applySalesSite(dataItem, editTrackerRef.current);
+    applySalesSite(dataItem, editTrackerRef.current, getSoldToCustomerName(dataItem));
     gridRef.current?.refreshRange(new CellRange(clickedRow, 0, clickedRow, -1));
   };
 
@@ -81,7 +98,7 @@ export const SalesSiteGrid = ({
     if (!binding || !dataItem || dataItem.CRUD_TYPE !== CRUD_TYPE.INSERT) return;
     if (!['SOLDTO_CUSTOMER', 'COUNTRY', 'CITY'].includes(binding)) return;
 
-    applySalesSite(dataItem, editTrackerRef.current);
+    applySalesSite(dataItem, editTrackerRef.current, getSoldToCustomerName(dataItem));
     grid.refreshRange(new CellRange(row, 0, row, -1));
   };
 

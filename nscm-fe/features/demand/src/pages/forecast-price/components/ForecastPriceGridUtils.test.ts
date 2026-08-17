@@ -10,7 +10,7 @@
  * 기준 원천: `Doc/_legacy_source/.../DMF0082_FcstNPrice_Mgmt.cs` (라인은 각 테스트에 인용)
  *   + `Doc/화면분석서/DMF0082_FcstNPrice_제약매트릭스_상세.md` 제약 ID(M-xx / P-xx)
  */
-import { describe, expect, it, vi } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 
 import {
   allocateLoc,
@@ -170,6 +170,18 @@ describe('allocateLoc — LOC 일괄 할당 (M-16 / M-20)', () => {
 });
 
 describe('isNonEditableCell — 편집 차단 게이트 (M-03 / M-04·F-01 / M-07)', () => {
+  // ⭐ [2026-08-15] **시간 고정 필수** — 이 게이트는 `isPastPeriodLocked`(금주 월요일 기준)를
+  //   거치므로 픽스처 주(2026-08-03~09)가 과거가 되는 순간 "편집 가능" 케이스가 전부 true 가 돼
+  //   시간이 지나면 저절로 깨진다(실측 2026-08-15: 2건 FAIL — 제품 결함 아님).
+  //   픽스처 주 안의 날짜로 현재시각을 고정해 **산식만** 검증한다.
+  beforeAll(() => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date(2026, 7, 3, 9, 0, 0)); // 2026-08-03(월) = WEEK1 시작
+  });
+  afterAll(() => {
+    vi.useRealTimers();
+  });
+
   const grid = () => ({ isReadOnly: false }) as never;
   const call = (item: Record<string, unknown>, binding: string, bucket: string) =>
     isNonEditableCell(grid(), binding, item as never, weekMap(), bucket, '');

@@ -8,6 +8,7 @@ import {
   VAlign,
   Workbook,
   WorkbookCell,
+  WorkbookFill,
   WorkbookFont,
   WorkbookRow,
   WorkbookStyle,
@@ -486,10 +487,19 @@ export const GridAction = {
   //   2단 병합 헤더(하위명 중복)로는 업로드 매핑이 불가능하다.
   //   전 셀 문자열 — 숫자 셀이면 POI getNumericCellValue 가 '0.0' 을 돌려 SP 정수 검증에서 탈락한다.
   //   저장은 saveAsync 필수 — Workbook.save() 는 JSZip 2.x 전용이라 현재 3.x 환경에서 동작하지 않는다.
+  //   ⭐ [2026-08-15] `cellFill` (선택) — 데이터 셀 배경색을 파일에도 남긴다. 양식에서 배경색은
+  //     장식이 아니라 "여기에 입력하라"는 유일한 표식이라, 화면에만 칠하면 파일을 연 순간
+  //     인지 수단이 사라진다(DMF0014 요구 2026-08-14). 미전달이면 기존 동작 그대로 —
+  //     공용 F11 `excelDownload` 와 타 화면 호출부는 영향 없음.
   flatExcelDownload: (
     rows: ReadonlyArray<Record<string, string | number | null | undefined>>,
     columns: ReadonlyArray<{ header: string; key: string }>,
-    fileNamePrefix: string
+    fileNamePrefix: string,
+    cellFill?: (
+      row: Record<string, string | number | null | undefined>,
+      column: { header: string; key: string },
+      rowIndex: number
+    ) => string | undefined
   ): Promise<void> => {
     const headerFont = new WorkbookFont();
     headerFont.family = 'Spoqa Han Sans Neo';
@@ -507,6 +517,20 @@ export const GridAction = {
     const textStyle = new WorkbookStyle();
     textStyle.format = '@';
 
+    // 같은 색을 쓰는 셀이 수만 개라 스타일 객체를 색상별로 1개만 만들어 재사용한다
+    //   (셀마다 new 하면 xlsx 스타일 테이블이 폭발해 저장이 느려지고 파일이 커진다).
+    const fillStyles = new Map<string, WorkbookStyle>();
+    const styleForFill = (color: string): WorkbookStyle => {
+      const cached = fillStyles.get(color);
+      if (cached) return cached;
+      const style = new WorkbookStyle();
+      style.format = '@';
+      style.fill = new WorkbookFill();
+      style.fill.color = color;
+      fillStyles.set(color, style);
+      return style;
+    };
+
     const toCell = (value: string, style: WorkbookStyle) => {
       const cell = new WorkbookCell();
       cell.value = value;
@@ -515,9 +539,15 @@ export const GridAction = {
     };
 
     // cells / rows / sheets 는 readonly 배열 — 재할당이 아닌 push 로 채운다.
-    const buildRow = (values: string[], style: WorkbookStyle) => {
+    const buildRow = (
+      values: string[],
+      style: WorkbookStyle,
+      styleAt?: (index: number) => WorkbookStyle
+    ) => {
       const sheetRow = new WorkbookRow();
-      values.forEach(value => sheetRow.cells.push(toCell(value, style)));
+      values.forEach((value, index) =>
+        sheetRow.cells.push(toCell(value, styleAt?.(index) ?? style))
+      );
       return sheetRow;
     };
 
@@ -529,11 +559,17 @@ export const GridAction = {
         headerStyle
       )
     );
-    rows.forEach(row =>
+    rows.forEach((row, rowIndex) =>
       sheet.rows.push(
         buildRow(
           columns.map(column => String(row[column.key] ?? '')),
-          textStyle
+          textStyle,
+          cellFill
+            ? index => {
+                const color = cellFill(row, columns[index], rowIndex);
+                return color ? styleForFill(color) : textStyle;
+              }
+            : undefined
         )
       )
     );

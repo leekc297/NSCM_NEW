@@ -7,6 +7,7 @@ import { IcExchangeRate, IcGridColumnSetup } from '@foundation/assets';
 import type { HotkeyConfig, PageProps, RawFlexGridColumnConfig } from '@foundation/models';
 import { queryClient } from '@foundation/query-client';
 import type { EditTracker } from '@foundation/utils';
+import { GridAction } from '@foundation/utils';
 import { type ColumnLayoutRow, MainTitle, SubTitle } from '@shared/components';
 import { useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
 import { useMessageStore, useSessionStore } from '@shared/stores';
@@ -206,8 +207,38 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabId]);
 
-  // 신규/수정 행 추적 (CRUD_TYPE) — SP 결과와 합쳐 grid itemsSource
-  const [insertedRows, setInsertedRows] = useState<FuturePriceRow[]>([]);
+  // GridAction.addRow 로 추가한 신규행은 CollectionView 와 같은 객체를 보관한다.
+  const insertedRowsRef = useRef<FuturePriceRow[]>([]);
+  const [insertedRowCount, setInsertedRowCount] = useState(0);
+
+  const clearInsertedRows = useCallback(() => {
+    const g = gridRef.current;
+    const source = g?.collectionView?.sourceCollection;
+    if (source) {
+      for (let i = source.length - 1; i >= 0; i--) {
+        if (source[i]?.CRUD_TYPE === 'I') source.splice(i, 1);
+      }
+      g.collectionView.refresh();
+    }
+    insertedRowsRef.current = [];
+    setInsertedRowCount(0);
+  }, []);
+
+  const updateInsertedGroup = useCallback((groupId: string, values: Record<string, string>) => {
+    insertedRowsRef.current.forEach(row => {
+      if (row.INSERT_GROUP_ID !== groupId) return;
+      Object.entries(values).forEach(([binding, value]) => {
+        editTrackerRef.current?.storeChange(
+          row as unknown as WijmoRowItem,
+          binding,
+          row[binding] as WijmoPrimitive,
+          value
+        );
+        row[binding] = value;
+      });
+    });
+    gridRef.current?.refresh();
+  }, []);
 
   // #23 blnWork — 저장 in-flight 가드 (연속작업 방지, AS-IS L1549 MSG00137).
   const savingRef = useRef(false);
@@ -221,7 +252,7 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   useEffect(() => {
     if (prevDivisionRef.current === sc.divisionId) return;
     prevDivisionRef.current = sc.divisionId;
-    setInsertedRows([]);
+    clearInsertedRows();
     editTrackerRef.current?.clearChanges();
     clearFilters(); // filters[MAIN] 제거 → query disabled → spRows 비움
     // ⭐ 컬럼 개인화 무효화 — TITLESET_USER 는 division 무관 1벌인데 컬럼 세트는 division 별로 다르다.
@@ -239,7 +270,7 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   removeQueries([tabId]) 필수 — queryKey 는 filters '값' 기반이라 동일 조건으로 다시
   //   Search 하면 전역 staleTime=Infinity 캐시가 이전 설정으로 받은 rows 를 그대로 돌려준다.
   const clearGridOnSettingChange = () => {
-    setInsertedRows([]);
+    clearInsertedRows();
     editTrackerRef.current?.clearChanges();
     clearFilters();
     queryClient.removeQueries({ queryKey: [tabId] });
@@ -282,7 +313,7 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
     //   (BE SQL_LOG 실측 88ms~13s — 풀 커넥션 점유 + GTT DELETE 낭비, enabled:false 도 우회).
     //   재조회 트리거는 useTabProcQuery 내부가 담당: filters 참조 변경 → 이전 키 invalidate
     //   (동일 조건 재검색 = 같은 해시 = active refetch) / 값 변경 = 새 키 자동 fetch.
-    setInsertedRows([]);
+    clearInsertedRows();
     // ⭐ master hook §2.4 — Search 시 admin 메타 refetch (admin 변경 즉시 반영)
     void fetchStaticColumns(sc.divisionId); // ⭐ divisionId → SP 서버측 DIVISION_ID 필터
     void fetchStaticMeasures();
@@ -292,6 +323,8 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   ⭐ master hook §5 — Measure 동적 fetch (SCM_MST_SHEET_MEASURE 의 VALID_YN='Y' COLUMN_NAME 만)
   //   admin 변경 즉시 반영. staticMeasures 비어있으면 MEASURE_4 hardcode fallback.
   const handleInsert = () => {
+    const g = gridRef.current;
+    if (!g) return;
     if (!editable) return; // 편집제약 division 방어 (버튼도 미표시되나 이중 가드)
     // ⭐ isCurVersion 게이트 (MSG00448) — 과거버전 조회 상태에서는 Insert 불가.
     //   AS-IS EditButton(.cs L868~): txtVersion=='Current' 조회일 때만 편집/신규 허용.
@@ -333,7 +366,18 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         MEASURE: m,
       })
     );
-    setInsertedRows(prev => [...newRows, ...prev]);
+    const addedRows: FuturePriceRow[] = [];
+    [...newRows].reverse().forEach(newRow => {
+      const addedRow = GridAction.addRow(
+        g as unknown as FlexGridType<WijmoRowItem>,
+        newRow as unknown as WijmoRowItem,
+        'above',
+        true
+      );
+      if (addedRow) addedRows.unshift(addedRow as unknown as FuturePriceRow);
+    });
+    insertedRowsRef.current = [...addedRows, ...insertedRowsRef.current];
+    setInsertedRowCount(insertedRowsRef.current.length);
   };
 
   // F9 Delete — AS-IS L275~ DeleteButton (신규 'I' 행만 제거, 같은 INSERT_GROUP_ID 4 row 묶음 삭제)
@@ -346,11 +390,15 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
       return;
     }
     const gid = sel.INSERT_GROUP_ID;
-    if (gid) {
-      setInsertedRows(prev => prev.filter(r => r.INSERT_GROUP_ID !== gid));
-    } else {
-      setInsertedRows(prev => prev.filter(r => r !== sel));
+    const source = g.collectionView.sourceCollection;
+    for (let i = source.length - 1; i >= 0; i--) {
+      if (gid ? source[i]?.INSERT_GROUP_ID === gid : source[i] === sel) source.splice(i, 1);
     }
+    insertedRowsRef.current = insertedRowsRef.current.filter(row =>
+      gid ? row.INSERT_GROUP_ID !== gid : row !== sel
+    );
+    setInsertedRowCount(insertedRowsRef.current.length);
+    g.collectionView.refresh();
   };
 
   // F7 Save — AS-IS DMF0020_SAVE_SCM_MST_FUTURE_PRICE_ALL (1,279 lines) → To-Be 17 ^-delim CLOB
@@ -374,6 +422,7 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
       return;
     }
     const spRowsAll = (data as { o_rc1?: FuturePriceRow[] })?.o_rc1 ?? [];
+    const insertedRows = insertedRowsRef.current;
     // AS-IS SaveData = I/M/D 통합. 편집된 기존 행은 EditTracker 가 자동 CRUD_TYPE='M' 마킹.
     const editedRows = spRowsAll.filter(r => r.CRUD_TYPE === 'M');
     const targetRows = [...insertedRows, ...editedRows];
@@ -567,7 +616,7 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         setRangeRows(overRows);
         setOpenRange(true);
       }
-      setInsertedRows([]);
+      clearInsertedRows();
       editTrackerRef.current?.clearChanges(); // 편집 추적 reset (재조회 전)
       refetch?.();
     } catch (e) {
@@ -604,10 +653,7 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
     () => (data as { o_rc1?: FuturePriceRow[] })?.o_rc1 ?? [],
     [data]
   );
-  const rows = useMemo<FuturePriceRow[]>(
-    () => [...insertedRows, ...spRows],
-    [insertedRows, spRows]
-  );
+  const rows = useMemo<FuturePriceRow[]>(() => [...insertedRowsRef.current, ...spRows], [spRows]);
 
   // ⭐ 저장 후 재조회 데이터 로드 시 방금 저장한 행으로 scroll + select
   //   (신규 행이 그리드 맨 위 → 저장/재조회 후 SP 정렬 위치로 이동해 "안 보임"으로 인지되는 문제 해소.
@@ -646,7 +692,7 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         <SalesFuturePriceForm
           onSearch={handleSearch}
           onVersionOpen={() => setOpenVersion(true)}
-          hasInsertRows={insertedRows.length > 0}
+          hasInsertRows={insertedRowCount > 0}
         />
       )}
 
@@ -799,19 +845,12 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
           // AS-IS L2049 LoopByDtMeasureCount — 같은 INSERT_GROUP_ID 의 4 measure row 동기화
           // AS-IS L2092 ProjectStatus LockRange2(true) — popup 선택 시 자동 채움
           // AS-IS L2094 BizTypeName LockRange2(true) — popup 선택 시 자동 채움
-          setInsertedRows(prev =>
-            prev.map(r =>
-              r.INSERT_GROUP_ID === popupGroupId
-                ? {
-                    ...r,
-                    PROJECT_CODE: projectCode,
-                    PROJECT_NAME: projectName ?? '',
-                    PROJECT_STATUS: projectStatus ?? '',
-                    BIZ_TYPE_NAME: bizTypeName ?? '',
-                  }
-                : r
-            )
-          );
+          updateInsertedGroup(popupGroupId, {
+            PROJECT_CODE: projectCode,
+            PROJECT_NAME: projectName ?? '',
+            PROJECT_STATUS: projectStatus ?? '',
+            BIZ_TYPE_NAME: bizTypeName ?? '',
+          });
         }}
         preSearchParams={
           {
@@ -833,19 +872,12 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         modalClose={() => setOpenItem(false)}
         setSelectedValue={(itemId, itemName, itemClass, nickName) => {
           if (!popupGroupId) return;
-          setInsertedRows(prev =>
-            prev.map(r =>
-              r.INSERT_GROUP_ID === popupGroupId
-                ? {
-                    ...r,
-                    ITEM_ID: itemId,
-                    ITEM_NAME: itemName ?? '', // Model Name
-                    ITEM_CLASS_NAME: itemClass ?? '', // Model Type
-                    NICK_NAME: nickName ?? '', // ⭐ Nick Name (AS-IS DefColumns.NICK_NAME)
-                  }
-                : r
-            )
-          );
+          updateInsertedGroup(popupGroupId, {
+            ITEM_ID: itemId,
+            ITEM_NAME: itemName ?? '', // Model Name
+            ITEM_CLASS_NAME: itemClass ?? '', // Model Type
+            NICK_NAME: nickName ?? '', // ⭐ Nick Name (AS-IS DefColumns.NICK_NAME)
+          });
         }}
         preSearchParams={
           {

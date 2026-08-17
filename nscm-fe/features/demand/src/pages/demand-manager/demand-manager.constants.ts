@@ -24,6 +24,10 @@ export const DIVISION_40 = '40' as const;
 // 버전 팝업 유형 콤보 원천 (MDF_TYPE 룩업 — REPORT_SP_W / REPORT_BP_M 2건)
 export const VERSION_TYPE_LOOKUP = 'MDF_TYPE' as const;
 
+// 버전 팝업 Div 콤보 원천 — 사내 CMBO 레지스트리 등록명 (DivisionField 와 동일 룩업).
+//   화면이 40 전용이라 선택은 잠그고 라벨 표시용으로만 쓴다 (AS-IS '40 Mobility & IT Battery').
+export const DIVISION_LOOKUP = 'MyDivision' as const;
+
 // ⭐ 버전 팝업 기본 유형 — 조회 프로시저가 VERSION_TYPE 을 등호로 비교하므로 빈 값이면 0행이 된다.
 //   AS-IS 도 콤보 첫 항목이 선택된 상태로 열린다. 사내 실측(Division 40): REPORT_SP_W 176건 / REPORT_BP_M 139건.
 export const VERSION_TYPE_DEFAULT = 'REPORT_SP_W' as const;
@@ -102,3 +106,13 @@ export const INSERT_ROW_DEFAULTS = {
   STOCK2: 0,
   EDIT_YN: 'Y',
 } as const;
+
+/**
+ * unknown 값을 안전하게 문자열로 — 객체가 섞여 들어와도 '[object Object]' 를 만들지 않는다.
+ *
+ * 그리드 셀 값과 SP 결과 커서는 타입이 unknown 이라 String() 을 그대로 쓰면
+ * @typescript-eslint/no-base-to-string 에 걸리고, 실제로도 객체가 오면 쓰레기 문자열이 된다.
+ * sales-plan / business-plan / mkt-fcst / etc-sales-reports 의 페이지-로컬 toCellStr 과 동일 형태.
+ */
+export const toCellStr = (v: unknown): string =>
+  typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '';

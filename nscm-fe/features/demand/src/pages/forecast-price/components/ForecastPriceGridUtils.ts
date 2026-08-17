@@ -488,4 +488,4 @@ export const isNonEditableCell = (
   if (isM4Locked(measure, binding, m3CutoffYyyymm, condBucket)) return true;
 
   return false;
-};  
+};

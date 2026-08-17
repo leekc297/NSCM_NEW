@@ -1,0 +1,15 @@
+.groupHeader {
+  list-style: none;
+  font-weight: 600;
+  font-size: 12px;
+  padding: 6px 8px;
+  color: #666;
+}
+
+.childItem {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 6px 8px;
+  cursor: pointer;
+}

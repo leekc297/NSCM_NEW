@@ -4,6 +4,7 @@ import { type MutableRefObject, useEffect, useMemo } from 'react';
 
 import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
+import { rebindFilterColumns } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 
 import { MAIN_COLUMNS, type MainColumnMeta } from '../metal-link-price.constants';
@@ -257,6 +258,13 @@ export const MetalLinkPriceGrid = ({
     const cleaned = f.filterColumns.filter(b => !metalBindings.has(b));
     if (cleaned.length !== f.filterColumns.length) f.filterColumns = cleaned;
     f.filterApplied.addHandler(onFilterApplied);
+
+    // ⭐ [공통 UC-07, hook #133 §5] 재조회해도 사용자가 걸어둔 **필터가 유지**되어야 한다.
+    //   이 화면은 조회마다 baseStaticColumns key 로 DataGrid 를 재마운트하고 메탈 42 dynamicColumns
+    //   를 재생성하므로, FlexGridFilter 가 죽은 Column 객체를 붙든 채 남으면 "아이콘은 꺼졌는데
+    //   행은 걸러진" 상태가 된다. 끊긴 필터만 재바인딩한다(끊긴 게 없으면 no-op — 유틸 내부 가드).
+    //   정본 = business-plan/components/BusinessPlanGrid.tsx:715 (DMF0042).
+    rebindFilterColumns(g as unknown as FlexGrid<WijmoRowItem>, f);
 
     return () => {
       try {
