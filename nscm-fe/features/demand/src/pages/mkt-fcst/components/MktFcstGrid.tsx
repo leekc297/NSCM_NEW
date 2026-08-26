@@ -8,7 +8,7 @@ import {
   type FlexGrid as FlexGridType,
   type FormatItemEventArgs,
 } from '@mescius/wijmo.grid';
-import { FlexGridFilter } from '@mescius/wijmo.grid.filter';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { type MutableRefObject, useCallback, useEffect, useMemo, useRef } from 'react';
 
 import { apiClient } from '@foundation/apis';
@@ -115,7 +115,7 @@ const describeCascade = (cascade: CascadeRule[], row: Record<string, unknown>): 
 interface Props {
   rows: MktFcstRow[];
   gridRef: MutableRefObject<FlexGridType<MktFcstRow> | undefined>;
-  // ⭐ F4 Filter — 피처가 FlexGridFilter 직접 소유. 정적/동적(M_/W_/D_) 컬럼 모두 필터 대상 + 필터후 머지/높이 재적용.
+  // F4 Filter — 인스턴스는 공용 DataGrid 소유. 정적/동적(M_/W_/D_) 컬럼 모두 필터 대상 + 필터후 머지/높이 재적용.
   gridFilterRef?: MutableRefObject<FlexGridFilter | undefined>;
   // F7 Save — EditTracker 로 변경 셀 추적 + 비-insert 행 자동 CRUD_TYPE='M' 마킹.
   editTrackerRef?: MutableRefObject<EditTracker<MktFcstRow> | undefined>;
@@ -299,20 +299,26 @@ export const MktFcstGrid = ({
     buildGridComboFilter(c.binding, c._comboKey as string, division)
   );
   const comboResults = useTabComboQueries({ filters: gridComboFilters });
+  // W/S 권한 여부 — Div82 FCST Type 제약(A-06)의 예외 축. 상세 용도는 아래 W/S 분기 자료 블록 주석.
+  //   콤보 필터가 소비하므로 그 블록보다 먼저 선언한다(ref 미러는 그대로 아래에 둔다).
+  const wsPlannerYn = useMktFcstStore(s => s.wsPlannerYn);
   // dataMap 재생성 안정화 — comboId + row count 시그니처가 바뀔 때만 rebuild (DMF0020 동일).
   //   ⚠️ division 포함 — @divisionId 로 갈리는 콤보가 행 수만 같으면 이전 division 결과로 굳는다.
-  const comboSig = `${division}|${buildComboSig(
+  //   wsPlannerYn 도 포함 — 조회(MktFcstWsPlannerYn)가 늦게 도착하면 false 로 만든 dataMap 이
+  //   그대로 굳어 W/S 계정에 WS·WSF 가 끝내 안 보인다.
+  const comboSig = `${division}|${wsPlannerYn ? 'Y' : 'N'}|${buildComboSig(
     comboColumns.map(c => c._comboKey),
     comboResults
   )}`;
-  // A-06 [통합테스트 1st No.54] Div82 는 FCST Type 후보에서 WS·WSF 제외 — 조회 표시 dataMap 과
-  //   편집 후보(applyEditCombo)가 같은 filterFcstTypeRows 를 거친다. 한쪽만 걸면 편집에서는 못 고르는데
-  //   조회 표시에는 남아 CODE→NAME 변환만 살아 있는 불일치가 된다. 대상 아니면 원본 참조 그대로.
+  // A-06 [통합테스트 1st No.54] Div82 는 FCST Type 후보에서 WS·WSF 제외(2026-08-17 요구로 W/S
+  //   권한 계정은 예외) — 조회 표시 dataMap 과 편집 후보(applyEditCombo)가 같은 filterFcstTypeRows 를
+  //   거친다. 한쪽만 걸면 편집에서는 못 고르는데 조회 표시에는 남아 CODE→NAME 변환만 살아 있는
+  //   불일치가 된다. 대상 아니면 원본 참조 그대로.
   const dataMaps = useMemo<Record<string, DataMap | null>>(() => {
     const m: Record<string, DataMap | null> = {};
     comboColumns.forEach((c, i) => {
       m[c.binding] = buildDataMap(
-        filterFcstTypeRows(asComboRows(comboResults[i]), c.binding, division)
+        filterFcstTypeRows(asComboRows(comboResults[i]), c.binding, division, wsPlannerYn)
       );
     });
     return m;
@@ -330,7 +336,8 @@ export const MktFcstGrid = ({
       rowsByBinding[c.binding] = filterFcstTypeRows(
         asComboRows(comboResults[i]),
         c.binding,
-        division
+        division,
+        wsPlannerYn
       );
     });
     comboRowsRef.current = rowsByBinding;
@@ -444,20 +451,24 @@ export const MktFcstGrid = ({
   }, [division, fetchRowParamCombo]);
 
   // [E20260402-001736] W/S 분기 자료 — wsPlannerYn(store) + W/S FcstType 4종(FcstTypeWs =
-  //   SALES_TYPE_CODE2). 용도: MEASURE 편집 후보 필터(W/S + AS 사이트행 → AS_In_Req 1종) /
+  //   SALES_TYPE_CODE2). 용도: MEASURE 편집 후보 필터(사이트 축 우선 / W/S 축은 사이트 미선택 행) /
   //   AS_FROM_SITE 조건부 편집(#128~130 — isAsFromSiteEditable 의 FCST_TYPE 축 담당.
-  //   W/S Planner 축은 2026-08-14 요구로 제거 — wsPlannerYn 은 Measure 후보 필터와
-  //   AS 사이트 Measure 값 셋팅(AS_SITE_MEASURE)에서만 쓴다).
+  //   W/S Planner 축은 2026-08-14 요구로 제거 — wsPlannerYn 은 Measure 후보 필터,
+  //   AS 사이트 Measure 값 셋팅(AS_SITE_MEASURE), Div82 FCST Type 예외(A-06)에서 쓴다).
   //   AS_FROM_SITE CMBO(= AS(비축)향 사이트 목록, @param1=division)는 행의 Sales site 가 비축향인지
   //   판정하는 유일한 근거다 — AS-IS dtAsSalesSite.Select("Name = …") 1:1. NAME 집합에 포함 = 비축향,
   //   미포함 = 고객향. 조건부 잠금(CE-02) / 값 클리어(CE-04) 가 이 판정을 쓴다.
   //   주의: Measure 를 사이트로 1종 고정하던 규칙(.cs 1-c)은 2026-08-10 요구로 걷어냈다가 2026-08-14
-  //     요구로 W/S Planner + AS 사이트 조합만 되살렸다 — 값 셋팅(cellEditEnded)과 편집 후보 목록
-  //     (filterMeasureEditRows) 양쪽에 같은 조건으로 건다. 두 곳의 조건은 항상 일치해야 한다.
-  //     비W/S 사용자 후보에서 AS_In_Req 를 빼던 블랙리스트(.cs 1-a/1-b)도 2026-08-14 요구로 제거했다 —
-  //     W/S Planner 가 아니면 콤보 응답을 그대로 다 본다.
+  //     요구로 AS 사이트 쪽 절반만 되살렸고, 2026-08-17 규칙표로 그 절반의 W/S 한정 조건을 풀었으며,
+  //     2026-08-18 규칙표 4열로 일반 사이트 쪽 절반(고객향 -> MKT_FCST_RP 1종)까지 되살렸다 — 이제
+  //     사이트가 정해진 행은 그룹과 무관하게 measure 가 1종으로 고정된다.
+  //     값 셋팅(cellEditEnded)과 편집 후보 목록(filterMeasureEditRows) 양쪽에 같은 조건으로 건다.
+  //     두 곳의 조건은 항상 일치해야 한다.
+  //     비W/S 사용자 후보에서 AS_In_Req 를 빼던 블랙리스트(.cs 1-a/1-b)도 2026-08-14 제거 -> 2026-08-17
+  //     규칙표로 재적용했다(사이트 미선택 행 한정). 규칙은 filterMeasureEditRows 주석 참조.
+  //     따라서 wsPlannerRef 가 Measure 후보를 가르는 자리는 "사이트 미선택 행" 하나뿐이다.
   //     저장 검증(MSG00476)은 MktFcst.tsx 가 자체 조회분으로 한다.
-  const wsPlannerYn = useMktFcstStore(s => s.wsPlannerYn);
+  //   wsPlannerYn 선언은 위 콤보 dataMap 블록으로 올렸다(Div82 FCST Type 예외가 먼저 쓴다).
   const wsPlannerRef = useRef(false);
   wsPlannerRef.current = wsPlannerYn;
   const [wsFcstTypeRows, asSiteRows] = useTabComboQueries({
@@ -970,9 +981,10 @@ export const MktFcstGrid = ({
     }) => {
       const { col, binding, rowRec, comboId, param, dependsOn, src, memo } = opts;
       // [E20260402-001736] MEASURE 편집 후보 필터 — 규칙은 gridCombos.filterMeasureEditRows.
-      //   행 축(asBoundRow)은 여기서 판정해 넘긴다: AS 사이트 목록(asSiteNamesRef)은 화면 상태라
-      //   gridCombos 가 알 수 없다. 2026-08-14 요구로 W/S Planner + AS 사이트만 AS_In_Req 1종이고,
-      //   그 외 사용자는 콤보 응답 그대로 전부 본다(비W/S 81*/82 블랙리스트는 같은 날 제거).
+      //   사이트 축(asBoundRow·siteSelected)은 여기서 판정해 넘긴다: AS 사이트 목록(asSiteNamesRef)은
+      //   화면 상태라 gridCombos 가 알 수 없다. AS 사이트 행은 그룹 무관 AS_In_Req 1종, 일반 사이트
+      //   행은 그룹 무관 MKT_FCST_RP 1종, 사이트 미선택 행만 비W/S 면 AS_In_Req 제거 / W/S 면 응답
+      //   그대로다(2026-08-17~18 규칙표).
       //   후보가 0건이면 필터 전 목록으로 되돌린다(선택지 전무 방지 — 기존 동작).
       const measured =
         binding === 'MEASURE'
@@ -980,13 +992,15 @@ export const MktFcstGrid = ({
               src,
               wsPlanner: wsPlannerRef.current,
               asBoundRow: isAsBoundRow(rowRec),
+              siteSelected: !!rowSalesSite(rowRec),
             })
           : src;
       const base = measured.length > 0 ? measured : src;
-      // A-06 [통합테스트 1st No.54] Div82 FCST Type 후보에서 WS·WSF 제외 — 조회 표시 dataMap 과 동일
-      //   함수(filterFcstTypeRows). MEASURE 와 달리 0건 fallback 을 두지 않는다: 82 에서 WS·WSF 는
-      //   업무상 선택 불가이므로 되살리면 제약 자체가 무의미해진다(82 도 남는 후보가 여러 종 있다).
-      const restricted = filterFcstTypeRows(base, binding, division);
+      // A-06 [통합테스트 1st No.54] Div82 FCST Type 후보에서 WS·WSF 제외(W/S 권한 계정은 예외 —
+      //   2026-08-17 요구) — 조회 표시 dataMap 과 동일 함수(filterFcstTypeRows). MEASURE 와 달리
+      //   0건 fallback 을 두지 않는다: 82 에서 WS·WSF 는 업무상 선택 불가이므로 되살리면 제약 자체가
+      //   무의미해진다(82 도 남는 후보가 여러 종 있다).
+      const restricted = filterFcstTypeRows(base, binding, division, wsPlannerRef.current);
       // ⭐ 편집 콤보에도 행 cascade 적용 (사용자 요구 2026-08-07 — END_CUSTOMER 는 신규행에서
       //   그 행의 DIVISION_ID·TEAM_ID 로 좁혀져야 한다). 규칙이 없는 컬럼은 그대로 통과.
       const cascade = GRID_CASCADE_FILTERS[binding];
@@ -998,8 +1012,9 @@ export const MktFcstGrid = ({
         dependsOn:
           dependsOn +
           (binding === 'MEASURE'
-            ? `  /  후보필터(둘 다 true 일 때만 AS_In_Req 1종): W-S Planner=${wsPlannerRef.current}` +
-              ` / AS 사이트행=${isAsBoundRow(rowRec)}`
+            ? '  /  후보필터(AS행=AS_In_Req / 일반사이트=MKT_FCST_RP / 미선택+비W-S=AS_In_Req 제거)' +
+              `: W-S Planner=${wsPlannerRef.current} / AS 사이트행=${isAsBoundRow(rowRec)}` +
+              ` / 사이트입력=${!!rowSalesSite(rowRec)}`
             : '') +
           (cascade ? '  /  ' + describeCascade(cascade, rowRec) : ''),
         before: src,
@@ -1237,40 +1252,23 @@ export const MktFcstGrid = ({
       s.invalidate(true);
     };
 
-    // 편집 종료 — (A) 정적 cols = Insert 행 group 동기화 / (B) 동적 cols(D_/W_/M_) = 재계산 cascade.
-    const cellEditEndedHandler = (s: FlexGridType<MktFcstRow>, e: { row: number; col: number }) => {
-      const col = s.columns[e.col];
-      const binding = col.binding ?? '';
-
-      // ⭐ cascade 스왑 원복 (hook #59 §5-G) — beginningEdit 의 행 컨텍스트 필터 dataMap 을 전체
-      //   dataMap 으로 되돌린다 (스왑 잔존 시 필터 밖 CODE 보유 타 행의 명칭 변환이 깨짐. 취소도 커버).
-      if (GRID_CASCADE_FILTERS[binding] && dataMapsRef.current[binding]) {
-        col.dataMap = dataMapsRef.current[binding];
-      }
-      // ⭐ 편집 전용 콤보 원복 (MEASURE 등) — 편집 후보(유효분) dataMap 을 전체 표시 dataMap 으로
-      //   되돌린다. 원복 누락 시 조회 표시에서 편집목록 밖 CODE 명칭 변환 손실.
-      //   ROW_PARAM_EDIT_COMBO(MEASURE·INCOTERMS)도 동일 — 스왑이 남으면 파라미터가 다른 타 행의
-      //   명칭 변환이 방금 편집한 행의 후보 기준으로 굳는다.
-      if (
-        (GRID_EDIT_COMBO[binding] || ROW_PARAM_EDIT_COMBO[binding]) &&
-        dataMapsRef.current[binding]
-      ) {
-        col.dataMap = dataMapsRef.current[binding];
-      }
-
-      // ===== (B) 동적 셀(D_/W_/M_) 재계산 cascade (보강스펙 §2, AS-IS L3282~4175) =====
-      if (dynKindOf(binding) && /^[MWD]_/.test(binding)) {
-        if (!canModelChangeRef.current) return; // 재진입 차단 (AS-IS L2885)
-        const row = s.rows[e.row].dataItem as MktFcstRow | undefined;
-        if (!row) return;
-        runDynRecalc(s, e.row, binding, row);
-        return;
-      }
-
-      // ===== (A) 정적 셀 — Insert 행 group 좌측 cols 동기화 (Phase 2b 유지) =====
+    // 정적 셀 값이 확정된 뒤의 공통 후처리 — 직접 편집(cellEditEnded)과 붙여넣기(pastedCell)가
+    //   같은 규칙을 타도록 함수로 뺐다(2026-08-19 사용자 요구: 셀 복사에도 하위값 초기화 적용).
+    //   prev = 그 셀의 직전 값. 값이 실제로 바뀐 경우만 도는 동작(하위 셀 clear, 수량 클리어 등)의
+    //     판정 근거라 붙여넣기 경로도 pastingCell 에서 직전 값을 잡아 넘겨야 한다.
+    //   keepCols = 같은 붙여넣기에서 값이 함께 들어온 컬럼. 방금 붙여넣은 하위 값을 도로 지우면
+    //     안 되므로 clear 대상에서 뺀다.
+    const applyStaticCascade = (
+      s: FlexGridType<MktFcstRow>,
+      rowIdx: number,
+      binding: string,
+      prev: { binding: string; oldVal: unknown } | null,
+      keepCols: readonly string[] = []
+    ): void => {
       const meta = visibleColumns.find(c => c.binding === binding);
       if (!meta) return;
-      const staticRow = s.rows[e.row].dataItem as MktFcstRow | undefined;
+      // 붙여넣기 경로는 flush 가 한 박자 늦게 돌아 그 사이 행이 사라졌을 수 있다.
+      const staticRow = s.rows[rowIdx]?.dataItem as MktFcstRow | undefined;
       if (!staticRow || staticRow.CRUD_TYPE !== 'I') return;
       const gid = staticRow.INSERT_GROUP_ID;
       if (!gid) return;
@@ -1284,12 +1282,11 @@ export const MktFcstGrid = ({
 
       // ⭐ cascade 계단식 리셋 (hook #59 §5-G / DMF0020 이식) — 상위 콤보 값이 실제로 바뀐 경우만
       //   같은 INSERT_GROUP 형제 행 포함 하위 셀 clear (END_CUSTOMER→SCM_SITE_ID 등).
-      const prev = editingCellRef.current;
       const changed = prev?.binding === binding && toCellStr(prev.oldVal) !== toCellStr(newVal);
       if (changed && GRID_CASCADE_CLEAR[binding]) {
         for (const item of view.items) {
           if (item.CRUD_TYPE === 'I' && item.INSERT_GROUP_ID === gid) {
-            applyCascadeClear(item as Record<string, unknown>, binding);
+            applyCascadeClear(item as Record<string, unknown>, binding, keepCols);
           }
         }
       }
@@ -1312,26 +1309,35 @@ export const MktFcstGrid = ({
             if (item.CRUD_TYPE === 'I' && item.INSERT_GROUP_ID === gid) {
               const rec = item as Record<string, unknown>;
               MEASURE_MODEL_CLEAR_COLS.forEach(k => {
+                if (keepCols.includes(k)) return;
                 rec[k] = '';
               });
             }
           }
         }
       }
-      // Sales site 가 비축향(AS)으로 바뀌면 W/S Planner 행의 Measure 를 AS_In_Req 로 셋팅
-      //   (.cs ComboSelChange 1-c, 2026-08-14 요구 — "DM Planner(W/S) 이고 AS Site 면 AS_In_Req 표시").
-      //   같은 조건으로 편집 후보 목록도 AS_In_Req 1종만 남는다(filterMeasureEditRows) — 값만 바꾸고
+      // Sales site 가 정해지면 Measure 를 그 사이트 전용 1종으로 셋팅 (.cs ComboSelChange 1-c /
+      //   2026-08-17~18 규칙표 3·4열 — "AS Site 선택 후 AS_In_Req 만" / "비-AS Site 선택 후
+      //   MKT_FCST_RP 만").
+      //   그룹 조건은 없다: 규칙표 비고 "Site 변경 후 필터에는 그룹 조건 없음" 대로 W/S Planner 한정
+      //   조건을 2026-08-17 에 걷어냈다 — DM Planner·DM ADMIN·그 외 그룹도 동일하게 셋팅된다.
+      //   같은 조건으로 편집 후보 목록도 같은 1종만 남는다(filterMeasureEditRows) — 값만 바꾸고
       //   목록을 열어 두면 잠시 뒤 다른 measure 로 되돌릴 수 있어 두 곳의 조건은 항상 같이 움직인다.
-      //   되돌리기는 "직전 사이트가 AS 사이트였던 경우" 로 한정한다. 조건 없이 되돌리면 일반 사이트에서
-      //   사용자가 직접 고른 AS_In_Req 까지 기본값으로 밀어 버린다.
-      //   주의: AS_In_Req 는 MEASURE_MODEL_KEEP 이라 이 셋팅으로 Model 이 날아가지 않는다.
+      //   사이트를 비워 미선택으로 돌아가면 값을 건드리지 않는다 — 단 직전이 AS 사이트였고 값이
+      //   AS_In_Req 로 남아 있으면 기본값으로 되돌린다. 비W/S 계정의 미선택 후보에는 AS_In_Req 가
+      //   없어 그대로 두면 값과 목록이 어긋난다.
+      //   주의: 이 프로그램 셋팅은 binding==='MEASURE' 가 아니라 위 Model clear 연쇄를 타지 않는다.
+      //     사이트 변경 자체가 GRID_CASCADE_CLEAR(SCM_SITE_ID -> ITEM_ID 등)로 Model 계열을 이미
+      //     비우므로 measure x model 조합이 어긋날 일은 없다.
       if (changed && SALES_SITE_BINDINGS.includes(binding)) {
         const nowAsBound = isAsBoundRow(staticRow);
+        const siteSelected = !!rowSalesSite(staticRow);
         const wasAsBound = asSiteNamesRef.current.has(toCellStr(prev?.oldVal).trim());
         const curMeasure = toCellStr(staticRow.MEASURE).trim();
         let nextMeasure = '';
-        if (nowAsBound && wsPlannerRef.current) nextMeasure = AS_SITE_MEASURE;
-        else if (!nowAsBound && wasAsBound && curMeasure === AS_SITE_MEASURE) {
+        if (nowAsBound) nextMeasure = AS_SITE_MEASURE;
+        else if (siteSelected) nextMeasure = INSERT_DEFAULT_MEASURE;
+        else if (wasAsBound && curMeasure === AS_SITE_MEASURE) {
           nextMeasure = INSERT_DEFAULT_MEASURE;
         }
         if (nextMeasure) {
@@ -1362,13 +1368,51 @@ export const MktFcstGrid = ({
       //   같은 INSERT_GROUP 형제 행 일괄 — 위 동기화가 키 값을 형제에도 복사하니 형제 정체도 같이 바뀐다.
       //   키 목록은 gridCombos.ROW_KEY_BINDINGS(= division.ts buildDuplicateKey 컬럼셋) 단일 출처.
       //   주의: changed 게이트 필수 — 같은 값 재선택·형제 동기화로 입력한 수량이 날아가면 안 된다.
+      //   keepCols 예외: 행 전체를 복사해 붙여넣으면 키와 수량이 같은 동작에서 함께 들어온다 —
+      //     방금 붙여넣은 수량까지 지우면 붙여넣기가 무의미해진다.
       if (changed && ROW_KEY_BINDINGS.includes(binding)) {
         for (const item of view.items) {
           if (item.CRUD_TYPE !== 'I' || item.INSERT_GROUP_ID !== gid) continue;
           const rec = item as Record<string, unknown>;
-          for (const b of dynBindings) rec[b] = null;
+          for (const b of dynBindings) {
+            if (!keepCols.includes(b)) rec[b] = null;
+          }
         }
       }
+    };
+
+    // 편집 종료 — (A) 정적 cols = Insert 행 group 동기화 / (B) 동적 cols(D_/W_/M_) = 재계산 cascade.
+    const cellEditEndedHandler = (s: FlexGridType<MktFcstRow>, e: { row: number; col: number }) => {
+      const col = s.columns[e.col];
+      const binding = col.binding ?? '';
+
+      // ⭐ cascade 스왑 원복 (hook #59 §5-G) — beginningEdit 의 행 컨텍스트 필터 dataMap 을 전체
+      //   dataMap 으로 되돌린다 (스왑 잔존 시 필터 밖 CODE 보유 타 행의 명칭 변환이 깨짐. 취소도 커버).
+      if (GRID_CASCADE_FILTERS[binding] && dataMapsRef.current[binding]) {
+        col.dataMap = dataMapsRef.current[binding];
+      }
+      // ⭐ 편집 전용 콤보 원복 (MEASURE 등) — 편집 후보(유효분) dataMap 을 전체 표시 dataMap 으로
+      //   되돌린다. 원복 누락 시 조회 표시에서 편집목록 밖 CODE 명칭 변환 손실.
+      //   ROW_PARAM_EDIT_COMBO(MEASURE·INCOTERMS)도 동일 — 스왑이 남으면 파라미터가 다른 타 행의
+      //   명칭 변환이 방금 편집한 행의 후보 기준으로 굳는다.
+      if (
+        (GRID_EDIT_COMBO[binding] || ROW_PARAM_EDIT_COMBO[binding]) &&
+        dataMapsRef.current[binding]
+      ) {
+        col.dataMap = dataMapsRef.current[binding];
+      }
+
+      // ===== (B) 동적 셀(D_/W_/M_) 재계산 cascade (보강스펙 §2, AS-IS L3282~4175) =====
+      if (dynKindOf(binding) && /^[MWD]_/.test(binding)) {
+        if (!canModelChangeRef.current) return; // 재진입 차단 (AS-IS L2885)
+        const row = s.rows[e.row].dataItem as MktFcstRow | undefined;
+        if (!row) return;
+        runDynRecalc(s, e.row, binding, row);
+        return;
+      }
+
+      // ===== (A) 정적 셀 — 그룹 동기화 + cascade clear (붙여넣기와 공유하는 applyStaticCascade) =====
+      applyStaticCascade(s, e.row, binding, editingCellRef.current);
       editingCellRef.current = null;
       s.invalidate(true);
     };
@@ -1563,8 +1607,55 @@ export const MktFcstGrid = ({
     //   ScmSiteId(81·82) 컬럼이면 해당 행 Measure/Incoterms 콤보 재조회·재설정.
     //   Wijmo 는 whole-range 'pasted' 이벤트가 없어 pastedCell(셀당) 사용. TO-BE 콤보 dataMap 은
     //   grid 전역(useTabComboQueries) 이므로 행 단위 재조회 대신 dataMap 재부착 + invalidate 로 표시 동기화.
+    //   2026-08-19 사용자 요구 추가 — 붙여넣기도 콤보를 직접 바꿨을 때와 똑같이 하위 셀을 비운다.
+    //     값이 덮이기 전이 직전 값을 잡을 유일한 시점이라 pastingCell 에서 기억해 둔다.
+    //     처리는 셀마다 즉시 하지 않고 붙여넣기 한 번이 끝난 뒤(setTimeout 0) 모아서 한다 —
+    //     즉시 하면 같은 붙여넣기로 뒤이어 들어올 하위 셀 값을 먼저 지워 버린다. 모아서 하면
+    //     같은 행에 함께 붙여넣은 컬럼을 keepCols 로 넘겨 그 값만 살릴 수 있다.
+    const pasteOldValues = new Map<string, unknown>();
+    let pastedCells: { row: number; binding: string; oldVal: unknown }[] = [];
+    let pasteFlushTimer: ReturnType<typeof setTimeout> | null = null;
+
+    const pastingCellHandler = (s: FlexGridType<MktFcstRow>, e: CellRangeEventArgs) => {
+      // 배치의 첫 셀이면(=flush 예약 없음) 이전 배치에서 취소돼 남은 값을 버린다.
+      if (pasteFlushTimer === null) pasteOldValues.clear();
+      const b = g.columns[e.col]?.binding ?? '';
+      const rec = s.rows[e.row]?.dataItem as Record<string, unknown> | undefined;
+      pasteOldValues.set(`${e.row}:${e.col}`, rec?.[b]);
+    };
+
+    const flushPastedCascade = () => {
+      pasteFlushTimer = null;
+      const cells = pastedCells;
+      pastedCells = [];
+      pasteOldValues.clear();
+      if (cells.length === 0) return;
+      const pastedByRow = new Map<number, string[]>();
+      for (const c of cells) {
+        const cols = pastedByRow.get(c.row) ?? [];
+        cols.push(c.binding);
+        pastedByRow.set(c.row, cols);
+      }
+      for (const c of cells) {
+        applyStaticCascade(
+          g,
+          c.row,
+          c.binding,
+          { binding: c.binding, oldVal: c.oldVal },
+          pastedByRow.get(c.row) ?? []
+        );
+      }
+      g.invalidate(true);
+    };
+
     const pastedCellHandler = (_s: FlexGridType<MktFcstRow>, e: CellRangeEventArgs) => {
       const b = g.columns[e.col]?.binding ?? '';
+      const key = `${e.row}:${e.col}`;
+      if (b) {
+        pastedCells.push({ row: e.row, binding: b, oldVal: pasteOldValues.get(key) });
+        if (pasteFlushTimer === null) pasteFlushTimer = setTimeout(flushPastedCascade, 0);
+      }
+      pasteOldValues.delete(key);
       if (b !== 'SCM_SITE_ID' && b !== 'SCM_SITE_ID40') return;
       for (let i = 0; i < g.columns.length; i++) {
         const col = g.columns[i];
@@ -1574,6 +1665,7 @@ export const MktFcstGrid = ({
       g.invalidate(true);
       pasteContinueRef.current = false;
     };
+    g.pastingCell.addHandler(pastingCellHandler);
     g.pastedCell.addHandler(pastedCellHandler);
 
     // Scroll 시 머지 그룹 재계산 (viewport sticky #38)
@@ -1620,10 +1712,16 @@ export const MktFcstGrid = ({
         /* unmount race */
       }
       try {
+        g.pastingCell?.removeHandler(pastingCellHandler);
+      } catch {
+        /* unmount race */
+      }
+      try {
         g.pastedCell?.removeHandler(pastedCellHandler);
       } catch {
         /* unmount race */
       }
+      if (pasteFlushTimer !== null) clearTimeout(pasteFlushTimer);
       try {
         g.scrollPositionChanged?.removeHandler(handleScrollInvalidate);
       } catch {
@@ -1656,10 +1754,7 @@ export const MktFcstGrid = ({
       //   columnGroups 재대입이 Column 객체를 통째로 재생성하므로, FlexGridFilter 가 죽은 Column 을
       //   붙든 채 남아 "아이콘은 꺼졌는데 행은 걸러진" 상태가 된다. 끊긴 필터만 재바인딩한다.
       //   (끊긴 게 없으면 no-op — 되먹임 방지는 유틸 내부 가드가 담당. hook #133 §5 UC-07)
-      rebindFilterColumns(
-        g as unknown as FlexGridType<WijmoRowItem>,
-        gridFilterRef?.current
-      );
+      rebindFilterColumns(g as unknown as FlexGridType<WijmoRowItem>, gridFilterRef?.current);
       // (0) combo dataMap 재적용 — wrapper columnGroups 재적용이 col.dataMap 을 덮으므로 재부착(guard)
       for (let i = 0; i < g.columns.length; i++) {
         const col = g.columns[i];
@@ -1739,24 +1834,24 @@ export const MktFcstGrid = ({
     g?.invalidate(true);
   }, [currentWeekInfo, gridRef]);
 
-  // ⭐ F4 Filter — 피처 소유 FlexGridFilter (정적/동적 컬럼 모두 필터 대상 + 필터후 머지/높이 재적용)
+  // F4 Filter — 정적/동적 컬럼 모두 필터 대상 + 필터후 머지/높이 재적용.
+  //   FlexGridFilter 인스턴스는 공용 DataGrid 소유(gridFilterRef) — 여기서는 핸들러만 얹는다.
+  //   금지: 여기서 new FlexGridFilter 생성. 두 번째 인스턴스가 itemsSourceChanged 에 거는 clear 가
+  //   DataGrid 의 restore 뒤에 실행돼 복원한 필터를 도로 지운다(재조회·행추가 시 필터 해제, 2026-08-21 실측).
+  //   인스턴스는 DataGrid 의 initialized(자식 mount)에서 만들어지므로 이 effect(부모) 시점엔 항상 있다.
+  //   표준 = master/sales-site/components/SalesSiteGrid.tsx.
   useEffect(() => {
     const g = (gridRef as { current: FlexGridType<MktFcstRow> | null } | null)?.current;
-    if (!g || !gridFilterRef) return;
+    const f = gridFilterRef?.current;
+    if (!g || !f) return;
 
     const onFilterApplied = () => g.invalidate(true);
 
-    let f = gridFilterRef.current;
-    if (!f || f.grid !== g) {
-      f = new FlexGridFilter(g);
-      f.filterColumns = [''];
-      gridFilterRef.current = f;
-    }
     f.filterApplied.addHandler(onFilterApplied);
 
     return () => {
       try {
-        f?.filterApplied.removeHandler(onFilterApplied);
+        f.filterApplied.removeHandler(onFilterApplied);
       } catch {
         /* unmount race */
       }
@@ -1767,6 +1862,8 @@ export const MktFcstGrid = ({
     <>
       <DataGrid<MktFcstRow>
         gridRef={gridRef}
+        // 필터 인스턴스는 DataGrid 소유 — 위 F4 Filter effect 주석 참고.
+        gridFilterRef={gridFilterRef}
         editTrackerRef={editTrackerRef}
         staticColumns={mainStaticColumns}
         dynamicColumns={mainDynamicColumns}

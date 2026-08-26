@@ -2,14 +2,16 @@ import type { FlexGrid as FlexGridType, FormatItemEventArgs } from '@mescius/wij
 import { AllowMerging, DataMap } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { FlexGridFilter as FlexGridFilterCtor } from '@mescius/wijmo.grid.filter';
-import { type MutableRefObject, type Ref, useEffect, useMemo, useRef } from 'react';
+import { type MutableRefObject, useCallback, useEffect, useMemo, useRef } from 'react';
 
-import type { RawFlexGridColumnConfig } from '@foundation/models';
-import type { EditTracker } from '@foundation/utils';
+import { CRUD_TYPE } from '@foundation/constants';
+import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
+import { type EditTracker, keepRowVisibleUnderFilter } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 
 import {
   EDITABLE_BINDINGS,
+  INSERT_ONLY_BINDINGS,
   MONTH_GROUP_HEADER,
   PAIR_FOLLOW_BINDINGS,
   toCellStr,
@@ -26,9 +28,9 @@ import { isOutOfOrderRange } from '../utils/demand-manager.months';
 
 interface Props {
   rows: DemandManagerRow[];
-  gridRef: Ref<FlexGridType<DemandManagerRow>>;
+  gridRef: MutableRefObject<FlexGridType<DemandManagerRow> | undefined>;
   gridFilterRef?: MutableRefObject<FlexGridFilter | undefined>;
-  editTrackerRef?: MutableRefObject<EditTracker | undefined>;
+  editTrackerRef?: MutableRefObject<EditTracker<DemandManagerRow> | undefined>;
   staticColumns?: RawFlexGridColumnConfig[];
   monthColumns: MonthColumnMeta[];
   projectOptions?: LookupProjectRow[];
@@ -99,7 +101,7 @@ export const DemandManagerGrid = ({
 
   // ⭐ 월 컬럼 — 조회 기간에서 산출. AS-IS 와 동일하게 전체 월을 상위 헤더 하나로 묶고(2단),
   //   leaf 에 yyyy.MM 을 표시한다. 연도별로 쪼개지 않는다.
-  const mainDynamicColumns = useMemo(() => {
+  const mainDynamicColumns = useMemo<FlexGridColumnConfig[]>(() => {
     if (monthColumns.length === 0) return [];
     return [
       {
@@ -121,7 +123,7 @@ export const DemandManagerGrid = ({
         })),
       },
     ];
-  }, [monthColumns]) as never[];
+  }, [monthColumns]);
 
   const monthByBinding = useMemo(() => {
     const m = new Map<string, MonthColumnMeta>();
@@ -134,7 +136,7 @@ export const DemandManagerGrid = ({
   ctxRef.current = { canEdit, rows, monthByBinding };
 
   useEffect(() => {
-    const g = (gridRef as { current: FlexGridType<DemandManagerRow> | null } | null)?.current;
+    const g = gridRef.current;
     if (!g || !g.columnHeaders || !g.columnHeaders.rows) return;
 
     if (g.alternatingRowStep !== 1) g.alternatingRowStep = 1; // zebra (#95)
@@ -160,6 +162,13 @@ export const DemandManagerGrid = ({
         return false;
       }
       const row = rs[rowIndex];
+      // Project 는 신규 세트에서만 입력할 수 있다 — 조회된 행에서는 잠근다
+      if (
+        INSERT_ONLY_BINDINGS.includes(binding as (typeof INSERT_ONLY_BINDINGS)[number]) &&
+        row?.CRUD_TYPE !== CRUD_TYPE.INSERT
+      ) {
+        return false;
+      }
       // 서버가 내려준 편집 권한(EDIT_YN)이 N 이면 잠근다
       return String(row?.EDIT_YN ?? 'Y').toUpperCase() !== 'N';
     };
@@ -174,9 +183,14 @@ export const DemandManagerGrid = ({
         // 수주 기간을 벗어난 월은 0 으로 보여준다 (AS-IS 범위 밖 0 처리)
         const out = isOutOfOrderRange(meta.yyyymm, rowItem?.ORDERSTART, rowItem?.ORDEREND);
         const n = out ? 0 : toNumber(rowItem?.[binding]);
-        e.cell.textContent = n === 0 ? '0' : n.toLocaleString();
+        // 데이터(월) 컬럼은 정수로만 보여준다 — 소수점 이하는 버린다.
+        //   주의: 인자 없는 toLocaleString() 은 maximumFractionDigits 기본이 3 이라
+        //   SP 가 소수를 내려주면 그대로 노출된다. business-plan / sales-plan 의 INTEGER 표기와 동일.
+        //   0 판정은 자른 뒤에 한다 — -0.4 같은 값이 '-0' 으로 찍히거나 빨갛게 칠해지지 않도록.
+        const shown = Math.trunc(n);
+        e.cell.textContent = shown === 0 ? '0' : shown.toLocaleString();
         toggleClass(e.cell, 'wj-cell-non-editable', true);
-        paintNegative(e.cell, n);
+        paintNegative(e.cell, shown);
         return;
       }
       if (staticBindingSet.has(binding)) {
@@ -242,7 +256,7 @@ export const DemandManagerGrid = ({
 
   // 헤더 높이 48px 고정 (#93) + Project 셀 콤보 배선
   useEffect(() => {
-    const g = (gridRef as { current: FlexGridType<DemandManagerRow> | null } | null)?.current;
+    const g = gridRef.current;
     if (!g) return;
     const applyLayout = () => {
       const projectCol = g.columns.getColumn('PROJECT_NAME');
@@ -272,9 +286,55 @@ export const DemandManagerGrid = ({
     };
   }, [gridRef, projectDataMap, monthColumns, fixedColumns]);
 
+  // 필터가 걸린 상태에서 Insert — 값이 빈 신규행은 필터 조건에 걸려 CollectionView 에서 빠진다.
+  //   공용 keepRowVisibleUnderFilter 로 wijmo 예외 집합(grid._newAddedRowsSet)에 등록해 보이게 한다.
+  //   필터 자체의 보존은 공용 DataGrid 가 담당한다(itemsSourceChanged 의 capture -> clear -> restore).
+  //   주의: 등록은 한 번으로 끝나지 않는다. FlexGridFilter.apply() 가 이 Set 을 null 로 비우는데
+  //     DataGrid 의 필터 복원이 곧 apply() 라 Insert 마다 예외가 날아가 신규행이 다시 숨는다.
+  //     따라서 rows 변경 시와 filterApplied 시 양쪽에서 재등록한다 (DMF0042 배선 1:1).
+  const reapplyInsertRowVisibility = useCallback((): boolean => {
+    const g = gridRef.current;
+    // 컬럼이 없는 그리드에 refresh 를 걸면 wijmo 가 컬럼 인덱스 -1 로 계산하다 예외를 던진다.
+    if (!g || g.columns.length === 0) return false;
+    const insertRows = ctxRef.current.rows.filter(r => r.CRUD_TYPE === 'I');
+    if (insertRows.length === 0) return false;
+    insertRows.forEach(row => keepRowVisibleUnderFilter(g, row));
+    return true;
+  }, [gridRef]);
+
+  /**
+   * 선택 행을 붙든 채 CollectionView 를 다시 계산한다.
+   *
+   * refresh() 는 뷰를 새로 만들고 그리드가 행을 다시 바인딩하는데, 이때 선택은 행 참조가 아니라
+   * 인덱스·CollectionView 의 현재 위치를 따라간다. 그래서 필터 복원(apply -> refresh)이
+   * 화면단 Insert 포커스 이동보다 늦게 돌면 커서가 방금 만든 행이 아니라 엉뚱한 행
+   * (인덱스 보정으로 밀린 그리드 끝 행)에 남는다.
+   * refresh 전에 선택 행을 참조로 잡아 두었다가 같은 행에 선택을 되돌린다.
+   */
+  const refreshKeepingSelection = useCallback(() => {
+    const g = gridRef.current;
+    const cv = g?.collectionView;
+    if (!g || !cv) return;
+    const selRow = g.selection?.row ?? -1;
+    const selCol = g.selection?.col ?? -1;
+    const selItem =
+      selRow >= 0 ? (g.rows[selRow]?.dataItem as DemandManagerRow | undefined) : undefined;
+    cv.refresh();
+    if (!selItem) return;
+    for (let i = 0; i < g.rows.length; i++) {
+      if (g.rows[i]?.dataItem !== selItem) continue;
+      if (g.selection?.row !== i) g.select(i, selCol >= 0 ? selCol : 0);
+      return;
+    }
+  }, [gridRef]);
+
+  useEffect(() => {
+    if (reapplyInsertRowVisibility()) refreshKeepingSelection();
+  }, [rows, reapplyInsertRowVisibility, refreshKeepingSelection]);
+
   // F4 Filter — 월 컬럼은 필터 대상에서 제외
   useEffect(() => {
-    const g = (gridRef as { current: FlexGridType<DemandManagerRow> | null } | null)?.current;
+    const g = gridRef.current;
     if (!g || !gridFilterRef) return;
     const onFilterChanging = (
       _s: FlexGridFilter,
@@ -282,16 +342,35 @@ export const DemandManagerGrid = ({
     ) => {
       if (/^M\d+$/.test(e.getColumn()?.binding ?? '')) e.cancel = true;
     };
-    const onFilterApplied = () => g.invalidate(true);
-    let f = gridFilterRef.current;
-    if (!f || f.grid !== g) {
-      f = new FlexGridFilterCtor(g);
-      f.filterColumns = [''];
-      gridFilterRef.current = f;
+    // 금지: 여기서 새 FlexGridFilter 를 만들지 말 것 (2026-08-22 실측 — "필터 걸고 행추가하면 필터가 풀림").
+    //   공용 DataGrid 가 itemsSourceChanged 에 [capture -> FlexGridFilter 생성(=wijmo clear) -> restore]
+    //   를 등록 순서로 걸어 필터를 되살린다. 화면이 두 번째 인스턴스를 만들면 그 clear 핸들러가
+    //   restore 뒤에 붙어 마지막에 실행되므로 복원분이 도로 지워진다.
+    //   필수: DataGrid 에 gridFilterRef 를 넘겨 인스턴스를 공유한다(아래 JSX). 여기서는 없을 때만
+    //     안전망으로 만든다 — business-plan / forecast-price 가 쓰는 배선과 동일하다.
+    if (!gridFilterRef.current) {
+      const created = new FlexGridFilterCtor(g);
+      created.filterColumns = [''];
+      gridFilterRef.current = created;
     }
+    const f = gridFilterRef.current;
+    let raf = 0;
+    const onFilterApplied = () => {
+      g.invalidate(true);
+      // apply() 가 방금 비운 신규행 예외 집합을 되살린다.
+      //   주의: refresh 를 filterApplied 안에서 바로 부르면 wijmo apply() 도중 재진입이 되어
+      //     내부 인덱스가 어긋난다. 다음 프레임으로 미룬다(DMF0082 선례).
+      if (!reapplyInsertRowVisibility()) return;
+      window.cancelAnimationFrame(raf);
+      raf = window.requestAnimationFrame(() => {
+        reapplyInsertRowVisibility();
+        refreshKeepingSelection();
+      });
+    };
     f.filterChanging.addHandler(onFilterChanging as never);
     f.filterApplied.addHandler(onFilterApplied);
     return () => {
+      window.cancelAnimationFrame(raf);
       try {
         f?.filterChanging.removeHandler(onFilterChanging as never);
         f?.filterApplied.removeHandler(onFilterApplied);
@@ -299,22 +378,26 @@ export const DemandManagerGrid = ({
         /* unmount race */
       }
     };
-  }, [gridRef, gridFilterRef, monthColumns]);
+  }, [gridRef, gridFilterRef, monthColumns, reapplyInsertRowVisibility, refreshKeepingSelection]);
 
   return (
-    <div className={styles.gridContainer}>
-      <DataGrid
-        key={mainStaticColumns.map(c => c.colNm).join(',')}
-        className={styles.grid}
-        gridRef={gridRef as never}
-        editTrackerRef={editTrackerRef as never}
-        staticColumns={mainStaticColumns}
-        dynamicColumns={mainDynamicColumns}
-        itemsSource={rows as unknown as WijmoRowItem[]}
-        autoGenerateColumns={false}
-        allowSorting={false}
-        allowMerging={AllowMerging.All}
-      />
-    </div>
+    // <div className={styles.gridContainer}>
+    <DataGrid<DemandManagerRow>
+      key={mainStaticColumns.map(c => c.colNm).join(',')}
+      className={styles.grid}
+      gridRef={gridRef}
+      // 필수: 필터 인스턴스를 공용 DataGrid 와 공유한다. 넘기지 않으면 DataGrid 가 필터를
+      //   만들지 않아 itemsSourceChanged 의 capture/restore 가 전부 no-op 이 되고,
+      //   화면이 뒤늦게 만든 필터의 clear 만 남아 행 추가 때마다 필터가 풀린다.
+      gridFilterRef={gridFilterRef}
+      editTrackerRef={editTrackerRef}
+      staticColumns={mainStaticColumns}
+      dynamicColumns={mainDynamicColumns}
+      itemsSource={rows}
+      autoGenerateColumns={false}
+      allowSorting={false}
+      allowMerging={AllowMerging.All}
+    />
+    // </div>
   );
 };

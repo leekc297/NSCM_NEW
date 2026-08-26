@@ -94,3 +94,17 @@ export const resolveView = (menu: {
   }
   return page;
 };
+
+/**
+ * 캐시된 lazy 인스턴스를 폐기한다 — 재시도용.
+ *
+ * React.lazy 는 로더 promise 가 한 번 reject 되면 그 실패를 영구 캐시한다.
+ * dev 서버 재시작/중단, 일시적 500 등으로 모듈 fetch 가 실패하면
+ * ('Failed to fetch dynamically imported module') 같은 인스턴스를 다시 렌더해도
+ * 재요청 없이 계속 같은 에러를 던진다 → 새로고침 외엔 복구 불가.
+ * 캐시를 비워 다음 resolveView 가 새 lazy 인스턴스(= 새 import 요청)를 만들게 한다.
+ */
+export const resetView = (menu: { routePath?: string | null; mnuUrl?: string | null }): void => {
+  const found = findLoader(menu);
+  if (found) lazyCache.delete(found[0]);
+};

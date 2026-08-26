@@ -5,6 +5,7 @@
 
 | # | Hook | 강도 | 계율 1줄 |
 |---:|---|:--:|---|
+| 142 | [ui-meta-dictionary-mandatory](../hooks/ui-meta-dictionary-mandatory.md) | ⭐⭐⭐ | 조회조건 작성 전 항목 사전 대조 — binding ARG/CASCADE/FILTER 표준 + division별 사용여부 |
 | 112 | [search-condition-asis-tobe-catalog](../hooks/search-condition-asis-tobe-catalog.md) | ⭐⭐ | SCP·DM 조회조건 = 카탈로그(953행/99화면) **전 행 대조** — 명칭 rename 13쌍 + 다중선택=검색+ALL + 카운트 일치 보고 |
 | 117 | [search-condition-datasource-asis-parity](../hooks/search-condition-datasource-asis-parity.md) | ⭐⭐ | 항목별 추출 쿼리 AS-IS 1:1(BigFilter.xml/UP_FX 실측) + **공유 CMBO 수정 전 FE 소비자 전수 grep** — 소비자 2+ = 화면 전용 SQL_ID 분리. ⭐ **§5.5~§5.10(2026-08-08)**: UP_FX 키 = ①CMBO 등록 ②배선 ③FE 파라미터 **3분할 완결** + 토큰 대사표·quoting·빈 catch 금지·편집/조회 이원화(메타 교체 금지) — 게이트 = `ui_gate_runner` 섹션 7 / `ui_http_e2e` D2 / hook G-F·G-G. ⭐ **§5.11 combo SP 프롤로그 이식**(GET_ADMIN_GROUP 권한 승격·PM_TEAM_MAPPING — 리터럴 ADMIN 축소 금지) + **§5.12 호출 지점 N:N 대사**(InsertRow 최우선) — 자동화 `combo_callsite_parity.py` = 게이트 섹션 8 |
 | 5 | [cascade-combo-filter](../hooks/cascade-combo-filter.md) | ⭐⭐⭐ | Division→하위 'ALL' reset + Map dedup + 1RT + **§1.4 Div 변경=Grid 비움+CRUD reset** + **§5-G Grid 셀 cascade**(dataMap 스왑/원복) |

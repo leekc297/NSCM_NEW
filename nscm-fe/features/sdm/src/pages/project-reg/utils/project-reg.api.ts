@@ -9,6 +9,7 @@
 //     TO_CHAR(처리건수) — EVENT '0' 이면 성공 토스트 금지, §0.1 허위성공 방지 계보).
 //   실패(예외)는 RAISE_APPLICATION_ERROR(-20001) → HTTP 오류 경로로 수신 (§0.1).
 import { apiClient } from '@foundation/apis';
+import { safeString } from '@foundation/utils';
 
 import { MENU_ID, SHEETS } from '../project-reg.constants';
 
@@ -56,9 +57,9 @@ const callProc = async (
     return { ok: false, event: 0, message: undefined };
   }
   // ⭐ 이름 기반 추출 (CODE/MSG/EVENT — §0.1 커서 계약)
-  const code = String(first.CODE ?? '').trim();
+  const code = safeString(first.CODE).trim();
   const msg = typeof first.MSG === 'string' ? first.MSG.trim() : undefined;
-  const event = Number(String(first.EVENT ?? '0').trim() || '0');
+  const event = Number(safeString(first.EVENT ?? '0').trim() || '0');
   return {
     ok: code === '0',
     code,

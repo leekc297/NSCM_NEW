@@ -30,8 +30,15 @@ interface MetalLinkPriceAction {
 }
 
 // AS-IS drpPeriodMonth 기본 당월 ~ +6개월 (.cs L167~168 1:1). dayjs = 로컬 날짜 (UTC 금지).
-const thisMonth = dayjs().format('YYYYMMDD');
-const sixMonthsAhead = dayjs().add(6, 'month').format('YYYYMMDD');
+//   ⭐ [2026-08-18] 형식 = YYYYMM (년월) — AS-IS MonthText('-' 제거) 1:1. 종전 YYYYMMDD 는
+//   PeriodField(년월일 픽커) 드리프트의 잔재 — SP P_FROM/TO_YYYYMMDD 도 YYYYMM 을 받는 계약이다
+//   (setFilters 주석·ALL_ARGUMENTS 실측). 폼은 PeriodField mode='month' 로 전환.
+// Div/Team 변경 시에는 리셋하지 않는다 (2026-08-20 사용자 결정 — 사용자가 지정한 기간 유지).
+const METAL_LINK_PRICE_INIT_PERIOD = {
+  start: dayjs().format('YYYYMM'),
+  end: dayjs().add(6, 'month').format('YYYYMM'),
+};
+const { start: thisMonth, end: sixMonthsAhead } = METAL_LINK_PRICE_INIT_PERIOD;
 
 const initMetalLinkPriceState: MetalLinkPriceState = {
   initialized: false,
@@ -87,8 +94,10 @@ export const useMetalLinkPriceStore = createPersistedStoreWithTab<
             plantSiteId: orAll(p.plantSite), // 5  P_PLANT_SITE_ID (81* 전용 — 그 외 'ALL')
             projectCode: p.project, // 6  P_PROJECT_CODE (AS-IS txtProject.Text raw)
             itemId: p.modelNickname, // 7  P_ITEM_ID (AS-IS txtItemId.Text raw)
-            fromYyyymmdd: p.fromYyyymm, // 8  P_FROM_YYYYMMDD (AS-IS MonthText '-' 제거 YYYYMM)
-            toYyyymmdd: p.toYyyymm, // 9  P_TO_YYYYMMDD (YYYYMM)
+            // 8/9  P_FROM/TO_YYYYMMDD — 계약 = YYYYMM (AS-IS MonthText '-' 제거).
+            //   slice(0,6): persist 복원된 구 8자리(년월일 픽커 드리프트 잔재) 방어 정규화.
+            fromYyyymmdd: p.fromYyyymm.slice(0, 6),
+            toYyyymmdd: p.toYyyymm.slice(0, 6),
             versionType: p.version, // 10 P_VERSION_TYPE ('Current' | 버전NO 콤마 최대 2)
             sesUserId, // 11 P_USER_ID (BE 자동 — division-gate)
             mnuId: MENU_ID, // 12 P_MENU_ID (BE 자동 — division-gate)

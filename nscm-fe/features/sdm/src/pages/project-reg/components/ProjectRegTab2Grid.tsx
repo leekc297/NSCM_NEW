@@ -1,5 +1,4 @@
 import type { FlexGrid as FlexGridType, FormatItemEventArgs } from '@mescius/wijmo.grid';
-import { CellType } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { type MutableRefObject, type Ref, useEffect, useMemo, useRef } from 'react';
 

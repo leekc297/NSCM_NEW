@@ -33,6 +33,11 @@ Target UI : {대상 화면}
 Target UI 전면 점검·교정. 특정 기능 변경이 아니라 룰 미준수 부분을 전부 찾아 고친다.
 (FIGMA 파일이 있으면 상세분석해서 객체별 오브젝트 정보 md 파일로 생성 후 작업 — §1.4)
 
+⓪ ⭐ 보완요청 원장 선행 (hook #139, 2026-08-20 — 다른 무엇보다 먼저):
+   지정된 요구 원문(문서 셀/대화) 전문 채록 → 하위문구 분해 → `Doc/단위테스트_보완대상/보완요청_원장.md`
+   등재(전부 PENDING — 미적용 전제) → `asis_mapping_gate --init ... --menu {MNU_ID}` 로 대사표 REQ 축 편입.
+   기존 등재분이 있으면 전 행 PENDING 전제로 재판정(실측 근거로만 전이·사전 판단 SKIP 금지).
+
 시작 전 Doc/_rules_consolidation/RULESET_MASTER.md 전체를 읽고:
 ① Target UI 의 모든 자원(Page/Store/constants/types/utils/components/modals/SCSS/i18n + 관련 BE 메타·SP)을
    §3 UI-MANDATORY 체크리스트 + §4 hook 카탈로그(UI/공통) + §5 _tobe 13룰과 전수 대조해
@@ -41,7 +46,7 @@ Target UI 전면 점검·교정. 특정 기능 변경이 아니라 룰 미준수
 ② 점검표의 모든 위반을 교정하라(인라인 <FlexGrid> → 공용 DataGrid + @foundation/utils 변환,
    components/ 분리 포함). 단 regression-zero Hard Boundary(shared/foundation/lges/타화면/타도메인/BE)
    밖이면 분리 PR 로 제안.
-③ POST-WRITE grep 0 + screen-completion-gate 8게이트 + 위반 전/후 건수·변경 파일 목록 보고.
+③ POST-WRITE grep 0 + screen-completion-gate 10게이트(G10=REQ 원장 축 포함) + 위반 전/후 건수·변경 파일 목록 보고.
    단순화 금지. 불확실하면 reference(DMF0004/0005/0006) cross-check.
 ④ FIGMA 에서 추출한 SVG 파일과 MD 파일을 기반으로 UI 디자인 상세 적용 (figma-layout-parity #90).
 ⑤ UI 개발 시 소스 구조를 분석한 RULE(_tobe 01~13 + reference 패턴)에 따라 기준을 지키며 진행.

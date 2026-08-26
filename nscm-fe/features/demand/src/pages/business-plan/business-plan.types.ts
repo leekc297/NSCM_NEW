@@ -1,15 +1,15 @@
 import type { BUCKET_TYPE, MENU_ID, SHEETS } from './business-plan.constants';
 
-// AS-IS DMF0042 조회조건 14 + Sum 체크박스 (상세동작 md §3 컨트롤 15 전수 — dead/숨김 제외):
+// AS-IS DMF0042 조회조건 14 + Sum/Qty≠0 체크박스 (상세동작 md §3 컨트롤 15 전수 — dead/숨김 제외):
 //   Row1: Division*(단일) / Team / End Customer / Sales Site
 //   Row2: Plant Site(40 비활성) / Biz Type / Period* / Bucket*(기본 Monthly — M/Q/Y)
 //   Row3: Project🔍(40 비활성) / Model🔍 / Owner🔍 / Item Type
-//   체크박스: Sum(즉시 토글 — Y_/Q_ SUM 표시) / cboQty(Qty≥0)=Visible=false dead — 'N' 고정 배선만 /
+//   Row4: 체크박스 Sum(즉시 토글 — Y_/Q_ SUM 표시) / Qty≠0(P_QTY_YN — 기본 체크)
 //   cboClosed=Enabled=false dead 제외.
 export interface SearchCondition {
   divisionId: string; // 필수 — Division 단일 콤보 (MSG00097)
   deptIds: string[]; // Team
-  endCustomers: string[]; // End Customer (40 = EndCustomerByDivision40 원천)
+  endCustomers: string[]; // End Customer (콤보 'EndCustomer' — 2026-08-22 콤보 통일)
   scmSiteIds: string[]; // Sales Site
   plantSiteIds: string[]; // Plant Site (40 비활성 — AS-IS InitControls L259~261)
   bizTypes: string[]; // Biz Type (40 = DM_BIZ_TYPE / 81·82 = GetBizTypebyDivision)
@@ -21,6 +21,9 @@ export interface SearchCondition {
   endYyyymmdd: string; // Period.end (필수 — +7개월 말일)
   bucketType: BUCKET_TYPE; // Bucket (필수 — 기본 Monthly. M/Q/Y — BUCKET2_TYPE_CODE)
   sumYn: boolean; // Sum — 상위 버킷 SUM 컬럼(Y_/Q_) 표시 토글 (FE 전용, AS-IS chkSum L2832)
+  // ⭐ Qty — P_QTY_YN 조회 파라미터 (기본 체크 = 'Y'). 2026-08-06 AS-IS 실화면 대조 교정:
+  //   구 분석의 'cboQty Visible=false dead → N 고정' 판정이 오류 — 실화면에 체크 상태로 노출.
+  qtyYn: boolean;
 }
 
 // 메인 그리드 행 (PIVOT wide format — 정적 63 admin 메타 + 동적 Y_/Q_/M_ 컬럼)

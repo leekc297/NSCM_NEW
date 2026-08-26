@@ -1,0 +1,40 @@
+{
+ "event": "SCM_MST_SHEET_COLUMNS / SCM_MST_SHEET_MEASURE 테이블 단위 재적재 관측",
+ "evidence": [
+  "sys.dm_tran_locks: 대상 테이블 잠금 0건 (재적재 완료 후 확인)",
+  "msdb.dbo.restorehistory: LGCE_SCMDEV 복원 이력 0건 → DB 복원이 아니라 테이블 단위 적재",
+  "sys.databases.is_read_committed_snapshot_on = False",
+  "동시 관측 세션: DBeaver(SCP_MGR_DEV@LESP03D5114) 가 DM_PLN_MKT_FCST_C / _RESULT_C DELETE 수행 중"
+ ],
+ "gate": "01_dump_asis.py 의 stable_count() 가 재적재 창을 실제로 차단했다 (clean=0 에서 즉시 중단).",
+ "impact": [
+  "본 사전의 AS-IS 근거는 재적재 이후 스냅샷(14,675 / 1,505)이다.",
+  "DEV 는 작업 중 변동하는 환경이므로 재현성이 보장되지 않는다. 사용자가 QA 를 지정한 이유와 일치한다.",
+  "QA(10.34.221.91:7433) 개방 시 01_dump_asis.py 를 환경변수만 바꿔 재실행하고 차이를 대사할 것 (플랜 Phase 5)."
+ ],
+ "observed_on": "2026-08-21",
+ "source": "AS-IS DEV / LGCE_SCMDEV (165.244.95.223:1433)",
+ "timeline": [
+  {
+   "asis_columns": 15105,
+   "asis_measures": 1703,
+   "max_last_update": "2026-08-19 11:44:44",
+   "rows_updated_2026": 120,
+   "t": "~15:30"
+  },
+  {
+   "asis_columns": 0,
+   "asis_measures": 1505,
+   "note": "committed COUNT(*)=0 / NOLOCK=14675 — 재적재 창. RCSI=OFF 인데 clean·dirty 가 갈렸다",
+   "t": "~16:05"
+  },
+  {
+   "asis_columns": 14675,
+   "asis_measures": 1505,
+   "max_last_update": "2026-07-27 09:34:39",
+   "note": "안정. 8월 DEV 편집분이 사라진 상태 = 외부 원천에서 테이블 단위 재적재된 것으로 판단",
+   "rows_updated_2026_08": 0,
+   "t": "~16:25"
+  }
+ ]
+}

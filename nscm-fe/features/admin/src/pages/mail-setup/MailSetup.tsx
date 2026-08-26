@@ -3,7 +3,7 @@ import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useMemo, useRef } from 'react';
 
 import { apiClient } from '@foundation/apis';
-import { CRUD_TYPE } from '@foundation/constants';
+import { CRUD_MSG, CRUD_TYPE } from '@foundation/constants';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { useQueryClient } from '@foundation/query-client';
 import { MainTitle, SubTitle } from '@shared/components';
@@ -56,6 +56,7 @@ export const MailSetup = ({ tabId, title }: PageProps<MENU_ID>) => {
   const closeContentDialog = useMailSetupStore(state => state.closeContentDialog);
   const contentTargetLanguage = useMailSetupStore(state => state.contentTargetLanguage);
   const setAlert = useMessageStore(state => state.setAlert);
+  const setToast = useMessageStore(state => state.setToast);
   const queryClient = useQueryClient();
 
   const { t } = useTranslation();
@@ -123,15 +124,15 @@ export const MailSetup = ({ tabId, title }: PageProps<MENU_ID>) => {
     setReceiverFilters();
   };
 
-  // MSG00672 는 '{0}개의 데이터가 저장되었습니다.' — 자리표시자를 직접 치환하지 않으면
-  //   '{0}' 이 그대로 노출된다. i18n 미조회 시를 대비해 fallback 문구에도 {0} 을 남긴다.
-  const afterSave = (savedCount: number, refetch?: () => void) => {
+  const afterSave = (refetch?: () => void) => {
     void queryClient.invalidateQueries({ queryKey: [MENU_ID] });
     refetch?.();
-    void setAlert({
-      type: 'alert',
-      content: t('MSG00672', '_{0} data saved.').replace('{0}', String(savedCount)),
-    });
+    // Alert 대신 Toast 로 통일 (useCustomQueryClient.ts 기본 onSuccess 와 동일 패턴)
+    // void setAlert({
+    //   type: 'alert',
+    //   content: t('MSG00672', '_{0} data saved.').replace('{0}', String(savedCount)),
+    // });
+    setToast({ type: 'success', message: t(CRUD_MSG.SAVED.id, CRUD_MSG.SAVED.fallback) });
   };
 
   /** Category 저장 — '^' bulk payload (apiClient.post 직접 호출 의무) */
@@ -180,7 +181,7 @@ export const MailSetup = ({ tabId, title }: PageProps<MENU_ID>) => {
         creationDate: joinBulk(changed.map(() => today())),
         lastUpdatedBy: joinBulk(createdBy),
       });
-      afterSave(changed.length, refetchCategory);
+      afterSave(refetchCategory);
     } catch {
       void setAlert({ type: 'alert', content: t('MSG00690', '_Failed to save.') });
     }
@@ -210,7 +211,7 @@ export const MailSetup = ({ tabId, title }: PageProps<MENU_ID>) => {
         creationDate: joinBulk(changed.map(() => today())),
         lastUpdatedBy: joinBulk(changed.map(() => '')),
       });
-      afterSave(changed.length, refetchMessage);
+      afterSave(refetchMessage);
     } catch {
       void setAlert({ type: 'alert', content: t('MSG00690', '_Failed to save.') });
     }
@@ -233,7 +234,7 @@ export const MailSetup = ({ tabId, title }: PageProps<MENU_ID>) => {
         creationDate: joinBulk(changed.map(() => today())),
         lastUpdatedBy: joinBulk(changed.map(() => '')),
       });
-      afterSave(changed.length, refetchSelReceiver);
+      afterSave(refetchSelReceiver);
     } catch {
       void setAlert({ type: 'alert', content: t('MSG00690', '_Failed to save.') });
     }
@@ -302,7 +303,7 @@ export const MailSetup = ({ tabId, title }: PageProps<MENU_ID>) => {
         lastUpdatedBy: '',
       });
       closeSqlDialog();
-      afterSave(1); // PopSQL 은 선택 Category 1건의 SQL 을 갱신
+      afterSave();
     } catch {
       void setAlert({ type: 'alert', content: t('MSG00690', '_Failed to save.') });
     }

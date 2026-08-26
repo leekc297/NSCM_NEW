@@ -1,0 +1,46 @@
+[
+ {
+  "old": "        ATTRIBUTE1  Div*\n        ATTRIBUTE2  End Customer*",
+  "new": "        ATTRIBUTE1  Div*\n        ATTRIBUTE2  Project Code*   [E20260825-XLSPRICECOL2] 양식 컬럼 = 단가 테이블 축 (구 End Customer 슬롯 — 81 은 원래 코드가 실렸음)"
+ },
+ {
+  "old": "        ATTRIBUTE8  Cell Prod Site*\n        ATTRIBUTE9  Currency*",
+  "new": "        ATTRIBUTE8  Plant Site*   [E20260825-XLSPRICECOL2] 구 Cell Prod Site 슬롯 -> 원장 PLANT_SITE_ID 직송\n        ATTRIBUTE9  Currency*"
+ },
+ {
+  "old": "                                         WHEN ATTRIBUTE2  IS NULL THEN 'NULL End Customer'",
+  "new": "                                         WHEN ATTRIBUTE2  IS NULL THEN 'NULL Project Code'"
+ },
+ {
+  "old": "                                         WHEN ATTRIBUTE8  IS NULL THEN 'NULL Cell Prod Site'",
+  "new": "                                         WHEN ATTRIBUTE8  IS NULL THEN 'NULL Plant Site'"
+ },
+ {
+  "old": "        /* #################################################### */\n        /* END CUSTOMER 체크                                     */\n        --ATTRIBUTE2    End Customer (Name)\n        --ATTRIBUTE302  End Customer (Code) - SYSTEM UPDATE\n        /* #################################################### */",
+  "new": "        /* #################################################### */\n        /* PROJECT CODE 체크  [E20260825-XLSPRICECOL2]           */\n        --ATTRIBUTE2    Project Code (81 = 코드 그대로. 구 End Customer 슬롯 — EC 역변환은 81 에서 코드 항등이라 로직 무수정, 존재검증 겸용)\n        --ATTRIBUTE302  Project Code (Code) - SYSTEM UPDATE\n        /* #################################################### */"
+ },
+ {
+  "old": "             , MESSAGE_TEXT       = MESSAGE_TEXT || ', Invalid End Customer'",
+  "new": "             , MESSAGE_TEXT       = MESSAGE_TEXT || ', Invalid Project Code'   /* [E20260825-XLSPRICECOL2] */"
+ },
+ {
+  "old": "             , A.MESSAGE_TEXT       = A.MESSAGE_TEXT || ', Invalid End Customer/Sales Site.'",
+  "new": "             , A.MESSAGE_TEXT       = A.MESSAGE_TEXT || ', Invalid Project Code/Sales Site.'   /* [E20260825-XLSPRICECOL2] */"
+ },
+ {
+  "old": "        /* #################################################### */\n        /* Cell Prod Site 체크                                   */\n        -- ATTRIBUTE8    Cell Prod Site (NAME)\n        -- ATTRIBUTE308  Cell Prod Site (CODE) --SYSTEM UPDATE\n        /* #################################################### */\n        UPDATE SCM_MGR.SCM_ADM_EXCEL_UPLOAD A\n        SET    A.ATTRIBUTE308 = (SELECT MAX(M.SEGMENT1)\n                                 FROM   SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL M\n                                 WHERE  M.LOOKUP_TYPE = 'SP_CELL_PROD_SITE'\n                                 AND    M.VALID_YN    = 'Y'\n                                 AND    M.ATTRIBUTE1  = A.ATTRIBUTE8)    ---CELL PROD SITE",
+  "new": "        /* #################################################### */\n        /* Plant Site 체크  [E20260825-XLSPRICECOL2]             */\n        -- ATTRIBUTE8    Plant Site (원장 PLANT_SITE_ID 코드)\n        -- ATTRIBUTE308  Plant Site (검증 통과 코드) --SYSTEM UPDATE\n        -- 도메인 = SITE(PLANT,VALID) 마스터 + 원장 실도메인 합집합 (원장 29종 중 5종이 마스터 밖 실측 —\n        --   양식이 원장 키를 내리므로 원장 도메인 배제 시 정상 왕복이 거부된다) */\n        UPDATE SCM_MGR.SCM_ADM_EXCEL_UPLOAD A\n        SET    A.ATTRIBUTE308 = CASE WHEN EXISTS (SELECT 1 FROM SCM_MGR.SCM_MST_SITE MS\n                                                   WHERE MS.DIVISION_ID = A.ATTRIBUTE301\n                                                     AND MS.SCM_SITE_ID = A.ATTRIBUTE8\n                                                     AND MS.SITE_TYPE   = 'PLANT'\n                                                     AND MS.VALID_YN    = 'Y')\n                                       OR EXISTS (SELECT 1 FROM SCM_MGR.SCM_MST_FUTURE_PRICE F\n                                                   WHERE F.DIVISION_ID   = A.ATTRIBUTE301\n                                                     AND F.PLANT_SITE_ID = A.ATTRIBUTE8)\n                                     THEN A.ATTRIBUTE8 END"
+ },
+ {
+  "old": "             , MESSAGE_TEXT       = MESSAGE_TEXT || ', Invalid Cell Prod Site'",
+  "new": "             , MESSAGE_TEXT       = MESSAGE_TEXT || ', Invalid Plant Site'   /* [E20260825-XLSPRICECOL2] */"
+ },
+ {
+  "old": "                     , NVL( (SELECT MAX(X.PLANT_SITE_ID)\n                               FROM SCM_MGR.DM_PLN_CFM_MKT_DEMAND_PLAN X\n                              WHERE X.DIVISION_ID       = D.DIVISION_ID\n                                AND X.PROJECT_CODE      = D.END_CUSTOMER\n                                AND X.SCM_SITE_ID       = D.SCM_SITE_ID\n                                AND X.ITEM_ID           = D.ITEM_ID\n                                AND X.DOM_EXP           = D.DOM_EXP\n                                AND X.FCST_TYPE         = D.FCST_TYPE\n                                AND X.INCOTERMS         = D.INCOTERMS\n                                AND X.CELL_PROD_SITE_ID = D.CELL_PROD_SITE)\n                          , NVL( (SELECT MAX(F.PLANT_SITE_ID)   /* [E20260820-XLSWEEKLY] 81 원장 역참조 — 40 참조(DM_PLN_CFM)는 81 에 항상 NULL\n                                                                    → PLANT_SITE '-' 로 SAVE 필수검증 'F' (사내 실측 2026-08-20).\n                                                                    기존 키('M' 갱신)는 원장 실키로 해소. 원장 무존재 신규 키는 '-' 유지 = Plant Site 축 미결. */\n                                 FROM SCM_MGR.SCM_MST_FUTURE_PRICE F\n                                WHERE F.DIVISION_ID  = D.DIVISION_ID\n                                  AND F.PROJECT_CODE = D.END_CUSTOMER\n                                  AND F.SCM_SITE_ID  = D.SCM_SITE_ID\n                                  AND F.ITEM_ID      = D.ITEM_ID\n                                  AND F.DOM_EXP      = D.DOM_EXP\n                                  AND F.FCST_TYPE    = D.FCST_TYPE\n                                  AND F.INCOTERMS    = D.INCOTERMS\n                                  AND F.MEASURE      = 'LOC')\n                             , '-' ) )\n                     , D.CELL_PROD_SITE",
+  "new": "                     , D.CELL_PROD_SITE   /* [E20260825-XLSPRICECOL2] Plant Site 직송 — 양식 슬롯8 = 원장 PLANT_SITE_ID.\n                                                구 원장 역참조 NVL 체인 폐지 ('Plant Site 축 미결' 해소 — 신규 키도 명시 지정) */\n                     , '-'                /* [E20260825-XLSPRICECOL2] CELL_PROD_SITE_ID = '-' (81 테이블 컬럼 부재 규약) */"
+ },
+ {
+  "old": "             , NVL( (SELECT MAX(X.PLANT_SITE_ID)\n                       FROM SCM_MGR.DM_PLN_CFM_MKT_DEMAND_PLAN X\n                      WHERE X.DIVISION_ID       = D.DIVISION_ID\n                        AND X.PROJECT_CODE      = D.END_CUSTOMER\n                        AND X.SCM_SITE_ID       = D.SCM_SITE_ID\n                        AND X.ITEM_ID           = D.ITEM_ID\n                        AND X.DOM_EXP           = D.DOM_EXP\n                        AND X.FCST_TYPE         = D.FCST_TYPE\n                        AND X.INCOTERMS         = D.INCOTERMS\n                        AND X.CELL_PROD_SITE_ID = D.CELL_PROD_SITE)\n                  , (SELECT MAX(F.PLANT_SITE_ID)   /* [E20260820-XLSWEEKLY] 81 원장 역참조 — 40 참조(DM_PLN_CFM)는 81 에 항상 NULL\n                                                            → PLANT_SITE '-' 로 SAVE 필수검증 'F' (사내 실측 2026-08-20).\n                                                            기존 키('M' 갱신)는 원장 실키로 해소. 원장 무존재 신규 키는 '-' 유지 = Plant Site 축 미결.\n                                                            [E20260820-SENTINELDDL] 최종 '-' 폴백 NVL 제거 — NULL 이면 GTT DEFAULT ON NULL '-' 적용 */\n                         FROM SCM_MGR.SCM_MST_FUTURE_PRICE F\n                        WHERE F.DIVISION_ID  = D.DIVISION_ID\n                          AND F.PROJECT_CODE = D.END_CUSTOMER\n                          AND F.SCM_SITE_ID  = D.SCM_SITE_ID\n                          AND F.ITEM_ID      = D.ITEM_ID\n                          AND F.DOM_EXP      = D.DOM_EXP\n                          AND F.FCST_TYPE    = D.FCST_TYPE\n                          AND F.INCOTERMS    = D.INCOTERMS\n                          AND F.MEASURE      = 'LOC') )\n             , D.CELL_PROD_SITE",
+  "new": "             , D.CELL_PROD_SITE   /* [E20260825-XLSPRICECOL2] Plant Site 직송 (모드0 지점과 동일 — 양식 슬롯8) */\n             , '-'                /* [E20260825-XLSPRICECOL2] CELL_PROD_SITE_ID = '-' (81 규약) */"
+ }
+]

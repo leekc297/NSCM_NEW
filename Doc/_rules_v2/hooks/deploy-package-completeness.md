@@ -168,6 +168,25 @@ COMMIT;
 - `SCM_MST_SHEET_COLUMNS.INPUT_TP_CD` = `'IM'` (mandatory insert)
 - 기타 표준값 강제 컬럼
 
+### §1.8 ⭐⭐ FE 이관물 = **실제 저장소 디렉토리 구조 그대로** (2026-08-26 사용자 명시 — 상시 의무)
+
+> 사용자 원문: "이관폴더 생성 시 FE 실경로 구조 재배치는 항상 반영되도록 RULE 로 적용해주세요."
+
+이관 폴더의 FE 산출물(`B_FE/` 등)은 **nscm-fe 저장소 루트 기준 실경로를 그대로 보존**해 담는다.
+적용자가 `B_FE/` 하위를 저장소 루트에 그대로 덮어쓰면 끝나는 형태가 정본이다.
+
+```
+(정본)  B_FE/features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx
+(금지)  B_FE/forecast-price/components/ForecastPriceGrid.tsx        ← 축약 경로
+(금지)  B_FE/ForecastPriceGrid.tsx                                   ← 평탄화
+```
+
+- 대상 = **이관대상(수정) 파일만** — 디렉토리는 실경로로 만들되 미수정 형제 파일은 담지 않는다.
+- 축약/평탄화 금지 사유: 적용자가 목적지 경로를 복원 추론해야 하고, 동명 파일(index.ts 등)이
+  다른 폴더에 존재하면 오배치가 조용히 발생한다. 경로 자체가 적용 명세다.
+- README 의 FE 표는 `B_FE/` 하위 경로 기준으로 기재하고 "루트에 그대로 덮어쓰기" 문구를 명시한다.
+- 첫 적용 사례: `DMF0082_CLOUD_20260826_PENDING/B_FE/` (2026-08-26 재배치).
+
 ### §1.2 자동 차단 (1건이라도 ✗ → deploy zip 작성 금지)
 
 | ✗ 항목 | 차단 사유 |
@@ -256,10 +275,95 @@ ls _artifacts/_deploy_packages/{화면}/04_Verify/*_Diagnose.sql        # Diagno
 
 ---
 
+## §4.7 ⭐⭐⭐ 2026-08-20 — 축 누락은 "룰 부재"가 아니라 **스윕 목록 누락**이다 (기계 적출 의무)
+
+**실사고**: `DMF0035_CLOUD_20260820` 패키지에 **`SCM_ADM_PROC_M` 축이 통째로 빠졌다**. 클라우드 적용 후
+8시트 중 6시트가 PROC_M 0행 → **PLS-00306**(인수 갯수·유형 불일치)로 화면이 죽었다.
+⚠ 본 hook 은 §4.5-2 에서 이미 PROC_M 이관 방식까지 규정하고 있었다 — **룰은 있었고 실행에서 빠졌다.**
+
+**근본원인**: 취합 시 "딕셔너리 전수 스윕"을 한다면서 **대상 테이블 목록 자체에 PROC_M 이 없었다**.
+`20_MENU_META_SYNC.sql` 의 MERGE 63건 = MNU_M 1 + PROGRAM 1 + API_M 8 + BTN_MPG 8 + GR_MNU 5 + GR_BTN 40
+= **정확히 63** — PROC_M 이 들어갈 자리가 처음부터 없었고, 카운트가 딱 맞아떨어져 **누락이 보이지 않았다**.
+(손나열 축 누락 계보 = 2026-08-14 BTN 축 스킵과 동형. 카운트 일치는 완전성의 증거가 **아니다**.)
+
+**의무 3**:
+1. **메타 스윕 상시 축에 `SCM_ADM_PROC_M` 을 명시적으로 포함**한다. 스윕 목록은 코드/문서에 **열거된
+   상수**로 두고, 패키지 README 에 축별 실측 카운트를 **축 이름과 함께** 적는다("합계 63" 만 적으면
+   빠진 축이 보이지 않는다).
+2. **배선 역추적 적출을 90_VERIFY 에 필수 편입**(정상 = 0행):
+   `SCM_ADM_MNU_BTN_MPG_M(MNU_ID) ⋈ SCM_ADM_API_M` 로 전 시트의 호출 SP 를 뽑아
+   `SCM_ADM_PROC_M` 행수와 `ALL_ARGUMENTS` 인자수를 비교 → **불일치 또는 0 이면 FAIL**.
+   이 쿼리는 "무엇을 넣었는가"가 아니라 **"화면이 부르는 것 중 무엇이 없는가"** 를 묻기 때문에
+   스윕 목록이 틀려도 잡힌다.
+3. **공유 SP 축은 덮어쓰기 금지** — 클라우드에 이미 정상 등재된 타 화면 소관 SP(예 DMF0035 패키지의
+   `P_DMF0022_GET_DM_PLN_SALES_PLAN_WATERFALL`)는 적재 대상에서 제외한다(회귀 방지).
+
+### §4.7-B 같은 날 2번째 사례 — **메뉴 행(MNU_M) 부재 → 전 화면 조용한 0행** (2026-08-20)
+
+DMF0035 클라우드에서 **3 TYPE 전부 0행**. 데이터·메타·PROC_M·PKG·캘린더·GTT·콤보를 4차수에 걸쳐
+전수 확인했는데 **전부 정상**이었고, 실제 원인은 `SCM_ADM_MNU_M` 에 **DMF0035 행 자체가 없었던 것**.
+
+기전: `PKG_DMF0035/0022/0051` 셋 다 아래 조인을 갖는다 — **3 TYPE 동시 사망의 단일 지점**.
+```
+INNER JOIN SCM_ADM_USER_MNU_EDIT_AUTH_V EDY
+   ON EDY.USER_ID=<로그인> AND EDY.MNU_ID=<화면> AND EDY.UNIT_ID=A.DIVISION_ID
+```
+그 뷰는 `JOIN SCM_ADM_MNU_M MNU ON MNU.UNIT_TP_CD = AUTH.UNIT_TP_CD ... WHERE MNU.USE_YN='Y'` 이므로
+**메뉴 행이 없거나 `UNIT_TP_CD<>'D'`/`USE_YN<>'Y'` 이면 뷰가 0행 → 조회 결과도 0행**이 된다.
+
+⚠ 교훈 3:
+1. **권한 뷰를 INNER JOIN 하는 SP 는 그 뷰가 조회 필터**다 — 권한이 "막는" 게 아니라 **데이터를 지운다**.
+   (같은 날 DMF0044 환율 팝업에서 정정한 `SCM_ADM_USER_MNU_EDIT_AUTH_V` INNER JOIN 과 동일 계보)
+2. **오류 없이 조용히 0행** — SP 는 성공(CODE 0)으로 끝나고 로그에도 예외가 없어 **배포 성공으로 보인다**.
+   `RESULT_COUNT=0` 은 판정 근거가 아니다(callProc 은 커서를 세지 않아 정상 호출도 0으로 찍힌다).
+3. 자식 메타(API_M/BTN_MPG/PROC_M)가 있어도 **부모 메뉴 행이 없을 수 있다** — 축별 존재만 세지 말고
+   **화면이 실제로 의존하는 것**(메뉴 행 + 권한 뷰 반환 행)을 검증해야 한다.
+⇒ `90_VERIFY` **V11** 신설: ①메뉴 행 실존 + `UNIT_TP_CD='D'`/`USE_YN='Y'` ②대상 계정의 권한 뷰 반환 행 > 0.
+
+**부수 확인 축**: PROC_M 행이 있어도 **객체 자체가 없으면** ARG_CNT 0 으로 같은 증상이 난다
+(DMF0035 실측: `DMF0073_GET_VERSION_SALESPRICE` = PROC_M 9행 / 객체 부재). 역추적 쿼리가 두 경우를
+같이 잡으므로 **본문 동봉 + GRANT/시노님**까지 함께 판정할 것(GRANT 누락 = PLS-00201 계보).
+
+---
+
 ## §5. 변경 이력
 
 - **2026-06-02 작성** (DMF0072/0008/0043/0043_01 deploy zip 누락 4건 사후 보강 작업 — 사용자 명시 요구)
 - **2026-07-02 §4.5 신설** (DMF0020 SAVE '후속 보강' 잔류 → 클라우드 저장 불능 / SYS0012 PROC_M MERGE ORA-00001 사고)
 - **2026-07-23 §4.6 신설** (DMF0003 FE 동봉 누락·DMF0049 `/`구분자 PLS-00103·교차 PKG PLS-00201 — 사용자 룰화 요구)
 - 2026-07-29: **§1.0-B 신설** — 00_PRECHECK_CLOUD 동봉 / 신규 채번 충돌 점검 / 권한 미러링 원본 실측 3건 + §1.1 에 재사용 i18n 키 실제 문구 확인 추가 (SYS0017 이관 취합).
+- 2026-08-20: **§4.7 신설** — PROC_M 축 통째 누락(DMF0035 클라우드 PLS-00306, 사용자 신고). 룰은 있었고
+  **스윕 목록에서 빠진 것**이 원인. 상시 축 명시 + **배선 역추적 0행 적출(V10)** 필수 편입 + 공유 SP
+  덮어쓰기 금지. "카운트가 딱 맞음"은 완전성의 증거가 아니라는 계보 기록.
 - 2026-08-06: **§1.0-C 신설** — 메타 "값 단언" 3종 (CTRL 화이트리스트 / INPUT_TP_CD 분포 대사 / PRECHECK [B] 단언 형식). SYS0017 근본원인 감사 계기 — 본문 = hook #98 §6.
+- 2026-08-26: **§1.8 신설** — FE 이관물 = 저장소 실경로 구조 보존 의무 (사용자 명시 상시 룰. DMF0082_CLOUD_20260826_PENDING 축약 경로 → 실경로 재배치 계기).
+
+---
+
+## §MSG. `SCM_ADM_MSG_M` 축 = `INSERT ... NOT EXISTS` 전용 ⭐ (2026-08-21 사용자 명시)
+
+이관 패키지에 MSG/LBL 을 담을 때 **기존 코드의 문구를 덮는 문장을 만들지 않는다.**
+코드는 화면 간 공유 자산이라, 한 화면 기준으로 문구를 바꾸면 그 코드를 쓰는 **다른 모든 화면이
+조용히 오표기**된다.
+
+```sql
+INSERT INTO SCM_MGR.SCM_ADM_MSG_M (MSG_ID, LANG_CD, MSG_NM, MSG_DESC, MSG_TP_CD, USE_YN,
+                                   CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+SELECT '<CODE>', '<LANG>', '...', NULL, '<TP>', 'Y', 'admin', SYSDATE, 'admin', SYSDATE
+  FROM DUAL
+ WHERE NOT EXISTS (SELECT 1 FROM SCM_MGR.SCM_ADM_MSG_M T
+                    WHERE T.MSG_ID = '<CODE>' AND T.LANG_CD = '<LANG>');
+```
+
+취합 체크 (grep 으로 실측):
+
+```
+[ ] MERGE INTO SCM_ADM_MSG_M / UPDATE ... SET MSG_NM / DELETE FROM SCM_ADM_MSG_M  = 0건
+[ ] INSERT 문 수 == NOT EXISTS 가드 수 (PK = MSG_ID + LANG_CD 양쪽)
+[ ] 담긴 코드 = 신규분만 (대상 환경 기보유 코드 미포함)
+[ ] 감사컬럼 전부 'admin'
+[ ] 재실행 멱등 (두 번 돌려도 결과 동일)
+```
+
+> 본문·예외·자동 생성기 = **hook #140 `msg-table-cloud-sync-and-insert-only` §B**.
+> 정본 산출물 = `_artifacts/_cloud_to_corp/MSG_SYNC/out_*/30_CLOUD_PUSH.sql`.

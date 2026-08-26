@@ -1,0 +1,6 @@
+[
+ {
+  "old": "    V_Prod_Cols VARCHAR2(32767); -- [FIX 2026-07-12] MSSQL bracket PIVOT / '+' concat 잔재 교정\n    v_nsql VARCHAR2(4000 CHAR);",
+  "new": "    V_Prod_Cols VARCHAR2(32767); -- [FIX 2026-07-12] MSSQL bracket PIVOT / '+' concat 잔재 교정\n    v_nsql CLOB;   /* [E20260825-SAVEPOPCLOB] 구 VARCHAR2(4000) — 원장 재적재로 기간 도메인 확대(구간 99일자)\n                      후 동적 PIVOT 목록(v_prod/v_prod_cols) 포함 조립이 4000 초과 = ORA-06502 (BODY 11025행 실측).\n                      hook #106(대량 동적 SQL = CLOB) 표준 처방 — OPEN FOR CLOB 는 19c 네이티브 지원. */"
+ }
+]

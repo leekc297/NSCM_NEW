@@ -8,7 +8,11 @@ import { Button, FormItem, InputField } from '@shared/lges';
 import { ControlConfirmIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 
-import { SEARCH_POPUP_WIDTH } from '../searchFields/SearchFields.utils';
+import {
+  SEARCH_POPUP_WIDTH,
+  buildEndCustomerOptions,
+  buildSalesSiteOptions,
+} from '../searchFields/SearchFields.utils';
 
 import {
   MODAL_OWNER_BY_DIVISION,
@@ -26,13 +30,6 @@ interface OwnerByDivisionModalProps {
   ownerId?: string;
   // ⭐ 멀티 선택 모드(옵션). true 시 체크박스 컬럼으로 선택(재기동 시 carry/프리체크 없음).
   multiCheckbox?: boolean;
-}
-
-interface OwnerComboOption {
-  CODE: string;
-  NAME: string;
-  DIVISION_ID?: string;
-  DEPT_ID?: string;
 }
 
 export const OwnerByDivisionModal = ({
@@ -54,22 +51,27 @@ export const OwnerByDivisionModal = ({
   const staticColumns = useOwnerByDivisionModalStore(state => state.staticColumns);
   const fetchStaticColumns = useOwnerByDivisionModalStore(state => state.fetchStaticColumns);
 
-  const [divisions, teams, endCustomers, endCustomers40, salesSites] = useTabComboQueries({
-    filters: [
-      'MyDivision',
-      'TeambyDivision',
-      'EndCustomer',
-      'EndCustomerByDivision40',
-      'SalesSite',
-    ],
+  // 2026-08-22 콤보 통일 — End Customer 는 division 무관 'EndCustomer' 단일이다.
+  //   종전 40 전용 'EndCustomerByDivision40' 스왑은 폐지했다 (호출 화면의 조회조건도
+  //   같은 콤보를 쓰므로 여기서만 다른 원천을 쓰면 라벨이 안 맞는다).
+  const [divisions, endCustomers, salesSites] = useTabComboQueries({
+    filters: ['MyDivision', 'EndCustomer', 'SalesSite'],
   });
 
   const [searchParam, setSearchParam] = useState<
     ProcRequest<MODAL_OWNER_BY_DIVISION, MODAL_SHEET_OWNER_BY_DIVISION>
   >({} as ProcRequest<MODAL_OWNER_BY_DIVISION, MODAL_SHEET_OWNER_BY_DIVISION>);
-  const ownerEndCustomers = (searchParam.divisionId === '40' ? endCustomers40 : endCustomers) as
-    | OwnerComboOption[]
-    | undefined;
+
+  // Team 콤보는 divisionId 파라미터를 받아야 한다 (SearchFields TeamField 와 같은 계약).
+  //   미전달 = 'ALL' 분기라 division 40 의 팀은 아예 반환되지 않는다 (40 은 owner 경로 전용
+  //   분기 — 40 SALES 사이트는 DEPT 미배정 설계). 그러면 호출 화면 조회조건에서 넘어온 Team
+  //   값이 options 에 없어 selectedOptions 가 비고, CustomDropdown 이 placeholder 'ALL' 만
+  //   보여준다 — 값은 전달됐는데 화면만 ALL 로 보이던 원인.
+  // 주의: BE makeComboQuery 는 raw 문자열 치환이라 작은따옴표를 포함해 넘긴다.
+  // divisionId 가 바뀌면 쿼리키가 바뀌어 자동 재조회된다.
+  const [teams] = useTabComboQueries({
+    filters: [{ comboId: 'TeambyDivision', divisionId: `'${searchParam.divisionId ?? ''}'` }],
+  });
 
   const [modalFilters, setModalFilters] = useState<{
     owner: string;
@@ -212,7 +214,15 @@ export const OwnerByDivisionModal = ({
                         options={[
                           ...new Map(
                             (teams ?? [])
-                              .filter(item => item.DIVISION_ID === searchParam.divisionId)
+                              // DIVISION_ID 가 공란인 행은 통과시킨다 (SearchFields toOptions 와
+                              // 동일 규칙). 엄격 비교만 하면 division 키를 안 채워 주는 응답에서
+                              // 목록이 통째로 비어버린다.
+                              .filter(
+                                item =>
+                                  !searchParam.divisionId ||
+                                  !item.DIVISION_ID ||
+                                  item.DIVISION_ID === searchParam.divisionId
+                              )
                               .map(item => [`${item.DIVISION_ID}|${item.CODE}`, item])
                           ).values(),
                         ].map(item => ({ label: item.NAME, value: item.CODE }))}
@@ -230,23 +240,12 @@ export const OwnerByDivisionModal = ({
                         disabled
                         limitTags={1}
                         value={searchParam.endCustomer}
-                        options={
-                          [
-                            ...new Map(
-                              ownerEndCustomers
-                                ?.filter(
-                                  item =>
-                                    searchParam.divisionId === '40' ||
-                                    (item.DIVISION_ID === searchParam.divisionId &&
-                                      (searchParam.deptId === 'ALL' ||
-                                        searchParam.deptId
-                                          ?.split(',')
-                                          .includes(item.DEPT_ID ?? '')))
-                                )
-                                .map(item => [`${item.DIVISION_ID ?? '40'}|${item.CODE}`, item])
-                            ).values(),
-                          ].map(item => ({ label: item.NAME, value: item.CODE })) ?? []
-                        }
+                        options={buildEndCustomerOptions({
+                          rows: endCustomers,
+                          divisionId: searchParam.divisionId,
+                          deptId: searchParam.deptId,
+                          selected: searchParam.endCustomer,
+                        })}
                       />
                     )}
                   />
@@ -261,18 +260,12 @@ export const OwnerByDivisionModal = ({
                         disabled
                         limitTags={1}
                         value={searchParam.salesSite}
-                        options={[
-                          ...new Map(
-                            (salesSites ?? [])
-                              .filter(
-                                item =>
-                                  item.DIVISION_ID === searchParam.divisionId &&
-                                  (searchParam.deptId === 'ALL' ||
-                                    searchParam.deptId?.split(',').includes(item.DEPT_ID))
-                              )
-                              .map(item => [`${item.DIVISION_ID}|${item.CODE}`, item])
-                          ).values(),
-                        ].map(item => ({ label: item.NAME, value: item.CODE }))}
+                        options={buildSalesSiteOptions({
+                          rows: salesSites,
+                          divisionId: searchParam.divisionId,
+                          deptId: searchParam.deptId,
+                          selected: searchParam.salesSite,
+                        })}
                       />
                     )}
                   />

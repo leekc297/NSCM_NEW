@@ -1,0 +1,286 @@
+package com.lgcns.nscm.framework.interceptor;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
+import javax.sql.DataSource;
+
+import org.apache.ibatis.executor.Executor;
+import org.apache.ibatis.mapping.BoundSql;
+import org.apache.ibatis.mapping.MappedStatement;
+import org.apache.ibatis.mapping.ParameterMapping;
+import org.apache.ibatis.mapping.SqlCommandType;
+import org.apache.ibatis.plugin.Interceptor;
+import org.apache.ibatis.plugin.Intercepts;
+import org.apache.ibatis.plugin.Invocation;
+import org.apache.ibatis.plugin.Plugin;
+import org.apache.ibatis.plugin.Signature;
+import org.apache.ibatis.session.ResultHandler;
+import org.apache.ibatis.session.RowBounds;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lgcns.nscm.admin.user.UserSession;
+import com.lgcns.nscm.framework.property.CommonProperties;
+import com.lgcns.nscm.framework.utils.NullUtils;
+import com.lgcns.nscm.framework.utils.SecurityUtil;
+
+@Intercepts({
+    @Signature(
+        type = Executor.class,
+        method = "update",
+        args = {MappedStatement.class, Object.class}
+    ),
+    @Signature(
+        type = Executor.class,
+        method = "query",
+        args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class}
+    ),
+    @Signature(
+        type = Executor.class,
+        method = "queryCursor",
+        args = {MappedStatement.class, Object.class, RowBounds.class}
+    )
+})
+public class QueryLogInterceptor implements Interceptor {
+
+    private static final Logger log = LoggerFactory.getLogger(QueryLogInterceptor.class);
+    private static final ThreadLocal<Boolean> logging = ThreadLocal.withInitial(() -> false);
+
+    private final DataSource dataSource;
+    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final CommonProperties commonProperties;
+
+    private int thresholdMs = 0;
+
+    public QueryLogInterceptor(DataSource dataSource, CommonProperties commonProperties) {
+        this.dataSource = dataSource;
+        this.commonProperties = commonProperties;
+    }
+
+    @Override
+    public Object intercept(Invocation invocation) throws Throwable {
+
+        if (Boolean.TRUE.equals(logging.get())) {
+            return invocation.proceed();
+        }
+
+        long start = System.currentTimeMillis();
+
+        MappedStatement ms = (MappedStatement) invocation.getArgs()[0];
+        Object parameter = invocation.getArgs().length > 1 ? invocation.getArgs()[1] : null;
+
+        String sqlId = ms.getId();
+        SqlCommandType commandType = ms.getSqlCommandType();
+        String sqlType = commandType.name(); // SELECT / INSERT / ...
+
+        BoundSql boundSql = ms.getBoundSql(parameter);
+        String sqlText = buildFullSql(boundSql, parameter);
+
+        int resultCount = -1;
+        String exceptionMsg = null;
+
+        try {
+            Object result = invocation.proceed();
+
+            if (result instanceof List<?> list) {
+                resultCount = list.size();
+            } else if (result != null) {
+                resultCount = 1;
+            } else {
+                resultCount = 0;
+            }
+
+            return result;
+        } catch (Exception e) {
+            exceptionMsg = e.getClass().getSimpleName() + ": " + e.getMessage();
+            throw e;
+        } finally {
+            long end = System.currentTimeMillis();
+            int elapsed = (int) (end - start);
+
+            if (thresholdMs > 0 && elapsed < thresholdMs) {
+                return null;
+            }
+
+            String paramsJson = toJsonSafe(parameter);
+            UserSession userSession = SecurityUtil.getUserSession();
+            String userId =  (userSession != null && userSession.getUserId() != null) ? userSession.getUserId() : "GUEST";
+            LocalDateTime now = LocalDateTime.now();
+
+            // logging.set(true);
+            if(commonProperties.getMybatis().isLoggingOnlyError()) {
+            	if(!NullUtils.isNone(exceptionMsg)) insertSqlLog(sqlId, sqlType, sqlText, elapsed, now, userId, paramsJson, resultCount, exceptionMsg);
+            } else insertSqlLog(sqlId, sqlType, sqlText, elapsed, now, userId, paramsJson, resultCount, exceptionMsg);
+        }
+    }
+
+    private void insertSqlLog(String sqlId,
+                              String sqlType,
+                              String sqlText,
+                              int elapsedMs,
+                              LocalDateTime executeTime,
+                              String userId,
+                              String paramsJson,
+                              int resultCount,
+                              String exceptionMsg) {
+
+        String insertSql =
+            "INSERT INTO SCM_COM_SQL_LOG " +
+            " (SQL_ID, SQL_TYPE, SQL_TEXT, ELAPSED_MS, EXECUTE_TIME, CREATED_BY, PARAMS, RESULT_COUNT, EXCEPTION) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(insertSql)) {
+
+            ps.setString(1, sqlId);
+            ps.setString(2, sqlType);
+            ps.setString(3, sqlText);
+            ps.setInt(4, elapsedMs);
+            ps.setTimestamp(5, Timestamp.valueOf(executeTime));
+            ps.setString(6, userId);
+            ps.setString(7, paramsJson);
+
+            if (resultCount < 0) {
+                ps.setNull(8, java.sql.Types.INTEGER);
+            } else {
+                ps.setInt(8, resultCount);
+            }
+
+            ps.setString(9, exceptionMsg);
+
+            ps.executeUpdate();
+        } catch (Exception e) {
+            log.warn("Failed to insert SCM_COM_SQL_LOG. sqlId={}, elapsedMs={}, error={}",
+                    sqlId, elapsedMs, e.getMessage());
+        }
+    }
+
+    /** [E20260824-LOGPARAM] PARAMS 로그 상한. 초과분은 잘라 기록한다(안전망). */
+    private static final int PARAMS_MAX_LEN = 4000;
+
+    /**
+     * [E20260824-LOGPARAM] 파라미터 로그 직렬화.
+     *
+     * <p>종전 문제: MyBatis 는 실행 후 <b>OUT 파라미터(REF CURSOR 매핑 결과)를 파라미터 맵에 되돌려
+     * 넣는다</b>. 이 메서드는 finally 에서 호출되므로 그 시점 맵에는 조회 결과 전체가 들어 있었고,
+     * 결과적으로 조회 1회마다 결과셋을 통째로 JSON 으로 만들어 SCM_COM_SQL_LOG.PARAMS(CLOB) 에
+     * INSERT 했다. DMF0020 실측(2026-08-24, div82/12개월/10,524행 x 102컬럼):
+     * <b>PARAMS 길이 20,535,281 bytes(19.6MB)</b> — 직렬화 + 원격 DB CLOB 왕복이 조회 지연의
+     * 지배적 요인이었다(DB 자체는 13초).
+     *
+     * <p>조치: ① OUT 파라미터 키('@' 시작)와 MyBatis 결과 홀더(DATARESULT)를 제외해 <b>입력만</b>
+     * 남긴다(로그 목적 = 어떤 파라미터로 호출했는가). ② 그래도 커지면 PARAMS_MAX_LEN 으로 절단한다.
+     */
+    private String toJsonSafe(Object parameter) {
+        try {
+            if (parameter == null) return null;
+            Object target = parameter;
+            if (parameter instanceof Map<?, ?> map) {
+                Map<String, Object> in = new java.util.LinkedHashMap<>();
+                for (Map.Entry<?, ?> e : map.entrySet()) {
+                    String k = String.valueOf(e.getKey());
+                    // OUT 커서(@o_rc1, @O_RESULT_CURSOR ...) 와 결과 홀더는 로그 대상이 아니다
+                    if (k.startsWith("@") || "DATARESULT".equals(k)) continue;
+                    Object v = e.getValue();
+                    // 방어: 결과 컬렉션이 다른 키로 섞여 들어와도 통째로 담지 않는다
+                    if (v instanceof java.util.Collection<?> c) {
+                        in.put(k, "[collection size=" + c.size() + "]");
+                    } else {
+                        in.put(k, v);
+                    }
+                }
+                target = in;
+            }
+            String json = objectMapper.writeValueAsString(target);
+            if (json != null && json.length() > PARAMS_MAX_LEN) {
+                json = json.substring(0, PARAMS_MAX_LEN) + "...(truncated, total=" + json.length() + ")";
+            }
+            return json;
+        } catch (Exception e) {
+            return "param to json error: " + e.getMessage();
+        }
+    }
+
+    // ? 를 실제 값으로 치환한 SQL 문자열 생성 (로그용)
+    private String buildFullSql(BoundSql boundSql, Object parameterObject) {
+        String sql = boundSql.getSql();
+        List<ParameterMapping> paramMappings = boundSql.getParameterMappings();
+
+        if (paramMappings == null || paramMappings.isEmpty()) {
+            return sql;
+        }
+
+        Object paramObj = (parameterObject != null) ? parameterObject : boundSql.getParameterObject();
+
+        StringBuilder sb = new StringBuilder();
+        int paramIndex = 0;
+        int qIndex;
+        int prev = 0;
+
+        while ((qIndex = sql.indexOf('?', prev)) != -1 && paramIndex < paramMappings.size()) {
+            sb.append(sql, prev, qIndex);
+            Object value = getParameterValue(paramObj, boundSql, paramMappings.get(paramIndex));
+            sb.append(formatValueForSql(value));
+            prev = qIndex + 1;
+            paramIndex++;
+        }
+        sb.append(sql.substring(prev));
+
+        return sb.toString();
+    }
+
+    private Object getParameterValue(Object parameterObject,
+                                    BoundSql boundSql,
+                                    ParameterMapping parameterMapping) {
+        String propertyName = parameterMapping.getProperty();
+
+        if (boundSql.hasAdditionalParameter(propertyName)) {
+            return boundSql.getAdditionalParameter(propertyName);
+        }
+        if (parameterObject == null) {
+            return null;
+        }
+        if (parameterObject instanceof Map<?, ?> map) {
+            return map.get(propertyName);
+        }
+        try {
+            var field = parameterObject.getClass().getDeclaredField(propertyName);
+            field.setAccessible(true);
+            return field.get(parameterObject);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private String formatValueForSql(Object value) {
+        if (value == null) return "NULL";
+        if (value instanceof Number) return value.toString();
+        if (value instanceof java.util.Date date) {
+            return "'" + new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date) + "'";
+        }
+        return "'" + value.toString().replace("'", "''") + "'";
+    }
+
+    @Override
+    public Object plugin(Object target) {
+        return Plugin.wrap(target, this);
+    }
+
+    @Override
+    public void setProperties(Properties properties) {
+        String thresholdProp = properties.getProperty("thresholdMs");
+        if (thresholdProp != null) {
+            try {
+                this.thresholdMs = Integer.parseInt(thresholdProp);
+            } catch (NumberFormatException ignore) {
+            }
+        }
+    }
+}

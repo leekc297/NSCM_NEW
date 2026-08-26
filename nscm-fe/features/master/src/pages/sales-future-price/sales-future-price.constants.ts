@@ -384,3 +384,22 @@ export const MSG = {
   INSERT_ONLY_BUCKET: 'MSG00227',
   NO_CHANGES: 'MSG00004',
 } as const;
+
+// ====================================================================================
+// 조회조건 cascade 콤보 ID (SCM_ADM_CMBO_SQL_M)
+// ====================================================================================
+// 단계마다 콤보를 따로 조회하고 클라이언트에서 서로 필터링하던 카탈로그 방식(SearchFields)을
+// 접고, 상위부터 하위까지 한 행에 다 들어간 조인 콤보 1건만 조회한다. 한 SQL 결과라 모든 행에
+// 모든 단계 컬럼이 차 있어 strict / 관대 판단 자체가 없어진다. 값은 MktFcst(DMF0003)와 같은
+// 등록 ID 이며 컬럼 규약도 같다 - 자세한 내용은 CascadeFields.tsx 헤더 참조.
+
+// Div - Team - End Customer - Sales Site.
+export const SEARCH_CASCADE_COMBO_ID = 'SalesSite';
+
+// Div - Team - End Customer - Plant Site. Plant Site 는 Sales Site 의 하위가 아니라
+// End Customer 에서 나란히 갈라지는 별개 가지라 콤보도 따로 등록돼 있다.
+export const PLANT_SITE_CASCADE_COMBO_ID = 'PlantSite';
+
+// Div - Biz Type 2단. 종전 이 화면의 BizTypeField 는 전역 lookup('BizType')을 Division 구분
+// 없이 그대로 보여줬다 - 이 콤보로 바꾸면 Division 에 해당하는 Biz Type 만 나온다.
+export const BIZ_TYPE_CASCADE_COMBO_ID = 'DivBizType';

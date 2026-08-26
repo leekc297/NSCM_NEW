@@ -1,0 +1,126 @@
+﻿pnpm 10.28.2  (요구 = "packageManager": "pnpm@10.28.2",)
+task=type-check  filter=(전체)
+--- gen (icons + i18n) ---
+✅ 67개의 아이콘이 index.ts에 등록되었습니다.
+🚀 다국어 동기화 스크립트 시작...
+✅ 메시지 원천: http://127.0.0.1:8080/admin/message (2877건)
+EN
+CN
+KO
+--- turbo run type-check --continue ---
+powershell.exe : • turbo 2.8.5
+At line:1 char:307
++ ... } } }; $o = & powershell -NoProfile -File C:\Projects\NSCM\_artifacts ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (• turbo 2.8.5:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+• Packages in scope: @admin, @authority, @demand, @factory, @foundation, @master, @report, @sdm, @shared, @shipping, @spms-demand, @supply, @web
+• Running type-check in 13 packages
+• Remote caching disabled
+@foundation:type-check: cache miss, executing 44e6f3a626470918
+@foundation:type-check: 
+@foundation:type-check: > @foundation@0.1.0 type-check C:\Projects\NSCM\nscm-fe\packages\foundation
+@foundation:type-check: > tsc --noEmit
+@foundation:type-check: 
+@shared:type-check: cache miss, executing cbc2cddc90c43f6a
+@shared:type-check: 
+@shared:type-check: > @shared@0.1.0 type-check C:\Projects\NSCM\nscm-fe\packages\shared
+@shared:type-check: > tsc --noEmit
+@shared:type-check: 
+@shipping:type-check: cache miss, executing e40fade38ab59b6b
+@report:type-check: cache miss, executing 0a0f64210b6bef4f
+@spms-demand:type-check: cache miss, executing c91cdb8c5cb7d93b
+@supply:type-check: cache miss, executing 9df50db370221b58
+@master:type-check: cache miss, executing 03240b749e2fb604
+@admin:type-check: cache miss, executing cc5efe92af9690f7
+@demand:type-check: cache miss, executing 32d42ce0f51dedaa
+@factory:type-check: cache miss, executing cd6a4eb116e10b88
+@authority:type-check: cache miss, executing 13609f69d5d7012c
+@sdm:type-check: cache miss, executing 6c5ffaee3df16709
+@shipping:type-check: 
+@shipping:type-check: > @shipping@0.1.0 type-check C:\Projects\NSCM\nscm-fe\features\shipping
+@shipping:type-check: > tsc --noEmit
+@shipping:type-check: 
+@spms-demand:type-check: 
+@spms-demand:type-check: > @spms-demand@0.1.0 type-check C:\Projects\NSCM\nscm-fe\features\spms-demand
+@spms-demand:type-check: > tsc --noEmit
+@spms-demand:type-check: 
+@report:type-check: 
+@report:type-check: > @report@0.1.0 type-check C:\Projects\NSCM\nscm-fe\features\report
+@report:type-check: > tsc --noEmit
+@report:type-check: 
+@admin:type-check: 
+@admin:type-check: > @admin@0.1.0 type-check C:\Projects\NSCM\nscm-fe\features\admin
+@admin:type-check: > tsc --noEmit
+@admin:type-check: 
+@supply:type-check: 
+@supply:type-check: > @supply@0.1.0 type-check C:\Projects\NSCM\nscm-fe\features\supply
+@supply:type-check: > tsc --noEmit
+@supply:type-check: 
+@master:type-check: 
+@master:type-check: > @master@0.1.0 type-check C:\Projects\NSCM\nscm-fe\features\master
+@master:type-check: > tsc --noEmit
+@master:type-check: 
+@authority:type-check: 
+@authority:type-check: > @authority@0.1.0 type-check C:\Projects\NSCM\nscm-fe\features\authority
+@authority:type-check: > tsc --noEmit
+@authority:type-check: 
+@demand:type-check: 
+@demand:type-check: > @demand@0.1.0 type-check C:\Projects\NSCM\nscm-fe\features\demand
+@demand:type-check: > tsc --noEmit
+@demand:type-check: 
+@sdm:type-check: 
+@sdm:type-check: > @sdm@0.1.0 type-check C:\Projects\NSCM\nscm-fe\features\sdm
+@sdm:type-check: > tsc --noEmit
+@sdm:type-check: 
+@factory:type-check: 
+@factory:type-check: > @factory@0.1.0 type-check C:\Projects\NSCM\nscm-fe\features\factory
+@factory:type-check: > tsc --noEmit
+@factory:type-check: 
+@admin:type-check: src/pages/dynamic-query/components/DynamicQueryEditModal.tsx(31,3): error TS2305: Module '"../dynamic-query.types"' has no exported member 'ValidateColumnRow'.
+@admin:type-check: src/pages/dynamic-query/useDynamicQuerySave.ts(16,3): error TS2305: Module '"./dynamic-query.types"' has no exported member 'PendingModalColumnRow'.
+@admin:type-check: src/pages/dynamic-query/useDynamicQuerySave.ts(17,3): error TS2305: Module '"./dynamic-query.types"' has no exported member 'PendingModalConditionRow'.
+@admin:type-check: src/pages/dynamic-query/useDynamicQuerySave.ts(18,3): error TS2305: Module '"./dynamic-query.types"' has no exported member 'PendingQueryMeta'.
+@admin:type-check: src/pages/dynamic-query/useDynamicQuerySave.ts(73,55): error TS2339: Property 'selectedQueryId' does not exist on type 'DynamicQueryState & DynamicQueryAction'.
+@admin:type-check: src/pages/dynamic-query/useDynamicQuerySave.ts(74,53): error TS2339: Property 'roleSelection' does not exist on type 'DynamicQueryState & DynamicQueryAction'.
+@admin:type-check: src/pages/dynamic-query/useDynamicQuerySave.ts(75,52): error TS2339: Property 'roleOriginal' does not exist on type 'DynamicQueryState & DynamicQueryAction'.
+@admin:type-check: src/pages/dynamic-query/useDynamicQuerySave.ts(76,58): error TS2339: Property 'setSelectedQueryId' does not exist on type 'DynamicQueryState & DynamicQueryAction'.
+@admin:type-check: src/pages/dynamic-query/useDynamicQuerySave.ts(132,28): error TS7006: Parameter 'r' implicitly has an 'any' type.
+@admin:type-check: src/pages/dynamic-query/useDynamicQuerySave.ts(274,46): error TS7006: Parameter 'r' implicitly has an 'any' type.
+@admin:type-check: src/pages/dynamic-query/useDynamicQuerySave.ts(275,47): error TS7006: Parameter 'r' implicitly has an 'any' type.
+@admin:type-check: src/pages/dynamic-query/useDynamicQuerySave.ts(277,26): error TS7006: Parameter 'g' implicitly has an 'any' type.
+@admin:type-check: src/pages/dynamic-query/useDynamicQuerySave.ts(278,28): error TS7006: Parameter 'g' implicitly has an 'any' type.
+@admin:type-check: src/pages/lookup/lookup.utils.test.ts(3,54): error TS2305: Module '"./lookup.utils"' has no exported member 'toDetailSaveRow'.
+@admin:type-check: src/pages/notice-setup/notice-setup.util.ts(54,3): error TS2353: Object literal may only specify known properties, and 'CREATION_DATE' does not exist in type '{ NOTICE_ID: string; MODULE: string; MODULE_NM: string; SUB_MODULE: string; SUB_MODULE_NM: string; NOTICE: string; ACTIVE: string; START_DATE: string; END_DATE: string; PUBLICATION_PERIOD: string; ... 6 more ...; ACTION: string; } & { ...; }'.
+@admin:type-check:  ELIFECYCLE  Command failed with exit code 2.
+@admin:type-check: command finished with error, but continuing...
+@master:type-check: src/components/columnLayoutModal/columnLayoutModal.utils.test.ts(30,24): error TS2345: Argument of type 'string' is not assignable to parameter of type 'Record<string, unknown>'.
+@master:type-check: src/components/columnLayoutModal/columnLayoutModal.utils.test.ts(31,24): error TS2345: Argument of type 'string' is not assignable to parameter of type 'Record<string, unknown>'.
+@master:type-check:  ELIFECYCLE  Command failed with exit code 2.
+@master:type-check: command finished with error, but continuing...
+@demand:type-check: src/pages/sales-reports/utils/sales-reports.api.test.ts(11,10): error TS2459: Module '"./sales-reports.api"' declares 'callProc' locally, but it is not exported.
+@demand:type-check: src/pages/sales-reports/utils/sales-reports.editLock.test.ts(7,3): error TS2305: Module '"./sales-reports.editLock"' has no exported member 'currentYyyymm'.
+@demand:type-check: src/pages/sales-reports/utils/sales-reports.editLock.test.ts(10,3): error TS2305: Module '"./sales-reports.editLock"' has no exported member 'existingStaticEditable'.
+@demand:type-check: src/pages/sales-reports/utils/sales-reports.editLock.test.ts(11,3): error TS2305: Module '"./sales-reports.editLock"' has no exported member 'insertStaticEditable'.
+@demand:type-check: src/pages/sales-reports/utils/sales-reports.save.test.ts(9,3): error TS2724: '"./sales-reports.save"' has no exported member named 'buildEtcInsertRows'. Did you mean 'buildEtcSaveRows'?
+@demand:type-check:  ELIFECYCLE  Command failed with exit code 2.
+@demand:type-check: command finished with error, but continuing...
+@web:type-check: cache miss, executing fa442045041be85f
+@web:type-check: 
+@web:type-check: > @web@0.1.0 type-check C:\Projects\NSCM\nscm-fe\apps\web
+@web:type-check: > tsc --noEmit
+@web:type-check: 
+@admin#type-check: command (C:\Projects\NSCM\nscm-fe\features\admin) C:\Projects\NSCM\_artifacts\_tools\pnpm-10.28.2\pn
+pm.cmd run type-check exited (2)
+@master#type-check: command (C:\Projects\NSCM\nscm-fe\features\master) C:\Projects\NSCM\_artifacts\_tools\pnpm-10.28.2\
+pnpm.cmd run type-check exited (2)
+@demand#type-check: command (C:\Projects\NSCM\nscm-fe\features\demand) C:\Projects\NSCM\_artifacts\_tools\pnpm-10.28.2\
+pnpm.cmd run type-check exited (2)
+
+ Tasks:    10 successful, 13 total
+Cached:    0 cached, 13 total
+  Time:    3m10.2s 
+Failed:    @admin#type-check, @demand#type-check, @master#type-check
+
+ ERROR  run failed: command  exited (2)

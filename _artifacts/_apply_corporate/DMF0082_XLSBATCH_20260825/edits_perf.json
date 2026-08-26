@@ -1,0 +1,10 @@
+[
+ {
+  "old": "         GROUP BY F.DIVISION_ID, F.PROJECT_CODE, F.SCM_SITE_ID, F.ITEM_ID\n                , F.INCOTERMS, F.FCST_TYPE, F.DOM_EXP, F.CURRENCY\n    )\n    , WT_KEY AS (",
+  "new": "         GROUP BY F.DIVISION_ID, F.PROJECT_CODE, F.SCM_SITE_ID, F.ITEM_ID\n                , F.INCOTERMS, F.FCST_TYPE, F.DOM_EXP, F.CURRENCY\n    )\n    , WT_ITEM AS (\n        /* [E20260825-XLSBATCH2] ITEM_V 선실현 — INNER 전환 후 옵티마이저가 VIEW PUSHED PREDICATE\n           + NL(추정 433만행)로 행별 평가(ASH 라인27 INDEX SKIP SCAN CPU 지배 실측, hook #129 계보).\n           일괄입력 팝업 원문도 동일 사유로 GTT_DM_MST_ITEM_SINGLE_V 선적재 — 등가 처방(division 1회 실현). */\n        SELECT /*+ MATERIALIZE */\n               IV0.DIVISION_ID, IV0.ITEM_ID, IV0.ITEM_NAME, IV0.NICK_NAME, IV0.ITEM_TYPE\n             , IV0.MDM_PROJECT_NAME, IV0.MIN_CAPACITY, IV0.FORECAST_INFO_BIZ_TYPE, IV0.CELL_TYPE\n             , IV0.FORECAST_INFO_CELL_MODEL, IV0.FORECAST_INFO_CELL_PACK_COUNT\n             , IV0.FORECAST_INFO_SPEC, IV0.FORECAST_INFOR_VERSION\n          FROM SCM_MGR.DM_MST_ITEM_SINGLE_V IV0\n         WHERE IV0.DIVISION_ID = p_division_id\n    )\n    , WT_KEY AS ("
+ },
+ {
+  "old": "         INNER JOIN SCM_MGR.DM_MST_ITEM_SINGLE_V IV  --[E20260825-XLSBATCH] 일괄입력 최종 취합 INNER JOIN(ITEM) 동일 (구 LEFT)\n            ON  IV.DIVISION_ID = R.DIVISION_ID\n            AND IV.ITEM_ID     = R.ITEM_ID",
+  "new": "         INNER JOIN WT_ITEM IV  --[E20260825-XLSBATCH] 일괄입력 최종 취합 INNER JOIN(ITEM) 동일 (선실현본)\n            ON  IV.DIVISION_ID = R.DIVISION_ID\n            AND IV.ITEM_ID     = R.ITEM_ID"
+ }
+]

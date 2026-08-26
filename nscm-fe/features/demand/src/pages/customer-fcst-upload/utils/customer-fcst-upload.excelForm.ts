@@ -59,15 +59,17 @@ export const UPLOAD_TOKEN_BY_COL: Readonly<Record<string, string>> = {
 export const MAX_VALUE_SLOTS = 187;
 
 /**
- * ⭐ 값 칸 배경색 — **미리보기와 다운로드 파일이 같은 색**이어야 한다(단일 원천).
- * `CustomerFcstTemplateModal.module.scss` 의 `.uploadableCell` / `.blockedCell` 과 값을 맞춘다.
+ * 값 칸 배경색 — **미리보기와 다운로드 파일이 같은 색**이어야 한다(단일 원천).
+ * 공통 표준(hook #95) 그리드 색 토큰과 값을 맞춘다 (사용자 요구 2026-08-21):
+ *   `$wj-editable-cell` #fff8cd / `$wj-non-editable-cell` #f1f4f3
+ *   (packages/foundation/src/styles/wijmo/misc/_variables.scss).
  * 색이 갈리면 화면에서 노랑이던 칸이 파일에서 회색으로 보여 사용자가 입력 위치를 잘못 읽는다.
  */
 export const EXCEL_FILL = {
-  /** 입력 가능 — DMF0007 이 VALID_YN='Y' 로 표기한 주차 */
-  UPLOADABLE: '#FFFBE6',
-  /** 입력 불가 — 해당 기간의 기준데이터 없음 */
-  BLOCKED: '#F2F3F5',
+  /** 입력 가능 — DMF0007 이 VALID_YN='Y' 로 표기한 주차 (표준 편집가능 Yellow) */
+  UPLOADABLE: '#FFF8CD',
+  /** 입력 불가 — 해당 기간의 기준데이터 없음 (표준 잠금 Gray) */
+  BLOCKED: '#F1F4F3',
 } as const;
 
 /**
@@ -207,9 +209,12 @@ export const uploadableWeekTokens = (row: ExcelFormRow | undefined): Set<string>
 };
 
 /** 결과커서 판정 — RESULT_CODE/RESULT_MSG 우선, 일부 SP 는 CODE/MSG (겸용). */
-export const pickResultCursor = (
-  inner?: { CODE?: string; MSG?: string; RESULT_CODE?: string; RESULT_MSG?: string }
-): { ok: boolean; message?: string } => {
+export const pickResultCursor = (inner?: {
+  CODE?: string;
+  MSG?: string;
+  RESULT_CODE?: string;
+  RESULT_MSG?: string;
+}): { ok: boolean; message?: string } => {
   if (!inner) return { ok: true };
   const code = inner.RESULT_CODE ?? inner.CODE;
   if (code === undefined || String(code) === '0') return { ok: true };

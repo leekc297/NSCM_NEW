@@ -321,9 +321,6 @@ const SubTitleComp = ({
                 </div>
               </Tooltip>
             )}
-            {!searchAction && customButtons && customButtons.length > 0 && (
-              <div style={{ marginRight: '12px' }} />
-            )}
             {buttonActions.upload === false || (
               <Tooltip followCursor title='Upload' placement='bottom'>
                 <div>

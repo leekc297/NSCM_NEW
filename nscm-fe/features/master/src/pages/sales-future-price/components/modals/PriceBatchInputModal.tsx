@@ -14,6 +14,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { apiClient } from '@foundation/apis';
 import { CELL_CONTROL_TYPE, CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
+import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { GridAction } from '@foundation/utils';
 import { CustomDialog, CustomDropdown, DataGrid, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
@@ -36,15 +37,21 @@ import {
 } from '../../salesPriceExchange';
 import { useSalesFuturePriceStore } from '../../useSalesFuturePriceStore';
 import { fromYyyymmdd, isPeriodInverted, yyyymmddOf } from '../../utils/futurePriceDate';
+import { toStr } from '../../utils/futurePriceGroup';
 
 import styles from './PriceBatchInputModal.module.scss';
+import type { SalesPriceRangeRow } from './SalesPriceRangeModal';
 
-// yyyymmdd → 해당 주 "월요일" yyyymmdd (AS-IS drpDateTime 월요일 정렬 + MSG00330 정합).
+// yyyymmdd → 월요일 정렬 (AS-IS drpDateTime 월요일 정렬 + MSG00330 정합).
+//   AS-IS 계산식 = dt.AddDays(DayOfWeek.Monday - dt.DayOfWeek). .NET DayOfWeek 는 Sunday=0 이므로
+//   일요일은 "그 주 월요일(-6)" 이 아니라 "다음날 월요일(+1)" 로 이동한다.
+//   주의: JS 관용구(일요일 = 그 주의 마지막 날 → -6)로 계산하면 일요일에만 AS-IS 대비 기간이 한 주 앞당겨진다
+//   (2026-08-23 일요일 실측 — AS-IS 2026.08.24~2027.02.01 / -6 계산 2026.08.17~2027.01.25).
+//   메인 그리드의 과거주차 lock cutoff(SalesFuturePriceGrid todayCutoff)도 동일하게 (1 - getDay()) 를 쓴다.
 const snapMonday = (yyyymmdd: string): string => {
   if (!/^\d{8}$/.test(yyyymmdd)) return yyyymmdd;
   const d = new Date(+yyyymmdd.slice(0, 4), +yyyymmdd.slice(4, 6) - 1, +yyyymmdd.slice(6, 8));
-  const day = d.getDay(); // 0=일 … 6=토
-  d.setDate(d.getDate() + (day === 0 ? -6 : 1 - day)); // 그 주 월요일
+  d.setDate(d.getDate() + (1 - d.getDay())); // 0=일 → +1(다음날 월요일) / 그 외 → 그 주 월요일
   return `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`;
 };
 // 오늘 yyyymmdd (local).
@@ -137,12 +144,60 @@ const PRICE_ALL_COL: RawFlexGridColumnConfig = {
   scale: 3,
 };
 
+// 일괄입력 Price 프리필 원본을 담는 내부 필드 — 사용자가 실제로 고쳤는지 판정하는 기준값.
+//   그리드 컬럼(autoGenerateColumns=false)에는 없으므로 화면에 나타나지 않는다.
+const PRICE_ALL_INIT = '__PRICE_ALL_INIT';
+
+// 행의 "기존 가격" = 기간 내 가장 이른 주차(W_yyyymmdd)의 LOC 값.
+//   AS-IS 팝업은 전용 SP(P_DMF0020_GET_SCM_MST_FUTURE_PRICE_POPUP_DATA)가 일괄입력 Price 컬럼에
+//   기존 가격을 실어 내려주는데, TO-BE 는 메인 wide SP 를 재사용해 그 컬럼이 없다 → 주차 값에서 복원한다.
+//   0/빈값은 "가격 없음" 으로 보고 빈칸 유지 (AS-IS 도 가격 없는 행은 일괄입력 Price 가 빈칸).
+const existingPriceOf = (r: PriceBatchRow): number | '' => {
+  const weekKeys = Object.keys(r)
+    .filter(k => /^W_\d{8}$/.test(k))
+    .sort();
+  for (const k of weekKeys) {
+    const v = r[k];
+    if (v === undefined || v === null || v === '') continue;
+    const n = typeof v === 'number' ? v : Number(String(v).replace(/,/g, ''));
+    if (!Number.isNaN(n) && n !== 0) return n;
+  }
+  return '';
+};
+
+// AS-IS 키 컬럼 편집 규칙 (사용자 확인 2026-08-23, 캡처 대조):
+//   한 행의 Incoterms / FCST Type / Customs Handbook 이 모두 비어 있으면(= 아직 Sales Price 레코드가
+//   없는 행) 그 3개 + Currency 를 편집할 수 있다. 값이 있는 행은 키를 바꿀 수 없다(표시전용).
+//   Currency 는 값(USD)이 채워져 있어도 함께 열린다 — AS-IS 캡처에서 노란색으로 확인.
+const KEY_EDIT_TRIGGER_COLS = ['INCOTERMS', 'FCST_TYPE', 'DOM_EXP'] as const;
+const KEY_EDIT_TARGET_COLS = new Set(['INCOTERMS', 'FCST_TYPE', 'DOM_EXP', 'CURRENCY']);
+// 편집 허용 여부를 조회 시점에 판정해 행에 기록하는 내부 필드.
+//   현재 셀 값으로 매번 판정하면 사용자가 Incoterms 를 입력하는 순간 나머지 셀이 잠겨 오타를 못 고친다.
+const KEY_EDITABLE = '__KEY_EDITABLE';
+const isBlankCell = (v: unknown): boolean => toStr(v).trim() === '';
+
+// 고정 컬럼 편집 가능 판정 = UI Category Setup 의 INPUT_TYPE_CODE (사용자 요구 2026-08-23).
+//   'O'(선택입력) / 'M'(필수입력) = 편집 가능, 'S'(조회전용) = 표시전용.
+//   'IO'/'IM' 은 신규행 전용인데 이 팝업은 행 추가가 없으므로 표시전용으로 취급한다.
+const isEditableInputType = (t?: string): boolean =>
+  t === CELL_INPUT_EDIT_TYPE.OPTIONAL || t === CELL_INPUT_EDIT_TYPE.MANDATORY;
+
+// 가격 비교용 정규화 (사용자가 콤마를 넣어 입력할 수 있음 — 저장 로직과 동일 규칙).
+const normPrice = (v: unknown): string => toStr(v).replace(/,/g, '').trim();
+
 interface Props {
   open: boolean;
   modalClose: () => void;
   defaultDivision: string;
   defaultPeriod: { start: string; end: string };
+  // 메인 화면 조회조건 이월 (사용자 요구 2026-08-23) — 팝업 오픈 시 Sales Site / Project 를 그대로 세팅.
+  //   Sales Site 는 메인과 동일한 다중선택 계약(string[]), Project 도 메인이 다중이라 코드 배열로 받는다.
+  defaultSalesSite?: string[];
+  defaultProjectCodes?: string[];
   onSaveResult?: () => void;
+  // 저장 응답의 허용범위(Range Rate) 초과 목록 — 메인 화면이 소유한 SalesPriceRangeModal 로 넘긴다
+  //   (AS-IS: 일괄 저장 후에도 Range Rate 팝업이 떠야 함).
+  onRangeOver?: (overRows: SalesPriceRangeRow[]) => void;
 }
 
 interface PriceBatchRow {
@@ -160,6 +215,10 @@ interface PriceBatchRow {
   PLANT_SITE_ID?: string;
   MEASURE?: string;
   PRICE_ALL?: string | number;
+  // 프리필 원본(PRICE_ALL_INIT) — 저장 대상(사용자 수정 행) 판정용 내부 필드.
+  __PRICE_ALL_INIT?: string | number;
+  // 조회 시점 키 컬럼 편집 허용 여부('Y'/'N') — KEY_EDIT_TARGET_COLS 편집 게이트.
+  __KEY_EDITABLE?: string;
   [key: string]: string | number | undefined;
 }
 
@@ -179,7 +238,10 @@ export const PriceBatchInputModal = ({
   modalClose,
   defaultDivision,
   defaultPeriod,
+  defaultSalesSite,
+  defaultProjectCodes,
   onSaveResult,
+  onRangeOver,
 }: Props) => {
   const { t } = useTranslation();
   const setAlert = useMessageStore.getState().setAlert;
@@ -200,8 +262,22 @@ export const PriceBatchInputModal = ({
   // popup state
   const [openProject, setOpenProject] = useState(false);
   const [openItem, setOpenItem] = useState(false);
-  // ⭐ 재진입 초기화 — 이 모달 세션에서 조회했는지 여부. 미조회면 그리드 비움(이전 데이터/입력 잔존 방지).
-  const [searched, setSearched] = useState(false);
+  // 조회 시점 조회조건 스냅샷 (null = 이 모달 세션에서 아직 조회 안 함 → 그리드 비움).
+  //   조회조건 state 를 그대로 SP filters 에 쓰면 Sales Site 를 체크하는 순간 react-query 키가 바뀌어
+  //   (useTabProcQuery queryKey = [tabId, sheet, action, {...filters}]) 아직 조회한 적 없는 키가 되고,
+  //   enabled:false 라 fetch 도 안 되므로 data 가 undefined → 그리드가 즉시 비어 버린다.
+  //   (사용자 지적 2026-08-23: 조회조건만 골라도 데이터가 사라짐 — 필터가 아니라 쿼리 키 전환이 원인.)
+  //   → 조회 버튼을 눌러야만 스냅샷이 갱신되고, SP 조회 / 화면 필터 / 저장 주차 산출이 모두 이 값을 쓴다.
+  const [appliedCond, setAppliedCond] = useState<{
+    salesSite: string[];
+    projectTokens: string[];
+    itemId: string;
+    periodFrom: string;
+    periodTo: string;
+  } | null>(null);
+  // 조회 버튼 클릭 카운터 — 스냅샷 반영(리렌더) 후 refetch 하기 위한 트리거.
+  //   handleFind 안에서 곧바로 refetch 하면 아직 이전 스냅샷 기준 쿼리 키에 붙은 refetch 가 실행된다.
+  const [searchTick, setSearchTick] = useState(0);
 
   // ⭐ UI Category Setup 동적 컬럼 메타 — Batch 전용 시트 'Sales Price Save All'(AS-IS shtMain, 2026-07-07).
   //   division 필터는 SP(PR_GET_SHEET_COLUMN_LIST)가 DIVISION_ID 컬럼으로 서버측 처리(attribute3 미사용) →
@@ -209,26 +285,51 @@ export const PriceBatchInputModal = ({
   const metaBatch = useSalesFuturePriceStore(s => s.staticColumns[SHEETS.PRICE_BATCH]);
   const fetchBatchColumns = useSalesFuturePriceStore(s => s.fetchBatchColumns);
 
+  // 오픈 시점의 부모 조회조건 스냅샷 — 아래 초기화 효과는 열림 전환에서만 이 값을 읽는다.
+  //   주의: defaultPeriod 는 부모가 매 렌더 새 객체로 만들고 defaultSalesSite/defaultProjectCodes 도 배열이라
+  //   deps 에 직접 넣으면 부모 리렌더마다 초기화가 재실행돼 사용자가 팝업에서 고친 조회조건이 되돌아간다.
+  const openDefaultsRef = useRef({
+    defaultDivision,
+    defaultPeriod,
+    defaultSalesSite,
+    defaultProjectCodes,
+  });
+  openDefaultsRef.current = {
+    defaultDivision,
+    defaultPeriod,
+    defaultSalesSite,
+    defaultProjectCodes,
+  };
+
   useEffect(() => {
-    if (open) {
-      // ⭐ 재진입 시 초기화 — 조회조건/조회여부 리셋(이전 입력·데이터 잔존 방지).
-      setDivisionId(defaultDivision);
-      setSalesSite([]);
-      setProjectCode('');
-      setItemId('');
-      setSearched(false);
-      // ⭐ AS-IS drpDateTime 정합 — 기간 기본값 월요일 정렬 + 시작일은 이번 주 월요일 이상(과거구간 금지 MSG00409).
-      const thisMon = snapMonday(todayYmd());
-      const fromMon = snapMonday(defaultPeriod.start);
-      const from = fromMon > thisMon ? fromMon : thisMon;
-      const to = snapMonday(defaultPeriod.end);
-      setPeriodFrom(from);
-      setPeriodTo(to < from ? from : to);
-      // ⭐ Batch 시트 컬럼은 부모(SalesFuturePrice)가 division 단위로 선-fetch → 여기선 미로드일 때만 보강.
-      //   (open 마다 재fetch 하면 metaBatch 참조가 매번 바뀌어 그리드 컬럼 재구성 = 깜박임. 2026-07-07)
-      if (!metaBatch || metaBatch.length === 0) void fetchBatchColumns(defaultDivision);
-    }
-  }, [open, defaultDivision, defaultPeriod, metaBatch, fetchBatchColumns]);
+    if (!open) return;
+    const d = openDefaultsRef.current;
+    // 재진입 시 초기화 — 조회조건/조회여부 리셋(이전 입력·데이터 잔존 방지).
+    //   Sales Site / Project 는 메인 화면에서 선택한 값이 있으면 그대로 이월한다 (사용자 요구 2026-08-23).
+    setDivisionId(d.defaultDivision);
+    setSalesSite(d.defaultSalesSite ?? []);
+    setProjectCode((d.defaultProjectCodes ?? []).join(', '));
+    setItemId('');
+    setAppliedCond(null);
+    // AS-IS drpDateTime 정합 — 기간 기본값 월요일 정렬 + 시작일은 이번 주 월요일 이상(과거구간 금지 MSG00409).
+    const thisMon = snapMonday(todayYmd());
+    const fromMon = snapMonday(d.defaultPeriod.start);
+    const from = fromMon > thisMon ? fromMon : thisMon;
+    const to = snapMonday(d.defaultPeriod.end);
+    setPeriodFrom(from);
+    setPeriodTo(to < from ? from : to);
+    // 초기화는 열림 전환에서만 — 스냅샷은 openDefaultsRef 로 읽으므로 deps 는 open 만.
+  }, [open]);
+
+  // Batch 시트 컬럼('Sales Price Save All') = admin UI Category Setup 메타 → open 마다 재조회.
+  //   master hook 2.4(admin 메타 즉시 반영)와 동일 정책. 미로드일 때만 fetch 하면 컬럼셋팅 화면에서
+  //   고친 내용이 탭을 닫기 전까지 이 팝업에 반영되지 않는다 — 스토어(탭 수명 registry)가 메타를 계속 들고 있기 때문.
+  //   깜박임 없음: store fetchBatchColumns 가 내용 동일 시 set 을 생략(JSON 비교)해 배열 참조가 유지된다.
+  //   조회조건 초기화 효과와는 분리 — metaBatch 도착이 사용자 입력 초기화를 다시 트리거하지 않게 한다.
+  useEffect(() => {
+    if (!open) return;
+    void fetchBatchColumns(defaultDivision);
+  }, [open, defaultDivision, fetchBatchColumns]);
 
   // ===== Combo dropdown — Div / Sales Site / Team / Incoterms / FCST / Customs Handbook / Currency =====
   const [divQ, ssQ, teamQ, incoQ, currQ, fcstQ, customsQ] = useTabComboQueries({
@@ -282,7 +383,9 @@ export const PriceBatchInputModal = ({
   // ⭐ 고정 컬럼 = 'Sales Price Save All' 시트 메타 순수 구동 (2026-07-07 하드코딩 화이트리스트 제거).
   //   division 필터 = SP 서버측(DIVISION_ID 컬럼) → FE 는 visible 만 필터. 정렬 = SP 반환 순서(SORT_ORDER_NO).
   //   PRICE_ALL 은 시트에 VISIBLE_FLAG='N' 이므로 visible 셋에 없음 → 항상 편집용 상수 append(중복 없음).
-  //   inputTpCd = 표시전용(SEARCH_ONLY) 강제(오직 PRICE_ALL 편집). 메타 미로드 시 FALLBACK_FIXED.
+  //   편집 가능 여부는 메타의 INPUT_TYPE_CODE(inputTpCd) 를 그대로 따른다 (사용자 요구 2026-08-23 —
+  //   기존에는 전 컬럼 SEARCH_ONLY 강제라 admin 에서 O/M 으로 바꿔도 편집이 안 됐다).
+  //   미지정(null) 컬럼은 안전하게 표시전용. 메타 미로드 시 FALLBACK_FIXED(전부 표시전용).
   const fixedColumns = useMemo<RawFlexGridColumnConfig[]>(() => {
     const base: RawFlexGridColumnConfig[] =
       metaBatch && metaBatch.length > 0
@@ -296,46 +399,63 @@ export const PriceBatchInputModal = ({
               fixed: false, // ⭐ 메인 그리드와 동일 — freeze 미사용(다단 헤더 높이 정규화 정상화)
               visible: true,
               display: true,
-              inputTpCd: CELL_INPUT_EDIT_TYPE.SEARCH_ONLY, // 표시전용 (편집=PRICE_ALL 만)
+              inputTpCd: c.inputTpCd ?? CELL_INPUT_EDIT_TYPE.SEARCH_ONLY,
             }))
         : FALLBACK_FIXED.map(c => ({ ...c, inputTpCd: CELL_INPUT_EDIT_TYPE.SEARCH_ONLY }));
     return [...base, PRICE_ALL_COL];
   }, [metaBatch]);
 
   const fixedBindings = useMemo(() => fixedColumns.map(c => c.colNm), [fixedColumns]);
+  // formatItem 이 노란색(편집가능) 을 칠할 고정 컬럼 — 메타 INPUT_TYPE_CODE 기준.
+  //   (PRICE_ALL 은 항상 편집 가능이라 이 집합과 무관하게 별도 분기.)
+  const editableFixedBindings = useMemo(
+    () => new Set(fixedColumns.filter(c => isEditableInputType(c.inputTpCd)).map(c => c.colNm)),
+    [fixedColumns]
+  );
+  const editableFixedRef = useRef(editableFixedBindings);
+  editableFixedRef.current = editableFixedBindings;
+
+  // Project 입력은 단일 텍스트지만 메인 조회조건(다중선택)이 이월될 수 있어 콤마/캐럿 구분 다중 값을 허용한다.
+  //   토큰이 1개면(사용자 직접 타이핑 포함) 기존 동작과 동일 — 부분일치 필터 + SP 단일 파라미터.
+  const projectTokens = useMemo(
+    () =>
+      projectCode
+        .split(/[,^]/)
+        .map(v => v.trim())
+        .filter(Boolean),
+    [projectCode]
+  );
 
   // ===== SP — sheet 'priceBatch' (메인 SP DMF0020_GET_SCM_MST_FUTURE_PRICE 와 동일) =====
   //   BE makeProcedure (BaseService.java) 가 SCM_ADM_PROC_M.COL_NM 매핑 — IN 18 param 모두 명시 의무.
   const sesUserId = useSessionStore(s => s.session.userId ?? '');
   // ⭐ open 일 때만 filters 정의 (형제 SalesPriceVersionModal 표준) — modal 닫힘 시 stale query 방지.
-  const filters = useMemo(
-    () =>
-      open
-        ? ({
-            divisionId,
-            deptId: 'ALL',
-            endCustomer: 'ALL',
-            scmSiteId: salesSite.length > 0 ? salesSite.join('^') : 'ALL',
-            plantSiteId: 'ALL',
-            projectCode: projectCode || 'ALL',
-            itemId: itemId || 'ALL',
-            customerProjectCode: 'ALL',
-            customerModel: 'ALL',
-            fromYyyymmdd: periodFrom,
-            toYyyymmdd: periodTo,
-            biztype: 'ALL',
-            sesUserId,
-            userInfo: sesUserId,
-            owner: 'ALL',
-            overRange: 'N',
-            invalidExec: 'N',
-            versionType: 'CURRENT',
-            // ⭐ 'W' — 기간 내 주차(W_yyyymmdd) 단위로 주별 컬럼 표시 + 저장 시 일괄 price 확장.
-            bucketType: 'W',
-          } as never)
-        : undefined,
-    [open, divisionId, periodFrom, periodTo, salesSite, projectCode, itemId, sesUserId]
-  );
+  const filters = useMemo(() => {
+    if (!open || !appliedCond) return undefined;
+    const cond = appliedCond;
+    return {
+      divisionId,
+      deptId: 'ALL',
+      endCustomer: 'ALL',
+      scmSiteId: cond.salesSite.length > 0 ? cond.salesSite.join('^') : 'ALL',
+      plantSiteId: 'ALL',
+      projectCode: cond.projectTokens.length > 0 ? cond.projectTokens.join('^') : 'ALL',
+      itemId: cond.itemId || 'ALL',
+      customerProjectCode: 'ALL',
+      customerModel: 'ALL',
+      fromYyyymmdd: cond.periodFrom,
+      toYyyymmdd: cond.periodTo,
+      biztype: 'ALL',
+      sesUserId,
+      userInfo: sesUserId,
+      owner: 'ALL',
+      overRange: 'N',
+      invalidExec: 'N',
+      versionType: 'CURRENT',
+      // ⭐ 'W' — 기간 내 주차(W_yyyymmdd) 단위로 주별 컬럼 표시 + 저장 시 일괄 price 확장.
+      bucketType: 'W',
+    } as never;
+  }, [open, divisionId, appliedCond, sesUserId]);
   const { data, refetch, isLoading, isFetching } = useTabProcQuery({
     menuId: MENU_ID,
     sheetName: SHEETS.PRICE_BATCH,
@@ -349,17 +469,20 @@ export const PriceBatchInputModal = ({
   //   월초로 스냅해 조회 (SalesFuturePrice.tsx exchangeFilters 와 동일 처리).
   const exchangeFilters = useMemo(
     () =>
-      open
-        ? ({ startYyyymmdd: `${periodFrom.slice(0, 6)}01`, endYyyymmdd: periodTo } as never)
+      open && appliedCond
+        ? ({
+            startYyyymmdd: `${appliedCond.periodFrom.slice(0, 6)}01`,
+            endYyyymmdd: appliedCond.periodTo,
+          } as never)
         : undefined,
-    [open, periodFrom, periodTo]
+    [open, appliedCond]
   );
   const { data: exchangeData } = useTabProcQuery<MENU_ID, SHEETS.EXCHANGE>({
     menuId: MENU_ID,
     sheetName: SHEETS.EXCHANGE,
     tabId: MENU_ID,
     filters: exchangeFilters,
-    enabled: !!open && !!periodFrom && !!periodTo,
+    enabled: !!open && !!appliedCond,
   });
 
   // ⭐ 성능(2026-07-08) — allRows 참조 안정화(useMemo). `data?.o_rc1 ?? []` 를 렌더 본문에서 만들면
@@ -368,23 +491,51 @@ export const PriceBatchInputModal = ({
     () => (data?.o_rc1 ?? EMPTY_ROWS) as unknown as PriceBatchRow[],
     [data]
   );
+  // 일괄입력 Price 프리필 — 조회 결과가 새로 도착할 때만 실행 (AS-IS 팝업이 기존 가격을 보여주는 동작 등가).
+  //   주의: rows useMemo 안에서 행을 복사해 채우면 Project/Model 입력 등 필터가 바뀔 때마다 행 객체가
+  //   새로 만들어져 사용자가 그리드에 입력한 값이 사라진다 → 행 객체 자체에 기록한다(그리드 편집과 동일 대상).
+  useEffect(() => {
+    if (allRows.length === 0) return;
+    for (const r of allRows) {
+      const init = existingPriceOf(r);
+      r[PRICE_ALL_INIT] = init;
+      r.PRICE_ALL = init;
+      // 키 컬럼 편집 허용 판정도 이 시점(조회 직후 원본 값)에 확정한다.
+      r[KEY_EDITABLE] = KEY_EDIT_TRIGGER_COLS.every(k => isBlankCell(r[k])) ? 'Y' : 'N';
+    }
+    gridRef.current?.invalidate(true);
+  }, [allRows]);
+
+  // ⭐ 2026-08-24 — CustomDropdown(allOption) 은 전체 선택을 **열거가 아니라 'ALL' sentinel** 로 내보낸다
+  //   (CustomDropdown.tsx L370/L375, 2026-08-18 사용자 요구). 그래서 ALL 선택 시 salesSite = ['ALL'] 이다.
+  //   서버 payload 는 join 결과가 그대로 'ALL' 이라 정상이지만, 아래 client-side 필터는
+  //   ['ALL'].includes('<실제 사이트>') === false 라 **전 행을 걸러 그리드가 빈다**.
+  //   실사고: Sales Site 조건 조회 후 다시 ALL 로 조회하면 데이터가 안 보임.
+  //   -> 필터 판정에는 sentinel 을 제거한 목록을 쓴다(빈 배열 = 필터 없음).
+  const siteFilter = useMemo(
+    () => (appliedCond?.salesSite ?? []).filter(s => s && s.toUpperCase() !== 'ALL'),
+    [appliedCond]
+  );
+
   // 추가 client-side filter (사용자 명시 검색조건)
   //   ⭐ 이 Modal 은 LOC Measure 만 등록 사용 (AS-IS GET_MEASURE_COUNTINFO_SAVE_PRICE = LOC only) → LOC 행만 표시.
   const rows = useMemo(
     () =>
       // ⭐ 미조회(재진입 초기) 상태면 빈 그리드 → 헤더 단단(1단)로 리셋 + 이전 데이터/입력 비표시.
       //   EMPTY_ROWS 상수 반환 = 참조 안정(매번 새 [] 생성 금지 — DataGrid memo 보존).
-      !searched
+      !appliedCond
         ? EMPTY_ROWS
         : allRows.filter(r => {
             if (String(r.MEASURE ?? '').toUpperCase() !== 'LOC') return false;
-            if (salesSite.length > 0 && !salesSite.includes(String(r.SCM_SITE_ID ?? '')))
+            const { projectTokens: pts, itemId: iid } = appliedCond;
+            if (siteFilter.length > 0 && !siteFilter.includes(String(r.SCM_SITE_ID ?? '')))
               return false;
-            if (projectCode && !String(r.PROJECT_CODE ?? '').includes(projectCode)) return false;
-            if (itemId && !String(r.ITEM_ID ?? '').includes(itemId)) return false;
+            if (pts.length > 0 && !pts.some(tk => String(r.PROJECT_CODE ?? '').includes(tk)))
+              return false;
+            if (iid && !String(r.ITEM_ID ?? '').includes(iid)) return false;
             return true;
           }),
-    [allRows, salesSite, projectCode, itemId, searched]
+    [allRows, appliedCond, siteFilter]
   );
 
   // ⭐ 동적 주별 bindings (W_yyyymmdd) — 주 시작일(월요일 OR 월 1일, 월경계 분할 주차) 만.
@@ -462,6 +613,9 @@ export const PriceBatchInputModal = ({
   }, [dynBindings]);
 
   const loading = isLoading || isFetching;
+  // 저장 왕복 중 상태 — 이중 제출 차단(savingRef) + 버튼 비활성/스피너(saving).
+  const savingRef = useRef(false);
+  const [saving, setSaving] = useState(false);
 
   // ===== Button handlers =====
   const handleFind = () => {
@@ -490,23 +644,40 @@ export const PriceBatchInputModal = ({
       void setAlert({ type: 'alert', content: t('MSG00097', '_Division 을 선택하세요.') });
       return;
     }
-    setSearched(true);
-    refetch?.();
+    // 조회 버튼을 누른 시점의 조회조건만 확정 — SP 조회/화면 필터/저장 주차가 모두 이 스냅샷을 쓴다.
+    //   refetch 는 스냅샷이 반영된 다음 렌더에서 아래 효과가 호출한다(쿼리 키 정합).
+    setAppliedCond({ salesSite, projectTokens, itemId, periodFrom, periodTo });
+    setSearchTick(n => n + 1);
   };
+
+  // 조회 실행 — 스냅샷(appliedCond)이 filters 에 반영된 뒤 실행되어야 올바른 쿼리 키로 fetch 된다.
+  //   같은 조건으로 다시 Search 해도 tick 이 증가하므로 강제 재조회된다.
+  useEffect(() => {
+    if (searchTick === 0) return;
+    void refetch?.();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchTick]);
 
   // AS-IS DMF0020_SaveSalesFuturePrice_Popup.cs SaveData() L1751~1839 정합:
   //   LOC 행마다 입력한 일괄 price 를 기간 내 모든 주차(W_yyyymmdd)로 확장 × measure 3쌍(LOC/KRW/USD, RTF 제외).
   //   LOC=입력값 / KRW·USD=GetExchangeRate 재계산. 저장 SP = DMF0020_SAVE_SCM_MST_FUTURE_PRICE_ALL(메인 라우트 재사용).
-  const handleSave = async () => {
-    // 일괄 price 입력된 LOC 행만 대상 (PRICE_ALL 비어있으면 skip)
+  const runSave = async () => {
+    // 저장 대상 = 사용자가 일괄 price 를 실제로 고친 LOC 행만 (사용자 결정 2026-08-23).
+    //   프리필(기존 가격) 그대로인 행은 제외 — 조회 결과 전체가 매번 재저장되는 것을 막는다.
+    //   비운 행도 제외(입력 없음). 삭제는 AS-IS 와 동일하게 0 을 입력해야 한다(flag 'D').
     const targets = rows.filter(r => {
-      const v = r.PRICE_ALL;
-      return v !== undefined && v !== null && String(v).trim() !== '';
+      const cur = normPrice(r.PRICE_ALL);
+      if (cur === '') return false;
+      return cur !== normPrice(r[PRICE_ALL_INIT]);
     });
     if (targets.length === 0) {
+      // MSG00004 = "수정한 내용이 없습니다." (사내 NO_CHANGES 표준 코드).
+      //   MSG00113 은 "필수 입력 컬럼이 없습니다" 로 등록돼 있어 이 상황과 맞지 않는다 —
+      //   t() 2번째 인자는 코드 미등록 시 fallback 일 뿐이라 문구만 바꿔선 화면이 안 바뀐다.
+      //   형제 화면 forecast-price SavePricePeriodModal 도 동일 판정에 MSG00004 사용.
       void setAlert({
         type: 'alert',
-        content: t('MSG00113', '_일괄입력 Price 를 입력 후 저장하세요.'),
+        content: t('MSG00004', '_수정한 내용이 없습니다.'),
       });
       return;
     }
@@ -570,14 +741,16 @@ export const PriceBatchInputModal = ({
     // ⭐ No.30 — 기간 내 주차(W_yyyymmdd) 는 GET 응답의 동적 키가 아니라 선택 Period(periodFrom~periodTo)
     //   로 직접 산출한다 (표시 주차(dynBindings)와 동일 규칙: 주 시작 = 월요일 OR 월 1일). GET 응답 컬럼에
     //   기대면 그 응답이 Period 전체를 못 채웠을 때 저장도 같이 잘린다 — 위 enumerateWeekStarts 참조.
-    const weeks = enumerateWeekStarts(periodFrom, periodTo);
+    //   기간도 조회 시점 스냅샷을 쓴다 — 조회 후 기간만 바꾸고 저장하면 화면에 없는 주차까지 저장된다.
+    const weeks = appliedCond
+      ? enumerateWeekStarts(appliedCond.periodFrom, appliedCond.periodTo)
+      : [];
     if (weeks.length === 0) {
       void setAlert({ type: 'alert', content: t('MSG00108', '_조회된 주차가 없습니다.') });
       return;
     }
 
-    const ok = await setAlert({ type: 'confirm', content: t('MSG00001', '_저장하시겠습니까?') });
-    if (!ok) return;
+    // 저장 확인창 없이 즉시 저장 (사용자 요구 2026-08-23). 위 검증을 모두 통과한 시점이다.
     void setToast({ message: t('LBL00665', 'Loading...'), type: 'default', duration: 3000 });
 
     const erRows = (exchangeData as { o_rc1?: ExchangeRateRow[] })?.o_rc1 ?? [];
@@ -678,9 +851,32 @@ export const PriceBatchInputModal = ({
       void setToast({ message: t('MSG00606', '_저장되었습니다.'), type: 'success' });
       onSaveResult?.(); // 메인 grid refetch
       modalClose();
+      // AS-IS — 일괄 저장 후에도 허용범위 초과분이 있으면 Range Rate 팝업 표시(저장 자체는 완료).
+      //   SAVE SP O_RC1 = 초과 리스트. 메인 화면이 가진 SalesPriceRangeModal 을 재사용한다.
+      const overRows: SalesPriceRangeRow[] =
+        (res.data?.result as { o_rc1?: SalesPriceRangeRow[] })?.o_rc1 ??
+        (res.data as { o_rc1?: SalesPriceRangeRow[] })?.o_rc1 ??
+        [];
+      if (overRows.length > 0) onRangeOver?.(overRows);
     } catch (e) {
       const msg = e instanceof Error ? e.message : t('MSG00618', '_저장 중 오류가 발생했습니다.');
       void setAlert({ type: 'alert', content: msg });
+    }
+  };
+
+  // 이중 제출 차단 (메인 화면 handleSave savingRef 와 동일 정책).
+  //   이 팝업의 저장은 1행을 기간 내 전 주차 x measure 3쌍으로 펼쳐 보내므로 왕복이 길다.
+  //   그 사이 Save 를 다시 누르면 동일 payload 가 동시에 SP 로 들어가고, 두 호출이 같은
+  //   HISTORY_SEQ 를 계산해 이력 insert 가 PK_SCM_MST_FUTURE_PRICE_H 를 위반한다(ORA-00001).
+  const handleSave = async () => {
+    if (savingRef.current) return;
+    savingRef.current = true;
+    setSaving(true);
+    try {
+      await runSave();
+    } finally {
+      savingRef.current = false;
+      setSaving(false);
     }
   };
 
@@ -728,6 +924,7 @@ export const PriceBatchInputModal = ({
     const formatHandler = (_s: unknown, e: FormatItemEventArgs) => {
       if (e.panel.cellType !== CellType.Cell) return;
       const binding = e.panel.columns[e.col]?.binding ?? '';
+      const rowItem = (e.panel.rows[e.row] as unknown as { dataItem?: PriceBatchRow })?.dataItem;
       // PRICE_ALL(일괄입력) = editable Yellow.
       if (binding === 'PRICE_ALL') {
         toggleClass(e.cell, 'wj-cell-editable', true);
@@ -741,11 +938,30 @@ export const PriceBatchInputModal = ({
         toggleClass(e.cell, 'wj-cell-non-editable', isPast);
         return;
       }
-      // 고정 표시전용 컬럼 = White 기본 (gray 칠하지 않음 — hook #95).
-      toggleClass(e.cell, 'wj-cell-editable', false);
+      // 고정 컬럼 — 메타 INPUT_TYPE_CODE 가 O/M 이면 편집가능 Yellow, 그 외 White.
+      //   키 컬럼 4종은 여기에 더해 조회 시점 3개 컬럼이 모두 빈 행에서만 열린다(KEY_EDITABLE).
+      //   (표시전용도 gray 는 칠하지 않음 — hook #95: 잠금 Gray 는 특수셀만.)
+      const editableFixed =
+        editableFixedRef.current.has(binding) &&
+        (!KEY_EDIT_TARGET_COLS.has(binding) || rowItem?.[KEY_EDITABLE] === 'Y');
+      toggleClass(e.cell, 'wj-cell-editable', editableFixed);
       toggleClass(e.cell, 'wj-cell-non-editable', false);
     };
     g.formatItem.addHandler(formatHandler);
+
+    // 키 컬럼(Incoterms/FCST Type/Customs Handbook/Currency) 편집 게이트 — 조회 시점에 3개 컬럼이
+    //   모두 비어 있던 행에서만 편집 허용. 컬럼 자체의 편집 가능 여부(inputTpCd)는 wrapper 가 판정한다.
+    const beginningEditHandler = (
+      src: FlexGridType<PriceBatchRow>,
+      e: { cancel: boolean; row: number; col: number }
+    ) => {
+      const binding = src.columns[e.col]?.binding ?? '';
+      if (!KEY_EDIT_TARGET_COLS.has(binding)) return;
+      const row = src.rows[e.row]?.dataItem as PriceBatchRow | undefined;
+      if (row?.[KEY_EDITABLE] !== 'Y') e.cancel = true;
+    };
+    g.beginningEdit.addHandler(beginningEditHandler);
+    g.pastingCell.addHandler(beginningEditHandler);
 
     // ⭐ scroll 시 머지 재계산 (hook #38 viewport sticky) → 새 viewport 첫 row 가 머지 top → 값 항상 표시.
     const handleScrollInvalidate = () => g.invalidate();
@@ -854,6 +1070,12 @@ export const PriceBatchInputModal = ({
     return () => {
       try {
         g.formatItem?.removeHandler(formatHandler);
+      } catch {
+        /* unmount race */
+      }
+      try {
+        g.beginningEdit?.removeHandler(beginningEditHandler);
+        g.pastingCell?.removeHandler(beginningEditHandler);
       } catch {
         /* unmount race */
       }
@@ -997,6 +1219,11 @@ export const PriceBatchInputModal = ({
         size={1100}
         handleClose={modalClose}
         disableButtonCancel
+        // 그리드 셀 콤보(dataMap) 편집 필수 — CustomDialog 주석 참조.
+        //   Wijmo 드롭다운 ListBox 는 MuiDialog-container 밖에 붙는데 MUI FocusTrap 이 포커스를
+        //   되돌리는 순간 Wijmo 가 finishEditing() 으로 에디터를 파괴해, 항목을 클릭해도 선택값이
+        //   조용히 버려지고 리스트만 닫힌다 (사용자 보고 2026-08-23: 콤보 값이 선택 안 됨).
+        disableEnforceFocus
         customHeaderTitle={
           <div className='headerContainer'>
             <div className='headerDot' />
@@ -1013,6 +1240,7 @@ export const PriceBatchInputModal = ({
                 <>
                   <Grid size={3}>
                     <FormItem
+                      className={commonStyles.formItem}
                       label={t('LBL00663', 'Div')}
                       labelAlign='right'
                       render={() => (
@@ -1037,6 +1265,7 @@ export const PriceBatchInputModal = ({
                   />
                   <Grid size={3}>
                     <FormItem
+                      className={commonStyles.formItem}
                       label={t('LBL00617', 'Project')}
                       labelAlign='right'
                       render={() => (
@@ -1059,6 +1288,7 @@ export const PriceBatchInputModal = ({
                   </Grid>
                   <Grid size={3}>
                     <FormItem
+                      className={commonStyles.formItem}
                       label={t('LBL00669', 'Model')}
                       labelAlign='right'
                       render={() => (
@@ -1082,7 +1312,7 @@ export const PriceBatchInputModal = ({
                   {/* ⭐ 표준 카탈로그 PeriodField (DatePickerCalendar date-range-multi, 36px datePickerFix).
                       AS-IS 월요일 정렬 — 선택 날짜를 그 주 월요일로 스냅(기존 동작 유지). */}
                   <PeriodField
-                    gridSize={4}
+                    gridSize={3}
                     start={periodFrom}
                     end={periodTo}
                     onChange={(start, end) => {
@@ -1101,7 +1331,7 @@ export const PriceBatchInputModal = ({
               <ProgressIndicator
                 shape='circular'
                 apprearance='infinite'
-                open={loading}
+                open={loading || saving}
                 placement='parent'
               />
               <DataGrid
@@ -1139,7 +1369,7 @@ export const PriceBatchInputModal = ({
                 buttonLabel={t('LBL00111', 'Save')}
                 iconComponent={<ControlConfirmIcon size='small' />}
                 iconPosition='leading'
-                disabled={loading || rows.length === 0}
+                disabled={loading || saving || rows.length === 0}
                 onClick={handleSave}
               />
             </div>
@@ -1184,7 +1414,8 @@ export const PriceBatchInputModal = ({
             // ⭐ No.27 — salesSite 가 string[] 로 바뀜(다중선택). 이 팝업 내부 필터는 콤마 split
             //   기준(ItemByDivisionModal searchParam.salesSite?.split(',') 과 동일 계약).
             salesSite: salesSite.length > 0 ? salesSite.join(',') : 'ALL',
-            projectCode: projectCode || '',
+            // 다중 Project 는 이 팝업의 단일 파라미터로 표현 불가 → 1개일 때만 사전 필터로 전달.
+            projectCode: projectTokens.length === 1 ? projectTokens[0] : '',
             itemId: '',
           } as never
         }

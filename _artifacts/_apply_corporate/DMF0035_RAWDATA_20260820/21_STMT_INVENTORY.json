@@ -1,0 +1,2338 @@
+[
+ {
+  "start": 169,
+  "end": 195,
+  "kind": "SELECT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 160,
+  "vsql": {
+   "exec": 23,
+   "el": 0.01,
+   "bg": 463,
+   "dr": 4,
+   "rows": 989,
+   "txt": "SELECT '''D_' || A.BASIS_YYYYMMDD || '''  AS D_' || A.BASIS_YYYYMMDD A",
+   "sql_ids": [
+    "dmqu3kvvxpxya"
+   ]
+  }
+ },
+ {
+  "start": 253,
+  "end": 256,
+  "kind": "SELECT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 249,
+  "vsql": {
+   "exec": 30,
+   "el": 0.01,
+   "bg": 90,
+   "dr": 3,
+   "rows": 30,
+   "txt": "SELECT BASIS_START_DATE FROM SCM_MGR.SCM_SYS_CALENDAR_M WHERE BASIS_YY",
+   "sql_ids": [
+    "35zgrpqyxuu19"
+   ]
+  }
+ },
+ {
+  "start": 274,
+  "end": 293,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 274,
+  "vsql": {
+   "exec": 12,
+   "el": 0.09,
+   "bg": 5613,
+   "dr": 74,
+   "rows": 15,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_VERSION (VERSION_NO, VERSION_NO_W, NOW_YYY",
+   "sql_ids": [
+    "9mjqa2s088dua"
+   ]
+  }
+ },
+ {
+  "start": 313,
+  "end": 319,
+  "kind": "SELECT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 309,
+  "vsql": {
+   "exec": 30,
+   "el": 0.0,
+   "bg": 86,
+   "dr": 0,
+   "rows": 30,
+   "txt": "SELECT COUNT(*) FROM SCM_MGR.SCM_MST_TITLESET_USER U WHERE U.PROGRAM_I",
+   "sql_ids": [
+    "1hjmpgghtc6k5"
+   ]
+  }
+ },
+ {
+  "start": 323,
+  "end": 334,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 379,
+  "end": 428,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 375,
+  "vsql": {
+   "exec": 23,
+   "el": 0.05,
+   "bg": 1001,
+   "dr": 13,
+   "rows": 69,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_SEL_MEASURE (PROGRAM_ID, SHEET_NAME, USER_",
+   "sql_ids": [
+    "44d8mcn2fz8m2"
+   ]
+  }
+ },
+ {
+  "start": 433,
+  "end": 481,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 429,
+  "vsql": {
+   "exec": 23,
+   "el": 0.01,
+   "bg": 208,
+   "dr": 0,
+   "rows": 184,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_SEL_MEASURE (PROGRAM_ID, SHEET_NAME, USER_",
+   "sql_ids": [
+    "2rr44a8g45dzc"
+   ]
+  }
+ },
+ {
+  "start": 489,
+  "end": 522,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 520,
+  "vsql": {
+   "exec": 23,
+   "el": 0.01,
+   "bg": 102,
+   "dr": 0,
+   "rows": 0,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_SEL_MEASURE (PROGRAM_ID, SHEET_NAME, USER_",
+   "sql_ids": [
+    "7gb28p59nwpj7"
+   ]
+  }
+ },
+ {
+  "start": 524,
+  "end": 556,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 565,
+  "end": 565,
+  "kind": "SELECT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 561,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 73,
+   "dr": 0,
+   "rows": 23,
+   "txt": "SELECT COUNT(1) FROM SCM_MGR.GT_DM35_SEL_MEASURE WHERE MEASURE LIKE 'M",
+   "sql_ids": [
+    "b4hfrt3caxjdb"
+   ]
+  }
+ },
+ {
+  "start": 568,
+  "end": 576,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 575,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 73,
+   "dr": 0,
+   "rows": 23,
+   "txt": "SELECT COUNT(1) FROM SCM_MGR.GT_DM35_SEL_MEASURE WHERE MEASURE LIKE 'R",
+   "sql_ids": [
+    "76820kd2gr6xt"
+   ]
+  }
+ },
+ {
+  "start": 579,
+  "end": 579,
+  "kind": "SELECT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 581,
+  "end": 587,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 586,
+  "vsql": {
+   "exec": 46,
+   "el": 0.0,
+   "bg": 142,
+   "dr": 0,
+   "rows": 46,
+   "txt": "SELECT COUNT(1) FROM SCM_MGR.GT_DM35_SEL_MEASURE WHERE MEASURE = 'LOC'",
+   "sql_ids": [
+    "0anw036xfthm9"
+   ]
+  }
+ },
+ {
+  "start": 590,
+  "end": 590,
+  "kind": "SELECT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 592,
+  "end": 600,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 607,
+  "end": 607,
+  "kind": "SELECT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 603,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 73,
+   "dr": 0,
+   "rows": 23,
+   "txt": "SELECT COUNT(1) FROM SCM_MGR.GT_DM35_SEL_MEASURE WHERE MEASURE IN ('SC",
+   "sql_ids": [
+    "0g9cg72xa50nb"
+   ]
+  }
+ },
+ {
+  "start": 609,
+  "end": 615,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 626,
+  "end": 633,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 622,
+  "vsql": {
+   "exec": 23,
+   "el": 0.04,
+   "bg": 1703,
+   "dr": 6,
+   "rows": 5267,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_EDI_SENDER (SCM_SITE_ID, SENDER_CODE, SEND",
+   "sql_ids": [
+    "gat8yr60wpvtp"
+   ]
+  }
+ },
+ {
+  "start": 648,
+  "end": 712,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 644,
+  "vsql": {
+   "exec": 11,
+   "el": 12.23,
+   "bg": 937723,
+   "dr": 861597,
+   "rows": 30756,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_LAST_SETUP SELECT X.DIVISION_ID, X.PROJE",
+   "sql_ids": [
+    "gsb3rctj8df9t"
+   ]
+  }
+ },
+ {
+  "start": 725,
+  "end": 743,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 721,
+  "vsql": {
+   "exec": 11,
+   "el": 0.05,
+   "bg": 1049,
+   "dr": 0,
+   "rows": 5863,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_EDI_END_CUST (DIVISION_ID, END_CUSTOMER, S",
+   "sql_ids": [
+    "aqa0g93yhna1u"
+   ]
+  }
+ },
+ {
+  "start": 761,
+  "end": 779,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 757,
+  "vsql": {
+   "exec": 11,
+   "el": 0.05,
+   "bg": 979,
+   "dr": 4,
+   "rows": 5852,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_RPA_END_CUST (DIVISION_ID, END_CUSTOMER, S",
+   "sql_ids": [
+    "90sms2653ckmd"
+   ]
+  }
+ },
+ {
+  "start": 797,
+  "end": 826,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 793,
+  "vsql": {
+   "exec": 11,
+   "el": 0.56,
+   "bg": 88396,
+   "dr": 7300,
+   "rows": 74481,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_DM_PLN_MKT SELECT A.DIVISION_ID, A.PROJECT",
+   "sql_ids": [
+    "7mmbf1adg660s"
+   ]
+  }
+ },
+ {
+  "start": 844,
+  "end": 933,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 840,
+  "vsql": {
+   "exec": 1,
+   "el": 1.27,
+   "bg": 352488,
+   "dr": 0,
+   "rows": 6771,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_RAW_DATA (VERSION_NO, CUTOFF_YYYYMMDD, DIV",
+   "sql_ids": [
+    "cb5qpc030175g"
+   ]
+  }
+ },
+ {
+  "start": 947,
+  "end": 1031,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 943,
+  "vsql": {
+   "exec": 11,
+   "el": 0.3,
+   "bg": 81125,
+   "dr": 0,
+   "rows": 0,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_RAW_DATA (VERSION_NO, CUTOFF_YYYYMMDD, DIV",
+   "sql_ids": [
+    "27j1fs9mrm6pz"
+   ]
+  }
+ },
+ {
+  "start": 1048,
+  "end": 1135,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 1044,
+  "vsql": {
+   "exec": 11,
+   "el": 0.36,
+   "bg": 9873,
+   "dr": 1656,
+   "rows": 0,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_RAW_DATA (VERSION_NO, CUTOFF_YYYYMMDD, DIV",
+   "sql_ids": [
+    "8yhv1dhxvux6p"
+   ]
+  }
+ },
+ {
+  "start": 1145,
+  "end": 1217,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 1141,
+  "vsql": {
+   "exec": 11,
+   "el": 0.07,
+   "bg": 10434,
+   "dr": 0,
+   "rows": 0,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_RAW_DATA (VERSION_NO, CUTOFF_YYYYMMDD, DIV",
+   "sql_ids": [
+    "7h6mwn33mp2p0"
+   ]
+  }
+ },
+ {
+  "start": 1229,
+  "end": 1332,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 1225,
+  "vsql": {
+   "exec": 11,
+   "el": 0.94,
+   "bg": 241561,
+   "dr": 922,
+   "rows": 3168,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_RAW_DATA (VERSION_NO, CUTOFF_YYYYMMDD, DIV",
+   "sql_ids": [
+    "dxzg3g8fmnb68"
+   ]
+  }
+ },
+ {
+  "start": 1353,
+  "end": 1431,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 1349,
+  "vsql": {
+   "exec": 11,
+   "el": 0.02,
+   "bg": 128,
+   "dr": 0,
+   "rows": 0,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_RAW_DATA (VERSION_NO, CUTOFF_YYYYMMDD, DIV",
+   "sql_ids": [
+    "9j99tca6nbdh1"
+   ]
+  }
+ },
+ {
+  "start": 1441,
+  "end": 1504,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 1437,
+  "vsql": {
+   "exec": 11,
+   "el": 0.02,
+   "bg": 599,
+   "dr": 108,
+   "rows": 0,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_RAW_DATA (VERSION_NO, CUTOFF_YYYYMMDD, DIV",
+   "sql_ids": [
+    "7w269p070gzxd"
+   ]
+  }
+ },
+ {
+  "start": 1526,
+  "end": 1600,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 1526,
+  "vsql": {
+   "exec": 12,
+   "el": 21.84,
+   "bg": 2887845,
+   "dr": 953270,
+   "rows": 35616,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_LAST_SETUP_C SELECT X.VERSION_NO, X.DIVI",
+   "sql_ids": [
+    "6qbykgbmmjr15",
+    "cbxpxq839ydqs"
+   ]
+  }
+ },
+ {
+  "start": 1610,
+  "end": 1723,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 1603,
+  "vsql": {
+   "exec": 12,
+   "el": 73.68,
+   "bg": 9822872,
+   "dr": 2635076,
+   "rows": 139431,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_RAW_DATA (VERSION_NO, CUTOFF_YYYYMMDD, DIV",
+   "sql_ids": [
+    "g0w0gvnn7rkb2"
+   ]
+  }
+ },
+ {
+  "start": 1739,
+  "end": 1842,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 1732,
+  "vsql": {
+   "exec": 12,
+   "el": 0.7,
+   "bg": 149826,
+   "dr": 71,
+   "rows": 3999,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_RAW_DATA (VERSION_NO, CUTOFF_YYYYMMDD, DIV",
+   "sql_ids": [
+    "azhh5h3t78wsb"
+   ]
+  }
+ },
+ {
+  "start": 1868,
+  "end": 1941,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 1950,
+  "end": 2014,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 2041,
+  "end": 2062,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2024,
+  "vsql": {
+   "exec": 23,
+   "el": 10.07,
+   "bg": 1294558,
+   "dr": 683871,
+   "rows": 5455108,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_ITEM_SINGLE_ORI (DIVISION_ID, ITEM_ID, ITE",
+   "sql_ids": [
+    "bzwrs6wa44gws"
+   ]
+  }
+ },
+ {
+  "start": 2072,
+  "end": 2098,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2091,
+  "vsql": {
+   "exec": 23,
+   "el": 18.89,
+   "bg": 160578,
+   "dr": 68479,
+   "rows": 2914080,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_ITEM_SINGLE_B SELECT DIVISION_ID , SUBSTR(",
+   "sql_ids": [
+    "cxz3x2uzj60qk"
+   ]
+  }
+ },
+ {
+  "start": 2108,
+  "end": 2119,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2118,
+  "vsql": {
+   "exec": 1,
+   "el": 0.15,
+   "bg": 11081,
+   "dr": 0,
+   "rows": 85973,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_ITEM_SINGLE_V SELECT T1.DIVISION_ID, T1.IT",
+   "sql_ids": [
+    "8udt5p5xfvjnu"
+   ]
+  }
+ },
+ {
+  "start": 2135,
+  "end": 2150,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 2162,
+  "end": 2164,
+  "kind": "UPDATE",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2163,
+  "vsql": {
+   "exec": 1,
+   "el": 0.05,
+   "bg": 6541,
+   "dr": 0,
+   "rows": 273,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_SITE_ITEM (DIVISION_ID, PROJECT_CODE, SCM_",
+   "sql_ids": [
+    "9rfz9q4sgnhdk"
+   ]
+  }
+ },
+ {
+  "start": 2180,
+  "end": 2222,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 2236,
+  "end": 2247,
+  "kind": "DELETE",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 2257,
+  "end": 2265,
+  "kind": "DELETE",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2263,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 85,
+   "dr": 0,
+   "rows": 23,
+   "txt": "SELECT COUNT(1) FROM SCM_MGR.GT_DM35_SEL_MEASURE WHERE MEASURE = 'MKT_",
+   "sql_ids": [
+    "fyk3mncyatg7b"
+   ]
+  }
+ },
+ {
+  "start": 2280,
+  "end": 2280,
+  "kind": "SELECT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 2283,
+  "end": 2296,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 2306,
+  "end": 2319,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2318,
+  "vsql": {
+   "exec": 23,
+   "el": 0.01,
+   "bg": 73,
+   "dr": 0,
+   "rows": 23,
+   "txt": "SELECT COUNT(1) FROM SCM_MGR.GT_DM35_SEL_MEASURE WHERE MEASURE = 'SCM_",
+   "sql_ids": [
+    "1t1jggzsh2j8r"
+   ]
+  }
+ },
+ {
+  "start": 2335,
+  "end": 2335,
+  "kind": "SELECT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 2337,
+  "end": 2350,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 2368,
+  "end": 2370,
+  "kind": "SELECT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2351,
+  "vsql": {
+   "exec": 1,
+   "el": 0.0,
+   "bg": 272,
+   "dr": 0,
+   "rows": 1,
+   "txt": "SELECT COUNT(1) FROM GT_DM35_RAW_DATA",
+   "sql_ids": [
+    "9tdrp8ktjdk29"
+   ]
+  }
+ },
+ {
+  "start": 2385,
+  "end": 2397,
+  "kind": "DELETE",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 2410,
+  "end": 2428,
+  "kind": "DELETE",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 2440,
+  "end": 2449,
+  "kind": "DELETE",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 2462,
+  "end": 2470,
+  "kind": "DELETE",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 2484,
+  "end": 2488,
+  "kind": "DELETE",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 2490,
+  "end": 2498,
+  "kind": "DELETE",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 2511,
+  "end": 2515,
+  "kind": "DELETE",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 2527,
+  "end": 2531,
+  "kind": "DELETE",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 2543,
+  "end": 2551,
+  "kind": "DELETE",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 2565,
+  "end": 2573,
+  "kind": "DELETE",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 2575,
+  "end": 2583,
+  "kind": "DELETE",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 2596,
+  "end": 2600,
+  "kind": "DELETE",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 2622,
+  "end": 2622,
+  "kind": "SELECT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 2624,
+  "end": 2652,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2649,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 73,
+   "dr": 0,
+   "rows": 23,
+   "txt": "SELECT COUNT(1) FROM SCM_MGR.GT_DM35_SEL_MEASURE WHERE MEASURE IN ('MK",
+   "sql_ids": [
+    "37cnrqrb7gcta"
+   ]
+  }
+ },
+ {
+  "start": 2666,
+  "end": 2668,
+  "kind": "SELECT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 2671,
+  "end": 2717,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 2739,
+  "end": 2741,
+  "kind": "SELECT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2722,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 73,
+   "dr": 0,
+   "rows": 23,
+   "txt": "SELECT COUNT(1) FROM SCM_MGR.GT_DM35_SEL_MEASURE WHERE MEASURE IN ('MK",
+   "sql_ids": [
+    "fgmubv685pzhw"
+   ]
+  }
+ },
+ {
+  "start": 2744,
+  "end": 2770,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 2791,
+  "end": 2792,
+  "kind": "DELETE",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2774,
+  "vsql": {
+   "exec": 1,
+   "el": 0.02,
+   "bg": 4690,
+   "dr": 0,
+   "rows": 4021,
+   "txt": "DELETE FROM SCM_MGR.GT_DM35_RAW_DATA A WHERE EXISTS (SELECT 1 FROM SCM",
+   "sql_ids": [
+    "3hd5hwv64v33m"
+   ]
+  }
+ },
+ {
+  "start": 2827,
+  "end": 2850,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2845,
+  "vsql": {
+   "exec": 1,
+   "el": 0.0,
+   "bg": 478,
+   "dr": 0,
+   "rows": 1,
+   "txt": "SELECT COUNT(1) FROM GT_DM35_RAW_DATA ",
+   "sql_ids": [
+    "6s03vb8akqauv"
+   ]
+  }
+ },
+ {
+  "start": 2862,
+  "end": 2865,
+  "kind": "SELECT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2863,
+  "vsql": {
+   "exec": 35,
+   "el": 0.0,
+   "bg": 96,
+   "dr": 0,
+   "rows": 35,
+   "txt": "SELECT COUNT(*) FROM SCM_MGR.SCM_MST_TITLESET_USER U WHERE U.PROGRAM_I",
+   "sql_ids": [
+    "f3tmbz90t3nk2"
+   ]
+  }
+ },
+ {
+  "start": 2880,
+  "end": 2885,
+  "kind": "SELECT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2872,
+  "vsql": {
+   "exec": 23,
+   "el": 0.01,
+   "bg": 268,
+   "dr": 15,
+   "rows": 23,
+   "txt": "SELECT LISTAGG(' ' || COLUMN_NAME || ',', '') WITHIN GROUP (ORDER BY S",
+   "sql_ids": [
+    "0uh28hs4a4uk8"
+   ]
+  }
+ },
+ {
+  "start": 2889,
+  "end": 2899,
+  "kind": "SELECT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 2901,
+  "end": 2932,
+  "kind": "SELECT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 2955,
+  "end": 2955,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2953,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 46,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "b3n6swq6bmcu9"
+   ]
+  }
+ },
+ {
+  "start": 2958,
+  "end": 2958,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2957,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 48,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "0g61g7zuvv6qb"
+   ]
+  }
+ },
+ {
+  "start": 2960,
+  "end": 2960,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2959,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 46,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "8bkmakpn8j9q3"
+   ]
+  }
+ },
+ {
+  "start": 2961,
+  "end": 2961,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2961,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 48,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "0q3a562aa3c93"
+   ]
+  }
+ },
+ {
+  "start": 2962,
+  "end": 2962,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2962,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 46,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "0y1v3y17kh2sd"
+   ]
+  }
+ },
+ {
+  "start": 2963,
+  "end": 2963,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2963,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 46,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "g4qzfygz0bh11"
+   ]
+  }
+ },
+ {
+  "start": 2964,
+  "end": 2964,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2964,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 48,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "ctj9m8ms47rwr"
+   ]
+  }
+ },
+ {
+  "start": 2965,
+  "end": 2965,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2965,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 52,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "adr738c29wdq1"
+   ]
+  }
+ },
+ {
+  "start": 2966,
+  "end": 2966,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2966,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 48,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "fc5huw6dckcz9"
+   ]
+  }
+ },
+ {
+  "start": 2967,
+  "end": 2967,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2967,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 46,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "6dv9wtwsyx8ks"
+   ]
+  }
+ },
+ {
+  "start": 2968,
+  "end": 2968,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2968,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 46,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "4h2aw9ws3jzn9"
+   ]
+  }
+ },
+ {
+  "start": 2969,
+  "end": 2969,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2969,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 46,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "d3nb7rra5qk59"
+   ]
+  }
+ },
+ {
+  "start": 2970,
+  "end": 2970,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2970,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 46,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "fzupkj61vx87m"
+   ]
+  }
+ },
+ {
+  "start": 2971,
+  "end": 2971,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2971,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 46,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "drvtm1420bk5z"
+   ]
+  }
+ },
+ {
+  "start": 2972,
+  "end": 2972,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2972,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 46,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "1m0vzztzhxxmt"
+   ]
+  }
+ },
+ {
+  "start": 2973,
+  "end": 2973,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2973,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 46,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "g9bz815w5gzgf"
+   ]
+  }
+ },
+ {
+  "start": 2974,
+  "end": 2974,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2974,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 46,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "6wqzpw4zt5rm3"
+   ]
+  }
+ },
+ {
+  "start": 2975,
+  "end": 2975,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2975,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 48,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "35hkfssz64vys"
+   ]
+  }
+ },
+ {
+  "start": 2976,
+  "end": 2976,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2976,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 46,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "fyzju0a23swmr"
+   ]
+  }
+ },
+ {
+  "start": 2977,
+  "end": 2977,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2977,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 48,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "78y0pphrfgdpg"
+   ]
+  }
+ },
+ {
+  "start": 2978,
+  "end": 2978,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2978,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 46,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "5hyr8cpduy0ph"
+   ]
+  }
+ },
+ {
+  "start": 2979,
+  "end": 2979,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2979,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 46,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "4m48ddm080vmk"
+   ]
+  }
+ },
+ {
+  "start": 2980,
+  "end": 2980,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2980,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 48,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "62pay985rjn92"
+   ]
+  }
+ },
+ {
+  "start": 2981,
+  "end": 2981,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2981,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 46,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "6b4mjajcng8r7"
+   ]
+  }
+ },
+ {
+  "start": 2982,
+  "end": 2982,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2982,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 46,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "1sc553nc580rt"
+   ]
+  }
+ },
+ {
+  "start": 2983,
+  "end": 2983,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2983,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 46,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "fyhc8gs7r0duy"
+   ]
+  }
+ },
+ {
+  "start": 2984,
+  "end": 2984,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2984,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 46,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "8u6zwazc4aut8"
+   ]
+  }
+ },
+ {
+  "start": 2985,
+  "end": 2985,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2985,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 46,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "g9b6bckgdxvd5"
+   ]
+  }
+ },
+ {
+  "start": 2986,
+  "end": 2986,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2986,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 46,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "81h19hmyd9qcv"
+   ]
+  }
+ },
+ {
+  "start": 2987,
+  "end": 2987,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2987,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 46,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "8bz830wtyrmr0"
+   ]
+  }
+ },
+ {
+  "start": 2988,
+  "end": 2988,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 2989,
+  "end": 2989,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 2990,
+  "end": 2990,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 2991,
+  "end": 2991,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 2992,
+  "end": 2992,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 2993,
+  "end": 2993,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2993,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 46,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "1xf69ymkqtzx5"
+   ]
+  }
+ },
+ {
+  "start": 2994,
+  "end": 2994,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2994,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 46,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "8t0tsg9472f5x"
+   ]
+  }
+ },
+ {
+  "start": 2995,
+  "end": 2995,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2995,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 46,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "4tswkusghbnuv"
+   ]
+  }
+ },
+ {
+  "start": 2996,
+  "end": 2996,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2996,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 46,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "5dah7wq15jch7"
+   ]
+  }
+ },
+ {
+  "start": 2997,
+  "end": 2997,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2997,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 48,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "6x17jxx9khgr5"
+   ]
+  }
+ },
+ {
+  "start": 2998,
+  "end": 2998,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2998,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 46,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "bwm6bf0xk78hc"
+   ]
+  }
+ },
+ {
+  "start": 2999,
+  "end": 2999,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 2999,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 46,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "f32ytyuuuvr7y"
+   ]
+  }
+ },
+ {
+  "start": 3000,
+  "end": 3000,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 3000,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 46,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "5m9j5as4syzyd"
+   ]
+  }
+ },
+ {
+  "start": 3001,
+  "end": 3001,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 3001,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 46,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "6bsgxn364x3bn"
+   ]
+  }
+ },
+ {
+  "start": 3002,
+  "end": 3002,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 3002,
+  "vsql": {
+   "exec": 23,
+   "el": 0.03,
+   "bg": 46,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "a2r2cqc0g6sgm"
+   ]
+  }
+ },
+ {
+  "start": 3003,
+  "end": 3003,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 3003,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 46,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "dgnnnzhzcgrsz"
+   ]
+  }
+ },
+ {
+  "start": 3004,
+  "end": 3009,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 3009,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 48,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "b25mgsqtyp0sk"
+   ]
+  }
+ },
+ {
+  "start": 3010,
+  "end": 3010,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 3010,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 46,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "954q9nj3xnbas"
+   ]
+  }
+ },
+ {
+  "start": 3011,
+  "end": 3011,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 3011,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 46,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "bdqwzhzzbv4ta"
+   ]
+  }
+ },
+ {
+  "start": 3012,
+  "end": 3012,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 3012,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 48,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "c0t3hxsyadm6x"
+   ]
+  }
+ },
+ {
+  "start": 3013,
+  "end": 3013,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 3013,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 46,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "4dq94qwwbm6p6"
+   ]
+  }
+ },
+ {
+  "start": 3014,
+  "end": 3014,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 3014,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 46,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "6chh1w5x4171d"
+   ]
+  }
+ },
+ {
+  "start": 3015,
+  "end": 3015,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 3016,
+  "end": 3016,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 3017,
+  "end": 3017,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 3017,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 48,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "7c68nxfkafp0f"
+   ]
+  }
+ },
+ {
+  "start": 3018,
+  "end": 3018,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 3019,
+  "end": 3019,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 3020,
+  "end": 3025,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 3020,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 46,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "g4btf74vy05pm"
+   ]
+  }
+ },
+ {
+  "start": 3026,
+  "end": 3026,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 3027,
+  "end": 3027,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 3028,
+  "end": 3028,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 3028,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 48,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "98yt2stnh76vd"
+   ]
+  }
+ },
+ {
+  "start": 3029,
+  "end": 3029,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 3030,
+  "end": 3030,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 3031,
+  "end": 3033,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 3032,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 46,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "61zk3vvxqcvax"
+   ]
+  }
+ },
+ {
+  "start": 3034,
+  "end": 3036,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 3036,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 46,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "dcgp99waagy35"
+   ]
+  }
+ },
+ {
+  "start": 3037,
+  "end": 3037,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 3037,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 48,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "93kwzfj0fnkrs"
+   ]
+  }
+ },
+ {
+  "start": 3038,
+  "end": 3038,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 3038,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 46,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "gtvssdcn20amz"
+   ]
+  }
+ },
+ {
+  "start": 3041,
+  "end": 3043,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 3040,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 46,
+   "dr": 0,
+   "rows": 23,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_T_COLUMN_SETUP (COLUMN_NAME, COLUMN_STRING",
+   "sql_ids": [
+    "dfg6y8xhubghc"
+   ]
+  }
+ },
+ {
+  "start": 3045,
+  "end": 3047,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 3049,
+  "end": 3049,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 3052,
+  "end": 3052,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 3052,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 73,
+   "dr": 0,
+   "rows": 23,
+   "txt": "SELECT COUNT(*) FROM SCM_MGR.GT_DM35_T",
+   "sql_ids": [
+    "at1hmaazhy7up"
+   ]
+  }
+ },
+ {
+  "start": 3053,
+  "end": 3053,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 3054,
+  "end": 3054,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 3055,
+  "end": 3055,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 3055,
+  "vsql": {
+   "exec": 437,
+   "el": 0.01,
+   "bg": 1315,
+   "dr": 0,
+   "rows": 437,
+   "txt": "SELECT CASE WHEN :B1 = 1 THEN '' ELSE ',' END || COLUMN_STRING , CASE ",
+   "sql_ids": [
+    "8f3g0hz6wj9qq"
+   ]
+  }
+ },
+ {
+  "start": 3057,
+  "end": 3057,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 3059,
+  "end": 3063,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 3069,
+  "end": 3069,
+  "kind": "SELECT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 3072,
+  "end": 3080,
+  "kind": "SELECT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 3075,
+  "vsql": {
+   "exec": 23,
+   "el": 518.93,
+   "bg": 224869669,
+   "dr": 2699,
+   "rows": 332595,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_SCP_ITEM_INFO (DIVISION_ID, ITEM_ID, CELL_",
+   "sql_ids": [
+    "4t2sg3t6xvb8z",
+    "amzyz3wfg59jk"
+   ]
+  }
+ },
+ {
+  "start": 3092,
+  "end": 3172,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 3153,
+  "vsql": {
+   "exec": 1,
+   "el": 0.02,
+   "bg": 1877,
+   "dr": 0,
+   "rows": 8868,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_RAW_DATA_FINAL ( VERSION_NO, CUTOFF_YYYYMM",
+   "sql_ids": [
+    "c3t9xzwvyxbck"
+   ]
+  }
+ },
+ {
+  "start": 3178,
+  "end": 3204,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 3219,
+  "end": 3246,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 3249,
+  "end": 3276,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 3282,
+  "end": 3316,
+  "kind": "DELETE",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 3330,
+  "end": 3352,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 3355,
+  "end": 3370,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 3373,
+  "end": 3389,
+  "kind": "DELETE",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 3396,
+  "end": 3407,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 3405,
+  "vsql": {
+   "exec": 23,
+   "el": 0.01,
+   "bg": 399,
+   "dr": 0,
+   "rows": 161,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_CAL_MONTH_END (MONTH_END_DATE) SELECT MAX(",
+   "sql_ids": [
+    "arf2k3r7twv10"
+   ]
+  }
+ },
+ {
+  "start": 3419,
+  "end": 3428,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 3411,
+  "vsql": {
+   "exec": 23,
+   "el": 0.01,
+   "bg": 403,
+   "dr": 0,
+   "rows": 828,
+   "txt": "INSERT INTO SCM_MGR.GT_DM35_CAL_WEEK_END (WEEK_END_DATE) SELECT MAX(BA",
+   "sql_ids": [
+    "btaqs7f42cyu0"
+   ]
+  }
+ },
+ {
+  "start": 3430,
+  "end": 3434,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 3436,
+  "end": 3440,
+  "kind": "INSERT",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 3597,
+  "end": 3597,
+  "kind": "OPEN",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 3576,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 63,
+   "dr": 0,
+   "rows": 21,
+   "txt": "SELECT ISO_WEEK, BASIS_DATE FROM SCM_MGR.SCM_SYS_CALENDAR_M WHERE BASI",
+   "sql_ids": [
+    "9v835v550dc6z"
+   ]
+  }
+ },
+ {
+  "start": 3600,
+  "end": 3603,
+  "kind": "OPEN",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 3635,
+  "end": 3636,
+  "kind": "OPEN",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "prog_line": 3611,
+  "vsql": {
+   "exec": 23,
+   "el": 0.0,
+   "bg": 0,
+   "dr": 0,
+   "rows": 21,
+   "txt": "SELECT :B1 FROM DUAL",
+   "sql_ids": [
+    "d8jhv8fcm27kd"
+   ]
+  }
+ },
+ {
+  "start": 3648,
+  "end": 3649,
+  "kind": "OPEN",
+  "proc": "P_DMF0035_GET_MKT_FCST_WATERFALL",
+  "vsql": null
+ },
+ {
+  "start": 3771,
+  "end": 3782,
+  "kind": "SELECT",
+  "proc": "P_DMF0035_GET_SPREAD_TITLE",
+  "prog_line": 3746,
+  "vsql": {
+   "exec": 4,
+   "el": 0.01,
+   "bg": 281,
+   "dr": 19,
+   "rows": 0,
+   "txt": "SELECT 1 FROM DUAL WHERE EXISTS ( SELECT 1 FROM SCM_MST_TITLESET_USER ",
+   "sql_ids": [
+    "497y8rsavzm92"
+   ]
+  }
+ },
+ {
+  "start": 3791,
+  "end": 3951,
+  "kind": "OPEN",
+  "proc": "P_DMF0035_GET_SPREAD_TITLE",
+  "prog_line": 3931,
+  "vsql": {
+   "exec": 4,
+   "el": 0.02,
+   "bg": 268,
+   "dr": 7,
+   "rows": 212,
+   "txt": "SELECT C.PROGRAM_ID , C.SHEET_NAME , C.COLUMN_NAME , C.COLUMN_LABEL_NA",
+   "sql_ids": [
+    "94y7mxzap8m0k"
+   ]
+  }
+ },
+ {
+  "start": 3955,
+  "end": 4111,
+  "kind": "OPEN",
+  "proc": "P_DMF0035_GET_SPREAD_TITLE",
+  "vsql": null
+ },
+ {
+  "start": 4116,
+  "end": 4117,
+  "kind": "OPEN",
+  "proc": "P_DMF0035_GET_SPREAD_TITLE",
+  "vsql": null
+ }
+]

@@ -11,18 +11,19 @@ import { Grid } from '@shared/mui';
 import { useMessageStore } from '@shared/stores';
 
 import { MSG, TEMPLATE_EXCEL_PREFIX } from '../../forecast-price.constants';
+import { useForecastPriceStore } from '../../useForecastPriceStore';
 import type { UploadPreviewRow } from '../../utils/forecast-price.api';
 import { fetchExcelFormData } from '../../utils/forecast-price.api';
 import {
   buildExcelFormColumns,
   buildExcelFormRows,
+  pruneEmptyInfoColumns,
   toPreviewColumns,
 } from '../../utils/forecast-price.excelForm';
-import type { StaticColumnLike } from '../../utils/forecast-price.excelForm';
 
 import styles from './ForecastTemplateModal.module.scss';
 
-// ⭐ Excel Form — ⭐ division 40 전용 (SP 검증 'Invalid Division(40 Only)' 실측).
+// ⭐ Excel Form — ⭐ division 81 계열 전용 [E20260819-XLS81LOC] (SP 검증 'Invalid Division(81 Only)' + Form 가드 MSG01014 실측. 대상 measure LOC 한정).
 //   metal-link MetalLinkTemplateModal 레이아웃 1:1: 상단 SearchArea(Div 고정) /
 //   하단 [Excel Download 아이콘] + [Close].
 //
@@ -31,7 +32,8 @@ import styles from './ForecastTemplateModal.module.scss';
 //   - IN = 메인 조회(FcstNPrice)와 동일 축·동일 이름 → store.filters 를 가공 없이 전달
 //   - 1행 = 키 조합 × 입력 가능 measure 1종 (화면 measure 개인화와 무관 — SP 가 LOOKUP 으로 확장)
 //   - 값은 **업로드 검증이 기대하는 표기**로 SP 가 이미 변환해 내려준다 → FE 콤보 변환 없음
-//   - 0건 = MSG00718 (신규 채번 2026-08-13. MSG00705 는 '업로드분 없음' 이라 의미가 반대라 재사용 금지)
+//   - 0건 = MSG01023 (MSG00705 는 '업로드분 없음' 이라 의미가 반대라 재사용 금지)
+//     ⚠ 구 코드 MSG00718 은 2026-08-21 클라우드 동기화로 '권한 요청을 반려하시겠습니까?' 로 재정의됨
 //
 //   [Excel Download] 정적 메타 컬럼 + M4~M16(빈칸) 평탄 헤더.
 //   ⚠ 토큰 10개와 'M4'~'M16' 은 **원형 유지 의무** — BE cvtListUploadRows 가 HEADER_CONTENT 문자열
@@ -42,26 +44,21 @@ interface ForecastTemplateModalProps {
   modalClose: () => void;
   // 부모 화면 조회 division 고정 전달 (metal-link 동일 패턴)
   divisionId: string;
-  /** ⭐ 메인 그리드 조회조건(store.filters) 원본 — 가공 없이 그대로 SP 로 전달한다.
-   *  "MAIN GRID 의 조회조건에 맞는 데이터" 요구를 정의상 보장하기 위한 계약. */
+  /** 메인 그리드 조회조건(store.filters) 원본 — 있으면 그대로 SP 로 전달.
+   *  [E20260825-XLSPRICECOL] 없으면(MAIN 미조회) 조회조건 기본값(searchParams)으로 자체 구성 —
+   *  Excel Form 은 MAIN 조회와 무관하게 열고 Search 로 조회할 수 있다 (사용자 지시 2026-08-25). */
   filters?: Record<string, unknown>;
-  /** 메인 정적 컬럼 메타 — 양식 컬럼의 단일 원천(division 별 필수 컬럼 포함). */
-  staticColumns?: StaticColumnLike[];
 }
 
-/** 'M{n}' → 대상 월 yyyyMM (SP v_start/end = ADD_MONTHS(SYSDATE, 4~16) 계약 1:1) */
-const ymOfOffset = (offset: number): string => {
-  const now = new Date();
-  const dt = new Date(now.getFullYear(), now.getMonth() + offset, 1);
-  return `${dt.getFullYear()}${String(dt.getMonth() + 1).padStart(2, '0')}`;
-};
+/** [E20260820-XLSWEEKLY] 주 시작일 헤더(YYYYMMDD) → 미리보기 라벨 'YYYY-MM-DD' */
+const weekLabel = (token: string): string =>
+  /^\d{8}$/.test(token) ? `${token.slice(0, 4)}-${token.slice(4, 6)}-${token.slice(6)}` : token;
 
 export const ForecastTemplateModal = ({
   open,
   modalClose,
   divisionId,
   filters,
-  staticColumns = [],
 }: ForecastTemplateModalProps) => {
   const { t } = useTranslation();
   const setAlert = useMessageStore.getState().setAlert;
@@ -80,6 +77,8 @@ export const ForecastTemplateModal = ({
 
   // 조회 상태 — AS-IS 팝업류 표준: 진입 시 자동조회 없음, Search 명시 게이트 (모달 닫으면 초기화)
   const [rows, setRows] = useState<UploadPreviewRow[]>([]);
+  // [E20260820-XLSWEEKLY] SP WEEK_LIST — 기간(주차) 동적 컬럼의 단일 원천
+  const [weekList, setWeekList] = useState<string[]>([]);
   const [isFetching, setIsFetching] = useState(false);
   useEffect(() => {
     if (!open) {
@@ -88,38 +87,55 @@ export const ForecastTemplateModal = ({
     }
   }, [open]);
 
-  // ⭐ 양식 컬럼 = [정적 메타(표시 대상, 개인화 순서 그대로)] + [M4~M16 빈칸]
-  //   토큰 10개는 HEADER_CONTENT 원형 문자열을 헤더로 쓴다(BE 이름 매핑). 정보성 컬럼은 업로드 시 무시된다.
-  const formColumns = useMemo(() => buildExcelFormColumns(staticColumns), [staticColumns]);
+  // ⭐ 양식 컬럼 = 단가 테이블 축 고정(토큰 10) + Project/Owner 정보성 + 동적 주차 [E20260825-XLSPRICECOL]
+  //   토큰 헤더는 HEADER_CONTENT 원형 문자열(BE 이름 매핑). 정보성 컬럼은 업로드 시 무시된다.
+  //   [E20260825-XLSPRJ] 전 행이 빈 정보성 컬럼은 숨김(토큰·주차 보존) — 그리드·다운로드 동일 목록.
+  const formColumns = useMemo(
+    () => pruneEmptyInfoColumns(buildExcelFormColumns(weekList), rows),
+    [weekList, rows]
+  );
 
   // 미리보기 그리드 = 다운로드 결과와 1:1 (조회 전/후 컬럼이 갈리지 않는다)
   const gridColumns = useMemo<RawFlexGridColumnConfig[]>(
-    () =>
-      toPreviewColumns(formColumns, token => {
-        const m = /^M(\d+)$/.exec(token);
-        return m ? `${token} (${ymOfOffset(Number(m[1]))})` : token;
-      }),
+    () => toPreviewColumns(formColumns, weekLabel),
     [formColumns]
   );
 
   // Search — [E20260813-EXCELFORM] FORM_DATA 배선. 메인 조회조건(filters)을 그대로 전달한다.
   //   silent = 오픈 자동조회 경로(0건이어도 alert 없이 빈 양식 유지 — alert 는 명시 Search 시에만)
+  // [E20260825-XLSPRICECOL] MAIN 미조회(filters 부재) 시 조회조건 기본값으로 자체 구성 —
+  //   행 원천이 단가 마스터라 MAIN 조회 여부와 무관하다. 기간·division 은 화면 조회조건 상태 그대로.
+  //   (createPersistedStoreWithTab 훅은 selector 전용 — getState 미제공)
+  const storeSearchParams = useForecastPriceStore(s => s.searchParams);
+  const storeAuthGroup = useForecastPriceStore(s => s.authGroup);
+  const buildFallbackFilters = (): Record<string, unknown> => {
+    const sp = storeSearchParams;
+    return {
+      divisionId,
+      deptId: '',
+      endCustomer: '',
+      bizType: '',
+      fromYyyymmdd: sp.startYyyymmdd,
+      toYyyymmdd: sp.endYyyymmdd,
+      salesSite: '',
+      itemId: '',
+      versionType: sp.versionType,
+      qtyYn: sp.qtyYn ? 'Y' : 'N',
+      userGroup: storeAuthGroup || '',
+      plantSiteId: '',
+      projectCode: '',
+      owner: '',
+      senderCode: '',
+    };
+  };
+
   const handleFind = (silent = false) => {
     if (isFetching) return;
-    if (!filters) {
-      // 메인이 아직 조회되지 않았다 — 조회조건이 확정되기 전에는 양식 대상이 정의되지 않는다.
-      if (!silent) {
-        void setAlert({
-          type: 'alert',
-          content: t(MSG.EXCEL_FORM_EMPTY, '_No data found for the search conditions.'),
-        });
-      }
-      return;
-    }
     setIsFetching(true);
-    void fetchExcelFormData(filters)
-      .then(({ ok, message, pivot }) => {
+    void fetchExcelFormData(filters ?? buildFallbackFilters())
+      .then(({ ok, message, pivot, weekList: wks }) => {
         setRows(ok ? pivot : []);
+        setWeekList(ok ? wks : []);
         if (!ok) {
           if (!silent) {
             void setAlert({
@@ -139,11 +155,8 @@ export const ForecastTemplateModal = ({
       .finally(() => setIsFetching(false));
   };
 
-  // ⭐ 오픈 시 자동 조회 — 메인이 이미 조회된 상태(filters 확정)에서만.
-  useEffect(() => {
-    if (open && filters) handleFind(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open]);
+  // [E20260825-XLSPRICECOL] 오픈 시 자동 조회 없음 — Search 명시 게이트 (사용자 지시 2026-08-25:
+  //   "OPEN 후 조회 클릭하면 조회". AS-IS 팝업류 표준과 동일). MAIN 조회 여부와도 무관.
 
   // ⭐ 양식 다운로드 — 평탄 1행 헤더(토큰 원형) + 정보성 컬럼. M4~M16 은 입력용 빈칸.
   const handleExcel = () => {

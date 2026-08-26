@@ -6,5 +6,6 @@ export * from './mergeManager';
 export * from './gridColumns';
 export * from './editTracker';
 export * from './gridAction';
+export * from './gridNegativeText';
 export * from './columnMapping';
 export * from './gridUtils';

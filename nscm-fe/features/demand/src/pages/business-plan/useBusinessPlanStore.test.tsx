@@ -67,7 +67,9 @@ describe('useBusinessPlanStore', () => {
     expect(result.current.searchCondition.divisionId).toBe('40');
     // 기본 Bucket = Monthly (AS-IS BUCKET2_TYPE_CODE — M/Q/Y 축)
     expect(result.current.searchCondition.bucketType).toBe(BUCKET_TYPE.MONTHLY);
-    expect(result.current.searchCondition.sumYn).toBe(false);
+    // AS-IS Designer.cs 실측 — chkSum.Checked=true / cboQty 는 Checked 지정 없음(false)
+    expect(result.current.searchCondition.sumYn).toBe(true);
+    expect(result.current.searchCondition.qtyYn).toBe(false);
     // 기본 Period = 당월 1일 ~ +7개월 말일 (AS-IS p_month=7)
     expect(result.current.searchCondition.startYyyymmdd.endsWith('01')).toBe(true);
     expect(result.current.openSearchArea).toBe(true);
@@ -108,7 +110,7 @@ describe('useBusinessPlanStore', () => {
     expect(main?.endCustomer).toBe('ALL'); // 빈 멀티선택 = 'ALL' sentinel
     expect(main?.projectCode).toBe('PJT1'); // 텍스트 raw
     expect(main?.owner).toBe(''); // 텍스트 빈값 = ''
-    expect(main?.qtyYn).toBe('N'); // cboQty dead — 'N' 고정 (파리티)
+    expect(main?.qtyYn).toBe('N'); // Qty≠0 기본 해제 → 'N' (AS-IS cboQty 미체크)
     expect(main?.userGroup).toBe('TEST_USER'); // 그룹 미도착 = sesUserId fallback
     // ⭐ 금주 월요일 (AS-IS GetThisWeekMonday — p_now_yyyymmdd)
     expect(main?.nowYyyymmdd).toMatch(/^\d{8}$/);
@@ -120,6 +122,17 @@ describe('useBusinessPlanStore', () => {
     const title = result.current.filters[SHEETS.SPREAD_TITLE];
     expect(title?.divisionId).toBe('82');
     expect(title?.mnuId).toBe(MENU_ID);
+  });
+
+  it('Qty≠0 체크 시 P_QTY_YN = Y (AS-IS 체크박스 1:1)', () => {
+    const { result } = renderHook(() => useBusinessPlanStore(s => s));
+
+    act(() => {
+      result.current.setSearchCondition({ qtyYn: true });
+      result.current.setFilter();
+    });
+
+    expect(result.current.filters[SHEETS.MAIN]?.qtyYn).toBe('Y');
   });
 
   it('clearFilters empties filters (stale payload 재사용 차단)', () => {
@@ -158,12 +171,6 @@ describe('useBusinessPlanStore', () => {
     postMock.mockResolvedValue({ data: { result: mockColumns } });
 
     const { result } = renderHook(() => useBusinessPlanStore(s => s));
-
-    // ⚠ 스토어는 `it` 블록 간 공유된다(mock storeRegistry) — 앞선 setFilter 테스트가 divisionId='82' 를
-    //   남긴다. 초기값 '40' 에 의존하면 **실행 순서에 종속**되므로 전제를 명시적으로 세운다.
-    act(() => {
-      result.current.setSearchCondition({ divisionId: '40' });
-    });
 
     await act(async () => {
       await result.current.fetchStaticColumns();

@@ -90,8 +90,13 @@ interface Action {
 }
 
 // ⭐ A-3 (2026-07-04): toISOString(UTC) 금지 — KST 00:00~09:00 에 전날로 계산되던 버그. dayjs = 로컬.
-const today = dayjs().format('YYYYMMDD');
-const sixMonthsAhead = dayjs().add(180, 'day').format('YYYYMMDD');
+// Period 조회조건 초기값 — dayRange(PR_GET_DAY_RANGE) 응답 도착 전까지의 자리값.
+//   Div/Team 변경 시에는 리셋하지 않는다 (2026-08-20 사용자 결정 — 사용자가 지정한 기간 유지).
+const SALES_MONITORING_INIT_PERIOD = {
+  start: dayjs().format('YYYYMMDD'),
+  end: dayjs().add(180, 'day').format('YYYYMMDD'),
+};
+const { start: today, end: sixMonthsAhead } = SALES_MONITORING_INIT_PERIOD;
 
 const initSearch: SearchCondition = {
   divisionId: useSessionStore.getState().session.div ?? '40',

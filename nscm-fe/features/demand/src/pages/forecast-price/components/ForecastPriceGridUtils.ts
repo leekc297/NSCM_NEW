@@ -448,6 +448,102 @@ export const isM4Locked = (
 export const isInsertRow = (dataItem: WijmoRowItem | undefined | null): boolean =>
   dataItem?.['CRUD_TYPE'] === 'I';
 
+/** 그룹 판정 입력 — 그리드 **표시 순서 그대로**의 컬럼 정보. */
+export interface GroupKeyColumn {
+  binding: string;
+  visible: boolean;
+}
+
+const isDynamicBinding = (binding: string): boolean => /^[MWD]_/.test(binding);
+
+/**
+ * 머지 범위를 가르는 키 컬럼 — 표시 순서에서 **0번부터 클릭한 컬럼까지**의 정적 컬럼.
+ *
+ * 근거: 공용 `CustomMergeManager` 의 셀 병합은 계층형이다. 머지키가
+ *   `col0값 | col1값 | … | colN값`(foundation/utils/mergeManager.ts `_getMergeKey`)이라
+ *   어떤 컬럼의 셀이 위아래로 붙어 보이려면 **그 왼쪽 컬럼이 전부 같아야** 한다.
+ *   ⇒ 컬럼 c 의 병합 범위 = `0..c` 값이 모두 같은 연속 행. 키 목록도 `0..클릭컬럼` 이다.
+ *
+ * 사용자 요구(2026-08-17): "선택한 값의 병합한 데이터 위로" — 즉 **누른 병합 셀이 덮는 범위**가
+ *   곧 위로 보낼 범위다. Sales Site 셀은 그 안의 여러 Model 블록을, Model 셀은 그 안의 Incoterms
+ *   블록을, Incoterms 셀은 다시 measure 블록만 덮는다.
+ *
+ * 주의(설계상 당연한 귀결, 버그 아님): 조회 결과가 그 컬럼 값 하나로만 이뤄져 있으면 병합 블록이
+ *   곧 그리드 전체라 신규행이 맨 위로 간다. 범위를 좁히려면 더 오른쪽 컬럼을 누르면 된다.
+ *
+ * 필수: 기준을 **컬럼 인덱스**로 받는다(binding 문자열 역탐색 금지). `g.selection.col` 이 곧
+ *   `g.columns` 의 인덱스라 그대로 쓰면 어긋날 여지가 없다. 이름으로 되찾는 방식은 표시/비표시
+ *   목록을 따로 만드는 순간 인덱스가 밀려 조용히 폴백으로 떨어진다(2026-08-17 Sales Site 사고).
+ *
+ * 클릭 컬럼이 병합 축이 못 되면(MEASURE 자신 · 동적 기간 컬럼 · 비표시 · 범위 밖) **MEASURE 직전**
+ *   까지를 기준으로 폴백한다 = 통합테스트 35번의 "data Group"(키가 모두 같고 measure 만 다른 블록).
+ *
+ * 주의: **비표시 컬럼은 키에서 뺀다.** admin 메타상 `EDIT_FLAG`/`BUCKET`/`MEASURE_GROUP`/
+ *   `SORT_KEY` 같은 내부 컬럼은 measure 행마다 값이 달라, 키에 넣으면 모든 블록이 1행으로 쪼개져
+ *   그룹 판정이 무력화된다. 화면 오른쪽 끝이라 왼쪽 표시 컬럼들의 실제 병합에는 영향이 없다.
+ */
+export const groupKeyBindings = (
+  columnsInOrder: readonly GroupKeyColumn[],
+  clickedIndex: number
+): string[] => {
+  const usable = (column: GroupKeyColumn | undefined): boolean =>
+    !!column && column.visible && !!column.binding && !isDynamicBinding(column.binding);
+
+  const clicked = columnsInOrder[clickedIndex];
+  let end: number;
+  if (usable(clicked) && clicked?.binding !== 'MEASURE') {
+    end = clickedIndex + 1;
+  } else {
+    const measureIndex = columnsInOrder.findIndex(column => column.binding === 'MEASURE');
+    end = measureIndex < 0 ? columnsInOrder.length : measureIndex;
+  }
+
+  const keys: string[] = [];
+  for (let i = 0; i < end && i < columnsInOrder.length; i++) {
+    const column = columnsInOrder[i];
+    if (usable(column)) keys.push(column.binding);
+  }
+  return keys;
+};
+
+/**
+ * 선택한 셀이 속한 머지 블록의 **첫 행 인덱스** — Insert 가 그 블록 맨 위에 행을 넣기 위한 앵커.
+ *
+ * 요구(통합테스트 35번): "라인추가할 때 data Group 제일 위로 추가해야함. 선택된 위치에 따라서
+ *   measure 중간에 라인이 추가됨." + 사용자 추가 요구(2026-08-17): "선택한 값 그 그룹의 젤 위".
+ *
+ * 위로 훑다가 멈추는 조건 2가지:
+ *   1. 키 컬럼 값이 하나라도 다르면 = 다른 그룹.
+ *   2. 신규행(CRUD_TYPE='I') 이면 = 병합이 끊기는 자리다. `_getCellMergedRange` 가 신규행을
+ *      병합에서 빼므로(mergeManager.ts) 화면상으로도 거기서 블록이 갈린다. 앞서 추가한 신규행은
+ *      시드로 키를 복사받아 값이 같으므로, 이 가드가 없으면 그 위까지 타고 올라가 버린다.
+ *
+ * 그룹을 못 찾거나 신규행에서 눌렀으면 `index` 를 그대로 돌려준다(= 포커스 행 바로 위).
+ */
+export const findGroupTopIndex = (
+  rows: readonly (WijmoRowItem | undefined)[],
+  index: number,
+  keyBindings: readonly string[]
+): number => {
+  const target = rows[index];
+  if (!target || keyBindings.length === 0 || isInsertRow(target)) return index;
+
+  const cell = (row: WijmoRowItem, binding: string): string => {
+    const value = row[binding];
+    return value === null || value === undefined ? '' : String(value);
+  };
+  const isSameGroup = (row: WijmoRowItem): boolean =>
+    keyBindings.every(binding => cell(row, binding) === cell(target, binding));
+
+  let top = index;
+  while (top > 0) {
+    const prev = rows[top - 1];
+    if (!prev || isInsertRow(prev) || !isSameGroup(prev)) break;
+    top--;
+  }
+  return top;
+};
+
 // cell 수정여부 판별 로직
 export const isNonEditableCell = (
   sender: FlexGrid,

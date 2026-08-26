@@ -1,0 +1,14 @@
+[
+ {
+  "old": "        SELECT /*+ MATERIALIZE */\n               R.DIVISION_ID\n             , R.PROJECT_CODE                        AS END_CUSTOMER\n             , R.SCM_SITE_ID",
+  "new": "        SELECT /*+ MATERIALIZE */\n               R.DIVISION_ID\n             , R.PROJECT_CODE                        AS END_CUSTOMER\n             /* [E20260825-XLSPRJ] 컬럼 위치 정정 (사용자 지시 2026-08-25): 프로젝트 코드를 제 컬럼\n                (메타 colNm=PROJECT_CODE)으로도 출력 + 일괄입력 팝업 동일 NAME/OWNER 보강.\n                END_CUSTOMER 별칭은 업로드 키 계약(파일 'End Customer' 토큰 = 81 키 유일 통로)이라 유지. */\n             , R.PROJECT_CODE\n             , PJ.PROJECT_NAME\n             , PJ.PROJECT_OWNER\n             , R.SCM_SITE_ID"
+ },
+ {
+  "old": "          LEFT JOIN SCM_MGR.SCM_MST_SSO_DEPT_INFO SD\n            ON  SD.DEPT_ID = SI.DEPT_ID\n    )\n    -- 입력 가능 measure (화면 개인화 무관",
+  "new": "          LEFT JOIN SCM_MGR.SCM_MST_SSO_DEPT_INFO SD\n            ON  SD.DEPT_ID = SI.DEPT_ID\n          LEFT JOIN SCM_MGR.SCM_MST_PROJECT PJ  --[E20260825-XLSPRJ] (DIV,CODE) 유일 실측 1,158=1,158 — 행 불증식\n            ON  PJ.DIVISION_ID  = R.DIVISION_ID\n            AND PJ.PROJECT_CODE = R.PROJECT_CODE\n    )\n    -- 입력 가능 measure (화면 개인화 무관"
+ },
+ {
+  "old": "         , K.TEAM_ID, K.TEAM_NAME_KO, K.SOLDTO_CUSTOMER, K.COUNTRY_NAME, K.CITY_NAME",
+  "new": "         , K.PROJECT_CODE, K.PROJECT_NAME, K.PROJECT_OWNER  --[E20260825-XLSPRJ]\n         , K.TEAM_ID, K.TEAM_NAME_KO, K.SOLDTO_CUSTOMER, K.COUNTRY_NAME, K.CITY_NAME"
+ }
+]

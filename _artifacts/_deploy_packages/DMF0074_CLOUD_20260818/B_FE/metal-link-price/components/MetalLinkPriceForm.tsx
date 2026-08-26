@@ -212,7 +212,10 @@ export const MetalLinkPriceForm = ({
             />
           </Grid>
           <Grid size={3}>
+            {/* ⭐ [2026-08-18] 년월 구간 — AS-IS drpPeriodMonth(월 선택기) 1:1. 종전 기본(년월일)
+                픽커는 스토어 YYYYMM 계약과 어긋나 8자리를 밀어넣던 드리프트. */}
             <PeriodField
+              mode='month'
               start={searchParams.fromYyyymm}
               end={searchParams.toYyyymm}
               onChange={(start, end) => setSearchParams({ fromYyyymm: start, toYyyymm: end })}

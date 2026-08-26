@@ -1,7 +1,6 @@
 import { CellType, type FlexGrid } from '@mescius/wijmo.grid';
 import { useEffect, useRef, useState } from 'react';
 
-import _ from '@foundation/lodash';
 import { GridUtils } from '@foundation/utils';
 import { CustomDialog, SearchArea, DataGrid } from '@shared/components';
 import { useTabProcQuery } from '@shared/hooks';
@@ -56,12 +55,11 @@ export const TeamModal = ({
       (team.TEAM_NAME_KO ?? '').toLowerCase().includes(modalFilters.teamName.toLowerCase())
   );
 
-  const handleFilterhange = _.debounce((teamId: string, teamName: string) => {
-    setModalFilters({
-      teamId: teamId,
-      teamName: teamName,
-    });
-  }, 50);
+  // 입력값은 제어 컴포넌트로 둔다. modaless 라 닫아도 언마운트되지 않아, defaultValue 로 두면 다시 열 때
+  //   초기화 effect 가 state 를 되돌려도 입력창에는 직전 문자가 그대로 남는다.
+  // 주의: debounce 금지 - 제어 입력에서 setState 를 늦추면 타이핑이 밀리거나 글자가 유실된다.
+  const handleFilterChange = (field: 'teamId' | 'teamName', value: string) =>
+    setModalFilters(prev => ({ ...prev, [field]: value }));
 
   const handleDblClick = (mouseEvent: MouseEvent) => {
     const grid = gridRef.current;
@@ -111,8 +109,8 @@ export const TeamModal = ({
                     render={() => (
                       <InputField
                         fullWidth
-                        defaultValue={teamId}
-                        onChange={e => handleFilterhange(e.target.value, modalFilters.teamName)}
+                        value={modalFilters.teamId}
+                        onChange={e => handleFilterChange('teamId', e.target.value)}
                       />
                     )}
                   />
@@ -125,8 +123,8 @@ export const TeamModal = ({
                     render={() => (
                       <InputField
                         fullWidth
-                        defaultValue={teamName}
-                        onChange={e => handleFilterhange(modalFilters.teamId, e.target.value)}
+                        value={modalFilters.teamName}
+                        onChange={e => handleFilterChange('teamName', e.target.value)}
                       />
                     )}
                   />

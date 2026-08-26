@@ -1,6 +1,8 @@
-# DMF0074 (Metal Link Price) 클라우드 이관 패키지 — 2026-08-18 취합 (**rev.2**)
+# DMF0074 (Metal Link Price) 클라우드 이관 패키지 — 2026-08-18 취합 (**rev.5**)
 
 > **상태: 취합 완료 / 클라우드 미적용.** 적용은 별도 지시 후 수행.
+> ⚠ 사용자가 2026-08-18 낮에 **pre-MRFPARITY BODY 를 클라우드에 실행한 이력** 있음 — 적용 시
+> `91_DIAG_TEMPLATE_EMPTY.sql` D1 로 마커 판별 후 `02_BODY` 를 반드시 재실행할 것.
 
 ## rev 이력
 
@@ -8,10 +10,41 @@
 |---|---|---|
 | rev.1 | 2026-08-18 초기 | 최초 취합 — NULLFIX(2026-08-16) 반영본 기준 |
 | rev.2 | 2026-08-18 재취합 | **4축 점검(대사표→기능검증→테스트→권한별) 결과 반영** — 아래 3건 추가 |
-| **rev.3** | 2026-08-18 보완 | ① `A_DB/05_FIX_HISTORY_SEQ_RESEED.sql` **이관 결함 정정 추가**(다건 업로드 ORA-00001 차단 해소) ② `90_VERIFY.sql` 축 ⑥⑦ 추가 + NULLFIX 기대값 오기 정정(10→**9**, 본문 실측) ③ `D_SAMPLE/` **업로드 스모크용 샘플 3건** 동봉 ④ 운영 주의 2건(§7) 명문화 |
+| **rev.5** | 2026-08-18 저녁 | ① **FE 3파일 갱신** — 조회조건 Period **년월(YYYYMM) 전환**(`MetalLinkPriceForm` `mode='month'` + store 초기값 YYYYMM·`slice(0,6)` 방어 — AS-IS `drpPeriodMonth` 파리티, 종전 년월일 픽커는 8자리 드리프트) + **업로드 저장 성공 시 Version='Current' 자동 리셋·재조회**(`MetalLinkPrice.tsx onUploaded` — 특정 버전 잔존 시 `_C` 스냅샷을 읽어 업로드분 미표시 실사고 21:45, SP 교차검증 특정버전 0행/Current 2행) ② **공용 `B_FE/shared/searchFields/` 신설 동봉** — `PeriodField` `mode` prop(월 달력). ⚠ 공유 컴포넌트: 타 22개 사용처는 `mode` 미전달=date 기본이라 회귀 0(전수 인벤토리 실측). **FE 빌드 시 이 파일 없이 metal-link-price 만 배포하면 컴파일 실패** ③ **locales 3본 최신화** — `MSG01001` 3언어 동봉(전역 자산 — 구본으로 덮으면 DMF0021 정정 역행) ④ BODY 신선 덤프 재교체(마커 동일·개행 정합) ⑤ 드리프트 재검증 **전건 일치**(V1~V5, `_diagnostics/_dmf0074_pkg_refresh_20260818.py` exit 0) |
+| **rev.4** | 2026-08-18 보완 | ① **`A_DB/02_PKG_DMF0074_BODY.sql` 재교체 — `[MRFPARITY 2026-08-18]`** (Excel Form 템플릿 MRF 필터 AS-IS 파리티 복원, 아래 §rev.4) ② **`A_DB/11_MSG_LBL_DMF0074.sql` 신규** — MSG/LBL 축 23코드 69행(INSERT-only). 종전 `10_META_ALL_AXES.sql` 에 MSG/LBL 문장이 **0건**이었다(동봉 의무 누락) ③ `90_VERIFY.sql` 축 ⑤-2(MRFPARITY)·⑤-3(MSG/LBL) 추가 |
+| rev.3 | 2026-08-18 보완 | ① `A_DB/05_FIX_HISTORY_SEQ_RESEED.sql` **이관 결함 정정 추가**(다건 업로드 ORA-00001 차단 해소) ② `90_VERIFY.sql` 축 ⑥⑦ 추가 + NULLFIX 기대값 오기 정정(10→**9**, 본문 실측) ③ `D_SAMPLE/` **업로드 스모크용 샘플 3건** 동봉 ④ 운영 주의 2건(§7) 명문화 |
 
 > rev.3 드리프트 점검 실측(2026-08-18): B_FE 13파일 **해시 전건 일치** · locales 3본 일치 ·
 > `02_PKG_DMF0074_BODY.sql` ↔ 사내 `ALL_SOURCE` **본문 동일(3,975행)** · 메타 8축 행수 전건 일치.
+
+## rev.4 (2026-08-18) — Excel Form 템플릿 MRF 필터 AS-IS 파리티 + MSG/LBL 축
+
+**증상**: Excel Form 조회 시 `MSG00656`("이번 주 Sales Plan Waterfall 에 Monthly Rolling Forecast 'Y'
+버전이 존재하지 않습니다") — 81/82 에서 항상 발생(사용자 신고).
+
+**원인**: `P_DMF0074_GET_METAL_LINK_TEMPLATE` 의 기준 버전 CTE 에서 MRF 필터가 **활성**이었다.
+AS-IS 변환 원본(`To-be_v2_converted/06_Packages/04_Package_PKG_DMF0074.sql:688`)은
+`--AND NVL(ATTRIBUTE7,'') = 'Y'` **주석**이다. 2026-06-01~07-10 사이에 살아났다(들여쓰기 14칸 =
+후삽입 흔적). 형제 화면 `PKG_DMF0020` L2697 은 지금도 주석 상태.
+활성이면 금주 `SP_W` 는 전 division `ATTRIBUTE7=NULL` 이라 과거 MRF='Y' 버전(40=2026-05-15,
+81계열=2025-10-31, 82=2025-11-28)으로 밀리고, 그 버전 원장이 0행이라 템플릿이 0건이 된다.
+
+**조치**: TEMPLATE 쪽 **1줄만** 주석 복원. **UPLOAD 쪽 적재 조건(L1032)은 변환 원본에서도 활성이라 유지.**
+사내 적용 완료(BODY VALID 2026-08-18 14:06:02 · 컴파일 오류 0).
+
+**전/후 실측** (`_diagnostics/_dmf0074_tpl_measure.py` — SP 직접 호출, 읽기 전용)
+
+| Division | 전 | 후 |
+|---|---:|---:|
+| 40 | 412 | **237** (기준 버전이 2026-05-15 → 금주로 교체된 결과. 결함 아님) |
+| 81 | 0 | **1** |
+| 82 | 0 | **7** |
+| 81_UC | 0 | 0 (별건 — 금주 버전 원장은 있으나 하위 조인/권한에서 탈락. 미규명) |
+
+**MSG/LBL 축**: `axis_sweep_result.json` 의 `C_msg_lbl_mnu` 가 코드를 찾아냈는데
+`10_META_DMF0074_ALL_AXES.sql` 에는 MSG/LBL 문장이 **한 건도 없었다**. `11_MSG_LBL_DMF0074.sql`
+(23코드 × 3언어 = 69행)을 **INSERT-only** 로 신설 — 클라우드에 같은 코드가 있으면 문구를 덮어쓰지 않는다.
+AS-IS 코드 `MSG00049`/`MSG00427` 은 사내 원장 미등록이며 TO-BE 대체분(dayjs 검증 / `MSG00656`)이 있어 제외.
 
 **rev.2 에 새로 담긴 것**
 

@@ -6,11 +6,12 @@ import { type MutableRefObject, type Ref, useEffect, useMemo, useRef } from 'rea
 
 import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import type { ComboParam, RawFlexGridColumnConfig } from '@foundation/models';
-import { rebindFilterColumns } from '@foundation/utils';
+import { keepRowVisibleUnderFilter } from '@foundation/utils';
 import type { EditTracker } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 
+import { dataScaleOf, DEFAULT_DATA_SCALE } from '../etc-sales-reports.constants';
 import type { EtcSalesReportRow, SpreadTitleRow } from '../etc-sales-reports.types';
 import styles from '../EtcSalesReports.module.scss';
 import {
@@ -20,12 +21,16 @@ import {
 } from '../utils/etc-sales-reports.editLock';
 import {
   buildDataMap,
+  buildDeptIdDataMap,
   cascadeClearColumns,
-  resolveDeptIdRows,
   ROW_COMBO_IDS,
   toCellStr,
 } from '../utils/etc-sales-reports.gridCombos';
-import { EtcSalesReportsMergeManager } from '../utils/etc-sales-reports.merge';
+import {
+  EtcSalesReportsMergeManager,
+  type MergeContext,
+  type SetKeyMap,
+} from '../utils/etc-sales-reports.merge';
 
 // ⭐ DMF0049 EtcSalesReportsGrid — sales-reports(DMF0044) Grid 이식 (M_ 단일축 · **1단 헤더**
 //   [월 라벨 '2025-01'] · 배분/롤업 없음 · 2행 Measure 블록은 행 데이터 차원 — Grid 는 셀 편집만).
@@ -48,6 +53,8 @@ interface Props {
   userGroup?: string;
   staticColumns?: RawFlexGridColumnConfig[];
   spreadTitle?: SpreadTitleRow[];
+  // 행 → 세트키. 병합 블록이 세트를 넘지 않게 하는 원천 (저장부와 같은 맵 — merge.ts 상단 참조).
+  setKeys?: SetKeyMap;
 }
 
 const toNumber = (v: unknown): number => {
@@ -79,8 +86,15 @@ export const EtcSalesReportsGrid = ({
   userGroup = '',
   staticColumns,
   spreadTitle,
+  setKeys,
 }: Props) => {
   const division = divisionId ?? '';
+
+  // 병합 컨텍스트 ref 미러 — MergeManager 는 컬럼 구성이 바뀔 때만 다시 만들어지므로(아래 useEffect
+  //   의존성), 조회·Insert 마다 바뀌는 세트키 맵과 편집 진입 세트는 ref 로 넘긴다(lockCtxRef 와 동형).
+  //   `activeSetKey` 는 이벤트 핸들러가 직접 쓰므로 렌더에서 덮지 않는다.
+  const mergeCtxRef = useRef<MergeContext>({ setKeys: undefined, activeSetKey: null });
+  mergeCtxRef.current.setKeys = setKeys;
 
   // ⭐ 정적 컬럼 — admin 메타 100% 주도 (hook #113 — visible/display 2 boolean 만, FALLBACK 금지)
   const visibleColumns = useMemo<RawFlexGridColumnConfig[]>(
@@ -145,33 +159,50 @@ export const EtcSalesReportsGrid = ({
     return m;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [comboSig]);
-  const comboRowsRef = useRef<Record<string, Record<string, unknown>[]>>({});
-  const dataMapsRef = useRef<Record<string, DataMap | null>>({});
-  useEffect(() => {
-    const rowsByBinding: Record<string, Record<string, unknown>[]> = {};
-    comboColumns.forEach((c, i) => {
-      rowsByBinding[c.colNm] = (comboResults[i] ?? []) as unknown as Record<string, unknown>[];
-    });
-    comboRowsRef.current = rowsByBinding;
-    dataMapsRef.current = dataMaps;
+  // DEPT_ID 메타 콤보 rows — 행별 후보 해석(`resolveDeptIdRows`)의 기본 분기 원천
+  const deptDefaultRows = useMemo<Record<string, unknown>[]>(() => {
+    const i = comboColumns.findIndex(c => c.colNm === 'DEPT_ID');
+    return i >= 0 ? ((comboResults[i] ?? []) as unknown as Record<string, unknown>[]) : [];
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [comboSig, dataMaps]);
+  }, [comboSig]);
 
   // ===== 행별 콤보 — AS-IS `.cs` 런타임 SetCellTypeCombo 분 (메타에 컬럼이 없어 별도 구독) =====
   //   DEPT_ID 부모키 후보(`DMF0044_DEPARTMENT_TEAM`). 화면 단위로 superset 을 받아
-  //   `beginningEdit` 에서 행 컨텍스트로 골라 스왑한다(hook #59 §5-G).
+  //   컬럼 DataMap 하나에 담고, 후보 목록만 행 컨텍스트로 좁힌다(hook #59 §5-G).
   const [deptByDepartmentRows, custReportRows] = useTabComboQueries({
     filters: [ROW_COMBO_IDS.DEPT_BY_DEPARTMENT, ROW_COMBO_IDS.CUST_REPORT],
   });
-  const rowComboRef = useRef<Record<string, unknown>[]>([]);
-  useEffect(() => {
-    rowComboRef.current = (deptByDepartmentRows ?? []) as unknown as Record<string, unknown>[];
-  }, [deptByDepartmentRows]);
+  const deptByDepartment = useMemo<Record<string, unknown>[]>(
+    () => (deptByDepartmentRows ?? []) as unknown as Record<string, unknown>[],
+    [deptByDepartmentRows]
+  );
   // CUST_REPORT 행별 콤보 (AS-IS L1346 `DMF0005_REPORT_GROUP2` — 파라미터 없음)
-  const custReportRef = useRef<Record<string, unknown>[]>([]);
-  useEffect(() => {
-    custReportRef.current = (custReportRows ?? []) as unknown as Record<string, unknown>[];
-  }, [custReportRows]);
+  const custReportList = useMemo<Record<string, unknown>[]>(
+    () => (custReportRows ?? []) as unknown as Record<string, unknown>[],
+    [custReportRows]
+  );
+
+  // 메타에 없는(= `.cs` 가 런타임에 붙이던) 콤보의 컬럼 DataMap.
+  //   금지: 편집 진입 시 `column.dataMap` 을 갈아끼우지 말 것 — dataMap 은 셀이 아니라 **컬럼**
+  //   속성이라 그 컬럼 전 행의 표시가 함께 바뀌고, 좁혀진 맵에 없는 코드는 원 코드로 드러난다
+  //   (근거·대안은 `utils/etc-sales-reports.gridCombos.ts` buildDeptIdDataMap 주석 참조).
+  const rowScopedDataMaps = useMemo<Record<string, DataMap | null>>(
+    () => ({
+      DEPT_ID: buildDeptIdDataMap({ deptDefault: deptDefaultRows, deptByDepartment }, division),
+      CUST_REPORT: buildDataMap(custReportList),
+    }),
+    [deptDefaultRows, deptByDepartment, custReportList, division]
+  );
+
+  // 컬럼에 실제로 붙일 DataMap — 메타 콤보 위에 행별 콤보를 덮는다.
+  //   null(원천 미도착)은 덮지 않는다. 덮으면 이미 붙어 있던 메타 맵까지 지워진다.
+  const effectiveDataMaps = useMemo<Record<string, DataMap | null>>(() => {
+    const merged: Record<string, DataMap | null> = { ...dataMaps };
+    Object.entries(rowScopedDataMaps).forEach(([binding, dm]) => {
+      if (dm) merged[binding] = dm;
+    });
+    return merged;
+  }, [dataMaps, rowScopedDataMaps]);
 
   // ===== 동적 컬럼 메타 — GET_SPREAD_TITLE 우선, 부재 시 row 키 union fallback (M_ 단일축) =====
   //   ⭐ 2026-08-11 — **1단 헤더**로 전환 (DMF0044 2026-08-10 선례 이식). AS-IS
@@ -180,7 +211,9 @@ export const EtcSalesReportsGrid = ({
   //     실제로 `PKG_DMF0049.P_DMF0049_GET_SPREAD_TITLE`(BODY L229~232) 은 LARGE/SMALL/COLUMN_LABEL_NAME
   //     을 모두 `SCM_SYS_CALENDAR_M.MONTH_NAME`(= `2025-01`) **동일값**으로 주므로, 2단으로 묶으면
   //     '2025-01' 그룹 아래 '2025-01' 1개짜리가 12개 생겼다(오구성).
-  type DynColMeta = { binding: string; label: string; sort: number };
+  //   ⭐ REQ:CHAT-20260820-16 — `scale` 은 같은 SP 가 주는 `DATA_SCALE_NUMBER` 를 소비한다
+  //     (동적 M_ 분기 실측 '3'). 표시·입력 정규화가 이 값 하나를 공유하므로 둘이 갈릴 수 없다.
+  type DynColMeta = { binding: string; label: string; sort: number; scale: number };
   const dynColMetas = useMemo<DynColMeta[]>(() => {
     const titleRows = (spreadTitle ?? []).filter(r => dynKindOf(String(r.COLUMN_NAME ?? '')));
     if (titleRows.length > 0) {
@@ -193,6 +226,7 @@ export const EtcSalesReportsGrid = ({
               `${String(r.COLUMN_NAME).slice(2, 6)}-${String(r.COLUMN_NAME).slice(6, 8)}`
           ),
           sort: Number(r.SORT_ORDER_NO ?? 0),
+          scale: dataScaleOf(r.DATA_SCALE_NUMBER),
         }))
         .sort((a, b) => a.sort - b.sort || a.binding.localeCompare(b.binding));
     }
@@ -205,9 +239,14 @@ export const EtcSalesReportsGrid = ({
       binding: b,
       label: `${b.slice(2, 6)}-${b.slice(6, 8)}`,
       sort: 0,
+      scale: DEFAULT_DATA_SCALE, // SP 메타가 없는 fallback 경로 — 자릿수 원천이 없다
     }));
   }, [spreadTitle, rows]);
   const dynBindings = useMemo(() => dynColMetas.map(m => m.binding), [dynColMetas]);
+
+  // 자릿수 ref 미러 — 핸들러가 effect 안에서 등록되므로(lockCtxRef·inputTpRef 와 동형) 최신 메타를 본다
+  const dynScaleRef = useRef<Map<string, number>>(new Map());
+  dynScaleRef.current = new Map(dynColMetas.map(m => [m.binding, m.scale]));
 
   // editLock 파라미터 ref 미러 (핸들러 공유)
   const lockCtxRef = useRef({
@@ -283,11 +322,104 @@ export const EtcSalesReportsGrid = ({
       else el.classList.remove(cls);
     };
 
+    // ===== 편집 진입 세트 분리 (AS-IS spdMain_CellClick 파리티 — `.cs:1503~1527`) =====
+    //   조회 직후에는 종전대로 광역 병합이고, **더블클릭한 세트 하나만** 블록에서 떨어져 나온다.
+    //   목적은 모양이 아니라 **쓰기 범위**다 — wijmo 는 편집 커밋을 병합 블록 전 행에 쓰고
+    //   그 범위(`_rng`)를 `startEditing` 이 beginningEdit **보다 먼저** 잡는다. 그래서 편집이
+    //   시작되기 전에 갈라 놔야 값이 세트 밖으로 새지 않는다(근거 전문 = merge.ts 상단).
+    const openSetForEdit = (row: number, col: number): void => {
+      const binding = g.columns[col]?.binding ?? '';
+      if (!staticBindingSet.has(binding)) return; // 수치(M_) 셀은 병합 대상이 아니다
+      const item = g.rows[row]?.dataItem as EtcSalesReportRow | undefined;
+      if (!item) return;
+      // 편집 불가 셀은 갈라 두면 되돌릴 계기(cellEditEnded)가 없다 — 애초에 분리하지 않는다.
+      //   PROJECT_CODE 더블클릭(드릴다운 팝업)처럼 편집이 아닌 더블클릭도 여기서 걸러진다.
+      if (!staticEditableByMeta(inputTpRef.current.get(binding), item)) return;
+      const key = mergeCtxRef.current.setKeys?.get(item);
+      if (!key || mergeCtxRef.current.activeSetKey === key) return;
+      // 블록이 이미 그 세트 하나뿐이면 갈라낼 것이 없다 — 아래 동기 refresh 를 아낀다.
+      //   신규 세트는 항상 여기에 해당한다(기존 행과는 값이 같아도 병합하지 않으므로).
+      const merged = g.getMergedRange(g.cells, row, col);
+      if (!merged || merged.row === merged.row2) return;
+      let spansOtherSet = false;
+      for (let r = merged.row; r <= merged.row2 && !spansOtherSet; r++) {
+        const other = g.rows[r]?.dataItem as EtcSalesReportRow | undefined;
+        if (other && mergeCtxRef.current.setKeys?.get(other) !== key) spansOtherSet = true;
+      }
+      if (!spansOtherSet) return;
+      // 필수: 진행 중이던 편집을 **먼저** 끝낸다. 아래 refresh 가 finishEditing 을 부르는데,
+      //   그 cellEditEnded 안의 closeActiveSet 가 방금 연 세트를 도로 닫아 버린다(순서 사고).
+      if (g.activeEditor) g.finishEditing();
+      mergeCtxRef.current.activeSetKey = key;
+      // 필수: **동기** refresh. invalidate(10ms 뒤 refresh)로 미루면 wijmo 가 아직 광역인 DOM 에서
+      //   편집을 시작해, 세트가 1행인 division(82)에서는 편집기가 앉을 셀을 못 찾아 편집이 아예
+      //   시작되지 않는다(`_EditHandler._updateEditorCell` 은 단일 셀 범위면 refresh 를 건너뛴다).
+      //   지금은 편집기가 열리기 **전**이라 refresh 가 부르는 finishEditing 이 해칠 편집이 없다.
+      g.refresh(false);
+    };
+
+    // ===== 신규 세트 값 동기화 — 병합이 못 덮는 경로의 안전망 =====
+    //   신규 세트는 병합되어 있어 보통은 wijmo 가 세트 전 행에 값을 쓴다. 다만 병합이 닿지 않는
+    //   경로가 둘 있다.
+    //     ① 붙여넣기 — 공용 DataGrid 가 `expandSelectionOnCopyPaste = false` 라 앵커 1행에만 쓴다.
+    //     ② 세트가 viewport 경계에 걸치면 병합 블록이 그 자리에서 잘린다(`panel.viewRange` 제한).
+    //     ③ cascade clear 는 편집한 행에만 적용된다.
+    //   그런데 저장 빌더는 세트 **첫 행**에서 identity 를 읽으므로
+    //   (`utils/etc-sales-reports.save.ts` `identityOf(t.setRows[0])`) 첫 행이 비면 Department 공란으로
+    //   보고 저장을 막는다(MSG00429). 세트는 한 레코드이므로 Measure 를 뺀 정적 값은 전 행이 같아야 한다.
+    //   변경 등록(EditTracker)은 불요 — 신규 세트는 `CRUD_TYPE='I'` 만으로 늘 저장 대상이다.
+    //
+    //   금지: 수치(M_) 셀은 절대 전파하지 말 것 (2026-08-21 실사고 — "뒤에 병합 안 된 데이터도 같은
+    //     값이 들어간다"). 월 수량은 **행(Measure)마다 다른 값**이라 세트 공유 대상이 아니다.
+    //     동적 컬럼은 `allowMerging: false` 라 화면에서도 병합되지 않는다 — 전파는 그 계약도 깬다.
+    //     그래서 전파 대상을 **정적 컬럼 화이트리스트**(`staticBindingSet`)로 못박는다.
+    const syncInsertSet = (
+      s: FlexGridType<EtcSalesReportRow>,
+      src: EtcSalesReportRow,
+      bindings: string[]
+    ): void => {
+      const gid = src.INSERT_GROUP_ID;
+      if (src.CRUD_TYPE !== 'I' || !gid) return;
+      // 세트 공유 값 = 정적 컬럼 - MEASURE. 나머지(M_ 수량 등)는 행마다 달라야 한다.
+      const shared = bindings.filter(b => b !== 'MEASURE' && staticBindingSet.has(b));
+      if (shared.length === 0) return;
+      const rec = src as Record<string, unknown>;
+      let touched = false;
+      for (let i = 0; i < s.rows.length; i++) {
+        const other = s.rows[i]?.dataItem as EtcSalesReportRow | undefined;
+        if (!other || other === src) continue;
+        if (other.CRUD_TYPE !== 'I' || other.INSERT_GROUP_ID !== gid) continue;
+        const target = other as Record<string, unknown>;
+        shared.forEach(b => {
+          if (target[b] === rec[b]) return;
+          target[b] = rec[b];
+          touched = true;
+        });
+      }
+      if (touched) s.invalidate();
+    };
+
+    // 분리 해제 — 편집이 끝난 뒤에만 부른다(편집 중 invalidate 금지 — merge.ts 상단 참조).
+    const closeActiveSet = (): void => {
+      if (mergeCtxRef.current.activeSetKey == null) return;
+      mergeCtxRef.current.activeSetKey = null;
+      g.invalidate();
+    };
+
     const formatHandler = (_s: FlexGridType<EtcSalesReportRow>, e: FormatItemEventArgs) => {
       if (e.panel !== g.cells) return;
       const col = g.columns[e.col];
       const binding = col?.binding ?? '';
       const rowItem = g.rows[e.row]?.dataItem as EtcSalesReportRow | undefined;
+
+      // 음수 = 빨간 글자 (공통 규약. 정본 mkt-fcst / demand-manager / contribute-view).
+      //   필수: **진입 직후 한 번만** 칠한다 — 아래 분기들이 각자 return 하므로 분기 안에서 부르면
+      //   편집 중인 셀(editRange 가드로 조기 return)과 정적/동적 어디에도 안 걸리는 컬럼
+      //   (개인화로 사용자가 되살린 컬럼은 staticBindingSet 에 없다)이 통째로 빠진다.
+      //   값 원천은 그 셀이 실제로 그리는 원값이다(`getCellData(..., false)`) — 콤보 컬럼은
+      //   CODE 가 와서 toNumber 가 0 이 되므로 자연히 음수 판정에서 빠진다.
+      paintNegative(e.cell, toNumber(e.panel.getCellData(e.row, e.col, false)));
+
       if (dynKindOf(binding)) {
         // ⚠️ **`editRange` 가드 필수** (DMF0044 2026-08-11 실사고 — "노란색인데 편집 불가").
         //   `formatItem` 은 **편집 중인 셀에도 발생**한다(Wijmo 가 편집기 <input> 을 셀에 넣은 뒤 셀을 갱신).
@@ -298,27 +430,30 @@ export const EtcSalesReportsGrid = ({
         const st = evalDyn(binding, rowItem);
         toggleClass(e.cell, 'wj-cell-editable', st.editable);
         toggleClass(e.cell, 'wj-cell-non-editable', !st.editable && st.isPast);
-        // 숫자 표시 — 0/빈 = 빈칸, 콤마 포맷
+        // 숫자 표시 — 0/빈 = 빈칸, 콤마 포맷 + 메타 자릿수 고정 소수 (REQ:CHAT-20260820-16).
+        //   ⚠ **0 은 계속 빈칸**이다(2026-08-20 사용자 확정 — 현행 동작 보존). '0.000' 을 찍지 않는다.
         const v = rowItem?.[binding];
         const n = toNumber(v);
-        e.cell.textContent = v == null || v === '' || n === 0 ? '' : n.toLocaleString();
-        // 음수 수량 = 빨간 글자 (mkt-fcst 동일 규약)
-        paintNegative(e.cell, n);
+        const s = dynScaleRef.current.get(binding) ?? DEFAULT_DATA_SCALE;
+        e.cell.textContent =
+          v == null || v === '' || n === 0
+            ? ''
+            : n.toLocaleString(undefined, {
+                minimumFractionDigits: s,
+                maximumFractionDigits: s,
+              });
         return;
       }
       if (staticBindingSet.has(binding) && rowItem) {
         // 색상 판정도 편집 게이트와 **같은 함수**를 쓴다 — 두 곳이 갈리면 노란칸인데 못 고치는 상태가 생긴다
         const editable = staticEditableByMeta(inputTpRef.current.get(binding), rowItem);
         toggleClass(e.cell, 'wj-cell-editable', editable);
-        // 정적 컬럼의 수치도 음수면 빨간 글자. 문자 컬럼은 toNumber 가 0 을 돌려주므로
-        // 자연히 음수 판정에서 빠진다.
-        paintNegative(e.cell, toNumber(rowItem[binding]));
       }
     };
     g.formatItem.addHandler(formatHandler);
 
-    // 편집 시작 — 게이트 + cascade 콤보 스왑 (hook #59 §5-G)
-    const editingCellRef: { current: { binding: string } | null } = { current: null };
+    // 편집 시작 — 게이트만 본다. cascade 후보 좁히기는 컬럼 DataMap 의 `getDisplayValues` 담당이라
+    //   여기서 dataMap 을 건드리지 않는다(hook #59 §5-G).
     const beginningEditHandler = (
       s: FlexGridType<EtcSalesReportRow>,
       e: { cancel: boolean; row: number; col: number }
@@ -332,48 +467,36 @@ export const EtcSalesReportsGrid = ({
         const allowed = staticEditableByMeta(inputTpRef.current.get(binding), row);
         if (!allowed) {
           e.cancel = true;
+          closeActiveSet(); // 편집이 안 열리면 cellEditEnded 가 없다 — 갈라진 채 남지 않게 여기서 복원
           return;
-        }
-        // 행 컨텍스트 스왑 — DEPT_ID 후보를 AS-IS 2분기(L1268 / L1294)로 다시 고른다
-        if (binding === 'DEPT_ID' && row) {
-          const dm = buildDataMap(
-            resolveDeptIdRows(row, lockCtxRef.current.division, {
-              deptDefault: comboRowsRef.current.DEPT_ID ?? [],
-              deptByDepartment: rowComboRef.current,
-            })
-          );
-          if (dm) {
-            s.columns[e.col].dataMap = dm;
-            editingCellRef.current = { binding };
-          }
-        }
-        // CUST_REPORT — AS-IS 가 `.cs` 에서 붙이던 행별 콤보(L1346/1367/1597). 메타에 없으므로
-        //   화면이 구독해 편집 진입 시 스왑한다(편집 종료 시 cellEditEnded 가 원복).
-        if (binding === 'CUST_REPORT') {
-          const dm = buildDataMap(custReportRef.current);
-          if (dm) {
-            s.columns[e.col].dataMap = dm;
-            editingCellRef.current = { binding };
-          }
         }
         return;
       }
       if (dynKindOf(binding)) {
         e.cancel = !evalDyn(binding, row).editable;
+        if (e.cancel) closeActiveSet();
       }
     };
     g.beginningEdit.addHandler(beginningEditHandler);
     g.pastingCell.addHandler(beginningEditHandler as never);
 
-    // 편집 종료 — 수치셀 빈값 → '0' (AS-IS L1295~1302) + cascade dataMap 원복
+    // 편집 종료 — 수치셀 빈값 → '0' (AS-IS L1295~1302) + 종속 컬럼 cascade clear
     const cellEditEndedHandler = (
       s: FlexGridType<EtcSalesReportRow>,
       e: { row: number; col: number }
     ) => {
       const binding = s.columns[e.col]?.binding ?? '';
       const row = s.rows[e.row]?.dataItem as EtcSalesReportRow | undefined;
-      if (dynKindOf(binding) && row && (row[binding] == null || row[binding] === '')) {
-        (row as Record<string, unknown>)[binding] = '0';
+      if (dynKindOf(binding) && row) {
+        const raw = row[binding];
+        if (raw == null || raw === '') {
+          (row as Record<string, unknown>)[binding] = '0'; // AS-IS L1295~1302 — 빈값 → '0'
+        } else {
+          // ⭐ REQ:CHAT-20260820-16 — 입력축도 메타 자릿수로 정규화한다. 표시(3자리)와 저장 payload 가
+          //   갈리지 않게 **셀 값 자체**를 고정 소수로 확정한다(지수표기도 여기서 제거된다).
+          const sc = dynScaleRef.current.get(binding) ?? DEFAULT_DATA_SCALE;
+          (row as Record<string, unknown>)[binding] = toNumber(raw).toFixed(sc);
+        }
       }
       // DEPARTMENT_ID / DEPT_ID 변경 → 종속 컬럼 clear (AS-IS 매트릭스 = cascadeClearColumns JSDoc)
       //   ⚠ AS-IS 는 **DEPT_ID 자체를 지우지 않는다** — DMF0044 와 다른 지점이라 원문 그대로 따른다.
@@ -387,13 +510,11 @@ export const EtcSalesReportsGrid = ({
           });
           s.invalidate();
         }
+        // 신규 세트는 병합이 없으므로 방금 바뀐 값(+ cascade clear 분)을 세트 전체에 맞춘다
+        syncInsertSet(s, row, [binding, ...clears]);
       }
-      // cascade 원복
-      if (editingCellRef.current?.binding === binding) {
-        const orig = dataMapsRef.current[binding];
-        if (orig !== undefined) s.columns[e.col].dataMap = orig;
-        editingCellRef.current = null;
-      }
+      // 편집이 끝났으니 갈라 뒀던 세트를 광역 병합으로 되돌린다(invalidate 는 여기서만 안전).
+      closeActiveSet();
     };
     g.cellEditEnded.addHandler(cellEditEndedHandler);
     g.pastedCell.addHandler(cellEditEndedHandler as never);
@@ -409,6 +530,33 @@ export const EtcSalesReportsGrid = ({
     };
     g.hostElement.addEventListener('dblclick', dblclickHandler);
 
+    // 더블클릭 = 편집 진입 = 세트 분리 시점. **capture 단계**로 등록해 wijmo 자신의 mousedown
+    //   핸들러보다 먼저 돌게 한다 — wijmo 는 이 mousedown 에서 hitTest·select 를 하고 이어지는
+    //   mouseup 에서 `startEditing(true, null, null)`(= selection.row 사용)로 편집을 시작하므로,
+    //   그 전에 병합이 세트로 갈라져 있어야 선택도 편집 범위도 세트 안에 잡힌다.
+    //   `detail >= 2` 로 **두 번째 클릭에서만** 갈라진다 — 단일 클릭(포커스 이동)은 병합을 건드리지
+    //   않는다(과거 selectionChanged 판이 "포커스만 옮겼는데 병합이 깨진다"가 됐던 지점).
+    //   병합 셀은 위에서 아래까지 한 칸이라 wijmo 쪽에는 "클릭한 줄" 정보가 없다. 물리 행은
+    //   좌표 기반 `hitTest` 만 알고 있으므로 여기서 잡아 둔다.
+    const mouseDownCapture = (ev: MouseEvent) => {
+      if (ev.detail < 2) return;
+      const ht = g.hitTest(ev);
+      if (!ht || ht.panel !== g.cells || ht.row < 0 || ht.col < 0) return;
+      openSetForEdit(ht.row, ht.col);
+    };
+    g.hostElement.addEventListener('mousedown', mouseDownCapture, true);
+
+    // 키보드로 편집을 시작하는 경로(F2 / 문자 입력)도 같은 분리가 필요하다 — 안 그러면 그 경로만
+    //   광역 블록 전체에 값이 쓰인다. 대상 행은 선택 행(병합 블록의 맨 윗행)이다.
+    const keyDownCapture = (ev: KeyboardEvent) => {
+      if (g.activeEditor || ev.ctrlKey || ev.metaKey || ev.altKey) return;
+      if (ev.key !== 'F2' && ev.key.length !== 1) return; // F2 또는 문자 1글자 입력만 편집을 연다
+      const sel = g.selection;
+      if (!sel || sel.row < 0 || sel.col < 0) return;
+      openSetForEdit(sel.row, sel.col);
+    };
+    g.hostElement.addEventListener('keydown', keyDownCapture, true);
+
     // 스크롤 시 재렌더(merge 재계산용). ⚠ 편집 중에는 건너뛴다 — 편집기가 붙은 셀을 다시 그리면
     //   입력이 끊긴다(위 formatItem editRange 가드와 같은 계열의 사고. DMF0044 2026-08-11 선례).
     const handleScrollInvalidate = () => {
@@ -419,7 +567,8 @@ export const EtcSalesReportsGrid = ({
 
     g.allowMerging = AllowMerging.All;
     for (let i = 0; i < g.columns.length; i++) g.columns[i].allowMerging = true;
-    g.mergeManager = new EtcSalesReportsMergeManager(fixedBindings);
+    g.mergeManager = new EtcSalesReportsMergeManager(fixedBindings, mergeCtxRef);
+
     g.invalidate(true);
 
     return () => {
@@ -430,6 +579,8 @@ export const EtcSalesReportsGrid = ({
         g.cellEditEnded?.removeHandler(cellEditEndedHandler);
         g.pastedCell?.removeHandler(cellEditEndedHandler as never);
         g.hostElement?.removeEventListener('dblclick', dblclickHandler);
+        g.hostElement?.removeEventListener('mousedown', mouseDownCapture, true);
+        g.hostElement?.removeEventListener('keydown', keyDownCapture, true);
         g.scrollPositionChanged?.removeHandler(handleScrollInvalidate);
       } catch {
         /* unmount race */
@@ -449,18 +600,9 @@ export const EtcSalesReportsGrid = ({
         const cleaned = f.filterColumns.filter(b => !/^M_/.test(b));
         if (cleaned.length !== f.filterColumns.length) f.filterColumns = cleaned;
       }
-      // (0-a2) [공통 UC-07, hook #133 §5] 재조회해도 사용자가 걸어둔 **필터가 유지**되어야 한다.
-      //   columnGroups 재대입이 Column 객체를 통째로 재생성해, FlexGridFilter 가 죽은 Column 을
-      //   붙든 채 남으면 "아이콘은 꺼졌는데 행은 걸러진" 상태가 된다. 끊긴 필터만 재바인딩한다
-      //   (끊긴 게 없으면 no-op — 되먹임 방지 가드는 유틸 내부). 위 sanitize 로 제외한 동적(M_)
-      //   컬럼은 이미 filterColumns 에서 빠져 되살아나지 않는다. 2026-08-15 보완.
-      rebindFilterColumns(
-        g as unknown as FlexGridType<WijmoRowItem>,
-        gridFilterRef?.current
-      );
       for (let i = 0; i < g.columns.length; i++) {
         const col = g.columns[i];
-        const dm = dataMaps[col.binding ?? ''];
+        const dm = effectiveDataMaps[col.binding ?? ''];
         if (dm && col.dataMap !== dm) col.dataMap = dm;
       }
       const headerRows = g.columnHeaders?.rows;
@@ -484,7 +626,7 @@ export const EtcSalesReportsGrid = ({
         /* unmount race */
       }
     };
-  }, [dynBindings, visibleColumns, dataMaps, gridRef, gridFilterRef]);
+  }, [dynBindings, visibleColumns, effectiveDataMaps, gridRef, gridFilterRef]);
 
   // F4 Filter — 동적(M_) 컬럼 필터 cancel
   useEffect(() => {
@@ -515,12 +657,38 @@ export const EtcSalesReportsGrid = ({
     };
   }, [dynBindings, visibleColumns, gridRef, gridFilterRef]);
 
+  // 공통 UC-01 — 필터가 걸린 상태에서 Insert 해도 필터를 유지한 채 신규행이 보여야 한다.
+  //   Insert 는 rows 를 새 배열로 만들어 itemsSource 를 갈아끼우는데, 그 순간 wijmo 가 두 가지를 한다.
+  //     (1) FlexGridFilter 가 생성자에서 itemsSourceChanged 에 건 clear() 로 필터를 통째로 비운다
+  //         -> 공용 DataGrid 의 capture/restore 가 되돌린다. 필수: gridFilterRef 를 DataGrid 에
+  //            넘겨야 그 장치가 이 화면의 필터를 본다(안 넘기면 화면이 직접 만든 필터라 무동작).
+  //     (2) 값이 빈 신규행은 필터 조건에 걸려 CollectionView 에서 빠진다
+  //         -> keepRowVisibleUnderFilter 로 wijmo 예외집합(excludedRowsSet)에 등록해 통과시킨다.
+  //   순서 의무: 복원의 apply() 가 예외집합을 비우므로 itemsSource 교체가 끝난 뒤(= 이 effect)에
+  //   등록하고 refresh 한다. handleInsert 안에서 동기로 등록하면 뒤이은 복원에 지워진다.
+  //   컬럼 0개 가드: 컬럼이 없는 상태에서 refresh 하면 wijmo 가 인덱스 -1 로 계산하다 예외를 던진다.
+  //   정본 = forecast-price/components/ForecastPriceGrid.tsx.
+  useEffect(() => {
+    const g = (gridRef as { current: FlexGridType<EtcSalesReportRow> | null } | null)?.current;
+    if (!g || g.columns.length === 0) return;
+    const insertRows = rows.filter(r => r.CRUD_TYPE === 'I');
+    if (insertRows.length === 0) return;
+    insertRows.forEach(r =>
+      keepRowVisibleUnderFilter(
+        g as unknown as FlexGridType<WijmoRowItem>,
+        r as unknown as WijmoRowItem
+      )
+    );
+    g.collectionView?.refresh();
+  }, [rows, gridRef]);
+
   return (
     <>
       <DataGrid
         key={mainStaticColumns.map(c => c.colNm).join(',')}
         className={styles.grid}
         gridRef={gridRef as never}
+        gridFilterRef={gridFilterRef}
         editTrackerRef={editTrackerRef as never}
         staticColumns={mainStaticColumns}
         dynamicColumns={mainDynamicColumns}

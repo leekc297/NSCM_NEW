@@ -6,7 +6,7 @@
 //   '^' 병렬 문자열이라 payload 객체 키 순서 자체는 무관 — PROC_M COL_NM(camelCase) 매칭이 전부.
 //   저장 채택 3분기 (AS-IS L739~744): ①Red(변경) M_ 셀 ②40+M행+cnt≥2 → 전 월 ③82+M행 → 전 월.
 //   행 emit = 세트 × 채택월 × 세트내 measure 행 (p_measure/p_qty = k 행 값, identity = 세트 첫 행).
-import { MSG, measureCntOf } from '../etc-sales-reports.constants';
+import { DEFAULT_DATA_SCALE, MSG, measureCntOf } from '../etc-sales-reports.constants';
 import type { EtcSalesReportRow, ValidationResult } from '../etc-sales-reports.types';
 
 import { dynKindOf } from './etc-sales-reports.editLock';
@@ -16,10 +16,13 @@ type Rec = Record<string, unknown>;
 const str = (v: unknown): string =>
   typeof v === 'string' ? v.trim() : typeof v === 'number' ? String(v) : '';
 
-const qtyOf = (v: unknown): string => {
-  if (v == null || v === '') return '0';
+// ⭐ REQ:CHAT-20260820-16 — 수량은 **메타 자릿수 고정 소수 문자열**로 보낸다.
+//   `String(n)` 은 작은 값을 `1e-7` 같은 **지수표기**로 내놓는데, SP 가 이 문자열을 TO_NUMBER 로
+//   읽으므로 ORA-01722(invalid number)가 난다. toFixed 는 지수표기를 만들지 않는다.
+const qtyOf = (v: unknown, scale: number): string => {
+  if (v == null || v === '') return (0).toFixed(scale);
   const n = typeof v === 'number' ? v : Number(str(v).replace(/,/g, ''));
-  return Number.isFinite(n) ? String(n) : '0';
+  return Number.isFinite(n) ? n.toFixed(scale) : (0).toFixed(scale);
 };
 
 // SAVE 한 행 — 35키 (PROC_M COL_NM camelCase. sesUserId 제외)
@@ -102,19 +105,29 @@ const identityOf = (row: Rec) => ({
 export interface SaveTarget {
   setRows: { row: EtcSalesReportRow; changes?: Record<string, unknown> }[]; // 세트 전 행 (첫 행 = identity)
   isInsert: boolean;
+  /**
+   * Delete(F9) 로 `CRUD_TYPE='D'` 마킹된 세트 (공용 `GridAction.removeRow` 규약).
+   *
+   * SP 는 `ACTIVE_FLAG='D'` 행을 **VERSION_NO + DIVISION_ID + DATA_SEQ + MEASURE + YYYYMMDD**
+   * 로 매칭해 원장에서 지운다(`PKG_DMF0049` BODY — "DM_PLN_SALES_ETC_REPORT_C 테이블 DELETE").
+   * ⇒ 세트를 지우려면 **세트 전 행 × 조회 연도 전 월**을 D 로 내보내야 한다(부분 월만 보내면 그 월만 지워진다).
+   */
+  isDelete?: boolean;
 }
 
 /**
  * 저장 행 조립 — 세트 × 채택월 × 세트내 행.
  *   채택월 (L739~744): Red 변경 월 ∪ (40&&M&&cnt≥2 → 전 월) ∪ (82&&M → 전 월). I 세트 = 값 존재 월.
+ *   ⭐ 40/82 의 뒤 두 분기는 **정적 컬럼만 바뀐 세트**(월 변경 0건)도 채택한다 — 아래 staticChanged.
  */
 export const buildEtcReportSaveRows = (params: {
   targets: SaveTarget[];
   versionNo: string;
   resultMonth: string; // Result 조회 시 전월 yyyymm / Plan ''
   monthBindings: string[]; // 조회 연도 M_ 전체 (전 월 수집용)
+  scale?: number; // 동적 셀 DATA_SCALE_NUMBER (미지정 = 메타 부재 fallback)
 }): SaveBuildResult => {
-  const { targets, versionNo, resultMonth, monthBindings } = params;
+  const { targets, versionNo, resultMonth, monthBindings, scale = DEFAULT_DATA_SCALE } = params;
   const out: EtcReportSaveRow[] = [];
 
   for (const t of targets) {
@@ -146,25 +159,41 @@ export const buildEtcReportSaveRows = (params: {
         }
       }
     }
-    if (changedMonths.size === 0) continue;
     // 전 월 수집 분기 — 40+M+cnt≥2 / 82+M (L741~744)
-    const allMonths =
-      !t.isInsert && ((divisionId === '40' && cnt >= 2) || divisionId === '82')
-        ? monthBindings
-        : [...changedMonths].sort();
+    const allMonthsBranch =
+      !t.isInsert && ((divisionId === '40' && cnt >= 2) || divisionId === '82');
+
+    // ⭐ REQ:CHAT-20260820-18/19 동반 결함 — **정적 컬럼만 고친 세트가 통째로 버려지던 문제**.
+    //   AS-IS 채택 조건(L739~744)은 ①Red(변경) M_ 셀 ∪ ②40 && action='M' && cnt≥2
+    //   ∪ ③82 && action='M' 이다. ②③ 의 `action` 은 프레임워크 Action 컬럼(L702~713)에서 읽는데,
+    //   이 컬럼은 **Department/Team/Cust 같은 정적 셀만 고쳐도** 'M' 이 붙는다
+    //   (L742 원문 주석 "소형사업부 Department, Team, Cust Report 컬럼 추가" 가 바로 그 목적).
+    //   즉 AS-IS 는 월 값이 하나도 안 바뀌어도 세트를 채택하고 전 월 루프를 돈다.
+    //   종전 `changedMonths.size === 0 → continue` 는 이 경로를 잘라내 정적 컬럼만 수정하면
+    //   저장이 MSG00676(저장 대상 없음)으로 끝났다.
+    //   ⚠ 반대로 ②③ 에 해당하지 않는 division(81 계열)은 AS-IS 도 Red 월 셀이 없으면 채택하지
+    //     않으므로, 정적 변경만으로는 살리지 않는다 — 조건을 넓히면 AS-IS 파리티가 깨진다.
+    const staticChanged =
+      !t.isInsert &&
+      t.setRows.some(r => Object.keys(r.changes ?? {}).some(k => dynKindOf(k) !== 'M'));
+    // 삭제 세트는 채택월 판정을 건너뛴다 — 월 값이 하나도 안 바뀌어도 지워야 한다.
+    if (!t.isDelete && changedMonths.size === 0 && !(staticChanged && allMonthsBranch)) continue;
+
+    // 삭제는 **조회 연도 전 월**을 내보낸다 (SP 매칭 키에 YYYYMMDD 가 있어 부분 월만 보내면 그 월만 지워진다)
+    const allMonths = t.isDelete || allMonthsBranch ? monthBindings : [...changedMonths].sort();
 
     for (const binding of allMonths) {
       for (const r of t.setRows) {
         const kRec = r.row as Rec;
         out.push({
-          activeFlag: t.isInsert ? 'I' : 'M',
+          activeFlag: t.isDelete ? 'D' : t.isInsert ? 'I' : 'M',
           resultMonth,
           ...identity,
           versionNo,
           departmentEditFlag: deptEdited ? 'true' : 'false',
           measure: str(kRec.MEASURE), // k 행 measure
           yyyymmdd: binding.slice(2),
-          qty: qtyOf(kRec[binding]), // k 행 해당 월 값
+          qty: qtyOf(kRec[binding], scale), // k 행 해당 월 값 (메타 자릿수 고정 소수)
         });
       }
     }

@@ -67,3 +67,18 @@ export const SINGLE_OWNER_DIVISIONS = {
   [SHEETS.PRODUCTION]: ['82'],
   [SHEETS.PURCHASE]: ['81', '82'],
 } as Record<SHEETS, readonly string[]>;
+
+/**
+ * 조회조건 cascade 콤보 ID — Div / Team / End Customer / Sales Site 를 조인한 평면 콤보 1건.
+ *
+ * 종전에는 단계마다 콤보를 따로 조회했다(MyDivision / TeambyDivision / EndCustomer / SalesSite).
+ * 콤보마다 스키마가 달라 화면이 cascade 컬럼을 배선했고, 상위 컬럼이 공란인 행을 자를지
+ * (strict) 도 콤보마다 달라 화면이 판단해야 했다. 조인 1건으로 바꾸면 모든 행에 모든 단계가
+ * 차 있어 그 분기가 전부 사라진다.
+ *
+ * 콤보 SQL 컬럼 규약은 CascadeFields 헤더 주석 참조 —
+ *   중간 단계: <LEVEL>_CODE / <LEVEL>_NAME, 마지막 단계: CODE / NAME.
+ *
+ * 주의: 아래 값은 SCM_ADM_CMBO_SQL_M 등록명이 확정되면 그 이름으로 바꾼다.
+ */
+export const SEARCH_CASCADE_COMBO_ID = 'SalesSite';

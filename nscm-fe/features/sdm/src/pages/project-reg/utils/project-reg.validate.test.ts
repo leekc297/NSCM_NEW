@@ -149,7 +149,7 @@ describe('validateDuplicate — P-05 (논리키 DIVISION_ID+DPJT_CLASS+END_CUSTO
     expect(validateDuplicate([row(), row({ DIVISION_ID: '81' })])).toEqual({ ok: true });
   });
 
-  it("삭제('D') 행은 중복 판정 제외 — 삭제 후 동일키 재등록 허용", () => {
+  it('삭제(\'D\') 행은 중복 판정 제외 — 삭제 후 동일키 재등록 허용', () => {
     expect(validateDuplicate([row({ CRUD_TYPE: 'D' }), row({ CRUD_TYPE: 'M' })])).toEqual({
       ok: true,
     });
@@ -157,7 +157,7 @@ describe('validateDuplicate — P-05 (논리키 DIVISION_ID+DPJT_CLASS+END_CUSTO
 });
 
 describe('toSavePayload — §2 SAVE 단건 payload (PROC_M COL_NM 13키 — sesUserId BE주입)', () => {
-  it("신규 'C' → activeFlag 'I' + 서버 채번 계약 (dpjtKey/dpjtCode ''·dpjtSeq '1' — §2 I)", () => {
+  it('신규 \'C\' → activeFlag \'I\' + 서버 채번 계약 (dpjtKey/dpjtCode \'\'·dpjtSeq \'1\' — §2 I)', () => {
     const p = toSavePayload(
       row({ DPJT_KEY: 'STALE', DPJT_CODE: 'STALE', DPJT_SEQ: '9', SOP_DATE: '' })
     );
@@ -178,7 +178,7 @@ describe('toSavePayload — §2 SAVE 단건 payload (PROC_M COL_NM 13키 — ses
     });
   });
 
-  it("M/D = 커서 수신 DPJT_KEY·DPJT_CODE·DPJT_SEQ 실값 그대로 (빈 값 = 서버 가드 EVENT=0 — 2026-08-13 실측)", () => {
+  it('M/D = 커서 수신 DPJT_KEY·DPJT_CODE·DPJT_SEQ 실값 그대로 (빈 값 = 서버 가드 EVENT=0 — 2026-08-13 실측)', () => {
     const m = toSavePayload(
       row({
         CRUD_TYPE: 'M',
@@ -196,7 +196,7 @@ describe('toSavePayload — §2 SAVE 단건 payload (PROC_M COL_NM 13키 — ses
     expect(d.dpjtSeq).toBe('1');
   });
 
-  it("sopDate = 'YYYY-MM-DD 00:00:00' 변환 (§2 TO_DATE 마스크) — 에디터 표시 포맷·ISO·YYYYMMDD 전부", () => {
+  it('sopDate = \'YYYY-MM-DD 00:00:00\' 변환 (§2 TO_DATE 마스크) — 에디터 표시 포맷·ISO·YYYYMMDD 전부', () => {
     expect(toSavePayload(row({ SOP_DATE: '8/31/2026' })).sopDate).toBe('2026-08-31 00:00:00');
     expect(toSavePayload(row({ SOP_DATE: '2026-08-31T00:00:00' })).sopDate).toBe(
       '2026-08-31 00:00:00'
@@ -214,7 +214,7 @@ describe('toSopDateParam / toDisplayDate — 날짜 경계 순수함수', () => 
     expect(toSopDateParam('not-a-date')).toBe('');
   });
 
-  it("toDisplayDate — DATE 원형(ISO)·YYYYMMDD → 'YYYY.MM.DD' (계약 결정 8)", () => {
+  it('toDisplayDate — DATE 원형(ISO)·YYYYMMDD → \'YYYY.MM.DD\' (계약 결정 8)', () => {
     expect(toDisplayDate('2026-07-01T00:00:00')).toBe('2026.07.01');
     expect(toDisplayDate('20260701')).toBe('2026.07.01');
     expect(toDisplayDate(new Date(2026, 6, 1))).toBe('2026.07.01');

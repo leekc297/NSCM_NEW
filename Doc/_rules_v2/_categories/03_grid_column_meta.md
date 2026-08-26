@@ -19,6 +19,7 @@
 ## B. 컬럼 메타 (SHEET_COLUMNS·표시·개인화)
 | # | Hook | 강도 | 계율 1줄 |
 |---:|---|:--:|---|
+| 142 | [ui-meta-dictionary-mandatory](../hooks/ui-meta-dictionary-mandatory.md) | ⭐⭐⭐ | 컬럼 메타 작성 전 지식사전 대조 — 표시≠편집 표준·모달키 필수·콤보등록 확인 / POST-WRITE `06_verify.py --program` ERROR 0 |
 | 19 | [grid-column-meta](../hooks/grid-column-meta.md) | ⭐ | Grid/Column 메타 14 ctrl + 5 edit type |
 | 7 | [column-lookup-meta-standard](../hooks/column-lookup-meta-standard.md) | ⭐⭐ | dropdown=`CELL_COMBO_DATA_TYPE` 위치 / `INPUT_TP_CD` 5종(`MI` 금지) |
 | 54 | [sheet-columns-binding-match](../hooks/sheet-columns-binding-match.md) | ⭐ | SHEET_COLUMNS ↔ SP alias 일치 — 하드코딩 staticColumns 금지 |

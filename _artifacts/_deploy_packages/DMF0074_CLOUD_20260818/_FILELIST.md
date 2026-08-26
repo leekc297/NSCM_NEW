@@ -1,39 +1,36 @@
-# DMF0074_CLOUD_20260818 — 파일 목록 (실측)
+﻿# DMF0074_CLOUD_20260818 — 파일 목록 (실측)
 
-총 **26 파일 / 651,578 bytes**. 해시는 sha256 앞 12자.
+총 **30 파일 / 723,717 bytes**. 해시는 sha256 앞 12자. (rev.5 = 2026-08-18 저녁 — 년월 기간·Version 리셋·공용 PeriodField·locales 최신화)
 
 | # | 경로 | bytes | lines | sha256 |
 |---:|---|---:|---:|---|
-| 1 | `_README.md` | 12,047 | 164 | `b90fdba49924` |
+| 1 | `_README.md` | 15,802 | 158 | `5ac206628705` |
 | 2 | `_survey/axis_sweep_result.json` | 6,952 | 344 | `777f77a73659` |
 | 3 | `_survey/collect_report.json` | 1,756 | 49 | `819baeb78abb` |
-| 4 | `A_DB/00_GTT_DDL.sql` | 24,741 | 613 | `3e2ab2a5e752` |
-| 5 | `A_DB/01_PKG_DMF0074_SPEC.sql` | 2,562 | 54 | `ce1c668ec9d0` |
-| 6 | `A_DB/02_PKG_DMF0074_BODY.sql` | 241,905 | 3979 | `49c4949cec43` |
-| 7 | `A_DB/05_FIX_HISTORY_SEQ_RESEED.sql` | 1,983 | 30 | `740cf7c36595` |
-| 8 | `A_DB/10_META_DMF0074_ALL_AXES.sql` | 120,176 | 310 | `4874b0a50fdb` |
-| 9 | `A_DB/90_VERIFY.sql` | 4,165 | 55 | `c8baffaf1d35` |
-| 10 | `B_FE/locales/CN.json` | 30,919 | 809 | `622856585fb4` |
-| 11 | `B_FE/locales/EN.json` | 31,567 | 815 | `879fe788b4d8` |
-| 12 | `B_FE/locales/KO.json` | 35,717 | 871 | `7e6f34e511f2` |
-| 13 | `B_FE/metal-link-price/__asis-mapping__.md` | 48,253 | 317 | `8865a8c81595` |
-| 14 | `B_FE/metal-link-price/components/MetalLinkPriceForm.module.scss` | 2,594 | 100 | `f4a58ab53d4e` |
-| 15 | `B_FE/metal-link-price/components/MetalLinkPriceForm.tsx` | 10,917 | 265 | `9f63719f03ec` |
-| 16 | `B_FE/metal-link-price/components/MetalLinkPriceGrid.tsx` | 11,155 | 291 | `37e47ffacb84` |
-| 17 | `B_FE/metal-link-price/components/modals/MetalLinkTemplateModal.module.scss` | 617 | 28 | `b98ea31c45cf` |
-| 18 | `B_FE/metal-link-price/components/modals/MetalLinkTemplateModal.tsx` | 8,790 | 222 | `b7ff32ad4752` |
-| 19 | `B_FE/metal-link-price/components/modals/MetalLinkVersionModal.module.scss` | 715 | 34 | `2223795a6a7d` |
-| 20 | `B_FE/metal-link-price/components/modals/MetalLinkVersionModal.tsx` | 10,168 | 265 | `b8e97c2a930e` |
-| 21 | `B_FE/metal-link-price/index.ts` | 34 | 1 | `f27f61ff393f` |
-| 22 | `B_FE/metal-link-price/metal-link-price.constants.ts` | 11,372 | 313 | `326293f80e2a` |
-| 23 | `B_FE/metal-link-price/metal-link-price.types.ts` | 1,743 | 41 | `fd7e1389a3cf` |
-| 24 | `B_FE/metal-link-price/MetalLinkPrice.tsx` | 14,912 | 324 | `529c3b65fd72` |
-| 25 | `B_FE/metal-link-price/useMetalLinkPriceStore.ts` | 6,343 | 151 | `70bea5478862` |
-| 26 | `D_SAMPLE/DMF0074_ExcelUpload_Sample_div40_3rows.xlsx` | 9,475 | - | `f90aa86fa173` |
-
-## 구성 요약
-
-- `A_DB` : 6 파일 (GTT DDL · PKG SPEC/BODY · 메타 8축 · 검증)
-- `B_FE` : 16 파일 (화면 폴더 전체 + locales 3본)
-- `C_BE` : 0 파일 (BE 이관분 없음 — grep 실측 0건)
-- `_survey` : 2 파일 (축 스윕·취합 근거 JSON)
+| 4 | `A_DB/00_GTT_DDL.sql` | 24,741 | 596 | `3e2ab2a5e752` |
+| 5 | `A_DB/01_PKG_DMF0074_SPEC.sql` | 2,562 | 50 | `ce1c668ec9d0` |
+| 6 | `A_DB/02_PKG_DMF0074_BODY.sql` | 238,349 | 3854 | `afed4f59769c` |
+| 7 | `A_DB/05_FIX_HISTORY_SEQ_RESEED.sql` | 1,983 | 27 | `740cf7c36595` |
+| 8 | `A_DB/10_META_DMF0074_ALL_AXES.sql` | 120,176 | 301 | `4874b0a50fdb` |
+| 9 | `A_DB/11_MSG_LBL_DMF0074.sql` | 28,864 | 360 | `2b8a79ee0153` |
+| 10 | `A_DB/90_VERIFY.sql` | 5,665 | 66 | `0b963f82db96` |
+| 11 | `A_DB/91_DIAG_TEMPLATE_EMPTY.sql` | 5,432 | 81 | `8e2ae0af734b` |
+| 12 | `B_FE/locales/CN.json` | 30,997 | 810 | `735f9997f83f` |
+| 13 | `B_FE/locales/EN.json` | 31,645 | 816 | `68c1ddb14a6e` |
+| 14 | `B_FE/locales/KO.json` | 35,802 | 872 | `032dd788df3b` |
+| 15 | `B_FE/metal-link-price/__asis-mapping__.md` | 48,253 | 275 | `8865a8c81595` |
+| 16 | `B_FE/metal-link-price/components/MetalLinkPriceForm.module.scss` | 2,594 | 91 | `f4a58ab53d4e` |
+| 17 | `B_FE/metal-link-price/components/MetalLinkPriceForm.tsx` | 11,169 | 259 | `3bbc4cae1bff` |
+| 18 | `B_FE/metal-link-price/components/MetalLinkPriceGrid.tsx` | 11,155 | 270 | `37e47ffacb84` |
+| 19 | `B_FE/metal-link-price/components/modals/MetalLinkTemplateModal.module.scss` | 617 | 26 | `b98ea31c45cf` |
+| 20 | `B_FE/metal-link-price/components/modals/MetalLinkTemplateModal.tsx` | 8,790 | 206 | `b7ff32ad4752` |
+| 21 | `B_FE/metal-link-price/components/modals/MetalLinkVersionModal.module.scss` | 715 | 31 | `2223795a6a7d` |
+| 22 | `B_FE/metal-link-price/components/modals/MetalLinkVersionModal.tsx` | 10,168 | 247 | `b8e97c2a930e` |
+| 23 | `B_FE/metal-link-price/index.ts` | 34 | 1 | `f27f61ff393f` |
+| 24 | `B_FE/metal-link-price/metal-link-price.constants.ts` | 11,372 | 298 | `326293f80e2a` |
+| 25 | `B_FE/metal-link-price/MetalLinkPrice.tsx` | 15,640 | 312 | `3fb2191314bb` |
+| 26 | `B_FE/metal-link-price/metal-link-price.types.ts` | 1,743 | 39 | `fd7e1389a3cf` |
+| 27 | `B_FE/metal-link-price/useMetalLinkPriceStore.ts` | 6,800 | 148 | `566e42440e15` |
+| 28 | `B_FE/shared/searchFields/SearchFields.module.scss` | 2,169 | 56 | `29d730037b09` |
+| 29 | `B_FE/shared/searchFields/SearchFields.tsx` | 32,297 | 872 | `581cf3198970` |
+| 30 | `D_SAMPLE/DMF0074_ExcelUpload_Sample_div40_3rows.xlsx` | 9,475 | 76 | `f90aa86fa173` |

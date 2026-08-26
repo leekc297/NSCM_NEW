@@ -1,0 +1,169 @@
+=== [진단표] PKG_DMF0035 GET 경로 전 문장 — LIVE 커서 소요 순 ===
+       BODY라인 KIND   EXEC   s/exec     EL_s      BUFGETS      DISK      ROWS   ①상관   ①함수  대상 / ②비SARG
+L 1610-1723   INSERT   12    6.140    73.68      9822872   2635076    139431    10     0  GT_DM35_RAW_DATA  ②컬럼에 함수x1
+L 2108-2119   INSERT   23    0.821    18.89       160578     68479   2914080     0     0  GT_DM35_ITEM_SINGLE_B
+L  648-712    INSERT   11    1.112    12.23       937723    861597     30756     0     0  GT_DM35_T_LAST_SETUP  ②컬럼에 함수x3
+L 2072-2098   INSERT   23    0.462    10.63       439317         0   3404614     0     0  GT_DM35_ITEM_SINGLE_A
+L 2041-2062   INSERT   23    0.438    10.07      1294558    683871   5455108     0     0  GT_DM35_ITEM_SINGLE_ORI
+L 1526-1600   INSERT    8    1.024     8.19      1941450     64599     23744     0     0  GT_DM35_T_LAST_SETUP_C  ②컬럼에 함수x3  [STALE:cbxpxq839ydqs]
+L 2827-2850   INSERT   23    0.263     6.05       496618      9634   2721406     0     0  GT_DM35_TEMP_SCM_SITE
+L 3092-3172   INSERT   19    0.080     1.52       294516      1762    264807     0     0  GT_DM35_SCP_ITEM_INFO  ②컬럼에 함수x6
+L  844-933    INSERT    1    1.269     1.27       352488         0      6771    10     0  GT_DM35_RAW_DATA  ②컬럼에 함수x1
+L 1229-1332   INSERT   11    0.085     0.94       241561       922      3168    10     0  GT_DM35_RAW_DATA  ②컬럼에 함수x1
+L 1739-1842   INSERT   12    0.057     0.69       149826        71      3999    10     0  GT_DM35_RAW_DATA  ②컬럼에 함수x1
+L  797-826    INSERT   11    0.050     0.56        88396      7300     74481     0     0  GT_DM35_DM_PLN_MKT
+L 1048-1135   INSERT   11    0.033     0.36         9873      1656         0     1     0  GT_DM35_RAW_DATA
+L  947-1031   INSERT   11    0.028     0.30        81125         0         0     0     0  GT_DM35_RAW_DATA  ②컬럼에 함수x3
+L 2135-2150   INSERT    1    0.152     0.15        11081         0     85973     0     0  GT_DM35_ITEM_SINGLE_V  ②컬럼에 함수x1
+L  489-522    INSERT   23    0.006     0.15         5442       485        46     0     0  GT_DM35_SEL_MEASURE
+L 3419-3428   INSERT   23    0.006     0.14         9248      1095      4991     0     0  GT_DM35_CALENDAR
+L  274-293    INSERT   12    0.008     0.09         5613        74        15     0     1  GT_DM35_VERSION
+L 1145-1217   INSERT   11    0.006     0.07        10434         0         0     1     0  GT_DM35_RAW_DATA
+L  761-779    INSERT   11    0.005     0.05          979         4      5852     0     0  GT_DM35_RPA_END_CUST  ②컬럼에 함수x2
+L  725-743    INSERT   11    0.005     0.05         1049         0      5863     0     0  GT_DM35_EDI_END_CUST  ②컬럼에 함수x2
+L  379-428    INSERT   23    0.002     0.05         1001        13        69     0     0  GT_DM35_SEL_MEASURE
+L 2180-2222   INSERT    1    0.050     0.05         6541         0       273     2     3  GT_DM35_SITE_ITEM
+L  626-633    INSERT   23    0.002     0.04         1703         6      5267     0     0  GT_DM35_EDI_SENDER
+L 2973-2973   INSERT   23    0.001     0.03           48         0        23     0     0  GT_DM35_T_COLUMN_SETUP
+L 3019-3019   INSERT   23    0.001     0.03           46         0        23     0     0  GT_DM35_T_COLUMN_SETUP
+L 1441-1504   INSERT   11    0.002     0.02          599       108         0     1     0  GT_DM35_RAW_DATA
+L 3955-4111   OPEN      4    0.005     0.02          268         7       212     0     0  OPEN
+L 3041-3043   INSERT   23    0.000     0.00           46         0        23     0     0  GT_DM35_T_COLUMN_SETUP  [STALE:at1hmaazhy7up]
+L 3045-3047   INSERT   23    0.000     0.00           48         0        23     0     0  GT_DM35_T_COLUMN_SETUP  [STALE:8f3g0hz6wj9qq]
+L  169-195    SELECT    0    0.000     0.00            0         0         0     0     0  SELECT  [STALE:dmqu3kvvxpxya]
+L  253-256    SELECT    0    0.000     0.00            0         0         0     0     0  SELECT  [STALE:35zgrpqyxuu19]
+L  313-319    SELECT    0    0.000     0.00            0         0         0     0     0  SELECT  [STALE:1hjmpgghtc6k5]
+L  565-565    SELECT    0    0.000     0.00            0         0         0     0     0  SELECT  [STALE:76820kd2gr6xt,b4hfrt3caxjdb]
+L  579-579    SELECT    0    0.000     0.00            0         0         0     0     0  SELECT  [STALE:0anw036xfthm9]
+L  592-600    INSERT    0    0.000     0.00            0         0         0     0     0  GT_DM35_SEL_MEASURE  [STALE:0g9cg72xa50nb]
+L 2257-2265   DELETE    0    0.000     0.00            0         0         0     0     0  GT_DM35_RAW_DATA  [STALE:fyk3mncyatg7b]
+L 2306-2319   INSERT    0    0.000     0.00            0         0         0     0     0  GT_DM35_RAW_DATA  [STALE:1t1jggzsh2j8r]
+L 2368-2370   SELECT    0    0.000     0.00            0         0         0     0     0  SELECT  [STALE:9tdrp8ktjdk29]
+L 2666-2668   SELECT    0    0.000     0.00            0         0         0     0     0  SELECT  [STALE:37cnrqrb7gcta]
+L 2739-2741   SELECT    0    0.000     0.00            0         0         0     0     0  SELECT  [STALE:fgmubv685pzhw]
+L 2862-2865   SELECT    0    0.000     0.00            0         0         0     0     0  SELECT  [STALE:0uh28hs4a4uk8,6s03vb8akqauv,f3tmbz90t3nk2]
+L 3069-3069   SELECT    0    0.000     0.00            0         0         0     0     0  SELECT  [STALE:amzyz3wfg59jk]
+L 3597-3597   OPEN      0    0.000     0.00            0         0         0     0     0  OPEN  [STALE:b39hx68b53m7d,czyhugbtb8sd5]
+L 3771-3782   SELECT    0    0.000     0.00            0         0         0     0     0  SELECT  [STALE:497y8rsavzm92]
+
+=== ① 상관 스칼라 서브쿼리 보유 문장 전수 (소요 무관) ===
+  L  844-933    상관 10개 / 비상관  0개 / 함수 0  LIVE 1.27s  표=GT_DM35_DM_PLN_MKT,GT_DM35_EDI_SENDER,GT_DM35_T_LAST_SETUP
+  L 1229-1332   상관 10개 / 비상관  0개 / 함수 0  LIVE 0.94s  표=DM_PLN_MKT_FCST_RESULT,GT_DM35_EDI_SENDER,GT_DM35_SEL_MEASURE,GT_DM35_T_LAST_SET
+  L 1610-1723   상관 10개 / 비상관  0개 / 함수 0  LIVE 73.68s  표=DM_PLN_CFM_MKT_DEMAND_PLAN_C,DM_PLN_MKT_FCST_C,GT_DM35_EDI_SENDER,GT_DM35_SEL_ME
+  L 1739-1842   상관 10개 / 비상관  0개 / 함수 0  LIVE 0.69s  표=DM_PLN_MKT_FCST_RESULT_C,GT_DM35_EDI_SENDER,GT_DM35_SEL_MEASURE,GT_DM35_T_LAST_S
+  L 1950-2014   상관  4개 / 비상관  0개 / 함수 0  LIVE 0.00s  표=DM_PLN_CFM_MKT_DEMAND_PLAN_C,DM_PLN_MKT_FCST_C,GT_DM35_EDI_SENDER,GT_DM35_SEL_ME
+  L 2180-2222   상관  2개 / 비상관  0개 / 함수 3  LIVE 0.05s  표=GT_DM35_RAW_DATA,SCM_MST_SITE_ITEM
+  L 1048-1135   상관  1개 / 비상관  0개 / 함수 0  LIVE 0.36s  표=DM_PLN_CFM_MKT_DEMAND_PLAN,DM_PLN_MKT_FCST,GT_DM35_EDI_END_CUST,GT_DM35_RPA_END_
+  L 1145-1217   상관  1개 / 비상관  0개 / 함수 0  LIVE 0.07s  표=DM_PLN_CFM_MKT_DEMAND_PLAN,DM_PLN_MKT_FCST,GT_DM35_EDI_END_CUST,GT_DM35_RPA_END_
+  L 1353-1431   상관  1개 / 비상관  0개 / 함수 0  LIVE 0.02s  표=DM_PLN_MKT_FCST_RESULT,GT_DM35_EDI_END_CUST,GT_DM35_RPA_END_CUST,GT_DM35_SEL_MEA
+  L 1441-1504   상관  1개 / 비상관  0개 / 함수 0  LIVE 0.02s  표=DM_PLN_MKT_FCST_RESULT,GT_DM35_EDI_END_CUST,GT_DM35_RPA_END_CUST,GT_DM35_SEL_MEA
+
+=== 참조표 인벤토리 (GTT/상용 구분 + 인덱스) ===
+  [상용] DM_PLN_MKT_FCST_C                rows=13322066 blocks=289342 idx=6
+        IDX_DM_PLN_MKT_FCST_C_N1           DIVISION_ID,MEASURE,YYYYMMDD,QTY,CUTOFF_YYYYMMDD
+        IDX_DM_PLN_MKT_FCST_C_N3           DIVISION_ID,VERSION_NO,MEASURE,PROJECT_CODE,SCM_SITE_ID,ITEM_ID,QTY,CUTOFF_YYYYMMDD
+        IDX_DM_PLN_MKT_FCST_C_SUPPLY       DIVISION_ID,MEASURE,PROJECT_CODE,ITEM_ID,FCST_TYPE,YYYYMMDD
+        IDX_DM_PLN_MKT_FCST_C_SUPPLY_VERSION VERSION_NO
+        IX03_DM_PLN_MKT_FCST_C             CUTOFF_YYYYMMDD,CUTOFF_TYPE
+        PK_DM_PLN_MKT_FCST_C_PART          DIVISION_ID,VERSION_NO,CUTOFF_TYPE,CUTOFF_YYYYMMDD,PROJECT_CODE,SCM_SITE_ID,ITEM_ID,DOM_EXP,FCST_TYPE,INCOTERMS,MEASURE,PLANT_SITE_ID,YYYYMMDD,CUTOFF_YYYYMMDD_DATE
+  [상용] DM_PLN_CFM_MKT_DEMAND_PLAN_C     rows=6816647 blocks=164667 idx=1
+        PK_DM_PLN_CFM_MKT_DEMAND_PLAN_C_PART DIVISION_ID,VERSION_NO,CUTOFF_TYPE,CUTOFF_YYYYMMDD,PROJECT_CODE,END_CUSTOMER,SCM_SITE_ID,ITEM_ID,DOM_EXP,FCST_TYPE,INCOTERMS,MEASURE,PLANT_SITE_ID,YYYYMMDD,CELL_PROD_SITE_ID,CUTOFF_YYYYMMDD_DATE
+  [상용] DM_PLN_MKT_FCST_RESULT           rows=4254455 blocks=78076 idx=2
+        IDX_DM_PLN_MKT_FCST_RESULT_N1      MEASURE,YYYYMMDD
+        PK_DM_PLN_MKT_FCST_RESULT          DIVISION_ID,PROJECT_CODE,SCM_SITE_ID,ITEM_ID,DOM_EXP,FCST_TYPE,INCOTERMS,MEASURE,PLANT_SITE_ID,YYYYMMDD,CELL_PROD_SITE_ID
+  [상용] DM_PLN_MKT_FCST                  rows=2623844 blocks=43757 idx=4
+        IDX_DM_PLN_MKT_FCST_N1             DIVISION_ID,MEASURE,YYYYMMDD
+        IDX_DM_PLN_MKT_FCST_N2             DIVISION_ID,SCM_SITE_ID,MEASURE
+        IDX_DM_PLN_MKT_FCST_N3             DIVISION_ID,ITEM_ID,SCM_SITE_ID,INCOTERMS,YYYYMMDD,MEASURE
+        PK_DM_PLN_MKT_FCST                 DIVISION_ID,PROJECT_CODE,SCM_SITE_ID,ITEM_ID,DOM_EXP,FCST_TYPE,INCOTERMS,MEASURE,YYYYMMDD,PLANT_SITE_ID
+  [상용] DM_PLN_MKT_FCST_RESULT_C         rows=1897530 blocks=47040 idx=5
+        IDX_DM_PLN_MKT_FCST_RESULT_C_N1    MEASURE,YYYYMMDD,CUTOFF_YYYYMMDD
+        IDX_DM_PLN_MKT_FCST_RESULT_C_SUPPLY DIVISION_ID,MEASURE,PROJECT_CODE,ITEM_ID,FCST_TYPE,YYYYMMDD
+        IDX_DM_PLN_MKT_FCST_RESULT_C_SUPPLY_VERSION VERSION_NO
+        IX03_DM_PLN_MKT_FCST_RESULT_C      CUTOFF_YYYYMMDD,CUTOFF_TYPE
+        PK_DM_PLN_MKT_FCST_RESULT_C_PART   DIVISION_ID,VERSION_NO,CUTOFF_TYPE,CUTOFF_YYYYMMDD,PROJECT_CODE,SCM_SITE_ID,ITEM_ID,DOM_EXP,FCST_TYPE,INCOTERMS,MEASURE,PLANT_SITE_ID,YYYYMMDD,CELL_PROD_SITE_ID,CUTOFF_YYYYMMDD_DATE
+  [상용] SCM_MST_FUTURE_PRICE             rows=1380745 blocks=30720 idx=2
+        IX_YYYYMMDD_SCM_MST_FUTURE_PRICE   YYYYMMDD,DIVISION_ID
+        PK_SCM_MST_FUTURE_PRICE            DIVISION_ID,PROJECT_CODE,SCM_SITE_ID,PLANT_SITE_ID,ITEM_ID,YYYYMMDD,CURRENCY,MEASURE,DOM_EXP,FCST_TYPE,INCOTERMS
+  [상용] DM_PLN_CFM_MKT_DEMAND_PLAN       rows=313283 blocks=7420 idx=1
+        PK_DM_PLN_CFM_MKT_DEMAND_PLAN      DIVISION_ID,PROJECT_CODE,END_CUSTOMER,SCM_SITE_ID,ITEM_ID,DOM_EXP,FCST_TYPE,INCOTERMS,MEASURE,YYYYMMDD,PLANT_SITE_ID,CELL_PROD_SITE_ID
+  [상용] SCM_MST_SITE_ITEM                rows=118018 blocks=3520 idx=8
+        FBI_SCM_MST_SITE_ITEM_OWNER_TOKEN1 SYS_NC00059$
+        IDX01_SCM_MST_SITE_ITEM            DIVISION_ID,OWNER
+        IDX02_SCM_MST_SITE_ITEM            ITEM_ID,DIVISION_ID
+        IDX03_SCM_MST_SITE_ITEM            DIVISION_ID,VALID_YN,OWNER,PROJECT_CODE,ITEM_ID
+        IDX04_SCM_MST_SITE_ITEM            DIVISION_ID,SCM_SITE_ID,ITEM_ID
+        IDX05_SCM_MST_SITE_ITEM            DIVISION_ID,PROJECT_CODE
+        IDX06_SCM_MST_SITE_ITEM            DIVISION_ID,ITEM_ID
+        PK_SCM_MST_SITE_ITEM               DIVISION_ID,PROJECT_CODE,SCM_SITE_ID,ITEM_ID
+  [상용] SCM_MST_CITY                     rows=89426 blocks=1252 idx=2
+        IX01_SCM_MST_CITY                  CITY,COUNTRY
+        PK_SCM_MST_CITY                    COUNTRY,CITY
+  [상용] SCM_ADM_LOOKUP_MASTER_DETAIL     rows=78234 blocks=1756 idx=2
+        IDX01_SCM_ADM_LOOKUP_MASTER_DETAIL SEGMENT1,LOOKUP_TYPE,VALID_YN
+        PK_SCM_ADM_LOOKUP_MASTER_DETAIL    LOOKUP_TYPE,SEGMENT1,SEGMENT2,SEGMENT3,SEGMENT4,SEGMENT5
+  [상용] SCP_MST_FINAL_ITEM               rows=34605 blocks=874 idx=4
+        IDX01_SCP_MST_FINAL_ITEM           GROUP_CODE1
+        IX01_SCP_MST_FINAL_ITEM            ITEM_ID
+        IX02_SCP_MST_FINAL_ITEM            OPERATION_GROUP,ITEM_ID,NICK_NAME
+        PK_SCP_MST_FINAL_ITEM              DIVISION_ID,ITEM_ID
+  [상용] SCM_MST_CUSTOMER                 rows=24472 blocks=874 idx=1
+        PK_SCM_MST_CUSTOMER_1              DIVISION_ID,SOLDTO_CODE,SHIPTO_CODE
+  [상용] SCP_PLN_INTERFACE_YN             rows=20174 blocks=73 idx=1
+        PK_SCP_PLN_INTERFACE_YN            DIVISION_ID,PLAN_START_YYYYMMDD
+  [상용] SCM_MST_SHEET_COLUMNS            rows=15620 blocks=370 idx=2
+        IDX_SCM_MST_SHEET_COLUMNS_N1       VISIBLE_FLAG,DEFAULT_FLAG,VALID_YN
+        PK_SCM_MST_SHEET_COLUMNS           PROGRAM_ID,SHEET_NAME,COLUMN_NAME
+  [상용] SCM_SYS_CALENDAR_M               rows=15340 blocks=370 idx=6
+        IDX_SCM_SYS_CALENDAR_N1            BASIS_YYYYMM,WEEK_NO,ISO_YYYYWW
+        IDX_SCM_SYS_CALENDAR_N2            ISO_YYYYWW
+        IDX_SCM_SYS_CALENDAR_N3            BASIS_YYYYMMDD
+        IDX_SCM_SYS_CALENDAR_N4            BASIS_YYYYMM,CALENDAR_DAY
+        IDX_SCM_SYS_CALENDAR_N5            CALENDAR_YYYY
+        PK_SCM_SYS_CALENDAR_U1             BASIS_DATE
+  [상용] SCM_MST_TITLESET_USER            rows=10274 blocks=244 idx=2
+        IDX01_SCM_MST_TITLESET_USER        USER_ID,PROGRAM_ID,SHEET_NAME
+        PK_SCM_MST_TITLESET_USER           USER_ID,PROGRAM_ID,SHEET_NAME,USER_INQUIRY_COLUMN_TYPE_CODE,COLUMN_NAME
+  [상용] SCM_MST_PROJECT                  rows=8468 blocks=244 idx=2
+        IX01_SCM_MST_PROJECT               DIVISION_ID,PROJECT_CODE
+        PK_SCM_MST_PROJECT                 PROJECT_CODE,PROJECT_VER_SEQ,DIVISION_ID
+  [상용] SCM_MST_SITE_CUSTOMER            rows=6580 blocks=110 idx=1
+        PK_SCM_MST_SITE_CUSTOMER           DIVISION_ID,SCM_SITE_ID,SOLDTO_CODE,SHIPTO_CODE
+  [상용] DM_MST_CUSTOMER_FCST             rows=3171 blocks=251 idx=2
+        IDX_DM_MST_CUSTOMER_FCST_N1        MEASURE,MEASURE_GROUP
+        PK_DM_MST_CUSTOMER_FCST            DIVISION_ID,PLAN_WEEK,CUSTOMER_CODE,SCM_SITE_ID,SUMMARY_BUCKET_VALUE,MEASURE_GROUP,CUSTOMER_PSI,MEASURE
+  [상용] SCM_MST_SITE                     rows=3029 blocks=73 idx=6
+        IDX01_SCM_MST_SITE                 COMPANY_ID,DIVISION_ID,SITE_ID,PLANT_ID,OPERATION_GROUP
+        IDX02_SCM_MST_SITE                 SITE_TYPE,VALID_YN
+        IDX03_SCM_MST_SITE                 PLANT_ID,OPERATION_GROUP
+        IDX04_SCM_MST_SITE                 DIVISION_ID,SITE_TYPE,VALID_YN,SCM_SITE_ID,CITY,COUNTRY,END_CUSTOMER,SOLDTO_CUSTOMER
+        IDX_SCM_MST_SITE_N1                DIVISION_ID,SCM_SITE_ID,CITY,COUNTRY
+        PK_SCM_MST_SITE                    DIVISION_ID,SCM_SITE_ID
+  [상용] DM_MST_VERSION                   rows=2670 blocks=43 idx=1
+        PK_DM_MST_VERSION                  DIVISION_ID,VERSION_NO
+  [상용] SCM_MST_SHEET_MEASURE            rows=1711 blocks=35 idx=1
+        PK_SCM_MST_SHEET_MEASURE           PROGRAM_ID,SHEET_NAME,COLUMN_NAME
+  [상용] SCM_ADM_LOOKUP_MASTER            rows=604 blocks=13 idx=1
+        PK_SCM_ADM_LOOKUP_MASTER           LOOKUP_TYPE
+  [상용] SCM_MST_COUNTRY                  rows=249 blocks=5 idx=1
+        PK_SCM_MST_COUNTRY                 COUNTRY
+  [GTT] GT_DM35_DM_PLN_MKT               rows=None blocks=None idx=0
+  [GTT] GT_DM35_EDI_END_CUST             rows=None blocks=None idx=0
+  [GTT] GT_DM35_EDI_SENDER               rows=None blocks=None idx=0
+  [GTT] GT_DM35_ITEM_SINGLE_A            rows=None blocks=None idx=0
+  [GTT] GT_DM35_ITEM_SINGLE_B            rows=None blocks=None idx=0
+  [GTT] GT_DM35_ITEM_SINGLE_ORI          rows=None blocks=None idx=0
+  [GTT] GT_DM35_ITEM_SINGLE_V            rows=None blocks=None idx=0
+  [GTT] GT_DM35_RAW_DATA                 rows=None blocks=None idx=0
+  [GTT] GT_DM35_RAW_DATA_FINAL           rows=None blocks=None idx=0
+  [GTT] GT_DM35_RPA_END_CUST             rows=None blocks=None idx=0
+  [GTT] GT_DM35_SCP_ITEM_INFO            rows=None blocks=None idx=0
+  [GTT] GT_DM35_SEL_MEASURE              rows=None blocks=None idx=0
+  [GTT] GT_DM35_SITE_ITEM                rows=None blocks=None idx=0
+  [GTT] GT_DM35_T                        rows=None blocks=None idx=0
+  [GTT] GT_DM35_TEMP_VMI_INV             rows=None blocks=None idx=0
+  [GTT] GT_DM35_T_COLUMN_SETUP           rows=None blocks=None idx=0
+  [GTT] GT_DM35_T_LAST_SETUP             rows=None blocks=None idx=0
+  [GTT] GT_DM35_T_LAST_SETUP_C           rows=None blocks=None idx=0
+  [GTT] GT_DM35_VERSION                  rows=None blocks=None idx=0
+  [GTT] GT_DM35_VMI_INV_RESULT           rows=None blocks=None idx=0

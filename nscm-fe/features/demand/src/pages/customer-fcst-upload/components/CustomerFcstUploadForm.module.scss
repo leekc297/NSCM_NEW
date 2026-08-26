@@ -57,24 +57,12 @@
 }
 
 @include respond-to('FHD') {
-  body .formItem {
-    grid-template-columns: 100px auto;
-    & > div:first-child {
-      width: 100px;
-    }
-  }
   body .input {
     width: 85%;
   }
 }
 
 @include respond-to('HD') {
-  body .formItem {
-    grid-template-columns: 100px auto;
-    & > div:first-child {
-      width: 100px;
-    }
-  }
   body .input {
     width: 100%;
   }

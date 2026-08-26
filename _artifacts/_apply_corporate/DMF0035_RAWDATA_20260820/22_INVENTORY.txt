@@ -1,0 +1,41 @@
+[BODY] 4166 lines
+[PROGRAM_ID] 89244
+  PROC L   15-3701  P_DMF0035_GET_MKT_FCST_WATERFALL
+  PROC L 3702-4166  P_DMF0035_GET_SPREAD_TITLE
+
+[문장] 170건 추출
+[V$SQL] PROGRAM_ID=89244 귀속 커서 150건
+
+=== 소요 상위 (V$SQL 귀속, 사내 누적) ===
+        LINE KIND     EXEC      EL_s  s/exec      BUFGETS       DISK      ROWS  TARGET
+L 3072-3080  SELECT     23    518.93   22.56    224869669       2699    332595  V_COLUMN_TEXT
+L 1610-1723  INSERT     12     73.68    6.14      9822872    2635076    139431  SCM_MGR.GT_DM35_RAW_DATA
+L 1526-1600  INSERT     12     21.84    1.82      2887845     953270     35616  SCM_MGR.GT_DM35_T_LAST_SETUP_C
+L 2072-2098  INSERT     23     18.89    0.82       160578      68479   2914080  SCM_MGR.GT_DM35_ITEM_SINGLE_A
+L  648-712   INSERT     11     12.23    1.11       937723     861597     30756  SCM_MGR.GT_DM35_T_LAST_SETUP
+L 2041-2062  INSERT     23     10.07    0.44      1294558     683871   5455108  SCM_MGR.GT_DM35_ITEM_SINGLE_ORI
+L  844-933   INSERT      1      1.27    1.27       352488          0      6771  SCM_MGR.GT_DM35_RAW_DATA
+L 1229-1332  INSERT     11      0.94    0.09       241561        922      3168  SCM_MGR.GT_DM35_RAW_DATA
+L 1739-1842  INSERT     12      0.70    0.06       149826         71      3999  SCM_MGR.GT_DM35_RAW_DATA
+L  797-826   INSERT     11      0.56    0.05        88396       7300     74481  SCM_MGR.GT_DM35_DM_PLN_MKT
+L 1048-1135  INSERT     11      0.36    0.03         9873       1656         0  SCM_MGR.GT_DM35_RAW_DATA
+L  947-1031  INSERT     11      0.30    0.03        81125          0         0  SCM_MGR.GT_DM35_RAW_DATA
+L 2108-2119  INSERT      1      0.15    0.15        11081          0     85973  SCM_MGR.GT_DM35_ITEM_SINGLE_B
+L  274-293   INSERT     12      0.09    0.01         5613         74        15  SCM_MGR.GT_DM35_VERSION
+L 1145-1217  INSERT     11      0.07    0.01        10434          0         0  SCM_MGR.GT_DM35_RAW_DATA
+L  379-428   INSERT     23      0.05    0.00         1001         13        69  SCM_MGR.GT_DM35_SEL_MEASURE
+L  725-743   INSERT     11      0.05    0.00         1049          0      5863  SCM_MGR.GT_DM35_EDI_END_CUST
+L  761-779   INSERT     11      0.05    0.00          979          4      5852  SCM_MGR.GT_DM35_RPA_END_CUST
+L 2162-2164  UPDATE      1      0.05    0.05         6541          0       273  SCM_MGR.GT_DM35_ITEM_SINGLE_V
+L  626-633   INSERT     23      0.04    0.00         1703          6      5267  SCM_MGR.GT_DM35_EDI_SENDER
+L 3002-3002  INSERT     23      0.03    0.00           46          0        23  SCM_MGR.GT_DM35_T_COLUMN_SETUP
+L 1353-1431  INSERT     11      0.02    0.00          128          0         0  SCM_MGR.GT_DM35_RAW_DATA
+L 1441-1504  INSERT     11      0.02    0.00          599        108         0  SCM_MGR.GT_DM35_RAW_DATA
+L 2791-2792  DELETE      1      0.02    0.02         4690          0      4021  SCM_MGR.GT_DM35_RAW_DATA
+L 3092-3172  INSERT      1      0.02    0.02         1877          0      8868  SCM_MGR.GT_DM35_SCP_ITEM_INFO
+L 3791-3951  OPEN        4      0.02    0.01          268          7       212  SCM_MST_TITLESET_USER
+L  169-195   SELECT     23      0.01    0.00          463          4       989  SCM_MGR.SCM_SYS_CALENDAR_M
+L  253-256   SELECT     30      0.01    0.00           90          3        30  V_START_YYYYMMDD
+L  433-481   INSERT     23      0.01    0.00          208          0       184  SCM_MGR.GT_DM35_SEL_MEASURE
+L  489-522   INSERT     23      0.01    0.00          102          0         0  SCM_MGR.GT_DM35_SEL_MEASURE
+  누적 합계 660.5s / 귀속 문장 104건 (전체 추출 170건)

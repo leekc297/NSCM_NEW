@@ -1,0 +1,10 @@
+[
+ {
+  "old": "        SELECT F.DIVISION_ID\n             , F.PROJECT_CODE                        AS END_CUSTOMER\n",
+  "new": "        SELECT /*+ MATERIALIZE */ F.DIVISION_ID   --[E20260825-XLSMASTER perf] 2,398행으로 선접기 후 조인 (미적용 시 인라인 반복평가 550s+ 실측)\n             , F.PROJECT_CODE                        AS END_CUSTOMER\n"
+ },
+ {
+  "old": "CASE WHEN EC.EC_NAME IS NULL AND K.END_CUSTOMER NOT IN (\n                       SELECT SI.PROJECT_CODE FROM SCM_MGR.SCM_MST_SITE_ITEM SI\n                        WHERE SI.DIVISION_ID = K.DIVISION_ID AND SI.VALID_YN = 'Y')\n                  THEN 'EC,' ELSE '' END ||",
+  "new": "'' ||  --[E20260825-XLSMASTER perf] EC warn 상관 서브쿼리 제거 — 마스터 기준은 EC=PROJECT_CODE∈SITE_ITEM 항상 참(WT_KEY INNER JOIN)"
+ }
+]

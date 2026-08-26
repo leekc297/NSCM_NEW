@@ -21,8 +21,8 @@
 //                     ※ 행 Sales site 가 채워진 뒤에만 (ready)
 //  MEASURE          메타('Measure')                         → MktFcstEditMeasure
 //                     [@divisionId·@scmSiteId·@projectCode = 그 행 값, @sesUserId]
-//                     + filterMeasureEditRows(W/S Planner + AS 사이트행 → AS_In_Req 1종.
-//                       그 외는 응답 그대로)
+//                     + filterMeasureEditRows(AS 사이트행 → AS_In_Req 1종 / 일반 사이트행 →
+//                       MKT_FCST_RP 1종 / 사이트 미선택은 비W/S 면 AS_In_Req 제거, W/S 면 응답 그대로)
 //  FCST_TYPE        메타('FCST_TYPE_NOT_ETC' = ETC 제외)     → FCST_TYPE [@sesUserId, @editModeYn='Y']
 //  AS_FROM_SITE     메타('AS_FROM_SITE')                    → AS_FROM_SITE [@param1 = 그 행 Div]
 //                     ※ 편집 허용 판정은 MktFcstGrid.isAsFromSiteEditable (4축)
@@ -50,7 +50,7 @@
 //   · SQL 에 없는 토큰은 BE 가 무시(존재 토큰만 치환) → 잉여 파라미터는 무해(회귀 0).
 import { DataMap } from '@mescius/wijmo.grid';
 
-import { AS_SITE_MEASURE, DIVISION, MENU_ID } from '../mkt-fcst.constants';
+import { AS_SITE_MEASURE, DIVISION, INSERT_DEFAULT_MEASURE, MENU_ID } from '../mkt-fcst.constants';
 
 import { toCellStr } from './mkt-fcst.prContext';
 
@@ -428,9 +428,16 @@ const CASCADE_COMPANION_COLS: Record<string, readonly string[]> = {
  * 행 1건에 cascade clear 적용 — 그리드 편집(cellEditEnded)과 팝업 선택 경로가 함께 쓴다.
  * 팝업(Project/Model)은 cellEditEnded 를 타지 않으므로 이 함수를 직접 불러야 한다.
  * 호출 측이 "값이 실제로 바뀌었는지" 를 먼저 판정한다 — 같은 값 재선택으로 하위가 날아가면 안 된다.
+ * keepCols = 지우지 않을 컬럼. 붙여넣기처럼 상위와 하위 값이 한 번에 들어오는 경로에서
+ * 방금 붙여넣은 하위 값을 도로 지우지 않도록 호출 측이 넘긴다.
  */
-export const applyCascadeClear = (rec: Record<string, unknown>, binding: string): void => {
+export const applyCascadeClear = (
+  rec: Record<string, unknown>,
+  binding: string,
+  keepCols: readonly string[] = []
+): void => {
   for (const k of GRID_CASCADE_CLEAR[binding] ?? []) {
+    if (keepCols.includes(k)) continue;
     rec[k] = '';
     for (const c of CASCADE_COMPANION_COLS[k] ?? []) rec[c] = '';
   }
@@ -493,56 +500,101 @@ export const filterComboRowsByRow = (
 };
 
 // ============================================================================
-// 5. MEASURE 편집 후보 필터 (W/S Planner + AS 사이트 = AS_In_Req 1종)
+// 5. MEASURE 편집 후보 필터 (행 Sales site 축 우선 / W/S 권한 축은 사이트 미선택 행에서만)
 // ============================================================================
-//   좁히는 조건은 이 하나뿐이다. 나머지는 콤보(MktFcstEditMeasure) 응답 그대로 다 보여준다 —
-//   후보 축소는 이미 SQL 이 그 행의 division·사이트·프로젝트로 하고 있다.
-//   .cs 원문 대비 이탈 2건(둘 다 사용자 요구):
-//     · 1-a/1-b — 비W/S 사용자의 81*/82 후보에서 AS_In_Req 를 빼던 블랙리스트. 2026-08-14 제거.
-//       "W/S Planner 가 아닌 사용자는 목록이 전부 보여야 한다"(비W/S 로 82 AS 사이트 행을 열었을 때
-//       후보가 MKT_FCST_RP 1건으로 줄던 케이스 보고).
-//     · 1-c 중 고객향 사이트 -> MKT_FCST_RP 1종 고정분. 2026-08-10 제거 — 사이트를 고르는 순간
-//       다른 measure 를 못 쓰게 되는 게 현행 업무와 맞지 않는다. AS 사이트 쪽 절반만 남았다.
+//   좁히는 축은 두 개뿐이다 — 그 행의 Sales site 가 무엇인지(미선택 / AS(비축)향 / 일반)와
+//   로그인 계정의 W/S Planner 여부(store wsPlannerYn). 나머지는 콤보(MktFcstEditMeasure)
+//   응답 그대로 다 보여준다 — 후보 축소는 이미 SQL 이 그 행의 division·사이트·프로젝트로 하고 있다.
+//
+//   2026-08-17~18 사용자 규칙표(사용자 그룹 x Measure 목록) 기준 — 사이트 축이 권한 축보다 우선:
+//     · AS 사이트 행 (그룹 무관)   -> AS_In_Req 1종    (규칙표 3열. .cs 1-c)
+//     · 일반 사이트 행 (그룹 무관) -> MKT_FCST_RP 1종  (규칙표 4열. .cs 1-c)
+//     · 사이트 미선택 + W/S        -> 콤보 응답 그대로  (AS_In_Req 를 제거하지 않는 유일한 그룹)
+//     · 사이트 미선택 + 비W/S      -> AS_In_Req 제거    (규칙표 2열. .cs 1-a/1-b)
+//
+//   권한 축(wsPlanner)이 결과를 가르는 자리는 "사이트를 아직 안 고른 행" 하나뿐이다 — 곧 규칙표
+//     2열 "신규 행 최초 Measure 목록"이다. 사이트를 고르는 순간 DM Planner / DM ADMIN /
+//     SCP Planner / 그 외 전부 같은 1종이 된다(규칙표 비고 "Site 변경 후 필터에는 그룹 조건 없음").
+//
+//   이력 — .cs 1-c(사이트로 measure 1종 고정)는 2026-08-10 요구로 전면 제거했다가("사이트를 고르는
+//     순간 다른 measure 를 못 쓰게 되는 게 현행 업무와 맞지 않는다") 2026-08-14 에 AS 사이트 쪽
+//     절반만 W/S 한정으로 복원, 2026-08-17 에 그 W/S 한정 조건 해제, 2026-08-18 에 규칙표 4열대로
+//     일반 사이트 쪽 절반까지 되살렸다 — 2026-08-10 결정은 사용자 지시로 뒤집혔고 .cs 1-c 는 전체가
+//     다시 살아 있다.
+//   1-a/1-b(비W/S 후보에서 AS_In_Req 제외)는 2026-08-14 제거 -> 2026-08-17 재적용. 걷어냈던 계기는
+//     "비W/S 로 82 AS 사이트 행을 열었더니 후보가 1건으로 줄더라"였는데, 규칙표는 그 케이스를
+//     AS_In_Req 1건으로 규정한다 — 줄어드는 것 자체가 아니라 남는 값이 MKT_FCST_RP 였던 게 문제였다.
 const MEASURE_AS_IN_REQ = AS_SITE_MEASURE;
+const MEASURE_GENERAL_SITE = INSERT_DEFAULT_MEASURE;
 
 export const filterMeasureEditRows = ({
   src,
   wsPlanner,
   asBoundRow = false,
+  siteSelected = false,
 }: {
   src: Record<string, unknown>[];
   wsPlanner: boolean;
   /** 행의 Sales site 가 비축향(AS) 사이트인가 — MktFcstGrid.isAsBoundRow 판정 결과. */
   asBoundRow?: boolean;
+  /** 행의 Sales site 가 입력되어 있는가 — 미입력(신규행 첫 상태)과 일반 사이트를 가른다. */
+  siteSelected?: boolean;
 }): Record<string, unknown>[] => {
-  // 2026-08-14 요구 — W/S Planner + AS 사이트 행은 후보를 AS_In_Req 1종으로 고정한다(.cs 1-c).
-  //   같은 조건으로 cellEditEnded 가 값도 AS_In_Req 로 셋팅한다. 두 곳의 조건은 항상 일치해야 한다.
-  //   0건이면 호출 측(swapEditCandidates)이 필터 전 목록으로 되돌린다 — 콤보 응답에 AS_In_Req 가
-  //   없으면 잠금이 조용히 풀린다는 뜻이므로, 잠기지 않으면 콤보 응답부터 확인할 것.
-  if (wsPlanner && asBoundRow) {
+  // 아래 어느 분기든 결과가 0건이면 호출 측(swapEditCandidates)이 필터 전 목록으로 되돌린다
+  //   (선택지 전무 방지). 콤보 응답에 해당 measure 가 없으면 잠금이 조용히 풀린다는 뜻이므로,
+  //   1종으로 안 잠기면 콤보 응답부터 확인할 것.
+  //   필수: 값 셋팅(MktFcstGrid.cellEditEnded)이 같은 조건으로 MEASURE 값도 바꾼다. 두 곳의 조건은
+  //   항상 같이 움직여야 한다 — 값만 강제하고 목록을 열어 두면 곧바로 다른 값으로 되돌릴 수 있다.
+
+  // 규칙표 3열(AS Site 선택 후) — 그룹 무관, AS 사이트 행은 후보를 AS_In_Req 1종으로 고정한다(.cs 1-c).
+  //   사이트 축이 권한 축보다 먼저다: 비W/S 라도 AS 사이트를 고르면 아래 분기로 내려가지 않는다.
+  if (asBoundRow) {
     return src.filter(cr => toCellStr(cr.CODE).trim() === MEASURE_AS_IN_REQ);
+  }
+  // 규칙표 4열(비-AS Site 선택 후) — 그룹 무관, 일반 사이트 행은 MKT_FCST_RP 1종으로 고정한다(.cs 1-c).
+  //   2026-08-18 재적용. AS 사이트 행은 위 분기가 이미 가져갔으므로 여기 오는 "사이트가 채워진 행"은
+  //   전부 일반(고객향) 사이트다.
+  if (siteSelected) {
+    return src.filter(cr => toCellStr(cr.CODE).trim() === MEASURE_GENERAL_SITE);
+  }
+  // 규칙표 2열(신규 행 최초 목록 = 사이트 미선택) — W/S Planner 가 아닌 그룹(DM Planner / DM ADMIN /
+  //   SCP Planner / 그 외)은 AS_In_Req 를 후보에서 뺀다. AS_In_Req 는 비축향 업무 전용 measure 라
+  //   사이트를 고르기 전 목록에 노출되면 안 된다.
+  //   신규행은 Insert 직후 Sales site 가 공란이라 이 분기가 곧 "최초 목록"이다.
+  //   주의: 콤보 응답이 AS_In_Req 하나뿐이면 제거 후 0건이 되어 위 폴백이 원본을 되살린다.
+  //   그 경우 제거가 안 걸린 것처럼 보이는 게 정상이다.
+  if (!wsPlanner) {
+    return src.filter(cr => toCellStr(cr.CODE).trim() !== MEASURE_AS_IN_REQ);
   }
   return src;
 };
 
 // ============================================================================
-// 5-B. FCST Type division 제약 (Div82 W/S 제외)
+// 5-B. FCST Type division 제약 (Div82 W/S 제외 — W/S Planner 는 예외)
 // ============================================================================
 //   통합테스트 1st No.54 — AS-IS 에는 없던 신규 제약. 82(ESS)는 W/S 판매 개념이 없어 WS·WSF 를
 //   고를 수 없어야 한다. 81* 은 영향 없음(콤보 응답 그대로).
 //   콤보 SQL(FCST_TYPE / FCST_TYPE_NOT_ETC)을 고치면 이 화면 밖까지 영향이 가므로 화면단 필터로 둔다.
+//   2026-08-17 요구: W/S 권한 계정(store wsPlannerYn = 'DM Planner (W/S)' 그룹)은 82 에서도
+//     WS·WSF 를 본다. 제약의 취지가 "82 에 W/S 가 없다"가 아니라 "W/S 를 다루지 않는 사용자에게
+//     안 보인다"이므로, 권한 축이 division 축보다 우선한다.
 const FCST_TYPE_DIV82_BLOCKED: readonly string[] = ['WS', 'WSF'];
 
 /**
  * FCST Type 후보에서 division 제약분 제거 — 조회 표시 dataMap 과 편집 후보 양쪽이 같은 함수를 쓴다.
  * 한쪽만 걸면 편집에서는 못 고르는데 조회 표시에는 남거나(그 반대) 하는 불일치가 생긴다.
+ * wsPlanner=true 면 division 무관하게 원본 그대로 — 82 에서도 WS·WSF 를 고를 수 있다.
  * 대상 컬럼/division 이 아니면 원본 배열을 그대로 돌려준다(참조 유지 — dataMap 재생성 억제).
+ * 필수: wsPlanner 는 store 적재가 늦으면 false 로 먼저 읽힌다 — 호출 측은 이 값이 바뀌면
+ *   dataMap 을 다시 만들어야 한다(MktFcstGrid comboSig 에 wsPlannerYn 포함).
  */
 export const filterFcstTypeRows = (
   src: Record<string, unknown>[],
   binding: string,
-  division: string
+  division: string,
+  wsPlanner: boolean
 ): Record<string, unknown>[] => {
+  if (wsPlanner) return src;
   if (binding !== 'FCST_TYPE' || division.trim() !== DIVISION.ESS) return src;
   return src.filter(cr => !FCST_TYPE_DIV82_BLOCKED.includes(toCellStr(cr.CODE).trim()));
 };

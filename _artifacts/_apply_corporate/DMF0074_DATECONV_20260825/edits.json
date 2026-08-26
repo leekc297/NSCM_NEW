@@ -1,0 +1,14 @@
+[
+ {
+  "old": "          , CASE WHEN B.BASIS_YYYYMM > TO_CHAR(SCM_MGR.FN_NEXT_DAY(A.YYYYMMDD, 'MON') - 7, 'YYYYMM')\n",
+  "new": "            --[E20260825-DATECONV] FN_NEXT_DAY 파라미터는 DATE — VARCHAR2 암묵 변환은 세션 NLS_DATE_FORMAT 의존\n            --  (클라우드 BE 'DD-MON-RR' 세션에서 ORA-01861 — 명시 TO_DATE 선행. 동일 PKG L1022~1026 기적용 패턴)\n          , CASE WHEN B.BASIS_YYYYMM > TO_CHAR(SCM_MGR.FN_NEXT_DAY(TO_DATE(A.YYYYMMDD, 'YYYYMMDD'), 'MON') - 7, 'YYYYMM')\n"
+ },
+ {
+  "old": "          , TO_CHAR(SCM_MGR.FN_NEXT_DAY(A.YYYYMMDD, 'MON') - 7, 'YYYYMMDD')                           AS RESULT_TO\n",
+  "new": "          , TO_CHAR(SCM_MGR.FN_NEXT_DAY(TO_DATE(A.YYYYMMDD, 'YYYYMMDD'), 'MON') - 7, 'YYYYMMDD')       AS RESULT_TO  --[E20260825-DATECONV]\n"
+ },
+ {
+  "old": "          , TO_CHAR(SCM_MGR.FN_NEXT_DAY(A.YYYYMMDD, 'MON') - 7 + (52 * 7) - 1, 'YYYYMMDD')            AS PLAN_TO\n",
+  "new": "          , TO_CHAR(SCM_MGR.FN_NEXT_DAY(TO_DATE(A.YYYYMMDD, 'YYYYMMDD'), 'MON') - 7 + (52 * 7) - 1, 'YYYYMMDD') AS PLAN_TO  --[E20260825-DATECONV]\n"
+ }
+]

@@ -56,8 +56,14 @@ describe('division 축 (CB-04 / CH-04~06 — .cs Substring(0,2)=="81" || =="82")
 
   it('buildDuplicateKey — division 분기 키 (CG-02, 81*=9키/82·40=8키 .cs L4262~4302)', () => {
     const row81 = {
-      DIVISION_ID: '81', PROJECT_CODE: 'P1', SCM_SITE_ID: 'S1', ITEM_ID: 'I1',
-      DOM_EXP: 'E', FCST_TYPE: 'MPS', INCOTERMS: 'FOB', MEASURE: 'MKT_FCST_RP',
+      DIVISION_ID: '81',
+      PROJECT_CODE: 'P1',
+      SCM_SITE_ID: 'S1',
+      ITEM_ID: 'I1',
+      DOM_EXP: 'E',
+      FCST_TYPE: 'MPS',
+      INCOTERMS: 'FOB',
+      MEASURE: 'MKT_FCST_RP',
       PLANT_SITE_ID: 'PL1',
     };
     const k81 = buildDuplicateKey(row81, '81');
@@ -97,10 +103,19 @@ describe('editLock 축 (CB-101~104 — 버킷×시점)', () => {
 describe('save 축 (E04-2/CE-06 — buildUnfoldRows/buildSavePayload .cs SetSaveData L5395~5522 1:1)', () => {
   const baseRow = {
     CRUD_TYPE: 'I',
-    DIVISION_ID: '82', PROJECT_CODE: 'P1', SCM_SITE_ID: 'S1', ITEM_ID: 'I1',
-    DOM_EXP: 'E', FCST_TYPE: 'MPS', INCOTERMS: 'FOB', MEASURE: 'MKT_FCST_RP',
-    PLANT_SITE_ID: '', AS_FROM_SITE: '',
-    D_20260810: 10, D_20260811: '', D_20260812: 5,
+    DIVISION_ID: '82',
+    PROJECT_CODE: 'P1',
+    SCM_SITE_ID: 'S1',
+    ITEM_ID: 'I1',
+    DOM_EXP: 'E',
+    FCST_TYPE: 'MPS',
+    INCOTERMS: 'FOB',
+    MEASURE: 'MKT_FCST_RP',
+    PLANT_SITE_ID: '',
+    AS_FROM_SITE: '',
+    D_20260810: 10,
+    D_20260811: '',
+    D_20260812: 5,
   };
 
   it('신규 행 — 값 있는 D_ 셀만 unfold (activeFlag I)', () => {

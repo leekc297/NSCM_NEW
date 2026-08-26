@@ -8,16 +8,17 @@ import type { HotkeyConfig, PageProps, RawFlexGridColumnConfig } from '@foundati
 import { queryClient } from '@foundation/query-client';
 import type { EditTracker } from '@foundation/utils';
 import { GridAction } from '@foundation/utils';
-import { type ColumnLayoutRow, MainTitle, SubTitle } from '@shared/components';
+import {
+  type ColumnLayoutRow,
+  ColumnLayoutModal,
+  MainTitle,
+  saveTitleSet,
+  SubTitle,
+} from '@shared/components';
 import { useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
-import {
-  ColumnLayoutModal,
-  ItemByDivisionModal,
-  ProjectByDivisionModal,
-  saveTitleSet,
-} from '../../components';
+import { ItemByDivisionModal, ProjectByDivisionModal } from '../../components';
 
 import { ExchangeRateModal } from './components/modals/ExchangeRateModal';
 import { PriceBatchInputModal } from './components/modals/PriceBatchInputModal';
@@ -42,7 +43,6 @@ import {
   TITLESET_SHEET,
 } from './sales-future-price.constants';
 import type { FuturePriceRow } from './sales-future-price.types';
-import styles from './SalesFuturePrice.module.scss';
 import {
   buildExchangeRateMap,
   currencyCodesFromRateMap,
@@ -306,7 +306,7 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   const handleSearch = () => {
     const v = validate.validateFind(sc);
     if (!v.ok) return;
-    void setToast({ message: t('LBL00665', 'Loading...'), type: 'default', duration: 2000 });
+    // void setToast({ message: t('LBL00665', 'Loading...'), type: 'default', duration: 2000 });
     setFilter();
     // ⭐ 2026-07-03 — refetch?.() 제거: refetch 는 "이 렌더" 관찰자(=이전 filters, division 변경 직후엔
     //   undefined)로 즉시 발사되어 실제 조회와 병렬로 전-파라미터 NULL SP 호출이 매번 1회 나감
@@ -316,6 +316,7 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
     clearInsertedRows();
     // ⭐ master hook §2.4 — Search 시 admin 메타 refetch (admin 변경 즉시 반영)
     void fetchStaticColumns(sc.divisionId); // ⭐ divisionId → SP 서버측 DIVISION_ID 필터
+    void fetchBatchColumns(sc.divisionId); // Batch 팝업 컬럼도 함께 갱신 (팝업 open 전 미리 최신화)
     void fetchStaticMeasures();
   };
 
@@ -343,7 +344,28 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
       .filter(m => m.display !== false)
       .filter(m => !!(m.colNm ?? '').trim())
       .map(m => m.colNm.trim());
-    const measures: readonly string[] = validMeasures.length > 0 ? validMeasures : MEASURE_4;
+    // 신규행 measure 정렬 = 조회 결과에 나타난 순서 (사용자 요구 2026-08-23).
+    //   admin 메타(SCM_MST_SHEET_MEASURE) 반환 순서와 SP 조회 결과의 measure 배치가 다르면 신규행만
+    //   다른 순서로 쌓여 기존 행과 어긋나 보인다 → 조회된 행의 measure 최초 등장 순서를 기준으로 정렬한다.
+    //   대상 measure "집합" 은 그대로 admin 메타(AS-IS dtMeasureCount) — 순서만 조회 결과에 맞춘다.
+    //   조회 전(그리드 비어있음)이면 기준이 없으므로 기존대로 admin 메타 순서.
+    const spRowsNow = (data as { o_rc1?: FuturePriceRow[] })?.o_rc1 ?? [];
+    const measureOrder: string[] = [];
+    for (const r of spRowsNow) {
+      const m = String(r.MEASURE ?? '').trim();
+      if (m && !measureOrder.includes(m)) measureOrder.push(m);
+    }
+    // 조회 결과에 없는 measure 는 뒤로 — sort 안정성(ES2019)으로 admin 메타 상대순서 유지.
+    const measureRank = (m: string): number => {
+      const i = measureOrder.indexOf(m);
+      return i < 0 ? Number.MAX_SAFE_INTEGER : i;
+    };
+    const measures: readonly string[] =
+      validMeasures.length === 0
+        ? MEASURE_4
+        : measureOrder.length === 0
+          ? validMeasures
+          : [...validMeasures].sort((a, b) => measureRank(a) - measureRank(b));
     const groupId = `I_${Date.now()}`;
     const newRows: FuturePriceRow[] = measures.map(
       (m): FuturePriceRow => ({
@@ -367,16 +389,38 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
       })
     );
     const addedRows: FuturePriceRow[] = [];
-    [...newRows].reverse().forEach(newRow => {
+    newRows.forEach(newRow => {
       const addedRow = GridAction.addRow(
         g as unknown as FlexGridType<WijmoRowItem>,
         newRow as unknown as WijmoRowItem,
         'above',
         true
       );
-      if (addedRow) addedRows.unshift(addedRow as unknown as FuturePriceRow);
+      if (addedRow) addedRows.push(addedRow as unknown as FuturePriceRow);
     });
-    insertedRowsRef.current = [...addedRows, ...insertedRowsRef.current];
+
+    // measure 배치 보정 — GridAction.addRow 의 삽입 위치(resolveInsertIndex)는 현재 선택 행과
+    //   머지 상태에 따라 정해진다. 선택이 삽입된 행을 따라 내려가면 호출 순서대로 쌓이고, 그렇지
+    //   않으면 매번 같은 자리에 꽂혀 역순으로 쌓인다 → 호출 순서만으로는 순서를 보장할 수 없다.
+    //   (사용자 보고 2026-08-23: 신규행이 LOC/USD/KRW/RTF 로 조회 순서(RTF/KRW/USD/LOC)와 반대.)
+    //   그래서 실제로 들어간 자리(index)만 모아 measures 순서대로 다시 배치한다.
+    const source = g.collectionView.sourceCollection;
+    const slots = addedRows
+      .map(r => source.indexOf(r))
+      .filter(i => i >= 0)
+      .sort((a, b) => a - b);
+    const rank = new Map(measures.map((m, i) => [m, i]));
+    const orderedRows = [...addedRows].sort(
+      (a, b) => (rank.get(String(a.MEASURE ?? '')) ?? 0) - (rank.get(String(b.MEASURE ?? '')) ?? 0)
+    );
+    if (slots.length === orderedRows.length) {
+      slots.forEach((slot, i) => {
+        source[slot] = orderedRows[i];
+      });
+      g.collectionView.refresh();
+      g.invalidate();
+    }
+    insertedRowsRef.current = [...orderedRows, ...insertedRowsRef.current];
     setInsertedRowCount(insertedRowsRef.current.length);
   };
 
@@ -437,7 +481,7 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
     });
     if (!ok) return;
 
-    void setToast({ message: t('LBL00665', 'Loading...'), type: 'default', duration: 3000 });
+    // void setToast({ message: t('LBL00665', 'Loading...'), type: 'default', duration: 3000 });
 
     // 17 IN params 의 ^-delim 누적 array (AS-IS SaveData nvc 동등)
     const acc: Record<string, string[]> = {
@@ -680,7 +724,7 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   }, [data]);
 
   return (
-    <div className={styles.container}>
+    <>
       <MainTitle
         title={title}
         menuId={MENU_ID}
@@ -760,7 +804,15 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         modalClose={() => setOpenBatch(false)}
         defaultDivision={sc.divisionId}
         defaultPeriod={{ start: sc.startYyyymmdd, end: sc.endYyyymmdd }}
+        // 메인 조회조건 이월 (사용자 요구 2026-08-23) — 팝업 오픈 시 Sales Site / Project 초기값.
+        defaultSalesSite={sc.scmSiteIds}
+        defaultProjectCodes={sc.projectCodes}
         onSaveResult={() => refetch?.()}
+        // AS-IS — 일괄 저장 후 허용범위 초과분은 메인이 가진 Range Rate 팝업으로 표시.
+        onRangeOver={over => {
+          setRangeRows(over);
+          setOpenRange(true);
+        }}
       />
       <SalesPriceVersionModal
         open={openVersion}
@@ -892,6 +944,6 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         }
         callFromCell={true}
       />
-    </div>
+    </>
   );
 };

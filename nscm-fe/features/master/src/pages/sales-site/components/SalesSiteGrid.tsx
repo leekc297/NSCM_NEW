@@ -9,16 +9,16 @@ import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useMemo, useRef, useState, type MutableRefObject } from 'react';
 
 import { CRUD_TYPE } from '@foundation/constants';
+import type { ComboResponse } from '@foundation/models';
 import type { EditTracker } from '@foundation/utils';
-import { GridUtils } from '@foundation/utils';
+import { GridUtils, parseComboFilterBindings } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
-import { useTabComboQueries } from '@shared/hooks';
 
 import { RegionModal } from '../../../components';
 import type { MENU_ID, SHEETS } from '../sales-site.constants';
 import { RESPONSE_SET, SHEET_INDEX } from '../sales-site.constants';
 import { useSalesSiteStore } from '../useSalesSiteStore';
-import { applySalesSite } from '../utils/sales-site.util';
+import { applySalesSite, resolveComboCodeByDivision } from '../utils/sales-site.util';
 
 interface SalesSiteGridProps {
   gridRef: MutableRefObject<FlexGrid<ResponseData<MENU_ID, SHEETS.SITE>> | undefined>;
@@ -41,21 +41,28 @@ export const SalesSiteGrid = ({
   const [clickedRow, setClickedRow] = useState<number>(-1);
   const [openRegionModal, setOpenRegionModal] = useState<boolean>(false);
 
-  // Sales Site 채번 시 SOLDTO_CUSTOMER(row 저장값=CODE) 대신 NAME 을 쓰기 위한 CODE→NAME 조회.
-  //   그리드 셀 콤보와 같은 comboId(cellCboDataTp) 를 재사용하므로 react-query 캐시가 공유된다.
-  const soldToCustomerComboId = staticColumns[RESPONSE_SET.SITE].find(
-    column => column.colNm === 'SOLDTO_CUSTOMER'
-  )?.cellCboDataTp;
-  const [soldToCustomerCombo] = useTabComboQueries({
-    filters: soldToCustomerComboId ? [soldToCustomerComboId] : [],
-    enabled: !!soldToCustomerComboId,
-  });
-  const soldToCustomerNameMap = useMemo(
-    () => new Map((soldToCustomerCombo ?? []).map(item => [item.CODE, item.NAME])),
-    [soldToCustomerCombo]
+  const salesSiteColumns = useMemo(
+    () =>
+      staticColumns[RESPONSE_SET.SITE].map(column =>
+        column.colNm !== 'END_CUSTOMER' || parseComboFilterBindings(column.attribute2).DIVISION_ID
+          ? column
+          : {
+              ...column,
+              attribute2: [column.attribute2, 'DIVISION_ID:DIVISION_ID'].filter(Boolean).join(','),
+            }
+      ),
+    [staticColumns]
   );
-  const getSoldToCustomerName = (dataItem: ResponseData<MENU_ID, SHEETS.SITE>) =>
-    soldToCustomerNameMap.get(String(dataItem.SOLDTO_CUSTOMER ?? ''));
+
+  // 채번에 쓰는 값은 NAME 이 아니라 CODE 다. 붙여넣기로 셀에 NAME 이 들어온 경우만
+  //   저장 경로(SalesSite.tsx handleSave)와 같은 규칙으로 division 기준 CODE 를 되찾는다.
+  const getSoldToCustomerCode = (dataItem: ResponseData<MENU_ID, SHEETS.SITE>) =>
+    resolveComboCodeByDivision(
+      (gridRef.current?.columns.getColumn('SOLDTO_CUSTOMER')?.dataMap?.collectionView?.items ??
+        []) as ComboResponse[],
+      String(dataItem.DIVISION_ID ?? ''),
+      String(dataItem.SOLDTO_CUSTOMER ?? '')
+    );
 
   const setRegion = (
     countryCode: string,
@@ -78,7 +85,7 @@ export const SalesSiteGrid = ({
     dataItem.COUNTRY_NAME = countryName;
     dataItem.CITY = cityCode;
     dataItem.CITY_NAME = cityName;
-    applySalesSite(dataItem, editTrackerRef.current, getSoldToCustomerName(dataItem));
+    applySalesSite(dataItem, editTrackerRef.current, getSoldToCustomerCode(dataItem));
     gridRef.current?.refreshRange(new CellRange(clickedRow, 0, clickedRow, -1));
   };
 
@@ -98,7 +105,7 @@ export const SalesSiteGrid = ({
     if (!binding || !dataItem || dataItem.CRUD_TYPE !== CRUD_TYPE.INSERT) return;
     if (!['SOLDTO_CUSTOMER', 'COUNTRY', 'CITY'].includes(binding)) return;
 
-    applySalesSite(dataItem, editTrackerRef.current, getSoldToCustomerName(dataItem));
+    applySalesSite(dataItem, editTrackerRef.current, getSoldToCustomerCode(dataItem));
     grid.refreshRange(new CellRange(row, 0, row, -1));
   };
 
@@ -137,7 +144,7 @@ export const SalesSiteGrid = ({
         gridFilterRef={gridFilterRef}
         editTrackerRef={editTrackerRef}
         itemsSource={data}
-        staticColumns={staticColumns[RESPONSE_SET.SITE]}
+        staticColumns={salesSiteColumns}
         allowMerging={AllowMerging.Cells}
         alternatingRowStep={0}
         gotFocus={handleFocus}

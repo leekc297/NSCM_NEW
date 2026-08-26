@@ -54,6 +54,7 @@ export const useTabProcQuery = <M extends MenuId, S extends SheetName<M> = Sheet
   filters,
   enabled = false,
   queryOptions,
+  stream = false,
 }: {
   menuId: M;
   sheetName: S;
@@ -62,6 +63,7 @@ export const useTabProcQuery = <M extends MenuId, S extends SheetName<M> = Sheet
   filters?: ProcRequest<M, S>;
   enabled?: boolean;
   queryOptions?: Omit<UseQueryOptions<ProcResponse<M, S>>, 'queryKey' | 'queryFn'>;
+  stream?: boolean;
 }) => {
   const { t } = useTranslation();
   const { setAlert } = useMessageStore.getState();
@@ -74,7 +76,7 @@ export const useTabProcQuery = <M extends MenuId, S extends SheetName<M> = Sheet
   const queryResult = useQuery<ProcResponse<M, S>>({
     queryKey, // eslint-disable-line tanstack-query/exhaustive-deps
     queryFn: async () => {
-      const response = await apiClient.callProc<M, S>(menuId, sheetName, procedureAction, filters);
+      const response = await apiClient.callProc<M, S>(menuId, sheetName, procedureAction, filters, stream);
       if (response.code !== '0')
         void setAlert({
           type: 'alert',
@@ -127,7 +129,7 @@ export const useProcMutation = <
   onError?: (error?: Error) => void;
 }) => {
   const { t } = useTranslation();
-  const { setToast, setAlert } = useMessageStore.getState();
+  const { setToast } = useMessageStore.getState();
   const queryKey = buildTabQueryKey(tabId, sheetName, procedureAction);
   const queryClient = useQueryClient();
 
@@ -148,9 +150,13 @@ export const useProcMutation = <
     onError:
       onError ??
       (error => {
-        void setAlert({
-          type: 'alert',
-          content: error.message ?? t('MSG00003', '_저장에 실패하였습니다.'),
+        // void setAlert({
+        //   type: 'alert',
+        //   content: error.message ?? t('MSG00003', '_저장에 실패하였습니다.'),
+        // });
+        setToast({
+          type: 'error',
+          message: error.message ?? t('MSG00003', '_저장에 실패하였습니다.'),
         });
       }),
   });

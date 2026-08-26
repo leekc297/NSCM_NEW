@@ -1,0 +1,4 @@
+-- NAME_DIFF 코드 전체 (MERGE 시 사내 명칭이 덮여쓰이는 대상)
+-- 사내 명칭을 정본으로 유지할 코드만 남기고 나머지는 지운 뒤,
+-- 01_GEN_MSG_MERGE.sql 의 P_EXCLUDE_MSG_IDS 에 아래 한 줄을 붙여넣는다.
+

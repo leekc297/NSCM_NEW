@@ -19,6 +19,7 @@ interface MainTitleProps {
   menuId: string;
   openSearchArea?: boolean;
   disableSearchArea?: boolean;
+  disableSearchAreaToggle?: boolean;
   toggleOpenSearchArea?: (open?: boolean) => void;
 }
 
@@ -27,6 +28,7 @@ const MainTitleComp = ({
   menuId,
   openSearchArea = true,
   disableSearchArea = false,
+  disableSearchAreaToggle = false,
   toggleOpenSearchArea,
 }: MainTitleProps) => {
   const { t } = useTranslation();
@@ -70,6 +72,7 @@ const MainTitleComp = ({
                 color='primary'
                 label={t('LBL00324', '_Search Area')}
                 checked={openSearchArea}
+                disabled={disableSearchAreaToggle}
                 onChange={(_, val) => toggleOpenSearchArea?.(val)}
               />
             )}

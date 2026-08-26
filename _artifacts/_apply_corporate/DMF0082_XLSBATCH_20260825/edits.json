@@ -1,0 +1,18 @@
+[
+ {
+  "old": "    SELECT COUNT(*)\n      INTO n_key_cnt\n      FROM (SELECT DISTINCT F.PROJECT_CODE, F.SCM_SITE_ID, F.ITEM_ID, F.INCOTERMS\n                          , F.FCST_TYPE, F.DOM_EXP, F.CURRENCY\n              FROM SCM_MGR.SCM_MST_FUTURE_PRICE F\n             WHERE F.DIVISION_ID = p_division_id AND F.MEASURE = 'LOC');\n",
+  "new": "    /* [E20260825-XLSBATCH] 추출 기준 = Price Batch Input(일괄입력) 팝업 SP 동일 (사용자 지시 2026-08-25).\n       P_..._SAVE_PRICE_POPUP 81 분기 B2(GTT_PLAN_DATA) 술어 이식: 동적 구간 YYYYMMDD BETWEEN +\n       SITE(SALES,VALID)/SITE_ITEM(VALID) 게이트. MEASURE='LOC' 는 원문 무필터와 키 등가 실측(2,468=2,468 —\n       KRW/USD 는 환산 시리즈로 키 동일) — 1/3 비용의 등가 필터로 유지. 일괄입력 PRICE 축은 제외(양식은 W 슬롯 입력). */\n    SELECT COUNT(*)\n      INTO n_key_cnt\n      FROM (SELECT DISTINCT F.PROJECT_CODE, F.SCM_SITE_ID, F.ITEM_ID, F.INCOTERMS\n                          , F.FCST_TYPE, F.DOM_EXP, F.CURRENCY\n              FROM SCM_MGR.SCM_MST_FUTURE_PRICE F\n             WHERE F.DIVISION_ID = p_division_id AND F.MEASURE = 'LOC'\n               AND F.YYYYMMDD BETWEEN p_from_yyyymmdd AND p_to_yyyymmdd\n               AND EXISTS (SELECT 1 FROM SCM_MGR.SCM_MST_SITE B\n                            WHERE B.DIVISION_ID = F.DIVISION_ID AND B.SCM_SITE_ID = F.SCM_SITE_ID\n                              AND B.SITE_TYPE = 'SALES' AND B.VALID_YN = 'Y')\n               AND EXISTS (SELECT 1 FROM SCM_MGR.SCM_MST_SITE_ITEM B\n                            WHERE B.DIVISION_ID = F.DIVISION_ID AND B.PROJECT_CODE = F.PROJECT_CODE\n                              AND B.SCM_SITE_ID = F.SCM_SITE_ID AND B.ITEM_ID = F.ITEM_ID\n                              AND B.VALID_YN = 'Y'));\n"
+ },
+ {
+  "old": "         WHERE F.DIVISION_ID = p_division_id\n           AND F.MEASURE     = 'LOC'\n           /* [E20260825-XLSMASTER perf3] 선택 필터는 여기(174K 스캔)이 아니라 최종 WHERE(2.4K)에서 —",
+  "new": "         WHERE F.DIVISION_ID = p_division_id\n           AND F.MEASURE     = 'LOC'\n           /* [E20260825-XLSBATCH] 일괄입력 B2 동일 — 동적 구간의 단가 대상만 (사용자 지시 2026-08-25) */\n           AND F.YYYYMMDD BETWEEN p_from_yyyymmdd AND p_to_yyyymmdd\n           /* [E20260825-XLSMASTER perf3] 선택 필터는 여기(174K 스캔)이 아니라 최종 WHERE(2.4K)에서 —"
+ },
+ {
+  "old": "         INNER JOIN SCM_MGR.SCM_MST_SITE MS0\n            ON  MS0.DIVISION_ID = R.DIVISION_ID\n            AND MS0.SCM_SITE_ID = R.SCM_SITE_ID\n            AND MS0.VALID_YN    = 'Y'\n         INNER JOIN SCM_MGR.SCM_MST_SITE_ITEM SI",
+  "new": "         INNER JOIN SCM_MGR.SCM_MST_SITE MS0\n            ON  MS0.DIVISION_ID = R.DIVISION_ID\n            AND MS0.SCM_SITE_ID = R.SCM_SITE_ID\n            AND MS0.SITE_TYPE   = 'SALES'  --[E20260825-XLSBATCH] 일괄입력 최종 취합 INNER JOIN(SITE_TYPE='SALES') 동일\n            AND MS0.VALID_YN    = 'Y'\n         INNER JOIN SCM_MGR.SCM_MST_SITE_ITEM SI"
+ },
+ {
+  "old": "          LEFT JOIN SCM_MGR.DM_MST_ITEM_SINGLE_V IV\n            ON  IV.DIVISION_ID = R.DIVISION_ID\n            AND IV.ITEM_ID     = R.ITEM_ID\n          LEFT JOIN SCM_MGR.SCM_MST_SSO_DEPT_INFO SD",
+  "new": "         INNER JOIN SCM_MGR.DM_MST_ITEM_SINGLE_V IV  --[E20260825-XLSBATCH] 일괄입력 최종 취합 INNER JOIN(ITEM) 동일 (구 LEFT)\n            ON  IV.DIVISION_ID = R.DIVISION_ID\n            AND IV.ITEM_ID     = R.ITEM_ID\n          LEFT JOIN SCM_MGR.SCM_MST_SSO_DEPT_INFO SD"
+ }
+]

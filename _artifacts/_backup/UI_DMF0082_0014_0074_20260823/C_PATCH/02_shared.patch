@@ -1,0 +1,1817 @@
+diff --git a/nscm-fe/configs/types/procedures.d.ts b/nscm-fe/configs/types/procedures.d.ts
+index 73ddafe..73fd457 100644
+--- a/nscm-fe/configs/types/procedures.d.ts
++++ b/nscm-fe/configs/types/procedures.d.ts
+@@ -4002,6 +4002,249 @@ interface RawProcedureMap extends Base {
+       };
+     };
+   };
++
++  /**
++   * ProjectList — SDM1020 (Project List · 프로젝트 조회/변경)
++   *
++   * ⭐ 계약 단일 원천 = `_artifacts/_apply_corporate/SDM1020_META_20260819/_CONTRACT.md`
++   *   (PROC_M COL_NM = payload 키 — ALL_ARGUMENTS positional 29=29 실측. 원문 = PKG_SDM1020.txt).
++   * SHEETS (SEARCH — 커서명 'data'):
++   * - `Project List` (P_SDM1020_GET_PJT_LIST — SHT_NM 실명(공백 포함), API_ID 시트 토큰 'main'.
++   *   커서 41컬럼 — 메타 30 + 보조 NAME 계열. ⚠ D1: DPJT_AUTH_REQ_READ 는 커서에 동명 2회 SELECT —
++   *   FE 는 컬럼명 1회 바인딩(마지막 값 승리 의존 금지). ⚠ D2: 권한요청 TAG 의 NAME/COLOR 커서 실명 =
++   *   `DPJT_AUTH_REQ_WRITE_NAME`/`_WRITE_COLOR_TYPE`. `DPJT_AUTH_REQ_LINK` 는 FE 파생 — 커서 미반환)
++   * - `period` (PR_GET_DAY_RANGE 공유 — SDM1020_period_SEARCH. 실서명 2-IN createdBy/month —
++   *   설계서의 P_FR_BUCKET 7-인자 서명은 실물과 다름, 계약 ⑤)
++   * BTN 계열 2본은 **행별 단건** apiClient.post 직접
++   * (`features/sdm/src/pages/project-list/utils/project-list.api.ts` — 결과커서 CODE '0'+EVENT 판정
++   * 의무. SDM1010 SAVE 계열 관행 동일 — 타입 미등재. COL_NM 계약 ①):
++   * - REQ    = PKG_SDM1020.P_SDM1020_BTN_REQ_PJT_REG (15 IN — activeFlag/dpjtKey/dpjtCode/dpjtSeq/
++   *   divisionId/dpjtClass/endCustomer/dpjtName/cellType/stackMethod/bizType/sopDate/sopPlantId
++   *   + sesUserId(BE주입) → result)
++   * - AUTHREQ = PKG_SDM1020.P_SDM1020_REQ_PJT_AUTH (5 IN — dpjtKey/dpjtAuthReqWrite/dpjtAuthReqRead
++   *   + sesUserId(BE주입) → result)
++   * sesUserId/mnuId 는 BE 세션 자동주입 — request 미포함.
++   * 날짜 컬럼(SOP_DATE/REG_COMP_DATE)은 Oracle DATE 원형 → BE ISO 직렬화 수신.
++   */
++  SDM1020: {
++    'Project List': {
++      request: {
++        divisionId: string; // 1 P_DIVISION_ID (단일 필수 — MyDivision)
++        endCustomer: string; // 2 P_END_CUSTOMER (콤마 다중 or 'ALL' — UF_FX_STRING_SPLIT)
++        dpjtAuthType: string; // 3 P_DPJT_AUTH_TYPE (ADMIN/WRITE/READ/NONE 콤마 다중 or 'ALL')
++        dpjtRegStatus: string; // 4 P_DPJT_REG_STATUS (콤마 다중 or 'ALL')
++        regCompDateFr: string; // 5 P_REG_COMP_DATE_FR ('YYYY-MM-DD' — 필수, TO_DATE SUBSTR 1..10)
++        regCompDateTo: string; // 6 P_REG_COMP_DATE_TO ('YYYY-MM-DD' — 필수)
++      };
++      response: {
++        // O_CURSOR — SELECT 순서 그대로 (PKG_SDM1020.txt L136~219 실측)
++        data: {
++          DPJT_KEY: string;
++          DPJT_CODE: string;
++          DPJT_SEQ: string | number;
++          DIVISION_ID: string;
++          DIVISION_NAME: string; // ⚠ D8: DIVISION_ID 재-alias (CODE=NAME — as-is 수용)
++          DPJT_CLASS: string;
++          DPJT_CLASS_NAME: string;
++          END_CUSTOMER: string;
++          END_CUSTOMER_NAME: string;
++          DPJT_NAME: string;
++          CELL_TYPE: string;
++          CELL_TYPE_NAME: string;
++          STACK_METHOD: string;
++          STACK_METHOD_NAME: string;
++          BIZ_TYPE: string;
++          BIZ_TYPE_NAME: string;
++          SOP_DATE: string;
++          SOP_PLANT_ID: string;
++          SOP_PLANT_NAME: string; // ⚠ D8: SCM_SITE_ID 재-alias
++          DEPT_ID: string;
++          DEPT_NAME: string; // = DEPT_NAME_KO
++          DEPT_NAME_KO: string;
++          DEPT_NAME_EN: string;
++          DEPT_NAME_CN: string;
++          MGMT_USER_ID: string;
++          USER_NAME: string;
++          USER_NAME_EN: string;
++          DPJT_AUTH_TYPE: string; // ADMIN/WRITE/READ (REQUEST 상태 = 'NONE' 치환 — P-01 편집 축)
++          DPJT_AUTH_TYPE_NAME: string;
++          DPJT_REG_STATUS: string; // TAG (lookup SPMS_DPJT_REG_STATUS — P-22 도메인)
++          DPJT_REG_STATUS_NAME: string;
++          DPJT_REG_STATUS_COLOR_TYPE: string;
++          REG_COMP_DATE: string;
++          DPJT_DEVELOP_STATUS: string;
++          DPJT_DEVELOP_STATUS_NAME: string;
++          DPJT_AUTH_MGMT: string; // ADMIN=''(NULL — 링크 노출) / 그 외 '-' (P-02)
++          DPJT_AUTH_REQ_STATUS: string; // ADMIN+요청存 = '권한요청' / 그 외 NULL (TAG)
++          DPJT_AUTH_REQ_WRITE_NAME: string; // D2 — 권한요청 TAG NAME (커서 실명)
++          DPJT_AUTH_REQ_WRITE_COLOR_TYPE: string; // D2 — 'warning-major'
++          DPJT_AUTH_REQ_WRITE: string; // 3상태 DISABLED/CHECKED/UNCHECKED (P-04)
++          DPJT_AUTH_REQ_READ: string; // 3상태 (⚠ D1: 커서 동명 2회 — 판정 CASE 동일·1회 바인딩)
++          [key: string]: string | number;
++        };
++      };
++    };
++    period: {
++      // PR_GET_DAY_RANGE PROC_M 공유 (실서명 2-IN — 계약 ⑤. o_rc2 = 월 경계 'YYYYMMDD:YYYYMMDD')
++      request: {
++        createdBy: string; // 1 P_CREATED_BY (SP NVL 가드 — '')
++        month: string; // 2 P_MONTH (당월 1일 앵커 소비 — M-1~Today 는 FE dayjs 병행, 계약 ⑤)
++      };
++      response: {
++        o_rc1: { DAY_RANGE: string; [key: string]: string | number };
++        o_rc2: { DAY_RANGE: string; [key: string]: string | number };
++      };
++    };
++  };
++
++  /**
++   * ProjectMaster — SDM5010 (Project Master · 프로젝트 등록 요청 승인/반려 + Master 관리)
++   *
++   * ⭐ 계약 단일 원천 = `_artifacts/_apply_corporate/SDM5010_META_20260819/_CONTRACT.md`
++   *   (PROC_M COL_NM = payload 키 — ALL_ARGUMENTS positional 44=44 실측. 원문 = PKG_SDM5010.txt
++   *   치명 결함 정정본 02_PKG_SDM5010.sql — D1~D6·D10~D13 정정 승인 반영).
++   * SHEETS (SEARCH — 커서명 'data'):
++   * - TAB1 (P_SDM5010_GET_TAB1_PJT_REG_REQ — Session 4 IN. SP 내부 필터 = DIVISION_ID=P_SES_DIVISION_ID
++   *   + MGMT_USER_ID=P_SES_USER_ID(본인 — 설계 원문 유지 사용자 확정 D14) + WAITING/REQ_MOD. 조회조건 미소비 F-3)
++   * - TAB2 (P_SDM5010_GET_TAB2_PJT_MASTER — 멀티 콤마 4축 + 'ALL' 무필터 + REG_COMP_DATE BETWEEN.
++   *   ⚠ 커서 REG_COMP_DATE 2회 중복(D16) — FE 는 컬럼명 1회 바인딩(첫 출현) 의존)
++   * - period (PKG_SDM1010.P_SDM1010_GET_PERIOD 공유 배선 — SDM5010_period_SEARCH. 계약 ① 재사용)
++   * BTN 계열 3본은 **행별 단건** apiClient.post 직접
++   * (`features/sdm/src/pages/project-master/utils/project-master.api.ts` — 결과커서 CODE '0'+EVENT
++   * 판정 의무. COL_NM 계약 ①):
++   * - CONFIRM = PKG_SDM5010.P_SDM5010_BTN_TAB1_CONFIRM (15 IN — dpjtKey/dpjtCode/dpjtSeq/
++   *   dpjtKeyParent/divisionId/dpjtClass/endCustomer/dpjtName/cellType/stackMethod/bizType/
++   *   sopDate/sopPlantId/note + sesUserId(BE주입) → result)
++   * - CANCEL = PKG_SDM5010.P_SDM5010_BTN_TAB1_CANCEL (5 IN — divisionId/dpjtKey/dpjtKeyParent/note
++   *   + sesUserId(BE주입) → result)
++   * - SAVE = PKG_SDM5010.P_SDM5010_SAVE_TAB2_PJT_MASTER (5 IN — activeFlag('M' 단건만 유효)/
++   *   dpjtKey/dpjtDevelopStatus/disabled('CHECKED' 정확 일치만 DISABLED — 계약 ⑥) + sesUserId(BE주입) → result)
++   * sesUserId/mnuId 는 BE 세션 자동주입 — request 미포함.
++   * 날짜 컬럼(SOP_DATE/REG_REQ_DATE/REG_COMP_DATE)은 Oracle DATE 원형 → BE ISO 직렬화 수신.
++   */
++  SDM5010: {
++    TAB1: {
++      request: {
++        sesDivisionId: string; // 1 P_SES_DIVISION_ID (SP WHERE 실사용 — 조회조건 Division 전달)
++        userGroup: string; // 4 P_SES_USER_GR_ID (수신만·본문 미사용 D7 — 시그니처 충족용 '')
++      };
++      response: {
++        // 계약 ⑤ O_CURSOR 36컬럼 — callproc 실측 순서 그대로. ⚠ `DPJT_ATUH_*` 오타 alias 유지 확정(F-12)
++        data: {
++          DPJT_KEY: string;
++          DPJT_CODE: string;
++          DPJT_SEQ: string | number;
++          DPJT_REG_CAT: string; // 구분 신규/수정('MOD') — 행 색상 축 (P-05)
++          DPJT_REG_CAT_NAME: string;
++          DIVISION_ID: string;
++          DIVISION_NAME: string; // ⚠ D8: DIVISION_ID 재-alias (CODE=NAME — as-is 수용)
++          DPJT_CLASS: string;
++          DPJT_CLASS_NAME: string;
++          END_CUSTOMER: string;
++          END_CUSTOMER_NAME: string;
++          DPJT_NAME: string;
++          CELL_TYPE: string;
++          CELL_TYPE_NAME: string;
++          STACK_METHOD: string;
++          STACK_METHOD_NAME: string;
++          BIZ_TYPE: string;
++          BIZ_TYPE_NAME: string;
++          SOP_DATE: string;
++          SOP_PLANT_ID: string;
++          SOP_PLANT_NAME: string; // ⚠ D8: SCM_SITE_ID 재-alias
++          DEPT_ID: string;
++          DEPT_NAME: string;
++          DEPT_NAME_KO: string;
++          DEPT_NAME_EN: string;
++          DEPT_NAME_CN: string;
++          MGMT_USER_ID: string;
++          USER_NAME: string;
++          USER_NAME_EN: string;
++          DPJT_ATUH_REG_STR: string; // 리터럴 '권한관리' (링크 셀 — 커서 실명 유지 F-12)
++          DPJT_ATUH_REG_STATUS: string; // 파생 WRITING/COMPLETE (TAG)
++          DPJT_ATUH_REG_STATUS_NAME: string;
++          DPJT_ATUH_REG_STATUS_COLOR_TYPE: string; // Gray/Amber/Green/Red (TAG 색 데이터 주도)
++          NOTE: string;
++          REG_COL: string; // '' 리터럴 — 승인/반려 행 버튼 placeholder (메타 ATTRIBUTE1='REG_ACTION' F-15)
++          DPJT_KEY_PARENT: string;
++          [key: string]: string | number;
++        };
++      };
++    };
++    TAB2: {
++      request: {
++        divisionId: string; // 1 P_DIVISION_ID (단일 필수 — MyDivision. UF_FX_STRING_SPLIT 테이블화)
++        endCustomer: string; // 2 P_END_CUSTOMER (콤마 다중 or 'ALL' — UC-06)
++        cellType: string; // 3 P_CELL_TYPE (콤마 다중 or 'ALL')
++        bizType: string; // 4 P_BIZ_TYPE (콤마 다중 or 'ALL')
++        dpjtDevelopStatus: string; // 5 P_DPJT_DEVELOP_STATUS (콤마 다중 or 'ALL')
++        regCompDateFr: string; // 6 P_REG_COMP_DATE_FR ('YYYY-MM-DD' — TO_DATE SUBSTR 1..10)
++        regCompDateTo: string; // 7 P_REG_COMP_DATE_TO ('YYYY-MM-DD')
++      };
++      response: {
++        // 계약 ⑤ O_CURSOR 36컬럼 — ⚠ REG_COMP_DATE 2회 중복(D16) → 첫 출현 1회 바인딩(타입은 1회 등재)
++        data: {
++          DPJT_KEY: string;
++          DPJT_CODE: string;
++          DPJT_SEQ: string | number;
++          DPJT_REG_CAT: string;
++          DPJT_REG_CAT_NAME: string;
++          DIVISION_ID: string;
++          DIVISION_NAME: string;
++          DPJT_CLASS: string;
++          DPJT_CLASS_NAME: string;
++          END_CUSTOMER: string;
++          END_CUSTOMER_NAME: string;
++          DPJT_NAME: string;
++          CELL_TYPE: string;
++          CELL_TYPE_NAME: string;
++          STACK_METHOD: string;
++          STACK_METHOD_NAME: string;
++          BIZ_TYPE: string;
++          BIZ_TYPE_NAME: string;
++          SOP_DATE: string;
++          SOP_PLANT_ID: string;
++          SOP_PLANT_NAME: string;
++          NOTE: string;
++          REG_REQ_DATE: string;
++          REG_COMP_DATE: string;
++          CNFM_USER_ID: string;
++          CNFM_USER_NAME: string;
++          DEPT_ID: string;
++          DEPT_NAME: string;
++          DPJT_ATUH_REG_STR: string; // 리터럴 '권한관리' (링크 셀)
++          DPJT_ATUH_REG_STATUS: string; // TAG
++          DPJT_ATUH_REG_STATUS_NAME: string;
++          DPJT_ATUH_REG_STATUS_COLOR_TYPE: string;
++          DPJT_DEVELOP_STATUS: string; // 편집 콤보 DpjtDevelopStatus (P-12)
++          DPJT_DEVELOP_STATUS_NAME: string;
++          DISABLE_YN: string; // CHECKED/UNCHECKED (계약 ⑥ — DPJT_MGMT_STATUS='DISABLED' 표현)
++          [key: string]: string | number;
++        };
++      };
++    };
++    period: {
++      // PKG_SDM1010.P_SDM1010_GET_PERIOD 공유 배선 (계약 ① — SDM1010 period 시트와 동일 소비 패턴)
++      request: {
++        frBucket: string; // 1 P_FR_BUCKET (D/W/M)
++        frDateVal: string; // 2 P_FR_DATE_VAL (정수 문자열, 음수 가능)
++        frBucketType: string; // 3 P_FR_BUCKET_TYPE (S/E/C)
++        toBucket: string; // 4 P_TO_BUCKET (FR 과 동일 bucket 만)
++        toDateVal: string; // 5 P_TO_DATE_VAL
++        toBucketType: string; // 6 P_TO_BUCKET_TYPE (S/E/C/X)
++      };
++      response: {
++        // YMD_* 'YYYYMMDD' 문자열 소비 — YMD_FR = M-1 앵커, To=Today 는 FE dayjs 병행 (E01-2)
++        data: {
++          DATE_FR: string;
++          YMD_FR: string;
++          DATE_TO: string;
++          YMD_TO: string;
++          [key: string]: string | number;
++        };
++      };
++    };
++  };
+ }
+ 
+ type ProcessedProcedures = {
+diff --git a/nscm-fe/features/master/src/components/columnLayoutModal/ColumnLayoutModal.tsx b/nscm-fe/features/master/src/components/columnLayoutModal/ColumnLayoutModal.tsx
+index 9998455..9f5f6dd 100644
+--- a/nscm-fe/features/master/src/components/columnLayoutModal/ColumnLayoutModal.tsx
++++ b/nscm-fe/features/master/src/components/columnLayoutModal/ColumnLayoutModal.tsx
+@@ -1,456 +1,8 @@
+-import { useEffect, useMemo, useState } from 'react';
+-
+-import { useQuery } from '@foundation/query-client';
+-import {
+-  type ColumnLayoutRow,
+-  type DualListColumn,
+-  ColorPickerButton,
+-  ColumnSelectDualList,
+-  CustomDialog,
+-} from '@shared/components';
+-import { Button } from '@shared/lges';
+-import { ControlConfirmIcon } from '@shared/lges-icons';
+-import { useMessageStore } from '@shared/stores';
+-
+-import { type ColumnSettingFallback } from '../columnSettingModal/ColumnSettingModal';
+-
+-import styles from './ColumnLayoutModal.module.scss';
+-import {
+-  buildInitialRows,
+-  changeCellColor,
+-  changeTextColor,
+-  changeWidth,
+-  isVisibleColumn,
+-  overrideRows,
+-  parseWidth,
+-  reorderRows,
+-  toHiddenColumnSet,
+-} from './columnLayoutModal.utils';
+-import { fetchColumnMeta, fetchTitleSet } from './titleSet.api';
+-
+-// 컬럼 개인화(Layout) 팝업 — AS-IS ColumnSettingModal 과 동일한 dual list 구조 위에
+-//   To-Be 개인화(Width / Cell·Text Color)를 우측에 얹은 형태.
+-//     좌 = 미표시 컬럼 목록 / 우 = 표시 컬럼 + 개인화 설정.
+-//   ⭐ Display Y/N 컬럼 없음 (2026-07-27 요청) — 우측 목록에 있다는 것 자체가 '표시'다.
+-//     따라서 표시/비표시는 ▶◀ 이동(또는 행 더블클릭)으로만 바꾼다.
+-//   데이터 흐름(SP titleSet + fallback)과 onSave 계약은 종전과 동일.
+-//   설계서: docs/superpowers/specs/2026-07-20-column-layout-modal-design.md
+-
+-// ColumnSelectDualList 의 제네릭 제약은 Record<string, string | number> 다.
+-//   ColumnLayoutRow 는 interface + isKey:boolean 이라 그대로 넣을 수 없어 표시용 row 로 투영한다.
+-//   (isKey 는 IS_KEY 'Y'/'N' 문자열로 옮겨 라벨 강조에만 쓴다 — 이동 가드는 원본 rows 로 판단.)
+-type DualRow = {
+-  COLUMN_NAME: string;
+-  COLUMN_LABEL_NAME: string;
+-  COL_WIDTH: number;
+-  CELL_COLOR: string;
+-  TEXT_COLOR: string;
+-  IS_KEY: 'Y' | 'N';
+-  [key: string]: string | number;
+-};
+-
+-// MEASURE은 안보이게 처리
+-const HIDDEN_FROM_LIST = new Set(['MEASURE']);
+-
+-const toDualRow = (r: ColumnLayoutRow): DualRow => ({
+-  COLUMN_NAME: r.COLUMN_NAME,
+-  COLUMN_LABEL_NAME: r.COLUMN_LABEL_NAME,
+-  COL_WIDTH: r.COL_WIDTH,
+-  CELL_COLOR: r.CELL_COLOR,
+-  TEXT_COLOR: r.TEXT_COLOR,
+-  IS_KEY: r.isKey ? 'Y' : 'N',
+-});
+-
+-interface Props {
+-  open: boolean;
+-  modalClose: () => void;
+-  menuId: string;
+-  sheetName: string;
+-  columnType?: string;
+-  divisionId?: string;
+-  fallbackColumns?: ColumnSettingFallback[];
+-  /** 재진입 시 이전 저장 상태 복원 (visible+width+color+order) */
+-  initialSettings?: ColumnLayoutRow[];
+-  defaultSettings?: ColumnLayoutRow[];
+-  /** OK 시 전체 컬럼 반환 — 우측(USER_FLAG='Y')이 표시 순서대로 앞에 온다. */
+-  onSave: (settings: ColumnLayoutRow[]) => void;
+-  title?: string;
+-  /** dual list 좌측 상단 라벨 (예: 'Invisible') */
+-  leftTitle?: string;
+-  /** dual list 우측 상단 라벨 (예: 'Visible') */
+-  rightTitle?: string;
+-}
+-
+-export const ColumnLayoutModal = ({
+-  open,
+-  modalClose,
+-  menuId,
+-  sheetName,
+-  columnType,
+-  divisionId,
+-  fallbackColumns = [],
+-  initialSettings,
+-  defaultSettings,
+-  onSave,
+-  title = 'Column Setting',
+-  leftTitle,
+-  rightTitle,
+-}: Props) => {
+-  const setAlert = useMessageStore.getState().setAlert;
+-
+-  const filters = useMemo(
+-    () => ({
+-      menuId,
+-      sheetName,
+-      columnType: columnType ?? sheetName,
+-      divisionId: divisionId ?? '40',
+-    }),
+-    [menuId, sheetName, columnType, divisionId]
+-  );
+-
+-  // ⭐ 공용 조회 엔드포인트(fetchTitleSet) — 화면별 `{menuId}/titleSet/SEARCH/call-proc` 을 쓰면
+-  //   SCM_ADM_MNU_BTN_MPG_M 미등록 화면에서 403 No Permission 이 난다 (DMF0042 실측 2026-07-29).
+-  //   ⚠️ queryKey 첫 요소는 반드시 menuId — 각 화면이 저장 직후 invalidateQueries({queryKey:[MENU_ID]})
+-  //     로 이 캐시를 무효화한다(전역 staleTime=Infinity 라 invalidate 없이는 재조회가 안 된다).
+-  const { data, refetch, isLoading, isFetching } = useQuery({
+-    queryKey: [menuId, 'titleSet', 'SEARCH', filters],
+-    queryFn: () => fetchTitleSet(filters),
+-    enabled: open,
+-  });
+-
+-  // ⭐ admin 노출 대상(VISIBLE_FLAG='Y')만 팝업 목록에 올린다 — SP 는 sheet 메타의 모든 컬럼을
+-  //   내려주므로 걸러내지 않으면 관리자가 뺀 컬럼까지 좌측 Invisible 에 쌓인다 (2026-07-29).
+-  const beRows = useMemo(() => (data ?? []).filter(isVisibleColumn), [data]);
+-
+-  // ⭐ admin 노출 금지 컬럼(VISIBLE_FLAG='N' → visible:false) 제외 — 팝업이 메타를 직접 조회한다.
+-  //   화면마다 prop 으로 넘기지 않는 이유: 이 팝업을 쓰는 7개 화면 전부가 같은 처리를 필요로 하고,
+-  //   menuId/sheetName/divisionId 만 있으면 각 화면 store 와 동일한 메타를 얻을 수 있다.
+-  //   ⚠️ beRows 의 VISIBLE_FLAG 필터(isVisibleColumn)만으로는 부족하다. 저장된 개인화가 없어
+-  //     fallbackColumns 로 목록을 만드는 경로에는 admin 메타가 실려오지 않고(ColumnSettingFallback =
+-  //     key/header/width), initialSettings 도 visible/display 를 USER_FLAG 하나로 뭉갠다 (2026-07-29 실측).
+-  const {
+-    data: metaRows,
+-    isLoading: metaLoading,
+-    isFetching: metaFetching,
+-  } = useQuery({
+-    queryKey: [menuId, 'columnMeta', filters.sheetName, filters.divisionId],
+-    queryFn: () =>
+-      fetchColumnMeta({
+-        menuId,
+-        sheetName: filters.sheetName,
+-        divisionId: filters.divisionId,
+-      }),
+-    enabled: open,
+-  });
+-
+-  const excluded = useMemo(() => toHiddenColumnSet(metaRows ?? []), [metaRows]);
+-
+-  // ⚠️ 메타 조회도 loading 에 포함해야 한다 — 아래 latch 는 rows.length===0 일 때 1회만 돌므로,
+-  //   메타보다 titleSet 이 먼저 도착한 순간을 latch 하면 제외 대상이 그대로 좌측에 남는다.
+-  const loading = isLoading || isFetching || metaLoading || metaFetching;
+-
+-  const initialRows = useMemo<ColumnLayoutRow[]>(
+-    () =>
+-      buildInitialRows(beRows, fallbackColumns, initialSettings).filter(
+-        r => !excluded.has(r.COLUMN_NAME)
+-      ),
+-    [beRows, fallbackColumns, initialSettings, excluded]
+-  );
+-
+-  const [rows, setRows] = useState<ColumnLayoutRow[]>([]);
+-  // 체크박스 다중선택 — 체크된 행을 ▶/◀ 로 이동 (ColumnSettingModal 동일).
+-  const [checkedLeft, setCheckedLeft] = useState<Set<string>>(new Set());
+-  const [checkedRight, setCheckedRight] = useState<Set<string>>(new Set());
+-
+-  // popup 닫히면 reset
+-  useEffect(() => {
+-    if (!open) {
+-      setRows([]);
+-      setCheckedLeft(new Set());
+-      setCheckedRight(new Set());
+-    }
+-  }, [open]);
+-
+-  // open + 데이터 도착 시 1회만 초기화 (사용자 편집 보존)
+-  // ⚠️ loading 가드 필수 — 재진입 시 React Query 가 직전(저장 전) 캐시를 즉시 돌려준다. 그걸 먼저
+-  //   latch 하면 뒤이어 도착한 최신 응답을 rows.length>0 가드가 막아, 방금 저장한 표시상태가
+-  //   원복된 것처럼 보인다(2026-07-27 실측). fetch 가 끝난 뒤의 데이터만 적재한다.
+-  useEffect(() => {
+-    if (open && !loading && rows.length === 0 && initialRows.length > 0) {
+-      setRows(initialRows);
+-    }
+-  }, [open, loading, initialRows, rows.length]);
+-
+-  const baseRows = useMemo(() => rows.filter(r => r.USER_FLAG === 'N'), [rows]);
+-  const userRows = useMemo(
+-    () => rows.filter(r => r.USER_FLAG === 'Y').sort((a, b) => a.SORT_ORDER_NO - b.SORT_ORDER_NO),
+-    [rows]
+-  );
+-
+-  const leftItems = useMemo(
+-    () => baseRows.filter(r => !HIDDEN_FROM_LIST.has(r.COLUMN_NAME)).map(toDualRow),
+-    [baseRows]
+-  );
+-  const rightItems = useMemo(
+-    () => userRows.filter(r => !HIDDEN_FROM_LIST.has(r.COLUMN_NAME)).map(toDualRow),
+-    [userRows]
+-  );
+-
+-  const keyColumns = useMemo(
+-    () => new Set(rows.filter(r => r.isKey).map(r => r.COLUMN_NAME)),
+-    [rows]
+-  );
+-
+-  const toggleLeft = (key: string) =>
+-    setCheckedLeft(prev => {
+-      const next = new Set(prev);
+-      if (next.has(key)) next.delete(key);
+-      else next.add(key);
+-      return next;
+-    });
+-  const toggleRight = (key: string) =>
+-    setCheckedRight(prev => {
+-      const next = new Set(prev);
+-      if (next.has(key)) next.delete(key);
+-      else next.add(key);
+-      return next;
+-    });
+-  const toggleAllLeft = (checked: boolean) =>
+-    setCheckedLeft(checked ? new Set(baseRows.map(r => r.COLUMN_NAME)) : new Set());
+-  const toggleAllRight = (checked: boolean) =>
+-    setCheckedRight(checked ? new Set(userRows.map(r => r.COLUMN_NAME)) : new Set());
+-
+-  // 표시로 이동 — 우측 맨 뒤에 붙인다(기존 순서 보존).
+-  const showColumns = (keys: Set<string>) => {
+-    setRows(prev => {
+-      let maxSeq = Math.max(0, ...prev.filter(r => r.USER_FLAG === 'Y').map(r => r.SORT_ORDER_NO));
+-      return prev.map(r => {
+-        if (r.USER_FLAG === 'N' && keys.has(r.COLUMN_NAME)) {
+-          maxSeq += 1;
+-          return { ...r, USER_FLAG: 'Y' as const, SORT_ORDER_NO: maxSeq };
+-        }
+-        return r;
+-      });
+-    });
+-  };
+-
+-  // 비표시로 이동 — key 컬럼(라벨 끝 '*')은 항상 표시라 제외한다.
+-  const hideColumns = (keys: Set<string>) => {
+-    setRows(prev =>
+-      prev.map(r =>
+-        r.USER_FLAG === 'Y' && keys.has(r.COLUMN_NAME) && !r.isKey
+-          ? { ...r, USER_FLAG: 'N' as const, SORT_ORDER_NO: 0 }
+-          : r
+-      )
+-    );
+-  };
+-
+-  const moveToUser = () => {
+-    if (checkedLeft.size === 0) {
+-      void setAlert({ type: 'alert', content: '좌측 column 선택' });
+-      return;
+-    }
+-    showColumns(checkedLeft);
+-    setCheckedLeft(new Set());
+-  };
+-
+-  const moveToBase = () => {
+-    if (checkedRight.size === 0) {
+-      void setAlert({ type: 'alert', content: '우측 column 선택' });
+-      return;
+-    }
+-    // 선택이 전부 key 컬럼이면 아무것도 안 옮겨진다 — 왜 안 되는지 알려준다.
+-    if ([...checkedRight].every(k => keyColumns.has(k))) {
+-      void setAlert({ type: 'alert', content: '필수 column 은 비표시로 옮길 수 없습니다.' });
+-      return;
+-    }
+-    hideColumns(checkedRight);
+-    setCheckedRight(new Set());
+-  };
+-
+-  // 더블클릭 — 해당 행 1개만 이동 (▶/◀ 와 동일 동작, 체크상태 무관)
+-  const moveOneToUser = (key: string) => {
+-    showColumns(new Set([key]));
+-    setCheckedLeft(prev => {
+-      const next = new Set(prev);
+-      next.delete(key);
+-      return next;
+-    });
+-  };
+-
+-  const moveOneToBase = (key: string) => {
+-    if (keyColumns.has(key)) {
+-      void setAlert({ type: 'alert', content: '필수 column 은 비표시로 옮길 수 없습니다.' });
+-      return;
+-    }
+-    hideColumns(new Set([key]));
+-    setCheckedRight(prev => {
+-      const next = new Set(prev);
+-      next.delete(key);
+-      return next;
+-    });
+-  };
+-
+-  // 행 클릭이 체크 토글/더블클릭 이동을 일으키므로, 입력 컨트롤에서는 전파를 끊는다.
+-  const stopRowEvents = {
+-    onClick: (e: { stopPropagation: () => void }) => e.stopPropagation(),
+-    onDoubleClick: (e: { stopPropagation: () => void }) => e.stopPropagation(),
+-  };
+-
+-  const renderLabel = (row: DualRow) => (
+-    <span className={row.IS_KEY === 'Y' ? styles.keyLabel : undefined}>
+-      {row.COLUMN_LABEL_NAME}
+-    </span>
+-  );
+-
+-  const LEFT_COLUMNS: DualListColumn<DualRow>[] = [
+-    { key: 'COLUMN_LABEL_NAME', header: 'Column', align: 'left', render: renderLabel },
+-  ];
+-
+-  const RIGHT_COLUMNS: DualListColumn<DualRow>[] = [
+-    { key: 'COLUMN_LABEL_NAME', header: 'Column', align: 'left', render: renderLabel },
+-    {
+-      key: 'COL_WIDTH',
+-      header: 'Width',
+-      width: 80,
+-      align: 'center',
+-      render: (row, rowKey) => (
+-        <span {...stopRowEvents}>
+-          <input
+-            type='number'
+-            min={0}
+-            className={styles.widthInput}
+-            value={row.COL_WIDTH}
+-            onChange={e =>
+-              setRows(prev => changeWidth(prev, rowKey, parseWidth(e.target.value, row.COL_WIDTH)))
+-            }
+-          />
+-        </span>
+-      ),
+-    },
+-    {
+-      key: 'CELL_COLOR',
+-      header: 'Cell Color',
+-      width: 80,
+-      align: 'center',
+-      render: (row, rowKey) => (
+-        <span {...stopRowEvents}>
+-          <ColorPickerButton
+-            value={row.CELL_COLOR}
+-            onChange={hex => setRows(prev => changeCellColor(prev, rowKey, hex))}
+-            title='Cell Color'
+-            autoColor='#ffffff'
+-          />
+-        </span>
+-      ),
+-    },
+-    {
+-      key: 'TEXT_COLOR',
+-      header: 'Text Color',
+-      width: 80,
+-      align: 'center',
+-      render: (row, rowKey) => (
+-        <span {...stopRowEvents}>
+-          <ColorPickerButton
+-            value={row.TEXT_COLOR}
+-            onChange={hex => setRows(prev => changeTextColor(prev, rowKey, hex))}
+-            title='Text Color'
+-          />
+-        </span>
+-      ),
+-    },
+-  ];
+-
+-  const handleDefault = () => {
+-    // ⭐ 관리자 기본값으로 원복 — 저장된 개인화(BE 응답)를 defaultSettings 로 강제로 덮는다.
+-    //   buildInitialRows 는 DB 우선이라 그대로 쓰면 개인화가 그대로 남으므로 overrideRows 를 쓴다.
+-    //   Cell/Text Color 는 '' = 자동(기본색) 이므로 항상 비운다 (2026-07-27 요청).
+-    const base = buildInitialRows(beRows, fallbackColumns).filter(
+-      r => !excluded.has(r.COLUMN_NAME)
+-    );
+-    const reverted = defaultSettings?.length ? overrideRows(base, defaultSettings) : base;
+-    setRows(reverted.map(r => ({ ...r, CELL_COLOR: '', TEXT_COLOR: '' })));
+-    setCheckedLeft(new Set());
+-    setCheckedRight(new Set());
+-    void refetch?.();
+-  };
+-
+-  const handleOk = () => {
+-    if (userRows.length === 0) {
+-      void setAlert({ type: 'alert', content: '최소 1개 column 은 표시 상태여야 합니다.' });
+-      return;
+-    }
+-    // ⭐ HIDDEN_FROM_LIST(MEASURE) 는 dual list 에서 안 보여서 드래그로 순서를 못 옮긴다 — reorderRows
+-    //   가 orderedKeys 에 없는 행은 SORT_ORDER_NO 를 그대로 두므로, 방치하면 예전 순번이 남아
+-    //   다른 컬럼들 사이 임의 위치에 낀다. 항상 마지막(다른 표시 컬럼 전부 뒤)이라고 가정하고 저장한다.
+-    const visibleUserRows = userRows.filter(r => !HIDDEN_FROM_LIST.has(r.COLUMN_NAME));
+-    const trailingUserRows = userRows.filter(r => HIDDEN_FROM_LIST.has(r.COLUMN_NAME));
+-    // 우측(표시)을 화면 순서대로 1..n(+숨김목록 후행), 좌측(비표시)은 0 — ColumnSettingModal 저장 계약과 동일.
+-    onSave([
+-      ...visibleUserRows.map((r, i) => ({ ...r, SORT_ORDER_NO: i + 1 })),
+-      ...trailingUserRows.map((r, i) => ({
+-        ...r,
+-        SORT_ORDER_NO: visibleUserRows.length + i + 1,
+-      })),
+-      ...baseRows.map(r => ({ ...r, SORT_ORDER_NO: 0 })),
+-    ]);
+-    modalClose();
+-  };
+-
+-  return (
+-    <CustomDialog
+-      open={open}
+-      type='modal'
+-      position='basic'
+-      size={900}
+-      draggable={false}
+-      handleClose={modalClose}
+-      disableButtonCancel
+-      title={title}
+-      customContentArea={
+-        <div className={styles.container}>
+-          <ColumnSelectDualList<DualRow>
+-            leftItems={leftItems}
+-            rightItems={rightItems}
+-            leftColumns={LEFT_COLUMNS}
+-            rightColumns={RIGHT_COLUMNS}
+-            leftTitle={leftTitle}
+-            rightTitle={rightTitle}
+-            itemKey='COLUMN_NAME'
+-            checkedLeft={checkedLeft}
+-            checkedRight={checkedRight}
+-            onToggleLeft={toggleLeft}
+-            onToggleRight={toggleRight}
+-            onToggleAllLeft={toggleAllLeft}
+-            onToggleAllRight={toggleAllRight}
+-            onMoveRight={moveToUser}
+-            onMoveLeft={moveToBase}
+-            onReorderRight={orderedKeys => setRows(prev => reorderRows(prev, orderedKeys))}
+-            onRowDoubleClickLeft={moveOneToUser}
+-            onRowDoubleClickRight={moveOneToBase}
+-          />
+-
+-          <div className={styles.actionBar}>
+-            <Button
+-              appearance='outlined'
+-              priority='normal'
+-              size='medium'
+-              buttonLabel='Default'
+-              onClick={handleDefault}
+-              disabled={loading}
+-            />
+-            <Button
+-              appearance='contained'
+-              priority='primary'
+-              size='medium'
+-              buttonLabel='Save'
+-              iconComponent={<ControlConfirmIcon size='small' />}
+-              iconPosition='leading'
+-              onClick={handleOk}
+-            />
+-          </div>
+-        </div>
+-      }
+-    />
+-  );
+-};
++// ⭐ [2026-08-20 정본 단일화 — 사용자 지시] Grid Column Setting(컬럼 개인화) 모달 정본은
++//   `packages/shared/src/components/templates/modals/column-layout-modal/ColumnLayoutModal.tsx` **유일**이다.
++//   본 파일은 기존 소비처(mkt-fcst / forecast-price / sales-reports / sales-future-price /
++//   contribute-view / sales-monitoring 등) 호환용 **재수출 스텁** — 여기에 구현을 되살리지 말 것.
++//   신규 화면은 `@shared/components` 에서 직접 import 한다. 룰 = hook #132
++//   (`Doc/_rules_v2/hooks/ui-layout-shell-modal-feedback-standard.md` §Column 모달 정본).
++//   (구 사본에만 있던 2026-08-13 HIDDEN_FROM_LIST 순번 fix 는 정본에 이식 완료 — 2026-08-20)
++export { ColumnLayoutModal } from '@shared/components';
+diff --git a/nscm-fe/features/master/src/components/columnLayoutModal/columnLayoutModal.utils.ts b/nscm-fe/features/master/src/components/columnLayoutModal/columnLayoutModal.utils.ts
+index bcf5273..9485462 100644
+--- a/nscm-fe/features/master/src/components/columnLayoutModal/columnLayoutModal.utils.ts
++++ b/nscm-fe/features/master/src/components/columnLayoutModal/columnLayoutModal.utils.ts
+@@ -1,203 +1,21 @@
+-import type { RawFlexGridColumnConfig } from '@foundation/models';
+-import type { ColumnLayoutRow } from '@shared/components';
+-
+-import type { ColumnSettingFallback } from '../columnSettingModal/ColumnSettingModal';
+-
+-import type { ColumnMetaRow } from './titleSet.api';
+-
+-export const DEFAULT_COL_WIDTH = 100;
+-
+-export const deriveIsKey = (label: string): boolean => label.trim().endsWith('*');
+-
+-/**
+- * 화면 grid 메타(SHEET_COLUMNS) → 팝업 initialSettings/defaultSettings 변환.
+- *
+- * titleSet SP 계약(COLUMN_NAME/COLUMN_LABEL)에는 width/color 가 없으므로, 팝업의 Width 기본값은
+- * grid 가 실제로 쓰는 `colWth`(= SCM_MST_SHEET_COLUMNS.COLUMN_WIDTH) 에서 와야 한다.
+- * 배열 순서를 SORT_ORDER_NO 로 삼는다 — grid 가 배열 순서를 컬럼 순서로 쓰는 것과 동일 규칙.
+- */
+-export const toColumnLayoutSettings = (rawColumns: RawFlexGridColumnConfig[]): ColumnLayoutRow[] =>
+-  rawColumns.map((c, i) => {
+-    const label = c.colLblNm ?? c.colNm;
+-    return {
+-      COLUMN_NAME: c.colNm,
+-      COLUMN_LABEL_NAME: label,
+-      // ⚠️ 표시 판정은 VISIBLE_FLAG(visible) 와 DISPLAY_FLAG(display) 둘 다 본다.
+-      //   admin 원본에서는 둘이 다를 수 있어(visible=Y / display=N) visible 만 보면
+-      //   기본 미표시 컬럼까지 Default 에서 전부 켜진다 (2026-07-27 실측).
+-      //   개인화 적용본은 store 가 둘을 같이 세팅하므로 동작 변화 없음.
+-      USER_FLAG: c.visible === false || c.display === false ? 'N' : 'Y',
+-      SORT_ORDER_NO: i + 1,
+-      COL_WIDTH: c.colWth ?? DEFAULT_COL_WIDTH,
+-      CELL_COLOR: c.cellColor ?? '',
+-      TEXT_COLOR: c.textColor ?? '',
+-      isKey: deriveIsKey(label),
+-    };
+-  });
+-
+-export const parseWidth = (raw: string, fallback: number): number => {
+-  const t = raw.trim();
+-  if (t === '') return fallback;
+-  const n = Number(t);
+-  if (!Number.isFinite(n)) return fallback;
+-  return n < 0 ? 0 : Math.floor(n);
+-};
+-
+-const mapBeRow = (r: Record<string, string>, i: number): ColumnLayoutRow => {
+-  const label = String(r.COLUMN_LABEL_NAME ?? r.COLUMN_NAME ?? '');
+-  const beFlag = String(r.USER_FLAG ?? r.VISIBLE_FLAG ?? 'Y');
+-  // ⭐ 사용자 저장값 우선 (2026-07-27 SP 실측) — GET_TITLESET_POPUP 은 관리자 기본값과 사용자값을
+-  //   별칭으로 나눠 둘 다 내려준다:
+-  //     COLUMN_WIDTH   = SCM_MST_SHEET_COLUMNS (관리자 기본)
+-  //     USER_COLUMN_WIDTH = COALESCE(TITLESET_USER.COLUMN_WIDTH, 관리자값)  ← 사용자 저장값
+-  //   관리자쪽을 읽으면 저장한 폭이 영원히 안 보인다. SORT_ORDER_NO 도 동일 구조.
+-  const width = Number(
+-    r.USER_COLUMN_WIDTH ?? r.COLUMN_WIDTH ?? r.COL_WIDTH ?? r.COL_WTH ?? DEFAULT_COL_WIDTH
+-  );
+-  return {
+-    COLUMN_NAME: String(r.COLUMN_NAME ?? ''),
+-    COLUMN_LABEL_NAME: label,
+-    USER_FLAG: beFlag === 'Y' ? 'Y' : 'N',
+-    SORT_ORDER_NO: Number(r.USER_SORT_ORDER_NO ?? r.SORT_ORDER_NO ?? i + 1),
+-    COL_WIDTH: Number.isFinite(width) && width > 0 ? width : DEFAULT_COL_WIDTH,
+-    CELL_COLOR: String(r.CELL_COLOR ?? ''),
+-    TEXT_COLOR: String(r.TEXT_COLOR ?? ''),
+-    isKey: deriveIsKey(label),
+-  };
+-};
+-
+-const mapFallback = (c: ColumnSettingFallback, i: number): ColumnLayoutRow => ({
+-  COLUMN_NAME: c.key,
+-  COLUMN_LABEL_NAME: c.header,
+-  USER_FLAG: 'Y',
+-  SORT_ORDER_NO: i + 1,
+-  COL_WIDTH: c.width ?? DEFAULT_COL_WIDTH,
+-  CELL_COLOR: '',
+-  TEXT_COLOR: '',
+-  isKey: deriveIsKey(c.header),
+-});
+-
+-/**
+- * 값이 실제로 내려왔는지 — null/undefined/공백은 '미제공'으로 본다.
+- * ⚠️ SP 응답은 타입상 Record<string,string> 이지만 런타임엔 숫자가 그대로 온다
+- *   (COLUMN_WIDTH/SORT_ORDER_NO). string 전제로 .trim() 호출 시 TypeError (2026-07-27).
+- */
+-const has = (v: unknown): boolean => {
+-  if (v === undefined || v === null) return false;
+-  if (typeof v === 'string') return v.trim() !== '';
+-  return typeof v === 'number' || typeof v === 'boolean';
+-};
+-
+-const hasWidth = (r: Record<string, string>): boolean =>
+-  has(r.USER_COLUMN_WIDTH) || has(r.COLUMN_WIDTH) || has(r.COL_WIDTH) || has(r.COL_WTH);
+-
+-const hasOrder = (r: Record<string, string>): boolean =>
+-  has(r.USER_SORT_ORDER_NO) || has(r.SORT_ORDER_NO);
+-
+-/**
+- * 팝업 목록에 올릴 컬럼인지 — admin 메타의 VISIBLE_FLAG(= 관리 노출 여부) 기준.
+- *
+- * ⭐ GET_TITLESET_POPUP 은 sheet 메타에 등록된 컬럼을 전부 내려주므로, 관리자가 노출 대상에서
+- *   뺀 컬럼(VISIBLE_FLAG='N')까지 좌측 Invisible 목록에 쌓인다 (2026-07-29 요청). 그리드는
+- *   VISIBLE_FLAG='N' 을 애초에 그리지 않으므로, 팝업에서도 선택지 자체에서 제외한다.
+- *
+- * ⚠️ 표시/비표시(좌·우) 판정은 여전히 USER_FLAG 다 — VISIBLE_FLAG 는 "목록에 존재하는가" 만 본다.
+- * ⚠️ 값이 안 내려온 행은 남긴다. VISIBLE_FLAG 를 커서에 포함하지 않는 SP 에서 ==='Y' 로 걸면
+- *   팝업이 통째로 비어버린다 (mapBeRow 가 USER_FLAG 부재 시 VISIBLE_FLAG 로 폴백하는 것과 동일한
+- *   방어). 이 경우 필터는 no-op 이므로 SP 쪽에서 걸러야 한다.
+- */
+-export const isVisibleColumn = (r: Record<string, string>): boolean =>
+-  !has(r.VISIBLE_FLAG) || String(r.VISIBLE_FLAG).toUpperCase() === 'Y';
+-
+-/**
+- * admin 메타에서 노출 금지된 컬럼명 집합 — `visible === false` (= VISIBLE_FLAG 'N').
+- *
+- * ⚠️ `display === false` 는 넣지 않는다. 그건 "기본 미표시"일 뿐 사용자가 켤 수 있어야 하므로
+- *   좌측 Invisible 목록에 남아야 한다. 둘을 섞으면 한 번 숨긴 컬럼을 영영 되살릴 수 없다.
+- * ⚠️ `visible` 미제공(undefined)은 제외하지 않는다 — 메타가 없을 때 목록이 통째로 비는 사고 방지.
+- */
+-export const toHiddenColumnSet = (cols: Partial<ColumnMetaRow>[]): Set<string> =>
+-  new Set(cols.filter(c => c.visible === false && c.colNm).map(c => String(c.colNm)));
+-
+-/** base 행에 settings 를 강제로 덮어쓴다 (Default 원복 등 — DB 값보다 우선시켜야 할 때). */
+-export const overrideRows = (
+-  base: ColumnLayoutRow[],
+-  settings: ColumnLayoutRow[]
+-): ColumnLayoutRow[] => {
+-  const map = new Map(settings.map(s => [s.COLUMN_NAME, s]));
+-  return base.map(row => {
+-    const o = map.get(row.COLUMN_NAME);
+-    if (!o) return row;
+-    return {
+-      ...row,
+-      USER_FLAG: row.isKey ? 'Y' : o.USER_FLAG,
+-      SORT_ORDER_NO: o.SORT_ORDER_NO,
+-      COL_WIDTH: o.COL_WIDTH,
+-      CELL_COLOR: o.CELL_COLOR,
+-      TEXT_COLOR: o.TEXT_COLOR,
+-    };
+-  });
+-};
+-
+-/**
+- * 팝업 초기 행 구성.
+- *
+- * ⭐ 우선순위 = DB(BE 응답) > 화면 상태(initialSettings) (2026-07-27 요청).
+- *   저장된 개인화가 있으면 그게 최우선으로 보여야 하므로, initialSettings 는 BE 가 값을 주지
+- *   않은 필드만 보완한다. (구 구현은 initialSettings 가 무조건 덮어써서, DB 에 저장된 값이
+- *   화면 store 값에 가려졌다.)
+- *   BE 응답이 0건일 때만 fallbackColumns 를 base 로 쓰고, 이때는 initialSettings 를 그대로 적용한다.
+- */
+-export const buildInitialRows = (
+-  beRows: Record<string, string>[],
+-  fallbackColumns: ColumnSettingFallback[],
+-  initialSettings?: ColumnLayoutRow[]
+-): ColumnLayoutRow[] => {
+-  if (beRows.length > 0) {
+-    const overrideMap = new Map((initialSettings ?? []).map(s => [s.COLUMN_NAME, s]));
+-    return beRows.map((raw, i) => {
+-      const row = mapBeRow(raw, i);
+-      const o = overrideMap.get(row.COLUMN_NAME);
+-      if (!o) return row;
+-      return {
+-        ...row,
+-        USER_FLAG: row.isKey ? 'Y' : has(raw.USER_FLAG) ? row.USER_FLAG : o.USER_FLAG,
+-        SORT_ORDER_NO: hasOrder(raw) ? row.SORT_ORDER_NO : o.SORT_ORDER_NO,
+-        COL_WIDTH: hasWidth(raw) ? row.COL_WIDTH : o.COL_WIDTH,
+-        CELL_COLOR: has(raw.CELL_COLOR) ? row.CELL_COLOR : o.CELL_COLOR,
+-        TEXT_COLOR: has(raw.TEXT_COLOR) ? row.TEXT_COLOR : o.TEXT_COLOR,
+-      };
+-    });
+-  }
+-  const base = fallbackColumns.map(mapFallback);
+-  return initialSettings && initialSettings.length > 0 ? overrideRows(base, initialSettings) : base;
+-};
+-
+-export const toggleDisplay = (rows: ColumnLayoutRow[], key: string): ColumnLayoutRow[] =>
+-  rows.map(r =>
+-    r.COLUMN_NAME === key && !r.isKey ? { ...r, USER_FLAG: r.USER_FLAG === 'Y' ? 'N' : 'Y' } : r
+-  );
+-
+-export const changeWidth = (
+-  rows: ColumnLayoutRow[],
+-  key: string,
+-  width: number
+-): ColumnLayoutRow[] => rows.map(r => (r.COLUMN_NAME === key ? { ...r, COL_WIDTH: width } : r));
+-
+-export const changeCellColor = (
+-  rows: ColumnLayoutRow[],
+-  key: string,
+-  hex: string
+-): ColumnLayoutRow[] => rows.map(r => (r.COLUMN_NAME === key ? { ...r, CELL_COLOR: hex } : r));
+-
+-export const changeTextColor = (
+-  rows: ColumnLayoutRow[],
+-  key: string,
+-  hex: string
+-): ColumnLayoutRow[] => rows.map(r => (r.COLUMN_NAME === key ? { ...r, TEXT_COLOR: hex } : r));
+-
+-export const reorderRows = (rows: ColumnLayoutRow[], orderedKeys: string[]): ColumnLayoutRow[] =>
+-  rows.map(r => {
+-    const idx = orderedKeys.indexOf(r.COLUMN_NAME);
+-    return idx === -1 ? r : { ...r, SORT_ORDER_NO: idx + 1 };
+-  });
++// ⭐ [2026-08-20 정본 단일화] Grid Column Setting 모달 유틸 정본 =
++//   `packages/shared/src/components/templates/modals/column-layout-modal/columnLayoutModal.utils.ts` 유일.
++//   본 파일은 기존 소비처 호환용 재수출 스텁 — 구현 금지 (hook #132 §Column 모달 정본).
++//   ⚠ `ColumnSettingFallback` 타입은 재수출하지 않는다 — master barrel 이
++//   `columnSettingModal/ColumnSettingModal.tsx` 의 동명 export 와 충돌(ambiguous star export)하기 때문.
++//   구조 동일 타입이라 소비처는 기존 import 경로 그대로 동작한다.
++export {
++  DEFAULT_COL_WIDTH,
++  deriveIsKey,
++  toColumnLayoutSettings,
++  parseWidth,
++  isVisibleColumn,
++  toHiddenColumnSet,
++  overrideRows,
++  buildInitialRows,
++  toggleDisplay,
++  changeWidth,
++  changeCellColor,
++  changeTextColor,
++  reorderRows,
++} from '@shared/components';
+diff --git a/nscm-fe/features/master/src/components/searchFields/SearchFields.tsx b/nscm-fe/features/master/src/components/searchFields/SearchFields.tsx
+index 70bde36..fee1608 100644
+--- a/nscm-fe/features/master/src/components/searchFields/SearchFields.tsx
++++ b/nscm-fe/features/master/src/components/searchFields/SearchFields.tsx
+@@ -57,7 +57,59 @@ interface MultiFieldProps {
+   onChange: (v: string[]) => void;
+   division?: string; // 종속 필터용
+   gridSize?: number;
++  /**
++   * ⭐ 2026-08-23 — 임시 디버그 라벨(무기능). 화면이 `SearchFields.debug.logSearchReset` 과 짝으로
++   * 넘기는 식별 문자열이다. 런타임 동작에 영향 없음 — 디버그 정리 시 화면과 함께 제거 대상.
++   */
++  debugLabel?: string;
++  /**
++   * ⭐ 2026-08-23 — 비활성 override. 카탈로그 기본 게이트(예: PlantSite = 81 계열만 활성)를
++   * 화면 사양이 덮어야 하는 경우에 쓴다(DMF0042 는 40 만 비활성 — 기본 게이트면 82 까지 잠긴다).
++   * 미전달 = 종전 동작 그대로.
++   */
++  disabled?: boolean;
+ }
++
++/**
++ * ⭐ 2026-08-23 — 종속(cascade) 필터 규약.
++ *
++ * 콤보가 **내려주는 컬럼 값**으로 클라이언트에서 목록을 좁힌다(서버 바인드 콤보가 없는 축의 대체).
++ * - `string[]`            = 관대(loose) 매칭 — 콤보 행의 해당 컬럼이 공란/NULL 이면 **통과**시킨다.
++ *   그 컬럼이 정상적으로 비어 있는 행이 존재하는 축(예: SalesSite 콤보의 PROJECT_CODE)에 쓴다.
++ *   자르면 목록이 통째로 비어버린다.
++ * - `{ values, strict:true }` = 엄격 매칭 — 공란/NULL 행도 **탈락**시킨다. 상위 선택이 반드시
++ *   하위를 좁혀야 하는 축(예: Team(DEPT_ID) → End Customer / Sales Site)에 쓴다.
++ * - 값 배열이 비어 있으면(미선택) 그 축은 **미적용**.
++ *
++ * 계보: `EndCustomerField.deptIds`(2026-08-04, DEPT_ID 관대 매칭 단일 축)의 일반화.
++ * 두 prop 을 함께 주면 deptIds 는 `{DEPT_ID: values}`(관대) 로 합쳐진다.
++ */
++export type CascadeAxis = string[] | { values: string[]; strict?: boolean };
++export type CascadeSpec = Record<string, CascadeAxis>;
++
++const normalizeAxis = (axis: CascadeAxis): { values: string[]; strict: boolean } =>
++  Array.isArray(axis)
++    ? { values: axis, strict: false }
++    : { values: axis.values ?? [], strict: axis.strict === true };
++
++/** cascade 규약대로 콤보 행을 거른다. cascade 미전달/전 축 공백이면 원본 그대로 반환. */
++const applyCascade = <T,>(rows: T | undefined, cascade?: CascadeSpec): T | undefined => {
++  if (!cascade || !rows) return rows;
++  const axes = Object.entries(cascade)
++    .map(([col, axis]) => [col, normalizeAxis(axis)] as const)
++    .filter(([, a]) => a.values.length > 0);
++  if (axes.length === 0) return rows;
++  const list = rows as unknown as Array<Record<string, unknown>>;
++  const filtered = list.filter(row =>
++    axes.every(([col, a]) => {
++      const cell = row[col];
++      const v = cell === null || cell === undefined ? '' : String(cell).trim();
++      if (v === '') return !a.strict; // 공란 행 — 관대면 통과, 엄격이면 탈락
++      return a.values.some(x => String(x).trim() === v);
++    })
++  );
++  return filtered as unknown as T;
++};
+ interface PopupFieldProps {
+   value: string[];
+   onChange: (v: string[]) => void;
+@@ -99,6 +151,8 @@ interface PopupSearchInputProps {
+   onValueChange: (v: string) => void;
+   onOpenPopup: () => void;
+   disabled?: boolean; // ⭐ division 기준 비활성 (AS-IS Enabled=false) — 입력/팝업 버튼 모두 잠금
++  /** ⭐ 2026-08-23 — 편집 시작 시점 훅 (VersionField 가 표시문→코드 치환에 쓴다) */
++  onFocus?: () => void;
+ }
+ const popupRowStyle: React.CSSProperties = {
+   display: 'flex',
+@@ -111,12 +165,14 @@ const PopupSearchInput = ({
+   onValueChange,
+   onOpenPopup,
+   disabled,
++  onFocus,
+ }: PopupSearchInputProps) => (
+   <div style={popupRowStyle}>
+     <InputField
+       fullWidth
+       disabled={disabled}
+       value={value}
++      onFocus={onFocus}
+       onChange={e => onValueChange((e.target as HTMLInputElement).value)}
+     />
+     <Button
+@@ -188,7 +244,14 @@ export const TeamField = ({
+   division,
+   gridSize,
+   comboId,
++  deptIds,
++  cascade,
++  disabled,
+ }: MultiFieldProps & {
++  /** 상위 축 종속 필터 — 규약은 `CascadeSpec` 주석 참조. */
++  cascade?: CascadeSpec;
++  /** 레거시 단일 축(DEPT_ID 관대 매칭). cascade 와 함께 주면 합쳐진다. */
++  deptIds?: string[];
+   /**
+    * ⭐ 2026-07-23 (DMF0003 조회조건 AS-IS 정합) — opt-in 콤보 대체.
+    * 기본 'TeambyDivision'(기존 화면 무영향). DMF0003 은 AS-IS BigFilter 1:1 등록본
+@@ -205,6 +268,9 @@ export const TeamField = ({
+   const [teams] = useTabComboQueries({
+     filters: [{ comboId: comboId ?? 'TeambyDivision', divisionId: `'${division ?? ''}'` }],
+   });
++  const spec: CascadeSpec | undefined =
++    deptIds && deptIds.length > 0 ? { DEPT_ID: deptIds, ...(cascade ?? {}) } : cascade;
++  const filtered = applyCascade(teams, spec);
+   return (
+     <Grid size={gridSize ?? 4}>
+       <FormItem
+@@ -216,8 +282,9 @@ export const TeamField = ({
+             allOption
+             useClearIcon
+             limitTags={1}
++            disabled={disabled}
+             value={value.join(',')}
+-            options={toOptions(teams as never, division)}
++            options={toOptions(filtered as never, division)}
+             onChange={(_, options) =>
+               onChange(
+                 String(options ?? '')
+@@ -242,7 +309,11 @@ export const EndCustomerField = ({
+   gridSize,
+   comboId,
+   deptIds,
++  cascade,
++  disabled,
+ }: MultiFieldProps & {
++  /** 상위 축 종속 필터 — 규약은 `CascadeSpec` 주석 참조 (deptIds 의 일반화). */
++  cascade?: CascadeSpec;
+   /**
+    * ⭐ 2026-07-23 (DMF0003 조회조건 AS-IS 정합) — opt-in 콤보 대체.
+    * 기본 'EndCustomer'(기존 화면 무영향). DMF0003 은 AS-IS BigFilter 1:1 등록본
+@@ -256,12 +327,10 @@ export const EndCustomerField = ({
+ }) => {
+   const L = useL();
+   const [endCustomers] = useTabComboQueries({ filters: [comboId ?? 'EndCustomer'] });
+-  const deptSet = deptIds && deptIds.length > 0 ? new Set(deptIds) : null;
+-  const deptFiltered = deptSet
+-    ? ((endCustomers ?? []) as Array<Record<string, string>>).filter(
+-        r => !r.DEPT_ID || deptSet.has(r.DEPT_ID)
+-      )
+-    : endCustomers;
++  // 레거시 deptIds(관대) + cascade 합성 — 같은 축이면 cascade 가 우선(엄격 지정 가능).
++  const spec: CascadeSpec | undefined =
++    deptIds && deptIds.length > 0 ? { DEPT_ID: deptIds, ...(cascade ?? {}) } : cascade;
++  const deptFiltered = applyCascade(endCustomers, spec);
+   return (
+     <Grid size={gridSize ?? 4}>
+       <FormItem
+@@ -273,6 +342,7 @@ export const EndCustomerField = ({
+             allOption
+             useClearIcon
+             limitTags={1}
++            disabled={disabled}
+             value={value.join(',')}
+             options={toOptions(deptFiltered as never, division)}
+             onChange={(_, options) =>
+@@ -301,7 +371,11 @@ export const SalesSiteField = ({
+   endCustomer,
+   deptId,
+   asYn,
++  cascade,
++  disabled,
+ }: MultiFieldProps & {
++  /** 상위 축 종속 필터 — 규약은 `CascadeSpec` 주석 참조. */
++  cascade?: CascadeSpec;
+   /**
+    * ⭐ 2026-07-23 (조회조건 AS-IS 정합, hook #117) — opt-in 서버 바인드 콤보 대체.
+    * comboId 지정 시 'UserSiteByEndCustomer'(AS-IS UP_FX SiteByEndCustomer/40 1:1) 형태의
+@@ -333,12 +407,13 @@ export const SalesSiteField = ({
+         }
+       : { filters: ['SalesSite'] }
+   );
++  const cascaded = applyCascade(salesSites, cascade);
+   const options = comboId
+-    ? ((salesSites ?? []) as Array<Record<string, string>>).map(r => ({
++    ? ((cascaded ?? []) as Array<Record<string, string>>).map(r => ({
+         label: String(r.NAME ?? r.CODE ?? ''),
+         value: String(r.CODE ?? ''),
+       }))
+-    : toOptions(salesSites as never, division);
++    : toOptions(cascaded as never, division);
+   return (
+     <Grid size={gridSize ?? 4}>
+       <FormItem
+@@ -350,6 +425,7 @@ export const SalesSiteField = ({
+             allOption
+             useClearIcon
+             limitTags={1}
++            disabled={disabled}
+             value={value.join(',')}
+             options={options}
+             onChange={(_, options) =>
+@@ -378,10 +454,13 @@ export const PlantSiteField = ({
+   division,
+   endCustomer,
+   gridSize,
++  disabled: disabledProp,
+ }: MultiFieldProps & { endCustomer?: string }) => {
+   const L = useL();
+   // Enable = 81 계열만 (81/81_UC/81_HM/81_ST/81_HD/81_HG). 40·82 = 비활성.
+-  const disabled = !division?.startsWith('81');
++  // ⭐ 2026-08-23 — 화면이 `disabled` 를 명시하면 그 값이 우선한다(DMF0042 는 40 만 비활성 —
++  //   기본 게이트를 그대로 쓰면 82 까지 잠긴다). 미전달 = 종전 기본 게이트.
++  const disabled = disabledProp ?? !division?.startsWith('81');
+   const q = (v?: string): string => `'${v && v.trim() !== '' ? v : 'ALL'}'`;
+   // 서버측 바인드 cascade — division/endCustomer 변경 시 queryKey 갱신 → 재조회 (81* 만 조회)
+   const [plantSites] = useTabComboQueries({
+@@ -699,6 +778,11 @@ const toDayjs = (s: string) => {
+   if (!s || s.length !== 8) return dayjs();
+   return dayjs(`${s.slice(0, 4)}-${s.slice(4, 6)}-${s.slice(6, 8)}`);
+ };
++// mode='month' 용 — YYYYMM ↔ dayjs (정본 DemandManagerForm ymToDayjs 동일 규약: 1일로 고정)
++const ymToDayjs = (s: string) => {
++  if (!s || s.length !== 6) return dayjs();
++  return dayjs(`${s.slice(0, 4)}-${s.slice(4, 6)}-01`);
++};
+ interface PeriodFieldProps {
+   start: string;
+   end: string;
+@@ -706,13 +790,22 @@ interface PeriodFieldProps {
+   gridSize?: number;
+   // 라벨 커스터마이즈 (미지정 시 표준 'Period'). 예: 승인관리 'Request Date'.
+   label?: string;
++  /**
++   * 'month' = 년월(YYYYMM) 구간 — AS-IS drpPeriodMonth 계열 화면(DMF0074 등,
++   * usecase='month' 정본 = DemandManagerForm). 기본 'date'(YYYYMMDD) — 기존 사용처 회귀 0.
++   * ⚠ 값 형식이 모드에 따라 다르다(YYYYMM vs YYYYMMDD) — 스토어 초기값·SP 계약과 맞출 것.
++   */
++  mode?: 'date' | 'month';
+ }
+-export const PeriodField = ({ start, end, onChange, gridSize, label }: PeriodFieldProps) => {
++export const PeriodField = ({ start, end, onChange, gridSize, label, mode }: PeriodFieldProps) => {
+   const L = useL();
+-  // 시작일/종료일을 각각 독립 달력(usecase='date') 2개로 분리.
++  // 시작일/종료일을 각각 독립 달력 2개로 분리 (mode='month' 는 월 달력).
+   //   필드별로 자기 팝업이 뜨며, 종료일은 시작일 이후만 선택 가능(mindate).
+-  const startValue = start ? toDayjs(start) : null;
+-  const endValue = end ? toDayjs(end) : null;
++  const isMonth = mode === 'month';
++  const parse = isMonth ? ymToDayjs : toDayjs;
++  const outFormat = isMonth ? 'YYYYMM' : 'YYYYMMDD';
++  const startValue = start ? parse(start) : null;
++  const endValue = end ? parse(end) : null;
+   return (
+     <Grid size={gridSize ?? 8}>
+       <FormItem
+@@ -725,14 +818,14 @@ export const PeriodField = ({ start, end, onChange, gridSize, label }: PeriodFie
+           <div className={styles.periodSplit}>
+             <div className={styles.datePickerFix}>
+               <DatePickerCalendar
+-                usecase='date'
++                usecase={isMonth ? 'month' : 'date'}
+                 elevation
+                 size='small'
+-                format='YYYY.MM.DD'
++                format={isMonth ? 'YYYY.MM' : 'YYYY.MM.DD'}
+                 value={startValue}
+                 onChange={
+                   ((date: Dayjs | null) => {
+-                    onChange(date?.format('YYYYMMDD') ?? '', end);
++                    onChange(date?.format(outFormat) ?? '', end);
+                   }) as never
+                 }
+               />
+@@ -740,15 +833,15 @@ export const PeriodField = ({ start, end, onChange, gridSize, label }: PeriodFie
+             <span className={styles.periodSep}>~</span>
+             <div className={styles.datePickerFix}>
+               <DatePickerCalendar
+-                usecase='date'
++                usecase={isMonth ? 'month' : 'date'}
+                 elevation
+                 size='small'
+-                format='YYYY.MM.DD'
++                format={isMonth ? 'YYYY.MM' : 'YYYY.MM.DD'}
+                 value={endValue}
+                 mindate={startValue ?? undefined}
+                 onChange={
+                   ((date: Dayjs | null) => {
+-                    onChange(start, date?.format('YYYYMMDD') ?? '');
++                    onChange(start, date?.format(outFormat) ?? '');
+                   }) as never
+                 }
+               />
+@@ -815,6 +908,12 @@ interface VersionFieldProps {
+    * 사용자가 친 문자열이 가공 없이 그대로 올라오므로, 조회키/표시문 매핑은 호출 측이 정한다.
+    */
+   onValueChange?: (v: string) => void;
++  /**
++   * ⭐ 2026-08-23 — 조회키(원문 VERSION_NO). 팝업으로 고른 표시문은 'VERSION_NO 설명' 형태라
++   * 그 뒤에서 편집을 시작하면 설명까지 조회키가 된다. 편집형(onValueChange 전달)일 때
++   * **포커스 순간 코드만 남긴다**. 미전달 = 종전 동작(표시문 그대로 편집).
++   */
++  versionNo?: string;
+ }
+ export const VersionField = ({
+   value,
+@@ -823,6 +922,7 @@ export const VersionField = ({
+   label,
+   emptyText,
+   onValueChange,
++  versionNo,
+ }: VersionFieldProps) => {
+   const L = useL();
+   // 주의: 직접 입력 가능한 경우 emptyText 를 value 로 넣지 않는다 — placeholder 성격의 문자열이
+@@ -843,6 +943,11 @@ export const VersionField = ({
+                 /* 미전달 = popup 선택 전용, 직접 입력 안 함 */
+               })
+             }
++            onFocus={
++              onValueChange && versionNo !== undefined && versionNo !== value
++                ? () => onValueChange(versionNo)
++                : undefined
++            }
+             onOpenPopup={onOpenPopup}
+           />
+         )}
+diff --git a/nscm-fe/packages/foundation/src/constants/column-config.ts b/nscm-fe/packages/foundation/src/constants/column-config.ts
+index abe5646..6f67a73 100644
+--- a/nscm-fe/packages/foundation/src/constants/column-config.ts
++++ b/nscm-fe/packages/foundation/src/constants/column-config.ts
+@@ -9,6 +9,22 @@ export enum CELL_INPUT_EDIT_TYPE {
+ export enum CELL_CONTROL_TYPE {
+   // modal에 대한 명칭 정하기 필요
+   MODAL = 'FPModal',
++  /**
++   * ⭐ [2026-08-22 신설] 텍스트 입력 **과** 모달 선택을 **둘 다** 허용하는 셀.
++   *
++   * 왜 별도 값이 필요한가 — `FPModal` 은 공용 DataGrid 에서 **세 가지를 한 덩어리로** 지배한다:
++   *   ① `beginningEdit` cancel(타이핑 차단)  ② 돋보기 아이콘(`is-popup`)  ③ `wj-cell-popup` 스타일
++   * 그래서 기존 두 값으로는 AS-IS 동작을 표현할 수 없었다.
++   *   · `FPTextBox` → 타이핑 O / **아이콘 X** (모달이 있어도 사용자가 알 수 없다)
++   *   · `FPModal`   → 아이콘 O / **타이핑 X**
++   *
++   * AS-IS 는 `TextCellType`(텍스트) 에 `BackgroundImage = ImagePopUp`(돋보기) 를 씌우고
++   * `CellDoubleClick` 으로 팝업을 여는 방식이라 **둘 다** 가능했다
++   * (`DMF0082_FcstNPrice_Mgmt.cs:404-407` 셀타입 정의 / `:2541` InsertRow 적용 / `:3772` 더블클릭).
++   *
++   * `FPTextModal` = ①은 **허용**, ②③은 `FPModal` 과 동일. 모달 식별자는 `ATTRIBUTE1`(모달키)에 둔다.
++   */
++  TEXT_MODAL = 'FPTextModal',
+   COMBO = 'FPComboBox',
+   BUTTON = 'FPButton',
+   DATE = 'FPDate',
+diff --git a/nscm-fe/packages/foundation/src/utils/mergeManager.ts b/nscm-fe/packages/foundation/src/utils/mergeManager.ts
+index dbeaf62..cc53305 100644
+--- a/nscm-fe/packages/foundation/src/utils/mergeManager.ts
++++ b/nscm-fe/packages/foundation/src/utils/mergeManager.ts
+@@ -104,6 +104,14 @@ export class CustomMergeManager<T extends WijmoRowItem = WijmoRowItem> extends M
+     this.bindInvalidateEvents();
+   }
+ 
++  // 빈 값 셀의 병합 허용 여부 — 기본 금지(_getCellMergedRange 빈 셀 가드 참조).
++  //   AS-IS 파리티로 "값이 없어도 같은 키 조합 안에서는 한 칸"이어야 하는 attribute 컬럼
++  //   (예: DMF0082 SENDER_NAME)은 서브클래스가 컬럼 단위로 허용한다.
++  //   Insert 행(CRUD_TYPE='I')은 이 허용과 무관하게 병합에서 계속 제외된다.
++  protected allowEmptyCellMerge(_panel: GridPanel, _row: number, _col: number): boolean {
++    return false;
++  }
++
+   private _getMergeKey(panel: GridPanel, row: number, col: number): string {
+     if (row < 0) return '';
+ 
+@@ -194,7 +202,13 @@ export class CustomMergeManager<T extends WijmoRowItem = WijmoRowItem> extends M
+     if (![AllowMerging.All, AllowMerging.Cells].includes(panel.grid.allowMerging)) return null;
+     // 값이 빈 셀은 병합하지 않는다 — 빈칸끼리 한 덩어리가 되면 실제 데이터 그룹처럼 보인다.
+     //   컬럼 헤더 병합도 같은 규칙이다(_getColumnHeaderMergedRange).
+-    if (isEmptyCellValue(panel.getCellData(currentRow, currentCol, false))) return null;
++    //   단, 화면이 allowEmptyCellMerge 로 허용한 컬럼은 예외 — 머지키가 좌측 전 컬럼 누적이라
++    //   허용해도 같은 키 조합 블록(예: measure 분할 행) 안에서만 병합된다.
++    if (
++      isEmptyCellValue(panel.getCellData(currentRow, currentCol, false)) &&
++      !this.allowEmptyCellMerge(panel, currentRow, currentCol)
++    )
++      return null;
+ 
+     const rng = new CellRange(currentRow, currentCol);
+     const item = panel.grid.collectionView.items[currentRow] as WijmoRowItem;
+diff --git a/nscm-fe/packages/shared/src/components/molecules/customDropdown/CustomDropdown.tsx b/nscm-fe/packages/shared/src/components/molecules/customDropdown/CustomDropdown.tsx
+index 1be3b4a..958304b 100644
+--- a/nscm-fe/packages/shared/src/components/molecules/customDropdown/CustomDropdown.tsx
++++ b/nscm-fe/packages/shared/src/components/molecules/customDropdown/CustomDropdown.tsx
+@@ -73,6 +73,30 @@ const dedupeOptions = <T extends { value: string; label?: unknown }>(opts: T[]):
+   return seen.size === opts.length ? opts : [...seen.values()];
+ };
+ 
++/**
++ * ⭐ [2026-08-18 사용자 확정] 센티널 4형(`' '` / `''` / `'-'` / `'--'`) 옵션 **제외** — 전 화면 일괄.
++ *
++ * 원장은 '미지정'을 여러 표기로 들고 있다(PK 센티널 정규화 표준: 변형 3형 = `'-'` 통일,
++ * 초기값 `NVL(x,'-')`). 그래서 콤보 원천에 값들이 **동시에** 존재하고, 위 dedupe 는 문자열이
++ * 달라 못 묶는다 — 실측 `DM_PLN_SALES_PLAN.PLANT_SITE_ID` = `' '` 14,131 / `'-'` 13,675 /
++ * `'--'` 3,095 건. 결과적으로 조회조건 드롭다운에 의미 없는 행이 여러 줄 뜬다.
++ * (`' '` 는 TRIM 후 `''` 로 흡수되므로 셋에 `''` 만 두면 둘 다 걸린다)
++ *
++ * ⚠ **조회 범위는 좁히지 않는다.** 목록에서 빼는 것은 *표시*뿐이고, 전체 선택은
++ *   `handleMultipleChange` 에서 `'ALL'` sentinel(= 필터 없음)로 내보내므로 센티널 값을 가진
++ *   행도 ALL 조회 대상에 그대로 포함된다.
++ * ⚠ **현재 선택된 값이 센티널이면 그 항목은 남긴다.** 원장에 이미 `'-'` 로 저장된 행을
++ *   편집 폼에서 열었을 때 선택지가 없어 빈칸으로 보이고, 그대로 저장하면 값이 뒤바뀌기 때문.
++ *   (선택지로 새로 고를 수는 없고, 기존 값 표시만 유지된다.)
++ */
++const SENTINEL_VALUES = new Set(['', '-', '--']);
++const isSentinelValue = (v: unknown): boolean => SENTINEL_VALUES.has(String(v ?? '').trim());
++
++const dropSentinelOptions = <T extends { value: string }>(opts: T[], keep: Set<string>): T[] => {
++  const kept = opts.filter(o => !isSentinelValue(o?.value) || keep.has(o?.value));
++  return kept.length === opts.length ? opts : kept;
++};
++
+ export const CustomDropdown = ({
+   options: rawOptions,
+   value,
+@@ -87,12 +111,13 @@ export const CustomDropdown = ({
+   const optionIndexMapRef = useRef<Map<string, number>>(new Map());
+   const lastIndexRef = useRef<number | null>(null);
+ 
+-  // 표시 직전 중복 제거 (위 dedupeOptions 주석 참조 — 중복 없으면 원본 참조 그대로 반환)
+-  const options = dedupeOptions(rawOptions);
+-
+   // const splitValueSet = new Set(value?.trim().split(',') ?? []);
+   const splitValueSet = new Set(value?.trim().split(',').filter(Boolean) ?? []);
+ 
++  // 표시 직전 정리 — ① 센티널 3형 제외(현재 선택값은 보존) ② value 기준 중복 제거.
++  //   (둘 다 변화가 없으면 원본 배열 참조를 그대로 돌려주어 불필요한 리렌더를 만들지 않는다)
++  const options = dedupeOptions(dropSentinelOptions(rawOptions, splitValueSet));
++
+   // TODO: 성능 개선 필요해보임, mockHeavyDropdown 기준 버벅거림 있음 - 강민재
+   const isAllSelected = splitValueSet.size > 0 && splitValueSet.size === options.length;
+ 
+@@ -160,6 +185,16 @@ export const CustomDropdown = ({
+     }
+     if (allOption) {
+       const nextValue = handleSelectAll(value, reason, details);
++      // ⭐ [2026-08-18 사용자 요구] 전체 선택은 **열거가 아니라 'ALL' sentinel** 로 내보낸다.
++      //   종전엔 보이는 옵션 value 를 콤마로 나열해 필터로 보냈다. 그 방식이면 위에서 화면 표시상
++      //   제외한 센티널 값(' '/''/'-'/'--')이 **필터 목록에서도 빠져 조회 대상이 줄어든다.**
++      //   'ALL' 은 스토어 규약(빈 배열 → 'ALL')과 동일한 "필터 없음"이라 센티널 행도 조회에 포함된다.
++      //   (SELECT ALL 클릭 + 보이는 항목을 손으로 전부 고른 경우 둘 다 해당)
++      const picked = nextValue.filter(item => item.value !== SELECT_ALL_OPTION.value);
++      if (picked.length > 0 && picked.length >= options.length) {
++        onChange?.(event, 'ALL');
++        return;
++      }
+       onChange?.(event, nextValue.map(item => item.value).toString());
+     } else onChange?.(event, value.map(item => item.value).toString());
+   };
+diff --git a/nscm-fe/packages/shared/src/components/organisms/data-grid/DataGrid.tsx b/nscm-fe/packages/shared/src/components/organisms/data-grid/DataGrid.tsx
+index f872227..2a1af55 100644
+--- a/nscm-fe/packages/shared/src/components/organisms/data-grid/DataGrid.tsx
++++ b/nscm-fe/packages/shared/src/components/organisms/data-grid/DataGrid.tsx
+@@ -539,14 +539,31 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
+       filterBeforeReload = captureGridFilter(getGridFilter());
+     });
+ 
++    /**
++     * 필터 대상 컬럼 = `['']` — **"아무 컬럼도 아님" 이 기본값**이다.
++     *
++     * wijmo 실측 (wijmo.grid.filter 헤더 렌더 가드):
++     *     n = this._filterColumns;
++     *     n && n.length && n.indexOf(col.binding) < 0 && n.indexOf(col.name) < 0 && (filter = null)
++     *
++     *   · `['']` → 어떤 컬럼의 binding/name 과도 안 맞아 **필터 아이콘이 하나도 안 붙는다.**
++     *   · **빈 배열 `[]` 은 정반대다** — `n.length` 가 0 이라 가드를 통째로 건너뛰어 **전 컬럼**에 붙는다.
++     *
++     * 이 프로젝트의 필터 UX 는 "기본 없음 → 사용자가 켠다" 다:
++     *   `GridAction.toggleColumnFilter`(F4 / SubTitle 필터 버튼, gridAction.ts:326~343)가
++     *   선택 컬럼을 `filterColumns` 에 push/splice 한다.
++     * ⛔ 그러므로 여기에 컬럼 목록을 미리 채워 넣지 말 것 — 그 컬럼 전부에 아이콘이 상시 노출되고
++     *    (2026-08-22 실사고), F4 토글의 의미도 사라진다.
++     */
++    const targetFilterColumns = [''];
+     if (gridFilterRef)
+       gridFilterRef.current = new FlexGridFilter(grid, {
+-        filterColumns: [''],
++        filterColumns: targetFilterColumns,
+       });
+     // 팝업(다이얼로그 스코프)인데 외부 filter ref가 없으면 F4용 filter를 내부 생성.
+     else if (scopeId !== null)
+       internalFilterRef.current = new FlexGridFilter(grid, {
+-        filterColumns: [''],
++        filterColumns: targetFilterColumns,
+       });
+ 
+     // wijmo 가 비운 필터를 새로 실린 데이터 위에 되돌린다 (위 캡처 핸들러 주석 참고).
+@@ -728,6 +745,7 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
+     return () => globalThis.window.removeEventListener('keydown', hotkeyHandler, true);
+   }, [scopeId, gridFilterRef]);
+ 
++
+   return (
+     <>
+       <FlexGrid
+diff --git a/nscm-fe/packages/shared/src/components/organisms/data-grid/dataGridUtils.ts b/nscm-fe/packages/shared/src/components/organisms/data-grid/dataGridUtils.ts
+index 8e8b466..e4f1b36 100644
+--- a/nscm-fe/packages/shared/src/components/organisms/data-grid/dataGridUtils.ts
++++ b/nscm-fe/packages/shared/src/components/organisms/data-grid/dataGridUtils.ts
+@@ -155,10 +155,14 @@ export const useDataGridUtils = <T extends WijmoRowItem = WijmoRowItem>() => {
+       cellInputEditType === CELL_INPUT_EDIT_TYPE.MANDATORY ||
+       cellInputEditType === CELL_INPUT_EDIT_TYPE.OPTIONAL;
+ 
++    // ⭐ [2026-08-22] FPTextModal 도 돋보기 아이콘을 단다 — 텍스트 입력이 되더라도 모달이 있다는
++    //   사실이 보여야 한다(AS-IS `TextCellType.BackgroundImage = ImagePopUp` 파리티).
+     toggleClass(
+       formatItemEventArgs.cell,
+       'is-popup',
+-      cellCtrlType === CELL_CONTROL_TYPE.MODAL && isEditableCell
++      (cellCtrlType === CELL_CONTROL_TYPE.MODAL ||
++        cellCtrlType === CELL_CONTROL_TYPE.TEXT_MODAL) &&
++        isEditableCell
+     );
+   };
+ 
+@@ -224,7 +228,8 @@ export const useDataGridUtils = <T extends WijmoRowItem = WijmoRowItem>() => {
+       toggleClass(
+         cell,
+         'wj-cell-popup',
+-        columnGroupProps?._ctrlType === CELL_CONTROL_TYPE.MODAL &&
++        (columnGroupProps?._ctrlType === CELL_CONTROL_TYPE.MODAL ||
++          columnGroupProps?._ctrlType === CELL_CONTROL_TYPE.TEXT_MODAL) &&
+           (columnGroupProps?._inputEditType === CELL_INPUT_EDIT_TYPE.MANDATORY ||
+             columnGroupProps?._inputEditType === CELL_INPUT_EDIT_TYPE.OPTIONAL ||
+             (columnGroupProps?._inputEditType?.startsWith('I') && crudType === CRUD_TYPE.INSERT))
+@@ -272,6 +277,9 @@ export const useDataGridUtils = <T extends WijmoRowItem = WijmoRowItem>() => {
+       const column = GridUtils.getColumn(sender, cellRangeEventArgs.col);
+       const ctrlType = column?._ctrlType;
+ 
++      // ⛔ 모달 전용 셀만 직접 편집을 막는다.
++      //   ⭐ [2026-08-22] `FPTextModal` 은 **막지 않는다** — 타이핑과 모달을 둘 다 허용하는 값이다
++      //     (AS-IS 파리티). 여기에 TEXT_MODAL 을 함께 넣으면 신설 값의 존재 이유가 사라진다.
+       if (ctrlType === CELL_CONTROL_TYPE.MODAL) {
+         cellRangeEventArgs.cancel = true;
+         return;
+diff --git a/nscm-fe/packages/shared/src/components/organisms/index.ts b/nscm-fe/packages/shared/src/components/organisms/index.ts
+index 064334e..6d56d80 100644
+--- a/nscm-fe/packages/shared/src/components/organisms/index.ts
++++ b/nscm-fe/packages/shared/src/components/organisms/index.ts
+@@ -8,3 +8,5 @@ export * from './sub-title/SubTitle';
+ export * from './toast-message/ToastMessage';
+ export * from './alert/Alert';
+ export * from './search-area/SearchArea';
++export * from './olap-pivot-grid/OlapPivotGrid';
++export * from './olap-pivot-grid/olapUtils';
+diff --git a/nscm-fe/packages/shared/src/components/organisms/olap-pivot-grid/OlapPivotGrid.tsx b/nscm-fe/packages/shared/src/components/organisms/olap-pivot-grid/OlapPivotGrid.tsx
+index 177e2d4..54472f8 100644
+--- a/nscm-fe/packages/shared/src/components/organisms/olap-pivot-grid/OlapPivotGrid.tsx
++++ b/nscm-fe/packages/shared/src/components/organisms/olap-pivot-grid/OlapPivotGrid.tsx
+@@ -40,6 +40,11 @@ export interface OlapPivotGridProps {
+   showColumnTotals?: 'None' | 'Subtotals' | 'GrandTotals';
+   /** 그리드 높이 CSS 값. 미지정 시 flex 채움(flex:1 1 0 — ViewContainer flex column 표준). */
+   height?: string;
++  /**
++   * 컬럼 폭 자동 최적화 (opt-in — DMF0035 사용자 지정 2026-08-20).
++   * 피벗 뷰 갱신 시 행 축 헤더=내용 기준 autosize, 값 컬럼=내용 기준 autosize 후 MIN/MAX 캡.
++   */
++  autoFitColumns?: boolean;
+   className?: string;
+ }
+ 
+@@ -83,6 +88,7 @@ export const OlapPivotGrid = forwardRef<OlapPivotGridRef, OlapPivotGridProps>(
+       showRowTotals = 'None',
+       showColumnTotals = 'None',
+       height,
++      autoFitColumns = false,
+       className,
+     },
+     ref
+@@ -125,6 +131,68 @@ export const OlapPivotGrid = forwardRef<OlapPivotGridRef, OlapPivotGridProps>(
+     // PivotGrid 는 FlexGrid 파생 — initialized 로 인스턴스를 잡아 xlsx 변환에 사용
+     const gridInstanceRef = useRef<unknown>(null);
+ 
++    // ── 컬럼 폭 자동 최적화 (opt-in — DMF0035 사용자 지정 2026-08-20) ────────────────
++    //   목적: 셀 데이터가 **2행(줄바꿈)으로 표시되지 않도록** 내용 전체가 1행에 들어가는 폭으로
++    //   맞춘다. ①wordWrap 강제 해제(줄바꿈 자체 차단) ②행 축 헤더·값 컬럼 모두 내용 폭 기준
++    //   autosize(상한 캡 없음 — 캡이 있으면 줄바꿈이 되살아난다) ③값 컬럼 하한만 유지.
++    //   ⚠ 트리거는 **그리드의 updatedLayout** 이다 — PivotGrid 는 engine.updatedView 를 받아
++    //   컬럼을 재생성하므로, engine 이벤트에 걸면 재생성이 폭을 덮어써 반영되지 않는다.
++    //   autoSize 가 다시 updatedLayout 을 발화시키므로 busy 플래그로 재귀를 끊는다.
++    const autoFitRef = useRef(autoFitColumns);
++    autoFitRef.current = autoFitColumns;
++    const fitBusyRef = useRef(false);
++    const lastFitSignRef = useRef('');
++    const fitColumns = useRef<() => void>(() => {});
++    fitColumns.current = () => {
++      const VALUE_MIN = 64;
++      interface FitColumn {
++        renderWidth: number;
++        width: number | null;
++        wordWrap: boolean;
++      }
++      interface FitGrid {
++        deferUpdate: (fn: () => void) => void;
++        autoSizeColumns: (first?: number, last?: number, header?: boolean, extra?: number) => void;
++        columns: FitColumn[] & { length: number };
++        rowHeaders: { columns: FitColumn[] & { length: number } };
++      }
++      const g = gridInstanceRef.current as FitGrid | null;
++      if (!autoFitRef.current || fitBusyRef.current || !g || !g.columns.length) return;
++      // 이미 이 폭 구성으로 맞춰 둔 상태면 재적용하지 않는다 — autoSize→layout→autoSize 진동 차단
++      const sign = (grid: FitGrid) =>
++        [
++          ...Array.from({ length: grid.rowHeaders.columns.length }, (_, i) =>
++            Math.round(grid.rowHeaders.columns[i].renderWidth)
++          ),
++          '|',
++          ...Array.from({ length: grid.columns.length }, (_, i) =>
++            Math.round(grid.columns[i].renderWidth)
++          ),
++        ].join(',');
++      if (sign(g) === lastFitSignRef.current) return;
++      fitBusyRef.current = true;
++      try {
++        g.deferUpdate(() => {
++          // 줄바꿈 차단 — autosize 는 단일행 기준 내용 폭을 계산한다
++          for (let i = 0; i < g.columns.length; i += 1) g.columns[i].wordWrap = false;
++          for (let i = 0; i < g.rowHeaders.columns.length; i += 1)
++            g.rowHeaders.columns[i].wordWrap = false;
++          g.autoSizeColumns(0, g.rowHeaders.columns.length - 1, true, 8);
++          g.autoSizeColumns(0, g.columns.length - 1, false, 8);
++          for (let i = 0; i < g.columns.length; i += 1) {
++            const c = g.columns[i];
++            if (c.renderWidth < VALUE_MIN) c.width = VALUE_MIN;
++          }
++        });
++        lastFitSignRef.current = sign(g);
++      } finally {
++        // deferUpdate 가 유발한 layout 이벤트까지 흘려보낸 뒤 해제
++        requestAnimationFrame(() => {
++          fitBusyRef.current = false;
++        });
++      }
++    };
++
+     useImperativeHandle(ref, () => ({
+       engine: engineRef.current,
+       get grid() {
+@@ -157,6 +225,9 @@ export const OlapPivotGrid = forwardRef<OlapPivotGridRef, OlapPivotGridProps>(
+           showSelectedHeaders='All'
+           initialized={(g: unknown) => {
+             gridInstanceRef.current = g as never;
++            const grid = g as { updatedLayout?: { addHandler: (h: () => void) => void } };
++            // 컬럼 재생성이 끝난 뒤(레이아웃 갱신 완료)에 폭을 잡는다 — §autoFitColumns 참조
++            grid.updatedLayout?.addHandler(() => fitColumns.current());
+           }}
+           style={{ height: '100%' }}
+         />
+diff --git a/nscm-fe/packages/shared/src/components/templates/modals/column-layout-modal/ColumnLayoutModal.tsx b/nscm-fe/packages/shared/src/components/templates/modals/column-layout-modal/ColumnLayoutModal.tsx
+index 4df4198..ba658c1 100644
+--- a/nscm-fe/packages/shared/src/components/templates/modals/column-layout-modal/ColumnLayoutModal.tsx
++++ b/nscm-fe/packages/shared/src/components/templates/modals/column-layout-modal/ColumnLayoutModal.tsx
+@@ -1,4 +1,4 @@
+-import { useEffect, useMemo, useState } from 'react';
++import { useCallback, useEffect, useMemo, useState } from 'react';
+ 
+ import { useQuery } from '@foundation/query-client';
+ import { Button } from '@shared/lges';
+@@ -14,6 +14,8 @@ import {
+   type DualListColumn,
+ } from '../../../molecules/columnSelectDualList/ColumnSelectDualList';
+ import { CustomDialog } from '../../../molecules/dialog/CustomDialog';
++import { t } from '@foundation/i18n';
++
+ import { fetchColumnMeta, fetchTitleSet } from '../../../organisms/data-grid/titleSetApi';
+ 
+ import styles from './ColumnLayoutModal.module.scss';
+@@ -27,6 +29,7 @@ import {
+   parseWidth,
+   reorderRows,
+   toHiddenColumnSet,
++  toZeroWidthColumnSet,
+   type ColumnSettingFallback,
+ } from './columnLayoutModal.utils';
+ 
+@@ -76,6 +79,12 @@ interface Props {
+   defaultSettings?: ColumnLayoutRow[];
+   /** OK 시 전체 컬럼 반환 — 우측(USER_FLAG='Y')이 표시 순서대로 앞에 온다. */
+   onSave: (settings: ColumnLayoutRow[]) => void;
++  /**
++   * 다이얼로그 제목. **기본값은 공통 라벨 `LBL00605`("Column Setting")** 이고,
++   * 호출처는 넘기지 않는 것이 정상이다 — 화면마다 넘기다 보니 제목이 4가지로 갈렸다
++   * (`LBL00711`="Column" 4곳 / `LBL00753`=**"Include Internal Txn"**(오선택) 1곳 /
++   *  하드코딩 2곳 / 미지정 1곳 — 2026-08-22 실측). 다른 제목이 꼭 필요할 때만 넘긴다.
++   */
+   title?: string;
+   /** dual list 좌측 상단 라벨 (예: 'Invisible') */
+   leftTitle?: string;
+@@ -94,7 +103,7 @@ export const ColumnLayoutModal = ({
+   initialSettings,
+   defaultSettings,
+   onSave,
+-  title = 'Column Setting',
++  title,
+   leftTitle,
+   rightTitle,
+ }: Props) => {
+@@ -105,7 +114,10 @@ export const ColumnLayoutModal = ({
+       menuId,
+       sheetName,
+       columnType: columnType ?? sheetName,
+-      divisionId: divisionId ?? '40',
++      // ⚠ `??` 는 `''` 를 통과시킨다. Oracle 에서 `''` = NULL 이라 팝업 SP 의
++      //   `P_DIVISION_ID IS NULL OR ...` 가드에 걸려 **division 필터가 통째로 무력화**된다
++      //   (실측 DMF0082/FcstNPrice: div '40' 52컬럼 / '' 65컬럼 — 81·82 전용 컬럼까지 노출).
++      divisionId: divisionId?.trim() || '40',
+     }),
+     [menuId, sheetName, columnType, divisionId]
+   );
+@@ -114,10 +126,17 @@ export const ColumnLayoutModal = ({
+   //   SCM_ADM_MNU_BTN_MPG_M 미등록 화면에서 403 No Permission 이 난다 (DMF0042 실측 2026-07-29).
+   //   ⚠️ queryKey 첫 요소는 반드시 menuId — 각 화면이 저장 직후 invalidateQueries({queryKey:[MENU_ID]})
+   //     로 이 캐시를 무효화한다(전역 staleTime=Infinity 라 invalidate 없이는 재조회가 안 된다).
++  // ⭐ [2026-08-22] `staleTime: 0` 필수 — 전역 기본값이 `staleTime: Infinity` + gcTime 8h 이고
++  //   응답이 **IndexedDB 에 영속**된다(`shouldPersistQuery` 의 제외 대상은 'combo'/'lookup' prefix 뿐이라
++  //   `[menuId,'titleSet',…]` 는 그대로 저장된다). 그래서 admin 메타나 조회 SP 가 바뀌어도 팝업이
++  //   **새로고침으로도 안 사라지는 옛 목록**을 계속 보여줬다 — division 필터를 SP 에 넣은 뒤에도
++  //   40 division 에서 81/82 전용 컬럼(Project Code/Project/Project Owner)이 남던 실사고(사용자 신고).
++  //   0 = 열 때마다 재조회(캐시본을 먼저 그리고 뒤에서 갱신)라 깜빡임 없이 항상 최신 메타가 된다.
+   const { data, refetch, isLoading, isFetching } = useQuery({
+     queryKey: [menuId, 'titleSet', 'SEARCH', filters],
+     queryFn: () => fetchTitleSet(filters),
+     enabled: open,
++    staleTime: 0,
+   });
+ 
+   // ⭐ admin 노출 대상(VISIBLE_FLAG='Y')만 팝업 목록에 올린다 — SP 는 sheet 메타의 모든 컬럼을
+@@ -143,10 +162,34 @@ export const ColumnLayoutModal = ({
+         divisionId: filters.divisionId,
+       }),
+     enabled: open,
++    // 위 titleSet 과 같은 이유 — admin 메타 변경이 영속 캐시에 막혀 반영되지 않는다.
++    staleTime: 0,
+   });
+ 
+   const excluded = useMemo(() => toHiddenColumnSet(metaRows ?? []), [metaRows]);
+ 
++  // ⭐ [2026-08-22 사용자 지시] 관리자 기본 폭이 0 인 컬럼은 목록에서 감춘다.
++  //   폭 0 은 그리드에서 실질적으로 안 보이는데(공용 매핑이 `width: colWth` 를 폴백 없이 그대로 쓴다)
++  //   목록에는 남아 있어 "켰는데 안 나온다" 가 된다. 실측 1,009행이 이 상태였다.
++  //   ⚠ raw 응답을 보는 이유 = `COL_WIDTH` 는 매핑 단계에서 0→100 으로 정규화된다(utils 주석 참고).
++  const zeroWidthColumns = useMemo(
++    () => toZeroWidthColumnSet(data ?? [], fallbackColumns),
++    [data, fallbackColumns]
++  );
++
++  /**
++   * 목록(좌/우 dual list)에서 감출 행 — ①`MEASURE` ②관리자 폭 0.
++   *
++   * ⚠ `rows` 자체에서 빼지 않는다. `handleOk` 가 `baseRows`/`userRows` **전량**을 저장하므로
++   *   제거하면 이미 저장돼 있던 사용자 레이아웃이 조용히 바뀐다. `HIDDEN_FROM_LIST`(MEASURE) 와
++   *   동일 계약 — 화면에서만 감추고 저장 시에는 뒤로 몰아 보존한다.
++   */
++  const isHiddenFromList = useCallback(
++    (r: ColumnLayoutRow): boolean =>
++      HIDDEN_FROM_LIST.has(r.COLUMN_NAME) || zeroWidthColumns.has(r.COLUMN_NAME),
++    [zeroWidthColumns]
++  );
++
+   // ⚠️ 메타 조회도 loading 에 포함해야 한다 — 아래 latch 는 rows.length===0 일 때 1회만 돌므로,
+   //   메타보다 titleSet 이 먼저 도착한 순간을 latch 하면 제외 대상이 그대로 좌측에 남는다.
+   const loading = isLoading || isFetching || metaLoading || metaFetching;
+@@ -190,12 +233,12 @@ export const ColumnLayoutModal = ({
+   );
+ 
+   const leftItems = useMemo(
+-    () => baseRows.filter(r => !HIDDEN_FROM_LIST.has(r.COLUMN_NAME)).map(toDualRow),
+-    [baseRows]
++    () => baseRows.filter(r => !isHiddenFromList(r)).map(toDualRow),
++    [baseRows, isHiddenFromList]
+   );
+   const rightItems = useMemo(
+-    () => userRows.filter(r => !HIDDEN_FROM_LIST.has(r.COLUMN_NAME)).map(toDualRow),
+-    [userRows]
++    () => userRows.filter(r => !isHiddenFromList(r)).map(toDualRow),
++    [userRows, isHiddenFromList]
+   );
+ 
+   const keyColumns = useMemo(
+@@ -382,9 +425,19 @@ export const ColumnLayoutModal = ({
+       void setAlert({ type: 'alert', content: '최소 1개 column 은 표시 상태여야 합니다.' });
+       return;
+     }
+-    // 우측(표시)을 화면 순서대로 1..n, 좌측(비표시)은 0 — ColumnSettingModal 저장 계약과 동일.
++    // ⭐ HIDDEN_FROM_LIST(MEASURE) 는 dual list 에서 안 보여서 드래그로 순서를 못 옮긴다 — reorderRows
++    //   가 orderedKeys 에 없는 행은 SORT_ORDER_NO 를 그대로 두므로, 방치하면 예전 순번이 남아
++    //   다른 컬럼들 사이 임의 위치에 낀다. 항상 마지막(다른 표시 컬럼 전부 뒤)이라고 가정하고 저장한다.
++    //   (2026-08-13 master 사본에만 있던 fix — 2026-08-20 정본 단일화 시 이식)
++    const visibleUserRows = userRows.filter(r => !isHiddenFromList(r));
++    const trailingUserRows = userRows.filter(r => isHiddenFromList(r));
++    // 우측(표시)을 화면 순서대로 1..n(+숨김목록 후행), 좌측(비표시)은 0 — ColumnSettingModal 저장 계약과 동일.
+     onSave([
+-      ...userRows.map((r, i) => ({ ...r, SORT_ORDER_NO: i + 1 })),
++      ...visibleUserRows.map((r, i) => ({ ...r, SORT_ORDER_NO: i + 1 })),
++      ...trailingUserRows.map((r, i) => ({
++        ...r,
++        SORT_ORDER_NO: visibleUserRows.length + i + 1,
++      })),
+       ...baseRows.map(r => ({ ...r, SORT_ORDER_NO: 0 })),
+     ]);
+     modalClose();
+@@ -399,7 +452,7 @@ export const ColumnLayoutModal = ({
+       draggable={false}
+       handleClose={modalClose}
+       disableButtonCancel
+-      title={title}
++      title={title ?? t('LBL00605', 'Column Setting')}
+       customContentArea={
+         <div className={styles.container}>
+           <ColumnSelectDualList<DualRow>
+diff --git a/nscm-fe/packages/shared/src/components/templates/modals/column-layout-modal/columnLayoutModal.utils.ts b/nscm-fe/packages/shared/src/components/templates/modals/column-layout-modal/columnLayoutModal.utils.ts
+index 429322a..2538634 100644
+--- a/nscm-fe/packages/shared/src/components/templates/modals/column-layout-modal/columnLayoutModal.utils.ts
++++ b/nscm-fe/packages/shared/src/components/templates/modals/column-layout-modal/columnLayoutModal.utils.ts
+@@ -123,6 +123,35 @@ export const isVisibleColumn = (r: Record<string, string>): boolean =>
+ export const toHiddenColumnSet = (cols: Partial<ColumnMetaRow>[]): Set<string> =>
+   new Set(cols.filter(c => c.visible === false && c.colNm).map(c => String(c.colNm)));
+ 
++/**
++ * **관리자 기본 폭이 0** 인 컬럼명 집합 — Column Setting 목록에서 감출 대상
++ * (사용자 지시 2026-08-22: "GRID COLUMN SETTING 에서 WIDTH = 0 이면 목록에서 보이지 않도록").
++ *
++ * ⚠️ `ColumnLayoutRow.COL_WIDTH` 로는 판별할 수 없다 — `mapBeRow` 가 `width > 0 ? width :
++ *   DEFAULT_COL_WIDTH` 로 **0 을 100 으로 정규화**하기 때문이다. 그 정규화는 그리드 렌더 폴백이라
++ *   그대로 두고, 여기서는 **raw 응답**을 본다.
++ * ⚠️ 판정 축은 `COLUMN_WIDTH`(관리자 기본)이지 `USER_COLUMN_WIDTH`(사용자 저장값)가 아니다.
++ *   사용자가 개인화로 0 을 넣었다고 목록에서 사라지면 되살릴 방법이 없다.
++ * ⚠️ 값이 안 내려온 경우(null/undefined/공백)는 **제외하지 않는다** — 메타 결손으로 목록이 통째로
++ *   비는 사고를 막는다(`toHiddenColumnSet` 과 같은 방침).
++ */
++export const toZeroWidthColumnSet = (
++  beRows: Record<string, string>[],
++  fallbackColumns: ColumnSettingFallback[] = []
++): Set<string> => {
++  const out = new Set<string>();
++  beRows.forEach(r => {
++    const name = String(r.COLUMN_NAME ?? '');
++    if (!name || !has(r.COLUMN_WIDTH)) return;
++    if (Number(r.COLUMN_WIDTH) === 0) out.add(name);
++  });
++  // BE 응답이 없어 fallbackColumns 로 목록을 만드는 경로 — 그리드 실컬럼 폭이 곧 관리자 폭이다.
++  fallbackColumns.forEach(c => {
++    if (c.key && c.width === 0) out.add(String(c.key));
++  });
++  return out;
++};
++
+ /** base 행에 settings 를 강제로 덮어쓴다 (Default 원복 등 — DB 값보다 우선시켜야 할 때). */
+ export const overrideRows = (
+   base: ColumnLayoutRow[],
+diff --git a/nscm-fe/packages/shared/src/stores/useDirtyRegistry.ts b/nscm-fe/packages/shared/src/stores/useDirtyRegistry.ts
+index 958cb8a..7c04264 100644
+--- a/nscm-fe/packages/shared/src/stores/useDirtyRegistry.ts
++++ b/nscm-fe/packages/shared/src/stores/useDirtyRegistry.ts
+@@ -109,7 +109,7 @@ const dirtyConfirmMessage = {
+   /** 조회(F5/조회 버튼) — 조회는 그리드 데이터를 통째로 덮어쓴다 */
+   search: () => t('MSG00704', '_작업중인 데이터가 있습니다. 조회 하시겠습니까?'),
+   /** 화면 닫기 — MDI 탭 닫기, 다이얼로그 닫기 */
+-  close: () => t('MSG00703', '_작업중인 데이터가 있습니다. 이 화면을 닫으시겠습니까?'),
++  close: () => t('MSG01016', '_작업중인 데이터가 있습니다. 이 화면을 닫으시겠습니까?'),
+ } as const;
+ 
+ export type DirtyConfirmKind = keyof typeof dirtyConfirmMessage;

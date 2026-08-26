@@ -1,13 +1,17 @@
 import {
+  BizTypeField,
   DivisionField,
+  EndCustomerField,
   ItemField,
   OwnerField,
   PeriodField,
+  PlantSiteField,
   ProjectField,
   SalesSiteField,
   TeamField,
 } from 'features/master/src/components';
 
+import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { Checkbox, FormItem } from '@shared/lges';
@@ -30,12 +34,13 @@ interface BusinessPlanFormProps {
   validation: ReturnType<typeof useBusinessPlanValidation>;
 }
 
-// AS-IS DMF0042 조회조건 14종 + Sum 체크박스 (상세동작 md §3 컨트롤 15 전수 — cboQty/cboClosed dead 제외).
+// AS-IS DMF0042 조회조건 14종 + Sum/Qty≠0 체크박스 (상세동작 md §3 컨트롤 15 전수 — cboClosed dead 제외).
 //   ⭐ hook #94 — 1단 4개(Grid size={3}) + 모든 객체 36px. Period = 카탈로그 PeriodField(datePickerFix 내장).
-//   ⭐ 카탈로그(@master/searchFields): Division/Team/SalesSite/Project(40 비활성)/Model/Owner/Period.
-//     인라인 유지 필드(원천 스왑·division 분기 사유): End Customer(40=EndCustomerByDivision40 스왑) /
-//     Biz Type(40=DmBizType 스왑 — AS-IS DM_BIZ_TYPE 공통 대응) / Plant Site(40 만 비활성 —
-//     동일 CMBO 'PlantSitebyEndCustomer' 인라인) / Item Type / Bucket(M/Q/Y — 'BucketType2' P5 신설).
+//   ⭐ 카탈로그(@master/searchFields): Division/Team/End Customer/Sales Site/Plant Site/
+//     Project(40 비활성)/Model/Owner/Period. Plant Site 는 활성 기준만 disabled prop 으로 덮는다
+//     (40 만 비활성 — 카탈로그 기본 게이트는 81 전용이라 그대로 두면 AS-IS 82 활성과 어긋난다).
+//     인라인 유지 필드(원천 스왑 사유): Biz Type(40=DmBizType 스왑 — AS-IS DM_BIZ_TYPE 공통 대응) /
+//     Item Type / Bucket(M/Q/Y — 'BucketType2' P5 신설).
 export const BusinessPlanForm = ({
   onSearch,
   onDivisionChange,
@@ -47,66 +52,38 @@ export const BusinessPlanForm = ({
   const sc = useBusinessPlanStore(s => s.searchCondition);
   const set = useBusinessPlanStore(s => s.setSearchCondition);
   const openSearchArea = useBusinessPlanStore(s => s.openSearchArea);
-  const defaultPeriod = useBusinessPlanStore(s => s.defaultPeriod);
 
   const div40 = isDiv40(sc.divisionId);
 
-  // ⭐ 인라인 콤보 원천 (SCM_ADM_CMBO_SQL_M 등록명 — 2026-07-15 실측):
-  //   End Customer = 'EndCustomer'(81·82) / 'EndCustomerByDivision40'(40 — AS-IS InitControls 스왑)
-  //   Biz Type     = 'BizTypeByDivision'(81·82 — GetBizTypebyDivision) / 'DmBizType'(40 — DM_BIZ_TYPE)
+  // 인라인 콤보 원천 (SCM_ADM_CMBO_SQL_M 등록명 — 2026-07-15 실측):
   //   Item Type    = 'ItemType' (ITEM_TYPE_CODE)
   //   Bucket       = 'BucketType2' (BUCKET2_TYPE_CODE — MONTHLY/QUARTERLY/YEARLY. P5 신설)
-  //   Plant Site   = 'PlantSitebyEndCustomer' (Division+EndCustomer 서버 바인드 + 값 quoting 의무)
-  const q = (v?: string): string => `'${v && v.trim() !== '' ? v : 'ALL'}'`;
-  const [
-    endCustomer,
-    endCustomer40,
-    bizTypeByDivision,
-    dmBizType,
-    itemType,
-    bucketTypeCombo,
-    plantSite,
-  ] = useTabComboQueries({
-    filters: [
-      'EndCustomer',
-      'EndCustomerByDivision40',
-      // ⭐ 2026-07-23 AS-IS 정합(사용자 승인) — BIZ_TYPE_BPMS lookup(12종 고정) →
-      //   AS-IS SCM0001_GET_BIZ_TYPE_BY_DIVISION 1:1 (SCM_MST_PROJECT division별 distinct, @divisionId 바인드).
-      { comboId: 'BizTypeByDivision', divisionId: q(sc.divisionId) },
-      'DmBizType',
-      'ItemType',
-      'BucketType2',
-      {
-        comboId: 'PlantSitebyEndCustomer',
-        divisionId: q(sc.divisionId),
-        // ⭐ AS-IS 파리티 — DMF0042 는 양 지점 모두 UserPlantSiteByDivision(division 만,
-        //   InitControls L316·cboDivision L1548). EC 바인드 시 목록이 좁아져 AS-IS 와 어긋남 →
-        //   항상 'ALL' (2026-08-05 대조 F-4).
-        endCustomer: q(''),
-      },
-    ],
-  });
+  // 카탈로그 필드가 직접 조회하는 조회조건 (2026-08-22 콤보 통일):
+  //   Div / Team / End Customer / Sales Site / Plant Site =
+  //     MyDivision / TeambyDivision / EndCustomer / SalesSite / PlantSitebyEndCustomer.
+  //     'PlantSitebyEndCustomer' 는 SQL 개정으로 파라미터를 받지 않고 전량을 내려준다
+  //     — cascade 는 클라이언트(카탈로그)에서 건다.
+  //     종전 40 전용 'EndCustomerByDivision40' 스왑은 폐지했다.
+  //   Biz Type = BizTypeField(comboId='BizTypebyDivision') — 통일 대상 아님, 종전 그대로.
+  // TeamField 의 전체 선택 해제 결과가 [], [''], ['ALL'] 등으로 내려올 수 있으므로
+  // 실제 Team ID만 남기고 나머지는 '미선택'([])으로 통일한다. (DMF0021 SalesPlanForm 1:1)
+  const normalizeDeptIds = (values: string[] | string | null | undefined): string[] => {
+    const items = Array.isArray(values) ? values : String(values ?? '').split(',');
 
-  // 멀티 옵션 헬퍼 — NUMBER→String + DIVISION_ID/DEPT_ID 토큰 필터 (카탈로그 toOptions 동등.
-  //   deptIds = Team cascade 반영: AS-IS UserEndCustomerByDivisionDept(div, team) 의 team 필터 1:1.
-  //   콤보 행 DEPT_ID 공란 또는 deptIds 미선택 = 통과 — 카탈로그 EndCustomerField 동일 규약)
-  const toOptions = (
-    rows: Array<Record<string, unknown>> | undefined,
-    divisionId?: string,
-    deptIds?: string[]
-  ) => {
-    const arr = (rows ?? []) as unknown as Array<Record<string, string>>;
-    return [
-      ...new Map(
-        arr
-          .filter(r => !divisionId || !r.DIVISION_ID || r.DIVISION_ID === divisionId)
-          .filter(
-            r => !deptIds || deptIds.length === 0 || !r.DEPT_ID || deptIds.includes(r.DEPT_ID)
-          )
-          .map(r => [`${r.DIVISION_ID ?? ''}|${r.CODE ?? ''}`, r] as const)
-      ).values(),
-    ].map(r => ({ label: String(r.NAME ?? r.CODE ?? ''), value: String(r.CODE ?? '') }));
+    return items
+      .map(value => String(value).trim())
+      .filter(value => value !== '' && value.toUpperCase() !== 'ALL');
   };
+
+  const activeDeptIds = normalizeDeptIds(sc.deptIds);
+
+  // End Customer / Sales Site 는 카탈로그 필드가 직접 조회한다 (2026-08-22 콤보 통일 —
+  //   'EndCustomer' / 'SalesSite'). 종전 'EndCustomerByDivision' + 'UserSiteByEndCustomer' 는 폐지.
+  //   'EndCustomer' 는 DEPT_ID 가 NULL 인 행이 섞이므로 Team cascade 를 반드시 strict 로 건다 —
+  //   관대로 두면 Team 축소가 AS-IS 보다 헐거워진다(2026-08-21 실측: 81 ESG팀에서 AS-IS 2건 대비 과다).
+  const [itemType, bucketTypeCombo] = useTabComboQueries({
+    filters: ['ItemType', 'BucketType2'],
+  });
 
   // Bucket 옵션 — CMBO CODE 풀워드(MONTHLY/QUARTERLY/YEARLY) → 첫 글자 enum 매핑 + 정적 fallback
   const bucketFallback = [
@@ -131,11 +108,6 @@ export const BusinessPlanForm = ({
 
   const firstOr = (arr: string[]): string => arr[0] ?? '';
   const toArr = (v: string): string[] => (v ? [v] : []);
-  const toMulti = (v: string | undefined): string[] =>
-    String(v ?? '')
-      .split(',')
-      .filter(Boolean);
-
   return (
     <SearchArea
       isHidden={!openSearchArea}
@@ -161,9 +133,11 @@ export const BusinessPlanForm = ({
                 projectCodes: [],
                 itemIds: [],
                 owners: [],
-                // ⭐ Period 기본값 리셋 — AS-IS cboDivision L1554 drpPeriod.InitValue=GetDayRange() 파리티
-                startYyyymmdd: defaultPeriod.start,
-                endYyyymmdd: defaultPeriod.end,
+                itemTypes: [],
+                bucketType: BUCKET_TYPE.MONTHLY,
+                // ⭐ 2026-08-20 교정 — AS-IS Designer.cs 실측(chkSum.Checked=true / cboQty 미지정=false)
+                sumYn: true,
+                qtyYn: false,
               });
               onDivisionChange();
             }}
@@ -171,100 +145,82 @@ export const BusinessPlanForm = ({
           <TeamField
             gridSize={3}
             value={sc.deptIds}
-            onChange={v => set({ deptIds: v, endCustomers: [], scmSiteIds: [] })}
+            onChange={v =>
+              set({
+                deptIds: v,
+                endCustomers: [],
+                scmSiteIds: [],
+                plantSiteIds: [],
+                bizTypes: [],
+                projectCodes: [],
+                itemIds: [],
+                owners: [],
+                itemTypes: [],
+                bucketType: BUCKET_TYPE.MONTHLY,
+                // ⭐ 2026-08-20 교정 — 위 Division 변경 reset 과 같은 값
+                sumYn: true,
+                qtyYn: false,
+              })
+            }
             division={sc.divisionId}
-            // ⭐ 2026-08-13 Team 원천 오귀속 정정 — AS-IS clbTeam 은 C# 메서드명이
-            //   Data.UserTeamByDivision 이지만 실호출 UP_FX 는 'TeambyDivision'
-            //   (Data.cs L1076 CallBizCommonData("TeambyDivision", divisionID)).
-            //   2026-07-23 정합 때 메서드명을 CMBO 명으로 오귀속해 'UserTeamByDivision'
-            //   (SITE_ITEM.OWNER 파생 — @divisionId 토큰 없음)을 배선했고, 예전 조직 유입
-            //   + 현행 SALES 팀 누락(81: 98행 vs 정본 30행)이 실측됨. TeamField 기본
-            //   comboId = 'TeambyDivision'(FULLCONV v2) — DMF0082/0003 과 동일 경로.
           />
-          <Grid size={3}>
-            {/* ⭐ End Customer — 40 = 'EndCustomerByDivision40' 원천 스왑 (AS-IS InitControls L252~262).
-                변경 시 Sales Site 재조회 종속 clear (clbCustomer L1535). */}
-            <FormItem
-              label={t('LBL00503', 'End Customer')}
-              labelAlign='right'
-              render={() => (
-                <CustomDropdown
-                  multiple
-                  allOption
-                  useClearIcon
-                  limitTags={1}
-                  value={sc.endCustomers.join(',')}
-                  options={toOptions(
-                    (div40 ? endCustomer40 : endCustomer) as never,
-                    div40 ? undefined : sc.divisionId,
-                    // ⭐ Team cascade — 81·82 = 'EndCustomer' 콤보 행 DEPT_ID 클라 필터 (AS-IS
-                    //   UserEndCustomerByDivisionDept(div, team) L1581). 40 은 CMBO 에 DEPT_ID
-                    //   미반환이라 관대 통과 — CMBO 확장(@deptId) 승인 대기 (2026-08-05 대조).
-                    sc.deptIds
-                  )}
-                  onChange={(_, options) =>
-                    set({ endCustomers: toMulti(String(options ?? '')), scmSiteIds: [] })
-                  }
-                />
-              )}
-            />
-          </Grid>
+          {/* cascade = division-team-endCustomer. division 은 카탈로그 필드가 항상 먼저 걸므로
+              여기엔 Team(DEPT_ID) 단계만 넘긴다.
+              필수: strict. 위 콤보 주석의 2026-08-21 실측 근거 그대로다 — 관대 매칭이면 Team 을
+                골라도 목록이 그대로 보인다.
+              AS-IS clbCustomer_SelectedIndexChanged (L1535) — 변경 시 하위 Sales Site clear. */}
+          <EndCustomerField
+            gridSize={3}
+            division={sc.divisionId}
+            cascade={{ DEPT_ID: { values: activeDeptIds, strict: true } }}
+            debugLabel='DMF0042 business-plan / End Customer'
+            value={sc.endCustomers}
+            onChange={v => set({ endCustomers: v, scmSiteIds: [], plantSiteIds: [] })}
+          />
+          {/* cascade = division-team-endCustomer-salesSite ('SalesSite' 콤보 반환 컬럼 기준).
+              End Customer 는 이 콤보의 PROJECT_CODE 자리로 본다 — 콤보가 END_CUSTOMER 컬럼을
+                내려주지 않기 때문이다. DMF0014 / DMF0044 와 동일한 매핑이다.
+              DEPT_ID 는 엄격 — 종전 'UserSiteByEndCustomer' 의 @deptId 브랜치가 하던 40 팀 축소를
+                여기서 대신한다(2026-08-21 실측: 안 걸면 40 에서 다른 팀 사이트까지 남았다).
+              PROJECT_CODE 는 관대 — 이 컬럼이 NULL 인 행이 정상적으로 존재해 자르면 목록이 빈다.
+              deptId 는 정규화본(activeDeptIds)을 넘긴다 — 원본은 '' · 'ALL' 이 섞여 있다. */}
           <SalesSiteField
             gridSize={3}
+            division={sc.divisionId}
+            cascade={{
+              DEPT_ID: { values: activeDeptIds, strict: true },
+              PROJECT_CODE: sc.endCustomers,
+            }}
+            debugLabel='DMF0042 business-plan / Sales Site'
             value={sc.scmSiteIds}
             onChange={v => set({ scmSiteIds: v })}
-            division={sc.divisionId}
-            // ⭐ 2026-07-23 AS-IS 정합(사용자 승인) — 'UserSiteByEndCustomer' 서버 바인드 전환:
-            //   EndCustomer/Team cascade + 40 owner-team 필터 + OPERATION_GROUP 'W' 제외 (hook #117).
-            comboId='UserSiteByEndCustomer'
-            endCustomer={sc.endCustomers.join(',')}
-            deptId={sc.deptIds.join(',')}
           />
 
           {/* Row 2 — Plant Site(40 비활성) / Biz Type(40 원천 스왑) / Period* / Bucket*(기본 Monthly — M/Q/Y) */}
-          <Grid size={3}>
-            {/* ⭐ Plant Site — AS-IS 40 만 비활성 (InitControls L259~261), 81·82 활성. */}
-            <FormItem
-              label={t('LBL00509', 'Plant Site')}
-              labelAlign='right'
-              render={() => (
-                <CustomDropdown
-                  multiple
-                  allOption
-                  useClearIcon
-                  limitTags={1}
-                  disabled={div40}
-                  value={sc.plantSiteIds.join(',')}
-                  options={((plantSite ?? []) as Array<Record<string, string>>).map(r => ({
-                    label: String(r.NAME ?? r.CODE ?? ''),
-                    value: String(r.CODE ?? ''),
-                  }))}
-                  onChange={(_, options) => set({ plantSiteIds: toMulti(String(options ?? '')) })}
-                />
-              )}
-            />
-          </Grid>
-          <Grid size={3}>
-            {/* ⭐ Biz Type — 40 = 'DmBizType' 원천 스왑 (AS-IS InitControls L252 DM_BIZ_TYPE). */}
-            <FormItem
-              label={t('LBL00504', 'Biz.Type')}
-              labelAlign='right'
-              render={() => (
-                <CustomDropdown
-                  multiple
-                  allOption
-                  useClearIcon
-                  limitTags={1}
-                  value={sc.bizTypes.join(',')}
-                  options={toOptions(
-                    (div40 ? dmBizType : bizTypeByDivision) as never,
-                    div40 ? undefined : sc.divisionId
-                  )}
-                  onChange={(_, options) => set({ bizTypes: toMulti(String(options ?? '')) })}
-                />
-              )}
-            />
-          </Grid>
+          {/* Plant Site — 카탈로그 PlantSiteField ('PlantSitebyEndCustomer', Division+EndCustomer
+              클라이언트 cascade — 콤보는 파라미터 없이 전량을 내려준다). fetch 만 비활성 시 건너뛴다.
+              ⚠ disabled 를 명시 전달한다 — 카탈로그 기본 게이트는 81 계열 전용(40·82 비활성)이라
+                그대로 두면 82 가 잠긴다. DMF0042 는 40 만 비활성이고 81 계열·82 는 활성이다
+                (AS-IS InitControls L259~261 / 설계서 [사업부별 분기] Plant Site 행). */}
+          <PlantSiteField
+            gridSize={3}
+            value={sc.plantSiteIds}
+            onChange={v => set({ plantSiteIds: v })}
+            division={sc.divisionId}
+            endCustomer={sc.endCustomers.join(',')}
+            disabled={div40}
+          />
+          {/* Biz Type — 40/비40 을 한 콤보로 덮는 'BizTypebyDivision' (MktFcstForm 1:1).
+              DM_BIZ_TYPE(40) UNION SCM_MST_PROJECT BIZ_TYPE(비40) 이며 DIVISION_ID 를 반환하므로
+              카탈로그가 division 으로 거른다. 구 'DmBizType'(40) / 'BizTypeByDivision'(비40)
+              2종 스왑에서 교체 — 두 원천은 값 집합이 서로 달랐다. */}
+          <BizTypeField
+            gridSize={3}
+            value={sc.bizTypes}
+            onChange={v => set({ bizTypes: v })}
+            division={sc.divisionId}
+            comboId='BizTypebyDivision'
+          />
           <PeriodField
             gridSize={3}
             start={sc.startYyyymmdd}
@@ -275,6 +231,7 @@ export const BusinessPlanForm = ({
             <FormItem
               label={t('LBL00710', '_Bucket')}
               labelAlign='right'
+              className={commonStyles.formItem}
               render={() => (
                 <CustomDropdown
                   isInput={false}
@@ -335,6 +292,7 @@ export const BusinessPlanForm = ({
             <FormItem
               label={t('LBL00068', '_Item Type')}
               labelAlign='right'
+              className={commonStyles.formItem}
               render={() => (
                 <CustomDropdown
                   allOption
@@ -347,17 +305,40 @@ export const BusinessPlanForm = ({
             />
           </Grid>
 
-          {/* Row 4 — 체크박스 Sum (cboQty=Visible=false dead 'N' 배선만 / cboClosed dead 제외 — 파리티) */}
+          {/* Row 4 — 체크박스 Sum / Qty≠0 (cboClosed dead 제외 — 파리티). 좌측 첫 열 배치.
+              ⭐ Qty≠0 = P_QTY_YN 조회 파라미터 (기본 체크 — Search 시 반영. Sum 과 달리 즉시 토글 아님).
+                 라벨 = AS-IS 화면 리터럴 'Qty≠0' (신규 LBL 채번 금지 규약 — 기존 LBL00689 는
+                 '_Qty ≥ 0' 문구라 DMF0042 AS-IS 와 불일치해 미사용. 2026-08-06 사용자 지시). */}
           <Grid size={3}>
-            <div className={styles.checkboxRow}>
-              <Stack direction='row' spacing={2} alignItems='center'>
-                <Checkbox
-                  labelText={t('LBL00687', '_Sum')}
-                  checked={sc.sumYn}
-                  onChange={checked => set({ sumYn: checked })}
-                />
-              </Stack>
-            </div>
+            {/* ⭐ 시작 위치 정렬 (2026-08-06 사용자 요청) — 빈 라벨 FormItem 으로 감싼다.
+                FormItem 은 `grid-template-columns: {labelWidth}px auto`(labelSize 기준 고정 px) 라
+                라벨 트랙만 확보되면 콘텐츠가 위 조건들의 입력 박스와 같은 x 에서 시작한다.
+                ⚠ label='' 은 falsy 라 라벨 트랙이 생성되지 않아 정렬이 안 됐음 → NBSP 사용.
+                   보이지는 않으면서 truthy 라 트랙이 잡힌다. */}
+            <FormItem
+              label={' '}
+              labelAlign='right'
+              className={commonStyles.formItem}
+              render={() => (
+                <div className={styles.checkboxRow}>
+                  <Stack direction='row' spacing={2} alignItems='center'>
+                    <Checkbox
+                      labelText={t('LBL00687', '_Sum')}
+                      checked={sc.sumYn}
+                      onChange={checked => set({ sumYn: checked })}
+                    />
+                    <Checkbox
+                      labelText='Qty≠0'
+                      // ?? false — 기본값이 해제(Designer.cs cboQty 미체크)라 persist 구버전 shape 에
+                      //   qtyYn 키가 없을 때의 대체값도 해제여야 한다. setFilter 는 initSearch 머지로
+                      //   'N' 을 보내므로 true 로 두면 표시와 전송값이 어긋난다.
+                      checked={sc.qtyYn ?? false}
+                      onChange={checked => set({ qtyYn: checked })}
+                    />
+                  </Stack>
+                </div>
+              )}
+            />
           </Grid>
         </>
       }

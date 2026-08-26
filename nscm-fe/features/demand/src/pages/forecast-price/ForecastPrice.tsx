@@ -2,20 +2,22 @@ import { FileExceluploadIcon } from '@lges/design-system/icon';
 import { type FlexGrid as TFlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import {
-  ColumnLayoutModal,
+  ItemByDivisionModal,
   MeasureSelectModal,
   ProjectByDivisionModal,
-  toColumnLayoutSettings,
 } from 'features/master/src/components';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { apiClient } from '@foundation/apis';
 import { IcExchangeRate, IcGridColumnSetup, IcMeasureSelect } from '@foundation/assets';
 import type { PageProps } from '@foundation/models';
 import { queryClient } from '@foundation/query-client';
 import type { EditTracker } from '@foundation/utils';
-import { MainTitle, SubTitle } from '@shared/components';
+// ⭐ [2026-08-20 정본 단일화] Grid Column Setting 모달 = @shared/components 표준 정본 직행
+//   (packages/shared/.../templates/modals/column-layout-modal — hook #132 §Column 모달 정본)
+import { ColumnLayoutModal, MainTitle, SubTitle, toColumnLayoutSettings } from '@shared/components';
 import { useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
+import { ProgressIndicator } from '@shared/lges';
 import { FileExceldownloadIcon } from '@shared/lges-icons';
 import { useDirtyReset, useMessageStore, useSessionStore } from '@shared/stores';
 
@@ -23,6 +25,11 @@ import { FcstUploadModal } from '../../components';
 
 import { ForecastPriceForm } from './components/ForecastPriceForm';
 import { ForecastPriceGrid } from './components/ForecastPriceGrid';
+import {
+  findGroupTopIndex,
+  groupKeyBindings,
+  type GroupKeyColumn,
+} from './components/ForecastPriceGridUtils';
 import {
   ExchangeRateModal,
   ForecastTemplateModal,
@@ -46,6 +53,7 @@ import type {
 } from './forecast-price.types';
 import { useForecastPriceStore } from './useForecastPriceStore';
 import { saveExcelUpload, saveTitleSet, TITLESET_SHEET } from './utils/forecast-price.api';
+import { q } from './utils/forecast-price.combo';
 import { editableDayColumnsOf } from './utils/forecast-price.editLock';
 import { buildSavePayload, buildSaveRows } from './utils/forecast-price.save';
 import { validateSaveRows } from './utils/forecast-price.validate';
@@ -53,8 +61,8 @@ import { buildWsFcstTypeSet, parseWsPlannerYn } from './utils/forecast-price.wsA
 
 /**
  * 저장 전 신규행 1건 — 그리드 표시 위치를 결정하는 앵커를 함께 보관한다.
- *   anchor = Insert 를 누른 시점의 포커스 행(조회행 또는 앞서 추가한 신규행)의 객체 참조.
- *   null = 포커스 없이 Insert (그리드 맨 위에 놓는다).
+ *   anchor = Insert 를 누른 시점의 선택 셀이 속한 **머지 블록의 첫 행** 객체 참조.
+ *   null = 선택 없이 Insert (그리드 맨 위에 놓는다).
  * 배열 순서 = 누른 순서. 같은 앵커에 여러 건이 걸리면 누른 순서대로 위에서 아래로 쌓인다.
  */
 interface PendingInsert {
@@ -80,7 +88,27 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   const [templateModalOpen, setTemplateModalOpen] = useState(false);
   const [insertedRows, setInsertedRows] = useState<PendingInsert[]>([]);
   // Insert 직후 포커스를 옮길 신규행 — gridRows 재계산 후 effect 가 소비하고 비운다.
+  // 저장 진행 오버레이 — '^' bulk 저장은 react-query 밖이라 전역 스피너가 뜨지 않는다
+  //   (정본 SalesReports.tsx:133·493 동일 패턴). 화면 스피너로 진행 중임을 알린다.
+  const [saving, setSaving] = useState(false);
   const focusRowRef = useRef<ForecastPriceRow | null>(null);
+
+  /**
+   * 저장·업로드·설정변경 후 **자동 재조회** (사용자 요구 — "저장완료 메세지 후에는 자동재조회").
+   *
+   * ⛔ 구 코드는 무효화 키를 `[MENU_ID]` 로 걸었는데 **메인 그리드에 매칭되지 않았다.**
+   *   쿼리 키는 `buildTabQueryKey` 가 만든다 (`useCustomQueryClient.ts:47`):
+   *       [tabId, sheetName, procedureAction, {...filters}]
+   *   즉 **prefix 가 `tabId`(탭 UUID)** 다. 메인 화면은 `PageProps.tabId` 를 넘기고(:192,:200),
+   *   모달들만 `tabId: MENU_ID` 를 쓴다 → 구 키는 **모달 쿼리만** 무효화하고 메인 그리드는 그대로 남아,
+   *   저장해도 화면이 갱신되지 않았다(2026-08-22 실측).
+   *   ⇒ 둘 다 무효화한다: 메인(`tabId`) + 모달 스코프(`MENU_ID`).
+   */
+  const invalidateAfterSave = useCallback(() => {
+    void queryClient.invalidateQueries({ queryKey: [tabId] });
+    void queryClient.invalidateQueries({ queryKey: [MENU_ID] });
+    // `queryClient` 는 모듈 스코프 싱글턴(@foundation/query-client) — deps 대상이 아니다.
+  }, [tabId]);
 
   const { setAlert, setToast } = useMessageStore();
   const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
@@ -138,6 +166,39 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
     editTrackerRef.current?.clearChanges(); // 미저장 편집 추적 reset
     clearFilters(); // filters/titleFilters 무효화 → useTabProcQuery enabled=false → rows/동적컬럼 비움
   }, [searchParams.divisionId, clearFilters]);
+
+  // ⭐ [ENDCUSTDISP 2026-08-18 사용자 확정] 비40 division 의 그리드 END_CUSTOMER 표시값을
+  //   조회조건과 **같은 축**(SCM_MST_SITE.END_CUSTOMER — Volvo/BMW/HKMC)으로 파생 표기한다.
+  //   원장(DM_PLN_CFM_*)의 END_CUSTOMER 는 PK 구성 컬럼이라 값 자체를 바꾸면 SAVE 의 DELETE/MERGE
+  //   키가 어긋나 중복 적재된다 ⇒ 원값은 END_CUSTOMER_KEY 로 보존하고(gridRows 변환) 저장은
+  //   keyOf 가 KEY 를 우선 사용한다(forecast-price.save.ts). SP 무변경 — 표시/키 분리는 FE 전담.
+  //   맵 원천 = CMBO 'SiteEndCustomerMapDMF0082' (division→ SCM_SITE_ID:END_CUSTOMER, (DIV,SITE)
+  //   유일성 실측 0중복 = 1:1). 40 은 AS-IS 부터 PROJECT_CODE 축이 조회조건과 동일하므로 제외.
+  const siteEcMapRef = useRef<Map<string, string>>(new Map());
+  const [siteEcVersion, setSiteEcVersion] = useState(0);
+  useEffect(() => {
+    const div = searchParams.divisionId;
+    siteEcMapRef.current = new Map();
+    setSiteEcVersion(v => v + 1);
+    if (!div || div === '40') return;
+    // 인용/이스케이프는 quoteComboParams 가 멱등 처리하지만, 화면 관례(q())·게이트 G-G 와
+    //   정렬해 명시 인용한다 (멱등이라 이중 인용 무해).
+    void apiClient
+      .getCombo({ comboId: 'SiteEndCustomerMapDMF0082', divisionId: q(div) })
+      .then(rows => {
+        siteEcMapRef.current = new Map(
+          (rows ?? []).map(r => [String(r.CODE ?? ''), String(r.NAME ?? '')])
+        );
+        setSiteEcVersion(v => v + 1);
+      })
+      .catch((err: unknown) => {
+        // 실패 시 원값(원장 키) 표시 유지 — 조용한 무증상 금지, 콘솔로 남긴다.
+        console.error(
+          '[combo] SiteEndCustomerMapDMF0082 조회 실패 — END_CUSTOMER 원값 표시 유지',
+          err
+        );
+      });
+  }, [searchParams.divisionId]);
 
   // Column Setting 팝업 재진입 복원 — 현재 grid 상태(개인화 반영본).
   //   ⚠️ DB 응답이 우선이고 이 값은 BE 가 안 준 필드만 보완한다 (buildInitialRows 규칙).
@@ -232,12 +293,43 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
     [titleData]
   );
 
-  // 조회행 + 신규행 병합 — 신규행은 앵커(=Insert 누른 시점의 포커스 행) **바로 위**에 놓는다.
-  //   구 구현은 `[...insertedRows, ...조회행]` 이라 포커스와 무관하게 항상 맨 위였다(2026-08-12 정정).
+  // 조회행 + 신규행 병합 — 신규행은 앵커(=선택 셀이 속한 머지 블록의 첫 행) **바로 위**에 놓는다.
   //   앵커가 사라진 경우(재조회로 객체 참조 교체 등)는 맨 위로 폴백 — 행이 증발하지 않게 한다.
   const gridRows = useMemo(() => {
     const baseRows = data?.fcstNPrice ?? [];
-    if (insertedRows.length === 0) return baseRows;
+    // [ENDCUSTDISP] 표시/키 분리 — 행 객체 **제자리** 변환(참조 유지 필수: editTracker·insert 앵커가
+    //   행 참조를 쥔다. 새 객체로 map 하면 앵커/변경추적이 전부 끊긴다). 멱등: END_CUSTOMER_KEY
+    //   보유 행은 재변환하지 않는다. 맵 미도착 시 원값 유지 — 도착하면 siteEcVersion 이 재실행시킨다.
+    if (siteEcMapRef.current.size > 0) {
+      // 값 타입은 WijmoRowItem(WijmoPrimitive) — Record<string, unknown> 로 두면 String(row.X)
+      //   가 no-base-to-string 에 걸린다.
+      for (const row of baseRows as unknown as WijmoRowItem[]) {
+        if ('END_CUSTOMER_KEY' in row) continue;
+        const disp = siteEcMapRef.current.get(String(row.SCM_SITE_ID ?? ''));
+        if (disp === undefined) continue;
+        row.END_CUSTOMER_KEY = row.END_CUSTOMER ?? '';
+        row.END_CUSTOMER = disp;
+      }
+    }
+    // [E20260826-DISPSORT] 행 정렬 = **표시값** 기준 (사용자 신고 2026-08-26: Audi→VW 일부→BMW).
+    //   SP 정렬 키는 원장 END_CUSTOMER(비40=프로젝트 코드)인데 표시값은 위에서 사이트 파생 고객명으로
+    //   교체(ENDCUSTDISP)되므로 표시 기준으로 어긋나 보인다. 표시 컬럼(staticColumns 개인화 순서)
+    //   순으로 재정렬한다 — 얕은 복사 정렬(행 참조 보존: editTracker·insert 앵커 무손상), stable sort
+    //   라 동순위(같은 키의 메저 행들)는 SP 원 순서(메저 SORT) 그대로 유지된다. 40 도 표시값=원장값이라
+    //   비교 결과가 SP binary 정렬과 동일(UTF-16 코드단위 비교 — localeCompare 미사용 의도).
+    const sortCols = staticColumns
+      .filter(c => c.visible !== false && !!c.colNm && c.colNm !== 'NO')
+      .map(c => c.colNm);
+    const displaySorted = ([...baseRows] as unknown as WijmoRowItem[]).sort((a, b) => {
+      for (const col of sortCols) {
+        const av = String(a[col] ?? '');
+        const bv = String(b[col] ?? '');
+        if (av < bv) return -1;
+        if (av > bv) return 1;
+      }
+      return 0;
+    }) as unknown as ForecastPriceRow[];
+    if (insertedRows.length === 0) return displaySorted;
 
     const knownRows = new Set<ForecastPriceRow>(baseRows);
     insertedRows.forEach(pending => knownRows.add(pending.row));
@@ -262,21 +354,51 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
       merged.push(target);
     };
     orphanRows.forEach(emit);
-    baseRows.forEach(emit);
+    displaySorted.forEach(emit); // [E20260826-DISPSORT] 신규행 병합도 표시 정렬 순서 기준
     return merged;
-  }, [insertedRows, data]);
+    // siteEcVersion — [ENDCUSTDISP] 맵 도착 시 표시 변환 재실행 트리거 (맵 자체는 ref).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [insertedRows, data, siteEcVersion, staticColumns]);
 
-  // Insert 직후 새 행으로 포커스·스크롤 이동 (그리드가 새 itemsSource 를 반영한 뒤 실행).
+  // Insert 직후 새 행으로 포커스·스크롤 이동.
+  //   필수: 실패 시 **다음 프레임에 한 번 더** 시도한다. itemsSource 가 바뀌면 wijmo 는 스크롤을
+  //   0 으로 되돌리는데, 이 시점에 grid.rows 가 아직 새 배열을 반영하지 않았으면 findIndex 가 -1 이라
+  //   그대로 빠져나가 화면이 맨 위에 머문다 — 사용자는 중간에 생긴 신규행을 찾아 스크롤하게 된다
+  //   (2026-08-17 리포트). 재시도 후에도 못 찾으면 조용히 포기(다음 Insert 에 영향 없음).
   useEffect(() => {
     const target = focusRowRef.current;
     if (!target) return;
-    focusRowRef.current = null;
     const grid = gridRef.current;
     if (!grid) return;
-    const rowIndex = grid.rows.findIndex(r => r.dataItem === target);
-    if (rowIndex < 0) return;
-    grid.select(rowIndex, Math.max(0, grid.selection.col));
-    grid.scrollIntoView(rowIndex, -1);
+    const focusTarget = (): boolean => {
+      const rowIndex = grid.rows.findIndex(r => r.dataItem === target);
+      if (rowIndex < 0) return false;
+      grid.select(rowIndex, Math.max(0, grid.selection.col));
+      grid.scrollIntoView(rowIndex, -1);
+      return true;
+    };
+    if (focusTarget()) {
+      focusRowRef.current = null;
+      return;
+    }
+    // ⭐ [2026-08-22] 재시도를 **여러 프레임**으로 늘린다 (사용자 신고: "INSERT 한 ROW 로 FOCUS 가
+    //   이동하지 않아서 INSERT 된 ROW 을 찾아야 합니다").
+    //   필터가 걸린 상태의 Insert 는 신규행이 곧바로 `grid.rows` 에 나타나지 않는다 —
+    //   ①필터 복원(apply) → ②예외집합 등록(keepRowVisibleUnderFilter) → ③collectionView.refresh()
+    //   → ④wijmo 레이아웃 재계산 순서라, 1프레임 재시도로는 ③~④ 사이에서 놓칠 수 있다.
+    //   찾으면 즉시 중단하고, 못 찾으면 조용히 포기한다(다음 Insert 에 영향 없음).
+    let frame = 0;
+    let tries = 0;
+    const retry = () => {
+      if (focusTarget()) {
+        focusRowRef.current = null;
+        return;
+      }
+      if (++tries >= 10) return; // 약 10프레임(≈160ms) — 그 이상은 행이 없다고 본다
+      frame = requestAnimationFrame(retry);
+    };
+    frame = requestAnimationFrame(retry);
+    return () => cancelAnimationFrame(frame);
   }, [gridRows]);
 
   const editableDayColumns = useMemo(
@@ -299,10 +421,11 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
     isCurVersion ||
     ((data?.fcstNPrice ?? []) as WijmoRowItem[]).some(r => String(r.EDIT_FLAG ?? '') !== 'N');
 
-  // Excel Form / Excel Upload 버튼 노출 게이트 — ⭐ division 40 전용 (2026-08-12 정정).
-  //   근거: PKG_DMF0082.P_DMF0082_EXCEL_UPLOAD 검증절 L4342 'Invalid Division(40 Only)' 실측 —
-  //   구 81 게이트는 SP 계약과 정면 충돌(81 업로드는 전행 ERROR 분류). AS-IS(KJY 2025.05) 40 전용 설계.
-  const isExcelDiv = searchParams.divisionId === '40';
+  // Excel Form / Excel Upload 버튼 노출 게이트 — ⭐ division 81 계열 전용 (2026-08-19 사용자 지시 — 구 40 전용 역전).
+  //   근거: PKG_DMF0082 [E20260819-XLS81LOC] — Upload 검증절 'Invalid Division(81 Only)' + Form 진입 가드(MSG01014) 실측.
+  //   대상 measure 도 LOC(Unit Price) 한정 — SP 가 템플릿 산출·업로드 검증에서 LOC 외 제외/오류 분류(서버 권위).
+  //   Sender Code disabled 관례(startsWith('81'))와 동일 판정식.
+  const isExcelDiv = searchParams.divisionId.startsWith('81');
   // [UICATEGORY 2026-08-07] Division 82 = 조회 전용 (사용자 확정) — Insert/Delete/Save 버튼 차단.
   //   서버 권위 = PKG EDIT_FLAG='N' 일괄 + SAVE V82-00 가드. FE 는 UX 게이트(진입점 원천 차단).
   const isDiv82 = searchParams.divisionId === '82';
@@ -341,12 +464,61 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
     if (isSame) void refetch();
   };
 
+  /**
+   * 선택한 셀이 속한 머지 블록의 첫 행 — Insert 앵커.
+   *
+   * 판정 입력은 **그리드가 실제로 그리고 있는 것**에서 뽑는다: 표시 순서(개인화로 바뀐다) ·
+   * 표시 여부 · 필터/정렬이 반영된 행 순서(`g.rows`). 조회 응답 배열(gridRows)이 아니다 —
+   * 사용자가 본 화면상의 블록과 어긋나면 안 된다.
+   *
+   * 범위 축 = **선택한 컬럼(`g.selection.col`)** — 사용자 요구 "선택한 값의 병합한 데이터 위로"
+   *   (2026-08-17). Sales Site 셀은 그 안의 여러 Model 블록을, Model 셀은 그 안의 Incoterms 블록을,
+   *   Incoterms 셀은 measure 블록만 덮는다. 축은 `groupKeyBindings` 에 **인덱스 그대로** 넘긴다
+   *   (binding 이름 역탐색 금지 — 그 방식이 2026-08-17 Sales Site 미동작의 원인이었다).
+   *
+   * 값이 빈 셀은 wijmo 가 아예 병합하지 않으므로(mergeManager `isEmptyCellValue`) 축에서 빼고
+   *   data Group(measure 블록) 기준으로 떨어뜨린다.
+   *
+   * 금지: wijmo 컬렉션(`g.columns`/`g.rows`)에 `.map`/`.filter` 를 쓰지 말 것 — Array 상속이라
+   *   species 규약(`new ObservableArray(length)`)으로 새 ObservableArray 를 만들며 결과가 깨진다.
+   *   실제로 이 때문에 앵커 계산이 통째로 무력화돼 "포커스 행 바로 위"로 떨어졌다(2026-08-17).
+   *   인덱스 루프로 순수 배열에 복사한 뒤 다룬다.
+   */
+  const groupTopRowOf = (index: number): ForecastPriceRow | undefined => {
+    const g = gridRef.current;
+    if (!g || index < 0) return undefined;
+
+    const columns: GroupKeyColumn[] = [];
+    for (let i = 0; i < g.columns.length; i++) {
+      const column = g.columns[i];
+      // visible 미지정(undefined)은 표시로 본다 — 잘못 빼면 축이 통째로 폴백된다.
+      columns.push({ binding: column?.binding ?? '', visible: column?.visible !== false });
+    }
+    const rows: (WijmoRowItem | undefined)[] = [];
+    for (let i = 0; i < g.rows.length; i++) {
+      rows.push(g.rows[i]?.dataItem as WijmoRowItem | undefined);
+    }
+
+    const clickedIndex = g.selection.col;
+    const clickedBinding = columns[clickedIndex]?.binding ?? '';
+    const clickedValue = clickedBinding ? rows[index]?.[clickedBinding] : undefined;
+    const isEmptyCell =
+      clickedValue === null || clickedValue === undefined || String(clickedValue).trim() === '';
+
+    const keyBindings = groupKeyBindings(columns, isEmptyCell ? -1 : clickedIndex);
+    return g.rows[findGroupTopIndex(rows, index, keyBindings)]?.dataItem as
+      | ForecastPriceRow
+      | undefined;
+  };
+
   // ── Insert (AS-IS InsertButton — Current 버전 조회 시에만) ──
-  //   ⭐ #9 시드 복사 (AS-IS L2636~2676): 포커스 행이 있으면 키 10종을 새 행에 복제, 없으면 Measure='MKT_FCST'.
+  //   ⭐ #9 시드 복사 (AS-IS L2636~2676): 포커스 행이 있으면 키 컬럼을 새 행에 복제한다.
+  //   단 MEASURE 는 복사 대상에서 제외 — 통합테스트 35번 요구 (아래 MEASURE 주석 참조).
   const handleInsert = () => {
     if (!isEditableVersion) return;
     const g = gridRef.current;
-    const seedRow = g?.rows[g.selection.row]?.dataItem as ForecastPriceRow | undefined;
+    const selectedIndex = g?.selection.row ?? -1;
+    const seedRow = g?.rows[selectedIndex]?.dataItem as ForecastPriceRow | undefined;
     const seed = seedRow as unknown as WijmoRowItem | undefined;
     const str = (v: unknown): string => (typeof v === 'string' ? v : '');
     const baseDivision = str((data?.fcstNPrice ?? [])[0]?.DIVISION_ID);
@@ -361,20 +533,50 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
       // AS FROM SITE 시드 승계 — SAVE 의 p_as_from_site 로 나가는 키 컬럼이라 신규행도 이어받는다.
       AS_FROM_SITE: str(seed?.['AS_FROM_SITE']),
       SCM_SITE_ID: str(seed?.['SCM_SITE_ID']),
+      // ⭐ DEPT_ID 시드 승계 — AS-IS 그리드 행은 Team 을 항상 들고 있고, 셀 팝업이 그 값을 조회조건으로
+      //   읽어 간다(`.cs:3725` `sTeam = GetValue(e.Row, ...Team)`). TO-BE 신규행에는 이 키가 아예
+      //   없어 `undefined→''` 가 팝업으로 나갔고, 조회 SP 가 0행을 돌려줬다
+      //   (실측 `PKG_COM0000.P_COM0008_GET_ITEM_BY_DIVISION_POPUP`: 'ALL' 14,458행 / '' 0행 —
+      //    술어가 `P_DEPT_ID='ALL' OR ...` 엄격비교라 빈값이 어느 것도 못 만난다).
+      DEPT_ID: str(seed?.['DEPT_ID']),
       ITEM_ID: str(seed?.['ITEM_ID']),
       DOM_EXP: str(seed?.['DOM_EXP']),
       FCST_TYPE: str(seed?.['FCST_TYPE']),
       INCOTERMS: str(seed?.['INCOTERMS']),
-      MEASURE: seed ? str(seed['MEASURE']) : 'MKT_FCST',
-      CURRENCY: str(seed?.['CURRENCY']),
+      // ⭐ [2026-08-22 사용자 결정 — AS-IS 파리티] measure 는 **시드에서 복사하지 않고 기본값을 넣는다.**
+      //   AS-IS `InsertRow()` 는 두 갈래다(`DMF0082_FcstNPrice_Mgmt.cs:2636-2676`):
+      //     if (bFocusYN)  → 포커스 행에서 Measure 를 **복사**
+      //     else           → `SetValue(..., Measure, "MKT_FCST")` **기본값만** 설정
+      //   `[통합테스트 35번]` "라인추가시 measure 는 copy 하지 않음" 은 **if 분기(복사)** 를 막은 요구이고,
+      //   **else 분기의 기본값은 별개 조항**이다. 종전 구현은 둘을 묶어 기본값까지 없애 `''` 로 두었고,
+      //   그 결과 AS-IS(`MKT_FCST`) 와 초기값이 달라졌다(사용자 신고 2026-08-22).
+      //   ⇒ 복사는 계속 하지 않고(35번 충족), 기본값만 AS-IS else 분기와 동일하게 복원한다.
+      //   부수효과: 공백 measure 일 때 잠기던 수량/가격 셀이 처음부터 열린다(AS-IS 와 동일).
+      MEASURE: 'MKT_FCST',
+      // ⭐ [2026-08-22 사용자 결정 — AS-IS 로직 이식] CURRENCY 는 **시드에서 복사하지 않는다.**
+      //   AS-IS `InsertRow()` 의 두 분기는 **원자적**이다:
+      //     if (bFocusYN) → Measure **와** CURRENCY 를 둘 다 포커스 행에서 복사 (`.cs:2664·2668`)
+      //     else          → Measure="MKT_FCST" 만 설정, **CURRENCY 는 손대지 않음(=공백)** (`.cs:2674`)
+      //   TO-BE 는 통합테스트 35번으로 Measure 복사가 막혀 있으므로 **else 분기에 해당**한다.
+      //   그런데 CURRENCY 만 if 분기처럼 복사하면 AS-IS 가 만들지 않는 조합이 된다
+      //   (MEASURE='MKT_FCST' + CURRENCY='USD'). 두 분기를 섞으면 안 된다.
+      //   ⇒ 근거 보강: AS-IS 는 measure 가 'LOC' 가 아니면 CURRENCY 셀 콤보를 `NO_DATA`(빈 목록)로
+      //     바꿔(`.cs:5626-5645`) **입력도 선택도 불가**하게 만든다. 그 상태에서 값만 남으면
+      //     사용자가 지울 수도 없다(사용자 신고 2026-08-22). 저장 검증·중복키도 CURRENCY 를
+      //     'LOC' 일 때만 요구/대조한다(`.cs:7710` / `.cs:2286-2298`).
+      CURRENCY: '',
       CELL_PROD_SITE_ID: str(seed?.['CELL_PROD_SITE_ID']),
       // 시드 행 BUCKET(요일비트) 승계 — 배분 요일 유지 (없으면 #2 캐스케이드/기본요일).
       BUCKET: str(seed?.['BUCKET']),
       EDIT_FLAG: 'Y',
     } as unknown as ForecastPriceRow;
-    // 포커스 행을 앵커로 달아 그 **바로 위**에 놓는다 (포커스 없으면 앵커 null = 맨 위).
+    // 앵커 = 선택한 셀이 속한 **머지 블록의 첫 행** — 그 바로 위에 놓는다 (앵커 null = 맨 위).
+    //   [통합테스트 35번] 앵커가 포커스 행 자체면 그룹 중간(measure 2~3번째)을 찍었을 때 신규행이
+    //   measure 사이에 낀다. 요구는 "data Group 제일 위로 / 선택한 값의 병합한 데이터 위로".
+    //   시드 값은 그대로 **선택한 행**에서 복사한다 — 위치만 블록 맨 위로 올린다.
     //   배열 끝에 붙여 누른 순서를 유지한다 — 같은 앵커에 연속 Insert 시 누른 순서대로 쌓인다.
-    setInsertedRows(prev => [...prev, { row: newRow, anchor: seedRow ?? null }]);
+    const anchorRow = groupTopRowOf(selectedIndex) ?? null;
+    setInsertedRows(prev => [...prev, { row: newRow, anchor: anchorRow }]);
     focusRowRef.current = newRow;
     // [공통 C1 2026-08-11 → 2026-08-12 정정] 필터링 상태 Insert 시 신규행이 안 보이던 문제는
     //   ForecastPriceGrid 가 신규(CRUD_TYPE='I') 행을 필터에서 제외해 해결한다.
@@ -383,8 +585,25 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   // ⭐ [No.65 2026-08-14] Project 셀 검색 모달 상태 — 더블클릭한 신규행에 선택값을 되꽂는다.
   const [openProject, setOpenProject] = useState(false);
+  // ⭐ [2026-08-22] Model(ITEM_ID) 셀 검색 모달 — AS-IS `DMF0082_FcstNPrice_Mgmt.cs:3772`
+  //   `spdMain_CellDoubleClick` 의 `DM0002_ItembyDivisionPopupEx` 배선. TO-BE 에 누락돼 있었다.
+  const [openItem, setOpenItem] = useState(false);
   const [popupRow, setPopupRow] = useState<ForecastPriceRow | null>(null);
   /** 팝업 조회조건 초기값 — 더블클릭 행의 셀 값(없으면 fallback). DMF0003 `rowValue` 1:1. */
+  /**
+   * 모달 선택 후 **파생 컬럼**을 채운다 — AS-IS `if (GetColumnIndex(col) > 0) SetText(...)` 1:1.
+   *
+   * ⚠ 종전 구현은 `'KEY' in target` 으로 걸렀는데, 신규 Insert 행 객체(`handleInsert` 의 newRow)는
+   *   파생 컬럼 키를 아예 만들지 않으므로 **항상 false** 였다 → Model/Project 를 골라도 Nick Name·
+   *   Project Name 등이 빈 채로 남았다. 판정 축은 "행 객체에 키가 있나"가 아니라
+   *   **"그리드(=메타)에 그 컬럼이 있나"** 다.
+   * ⚠ 행에 키가 늘어도 SAVE 는 오염되지 않는다 — `forecast-price.save.ts keyOf` 가 명시 키 목록만
+   *   골라 보낸다(파생 컬럼은 표시용이라 목록에 없다).
+   */
+  const setDerivedCell = (target: WijmoRowItem, binding: string, value: string) => {
+    if (gridRef.current?.columns.getColumn(binding)) target[binding] = value;
+  };
+
   const popupCellValue = (key: string, fallback = 'ALL'): string => {
     const value = (popupRow as Record<string, unknown> | null)?.[key];
     if (value == null) return fallback;
@@ -508,40 +727,45 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
     if (!confirmed) return;
 
     const userId = useSessionStore.getState().session.userId ?? '';
-    // '^' bulk payload — useProcMutation 의 array unfold 를 피해 call-proc 직접 (표준 패턴).
-    const res = await apiClient.post<{
-      o_rc1?: { RESULT_CODE?: string; RESULT_MSG?: string; ERR_EVENT?: string }[];
-    }>(`/${MENU_ID}/FcstNPrice/SAVE/call-proc`, buildSavePayload(saveRows, userId));
+    setSaving(true);
+    try {
+      // '^' bulk payload — useProcMutation 의 array unfold 를 피해 call-proc 직접 (표준 패턴).
+      const res = await apiClient.post<{
+        o_rc1?: { RESULT_CODE?: string; RESULT_MSG?: string; ERR_EVENT?: string }[];
+      }>(`/${MENU_ID}/FcstNPrice/SAVE/call-proc`, buildSavePayload(saveRows, userId));
 
-    // HTTP/BE 레벨 실패 판정 — 필수: 아래 RESULT_CODE 가드보다 먼저 와야 한다.
-    //   여기서 걸러내지 않으면 PKG 예외(ORA-01400 등)로 저장이 실패해도 '저장되었습니다' 가 뜬다
-    //   (2026-07-30 실측). 원인 2단: ① responseErrorInterceptor 가 403/500 을 reject 하지 않고
-    //   error.response 를 그대로 resolve 한다(axios-interceptors.ts L53~55) → await 가 throw 안 함.
-    //   ② 그 에러 응답에는 result.o_rc1 자체가 없어 `result &&` 단축평가로 가드가 통과된다.
-    //   Number(code) 진위 판정은 responseInterceptor 와 동일 관용구 (비수치 code=NaN 은 성공 취급).
-    if (res.status >= 400 || Number(res.data?.code)) {
-      await setAlert({
-        type: 'alert',
-        content: String(res.data?.message ?? '').trim() || t(MSG.DUP_SAVE_ERROR, '_Save error.'),
-      });
-      return;
-    }
+      // HTTP/BE 레벨 실패 판정 — 필수: 아래 RESULT_CODE 가드보다 먼저 와야 한다.
+      //   여기서 걸러내지 않으면 PKG 예외(ORA-01400 등)로 저장이 실패해도 '저장되었습니다' 가 뜬다
+      //   (2026-07-30 실측). 원인 2단: ① responseErrorInterceptor 가 403/500 을 reject 하지 않고
+      //   error.response 를 그대로 resolve 한다(axios-interceptors.ts L53~55) → await 가 throw 안 함.
+      //   ② 그 에러 응답에는 result.o_rc1 자체가 없어 `result &&` 단축평가로 가드가 통과된다.
+      //   Number(code) 진위 판정은 responseInterceptor 와 동일 관용구 (비수치 code=NaN 은 성공 취급).
+      if (res.status >= 400 || Number(res.data?.code)) {
+        await setAlert({
+          type: 'alert',
+          content: String(res.data?.message ?? '').trim() || t(MSG.DUP_SAVE_ERROR, '_Save error.'),
+        });
+        return;
+      }
 
-    const result = (res.data?.result?.o_rc1 ?? [])[0];
-    if (result && String(result.RESULT_CODE ?? '') !== '0') {
-      await setAlert({
-        type: 'alert',
-        content: String(result.RESULT_MSG ?? t(MSG.DUP_SAVE_ERROR, '_Save error.')),
-      });
-      return;
+      const result = (res.data?.result?.o_rc1 ?? [])[0];
+      if (result && String(result.RESULT_CODE ?? '') !== '0') {
+        await setAlert({
+          type: 'alert',
+          content: String(result.RESULT_MSG ?? t(MSG.DUP_SAVE_ERROR, '_Save error.')),
+        });
+        return;
+      }
+      // [공통 C4 2026-08-11] 저장 완료 = 팝업 아닌 **토스트**(하단 중앙, 자동 소멸) — 통합테스트 1st
+      //   Common "별도 팝업으로 Alert 하지 않고 하단 중앙 메시지 표기 후 사라지도록"(LGES WDG 표준).
+      //   실패·검증 메시지는 종전대로 팝업 유지(사용자 확인 필요) — 완료 계열만 토스트.
+      setToast({ message: t(MSG.SAVED, '_Saved.') });
+      tracker.clearChanges();
+      setInsertedRows([]);
+      invalidateAfterSave();
+    } finally {
+      setSaving(false);
     }
-    // [공통 C4 2026-08-11] 저장 완료 = 팝업 아닌 **토스트**(하단 중앙, 자동 소멸) — 통합테스트 1st
-    //   Common "별도 팝업으로 Alert 하지 않고 하단 중앙 메시지 표기 후 사라지도록"(LGES WDG 표준).
-    //   실패·검증 메시지는 종전대로 팝업 유지(사용자 확인 필요) — 완료 계열만 토스트.
-    setToast({ message: t(MSG.SAVED, '_Saved.') });
-    tracker.clearChanges();
-    setInsertedRows([]);
-    void queryClient.invalidateQueries({ queryKey: [MENU_ID] });
   };
 
   const hotkeyConfig = {
@@ -568,7 +792,7 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   label/title=Tooltip). ⚠️ LBL 실측 대사 완료 — LBL00661/00712/00605 (직전 LBL00741/752/753 은
   //   View PR/MKT FCST 미등록 제외/Include Internal Txn 오매핑 사고 → 교정 2026-07-12).
   const customButtons = [
-    // ⭐ Excel Form(템플릿 다운로드 모달) — division 40 전용 노출 (metal-link 'Excel Form' 이식).
+    // ⭐ Excel Form(템플릿 다운로드 모달) — division 81 계열 전용 노출 [E20260819-XLS81LOC] (metal-link 'Excel Form' 이식).
     ...(isExcelDiv && hasButton('FORM_DATA')
       ? [
           {
@@ -580,7 +804,7 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
           },
         ]
       : []),
-    // ⭐ Excel Upload — [2026-08-12 사용자 지시] Excel Form 다음(2번째). division 40 전용.
+    // ⭐ Excel Upload — [2026-08-12 사용자 지시] Excel Form 다음(2번째). division 81 계열 전용 [E20260819-XLS81LOC].
     ...(isExcelDiv && hasButton('UPLOAD')
       ? [
           {
@@ -682,10 +906,69 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         spreadTitle={spreadTitle}
         editTrackerRef={editTrackerRef}
         onPopupCellDblClick={(modalKey, row) => {
-          if (modalKey !== 'PROJECT') return;
+          if (modalKey !== 'PROJECT' && modalKey !== 'ITEM') return;
           setPopupRow(row as unknown as ForecastPriceRow);
-          setOpenProject(true);
+          if (modalKey === 'ITEM') setOpenItem(true);
+          else setOpenProject(true);
         }}
+      />
+
+      {/* ⭐ [2026-08-22] Model(ITEM_ID) 셀 검색 모달 — AS-IS 파리티 복원.
+          AS-IS `DMF0082_FcstNPrice_Mgmt.cs`
+            · L404-407 : `TextCellType` + `BackgroundImage(ImagePopUp)` = 타이핑 O · 돋보기 O
+            · L2541    : `InsertRow()` 가 division 40 신규행 셀에 그 셀타입을 부착
+            · L3772    : `spdMain_CellDoubleClick` 에서 `DM0002_ItembyDivisionPopupEx` 호출 후
+                         ITEM_ID / ITEM_NAME / NICK_NAME 동반 세팅
+          TO-BE 는 모달 배선이 통째로 빠져 있어 Model 을 **모달로 고를 수 없었다**.
+          정본 = DMF0003 `MktFcst.tsx` ItemByDivisionModal 배선 1:1. */}
+      <ItemByDivisionModal
+        open={openItem}
+        modalClose={() => setOpenItem(false)}
+        setSelectedValue={(
+          itemId: string,
+          itemName?: string,
+          _itemType?: string,
+          nickName?: string
+        ) => {
+          const target = popupRow as unknown as WijmoRowItem | null;
+          if (target) {
+            target['ITEM_ID'] = itemId;
+            // AS-IS 는 Model 선택 시 ITEM_NAME / ITEM_TYPE / NICK_NAME 을 함께 채운다
+            //   (`.cs:3817-3823` — 각각 그리드에 컬럼이 있을 때만).
+            setDerivedCell(target, 'ITEM_NAME', itemName ?? '');
+            setDerivedCell(target, 'NICK_NAME', nickName ?? '');
+            // ⛔ ITEM_TYPE 은 채우지 않는다 — DMF0082 의 ITEM_TYPE 은 `FPComboBox`(콤보 `ItemType`)
+            //   즉 **코드** 컬럼인데, 이 모달이 넘겨 주는 3번째 인자는 `ITEM_CLASS_NAME`(명칭)이다
+            //   (`ItemByDivisionModal.tsx:285-291`). 명칭을 코드 컬럼에 넣으면 콤보가 값을 못 찾아
+            //   빈 칸으로 보인다. 모달이 ITEM_TYPE 코드를 노출하도록 넓힌 뒤 채울 것.
+            gridRef.current?.invalidate();
+          }
+          setOpenItem(false);
+          setPopupRow(null);
+        }}
+        preSearchParams={
+          {
+            // ⚠ 값이 없을 때 **'ALL' 로 넘겨야 한다** — 빈 문자('')를 넘기면 조회 SP 가 0행을 준다.
+            //   실측: `P_DMF0002_GET_ITEM_BY_DIVISION_POPUPEX` div40 → ALL 23,360행 / '' 0행
+            //   (deptId·endCustomer·salesSite 각각 단독으로 ''만 돼도 전멸).
+            //   모달의 `preSearchParams.deptId ?? 'ALL'` 는 `??` 라 null/undefined 만 걸러 ''는 통과시킨다.
+            //   신규 Insert 행은 `handleInsert` 가 DEPT_ID 를 만들지 않아 항상 undefined→'' 였다.
+            //   ⇒ 아래 `popupCellValue`(기본값 'ALL')로 통일 — 바로 밑 Project 모달과 같은 규약.
+            divisionId: popupCellValue('DIVISION_ID', searchParams.divisionId),
+            deptId: popupCellValue('DEPT_ID'),
+            endCustomer: popupCellValue('END_CUSTOMER'),
+            salesSite: popupCellValue('SCM_SITE_ID'),
+            // project 는 AS-IS 가 Item 팝업에 빈값을 넘긴다(`.cs:3785` `sProject = "";`) — 'ALL' 금지.
+            projectCode: popupCellValue('PROJECT_CODE', ''),
+            // ⭐ 현재 셀의 Model 을 팝업에 넘긴다 — Project 모달과 동일 거동.
+            //   AS-IS 는 더블클릭한 행의 ITEM_ID 를 읽어 팝업 인자로 넘긴다
+            //   (`DMF0082_FcstNPrice_Mgmt.cs:3786` → `Form_Load(…, sProject, sItemId, …)`).
+            //   모달은 이 값을 Model 입력칸 + 목록 필터에 실소비한다
+            //   (`ItemByDivisionModal.tsx:309-310`). 빈값이면 조건 없이 전량이 열린다.
+            itemId: popupCellValue('ITEM_ID', ''),
+          } as never
+        }
+        callFromCell={true}
       />
 
       {/* ⭐ [No.65 2026-08-14] Project 셀 검색 모달 — 81 계열 신규행의 PROJECT_CODE 입력 경로.
@@ -695,20 +978,21 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
       <ProjectByDivisionModal
         open={openProject}
         modalClose={() => setOpenProject(false)}
-        setSelectedValue={(
-          projectCode,
-          projectName,
-          _projectStatus,
-          _bizTypeName,
-          projectOwner
-        ) => {
+        setSelectedValue={(projectCode, projectName, projectStatus, _bizTypeName, projectOwner) => {
           const target = popupRow as unknown as WijmoRowItem | null;
           if (target) {
             target['PROJECT_CODE'] = projectCode;
-            // PROJECT_NAME / OWNER 컬럼은 division·컬럼셋에 따라 없을 수 있다 —
-            //   **있을 때만** 채운다(hook #130 메타 실소비: 없는 키를 만들면 SAVE payload 가 오염된다).
-            if ('PROJECT_NAME' in target) target['PROJECT_NAME'] = projectName ?? '';
-            if ('PROJECT_OWNER' in target) target['PROJECT_OWNER'] = projectOwner ?? '';
+            // AS-IS 는 Project 선택 시 PROJECT_NAME / PROJECT_STATUS / BIZ_TYPE / PROJECT_OWNER 를
+            //   함께 채운다(`.cs:3751-3769` — 각각 그리드에 컬럼이 있을 때만).
+            setDerivedCell(target, 'PROJECT_NAME', projectName ?? '');
+            setDerivedCell(target, 'PROJECT_STATUS', projectStatus ?? '');
+            setDerivedCell(target, 'PROJECT_OWNER', projectOwner ?? '');
+            // ⛔ BIZ_TYPE 은 채우지 않는다 — DMF0082 의 BIZ_TYPE 은 `FPComboBox`(콤보 `BizType`)
+            //   즉 **코드** 컬럼이고, AS-IS 도 `popProject.BizType`(=BIZ_TYPE **코드**)을 넣는다
+            //   (`SCM0002_ProjectbyDivisionPopupEx.cs:68`). 그런데 이 모달은 4번째 인자로
+            //   `BIZ_TYPE_NAME`(명칭)을 넘긴다(`ProjectByDivisionModal.tsx:161`).
+            //   명칭을 코드 컬럼에 넣으면 콤보가 값을 못 찾아 빈 칸이 된다 — 모달이 코드를 함께
+            //   노출하도록 넓힌 뒤 채울 것.
             gridRef.current?.invalidate();
           }
           setOpenProject(false);
@@ -739,14 +1023,14 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
 
       {/* Measure 설정 (AS-IS btnMeasure — titleSet 'M' 영구 저장 → 재조회).
           공용 팝업 사용 (2026-08-12 전환 — 로컬 복사본 제거, sales-monitoring/DMF0048 과 동일 컴포넌트).
-          visibleMeasures={null} 유지: 표시 상태는 저장 후 재fetch 한 display 로만 복원한다. */}
+          visibleMeasures={null} 유지: 표시 상태는 저장 후 재fetch 한 display 로만 복원한다.
+          [2026-08-26 사용자 확정] DMF0003(MktFcst) 사용형이 정본 — showMeasureCode(Measure Code
+          컬럼 노출, 구 통합테스트 1st No.40 요구) 제거 = No.40 역전. 화면별 옵션 변형 ⛔ (hook #132). */}
       <MeasureSelectModal
         open={measureModalOpen}
         modalClose={() => setMeasureModalOpen(false)}
         measures={staticMeasures}
         visibleMeasures={null}
-        // 통합테스트 1st No.40 요구 — 이 화면만 Measure Code 컬럼을 함께 노출한다.
-        showMeasureCode
         onApply={codes => {
           const all = staticMeasures.map(m => m.colNm);
           const selected = codes ?? all;
@@ -756,7 +1040,7 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
           ).then(ok => {
             if (!ok) return;
             fetchStaticMeasures();
-            void queryClient.invalidateQueries({ queryKey: [MENU_ID] });
+            invalidateAfterSave();
           });
         }}
       />
@@ -772,7 +1056,6 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         //   재진입 시 사라진다(2026-07-27 실측). MktFcst/SalesMonitoring/ContributeView 도 'C'.
         columnType='C'
         divisionId={searchParams.divisionId}
-        title={t('LBL00753', '_Column')}
         leftTitle={t('LBL00764', 'Invisible')}
         rightTitle={t('LBL00765', 'Visible')}
         // 재진입 복원 — staticColumns 는 fetchUserColumnKeys/applyColumnLayout 로 개인화가 반영된 상태다.
@@ -808,7 +1091,7 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
               void setAlert({ type: 'alert', content: t(MSG.SAVE_ERROR, '_Save error.') });
               return;
             }
-            void queryClient.invalidateQueries({ queryKey: [MENU_ID] });
+            invalidateAfterSave();
           });
           // [공통 C3 2026-08-11] 컬럼 추가/제외 적용 시 기존 조회 데이터가 있으면 Reset — 통합테스트
           //   1st Common "기존에 조회된 데이터가 있을 경우 Reset 후 재조회 할 수 있도록 수정".
@@ -837,21 +1120,23 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         defaultPeriod={{ start: searchParams.startYyyymmdd, end: searchParams.endYyyymmdd }}
         defaultEndCustomers={searchParams.endCustomers}
         defaultSalesSites={searchParams.salesSites}
-        onSaveResult={() => void queryClient.invalidateQueries({ queryKey: [MENU_ID] })}
+        onSaveResult={() => invalidateAfterSave()}
       />
 
-      {/* Excel Form (템플릿 다운로드 모달) — division 40 전용
-          (DMF0082 템플릿 백엔드 proc 배선 전 — ForecastTemplateModal 내 TODO 참조). */}
+      {/* Excel Form (템플릿 다운로드 모달) — division 81 계열 전용 [E20260819-XLS81LOC].
+          SP 가 LOC measure 만 산출 + 81 외 division 은 CODE '1' MSG01014 가드. */}
       <ForecastTemplateModal
         open={templateModalOpen}
         modalClose={() => setTemplateModalOpen(false)}
         divisionId={searchParams.divisionId}
         filters={filters as Record<string, unknown> | undefined}
-        staticColumns={staticColumns}
       />
 
       {/* Excel Upload (AS-IS DMF0082_EXCEL_UPLOAD — 2-Step: Upload=검증분류 / OK=저장 mode=1.
           공용 FcstUploadModal(demand) + EXCEL_COLUMNS SHEET_NAME='FcstNPrice' 기이관 실측) */}
+      {/* 저장 진행 오버레이 (사용자 요구 2026-08-22) — 저장 중 화면 스피너. */}
+      <ProgressIndicator shape='circular' placement='parent' open={saving} />
+
       <FcstUploadModal
         open={uploadModalOpen}
         modalClose={() => setUploadModalOpen(false)}
@@ -859,7 +1144,7 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         sheetName={UPLOAD_SHEET}
         attributeHeaders={[...UPLOAD_HEADERS]}
         onSave={saveExcelUpload}
-        onUploaded={() => void queryClient.invalidateQueries({ queryKey: [MENU_ID] })}
+        onUploaded={() => invalidateAfterSave()}
       />
     </>
   );

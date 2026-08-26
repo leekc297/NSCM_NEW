@@ -1,0 +1,147 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 8px;
+}
+
+.gridContainer {
+  flex: 1;
+  overflow: hidden;
+  min-height: 400px;
+  border: 1px solid #e0e4e9;
+  border-radius: 4px;
+  background: white;
+}
+
+.grid {
+  width: 100%;
+  height: 100%;
+
+  // 다단 헤더 셀 타이포 보정 (헤더 row 높이는 공용 DataGrid headerRowHeight / updatedLayout 효과가 전담).
+  :global {
+    .wj-colheaders .wj-cell {
+      line-height: 14px;
+      padding: 1px 4px;
+      font-size: 11px;
+    }
+  }
+}
+
+// 룰 #95 — cell coloring 3색 (편집 Yellow / 과거 잠금 Gray 특수셀만 / 기본 White+zebra)
+:global(.wj-cell-editable) {
+  background: #fff8cd !important;
+}
+
+:global(.wj-cell-non-editable) {
+  background: #f1f4f3 !important;
+  color: #5b6470 !important;
+}
+
+// ⭐ 변경 셀 Red 마킹 (AS-IS SetCellColor Red — 저장 대상 표시. EditTracker 단일 소스)
+:global(.bp-cell-changed) {
+  color: #d32f2f !important;
+  font-weight: 600;
+}
+
+// ⭐ FPModal 팝업셀 아이콘 (DMF0020/DMF0003 표준 — 전용 span .popup-icon + OpenInNew SVG mask.
+//   cell position override 금지(머지셀 파손) — span absolute 는 셀 기존 positioning anchor 사용)
+.popupIcon {
+  position: absolute;
+  top: 50%;
+  right: 5px;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  background-color: #5b5c5b;
+  pointer-events: none;
+
+  $svg-path: "M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z";
+  -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="#{$svg-path}"/></svg>') no-repeat center;
+  mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="#{$svg-path}"/></svg>') no-repeat center;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+}
+
+// ⭐ Measure 선택 모달 (공용 ColumnSelectDualList 양쪽 구성 — ColumnSettingModal 동일 레이아웃)
+.measureDualContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 4px 2px;
+  height: 460px;
+  min-height: 350px;
+  max-height: 68vh;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.measureDualContainer > div:first-child {
+  flex: 1 1 auto;
+  min-height: 250px;
+  overflow: hidden;
+}
+
+.measureActionBar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 6px 2px 2px;
+  flex-shrink: 0;
+}
+
+// ⭐ Ver. Cutoff / Replace 모달 공통 — SearchArea → grid → 하단 버튼 (ExchangeRateModal 정본 레이아웃)
+.modalContentWrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 8px;
+}
+
+.modalGridWrapper {
+  flex: 1;
+  min-height: 260px;
+  border: 1px solid #e0e4e9;
+  border-radius: 4px;
+  background: white;
+  overflow: hidden;
+  position: relative;
+}
+
+.modalButtonWrapper {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-top: 5px;
+}
+
+.modalFieldRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  > span {
+    flex-shrink: 0;
+    font-size: 12px;
+    color: #5b6470;
+  }
+}
+
+/* DMF0044 Textbox 팝업 — 13개월 코멘트 테이블 (가로 스크롤) */
+.textboxTableWrapper {
+  overflow-x: auto;
+  max-height: 420px;
+}
+
+.textboxTable {
+  border-collapse: collapse;
+  white-space: nowrap;
+
+  th,
+  td {
+    border: 1px solid var(--border-color, #ddd);
+    padding: 2px 4px;
+    min-width: 90px;
+  }
+}

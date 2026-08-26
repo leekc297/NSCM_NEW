@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "../../mybatis/mybatis-3-mapper.dtd">
+<mapper namespace="com.lgcns.nscm.admin.menu">
+
+    <resultMap id="menuResultMap" type="java.util.HashMap" />
+
+    <select id="retrieveMenus" statementType="CALLABLE">
+		{ CALL SCM_MGR.PR_GET_MENU_LIST_V2(
+			#{userId},
+			#{DATARESULT, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=menuResultMap}
+		) }
+    </select>
+
+    <select id="retrieveGridColumns" statementType="CALLABLE">
+		{ CALL SCM_MGR.PKG_NSCM_UI_COM_MENU.PR_GET_SHEET_COLUMN_LIST(
+			#{userId},
+			#{mnuId},
+			#{sheetNm},
+			#{divisionId},
+			#{DATARESULT, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=menuResultMap}
+		) }
+    </select>
+
+    <select id="retrieveGridMeasures" statementType="CALLABLE">
+		{ CALL SCM_MGR.PKG_NSCM_UI_COM_MENU.PR_GET_SHEET_MEASURE_LIST(
+			#{userId},
+			#{mnuId},
+			#{sheetNm},
+			#{divisionId},
+			#{DATARESULT, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=menuResultMap}
+		) }
+    </select>
+
+    <select id="addFavorite" statementType="CALLABLE">
+		{ CALL SCM_MGR.PKG_NSCM_UI_COM_MENU.PR_ADD_USER_BMK(
+			#{userId},
+			#{mnuId}
+		) }
+    </select>
+
+    <select id="removeFavorite" statementType="CALLABLE">
+		{ CALL SCM_MGR.PKG_NSCM_UI_COM_MENU.PR_REMOVE_USER_BMK(
+			#{userId},
+			#{mnuId}
+		) }
+    </select>
+
+    <select id="retrieveSearchConditions" statementType="CALLABLE">
+		{ CALL SCM_MGR.PKG_SCM0000.P_SCM0000_GET_SRCH_COND(
+			#{userId},
+			#{mnuId},
+			#{DATARESULT, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=menuResultMap}
+		) }
+    </select>    
+    
+    <select id="saveSearchConditions" statementType="CALLABLE">
+		{ CALL SCM_MGR.PKG_SCM0000.P_SCM0000_SAVE_SRCH_COND(
+			#{userId},
+			#{mnuId},
+			#{searchConditions, mode=IN, jdbcType=CLOB}
+		) }
+    </select>
+
+    <select id="resetSearchConditions" statementType="CALLABLE">
+		{ CALL SCM_MGR.PKG_SCM0000.P_SCM0000_RESET_SRCH_COND(
+			#{userId},
+			#{mnuId}
+		) }
+    </select>    
+    
+	<select id="retrieveTitleSet" statementType="CALLABLE">
+		{ CALL SCM_MGR.DMF0002_GET_TITLESET_POPUP(
+			#{programId, mode=IN, jdbcType=VARCHAR},
+			#{sheetName, mode=IN, jdbcType=VARCHAR},
+			#{columnType, mode=IN, jdbcType=VARCHAR},
+			#{sesUserId, mode=IN, jdbcType=VARCHAR},
+			#{divisionId, mode=IN, jdbcType=VARCHAR},
+			#{menuId, mode=IN, jdbcType=VARCHAR},
+			#{DATARESULT, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=menuResultMap}
+		) }
+    </select>
+
+	<select id="saveTitleSet" statementType="CALLABLE">
+		{ CALL SCM_MGR.SCM0002_SET_TITLESET_POPUP(
+			#{programId, mode=IN, jdbcType=VARCHAR},
+			#{sheetName, mode=IN, jdbcType=VARCHAR},
+			#{columnType, mode=IN, jdbcType=VARCHAR},
+			#{activeFlag, mode=IN, jdbcType=VARCHAR},
+			#{columnName, mode=IN, jdbcType=VARCHAR},
+			#{sortOrderNo, mode=IN, jdbcType=VARCHAR},
+			#{subTotalFlag, mode=IN, jdbcType=VARCHAR},
+			#{sortMethodCode, mode=IN, jdbcType=VARCHAR},
+			#{sesUserId, mode=IN, jdbcType=VARCHAR},
+			#{columnWidth, mode=IN, jdbcType=VARCHAR},
+			#{cellColor, mode=IN, jdbcType=VARCHAR},
+			#{textColor, mode=IN, jdbcType=VARCHAR},
+			#{DATARESULT, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=menuResultMap},
+			#{resultCursor, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=menuResultMap}
+		) }
+    </select>
+    
+</mapper>

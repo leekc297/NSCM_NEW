@@ -86,7 +86,7 @@ RE_TABLE_DATA_NOID = re.compile(r"^\|\s*[`\"'\w][^|]{0,80}\|.*\|.*\|")
 #   DMF0082 대사표 17 EID 행 중 **11행을 조용히 무시**했다(2026-08-08 실측 — 오늘 정정한 E01-B·E08-C 포함).
 RE_MAP_ROW = re.compile(
     r"^\|\s*(E\d{1,3}(?:-[A-Za-z0-9]{1,3})?|[A-Z]{1,3}-?\d{1,3}"
-    r"|CRUD:[^|\s]+|MODAL:[^|\s]+|HANDLER:[^|\s]+|COMMON:[^|\s]+)\s*\|(.*)$"
+    r"|CRUD:[^|\s]+|MODAL:[^|\s]+|HANDLER:[^|\s]+|COMMON:[^|\s]+|REQ:[^|\s]+)\s*\|(.*)$"
 )
 # 대사표 안에서 **ID 행처럼 보이는데 위 패턴에 안 걸리는** 행 탐지 — 조용한 누락 차단(2026-08-08 신설).
 RE_ID_LOOKALIKE = re.compile(r"^\|\s*([A-Za-z][\w]{0,4}[-_]?\d{1,3}[A-Za-z0-9]{0,2})\s*\|")
@@ -128,6 +128,112 @@ UI_COMMON_ITEMS = [
     #   / 필터도 적용 (현상: 조회하면 컬럼에 필터는 남아 있지만 필터가 풀린상태로 조회됨)".
     ("COMMON:UC-07", "필터가 걸린 상태에서 재조회해도 조회되고 **필터도 그대로 적용** (rebindFilterColumns — 2026-08-14 공통 수정사항②)"),
 ]
+
+
+# ── ⭐ 사용자 지정 보완요청(REQ) 축 (2026-08-20 사용자 확정 — "보완요청 미적용 재발 방지") ────────
+# 원천: `Doc/단위테스트_보완대상/보완요청_원장.md` (단일 원장 — 통합테스트 xlsx 98행 전수 + RULE/CHAT).
+# 배경(근본원인 갭②): 사용자 지시는 대사표에 평문으로만 남아 "보이지만 세지지 않는" 상태였고
+#   게이트는 PASS 를 냈다 (DMF0082 "미보완 0" 오보고 실사고). COMMON:UC 축 패턴을 화면별 요구로 확장.
+# ⭐⭐⭐ 미적용 전제 원칙(사용자 확정): 원장 초기 상태 = PENDING. PENDING→전이는 실측 근거 기입 시에만.
+#   근거 칸 공란인 비-PENDING 행 = FAIL (사전 판단 SKIP 차단).
+REQUEST_LEDGER = pathlib.Path(__file__).resolve().parents[2] / "Doc" / "단위테스트_보완대상" / "보완요청_원장.md"
+REQ_STATUSES = {"PENDING", "APPLIED", "VERIFIED", "USER-DECISION", "VISUAL", "EXCLUDED"}
+RE_LEDGER_ROW = re.compile(r"^\|\s*(REQ:[^|\s]+)\s*\|(.*)$")
+
+
+def parse_request_ledger(path=None):
+    """원장 9열 표 파싱 → 행 dict 목록. 미지 상태/ID 중복/열 부족 = 즉시 오류 목록 반환 (조용한 누락 차단)."""
+    p = pathlib.Path(path) if path else REQUEST_LEDGER
+    if not p.is_file():
+        return None, [f"원장 파일 부재: {p}"]
+    rows, errors, seen = [], [], set()
+    for ln in p.read_text(encoding="utf-8", errors="ignore").splitlines():
+        s = ln.strip()
+        m = RE_LEDGER_ROW.match(s)
+        if not m:
+            # REQ 꼴인데 파싱 불가 행 탐지 (RE_ID_LOOKALIKE 계보 — 조용한 누락 차단)
+            if s.startswith("|") and s.count("|") > 1 and "REQ:" in s.split("|")[1]:
+                errors.append(f"REQ 꼴인데 파싱 불가: {s[:80]}")
+            continue
+        _id = m.group(1)
+        cells = [c.strip() for c in m.group(2).strip().strip("|").split("|")]
+        if len(cells) < 8:
+            errors.append(f"{_id}: 열 부족 ({len(cells)}/8)")
+            continue
+        src, gist, target_ui, signal, status, onprem, cloud, evidence = cells[:8]
+        if _id in seen:
+            errors.append(f"{_id}: ID 중복")
+            continue
+        seen.add(_id)
+        if status not in REQ_STATUSES:
+            errors.append(f"{_id}: 미지 상태 '{status}' (허용: {'/'.join(sorted(REQ_STATUSES))})")
+            continue
+        rows.append({"id": _id, "src": src, "gist": gist, "ui": target_ui,
+                     "signal": signal, "status": status, "onprem": onprem,
+                     "cloud": cloud, "evidence": evidence})
+    return rows, errors
+
+
+def scan_request_signals(page_dir, signal_expr):
+    """판정신호 실측 — `FE:`/`SHARED:`/`EV:경로::rx`/`!FE:` 를 `;;` 복수로.
+    반환: (ok, 상세목록). `(미정` 신호는 (None, 사유) — 실측 불가(근거 칸으로 판정)."""
+    expr = signal_expr.strip()
+    if not expr or expr.startswith("(미정") or expr.startswith("=COMMON:"):
+        return None, [f"신호 미정/위임: {expr or '(공란)'}"]
+    page = pathlib.Path(page_dir)
+    root_fe = pathlib.Path(__file__).resolve().parents[2] / "nscm-fe"
+    repo = pathlib.Path(__file__).resolve().parents[2]
+    details, ok = [], True
+
+    def grep(base, rx, exts=(".ts", ".tsx")):
+        hits = []
+        for f in base.rglob("*"):
+            if f.suffix not in exts or "node_modules" in f.parts or "BACKUP_" in str(f):
+                continue
+            try:
+                txt = f.read_text(encoding="utf-8", errors="ignore")
+            except OSError:
+                continue
+            for i, l in enumerate(txt.splitlines(), 1):
+                if re.search(rx, l):
+                    hits.append(f"{f.name}:{i}")
+                    if len(hits) >= 3:
+                        return hits
+        return hits
+
+    for part in [s.strip() for s in expr.split(";;") if s.strip()]:
+        neg = part.startswith("!")
+        body = part[1:] if neg else part
+        if body.startswith("FE:"):
+            hits = grep(page, body[3:])
+        elif body.startswith("SHARED:"):
+            hits = grep(root_fe, body[7:])
+        elif body.startswith("EV:") and "::" in body:
+            rel, rx = body[3:].split("::", 1)
+            f = repo / rel
+            if not f.is_file():
+                ok = False
+                details.append(f"⛔ {part} — 증적 파일 부재: {rel}")
+                continue
+            hits = [f"{f.name}(x{len(re.findall(rx, f.read_text(encoding='utf-8', errors='ignore')))})"] \
+                if re.search(rx, f.read_text(encoding="utf-8", errors="ignore")) else []
+        else:
+            ok = False
+            details.append(f"⛔ 신호 문법 불명: {part}")
+            continue
+        if neg:
+            if hits:
+                ok = False
+                details.append(f"⛔ 부정신호 위반 {part} — 검출: {', '.join(hits)}")
+            else:
+                details.append(f"✓ {part} (0건 확인)")
+        else:
+            if hits:
+                details.append(f"✓ {part} ({', '.join(hits)})")
+            else:
+                ok = False
+                details.append(f"⛔ {part} — 매칭 0건")
+    return ok, details
 
 
 def classify_crud(text):
@@ -387,7 +493,7 @@ def parse_existing(path):
     return rows
 
 
-def cmd_init(md_paths, page_dir, out_override=None, allow_legacy=False):
+def cmd_init(md_paths, page_dir, out_override=None, allow_legacy=False, menu=None):
     md_paths = [pathlib.Path(p) for p in md_paths]
     for p in md_paths:
         if not p.is_file():
@@ -481,7 +587,10 @@ def cmd_init(md_paths, page_dir, out_override=None, allow_legacy=False):
         emit(_id, g)
     # ⭐ 2026-08-08 — 보존 섹션(핸들러 인벤토리 등)에 이미 있는 ID 는 여기서 재출력하지 않는다(중복 방지).
     preserved_ids = set()
-    MANAGED = ("## 이벤트·제약 (EID 1:1)", "## CRUD·모달 매트릭스")
+    # ⭐ 2026-08-20 버그 수정 — 관리 섹션에 「UI 공통」·「보완요청(REQ)」 헤더 미등재로
+    #   --init 재실행 시 두 섹션이 preserved 로도 살고 아래에서 또 생성돼 **중복 증식**하던 버그.
+    MANAGED = ("## 이벤트·제약 (EID 1:1)", "## CRUD·모달 매트릭스",
+               "## UI 공통(통합테스트) 체크 축", "## 보완요청(REQ) 축")
     preserved = []
     if target.is_file():
         keep, cur = True, None
@@ -516,6 +625,38 @@ def cmd_init(md_paths, page_dir, out_override=None, allow_legacy=False):
         else:
             lines.append(f"| {_id} | {g} |  |  | {STATUS_INIT} |")
 
+    # ⭐ 보완요청(REQ) 축 — 원장에서 이 화면 대상 행을 끌어와 대사표에 편입 (2026-08-20 신설, 기입값 보존)
+    n_req = 0
+    if menu:
+        led_rows, led_errs = parse_request_ledger()
+        if led_rows is None:
+            print(f"[warn] REQ 축 미생성 — {led_errs[0]}")
+        else:
+            if led_errs:
+                print(f"[FAIL] 원장 파싱 오류 {len(led_errs)}건 — 조용한 누락 차단:")
+                for e in led_errs:
+                    print(f"  ⛔ {e}")
+                return 1
+            mine = [r for r in led_rows
+                    if r["ui"] != "ALL" and re.search(rf"\b{re.escape(menu)}\b", r["ui"])]
+            lines.append("")
+            lines.append(f"## 보완요청(REQ) 축 (2026-08-20 — 사용자 지정 보완요청 · 대상: {menu})")
+            lines.append("")
+            lines.append(f"> 원장: `Doc/단위테스트_보완대상/보완요청_원장.md` · 대상 UI={menu} 행 {len(mine)}건.")
+            lines.append("> ⭐ 미적용 전제 — 원장 PENDING 행은 본 표 상태와 무관하게 --check FAIL. "
+                         "전이는 실측 근거 기입 시에만 (사전 판단 SKIP 금지).")
+            lines.append("")
+            lines.append(header_cols)
+            lines.append("|---|---|---|---|---|")
+            for r in mine:
+                if r["id"] in existing:
+                    lines.append(existing.pop(r["id"]))
+                else:
+                    lines.append(f"| {r['id']} | {r['gist'][:120]} |  |  | {STATUS_INIT} |")
+                n_req += 1
+    else:
+        print("[warn] --menu 미지정 — 보완요청(REQ) 축 미생성. 원장 대상 행이 있는 화면이면 --check 가 FAIL 한다.")
+
     if preserved:
         lines.append("")
         lines.extend(preserved)
@@ -532,7 +673,7 @@ def cmd_init(md_paths, page_dir, out_override=None, allow_legacy=False):
     crud_cnt = sum(1 for i, _ in matrix if i.startswith("CRUD:"))
     modal_cnt = len(matrix) - crud_cnt
     print(f"[init] {target}")
-    print(f"       추출 {len(ids) + len(matrix)}행 (이벤트 E {e_cnt} / 제약 {c_cnt} / CRUD {crud_cnt} / 모달 {modal_cnt}) — 신규 {n_new} / 기존 보존 {n_kept}")
+    print(f"       추출 {len(ids) + len(matrix)}행 (이벤트 E {e_cnt} / 제약 {c_cnt} / CRUD {crud_cnt} / 모달 {modal_cnt} / REQ {n_req}) — 신규 {n_new} / 기존 보존 {n_kept}")
     for _id, g, src in sorted(ids, key=lambda x: id_sort_key(x[0])):
         print(f"       {_id:8} | {src} | {g}")
     for _id, g in sorted(matrix, key=lambda x: id_sort_key(x[0])):
@@ -711,17 +852,20 @@ def check_citations(page_dir, db_ids=None):
     return total, bad
 
 
-def cmd_check(page_dir, matrix_only=False, handlers_only=False, citations=False):
+def cmd_check(page_dir, matrix_only=False, handlers_only=False, citations=False,
+              requests_only=False, menu=None, requests_path=None):
     page = pathlib.Path(page_dir)
     target = page / MAPPING_FILENAME
     scope = ("AS-IS 핸들러 인벤토리" if handlers_only else
-             "CRUD·모달 매트릭스" if matrix_only else "EID 1:1(+매트릭스+핸들러)")
+             "CRUD·모달 매트릭스" if matrix_only else
+             "보완요청(REQ)" if requests_only else "EID 1:1(+매트릭스+핸들러+REQ)")
     if not target.is_file():
         print(f"[FAIL] 대사표 부재: {target} — --init 으로 선생성 의무 (asis-coverage-check §0.1)")
         return 1
     residual = []
     total = 0
     unparsed = []
+    map_req = {}  # REQ:id → (구현위치, 상태) — 원장↔대사표 정합 판정용
     for line in target.read_text(encoding="utf-8", errors="ignore").splitlines():
         m = RE_MAP_ROW.match(line.strip())
         if not m or re.fullmatch(r"[-: |]+", line.strip()):
@@ -736,15 +880,20 @@ def cmd_check(page_dir, matrix_only=False, handlers_only=False, citations=False)
         _id = m.group(1)
         is_matrix = _id.startswith("CRUD:") or _id.startswith("MODAL:")
         is_handler = _id.startswith("HANDLER:")
+        is_req = _id.startswith("REQ:")
         if matrix_only and not is_matrix:
             continue
         if handlers_only and not is_handler:
+            continue
+        if requests_only and not is_req:
             continue
         total += 1
         cells = [c.strip() for c in m.group(2).strip().strip("|").split("|")]
         while len(cells) < 4:
             cells.append("")
         _gist, impl, reason, status = cells[0], cells[1], cells[2], cells[3]
+        if is_req:
+            map_req[_id] = (impl, status)
         impl_filled = impl not in ("", "—", "-")
         reason_filled = reason not in ("", "—", "-")
         if status == STATUS_OK_IMPL and impl_filled:
@@ -803,7 +952,7 @@ def cmd_check(page_dir, matrix_only=False, handlers_only=False, citations=False)
         return 1
     # ⭐ UI 공통 축 부재 검증 (2026-08-12) — 전 화면 상시 6항목이 대사표에 없으면 FAIL.
     #   (matrix/handlers 부분 판정 모드에서는 생략 — 전체 --check 에서만 강제)
-    if not matrix_only and not handlers_only:
+    if not matrix_only and not handlers_only and not requests_only:
         present = set()
         for line in target.read_text(encoding="utf-8", errors="ignore").splitlines():
             m = RE_MAP_ROW.match(line.strip())
@@ -814,7 +963,87 @@ def cmd_check(page_dir, matrix_only=False, handlers_only=False, citations=False)
             print(f"[FAIL] UI 공통(통합테스트) 축 부재 {len(missing_common)}건 — --init 재실행으로 섹션 생성 후 "
                   f"전 행 판정 기입 의무 (2026-08-12 사용자 지정): {', '.join(missing_common)}")
             return 1
+
+    # ⭐ 보완요청(REQ) 축 — 원장 대조 (2026-08-20 신설, 사용자 확정 "미적용 전제" 원칙)
+    #   근본원인 갭②③⑥⑦⑨ 봉인: 원장 미편입=FAIL / PENDING 잔존=FAIL / 비-PENDING 근거 공란=FAIL /
+    #   판정신호 실측 불일치=FAIL / 원장↔대사표 상태 불합치=FAIL / 보류·클라우드 N = 상시 목록 출력.
+    if not matrix_only and not handlers_only:
+        map_txt = target.read_text(encoding="utf-8", errors="ignore")
+        if not menu:
+            mh = re.search(r"## 보완요청\(REQ\) 축.*?대상:\s*([A-Z]{2,4}\d{4}\w*)", map_txt)
+            menu = mh.group(1) if mh else None
+        led_rows, led_errs = parse_request_ledger(requests_path)
+        if led_rows is None:
+            print(f"[FAIL] 보완요청 원장 판독 불가 — {led_errs[0]}")
+            return 1
+        if led_errs:
+            print(f"[FAIL] 보완요청 원장 파싱 오류 {len(led_errs)}건 (조용한 누락 차단):")
+            for e in led_errs:
+                print(f"  ⛔ {e}")
+            return 1
+        if not menu:
+            # 최후 추정: 대사표 본문 프로그램 ID 와 원장 대상 UI 교집합
+            prog_ids = set(re.findall(r"\b(DMF\d{4}(?:_\d+)?|SCM\d{4}|SDM\d{4}|SYS\d{4})\b", map_txt))
+            mine = [r for r in led_rows if r["ui"] != "ALL"
+                    and any(re.search(rf"\b{re.escape(p)}\b", r["ui"]) for p in prog_ids)]
+            if mine:
+                print(f"[REQ] --menu 미지정 — 대사표 본문 프로그램 ID {sorted(prog_ids)} 로 원장 {len(mine)}행 귀속 (추정 귀속 — --menu 명시 권장)")
+        else:
+            mine = [r for r in led_rows
+                    if r["ui"] != "ALL" and re.search(rf"\b{re.escape(menu)}\b", r["ui"])]
+        req_fail = []
+        holds, cloud_n = [], []
+        for orphan in sorted(set(map_req) - {r["id"] for r in mine}):
+            req_fail.append((orphan, "대사표 REQ 행이 원장에 없음 (ID 오기 또는 원장 미등재 — 원장이 단일 원천)"))
+        for r in mine:
+            _id, st, ev, sig = r["id"], r["status"], r["evidence"], r["signal"]
+            ev_filled = ev not in ("", "—", "-")
+            if st in ("USER-DECISION", "VISUAL"):
+                holds.append((r, ""))
+            if r["cloud"].upper().startswith("N"):
+                cloud_n.append(r)
+            if _id not in map_req:
+                req_fail.append((_id, "원장 행이 대사표에 미편입 — --init --menu 재실행 의무"))
+                continue
+            m_impl, m_st = map_req[_id]
+            if st == "PENDING":
+                req_fail.append((_id, "원장 상태=PENDING — 미적용 전제, 실측 근거로만 전이 가능"))
+                continue
+            if not ev_filled:
+                req_fail.append((_id, f"원장 상태={st} 인데 근거 공란 — 사전 판단 SKIP 금지 (근거 없는 전이 = FAIL)"))
+                continue
+            if st in ("APPLIED", "VERIFIED"):
+                if m_st != STATUS_OK_IMPL:
+                    req_fail.append((_id, f"원장={st} ↔ 대사표='{m_st}' 불합치 (구현 이어야 함)"))
+                ok, details = scan_request_signals(page_dir, sig)
+                if ok is False:
+                    req_fail.append((_id, "판정신호 실측 불일치: " + " / ".join(d for d in details if d.startswith("⛔"))))
+            elif st in ("EXCLUDED", "USER-DECISION", "VISUAL"):
+                if m_st not in (STATUS_EXCLUDED, STATUS_NA):
+                    req_fail.append((_id, f"원장={st} ↔ 대사표='{m_st}' 불합치 (제외/해당없음+사유 이어야 함)"))
+        if mine:
+            print(f"[REQ] 원장 대상 행 {len(mine)}건 (menu={menu or '추정'}) — "
+                  f"PENDING {sum(1 for r in mine if r['status'] == 'PENDING')} / "
+                  f"보류 {len(holds)} / 클라우드N {len(cloud_n)}")
+        if holds:
+            print(f"[REQ][보류 — 소실 금지 상시 출력] {len(holds)}건:")
+            for r, _ in holds:
+                print(f"  ⏸ {r['id']:16} [{r['status']}] {r['gist'][:70]}")
+        if cloud_n:
+            print(f"[REQ][클라우드 미반영 — hook #126 ERROR 행 의무] {len(cloud_n)}건:")
+            for r in cloud_n:
+                print(f"  ☁ {r['id']:16} {r['gist'][:70]}")
+        if req_fail:
+            print(f"[FAIL] 보완요청(REQ) 축 {len(req_fail)}건:")
+            for _id, why in req_fail:
+                print(f"  ⛔ {_id:16} | {why}")
+            return 1
+        if mine:
+            print(f"[PASS] 보완요청(REQ) 축 {len(mine)}건 전수 — 원장·대사표·판정신호 정합")
     if total == 0:
+        if requests_only:
+            print(f"[PASS] 보완요청(REQ) 축 — 이 화면 대상 원장 행 0건·대사표 REQ 행 0건 (요구 없음)")
+            return 0
         if matrix_only:
             print(f"[FAIL] {target} 에 CRUD·모달 매트릭스 행 0건 — 2026-08-07 축 미생성 (--init 재실행 필요)")
         else:
@@ -842,16 +1071,22 @@ def main():
                     help="--check 시 상태='구현' 행의 구현 위치 인용(파일·심볼) 실재성까지 검증")
     ap.add_argument("--allow-legacy-md", action="store_true",
                     help="--init 시 EID 추출 0건(구양식 md) 허용 — 기본은 FAIL (hook #125 §5). 사유 기록 의무")
+    ap.add_argument("--menu", help="화면 MNU_ID (예: DMF0082) — --init REQ 축 생성 / --check REQ 귀속에 사용")
+    ap.add_argument("--requests", metavar="원장경로",
+                    help="보완요청 원장 md 경로 override (기본: Doc/단위테스트_보완대상/보완요청_원장.md — 음성 대조군 검증용)")
+    ap.add_argument("--requests-only", action="store_true", help="--check 시 보완요청(REQ) 축만 판정 (러너 섹션 10)")
     args = ap.parse_args()
     if args.init:
         if len(args.init) < 2:
             ap.error("--init 은 <분석md 1개 이상> + <페이지폴더> 필요")
-        sys.exit(cmd_init(args.init[:-1], args.init[-1], args.out, args.allow_legacy_md))
+        sys.exit(cmd_init(args.init[:-1], args.init[-1], args.out, args.allow_legacy_md, menu=args.menu))
     if args.handlers:
         sys.exit(cmd_handlers(args.handlers[0], args.handlers[1], args.out))
     if args.check:
         sys.exit(cmd_check(args.check, matrix_only=args.matrix_only,
-                           handlers_only=args.handlers_only, citations=args.citations))
+                           handlers_only=args.handlers_only, citations=args.citations,
+                           requests_only=args.requests_only, menu=args.menu,
+                           requests_path=args.requests))
     ap.error("--init 또는 --check 필요")
 
 

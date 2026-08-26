@@ -1,24 +1,25 @@
 import {
   MeasureSelectModal,
-  ColumnLayoutModal,
   ItemByDivisionModal,
   ProjectByDivisionModal,
-  saveTitleSet,
-  toColumnLayoutSettings,
 } from 'features/master/src/components';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 
 import { queryClient } from '@foundation/query-client';
+import { ColumnLayoutModal, saveTitleSet, toColumnLayoutSettings } from '@shared/components';
 import { useMessageStore } from '@shared/stores';
 
 import {
+  ITEM_CLEAR_FIELDS,
   MENU_ID,
+  PROJECT_POPUP_CANCEL_CLEAR,
   SHEETS,
   TITLESET_COLUMN_TYPE,
   TITLESET_MEASURE_TYPE,
 } from '../sales-plan.constants';
 import type { SalesPlanRow } from '../sales-plan.types';
 import { useSalesPlanStore } from '../useSalesPlanStore';
+import { buildClearPatch } from '../utils/sales-plan.gridCombos';
 
 export type SalesPlanModalKey = 'PROJECT' | 'ITEM' | 'COLUMN' | 'MEASURE';
 
@@ -84,6 +85,23 @@ export const SalesPlanModals = ({
     void setAlert({ type: 'alert', content: t('MSG00618', '_An error occurred while saving.') });
   };
 
+  // Project 셀 모달 취소 판정 — 공용 ProjectByDivisionModal 은 OK/더블클릭 확정 경로에서도
+  //   modalClose() 를 호출하므로 '닫혔다'는 사실만으로는 선택/취소를 구분할 수 없다.
+  //   setSelectedValue 통과 여부를 ref 에 표시해 구분한다.
+  //   필수: state 가 아니라 ref — 확정과 닫기가 같은 이벤트 안에서 연달아 일어나 state 는
+  //   갱신 전 값이 읽히고(배치), 그러면 방금 선택한 Project 까지 지워진다.
+  const projectPickedRef = useRef(false);
+  useEffect(() => {
+    if (openProject) projectPickedRef.current = false;
+  }, [openProject]);
+
+  const handleProjectClose = () => {
+    // 선택 없이 닫음 = Project 미선택 확정 (사용자 요구 2026-08-23 — 기존 값이 있어도 비움).
+    //   Model 은 Project 종속이라 함께 초기화한다.
+    if (!projectPickedRef.current) applyToInsertRow(buildClearPatch(PROJECT_POPUP_CANCEL_CLEAR));
+    onClose('PROJECT');
+  };
+
   const rowValue = (key: string, fallback = 'ALL'): string => {
     const value = popupRow?.[key];
     if (value == null) return fallback;
@@ -96,7 +114,7 @@ export const SalesPlanModals = ({
       {/* 셀 모달 — PROJECT (81·82 신규행) */}
       <ProjectByDivisionModal
         open={openProject}
-        modalClose={() => onClose('PROJECT')}
+        modalClose={handleProjectClose}
         setSelectedValue={(
           projectCode,
           projectName,
@@ -106,16 +124,16 @@ export const SalesPlanModals = ({
           deptId,
           deptName
         ) => {
+          // 이 호출을 지나면 확정 — 뒤이어 오는 modalClose 는 취소 clear 를 건너뛴다.
+          projectPickedRef.current = true;
           applyToInsertRow({
             PROJECT_CODE: projectCode,
             PROJECT_NAME: projectName ?? '',
             PROJECT_STATUS: projectStatus ?? '',
             BIZ_TYPE_NAME: bizTypeName ?? '',
             PROJECT_OWNER: projectOwner ?? '',
-            ITEM_ID: '',
-            ITEM_CLASS_NAME: '',
-            ITEM_TYPE: '',
-            NICK_NAME: '',
+            // Project 가 바뀌면 Model 은 무효 — 취소 경로와 같은 묶음으로 비운다.
+            ...buildClearPatch(ITEM_CLEAR_FIELDS),
             // [No.61-④] Team 파생 — 입력 불가 컬럼이라 마스터(선택 행)의 팀이 유일한 출처.
             //   팝업이 팀을 안 내려주면(구 버전·다건 선택) 종전 값을 유지한다.
             ...(deptId ? { DEPT_ID: deptId, TEAM_NAME: deptName ?? '' } : {}),
@@ -187,6 +205,9 @@ export const SalesPlanModals = ({
           key: c.colNm,
           header: c.colLblNm ?? c.colNm,
           width: c.colWth ?? 100,
+          // titleSet 응답이 0건일 때의 좌/우 배치·이동 잠금도 admin 플래그 기준 (라벨 '*' 폐기).
+          display: c.display,
+          personalizable: c.personalizable,
         }))}
         title={t('LBL00711', '_Column')}
         leftTitle={t('LBL00764', 'Invisible')}

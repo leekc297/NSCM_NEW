@@ -67,6 +67,7 @@ export const CustomerFcstMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
       DIVISION_ID: filters?.divisionId ?? '81',
       SUMMARY_BUCKET_TYPE: filters?.bucketType,
       MEASURE_GROUP: 'CUST_FCST',
+      MEASURE: 'Customer Fcst',
       EDI_FCST_YN: 'Y',
       VALID_YN: 'Y',
       ...dateBindings,
@@ -75,7 +76,7 @@ export const CustomerFcstMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   const handleDelete = () => {
     if (!gridRef.current) return;
-    GridAction.removeRow(gridRef.current, true);
+    GridAction.removeRow(gridRef.current);
   };
 
   const handleSave = () => {

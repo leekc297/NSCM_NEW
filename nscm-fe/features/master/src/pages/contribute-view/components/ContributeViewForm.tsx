@@ -133,9 +133,15 @@ export const ContributeViewForm = ({ onSearch, onOpenVersionPopup }: Props) => {
                   options={yearDropdownOptions}
                   onChange={(_, option) => {
                     const opt = yearOptions.find(o => String(o.CODE) === option);
+                    // Year 변경 시 그 외 조회조건도 기본값으로 초기화
                     setSearchParams({
                       verSeq: option,
                       yyyy: String(opt?.NAME2 ?? opt?.NAME ?? '').substring(0, 4),
+                      versionNo: '',
+                      productGroup: 'ALL',
+                      endCustReport: '',
+                      bizType: 'ALL',
+                      millionYn: 'N',
                     });
                   }}
                 />

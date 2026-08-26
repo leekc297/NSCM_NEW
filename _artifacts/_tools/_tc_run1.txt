@@ -1,0 +1,179 @@
+﻿pnpm 10.28.2  (요구 = "packageManager": "pnpm@10.28.2",)
+task=type-check  filter=(전체)
+--- gen (icons + i18n) ---
+✅ 67개의 아이콘이 index.ts에 등록되었습니다.
+🚀 다국어 동기화 스크립트 시작...
+✅ 메시지 원천: http://127.0.0.1:8080/admin/message (2877건)
+EN
+CN
+KO
+--- turbo run type-check --continue ---
+powershell.exe : • turbo 2.8.5
+At line:1 char:307
++ ... } } }; $o = & powershell -NoProfile -File C:\Projects\NSCM\_artifacts ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (• turbo 2.8.5:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+• Packages in scope: @admin, @authority, @demand, @factory, @foundation, @master, @report, @sdm, @shared, @shipping, @spms-demand, @supply, @web
+• Running type-check in 13 packages
+• Remote caching disabled
+@foundation:type-check: cache hit, replaying logs 3fa6f4cf7f46a3e0
+@foundation:type-check: 
+@foundation:type-check: > @foundation@0.1.0 type-check C:\Projects\NSCM\nscm-fe\packages\foundation
+@foundation:type-check: > tsc --noEmit
+@foundation:type-check: 
+@shared:type-check: cache hit, replaying logs c5b3d44c105aa036
+@shared:type-check: 
+@shared:type-check: > @shared@0.1.0 type-check C:\Projects\NSCM\nscm-fe\packages\shared
+@shared:type-check: > tsc --noEmit
+@shared:type-check: 
+@authority:type-check: cache hit, replaying logs 900cb20ef74e4dec
+@demand:type-check: cache miss, executing 0438930dfcb14550
+@authority:type-check: 
+@authority:type-check: > @authority@0.1.0 type-check C:\Projects\NSCM\nscm-fe\features\authority
+@authority:type-check: > tsc --noEmit
+@authority:type-check: 
+@supply:type-check: cache hit, replaying logs 63b7d0d161374b11
+@shipping:type-check: cache hit, replaying logs 71c26405371854c3
+@spms-demand:type-check: cache miss, executing 8f9d9a3b2a89d99a
+@supply:type-check: 
+@supply:type-check: > @supply@0.1.0 type-check C:\Projects\NSCM\nscm-fe\features\supply
+@supply:type-check: > tsc --noEmit
+@supply:type-check: 
+@admin:type-check: cache miss, executing 0babbb2aec6498ef
+@shipping:type-check: 
+@shipping:type-check: > @shipping@0.1.0 type-check C:\Projects\NSCM\nscm-fe\features\shipping
+@shipping:type-check: > tsc --noEmit
+@shipping:type-check: 
+@report:type-check: cache miss, executing d85925203d5e9444
+@master:type-check: cache miss, executing 9ed06b8ede753a5d
+@factory:type-check: cache hit, replaying logs 8d574027a18f4f17
+@factory:type-check: 
+@factory:type-check: > @factory@0.1.0 type-check C:\Projects\NSCM\nscm-fe\features\factory
+@factory:type-check: > tsc --noEmit
+@factory:type-check: 
+@sdm:type-check: cache hit, replaying logs 555d9e0c9ff4bbb3
+@sdm:type-check: 
+@sdm:type-check: > @sdm@0.1.0 type-check C:\Projects\NSCM\nscm-fe\features\sdm
+@sdm:type-check: > tsc --noEmit
+@sdm:type-check: 
+@spms-demand:type-check: 
+@spms-demand:type-check: > @spms-demand@0.1.0 type-check C:\Projects\NSCM\nscm-fe\features\spms-demand
+@spms-demand:type-check: > tsc --noEmit
+@spms-demand:type-check: 
+@demand:type-check: 
+@demand:type-check: > @demand@0.1.0 type-check C:\Projects\NSCM\nscm-fe\features\demand
+@demand:type-check: > tsc --noEmit
+@demand:type-check: 
+@admin:type-check: 
+@admin:type-check: > @admin@0.1.0 type-check C:\Projects\NSCM\nscm-fe\features\admin
+@admin:type-check: > tsc --noEmit
+@admin:type-check: 
+@report:type-check: 
+@report:type-check: > @report@0.1.0 type-check C:\Projects\NSCM\nscm-fe\features\report
+@report:type-check: > tsc --noEmit
+@report:type-check: 
+@master:type-check: 
+@master:type-check: > @master@0.1.0 type-check C:\Projects\NSCM\nscm-fe\features\master
+@master:type-check: > tsc --noEmit
+@master:type-check: 
+@admin:type-check: src/pages/dynamic-query/components/DynamicQueryEditModal.tsx(31,3): error TS2305: Module '"../dynamic-query.types"' has no exported member 'ValidateColumnRow'.
+@admin:type-check: src/pages/dynamic-query/useDynamicQuerySave.ts(16,3): error TS2305: Module '"./dynamic-query.types"' has no exported member 'PendingModalColumnRow'.
+@admin:type-check: src/pages/dynamic-query/useDynamicQuerySave.ts(17,3): error TS2305: Module '"./dynamic-query.types"' has no exported member 'PendingModalConditionRow'.
+@admin:type-check: src/pages/dynamic-query/useDynamicQuerySave.ts(18,3): error TS2305: Module '"./dynamic-query.types"' has no exported member 'PendingQueryMeta'.
+@admin:type-check: src/pages/dynamic-query/useDynamicQuerySave.ts(73,55): error TS2339: Property 'selectedQueryId' does not exist on type 'DynamicQueryState & DynamicQueryAction'.
+@admin:type-check: src/pages/dynamic-query/useDynamicQuerySave.ts(74,53): error TS2339: Property 'roleSelection' does not exist on type 'DynamicQueryState & DynamicQueryAction'.
+@admin:type-check: src/pages/dynamic-query/useDynamicQuerySave.ts(75,52): error TS2339: Property 'roleOriginal' does not exist on type 'DynamicQueryState & DynamicQueryAction'.
+@admin:type-check: src/pages/dynamic-query/useDynamicQuerySave.ts(76,58): error TS2339: Property 'setSelectedQueryId' does not exist on type 'DynamicQueryState & DynamicQueryAction'.
+@admin:type-check: src/pages/dynamic-query/useDynamicQuerySave.ts(132,28): error TS7006: Parameter 'r' implicitly has an 'any' type.
+@admin:type-check: src/pages/dynamic-query/useDynamicQuerySave.ts(274,46): error TS7006: Parameter 'r' implicitly has an 'any' type.
+@admin:type-check: src/pages/dynamic-query/useDynamicQuerySave.ts(275,47): error TS7006: Parameter 'r' implicitly has an 'any' type.
+@admin:type-check: src/pages/dynamic-query/useDynamicQuerySave.ts(277,26): error TS7006: Parameter 'g' implicitly has an 'any' type.
+@admin:type-check: src/pages/dynamic-query/useDynamicQuerySave.ts(278,28): error TS7006: Parameter 'g' implicitly has an 'any' type.
+@admin:type-check: src/pages/lookup/lookup.utils.test.ts(3,54): error TS2305: Module '"./lookup.utils"' has no exported member 'toDetailSaveRow'.
+@admin:type-check: src/pages/notice-setup/notice-setup.util.ts(54,3): error TS2353: Object literal may only specify known properties, and 'CREATION_DATE' does not exist in type '{ NOTICE_ID: string; MODULE: string; MODULE_NM: string; SUB_MODULE: string; SUB_MODULE_NM: string; NOTICE: string; ACTIVE: string; START_DATE: string; END_DATE: string; PUBLICATION_PERIOD: string; ... 6 more ...; ACTION: string; } & { ...; }'.
+@admin:type-check:  ELIFECYCLE  Command failed with exit code 2.
+@admin:type-check: command finished with error, but continuing...
+@spms-demand:type-check: src/components/auth-management-popup/AuthManagementPopup.tsx(97,81): error TS2344: Type 'SHEETS.POPUP_ORG' does not satisfy the constraint '"TAB1" | "TAB2" | "POP1_TREE" | "POP1_GRID1" | "POP1_GRID2" | "POP1_GRID3" | "POP1_GRID4" | "POP2_GRID5" | "period"'.
+@spms-demand:type-check: src/components/auth-management-popup/AuthManagementPopup.tsx(106,55): error TS2344: Type 'SHEETS.POPUP_USER' does not satisfy the constraint '"TAB1" | "TAB2" | "POP1_TREE" | "POP1_GRID1" | "POP1_GRID2" | "POP1_GRID3" | "POP1_GRID4" | "POP2_GRID5" | "period"'.
+@spms-demand:type-check: src/components/auth-management-popup/AuthManagementPopup.tsx(114,60): error TS2344: Type 'SHEETS.POPUP_AUTH_WRITE' does not satisfy the constraint '"TAB1" | "TAB2" | "POP1_TREE" | "POP1_GRID1" | "POP1_GRID2" | "POP1_GRID3" | "POP1_GRID4" | "POP2_GRID5" | "period"'.
+@spms-demand:type-check: src/components/auth-management-popup/AuthManagementPopup.tsx(122,59): error TS2344: Type 'SHEETS.POPUP_AUTH_READ' does not satisfy the constraint '"TAB1" | "TAB2" | "POP1_TREE" | "POP1_GRID1" | "POP1_GRID2" | "POP1_GRID3" | "POP1_GRID4" | "POP2_GRID5" | "period"'.
+@spms-demand:type-check: src/components/auth-management-popup/AuthManagementPopup.tsx(131,58): error TS2344: Type 'SHEETS.POPUP_AUTH_REQ' does not satisfy the constraint '"TAB1" | "TAB2" | "POP1_TREE" | "POP1_GRID1" | "POP1_GRID2" | "POP1_GRID3" | "POP1_GRID4" | "POP2_GRID5" | "period"'.
+@spms-demand:type-check: src/components/auth-management-popup/AuthManagementPopup.tsx(139,67): error TS2344: Type 'SHEETS.POPUP_AUTH_WRITE' does not satisfy the constraint '"TAB1" | "TAB2" | "POP1_TREE" | "POP1_GRID1" | "POP1_GRID2" | "POP1_GRID3" | "POP1_GRID4" | "POP2_GRID5" | "period"'.
+@spms-demand:type-check: src/components/auth-management-popup/AuthManagementPopup.tsx(146,66): error TS2344: Type 'SHEETS.POPUP_AUTH_READ' does not satisfy the constraint '"TAB1" | "TAB2" | "POP1_TREE" | "POP1_GRID1" | "POP1_GRID2" | "POP1_GRID3" | "POP1_GRID4" | "POP2_GRID5" | "period"'.
+@spms-demand:type-check: src/components/auth-management-popup/AuthManagementPopup.tsx(153,68): error TS2344: Type 'SHEETS.POPUP_AUTH_REQ' does not satisfy the constraint '"TAB1" | "TAB2" | "POP1_TREE" | "POP1_GRID1" | "POP1_GRID2" | "POP1_GRID3" | "POP1_GRID4" | "POP2_GRID5" | "period"'.
+@spms-demand:type-check: src/components/auth-management-popup/AuthManagementPopup.tsx(181,23): error TS2339: Property 'authWriteList' does not exist on type 'ProcResponse<"SDM1010", SHEETS.POPUP_AUTH_WRITE>'.
+@spms-demand:type-check: src/components/auth-management-popup/AuthManagementPopup.tsx(182,37): error TS2339: Property 'authReadList' does not exist on type 'ProcResponse<"SDM1010", SHEETS.POPUP_AUTH_READ>'.
+@spms-demand:type-check: src/components/auth-management-popup/AuthManagementPopup.tsx(190,34): error TS2339: Property 'orgList' does not exist on type 'ProcResponse<"SDM1010", SHEETS.POPUP_ORG>'.
+@spms-demand:type-check: src/components/auth-management-popup/AuthManagementPopup.tsx(194,19): error TS2339: Property 'userList' does not exist on type 'ProcResponse<"SDM1010", SHEETS.POPUP_USER>'.
+@spms-demand:type-check: src/components/auth-management-popup/AuthManagementPopup.tsx(197,19): error TS2339: Property 'authRequestList' does not exist on type 'ProcResponse<"SDM1010", SHEETS.POPUP_AUTH_REQ>'.
+@spms-demand:type-check: src/pages/project-registration/components/authManagementPopup/AuthManagementPopup.tsx(92,81): error TS2344: Type 'SHEETS.POPUP_ORG' does not satisfy the constraint '"TAB1" | "TAB2" | "POP1_TREE" | "POP1_GRID1" | "POP1_GRID2" | "POP1_GRID3" | "POP1_GRID4" | "POP2_GRID5" | "period"'.
+@spms-demand:type-check: src/pages/project-registration/components/authManagementPopup/AuthManagementPopup.tsx(101,55): error TS2344: Type 'SHEETS.POPUP_USER' does not satisfy the constraint '"TAB1" | "TAB2" | "POP1_TREE" | "POP1_GRID1" | "POP1_GRID2" | "POP1_GRID3" | "POP1_GRID4" | "POP2_GRID5" | "period"'.
+@spms-demand:type-check: src/pages/project-registration/components/authManagementPopup/AuthManagementPopup.tsx(109,60): error TS2344: Type 'SHEETS.POPUP_AUTH_WRITE' does not satisfy the constraint '"TAB1" | "TAB2" | "POP1_TREE" | "POP1_GRID1" | "POP1_GRID2" | "POP1_GRID3" | "POP1_GRID4" | "POP2_GRID5" | "period"'.
+@spms-demand:type-check: src/pages/project-registration/components/authManagementPopup/AuthManagementPopup.tsx(117,59): error TS2344: Type 'SHEETS.POPUP_AUTH_READ' does not satisfy the constraint '"TAB1" | "TAB2" | "POP1_TREE" | "POP1_GRID1" | "POP1_GRID2" | "POP1_GRID3" | "POP1_GRID4" | "POP2_GRID5" | "period"'.
+@spms-demand:type-check: src/pages/project-registration/components/authManagementPopup/AuthManagementPopup.tsx(126,58): error TS2344: Type 'SHEETS.POPUP_AUTH_REQ' does not satisfy the constraint '"TAB1" | "TAB2" | "POP1_TREE" | "POP1_GRID1" | "POP1_GRID2" | "POP1_GRID3" | "POP1_GRID4" | "POP2_GRID5" | "period"'.
+@spms-demand:type-check: src/pages/project-registration/components/authManagementPopup/AuthManagementPopup.tsx(134,67): error TS2344: Type 'SHEETS.POPUP_AUTH_WRITE' does not satisfy the constraint '"TAB1" | "TAB2" | "POP1_TREE" | "POP1_GRID1" | "POP1_GRID2" | "POP1_GRID3" | "POP1_GRID4" | "POP2_GRID5" | "period"'.
+@spms-demand:type-check: src/pages/project-registration/components/authManagementPopup/AuthManagementPopup.tsx(141,66): error TS2344: Type 'SHEETS.POPUP_AUTH_READ' does not satisfy the constraint '"TAB1" | "TAB2" | "POP1_TREE" | "POP1_GRID1" | "POP1_GRID2" | "POP1_GRID3" | "POP1_GRID4" | "POP2_GRID5" | "period"'.
+@spms-demand:type-check: src/pages/project-registration/components/authManagementPopup/AuthManagementPopup.tsx(148,68): error TS2344: Type 'SHEETS.POPUP_AUTH_REQ' does not satisfy the constraint '"TAB1" | "TAB2" | "POP1_TREE" | "POP1_GRID1" | "POP1_GRID2" | "POP1_GRID3" | "POP1_GRID4" | "POP2_GRID5" | "period"'.
+@spms-demand:type-check: src/pages/project-registration/components/authManagementPopup/AuthManagementPopup.tsx(176,23): error TS2339: Property 'authWriteList' does not exist on type 'ProcResponse<"SDM1010", SHEETS.POPUP_AUTH_WRITE>'.
+@spms-demand:type-check: src/pages/project-registration/components/authManagementPopup/AuthManagementPopup.tsx(177,37): error TS2339: Property 'authReadList' does not exist on type 'ProcResponse<"SDM1010", SHEETS.POPUP_AUTH_READ>'.
+@spms-demand:type-check: src/pages/project-registration/components/authManagementPopup/AuthManagementPopup.tsx(185,34): error TS2339: Property 'orgList' does not exist on type 'ProcResponse<"SDM1010", SHEETS.POPUP_ORG>'.
+@spms-demand:type-check: src/pages/project-registration/components/authManagementPopup/AuthManagementPopup.tsx(189,19): error TS2339: Property 'userList' does not exist on type 'ProcResponse<"SDM1010", SHEETS.POPUP_USER>'.
+@spms-demand:type-check: src/pages/project-registration/components/authManagementPopup/AuthManagementPopup.tsx(192,19): error TS2339: Property 'authRequestList' does not exist on type 'ProcResponse<"SDM1010", SHEETS.POPUP_AUTH_REQ>'.
+@spms-demand:type-check: src/pages/project-registration/components/myWorkPopup/MyWorkPopup.tsx(62,45): error TS2344: Type 'SHEETS.POPUP_MY_WORK' does not satisfy the constraint '"TAB1" | "TAB2" | "POP1_TREE" | "POP1_GRID1" | "POP1_GRID2" | "POP1_GRID3" | "POP1_GRID4" | "POP2_GRID5" | "period"'.
+@spms-demand:type-check: src/pages/project-registration/components/myWorkPopup/MyWorkPopup.tsx(75,23): error TS2339: Property 'scheduleList' does not exist on type 'ProcResponse<"SDM1010", SHEETS.POPUP_MY_WORK>'.
+@spms-demand:type-check: src/pages/project-registration/ProjectRegistration.tsx(76,83): error TS2344: Type 'SHEETS.PROJECT' does not satisfy the constraint '"TAB1" | "TAB2" | "POP1_TREE" | "POP1_GRID1" | "POP1_GRID2" | "POP1_GRID3" | "POP1_GRID4" | "POP2_GRID5" | "period"'.
+@spms-demand:type-check: src/pages/project-registration/ProjectRegistration.tsx(83,60): error TS2344: Type 'SHEETS.MY_PROJECT' does not satisfy the constraint '"TAB1" | "TAB2" | "POP1_TREE" | "POP1_GRID1" | "POP1_GRID2" | "POP1_GRID3" | "POP1_GRID4" | "POP2_GRID5" | "period"'.
+@spms-demand:type-check: src/pages/project-registration/ProjectRegistration.tsx(91,62): error TS2344: Type 'SHEETS.PROJECT' does not satisfy the constraint '"TAB1" | "TAB2" | "POP1_TREE" | "POP1_GRID1" | "POP1_GRID2" | "POP1_GRID3" | "POP1_GRID4" | "POP2_GRID5" | "period"'.
+@spms-demand:type-check: src/pages/project-registration/ProjectRegistration.tsx(96,63): error TS2344: Type 'SHEETS.PROJECT' does not satisfy the constraint '"TAB1" | "TAB2" | "POP1_TREE" | "POP1_GRID1" | "POP1_GRID2" | "POP1_GRID3" | "POP1_GRID4" | "POP2_GRID5" | "period"'.
+@spms-demand:type-check: src/pages/project-registration/ProjectRegistration.tsx(112,69): error TS2344: Type 'SHEETS.PROJECT' does not satisfy the constraint '"TAB1" | "TAB2" | "POP1_TREE" | "POP1_GRID1" | "POP1_GRID2" | "POP1_GRID3" | "POP1_GRID4" | "POP2_GRID5" | "period"'.
+@spms-demand:type-check: src/pages/project-registration/ProjectRegistration.tsx(131,37): error TS2339: Property 'projectList' does not exist on type 'ProcResponse<"SDM1010", SHEETS.PROJECT>'.
+@spms-demand:type-check: src/pages/project-registration/ProjectRegistration.tsx(133,21): error TS2339: Property 'myProjectList' does not exist on type 'ProcResponse<"SDM1010", SHEETS.MY_PROJECT>'.
+@spms-demand:type-check: src/pages/project-registration/useProjectRegistrationStore.ts(68,43): error TS2344: Type 'SHEETS.PROJECT' does not satisfy the constraint '"TAB1" | "TAB2" | "POP1_TREE" | "POP1_GRID1" | "POP1_GRID2" | "POP1_GRID3" | "POP1_GRID4" | "POP2_GRID5" | "period"'.
+@spms-demand:type-check: src/pages/project-registration/useProjectRegistrationStore.ts(69,46): error TS2344: Type 'SHEETS.MY_PROJECT' does not satisfy the constraint '"TAB1" | "TAB2" | "POP1_TREE" | "POP1_GRID1" | "POP1_GRID2" | "POP1_GRID3" | "POP1_GRID4" | "POP2_GRID5" | "period"'.
+@spms-demand:type-check:  ELIFECYCLE  Command failed with exit code 2.
+@spms-demand:type-check:  WARN   Local package.json exists, but node_modules missing, did you mean to install?
+@report:type-check: src/pages/demand-plan-waterfall/components/DemandPlanWaterfallGrid.tsx(7,3): error TS2305: Module '"@shared/components"' has no exported member 'OlapPivotGrid'.
+@report:type-check: src/pages/demand-plan-waterfall/components/DemandPlanWaterfallGrid.tsx(8,3): error TS2305: Module '"@shared/components"' has no exported member 'unpivotWideRows'.
+@report:type-check: src/pages/demand-plan-waterfall/components/DemandPlanWaterfallGrid.tsx(9,8): error TS2305: Module '"@shared/components"' has no exported member 'OlapFieldDef'.
+@report:type-check: src/pages/demand-plan-waterfall/components/DemandPlanWaterfallGrid.tsx(10,8): error TS2305: Module '"@shared/components"' has no exported member 'OlapPivotGridRef'.
+@report:type-check: src/pages/demand-plan-waterfall/components/DemandPlanWaterfallGrid.tsx(154,21): error TS7006: Parameter 'row' implicitly has an 'any' type.
+@report:type-check: src/pages/demand-plan-waterfall/components/OlapLayoutModal.tsx(4,45): error TS2305: Module '"@shared/components"' has no exported member 'OlapPivotGridRef'.
+@report:type-check: src/pages/demand-plan-waterfall/DemandPlanWaterfall.tsx(8,36): error TS2305: Module '"@shared/components"' has no exported member 'OlapPivotGridRef'.
+@spms-demand:type-check: command finished with error, but continuing...
+@report:type-check:  ELIFECYCLE  Command failed with exit code 2.
+@report:type-check: command finished with error, but continuing...
+@master:type-check: src/components/columnLayoutModal/columnLayoutModal.utils.test.ts(30,24): error TS2345: Argument of type 'string' is not assignable to parameter of type 'Record<string, unknown>'.
+@master:type-check: src/components/columnLayoutModal/columnLayoutModal.utils.test.ts(31,24): error TS2345: Argument of type 'string' is not assignable to parameter of type 'Record<string, unknown>'.
+@master:type-check:  ELIFECYCLE  Command failed with exit code 2.
+@master:type-check: command finished with error, but continuing...
+@demand:type-check: src/pages/sales-reports/utils/sales-reports.api.test.ts(11,10): error TS2459: Module '"./sales-reports.api"' declares 'callProc' locally, but it is not exported.
+@demand:type-check: src/pages/sales-reports/utils/sales-reports.editLock.test.ts(7,3): error TS2305: Module '"./sales-reports.editLock"' has no exported member 'currentYyyymm'.
+@demand:type-check: src/pages/sales-reports/utils/sales-reports.editLock.test.ts(10,3): error TS2305: Module '"./sales-reports.editLock"' has no exported member 'existingStaticEditable'.
+@demand:type-check: src/pages/sales-reports/utils/sales-reports.editLock.test.ts(11,3): error TS2305: Module '"./sales-reports.editLock"' has no exported member 'insertStaticEditable'.
+@demand:type-check: src/pages/sales-reports/utils/sales-reports.save.test.ts(9,3): error TS2724: '"./sales-reports.save"' has no exported member named 'buildEtcInsertRows'. Did you mean 'buildEtcSaveRows'?
+@demand:type-check:  ELIFECYCLE  Command failed with exit code 2.
+@demand:type-check: command finished with error, but continuing...
+@web:type-check: cache miss, executing fb16bcd742b8bd5a
+@web:type-check: 
+@web:type-check: > @web@0.1.0 type-check C:\Projects\NSCM\nscm-fe\apps\web
+@web:type-check: > tsc --noEmit
+@web:type-check: 
+@admin#type-check: command (C:\Projects\NSCM\nscm-fe\features\admin) C:\Projects\NSCM\_artifacts\_tools\pnpm-10.28.2\pn
+pm.cmd run type-check exited (2)
+@spms-demand#type-check: command (C:\Projects\NSCM\nscm-fe\features\spms-demand) C:\Projects\NSCM\_artifacts\_tools\pnp
+m-10.28.2\pnpm.cmd run type-check exited (2)
+@report#type-check: command (C:\Projects\NSCM\nscm-fe\features\report) C:\Projects\NSCM\_artifacts\_tools\pnpm-10.28.2\
+pnpm.cmd run type-check exited (2)
+@master#type-check: command (C:\Projects\NSCM\nscm-fe\features\master) C:\Projects\NSCM\_artifacts\_tools\pnpm-10.28.2\
+pnpm.cmd run type-check exited (2)
+@demand#type-check: command (C:\Projects\NSCM\nscm-fe\features\demand) C:\Projects\NSCM\_artifacts\_tools\pnpm-10.28.2\
+pnpm.cmd run type-check exited (2)
+
+ Tasks:    8 successful, 13 total
+Cached:    7 cached, 13 total
+  Time:    1m51.983s 
+Failed:    @admin#type-check, @demand#type-check, @master#type-check, @report#type-check, @spms-demand#type-check
+
+ ERROR  run failed: command  exited (2)

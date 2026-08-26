@@ -1,0 +1,280 @@
+﻿-- ═══════════════════════════════════════════════════════════════════════════════
+-- DMF0035_CLOUD_20260820 / A_DB/90_VERIFY.sql
+--   적용 **후** 검증. 룰 #136 — 대상 객체를 실측하고, 엉뚱한 객체 상태를 출력하지 않는다.
+--   ⛔ SELECT 전용.
+--   PASS 판정 = 아래 V1~V8 이 전부 EXPECT 와 일치 + V3 마커 2종 충족 + **V10 이 0행**.
+-- ═══════════════════════════════════════════════════════════════════════════════
+SET LINESIZE 300
+SET PAGESIZE 300
+
+-- ── V1. PKG 4본 STATUS (기대: 8객체 전부 VALID) ────────────────────────────────
+PROMPT === V1. PKG 4본 STATUS ===
+SELECT OBJECT_NAME, OBJECT_TYPE, STATUS, LAST_DDL_TIME,
+       (SELECT COUNT(*) FROM ALL_SOURCE s WHERE s.OWNER='SCM_MGR'
+         AND s.NAME = o.OBJECT_NAME AND s.TYPE = o.OBJECT_TYPE) AS LINES
+  FROM ALL_OBJECTS o
+ WHERE OWNER='SCM_MGR' AND OBJECT_NAME IN ('PKG_DMF0035','PKG_DMF0022','PKG_DMF0051','PKG_SCM0002')
+ ORDER BY 1, 2;
+
+PROMPT === V1b. INVALID 0건 판정 ===
+SELECT COUNT(*) AS INVALID_CNT_EXPECT_0 FROM ALL_OBJECTS
+ WHERE OWNER='SCM_MGR' AND STATUS <> 'VALID'
+   AND OBJECT_NAME IN ('PKG_DMF0035','PKG_DMF0022','PKG_DMF0051','PKG_SCM0002');
+
+-- ── V2. ALL_ERRORS 0건 ────────────────────────────────────────────────────────
+PROMPT === V2. ALL_ERRORS (기대 0행) ===
+SELECT NAME, TYPE, SEQUENCE, LINE, POSITION, TEXT
+  FROM ALL_ERRORS
+ WHERE OWNER='SCM_MGR' AND NAME IN ('PKG_DMF0035','PKG_DMF0022','PKG_DMF0051','PKG_SCM0002')
+ ORDER BY NAME, TYPE, SEQUENCE;
+
+-- ── V3. ⭐ 마커 grep 2종 (필수) ────────────────────────────────────────────────
+--   ① E20260820-WFITEMPERF (PKG_DMF0035) = 2  → 2026-08-20 조회 튜닝 반영 확인
+--      (GT_DM35_SCP_ITEM_INFO 적재문의 상관 스칼라 2분기 → 선계산 LEFT JOIN. MKT GET 141s→4.2s)
+--   ② V_MEASURE_SHEET (PKG_DMF0022) = 6     → 08-10 구세대 덮어쓰기 **재발 탐지축**
+--      0 이면 SALES PLAN 이 0행으로 회귀한 상태다 (2026-08-20 재적용 소실).
+PROMPT === V3. 마커 grep (둘 다 PASS 여야 함) ===
+SELECT 'V3-1 PKG_DMF0035 / E20260820-WFITEMPERF' AS AXIS,
+       (SELECT COUNT(*) FROM ALL_SOURCE WHERE OWNER='SCM_MGR' AND NAME='PKG_DMF0035'
+          AND TYPE='PACKAGE BODY' AND TEXT LIKE '%E20260820-WFITEMPERF%') AS CNT,
+       2 AS EXPECT,
+       CASE WHEN (SELECT COUNT(*) FROM ALL_SOURCE WHERE OWNER='SCM_MGR' AND NAME='PKG_DMF0035'
+                    AND TYPE='PACKAGE BODY' AND TEXT LIKE '%E20260820-WFITEMPERF%') = 2
+            THEN 'PASS' ELSE 'FAIL' END AS RESULT
+  FROM DUAL
+UNION ALL
+SELECT 'V3-2 PKG_DMF0022 / V_MEASURE_SHEET (구세대 재발 탐지)',
+       (SELECT COUNT(*) FROM ALL_SOURCE WHERE OWNER='SCM_MGR' AND NAME='PKG_DMF0022'
+          AND TYPE='PACKAGE BODY' AND UPPER(TEXT) LIKE '%V_MEASURE_SHEET%'),
+       6,
+       CASE WHEN (SELECT COUNT(*) FROM ALL_SOURCE WHERE OWNER='SCM_MGR' AND NAME='PKG_DMF0022'
+                    AND TYPE='PACKAGE BODY' AND UPPER(TEXT) LIKE '%V_MEASURE_SHEET%') = 6
+            THEN 'PASS' ELSE 'FAIL' END
+  FROM DUAL;
+
+PROMPT === V3b. 마커 원문 (육안 확인) ===
+SELECT NAME, LINE, RTRIM(TEXT) AS TEXT FROM ALL_SOURCE
+ WHERE OWNER='SCM_MGR' AND TYPE='PACKAGE BODY'
+   AND ( (NAME='PKG_DMF0035' AND TEXT LIKE '%E20260820-WFITEMPERF%')
+      OR (NAME='PKG_DMF0022' AND UPPER(TEXT) LIKE '%V_MEASURE_SHEET VARCHAR2%') )
+ ORDER BY NAME, LINE;
+
+-- ── V4. GTT / 인덱스 (기대 49 / 2) ────────────────────────────────────────────
+PROMPT === V4. GTT + INDEX ===
+SELECT 'GTT' AS AXIS, COUNT(*) AS CNT, 49 AS EXPECT FROM ALL_TABLES
+ WHERE OWNER='SCM_MGR' AND TEMPORARY='Y'
+   AND (TABLE_NAME LIKE 'GT\_DM22%' ESCAPE '\' OR TABLE_NAME LIKE 'GT\_DM35%' ESCAPE '\'
+     OR TABLE_NAME LIKE 'GT\_DM51%' ESCAPE '\' OR TABLE_NAME LIKE 'GT\_SPNC%' ESCAPE '\')
+UNION ALL
+SELECT 'GTT INDEX', COUNT(*), 2 FROM ALL_INDEXES
+ WHERE OWNER='SCM_MGR' AND INDEX_NAME IN ('IDX1_GT_DM22_ITEM_SINGLE_V','IDX1_GT_DM22_ITEM_SINGLE_V_T');
+
+-- ── V5. 메뉴/버튼/권한/API 축 ─────────────────────────────────────────────────
+PROMPT === V5. 메타 축별 기대 카운트 (사내 2026-08-20 실측) ===
+SELECT 'SCM_ADM_MNU_M'                 AS TBL, COUNT(*) AS CNT,  1 AS EXPECT FROM SCM_MGR.SCM_ADM_MNU_M                 WHERE MNU_ID='DMF0035'
+UNION ALL SELECT 'SCM_ADM_PROGRAM',               COUNT(*),  1 FROM SCM_MGR.SCM_ADM_PROGRAM               WHERE PROGRAM_ID='DMF0035'
+UNION ALL SELECT 'SCM_ADM_API_M',                 COUNT(*),  8 FROM SCM_MGR.SCM_ADM_API_M                 WHERE API_ID LIKE 'DMF0035\_%' ESCAPE '\'
+UNION ALL SELECT 'SCM_ADM_MNU_BTN_MPG_M',         COUNT(*),  8 FROM SCM_MGR.SCM_ADM_MNU_BTN_MPG_M         WHERE MNU_ID='DMF0035'
+UNION ALL SELECT 'SCM_ADM_USER_GR_MNU_MPG_M',     COUNT(*),  5 FROM SCM_MGR.SCM_ADM_USER_GR_MNU_MPG_M     WHERE MNU_ID='DMF0035'
+UNION ALL SELECT 'SCM_ADM_USER_GR_MNU_BTN_MPG_M', COUNT(*), 40 FROM SCM_MGR.SCM_ADM_USER_GR_MNU_BTN_MPG_M WHERE MNU_ID='DMF0035'
+UNION ALL SELECT 'SCM_ADM_CMBO_SQL_M(7본)',       COUNT(*),  7 FROM SCM_MGR.SCM_ADM_CMBO_SQL_M
+          WHERE SQL_ID IN ('QtyType','ReportBucketType','BucketType2','SenderCode','ItemType','UserSiteByEndCustomer','MyDivision')
+UNION ALL SELECT 'SCM_ADM_MSG_M(22코드x3언어)',   COUNT(*), 66 FROM SCM_MGR.SCM_ADM_MSG_M
+          WHERE MSG_ID IN ('LBL00001','LBL00031','LBL00090','LBL00112','LBL00608','LBL00627',
+                           'LBL00664','LBL00665','LBL00687','LBL00710','LBL00852','LBL00853',
+                           'LBL00854','MNU00179','MNU00020','MNU00691','MSG00013','MSG00097',
+                           'MSG00108','MSG00137','MSG00164','MSG00283')
+UNION ALL SELECT 'SCM_ADM_EXCEL_COLUMNS(0행 축)', COUNT(*),  0 FROM SCM_MGR.SCM_ADM_EXCEL_COLUMNS         WHERE PROGRAM_ID='DMF0035';
+
+-- ── V5b. 시트 메타 (SHEET_NAME 단위 전량 — 공유 시트 포함) ────────────────────
+PROMPT === V5b. 시트 메타 ===
+SELECT 'SHEET_COLUMNS / Mkt Fcst Waterfall'   AS AXIS, COUNT(*) CNT, 119 EXPECT FROM SCM_MGR.SCM_MST_SHEET_COLUMNS WHERE SHEET_NAME='Mkt Fcst Waterfall'
+UNION ALL SELECT 'SHEET_COLUMNS / salesPlanWaterfall',   COUNT(*),  65 FROM SCM_MGR.SCM_MST_SHEET_COLUMNS WHERE SHEET_NAME='salesPlanWaterfall'
+UNION ALL SELECT 'SHEET_COLUMNS / Biz Plan Waterfall',   COUNT(*), 125 FROM SCM_MGR.SCM_MST_SHEET_COLUMNS WHERE SHEET_NAME='Biz Plan Waterfall'
+UNION ALL SELECT 'SHEET_MEASURE / Mkt Fcst Waterfall',   COUNT(*),  73 FROM SCM_MGR.SCM_MST_SHEET_MEASURE WHERE SHEET_NAME='Mkt Fcst Waterfall'
+UNION ALL SELECT 'SHEET_MEASURE / Sales Plan Waterfall', COUNT(*),  84 FROM SCM_MGR.SCM_MST_SHEET_MEASURE WHERE SHEET_NAME='Sales Plan Waterfall'
+UNION ALL SELECT 'SHEET_MEASURE / Biz Plan Waterfall',   COUNT(*),  16 FROM SCM_MGR.SCM_MST_SHEET_MEASURE WHERE SHEET_NAME='Biz Plan Waterfall';
+
+PROMPT === V5c. 시트 메타 PROGRAM_ID 분해 (공유 시트 타 화면 행 보존 확인) ===
+SELECT 'SHEET_COLUMNS' TBL, SHEET_NAME, PROGRAM_ID, COUNT(*) CNT FROM SCM_MGR.SCM_MST_SHEET_COLUMNS
+ WHERE SHEET_NAME IN ('Mkt Fcst Waterfall','salesPlanWaterfall','Biz Plan Waterfall') GROUP BY SHEET_NAME, PROGRAM_ID
+UNION ALL
+SELECT 'SHEET_MEASURE', SHEET_NAME, PROGRAM_ID, COUNT(*) FROM SCM_MGR.SCM_MST_SHEET_MEASURE
+ WHERE SHEET_NAME IN ('Mkt Fcst Waterfall','Sales Plan Waterfall','Biz Plan Waterfall') GROUP BY SHEET_NAME, PROGRAM_ID
+ ORDER BY 1, 2, 3;
+-- 기대: COLUMNS Mkt(DMF0035 71 / DMF0040 48) · sales(DMF0022 65) · Biz(DMF0051 61 / DMF0051_1 64)
+--       MEASURE Mkt(DMF0035 49 / DM0035 24) · Sales(DMF0022 31 / DM0022 19 / DMF0021 17 / DMF0048 17)
+--               Biz(DMF0051 9 / DMF0051_1 7)
+
+-- ── V6. GRANT / SYNONYM (기대 각 8) ───────────────────────────────────────────
+PROMPT === V6. GRANT / SYNONYM ===
+SELECT 'EXECUTE GRANT (SCMD_APP+SCMP_APP)' AS AXIS, COUNT(*) CNT, 8 EXPECT FROM ALL_TAB_PRIVS
+ WHERE TABLE_NAME IN ('PKG_DMF0035','PKG_DMF0022','PKG_DMF0051','PKG_SCM0002')
+   AND PRIVILEGE='EXECUTE' AND GRANTEE IN ('SCMD_APP','SCMP_APP')
+UNION ALL
+SELECT 'SYNONYM (SCMD_APP+SCMP_APP)', COUNT(*), 8 FROM ALL_SYNONYMS
+ WHERE TABLE_NAME IN ('PKG_DMF0035','PKG_DMF0022','PKG_DMF0051','PKG_SCM0002')
+   AND OWNER IN ('SCMD_APP','SCMP_APP') AND TABLE_OWNER='SCM_MGR';
+
+-- ── V7. API_M ↔ MNU_BTN_MPG_M 배선 1:1 (고아 0건) ─────────────────────────────
+PROMPT === V7. 버튼-API 배선 무결성 (기대 0행) ===
+SELECT B.MNU_ID, B.SHT_NM, B.MNU_BTN_CD, B.API_ID, 'API_M 미등록' AS DEFECT
+  FROM SCM_MGR.SCM_ADM_MNU_BTN_MPG_M B
+ WHERE B.MNU_ID='DMF0035'
+   AND NOT EXISTS (SELECT 1 FROM SCM_MGR.SCM_ADM_API_M A WHERE A.API_ID = B.API_ID);
+
+PROMPT === V7b. API_URL ↔ 실제 SP 존재 대조 (룰 #136 — 대상 객체 실측) ===
+SELECT A.API_ID, A.API_URL,
+       CASE WHEN INSTR(A.API_URL, '.') > 0 THEN
+            (SELECT COUNT(*) FROM ALL_PROCEDURES P
+              WHERE P.OWNER='SCM_MGR'
+                AND P.OBJECT_NAME = UPPER(SUBSTR(A.API_URL, 1, INSTR(A.API_URL,'.')-1))
+                AND P.PROCEDURE_NAME = UPPER(SUBSTR(A.API_URL, INSTR(A.API_URL,'.')+1)))
+            ELSE
+            (SELECT COUNT(*) FROM ALL_PROCEDURES P
+              WHERE P.OWNER='SCM_MGR' AND P.OBJECT_NAME = UPPER(A.API_URL))
+       END AS SP_EXISTS_EXPECT_1
+  FROM SCM_MGR.SCM_ADM_API_M A
+ WHERE A.API_ID LIKE 'DMF0035\_%' ESCAPE '\'
+ ORDER BY 1;
+-- 기대: 8행 전부 SP_EXISTS = 1
+--   ⚠ DMF0035_version_SEARCH 의 API_URL = 'DMF0073_GET_VERSION_SALESPRICE' (standalone PROCEDURE).
+--     이 축이 0 이면 DMF0073 계열이 클라우드에 미배포 — Version 모달(SALES)이 빈다.
+
+-- ── V8. 메뉴 라우팅 실측 (FE viewRegistry 키와 1:1) ────────────────────────────
+PROMPT === V8. 메뉴 라우팅 ===
+SELECT MNU_ID, UPPR_MNU_ID, MNU_URL, ROUTE_PATH, MNU_MSG_ID, MNU_TP_CD, UNIT_TP_CD, USE_YN, SORT_ORD
+  FROM SCM_MGR.SCM_ADM_MNU_M WHERE MNU_ID='DMF0035';
+-- 기대: UPPR_MNU_ID='Demand_Waterfall' / MNU_URL='demand-plan-waterfall'
+--       ROUTE_PATH='report/demand-plan-waterfall' / MNU_MSG_ID='MNU00691' / USE_YN='Y'
+--   ⚠ ROUTE_PATH 의 'report' 는 FE 폴더(features/report)와 일치해야 한다 —
+--     viewRegistry glob 키 = 'report/demand-plan-waterfall'. 메뉴 트리 위치(Demand_Waterfall)와
+--     의도적으로 상이하다 (개명 금지).
+
+-- ── V10. ⭐ 배선 역추적 적출 — PROC_M 축 (2026-08-20 신설) ─────────────────────
+--   사고: 클라우드 실측에서 DMF0035 8시트 중 **6시트가 SCM_ADM_PROC_M 0행** → **PLS-00306**.
+--         (generic call-proc 이 PROC_M 으로 인자 바인딩 목록을 만들기 때문에,
+--          PKG 가 VALID 여도 PROC_M 이 비면 "잘못된 개수 또는 유형의 인수" 로 즉사한다.)
+--   근본원인: 20_MENU_META_SYNC 의 축 목록에 SCM_ADM_PROC_M 이 처음부터 없었다(축 자체 부재).
+--
+--   방식: MNU_BTN_MPG_M(MNU_ID='DMF0035') ⋈ API_M 으로 **전 시트의 호출 SP 를 역추적**하고,
+--         PROC_M_CNT(메타) 와 ARG_CNT(ALL_ARGUMENTS 실측) 를 대조한다.
+--   ⭐ **정상 = 0행.** 1행이라도 나오면 그 시트는 조회 자체가 불가하다.
+--     · FAIL-A: SP 객체 부재            → PKG/PROCEDURE 미배포 (A_DB/10~17, 19 확인)
+--     · FAIL-B: PROC_M 0행 → PLS-00306  → A_DB/24_PROC_M_SYNC.sql 미적용
+--     · FAIL-C: 인자수 불일치           → PKG 세대 불일치(구세대 덮어쓰기) 또는 PROC_M stale
+--   사내(정본) 2026-08-20 실행 결과 = **0행** (8/8 PASS: 25/7/9/22/9/8/25/9).
+PROMPT === V10. 배선 역추적 PROC_M vs ALL_ARGUMENTS (기대 0행) ===
+WITH WIRED AS (
+  SELECT DISTINCT B.SHT_NM, B.MNU_BTN_CD, A.API_ID, A.API_URL,
+         UPPER(A.API_URL) AS API_URL_U,
+         CASE WHEN INSTR(A.API_URL,'.') > 0
+              THEN UPPER(SUBSTR(A.API_URL, 1, INSTR(A.API_URL,'.') - 1)) ELSE '~' END AS PKG_U,
+         CASE WHEN INSTR(A.API_URL,'.') > 0
+              THEN UPPER(SUBSTR(A.API_URL, INSTR(A.API_URL,'.') + 1)) ELSE UPPER(A.API_URL) END AS OBJ_U
+    FROM SCM_MGR.SCM_ADM_MNU_BTN_MPG_M B
+    JOIN SCM_MGR.SCM_ADM_API_M         A ON A.API_ID = B.API_ID
+   WHERE B.MNU_ID = 'DMF0035'
+),
+PM AS (   -- 선계산 후 JOIN (상관 스칼라 서브쿼리 금지 — 진단 SQL 도 튜닝 품질)
+  SELECT UPPER(PROC_NM) AS PROC_NM_U, COUNT(*) AS PROC_M_CNT
+    FROM SCM_MGR.SCM_ADM_PROC_M GROUP BY UPPER(PROC_NM)
+),
+AG AS (
+  SELECT NVL(UPPER(PACKAGE_NAME),'~') AS PKG_U, UPPER(OBJECT_NAME) AS OBJ_U, COUNT(*) AS ARG_CNT
+    FROM ALL_ARGUMENTS
+   WHERE OWNER = 'SCM_MGR' AND ARGUMENT_NAME IS NOT NULL AND DATA_LEVEL = 0 AND OVERLOAD IS NULL
+   GROUP BY NVL(UPPER(PACKAGE_NAME),'~'), UPPER(OBJECT_NAME)
+)
+SELECT W.SHT_NM, W.MNU_BTN_CD, W.API_ID, W.API_URL,
+       NVL(PM.PROC_M_CNT,0) AS PROC_M_CNT, NVL(AG.ARG_CNT,0) AS ARG_CNT,
+       CASE WHEN NVL(AG.ARG_CNT,0)    = 0 THEN 'FAIL-A: SP OBJECT MISSING'
+            WHEN NVL(PM.PROC_M_CNT,0) = 0 THEN 'FAIL-B: PROC_M 0 ROWS -> PLS-00306'
+            ELSE 'FAIL-C: ARG COUNT MISMATCH' END AS DEFECT
+  FROM WIRED W
+  LEFT JOIN PM ON PM.PROC_NM_U = W.API_URL_U
+  LEFT JOIN AG ON AG.PKG_U = W.PKG_U AND AG.OBJ_U = W.OBJ_U
+ WHERE NVL(PM.PROC_M_CNT,0) = 0 OR NVL(AG.ARG_CNT,0) = 0 OR PM.PROC_M_CNT <> AG.ARG_CNT
+ ORDER BY W.SHT_NM, W.API_ID;
+
+PROMPT === V10b. 동일 축 전량 출력 (육안 대조 — 8행 전부 PASS 여야 함) ===
+WITH WIRED AS (
+  SELECT DISTINCT B.SHT_NM, A.API_ID, A.API_URL, UPPER(A.API_URL) AS API_URL_U,
+         CASE WHEN INSTR(A.API_URL,'.') > 0
+              THEN UPPER(SUBSTR(A.API_URL, 1, INSTR(A.API_URL,'.') - 1)) ELSE '~' END AS PKG_U,
+         CASE WHEN INSTR(A.API_URL,'.') > 0
+              THEN UPPER(SUBSTR(A.API_URL, INSTR(A.API_URL,'.') + 1)) ELSE UPPER(A.API_URL) END AS OBJ_U
+    FROM SCM_MGR.SCM_ADM_MNU_BTN_MPG_M B
+    JOIN SCM_MGR.SCM_ADM_API_M         A ON A.API_ID = B.API_ID
+   WHERE B.MNU_ID = 'DMF0035'
+),
+PM AS (SELECT UPPER(PROC_NM) AS PROC_NM_U, COUNT(*) AS PROC_M_CNT
+         FROM SCM_MGR.SCM_ADM_PROC_M GROUP BY UPPER(PROC_NM)),
+AG AS (SELECT NVL(UPPER(PACKAGE_NAME),'~') AS PKG_U, UPPER(OBJECT_NAME) AS OBJ_U, COUNT(*) AS ARG_CNT
+         FROM ALL_ARGUMENTS
+        WHERE OWNER='SCM_MGR' AND ARGUMENT_NAME IS NOT NULL AND DATA_LEVEL=0 AND OVERLOAD IS NULL
+        GROUP BY NVL(UPPER(PACKAGE_NAME),'~'), UPPER(OBJECT_NAME))
+SELECT W.SHT_NM, W.API_ID, W.API_URL,
+       NVL(PM.PROC_M_CNT,0) AS PROC_M_CNT, NVL(AG.ARG_CNT,0) AS ARG_CNT,
+       CASE WHEN NVL(AG.ARG_CNT,0)=0 OR NVL(PM.PROC_M_CNT,0)=0
+                 OR PM.PROC_M_CNT <> AG.ARG_CNT THEN 'FAIL' ELSE 'PASS' END AS RESULT
+  FROM WIRED W
+  LEFT JOIN PM ON PM.PROC_NM_U = W.API_URL_U
+  LEFT JOIN AG ON AG.PKG_U = W.PKG_U AND AG.OBJ_U = W.OBJ_U
+ ORDER BY W.SHT_NM;
+-- 사내 실측 기대치 (2026-08-20):
+--   bizPlanSpreadTitle    PKG_DMF0051.P_DMF0051_GET_SPREAD_TITLE                 9 /  9  PASS
+--   bizPlanWaterfall      PKG_DMF0051.P_DMF0051_GET_DM_PLN_BIZ_PLAN_WATERFALL   22 / 22  PASS
+--   mktFcstSpreadTitle    PKG_DMF0035.P_DMF0035_GET_SPREAD_TITLE                 7 /  7  PASS
+--   mktFcstWaterfall      PKG_DMF0035.P_DMF0035_GET_MKT_FCST_WATERFALL          25 / 25  PASS
+--   salesPlanSpreadTitle  PKG_DMF0022.P_DMF0022_GET_SPREAD_TITLE                 9 /  9  PASS
+--   salesPlanWaterfall    PKG_DMF0022.P_DMF0022_GET_DM_PLN_SALES_PLAN_WATERFALL 25 / 25  PASS  ⚠ 24 미포함(DMF0022 소관)
+--   version               DMF0073_GET_VERSION_SALESPRICE                         9 /  9  PASS  ⚠ 클라우드 ARG=0 결손
+--   versionWf             PKG_SCM0002.P_SCM0002_GET_VERSIONBYWATERFALLPOPUP      8 /  8  PASS
+
+-- ── V9. 런타임 스모크 (수동 — 화면에서 실행) ──────────────────────────────────
+--   ① 로그인 → Demand > Demand_Waterfall > Demand Plan Waterfall
+--   ② Waterfall Type=MKT FCST / Div 선택 / 기간 기본값 / Bucket=MONTHLY → Search
+--      → OLAP 그리드에 행 축 + 기간 컬럼 표시. 응답 4~10초 이내(튜닝 반영 시).
+--        141초대면 13_PKG_DMF0035_BODY.sql 미적용 (V3-1 재확인).
+--   ③ Waterfall Type=SALES PLAN → Ver. 돋보기 → Version 팝업(Day/Week/Manual) → 선택 → Search
+--      → 0행이면 15_PKG_DMF0022_BODY.sql 미적용/구세대 (V3-2 재확인).
+--   ④ Waterfall Type=BIZ PLAN → Ver. 선택 → Search  (⚠ 실화면 확인 미완 — README 미결 참조)
+--   ⑤ Grid Layout 버튼 → PivotPanel/Subtotal 드롭다운 동작
+--   ⑥ SubTitle Excel → DemandPlanWaterfall.xlsx 저장
+
+PROMPT === V11. ⭐⭐ 메뉴 행 + 권한 뷰 (2026-08-20 실사고 — 전 TYPE 0행의 실제 원인 축) ===
+-- [배경] 클라우드에서 3 TYPE 모두 0행. 데이터·메타·PROC_M·PKG·캘린더 전부 정상이었는데도 0행이었고,
+--   원인은 **SCM_ADM_MNU_M 에 DMF0035 행 자체가 없었던 것**이다.
+--   PKG_DMF0035/0022/0051 은 셋 다 아래 조인을 갖는다(= 3 TYPE 동시 사망의 단일 지점):
+--       INNER JOIN SCM_ADM_USER_MNU_EDIT_AUTH_V EDY
+--          ON EDY.USER_ID=<로그인> AND EDY.MNU_ID='DMF0035' AND EDY.UNIT_ID=A.DIVISION_ID
+--   그 뷰는 `JOIN SCM_ADM_MNU_M MNU ON MNU.UNIT_TP_CD = AUTH.UNIT_TP_CD ... WHERE MNU.USE_YN='Y'` 이므로
+--   **메뉴 행이 없거나 UNIT_TP_CD<>'D' 또는 USE_YN<>'Y' 이면 뷰가 0행 → 조회 결과도 0행**이 된다.
+--   ⚠ 오류가 나지 않고 **조용히 0행**이라 배포 성공으로 보인다 — 그래서 기계 검증이 필요하다.
+PROMPT --- V11a. 메뉴 행 실존·속성 (기대 1행 / UNIT_TP_CD='D' / USE_YN='Y') ---
+SELECT COUNT(*) CNT, NVL(MAX(UNIT_TP_CD),'-') UNIT_TP_CD, NVL(MAX(USE_YN),'-') USE_YN, CASE WHEN COUNT(*) = 0 THEN '*** FAIL - menu row missing -> auth view 0 -> all types 0 rows ***' WHEN MAX(UNIT_TP_CD) <> 'D' OR MAX(USE_YN) <> 'Y' THEN '*** FAIL - UNIT_TP_CD/USE_YN mismatch ***' ELSE 'PASS' END VERDICT FROM SCM_MGR.SCM_ADM_MNU_M WHERE MNU_ID = 'DMF0035';
+
+PROMPT --- V11b. 권한 뷰 반환 행 (조회 예정 계정 기준 · 0행이면 조회도 0행) ---
+--  ⚠ USER 리터럴을 실제 로그인 계정으로 바꿔 실행할 것.
+SELECT COUNT(*) AUTH_ROWS,
+       CASE WHEN COUNT(*) = 0 THEN '*** FAIL — 이 계정은 DMF0035 조회 시 항상 0행 ***' ELSE 'PASS' END VERDICT
+  FROM SCM_MGR.SCM_ADM_USER_MNU_EDIT_AUTH_V
+ WHERE MNU_ID = 'DMF0035' AND USER_ID = 'minyonglee1';
+PROMPT === V12. 부분적용 잔여 갭 적출 (2026-08-20 실측 갭: MSG 54/66, GRANT 4/8, SYNONYM 4/8) ===
+PROMPT --- V12a. MSG 누락 코드 (23_MSG_LBL_MNU_SYNC 재적용 대상) ---
+SELECT MSG_ID, COUNT(*) LANG_CNT FROM SCM_MGR.SCM_ADM_MSG_M WHERE MSG_ID IN ('MNU00691') GROUP BY MSG_ID;
+PROMPT --- V12b. GRANT 현황 (기대 8 = 4 PKG x SCMD_APP/SCMP_APP, DMF0073 포함 시 10) ---
+SELECT GRANTEE, TABLE_NAME, PRIVILEGE FROM DBA_TAB_PRIVS WHERE OWNER='SCM_MGR' AND TABLE_NAME IN ('PKG_DMF0035','PKG_DMF0022','PKG_DMF0051','PKG_SCM0002','DMF0073_GET_VERSION_SALESPRICE') ORDER BY TABLE_NAME, GRANTEE;
+PROMPT --- V12c. SYNONYM 현황 (동일 기대) ---
+SELECT OWNER, SYNONYM_NAME, TABLE_NAME FROM DBA_SYNONYMS WHERE TABLE_OWNER='SCM_MGR' AND TABLE_NAME IN ('PKG_DMF0035','PKG_DMF0022','PKG_DMF0051','PKG_SCM0002','DMF0073_GET_VERSION_SALESPRICE') ORDER BY TABLE_NAME, OWNER;
+PROMPT === V13. DS2 표준 (클라우드 optimizer_dynamic_sampling=0 방어) — 3본 각 1건 기대 ===
+-- 2026-08-20 실사고: 클라우드 ODS=0 + 통계 없는 GTT(GT_DM35_SEL_MEASURE / GT_DM35_VERSION) 조인 →
+--   카디널리티 1 추정 → NL 로 51M 표를 행 단위 조회(cell single block read) → 1,302초/회.
+--   DMF0044/0049 에는 [E20260812-DS2] 로 이미 표준 적용돼 있었으나 DMF0035 계열 3본에만 누락.
+SELECT NAME, SUM(CASE WHEN TEXT LIKE '%E20260820-DS2%' THEN 1 ELSE 0 END) DS2_CNT,
+       CASE WHEN SUM(CASE WHEN TEXT LIKE '%E20260820-DS2%' THEN 1 ELSE 0 END) >= 1 THEN 'PASS' ELSE '*** FAIL - DS2 미적용 ***' END VERDICT
+  FROM ALL_SOURCE WHERE OWNER='SCM_MGR' AND TYPE='PACKAGE BODY'
+   AND NAME IN ('PKG_DMF0035','PKG_DMF0022','PKG_DMF0051') GROUP BY NAME ORDER BY 1;
+PROMPT --- V13b. 세션 파라미터 (참고 — 0 이면 DS2 가 반드시 필요하다) ---
+SELECT NAME, VALUE FROM V$PARAMETER WHERE NAME='optimizer_dynamic_sampling';

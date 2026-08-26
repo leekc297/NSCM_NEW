@@ -1,0 +1,177 @@
+﻿
+==============================================================================================================
+SQL_ID 4cj6s5jx44ydb
+==============================================================================================================
+INSERT INTO SCM_MGR.GT_DM51_SCM_CITY (DIVISION_ID, SOLDTO_CUSTOMER, END_CUSTOMER, DEPT_ID, SCM_SITE_ID, VMI_YN, VALID_YN, CITY_NAME, COUNTRY_NAME) SELECT S.DIVISION_ID , S.SOLDTO_CUSTOMER , S.END_CUSTOMER , S.DEPT_ID , S.SCM_SITE_ID , S.VMI_YN , S.VALID_YN , S.CITY_NAME , S.COUNTRY_NAME FROM SCM_MGR.DM_PLN_BP_FCST A LEFT JOIN (SELECT X.DIVISION_ID , X.SOLDTO_CUSTOMER , X.END_CUSTOMER , X.DEPT_ID , X.SCM_SITE_ID , X.VMI_YN , X.VALID_YN , Y.CITY_NAME , Z.COUNTRY_NAME FROM SCM_MGR.SCM_MST_SITE X , SCM_MGR.SCM_MST_CITY Y , SCM_MGR.SCM_MST_COUNTRY Z WHERE X.CITY = Y.CITY AND X.COUNTRY = Z.COUNTRY ) S ON A.DIVISION_ID = S.DIVISION_ID AND A.SCM_SITE_ID = S.SCM_SITE_ID WHERE A.DIVISION_ID = :B1 
+--------------------------------------------------------------------------------------------------------------
+SQL_ID  4cj6s5jx44ydb, child number 0
+-------------------------------------
+INSERT INTO SCM_MGR.GT_DM51_SCM_CITY (DIVISION_ID, SOLDTO_CUSTOMER, 
+END_CUSTOMER, DEPT_ID, SCM_SITE_ID, VMI_YN, VALID_YN, CITY_NAME, 
+COUNTRY_NAME) SELECT S.DIVISION_ID , S.SOLDTO_CUSTOMER , S.END_CUSTOMER 
+, S.DEPT_ID , S.SCM_SITE_ID , S.VMI_YN , S.VALID_YN , S.CITY_NAME , 
+S.COUNTRY_NAME FROM SCM_MGR.DM_PLN_BP_FCST A LEFT JOIN (SELECT 
+X.DIVISION_ID , X.SOLDTO_CUSTOMER , X.END_CUSTOMER , X.DEPT_ID , 
+X.SCM_SITE_ID , X.VMI_YN , X.VALID_YN , Y.CITY_NAME , Z.COUNTRY_NAME 
+FROM SCM_MGR.SCM_MST_SITE X , SCM_MGR.SCM_MST_CITY Y , 
+SCM_MGR.SCM_MST_COUNTRY Z WHERE X.CITY = Y.CITY AND X.COUNTRY = 
+Z.COUNTRY ) S ON A.DIVISION_ID = S.DIVISION_ID AND A.SCM_SITE_ID = 
+S.SCM_SITE_ID WHERE A.DIVISION_ID = :B1
+ 
+Plan hash value: 223836651
+ 
+-----------------------------------------------------------------------------------------
+| Id  | Operation                | Name             | E-Rows |  OMem |  1Mem | Used-Mem |
+-----------------------------------------------------------------------------------------
+|   0 | INSERT STATEMENT         |                  |        |       |       |          |
+|   1 |  LOAD TABLE CONVENTIONAL | GT_DM51_SCM_CITY |        |       |       |          |
+|*  2 |   HASH JOIN RIGHT OUTER  |                  |   1283K|   966K|   966K| 1350K (0)|
+|   3 |    VIEW                  |                  |   1376 |       |       |          |
+|*  4 |     HASH JOIN            |                  |   1376 |  1538K|  1538K| 1446K (0)|
+|   5 |      TABLE ACCESS FULL   | SCM_MST_COUNTRY  |    249 |       |       |          |
+|*  6 |      HASH JOIN           |                  |   1379 |  1005K|  1005K| 1366K (0)|
+|*  7 |       TABLE ACCESS FULL  | SCM_MST_SITE     |   1386 |       |       |          |
+|   8 |       TABLE ACCESS FULL  | SCM_MST_CITY     |  89426 |       |       |          |
+|*  9 |    TABLE ACCESS FULL     | DM_PLN_BP_FCST   |   1283K|       |       |          |
+-----------------------------------------------------------------------------------------
+ 
+Outline Data
+-------------
+ 
+  /*+
+      BEGIN_OUTLINE_DATA
+      IGNORE_OPTIM_EMBEDDED_HINTS
+      OPTIMIZER_FEATURES_ENABLE('23.1.0')
+      DB_VERSION('23.1.0')
+      ALL_ROWS
+      OUTLINE_LEAF(@"SEL$2")
+      OUTLINE_LEAF(@"SEL$776AA54E")
+      MERGE(@"SEL$8812AA4E" >"SEL$E8571221")
+      OUTLINE_LEAF(@"INS$1")
+      OUTLINE(@"SEL$E8571221")
+      ANSI_REARCH(@"SEL$3")
+      OUTLINE(@"SEL$8812AA4E")
+      ANSI_REARCH(@"SEL$1")
+      OUTLINE(@"SEL$3")
+      OUTLINE(@"SEL$1")
+      LOAD_METHOD(@"INS$1" "GT_DM51_SCM_CITY"@"INS$1" CONVENTIONAL)
+      LOAD_TYPE(@"INS$1" "GT_DM51_SCM_CITY"@"INS$1" SERIAL)
+      FULL(@"INS$1" "GT_DM51_SCM_CITY"@"INS$1")
+      FULL(@"SEL$776AA54E" "A"@"SEL$1")
+      NO_ACCESS(@"SEL$776AA54E" "S"@"SEL$1")
+      LEADING(@"SEL$776AA54E" "A"@"SEL$1" "S"@"SEL$1")
+      USE_HASH(@"SEL$776AA54E" "S"@"SEL$1")
+      SWAP_JOIN_INPUTS(@"SEL$776AA54E" "S"@"SEL$1")
+      FULL(@"SEL$2" "X"@"SEL$2")
+      FULL(@"SEL$2" "Y"@"SEL$2")
+      FULL(@"SEL$2" "Z"@"SEL$2")
+      LEADING(@"SEL$2" "X"@"SEL$2" "Y"@"SEL$2" "Z"@"SEL$2")
+      USE_HASH(@"SEL$2" "Y"@"SEL$2")
+      USE_HASH(@"SEL$2" "Z"@"SEL$2")
+      SWAP_JOIN_INPUTS(@"SEL$2" "Z"@"SEL$2")
+      END_OUTLINE_DATA
+  */
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   2 - access("A"."DIVISION_ID"="S"."DIVISION_ID" AND 
+              "A"."SCM_SITE_ID"="S"."SCM_SITE_ID")
+   4 - access("X"."COUNTRY"="Z"."COUNTRY")
+   6 - access("X"."CITY"="Y"."CITY")
+   7 - filter("X"."DIVISION_ID"=:B1)
+   9 - filter("A"."DIVISION_ID"=:B1)
+ 
+Note
+-----
+   - this is an adaptive plan
+   - Warning: basic plan statistics not available. These are only collected when:
+       * hint 'gather_plan_statistics' is used for the statement or
+       * parameter 'statistics_level' is set to 'ALL', at session or system level
+ 
+SQL_ID  4cj6s5jx44ydb, child number 1
+-------------------------------------
+INSERT INTO SCM_MGR.GT_DM51_SCM_CITY (DIVISION_ID, SOLDTO_CUSTOMER, 
+END_CUSTOMER, DEPT_ID, SCM_SITE_ID, VMI_YN, VALID_YN, CITY_NAME, 
+COUNTRY_NAME) SELECT S.DIVISION_ID , S.SOLDTO_CUSTOMER , S.END_CUSTOMER 
+, S.DEPT_ID , S.SCM_SITE_ID , S.VMI_YN , S.VALID_YN , S.CITY_NAME , 
+S.COUNTRY_NAME FROM SCM_MGR.DM_PLN_BP_FCST A LEFT JOIN (SELECT 
+X.DIVISION_ID , X.SOLDTO_CUSTOMER , X.END_CUSTOMER , X.DEPT_ID , 
+X.SCM_SITE_ID , X.VMI_YN , X.VALID_YN , Y.CITY_NAME , Z.COUNTRY_NAME 
+FROM SCM_MGR.SCM_MST_SITE X , SCM_MGR.SCM_MST_CITY Y , 
+SCM_MGR.SCM_MST_COUNTRY Z WHERE X.CITY = Y.CITY AND X.COUNTRY = 
+Z.COUNTRY ) S ON A.DIVISION_ID = S.DIVISION_ID AND A.SCM_SITE_ID = 
+S.SCM_SITE_ID WHERE A.DIVISION_ID = :B1
+ 
+Plan hash value: 223836651
+ 
+-----------------------------------------------------------------------------------------
+| Id  | Operation                | Name             | E-Rows |  OMem |  1Mem | Used-Mem |
+-----------------------------------------------------------------------------------------
+|   0 | INSERT STATEMENT         |                  |        |       |       |          |
+|   1 |  LOAD TABLE CONVENTIONAL | GT_DM51_SCM_CITY |        |       |       |          |
+|*  2 |   HASH JOIN RIGHT OUTER  |                  |   1283K|   966K|   966K| 1386K (0)|
+|   3 |    VIEW                  |                  |   1376 |       |       |          |
+|*  4 |     HASH JOIN            |                  |   1376 |  1538K|  1538K| 1697K (0)|
+|   5 |      TABLE ACCESS FULL   | SCM_MST_COUNTRY  |    249 |       |       |          |
+|*  6 |      HASH JOIN           |                  |   1379 |  1005K|  1005K| 1364K (0)|
+|*  7 |       TABLE ACCESS FULL  | SCM_MST_SITE     |   1386 |       |       |          |
+|   8 |       TABLE ACCESS FULL  | SCM_MST_CITY     |  89426 |       |       |          |
+|*  9 |    TABLE ACCESS FULL     | DM_PLN_BP_FCST   |   1283K|       |       |          |
+-----------------------------------------------------------------------------------------
+ 
+Outline Data
+-------------
+ 
+  /*+
+      BEGIN_OUTLINE_DATA
+      IGNORE_OPTIM_EMBEDDED_HINTS
+      OPTIMIZER_FEATURES_ENABLE('23.1.0')
+      DB_VERSION('23.1.0')
+      ALL_ROWS
+      OUTLINE_LEAF(@"SEL$2")
+      OUTLINE_LEAF(@"SEL$776AA54E")
+      MERGE(@"SEL$8812AA4E" >"SEL$E8571221")
+      OUTLINE_LEAF(@"INS$1")
+      OUTLINE(@"SEL$E8571221")
+      ANSI_REARCH(@"SEL$3")
+      OUTLINE(@"SEL$8812AA4E")
+      ANSI_REARCH(@"SEL$1")
+      OUTLINE(@"SEL$3")
+      OUTLINE(@"SEL$1")
+      LOAD_METHOD(@"INS$1" "GT_DM51_SCM_CITY"@"INS$1" CONVENTIONAL)
+      LOAD_TYPE(@"INS$1" "GT_DM51_SCM_CITY"@"INS$1" SERIAL)
+      FULL(@"INS$1" "GT_DM51_SCM_CITY"@"INS$1")
+      FULL(@"SEL$776AA54E" "A"@"SEL$1")
+      NO_ACCESS(@"SEL$776AA54E" "S"@"SEL$1")
+      LEADING(@"SEL$776AA54E" "A"@"SEL$1" "S"@"SEL$1")
+      USE_HASH(@"SEL$776AA54E" "S"@"SEL$1")
+      SWAP_JOIN_INPUTS(@"SEL$776AA54E" "S"@"SEL$1")
+      FULL(@"SEL$2" "X"@"SEL$2")
+      FULL(@"SEL$2" "Y"@"SEL$2")
+      FULL(@"SEL$2" "Z"@"SEL$2")
+      LEADING(@"SEL$2" "X"@"SEL$2" "Y"@"SEL$2" "Z"@"SEL$2")
+      USE_HASH(@"SEL$2" "Y"@"SEL$2")
+      USE_HASH(@"SEL$2" "Z"@"SEL$2")
+      SWAP_JOIN_INPUTS(@"SEL$2" "Z"@"SEL$2")
+      END_OUTLINE_DATA
+  */
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   2 - access("A"."DIVISION_ID"="S"."DIVISION_ID" AND 
+              "A"."SCM_SITE_ID"="S"."SCM_SITE_ID")
+   4 - access("X"."COUNTRY"="Z"."COUNTRY")
+   6 - access("X"."CITY"="Y"."CITY")
+   7 - filter("X"."DIVISION_ID"=:B1)
+   9 - filter("A"."DIVISION_ID"=:B1)
+ 
+Note
+-----
+   - this is an adaptive plan
+   - Warning: basic plan statistics not available. These are only collected when:
+       * hint 'gather_plan_statistics' is used for the statement or
+       * parameter 'statistics_level' is set to 'ALL', at session or system level
+   - Global temporary table session private statistics used
+ 

@@ -24,6 +24,10 @@ export interface ColumnSettingFallback {
   key: string;
   header: string;
   width?: number;
+  /** DEFAULT_FLAG — 저장된 개인화가 없을 때의 기본 표시 여부. 미지정 = 표시. */
+  display?: boolean;
+  /** USER_SELECTABLE_FLAG — 사용자 표시/비표시 변경 가능 여부. false = 고정(좌우 이동 잠금). */
+  personalizable?: boolean;
 }
 
 export interface ColumnSettingRow {

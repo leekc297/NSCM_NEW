@@ -1,4 +1,3 @@
-import { TeamField } from 'features/master/src/components';
 import { useState } from 'react';
 
 import commonStyles from '@foundation/styles/common-styles.module.scss';
@@ -9,11 +8,12 @@ import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 
 import {
+  CascadeFields,
   ItemByDivisionModal,
   OwnerByDivisionModal,
   ProjectByDivisionModal,
 } from '../../../components';
-import { SHEET_INDEX } from '../sales-site-project-model.constants';
+import { SEARCH_CASCADE_COMBO_ID, SHEET_INDEX } from '../sales-site-project-model.constants';
 import { useSalesSiteProjectModelStore } from '../useSalesSiteProjectModelStore';
 
 interface SalesSiteProjectModelFormProps {
@@ -33,9 +33,9 @@ export const SalesSiteProjectModelForm = ({
   const setOpenPurchaseGrid = useSalesSiteProjectModelStore(state => state.setOpenPurchaseGrid);
   const setSearchParams = useSalesSiteProjectModelStore(state => state.setSearchParams);
 
-  const [divisions, endCustomers, salesSites, yesOrNo] = useTabComboQueries({
-    filters: ['MyDivision', 'EndCustomer', 'SalesSite', 'YesOrNo'],
-  });
+  // Div / Team / End Customer / Sales Site 콤보는 CascadeFields 가 조인 콤보 1건으로 직접 조회한다.
+  // 여기서는 이 화면에만 있는 Active 콤보만 받는다.
+  const [yesOrNo] = useTabComboQueries({ filters: ['YesOrNo'] });
 
   const [openProjectByDivisionModal, setOpenProjectByDivisionModal] = useState(false);
   const [openItemByDivisionModal, setOpenItemByDivisionModal] = useState(false);
@@ -61,113 +61,39 @@ export const SalesSiteProjectModelForm = ({
         onSearch={onSubmit}
         conditions={
           <>
-            <Grid size={3}>
-              <FormItem
-                label={t('LBL00001', '_Div.')}
-                labelAlign='right'
-                required
-                className={commonStyles.formItem}
-                render={() => (
-                  <CustomDropdown
-                    value={searchParams.divisionId}
-                    options={divisions?.map(item => ({ label: item.NAME, value: item.CODE })) ?? []}
-                    onChange={(_, option) => {
-                      setSearchParams({
-                        divisionId: option,
-                        deptId: 'ALL',
-                        endCustomer: 'ALL',
-                        salesSite: 'ALL',
-                      });
-                    }}
-                  />
-                )}
-              />
-            </Grid>
-            <TeamField
+            {/* Div - Team - End Customer - Sales Site 는 조인 콤보 1건(CascadeFields)에서 뽑는다.
+                단계 옵션은 상위 선택으로 좁힌 행에서 나오고, 하위 값 초기화도 컴포넌트가 한다.
+                여기서는 이 화면 고유 항목(PJT / Model / Owner / Active)만 얹는다. */}
+            <CascadeFields
+              comboId={SEARCH_CASCADE_COMBO_ID}
               gridSize={3}
-              value={
-                searchParams.deptId && searchParams.deptId !== 'ALL'
-                  ? searchParams.deptId.split(',').filter(Boolean)
-                  : []
-              }
-              onChange={v =>
-                setSearchParams({
-                  deptId: v.length > 0 ? v.join(',') : 'ALL',
-                  endCustomer: 'ALL',
-                  salesSite: 'ALL',
-                })
-              }
-              division={searchParams.divisionId}
+              // 배열 순서가 곧 cascade 순서다. 마지막 단계(salesSite)가 콤보의 CODE / NAME 을 읽는다.
+              // field 는 스토어 필드명 — value 로 넘긴 searchParams 의 키와 대조돼 오타가 컴파일에서 잡힌다.
+              // 인라인 배열이지만 CascadeFields 가 값 기준 서명으로 memo 하므로 매 렌더 재계산되지 않는다.
+              levels={[
+                { key: 'division', field: 'divisionId' },
+                { key: 'team', field: 'deptId' },
+                { key: 'endCustomer', field: 'endCustomer' },
+                { key: 'salesSite', field: 'salesSite' },
+              ]}
+              value={searchParams}
+              onChange={(next, changed) => {
+                // Div / Team 변경은 화면 고유 조회조건까지 전부 초기화한다 — 종전 인라인 동작 그대로.
+                // End Customer / Sales Site 는 cascade 하위만 정리되면 되므로 next 만 반영한다.
+                if (changed === 'division' || changed === 'team') {
+                  setSearchParams({
+                    ...next,
+                    projectCode: '',
+                    itemId: '',
+                    owner: '',
+                    activeFlag: 'ALL',
+                  });
+                  setOpenPurchaseGrid(true);
+                  return;
+                }
+                setSearchParams(next);
+              }}
             />
-            <Grid size={3}>
-              <FormItem
-                label={t('LBL00080', '_End Customer')}
-                labelAlign='right'
-                className={commonStyles.formItem}
-                render={() => (
-                  <CustomDropdown
-                    multiple
-                    allOption
-                    useClearIcon
-                    limitTags={1}
-                    value={searchParams.endCustomer}
-                    options={
-                      [
-                        ...new Map(
-                          endCustomers
-                            ?.filter(
-                              item =>
-                                item.DIVISION_ID === searchParams.divisionId &&
-                                (searchParams.deptId === 'ALL' ||
-                                  searchParams.deptId.split(',').includes(item.DEPT_ID))
-                            )
-                            .map(item => [`${item.DIVISION_ID}|${item.CODE}`, item])
-                        ).values(),
-                      ].map(item => ({ label: item.NAME, value: item.CODE })) ?? []
-                    }
-                    onChange={(_, option) => {
-                      setSearchParams({
-                        endCustomer: option,
-                        salesSite: 'ALL',
-                      });
-                    }}
-                  />
-                )}
-              />
-            </Grid>
-            <Grid size={3}>
-              <FormItem
-                label={t('LBL00011', '_Sales Site')}
-                labelAlign='right'
-                className={commonStyles.formItem}
-                render={() => (
-                  <CustomDropdown
-                    multiple
-                    allOption
-                    useClearIcon
-                    limitTags={1}
-                    value={searchParams.salesSite}
-                    options={[
-                      ...new Map(
-                        (salesSites ?? [])
-                          .filter(
-                            item =>
-                              item.DIVISION_ID === searchParams.divisionId &&
-                              (searchParams.deptId === 'ALL' ||
-                                searchParams.deptId.split(',').includes(item.DEPT_ID))
-                          )
-                          .map(item => [`${item.DIVISION_ID}|${item.CODE}`, item])
-                      ).values(),
-                    ].map(item => ({ label: item.NAME, value: item.CODE }))}
-                    onChange={(_, option) => {
-                      setSearchParams({
-                        salesSite: option,
-                      });
-                    }}
-                  />
-                )}
-              />
-            </Grid>
             {searchParams.divisionId !== '40' && (
               <Grid size={3}>
                 <FormItem

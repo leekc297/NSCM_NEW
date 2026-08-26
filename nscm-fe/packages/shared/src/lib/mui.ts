@@ -15,4 +15,5 @@ export {
   useTheme,
   InputAdornment,
   Box,
+  ThemeProvider,
 } from '@mui/material';

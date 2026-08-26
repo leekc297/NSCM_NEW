@@ -129,8 +129,13 @@ interface Action {
 }
 
 const yyyymmdd = (d: Date) => d.toISOString().slice(0, 10).replace(/-/g, '');
-const today = yyyymmdd(new Date());
-const sixMonthsAhead = yyyymmdd(new Date(Date.now() + 180 * 24 * 3600 * 1000));
+// Period 조회조건 초기값 — dayRange(PR_GET_DAY_RANGE) 응답 도착 전까지의 자리값.
+//   Div/Team 변경 시에는 리셋하지 않는다 (2026-08-20 사용자 결정 — 사용자가 지정한 기간 유지).
+const MKT_FCST_INIT_PERIOD = {
+  start: yyyymmdd(new Date()),
+  end: yyyymmdd(new Date(Date.now() + 180 * 24 * 3600 * 1000)),
+};
+const { start: today, end: sixMonthsAhead } = MKT_FCST_INIT_PERIOD;
 
 const initSearch: SearchCondition = {
   divisionId: useSessionStore.getState().session.div ?? DIVISION.MOBILITY,

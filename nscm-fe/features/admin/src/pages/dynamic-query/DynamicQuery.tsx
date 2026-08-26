@@ -159,8 +159,8 @@ export const DynamicQuery = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   const buildParamLiteral = (rawValue: string, operationId: string): string => {
     const v = String(rawValue ?? '').trim();
-    if (!v) return "''";
-    const escape = (s: string) => s.replace(/'/g, "''");
+    if (!v) return '\'\'';
+    const escape = (s: string) => s.replace(/'/g, '\'\'');
     const op = (operationId || '=').toUpperCase();
     if (op === 'LIKE') return `'%${escape(v)}%'`;
     if (op === 'IN') {
@@ -170,7 +170,7 @@ export const DynamicQuery = ({ tabId, title }: PageProps<MENU_ID>) => {
         .filter(x => x !== '')
         .map(x => `'${escape(x)}'`)
         .join(', ');
-      return items ? `(${items})` : "('')";
+      return items ? `(${items})` : '(\'\')';
     }
     return `'${escape(v)}'`;
   };
@@ -575,12 +575,12 @@ export const DynamicQuery = ({ tabId, title }: PageProps<MENU_ID>) => {
                   <Panel defaultSize={40} minSize={15} style={{ overflow: 'hidden' }}>
                     <div className={styles.leftSection}>
                       <TitleArea isSubTitle title={t('LBL00725', 'Columns')} depth='h4' />
-                      <div className={styles.gridFill}>
-                        <DynamicQueryColumnsGrid
-                          gridRef={columnsGridRef}
-                          data={columnsData?.o_rc1 ?? []}
-                        />
-                      </div>
+                      {/* <div className={styles.gridFill}> */}
+                      <DynamicQueryColumnsGrid
+                        gridRef={columnsGridRef}
+                        data={columnsData?.o_rc1 ?? []}
+                      />
+                      {/* </div> */}
                     </div>
                   </Panel>
 
@@ -589,12 +589,12 @@ export const DynamicQuery = ({ tabId, title }: PageProps<MENU_ID>) => {
                   <Panel defaultSize={20} minSize={10} style={{ overflow: 'hidden' }}>
                     <div className={styles.leftSection}>
                       <TitleArea isSubTitle title={t('LBL00726', 'Condition')} depth='h4' />
-                      <div className={styles.gridFill}>
-                        <DynamicQueryParametersGrid
-                          gridRef={parametersGridRef}
-                          data={parametersData?.o_rc1 ?? []}
-                        />
-                      </div>
+                      {/* <div className={styles.gridFill}> */}
+                      <DynamicQueryParametersGrid
+                        gridRef={parametersGridRef}
+                        data={parametersData?.o_rc1 ?? []}
+                      />
+                      {/* </div> */}
                     </div>
                   </Panel>
 
@@ -603,9 +603,9 @@ export const DynamicQuery = ({ tabId, title }: PageProps<MENU_ID>) => {
                   <Panel defaultSize={40} minSize={15} style={{ overflow: 'hidden' }}>
                     <div className={styles.leftSection}>
                       <TitleArea isSubTitle title={t('LBL00727', 'SQL')} depth='h4' />
-                      <div className={styles.gridFill}>
-                        <DynamicQuerySQLViewer />
-                      </div>
+                      {/* <div className={styles.gridFill}> */}
+                      <DynamicQuerySQLViewer />
+                      {/* </div>   */}
                     </div>
                   </Panel>
                 </PanelGroup>

@@ -1,0 +1,204 @@
+{
+  "ui": "DMF0004",
+  "ui_name_asis": "Sales Site",
+  "asis_file": "asis_stripped/DMF0004.cs",
+  "tobe_form": "nscm-fe/features/master/src/pages/sales-site/components/SalesSiteForm.tsx",
+  "conditions": [
+    {
+      "cond": "Div.",
+      "asis": {
+        "label": "Division",
+        "control": "콤보단일(ComboBox DropDownList)",
+        "combo": "GetDMInnerTable('MyDivision')",
+        "params": "GROUP_ID(NowGroupID), USER_ID",
+        "filter": "BigFilter Tables[0] — SCM_MST_DIVISION, ATTRIBUTE3<>'EE', VALID_YN='Y', TB_FX_UserGroupAuthExtention(GroupID/UserID, AuthType='D', JV Planner='J') 사용자 권한 division",
+        "cascade": "변경 시 Team→EndCustomer→SalesSite→SoldToCustomer 순 재바인딩 + 메인 그리드 clear(RowCount=0)",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "Y(빈값 조회 시 MSG00097)",
+        "default": "권한 division 목록 첫 값(ALL 미부여, setListBox false)",
+        "evidence": ["DMF0004.cs:L281-285", "DMF0004.cs:L326-329", "DMF0004.cs:L2138-2193", "DMF0004.cs:L788-793"]
+      },
+      "tobe": {
+        "label": "Div. (LBL00001)",
+        "control": "콤보단일(CustomDropdown)",
+        "combo": "MyDivision (CMBO)",
+        "params": "@sesUserId(세션자동)",
+        "filter": "SCM_MST_DIVISION + SCM_ADM_USER_GR_UNIT_AUTH_MPG_M UNIT_TP_CD='D' USE_YN='Y' 사용자 권한, ATTRIBUTE3<>'EE', VALID_YN='Y'",
+        "cascade": "변경 시 endCustomer/soldToCustomer/salesSite='ALL' reset + fetchStaticColumns + filters 초기화(store)",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "Y(FormItem required)",
+        "default": "session.div ?? '40'",
+        "evidence": ["SalesSiteForm.tsx:L43-64", "useSalesSiteStore.ts:L40-46", "useSalesSiteStore.ts:L82-90"]
+      }
+    },
+    {
+      "cond": "Team",
+      "asis": {
+        "label": "Team",
+        "control": "콤보다중(UsrCheckedList)",
+        "combo": "GetDMInnerTable('UserTeamByDivision')",
+        "params": "GROUP_ID, USER_ID, DIVISION_ID(선택 division)",
+        "filter": "BigFilter Tables[1] 'TeambyDivision' — SCM_MST_SITE_ITEM owner 사용자의 부서(SSO_USER/DEPT_INFO) + 권한 division, DIVISION_ID 클라 필터 +ALL행",
+        "cascade": "변경 시 EndCustomer→SalesSite→SoldToCustomer 재바인딩 (clbTeam_SelectedIndexChanged)",
+        "div40": "라벨 Enabled=false + 조회 후 Visibility=Never(SetGridHeader)", "div81": "사용", "div82": "사용",
+        "required": "N",
+        "default": "ALL",
+        "evidence": ["DMF0004.cs:L286-292", "DMF0004.cs:L332-335", "DMF0004.cs:L351-362", "DMF0004.cs:L2215-2216", "DMF0004.cs:L2229-2250"]
+      },
+      "tobe": null
+    },
+    {
+      "cond": "End Customer",
+      "asis": {
+        "label": "End Customer",
+        "control": "콤보다중(UsrCheckedList)",
+        "combo": "GetDMInnerTable('EndCustomerByDivision')",
+        "params": "GROUP_ID, USER_ID, DIVISION_ID, DEPT_ID(선택 Team)",
+        "filter": "BigFilter Tables[2] — 40: SITE_ITEM owner-dept PROJECT_CODE + lookup END_CUSTOMER(40) UNION / 비40: SCM_MST_SITE END_CUSTOMER + lookup 명칭. DIVISION_ID/DEPT_ID 클라 필터 +ALL행",
+        "cascade": "변경 시 SalesSite 재바인딩 (clbEndCustomer_SelectedIndexChanged)",
+        "div40": "라벨 Enabled=false", "div81": "사용", "div82": "사용",
+        "required": "N",
+        "default": "ALL",
+        "evidence": ["DMF0004.cs:L293-300", "DMF0004.cs:L339-342", "DMF0004.cs:L2252-2262"]
+      },
+      "tobe": {
+        "label": "End Customer (LBL00080)",
+        "control": "콤보다중(CustomDropdown multiple+allOption)",
+        "combo": "EndCustomer (CMBO)",
+        "params": "@sesUserId(세션자동) — divisionId는 클라 필터",
+        "filter": "SCM_MST_SITE(+SITE_ITEM: 40=PROJECT_CODE)+LOOKUP END_CUSTOMER 명칭. FE에서 DIVISION_ID===division 필터 + Map dedup",
+        "cascade": "없음(자체). Division 변경 시 'ALL' reset",
+        "div40": "disabled(divisionId==='40')", "div81": "사용", "div82": "사용",
+        "required": "Y(FormItem required — 값은 ALL 허용)",
+        "default": "ALL",
+        "evidence": ["SalesSiteForm.tsx:L65-96"]
+      }
+    },
+    {
+      "cond": "Sold Customer",
+      "asis": {
+        "label": "Sold-To Customer",
+        "control": "콤보다중(UsrCheckedList)",
+        "combo": "SP DM.DMF0004_GET_SOLDTO_CUSTOMER_DATA",
+        "params": "p_division_id(콤보값), p_dept_id(Team 선택값)",
+        "filter": "SP 내부 — division/팀별 Sold-To 고객 목록 +ALL행(setListBox)",
+        "cascade": "변경 시 Data.SiteByEndCustomerSold 로 SalesSite 재바인딩 (clbSoldToCustomer_SelectedIndexChanged)",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N",
+        "default": "ALL",
+        "evidence": ["DMF0004.cs:L365-366", "DMF0004.cs:L2264-2271", "DMF0004.cs:L2748-2761"]
+      },
+      "tobe": {
+        "label": "Sold-To Customer (LBL00081)",
+        "control": "콤보다중(CustomDropdown multiple+allOption)",
+        "combo": "SoldCustomer (CMBO)",
+        "params": "없음(토큰 無)",
+        "filter": "SCM_ADM_LOOKUP_MASTER_DETAIL LOOKUP_TYPE='SOLD_CUSTOMER'. FE에서 DIVISION_ID===division 필터",
+        "cascade": "없음. Division 변경 시 'ALL' reset",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N",
+        "default": "ALL",
+        "evidence": ["SalesSiteForm.tsx:L97-127"]
+      }
+    },
+    {
+      "cond": "Sales Site",
+      "asis": {
+        "label": "Sales Site",
+        "control": "콤보다중(UsrCheckedList)",
+        "combo": "81*/82: GetDMInnerTable('UserSiteByEndCustomer') / 40: GetDMInnerTable('ScmSitebyEndCustomer40')",
+        "params": "GROUP_ID, USER_ID, DIVISION_ID, DEPT_ID(''), END_CUSTOMER",
+        "filter": "Tables[4] SiteByEndCustomer(비40+40 union, SITE_TYPE='SALES', 권한 division; DEPT_ID는 40에서만 유효—DataService L3891) / Tables[8] 40 SALES 사이트 전체. +ALL행",
+        "cascade": "없음(수신측)",
+        "div40": "ScmSitebyEndCustomer40 경로", "div81": "UserSiteByEndCustomer 경로", "div82": "UserSiteByEndCustomer 경로",
+        "required": "N",
+        "default": "ALL",
+        "evidence": ["DMF0004.cs:L301-315", "DMF0004.cs:L344-363", "DataService.cs:L3883-3935"]
+      },
+      "tobe": {
+        "label": "Sales Site (LBL00011)",
+        "control": "콤보다중(CustomDropdown multiple+allOption)",
+        "combo": "SalesSite (CMBO)",
+        "params": "@sesUserId(세션자동)",
+        "filter": "SCM_MST_SITE SITE_TYPE='SALES' + SCM_ADM_USER_GR_UNIT_AUTH_MPG_M(UNIT_TP_CD='D') 권한 + VALID_YN='Y'. FE에서 DIVISION_ID 필터 + (DIVISION|END_CUSTOMER|CODE) dedup",
+        "cascade": "없음. Division 변경 시 'ALL' reset",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N",
+        "default": "ALL",
+        "evidence": ["SalesSiteForm.tsx:L128-160"]
+      }
+    },
+    {
+      "cond": "Active(YesOrNo)",
+      "asis": {
+        "label": "Active",
+        "control": "콤보단일(ComboBox DropDownList)",
+        "combo": "Data.Common(Data.Type.YesOrNo)",
+        "params": "isAddALL=false(BLL), setListBox true=ALL행 삽입",
+        "filter": "BizService CommonData 'YesOrNo' — Y/N 고정 목록 (UP_FX_GetCommonDataList 미경유) + ALL행(클라)",
+        "cascade": "없음",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N",
+        "default": "ALL(목록 0번 자동선택)",
+        "evidence": ["DMF0004.cs:L67", "DMF0004.cs:L370", "DMF0004.cs:L784", "Data.cs:L295-297"]
+      },
+      "tobe": {
+        "label": "Active (LBL00007)",
+        "control": "콤보단일(CustomDropdown allOption, isInput=false)",
+        "combo": "YesOrNo (CMBO)",
+        "params": "없음(토큰 無)",
+        "filter": "DUAL — 'Y'/'N' 2행 + allOption 'ALL'",
+        "cascade": "없음",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N",
+        "default": "ALL",
+        "evidence": ["SalesSiteForm.tsx:L161-186", "useSalesSiteStore.ts:L44"]
+      }
+    },
+    {
+      "cond": "Detail",
+      "asis": {
+        "label": "Detail",
+        "control": "체크박스(chkDetail)",
+        "combo": "없음",
+        "params": "없음",
+        "filter": "없음 — 하단 상세(spdSub, splitContainer Panel2) 표시/접기",
+        "cascade": "체크 해제 시 Panel2Collapsed=true",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N",
+        "default": "checked(true)",
+        "evidence": ["DMF0004.cs:L378", "DMF0004.cs:L2692-2695"]
+      },
+      "tobe": {
+        "label": "Detail (LBL00316)",
+        "control": "체크박스(Checkbox+Label)",
+        "combo": "없음",
+        "params": "없음",
+        "filter": "없음 — openDetailGrid 토글, 해제 시 activeTab=SITE 복귀",
+        "cascade": "없음",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N",
+        "default": "미확인(부모 SalesSite.tsx state — Form은 prop 수신)",
+        "evidence": ["SalesSiteForm.tsx:L187-202"]
+      }
+    }
+  ],
+  "cascade_chains": [
+    "ASIS: Division→Team→EndCustomer→SalesSite(+SoldToCustomer) 순차 재바인딩 (L2138-2193 / L2229-2250 / L2252-2262), SoldToCustomer→SalesSite(SiteByEndCustomerSold L2264-2271)",
+    "TOBE: Division 변경 → endCustomer/soldToCustomer/salesSite 일괄 'ALL' + staticColumns 재조회 + filters clear (Form L53-60, store L82-90). Team 조건 자체 부재"
+  ],
+  "excluded": ["그리드 셀 콤보(EndCustomer/SoldTo/Company/SalesSite 등 SetCellTypeCombo 다수 — L1891-1903, L2282-2300)", "그리드 셀 팝업(SoldTo/City/Team/Customer/Storage 팝업 — L2046-2133, L2303-2372)", "기능 버튼(Search/Save/Excel 등 공통버튼)"],
+  "crosscheck": {
+    "catalog_screen": "Sales Site",
+    "catalog_asis_rows": 7, "catalog_tobe_rows": 6,
+    "my_asis_count": 7, "my_tobe_count": 6,
+    "reason": "AS-IS 7=7 일치. TO-BE 6=6 이나 구성 상이: 카탈로그는 Team 존치+Detail '공통기능화 검토'로 제외했으나, 실코드는 Team 미구현(조건 부재)·Detail 은 구현됨"
+  },
+  "notes": [
+    "AS-IS Team 조건이 TO-BE 에 없음 — Form/store 에 deptId 파라미터 자체가 없음(SP p_dept_id 전달 경로도 store filters 에 없음). 카탈로그(변경 X)와 불일치",
+    "Sold Customer 는 표준명 목록의 'Sold Customer' 로 명명 (카탈로그 표기 'Sold-To Customer')",
+    "AS-IS usrConditionPanel2.Visible=false (L377) — 2단 조건 패널 미사용",
+    "AS-IS 조회 SP DM.DMF0004_GET_SALES_SITE_DATA 파라미터: p_division_id/p_dept_id/p_end_customer/p_scm_site_id/p_active_flag/p_soldto_customer/p_user_dept_id (L801-821)",
+    "TO-BE store 는 division 40 일 때만 SITE 시트 컬럼 fetch 에 divisionId='40' 전달 (useSalesSiteStore.ts L91-106)"
+  ]
+}

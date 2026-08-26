@@ -1,0 +1,289 @@
+{
+  "ui": "DMF0074",
+  "ui_name_asis": "Metal Link Price",
+  "asis_file": "asis_stripped/DMF0074.cs",
+  "tobe_form": "nscm-fe/features/demand/src/pages/metal-link-price/components/MetalLinkPriceForm.tsx",
+  "conditions": [
+    {
+      "cond": "Div.",
+      "asis": {
+        "label": "Division",
+        "control": "콤보단일(UsrCombo)",
+        "combo": "GetDMInnerTable('MyDivision')",
+        "params": "GROUP_ID(NowGroupID), USER_ID",
+        "filter": "BigFilter Tables[0] — TB_FX_UserGroupAuthExtention AuthType='D'(JV Planner='J') 권한 division + ATTRIBUTE3<>'EE' + VALID_YN='Y'",
+        "cascade": "SIC(L501) → Team/EndCustomer/BizType(무배선)/SalesSite 재조회, 81* 이면 PlantSite 재조회, Project/Item/Version 텍스트 clear(L572-574), 82=PlantSite 비활성+clear, 비81/82=Project·PlantSite 비활성+clear",
+        "div40": "Project/PlantSite 비활성 + 값 clear",
+        "div81": "Project/PlantSite 활성(81* PlantSite 재조회)",
+        "div82": "Project 활성, PlantSite 비활성+clear(L540-544)",
+        "required": "Y (빈값 시 MSG00097, L419-423)",
+        "default": "'ALL' (DefineProperty L245 — GetCheckedListValue 로 보유 division 전체 코드 확장)",
+        "evidence": ["DMF0074.cs:L107-111", "DMF0074.cs:L170-174", "DMF0074.cs:L245", "DMF0074.cs:L419-423", "DMF0074.cs:L501-604", "Designer.cs lblDivision1='Division'/UsrCombo"]
+      },
+      "tobe": {
+        "label": "Div. (LBL00001)",
+        "control": "콤보단일(CustomDropdown)",
+        "combo": "MyDivision (CMBO)",
+        "params": "@sesUserId(세션자동)",
+        "filter": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M UNIT_TP_CD='D' 사용자 권한 + ATTRIBUTE3<>'EE' + VALID_YN='Y'",
+        "cascade": "변경 시 team/endCustomer/salesSite/plantSite/project/version 일괄 clear (Form L72-80)",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "Y (FormItem required)",
+        "default": "session.div ?? '40' (store L43)",
+        "evidence": ["MetalLinkPriceForm.tsx:L59-88", "useMetalLinkPriceStore.ts:L43"]
+      }
+    },
+    {
+      "cond": "Team",
+      "asis": {
+        "label": "Team",
+        "control": "콤보다중(UsrCheckedList)",
+        "combo": "GetDMInnerTable('UserTeamByDivision')",
+        "params": "GROUP_ID, USER_ID, DIVISION_ID(선택 division)",
+        "filter": "BigFilter Tables[1] — SITE_ITEM.OWNER 첫 토큰 사용자의 SSO 부서(권한 division 한정) + 클라측 DIVISION_ID 필터. isAddALL 아님(setListBox 3번째 인자 true=ALL행)",
+        "cascade": "SIC(L606) → EndCustomer 재조회 → SalesSite 재조회",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N",
+        "default": "미선택(전체)",
+        "evidence": ["DMF0074.cs:L112-118", "DMF0074.cs:L178-181", "DMF0074.cs:L606-624"]
+      },
+      "tobe": {
+        "label": "Team (LBL00502)",
+        "control": "콤보다중(CustomDropdown, TeamField)",
+        "combo": "TeambyDivision (CMBO — TeamField 기본값)",
+        "params": "@divisionId('{division}' quoted), @sesUserId, @langCd(세션자동)",
+        "filter": "SALES 사이트 배정 부서(비40) UNION 40=SITE_ITEM owner 부서 — 권한 division 한정, division 클라 재필터",
+        "cascade": "변경 시 endCustomer/salesSite clear (Form L92-95)",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N",
+        "default": "'' (store L44)",
+        "evidence": ["MetalLinkPriceForm.tsx:L89-97", "SearchFields.tsx:L185-233"]
+      }
+    },
+    {
+      "cond": "End Customer",
+      "asis": {
+        "label": "End Customer",
+        "control": "콤보다중(UsrCheckedList)",
+        "combo": "GetDMInnerTable('EndCustomerByDivision')",
+        "params": "GROUP_ID, USER_ID, DIVISION_ID, DEPT_ID(Team)",
+        "filter": "BigFilter Tables[2] — 40=SITE_ITEM(owner 부서) PROJECT_CODE + lookup END_CUSTOMER(40) UNION 비40=SITE.END_CUSTOMER(권한 division) — 클라측 DIVISION_ID/DEPT_ID 필터 +ALL행(setListBox)",
+        "cascade": "SIC(L626) → SalesSite 재조회",
+        "div40": "division 원문(ControlValues)+Team 원문 전달 (L197)",
+        "div81": "확장 division 코드+확장 Team 코드 전달 (L185)",
+        "div82": "81 과 동일 분기 (L183)",
+        "required": "N",
+        "default": "미선택(전체)",
+        "evidence": ["DMF0074.cs:L119-126", "DMF0074.cs:L183-210", "DMF0074.cs:L626-630"]
+      },
+      "tobe": {
+        "label": "End Customer (LBL00080)",
+        "control": "콤보다중(CustomDropdown multiple+allOption)",
+        "combo": "EndCustomer (CMBO)",
+        "params": "@sesUserId(세션자동)",
+        "filter": "SITE+SITE_ITEM+lookup END_CUSTOMER(40=PROJECT_CODE) — FE 측 DIVISION_ID=division && (Team 미선택 or DEPT_ID∈selTeams) 필터 (Form L110-118)",
+        "cascade": "변경 시 salesSite clear (Form L120-123)",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N",
+        "default": "'' (store L45 — 빈값=ALL sentinel)",
+        "evidence": ["MetalLinkPriceForm.tsx:L98-130", "useMetalLinkPriceStore.ts:L88"]
+      }
+    },
+    {
+      "cond": "Sales Site",
+      "asis": {
+        "label": "Sales Site",
+        "control": "콤보다중(UsrCheckedList)",
+        "combo": "GetDMInnerTable('UserSiteByEndCustomer')",
+        "params": "GROUP_ID, USER_ID, DIVISION_ID, DEPT_ID=''(항상 빈값), END_CUSTOMER",
+        "filter": "BigFilter Tables[4] — SITE_TYPE='SALES' 비40 + 40(owner 부서 join) UNION, 권한 division — 클라측 DIVISION/DEPT/END_CUSTOMER 필터 +ALL행",
+        "cascade": "Division/Team/EndCustomer 변경 시 재조회 (수신측)",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N",
+        "default": "미선택(전체)",
+        "evidence": ["DMF0074.cs:L134-142", "DMF0074.cs:L212-213", "DMF0074.cs:L628-629"]
+      },
+      "tobe": {
+        "label": "Sales Site (LBL00011)",
+        "control": "콤보다중(CustomDropdown multiple+allOption)",
+        "combo": "SalesSite (CMBO)",
+        "params": "@sesUserId(세션자동)",
+        "filter": "SCM_MST_SITE SITE_TYPE='SALES' 권한 division — FE 측 DIVISION_ID=division && (Team 미선택 or DEPT_ID∈selTeams) 필터 (Form L142-151)",
+        "cascade": "Division/Team/EndCustomer 변경 시 clear (상위 onChange)",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N",
+        "default": "'' (store L46)",
+        "evidence": ["MetalLinkPriceForm.tsx:L131-162"]
+      }
+    },
+    {
+      "cond": "Plant Site",
+      "asis": {
+        "label": "Plant Site",
+        "control": "콤보다중(UsrCheckedList)",
+        "combo": "GetDMInnerTable('UserPlantSiteByEndCustomer')",
+        "params": "GROUP_ID, USER_ID, DIVISION_ID, END_CUSTOMER",
+        "filter": "BigFilter Tables[6] — SITE_TYPE='PLANT' 권한 division — 클라측 DIVISION/END_CUSTOMER 필터 +ALL행",
+        "cascade": "Division 변경 시 81* 만 재조회(L533-537)",
+        "div40": "라벨 비활성 + 값 clear (L203/207, L559/562)",
+        "div81": "활성 — division 에 '81' 포함 시에만 행 로드 (L215-219)",
+        "div82": "라벨 비활성 + 값 clear (L540-544)",
+        "required": "N",
+        "default": "미선택(전체) — 비81 은 빈값",
+        "evidence": ["DMF0074.cs:L150-157", "DMF0074.cs:L215-219", "DMF0074.cs:L533-548"]
+      },
+      "tobe": {
+        "label": "Plant Site (LBL00509)",
+        "control": "콤보다중(CustomDropdown, PlantSiteField — extraConditions 영역)",
+        "combo": "PlantSitebyEndCustomer (CMBO)",
+        "params": "@divisionId('{division}' quoted), @endCustomer('{endCustomer}'|'ALL' quoted)",
+        "filter": "SITE_TYPE='PLANT' + divisionId/endCustomer INSTR 서버 필터 (빈값='ALL' 통과)",
+        "cascade": "division/endCustomer 변경 = 쿼리키 갱신 재조회, Division 변경 시 값 clear",
+        "div40": "disabled (!division.startsWith('81'))",
+        "div81": "활성 (81/81_* 계열)",
+        "div82": "disabled",
+        "required": "N",
+        "default": "'' (store L47)",
+        "evidence": ["MetalLinkPriceForm.tsx:L251-265", "SearchFields.tsx:L375-424"]
+      }
+    },
+    {
+      "cond": "PJT",
+      "asis": {
+        "label": "Project",
+        "control": "텍스트다중(UsrMultiLineEditor)+팝업(UsrButton)",
+        "combo": "팝업 SCM0002_ProjectbyDivisionPopupEx (Form_Load: division확장, Team, EndCustomer, ScmSite, Project)",
+        "params": "sDivision, sTeam, sEndCustomer, sScmSite, sProject",
+        "filter": "팝업 내부 조회 (본 파일 밖)",
+        "cascade": "Division 변경 시 clear (L572), Enter 키=팝업 오픈 (L252-258)",
+        "div40": "라벨/버튼 비활성 + 값 clear (L202-206, L558-560)",
+        "div81": "활성 (L190-192)",
+        "div82": "활성 (L530-531)",
+        "required": "N",
+        "default": "빈값",
+        "evidence": ["DMF0074.cs:L190-206", "DMF0074.cs:L247", "DMF0074.cs:L632-651"]
+      },
+      "tobe": {
+        "label": "Project (LBL00617)",
+        "control": "텍스트(InputField)+팝업버튼(PrjByDivisionModal)",
+        "combo": "팝업 PrjByDivisionModal (페이지 루트 setOpenPrjByDivisionModal)",
+        "params": "미확인(모달 내부 — 조회조건 밖)",
+        "filter": "isProjectDisabled = !(division.startsWith('81') || division==='82') — 입력/버튼 모두 잠금 (Form L48-50)",
+        "cascade": "Division 변경 시 project clear (Form L78)",
+        "div40": "disabled",
+        "div81": "활성",
+        "div82": "활성",
+        "required": "N",
+        "default": "'' (store L48)",
+        "evidence": ["MetalLinkPriceForm.tsx:L47-50", "MetalLinkPriceForm.tsx:L163-190"]
+      }
+    },
+    {
+      "cond": "Model/Nickname",
+      "asis": {
+        "label": "Model / Nickname",
+        "control": "텍스트다중(UsrMultiLineEditor)+팝업(UsrButton)",
+        "combo": "팝업 DM0002_ItembyDivisionPopupEx (Form_Load: division확장, Team, EndCustomer, ScmSite, Project, ItemId)",
+        "params": "sDivision, sTeam, sEndCustomer, sScmSiteId, sProject, sItemId",
+        "filter": "팝업 내부 조회 (본 파일 밖)",
+        "cascade": "Division 변경 시 clear (L573), Enter 키=팝업 오픈 (L260-266)",
+        "div40": "공통(항상 활성)", "div81": "공통", "div82": "공통",
+        "required": "N",
+        "default": "빈값",
+        "evidence": ["DMF0074.cs:L248", "DMF0074.cs:L653-671", "Designer.cs lblItem='Model / Nickname'"]
+      },
+      "tobe": {
+        "label": "Model/Nickname (LBL00003)",
+        "control": "텍스트(InputField)+팝업버튼(ModelByDivisionModal)",
+        "combo": "팝업 ModelByDivisionModal (페이지 루트 setOpenModelByDivisionModal)",
+        "params": "미확인(모달 내부 — 조회조건 밖)",
+        "filter": "없음(항상 활성)",
+        "cascade": "Division 변경 시 clear 없음 — AS-IS 는 clear(L573). notes 참조",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N",
+        "default": "'' (store L49)",
+        "evidence": ["MetalLinkPriceForm.tsx:L191-213"]
+      }
+    },
+    {
+      "cond": "Period",
+      "asis": {
+        "label": "Plan Date",
+        "control": "월범위선택(UsrMonthRangePicker)",
+        "combo": "없음(달력)",
+        "params": "MonthText1/MonthText2 (YYYY-MM, SP 전달 시 '-' 제거 YYYYMM)",
+        "filter": "없음",
+        "cascade": "없음",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "Y (빈값 MSG00002, 형식오류 MSG00049, 역전 MSG00108 — L385-405)",
+        "default": "당월 ~ +6개월 (L167-168)",
+        "evidence": ["DMF0074.cs:L167-168", "DMF0074.cs:L385-405", "DMF0074.cs:L454-455", "Designer.cs layoutControlItem5='Plan Date'"]
+      },
+      "tobe": {
+        "label": "Period (LBL00505)",
+        "control": "월달력 2개(PeriodField mode='month', DatePickerCalendar usecase='month')",
+        "combo": "없음(달력)",
+        "params": "fromYyyymm/toYyyymm (YYYYMM — setFilters 에서 slice(0,6) 방어)",
+        "filter": "종료월 mindate=시작월",
+        "cascade": "없음",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "Y (FormItem required — PeriodField 내장)",
+        "default": "당월 ~ +6개월 (store L36-37, dayjs YYYYMM)",
+        "evidence": ["MetalLinkPriceForm.tsx:L214-223", "useMetalLinkPriceStore.ts:L36-51", "SearchFields.tsx:L695-775"]
+      }
+    },
+    {
+      "cond": "Ver.",
+      "asis": {
+        "label": "Version",
+        "control": "텍스트다중(UsrMultiLineEditor)+팝업(UsrButton btnSPVer)",
+        "combo": "팝업 DMF0073_VersionBySalesPricePopup (Form_Load: 'SP', division확장, 오늘-3개월~+3개월 — 사용자 TimeZone 기준)",
+        "params": "'SP', sDivision, sStartDate, sEndDate",
+        "filter": "선택 2개 초과 시 MSG00255 거부 (L690-694)",
+        "cascade": "Division 변경 시 clear (L574)",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "Y (빈값 시 MSG00283 조회 차단, L375-379)",
+        "default": "'Current' (L222)",
+        "evidence": ["DMF0074.cs:L222", "DMF0074.cs:L375-379", "DMF0074.cs:L673-702"]
+      },
+      "tobe": {
+        "label": "Version (LBL00653)",
+        "control": "텍스트(InputField 직접입력 허용)+팝업버튼(MetalLinkVersionModal)",
+        "combo": "팝업 MetalLinkVersionModal (페이지 루트 setOpenVersionModal)",
+        "params": "미확인(모달 내부 — 조회조건 밖)",
+        "filter": "없음(폼 측 2개 제한 검증 미확인 — 모달측 소관)",
+        "cascade": "Division 변경 시 version clear (Form L79)",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "Y (FormItem required)",
+        "default": "'Current' (store L52)",
+        "evidence": ["MetalLinkPriceForm.tsx:L224-248", "useMetalLinkPriceStore.ts:L52"]
+      }
+    }
+  ],
+  "cascade_chains": [
+    "ASIS: Division(SIC L501)→Team→EndCustomer→SalesSite→(81*)PlantSite + Project/Item/Version 텍스트 clear(L572-574) / Team(SIC L606)→EndCustomer→SalesSite / EndCustomer(SIC L626)→SalesSite",
+    "TOBE: Division→(team,endCustomer,salesSite,plantSite,project,version) 일괄 clear(Form L72-80) / Team→(endCustomer,salesSite) clear / EndCustomer→salesSite clear — modelNickname 은 clear 대상 아님"
+  ],
+  "excluded": [
+    "기능 버튼: btnTemplate(Excel Form → DMF0074_MetalLinkPricePopup)/btnExcelUpload(Upload → ExcelUploadForm 'DMF0074'|div40='DMF0074_40') — 카탈로그는 이 2행 포함 11행",
+    "TO-BE 모달 내부 콤보: MetalLinkTemplateModal/MetalLinkVersionModal/PrjByDivisionModal/ModelByDivisionModal 내부",
+    "그리드 셀 콤보: 없음(MAIN 전체 LockColumn 조회 전용, .cs L466)"
+  ],
+  "crosscheck": {
+    "catalog_screen": "Metal Link Price (search_conditions_scp_dm.md L1443)",
+    "catalog_asis_rows": 11,
+    "catalog_tobe_rows": 9,
+    "my_asis_count": 9,
+    "my_tobe_count": 9,
+    "reason": "카탈로그 As-Is 11행 중 2행은 기능버튼(Excel Form/Upload — To-Be 열 공란)이라 본 추출에선 excluded 로 분리 → 실질 조회조건 9:9 일치. 카탈로그 To-Be 9행과 정확 일치"
+  },
+  "notes": [
+    "AS-IS 는 dtBizType 을 SetChangeControl('BizType')로 매번 fetch 하지만(L188/200/528/555) 바인딩되는 화면 컨트롤이 없음 — dead fetch. 카탈로그에도 Biz Type 행 없음. TO-BE 도 미구현(정합)",
+    "AS-IS dtDepartment = Data.Common(Data.Type.UpperDeptId,false,GROUP_ID,USER_ID) fetch(L176)도 컨트롤 미배선 — dead fetch",
+    "AS-IS Search 필수검증 4종: MSG00137(작업중)/MSG00283(Version)/MSG00002·00049·00108(Plan Date)/MSG00097(Division) — 조회 SP DM.DMF0074_GET_METAL_LINK_PRICE 10 파라미터",
+    "AS-IS Division 변경 시 Model/Nickname(txtItemId)도 clear(L573)되나 TO-BE Division onChange 는 modelNickname 을 clear 하지 않음 — 미세 격차",
+    "AS-IS Plan Date 라벨은 'Plan Date' — TO-BE 는 표준 'Period'(카탈로그 '용어' 변경 승인 행)",
+    "TO-BE Plant Site 는 extraConditions(접힘 영역)에 배치 — 본 조건 8 + extra 1",
+    "TO-BE Version 은 직접입력+팝업 병행, 저장 파라미터 versionType='Current'|버전NO(콤마 최대2 — AS-IS MSG00255 계약, FE 측 재검증은 모달 소관)"
+  ]
+}

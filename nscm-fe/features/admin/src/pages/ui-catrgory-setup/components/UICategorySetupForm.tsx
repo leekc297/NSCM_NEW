@@ -1,11 +1,10 @@
+import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { FormItem, InputField } from '@shared/lges';
 import { Grid } from '@shared/mui';
 
 import { useUICategorySetupStore } from '../useUICategorySetupStore';
-
-import styles from './UICategorySetupForm.module.scss';
 
 export const UICategorySetupForm = () => {
   const { t } = useTranslation();
@@ -26,9 +25,9 @@ export const UICategorySetupForm = () => {
       isHidden={!isOpenSearchArea}
       conditions={
         <>
-          <Grid size={4}>
+          <Grid size={3}>
             <FormItem
-              className={styles.customForm}
+              className={commonStyles.formItem}
               label={t('LBL00305', '_Program ID')}
               labelAlign='right'
               render={() => (
@@ -42,11 +41,11 @@ export const UICategorySetupForm = () => {
               )}
             />
           </Grid>
-          <Grid size={4}>
+          <Grid size={3}>
             <FormItem
               label={t('LBL00306', '_Sheet Name')}
               labelAlign='right'
-              className={styles.customForm}
+              className={commonStyles.formItem}
               render={() => (
                 <InputField
                   fullWidth
@@ -58,11 +57,11 @@ export const UICategorySetupForm = () => {
               )}
             />
           </Grid>
-          <Grid size={4}>
+          <Grid size={3}>
             <FormItem
               label={t('LBL00007', '_Valid')}
               labelAlign='right'
-              className={styles.customForm}
+              className={commonStyles.formItem}
               render={() => (
                 <CustomDropdown
                   value={searchParams.valid}
@@ -76,11 +75,11 @@ export const UICategorySetupForm = () => {
               )}
             />
           </Grid>
-          <Grid size={4}>
+          <Grid size={3}>
             <FormItem
               label={t('LBL00307', '_Column Name')}
               labelAlign='right'
-              className={styles.customForm}
+              className={commonStyles.formItem}
               render={() => (
                 <InputField
                   fullWidth
@@ -92,11 +91,11 @@ export const UICategorySetupForm = () => {
               )}
             />
           </Grid>
-          <Grid size={4}>
+          <Grid size={3}>
             <FormItem
               label={t('LBL00308', '_Column Label Name')}
               labelAlign='right'
-              className={styles.customForm}
+              className={commonStyles.formItem}
               render={() => (
                 <InputField
                   fullWidth

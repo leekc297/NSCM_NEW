@@ -1,0 +1,331 @@
+-- ═══════════════════════════════════════════════════════════════════════════════
+-- DMF0049_CLOUD_20260820 / A_DB/90_VERIFY.sql
+--   적용 **후** 검증. 룰 #136 — 대상 객체를 실측하고, 엉뚱한 객체 상태를 출력하지 않는다.
+--   ⛔ SELECT 전용 (DDL/DML 없음).
+--   PASS 판정 = V1~V9 가 전부 EXPECT 와 일치 + V3 마커 3 + **V4 가 0행**.
+--   EXPECT 값은 전부 2026-08-20 사내(OCGSCMD_P01) 실측치다.
+-- ═══════════════════════════════════════════════════════════════════════════════
+SET LINESIZE 300
+SET PAGESIZE 400
+
+-- ── V1. PKG_DMF0049 STATUS (기대: SPEC/BODY 2객체 VALID) ───────────────────────
+PROMPT === V1. PKG_DMF0049 STATUS (기대 2행 전부 VALID) ===
+SELECT o.OBJECT_NAME, o.OBJECT_TYPE, o.STATUS, o.LAST_DDL_TIME,
+       (SELECT COUNT(*) FROM ALL_SOURCE s
+         WHERE s.OWNER='SCM_MGR' AND s.NAME=o.OBJECT_NAME AND s.TYPE=o.OBJECT_TYPE) AS LINES
+  FROM ALL_OBJECTS o
+ WHERE o.OWNER='SCM_MGR' AND o.OBJECT_NAME='PKG_DMF0049'
+ ORDER BY o.OBJECT_TYPE;
+-- 사내 실측: PACKAGE 89 lines / PACKAGE BODY 1224 lines / 둘 다 VALID
+
+PROMPT === V1b. INVALID 판정 (기대 0) ===
+SELECT COUNT(*) AS INVALID_CNT_EXPECT_0 FROM ALL_OBJECTS
+ WHERE OWNER='SCM_MGR' AND OBJECT_NAME='PKG_DMF0049' AND STATUS <> 'VALID';
+
+-- ── V2. ALL_ERRORS 0건 ────────────────────────────────────────────────────────
+PROMPT === V2. ALL_ERRORS (기대 0행) ===
+SELECT NAME, TYPE, SEQUENCE, LINE, POSITION, TEXT
+  FROM ALL_ERRORS WHERE OWNER='SCM_MGR' AND NAME='PKG_DMF0049'
+ ORDER BY TYPE, SEQUENCE;
+
+-- ── V3. ⭐ 마커 grep — 2026-08-20 SAVE 결함 정정 반영 확인 ─────────────────────
+--   [E20260820-DIVIDSCALAR] 3곳: 벌크 '^' 파라미터 p_division_id 를 스칼라 비교에 쓰던 것을
+--   파싱 대표값 v_division_id 로 교체. 미반영 시 2행 이상 payload 저장에서
+--   NICK_NAME / FORECAST_INFO_SPEC / FORECAST_INFO_CELL_PACK_COUNT 가 **NULL 로 덮인다**
+--   (에러 없이 조용히 — 그래서 기계 검증이 필요하다).
+PROMPT === V3. 마커 카운트 (기대 3) ===
+SELECT 'E20260820-DIVIDSCALAR' AS MARKER,
+       (SELECT COUNT(*) FROM ALL_SOURCE WHERE OWNER='SCM_MGR' AND NAME='PKG_DMF0049'
+          AND TYPE='PACKAGE BODY' AND TEXT LIKE '%E20260820-DIVIDSCALAR%') AS CNT,
+       3 AS EXPECT,
+       CASE WHEN (SELECT COUNT(*) FROM ALL_SOURCE WHERE OWNER='SCM_MGR' AND NAME='PKG_DMF0049'
+                    AND TYPE='PACKAGE BODY' AND TEXT LIKE '%E20260820-DIVIDSCALAR%') = 3
+            THEN 'PASS' ELSE '*** FAIL - SAVE 부가정보 NULL 덮어쓰기 결함 잔존 ***' END AS RESULT
+  FROM DUAL;
+
+PROMPT === V3b. 결함 잔존 역판정 (기대 0행 — 구세대 리터럴이 남아 있으면 적출) ===
+SELECT LINE, RTRIM(TEXT) AS TEXT FROM ALL_SOURCE
+ WHERE OWNER='SCM_MGR' AND NAME='PKG_DMF0049' AND TYPE='PACKAGE BODY'
+   AND ( TEXT LIKE '%WHERE DIVISION_ID = p_division_id;%'
+      OR TEXT LIKE '%p_division_id = ''40''%' )
+ ORDER BY LINE;
+
+-- ── V4. ⭐⭐ PROC_M 배선 역추적 (기대 **0행**) ────────────────────────────────
+--   사고 계보(2026-08-20 DMF0035): 메타 sync 축에 SCM_ADM_PROC_M 이 아예 없어 통째 누락 →
+--   PKG 는 VALID 인데 화면이 PLS-00306("잘못된 개수 또는 유형의 인수")으로 즉사.
+--   generic call-proc 은 PROC_M 으로 인자 바인딩 목록을 만들기 때문이다.
+--   ⭐ 1행이라도 나오면 그 시트는 동작 불가.
+--     · FAIL-A: SP 객체 부재     → 10/11 (또는 선행 PKG_DMF0044/0000) 미배포
+--     · FAIL-B: PROC_M 0행        → 24_PROC_M_SYNC.sql 미적용
+--     · FAIL-C: 인자수 불일치     → PKG 세대 불일치(구세대 덮어쓰기) 또는 PROC_M stale
+PROMPT === V4. PROC_M vs ALL_ARGUMENTS 적출 (기대 0행) ===
+WITH WIRED AS (
+  SELECT DISTINCT B.SHT_NM, B.MNU_BTN_CD, A.API_ID, A.API_URL,
+         UPPER(A.API_URL) AS API_URL_U,
+         CASE WHEN INSTR(A.API_URL,'.') > 0
+              THEN UPPER(SUBSTR(A.API_URL, 1, INSTR(A.API_URL,'.') - 1)) ELSE '~' END AS PKG_U,
+         CASE WHEN INSTR(A.API_URL,'.') > 0
+              THEN UPPER(SUBSTR(A.API_URL, INSTR(A.API_URL,'.') + 1)) ELSE UPPER(A.API_URL) END AS OBJ_U
+    FROM SCM_MGR.SCM_ADM_MNU_BTN_MPG_M B
+    JOIN SCM_MGR.SCM_ADM_API_M         A ON A.API_ID = B.API_ID
+   WHERE B.MNU_ID = 'DMF0049'
+),
+PM AS (   -- 선계산 후 JOIN (상관 스칼라 서브쿼리 금지 — 진단 SQL 도 튜닝 품질)
+  SELECT UPPER(PROC_NM) AS PROC_NM_U, COUNT(*) AS PROC_M_CNT
+    FROM SCM_MGR.SCM_ADM_PROC_M GROUP BY UPPER(PROC_NM)
+),
+AG AS (
+  SELECT NVL(UPPER(PACKAGE_NAME),'~') AS PKG_U, UPPER(OBJECT_NAME) AS OBJ_U, COUNT(*) AS ARG_CNT
+    FROM ALL_ARGUMENTS
+   WHERE OWNER = 'SCM_MGR' AND ARGUMENT_NAME IS NOT NULL AND DATA_LEVEL = 0 AND OVERLOAD IS NULL
+   GROUP BY NVL(UPPER(PACKAGE_NAME),'~'), UPPER(OBJECT_NAME)
+)
+SELECT W.SHT_NM, W.MNU_BTN_CD, W.API_ID, W.API_URL,
+       NVL(PM.PROC_M_CNT,0) AS PROC_M_CNT, NVL(AG.ARG_CNT,0) AS ARG_CNT,
+       CASE WHEN NVL(AG.ARG_CNT,0)    = 0 THEN 'FAIL-A: SP OBJECT MISSING'
+            WHEN NVL(PM.PROC_M_CNT,0) = 0 THEN 'FAIL-B: PROC_M 0 ROWS -> PLS-00306'
+            ELSE 'FAIL-C: ARG COUNT MISMATCH' END AS DEFECT
+  FROM WIRED W
+  LEFT JOIN PM ON PM.PROC_NM_U = W.API_URL_U
+  LEFT JOIN AG ON AG.PKG_U = W.PKG_U AND AG.OBJ_U = W.OBJ_U
+ WHERE NVL(PM.PROC_M_CNT,0) = 0 OR NVL(AG.ARG_CNT,0) = 0 OR PM.PROC_M_CNT <> AG.ARG_CNT
+ ORDER BY W.SHT_NM, W.API_ID;
+
+PROMPT === V4b. 동일 축 전량 (육안 대조 — 11 SP 전부 PASS 여야 함) ===
+WITH WIRED AS (
+  SELECT DISTINCT A.API_URL, UPPER(A.API_URL) AS API_URL_U,
+         CASE WHEN INSTR(A.API_URL,'.') > 0
+              THEN UPPER(SUBSTR(A.API_URL, 1, INSTR(A.API_URL,'.') - 1)) ELSE '~' END AS PKG_U,
+         CASE WHEN INSTR(A.API_URL,'.') > 0
+              THEN UPPER(SUBSTR(A.API_URL, INSTR(A.API_URL,'.') + 1)) ELSE UPPER(A.API_URL) END AS OBJ_U
+    FROM SCM_MGR.SCM_ADM_MNU_BTN_MPG_M B
+    JOIN SCM_MGR.SCM_ADM_API_M         A ON A.API_ID = B.API_ID
+   WHERE B.MNU_ID = 'DMF0049'
+),
+PM AS (SELECT UPPER(PROC_NM) AS PROC_NM_U, COUNT(*) AS PROC_M_CNT
+         FROM SCM_MGR.SCM_ADM_PROC_M GROUP BY UPPER(PROC_NM)),
+AG AS (SELECT NVL(UPPER(PACKAGE_NAME),'~') AS PKG_U, UPPER(OBJECT_NAME) AS OBJ_U, COUNT(*) AS ARG_CNT
+         FROM ALL_ARGUMENTS
+        WHERE OWNER='SCM_MGR' AND ARGUMENT_NAME IS NOT NULL AND DATA_LEVEL=0 AND OVERLOAD IS NULL
+        GROUP BY NVL(UPPER(PACKAGE_NAME),'~'), UPPER(OBJECT_NAME))
+SELECT W.API_URL, NVL(PM.PROC_M_CNT,0) AS PROC_M, NVL(AG.ARG_CNT,0) AS ARGS,
+       CASE WHEN NVL(AG.ARG_CNT,0)=0 OR NVL(PM.PROC_M_CNT,0)=0
+                 OR PM.PROC_M_CNT <> AG.ARG_CNT THEN 'FAIL' ELSE 'PASS' END AS RESULT
+  FROM WIRED W
+  LEFT JOIN PM ON PM.PROC_NM_U = W.API_URL_U
+  LEFT JOIN AG ON AG.PKG_U = W.PKG_U AND AG.OBJ_U = W.OBJ_U
+ ORDER BY W.API_URL;
+-- 사내 실측 기대치 (2026-08-20) — 11행 전부 PASS:
+--   DMF0002_GET_TITLESET_POPUP                            7 /  7
+--   PKG_DMF0000.P_DMF0000_GET_COMMON_SPREAD_TITLE         8 /  8
+--   PKG_DMF0044.P_DMF0044_GET_SALES_VERSION_POPUP         9 /  9
+--   PKG_DMF0044.P_DMF0044_MOBILE_REPORT_CREATE            6 /  6
+--   PKG_DMF0044.P_DMF0044_SAVE_BIZ_PLAN_VERSION_COPY      6 /  6
+--   PKG_DMF0044.P_DMF0044_SAVE_SALES_PLAN_VERSION_COPY    9 /  9
+--   PKG_DMF0049.P_DMF0049_GET_MEASURE                     5 /  5
+--   PKG_DMF0049.P_DMF0049_GET_SALES_ETC_REPORTS_DATA     10 / 10
+--   PKG_DMF0049.P_DMF0049_GET_SPREAD_TITLE                8 /  8
+--   PKG_DMF0049.P_DMF0049_SAVE_SALES_ETC_REPORT_C        37 / 37
+--   SCM0002_SET_TITLESET_POPUP                           14 / 14
+
+-- ── V5. ⭐⭐ 메뉴 행 + 권한 뷰 (조용한 0행의 실제 원인 축) ────────────────────
+--   [배경] PKG_DMF0049 GET/SAVE 는 SCM_ADM_USER_MNU_EDIT_AUTH_V 를 INNER JOIN 한다.
+--   그 뷰는 SCM_ADM_MNU_M 을 조인하므로 **메뉴 행이 없거나 UNIT_TP_CD<>'D' / USE_YN<>'Y' 이면
+--   뷰가 0행 → 조회 결과도 0행**이 된다. 오류가 아니라 조용한 0행이라 배포 성공으로 보인다.
+PROMPT === V5a. 메뉴 행 실존·속성 (기대 1행 / UNIT_TP_CD='D' / USE_YN='Y') ===
+SELECT COUNT(*) AS CNT, NVL(MAX(UNIT_TP_CD),'-') AS UNIT_TP_CD, NVL(MAX(USE_YN),'-') AS USE_YN,
+       CASE WHEN COUNT(*) = 0
+              THEN '*** FAIL - menu row missing -> auth view 0 -> all rows 0 ***'
+            WHEN MAX(UNIT_TP_CD) <> 'D' OR MAX(USE_YN) <> 'Y'
+              THEN '*** FAIL - UNIT_TP_CD/USE_YN mismatch ***'
+            ELSE 'PASS' END AS VERDICT
+  FROM SCM_MGR.SCM_ADM_MNU_M WHERE MNU_ID = 'DMF0049';
+
+PROMPT === V5b. 메뉴 라우팅 실측 (FE viewRegistry 키와 1:1) ===
+SELECT MNU_ID, UPPR_MNU_ID, MNU_URL, ROUTE_PATH, MNU_MSG_ID, MNU_TP_CD, UNIT_TP_CD, USE_YN, SORT_ORD
+  FROM SCM_MGR.SCM_ADM_MNU_M WHERE MNU_ID = 'DMF0049';
+-- 기대: UPPR_MNU_ID='Demand_Plan' / MNU_URL='etc-sales-reports'
+--       ROUTE_PATH='demand/demand-plan/etc-sales-reports' / MNU_MSG_ID='MNU00039'
+--       MNU_TP_CD='SCREEN' / UNIT_TP_CD='D' / USE_YN='Y' / SORT_ORD=7
+--   ⚠ ROUTE_PATH 의 마지막 세그먼트는 FE 폴더명(pages/etc-sales-reports)과 **정확히** 같아야 한다.
+--     viewRegistry glob 의 유일한 등록 키가 `pages/<화면>/index.ts` 이기 때문이다
+--     (2026-08-14 "Page Not Found" 사고 — 라우터 404 가 아니라 탭 안 resolveView() 실패였다).
+
+PROMPT === V5c. 권한 뷰 반환 행 (0행이면 조회도 0행) — USER_ID 를 실제 계정으로 교체 ===
+SELECT COUNT(*) AS AUTH_ROWS,
+       CASE WHEN COUNT(*) = 0 THEN '*** FAIL - 이 계정은 DMF0049 조회 시 항상 0행 ***'
+            ELSE 'PASS' END AS VERDICT
+  FROM SCM_MGR.SCM_ADM_USER_MNU_EDIT_AUTH_V
+ WHERE MNU_ID = 'DMF0049' AND USER_ID = 'minyonglee1';
+-- 사내 실측 2026-08-20: 8행 (PASS)
+
+-- ── V6. ⭐ DDL 적용 확인 — DEFAULT ON NULL ────────────────────────────────────
+PROMPT === V6. DEFAULT ON NULL 적용 (기대: 대상 22행 전부 YES, 적출 0행) ===
+SELECT TABLE_NAME, COLUMN_NAME, DATA_TYPE, DEFAULT_ON_NULL,
+       '*** FAIL - 01_DDL 미적용 ***' AS DEFECT
+  FROM ALL_TAB_COLUMNS
+ WHERE OWNER = 'SCM_MGR'
+   AND TABLE_NAME IN ('DM_PLN_SALES_ETC_REPORT_C','DM_PLN_SALES_ETC_REPORT_H')
+   AND NULLABLE = 'N'
+   AND COLUMN_NAME NOT IN ('DATA_SEQ','HISTORY_SEQ',
+                           'CREATED_BY','CREATION_DATE','LAST_UPDATED_BY','LAST_UPDATE_DATE')
+   AND DEFAULT_ON_NULL <> 'YES'
+ ORDER BY TABLE_NAME, COLUMN_ID;
+
+PROMPT === V6b. 동일 축 카운트 (기대 11 / 11) ===
+SELECT TABLE_NAME, COUNT(*) AS DON_YES_CNT, 11 AS EXPECT,
+       CASE WHEN COUNT(*) = 11 THEN 'PASS' ELSE '*** FAIL ***' END AS RESULT
+  FROM ALL_TAB_COLUMNS
+ WHERE OWNER='SCM_MGR' AND TABLE_NAME IN ('DM_PLN_SALES_ETC_REPORT_C','DM_PLN_SALES_ETC_REPORT_H')
+   AND NULLABLE='N' AND DEFAULT_ON_NULL='YES'
+ GROUP BY TABLE_NAME ORDER BY 1;
+
+PROMPT === V6c. 의도적 제외 축이 그대로 남아 있는지 (기대: 전부 DEFAULT_ON_NULL='NO') ===
+SELECT TABLE_NAME, COLUMN_NAME, DEFAULT_ON_NULL,
+       CASE WHEN DEFAULT_ON_NULL = 'NO' THEN 'PASS'
+            ELSE '*** FAIL - 키/감사컬럼에 기본값이 붙었다(유령행·조용한 오류 위험) ***' END AS RESULT
+  FROM ALL_TAB_COLUMNS
+ WHERE OWNER='SCM_MGR' AND TABLE_NAME IN ('DM_PLN_SALES_ETC_REPORT_C','DM_PLN_SALES_ETC_REPORT_H')
+   AND COLUMN_NAME IN ('DATA_SEQ','HISTORY_SEQ','CREATED_BY','CREATION_DATE',
+                       'LAST_UPDATED_BY','LAST_UPDATE_DATE')
+ ORDER BY TABLE_NAME, COLUMN_NAME;
+
+-- ── V7. ⭐ INPUT_TP_CD 40 분리 (2026-08-20 메타 적용분) ───────────────────────
+PROMPT === V7. INPUT_TP_CD 40 분리 (기대 5행 전부 PASS) ===
+SELECT COLUMN_NAME, DIVISION_ID, INPUT_TP_CD,
+       CASE
+         WHEN COLUMN_NAME='DEPARTMENT_ID' AND DIVISION_ID='40'                          AND INPUT_TP_CD='M'  THEN 'PASS'
+         WHEN COLUMN_NAME='DEPARTMENT_ID' AND DIVISION_ID<>'40'                         AND INPUT_TP_CD='IM' THEN 'PASS'
+         WHEN COLUMN_NAME='DEPT_ID'       AND DIVISION_ID='40'                          AND INPUT_TP_CD='O'  THEN 'PASS'
+         WHEN COLUMN_NAME='DEPT_ID'       AND DIVISION_ID<>'40'                         AND INPUT_TP_CD='IO' THEN 'PASS'
+         WHEN COLUMN_NAME='CUST_REPORT'   AND DIVISION_ID='40'                          AND INPUT_TP_CD='O'  THEN 'PASS'
+         ELSE '*** FAIL - 22_SHEET_META_SYNC 미적용/구세대 ***' END AS RESULT
+  FROM SCM_MGR.SCM_MST_SHEET_COLUMNS
+ WHERE PROGRAM_ID='DMF0049' AND SHEET_NAME='MDF Reports'
+   AND COLUMN_NAME IN ('DEPARTMENT_ID','DEPT_ID','CUST_REPORT')
+ ORDER BY COLUMN_NAME, DIVISION_ID;
+-- 사내 실측 (2026-08-20 적용 후) — 5행:
+--   CUST_REPORT   / 40                                        / O
+--   DEPARTMENT_ID / 40                                        / M
+--   DEPARTMENT_ID / 82,81,81_UC,81_HM,81_ST,81_HD,81_HG       / IM
+--   DEPT_ID       / 40                                        / O
+--   DEPT_ID       / 82,81,81_UC,81_HM,81_ST,81_HD,81_HG       / IO
+--   근거: AS-IS DMF0049_Sales_ETC_Reports.cs EditButton L396~406 (40 분기만 정적 3컬럼 미잠금).
+--   ⚠ 비-40 을 'S'(전면 잠금)로 바꾸면 81/82 의 **신규행 입력까지** 막혀 AS-IS InsertRow 가 회귀한다.
+
+-- ── V8. 메타 축별 기대 카운트 (2026-08-20 사내 실측) ─────────────────────────
+PROMPT === V8. 메타 축별 카운트 ===
+SELECT 'SCM_ADM_MNU_M'                 AS TBL, COUNT(*) AS CNT,  1 AS EXPECT FROM SCM_MGR.SCM_ADM_MNU_M                 WHERE MNU_ID='DMF0049'
+UNION ALL SELECT 'SCM_ADM_PROGRAM',               COUNT(*),  1 FROM SCM_MGR.SCM_ADM_PROGRAM               WHERE PROGRAM_ID='DMF0049'
+UNION ALL SELECT 'SCM_ADM_API_M',                 COUNT(*), 19 FROM SCM_MGR.SCM_ADM_API_M                 WHERE API_ID LIKE 'DMF0049\_%' ESCAPE '\'
+UNION ALL SELECT 'SCM_ADM_MNU_BTN_MPG_M',         COUNT(*), 19 FROM SCM_MGR.SCM_ADM_MNU_BTN_MPG_M         WHERE MNU_ID='DMF0049'
+UNION ALL SELECT 'SCM_ADM_USER_GR_MNU_MPG_M',     COUNT(*),  4 FROM SCM_MGR.SCM_ADM_USER_GR_MNU_MPG_M     WHERE MNU_ID='DMF0049'
+UNION ALL SELECT 'SCM_ADM_USER_GR_MNU_BTN_MPG_M', COUNT(*), 70 FROM SCM_MGR.SCM_ADM_USER_GR_MNU_BTN_MPG_M WHERE MNU_ID='DMF0049'
+UNION ALL SELECT 'SCM_ADM_PROC_M(11 SP)',         COUNT(*),119 FROM SCM_MGR.SCM_ADM_PROC_M
+          WHERE PROC_NM IN ('DMF0002_GET_TITLESET_POPUP','SCM0002_SET_TITLESET_POPUP',
+                            'PKG_DMF0000.P_DMF0000_GET_COMMON_SPREAD_TITLE',
+                            'PKG_DMF0044.P_DMF0044_GET_SALES_VERSION_POPUP',
+                            'PKG_DMF0044.P_DMF0044_MOBILE_REPORT_CREATE',
+                            'PKG_DMF0044.P_DMF0044_SAVE_BIZ_PLAN_VERSION_COPY',
+                            'PKG_DMF0044.P_DMF0044_SAVE_SALES_PLAN_VERSION_COPY',
+                            'PKG_DMF0049.P_DMF0049_GET_MEASURE',
+                            'PKG_DMF0049.P_DMF0049_GET_SALES_ETC_REPORTS_DATA',
+                            'PKG_DMF0049.P_DMF0049_GET_SPREAD_TITLE',
+                            'PKG_DMF0049.P_DMF0049_SAVE_SALES_ETC_REPORT_C')
+UNION ALL SELECT 'SCM_ADM_CMBO_SQL_M(22종)',       COUNT(*), 22 FROM SCM_MGR.SCM_ADM_CMBO_SQL_M
+          WHERE SQL_ID IN ('APPLICATION','CALENDAR_YYYY','COUNTRY_MST','CurrencyList',
+                           'DMF0005_REPORT_GROUP1','DMF0005_REPORT_GROUP2','DMF0005_REPORT_GROUP4',
+                           'DMF0005_REPORT_GROUP6','DMF0044_DEPARTMENT_TEAM','DMF0044_DEPARTMENT_TEAM2',
+                           'DMF0044_MDF_DEPARTMENT','DMF0044_MDF_MEASURE','DMF0049_DEPARTMENT_TEAM',
+                           'DM_COMPANY','DM_LOOKUP_DIV','END_CUST_REPORT','EndCustomerByDivisionDept',
+                           'FcstType','Incoterms','MDF_TYPE','ReportGroup3','SOLD_TO_CUST_REPORT')
+UNION ALL SELECT 'SCM_ADM_MSG_M(24코드x3언어)',    COUNT(*), 72 FROM SCM_MGR.SCM_ADM_MSG_M
+          WHERE MSG_ID IN ('LBL00086','LBL00112','LBL00712','LBL00795','LBL00797','LBL00798','LBL00800',
+                           'MNU00002','MNU00011','MNU00039',
+                           'MSG00002','MSG00004','MSG00096','MSG00283','MSG00429','MSG00618','MSG00676',
+                           'MSG00682','MSG00683','MSG00684','MSG00685','MSG00686','MSG00687','MSG00688')
+UNION ALL SELECT 'SCM_ADM_EXCEL_COLUMNS(0행 축)',  COUNT(*),  0 FROM SCM_MGR.SCM_ADM_EXCEL_COLUMNS         WHERE PROGRAM_ID='DMF0049';
+
+PROMPT === V8b. 시트 메타 (SHEET_NAME 단위 전량 — 공유 시트 DMF0044 행 보존 확인) ===
+SELECT 'SHEET_COLUMNS' AS TBL, PROGRAM_ID, COUNT(*) AS CNT FROM SCM_MGR.SCM_MST_SHEET_COLUMNS
+ WHERE SHEET_NAME='MDF Reports' GROUP BY PROGRAM_ID
+UNION ALL
+SELECT 'SHEET_MEASURE', PROGRAM_ID, COUNT(*) FROM SCM_MGR.SCM_MST_SHEET_MEASURE
+ WHERE SHEET_NAME='MDF Reports' GROUP BY PROGRAM_ID
+ ORDER BY 1, 2;
+-- 기대: SHEET_COLUMNS DMF0044=46 / DMF0049=44 (합 90)
+--       SHEET_MEASURE DMF0044=18 / DMF0049= 3 (합 21)
+--   ⚠ DMF0044 행이 0 이면 22_SHEET_META_SYNC 를 **DMF0049 행만** 담은 구버전으로 적용한 것이다.
+
+PROMPT === V8c. SHEET_MEASURE DMF0049 3행 상세 (division 세트 40=3 / 81계열=2 / 82=1) ===
+SELECT COLUMN_NAME, DIVISION_ID, SORT_ORDER_NO FROM SCM_MGR.SCM_MST_SHEET_MEASURE
+ WHERE PROGRAM_ID='DMF0049' AND SHEET_NAME='MDF Reports' ORDER BY SORT_ORDER_NO;
+-- 기대: SalesAmt_LOC(40,81계열 / 10) · SalesAmt_KRW(40,82,81계열 / 30) · RTF_SYS_RP(40 / 90)
+
+-- ── V9. GTT / SEQUENCE / GRANT / SYNONYM ─────────────────────────────────────
+PROMPT === V9a. GTT (기대 6) ===
+SELECT COUNT(*) AS GTT_CNT, 6 AS EXPECT,
+       CASE WHEN COUNT(*) = 6 THEN 'PASS' ELSE '*** FAIL ***' END AS RESULT
+  FROM ALL_TABLES WHERE OWNER='SCM_MGR' AND TEMPORARY='Y'
+   AND TABLE_NAME LIKE 'GT\_DMF0049\_%' ESCAPE '\';
+
+PROMPT === V9b. GTT 컬럼 시그니처 (구세대 구조 잔존 적출 — 사내 실측과 대조) ===
+SELECT TABLE_NAME, COUNT(*) AS COL_CNT FROM ALL_TAB_COLUMNS
+ WHERE OWNER='SCM_MGR' AND TABLE_NAME LIKE 'GT\_DMF0049\_%' ESCAPE '\'
+ GROUP BY TABLE_NAME ORDER BY 1;
+-- 사내 실측 2026-08-20 (ALL_TAB_COLUMNS 직접 측정 — 추정 아님):
+--   GT_DMF0049_PJT= 4 / GT_DMF0049_RESULTS_MST=45 / GT_DMF0049_RESULTS_MST_PRICE=36 /
+--   GT_DMF0049_SELECT_MEASURE= 5 / GT_DMF0049_T=48 / GT_DMF0049_TEMP_ITEM_SINGLE= 9
+--   ⚠ 개수가 다르면 -955 skip 으로 조용히 통과한 **구세대 GTT** 다 → DROP 후 02_DDL_GTT 재적용.
+
+PROMPT === V9c. SEQUENCE (기대 1) ===
+SELECT COUNT(*) AS SEQ_CNT, 1 AS EXPECT FROM ALL_SEQUENCES
+ WHERE SEQUENCE_OWNER='SCM_MGR' AND SEQUENCE_NAME='SEQ1_DM_PLN_SALES_ETC_REPORT_H';
+
+PROMPT === V9d. EXECUTE GRANT (기대 20 = 10객체 x SCMD_APP/SCMP_APP) ===
+SELECT COUNT(*) AS GRANT_CNT, 20 AS EXPECT FROM DBA_TAB_PRIVS
+ WHERE OWNER='SCM_MGR' AND PRIVILEGE='EXECUTE' AND GRANTEE IN ('SCMD_APP','SCMP_APP')
+   AND TABLE_NAME IN ('PKG_DMF0049','PKG_DMF0044','PKG_DMF0000','PKG_SCM_USER_MNU',
+                      'DMF0002_GET_TITLESET_POPUP','SCM0002_SET_TITLESET_POPUP',
+                      'FN_GET_COUNTRY_KR_NAME','FN_GET_DM_MKT_OWNER_NAME',
+                      'PR_DM_SYS_LOG_BATCH','PR_SCM_SYS_LOG_BATCH');
+
+PROMPT === V9e. SYNONYM (기대 21 = 10객체 x 2 + 시퀀스 SCMP_APP 1) ===
+SELECT COUNT(*) AS SYN_CNT, 21 AS EXPECT FROM DBA_SYNONYMS
+ WHERE TABLE_OWNER='SCM_MGR' AND OWNER IN ('SCMD_APP','SCMP_APP')
+   AND TABLE_NAME IN ('PKG_DMF0049','PKG_DMF0044','PKG_DMF0000','PKG_SCM_USER_MNU',
+                      'DMF0002_GET_TITLESET_POPUP','SCM0002_SET_TITLESET_POPUP',
+                      'FN_GET_COUNTRY_KR_NAME','FN_GET_DM_MKT_OWNER_NAME',
+                      'PR_DM_SYS_LOG_BATCH','PR_SCM_SYS_LOG_BATCH',
+                      'SEQ1_DM_PLN_SALES_ETC_REPORT_H');
+
+PROMPT === V9f. 저장 대상 표 DML 권한 (기대 SCMD_APP 4종 x 2표 = 8) ===
+SELECT COUNT(*) AS DML_GRANT_CNT, 8 AS EXPECT FROM DBA_TAB_PRIVS
+ WHERE OWNER='SCM_MGR' AND GRANTEE='SCMD_APP'
+   AND TABLE_NAME IN ('DM_PLN_SALES_ETC_REPORT_C','DM_PLN_SALES_ETC_REPORT_H')
+   AND PRIVILEGE IN ('SELECT','INSERT','UPDATE','DELETE');
+
+-- ── V10. 선행 의존 객체 실존 (PLS-00201 계보 — 이 PKG 는 교차 PKG 를 호출한다) ──
+PROMPT === V10. 의존 객체 실존 (기대: 전부 CNT=1, STATUS=VALID) ===
+SELECT OBJECT_NAME, OBJECT_TYPE, STATUS FROM ALL_OBJECTS
+ WHERE OWNER='SCM_MGR'
+   AND OBJECT_NAME IN ('PKG_DMF0044','PKG_DMF0000','PKG_SCM_USER_MNU',
+                       'DMF0002_GET_TITLESET_POPUP','SCM0002_SET_TITLESET_POPUP',
+                       'FN_GET_COUNTRY_KR_NAME','FN_GET_DM_MKT_OWNER_NAME',
+                       'PR_DM_SYS_LOG_BATCH','PR_SCM_SYS_LOG_BATCH',
+                       'DM_MST_ITEM_SINGLE_V')
+   AND OBJECT_TYPE IN ('PACKAGE','PACKAGE BODY','PROCEDURE','FUNCTION','VIEW')
+ ORDER BY OBJECT_NAME, OBJECT_TYPE;
+-- ⚠ PKG_DMF0044 가 없으면 unitedVersion/SP_VER 시트 4 SP 가 PLS-00201 로 죽는다.
+--   과거 이 PKG 계보에서 실제로 발생한 사고다 → PKG_DMF0044 선행 배포 확인 필수(README §2 PREREQ).
+
+-- ── V11. 런타임 스모크 (수동 — 화면에서 실행) ────────────────────────────────
+--   ① Demand > Demand Plan > Etc Sales Reports 진입 (메뉴 미표시 = 20_MENU_META_SYNC 미적용)
+--   ② Report Type / Year / Plan-Result / Division 선택 → Ver. '...' → United 팝업 → 버전 선택
+--   ③ Search → 그리드 표시 (0행이면 V5a/V5c 재확인)
+--   ④ **소수 3자리** 표시 확인 (M_ 월 셀. 0 은 빈칸 유지)
+--   ⑤ Division 40 에서 기존행의 Department/Dept/Cust Report **편집 가능** 확인 (V7 축)
+--      → 81/82 에서는 기존행 잠금 + 신규행 입력은 가능해야 한다
+--   ⑥ 2행 이상 선택해 부가정보 수정 후 Save → 저장 성공 Toast → 재조회 시
+--      NICK_NAME / FORECAST_INFO_SPEC 가 **NULL 로 날아가지 않는지** 확인 (V3 축의 실제 증상)
+--   ⑦ 정적 컬럼만 수정 후 Save → MSG00676('저장 대상 없음') 이 뜨지 않아야 한다 (staticChanged 정정)

@@ -48,7 +48,14 @@ const str = (v: unknown): string => {
 const keyOf = (item: WijmoRowItem): Omit<SaveRow, 'activeFlag' | 'yyyymmdd' | 'qty'> => ({
   divisionId: str(item['DIVISION_ID']),
   projectCode: str(item['PROJECT_CODE'] || item['END_CUSTOMER']), // 40: PROJECT=END_CUSTOMER 코드 (AS-IS L761)
-  endCustomer: str(item['END_CUSTOMER']),
+  // ⭐ [ENDCUSTDISP 2026-08-18] 표시/키 분리 — 비40 조회행의 END_CUSTOMER 는 화면 표시용
+  //   (사이트 파생, 조회조건 축)으로 교체되고 원장 키는 END_CUSTOMER_KEY 에 보존된다
+  //   (ForecastPrice.tsx gridRows 변환). SAVE·중복키는 **반드시 KEY** — 원장 END_CUSTOMER 는
+  //   DM_PLN_CFM_* PK 구성 컬럼이라 표시값으로 보내면 DELETE/MERGE 가 어긋나 중복 적재된다.
+  //   'in' 검사인 이유: KEY='' (원장 빈값) 도 유효한 키라 || 폴백으로 덮으면 안 된다.
+  //   신규행(I)은 KEY 가 없어 사용자가 고른 END_CUSTOMER 가 그대로 키가 된다(새 키 — 충돌 없음).
+  endCustomer:
+    'END_CUSTOMER_KEY' in item ? str(item['END_CUSTOMER_KEY']) : str(item['END_CUSTOMER']),
   scmSiteId: str(item['SCM_SITE_ID']),
   itemId: str(item['ITEM_ID']),
   domExp: str(item['DOM_EXP']),

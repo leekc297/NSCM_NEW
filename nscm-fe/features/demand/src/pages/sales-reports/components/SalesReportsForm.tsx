@@ -1,11 +1,13 @@
 import { DivisionField, VersionField } from 'features/master/src/components';
 
+import dayjs from '@foundation/dayjs';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { FormItem } from '@shared/lges';
 import { Grid } from '@shared/mui';
 
+import { DATA_TYPE, REPORT_TYPE } from '../sales-reports.constants';
 import type { DataType, ReportType } from '../sales-reports.constants';
 import { useSalesReportsStore } from '../useSalesReportsStore';
 
@@ -13,6 +15,9 @@ interface SalesReportsFormProps {
   onSearch: () => void;
   // ⭐ Division 변경 = Grid 초기화(비움) + CRUD reset 의무 (memory feedback_division_change_grid_reset)
   onDivisionChange: () => void;
+  // ⭐ Report Type 변경 = Grid 초기화 (AS-IS clbType_SelectedIndexChanged = InitSpread + Version 비움.
+  //    사용자 지정 2026-08-20 REQ:CHAT-20260820-2 — Division 과 동일 처우)
+  onReportTypeChange: () => void;
   onOpenVersionModal: () => void; // btnSPVer '...' — United 팝업 (Version 주입)
 }
 
@@ -24,6 +29,7 @@ interface SalesReportsFormProps {
 export const SalesReportsForm = ({
   onSearch,
   onDivisionChange,
+  onReportTypeChange,
   onOpenVersionModal,
 }: SalesReportsFormProps) => {
   const { t } = useTranslation();
@@ -56,7 +62,14 @@ export const SalesReportsForm = ({
             value={sc.divisionId}
             onChange={v => {
               // Version 은 division 종속(버전 목록이 division별) — 변경 시 초기화 (AS-IS 파리티)
-              set({ divisionId: v, versionNo: '', versionLabel: '' });
+              set({
+                divisionId: v,
+                versionNo: '',
+                versionLabel: '',
+                mdfType: REPORT_TYPE.SP_W,
+                yyyy: dayjs().format('YYYY'),
+                dataType: DATA_TYPE.ALL,
+              });
               onDivisionChange();
             }}
           />
@@ -69,9 +82,16 @@ export const SalesReportsForm = ({
                 <CustomDropdown
                   value={sc.mdfType}
                   options={toOptions(mdfType)}
-                  onChange={(_, v) =>
-                    set({ mdfType: String(v ?? '') as ReportType, versionNo: '', versionLabel: '' })
-                  }
+                  onChange={(_, v) => {
+                    // AS-IS DMF0044_Sales_Reports.cs clbType_SelectedIndexChanged = InitSpread()(시트 재생성)
+                    //   + txtSPVersion 비움 ⇒ TO-BE 도 Version 초기화 + 그리드/CRUD reset
+                    set({
+                      mdfType: String(v ?? '') as ReportType,
+                      versionNo: '',
+                      versionLabel: '',
+                    });
+                    onReportTypeChange();
+                  }}
                 />
               )}
             />
@@ -117,6 +137,9 @@ export const SalesReportsForm = ({
             //   팝업 선택은 표시문에 DESCRIPTION 이 붙지만 직접 입력은 원문이 곧 표시문이다.
             //   존재하지 않는 버전을 치면 조회 0건으로 떨어진다(SP 판정 — FE 사전 검증 없음).
             onValueChange={v => set({ versionNo: v, versionLabel: v })}
+            // 팝업 라벨('VERSION_NO 설명') 뒤에서 편집을 시작하면 설명까지 조회키가 되므로
+            //   포커스 순간 코드만 남긴다.
+            versionNo={sc.versionNo}
             label={
               sc.mdfType === 'REPORT_BP_M'
                 ? t('LBL00797', '_BP Version')

@@ -25,6 +25,11 @@ interface ContributeMainAction {
   reset: () => void;
   setSearchParams: (params: Partial<SearchParamProps>) => void;
   setFilters: () => void;
+  /**
+   * 조회 filters 무효화 — useTabProcQuery 의 enabled=false + queryKey 변경으로 그리드가 비워진다.
+   * 조회 결과가 현재 조회조건과 어긋나는 순간(Year 변경 등)에 호출한다. 재조회는 Search 로만.
+   */
+  clearFilters: () => void;
   fetchStaticColumns: () => Promise<void>;
   setOpenSearchArea: (open?: boolean) => void;
 }
@@ -80,6 +85,10 @@ export const useContributeMainStore = createPersistedStoreWithTab<
         };
       });
     },
+    clearFilters: () =>
+      set(state => {
+        state.filters = {};
+      }),
     fetchStaticColumns: async () => {
       const [main, mainTitle, version] = await Promise.all([
         apiClient.post<RawFlexGridColumnConfig[]>(`/admin/menu/${MENU_ID}/column`, {

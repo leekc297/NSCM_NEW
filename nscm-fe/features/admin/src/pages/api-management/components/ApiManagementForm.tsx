@@ -1,5 +1,6 @@
 import { type MutableRefObject, useState } from 'react';
 
+import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabLookupQueries } from '@shared/hooks';
 import { FormItem, InputField } from '@shared/lges';
@@ -55,10 +56,11 @@ export const ApiManagementForm = ({ onSearch, apiIdInputRef }: ApiManagementForm
       isHidden={!isOpenSearchArea}
       conditions={
         <>
-          <Grid size={4}>
+          <Grid size={3}>
             <FormItem
               label={t('LBL00345', '_API Type')}
               labelAlign='right'
+              className={commonStyles.formItem}
               render={() => (
                 <CustomDropdown
                   multiple
@@ -77,10 +79,11 @@ export const ApiManagementForm = ({ onSearch, apiIdInputRef }: ApiManagementForm
               )}
             />
           </Grid>
-          <Grid size={4}>
+          <Grid size={3}>
             <FormItem
               label={t('LBL00323', '_API ID')}
               labelAlign='right'
+              className={commonStyles.formItem}
               render={() => (
                 <InputField
                   fullWidth
@@ -91,10 +94,11 @@ export const ApiManagementForm = ({ onSearch, apiIdInputRef }: ApiManagementForm
               )}
             />
           </Grid>
-          <Grid size={4}>
+          <Grid size={3}>
             <FormItem
               label={t('LBL00007', '_Active')}
               labelAlign='right'
+              className={commonStyles.formItem}
               render={() => (
                 <CustomDropdown
                   isInput={false}

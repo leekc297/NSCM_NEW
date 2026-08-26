@@ -69,6 +69,39 @@ export const resolveDeptIdRows = (
   return src.deptByDepartment.filter(cr => toCellStr(cr.DEPARTMENT_ID).trim() === departmentId);
 };
 
+/**
+ * DEPT_ID 컬럼 DataMap — 표시는 컬럼 전체(superset)로 고정하고, 드롭다운 후보만 행 컨텍스트로 좁힌다.
+ *
+ * 금지: `beginningEdit` 에서 `column.dataMap` 을 행별 콤보로 갈아끼우지 말 것 (2026-08-21 결함).
+ *   wijmo 는 셀 표시 글자를 `Column.dataMap.getDisplayValue(key)` 로 만들고, 그 함수는 맵에 없는
+ *   키를 만나면 **원값(코드)을 그대로** 돌려준다(`@mescius/wijmo.grid` DataMap 구현).
+ *   dataMap 은 셀이 아니라 **컬럼** 속성이라, 한 셀이 편집에 들어간 순간 그 컬럼 전 행이 좁혀진
+ *   맵을 타고 후보에 없는 코드가 전부 원 코드('소형.마케팅.IM.IM1팀')로 바뀐다. 편집이 끝나면
+ *   원복되므로 사용자에게는 "Team 에 포커스만 가면 코드로 보였다 이름으로 돌아온다"로 보였다.
+ * 대신 wijmo 가 후보 목록 전용으로 제공하는 `DataMap.getDisplayValues(dataItem)` 를 쓴다 —
+ *   공용 컬럼 매핑(`packages/foundation/src/utils/columnMapping.ts` getDataMap)과 같은 처방이다.
+ *
+ * 표시명 우선순위는 **메타 콤보(deptDefault)** 다. 같은 CODE 가 양쪽 원천에 있으면 먼저 넣은 쪽이
+ *   이기므로(DataMap 내부 색인이 첫 항목만 담는다) 편집 전후 글자가 갈리지 않는다. 후보 라벨도
+ *   같은 맵을 거쳐 만들어 드롭다운과 셀이 같은 이름 체계를 쓴다.
+ */
+export const buildDeptIdDataMap = (
+  src: {
+    deptDefault: Record<string, unknown>[];
+    deptByDepartment: Record<string, unknown>[];
+  },
+  divisionId: string
+): DataMap | null => {
+  const superset = [...src.deptDefault, ...src.deptByDepartment];
+  if (superset.length === 0) return null;
+  const dataMap = new DataMap(superset, 'CODE', 'NAME');
+  dataMap.getDisplayValues = (rowItem?: unknown): string[] =>
+    resolveDeptIdRows(rowItem as EtcSalesReportRow | undefined, divisionId, src).map(cr =>
+      dataMap.getDisplayValue(toCellStr(cr.CODE))
+    );
+  return dataMap;
+};
+
 const CLEAR_FULL5 = ['ITEM_ID', 'NICK_NAME', 'END_CUST_REPORT', 'CUST_REPORT', 'PRODUCT_GROUP'];
 const CLEAR_REPORT3 = ['END_CUST_REPORT', 'CUST_REPORT', 'PRODUCT_GROUP'];
 

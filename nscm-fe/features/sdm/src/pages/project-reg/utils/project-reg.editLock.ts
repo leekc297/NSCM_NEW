@@ -3,6 +3,7 @@
 //   등록요청 = 저장된 행 ∈ {DRAFT, WRITING} / 요청취소 = WAITING.
 //   셀 게이트 : UI Category Setup `INPUT_TP_CD` 단일 원천 (IM/IO=신규행만 · M/O=행 게이트 통과 시 ·
 //   S/미지정=불가). 색(Yellow/Gray)과 편집 판정이 같은 함수를 본다 — 갈리면 "노란칸인데 못 고침" 사고.
+import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 
 import { REG_STATUS } from '../project-reg.constants';
@@ -39,7 +40,10 @@ export const isCellEditable = (
 // IM(신규행 필수) 컬럼 바인딩 — Save FE 검증(MSG00113) 대상 (메타 단일 원천)
 export const requiredInsertColumns = (
   columns: RawFlexGridColumnConfig[] | undefined
-): RawFlexGridColumnConfig[] => (columns ?? []).filter(c => c.inputTpCd === 'IM');
+): RawFlexGridColumnConfig[] =>
+  // enum 멤버로 비교한다 — 문자열 리터럴과 비교하면 no-unsafe-enum-comparison 이 막는다
+  //   (오타·값 변경을 타입이 못 잡는 비교라서). 'IM' = 신규행 필수 입력.
+  (columns ?? []).filter(c => c.inputTpCd === CELL_INPUT_EDIT_TYPE.MANDATORY_INSERT_ONLY);
 
 // ── 상태머신 행 가드 (P-07/P-09/P-12/P-31 — ProjectReg 핸들러·단위테스트 공용 단일 원천) ──
 // 삭제 가드 (P-07) — 신규(C) 또는 DRAFT/WRITING 만 (행 편집 게이트와 동일 술어.

@@ -315,7 +315,16 @@ export const MetalLinkPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
           }
         }}
         onUploaded={() => {
-          if (hasSearched) void queryClient.invalidateQueries({ queryKey: [MENU_ID] });
+          // ⭐ [2026-08-18 사용자 확정 A안] 업로드 저장 성공 = Version 을 'Current' 로 리셋 후 재조회.
+          //   업로드분은 Current 원장(DM_BPS_METAL_LINK_PRICE)에 적재되는데, Version 칸에 특정
+          //   버전(예: SP_W_..._V001)이 남아 있으면 _C 스냅샷을 읽어 방금 저장분이 안 보인다
+          //   (실사고 2026-08-18 21:45 — SP 교차검증: 특정버전 0행 / Current 2행).
+          setSearchParams({ version: 'Current' });
+          if (hasSearched) {
+            // setFilters 가 최신 searchParams(Current)로 필터를 재조립 → query key 변경 = 자동 재조회.
+            //   (invalidateQueries 는 구 필터(특정 버전)로 재요청하므로 여기선 부적합)
+            setFilters();
+          }
         }}
       />
       <Alert />

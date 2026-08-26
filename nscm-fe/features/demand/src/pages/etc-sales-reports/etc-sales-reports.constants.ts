@@ -46,6 +46,23 @@ export const DIVISION = {
 export const measureCntOf = (divisionId: string): number =>
   divisionId === '40' ? 3 : divisionId.startsWith('81') ? 2 : 1;
 
+// ⭐ REQ:CHAT-20260820-16 — 동적 월(M_) 셀 소수 자릿수. **원천은 메타**(하드코딩 금지):
+//   `P_DMF0049_GET_SPREAD_TITLE` 이 동적 M_ 분기에서 `DATA_SCALE_NUMBER` 를 내려준다
+//   (`_artifacts/_deploy_packages/DMF0049_20260811_1532/03_PKG_BODY.sql:228` — LIVE 라인.
+//    바로 위 :227 `--, '2' AS DATA_SCALE_NUMBER` 는 주석이라 근거 아님. hook #138).
+//   아래 상수는 SP 가 값을 주지 않을 때만 쓰는 최후 fallback 이다.
+export const DEFAULT_DATA_SCALE = 3;
+
+// 메타 문자열('3')·숫자(3) 어느 형태로 와도 자릿수로 환산 (음수·비정수·범위밖은 fallback).
+//   ⚠ 빈값(null/undefined/''/공백)을 먼저 걸러야 한다 — `Number('')` 은 **0** 이라
+//     "메타 없음" 이 조용히 "소수 0자리" 로 둔갑한다(2026-08-20 단위검증에서 적출).
+export const dataScaleOf = (raw: unknown): number => {
+  const text = typeof raw === 'number' || typeof raw === 'string' ? String(raw).trim() : '';
+  if (text === '') return DEFAULT_DATA_SCALE;
+  const n = Number(text);
+  return Number.isInteger(n) && n >= 0 && n <= 20 ? n : DEFAULT_DATA_SCALE;
+};
+
 // ⭐ MSG 매핑 — 전부 사내 기등록 실측 재사용 (2026-07-22 — 신규 채번 0. hook #114 3분기)
 export const MSG = {
   // 조회 전 버전 필수 (FindData L528 — AS-IS 00283 = 사내 기등록)

@@ -1,4 +1,3 @@
-import { toggleClass } from '@mescius/wijmo';
 import {
   type CellRangeEventArgs,
   CellType,
@@ -13,7 +12,11 @@ import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/
 import type { EditTracker } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 
-import { MAIN_COLUMNS } from '../customer-fcst-upload.constant';
+import {
+  CODE_DISPLAY_COLUMNS,
+  GRID_COMBO_PARAMS,
+  MAIN_COLUMNS,
+} from '../customer-fcst-upload.constant';
 import type { CustomerFcstUploadRow, SpreadTitleRow } from '../customer-fcst-upload.types';
 import { useCustomerFcstUploadStore } from '../useCustomerFcstUploadStore';
 
@@ -38,6 +41,10 @@ interface MergedColumnMeta {
   visible: boolean;
   display: boolean;
   fixed: boolean;
+  // admin CELL_CONTROL_OBJECT_TYPE_CODE / CELL_COMBO_DATA_TYPE — 공용 DataGrid 자동 콤보 dataMap 트리거.
+  //   COMBO + comboId 면 DataGrid 가 useTabComboQueries 로 CODE -> NAME 표시 매핑을 붙인다.
+  cellCtrlObjTpCd?: CELL_CONTROL_TYPE;
+  cellCboDataTp?: string;
 }
 
 export const CustomerFcstUploadGrid = ({
@@ -62,10 +69,19 @@ export const CustomerFcstUploadGrid = ({
         display: c._default === true,
         // AS-IS Freeze(0..EditFlag) — 식별 컬럼 전체 고정 (SHEET_COLUMNS FIXED_FLAG='Y' 등재 1:1)
         fixed: c.visible !== false,
+        cellCboDataTp: c._comboKey,
+        cellCtrlObjTpCd: c._comboKey
+          ? CELL_CONTROL_TYPE.COMBO
+          : (c._ctrlType as CELL_CONTROL_TYPE | undefined),
       }));
     }
     return staticColumn.map(col => {
       const fb = MAIN_COLUMNS.find(m => m.key === col.colNm);
+      // 콤보 SQL_ID 는 admin 메타 우선, 없으면 MAIN_COLUMNS fallback (AS-IS AddComboColumn 8종).
+      //   단 CODE_DISPLAY_COLUMNS(Division)는 메타에 등재돼 있어도 코드 표기를 유지한다.
+      const comboKey = CODE_DISPLAY_COLUMNS.includes(col.colNm)
+        ? undefined
+        : col.cellCboDataTp?.trim() || fb?._comboKey;
       return {
         binding: col.colNm,
         header: col.colLblNm || fb?.header || col.colNm,
@@ -74,6 +90,11 @@ export const CustomerFcstUploadGrid = ({
         visible: col.visible !== false,
         display: col.display === true, // BE 계산값 (개인화 있으면 개인화 / 없으면 DEFAULT_FLAG)
         fixed: col.fixed === true, // admin FIXED_FLAG 위임 (등재값 'Y' — AS-IS Freeze 1:1)
+        cellCboDataTp: comboKey,
+        // 콤보 SQL_ID 가 잡히면 COMBO 로 승격한다 — admin 메타의 CELL_CONTROL_OBJECT_TYPE_CODE 가
+        //   'FPText'/공란으로 등재돼 있어도 표시 매핑이 살아야 하기 때문이다. 이 화면 식별 컬럼은
+        //   전부 읽기전용('S')이라 COMBO 선언은 CODE -> NAME 표시 스위치로만 작동한다(편집화 아님).
+        cellCtrlObjTpCd: comboKey ? CELL_CONTROL_TYPE.COMBO : col.cellCtrlObjTpCd,
       } as MergedColumnMeta;
     });
   }, [staticColumn]);
@@ -96,6 +117,11 @@ export const CustomerFcstUploadGrid = ({
         visible: true,
         display: true,
         inputTpCd: CELL_INPUT_EDIT_TYPE.SEARCH_ONLY,
+        // 콤보 메타 승계 -> 공용 DataGrid 자동 dataMap (AS-IS AddComboColumn 컬럼 CODE -> NAME 표시).
+        //   inputTpCd='S'(읽기전용)여도 dataMap 은 표시 매핑만 담당하며, 셀에 남는 값과 저장 payload 는
+        //   변함없이 CODE 원문이다 (handleSave 는 row 값을 그대로 읽는다).
+        cellCtrlObjTpCd: c.cellCtrlObjTpCd,
+        cellCboDataTp: c.cellCboDataTp,
       })),
     [visibleColumns]
   );
@@ -151,7 +177,6 @@ export const CustomerFcstUploadGrid = ({
     const formatHandler = (_s: FlexGrid<CustomerFcstUploadRow>, e: FormatItemEventArgs) => {
       const col = e.panel.columns[e.col];
       if (!col) return;
-      const binding = col.binding ?? '';
 
       if (e.panel.cellType === CellType.ColumnHeader) {
         e.cell.style.textAlign = 'center';
@@ -161,39 +186,15 @@ export const CustomerFcstUploadGrid = ({
         else if (text === 'SUN') e.cell.style.color = '#c0392b';
         return;
       }
-      if (e.panel.cellType !== CellType.Cell) return;
-      if (!binding) return;
-
-      // #95 — 편집 가능 셀만 Yellow (D_ 기간 셀 × EDIT_FLAG='Y' 행), 그 외 White + zebra
-      if (dynBindings.has(binding)) {
-        const item = (e.panel.rows[e.row] as { dataItem?: CustomerFcstUploadRow }).dataItem;
-        const editable = item?.EDIT_FLAG === 'Y';
-        toggleClass(e.cell, 'wj-cell-editable', editable);
-        toggleClass(e.cell, 'wj-cell-non-editable', false);
-        return;
-      }
-      toggleClass(e.cell, 'wj-cell-editable', false);
-      toggleClass(e.cell, 'wj-cell-non-editable', false);
+      // 셀 편집가능 색(wj-cell-editable)과 편집 게이트는 공통 DataGrid 의 isCellEditable predicate 로 이관.
+      //   formatHandler 는 헤더 요일색만 담당한다.
     };
     g.formatItem.addHandler(formatHandler);
 
-    // ⭐ 편집 가드 — D_ 기간 셀 × EDIT_FLAG='Y' 행만 허용 (AS-IS FindData 전체 잠금 → EditButton
-    //   에서 'Y' 행 식별 컬럼만 잠금 유지 1:1. F2 토글은 TO-BE 표준(mkt-fcst)대로 상시 판정으로 대체)
-    const beginningEditHandler = (
-      _s: FlexGrid<CustomerFcstUploadRow>,
-      e: CellRangeEventArgs & { cancel: boolean }
-    ) => {
-      const binding = _s.columns[e.col]?.binding ?? '';
-      if (!dynBindings.has(binding)) {
-        e.cancel = true;
-        return;
-      }
-      const item = (_s.rows[e.row] as { dataItem?: CustomerFcstUploadRow }).dataItem;
-      if (item?.EDIT_FLAG !== 'Y') e.cancel = true;
-    };
-    g.beginningEdit.addHandler(beginningEditHandler);
+    // 편집 가드(D_ 기간 셀 × EDIT_FLAG='Y' 행만 허용)는 공통 DataGrid 의 isCellEditable predicate 로 이관.
+    //   predicate 가 beginningEdit/pastingCell cancel 을 색과 동일한 기준으로 처리한다.
 
-    // ⭐ spdMain_Changed(CellsUpdated) 1:1 — 편집 종료 셀을 메인으로 통지 (검증+수집은 메인 소관)
+    // spdMain_Changed(CellsUpdated) 1:1 — 편집 종료 셀을 메인으로 통지 (검증+수집은 메인 소관)
     const cellEditEndedHandler = (_s: FlexGrid<CustomerFcstUploadRow>, e: CellRangeEventArgs) => {
       const binding = _s.columns[e.col]?.binding ?? '';
       if (!dynBindings.has(binding)) return;
@@ -205,11 +206,6 @@ export const CustomerFcstUploadGrid = ({
     return () => {
       try {
         g.formatItem?.removeHandler(formatHandler);
-      } catch {
-        /* unmount race */
-      }
-      try {
-        g.beginningEdit?.removeHandler(beginningEditHandler);
       } catch {
         /* unmount race */
       }
@@ -311,10 +307,14 @@ export const CustomerFcstUploadGrid = ({
       editTrackerRef={editTrackerRef}
       staticColumns={mainStaticColumns}
       dynamicColumns={dynamicColumns}
+      comboParams={GRID_COMBO_PARAMS}
       itemsSource={data}
       autoGenerateColumns={false}
       allowSorting={true}
-      isReadOnly={true}
+      // D_ 기간 셀 × EDIT_FLAG='Y' 행만 편집 가능 (색·편집 게이트 단일 판정)
+      isCellEditable={({ binding, rowItem }) =>
+        dynBindings.has(binding) && rowItem?.EDIT_FLAG === 'Y'
+      }
     />
   );
 };

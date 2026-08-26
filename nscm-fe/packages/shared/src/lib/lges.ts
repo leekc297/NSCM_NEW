@@ -16,6 +16,10 @@ export {
   type LabelProps,
   Switch,
   type SwitchProps,
+  Tag,
+  type TagAppearance,
+  type TagColorType,
+  type TagProps,
   TitleArea,
   type TitleAreaProps,
   InputField,
@@ -35,4 +39,6 @@ export {
   DetailTableHeaderCell,
   DetailTableDataCell,
   DetailTableBox,
+  Tree,
+  type TreeData,
 } from '@lges/design-system';

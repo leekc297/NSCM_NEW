@@ -344,3 +344,29 @@ export const MEASURE_MODEL_CLEAR_COLS: readonly string[] = [
   'ITEM_TYPE',
   'NICK_NAME',
 ];
+
+// Division - Team - End Customer - Sales Site 조회조건이 읽는 조인 콤보 ID (SCM_ADM_CMBO_SQL_M).
+// 4단이 한 SQL 로 조인돼 내려오므로 단계별 콤보를 각자 조회하고 클라이언트에서 서로 필터링할
+// 필요가 없다. 특히 EndCustomer 콤보의 DEPT_ID 공란 행 때문에 strict / 관대 판단이 필요했던
+// 문제가 사라진다 (2026-08-18 원복 건). useCascadeFields 가 이 ID 하나만 조회한다.
+export const SEARCH_CASCADE_COMBO_ID = 'SalesSite';
+
+// Plant Site 조회조건이 읽는 조인 콤보 ID. 위 콤보와 컬럼 규약은 같지만(DIVISION_CODE /
+// TEAM_CODE / END_CUSTOMER / PLANT_SITE_CODE) 마지막 단계가 Plant Site 인 별개 SQL 이다.
+// Plant Site 는 Sales Site 의 하위가 아니라 End Customer 에서 나란히 갈라진다.
+// 주의: 이 SQL_ID 는 카탈로그 PlantSiteField 도 쓰고 있고, 그쪽은 아직 개정 전 컬럼명
+// (DIVISION_ID / END_CUSTOMER)을 읽는다. 조인 형태로 갈아끼울 때 같은 ID 를 덮어썼다면
+// PlantSiteField 를 쓰는 다른 화면들이 조용히 빈 목록이 된다 - 아래 목록 확인 필요.
+export const PLANT_SITE_CASCADE_COMBO_ID = 'PlantSite';
+
+// Sender Code 조회조건이 읽는 조인 콤보 ID. Div - Team - Sender 3단이고 컬럼은 표준 규약
+// (DIVISION_CODE / DIVISION_NAME / TEAM_CODE / TEAM_NAME / SENDER_CODE / SENDER_NAME)이다.
+// 주의: 이 SQL_ID 는 ForecastPriceForm 의 Sender Code 콤보도 쓰고 있고, 그쪽은 아직 개정 전
+// 컬럼명(DIVISION_ID / CODE / NAME)을 읽는다.
+export const SENDER_CASCADE_COMBO_ID = 'SenderCode';
+
+// Biz Type 조회조건이 읽는 조인 콤보 ID. Div - Biz Type 2단이고 컬럼은 표준 규약
+// (DIVISION_CODE / DIVISION_NAME / BIZ_TYPE_CODE / BIZ_TYPE_NAME)이다.
+// 종전 'BizTypebyDivision' 을 카탈로그 BizTypeField 로 조회하고 DIVISION_ID 를 클라이언트에서
+// 걸던 것을 cascade 단계로 옮긴 것이다 (동작은 같다 - Division 으로만 좁힌다).
+export const BIZ_TYPE_CASCADE_COMBO_ID = 'DivBizType';

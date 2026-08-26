@@ -11,7 +11,7 @@
 // 각 화면은 자기 tabId 의 TabIdContext.Provider 로 감싼다
 // (createPersistedStoreWithTab 의 탭별 스토어 격리를 위해 필수).
 // 각 화면은 ErrorBoundary 로 격리 — 한 화면의 렌더 에러가 앱 전체를 백지화하지 않는다.
-import { Component, Suspense, useEffect, type ReactNode } from 'react';
+import { Component, Suspense, useCallback, useEffect, useState, type ReactNode } from 'react';
 
 import { clsx } from '@shared/clsx';
 import { ProgressIndicator } from '@shared/lges';
@@ -24,9 +24,15 @@ import { NotFoundPage } from '../pages/NotFound';
 import { useMDIStore } from './useMDIStore';
 import { useTabActivation } from './useTabActivation';
 import styles from './ViewContainer.module.scss';
-import { resolveView, type AnyPage } from './viewRegistry';
+import { resetView, resolveView, type AnyPage } from './viewRegistry';
 
-class ViewErrorBoundary extends Component<{ children: ReactNode }, { error: Error | null }> {
+// onRetry 는 부모(ViewContainer)가 lazy 캐시를 비우고 재렌더하도록 알린다 —
+// 에러 상태만 지우면 부모가 준 children(= 실패를 캐시한 같은 lazy 인스턴스)이 그대로라
+// 재요청 없이 같은 에러가 다시 던져진다. resetView 주석 참고.
+class ViewErrorBoundary extends Component<
+  { children: ReactNode; onRetry: () => void },
+  { error: Error | null }
+> {
   state: { error: Error | null } = { error: null };
 
   static getDerivedStateFromError(error: Error) {
@@ -44,7 +50,10 @@ class ViewErrorBoundary extends Component<{ children: ReactNode }, { error: Erro
           <button
             type='button'
             className={styles.viewErrorRetry}
-            onClick={() => this.setState({ error: null })}
+            onClick={() => {
+              this.props.onRetry();
+              this.setState({ error: null });
+            }}
           >
             다시 시도
           </button>
@@ -78,6 +87,14 @@ export const ViewContainer = () => {
   useEffect(() => {
     if (activeTabId) activate(activeTabId);
   }, [activeTabId, activate]);
+
+  // 화면 로드 실패 후 "다시 시도" — lazy 캐시를 비우고 재렌더해 새 lazy 인스턴스로 다시 import 한다.
+  // nonce 는 재렌더 트리거용(캐시를 비워도 부모가 다시 렌더하지 않으면 옛 인스턴스가 그대로 쓰인다).
+  const [, setRetryNonce] = useState(0);
+  const retryView = useCallback((menu: { routePath?: string | null; mnuUrl?: string | null }) => {
+    resetView(menu);
+    setRetryNonce(nonce => nonce + 1);
+  }, []);
 
   // Page 영역 전체화면 (MainTitle 의 전체화면 아이콘이 토글) — 활성 탭 뷰에만 적용하는 공통 처리.
   const pageFullscreen = useUIStore(state => state.pageFullscreen);
@@ -129,7 +146,9 @@ export const ViewContainer = () => {
             }}
           >
             <TabIdContext.Provider value={tab.tabId}>
-              <ViewErrorBoundary>
+              <ViewErrorBoundary
+                onRetry={() => retryView({ routePath: tab.routePath, mnuUrl: tab.mnuUrl })}
+              >
                 <Suspense fallback={<Fallback />}>
                   {/*
                     VIEW_REGISTRY 에 mnuId 매핑이 없는 탭(메뉴는 DB 에 있으나 화면 미구현/오타).

@@ -1,0 +1,67 @@
+﻿pnpm 10.28.2  (요구 = "packageManager": "pnpm@10.28.2",)
+task=lint  filter=@sdm
+--- turbo run lint --filter @sdm --continue ---
+• turbo 2.8.5
+• Packages in scope: @sdm
+• Running lint in 1 packages
+• Remote caching disabled
+@sdm:lint: cache miss, executing f6e39f22cc17278d
+@sdm:lint: 
+@sdm:lint: > @sdm@0.1.0 lint C:\Projects\NSCM\nscm-fe\features\sdm
+@sdm:lint: > eslint src --color
+@sdm:lint: 
+@sdm:lint: 
+@sdm:lint: C:\Projects\NSCM\nscm-fe\features\sdm\src\components\ProjectAuthRegModal.tsx
+@sdm:lint:   25:20  warning  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `ProjectAuthRegModal.tsx` to same directory as `../pages/project-reg/ProjectReg.module.scss` or consider making `../pages/project-reg/ProjectReg.module.scss` a package  import/no-relative-parent-imports
+@sdm:lint: 
+@sdm:lint: C:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-list\ProjectList.tsx
+@sdm:lint:   138:49  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+@sdm:lint: 
+@sdm:lint: C:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-list\components\ProjectListGrid.tsx
+@sdm:lint:   28:20  warning  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `ProjectListGrid.tsx` to same directory as `../ProjectList.module.scss` or consider making `../ProjectList.module.scss` a package  import/no-relative-parent-imports
+@sdm:lint: 
+@sdm:lint: C:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-list\utils\project-list.api.test.ts
+@sdm:lint:   14:18  error  A method that is not declared with `this: void` may cause unintentional scoping of `this` when separated from its object.
+@sdm:lint: Consider using an arrow function or explicitly `.bind()`ing the method to avoid calling the method with an unintended `this` value. 
+@sdm:lint: If a function does not access `this`, it can be annotated with `this: void`  @typescript-eslint/unbound-method
+@sdm:lint: 
+@sdm:lint: C:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-master\ProjectMaster.tsx
+@sdm:lint:   166:49  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+@sdm:lint: 
+@sdm:lint: C:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-master\components\ProjectMasterTab1Grid.tsx
+@sdm:lint:   23:20  warning  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `ProjectMasterTab1Grid.tsx` to same directory as `../ProjectMaster.module.scss` or consider making `../ProjectMaster.module.scss` a package  import/no-relative-parent-imports
+@sdm:lint: 
+@sdm:lint: C:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-master\components\ProjectMasterTab2Grid.tsx
+@sdm:lint:   21:20  warning  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `ProjectMasterTab2Grid.tsx` to same directory as `../ProjectMaster.module.scss` or consider making `../ProjectMaster.module.scss` a package  import/no-relative-parent-imports
+@sdm:lint: 
+@sdm:lint: C:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-master\utils\project-master.api.test.ts
+@sdm:lint:   19:18  error  A method that is not declared with `this: void` may cause unintentional scoping of `this` when separated from its object.
+@sdm:lint: Consider using an arrow function or explicitly `.bind()`ing the method to avoid calling the method with an unintended `this` value. 
+@sdm:lint: If a function does not access `this`, it can be annotated with `this: void`  @typescript-eslint/unbound-method
+@sdm:lint: 
+@sdm:lint: C:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-reg\ProjectReg.tsx
+@sdm:lint:   173:49  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+@sdm:lint:   283:20  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+@sdm:lint:   290:16  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+@sdm:lint: 
+@sdm:lint: C:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-reg\components\ProjectRegTab1Grid.tsx
+@sdm:lint:   20:20  warning  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `ProjectRegTab1Grid.tsx` to same directory as `../ProjectReg.module.scss` or consider making `../ProjectReg.module.scss` a package  import/no-relative-parent-imports
+@sdm:lint: 
+@sdm:lint: C:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-reg\components\ProjectRegTab2Grid.tsx
+@sdm:lint:   10:20  warning  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `ProjectRegTab2Grid.tsx` to same directory as `../ProjectReg.module.scss` or consider making `../ProjectReg.module.scss` a package  import/no-relative-parent-imports
+@sdm:lint: 
+@sdm:lint: C:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-reg\components\modals\MyWorkModal.tsx
+@sdm:lint:   11:20  warning  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `MyWorkModal.tsx` to same directory as `../../ProjectReg.module.scss` or consider making `../../ProjectReg.module.scss` a package  import/no-relative-parent-imports
+@sdm:lint: 
+@sdm:lint: ✖ 14 problems (2 errors, 12 warnings)
+@sdm:lint: 
+@sdm:lint:  ELIFECYCLE  Command failed with exit code 1.
+@sdm:lint: command finished with error, but continuing...
+@sdm#lint: command (C:\Projects\NSCM\nscm-fe\features\sdm) C:\Projects\NSCM\_artifacts\_tools\pnpm-10.28.2\pnpm.cmd run lint exited (1)
+
+ Tasks:    0 successful, 1 total
+Cached:    0 cached, 1 total
+  Time:    2m5.806s 
+Failed:    @sdm#lint
+
+ ERROR  run failed: command  exited (1)

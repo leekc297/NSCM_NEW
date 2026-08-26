@@ -1,0 +1,106 @@
+﻿
+==============================================================================================================
+SQL_ID 0w0qjxv6azjvt
+==============================================================================================================
+INSERT INTO SCM_MGR.GT_DM51_RAW_DATA ( VERSION_NO, CUTOFF_YYYYMMDD, DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, PLANT_SITE_ID, ITEM_ID , INCOTERMS, CELL_PROD_SITE, FCST_TYPE, CURRENCY, MEASURE, YYYYMM, CAL_YYYYQQ, CAL_YYYY, QTY , COLNAME, DEPT_ID, END_CUSTOMER, BIZ_TYPE, PROJECT_NAME, ITEM_USE, UNIT_ENERGY ) SELECT A.VERSION_NO , A.CUTOFF_YYYYMMDD , A.DIVISION_ID , A.PROJECT_CODE , A.SCM_SITE_ID , A.PLANT_SITE_ID , A.ITEM_ID , A.INCOTERMS , A.CELL_PROD_SITE , A.FCST_TYPE , A.CURRENCY , A.MEASURE , A.YYYYMM , CAL.CALENDAR_YYYYQQ AS CAL_YYYYQQ , CAL.CALENDAR_YYYY AS CAL_YYYY , A.QTY , 'M_' || A.YYYYMM AS COLNAME , A.DEPT_ID , A.END_CUSTOMER , A.BIZ_TYPE , A.PROJECT_NAME , A.ITEM_USE , A.UNIT_ENERGY FROM SCM_MGR.DM_PLN_BP_FCST_C A JOIN SCM_MGR.GT_DM22_SELECT_MEASURE B ON A.MEASURE = B.MEASURE INNER JOIN (SELECT CALENDAR_YYYY, CALENDAR_YYYYQQ, BASIS_YYYYMM FROM SCM_MGR.SCM_SYS_CALENDAR_M WHERE (BASIS_YYYYMM >= SUBSTR(:B2 , 1, 6) AND BASIS_YYYYMM <= SUBSTR(:B1 , 1, 6)) GROUP BY CALENDAR_YYYY, CALENDAR_YYYYQQ, BASIS_YYYYMM) CAL ON CAL.BASIS_YYYYMM = A.YYYYMM WHERE A.YYYYMM >= SUBSTR(:B2 , 1, 6) AND A.YYYYMM <= SUBSTR(:B1 , 1, 6) AND A.DIVISION_ID = :B3 AND A.VERSION_NO IN (SELECT VERSION_NO FROM SCM_MGR.GT_DM22_V_VERSION_NO) 
+--------------------------------------------------------------------------------------------------------------
+SQL_ID  0w0qjxv6azjvt, child number 0
+-------------------------------------
+INSERT INTO SCM_MGR.GT_DM51_RAW_DATA ( VERSION_NO, CUTOFF_YYYYMMDD, 
+DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, PLANT_SITE_ID, ITEM_ID , 
+INCOTERMS, CELL_PROD_SITE, FCST_TYPE, CURRENCY, MEASURE, YYYYMM, 
+CAL_YYYYQQ, CAL_YYYY, QTY , COLNAME, DEPT_ID, END_CUSTOMER, BIZ_TYPE, 
+PROJECT_NAME, ITEM_USE, UNIT_ENERGY ) SELECT A.VERSION_NO , 
+A.CUTOFF_YYYYMMDD , A.DIVISION_ID , A.PROJECT_CODE , A.SCM_SITE_ID , 
+A.PLANT_SITE_ID , A.ITEM_ID , A.INCOTERMS , A.CELL_PROD_SITE , 
+A.FCST_TYPE , A.CURRENCY , A.MEASURE , A.YYYYMM , CAL.CALENDAR_YYYYQQ 
+AS CAL_YYYYQQ , CAL.CALENDAR_YYYY AS CAL_YYYY , A.QTY , 'M_' || 
+A.YYYYMM AS COLNAME , A.DEPT_ID , A.END_CUSTOMER , A.BIZ_TYPE , 
+A.PROJECT_NAME , A.ITEM_USE , A.UNIT_ENERGY FROM 
+SCM_MGR.DM_PLN_BP_FCST_C A JOIN SCM_MGR.GT_DM22_SELECT_MEASURE B ON 
+A.MEASURE = B.MEASURE INNER JOIN (SELECT CALENDAR_YYYY, 
+CALENDAR_YYYYQQ, BASIS_YYYYMM FROM SCM_MGR.SCM_SYS_CALENDAR_M WHERE 
+(BASIS_YYYYMM >= SUBSTR(:B2 , 1, 6) AND BASIS_YYYYMM <= SUBSTR(:B1 , 1, 
+6)) GROUP BY CALENDAR_YYYY, C
+ 
+Plan hash value: 1542141040
+ 
+----------------------------------------------------------------------------------------------------------------
+| Id  | Operation                                | Name                    | E-Rows |  OMem |  1Mem | Used-Mem |
+----------------------------------------------------------------------------------------------------------------
+|   0 | INSERT STATEMENT                         |                         |        |       |       |          |
+|   1 |  LOAD TABLE CONVENTIONAL                 | GT_DM51_RAW_DATA        |        |       |       |          |
+|*  2 |   HASH JOIN                              |                         |   1806K|  1399K|  1399K| 1403K (0)|
+|   3 |    VIEW                                  |                         |    211 |       |       |          |
+|   4 |     SORT GROUP BY                        |                         |    211 | 73728 | 73728 |          |
+|*  5 |      FILTER                              |                         |        |       |       |          |
+|   6 |       TABLE ACCESS BY INDEX ROWID BATCHED| SCM_SYS_CALENDAR_M      |    211 |       |       |          |
+|*  7 |        INDEX RANGE SCAN                  | IDX_SCM_SYS_CALENDAR_N4 |    211 |       |       |          |
+|*  8 |    HASH JOIN                             |                         |  76803 |  1856K|  1856K|  997K (0)|
+|   9 |     TABLE ACCESS FULL                    | GT_DM22_SELECT_MEASURE  |      9 |       |       |          |
+|* 10 |     HASH JOIN RIGHT SEMI                 |                         |  76803 |  1423K|  1423K|  433K (0)|
+|  11 |      TABLE ACCESS FULL                   | GT_DM22_V_VERSION_NO    |      1 |       |       |          |
+|* 12 |      TABLE ACCESS FULL                   | DM_PLN_BP_FCST_C        |    460K|       |       |          |
+----------------------------------------------------------------------------------------------------------------
+ 
+Outline Data
+-------------
+ 
+  /*+
+      BEGIN_OUTLINE_DATA
+      IGNORE_OPTIM_EMBEDDED_HINTS
+      OPTIMIZER_FEATURES_ENABLE('23.1.0')
+      DB_VERSION('23.1.0')
+      ALL_ROWS
+      OUTLINE_LEAF(@"SEL$3")
+      OUTLINE_LEAF(@"SEL$B4538231")
+      UNNEST(@"SEL$5")
+      OUTLINE_LEAF(@"INS$1")
+      OUTLINE(@"SEL$5D4F31E4")
+      MERGE(@"SEL$58A6D7F6" >"SEL$4")
+      OUTLINE(@"SEL$5")
+      OUTLINE(@"SEL$4")
+      OUTLINE(@"SEL$58A6D7F6")
+      MERGE(@"SEL$1" >"SEL$2")
+      OUTLINE(@"SEL$2")
+      OUTLINE(@"SEL$1")
+      LOAD_METHOD(@"INS$1" "GT_DM51_RAW_DATA"@"INS$1" CONVENTIONAL)
+      LOAD_TYPE(@"INS$1" "GT_DM51_RAW_DATA"@"INS$1" SERIAL)
+      FULL(@"INS$1" "GT_DM51_RAW_DATA"@"INS$1")
+      FULL(@"SEL$B4538231" "A"@"SEL$1")
+      FULL(@"SEL$B4538231" "GT_DM22_V_VERSION_NO"@"SEL$5")
+      FULL(@"SEL$B4538231" "B"@"SEL$1")
+      NO_ACCESS(@"SEL$B4538231" "CAL"@"SEL$2")
+      LEADING(@"SEL$B4538231" "A"@"SEL$1" "GT_DM22_V_VERSION_NO"@"SEL$5" "B"@"SEL$1" "CAL"@"SEL$2")
+      USE_HASH(@"SEL$B4538231" "GT_DM22_V_VERSION_NO"@"SEL$5")
+      USE_HASH(@"SEL$B4538231" "B"@"SEL$1")
+      USE_HASH(@"SEL$B4538231" "CAL"@"SEL$2")
+      SWAP_JOIN_INPUTS(@"SEL$B4538231" "GT_DM22_V_VERSION_NO"@"SEL$5")
+      SWAP_JOIN_INPUTS(@"SEL$B4538231" "B"@"SEL$1")
+      SWAP_JOIN_INPUTS(@"SEL$B4538231" "CAL"@"SEL$2")
+      INDEX_RS_ASC(@"SEL$3" "SCM_SYS_CALENDAR_M"@"SEL$3" ("SCM_SYS_CALENDAR_M"."BASIS_YYYYMM" 
+              "SCM_SYS_CALENDAR_M"."CALENDAR_DAY"))
+      BATCH_TABLE_ACCESS_BY_ROWID(@"SEL$3" "SCM_SYS_CALENDAR_M"@"SEL$3")
+      END_OUTLINE_DATA
+  */
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   2 - access("CAL"."BASIS_YYYYMM"="A"."YYYYMM")
+   5 - filter((SUBSTR(:B2,1,6)<=SUBSTR(:B1,1,6) AND SUBSTR(:B1,1,6)>=SUBSTR(:B2,1,6) AND 
+              SUBSTR(:B1,1,6)>=SUBSTR(:B2,1,6) AND SUBSTR(:B1,1,6)>=SUBSTR(:B2,1,6)))
+   7 - access("BASIS_YYYYMM">=GREATEST(SUBSTR(:B2,1,6),SUBSTR(:B2,1,6)) AND 
+              "BASIS_YYYYMM"<=LEAST(SUBSTR(:B1,1,6),SUBSTR(:B1,1,6)))
+   8 - access("A"."MEASURE"="B"."MEASURE")
+  10 - access("A"."VERSION_NO"="VERSION_NO")
+  12 - filter(("A"."YYYYMM">=SUBSTR(:B2,1,6) AND "A"."YYYYMM"<=SUBSTR(:B1,1,6) AND 
+              "A"."DIVISION_ID"=:B3))
+ 
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+   - Warning: basic plan statistics not available. These are only collected when:
+       * hint 'gather_plan_statistics' is used for the statement or
+       * parameter 'statistics_level' is set to 'ALL', at session or system level
+ 

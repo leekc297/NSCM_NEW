@@ -43,8 +43,10 @@ export const MSG = {
   VERSION_MAX: 'MSG00255',
   // "Excel 업로드가 완료되었습니다. 재조회합니다." — 업로드 닫힘 후 confirm (.cs L733)
   UPLOAD_DONE: 'MSG00265',
-  // ⭐ 신규 채번 (2026-07-10) — 템플릿 0건: MRF 'Y' 버전 부재 (AS-IS 팝업 L229 구 MSG00427 의도)
-  TEMPLATE_EMPTY: 'MSG00656',
+  // ⭐ [2026-08-20 재채번 — 사용자 확정] 템플릿 0건 안내 = MSG01015 ("다운로드할 템플릿 대상 데이터가 없습니다.")
+  //   구 MSG00656("MRF 'Y' 버전이 존재하지 않습니다")은 실원인(조회 대상 0건)을 오지시해 신규 채번으로 교체.
+  //   MSG00656 은 DB·locales 에 존치(문구 불변) — 소비처만 본 키로 전환 (hook #98 §7.1 문구 덮어쓰기 금지).
+  TEMPLATE_EMPTY: 'MSG01015',
 } as const;
 
 // Column 메타 (customer-fcst-upload MainColumnMeta 동일 형태 + #92 division 토큰)

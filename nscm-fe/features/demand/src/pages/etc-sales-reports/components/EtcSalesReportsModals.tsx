@@ -1,11 +1,8 @@
-import {
-  ColumnLayoutModal,
-  ProjectByDivisionModal,
-  MeasureSelectModal,
-} from 'features/master/src/components';
+import { ProjectByDivisionModal, MeasureSelectModal } from 'features/master/src/components';
 import { useMemo } from 'react';
 
 import type { ColumnLayoutRow } from '@shared/components';
+import { ColumnLayoutModal } from '@shared/components';
 
 import { VersionModal } from '../../../components';
 import { MENU_ID, SHEETS } from '../etc-sales-reports.constants';
@@ -25,6 +22,10 @@ interface EtcSalesReportsModalsProps {
   onGridReset: () => void;
   // PROJECT 셀 팝업 반영 대상 행 (Grid dblclick — SCM0002 ETC=true)
   projectTargetRow: EtcSalesReportRow | null;
+  // 선택값 반영 — 대상 행이 아니라 **세트 전체**에 쓰고 변경 등록까지 한다(부모가 소유).
+  //   금지: 여기서 `projectTargetRow` 에 직접 대입하지 말 것 — 한 행만 바뀌고 저장에서도 빠진다
+  //   (2026-08-22 결함. 근거는 EtcSalesReports.tsx `applyPopupSelection` 주석).
+  onProjectSelect: (target: EtcSalesReportRow, values: Record<string, unknown>) => void;
   onVersionSelect: (versionNo: string, label: string) => void;
 }
 
@@ -36,6 +37,7 @@ export const EtcSalesReportsModals = ({
   onClose,
   onGridReset,
   projectTargetRow,
+  onProjectSelect,
   onVersionSelect,
 }: EtcSalesReportsModalsProps) => {
   const staticColumns = useEtcSalesReportsStore(s => s.staticColumns);
@@ -87,10 +89,11 @@ export const EtcSalesReportsModals = ({
         open={openKey === 'PROJECT'}
         modalClose={onClose}
         setSelectedValue={(projectCode: string, projectName?: string) => {
-          if (projectTargetRow) {
-            (projectTargetRow as Record<string, unknown>).PROJECT_CODE = projectCode;
-            (projectTargetRow as Record<string, unknown>).PROJECT_NAME = projectName ?? '';
-          }
+          if (!projectTargetRow) return;
+          onProjectSelect(projectTargetRow, {
+            PROJECT_CODE: projectCode,
+            PROJECT_NAME: projectName ?? '',
+          });
         }}
         preSearchParams={
           {
@@ -126,10 +129,6 @@ export const EtcSalesReportsModals = ({
         initialSettings={columnLayoutSettings}
         defaultSettings={columnLayoutDefaults}
         onSave={settings => {
-          // ⭐ [공통 UC-03, hook #132 §2-2] 컬럼 구성이 바뀌면 화면에 남은 결과는 새 구성과
-          //   어긋나므로 **그리드를 비운다**(자동 재조회 ⛔ — 재조회는 사용자가 Search 로).
-          //   Measure 적용 경로에는 이미 걸려 있었는데 Column 경로만 빠져 있었다(2026-08-15 보완).
-          onGridReset();
           applyColumnLayout(
             settings.map(s => ({
               colNm: s.COLUMN_NAME,

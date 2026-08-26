@@ -20,6 +20,15 @@ export enum SHEETS {
   MDF_VERSION = 'mdfVersion', // Replace 대상 버전 목록 (DMF0042_GET_DM_MDF_VERSION)
 }
 
+// ⭐ 컬럼 개인화(SCM_MST_TITLESET_USER) 구분값 — USER_INQUIRY_COLUMN_TYPE_CODE.
+//   ⚠️ 팝업 조회(ColumnLayoutModal) · 저장(saveTitleSet) · 진입 복원(fetchUserColumnLayout) 이
+//     **셋 다 같은 값**을 써야 한다. 하나라도 다르면 저장은 성공하는데 재진입 조회가 그 행을 못 찾아
+//     개인화가 사라진다.
+//   2026-07-29: 팝업이 SHEETS.MAIN('Biz Plan')으로 조회하고 저장은 'C' 로 하던 불일치를 교정
+//     (실측 값 = 'C'(컬럼)/'M'(measure). forecast-price 2026-07-27 / sales-monitoring 2026-07-04 동일 사고).
+export const TITLESET_COLUMN_TYPE = 'C';
+export const TITLESET_MEASURE_TYPE = 'M';
+
 // Bucket Type — AS-IS cboBucketType (BUCKET2_TYPE_CODE — Monthly/Quarterly/Yearly). 기본 Monthly.
 //   ⚠ DMF0082(D/W/M)·DMF0021(D/W/M) 과 버킷 축이 다름 — 분기(Q)/연(Y) 축은 TO-BE 최초 (상세동작 md 헤더).
 export enum BUCKET_TYPE {
@@ -109,6 +118,8 @@ export const MSG = {
   BP_INTEGER_ONLY: 'MSG00679',
   // Set Price 확인 — "변경된 환율을 적용하시겠습니까?" (btnSetPrice L3117 AS-IS 00282 → P1 신설 678)
   SET_PRICE_CONFIRM: 'MSG00678',
+  // 실행 확인 공통 — "실행하시겠습니까?" (Ver. Cutoff 실행 전 confirm. 2026-08-08 사내 등록)
+  EXECUTE_CONFIRM: 'MSG00033',
   // Ver. Cutoff 완료 — "Manual Cutoff가 완료되었습니다.[Division ID : {0}] {1}" (AS-IS 00151 → P1 신설 675)
   CUTOFF_DONE: 'MSG00675',
   // 변경 중 수행 불가 — (btnExchangeRate L2989 MSG00142 / btnCutOff·btnReplace 인라인 "Edit Mode is not
@@ -116,11 +127,6 @@ export const MSG = {
   PENDING_BLOCK: 'MSG00680',
   // 저장 오류 공통 fallback — "저장 중 오류가 발생했습니다." (SP 원문 메시지 부재 시)
   SAVE_ERROR: 'MSG00618',
-  // Replace 확인 — AS-IS ReplaceByCutOffPopUp L474 MSG00400 ({0}년{1}월~{2}년{3}월 + {4}=버전).
-  //   ⚠ AS-IS 원문 미확보(MSSQL 미도달·클라우드 미러에도 미등재) — 문구 신설, 원문 확보 시 대사 (hook #114)
-  REPLACE_CONFIRM: 'MSG00400',
-  // Replace 완료 — AS-IS L511 MSG00401 ({0}건). 동일하게 문구 신설
-  REPLACE_DONE: 'MSG00401',
 } as const;
 
 // ============================================================================
@@ -135,13 +141,8 @@ export const GRID_CASCADE_FILTERS: Record<string, { rowKey: string; comboKey: st
     { rowKey: 'DIVISION_ID', comboKey: 'DIVISION_ID' },
     { rowKey: 'DEPT_ID', comboKey: 'DEPT_ID' },
   ],
-  // AS-IS L1640~1658 — DEPT_ID40 변경 시 END_CUSTOMER40 재설정 (EndCustomerByDivision40(40, team행값)).
-  //   ⚠ CMBO 'EndCustomerByDivision40' 는 현재 DEPT_ID 미반환 → 관대 통과(전체 표시).
-  //   CMBO DEPT_ID 컬럼 확장(승인 대기 — 2026-08-05 대조 F-3/G-1) 시 본 필터가 즉시 발효된다.
-  END_CUSTOMER40: [
-    { rowKey: 'DIVISION_ID', comboKey: 'DIVISION_ID' },
-    { rowKey: 'DEPT_ID40', comboKey: 'DEPT_ID' },
-  ],
+  // AS-IS L1577~1595 — DEPT_ID40 변경 시 END_CUSTOMER40 재설정 (EndCustomerByDivision40 원천)
+  END_CUSTOMER40: [{ rowKey: 'DIVISION_ID', comboKey: 'DIVISION_ID' }],
   // AS-IS L1568~1576 — END_CUSTOMER40 변경 시 SCM_SITE_ID40(SiteByEndCustomer) 재조회
   SCM_SITE_ID40: [
     { rowKey: 'DIVISION_ID', comboKey: 'DIVISION_ID' },
@@ -164,9 +165,16 @@ export const GRID_EDIT_COMBO: Record<string, { comboId: string }> = {
   //   (신정본 InsertRow L1274~1278 GetCellProdSite(...,"Y") [C20220513-000327]).
   //   조회 표시(코드→한글)는 SHEET_COLUMNS 메타 FPComboBox='DMF0042CellProdSite'(ALL) 가 담당
   //   ([E20240731-000845] InitSpread L392~397) — P7 SQL 와 반드시 세트 적용(원복 로직이 표시 dataMap 전제).
-  //   ⚠ 등재명 = 'DMF0042CellProdSiteValid' (사내 CMBO_SQL_M 실측 2026-08-05 — 구 'CellProdSiteValid'
-  //   는 미등재 SQL_ID 라 조용한 빈 콤보였음. memory feedback_combo_registry_full_sync)
   CELL_PROD_SITE: { comboId: 'DMF0042CellProdSiteValid' },
+  // Team — 편집은 설계서 등록본 'DeptId' 그대로. 표시는 BusinessPlanGrid 가 'TeambyDivision' 으로
+  //   덮는다 (CELL_PROD_SITE 와 같은 '표시 콤보 != 편집 콤보' 구조).
+  //   두 콤보의 DEPT_ID 출처가 다르다 —
+  //     DeptId         : SCM_MST_SITE.DEPT_ID  UNION  품목 OWNER 의 부서
+  //     TeambyDivision : SCM_MST_SITE_ITEM.DEPT_ID
+  //   그리드 행의 Team 은 조회 SP 가 SCM_MST_SITE_ITEM.DEPT_ID 로 채우므로 DeptId 로는
+  //   코드→명칭 매핑이 안 잡혀 코드가 그대로 보였다 (2026-08-21 실측).
+  DEPT_ID: { comboId: 'DeptId' },
+  DEPT_ID40: { comboId: 'DeptId' },
 };
 
 // Ver. Cutoff / Replace 버전 타입 고정값 (AS-IS LoadDataDiv "BP_M" — [27]/[28])

@@ -6,7 +6,7 @@ import { apiClient } from '@foundation/apis';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { GridAction } from '@foundation/utils';
 import { MainTitle, SubTitle, TabItem, TabWrapper } from '@shared/components';
-import { useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
+import { useSaveWithValidation, useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
 import { Panel, PanelGroup, PanelSeparator } from '@shared/panel';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
@@ -17,6 +17,7 @@ import { ErpEdiMasterSspmGrid } from './components/ErpEdiMasterSspmGrid';
 import { ErpEdiMasterSummaryGrid } from './components/ErpEdiMasterSummaryGrid';
 import { MENU_ID, SHEETS, SHEET_INDEX } from './erp-edi-master.constants';
 import { EMPTY_SALES_SITE_ROW, EMPTY_SSPM_ROW } from './erp-edi-master.empty-rows';
+import { checkSalesSiteSaveResult, checkSspmSaveResult } from './erp-edi-master.utils';
 import styles from './ErpEdiMaster.module.scss';
 import { useErpEdiMasterStore } from './useErpEdiMasterStore';
 
@@ -57,14 +58,13 @@ const SSPM_SAVE_MAP: Record<string, string> = {
   moduleVariant: 'MODULE_VARIANT',
   incoterms: 'EDI',
 };
-// salesSite 필수 입력 (AS-IS MSG00002, .cs L1069~1119)
-const SS_MANDATORY: ReadonlyArray<{ field: string; label: string }> = [
-  { field: 'SSCM_SITE_ID', label: 'Sales Site' },
-  { field: 'REP_SOLDTO_CODE', label: 'Sold-To' },
-  { field: 'REP_SHIPTO_CODE', label: 'Ship-To' },
-  { field: 'SITE_VALID_YN', label: 'Site Valid' },
-  { field: 'CUSTOMER_VALID_YN', label: 'Customer Valid' },
-];
+// 필수 입력 판정은 화면에 목록을 두지 않고 컬럼 메타(inputTpCd = M / IM)를 그대로 따른다.
+//   헤더 빨간 점도 같은 메타를 공용 formatEditableColumns 가 그리므로 둘이 항상 일치한다.
+//   (AS-IS MSG00002 — salesSite .cs L1069~1119 / sspm 편집 3 컬럼)
+
+// Repair 그리드가 정비 대상 셀에 내려주는 값. AS-IS .cs L1324/L1364 의 sScmSite/sACTIVE_SS/sGSCM_SSPM
+//   .Equals("확인필요") 비교와 동일 문자열.
+const REPAIR_NEEDED = '확인필요';
 
 // AS-IS DMF0008_ErpEdiMaster — 3단 구조:
 //   [검색] Division (Form) + Last Update Start/End (AS-IS .cs L2918 DMF0000_GET_UPDATE_HISTORY)
@@ -97,8 +97,6 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
   const setSummaryFilters = useErpEdiMasterStore(s => s.setSummaryFilters);
   const setUpdateHistoryFilter = useErpEdiMasterStore(s => s.setUpdateHistoryFilter);
   const setRepairFilter = useErpEdiMasterStore(s => s.setRepairFilter);
-  const setSalesSiteOnly = useErpEdiMasterStore(s => s.setSalesSiteOnly);
-  const setSspmOnly = useErpEdiMasterStore(s => s.setSspmOnly);
   const clearSubFilters = useErpEdiMasterStore(s => s.clearSubFilters);
   const setSalesSiteFilters = useErpEdiMasterStore(s => s.setSalesSiteFilters);
   const setSspmFilters = useErpEdiMasterStore(s => s.setSspmFilters);
@@ -108,11 +106,17 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
   const setOpenSearchArea = useErpEdiMasterStore(s => s.setOpenSearchArea);
   const fetchStaticColumns = useErpEdiMasterStore(s => s.fetchStaticColumns);
   const setUpdateHistory = useErpEdiMasterStore(s => s.setUpdateHistory);
+  // 필수 검증 메시지의 항목명을 헤더 라벨과 맞추기 위한 컬럼 메타
+  const salesSiteColumns = useErpEdiMasterStore(s => s.staticColumns.salesSite);
+  const sspmColumns = useErpEdiMasterStore(s => s.staticColumns.sspm);
 
   const { t } = useTranslation();
 
   const setAlert = useMessageStore(s => s.setAlert);
   const setToast = useMessageStore(s => s.setToast);
+  // 필수 입력 검증은 공용 훅에 맡긴다 — 저장 자체는 화면 고유(^-delim POST)라 mutate 자리에
+  //   화면 저장 함수를 넘긴다(훅의 3번째 인자는 react-query mutate 가 아니라 일반 콜백).
+  const { saveWithValidation } = useSaveWithValidation();
 
   // V07 fix (2026-06-20): 동적 권한 hook 도입 (Hook #24/#62).
   // admin USE_YN='N' 시 자동 false. BE 메타 (SCM_ADM_USER_GR_MNU_BTN_MPG_M) 등록 필요.
@@ -142,10 +146,11 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
     enabled: !!filters[SHEETS.REPAIR],
   });
 
-  const { data: salesSiteData, refetch: refetchSalesSite } = useTabProcQuery<
-    MENU_ID,
-    SHEETS.SALES_SITE
-  >({
+  const {
+    data: salesSiteData,
+    isFetching: isSalesSiteFetching,
+    refetch: refetchSalesSite,
+  } = useTabProcQuery<MENU_ID, SHEETS.SALES_SITE>({
     menuId: MENU_ID,
     sheetName: SHEETS.SALES_SITE,
     tabId,
@@ -153,7 +158,11 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
     enabled: !!filters[SHEETS.SALES_SITE],
   });
 
-  const { data: sspmData, refetch: refetchSspm } = useTabProcQuery<MENU_ID, SHEETS.SSPM>({
+  const {
+    data: sspmData,
+    isFetching: isSspmFetching,
+    refetch: refetchSspm,
+  } = useTabProcQuery<MENU_ID, SHEETS.SSPM>({
     menuId: MENU_ID,
     sheetName: SHEETS.SSPM,
     tabId,
@@ -201,6 +210,7 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   // #5 (2026-06-28): 하단 탭 전환 시 현재 Repair context 로 미조회된 탭 자동 조회 (hook #81 tab-driven-lazy-fetch).
   //   filter 내용 동일 시 react-query 가 캐시(같은 key) → 중복 fetch 없음. handleRepairDoubleClick 후 탭 전환에도 적용.
+  //   Repair 더블클릭도 이 effect 로 조회된다 — 핸들러는 setActiveTab/setRepairContext 만 하고 filter set 은 여기 한 곳.
   useEffect(() => {
     if (!repairContext) return;
     if (activeTab === SHEET_INDEX.SALES_SITE) {
@@ -248,7 +258,9 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
   };
 
   // RepairGrid onDblClick — AS-IS .cs L1973 단일 sheet 분기 (성능 — 2 SP → 1 SP).
-  // targetSheet 에 따라 해당 sub tab 으로 전환 + 단일 filter set.
+  // targetSheet 에 따라 해당 sub tab 으로 전환. filter set 은 아래 activeTab/repairContext effect 가 담당한다
+  //   (여기서 setSalesSiteOnly/setSspmOnly 를 또 호출하면 폼 division 기준 filter 로 한 번 더 조회가 나가고,
+  //    같은 조회에 대해 filters 객체가 두 개 생겨 0건 안내 Alert 가 중복으로 뜬다).
   const handleRepairDoubleClick = (
     targetSheet: 'SALES_SITE' | 'SSPM',
     row: ResponseData<MENU_ID, SHEETS.REPAIR>
@@ -259,13 +271,7 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
       selectedItemId: String(row.ERP_ITEM_ID ?? ''),
       selectedScmSiteId: String(row.GSCM_SALES_SITE_ID ?? ''),
     });
-    if (targetSheet === 'SALES_SITE') {
-      setSalesSiteOnly();
-      setActiveTab(SHEET_INDEX.SALES_SITE);
-    } else {
-      setSspmOnly();
-      setActiveTab(SHEET_INDEX.SSPM);
-    }
+    setActiveTab(targetSheet === 'SALES_SITE' ? SHEET_INDEX.SALES_SITE : SHEET_INDEX.SSPM);
     const ctx = {
       division: row.DIVISION_ID,
       senderName: row.EDI_SENDER_NAME,
@@ -360,32 +366,69 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
     [sspmData, filters[SHEETS.SSPM], sspmRefreshNonce]
   );
 
+  // 하위 조회 0건 안내 (AS-IS .cs L1251 / L1323~1374). 더블클릭 전용이 아니라 하단 탭 클릭
+  //   (.cs L2477 spdSub_SheetTabClick) / 저장 후 재조회(.cs L1624)로 들어온 조회에도 동일하게 뜬다.
+  // 한 번의 조회 결과에 대해 1회만 띄우기 위해, 처리한 filters 객체를 ref 로 기억한다
+  //   (store set 이 매번 새 객체를 만들므로 참조 비교로 신규 조회를 구분).
+  // 초기값 = 마운트 시점 filters — 탭 재진입으로 persist 복원된 조회 결과에는 뜨지 않게 한다.
+  const alertedSsFilterRef = useRef<unknown>(filters[SHEETS.SALES_SITE]);
+  const alertedSspmFilterRef = useRef<unknown>(filters[SHEETS.SSPM]);
+
+  // AS-IS FindData_SubSalesSite (.cs L1251): Sales Site 조회 결과 0건이면 MSG00445.
+  //   '확인필요' 여부와 무관하게 0건이면 표시한다.
+  useEffect(() => {
+    const f = filters[SHEETS.SALES_SITE];
+    if (!f || !repairContext) return;
+    if (isSalesSiteFetching || !salesSiteData) return;
+    if (alertedSsFilterRef.current === f) return;
+    alertedSsFilterRef.current = f;
+    if (salesSiteRows.length > 0) return;
+    void setAlert({
+      type: 'alert',
+      content: t('MSG00445', '_Sales Site UI에서 Sales Site를 추가하시기 바랍니다.'),
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [salesSiteRows, salesSiteData, isSalesSiteFetching, filters, repairContext]);
+
+  // AS-IS FindData_SubSalesSiteProjectModel (.cs L1323~1374): SSPM 조회 결과 0건일 때 두 분기.
+  //   1) GSCM.Sales Site / Active.SS 둘 다 '확인필요' → Sales Site 를 재조회(.cs L1330).
+  //      0건이면 MSG00445, 있으면 Sales Site 탭에 표시(메시지 없음).
+  //      TO-BE 재조회 = 탭 전환 → activeTab effect 가 filters[SALES_SITE] set → 위 effect 가 0건 판정.
+  //      (AS-IS 재조회 파라미터 p_scm_site_id 도 '확인필요' 문자열 그대로 — repairContext 값과 동일)
+  //   2) Sales Site / Active.SS 는 정상인데 GSCM.SSPM 이 '확인필요' → MSG00446.
+  useEffect(() => {
+    const f = filters[SHEETS.SSPM];
+    if (!f || !repairContext) return;
+    if (isSspmFetching || !sspmData) return;
+    if (alertedSspmFilterRef.current === f) return;
+    alertedSspmFilterRef.current = f;
+    if (sspmRows.length > 0) return;
+
+    const { gscmSalesSiteId: ss, activeSs, gscmSspm } = repairContext;
+    if (ss === REPAIR_NEEDED && activeSs === REPAIR_NEEDED) {
+      setActiveTab(SHEET_INDEX.SALES_SITE);
+      return;
+    }
+    if (
+      ss &&
+      ss !== REPAIR_NEEDED &&
+      activeSs &&
+      activeSs !== REPAIR_NEEDED &&
+      gscmSspm === REPAIR_NEEDED
+    ) {
+      void setAlert({
+        type: 'alert',
+        content: t('MSG00446', '_Sales Site Project Model UI에서 데이터를 추가하시기 바랍니다.'),
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sspmRows, sspmData, isSspmFetching, filters, repairContext]);
+
+  // 필수 검증을 통과한 뒤의 실제 저장 (no-use-before-define: handleSave 보다 먼저 선언).
   // AS-IS SaveSalesSite/SaveSSPM — 변경행(CRUD_TYPE)만 ^-delim 누적 → 1회 POST(개별 param SP 가 내부 split).
   //   결과: salesSite=p_message_cursor[0].RESULT_MSG(에러 시 한글 메시지) / sspm=O_RESULT_CURSOR[0].RESULT_CODE('1'=성공).
   //   (두 결과커서 컬럼명이 CODE 가 아니므로 전역 interceptor 미간섭 → 여기서 직접 판별.)
-  const handleSave = async () => {
-    const isSS = activeTab === SHEET_INDEX.SALES_SITE;
-    const src = (isSS ? salesSiteRows : sspmRows) as unknown as Record<string, string>[];
-    const rows = src.filter(r => r.CRUD_TYPE);
-    if (rows.length === 0) {
-      void setAlert({ type: 'alert', content: t('MSG00113', '_저장할 데이터를 선택하세요.') });
-      return;
-    }
-    // 필수 검증 (salesSite — AS-IS MSG00002)
-    if (isSS) {
-      for (const r of rows) {
-        const miss = SS_MANDATORY.find(m => !String(r[m.field] ?? '').trim());
-        if (miss) {
-          void setAlert({
-            type: 'alert',
-            content: t('MSG00002', `_[${miss.label}] 은(는) 필수 입력사항입니다.`, {
-              0: miss.label,
-            }),
-          });
-          return;
-        }
-      }
-    }
+  const postSave = async (isSS: boolean, rows: Record<string, string>[]) => {
     const map = isSS ? SS_SAVE_MAP : SSPM_SAVE_MAP;
     const acc: Record<string, string[]> = {};
     for (const k of Object.keys(map)) acc[k] = [];
@@ -410,23 +453,16 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
         void setAlert({ type: 'alert', content: reason });
         return; // 편집/신규행 유지 — 사용자가 수정 후 재저장
       }
-      const result = (res.data?.result ?? {}) as Record<string, Record<string, string>[]>;
-      if (isSS) {
-        const m = String(result.p_message_cursor?.[0]?.RESULT_MSG ?? '').trim();
-        if (m && m.toUpperCase() !== 'SUCCESS') {
-          void setAlert({ type: 'alert', content: m });
-          return;
-        }
-      } else {
-        const rc = result.O_RESULT_CURSOR ?? result.o_result_cursor;
-        const code = String(rc?.[0]?.RESULT_CODE ?? '');
-        if (code && code !== '1') {
-          const em =
-            String(rc?.[0]?.RESULT_MSG ?? rc?.[0]?.ERR_EVENT ?? '').trim() ||
-            t('MSG00618', '_저장 중 오류가 발생했습니다.');
-          void setAlert({ type: 'alert', content: em });
-          return;
-        }
+      // SP 가 내려준 실패 문구 passthrough. 두 SP 의 결과 계약이 서로 달라 판정을 utils 로 분리했다
+      //   (salesSite = p_message_cursor 단일 / sspm = 성공만 O_RESULT_CURSOR, 실패는 O_RC1~O_RC6).
+      const result = res.data?.result ?? {};
+      const check = isSS ? checkSalesSiteSaveResult(result) : checkSspmSaveResult(result);
+      if (!check.ok) {
+        void setAlert({
+          type: 'alert',
+          content: check.message || t('MSG00618', '_저장 중 오류가 발생했습니다.'),
+        });
+        return; // 편집/신규행 유지 — 사용자가 수정 후 재저장
       }
       void setToast({ type: 'success', message: t('MSG00606', '_데이터가 저장되었습니다.') });
       if (isSS) {
@@ -442,12 +478,36 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
     }
   };
 
+  const handleSave = () => {
+    const isSS = activeTab === SHEET_INDEX.SALES_SITE;
+    // 저장 대상은 그리드의 라이브 행에서 읽는다 — 화면이 들고 있는 memo 배열(salesSiteRows)은
+    //   조회 결과로 만든 스냅샷이라 재조회/재계산 시 새 객체로 갈리면 방금 편집한 값과 CRUD_TYPE 이
+    //   따라오지 않는다. sourceCollection 은 정렬/필터와 무관한 원본이라 신규행도 함께 잡힌다.
+    const grid = isSS ? salesSiteGridRef.current : sspmGridRef.current;
+    const live = grid?.collectionView?.sourceCollection as Record<string, string>[] | undefined;
+    const src = (live ?? (isSS ? salesSiteRows : sspmRows)) as unknown as Record<string, string>[];
+    const rows = src.filter(r => r.CRUD_TYPE);
+    if (rows.length === 0) {
+      // 변경 0건 = MSG00004(수정한 내용이 없습니다). 도메인 표준 NO_CHANGES 코드.
+      //   MSG00113 은 "~를 선택하세요" 문구라 행 선택을 요구하는 것처럼 읽힌다.
+      void setAlert({ type: 'alert', content: t('MSG00004', '_수정한 내용이 없습니다.') });
+      return;
+    }
+    // 필수 검증 — 대상 컬럼(inputTpCd = M / IM)도 메시지(MSG00429 + colLblNm 라벨)도 공용 훅이 담당한다.
+    //   화면에 필수 목록을 두지 않으므로 admin/master 다른 화면과 규칙이 갈릴 일이 없다.
+    saveWithValidation(rows, isSS ? salesSiteColumns : sspmColumns, saveRows => {
+      void postSave(isSS, saveRows);
+    });
+  };
+
   // V07 fix (2026-06-20): hasButton 권한 분기.
   // BTN_CD 표준: SEARCH / SAVE / INSERT / STATUS_UPDATE (DMF0008 메타 SCM_ADM_USER_GR_MNU_BTN_MPG_M).
   // 2026-06-20 사용자 요구: Condition / ResetCondition 기본 활성 (SubTitle DefaultButtonActions).
   // → 명시 미정의 = 자동 활성 (F6 / F10).
   const hotkeyConfig: HotkeyConfig = {
     search: hasButton('SEARCH') ? setSummaryFilters : false,
+    // Save(F7) — 하단 활성 탭(Sales Site / SSPM)의 변경행만 저장. 권한 메타(BTN_CD='SAVE') 필요.
+    // Save(F7) 버튼 미노출 — 하단 활성 탭(Sales Site / SSPM) 변경행 저장 경로. 되살리려면 아래 주석 복원.
     save: false, //hasButton('SAVE') ? handleSave : false,
     insert: false, //hasButton('INSERT') ? handleInsert : false,
     delete: hasButton('DELETE') ? handleDelete : false, // Delete(F9) — Figma 디자인 + 권한 메타(DELETE) 등록

@@ -1,0 +1,36 @@
+/* DMF0044 Exchange Rate 팝업 — 레이아웃은 자매 모달
+   `features/demand/src/pages/forecast-price/components/modals/ExchangeRateModal.module.scss`
+   (DMF0020 정본 계열)과 **동일하게 맞춘다** (사용자 지시 2026-08-21):
+   SearchArea → grid → **하단** 버튼 바. 종전의 그리드 위 액션 바(.actionBar)는 제거했다.
+   ⚠ 폼(FormItem/InputField) 레이아웃 규칙은 여기 두지 않는다 — hook #121(@foundation common-styles).
+      본 파일은 화면 고유(모달 컨테이너/그리드/버튼 바)만 소유한다. */
+
+.dialogContentWrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  // 진행 스피너(ProgressIndicator placement='parent')가 이 영역을 기준으로 덮는다.
+  //   position 이 없으면 absolute 기준이 위로 올라가 모달 밖까지 덮는다.
+  position: relative;
+}
+
+.gridWrapper {
+  flex: 1;
+  min-height: 0;
+  border: 1px solid #e0e4e9;
+  border-radius: 4px;
+  background: white;
+  overflow: hidden;
+  position: relative;
+}
+
+.buttonWrapper {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-top: 5px;
+}
+
+.grid {
+  height: 100%;
+}

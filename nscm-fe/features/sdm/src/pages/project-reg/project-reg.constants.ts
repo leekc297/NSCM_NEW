@@ -87,19 +87,19 @@ export const MSG = {
   DIVISION_REQUIRED: 'MSG00097', // Division 필수
   DATE_INVERTED: 'MSG00108', // 기간 역전/한쪽만 입력
   REQUIRED_COLUMN: 'MSG00113', // IM 필수 컬럼 누락
-  PENDING_SEARCH_CONFIRM: 'MSG00703', // 수정 pending 중 재조회 confirm (UC-02)
-  DELETE_ONLY_DRAFT: 'MSG00706', // 작성중 외 삭제 불가
-  DELETE_CONFIRM: 'MSG00707', // 삭제 confirm
-  REQ_ONLY_DRAFT: 'MSG00708', // 작성중 아닌 행 등록요청 불가
-  NO_CHECKED: 'MSG00709', // 대상 0건
-  REQ_CONFIRM: 'MSG00710', // 등록요청 confirm
-  REQ_DONE: 'MSG00711', // 등록요청 성공 (toast)
-  REQ_FAIL: 'MSG00712', // 등록요청 실패
-  CANCEL_ONLY_REQUEST: 'MSG00713', // 승인대기 외 요청취소 불가
-  CANCEL_CONFIRM: 'MSG00714', // 요청취소 confirm
-  RANGE_OVER_3Y: 'MSG00715', // TAB2 조회기간 3년 초과
-  AUTH_INPUT_DUP: 'MSG00716', // 입력 리스트 기존재
-  AUTH_READ_DUP: 'MSG00717', // 조회 리스트 기존재
+  PENDING_SEARCH_CONFIRM: 'MSG01016', // 수정 pending 중 재조회 confirm (UC-02)
+  DELETE_ONLY_DRAFT: 'MSG01017', // 작성중 외 삭제 불가
+  DELETE_CONFIRM: 'MSG00710', // 삭제 confirm
+  REQ_ONLY_DRAFT: 'MSG01018', // 작성중 아닌 행 등록요청 불가
+  NO_CHECKED: 'MSG01019', // 대상 0건
+  REQ_CONFIRM: 'MSG01020', // 등록요청 confirm
+  REQ_DONE: 'MSG00712', // 등록요청 성공 (toast)
+  REQ_FAIL: 'MSG00711', // 등록요청 실패
+  CANCEL_ONLY_REQUEST: 'MSG00707', // 승인대기 외 요청취소 불가
+  CANCEL_CONFIRM: 'MSG00713', // 요청취소 confirm
+  RANGE_OVER_3Y: 'MSG00164', // TAB2 조회기간 3년 초과
+  AUTH_INPUT_DUP: 'MSG01021', // 입력 리스트 기존재
+  AUTH_READ_DUP: 'MSG01022', // 조회 리스트 기존재
 } as const;
 
 // ⭐ NAME↔CODE 페어 (FPComboBox 메타 NAME 컬럼 편집 → cellEditEnded 에서 CODE 컬럼 동기 기입.

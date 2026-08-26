@@ -2,7 +2,7 @@ import type { FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { CRUD_TYPE } from '@foundation/constants';
+import { CRUD_MSG, CRUD_TYPE } from '@foundation/constants';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import type { EditTracker } from '@foundation/utils';
 import { MainTitle, SubTitle } from '@shared/components';
@@ -20,12 +20,21 @@ import {
   SHEETS,
 } from './demand-manager.constants';
 import type { DemandManagerRow, LookupProjectRow } from './demand-manager.types';
-import styles from './DemandManager.module.scss';
 import { useDemandManagerStore } from './useDemandManagerStore';
 import { callDeleteOrderList, callSaveOrderList } from './utils/demand-manager.api';
+import {
+  findGroupTopIndex,
+  mergeInsertedRows,
+  removePendingGroup,
+  type PendingInsert,
+} from './utils/demand-manager.insertAnchor';
 import { buildMonthColumns } from './utils/demand-manager.months';
 import { buildSaveRows, collectDeleteGroupKeys, newRowKey } from './utils/demand-manager.save';
 import { validateFind } from './utils/demand-manager.validate';
+
+// Insert 포커스를 붙들 프레임 수 — 그리드 쪽 필터 복원이 다음 프레임에 CollectionView 를
+//   다시 계산하며 선택을 되돌리므로, 그 뒤까지 같은 행을 다시 잡아 준다.
+const FOCUS_SETTLE_FRAMES = 3;
 
 // AS-IS DMF0068_DemandManager40 (Demand > Demand Waterfall > Demand Manager — 정본 1,337행 1:1).
 //   Division 40 전용. 한 건 = Measure 2행 1세트(QTY(Cell) / Sales Amt.(KRW))로, 추가·수정·삭제가
@@ -34,9 +43,11 @@ import { validateFind } from './utils/demand-manager.validate';
 export const DemandManager = ({ tabId, title }: PageProps<MENU_ID>) => {
   const { t } = useTranslation();
 
-  const gridRef = useRef<FlexGridType<DemandManagerRow>>(null);
+  // 공용 DataGrid 제네릭에 그대로 물리는 ref 3종 — mkt-fcst / forecast-price 와 같은 배선이라
+  //   화면 쪽 캐스팅(as never)이 필요 없다.
+  const gridRef = useRef<FlexGridType<DemandManagerRow>>(undefined);
   const gridFilterRef = useRef<FlexGridFilter>(undefined);
-  const editTrackerRef = useRef<EditTracker>(undefined);
+  const editTrackerRef = useRef<EditTracker<DemandManagerRow>>(undefined);
 
   const setAlert = useMessageStore.getState().setAlert;
   const setToast = useMessageStore.getState().setToast;
@@ -59,8 +70,12 @@ export const DemandManager = ({ tabId, title }: PageProps<MENU_ID>) => {
   const [hasSearched, setHasSearched] = useState(false);
   const [versionLabel, setVersionLabel] = useState('');
   const [openVersionModal, setOpenVersionModal] = useState(false);
-  const [insertedRows, setInsertedRows] = useState<DemandManagerRow[]>([]);
+  // 신규 세트(CRUD_TYPE='I') — 각 행이 표시 위치를 정하는 앵커를 함께 든다.
+  //   앵커 = Insert 를 누른 시점에 선택된 행이 속한 세트의 첫 행 (utils/demand-manager.insertAnchor.ts).
+  const [insertedRows, setInsertedRows] = useState<PendingInsert[]>([]);
   const [deletedKeys, setDeletedKeys] = useState<string[]>([]);
+  // Insert 직후 포커스를 옮길 신규행 — rows 재계산 후 아래 effect 가 소비하고 비운다.
+  const focusRowRef = useRef<DemandManagerRow | null>(null);
 
   // 메인 조회 — PKG_DMF0068.P_DMF0068_GET_ORDERLIST
   //   ⭐ filters 는 store 참조를 그대로 넘긴다 (인라인 객체 금지 — 무한 재조회 방지)
@@ -111,10 +126,48 @@ export const DemandManager = ({ tabId, title }: PageProps<MENU_ID>) => {
   const spRows = useMemo<DemandManagerRow[]>(() => mainData?.o_rc1 ?? [], [mainData]);
   // 삭제 표시된 행도 그리드에 남긴다 — 행 헤더에 'D' 가 찍혀 무엇이 지워질지 보인다.
   //   앱 공통 규약(GridAction.removeRow)과 동일: 신규 행만 실제로 빼고, 저장된 행은 CRUD_TYPE='D' 표시.
+  // 조회행 + 신규행 병합 — 신규 세트는 앵커(선택 세트의 첫 행) 바로 위에 놓는다.
+  //   앵커가 없으면(선택 없이 Insert) 맨 위 — 예전 동작과 같다.
   const rows = useMemo<DemandManagerRow[]>(
-    () => [...insertedRows, ...spRows],
+    () => mergeInsertedRows(spRows, insertedRows),
     [insertedRows, spRows]
   );
+
+  // Insert 직후 새 행으로 포커스·스크롤 이동 — 신규 세트가 그리드 중간(선택 세트 바로 위)에
+  //   생기므로 이동이 없으면 사용자가 새 행을 찾아 스크롤해야 한다.
+  //   필수: 한 번 맞추고 끝내지 않는다. itemsSource 가 바뀌면 wijmo 가 CollectionView 를 새로
+  //   만들며 선택을 초기화하는데, 이 effect 시점에 grid.rows 가 아직 새 배열을 반영하지 않았으면
+  //   탐색이 -1 이라 화면이 그대로 머문다. 반대로 탐색에 성공해 선택을 옮겨 놓아도, 그리드 쪽
+  //   필터 복원(FlexGridFilter.apply -> CollectionView 재계산)이 다음 프레임에 돌면서 선택을
+  //   행 참조가 아닌 인덱스 기준으로 되돌려 커서가 엉뚱한 행에 남는다.
+  //   그래서 몇 프레임 동안 같은 행을 다시 붙든다. 이미 그 행이 선택돼 있으면 select 를 부르지 않아
+  //   사용자 조작을 빼앗지 않는다.
+  useEffect(() => {
+    const target = focusRowRef.current;
+    if (!target) return;
+
+    const focusTarget = (): boolean => {
+      const g = gridRef.current;
+      if (!g) return false;
+      for (let i = 0; i < g.rows.length; i++) {
+        if (g.rows[i]?.dataItem !== target) continue;
+        if (g.selection.row !== i) g.select(i, g.selection.col >= 0 ? g.selection.col : 0);
+        g.scrollIntoView(i, -1);
+        return true;
+      }
+      return false;
+    };
+
+    let raf = 0;
+    let frames = 0;
+    const tick = () => {
+      focusTarget();
+      if (++frames < FOCUS_SETTLE_FRAMES) raf = window.requestAnimationFrame(tick);
+      else focusRowRef.current = null;
+    };
+    tick();
+    return () => window.cancelAnimationFrame(raf);
+  }, [rows]);
 
   // ⭐ 편집 가능 판정 = 버튼 권한(SAVE) + 행의 EDIT_YN(서버 판정).
   //   세션에는 그룹 ID 가 없고(groupId 는 빈 값) groups 는 표시명이라 화면에서 그룹명을 비교하지 않는다.
@@ -131,12 +184,29 @@ export const DemandManager = ({ tabId, title }: PageProps<MENU_ID>) => {
       alert(v.msgId!, '_조회 조건을 확인해 주세요.', v.param);
       return;
     }
-    void setToast({ message: t('LBL00665', '_Loading...'), type: 'default', duration: 2000 });
+    // void setToast({ message: t('LBL00665', '_Loading...'), type: 'default', duration: 2000 });
     setInsertedRows([]);
     setDeletedKeys([]);
     setHasSearched(true);
     setFilter();
     void fetchStaticColumns();
+  };
+
+  /**
+   * Insert 앵커 — 선택 셀이 속한 세트의 첫 행. 선택이 없으면 null(맨 위).
+   *
+   * 금지: wijmo 컬렉션(g.rows)에 .map/.filter 사용 — Array 상속이라 새 ObservableArray 가
+   *   만들어져 결과가 깨진다. 인덱스 루프로 순수 배열에 복사한다.
+   */
+  const anchorRowOf = (): DemandManagerRow | null => {
+    const g = gridRef.current;
+    const index = g?.selection?.row ?? -1;
+    if (!g || index < 0) return null;
+    const gridRowItems: (DemandManagerRow | undefined)[] = [];
+    for (let i = 0; i < g.rows.length; i++) {
+      gridRowItems.push(g.rows[i]?.dataItem as DemandManagerRow | undefined);
+    }
+    return gridRowItems[findGroupTopIndex(gridRowItems, index)] ?? null;
   };
 
   // F8 Insert — 언제나 2행 한 세트. 두 행에 같은 그룹 키를 주고 Measure 를 고정 배정한다
@@ -151,7 +221,12 @@ export const DemandManager = ({ tabId, title }: PageProps<MENU_ID>) => {
       MEASURE: m.name,
       MEASURE2: m.code,
     }));
-    setInsertedRows(prev => [...block, ...prev]);
+    // 앵커 = 선택 셀이 속한 세트의 첫 행 — 신규 세트를 그 바로 위에 통째로 놓는다.
+    //   앵커를 선택 행 자체로 잡으면 짝 행(Sales Amt.)을 눌렀을 때 QTY / Sales Amt. 사이에 낀다.
+    //   배열 끝에 붙여 누른 순서를 유지한다(같은 자리에 연속 Insert 하면 위에서 아래로 쌓인다).
+    const anchor = anchorRowOf();
+    setInsertedRows(prev => [...prev, ...block.map(row => ({ row, anchor }))]);
+    focusRowRef.current = block[0] ?? null;
   };
 
   // F9 Delete — 선택한 행이 속한 세트를 지운다. 신규 세트는 화면에서 바로 빼고,
@@ -162,7 +237,8 @@ export const DemandManager = ({ tabId, title }: PageProps<MENU_ID>) => {
     const key = String(sel.KEYVALUE2 ?? sel.INSERT_GROUP_ID ?? '');
     if (!key) return;
     if (sel.CRUD_TYPE === CRUD_TYPE.INSERT) {
-      setInsertedRows(prev => prev.filter(r => String(r.INSERT_GROUP_ID ?? '') !== key));
+      // 지우는 세트를 앵커로 삼던 신규행이 있으면 그 앵커를 승계시킨다(맨 위로 튀지 않게).
+      setInsertedRows(prev => removePendingGroup(prev, key));
       return;
     }
     // 세트 단위 표시 — 한 행만 골라도 짝 행까지 함께 지워진다(SP 가 그룹 키로 세트 전체를 삭제).
@@ -185,10 +261,10 @@ export const DemandManager = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   // F7 Save — 변경·신규 행을 저장하고 삭제 표시된 세트를 지운다. 하나라도 성공하면 다시 조회한다.
   const handleSave = async () => {
+    // EditTracker 가 화면 행 타입으로 제네릭이 잡혀 있어 캐스팅 없이 그대로 쓴다.
     const changedMap =
-      (editTrackerRef.current?.getOriginalValues() as
-        | Map<DemandManagerRow, Record<string, unknown>>
-        | undefined) ?? new Map<DemandManagerRow, Record<string, unknown>>();
+      editTrackerRef.current?.getOriginalValues() ??
+      new Map<DemandManagerRow, Record<string, WijmoPrimitive>>();
 
     // 변경·신규가 속한 세트를 통째로 보낸다 (짝 행의 기간이 함께 움직여야 하므로).
     //   ⭐ 삭제 표시된 세트는 제외 — 그리드에 남아 있으므로(‘D’ 표시) 편집 이력이 있으면
@@ -212,13 +288,10 @@ export const DemandManager = ({ tabId, title }: PageProps<MENU_ID>) => {
     const savedScroll = gridRef.current?.scrollPosition ?? null;
     let reload = false;
 
-    // 저장·삭제 성공 결과는 모아서 토스트 1개로 띄운다 (앱 공통 setToast success).
+    // 저장·삭제 성공 여부만 모아서 토스트 1개로 띄운다 (앱 공통 setToast success).
     //   확인 버튼이 필요한 실패·검증만 알럼으로 남긴다.
-    //   'ADD / MODIFY : ' / 'DELETE : ' 접두어는 화면이 붙이는 게 아니라 SP 가 결과 커서의
-    //     EVENT 컬럼에 담아 내려준다(demand-manager.api.ts toResult → count). 메시지 원장은
-    //     '{0}개의 데이터가 저장되었습니다.' 한 건이며, 삭제용 메시지 ID 는 따로 필요 없다.
-    //   구분자는 공백 — 토스트 본문도 string 한 줄이라 '\n' 은 줄바꿈으로 렌더되지 않는다.
-    const results: string[] = [];
+    //   성공 메시지는 message-id.ts 공통 원장(CRUD_MSG.SAVED)을 그대로 쓴다.
+    let hasSuccess = false;
 
     try {
       if (targets.length > 0) {
@@ -229,9 +302,7 @@ export const DemandManager = ({ tabId, title }: PageProps<MENU_ID>) => {
         }
         const res = await callSaveOrderList(build.rows, sc.versionNo);
         if (res.ok) {
-          results.push(
-            msgText(MSG.SAVED_COUNT, '_{0}개의 데이터가 저장되었습니다.', res.count ?? '0')
-          );
+          hasSuccess = true;
           reload = true;
         } else if (res.code === 'DUPLICATE') {
           alert(MSG.PERIOD_OVERLAP, '_중첩된 기간이 있습니다.');
@@ -245,9 +316,7 @@ export const DemandManager = ({ tabId, title }: PageProps<MENU_ID>) => {
       if (deleteKeys.length > 0) {
         const res = await callDeleteOrderList(deleteKeys);
         if (res.ok) {
-          results.push(
-            msgText(MSG.SAVED_COUNT, '_{0}개의 데이터가 저장되었습니다.', res.count ?? '0')
-          );
+          hasSuccess = true;
           reload = true;
         } else {
           // 실패는 확인이 필요하므로 알럼. 성공 토스트와 채널이 달라 서로 덮지 않는다.
@@ -255,7 +324,8 @@ export const DemandManager = ({ tabId, title }: PageProps<MENU_ID>) => {
         }
       }
 
-      if (results.length > 0) void setToast({ type: 'success', message: results.join(' ') });
+      if (hasSuccess)
+        void setToast({ type: 'success', message: t(CRUD_MSG.SAVED.id, CRUD_MSG.SAVED.fallback) });
 
       if (reload) {
         setInsertedRows([]);
@@ -282,7 +352,7 @@ export const DemandManager = ({ tabId, title }: PageProps<MENU_ID>) => {
   };
 
   return (
-    <div className={styles.container}>
+    <>
       <MainTitle
         title={title}
         menuId={MENU_ID}
@@ -316,7 +386,7 @@ export const DemandManager = ({ tabId, title }: PageProps<MENU_ID>) => {
 
       <DemandManagerGrid
         rows={rows}
-        gridRef={gridRef as never}
+        gridRef={gridRef}
         gridFilterRef={gridFilterRef}
         editTrackerRef={editTrackerRef}
         staticColumns={staticColumns}
@@ -333,6 +403,6 @@ export const DemandManager = ({ tabId, title }: PageProps<MENU_ID>) => {
           setVersionLabel(label);
         }}
       />
-    </div>
+    </>
   );
 };

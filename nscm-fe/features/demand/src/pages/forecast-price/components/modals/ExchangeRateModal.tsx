@@ -115,11 +115,11 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
   // Insert 신규 행 (AS-IS InsertRow L490~529 — DIVISION 고정 + Currency/Unit 콤보 편집)
   const [insertedRows, setInsertedRows] = useState<PivotRow[]>([]);
   // 편집 추적 — row 객체 → (ym → 값). 저장 성공/재조회/모달 재오픈 시 clear (DMF0042 모달 계보)
+  //   ⚠️ 건수는 **상태로 들고 있지 않는다** — Save 버튼 라벨에 `Save (N)` 으로 노출되던 것을
+  //   2026-08-18 사용자 요청으로 제거했다. 저장 대상 판정은 editsRef 단독이며 화면 표기와 무관하다.
   const editsRef = useRef<Map<PivotRow, Map<string, number>>>(new Map());
-  const [editCount, setEditCount] = useState(0);
   const clearEdits = () => {
     editsRef.current.clear();
-    setEditCount(0);
     setInsertedRows([]);
   };
 
@@ -152,7 +152,6 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
       setPeriodFrom(defaultPeriod.start);
       setPeriodTo(defaultPeriod.end);
       editsRef.current.clear();
-      setEditCount(0);
       setInsertedRows([]);
     }
   }, [open, defaultDivision, defaultPeriod.start, defaultPeriod.end]);
@@ -190,12 +189,18 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
       // 결과 = res.data.result.o_result_cursor[0] (PROC_RESULT 커서, saveExcelUpload 패턴 1:1).
       //   구버전은 res.data.result[0](배열형)으로 오파싱해 성공(CODE='0')을 실패로 처리하는 버그.
       const inner = (
-        res.data?.result as { o_result_cursor?: { CODE?: string; RESULT_MSG?: string }[] }
+        res.data?.result as {
+          o_result_cursor?: { CODE?: string; RESULT_MSG?: string; EVENT?: string }[];
+        }
       )?.o_result_cursor?.[0];
       const ok = res.status < 400 && !!inner && String(inner.CODE) === '0';
       // 실패 사유 우선순위: proc 결과 메시지 > 서버 오류 본문 > 고정 문구.
+      //   ⭐ [2026-08-18] EVENT 를 함께 노출한다. 래퍼 PR_SCM_MST_EXCHANGE_RATE_UI 는 실패 시
+      //     CODE='9' / RESULT_MSG='fail' / EVENT=<SQLERRM> 를 돌려주는데, RESULT_MSG 만 읽으면
+      //     사용자에게 **"fail" 한 단어**만 뜨고 실제 ORA 오류가 버려진다(원인 규명 불가 신고).
+      const detail = inner?.EVENT?.trim();
       const failure =
-        inner?.RESULT_MSG ||
+        [inner?.RESULT_MSG, detail].filter(Boolean).join('\n') ||
         (res.status >= 400 ? serverErrorText(res.status, res.data) : '') ||
         t('MSG00455', '_환율 정보 반영에 실패했습니다.');
       // 완료는 별도 팝업(Alert) 대신 하단 중앙 토스트로 표기 후 사라진다 (2026-08-13 사용자 지시).
@@ -407,7 +412,6 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
         const ymMap = editsRef.current.get(item) ?? new Map<string, number>();
         ymMap.set(ym, value);
         editsRef.current.set(item, ymMap);
-        setEditCount([...editsRef.current.values()].reduce((n, m) => n + m.size, 0));
       };
       g.cellEditEnded.addHandler(cellEditEndedHandler);
 
@@ -812,7 +816,7 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
                 appearance='contained'
                 priority='primary'
                 size='medium'
-                buttonLabel={editCount > 0 ? `Save (${editCount})` : 'Save'}
+                buttonLabel='Save'
                 disabled={saving}
                 onClick={() => void handleSave()}
               />

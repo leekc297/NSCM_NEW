@@ -162,9 +162,47 @@ public class QueryLogInterceptor implements Interceptor {
         }
     }
 
+    /** [E20260824-LOGPARAM] PARAMS 로그 상한. 초과분은 잘라 기록한다(안전망). */
+    private static final int PARAMS_MAX_LEN = 4000;
+
+    /**
+     * [E20260824-LOGPARAM] 파라미터 로그 직렬화.
+     *
+     * <p>종전 문제: MyBatis 는 실행 후 <b>OUT 파라미터(REF CURSOR 매핑 결과)를 파라미터 맵에 되돌려
+     * 넣는다</b>. 이 메서드는 finally 에서 호출되므로 그 시점 맵에는 조회 결과 전체가 들어 있었고,
+     * 결과적으로 조회 1회마다 결과셋을 통째로 JSON 으로 만들어 SCM_COM_SQL_LOG.PARAMS(CLOB) 에
+     * INSERT 했다. DMF0020 실측(2026-08-24, div82/12개월/10,524행 x 102컬럼):
+     * <b>PARAMS 길이 20,535,281 bytes(19.6MB)</b> — 직렬화 + 원격 DB CLOB 왕복이 조회 지연의
+     * 지배적 요인이었다(DB 자체는 13초).
+     *
+     * <p>조치: ① OUT 파라미터 키('@' 시작)와 MyBatis 결과 홀더(DATARESULT)를 제외해 <b>입력만</b>
+     * 남긴다(로그 목적 = 어떤 파라미터로 호출했는가). ② 그래도 커지면 PARAMS_MAX_LEN 으로 절단한다.
+     */
     private String toJsonSafe(Object parameter) {
         try {
-            return parameter == null ? null : objectMapper.writeValueAsString(parameter);
+            if (parameter == null) return null;
+            Object target = parameter;
+            if (parameter instanceof Map<?, ?> map) {
+                Map<String, Object> in = new java.util.LinkedHashMap<>();
+                for (Map.Entry<?, ?> e : map.entrySet()) {
+                    String k = String.valueOf(e.getKey());
+                    // OUT 커서(@o_rc1, @O_RESULT_CURSOR ...) 와 결과 홀더는 로그 대상이 아니다
+                    if (k.startsWith("@") || "DATARESULT".equals(k)) continue;
+                    Object v = e.getValue();
+                    // 방어: 결과 컬렉션이 다른 키로 섞여 들어와도 통째로 담지 않는다
+                    if (v instanceof java.util.Collection<?> c) {
+                        in.put(k, "[collection size=" + c.size() + "]");
+                    } else {
+                        in.put(k, v);
+                    }
+                }
+                target = in;
+            }
+            String json = objectMapper.writeValueAsString(target);
+            if (json != null && json.length() > PARAMS_MAX_LEN) {
+                json = json.substring(0, PARAMS_MAX_LEN) + "...(truncated, total=" + json.length() + ")";
+            }
+            return json;
         } catch (Exception e) {
             return "param to json error: " + e.getMessage();
         }

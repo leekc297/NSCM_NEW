@@ -1,3 +1,4 @@
+import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { FormItem, Label } from '@shared/lges';
@@ -35,7 +36,7 @@ export const ErpEdiMasterForm = () => {
         <>
           <Grid size={4}>
             <FormItem
-              className={styles.customForm}
+              className={`${styles.customForm} ${commonStyles.formItem}`}
               label={t('LBL00001', '_Div.')}
               labelAlign='right'
               required

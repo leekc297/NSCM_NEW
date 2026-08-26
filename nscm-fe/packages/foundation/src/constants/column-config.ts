@@ -9,6 +9,8 @@ export enum CELL_INPUT_EDIT_TYPE {
 export enum CELL_CONTROL_TYPE {
   // modal에 대한 명칭 정하기 필요
   MODAL = 'FPModal',
+  // 타이핑 + 돋보기 모달을 동시에 허용하는 셀 (AS-IS FPTextModal).
+  TEXT_MODAL = 'FPTextModal',
   COMBO = 'FPComboBox',
   BUTTON = 'FPButton',
   DATE = 'FPDate',

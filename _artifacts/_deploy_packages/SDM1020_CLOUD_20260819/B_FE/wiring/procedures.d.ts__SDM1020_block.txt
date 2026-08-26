@@ -1,0 +1,103 @@
+// =====================================================================================
+// SDM1020 — procedures.d.ts 배선 블록 (라이브 nscm-fe/configs/types/procedures.d.ts L4006~L4098 발췌, 2026-08-19)
+// [병합 안내 — 파일 통짜 덮어쓰기 금지 (클라우드 셸 신·구 세대 혼재)]
+//   1. 클라우드 본 nscm-fe/configs/types/procedures.d.ts 의 `interface RawProcedureMap` 안,
+//      마지막 화면 블록(SDM1010: {...};) 뒤 · 인터페이스 닫는 `}` 앞에 아래 블록 삽입.
+//   2. 기존 SDM1020 블록이 이미 있으면 통째 교체.
+//   3. tsconfig.base.json "@sdm/*" alias · apps/web package.json "@sdm" 의존은
+//      SDM1010_CLOUD_20260813/fe/wiring_snippets/README_배선.md 대로 기적용 전제(미적용 시 그것부터).
+//   4. 병합 후 type-check 0 확인 (클라우드 빌드 파이프라인).
+// =====================================================================================
+  /**
+   * ProjectList — SDM1020 (Project List · 프로젝트 조회/변경)
+   *
+   * ⭐ 계약 단일 원천 = `_artifacts/_apply_corporate/SDM1020_META_20260819/_CONTRACT.md`
+   *   (PROC_M COL_NM = payload 키 — ALL_ARGUMENTS positional 29=29 실측. 원문 = PKG_SDM1020.txt).
+   * SHEETS (SEARCH — 커서명 'data'):
+   * - `Project List` (P_SDM1020_GET_PJT_LIST — SHT_NM 실명(공백 포함), API_ID 시트 토큰 'main'.
+   *   커서 41컬럼 — 메타 30 + 보조 NAME 계열. ⚠ D1: DPJT_AUTH_REQ_READ 는 커서에 동명 2회 SELECT —
+   *   FE 는 컬럼명 1회 바인딩(마지막 값 승리 의존 금지). ⚠ D2: 권한요청 TAG 의 NAME/COLOR 커서 실명 =
+   *   `DPJT_AUTH_REQ_WRITE_NAME`/`_WRITE_COLOR_TYPE`. `DPJT_AUTH_REQ_LINK` 는 FE 파생 — 커서 미반환)
+   * - `period` (PR_GET_DAY_RANGE 공유 — SDM1020_period_SEARCH. 실서명 2-IN createdBy/month —
+   *   설계서의 P_FR_BUCKET 7-인자 서명은 실물과 다름, 계약 ⑤)
+   * BTN 계열 2본은 **행별 단건** apiClient.post 직접
+   * (`features/sdm/src/pages/project-list/utils/project-list.api.ts` — 결과커서 CODE '0'+EVENT 판정
+   * 의무. SDM1010 SAVE 계열 관행 동일 — 타입 미등재. COL_NM 계약 ①):
+   * - REQ    = PKG_SDM1020.P_SDM1020_BTN_REQ_PJT_REG (15 IN — activeFlag/dpjtKey/dpjtCode/dpjtSeq/
+   *   divisionId/dpjtClass/endCustomer/dpjtName/cellType/stackMethod/bizType/sopDate/sopPlantId
+   *   + sesUserId(BE주입) → result)
+   * - AUTHREQ = PKG_SDM1020.P_SDM1020_REQ_PJT_AUTH (5 IN — dpjtKey/dpjtAuthReqWrite/dpjtAuthReqRead
+   *   + sesUserId(BE주입) → result)
+   * sesUserId/mnuId 는 BE 세션 자동주입 — request 미포함.
+   * 날짜 컬럼(SOP_DATE/REG_COMP_DATE)은 Oracle DATE 원형 → BE ISO 직렬화 수신.
+   */
+  SDM1020: {
+    'Project List': {
+      request: {
+        divisionId: string; // 1 P_DIVISION_ID (단일 필수 — MyDivision)
+        endCustomer: string; // 2 P_END_CUSTOMER (콤마 다중 or 'ALL' — UF_FX_STRING_SPLIT)
+        dpjtAuthType: string; // 3 P_DPJT_AUTH_TYPE (ADMIN/WRITE/READ/NONE 콤마 다중 or 'ALL')
+        dpjtRegStatus: string; // 4 P_DPJT_REG_STATUS (콤마 다중 or 'ALL')
+        regCompDateFr: string; // 5 P_REG_COMP_DATE_FR ('YYYY-MM-DD' — 필수, TO_DATE SUBSTR 1..10)
+        regCompDateTo: string; // 6 P_REG_COMP_DATE_TO ('YYYY-MM-DD' — 필수)
+      };
+      response: {
+        // O_CURSOR — SELECT 순서 그대로 (PKG_SDM1020.txt L136~219 실측)
+        data: {
+          DPJT_KEY: string;
+          DPJT_CODE: string;
+          DPJT_SEQ: string | number;
+          DIVISION_ID: string;
+          DIVISION_NAME: string; // ⚠ D8: DIVISION_ID 재-alias (CODE=NAME — as-is 수용)
+          DPJT_CLASS: string;
+          DPJT_CLASS_NAME: string;
+          END_CUSTOMER: string;
+          END_CUSTOMER_NAME: string;
+          DPJT_NAME: string;
+          CELL_TYPE: string;
+          CELL_TYPE_NAME: string;
+          STACK_METHOD: string;
+          STACK_METHOD_NAME: string;
+          BIZ_TYPE: string;
+          BIZ_TYPE_NAME: string;
+          SOP_DATE: string;
+          SOP_PLANT_ID: string;
+          SOP_PLANT_NAME: string; // ⚠ D8: SCM_SITE_ID 재-alias
+          DEPT_ID: string;
+          DEPT_NAME: string; // = DEPT_NAME_KO
+          DEPT_NAME_KO: string;
+          DEPT_NAME_EN: string;
+          DEPT_NAME_CN: string;
+          MGMT_USER_ID: string;
+          USER_NAME: string;
+          USER_NAME_EN: string;
+          DPJT_AUTH_TYPE: string; // ADMIN/WRITE/READ (REQUEST 상태 = 'NONE' 치환 — P-01 편집 축)
+          DPJT_AUTH_TYPE_NAME: string;
+          DPJT_REG_STATUS: string; // TAG (lookup SPMS_DPJT_REG_STATUS — P-22 도메인)
+          DPJT_REG_STATUS_NAME: string;
+          DPJT_REG_STATUS_COLOR_TYPE: string;
+          REG_COMP_DATE: string;
+          DPJT_DEVELOP_STATUS: string;
+          DPJT_DEVELOP_STATUS_NAME: string;
+          DPJT_AUTH_MGMT: string; // ADMIN=''(NULL — 링크 노출) / 그 외 '-' (P-02)
+          DPJT_AUTH_REQ_STATUS: string; // ADMIN+요청存 = '권한요청' / 그 외 NULL (TAG)
+          DPJT_AUTH_REQ_WRITE_NAME: string; // D2 — 권한요청 TAG NAME (커서 실명)
+          DPJT_AUTH_REQ_WRITE_COLOR_TYPE: string; // D2 — 'warning-major'
+          DPJT_AUTH_REQ_WRITE: string; // 3상태 DISABLED/CHECKED/UNCHECKED (P-04)
+          DPJT_AUTH_REQ_READ: string; // 3상태 (⚠ D1: 커서 동명 2회 — 판정 CASE 동일·1회 바인딩)
+          [key: string]: string | number;
+        };
+      };
+    };
+    period: {
+      // PR_GET_DAY_RANGE PROC_M 공유 (실서명 2-IN — 계약 ⑤. o_rc2 = 월 경계 'YYYYMMDD:YYYYMMDD')
+      request: {
+        createdBy: string; // 1 P_CREATED_BY (SP NVL 가드 — '')
+        month: string; // 2 P_MONTH (당월 1일 앵커 소비 — M-1~Today 는 FE dayjs 병행, 계약 ⑤)
+      };
+      response: {
+        o_rc1: { DAY_RANGE: string; [key: string]: string | number };
+        o_rc2: { DAY_RANGE: string; [key: string]: string | number };
+      };
+    };
+  };

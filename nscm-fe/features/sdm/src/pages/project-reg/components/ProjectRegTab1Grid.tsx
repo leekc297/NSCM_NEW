@@ -5,6 +5,7 @@ import { type MutableRefObject, type Ref, useEffect, useMemo, useRef } from 'rea
 
 import type { ComboParam, RawFlexGridColumnConfig } from '@foundation/models';
 import type { EditTracker } from '@foundation/utils';
+import { safeString } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 
@@ -297,8 +298,8 @@ export const ProjectRegTab1Grid = ({
       //   (division 종속 콤보는 행 division 의 원천으로 매칭 — 전역 원천과 CODE 충돌 방지)
       const codeBinding = CODE_PAIR[binding];
       if (codeBinding && staticBindingSet.has(binding)) {
-        const stored = String(rec[binding] ?? '');
-        const rowDv = String(rec.DIVISION_ID ?? '');
+        const stored = safeString(rec[binding]);
+        const rowDv = safeString(rec.DIVISION_ID);
         const comboRows =
           scopedRowsRef.current[`${binding}|${rowDv}`] ?? comboRowsRef.current[binding] ?? [];
         const hit =
@@ -309,7 +310,7 @@ export const ProjectRegTab1Grid = ({
           rec[binding] = String(hit.NAME ?? '');
         }
         // ⭐ DIVISION 변경 확정 시 종속 셀(ByDivision 콤보 + CODE 페어) clear — 타 division 값 잔존 방지
-        if (binding === 'DIVISION_NAME' && String(rec.DIVISION_ID ?? '') !== preEditDivisionRef.current) {
+        if (binding === 'DIVISION_NAME' && safeString(rec.DIVISION_ID) !== preEditDivisionRef.current) {
           scopedFieldsRef.current.forEach(f => {
             rec[f] = '';
           });

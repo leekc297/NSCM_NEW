@@ -1,0 +1,970 @@
+-- ============================================================================================
+-- DMF0020_CLOUD_20260824 / 00_GTT_DDL.sql
+--   PKG_DMF0020 BODY 가 참조하는 GLOBAL TEMPORARY TABLE 자급 DDL.
+--   ⚠ 기존재를 가정하지 않는다 — 클라우드에 없으면 BODY 가 INVALID 로 떨어진다.
+--   ⚠ 멱등: 이미 있으면 ORA-00955 / ORA-00955 는 무시하고 넘어간다(아래 PL/SQL 블록).
+--   ⚠ TEMPORARY 정의(ON COMMIT ...)는 사내 실측값을 그대로 옮긴다.
+--   ⚠ 01_PKG_SPEC / 02_PKG_BODY 보다 **먼저** 실행할 것.
+-- ============================================================================================
+
+-- ---- GT_D000_RESULTS (ON COMMIT PRESERVE ROWS) ----
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE '
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_D000_RESULTS (
+  ACTIVE_FLAG                        VARCHAR2(4000 CHAR),
+  DIVISION_ID                        VARCHAR2(4000 CHAR),
+  YYYYMMDD                           VARCHAR2(4000 CHAR),
+  CURRENCY                           VARCHAR2(4000 CHAR),
+  UNIT_CURRENCY                      VARCHAR2(4000 CHAR),
+  EXCHANGE_PRICE                     VARCHAR2(4000 CHAR),
+  CREATED_BY                         VARCHAR2(4000 CHAR),
+  LAST_UPDATED_BY                    VARCHAR2(4000 CHAR)
+) ON COMMIT PRESERVE ROWS';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_D000_RESULTS TO SCMP_APP;
+
+-- ---- GT_DMF0020_DATA (ON COMMIT PRESERVE ROWS) ----
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE '
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_DMF0020_DATA (
+  DIVISION_ID                        VARCHAR2(30 CHAR),
+  DIVISION_NAME                      VARCHAR2(150 CHAR),
+  UPPER_DEPT_ID                      VARCHAR2(50 CHAR),
+  DEPT_ID                            VARCHAR2(50 CHAR),
+  SCM_SITE_ID                        VARCHAR2(30 CHAR),
+  PLANT_SITE_ID                      VARCHAR2(30 CHAR),
+  SITE_DESCRIPTION                   VARCHAR2(150 CHAR),
+  END_CUSTOMER                       VARCHAR2(150 CHAR),
+  PROJECT_CODE                       VARCHAR2(50 CHAR),
+  PROJECT_NAME                       VARCHAR2(200 CHAR),
+  BIZ_TYPE_NAME                      VARCHAR2(50 CHAR),
+  PROJECT_STATUS                     VARCHAR2(150 CHAR),
+  PROJECT_OWNER                      VARCHAR2(50 CHAR),
+  ITEM_ID                            VARCHAR2(50 CHAR),
+  ITEM_CLASS_NAME                    VARCHAR2(300 CHAR),
+  ITEM_NAME                          VARCHAR2(150 CHAR),
+  INCOTERMS                          VARCHAR2(10 CHAR),
+  CURRENCY                           VARCHAR2(10 CHAR),
+  FCST_TYPE                          VARCHAR2(20 CHAR),
+  DOM_EXP                            VARCHAR2(3 CHAR),
+  AUTHORITY_YN                       VARCHAR2(50 CHAR),
+  NICK_NAME                          VARCHAR2(50 CHAR)
+) ON COMMIT PRESERVE ROWS';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_DMF0020_DATA TO SCMP_APP;
+
+-- ---- GT_DMF0020_DEPT_AUTH (ON COMMIT PRESERVE ROWS) ----
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE '
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_DMF0020_DEPT_AUTH (
+  DEPT_ID                            VARCHAR2(50 CHAR),
+  HAS_AUTH                           VARCHAR2(4 CHAR)
+) ON COMMIT PRESERVE ROWS';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE 'CREATE INDEX SCM_MGR.GT_DMF0020_DEPT_AUTH_IDX ON SCM_MGR.GT_DMF0020_DEPT_AUTH (DEPT_ID)';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_DMF0020_DEPT_AUTH TO SCMP_APP;
+
+-- ---- GT_DMF0020_EXCH (ON COMMIT PRESERVE ROWS) ----
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE '
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_DMF0020_EXCH (
+  DIVISION_ID                        VARCHAR2(30 CHAR) NOT NULL,
+  YYYYMMDD                           VARCHAR2(8 CHAR) NOT NULL,
+  CURRENCY                           VARCHAR2(10 CHAR) NOT NULL,
+  UNIT_CURRENCY                      VARCHAR2(10 CHAR) NOT NULL,
+  EXCHANGE_PRICE                     NUMBER(20,10) NOT NULL
+) ON COMMIT PRESERVE ROWS';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_DMF0020_EXCH TO SCMP_APP;
+
+-- ---- GT_DMF0020_ITEM (ON COMMIT PRESERVE ROWS) ----
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE '
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_DMF0020_ITEM (
+  DIVISION_ID                        VARCHAR2(30 CHAR),
+  ITEM_ID                            VARCHAR2(50 CHAR),
+  ITEM_NAME                          VARCHAR2(150 CHAR),
+  ITEM_CLASS_NAME                    VARCHAR2(300 CHAR),
+  NICK_NAME                          VARCHAR2(50 CHAR),
+  FORECAST_INFO_BIZ_TYPE             VARCHAR2(10 CHAR),
+  ITEM_TYPE                          VARCHAR2(10 CHAR)
+) ON COMMIT PRESERVE ROWS';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_DMF0020_ITEM TO SCMP_APP;
+
+-- ---- GT_DMF0020_OUTPUT (ON COMMIT PRESERVE ROWS) ----
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE '
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_DMF0020_OUTPUT (
+  DIVISION_ID                        VARCHAR2(30 CHAR),
+  DIVISION_NAME                      VARCHAR2(150 CHAR),
+  UPPER_DEPT_ID                      VARCHAR2(50 CHAR),
+  DEPT_ID                            VARCHAR2(50 CHAR),
+  SCM_SITE_ID                        VARCHAR2(30 CHAR),
+  PLANT_SITE_ID                      VARCHAR2(30 CHAR),
+  SITE_DESCRIPTION                   VARCHAR2(150 CHAR),
+  END_CUSTOMER                       VARCHAR2(150 CHAR),
+  END_CUSTOMER40                     VARCHAR2(150 CHAR),
+  PROJECT_CODE                       VARCHAR2(50 CHAR),
+  PROJECT_NAME                       VARCHAR2(200 CHAR),
+  BIZ_TYPE_NAME                      VARCHAR2(50 CHAR),
+  PROJECT_STATUS                     VARCHAR2(150 CHAR),
+  ITEM_ID                            VARCHAR2(50 CHAR),
+  ITEM_CLASS_NAME                    VARCHAR2(300 CHAR),
+  ITEM_NAME                          VARCHAR2(150 CHAR),
+  INCOTERMS                          VARCHAR2(10 CHAR),
+  CURRENCY                           VARCHAR2(10 CHAR),
+  FCST_TYPE                          VARCHAR2(20 CHAR),
+  DOM_EXP                            VARCHAR2(3 CHAR),
+  MEASURE                            VARCHAR2(50 CHAR),
+  DISPLAY_SEQ                        NUMBER(10,0),
+  AUTHORITY_YN                       VARCHAR2(50 CHAR),
+  YYYYMMDD                           VARCHAR2(10 CHAR),
+  PRICE                              NUMBER(30,10),
+  NICK_NAME                          VARCHAR2(50 CHAR),
+  COL_LIST                           VARCHAR2(3000 CHAR),
+  PRICE_EXIST                        VARCHAR2(1 CHAR),
+  GROUP_ID                           VARCHAR2(50 CHAR)
+) ON COMMIT PRESERVE ROWS';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_DMF0020_OUTPUT TO SCMP_APP;
+
+-- ---- GT_DMF0020_OVER_RANGE (ON COMMIT PRESERVE ROWS) ----
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE '
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_DMF0020_OVER_RANGE (
+  DIVISION_ID                        VARCHAR2(30 CHAR),
+  PROJECT_CODE                       VARCHAR2(50 CHAR),
+  SCM_SITE_ID                        VARCHAR2(30 CHAR),
+  PLANT_SITE_ID                      VARCHAR2(30 CHAR),
+  ITEM_ID                            VARCHAR2(50 CHAR),
+  CURRENCY                           VARCHAR2(10 CHAR),
+  MEASURE                            VARCHAR2(50 CHAR),
+  DOM_EXP                            VARCHAR2(3 CHAR),
+  FCST_TYPE                          VARCHAR2(20 CHAR),
+  INCOTERMS                          VARCHAR2(10 CHAR),
+  YYYYMMDD                           CHAR(8 CHAR)
+) ON COMMIT PRESERVE ROWS';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_DMF0020_OVER_RANGE TO SCMP_APP;
+
+-- ---- GT_DMF0020_OVER_RANGE_LIST (ON COMMIT PRESERVE ROWS) ----
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE '
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_DMF0020_OVER_RANGE_LIST (
+  DIVISION_ID                        VARCHAR2(30 CHAR),
+  PROJECT_CODE                       VARCHAR2(50 CHAR),
+  SCM_SITE_ID                        VARCHAR2(30 CHAR),
+  PLANT_SITE_ID                      VARCHAR2(30 CHAR),
+  ITEM_ID                            VARCHAR2(50 CHAR),
+  CURRENCY                           VARCHAR2(10 CHAR),
+  DOM_EXP                            VARCHAR2(3 CHAR),
+  FCST_TYPE                          VARCHAR2(20 CHAR),
+  INCOTERMS                          VARCHAR2(10 CHAR),
+  COL_LIST                           VARCHAR2(4000 CHAR)
+) ON COMMIT PRESERVE ROWS';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_DMF0020_OVER_RANGE_LIST TO SCMP_APP;
+
+-- ---- GT_DMF0020_PARAM_TOKEN (ON COMMIT PRESERVE ROWS) ----
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE '
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_DMF0020_PARAM_TOKEN (
+  PARAM_NM                           VARCHAR2(30 CHAR),
+  TOKEN                              VARCHAR2(960 CHAR)
+) ON COMMIT PRESERVE ROWS';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE 'CREATE INDEX SCM_MGR.IX_GT_DMF0020_PARAM_TOKEN_01 ON SCM_MGR.GT_DMF0020_PARAM_TOKEN (PARAM_NM)';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_DMF0020_PARAM_TOKEN TO SCMP_APP;
+
+-- ---- GT_DMF0020_PJT (ON COMMIT PRESERVE ROWS) ----
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE '
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_DMF0020_PJT (
+  DIVISION_ID                        VARCHAR2(240 BYTE),
+  PROJECT_CODE                       VARCHAR2(960 BYTE),
+  PROJECT_NAME                       VARCHAR2(4000 BYTE),
+  PROJECT_OWNER                      VARCHAR2(4000 BYTE),
+  PROJECT_STATUS                     VARCHAR2(960 BYTE),
+  BIZ_TYPE                           VARCHAR2(960 BYTE),
+  SCM_SITE_ID                        VARCHAR2(960 BYTE),
+  ITEM_ID                            VARCHAR2(960 BYTE),
+  DEPT_ID                            VARCHAR2(960 BYTE),
+  DEPT_NAME_KO                       VARCHAR2(4000 BYTE),
+  USER_ID                            VARCHAR2(960 BYTE),
+  USER_NAME                          VARCHAR2(4000 BYTE),
+  USER_NAME_EN                       VARCHAR2(4000 BYTE)
+) ON COMMIT PRESERVE ROWS';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_DMF0020_PJT TO SCMP_APP;
+
+-- ---- GT_DMF0020_PLAN_DATA (ON COMMIT PRESERVE ROWS) ----
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE '
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_DMF0020_PLAN_DATA (
+  DIVISION_ID                        VARCHAR2(30 CHAR),
+  SCM_SITE_ID                        VARCHAR2(30 CHAR),
+  PLANT_SITE_ID                      VARCHAR2(30 CHAR),
+  PROJECT_CODE                       VARCHAR2(50 CHAR),
+  ITEM_ID                            VARCHAR2(50 CHAR),
+  INCOTERMS                          VARCHAR2(10 CHAR),
+  CURRENCY                           VARCHAR2(10 CHAR),
+  FCST_TYPE                          VARCHAR2(20 CHAR),
+  DOM_EXP                            VARCHAR2(3 CHAR)
+) ON COMMIT PRESERVE ROWS';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_DMF0020_PLAN_DATA TO SCMP_APP;
+
+-- ---- GT_DMF0020_RESULTS (ON COMMIT PRESERVE ROWS) ----
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE '
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_DMF0020_RESULTS (
+  V_DIVISION_ID                      VARCHAR2(30 CHAR) NOT NULL,
+  V_PROJECT_CODE                     VARCHAR2(50 CHAR) NOT NULL,
+  V_SCM_SITE_ID                      VARCHAR2(30 CHAR) NOT NULL,
+  V_PLANT_SITE_ID                    VARCHAR2(30 CHAR) NOT NULL,
+  V_ITEM_ID                          VARCHAR2(50 CHAR) NOT NULL,
+  V_YYYYMMDD                         VARCHAR2(8 CHAR) NOT NULL,
+  V_CURRENCY                         VARCHAR2(10 CHAR) NOT NULL,
+  V_MEASURE                          VARCHAR2(50 CHAR) NOT NULL,
+  V_DOM_EXP                          VARCHAR2(3 CHAR) NOT NULL,
+  V_FCST_TYPE                        VARCHAR2(20 CHAR) NOT NULL,
+  V_INCOTERMS                        VARCHAR2(10 CHAR) NOT NULL,
+  V_PRICE                            NUMBER(20,10) NOT NULL,
+  V_CREATED_BY                       VARCHAR2(150 CHAR) NOT NULL
+) ON COMMIT PRESERVE ROWS';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_DMF0020_RESULTS TO SCMP_APP;
+
+-- ---- GT_DMF0020_RESULTS_MST (ON COMMIT PRESERVE ROWS) ----
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE '
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_DMF0020_RESULTS_MST (
+  V_ACTIVE_FLAG                      VARCHAR2(1 CHAR),
+  V_DIVISION_ID                      VARCHAR2(30 CHAR) NOT NULL,
+  V_PROJECT_CODE                     VARCHAR2(50 CHAR) NOT NULL,
+  V_SCM_SITE_ID                      VARCHAR2(30 CHAR) NOT NULL,
+  V_PLANT_SITE_ID                    VARCHAR2(30 CHAR) NOT NULL,
+  V_ITEM_ID                          VARCHAR2(50 CHAR) NOT NULL,
+  V_YYYYMMDD                         VARCHAR2(8 CHAR) NOT NULL,
+  V_CURRENCY                         VARCHAR2(10 CHAR) NOT NULL,
+  V_MEASURE                          VARCHAR2(50 CHAR) NOT NULL,
+  V_DOM_EXP                          VARCHAR2(3 CHAR) NOT NULL,
+  V_FCST_TYPE                        VARCHAR2(20 CHAR) NOT NULL,
+  V_INCOTERMS                        VARCHAR2(10 CHAR) NOT NULL,
+  V_PRICE                            NUMBER(20,10) NOT NULL,
+  V_CREATED_BY                       VARCHAR2(150 CHAR) NOT NULL,
+  V_CREATION_DATE                    DATE NOT NULL,
+  V_LAST_UPDATED_BY                  VARCHAR2(150 CHAR) NOT NULL,
+  V_ROWNUM                           VARCHAR2(150 CHAR)
+) ON COMMIT PRESERVE ROWS';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_DMF0020_RESULTS_MST TO SCMP_APP;
+
+-- ---- GT_DMF0020_SALES_SITE_MODEL (ON COMMIT PRESERVE ROWS) ----
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE '
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_DMF0020_SALES_SITE_MODEL (
+  DIVISION_ID                        VARCHAR2(30 CHAR),
+  DEPT_ID                            VARCHAR2(50 CHAR),
+  END_CUSTOMER                       VARCHAR2(150 CHAR),
+  END_CUSTOMER40                     VARCHAR2(150 CHAR),
+  SCM_SITE_ID                        VARCHAR2(30 CHAR),
+  SCM_SITE_ID40                      VARCHAR2(30 CHAR),
+  PROJECT_CODE                       VARCHAR2(50 CHAR),
+  PROJECT_NAME                       VARCHAR2(200 CHAR),
+  PROJECT_STATUS                     VARCHAR2(150 CHAR),
+  SALES_PLAN_ADJUST_YN               VARCHAR2(1 CHAR),
+  ITEM_CLASS_NAME                    VARCHAR2(300 CHAR),
+  ITEM_ID                            VARCHAR2(50 CHAR),
+  ITEM_NAME                          VARCHAR2(150 CHAR),
+  NICK_NAME                          VARCHAR2(50 CHAR),
+  CURRENCY                           VARCHAR2(10 CHAR),
+  MEASURE                            VARCHAR2(50 CHAR),
+  DISPLAY_SEQ                        NUMBER(10,0)
+) ON COMMIT PRESERVE ROWS';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_DMF0020_SALES_SITE_MODEL TO SCMP_APP;
+
+-- ---- GT_DMF0020_SALES_SITE_MODEL_ALL (ON COMMIT PRESERVE ROWS) ----
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE '
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_DMF0020_SALES_SITE_MODEL_ALL (
+  DIVISION_ID                        VARCHAR2(30 CHAR),
+  DEPT_ID                            VARCHAR2(50 CHAR),
+  END_CUSTOMER                       VARCHAR2(150 CHAR),
+  END_CUSTOMER40                     VARCHAR2(150 CHAR),
+  SCM_SITE_ID                        VARCHAR2(30 CHAR),
+  SCM_SITE_ID40                      VARCHAR2(30 CHAR),
+  PROJECT_CODE                       VARCHAR2(50 CHAR),
+  PROJECT_NAME                       VARCHAR2(200 CHAR),
+  PROJECT_STATUS                     VARCHAR2(150 CHAR),
+  SALES_PLAN_ADJUST_YN               VARCHAR2(1 CHAR),
+  ITEM_CLASS_NAME                    VARCHAR2(300 CHAR),
+  ITEM_ID                            VARCHAR2(50 CHAR),
+  ITEM_NAME                          VARCHAR2(150 CHAR),
+  NICK_NAME                          VARCHAR2(50 CHAR),
+  CURRENCY                           VARCHAR2(10 CHAR)
+) ON COMMIT PRESERVE ROWS';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_DMF0020_SALES_SITE_MODEL_ALL TO SCMP_APP;
+
+-- ---- GT_DMF0020_SEL_MEASURE (ON COMMIT PRESERVE ROWS) ----
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE '
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_DMF0020_SEL_MEASURE (
+  MEASURE                            VARCHAR2(100 CHAR)
+) ON COMMIT PRESERVE ROWS';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE 'CREATE INDEX SCM_MGR.GT_DMF0020_SEL_MEASURE_IDX ON SCM_MGR.GT_DMF0020_SEL_MEASURE (MEASURE)';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_DMF0020_SEL_MEASURE TO SCMP_APP;
+
+-- ---- GT_DMF0020_SEL_VERSION (ON COMMIT PRESERVE ROWS) ----
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE '
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_DMF0020_SEL_VERSION (
+  VERSION_NO                         VARCHAR2(100 CHAR)
+) ON COMMIT PRESERVE ROWS';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE 'CREATE INDEX SCM_MGR.GT_DMF0020_SEL_VERSION_IDX ON SCM_MGR.GT_DMF0020_SEL_VERSION (VERSION_NO)';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_DMF0020_SEL_VERSION TO SCMP_APP;
+
+-- ---- GT_F020_CFM_SELLING_PRICE_TEMP2 (ON COMMIT PRESERVE ROWS) ----
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE '
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_F020_CFM_SELLING_PRICE_TEMP2 (
+  DIVISION_ID                        VARCHAR2(100 CHAR),
+  PROJECT_CODE                       VARCHAR2(100 CHAR),
+  END_CUSTOMER                       VARCHAR2(100 CHAR),
+  SCM_SITE_ID                        VARCHAR2(100 CHAR),
+  PLANT_SITE_ID                      VARCHAR2(100 CHAR),
+  CELL_PROD_SITE_ID                  VARCHAR2(100 CHAR),
+  ITEM_ID                            VARCHAR2(100 CHAR),
+  YYYYMMDD                           VARCHAR2(8 CHAR),
+  CURRENCY                           VARCHAR2(10 CHAR),
+  MEASURE                            VARCHAR2(10 CHAR),
+  DOM_EXP                            VARCHAR2(10 CHAR),
+  FCST_TYPE                          VARCHAR2(20 CHAR),
+  INCOTERMS                          VARCHAR2(10 CHAR),
+  PRICE                              NUMBER(20,10),
+  CREATED_BY                         VARCHAR2(100 CHAR),
+  CREATION_DATE                      DATE
+) ON COMMIT PRESERVE ROWS';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_F020_CFM_SELLING_PRICE_TEMP2 TO SCMP_APP;
+
+-- ---- GT_F020_EXCEL_UPLOAD (ON COMMIT PRESERVE ROWS) ----
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE '
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_F020_EXCEL_UPLOAD (
+  DIVISION_ID                        VARCHAR2(100 CHAR),
+  TEAM_NAME                          VARCHAR2(100 CHAR),
+  END_CUST                           VARCHAR2(100 CHAR),
+  PROJECT_CODE                       VARCHAR2(100 CHAR),
+  CURRENCY                           VARCHAR2(100 CHAR),
+  MODEL                              VARCHAR2(100 CHAR),
+  M0                                 VARCHAR2(100 CHAR),
+  M1                                 VARCHAR2(100 CHAR),
+  M2                                 VARCHAR2(100 CHAR),
+  M3                                 VARCHAR2(100 CHAR),
+  M4                                 VARCHAR2(100 CHAR),
+  M5                                 VARCHAR2(100 CHAR),
+  M6                                 VARCHAR2(100 CHAR),
+  M7                                 VARCHAR2(100 CHAR),
+  M8                                 VARCHAR2(100 CHAR),
+  M9                                 VARCHAR2(100 CHAR),
+  M10                                VARCHAR2(100 CHAR),
+  M11                                VARCHAR2(100 CHAR),
+  M12                                VARCHAR2(100 CHAR)
+) ON COMMIT PRESERVE ROWS';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_F020_EXCEL_UPLOAD TO SCMP_APP;
+
+-- ---- GT_F020_EXCH (ON COMMIT PRESERVE ROWS) ----
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE '
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_F020_EXCH (
+  DIVISION_ID                        VARCHAR2(30 CHAR) NOT NULL,
+  YYYYMMDD                           VARCHAR2(8 CHAR) NOT NULL,
+  CURRENCY                           VARCHAR2(10 CHAR) NOT NULL,
+  UNIT_CURRENCY                      VARCHAR2(10 CHAR) NOT NULL,
+  EXCHANGE_PRICE                     NUMBER(20,10) NOT NULL
+) ON COMMIT PRESERVE ROWS';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_F020_EXCH TO SCMP_APP;
+
+-- ---- GT_F020_EXCHANGE_RATE (ON COMMIT PRESERVE ROWS) ----
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE '
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_F020_EXCHANGE_RATE (
+  ACTIVE_FLAG                        VARCHAR2(10 CHAR),
+  DIVISION_ID                        VARCHAR2(100 CHAR),
+  YYYYMMDD                           VARCHAR2(100 CHAR),
+  CURRENCY                           VARCHAR2(100 CHAR),
+  UNIT_CURRENCY                      VARCHAR2(100 CHAR),
+  EXCHANGE_PRICE                     VARCHAR2(100 CHAR),
+  CREATED_BY                         VARCHAR2(100 CHAR),
+  LAST_UPDATED_BY                    VARCHAR2(100 CHAR)
+) ON COMMIT PRESERVE ROWS';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_F020_EXCHANGE_RATE TO SCMP_APP;
+
+-- ---- GT_F020_FUTURE_PRICE_TEMP2 (ON COMMIT PRESERVE ROWS) ----
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE '
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_F020_FUTURE_PRICE_TEMP2 (
+  DIVISION_ID                        VARCHAR2(100 CHAR),
+  PROJECT_CODE                       VARCHAR2(100 CHAR),
+  SCM_SITE_ID                        VARCHAR2(100 CHAR),
+  PLANT_SITE_ID                      VARCHAR2(100 CHAR),
+  ITEM_ID                            VARCHAR2(100 CHAR),
+  YYYYMMDD                           VARCHAR2(8 CHAR),
+  CURRENCY                           VARCHAR2(10 CHAR),
+  MEASURE                            VARCHAR2(10 CHAR),
+  DOM_EXP                            VARCHAR2(10 CHAR),
+  FCST_TYPE                          VARCHAR2(20 CHAR),
+  INCOTERMS                          VARCHAR2(10 CHAR),
+  PRICE                              NUMBER(20,10),
+  CREATED_BY                         VARCHAR2(100 CHAR)
+) ON COMMIT PRESERVE ROWS';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_F020_FUTURE_PRICE_TEMP2 TO SCMP_APP;
+
+-- ---- GT_F020_UPLOAD_MASTER_FINAL (ON COMMIT PRESERVE ROWS) ----
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE '
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_F020_UPLOAD_MASTER_FINAL (
+  DIVISION_ID                        VARCHAR2(100 CHAR),
+  SCM_SITE_ID                        VARCHAR2(100 CHAR),
+  PROJECT_CODE                       VARCHAR2(100 CHAR),
+  ITEM_ID                            VARCHAR2(100 CHAR),
+  CURRENCY                           VARCHAR2(100 CHAR),
+  INCOTERMS                          VARCHAR2(100 CHAR),
+  DOM_EXP                            VARCHAR2(100 CHAR),
+  PLANT_SITE_ID                      VARCHAR2(100 CHAR),
+  FCST_TYPE                          VARCHAR2(100 CHAR),
+  LOC                                VARCHAR2(100 CHAR),
+  MM                                 VARCHAR2(10 CHAR),
+  MM2                                VARCHAR2(6 CHAR),
+  BASIS_START_DATE                   VARCHAR2(8 CHAR),
+  MEASURE                            VARCHAR2(30 CHAR)
+) ON COMMIT PRESERVE ROWS';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_F020_UPLOAD_MASTER_FINAL TO SCMP_APP;
+
+-- ---- GT_F020_UPLOAD_MASTER_STEP1 (ON COMMIT PRESERVE ROWS) ----
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE '
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_F020_UPLOAD_MASTER_STEP1 (
+  DIVISION_ID                        VARCHAR2(100 CHAR),
+  SCM_SITE_ID                        VARCHAR2(100 CHAR),
+  PROJECT_CODE                       VARCHAR2(100 CHAR),
+  ITEM_ID                            VARCHAR2(100 CHAR),
+  CURRENCY                           VARCHAR2(100 CHAR),
+  INCOTERMS                          VARCHAR2(100 CHAR),
+  DOM_EXP                            VARCHAR2(100 CHAR),
+  PLANT_SITE_ID                      VARCHAR2(100 CHAR),
+  FCST_TYPE                          VARCHAR2(100 CHAR),
+  M0                                 VARCHAR2(100 CHAR),
+  M1                                 VARCHAR2(100 CHAR),
+  M2                                 VARCHAR2(100 CHAR),
+  M3                                 VARCHAR2(100 CHAR),
+  M4                                 VARCHAR2(100 CHAR),
+  M5                                 VARCHAR2(100 CHAR),
+  M6                                 VARCHAR2(100 CHAR),
+  M7                                 VARCHAR2(100 CHAR),
+  M8                                 VARCHAR2(100 CHAR),
+  M9                                 VARCHAR2(100 CHAR),
+  M10                                VARCHAR2(100 CHAR),
+  M11                                VARCHAR2(100 CHAR),
+  M12                                VARCHAR2(100 CHAR)
+) ON COMMIT PRESERVE ROWS';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_F020_UPLOAD_MASTER_STEP1 TO SCMP_APP;
+
+-- ---- GT_F020_UPLOAD_MASTER_STEP2 (ON COMMIT PRESERVE ROWS) ----
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE '
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_F020_UPLOAD_MASTER_STEP2 (
+  DIVISION_ID                        VARCHAR2(100 CHAR),
+  SCM_SITE_ID                        VARCHAR2(100 CHAR),
+  PROJECT_CODE                       VARCHAR2(100 CHAR),
+  ITEM_ID                            VARCHAR2(100 CHAR),
+  CURRENCY                           VARCHAR2(100 CHAR),
+  INCOTERMS                          VARCHAR2(100 CHAR),
+  DOM_EXP                            VARCHAR2(100 CHAR),
+  PLANT_SITE_ID                      VARCHAR2(100 CHAR),
+  FCST_TYPE                          VARCHAR2(100 CHAR),
+  LOC                                VARCHAR2(100 CHAR),
+  MM                                 VARCHAR2(10 CHAR),
+  MM2                                VARCHAR2(6 CHAR)
+) ON COMMIT PRESERVE ROWS';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_F020_UPLOAD_MASTER_STEP2 TO SCMP_APP;
+
+-- ---- GT_F020_UPLOAD_MASTER_WITH_ITEM (ON COMMIT PRESERVE ROWS) ----
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE '
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_F020_UPLOAD_MASTER_WITH_ITEM (
+  DIVISION_ID                        VARCHAR2(100 CHAR),
+  SCM_SITE_ID                        VARCHAR2(100 CHAR),
+  PROJECT_CODE                       VARCHAR2(100 CHAR),
+  ITEM_ID                            VARCHAR2(100 CHAR),
+  CURRENCY                           VARCHAR2(100 CHAR),
+  INCOTERMS                          VARCHAR2(100 CHAR),
+  DOM_EXP                            VARCHAR2(100 CHAR),
+  PLANT_SITE_ID                      VARCHAR2(100 CHAR),
+  FCST_TYPE                          VARCHAR2(100 CHAR),
+  M0                                 VARCHAR2(100 CHAR),
+  M1                                 VARCHAR2(100 CHAR),
+  M2                                 VARCHAR2(100 CHAR),
+  M3                                 VARCHAR2(100 CHAR),
+  M4                                 VARCHAR2(100 CHAR),
+  M5                                 VARCHAR2(100 CHAR),
+  M6                                 VARCHAR2(100 CHAR),
+  M7                                 VARCHAR2(100 CHAR),
+  M8                                 VARCHAR2(100 CHAR),
+  M9                                 VARCHAR2(100 CHAR),
+  M10                                VARCHAR2(100 CHAR),
+  M11                                VARCHAR2(100 CHAR),
+  M12                                VARCHAR2(100 CHAR)
+) ON COMMIT PRESERVE ROWS';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_F020_UPLOAD_MASTER_WITH_ITEM TO SCMP_APP;
+
+-- ---- GT_FCSV_RESULTS (ON COMMIT PRESERVE ROWS) ----
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE '
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_FCSV_RESULTS (
+  V_DIVISION_ID                      VARCHAR2(30 CHAR),
+  V_PROJECT_CODE                     VARCHAR2(50 CHAR),
+  V_SCM_SITE_ID                      VARCHAR2(30 CHAR),
+  V_PLANT_SITE_ID                    VARCHAR2(30 CHAR),
+  V_ITEM_ID                          VARCHAR2(50 CHAR),
+  V_YYYYMMDD                         VARCHAR2(8 CHAR),
+  V_CURRENCY                         VARCHAR2(10 CHAR),
+  V_MEASURE                          VARCHAR2(50 CHAR),
+  V_DOM_EXP                          VARCHAR2(3 CHAR),
+  V_FCST_TYPE                        VARCHAR2(20 CHAR),
+  V_INCOTERMS                        VARCHAR2(10 CHAR),
+  V_PRICE                            NUMBER(20,10),
+  V_CREATED_BY                       VARCHAR2(150 CHAR)
+) ON COMMIT PRESERVE ROWS';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_FCSV_RESULTS TO SCMP_APP;
+
+-- ---- GT_FCSV_RESULTS_MST (ON COMMIT PRESERVE ROWS) ----
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE '
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_FCSV_RESULTS_MST (
+  V_ACTIVE_FLAG                      VARCHAR2(1 CHAR),
+  V_DIVISION_ID                      VARCHAR2(30 CHAR),
+  V_PROJECT_CODE                     VARCHAR2(50 CHAR),
+  V_SCM_SITE_ID                      VARCHAR2(30 CHAR),
+  V_PLANT_SITE_ID                    VARCHAR2(30 CHAR),
+  V_ITEM_ID                          VARCHAR2(50 CHAR),
+  V_YYYYMMDD                         VARCHAR2(8 CHAR),
+  V_CURRENCY                         VARCHAR2(10 CHAR),
+  V_MEASURE                          VARCHAR2(50 CHAR),
+  V_DOM_EXP                          VARCHAR2(3 CHAR),
+  V_FCST_TYPE                        VARCHAR2(20 CHAR),
+  V_INCOTERMS                        VARCHAR2(10 CHAR),
+  V_PRICE                            NUMBER(20,10),
+  V_CREATED_BY                       VARCHAR2(150 CHAR),
+  V_CREATION_DATE                    DATE,
+  V_LAST_UPDATED_BY                  VARCHAR2(150 CHAR),
+  V_ROWNUM                           NUMBER(10,0)
+) ON COMMIT PRESERVE ROWS';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_FCSV_RESULTS_MST TO SCMP_APP;
+
+-- ---- GT_FTPR_DM_MST_ITEM_SINGLE_ORI_V (ON COMMIT PRESERVE ROWS) ----
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE '
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_FTPR_DM_MST_ITEM_SINGLE_ORI_V (
+  DIVISION_ID                        VARCHAR2(30 CHAR),
+  ITEM_ID                            VARCHAR2(150 CHAR),
+  ITEM_NAME                          VARCHAR2(150 CHAR),
+  ITEM_CLASS_NAME                    VARCHAR2(300 CHAR),
+  NICK_NAME                          VARCHAR2(50 CHAR),
+  ITEM_TYPE                          VARCHAR2(50 CHAR)
+) ON COMMIT PRESERVE ROWS';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_FTPR_DM_MST_ITEM_SINGLE_ORI_V TO SCMP_APP;
+
+-- ---- GT_FTPR_DM_PLN_SALES_PLAN (ON COMMIT PRESERVE ROWS) ----
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE '
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_FTPR_DM_PLN_SALES_PLAN (
+  VERSION_NO                         VARCHAR2(50 CHAR),
+  CUTOFF_YYYYMMDD                    CHAR(8 CHAR),
+  DIVISION_ID                        VARCHAR2(30 CHAR),
+  PROJECT_CODE                       VARCHAR2(50 CHAR),
+  SCM_SITE_ID                        VARCHAR2(30 CHAR),
+  PLANT_SITE_ID                      VARCHAR2(30 CHAR),
+  ITEM_ID                            VARCHAR2(50 CHAR),
+  INCOTERMS                          VARCHAR2(10 CHAR),
+  DOM_EXP                            VARCHAR2(3 CHAR),
+  FCST_TYPE                          VARCHAR2(20 CHAR),
+  CURRENCY                           VARCHAR2(3 CHAR),
+  MEASURE                            VARCHAR2(50 CHAR),
+  YYYYMMDD                           CHAR(8 CHAR),
+  QTY                                NUMBER(30,10)
+) ON COMMIT PRESERVE ROWS';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_FTPR_DM_PLN_SALES_PLAN TO SCMP_APP;
+
+-- ---- GT_FTPR_SCM_MST_FUTURE_PRICE (ON COMMIT PRESERVE ROWS) ----
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE '
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_FTPR_SCM_MST_FUTURE_PRICE (
+  VERSION_NO                         VARCHAR2(50 CHAR),
+  CUTOFF_YYYYMMDD                    CHAR(8 CHAR),
+  DIVISION_ID                        VARCHAR2(30 CHAR),
+  PROJECT_CODE                       VARCHAR2(50 CHAR),
+  SCM_SITE_ID                        VARCHAR2(30 CHAR),
+  PLANT_SITE_ID                      VARCHAR2(30 CHAR),
+  ITEM_ID                            VARCHAR2(50 CHAR),
+  INCOTERMS                          VARCHAR2(10 CHAR),
+  DOM_EXP                            VARCHAR2(3 CHAR),
+  FCST_TYPE                          VARCHAR2(20 CHAR),
+  CURRENCY                           VARCHAR2(3 CHAR),
+  MEASURE                            VARCHAR2(50 CHAR),
+  YYYYMMDD                           CHAR(8 CHAR),
+  PRICE                              NUMBER(30,10)
+) ON COMMIT PRESERVE ROWS';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_FTPR_SCM_MST_FUTURE_PRICE TO SCMP_APP;
+
+-- ---- GT_FTPR_SCM_MST_FUTURE_PRICE_OVER (ON COMMIT PRESERVE ROWS) ----
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE '
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_FTPR_SCM_MST_FUTURE_PRICE_OVER (
+  DIVISION_ID                        VARCHAR2(30 CHAR),
+  PROJECT_CODE                       VARCHAR2(50 CHAR),
+  SCM_SITE_ID                        VARCHAR2(30 CHAR),
+  PLANT_SITE_ID                      VARCHAR2(30 CHAR),
+  ITEM_ID                            VARCHAR2(50 CHAR),
+  INCOTERMS                          VARCHAR2(10 CHAR),
+  DOM_EXP                            VARCHAR2(3 CHAR),
+  FCST_TYPE                          VARCHAR2(20 CHAR),
+  CURRENCY                           VARCHAR2(3 CHAR),
+  MEASURE                            VARCHAR2(50 CHAR),
+  YYYYMMDD                           CHAR(8 CHAR)
+) ON COMMIT PRESERVE ROWS';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_FTPR_SCM_MST_FUTURE_PRICE_OVER TO SCMP_APP;
+
+-- ---- GT_FTPR_TMPDATA (ON COMMIT PRESERVE ROWS) ----
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE '
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_FTPR_TMPDATA (
+  DIVISION_ID                        VARCHAR2(30 CHAR),
+  DIVISION_NAME                      VARCHAR2(150 CHAR),
+  UPPER_DEPT_ID                      VARCHAR2(50 CHAR),
+  DEPT_ID                            VARCHAR2(50 CHAR),
+  SCM_SITE_ID                        VARCHAR2(30 CHAR),
+  PLANT_SITE_ID                      VARCHAR2(30 CHAR),
+  SITE_DESCRIPTION                   VARCHAR2(150 CHAR),
+  END_CUSTOMER                       VARCHAR2(150 CHAR),
+  PROJECT_CODE                       VARCHAR2(50 CHAR),
+  PROJECT_NAME                       VARCHAR2(200 CHAR),
+  BIZ_TYPE_NAME                      VARCHAR2(50 CHAR),
+  PROJECT_STATUS                     VARCHAR2(150 CHAR),
+  PROJECT_OWNER                      VARCHAR2(50 CHAR),
+  ITEM_ID                            VARCHAR2(50 CHAR),
+  ITEM_CLASS_NAME                    VARCHAR2(300 CHAR),
+  ITEM_NAME                          VARCHAR2(150 CHAR),
+  INCOTERMS                          VARCHAR2(10 CHAR),
+  CURRENCY                           VARCHAR2(10 CHAR),
+  FCST_TYPE                          VARCHAR2(20 CHAR),
+  DOM_EXP                            VARCHAR2(3 CHAR),
+  AUTHORITY_YN                       VARCHAR2(1 CHAR),
+  NICK_NAME                          VARCHAR2(50 CHAR)
+) ON COMMIT PRESERVE ROWS';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_FTPR_TMPDATA TO SCMP_APP;
+
+-- ---- GT_FTPR_TMPITEM (ON COMMIT PRESERVE ROWS) ----
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE '
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_FTPR_TMPITEM (
+  DIVISION_ID                        VARCHAR2(30 CHAR),
+  ITEM_ID                            VARCHAR2(50 CHAR),
+  ITEM_NAME                          VARCHAR2(150 CHAR),
+  ITEM_CLASS_NAME                    VARCHAR2(300 CHAR),
+  NICK_NAME                          VARCHAR2(50 CHAR),
+  FORECAST_INFO_BIZ_TYPE             VARCHAR2(10 CHAR),
+  ITEM_TYPE                          VARCHAR2(10 CHAR)
+) ON COMMIT PRESERVE ROWS';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_FTPR_TMPITEM TO SCMP_APP;
+
+-- ---- GT_FTPR_TMPOUTPUT (ON COMMIT PRESERVE ROWS) ----
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE '
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_FTPR_TMPOUTPUT (
+  DIVISION_ID                        VARCHAR2(30 CHAR),
+  DIVISION_NAME                      VARCHAR2(150 CHAR),
+  UPPER_DEPT_ID                      VARCHAR2(50 CHAR),
+  DEPT_ID                            VARCHAR2(50 CHAR),
+  SCM_SITE_ID                        VARCHAR2(30 CHAR),
+  PLANT_SITE_ID                      VARCHAR2(30 CHAR),
+  SITE_DESCRIPTION                   VARCHAR2(150 CHAR),
+  END_CUSTOMER                       VARCHAR2(150 CHAR),
+  END_CUSTOMER40                     VARCHAR2(150 CHAR),
+  PROJECT_CODE                       VARCHAR2(50 CHAR),
+  PROJECT_NAME                       VARCHAR2(200 CHAR),
+  BIZ_TYPE_NAME                      VARCHAR2(50 CHAR),
+  PROJECT_STATUS                     VARCHAR2(150 CHAR),
+  ITEM_ID                            VARCHAR2(50 CHAR),
+  ITEM_CLASS_NAME                    VARCHAR2(300 CHAR),
+  ITEM_NAME                          VARCHAR2(150 CHAR),
+  INCOTERMS                          VARCHAR2(10 CHAR),
+  CURRENCY                           VARCHAR2(10 CHAR),
+  FCST_TYPE                          VARCHAR2(20 CHAR),
+  DOM_EXP                            VARCHAR2(3 CHAR),
+  MEASURE                            VARCHAR2(50 CHAR),
+  DISPLAY_SEQ                        NUMBER(10,0),
+  AUTHORITY_YN                       VARCHAR2(50 CHAR),
+  YYYYMMDD                           VARCHAR2(10 CHAR),
+  PRICE                              NUMBER(30,10),
+  NICK_NAME                          VARCHAR2(50 CHAR),
+  COL_LIST                           VARCHAR2(3000 CHAR),
+  PRICE_EXIST                        VARCHAR2(1 CHAR),
+  GROUP_ID                           VARCHAR2(50 CHAR)
+) ON COMMIT PRESERVE ROWS';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_FTPR_TMPOUTPUT TO SCMP_APP;
+
+-- ---- GT_FTPR_TMPOUTPUTALL (ON COMMIT PRESERVE ROWS) ----
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE '
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_FTPR_TMPOUTPUTALL (
+  DIVISION_ID                        VARCHAR2(30 CHAR),
+  DIVISION_NAME                      VARCHAR2(150 CHAR),
+  UPPER_DEPT_ID                      VARCHAR2(50 CHAR),
+  DEPT_ID                            VARCHAR2(50 CHAR),
+  SCM_SITE_ID                        VARCHAR2(30 CHAR),
+  PLANT_SITE_ID                      VARCHAR2(30 CHAR),
+  SITE_DESCRIPTION                   VARCHAR2(150 CHAR),
+  END_CUSTOMER                       VARCHAR2(150 CHAR),
+  END_CUSTOMER40                     VARCHAR2(150 CHAR),
+  PROJECT_CODE                       VARCHAR2(50 CHAR),
+  PROJECT_NAME                       VARCHAR2(200 CHAR),
+  BIZ_TYPE_NAME                      VARCHAR2(50 CHAR),
+  PROJECT_STATUS                     VARCHAR2(150 CHAR),
+  ITEM_ID                            VARCHAR2(50 CHAR),
+  ITEM_CLASS_NAME                    VARCHAR2(300 CHAR),
+  ITEM_NAME                          VARCHAR2(150 CHAR),
+  INCOTERMS                          VARCHAR2(10 CHAR),
+  CURRENCY                           VARCHAR2(10 CHAR),
+  FCST_TYPE                          VARCHAR2(20 CHAR),
+  DOM_EXP                            VARCHAR2(3 CHAR),
+  MEASURE                            VARCHAR2(50 CHAR),
+  DISPLAY_SEQ                        NUMBER(10,0),
+  AUTHORITY_YN                       VARCHAR2(50 CHAR),
+  YYYYMMDD                           VARCHAR2(10 CHAR),
+  PRICE                              NUMBER(30,10),
+  NICK_NAME                          VARCHAR2(50 CHAR),
+  COL_LIST                           VARCHAR2(3000 CHAR)
+) ON COMMIT PRESERVE ROWS';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_FTPR_TMPOUTPUTALL TO SCMP_APP;
+
+-- ---- GT_FTPR_TMPOUTPUTOMISSION (ON COMMIT PRESERVE ROWS) ----
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE '
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_FTPR_TMPOUTPUTOMISSION (
+  DIVISION_ID                        VARCHAR2(30 CHAR),
+  DIVISION_NAME                      VARCHAR2(150 CHAR),
+  UPPER_DEPT_ID                      VARCHAR2(50 CHAR),
+  DEPT_ID                            VARCHAR2(50 CHAR),
+  SCM_SITE_ID                        VARCHAR2(30 CHAR),
+  PLANT_SITE_ID                      VARCHAR2(30 CHAR),
+  SITE_DESCRIPTION                   VARCHAR2(150 CHAR),
+  END_CUSTOMER                       VARCHAR2(150 CHAR),
+  END_CUSTOMER40                     VARCHAR2(150 CHAR),
+  PROJECT_CODE                       VARCHAR2(50 CHAR),
+  PROJECT_NAME                       VARCHAR2(200 CHAR),
+  BIZ_TYPE_NAME                      VARCHAR2(50 CHAR),
+  PROJECT_STATUS                     VARCHAR2(150 CHAR),
+  ITEM_ID                            VARCHAR2(50 CHAR),
+  ITEM_CLASS_NAME                    VARCHAR2(300 CHAR),
+  ITEM_NAME                          VARCHAR2(150 CHAR),
+  INCOTERMS                          VARCHAR2(10 CHAR),
+  CURRENCY                           VARCHAR2(10 CHAR),
+  FCST_TYPE                          VARCHAR2(20 CHAR),
+  DOM_EXP                            VARCHAR2(3 CHAR),
+  MEASURE                            VARCHAR2(50 CHAR),
+  DISPLAY_SEQ                        NUMBER(10,0),
+  AUTHORITY_YN                       VARCHAR2(50 CHAR),
+  YYYYMMDD                           VARCHAR2(10 CHAR),
+  PRICE                              NUMBER(30,10),
+  NICK_NAME                          VARCHAR2(50 CHAR),
+  COL_LIST                           VARCHAR2(3000 CHAR)
+) ON COMMIT PRESERVE ROWS';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_FTPR_TMPOUTPUTOMISSION TO SCMP_APP;
+
+-- ---- GT_FTPR_TMPOVERRANGE (ON COMMIT PRESERVE ROWS) ----
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE '
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_FTPR_TMPOVERRANGE (
+  DIVISION_ID                        VARCHAR2(30 CHAR),
+  PROJECT_CODE                       VARCHAR2(50 CHAR),
+  SCM_SITE_ID                        VARCHAR2(30 CHAR),
+  PLANT_SITE_ID                      VARCHAR2(30 CHAR),
+  ITEM_ID                            VARCHAR2(50 CHAR),
+  CURRENCY                           VARCHAR2(3 CHAR),
+  MEASURE                            VARCHAR2(50 CHAR),
+  DOM_EXP                            VARCHAR2(3 CHAR),
+  FCST_TYPE                          VARCHAR2(20 CHAR),
+  INCOTERMS                          VARCHAR2(10 CHAR),
+  YYYYMMDD                           CHAR(8 CHAR)
+) ON COMMIT PRESERVE ROWS';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_FTPR_TMPOVERRANGE TO SCMP_APP;
+
+-- ---- GT_FTPR_TMPOVERRANGELIST (ON COMMIT PRESERVE ROWS) ----
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE '
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_FTPR_TMPOVERRANGELIST (
+  DIVISION_ID                        VARCHAR2(30 CHAR),
+  PROJECT_CODE                       VARCHAR2(50 CHAR),
+  SCM_SITE_ID                        VARCHAR2(30 CHAR),
+  PLANT_SITE_ID                      VARCHAR2(30 CHAR),
+  ITEM_ID                            VARCHAR2(50 CHAR),
+  CURRENCY                           VARCHAR2(3 CHAR),
+  DOM_EXP                            VARCHAR2(3 CHAR),
+  FCST_TYPE                          VARCHAR2(20 CHAR),
+  INCOTERMS                          VARCHAR2(10 CHAR),
+  COL_LIST                           VARCHAR2(3000 CHAR)
+) ON COMMIT PRESERVE ROWS';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_FTPR_TMPOVERRANGELIST TO SCMP_APP;
+
+-- ---- GT_FTPR_TMPPLANDATA (ON COMMIT PRESERVE ROWS) ----
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE '
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_FTPR_TMPPLANDATA (
+  DIVISION_ID                        VARCHAR2(30 CHAR),
+  SCM_SITE_ID                        VARCHAR2(30 CHAR),
+  PLANT_SITE_ID                      VARCHAR2(30 CHAR),
+  PROJECT_CODE                       VARCHAR2(50 CHAR),
+  ITEM_ID                            VARCHAR2(50 CHAR),
+  INCOTERMS                          VARCHAR2(10 CHAR),
+  CURRENCY                           VARCHAR2(10 CHAR),
+  FCST_TYPE                          VARCHAR2(20 CHAR),
+  DOM_EXP                            VARCHAR2(3 CHAR)
+) ON COMMIT PRESERVE ROWS';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_FTPR_TMPPLANDATA TO SCMP_APP;
+
+-- ---- GT_FTPR_TMPSALESSITEMODEL (ON COMMIT PRESERVE ROWS) ----
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE '
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_FTPR_TMPSALESSITEMODEL (
+  DIVISION_ID                        VARCHAR2(30 CHAR),
+  DEPT_ID                            VARCHAR2(50 CHAR),
+  END_CUSTOMER                       VARCHAR2(150 CHAR),
+  END_CUSTOMER40                     VARCHAR2(150 CHAR),
+  SCM_SITE_ID                        VARCHAR2(30 CHAR),
+  SCM_SITE_ID40                      VARCHAR2(30 CHAR),
+  PROJECT_CODE                       VARCHAR2(50 CHAR),
+  PROJECT_NAME                       VARCHAR2(200 CHAR),
+  PROJECT_STATUS                     VARCHAR2(150 CHAR),
+  SALES_PLAN_ADJUST_YN               VARCHAR2(1 CHAR),
+  ITEM_CLASS_NAME                    VARCHAR2(300 CHAR),
+  ITEM_ID                            VARCHAR2(50 CHAR),
+  ITEM_NAME                          VARCHAR2(150 CHAR),
+  NICK_NAME                          VARCHAR2(50 CHAR),
+  CURRENCY                           VARCHAR2(10 CHAR),
+  MEASURE                            VARCHAR2(50 CHAR),
+  DISPLAY_SEQ                        NUMBER(10,0)
+) ON COMMIT PRESERVE ROWS';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_FTPR_TMPSALESSITEMODEL TO SCMP_APP;
+
+-- ---- GT_FTPR_TMPSALESSITEMODELALL (ON COMMIT PRESERVE ROWS) ----
+DECLARE e_exists EXCEPTION; PRAGMA EXCEPTION_INIT(e_exists, -955);
+BEGIN EXECUTE IMMEDIATE '
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_FTPR_TMPSALESSITEMODELALL (
+  DIVISION_ID                        VARCHAR2(30 CHAR),
+  DEPT_ID                            VARCHAR2(50 CHAR),
+  END_CUSTOMER                       VARCHAR2(150 CHAR),
+  END_CUSTOMER40                     VARCHAR2(150 CHAR),
+  SCM_SITE_ID                        VARCHAR2(30 CHAR),
+  SCM_SITE_ID40                      VARCHAR2(30 CHAR),
+  PROJECT_CODE                       VARCHAR2(50 CHAR),
+  PROJECT_NAME                       VARCHAR2(200 CHAR),
+  PROJECT_STATUS                     VARCHAR2(150 CHAR),
+  SALES_PLAN_ADJUST_YN               VARCHAR2(1 CHAR),
+  ITEM_CLASS_NAME                    VARCHAR2(300 CHAR),
+  ITEM_ID                            VARCHAR2(50 CHAR),
+  ITEM_NAME                          VARCHAR2(150 CHAR),
+  NICK_NAME                          VARCHAR2(50 CHAR),
+  CURRENCY                           VARCHAR2(10 CHAR)
+) ON COMMIT PRESERVE ROWS';
+EXCEPTION WHEN e_exists THEN NULL; END;
+/
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_FTPR_TMPSALESSITEMODELALL TO SCMP_APP;
+
+PROMPT ===== 검증: BODY 참조 GTT 가 전부 존재해야 한다 =====
+SELECT COUNT(*) AS GTT_CNT, 42 AS EXPECTED,
+       CASE WHEN COUNT(*) >= 42 THEN 'PASS' ELSE 'FAIL' END AS RESULT
+  FROM ALL_TABLES WHERE OWNER='SCM_MGR' AND TEMPORARY='Y'
+   AND TABLE_NAME IN ('GT_D000_RESULTS', 'GT_DMF0020_DATA', 'GT_DMF0020_DEPT_AUTH', 'GT_DMF0020_EXCH', 'GT_DMF0020_ITEM', 'GT_DMF0020_OUTPUT', 'GT_DMF0020_OVER_RANGE', 'GT_DMF0020_OVER_RANGE_LIST', 'GT_DMF0020_PARAM_TOKEN', 'GT_DMF0020_PJT', 'GT_DMF0020_PLAN_DATA', 'GT_DMF0020_RESULTS', 'GT_DMF0020_RESULTS_MST', 'GT_DMF0020_SALES_SITE_MODEL', 'GT_DMF0020_SALES_SITE_MODEL_ALL', 'GT_DMF0020_SEL_MEASURE', 'GT_DMF0020_SEL_VERSION', 'GT_F020_CFM_SELLING_PRICE_TEMP2', 'GT_F020_EXCEL_UPLOAD', 'GT_F020_EXCH', 'GT_F020_EXCHANGE_RATE', 'GT_F020_FUTURE_PRICE_TEMP2', 'GT_F020_UPLOAD_MASTER_FINAL', 'GT_F020_UPLOAD_MASTER_STEP1', 'GT_F020_UPLOAD_MASTER_STEP2', 'GT_F020_UPLOAD_MASTER_WITH_ITEM', 'GT_FCSV_RESULTS', 'GT_FCSV_RESULTS_MST', 'GT_FTPR_DM_MST_ITEM_SINGLE_ORI_V', 'GT_FTPR_DM_PLN_SALES_PLAN', 'GT_FTPR_SCM_MST_FUTURE_PRICE', 'GT_FTPR_SCM_MST_FUTURE_PRICE_OVER', 'GT_FTPR_TMPDATA', 'GT_FTPR_TMPITEM', 'GT_FTPR_TMPOUTPUT', 'GT_FTPR_TMPOUTPUTALL', 'GT_FTPR_TMPOUTPUTOMISSION', 'GT_FTPR_TMPOVERRANGE', 'GT_FTPR_TMPOVERRANGELIST', 'GT_FTPR_TMPPLANDATA', 'GT_FTPR_TMPSALESSITEMODEL', 'GT_FTPR_TMPSALESSITEMODELALL');

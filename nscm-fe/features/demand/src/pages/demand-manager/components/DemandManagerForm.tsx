@@ -1,5 +1,6 @@
 import dayjs, { type Dayjs } from 'dayjs';
 
+import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { SearchArea } from '@shared/components';
 import { Button, DatePickerCalendar, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
@@ -55,6 +56,7 @@ export const DemandManagerForm = ({
               label={t('LBL00513', 'Version')}
               labelAlign='right'
               required
+              className={commonStyles.formItem}
               render={() => (
                 <div className={styles.versionCell}>
                   <InputField
@@ -82,6 +84,7 @@ export const DemandManagerForm = ({
               label={t('LBL00013', 'Period')}
               labelAlign='right'
               required
+              className={commonStyles.formItem}
               render={() => (
                 <div className={styles.periodSplit}>
                   <div className={styles.datePickerFix}>

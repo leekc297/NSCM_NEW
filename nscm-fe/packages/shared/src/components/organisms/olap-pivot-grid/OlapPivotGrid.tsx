@@ -40,6 +40,11 @@ export interface OlapPivotGridProps {
   showColumnTotals?: 'None' | 'Subtotals' | 'GrandTotals';
   /** 그리드 높이 CSS 값. 미지정 시 flex 채움(flex:1 1 0 — ViewContainer flex column 표준). */
   height?: string;
+  /**
+   * 컬럼 폭 자동 최적화 (opt-in — DMF0035 사용자 지정 2026-08-20).
+   * 피벗 뷰 갱신 시 행 축 헤더=내용 기준 autosize, 값 컬럼=내용 기준 autosize 후 MIN/MAX 캡.
+   */
+  autoFitColumns?: boolean;
   className?: string;
 }
 
@@ -83,6 +88,7 @@ export const OlapPivotGrid = forwardRef<OlapPivotGridRef, OlapPivotGridProps>(
       showRowTotals = 'None',
       showColumnTotals = 'None',
       height,
+      autoFitColumns = false,
       className,
     },
     ref
@@ -120,10 +126,80 @@ export const OlapPivotGrid = forwardRef<OlapPivotGridRef, OlapPivotGridProps>(
         engine.showRowTotals = TOTALS[showRowTotals];
         engine.showColumnTotals = TOTALS[showColumnTotals];
       });
-    }, [engine, itemsSource, rowFields, columnFields, valueFields, showRowTotals, showColumnTotals]);
+    }, [
+      engine,
+      itemsSource,
+      rowFields,
+      columnFields,
+      valueFields,
+      showRowTotals,
+      showColumnTotals,
+    ]);
 
     // PivotGrid 는 FlexGrid 파생 — initialized 로 인스턴스를 잡아 xlsx 변환에 사용
     const gridInstanceRef = useRef<unknown>(null);
+
+    // ── 컬럼 폭 자동 최적화 (opt-in — DMF0035 사용자 지정 2026-08-20) ────────────────
+    //   목적: 셀 데이터가 **2행(줄바꿈)으로 표시되지 않도록** 내용 전체가 1행에 들어가는 폭으로
+    //   맞춘다. ①wordWrap 강제 해제(줄바꿈 자체 차단) ②행 축 헤더·값 컬럼 모두 내용 폭 기준
+    //   autosize(상한 캡 없음 — 캡이 있으면 줄바꿈이 되살아난다) ③값 컬럼 하한만 유지.
+    //   ⚠ 트리거는 **그리드의 updatedLayout** 이다 — PivotGrid 는 engine.updatedView 를 받아
+    //   컬럼을 재생성하므로, engine 이벤트에 걸면 재생성이 폭을 덮어써 반영되지 않는다.
+    //   autoSize 가 다시 updatedLayout 을 발화시키므로 busy 플래그로 재귀를 끊는다.
+    const autoFitRef = useRef(autoFitColumns);
+    autoFitRef.current = autoFitColumns;
+    const fitBusyRef = useRef(false);
+    const lastFitSignRef = useRef('');
+    const fitColumns = useRef<() => void>(() => {});
+    fitColumns.current = () => {
+      const VALUE_MIN = 64;
+      interface FitColumn {
+        renderWidth: number;
+        width: number | null;
+        wordWrap: boolean;
+      }
+      interface FitGrid {
+        deferUpdate: (fn: () => void) => void;
+        autoSizeColumns: (first?: number, last?: number, header?: boolean, extra?: number) => void;
+        columns: FitColumn[] & { length: number };
+        rowHeaders: { columns: FitColumn[] & { length: number } };
+      }
+      const g = gridInstanceRef.current as FitGrid | null;
+      if (!autoFitRef.current || fitBusyRef.current || !g || !g.columns.length) return;
+      // 이미 이 폭 구성으로 맞춰 둔 상태면 재적용하지 않는다 — autoSize→layout→autoSize 진동 차단
+      const sign = (grid: FitGrid) =>
+        [
+          ...Array.from({ length: grid.rowHeaders.columns.length }, (_, i) =>
+            Math.round(grid.rowHeaders.columns[i].renderWidth)
+          ),
+          '|',
+          ...Array.from({ length: grid.columns.length }, (_, i) =>
+            Math.round(grid.columns[i].renderWidth)
+          ),
+        ].join(',');
+      if (sign(g) === lastFitSignRef.current) return;
+      fitBusyRef.current = true;
+      try {
+        g.deferUpdate(() => {
+          // 줄바꿈 차단 — autosize 는 단일행 기준 내용 폭을 계산한다
+          for (let i = 0; i < g.columns.length; i += 1) g.columns[i].wordWrap = false;
+          for (let i = 0; i < g.rowHeaders.columns.length; i += 1)
+            g.rowHeaders.columns[i].wordWrap = false;
+          g.autoSizeColumns(0, g.rowHeaders.columns.length - 1, true, 8);
+          g.autoSizeColumns(0, g.columns.length - 1, false, 8);
+          for (let i = 0; i < g.columns.length; i += 1) {
+            const c = g.columns[i];
+            if (c.renderWidth < VALUE_MIN) c.width = VALUE_MIN;
+          }
+        });
+        lastFitSignRef.current = sign(g);
+      } finally {
+        // deferUpdate 가 유발한 layout 이벤트까지 흘려보낸 뒤 해제
+        requestAnimationFrame(() => {
+          fitBusyRef.current = false;
+        });
+      }
+    };
 
     useImperativeHandle(ref, () => ({
       engine: engineRef.current,
@@ -157,6 +233,9 @@ export const OlapPivotGrid = forwardRef<OlapPivotGridRef, OlapPivotGridProps>(
           showSelectedHeaders='All'
           initialized={(g: unknown) => {
             gridInstanceRef.current = g as never;
+            const grid = g as { updatedLayout?: { addHandler: (h: () => void) => void } };
+            // 컬럼 재생성이 끝난 뒤(레이아웃 갱신 완료)에 폭을 잡는다 — §autoFitColumns 참조
+            grid.updatedLayout?.addHandler(() => fitColumns.current());
           }}
           style={{ height: '100%' }}
         />
@@ -165,4 +244,3 @@ export const OlapPivotGrid = forwardRef<OlapPivotGridRef, OlapPivotGridProps>(
   }
 );
 OlapPivotGrid.displayName = 'OlapPivotGrid';
-

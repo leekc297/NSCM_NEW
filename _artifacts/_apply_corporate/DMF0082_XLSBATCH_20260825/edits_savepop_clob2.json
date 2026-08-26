@@ -1,0 +1,10 @@
+[
+ {
+  "old": "    V_Prod VARCHAR2(32767);\n    V_Prod_Cols VARCHAR2(32767); -- [FIX 2026-07-12] MSSQL bracket PIVOT / '+' concat 잔재 교정",
+  "new": "    V_Prod CLOB;        /* [E20260825-SAVEPOPCLOB2] 구 VARCHAR2(32767) — CLOB 통일 (동적 PIVOT 목록) */\n    V_Prod_Cols CLOB;   -- [FIX 2026-07-12] MSSQL bracket PIVOT / '+' concat 잔재 교정 [E20260825-SAVEPOPCLOB2] CLOB"
+ },
+ {
+  "old": "\tSELECT LISTAGG('''' || A.YYYYMMDD || ''' AS \"' || A.YYYYMMDD || '\"', ',') WITHIN GROUP (ORDER BY YYYYMMDD) -- [FIX 2026-07-12] MSSQL bracket PIVOT / '+' concat 잔재 교정\n\t     , LISTAGG('\"' || A.YYYYMMDD || '\"', ',') WITHIN GROUP (ORDER BY YYYYMMDD)\n\tINTO V_Prod, V_Prod_Cols\n\tFROM (\n\t    SELECT DISTINCT YYYYMMDD FROM GTT_MST_FUTURE_PRICE_SAVE_PRICE\n\t) A;",
+  "new": "\t/* [E20260825-SAVEPOPCLOB2] 구 LISTAGG — SQL VARCHAR2 4000 한계로 재적재(기간 일자 도메인 확대) 후\n\t   ORA-01489 (BODY 10767행 실측, 구간 20260824~20270125). CLOB 루프 집계로 상한 제거 (기능 등가 — 정렬·구분자 동일). */\n\tV_Prod := NULL; V_Prod_Cols := NULL;\n\tFOR r IN (SELECT DISTINCT YYYYMMDD FROM GTT_MST_FUTURE_PRICE_SAVE_PRICE ORDER BY YYYYMMDD) LOOP\n\t    IF V_Prod IS NOT NULL THEN\n\t        V_Prod := V_Prod || ','; V_Prod_Cols := V_Prod_Cols || ',';\n\t    END IF;\n\t    V_Prod      := V_Prod      || '''' || r.YYYYMMDD || ''' AS \"' || r.YYYYMMDD || '\"';\n\t    V_Prod_Cols := V_Prod_Cols || '\"' || r.YYYYMMDD || '\"';\n\tEND LOOP;"
+ }
+]

@@ -7,18 +7,24 @@ import {
   type FormatItemEventArgs,
 } from '@mescius/wijmo.grid';
 import { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { type MutableRefObject, type Ref, useEffect, useMemo, useRef } from 'react';
+import {
+  type MutableRefObject,
+  type Ref,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
-import type { ComboParam, FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
-import { rebindFilterColumns } from '@foundation/utils';
-import type { EditTracker } from '@foundation/utils';
+import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
+import { type EditTracker, keepRowVisibleUnderFilter } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { useMessageStore } from '@shared/stores';
 
 import {
   BUCKET_TYPE,
-  EDIT_MEASURE,
   GRID_CASCADE_CLEAR,
   GRID_CASCADE_FILTERS,
   GRID_EDIT_COMBO,
@@ -35,7 +41,7 @@ import {
   parseDynTag,
   type ValidWindow,
 } from '../utils/business-plan.editLock';
-import { buildDataMap, filterComboRowsByRow, toCellStr } from '../utils/business-plan.gridCombos';
+import { filterComboRowsByRow, toCellStr } from '../utils/business-plan.gridCombos';
 import { HierarchicalMergeManager } from '../utils/business-plan.merge';
 import { applyCellChange } from '../utils/business-plan.spread';
 
@@ -65,25 +71,6 @@ interface Props {
   validWindow?: ValidWindow | null;
 }
 
-// 숫자 변환 — 콤마 제거, 비숫자 0.
-const toNumber = (v: unknown): number => {
-  if (v == null || v === '') return 0;
-  const n = typeof v === 'number' ? v : Number(toCellStr(v).replace(/,/g, ''));
-  return Number.isFinite(n) ? n : 0;
-};
-
-// ⭐ measure 별 숫자 포맷 (AS-IS spdMain_Changed — Business_Plan=long 정수 / LOC 등=double 실수).
-//   0/null/빈 셀 = 빈칸.
-const formatByMeasure = (v: unknown, measure: string): string => {
-  if (v == null || v === '' || v === 0) return '';
-  const n = toNumber(v);
-  if (n === 0) return '';
-  if (measure === EDIT_MEASURE.BUSINESS_PLAN || measure === 'CAR_QTY' || measure === 'MKT_FCST') {
-    return Math.trunc(n).toLocaleString();
-  }
-  return n.toLocaleString(undefined, { maximumFractionDigits: 3 });
-};
-
 export const BusinessPlanGrid = ({
   rows,
   gridRef,
@@ -104,18 +91,26 @@ export const BusinessPlanGrid = ({
 
   // ⭐ 정적 컬럼 — admin(UI Category Setup) 메타 100% 주도. 하드코딩/화이트리스트/FALLBACK 금지 (hook #113).
   //   FE 는 VISIBLE_FLAG(admin 관리 노출) + DISPLAY_FLAG(사용자 Column Setup 선택) 만 반영.
-  // ⭐ MEASURE 는 Column Setting 대상에서 제외하고 정적 컬럼 마지막에 항상 표시한다
-  //   (2026-08-05 사용자 확정 — admin 메타 VISIBLE_FLAG/개인화 display 와 무관하게 상시 노출).
-  const visibleColumns = useMemo<RawFlexGridColumnConfig[]>(() => {
-    const cols = staticColumns ?? [];
-    const base = cols.filter(
-      c => c.colNm !== 'MEASURE' && c.visible !== false && c.display !== false
-    );
-    const measure = cols.find(c => c.colNm === 'MEASURE');
-    return measure ? [...base, { ...measure, visible: true, display: true }] : base;
-  }, [staticColumns]);
+  const visibleColumns = useMemo<RawFlexGridColumnConfig[]>(
+    () => (staticColumns ?? []).filter(c => c.visible !== false && c.display !== false),
+    [staticColumns]
+  );
   const fixedBindings = useMemo(() => visibleColumns.map(c => c.colNm), [visibleColumns]);
   const staticBindingSet = useMemo(() => new Set(fixedBindings), [fixedBindings]);
+
+  // ⭐ 컬럼 개인화 색 (ColumnLayoutModal 저장값) — binding → {cell, text}.
+  //   공용 DataGrid 는 colWth/display 만 옮기고 색은 안 넘기므로 formatItem 이 직접 적용한다
+  //   (mkt-fcst/forecast-price 선례 동일). ref 로 최신 맵 전달 — 핸들러 재등록 불필요.
+  const colorMetaRef = useRef<Map<string, { cell: string; text: string }>>(new Map());
+  colorMetaRef.current = useMemo(() => {
+    const m = new Map<string, { cell: string; text: string }>();
+    (staticColumns ?? []).forEach(c => {
+      if (c.cellColor || c.textColor) {
+        m.set(c.colNm, { cell: c.cellColor ?? '', text: c.textColor ?? '' });
+      }
+    });
+    return m;
+  }, [staticColumns]);
 
   const mainStaticColumns = useMemo<RawFlexGridColumnConfig[]>(
     () =>
@@ -139,39 +134,65 @@ export const BusinessPlanGrid = ({
       ),
     [visibleColumns]
   );
-  // ⭐ 셀 콤보 바인드 파라미터 — AS-IS 프레임워크 계약 1:1 (2026-08-09 보완).
-  //   AS-IS `SpreadInfo.cs:1975~1981` : 메타 콤보는 **커서 ATTRIBUTE1~5 를 sParam1~5 로** 넘긴다.
-  //   그 커서(`DMF0042_GET_SPREAD_TITLE`) 가 채우는 값 =
-  //     · ATTRIBUTE1 = `@p_division_id`  ("COMMONDATALIST 에서 사용하도록 DIVISION 을 넣어준다" 주석)
-  //     · ATTRIBUTE2 = `CASE WHEN CELL_COMBO_DATA_TYPE='DM_LOOKUP_DIV' THEN C.ATTRIBUTE1 ELSE '' END`
-  //   ⇒ **모든 메타 셀 콤보에 division**, `DM_LOOKUP_DIV` 에는 추가로 컬럼 ATTRIBUTE1(LOOKUP_TYPE).
-  //   TO-BE CMBO 는 named token 이라 division 계열 = `@divisionId`, DM_LOOKUP_DIV = `@param1`/`@param2`.
-  //   ⛔ 미전달 시 `DM_LOOKUP_DIV`(FCST_TYPE) 는 `B.SEGMENT1=@param1 AND A.LOOKUP_TYPE=@param2` 가
-  //      '' 비교가 되어 **항상 0행**(조용한 빈 콤보) — 2026-08-09 게이트 섹션 7 FAIL 실측.
-  //   BE makeComboQuery 는 raw 치환이므로 값은 작은따옴표로 감싼다(hook #117 §5.8). 여분 키는 무해.
-  //   값 quoting 헬퍼는 조회조건(BusinessPlanForm)과 **동일 규약**을 쓴다 — 빈 값은 'ALL' 센티널
-  //   (memory feedback_bind_combo_value_quoting: 빈 '' 는 CASE-IN 계열에서 전멸한다).
-  const q = (v?: string): string => `'${v && v.trim() !== '' ? v : 'ALL'}'`;
-  const comboResults = useTabComboQueries({
-    filters: comboColumns.map((c): ComboParam =>
-      c.cellCboDataTp === 'DM_LOOKUP_DIV'
-        ? { comboId: 'DM_LOOKUP_DIV', param1: q(division), param2: q(c.attribute1) }
-        : { comboId: c.cellCboDataTp as string, divisionId: q(division) }
-    ),
+  //   ⚠⚠ **값 quoting 의무** — BE LookupServiceImpl.makeComboQuery 는 `@param2` 를 raw 치환하고,
+  //     파라미터가 없을 때의 기본값이 `''`(따옴표 포함 빈 문자열)다. 즉 SQL 에서 @param 은 문자열
+  //     리터럴 자리에 그대로 박히므로 값이 따옴표를 직접 들고 와야 한다.
+  //     따옴표 없이 보내면 `WHERE LOOKUP_TYPE = BP_FCST_TYPE` 가 되어 컬럼명으로 해석 → 0건 →
+  //     dataMap=null → 드롭다운 대신 텍스트 입력으로 남는다 (2026-08-07 실측).
+  const q = (v: string): string => `'${v}'`;
+  const comboFilters = useMemo(
+    () =>
+      comboColumns.map(c => {
+        const comboId = String(c.cellCboDataTp);
+        if (comboId === 'DM_LOOKUP_DIV') {
+          return {
+            comboId,
+            param1: q(division),
+            param2: q(c.attribute1?.trim() ?? ''),
+          } as never;
+        }
+        return comboId as never;
+      }),
+
+    [comboColumns, division]
+  );
+  const comboResults = useTabComboQueries({ filters: comboFilters });
+
+  // ⭐ Team 표시 전용 콤보 — 'TeambyDivision' (조회조건 Team 과 같은 원천).
+  //   그리드 행의 DEPT_ID 는 조회 SP 가 SCM_MST_SITE_ITEM.DEPT_ID 로 채우는데, 메타 지정 콤보
+  //   'DeptId' 는 SCM_MST_SITE.DEPT_ID 와 품목 OWNER 의 부서만 뽑아 코드 공간이 달라 매핑이
+  //   안 잡힌다(코드가 그대로 노출). 표시만 같은 원천으로 덮고, 편집 콤보는 등록본 'DeptId' 를
+  //   GRID_EDIT_COMBO 로 유지한다 — CELL_PROD_SITE 와 동일 구조.
+  const [teamComboRows] = useTabComboQueries({
+    filters: [{ comboId: 'TeambyDivision', divisionId: q(division) }] as never,
   });
-  // ⚠ division 을 시그니처에 포함한다 — 미포함 시 division 전환 후 행수가 우연히 같으면
-  //   useMemo 가 재계산되지 않아 **이전 division 의 dataMap 이 잔존**한다.
+  const teamSig = `${division}#${teamComboRows?.length ?? 'x'}`;
+  const teamDataMap = useMemo<DataMap | null>(() => {
+    const arr = ((teamComboRows ?? []) as unknown as Record<string, string>[]).filter(
+      r => !r.DIVISION_ID || !division || r.DIVISION_ID === division
+    );
+    // 같은 DEPT_ID 가 division 별로 중복 반환될 수 있어 CODE 기준 dedup.
+    const uniq = [...new Map(arr.map(r => [String(r.CODE ?? ''), r])).values()];
+    return uniq.length > 0 ? new DataMap(uniq, 'CODE', 'NAME') : null;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [teamSig]);
   const comboSig = comboColumns
-    .map((c, i) => `${c.cellCboDataTp}@${division}#${comboResults[i]?.length ?? 'x'}`)
+    .map((c, i) => `${c.cellCboDataTp}#${comboResults[i]?.length ?? 'x'}`)
     .join(',');
   const dataMaps = useMemo<Record<string, DataMap | null>>(() => {
     const m: Record<string, DataMap | null> = {};
     comboColumns.forEach((c, i) => {
-      m[c.colNm] = buildDataMap((comboResults[i] ?? []) as unknown as Record<string, unknown>[]);
+      const arr = comboResults[i] ?? [];
+      m[c.colNm] = arr.length > 0 ? new DataMap(arr, 'CODE', 'NAME') : null;
     });
+    // Team 표시 오버라이드 (위 teamDataMap 주석 참조) — 메타 콤보로는 코드가 안 풀린다.
+    if (teamDataMap) {
+      if ('DEPT_ID' in m) m.DEPT_ID = teamDataMap;
+      if ('DEPT_ID40' in m) m.DEPT_ID40 = teamDataMap;
+    }
     return m;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [comboSig]);
+  }, [comboSig, teamDataMap]);
 
   // cascade 스왑용 콤보 원본 rows + 전체 dataMap 원복 ref 미러 (핸들러 useEffect deps 밖 참조).
   const comboRowsRef = useRef<Record<string, Record<string, unknown>[]>>({});
@@ -197,7 +218,8 @@ export const BusinessPlanGrid = ({
   const editDataMaps = useMemo<Record<string, DataMap | null>>(() => {
     const m: Record<string, DataMap | null> = {};
     editComboEntries.forEach(([binding], i) => {
-      m[binding] = buildDataMap((editComboResults[i] ?? []) as unknown as Record<string, unknown>[]);
+      const arr = (editComboResults[i] ?? []) as unknown as Record<string, unknown>[];
+      m[binding] = arr.length > 0 ? new DataMap(arr, 'CODE', 'NAME') : null;
     });
     return m;
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -279,6 +301,10 @@ export const BusinessPlanGrid = ({
   const drillVisRef = useRef<Map<string, boolean>>(new Map());
   const applyDynVisibilityRef = useRef<(() => void) | null>(null);
 
+  // 신규행 필터 예외 재등록용 최신 rows 미러 (filterApplied 핸들러가 deps 밖에서 참조).
+  const rowsRef = useRef<BusinessPlanRow[]>([]);
+  rowsRef.current = rows;
+
   // editLock 파라미터 ref 미러 (formatItem/beginningEdit 핸들러 공유)
   const cutoffRef = useRef<BizPlanCutoff | null>(null);
   const windowRef = useRef<ValidWindow | null>(null);
@@ -316,6 +342,10 @@ export const BusinessPlanGrid = ({
         // 3단(leaf) 라벨 — M=월 라벨 / Q·Y=SUM.
         header: tag.kind === 'M' ? m.leaf || String(tag.month).padStart(2, '0') : 'SUM',
         align: 'right',
+        // AS-IS 수량 표시 서식 = 소수 3자리 고정(n3). SP 응답에 소수부가 없어도 0 을 채워 표시한다.
+        //   Business_Plan measure 입력은 정수만 허용(MSG00679)이지만, 표시 서식은 소수 원천을 갖는
+        //   다른 measure(ENERGE_WH·환율 등)와 공통으로 3자리를 쓴다.
+        format: 'n3',
         width: 90,
         allowDragging: true,
         allowMerging: false,
@@ -347,6 +377,38 @@ export const BusinessPlanGrid = ({
           })),
       }));
   }, [dynColMetas]);
+
+  // 그리드 인스턴스 준비 신호 — 아래 gridRef 를 읽는 effect 들이 deps 로 함께 든다.
+  //   필수: wijmo React wrapper 는 initialized 를 setTimeout 으로 미뤄 부르고
+  //   (@mescius/wijmo.react.base useWjComponentBase), 공용 DataGrid 는 그 콜백에서만
+  //   gridRef.current 를 채운다(handleInitialized). 언마운트 정리에서는 다시 undefined 로 비운다.
+  //   이 화면은 정적 컬럼 목록을 DataGrid key 로 쓰므로(아래 JSX) 정적 컬럼이 들어오는 순간
+  //   그리드가 재마운트되고, 새 인스턴스의 initialized 도 다음 틱으로 밀린다. 그래서 재마운트가
+  //   일어난 커밋의 effect 는 gridRef.current 가 undefined 인 상태로 돌아 아무것도 설치하지
+  //   못하고, 그 뒤로 리렌더가 없으면 formatItem/beginningEdit/mergeManager 가 영구 미설치로 남는다.
+  //   증상(2026-08-24 실측): 헤더가 공용 CustomMergeManager 의 내용 기반 가로 병합으로 보인다
+  //   (연 SUM 과 분기 SUM 이 한 칸으로 붙고 Y_ 의 2·3단 세로 병합이 사라짐). 같은 원인으로
+  //   편집 가능 셀 노랑이 빠지고 수량이 measure 별 포맷 대신 wijmo 기본 서식으로 나온다.
+  //   대응: deps 없는 effect 로 매 커밋 그리드 유무를 확인하고, 없으면 다음 틱에 재확인해
+  //   인스턴스가 생기는 시점에 epoch 를 올려 설치 effect 들을 다시 태운다.
+  //   시도 횟수 상한은 그리드가 끝내 안 생길 때의 무한 루프 방지용.
+  const [gridEpoch, setGridEpoch] = useState(0);
+  useEffect(() => {
+    const ref = gridRef as MutableRefObject<FlexGridType<BusinessPlanRow> | undefined> | null;
+    if (ref?.current) return;
+    let attempts = 0;
+    let timer = 0;
+    const poll = () => {
+      if (ref?.current) {
+        setGridEpoch(e => e + 1);
+        return;
+      }
+      if (++attempts > 20) return;
+      timer = window.setTimeout(poll, 0);
+    };
+    timer = window.setTimeout(poll, 0);
+    return () => window.clearTimeout(timer);
+  });
 
   // ⭐ grid 핸들러 + mergeManager useEffect 등록.
   useEffect(() => {
@@ -405,11 +467,10 @@ export const BusinessPlanGrid = ({
           )?.get(rowItem)?.[binding] !== undefined;
         const insertInput = isInsert && rowItem?.[binding] != null && rowItem?.[binding] !== '';
         toggleClass(e.cell, 'bp-cell-changed', !!tracked || !!insertInput);
-        // ⭐ measure 별 숫자 포맷 (편집 중 셀 제외)
-        if (!g.editRange?.contains(e.row, e.col)) {
-          const measure = toCellStr(rowItem?.MEASURE);
-          e.cell.innerText = formatByMeasure(rowItem?.[binding], measure);
-        }
+        // 숫자 표시 서식은 컬럼 format('n3') 단일 출처 — 여기서 innerText 를 덮지 않는다.
+        //   AS-IS 는 measure 와 무관하게 소수 3자리 고정이고 0 도 '0.000' 으로 보여준다
+        //   (Business_Plan 은 입력만 정수 제한 MSG00679). measure 별 포맷을 여기서 다시 쓰면
+        //   0 이 빈칸이 되고 Business_Plan 이 소수부를 잃어 AS-IS 와 어긋난다.
         return;
       }
 
@@ -418,16 +479,22 @@ export const BusinessPlanGrid = ({
 
       // 정적 셀 — Insert 행 화이트리스트(R5)만 Yellow. 기존행 정적 영역은 전량 잠금
       //   (2026-07-21 G2 — 신정본 EditButton L649 LockRange 활성 / INCO·FCST unlock 블록 L651~667 전체 주석).
+      // 팝업 전용 셀(Project · Model) — 직접 타이핑은 막고 더블클릭 모달로만 입력한다
+      //   (설계서 [사업부별 분기] '검색 모달 전용 칸'). 즉 **입력 수단이 있는 칸**이므로 다른 편집
+      //   가능 셀과 같은 Yellow 로 보여야 한다 (2026-08-21 사용자 요구).
+      //   insertStaticEditable 은 '직접 입력 가능' 판정이라 이 컬럼들에 false 를 주는 게 맞다
+      //   (beginningEdit 의 타이핑 차단이 그 값을 쓴다) — 표시 판정에서만 따로 더한다.
+      const isModalCell =
+        isInsert &&
+        ((binding === 'PROJECT_CODE' && !isDiv40(division) && !isDiv82(division)) ||
+          (binding === 'PROJECT_CODE82' && isDiv82(division)) ||
+          (binding === 'ITEM_ID' && !isDiv40(division)) ||
+          (binding === 'ITEM_ID40' && isDiv40(division)));
+
       if (rowItem) {
         const editable = isInsert ? insertStaticEditable(binding, rowItem, division) : false;
-        toggleClass(e.cell, 'wj-cell-editable', editable);
+        toggleClass(e.cell, 'wj-cell-editable', editable || isModalCell);
         toggleClass(e.cell, 'wj-cell-non-editable', false);
-        const isModalCell =
-          isInsert &&
-          ((binding === 'PROJECT_CODE' && !isDiv40(division) && !isDiv82(division)) ||
-            (binding === 'PROJECT_CODE82' && isDiv82(division)) ||
-            (binding === 'ITEM_ID' && !isDiv40(division)) ||
-            (binding === 'ITEM_ID40' && isDiv40(division)));
         toggleClass(e.cell, 'wj-cell-popup', false); // wrapper 자동 토글 무력화 (전용 span 사용)
         if (isModalCell) {
           const cellEl = e.cell;
@@ -444,6 +511,25 @@ export const BusinessPlanGrid = ({
       } else {
         toggleClass(e.cell, 'wj-cell-editable', false);
         e.cell.querySelector('.popup-icon')?.remove();
+      }
+
+      // ⭐ 개인화 색 (ColumnLayoutModal 저장값) — 정적 컬럼만 (동적 기간 컬럼은 위에서 return).
+      //   우선순위: Insert 편집셀 Yellow(클래스) > 저장된 Cell Color. inline !important 라 클래스보다
+      //   세므로 편집 가능 Insert 셀에는 배경을 칠하지 않는다.
+      //   미지정 시 removeProperty 필수 — Wijmo 셀 재활용으로 이전 컬럼 색이 남는다.
+      const personalColor = colorMetaRef.current.get(binding);
+      //   팝업 셀도 편집 가능 취급 — 개인화 배경색이 Yellow 를 덮지 않게 한다.
+      const insertEditable =
+        (!!rowItem && isInsert && insertStaticEditable(binding, rowItem, division)) || isModalCell;
+      if (!insertEditable && personalColor?.cell) {
+        e.cell.style.setProperty('background-color', personalColor.cell, 'important');
+      } else {
+        e.cell.style.removeProperty('background-color');
+      }
+      if (personalColor?.text) {
+        e.cell.style.setProperty('color', personalColor.text, 'important');
+      } else {
+        e.cell.style.removeProperty('color');
       }
     };
     g.formatItem.addHandler(formatHandler);
@@ -587,7 +673,24 @@ export const BusinessPlanGrid = ({
       const ht = g.hitTest(ev);
       // 헤더 — Y_ 헤더: 해당 연 Q_ 토글 + 열린 M_ 접기 / Q_ 헤더: 해당 분기 M_ 토글 (L1600~1639)
       if (ht.cellType === CellType.ColumnHeader) {
-        const hb = g.columns[ht.col]?.binding ?? '';
+        // ⭐ 머지된 상위 헤더 → 그룹 대표 binding 복원 (forecast-price 선례 1:1).
+        //   hitTest 는 **커서 아래 물리 컬럼**을 준다(머지 원점이 아니다). 3단 헤더에서 1단(연)/
+        //   2단(분기) 라벨은 머지 범위 **가운데** = M_ 컬럼들 위에 그려지므로, 그대로 두면 hb 가 M_
+        //   로 잡혀 아래 Y/Q 가드에 걸린다 → 사용자가 실제로 누르는 연/분기 라벨에서 드릴다운이 죽고
+        //   leaf 의 'SUM' 칸(Y_/Q_ 물리 컬럼 위)에서만 먹는다.
+        //     1단(연) = Y_${연도} 직접 산출 — Y_/Q_/M_ 모두 slice(2,6) 이 연도다. 머지 좌단 대신
+        //       직접 산출해야 Sum OFF 로 Y_ 가 숨은 상태에서도(컬럼 순서 무관) 연 드릴로 확정된다.
+        //     2단(분기) = 머지 좌단 — mainDynamicColumns 가 그룹 내 Q_ → M_ 순으로 정렬하므로
+        //       좌단이 Q_ (Y_ 의 'SUM' 그룹은 단독 세로머지라 좌단이 곧 Y_).
+        //   leaf 행(Y_/Q_ 의 'SUM' · 월 낱개)은 물리 컬럼이 곧 대상이라 손대지 않는다.
+        const leafRow = g.columnHeaders.rows.length - 1;
+        let hb = g.columns[ht.col]?.binding ?? '';
+        if (dynKindOf(hb) && ht.row < leafRow) {
+          const merged = g.getMergedRange(g.columnHeaders, ht.row, ht.col);
+          const leftBinding = merged ? (g.columns[merged.leftCol]?.binding ?? hb) : hb;
+          const yearBinding = `Y_${hb.slice(2, 6)}`;
+          hb = ht.row === 0 && dynBindings.includes(yearBinding) ? yearBinding : leftBinding;
+        }
         const hk = dynKindOf(hb);
         if (hk !== 'Y' && hk !== 'Q') return;
         const idx = dynBindings.indexOf(hb);
@@ -693,7 +796,11 @@ export const BusinessPlanGrid = ({
     division,
     bucketType,
     dataMaps,
+    gridEpoch,
   ]);
+
+  // 마지막으로 확인한 헤더 단수 — 위 applyHeaderHeight 의 1회성 재드로우 판정에 쓴다.
+  const headerRowCountRef = useRef(0);
 
   // ⭐ hook #93 — 다단 헤더 총높이 48px 고정 (3단=16×3) + combo dataMap 재적용 + Filter sanitize.
   useEffect(() => {
@@ -707,12 +814,6 @@ export const BusinessPlanGrid = ({
         const cleaned = f.filterColumns.filter(b => !/^[YQM]_/.test(b));
         if (cleaned.length !== f.filterColumns.length) f.filterColumns = cleaned;
       }
-      // (0-a2) [공통 UC-07, hook #133 §5] 재조회해도 사용자가 걸어둔 **필터가 유지**되어야 한다.
-      //   columnGroups 재대입이 Column 객체를 통째로 재생성해, FlexGridFilter 가 죽은 Column 을
-      //   붙든 채 남으면 "아이콘은 꺼졌는데 행은 걸러진" 상태가 된다. 끊긴 필터만 재바인딩한다
-      //   (끊긴 게 없으면 no-op — 되먹임 방지 가드는 유틸 내부). 위 (0-a) 로 제외한 동적 컬럼은
-      //   이미 filterColumns 에서 빠졌으므로 여기서 되살아나지 않는다.
-      rebindFilterColumns(g as unknown as FlexGridType<WijmoRowItem>, gridFilterRef?.current);
       // (0-b) combo dataMap 재적용 — wrapper columnGroups 재적용이 col.dataMap 을 덮으므로 재부착(guard)
       for (let i = 0; i < g.columns.length; i++) {
         const col = g.columns[i];
@@ -722,6 +823,16 @@ export const BusinessPlanGrid = ({
       const headerRows = g.columnHeaders?.rows;
       if (!headerRows || headerRows.length === 0) return;
       const rowCount = headerRows.length;
+      // 헤더 단수가 바뀌는 시점(= 동적 컬럼 그룹 적용 완료)에 한 번 강제로 다시 그린다.
+      //   필수: mergeManager 는 이미 그려진 헤더에 소급 적용되지 않는다. 매니저 설치 시점의
+      //   columnHeaders 가 아직 1~2단이면 HierarchicalMergeManager 가 Y_ 의 2·3단 세로 병합을
+      //   건너뛰고(last <= 1 가드), 그 상태의 페인트가 그대로 남는다 — 스크롤해서 invalidate 가
+      //   한 번 돌면 정상으로 보이던 증상 (2026-08-24 실측: 연 SUM 과 분기 SUM 이 한 칸으로 붙어 보임).
+      //   단수 변화에만 반응하므로 updatedLayout 무한 루프는 없다.
+      if (headerRowCountRef.current !== rowCount) {
+        headerRowCountRef.current = rowCount;
+        g.invalidate(true);
+      }
       const per = Math.round(48 / rowCount);
       if (
         Math.round(headerRows.defaultSize) === per &&
@@ -743,7 +854,7 @@ export const BusinessPlanGrid = ({
         /* unmount race */
       }
     };
-  }, [dynBindings, visibleColumns, dataMaps, gridRef, gridFilterRef]);
+  }, [dynBindings, visibleColumns, dataMaps, gridRef, gridFilterRef, gridEpoch]);
 
   // ⭐ Sum 체크박스 + 헤더 드릴다운 — 동적 컬럼 visible 통합 적용 (AS-IS SetSpreadColumn L466~498 +
   //   헤더 더블클릭 1:1). 규칙: 활성 bucket=표시 / 상위 SUM=sumYn / 하위=숨김 — 드릴 오버라이드 우선.
@@ -781,7 +892,29 @@ export const BusinessPlanGrid = ({
         /* unmount race */
       }
     };
-  }, [sumYn, summaryBindings, drillBindings, dynBindings, gridRef]);
+  }, [sumYn, summaryBindings, drillBindings, dynBindings, gridRef, gridEpoch]);
+
+  // ⭐ 필터 상태에서 Insert — 값이 빈 신규행은 필터 조건에 걸려 CollectionView 에서 빠진다.
+  //   공용 keepRowVisibleUnderFilter 로 wijmo 예외 집합(grid._newAddedRowsSet)에 등록해 보이게 한다.
+  //   필터 자체의 보존은 공용 DataGrid 가 담당한다(itemsSourceChanged 의 capture -> clear -> restore).
+  //   ⚠ 등록은 **한 번으로 끝나지 않는다**. FlexGridFilter.apply() 가 그 Set 을 null 로 비우는데
+  //     (gridAction.ts keepRowVisibleUnderFilter 주석), DataGrid 의 필터 복원이 곧 apply() 라
+  //     Insert 마다 예외가 날아가 신규행이 다시 숨는다 (2026-08-21 실측).
+  //     ⇒ rows 변경 시 + filterApplied 시 **양쪽에서** 재등록한다.
+  const reapplyInsertRowVisibility = useCallback((): boolean => {
+    const g = (gridRef as { current: FlexGridType<BusinessPlanRow> | null } | null)?.current;
+    // 컬럼이 없는 그리드에 refresh 를 걸면 wijmo 가 컬럼 인덱스 -1 로 계산하다 예외를 던진다.
+    if (!g || g.columns.length === 0) return false;
+    const insertRows = rowsRef.current.filter(r => r.CRUD_TYPE === 'I');
+    if (insertRows.length === 0) return false;
+    insertRows.forEach(row => keepRowVisibleUnderFilter(g as never, row as never));
+    return true;
+  }, [gridRef]);
+
+  useEffect(() => {
+    const g = (gridRef as { current: FlexGridType<BusinessPlanRow> | null } | null)?.current;
+    if (reapplyInsertRowVisibility()) g?.collectionView?.refresh();
+  }, [gridRef, rows, reapplyInsertRowVisibility, gridEpoch]);
 
   // ⭐ F4 Filter — 피처 소유 FlexGridFilter (동적 컬럼 필터 제외 + 필터후 머지/높이 재적용)
   useEffect(() => {
@@ -796,18 +929,41 @@ export const BusinessPlanGrid = ({
     ) => {
       if (isDynamic(e.getColumn()?.binding)) e.cancel = true;
     };
-    const onFilterApplied = () => g.invalidate(true);
-
-    let f = gridFilterRef.current;
-    if (!f || f.grid !== g) {
-      f = new FlexGridFilter(g);
-      f.filterColumns = [''];
-      gridFilterRef.current = f;
+    // 필터가 적용될 때마다 정의(JSON)를 떠 둔다. Insert 로 itemsSource 가 갈리면 FlexGridFilter 가
+    //   스스로 clear() 하므로, 아래 복원 effect 가 이 값으로 되살린다.
+    //   ⚠ 이 등록은 **FlexGridFilter 를 만드는 이 effect 안에서** 해야 한다. 별도 effect 로 빼면
+    //     인스턴스 생성보다 먼저 실행돼 gridFilterRef.current 가 undefined 라 핸들러가 안 붙고,
+    //     기억된 정의가 영원히 빈 문자열로 남아 필터가 그대로 풀린다 (2026-08-21 실측).
+    // ⚠ 여기서 새 FlexGridFilter 를 만들면 안 된다 (2026-08-21 실측 — "필터 걸고 행추가하니 필터가 풀림").
+    //   공용 DataGrid 가 itemsSourceChanged 에 [capture -> FlexGridFilter 생성(=wijmo clear) -> restore]
+    //   를 **등록 순서**로 걸어 필터를 되살린다. 여기서 두 번째 인스턴스를 만들면 그 clear 핸들러가
+    //   restore **뒤에** 붙어 마지막에 실행되므로 복원분이 도로 지워진다.
+    //   ⇒ DataGrid 에 gridFilterRef 를 넘겨 인스턴스를 공유하고(아래 JSX), 없을 때만 안전망으로 만든다.
+    //     (forecast-price 가 쓰는 배선 1:1 — `if (!gridFilterRef.current)` 가드.)
+    if (!gridFilterRef.current) {
+      const created = new FlexGridFilter(g);
+      created.filterColumns = [''];
+      gridFilterRef.current = created;
     }
+    const f = gridFilterRef.current;
+    // apply() 가 방금 예외 집합을 비웠으므로 여기서 되살린다.
+    //   ⚠ refresh 는 rAF 로 미룬다 — filterApplied 핸들러 안에서 부르면 wijmo apply() 도중
+    //     재진입이 되어 내부 인덱스가 어긋난다 (DMF0082 주석 참고).
+    let raf = 0;
+    const onFilterApplied = () => {
+      g.invalidate(true);
+      if (!reapplyInsertRowVisibility()) return;
+      window.cancelAnimationFrame(raf);
+      raf = window.requestAnimationFrame(() => {
+        reapplyInsertRowVisibility();
+        g.collectionView?.refresh();
+      });
+    };
     f.filterChanging.addHandler(onFilterChanging as never);
     f.filterApplied.addHandler(onFilterApplied);
 
     return () => {
+      window.cancelAnimationFrame(raf);
       try {
         f?.filterChanging.removeHandler(onFilterChanging as never);
         f?.filterApplied.removeHandler(onFilterApplied);
@@ -815,13 +971,15 @@ export const BusinessPlanGrid = ({
         /* unmount race */
       }
     };
-  }, [dynBindings, visibleColumns, gridRef, gridFilterRef]);
+  }, [dynBindings, visibleColumns, gridRef, gridFilterRef, reapplyInsertRowVisibility, gridEpoch]);
 
   return (
+    // <div className={styles.gridContainer}>
     <DataGrid
       key={mainStaticColumns.map(c => c.colNm).join(',')}
       className={styles.grid}
       gridRef={gridRef as never}
+      gridFilterRef={gridFilterRef}
       editTrackerRef={editTrackerRef as never}
       staticColumns={mainStaticColumns}
       dynamicColumns={mainDynamicColumns}
@@ -830,5 +988,6 @@ export const BusinessPlanGrid = ({
       allowSorting={true}
       allowMerging={AllowMerging.All}
     />
+    // </div>
   );
 };

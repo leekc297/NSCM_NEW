@@ -1,0 +1,1837 @@
+{
+  "file": "c:/Projects/NSCM/nscm-fe/features/demand/src/pages/forecast-price/__asis-mapping__.md",
+  "stat": {
+    "PASS": 179,
+    "미구현": 23,
+    "UNVERIFIABLE": 77,
+    "FAIL": 51,
+    "해당없음": 21,
+    "제외": 41,
+    "미전달 사유": 1,
+    "(공란)": 25,
+    "모달 `Sales Price Save All` 표시 전용(INPUT_TP_CD=S) — 저장 대상 아님": 1,
+    "@companyId 는 DMF0082 에 컨텍스트 없음(AS-IS 도 미전달). @divisionId 는 GRID_EDIT_COMBO 스왑 경로가 전달": 1
+  },
+  "rows": [
+    {
+      "line": 15,
+      "id": "E06",
+      "gist": "§6 InsertRow / DeleteButton",
+      "where": "",
+      "reason": "",
+      "status": "미구현",
+      "verdict": "BLANK",
+      "why": [
+        "구현 위치 공란"
+      ]
+    },
+    {
+      "line": 16,
+      "id": "E07",
+      "gist": "ClipboardPasted/KeyUp — 붙여넣기 (md §7)",
+      "where": "ForecastPriceGrid pastedCell→cellEditHandler(#8 2026-07-21 — 캐스케이드·중복·배분 발동). 1행→N행 확장은 Wijmo whole-range paste 이벤트 부재로 원천 불가(mkt-fcst L1090 동일 한계)",
+      "reason": "—",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 17,
+      "id": "E08",
+      "gist": "§8 헤더/셀 더블클릭 (spdMain_CellDoubleClick, L3534~L3833)",
+      "where": "",
+      "reason": "",
+      "status": "미구현",
+      "verdict": "BLANK",
+      "why": [
+        "구현 위치 공란"
+      ]
+    },
+    {
+      "line": 18,
+      "id": "A-01",
+      "gist": "메인 조회 SP / `p_user_group = UserInfoContext.Current[\"NowGroupID\"]`",
+      "where": "useTabProcQuery SEARCH → PKG_DMF0082.P_DMF0082_GET_MAIN_DATA(p_user_group=세션 그룹, BE 주입)",
+      "reason": "—",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 19,
+      "id": "A-02",
+      "gist": "Measure 편집권한 로드 / `dsMain.Tables.Count >= 3` → `dsMain.Tables[3]` (GET_ADMIN_GROUP_MEASUR…",
+      "where": "store `measureAuth`(GET drop3 = MEASURE/EDIT_FLAG 커서) — ForecastPriceGrid `measureAuthRef`",
+      "reason": "AS-IS 4개 bool 변수 → TO-BE 는 measure별 EDIT_FLAG 맵으로 일반화(하드코딩 4종 제거)",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E3 심볼 `measureAuth` — 대조할 파일 인용이 없다",
+        "E3 심볼 `measureAuthRef` — 대조할 파일 인용이 없다"
+      ]
+    },
+    {
+      "line": 24,
+      "id": "A-07",
+      "gist": "SetLockRange — LOC / `!bEDIT_AUTH_LOC` → continue (해당 행 unlock 제외)",
+      "where": "ForecastPriceGrid `canEditCell` — `measureAuthRef` EDIT_FLAG 판정(AUTH_MEASURES 화이트리스트)",
+      "reason": "—",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E3 심볼 `canEditCell` — 대조할 파일 인용이 없다",
+        "E3 심볼 `measureAuthRef` — 대조할 파일 인용이 없다"
+      ]
+    },
+    {
+      "line": 25,
+      "id": "A-08",
+      "gist": "SetLockRange — MKT_FCST / `!bEDIT_AUTH_MKT_FCST` → continue",
+      "where": "ForecastPriceGrid `canEditCell` (A-07 동일 경로)",
+      "reason": "—",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E3 심볼 `canEditCell` — 대조할 파일 인용이 없다"
+      ]
+    },
+    {
+      "line": 26,
+      "id": "A-09",
+      "gist": "SetLockRange — SCM_FCST / `!bEDIT_AUTH_SCM_FCST` → continue",
+      "where": "ForecastPriceGrid `canEditCell` (A-07 동일 경로)",
+      "reason": "—",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E3 심볼 `canEditCell` — 대조할 파일 인용이 없다"
+      ]
+    },
+    {
+      "line": 27,
+      "id": "A-10",
+      "gist": "SetLockRange — VMI_In_Req / `!bEDIT_AUTH_VMI_IN_REQ` → continue",
+      "where": "ForecastPriceGrid `canEditCell` (A-07 동일 경로)",
+      "reason": "—",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E3 심볼 `canEditCell` — 대조할 파일 인용이 없다"
+      ]
+    },
+    {
+      "line": 28,
+      "id": "A-11",
+      "gist": "조회조건/셀 콤보 (그룹권한 스코프) / `NowGroupID + UserId` 파라미터",
+      "where": "CMBO `@sesUserId` 서버 자동 주입(BE LookupServiceImpl) + `EndCustomerByDivision40`/`SiteByEndCustomer`/`CurrencyList`/`FcstTypeByUserGroupDMF0082` 배선",
+      "reason": "AS-IS 는 GroupID+UserId 를 파라미터로 전달 — TO-BE 는 세션에서 서버가 주입(위조 불가). BigFilter GROUP_ID 는 조회조건 카탈로그가 담당",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E3 심볼 `EndCustomerByDivision40` — 대조할 파일 인용이 없다",
+        "E3 심볼 `SiteByEndCustomer` — 대조할 파일 인용이 없다",
+        "E3 심볼 `CurrencyList` — 대조할 파일 인용이 없다",
+        "E3 심볼 `FcstTypeByUserGroupDMF0082` — 대조할 파일 인용이 없다"
+      ]
+    },
+    {
+      "line": 32,
+      "id": "A-15",
+      "gist": "팝업 조회 SP / `p_userinfo = NowGroupID`, `p_created_by = UserId`",
+      "where": "savePriceData 시트 → DMF0082_POPUP_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP (sesUserId 서버 주입)",
+      "reason": "—",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 39,
+      "id": "D-07",
+      "gist": "InsertRow / `sDivision == \"40\"`",
+      "where": "ForecastPriceGrid 신규행 프라이밍 effect + GRID_EDIT_COMBO — EndCustomerByDivision40 / SiteByEndCustomer / IncotermsEdit / FcstPriceEditMeasure / CELL_PROD_SITE_ID / CurrencyList",
+      "reason": "2026-08-08 UP_FX 정합에서 InsertRow 시점 재조회 전수 이식",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 44,
+      "id": "D-12",
+      "gist": "spdMain_Changed(중복검사) / `clbDivision.ControlValues == \"40\"`",
+      "where": "ForecastPriceGrid `cellEditHandler` DUP_KEY_COLS 8키 실시간 중복검사 → MSG00260 + 값 롤백",
+      "reason": "—",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E3 심볼 `cellEditHandler` — 대조할 파일 인용이 없다"
+      ]
+    },
+    {
+      "line": 45,
+      "id": "D-13",
+      "gist": "spdMain_Changed(else, 키변경) / `clbDivision.ControlValues == \"40\"`",
+      "where": "ForecastPriceGrid `cellEditHandler` + GRID 키 변경 시 수량 클리어 경로",
+      "reason": "—",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E3 심볼 `cellEditHandler` — 대조할 파일 인용이 없다"
+      ]
+    },
+    {
+      "line": 49,
+      "id": "D-17",
+      "gist": "spdMain_ComboSelChange(Division 셀) / `clbDivision.ControlValues.Substring(0,2) == \"40\"`",
+      "where": "ForecastPriceGrid `applySalesSites`(END_CUSTOMER/DIVISION_ID 변경 → SiteByEndCustomer 재조회)",
+      "reason": "2026-08-08 신설",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E3 심볼 `applySalesSites` — 대조할 파일 인용이 없다"
+      ]
+    },
+    {
+      "line": 50,
+      "id": "D-18",
+      "gist": "spdMain_ComboSelChange(Division 셀) / `sDivision.Substring(0,2)==\"81\"` → PlantSite unlock …",
+      "where": "ForecastPriceGrid `cellEditableHandler` — PLANT_SITE_ID 는 81 계열 컬럼 메타(DIVISION_ID 토큰)로 노출 제어",
+      "reason": "AS-IS 의 명령형 unlock/lock → TO-BE 는 컬럼 메타 division 토큰 + 편집 판정으로 등가",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E3 심볼 `cellEditableHandler` — 대조할 파일 인용이 없다"
+      ]
+    },
+    {
+      "line": 67,
+      "id": "E07-A",
+      "gist": "§7-A spdMain_KeyUp (활성 신로직 L8384~L8425)",
+      "where": "",
+      "reason": "",
+      "status": "미구현",
+      "verdict": "BLANK",
+      "why": [
+        "구현 위치 공란"
+      ]
+    },
+    {
+      "line": 68,
+      "id": "E07-B",
+      "gist": "§7-B spdMain_ClipboardPasted (L7864~L8199)",
+      "where": "",
+      "reason": "",
+      "status": "미구현",
+      "verdict": "BLANK",
+      "why": [
+        "구현 위치 공란"
+      ]
+    },
+    {
+      "line": 77,
+      "id": "F-06",
+      "gist": "저장 SP / `p_fcst_type` ^연결 전달",
+      "where": "SAVE PROC_M `fcstType` 파라미터(18 IN 중)",
+      "reason": "—",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E3 심볼 `fcstType` — 대조할 파일 인용이 없다"
+      ]
+    },
+    {
+      "line": 82,
+      "id": "L-01",
+      "gist": "`LockColumn2(xCol1+1, 마지막, true)` / EditButton — Edit 해제 시 Action 이후 전 컬럼 잠금(+SetLockFlag…",
+      "where": "ForecastPriceGrid.tsx `cellEditableHandler`(진입 차단) + `ForecastPriceGridUtils.isNonEditableCell` + `utils/forecast-price.editLock.ts`(금주 월요일 cutoff) + 서버 `EDIT_FLAG`(PKG GET) + 셀 색상 `wj-cell-editable`/`wj-cell-non-editable`",
+      "reason": "AS-IS 는 WinForms 스프레드의 `LockRange/LockColumn` 으로 **셀 범위를 명령형 잠금**한다. TO-BE(Wijmo)는 잠금 API 대신 **편집 진입 시점 판정**(beginningEdit e.cancel)으로 등가 구현 — 호출 1건 1행 대응이 아니라 판정 함수 1곳으로 수렴한다(hook #95 3색 표준 연동)",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E3 심볼 `ForecastPriceGridUtils.isNonEditableCell` 이 인용 파일에 없다"
+      ]
+    },
+    {
+      "line": 83,
+      "id": "L-02",
+      "gist": "`SetLockRange(0, maxRow, !IsEditMode)` / EditButton — 전 행 편집가능 셀 unlock/lock 일괄",
+      "where": "ForecastPriceGrid.tsx `cellEditableHandler`(진입 차단) + `ForecastPriceGridUtils.isNonEditableCell` + `utils/forecast-price.editLock.ts`(금주 월요일 cutoff) + 서버 `EDIT_FLAG`(PKG GET) + 셀 색상 `wj-cell-editable`/`wj-cell-non-editable`",
+      "reason": "AS-IS 는 WinForms 스프레드의 `LockRange/LockColumn` 으로 **셀 범위를 명령형 잠금**한다. TO-BE(Wijmo)는 잠금 API 대신 **편집 진입 시점 판정**(beginningEdit e.cancel)으로 등가 구현 — 호출 1건 1행 대응이 아니라 판정 함수 1곳으로 수렴한다(hook #95 3색 표준 연동)",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E3 심볼 `ForecastPriceGridUtils.isNonEditableCell` 이 인용 파일에 없다"
+      ]
+    },
+    {
+      "line": 84,
+      "id": "L-03",
+      "gist": "`LockColumn(0, maxCol, true)` / Draw() — 조회 직후 전 컬럼 잠금(조회모드 기본)",
+      "where": "ForecastPriceGrid.tsx `cellEditableHandler`(진입 차단) + `ForecastPriceGridUtils.isNonEditableCell` + `utils/forecast-price.editLock.ts`(금주 월요일 cutoff) + 서버 `EDIT_FLAG`(PKG GET) + 셀 색상 `wj-cell-editable`/`wj-cell-non-editable`",
+      "reason": "AS-IS 는 WinForms 스프레드의 `LockRange/LockColumn` 으로 **셀 범위를 명령형 잠금**한다. TO-BE(Wijmo)는 잠금 API 대신 **편집 진입 시점 판정**(beginningEdit e.cancel)으로 등가 구현 — 호출 1건 1행 대응이 아니라 판정 함수 1곳으로 수렴한다(hook #95 3색 표준 연동)",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E3 심볼 `ForecastPriceGridUtils.isNonEditableCell` 이 인용 파일에 없다"
+      ]
+    },
+    {
+      "line": 85,
+      "id": "L-04",
+      "gist": "`LockRange2(iActRow, col, iRowCount, col, false, MarkedForeColor, UnLockColor)` ×9컬럼 루프 /…",
+      "where": "ForecastPriceGrid.tsx `cellEditableHandler`(진입 차단) + `ForecastPriceGridUtils.isNonEditableCell` + `utils/forecast-price.editLock.ts`(금주 월요일 cutoff) + 서버 `EDIT_FLAG`(PKG GET) + 셀 색상 `wj-cell-editable`/`wj-cell-non-editable`",
+      "reason": "AS-IS 는 WinForms 스프레드의 `LockRange/LockColumn` 으로 **셀 범위를 명령형 잠금**한다. TO-BE(Wijmo)는 잠금 API 대신 **편집 진입 시점 판정**(beginningEdit e.cancel)으로 등가 구현 — 호출 1건 1행 대응이 아니라 판정 함수 1곳으로 수렴한다(hook #95 3색 표준 연동)",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E3 심볼 `ForecastPriceGridUtils.isNonEditableCell` 이 인용 파일에 없다"
+      ]
+    },
+    {
+      "line": 86,
+      "id": "L-05",
+      "gist": "`SetLockRange(iActRow, iActRow, false)` / InsertRow — 신규 행 계획구간 unlock",
+      "where": "ForecastPriceGrid.tsx `cellEditableHandler`(진입 차단) + `ForecastPriceGridUtils.isNonEditableCell` + `utils/forecast-price.editLock.ts`(금주 월요일 cutoff) + 서버 `EDIT_FLAG`(PKG GET) + 셀 색상 `wj-cell-editable`/`wj-cell-non-editable`",
+      "reason": "AS-IS 는 WinForms 스프레드의 `LockRange/LockColumn` 으로 **셀 범위를 명령형 잠금**한다. TO-BE(Wijmo)는 잠금 API 대신 **편집 진입 시점 판정**(beginningEdit e.cancel)으로 등가 구현 — 호출 1건 1행 대응이 아니라 판정 함수 1곳으로 수렴한다(hook #95 3색 표준 연동)",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E3 심볼 `ForecastPriceGridUtils.isNonEditableCell` 이 인용 파일에 없다"
+      ]
+    },
+    {
+      "line": 87,
+      "id": "L-06",
+      "gist": "`LockRange2(e.Row, MEASURE+1, e.Row, maxCol, true, true)` / spdMain_Changed — MEASURE 변경 …",
+      "where": "ForecastPriceGrid.tsx `cellEditableHandler`(진입 차단) + `ForecastPriceGridUtils.isNonEditableCell` + `utils/forecast-price.editLock.ts`(금주 월요일 cutoff) + 서버 `EDIT_FLAG`(PKG GET) + 셀 색상 `wj-cell-editable`/`wj-cell-non-editable`",
+      "reason": "AS-IS 는 WinForms 스프레드의 `LockRange/LockColumn` 으로 **셀 범위를 명령형 잠금**한다. TO-BE(Wijmo)는 잠금 API 대신 **편집 진입 시점 판정**(beginningEdit e.cancel)으로 등가 구현 — 호출 1건 1행 대응이 아니라 판정 함수 1곳으로 수렴한다(hook #95 3색 표준 연동)",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E3 심볼 `ForecastPriceGridUtils.isNonEditableCell` 이 인용 파일에 없다"
+      ]
+    },
+    {
+      "line": 88,
+      "id": "L-07",
+      "gist": "`SetLockRange(e.Row, e.Row, false)` / spdMain_Changed — 변경된 Measure 기준 재-unlock",
+      "where": "ForecastPriceGrid.tsx `cellEditableHandler`(진입 차단) + `ForecastPriceGridUtils.isNonEditableCell` + `utils/forecast-price.editLock.ts`(금주 월요일 cutoff) + 서버 `EDIT_FLAG`(PKG GET) + 셀 색상 `wj-cell-editable`/`wj-cell-non-editable`",
+      "reason": "AS-IS 는 WinForms 스프레드의 `LockRange/LockColumn` 으로 **셀 범위를 명령형 잠금**한다. TO-BE(Wijmo)는 잠금 API 대신 **편집 진입 시점 판정**(beginningEdit e.cancel)으로 등가 구현 — 호출 1건 1행 대응이 아니라 판정 함수 1곳으로 수렴한다(hook #95 3색 표준 연동)",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E3 심볼 `ForecastPriceGridUtils.isNonEditableCell` 이 인용 파일에 없다"
+      ]
+    },
+    {
+      "line": 89,
+      "id": "L-08",
+      "gist": "`LockRange(ActiveRow, PlantSiteId.., false)` / ComboSelChange Division — 81 prefix면 Plant…",
+      "where": "ForecastPriceGrid.tsx `cellEditableHandler`(진입 차단) + `ForecastPriceGridUtils.isNonEditableCell` + `utils/forecast-price.editLock.ts`(금주 월요일 cutoff) + 서버 `EDIT_FLAG`(PKG GET) + 셀 색상 `wj-cell-editable`/`wj-cell-non-editable`",
+      "reason": "AS-IS 는 WinForms 스프레드의 `LockRange/LockColumn` 으로 **셀 범위를 명령형 잠금**한다. TO-BE(Wijmo)는 잠금 API 대신 **편집 진입 시점 판정**(beginningEdit e.cancel)으로 등가 구현 — 호출 1건 1행 대응이 아니라 판정 함수 1곳으로 수렴한다(hook #95 3색 표준 연동)",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E3 심볼 `ForecastPriceGridUtils.isNonEditableCell` 이 인용 파일에 없다"
+      ]
+    },
+    {
+      "line": 90,
+      "id": "L-09",
+      "gist": "`LockRange(ActiveRow, PlantSiteId.., true)` / ComboSelChange Division — 그 외(40) PlantSite…",
+      "where": "ForecastPriceGrid.tsx `cellEditableHandler`(진입 차단) + `ForecastPriceGridUtils.isNonEditableCell` + `utils/forecast-price.editLock.ts`(금주 월요일 cutoff) + 서버 `EDIT_FLAG`(PKG GET) + 셀 색상 `wj-cell-editable`/`wj-cell-non-editable`",
+      "reason": "AS-IS 는 WinForms 스프레드의 `LockRange/LockColumn` 으로 **셀 범위를 명령형 잠금**한다. TO-BE(Wijmo)는 잠금 API 대신 **편집 진입 시점 판정**(beginningEdit e.cancel)으로 등가 구현 — 호출 1건 1행 대응이 아니라 판정 함수 1곳으로 수렴한다(hook #95 3색 표준 연동)",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E3 심볼 `ForecastPriceGridUtils.isNonEditableCell` 이 인용 파일에 없다"
+      ]
+    },
+    {
+      "line": 91,
+      "id": "L-10",
+      "gist": "`LockRange2(iRow, MEASURE+1, iRow, maxCol, true, true)` / SetLockRange — Insert 행 선잠금(Mon…",
+      "where": "ForecastPriceGrid.tsx `cellEditableHandler`(진입 차단) + `ForecastPriceGridUtils.isNonEditableCell` + `utils/forecast-price.editLock.ts`(금주 월요일 cutoff) + 서버 `EDIT_FLAG`(PKG GET) + 셀 색상 `wj-cell-editable`/`wj-cell-non-editable`",
+      "reason": "AS-IS 는 WinForms 스프레드의 `LockRange/LockColumn` 으로 **셀 범위를 명령형 잠금**한다. TO-BE(Wijmo)는 잠금 API 대신 **편집 진입 시점 판정**(beginningEdit e.cancel)으로 등가 구현 — 호출 1건 1행 대응이 아니라 판정 함수 1곳으로 수렴한다(hook #95 3색 표준 연동)",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E3 심볼 `ForecastPriceGridUtils.isNonEditableCell` 이 인용 파일에 없다"
+      ]
+    },
+    {
+      "line": 92,
+      "id": "L-11",
+      "gist": "`LockRange2(iRow, idx, iRow, idx, bLockFlag, true)` / SetLockRange — LOC: 편집대상 idx unlock…",
+      "where": "ForecastPriceGrid.tsx `cellEditableHandler`(진입 차단) + `ForecastPriceGridUtils.isNonEditableCell` + `utils/forecast-price.editLock.ts`(금주 월요일 cutoff) + 서버 `EDIT_FLAG`(PKG GET) + 셀 색상 `wj-cell-editable`/`wj-cell-non-editable`",
+      "reason": "AS-IS 는 WinForms 스프레드의 `LockRange/LockColumn` 으로 **셀 범위를 명령형 잠금**한다. TO-BE(Wijmo)는 잠금 API 대신 **편집 진입 시점 판정**(beginningEdit e.cancel)으로 등가 구현 — 호출 1건 1행 대응이 아니라 판정 함수 1곳으로 수렴한다(hook #95 3색 표준 연동)",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E3 심볼 `ForecastPriceGridUtils.isNonEditableCell` 이 인용 파일에 없다"
+      ]
+    },
+    {
+      "line": 93,
+      "id": "L-12",
+      "gist": "`LockRange2(iRow, idx, iRow, idx, bLockFlag, true)` / SetLockRange — FCST 3메저 Monthly(M+4…",
+      "where": "ForecastPriceGrid.tsx `cellEditableHandler`(진입 차단) + `ForecastPriceGridUtils.isNonEditableCell` + `utils/forecast-price.editLock.ts`(금주 월요일 cutoff) + 서버 `EDIT_FLAG`(PKG GET) + 셀 색상 `wj-cell-editable`/`wj-cell-non-editable`",
+      "reason": "AS-IS 는 WinForms 스프레드의 `LockRange/LockColumn` 으로 **셀 범위를 명령형 잠금**한다. TO-BE(Wijmo)는 잠금 API 대신 **편집 진입 시점 판정**(beginningEdit e.cancel)으로 등가 구현 — 호출 1건 1행 대응이 아니라 판정 함수 1곳으로 수렴한다(hook #95 3색 표준 연동)",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E3 심볼 `ForecastPriceGridUtils.isNonEditableCell` 이 인용 파일에 없다"
+      ]
+    },
+    {
+      "line": 94,
+      "id": "L-13",
+      "gist": "`LockRange2(iRow, idx, iRow, idx, bLockFlag, true)` / SetLockRange — FCST 3메저 Weekly/Dail…",
+      "where": "ForecastPriceGrid.tsx `cellEditableHandler`(진입 차단) + `ForecastPriceGridUtils.isNonEditableCell` + `utils/forecast-price.editLock.ts`(금주 월요일 cutoff) + 서버 `EDIT_FLAG`(PKG GET) + 셀 색상 `wj-cell-editable`/`wj-cell-non-editable`",
+      "reason": "AS-IS 는 WinForms 스프레드의 `LockRange/LockColumn` 으로 **셀 범위를 명령형 잠금**한다. TO-BE(Wijmo)는 잠금 API 대신 **편집 진입 시점 판정**(beginningEdit e.cancel)으로 등가 구현 — 호출 1건 1행 대응이 아니라 판정 함수 1곳으로 수렴한다(hook #95 3색 표준 연동)",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E3 심볼 `ForecastPriceGridUtils.isNonEditableCell` 이 인용 파일에 없다"
+      ]
+    },
+    {
+      "line": 95,
+      "id": "L-14",
+      "gist": "`range3.Locked = false` (+UnLockColor) / Insert() — 빈 시트 최초 행 추가 시 Action 이후 전 컬럼 unlock",
+      "where": "ForecastPriceGrid.tsx `cellEditableHandler`(진입 차단) + `ForecastPriceGridUtils.isNonEditableCell` + `utils/forecast-price.editLock.ts`(금주 월요일 cutoff) + 서버 `EDIT_FLAG`(PKG GET) + 셀 색상 `wj-cell-editable`/`wj-cell-non-editable`",
+      "reason": "AS-IS 는 WinForms 스프레드의 `LockRange/LockColumn` 으로 **셀 범위를 명령형 잠금**한다. TO-BE(Wijmo)는 잠금 API 대신 **편집 진입 시점 판정**(beginningEdit e.cancel)으로 등가 구현 — 호출 1건 1행 대응이 아니라 판정 함수 1곳으로 수렴한다(hook #95 3색 표준 연동)",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E3 심볼 `ForecastPriceGridUtils.isNonEditableCell` 이 인용 파일에 없다"
+      ]
+    },
+    {
+      "line": 143,
+      "id": "P-23",
+      "gist": "기본 버킷요일 / 행 BUCKET 빈값/\"0000000\" → DEFAULT_BUCKET_DAY 룩업(sDefaultDay, 조회 시 1773) 요일 비트 변환(…",
+      "where": "components/ForecastPriceGridUtils.ts `bucketBitsOfDay` + CMBO `DefaultBucketDay`(division×MONTHLY／WEEKLY 마스터 조회)",
+      "reason": "⚠️ **2026-08-08 결함 정정** — 구 코드는 40=MON/그 외=FRI **FE 상수 하드코딩**이었다(본 제약이 대사표에 없어 게이트가 못 잡음). 마스터 조회로 교체 + 주배분 분기 버그·LOC 월 기준일 동시 정정",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E3 심볼 `DefaultBucketDay` 이 인용 파일에 없다"
+      ]
+    },
+    {
+      "line": 188,
+      "id": "S-07",
+      "gist": "조회 SP / `DMF0082_POPUP_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP` (userinfo=NowGroupID) —…",
+      "where": "savePriceData 시트 조회(DMF0082_POPUP_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP)",
+      "reason": "—",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 203,
+      "id": "S-22",
+      "gist": "파라미터 조립 / 16개 파라미터 `CString.AppendStringEx` ^연결 → `DM.DMF0082_SAVE_MAIN_DATA` (CommandTim…",
+      "where": "기배선 SAVE(DMF0082_SAVE_MAIN_DATA) 재사용 — 16 IN ^ bulk",
+      "reason": "—",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 244,
+      "id": "CRUD:E02:SAVE",
+      "gist": "[SAVE] §2 SetSaveData / SetSaveDataRemove (저장 버퍼, L7638~L7781 / L7783~L7862)",
+      "where": "",
+      "reason": "",
+      "status": "미구현",
+      "verdict": "BLANK",
+      "why": [
+        "구현 위치 공란"
+      ]
+    },
+    {
+      "line": 245,
+      "id": "CRUD:E04:SAVE",
+      "gist": "[SAVE] §4 SaveData (F7, SaveButton L1612~L1615 → SaveData L2025~L2217, fnValidation L2220~L2490)",
+      "where": "",
+      "reason": "",
+      "status": "미구현",
+      "verdict": "BLANK",
+      "why": [
+        "구현 위치 공란"
+      ]
+    },
+    {
+      "line": 246,
+      "id": "CRUD:E05:SEARCH",
+      "gist": "[SEARCH] §5 FindData (F5, FindButton L671~L676 → FindData L1662~L1790, Draw L1793~L2022)",
+      "where": "",
+      "reason": "",
+      "status": "미구현",
+      "verdict": "BLANK",
+      "why": [
+        "구현 위치 공란"
+      ]
+    },
+    {
+      "line": 247,
+      "id": "CRUD:E06:DELETE",
+      "gist": "[DELETE] §6 InsertRow / DeleteButton",
+      "where": "",
+      "reason": "",
+      "status": "미구현",
+      "verdict": "BLANK",
+      "why": [
+        "구현 위치 공란"
+      ]
+    },
+    {
+      "line": 248,
+      "id": "CRUD:E06:INSERT",
+      "gist": "[INSERT] §6 InsertRow / DeleteButton",
+      "where": "",
+      "reason": "",
+      "status": "미구현",
+      "verdict": "BLANK",
+      "why": [
+        "구현 위치 공란"
+      ]
+    },
+    {
+      "line": 257,
+      "id": "E01-B",
+      "gist": "수량 변경 — 버킷 요일비트 산출 (md §1-B)",
+      "where": "ForecastPriceGridUtils.ts `bucketBitsOfDay` + divideByMonth/divideByWeek `defaultBucket` 인자 — **2026-08-08 정정**: 구 코드는 `40=MON/그 외=FRI` FE 상수였으나 AS-IS 는 lookup `DEFAULT_BUCKET_DAY`(division×MONTHLY／WEEKLY) 조회값(.cs L1773 sDefaultDay → L6024 switch). CMBO `DefaultBucketDay` 신규 등록 후 마스터 조회로 교체",
+      "reason": "—",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E3 심볼 `DEFAULT_BUCKET_DAY` 이 인용 파일에 없다",
+        "E3 심볼 `DefaultBucketDay` 이 인용 파일에 없다"
+      ]
+    },
+    {
+      "line": 262,
+      "id": "CRUD:MAIN:SEARCH",
+      "gist": "버전 조회 (GET_MAIN_DATA)",
+      "where": "useForecastPriceStore.setFilters→useTabProcQuery(SEARCH)→PKG_DMF0082.P_DMF0082_GET_MAIN_DATA — 실측 40/81/82 SUCCESS",
+      "reason": "—",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 263,
+      "id": "CRUD:MAIN:SEARCH_CURRENT",
+      "gist": "Current 조회",
+      "where": "SEARCH_CURRENT 배선→P_DMF0082_GET_MAIN_DATA_CURRENT — 2026-08-07 사문 파손(ORA-00904) 복구 실증",
+      "reason": "—",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 265,
+      "id": "CRUD:MAIN:UPDATE",
+      "gist": "셀 편집 → SAVE 'M'",
+      "where": "cellEditEnded+EditTracker + SAVE 'M' — SP 직접 실증(40/81 +1→원장 반영→원복)",
+      "reason": "—",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 267,
+      "id": "CRUD:MAIN:SAVE",
+      "gist": "저장 (16+1 IN '^' bulk)",
+      "where": "handleSave→/DMF0082/FcstNPrice/SAVE/call-proc — 82 는 V82-00 서버 거부+FE 버튼 숨김(2026-08-07) 실증",
+      "reason": "—",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 268,
+      "id": "CRUD:MAIN:UPLOAD",
+      "gist": "Excel Upload (81 전용)",
+      "where": "UploadModal→P_DMF0082_EXCEL_UPLOAD/GET_EXCEL_UPLOAD_DATA 배선(UPLOAD/UPLOAD_DATA/UPLOAD_SAVE BTN_MPG 실측) — isDiv81 게이트",
+      "reason": "—",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 269,
+      "id": "COMMON:UC-01",
+      "gist": "필터링 상태에서 신규행 Insert 시 필터를 **유지한 채** 추가 행이 보이도록 (keepRowVisibleUnderFilter — 필터 clear 금지, 1st 행3 + 2026-08-14 공통 수정사항①)",
+      "where": "",
+      "reason": "",
+      "status": "미구현",
+      "verdict": "BLANK",
+      "why": [
+        "구현 위치 공란"
+      ]
+    },
+    {
+      "line": 270,
+      "id": "COMMON:UC-02",
+      "gist": "데이터 수정 중 다른 데이터 조회 시도 = '수정 중인 데이터가 있습니다. 새로 조회하시겠습니까?' confirm (MSG00703 — 1st 행4)",
+      "where": "",
+      "reason": "",
+      "status": "미구현",
+      "verdict": "BLANK",
+      "why": [
+        "구현 위치 공란"
+      ]
+    },
+    {
+      "line": 271,
+      "id": "COMMON:UC-03",
+      "gist": "컬럼 추가/제외(Column/Measure 설정) 적용 시 기존 조회 데이터 Reset 후 재조회 유도 (hook #132 §2-2 — 1st 행5)",
+      "where": "",
+      "reason": "",
+      "status": "미구현",
+      "verdict": "BLANK",
+      "why": [
+        "구현 위치 공란"
+      ]
+    },
+    {
+      "line": 272,
+      "id": "COMMON:UC-04",
+      "gist": "CRUD 완료 알림 = Alert 아닌 하단 중앙 Toast 후 자동 소멸 (LGES WDG 표준·hook #132 §3 — 1st 행6)",
+      "where": "",
+      "reason": "",
+      "status": "미구현",
+      "verdict": "BLANK",
+      "why": [
+        "구현 위치 공란"
+      ]
+    },
+    {
+      "line": 273,
+      "id": "COMMON:UC-05",
+      "gist": "Excel Download 시 콤보 컬럼 데이터가 Code 아닌 Name 으로 출력 (gridAction dataMap 승계 — 1st 행7)",
+      "where": "",
+      "reason": "",
+      "status": "미구현",
+      "verdict": "BLANK",
+      "why": [
+        "구현 위치 공란"
+      ]
+    },
+    {
+      "line": 274,
+      "id": "COMMON:UC-06",
+      "gist": "Key-in 조회조건 = 콤마 구분 다중 입력 시 전건 조회 (1st 행8)",
+      "where": "",
+      "reason": "",
+      "status": "미구현",
+      "verdict": "BLANK",
+      "why": [
+        "구현 위치 공란"
+      ]
+    },
+    {
+      "line": 275,
+      "id": "COMMON:UC-07",
+      "gist": "필터가 걸린 상태에서 재조회해도 조회되고 **필터도 그대로 적용** (rebindFilterColumns — 2026-08-14 공통 수정사항②)",
+      "where": "",
+      "reason": "",
+      "status": "미구현",
+      "verdict": "BLANK",
+      "why": [
+        "구현 위치 공란"
+      ]
+    },
+    {
+      "line": 277,
+      "id": "REQ:1ST-33-2",
+      "gist": "Mail Setup 버튼 삭제 (AS-IS 부재 버튼)",
+      "where": "FE 0건 + SCM_ADM_MNU_BTN_MPG_M(DMF0082) 18행 중 MAIL 계열 0건 SELECT 실측",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 278,
+      "id": "REQ:1ST-33-3",
+      "gist": "Category 버튼 삭제 (AS-IS 부재 버튼)",
+      "where": "FE 0건 + 버튼 원장 CATEGORY 코드 0건 실측",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 279,
+      "id": "REQ:1ST-33-4",
+      "gist": "Main 버튼 삭제 (AS-IS 부재 버튼)",
+      "where": "FE 0건 + 버튼 원장 MAIN 코드 0건 실측",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 282,
+      "id": "REQ:1ST-35-1",
+      "gist": "40 신규 행 입력 가능 컬럼 = 8개 한정 (End Customer/Sales Site/Model/Incoterms/FCST Type/Customs Handbook/Cell Prod Site/Currency)",
+      "where": "신호 스캔 PASS",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 283,
+      "id": "REQ:1ST-36-1",
+      "gist": "40 Current 버전에서 MKT_FCST[R+P]·SCM_FCST[R+P](GET_ADMIN_GROUP_MEASURE 통제)·Unit Price(LOC) 입력 가능",
+      "where": "BODY E20260814-CURMEASURE 마커 실존 + 08-14 검증 계보",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 284,
+      "id": "REQ:1ST-37-1",
+      "gist": "SQL 에러 해소",
+      "where": "BODY:3156 TEAMFILTER",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 285,
+      "id": "REQ:1ST-37-2",
+      "gist": "전체 조회조건 정상 동작 점검 (★)",
+      "where": "조회조건 MATRIX 15/15 fails=0 (2026-08-19 파이프라인) + 0820 Team/EndCustomer CMBO 정합",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 286,
+      "id": "REQ:1ST-38-1",
+      "gist": "중복 Validation 을 행 추가 시점이 아닌 저장 버튼 클릭 시점에 수행",
+      "where": "실시간 중복검사 제거(DUP_KEY_COLS 0건) + 저장 시점 validate.ts:123 V3·MSG00260(constants:186)",
+      "reason": "",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E1 파일 미존재: validate.ts"
+      ]
+    },
+    {
+      "line": 287,
+      "id": "REQ:1ST-39-1",
+      "gist": "81/81_JV: Cell Prod Site 컬럼 미조회 + 컬럼 셋팅에서도 제외",
+      "where": "사내 SHEET_COLUMNS '40,82' 복원 + META05:104 (fix_39_1.py, 2026-08-20)",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 288,
+      "id": "REQ:1ST-39-2",
+      "gist": "81/81_JV: Plant Site·AS From Site 컬럼 조회",
+      "where": "PLANT_SITE_ID·AS_FROM_SITE 81 계열 VISIBLE='Y' SELECT 실측. ⚠ '81_JV' 토큰은 전사 미프로비저닝(별건)",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 289,
+      "id": "REQ:1ST-39-3",
+      "gist": "Div별 Default 컬럼 AS-IS 기준 적용 (★)",
+      "where": "AS-IS↔TO-BE 204키 전수 대조 — 결손 0 (2026-08-20)",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 292,
+      "id": "REQ:1ST-41-1",
+      "gist": "Current 버전 Measure 입력 — MKT_FCST/SCM_FCST(룩업 통제)·Unit Price(LOC)",
+      "where": "BODY E20260814-CURMEASURE 실존 + 08-14 검증 계보 (36-1 동일 축)",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 293,
+      "id": "REQ:1ST-41-2",
+      "gist": "AS_In_Req: 81/81_JV/82 + DM Planner(W/S) 권한만 입력 가능",
+      "where": "BODY:3319 E20260820-MEASRULE(81%·82 × DM Planner(W/S)) + wsAuth.ts:224 양축",
+      "reason": "",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E1 파일 미존재: wsAuth.ts"
+      ]
+    },
+    {
+      "line": 294,
+      "id": "REQ:1ST-41-3",
+      "gist": "VMI_In_Req: 40/82 + Sales Site VMI=Y 만 입력 가능",
+      "where": "BODY:3327 div 40/82 게이트 + wsAuth.ts:253 + FcstPriceEditMeasure VMI_YN 조인 3계층",
+      "reason": "",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E1 파일 미존재: wsAuth.ts"
+      ]
+    },
+    {
+      "line": 295,
+      "id": "REQ:1ST-42-1",
+      "gist": "40 FCST Type = SALES_TYPE_CODE 기준 (AS 전용 Y 2건 제외 전 항목, W/S 2종 미표시)",
+      "where": "신호 교정(구 E20260814-WSDIV 오기)",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 296,
+      "id": "REQ:1ST-43-1",
+      "gist": "Daily Bucket: Unit Price(LOC) 입력 불가 / MKT_FCST·SCM_FCST 입력 가능",
+      "where": "GridUtils.ts:579 Daily×LOC 잠금 + 콤보 SQL @bucketType='D' LOC 제외 실측",
+      "reason": "",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E1 파일 미존재: GridUtils.ts"
+      ]
+    },
+    {
+      "line": 297,
+      "id": "REQ:1ST-44-1",
+      "gist": "Monthly Bucket: Unit Price(LOC) 당월부터 입력 가능",
+      "where": "M4_MEASURES(:396) LOC 제외 → LOC=당월 경계(editLock.ts:36~37)",
+      "reason": "",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E1 파일 미존재: editLock.ts"
+      ]
+    },
+    {
+      "line": 298,
+      "id": "REQ:1ST-44-2",
+      "gist": "Monthly Bucket: MKT_FCST·SCM_FCST M+4월부터 + LOC 와 동시 수정 불가",
+      "where": "isM4Locked(:426) M+4 + BODY:3244 LIMITMEAS 동시편집 강제. 동시제약 대상=MKT↔SCM(원문 대조",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 299,
+      "id": "REQ:1ST-45-1",
+      "gist": "Unit Price(LOC) 미입력 상태 저장 불가 (52주 게이트 사전 차단)",
+      "where": "BODY E20260818-PRICECHK1 실존 (52주 게이트 사전 차단)",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 300,
+      "id": "REQ:1ST-45-2",
+      "gist": "Plant Site ID 데이터 인식 차이(MSSQL↔Oracle 센티널) 해소",
+      "where": "03_DDL DEFAULT ON NULL 64개소 + 사내 적용 완료(2026-08-20 SENTINEL 체인)",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 301,
+      "id": "REQ:1ST-46-1",
+      "gist": "MKT_FCST 입력 시작: Daily=W+0 월요일 / Weekly=W+0 / Monthly=M+4",
+      "where": "editLock.ts D_/W_=금주 월요일 경계·Monthly=M+4 (CRUD_ROUNDTRIP 5본 계보)",
+      "reason": "",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E1 파일 미존재: editLock.ts"
+      ]
+    },
+    {
+      "line": 302,
+      "id": "REQ:1ST-46-2",
+      "gist": "Unit Price(LOC) 입력 시작: Daily 불가 / Weekly=W+0 / Monthly=M+0",
+      "where": "Daily 불가·Weekly W+0·Monthly M+0(editLock.ts:37) 실측",
+      "reason": "",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E1 파일 미존재: editLock.ts"
+      ]
+    },
+    {
+      "line": 303,
+      "id": "REQ:1ST-47-1",
+      "gist": "Bucket 변경 반복 후 입력·저장 시 SQL 에러 해소",
+      "where": "BODY:3466 BUCKET_TYPE 분기 + CRUD M/I/D PASS 계보(08-08~11)",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 304,
+      "id": "REQ:1ST-47-2",
+      "gist": "Monthly Bucket 저장 SQL 에러 해소",
+      "where": "Monthly 저장 분기 + 센티널 ORA-00001 근본정정(08-20 사내)",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 305,
+      "id": "REQ:1ST-47-3",
+      "gist": "Weekly Bucket 저장 SQL 에러 해소",
+      "where": "Weekly 저장 동일 분기",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 306,
+      "id": "REQ:1ST-48-1",
+      "gist": "환율 팝업 Save 버튼 데이터 수정 건수 표기 제거",
+      "where": "ExchangeRateModal.tsx:819 'Save' 고정 리터럴 (건수 표기 08-18 제거)",
+      "reason": "",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E2 라인 범위 초과: ExchangeRateModal.tsx:819-819 (총 741줄)"
+      ]
+    },
+    {
+      "line": 307,
+      "id": "REQ:1ST-48-2",
+      "gist": "환율 팝업 Close 후 재오픈 시 수정 데이터 잔존 해소",
+      "where": "open useEffect(:149~157) editsRef.clear+insertedRows 리셋 실측",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 308,
+      "id": "REQ:1ST-48-3",
+      "gist": "잔존 데이터 저장 시 '수정 데이터 없음' 팝업 해소",
+      "where": ":493 raf 재시도 cellEditEnded 상시 부착(08-13 정정) 실측",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 309,
+      "id": "REQ:1ST-48-4",
+      "gist": "BPS I/F 버튼 정상 동작",
+      "where": "배선 3축(FE handleBpsIf/API_M/PROC_M) 실측. ⚠ 사내 래퍼·원 proc STATUS=INVALID(에러 0",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 310,
+      "id": "REQ:1ST-49-1",
+      "gist": "수량·판가 입력 후 저장 시 미입력 팝업 오탐 해소",
+      "where": "BODY E20260814-FCSTNAME x2 실존 (미입력 팝업 오탐 해소)",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 311,
+      "id": "REQ:1ST-63-1",
+      "gist": "81: 비축향 Sales Site 행 = AS From Site 비활성",
+      "where": "신호 스캔 PASS",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 312,
+      "id": "REQ:1ST-63-2",
+      "gist": "81: 고객향 Sales Site 행 = AS From Site 활성 + 콤보 List 작동",
+      "where": "신호 스캔 PASS",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 313,
+      "id": "REQ:1ST-63-3",
+      "gist": "81: Measure 후보 3분기 (미입력=MKT/AS_In/LOC, 고객향=MKT/LOC, 비축향=AS_In/LOC)",
+      "where": "신호 스캔 PASS",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 314,
+      "id": "REQ:1ST-64-1",
+      "gist": "81: End Customer 콤보 = END_CUSTOMER 룩업 기준 Div별 리스트",
+      "where": "신호 스캔 PASS",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 315,
+      "id": "REQ:1ST-65-1",
+      "gist": "81: MKT FCST 화면 대비 컬럼 전수 반영 (AS-IS 29개 — Project 컬럼 포함)",
+      "where": "81 적용 42행/VISIBLE 34 실측(결함 당시 21)",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 316,
+      "id": "REQ:1ST-65-2",
+      "gist": "81: Cust FCST 관련 Measure 반영",
+      "where": "SHEET_MEASURE 81 계열 18종 실측(CUST_FCST DEFAULT='Y' 포함) + probe 92행 회귀 계보",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 317,
+      "id": "REQ:1ST-65-3",
+      "gist": "81: 예시 외 모든 차이 확인 후 반영 (DMF0003_GET_MKT_FCST_DATA 로직 확인)",
+      "where": "DMF0003 81-valid 19종 전수 대조 완료(2차 정정본)",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 318,
+      "id": "REQ:1ST-66-1",
+      "gist": "81: 팝업 UI Search 클릭 시 데이터 조회",
+      "where": "Search=FORM_DATA 배선(:104~191) + BODY:14231 EXCELFORM + 버튼 원장 'Y' 실측",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 319,
+      "id": "REQ:1ST-67-1",
+      "gist": "81: Excel Upload 가능",
+      "where": "신호 스캔 PASS",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 328,
+      "id": "COMMON:UC-01",
+      "gist": "필터링 상태에서 신규행 Insert 시 필터를 **유지한 채** 추가 행이 보이도록 (keepRowVisibleUnderFilter — 필터 clear 금지, 1st 행3 + 2026-08-14 공통 수정사항①)",
+      "where": "",
+      "reason": "",
+      "status": "미구현",
+      "verdict": "BLANK",
+      "why": [
+        "구현 위치 공란"
+      ]
+    },
+    {
+      "line": 329,
+      "id": "COMMON:UC-02",
+      "gist": "데이터 수정 중 다른 데이터 조회 시도 = '수정 중인 데이터가 있습니다. 새로 조회하시겠습니까?' confirm (MSG00703 — 1st 행4)",
+      "where": "",
+      "reason": "",
+      "status": "미구현",
+      "verdict": "BLANK",
+      "why": [
+        "구현 위치 공란"
+      ]
+    },
+    {
+      "line": 330,
+      "id": "COMMON:UC-03",
+      "gist": "컬럼 추가/제외(Column/Measure 설정) 적용 시 기존 조회 데이터 Reset 후 재조회 유도 (hook #132 §2-2 — 1st 행5)",
+      "where": "",
+      "reason": "",
+      "status": "미구현",
+      "verdict": "BLANK",
+      "why": [
+        "구현 위치 공란"
+      ]
+    },
+    {
+      "line": 331,
+      "id": "COMMON:UC-04",
+      "gist": "CRUD 완료 알림 = Alert 아닌 하단 중앙 Toast 후 자동 소멸 (LGES WDG 표준·hook #132 §3 — 1st 행6)",
+      "where": "",
+      "reason": "",
+      "status": "미구현",
+      "verdict": "BLANK",
+      "why": [
+        "구현 위치 공란"
+      ]
+    },
+    {
+      "line": 332,
+      "id": "COMMON:UC-05",
+      "gist": "Excel Download 시 콤보 컬럼 데이터가 Code 아닌 Name 으로 출력 (gridAction dataMap 승계 — 1st 행7)",
+      "where": "",
+      "reason": "",
+      "status": "미구현",
+      "verdict": "BLANK",
+      "why": [
+        "구현 위치 공란"
+      ]
+    },
+    {
+      "line": 333,
+      "id": "COMMON:UC-06",
+      "gist": "Key-in 조회조건 = 콤마 구분 다중 입력 시 전건 조회 (1st 행8)",
+      "where": "",
+      "reason": "",
+      "status": "미구현",
+      "verdict": "BLANK",
+      "why": [
+        "구현 위치 공란"
+      ]
+    },
+    {
+      "line": 334,
+      "id": "COMMON:UC-07",
+      "gist": "필터가 걸린 상태에서 재조회해도 조회되고 **필터도 그대로 적용** (rebindFilterColumns — 2026-08-14 공통 수정사항②)",
+      "where": "",
+      "reason": "",
+      "status": "미구현",
+      "verdict": "BLANK",
+      "why": [
+        "구현 위치 공란"
+      ]
+    },
+    {
+      "line": 344,
+      "id": "REQ:1ST-33-2",
+      "gist": "Mail Setup 버튼 삭제 (AS-IS 부재 버튼)",
+      "where": "FE 0건 + SCM_ADM_MNU_BTN_MPG_M(DMF0082) 18행 중 MAIL 계열 0건 SELECT 실측",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 345,
+      "id": "REQ:1ST-33-3",
+      "gist": "Category 버튼 삭제 (AS-IS 부재 버튼)",
+      "where": "FE 0건 + 버튼 원장 CATEGORY 코드 0건 실측",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 346,
+      "id": "REQ:1ST-33-4",
+      "gist": "Main 버튼 삭제 (AS-IS 부재 버튼)",
+      "where": "FE 0건 + 버튼 원장 MAIN 코드 0건 실측",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 349,
+      "id": "REQ:1ST-35-1",
+      "gist": "40 신규 행 입력 가능 컬럼 = 8개 한정 (End Customer/Sales Site/Model/Incoterms/FCST Type/Customs Handbook/Cell Prod Site/Currency)",
+      "where": "신호 스캔 PASS",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 350,
+      "id": "REQ:1ST-36-1",
+      "gist": "40 Current 버전에서 MKT_FCST[R+P]·SCM_FCST[R+P](GET_ADMIN_GROUP_MEASURE 통제)·Unit Price(LOC) 입력 가능",
+      "where": "BODY E20260814-CURMEASURE 마커 실존 + 08-14 검증 계보",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 351,
+      "id": "REQ:1ST-37-1",
+      "gist": "SQL 에러 해소",
+      "where": "BODY:3156 TEAMFILTER",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 352,
+      "id": "REQ:1ST-37-2",
+      "gist": "전체 조회조건 정상 동작 점검 (★)",
+      "where": "조회조건 MATRIX 15/15 fails=0 (2026-08-19 파이프라인) + 0820 Team/EndCustomer CMBO 정합",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 353,
+      "id": "REQ:1ST-38-1",
+      "gist": "중복 Validation 을 행 추가 시점이 아닌 저장 버튼 클릭 시점에 수행",
+      "where": "실시간 중복검사 제거(DUP_KEY_COLS 0건) + 저장 시점 validate.ts:123 V3·MSG00260(constants:186)",
+      "reason": "",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E1 파일 미존재: validate.ts"
+      ]
+    },
+    {
+      "line": 354,
+      "id": "REQ:1ST-39-1",
+      "gist": "81/81_JV: Cell Prod Site 컬럼 미조회 + 컬럼 셋팅에서도 제외",
+      "where": "사내 SHEET_COLUMNS '40,82' 복원 + META05:104 (fix_39_1.py, 2026-08-20)",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 355,
+      "id": "REQ:1ST-39-2",
+      "gist": "81/81_JV: Plant Site·AS From Site 컬럼 조회",
+      "where": "PLANT_SITE_ID·AS_FROM_SITE 81 계열 VISIBLE='Y' SELECT 실측. ⚠ '81_JV' 토큰은 전사 미프로비저닝(별건)",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 356,
+      "id": "REQ:1ST-39-3",
+      "gist": "Div별 Default 컬럼 AS-IS 기준 적용 (★)",
+      "where": "AS-IS↔TO-BE 204키 전수 대조 — 결손 0 (2026-08-20)",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 359,
+      "id": "REQ:1ST-41-1",
+      "gist": "Current 버전 Measure 입력 — MKT_FCST/SCM_FCST(룩업 통제)·Unit Price(LOC)",
+      "where": "BODY E20260814-CURMEASURE 실존 + 08-14 검증 계보 (36-1 동일 축)",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 360,
+      "id": "REQ:1ST-41-2",
+      "gist": "AS_In_Req: 81/81_JV/82 + DM Planner(W/S) 권한만 입력 가능",
+      "where": "BODY:3319 E20260820-MEASRULE(81%·82 × DM Planner(W/S)) + wsAuth.ts:224 양축",
+      "reason": "",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E1 파일 미존재: wsAuth.ts"
+      ]
+    },
+    {
+      "line": 361,
+      "id": "REQ:1ST-41-3",
+      "gist": "VMI_In_Req: 40/82 + Sales Site VMI=Y 만 입력 가능",
+      "where": "BODY:3327 div 40/82 게이트 + wsAuth.ts:253 + FcstPriceEditMeasure VMI_YN 조인 3계층",
+      "reason": "",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E1 파일 미존재: wsAuth.ts"
+      ]
+    },
+    {
+      "line": 362,
+      "id": "REQ:1ST-42-1",
+      "gist": "40 FCST Type = SALES_TYPE_CODE 기준 (AS 전용 Y 2건 제외 전 항목, W/S 2종 미표시)",
+      "where": "신호 교정(구 E20260814-WSDIV 오기)",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 363,
+      "id": "REQ:1ST-43-1",
+      "gist": "Daily Bucket: Unit Price(LOC) 입력 불가 / MKT_FCST·SCM_FCST 입력 가능",
+      "where": "GridUtils.ts:579 Daily×LOC 잠금 + 콤보 SQL @bucketType='D' LOC 제외 실측",
+      "reason": "",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E1 파일 미존재: GridUtils.ts"
+      ]
+    },
+    {
+      "line": 364,
+      "id": "REQ:1ST-44-1",
+      "gist": "Monthly Bucket: Unit Price(LOC) 당월부터 입력 가능",
+      "where": "M4_MEASURES(:396) LOC 제외 → LOC=당월 경계(editLock.ts:36~37)",
+      "reason": "",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E1 파일 미존재: editLock.ts"
+      ]
+    },
+    {
+      "line": 365,
+      "id": "REQ:1ST-44-2",
+      "gist": "Monthly Bucket: MKT_FCST·SCM_FCST M+4월부터 + LOC 와 동시 수정 불가",
+      "where": "isM4Locked(:426) M+4 + BODY:3244 LIMITMEAS 동시편집 강제. 동시제약 대상=MKT↔SCM(원문 대조",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 366,
+      "id": "REQ:1ST-45-1",
+      "gist": "Unit Price(LOC) 미입력 상태 저장 불가 (52주 게이트 사전 차단)",
+      "where": "BODY E20260818-PRICECHK1 실존 (52주 게이트 사전 차단)",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 367,
+      "id": "REQ:1ST-45-2",
+      "gist": "Plant Site ID 데이터 인식 차이(MSSQL↔Oracle 센티널) 해소",
+      "where": "03_DDL DEFAULT ON NULL 64개소 + 사내 적용 완료(2026-08-20 SENTINEL 체인)",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 368,
+      "id": "REQ:1ST-46-1",
+      "gist": "MKT_FCST 입력 시작: Daily=W+0 월요일 / Weekly=W+0 / Monthly=M+4",
+      "where": "editLock.ts D_/W_=금주 월요일 경계·Monthly=M+4 (CRUD_ROUNDTRIP 5본 계보)",
+      "reason": "",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E1 파일 미존재: editLock.ts"
+      ]
+    },
+    {
+      "line": 369,
+      "id": "REQ:1ST-46-2",
+      "gist": "Unit Price(LOC) 입력 시작: Daily 불가 / Weekly=W+0 / Monthly=M+0",
+      "where": "Daily 불가·Weekly W+0·Monthly M+0(editLock.ts:37) 실측",
+      "reason": "",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E1 파일 미존재: editLock.ts"
+      ]
+    },
+    {
+      "line": 370,
+      "id": "REQ:1ST-47-1",
+      "gist": "Bucket 변경 반복 후 입력·저장 시 SQL 에러 해소",
+      "where": "BODY:3466 BUCKET_TYPE 분기 + CRUD M/I/D PASS 계보(08-08~11)",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 371,
+      "id": "REQ:1ST-47-2",
+      "gist": "Monthly Bucket 저장 SQL 에러 해소",
+      "where": "Monthly 저장 분기 + 센티널 ORA-00001 근본정정(08-20 사내)",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 372,
+      "id": "REQ:1ST-47-3",
+      "gist": "Weekly Bucket 저장 SQL 에러 해소",
+      "where": "Weekly 저장 동일 분기",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 373,
+      "id": "REQ:1ST-48-1",
+      "gist": "환율 팝업 Save 버튼 데이터 수정 건수 표기 제거",
+      "where": "ExchangeRateModal.tsx:819 'Save' 고정 리터럴 (건수 표기 08-18 제거)",
+      "reason": "",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E2 라인 범위 초과: ExchangeRateModal.tsx:819-819 (총 741줄)"
+      ]
+    },
+    {
+      "line": 374,
+      "id": "REQ:1ST-48-2",
+      "gist": "환율 팝업 Close 후 재오픈 시 수정 데이터 잔존 해소",
+      "where": "open useEffect(:149~157) editsRef.clear+insertedRows 리셋 실측",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 375,
+      "id": "REQ:1ST-48-3",
+      "gist": "잔존 데이터 저장 시 '수정 데이터 없음' 팝업 해소",
+      "where": ":493 raf 재시도 cellEditEnded 상시 부착(08-13 정정) 실측",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 376,
+      "id": "REQ:1ST-48-4",
+      "gist": "BPS I/F 버튼 정상 동작",
+      "where": "배선 3축(FE handleBpsIf/API_M/PROC_M) 실측. ⚠ 사내 래퍼·원 proc STATUS=INVALID(에러 0",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 377,
+      "id": "REQ:1ST-49-1",
+      "gist": "수량·판가 입력 후 저장 시 미입력 팝업 오탐 해소",
+      "where": "BODY E20260814-FCSTNAME x2 실존 (미입력 팝업 오탐 해소)",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 378,
+      "id": "REQ:1ST-63-1",
+      "gist": "81: 비축향 Sales Site 행 = AS From Site 비활성",
+      "where": "신호 스캔 PASS",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 379,
+      "id": "REQ:1ST-63-2",
+      "gist": "81: 고객향 Sales Site 행 = AS From Site 활성 + 콤보 List 작동",
+      "where": "신호 스캔 PASS",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 380,
+      "id": "REQ:1ST-63-3",
+      "gist": "81: Measure 후보 3분기 (미입력=MKT/AS_In/LOC, 고객향=MKT/LOC, 비축향=AS_In/LOC)",
+      "where": "신호 스캔 PASS",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 381,
+      "id": "REQ:1ST-64-1",
+      "gist": "81: End Customer 콤보 = END_CUSTOMER 룩업 기준 Div별 리스트",
+      "where": "신호 스캔 PASS",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 382,
+      "id": "REQ:1ST-65-1",
+      "gist": "81: MKT FCST 화면 대비 컬럼 전수 반영 (AS-IS 29개 — Project 컬럼 포함)",
+      "where": "81 적용 42행/VISIBLE 34 실측(결함 당시 21)",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 383,
+      "id": "REQ:1ST-65-2",
+      "gist": "81: Cust FCST 관련 Measure 반영",
+      "where": "SHEET_MEASURE 81 계열 18종 실측(CUST_FCST DEFAULT='Y' 포함) + probe 92행 회귀 계보",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 384,
+      "id": "REQ:1ST-65-3",
+      "gist": "81: 예시 외 모든 차이 확인 후 반영 (DMF0003_GET_MKT_FCST_DATA 로직 확인)",
+      "where": "DMF0003 81-valid 19종 전수 대조 완료(2차 정정본)",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 385,
+      "id": "REQ:1ST-66-1",
+      "gist": "81: 팝업 UI Search 클릭 시 데이터 조회",
+      "where": "Search=FORM_DATA 배선(:104~191) + BODY:14231 EXCELFORM + 버튼 원장 'Y' 실측",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 386,
+      "id": "REQ:1ST-67-1",
+      "gist": "81: Excel Upload 가능",
+      "where": "신호 스캔 PASS",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 387,
+      "id": "REQ:CHAT-20260820-1",
+      "gist": "DMF0082 81 Division 컬럼의 AS-IS 대조 기준 = DMF0003 MAIN GRID 시트 (AS-IS 에서 81은 DMF0003 사용 → TO-BE 는 DMF0082) — SHEET_COLUMNS 8",
+      "where": "사내 SHEET_COLUMNS 81축 4컬럼 INSERT (insert_4cols.py, 2026-08-20)",
+      "reason": "",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 451,
+      "id": "HANDLER:EditButton",
+      "gist": "AS-IS `DMF0082_FcstNPrice_Mgmt.cs:1531` (라이브 57행)",
+      "where": "서버 EDIT_FLAG(PKG GET) + `isEditableVersion`(Current 버전 한정) + wrapper 편집판정",
+      "reason": "AS-IS 는 클라 스프레드 LockRange 조작 — TO-BE 는 서버 EDIT_FLAG 판정으로 등가 이전",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E3 심볼 `isEditableVersion` — 대조할 파일 인용이 없다"
+      ]
+    },
+    {
+      "line": 456,
+      "id": "HANDLER:SetEditList",
+      "gist": "AS-IS `DMF0082_FcstNPrice_Mgmt.cs:9059` (라이브 56행)",
+      "where": "ForecastPriceGrid `isNonEditableCell`/`canEditCell` + utils/forecast-price.editLock.ts",
+      "reason": "—",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E3 심볼 `isNonEditableCell` 이 인용 파일에 없다",
+        "E3 심볼 `canEditCell` 이 인용 파일에 없다"
+      ]
+    },
+    {
+      "line": 465,
+      "id": "HANDLER:chkSum_CheckedChanged",
+      "gist": "AS-IS `DMF0082_FcstNPrice_Mgmt.cs:9046` (라이브 6행)",
+      "where": "components/ForecastPriceForm.tsx `sumYn` 토글 → Grid `applyDynVisibility`(SUM 컬럼 표시)",
+      "reason": "—",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E3 심볼 `applyDynVisibility` 이 인용 파일에 없다"
+      ]
+    },
+    {
+      "line": 470,
+      "id": "HANDLER:spdMain_ClipboardPasted",
+      "gist": "AS-IS `DMF0082_FcstNPrice_Mgmt.cs:7864` (라이브 120행)",
+      "where": "ForecastPriceGrid `pastedCell`/`pastingCell` = 편집 핸들러 공유. 1행→N행 확장은 Wijmo whole-range paste 이벤트 부재로 원천 불가(mkt-fcst 동일 한계)",
+      "reason": "—",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E3 심볼 `pastedCell` — 대조할 파일 인용이 없다",
+        "E3 심볼 `pastingCell` — 대조할 파일 인용이 없다"
+      ]
+    },
+    {
+      "line": 471,
+      "id": "HANDLER:spdMain_ComboSelChange",
+      "gist": "AS-IS `DMF0082_FcstNPrice_Mgmt.cs:8201` (라이브 116행)",
+      "where": "ForecastPriceGrid `cellEditHandler` 캐스케이드 분기(SCM_SITE_ID/DIVISION_ID/INCOTERMS/END_CUSTOMER/ITEM_ID)",
+      "reason": "—",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E3 심볼 `cellEditHandler` — 대조할 파일 인용이 없다"
+      ]
+    },
+    {
+      "line": 484,
+      "id": "DPF-01",
+      "gist": "`DM.DMF0082_GET_SPREAD_TITLE` p_division_id",
+      "where": "spreadTitle 시트 SEARCH filters.divisionId (useTabProcQuery)",
+      "reason": "—",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 485,
+      "id": "DPF-02",
+      "gist": "`DM.DMF0082_GET_MAIN_DATA` p_division_id + p_user_group",
+      "where": "FcstNPrice SEARCH filters.divisionId / p_user_group 은 BE 세션 주입",
+      "reason": "—",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 487,
+      "id": "DPF-04",
+      "gist": "`DM0002_TitleSetForm_Popup` division (Column/Measure)",
+      "where": "ColumnSettingModal / MeasureSelectModal — titleSet 시트 배선",
+      "reason": "—",
+      "status": "구현",
+      "verdict": "UNVERIFIABLE",
+      "why": [
+        "인용 근거(파일:라인 / `심볼`)가 없어 기계 대조 불가"
+      ]
+    },
+    {
+      "line": 489,
+      "id": "DPF-06",
+      "gist": "`FCST_PRICE_EDIT_MEASURE` 룩업 PARAM2=division",
+      "where": "ForecastPriceGrid `applyEditMeasures` divisionId=q(div)",
+      "reason": "—",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E3 심볼 `applyEditMeasures` — 대조할 파일 인용이 없다"
+      ]
+    },
+    {
+      "line": 490,
+      "id": "DPF-07",
+      "gist": "`CELL_PROD_SITE_ID` 공통룩업 (division, item)",
+      "where": "ForecastPriceGrid `applyCellProdSites` divisionId/itemId (2026-08-08 신설)",
+      "reason": "—",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E3 심볼 `applyCellProdSites` — 대조할 파일 인용이 없다"
+      ]
+    },
+    {
+      "line": 491,
+      "id": "DPF-08",
+      "gist": "`SALES_BUCKET` 룩업 (division, site, incoterms)",
+      "where": "ForecastPriceGrid `applySalesBucket` — 3파라미터 quoting 정합(2026-08-08)",
+      "reason": "—",
+      "status": "구현",
+      "verdict": "FAIL",
+      "why": [
+        "E3 심볼 `applySalesBucket` — 대조할 파일 인용이 없다"
+      ]
+    }
+  ]
+}

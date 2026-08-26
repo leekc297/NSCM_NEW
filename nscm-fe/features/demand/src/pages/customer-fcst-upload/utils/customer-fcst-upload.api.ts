@@ -28,7 +28,12 @@ export const fetchExcelFormData = async (
     const code = Number((res.data as { code?: string })?.code ?? 0);
     const result = (res.data?.result ?? {}) as {
       o_rc1?: ExcelFormRow[];
-      o_result_cursor?: { CODE?: string; MSG?: string; RESULT_CODE?: string; RESULT_MSG?: string }[];
+      o_result_cursor?: {
+        CODE?: string;
+        MSG?: string;
+        RESULT_CODE?: string;
+        RESULT_MSG?: string;
+      }[];
     };
     const inner = result.o_result_cursor?.[0];
     const innerCode = inner?.RESULT_CODE ?? inner?.CODE;

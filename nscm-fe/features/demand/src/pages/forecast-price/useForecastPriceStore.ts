@@ -73,6 +73,10 @@ export interface ColumnLayoutSetting {
 
 interface ForecastPriceAction {
   reset: () => void;
+  /** [RESET 2026-08-26] 조회조건 전체 초기화 — AS-IS 공통 [Reset Condition](F10) 파리티.
+   *  persisted store 라 저장된 조건도 함께 초기값으로 돌아간다. division 변경이 수반되면
+   *  ForecastPrice.tsx 의 division-변경 effect 가 그리드 초기화·CRUD reset 을 수행한다. */
+  resetSearchParams: () => void;
   setSearchParams: (searchParams: Partial<SearchParamProps>) => void;
   setFilters: () => boolean;
   /** 조회조건 무효화 — division 전환 시 이전 division 조회결과가 그리드에 잔존하는 것을 막는다. */
@@ -179,6 +183,10 @@ export const useForecastPriceStore = createPersistedStoreWithTab<
   (set, get) => ({
     ...initState,
     reset: () => set(initState),
+    resetSearchParams: () =>
+      set(state => {
+        state.searchParams = { ...initSearchParams };
+      }),
     setAuthGroup: (group: string) =>
       set(state => {
         state.authGroup = group;

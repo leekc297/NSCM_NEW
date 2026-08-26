@@ -1,0 +1,34 @@
+# DMF0020_PRE_CLOUD_UPDATE_20260824 — 파일 목록 (기계 산출)
+
+총 28 파일 / 715,822 bytes
+
+| 경로 | bytes | 줄 | md5(10) | 용도 |
+|---|---:|---:|---|---|
+| `A_PKG/PKG_DMF0020_BODY.sql` | 217,960 | 4,623 | `9cecfdcfec` |  |
+| `A_PKG/PKG_DMF0020_SPEC.sql` | 6,324 | 199 | `d1146b2097` |  |
+| `B_SP/DMF0020_EXCEL_UPLOAD.sql` | 71,538 | 1,319 | `7aa82051e6` |  |
+| `B_SP/DMF0020_GET_EXCHANGE_POPUP_SPREAD_TITLE.sql` | 5,174 | 111 | `d75be85702` |  |
+| `B_SP/DMF0020_GET_FUTUREPRICE_INFO.sql` | 4,583 | 113 | `21d7c5c5d5` |  |
+| `B_SP/DMF0020_GET_MEASURE_COUNTINFO.sql` | 5,499 | 143 | `6d60f355d5` |  |
+| `B_SP/DMF0020_GET_MEASURE_COUNTINFO_SAVE_PRICE.sql` | 4,538 | 117 | `99a800c2cf` |  |
+| `B_SP/DMF0020_GET_OWNER_DATA.sql` | 12,987 | 293 | `e6c33f59fa` |  |
+| `B_SP/DMF0020_GET_SALES_PRICE_TEMPLATE.sql` | 12,046 | 311 | `86ba21a213` |  |
+| `B_SP/DMF0020_GET_SCM_MST_FUTURE_PRICE.sql` | 74,619 | 1,199 | `4204f72513` |  |
+| `B_SP/DMF0020_GET_SCM_MST_FUTURE_PRICE_POPUP.sql` | 6,870 | 150 | `2eb898be3a` |  |
+| `B_SP/DMF0020_GET_SCM_MST_FUTURE_PRICE_POPUP_DATA.sql` | 6,697 | 145 | `32c7a16cdb` |  |
+| `B_SP/DMF0020_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP.sql` | 51,755 | 1,032 | `58e31d23ed` |  |
+| `B_SP/DMF0020_GET_SPREAD_TITLE.sql` | 18,943 | 420 | `0fc652b49d` |  |
+| `B_SP/DMF0020_GET_SPREAD_TITLE_DATE.sql` | 3,200 | 84 | `3b7e675b7f` |  |
+| `B_SP/DMF0020_GET_SPREAD_TITLE_SAVE_PRICE.sql` | 15,602 | 345 | `fce26440eb` |  |
+| `B_SP/DMF0020_GET_WEEKDATA.sql` | 2,957 | 79 | `a9a2f566a3` |  |
+| `B_SP/DMF0020_SAVE_DM_MST_EXCHANGE_RATE_ALL.sql` | 10,281 | 242 | `779c0b1e1f` |  |
+| `B_SP/DMF0020_SAVE_SCM_MST_FUTURE_PRICE_ALL.sql` | 55,995 | 1,135 | `3779fa06e9` |  |
+| `B_SP/DMF0020_SAVE_SCM_MST_FUTURE_PRICE_CONVERSION.sql` | 16,874 | 323 | `2e238c612a` |  |
+| `B_SP/DMF0020_SAVE_SCM_MST_FUTURE_PRICE_POPUP.sql` | 29,817 | 800 | `b91cc5e1b1` |  |
+| `B_SP/P_DMF0020_GET_OWNER_DATA.sql` | 5,113 | 133 | `1803e3a04d` |  |
+| `C_WIRING/01_API_M.sql` | 10,550 | 77 | `620bbbdabb` |  |
+| `C_WIRING/02_MNU_BTN_MPG_M.sql` | 10,256 | 89 | `1b31e7ee24` |  |
+| `C_WIRING/03_PROC_M.sql` | 48,297 | 383 | `8b6db220fc` |  |
+| `_README.md` | 3,851 | 72 | `67f1aea2b6` |  |
+| `_meta/ALL_ERRORS.txt` | 466 | 9 | `8cf5d9f4e1` |  |
+| `_meta/OBJECT_LIST.md` | 3,030 | 24 | `d50c36f579` |  |

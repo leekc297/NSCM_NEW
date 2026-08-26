@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 
 import { apiClient } from '@foundation/apis';
+import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabLookupQueries } from '@shared/hooks';
 import { FormItem, InputField } from '@shared/lges';
@@ -8,8 +9,6 @@ import { Grid } from '@shared/mui';
 
 import { MENU_ID } from '../lookup.constants';
 import { initSearchParams, useLookupStore, type SearchParamProps } from '../useLookupStore';
-
-import styles from './LookupForm.module.scss';
 
 interface LookupFormProps {
   onSubmit: () => void;
@@ -64,11 +63,10 @@ export const LookupForm = ({ onSubmit }: LookupFormProps) => {
       isHidden={!isOpenSearchArea}
       conditions={
         <>
-          <Grid size={4}>
+          <Grid size={3}>
             <FormItem
               label={t('LBL00636', 'Lookup Type')}
               labelAlign='right'
-              labelSize='long'
               render={() => (
                 <InputField
                   fullWidth
@@ -76,14 +74,13 @@ export const LookupForm = ({ onSubmit }: LookupFormProps) => {
                   onChange={event => setSearchParams({ lookupType: event.target.value })}
                 />
               )}
-              className={styles.formItem}
+              className={commonStyles.formItem}
             />
           </Grid>
-          <Grid size={4}>
+          <Grid size={3}>
             <FormItem
               label={t('LBL00638', 'System')}
               labelAlign='right'
-              labelSize='long'
               render={() => (
                 <CustomDropdown
                   isInput={false}
@@ -100,14 +97,13 @@ export const LookupForm = ({ onSubmit }: LookupFormProps) => {
                   }}
                 />
               )}
-              className={styles.formItem}
+              className={commonStyles.formItem}
             />
           </Grid>
-          <Grid size={4}>
+          <Grid size={3}>
             <FormItem
               label={t('LBL00007', 'Active')}
               labelAlign='right'
-              labelSize='long'
               render={() => (
                 <CustomDropdown
                   isInput={false}
@@ -124,7 +120,7 @@ export const LookupForm = ({ onSubmit }: LookupFormProps) => {
                   }}
                 />
               )}
-              className={styles.formItem}
+              className={commonStyles.formItem}
             />
           </Grid>
         </>

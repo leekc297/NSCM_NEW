@@ -1,0 +1,184 @@
+{
+ "by_type": {
+  "CELL_CONTROL_OBJECT_TYPE_CODE": [
+   "FPComboBox",
+   "FPButton",
+   "FPNumber",
+   "FPNumberText",
+   "FPExNum",
+   "FPPercent",
+   "FPDate",
+   "FPDateTime",
+   "FPDateText",
+   "FPDateMonth",
+   "FPMultiLineTextBox",
+   "FPCheckBox",
+   "FPTextBox"
+  ],
+  "DATA_SORT_METHOD": [
+   "ASC",
+   "DESC"
+  ],
+  "HORIZONTAL_ALIGN_CODE": [
+   "C",
+   "R",
+   "L"
+  ]
+ },
+ "meta": {
+  "owner": "SCM_MGR",
+  "snapshot": "2026-08-21"
+ },
+ "row_counts": {
+  "SCM_ADM_LOOKUP_MASTER": 614,
+  "SCM_ADM_LOOKUP_MASTER_DETAIL": 64500,
+  "SCM_ADM_LOOKUP_MASTER_DETAIL_H": 10,
+  "SCM_CODE_LOOKUP_VALUE": 885
+ },
+ "rows": [
+  {
+   "DISPLAY_SEQ": 1,
+   "LOOKUP_TYPE": "CELL_CONTROL_OBJECT_TYPE_CODE",
+   "SEGMENT1": "FPComboBox",
+   "SEGMENT2": "FPComboBox",
+   "SEGMENT3": "-",
+   "VALID_YN": "Y"
+  },
+  {
+   "DISPLAY_SEQ": 2,
+   "LOOKUP_TYPE": "CELL_CONTROL_OBJECT_TYPE_CODE",
+   "SEGMENT1": "FPButton",
+   "SEGMENT2": "FPButton",
+   "SEGMENT3": "-",
+   "VALID_YN": "Y"
+  },
+  {
+   "DISPLAY_SEQ": 3,
+   "LOOKUP_TYPE": "CELL_CONTROL_OBJECT_TYPE_CODE",
+   "SEGMENT1": "FPNumber",
+   "SEGMENT2": "FPNumber",
+   "SEGMENT3": "-",
+   "VALID_YN": "Y"
+  },
+  {
+   "DISPLAY_SEQ": 4,
+   "LOOKUP_TYPE": "CELL_CONTROL_OBJECT_TYPE_CODE",
+   "SEGMENT1": "FPNumberText",
+   "SEGMENT2": "FPNumberText",
+   "SEGMENT3": "-",
+   "VALID_YN": "Y"
+  },
+  {
+   "DISPLAY_SEQ": 5,
+   "LOOKUP_TYPE": "CELL_CONTROL_OBJECT_TYPE_CODE",
+   "SEGMENT1": "FPExNum",
+   "SEGMENT2": "FPExNum",
+   "SEGMENT3": "-",
+   "VALID_YN": "Y"
+  },
+  {
+   "DISPLAY_SEQ": 6,
+   "LOOKUP_TYPE": "CELL_CONTROL_OBJECT_TYPE_CODE",
+   "SEGMENT1": "FPPercent",
+   "SEGMENT2": "FPPercent",
+   "SEGMENT3": "-",
+   "VALID_YN": "Y"
+  },
+  {
+   "DISPLAY_SEQ": 7,
+   "LOOKUP_TYPE": "CELL_CONTROL_OBJECT_TYPE_CODE",
+   "SEGMENT1": "FPDate",
+   "SEGMENT2": "FPDate",
+   "SEGMENT3": "-",
+   "VALID_YN": "Y"
+  },
+  {
+   "DISPLAY_SEQ": 8,
+   "LOOKUP_TYPE": "CELL_CONTROL_OBJECT_TYPE_CODE",
+   "SEGMENT1": "FPDateTime",
+   "SEGMENT2": "FPDateTime",
+   "SEGMENT3": "-",
+   "VALID_YN": "Y"
+  },
+  {
+   "DISPLAY_SEQ": 9,
+   "LOOKUP_TYPE": "CELL_CONTROL_OBJECT_TYPE_CODE",
+   "SEGMENT1": "FPDateText",
+   "SEGMENT2": "FPDateText",
+   "SEGMENT3": "-",
+   "VALID_YN": "Y"
+  },
+  {
+   "DISPLAY_SEQ": 10,
+   "LOOKUP_TYPE": "CELL_CONTROL_OBJECT_TYPE_CODE",
+   "SEGMENT1": "FPDateMonth",
+   "SEGMENT2": "FPDateMonth",
+   "SEGMENT3": "-",
+   "VALID_YN": "Y"
+  },
+  {
+   "DISPLAY_SEQ": 11,
+   "LOOKUP_TYPE": "CELL_CONTROL_OBJECT_TYPE_CODE",
+   "SEGMENT1": "FPMultiLineTextBox",
+   "SEGMENT2": "FPMultiLineTextBox",
+   "SEGMENT3": "-",
+   "VALID_YN": "Y"
+  },
+  {
+   "DISPLAY_SEQ": 12,
+   "LOOKUP_TYPE": "CELL_CONTROL_OBJECT_TYPE_CODE",
+   "SEGMENT1": "FPCheckBox",
+   "SEGMENT2": "FPCheckBox",
+   "SEGMENT3": "-",
+   "VALID_YN": "Y"
+  },
+  {
+   "DISPLAY_SEQ": 13,
+   "LOOKUP_TYPE": "CELL_CONTROL_OBJECT_TYPE_CODE",
+   "SEGMENT1": "FPTextBox",
+   "SEGMENT2": "FPTextBox",
+   "SEGMENT3": "-",
+   "VALID_YN": "Y"
+  },
+  {
+   "DISPLAY_SEQ": 1,
+   "LOOKUP_TYPE": "DATA_SORT_METHOD",
+   "SEGMENT1": "ASC",
+   "SEGMENT2": "ASC",
+   "SEGMENT3": "-",
+   "VALID_YN": "Y"
+  },
+  {
+   "DISPLAY_SEQ": 2,
+   "LOOKUP_TYPE": "DATA_SORT_METHOD",
+   "SEGMENT1": "DESC",
+   "SEGMENT2": "DESC",
+   "SEGMENT3": "-",
+   "VALID_YN": "Y"
+  },
+  {
+   "DISPLAY_SEQ": 1,
+   "LOOKUP_TYPE": "HORIZONTAL_ALIGN_CODE",
+   "SEGMENT1": "C",
+   "SEGMENT2": "Center",
+   "SEGMENT3": "-",
+   "VALID_YN": "Y"
+  },
+  {
+   "DISPLAY_SEQ": 2,
+   "LOOKUP_TYPE": "HORIZONTAL_ALIGN_CODE",
+   "SEGMENT1": "R",
+   "SEGMENT2": "Right",
+   "SEGMENT3": "-",
+   "VALID_YN": "Y"
+  },
+  {
+   "DISPLAY_SEQ": 3,
+   "LOOKUP_TYPE": "HORIZONTAL_ALIGN_CODE",
+   "SEGMENT1": "L",
+   "SEGMENT2": "Left",
+   "SEGMENT3": "-",
+   "VALID_YN": "Y"
+  }
+ ]
+}

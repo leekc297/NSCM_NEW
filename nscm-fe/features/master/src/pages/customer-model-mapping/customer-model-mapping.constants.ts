@@ -34,6 +34,9 @@ export const DIVISION_NO_PROJECT = '40';
 /** Division 필드 바인딩. */
 export const DIVISION_BINDING = 'DIVISION_ID';
 
+/** Team 필드 바인딩. 신규행 후보 콤보 배선은 customer-model-mapping.gridCombos.ts 참조. */
+export const TEAM_BINDING = 'DEPT_ID';
+
 /**
  * 컬럼 메타 Param1(SCM_MST_SHEET_COLUMNS.ATTRIBUTE1) 의 허용 Division 목록 판정.
  *
@@ -84,3 +87,18 @@ export const getConvertQtyEditable = (itemClassName?: string): ConvertQtyEditabl
   }
   return { pack: true, module: true, cell: true };
 };
+
+/**
+ * 조회조건 cascade 콤보 ID — Div / Team / End Customer / Sales Site 를 조인한 평면 콤보 1건.
+ *
+ * 종전에는 단계마다 콤보를 따로 조회했다(MyDivision / TeambyDivision / EndCustomer / SalesSite).
+ * 콤보마다 스키마가 달라 화면이 cascade 컬럼을 배선했고, 상위 컬럼이 공란인 행을 자를지
+ * (strict) 도 콤보마다 달라 화면이 판단해야 했다. 조인 1건으로 바꾸면 모든 행에 모든 단계가
+ * 차 있어 그 분기가 전부 사라진다. DMF0005 sales-site-project-model 과 같은 콤보를 쓴다.
+ *
+ * 콤보 SQL 컬럼 규약은 CascadeFields 헤더 주석 참조 —
+ *   단계 순서와 무관하게 풀네임 컬럼(DIVISION_CODE / TEAM_CODE / END_CUSTOMER_CODE / SALES_SITE_CODE ...).
+ *
+ * 주의: 아래 값은 SCM_ADM_CMBO_SQL_M 등록명이 확정되면 그 이름으로 바꾼다.
+ */
+export const SEARCH_CASCADE_COMBO_ID = 'SalesSite';

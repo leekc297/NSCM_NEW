@@ -8,17 +8,23 @@ import { useQueryClient } from '@foundation/query-client';
 import type { EditTracker } from '@foundation/utils';
 import { MainTitle, SubTitle } from '@shared/components';
 import { useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
-import { useMessageStore, useSessionStore } from '@shared/stores';
+import { useDirtyReset, useMessageStore, useSessionStore } from '@shared/stores';
 
 import { SalesPlanForm } from './components/SalesPlanForm';
 import { SalesPlanGrid } from './components/SalesPlanGrid';
 import { type SalesPlanModalKey, SalesPlanModals } from './components/SalesPlanModals';
 import { BUCKET_TYPE, INSERT_ROW_DEFAULTS, MENU_ID, MSG, SHEETS } from './sales-plan.constants';
 import type { MeasureInfoRow, SalesPlanRow, SpreadTitleRow } from './sales-plan.types';
-import styles from './SalesPlan.module.scss';
 import { useSalesPlanStore } from './useSalesPlanStore';
-import { callSaveSalesPlan } from './utils/sales-plan.api';
+import { callSaveSalesPlan, formatSaveErrorText } from './utils/sales-plan.api';
 import { resolveSalesPlanAuthGroup } from './utils/sales-plan.auth';
+import {
+  findGroupTopIndex,
+  type GroupKeyColumn,
+  groupKeyBindings,
+  mergeInsertedRows,
+  type PendingInsert,
+} from './utils/sales-plan.insertAnchor';
 import { buildSavePayload, buildUnfoldRows } from './utils/sales-plan.save';
 import { useSalesPlanValidation } from './utils/sales-plan.validate';
 
@@ -137,8 +143,18 @@ export const SalesPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [comboReady, authGroup, userDeptId]);
 
-  // 신규 행 추적 (CRUD_TYPE='I')
-  const [insertedRows, setInsertedRows] = useState<SalesPlanRow[]>([]);
+  // 신규 행 추적 (CRUD_TYPE='I') — 행 + 표시 위치를 정하는 앵커(머지 블록 첫 행) 쌍.
+  //   배열 순서 = 누른 순서. 같은 앵커에 여러 건이 걸리면 누른 순서대로 위에서 아래로 쌓인다.
+  const [insertedRows, setInsertedRows] = useState<PendingInsert[]>([]);
+  // 저장/검증/모달 등 "행" 만 필요한 곳의 입력 — 앵커는 화면 표시 전용이라 payload 에 나가지 않는다.
+  const insertRowList = useMemo<SalesPlanRow[]>(() => insertedRows.map(p => p.row), [insertedRows]);
+  // Insert 직후 포커스를 옮길 신규행 — rows 재계산 후 effect 가 소비하고 비운다.
+  const focusRowRef = useRef<SalesPlanRow | null>(null);
+
+  // 이탈 가드(조회·탭 닫기·팝업 닫기) 확인 시 화면이 들고 있는 신규행 state 도 함께 버린다.
+  //   그리드 되돌리기는 DataGrid 가 자동 등록하지만, 그것은 itemsSource 배열에서 'I' 행을 지울 뿐이라
+  //   insertedRows 가 살아 있으면 다음 렌더의 rows useMemo 가 버린 행을 그대로 되살린다.
+  useDirtyReset(() => setInsertedRows([]));
 
   // ⭐ MAIN 커서 2/3 (calendar 기준일 / editAuth 편집권한) 을 store 에 보관 — editLock cutoff·Insert 게이트.
   type Cal = NonNullable<typeof calendarInfo>;
@@ -193,25 +209,21 @@ export const SalesPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
   // F5 Search — AS-IS FindData(L1450~1632) 1:1 검증(V-S1~S3) 후 조회.
   //   ⚠️ refetch?.() 직접 호출 금지 — stale closure filters 로 첫 호출 NULL payload 사고
   //   (memory feedback_search_refetch_stale_closure). setFilter(queryKey 변경) + enabled 만으로 fetch.
-  const handleSearch = async () => {
+  //   [공통 C2 2026-08-14 정정] 수정 중 재조회 가드(확인 팝업)는 여기서 하지 않는다. 조회 진입점
+  //   두 곳(SearchArea 조회 버튼 · SubTitle F5)이 이미 공통 가드 confirmIfDirtyKey(..., 'search') 로
+  //   감싸 confirm + 편집분 되돌리기까지 수행한다. 화면이 같은 검사를 한 번 더 하면 팝업이 2연속으로
+  //   뜬다 — 공통 가드가 확인 직후 그리드만 되돌리고 화면 state(insertedRows)는 남기기 때문에 여기
+  //   검사가 다시 걸린다(2번째 팝업은 MSG00703 = 닫기 문구라 "이 화면을 닫으시겠습니까?" 로 뜬다).
+  //   화면 state 정리는 위 useDirtyReset 등록이 담당한다 (DMF0082 ForecastPrice 선례 1:1).
+  const handleSearch = () => {
     if (blockIfWorking()) return;
-    // [공통 C2 2026-08-12] 수정 중 재조회 가드 — 통합테스트 1st Common "수정 중인 데이터가 있습니다.
-    //   새로 조회하시겠습니까?"(MSG00703). 미가드 시 setInsertedRows([]) 가 변경분을 조용히 폐기
-    //   (DMF0082 ForecastPrice 공통 C2 선례 1:1).
-    if (hasPendingChanges()) {
-      const proceed = await setAlert({
-        type: 'confirm',
-        content: t('MSG00703', '_There are unsaved changes. Search again?'),
-      });
-      if (!proceed) return;
-    }
     const vr = validation.validateFind(sc);
     if (!vr.ok) {
       // V-S3 — 3년 초과 시 종료일 = 시작일+3년 보정 (AS-IS L1481 Value2 보정 후 차단)
       if (vr.adjustedEnd) setSearchCondition({ endYyyymmdd: vr.adjustedEnd });
       return;
     }
-    void setToast({ message: t('LBL00665', '_Loading...'), type: 'default', duration: 2000 });
+    // void setToast({ message: t('LBL00665', '_Loading...'), type: 'default', duration: 2000 });
     setInsertedRows([]);
     editTrackerRef.current?.clearChanges();
     setHasSearched(true);
@@ -248,6 +260,42 @@ export const SalesPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
     void fetchStaticMeasures();
   };
 
+  /**
+   * 선택한 셀이 속한 머지 블록의 첫 행 — Insert 앵커. (DMF0082 groupTopRowOf 이식)
+   *
+   * 판정 입력은 그리드가 실제로 그리고 있는 것에서 뽑는다: 표시 순서(개인화로 바뀐다) · 표시 여부 ·
+   * 필터/정렬이 반영된 행 순서(`g.rows`). 조회 응답 배열(spRows)이 아니다 — 사용자가 본 화면상의
+   * 블록과 어긋나면 안 된다.
+   *
+   * 범위 축 = 선택한 컬럼(`g.selection.col`). Sales Site 셀은 그 안의 여러 Model 블록을, Model 셀은
+   *   그 안의 Incoterms 블록을, Incoterms 셀은 measure 블록만 덮는다. 축은 groupKeyBindings 에
+   *   인덱스 그대로 넘긴다 (binding 이름 역탐색 금지 — 표시/비표시 목록을 따로 만드는 순간 인덱스가
+   *   밀려 조용히 폴백으로 떨어진다).
+   *
+   * 금지: wijmo 컬렉션(`g.columns`/`g.rows`)에 `.map`/`.filter` 를 쓰지 말 것 — Array 상속이라
+   *   species 규약(`new ObservableArray(length)`)으로 새 ObservableArray 를 만들며 결과가 깨진다.
+   *   인덱스 루프로 순수 배열에 복사한 뒤 다룬다.
+   */
+  const groupTopRowOf = (index: number): SalesPlanRow | null => {
+    const g = gridRef.current;
+    if (!g || index < 0) return null;
+
+    const columns: GroupKeyColumn[] = [];
+    for (let i = 0; i < g.columns.length; i++) {
+      const column = g.columns[i];
+      // visible 미지정(undefined)은 표시로 본다 — 잘못 빼면 축이 통째로 폴백된다.
+      columns.push({ binding: column?.binding ?? '', visible: column?.visible !== false });
+    }
+    const gridRowItems: (SalesPlanRow | undefined)[] = [];
+    for (let i = 0; i < g.rows.length; i++) {
+      gridRowItems.push(g.rows[i]?.dataItem as SalesPlanRow | undefined);
+    }
+
+    const keyBindings = groupKeyBindings(columns, g.selection.col);
+    const top = findGroupTopIndex(gridRowItems, index, keyBindings);
+    return (g.rows[top]?.dataItem as SalesPlanRow | undefined) ?? null;
+  };
+
   // F8 Insert — AS-IS InsertRow(L2831~3382) 1:1.
   //   권한 게이트: EDIT_AUTH_SALESAMT_LOC='Y'(기타매출 편집권한자)만 — 무권한 silent 무시(L2854).
   //   기본값: MEASURE=SalesAmt_LOC(L2926) + FCST_TYPE=ETC 고정(L2944). Daily 버킷 = 편집 불가(MSG00361).
@@ -267,10 +315,16 @@ export const SalesPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
       DIVISION_ID: sc.divisionId,
       ...INSERT_ROW_DEFAULTS,
     };
-    setInsertedRows(prev => [newRow, ...prev]);
-    // [공통 C1 2026-08-12] 필터링 상태에서 Insert 시 신규행이 그리드 필터에 걸려 화면에 안 보이는
-    //   문제(통합테스트 1st Common) — 활성 필터를 해제해 추가된 행이 즉시 보이게 한다 (DMF0082 선례 1:1).
-    gridFilterRef.current?.clear();
+    // 앵커 = 선택한 셀이 속한 머지 블록의 첫 행 — 그 바로 위에 놓는다 (앵커 null = 그리드 맨 위).
+    //   [통합테스트 35번] 앵커가 포커스 행 자체면 그룹 중간(measure 2~3번째)을 찍었을 때 신규행이
+    //   measure 사이에 낀다. 요구는 "data Group 제일 위로 / 선택한 값의 병합한 데이터 위로".
+    //   배열 끝에 붙여 누른 순서를 유지한다 — 같은 앵커에 연속 Insert 시 누른 순서대로 쌓인다.
+    const anchorRow = groupTopRowOf(gridRef.current?.selection.row ?? -1);
+    setInsertedRows(prev => [...prev, { row: newRow, anchor: anchorRow }]);
+    focusRowRef.current = newRow;
+    // 필터를 걸어 둔 채 Insert 해도 필터는 유지한다. 신규행이 필터 조건에 걸려 숨는 문제는
+    //   SalesPlanGrid 의 keepRowVisibleUnderFilter 재등록이 담당한다 (DMF0020 배선 1:1).
+    //   금지: 여기서 gridFilter.clear() 를 부르지 말 것 — 사용자가 건 필터가 통째로 풀린다.
   };
 
   // F9 Delete — AS-IS DeleteButton(L673~679) 1:1 — Action='I'(신규 삽입행)만 즉시 제거.
@@ -279,16 +333,42 @@ export const SalesPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
     if (isPending) return;
     const g = gridRef.current;
     if (!g) return;
-    const sel = g.selectedItems[0] as SalesPlanRow | undefined;
-    if (!sel || sel.CRUD_TYPE !== 'I') return; // silent (AS-IS L675 — I 행 외 무동작)
-    const gid = sel.INSERT_GROUP_ID;
-    if (gid) setInsertedRows(prev => prev.filter(r => r.INSERT_GROUP_ID !== gid));
-    else setInsertedRows(prev => prev.filter(r => r !== sel));
+    // ⚠ 드래그 다중 선택 — `selectedItems[0]` 만 보면 **마지막 포커스 행 하나만** 지워진다
+    //   (2026-08-22 리포트). 선택된 행 전부를 대상으로 삼는다.
+    const selected = (g.selectedItems ?? []) as SalesPlanRow[];
+    const insertSel = selected.filter(r => r.CRUD_TYPE === 'I'); // 조회행은 무동작 (AS-IS L675)
+    if (insertSel.length === 0) return; // silent (AS-IS L675 — I 행 외 무동작)
+    const gids = new Set(
+      insertSel.map(r => r.INSERT_GROUP_ID).filter((v): v is string => Boolean(v))
+    );
+    const singles = new Set(insertSel.filter(r => !r.INSERT_GROUP_ID));
+    // 삭제 대상이 다른 신규행의 앵커였다면 그 앵커를 삭제 행의 앵커로 승계시킨다.
+    //   (승계하지 않으면 앵커 유실로 딸린 행들이 그리드 맨 위로 튄다.)
+    setInsertedRows(prev => {
+      const isRemoved = (p: PendingInsert) =>
+        (!!p.row.INSERT_GROUP_ID && gids.has(p.row.INSERT_GROUP_ID)) || singles.has(p.row);
+      const inherited = new Map<SalesPlanRow, SalesPlanRow | null>();
+      prev.filter(isRemoved).forEach(p => inherited.set(p.row, p.anchor));
+      if (inherited.size === 0) return prev;
+      // 승계 대상이 또 삭제된 행이면 살아 있는 앵커가 나올 때까지 타고 올라간다(순환 가드 포함).
+      const resolve = (anchor: SalesPlanRow | null): SalesPlanRow | null => {
+        const seen = new Set<SalesPlanRow>();
+        let cur = anchor;
+        while (cur && inherited.has(cur) && !seen.has(cur)) {
+          seen.add(cur);
+          cur = inherited.get(cur) ?? null;
+        }
+        return cur;
+      };
+      return prev
+        .filter(p => !isRemoved(p))
+        .map(p => (p.anchor && inherited.has(p.anchor) ? { ...p, anchor: resolve(p.anchor) } : p));
+    });
   };
 
   // F7 Save — AS-IS SaveData(L1922~2828) 1:1. ⚠ 저장확인 없음 — 즉시 저장 (MSG00012 부재, 사용자 확정).
   //   검증(V-V1 필수 13종) → 18키 '^' bulk 조립(Catch_Up 음수/라인 변경 0건 조립 검증) →
-  //   apiClient.post 직접 → 결과 'messageCode^addmessage' 분해 → 성공 MSG00002 + 재조회(스크롤 복원).
+  //   apiClient.post 직접 → 결과 '^' 토큰 분해(MSG 코드 추출) → 성공 MSG00002 + 재조회(스크롤 복원).
   const handleSave = async () => {
     if (blockIfWorking()) return;
     const savedScroll = gridRef.current?.scrollPosition ?? null;
@@ -303,7 +383,7 @@ export const SalesPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
 
     // (0) 변경 0건 + 필수 13종 division×measure 분기 (MSG00004 / MSG00429 {0})
     const vr = validation.validateSaveRows(
-      [...insertedRows, ...editedRows],
+      [...insertRowList, ...editedRows],
       sc.divisionId,
       staticColumns
     );
@@ -311,7 +391,7 @@ export const SalesPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
 
     // (1) (행 × 변경 기간셀) unfold — 활성 버킷 셀만, 빈값→'0'→'D', Catch_Up 음수/라인 무변경 검증
     const build = buildUnfoldRows({
-      insertedRows,
+      insertedRows: insertRowList,
       editedChanges: changedMap,
       divisionId: sc.divisionId,
       bucketType: sc.bucketType,
@@ -334,14 +414,16 @@ export const SalesPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
       return;
     }
 
-    void setToast({ message: t('LBL00665', '_Loading...'), type: 'default', duration: 3000 });
+    // void setToast({ message: t('LBL00665', '_Loading...'), type: 'default', duration: 3000 });
     setIsPending(true);
     try {
       const res = await callSaveSalesPlan(payload);
       if (!res.ok) {
-        // SP 반환 'messageCode^addmessage' — 코드는 MSG_M 변환, 추가 메시지는 원문 병기 (AS-IS L2776~2788)
+        // SP 반환 '^' 토큰 처리 — AS-IS L2776~2788 [E20250520-000572] 1:1.
+        //   코드 검출: MSG_M 다국어 변환 후 '^' 뒤 토큰을 {0} 자리에 치환 (formatSaveErrorText).
+        //   코드 미검출: SP 오류문 원문을 그대로 띄운다 (AS-IS else 분기 MessageBox.Show 대응).
         const reason = res.msgCode
-          ? `${t(res.msgCode, res.msgCode)}${res.addMessage ? `\n${res.addMessage}` : ''}`
+          ? formatSaveErrorText(t(res.msgCode, res.msgCode), res.addMessage, res.msgCode)
           : res.addMessage || t(MSG.SAVE_ERROR, '_저장 중 오류가 발생했습니다.');
         void setAlert({ type: 'alert', content: reason });
         return;
@@ -413,10 +495,42 @@ export const SalesPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
   const spRows = useMemo<SalesPlanRow[]>(() => mainData?.data ?? [], [mainData]);
   // ⭐ measure 행 필터는 서버(TITLESET 'M') 단일 출처 — 모달 OK 의 saveTitleSet('M') + invalidate 재조회로
   //   반영 (클라이언트 measure 행 필터 금지 — DMF0003 종속 메저 잘림 사고 계보).
-  const rows: SalesPlanRow[] = useMemo(() => [...insertedRows, ...spRows], [insertedRows, spRows]);
+  // 조회행 + 신규행 병합 — 신규행은 앵커(= 선택 셀이 속한 머지 블록의 첫 행) 바로 위에 놓는다.
+  //   앵커가 사라진 경우(재조회로 객체 참조 교체 등)는 맨 위로 폴백 — 행이 증발하지 않게 한다.
+  const rows: SalesPlanRow[] = useMemo(
+    () => mergeInsertedRows(spRows, insertedRows),
+    [insertedRows, spRows]
+  );
+
+  // Insert 직후 새 행으로 포커스·스크롤 이동 — 신규행이 그리드 중간(선택 블록 맨 위)에 생기므로
+  //   이동이 없으면 사용자가 새 행을 찾아 스크롤해야 한다.
+  //   필수: 실패 시 다음 프레임에 한 번 더 시도한다. itemsSource 가 바뀌면 wijmo 는 스크롤을 0 으로
+  //   되돌리는데, 이 시점에 grid.rows 가 아직 새 배열을 반영하지 않았으면 findIndex 가 -1 이라 그대로
+  //   빠져나가 화면이 맨 위에 머문다. 재시도 후에도 못 찾으면 조용히 포기(다음 Insert 에 영향 없음).
+  useEffect(() => {
+    const target = focusRowRef.current;
+    if (!target) return;
+    const grid = gridRef.current;
+    if (!grid) return;
+    const focusTarget = (): boolean => {
+      const rowIndex = grid.rows.findIndex(r => r.dataItem === target);
+      if (rowIndex < 0) return false;
+      grid.select(rowIndex, Math.max(0, grid.selection.col));
+      grid.scrollIntoView(rowIndex, -1);
+      return true;
+    };
+    if (focusTarget()) {
+      focusRowRef.current = null;
+      return;
+    }
+    const frame = window.requestAnimationFrame(() => {
+      if (focusTarget()) focusRowRef.current = null;
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [rows]);
 
   return (
-    <div className={styles.container}>
+    <>
       <MainTitle
         title={title}
         menuId={MENU_ID}
@@ -489,13 +603,26 @@ export const SalesPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
         applyToInsertRow={patch => {
           const popupGroupId = popupRow?.INSERT_GROUP_ID;
           if (!popupGroupId) return;
-          setInsertedRows(prev =>
-            prev.map(r => (r.INSERT_GROUP_ID === popupGroupId ? { ...r, ...patch } : r))
-          );
+          // 셀 팝업 반영은 행 객체를 새로 만든다 — 그 행을 앵커로 잡고 있던 다른 신규행의 참조도
+          //   같이 갈아끼워야 한다. 안 그러면 앵커 유실로 딸린 행이 그리드 맨 위로 튄다.
+          setInsertedRows(prev => {
+            const replaced = new Map<SalesPlanRow, SalesPlanRow>();
+            const next = prev.map(p => {
+              if (p.row.INSERT_GROUP_ID !== popupGroupId) return p;
+              const row: SalesPlanRow = { ...p.row, ...patch };
+              replaced.set(p.row, row);
+              return { ...p, row };
+            });
+            if (replaced.size === 0) return prev;
+            return next.map(p => {
+              const swapped = p.anchor ? replaced.get(p.anchor) : undefined;
+              return swapped ? { ...p, anchor: swapped } : p;
+            });
+          });
           setPopupRow(null);
         }}
         onSettingChanged={clearGridOnSettingChange}
       />
-    </div>
+    </>
   );
 };

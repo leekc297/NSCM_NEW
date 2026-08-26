@@ -1,0 +1,233 @@
+=== DBMS_XPLAN.DISPLAY_CURSOR (ALL) ===
+SQL_ID  g0w0gvnn7rkb2, child number 0
+-------------------------------------
+INSERT INTO SCM_MGR.GT_DM35_RAW_DATA (VERSION_NO, CUTOFF_YYYYMMDD, 
+DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, PLANT_SITE_ID, ITEM_ID , 
+INCOTERMS, DOM_EXP, FCST_TYPE, MEASURE, MEASURE_GROUP, YYYYMMDD, QTY, 
+PLAN_RESULT, GUBUN, CREATE_DATE , LAST_UPDATED_BY, SENDER_CODE, 
+SENDER_NAME , AS_FROM_SITE, CELL_PROD_SITE_ID ) SELECT CASE WHEN :B1 = 
+'82' THEN E.VERSION_NO_W ELSE A.VERSION_NO END AS VERSION_NO , 
+A.CUTOFF_YYYYMMDD , A.DIVISION_ID , A.PROJECT_CODE , A.SCM_SITE_ID , 
+A.PLANT_SITE_ID , A.ITEM_ID , A.INCOTERMS , A.DOM_EXP , A.FCST_TYPE , 
+A.MEASURE , CASE WHEN A.DIVISION_ID = '40' AND B.MEASURE_GROUP IS NULL 
+THEN 'MKT_FCST_RP' WHEN A.DIVISION_ID = '40' THEN B.MEASURE_GROUP ELSE 
+'' END AS MEASURE_GROUP , A.YYYYMMDD , A.QTY , 'P', 3 , (CASE WHEN 
+A.MEASURE IN ('CUST_FCST', 'CUST_FCST_EDI', 'Immidiate', 
+'Planning_Forecast', 'Commercial_Agreement', 'Firm_Temp', 
+'Manumacturing_Material_Temp', 'Material_Temp', 'Backorder') THEN 
+(SELECT MAX(LS.CREATE_DATE) FROM SCM_MGR.GT_DM35_T_LAST_SETUP_C LS WHER
+ 
+Plan hash value: 775761278
+ 
+--------------------------------------------------------------------------------------------------------------------------------------
+| Id  | Operation                 | Name                         | E-Rows |E-Bytes| Cost (%CPU)| E-Time   |  OMem |  1Mem | Used-Mem |
+--------------------------------------------------------------------------------------------------------------------------------------
+|   0 | INSERT STATEMENT          |                              |        |       |   297K(100)|          |       |       |          |
+|   1 |  LOAD TABLE CONVENTIONAL  | GT_DM35_RAW_DATA             |        |       |            |          |       |       |          |
+|   2 |   SORT AGGREGATE          |                              |      1 |   862 |            |          |       |       |          |
+|*  3 |    TABLE ACCESS FULL      | GT_DM35_T_LAST_SETUP_C       |      1 |   862 |    12   (0)| 00:00:01 |       |       |          |
+|   4 |   SORT AGGREGATE          |                              |      1 |   862 |            |          |       |       |          |
+|*  5 |    TABLE ACCESS FULL      | GT_DM35_T_LAST_SETUP_C       |      1 |   862 |    12   (0)| 00:00:01 |       |       |          |
+|   6 |   SORT AGGREGATE          |                              |      1 |   862 |            |          |       |       |          |
+|*  7 |    TABLE ACCESS FULL      | GT_DM35_T_LAST_SETUP_C       |      1 |   862 |    12   (0)| 00:00:01 |       |       |          |
+|*  8 |   TABLE ACCESS FULL       | GT_DM35_T_LAST_SETUP_C       |      1 |   862 |    12   (0)| 00:00:01 |       |       |          |
+|   9 |   SORT AGGREGATE          |                              |      1 |   604 |            |          |       |       |          |
+|* 10 |    TABLE ACCESS FULL      | GT_DM35_EDI_SENDER           |      2 |  1208 |     2   (0)| 00:00:01 |       |       |          |
+|  11 |   SORT AGGREGATE          |                              |      1 |  1464 |            |          |       |       |          |
+|* 12 |    FILTER                 |                              |        |       |            |          |       |       |          |
+|* 13 |     TABLE ACCESS FULL     | GT_DM35_T_LAST_SETUP_C       |      1 |  1464 |    12   (0)| 00:00:01 |       |       |          |
+|  14 |     SORT AGGREGATE        |                              |      1 |   862 |            |          |       |       |          |
+|* 15 |      TABLE ACCESS FULL    | GT_DM35_T_LAST_SETUP_C       |      1 |   862 |    12   (0)| 00:00:01 |       |       |          |
+|* 16 |   TABLE ACCESS FULL       | GT_DM35_T_LAST_SETUP_C       |      1 |  1446 |    12   (0)| 00:00:01 |       |       |          |
+|  17 |   SORT AGGREGATE          |                              |      1 |   264 |            |          |       |       |          |
+|* 18 |    TABLE ACCESS FULL      | GT_DM35_EDI_SENDER           |      2 |   528 |     2   (0)| 00:00:01 |       |       |          |
+|  19 |   SORT AGGREGATE          |                              |      1 |   604 |            |          |       |       |          |
+|* 20 |    TABLE ACCESS FULL      | GT_DM35_EDI_SENDER           |      2 |  1208 |     2   (0)| 00:00:01 |       |       |          |
+|* 21 |   FILTER                  |                              |        |       |            |          |       |       |          |
+|* 22 |    HASH JOIN              |                              |   2052 |    10M|   123K  (1)| 00:00:05 |  1376K|  1376K| 1585K (0)|
+|* 23 |     INDEX FAST FULL SCAN  | IDX04_SCM_MST_SITE           |   1216 | 26752 |    15   (0)| 00:00:01 |       |       |          |
+|* 24 |     HASH JOIN             |                              |   2041 |    10M|   123K  (1)| 00:00:05 |   924K|   924K| 1134K (0)|
+|  25 |      JOIN FILTER CREATE   | :BF0000                      |     14 |  8764 |     4   (0)| 00:00:01 |       |       |          |
+|  26 |       MERGE JOIN CARTESIAN|                              |     14 |  8764 |     4   (0)| 00:00:01 |       |       |          |
+|* 27 |        TABLE ACCESS FULL  | GT_DM35_VERSION              |      1 |   222 |     2   (0)| 00:00:01 |       |       |          |
+|  28 |        BUFFER SORT        |                              |     14 |  5656 |     2   (0)| 00:00:01 | 73728 | 73728 |          |
+|* 29 |         TABLE ACCESS FULL | GT_DM35_SEL_MEASURE          |     14 |  5656 |     2   (0)| 00:00:01 |       |       |          |
+|  30 |      VIEW                 |                              |   4816K|    21G|   123K  (1)| 00:00:05 |       |       |          |
+|  31 |       UNION-ALL           |                              |   4816K|   676M|            |          |       |       |          |
+|* 32 |        FILTER             |                              |        |       |            |          |       |       |          |
+|  33 |         JOIN FILTER USE   | :BF0000                      |   2477K|   297M| 78589   (1)| 00:00:04 |       |       |          |
+|* 34 |          TABLE ACCESS FULL| DM_PLN_MKT_FCST_C            |   2477K|   297M| 78589   (1)| 00:00:04 |       |       |          |
+|* 35 |        FILTER             |                              |        |       |            |          |       |       |          |
+|  36 |         JOIN FILTER USE   | :BF0000                      |   2338K|   379M| 44740   (1)| 00:00:02 |       |       |          |
+|* 37 |          TABLE ACCESS FULL| DM_PLN_CFM_MKT_DEMAND_PLAN_C |   2338K|   379M| 44740   (1)| 00:00:02 |       |       |          |
+--------------------------------------------------------------------------------------------------------------------------------------
+ 
+Query Block Name / Object Alias (identified by operation id):
+-------------------------------------------------------------
+ 
+   1 - SEL$B43DDB7B
+   2 - SEL$7       
+   3 - SEL$7        / "LS"@"SEL$7"
+   4 - SEL$8       
+   5 - SEL$8        / "LS"@"SEL$8"
+   6 - SEL$9       
+   7 - SEL$9        / "LS"@"SEL$9"
+   8 - SEL$10       / "LS"@"SEL$10"
+   9 - SEL$11      
+  10 - SEL$11       / "ES"@"SEL$11"
+  11 - SEL$12      
+  13 - SEL$12       / "LS"@"SEL$12"
+  14 - SEL$13      
+  15 - SEL$13       / "LS2"@"SEL$13"
+  16 - SEL$14       / "LS"@"SEL$14"
+  17 - SEL$15      
+  18 - SEL$15       / "ES"@"SEL$15"
+  19 - SEL$16      
+  20 - SEL$16       / "ES"@"SEL$16"
+  23 - SEL$B43DDB7B / "C"@"SEL$4"
+  27 - SEL$B43DDB7B / "E"@"SEL$5"
+  29 - SEL$B43DDB7B / "B"@"SEL$1"
+  30 - SET$1        / "A"@"SEL$1"
+  31 - SET$1       
+  32 - SEL$2       
+  34 - SEL$2        / "F"@"SEL$2"
+  35 - SEL$3       
+  37 - SEL$3        / "F"@"SEL$3"
+ 
+Outline Data
+-------------
+ 
+  /*+
+      BEGIN_OUTLINE_DATA
+      IGNORE_OPTIM_EMBEDDED_HINTS
+      OPTIMIZER_FEATURES_ENABLE('23.1.0')
+      DB_VERSION('23.1.0')
+      ALL_ROWS
+      OUTLINE_LEAF(@"SEL$7")
+      OUTLINE_LEAF(@"SEL$8")
+      OUTLINE_LEAF(@"SEL$9")
+      OUTLINE_LEAF(@"SEL$10")
+      OUTLINE_LEAF(@"SEL$11")
+      OUTLINE_LEAF(@"SEL$13")
+      OUTLINE_LEAF(@"SEL$12")
+      OUTLINE_LEAF(@"SEL$14")
+      OUTLINE_LEAF(@"SEL$15")
+      OUTLINE_LEAF(@"SEL$16")
+      OUTLINE_LEAF(@"SEL$2")
+      OUTLINE_LEAF(@"SEL$3")
+      OUTLINE_LEAF(@"SET$1")
+      OUTLINE_LEAF(@"SEL$B43DDB7B")
+      MERGE(@"SEL$4EC83E35" >"SEL$6")
+      OUTLINE_LEAF(@"INS$1")
+      OUTLINE(@"SEL$6")
+      OUTLINE(@"SEL$4EC83E35")
+      MERGE(@"SEL$16C51A37" >"SEL$5")
+      OUTLINE(@"SEL$5")
+      OUTLINE(@"SEL$16C51A37")
+      MERGE(@"SEL$1" >"SEL$4")
+      OUTLINE(@"SEL$4")
+      OUTLINE(@"SEL$1")
+      LOAD_METHOD(@"INS$1" "GT_DM35_RAW_DATA"@"INS$1" CONVENTIONAL)
+      LOAD_TYPE(@"INS$1" "GT_DM35_RAW_DATA"@"INS$1" SERIAL)
+      FULL(@"INS$1" "GT_DM35_RAW_DATA"@"INS$1")
+      FULL(@"SEL$B43DDB7B" "E"@"SEL$5")
+      FULL(@"SEL$B43DDB7B" "B"@"SEL$1")
+      NO_ACCESS(@"SEL$B43DDB7B" "A"@"SEL$1")
+      INDEX_FFS(@"SEL$B43DDB7B" "C"@"SEL$4" ("SCM_MST_SITE"."DIVISION_ID" "SCM_MST_SITE"."SITE_TYPE" "SCM_MST_SITE"."VALID_YN" 
+              "SCM_MST_SITE"."SCM_SITE_ID" "SCM_MST_SITE"."CITY" "SCM_MST_SITE"."COUNTRY" "SCM_MST_SITE"."END_CUSTOMER" 
+              "SCM_MST_SITE"."SOLDTO_CUSTOMER"))
+      LEADING(@"SEL$B43DDB7B" "E"@"SEL$5" "B"@"SEL$1" "A"@"SEL$1" "C"@"SEL$4")
+      USE_MERGE_CARTESIAN(@"SEL$B43DDB7B" "B"@"SEL$1")
+      USE_HASH(@"SEL$B43DDB7B" "A"@"SEL$1")
+      USE_HASH(@"SEL$B43DDB7B" "C"@"SEL$4")
+      PX_JOIN_FILTER(@"SEL$B43DDB7B" "A"@"SEL$1")
+      SWAP_JOIN_INPUTS(@"SEL$B43DDB7B" "C"@"SEL$4")
+      FULL(@"SEL$3" "F"@"SEL$3")
+      FULL(@"SEL$2" "F"@"SEL$2")
+      FULL(@"SEL$16" "ES"@"SEL$16")
+      FULL(@"SEL$15" "ES"@"SEL$15")
+      FULL(@"SEL$14" "LS"@"SEL$14")
+      FULL(@"SEL$12" "LS"@"SEL$12")
+      PQ_FILTER(@"SEL$12" SERIAL)
+      FULL(@"SEL$11" "ES"@"SEL$11")
+      FULL(@"SEL$10" "LS"@"SEL$10")
+      FULL(@"SEL$9" "LS"@"SEL$9")
+      FULL(@"SEL$8" "LS"@"SEL$8")
+      FULL(@"SEL$7" "LS"@"SEL$7")
+      FULL(@"SEL$13" "LS2"@"SEL$13")
+      END_OUTLINE_DATA
+  */
+ 
+Peeked Binds (identified by position):
+--------------------------------------
+ 
+   4 - (VARCHAR2(30), CSID=873): '20260801'
+   5 - (VARCHAR2(30), CSID=873): '20270228'
+   6 - (VARCHAR2(30), CSID=873): (null)
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   3 - filter(("LS"."DIVISION_ID"=:B1 AND "LS"."PROJECT_CODE"=:B2 AND "LS"."SCM_SITE_ID"=:B3 AND "LS"."ITEM_ID"=:B4 AND 
+              "LS"."DOM_EXP"=:B5 AND "LS"."FCST_TYPE"=:B6 AND "LS"."INCOTERMS"=:B7 AND "LS"."VERSION_NO"=:B8 AND 
+              INTERNAL_FUNCTION("LS"."MEASURE")))
+   5 - filter(("LS"."DIVISION_ID"=:B1 AND "LS"."PROJECT_CODE"=:B2 AND "LS"."SCM_SITE_ID"=:B3 AND "LS"."ITEM_ID"=:B4 AND 
+              "LS"."DOM_EXP"=:B5 AND "LS"."FCST_TYPE"=:B6 AND "LS"."INCOTERMS"=:B7 AND "LS"."VERSION_NO"=:B8 AND 
+              INTERNAL_FUNCTION("LS"."MEASURE")))
+   7 - filter(("LS"."DIVISION_ID"=:B1 AND "LS"."PROJECT_CODE"=:B2 AND "LS"."SCM_SITE_ID"=:B3 AND "LS"."ITEM_ID"=:B4 AND 
+              "LS"."DOM_EXP"=:B5 AND "LS"."FCST_TYPE"=:B6 AND "LS"."INCOTERMS"=:B7 AND "LS"."VERSION_NO"=:B8 AND 
+              INTERNAL_FUNCTION("LS"."MEASURE")))
+   8 - filter(("LS"."DIVISION_ID"=:B1 AND "LS"."PROJECT_CODE"=:B2 AND "LS"."SCM_SITE_ID"=:B3 AND "LS"."ITEM_ID"=:B4 AND 
+              "LS"."DOM_EXP"=:B5 AND "LS"."FCST_TYPE"=:B6 AND "LS"."INCOTERMS"=:B7 AND "LS"."VERSION_NO"=:B8 AND "LS"."MEASURE"=:B9))
+  10 - filter("ES"."SCM_SITE_ID"=:B1)
+  12 - filter("LS"."CREATE_DATE"=)
+  13 - filter(("LS"."DIVISION_ID"=:B1 AND "LS"."PROJECT_CODE"=:B2 AND "LS"."SCM_SITE_ID"=:B3 AND "LS"."ITEM_ID"=:B4 AND 
+              "LS"."DOM_EXP"=:B5 AND "LS"."FCST_TYPE"=:B6 AND "LS"."INCOTERMS"=:B7 AND "LS"."VERSION_NO"=:B8 AND 
+              INTERNAL_FUNCTION("LS"."MEASURE")))
+  15 - filter(("LS2"."DIVISION_ID"=:B1 AND "LS2"."PROJECT_CODE"=:B2 AND "LS2"."SCM_SITE_ID"=:B3 AND "LS2"."ITEM_ID"=:B4 AND 
+              "LS2"."DOM_EXP"=:B5 AND "LS2"."FCST_TYPE"=:B6 AND "LS2"."INCOTERMS"=:B7 AND "LS2"."VERSION_NO"=:B8 AND 
+              INTERNAL_FUNCTION("LS2"."MEASURE")))
+  16 - filter(("LS"."DIVISION_ID"=:B1 AND "LS"."PROJECT_CODE"=:B2 AND "LS"."SCM_SITE_ID"=:B3 AND "LS"."ITEM_ID"=:B4 AND 
+              "LS"."DOM_EXP"=:B5 AND "LS"."FCST_TYPE"=:B6 AND "LS"."INCOTERMS"=:B7 AND "LS"."VERSION_NO"=:B8 AND "LS"."MEASURE"=:B9))
+  18 - filter("ES"."SCM_SITE_ID"=:B1)
+  20 - filter("ES"."SCM_SITE_ID"=:B1)
+  21 - filter(:B2>=:B3)
+  22 - access("A"."DIVISION_ID"="C"."DIVISION_ID" AND "A"."SCM_SITE_ID"="C"."SCM_SITE_ID")
+  23 - filter(("C"."DIVISION_ID"=:B1 AND "C"."VALID_YN"='Y'))
+  24 - access("A"."VERSION_NO"="E"."VERSION_NO" AND "A"."MEASURE"="B"."MEASURE")
+       filter("A"."YYYYMMDD">="E"."NOW_YYYYMMDD")
+  27 - filter(("E"."NOW_YYYYMMDD"<=:B2 AND ("E"."VERSION_NO" LIKE '%MF%' OR "E"."VERSION_NO" LIKE '%SF%')))
+  29 - filter(("B"."MEASURE"<>'CUST_FCST_EDI_ORG' AND "B"."MEASURE"<>'Immidiate[Org.]' AND 
+              "B"."MEASURE"<>'Planning_Forecast[Org.]' AND "B"."MEASURE"<>'Commercial_Agreement[Org.]' AND "B"."MEASURE"<>'Firm_Temp[Org.]' 
+              AND "B"."MEASURE"<>'Manumacturing_Material_Temp[Org.]' AND "B"."MEASURE"<>'Material_Temp[Org.]' AND 
+              "B"."MEASURE"<>'Backorder[Org.]'))
+  32 - filter((:B2>=:B3 AND CASE :B1 WHEN '40' THEN 1 ELSE 2 END =2))
+  34 - filter(("F"."YYYYMMDD"<=:B2 AND "F"."DIVISION_ID"=:B1 AND "F"."YYYYMMDD">=:B3 AND "F"."QTY"<>0 AND 
+              "F"."MEASURE"<>'CUST_FCST_EDI_ORG' AND "F"."MEASURE"<>'Commercial_Agreement[Org.]' AND 
+              "F"."MEASURE"<>'Planning_Forecast[Org.]' AND "F"."MEASURE"<>'Immidiate[Org.]' AND "F"."MEASURE"<>'Firm_Temp[Org.]' AND 
+              "F"."MEASURE"<>'Manumacturing_Material_Temp[Org.]' AND "F"."MEASURE"<>'Material_Temp[Org.]' AND 
+              "F"."MEASURE"<>'Backorder[Org.]' AND SYS_OP_BLOOM_FILTER(:BF0000,"F"."VERSION_NO","F"."MEASURE")))
+  35 - filter((:B2>=:B3 AND CASE :B1 WHEN '40' THEN 1 ELSE 2 END =1))
+  37 - filter(("F"."YYYYMMDD"<=:B2 AND "F"."DIVISION_ID"=:B1 AND "F"."YYYYMMDD">=:B3 AND "F"."QTY"<>0 AND 
+              "F"."MEASURE"<>'CUST_FCST_EDI_ORG' AND "F"."MEASURE"<>'Immidiate[Org.]' AND "F"."MEASURE"<>'Planning_Forecast[Org.]' AND 
+              "F"."MEASURE"<>'Commercial_Agreement[Org.]' AND "F"."MEASURE"<>'Firm_Temp[Org.]' AND 
+              "F"."MEASURE"<>'Manumacturing_Material_Temp[Org.]' AND "F"."MEASURE"<>'Material_Temp[Org.]' AND 
+              "F"."MEASURE"<>'Backorder[Org.]' AND SYS_OP_BLOOM_FILTER(:BF0000,"F"."VERSION_NO","F"."MEASURE")))
+ 
+Column Projection Information (identified by operation id):
+-----------------------------------------------------------
+ 
+   2 - (#keys=0) MAX("LS"."CREATE_DATE")[32]
+   3 - (rowset=256) "LS"."VERSION_NO"[VARCHAR2,400], "LS"."DIVISION_ID"[VARCHAR2,120], "LS"."PROJECT_CODE"[VARCHAR2,200], 
+       "LS"."SCM_SITE_ID"[VARCHAR2,400], "LS"."ITEM_ID"[VARCHAR2,200], "LS"."DOM_EXP"[VARCHAR2,12], "LS"."FCST_TYPE"[VARCHAR2,80], 
+       "LS"."INCOTERMS"[VARCHAR2,40], "LS"."MEASURE"[VARCHAR2,200], "LS"."CREATE_DATE"[VARCHAR2,32]
+   4 - (#keys=0) MAX("LS"."CREATE_DATE")[32]
+   5 - (rowset=256) "LS"."VERSION_NO"[VARCHAR2,400], "LS"."DIVISION_ID"[VARCHAR2,120], "LS"."PROJECT_CODE"[VARCHAR2,200], 
+       "LS"."SCM_SITE_ID"[VARCHAR2,400], "LS"."ITEM_ID"[VARCHAR2,200], "LS"."DOM_EXP"[VARCHAR2,12], "LS"."FCST_TYPE"[VARCHAR2,80], 
+       "LS"."INCOTERMS"[VARCHAR2,40], "LS"."MEASURE"[VARCHAR2,200], "LS"."CREATE_DATE"[VARCHAR2,32]
+   6 - (#keys=0) MAX("LS"."CREATE_DATE")[32]
+   7 - (rowset=256) "LS"."VERSION_NO"[VARCHAR2,400], "LS"."DIVISION_ID"[VARCHAR2,120], "LS"."PROJECT_CODE"[VARCHAR2,200], 
+       "LS"."SCM_SITE_ID"[VARCHAR2,400], "LS"."ITEM_ID"[VARCHAR2,200], "LS"."DOM_EXP"[VARCHAR2,12], "LS"."FCST_TYPE"[VARCHAR2,80], 
+       "LS"."INCOTERMS"[VARCHAR2,40], "LS"."MEASURE"[VARCHAR2,200], "LS"."CREATE_DATE"[VARCHAR2,32]
+   8 - "LS"."VERSION_NO"[VARCHAR2,400], "LS"."DIVISION_ID"[VARCHAR2,120], "LS"."PROJECT_CODE"[VARCHAR2,200], 
+       "LS"."SCM_SITE_ID"[VARCHAR2,400], "LS"."ITEM_ID"[VARCHAR2,200], "LS"."DOM_EXP"[VARCHAR2,12], "LS"."FCST_TYPE"[VARCHAR2,80], 

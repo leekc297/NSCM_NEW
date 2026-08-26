@@ -62,19 +62,8 @@ export const UPLOAD_HEADERS = [
   'Cell Prod Site',
   'Currency',
   'Measure',
-  'M4',
-  'M5',
-  'M6',
-  'M7',
-  'M8',
-  'M9',
-  'M10',
-  'M11',
-  'M12',
-  'M13',
-  'M14',
-  'M15',
-  'M16',
+  // [E20260820-XLSWEEKLY] 기간 토큰 M4~M16 제거 — 기간 컬럼 = 주 시작일(YYYYMMDD) 동적 헤더
+  //   (BE FileServiceImpl 1단 날짜헤더 인식 · EXCEL_COLUMNS HEADER_CONTENT 동기 개정 20260820).
 ] as const;
 
 export const TEMPLATE_EXCEL_PREFIX = 'DMF0082_Template';
@@ -118,12 +107,33 @@ export const BUCKET_FALLBACK = [
  *   → 40 만 AS-IS 큐레이션 적용, 81/82 는 표시용 전체 목록 유지(확장 영역 = AS-IS 규칙 부재).
  *   권한 필터(TEAM_ID)는 코드 큐레이션이 아니라 사용자 권한이므로 전 division 적용.
  */
+/**
+ * ⭐ [2026-08-21 사용자 지정] **편집 콤보 ID 의 원천은 메타 `ATTRIBUTE9`** 다.
+ *
+ *   해소 순서: `ATTRIBUTE9`(편집 콤보) → 없으면 `CELL_COMBO_DATA_TYPE`(표시 콤보)
+ *
+ * 왜 바뀌었나 — 소스에만 있던 편집 콤보는 **운영자가 볼 수 없었다**.
+ *   UI CATEGORY SETUP(SYS0004)에 보이는 것은 표시 콤보뿐이라, 화면이 실제로 무엇을 쓰는지
+ *   메타만 봐서는 알 수 없었다. 실제로 `PLANT_SITE_ID` 는 메타를 `FromSiteByDivision` 로 고쳐도
+ *   여기 상수(`PlantByDivisionCompany`)가 편집 시 덮어써서 값 도메인이 갈린 채 남아 있었다.
+ *   ⇒ **ID 는 메타로 이관**하고, 이 상수에는 **메타로 표현 못 하는 옵션만** 남긴다.
+ *
+ * 여기 남는 것 (행 데이터·화면 로직 의존 — 정적 메타로 표현 불가)
+ *   · `divisionParam` : 편집 조회 시 `@divisionId` 를 실어 보낼지
+ *   · `divisions`     : 어느 division 행에만 편집판을 적용할지 (AS-IS 적용 범위 한정)
+ *   · `rowFilterKey`  : 행 컨텍스트로 후보를 좁히는 키
+ *   ⚠ AS 사이트 행의 Incoterms 스왑처럼 **행 값을 읽어 분기**하는 것은 코드에 남는다
+ *     (ForecastPriceGrid `beginningEdit` ①단계). 메타로 옮길 수 없는 계층이다.
+ *
+ * ⚠ 이 맵에 **binding 이 없으면 편집 스왑 자체를 하지 않는다** — 메타 `ATTRIBUTE9` 만 채워도
+ *   스왑 대상이 되지 않는다. 옵션이 필요 없으면 `{}` 로 등재한다.
+ */
 export const GRID_EDIT_COMBO: Record<
   string,
-  { comboId: string; divisionParam?: boolean; rowFilterKey?: string; divisions?: string[] }
+  { divisionParam?: boolean; rowFilterKey?: string; divisions?: string[] }
 > = {
-  INCOTERMS: { comboId: 'IncotermsEdit', divisions: ['40'] },
-  DOM_EXP: { comboId: 'CustomsHandbook', divisions: ['40'] },
+  INCOTERMS: { divisions: ['40'] },
+  DOM_EXP: { divisions: ['40'] },
   // [No.64 2026-08-14] End Customer — 표시용 메타 콤보는 **전 division 합집합**(CODE→NAME 매핑 보존)이라
   //   그대로 두면 81 로 조회해도 40 의 End Customer(예: 'AJ상사')를 고를 수 있다.
   //   ⚠ 원인은 FE 가 아니라 메타였다: `FcstNPrice.END_CUSTOMER` 가 CMBO `EndCustomerByDivision40`
@@ -132,12 +142,15 @@ export const GRID_EDIT_COMBO: Record<
   //       편집 진입 시 여기서 division 을 명시 전달해 후보를 좁힌다.
   //   요구 원문(통합테스트 1st No.64): "END_CUSTOMER 룩업코드 기준으로 Div별 리스트를 구성할 수 있도록 수정 필요".
   //   실측: div40=1,067종(구 등재본과 **완전 동일** = 회귀 0) / 81=553 / 81_HG=227 / 82=1,534, 81·82 에 'AJ*' 0건.
-  END_CUSTOMER: { comboId: 'EndCustomerByDivisionDMF0082', divisionParam: true },
-  // PLANT_SITE_ID(81 계열 전용, SAVE IN `plantSite`) — 표시용 메타 경로는 @divisionId 미전달이라
-  //   관대형 폴백으로 **전 division 플랜트**가 뜬다. 편집 진입 시에만 division 한정 목록으로 스왑.
-  //   (AS-IS `Data.UserPlantSiteByDivision` 호출은 주석 상태[C20200525-000296]이므로 TO-BE 확장 영역 —
-  //    표시용은 건드리지 않아 기존 값의 명칭 변환은 그대로 유지된다.)
-  PLANT_SITE_ID: { comboId: 'PlantByDivisionCompany', divisionParam: true },
+  END_CUSTOMER: { divisionParam: true },
+  // ⭐ [2026-08-21 사용자 지정] PLANT_SITE_ID 는 **편집 콤보를 쓰지 않는다** — 메타 표시 콤보
+  //   (`FromSiteByDivision`)를 편집에도 그대로 쓴다. 그래서 이 맵에서 제외한다.
+  //   경위: TO-BE 가 편집 전용으로 `PlantByDivisionCompany` 를 걸었는데, 그 콤보는
+  //     `SCM_MST_PLANT_SN.PLANT_ID`(예 'HQ04') 로 **표시·조회조건의 사이트 코드**
+  //     (`SCM_MST_SITE.SCM_SITE_ID`, 예 'HQ07-A')와 **교집합이 0건**이었다.
+  //     → 그리드에서 고른 값이 조회조건으로 검색되지 않고, GET 이 사이트 코드를 주면 CODE raw 노출.
+  //   AS-IS 에는 이 컬럼의 런타임 콤보 스왑이 없다(`Data.UserPlantSiteByDivision` 호출은
+  //     주석 상태 [C20200525-000296]) — 즉 편집 이원화 자체가 TO-BE 단독 신설이었다.
 };
 
 /**
@@ -163,6 +176,9 @@ export const GRID_EDIT_COMBO: Record<
  */
 export const CELL_MODAL_KEY: Readonly<Record<string, string>> = {
   PROJECT_CODE: 'PROJECT',
+  // ⭐ [2026-08-22] Model 셀 검색 모달 — AS-IS `.cs:3772` `DM0002_ItembyDivisionPopupEx` 파리티.
+  //   메타 `ITEM_ID` = `FPTextModal` + `IO`(신규행 선택입력) → 타이핑도 되고 모달도 뜬다.
+  ITEM_ID: 'ITEM',
 };
 
 /**
@@ -222,7 +238,7 @@ export const MSG = {
   SAVE_ERROR: 'MSG00618', // 저장 중 오류가 발생했습니다. (SP 원문 메시지 부재 시 fallback — DMF0042 선례)
   // ── ForecastTemplateModal (Excel Form) 조회 0건 —
   //   조회조건 기준 조회이므로 '업로드분 없음'(MSG00705)과 의미가 다르다 → 신규 채번(3점 동기 2026-08-13)
-  EXCEL_FORM_EMPTY: 'MSG00718',
+  EXCEL_FORM_EMPTY: 'MSG01023',
 } as const;
 
 /** ExchangeRateModal 좌측 고정 컬럼 메타 (DMF0020 EXCHANGE_RATE_COLUMNS 표준 1:1 — hook #96 단일문자 정렬코드). */

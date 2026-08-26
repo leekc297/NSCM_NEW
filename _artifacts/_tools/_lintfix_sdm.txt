@@ -1,0 +1,76 @@
+﻿pnpm 10.28.2  (요구 = "packageManager": "pnpm@10.28.2",)
+task=lint:fix  filter=@sdm
+--- turbo run lint:fix --filter @sdm --continue ---
+• turbo 2.8.5
+• Packages in scope: @sdm
+• Running lint:fix in 1 packages
+• Remote caching disabled
+@sdm:lint:fix: cache bypass, force executing 210968d1f0b985b9
+@sdm:lint:fix: 
+@sdm:lint:fix: > @sdm@0.1.0 lint:fix C:\Projects\NSCM\nscm-fe\features\sdm
+@sdm:lint:fix: > eslint src --fix --color
+@sdm:lint:fix: 
+@sdm:lint:fix: 
+@sdm:lint:fix: C:\Projects\NSCM\nscm-fe\features\sdm\src\components\ProjectAuthRegModal.tsx
+@sdm:lint:fix:   25:20  warning  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `ProjectAuthRegModal.tsx` to same directory as `../pages/project-reg/ProjectReg.module.scss` or consider making `../pages/project-reg/ProjectReg.module.scss` a package  import/no-relative-parent-imports
+@sdm:lint:fix: 
+@sdm:lint:fix: C:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-list\ProjectList.tsx
+@sdm:lint:fix:   138:49  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+@sdm:lint:fix: 
+@sdm:lint:fix: C:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-list\components\ProjectListGrid.tsx
+@sdm:lint:fix:    28:20  warning  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `ProjectListGrid.tsx` to same directory as `../ProjectList.module.scss` or consider making `../ProjectList.module.scss` a package  import/no-relative-parent-imports
+@sdm:lint:fix:   217:11  error    '(src ? rec[src.name] : undefined) ?? rec[`${binding}_NAME`] ?? rec[binding] ?? ''' will use Object's default stringification format ('[object Object]') when stringified                                                                                                             @typescript-eslint/no-base-to-string
+@sdm:lint:fix: 
+@sdm:lint:fix: C:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-list\utils\project-list.api.test.ts
+@sdm:lint:fix:   13:28  error  A method that is not declared with `this: void` may cause unintentional scoping of `this` when separated from its object.
+@sdm:lint:fix: Consider using an arrow function or explicitly `.bind()`ing the method to avoid calling the method with an unintended `this` value. 
+@sdm:lint:fix: If a function does not access `this`, it can be annotated with `this: void`  @typescript-eslint/unbound-method
+@sdm:lint:fix: 
+@sdm:lint:fix: C:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-master\ProjectMaster.tsx
+@sdm:lint:fix:   166:49  warning  Forbidden non-null assertion                                      @typescript-eslint/no-non-null-assertion
+@sdm:lint:fix:   201:9   error    The two values in this comparison do not have a shared enum type  @typescript-eslint/no-unsafe-enum-comparison
+@sdm:lint:fix: 
+@sdm:lint:fix: C:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-master\components\ProjectMasterTab1Grid.tsx
+@sdm:lint:fix:    23:20  warning  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `ProjectMasterTab1Grid.tsx` to same directory as `../ProjectMaster.module.scss` or consider making `../ProjectMaster.module.scss` a package  import/no-relative-parent-imports
+@sdm:lint:fix:   199:11  error    '(src ? rec[src.name] : undefined) ?? rec[`${binding}_NAME`] ?? rec[binding] ?? ''' will use Object's default stringification format ('[object Object]') when stringified                                                                                                                       @typescript-eslint/no-base-to-string
+@sdm:lint:fix:   202:11  error    '(src ? rec[src.color] : undefined) ?? rec[colorTypeColumnOf(binding)] ?? ''' will use Object's default stringification format ('[object Object]') when stringified                                                                                                                             @typescript-eslint/no-base-to-string
+@sdm:lint:fix: 
+@sdm:lint:fix: C:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-master\components\ProjectMasterTab2Grid.tsx
+@sdm:lint:fix:    21:20  warning  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `ProjectMasterTab2Grid.tsx` to same directory as `../ProjectMaster.module.scss` or consider making `../ProjectMaster.module.scss` a package  import/no-relative-parent-imports
+@sdm:lint:fix:   126:11  error    '(src ? rec[src.name] : undefined) ?? rec[`${binding}_NAME`] ?? rec[binding] ?? ''' will use Object's default stringification format ('[object Object]') when stringified                                                                                                                       @typescript-eslint/no-base-to-string
+@sdm:lint:fix:   129:11  error    '(src ? rec[src.color] : undefined) ?? rec[colorTypeColumnOf(binding)] ?? ''' will use Object's default stringification format ('[object Object]') when stringified                                                                                                                             @typescript-eslint/no-base-to-string
+@sdm:lint:fix: 
+@sdm:lint:fix: C:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-master\utils\project-master.api.test.ts
+@sdm:lint:fix:   18:28  error  A method that is not declared with `this: void` may cause unintentional scoping of `this` when separated from its object.
+@sdm:lint:fix: Consider using an arrow function or explicitly `.bind()`ing the method to avoid calling the method with an unintended `this` value. 
+@sdm:lint:fix: If a function does not access `this`, it can be annotated with `this: void`  @typescript-eslint/unbound-method
+@sdm:lint:fix: 
+@sdm:lint:fix: C:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-reg\ProjectReg.tsx
+@sdm:lint:fix:   173:49  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+@sdm:lint:fix:   283:20  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+@sdm:lint:fix:   290:16  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+@sdm:lint:fix: 
+@sdm:lint:fix: C:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-reg\components\ProjectRegTab1Grid.tsx
+@sdm:lint:fix:   20:20  warning  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `ProjectRegTab1Grid.tsx` to same directory as `../ProjectReg.module.scss` or consider making `../ProjectReg.module.scss` a package  import/no-relative-parent-imports
+@sdm:lint:fix: 
+@sdm:lint:fix: C:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-reg\components\ProjectRegTab2Grid.tsx
+@sdm:lint:fix:   10:20  warning  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `ProjectRegTab2Grid.tsx` to same directory as `../ProjectReg.module.scss` or consider making `../ProjectReg.module.scss` a package  import/no-relative-parent-imports
+@sdm:lint:fix: 
+@sdm:lint:fix: C:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-reg\components\modals\MyWorkModal.tsx
+@sdm:lint:fix:   11:20  warning  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `MyWorkModal.tsx` to same directory as `../../ProjectReg.module.scss` or consider making `../../ProjectReg.module.scss` a package  import/no-relative-parent-imports
+@sdm:lint:fix: 
+@sdm:lint:fix: C:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-reg\utils\project-reg.editLock.ts
+@sdm:lint:fix:   42:61  error  The two values in this comparison do not have a shared enum type  @typescript-eslint/no-unsafe-enum-comparison
+@sdm:lint:fix: 
+@sdm:lint:fix: ✖ 21 problems (9 errors, 12 warnings)
+@sdm:lint:fix: 
+@sdm:lint:fix:  ELIFECYCLE  Command failed with exit code 1.
+@sdm:lint:fix: command finished with error, but continuing...
+@sdm#lint:fix: command (C:\Projects\NSCM\nscm-fe\features\sdm) C:\Projects\NSCM\_artifacts\_tools\pnpm-10.28.2\pnpm.cmd run lint:fix exited (1)
+
+ Tasks:    0 successful, 1 total
+Cached:    0 cached, 1 total
+  Time:    1m38.686s 
+Failed:    @sdm#lint:fix
+
+ ERROR  run failed: command  exited (1)

@@ -260,11 +260,6 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
       .join('^');
 
     void (async () => {
-      const ok = await setAlert({
-        type: 'confirm',
-        content: t('MSG00617', '_{0} 행을 저장하시겠습니까?').replace('{0}', String(dirty.length)),
-      });
-      if (!ok) return;
       try {
         await apiClient.post(`/${MENU_ID}/main/SAVE/call-proc`, {
           divisionId: searchCondition.divisionId,

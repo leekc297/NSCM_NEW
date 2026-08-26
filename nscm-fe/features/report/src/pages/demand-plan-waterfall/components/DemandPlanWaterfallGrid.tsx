@@ -222,6 +222,8 @@ export const DemandPlanWaterfallGrid = ({
       // Subtotal 표기 = Layout 모달 드롭다운 (기본 GrandTotals — AS-IS footer SUM 대응)
       showRowTotals={searchParams.rowTotals}
       showColumnTotals='None'
+      // 컬럼 폭 자동 최적화 (사용자 지정 2026-08-20 — 행 축=내용 autosize·값 컬럼=64~160 캡)
+      autoFitColumns
     />
   );
 };

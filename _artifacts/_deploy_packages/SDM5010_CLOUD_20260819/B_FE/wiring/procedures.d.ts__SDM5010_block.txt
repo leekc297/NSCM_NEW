@@ -1,0 +1,159 @@
+// =====================================================================================
+// SDM5010 — procedures.d.ts 배선 블록 (라이브 nscm-fe/configs/types/procedures.d.ts L4100~L4248 발췌, 2026-08-19)
+// [병합 안내 — 파일 통짜 덮어쓰기 금지 (클라우드 셸 신·구 세대 혼재)]
+//   1. 클라우드 본 nscm-fe/configs/types/procedures.d.ts 의 `interface RawProcedureMap` 안,
+//      마지막 화면 블록(SDM1020: {...};) 뒤 · 인터페이스 닫는 `}` 앞에 아래 블록 삽입.
+//   2. 기존 SDM5010 블록이 이미 있으면 통째 교체.
+//   3. 전제: SDM1020_CLOUD_20260819 패키지 선적용 (SDM1020 블록 + @sdm alias 배선 —
+//      그보다 앞은 SDM1010_CLOUD_20260813/fe/wiring_snippets/README_배선.md).
+//   4. 병합 후 type-check 0 확인 (클라우드 빌드 파이프라인).
+// =====================================================================================
+  /**
+   * ProjectMaster — SDM5010 (Project Master · 프로젝트 등록 요청 승인/반려 + Master 관리)
+   *
+   * ⭐ 계약 단일 원천 = `_artifacts/_apply_corporate/SDM5010_META_20260819/_CONTRACT.md`
+   *   (PROC_M COL_NM = payload 키 — ALL_ARGUMENTS positional 44=44 실측. 원문 = PKG_SDM5010.txt
+   *   치명 결함 정정본 02_PKG_SDM5010.sql — D1~D6·D10~D13 정정 승인 반영).
+   * SHEETS (SEARCH — 커서명 'data'):
+   * - TAB1 (P_SDM5010_GET_TAB1_PJT_REG_REQ — Session 4 IN. SP 내부 필터 = DIVISION_ID=P_SES_DIVISION_ID
+   *   + MGMT_USER_ID=P_SES_USER_ID(본인 — 설계 원문 유지 사용자 확정 D14) + WAITING/REQ_MOD. 조회조건 미소비 F-3)
+   * - TAB2 (P_SDM5010_GET_TAB2_PJT_MASTER — 멀티 콤마 4축 + 'ALL' 무필터 + REG_COMP_DATE BETWEEN.
+   *   ⚠ 커서 REG_COMP_DATE 2회 중복(D16) — FE 는 컬럼명 1회 바인딩(첫 출현) 의존)
+   * - period (PKG_SDM1010.P_SDM1010_GET_PERIOD 공유 배선 — SDM5010_period_SEARCH. 계약 ① 재사용)
+   * BTN 계열 3본은 **행별 단건** apiClient.post 직접
+   * (`features/sdm/src/pages/project-master/utils/project-master.api.ts` — 결과커서 CODE '0'+EVENT
+   * 판정 의무. COL_NM 계약 ①):
+   * - CONFIRM = PKG_SDM5010.P_SDM5010_BTN_TAB1_CONFIRM (15 IN — dpjtKey/dpjtCode/dpjtSeq/
+   *   dpjtKeyParent/divisionId/dpjtClass/endCustomer/dpjtName/cellType/stackMethod/bizType/
+   *   sopDate/sopPlantId/note + sesUserId(BE주입) → result)
+   * - CANCEL = PKG_SDM5010.P_SDM5010_BTN_TAB1_CANCEL (5 IN — divisionId/dpjtKey/dpjtKeyParent/note
+   *   + sesUserId(BE주입) → result)
+   * - SAVE = PKG_SDM5010.P_SDM5010_SAVE_TAB2_PJT_MASTER (5 IN — activeFlag('M' 단건만 유효)/
+   *   dpjtKey/dpjtDevelopStatus/disabled('CHECKED' 정확 일치만 DISABLED — 계약 ⑥) + sesUserId(BE주입) → result)
+   * sesUserId/mnuId 는 BE 세션 자동주입 — request 미포함.
+   * 날짜 컬럼(SOP_DATE/REG_REQ_DATE/REG_COMP_DATE)은 Oracle DATE 원형 → BE ISO 직렬화 수신.
+   */
+  SDM5010: {
+    TAB1: {
+      request: {
+        sesDivisionId: string; // 1 P_SES_DIVISION_ID (SP WHERE 실사용 — 조회조건 Division 전달)
+        userGroup: string; // 4 P_SES_USER_GR_ID (수신만·본문 미사용 D7 — 시그니처 충족용 '')
+      };
+      response: {
+        // 계약 ⑤ O_CURSOR 36컬럼 — callproc 실측 순서 그대로. ⚠ `DPJT_ATUH_*` 오타 alias 유지 확정(F-12)
+        data: {
+          DPJT_KEY: string;
+          DPJT_CODE: string;
+          DPJT_SEQ: string | number;
+          DPJT_REG_CAT: string; // 구분 신규/수정('MOD') — 행 색상 축 (P-05)
+          DPJT_REG_CAT_NAME: string;
+          DIVISION_ID: string;
+          DIVISION_NAME: string; // ⚠ D8: DIVISION_ID 재-alias (CODE=NAME — as-is 수용)
+          DPJT_CLASS: string;
+          DPJT_CLASS_NAME: string;
+          END_CUSTOMER: string;
+          END_CUSTOMER_NAME: string;
+          DPJT_NAME: string;
+          CELL_TYPE: string;
+          CELL_TYPE_NAME: string;
+          STACK_METHOD: string;
+          STACK_METHOD_NAME: string;
+          BIZ_TYPE: string;
+          BIZ_TYPE_NAME: string;
+          SOP_DATE: string;
+          SOP_PLANT_ID: string;
+          SOP_PLANT_NAME: string; // ⚠ D8: SCM_SITE_ID 재-alias
+          DEPT_ID: string;
+          DEPT_NAME: string;
+          DEPT_NAME_KO: string;
+          DEPT_NAME_EN: string;
+          DEPT_NAME_CN: string;
+          MGMT_USER_ID: string;
+          USER_NAME: string;
+          USER_NAME_EN: string;
+          DPJT_ATUH_REG_STR: string; // 리터럴 '권한관리' (링크 셀 — 커서 실명 유지 F-12)
+          DPJT_ATUH_REG_STATUS: string; // 파생 WRITING/COMPLETE (TAG)
+          DPJT_ATUH_REG_STATUS_NAME: string;
+          DPJT_ATUH_REG_STATUS_COLOR_TYPE: string; // Gray/Amber/Green/Red (TAG 색 데이터 주도)
+          NOTE: string;
+          REG_COL: string; // '' 리터럴 — 승인/반려 행 버튼 placeholder (메타 ATTRIBUTE1='REG_ACTION' F-15)
+          DPJT_KEY_PARENT: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    TAB2: {
+      request: {
+        divisionId: string; // 1 P_DIVISION_ID (단일 필수 — MyDivision. UF_FX_STRING_SPLIT 테이블화)
+        endCustomer: string; // 2 P_END_CUSTOMER (콤마 다중 or 'ALL' — UC-06)
+        cellType: string; // 3 P_CELL_TYPE (콤마 다중 or 'ALL')
+        bizType: string; // 4 P_BIZ_TYPE (콤마 다중 or 'ALL')
+        dpjtDevelopStatus: string; // 5 P_DPJT_DEVELOP_STATUS (콤마 다중 or 'ALL')
+        regCompDateFr: string; // 6 P_REG_COMP_DATE_FR ('YYYY-MM-DD' — TO_DATE SUBSTR 1..10)
+        regCompDateTo: string; // 7 P_REG_COMP_DATE_TO ('YYYY-MM-DD')
+      };
+      response: {
+        // 계약 ⑤ O_CURSOR 36컬럼 — ⚠ REG_COMP_DATE 2회 중복(D16) → 첫 출현 1회 바인딩(타입은 1회 등재)
+        data: {
+          DPJT_KEY: string;
+          DPJT_CODE: string;
+          DPJT_SEQ: string | number;
+          DPJT_REG_CAT: string;
+          DPJT_REG_CAT_NAME: string;
+          DIVISION_ID: string;
+          DIVISION_NAME: string;
+          DPJT_CLASS: string;
+          DPJT_CLASS_NAME: string;
+          END_CUSTOMER: string;
+          END_CUSTOMER_NAME: string;
+          DPJT_NAME: string;
+          CELL_TYPE: string;
+          CELL_TYPE_NAME: string;
+          STACK_METHOD: string;
+          STACK_METHOD_NAME: string;
+          BIZ_TYPE: string;
+          BIZ_TYPE_NAME: string;
+          SOP_DATE: string;
+          SOP_PLANT_ID: string;
+          SOP_PLANT_NAME: string;
+          NOTE: string;
+          REG_REQ_DATE: string;
+          REG_COMP_DATE: string;
+          CNFM_USER_ID: string;
+          CNFM_USER_NAME: string;
+          DEPT_ID: string;
+          DEPT_NAME: string;
+          DPJT_ATUH_REG_STR: string; // 리터럴 '권한관리' (링크 셀)
+          DPJT_ATUH_REG_STATUS: string; // TAG
+          DPJT_ATUH_REG_STATUS_NAME: string;
+          DPJT_ATUH_REG_STATUS_COLOR_TYPE: string;
+          DPJT_DEVELOP_STATUS: string; // 편집 콤보 DpjtDevelopStatus (P-12)
+          DPJT_DEVELOP_STATUS_NAME: string;
+          DISABLE_YN: string; // CHECKED/UNCHECKED (계약 ⑥ — DPJT_MGMT_STATUS='DISABLED' 표현)
+          [key: string]: string | number;
+        };
+      };
+    };
+    period: {
+      // PKG_SDM1010.P_SDM1010_GET_PERIOD 공유 배선 (계약 ① — SDM1010 period 시트와 동일 소비 패턴)
+      request: {
+        frBucket: string; // 1 P_FR_BUCKET (D/W/M)
+        frDateVal: string; // 2 P_FR_DATE_VAL (정수 문자열, 음수 가능)
+        frBucketType: string; // 3 P_FR_BUCKET_TYPE (S/E/C)
+        toBucket: string; // 4 P_TO_BUCKET (FR 과 동일 bucket 만)
+        toDateVal: string; // 5 P_TO_DATE_VAL
+        toBucketType: string; // 6 P_TO_BUCKET_TYPE (S/E/C/X)
+      };
+      response: {
+        // YMD_* 'YYYYMMDD' 문자열 소비 — YMD_FR = M-1 앵커, To=Today 는 FE dayjs 병행 (E01-2)
+        data: {
+          DATE_FR: string;
+          YMD_FR: string;
+          DATE_TO: string;
+          YMD_TO: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+  };
+}

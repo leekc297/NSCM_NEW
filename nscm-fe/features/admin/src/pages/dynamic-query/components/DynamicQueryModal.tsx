@@ -8,6 +8,7 @@ import { type FlexGrid } from '@mescius/wijmo.grid';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { apiClient } from '@foundation/apis';
+import { CRUD_MSG } from '@foundation/constants';
 import { GridAction } from '@foundation/utils';
 import { CustomDialog, CustomDropdown } from '@shared/components';
 import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
@@ -451,6 +452,7 @@ export const DynamicQueryModal = ({
       if (!isInsertRow) initialRow.CRUD_TYPE = 'M';
     }
     onSaved?.();
+    setToast({ type: 'success', message: t(CRUD_MSG.SAVED.id, CRUD_MSG.SAVED.fallback) });
     modalClose();
   };
 

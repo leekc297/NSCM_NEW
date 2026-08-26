@@ -1,0 +1,42 @@
+/* DMF0044 Exchange Rate 팝업 — AS-IS DMF0044_SalesReportExchangePopup.Designer.cs 구조 재현
+   usrConditionPanel1(조회조건 1행 + 버튼 바) + spdMain(2단 헤더 grid).
+   ⚠ 폼(FormItem/InputField) 레이아웃 규칙은 여기 두지 않는다 — hook #121(@foundation common-styles).
+      본 파일은 화면 고유(모달 컨테이너/액션 바/그리드)만 소유한다. */
+
+.contentWrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 8px;
+}
+
+/* 액션 바 — AS-IS btnButtonList(Find/Edit/Insert/Save/Excel/OK/Close) 중 Find 를 제외한 6종.
+   Find 는 표준 SearchArea 의 Search 버튼이 담당한다. (VersionModal.actionBar 승계) */
+.actionBar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 6px 8px;
+  border: 1px solid #e0e4e9;
+  border-radius: 4px;
+  background: #f7f8fa;
+}
+
+.actionBarSpacer {
+  flex: 1;
+}
+
+.gridWrapper {
+  flex: 1;
+  min-height: 300px;
+  border: 1px solid #e0e4e9;
+  border-radius: 4px;
+  background: white;
+  overflow: hidden;
+  position: relative;
+}
+
+.grid {
+  height: 100%;
+}

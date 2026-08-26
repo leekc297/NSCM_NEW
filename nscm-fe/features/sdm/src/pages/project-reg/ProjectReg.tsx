@@ -8,8 +8,10 @@ import { MainTitle, SubTitle, TabItem, TabWrapper } from '@shared/components';
 import { useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
 import { useMessageStore } from '@shared/stores';
 
+// ⭐ ProjectAuthRegModal = feature 공용 승격분 (2026-08-19 — SDM1010/SDM1020 공용, MENU_ID SDM1010 유지)
+import { ProjectAuthRegModal } from '../../components/ProjectAuthRegModal';
+
 import { MyWorkModal } from './components/modals/MyWorkModal';
-import { ProjectAuthRegModal } from './components/modals/ProjectAuthRegModal';
 import { ProjectRegForm } from './components/ProjectRegForm';
 import { ProjectRegTab1Grid } from './components/ProjectRegTab1Grid';
 import { ProjectRegTab2Grid } from './components/ProjectRegTab2Grid';

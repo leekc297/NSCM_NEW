@@ -2,14 +2,13 @@ import type { FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { IcExchangeRate, IcGridColumnSetup, IcMeasureSelect } from '@foundation/assets';
+import { IcGridColumnSetup } from '@foundation/assets';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { useQueryClient } from '@foundation/query-client';
-import { keepRowVisibleUnderFilter } from '@foundation/utils';
 import type { EditTracker } from '@foundation/utils';
 import { MainTitle, SubTitle } from '@shared/components';
 import { useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
-import { useMessageStore, useSessionStore } from '@shared/stores';
+import { useDirtyReset, useMessageStore } from '@shared/stores';
 
 import {
   INSERT_MEASURE_COMBO_ID,
@@ -26,6 +25,13 @@ import { useBusinessPlanStore, thisWeekMonday } from './useBusinessPlanStore';
 import { callSaveBusinessPlan, callSetPrice } from './utils/business-plan.api';
 import { buildCutoff, buildValidWindow, dynKindOf } from './utils/business-plan.editLock';
 import { measureBlockOf } from './utils/business-plan.gridCombos';
+import {
+  findGroupTopIndex,
+  type GroupKeyColumn,
+  groupKeyBindings,
+  mergeInsertedRows,
+  type PendingInsert,
+} from './utils/business-plan.insertAnchor';
 import { buildSavePayload, buildUnfoldRows } from './utils/business-plan.save';
 import { useBusinessPlanValidation } from './utils/business-plan.validate';
 
@@ -57,6 +63,7 @@ export const BusinessPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
   const setOpenSearchArea = useBusinessPlanStore(s => s.setOpenSearchArea);
   const staticColumns = useBusinessPlanStore(s => s.staticColumns);
   const fetchStaticColumns = useBusinessPlanStore(s => s.fetchStaticColumns);
+  const clearUserColumnLayout = useBusinessPlanStore(s => s.clearUserColumnLayout);
   const fetchStaticMeasures = useBusinessPlanStore(s => s.fetchStaticMeasures);
   const setCutoffWindow = useBusinessPlanStore(s => s.setCutoffWindow);
   const cutoffWindow = useBusinessPlanStore(s => s.cutoffWindow);
@@ -103,8 +110,21 @@ export const BusinessPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
   });
   const spreadTitleRows = (spreadTitleData as { data?: SpreadTitleRow[] } | undefined)?.data ?? [];
 
-  // ⭐ Insert Measure 블록 원천 — CMBO 'DMF0042_BP_Measure' (AS-IS dtMeasure 1:1. division 토큰 클라 필터)
-  const [measureComboRows] = useTabComboQueries({ filters: [INSERT_MEASURE_COMBO_ID] });
+  // Insert Measure 블록 원천 — CMBO 'DMF0042_BP_Measure' (AS-IS dtMeasure 1:1).
+  //   ⚠ divisionId 는 반드시 넘긴다. 등록 SQL 이
+  //       AND (NVL(TRIM(@divisionId),'-') = '-' OR INSTR(','||DIVISION_ID||',', ','||@divisionId||',') > 0)
+  //     라서 미전달이면 앞 조건이 참이 되어 **전 사업부 Measure 9건이 통째로** 내려온다.
+  //     SELECT 가 COLUMN_NAME/COLUMN_LABEL_NAME 뿐이라 DIVISION_ID 가 없어 클라 필터로는 못 막는다
+  //     (measureBlockOf 는 키 미보유 행을 관대 통과시킨다) — 서버 필터가 유일한 게이트다.
+  //   2026-08-21 실측: 40 에서 Insert 시 4건이 아니라 9건(MKT_FCST·KRW·USD·SalesAmt_USD·CAR_QTY 포함)이
+  //     추가됐다. 그 5종은 설계서 [Measure 규칙] 시트의 '목록 제외 (전 사업부)' 로, 조회에는 나와도
+  //     신규 행으로는 만들어지지 않아야 한다.
+  //   값 quoting 의무 — BE makeComboQuery 는 @키를 raw 치환한다.
+  const measureFilters = useMemo(
+    () => [{ comboId: INSERT_MEASURE_COMBO_ID, divisionId: `'${sc.divisionId}'` }],
+    [sc.divisionId]
+  );
+  const [measureComboRows] = useTabComboQueries({ filters: measureFilters as never });
 
   // ⭐ P_USERINFO 권한 그룹 — 세션 그룹 부재(유령 필드) → CMBO 'BizPlanUserAuthGroup'(P5) 1행 주입.
   const [authGroupCombo] = useTabComboQueries({ filters: ['BizPlanUserAuthGroup'] });
@@ -121,8 +141,48 @@ export const BusinessPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authGroup]);
 
-  // 신규 행 추적 (CRUD_TYPE='I' — Measure 블록 단위)
-  const [insertedRows, setInsertedRows] = useState<BusinessPlanRow[]>([]);
+  // 신규 행 추적 (CRUD_TYPE='I' — Measure 블록 단위). 각 행은 표시 위치를 정하는 앵커를 함께 든다.
+  //   공용 useInsertedRows 를 쓰지 않는 이유: 그 훅은 앵커를 **선택 행 자체**로 잡아서 measure 블록
+  //   중간(2~3번째 measure)을 찍으면 신규 블록이 그 사이에 낀다. 요구는 "group 위로" 라
+  //   DMF0082(forecast-price) → DMF0021(sales-plan) 계보의 그룹 최상단 앵커를 쓴다.
+  const [insertedRows, setInsertedRows] = useState<PendingInsert[]>([]);
+  // 저장/검증/모달 등 "행" 만 필요한 곳의 입력 — 앵커는 화면 표시 전용이라 payload 에 나가지 않는다.
+  const insertRowList = useMemo<BusinessPlanRow[]>(
+    () => insertedRows.map(p => p.row),
+    [insertedRows]
+  );
+  // Insert 직후 포커스를 옮길 신규행 — rows 재계산 후 effect 가 소비하고 비운다.
+  const focusRowRef = useRef<BusinessPlanRow | null>(null);
+
+  // 이탈 가드(조회·탭 닫기) 확인 시 화면이 들고 있는 신규행 state 도 함께 버린다.
+  //   DataGrid 되돌리기는 itemsSource 에서 'I' 행을 지울 뿐이라, state 가 살아 있으면
+  //   다음 렌더의 rows useMemo 가 버린 행을 그대로 되살린다.
+  useDirtyReset(() => setInsertedRows([]));
+
+  /**
+   * 선택 셀이 속한 머지 블록의 첫 행 — Insert 앵커.
+   *   누른 컬럼까지의 정적 컬럼을 키로 삼아 위로 훑는다(groupKeyBindings). MEASURE 자신이나
+   *   동적 기간 컬럼을 눌렀으면 MEASURE 직전까지를 키로 폴백 = measure 만 다른 블록 전체.
+   *   금지: wijmo 컬렉션(g.columns/g.rows)에 .map/.filter 사용 — Array 상속이라 새 ObservableArray 가
+   *   만들어져 결과가 깨진다. 인덱스 루프로 순수 배열에 복사한다.
+   */
+  const groupTopRowOf = (index: number): BusinessPlanRow | null => {
+    const g = gridRef.current;
+    if (!g || index < 0) return null;
+    const columns: GroupKeyColumn[] = [];
+    for (let i = 0; i < g.columns.length; i++) {
+      const column = g.columns[i];
+      // visible 미지정(undefined)은 표시로 본다 — 잘못 빼면 축이 통째로 폴백된다.
+      columns.push({ binding: column?.binding ?? '', visible: column?.visible !== false });
+    }
+    const gridRowItems: (BusinessPlanRow | undefined)[] = [];
+    for (let i = 0; i < g.rows.length; i++) {
+      gridRowItems.push(g.rows[i]?.dataItem as BusinessPlanRow | undefined);
+    }
+    const keyBindings = groupKeyBindings(columns, g.selection.col);
+    const top = findGroupTopIndex(gridRowItems, index, keyBindings);
+    return (g.rows[top]?.dataItem as BusinessPlanRow | undefined) ?? null;
+  };
 
   // ⭐ MAIN 커서 2 (40 편집 유효구간 — 81/82 NULL 방어) 를 store 에 보관.
   type Cal = NonNullable<typeof cutoffWindow>;
@@ -171,32 +231,37 @@ export const BusinessPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   // 변경분 존재 여부 — Bucket 변경(MSG00227)·커스텀 버튼 pending 차단(MSG00680) 입력
   const hasPendingChanges = () =>
-    insertedRows.length > 0 || (editTrackerRef.current?.getOriginalValues()?.size ?? 0) > 0;
+    insertRowList.length > 0 || (editTrackerRef.current?.getOriginalValues()?.size ?? 0) > 0;
 
   // F5 Search — AS-IS FindData(L684~799) 1:1 검증(V-S1~S3) 후 조회.
   //   ⚠ refetch?.() 직접 호출 금지 — stale closure NULL payload 사고 (memory feedback_search_refetch_stale_closure).
-  const handleSearch = async () => {
-    // [공통 UC-02 2026-08-12] 미저장 편집(신규행·수정) 잔존 시 confirm 가드 — 미가드 시
-    //   setInsertedRows([]) 가 변경분을 조용히 폐기 (통합테스트 1st Common — DMF0021 C2 선례 1:1)
-    if (hasPendingChanges()) {
-      const proceed = await setAlert({
-        type: 'confirm',
-        content: t('MSG00703', '_There are unsaved changes. Search again?'),
-      });
-      if (!proceed) return;
-    }
+  const handleSearch = () => {
     const vr = validation.validateFind(sc);
     if (!vr.ok) {
       // V-S3 — 6년 초과 시 종료일 = 시작일+6년 보정 (AS-IS L711 Value2 보정 후 차단)
       if (vr.adjustedEnd) setSearchCondition({ endYyyymmdd: vr.adjustedEnd });
       return;
     }
-    void setToast({ message: t('LBL00665', '_Loading...'), type: 'default', duration: 2000 });
+    // void setToast({ message: t('LBL00665', '_Loading...'), type: 'default', duration: 2000 });
     setInsertedRows([]);
     setHasSearched(true);
     setFilter();
     void fetchStaticColumns();
     void fetchStaticMeasures();
+  };
+
+  // Column 설정 저장 = Grid 초기화 의무 (AS-IS btnColumn_Click L2807~2817 OK -> InitSpread).
+  //   저장 즉시 표시 컬럼이 바뀌므로, 이전 설정으로 조회해 둔 rows 를 그대로 두면 화면의 컬럼
+  //   구성과 데이터가 어긋난다. 그리드를 공백으로 되돌리고 재조회는 Search 로만
+  //   (division 변경 초기화와 동일 정책, sales-plan SalesPlan.tsx clearGridOnSettingChange 정본).
+  //   필수: removeQueries([tabId]) — queryKey 는 filters '값' 기반이라 동일 조건으로 다시 Search 하면
+  //   전역 staleTime=Infinity 캐시가 이전 설정으로 받은 rows 를 그대로 돌려준다.
+  const clearGridOnSettingChange = () => {
+    setInsertedRows([]);
+    editTrackerRef.current?.clearChanges();
+    setHasSearched(false);
+    clearFilters();
+    queryClient.removeQueries({ queryKey: [tabId] });
   };
 
   // ⭐ Division 변경 = Grid 초기화(비움) + CRUD reset 의무 (memory feedback_division_change_grid_reset)
@@ -205,6 +270,9 @@ export const BusinessPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
     editTrackerRef.current?.clearChanges();
     setHasSearched(false);
     clearFilters();
+    // ⭐ 컬럼 개인화 무효화 — TITLESET_USER 는 division 무관 1벌인데 컬럼 세트는 division 별로 다르다.
+    //   비우지 않으면 이전 division 레이아웃이 새 division 컬럼을 전부 숨긴다.
+    clearUserColumnLayout();
     void fetchStaticColumns();
     void fetchStaticMeasures();
   };
@@ -231,14 +299,15 @@ export const BusinessPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
       MEASURE: measure,
       ...INSERT_ROW_DEFAULTS,
     }));
-    setInsertedRows(prev => [...block, ...prev]);
-    // [공통 UC-01 — 2026-08-14 역전] 필터링 상태에서 Insert 해도 **필터를 유지한 채** 신규행이 보여야 한다.
-    //   ⛔ 구 구현 `gridFilterRef.current?.clear()` 는 사용자가 걸어둔 필터까지 날려서, 사용자가 보고한
-    //     "필터가 풀리는 현상"을 스스로 만들었다 (공통 수정사항① — hook #133 §5).
-    //   ⇒ 신규행만 wijmo 예외 집합(`_newAddedRowsSet`)에 등록해 필터 조건 검사를 건너뛰게 한다.
-    //   (유틸 시그니처는 `FlexGrid<WijmoRowItem>` 기준 — 행 타입이 좁아 캐스팅만 맞춘다.)
-    const grid = gridRef.current as unknown as FlexGridType<WijmoRowItem> | null;
-    if (grid) block.forEach(row => keepRowVisibleUnderFilter(grid, row as WijmoRowItem));
+    // 앵커 = 선택 셀이 속한 머지 블록의 첫 행 — 블록을 그 **바로 위**에 통째로 놓는다.
+    //   앵커를 포커스 행 자체로 잡으면 measure 2~3번째를 찍었을 때 신규 블록이 measure 사이에 낀다.
+    //   앵커 null(선택 없음) = 그리드 맨 위. 배열 끝에 붙여 누른 순서를 유지한다.
+    const anchorRow = groupTopRowOf(gridRef.current?.selection.row ?? -1);
+    setInsertedRows(prev => [...prev, ...block.map(row => ({ row, anchor: anchorRow }))]);
+    focusRowRef.current = block[0] ?? null;
+    // 필터는 건드리지 않는다 (2026-08-21 사용자 요구 "filter 가 풀리면 안됩니다").
+    //   필터 상태에서 신규행이 안 보이던 문제는 BusinessPlanGrid 가 'I' 행을 필터 예외로 등록하고
+    //   filterDefinition 을 복원하는 방식으로 푼다 — DMF0082 가 gridFilter.clear() 를 버린 선례와 동일.
   };
 
   // F9 Delete — AS-IS DeleteButton(L525~537) 1:1 — Action='I' Measure 블록 전체 삭제.
@@ -249,8 +318,27 @@ export const BusinessPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
     const sel = g.selectedItems[0] as BusinessPlanRow | undefined;
     if (!sel || sel.CRUD_TYPE !== 'I') return; // silent (AS-IS L527)
     const gid = sel.INSERT_GROUP_ID;
-    if (gid) setInsertedRows(prev => prev.filter(r => r.INSERT_GROUP_ID !== gid));
-    else setInsertedRows(prev => prev.filter(r => r !== sel));
+    // 삭제 대상이 다른 신규행의 앵커였다면 그 앵커를 삭제 행의 앵커로 승계시킨다.
+    //   승계하지 않으면 앵커 유실로 딸린 행들이 그리드 맨 위로 튄다.
+    setInsertedRows(prev => {
+      const isRemoved = (p: PendingInsert) => (gid ? p.row.INSERT_GROUP_ID === gid : p.row === sel);
+      const inherited = new Map<BusinessPlanRow, BusinessPlanRow | null>();
+      prev.filter(isRemoved).forEach(p => inherited.set(p.row, p.anchor));
+      if (inherited.size === 0) return prev;
+      // 승계 대상이 또 삭제된 행이면 살아 있는 앵커가 나올 때까지 타고 올라간다(순환 가드 포함).
+      const resolve = (anchor: BusinessPlanRow | null): BusinessPlanRow | null => {
+        const seen = new Set<BusinessPlanRow>();
+        let cur = anchor;
+        while (cur && inherited.has(cur) && !seen.has(cur)) {
+          seen.add(cur);
+          cur = inherited.get(cur) ?? null;
+        }
+        return cur;
+      };
+      return prev
+        .filter(p => !isRemoved(p))
+        .map(p => (p.anchor && inherited.has(p.anchor) ? { ...p, anchor: resolve(p.anchor) } : p));
+    });
   };
 
   // F7 Save — AS-IS SaveData(L801~1148) 1:1. 검증(V-V1) → 19키 '^' bulk 조립(중복 MSG00043) →
@@ -264,12 +352,12 @@ export const BusinessPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
     const editedRows = [...changedMap.keys()].filter(r => r.CRUD_TYPE !== 'I');
 
     // (0) 변경 0건 + 필수값 division 분기 (MSG00004 / MSG00429 {0})
-    const vr = validation.validateSaveRows([...insertedRows, ...editedRows], sc.divisionId);
+    const vr = validation.validateSaveRows([...insertRowList, ...editedRows], sc.divisionId);
     if (!vr.ok) return;
 
     // (1) (행 × M_ 기간셀) unfold — 빈값→'0'→'D', 중복 키 검증(MSG00043)
     const build = buildUnfoldRows({
-      insertedRows,
+      insertedRows: insertRowList,
       editedChanges: changedMap,
       divisionId: sc.divisionId,
       msg: { duplicateKey: MSG.DUPLICATE_KEY },
@@ -284,10 +372,7 @@ export const BusinessPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
       });
       return;
     }
-    const payload = buildSavePayload(
-      build.rows,
-      useSessionStore.getState().session.userId ?? ''
-    );
+    const payload = buildSavePayload(build.rows);
     if (!payload) {
       // 저장 대상 0건 (AS-IS L1087 MSG00275 → MSG00676)
       void setAlert({
@@ -297,7 +382,7 @@ export const BusinessPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
       return;
     }
 
-    void setToast({ message: t('LBL00665', '_Loading...'), type: 'default', duration: 3000 });
+    // void setToast({ message: t('LBL00665', '_Loading...'), type: 'default', duration: 3000 });
     try {
       const res = await callSaveBusinessPlan(payload);
       if (!res.ok) {
@@ -336,11 +421,16 @@ export const BusinessPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
       content: t(MSG.SET_PRICE_CONFIRM, '_변경된 환율을 적용하시겠습니까?'),
     });
     if (!confirmed) return;
-    void setToast({ message: t('LBL00665', '_Loading...'), type: 'default', duration: 3000 });
+    // void setToast({ message: t('LBL00665', '_Loading...'), type: 'default', duration: 3000 });
     const res = await callSetPrice(sc.divisionId);
     // 반환 메시지 passthrough (AS-IS L3133 GMessageBox 1:1)
     if (res.message) {
       void setAlert({ type: 'alert', content: res.message });
+    } else if (res.ok) {
+      // ⭐ 2026-08-06 — SP 가 메시지를 안 돌려주는 경우(실측: result.DATARESULT=[] / data=null) 화면에
+      //   피드백이 하나도 없어 "버튼이 안 먹는다"로 보였다. AS-IS 는 SP 반환문을 항상 띄우는 전제라
+      //   메시지 부재를 고려하지 않은 것. 무반응 대신 완료 토스트로 최소 피드백 보장.
+      void setToast({ message: t(MSG.SAVED, '_성공적으로 저장되었습니다.'), type: 'success' });
     }
     if (res.ok) await (refetch?.() ?? Promise.resolve());
   };
@@ -401,11 +491,9 @@ export const BusinessPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
     upload: false,
   };
 
-  // 커스텀 버튼 6종 — Set Price/Ver. Cutoff/Ver. Replace(F-2 ② 전부 노출 — 권한은 P4 hasButton)
-  //   + Exchange Rate/Column Setting/Measure Select (icon-only). 라벨 = 기존 LBL 재사용, 부재 시 영문
-  //   리터럴 (신규 LBL 채번 금지 — DMF0021 확정 승계).
-  //   ⭐ 배치 규약 (hook #120, 사용자 명시 2026-07-30): 텍스트 버튼 먼저, 그 뒤 아이콘 버튼을
-  //      왼쪽부터 **환율 → Grid Column Set → Measure** 순서로 고정. 환율은 항상 아이콘 형태.
+  // 커스텀 버튼 6종 — Set Price/Exchange Rate/Ver. Cutoff/Replace(F-2 ② 전부 노출 — 권한은 P4 hasButton)
+  //   + Column Setting/Measure Select (icon-only). 라벨 = 기존 LBL 재사용, 부재 시 영문 리터럴
+  //   (신규 LBL 채번 금지 — DMF0021 확정 승계).
   const customButtons = [
     ...(hasButton('SET_PRICE')
       ? [
@@ -414,6 +502,16 @@ export const BusinessPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
             title: 'Set Price',
             action: () => void handleSetPrice(),
             buttonLabel: 'Set Price',
+          },
+        ]
+      : []),
+    ...(hasButton('EXCHANGE_RATE')
+      ? [
+          {
+            label: t('LBL00661', 'Exchange Rate'),
+            title: t('LBL00661', 'Exchange Rate'),
+            action: handleExchangeRate,
+            buttonLabel: t('LBL00661', 'Exchange Rate'),
           },
         ]
       : []),
@@ -430,26 +528,24 @@ export const BusinessPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
     ...(hasButton('REPLACE')
       ? [
           {
-            label: 'Ver. Replace',
-            title: 'Ver. Replace',
+            label: 'Replace',
+            title: 'Replace',
             action: handleReplace,
-            buttonLabel: 'Ver. Replace',
+            buttonLabel: 'Replace',
           },
         ]
       : []),
-    // ⭐ 아이콘 버튼 표준 순서 = **환율 → 컬럼설정 → 메저** (hook #120, 2026-08-10 사용자 재확정).
-    //   권한으로 일부가 빠져도 남은 것들의 상대 순서는 그대로 유지된다.
-    ...(hasButton('EXCHANGE_RATE')
-      ? [
-          {
-            label: t('LBL00661', 'Exchange Rate'),
-            title: t('LBL00661', 'Exchange Rate'),
-            action: handleExchangeRate,
-            iconComponent: <IcExchangeRate />,
-            buttonLabel: '',
-          },
-        ]
-      : []),
+    // ...(hasButton('MEASURE_SELECT')
+    //   ? [
+    //       {
+    //         label: t('LBL00712', '_Measure'),
+    //         title: t('LBL00712', '_Measure'),
+    //         action: () => setOpenMeasureSelect(true),
+    //         iconComponent: <IcMeasureSelect />,
+    //         buttonLabel: '',
+    //       },
+    //     ]
+    //   : []),
     ...(hasButton('COLUMN_SETUP')
       ? [
           {
@@ -461,25 +557,50 @@ export const BusinessPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
           },
         ]
       : []),
-    ...(hasButton('MEASURE_SELECT')
-      ? [
-          {
-            label: t('LBL00712', '_Measure'),
-            title: t('LBL00712', '_Measure'),
-            action: () => setOpenMeasureSelect(true),
-            iconComponent: <IcMeasureSelect />,
-            buttonLabel: '',
-          },
-        ]
-      : []),
   ];
 
   const spRows = useMemo<BusinessPlanRow[]>(() => mainData?.data ?? [], [mainData]);
   // ⭐ measure 행 필터는 서버(TITLESET 'M') 단일 출처 — 모달 OK 의 saveTitleSet('M') + invalidate 재조회.
+  // 조회행 + 신규행 병합 — 신규행은 앵커(선택 셀이 속한 머지 블록의 첫 행) 바로 위에 놓는다.
+  //   앵커가 사라진 경우(재조회로 객체 참조 교체 등)는 맨 위로 폴백 — 행이 증발하지 않게 한다.
   const rows: BusinessPlanRow[] = useMemo(
-    () => [...insertedRows, ...spRows],
-    [insertedRows, spRows]
+    () => mergeInsertedRows(spRows, insertedRows),
+    [spRows, insertedRows]
   );
+
+  // Insert 직후 새 행으로 포커스·스크롤 이동 — 신규행이 그리드 중간(선택 블록 맨 위)에 생기므로
+  //   이동이 없으면 사용자가 새 행을 찾아 스크롤해야 한다.
+  //   필수: 실패 시 다음 프레임에 한 번 더 시도한다. itemsSource 가 바뀌면 wijmo 는 스크롤을 0 으로
+  //   되돌리는데, 이 시점에 grid.rows 가 아직 새 배열을 반영하지 않았으면 findIndex 가 -1 이라 그대로
+  //   빠져나가 화면이 맨 위에 머문다.
+  useEffect(() => {
+    const target = focusRowRef.current;
+    if (!target) return;
+    const focusTarget = (): boolean => {
+      const grid = gridRef.current;
+      if (!grid) return false;
+      let index = -1;
+      for (let i = 0; i < grid.rows.length; i++) {
+        if (grid.rows[i]?.dataItem === target) {
+          index = i;
+          break;
+        }
+      }
+      if (index < 0) return false;
+      grid.select(index, grid.selection.col >= 0 ? grid.selection.col : 0);
+      grid.scrollIntoView(index, -1);
+      return true;
+    };
+    if (focusTarget()) {
+      focusRowRef.current = null;
+      return;
+    }
+    const raf = window.requestAnimationFrame(() => {
+      focusTarget();
+      focusRowRef.current = null;
+    });
+    return () => window.cancelAnimationFrame(raf);
+  }, [rows]);
 
   return (
     <>
@@ -558,19 +679,26 @@ export const BusinessPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
         applyToInsertBlock={patch => {
           // 셀 모달 반영 — 같은 Measure 블록(INSERT_GROUP_ID) 전 행에 키 컬럼 patch (AS-IS 블록 공유 키)
           if (!popupGroupId) return;
-          setInsertedRows(prev =>
-            prev.map(r => (r.INSERT_GROUP_ID === popupGroupId ? { ...r, ...patch } : r))
-          );
+          setInsertedRows(prev => {
+            // patch 는 새 row 객체를 만든다 — 그 행을 앵커로 삼던 다른 신규 블록의 참조가 끊기면
+            //   앵커 유실로 그 블록이 그리드 맨 위로 튄다. 교체 맵으로 앵커까지 함께 갈아끼운다.
+            const replaced = new Map<BusinessPlanRow, BusinessPlanRow>();
+            const patched = prev.map(p => {
+              if (p.row.INSERT_GROUP_ID !== popupGroupId) return p;
+              const row: BusinessPlanRow = { ...p.row, ...patch };
+              replaced.set(p.row, row);
+              return { ...p, row };
+            });
+            if (replaced.size === 0) return prev;
+            return patched.map(p =>
+              p.anchor && replaced.has(p.anchor)
+                ? { ...p, anchor: replaced.get(p.anchor) ?? null }
+                : p
+            );
+          });
           setPopupGroupId(null);
         }}
-        onSettingsApplied={() => {
-          // hook #132 §2-2 — Column/Measure 설정 저장 = Division 변경과 동일 초기화 규약.
-          //   이전 결과는 옛 구성으로 조회된 것 → 비우고 Search 재조회 유도 (자동 재조회 금지).
-          setInsertedRows([]);
-          editTrackerRef.current?.clearChanges();
-          setHasSearched(false);
-          clearFilters();
-        }}
+        onSettingChanged={clearGridOnSettingChange}
       />
     </>
   );

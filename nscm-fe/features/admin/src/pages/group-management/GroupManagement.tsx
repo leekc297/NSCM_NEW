@@ -53,7 +53,7 @@ export const GroupManagement = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   const onDelete = () => {
     if (!gridRef.current) return;
-    GridAction.removeRow(gridRef.current, true);
+    GridAction.removeRow(gridRef.current);
   };
 
   const hotkeyConfig: HotkeyConfig = {

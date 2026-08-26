@@ -1,0 +1,506 @@
+{
+  "ui": "DMF0003",
+  "ui_name_asis": "MktFcst (MKT FCST)",
+  "asis_file": "asis_stripped/DMF0003.cs",
+  "tobe_form": "nscm-fe/features/demand/src/pages/mkt-fcst/components/MktFcstForm.tsx",
+  "conditions": [
+    {
+      "cond": "Div.",
+      "asis": {
+        "label": "Division",
+        "control": "콤보단일(UsrCombo — 변수명 clbDivision)",
+        "combo": "GetDMInnerTable('MyDivision')",
+        "params": "GROUP_ID(NowGroupID), USER_ID",
+        "filter": "BigFilter Tables[0] — TB_FX_UserGroupAuthExtention AuthType='D'(JV Planner='J') 권한 division + ATTRIBUTE3<>'EE' + VALID_YN='Y'",
+        "cascade": "SIC(L3019) → InitSpread('LOAD')+InitSaveDataTable, Team 재조회, EdiSender 재조회, 40/비40 분기(EndCustomer·SalesSite·BizType 재조회), 81*=PlantSite 재조회, Project/Item/Owner 텍스트 clear(L3159-3161)",
+        "div40": "Project·PlantSite 비활성, CellQty 활성, InvalidExec 비활성, SalesSite=ScmSitebyEndCustomer40/UP_FX 40 경로 (L3049-3081)",
+        "div81": "Project·PlantSite 활성, 81 정확일치 시 EDISender 활성 (L3142-3145)",
+        "div82": "Project 활성, PlantSite 비활성+clear, InvalidExec 활성+checked, CellQty 비활성 (L3129-3135)",
+        "required": "Y (빈값 시 MSG00097, L1685-1690)",
+        "default": "첫 행(setListBox isAddALL=false)",
+        "evidence": ["DMF0003.cs:L375-377", "DMF0003.cs:L427-429", "DMF0003.cs:L605", "DMF0003.cs:L1685-1690", "DMF0003.cs:L3019-3164", "Designer.cs L1333 lblDivion='Division'/L1641 UsrCombo"]
+      },
+      "tobe": {
+        "label": "Div (LBL00501)",
+        "control": "콤보단일(DivisionField — CustomDropdown)",
+        "combo": "MyDivision (CMBO)",
+        "params": "@sesUserId(세션자동)",
+        "filter": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M UNIT_TP_CD='D' 권한 + ATTRIBUTE3<>'EE'. 미보유 division 자동 보정(resolveDivisionAutoSelect)",
+        "cascade": "변경 시 deptIds/endCustomers/scmSiteIds/bizTypes/plantSiteIds/senderCodes/projectCodes/itemIds/nickName/owners/itemTypes 일괄 clear + cellQtyYn(비40=false)/invalidYn(=division==='82')/bucketType(WEEKLY) 재설정 (Form L141-163)",
+        "div40": "Project disabled, CellQty 활성", "div81": "Sender Code 활성(81*)", "div82": "invalidYn 자동 true",
+        "required": "Y (DivisionField 내장 required)",
+        "default": "session.div ?? '40'(DIVISION.MOBILITY) (store L136)",
+        "evidence": ["MktFcstForm.tsx:L138-164", "useMktFcstStore.ts:L136", "SearchFields.tsx:L143-180"]
+      }
+    },
+    {
+      "cond": "Team",
+      "asis": {
+        "label": "Team",
+        "control": "콤보다중(UsrCheckedList)",
+        "combo": "GetDMInnerTable('UserTeamByDivision')",
+        "params": "GROUP_ID, USER_ID, DIVISION_ID",
+        "filter": "BigFilter Tables[1] — SITE_ITEM.OWNER 첫 토큰 사용자의 SSO 부서(권한 division) + 클라측 DIVISION_ID 필터 +ALL행",
+        "cascade": "SIC(L3166): 81*/82=EndCustomer(div,team)→SalesSite(div,'',endCustomer) / 그 외=EndCustomer(div,Team원문)→SalesSite(div,Team원문,customer) 재조회",
+        "div40": "SalesSite 재조회에 DEPT_ID=Team 원문 전달(L3198)", "div81": "DEPT_ID='' 전달(L3184)", "div82": "81 동일",
+        "required": "N", "default": "미선택(전체)",
+        "evidence": ["DMF0003.cs:L379-382", "DMF0003.cs:L434-437", "DMF0003.cs:L3166-3202"]
+      },
+      "tobe": {
+        "label": "Team (LBL00502)",
+        "control": "콤보다중(TeamField)",
+        "combo": "UserTeamByDivision (CMBO — comboId 오버라이드, AS-IS BigFilter 1:1 등록본)",
+        "params": "@sesUserId, @langCd(세션자동). @divisionId 토큰 없음 → 클라 division 필터",
+        "filter": "SITE_ITEM.OWNER 첫 토큰 사용자 부서 + 권한 division — DIVISION_ID 클라 재필터",
+        "cascade": "변경 시 endCustomers/scmSiteIds clear (Form L168)",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N", "default": "[] (store L137)",
+        "evidence": ["MktFcstForm.tsx:L165-171", "SearchFields.tsx:L185-233", "cmbo_meta UserTeamByDivision"]
+      }
+    },
+    {
+      "cond": "End Customer",
+      "asis": {
+        "label": "End Customer",
+        "control": "콤보다중(UsrCheckedList — 변수명 clbCustomer)",
+        "combo": "GetDMInnerTable('EndCustomerByDivision')",
+        "params": "GROUP_ID, USER_ID, DIVISION_ID, DEPT_ID(Team)",
+        "filter": "BigFilter Tables[2] — 40=SITE_ITEM(owner 부서) PROJECT_CODE+lookup END_CUSTOMER(40) UNION 비40=SITE.END_CUSTOMER(권한 division) — 클라측 DIVISION/DEPT 필터 +ALL행",
+        "cascade": "SIC(L3204): 81*/82=GetSalesSite(UP_FX SiteByEndCustomer) / 그 외=GetSalesSite40(UP_FX SiteByEndCustomer40) 재조회",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N", "default": "미선택(전체)",
+        "evidence": ["DMF0003.cs:L384-388", "DMF0003.cs:L443-474", "DMF0003.cs:L513-514", "DMF0003.cs:L3204-3215"]
+      },
+      "tobe": {
+        "label": "End Customer (LBL00080)",
+        "control": "콤보다중(CustomDropdown multiple+allOption)",
+        "combo": "EndCustomerByDivision (CMBO — AS-IS BigFilter 1:1 등록본)",
+        "params": "@sesUserId(세션자동)",
+        "filter": "40=SITE_ITEM owner-dept PROJECT_CODE+lookup UNION 비40 — FE 측 DIVISION_ID=division && (deptIds 비면 통과 or DEPT_ID∈deptIds) + CODE dedup (Form L90-100)",
+        "cascade": "변경 시 scmSiteIds clear (Form L184-191)",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N", "default": "[] (store L138)",
+        "evidence": ["MktFcstForm.tsx:L172-195", "cmbo_meta EndCustomerByDivision"]
+      }
+    },
+    {
+      "cond": "Biz. Type",
+      "asis": {
+        "label": "Biz Type",
+        "control": "콤보다중(UsrCheckedList)",
+        "combo": "GetDMInnerTable('BizType')",
+        "params": "GROUP_ID, USER_ID, DIVISION_ID",
+        "filter": "BigFilter Tables[3] — 40=lookup DM_BIZ_TYPE UNION ALL SCM_MST_PROJECT.BIZ_TYPE(전 division) — 클라측 DIVISION_ID 필터 +ALL행",
+        "cascade": "Division 변경 시 재조회(수신측). 그리드 Division 셀 변경 시 GetBizTypebyDivision(SCM0001)로 재바인딩(L3345 — 조회조건 콤보를 그리드 이벤트가 덮는 특이 동작)",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N", "default": "미선택(전체)",
+        "evidence": ["DMF0003.cs:L390-393", "DMF0003.cs:L448-449", "DMF0003.cs:L3076-3077", "DMF0003.cs:L3345-3346"]
+      },
+      "tobe": {
+        "label": "Biz.Type (LBL00504)",
+        "control": "콤보다중(BizTypeField)",
+        "combo": "BizTypebyDivision (CMBO — comboId 오버라이드, AS-IS BigFilter 1:1: 40 lookup UNION SCM_MST_PROJECT)",
+        "params": "없음(TOKENS 없음)",
+        "filter": "DIVISION_ID 클라 필터 (division prop 전달)",
+        "cascade": "Division 변경 시 clear",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N", "default": "[] (store L140)",
+        "evidence": ["MktFcstForm.tsx:L223-229", "SearchFields.tsx:L429-472", "cmbo_meta BizTypebyDivision"]
+      }
+    },
+    {
+      "cond": "Sender Code",
+      "asis": {
+        "label": "Sender Code",
+        "control": "콤보다중(UsrCheckedList clbEDISender)",
+        "combo": "GetDMInnerTable('EdiSender')",
+        "params": "GROUP_ID, USER_ID (필터 파라미터 없음)",
+        "filter": "BigFilter Tables[7] — lookup EDI_SENDER_CODE SEGMENT1='81' 고정 +ALL행",
+        "cascade": "Division 변경 시 재조회(L3045-3046). SP 파라미터 p_sender_code",
+        "div40": "라벨 비활성 (lblEDISender.Enabled=false, L440/3040)",
+        "div81": "division=='81' 정확일치 시만 활성 (L493-502, L3142-3145)",
+        "div82": "비활성",
+        "required": "N", "default": "미선택(전체)",
+        "evidence": ["DMF0003.cs:L408-410", "DMF0003.cs:L440", "DMF0003.cs:L493-502", "DMF0003.cs:L1756", "DMF0003.cs:L3040-3046", "Designer.cs L1437 lblEDISender='Sender Code'"]
+      },
+      "tobe": {
+        "label": "Sender Code (LBL00090)",
+        "control": "콤보단일(CustomDropdown allOption — multiple 아님, firstOr/toArr 단일값)",
+        "combo": "SenderCode (CMBO)",
+        "params": "없음(TOKENS 없음)",
+        "filter": "lookup EDI_SENDER_CODE VALID_YN='Y' (SEGMENT1=DIVISION_ID 반환) — FE 측 DIVISION_ID 클라 필터, disabled=!divisionId.startsWith('81')",
+        "cascade": "Division 변경 시 senderCodes clear (Form L150)",
+        "div40": "disabled", "div81": "활성(81* 계열 — AS-IS 는 '81' 정확일치만. 격차 notes)", "div82": "disabled",
+        "required": "N", "default": "[] (store L141)",
+        "evidence": ["MktFcstForm.tsx:L230-251", "cmbo_meta SenderCode"]
+      }
+    },
+    {
+      "cond": "Period",
+      "asis": {
+        "label": "(라벨 컨트롤 명시 없음 — drpPeriod)",
+        "control": "일범위선택(UsrDateRangePicker)",
+        "combo": "없음(달력) — 기본값 DM.PR_GET_DAY_RANGE(p_created_by, p_month=6) Tables[1] 'yyyymmdd:yyyymmdd'",
+        "params": "ControlValues 'start:end' (YYYYMMDD)",
+        "filter": "없음",
+        "cascade": "없음",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "Y (start>end MSG00108 L1696-1700, 3년 초과 MSG00164+종료일 2년 clamp L1702-1709)",
+        "default": "PR_GET_DAY_RANGE 6개월 구간 (L534, L6319-6333)",
+        "evidence": ["DMF0003.cs:L534", "DMF0003.cs:L1694-1709", "DMF0003.cs:L6319-6333"]
+      },
+      "tobe": {
+        "label": "Period (LBL00505)",
+        "control": "일달력 2개(PeriodField date 모드)",
+        "combo": "없음(달력)",
+        "params": "startYyyymmdd/endYyyymmdd (YYYYMMDD)",
+        "filter": "종료일 mindate=시작일",
+        "cascade": "없음",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "Y (PeriodField 내장)",
+        "default": "오늘~+180일(FE, toISOString UTC 기반) → 진입 후 applyDayRange 로 PR_GET_DAY_RANGE 구간 전체 교체(1회성) (store L131-133, L539-551)",
+        "evidence": ["MktFcstForm.tsx:L252-257", "useMktFcstStore.ts:L131-133", "useMktFcstStore.ts:L539-551"]
+      }
+    },
+    {
+      "cond": "Sales Site",
+      "asis": {
+        "label": "Sales Site",
+        "control": "콤보다중(UsrCheckedList clbSalesSite)",
+        "combo": "행소스 스왑: InitControls 1차 GetDMInnerTable('UserSiteByEndCustomer') 후 즉시 재설정(L554-561) — (div.startsWith('81')||div=='82') ? GetSalesSite=UP_FX 'SiteByEndCustomer'(PARAM1=division,2=customer,3=GROUP_ID,4=USER_ID,5=asYn) : GetSalesSite40=UP_FX 'SiteByEndCustomer40'(PARAM1=Team,2=customer,3=GROUP_ID,4=USER_ID,5=asYn)",
+        "params": "PARAM5 asYn = NowGroupID=='DM Planner (W/S)' ? 'Y':'N' (L7036/7061)",
+        "filter": "UP_FX SiteByEndCustomer/40 — SITE_TYPE='SALES' 권한 division·customer cascade (본 파일 UP_FX L1813/L2135) +ALL행",
+        "cascade": "Team/Customer/AS체크 변경 시 재조회 (L3201, L3204-3215, L7068-7079)",
+        "div40": "SiteByEndCustomer40(Team 기반)", "div81": "SiteByEndCustomer(Customer 기반)", "div82": "81 동일",
+        "required": "N", "default": "미선택(전체)",
+        "evidence": ["DMF0003.cs:L395-400", "DMF0003.cs:L519-520", "DMF0003.cs:L554-561", "DMF0003.cs:L7022-7066", "DMF0003.cs:L7068-7079"]
+      },
+      "tobe": {
+        "label": "Sales Site (LBL00011)",
+        "control": "콤보다중(CustomDropdown multiple+allOption)",
+        "combo": "행소스 스왑(조건식 원문): sc.divisionId === DIVISION.MOBILITY ? userSiteByEndCustomer : siteByEndCustomer (Form L128 — MOBILITY='40'. CMBO 'UserSiteByEndCustomer' / 'SiteByEndCustomer')",
+        "params": "토큰 미전달(@divisionId/@endCustomer/@deptId → '' 치환 = ALL 분기 전체 반환), @sesUserId(세션자동)",
+        "filter": "FE 측 toSiteOptions — DIVISION_ID/DEPT_ID(deptIds)/END_CUSTOMER(endCustomers) 클라 cascade 필터 + dedup (Form L102-129)",
+        "cascade": "Division/Team/EndCustomer 변경 시 scmSiteIds clear(상위 onChange)",
+        "div40": "userSiteByEndCustomer 행소스", "div81": "siteByEndCustomer 행소스", "div82": "siteByEndCustomer 행소스",
+        "required": "N", "default": "[] (store L139)",
+        "evidence": ["MktFcstForm.tsx:L40-56", "MktFcstForm.tsx:L102-129", "MktFcstForm.tsx:L196-220", "cmbo_meta SiteByEndCustomer/UserSiteByEndCustomer"]
+      }
+    },
+    {
+      "cond": "Bucket",
+      "asis": {
+        "label": "Bucket",
+        "control": "콤보단일(UsrCombo cboBucketType)",
+        "combo": "DM.DMF0003_GET_BUCKET_TYPE_CODE",
+        "params": "없음",
+        "filter": "SP 반환 (DAILY/WEEKLY/MONTHLY)",
+        "cascade": "SIC(L3217) → SetSpreadColumn(기간 컬럼 표시 전환)+현재주 border, 편집모드면 EditButton 2회. Click 가드: Insert 행 존재 시 MSG00227 (L6470-6480)",
+        "div40": "공통", "div81": "공통", "div82": "OnShown 시 기본 Daily (L348-355)",
+        "required": "Y (단일 콤보)",
+        "default": "'WEEKLY' (L568) — div82 는 OnShown 에서 Daily 로 전환",
+        "evidence": ["DMF0003.cs:L348-355", "DMF0003.cs:L531-532", "DMF0003.cs:L568", "DMF0003.cs:L3217-3289", "DMF0003.cs:L6356-6366", "DMF0003.cs:L6470-6480", "Designer.cs L1263 lblBucket='Bucket'"]
+      },
+      "tobe": {
+        "label": "Bucket (LBL00710)",
+        "control": "콤보단일(CustomDropdown isInput=false)",
+        "combo": "BucketType (CMBO) — CODE 첫 글자(D/W/M)로 정규화, 미응답 시 fallback 3종 (Form L58-81)",
+        "params": "없음(TOKENS 없음)",
+        "filter": "D/W/M 만 허용",
+        "cascade": "insertedRowCount>0 시 변경 차단 + MSG00227 alert (Form L268-282 — AS-IS L6470 1:1). Division 변경 시 무조건 WEEKLY 재설정(Form L161 — 주석은 82=Daily 이나 코드는 상수 WEEKLY. notes)",
+        "div40": "공통", "div81": "공통", "div82": "AS-IS 의 진입 시 Daily 미재현 (코드 기준)",
+        "required": "Y", "default": "BUCKET_TYPE.WEEKLY (store L144)",
+        "evidence": ["MktFcstForm.tsx:L58-81", "MktFcstForm.tsx:L258-286", "useMktFcstStore.ts:L144"]
+      }
+    },
+    {
+      "cond": "PJT",
+      "asis": {
+        "label": "Project",
+        "control": "텍스트다중(UsrMultiLineEditor txtProject)+팝업(btnProject)",
+        "combo": "팝업 SCM0002_ProjectbyDivisionPopupEx (Form_Load: division, Team, EndCustomer, ScmSite, Project)",
+        "params": "clbDivision/clbTeam/clbCustomer/clbSalesSite 원문, txtProject",
+        "filter": "팝업 내부 조회 (본 파일 밖)",
+        "cascade": "Division 변경 시 clear (L3159)",
+        "div40": "라벨/버튼 비활성 (L456-458, L3051-3053)", "div81": "활성", "div82": "활성",
+        "required": "N", "default": "빈값",
+        "evidence": ["DMF0003.cs:L456-458", "DMF0003.cs:L476-478", "DMF0003.cs:L3159", "DMF0003.cs:L5702-5723"]
+      },
+      "tobe": {
+        "label": "Project (LBL00507)",
+        "control": "텍스트+팝업(ProjectField — ProjectByDivisionModal, multiCheckbox) — extraConditions 영역",
+        "combo": "팝업 ProjectByDivisionModal (preSearchParams: divisionId + deptId/endCustomer/salesSite 'ALL' 보정 + projectCode='ALL'(multiCheckbox) + etc='N')",
+        "params": "division/deptIds/endCustomers/scmSiteIds 전달",
+        "filter": "disabled = sc.divisionId === DIVISION.MOBILITY('40') (Form L300)",
+        "cascade": "Division 변경 시 projectCodes clear (Form L151)",
+        "div40": "disabled", "div81": "활성", "div82": "활성",
+        "required": "N", "default": "[] (store L145)",
+        "evidence": ["MktFcstForm.tsx:L291-302", "SearchFields.tsx:L477-546"]
+      }
+    },
+    {
+      "cond": "Model/Nickname",
+      "asis": {
+        "label": "Model / Nickname",
+        "control": "텍스트다중(UsrMultiLineEditor txtItemId)+팝업(btnItemId)",
+        "combo": "팝업 DM0002_ItembyDivisionPopupEx (Form_Load: division, Team, EndCustomer, ScmSite, Project, ItemId)",
+        "params": "조회조건 원문 6종",
+        "filter": "팝업 내부 조회 (본 파일 밖)",
+        "cascade": "Division 변경 시 clear (L3160)",
+        "div40": "공통(항상 활성)", "div81": "공통", "div82": "공통",
+        "required": "N", "default": "빈값",
+        "evidence": ["DMF0003.cs:L3160", "DMF0003.cs:L5725-5747", "Designer.cs L1213 lblModel='Model / Nickname'"]
+      },
+      "tobe": {
+        "label": "Model / Nickname (LBL00508)",
+        "control": "텍스트+팝업(ItemField — ItemByDivisionModal, multiCheckbox) — extraConditions 영역",
+        "combo": "팝업 ItemByDivisionModal (preSearchParams 6필드 'ALL' 보정, headerTitle='Model / Nickname')",
+        "params": "division/deptIds/endCustomers/scmSiteIds/projectCodes/itemIds 전달",
+        "filter": "없음(항상 활성)",
+        "cascade": "Division 변경 시 itemIds/nickName clear (Form L152-153)",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N", "default": "[] (store L146)",
+        "evidence": ["MktFcstForm.tsx:L303-314", "SearchFields.tsx:L551-620"]
+      }
+    },
+    {
+      "cond": "Plant Site",
+      "asis": {
+        "label": "Plant Site",
+        "control": "콤보다중(UsrCheckedList)",
+        "combo": "GetDMInnerTable('UserPlantSiteByEndCustomer')",
+        "params": "GROUP_ID, USER_ID, DIVISION_ID, END_CUSTOMER",
+        "filter": "BigFilter Tables[6] — SITE_TYPE='PLANT' 권한 division — 클라측 DIVISION/END_CUSTOMER 필터 +ALL행",
+        "cascade": "Division 변경 시 81* 만 재조회 (L522-529, L3119-3126)",
+        "div40": "라벨 비활성 + 값 clear (L457, L3052/3055)",
+        "div81": "활성 — division 에 '81' 포함 시 로드",
+        "div82": "비활성 + clear (L3133-3134)",
+        "required": "N", "default": "미선택(전체)",
+        "evidence": ["DMF0003.cs:L402-406", "DMF0003.cs:L522-529", "DMF0003.cs:L3119-3134"]
+      },
+      "tobe": {
+        "label": "Plant Site (LBL00509)",
+        "control": "콤보다중(PlantSiteField) — extraConditions 영역",
+        "combo": "PlantSitebyEndCustomer (CMBO)",
+        "params": "@divisionId('{division}' quoted), @endCustomer(endCustomers 콤마조인|'ALL' quoted)",
+        "filter": "SITE_TYPE='PLANT' + INSTR 서버 필터. disabled=!division.startsWith('81')",
+        "cascade": "division/endCustomer 변경 = 재조회, Division 변경 시 plantSiteIds clear",
+        "div40": "disabled", "div81": "활성", "div82": "disabled",
+        "required": "N", "default": "[] (store L148)",
+        "evidence": ["MktFcstForm.tsx:L315-321", "SearchFields.tsx:L375-424"]
+      }
+    },
+    {
+      "cond": "Item Type",
+      "asis": {
+        "label": "Item Type",
+        "control": "콤보다중(UsrCheckedList)",
+        "combo": "SCM.SCM0001_GET_LOOKUP_VALUES('ITEM_TYPE_CODE')",
+        "params": "p_lookup_type='ITEM_TYPE_CODE'",
+        "filter": "lookup ITEM_TYPE_CODE +ALL행",
+        "cascade": "없음 (SP 파라미터 p_item_type)",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N", "default": "미선택(전체)",
+        "evidence": ["DMF0003.cs:L536-537", "DMF0003.cs:L1746", "DMF0003.cs:L6368-6379"]
+      },
+      "tobe": {
+        "label": "Item Type (LBL00068)",
+        "control": "콤보다중(CustomDropdown multiple+allOption) — extraConditions 영역",
+        "combo": "ItemType (CMBO)",
+        "params": "없음(TOKENS 없음)",
+        "filter": "lookup ITEM_TYPE_CODE VALID_YN='Y' ORDER BY DISPLAY_SEQ",
+        "cascade": "Division 변경 시 itemTypes clear (Form L155)",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N", "default": "[] (store L149)",
+        "evidence": ["MktFcstForm.tsx:L322-344", "cmbo_meta ItemType"]
+      }
+    },
+    {
+      "cond": "Owner",
+      "asis": {
+        "label": "Owner",
+        "control": "텍스트다중(UsrMultiLineEditor txtOwner)+팝업(btnOwner)",
+        "combo": "팝업 DM0020_OwnerbyDivisionPopup (Form_Load: division확장, Team, EndCustomer, ScmSite, Project, ItemId, Owner)",
+        "params": "조회조건 원문 7종",
+        "filter": "팝업 내부 조회 (본 파일 밖). SP 파라미터 p_owner=txtOwner.Text.Trim()",
+        "cascade": "Division 변경 시 clear (L3161)",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N", "default": "빈값",
+        "evidence": ["DMF0003.cs:L1747", "DMF0003.cs:L3161", "DMF0003.cs:L6449-6468"]
+      },
+      "tobe": {
+        "label": "Owner (LBL00510)",
+        "control": "텍스트+팝업(OwnerField — OwnerByDivisionModal, multiCheckbox) — extraConditions 영역",
+        "combo": "팝업 OwnerByDivisionModal (preSearchParams 'ALL' 보정)",
+        "params": "division/deptIds/endCustomers/scmSiteIds/projectCodes/owners 전달",
+        "filter": "없음",
+        "cascade": "Division 변경 시 owners clear (Form L154)",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N", "default": "[] (store L150)",
+        "evidence": ["MktFcstForm.tsx:L346-357", "SearchFields.tsx:L625-692"]
+      }
+    },
+    {
+      "cond": "Active(YesOrNo) — AS 체크",
+      "asis": {
+        "label": "AS",
+        "control": "체크박스(UsrCheckBox cboAS) — 단, lciASCheck.ContentVisible=false 로 실행 UI 미표시 (L552)",
+        "combo": "없음",
+        "params": "체크 변경 시 SalesSite 행소스 재조회(L7068-7079). 조회 p_as_yn 은 체크박스가 아닌 그룹 파생: NowGroupID=='DM Planner (W/S)' ? 'Y':'N' (L1753)",
+        "filter": "없음", "cascade": "SalesSite 재조회",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N", "default": "숨김(unchecked)",
+        "evidence": ["DMF0003.cs:L552", "DMF0003.cs:L1753", "DMF0003.cs:L7068-7079", "Designer.cs L273 cboAS.Text='AS'"]
+      },
+      "tobe": {
+        "label": "(UI 미노출)",
+        "control": "없음 — store 파생값",
+        "combo": "MktFcstWsPlannerYn (CMBO — 사용자 W/S Planner 그룹 소속 실측, 페이지 루트 L116-160)",
+        "params": "@sesUserId(세션자동)",
+        "filter": "wsPlannerYn=true 시 searchCondition.asYn=true 고정 (store L509-513), 조회 asYn = c.asYn || wsPlannerYn (store L293)",
+        "cascade": "없음",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N", "default": "asYn=false (store L159)",
+        "evidence": ["MktFcst.tsx:L116-160", "useMktFcstStore.ts:L293", "useMktFcstStore.ts:L509-513"]
+      }
+    },
+    {
+      "cond": "Sum (표준명 외 — 체크박스)",
+      "asis": {
+        "label": "Sum",
+        "control": "체크박스(UsrCheckBox chkSum)",
+        "combo": "없음",
+        "params": "표시 전용 — Daily/Weekly 시 상위 합계(M_/W_) 컬럼 표시 토글 (SetSpreadColumn L5830/5840)",
+        "filter": "없음", "cascade": "CheckedChanged → SetSpreadColumn (L5781-5787)",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N", "default": "unchecked (L511)",
+        "evidence": ["DMF0003.cs:L511", "DMF0003.cs:L5781-5787", "DMF0003.cs:L5822-5848", "Designer.cs L469 chkSum.Text='Sum'"]
+      },
+      "tobe": {
+        "label": "Sum (LBL00687)",
+        "control": "체크박스(Checkbox) — extraConditions 영역",
+        "combo": "없음", "params": "sumYn (표시 전용 — Grid 측 소비)",
+        "filter": "없음", "cascade": "없음",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N", "default": "false (store L151)",
+        "evidence": ["MktFcstForm.tsx:L361-365", "useMktFcstStore.ts:L151"]
+      }
+    },
+    {
+      "cond": "Color (표준명 외 — 체크박스)",
+      "asis": {
+        "label": "Color",
+        "control": "체크박스(UsrCheckBox chkColor)",
+        "combo": "없음",
+        "params": "표시 전용 — 실적구간 Gray 배경 vs 현재 주/월 초록 강조 전환 (Draw/EditButton/SetSpreadColumn 다수)",
+        "filter": "없음", "cascade": "CheckedChanged → SetSpreadColumn (L5628-5634)",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N", "default": "unchecked (L510)",
+        "evidence": ["DMF0003.cs:L510", "DMF0003.cs:L2126-2183", "DMF0003.cs:L5628-5634", "Designer.cs L236 chkColor.Text='Color'"]
+      },
+      "tobe": null
+    },
+    {
+      "cond": "Qty≥0 (표준명 외 — 체크박스)",
+      "asis": {
+        "label": "Qty≥0",
+        "control": "체크박스(UsrCheckBox cboQty)",
+        "combo": "없음",
+        "params": "p_qty_yn = checked ? 'Y':'N' (L1748)",
+        "filter": "없음", "cascade": "없음",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N", "default": "unchecked",
+        "evidence": ["DMF0003.cs:L1748", "Designer.cs L321 cboQty.Text='Qty≥0'"]
+      },
+      "tobe": {
+        "label": "Qty ≥ 0 (LBL00689)",
+        "control": "체크박스(Checkbox) — extraConditions 영역",
+        "combo": "없음",
+        "params": "qtyYn = qtyOverZero?'Y':'N' (store L286 — SP 실측: 선언만 있고 미사용. 전달만 유지)",
+        "filter": "없음", "cascade": "없음",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N", "default": "false (store L154)",
+        "evidence": ["MktFcstForm.tsx:L366-370", "useMktFcstStore.ts:L286"]
+      }
+    },
+    {
+      "cond": "Cell Qty (표준명 외 — 체크박스)",
+      "asis": {
+        "label": "Cell Qty",
+        "control": "체크박스(UsrCheckBox cboCellQty)",
+        "combo": "없음",
+        "params": "p_cell_yn = checked ? 'Y':'N' (L1749)",
+        "filter": "없음", "cascade": "없음",
+        "div40": "활성 (L459)", "div81": "비활성+unchecked (L479-480)", "div82": "비활성+unchecked",
+        "required": "N", "default": "unchecked",
+        "evidence": ["DMF0003.cs:L459", "DMF0003.cs:L479-480", "DMF0003.cs:L1749", "DMF0003.cs:L3054", "DMF0003.cs:L3087-3088", "Designer.cs L1065 cboCellQty.Text='Cell Qty'"]
+      },
+      "tobe": {
+        "label": "Cell Qty (LBL00690)",
+        "control": "체크박스(Checkbox) — extraConditions 영역",
+        "params": "cellYn = cellQtyYn?'Y':'N' (store L287 — QTY×CELL_PACK_COUNT 환산)",
+        "combo": "없음",
+        "filter": "disabled = divisionId !== DIVISION.MOBILITY('40'), Division 변경 시 비40 이면 false 로 reset (Form L157)",
+        "cascade": "없음",
+        "div40": "활성", "div81": "disabled", "div82": "disabled",
+        "required": "N", "default": "false (store L155)",
+        "evidence": ["MktFcstForm.tsx:L371-377", "MktFcstForm.tsx:L156-157", "useMktFcstStore.ts:L287"]
+      }
+    },
+    {
+      "cond": "MKT FCST 미등록 제외 (표준명 외 — 체크박스, Invalid)",
+      "asis": {
+        "label": "MKT FCST 미등록 제외 (checkInvalidExec — DevExpress CheckEdit)",
+        "control": "체크박스(DevExpress.XtraEditors.CheckEdit)",
+        "combo": "없음",
+        "params": "p_invalid_exec = checked ? 'Y':'N' (L1683/1750)",
+        "filter": "없음", "cascade": "없음",
+        "div40": "비활성+unchecked (L461, L3080)",
+        "div81": "비활성+unchecked (L488-491)",
+        "div82": "활성 + 기본 checked (L483-487, L3129-3132)",
+        "required": "N", "default": "div82 진입 시 checked, 그 외 unchecked",
+        "evidence": ["DMF0003.cs:L461", "DMF0003.cs:L483-491", "DMF0003.cs:L1683", "DMF0003.cs:L1750", "DMF0003.cs:L3129-3139", "Designer.cs L283 Caption='MKT FCST 미등록 제외'"]
+      },
+      "tobe": {
+        "label": "(UI 미노출 — store 자동)",
+        "control": "없음 — Division onChange 파생",
+        "combo": "없음",
+        "params": "invalidExec = invalidYn?'Y':'N' (store L291 — Sales Price 미등록 조합 제외. 실측 82 Y=175행 vs N=1,165행)",
+        "filter": "invalidYn = (division==='82') 자동 설정 (Form L159)",
+        "cascade": "없음",
+        "div40": "N 고정", "div81": "N 고정", "div82": "Y 고정(자동)",
+        "required": "N", "default": "false (store L158)",
+        "evidence": ["MktFcstForm.tsx:L158-159", "useMktFcstStore.ts:L288-291"]
+      }
+    }
+  ],
+  "cascade_chains": [
+    "ASIS: Division(SIC L3019)→Team→EdiSender→[40: EndCustomer(Team원문)→ScmSitebyEndCustomer40→BizType / 비40: EndCustomer(div,team)→GetSalesSite(UP_FX)→BizType→(81*)PlantSite] + Project/Item/Owner clear + InitSpread('LOAD') / Team(SIC L3166)→EndCustomer→SalesSite / Customer(SIC L3204)→SalesSite(UP_FX 스왑) / AS체크(L7068)→SalesSite / BucketType(SIC L3217)→기간컬럼 표시 전환",
+    "TOBE: Division→11필드 일괄 clear + cellQtyYn/invalidYn/bucketType 재설정(Form L141-163) + spreadTitleLoadPending='LOAD' (store L243-245) / Team→(endCustomers,scmSiteIds) clear / EndCustomer→scmSiteIds clear / Sales Site·EndCustomer·Team 콤보는 FE 클라 필터 cascade (서버 재조회 없음)"
+  ],
+  "excluded": [
+    "기능 버튼: btnColumn(Column Setting → DM0002_TitleSetForm_Popup true)/btnMeasure(Measure Setting → 동 false)/btnIncotermsChg(Master Chg → DMF0003_MatsterChgPopup — ADMIN/DM ADMIN/DM Planner 만 표시 L580-600) — 카탈로그 NoName_이미지2/1·Master Chg 3행",
+    "그리드 셀 콤보 다수: Team/Customer/Customer40/ScmSiteId(40)/PlantSiteId/Measure/FcstType/Incoterms/AS_FROM_SITE/DomExp(40) — spdMain_ComboSelChange L3291-3603, InsertRow L2529-3014 (UP_FX FCST_TYPE/AS_INCOTERMS/DM_CUSTOMS_HANDBOOK, MktFcstEditMeasure, AS_FROM_SITE 등)",
+    "컨텍스트 메뉴: Request_PR/View_PR/Add_History/View_History (DMF0003_PRPopup 계열, L6710-6953)",
+    "TO-BE 모달 내부 콤보: ProjectByDivisionModal/ItemByDivisionModal/OwnerByDivisionModal/ColumnLayoutModal/MeasureSelectModal 내부"
+  ],
+  "crosscheck": {
+    "catalog_screen": "MKT FCST (search_conditions_scp_dm.md L1284)",
+    "catalog_asis_rows": 21,
+    "catalog_tobe_rows": 13,
+    "my_asis_count": 19,
+    "my_tobe_count": 16,
+    "reason": "As-Is: 카탈로그 21행 중 3행은 기능버튼(Column/Measure Setting·Master Chg — excluded 분리) → 조건 18행. 내 추출 19 = 18 + checkInvalidExec('MKT FCST 미등록 제외') 1건 — 카탈로그(2026-01 스냅샷) 미수록, 소스 실측 우선. To-Be: 카탈로그 13행(체크박스류 5행은 '공통기능화 검토'로 To-Be 공란) vs 실구현 16 = 13 + Sum/Qty≥0/Cell Qty 체크박스 3종 구현. Color 는 제거(2026-07-03 사용자 결정), AS·Invalid 는 UI 미노출 store 자동 파생"
+  },
+  "notes": [
+    "Sales Site 행소스 스왑 — AS-IS: (81*||82)?UP_FX SiteByEndCustomer:UP_FX SiteByEndCustomer40(Team 기반) / TO-BE: divisionId===DIVISION.MOBILITY('40') ? userSiteByEndCustomer : siteByEndCustomer — 방향이 다름(AS-IS 는 40 이 별도 40 전용 분기, TO-BE 는 40 이 UserSiteByEndCustomer(40 owner-dept UNION 포함) 사용). TO-BE 는 서버 토큰 미전달(''='ALL' 분기) + FE 클라 필터로 cascade 재현",
+    "AS-IS 조회 SP DM.DMF0003_GET_MKT_FCST_DATA 19 파라미터 (L1734-1756) — p_as_yn 은 체크박스가 아닌 NowGroupID=='DM Planner (W/S)' 파생, p_user_dept_id=세션 Dept_ID. TO-BE 22 IN (createdBy/sesUserId/mnuId 보강)",
+    "TO-BE Sender Code 는 단일 선택(AS-IS 다중 CheckedList) — 유형 격차. 활성 조건도 AS-IS '81' 정확일치 vs TO-BE 81* prefix 로 미세 격차(81_UC 등에서 상이)",
+    "TO-BE Bucket: Division 변경 시 무조건 WEEKLY (Form L161 — 주석 'G4 82=Daily' 와 코드 불일치, AS-IS OnShown 82=Daily 미재현). Insert 행 존재 시 변경 차단 MSG00227 은 1:1",
+    "AS-IS Measure 필터(OnShown L313-329: 81*/82 + 비 W/S Planner = MKT_FCST_RP 만)는 조회조건 아님 — 그리드 measure 후보 축",
+    "AS-IS cboAS 는 Designer 존재·코드 배선되어 있으나 lciASCheck.ContentVisible=false 로 숨김 — 카탈로그 'AS' 행의 실체. TO-BE 는 wsPlannerYn CMBO 실측으로 asYn 강제(P1-③)",
+    "TO-BE Period 기본값 산출이 toISOString(UTC) 기반 (store L131) — DMF0014 store 는 dayjs 로컬(UTC 금지 주석). applyDayRange 가 진입 직후 서버값으로 교체하므로 실사용 영향은 짧음",
+    "TO-BE 개인화 조회조건 fetchSearchConditions(/admin/menu/DMF0003/search-conditions) 가 저장분 부분 병합 — 배열/불리언 역직렬화 포함 (store L442-498)",
+    "hook #112 카탈로그의 'Suum' 행 = chkSum(Sum) 오기"
+  ]
+}

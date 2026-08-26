@@ -1,5 +1,5 @@
-import { Checkbox } from '@lges/design-system';
-import type { ReactElement } from 'react';
+import { Checkbox, Tooltip } from '@lges/design-system';
+import { useRef, useState, type MouseEvent, type ReactElement } from 'react';
 import type { RowComponentProps } from 'react-window';
 
 import styles from './CustomListboxRow.module.scss';
@@ -23,6 +23,11 @@ export const CustomListboxRow = ({
   rowData: ListboxRow;
   multiple: boolean;
 }) => {
+  const labelRef = useRef<HTMLSpanElement>(null);
+  // 잘린 라벨에만 툴팁을 띄운다. disableHoverListener 로 거르면 상태 반영이
+  // 한 박자 늦어 첫 hover 를 놓치므로 open 을 직접 제어한다.
+  const [tooltipOpen, setTooltipOpen] = useState(false);
+
   const dataSet = rowData[index];
   const inlineStyle = {
     ...style,
@@ -47,15 +52,39 @@ export const CustomListboxRow = ({
     className?: string;
   } & Record<string, unknown>;
 
+  // 라벨 span 과 행 li 를 둘 다 본다. 어느 쪽이 넘치는지는 MUI 옵션 스타일이
+  // 행을 flex 로 만드는지에 따라 갈리므로 한쪽만 재면 놓친다.
+  const handleMouseEnter = (event: MouseEvent<HTMLLIElement>) => {
+    const label = labelRef.current;
+    const row = event.currentTarget;
+    const overflowed =
+      (!!label && label.scrollWidth > label.clientWidth) || row.scrollWidth > row.clientWidth;
+    if (overflowed) setTooltipOpen(true);
+  };
+
+  const handleMouseLeave = () => setTooltipOpen(false);
+
   return (
-    <li
-      {...restOptionProps}
-      className={[optionClassName, styles.childItem].filter(Boolean).join(' ')}
-      style={inlineStyle}
-      key={key}
+    <Tooltip
+      open={tooltipOpen}
+      title={childLabel}
+      placement='right'
+      disableFocusListener
+      disableTouchListener
     >
-      {multiple && <Checkbox checked={selected} />}
-      {childLabel}
-    </li>
+      <li
+        {...restOptionProps}
+        className={[optionClassName, styles.childItem].filter(Boolean).join(' ')}
+        style={inlineStyle}
+        key={key}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        {multiple && <Checkbox checked={selected} />}
+        <span ref={labelRef} className={styles.childLabel}>
+          {childLabel}
+        </span>
+      </li>
+    </Tooltip>
   );
 };

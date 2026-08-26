@@ -72,6 +72,8 @@ export const fetchExcelFormData = async (
   message?: string;
   /** o_rc1 — 양식 행 (조회조건에 걸린 키 × 입력 가능 measure) */
   pivot: UploadPreviewRow[];
+  /** [E20260820-XLSWEEKLY] o_result_cursor.WEEK_LIST — 주 시작일(YYYYMMDD) CSV → 배열 */
+  weekList: string[];
 }> => {
   const sesUserId = useSessionStore.getState().session.userId ?? '';
   try {
@@ -97,11 +99,26 @@ export const fetchExcelFormData = async (
         ok: false,
         message: inner?.RESULT_MSG || inner?.MSG || (res.data as { message?: string })?.message,
         pivot: [],
+        weekList: [],
       };
     }
-    return { ok: true, pivot: result.o_rc1 ?? [] };
+    // WEEK_LIST 는 커서 컬럼이라 정적 타입이 없다. unknown 을 그대로 String() 에 넣으면
+    //   no-base-to-string 에 걸리므로 원시값으로 좁힌 뒤 변환한다.
+    const weekRaw = (inner as { WEEK_LIST?: unknown } | undefined)?.WEEK_LIST;
+    const weekCsv =
+      typeof weekRaw === 'string' || typeof weekRaw === 'number' ? String(weekRaw) : '';
+    return {
+      ok: true,
+      pivot: result.o_rc1 ?? [],
+      weekList: weekCsv ? weekCsv.split(',').filter(w => /^\d{8}$/.test(w)) : [],
+    };
   } catch (e) {
-    return { ok: false, message: e instanceof Error ? e.message : undefined, pivot: [] };
+    return {
+      ok: false,
+      message: e instanceof Error ? e.message : undefined,
+      pivot: [],
+      weekList: [],
+    };
   }
 };
 

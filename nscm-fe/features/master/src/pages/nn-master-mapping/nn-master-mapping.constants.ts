@@ -37,3 +37,15 @@ export type RESPONSE_SET = (typeof RESPONSE_SET)[keyof typeof RESPONSE_SET];
 export const FALLBACK_ALL: ReadonlyArray<{ value: string; label: string }> = [
   { value: 'ALL', label: 'ALL' },
 ];
+
+/**
+ * Div - Team - End Customer - Sales Site cascade 를 한 번에 내려주는 조인 콤보 ID.
+ *
+ * 종전에는 단계마다 콤보를 따로 조회하고(MyDivision / TeambyDivision / EndCustomer / SalesSite)
+ * 화면이 cascade 컬럼과 strict 여부까지 배선했다. 이 화면은 End Customer 를 'SalesSite' 콤보의
+ * PROJECT_CODE 자리로 읽는 우회까지 하고 있었다 — 조인 1건으로 바꾸면 그 배선이 전부 사라진다.
+ *
+ * 콤보 SQL 컬럼 규약은 CascadeFields 헤더 주석 참조 —
+ *   중간 단계: <LEVEL>_CODE / <LEVEL>_NAME, 마지막 단계: CODE / NAME.
+ */
+export const SEARCH_CASCADE_COMBO_ID = 'SalesSite';

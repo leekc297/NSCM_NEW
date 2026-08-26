@@ -5,11 +5,15 @@ import { useEffect, useMemo, useRef } from 'react';
 import { IcGridColumnSetup } from '@foundation/assets';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { queryClient } from '@foundation/query-client';
-import { MainTitle, SubTitle } from '@shared/components';
+import {
+  ColumnLayoutModal,
+  MainTitle,
+  saveTitleSet,
+  SubTitle,
+  toColumnLayoutSettings,
+} from '@shared/components';
 import { useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
 import { useMessageStore } from '@shared/stores';
-
-import { ColumnLayoutModal, saveTitleSet, toColumnLayoutSettings } from '../../components';
 
 import { ContributeViewForm } from './components/ContributeViewForm';
 import { ContributeViewGrid } from './components/ContributeViewGrid';
@@ -21,7 +25,6 @@ import {
   TITLESET_DIVISION,
   TITLESET_SHEET,
 } from './contribute-view.constants';
-import styles from './ContributeView.module.scss';
 import { useContributeViewValidation } from './hooks/useContributeViewValidation';
 import type { SalesViewRow, ValidationCheckCount } from './types';
 import { useContributeViewStore } from './useContributeViewStore';
@@ -190,7 +193,7 @@ export const ContributeView = ({ tabId, title }: PageProps<MENU_ID>) => {
   ];
 
   return (
-    <div className={styles.container}>
+    <>
       <MainTitle
         title={title}
         menuId={MENU_ID}
@@ -214,9 +217,7 @@ export const ContributeView = ({ tabId, title }: PageProps<MENU_ID>) => {
         searchParam={searchParams}
         customButtons={customButtons}
       />
-      <div className={styles.gridContainer}>
-        <ContributeViewGrid gridRef={gridRef} gridFilterRef={gridFilterRef} data={rows} />
-      </div>
+      <ContributeViewGrid gridRef={gridRef} gridFilterRef={gridFilterRef} data={rows} />
       <ContributeVersionModal
         open={versionPopupOpen}
         onClose={() => setVersionPopupOpen(false)}
@@ -282,6 +283,6 @@ export const ContributeView = ({ tabId, title }: PageProps<MENU_ID>) => {
           });
         }}
       />
-    </div>
+    </>
   );
 };

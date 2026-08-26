@@ -1,0 +1,66 @@
+.autocomplete {
+  height: 36px;
+}
+
+.customDropdown {
+  // 필드 폭을 컨테이너(그리드 셀)에 고정 — 칩/내용이 많아도 이 폭을 넘지 않고,
+  // 내용이 짧아도 줄지 않아 항상 '원래 폭'을 유지한다. 넘치는 칩은 아래 chipClip 의 ellipsis 로 잘림.
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+
+  [class*='MuiInputBase-formControl'][class*='MuiAutocomplete-inputRoot'] {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    white-space: nowrap;
+    // min-width:0 → 칩이 많아도 이 인풋루트가 FormItem 칼럼 안에서 줄어들 수 있게.
+    // ※ overflow:hidden 은 쓰지 않는다 — notchedOutline(fieldset, top:-5px)의
+    //   윗변 테두리가 잘려 '상단 라인 사라짐'이 발생한다. 칩은 아래 ellipsis 로 이미 잘리므로
+    //   넘침 클리핑이 불필요하다.
+    min-width: 0;
+  }
+
+  // 칩 폭 배분 규칙 (사용자 확정 2026-08-21 - 스크린샷 기준)
+  //  - 칩 1개(+N 없음): 아이콘 자리를 뺀 남은 폭 전부를 칩이 쓴다.
+  //  - +N 이 있을 때: +N 을 먼저 온전히 확보하고, 남는 폭을 칩이 쓴다.
+  //  두 경우 모두 '남는 폭보다 라벨이 길 때만' 줄임표가 생긴다. 짧은 라벨은 자르지 않는다.
+  //
+  // 주의: 폭을 예약하는 input 규칙 자체는 여기(CSS 모듈)가 아니라 CustomDropdown.tsx 의
+  //   MULTI_CHIP_WIDTH_SX(sx)에 있다. 디자인시스템이 호출부 sx 를 마지막에 병합하므로
+  //   주입 순서와 무관하게 적용된다 - 같은 규칙을 이 파일에 두었을 때는 적용되지 않았다.
+
+  // 다중 선택('ALL')은 placeholder 로 표시된다. 디자인시스템 테마가
+  // input::placeholder 를 commonTextLighter(흐린 회색)로 강제 지정하고 있어,
+  // 값 텍스트(currentColor = commonTextBasic)와 같은 진한 색으로 맞춘다.
+  // 테마엔 !important 가 없으므로 이 규칙이 특이도/주입순서와 무관하게 이긴다.
+  // (disabled 필드는 currentColor 가 흐린 색이라 그대로 흐리게 유지됨 — 의도된 동작)
+  input::placeholder,
+  [class*='MuiInputBase-input']::placeholder {
+    color: currentColor !important;
+    opacity: 1 !important;
+  }
+}
+
+// 선택 칩 래퍼 — 콘텐츠를 감싸며(hug), 폭이 모자랄 때만 … 로 잘린다.
+// flex:0 1 auto → 확장하지 않아 짧은 라벨 뒤 +N 이 바로 붙는다(여백 드리프트 없음).
+// 넓은 필드에서 라벨 전체가 보이는 건 위의 input basis:0 처리 덕분(input 이 폭을 예약 안 함).
+// min-width:0 → 좁을 때 콘텐츠보다 더 줄어 내부 Typography 가 … 로 자른다.
+// title 속성으로 hover 시 전체 라벨을 네이티브 툴팁으로 보여준다.
+// (Chip 은 title prop 을 전달하지 않으므로 span 래퍼로 감싼다.)
+.chipClip {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  flex: 0 1 auto;
+  overflow: hidden;
+}
+
+// +N 배지 래퍼 — 칩보다 먼저 자리를 확보한다(flex:0 0 auto = 축소 금지).
+// 라벨이 아무리 길어도 +N 은 온전히 보이고, 줄어드는 쪽은 언제나 라벨 칩이다.
+// (Chip 이 className 을 전달하는지에 의존하지 않도록 chipClip 과 같은 span 래퍼로 감싼다.)
+.chipCount {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+}

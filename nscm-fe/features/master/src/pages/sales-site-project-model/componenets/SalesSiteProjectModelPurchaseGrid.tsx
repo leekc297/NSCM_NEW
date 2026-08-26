@@ -9,6 +9,7 @@ import { OwnerModal } from '../../../components';
 import type { MODAL_OWNER } from '../../../components/ownerModal/owner-modal.constants';
 import type { MENU_ID, RESPONSE_SET } from '../sales-site-project-model.constants';
 import { SHEETS, SHEET_INDEX, SINGLE_OWNER_DIVISIONS } from '../sales-site-project-model.constants';
+import { useEditBaseline } from '../sales-site-project-model.editBaseline';
 import { useGridCombos } from '../sales-site-project-model.gridCombos';
 import { useSalesSiteProjectModelStore } from '../useSalesSiteProjectModelStore';
 
@@ -37,6 +38,9 @@ export const SalesSiteProjectModelPurchaseGrid = ({
   const [clickedRow, setClickedRow] = useState(-1);
   const clickedDataItem = GridUtils.getRow(gridRef.current, clickedRow);
 
+  // 조회 원본 기준선으로 수정상태(M)를 재판정 — 사유는 sales-site-project-model.editBaseline 참조.
+  const resyncRow = useEditBaseline({ gridRef, editTrackerRef, data });
+
   // 파라미터가 필요한 셀 콤보(Sales Plant 등) 적용 — 규칙은 sales-site-project-model.gridCombos 참조.
   // 하단은 상단 행 더블클릭으로 조회되므로 그 행의 division 이 곧 조회 조건이다.
   const gridComboHandlers = useGridCombos({
@@ -58,6 +62,7 @@ export const SalesSiteProjectModelPurchaseGrid = ({
     dataItem.OWNER = owners;
     dataItem.OWNER_NAME = ownersNames;
 
+    resyncRow(dataItem);
     gridRef.current?.refreshRange(new CellRange(clickedRow, 0, clickedRow, -1));
   };
 

@@ -91,7 +91,10 @@ export const CustomerFcstTemplateModal = ({
   useEffect(() => {
     const g = gridRef.current;
     if (!g) return;
-    const paint = (_s: unknown, e: { panel: { cellType: number }; row: number; col: number; cell: HTMLElement }) => {
+    const paint = (
+      _s: unknown,
+      e: { panel: { cellType: number }; row: number; col: number; cell: HTMLElement }
+    ) => {
       // 데이터 셀만 (헤더 제외)
       if (e.panel !== g.cells) return;
       // 값 컬럼(= 버킷 일자 컬럼)만 대상. 1단 헤더라 binding 이 곧 `YYYYMMDD`.
@@ -99,11 +102,12 @@ export const CustomerFcstTemplateModal = ({
       if (!/^\d{8}$/.test(binding)) return;
       const item = g.rows[e.row]?.dataItem as ExcelFormRow | undefined;
       const ok = uploadableWeekTokens(item).has(binding);
-      e.cell.classList.toggle(styles.uploadableCell, ok);
-      // ⭐ [2026-08-14] 해당 주차에 DMF0007 기준데이터가 없으면 **입력 불가**로 명시한다
-      //   (사용자 지시: "기간에 대한 데이터가 없으면 입력 불가로 표시").
-      //   색칠 없음(=중립)과 입력 불가를 구분하지 않으면 사용자가 빈칸을 "입력해도 되는 칸"으로 읽는다.
-      e.cell.classList.toggle(styles.blockedCell, !ok);
+      // 셀 배경 = 공통 표준(hook #95) 클래스만 쓴다 (사용자 요구 2026-08-21).
+      //   입력 가능 = wj-cell-editable (Yellow #fff8cd — 편집가능 표준색)
+      //   입력 불가 = wj-cell-non-editable (Gray #f1f4f3 — 타 화면 '과거달 입력불가' 와 동일 회색)
+      //   금지: 화면 전용 색·빗금(구 .uploadableCell / .blockedCell). 표준 그리드와 달라 보인다.
+      e.cell.classList.toggle('wj-cell-editable', ok);
+      e.cell.classList.toggle('wj-cell-non-editable', !ok);
       e.cell.title = ok ? '' : '입력 불가 — 해당 기간의 기준데이터(DMF0007) 없음';
     };
     g.formatItem.addHandler(paint);
@@ -217,7 +221,9 @@ export const CustomerFcstTemplateModal = ({
               searchWrapper = flex 축소 금지 (없으면 그리드가 조회조건을 0 높이로 눌러 덮는다). */}
           <div className={styles.searchWrapper}>
             <SearchArea
-              searchButtonLabel={isFetching ? t('LBL00665', 'Loading...') : t('LBL00112', '_Search')}
+              searchButtonLabel={
+                isFetching ? t('LBL00665', 'Loading...') : t('LBL00112', '_Search')
+              }
               onSearch={handleFind}
               conditions={
                 <>

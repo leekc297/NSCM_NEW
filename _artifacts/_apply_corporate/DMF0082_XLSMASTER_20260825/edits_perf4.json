@@ -1,0 +1,6 @@
+[
+ {
+  "old": "    SELECT K.DIVISION_ID\n         , NVL(EC.EC_NAME, K.END_CUSTOMER)      AS END_CUSTOMER\n",
+  "new": "    SELECT /*+ LEADING(K MSR) USE_HASH(LP) NO_MERGE(LP) */  --[E20260825-XLSMASTER perf4] 바인드 플랜 고정 — LP 1회 실체화+해시 (리터럴 3s vs 바인드 35s+ 실측)\n           K.DIVISION_ID\n         , NVL(EC.EC_NAME, K.END_CUSTOMER)      AS END_CUSTOMER\n"
+ }
+]

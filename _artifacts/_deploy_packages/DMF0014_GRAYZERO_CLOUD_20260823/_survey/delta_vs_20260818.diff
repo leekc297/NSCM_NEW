@@ -1,0 +1,69 @@
+--- 
++++ 
+@@ -1 +0,0 @@
+--- 2026-08-18 [E20260818-BATCHKEEP] 재업로드 배치 정정 + [E20260818-GRAYWEEK] 회색주차 반려
+@@ -902 +901 @@
+-                        AND    D.UPLOAD_BUCKET_TYPE IN (SELECT CASE (NVL(NVL(TO_DATE(TO_CHAR(TO_NUMBER(Z.ATTRIBUTE16)),'YYYYMMDD') - TO_DATE(TO_CHAR(TO_NUMBER(Z.ATTRIBUTE15)),'YYYYMMDD'), TO_DATE(TO_CHAR(TO_NUMBER(Z.ATTRIBUTE15)),'YYYYMMDD') - TO_DATE(TO_CHAR(TO_NUMBER(Z.ATTRIBUTE14)),'YYYYMMDD')), TO_DATE(TO_CHAR(TO_NUMBER(Z.ATTRIBUTE17)),'YYYYMMDD') - TO_DATE(TO_CHAR(TO_NUMBER(Z.ATTRIBUTE16)),'YYYYMMDD')))  /* [BUCKET FIX 07-08] V_TITLE(주차라벨 'W29')는 TO_DATE 불가 → 날짜행(2Row, ATTRIBUTE1 NULL) 의 과학표기 날짜를 TO_NUMBER 정규화하여 간격 산출(월경계 정확 7=WEEKLY) */  /* [BUCKET FIX 07-06] 부분 첫주(월1일)=2~3번째 일자 간격(완전주) 우선 */
++                        AND    D.UPLOAD_BUCKET_TYPE IN (SELECT CASE (NVL(NVL(TO_DATE(CASE WHEN LENGTH(REGEXP_REPLACE(TRIM(Z.ATTRIBUTE16),'[^0-9]','')) >= 8 THEN SUBSTR(REGEXP_REPLACE(TRIM(Z.ATTRIBUTE16),'[^0-9]',''),1,8) END,'YYYYMMDD') - TO_DATE(CASE WHEN LENGTH(REGEXP_REPLACE(TRIM(Z.ATTRIBUTE15),'[^0-9]','')) >= 8 THEN SUBSTR(REGEXP_REPLACE(TRIM(Z.ATTRIBUTE15),'[^0-9]',''),1,8) END,'YYYYMMDD'), TO_DATE(CASE WHEN LENGTH(REGEXP_REPLACE(TRIM(Z.ATTRIBUTE15),'[^0-9]','')) >= 8 THEN SUBSTR(REGEXP_REPLACE(TRIM(Z.ATTRIBUTE15),'[^0-9]',''),1,8) END,'YYYYMMDD') - TO_DATE(CASE WHEN LENGTH(REGEXP_REPLACE(TRIM(Z.ATTRIBUTE14),'[^0-9]','')) >= 8 THEN SUBSTR(REGEXP_REPLACE(TRIM(Z.ATTRIBUTE14),'[^0-9]',''),1,8) END,'YYYYMMDD')), TO_DATE(CASE WHEN LENGTH(REGEXP_REPLACE(TRIM(Z.ATTRIBUTE17),'[^0-9]','')) >= 8 THEN SUBSTR(REGEXP_REPLACE(TRIM(Z.ATTRIBUTE17),'[^0-9]',''),1,8) END,'YYYYMMDD') - TO_DATE(CASE WHEN LENGTH(REGEXP_REPLACE(TRIM(Z.ATTRIBUTE16),'[^0-9]','')) >= 8 THEN SUBSTR(REGEXP_REPLACE(TRIM(Z.ATTRIBUTE16),'[^0-9]',''),1,8) END,'YYYYMMDD')))  /* [E20260823-BUCKETNLS] 헤더 일자 = 숫자만 추출한 앞 8자리로 판정. 구식 TO_DATE(TO_CHAR(TO_NUMBER(x))) 는 NLS_NUMERIC_CHARACTERS 에 의존해(엑셀 '20260803.0' → 소수점 문자가 ','인 DB 에서 ORA-01722) 클라우드에서만 깨졌다. 날짜서식('2026-08-10')·과학표기·공백도 같은 값으로 수렴한다. 8자리 미만이면 NULL → 기존 NVL 폴백이 다음 간격을 쓴다(동작 보존). */  /* [BUCKET FIX 07-08] V_TITLE(주차라벨 'W29')는 TO_DATE 불가 → 날짜행(2Row, ATTRIBUTE1 NULL) 의 과학표기 날짜를 TO_NUMBER 정규화하여 간격 산출(월경계 정확 7=WEEKLY) */  /* [BUCKET FIX 07-06] 부분 첫주(월1일)=2~3번째 일자 간격(완전주) 우선 */
+@@ -915 +914 @@
+-                                                        AND    (Z.ATTRIBUTE1 IS NULL OR UPPER(Z.ATTRIBUTE1) = 'DIVISION*') AND Z.ATTRIBUTE15 IS NOT NULL AND    REGEXP_LIKE(Z.ATTRIBUTE15, '^[0-9.eE+-]+$')));  /* [BUCKET FIX 08-14] ⭐ 1단 헤더 지원 — **헤더행**(일자행 ATTRIBUTE1 NULL 또는 타이틀행 'Division*')만 채택한다. 데이터행까지 열면 값칸('100')이 TO_DATE 되어 ORA-01840 이 난다. 구 조건(ATTRIBUTE1 IS NULL)은 일자행만 인정해, 일자행이 없는 1단 양식에서 서브쿼리가 공집합이 되어 **전건 Invalid Measure Upload Bucket** 이 됐다. 2단 파일의 주차라벨 타이틀행('W29')은 위 숫자 정규식에서 자동 탈락하므로 종전 동작은 그대로다. */
++                                                        AND    (Z.ATTRIBUTE1 IS NULL OR UPPER(Z.ATTRIBUTE1) = 'DIVISION*') AND Z.ATTRIBUTE15 IS NOT NULL AND    LENGTH(REGEXP_REPLACE(TRIM(Z.ATTRIBUTE15),'[^0-9]','')) >= 8  /* [E20260823-BUCKETNLS] 날짜서식 헤더('2026-08-10')도 채택 — 구 정규식은 숫자문자만 허용해     클라우드에서 채택 0건 → 빈 IN 집합 → 전건 'Invalid Measure Upload Bucket' 이 됐다 */));  /* [BUCKET FIX 08-14] ⭐ 1단 헤더 지원 — **헤더행**(일자행 ATTRIBUTE1 NULL 또는 타이틀행 'Division*')만 채택한다. 데이터행까지 열면 값칸('100')이 TO_DATE 되어 ORA-01840 이 난다. 구 조건(ATTRIBUTE1 IS NULL)은 일자행만 인정해, 일자행이 없는 1단 양식에서 서브쿼리가 공집합이 되어 **전건 Invalid Measure Upload Bucket** 이 됐다. 2단 파일의 주차라벨 타이틀행('W29')은 위 숫자 정규식에서 자동 탈락하므로 종전 동작은 그대로다. */
+@@ -1618,14 +1617,14 @@
+-            /* [E20260818-GRAYWEEK] 회색(입력불가) 주차 입력 차단 ─────────────────────────
+-               DMF0007 Customer Master 가 VALID_YN='N' 으로 잠근 주차(화면 회색 컬럼)에 값을 넣어도
+-               종전 검증은 사이트·메저 존재와 버킷타입만 보고 통과시켜 그대로 저장됐다.
+-               헤더행의 주차 일자(ATTRIBUTE14~18)를 행으로 전개해, **값이 있는 주차**가
+-               마스터에 VALID_YN='Y' 로 없으면 ERROR 로 반려한다. */
+-            BEGIN
+-                UPDATE SCM_ADM_EXCEL_UPLOAD AEU
+-                SET    UPLOAD_STATUS_CODE = 'ERROR'
+-                      ,MESSAGE_TEXT       = 'Invalid Upload Week. (not editable in Customer Master)'
+-                WHERE  PROGRAM_ID = V_PROGRAM_ID
+-                AND    SHEET_NAME = V_SHEET_NAME
+-                AND    CREATED_BY = P_CREATED_BY
+-                AND    TO_CHAR(CREATION_DATE, 'YYYY-MM-DD HH24:MI:SS.FF3') = V_CREATION_DATE
+-                AND    UPLOAD_STATUS_CODE = 'UPLOAD'
++            /* [E20260818-GRAYWEEK → E20260823-GRAYZERO] 회색(입력불가) 주차 정책 전환 ─────
++               종전: 회색 주차에 값이 있으면 스테이징 행을 ERROR 로 바꾸고 업로드 전체를 반려했다.
++               변경(사용자 지시 2026-08-23): **반려하지 않는다.** 그 칸만 0 으로 적재하고
++                 나머지 칸은 정상값 그대로 넣는다 — 적재부 INSTEAD 값 CASE 참조.
++               여기서는 몇 칸이 0 처리 대상인지만 세어 로그(175)에 남긴다. 상태 변경·RETURN 없음. */
++            BEGIN
++                SELECT COUNT(*)
++                INTO   v_err_cnt
++                FROM   SCM_ADM_EXCEL_UPLOAD AEU
++                WHERE  AEU.PROGRAM_ID = V_PROGRAM_ID
++                AND    AEU.SHEET_NAME = V_SHEET_NAME
++                AND    AEU.CREATED_BY = P_CREATED_BY
++                AND    TO_CHAR(AEU.CREATION_DATE, 'YYYY-MM-DD HH24:MI:SS.FF3') = V_CREATION_DATE
++                AND    AEU.UPLOAD_STATUS_CODE = 'UPLOAD'
+@@ -1666 +1664,0 @@
+-                v_err_cnt := SQL%ROWCOUNT;
+@@ -1669 +1667 @@
+-                    V_LOG_MESSAGE := '########## ERROR Invalid Upload Week (gray). ##########';
++                    V_LOG_MESSAGE := '########## GRAYZERO: non-editable week value -> 0 (rows=' || v_err_cnt || ') ##########';
+@@ -1673,4 +1670,0 @@
+-                    COMMIT;   -- ERROR 상태 확정
+-                    OPEN O_RESULT_CURSOR FOR
+-                    SELECT '-1' AS CODE, 'ERR_RTN: - Validation Check' AS MSG, V_LOG_TYPE||','||V_LOG_MESSAGE AS EVENT FROM DUAL;
+-                    RETURN;  -- 프로시저 즉시 종료
+@@ -2349 +2343,18 @@
+-                      ,TO_NUMBER(V.VALUE)
++                      /* [E20260823-GRAYZERO] Customer Fcst Master 가 VALID_YN='Y' 로 열어둔 주차가
++                         아니면(화면 회색 구간) 사용자가 값을 넣었어도 **0 으로 적재**한다.
++                         판정식은 위 GRAYZERO 집계와 동일한 술어 — 기준이 갈라지면 화면 색과 적재가 어긋난다. */
++                      ,CASE WHEN EXISTS (
++                                SELECT 1
++                                FROM   DM_MST_CUSTOMER_FCST M, SCM_MST_DIVISION MD
++                                WHERE  M.VALID_YN = 'Y'
++                                AND    M.DIVISION_ID = MD.DIVISION_ID
++                                AND    (MD.DIVISION_ID = V.ATTRIBUTE1 OR MD.DIVISION_NAME = V.ATTRIBUTE1)
++                                AND    M.SCM_SITE_ID = V.ATTRIBUTE2
++                                AND    M.MEASURE     = V.ATTRIBUTE10
++                                /* 헤더 셀이 엑셀 숫자서식으로 '20260803.0' 처럼 들어오는 경우까지 맞춘다
++                                   — 종전 검증(TO_CHAR(TO_NUMBER(..),'FM99999999'))과 같은 정규화. */
++                                AND    M.SUMMARY_BUCKET_VALUE =
++                                       CASE WHEN REGEXP_LIKE(TRIM(C.YYYYMMDD), '^[0-9.eE+-]+$')
++                                            THEN TO_CHAR(TO_NUMBER(TRIM(C.YYYYMMDD)), 'FM99999999')
++                                            ELSE TRIM(C.YYYYMMDD) END)
++                            THEN TO_NUMBER(V.VALUE) ELSE 0 END

@@ -1,0 +1,165 @@
+{
+  "source": "C:\\Projects\\NSCM\\GSCM\\06.UIL\\GSCM.DM.Forms.UIL\\Plan\\DMF0082_FcstNPrice_Mgmt\\DMF0082_FcstNPrice_Mgmt.cs",
+  "defcolumns": {},
+  "handlers": {
+    "spdMain_ClipboardPasted": {
+      "exists": true,
+      "blocks": [
+        {
+          "line_from": 7865,
+          "line_to": 8199,
+          "loc": 335,
+          "columns_referenced": [
+            "CELL_PROD_SITE_ID",
+            "Division",
+            "Incoterms",
+            "ItemId",
+            "MEASURE",
+            "Measure",
+            "ScmSiteId"
+          ],
+          "setvalue_count": 5,
+          "getvalue_count": 26
+        }
+      ]
+    },
+    "spdMain_LeaveCell": {
+      "exists": true,
+      "blocks": [
+        {
+          "line_from": 8496,
+          "line_to": 8645,
+          "loc": 150,
+          "columns_referenced": [],
+          "setvalue_count": 0,
+          "getvalue_count": 0
+        }
+      ]
+    },
+    "spdMain_CellDoubleClick": {
+      "exists": true,
+      "blocks": [
+        {
+          "line_from": 3535,
+          "line_to": 3833,
+          "loc": 299,
+          "columns_referenced": [
+            "BizType",
+            "Customer",
+            "Division",
+            "DomExp",
+            "FcstType",
+            "Incoterms",
+            "ItemId",
+            "ItemName",
+            "ItemType",
+            "Measure",
+            "NickName",
+            "Project",
+            "ProjectName",
+            "ProjectOwner",
+            "ProjectStatus",
+            "ScmSiteId",
+            "Team"
+          ],
+          "setvalue_count": 0,
+          "getvalue_count": 21
+        }
+      ]
+    },
+    "spdMain_ComboSelChange": {
+      "exists": true,
+      "blocks": [
+        {
+          "line_from": 8202,
+          "line_to": 8373,
+          "loc": 172,
+          "columns_referenced": [
+            "BUCKET",
+            "Customer",
+            "Division",
+            "Incoterms",
+            "ItemId",
+            "Measure",
+            "PlantSiteId",
+            "ScmSiteId",
+            "Team"
+          ],
+          "setvalue_count": 0,
+          "getvalue_count": 21
+        }
+      ]
+    },
+    "spdMain_EditChange": {
+      "exists": true,
+      "blocks": [
+        {
+          "line_from": 8376,
+          "line_to": 8381,
+          "loc": 6,
+          "columns_referenced": [
+            "Measure"
+          ],
+          "setvalue_count": 0,
+          "getvalue_count": 0
+        }
+      ]
+    },
+    "spdMain_TopChange": {
+      "exists": true,
+      "blocks": [
+        {
+          "line_from": 8489,
+          "line_to": 8493,
+          "loc": 5,
+          "columns_referenced": [],
+          "setvalue_count": 0,
+          "getvalue_count": 0
+        }
+      ]
+    },
+    "spdMain_KeyUp": {
+      "exists": true,
+      "blocks": [
+        {
+          "line_from": 8385,
+          "line_to": 8425,
+          "loc": 41,
+          "columns_referenced": [],
+          "setvalue_count": 0,
+          "getvalue_count": 0
+        }
+      ]
+    },
+    "spdMain_Changed": {
+      "exists": true,
+      "blocks": [
+        {
+          "line_from": 5538,
+          "line_to": 7626,
+          "loc": 2089,
+          "columns_referenced": [
+            "AS_FROM_SITE",
+            "BUCKET",
+            "CELL_PROD_SITE_ID",
+            "CURRENCY",
+            "Customer",
+            "Division",
+            "DomExp",
+            "FcstType",
+            "Incoterms",
+            "ItemId",
+            "MEASURE",
+            "Measure",
+            "MeasureGroup",
+            "PlantSiteId",
+            "Project",
+            "ScmSiteId"
+          ],
+          "setvalue_count": 0,
+          "getvalue_count": 50
+        }
+      ]
+    }
+  }
+}

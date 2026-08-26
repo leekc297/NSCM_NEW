@@ -37,8 +37,17 @@ interface CustomerFcstUploadAction {
 }
 
 // toISOString(UTC) 금지 — dayjs = 로컬 날짜 (DMF0048 A-3 선례)
-const today = dayjs().format('YYYYMMDD');
-const sixMonthsAhead = dayjs().add(180, 'day').format('YYYYMMDD');
+// Period 조회조건 초기값 — MktFcst(DMF0003) 기본값과 동일 규칙 (2026-08-20 사용자 요구).
+//   PR_GET_DAY_RANGE(p_month=6) o_rc2 = "당월 1일 ~ 6개월째 되는 달의 말일" 을 FE 에서 그대로 계산한다
+//   (forecast-price FORECAST_PRICE_INIT_PERIOD 와 같은 식 — .add(6,'month').subtract(1,'day').
+//    구 값 '오늘 ~ +180일' 은 이 규칙과 달라 MktFcst 와 화면상 기간이 어긋났다).
+//   SP 응답이 오면 applyDayRange 가 같은 값으로 덮으므로 SP 유무와 무관하게 같은 기본값이 보인다.
+// Div/Team 변경 시 Form 에서도 재사용 (searchParams reset).
+export const CUSTOMER_FCST_UPLOAD_INIT_PERIOD = {
+  start: dayjs().startOf('month').format('YYYYMMDD'),
+  end: dayjs().startOf('month').add(6, 'month').subtract(1, 'day').format('YYYYMMDD'),
+};
+const { start: monthStart, end: sixMonthEnd } = CUSTOMER_FCST_UPLOAD_INIT_PERIOD;
 
 const initCustomerFcstUploadState: CustomerFcstUploadState = {
   initialized: false,
@@ -52,9 +61,9 @@ const initCustomerFcstUploadState: CustomerFcstUploadState = {
     plantSite: '',
     modelNickname: '',
     customsHandbook: '',
-    // 기본 Period = FE 근사값 → 화면 진입 후 PR_GET_DAY_RANGE o_rc2(월 경계)로 교체
-    startYyyymmdd: today,
-    endYyyymmdd: sixMonthsAhead,
+    // 기본 Period = 당월 1일 ~ 6개월째 말일 (MktFcst 동일) — PR_GET_DAY_RANGE o_rc2 와 같은 값
+    startYyyymmdd: monthStart,
+    endYyyymmdd: sixMonthEnd,
     bucket: BUCKET_TYPE.WEEKLY, // AS-IS DefineProperty: cboBucketType = BucketType.Weekly (.cs L308)
   },
   filters: {},
@@ -144,16 +153,16 @@ export const useCustomerFcstUploadStore = createPersistedStoreWithTab<
     },
 
     // PR_GET_DAY_RANGE o_rc2 DAY_RANGE('yyyymmdd:yyyymmdd') → 기본 Period (AS-IS L287 drpPeriod.InitValue)
+    //   시작일도 SP 값(당월 1일)을 그대로 쓴다 — MktFcst useMktFcstStore.applyDayRange 와 동일 규약
+    //   (2026-08-20 사용자 요구). 구 "시작일 = 당일" 강제(2026-07-07)는 이 요구로 철회.
     applyDayRange: range => {
       if (!range || !/^\d{8}:\d{8}$/.test(range)) return;
       if (get().dayRangeApplied) return;
-      const [, end] = range.split(':');
-      // ⭐ 시작일 = 당일 (사용자 요구 2026-07-07) — SP DAY_RANGE 의 월경계 시작 대신 오늘. 종료일은 SP 값 유지.
-      const startToday = dayjs().format('YYYYMMDD');
+      const [start, end] = range.split(':');
       set(state => {
         state.searchParams = {
           ...state.searchParams,
-          startYyyymmdd: startToday,
+          startYyyymmdd: start,
           endYyyymmdd: end,
         };
         state.dayRangeApplied = true;

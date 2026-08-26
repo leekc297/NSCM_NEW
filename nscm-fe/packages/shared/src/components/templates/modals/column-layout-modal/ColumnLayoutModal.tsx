@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { useQuery } from '@foundation/query-client';
+import { hasRequiredMark } from '@foundation/utils';
 import { Button } from '@shared/lges';
 import { ControlConfirmIcon } from '@shared/lges-icons';
 import { useMessageStore } from '@shared/stores';
@@ -18,7 +19,9 @@ import { fetchColumnMeta, fetchTitleSet } from '../../../organisms/data-grid/tit
 
 import styles from './ColumnLayoutModal.module.scss';
 import {
+  buildDefaultRows,
   buildInitialRows,
+  buildSavePayload,
   changeCellColor,
   changeTextColor,
   changeWidth,
@@ -27,6 +30,7 @@ import {
   parseWidth,
   reorderRows,
   toHiddenColumnSet,
+  toZeroWidthColumnSet,
   type ColumnSettingFallback,
 } from './columnLayoutModal.utils';
 
@@ -40,19 +44,23 @@ import {
 
 // ColumnSelectDualList 의 제네릭 제약은 Record<string, string | number> 다.
 //   ColumnLayoutRow 는 interface + isKey:boolean 이라 그대로 넣을 수 없어 표시용 row 로 투영한다.
-//   (isKey 는 IS_KEY 'Y'/'N' 문자열로 옮겨 라벨 강조에만 쓴다 — 이동 가드는 원본 rows 로 판단.)
+//   (라벨 빨간색 강조는 COLUMN_LABEL_NAME 끝의 '*' 로 판단하므로 별도 필드가 필요 없다 — renderLabel 참조.)
 type DualRow = {
   COLUMN_NAME: string;
   COLUMN_LABEL_NAME: string;
   COL_WIDTH: number;
   CELL_COLOR: string;
   TEXT_COLOR: string;
-  IS_KEY: 'Y' | 'N';
   [key: string]: string | number;
 };
 
 // MEASURE은 안보이게 처리
 const HIDDEN_FROM_LIST = new Set(['MEASURE']);
+
+// 팝업이 쓰는 두 메타 쿼리의 캐시 정책 — 전역 기본값(staleTime:Infinity, 영속)을 끈다.
+//   staleTime:0 = 팝업이 열려 쿼리가 enabled 되는 순간 항상 재조회.
+//   재조회 중에는 loading 이 true 라 아래 latch 가 옛 캐시를 먼저 적재하지 않는다.
+const ALWAYS_FRESH = { staleTime: 0, refetchOnMount: 'always' } as const;
 
 const toDualRow = (r: ColumnLayoutRow): DualRow => ({
   COLUMN_NAME: r.COLUMN_NAME,
@@ -60,7 +68,6 @@ const toDualRow = (r: ColumnLayoutRow): DualRow => ({
   COL_WIDTH: r.COL_WIDTH,
   CELL_COLOR: r.CELL_COLOR,
   TEXT_COLOR: r.TEXT_COLOR,
-  IS_KEY: r.isKey ? 'Y' : 'N',
 });
 
 interface Props {
@@ -114,10 +121,15 @@ export const ColumnLayoutModal = ({
   //   SCM_ADM_MNU_BTN_MPG_M 미등록 화면에서 403 No Permission 이 난다 (DMF0042 실측 2026-07-29).
   //   ⚠️ queryKey 첫 요소는 반드시 menuId — 각 화면이 저장 직후 invalidateQueries({queryKey:[MENU_ID]})
   //     로 이 캐시를 무효화한다(전역 staleTime=Infinity 라 invalidate 없이는 재조회가 안 된다).
-  const { data, refetch, isLoading, isFetching } = useQuery({
+  const { data, isLoading, isFetching } = useQuery({
     queryKey: [menuId, 'titleSet', 'SEARCH', filters],
     queryFn: () => fetchTitleSet(filters),
     enabled: open,
+    // 필수: 팝업을 열 때마다 새로 받는다. 전역 기본값이 staleTime:Infinity + gcTime 8h + IndexedDB
+    //   영속이라, 이게 없으면 한 번 받은 컬럼 메타가 새로고침 후에도 8시간 동안 그대로 복원된다
+    //   (admin UI Category Setup 에서 컬럼명을 바꿔도 그리드만 바뀌고 팝업은 옛 이름 — 2026-08-22 실측).
+    //   그리드는 react-query 를 안 쓰고 Search 마다 직접 조회해서 이 문제가 없다.
+    ...ALWAYS_FRESH,
   });
 
   // ⭐ admin 노출 대상(VISIBLE_FLAG='Y')만 팝업 목록에 올린다 — SP 는 sheet 메타의 모든 컬럼을
@@ -143,9 +155,56 @@ export const ColumnLayoutModal = ({
         divisionId: filters.divisionId,
       }),
     enabled: open,
+    // titleSet 과 같은 이유 — 라벨/폭/플래그의 정본이므로 열 때마다 최신을 받는다.
+    ...ALWAYS_FRESH,
   });
 
   const excluded = useMemo(() => toHiddenColumnSet(metaRows ?? []), [metaRows]);
+
+  // ⭐ [2026-08-22 사용자 지시 · DMF0082] 관리자 기본 폭이 0 인 컬럼은 목록에서 감춘다.
+  //   폭 0 은 그리드에서 실질적으로 안 보이는데 목록에는 남아 있어 "켰는데 안 나온다" 가 된다
+  //   (실측 1,009행이 이 상태였다). 판정은 raw 응답의 `COLUMN_WIDTH` — `COL_WIDTH` 는 매핑 단계에서
+  //   0→100 으로 정규화되므로 쓸 수 없다(utils `toZeroWidthColumnSet` 주석 참조).
+  const zeroWidthColumns = useMemo(
+    () => toZeroWidthColumnSet(data ?? [], fallbackColumns),
+    [data, fallbackColumns]
+  );
+  /**
+   * 목록(좌/우 dual list)에서 감출 컬럼 = ①`MEASURE`(HIDDEN_FROM_LIST) ②관리자 폭 0.
+   * ⚠ `rows` 에서 빼지 않는다 — 저장 페이로드(`buildSavePayload`)가 이 집합을 후행 배치로
+   *   보존하므로, 목록에서만 감추고 값은 그대로 유지된다.
+   */
+  const hiddenFromList = useMemo(
+    () => new Set<string>([...HIDDEN_FROM_LIST, ...zeroWidthColumns]),
+    [zeroWidthColumns]
+  );
+
+  // 고정 컬럼(좌우 이동 잠금) 판정 원본 = admin 메타의 USER_SELECTABLE_FLAG(personalizable).
+  //   titleSet SP 커서에 이 플래그가 없을 수 있어 메타를 정본으로 덮어쓴다. 메타 조회 실패 시
+  //   맵이 비므로 titleSet 행에서 파생한 값(deriveIsKey)이 그대로 남는다.
+  const personalizableByName = useMemo(
+    () =>
+      new Map<string, boolean>(
+        (metaRows ?? [])
+          .filter(m => m.colNm && m.personalizable !== undefined)
+          .map(m => [m.colNm, m.personalizable === true])
+      ),
+    [metaRows]
+  );
+
+  // 라벨 정본 = admin 컬럼 메타(COLUMN_LABEL_NAME) — 그리드 헤더와 같은 소스다.
+  //   주의: titleSet 응답(mapBeRow)의 COLUMN_LABEL_NAME 을 그대로 두면, admin UI Category Setup 에서
+  //   컬럼명을 바꿨을 때 그리드 헤더만 바뀌고 팝업 목록에는 옛 이름이 남는다 (2026-08-22 Sales Price 실측).
+  //   Default 경로(buildDefaultRows)는 이미 메타 라벨로 덮어쓰므로 두 경로를 같은 규칙으로 맞춘다.
+  const labelByName = useMemo(
+    () =>
+      new Map<string, string>(
+        (metaRows ?? [])
+          .filter(m => m.colNm && m.colLblNm !== undefined && m.colLblNm !== '')
+          .map(m => [m.colNm, String(m.colLblNm)])
+      ),
+    [metaRows]
+  );
 
   // ⚠️ 메타 조회도 loading 에 포함해야 한다 — 아래 latch 는 rows.length===0 일 때 1회만 돌므로,
   //   메타보다 titleSet 이 먼저 도착한 순간을 latch 하면 제외 대상이 그대로 좌측에 남는다.
@@ -153,10 +212,18 @@ export const ColumnLayoutModal = ({
 
   const initialRows = useMemo<ColumnLayoutRow[]>(
     () =>
-      buildInitialRows(beRows, fallbackColumns, initialSettings).filter(
-        r => !excluded.has(r.COLUMN_NAME)
-      ),
-    [beRows, fallbackColumns, initialSettings, excluded]
+      buildInitialRows(beRows, fallbackColumns, initialSettings)
+        .filter(r => !excluded.has(r.COLUMN_NAME))
+        .map(r => {
+          const personalizable = personalizableByName.get(r.COLUMN_NAME);
+          const label = labelByName.get(r.COLUMN_NAME);
+          return {
+            ...r,
+            COLUMN_LABEL_NAME: label ?? r.COLUMN_LABEL_NAME,
+            isKey: personalizable === undefined ? r.isKey : !personalizable,
+          };
+        }),
+    [beRows, fallbackColumns, initialSettings, excluded, personalizableByName, labelByName]
   );
 
   const [rows, setRows] = useState<ColumnLayoutRow[]>([]);
@@ -190,11 +257,11 @@ export const ColumnLayoutModal = ({
   );
 
   const leftItems = useMemo(
-    () => baseRows.filter(r => !HIDDEN_FROM_LIST.has(r.COLUMN_NAME)).map(toDualRow),
+    () => baseRows.filter(r => !hiddenFromList.has(r.COLUMN_NAME)).map(toDualRow),
     [baseRows]
   );
   const rightItems = useMemo(
-    () => userRows.filter(r => !HIDDEN_FROM_LIST.has(r.COLUMN_NAME)).map(toDualRow),
+    () => userRows.filter(r => !hiddenFromList.has(r.COLUMN_NAME)).map(toDualRow),
     [userRows]
   );
 
@@ -223,6 +290,7 @@ export const ColumnLayoutModal = ({
     setCheckedRight(checked ? new Set(userRows.map(r => r.COLUMN_NAME)) : new Set());
 
   // 표시로 이동 — 우측 맨 뒤에 붙인다(기존 순서 보존).
+  //   고정 컬럼(USER_SELECTABLE_FLAG='N')도 표시로는 이동할 수 있다 — 비표시로 내리는 방향만 잠근다.
   const showColumns = (keys: Set<string>) => {
     setRows(prev => {
       let maxSeq = Math.max(0, ...prev.filter(r => r.USER_FLAG === 'Y').map(r => r.SORT_ORDER_NO));
@@ -236,7 +304,7 @@ export const ColumnLayoutModal = ({
     });
   };
 
-  // 비표시로 이동 — key 컬럼(라벨 끝 '*')은 항상 표시라 제외한다.
+  // 비표시로 이동 — 고정 컬럼(USER_SELECTABLE_FLAG='N')은 제외한다.
   const hideColumns = (keys: Set<string>) => {
     setRows(prev =>
       prev.map(r =>
@@ -246,6 +314,9 @@ export const ColumnLayoutModal = ({
       )
     );
   };
+
+  // 고정 컬럼을 비표시로 옮기려 할 때 안내 — 왜 안 움직이는지 알려준다.
+  const FIXED_COLUMN_MSG = '고정 column 은 표시 상태를 변경할 수 없습니다.';
 
   const moveToUser = () => {
     if (checkedLeft.size === 0) {
@@ -261,9 +332,8 @@ export const ColumnLayoutModal = ({
       void setAlert({ type: 'alert', content: '우측 column 선택' });
       return;
     }
-    // 선택이 전부 key 컬럼이면 아무것도 안 옮겨진다 — 왜 안 되는지 알려준다.
     if ([...checkedRight].every(k => keyColumns.has(k))) {
-      void setAlert({ type: 'alert', content: '필수 column 은 비표시로 옮길 수 없습니다.' });
+      void setAlert({ type: 'alert', content: FIXED_COLUMN_MSG });
       return;
     }
     hideColumns(checkedRight);
@@ -282,7 +352,7 @@ export const ColumnLayoutModal = ({
 
   const moveOneToBase = (key: string) => {
     if (keyColumns.has(key)) {
-      void setAlert({ type: 'alert', content: '필수 column 은 비표시로 옮길 수 없습니다.' });
+      void setAlert({ type: 'alert', content: FIXED_COLUMN_MSG });
       return;
     }
     hideColumns(new Set([key]));
@@ -299,8 +369,10 @@ export const ColumnLayoutModal = ({
     onDoubleClick: (e: { stopPropagation: () => void }) => e.stopPropagation(),
   };
 
+  // 라벨 빨간색 = 필수표시(라벨 끝 '*') 컬럼. 그리드 헤더의 빨간점(_requiredMark)과 동일 기준이며,
+  //   이동 잠금(isKey / USER_SELECTABLE_FLAG)과는 별개 축이다.
   const renderLabel = (row: DualRow) => (
-    <span className={row.IS_KEY === 'Y' ? styles.keyLabel : undefined}>
+    <span className={hasRequiredMark(row.COLUMN_LABEL_NAME) ? styles.keyLabel : undefined}>
       {row.COLUMN_LABEL_NAME}
     </span>
   );
@@ -364,29 +436,32 @@ export const ColumnLayoutModal = ({
   ];
 
   const handleDefault = () => {
-    // ⭐ 관리자 기본값으로 원복 — 저장된 개인화(BE 응답)를 defaultSettings 로 강제로 덮는다.
-    //   buildInitialRows 는 DB 우선이라 그대로 쓰면 개인화가 그대로 남으므로 overrideRows 를 쓴다.
-    //   Cell/Text Color 는 '' = 자동(기본색) 이므로 항상 비운다 (2026-07-27 요청).
-    const base = buildInitialRows(beRows, fallbackColumns).filter(
+    // 컬럼 기본 셋팅(admin 원본)으로 리셋 — 표시 여부/정렬/폭/색을 전부 초기화한다.
+    //   금지: buildInitialRows 사용. mapBeRow 가 USER_* (개인화 저장값) 우선이라 개인화가 그대로 남는다.
+    //   정본은 팝업이 이미 조회해 둔 admin 컬럼 메타(metaRows) — 폭/기본표시/고정/라벨을 모두 갖는다.
+    const base = buildDefaultRows(beRows, fallbackColumns, metaRows ?? []).filter(
       r => !excluded.has(r.COLUMN_NAME)
     );
-    const reverted = defaultSettings?.length ? overrideRows(base, defaultSettings) : base;
-    setRows(reverted.map(r => ({ ...r, CELL_COLOR: '', TEXT_COLOR: '' })));
+    // 메타 조회가 실패했을 때만 화면이 넘겨준 admin 원본(defaultSettings)으로 보정한다.
+    setRows(
+      metaRows?.length
+        ? base
+        : defaultSettings?.length
+          ? overrideRows(base, defaultSettings).map(r => ({ ...r, CELL_COLOR: '', TEXT_COLOR: '' }))
+          : base
+    );
     setCheckedLeft(new Set());
     setCheckedRight(new Set());
-    void refetch?.();
   };
 
   const handleOk = () => {
-    if (userRows.length === 0) {
+    // 가드는 목록에 보이는 컬럼 기준 — 숨김 컬럼(MEASURE)만 남은 상태를 통과시키면 안 된다.
+    if (rightItems.length === 0) {
       void setAlert({ type: 'alert', content: '최소 1개 column 은 표시 상태여야 합니다.' });
       return;
     }
-    // 우측(표시)을 화면 순서대로 1..n, 좌측(비표시)은 0 — ColumnSettingModal 저장 계약과 동일.
-    onSave([
-      ...userRows.map((r, i) => ({ ...r, SORT_ORDER_NO: i + 1 })),
-      ...baseRows.map(r => ({ ...r, SORT_ORDER_NO: 0 })),
-    ]);
+    // 표시 1..n → 숨김 컬럼 후행 → 비표시 0. 숨김 컬럼은 항상 표시로 저장된다(buildSavePayload 주석).
+    onSave(buildSavePayload(rows, hiddenFromList));
     modalClose();
   };
 
@@ -395,8 +470,13 @@ export const ColumnLayoutModal = ({
       open={open}
       type='modal'
       position='basic'
-      size={900}
-      draggable={false}
+      // 헤더 드래그로 팝업 이동 (MeasureSelectModal 과 동일 — CustomDialog draggable 기본 true).
+      //   draggable 이 켜지면 DraggablePaper 가 Paper 에 height 를 박고 리사이즈 핸들을 붙이므로
+      //   (기본 50vh × DIALOG_SCALE=1.5 → 75vh), 종전 크기를 유지하려고 disableScale 로 배율을 끄고
+      //   확대 후 실측값을 그대로 명시한다: 폭 900×1.5=1350, 높이 556 = 컨텐츠 460 + 헤더 48 + padding 48.
+      size={1350}
+      height={556}
+      disableScale
       handleClose={modalClose}
       disableButtonCancel
       title={title}

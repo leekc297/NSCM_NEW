@@ -682,6 +682,13 @@
   }
 
   // 팝업 셀, MUI OpenInNew 아이콘 사용 - 강민재
+  // 커서는 셀에 직접 건다. `.wj-flexgrid` 의 cursor:default 는 상속값이라 특이도와 무관하게 진다.
+  //   이전에는 DMF0020 module scss 의 전역 누수(:global(.wj-cell-popup))가 이 pointer 를 대신
+  //   공급해 그 화면을 연 세션에서만 커서가 바뀌었다. 누수를 제거하며 표준 계약으로 여기에 옮겼다.
+  &.wj-cell-popup {
+    cursor: pointer;
+  }
+
   &.wj-cell-popup::after {
     content: '';
     position: absolute;

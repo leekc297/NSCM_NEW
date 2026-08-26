@@ -1,6 +1,3 @@
--- [DMF0074_CLOUD_20260818] 사내 → 클라우드 이관 (2026-08-18 취합)
--- 02_PKG_DMF0074_BODY.sql — ALL_SOURCE 원문
--- 2026-08-16 [E20260816-NULLFIX] 5결함 정정 반영본
 CREATE OR REPLACE PACKAGE BODY           "PKG_DMF0074" IS
 /****************************************************************************************************/
 /* Program ID  : PKG_DMF0074                                                                        */
@@ -613,7 +610,12 @@ BEGIN
             FROM   SCM_MGR.DM_MST_VERSION
             WHERE  DIVISION_ID  = P_DIVISION_ID
             AND    VERSION_TYPE = 'SP_W'
-              AND    NVL(ATTRIBUTE7, 'N') = 'Y'
+            --[MRFPARITY 2026-08-18] AS-IS 파리티 복원 — 변환 원본에서 이 줄은 **주석**이다
+            --  (To-be_v2_converted/06_Packages/04_Package_PKG_DMF0074.sql:688 `--AND NVL(ATTRIBUTE7,'') = 'Y'`).
+            --  활성화하면 금주 SP_W 는 전 division ATTRIBUTE7=NULL 이라 과거 MRF='Y' 버전으로 밀리고,
+            --  81/82 는 그 버전의 원장이 0행이라 템플릿 0건 → MSG00656 안내가 뜬다(사용자 신고).
+            --  형제 화면 PKG_DMF0020 L2697 도 동일하게 주석 유지. UPLOAD 쪽 적재 조건은 원본대로 활성 유지.
+            --AND    NVL(ATTRIBUTE7, 'N') = 'Y'
             GROUP BY DIVISION_ID
         ) A
         INNER JOIN SCM_MGR.SCM_SYS_CALENDAR_M B

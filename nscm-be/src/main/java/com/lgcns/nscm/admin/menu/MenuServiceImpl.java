@@ -18,6 +18,8 @@ import com.lgcns.nscm.admin.menu.dto.GridMeasure;
 import com.lgcns.nscm.admin.menu.dto.MenuDto;
 import com.lgcns.nscm.admin.menu.dto.SearchCondition;
 import com.lgcns.nscm.admin.menu.dto.SearchConditionForDB;
+import com.lgcns.nscm.admin.menu.dto.TitleSetSaveRequest;
+import com.lgcns.nscm.admin.menu.dto.TitleSetSearchRequest;
 import com.lgcns.nscm.framework.base.BaseService;
 import com.lgcns.nscm.framework.security.CustomUserDetails;
 
@@ -136,5 +138,61 @@ public class MenuServiceImpl extends BaseService implements MenuService {
 		selectList(nameSpace + "resetSearchConditions", params);
 
 		return;
+	}
+
+	/**
+	 * 컬럼 개인화(titleSet) 조회 — 공용 Column 팝업 전용.
+	 *
+	 * <p>DMF0002_GET_TITLESET_POPUP 고정 매핑 — call-proc 경로는 화면마다
+	 * SCM_ADM_MNU_BTN_MPG_M 에 (MNU_ID, 'titleSet', 'SEARCH') 등록이 필요해 미등록 화면이 403 이 난다.
+	 * programId 는 path 의 mnuId, P_USER_ID 는 로그인 세션에서 채운다(클라이언트 신뢰 금지).
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Map<String, Object>> retrieveTitleSet(String userId, String mnuId, TitleSetSearchRequest request) throws Exception {
+
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("programId", mnuId);
+		params.put("sheetName", request.getSheetName());
+		params.put("columnType", request.getColumnType());
+		params.put("sesUserId", userId);
+		params.put("divisionId", request.getDivisionId());
+		params.put("menuId", mnuId);
+
+		Map<String, Object> result = selectList(nameSpace + "retrieveTitleSet", params);
+
+		return (List<Map<String, Object>>) result.get(DEFAULT_DATA_RESULT);
+	}
+
+	/**
+	 * 컬럼 개인화(titleSet) 저장 — 공용 Column 팝업 전용.
+	 *
+	 * <p>프로시저가 programId/sheetName 을 인자로 받아 메뉴 종속이 없으므로, 화면마다
+	 * SCM_ADM_MNU_BTN_MPG_M 에 (MNU_ID, 'titleSet', 'SAVE') 를 등록하는 대신 고정 매핑을 쓴다.
+	 * programId 는 path 의 mnuId, P_USER_ID 는 로그인 세션에서 채운다(클라이언트 신뢰 금지).
+	 *
+	 * <p>반환값 = 프로시저 첫 OUT 커서 행. 호출측(FE)이 기존과 동일하게 CODE 로 성공 여부를 판정한다.
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Map<String, Object>> saveTitleSet(String userId, String mnuId, TitleSetSaveRequest request) throws Exception {
+
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("programId", mnuId);
+		params.put("sheetName", request.getSheetName());
+		params.put("columnType", request.getColumnType());
+		params.put("activeFlag", request.getActiveFlag());
+		params.put("columnName", request.getColumnName());
+		params.put("sortOrderNo", request.getSortOrderNo());
+		params.put("subTotalFlag", request.getSubTotalFlag());
+		params.put("sortMethodCode", request.getSortMethodCode());
+		params.put("sesUserId", userId);
+		params.put("columnWidth", request.getColumnWidth());
+		params.put("cellColor", request.getCellColor());
+		params.put("textColor", request.getTextColor());
+
+		Map<String, Object> result = selectList(nameSpace + "saveTitleSet", params);
+
+		return (List<Map<String, Object>>) result.get(DEFAULT_DATA_RESULT);
 	}
 }

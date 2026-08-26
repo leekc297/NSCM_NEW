@@ -1,0 +1,629 @@
+﻿pnpm 10.28.2  (요구 = "packageManager": "pnpm@10.28.2",)
+task=lint:fix  filter=(전체)
+--- turbo run lint:fix --continue ---
+• turbo 2.8.5
+• Packages in scope: @admin, @authority, @demand, @factory, @foundation, @master, @report, @sdm, @shared, @shipping, @spms-demand, @supply, @web
+• Running lint:fix in 13 packages
+• Remote caching disabled
+@factory:lint:fix: cache bypass, force executing 942d0feb9b71f46b
+@report:lint:fix: cache bypass, force executing f05c3c0a7f6e1e3a
+@shared:lint:fix: cache bypass, force executing dc20a1d938d744a6
+@supply:lint:fix: cache bypass, force executing cfdfe5912d70fece
+@authority:lint:fix: cache bypass, force executing 0083651b096f60ad
+@demand:lint:fix: cache bypass, force executing 7d73c7f03802ba19
+@spms-demand:lint:fix: cache bypass, force executing 9b40cd62db401b6b
+@web:lint:fix: cache bypass, force executing 21b9bd2ef523bab0
+@foundation:lint:fix: cache bypass, force executing 0018f9199fa3860c
+@admin:lint:fix: cache bypass, force executing c38be23792fefd38
+@factory:lint:fix: 
+@factory:lint:fix: > @factory@0.1.0 lint:fix C:\Projects\NSCM\nscm-fe\features\factory
+@factory:lint:fix: > eslint src --fix --color
+@factory:lint:fix: 
+@report:lint:fix: 
+@report:lint:fix: > @report@0.1.0 lint:fix C:\Projects\NSCM\nscm-fe\features\report
+@report:lint:fix: > eslint src --fix --color
+@report:lint:fix: 
+@authority:lint:fix: 
+@authority:lint:fix: > @authority@0.1.0 lint:fix C:\Projects\NSCM\nscm-fe\features\authority
+@authority:lint:fix: > eslint src --fix --color
+@authority:lint:fix: 
+@shared:lint:fix: 
+@shared:lint:fix: > @shared@0.1.0 lint:fix C:\Projects\NSCM\nscm-fe\packages\shared
+@shared:lint:fix: > eslint src --fix --color
+@shared:lint:fix: 
+@spms-demand:lint:fix: 
+@spms-demand:lint:fix: > @spms-demand@0.1.0 lint:fix C:\Projects\NSCM\nscm-fe\features\spms-demand
+@spms-demand:lint:fix: > eslint src --fix --color
+@spms-demand:lint:fix: 
+@demand:lint:fix: 
+@demand:lint:fix: > @demand@0.1.0 lint:fix C:\Projects\NSCM\nscm-fe\features\demand
+@demand:lint:fix: > eslint src --fix --color
+@demand:lint:fix: 
+@foundation:lint:fix: 
+@foundation:lint:fix: > @foundation@0.1.0 lint:fix C:\Projects\NSCM\nscm-fe\packages\foundation
+@foundation:lint:fix: > eslint src --fix --color
+@foundation:lint:fix: 
+@admin:lint:fix: 
+@admin:lint:fix: > @admin@0.1.0 lint:fix C:\Projects\NSCM\nscm-fe\features\admin
+@admin:lint:fix: > eslint src --fix --color
+@admin:lint:fix: 
+@supply:lint:fix: 
+@supply:lint:fix: > @supply@0.1.0 lint:fix C:\Projects\NSCM\nscm-fe\features\supply
+@supply:lint:fix: > eslint src --fix --color
+@supply:lint:fix: 
+@web:lint:fix: 
+@web:lint:fix: > @web@0.1.0 lint:fix C:\Projects\NSCM\nscm-fe\apps\web
+@web:lint:fix: > eslint src --fix --color
+@web:lint:fix: 
+@shipping:lint:fix: cache bypass, force executing 1196dea79421d215
+@shipping:lint:fix: 
+@shipping:lint:fix: > @shipping@0.1.0 lint:fix C:\Projects\NSCM\nscm-fe\features\shipping
+@shipping:lint:fix: > eslint src --fix --color
+@shipping:lint:fix: 
+@foundation:lint:fix: 
+@foundation:lint:fix: C:\Projects\NSCM\nscm-fe\packages\foundation\src\apis\axios.test.ts
+@foundation:lint:fix:   47:9  warning  Unsafe assignment of an `any` value  @typescript-eslint/no-unsafe-assignment
+@foundation:lint:fix: 
+@foundation:lint:fix: C:\Projects\NSCM\nscm-fe\packages\foundation\src\models\common\page-props.ts
+@foundation:lint:fix:   3:28  warning  'M' is defined but never used. Allowed unused vars must match /^_/u  unused-imports/no-unused-vars
+@foundation:lint:fix: 
+@foundation:lint:fix: C:\Projects\NSCM\nscm-fe\packages\foundation\src\utils\columnMapping.ts
+@foundation:lint:fix:   59:26  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+@foundation:lint:fix: 
+@foundation:lint:fix: ✖ 3 problems (0 errors, 3 warnings)
+@foundation:lint:fix: 
+@sdm:lint:fix: cache bypass, force executing 0171b155f6d2e030
+@master:lint:fix: cache bypass, force executing d951df5e644272ed
+@sdm:lint:fix: 
+@sdm:lint:fix: > @sdm@0.1.0 lint:fix C:\Projects\NSCM\nscm-fe\features\sdm
+@sdm:lint:fix: > eslint src --fix --color
+@sdm:lint:fix: 
+@master:lint:fix: 
+@master:lint:fix: > @master@0.1.0 lint:fix C:\Projects\NSCM\nscm-fe\features\master
+@master:lint:fix: > eslint src --fix --color
+@master:lint:fix: 
+@web:lint:fix: 
+@web:lint:fix: C:\Projects\NSCM\nscm-fe\apps\web\src\mdi\MDI.types.ts
+@web:lint:fix:   3:15  warning  'M' is defined but never used. Allowed unused vars must match /^_/u  unused-imports/no-unused-vars
+@web:lint:fix: 
+@web:lint:fix: C:\Projects\NSCM\nscm-fe\apps\web\src\mdi\MDIContainer.tsx
+@web:lint:fix:   34:9  warning  'progress' is assigned a value but never used. Allowed unused vars must match /^_/u  unused-imports/no-unused-vars
+@web:lint:fix: 
+@web:lint:fix: C:\Projects\NSCM\nscm-fe\apps\web\src\mdi\RouterSync.tsx
+@web:lint:fix:   21:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+@web:lint:fix: 
+@web:lint:fix: C:\Projects\NSCM\nscm-fe\apps\web\src\mdi\useMDIStore.test.ts
+@web:lint:fix:   11:7  warning  'PROC_NAME' is assigned a value but only used as a type. Allowed unused vars must match /^_/u  unused-imports/no-unused-vars
+@web:lint:fix: 
+@web:lint:fix: C:\Projects\NSCM\nscm-fe\apps\web\src\pages\Templates.tsx
+@web:lint:fix:   256:6   warning  React Hook useMemo has a missing dependency: 'sampleData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+@web:lint:fix:   669:37  warning  Unexpected empty arrow function                                                                              @typescript-eslint/no-empty-function
+@web:lint:fix: 
+@web:lint:fix: C:\Projects\NSCM\nscm-fe\apps\web\src\pages\TemplatesGantt.ts
+@web:lint:fix:   122:67  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+@web:lint:fix: 
+@web:lint:fix: C:\Projects\NSCM\nscm-fe\apps\web\src\pages\TemplatesTreeView.tsx
+@web:lint:fix:   14:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+@web:lint:fix:   74:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+@web:lint:fix: 
+@web:lint:fix: C:\Projects\NSCM\nscm-fe\apps\web\src\setup.ts
+@web:lint:fix:   5:17  warning  Unexpected empty arrow function  @typescript-eslint/no-empty-function
+@web:lint:fix: 
+@web:lint:fix: ✖ 10 problems (0 errors, 10 warnings)
+@web:lint:fix: 
+@spms-demand:lint:fix: 
+@spms-demand:lint:fix: C:\Projects\NSCM\nscm-fe\features\spms-demand\src\components\auth-management-popup\AuthManagementPopup.tsx
+@spms-demand:lint:fix:   196:9  warning  The 'allRequestRows' logical expression could make the dependencies of useMemo Hook (at line 218) change on every render. To fix this, wrap the initialization of 'allRequestRows' in its own useMemo() Hook  react-hooks/exhaustive-deps
+@spms-demand:lint:fix: 
+@spms-demand:lint:fix: C:\Projects\NSCM\nscm-fe\features\spms-demand\src\pages\project-registration\ProjectRegistration.tsx
+@spms-demand:lint:fix:   311:6   warning  React Hook useEffect has missing dependencies: 'fetchStaticColumns', 'filters', 'initialized', and 'setProjectFilters'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+@spms-demand:lint:fix:   311:14  warning  React Hook useEffect has a complex expression in the dependency array. Extract it to a separate variable so it can be statically checked                                    react-hooks/exhaustive-deps
+@spms-demand:lint:fix: 
+@spms-demand:lint:fix: C:\Projects\NSCM\nscm-fe\features\spms-demand\src\pages\project-registration\components\MyProjectGrid.tsx
+@spms-demand:lint:fix:   14:24  warning  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `MyProjectGrid.tsx` to same directory as `../ProjectRegistration.module.scss` or consider making `../ProjectRegistration.module.scss` a package  import/no-relative-parent-imports
+@spms-demand:lint:fix: 
+@spms-demand:lint:fix: C:\Projects\NSCM\nscm-fe\features\spms-demand\src\pages\project-registration\components\ProjectGrid.tsx
+@spms-demand:lint:fix:   32:24  warning  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `ProjectGrid.tsx` to same directory as `../ProjectRegistration.module.scss` or consider making `../ProjectRegistration.module.scss` a package  import/no-relative-parent-imports
+@spms-demand:lint:fix: 
+@spms-demand:lint:fix: C:\Projects\NSCM\nscm-fe\features\spms-demand\src\pages\project-registration\components\authManagementPopup\AuthManagementPopup.tsx
+@spms-demand:lint:fix:   191:9  warning  The 'allRequestRows' logical expression could make the dependencies of useMemo Hook (at line 198) change on every render. To fix this, wrap the initialization of 'allRequestRows' in its own useMemo() Hook  react-hooks/exhaustive-deps
+@spms-demand:lint:fix: 
+@spms-demand:lint:fix: ✖ 6 problems (0 errors, 6 warnings)
+@spms-demand:lint:fix: 
+@shared:lint:fix: 
+@shared:lint:fix: C:\Projects\NSCM\nscm-fe\packages\shared\src\components\molecules\colorPickerButton\ColorPickerButton.tsx
+@shared:lint:fix:   125:27  warning  Do not use Array index in keys  react/no-array-index-key
+@shared:lint:fix: 
+@shared:lint:fix: C:\Projects\NSCM\nscm-fe\packages\shared\src\components\molecules\columnSelectDualList\ColumnSelectDualList.tsx
+@shared:lint:fix:   196:32  warning  Do not use Array index in keys  react/no-array-index-key
+@shared:lint:fix: 
+@shared:lint:fix: C:\Projects\NSCM\nscm-fe\packages\shared\src\components\molecules\customDropdown\CustomDropdownMui.tsx
+@shared:lint:fix:   32:17  warning  Unsafe object destructuring of a property with an `any` value  @typescript-eslint/no-unsafe-assignment
+@shared:lint:fix:   36:20  warning  Unsafe assignment of an `any` value                            @typescript-eslint/no-unsafe-assignment
+@shared:lint:fix: 
+@shared:lint:fix: C:\Projects\NSCM\nscm-fe\packages\shared\src\components\molecules\dialog\CustomDialog.tsx
+@shared:lint:fix:   232:6  warning  React Hook useEffect has missing dependencies: 'height' and 'size'. Either include them or remove the dependency array. If 'setDialogSize' needs the current value of 'size', you can also switch to useReducer instead of useState and read 'size' in the reducer  react-hooks/exhaustive-deps
+@shared:lint:fix: 
+@shared:lint:fix: C:\Projects\NSCM\nscm-fe\packages\shared\src\components\molecules\dialog\components\CustomDialogContent.tsx
+@shared:lint:fix:   35:3  warning  'isMaximized' is defined but never used. Allowed unused args must match /^_/u       unused-imports/no-unused-vars
+@shared:lint:fix:   36:3  warning  'onToggleMaximize' is defined but never used. Allowed unused args must match /^_/u  unused-imports/no-unused-vars
+@shared:lint:fix: 
+@shared:lint:fix: C:\Projects\NSCM\nscm-fe\packages\shared\src\components\organisms\olap-pivot-grid\OlapPivotGrid.tsx
+@shared:lint:fix:   145:49  warning  Unexpected empty arrow function  @typescript-eslint/no-empty-function
+@shared:lint:fix: 
+@shared:lint:fix: C:\Projects\NSCM\nscm-fe\packages\shared\src\components\organisms\result-area\ResultArea.tsx
+@shared:lint:fix:    66:7   warning  Fast refresh only works when a file only exports components. Move your component(s) to a separate file. If all exports are HOCs, add them to the `extraHOCs` option  react-refresh/only-export-components
+@shared:lint:fix:   118:7   warning  Fast refresh only works when a file only exports components. Move your component(s) to a separate file. If all exports are HOCs, add them to the `extraHOCs` option  react-refresh/only-export-components
+@shared:lint:fix:   144:26  warning  Do not use Array index in keys                                                                                                                                       react/no-array-index-key
+@shared:lint:fix: 
+@shared:lint:fix: C:\Projects\NSCM\nscm-fe\packages\shared\src\components\organisms\sub-title\SubTitle.tsx
+@shared:lint:fix:   138:18  warning  The ref value 'gridFilter.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'gridFilter.current' to a variable inside the effect, and use that variable in the cleanup function  react-hooks/exhaustive-deps
+@shared:lint:fix:   141:6   warning  React Hook useEffect has missing dependencies: 'countGridRef' and 'gridFilter'. Either include them or remove the dependency array. Mutable values like 'countGridRef.current' aren't valid dependencies because mutating them doesn't re-render the component       react-hooks/exhaustive-deps
+@shared:lint:fix:   264:6   warning  React Hook useEffect has missing dependencies: 'buttonActions' and 'grid'. Either include them or remove the dependency array. Mutable values like 'grid.current' aren't valid dependencies because mutating them doesn't re-render the component                    react-hooks/exhaustive-deps
+@shared:lint:fix: 
+@shared:lint:fix: C:\Projects\NSCM\nscm-fe\packages\shared\src\components\templates\modals\column-layout-modal\ColumnLayoutModal.tsx
+@shared:lint:fix:   261:5  warning  React Hook useMemo has a missing dependency: 'hiddenFromList'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+@shared:lint:fix:   265:5  warning  React Hook useMemo has a missing dependency: 'hiddenFromList'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+@shared:lint:fix: 
+@shared:lint:fix: C:\Projects\NSCM\nscm-fe\packages\shared\src\components\templates\modals\column-layout-modal\columnLayoutModal.utils.test.ts
+@shared:lint:fix:   128:15  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+@shared:lint:fix:   201:12  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+@shared:lint:fix:   203:12  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+@shared:lint:fix:   209:12  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+@shared:lint:fix:   210:12  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+@shared:lint:fix:   273:12  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+@shared:lint:fix:   274:12  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+@shared:lint:fix: 
+@shared:lint:fix: C:\Projects\NSCM\nscm-fe\packages\shared\src\components\templates\modals\message-modal\MessageModal.tsx
+@shared:lint:fix:   110:6  warning  React Hook useEffect has missing dependencies: 'fetchStaticColumns', 'initialMessage', 'initialType', and 'initialized'. Either include them or remove the dependency array. If 'setModalFilters' needs the current value of 'initialType', you can also switch to useReducer instead of useState and read 'initialType' in the reducer  react-hooks/exhaustive-deps
+@shared:lint:fix: 
+@shared:lint:fix: C:\Projects\NSCM\nscm-fe\packages\shared\src\components\templates\modals\sso-dept-modal\SsoDeptModal.tsx
+@shared:lint:fix:   85:6  warning  React Hook useEffect has missing dependencies: 'fetchStaticColumns', 'initialDept', and 'initialized'. Either include them or remove the dependency array. If 'setModalFilters' needs the current value of 'initialDept', you can also switch to useReducer instead of useState and read 'initialDept' in the reducer  react-hooks/exhaustive-deps
+@shared:lint:fix: 
+@shared:lint:fix: C:\Projects\NSCM\nscm-fe\packages\shared\src\components\templates\modals\sso-user-modal\SsoUserModal.tsx
+@shared:lint:fix:   87:6  warning  React Hook useEffect has missing dependencies: 'fetchStaticColumns', 'initialUser', and 'initialized'. Either include them or remove the dependency array. If 'setModalFilters' needs the current value of 'initialUser', you can also switch to useReducer instead of useState and read 'initialUser' in the reducer  react-hooks/exhaustive-deps
+@shared:lint:fix: 
+@shared:lint:fix: C:\Projects\NSCM\nscm-fe\packages\shared\src\hooks\useCustomQueryClient.ts
+@shared:lint:fix:   105:6  warning  React Hook useEffect has missing dependencies: 'procedureAction', 'sheetName', and 'tabId'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+@shared:lint:fix: 
+@shared:lint:fix: ✖ 27 problems (0 errors, 27 warnings)
+@shared:lint:fix: 
+@admin:lint:fix: 
+@admin:lint:fix: C:\Projects\NSCM\nscm-fe\features\admin\src\pages\api-management\ApiManagement.tsx
+@admin:lint:fix:   64:6  warning  React Hook useEffect has missing dependencies: 'fetchStaticColumns' and 'initialized'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+@admin:lint:fix: 
+@admin:lint:fix: C:\Projects\NSCM\nscm-fe\features\admin\src\pages\dynamic-query\DynamicQuery.tsx
+@admin:lint:fix:   287:5  warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+@admin:lint:fix:   373:7  warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+@admin:lint:fix:   402:9  warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+@admin:lint:fix: 
+@admin:lint:fix: C:\Projects\NSCM\nscm-fe\features\admin\src\pages\dynamic-query\components\DynamicQueryMainGrid.tsx
+@admin:lint:fix:   59:35  warning  'g' is defined but never used. Allowed unused args must match /^_/u  unused-imports/no-unused-vars
+@admin:lint:fix:   59:51  warning  Unexpected empty arrow function                                      @typescript-eslint/no-empty-function
+@admin:lint:fix:   60:32  warning  'g' is defined but never used. Allowed unused args must match /^_/u  unused-imports/no-unused-vars
+@admin:lint:fix:   60:45  warning  'e' is defined but never used. Allowed unused args must match /^_/u  unused-imports/no-unused-vars
+@admin:lint:fix:   60:81  warning  Unexpected empty arrow function                                      @typescript-eslint/no-empty-function
+@admin:lint:fix: 
+@admin:lint:fix: C:\Projects\NSCM\nscm-fe\features\admin\src\pages\dynamic-query\components\DynamicQueryModal.tsx
+@admin:lint:fix:   29:20  warning  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `DynamicQueryModal.tsx` to same directory as `../DynamicQuery.module.scss` or consider making `../DynamicQuery.module.scss` a package  import/no-relative-parent-imports
+@admin:lint:fix: 
+@admin:lint:fix: C:\Projects\NSCM\nscm-fe\features\admin\src\pages\dynamic-query\components\DynamicQueryResultGrid.tsx
+@admin:lint:fix:   105:6  warning  React Hook useEffect has a missing dependency: 'defaultColums'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+@admin:lint:fix: 
+@admin:lint:fix: C:\Projects\NSCM\nscm-fe\features\admin\src\pages\dynamic-query\components\DynamicQuerySQLViewer.tsx
+@admin:lint:fix:   19:6  warning  React Hook useEffect has a missing dependency: 'sqlText'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+@admin:lint:fix: 
+@admin:lint:fix: C:\Projects\NSCM\nscm-fe\features\admin\src\pages\group-management\GroupManagement.tsx
+@admin:lint:fix:   75:6  warning  React Hook useEffect has missing dependencies: 'fetchStaticColumns', 'initialized', and 'setFilters'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+@admin:lint:fix: 
+@admin:lint:fix: C:\Projects\NSCM\nscm-fe\features\admin\src\pages\group-management\useGroupManagementStore.test.tsx
+@admin:lint:fix:   92:7  warning  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+@admin:lint:fix: 
+@admin:lint:fix: C:\Projects\NSCM\nscm-fe\features\admin\src\pages\group-menu\GroupMenuManagement.tsx
+@admin:lint:fix:   123:6  warning  React Hook useEffect has missing dependencies: 'fetchStaticColumns', 'initialized', and 'setFilters'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+@admin:lint:fix: 
+@admin:lint:fix: C:\Projects\NSCM\nscm-fe\features\admin\src\pages\group-user\components\GroupUserInfoGrid.tsx
+@admin:lint:fix:   23:11  warning  't' is assigned a value but never used. Allowed unused vars must match /^_/u         unused-imports/no-unused-vars
+@admin:lint:fix:   27:9   warning  'setAlert' is assigned a value but never used. Allowed unused vars must match /^_/u  unused-imports/no-unused-vars
+@admin:lint:fix: 
+@admin:lint:fix: C:\Projects\NSCM\nscm-fe\features\admin\src\pages\menu-button-management\MenuButtonManagement.tsx
+@admin:lint:fix:   75:6  warning  React Hook useEffect has missing dependencies: 'fetchStaticColumns' and 'initialized'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+@admin:lint:fix: 
+@admin:lint:fix: C:\Projects\NSCM\nscm-fe\features\admin\src\pages\menu-management\MenuManagement.tsx
+@admin:lint:fix:   152:9  warning  'onDelete' is assigned a value but never used. Allowed unused vars must match /^_/u                                                                       unused-imports/no-unused-vars
+@admin:lint:fix:   248:6  warning  React Hook useEffect has missing dependencies: 'fetchStaticColumns', 'initialized', and 'setFilters'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+@admin:lint:fix: 
+@admin:lint:fix: C:\Projects\NSCM\nscm-fe\features\admin\src\pages\message-management\MessageManagement.tsx
+@admin:lint:fix:   47:6  warning  React Hook useEffect has missing dependencies: 'fetchStaticColumns' and 'initialized'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+@admin:lint:fix: 
+@admin:lint:fix: C:\Projects\NSCM\nscm-fe\features\admin\src\pages\message-management\useMessageManagementStore.test.tsx
+@admin:lint:fix:   115:7  warning  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+@admin:lint:fix: 
+@admin:lint:fix: C:\Projects\NSCM\nscm-fe\features\admin\src\pages\notice-setup\notice-setup.util.ts
+@admin:lint:fix:   25:7  warning  'NOTICE_DATE_PATTERN' is assigned a value but never used. Allowed unused vars must match /^_/u  unused-imports/no-unused-vars
+@admin:lint:fix: 
+@admin:lint:fix: C:\Projects\NSCM\nscm-fe\features\admin\src\pages\procedure-management\ProcedureManagement.tsx
+@admin:lint:fix:   83:6  warning  React Hook useEffect has missing dependencies: 'fetchStaticColumns' and 'initialized'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+@admin:lint:fix: 
+@admin:lint:fix: C:\Projects\NSCM\nscm-fe\features\admin\src\pages\ui-catrgory-setup\UICategorySetup.tsx
+@admin:lint:fix:   62:6  warning  React Hook useEffect has missing dependencies: 'fetchStaticColumns' and 'initialized'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+@admin:lint:fix: 
+@admin:lint:fix: ✖ 25 problems (0 errors, 25 warnings)
+@admin:lint:fix: 
+@sdm:lint:fix: 
+@sdm:lint:fix: C:\Projects\NSCM\nscm-fe\features\sdm\src\components\ProjectAuthRegModal.tsx
+@sdm:lint:fix:    25:20  warning  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `ProjectAuthRegModal.tsx` to same directory as `../pages/project-reg/ProjectReg.module.scss` or consider making `../pages/project-reg/ProjectReg.module.scss` a package  import/no-relative-parent-imports
+@sdm:lint:fix:   382:13  warning  Unsafe assignment of an error typed value                                                                                                                                                                                                                                                                                   @typescript-eslint/no-unsafe-assignment
+@sdm:lint:fix:   382:35  error    Unsafe member access .user on a type that cannot be resolved                                                                                                                                                                                                                                                                @typescript-eslint/no-unsafe-member-access
+@sdm:lint:fix:   386:68  error    Unsafe member access .act on a type that cannot be resolved                                                                                                                                                                                                                                                                 @typescript-eslint/no-unsafe-member-access
+@sdm:lint:fix: 
+@sdm:lint:fix: C:\Projects\NSCM\nscm-fe\features\sdm\src\components\project-reg.authPopup.ts
+@sdm:lint:fix:    36:56  error    Unsafe return of a value of type error                  @typescript-eslint/no-unsafe-return
+@sdm:lint:fix:    36:56  error    Unsafe call of a type that could not be resolved        @typescript-eslint/no-unsafe-call
+@sdm:lint:fix:    92:11  warning  Unsafe assignment of an error typed value               @typescript-eslint/no-unsafe-assignment
+@sdm:lint:fix:    92:21  error    Unsafe call of a type that could not be resolved        @typescript-eslint/no-unsafe-call
+@sdm:lint:fix:    93:41  error    The type of computed name [reqUser] cannot be resolved  @typescript-eslint/no-unsafe-member-access
+@sdm:lint:fix:    94:28  error    The type of computed name [reqUser] cannot be resolved  @typescript-eslint/no-unsafe-member-access
+@sdm:lint:fix:   143:22  error    Unsafe call of a type that could not be resolved        @typescript-eslint/no-unsafe-call
+@sdm:lint:fix: 
+@sdm:lint:fix: C:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-list\ProjectList.tsx
+@sdm:lint:fix:   138:49  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+@sdm:lint:fix: 
+@sdm:lint:fix: C:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-list\components\ProjectListGrid.tsx
+@sdm:lint:fix:    28:20  warning  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `ProjectListGrid.tsx` to same directory as `../ProjectList.module.scss` or consider making `../ProjectList.module.scss` a package  import/no-relative-parent-imports
+@sdm:lint:fix:   217:11  error    '(src ? rec[src.name] : undefined) ?? rec[`${binding}_NAME`] ?? rec[binding] ?? ''' will use Object's default stringification format ('[object Object]') when stringified                                                                                                             @typescript-eslint/no-base-to-string
+@sdm:lint:fix: 
+@sdm:lint:fix: C:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-list\utils\project-list.api.test.ts
+@sdm:lint:fix:   13:28  error  A method that is not declared with `this: void` may cause unintentional scoping of `this` when separated from its object.
+@sdm:lint:fix: Consider using an arrow function or explicitly `.bind()`ing the method to avoid calling the method with an unintended `this` value. 
+@sdm:lint:fix: If a function does not access `this`, it can be annotated with `this: void`  @typescript-eslint/unbound-method
+@sdm:lint:fix: 
+@sdm:lint:fix: C:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-list\utils\project-list.editLock.ts
+@sdm:lint:fix:   34:9   warning  Unsafe assignment of an error typed value         @typescript-eslint/no-unsafe-assignment
+@sdm:lint:fix:   34:13  error    Unsafe call of a type that could not be resolved  @typescript-eslint/no-unsafe-call
+@sdm:lint:fix:   49:3   error    Unsafe call of a type that could not be resolved  @typescript-eslint/no-unsafe-call
+@sdm:lint:fix:   49:46  error    Unsafe call of a type that could not be resolved  @typescript-eslint/no-unsafe-call
+@sdm:lint:fix: 
+@sdm:lint:fix: C:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-list\utils\project-list.validate.ts
+@sdm:lint:fix:   16:9   warning  Unsafe assignment of an error typed value                                                                                @typescript-eslint/no-unsafe-assignment
+@sdm:lint:fix:   16:13  error    Unsafe call of a type that could not be resolved                                                                         @typescript-eslint/no-unsafe-call
+@sdm:lint:fix:   16:13  error    Unsafe call of a type that could not be resolved                                                                         @typescript-eslint/no-unsafe-call
+@sdm:lint:fix:   16:27  error    Unsafe member access .trim on a type that cannot be resolved                                                             @typescript-eslint/no-unsafe-member-access
+@sdm:lint:fix:   18:22  error    Unsafe argument of type error typed assigned to a parameter of type `string`                                             @typescript-eslint/no-unsafe-argument
+@sdm:lint:fix:   18:33  error    Unsafe argument of type error typed assigned to a parameter of type `string`                                             @typescript-eslint/no-unsafe-argument
+@sdm:lint:fix:   18:44  error    Unsafe argument of type error typed assigned to a parameter of type `string | number | Date | Dayjs | null | undefined`  @typescript-eslint/no-unsafe-argument
+@sdm:lint:fix:   20:35  error    Unsafe argument of type error typed assigned to a parameter of type `string | number | Date`                             @typescript-eslint/no-unsafe-argument
+@sdm:lint:fix:   28:3   error    Unsafe return of a value of type error                                                                                   @typescript-eslint/no-unsafe-return
+@sdm:lint:fix:   28:39  error    Unsafe call of a type that could not be resolved                                                                         @typescript-eslint/no-unsafe-call
+@sdm:lint:fix:   53:9   warning  Unsafe assignment of an error typed value                                                                                @typescript-eslint/no-unsafe-assignment
+@sdm:lint:fix:   53:13  error    Unsafe call of a type that could not be resolved                                                                         @typescript-eslint/no-unsafe-call
+@sdm:lint:fix:   54:39  error    Unsafe argument of type error typed assigned to a parameter of type `string`                                             @typescript-eslint/no-unsafe-argument
+@sdm:lint:fix:   54:50  error    Unsafe argument of type error typed assigned to a parameter of type `string`                                             @typescript-eslint/no-unsafe-argument
+@sdm:lint:fix:   54:50  error    Unsafe call of a type that could not be resolved                                                                         @typescript-eslint/no-unsafe-call
+@sdm:lint:fix:   54:52  error    Unsafe member access .slice on a type that cannot be resolved                                                            @typescript-eslint/no-unsafe-member-access
+@sdm:lint:fix: 
+@sdm:lint:fix: C:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-master\ProjectMaster.tsx
+@sdm:lint:fix:   166:49  warning  Forbidden non-null assertion                                      @typescript-eslint/no-non-null-assertion
+@sdm:lint:fix:   201:9   error    The two values in this comparison do not have a shared enum type  @typescript-eslint/no-unsafe-enum-comparison
+@sdm:lint:fix: 
+@sdm:lint:fix: C:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-master\components\ProjectMasterTab1Grid.tsx
+@sdm:lint:fix:    23:20  warning  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `ProjectMasterTab1Grid.tsx` to same directory as `../ProjectMaster.module.scss` or consider making `../ProjectMaster.module.scss` a package  import/no-relative-parent-imports
+@sdm:lint:fix:   199:11  error    '(src ? rec[src.name] : undefined) ?? rec[`${binding}_NAME`] ?? rec[binding] ?? ''' will use Object's default stringification format ('[object Object]') when stringified                                                                                                                       @typescript-eslint/no-base-to-string
+@sdm:lint:fix:   202:11  error    '(src ? rec[src.color] : undefined) ?? rec[colorTypeColumnOf(binding)] ?? ''' will use Object's default stringification format ('[object Object]') when stringified                                                                                                                             @typescript-eslint/no-base-to-string
+@sdm:lint:fix: 
+@sdm:lint:fix: C:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-master\components\ProjectMasterTab2Grid.tsx
+@sdm:lint:fix:    21:20  warning  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `ProjectMasterTab2Grid.tsx` to same directory as `../ProjectMaster.module.scss` or consider making `../ProjectMaster.module.scss` a package  import/no-relative-parent-imports
+@sdm:lint:fix:   126:11  error    '(src ? rec[src.name] : undefined) ?? rec[`${binding}_NAME`] ?? rec[binding] ?? ''' will use Object's default stringification format ('[object Object]') when stringified                                                                                                                       @typescript-eslint/no-base-to-string
+@sdm:lint:fix:   129:11  error    '(src ? rec[src.color] : undefined) ?? rec[colorTypeColumnOf(binding)] ?? ''' will use Object's default stringification format ('[object Object]') when stringified                                                                                                                             @typescript-eslint/no-base-to-string
+@sdm:lint:fix: 
+@sdm:lint:fix: C:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-master\utils\project-master.api.test.ts
+@sdm:lint:fix:   18:28  error  A method that is not declared with `this: void` may cause unintentional scoping of `this` when separated from its object.
+@sdm:lint:fix: Consider using an arrow function or explicitly `.bind()`ing the method to avoid calling the method with an unintended `this` value. 
+@sdm:lint:fix: If a function does not access `this`, it can be annotated with `this: void`  @typescript-eslint/unbound-method
+@sdm:lint:fix: 
+@sdm:lint:fix: C:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-master\utils\project-master.editLock.ts
+@sdm:lint:fix:   12:12  error    Unsafe call of a type that could not be resolved                @typescript-eslint/no-unsafe-call
+@sdm:lint:fix:   36:9   warning  Unsafe assignment of an error typed value                       @typescript-eslint/no-unsafe-assignment
+@sdm:lint:fix:   36:13  error    Unsafe call of a type that could not be resolved                @typescript-eslint/no-unsafe-call
+@sdm:lint:fix:   43:3   error    Unsafe call of a type that could not be resolved                @typescript-eslint/no-unsafe-call
+@sdm:lint:fix:   43:3   error    Unsafe call of a type that could not be resolved                @typescript-eslint/no-unsafe-call
+@sdm:lint:fix:   43:24  error    Unsafe member access .trim on a type that cannot be resolved    @typescript-eslint/no-unsafe-member-access
+@sdm:lint:fix:   43:31  error    Unsafe member access .length on a type that cannot be resolved  @typescript-eslint/no-unsafe-member-access
+@sdm:lint:fix: 
+@sdm:lint:fix: C:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-master\utils\project-master.validate.ts
+@sdm:lint:fix:   16:9   warning  Unsafe assignment of an error typed value                                                                                @typescript-eslint/no-unsafe-assignment
+@sdm:lint:fix:   16:13  error    Unsafe call of a type that could not be resolved                                                                         @typescript-eslint/no-unsafe-call
+@sdm:lint:fix:   16:13  error    Unsafe call of a type that could not be resolved                                                                         @typescript-eslint/no-unsafe-call
+@sdm:lint:fix:   16:27  error    Unsafe member access .trim on a type that cannot be resolved                                                             @typescript-eslint/no-unsafe-member-access
+@sdm:lint:fix:   18:22  error    Unsafe argument of type error typed assigned to a parameter of type `string`                                             @typescript-eslint/no-unsafe-argument
+@sdm:lint:fix:   18:33  error    Unsafe argument of type error typed assigned to a parameter of type `string`                                             @typescript-eslint/no-unsafe-argument
+@sdm:lint:fix:   18:44  error    Unsafe argument of type error typed assigned to a parameter of type `string | number | Dayjs | Date | null | undefined`  @typescript-eslint/no-unsafe-argument
+@sdm:lint:fix:   20:35  error    Unsafe argument of type error typed assigned to a parameter of type `string | number | Date`                             @typescript-eslint/no-unsafe-argument
+@sdm:lint:fix:   28:3   error    Unsafe return of a value of type error                                                                                   @typescript-eslint/no-unsafe-return
+@sdm:lint:fix:   28:39  error    Unsafe call of a type that could not be resolved                                                                         @typescript-eslint/no-unsafe-call
+@sdm:lint:fix:   53:9   warning  Unsafe assignment of an error typed value                                                                                @typescript-eslint/no-unsafe-assignment
+@sdm:lint:fix:   53:13  error    Unsafe call of a type that could not be resolved                                                                         @typescript-eslint/no-unsafe-call
+@sdm:lint:fix:   54:9   warning  Unsafe assignment of an error typed value                                                                                @typescript-eslint/no-unsafe-assignment
+@sdm:lint:fix:   54:23  error    Unsafe argument of type error typed assigned to a parameter of type `string`                                             @typescript-eslint/no-unsafe-argument
+@sdm:lint:fix:   55:12  warning  Unsafe assignment of an error typed value                                                                                @typescript-eslint/no-unsafe-assignment
+@sdm:lint:fix: 
+@sdm:lint:fix: C:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-reg\ProjectReg.tsx
+@sdm:lint:fix:   173:49  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+@sdm:lint:fix:   283:20  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+@sdm:lint:fix:   290:16  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+@sdm:lint:fix: 
+@sdm:lint:fix: C:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-reg\components\ProjectRegTab1Grid.tsx
+@sdm:lint:fix:   20:20  warning  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `ProjectRegTab1Grid.tsx` to same directory as `../ProjectReg.module.scss` or consider making `../ProjectReg.module.scss` a package  import/no-relative-parent-imports
+@sdm:lint:fix: 
+@sdm:lint:fix: C:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-reg\components\ProjectRegTab2Grid.tsx
+@sdm:lint:fix:   10:20  warning  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `ProjectRegTab2Grid.tsx` to same directory as `../ProjectReg.module.scss` or consider making `../ProjectReg.module.scss` a package  import/no-relative-parent-imports
+@sdm:lint:fix: 
+@sdm:lint:fix: C:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-reg\components\modals\MyWorkModal.tsx
+@sdm:lint:fix:   11:20  warning  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `MyWorkModal.tsx` to same directory as `../../ProjectReg.module.scss` or consider making `../../ProjectReg.module.scss` a package  import/no-relative-parent-imports
+@sdm:lint:fix: 
+@sdm:lint:fix: C:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-reg\utils\project-reg.editLock.ts
+@sdm:lint:fix:   42:61  error  The two values in this comparison do not have a shared enum type  @typescript-eslint/no-unsafe-enum-comparison
+@sdm:lint:fix: 
+@sdm:lint:fix: C:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-reg\utils\project-reg.validate.ts
+@sdm:lint:fix:   17:9   warning  Unsafe assignment of an error typed value                                                                                @typescript-eslint/no-unsafe-assignment
+@sdm:lint:fix:   17:13  error    Unsafe call of a type that could not be resolved                                                                         @typescript-eslint/no-unsafe-call
+@sdm:lint:fix:   17:13  error    Unsafe call of a type that could not be resolved                                                                         @typescript-eslint/no-unsafe-call
+@sdm:lint:fix:   17:27  error    Unsafe member access .trim on a type that cannot be resolved                                                             @typescript-eslint/no-unsafe-member-access
+@sdm:lint:fix:   19:22  error    Unsafe argument of type error typed assigned to a parameter of type `string`                                             @typescript-eslint/no-unsafe-argument
+@sdm:lint:fix:   19:33  error    Unsafe argument of type error typed assigned to a parameter of type `string`                                             @typescript-eslint/no-unsafe-argument
+@sdm:lint:fix:   19:44  error    Unsafe argument of type error typed assigned to a parameter of type `string | number | Date | Dayjs | null | undefined`  @typescript-eslint/no-unsafe-argument
+@sdm:lint:fix:   21:35  error    Unsafe argument of type error typed assigned to a parameter of type `string | number | Date`                             @typescript-eslint/no-unsafe-argument
+@sdm:lint:fix:   29:3   error    Unsafe return of a value of type error                                                                                   @typescript-eslint/no-unsafe-return
+@sdm:lint:fix:   29:39  error    Unsafe call of a type that could not be resolved                                                                         @typescript-eslint/no-unsafe-call
+@sdm:lint:fix:   66:24  error    Unsafe call of a type that could not be resolved                                                                         @typescript-eslint/no-unsafe-call
+@sdm:lint:fix:   66:24  error    Unsafe call of a type that could not be resolved                                                                         @typescript-eslint/no-unsafe-call
+@sdm:lint:fix:   66:38  error    Unsafe member access .trim on a type that cannot be resolved                                                             @typescript-eslint/no-unsafe-member-access
+@sdm:lint:fix:   78:42  error    Unsafe return of a value of type error                                                                                   @typescript-eslint/no-unsafe-return
+@sdm:lint:fix:   78:42  error    Unsafe call of a type that could not be resolved                                                                         @typescript-eslint/no-unsafe-call
+@sdm:lint:fix: 
+@sdm:lint:fix: ✖ 88 problems (65 errors, 23 warnings)
+@sdm:lint:fix: 
+@sdm:lint:fix:  ELIFECYCLE  Command failed with exit code 1.
+@sdm:lint:fix: command finished with error, but continuing...
+@demand:lint:fix: 
+@demand:lint:fix: C:\Projects\NSCM\nscm-fe\features\demand\src\pages\business-plan\components\BusinessPlanGrid.tsx
+@demand:lint:fix:    27:20  warning  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `BusinessPlanGrid.tsx` to same directory as `../BusinessPlan.module.scss` or consider making `../BusinessPlan.module.scss` a package  import/no-relative-parent-imports
+@demand:lint:fix:   263:17  warning  Forbidden non-null assertion                                                                                                                                                                                                                                                             @typescript-eslint/no-non-null-assertion
+@demand:lint:fix:   281:19  warning  Forbidden non-null assertion                                                                                                                                                                                                                                                             @typescript-eslint/no-non-null-assertion
+@demand:lint:fix:   289:21  warning  Forbidden non-null assertion                                                                                                                                                                                                                                                             @typescript-eslint/no-non-null-assertion
+@demand:lint:fix:   352:7   warning  Forbidden non-null assertion                                                                                                                                                                                                                                                             @typescript-eslint/no-non-null-assertion
+@demand:lint:fix:   369:19  warning  Forbidden non-null assertion                                                                                                                                                                                                                                                             @typescript-eslint/no-non-null-assertion
+@demand:lint:fix: 
+@demand:lint:fix: C:\Projects\NSCM\nscm-fe\features\demand\src\pages\business-plan\components\modals\ExchangeRateModal.tsx
+@demand:lint:fix:   201:19  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+@demand:lint:fix:   318:7   warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+@demand:lint:fix: 
+@demand:lint:fix: C:\Projects\NSCM\nscm-fe\features\demand\src\pages\business-plan\components\modals\MeasureSelectModal.tsx
+@demand:lint:fix:   8:20  warning  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `MeasureSelectModal.tsx` to same directory as `../../BusinessPlan.module.scss` or consider making `../../BusinessPlan.module.scss` a package  import/no-relative-parent-imports
+@demand:lint:fix: 
+@demand:lint:fix: C:\Projects\NSCM\nscm-fe\features\demand\src\pages\business-plan\components\modals\ReplaceByCutoffModal.tsx
+@demand:lint:fix:   20:20  warning  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `ReplaceByCutoffModal.tsx` to same directory as `../../BusinessPlan.module.scss` or consider making `../../BusinessPlan.module.scss` a package  import/no-relative-parent-imports
+@demand:lint:fix: 
+@demand:lint:fix: C:\Projects\NSCM\nscm-fe\features\demand\src\pages\business-plan\components\modals\VersionCutoffModal.tsx
+@demand:lint:fix:   20:20  warning  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `VersionCutoffModal.tsx` to same directory as `../../BusinessPlan.module.scss` or consider making `../../BusinessPlan.module.scss` a package  import/no-relative-parent-imports
+@demand:lint:fix: 
+@demand:lint:fix: C:\Projects\NSCM\nscm-fe\features\demand\src\pages\business-plan\utils\business-plan.spread.ts
+@demand:lint:fix:   109:18  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+@demand:lint:fix:   120:18  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+@demand:lint:fix:   169:18  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+@demand:lint:fix: 
+@demand:lint:fix: C:\Projects\NSCM\nscm-fe\features\demand\src\pages\demand-manager\DemandManager.tsx
+@demand:lint:fix:   184:13  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+@demand:lint:fix:   300:17  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+@demand:lint:fix: 
+@demand:lint:fix: C:\Projects\NSCM\nscm-fe\features\demand\src\pages\demand-manager\components\DemandManagerGrid.tsx
+@demand:lint:fix:   18:20  warning  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `DemandManagerGrid.tsx` to same directory as `../DemandManager.module.scss` or consider making `../DemandManager.module.scss` a package  import/no-relative-parent-imports
+@demand:lint:fix: 
+@demand:lint:fix: C:\Projects\NSCM\nscm-fe\features\demand\src\pages\demand-manager\components\modals\VersionPopupModal.tsx
+@demand:lint:fix:   30:20  warning  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `VersionPopupModal.tsx` to same directory as `../../DemandManager.module.scss` or consider making `../../DemandManager.module.scss` a package  import/no-relative-parent-imports
+@demand:lint:fix: 
+@demand:lint:fix: C:\Projects\NSCM\nscm-fe\features\demand\src\pages\demand-manager\utils\demand-manager.merge.ts
+@demand:lint:fix:   59:13  warning  Unsafe assignment of an `any` value  @typescript-eslint/no-unsafe-assignment
+@demand:lint:fix:   60:13  warning  Unsafe assignment of an `any` value  @typescript-eslint/no-unsafe-assignment
+@demand:lint:fix: 
+@demand:lint:fix: C:\Projects\NSCM\nscm-fe\features\demand\src\pages\etc-sales-reports\EtcSalesReports.tsx
+@demand:lint:fix:   245:9   warning  'hasPendingChanges' is assigned a value but never used. Allowed unused vars must match /^_/u  unused-imports/no-unused-vars
+@demand:lint:fix:   252:49  warning  Forbidden non-null assertion                                                                  @typescript-eslint/no-non-null-assertion
+@demand:lint:fix:   366:49  warning  Forbidden non-null assertion                                                                  @typescript-eslint/no-non-null-assertion
+@demand:lint:fix:   493:20  warning  Forbidden non-null assertion                                                                  @typescript-eslint/no-non-null-assertion
+@demand:lint:fix:   499:49  warning  Forbidden non-null assertion                                                                  @typescript-eslint/no-non-null-assertion
+@demand:lint:fix:   530:7   warning  Forbidden non-null assertion                                                                  @typescript-eslint/no-non-null-assertion
+@demand:lint:fix: 
+@demand:lint:fix: C:\Projects\NSCM\nscm-fe\features\demand\src\pages\etc-sales-reports\components\EtcSalesReportsGrid.tsx
+@demand:lint:fix:   16:20  warning  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `EtcSalesReportsGrid.tsx` to same directory as `../EtcSalesReports.module.scss` or consider making `../EtcSalesReports.module.scss` a package  import/no-relative-parent-imports
+@demand:lint:fix: 
+@demand:lint:fix: C:\Projects\NSCM\nscm-fe\features\demand\src\pages\forecast-price\components\ForecastPriceForm.tsx
+@demand:lint:fix:   66:9  warning  'deptIds' is assigned a value but never used. Allowed unused vars must match /^_/u       unused-imports/no-unused-vars
+@demand:lint:fix:   67:9  warning  'endCustomers' is assigned a value but never used. Allowed unused vars must match /^_/u  unused-imports/no-unused-vars
+@demand:lint:fix: 
+@demand:lint:fix: C:\Projects\NSCM\nscm-fe\features\demand\src\pages\forecast-price\components\ForecastPriceGrid.tsx
+@demand:lint:fix:   609:6  warning  React Hook useEffect has missing dependencies: 'applyCellProdSites', 'applyEditMeasures', and 'applySalesSites'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+@demand:lint:fix: 
+@demand:lint:fix: C:\Projects\NSCM\nscm-fe\features\demand\src\pages\forecast-price\components\modals\ExchangeRateModal.tsx
+@demand:lint:fix:   263:19  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+@demand:lint:fix:   326:7   warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+@demand:lint:fix: 
+@demand:lint:fix: C:\Projects\NSCM\nscm-fe\features\demand\src\pages\metal-link-price\MetalLinkPrice.tsx
+@demand:lint:fix:   44:9  warning  'setToast' is assigned a value but never used. Allowed unused vars must match /^_/u  unused-imports/no-unused-vars
+@demand:lint:fix: 
+@demand:lint:fix: C:\Projects\NSCM\nscm-fe\features\demand\src\pages\mkt-fcst\MktFcst.tsx
+@demand:lint:fix:   245:9  warning  'dmTimeBlocked' is assigned a value but never used. Allowed unused vars must match /^_/u  unused-imports/no-unused-vars
+@demand:lint:fix: 
+@demand:lint:fix: C:\Projects\NSCM\nscm-fe\features\demand\src\pages\mkt-fcst\components\MktFcstGrid.tsx
+@demand:lint:fix:     36:20  warning  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `MktFcstGrid.tsx` to same directory as `../MktFcst.module.scss` or consider making `../MktFcst.module.scss` a package  import/no-relative-parent-imports
+@demand:lint:fix:    571:19  warning  Forbidden non-null assertion                                                                                                                                                                                                                                              @typescript-eslint/no-non-null-assertion
+@demand:lint:fix:    605:15  warning  Forbidden non-null assertion                                                                                                                                                                                                                                              @typescript-eslint/no-non-null-assertion
+@demand:lint:fix:    652:30  warning  'idx' is defined but never used. Allowed unused args must match /^_/u                                                                                                                                                                                                     unused-imports/no-unused-vars
+@demand:lint:fix:   1732:6   warning  React Hook useEffect has missing dependencies: 'editTrackerRef', 'editable', 'fetchRowParamCombo', 'gridRef', 'isAsBoundRow', 'isAsFromSiteEditable', 'setAlert', and 't'. Either include them or remove the dependency array                                             react-hooks/exhaustive-deps
+@demand:lint:fix: 
+@demand:lint:fix: C:\Projects\NSCM\nscm-fe\features\demand\src\pages\mkt-fcst\components\modals\PrHistoryModal.tsx
+@demand:lint:fix:   11:20  warning  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `PrHistoryModal.tsx` to same directory as `../../MktFcst.module.scss` or consider making `../../MktFcst.module.scss` a package  import/no-relative-parent-imports
+@demand:lint:fix: 
+@demand:lint:fix: C:\Projects\NSCM\nscm-fe\features\demand\src\pages\mkt-fcst\components\modals\PrModal.tsx
+@demand:lint:fix:   14:20  warning  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `PrModal.tsx` to same directory as `../../MktFcst.module.scss` or consider making `../../MktFcst.module.scss` a package  import/no-relative-parent-imports
+@demand:lint:fix: 
+@demand:lint:fix: C:\Projects\NSCM\nscm-fe\features\demand\src\pages\mkt-fcst\components\modals\SspSyncCompareModal.tsx
+@demand:lint:fix:   9:20  warning  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `SspSyncCompareModal.tsx` to same directory as `../../MktFcst.module.scss` or consider making `../../MktFcst.module.scss` a package  import/no-relative-parent-imports
+@demand:lint:fix: 
+@demand:lint:fix: C:\Projects\NSCM\nscm-fe\features\demand\src\pages\mkt-fcst\components\modals\SspSyncResultModal.tsx
+@demand:lint:fix:   7:20  warning  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `SspSyncResultModal.tsx` to same directory as `../../MktFcst.module.scss` or consider making `../../MktFcst.module.scss` a package  import/no-relative-parent-imports
+@demand:lint:fix: 
+@demand:lint:fix: C:\Projects\NSCM\nscm-fe\features\demand\src\pages\mkt-fcst\utils\mkt-fcst.core.test.ts
+@demand:lint:fix:   153:12  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+@demand:lint:fix:   154:12  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+@demand:lint:fix:   155:12  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+@demand:lint:fix:   156:12  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+@demand:lint:fix: 
+@demand:lint:fix: C:\Projects\NSCM\nscm-fe\features\demand\src\pages\sales-monitoring\SalesMonitoring.tsx
+@demand:lint:fix:   44:9  warning  'setToast' is assigned a value but never used. Allowed unused vars must match /^_/u  unused-imports/no-unused-vars
+@demand:lint:fix: 
+@demand:lint:fix: C:\Projects\NSCM\nscm-fe\features\demand\src\pages\sales-monitoring\components\SalesMonitoringGrid.tsx
+@demand:lint:fix:    23:20  warning  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `SalesMonitoringGrid.tsx` to same directory as `../SalesMonitoring.module.scss` or consider making `../SalesMonitoring.module.scss` a package  import/no-relative-parent-imports
+@demand:lint:fix:   184:17  warning  Forbidden non-null assertion                                                                                                                                                                                                                                                                      @typescript-eslint/no-non-null-assertion
+@demand:lint:fix:   203:15  warning  Forbidden non-null assertion                                                                                                                                                                                                                                                                      @typescript-eslint/no-non-null-assertion
+@demand:lint:fix:   278:7   warning  Forbidden non-null assertion                                                                                                                                                                                                                                                                      @typescript-eslint/no-non-null-assertion
+@demand:lint:fix: 
+@demand:lint:fix: C:\Projects\NSCM\nscm-fe\features\demand\src\pages\sales-reports\SalesReports.tsx
+@demand:lint:fix:   296:49  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+@demand:lint:fix:   473:20  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+@demand:lint:fix:   481:20  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+@demand:lint:fix:   592:49  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+@demand:lint:fix:   599:20  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+@demand:lint:fix:   612:20  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+@demand:lint:fix: 
+@demand:lint:fix: C:\Projects\NSCM\nscm-fe\features\demand\src\pages\sales-reports\components\SalesReportsGrid.tsx
+@demand:lint:fix:   15:20  warning  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `SalesReportsGrid.tsx` to same directory as `../SalesReports.module.scss` or consider making `../SalesReports.module.scss` a package  import/no-relative-parent-imports
+@demand:lint:fix: 
+@demand:lint:fix: C:\Projects\NSCM\nscm-fe\features\demand\src\pages\sales-reports\components\modals\ExchangeRateModal.tsx
+@demand:lint:fix:   329:7  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+@demand:lint:fix: 
+@demand:lint:fix: C:\Projects\NSCM\nscm-fe\features\demand\src\pages\sales-reports\components\modals\TextboxModal.tsx
+@demand:lint:fix:   11:20  warning  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `TextboxModal.tsx` to same directory as `../../SalesReports.module.scss` or consider making `../../SalesReports.module.scss` a package  import/no-relative-parent-imports
+@demand:lint:fix: 
+@demand:lint:fix: ✖ 61 problems (0 errors, 61 warnings)
+@demand:lint:fix: 
+@master:lint:fix: 
+@master:lint:fix: C:\Projects\NSCM\nscm-fe\features\master\src\components\contributeRateModal\ContributeRateModal.tsx
+@master:lint:fix:   91:6  warning  React Hook useEffect has missing dependencies: 'fetchStaticColumns' and 'initialized'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+@master:lint:fix: 
+@master:lint:fix: C:\Projects\NSCM\nscm-fe\features\master\src\components\contributeVersionModal\ContributeVersionModal.tsx
+@master:lint:fix:   109:6  warning  React Hook useEffect has a missing dependency: 'fetchStaticColumns'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+@master:lint:fix:   118:6  warning  React Hook useEffect has a missing dependency: 'setSelectedYear'. Either include it or remove the dependency array     react-hooks/exhaustive-deps
+@master:lint:fix: 
+@master:lint:fix: C:\Projects\NSCM\nscm-fe\features\master\src\components\customerModal\CustomerModal.tsx
+@master:lint:fix:   116:6  warning  React Hook useEffect has missing dependencies: 'divisionId', 'fetchStaticColumns', 'initialized', 'shipTo', and 'soldTo'. Either include them or remove the dependency array. If 'setSearchParam' needs the current value of 'divisionId', you can also switch to useReducer instead of useState and read 'divisionId' in the reducer  react-hooks/exhaustive-deps
+@master:lint:fix: 
+@master:lint:fix: C:\Projects\NSCM\nscm-fe\features\master\src\components\itemByDivisionModal\ItemByDivisionModal.tsx
+@master:lint:fix:   326:6  warning  React Hook useEffect has missing dependencies: 'divisionId', 'fetchStaticColumns', 'initialized', 'preSearchParams.deptId', 'preSearchParams.divisionId', 'preSearchParams.endCustomer', 'preSearchParams.itemId', 'preSearchParams.projectCode', and 'preSearchParams.salesSite'. Either include them or remove the dependency array. If 'setSearchParam' needs the current value of 'preSearchParams.divisionId', you can also switch to useReducer instead of useState and read 'preSearchParams.divisionId' in the reducer  react-hooks/exhaustive-deps
+@master:lint:fix: 
+@master:lint:fix: C:\Projects\NSCM\nscm-fe\features\master\src\components\ownerByDivisionModal\OwnerByDivisionModal.tsx
+@master:lint:fix:   167:6  warning  React Hook useEffect has missing dependencies: 'fetchStaticColumns', 'initialized', 'ownerId', and 'preSearchParams'. Either include them or remove the dependency array. If 'setModalFilters' needs the current value of 'ownerId', you can also switch to useReducer instead of useState and read 'ownerId' in the reducer  react-hooks/exhaustive-deps
+@master:lint:fix: 
+@master:lint:fix: C:\Projects\NSCM\nscm-fe\features\master\src\components\ownerModal\OwnerModal.tsx
+@master:lint:fix:   163:6  warning  React Hook useEffect has missing dependencies: 'fetchStaticColumns', 'initialized', and 'userData?.o_rc1'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+@master:lint:fix: 
+@master:lint:fix: C:\Projects\NSCM\nscm-fe\features\master\src\components\projectByDivisionModal\ProjectByDivisionModal.tsx
+@master:lint:fix:   200:6  warning  React Hook useEffect has missing dependencies: 'fetchStaticColumns', 'initialized', 'preSearchParams.deptId', 'preSearchParams.divisionId', 'preSearchParams.endCustomer', 'preSearchParams.projectCode', and 'preSearchParams.salesSite'. Either include them or remove the dependency array. If 'setSearchParam' needs the current value of 'preSearchParams.divisionId', you can also switch to useReducer instead of useState and read 'preSearchParams.divisionId' in the reducer  react-hooks/exhaustive-deps
+@master:lint:fix: 
+@master:lint:fix: C:\Projects\NSCM\nscm-fe\features\master\src\components\projectModal\ProjectModal.tsx
+@master:lint:fix:   107:6  warning  React Hook useEffect has missing dependencies: 'fetchStaticColumns', 'initialized', 'preProject', and 'preSearchParams'. Either include them or remove the dependency array. If 'setModalFilters' needs the current value of 'preProject', you can also switch to useReducer instead of useState and read 'preProject' in the reducer  react-hooks/exhaustive-deps
+@master:lint:fix: 
+@master:lint:fix: C:\Projects\NSCM\nscm-fe\features\master\src\components\regionModal\RegionModal.tsx
+@master:lint:fix:   121:6  warning  React Hook useEffect has missing dependencies: 'city', 'country', 'fetchStaticColumns', and 'initialized'. Either include them or remove the dependency array. If 'setModalFilters' needs the current value of 'country', you can also switch to useReducer instead of useState and read 'country' in the reducer  react-hooks/exhaustive-deps
+@master:lint:fix: 
+@master:lint:fix: C:\Projects\NSCM\nscm-fe\features\master\src\components\storageLocationModal\StorageLocationModal.tsx
+@master:lint:fix:   89:6  warning  React Hook useEffect has missing dependencies: 'divisionId', 'fetchStaticColumns', 'initialized', and 'storageId'. Either include them or remove the dependency array. If 'setModalFilters' needs the current value of 'divisionId', you can also switch to useReducer instead of useState and read 'divisionId' in the reducer  react-hooks/exhaustive-deps
+@master:lint:fix: 
+@master:lint:fix: C:\Projects\NSCM\nscm-fe\features\master\src\components\teamModal\TeamModal.tsx
+@master:lint:fix:   85:6  warning  React Hook useEffect has missing dependencies: 'fetchStaticColumns', 'initialized', 'teamId', and 'teamName'. Either include them or remove the dependency array. If 'setModalFilters' needs the current value of 'teamId', you can also switch to useReducer instead of useState and read 'teamId' in the reducer  react-hooks/exhaustive-deps
+@master:lint:fix: 
+@master:lint:fix: C:\Projects\NSCM\nscm-fe\features\master\src\components\versionModal\versionModal.api.ts
+@master:lint:fix:   19:9  warning  Unsafe assignment of an `any` value  @typescript-eslint/no-unsafe-assignment
+@master:lint:fix: 
+@master:lint:fix: C:\Projects\NSCM\nscm-fe\features\master\src\pages\contribute-main\ContributeMain.tsx
+@master:lint:fix:   203:11  warning  Unexpected console statement. Only these console methods are allowed: warn, error                                                                                   no-console
+@master:lint:fix:   213:11  warning  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+@master:lint:fix:   215:16  warning  'e' is defined but never used. Allowed unused args must match /^_/u                                                                                                 unused-imports/no-unused-vars
+@master:lint:fix:   216:11  warning  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+@master:lint:fix:   247:5   warning  Unexpected console statement. Only these console methods are allowed: warn, error                                                                                   no-console
+@master:lint:fix:   249:6   warning  React Hook useEffect has a missing dependency: 'fetchStaticColumns'. Either include it or remove the dependency array                                               react-hooks/exhaustive-deps
+@master:lint:fix: 
+@master:lint:fix: C:\Projects\NSCM\nscm-fe\features\master\src\pages\contribute-main\components\ContributeMainGrid.tsx
+@master:lint:fix:   268:6  warning  React Hook useEffect has a missing dependency: 'gridRef'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+@master:lint:fix:   275:6  warning  React Hook useEffect has a missing dependency: 'gridRef'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+@master:lint:fix:   306:6  warning  React Hook useEffect has a missing dependency: 'gridRef'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+@master:lint:fix:   354:6  warning  React Hook useEffect has a missing dependency: 'gridRef'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+@master:lint:fix: 
+@master:lint:fix: C:\Projects\NSCM\nscm-fe\features\master\src\pages\contribute-main\components\SearchBar.tsx
+@master:lint:fix:   79:6  warning  React Hook useEffect has a missing dependency: 'setSearchParams'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+@master:lint:fix: 
+@master:lint:fix: C:\Projects\NSCM\nscm-fe\features\master\src\pages\contribute-view\ContributeView.tsx
+@master:lint:fix:   121:6  warning  React Hook useEffect has missing dependencies: 'fetchStaticColumns', 'searchParams.versionNo', and 'setFilters'. Either include them or remove the dependency array             react-hooks/exhaustive-deps
+@master:lint:fix:   159:6  warning  React Hook useEffect has missing dependencies: 'mainData', 'searchParams.compatibilityYn', 'setAlert', 't', and 'validCnt'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+@master:lint:fix: 
+@master:lint:fix: C:\Projects\NSCM\nscm-fe\features\master\src\pages\contribute-view\components\ContributeViewForm.tsx
+@master:lint:fix:   93:6  warning  React Hook useEffect has a missing dependency: 'setSearchParams'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+@master:lint:fix: 
+@master:lint:fix: C:\Projects\NSCM\nscm-fe\features\master\src\pages\contribute-view\components\ContributeViewGrid.tsx
+@master:lint:fix:   74:7  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+@master:lint:fix: 
+@master:lint:fix: C:\Projects\NSCM\nscm-fe\features\master\src\pages\contribute-view\components\modals\ContributeVersionModal.tsx
+@master:lint:fix:   180:6  warning  React Hook useEffect has a missing dependency: 'onSearch'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+@master:lint:fix: 
+@master:lint:fix: C:\Projects\NSCM\nscm-fe\features\master\src\pages\customer-forecast-master\CustomerFcstMaster.tsx
+@master:lint:fix:   134:6  warning  React Hook useEffect has missing dependencies: 'fetchStaticColumns' and 'initialized'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+@master:lint:fix: 
+@master:lint:fix: C:\Projects\NSCM\nscm-fe\features\master\src\pages\customer-forecast-master\componenets\CustomerFcstMasterForm.tsx
+@master:lint:fix:   40:6  warning  React Hook useEffect has a missing dependency: 'setSearchParams'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+@master:lint:fix: 
+@master:lint:fix: C:\Projects\NSCM\nscm-fe\features\master\src\pages\customer-forecast-master\useCustomerFcstMasterStore.ts
+@master:lint:fix:   65:11  warning  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+@master:lint:fix: 
+@master:lint:fix: C:\Projects\NSCM\nscm-fe\features\master\src\pages\customer-model-mapping\CustomerModelMapping.tsx
+@master:lint:fix:   66:6  warning  React Hook useEffect has missing dependencies: 'fetchStaticColumns' and 'initialized'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+@master:lint:fix: 
+@master:lint:fix: C:\Projects\NSCM\nscm-fe\features\master\src\pages\erp-edi-master\ErpEdiMaster.tsx
+@master:lint:fix:   289:9  warning  'handleInsert' is assigned a value but never used. Allowed unused vars must match /^_/u  unused-imports/no-unused-vars
+@master:lint:fix: 
+@master:lint:fix: C:\Projects\NSCM\nscm-fe\features\master\src\pages\sales-future-price\SalesFuturePrice.tsx
+@master:lint:fix:   169:9  warning  'loading' is assigned a value but never used. Allowed unused vars must match /^_/u                                                                                  unused-imports/no-unused-vars
+@master:lint:fix:   621:7  warning  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+@master:lint:fix: 
+@master:lint:fix: C:\Projects\NSCM\nscm-fe\features\master\src\pages\sales-future-price\components\SalesFuturePriceGrid.tsx
+@master:lint:fix:    31:20  warning  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `SalesFuturePriceGrid.tsx` to same directory as `../SalesFuturePrice.module.scss` or consider making `../SalesFuturePrice.module.scss` a package  import/no-relative-parent-imports
+@master:lint:fix:   359:7   warning  Forbidden non-null assertion                                                                                                                                                                                                                                                                         @typescript-eslint/no-non-null-assertion
+@master:lint:fix:   936:6   warning  React Hook useEffect has a missing dependency: 'gridFilterRef'. Either include it or remove the dependency array                                                                                                                                                                                     react-hooks/exhaustive-deps
+@master:lint:fix: 
+@master:lint:fix: C:\Projects\NSCM\nscm-fe\features\master\src\pages\sales-future-price\components\modals\ExchangeRateModal.tsx
+@master:lint:fix:   152:19  warning  Forbidden non-null assertion                                                                                                                                        @typescript-eslint/no-non-null-assertion
+@master:lint:fix:   194:7   warning  Forbidden non-null assertion                                                                                                                                        @typescript-eslint/no-non-null-assertion
+@master:lint:fix:   374:5   warning  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+@master:lint:fix: 
+@master:lint:fix: C:\Projects\NSCM\nscm-fe\features\master\src\pages\sales-future-price\components\modals\PriceBatchInputModal.tsx
+@master:lint:fix:   189:55  warning  Unexpected empty arrow function                                                                                                                                     @typescript-eslint/no-empty-function
+@master:lint:fix:   438:7   warning  Forbidden non-null assertion                                                                                                                                        @typescript-eslint/no-non-null-assertion
+@master:lint:fix:   494:5   warning  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+@master:lint:fix:   709:5   warning  Unsafe assignment of an `any` value                                                                                                                                 @typescript-eslint/no-unsafe-assignment
+@master:lint:fix:   714:7   warning  Unsafe assignment of an `any` value                                                                                                                                 @typescript-eslint/no-unsafe-assignment
+@master:lint:fix: 
+@master:lint:fix: C:\Projects\NSCM\nscm-fe\features\master\src\pages\sales-site-project-model\SalesSiteProjectModel.tsx
+@master:lint:fix:   154:6  warning  React Hook useEffect has missing dependencies: 'fetchStaticColumns' and 'initialized'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+@master:lint:fix: 
+@master:lint:fix: C:\Projects\NSCM\nscm-fe\features\master\src\pages\sales-site\SalesSite.tsx
+@master:lint:fix:   186:6  warning  React Hook useEffect has missing dependencies: 'fetchStaticColumns' and 'initialized'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+@master:lint:fix: 
+@master:lint:fix: ✖ 49 problems (0 errors, 49 warnings)
+@master:lint:fix: 
+@sdm#lint:fix: command (C:\Projects\NSCM\nscm-fe\features\sdm) C:\Projects\NSCM\_artifacts\_tools\pnpm-10.28.2\pnpm.cmd run lint:fix exited (1)
+
+ Tasks:    12 successful, 13 total
+Cached:    0 cached, 13 total
+  Time:    4m53.261s 
+Failed:    @sdm#lint:fix
+
+ ERROR  run failed: command  exited (1)

@@ -156,7 +156,24 @@
 | 124 | screen-asis-pre-analysis-mandatory | 11, 01, 05 |
 | 125 | ui-selfcheck-runtime-mandatory | 12, 02, 05 |
 | 126 | verification-completion-honesty | 12, 11, 10 |
+| 127 | oracle-nvl-null-antipattern | 09, 10 |
+| 128 | auth-by-userid-not-groupid | 02, 08 |
+| 129 | oracle-perf-fix-priority-order | 09, 10, 12 |
+| 130 | ui-meta-consumption-and-crud-path-coverage | 03, 08, 12 |
+| 131 | ui-save-idempotent-readback | 09, 03, 12 |
 | 134 | sdm-domain-development-standard | 12, 11, 06 |
+| 136 | sp-deploy-verify-target-object | 12, 10 |
+| 137 | oracle-load-dedup-and-exception-propagation | 09, 10 |
+| 138 | comment-live-code-discrimination | 11, 10, 09 |
+| 139 | request-ledger-and-subclause-mapping | 12, 11, 06 |
+| 140 | msg-table-cloud-sync-and-insert-only | 08, 09, 12 |
+| 141 | wijmo-merge-row-data-only | 01, 02, 12 |
+| 142 | ui-meta-dictionary-mandatory | 03, 04, 11 |
+| 143 | grid-insert-and-modal-derived-parity | 03, 01, 05 |
+| 144 | grid-insert-position-and-filter-contract | 03, 01, 02 |
+| 145 | verification-evidence-and-scale | 12, 10, 11 |
+| 146 | asis-grid-cell-event-full-extraction | 11, 03, 12 |
+| 147 | excel-upload-nls-safe-parsing | 12, 09 |
 
 ## 커버리지 검증 (신규 hook 등재 시 재실행 의무)
 
@@ -170,6 +187,15 @@ done
 # hook 파일 수 (RULESET_MASTER §4 카운트와 동일해야 함)
 ls Doc/_rules_v2/hooks/*.md | wc -l
 ```
+> 2026-08-22 **#144 grid-insert-position-and-filter-contract 신설** — 카테고리 03(주)·01·02 / Insert 위치=포커스 세트 **바로 위**(맨앞 삽입 ⛔·anchor 는 행 객체 참조·행 배열은 useMemo 계산) · `FlexGridFilter` 는 화면이 만들지 않고 `<DataGrid gridFilterRef>` 로 위임(wijmo 가 생성자에서 `itemsSourceChanged→clear` 를 걸어 capture→create→restore 순서가 계약) · 신규행은 `keepRowVisibleUnderFilter` 로 필터 예외 등록(복원 이후 effect 에서). §5 에 현행 미준수 11파일 명시.
+
+> 2026-08-22 **#145 verification-evidence-and-scale 신설** — 카테고리 12(주)·10·11 / `구현` 주장 = 파일:라인·백틱 심볼·**백틱 리터럴** 중 최소 1(리터럴 축만이 거짓 `구현` 적발) · 게이트 `verify_mapping_evidence.py` FAIL 0·공란 0 · 인용 없는 서술 = `UNVERIFIABLE`(PASS ⛔) / **기대값에 실측값 대입 ⛔** · FAIL→오탐 재분류 3요건(ⓐ라인 ⓑ**적용범위** ⓒ실존확인) / 선행조건 미성립 = **판정불가**(삽입 실패인데 삭제 PASS ⛔) · 후보는 원장 실키에서 / CRUD 규모 = **SIZE 10,000자**(최대행수 ⛔) / 대조 단위 = 분기·하위문구 · 공란 0
+
+> 2026-08-22 **#146 asis-grid-cell-event-full-extraction 신설** — 카테고리 11(주)·03·12 / AS-IS 그리드 셀 EVENT **전수 추출 → TO-BE 누락 0**(사용자 "절대 누락되지 안되는 영역") · `.Designer.cs` 배선 grep 실측(추정 핸들러명 ⛔) · **주석 제거본**에서만 판정(#138) · 핸들러 전 라인 판독 · 산출물 `events_grid_cell.md`(동작 유형 5종 구분 + 콤보 파라미터 계약) · `ATTRIBUTE2` 대체 ⛔ · 대사표 `EVENT:E-nn` 축 단위 + 근거 필수 · 게이트 G146-1~6
+> 2026-08-22 **#143 grid-insert-and-modal-derived-parity 신설** — 카테고리 03(주)·01·05 / Insert 복사 목록=AS-IS InsertRow 1:1(팝업이 읽는 키는 화면 미표시라도 복사) · 셀 모달 파라미터 빈문자('') 금지=`'ALL'` 폴백(SP 0행 실측) · 파생 컬럼 가드는 `'KEY' in row` ⛔ **그리드 컬럼 존재**로 · 코드 컬럼(FPComboBox)에 명칭 주입 ⛔.
+> 2026-08-21 **#141 wijmo-merge-row-data-only 신설** — 카테고리 01(주)·02·12 / 병합 판정=행 데이터 전용·상태 혼입 3형 금지·요구문구는 결함신고일 수 있음·수정은 제거(로직 diff 0).
+> 2026-08-21 **#140 msg-table-cloud-sync-and-insert-only 신설** — 카테고리 08(주)·09·12 / MSG 클라우드 동기화 고정 절차(A~D·순환치환·언어퇴행) + 이관 시 MSG 축 INSERT(NOT EXISTS) 전용.
+> 2026-08-20 **#139 request-ledger-and-subclause-mapping 신설** — 카테고리 12(주)·11·06 / 보완요청 원장·미적용 전제·게이트 REQ 축(러너 섹션 10·G10·#126 (F)).
 > 2026-08-07 검증 실측: 123 파일 / MISSING 0. (2026-08-07 SYS0017 감사 보강 — 신설 hook 없음·카운트 불변, #70 에 카테고리 05 추가[P9])
 > 2026-08-08 **#126 verification-completion-honesty 신설** — 126 파일 / 카테고리 12(주)·11·10 / MISSING 0.
 > 2026-08-07(저녁) **#125 ui-selfcheck-runtime-mandatory 신설** — 125 파일 / 카테고리 12(주)·02·05 / MISSING 0.
@@ -187,3 +213,4 @@ ls Doc/_rules_v2/hooks/*.md | wc -l
 | AS-IS Framework 7종 | 11 |
 | `_mapping/asis_to_tobe.md`(격차 10)/`search_conditions_scp_dm.md` | 11 / 04 |
 | 룰 v1: 02/28(git)·21(진단)·22/29/30(배포·환경)·31(Figma)·32(Oracle 도구) | 12 / 10 / 12 / 01 / 09·10 |
+> 2026-08-23 **#147 excel-upload-nls-safe-parsing 신설** — 카테고리 12(주·프로세스/운영) + 09(Oracle SP). 엑셀 업로드 값 파싱의 NLS·셀서식 의존 제거(사내 정상·클라우드 전건 반려 실사고 계보).

@@ -1,0 +1,10 @@
+[
+ {
+  "old": "           AND (NVL(p_sales_site,   'ALL') = 'ALL' OR INSTR(',' || p_sales_site   || ',', ',' || F.SCM_SITE_ID  || ',') > 0)\n           AND (NVL(p_item_id,      'ALL') = 'ALL' OR INSTR(',' || p_item_id      || ',', ',' || F.ITEM_ID      || ',') > 0)\n           AND (NVL(p_end_customer, 'ALL') = 'ALL' OR INSTR(',' || p_end_customer || ',', ',' || F.PROJECT_CODE || ',') > 0)\n           AND (NVL(p_project_code, 'ALL') = 'ALL' OR INSTR(',' || p_project_code || ',', ',' || F.PROJECT_CODE || ',') > 0)\n",
+  "new": "           /* [E20260825-XLSMASTER perf3] 선택 필터는 여기(174K 스캔)이 아니라 최종 WHERE(2.4K)에서 —\n              NVL(:p,'ALL')='ALL' OR INSTR 바인드 관용구가 이 단계 플랜을 파괴(리터럴 3s vs 바인드 150s+ 실측). */\n"
+ },
+ {
+  "old": "     WHERE ( ( NVL(MS.VMI_YN, 'N') = 'N' AND MSR.VMI_COND <> 'Y' )\n             OR NVL(MS.VMI_YN, 'N') = 'Y' )\n",
+  "new": "     WHERE ( ( NVL(MS.VMI_YN, 'N') = 'N' AND MSR.VMI_COND <> 'Y' )\n             OR NVL(MS.VMI_YN, 'N') = 'Y' )\n       --[E20260825-XLSMASTER perf3] 선택 필터 (키 2.4K 행 단계 — 바인드여도 무해)\n       AND (NVL(p_sales_site,   'ALL') = 'ALL' OR INSTR(',' || p_sales_site   || ',', ',' || K.SCM_SITE_ID  || ',') > 0)\n       AND (NVL(p_item_id,      'ALL') = 'ALL' OR INSTR(',' || p_item_id      || ',', ',' || K.ITEM_ID      || ',') > 0)\n       AND (NVL(p_end_customer, 'ALL') = 'ALL' OR INSTR(',' || p_end_customer || ',', ',' || K.END_CUSTOMER || ',') > 0)\n       AND (NVL(p_project_code, 'ALL') = 'ALL' OR INSTR(',' || p_project_code || ',', ',' || K.END_CUSTOMER || ',') > 0)\n"
+ }
+]

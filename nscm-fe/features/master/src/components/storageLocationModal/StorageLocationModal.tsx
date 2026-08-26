@@ -1,7 +1,6 @@
 import { CellType, type FlexGrid } from '@mescius/wijmo.grid';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import _ from '@foundation/lodash';
 import { GridUtils } from '@foundation/utils';
 import { SearchArea, DataGrid, CustomDialog } from '@shared/components';
 import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
@@ -60,12 +59,11 @@ export const StorageLocationModal = ({
     (sloc.STORAGE_ID ?? '').toLowerCase().includes(modalFilters.storageId.toLowerCase())
   );
 
-  const handleFilterChange = _.debounce((storageId: string) => {
-    setModalFilters(filter => ({
-      ...filter,
-      storageId: storageId,
-    }));
-  }, 50);
+  // 입력값은 제어 컴포넌트로 둔다. modaless 라 닫아도 언마운트되지 않아, defaultValue 로 두면 다시 열 때
+  //   초기화 effect 가 state 를 되돌려도 입력창에는 직전 문자가 그대로 남는다.
+  // 주의: debounce 금지 - 제어 입력에서 setState 를 늦추면 타이핑이 밀리거나 글자가 유실된다.
+  const handleFilterChange = (storageId: string) =>
+    setModalFilters(filter => ({ ...filter, storageId }));
 
   const handleDblClick = (mouseEvent: MouseEvent) => {
     const grid = gridRef.current;
@@ -128,7 +126,7 @@ export const StorageLocationModal = ({
                     render={() => (
                       <InputField
                         fullWidth
-                        defaultValue={storageId}
+                        value={modalFilters.storageId}
                         onChange={e => handleFilterChange(e.target.value)}
                       />
                     )}

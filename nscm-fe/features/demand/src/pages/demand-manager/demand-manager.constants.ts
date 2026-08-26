@@ -60,6 +60,11 @@ export const EDITABLE_BINDINGS = [
 // 짝 행(둘째 행)에서 첫 행 값을 따라가며 잠기는 컬럼 (AS-IS Formula 연결 + Locked)
 export const PAIR_FOLLOW_BINDINGS = ['PROJECT_NAME', 'ORDERSTART', 'ORDEREND'] as const;
 
+// 신규 세트(CRUD_TYPE='I')에서만 고칠 수 있는 컬럼.
+//   Project 는 저장 키(PROJECT_CODE)라 조회된 행에서 바꾸면 같은 행이 다른 건이 되어 버린다.
+//   조회행의 Project 를 바꾸려면 삭제 후 새로 추가한다.
+export const INSERT_ONLY_BINDINGS = ['PROJECT_NAME'] as const;
+
 // 월 컬럼 상위 헤더 — AS-IS 는 전체 월을 하나의 헤더로 묶는다(연도별로 쪼개지 않는다)
 export const MONTH_GROUP_HEADER = '수주 기간 매출 상세' as const;
 

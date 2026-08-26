@@ -2,9 +2,6 @@ import { apiClient } from '@foundation/apis';
 import { useQuery } from '@foundation/query-client';
 import { useSessionStore } from '@shared/stores';
 
-/** 홈 화면 목록에 노출할 공지 최대 개수 */
-export const HOME_NOTICE_LIMIT = 3;
-
 /**
  * 홈 공지 한 건. 관리자 공지관리(SYS0016) 조회 응답(o_rc1) 중 홈에서 쓰는 컬럼만 추린다.
  * - MODULE_NM: 모듈 룩업 이름(`[DM]` 라벨용)
@@ -35,14 +32,28 @@ interface HomeNoticeResponse {
 
 const EMPTY: HomeNotice[] = [];
 
-/** 다양한 날짜 문자열(yyyyMMdd / yyyy-MM-dd / ISO)을 yyyy-MM-dd 로 정규화한다. */
+/** 다양한 날짜 문자열(yyyyMMdd / yyyy-MM-dd / ISO)을 yyyy.MM.dd 로 정규화한다. */
 export const formatNoticeDate = (raw?: string): string => {
   if (!raw) return '';
   const digits = raw.replace(/\D/g, '');
   if (digits.length >= 8) {
-    return `${digits.slice(0, 4)}-${digits.slice(4, 6)}-${digits.slice(6, 8)}`;
+    return `${digits.slice(0, 4)}.${digits.slice(4, 6)}.${digits.slice(6, 8)}`;
   }
   return raw;
+};
+
+/**
+ * 상세 팝업의 "등록 일시"(마침표 구분). 시각까지 들어온 값은 `yyyy.MM.dd HH:mm`,
+ * 날짜만 있으면 `yyyy.MM.dd` 로 보여준다.
+ */
+export const formatNoticeDateTime = (raw?: string): string => {
+  if (!raw) return '';
+  const digits = raw.replace(/\D/g, '');
+  if (digits.length < 8) return raw;
+
+  const date = `${digits.slice(0, 4)}.${digits.slice(4, 6)}.${digits.slice(6, 8)}`;
+  if (digits.length < 12) return date;
+  return `${date} ${digits.slice(8, 10)}:${digits.slice(10, 12)}`;
 };
 
 /** 비교용 yyyyMMdd 키(8자리 숫자). 빈 값/형식불명은 undefined. */
@@ -84,7 +95,13 @@ export const dismissPopupForToday = (noticeId: string, today = getTodayKey()): v
  * 홈 공지 조회.
  * BE `/notice/home`(로그인 전용)이 관리자 공지 프로시저를 재사용해 활성 공지를 반환하면,
  * 활성 건만 추려 등록일 내림차순으로 정렬해 돌려준다.
- * 게시기간(START~END) 필터·개수 제한·팝업 여부는 소비하는 쪽(Home)에서 오늘 날짜 기준으로 처리한다.
+ * 게시기간(START~END) 필터·팝업 여부는 소비하는 쪽(Home)에서 오늘 날짜 기준으로 처리한다.
+ *
+ * ※ 캐시 정책만 전역 기본값(staleTime Infinity + gcTime 8h + IndexedDB 영속)에서 예외를 둔다.
+ *   기본값 그대로면 새로고침을 해도 영속 캐시가 복원돼 관리자 화면(SYS0016)에서 고친 공지가
+ *   브라우저 탭을 새로 열기 전까지 반영되지 않는다.
+ *   staleTime 0(마운트 시 재조회) + gcTime 0(영속 대상 제외)으로 새로고침·재로그인 때 새로 받는다.
+ *   탭 전환만으로는 재조회하지 않는다 — MDI keep-alive 규약(다른 화면과 동일)을 따른다.
  */
 export const useHomeNotices = (): HomeNotice[] => {
   const isLogin = useSessionStore(state => state.isLogin);
@@ -92,6 +109,8 @@ export const useHomeNotices = (): HomeNotice[] => {
   const { data } = useQuery<HomeNotice[]>({
     queryKey: ['home-notices'],
     enabled: isLogin,
+    staleTime: 0,
+    gcTime: 0,
     queryFn: async () => {
       const response = await apiClient.get<HomeNoticeResponse>('/notice/home');
       const rows = response.data.result?.o_rc1 ?? [];

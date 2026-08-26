@@ -1,4 +1,5 @@
 import { CRUD_TYPE } from '@foundation/constants';
+import type { ComboResponse } from '@foundation/models';
 import type { EditTracker } from '@foundation/utils';
 
 import type { MENU_ID, RESPONSE_SET, SHEETS } from '../sales-site.constants';
@@ -13,6 +14,40 @@ const DAY_MAP = [
   { key: 'D_SUN', label: 'SUN' },
 ];
 
+// 콤보 행/셀 값 비교용 정규화. 콤보 응답의 DIVISION_ID 가 숫자(81)로 내려오고 그리드 행은
+//   문자열('81')이라 === 비교가 조용히 어긋나던 사고가 있었다. 양쪽 다 문자열로 맞춘다.
+const normalizeComboValue = (value: string | number | null | undefined) =>
+  String(value ?? '').trim();
+
+// 콤보 통일화 과도기라 division 컬럼 이름이 DIVISION_ID / DIVISION_CODE 두 가지로 내려온다.
+const readComboDivision = (item: ComboResponse) =>
+  normalizeComboValue(item.DIVISION_ID) || normalizeComboValue(item.DIVISION_CODE);
+
+// 셀에 든 값(CODE 또는 NAME)을 콤보 기준 CODE 로 되돌린다.
+//   필수: 같은 division 안에서 먼저 찾는다. CODE 가 division 별로 중복되는 LGE 같은 값이
+//   다른 법인의 NAME 으로 먼저 걸리면 엉뚱한 CODE 로 풀린다.
+//   division 으로 못 찾을 때만 division 을 무시하고 CODE -> NAME 순으로 다시 찾는다.
+//   NAME 전역 탐색이 없으면 콤보 붙여넣기/직접 입력으로 들어온 NAME 이 그대로 채번에 쓰인다.
+export const resolveComboCodeByDivision = (
+  comboRows: readonly ComboResponse[],
+  divisionId: string,
+  value: string
+) => {
+  const target = normalizeComboValue(value);
+  if (!target) return value;
+
+  const division = normalizeComboValue(divisionId);
+  const inDivision = comboRows.filter(item => readComboDivision(item) === division);
+
+  return (
+    inDivision.find(item => normalizeComboValue(item.CODE) === target)?.CODE ??
+    inDivision.find(item => normalizeComboValue(item.NAME) === target)?.CODE ??
+    comboRows.find(item => normalizeComboValue(item.CODE) === target)?.CODE ??
+    comboRows.find(item => normalizeComboValue(item.NAME) === target)?.CODE ??
+    value
+  );
+};
+
 // TODO: DB에서 받는 데이터 형식에 따라 필요없을 수 있음, 삭제 필요 - 강민재
 export const expandByDayOfWeek = <T extends WijmoRowItem>(item: T): T[] => {
   return DAY_MAP.filter(day => item[day.key as keyof T] !== undefined).map(day => ({
@@ -22,10 +57,13 @@ export const expandByDayOfWeek = <T extends WijmoRowItem>(item: T): T[] => {
   }));
 };
 
-// Sales Site 채번 규칙: Sold To Customer(NAME) + _ + Country + _ + City 코드의 뒤 3글자
-//   SOLDTO_CUSTOMER 는 row 에 CODE 로만 저장되므로, NAME 은 콤보 목록에서 찾아 호출부가 넘겨준다.
-export const buildSalesSite = (row: WijmoRowItem, soldToCustomerName?: string) => {
-  const soldToCustomer = (soldToCustomerName ?? String(row['SOLDTO_CUSTOMER'] ?? '')).trim();
+// Sales Site 채번 규칙: Sold To Customer(CODE) + _ + Country + _ + City 코드의 뒤 3글자
+//   GPD/DE/DE2BZ -> GPD_DE_2BZ, LGE/JM/JMALP -> LGE_JM_ALP (2026-08-23 테스트 명세 기준).
+//   NAME 을 쓰면 CODE 가 division 별로 중복되는 LGE 가 다른 법인명(LG ENERGY SOLUTION)으로
+//   풀려서 잘못 채번된다. 콤보 붙여넣기로 row 에 NAME 이 들어온 경우만 호출부가
+//   division 기준으로 CODE 를 풀어서 넘긴다.
+export const buildSalesSite = (row: WijmoRowItem, soldToCustomerCode?: string) => {
+  const soldToCustomer = String(soldToCustomerCode ?? row['SOLDTO_CUSTOMER'] ?? '').trim();
   const country = String(row['COUNTRY'] ?? '').trim();
   const city = String(row['CITY'] ?? '')
     .trim()
@@ -73,9 +111,9 @@ export const applySalesSite = <
 >(
   row: T,
   editTracker?: EditTracker<T>,
-  soldToCustomerName?: string
+  soldToCustomerCode?: string
 ) => {
-  const next = buildSalesSite(row, soldToCustomerName);
+  const next = buildSalesSite(row, soldToCustomerCode);
   editTracker?.storeChange(row, 'SCM_SITE_ID', row['SCM_SITE_ID'], next);
   row['SCM_SITE_ID'] = next;
 };

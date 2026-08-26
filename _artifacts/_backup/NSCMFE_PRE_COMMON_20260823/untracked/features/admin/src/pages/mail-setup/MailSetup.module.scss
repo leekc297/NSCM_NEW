@@ -1,0 +1,25 @@
+.tabBar {
+  display: flex;
+  margin: 8px 0 4px;
+  border-bottom: 1px solid #d5d9df;
+  gap: 4px;
+}
+
+.tab {
+  padding: 6px 16px;
+  border: 1px solid #d5d9df;
+  border-bottom: 0;
+  border-radius: 4px 4px 0 0;
+  background: #f5f6f8;
+  color: #707781;
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+}
+
+.tabActive {
+  composes: tab;
+  background: #ffffff;
+  color: #1f4e79;
+  font-weight: 600;
+}

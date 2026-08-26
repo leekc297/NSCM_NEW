@@ -1,0 +1,90 @@
+// hook #132 §1-2/§1-3 — 페이지 최상위 .container / DataGrid 래퍼 .gridContainer 는 제거됨
+//   (세로 배치 = 셸 ViewContainer 소유, 그리드 높이 = 공용 DataGrid flex 계약).
+
+.grid {
+  width: 100%;
+  height: 100%;
+
+  // 다단 헤더 셀 타이포 보정 (헤더 row 높이는 공용 DataGrid headerRowHeight / updatedLayout 효과가 전담).
+  :global {
+    .wj-colheaders .wj-cell {
+      line-height: 14px;
+      padding: 1px 4px;
+      font-size: 11px;
+    }
+  }
+}
+
+// 룰 #95 — cell coloring 3색 (편집 Yellow / 과거 잠금 Gray 특수셀만 / 기본 White+zebra)
+:global(.wj-cell-editable) {
+  background: #fff8cd !important;
+}
+
+:global(.wj-cell-non-editable) {
+  background: #f1f4f3 !important;
+  color: #5b6470 !important;
+}
+
+// ⭐ 변경 셀 Red 마킹 (AS-IS SetCellColor Red — 저장 대상 표시. EditTracker 단일 소스)
+:global(.bp-cell-changed) {
+  color: #d32f2f !important;
+  font-weight: 600;
+}
+
+// ⭐ FPModal 팝업셀 아이콘 (DMF0020/DMF0003 표준 — 전용 span .popup-icon + OpenInNew SVG mask.
+//   cell position override 금지(머지셀 파손) — span absolute 는 셀 기존 positioning anchor 사용)
+.popupIcon {
+  position: absolute;
+  top: 50%;
+  right: 5px;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  background-color: #5b5c5b;
+  pointer-events: none;
+
+  $svg-path: "M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z";
+  -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="#{$svg-path}"/></svg>') no-repeat center;
+  mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="#{$svg-path}"/></svg>') no-repeat center;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+}
+
+// (Measure 선택 모달 스타일은 공용 master/measureSelectModal 로 이동 — hook #132 §2-1)
+
+// ⭐ Ver. Cutoff / Replace 모달 공통 — SearchArea → grid → 하단 버튼 (ExchangeRateModal 정본 레이아웃)
+.modalContentWrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 8px;
+}
+
+.modalGridWrapper {
+  flex: 1;
+  min-height: 260px;
+  border: 1px solid #e0e4e9;
+  border-radius: 4px;
+  background: white;
+  overflow: hidden;
+  position: relative;
+}
+
+.modalButtonWrapper {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-top: 5px;
+}
+
+.modalFieldRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  > span {
+    flex-shrink: 0;
+    font-size: 12px;
+    color: #5b6470;
+  }
+}

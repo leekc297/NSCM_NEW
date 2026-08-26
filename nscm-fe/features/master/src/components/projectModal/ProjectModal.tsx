@@ -1,7 +1,6 @@
 import { CellType, type FlexGrid } from '@mescius/wijmo.grid';
 import { useEffect, useRef, useState } from 'react';
 
-import _ from '@foundation/lodash';
 import { GridUtils } from '@foundation/utils';
 import { CustomDropdown, DataGrid, CustomDialog, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
@@ -66,11 +65,10 @@ export const ProjectModal = ({
       (project.PROJECT_NAME ?? '').toLowerCase().includes(modalFilters.project.toLowerCase())
   );
 
-  const handleProjectChange = _.debounce((project: string) => {
-    setModalFilters({
-      project: project,
-    });
-  }, 50);
+  // 입력값은 제어 컴포넌트로 둔다. modaless 라 닫아도 언마운트되지 않아, defaultValue 로 두면 다시 열 때
+  //   초기화 effect 가 state 를 되돌려도 입력창에는 직전 문자가 그대로 남는다.
+  // 주의: debounce 금지 - 제어 입력에서 setState 를 늦추면 타이핑이 밀리거나 글자가 유실된다.
+  const handleProjectChange = (project: string) => setModalFilters({ project });
 
   const handleSubmit = () => {
     const selections = gridRef.current?.selectedItems as ResponseData<
@@ -149,7 +147,7 @@ export const ProjectModal = ({
                     render={() => (
                       <InputField
                         fullWidth
-                        defaultValue={preProject ?? ''}
+                        value={modalFilters.project}
                         onChange={e => handleProjectChange(e.target.value)}
                       />
                     )}

@@ -1,6 +1,7 @@
 import { PeriodField } from 'features/master/src/components';
 import { useMemo } from 'react';
 
+import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { FormItem, InputField } from '@shared/lges';
@@ -49,10 +50,11 @@ export const AuthApprovalForm = ({ onSearch }: Props) => {
       onSearch={onSearch}
       conditions={
         <>
-          <Grid size={2}>
+          <Grid size={3}>
             <FormItem
               label={t('LBL00675', 'Div')}
               labelAlign='right'
+              className={commonStyles.formItem}
               render={() => (
                 <CustomDropdown
                   allOption
@@ -65,10 +67,11 @@ export const AuthApprovalForm = ({ onSearch }: Props) => {
               )}
             />
           </Grid>
-          <Grid size={2}>
+          <Grid size={3}>
             <FormItem
               label={t('LBL00339', 'User ID(Name)')}
               labelAlign='right'
+              className={commonStyles.formItem}
               render={() => (
                 <InputField
                   fullWidth
@@ -79,10 +82,11 @@ export const AuthApprovalForm = ({ onSearch }: Props) => {
               )}
             />
           </Grid>
-          <Grid size={2}>
+          <Grid size={3}>
             <FormItem
               label={t('LBL00676', 'Department')}
               labelAlign='right'
+              className={commonStyles.formItem}
               render={() => (
                 <InputField
                   fullWidth
@@ -93,10 +97,11 @@ export const AuthApprovalForm = ({ onSearch }: Props) => {
               )}
             />
           </Grid>
-          <Grid size={2}>
+          <Grid size={3}>
             <FormItem
               label={t('LBL00678', 'Approval Result')}
               labelAlign='right'
+              className={commonStyles.formItem}
               render={() => (
                 <CustomDropdown
                   isInput={false}
@@ -111,7 +116,7 @@ export const AuthApprovalForm = ({ onSearch }: Props) => {
           </Grid>
           {/* 공용 카탈로그 PeriodField(@master/searchFields) — 라벨만 'Request Date'로 오버라이드. */}
           <PeriodField
-            gridSize={2}
+            gridSize={3}
             label={t('LBL00677', 'Request Date')}
             start={sc.startDate}
             end={sc.endDate}

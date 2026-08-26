@@ -5,6 +5,8 @@ import {
   AllowResizing,
   AllowSorting,
   Column,
+  DataMap,
+  _EditHandler,
   SelectionMode,
   type FlexGrid as TFlexGrid,
 } from '@mescius/wijmo.grid';
@@ -57,7 +59,7 @@ import type { ColumnLayoutRow } from '../../molecules/columnLayoutList/ColumnLay
 import { ColumnLayoutModal } from '../../templates/modals/column-layout-modal/ColumnLayoutModal';
 import { toColumnLayoutSettings } from '../../templates/modals/column-layout-modal/columnLayoutModal.utils';
 
-import { useDataGridUtils } from './dataGridUtils';
+import { useDataGridUtils, type IsCellEditable } from './dataGridUtils';
 import { attachGridContextMenu, type GridContextMenuItem } from './gridContextMenu';
 import {
   applyGridLayout,
@@ -70,6 +72,141 @@ import {
 
 const initialIndexRowHeaderWidth = 50;
 
+/**
+ * 그리드 셀 콤보 드롭다운의 휠 스크롤을 항목 단위로 바꾼다.
+ *
+ * Wijmo 는 _CellEditHandler._createListBox 에서 목록 높이를 `4 * row.renderHeight`(약 84px)로
+ * 고정하는데, 브라우저 휠 한 칸은 약 100px 이라 한 번 굴리면 한 화면보다 더 내려간다. 그래서
+ * 중간 항목이 화면에 한 번도 안 뜨고 건너뛰어진다 (2026-08-19 Sales Plan Model 콤보 9건 중
+ * 5번째가 안 보임 — 목록에는 9건이 다 들어 있었다). CSS scroll-snap 으로는 못 고친다.
+ * 스냅은 멈출 경계만 고를 뿐 한 화면 넘게 내려가는 것 자체를 막지 못한다.
+ *
+ * 한 번에 (보이는 항목 수 - 1) 만큼만 내려 최소 한 항목이 겹치게 한다.
+ * 드롭다운 패널은 그리드 밖(body)에 생성되므로 document 에 1회만 건다.
+ */
+let gridListBoxWheelInstalled = false;
+const installGridListBoxWheelStep = () => {
+  if (gridListBoxWheelInstalled) return;
+  gridListBoxWheelInstalled = true;
+  document.addEventListener(
+    'wheel',
+    event => {
+      const target = event.target instanceof HTMLElement ? event.target : null;
+      const box = target?.closest<HTMLElement>('.wj-grid-listbox') ?? null;
+      if (!box) return;
+      const item = box.querySelector('.wj-listbox-item');
+      const step = item instanceof HTMLElement ? item.offsetHeight : 0;
+      if (step <= 0) return;
+      const visible = Math.max(1, Math.floor(box.clientHeight / step));
+      event.preventDefault();
+      box.scrollTop += Math.sign(event.deltaY) * step * Math.max(1, visible - 1);
+    },
+    { passive: false, capture: true }
+  );
+};
+
+/**
+ * 편집기 텍스트를 드롭다운 원본 표기로 되돌린다 (대소문자만 다를 때).
+ * 방향키로 옮긴 선택이 있으면 그 값이 우선이고, 없으면 후보 목록에서 앞부분 일치로 찾는다.
+ * 콤보가 아닌 컬럼은 _lbx/_list 가 없어 그대로 통과한다.
+ */
+const restoreCanonicalComboText = (editHandler: _EditHandler) => {
+  const editor = editHandler._edt;
+  const typed = editor?.value;
+  if (!editor || !typed) return;
+  // 목록 밖 값을 허용하는 DataMap(isEditable)은 친 그대로가 곧 입력값이라 되돌리지 않는다.
+  if (editHandler._map?.isEditable) return;
+
+  const selectedValue: unknown = editHandler._lbx?.selectedValue;
+  const candidates = [
+    ...(typeof selectedValue === 'string' ? [selectedValue] : []),
+    ...((editHandler._list as unknown[] | null) ?? []),
+  ];
+
+  const lowerTyped = typed.toLowerCase();
+  const canonical = candidates.find(
+    (candidate): candidate is string =>
+      typeof candidate === 'string' && candidate.toLowerCase().startsWith(lowerTyped)
+  );
+  if (canonical && !canonical.startsWith(typed)) editor.value = canonical;
+};
+
+/**
+ * 그리드 셀 콤보의 타이핑 검색을 대소문자 구분 없이 한다 (표기는 사용자가 친 그대로 유지).
+ *
+ * wijmo 는 DataMap.search 콜백이 없으면 _EditHandler._keypress 에서 먼저 대소문자를 구분해
+ * 찾고(_findString(list, text, true)), 거기서 못 찾을 때만 caseSensitiveSearch(기본 false)를 보고
+ * 무시 검색으로 되돌아간다. 그래서 "ACE KR" 과 "acer" 가 함께 있는 목록에서 `ace` 를 치면 구분
+ * 검색이 먼저 "acer" 를 잡아버려 "ACE KR" 로는 영영 갈 수 없다 (2026-08-22 리포트).
+ * grid.caseSensitiveSearch 로는 못 고친다 - 이미 false 이고, 그 값은 구분 검색이 실패한 뒤에만 쓰인다.
+ *
+ * 세 군데를 함께 손봐야 한 동작이 된다.
+ *
+ * 1) 후보 찾기 - DataMap.search. 지정되면 wijmo 가 후보를 그 콜백으로만 훑는 공식 훅이라, 여기에
+ *    무시 비교를 걸어 목록 순서대로 첫 일치 항목을 고르게 한다. prototype 에 걸어 화면이 직접 만든
+ *    DataMap 까지 한 번에 적용하고, 인스턴스에 search 를 지정한 DataMap 은 그 값이 우선한다.
+ *    주의: useFilter=true 인 DataMap 은 wijmo 가 후보를 객체째 넘겨 text 가 "[object Object]" 로
+ *    들어오므로(현재 코드베이스에는 없음) 그런 DataMap 에는 인스턴스 search 를 따로 지정해야 한다.
+ *
+ * 2) 표시 - wijmo 는 일치 항목을 찾으면 편집기 값을 원본 표기로 통째로 덮어쓴다(`t.value = _`).
+ *    그래서 `ace` 를 쳐도 `ACE KR` 로 바뀌어 보인다. 사용자가 친 앞부분은 친 표기 그대로 두고
+ *    자동완성으로 붙는 뒷부분만 원본 표기로 남긴다 (브라우저 주소창과 같은 방식).
+ *
+ * 3) 커밋 - wijmo 는 편집기 텍스트가 드롭다운 선택값과 **대소문자까지 같을 때만** 그 항목의 키를
+ *    셀에 넣는다(_keydown Enter / finishEditing 의 `sv.indexOf(t.value) == 0` 가드).
+ *    2) 로 표기를 남겨두면 이 가드가 깨져 값이 안 들어가므로, 커밋 직전에 편집기 텍스트만 원본
+ *    표기로 되돌린다. Enter/Tab/포커스이동/다른 셀 클릭이 모두 finishEditing 을 지나므로 여기 한
+ *    곳이면 충분하다 (Enter 는 그 전에 드롭다운을 닫아 _lbx 가 없어지므로 _list 로도 찾는다).
+ */
+let comboCaseInsensitiveSearchInstalled = false;
+const installComboCaseInsensitiveSearch = () => {
+  if (comboCaseInsensitiveSearchInstalled) return;
+  comboCaseInsensitiveSearchInstalled = true;
+
+  // 1) 후보 찾기
+  DataMap.prototype.search = (
+    text: string | null | undefined,
+    searchText: string | null | undefined
+  ) => (text ?? '').toLowerCase().startsWith((searchText ?? '').toLowerCase());
+
+  // 2) 표시
+  // 원본을 보관해 감싸는 것이므로 언바운드 참조가 맞다 - 호출은 항상 .call(this, ...) 로 한다.
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const originalKeypress = _EditHandler.prototype._keypress;
+  _EditHandler.prototype._keypress = function (this: _EditHandler, event: KeyboardEvent) {
+    const editor = this._edt;
+    // wijmo 가 검색어로 쓰는 값과 같은 계산 - 커서 앞 텍스트 + 방금 친 문자.
+    //   셀 선택 상태에서 바로 타이핑해 편집이 시작된 첫 글자는 이벤트 대상이 편집기가 아니고
+    //   그 글자가 이미 편집기 값에 들어 있다(_KeyboardHandler._keypress). 그때는 붙이지 않는다.
+    const typed =
+      editor && event.key?.length === 1
+        ? editor.value.slice(0, editor.selectionStart ?? editor.value.length) +
+          (event.target === editor ? event.key : '')
+        : null;
+
+    const beforeKeypress = editor?.value ?? null;
+    originalKeypress.call(this, event);
+
+    // wijmo 가 자동완성으로 편집기 값을 덮어쓴 경우에만 손댄다. 일치 항목이 없으면 값이 그대로라
+    // (문자는 그 뒤 브라우저가 넣는다) 여기서 걸러지고, 일반 텍스트 컬럼도 같은 이유로 안 걸린다.
+    if (typed === null || !editor || editor.value === beforeKeypress) return;
+    const completed = editor.value;
+    if (completed.startsWith(typed)) return; // 표기가 이미 같으면(=구분 일치) 손대지 않는다
+    if (!completed.toLowerCase().startsWith(typed.toLowerCase())) return;
+
+    editor.value = typed + completed.slice(typed.length);
+    editor.setSelectionRange(typed.length, editor.value.length);
+  };
+
+  // 3) 커밋
+  // eslint-disable-next-line @typescript-eslint/unbound-method -- 위 2) 와 같은 이유
+  const originalFinishEditing = _EditHandler.prototype.finishEditing;
+  _EditHandler.prototype.finishEditing = function (this: _EditHandler, cancel?: boolean) {
+    if (!cancel) restoreCanonicalComboText(this);
+    return originalFinishEditing.call(this, cancel);
+  };
+};
+
 interface DataGridProps<T extends WijmoRowItem = WijmoRowItem> extends FlexGridProps {
   gridFilterRef?: MutableRefObject<FlexGridFilter | undefined>;
   gridRef?: MutableRefObject<TFlexGrid | undefined>;
@@ -77,6 +214,15 @@ interface DataGridProps<T extends WijmoRowItem = WijmoRowItem> extends FlexGridP
   itemsSource?: T[];
   staticColumns?: RawFlexGridColumnConfig[];
   dynamicColumns?: FlexGridColumnConfig[];
+  /**
+   * 셀 편집가능 판정 주입 — 정적 메타(_inputEditType)로 못 다루는 동적(주/월/일) 컬럼용.
+   * 지정 시 색(wj-cell-editable)과 편집 게이트(beginningEdit/pastingCell)가 이 단일 함수를 공유한다
+   *   (화면이 formatItem 에서 wj-cell-editable 을 직접 토글하거나 자체 beginningEdit 게이트를 걸 필요가 없어진다).
+   * 미지정 시 기존 동작(GridUtils.isEditableCell) 그대로 — 회귀 0.
+   * 주의: 과거 Gray(wj-cell-non-editable)·변경색·rail·popup 등 화면 고유 장식은 이 predicate 소관이 아니라
+   *   화면 formatItem 이 계속 담당한다(공통 핸들러는 wj-cell-editable 만 찍는다).
+   */
+  isCellEditable?: IsCellEditable<T>;
   useSummaryTooltip?: boolean;
   useCellTooptip?: boolean;
   useCheckbox?: boolean;
@@ -143,6 +289,7 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
   itemsSource = [],
   staticColumns = [],
   dynamicColumns = [],
+  isCellEditable,
   useSummaryTooltip = true,
   useCellTooptip = true,
   useCheckbox = false,
@@ -179,6 +326,9 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
   headerRowHeightRef.current = headerRowHeight;
   const emptyCellAsZeroRef = useRef(emptyCellAsZero);
   emptyCellAsZeroRef.current = emptyCellAsZero;
+  // 편집가능 판정 predicate — 핸들러는 grid init 때 1회 등록되므로 ref 로 최신 closure 를 읽힌다.
+  const isCellEditableRef = useRef(isCellEditable);
+  isCellEditableRef.current = isCellEditable;
 
   // 정렬 사용 여부 — 화면이 allowSorting 을 false/None 으로 주면 정렬 자체를 막는다.
   // wijmo 기본 정렬은 handleInitialized 에서 항상 None 이고 실제 정렬은 공용 헤더 클릭
@@ -258,6 +408,7 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
       cancelled = true;
     };
     // 객체 리터럴 prop 재생성으로 매 렌더 refetch 되지 않도록 개별 필드를 deps 로 쓴다.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [layoutKey?.menuId, layoutKey?.sheetName, layoutKey?.columnType, layoutKey?.divisionId]);
 
   // 컨텍스트 메뉴 Hide Column 으로 숨긴 컬럼(런타임) — 재렌더에도 유지되도록 파이프라인에서 적용.
@@ -459,7 +610,7 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
     setSortableColumnHeaderClick,
     setResultColumn,
     setHandleUppercase,
-  } = useDataGridUtils<T>();
+  } = useDataGridUtils<T>({ isCellEditableRef });
 
   // 자동 콤보 필터 — comboId + comboParams(@mnuId/@divisionId 등) 를 함께 전달해 파라미터 콤보 해소.
   //   (기존엔 comboId 만 전달 → @mnuId 필요 콤보가 빈 결과가 되던 문제 fix. comboParams 미지정 시 종전과 동일)
@@ -522,6 +673,9 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
     if (gridRef) gridRef.current = grid;
     internalGridRef.current = grid;
 
+    installGridListBoxWheelStep();
+    installComboCaseInsensitiveSearch();
+
     /**
      * 재조회로 데이터가 다시 실려도 사용자가 건 컬럼 필터를 유지한다.
      *
@@ -534,9 +688,15 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
      * itemsSourceChanged 자체가 안 나는데, 그때는 필터도 그대로 남아 결과가 같다.
      */
     const getGridFilter = () => gridFilterRef?.current ?? internalFilterRef.current;
+    const gridWithAddedRows = grid as TFlexGrid<T> & { _newAddedRowsSet?: WeakSet<object> | null };
     let filterBeforeReload: string | null = null;
+    // 필터 예외로 등록된 신규행 집합(keepRowVisibleUnderFilter)도 함께 뜬다.
+    //   wijmo 의 clear()/apply() 가 이 집합을 null 로 비우는데, 아래 복원이 곧 apply() 라
+    //   되돌려 놓지 않으면 "필터는 살아났는데 방금 추가한 신규행만 사라지는" 상태가 된다.
+    let addedRowsBeforeReload: WeakSet<object> | null | undefined = null;
     grid.itemsSourceChanged.addHandler(() => {
       filterBeforeReload = captureGridFilter(getGridFilter());
+      addedRowsBeforeReload = gridWithAddedRows._newAddedRowsSet;
     });
 
     if (gridFilterRef)
@@ -551,8 +711,14 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
 
     // wijmo 가 비운 필터를 새로 실린 데이터 위에 되돌린다 (위 캡처 핸들러 주석 참고).
     grid.itemsSourceChanged.addHandler(() => {
-      restoreGridFilter(grid, getGridFilter(), filterBeforeReload);
+      const restored = restoreGridFilter(grid, getGridFilter(), filterBeforeReload);
+      // 복원(=apply)이 비운 신규행 예외 집합을 되돌리고 판정만 다시 시킨다.
+      if (restored && addedRowsBeforeReload) {
+        gridWithAddedRows._newAddedRowsSet = addedRowsBeforeReload;
+        grid.collectionView?.refresh();
+      }
       filterBeforeReload = null;
+      addedRowsBeforeReload = null;
     });
 
     const editTracker = new EditTracker(grid);
@@ -699,6 +865,9 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
       if (Math.round(headerRows.defaultSize) === h) return;
       headerRows.defaultSize = h;
     });
+
+    // 상위에서 넘긴 initialized 는 내부 설정이 모두 끝난 뒤 마지막에 호출한다.
+    initialized?.(grid as TFlexGrid);
   };
 
   // 팝업(다이얼로그 스코프) 안의 그리드에만 F3(Sort)/F4(Filter)를 자동 등록.

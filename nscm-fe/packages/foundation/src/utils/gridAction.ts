@@ -279,6 +279,131 @@ export const revertRowChanges = <T extends WijmoRowItem = WijmoRowItem>(
   return reverted;
 };
 
+/**
+ * 머지 블록에 포커스가 있을 때 행추가의 기준이 될 행 — 블록의 첫 행(top) 또는 마지막 행(bottom).
+ *
+ * 화면의 머지 셀은 사용자에게 "행 여러 개" 가 아니라 "묶음 하나" 로 보인다. 포커스 행 그대로
+ * 끼워 넣으면 묶음 한가운데가 갈라져 같은 값이 위아래로 나뉘고 그 사이에 신규행이 낀다.
+ * 기준행을 묶음의 경계로 밀어 주면 신규행이 그룹 앞(above)/뒤(below)에 서고 기존 머지는 그대로다.
+ *
+ * 머지가 아니거나(단일 셀 = null) 머지 매니저가 없으면 선택 행을 그대로 돌려준다. 판정 대상은
+ * 포커스가 놓인 그 컬럼 한 곳이다 — 계층 머지(좌측 컬럼이 더 크게 묶이는 화면)에서 사용자가
+ * 보고 있는 묶음이 곧 그 셀의 묶음이기 때문이다.
+ *
+ * 필수: 한 행씩 되짚어 올라간다(내려간다). 이 프로젝트의 머지 매니저는 뷰포트 sticky 머지를
+ *   위해 결과를 panel.viewRange 로 잘라 돌려주므로(CustomMergeManager._getCellMergedRange),
+ *   블록의 진짜 첫 행이 스크롤 위로 벗어나 있으면 한 번의 호출로는 "화면 맨 윗행" 만 나온다.
+ *   경계 바로 바깥 행을 다시 물어 그 결과가 지금 블록까지 이어지면(= 같은 머지키) 계속 잇는다.
+ *   이어지지 않으면(단일 셀이거나 다른 블록) 거기서 멈춘다. wijmo 의 clip 인자로는 못 푼다 —
+ *   자르는 주체가 wijmo 가 아니라 우리 머지 매니저다.
+ */
+const mergeBoundaryRow = <T extends WijmoRowItem = WijmoRowItem>(
+  grid: FlexGrid<T>,
+  row: number,
+  col: number,
+  edge: 'top' | 'bottom'
+): number => {
+  if (row < 0 || col < 0) return row;
+  if (grid.allowMerging === AllowMerging.None || !grid.mergeManager) return row;
+
+  // 화면 자체 머지 매니저가 던져도 행추가 자체는 막지 않는다 — 보정 없이 선택 행 기준.
+  const rangeAt = (targetRow: number): { row: number; row2: number } | null => {
+    try {
+      const merged = grid.getMergedRange(grid.cells, targetRow, col, false);
+      return merged && merged.row2 > merged.row ? { row: merged.row, row2: merged.row2 } : null;
+    } catch {
+      return null;
+    }
+  };
+
+  const focused = rangeAt(row);
+  if (!focused) return row;
+
+  if (edge === 'top') {
+    let top = Math.min(focused.row, row);
+    while (top > 0) {
+      const above = rangeAt(top - 1);
+      // row2 가 현재 블록까지 닿지 않으면 별개 블록 — 잇지 않는다.
+      if (!above || above.row2 < top) break;
+      top = Math.min(above.row, top - 1); // 매번 최소 1 감소 = 반드시 끝난다
+    }
+    return top;
+  }
+
+  const lastRow = grid.rows.length - 1;
+  let bottom = Math.max(focused.row2, row);
+  while (bottom < lastRow) {
+    const below = rangeAt(bottom + 1);
+    if (!below || below.row > bottom) break;
+    bottom = Math.max(below.row2, bottom + 1);
+  }
+  return bottom;
+};
+
+export type GridRowPlacement = 'below' | 'top' | 'bottom' | 'above';
+
+/**
+ * 신규행이 들어갈 원본 배열(sourceCollection) 인덱스를 계산한다 — 행추가 위치의 공통 규칙.
+ *
+ * 주의: grid.selection.row 는 필터·정렬을 거친 뷰(collectionView.items) 기준 인덱스인데
+ *   삽입 대상은 원본 배열이다. 두 인덱스는 필터가 없을 때만 일치한다. 예전 코드는 뷰 인덱스를
+ *   그대로 splice 에 넘겨, 필터가 걸리면 신규행이 원본 앞쪽에 박히고 그 앞 행들은 대부분
+ *   숨겨져 있어 화면상 항상 맨 위에 붙은 것처럼 보였다(정렬도 같은 원인).
+ *   선택 행을 아이템으로 잡아 원본에서의 위치를 역산한다. items 의 선언 타입은
+ *   T | Partial<T>(wijmo 의 addNew 경로) 라 indexOf 대신 findIndex 로 참조 비교한다.
+ *
+ * 머지 셀에 포커스가 있으면 그 묶음의 경계로 기준행을 민다 (mergeBoundaryRow 주석 참고).
+ *
+ * options.groupKey 는 "화면이 아는 묶음" 을 알려 주는 통로다. 머지가 걸리지 않은 컬럼
+ *   (예: DMF0068 의 월 컬럼)에 포커스가 있으면 머지 경계 보정이 걸리지 않아 한 건을 이루는
+ *   여러 행 사이에 신규행이 끼어든다. 같은 키가 이어지는 구간까지 기준행을 밀어 이를 막는다.
+ *
+ * GridAction.addRow 가 이 함수를 쓰고, 배열을 직접 다루는 화면(useState + useMemo 로 rows 를
+ *   만드는 화면)도 같은 규칙을 쓰도록 밖으로 내보낸다.
+ */
+const resolveInsertIndex = <T extends WijmoRowItem = WijmoRowItem>(
+  grid: FlexGrid<T>,
+  source: readonly T[],
+  placement: GridRowPlacement = 'above',
+  options?: { groupKey?: (row: T) => string }
+): number => {
+  if (placement === 'top') return 0;
+  if (placement === 'bottom') return source.length;
+
+  const view = grid.collectionView as CollectionView<T> | undefined;
+  const selectedRow = grid.selection?.row ?? -1;
+  const anchorRow =
+    selectedRow < 0
+      ? -1
+      : mergeBoundaryRow(
+          grid,
+          selectedRow,
+          grid.selection?.col ?? -1,
+          placement === 'below' ? 'bottom' : 'top'
+        );
+  const selectedItem = anchorRow < 0 ? undefined : view?.items?.[anchorRow];
+  let index = selectedItem ? source.findIndex(item => item === selectedItem) : -1;
+
+  // 선택이 없으면(-1) 맨 위 — 기존 동작 유지.
+  if (index < 0) return 0;
+
+  const groupKey = options?.groupKey;
+  const anchorItem = source[index];
+  if (groupKey && anchorItem) {
+    const key = groupKey(anchorItem);
+    const keyAt = (i: number): string | undefined => {
+      const item = source[i];
+      return item ? groupKey(item) : undefined;
+    };
+    if (key) {
+      if (placement === 'below') while (keyAt(index + 1) === key) index++;
+      else while (index > 0 && keyAt(index - 1) === key) index--;
+    }
+  }
+
+  return placement === 'below' ? index + 1 : index;
+};
+
 export const GridAction = {
   GridAction: {},
 
@@ -363,11 +488,14 @@ export const GridAction = {
     );
   },
 
+  // 행추가 위치 계산 — 배열을 직접 다루는 화면이 addRow 와 같은 규칙을 쓰도록 공개한다.
+  resolveInsertIndex,
+
   // F8: Add row
   addRow: <T extends WijmoRowItem = WijmoRowItem>(
     grid: FlexGrid<T>,
     defaultCopyProps: Partial<T>,
-    placement: 'below' | 'top' | 'bottom' | 'above' = 'above',
+    placement: GridRowPlacement = 'above',
     preserveMergeManager = false
   ) => {
     if (grid.isReadOnly) return undefined;
@@ -376,36 +504,22 @@ export const GridAction = {
     // TODO: 조회 없이 (그리드에 데이터 없이) 추가할 때 handle 추가적으로 필요  - 강민재
     if (itemsSource.length !== 0 && editFlag) return undefined;
 
-    let insertRowIndex: number = 0;
+    const view = grid.collectionView as CollectionView<T>;
+    const source = view.sourceCollection as T[];
+
     const newRow = {
       ...defaultCopyProps,
       CRUD_TYPE: 'I',
     } as unknown as T;
 
-    switch (placement) {
-      case 'below':
-        insertRowIndex = grid.collectionView.items.length > 0 ? (grid?.selection.row ?? -1) : 0;
-        break;
-      case 'bottom':
-        insertRowIndex = grid?.collectionView.items.length;
-        break;
-      case 'top':
-      case 'above':
-        // Insert the new row above of the current selected row
-        insertRowIndex = -1;
-        if (grid.collectionView.items.length) {
-          insertRowIndex = (grid?.selection.row ?? 0) - 1;
-        }
-        break;
-      default:
-        break;
-    }
-
-    grid.collectionView.sourceCollection.splice(insertRowIndex + 1, 0, newRow);
+    // 삽입 위치 계산은 resolveInsertIndex 한 곳에 모여 있다 — 그 주석 참고.
+    source.splice(resolveInsertIndex(grid, source, placement), 0, newRow);
     (grid.collectionView as CollectionView).itemsAdded.push(newRow);
     // 필터가 걸려 있어도 신규행은 보여야 한다 — refresh 전에 필터 예외로 등록.
     keepRowVisibleUnderFilter(grid, newRow);
 
+    // 주의: 아래 한 줄뿐이다. 예전에는 같은 대입이 무조건 실행되는 줄이 하나 더 있어
+    //   preserveMergeManager=true 로 넘겨도 화면 전용 머지 매니저가 매번 덮였다.
     if (!preserveMergeManager) grid.mergeManager = new CustomMergeManager(grid);
     grid.collectionView.refresh();
     grid.invalidate();
@@ -487,10 +601,11 @@ export const GridAction = {
   //   2단 병합 헤더(하위명 중복)로는 업로드 매핑이 불가능하다.
   //   전 셀 문자열 — 숫자 셀이면 POI getNumericCellValue 가 '0.0' 을 돌려 SP 정수 검증에서 탈락한다.
   //   저장은 saveAsync 필수 — Workbook.save() 는 JSZip 2.x 전용이라 현재 3.x 환경에서 동작하지 않는다.
-  //   ⭐ [2026-08-15] `cellFill` (선택) — 데이터 셀 배경색을 파일에도 남긴다. 양식에서 배경색은
-  //     장식이 아니라 "여기에 입력하라"는 유일한 표식이라, 화면에만 칠하면 파일을 연 순간
-  //     인지 수단이 사라진다(DMF0014 요구 2026-08-14). 미전달이면 기존 동작 그대로 —
-  //     공용 F11 `excelDownload` 와 타 화면 호출부는 영향 없음.
+  //   ⭐ [2026-08-14] `cellFill` — 화면 미리보기의 셀 배경색을 **다운로드 파일에도 유지**한다.
+  //     양식에서 배경색은 장식이 아니라 "여기에 입력하라"는 유일한 표식이다. 화면에만 칠하면
+  //     사용자가 파일을 연 순간 입력 가능 컬럼을 알 수 없다(2026-08-14 사용자 보고).
+  //     반환값 = `#RRGGBB` (undefined 면 채움 없음). 색상별 WorkbookStyle 은 캐시해 재사용한다
+  //     — 셀마다 새 스타일을 만들면 수천 개가 생겨 xlsx 가 비대해진다.
   flatExcelDownload: (
     rows: ReadonlyArray<Record<string, string | number | null | undefined>>,
     columns: ReadonlyArray<{ header: string; key: string }>,
@@ -517,20 +632,6 @@ export const GridAction = {
     const textStyle = new WorkbookStyle();
     textStyle.format = '@';
 
-    // 같은 색을 쓰는 셀이 수만 개라 스타일 객체를 색상별로 1개만 만들어 재사용한다
-    //   (셀마다 new 하면 xlsx 스타일 테이블이 폭발해 저장이 느려지고 파일이 커진다).
-    const fillStyles = new Map<string, WorkbookStyle>();
-    const styleForFill = (color: string): WorkbookStyle => {
-      const cached = fillStyles.get(color);
-      if (cached) return cached;
-      const style = new WorkbookStyle();
-      style.format = '@';
-      style.fill = new WorkbookFill();
-      style.fill.color = color;
-      fillStyles.set(color, style);
-      return style;
-    };
-
     const toCell = (value: string, style: WorkbookStyle) => {
       const cell = new WorkbookCell();
       cell.value = value;
@@ -538,16 +639,24 @@ export const GridAction = {
       return cell;
     };
 
+    // 색상별 스타일 캐시 — 같은 색이면 스타일 인스턴스를 공유한다(셀마다 생성 금지).
+    const fillStyles = new Map<string, WorkbookStyle>();
+    const filledStyle = (color: string) => {
+      const cached = fillStyles.get(color);
+      if (cached) return cached;
+      const fill = new WorkbookFill();
+      fill.color = color;
+      const style = new WorkbookStyle();
+      style.format = '@'; // 텍스트 유지 — 채움색을 넣어도 숫자 셀로 바뀌면 안 된다
+      style.fill = fill;
+      fillStyles.set(color, style);
+      return style;
+    };
+
     // cells / rows / sheets 는 readonly 배열 — 재할당이 아닌 push 로 채운다.
-    const buildRow = (
-      values: string[],
-      style: WorkbookStyle,
-      styleAt?: (index: number) => WorkbookStyle
-    ) => {
+    const buildRow = (values: string[], styleAt: (index: number) => WorkbookStyle) => {
       const sheetRow = new WorkbookRow();
-      values.forEach((value, index) =>
-        sheetRow.cells.push(toCell(value, styleAt?.(index) ?? style))
-      );
+      values.forEach((value, index) => sheetRow.cells.push(toCell(value, styleAt(index))));
       return sheetRow;
     };
 
@@ -556,20 +665,17 @@ export const GridAction = {
     sheet.rows.push(
       buildRow(
         columns.map(column => column.header),
-        headerStyle
+        () => headerStyle
       )
     );
     rows.forEach((row, rowIndex) =>
       sheet.rows.push(
         buildRow(
           columns.map(column => String(row[column.key] ?? '')),
-          textStyle,
-          cellFill
-            ? index => {
-                const color = cellFill(row, columns[index], rowIndex);
-                return color ? styleForFill(color) : textStyle;
-              }
-            : undefined
+          index => {
+            const color = cellFill?.(row, columns[index], rowIndex);
+            return color ? filledStyle(color) : textStyle;
+          }
         )
       )
     );

@@ -1,0 +1,58 @@
+// CustomerFcstTemplateModal (Excel Form — 업로드 양식 다운로드) — 표준 모달 레이아웃
+// 정본 = forecast-price/components/modals/ForecastTemplateModal.module.scss (hook #135 §1)
+.dialogContent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 4px 0;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+// 조회조건 영역 — 축소 금지. flex 컨테이너에서 기본값(flex-shrink:1)이면 그리드가 자라며
+// 조회조건을 0 높이로 눌러 덮는다 (2026-08-14 DMF0082 실사고 계보).
+.searchWrapper {
+  flex: 0 0 auto;
+}
+
+.gridWrapper {
+  position: relative;
+  // min-height:0 = flex 자식 축소 허용 → wijmo grid bounded viewport → 세로 스크롤바
+  flex: 1 1 auto;
+  min-height: 0;
+  border: 1px solid #e0e4e9;
+  border-radius: 4px;
+  overflow: hidden;
+  background: white;
+}
+
+.buttonWrapper {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+
+// ⭐ [2026-08-14] 업로드 가능 주차 칸 — DMF0007 이 VALID_YN='Y' 로 표기한 주차만 색칠한다.
+//   행마다 대상 주차가 달라 컬럼 스타일로는 불가 → 모달의 formatItem 이 셀 단위로 이 클래스를 토글한다.
+//   편집 가능 셀 표준색(hook #95 Yellow)과 같은 계열로 "입력해야 할 칸" 임을 즉시 인지시킨다.
+.uploadableCell {
+  background-color: #fffbe6 !important;
+  box-shadow: inset 0 0 0 1px #f5d76e;
+}
+
+// ⭐ [2026-08-14] 입력 불가 칸 — 그 주차에 DMF0007 기준데이터(VALID_YN='Y')가 없다.
+//   hook #95 의 **잠금 Gray** 와 같은 계열로 "쓸 수 없는 칸" 임을 즉시 인지시킨다.
+//   ⚠ 색을 빼는 것(중립)만으로는 부족하다 — 사용자가 빈칸을 "입력해도 되는 칸"으로 읽는다.
+.blockedCell {
+  background-color: #f2f3f5 !important;
+  color: #b0b4ba;
+  background-image: repeating-linear-gradient(
+    135deg,
+    transparent,
+    transparent 4px,
+    rgba(0, 0, 0, 0.045) 4px,
+    rgba(0, 0, 0, 0.045) 8px
+  );
+}

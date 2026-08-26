@@ -1,0 +1,12 @@
+// SCP0013 Production Plan Line — 레이아웃 (flex 체인 + 자식 min-height:0, magic vh 금지)
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.gridWrap {
+  flex: 1;
+  min-height: 0;
+}

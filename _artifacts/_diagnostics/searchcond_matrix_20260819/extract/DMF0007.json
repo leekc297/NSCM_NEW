@@ -1,0 +1,174 @@
+{
+  "ui": "DMF0007",
+  "ui_name_asis": "Cust Fcst Master (CustFcstMaster)",
+  "asis_file": "asis_stripped/DMF0007.cs",
+  "tobe_form": "nscm-fe/features/master/src/pages/customer-forecast-master/componenets/CustomerFcstMasterForm.tsx (폴더명 componenets 오타 그대로)",
+  "conditions": [
+    {
+      "cond": "Div.",
+      "asis": {
+        "label": "Division",
+        "control": "콤보단일(UsrCombo, clbDivisions)",
+        "combo": "Data.Common(Data.Type.MyDivision, false, NowGroupID, UserId)",
+        "params": "@Param1=GROUP_ID, @Param2=USER_ID",
+        "filter": "UP_FX 'MyDivision' 브랜치 — SCM_MST_DIVISION ATTRIBUTE3<>'EE' VALID_YN='Y' + TB_FX_UserGroupAuthExtention 권한 (UP_FX L342 계열; DMF0007 은 GetDMInnerTable 아닌 Data.Common 직행)",
+        "cascade": "변경 시 Team→EndCustomer(40: EndCustomerByDivision40 / 비40: UserEndCustomerByDivisionDept)→SalesSite(40: ScmSitebyEndCustomer40 / 비40: UserSiteByEndCustomer) 재바인딩 + 시트 헤더 재생성. 핸들러 2본 중복 등록(clbDivision_/clbDivisions_SelectedIndexChanged)",
+        "div40": "EndCustomer/SalesSite 별도 40 경로", "div81": "공통", "div82": "공통",
+        "required": "Y(빈값 조회 시 MSG00097)",
+        "default": "권한 division 목록 첫 값",
+        "evidence": ["DMF0007.cs:L219-222", "DMF0007.cs:L284", "DMF0007.cs:L287-332", "DMF0007.cs:L351", "DMF0007.cs:L1699-1722", "DMF0007.cs:L608-613"]
+      },
+      "tobe": {
+        "label": "Div. (LBL00001)",
+        "control": "콤보단일(CustomDropdown)",
+        "combo": "MyDivision (CMBO)",
+        "params": "@sesUserId(세션자동)",
+        "filter": "SCM_MST_DIVISION + USER_GR_UNIT_AUTH_MPG_M(UNIT_TP_CD='D') 권한",
+        "cascade": "변경 시 endCustomer/scmSiteId='ALL' reset + fetchStaticColumns + filters 초기화",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "Y(FormItem required)",
+        "default": "'81' (store 고정 초기값 — session.div 미사용)",
+        "evidence": ["CustomerFcstMasterForm.tsx:L41-61", "useCustomerFcstMasterStore.ts:L36-44", "useCustomerFcstMasterStore.ts:L61-69"]
+      }
+    },
+    {
+      "cond": "Bucket",
+      "asis": {
+        "label": "Bucket Type",
+        "control": "콤보단일(cboBucketType)",
+        "combo": "Data.Common(Data.Type.BucketType)",
+        "params": "없음",
+        "filter": "UP_FX 'BucketType' — SCM_ADM_LOOKUP_MASTER_DETAIL LOOKUP_TYPE='BUCKET_TYPE_CODE' ORDER BY DISPLAY_SEQ (Daily/Weekly/Monthly)",
+        "cascade": "변경 시 활성 시트 헤더 재생성(InitSpread — FCST 시트는 DMF0007_GET_SPREAD_TITLE p_bucket_type 재조회)",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "Y(단일 필수 선택)",
+        "default": "WEEKLY (DefineProperty 강제)",
+        "evidence": ["DMF0007.cs:L244-245", "DMF0007.cs:L259", "DMF0007.cs:L1767-1780", "UP_FX_GetCommonDataList.sql:L1798"]
+      },
+      "tobe": {
+        "label": "Bucket Type (LBL00032)",
+        "control": "콤보단일(CustomDropdown)",
+        "combo": "BucketType (CMBO)",
+        "params": "없음(토큰 無)",
+        "filter": "SCM_ADM_LOOKUP_MASTER_DETAIL LOOKUP_TYPE='BUCKET_TYPE_CODE' ORDER BY DISPLAY_SEQ",
+        "cascade": "없음(조회 후 fetchDateColumns 가 filters.bucketType 기준 동적 컬럼 산출)",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "Y(FormItem required)",
+        "default": "'WEEKLY'",
+        "evidence": ["CustomerFcstMasterForm.tsx:L62-80", "useCustomerFcstMasterStore.ts:L41", "useCustomerFcstMasterStore.ts:L109-113"]
+      }
+    },
+    {
+      "cond": "Team",
+      "asis": {
+        "label": "Team",
+        "control": "콤보다중(UsrCheckedList) — 화면 숨김(lblTeam.Visibility=Never)",
+        "combo": "Data.UserTeamByDivision / GetDMInnerTable('UserTeamByDivision')",
+        "params": "GROUP_ID, USER_ID, DIVISION_ID",
+        "filter": "UP_FX 'TeambyDivision' / BigFilter Tables[1] +ALL행 — 단 조회 SP 에는 p_dept_id='' 고정 전달(미사용)",
+        "cascade": "EndCustomer/SalesSite 재바인딩 트리거로만 잔존(clbTeam_SelectedIndexChanged)",
+        "div40": "숨김", "div81": "숨김", "div82": "숨김",
+        "required": "N", "default": "ALL",
+        "evidence": ["DMF0007.cs:L162-164", "DMF0007.cs:L224-227", "DMF0007.cs:L635", "DMF0007.cs:L718", "DMF0007.cs:L1726-1748"]
+      },
+      "tobe": null
+    },
+    {
+      "cond": "End Customer",
+      "asis": {
+        "label": "End Customer",
+        "control": "콤보다중(UsrCheckedList)",
+        "combo": "40: Data.Common(EndCustomerByDivision40) / 비40: Data.UserEndCustomerByDivisionDept",
+        "params": "40: @P1=division @P2=team @P3=GROUP @P4=USER / 비40: @P1=division @P2=dept @P3=GROUP @P4=USER",
+        "filter": "UP_FX 'EndCustomerByDivision40'(SITE_ITEM owner-dept PROJECT_CODE + lookup END_CUSTOMER(40) UNION, VALID_YN='Y') / 'EndCustomerByDivisionDept'(SCM_MST_SITE END_CUSTOMER+lookup 명칭) +ALL행",
+        "cascade": "변경 시 SalesSite 재바인딩(clbEndCustomer_SelectedIndexChanged → UserSiteByEndCustomer)",
+        "div40": "EndCustomerByDivision40 경로(PROJECT_CODE)", "div81": "EndCustomerByDivisionDept 경로", "div82": "EndCustomerByDivisionDept 경로",
+        "required": "N", "default": "ALL",
+        "evidence": ["DMF0007.cs:L229-239", "DMF0007.cs:L304-330", "DMF0007.cs:L1750-1765", "UP_FX_GetCommonDataList.sql:L3904-3967", "UP_FX_GetCommonDataList.sql:L860"]
+      },
+      "tobe": {
+        "label": "End Customer (LBL00080)",
+        "control": "콤보다중(CustomDropdown multiple+allOption)",
+        "combo": "EndCustomer (CMBO)",
+        "params": "@sesUserId(세션자동)",
+        "filter": "SCM_MST_SITE(+SITE_ITEM: 40=PROJECT_CODE)+lookup 명칭. FE에서 DIVISION_ID===division 필터 + dedup",
+        "cascade": "없음. Division 변경 시 'ALL' reset",
+        "div40": "공통(CMBO 내부 CASE 분기)", "div81": "공통", "div82": "공통",
+        "required": "Y(FormItem required — 값은 ALL 허용)",
+        "default": "ALL",
+        "evidence": ["CustomerFcstMasterForm.tsx:L81-111"]
+      }
+    },
+    {
+      "cond": "Sales Site",
+      "asis": {
+        "label": "Sales Site",
+        "control": "콤보다중(UsrCheckedList)",
+        "combo": "Data.UserSiteByEndCustomer('SiteByEndCustomer') / division 변경 시 40: Data.ScmSitebyEndCustomer40",
+        "params": "@P1=division @P2=endCustomer(40 변형은 @P2=projectCode='') @P3=GROUP @P4=USER",
+        "filter": "UP_FX 'SiteByEndCustomer'(SITE_TYPE='SALES' 권한 division) / 'ScmSitebyEndCustomer40'(40 SALES 전체 — EndCustomer 무관) +ALL행",
+        "cascade": "없음(수신측)",
+        "div40": "ScmSitebyEndCustomer40 경로", "div81": "SiteByEndCustomer 경로", "div82": "SiteByEndCustomer 경로",
+        "required": "N", "default": "ALL",
+        "evidence": ["DMF0007.cs:L241-242", "DMF0007.cs:L314-315", "DMF0007.cs:L326-327", "UP_FX_GetCommonDataList.sql:L907", "UP_FX_GetCommonDataList.sql:L3981-4009"]
+      },
+      "tobe": {
+        "label": "Sales Site (LBL00011)",
+        "control": "콤보다중(CustomDropdown multiple+allOption)",
+        "combo": "SalesSite (CMBO)",
+        "params": "@sesUserId(세션자동)",
+        "filter": "SITE_TYPE='SALES' + 권한 + VALID_YN='Y'. FE에서 DIVISION_ID 필터 + dedup",
+        "cascade": "없음. Division 변경 시 'ALL' reset",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N", "default": "ALL",
+        "evidence": ["CustomerFcstMasterForm.tsx:L112-141"]
+      }
+    },
+    {
+      "cond": "Active(YesOrNo)",
+      "asis": {
+        "label": "Active",
+        "control": "콤보단일(cboActive)",
+        "combo": "Data.Common(Data.Type.YesOrNo)",
+        "params": "isAddALL=false(BLL), setListBox true=ALL행",
+        "filter": "BizService 'YesOrNo' Y/N 고정 + ALL행(클라). p_valid_yn=cboActive.Text",
+        "cascade": "없음",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N", "default": "ALL",
+        "evidence": ["DMF0007.cs:L50", "DMF0007.cs:L248", "DMF0007.cs:L641", "DMF0007.cs:L724"]
+      },
+      "tobe": {
+        "label": "Active (LBL00007)",
+        "control": "콤보단일(CustomDropdown allOption)",
+        "combo": "YesOrNo (CMBO)",
+        "params": "없음",
+        "filter": "DUAL Y/N + allOption ALL",
+        "cascade": "없음",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N", "default": "ALL",
+        "evidence": ["CustomerFcstMasterForm.tsx:L142-166", "useCustomerFcstMasterStore.ts:L42"]
+      }
+    }
+  ],
+  "cascade_chains": [
+    "ASIS: Division→Team→EndCustomer→SalesSite (핸들러 2본: L287-332 Data.* 경로 / L1699-1722 GetDMInnerTable 경로 — 둘 다 등록), Team→EndCustomer→SalesSite (L1726-1748), EndCustomer→SalesSite (L1750-1765)",
+    "TOBE: Division 변경 → endCustomer/scmSiteId 'ALL' 일괄 reset (콤보는 클라 DIVISION_ID 필터로 자동 추종)"
+  ],
+  "excluded": [
+    "그리드 셀 콤보(End Customer/Sales Site/Measure=CUST_FCST_MEASURE — InsertRow L1258-1288, spdMain_ComboSelChange L1659-1696)",
+    "시트 탭(Customer FCST / Customer PSI — 조회조건 아님)"
+  ],
+  "crosscheck": {
+    "catalog_screen": "Customer FCST Master",
+    "catalog_asis_rows": 5, "catalog_tobe_rows": 5,
+    "my_asis_count": 6, "my_tobe_count": 5,
+    "reason": "카탈로그 5행(Div/Bucket Type/End Customer/Sales Site/Active)과 표시 조건은 일치. 내 AS-IS 6 은 숨김 Team 컨트롤(lblTeam.Visibility=Never, SP p_dept_id='' 고정) 1건을 실측 포함한 차이 — 화면 표시 기준으로는 5=5"
+  },
+  "notes": [
+    "AS-IS 조회 SP: FCST 시트 DM.DMF0007_GET_CUST_FCST_DATA / PSI 시트 DM.DMF0007_GET_CUST_PSI_DATA — 공통 파라미터 p_plan_week=''/p_division_id/p_dept_id=''/p_end_customer/p_scm_site_id/p_bucket_type/p_valid_yn/p_user_group (L626-648, L709-731)",
+    "TO-BE store 초기 divisionId='81' 하드코딩 — 타 화면(session.div ?? '40')과 다른 초기화 방식",
+    "TO-BE store searchParams 에 planWeek('')/userId(세션 useEffect 주입) 포함 — 화면 노출 조건 아님(SP 계약용)",
+    "AS-IS Bucket Type 변경 시 FCST 시트 헤더(DMF0007_GET_SPREAD_TITLE)가 p_bucket_type 로 재구성 — TO-BE 는 조회 후 getFcstRangeByBucket 클라 산출",
+    "AS-IS Division 콤보 SelectedIndexChanged 가 CreateSpread(L284)와 InitEvent(L351)에서 각각 등록되어 2회 실행되는 잠재 결함"
+  ]
+}

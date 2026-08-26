@@ -55,6 +55,7 @@
   font-size: 0.8125rem;
   font-weight: $font-weight-regular;
   line-height: $line-height-normal;
+  white-space: pre-line;
 }
 
 .lowerButtonGroup {
@@ -67,4 +68,4 @@
   min-width: 56px;
   height: 36px;
   padding: $space-sm 12px;
-}
+}

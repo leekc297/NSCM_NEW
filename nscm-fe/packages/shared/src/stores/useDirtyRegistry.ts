@@ -109,7 +109,7 @@ const dirtyConfirmMessage = {
   /** 조회(F5/조회 버튼) — 조회는 그리드 데이터를 통째로 덮어쓴다 */
   search: () => t('MSG00704', '_작업중인 데이터가 있습니다. 조회 하시겠습니까?'),
   /** 화면 닫기 — MDI 탭 닫기, 다이얼로그 닫기 */
-  close: () => t('MSG00703', '_작업중인 데이터가 있습니다. 이 화면을 닫으시겠습니까?'),
+  close: () => t('MSG01016', '_작업중인 데이터가 있습니다. 이 화면을 닫으시겠습니까?'),
 } as const;
 
 export type DirtyConfirmKind = keyof typeof dirtyConfirmMessage;

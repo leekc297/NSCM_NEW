@@ -75,6 +75,25 @@ export const sanitizeNoticeHtml = (html?: string | null) => {
   return template.innerHTML;
 };
 
+/**
+ * 목록 요약용 — 내용 HTML 에서 태그를 걷어낸 한 줄 텍스트.
+ * template 에 넣은 HTML 은 비활성 문서라 스크립트·리소스가 실행/요청되지 않는다(sanitize 와 동일).
+ */
+export const getNoticeTextPreview = (html?: string | null) => {
+  if (!html) return '';
+
+  if (!globalThis.document) {
+    return html
+      .replace(/<[^>]*>/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  const template = globalThis.document.createElement('template');
+  template.innerHTML = html;
+  return (template.content.textContent ?? '').replace(/\s+/g, ' ').trim();
+};
+
 export const getSafeNoticeImageSource = (fileId?: string | null) => {
   const value = fileId?.trim() ?? '';
   if (!value) return '';

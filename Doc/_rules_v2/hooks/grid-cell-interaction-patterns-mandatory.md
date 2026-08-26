@@ -368,3 +368,13 @@ grep -nE "ResponseData<\\w+,\\s*'\\w+',\\s*'\\w+'>" "$SCREEN" | head
 
 §9 PRE-WRITE 10 + §10 POST-WRITE grep 5 + §11 안티패턴 12 모두 PR 차단.
 사용자 cross-check 요청 (2026-06-18 "한번만 더 확인").
+
+---
+
+## ⛔ 병합 판정에 상태를 섞지 말 것 (hook #141)
+
+`MergeManager.getMergedRange()` 의 입력은 **행 데이터뿐**이다. `selectionChanged` / `prepareCellForEdit` / MergeManager 가변 상태 필드로 병합을 바꾸면 **"포커스만 가도 병합이 깨진다"** 가 된다.
+허용되는 상태 의존은 `cellEditEnded → invalidate()` 하나뿐.
+
+> 본문 = `Doc/_rules_v2/hooks/wijmo-merge-row-data-only.md` (#141, 2026-08-21 사용자 명시).
+> "클릭 시 병합이 풀리고 편집 가능" 류 요구 문구는 **결함 신고일 수 있으므로 구현 전 확인**.

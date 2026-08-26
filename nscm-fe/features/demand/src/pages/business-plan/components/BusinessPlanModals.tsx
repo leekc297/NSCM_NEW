@@ -1,5 +1,4 @@
 import {
-  ColumnLayoutModal,
   ItemByDivisionModal,
   MeasureSelectModal,
   ProjectByDivisionModal,
@@ -7,11 +6,16 @@ import {
 import { useMemo } from 'react';
 
 import { useQueryClient } from '@foundation/query-client';
-import type { ColumnLayoutRow } from '@shared/components';
+import { ColumnLayoutModal, saveTitleSet, toColumnLayoutSettings } from '@shared/components';
+import { useMessageStore } from '@shared/stores';
 
-import { MENU_ID, SHEETS } from '../business-plan.constants';
+import {
+  MENU_ID,
+  SHEETS,
+  TITLESET_COLUMN_TYPE,
+  TITLESET_MEASURE_TYPE,
+} from '../business-plan.constants';
 import { useBusinessPlanStore } from '../useBusinessPlanStore';
-import { saveTitleSet } from '../utils/business-plan.api';
 import { isDiv40 } from '../utils/business-plan.division';
 
 import { ExchangeRateModal, ReplaceByCutoffModal, VersionCutoffModal } from './modals';
@@ -41,16 +45,16 @@ interface BusinessPlanModalsProps {
   onRefetch: () => void;
   // 셀 모달 적용 — 부모가 INSERT_GROUP_ID 매칭 Measure 블록 전 행에 patch 반영
   applyToInsertBlock: (patch: Record<string, unknown>) => void;
-  // ⭐ Column/Measure 설정 저장 시 그리드 비움 (hook #132 §2-2 — Division 변경과 동일 초기화
-  //   규약. 이전 결과는 옛 구성으로 조회된 것이라 새 구성과 어긋남 → Search 재조회 유도.
-  //   자동 재조회(invalidateQueries/refetch) 금지, saveTitleSet 성패 무관 비움).
-  onSettingsApplied: () => void;
+  // Column 설정 저장 = Grid 초기화 의무 — 부모(BusinessPlan.tsx)가 insertedRows/EditTracker/
+  //   조회 게이트/캐시 reset 수행. 표시 컬럼이 바뀌는 순간 이전 조건으로 조회해 둔 rows 를
+  //   그대로 두면 화면 구성과 데이터가 어긋난다 (AS-IS btnColumn OK → InitSpread).
+  onSettingChanged: () => void;
 }
 
 // ⭐ DMF0042 모달 7종 묶음 (진입 컴포넌트 분리 — components/ 분리 의무 진입≤400):
 //   ① PROJECT 셀 모달 (81·82 신규행 — AS-IS L1699~1797: Project/Name/BizType 세팅)
 //   ② ITEM 셀 모달 (전 division 신규행 — L1640~1698: Item/ItemName 세팅)
-//   ③ Column 설정 (공용 ColumnLayoutModal + titleSet 'C' — AS-IS btnColumn L2807 → InitSpread)
+//   ③ Column 설정 (공용 ColumnSettingModal + titleSet 'C' — AS-IS btnColumn L2807 → InitSpread)
 //   ④ Measure 선택 (MeasureSelectModal + titleSet 'M' — AS-IS btnMeasure L2819)
 //   ⑤ Exchange Rate (전용 — AS-IS DMF0042_ExchangeRatePopup 677줄. 카테고리 'BP' + '^' bulk 저장)
 //   ⑥ Ver. Cutoff (전용 — AS-IS VersionCutOffPopUp 610줄. 'BP_M' 고정, ADMIN 게이트는 부모 hasButton)
@@ -69,55 +73,36 @@ export const BusinessPlanModals = ({
   onClose,
   onRefetch,
   applyToInsertBlock,
-  onSettingsApplied,
+  onSettingChanged,
 }: BusinessPlanModalsProps) => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 
+  const setAlert = useMessageStore.getState().setAlert;
+
   const staticColumns = useBusinessPlanStore(s => s.staticColumns);
+  const originalStaticColumns = useBusinessPlanStore(s => s.originalStaticColumns);
   const staticMeasures = useBusinessPlanStore(s => s.staticMeasures);
   const visibleMeasures = useBusinessPlanStore(s => s.visibleMeasures);
   const fetchStaticColumns = useBusinessPlanStore(s => s.fetchStaticColumns);
   const fetchStaticMeasures = useBusinessPlanStore(s => s.fetchStaticMeasures);
   const applyColumnLayout = useBusinessPlanStore(s => s.applyColumnLayout);
-  const userColumnLayout = useBusinessPlanStore(s => s.userColumnLayout);
   const applyVisibleMeasures = useBusinessPlanStore(s => s.applyVisibleMeasures);
 
-  // ColumnLayoutModal 재진입 복원값 — 현재 grid 상태(개인화 반영본) / Default 버튼 기준값(admin 메타 원본).
-  const labelOf = useMemo(
-    () => new Map(staticColumns.map(c => [c.colNm, c.colLblNm ?? c.colNm])),
+  // ColumnLayoutModal 재진입 복원(개인화 반영본) / Default 원복(admin 메타 원본).
+  const columnLayoutSettings = useMemo(
+    () => toColumnLayoutSettings(staticColumns),
     [staticColumns]
   );
-  // ⭐ MEASURE 는 Column Setting 목록에서 제외 — 그리드가 정적 컬럼 마지막에 상시 표시한다
-  //   (2026-08-05 사용자 확정). titleset 'C' 저장에서도 제외해 SP ColList 중복(ORA-00960) 오염을 차단.
-  const columnLayoutSettings = useMemo<ColumnLayoutRow[]>(
-    () =>
-      (userColumnLayout ?? []).filter(s => s.colNm !== 'MEASURE').map(s => ({
-        COLUMN_NAME: s.colNm,
-        COLUMN_LABEL_NAME: labelOf.get(s.colNm) ?? s.colNm,
-        USER_FLAG: s.visible ? 'Y' : 'N',
-        SORT_ORDER_NO: s.order,
-        COL_WIDTH: s.width,
-        CELL_COLOR: s.cellColor,
-        TEXT_COLOR: s.textColor,
-        isKey: false,
-      })),
-    [userColumnLayout, labelOf]
+  const columnLayoutDefaults = useMemo(
+    () => toColumnLayoutSettings(originalStaticColumns),
+    [originalStaticColumns]
   );
-  const columnLayoutDefaults = useMemo<ColumnLayoutRow[]>(
-    () =>
-      staticColumns.filter(c => c.colNm !== 'MEASURE').map((c, i) => ({
-        COLUMN_NAME: c.colNm,
-        COLUMN_LABEL_NAME: c.colLblNm ?? c.colNm,
-        USER_FLAG: c.visible === false ? 'N' : 'Y',
-        SORT_ORDER_NO: i + 1,
-        COL_WIDTH: c.colWth ?? 100,
-        CELL_COLOR: '',
-        TEXT_COLOR: '',
-        isKey: false,
-      })),
-    [staticColumns]
-  );
+
+  // 저장 실패를 조용히 삼키면 '저장했는데 재진입 시 원복' 과 구분이 안 된다 — 반드시 알린다.
+  const alertSaveFailed = () => {
+    void setAlert({ type: 'alert', content: t('MSG00618', '_An error occurred while saving.') });
+  };
 
   const div40 = isDiv40(divisionId);
 
@@ -127,8 +112,7 @@ export const BusinessPlanModals = ({
       <ProjectByDivisionModal
         open={openProject}
         modalClose={() => onClose('PROJECT')}
-        setSelectedValue={(projectCode, projectName, _projectStatus, bizTypeName) => {
-          // ⭐ BIZ_TYPE_NAME81/82 자동 채움 — AS-IS L1807~1808/L1857~1858 (popProject.BizType 반영)
+        setSelectedValue={(projectCode, projectName) => {
           applyToInsertBlock(
             div40
               ? { PROJECT_CODE: projectCode, PROJECT_NAME: projectName ?? '' }
@@ -136,15 +120,12 @@ export const BusinessPlanModals = ({
                 ? {
                     PROJECT_CODE82: projectCode,
                     PROJECT_NAME: projectName ?? '',
-                    // 더블클릭 단일선택 경로만 bizTypeName 제공 — 미제공(멀티 OK) 시 기존값 보존
-                    ...(bizTypeName !== undefined ? { BIZ_TYPE_NAME82: bizTypeName } : {}),
                     ITEM_ID: '',
                     ITEM_CLASS_NAME: '',
                   }
                 : {
                     PROJECT_CODE: projectCode,
                     PROJECT_NAME: projectName ?? '',
-                    ...(bizTypeName !== undefined ? { BIZ_TYPE_NAME81: bizTypeName } : {}),
                     ITEM_ID: '',
                     ITEM_CLASS_NAME: '',
                   }
@@ -191,33 +172,31 @@ export const BusinessPlanModals = ({
         callFromCell={true}
       />
 
-      {/* ⭐ Column 설정 — DMF0003(mkt-fcst) 방식으로 교체 (2026-07-30 사용자 지시).
-          공용 ColumnLayoutModal = 표시/순서 + Width/Cell·Text Color 개인화. DMF0082 → DMF0003 선례 1:1.
-          ⚠️ columnType 은 반드시 'C' — TITLESET_USER.USER_INQUIRY_COLUMN_TYPE_CODE 실측값이
-            'C'(컬럼)/'M'(measure) 이다. 이전에 sheetName('Biz Plan')을 넘겨 아래 saveTitleSet('C')
-            저장분과 키가 어긋나 저장한 개인화가 영구 미조회되던 상태였다. */}
+      {/* Column 설정 — 공용 ColumnLayoutModal (표시/순서 + Width/Cell·Text Color) + titleSet 'C' 영구 저장 */}
       <ColumnLayoutModal
         open={openColumnSetting}
         modalClose={() => onClose('COLUMN')}
         menuId={MENU_ID}
         sheetName={SHEETS.MAIN}
-        columnType='C'
+        // ⚠️ 저장·복원과 반드시 같은 값 — 상수 한 곳에서만 가져온다.
+        //   2026-07-29 교정: 조회는 SHEETS.MAIN('Biz Plan'), 저장은 'C' 로 서로 달라
+        //   저장한 개인화가 재진입 시 영구 미조회였다.
+        columnType={TITLESET_COLUMN_TYPE}
         divisionId={divisionId}
-        fallbackColumns={staticColumns
-          .filter(c => c.colNm !== 'MEASURE')
-          .map(c => ({
-            key: c.colNm,
-            header: c.colLblNm ?? c.colNm,
-            width: c.colWth ?? 100,
-          }))}
+        fallbackColumns={staticColumns.map(c => ({
+          key: c.colNm,
+          header: c.colLblNm ?? c.colNm,
+          width: c.colWth ?? 100,
+        }))}
         title={t('LBL00711', '_Column')}
         leftTitle={t('LBL00764', 'Invisible')}
         rightTitle={t('LBL00765', 'Visible')}
-        // 재진입 복원 — 현재 grid 상태(개인화 반영본). 미전달 시 사용자 선택이 원복된다.
         initialSettings={columnLayoutSettings}
         defaultSettings={columnLayoutDefaults}
         onSave={settings => {
-          // 로컬 즉시 반영 + titleSet 'C' 영구 저장(표시 컬럼 + 순서 + 폭/색)
+          // 설정이 바뀌었으므로 이전 조회 rows 는 무효 — 그리드부터 비운다 (sales-plan 동일 순서).
+          onSettingChanged();
+          // (1) 로컬 즉시 반영 — store 가 표시/순서/폭/색을 staticColumns 에 적용 → grid 즉시 갱신.
           applyColumnLayout(
             settings.map(s => ({
               colNm: s.COLUMN_NAME,
@@ -228,27 +207,30 @@ export const BusinessPlanModals = ({
               order: s.SORT_ORDER_NO,
             }))
           );
-          const visible = settings.filter(s => s.USER_FLAG === 'Y' && s.COLUMN_NAME !== 'MEASURE');
-          void saveTitleSet(
-            'C',
-            visible.map((s, i) => ({
+          // (2) titleSet 'C' 영구 저장 — 표시 column + 순서 + 폭/색.
+          const visible = settings.filter(s => s.USER_FLAG === 'Y');
+          void saveTitleSet({
+            menuId: MENU_ID,
+            sheetName: SHEETS.MAIN,
+            columnType: TITLESET_COLUMN_TYPE,
+            rows: visible.map((s, i) => ({
               name: s.COLUMN_NAME,
               sortOrderNo: i + 1,
               colWidth: s.COL_WIDTH,
               cellColor: s.CELL_COLOR,
               textColor: s.TEXT_COLOR,
-            }))
-          ).then(ok => {
-            if (!ok) return;
-            // ⭐ 팝업 titleSet 캐시 무효화 필수 — 전역 staleTime=Infinity 라 invalidate 없이는
+            })),
+          }).then(ok => {
+            if (!ok) {
+              alertSaveFailed();
+              return;
+            }
+            // ⭐ 팝업 titleSet 조회 캐시 무효화 (필수). 전역 staleTime=Infinity 라 invalidate 없이는
             //   재조회가 안 일어나고, buildInitialRows 는 BE 응답을 화면 상태보다 우선하므로
-            //   방금 표시로 옮긴 컬럼이 재진입 시 비표시로 보인다 (DMF0003 2026-07-28 실측 사고).
-            //   (메인 그리드 쿼리 키는 tabId UUID prefix 라 이 invalidate 에 미매칭 — 모달 캐시 전용)
+            //   저장 전 값이 그대로 이겨서 재진입 시 원복된 것처럼 보인다.
             void queryClient.invalidateQueries({ queryKey: [MENU_ID] });
             void fetchStaticColumns();
           });
-          // hook #132 §2-2 — 저장 성패 무관 그리드 비움 (Search 재조회 유도)
-          onSettingsApplied();
         }}
       />
 
@@ -262,17 +244,20 @@ export const BusinessPlanModals = ({
           applyVisibleMeasures(codes);
           const all = staticMeasures.map(m => m.colNm);
           const selected = codes ?? all;
-          void saveTitleSet(
-            'M',
-            selected.map((name, i) => ({ name, sortOrderNo: i + 1 }))
-          ).then(ok => {
-            if (!ok) return;
+          void saveTitleSet({
+            menuId: MENU_ID,
+            sheetName: SHEETS.MAIN,
+            // Measure 개인화 — 폭/색은 대상이 아니라 미전달(빈 값으로 저장됨).
+            columnType: TITLESET_MEASURE_TYPE,
+            rows: selected.map((name, i) => ({ name, sortOrderNo: i + 1 })),
+          }).then(ok => {
+            if (!ok) {
+              alertSaveFailed();
+              return;
+            }
             void fetchStaticMeasures();
-            // 모달 titleSet 캐시 무효화 전용 (메인 그리드 키는 tabId UUID prefix — 미매칭)
             void queryClient.invalidateQueries({ queryKey: [MENU_ID] });
           });
-          // hook #132 §2-2 — 저장 성패 무관 그리드 비움 (Search 재조회 유도)
-          onSettingsApplied();
         }}
       />
 
@@ -287,12 +272,12 @@ export const BusinessPlanModals = ({
         defaultPeriod={{ start: period.start.slice(0, 6), end: period.end.slice(0, 6) }}
       />
 
-      {/* Ver. Cutoff — 'BP_M' 고정 (AS-IS L2857. 팝업 자체 저장 — blnOK 후 처리 없음 L2862).
-          Period 는 팝업 자체 기본값(오늘~+5개월 — AS-IS Form_Load L106~108) */}
+      {/* Ver. Cutoff — 'BP_M' 고정 (AS-IS L2857. 팝업 자체 저장 — blnOK 후 처리 없음 L2862) */}
       <VersionCutoffModal
         open={openCutoff}
         modalClose={() => onClose('CUTOFF')}
         divisionId={divisionId}
+        period={period}
       />
 
       {/* Replace by Cutoff — 선택 M_ 범위 from/to (AS-IS L3465. 실행 후 메인 재조회) */}

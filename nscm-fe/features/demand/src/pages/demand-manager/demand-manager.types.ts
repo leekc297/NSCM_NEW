@@ -6,7 +6,16 @@ export interface SearchCondition {
 }
 
 // 메인 그리드 행 — PKG_DMF0068.P_DMF0068_GET_ORDERLIST 의 o_rc1 (고정 14 + 월 M1..Mn)
-export interface DemandManagerRow {
+//   인덱스 시그니처를 따로 떼어 낸 교차(intersection) 타입 — mkt-fcst(MktFcstRow) / forecast-price
+//   와 같은 방식이다. 공용 DataGrid 의 제네릭 제약 WijmoRowItem(= Record<string, WijmoPrimitive>)
+//   은 인덱스 값에 undefined 를 허용하지 않는데, 한 interface 안에서 optional 프로퍼티와 인덱스를
+//   함께 두면 TS2411(프로퍼티가 인덱스 타입에 대입 불가)이 나서 종전엔 인덱스에 undefined 를
+//   넣어야 했고, 그 탓에 제약을 못 맞춰 <DataGrid> 에 캐스팅을 붙여 왔다.
+//   구성요소를 가르면 optional 프로퍼티는 그대로 두면서 인덱스만 WijmoPrimitive 범위에 맞출 수 있다.
+export type DemandManagerRow = {
+  /** 월 컬럼 M1..Mn */
+  [key: string]: string | number;
+} & {
   PROJECT_NAME?: string;
   MEASURE?: string;
   ORDERSTART?: string;
@@ -23,8 +32,7 @@ export interface DemandManagerRow {
   EDIT_YN?: string;
   CRUD_TYPE?: 'I' | 'M' | 'D';
   INSERT_GROUP_ID?: string; // 신규 세트 임시 그룹 키 (저장 시 KEYVALUE2 로 승격)
-  [key: string]: string | number | undefined; // M1..Mn
-}
+};
 
 // 버전 팝업 행 — 그리드 바인딩 대상이므로 값에 undefined 를 두지 않는다
 export interface VersionPopupRow {

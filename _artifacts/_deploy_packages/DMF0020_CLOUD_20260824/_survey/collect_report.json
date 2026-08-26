@@ -1,0 +1,395 @@
+{
+  "menu": "DMF0020",
+  "generated": "20260824",
+  "A_meta": [
+    {
+      "table": "SCM_ADM_API_M",
+      "rows": 12,
+      "where": "\"API_ID\" LIKE '%DMF0020%' OR \"API_TP_CD\" LIKE '%DMF0020%' OR \"API_MSG_ID\" LIKE '%DMF0020%' OR \"API_MSG_DESC\" LIKE '%DMF0020%' OR \"API_URL\" LIKE '%DMF0020%' OR \"USE_YN\" LIKE '%DMF0020%' OR \"CREATED_BY\" LIKE '%DMF0020%' OR \"LAST_UPDATED_BY\" LIKE '%DMF0020%'",
+      "excluded": null
+    },
+    {
+      "table": "SCM_ADM_CMBO_SQL_M",
+      "rows": 1,
+      "where": "\"SQL_ID\" LIKE '%DMF0020%' OR \"MDU_DIVS_CD\" LIKE '%DMF0020%' OR \"SQL_NM\" LIKE '%DMF0020%' OR \"SQL_DTL_CTN\" LIKE '%DMF0020%' OR \"USE_YN\" LIKE '%DMF0020%' OR \"CREATED_BY\" LIKE '%DMF0020%' OR \"LAST_UPDATED_BY\" LIKE '%DMF0020%'",
+      "excluded": null
+    },
+    {
+      "table": "SCM_ADM_EXCEL_COLUMNS",
+      "rows": 1,
+      "where": "\"PROGRAM_ID\" LIKE '%DMF0020%' OR \"SHEET_NAME\" LIKE '%DMF0020%' OR \"STORAGE_SQL_ID\" LIKE '%DMF0020%' OR \"HEADER_CONTENT\" LIKE '%DMF0020%' OR \"VALID_YN\" LIKE '%DMF0020%' OR \"CREATED_BY\" LIKE '%DMF0020%' OR \"LAST_UPDATED_BY\" LIKE '%DMF0020%' OR \"ATTRIBUTE1\" LIKE '%DMF0020%' OR \"ATTRIBUTE2\" LIKE '%DMF0020%' OR \"ATTRIBUTE3\" LIKE '%DMF0020%' OR \"ATTRIBUTE4\" LIKE '%DMF0020%' OR \"ATTRIBUTE5\" LIKE '%DMF0020%' OR \"ATTRIBUTE6\" LIKE '%DMF0020%' OR \"ATTRIBUTE7\" LIKE '%DMF0020%' OR \"ATTRIBUTE8\" LIKE '%DMF0020%' OR \"ATTRIBUTE9\" LIKE '%DMF0020%' OR \"ATTRIBUTE10\" LIKE '%DMF0020%' OR \"XLS_COLUMN_CODE_MATCH\" LIKE '%DMF0020%'",
+      "excluded": null
+    },
+    {
+      "table": "SCM_ADM_LOOKUP_MASTER",
+      "rows": 1,
+      "where": "\"LOOKUP_TYPE\" LIKE '%DMF0020%' OR \"DESCRIPTION\" LIKE '%DMF0020%' OR \"LOOKUP_GROUP\" LIKE '%DMF0020%' OR \"VALID_YN\" LIKE '%DMF0020%' OR \"SEGMENT1\" LIKE '%DMF0020%' OR \"SEGMENT2\" LIKE '%DMF0020%' OR \"SEGMENT3\" LIKE '%DMF0020%' OR \"SEGMENT4\" LIKE '%DMF0020%' OR \"SEGMENT5\" LIKE '%DMF0020%' OR \"CREATED_BY\" LIKE '%DMF0020%' OR \"LAST_UPDATED_BY\" LIKE '%DMF0020%' OR \"ATTRIBUTE1\" LIKE '%DMF0020%' OR \"ATTRIBUTE2\" LIKE '%DMF0020%' OR \"ATTRIBUTE3\" LIKE '%DMF0020%' OR \"ATTRIBUTE4\" LIKE '%DMF0020%' OR \"ATTRIBUTE5\" LIKE '%DMF0020%' OR \"ATTRIBUTE6\" LIKE '%DMF0020%' OR \"ATTRIBUTE7\" LIKE '%DMF0020%' OR \"ATTRIBUTE8\" LIKE '%DMF0020%' OR \"ATTRIBUTE9\" LIKE '%DMF0020%' OR \"ATTRIBUTE10\" LIKE '%DMF0020%' OR \"ATTRIBUTE11\" LIKE '%DMF0020%' OR \"ATTRIBUTE12\" LIKE '%DMF0020%' OR \"ATTRIBUTE13\" LIKE '%DMF0020%' OR \"ATTRIBUTE14\" LIKE '%DMF0020%' OR \"ATTRIBUTE15\" LIKE '%DMF0020%'",
+      "excluded": null
+    },
+    {
+      "table": "SCM_ADM_LOOKUP_MASTER_DETAIL",
+      "rows": 12,
+      "where": "\"LOOKUP_TYPE\" LIKE '%DMF0020%' OR \"SEGMENT1\" LIKE '%DMF0020%' OR \"SEGMENT2\" LIKE '%DMF0020%' OR \"SEGMENT3\" LIKE '%DMF0020%' OR \"SEGMENT4\" LIKE '%DMF0020%' OR \"SEGMENT5\" LIKE '%DMF0020%' OR \"VALID_YN\" LIKE '%DMF0020%' OR \"DESCRIPTION\" LIKE '%DMF0020%' OR \"CREATED_BY\" LIKE '%DMF0020%' OR \"LAST_UPDATED_BY\" LIKE '%DMF0020%' OR \"ATTRIBUTE1\" LIKE '%DMF0020%' OR \"ATTRIBUTE2\" LIKE '%DMF0020%' OR \"ATTRIBUTE3\" LIKE '%DMF0020%' OR \"ATTRIBUTE4\" LIKE '%DMF0020%' OR \"ATTRIBUTE5\" LIKE '%DMF0020%' OR \"ATTRIBUTE6\" LIKE '%DMF0020%' OR \"ATTRIBUTE7\" LIKE '%DMF0020%' OR \"ATTRIBUTE8\" LIKE '%DMF0020%' OR \"ATTRIBUTE9\" LIKE '%DMF0020%' OR \"ATTRIBUTE10\" LIKE '%DMF0020%' OR \"ATTRIBUTE11\" LIKE '%DMF0020%' OR \"ATTRIBUTE12\" LIKE '%DMF0020%' OR \"ATTRIBUTE13\" LIKE '%DMF0020%' OR \"ATTRIBUTE14\" LIKE '%DMF0020%' OR \"ATTRIBUTE15\" LIKE '%DMF0020%'",
+      "excluded": null
+    },
+    {
+      "table": "SCM_ADM_LOOKUP_MASTER_DETAIL_H",
+      "rows": 2,
+      "where": "\"LOOKUP_TYPE\" LIKE '%DMF0020%' OR \"DESCRIPTION\" LIKE '%DMF0020%' OR \"SEGMENT1\" LIKE '%DMF0020%' OR \"SEGMENT2\" LIKE '%DMF0020%' OR \"SEGMENT3\" LIKE '%DMF0020%' OR \"SEGMENT4\" LIKE '%DMF0020%' OR \"SEGMENT5\" LIKE '%DMF0020%' OR \"VALID_YN\" LIKE '%DMF0020%' OR \"CREATED_BY\" LIKE '%DMF0020%' OR \"LAST_UPDATED_BY\" LIKE '%DMF0020%' OR \"ATTRIBUTE1\" LIKE '%DMF0020%' OR \"ATTRIBUTE2\" LIKE '%DMF0020%' OR \"ATTRIBUTE3\" LIKE '%DMF0020%' OR \"ATTRIBUTE4\" LIKE '%DMF0020%' OR \"ATTRIBUTE5\" LIKE '%DMF0020%' OR \"ATTRIBUTE6\" LIKE '%DMF0020%' OR \"ATTRIBUTE7\" LIKE '%DMF0020%' OR \"ATTRIBUTE8\" LIKE '%DMF0020%' OR \"ATTRIBUTE9\" LIKE '%DMF0020%' OR \"ATTRIBUTE10\" LIKE '%DMF0020%' OR \"ATTRIBUTE11\" LIKE '%DMF0020%' OR \"ATTRIBUTE12\" LIKE '%DMF0020%' OR \"ATTRIBUTE13\" LIKE '%DMF0020%' OR \"ATTRIBUTE14\" LIKE '%DMF0020%' OR \"ATTRIBUTE15\" LIKE '%DMF0020%'",
+      "excluded": "이력 테이블"
+    },
+    {
+      "table": "SCM_ADM_MNU_BTN_MPG_M",
+      "rows": 14,
+      "where": "\"MNU_ID\" LIKE '%DMF0020%' OR \"SHT_NM\" LIKE '%DMF0020%' OR \"MNU_BTN_CD\" LIKE '%DMF0020%' OR \"API_ID\" LIKE '%DMF0020%' OR \"USE_YN\" LIKE '%DMF0020%' OR \"CREATED_BY\" LIKE '%DMF0020%' OR \"LAST_UPDATED_BY\" LIKE '%DMF0020%'",
+      "excluded": null
+    },
+    {
+      "table": "SCM_ADM_MNU_M",
+      "rows": 1,
+      "where": "\"MNU_ID\" LIKE '%DMF0020%' OR \"UPPR_MNU_ID\" LIKE '%DMF0020%' OR \"MNU_URL\" LIKE '%DMF0020%' OR \"SYS_MNUL_URL\" LIKE '%DMF0020%' OR \"MNU_MSG_ID\" LIKE '%DMF0020%' OR \"MNU_DESC\" LIKE '%DMF0020%' OR \"MNU_TP_CD\" LIKE '%DMF0020%' OR \"UNIT_TP_CD\" LIKE '%DMF0020%' OR \"USE_YN\" LIKE '%DMF0020%' OR \"N01_ATR_CTN\" LIKE '%DMF0020%' OR \"N02_ATR_CTN\" LIKE '%DMF0020%' OR \"N03_ATR_CTN\" LIKE '%DMF0020%' OR \"N04_ATR_CTN\" LIKE '%DMF0020%' OR \"N05_ATR_CTN\" LIKE '%DMF0020%' OR \"N06_ATR_CTN\" LIKE '%DMF0020%' OR \"N07_ATR_CTN\" LIKE '%DMF0020%' OR \"N08_ATR_CTN\" LIKE '%DMF0020%' OR \"N09_ATR_CTN\" LIKE '%DMF0020%' OR \"N10_ATR_CTN\" LIKE '%DMF0020%' OR \"CREATED_BY\" LIKE '%DMF0020%' OR \"LAST_UPDATED_BY\" LIKE '%DMF0020%' OR \"ROUTE_PATH\" LIKE '%DMF0020%'",
+      "excluded": null
+    },
+    {
+      "table": "SCM_ADM_MSG_M",
+      "rows": 20,
+      "where": "\"MSG_ID\" LIKE '%DMF0020%' OR \"LANG_CD\" LIKE '%DMF0020%' OR \"MSG_NM\" LIKE '%DMF0020%' OR \"MSG_DESC\" LIKE '%DMF0020%' OR \"MSG_TP_CD\" LIKE '%DMF0020%' OR \"USE_YN\" LIKE '%DMF0020%' OR \"CREATED_BY\" LIKE '%DMF0020%' OR \"LAST_UPDATED_BY\" LIKE '%DMF0020%'",
+      "excluded": null
+    },
+    {
+      "table": "SCM_ADM_PROC_M",
+      "rows": 80,
+      "where": "\"PROC_NM\" LIKE '%DMF0020%' OR \"COL_NM\" LIKE '%DMF0020%' OR \"DATA_TP_CD\" LIKE '%DMF0020%' OR \"COL_TP_CD\" LIKE '%DMF0020%' OR \"CREATED_BY\" LIKE '%DMF0020%' OR \"LAST_UPDATED_BY\" LIKE '%DMF0020%'",
+      "excluded": null
+    },
+    {
+      "table": "SCM_ADM_PROGRAM",
+      "rows": 1,
+      "where": "\"PROGRAM_ID\" LIKE '%DMF0020%' OR \"PROGRAM_NAME\" LIKE '%DMF0020%' OR \"PROGRAM_PATH\" LIKE '%DMF0020%' OR \"CLASS_NAME\" LIKE '%DMF0020%' OR \"USE_YN\" LIKE '%DMF0020%' OR \"REGT_USER_ID\" LIKE '%DMF0020%' OR \"CREATED_BY\" LIKE '%DMF0020%' OR \"LAST_UPDATED_BY\" LIKE '%DMF0020%'",
+      "excluded": null
+    },
+    {
+      "table": "SCM_ADM_USER_GR_MNU_BTN_MPG_M",
+      "rows": 70,
+      "where": "\"USER_GR_ID\" LIKE '%DMF0020%' OR \"MNU_ID\" LIKE '%DMF0020%' OR \"SHT_NM\" LIKE '%DMF0020%' OR \"MNU_BTN_CD\" LIKE '%DMF0020%' OR \"USE_YN\" LIKE '%DMF0020%' OR \"CREATED_BY\" LIKE '%DMF0020%' OR \"LAST_UPDATED_BY\" LIKE '%DMF0020%'",
+      "excluded": null
+    },
+    {
+      "table": "SCM_ADM_USER_GR_MNU_MPG_M",
+      "rows": 5,
+      "where": "\"USER_GR_ID\" LIKE '%DMF0020%' OR \"MNU_ID\" LIKE '%DMF0020%' OR \"USE_YN\" LIKE '%DMF0020%' OR \"CREATED_BY\" LIKE '%DMF0020%' OR \"LAST_UPDATED_BY\" LIKE '%DMF0020%'",
+      "excluded": null
+    },
+    {
+      "table": "SCM_ADM_USER_MNU_SRCH_COND_M",
+      "rows": 7,
+      "where": "\"USER_ID\" LIKE '%DMF0020%' OR \"MNU_ID\" LIKE '%DMF0020%' OR \"PRAM_NM\" LIKE '%DMF0020%' OR \"PRAM_CTN\" LIKE '%DMF0020%' OR \"CREATED_BY\" LIKE '%DMF0020%' OR \"LAST_UPDATED_BY\" LIKE '%DMF0020%'",
+      "excluded": "사용자별 조회조건 개인화(USER_ID 보유)"
+    },
+    {
+      "table": "SCM_MST_SHEET_COLUMNS",
+      "rows": 77,
+      "where": "\"PROGRAM_ID\" LIKE '%DMF0020%' OR \"SHEET_NAME\" LIKE '%DMF0020%' OR \"COLUMN_NAME\" LIKE '%DMF0020%' OR \"COLUMN_LABEL_NAME\" LIKE '%DMF0020%' OR \"DATA_SORT_METHOD_CODE\" LIKE '%DMF0020%' OR \"SMALL_CLASS_LABEL_NAME\" LIKE '%DMF0020%' OR \"LARGE_CLASS_LABEL_NAME\" LIKE '%DMF0020%' OR \"FIXED_FLAG\" LIKE '%DMF0020%' OR \"CELL_CONTROL_OBJECT_TYPE_CODE\" LIKE '%DMF0020%' OR \"CELL_COMBO_DATA_TYPE\" LIKE '%DMF0020%' OR \"HORIZONTAL_ALIGN_CODE\" LIKE '%DMF0020%' OR \"UPPERCASE_APPLY_FLAG\" LIKE '%DMF0020%' OR \"VISIBLE_FLAG\" LIKE '%DMF0020%' OR \"DIVISION_ID\" LIKE '%DMF0020%' OR \"DEFAULT_FLAG\" LIKE '%DMF0020%' OR \"USER_SELECTABLE_FLAG\" LIKE '%DMF0020%' OR \"VALID_YN\" LIKE '%DMF0020%' OR \"CREATED_BY\" LIKE '%DMF0020%' OR \"LAST_UPDATED_BY\" LIKE '%DMF0020%' OR \"ATTRIBUTE1\" LIKE '%DMF0020%' OR \"ATTRIBUTE2\" LIKE '%DMF0020%' OR \"ATTRIBUTE3\" LIKE '%DMF0020%' OR \"ATTRIBUTE4\" LIKE '%DMF0020%' OR \"ATTRIBUTE5\" LIKE '%DMF0020%' OR \"ATTRIBUTE6\" LIKE '%DMF0020%' OR \"ATTRIBUTE7\" LIKE '%DMF0020%' OR \"ATTRIBUTE8\" LIKE '%DMF0020%' OR \"ATTRIBUTE9\" LIKE '%DMF0020%' OR \"ATTRIBUTE10\" LIKE '%DMF0020%' OR \"INPUT_TP_CD\" LIKE '%DMF0020%'",
+      "excluded": null
+    },
+    {
+      "table": "SCM_MST_SHEET_COLUMNS_0408",
+      "rows": 77,
+      "where": "\"PROGRAM_ID\" LIKE '%DMF0020%' OR \"SHEET_NAME\" LIKE '%DMF0020%' OR \"COLUMN_NAME\" LIKE '%DMF0020%' OR \"COLUMN_LABEL_NAME\" LIKE '%DMF0020%' OR \"DATA_SORT_METHOD_CODE\" LIKE '%DMF0020%' OR \"SMALL_CLASS_LABEL_NAME\" LIKE '%DMF0020%' OR \"LARGE_CLASS_LABEL_NAME\" LIKE '%DMF0020%' OR \"FIXED_FLAG\" LIKE '%DMF0020%' OR \"CELL_CONTROL_OBJECT_TYPE_CODE\" LIKE '%DMF0020%' OR \"CELL_COMBO_DATA_TYPE\" LIKE '%DMF0020%' OR \"HORIZONTAL_ALIGN_CODE\" LIKE '%DMF0020%' OR \"UPPERCASE_APPLY_FLAG\" LIKE '%DMF0020%' OR \"VISIBLE_FLAG\" LIKE '%DMF0020%' OR \"DIVISION_ID\" LIKE '%DMF0020%' OR \"DEFAULT_FLAG\" LIKE '%DMF0020%' OR \"USER_SELECTABLE_FLAG\" LIKE '%DMF0020%' OR \"VALID_YN\" LIKE '%DMF0020%' OR \"CREATED_BY\" LIKE '%DMF0020%' OR \"LAST_UPDATED_BY\" LIKE '%DMF0020%' OR \"ATTRIBUTE1\" LIKE '%DMF0020%' OR \"ATTRIBUTE2\" LIKE '%DMF0020%' OR \"ATTRIBUTE3\" LIKE '%DMF0020%' OR \"ATTRIBUTE4\" LIKE '%DMF0020%' OR \"ATTRIBUTE5\" LIKE '%DMF0020%' OR \"ATTRIBUTE6\" LIKE '%DMF0020%' OR \"ATTRIBUTE7\" LIKE '%DMF0020%' OR \"ATTRIBUTE8\" LIKE '%DMF0020%' OR \"ATTRIBUTE9\" LIKE '%DMF0020%' OR \"ATTRIBUTE10\" LIKE '%DMF0020%' OR \"INPUT_TP_CD\" LIKE '%DMF0020%'",
+      "excluded": null
+    },
+    {
+      "table": "SCM_MST_SHEET_COLUMNS_260408",
+      "rows": 77,
+      "where": "\"PROGRAM_ID\" LIKE '%DMF0020%' OR \"SHEET_NAME\" LIKE '%DMF0020%' OR \"COLUMN_NAME\" LIKE '%DMF0020%' OR \"COLUMN_LABEL_NAME\" LIKE '%DMF0020%' OR \"DATA_SORT_METHOD_CODE\" LIKE '%DMF0020%' OR \"SMALL_CLASS_LABEL_NAME\" LIKE '%DMF0020%' OR \"LARGE_CLASS_LABEL_NAME\" LIKE '%DMF0020%' OR \"FIXED_FLAG\" LIKE '%DMF0020%' OR \"CELL_CONTROL_OBJECT_TYPE_CODE\" LIKE '%DMF0020%' OR \"CELL_COMBO_DATA_TYPE\" LIKE '%DMF0020%' OR \"HORIZONTAL_ALIGN_CODE\" LIKE '%DMF0020%' OR \"UPPERCASE_APPLY_FLAG\" LIKE '%DMF0020%' OR \"VISIBLE_FLAG\" LIKE '%DMF0020%' OR \"DIVISION_ID\" LIKE '%DMF0020%' OR \"DEFAULT_FLAG\" LIKE '%DMF0020%' OR \"USER_SELECTABLE_FLAG\" LIKE '%DMF0020%' OR \"VALID_YN\" LIKE '%DMF0020%' OR \"CREATED_BY\" LIKE '%DMF0020%' OR \"LAST_UPDATED_BY\" LIKE '%DMF0020%' OR \"ATTRIBUTE1\" LIKE '%DMF0020%' OR \"ATTRIBUTE2\" LIKE '%DMF0020%' OR \"ATTRIBUTE3\" LIKE '%DMF0020%' OR \"ATTRIBUTE4\" LIKE '%DMF0020%' OR \"ATTRIBUTE5\" LIKE '%DMF0020%' OR \"ATTRIBUTE6\" LIKE '%DMF0020%' OR \"ATTRIBUTE7\" LIKE '%DMF0020%' OR \"ATTRIBUTE8\" LIKE '%DMF0020%' OR \"ATTRIBUTE9\" LIKE '%DMF0020%' OR \"ATTRIBUTE10\" LIKE '%DMF0020%' OR \"INPUT_TP_CD\" LIKE '%DMF0020%'",
+      "excluded": null
+    },
+    {
+      "table": "SCM_MST_SHEET_MEASURE",
+      "rows": 4,
+      "where": "\"PROGRAM_ID\" LIKE '%DMF0020%' OR \"SHEET_NAME\" LIKE '%DMF0020%' OR \"COLUMN_NAME\" LIKE '%DMF0020%' OR \"COLUMN_LABEL_NAME\" LIKE '%DMF0020%' OR \"SMALL_CLASS_LABEL_NAME\" LIKE '%DMF0020%' OR \"LARGE_CLASS_LABEL_NAME\" LIKE '%DMF0020%' OR \"DEFAULT_FLAG\" LIKE '%DMF0020%' OR \"USER_SELECTABLE_FLAG\" LIKE '%DMF0020%' OR \"DIVISION_ID\" LIKE '%DMF0020%' OR \"VALID_YN\" LIKE '%DMF0020%' OR \"CREATED_BY\" LIKE '%DMF0020%' OR \"LAST_UPDATED_BY\" LIKE '%DMF0020%' OR \"ATTRIBUTE1\" LIKE '%DMF0020%' OR \"ATTRIBUTE2\" LIKE '%DMF0020%' OR \"ATTRIBUTE3\" LIKE '%DMF0020%' OR \"ATTRIBUTE4\" LIKE '%DMF0020%' OR \"ATTRIBUTE5\" LIKE '%DMF0020%' OR \"ATTRIBUTE6\" LIKE '%DMF0020%' OR \"ATTRIBUTE7\" LIKE '%DMF0020%' OR \"ATTRIBUTE8\" LIKE '%DMF0020%' OR \"ATTRIBUTE9\" LIKE '%DMF0020%' OR \"ATTRIBUTE10\" LIKE '%DMF0020%' OR \"INPUT_TP_CD\" LIKE '%DMF0020%'",
+      "excluded": null
+    },
+    {
+      "table": "SCM_MST_TITLESET_USER",
+      "rows": 216,
+      "where": "\"USER_ID\" LIKE '%DMF0020%' OR \"PROGRAM_ID\" LIKE '%DMF0020%' OR \"SHEET_NAME\" LIKE '%DMF0020%' OR \"USER_INQUIRY_COLUMN_TYPE_CODE\" LIKE '%DMF0020%' OR \"COLUMN_NAME\" LIKE '%DMF0020%' OR \"SUB_TOTAL_FLAG\" LIKE '%DMF0020%' OR \"DATA_SORT_METHOD_CODE\" LIKE '%DMF0020%' OR \"CREATED_BY\" LIKE '%DMF0020%' OR \"LAST_UPDATED_BY\" LIKE '%DMF0020%' OR \"ATTRIBUTE1\" LIKE '%DMF0020%' OR \"ATTRIBUTE2\" LIKE '%DMF0020%' OR \"ATTRIBUTE3\" LIKE '%DMF0020%' OR \"ATTRIBUTE4\" LIKE '%DMF0020%' OR \"ATTRIBUTE5\" LIKE '%DMF0020%' OR \"ATTRIBUTE6\" LIKE '%DMF0020%' OR \"ATTRIBUTE7\" LIKE '%DMF0020%' OR \"ATTRIBUTE8\" LIKE '%DMF0020%' OR \"ATTRIBUTE9\" LIKE '%DMF0020%' OR \"ATTRIBUTE10\" LIKE '%DMF0020%' OR \"CELL_COLOR\" LIKE '%DMF0020%' OR \"TEXT_COLOR\" LIKE '%DMF0020%'",
+      "excluded": "사용자 개인화 데이터"
+    }
+  ],
+  "B_objects": [
+    {
+      "type": "INDEX",
+      "name": "GT_DMF0020_DEPT_AUTH_IDX",
+      "status": "VALID"
+    },
+    {
+      "type": "INDEX",
+      "name": "GT_DMF0020_OWNER_NAMES_IDX",
+      "status": "VALID"
+    },
+    {
+      "type": "INDEX",
+      "name": "GT_DMF0020_SEL_MEASURE_IDX",
+      "status": "VALID"
+    },
+    {
+      "type": "INDEX",
+      "name": "GT_DMF0020_SEL_VERSION_IDX",
+      "status": "VALID"
+    },
+    {
+      "type": "INDEX",
+      "name": "IX01_GT_DMF0020_OWNER_NAME",
+      "status": "VALID"
+    },
+    {
+      "type": "INDEX",
+      "name": "IX_GT_DMF0020_PARAM_TOKEN_01",
+      "status": "VALID"
+    },
+    {
+      "type": "INDEX",
+      "name": "IX_PERF_LOG_DMF0020_RUN",
+      "status": "VALID"
+    },
+    {
+      "type": "PACKAGE",
+      "name": "PKG_DMF0020",
+      "status": "VALID"
+    },
+    {
+      "type": "PACKAGE BODY",
+      "name": "PKG_DMF0020",
+      "status": "VALID"
+    },
+    {
+      "type": "SEQUENCE",
+      "name": "SEQ_PERF_LOG_DMF0020",
+      "status": "VALID"
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DMF0020_CFM_SELL_PRICE_CONV_T1",
+      "status": "VALID"
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DMF0020_CFM_SELL_PRICE_CONV_T2",
+      "status": "VALID"
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DMF0020_DATA",
+      "status": "VALID"
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DMF0020_DEPT_AUTH",
+      "status": "VALID"
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DMF0020_DM_MST_ITEM_SINGLE_ORI_V",
+      "status": "VALID"
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DMF0020_DM_PLN_SALES_PLAN",
+      "status": "VALID"
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DMF0020_EXCEL_UPLOAD",
+      "status": "VALID"
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DMF0020_EXCH",
+      "status": "VALID"
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DMF0020_FUTURE_PRICE_CONV_T1",
+      "status": "VALID"
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DMF0020_FUTURE_PRICE_CONV_T2",
+      "status": "VALID"
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DMF0020_ITEM",
+      "status": "VALID"
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DMF0020_OUTPUT",
+      "status": "VALID"
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DMF0020_OUTPUT_ALL",
+      "status": "VALID"
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DMF0020_OUTPUT_OMISSION",
+      "status": "VALID"
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DMF0020_OVER_RANGE",
+      "status": "VALID"
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DMF0020_OVER_RANGE_LIST",
+      "status": "VALID"
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DMF0020_OWNER_ADMIN_GROUP",
+      "status": "VALID"
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DMF0020_OWNER_LEVEL1_DEPT",
+      "status": "VALID"
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DMF0020_OWNER_LEVEL2_DEPT",
+      "status": "VALID"
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DMF0020_OWNER_NAME",
+      "status": "VALID"
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DMF0020_OWNER_NAMES",
+      "status": "VALID"
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DMF0020_OWNER_TMP_DEPT",
+      "status": "VALID"
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DMF0020_PARAM_TOKEN",
+      "status": "VALID"
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DMF0020_PJT",
+      "status": "VALID"
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DMF0020_PLAN_DATA",
+      "status": "VALID"
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DMF0020_RESULTS",
+      "status": "VALID"
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DMF0020_RESULTS_EXCH_RATE",
+      "status": "VALID"
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DMF0020_RESULTS_MST",
+      "status": "VALID"
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DMF0020_RESULTS_MST_DUP",
+      "status": "VALID"
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DMF0020_SALES_SITE_MODEL",
+      "status": "VALID"
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DMF0020_SALES_SITE_MODEL_ALL",
+      "status": "VALID"
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DMF0020_SCM_MST_FUTURE_PRICE",
+      "status": "VALID"
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DMF0020_SCM_MST_FUTURE_PRICE_OVER",
+      "status": "VALID"
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DMF0020_SEL_MEASURE",
+      "status": "VALID"
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DMF0020_SEL_VERSION",
+      "status": "VALID"
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DMF0020_UPLOAD_MASTER_FINAL",
+      "status": "VALID"
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DMF0020_UPLOAD_MASTER_STEP1",
+      "status": "VALID"
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DMF0020_UPLOAD_MASTER_STEP2",
+      "status": "VALID"
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DMF0020_UPLOAD_MASTER_WITH_ITEM",
+      "status": "VALID"
+    },
+    {
+      "type": "TABLE",
+      "name": "GT_DMF0020_VERSION_NO",
+      "status": "VALID"
+    },
+    {
+      "type": "TABLE",
+      "name": "PERF_LOG_DMF0020",
+      "status": "VALID"
+    }
+  ],
+  "pkg": {
+    "spec_lines": 293,
+    "body_lines": 8750
+  },
+  "counts": {
+    "SHEET_COLUMNS": 77,
+    "SCM_MST_SHEET_MEASURE": 4,
+    "SCM_ADM_EXCEL_COLUMNS": 1,
+    "SCM_ADM_PROGRAM": 1,
+    "SCM_ADM_MNU_M": 1,
+    "SCM_ADM_API_M": 12,
+    "SCM_ADM_PROC_M": 80,
+    "SCM_ADM_MNU_BTN_MPG_M": 14,
+    "SCM_ADM_USER_GR_MNU_MPG_M": 5,
+    "SCM_ADM_USER_GR_MNU_BTN_MPG_M": 70,
+    "LOOKUP": 3,
+    "MSG_M(rows)": 131
+  }
+}

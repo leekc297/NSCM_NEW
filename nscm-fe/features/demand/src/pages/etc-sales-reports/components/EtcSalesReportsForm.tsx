@@ -1,17 +1,29 @@
 import { DivisionField, VersionField } from 'features/master/src/components';
 
+import dayjs from '@foundation/dayjs';
+import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { FormItem } from '@shared/lges';
 import { Grid } from '@shared/mui';
 
-import { PLAN_RESULT, type PlanResult, type ReportType } from '../etc-sales-reports.constants';
+import {
+  PLAN_RESULT,
+  REPORT_TYPE,
+  type PlanResult,
+  type ReportType,
+} from '../etc-sales-reports.constants';
 import { useEtcSalesReportsStore } from '../useEtcSalesReportsStore';
 
 interface EtcSalesReportsFormProps {
   onSearch: () => void;
   // ⭐ Division 변경 = Grid 초기화(비움) + CRUD reset 의무 (memory feedback_division_change_grid_reset)
   onDivisionChange: () => void;
+  // ⭐ REQ:CHAT-20260820-15 — AS-IS 가 `InitSpread()` 를 부르는 나머지 2개 조회조건.
+  //   Report Type = `DMF0049_Sales_ETC_Reports.cs:1530~1539`, Plan/Result = `.cs:1566~1573`.
+  //   Year 는 AS-IS 에 변경 핸들러가 없어 prop 을 두지 않는다(.Designer.cs 등록 0건 실측).
+  onReportTypeChange: () => void;
+  onPlanResultChange: () => void;
   onOpenVersionModal: () => void; // btnSPVer '...' — United 팝업 (Version 주입)
 }
 
@@ -23,6 +35,8 @@ interface EtcSalesReportsFormProps {
 export const EtcSalesReportsForm = ({
   onSearch,
   onDivisionChange,
+  onReportTypeChange,
+  onPlanResultChange,
   onOpenVersionModal,
 }: EtcSalesReportsFormProps) => {
   const { t } = useTranslation();
@@ -55,7 +69,14 @@ export const EtcSalesReportsForm = ({
             value={sc.divisionId}
             onChange={v => {
               // Version 은 division 종속(버전 목록이 division별) — 변경 시 초기화 (AS-IS 파리티)
-              set({ divisionId: v, versionNo: '', versionLabel: '' });
+              set({
+                divisionId: v,
+                versionNo: '',
+                versionLabel: '',
+                mdfType: REPORT_TYPE.SP_W,
+                yyyy: dayjs().format('YYYY'),
+                planResult: PLAN_RESULT.PLAN,
+              });
               onDivisionChange();
             }}
           />
@@ -63,13 +84,21 @@ export const EtcSalesReportsForm = ({
             <FormItem
               label={t('LBL00795', '_Report Type')}
               labelAlign='right'
+              className={commonStyles.formItem}
               render={() => (
                 <CustomDropdown
                   value={sc.mdfType}
                   options={toOptions(mdfType)}
-                  onChange={(_, v) =>
-                    set({ mdfType: String(v ?? '') as ReportType, versionNo: '', versionLabel: '' })
-                  }
+                  onChange={(_, v) => {
+                    // AS-IS clbType_SelectedIndexChanged(.cs:1530~1539): txtSPVersion.Text = null
+                    //   (BP/SP 로 버전 체계가 갈리므로 이전 버전은 그대로 쓸 수 없다)
+                    set({
+                      mdfType: String(v ?? '') as ReportType,
+                      versionNo: '',
+                      versionLabel: '',
+                    });
+                    onReportTypeChange(); // 같은 핸들러의 InitSpread() = 그리드 초기화
+                  }}
                 />
               )}
             />
@@ -78,6 +107,7 @@ export const EtcSalesReportsForm = ({
             <FormItem
               label={t('LBL00086', '_Year')}
               labelAlign='right'
+              className={commonStyles.formItem}
               render={() => (
                 <CustomDropdown
                   value={sc.yyyy}
@@ -91,6 +121,7 @@ export const EtcSalesReportsForm = ({
             <FormItem
               label={t('LBL00800', '_Plan/Result')}
               labelAlign='right'
+              className={commonStyles.formItem}
               render={() => (
                 <CustomDropdown
                   value={sc.planResult}
@@ -98,7 +129,13 @@ export const EtcSalesReportsForm = ({
                     { label: 'Plan', value: PLAN_RESULT.PLAN },
                     { label: 'Result', value: PLAN_RESULT.RESULT },
                   ]}
-                  onChange={(_, v) => set({ planResult: String(v ?? '') as PlanResult })}
+                  onChange={(_, v) => {
+                    set({ planResult: String(v ?? '') as PlanResult });
+                    // AS-IS clbPlanResult_SelectedIndexChanged(.cs:1566~1573) = InitSpread() +
+                    //   DefineProperty(). Plan↔Result 는 잠금·회색 축이 뒤집히므로 기존 조회 결과를
+                    //   그대로 두면 편집 가능 구간이 화면과 어긋난다. 버전은 AS-IS 도 유지한다.
+                    onPlanResultChange();
+                  }}
                 />
               )}
             />
@@ -112,6 +149,13 @@ export const EtcSalesReportsForm = ({
           <VersionField
             value={sc.versionLabel}
             onOpenPopup={onOpenVersionModal}
+            // 직접 입력(key-in) 허용 — 친 문자열을 그대로 조회키(versionNo)로 쓴다 (DMF0044 동일 규약).
+            //   팝업 선택은 표시문에 DESCRIPTION 이 붙지만 직접 입력은 원문이 곧 표시문이다.
+            //   존재하지 않는 버전을 치면 조회 0건으로 떨어진다(SP 판정 — FE 사전 검증 없음).
+            onValueChange={v => set({ versionNo: v, versionLabel: v })}
+            // 팝업 라벨('VERSION_NO 설명') 뒤에서 편집을 시작하면 설명까지 조회키가 되므로
+            //   포커스 순간 코드만 남긴다.
+            versionNo={sc.versionNo}
             label={
               sc.mdfType === 'REPORT_BP_M'
                 ? t('LBL00797', '_BP Version')

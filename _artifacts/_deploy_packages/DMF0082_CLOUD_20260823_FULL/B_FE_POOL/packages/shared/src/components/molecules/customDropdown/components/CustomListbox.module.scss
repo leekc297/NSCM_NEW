@@ -1,0 +1,33 @@
+// 팝업 안 전용 검색칸. CustomDropdown 이 다중 선택일 때만 넘긴다.
+// 목록 위에 붙어 스크롤해도 따라오도록 sticky 로 둔다.
+.searchRow {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  background: #fff;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  box-sizing: border-box;
+}
+
+.searchInput {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 28px;
+  padding: 0 8px;
+  box-sizing: border-box;
+  font: inherit;
+  font-size: 13px;
+  color: inherit;
+  background: transparent;
+  border: 1px solid rgba(0, 0, 0, 0.23);
+  border-radius: 4px;
+  outline: none;
+
+  &:focus {
+    border-color: rgba(0, 0, 0, 0.6);
+  }
+}

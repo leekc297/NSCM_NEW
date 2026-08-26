@@ -13,6 +13,27 @@ import type { MeasureInfoRow, SalesPlanRow } from '../sales-plan.types';
 export const toCellStr = (v: unknown): string =>
   typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '';
 
+// 셀 비우기 patch 생성 — cascade 계단 clear 와 모달 취소가 같은 규칙(빈 문자열)으로 비운다.
+//   null 이 아니라 '' 인 이유: 신규행 기본값(INSERT_ROW_DEFAULTS)이 전부 '' 라 미입력 상태와
+//   같은 표현이어야 저장 필수값 검증(validate)이 둘을 구분 없이 걸러낸다.
+export const buildClearPatch = (fields: readonly string[]): Record<string, string> =>
+  Object.fromEntries(fields.map(f => [f, '']));
+
+// 콤보 rows 중복 제거 — CODE 기준 첫 행만 남긴다(콤보 SQL 정렬 순서 보존).
+//   코드 목록은 CODE 유일이 의미상 보장인데, CMBO_SQL 이 행을 불려 내려보내는 경우가 있다.
+//   실측(2026-08-17 Measure 드롭다운 중복): CMBO 'Measure' 는 @mnuId 만 받고 division 필터가
+//   없어(comboContext) SCM_MST_SHEET_MEASURE 에 division 별로 적재된 같은 measure 가 등록
+//   division 수만큼 반복돼 온다. DataMap 은 소스 배열을 그대로 펼치므로 그 중복이 셀 드롭다운
+//   항목 중복으로 보인다. (동류 사고: sales-reports P_DMF0044_GET_MEASURE 권한 조인 16행)
+export const dedupeComboRowsByCode = <T extends Record<string, unknown>>(rows: T[]): T[] => {
+  const byCode = new Map<string, T>();
+  for (const row of rows) {
+    const code = toCellStr(row.CODE).trim();
+    if (!byCode.has(code)) byCode.set(code, row);
+  }
+  return [...byCode.values()];
+};
+
 // FCST_TYPE Catch_Up 편집 콤보 — 전체 'FcstType' 콤보 rows 에서 ETC 제외 (AS-IS FCST_TYPE(ETC 제외) 1:1).
 export const buildCatchUpFcstTypeMap = (
   fcstTypeRows: Record<string, unknown>[]

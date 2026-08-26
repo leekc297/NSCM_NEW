@@ -8,7 +8,11 @@ import { Button, FormItem, InputField } from '@shared/lges';
 import { ControlConfirmIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 
-import { SEARCH_POPUP_WIDTH } from '../searchFields/SearchFields.utils';
+import {
+  SEARCH_POPUP_WIDTH,
+  buildEndCustomerOptions,
+  buildSalesSiteOptions,
+} from '../searchFields/SearchFields.utils';
 
 import {
   MODAL_PROJECT_BY_DIVISION,
@@ -62,8 +66,19 @@ export const ProjectByDivisionModal = ({
   >({} as ProcRequest<MODAL_PROJECT_BY_DIVISION, MODAL_SHEET_PROJECT_BY_DIVISION>);
   const [projectCode, setProjectCode] = useState<string>();
 
-  const [divisions, teams, endCustomers, salesSites] = useTabComboQueries({
-    filters: ['MyDivision', 'TeambyDivision', 'EndCustomer', 'SalesSite'],
+  const [divisions, endCustomers, salesSites] = useTabComboQueries({
+    filters: ['MyDivision', 'EndCustomer', 'SalesSite'],
+  });
+
+  // Team 콤보는 divisionId 파라미터를 받아야 한다 (SearchFields TeamField 와 같은 계약).
+  //   미전달 = 'ALL' 분기라 division 40 의 팀은 아예 반환되지 않는다 (40 은 owner 경로 전용
+  //   분기 — 40 SALES 사이트는 DEPT 미배정 설계). 그러면 호출 화면 조회조건에서 넘어온 Team
+  //   값이 options 에 없어 selectedOptions 가 비고, CustomDropdown 이 placeholder 'ALL' 만
+  //   보여준다 — 값은 전달됐는데 화면만 ALL 로 보이던 원인.
+  // 주의: BE makeComboQuery 는 raw 문자열 치환이라 작은따옴표를 포함해 넘긴다.
+  // divisionId 가 바뀌면 쿼리키가 바뀌어 자동 재조회된다.
+  const [teams] = useTabComboQueries({
+    filters: [{ comboId: 'TeambyDivision', divisionId: `'${searchParam.divisionId ?? ''}'` }],
   });
 
   const { data: projectData } = useTabProcQuery<MODAL_PROJECT_BY_DIVISION>({
@@ -241,7 +256,15 @@ export const ProjectByDivisionModal = ({
                         options={[
                           ...new Map(
                             (teams ?? [])
-                              .filter(item => item.DIVISION_ID === searchParam.divisionId)
+                              // DIVISION_ID 가 공란인 행은 통과시킨다 (SearchFields toOptions 와
+                              // 동일 규칙). 엄격 비교만 하면 division 키를 안 채워 주는 응답에서
+                              // 목록이 통째로 비어버린다.
+                              .filter(
+                                item =>
+                                  !searchParam.divisionId ||
+                                  !item.DIVISION_ID ||
+                                  item.DIVISION_ID === searchParam.divisionId
+                              )
                               .map(item => [`${item.DIVISION_ID}|${item.CODE}`, item])
                           ).values(),
                         ].map(item => ({ label: item.NAME, value: item.CODE }))}
@@ -259,25 +282,12 @@ export const ProjectByDivisionModal = ({
                         disabled
                         limitTags={1}
                         value={searchParam.endCustomer}
-                        options={
-                          // ⭐ 2026-07-03 — DEPT 관대 통과(hook #59 §5-G): 콤보 row 의 DEPT_ID 는
-                          //   owner 기반(NULL 다수)이라 그리드 팀(SITE_ITEM.DEPT_ID)과 기준이 달라
-                          //   엄격 필터 시 선택 값이 옵션에서 탈락 → disabled 표시가 비는 사고.
-                          [
-                            ...new Map(
-                              endCustomers
-                                ?.filter(
-                                  item =>
-                                    item.DIVISION_ID === searchParam.divisionId &&
-                                    (searchParam.deptId === 'ALL' ||
-                                      !item.DEPT_ID ||
-                                      searchParam.deptId?.split(',').includes(item.DEPT_ID) ||
-                                      searchParam.endCustomer?.split(',').includes(item.CODE))
-                                )
-                                .map(item => [`${item.DIVISION_ID}|${item.CODE}`, item])
-                            ).values(),
-                          ].map(item => ({ label: item.NAME, value: item.CODE })) ?? []
-                        }
+                        options={buildEndCustomerOptions({
+                          rows: endCustomers,
+                          divisionId: searchParam.divisionId,
+                          deptId: searchParam.deptId,
+                          selected: searchParam.endCustomer,
+                        })}
                       />
                     )}
                   />
@@ -292,21 +302,12 @@ export const ProjectByDivisionModal = ({
                         disabled
                         limitTags={1}
                         value={searchParam.salesSite}
-                        options={[
-                          // ⭐ 2026-07-03 — DEPT 관대 통과 + 선택 값 보존 (End Customer 와 동일 사유)
-                          ...new Map(
-                            (salesSites ?? [])
-                              .filter(
-                                item =>
-                                  item.DIVISION_ID === searchParam.divisionId &&
-                                  (searchParam.deptId === 'ALL' ||
-                                    !item.DEPT_ID ||
-                                    searchParam.deptId?.split(',').includes(item.DEPT_ID) ||
-                                    searchParam.salesSite?.split(',').includes(item.CODE))
-                              )
-                              .map(item => [`${item.DIVISION_ID}|${item.CODE}`, item])
-                          ).values(),
-                        ].map(item => ({ label: item.NAME, value: item.CODE }))}
+                        options={buildSalesSiteOptions({
+                          rows: salesSites,
+                          divisionId: searchParam.divisionId,
+                          deptId: searchParam.deptId,
+                          selected: searchParam.salesSite,
+                        })}
                       />
                     )}
                   />

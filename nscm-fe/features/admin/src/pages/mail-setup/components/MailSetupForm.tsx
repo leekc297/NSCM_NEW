@@ -1,3 +1,4 @@
+import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { FormItem } from '@shared/lges';
@@ -6,8 +7,6 @@ import { Grid } from '@shared/mui';
 import { ALL, COMBO_ID } from '../mail-setup.constants';
 import type { ComboOption } from '../mail-setup.types';
 import { useMailSetupStore } from '../useMailSetupStore';
-
-import styles from './MailSetupForm.module.scss';
 
 interface MailSetupFormProps {
   onSearch: () => void;
@@ -48,7 +47,7 @@ export const MailSetupForm = ({ onSearch }: MailSetupFormProps) => {
         <>
           <Grid size={3}>
             <FormItem
-              className={styles.formItem}
+              className={commonStyles.formItem}
               label={t('LBL00379', '_Module')}
               labelAlign='right'
               render={() => (
@@ -64,7 +63,7 @@ export const MailSetupForm = ({ onSearch }: MailSetupFormProps) => {
           </Grid>
           <Grid size={3}>
             <FormItem
-              className={styles.formItem}
+              className={commonStyles.formItem}
               label={t('LBL00378', '_Sub Module')}
               labelAlign='right'
               render={() => (
@@ -80,7 +79,7 @@ export const MailSetupForm = ({ onSearch }: MailSetupFormProps) => {
           </Grid>
           <Grid size={3}>
             <FormItem
-              className={styles.formItem}
+              className={commonStyles.formItem}
               label={t('LBL00007', '_Active')}
               labelAlign='right'
               render={() => (

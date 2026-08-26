@@ -1,0 +1,52 @@
+// 사용법:
+//   import commonStyles from '@foundation/styles/common-styles.module.scss';
+//   <InputField className={commonStyles.popupSearchField} ... />
+//
+body .formItem {
+  // 필드 열(auto 칼럼)의 자동 최소폭(min-width:auto)을 해제.
+  // 이게 없으면 칩 등 넓은 콘텐츠가 auto 트랙을 밀어 셀(Grid) 폭을 넘어 옆 칼럼을 침범한다.
+  // min-width:0 이면 트랙이 콘텐츠가 아니라 남은 셀 폭에 맞춰지고, 넘치는 칩은 필드 내부에서 …로 잘린다.
+  // (overflow:hidden 은 popupSearchField 의 필드 밖 버튼(right:-40px)을 자르므로 여기선 쓰지 않는다.)
+  & > div:last-of-type {
+    min-width: 0;
+  }
+
+  @include respond-to('HD') {
+    grid-template-columns: 50px auto;
+
+    & > div:first-of-type {
+      width: 50px;
+    }
+  }
+
+  @include respond-to('FHD') {
+    grid-template-columns: 140px auto;
+
+    & > div:first-of-type {
+      width: 140px;
+    }
+  }
+}
+
+.customGrid {
+  display: flex;
+  align-items: center;
+}
+
+.customCheckbox {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.popupSearchField {
+  & > div:first-child {
+    display: flex;
+    align-items: center;
+    width: calc(100% - 40px);
+  }
+  & button {
+    position: absolute;
+    right: -40px;
+  }
+}

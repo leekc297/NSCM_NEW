@@ -1,0 +1,866 @@
+{
+ "C1_div40_CURRENT": {
+  "elapsed": 7.24,
+  "rows": 15897,
+  "cols": [
+   "DIVISION_ID",
+   "DEPT_ID",
+   "DEPT_ID40",
+   "END_CUSTOMER",
+   "END_CUSTOMER40",
+   "SCM_SITE_ID40",
+   "SCM_SITE_ID81",
+   "SCM_SITE_ID82",
+   "PROJECT_CODE",
+   "PROJECT_CODE82",
+   "PROJECT_NAME",
+   "BIZ_TYPE_NAME81",
+   "ITEM_ID40",
+   "ITEM_ID",
+   "ITEM_NAME",
+   "INCOTERMS",
+   "FCST_TYPE",
+   "PLANT_SITE_ID",
+   "CELL_PROD_SITE",
+   "CURRENCY",
+   "VERSION_SORT",
+   "VERSION_NO",
+   "MEASURE",
+   "SORT_ORDER_NO",
+   "EDIT_YN",
+   "M_202608",
+   "Y_2026",
+   "Q_2026_3",
+   "M_202609",
+   "Q_2026_4",
+   "M_202610",
+   "M_202611",
+   "M_202612",
+   "Q_2027_1",
+   "Y_2027",
+   "M_202701",
+   "M_202702"
+  ],
+  "hash_ordered": "2c4cc0882f2828481712dd9f3e98e2f6721b5a525c111f39df0be1bd7252dbf4",
+  "hash_sorted": "662ed62f1dc1078ade2709b12f27773d4095396569116f1744cc12062ecb83f6",
+  "GT_DM51_SCM_MST_SITE_ITEM": {
+   "cnt": 23193,
+   "h1": "50065711261715",
+   "h2": "49533110491244",
+   "distinct": 23193
+  },
+  "GT_DM22_DM_MST_ITEM_SINGLE_V": {
+   "cnt": 169928,
+   "h1": "364877879706630",
+   "h2": "365677093749770",
+   "distinct": 169928
+  },
+  "GT_DM51_RAW_DATA": {
+   "cnt": 206776,
+   "h1": "444042974245872",
+   "h2": "444175062334522",
+   "distinct": 152691
+  },
+  "GT_DM51_SCM_CITY": {
+   "cnt": 1283852,
+   "h1": "2925025338751018",
+   "h2": "2716039558719755",
+   "distinct": 647
+  },
+  "GT_DM22_SELECT_MEASURE": {
+   "cnt": 9,
+   "h1": "21775965104",
+   "h2": "16387578520",
+   "distinct": 9
+  },
+  "GT_DM22_V_VERSION_NO": {
+   "cnt": 1,
+   "h1": "1907652618",
+   "h2": "1396702932",
+   "distinct": 1
+  },
+  "SINGLE_V_CONSUMED": {
+   "cnt": 343,
+   "h1": "770327751549",
+   "h2": "764570111466",
+   "distinct": 343
+  }
+ },
+ "C2_div40_BP20260810": {
+  "elapsed": 16.64,
+  "rows": 15897,
+  "cols": [
+   "DIVISION_ID",
+   "DEPT_ID",
+   "DEPT_ID40",
+   "END_CUSTOMER",
+   "END_CUSTOMER40",
+   "SCM_SITE_ID40",
+   "SCM_SITE_ID81",
+   "SCM_SITE_ID82",
+   "PROJECT_CODE",
+   "PROJECT_CODE82",
+   "PROJECT_NAME",
+   "BIZ_TYPE_NAME81",
+   "ITEM_ID40",
+   "ITEM_ID",
+   "ITEM_NAME",
+   "INCOTERMS",
+   "FCST_TYPE",
+   "PLANT_SITE_ID",
+   "CELL_PROD_SITE",
+   "CURRENCY",
+   "VERSION_SORT",
+   "VERSION_NO",
+   "MEASURE",
+   "SORT_ORDER_NO",
+   "EDIT_YN",
+   "M_202608",
+   "Y_2026",
+   "Q_2026_3",
+   "M_202609",
+   "Q_2026_4",
+   "M_202610",
+   "M_202611",
+   "M_202612",
+   "Q_2027_1",
+   "Y_2027",
+   "M_202701",
+   "M_202702"
+  ],
+  "hash_ordered": "ea81e0aa17fd2714a54f79291fdc441d7ac55419d3b9657b2a6d2c824e631c26",
+  "hash_sorted": "d8cdeef5798d553f9f4a80136af570378b62d9dc3151f915335d5e95955554d9",
+  "GT_DM51_SCM_MST_SITE_ITEM": {
+   "cnt": 23193,
+   "h1": "50065711261715",
+   "h2": "49533110491244",
+   "distinct": 23193
+  },
+  "GT_DM22_DM_MST_ITEM_SINGLE_V": {
+   "cnt": 169928,
+   "h1": "364877879706630",
+   "h2": "365677093749770",
+   "distinct": 169928
+  },
+  "GT_DM51_RAW_DATA": {
+   "cnt": 206776,
+   "h1": "444962135405756",
+   "h2": "443978791176868",
+   "distinct": 152691
+  },
+  "GT_DM51_SCM_CITY": {
+   "cnt": 1283852,
+   "h1": "2925025338751018",
+   "h2": "2716039558719755",
+   "distinct": 647
+  },
+  "GT_DM22_SELECT_MEASURE": {
+   "cnt": 9,
+   "h1": "21775965104",
+   "h2": "16387578520",
+   "distinct": 9
+  },
+  "GT_DM22_V_VERSION_NO": {
+   "cnt": 1,
+   "h1": "2235747057",
+   "h2": "1898366778",
+   "distinct": 1
+  },
+  "SINGLE_V_CONSUMED": {
+   "cnt": 343,
+   "h1": "770327751549",
+   "h2": "764570111466",
+   "distinct": 343
+  }
+ },
+ "C3_div40_BP20260805": {
+  "elapsed": 30.02,
+  "rows": 15896,
+  "cols": [
+   "DIVISION_ID",
+   "DEPT_ID",
+   "DEPT_ID40",
+   "END_CUSTOMER",
+   "END_CUSTOMER40",
+   "SCM_SITE_ID40",
+   "SCM_SITE_ID81",
+   "SCM_SITE_ID82",
+   "PROJECT_CODE",
+   "PROJECT_CODE82",
+   "PROJECT_NAME",
+   "BIZ_TYPE_NAME81",
+   "ITEM_ID40",
+   "ITEM_ID",
+   "ITEM_NAME",
+   "INCOTERMS",
+   "FCST_TYPE",
+   "PLANT_SITE_ID",
+   "CELL_PROD_SITE",
+   "CURRENCY",
+   "VERSION_SORT",
+   "VERSION_NO",
+   "MEASURE",
+   "SORT_ORDER_NO",
+   "EDIT_YN",
+   "M_202608",
+   "Y_2026",
+   "Q_2026_3",
+   "M_202609",
+   "Q_2026_4",
+   "M_202610",
+   "M_202611",
+   "M_202612",
+   "Q_2027_1",
+   "Y_2027",
+   "M_202701",
+   "M_202702"
+  ],
+  "hash_ordered": "7f1ff9a01423489748e25c18f015971d9498d68f2299d3a3e86882d869172bda",
+  "hash_sorted": "9aed00995211c5b1102dc29018bf4194809c10f9878a4fba26efdf94d616f4a5",
+  "GT_DM51_SCM_MST_SITE_ITEM": {
+   "cnt": 23193,
+   "h1": "50065711261715",
+   "h2": "49533110491244",
+   "distinct": 23193
+  },
+  "GT_DM22_DM_MST_ITEM_SINGLE_V": {
+   "cnt": 169928,
+   "h1": "364877879706630",
+   "h2": "365677093749770",
+   "distinct": 169928
+  },
+  "GT_DM51_RAW_DATA": {
+   "cnt": 206773,
+   "h1": "443312331728753",
+   "h2": "444769526745690",
+   "distinct": 152688
+  },
+  "GT_DM51_SCM_CITY": {
+   "cnt": 1283852,
+   "h1": "2925025338751018",
+   "h2": "2716039558719755",
+   "distinct": 647
+  },
+  "GT_DM22_SELECT_MEASURE": {
+   "cnt": 9,
+   "h1": "21775965104",
+   "h2": "16387578520",
+   "distinct": 9
+  },
+  "GT_DM22_V_VERSION_NO": {
+   "cnt": 1,
+   "h1": "2471482380",
+   "h2": "2983020707",
+   "distinct": 1
+  },
+  "SINGLE_V_CONSUMED": {
+   "cnt": 343,
+   "h1": "770327751549",
+   "h2": "764570111466",
+   "distinct": 343
+  }
+ },
+ "C4_div40_CURRENT+BP2": {
+  "elapsed": 54.19,
+  "rows": 44087,
+  "cols": [
+   "DIVISION_ID",
+   "DEPT_ID",
+   "DEPT_ID40",
+   "END_CUSTOMER",
+   "END_CUSTOMER40",
+   "SCM_SITE_ID40",
+   "SCM_SITE_ID81",
+   "SCM_SITE_ID82",
+   "PROJECT_CODE",
+   "PROJECT_CODE82",
+   "PROJECT_NAME",
+   "BIZ_TYPE_NAME81",
+   "ITEM_ID40",
+   "ITEM_ID",
+   "ITEM_NAME",
+   "INCOTERMS",
+   "FCST_TYPE",
+   "PLANT_SITE_ID",
+   "CELL_PROD_SITE",
+   "CURRENCY",
+   "VERSION_SORT",
+   "VERSION_NO",
+   "MEASURE",
+   "SORT_ORDER_NO",
+   "EDIT_YN",
+   "M_202608",
+   "Y_2026",
+   "Q_2026_3",
+   "M_202609",
+   "Q_2026_4",
+   "M_202610",
+   "M_202611",
+   "M_202612",
+   "Q_2027_1",
+   "Y_2027",
+   "M_202701",
+   "M_202702"
+  ],
+  "hash_ordered": "e2d47a61d3bccf660c71853765663dcb53492e5af7757950c04e80fcb541f268",
+  "hash_sorted": "8b9d3354d64e64bfc03fb687650bd67a4021eee41a6dbcbb286ceb7e130608de",
+  "GT_DM51_SCM_MST_SITE_ITEM": {
+   "cnt": 23193,
+   "h1": "50065711261715",
+   "h2": "49533110491244",
+   "distinct": 23193
+  },
+  "GT_DM22_DM_MST_ITEM_SINGLE_V": {
+   "cnt": 169928,
+   "h1": "364877879706630",
+   "h2": "365677093749770",
+   "distinct": 169928
+  },
+  "GT_DM51_RAW_DATA": {
+   "cnt": 603041,
+   "h1": "1295109161327720",
+   "h2": "1294996094247662",
+   "distinct": 442759
+  },
+  "GT_DM51_SCM_CITY": {
+   "cnt": 1283852,
+   "h1": "2925025338751018",
+   "h2": "2716039558719755",
+   "distinct": 647
+  },
+  "GT_DM22_SELECT_MEASURE": {
+   "cnt": 9,
+   "h1": "21775965104",
+   "h2": "16387578520",
+   "distinct": 9
+  },
+  "GT_DM22_V_VERSION_NO": {
+   "cnt": 3,
+   "h1": "7998326302",
+   "h2": "5566294221",
+   "distinct": 3
+  },
+  "SINGLE_V_CONSUMED": {
+   "cnt": 359,
+   "h1": "797682068647",
+   "h2": "805501074405",
+   "distinct": 359
+  }
+ },
+ "C5_div40_CURRENT_cellY": {
+  "elapsed": 19.01,
+  "rows": 15897,
+  "cols": [
+   "DIVISION_ID",
+   "DEPT_ID",
+   "DEPT_ID40",
+   "END_CUSTOMER",
+   "END_CUSTOMER40",
+   "SCM_SITE_ID40",
+   "SCM_SITE_ID81",
+   "SCM_SITE_ID82",
+   "PROJECT_CODE",
+   "PROJECT_CODE82",
+   "PROJECT_NAME",
+   "BIZ_TYPE_NAME81",
+   "ITEM_ID40",
+   "ITEM_ID",
+   "ITEM_NAME",
+   "INCOTERMS",
+   "FCST_TYPE",
+   "PLANT_SITE_ID",
+   "CELL_PROD_SITE",
+   "CURRENCY",
+   "VERSION_SORT",
+   "VERSION_NO",
+   "MEASURE",
+   "SORT_ORDER_NO",
+   "EDIT_YN",
+   "M_202608",
+   "Y_2026",
+   "Q_2026_3",
+   "M_202609",
+   "Q_2026_4",
+   "M_202610",
+   "M_202611",
+   "M_202612",
+   "Q_2027_1",
+   "Y_2027",
+   "M_202701",
+   "M_202702"
+  ],
+  "hash_ordered": "6230f568ac002392c2adb18a9dfeed25466f0cf55c6baa845cd60fe24f8e1ba7",
+  "hash_sorted": "e9296ea27e91c6fb9faa0eb4c9f984b48d125267f7d48d14c125e188525c0dc4",
+  "GT_DM51_SCM_MST_SITE_ITEM": {
+   "cnt": 23193,
+   "h1": "50065711261715",
+   "h2": "49533110491244",
+   "distinct": 23193
+  },
+  "GT_DM22_DM_MST_ITEM_SINGLE_V": {
+   "cnt": 169928,
+   "h1": "364877879706630",
+   "h2": "365677093749770",
+   "distinct": 169928
+  },
+  "GT_DM51_RAW_DATA": {
+   "cnt": 206776,
+   "h1": "444042974245872",
+   "h2": "444175062334522",
+   "distinct": 152691
+  },
+  "GT_DM51_SCM_CITY": {
+   "cnt": 1283852,
+   "h1": "2925025338751018",
+   "h2": "2716039558719755",
+   "distinct": 647
+  },
+  "GT_DM22_SELECT_MEASURE": {
+   "cnt": 9,
+   "h1": "21775965104",
+   "h2": "16387578520",
+   "distinct": 9
+  },
+  "GT_DM22_V_VERSION_NO": {
+   "cnt": 1,
+   "h1": "1907652618",
+   "h2": "1396702932",
+   "distinct": 1
+  },
+  "SINGLE_V_CONSUMED": {
+   "cnt": 343,
+   "h1": "770327751549",
+   "h2": "764570111466",
+   "distinct": 343
+  }
+ },
+ "C6_div40_CURRENT_qtyY": {
+  "elapsed": 10.85,
+  "rows": 7123,
+  "cols": [
+   "DIVISION_ID",
+   "DEPT_ID",
+   "DEPT_ID40",
+   "END_CUSTOMER",
+   "END_CUSTOMER40",
+   "SCM_SITE_ID40",
+   "SCM_SITE_ID81",
+   "SCM_SITE_ID82",
+   "PROJECT_CODE",
+   "PROJECT_CODE82",
+   "PROJECT_NAME",
+   "BIZ_TYPE_NAME81",
+   "ITEM_ID40",
+   "ITEM_ID",
+   "ITEM_NAME",
+   "INCOTERMS",
+   "FCST_TYPE",
+   "PLANT_SITE_ID",
+   "CELL_PROD_SITE",
+   "CURRENCY",
+   "VERSION_SORT",
+   "VERSION_NO",
+   "MEASURE",
+   "SORT_ORDER_NO",
+   "EDIT_YN",
+   "M_202608",
+   "Y_2026",
+   "Q_2026_3",
+   "M_202609",
+   "Q_2026_4",
+   "M_202610",
+   "M_202611",
+   "M_202612",
+   "Q_2027_1",
+   "Y_2027",
+   "M_202701",
+   "M_202702"
+  ],
+  "hash_ordered": "f74a89ff24492dc6af4c2589d7d1f92f3d3c3a4dc6c035a840b7e89150b7142c",
+  "hash_sorted": "65edd3404d11f13e510aff6d32180dd55843a21ad9ff36ebb231a4d05e2cfdde",
+  "GT_DM51_SCM_MST_SITE_ITEM": {
+   "cnt": 23193,
+   "h1": "50065711261715",
+   "h2": "49533110491244",
+   "distinct": 23193
+  },
+  "GT_DM22_DM_MST_ITEM_SINGLE_V": {
+   "cnt": 169928,
+   "h1": "364877879706630",
+   "h2": "365677093749770",
+   "distinct": 169928
+  },
+  "GT_DM51_RAW_DATA": {
+   "cnt": 84516,
+   "h1": "181152340161273",
+   "h2": "181393139662647",
+   "distinct": 65438
+  },
+  "GT_DM51_SCM_CITY": {
+   "cnt": 1283852,
+   "h1": "2925025338751018",
+   "h2": "2716039558719755",
+   "distinct": 647
+  },
+  "GT_DM22_SELECT_MEASURE": {
+   "cnt": 9,
+   "h1": "21775965104",
+   "h2": "16387578520",
+   "distinct": 9
+  },
+  "GT_DM22_V_VERSION_NO": {
+   "cnt": 1,
+   "h1": "1907652618",
+   "h2": "1396702932",
+   "distinct": 1
+  },
+  "SINGLE_V_CONSUMED": {
+   "cnt": 131,
+   "h1": "312024771151",
+   "h2": "283096644024",
+   "distinct": 131
+  }
+ },
+ "C7_div40_BP_owner필터": {
+  "elapsed": 45.98,
+  "rows": 280,
+  "cols": [
+   "DIVISION_ID",
+   "DEPT_ID",
+   "DEPT_ID40",
+   "END_CUSTOMER",
+   "END_CUSTOMER40",
+   "SCM_SITE_ID40",
+   "SCM_SITE_ID81",
+   "SCM_SITE_ID82",
+   "PROJECT_CODE",
+   "PROJECT_CODE82",
+   "PROJECT_NAME",
+   "BIZ_TYPE_NAME81",
+   "ITEM_ID40",
+   "ITEM_ID",
+   "ITEM_NAME",
+   "INCOTERMS",
+   "FCST_TYPE",
+   "PLANT_SITE_ID",
+   "CELL_PROD_SITE",
+   "CURRENCY",
+   "VERSION_SORT",
+   "VERSION_NO",
+   "MEASURE",
+   "SORT_ORDER_NO",
+   "EDIT_YN",
+   "M_202608",
+   "Y_2026",
+   "Q_2026_3",
+   "M_202609",
+   "Q_2026_4",
+   "M_202610",
+   "M_202611",
+   "M_202612",
+   "Q_2027_1",
+   "Y_2027",
+   "M_202701",
+   "M_202702"
+  ],
+  "hash_ordered": "4280b9bc0100b6311b5f005a16ae5de5e811ac69d306fe5c5912fd4153830654",
+  "hash_sorted": "0f0ed069e9540561b1d1f89ea5ac57c19aa2a4ac6f25d62022d5a9a57216a15a",
+  "GT_DM51_SCM_MST_SITE_ITEM": {
+   "cnt": 23193,
+   "h1": "50065711261715",
+   "h2": "49533110491244",
+   "distinct": 23193
+  },
+  "GT_DM22_DM_MST_ITEM_SINGLE_V": {
+   "cnt": 169928,
+   "h1": "364877879706630",
+   "h2": "365677093749770",
+   "distinct": 169928
+  },
+  "GT_DM51_RAW_DATA": {
+   "cnt": 4242,
+   "h1": "9110408629415",
+   "h2": "9098878234020",
+   "distinct": 3051
+  },
+  "GT_DM51_SCM_CITY": {
+   "cnt": 1283852,
+   "h1": "2925025338751018",
+   "h2": "2716039558719755",
+   "distinct": 647
+  },
+  "GT_DM22_SELECT_MEASURE": {
+   "cnt": 9,
+   "h1": "21775965104",
+   "h2": "16387578520",
+   "distinct": 9
+  },
+  "GT_DM22_V_VERSION_NO": {
+   "cnt": 1,
+   "h1": "2235747057",
+   "h2": "1898366778",
+   "distinct": 1
+  },
+  "SINGLE_V_CONSUMED": {
+   "cnt": 23,
+   "h1": "45434376458",
+   "h2": "56035499788",
+   "distinct": 23
+  }
+ },
+ "C8_div40_BP_itemtype": {
+  "elapsed": 67.86,
+  "rows": 15862,
+  "cols": [
+   "DIVISION_ID",
+   "DEPT_ID",
+   "DEPT_ID40",
+   "END_CUSTOMER",
+   "END_CUSTOMER40",
+   "SCM_SITE_ID40",
+   "SCM_SITE_ID81",
+   "SCM_SITE_ID82",
+   "PROJECT_CODE",
+   "PROJECT_CODE82",
+   "PROJECT_NAME",
+   "BIZ_TYPE_NAME81",
+   "ITEM_ID40",
+   "ITEM_ID",
+   "ITEM_NAME",
+   "INCOTERMS",
+   "FCST_TYPE",
+   "PLANT_SITE_ID",
+   "CELL_PROD_SITE",
+   "CURRENCY",
+   "VERSION_SORT",
+   "VERSION_NO",
+   "MEASURE",
+   "SORT_ORDER_NO",
+   "EDIT_YN",
+   "M_202608",
+   "Y_2026",
+   "Q_2026_3",
+   "M_202609",
+   "Q_2026_4",
+   "M_202610",
+   "M_202611",
+   "M_202612",
+   "Q_2027_1",
+   "Y_2027",
+   "M_202701",
+   "M_202702"
+  ],
+  "hash_ordered": "b077d462d7a34a4c79a8a1a98796905e7e05ad730e8dfbaee1a8e6cecfb7d1e1",
+  "hash_sorted": "7b7281f086d0fa3a22890f852d3d53acd2f0b0a115712079bb80708a345f672e",
+  "GT_DM51_SCM_MST_SITE_ITEM": {
+   "cnt": 23193,
+   "h1": "50065711261715",
+   "h2": "49533110491244",
+   "distinct": 23193
+  },
+  "GT_DM22_DM_MST_ITEM_SINGLE_V": {
+   "cnt": 169928,
+   "h1": "364877879706630",
+   "h2": "365677093749770",
+   "distinct": 169928
+  },
+  "GT_DM51_RAW_DATA": {
+   "cnt": 206279,
+   "h1": "443844993992080",
+   "h2": "442920269280650",
+   "distinct": 152315
+  },
+  "GT_DM51_SCM_CITY": {
+   "cnt": 1283852,
+   "h1": "2925025338751018",
+   "h2": "2716039558719755",
+   "distinct": 647
+  },
+  "GT_DM22_SELECT_MEASURE": {
+   "cnt": 9,
+   "h1": "21775965104",
+   "h2": "16387578520",
+   "distinct": 9
+  },
+  "GT_DM22_V_VERSION_NO": {
+   "cnt": 1,
+   "h1": "2235747057",
+   "h2": "1898366778",
+   "distinct": 1
+  },
+  "SINGLE_V_CONSUMED": {
+   "cnt": 339,
+   "h1": "758278561541",
+   "h2": "755550311972",
+   "distinct": 339
+  }
+ },
+ "C9_div81_CURRENT": {
+  "elapsed": 22.0,
+  "rows": 0,
+  "cols": [
+   "DIVISION_ID",
+   "DEPT_ID",
+   "DEPT_ID40",
+   "END_CUSTOMER",
+   "END_CUSTOMER40",
+   "SCM_SITE_ID40",
+   "SCM_SITE_ID81",
+   "SCM_SITE_ID82",
+   "PROJECT_CODE",
+   "PROJECT_CODE82",
+   "PROJECT_NAME",
+   "BIZ_TYPE_NAME81",
+   "ITEM_ID40",
+   "ITEM_ID",
+   "ITEM_NAME",
+   "INCOTERMS",
+   "FCST_TYPE",
+   "PLANT_SITE_ID",
+   "CELL_PROD_SITE",
+   "CURRENCY",
+   "VERSION_SORT",
+   "VERSION_NO",
+   "MEASURE",
+   "SORT_ORDER_NO",
+   "EDIT_YN",
+   "M_202608",
+   "Y_2026",
+   "Q_2026_3",
+   "M_202609",
+   "Q_2026_4",
+   "M_202610",
+   "M_202611",
+   "M_202612",
+   "Q_2027_1",
+   "Y_2027",
+   "M_202701",
+   "M_202702"
+  ],
+  "hash_ordered": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "hash_sorted": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "GT_DM51_SCM_MST_SITE_ITEM": {
+   "cnt": 53319,
+   "h1": "114382248062890",
+   "h2": "114251747390995",
+   "distinct": 53319
+  },
+  "GT_DM22_DM_MST_ITEM_SINGLE_V": {
+   "cnt": 85973,
+   "h1": "184861373124412",
+   "h2": "184798319299302",
+   "distinct": 85973
+  },
+  "GT_DM51_RAW_DATA": {
+   "cnt": 0,
+   "h1": "0",
+   "h2": "0",
+   "distinct": 0
+  },
+  "GT_DM51_SCM_CITY": {
+   "cnt": 15749,
+   "h1": "40134749339251",
+   "h2": "25436910646277",
+   "distinct": 86
+  },
+  "GT_DM22_SELECT_MEASURE": {
+   "cnt": 9,
+   "h1": "21775965104",
+   "h2": "16387578520",
+   "distinct": 9
+  },
+  "GT_DM22_V_VERSION_NO": {
+   "cnt": 1,
+   "h1": "1907652618",
+   "h2": "1396702932",
+   "distinct": 1
+  },
+  "SINGLE_V_CONSUMED": {
+   "cnt": 0,
+   "h1": "0",
+   "h2": "0",
+   "distinct": 0
+  }
+ },
+ "C10_div40_CURRENT_narrow": {
+  "elapsed": 28.69,
+  "rows": 14936,
+  "cols": [
+   "DIVISION_ID",
+   "DEPT_ID",
+   "DEPT_ID40",
+   "END_CUSTOMER",
+   "END_CUSTOMER40",
+   "SCM_SITE_ID40",
+   "SCM_SITE_ID81",
+   "SCM_SITE_ID82",
+   "PROJECT_CODE",
+   "PROJECT_CODE82",
+   "PROJECT_NAME",
+   "BIZ_TYPE_NAME81",
+   "ITEM_ID40",
+   "ITEM_ID",
+   "ITEM_NAME",
+   "INCOTERMS",
+   "FCST_TYPE",
+   "PLANT_SITE_ID",
+   "CELL_PROD_SITE",
+   "CURRENCY",
+   "VERSION_SORT",
+   "VERSION_NO",
+   "MEASURE",
+   "SORT_ORDER_NO",
+   "EDIT_YN",
+   "M_202609",
+   "Y_2026",
+   "Q_2026_3",
+   "M_202610",
+   "Q_2026_4",
+   "M_202611"
+  ],
+  "hash_ordered": "d00758ea8dcd47843b511a020c282fdaf7b559a42e52bf9fe9d758983681bdcf",
+  "hash_sorted": "5ade51dbec728118256f32570f08bcc3b53b29106489d56b86903cf57f8c2308",
+  "GT_DM51_SCM_MST_SITE_ITEM": {
+   "cnt": 23193,
+   "h1": "50065711261715",
+   "h2": "49533110491244",
+   "distinct": 23193
+  },
+  "GT_DM22_DM_MST_ITEM_SINGLE_V": {
+   "cnt": 169928,
+   "h1": "364877879706630",
+   "h2": "365677093749770",
+   "distinct": 169928
+  },
+  "GT_DM51_RAW_DATA": {
+   "cnt": 95543,
+   "h1": "205333231639491",
+   "h2": "204971145392021",
+   "distinct": 76217
+  },
+  "GT_DM51_SCM_CITY": {
+   "cnt": 1283852,
+   "h1": "2925025338751018",
+   "h2": "2716039558719755",
+   "distinct": 647
+  },
+  "GT_DM22_SELECT_MEASURE": {
+   "cnt": 9,
+   "h1": "21775965104",
+   "h2": "16387578520",
+   "distinct": 9
+  },
+  "GT_DM22_V_VERSION_NO": {
+   "cnt": 1,
+   "h1": "1907652618",
+   "h2": "1396702932",
+   "distinct": 1
+  },
+  "SINGLE_V_CONSUMED": {
+   "cnt": 340,
+   "h1": "762619648029",
+   "h2": "758609105967",
+   "distinct": 340
+  }
+ }
+}

@@ -7,8 +7,8 @@ import { Button, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 
-import { ItemByDivisionModal, ProjectByDivisionModal } from '../../../components';
-import { DIVISION_NO_PROJECT } from '../customer-model-mapping.constants';
+import { CascadeFields, ItemByDivisionModal, ProjectByDivisionModal } from '../../../components';
+import { DIVISION_NO_PROJECT, SEARCH_CASCADE_COMBO_ID } from '../customer-model-mapping.constants';
 import { useCustomerModelMappingStore } from '../useCustomerModelMappingStore';
 
 export const CustomerModelMappingForm = () => {
@@ -25,15 +25,9 @@ export const CustomerModelMappingForm = () => {
   const [openPrjByDivisionModal, setOpenPrjByDivisionModal] = useState<boolean>(false);
   const [openModelByDivisionModal, setOpenModelByDivisionModal] = useState<boolean>(false);
 
-  const [myDivision, teambyDivision, endCustomer, salesSite, yesOrNo] = useTabComboQueries({
-    filters: [
-      'MyDivision',
-      { comboId: 'TeambyDivision', divisionId: `'${searchParams.divisionId}'` },
-      'EndCustomer',
-      'SalesSite',
-      'YesOrNo',
-    ],
-  });
+  // Div / Team / End Customer / Sales Site 콤보는 CascadeFields 가 조인 콤보 1건으로 직접 조회한다.
+  // 여기서는 이 화면에만 있는 Active 콤보만 받는다.
+  const [yesOrNo] = useTabComboQueries({ filters: ['YesOrNo'] });
 
   return (
     <>
@@ -43,126 +37,40 @@ export const CustomerModelMappingForm = () => {
         isHidden={!isOpenSearchArea}
         conditions={
           <>
-            <Grid size={3}>
-              <FormItem
-                label={t('LBL00001', '_Div.')}
-                labelAlign='right'
-                className={commonStyles.formItem}
-                render={() => (
-                  <CustomDropdown
-                    value={searchParams.divisionId}
-                    options={
-                      myDivision?.map(item => ({ label: item.NAME, value: item.CODE })) ?? []
-                    }
-                    onChange={(_, option) => {
-                      // Project 코드는 Division 소속 값이라 Division 이 바뀌면 초기화한다
-                      //   (40 으로 바꿀 때 잠긴 칸에 이전 값이 남아 조회에 실려 가는 것도 함께 막힌다).
-                      setSearchParams({
-                        divisionId: option,
-                        deptId: 'ALL',
-                        endCustomer: 'ALL',
-                        salesSite: 'ALL',
-                        projectCode: '',
-                      });
-                    }}
-                  />
-                )}
-              />
-            </Grid>
-            <Grid size={3}>
-              <FormItem
-                label={t('LBL00044', '_Team')}
-                labelAlign='right'
-                className={commonStyles.formItem}
-                render={() => (
-                  <CustomDropdown
-                    value={searchParams.deptId}
-                    allOption
-                    useClearIcon
-                    multiple
-                    options={[
-                      ...new Map(
-                        (teambyDivision ?? [])
-                          .filter(
-                            item =>
-                              !item.DIVISION_ID || item.DIVISION_ID === searchParams.divisionId
-                          )
-                          .map(item => [`${item.DIVISION_ID}|${item.CODE}`, item])
-                      ).values(),
-                    ].map(item => ({ label: item.NAME, value: item.CODE }))}
-                    onChange={(_, option) => {
-                      setSearchParams({
-                        deptId: option,
-                        endCustomer: 'ALL',
-                        salesSite: 'ALL',
-                      });
-                    }}
-                  />
-                )}
-              />
-            </Grid>
-            <Grid size={3}>
-              <FormItem
-                label={t('LBL00080', '_End Customer')}
-                labelAlign='right'
-                className={commonStyles.formItem}
-                render={() => (
-                  <CustomDropdown
-                    value={searchParams.endCustomer}
-                    multiple
-                    allOption
-                    useClearIcon
-                    options={
-                      [
-                        ...new Map(
-                          endCustomer
-                            ?.filter(
-                              item =>
-                                item.DIVISION_ID === searchParams.divisionId &&
-                                (searchParams.deptId === 'ALL' ||
-                                  searchParams.deptId.split(',').includes(item.DEPT_ID))
-                            )
-                            .map(item => [`${item.DIVISION_ID}|${item.CODE}`, item])
-                        ).values(),
-                      ].map(item => ({ label: item.NAME, value: item.CODE })) ?? []
-                    }
-                    onChange={(_, options) => {
-                      setSearchParams({ endCustomer: options });
-                    }}
-                  />
-                )}
-              />
-            </Grid>
-            <Grid size={3}>
-              <FormItem
-                label={t('LBL00011', '_Sales Site')}
-                labelAlign='right'
-                className={commonStyles.formItem}
-                render={() => (
-                  <CustomDropdown
-                    value={searchParams.salesSite}
-                    multiple
-                    allOption
-                    useClearIcon
-                    options={[
-                      ...new Map(
-                        (salesSite ?? [])
-                          .filter(
-                            item =>
-                              item.DIVISION_ID === searchParams.divisionId &&
-                              (searchParams.deptId === 'ALL' ||
-                                searchParams.deptId.split(',').includes(item.DEPT_ID))
-                          )
-                          .map(item => [`${item.DIVISION_ID}|${item.CODE}`, item])
-                      ).values(),
-                    ].map(item => ({ label: item.NAME, value: item.CODE }))}
-                    onChange={(_, options) => {
-                      setSearchParams({ salesSite: options });
-                    }}
-                  />
-                )}
-              />
-            </Grid>
+            {/* Div - Team - End Customer - Sales Site 는 조인 콤보 1건(CascadeFields)에서 뽑는다.
+                단계 옵션은 상위 선택으로 좁힌 행에서 나오고, 하위 값 초기화도 컴포넌트가 한다.
+                여기서는 이 화면 고유 항목(Project / Model / Customer PJT / Customer Model / Active)만 얹는다. */}
+            <CascadeFields
+              comboId={SEARCH_CASCADE_COMBO_ID}
+              gridSize={3}
+              // 배열 순서가 곧 cascade 순서다. field 는 스토어 필드명 — value 로 넘긴 searchParams 의
+              // 키와 대조돼 오타가 컴파일에서 잡힌다.
+              levels={[
+                { key: 'division', field: 'divisionId' },
+                { key: 'team', field: 'deptId' },
+                { key: 'endCustomer', field: 'endCustomer' },
+                { key: 'salesSite', field: 'salesSite' },
+              ]}
+              value={searchParams}
+              onChange={(next, changed) => {
+                // Division / Team 변경은 화면 고유 조회조건까지 전부 초기화한다 — 종전 인라인 동작 그대로.
+                // Project 코드는 Division 소속 값이라 Division 이 바뀌면 반드시 지운다
+                //   (40 으로 바꿀 때 잠긴 칸에 이전 값이 남아 조회에 실려 가는 것도 함께 막힌다).
+                // End Customer / Sales Site 는 cascade 하위만 정리되면 되므로 next 만 반영한다.
+                if (changed === 'division' || changed === 'team') {
+                  setSearchParams({
+                    ...next,
+                    projectCode: '',
+                    itemId: '',
+                    customerPJT: '',
+                    customerModel: '',
+                    activeFlag: 'Y',
+                  });
+                  return;
+                }
+                setSearchParams(next);
+              }}
+            />
             <Grid size={3}>
               <FormItem
                 label={t('LBL00617', '_Project')}

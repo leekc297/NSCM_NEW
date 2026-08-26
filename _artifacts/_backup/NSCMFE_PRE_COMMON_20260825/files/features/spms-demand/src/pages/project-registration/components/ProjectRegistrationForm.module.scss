@@ -1,0 +1,69 @@
+// 등록완료일 Period 필드 — sales-plan SalesPlanForm.module.scss 와 동일한 처방(2026-08-07 기준):
+// DatePickerCalendar(MUI 내부) 높이를 조회조건 표준(36px)에 맞추고 시작/종료 두 달력을 좁게 배치한다.
+.datePickerFix {
+  width: 100%;
+  height: 36px;
+  display: flex;
+  align-items: center;
+
+  :global {
+    [class*='MuiBox-root'],
+    [class*='MuiFormControl-root'],
+    [class*='MuiTextField-root'],
+    [class*='MuiOutlinedInput-root'],
+    [class*='MuiInputBase-root'] {
+      height: 36px !important;
+      min-height: 36px !important;
+      box-sizing: border-box;
+    }
+
+    [class*='MuiInputBase-input'],
+    input {
+      box-sizing: border-box;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+    }
+  }
+}
+
+.periodSplit {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  width: 100%;
+
+  .datePickerFix {
+    flex: 0 0 auto;
+    width: 120px;
+    min-width: 0;
+  }
+}
+
+.periodSep {
+  flex: 0 0 auto;
+  color: var(--gray-400, #98a2b3);
+  user-select: none;
+}
+
+// commonStyles.formItem(@foundation/styles/common-styles.module.scss 의 `body .formItem`)이
+// HD/FHD 구간별 라벨 폭을 50px/140px 로 고정 강제한다 — 선택자 특이도(0,1,1)가 FormItem 자체의
+// labelSize prop(인라인 style)보다 높아서 labelSize 를 바꿔도 반영되지 않는다.
+// 나의 권한/등록 상태/등록 완료일 3개 필드만 라벨을 조금 더 넓게(=입력창은 좁게) 쓰기 위해
+// 같은 요소에 이 클래스를 같이 얹는다 — 선택자를 두 번 반복(.wideLabel.wideLabel)해 특이도(0,2,0)를
+// body .formItem(0,1,1) 보다 확실히 높여, CSS 삽입 순서에 기대지 않고 항상 이기게 한다.
+.wideLabel.wideLabel {
+  @media (min-width: 1366px) {
+    grid-template-columns: 72px auto !important;
+    & > div:first-of-type {
+      width: 72px !important;
+    }
+  }
+
+  @media (min-width: 1920px) {
+    grid-template-columns: 172px auto !important;
+    & > div:first-of-type {
+      width: 172px !important;
+    }
+  }
+}

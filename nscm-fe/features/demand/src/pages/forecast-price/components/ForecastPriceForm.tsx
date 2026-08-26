@@ -1,6 +1,7 @@
 import {
   BizTypeField,
   DivisionField,
+  EndCustomerField,
   ItemField,
   OwnerField,
   PeriodField,
@@ -17,6 +18,7 @@ import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { Checkbox, FormItem } from '@shared/lges';
 import { Grid, Stack } from '@shared/mui';
+import { useMessageStore } from '@shared/stores';
 
 import { BUCKET_FALLBACK } from '../forecast-price.constants';
 import { useForecastPriceStore } from '../useForecastPriceStore';
@@ -43,17 +45,42 @@ export const ForecastPriceForm = ({
 
   const searchParams = useForecastPriceStore(state => state.searchParams);
   const setSearchParams = useForecastPriceStore(state => state.setSearchParams);
+  const resetSearchParams = useForecastPriceStore(state => state.resetSearchParams);
   const isOpenSearchArea = useForecastPriceStore(state => state.isOpenSearchArea);
+
+  // [RESET 2026-08-26] AS-IS 공통 [Reset Condition](F10) 파리티 — MSG00009 confirm 후 조회조건
+  //   전체 초기화, 완료 안내 MSG00011 (둘 다 기존 메시지 재사용 — 신규 채번 불필요 실측).
+  //   공용 SearchArea 의 onResetCondition 슬롯 첫 적용 화면.
+  const handleResetCondition = async () => {
+    const setAlert = useMessageStore.getState().setAlert;
+    const confirmed = await setAlert({
+      type: 'confirm',
+      content: t('MSG00009', '_저장된 검색조건을 초기화 하겠습니까?'),
+    });
+    if (!confirmed) return;
+    resetSearchParams();
+    void setAlert({ type: 'alert', content: t('MSG00011', '_검색조건이 초기화 되었습니다.') });
+  };
 
   // Bucket 옵션 = CMBO 'BucketType' 동적 fetch (DMF0003_GET_BUCKET_TYPE_CODE 1:1 — CMBO 등록명).
   //   CODE 풀워드(DAILY/WEEKLY/MONTHLY) → 첫 글자 enum 매핑. 빈 응답 시 정적 fallback 3종.
-  // ⭐ End Customer 콤보 = division + 선택 팀(DEPT_ID) cascade 필터용 (MetalLinkPriceForm 동일 패턴).
-  //   catalog EndCustomerField 는 division 필터만 지원 → 인라인 CustomDropdown 으로 팀 cascade 처리.
-  // ⭐ Sender Code 콤보 = CMBO 'SenderCode' (DMF0003 동일 등록명 — lookup EDI_SENDER_CODE,
+  // 2026-08-22 콤보 통일 — End Customer 는 카탈로그 EndCustomerField 가 직접 조회한다
+  //   (콤보 'EndCustomer'). 카탈로그가 cascade prop 을 지원하면서 인라인 CustomDropdown 으로
+  //   팀(DEPT_ID) 필터를 직접 짠던 종전 방식은 필요 없어졌다.
+  // Sender Code 콤보 = CMBO 'SenderCode' (DMF0003 동일 등록명 — lookup EDI_SENDER_CODE,
   //   DIVISION_ID 컬럼 반환 → 클라 필터). 81 계열 전용 enable (AS-IS clbEDISender 파리티).
-  const [bucketTypeCombo, endCustomerCombo, senderCodeCombo] = useTabComboQueries({
-    filters: ['BucketType', 'EndCustomer', 'SenderCode'],
+  const [bucketTypeCombo, senderCodeCombo] = useTabComboQueries({
+    filters: ['BucketType', 'SenderCode'],
   });
+
+  // ⭐ [2026-08-22] `'ALL'` 센티널 정규화 — 하위 콤보 판정 전에 반드시 걸러낸다.
+  //   `CustomDropdown` 은 선택을 **모두 지우면** `'ALL'` 을 내보낸다(`CustomDropdown.tsx:182-184`
+  //   `if (value.length === 0) onChange(event, 'ALL')`). 그대로 두면 `deptIds = ['ALL']` 이 되어
+  //   `length === 0` 판정을 빠져나가고 어떤 `DEPT_ID` 와도 안 맞아 **End Customer 목록이 통째로 빈다**
+  //   (사용자 신고: "TEAM 삭제 후 END CUSTOMER 가 보이지 않음").
+  //   정본 = DMF0003 `MktFcstForm.tsx:87` 의 동일 정규화 1:1.
+  const deptIds = searchParams.deptIds.filter(v => v !== 'ALL');
+  const endCustomers = searchParams.endCustomers.filter(v => v !== 'ALL');
   const bucketOptions =
     bucketTypeCombo && bucketTypeCombo.length > 0
       ? bucketTypeCombo
@@ -65,15 +92,12 @@ export const ForecastPriceForm = ({
           .filter(o => ['D', 'W', 'M'].includes(o.value))
       : BUCKET_FALLBACK.map(b => ({ label: t(b.lblKey, b.label), value: b.value }));
 
-  // 단일 select dropdown 값 (string[] ↔ 단일 string) — MktFcstForm 동일 헬퍼.
-  const firstOr = (arr: string[]): string => arr[0] ?? '';
-  const toArr = (v: string): string[] => (v ? [v] : []);
-
   return (
     <SearchArea
       isHidden={!isOpenSearchArea}
       searchButtonLabel={t('LBL00112', '_Search')}
       onSearch={onSubmit}
+      onResetCondition={() => void handleResetCondition()}
       conditions={
         <>
           {/* Row 1 — Division* / Team / End Customer / Sales Site (DMF0003 파리티, Figma 1단 4필드) */}
@@ -94,67 +118,68 @@ export const ForecastPriceForm = ({
                 projectCodes: [],
                 owners: [],
                 senderCodes: [],
+                bucketType: 'W',
+                versionType: 'Current',
+                sumYn: false,
+                qtyYn: false,
               })
             }
           />
+          {/* ⭐ [2026-08-20 AS-IS 정합 — 사용자 확정] Team = 'UserTeamByDivision' (AS-IS DMF0082.cs L347
+              SetChangeControl('UserTeamByDivision') 의 BigFilter 'TeambyDivision' 결과셋은 E20260211-001049 로
+              비40 분기가 주석 — owner 1토큰 방식 전 division 통일 = 본 CMBO 1:1. 기본 'TeambyDivision' CMBO 는
+              UP_FX 판(2분기 생존)이라 조회조건 경로와 다름 — 주석 분기 부활 금지, hook #138). */}
           <TeamField
             gridSize={3}
             division={searchParams.divisionId}
             value={searchParams.deptIds}
-            onChange={v => setSearchParams({ deptIds: v, endCustomers: [], salesSites: [] })}
+            onChange={v =>
+              setSearchParams({
+                deptIds: v,
+                endCustomers: [],
+                salesSites: [],
+                bizTypes: [],
+                itemIds: [],
+                plantSiteIds: [],
+                projectCodes: [],
+                owners: [],
+                senderCodes: [],
+                bucketType: 'W',
+                versionType: 'Current',
+                sumYn: false,
+                qtyYn: false,
+              })
+            }
           />
-          {/* End Customer — division + 선택 팀(DEPT_ID) cascade 필터 (MetalLinkPriceForm L118~143 1:1).
-              팀 변경 시 옵션 재조회 + 하위(Sales Site) clear. */}
-          <Grid size={3}>
-            <FormItem
-              label={t('LBL00080', '_End Customer')}
-              labelAlign='right'
-              render={() => (
-                <CustomDropdown
-                  multiple
-                  allOption
-                  useClearIcon
-                  limitTags={1}
-                  value={searchParams.endCustomers.join(',')}
-                  options={
-                    endCustomerCombo
-                      ?.filter(
-                        (item: ComboResponse) =>
-                          item.DIVISION_ID === searchParams.divisionId &&
-                          (searchParams.deptIds.length === 0 ||
-                            !item.DEPT_ID ||
-                            searchParams.deptIds.includes(item.DEPT_ID))
-                      )
-                      ?.map((item: ComboResponse) => ({ label: item.NAME, value: item.CODE })) ?? []
-                  }
-                  onChange={(_, selected) =>
-                    setSearchParams({
-                      endCustomers: String(selected ?? '')
-                        .split(',')
-                        .filter(Boolean),
-                      salesSites: [],
-                    })
-                  }
-                />
-              )}
-            />
-          </Grid>
-          {/* ⭐ [CASCADE 2026-08-07] Sales Site = DMF0003 방식 이식 (MktFcstForm L70~86 1:1) —
-              Div40 + Team/Customer 미선택(=Division 변경 직후) = BigFilter 'ScmSitebyEndCustomer40'(전체 40) /
-              그 외 = 'UserSiteByEndCustomer'(div/dept/endCustomer 서버 바인드 — 81/82 고객 종속 + 권한 D + W 제외 + AS 포함).
-              기존 'SalesSite'(division 클라 필터 단독)는 81/82 고객 cascade 부재 — DMF0003 파리티로 교체. */}
+          {/* cascade = division-team-endCustomer. division 은 카탈로그 필드가 항상 먼저 걸므로
+              여기엔 Team(DEPT_ID) 단계만 넘긴다.
+              필수: strict. 'EndCustomer' 콤보는 DEPT_ID 공란 행이 대다수라(SITE_ITEM LEFT OUTER
+                JOIN) 관대 매칭이면 Team 을 골라도 목록이 그대로 보인다. 종전 인라인 필터는
+                관대(`!item.DEPT_ID ||`)라 Team 이 목록을 못 좁혔다 — 통일 규칙대로 엄격으로 바꿈.
+              팀 변경 시 하위(Sales Site) clear 는 TeamField onChange 가 이미 맡는다. */}
+          <EndCustomerField
+            gridSize={3}
+            division={searchParams.divisionId}
+            cascade={{ DEPT_ID: { values: searchParams.deptIds, strict: true } }}
+            debugLabel='DMF0082 forecast-price / End Customer'
+            value={searchParams.endCustomers}
+            onChange={v => setSearchParams({ endCustomers: v, salesSites: [] })}
+          />
+          {/* 2026-08-22 콤보 통일 — 'SalesSite' 단일. 종전 division/선택여부에 따른
+              'ScmSitebyEndCustomer40' · 'UserSiteByEndCustomer' 동적 스왑은 폐지했다.
+              cascade = division-team-endCustomer-salesSite ('SalesSite' 콤보 반환 컬럼 기준).
+              End Customer 는 이 콤보의 PROJECT_CODE 자리로 본다 — 콤보가 END_CUSTOMER 컬럼을
+                내려주지 않기 때문이다. DMF0014 / DMF0044 와 동일한 매핑이다.
+              DEPT_ID 는 엄격 — 종전 서버 바인드 @deptId 가 하던 축소를 여기서 대신한다.
+              PROJECT_CODE 는 관대 — NULL 인 행이 정상적으로 존재해 자르면 목록이 빈다. */}
           <SalesSiteField
             gridSize={3}
             division={searchParams.divisionId}
-            comboId={
-              searchParams.divisionId === '40' &&
-              searchParams.deptIds.length === 0 &&
-              searchParams.endCustomers.length === 0
-                ? 'ScmSitebyEndCustomer40'
-                : 'UserSiteByEndCustomer'
-            }
-            deptId={searchParams.deptIds.join(',')}
-            endCustomer={searchParams.endCustomers.join(',')}
+            cascade={{
+              DEPT_ID: { values: searchParams.deptIds, strict: true },
+              PROJECT_CODE: searchParams.endCustomers,
+            }}
+            debugLabel='DMF0082 forecast-price / Sales Site'
             value={searchParams.salesSites}
             onChange={v => setSearchParams({ salesSites: v })}
           />
@@ -171,12 +196,15 @@ export const ForecastPriceForm = ({
             <FormItem
               label={t('LBL00090', '_Sender Code')}
               labelAlign='right'
+              className={commonStyles.formItem}
               render={() => (
                 <CustomDropdown
+                  multiple
                   allOption
                   useClearIcon
+                  limitTags={1}
                   disabled={!searchParams.divisionId.startsWith('81')}
-                  value={firstOr(searchParams.senderCodes)}
+                  value={searchParams.senderCodes.join(',')}
                   options={
                     senderCodeCombo
                       ?.filter(
@@ -185,7 +213,13 @@ export const ForecastPriceForm = ({
                       )
                       .map((item: ComboResponse) => ({ label: item.NAME, value: item.CODE })) ?? []
                   }
-                  onChange={(_, option) => setSearchParams({ senderCodes: toArr(option) })}
+                  onChange={(_, selected) =>
+                    setSearchParams({
+                      senderCodes: String(selected ?? '')
+                        .split(',')
+                        .filter(Boolean),
+                    })
+                  }
                 />
               )}
             />
@@ -200,6 +234,7 @@ export const ForecastPriceForm = ({
             <FormItem
               label={t('LBL00710', '_bucket')}
               labelAlign='right'
+              className={commonStyles.formItem}
               render={() => (
                 <CustomDropdown
                   isInput={false}
@@ -243,8 +278,8 @@ export const ForecastPriceForm = ({
             value={searchParams.itemIds}
             onChange={v => setSearchParams({ itemIds: v })}
           />
-          {/* ⭐ Plant Site — 표준 카탈로그 PlantSiteField (PlantSitebyEndCustomer, 81 계열 전용 enable,
-              Division+EndCustomer 서버 바인드). 40/82 비활성. (MktFcstForm 1:1) */}
+          {/* Plant Site — 표준 카탈로그 PlantSiteField (PlantSitebyEndCustomer, 81 계열 전용 enable,
+              Division+EndCustomer 클라이언트 cascade). 40/82 비활성. (MktFcstForm 1:1) */}
           <PlantSiteField
             gridSize={3}
             value={searchParams.plantSiteIds}

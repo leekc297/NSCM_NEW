@@ -2,7 +2,7 @@ import type { FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useRef, useState } from 'react';
 
-import type { HotkeyConfig, PageProps } from '@foundation/models';
+import type { ComboResponse, HotkeyConfig, PageProps } from '@foundation/models';
 import { GridAction } from '@foundation/utils';
 import { MainTitle, SubTitle, TabItem, TabWrapper } from '@shared/components';
 import { useProcMutation, useSaveWithValidation, useTabProcQuery } from '@shared/hooks';
@@ -17,6 +17,7 @@ import type { RESPONSE_SET } from './sales-site.constants';
 import { MENU_ID, SHEET_INDEX, SHEETS } from './sales-site.constants';
 import styles from './SalesSite.module.scss';
 import { useSalesSiteStore } from './useSalesSiteStore';
+import { resolveComboCodeByDivision } from './utils/sales-site.util';
 
 export const SalesSite = ({ tabId, title }: PageProps<MENU_ID>) => {
   const { t } = useTranslation();
@@ -117,13 +118,32 @@ export const SalesSite = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   const handleDelete = () => {
     if (!gridRefs[activeTab].current) return;
-    GridAction.removeRow(gridRefs[activeTab].current, true);
+    GridAction.removeRow(gridRefs[activeTab].current);
   };
 
   const handleSave = () => {
     switch (activeTab) {
       case SHEET_INDEX.SITE: {
-        const saveData = siteData?.salesSite?.filter?.(item => item.CRUD_TYPE) ?? [];
+        const grid = gridRefs[SHEET_INDEX.SITE].current;
+        const endCustomerRows = (grid?.columns.getColumn('END_CUSTOMER')?.dataMap?.collectionView
+          .items ?? []) as ComboResponse[];
+        const soldToCustomerRows = (grid?.columns.getColumn('SOLDTO_CUSTOMER')?.dataMap
+          ?.collectionView.items ?? []) as ComboResponse[];
+        const saveData = (siteData?.salesSite?.filter?.(item => item.CRUD_TYPE) ?? []).map(
+          item => ({
+            ...item,
+            END_CUSTOMER: resolveComboCodeByDivision(
+              endCustomerRows,
+              String(item.DIVISION_ID ?? ''),
+              String(item.END_CUSTOMER ?? '')
+            ),
+            SOLDTO_CUSTOMER: resolveComboCodeByDivision(
+              soldToCustomerRows,
+              String(item.DIVISION_ID ?? ''),
+              String(item.SOLDTO_CUSTOMER ?? '')
+            ),
+          })
+        );
         const staticColumn = staticColumns.salesSite;
         saveWithValidation(saveData, staticColumn, mutateSite);
         break;
@@ -191,14 +211,12 @@ export const SalesSite = ({ tabId, title }: PageProps<MENU_ID>) => {
           Detail 체크 해제 시 아래 Panel/Separator 가 통째로 빠져 상단이 100% 를 차지한다. */}
       <PanelGroup className={styles.tableWrapper} orientation='vertical'>
         <Panel defaultSize={62.5} minSize={20}>
-          <div className={styles.upperGrid}>
-            <SalesSiteGrid
-              gridRef={gridRefs[SHEET_INDEX.SITE]}
-              gridFilterRef={gridFilterRefs[SHEET_INDEX.SITE]}
-              data={siteData?.salesSite ?? []}
-              setActiveTab={setActiveTab}
-            />
-          </div>
+          <SalesSiteGrid
+            gridRef={gridRefs[SHEET_INDEX.SITE]}
+            gridFilterRef={gridFilterRefs[SHEET_INDEX.SITE]}
+            data={siteData?.salesSite ?? []}
+            setActiveTab={setActiveTab}
+          />
         </Panel>
 
         {openDetailGrid && <PanelSeparator className={styles.splitBar} />}

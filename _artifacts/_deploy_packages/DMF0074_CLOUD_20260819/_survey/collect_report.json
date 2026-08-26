@@ -1,0 +1,49 @@
+{
+  "meta_rows": {
+    "GTT": 17,
+    "01_PKG_DMF0074_SPEC.sql": 51,
+    "02_PKG_DMF0074_BODY.sql": 3975,
+    "SCM_ADM_MNU_M": 1,
+    "SCM_ADM_API_M": 8,
+    "SCM_ADM_PROC_M": 24,
+    "SCM_ADM_MNU_BTN_MPG_M": 9,
+    "SCM_ADM_USER_GR_MNU_MPG_M": 3,
+    "SCM_ADM_USER_GR_MNU_BTN_MPG_M": 24,
+    "SCM_ADM_EXCEL_COLUMNS": 2,
+    "SCM_MST_SHEET_COLUMNS": 58
+  },
+  "gtt": [
+    "GT_DM74_TEMP_MST_ITEM",
+    "GT_DM74_TEMP_MST_ITEM_ENERGY",
+    "GT_DM74_TEMP_SP_ITEM",
+    "GT_DM74_TEMP_VERSION_NO",
+    "GT_DM74_TMP_APPLY_PRICE_TYPE",
+    "GT_DM74_TMP_CONTRACT_UNIT",
+    "GT_DM74_TMP_EXCEL_UPLOAD",
+    "GT_DM74_TMP_EXCEL_UPLOAD_FINAL",
+    "GT_DM74_TMP_EXCEL_UPLOAD_ITEM",
+    "GT_DM74_TMP_EXCEL_UPLOAD_RAW",
+    "GT_DM74_TMP_FROM_PERIOD",
+    "GT_DM74_TMP_METAL_APPLY",
+    "GT_DM74_TMP_METAL_LINK_PRICE",
+    "GT_DM74_TMP_METAL_REQR",
+    "GT_DM74_TMP_NOTUSE_CODE",
+    "GT_DM74_TMP_SEARCHED_METAL_LINK_PRICE",
+    "GT_DM74_TMP_TO_PERIOD"
+  ],
+  "fe_files": [
+    "metal-link-price/MetalLinkPrice.tsx",
+    "metal-link-price/__asis-mapping__.md",
+    "metal-link-price/components/MetalLinkPriceForm.module.scss",
+    "metal-link-price/components/MetalLinkPriceForm.tsx",
+    "metal-link-price/components/MetalLinkPriceGrid.tsx",
+    "metal-link-price/components/modals/MetalLinkTemplateModal.module.scss",
+    "metal-link-price/components/modals/MetalLinkTemplateModal.tsx",
+    "metal-link-price/components/modals/MetalLinkVersionModal.module.scss",
+    "metal-link-price/components/modals/MetalLinkVersionModal.tsx",
+    "metal-link-price/index.ts",
+    "metal-link-price/metal-link-price.constants.ts",
+    "metal-link-price/metal-link-price.types.ts",
+    "metal-link-price/useMetalLinkPriceStore.ts"
+  ]
+}

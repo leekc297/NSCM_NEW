@@ -104,6 +104,14 @@ export class CustomMergeManager<T extends WijmoRowItem = WijmoRowItem> extends M
     this.bindInvalidateEvents();
   }
 
+  // 빈 값 셀의 병합 허용 여부 — 기본 금지(_getCellMergedRange 빈 셀 가드 참조).
+  //   AS-IS 파리티로 "값이 없어도 같은 키 조합 안에서는 한 칸"이어야 하는 attribute 컬럼
+  //   (예: DMF0082 SENDER_NAME)은 서브클래스가 컬럼 단위로 허용한다.
+  //   Insert 행(CRUD_TYPE='I')은 이 허용과 무관하게 병합에서 계속 제외된다.
+  protected allowEmptyCellMerge(_panel: GridPanel, _row: number, _col: number): boolean {
+    return false;
+  }
+
   private _getMergeKey(panel: GridPanel, row: number, col: number): string {
     if (row < 0) return '';
 
@@ -194,7 +202,13 @@ export class CustomMergeManager<T extends WijmoRowItem = WijmoRowItem> extends M
     if (![AllowMerging.All, AllowMerging.Cells].includes(panel.grid.allowMerging)) return null;
     // 값이 빈 셀은 병합하지 않는다 — 빈칸끼리 한 덩어리가 되면 실제 데이터 그룹처럼 보인다.
     //   컬럼 헤더 병합도 같은 규칙이다(_getColumnHeaderMergedRange).
-    if (isEmptyCellValue(panel.getCellData(currentRow, currentCol, false))) return null;
+    //   단, 화면이 allowEmptyCellMerge 로 허용한 컬럼은 예외 — 머지키가 좌측 전 컬럼 누적이라
+    //   허용해도 같은 키 조합 블록(예: measure 분할 행) 안에서만 병합된다.
+    if (
+      isEmptyCellValue(panel.getCellData(currentRow, currentCol, false)) &&
+      !this.allowEmptyCellMerge(panel, currentRow, currentCol)
+    )
+      return null;
 
     const rng = new CellRange(currentRow, currentCol);
     const item = panel.grid.collectionView.items[currentRow] as WijmoRowItem;

@@ -1,0 +1,209 @@
+{
+  "axis": {
+    "GTT(DDL)": 18,
+    "GTT INDEX": 0,
+    "SCM_ADM_MNU_M": 1,
+    "SCM_ADM_PROGRAM": 1,
+    "SCM_ADM_API_M": 28,
+    "SCM_ADM_MNU_BTN_MPG_M": 29,
+    "SCM_ADM_USER_GR_MNU_MPG_M": 3,
+    "SCM_ADM_USER_GR_MNU_BTN_MPG_M": 77,
+    "SCM_ADM_CMBO_SQL_M": 23,
+    "SCM_MST_SHEET_COLUMNS": 114,
+    "SCM_MST_SHEET_MEASURE": 21,
+    "SCM_ADM_MSG_M": 102,
+    "SCM_ADM_PROC_M (§1 본화면)": 151,
+    "SCM_ADM_PROC_M (§2 공유·조건부)": 29,
+    "SCM_ADM_EXCEL_COLUMNS": 0
+  },
+  "sheets": {
+    "SCM_MST_SHEET_COLUMNS|MDF Reports": 90,
+    "SCM_MST_SHEET_COLUMNS|MDFVerpopup": 20,
+    "SCM_MST_SHEET_COLUMNS|exchangeRate": 4,
+    "SCM_MST_SHEET_MEASURE|MDF Reports": 21
+  },
+  "sheet_breakdown": {
+    "SCM_MST_SHEET_COLUMNS|MDF Reports": "DMF0044=46, DMF0049=44",
+    "SCM_MST_SHEET_COLUMNS|MDFVerpopup": "DMF0041=8, DMF0044=12",
+    "SCM_MST_SHEET_COLUMNS|exchangeRate": "DMF0044=4",
+    "SCM_MST_SHEET_MEASURE|MDF Reports": "DMF0044=18, DMF0049=3"
+  },
+  "proc_m": {
+    "PKG_DMF0044.P_DMF0044_GET_EXCHANGE_POPUP_SPREAD_TITLE": {
+      "rows": 3,
+      "args": 3
+    },
+    "PKG_DMF0044.P_DMF0044_GET_MEASURE": {
+      "rows": 5,
+      "args": 5
+    },
+    "PKG_DMF0044.P_DMF0044_GET_SALES_REPORTS_DATA": {
+      "rows": 11,
+      "args": 11
+    },
+    "PKG_DMF0044.P_DMF0044_GET_SALES_VERSION_POPUP": {
+      "rows": 9,
+      "args": 9
+    },
+    "PKG_DMF0044.P_DMF0044_GET_SCM_MST_EXCHANGE_RATE_POPUP": {
+      "rows": 8,
+      "args": 8
+    },
+    "PKG_DMF0044.P_DMF0044_GET_SCM_MST_EXCHANGE_RATE_POPUP_DATA": {
+      "rows": 8,
+      "args": 8
+    },
+    "PKG_DMF0044.P_DMF0044_GET_SPREAD_TITLE": {
+      "rows": 6,
+      "args": 6
+    },
+    "PKG_DMF0044.P_DMF0044_GET_TEXTBOX": {
+      "rows": 7,
+      "args": 7
+    },
+    "PKG_DMF0044.P_DMF0044_MOBILE_REPORT_CREATE": {
+      "rows": 6,
+      "args": 6
+    },
+    "PKG_DMF0044.P_DMF0044_SAVE_BIZ_PLAN_VERSION_COPY": {
+      "rows": 6,
+      "args": 6
+    },
+    "PKG_DMF0044.P_DMF0044_SAVE_DM_EXCHANGE_RATE_REPORT": {
+      "rows": 10,
+      "args": 10
+    },
+    "PKG_DMF0044.P_DMF0044_SAVE_SALES_PLAN_REPORT_C": {
+      "rows": 22,
+      "args": 22
+    },
+    "PKG_DMF0044.P_DMF0044_SAVE_SALES_PLAN_REPORT_C_CF": {
+      "rows": 24,
+      "args": 24
+    },
+    "PKG_DMF0044.P_DMF0044_SAVE_SALES_PLAN_VERSION_COPY": {
+      "rows": 9,
+      "args": 9
+    },
+    "PKG_DMF0044.P_DMF0044_SAVE_TEXTBOX": {
+      "rows": 17,
+      "args": 17
+    },
+    "DMF0002_GET_TITLESET_POPUP": {
+      "rows": 7,
+      "args": 7
+    },
+    "PKG_DMF0000.P_DMF0000_GET_COMMON_SPREAD_TITLE": {
+      "rows": 8,
+      "args": 8
+    },
+    "SCM0002_SET_TITLESET_POPUP": {
+      "rows": 14,
+      "args": 14
+    }
+  },
+  "gtt": [
+    {
+      "t": "GT_0044_BP_FCST_01",
+      "cols": 16,
+      "duration": "SYS$SESSION"
+    },
+    {
+      "t": "GT_0044_BP_FCST_02",
+      "cols": 25,
+      "duration": "SYS$SESSION"
+    },
+    {
+      "t": "GT_0044_RESULTS",
+      "cols": 11,
+      "duration": "SYS$SESSION"
+    },
+    {
+      "t": "GT_0044_RESULTS_MST",
+      "cols": 26,
+      "duration": "SYS$SESSION"
+    },
+    {
+      "t": "GT_0044_RESULTS_MST_C",
+      "cols": 27,
+      "duration": "SYS$SESSION"
+    },
+    {
+      "t": "GT_DMF0044_DEPT_RPT_C",
+      "cols": 11,
+      "duration": "SYS$SESSION"
+    },
+    {
+      "t": "GT_DMF0044_ITEM_SINGLE_V",
+      "cols": 9,
+      "duration": "SYS$TRANSACTION"
+    },
+    {
+      "t": "GT_DMF0_MEASURE",
+      "cols": 6,
+      "duration": "SYS$TRANSACTION"
+    },
+    {
+      "t": "GT_DMF0_PLAN_C_CATCHUP",
+      "cols": 19,
+      "duration": "SYS$TRANSACTION"
+    },
+    {
+      "t": "GT_DMF0_REPORT",
+      "cols": 30,
+      "duration": "SYS$TRANSACTION"
+    },
+    {
+      "t": "GT_DMF0_SCM_MST_SITE_ITEM",
+      "cols": 6,
+      "duration": "SYS$TRANSACTION"
+    },
+    {
+      "t": "GT_DMF0_VERSION_COPY",
+      "cols": 21,
+      "duration": "SYS$TRANSACTION"
+    },
+    {
+      "t": "GT_F044_DM_MST_ITEM_SINGLE_V",
+      "cols": 10,
+      "duration": "SYS$SESSION"
+    },
+    {
+      "t": "GT_F044_EXCHANGE_C",
+      "cols": 6,
+      "duration": "SYS$SESSION"
+    },
+    {
+      "t": "GT_F044_PJT",
+      "cols": 4,
+      "duration": "SYS$SESSION"
+    },
+    {
+      "t": "GT_F044_REPORT_C",
+      "cols": 12,
+      "duration": "SYS$SESSION"
+    },
+    {
+      "t": "GT_F044_SELECT_MEASURE",
+      "cols": 5,
+      "duration": "SYS$SESSION"
+    },
+    {
+      "t": "GT_F044_T",
+      "cols": 52,
+      "duration": "SYS$SESSION"
+    }
+  ],
+  "files": {
+    "01_DDL_GTT.sql": 430,
+    "02_DDL_GTT_INDEX.sql": 5,
+    "10_PKG_DMF0044_SPEC.sql": 82,
+    "11_PKG_DMF0044_BODY.sql": 10242,
+    "20_MENU_META_SYNC.sql": 863,
+    "21_CMBO_SYNC.sql": 195,
+    "22_SHEET_META_SYNC.sql": 296,
+    "23_MSG_LBL_MNU_SYNC.sql": 621,
+    "24_PROC_M_SYNC.sql": 1139,
+    "25_EXCEL_COLUMNS_SYNC.sql": 9
+  }
+}

@@ -1,7 +1,6 @@
 import { CellType, type FlexGrid } from '@mescius/wijmo.grid';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import _ from '@foundation/lodash';
 import { GridUtils } from '@foundation/utils';
 import { SearchArea, DataGrid, CustomDialog } from '@shared/components';
 import { useTabProcQuery } from '@shared/hooks';
@@ -79,11 +78,11 @@ export const OwnerModal = ({
       !selectedUsers.some(selected => selected.USER_ID === user.USER_ID)
   );
 
-  const handleFilterChange = _.debounce((user: string) => {
-    setModalFilters({
-      user: user,
-    });
-  }, 50);
+  // 입력값은 제어 컴포넌트로 둔다. defaultValue 는 최초 마운트 때만 반영되는데 이 모달은 modaless 라
+  //   닫아도 언마운트되지 않는다 - 다시 열 때 초기화 effect 가 state 를 비워도 입력창에는 직전
+  //   문자가 그대로 남아 있었다 (ItemByDivisionModal, OwnerByDivisionModal 과 같은 규약).
+  // 주의: debounce 금지 - 제어 입력에서 setState 를 늦추면 타이핑이 밀리거나 글자가 유실된다.
+  const handleFilterChange = (user: string) => setModalFilters({ user });
 
   const handleSelectUsers = () => {
     const selectedItems = candidateGridRef.current?.selectedItems as ResponseData<
@@ -187,7 +186,7 @@ export const OwnerModal = ({
                   render={() => (
                     <InputField
                       fullWidth
-                      defaultValue={modalFilters.user}
+                      value={modalFilters.user}
                       onChange={e => handleFilterChange(e.target.value)}
                     />
                   )}

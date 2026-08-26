@@ -141,13 +141,58 @@ export const GRID_CASCADE_FILTERS: Record<string, { rowKey: string; comboKey: st
   ],
 };
 
+// Project 셀 모달(ProjectByDivisionModal)이 한 번에 채우는 컬럼 묶음.
+//   필수: 코드만 지우고 파생 표시 컬럼을 남기면 Project 는 빈칸인데 Status/Biz Type/Owner 는
+//   이전 프로젝트 값이 남아 행이 어긋난다 — 항상 이 묶음 단위로 비운다.
+const PROJECT_CLEAR_FIELDS = [
+  'PROJECT_CODE',
+  'PROJECT_NAME',
+  'PROJECT_STATUS',
+  'BIZ_TYPE_NAME',
+  'PROJECT_OWNER',
+] as const;
+
+// Model 셀(ITEM 모달 / 'SalesPlanItemId' 콤보)이 채우는 컬럼 묶음 — 위와 같은 이유로 묶음 단위.
+export const ITEM_CLEAR_FIELDS = [
+  'ITEM_ID',
+  'ITEM_NAME',
+  'ITEM_CLASS_NAME',
+  'ITEM_TYPE',
+  'NICK_NAME',
+] as const;
+
+// Model 과 함께 입력되는 자유 텍스트 슬롯 — 81=TEXT / 40·82=TEXT4082 (sales-plan.division 참조).
+const TEXT_CLEAR_FIELDS = ['TEXT', 'TEXT4082'] as const;
+
 // 상위 콤보 값 변경 시 하위 셀 clear 체인 (AS-IS ComboSelChange 하위 키 셀 clear 1:1 —
 //   END_CUSTOMER L4646 / END_CUSTOMER40 L4682 / SCM_SITE_ID L4710. DEPT_ID 분기는 전량 주석 = no-op).
+//   2026-08-23 (사용자 요구): End Customer 변경 = Sales Site / Project / Model 전부 초기화.
+//   구: END_CUSTOMER 계열에 PROJECT_CODE 가 빠져 있어 Sales Site 는 비는데 그 아래 Project 는
+//   남아, 상위 없는 하위 값이 그대로 저장되는 상태가 됐다.
 export const GRID_CASCADE_CLEAR: Record<string, readonly string[]> = {
-  END_CUSTOMER: ['SCM_SITE_ID', 'ITEM_ID', 'TEXT', 'TEXT4082', 'ITEM_CLASS_NAME'],
-  END_CUSTOMER40: ['SCM_SITE_ID', 'ITEM_ID', 'TEXT', 'TEXT4082', 'ITEM_CLASS_NAME'],
-  SCM_SITE_ID: ['PROJECT_CODE', 'PROJECT_NAME', 'ITEM_ID', 'TEXT', 'TEXT4082', 'ITEM_CLASS_NAME'],
+  END_CUSTOMER: [
+    'SCM_SITE_ID',
+    ...PROJECT_CLEAR_FIELDS,
+    ...ITEM_CLEAR_FIELDS,
+    ...TEXT_CLEAR_FIELDS,
+  ],
+  END_CUSTOMER40: [
+    'SCM_SITE_ID',
+    ...PROJECT_CLEAR_FIELDS,
+    ...ITEM_CLEAR_FIELDS,
+    ...TEXT_CLEAR_FIELDS,
+  ],
+  SCM_SITE_ID: [...PROJECT_CLEAR_FIELDS, ...ITEM_CLEAR_FIELDS, ...TEXT_CLEAR_FIELDS],
 };
+
+// Project 셀 모달을 선택 없이 닫았을 때 비우는 컬럼 (사용자 요구 2026-08-23).
+//   닫기 = Project 미선택 확정으로 본다(기존 값이 있어도 비움). Model 은 Project 종속이라
+//   Project 가 비면 남길 근거가 없어 함께 초기화한다.
+//   TEXT/TEXT4082 는 대상이 아니다 — 팝업이 채우는 값이 아니라 사용자가 직접 친 자유 입력이다.
+export const PROJECT_POPUP_CANCEL_CLEAR: readonly string[] = [
+  ...PROJECT_CLEAR_FIELDS,
+  ...ITEM_CLEAR_FIELDS,
+];
 
 // ============================================================================
 // ⭐ Grid 편집 전용 콤보 (조회 표시 dataMap 과 별개 — 편집 진입 시 스왑, cellEditEnded 원복. hook #59 §5-G)

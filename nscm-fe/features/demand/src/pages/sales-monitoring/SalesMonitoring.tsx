@@ -1,17 +1,18 @@
 import type { FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import {
-  ColumnLayoutModal,
-  MeasureSelectModal,
-  saveTitleSet,
-  toColumnLayoutSettings,
-} from 'features/master/src/components';
+import { MeasureSelectModal } from 'features/master/src/components';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { IcGridColumnSetup, IcMeasureSelect } from '@foundation/assets';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { useQueryClient } from '@foundation/query-client';
-import { MainTitle, SubTitle } from '@shared/components';
+import {
+  ColumnLayoutModal,
+  MainTitle,
+  saveTitleSet,
+  SubTitle,
+  toColumnLayoutSettings,
+} from '@shared/components';
 import { useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
 import { useMessageStore } from '@shared/stores';
 
@@ -25,7 +26,6 @@ import {
   TITLESET_MEASURE_TYPE,
 } from './sales-monitoring.constants';
 import type { CurrentWeekInfo, SalesMonitoringRow, SpreadTitleRow } from './sales-monitoring.types';
-import styles from './SalesMonitoring.module.scss';
 import { useSalesMonitoringStore } from './useSalesMonitoringStore';
 
 // AS-IS DMF0048_SalesMonitoring (Demand > Demand Plan > Sales Monitoring / 판매 모니터링).
@@ -214,7 +214,7 @@ export const SalesMonitoring = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   최신 데이터 강제 refetch (filters 미변경이어도 서버 재호출).
   const handleSearch = () => {
     if (!validateFind()) return;
-    void setToast({ message: t('LBL00665', '_Loading...'), type: 'default', duration: 2000 });
+    // void setToast({ message: t('LBL00665', '_Loading...'), type: 'default', duration: 2000 });
     setHasSearched(true);
     setFilter();
     void queryClient.invalidateQueries({ queryKey: [MENU_ID] });
@@ -269,7 +269,7 @@ export const SalesMonitoring = ({ tabId, title }: PageProps<MENU_ID>) => {
   }, [data, mainVisibleMeasures]);
 
   return (
-    <div className={styles.container}>
+    <>
       <MainTitle
         title={title}
         menuId={MENU_ID}
@@ -396,6 +396,6 @@ export const SalesMonitoring = ({ tabId, title }: PageProps<MENU_ID>) => {
           });
         }}
       />
-    </div>
+    </>
   );
 };

@@ -74,6 +74,15 @@ interface Action {
   setSearchCondition: (p: Partial<SearchCondition>) => void;
   setFilter: () => void;
   clearFilters: () => void;
+  /**
+   * Bucket 전환.
+   *
+   * Daily 전환만 그리드 데이터를 초기화하고 동적 3단 헤더를 일자까지 펼친다
+   * (사용자 확정 2026-08-23). Weekly/Monthly 전환은 조회조건만 바꾼다 —
+   * 조회해 둔 데이터를 유지한 채 기간 컬럼 표시만 전환된다
+   * (AS-IS cboBucketType_SelectedIndexChanged — 조회 없이 D/W/M 컬럼 표시 전환).
+   */
+  setBucketType: (bucketType: BUCKET_TYPE) => void;
   setOpenSearchArea: (open?: boolean) => void;
   fetchStaticColumns: () => Promise<void>;
   fetchStaticMeasures: () => Promise<void>;
@@ -101,8 +110,12 @@ interface Action {
 
 // 기본 Period — 당월 1일 ~ +6개월 말일 (AS-IS PR_GET_DAY_RANGE p_month=6 동등 dayjs 계산.
 //   서버 dayRange(o_rc2) 도착 시 applyDayRange 가 서버값으로 교체 — 동등성 이중 방어).
-const monthStart = dayjs().startOf('month').format('YYYYMMDD');
-const sixMonthsEnd = dayjs().add(6, 'month').endOf('month').format('YYYYMMDD');
+// Div/Team 변경 시에는 리셋하지 않는다 (2026-08-20 사용자 결정 — 사용자가 지정한 기간 유지).
+const SALES_PLAN_INIT_PERIOD = {
+  start: dayjs().startOf('month').format('YYYYMMDD'),
+  end: dayjs().add(6, 'month').endOf('month').format('YYYYMMDD'),
+};
+const { start: monthStart, end: sixMonthsEnd } = SALES_PLAN_INIT_PERIOD;
 
 const yyyymmddOf = (date: Date): string =>
   `${date.getFullYear()}${String(date.getMonth() + 1).padStart(2, '0')}${String(
@@ -151,6 +164,15 @@ const initSearch: SearchCondition = {
   internalYn: false,
 };
 
+// P_DMF0021_GET_SPREAD_TITLE (4 IN — sesUserId BE주입) payload.
+//   조회(setFilter)와 버킷 전환(setBucketType)이 같은 규칙으로 만들어야 헤더 기간 구조가 갈라지지 않는다.
+const buildSpreadTitleFilter = (c: SearchCondition): ProcRequest<MENU_ID, SHEETS.SPREAD_TITLE> => ({
+  startYyyymmdd: c.startYyyymmdd,
+  endYyyymmdd: c.endYyyymmdd,
+  divisionId: c.divisionId,
+  bucket: BUCKET_WORD[c.bucketType],
+});
+
 const initState: State = {
   initialized: false,
   filters: {},
@@ -174,6 +196,8 @@ const DEFAULT_COL_WIDTH = 100;
 // ColumnLayoutModal 개인화 override — 표시/순서/폭/색을 admin 메타 위에 덧씌운다.
 //   주의: 표시 게이트는 `display` 만 건드린다 — `visible` 은 admin VISIBLE_FLAG(관리 노출)이라
 //     사용자 조작으로 덮어쓰지 않는다 (2026-07-15 정정. Grid 는 visible && display 로 필터).
+//   주의: 개인화는 비표시 컬럼(visible:false)까지 전부 담고 있어야 한다 — 표시분만 담으면
+//     아래 '미등록 = admin 기본값' 분기가 사용자가 끈 컬럼을 되살린다.
 const applyLayoutToColumns = (
   cols: RawFlexGridColumnConfig[],
   settings: ColumnLayoutSetting[]
@@ -183,8 +207,10 @@ const applyLayoutToColumns = (
     cols
       .map(c => {
         const s = byCol.get(c.colNm);
-        // 개인화 목록에 없는 컬럼 = 사용자가 비표시로 저장한 것.
-        if (!s) return { ...c, display: false };
+        // 개인화에 없는 컬럼 = 개인화 저장 이후 admin 메타에 추가된 컬럼 — 관리자 기본값
+        //   (DEFAULT_FLAG)을 그대로 따른다. 여기서 display:false 로 죽이면 기존에 컬럼 설정을
+        //   저장한 사용자에게는 신규 컬럼이 영원히 안 보인다 (2026-08-17 Text/From Site/Plant Site 결함).
+        if (!s) return c;
         return {
           ...c,
           display: s.visible,
@@ -326,15 +352,32 @@ export const useSalesPlanStore = createPersistedStoreWithTab<State & Action>(
             userDeptId, // 17 JV Planner 부서 — SalesPlanUserDept 전용 콤보에서 현재 사용자 부서 주입
           },
           // ── P_DMF0021_GET_SPREAD_TITLE (4 IN — sesUserId BE주입) ──
-          [SHEETS.SPREAD_TITLE]: {
-            startYyyymmdd: c.startYyyymmdd,
-            endYyyymmdd: c.endYyyymmdd,
-            divisionId: c.divisionId,
-            bucket: BUCKET_WORD[c.bucketType],
-          },
+          [SHEETS.SPREAD_TITLE]: buildSpreadTitleFilter(c),
         };
       });
     },
+
+    setBucketType: bucketType =>
+      set(state => {
+        if (state.searchCondition.bucketType === bucketType) return;
+        state.searchCondition = { ...state.searchCondition, bucketType };
+        // Daily 전환에서만 그리드를 초기화한다 (사용자 확정 2026-08-23).
+        //   Weekly/Monthly 전환은 종전대로 조회조건만 바꾼다 — 조회해 둔 데이터를 그대로 두고
+        //   기간 컬럼 표시 전환(SalesPlanGrid applyDynVisibility)만 일어난다.
+        if (bucketType !== BUCKET_TYPE.DAILY) return;
+        // 그리드 데이터 초기화 — MAIN filters 제거로 조회 게이트를 닫는다(rows 비움).
+        //   재조회는 Search 로만 (Division 변경·Column/Measure 설정 저장과 같은 초기화 규약).
+        delete state.filters[SHEETS.MAIN];
+        // 동적 3단 헤더는 DAILY 로 즉시 다시 그린다 — 헤더가 일자까지 펼쳐진다.
+        //   조회 게이트(hasSearched)는 그대로 두므로 SPREAD_TITLE 만 새 queryKey 로 재조회된다.
+        //   미조회 상태(SPREAD_TITLE 미보유)면 그릴 헤더 자체가 없으므로 건드리지 않는다.
+        if (state.filters[SHEETS.SPREAD_TITLE]) {
+          state.filters[SHEETS.SPREAD_TITLE] = buildSpreadTitleFilter({
+            ...initSearch,
+            ...state.searchCondition,
+          });
+        }
+      }),
     // mount 시 sessionStorage 의 이전 filters cache 무효화 — incomplete payload 재사용 회피.
     clearFilters: () =>
       set(state => {
@@ -449,22 +492,42 @@ export const useSalesPlanStore = createPersistedStoreWithTab<State & Action>(
         const rows = res.data.result?.o_rc1 ?? [];
         const orderOf = (r: Record<string, string>): number =>
           Number(r.USER_SORT_ORDER_NO ?? r.SORT_ORDER_NO ?? 0);
-        const layout = rows
-          .filter(r => String(r.USER_FLAG ?? '') === 'Y')
+        // 표시 여부 = 사용자 저장값(USER_FLAG) 우선, 없으면 관리자 기본값(DEFAULT_FLAG).
+        //   ColumnLayoutModal mapBeRow 와 동일 계약 — VISIBLE_FLAG 는 폴백으로 쓰지 않는다
+        //   (그건 관리 노출 여부라, 폴백에 쓰면 기본 미표시 컬럼까지 전부 켜진다).
+        const isShown = (r: Record<string, string>): boolean =>
+          String(r.USER_FLAG ?? r.DEFAULT_FLAG ?? 'Y')
+            .trim()
+            .toUpperCase() === 'Y';
+        const toSetting = (
+          r: Record<string, string>,
+          order: number,
+          visible: boolean
+        ): ColumnLayoutSetting => {
+          const width = Number(r.USER_COLUMN_WIDTH ?? r.COLUMN_WIDTH ?? 0);
+          return {
+            colNm: String(r.COLUMN_NAME ?? ''),
+            visible,
+            width: Number.isFinite(width) && width > 0 ? width : DEFAULT_COL_WIDTH,
+            cellColor: String(r.CELL_COLOR ?? ''),
+            textColor: String(r.TEXT_COLOR ?? ''),
+            order,
+          };
+        };
+        const shown = rows
+          .filter(isShown)
           .sort((a, b) => orderOf(a) - orderOf(b))
-          .map((r, i) => {
-            const width = Number(r.USER_COLUMN_WIDTH ?? r.COLUMN_WIDTH ?? 0);
-            return {
-              colNm: String(r.COLUMN_NAME ?? ''),
-              visible: true,
-              width: Number.isFinite(width) && width > 0 ? width : DEFAULT_COL_WIDTH,
-              cellColor: String(r.CELL_COLOR ?? ''),
-              textColor: String(r.TEXT_COLOR ?? ''),
-              order: i + 1,
-            };
-          })
+          .map((r, i) => toSetting(r, i + 1, true))
           .filter(s => s.colNm);
-        if (layout.length === 0) return null;
+        // 비표시 컬럼도 함께 보관 — applyLayoutToColumns 는 '개인화에 없는 컬럼 = admin 기본값'
+        //   이므로, 빠뜨리면 사용자가 끈 컬럼이 재조회마다 되살아난다.
+        const hidden = rows
+          .filter(r => !isShown(r))
+          .map(r => toSetting(r, Number.MAX_SAFE_INTEGER, false))
+          .filter(s => s.colNm);
+        // 표시 컬럼이 하나도 없으면 개인화 없음으로 본다 — admin 메타 그대로 두어 빈 그리드 방지.
+        if (shown.length === 0) return null;
+        const layout = [...shown, ...hidden];
         set(state => {
           state.userColumnLayout = layout;
           // 메타가 이미 도착해 있으면 소급 적용 (호출 순서 무관하게 개인화가 유실되지 않게).
@@ -487,11 +550,17 @@ export const useSalesPlanStore = createPersistedStoreWithTab<State & Action>(
     // ColumnLayoutModal OK — 표시/순서/폭/색을 grid 에 즉시 반영 (영구 저장은 titleSet SAVE 별도).
     applyColumnLayout: settings => {
       set(state => {
-        // 표시 컬럼만 보관 — fetchStaticColumns 재조회 후 재적용 기준.
-        const layout = settings
+        // fetchStaticColumns 재조회 후 재적용 기준 — 표시 컬럼은 순서대로 1..n.
+        //   비표시 컬럼도 visible:false 로 함께 보관한다(applyLayoutToColumns 는 미등록 컬럼을
+        //   admin 기본값으로 두므로, 버리면 방금 끈 컬럼이 재조회 때 되살아난다).
+        const shown = settings
           .filter(s => s.visible)
           .sort((a, b) => a.order - b.order)
           .map((s, i) => ({ ...s, order: i + 1 }));
+        const hidden = settings
+          .filter(s => !s.visible)
+          .map(s => ({ ...s, order: Number.MAX_SAFE_INTEGER }));
+        const layout = [...shown, ...hidden];
         state.userColumnLayout = layout;
         const cur = state.staticColumns;
         if (!cur || cur.length === 0) return;

@@ -1,0 +1,48 @@
+{
+  "scanned_objects": 334,
+  "hits": [
+    {
+      "object": "PR_SCP_MST_ALTER_BOM",
+      "type": "PROCEDURE",
+      "line": 510,
+      "set_column": "SCP_PLAN_YN",
+      "partition_by": "DIVISION_ID, SITE_ID, PLANT_ID, PARENT_ITEM_ID, ALT_ID ORDER BY ALT_PRIORITY",
+      "correlations": [
+        "B.CHILD_ITEM_ID = A.CHILD_ITEM_ID",
+        "B.DIVISION_ID = A.DIVISION_ID",
+        "B.PARENT_ITEM_ID = A.PARENT_ITEM_ID",
+        "B.PLANT_ID = A.PLANT_ID",
+        "B.SITE_ID = A.SITE_ID"
+      ],
+      "sub_len": 1093
+    },
+    {
+      "object": "PR_SCP_MST_MODEL_BOM_EFF_ALL",
+      "type": "PROCEDURE",
+      "line": 513,
+      "set_column": "A.CHILD_SEQ",
+      "partition_by": "COMPANY_ID, DIVISION_ID, SITE_ID, PLANT_ID, MODEL_ID, SUBSTR(SORT_ORDER, 1, LENGTH(SORT_ORDER",
+      "correlations": [
+        "B.COMPANY_ID = A.COMPANY_ID",
+        "B.CONCATENATE_ITEM = A.CONCATENATE_ITEM",
+        "B.DIVISION_ID = A.DIVISION_ID",
+        "B.EFF_START_DATE = A.EFF_START_DATE",
+        "B.MODEL_ID = A.MODEL_ID",
+        "B.PLANT_ID = A.PLANT_ID"
+      ],
+      "sub_len": 1245
+    },
+    {
+      "object": "PR_SCP_XLS_BOH",
+      "type": "PROCEDURE",
+      "line": 195,
+      "set_column": "A.ITEM_ID",
+      "partition_by": "A2.DIVISION_ID, A2.SCM_SITE_ID, A2.ITEM_ID ORDER BY C2.ITEM_ID_ASSY",
+      "correlations": [
+        "B.ITEM_ID = A.ITEM_ID",
+        "B.SCM_SITE_ID = A.SCM_SITE_ID"
+      ],
+      "sub_len": 1216
+    }
+  ]
+}

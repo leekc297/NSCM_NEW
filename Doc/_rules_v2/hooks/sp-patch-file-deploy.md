@@ -71,6 +71,33 @@ ALTER PROCEDURE SCM_MGR.<wrapper_sp_2> COMPILE;
 /
 ```
 
+### 1.4 ⭐ PKG BODY 파일 조립 3계약 (2026-08-21 신설 — DMF0035 실사고)
+
+`ALL_SOURCE` 덤프는 `CREATE OR REPLACE` 없이 **`PACKAGE BODY` 로 시작**한다. 그래서 조립 도구가
+접두를 붙이거나 잘라내는데, 이 지점에서 **파일 전체가 무력화되는 사고**가 난다.
+
+**⛔ 실사고 (2026-08-20)**: `"PACKAGE BODY"` **첫 출현 위치로 파일을 잘랐더니**, 그 첫 출현이
+**헤더 주석 안**(`-- PACKAGE BODY PKG_DMF0035 성능패치`)이었다. 결과적으로 `CREATE OR REPLACE` 가
+주석 뒤로 밀려 **주석 처리**되었고, 사용자가 실행하자 ORA-00928 / ORA-00904 / PLS-00103 이 쏟아졌다.
+→ 이건 hook #138(주석 ≠ 라이브 코드)의 **파일 조립판**이다. 문자열 탐색은 주석을 가리지 못한다.
+
+| # | 계약 | 이유 |
+|---:|---|---|
+| **C1** | 파일 **첫 실행 라인**(주석·`SET`·공백 제외 첫 줄)이 `CREATE OR REPLACE` 로 시작하는지 **조립 직후 단언** | 주석 함정을 기계로 차단 |
+| **C2** | 헤더 `SET DEFINE OFF` + `SET SQLBLANKLINES ON` 의무 | `&` 치환 사고 / PL/SQL 본문 내 빈 줄이 문장을 끊는 사고 |
+| **C3** | 절단 기준은 **문자열 첫 출현이 아니라 주석 제거 후의 첫 출현** | C1 과 같은 계보 (정본 = `strip_code_comments.py`) |
+
+```python
+# C1 단언 — 조립 도구에 의무 삽입
+first = next(l for l in text.splitlines()
+             if l.strip() and not l.strip().startswith('--')
+             and not l.strip().upper().startswith('SET '))
+assert first.upper().startswith('CREATE OR REPLACE'), f'첫 실행 라인 오류: {first[:80]}'
+```
+
+⚠ **"배포 성공 로그"를 완료 근거로 쓰지 말 것.** 이 사고는 도구가 파일을 정상 생성했다고 보고했고,
+실패는 **사용자가 실행한 뒤에야** 드러났다. 조립 도구는 C1 단언을 통과해야 파일을 남긴다.
+
 ---
 
 ## §2. 의무 패턴 — patch 파일 적용 (SQL client)
@@ -128,6 +155,15 @@ SELECT TABLE_NAME, PRIVILEGE FROM ALL_TAB_PRIVS
 - ALL_SOURCE 추출 후 `END;` 다음 newline 추가 의무
 - 의존 그래프 기반 객체 정렬 의무 (호출되는 쪽 먼저)
 - 통합 SQL 끝에 fallback ALTER COMPILE 블록 자동 추가
+
+### 3.2-b ⭐ 백업 파일 보호 (2026-08-21 신설 — 실사고)
+
+덤프·조립 도구가 **출력 경로를 백업 경로와 같은 이름으로** 잡아 `00_BACKUP_PKG_*.sql` 을
+덮어쓴 사고가 있었다(적용 전 원본 소실 = 원복 불가 직전까지 감). 복구는 삽입 라인 역치환 +
+이전 세션 백업과 바이트 비교로 겨우 됐다.
+
+- ⛔ `_backup/` · `00_BACKUP_*` 경로는 도구의 **쓰기 대상 금지**. 이미 존재하면 **즉시 중단**(덮어쓰기·`-Force` 금지)
+- 백업은 **적용 전 1회 생성 후 불변**. 재덤프가 필요하면 `_AFTER`/타임스탬프 등 **다른 이름**으로 쓴다
 
 ### 3.2 PR 직전 의무 grep
 

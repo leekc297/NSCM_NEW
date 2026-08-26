@@ -276,3 +276,13 @@ LEFT JOIN SCM_ADM_API_M a ON a.API_ID=b.API_ID WHERE b.MNU_ID='<MNU_ID>' AND a.A
 ## §8. 변경 이력
 
 - 2026-06-23 (PM): 신규 작성. 일일 이슈목록(`이슈목록_2026-06-23.md`) PM 갱신분 처리·머지 완료/처리내역 보유 이슈 5건(R-6·R-7·R-8·R-9·R-10)을 정식 룰로 승격. 사용자 "이슈목록 Rule 적용" 명시 요청. R-11(SYS0010)은 처리내역 부재로 후속조치(미승격).
+
+---
+
+## ⛔ 병합 판정에 상태를 섞지 말 것 (hook #141)
+
+`MergeManager.getMergedRange()` 의 입력은 **행 데이터뿐**이다. `selectionChanged` / `prepareCellForEdit` / MergeManager 가변 상태 필드로 병합을 바꾸면 **"포커스만 가도 병합이 깨진다"** 가 된다.
+허용되는 상태 의존은 `cellEditEnded → invalidate()` 하나뿐.
+
+> 본문 = `Doc/_rules_v2/hooks/wijmo-merge-row-data-only.md` (#141, 2026-08-21 사용자 명시).
+> "클릭 시 병합이 풀리고 편집 가능" 류 요구 문구는 **결함 신고일 수 있으므로 구현 전 확인**.

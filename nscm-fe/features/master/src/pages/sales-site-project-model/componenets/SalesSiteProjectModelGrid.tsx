@@ -19,6 +19,7 @@ import {
   SHEET_INDEX,
   SINGLE_OWNER_DIVISIONS,
 } from '../sales-site-project-model.constants';
+import { useEditBaseline } from '../sales-site-project-model.editBaseline';
 import { useGridCombos } from '../sales-site-project-model.gridCombos';
 import { useSalesSiteProjectModelStore } from '../useSalesSiteProjectModelStore';
 
@@ -60,6 +61,9 @@ export const SalesSiteProjectModelGrid = ({
   const [clickedRow, setClickedRow] = useState(-1);
   const clickedDataItem = GridUtils.getRow(gridRef.current, clickedRow);
 
+  // 조회 원본 기준선으로 수정상태(M)를 재판정 — 사유는 sales-site-project-model.editBaseline 참조.
+  const resyncRow = useEditBaseline({ gridRef, editTrackerRef, data });
+
   // 파라미터가 필요한 셀 콤보(Sales Plant 등) 적용 — 규칙은 sales-site-project-model.gridCombos 참조.
   const gridComboHandlers = useGridCombos({
     staticColumns: staticColumns[SHEETS.PRODUCTION],
@@ -85,6 +89,7 @@ export const SalesSiteProjectModelGrid = ({
     clickedDataItem.DEPT_ID = teamId;
     clickedDataItem.TEAM_NAME = teamName ?? '';
 
+    resyncRow(clickedDataItem);
     gridRef.current?.refreshRange(new CellRange(clickedRow, 0, clickedRow, -1));
   };
 
@@ -139,6 +144,7 @@ export const SalesSiteProjectModelGrid = ({
       }
     }
 
+    resyncRow(clickedDataItem);
     gridRef.current?.refreshRange(new CellRange(clickedRow, 0, clickedRow, -1));
   };
 
@@ -164,6 +170,7 @@ export const SalesSiteProjectModelGrid = ({
     clickedDataItem.PROJECT_CODE = projectCode;
     clickedDataItem.PROJECT_NAME = projectName;
 
+    resyncRow(clickedDataItem);
     gridRef.current?.refreshRange(new CellRange(clickedRow, 0, clickedRow, -1));
   };
 
@@ -185,7 +192,7 @@ export const SalesSiteProjectModelGrid = ({
     editTrackerRef.current?.storeChange(
       clickedDataItem,
       'ITEM_CLASS_NAME',
-      clickedDataItem.ITEM_TYPE,
+      clickedDataItem.ITEM_CLASS_NAME,
       itemType ?? ''
     );
 
@@ -193,6 +200,7 @@ export const SalesSiteProjectModelGrid = ({
     clickedDataItem.ITEM_NAME = itemName ?? '';
     clickedDataItem.ITEM_CLASS_NAME = itemType ?? '';
 
+    resyncRow(clickedDataItem);
     gridRef.current?.refreshRange(new CellRange(clickedRow, 0, clickedRow, -1));
   };
 

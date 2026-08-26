@@ -1,0 +1,22 @@
+SELECT
+    GRP.USER_ID
+  , MNU.MNU_ID
+  , MNU.UNIT_TP_CD
+ 	, AUTH.UNIT_ID
+  , MAX(AUTH.EDIT_YN)  AS EDIT_YN   -- 여러 그룹/조직 중 편집권한 최대값
+FROM
+    SCM_MGR.SCM_ADM_USER_GR_MPG_M          GRP   -- 그룹-사용자 매핑
+    INNER JOIN SCM_MGR.SCM_ADM_USER_GR_UNIT_AUTH_MPG_M  AUTH  -- 그룹-조직 권한
+            ON AUTH.USER_GR_ID = GRP.USER_GR_ID
+           AND AUTH.USER_ID    = GRP.USER_ID
+    INNER JOIN SCM_MGR.SCM_ADM_MNU_M                    MNU   -- 메뉴 마스터
+            ON MNU.UNIT_TP_CD = AUTH.UNIT_TP_CD
+WHERE
+    GRP.USE_YN  = 'Y'
+AND AUTH.USE_YN  = 'Y'
+AND MNU.USE_YN   = 'Y'
+GROUP BY
+    GRP.USER_ID
+  , MNU.MNU_ID
+  , MNU.UNIT_TP_CD
+  , AUTH.UNIT_ID

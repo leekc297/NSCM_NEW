@@ -1,12 +1,13 @@
 import axios, { AxiosHeaders } from 'axios';
 import type { AxiosInstance, AxiosRequestConfig, AxiosPromise } from 'axios';
 
-import type {
-  ApiResponse,
-  LookupParam,
-  ComboParam,
-  ComboResponse,
-  LookupResponse,
+import {
+  type ApiResponse,
+  type LookupParam,
+  type ComboParam,
+  type ComboResponse,
+  type LookupResponse,
+  quoteComboParams,
 } from '@foundation/models';
 
 import { API_CONFIG } from '../constants/app-config';
@@ -135,10 +136,13 @@ class AxiosConfig {
     menuId: M,
     sheetName: S,
     procedureAction: string,
-    params?: ProcRequest<M, S>
+    params?: ProcRequest<M, S>,
+    stream = false
   ): Promise<ApiResponse<ProcResponse<M, S>>> {
+    // stream=true 면 단일패스 스트리밍 엔드포인트(call-proc-stream) 사용. 응답 형태 동일.
+    const suffix = stream ? 'call-proc-stream' : 'call-proc';
     const response = await this.post<ProcResponse<M, S>, ProcRequest<M, S>>(
-      `${menuId}/${sheetName}/${procedureAction}/call-proc`,
+      `${menuId}/${sheetName}/${procedureAction}/${suffix}`,
       params
     );
     return response.data;
@@ -159,7 +163,13 @@ class AxiosConfig {
 
   // TODO: 임시 lookup 조회 func - 강민재
   async getCombo(params: ComboParam): Promise<ComboResponse[]> {
-    const response = await this.post<ComboResponse[], ComboParam>('admin/combo', params);
+    // 모든 콤보 요청이 반드시 지나는 단일 funnel — 여기서 파라미터 값을 일괄 인용한다.
+    //   BE makeComboQuery 가 @키 를 raw 치환하므로 문자열 값엔 홑따옴표가 필수다. 이미 감싼 값은
+    //   quoteComboParams 가 그대로 두므로(idempotent) 기존 q()/quote() 화면은 영향 없다.
+    const response = await this.post<ComboResponse[], ComboParam>(
+      'admin/combo',
+      quoteComboParams(params)
+    );
     return response.data.result;
   }
 

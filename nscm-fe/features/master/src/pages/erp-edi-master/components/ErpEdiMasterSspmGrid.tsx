@@ -7,7 +7,7 @@ import {
   type FormatItemEventArgs,
 } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { useState, type MutableRefObject } from 'react';
+import { useEffect, useState, type MutableRefObject } from 'react';
 
 import { CRUD_TYPE } from '@foundation/constants';
 import { GridUtils } from '@foundation/utils';
@@ -27,7 +27,12 @@ interface ErpEdiMasterSspmGridProps {
   data: ResponseData<MENU_ID, SHEETS.SSPM>[];
 }
 
-const YELLOW_HIGHLIGHT_COLUMNS = new Set(['SALES_PLANT', 'EDI', 'VALID_YN']);
+// AS-IS .cs L1309~1311 노란색 = 수정 가능 컬럼. 수정 모드에서도 이 3개만 LockRange 대상에서 빠진다
+//   (.cs L685~740 — pEDI 잠금은 L722 에서 주석 처리). Yellow 표시와 편집 허용 판정을 같은 집합으로 쓴다.
+const EDITABLE_COLUMNS = new Set(['SALES_PLANT', 'EDI', 'VALID_YN']);
+
+// 필수 입력 컬럼(헤더 빨간 점)은 여기서 정하지 않는다 — 공용 formatEditableColumns 가
+//   컬럼 메타 inputTpCd(M / IM)로 그리고, 저장 시 빈 값 차단도 같은 메타를 본다.
 
 export const ErpEdiMasterSspmGrid = ({
   gridRef,
@@ -63,15 +68,40 @@ export const ErpEdiMasterSspmGrid = ({
     }
   };
 
+  // 편집 허용 범위 — 공용 DataGrid 의 setEditableColumns 는 컬럼 메타(_inputEditType) 기준으로
+  //   판정하므로, 화면 기준(AS-IS 노란색 집합)을 mount 후에 등록해 덮어쓴다.
+  //   Wijmo Event 는 등록 순서대로 호출 → 마지막 등록이 최종 결정 (표준 패턴: CustomerModelMappingGrid).
+  // deps 에 data/staticColumns 를 두는 이유: 공용 DataGrid 는 wijmo react 의 initialized(setTimeout)
+  //   에서 gridRef 를 채우므로 첫 useEffect 시점엔 grid 가 아직 없다. 조회/컬럼메타 도착 시 다시 걸린다.
+  useEffect(() => {
+    const grid = gridRef.current;
+    if (!grid) return;
+    const handleBeginningEdit = (
+      sender: FlexGrid<ResponseData<MENU_ID, SHEETS.SSPM>>,
+      e: CellRangeEventArgs
+    ) => {
+      const binding = GridUtils.getBinding(sender, e.col);
+      e.cancel = typeof binding !== 'string' || !EDITABLE_COLUMNS.has(binding);
+    };
+    grid.beginningEdit.addHandler(handleBeginningEdit);
+    // 붙여넣기도 같은 기준 — 안 걸면 타이핑은 되는데 Ctrl+V 만 막히는 상태가 된다.
+    grid.pastingCell.addHandler(handleBeginningEdit);
+    return () => {
+      grid.beginningEdit?.removeHandler(handleBeginningEdit);
+      grid.pastingCell?.removeHandler(handleBeginningEdit);
+    };
+  }, [gridRef, data, staticColumns]);
+
   const handleFormatItem = (
     grid: FlexGrid<ResponseData<MENU_ID, SHEETS.SSPM>>,
     args: FormatItemEventArgs
   ) => {
+    // 헤더는 손대지 않는다 — 필수 빨간 점은 공용 formatEditableColumns 가 메타로 그린다.
     if (args.panel.cellType !== CellType.Cell) return;
     const binding = GridUtils.getBinding(grid, args.col);
     if (typeof binding !== 'string') return;
     // 편집 가능 컬럼 = 표준 Yellow(`wj-cell-editable`). 그 외 = White+zebra (클래스 없음). hook #95.
-    toggleClass(args.cell, 'wj-cell-editable', YELLOW_HIGHLIGHT_COLUMNS.has(binding));
+    toggleClass(args.cell, 'wj-cell-editable', EDITABLE_COLUMNS.has(binding));
   };
 
   const handleCellEditEnded = (
@@ -139,7 +169,7 @@ export const ErpEdiMasterSspmGrid = ({
         dblClick={handleDblClick}
         formatItem={handleFormatItem}
         cellEditEnded={handleCellEditEnded}
-        isReadOnly={true}
+        isReadOnly={false}
       />
       {openProjectModal && (
         <ProjectByDivisionModal

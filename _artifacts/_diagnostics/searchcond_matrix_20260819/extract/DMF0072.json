@@ -1,0 +1,206 @@
+{
+  "ui": "DMF0072",
+  "ui_name_asis": "N:N Master Mapping (NNMasterMapping — 폼 타이틀 'Customer Model Mapping')",
+  "asis_file": "asis_stripped/DMF0072.cs",
+  "tobe_form": "nscm-fe/features/master/src/pages/nn-master-mapping/components/NnMasterMappingForm.tsx",
+  "conditions": [
+    {
+      "cond": "Data Type",
+      "asis": {
+        "label": "DataType (Designer layoutControlItem2)",
+        "control": "콤보단일(UsrCombo, clbDataTypeCode)",
+        "combo": "GSCM.Utils.CommonUtils.GetLookupValues('DM_EDI_DATA_TYPE_CODE')",
+        "params": "p_lookup_type='DM_EDI_DATA_TYPE_CODE' (SCM0001_GET_LOOKUP_VALUES)",
+        "filter": "lookup DM_EDI_DATA_TYPE_CODE (ALL/ERP/SCM 계열) — setListBox(...,true,'CODE','CODE') CODE 표시 +ALL행",
+        "cascade": "없음",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N", "default": "ALL",
+        "evidence": ["DMF0072.cs:L200-201", "DMF0072.cs:L454", "DMF0072_...Designer.cs:L39", "DMF0072_...Designer.cs:L691"]
+      },
+      "tobe": {
+        "label": "Data Type (LBL00614)",
+        "control": "콤보단일(CustomDropdown allOption)",
+        "combo": "「CMBO 미등록」 — useTabProcQuery(MENU_ID, SHEETS.DATA_TYPE) 프로시저 시트로 조회",
+        "params": "filters={} (파라미터 없음)",
+        "filter": "SP 결과 o_rc1 에서 CODE 'ALL'/'' 행 제외(FE) — allOption 이 ALL 담당",
+        "cascade": "없음",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N", "default": "'ALL'",
+        "evidence": ["NnMasterMappingForm.tsx:L57-63", "NnMasterMappingForm.tsx:L86-97", "NnMasterMappingForm.tsx:L143-158", "useNnMasterMappingStore.ts:L29"]
+      }
+    },
+    {
+      "cond": "Div.",
+      "asis": {
+        "label": "Division",
+        "control": "콤보단일(UsrCombo, clbDivisions)",
+        "combo": "Data.Common(Data.Type.MyDivision, false, NowGroupID, UserId)",
+        "params": "@Param1=GROUP_ID, @Param2=USER_ID",
+        "filter": "UP_FX 'MyDivision' — 권한 division (VALID_YN='Y', ATTRIBUTE3<>'EE')",
+        "cascade": "변경 시 Team→EndCustomer(40: EndCustomerByDivision40 / 비40: UserEndCustomerByDivisionDept)→SalesSite(40: ScmSitebyEndCustomer40 / 비40: UserSiteByEndCustomer) 재바인딩 + 헤더 재생성 + 40: 그리드 PROJECT_CODE 컬럼 숨김·Project 조건 비활성",
+        "div40": "Project 비활성(layoutControlItem9/btnProject Enabled=false) + 그리드 PROJECT_CODE 숨김", "div81": "공통", "div82": "공통",
+        "required": "Y(빈값 조회 시 MSG00097)",
+        "default": "권한 division 목록 첫 값",
+        "evidence": ["DMF0072.cs:L151-155", "DMF0072.cs:L1065-1121", "DMF0072.cs:L460-464"]
+      },
+      "tobe": {
+        "label": "Div (LBL00663)",
+        "control": "콤보단일(CustomDropdown, required)",
+        "combo": "MyDivision (CMBO)",
+        "params": "@sesUserId(세션자동)",
+        "filter": "SCM_MST_DIVISION + USER_GR_UNIT_AUTH_MPG_M(UNIT_TP_CD='D') 권한 + 옵션 밖 값 자동 보정 useEffect(첫 옵션 선택)",
+        "cascade": "변경 시 deptId/endCustomer/scmSiteId='ALL' reset. EndCustomer/SalesSite proc 콤보는 divisionId 파라미터로 자동 재조회",
+        "div40": "Project 필드 disabled(sc.divisionId==='40')", "div81": "공통", "div82": "공통",
+        "required": "Y",
+        "default": "'81' (store 초기값) — 권한 목록에 없으면 첫 옵션으로 자동 보정",
+        "evidence": ["NnMasterMappingForm.tsx:L33", "NnMasterMappingForm.tsx:L126-135", "NnMasterMappingForm.tsx:L159-176", "useNnMasterMappingStore.ts:L28-35"]
+      }
+    },
+    {
+      "cond": "Team",
+      "asis": {
+        "label": "Team",
+        "control": "콤보다중(UsrCheckedList)",
+        "combo": "GetDMInnerTable('UserTeamByDivision')",
+        "params": "GROUP_ID, USER_ID, DIVISION_ID",
+        "filter": "BigFilter Tables[1] 'TeambyDivision' DIVISION_ID 클라 필터 +ALL행",
+        "cascade": "변경 시 EndCustomer→SalesSite 재바인딩 (clbTeam_SelectedIndexChanged)",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N", "default": "ALL",
+        "evidence": ["DMF0072.cs:L159-163", "DMF0072.cs:L1320-1326", "DMF0072.cs:L1411-1430"]
+      },
+      "tobe": {
+        "label": "Team (LBL00502, TeamField)",
+        "control": "콤보다중(TeamField=CustomDropdown multiple+allOption)",
+        "combo": "TeambyDivision (CMBO)",
+        "params": "@divisionId(따옴표 포함), @sesUserId, @langCd",
+        "filter": "비40/40 상호배타 2분기 + 권한 division + 클라 DIVISION_ID 필터. 'ALL'↔배열 변환",
+        "cascade": "변경 시 endCustomer/scmSiteId='ALL' reset",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N", "default": "ALL",
+        "evidence": ["NnMasterMappingForm.tsx:L177-188", "SearchFields.tsx:L185-233"]
+      }
+    },
+    {
+      "cond": "End Customer",
+      "asis": {
+        "label": "End Customer",
+        "control": "콤보다중(UsrCheckedList)",
+        "combo": "GetDMInnerTable('EndCustomerByDivision') (division 변경 시 40: Data.Common(EndCustomerByDivision40) / 비40: Data.UserEndCustomerByDivisionDept)",
+        "params": "GROUP_ID, USER_ID, DIVISION_ID, DEPT_ID",
+        "filter": "BigFilter Tables[2] / UP_FX 'EndCustomerByDivision40'·'EndCustomerByDivisionDept' — 40: PROJECT_CODE+lookup UNION / 비40: SITE END_CUSTOMER +ALL행",
+        "cascade": "변경 시 SalesSite 재바인딩 (clbEndCustomer_SelectedIndexChanged)",
+        "div40": "EndCustomerByDivision40 경로", "div81": "공통", "div82": "공통",
+        "required": "N", "default": "ALL",
+        "evidence": ["DMF0072.cs:L165-182", "DMF0072.cs:L1096-1120", "DMF0072.cs:L1327-1334", "DMF0072.cs:L1402-1409"]
+      },
+      "tobe": {
+        "label": "End Customer (LBL00616)",
+        "control": "콤보다중(CustomDropdown multiple+allOption)",
+        "combo": "「CMBO 미등록」 — useTabProcQuery(SHEETS.END_CUSTOMER) 프로시저 시트",
+        "params": "divisionId, deptId (필터 파라미터)",
+        "filter": "SP 결과 o_rc1, CODE 'ALL'/'' 제외(FE), 라벨 'CODE (NAME)'",
+        "cascade": "변경 시 scmSiteId='ALL' reset. SalesSite proc 콤보가 endCustomer 파라미터로 자동 재조회",
+        "div40": "공통(SP 내부 분기)", "div81": "공통", "div82": "공통",
+        "required": "N", "default": "'ALL'",
+        "evidence": ["NnMasterMappingForm.tsx:L64-70", "NnMasterMappingForm.tsx:L99-110", "NnMasterMappingForm.tsx:L189-206"]
+      }
+    },
+    {
+      "cond": "PJT",
+      "asis": {
+        "label": "Project",
+        "control": "텍스트+팝업버튼(umltProject/btnProject, Enter키도 팝업)",
+        "combo": "SCM0002_ProjectbyDivisionPopupEx (팝업)",
+        "params": "division, team, endCustomer, scmSite, project(입력값)",
+        "filter": "팝업 내부",
+        "cascade": "없음",
+        "div40": "비활성(layoutControlItem9/btnProject Enabled=false)", "div81": "사용", "div82": "사용",
+        "required": "N", "default": "빈값",
+        "evidence": ["DMF0072.cs:L219", "DMF0072.cs:L223-229", "DMF0072.cs:L1048-1063", "DMF0072.cs:L1073-1084"]
+      },
+      "tobe": {
+        "label": "Project (LBL00617)",
+        "control": "텍스트+팝업(InputField endAdornment 🔍 + 더블클릭 → ProjectByDivisionModal)",
+        "combo": "ProjectByDivisionModal (공용 팝업)",
+        "params": "preSearchParams: divisionId/deptId/endCustomer/salesSite/projectCode/etc='N'",
+        "filter": "팝업 내부",
+        "cascade": "없음",
+        "div40": "입력·버튼 모두 disabled", "div81": "사용", "div82": "사용",
+        "required": "N", "default": "빈 문자열",
+        "evidence": ["NnMasterMappingForm.tsx:L207-239", "NnMasterMappingForm.tsx:L293-309", "useNnMasterMappingStore.ts:L34"]
+      }
+    },
+    {
+      "cond": "Model/Nickname",
+      "asis": {
+        "label": "Model / Nickname",
+        "control": "텍스트+팝업버튼(umltModel/btnModelType, Enter키도 팝업)",
+        "combo": "DM0002_ItembyDivisionPopupEx (팝업)",
+        "params": "division, team, endCustomer, scmSiteId, project, itemId(입력값)",
+        "filter": "팝업 내부",
+        "cascade": "없음",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N", "default": "빈값",
+        "evidence": ["DMF0072.cs:L220", "DMF0072.cs:L231-237", "DMF0072.cs:L1029-1047"]
+      },
+      "tobe": {
+        "label": "Model/Nickname (LBL00618, 라벨 2단 개행)",
+        "control": "텍스트+팝업(InputField endAdornment 🔍 + 더블클릭 → ItemByDivisionModal)",
+        "combo": "ItemByDivisionModal (공용 팝업)",
+        "params": "preSearchParams: divisionId/deptId/endCustomer/salesSite/projectCode/itemId, headerTitle='Model/Nickname Popup'",
+        "filter": "팝업 내부",
+        "cascade": "없음",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N", "default": "빈 문자열",
+        "evidence": ["NnMasterMappingForm.tsx:L240-272", "NnMasterMappingForm.tsx:L312-329"]
+      }
+    },
+    {
+      "cond": "Sales Site",
+      "asis": {
+        "label": "Sales Site",
+        "control": "콤보다중(UsrCheckedList)",
+        "combo": "GetDMInnerTable('UserSiteByEndCustomer') (division 변경 시 40: Data.ScmSitebyEndCustomer40 / 비40: Data.UserSiteByEndCustomer)",
+        "params": "GROUP_ID, USER_ID, DIVISION_ID, DEPT_ID(''), END_CUSTOMER",
+        "filter": "BigFilter Tables[4] / UP_FX 'SiteByEndCustomer'·'ScmSitebyEndCustomer40' +ALL행",
+        "cascade": "없음(수신측)",
+        "div40": "ScmSitebyEndCustomer40 경로", "div81": "공통", "div82": "공통",
+        "required": "N", "default": "ALL",
+        "evidence": ["DMF0072.cs:L184-189", "DMF0072.cs:L1105-1119", "DMF0072.cs:L1342-1350"]
+      },
+      "tobe": {
+        "label": "Sales Site (LBL00619)",
+        "control": "콤보다중(CustomDropdown multiple+allOption)",
+        "combo": "「CMBO 미등록」 — useTabProcQuery(SHEETS.SALES_SITE) 프로시저 시트",
+        "params": "divisionId, endCustomer (필터 파라미터)",
+        "filter": "SP 결과 o_rc1, CODE 'ALL'/'' 제외(FE), 라벨 'CODE (NAME)'",
+        "cascade": "없음(division/endCustomer 변경 시 자동 재조회)",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N", "default": "'ALL'",
+        "evidence": ["NnMasterMappingForm.tsx:L71-77", "NnMasterMappingForm.tsx:L112-123", "NnMasterMappingForm.tsx:L274-291"]
+      }
+    }
+  ],
+  "cascade_chains": [
+    "ASIS: Division→Team→EndCustomer→SalesSite + 40 시 Project 비활성/PROJECT_CODE 컬럼 숨김 (L1065-1121), Team→EndCustomer→SalesSite (L1411-1430), EndCustomer→SalesSite (L1402-1409)",
+    "TOBE: Division→(deptId,endCustomer,scmSiteId) 'ALL' / Team→(endCustomer,scmSiteId) / EndCustomer→scmSiteId — proc 콤보(EC/SS)는 파라미터 queryKey 로 자동 재조회"
+  ],
+  "excluded": [
+    "그리드 셀 콤보(COMPANY_ID=DM_EDI_COMPANY_LIST, END_CUSTOMER, SCM_SITE_ID — InsertRow L538-602, spdMain_ComboSelChange L1123-1192)",
+    "그리드 셀 팝업(MAPPING_ITEM_ID/ITEM_ID/PROJECT_CODE/SOLDTO·SHIPTO — spdMain_CellDoubleClick L1194-1299)"
+  ],
+  "crosscheck": {
+    "catalog_screen": "N: N Master Mapping",
+    "catalog_asis_rows": 7, "catalog_tobe_rows": 7,
+    "my_asis_count": 7, "my_tobe_count": 7,
+    "reason": "일치 (Data Type/Div/Team/End Customer/PJT/Model·Nickname/Sales Site 7건 동일)"
+  },
+  "notes": [
+    "AS-IS 조회 SP DM.DMF0072_GET_NNMASTER_MAPPING 파라미터: p_data_type_code/p_division_id/p_dept_id/p_end_customer/p_scm_site_id/p_project_code/p_item_id (L477-491)",
+    "TO-BE 콤보 원천 혼합형: Division/Team 은 CMBO(MyDivision/TeambyDivision), Data Type·End Customer·Sales Site 는 화면 전용 프로시저 시트(useTabProcQuery) — cmbo_meta 165건에 해당 SQL_ID 없음(「CMBO 미등록」 표기)",
+    "TO-BE Data Type 라벨은 LBL00614 'Data Type' — AS-IS Designer 라벨 'DataType'. 카탈로그 표기 'Data Type ALL/ERP/SCM' 과 정합",
+    "TO-BE 진입 시 /admin/menu/DMF0072/search-conditions 저장 조회조건 복원(useEffect) — 자동조회는 안 함",
+    "AS-IS Division 콤보는 GetDMInnerTable 이 아닌 Data.Common(MyDivision) 경로 사용(SetChangeControl 'MyDivision' 케이스는 미호출 잔존 코드)"
+  ]
+}

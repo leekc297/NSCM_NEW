@@ -1,4 +1,4 @@
-// 체크박스 가로 배치 (Sum — cboQty/cboClosed dead 제외, AS-IS 파리티)
+// 체크박스 가로 배치 (Sum / Qty≠0 — cboClosed dead 제외, AS-IS 파리티)
 .checkboxRow {
   display: flex;
   align-items: center;

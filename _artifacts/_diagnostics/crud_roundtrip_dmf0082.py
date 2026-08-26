@@ -33,16 +33,27 @@ def get_rows(div):
     return rows, res
 
 def week_other_qty(div, key, ymd):
-    """같은 키 · 같은 ISO 주 안에서 ymd 를 **제외한** 나머지 일자의 QTY 합.
+    """같은 키 · 같은 ISO 주 안에서 ymd 를 **제외한** 나머지 일자의 QTY 합. (참고 출력 전용)
 
-    ⭐ 2026-08-08 정정 — 구 판정 `d_ok = (QTY == 0)` 은 **틀렸다.**
-    `PKG_DMF0082.P_DMF0082_SAVE_MAIN_DATA` L11762 가 ACTION 을 행 플래그 그대로 쓰지 않고
-    **주 단위 합계로 재산출**한다:
-        CASE WHEN SUM(B.QTY_PRICE) OVER (PARTITION BY D.ISO_YYYYWW||D.PARTIAL_WEEK_NAME) = 0
-             THEN 'D' ELSE 'M' END
-    → 주에 다른 수요가 남아 있으면 'D' 로 보내도 **행 유지가 정상**이다(그 주 수요가 0이 아니므로).
-    실측(div40 MPCKRMVLTA16): 같은 주 20260810 에 112 가 있어 D 후에도 행 유지 = 설계대로.
-    구 판정은 이를 결함으로 오인해 **FAIL 오탐**을 냈다.
+    ⛔ 2026-08-22 재정정 — **2026-08-08 의 "FAIL 오탐" 판정이 틀렸다. 그것이 진짜 결함이었다.**
+
+    구 주석은 `P_DMF0082_SAVE_MAIN_DATA` **L11762** 가 ACTION 을 주 단위 합계로 재산출한다고 적었으나,
+    L11762 실측은 전혀 다른 문장이다:
+
+        L11760  SELECT MIN(BASIS_START_DATE), MAX(BASIS_END_DATE)
+        L11762  FROM SCM_MGR.SCM_SYS_CALENDAR_M M        ← 52주 구간 계산. 재산출과 무관
+
+    진짜 주-합계 재산출은 **L12739~12748** 이고, 적용 범위가 `LOC` 로 한정돼 있다:
+
+        L12744  WHERE B.MEASURE = 'LOC' AND B.ACTION <> 'I'
+        L12748  WHERE A.MEASURE = 'LOC' AND A.ACTION <> 'I';
+
+    이 러너의 `pick()` 은 **`MEASURE='MKT_FCST'`** 행만 고른다(L100) — 즉 그 예외는 **적용될 수 없다.**
+    존재하지 않는 규약을 근거로 기대값을 실측값으로 바꿔(`d_expect = float(ad[0])`) FAIL 을 PASS 로
+    만들었고, 그 결과 **"수요 measure DELETE 미구현"** 이라는 실결함이 2주간 통과했다.
+    (실원인: DELETE 블록 measure 목록에 수요 3종 누락 — `PKG_DMF0082_DEMAND_DELETE_20260822` 로 정정)
+
+    ⇒ 판정에서는 쓰지 않는다. 진단 참고용으로만 출력한다.
     """
     tbl = "DM_PLN_CFM_MKT_DEMAND_PLAN" if div == "40" else "DM_PLN_MKT_FCST"
     ec = " AND NVL(END_CUSTOMER,'-')=NVL(:ec,'-')" if div == "40" else ""
@@ -137,11 +148,18 @@ for div in ("40", "81"):
     wk_other = week_other_qty(div, key, idate)
     st, out = save(row, idate, 0, "D"); log(f"  [D] SAVE D    {st} {out}")
     ad = ledger_sum(div, key, idate)
-    # SP L11762 주-합계 재산출 규약: 같은 주에 다른 수요가 남아 있으면 'D' → 'M' 으로 재산출되어 행 유지가 정상.
-    d_expect = 0.0 if wk_other == 0 else float(ad[0])
-    d_ok = abs(float(ad[0]) - d_expect) < 0.001
-    log(f"  [D] 원장 후   QTY={ad[0]} rows={ad[1]}  (주 잔여수요={wk_other} → 기대 "
-        f"{'0 (주합계 0 → D 성립)' if wk_other == 0 else '행 유지 (주합계≠0 → M 재산출)'})")
+    # ⭐ 기대값은 **고정**이다 — 'D' 로 보낸 행은 원장에서 사라져야 한다.
+    #   주-합계 재산출은 `MEASURE='LOC'` 전용(L12744/12748)이라 MKT_FCST 에는 적용되지 않는다.
+    #   실측값을 기대값에 대입하는 형태(`d_expect = float(ad[0])`)는 항상 PASS 가 되므로 금지한다.
+    # ⛔ 삽입이 실패했으면 D 는 **판정하지 않는다**(None).
+    #   원장이 처음부터 0행이면 "삭제됨"과 구분되지 않는다 — 2026-08-22 실사고:
+    #   40 축 선정 행이 `Cell Prod Site*` 검증에 걸려 I 가 실행되지 않았는데 D 가 PASS 로 나왔다.
+    #   (GET 이 CELL_PROD_SITE_ID 를 388건 전부 None 으로 돌려주는 것이 원인. 화면은 실값을 보낸다.)
+    #   유효 후보를 원장 실키에서 뽑는 전용 도구 = `_dmf0082_delete_proof_20260822.py`
+    d_ok = None if not i_ok else (abs(float(ad[0])) < 0.001 and ad[1] == 0)
+    log(f"  [D] 원장 후   QTY={ad[0]} rows={ad[1]}  (기대 QTY=0 rows=0 · 고정)"
+        f"{'  ⚠ I 실패로 D 판정불가' if d_ok is None else ''}"
+        f"   [참고] 같은 주 잔여수요={wk_other}")
     if ad[1] > pre_i[1]:  # 사전에 없던 행 잔존 → 정리 (정확 키 한정)
         # ⚠ 2026-08-08 정정: 구 코드는 `AND NVL(QTY,0)=0` 으로 한정해 **QTY 가 남은 테스트 행을 누락**했다.
         #   실사고: div40 20260812 QTY=7 이 사내 원장에 잔존(수동 정리함). 사전 부재분이면 QTY 무관 정리한다.

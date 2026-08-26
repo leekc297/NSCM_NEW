@@ -2,7 +2,7 @@ import type { Control } from '@mescius/wijmo';
 import { DataType } from '@mescius/wijmo';
 import { LinearGauge } from '@mescius/wijmo.gauge';
 import { DataMap } from '@mescius/wijmo.grid';
-import { InputDateTime } from '@mescius/wijmo.input';
+import { InputDate, InputDateTime } from '@mescius/wijmo.input';
 
 import { CELL_CONTROL_TYPE } from '@foundation/constants';
 import type {
@@ -46,9 +46,20 @@ const getFormat = (
   ctrlType: CELL_CONTROL_TYPE | undefined,
   scale: number | undefined
 ): string | undefined => {
-  // TODO: 숫자 외의 다른 format 필요 시 추가 - 강민재
   if (ctrlType === CELL_CONTROL_TYPE.NUMBER && scale) return `n${scale}`;
   if (ctrlType === CELL_CONTROL_TYPE.NUMBER_TEXT) return 'd0';
+
+  // 🔽 날짜 관련 컨트롤 타입 포맷 추가
+  const dateTypes = [
+    CELL_CONTROL_TYPE.DATE,
+    CELL_CONTROL_TYPE.DATE_MONTH,
+    CELL_CONTROL_TYPE.DATE_TIME,
+    CELL_CONTROL_TYPE.DATE_TEXT,
+  ];
+  if (dateTypes.includes(ctrlType!)) {
+    return 'yyyy.MM.dd'; // ⭐ 원하는 출력 형식
+  }
+
   return undefined;
 };
 
@@ -60,13 +71,19 @@ const getEditor = (ctrlType: CELL_CONTROL_TYPE): Control | undefined => {
         min: 0,
         max: 100,
       });
-    // TODO: 날짜 형식에 따른 format 설정 필요 + 날짜 버튼 디자인 조절 필요
-    case CELL_CONTROL_TYPE.DATE:
-    case CELL_CONTROL_TYPE.DATE_MONTH:
+    // TODO: 날짜 버튼 디자인 조절 필요
+    // DATE_TIME만 시분초 입력이 필요하다 — 나머지 날짜 타입에 InputDateTime을 쓰면 시분초
+    // 목록(00:00~23:45)까지 같이 떠서 날짜만 있는 컬럼(SOP_DATE 등)에서도 시간을 고르게 된다.
     case CELL_CONTROL_TYPE.DATE_TIME:
-    case CELL_CONTROL_TYPE.DATE_TEXT:
       return new InputDateTime(document.createElement('div'), {
         format: 'yyyy-MM-dd HH:mm:ss',
+        isReadOnly: false,
+      });
+    case CELL_CONTROL_TYPE.DATE:
+    case CELL_CONTROL_TYPE.DATE_MONTH:
+    case CELL_CONTROL_TYPE.DATE_TEXT:
+      return new InputDate(document.createElement('div'), {
+        format: 'yyyy-MM-dd',
         isReadOnly: false,
       });
     default:

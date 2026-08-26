@@ -279,15 +279,13 @@ export const MenuManagement = ({ tabId, title }: PageProps<MENU_ID>) => {
           data={levelTwoMenuCleared ? [] : rows[SHEET_INDEX.LEVEL_TWO_MENU]}
         />
       </div>
-      <div className={styles.lowerGrid}>
-        <LevelThreeMenuGrid
-          gridRef={gridRefs[SHEET_INDEX.LEVEL_THREE_MENU]}
-          gridFilterRef={gridFilterRefs[SHEET_INDEX.LEVEL_THREE_MENU]}
-          editTrackerRef={editTrackerRefs[SHEET_INDEX.LEVEL_THREE_MENU]}
-          setActiveTab={setActiveTab}
-          data={levelThreeMenuCleared ? [] : rows[SHEET_INDEX.LEVEL_THREE_MENU]}
-        />
-      </div>
+      <LevelThreeMenuGrid
+        gridRef={gridRefs[SHEET_INDEX.LEVEL_THREE_MENU]}
+        gridFilterRef={gridFilterRefs[SHEET_INDEX.LEVEL_THREE_MENU]}
+        editTrackerRef={editTrackerRefs[SHEET_INDEX.LEVEL_THREE_MENU]}
+        setActiveTab={setActiveTab}
+        data={levelThreeMenuCleared ? [] : rows[SHEET_INDEX.LEVEL_THREE_MENU]}
+      />
       <MessageModal
         open={openMessageModal}
         modalClose={() => setOpenMessageModal(false)}

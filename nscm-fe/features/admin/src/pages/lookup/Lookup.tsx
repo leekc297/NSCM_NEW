@@ -224,13 +224,13 @@ export const Lookup = ({ tabId, title }: PageProps<MENU_ID>) => {
       <div className={styles.outerModule}>
         <PanelGroup className={styles.tableWrapper} orientation='vertical'>
           <Panel defaultSize={70} minSize={20}>
-            <div className={styles.masterGrid}>
-              <LookupMasterGrid
-                gridRef={masterGridRef}
-                gridFilterRef={masterGridFilterRef}
-                data={masterData?.o_rc ?? []}
-              />
-            </div>
+            <LookupMasterGrid
+              gridRef={masterGridRef}
+              gridFilterRef={masterGridFilterRef}
+              data={masterData?.o_rc ?? []}
+            />
+            {/* <div className={styles.masterGrid}>
+            </div> */}
           </Panel>
           <PanelSeparator className={styles.splitBar} />
           <Panel defaultSize={30} minSize={15}>
@@ -241,13 +241,13 @@ export const Lookup = ({ tabId, title }: PageProps<MENU_ID>) => {
                 depth='h4'
                 totalCases={detailCount === 0 ? undefined : detailCount}
               />
-              <div className={styles.detailGrid}>
-                <LookupDetailGrid
-                  gridRef={detailGridRef}
-                  gridFilterRef={detailGridFilterRef}
-                  data={detailData?.o_rc ?? []}
-                />
-              </div>
+              <LookupDetailGrid
+                gridRef={detailGridRef}
+                gridFilterRef={detailGridFilterRef}
+                data={detailData?.o_rc ?? []}
+              />
+              {/* <div className={styles.detailGrid}>
+              </div> */}
             </div>
           </Panel>
         </PanelGroup>

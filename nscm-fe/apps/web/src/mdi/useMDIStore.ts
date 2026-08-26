@@ -2,7 +2,13 @@
 import { ROUTE_PATHS } from '@foundation/constants';
 import type { Menu } from '@foundation/models';
 import { getUuid } from '@foundation/utils';
-import { createPersistedStore, useSessionStore, useUIStore } from '@shared/stores';
+import {
+  confirmIfTabDirty,
+  confirmIfTabsDirty,
+  createPersistedStore,
+  useSessionStore,
+  useUIStore,
+} from '@shared/stores';
 
 import { MDI_TAB_MODE } from './mdi.config';
 import type { AnyTab } from './MDI.types';
@@ -92,29 +98,44 @@ export const useMDIStore = createPersistedStore<MDIState & MDIActions>(
       });
     },
     closeTab: tabIndex => {
-      set(state => {
-        if (tabIndex === -1) return;
-        if (!state.tabs[tabIndex]?.closable) return;
+      if (tabIndex === -1) return;
+      const tab = get().tabs[tabIndex];
+      if (!tab?.closable) return;
 
-        state.tabs.splice(tabIndex, 1);
-
-        if (state.activeIndex >= tabIndex) state.activeIndex -= 1;
+      // ⭐ 미저장 변경 가드 — 탭의 그리드에 저장 안 한 변경(I/M/D)이 있으면 confirm 후 닫는다.
+      void confirmIfTabDirty(tab.tabId).then(ok => {
+        if (!ok) return;
+        set(state => {
+          // confirm 대기 중 탭 목록이 바뀌었을 수 있으므로 tabId 로 다시 찾는다
+          const index = state.tabs.findIndex(t => t.tabId === tab.tabId);
+          if (index === -1) return;
+          state.tabs.splice(index, 1);
+          if (state.activeIndex >= index) state.activeIndex -= 1;
+        });
       });
     },
     closeOtherTabs: () => {
       const { activeIndex, tabs } = get();
-      if (activeIndex === 0) {
-        set({ ...initMDIState });
-      } else {
-        const tab = tabs[activeIndex];
-        set(state => {
-          state.tabs = [...initMDIState.tabs, tab];
-          state.activeIndex = 1;
-        });
-      }
+      const keep = tabs[activeIndex];
+      const closing = tabs.filter(tab => tab.closable && tab !== keep);
+
+      void confirmIfTabsDirty(closing.map(tab => tab.tabId)).then(ok => {
+        if (!ok) return;
+        if (activeIndex === 0) {
+          set({ ...initMDIState });
+        } else {
+          set(state => {
+            state.tabs = [...initMDIState.tabs, keep];
+            state.activeIndex = 1;
+          });
+        }
+      });
     },
     closeAllTabs: () => {
-      set({ ...initMDIState });
+      const closing = get().tabs.filter(tab => tab.closable);
+      void confirmIfTabsDirty(closing.map(tab => tab.tabId)).then(ok => {
+        if (ok) set({ ...initMDIState });
+      });
     },
   }),
   'MDI-store'

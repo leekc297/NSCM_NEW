@@ -133,7 +133,9 @@ export const useEtcSalesReportsStore = createPersistedStoreWithTab<State & Actio
             divisionId: c.divisionId, // 1
             mdfType: c.mdfType, // 2
             yyyy: c.yyyy, // 3
-            spVersionNo: c.versionNo, // 4 ⭐ United 팝업 주입 (필수)
+            // 4 United 팝업 주입 또는 직접 입력 (필수). trim 필수 — 직접 입력이라 앞뒤 공백이
+            //   섞일 수 있는데 validateFind 는 trim 후 판정하므로 그대로 넘기면 통과한 뒤 0건이 된다.
+            spVersionNo: c.versionNo.trim(),
             userGroup: userGroup, // 5 P_USER_GROUP (EDIT_AUTH_V 조인 — 세션 그룹)
             userId: sesUserId, // 7
             mnuId: MENU_ID, // 8

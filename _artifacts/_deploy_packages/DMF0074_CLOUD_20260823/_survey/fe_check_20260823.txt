@@ -1,0 +1,32 @@
+﻿== FE 검증 (넥서스 미접속 로컬) 2026-08-23 ==
+도구: _artifacts\_tools\fe-check.ps1 (고정 pnpm 10.28.2)
+
+-- type-check --
+
+ Tasks:    13 successful, 13 total
+Cached:    13 cached, 13 total
+  Time:    1.397s >>> FULL TURBO
+
+
+
+-- lint --
+
+@sdm:lint: [0m[33m[1m✖ 12 problems (0 errors, 12 warnings)[22m[39m[0m
+@web:lint: [0m[33m[1m✖ 10 problems (0 errors, 10 warnings)[22m[39m[0m
+@spms-demand:lint: [0m[33m[1m✖ 6 problems (0 errors, 6 warnings)[22m[39m[0m
+@shared:lint: [0m[33m[1m✖ 27 problems (0 errors, 27 warnings)[22m[39m[0m
+@master:lint: [0m[33m[1m✖ 49 problems (0 errors, 49 warnings)[22m[39m[0m
+@demand:lint: [0m[33m[1m✖ 61 problems (0 errors, 61 warnings)[22m[39m[0m
+@foundation:lint: [0m[33m[1m✖ 3 problems (0 errors, 3 warnings)[22m[39m[0m
+@admin:lint: [0m[33m[1m✖ 25 problems (0 errors, 25 warnings)[22m[39m[0m
+ Tasks:    13 successful, 13 total
+Cached:    13 cached, 13 total
+  Time:    1.297s >>> FULL TURBO
+
+
+
+-- @demand 강제 재실행 (TURBO_FORCE=true, 캐시 0) 2026-08-23 --
+ Tasks: 1 successful, 1 total / Cached: 0 cached, 1 total / Time: 2m11s
+ @demand:lint: ✖ 61 problems (0 errors, 61 warnings)
+ → 클라우드 동일 패키지는 68 problems (6 errors, 62 warnings).
+   차이 = forecast-price 6 error. 캐시 재생이 아니라 **실제 실행**으로 확인함.

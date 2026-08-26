@@ -3,19 +3,20 @@ import {
   type FlexGrid as FlexGridType,
   type FormatItemEventArgs,
 } from '@mescius/wijmo.grid';
+import { PeriodField } from 'features/master/src/components';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import dayjs from '@foundation/dayjs';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
-import { CustomDialog, CustomDropdown, DataGrid, SearchArea } from '@shared/components';
-import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
-import { Button, FormItem, InputField } from '@shared/lges';
+import { CustomDialog, DataGrid, SearchArea } from '@shared/components';
+import { useTabProcQuery } from '@shared/hooks';
+import { Button, FormItem, InputField, ProgressIndicator } from '@shared/lges';
 import { Grid } from '@shared/mui';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
 import { CUTOFF_VER_TYPE, MENU_ID, MSG, SHEETS } from '../../business-plan.constants';
-import type { MdfVersionRow } from '../../business-plan.types';
+import type { CutoffVersionRow } from '../../business-plan.types';
 import styles from '../../BusinessPlan.module.scss';
 import { callCutoff } from '../../utils/business-plan.api';
 
@@ -23,86 +24,86 @@ interface Props {
   open: boolean;
   modalClose: () => void;
   divisionId: string;
+  // 메인 화면 조회기간 (yyyymmdd 8자리) — 팝업 기간의 기본값.
+  //   optional : 미전달 구버전 호출부에서도 크래시 없이 빈값으로 뜨게 둔다.
+  period?: { start: string; end: string };
 }
 
-// 버전 목록 grid 8컬럼 — AS-IS VersionCutOffPopUp.InitSpread L190~199 1:1
-//   (Division/Version NO/Type/Description/Cutoff Date/Ver Seq/Update By/Update Date)
+// ⭐ 화면 입력은 일(日) 단위 yyyymmdd 8 그대로 보관하고(AS-IS DateTimePicker 와 동일 — 1일/말일로
+//   펼치지 않는다), SP 파라미터로 나갈 때만 앞 6자리를 잘라 yyyymm 계약을 지킨다 (2026-08-08 지시).
+const toYm = (yyyymmdd: string): string => (/^\d{8}$/.test(yyyymmdd) ? yyyymmdd.slice(0, 6) : '');
+
+// 버전 목록 grid 컬럼 (DMF0042_GET_DM_PLN_BP_CUTOFF_VERSION 커서 — 조회 전용)
 const VERSION_COLUMNS = [
-  { key: 'DIVISION_ID', header: 'Division', width: 90 },
-  { key: 'VERSION_NO', header: 'Version NO', width: 150 },
-  { key: 'VERSION_TYPE', header: 'Type', width: 70 },
-  { key: 'VERSION_DESCRIPTION', header: 'Description', width: 220 },
-  { key: 'YYYYMMDD', header: 'Cutoff Date', width: 100 },
-  { key: 'VER_CRE_SEQ', header: 'Ver Seq', width: 70 },
-  { key: 'LAST_UPDATED_BY', header: 'Update By', width: 110 },
-  { key: 'LAST_UPDATE_DATE', header: 'Update Date', width: 150 },
+  { key: 'DIVISION_ID', header: 'Division', width: 80 },
+  { key: 'VERSION_NO', header: 'Version No', width: 140 },
+  { key: 'VERSION_DESCRIPTION', header: 'Description', width: 260 },
+  { key: 'VERSION_TYPE', header: 'Type', width: 80 },
+  { key: 'CREATED_BY', header: 'Created By', width: 110 },
+  { key: 'CREATION_DATE', header: 'Creation Date', width: 140 },
 ];
 
-// ⭐ Ver. Cutoff 모달 — AS-IS VersionCutOffPopUp(610줄, BP_M 경로) 1:1 (2026-08-05 재작성):
-//   조회 = DMF0042_GET_DM_MDF_VERSION(mdfVersion 시트 — Description 필터 포함. 구 구현의
-//   cutoffVersion 배선은 Replace 팝업과 뒤바뀐 오배선이었음) / 실행 = Confirm →
-//   DMF0042_SAVE_DM_PLN_BP_FCST_CUTOFF (division 'ALL' 시 MyDivision 전체 순차 실행 L328~331,
-//   결과 ';' 연결 → MSG00151 → TO-BE MSG00675). Period 기본 = 오늘~+5개월 (Form_Load L106~108).
-//   권한 게이트 = 부모 hasButton('CUTOFF') (화면 DefineProperty L354~367 ADMIN/DM ADMIN 1:1).
-export const VersionCutoffModal = ({ open, modalClose, divisionId }: Props) => {
+// ⭐ Ver. Cutoff 모달 — AS-IS VersionCutOffPopUp(610줄) 1:1: 기존 버전 목록 조회
+//   (DMF0042_GET_DM_PLN_BP_CUTOFF_VERSION, versionType='BP_M') + 설명 입력 + Cutoff 실행
+//   (DMF0042_SAVE_DM_PLN_BP_FCST_CUTOFF — division 단일, createdBy BE주입).
+//   완료 안내 = MSG00675 '[Division ID : {0}] {1}' (AS-IS 00151). 권한 게이트 = 부모 hasButton('CUTOFF').
+export const VersionCutoffModal = ({ open, modalClose, divisionId, period }: Props) => {
   const { t } = useTranslation();
   const setAlert = useMessageStore.getState().setAlert;
-  const setToast = useMessageStore.getState().setToast;
-  const gridRef = useRef<FlexGridType<MdfVersionRow>>(undefined);
+  const gridRef = useRef<FlexGridType<CutoffVersionRow>>(undefined);
 
-  // Division 콤보 — MyDivision (AS-IS clbDivision. 초기값 = 화면 division, 변경 가능 L247)
-  const [myDivisions] = useTabComboQueries({ filters: ['MyDivision'] });
-  const divisionOptions = useMemo<Array<{ value: string; label: string }>>(() => {
-    const arr = (myDivisions ?? []) as Array<{ CODE?: string; NAME?: string }>;
-    return arr.map(r => {
-      const code = String(r.CODE ?? '');
-      const name = String(r.NAME ?? code);
-      return { value: code, label: code === name || name === '' ? code : `${code} (${name})` };
-    });
-  }, [myDivisions]);
+  // 기간 기본값 = 메인 화면 조회기간 승계 (설계서 popup-2 조회조건 'Default / 초기값' 칸).
+  //   월 1일/말일로 펼치지 않고 yyyymmdd 8자리 그대로 보관하며, SP 파라미터로 나갈 때만
+  //   앞 6자리를 잘라 yyyymm 계약을 지킨다.
+  //   부모 기간이 없는 경우에만 오늘 ~ +5개월로 대체한다.
+  const defaultPeriod = () => ({
+    from: /^\d{8}$/.test(period?.start ?? '')
+      ? (period?.start as string)
+      : dayjs().format('YYYYMMDD'),
+    to: /^\d{8}$/.test(period?.end ?? '')
+      ? (period?.end as string)
+      : dayjs().add(5, 'month').format('YYYYMMDD'),
+  });
 
-  const [division, setDivision] = useState(divisionId);
-  // Period 기본 = 2년 전 ~ +5개월 (AS-IS Form_Load L106~108 은 오늘~+5개월 — 과거 컷오프 버전이
-  //   목록에서 전멸해 "조회되지 않음"이 되므로 과거 포함으로 확장. 2026-08-05 사용자 지시 Δ.
-  //   현 원장 BP_M 컷오프일 = 2025-01-17/2025-05-22 실측 — 2년이면 커버)
-  const [fromYyyymmdd, setFromYyyymmdd] = useState('');
-  const [toYyyymmdd, setToYyyymmdd] = useState('');
-  // Description — 조회 필터(P_VERSION_DESCRIPTION like) 겸 Cutoff 실행 설명 (AS-IS txtDes 단일 필드)
+  const [startYmd, setStartYmd] = useState(() => defaultPeriod().from);
+  const [endYmd, setEndYmd] = useState(() => defaultPeriod().to);
   const [description, setDescription] = useState('');
   const [running, setRunning] = useState(false);
+  const [lastError, setLastError] = useState('');
 
   useEffect(() => {
     if (open) {
-      setDivision(divisionId);
-      setFromYyyymmdd(dayjs().subtract(2, 'year').format('YYYYMMDD'));
-      setToYyyymmdd(dayjs().add(5, 'month').format('YYYYMMDD'));
+      const { from, to } = defaultPeriod();
+      setStartYmd(from);
+      setEndYmd(to);
       setDescription('');
       setRunning(false);
+      setLastError('');
     }
-  }, [open, divisionId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, period?.start, period?.end]);
 
   const sesUserId = useSessionStore.getState().session.userId ?? '';
   const filters = useMemo(
     () => ({
-      divisionId: division,
-      versionDescription: description,
-      versionType: CUTOFF_VER_TYPE, // 'BP_M' (AS-IS LoadDataDiv L2915~2920)
-      fromYyyymmdd,
-      toYyyymmdd,
+      divisionId,
+      yyyymmFrom: toYm(startYmd),
+      yyyymmTo: toYm(endYmd),
+      versionType: CUTOFF_VER_TYPE, // 'BP_M' 고정 (AS-IS LoadDataDiv L2857)
       userId: sesUserId,
       mnuId: MENU_ID,
     }),
-    [division, description, fromYyyymmdd, toYyyymmdd, sesUserId]
+    [divisionId, startYmd, endYmd, sesUserId]
   );
-  const { data, refetch } = useTabProcQuery<MENU_ID, SHEETS.MDF_VERSION>({
+  const { data, refetch } = useTabProcQuery<MENU_ID, SHEETS.CUTOFF_VERSION>({
     menuId: MENU_ID,
-    sheetName: SHEETS.MDF_VERSION,
+    sheetName: SHEETS.CUTOFF_VERSION,
     tabId: MENU_ID,
     filters,
-    enabled: open && /^\d{8}$/.test(fromYyyymmdd) && /^\d{8}$/.test(toYyyymmdd),
+    enabled: open,
   });
-  const versionRows = useMemo<MdfVersionRow[]>(
-    () => (data as { data?: MdfVersionRow[] } | undefined)?.data ?? [],
+  const versionRows = useMemo<CutoffVersionRow[]>(
+    () => (data as { data?: CutoffVersionRow[] } | undefined)?.data ?? [],
     [data]
   );
 
@@ -142,40 +143,37 @@ export const VersionCutoffModal = ({ open, modalClose, divisionId }: Props) => {
     };
   }, [open, versionRows]);
 
-  // ⭐ Cutoff 실행 — AS-IS BP_Cutoff L521~576: division 'ALL' = MyDivision 전체 순차 실행,
-  //   결과 첫 값 ';' 연결 → MSG00675("[Division ID : {0}] {1}") → 재조회. (AS-IS 확인창 없음 —
-  //   TO-BE confirm 은 안전 강화 Δ)
+  // ⭐ Cutoff 실행 — confirm 후 SP 호출 (division 단일. 결과 passthrough + MSG00675 완료 안내)
   const handleCutoff = async () => {
     if (running) return;
-    const targets =
-      division.toUpperCase() === 'ALL' ? divisionOptions.map(o => o.value) : [division];
-    if (targets.length === 0 || targets[0] === '') return;
+    // 실행 확인 — MSG00033 '실행하시겠습니까?' (2026-08-08 사내 등록. 구: 하드코딩 영문
+    //   `Manual Cutoff (${divisionId})?`. Division 은 상단 Div 필드에 이미 고정 표시된다.)
     const confirmed = await setAlert({
       type: 'confirm',
-      content: `Manual Cutoff (${targets.join(',')})?`,
+      content: t(MSG.EXECUTE_CONFIRM, '실행하시겠습니까?'),
     });
     if (!confirmed) return;
     setRunning(true);
-    void setToast({ message: t('LBL00665', '_Loading...'), type: 'default', duration: 3000 });
+    // Loading 토스트는 제거 — duration 3초 고정이라 실제 소요시간과 어긋난다. 진행 표시는 스피너가 맡는다.
+    setLastError('');
     try {
-      let joined = '';
-      for (const div of targets) {
-        const res = await callCutoff(div, description.trim(), CUTOFF_VER_TYPE, sesUserId);
-        if (!res.ok) {
-          void setAlert({
-            type: 'alert',
-            content: res.message || t(MSG.SAVE_ERROR, '_저장 중 오류가 발생했습니다.'),
-          });
-          return;
-        }
-        joined += `;${res.message ?? ''}`;
+      const res = await callCutoff(divisionId, description.trim(), CUTOFF_VER_TYPE, sesUserId);
+      if (!res.ok) {
+        const message = res.message || t(MSG.SAVE_ERROR, '_저장 중 오류가 발생했습니다.');
+        // ⭐ SP 원문 오류는 alert 하나로는 읽기 어렵다 — 확인(confirm) 버튼과 결과 alert 의 확인 버튼이
+        //   같은 자리라 클릭이 이어지면 그대로 닫히고, ORA 스택은 400px 다이얼로그에서 잘린다.
+        //   ⇒ 모달 안에 남겨 두고(사용자가 읽고 복사 가능) 콘솔에도 기록한다.
+        setLastError(message);
+        console.error('[DMF0042] Ver. Cutoff 실패:', message);
+        void setAlert({ type: 'alert', content: message });
+        return;
       }
       // 완료 안내 — MSG00675 'Manual Cutoff가 완료되었습니다.[Division ID : {0}] {1}' (AS-IS 00151)
       void setAlert({
         type: 'alert',
         content: t(MSG.CUTOFF_DONE, '_Manual Cutoff가 완료되었습니다.[Division ID : {0}] {1}')
-          .replace('{0}', targets.join(','))
-          .replace('{1}', joined),
+          .replace('{0}', divisionId)
+          .replace('{1}', res.message ?? ''),
       });
       setDescription('');
       void refetch?.();
@@ -189,72 +187,60 @@ export const VersionCutoffModal = ({ open, modalClose, divisionId }: Props) => {
       open={open}
       type='modal'
       position='basic'
-      size={1000}
+      size={900}
       handleClose={modalClose}
       disableButtonCancel
       customHeaderTitle={
         <div className='headerContainer'>
           <div className='headerDot' />
-          {/* AS-IS 타이틀 "Ver. Cut-Off [BP_M]" (LoadDataDiv L137) */}
-          <h2 className='headerTitle'>{`Ver. Cut-Off [${CUTOFF_VER_TYPE}]`}</h2>
+          <h2 className='headerTitle'>Ver. Cutoff</h2>
         </div>
       }
       customContentArea={
         <div className={styles.modalContentWrapper}>
+          {/* ⭐ 실행 스피너 — Cutoff SP 는 수 초~수십 초 걸린다. 3초 만에 사라지는 Loading 토스트로는
+              "진행 중"이 안 읽혀 재클릭을 유발한다. 모달 전체를 덮는 스피너로 대체
+              (FcstUploadModal / SavePricePeriodModal 과 동일 패턴 — placement='parent'). */}
+          <ProgressIndicator
+            shape='circular'
+            apprearance='infinite'
+            open={running}
+            placement='parent'
+          />
           <SearchArea
             searchButtonLabel={t('LBL00664', 'Search')}
             onSearch={() => void refetch?.()}
             conditions={
+              // ⭐ 조회조건 = Div / Period 만 (2026-08-07 되돌림).
+              //   Description 은 조회 필터가 아니라 **Cutoff 실행 인자**(새 버전의 설명)라 하단
+              //   실행 버튼 옆으로 되돌렸다. 조회조건 자리에 두면 "이 값으로 거르는 건가"로 읽힌다.
               <>
                 <Grid size={4}>
                   <FormItem
                     label={t('LBL00663', 'Div')}
                     labelAlign='right'
-                    render={() => (
-                      // ⭐ 화면 division 고정 — 비활성 (2026-08-05 사용자 지시. AS-IS 는 변경 가능 Δ)
-                      <CustomDropdown
-                        value={division}
-                        options={divisionOptions}
-                        onChange={(_, option) => setDivision(String(option))}
-                        disabled
-                      />
-                    )}
+                    render={() => <InputField value={divisionId} disabled />}
                   />
                 </Grid>
-                <Grid size={5}>
-                  <FormItem
-                    label={t('LBL00013', 'Period')}
-                    labelAlign='right'
-                    render={() => (
-                      <div className={styles.modalFieldRow}>
-                        <InputField
-                          value={fromYyyymmdd}
-                          onChange={e => setFromYyyymmdd(e.target.value)}
-                          placeholder='YYYYMMDD'
-                        />
-                        <span>~</span>
-                        <InputField
-                          value={toYyyymmdd}
-                          onChange={e => setToYyyymmdd(e.target.value)}
-                          placeholder='YYYYMMDD'
-                        />
-                      </div>
-                    )}
-                  />
-                </Grid>
-                <Grid size={3}>
-                  <FormItem
-                    label='Type'
-                    labelAlign='right'
-                    render={() => <InputField value={CUTOFF_VER_TYPE} disabled />}
-                  />
-                </Grid>
+                {/* ⭐ Period — 부모 화면(BusinessPlanForm)과 동일한 카탈로그 PeriodField(일 달력).
+                    AS-IS 도 일 단위 DateTimePicker 라 월 달력(usecase='month')으로 바꾸지 않는다.
+                    화면값은 yyyymmdd 그대로 보관하고 SP 파라미터에서만 yyyymm 으로 자른다.
+                    required={false} — 모달 Period 는 선택 필터(부모는 필수 조회조건). */}
+                <PeriodField
+                  gridSize={8}
+                  start={startYmd}
+                  end={endYmd}
+                  onChange={(start, end) => {
+                    setStartYmd(start);
+                    setEndYmd(end);
+                  }}
+                />
               </>
             }
           />
 
           <div className={styles.modalGridWrapper}>
-            <DataGrid<MdfVersionRow>
+            <DataGrid<CutoffVersionRow>
               gridRef={gridRef}
               itemsSource={versionRows}
               staticColumns={gridStaticColumns}
@@ -262,23 +248,19 @@ export const VersionCutoffModal = ({ open, modalClose, divisionId }: Props) => {
               allowSorting={false}
             />
           </div>
-
-          {/* Description — 조회 필터 겸 Cutoff 버전 설명 (AS-IS txtDes 단일 필드 파리티) */}
-          <div className={styles.modalFieldRow}>
-            <span>Description</span>
+          {lastError && <div className={styles.modalErrorBox}>{lastError}</div>}
+          <div className={styles.modalActionRow}>
+            <span className={styles.modalActionLabel}>Description</span>
             <InputField
               value={description}
               onChange={e => setDescription(e.target.value)}
               placeholder='Version description'
             />
-          </div>
-
-          <div className={styles.modalButtonWrapper}>
             <Button
               appearance='contained'
               priority='primary'
               size='medium'
-              buttonLabel='Confirm'
+              buttonLabel='Cutoff'
               disabled={running}
               onClick={() => void handleCutoff()}
             />

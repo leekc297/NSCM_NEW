@@ -1,4 +1,7 @@
+import { useEffect } from 'react';
+
 import { clsx } from '@shared/clsx';
+import { isAnyDirty } from '@shared/stores';
 
 import { MDIContainer } from '../mdi/MDIContainer';
 import { NotFoundPage } from '../pages/NotFound';
@@ -15,6 +18,20 @@ interface MainLayoutProps {
 
 export const MainLayout = ({ notFound = false }: MainLayoutProps) => {
   useGuestNotice(); // 게스트 로그인 시 "권한 없음 → 권한신청" 안내
+
+  // ⭐ 브라우저 새로고침/창 닫기 미저장 변경 가드 — 열린 탭 중 하나라도 dirty 면
+  //   브라우저 기본 확인창을 띄운다. (F5 는 SubTitle 이 조회 단축키로 가로채므로
+  //   여기 걸리는 경로는 Ctrl+R/주소창 이동/창 닫기다.)
+  useEffect(() => {
+    const handler = (event: BeforeUnloadEvent) => {
+      if (!isAnyDirty()) return;
+      event.preventDefault();
+      // 일부 브라우저는 returnValue 설정이 있어야 확인창을 띄운다 (메시지 내용은 무시됨)
+      event.returnValue = '';
+    };
+    globalThis.window.addEventListener('beforeunload', handler);
+    return () => globalThis.window.removeEventListener('beforeunload', handler);
+  }, []);
   return (
     <>
       <Header />

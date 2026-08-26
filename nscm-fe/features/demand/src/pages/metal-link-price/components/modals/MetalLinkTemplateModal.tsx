@@ -29,7 +29,8 @@ import styles from './MetalLinkTemplateModal.module.scss';
 //   - 진입 시 자동조회 없음 (AS-IS //FindData() 주석 1:1) — 상단 SearchArea Search 로 조회.
 //   - SP = PKG_DMF0074.P_DMF0074_GET_METAL_LINK_TEMPLATE (divisionId 단일 — 부모 division 고정.
 //     division-gate 동일 적용 L837: 권한 없는 사업부 = 행 미반환).
-//   - 0건 = MSG00656 (이번 주 Sales Plan Waterfall MRF 'Y' 버전 부재 — AS-IS 팝업 L229 구 MSG00427 의도)
+//   - 0건 = MSG01015 "다운로드할 템플릿 대상 데이터가 없습니다." (2026-08-20 재채번 — 구 MSG00656 문구가
+//     MRF 'Y' 버전 부재로 원인을 오지시. AS-IS 팝업 L229 구 MSG00427 계보)
 //   - Excel Download(아이콘 버튼) = GridAction.flatExcelDownload — 업로드 양식(HEADER_CONTENT) 과
 //     동일한 평탄 헤더 1행 + '-' placeholder 는 빈칸으로 치환 (그대로 두면 업로드 검증에서 값으로 인식)
 //   ⭐ 표준 디자인 (사용자 요구 2026-07-10): 상단 SearchArea(Div 고정 + Search) /
@@ -96,10 +97,7 @@ export const MetalLinkTemplateModal = ({
     if (rows.length === 0) {
       void setAlert({
         type: 'alert',
-        content: t(
-          MSG.TEMPLATE_EMPTY,
-          "_Monthly Rolling Forecast 'Y' version does not exist in this week's Sales Plan Waterfall."
-        ),
+        content: t(MSG.TEMPLATE_EMPTY, '_No template data to download.'),
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -126,10 +124,7 @@ export const MetalLinkTemplateModal = ({
     if (rows.length === 0) {
       void setAlert({
         type: 'alert',
-        content: t(
-          MSG.TEMPLATE_EMPTY,
-          "_Monthly Rolling Forecast 'Y' version does not exist in this week's Sales Plan Waterfall."
-        ),
+        content: t(MSG.TEMPLATE_EMPTY, '_No template data to download.'),
       });
       return;
     }

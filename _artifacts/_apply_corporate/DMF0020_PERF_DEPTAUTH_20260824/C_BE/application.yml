@@ -1,0 +1,134 @@
+spring:
+  profiles:
+    group:
+      local: common, local
+      dev: common, dev
+      qa: common, qa
+      prd: common, prd
+    active: local
+
+---
+# [모든 profile 공통 설정]
+spring:
+  config:
+    activate:
+      on-profile: common
+
+  application:
+    name: scp
+
+  servlet:
+    context-path: /
+    multipart:
+      enabled: true
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+
+  aop:
+    proxy-target-class: true
+
+
+
+server:
+  servlet:
+    session:
+      timeout: 8h # default
+  port: 8080
+  tomcat:
+    connection-timeout: 1800000
+  # [E20260824-GZIP] 응답 압축. 조회 응답이 컬럼명 반복이 많은 JSON 이라 압축률이 극단적으로 높다.
+  #   DMF0020 실측(div82 / 12개월 / 10,524행 × 102컬럼): 25.1MB -> 0.60MB (42배), 압축 비용 0.55s.
+  #   FE 계약은 그대로다(브라우저가 Accept-Encoding: gzip 으로 투명 해제).
+  #   min-response-size 미만(작은 응답)은 압축하지 않으므로 소형 API 에 부담이 없다.
+  compression:
+    enabled: true
+    mime-types: application/json,application/json;charset=UTF-8,text/plain,text/css,text/html,application/javascript
+    min-response-size: 2KB
+
+config:
+  # Async 설정
+  async:
+    core-pool-size: 16
+    max-pool-size: 16
+    queue-capacity: 1000
+    thread-name-prefix: ScpThread
+
+  # Spring Security 설정
+  security:
+    skip-uris:
+      - /health-check
+      - /test/**
+
+  # 파일 경로
+  file:
+    path: "c:\\nscm\\file"
+    upload-path: "c:\\nscm\\uploadFile"
+    download-path: "c:\\nscm\\downloadFile"
+
+  # 메일 설정
+  mail:
+    host: mailrelay.lgensol.com
+    port: 25
+    user: scmpi
+    test-user: scmpi
+    password: "scm202307pi!"
+    smtp-auth: false
+    smtp-starttls-enable: false
+    smtp-ssl-enable: false
+    smtp-ssl-trust: scmpi@lgensol.com
+
+  # MyBatis 설정
+  mybatis:
+    logging-enabled: true
+    logging-only-error: false
+
+# Swagger UI 접속 경로 설정 (기본값: /swagger-ui/index.html)
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    url: /v3/api-docs
+    disable-swagger-default-url: true
+    tags-sorter: alpha
+    operations-sorter: alpha
+
+---
+# [Local profile]
+spring:
+  config:
+    activate:
+      on-profile: local
+    import:
+      - classpath:config/config-local.yml
+
+---
+# [Dev profile]
+spring:
+  config:
+    activate:
+      on-profile: dev
+    import:
+      - classpath:config/config-dev.yml
+
+---
+# [QA profile]
+spring:
+  config:
+    activate:
+      on-profile: qa
+    import:
+      - classpath:config/config-qa.yml
+
+---
+# [Prd profile]
+spring:
+  config:
+    activate:
+      on-profile: prd
+    import:
+      - classpath:config/config-prd.yml

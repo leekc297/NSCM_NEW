@@ -431,10 +431,15 @@ export const VersionModal = ({
             searchButtonLabel={t('LBL00664', 'Search')}
             onSearch={handleSearch}
             conditions={
-              <>
+              /* styles.searchGrid = display:contents 스코프 래퍼 — 4필드 라벨 열을 글자 폭에 맞춘다
+                 (기본 100px 고정 라벨이 셀 폭을 먹어 Div 콤보가 잘리던 문제. scss 주석 참조).
+                 칸 배분은 Div / Type / Period / Description 각 3칸 = 12칸 균등.
+                 라벨이 고정 100px 이 아니라 글자 폭만 쓰므로 Period(달력 2개 = 110px x 2 + 구분자)도
+                 3칸에 들어가고, 나머지 셋은 모두 종전보다 넓어진다. */
+              <div className={styles.searchGrid}>
                 {/* V-1 Division = 표준 카탈로그 DivisionField. AS-IS L119~120 `SelectedValue=_sDiv;
                     Enabled=false` 1:1 — 부모 확정값이라 비활성(값은 부모가 소유). */}
-                <DivisionField value={divisionId} onChange={() => undefined} gridSize={2} />
+                <DivisionField value={divisionId} onChange={() => undefined} gridSize={3} />
                 <Grid size={3}>
                   <FormItem
                     label={t('LBL00794', '_Type')}
@@ -452,7 +457,7 @@ export const VersionModal = ({
                 <PeriodField
                   start={sdt}
                   end={edt}
-                  gridSize={4}
+                  gridSize={3}
                   onChange={(s, e) => {
                     setSdt(s);
                     setEdt(e);
@@ -470,7 +475,7 @@ export const VersionModal = ({
                     )}
                   />
                 </Grid>
-              </>
+              </div>
             }
           />
 

@@ -136,7 +136,7 @@ export const GroupUser = ({ tabId, title }: PageProps<MENU_ID>) => {
       if (divisionGridRef.current) GridAction.removeRow(divisionGridRef.current, false);
       return;
     }
-    if (mainGridRef.current) GridAction.removeRow(mainGridRef.current, true);
+    if (mainGridRef.current) GridAction.removeRow(mainGridRef.current, false);
   };
 
   // — SAVE (3 sheet 통합 — main/userInfo/division CRUD row) —

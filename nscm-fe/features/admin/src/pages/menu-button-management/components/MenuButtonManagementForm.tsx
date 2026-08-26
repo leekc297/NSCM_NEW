@@ -1,3 +1,4 @@
+import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { FormItem, InputField } from '@shared/lges';
@@ -28,6 +29,7 @@ export const MenuButtonnManagementForm = () => {
             <FormItem
               label={t('LBL00347', '_Menu')}
               labelAlign='right'
+              className={commonStyles.formItem}
               render={() => (
                 <CustomDropdown
                   multiple
@@ -49,6 +51,7 @@ export const MenuButtonnManagementForm = () => {
             <FormItem
               label={t('LBL00306', '_Sheet name')}
               labelAlign='right'
+              className={commonStyles.formItem}
               render={() => (
                 <InputField
                   fullWidth
@@ -62,6 +65,7 @@ export const MenuButtonnManagementForm = () => {
             <FormItem
               label={t('LBL00348', '_API Name')}
               labelAlign='right'
+              className={commonStyles.formItem}
               render={() => (
                 <InputField
                   fullWidth
@@ -71,10 +75,11 @@ export const MenuButtonnManagementForm = () => {
               )}
             />
           </Grid>
-          <Grid size={2}>
+          <Grid size={3}>
             <FormItem
               label={t('LBL00007', '_Active')}
               labelAlign='right'
+              className={commonStyles.formItem}
               render={() => (
                 <CustomDropdown
                   allOption

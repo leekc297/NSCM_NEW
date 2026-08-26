@@ -4,6 +4,7 @@ import {
   setQueryErrorHandler,
   PersistQueryClientProvider,
   idbPersister,
+  shouldPersistQuery,
   CACHE_MAX_AGE,
 } from '@foundation/query-client';
 import { ThemeSwitchProvider } from '@shared/lges';
@@ -23,7 +24,12 @@ export const Providers = ({ children }: ProvidersProps) => {
   return (
     <PersistQueryClientProvider
       client={queryClient}
-      persistOptions={{ persister: idbPersister, maxAge: CACHE_MAX_AGE }}
+      persistOptions={{
+        persister: idbPersister,
+        maxAge: CACHE_MAX_AGE,
+        // 콤보/룩업은 영속 제외 — 새로고침하면 항상 서버에서 다시 받는다. shouldPersistQuery 주석 참고.
+        dehydrateOptions: { shouldDehydrateQuery: shouldPersistQuery },
+      }}
     >
       <I18nextProvider i18n={i18n}>
         <ThemeSwitchProvider initialThemeMode='system'>{children}</ThemeSwitchProvider>

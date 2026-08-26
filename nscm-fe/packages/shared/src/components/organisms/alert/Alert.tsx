@@ -2,7 +2,7 @@ import { CustomDialog } from '@shared/components/molecules';
 import { useMessageStore } from '@shared/stores';
 
 export const Alert = () => {
-  const { isOpenAlert, alertProps, close, resolve } = useMessageStore();
+  const { isOpenAlert, alertProps, closeAlert, resolve } = useMessageStore();
   return (
     <CustomDialog
       open={isOpenAlert}
@@ -15,7 +15,7 @@ export const Alert = () => {
       handleClose={() => {
         resolve(false);
         alertProps.onClose?.();
-        close();
+        closeAlert();
       }}
       position='basic'
       size={400}

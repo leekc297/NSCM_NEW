@@ -441,12 +441,30 @@ def run_section2(page_dir, analysis):
         if analysis:
             return "FAIL", f"__asis-mapping__.md 부재 (분석 md 지정됨 — asis_mapping_gate --init 선생성 의무)", []
         return "SKIP", "__asis-mapping__.md 부재 + --analysis 미지정 — 분석 md 존재 여부 판정 후 hook #123(md 선생성) 적용 대상인지 확인 필요 (사유 명시 SKIP)", []
+    # ⭐ 2026-08-20 — `--citations` 상시 활성 (죽은 실재성 축 부활: 상태='구현' 행의 인용 파일·심볼 실재 검증)
     r = subprocess.run(
-        [sys.executable, str(DIAG / "asis_mapping_gate.py"), "--check", str(page_dir)],
-        capture_output=True, timeout=120,
+        [sys.executable, str(DIAG / "asis_mapping_gate.py"), "--check", str(page_dir), "--citations"],
+        capture_output=True, timeout=300,
     )
     out = r.stdout.decode("utf-8", errors="replace").strip()
     return ("PASS" if r.returncode == 0 else "FAIL"), out.splitlines()[0] if out else "", [f"```\n{out}\n```"] if r.returncode else []
+
+
+def run_section10(menu, page_dir):
+    """보완요청(REQ) 원장 축 (2026-08-20 신설 — 사용자 지정 보완요청 미적용 재발 방지).
+
+    원천 = `Doc/단위테스트_보완대상/보완요청_원장.md` (미적용 전제 — PENDING 잔존 = FAIL).
+    보류(USER-DECISION/VISUAL)·클라우드 미반영 목록은 PASS 여도 상시 리포트에 남긴다 (소실 금지).
+    """
+    r = subprocess.run(
+        [sys.executable, str(DIAG / "asis_mapping_gate.py"), "--check", str(page_dir),
+         "--requests-only", "--menu", menu],
+        capture_output=True, timeout=120,
+    )
+    out = r.stdout.decode("utf-8", errors="replace").strip()
+    head = out.splitlines()[0] if out else ""
+    # 보류·클라우드N 목록은 판정과 무관하게 전량 상시 노출
+    return ("PASS" if r.returncode == 0 else "FAIL"), head, ([f"```\n{out}\n```"] if out else [])
 
 
 def run_section5(page_dir, analysis):
@@ -637,24 +655,26 @@ def main():
         except Exception as e:  # noqa: BLE001 — 환경성 오류를 판정과 구분해 보고
             return (label, "ERROR", f"실행 오류 — 재실행 필요: {e}", [])
 
-    print(f"[1/9] check-ui-gates.ps1 (G-A~G-G) — {page_dir}")
+    print(f"[1/10] check-ui-gates.ps1 (G-A~G-G) — {page_dir}")
     sections.append(guarded("1. 실행 hook check-ui-gates.ps1 (G-A~G-G)", run_section1, page_dir))
-    print("[2/9] asis_mapping_gate --check")
-    sections.append(guarded("2. EID 1:1 대사표 (asis_mapping_gate --check)", run_section2, page_dir, args.analysis))
-    print("[3/9] wiring_chain_check --menu (v2 액션·권한 축 포함)")
+    print("[2/10] asis_mapping_gate --check --citations")
+    sections.append(guarded("2. EID 1:1 대사표 (asis_mapping_gate --check --citations)", run_section2, page_dir, args.analysis))
+    print("[3/10] wiring_chain_check --menu (v2 액션·권한 축 포함)")
     sections.append(guarded("3. FE→BE→SP 배선 체인 (wiring_chain_check L1~L7+L2A/L2P)", run_section3, args.menu))
-    print("[4/9] 메타 값 단언 (SHEET_COLUMNS)")
+    print("[4/10] 메타 값 단언 (SHEET_COLUMNS)")
     sections.append(guarded("4. 메타 값 단언 (SHEET_COLUMNS CTRL/INPUT_TP_CD)", run_section4, args.menu, ctrl_wl))
-    print("[5/9] CRUD·모달 매트릭스 (asis_mapping_gate --check --matrix-only)")
+    print("[5/10] CRUD·모달 매트릭스 (asis_mapping_gate --check --matrix-only)")
     sections.append(guarded("5. CRUD·모달 매트릭스 (--matrix-only — MAIN UI·모달 CRUD 누락 0)", run_section5, page_dir, args.analysis))
-    print("[6/9] HTTP 셀프 E2E 리포트 (ui_http_e2e — 권한별·모달·SAVE 왕복 실행 증명)")
+    print("[6/10] HTTP 셀프 E2E 리포트 (ui_http_e2e — 권한별·모달·SAVE 왕복 실행 증명)")
     sections.append(guarded("6. HTTP 셀프 E2E (hook #125 §2 — 실행 증명 리포트)", run_section6, args.menu))
-    print("[7/9] UP_FX 콤보 파라미터 정합 (토큰 대사·quoting·조용한 실패)")
+    print("[7/10] UP_FX 콤보 파라미터 정합 (토큰 대사·quoting·조용한 실패)")
     sections.append(guarded("7. UP_FX 콤보 파라미터 정합 (hook #117 §5.5~§5.10)", run_section7, args.menu, page_dir))
-    print("[8/9] 콤보 호출 지점(트리거) 대사 — AS-IS N:N")
+    print("[8/10] 콤보 호출 지점(트리거) 대사 — AS-IS N:N")
     sections.append(guarded("8. 콤보 호출 지점 대사 (hook #117 §5.12 — 제때 부르는가)", run_section8, args.menu, page_dir))
-    print("[9/9] 단위테스트 (AS-IS 산식 1:1 — 값이 맞는가)")
+    print("[9/10] 단위테스트 (AS-IS 산식 1:1 — 값이 맞는가)")
     sections.append(guarded("9. 단위테스트 (asis-coverage-check §0.4 — 값 검증)", run_section9, page_dir))
+    print("[10/10] 보완요청(REQ) 원장 축 (--requests-only — 미적용 전제·PENDING 0 의무)")
+    sections.append(guarded("10. 보완요청(REQ) 원장 (2026-08-20 — 지정 보완요청 미적용 재발 방지)", run_section10, args.menu, page_dir))
 
     overall = "PASS"
     if any(s[1] == "FAIL" for s in sections):

@@ -9,7 +9,7 @@ import type { BUCKET_TYPE, MENU_ID, SHEETS } from './sales-plan.constants';
 export interface SearchCondition {
   divisionId: string; // 필수 — Division 단일 콤보 (MSG00097)
   deptIds: string[]; // Team
-  endCustomers: string[]; // End Customer (40 = EndCustomerByDivision40 원천)
+  endCustomers: string[]; // End Customer (콤보 'EndCustomer' — 2026-08-22 콤보 통일)
   scmSiteIds: string[]; // Sales Site
   plantSiteIds: string[]; // Plant Site (40 비활성 — AS-IS InitControls L455)
   bizTypes: string[]; // Biz Type (40 = DmBizType 원천)

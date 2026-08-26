@@ -1,0 +1,185 @@
+﻿[SP] ver=CURRENT rc1=15897
+최종 동적 SQL SQL_ID = gybz7gcbv0a7j
+SQL_ID  gybz7gcbv0a7j, child number 0
+-------------------------------------
+WITH T_DM51_WF AS ( SELECT A.QTY AS QTY                   , A.COLNAME   
+              , I.SORT_ORDER_NO                 , EDY.EDIT_YN           
+      , A.VERSION_NO ,NVL(D.ITEM_NAME, '') AS ITEM_NAME ,C.DEPT_ID 
+,A.PROJECT_CODE AS END_CUSTOMER40 ,A.END_CUSTOMER ,A.SCM_SITE_ID AS 
+SCM_SITE_ID40 ,A.SCM_SITE_ID AS SCM_SITE_ID81 ,A.SCM_SITE_ID AS 
+SCM_SITE_ID82 ,A.PROJECT_CODE AS PROJECT_CODE ,A.PROJECT_CODE AS 
+PROJECT_CODE82 ,A.BIZ_TYPE AS BIZ_TYPE_NAME81 ,A.ITEM_ID AS ITEM_ID 
+,A.ITEM_ID AS ITEM_ID40 ,A.INCOTERMS ,A.FCST_TYPE ,A.PLANT_SITE_ID 
+,J.ATTRIBUTE1 AS CELL_PROD_SITE ,A.MEASURE ,CASE WHEN A.VERSION_NO = 
+'CURRENT' THEN 'ZZZZZZZZZZZZZZZ' ELSE A.VERSION_NO END AS VERSION_SORT 
+,CASE WHEN A.DIVISION_ID = '40' THEN A.PROJECT_NAME                     
+                                                                    
+WHEN RTRIM(B.PROJECT_NAME) IS NULL THEN A.PROJECT_NAME                  
+                                                                       
+ELSE B.PROJECT_NAME END PROJECT_NA
+ 
+Plan hash value: 1218434245
+ 
+------------------------------------------------------------------------------------------------------------------------------------------
+| Id  | Operation                                          | Name                                    | E-Rows |  OMem |  1Mem | Used-Mem |
+------------------------------------------------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT                                   |                                         |        |       |       |          |
+|   1 |  SORT GROUP BY PIVOT                               |                                         |    102K|  9833K|  3258K| 8740K (0)|
+|   2 |   VIEW                                             |                                         |    102K|       |       |          |
+|   3 |    HASH GROUP BY                                   |                                         |    102K|    68M|  7692K|   53M (0)|
+|   4 |     VIEW                                           | VM_NWVW_1                               |    102K|       |       |          |
+|   5 |      HASH GROUP BY                                 |                                         |    102K|    74M|  7832K|   70M (0)|
+|*  6 |       HASH JOIN RIGHT OUTER                        |                                         |    102K|  1582K|  1406K| 1862K (0)|
+|   7 |        TABLE ACCESS FULL                           | SCM_MST_PROJECT                         |   8468 |       |       |          |
+|   8 |        NESTED LOOPS                                |                                         |    102K|       |       |          |
+|*  9 |         HASH JOIN RIGHT OUTER                      |                                         |    102K|  1281K|  1281K|  938K (0)|
+|  10 |          TABLE ACCESS BY INDEX ROWID BATCHED       | SCM_ADM_LOOKUP_MASTER_DETAIL            |     26 |       |       |          |
+|* 11 |           INDEX RANGE SCAN                         | PK_SCM_ADM_LOOKUP_MASTER_DETAIL         |     26 |       |       |          |
+|* 12 |          HASH JOIN RIGHT OUTER                     |                                         |    102K|    18M|  2640K|   18M (0)|
+|  13 |           TABLE ACCESS FULL                        | GT_DM22_DM_MST_ITEM_SINGLE_V            |    169K|       |       |          |
+|* 14 |           HASH JOIN RIGHT OUTER                    |                                         |    101K|   107M|    11M|  125M (0)|
+|  15 |            TABLE ACCESS FULL                       | GT_DM51_SCM_CITY                        |   1283K|       |       |          |
+|* 16 |            HASH JOIN RIGHT OUTER                   |                                         |    101K|  3216K|  1320K| 3348K (0)|
+|  17 |             TABLE ACCESS FULL                      | GT_DM51_SCM_MST_SITE_ITEM               |  23193 |       |       |          |
+|* 18 |             HASH JOIN                              |                                         |    101K|  1316K|  1316K|  931K (0)|
+|  19 |              TABLE ACCESS FULL                     | GT_DM22_SELECT_MEASURE                  |      9 |       |       |          |
+|* 20 |              HASH JOIN                             |                                         |    101K|  1209K|  1209K|  893K (0)|
+|* 21 |               HASH JOIN                            |                                         |      6 |  1162K|  1162K|  807K (0)|
+|  22 |                NESTED LOOPS                        |                                         |      6 |       |       |          |
+|* 23 |                 TABLE ACCESS BY INDEX ROWID        | SCM_ADM_MNU_M                           |      1 |       |       |          |
+|* 24 |                  INDEX UNIQUE SCAN                 | PK_SCM_ADM_MNU_M                        |      1 |       |       |          |
+|* 25 |                 TABLE ACCESS BY INDEX ROWID BATCHED| SCM_ADM_USER_GR_MPG_M                   |      6 |       |       |          |
+|* 26 |                  INDEX SKIP SCAN                   | PK_SCM_ADM_USER_GR_MPG_M                |      6 |       |       |          |
+|* 27 |                TABLE ACCESS BY INDEX ROWID BATCHED | SCM_ADM_USER_GR_UNIT_AUTH_MPG_M         |     32 |       |       |          |
+|* 28 |                 INDEX RANGE SCAN                   | IX01_TB_SCM_ADM_USER_GR_UNIT_AUTH_MPG_M |     32 |       |       |          |
+|  29 |               TABLE ACCESS FULL                    | GT_DM51_RAW_DATA                        |    227K|       |       |          |
+|* 30 |         INDEX UNIQUE SCAN                          | PK_SCM_MST_SITE                         |      1 |       |       |          |
+------------------------------------------------------------------------------------------------------------------------------------------
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   6 - access("A"."DIVISION_ID"="B"."DIVISION_ID" AND "A"."PROJECT_CODE"="B"."PROJECT_CODE")
+   9 - access("A"."CELL_PROD_SITE"="J"."SEGMENT1")
+  11 - access("J"."LOOKUP_TYPE"='DM_CELL_PROD_SITE')
+  12 - access("A"."DIVISION_ID"="D"."DIVISION_ID" AND "A"."ITEM_ID"="D"."ITEM_ID")
+  14 - access("A"."DIVISION_ID"="G"."DIVISION_ID" AND "A"."SCM_SITE_ID"="G"."SCM_SITE_ID" AND "G"."END_CUSTOMER"=CASE 
+              "A"."DIVISION_ID" WHEN '40' THEN "A"."PROJECT_CODE" ELSE "A"."END_CUSTOMER" END  AND "C"."DEPT_ID"="G"."DEPT_ID")
+  16 - access("A"."DIVISION_ID"="C"."DIVISION_ID" AND "A"."SCM_SITE_ID"="C"."SCM_SITE_ID" AND 
+              "A"."PROJECT_CODE"="C"."PROJECT_CODE" AND "A"."ITEM_ID"="C"."ITEM_ID")
+  18 - access("A"."MEASURE"="I"."MEASURE")
+  20 - access("AUTH"."UNIT_ID"="A"."DIVISION_ID")
+  21 - access("MNU"."UNIT_TP_CD"="AUTH"."UNIT_TP_CD" AND "AUTH"."USER_GR_ID"="GRP"."USER_GR_ID" AND 
+              "AUTH"."USER_ID"="GRP"."USER_ID")
+  23 - filter("MNU"."USE_YN"='Y')
+  24 - access("MNU"."MNU_ID"='DMF0035')
+  25 - filter("GRP"."USE_YN"='Y')
+  26 - access("GRP"."USER_ID"='minyonglee1')
+       filter("GRP"."USER_ID"='minyonglee1')
+  27 - filter("AUTH"."USE_YN"='Y')
+  28 - access("AUTH"."USER_ID"='minyonglee1')
+  30 - access("A"."DIVISION_ID"="F"."DIVISION_ID" AND "A"."SCM_SITE_ID"="F"."SCM_SITE_ID")
+ 
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+   - Warning: basic plan statistics not available. These are only collected when:
+       * hint 'gather_plan_statistics' is used for the statement or
+       * parameter 'statistics_level' is set to 'ALL', at session or system level
+   - Global temporary table session private statistics used
+ 
+SQL_ID  gybz7gcbv0a7j, child number 1
+-------------------------------------
+WITH T_DM51_WF AS ( SELECT A.QTY AS QTY                   , A.COLNAME   
+              , I.SORT_ORDER_NO                 , EDY.EDIT_YN           
+      , A.VERSION_NO ,NVL(D.ITEM_NAME, '') AS ITEM_NAME ,C.DEPT_ID 
+,A.PROJECT_CODE AS END_CUSTOMER40 ,A.END_CUSTOMER ,A.SCM_SITE_ID AS 
+SCM_SITE_ID40 ,A.SCM_SITE_ID AS SCM_SITE_ID81 ,A.SCM_SITE_ID AS 
+SCM_SITE_ID82 ,A.PROJECT_CODE AS PROJECT_CODE ,A.PROJECT_CODE AS 
+PROJECT_CODE82 ,A.BIZ_TYPE AS BIZ_TYPE_NAME81 ,A.ITEM_ID AS ITEM_ID 
+,A.ITEM_ID AS ITEM_ID40 ,A.INCOTERMS ,A.FCST_TYPE ,A.PLANT_SITE_ID 
+,J.ATTRIBUTE1 AS CELL_PROD_SITE ,A.MEASURE ,CASE WHEN A.VERSION_NO = 
+'CURRENT' THEN 'ZZZZZZZZZZZZZZZ' ELSE A.VERSION_NO END AS VERSION_SORT 
+,CASE WHEN A.DIVISION_ID = '40' THEN A.PROJECT_NAME                     
+                                                                    
+WHEN RTRIM(B.PROJECT_NAME) IS NULL THEN A.PROJECT_NAME                  
+                                                                       
+ELSE B.PROJECT_NAME END PROJECT_NA
+ 
+Plan hash value: 1218434245
+ 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Id  | Operation                                          | Name                                    | Starts | E-Rows | A-Rows |   A-Time   | Buffers |  OMem |  1Mem | Used-Mem |
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT                                   |                                         |      1 |        |  15897 |00:00:01.21 |     245K|       |       |          |
+|   1 |  SORT GROUP BY PIVOT                               |                                         |      1 |    118K|  15897 |00:00:01.21 |     245K|  9833K|  3258K| 8740K (0)|
+|   2 |   VIEW                                             |                                         |      1 |    118K|    149K|00:00:00.71 |     245K|       |       |          |
+|   3 |    HASH GROUP BY                                   |                                         |      1 |    118K|    149K|00:00:00.68 |     245K|    68M|  7692K|   55M (0)|
+|   4 |     VIEW                                           | VM_NWVW_1                               |      1 |    118K|    206K|00:00:00.45 |     245K|       |       |          |
+|   5 |      HASH GROUP BY                                 |                                         |      1 |    118K|    206K|00:00:00.45 |     245K|    74M|  7832K|   70M (0)|
+|*  6 |       HASH JOIN RIGHT OUTER                        |                                         |      1 |    118K|   1033K|00:00:03.15 |     245K|  1582K|  1406K| 1895K (0)|
+|   7 |        TABLE ACCESS FULL                           | SCM_MST_PROJECT                         |      1 |   8468 |   8468 |00:00:00.01 |     247 |       |       |          |
+|   8 |        NESTED LOOPS                                |                                         |      1 |    118K|   1033K|00:00:02.91 |     244K|       |       |          |
+|*  9 |         HASH JOIN RIGHT OUTER                      |                                         |      1 |    118K|   1033K|00:00:02.11 |   21084 |  1281K|  1281K|  913K (0)|
+|  10 |          TABLE ACCESS BY INDEX ROWID BATCHED       | SCM_ADM_LOOKUP_MASTER_DETAIL            |      1 |     26 |      7 |00:00:00.01 |       4 |       |       |          |
+|* 11 |           INDEX RANGE SCAN                         | PK_SCM_ADM_LOOKUP_MASTER_DETAIL         |      1 |     26 |      7 |00:00:00.01 |       3 |       |       |          |
+|* 12 |          HASH JOIN RIGHT OUTER                     |                                         |      1 |    118K|   1033K|00:00:01.85 |   21080 |    18M|  2640K|   18M (0)|
+|  13 |           TABLE ACCESS FULL                        | GT_DM22_DM_MST_ITEM_SINGLE_V            |      1 |    169K|    169K|00:00:00.01 |    2736 |       |       |          |
+|* 14 |           HASH JOIN RIGHT OUTER                    |                                         |      1 |    116K|   1033K|00:00:01.51 |   18344 |   107M|    11M|  125M (0)|
+|  15 |            TABLE ACCESS FULL                       | GT_DM51_SCM_CITY                        |      1 |   1283K|   1283K|00:00:00.06 |   10610 |       |       |          |
+|* 16 |            HASH JOIN RIGHT OUTER                   |                                         |      1 |    116K|   1033K|00:00:00.89 |    7734 |  3216K|  1320K| 3348K (0)|
+|  17 |             TABLE ACCESS FULL                      | GT_DM51_SCM_MST_SITE_ITEM               |      1 |  23193 |  23193 |00:00:00.01 |     558 |       |       |          |
+|* 18 |             HASH JOIN                              |                                         |      1 |    116K|   1033K|00:00:00.50 |    7176 |  1316K|  1316K|  931K (0)|
+|  19 |              TABLE ACCESS FULL                     | GT_DM22_SELECT_MEASURE                  |      1 |      9 |      9 |00:00:00.01 |       3 |       |       |          |
+|* 20 |              HASH JOIN                             |                                         |      1 |    116K|   1033K|00:00:00.20 |    7173 |  1209K|  1209K|  893K (0)|
+|* 21 |               HASH JOIN                            |                                         |      1 |      6 |     32 |00:00:00.01 |      11 |  1162K|  1162K|  807K (0)|
+|  22 |                NESTED LOOPS                        |                                         |      1 |      6 |      7 |00:00:00.01 |       7 |       |       |          |
+|* 23 |                 TABLE ACCESS BY INDEX ROWID        | SCM_ADM_MNU_M                           |      1 |      1 |      1 |00:00:00.01 |       2 |       |       |          |
+|* 24 |                  INDEX UNIQUE SCAN                 | PK_SCM_ADM_MNU_M                        |      1 |      1 |      1 |00:00:00.01 |       1 |       |       |          |
+|* 25 |                 TABLE ACCESS BY INDEX ROWID BATCHED| SCM_ADM_USER_GR_MPG_M                   |      1 |      6 |      7 |00:00:00.01 |       5 |       |       |          |
+|* 26 |                  INDEX SKIP SCAN                   | PK_SCM_ADM_USER_GR_MPG_M                |      1 |      6 |      7 |00:00:00.01 |       1 |       |       |          |
+|* 27 |                TABLE ACCESS BY INDEX ROWID BATCHED | SCM_ADM_USER_GR_UNIT_AUTH_MPG_M         |      1 |     32 |     32 |00:00:00.01 |       4 |       |       |          |
+|* 28 |                 INDEX RANGE SCAN                   | IX01_TB_SCM_ADM_USER_GR_UNIT_AUTH_MPG_M |      1 |     32 |     32 |00:00:00.01 |       2 |       |       |          |
+|  29 |               TABLE ACCESS FULL                    | GT_DM51_RAW_DATA                        |      1 |    260K|    206K|00:00:00.05 |    7162 |       |       |          |
+|* 30 |         INDEX UNIQUE SCAN                          | PK_SCM_MST_SITE                         |   1033K|      1 |   1033K|00:00:00.58 |     223K|       |       |          |
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   6 - access("A"."DIVISION_ID"="B"."DIVISION_ID" AND "A"."PROJECT_CODE"="B"."PROJECT_CODE")
+   9 - access("A"."CELL_PROD_SITE"="J"."SEGMENT1")
+  11 - access("J"."LOOKUP_TYPE"='DM_CELL_PROD_SITE')
+  12 - access("A"."DIVISION_ID"="D"."DIVISION_ID" AND "A"."ITEM_ID"="D"."ITEM_ID")
+  14 - access("A"."DIVISION_ID"="G"."DIVISION_ID" AND "A"."SCM_SITE_ID"="G"."SCM_SITE_ID" AND "G"."END_CUSTOMER"=CASE "A"."DIVISION_ID" WHEN '40' THEN "A"."PROJECT_CODE" 
+              ELSE "A"."END_CUSTOMER" END  AND "C"."DEPT_ID"="G"."DEPT_ID")
+  16 - access("A"."DIVISION_ID"="C"."DIVISION_ID" AND "A"."SCM_SITE_ID"="C"."SCM_SITE_ID" AND "A"."PROJECT_CODE"="C"."PROJECT_CODE" AND "A"."ITEM_ID"="C"."ITEM_ID")
+  18 - access("A"."MEASURE"="I"."MEASURE")
+  20 - access("AUTH"."UNIT_ID"="A"."DIVISION_ID")
+  21 - access("MNU"."UNIT_TP_CD"="AUTH"."UNIT_TP_CD" AND "AUTH"."USER_GR_ID"="GRP"."USER_GR_ID" AND "AUTH"."USER_ID"="GRP"."USER_ID")
+  23 - filter("MNU"."USE_YN"='Y')
+  24 - access("MNU"."MNU_ID"='DMF0035')
+  25 - filter("GRP"."USE_YN"='Y')
+  26 - access("GRP"."USER_ID"='minyonglee1')
+       filter("GRP"."USER_ID"='minyonglee1')
+  27 - filter("AUTH"."USE_YN"='Y')
+  28 - access("AUTH"."USER_ID"='minyonglee1')
+  30 - access("A"."DIVISION_ID"="F"."DIVISION_ID" AND "A"."SCM_SITE_ID"="F"."SCM_SITE_ID")
+ 
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+   - Global temporary table session private statistics used
+ 
+
+[SP 내부 문장별 A-Time — PKG_DMF0051 귀속]
+  gybz7gcbv0a7j | 4.86 | 245637 | 0 | 15897 | 1690 | WITH T_DM51_WF AS ( SELECT A.QTY AS QTY                   , A.COLNAME                 , I.
+  4cj6s5jx44ydb | 1.27 | 96253 | 0 | 1283852 | 1171 | INSERT INTO SCM_MGR.GT_DM51_SCM_CITY (DIVISION_ID, SOLDTO_CUSTOMER, END_CUSTOMER, DEPT_ID,
+  3xbwjjqs5c2sf | 1.1 | 89451 | 29781 | 243050 | 985 | INSERT INTO SCM_MGR.GT_DM22_DM_MST_ITEM_SINGLE_ORI_V (COMPANY_ID, DIVISION_ID, SITE_ID, IT
+  6zp8bsbjsdydh | 1.05 | 429773 | 0 | 169928 | 1067 | INSERT INTO SCM_MGR.GT_DM22_DM_MST_ITEM_SINGLE_V (DIVISION_ID, ITEM_ID, ITEM_NAME, ITEM_CL
+  761twajdscpp7 | 0.81 | 99585 | 4 | 23193 | 1145 | INSERT INTO SCM_MGR.GT_DM51_SCM_MST_SITE_ITEM (DIVISION_ID, SCM_SITE_ID, PROJECT_CODE, ITE
+  fgy7a722xj8cq | 0.72 | 26137 | 6913 | 169928 | 1017 | INSERT INTO SCM_MGR.GT_DM22_DM_MST_ITEM_SINGLE_A_V (DIVISION_ID, ITEM_ID, ITEM_NAME, ITEM_
+  6sa69p3dzmxhr | 0.43 | 35245 | 14 | 85427 | 684 | INSERT INTO SCM_MGR.GT_DM51_RAW_DATA ( VERSION_NO, CUTOFF_YYYYMMDD, DIVISION_ID, PROJECT_C
+  fmhtmy9fj9gmy | 0.26 | 11409 | 0 | 85427 | 723 | INSERT INTO SCM_MGR.GT_DM51_RAW_DATA ( VERSION_NO, CUTOFF_YYYYMMDD, DIVISION_ID, PROJECT_C
+  5fp3yfb2rn6xv | 0.22 | 12512 | 0 | 145878 | 1050 | INSERT INTO SCM_MGR.GT_DM22_DM_MST_ITEM_SINGLE_B_V (DIVISION_ID, ITEM_ID, FORECAST_INFO_BI
+  2hsvufms6ba3g | 0.14 | 7091 | 0 | 35922 | 773 | INSERT INTO SCM_MGR.GT_DM51_RAW_DATA ( VERSION_NO, CUTOFF_YYYYMMDD, DIVISION_ID, PROJECT_C

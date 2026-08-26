@@ -7,7 +7,7 @@ import {
   DataMap,
   SelectionMode,
 } from '@mescius/wijmo.grid';
-import { FlexGridFilter } from '@mescius/wijmo.grid.filter';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import type { MutableRefObject } from 'react';
 import { useEffect, useMemo, useRef } from 'react';
 
@@ -16,7 +16,7 @@ import { CELL_CONTROL_TYPE, CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import dayjs from '@foundation/dayjs';
 import isoWeek from '@foundation/isoWeek';
 import type { ComboResponse, FlexGridColumnConfig } from '@foundation/models';
-import { CustomMergeManager, EditTracker, keepRowVisibleUnderFilter } from '@foundation/utils';
+import { CustomMergeManager, EditTracker, keepRowVisibleUnderFilter, paintNegativeText, toGridNumber } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 
@@ -64,6 +64,16 @@ class FcstHeaderMergeManager extends CustomMergeManager<ForecastPriceRow> {
     private readonly getKeys: () => Map<string, HeaderKey>
   ) {
     super(grid);
+  }
+
+  // ⭐ [2026-08-20 사용자 리포트·같은 날 전 컬럼 확장 지시] 빈 셀도 그룹 병합 허용 (이 화면 전 컬럼).
+  //   공용 CustomMergeManager 의 빈 셀 병합 금지 가드(2026-08-14 신설)가 값이 비어 있는
+  //   SENDER_NAME 등 attribute 컬럼을 행마다 갈라 놓았다(같은 키 조합의 measure 분할 행인데
+  //   개별 입력칸처럼 보임). 머지키가 좌측 전 컬럼 누적이라 허용해도 같은 키 조합 블록 안에서만
+  //   병합되고, Insert 행(CRUD_TYPE='I') 제외는 공용 가드가 계속 담당한다(DMF0003 No.57 회귀 0).
+  //   동적 주차/월 컬럼은 allowMerging:false 라 공용 가드(_getCellMergedRange 첫 줄)가 먼저 거른다.
+  protected override allowEmptyCellMerge(panel: GridPanel): boolean {
+    return panel.cellType === CellType.Cell;
   }
 
   getMergedRange(panel: GridPanel, r: number, c: number): CellRange | null {
@@ -249,7 +259,20 @@ export const ForecastPriceGrid = ({
   // ⭐ 편집 전용 콤보 프리페치 (정본 mkt-fcst MktFcstGrid:280-311 이식) — AS-IS UP_FX 계통의
   //   "조회 표시 ↔ 편집 후보" 이원화. 진입 시 dataMap 스왑 → 종료 시 표시용으로 원복.
   //   0행이면 null 로 두어 **스왑을 생략**한다(미등록/무권한 시 기존 동작 유지 = 회귀 0).
-  const editComboEntries = useMemo(() => Object.entries(GRID_EDIT_COMBO), []);
+  //   ⭐ [2026-08-21 사용자 지정] **편집 콤보 ID 는 메타에서 해소한다** — `ATTRIBUTE9`(편집 콤보) →
+  //     없으면 `CELL_COMBO_DATA_TYPE`(표시 콤보). 화면 상수(GRID_EDIT_COMBO)는 옵션만 갖는다.
+  //     소스에만 있던 편집 콤보는 UI CATEGORY SETUP 에서 확인이 안 돼 운영자가 인지할 수 없었다.
+  //   ⚠ 둘 다 비면 그 binding 은 **스왑 대상에서 제외**한다(빈 콤보로 덮어써 기존 표시가 깨지는 것 방지).
+  const editComboEntries = useMemo(() => {
+    const metaOf = new Map(staticColumns.map(c => [c.colNm, c]));
+    return Object.entries(GRID_EDIT_COMBO)
+      .map(([binding, opts]) => {
+        const m = metaOf.get(binding);
+        const comboId = m?.attribute9?.trim() || m?.cellCboDataTp?.trim() || '';
+        return [binding, { ...opts, comboId }] as const;
+      })
+      .filter(([, cfg]) => cfg.comboId !== '');
+  }, [staticColumns]);
   const editComboResults = useTabComboQueries({
     filters: editComboEntries.map(([, cfg]) =>
       cfg.divisionParam
@@ -370,6 +393,94 @@ export const ForecastPriceGrid = ({
   // ⭐ #2 SALES_BUCKET 캐스케이드 (AS-IS L5862~5874) — Insert 행에서 Sales Site / Incoterms 변경 시
   //   배분 요일비트(SUN-first 7자리)를 조회해 행 BUCKET 에 세팅. 결과 없으면 '' → 배분은 기본요일 적용.
   //   (BUCKET 은 divideBy*/allocateLoc 가 다음 수량 편집 때 읽음 — AS-IS 도 세팅만.)
+  /**
+   * 상위 컬럼 변경으로 **후보 밖이 된 하위 셀 값을 비운다** (사용자 요구 2026-08-22).
+   *
+   * 증상: End Customer 를 바꾸면 Sales Site **콤보 후보**는 새 고객 것으로 바뀌는데 **값은 그대로** 남아,
+   *      셀을 열어보기 전까지 이전 고객의 사이트가 저장 대상으로 남는다.
+   * AS-IS 는 `SetCellTypeCombo` 로 후보만 갈아끼우지만, TO-BE 는 "드롭다운에 뜨는 값 = 셀에 남을 수 있는 값"
+   * 불변식을 지킨다(공용 `DataGrid.clearStaleComboCells` 와 같은 규칙).
+   *
+   * ⚠ 공용 처리로는 못 덮는다 — 그쪽은 **컬럼 메타 `ATTRIBUTE2` + 컬럼 단위 콤보맵** 기준인데(DMF0082 는
+   *   `ATTRIBUTE2` 정의 0건), 이 화면의 후보는 **행별 서버 재조회 결과(WeakMap)** 라 공용이 볼 수 없다.
+   *
+   * EditTracker 에도 기록한다 — 안 하면 저장 payload 가 이전 값을 그대로 싣는다.
+   */
+  const clearIfNotInCandidates = (
+    dataItem: WijmoRowItem,
+    binding: string,
+    rows: ComboResponse[] | undefined
+  ): boolean => {
+    const current = String(dataItem[binding] ?? '').trim();
+    if (current === '') return false;
+    // 후보를 못 받았으면(조회 실패 등) 비우지 않는다 — 폴백이 값을 지우는 사고 방지.
+    if (!rows || rows.length === 0) return false;
+    if (rows.some(r => String(r.CODE ?? '') === current)) return false;
+    editTrackerRef.current?.storeChange(dataItem, binding, current, '');
+    dataItem[binding] = '';
+    gridRef.current?.invalidate();
+    return true;
+  };
+
+  /**
+   * 상위 컬럼이 바뀌면 **그 컬럼을 조회조건으로 쓰는 하위 컬럼 값을 초기화**한다
+   * (사용자 요구 2026-08-22: "TEAM 변경시 SALES SITE, MODEL 등 실제 영향을 받는 다른 COLUMN 의
+   *  데이터도 초기화 되어야 합니다").
+   *
+   * 왜 `clearIfNotInCandidates` 로는 부족한가 — 그건 **콤보**(후보 목록이 있는 컬럼) 전용이다.
+   * `ITEM_ID`(FPTextModal) · `PROJECT_CODE`(FPModal) 는 후보 목록이 없어 "후보 밖" 판정 자체가 불가하다.
+   * 대신 **모달의 조회조건 계약**이 근거가 된다 (AS-IS `spdMain_CellDoubleClick` 실측):
+   *
+   *   PROJECT_CODE 팝업 ← (division, team, endCustomer, scmSite)          .cs:3737
+   *   ITEM_ID      팝업 ← (division, team, endCustomer, scmSite, project) .cs:3804
+   *
+   * ⇒ 조회조건이 바뀌면 그 조건으로 고른 값은 더 이상 유효하다고 볼 수 없다 → 초기화.
+   *   파생 컬럼(모달이 함께 채우던 것)도 같이 비운다 — 남겨두면 코드 없는 명칭만 떠 있게 된다.
+   */
+  const DEPENDENT_CLEAR_MAP: Record<string, string[]> = {
+    // End Customer 가 바뀌면 Project/Model 의 조회조건이 바뀐다
+    END_CUSTOMER: ['PROJECT_CODE', 'ITEM_ID'],
+    // Sales Site 도 두 모달의 조회조건
+    SCM_SITE_ID: ['PROJECT_CODE', 'ITEM_ID'],
+    // Project 는 Model 팝업의 조회조건(.cs:3804 6번째 인자)
+    PROJECT_CODE: ['ITEM_ID'],
+    // Model 이 바뀌면 Cell Prod Site 후보가 바뀐다(콤보 `CELL_PROD_SITE_ID` ← div, item)
+    ITEM_ID: ['CELL_PROD_SITE_ID'],
+  };
+  /** 모달이 함께 채우던 파생 컬럼 — 원본이 비면 같이 비운다 (ForecastPrice.tsx setDerivedCell 짝). */
+  const DERIVED_OF: Record<string, string[]> = {
+    ITEM_ID: ['ITEM_NAME', 'NICK_NAME'],
+    PROJECT_CODE: ['PROJECT_NAME', 'PROJECT_STATUS', 'PROJECT_OWNER'],
+  };
+
+  const clearDependentCells = (dataItem: WijmoRowItem, changedBinding: string) => {
+    let touched = false;
+    const clearOne = (binding: string) => {
+      // 그리드에 없는 컬럼(division 별 미표시)은 건드리지 않는다.
+      if (!gridRef.current?.columns.getColumn(binding)) return;
+      const prev = String(dataItem[binding] ?? '');
+      if (prev === '') return;
+      editTrackerRef.current?.storeChange(dataItem, binding, prev, '');
+      dataItem[binding] = '';
+      touched = true;
+    };
+    // ⭐ **연쇄(재귀)** — 한 단계로 끝내면 안 된다. 예: End Customer 변경 → ITEM_ID 초기화 →
+    //   ITEM_ID 를 조회조건으로 쓰는 CELL_PROD_SITE_ID 가 그대로 남는다(2026-08-22 실측).
+    //   visited 로 순환·중복 방문을 막는다.
+    const visited = new Set<string>([changedBinding]);
+    const walk = (from: string) => {
+      for (const target of DEPENDENT_CLEAR_MAP[from] ?? []) {
+        if (visited.has(target)) continue;
+        visited.add(target);
+        clearOne(target);
+        (DERIVED_OF[target] ?? []).forEach(clearOne);
+        walk(target); // 그 컬럼에 종속된 하위까지 계속
+      }
+    };
+    walk(changedBinding);
+    if (touched) gridRef.current?.invalidate();
+  };
+
   const applySalesBucket = (dataItem: WijmoRowItem) => {
     const div = String(dataItem['DIVISION_ID'] ?? '');
     const site = String(dataItem['SCM_SITE_ID'] ?? '');
@@ -396,15 +507,21 @@ export const ForecastPriceGrid = ({
   // #7 — Insert 행 Site 변경 시 편집가능 Measure 후보 재조회 → 행별 캐시 (MEASURE 편집 진입 시 사용).
   //   [No.63 2026-08-11] 후보 3분기(site 향)는 콤보 SQL 이 AS_SITE_PLANT 룩업으로 판정(서버 권위):
   //   미입력=MKT+AS_In_Req+LOC / 고객향=MKT+LOC / 비축향=AS_In_Req+LOC (통합테스트 1st No.63 매트릭스 1:1).
-  const applyEditMeasures = (dataItem: WijmoRowItem) => {
+  const applyEditMeasures = (dataItem: WijmoRowItem, clearStale = false) => {
     const div = String(dataItem['DIVISION_ID'] ?? '');
     const site = String(dataItem['SCM_SITE_ID'] ?? '');
-    if (!div || !site) return;
+    // ⭐ [2026-08-18 W/S 메저 3분기 정정] Sales Site 미입력도 **정당한 분기**다 — 여기서 return 하면
+    //   서버 후보가 영영 안 와서 폴백 목록이 뜨고, 요구(미입력=MKT+AS_In_Req+LOC 3종)가 깨진다.
+    if (!div) return;
+    // ⚠️ 미입력은 `q('')`(→ 'ALL') 로 보내면 안 된다. 등록 SQL 의 분기 게이트가
+    //   `NVL(@scmSiteId,' ') <> ' '` 라, 'ALL' 은 "입력됨"으로 읽혀 AS_SITE_PLANT 미등재 =
+    //   고객향으로 취급되고 AS_In_Req 가 제거된다.
+    //   사내 실측(2026-08-18): site=' ' → 3종(AS_In_Req·MKT_FCST·LOC) / site='ALL' → 2종(MKT_FCST·LOC).
     void apiClient
       .getCombo({
         comboId: 'FcstPriceEditMeasure',
         divisionId: q(div),
-        scmSiteId: q(site),
+        scmSiteId: `'${site.trim() !== '' ? site.replace(/'/g, "''") : ' '}'`,
         bucketType: q(bucketTypeParamRef.current),
       })
       .then(rows => {
@@ -418,7 +535,9 @@ export const ForecastPriceGrid = ({
         })
           ? (rows ?? [])
           : (rows ?? []).filter(r => String(r.CODE) !== AS_MEASURE);
-        return editMeasuresRef.current.set(dataItem, out);
+        editMeasuresRef.current.set(dataItem, out);
+        if (clearStale) clearIfNotInCandidates(dataItem, 'MEASURE', out);
+        return;
       })
       .catch((err: unknown) => {
         // 폴백은 유지하되 무증상 금지 — 캐시 미설정 → 편집 진입 시 전체 Measure 콤보.
@@ -431,13 +550,23 @@ export const ForecastPriceGrid = ({
   //   @Code='SiteByEndCustomer'`, .cs L2580 InsertRow / L8237·8283·8294 ComboSelChange).
   //   SCM_SITE_ID 는 SAVE IN 파라미터(scmSiteId)라 값이 잘못되면 원장에 그대로 들어간다.
   //   CMBO 는 관대형(@t IS NULL OR …)이라 미전달 시 "전체 사이트"가 뜨는 조용한 폴백이었다.
-  const applySalesSites = (dataItem: WijmoRowItem) => {
+  const applySalesSites = (dataItem: WijmoRowItem, clearStale = false) => {
     const div = String(dataItem['DIVISION_ID'] ?? '');
     const cust = String(dataItem['END_CUSTOMER'] ?? '');
     if (!div) return;
     void apiClient
       .getCombo({ comboId: 'SiteByEndCustomer', divisionId: q(div), endCustomer: q(cust) })
-      .then(rows => salesSitesRef.current.set(dataItem, rows ?? []))
+      .then(rows => {
+        salesSitesRef.current.set(dataItem, rows ?? []);
+        // 사용자 편집으로 온 호출만 값을 비운다 — Insert 프라이밍(시드 승계)은 건드리지 않는다.
+        if (!clearStale) return;
+        if (clearIfNotInCandidates(dataItem, 'SCM_SITE_ID', rows)) {
+          // Sales Site 가 비면 그에 종속된 Measure 후보·BUCKET 이 낡는다 → 한 단계 더 갱신
+          //   (AS-IS ComboSelChange 의 Site 분기와 동일 범위).
+          applyEditMeasures(dataItem, true);
+          applySalesBucket(dataItem);
+        }
+      })
       .catch((err: unknown) => {
         console.error('[combo] SiteByEndCustomer 조회 실패 — 전체 목록으로 폴백', err);
       });
@@ -448,13 +577,16 @@ export const ForecastPriceGrid = ({
   //   .cs L5854). AS-IS SP 는 PARAM1(division) 유무로 분기해, 이벤트 호출 시 해당 품목의 BIZ_TYPE 이
   //   CELL 이 아니면 '-'(Common) 만 남긴다. CMBO 가 여분 컬럼을 반환하지 않아 클라 필터가 불가 →
   //   Measure 와 동일하게 행별 서버 재조회 + WeakMap 캐시로 처리한다.
-  const applyCellProdSites = (dataItem: WijmoRowItem) => {
+  const applyCellProdSites = (dataItem: WijmoRowItem, clearStale = false) => {
     const div = String(dataItem['DIVISION_ID'] ?? '');
     const item = String(dataItem['ITEM_ID'] ?? '');
     if (!div || !item) return;
     void apiClient
       .getCombo({ comboId: 'CELL_PROD_SITE_ID', divisionId: q(div), itemId: q(item) })
-      .then(rows => cellProdSitesRef.current.set(dataItem, rows ?? []))
+      .then(rows => {
+        cellProdSitesRef.current.set(dataItem, rows ?? []);
+        if (clearStale) clearIfNotInCandidates(dataItem, 'CELL_PROD_SITE_ID', rows);
+      })
       .catch((err: unknown) => {
         console.error('[combo] CELL_PROD_SITE_ID 조회 실패 — 전체 목록으로 폴백', err);
       });
@@ -688,12 +820,20 @@ export const ForecastPriceGrid = ({
   modalCellRef.current = useMemo(() => {
     const map = new Map<string, string>();
     for (const c of staticColumns) {
-      const key = CELL_MODAL_KEY[c.colNm];
-      if (
-        key &&
-        c.cellCtrlObjTpCd === CELL_CONTROL_TYPE.MODAL &&
-        c.inputTpCd === CELL_INPUT_EDIT_TYPE.MANDATORY_INSERT_ONLY
-      ) {
+      // ⭐ [2026-08-22 사용자 결정] 모달 식별자 원천 = 메타 `CELL_COMBO_DATA_TYPE`.
+      //   화면 상수(`CELL_MODAL_KEY`)는 메타 미등재 시 폴백 — 관리자가 슬롯을 채우면 그 값이 이긴다.
+      //   ⚠ 이 슬롯은 모달 컨트롤에서만 모달키다(FPComboBox 면 콤보 ID). 아래 ctrlOk 가 이미 가른다.
+      const key = c.cellCboDataTp?.trim() || CELL_MODAL_KEY[c.colNm];
+      // ⭐ [2026-08-22] `FPTextModal` 포함 — 타이핑+모달 동시 허용 값(AS-IS 파리티).
+      //   입력형도 IM(신규행 필수) 외에 IO(신규행 선택)를 허용한다 — AS-IS DMF0082 의 Model 셀은
+      //   신규행에서 선택 입력이었다(`InsertRow` L2541 이 division 40 신규행에만 아이콘 부착).
+      const ctrlOk =
+        c.cellCtrlObjTpCd === CELL_CONTROL_TYPE.MODAL ||
+        c.cellCtrlObjTpCd === CELL_CONTROL_TYPE.TEXT_MODAL;
+      const inputOk =
+        c.inputTpCd === CELL_INPUT_EDIT_TYPE.MANDATORY_INSERT_ONLY ||
+        c.inputTpCd === CELL_INPUT_EDIT_TYPE.OPTIONAL_INSERT_ONLY;
+      if (key && ctrlOk && inputOk) {
         map.set(c.colNm, key);
       }
     }
@@ -757,15 +897,56 @@ export const ForecastPriceGrid = ({
   //   주의: 이 작업은 React effect(렌더 이후)에서만 한다. filterApplied 핸들러 안에서 refresh 를 부르면
   //     wijmo apply() 도중 재진입이 되어 내부 인덱스가 어긋난다.
   const filterDefinitionRef = useRef('');
+  // 최신 행 배열 참조 — filterApplied 핸들러(비 React 콜백)에서 신규행을 다시 찾기 위해.
+  const dataRef = useRef(data);
+  dataRef.current = data;
   useEffect(() => {
     const gridFilter = gridFilterRef.current;
     if (!gridFilter) return;
     const rememberFilter = () => {
       filterDefinitionRef.current = gridFilter.filterDefinition;
+
+      // ⭐ [2026-08-22 §3] **apply() 는 예외집합을 통째로 비운다.**
+      //     FlexGridFilter.apply()  →  this.excludedRowsSet = null;  →  onFilterApplied()
+      //   즉 이 핸들러가 도는 시점엔 방금 `keepRowVisibleUnderFilter` 로 등록해 둔 신규행이 이미
+      //   전부 날아가 있다. 그래서 필터를 걸거나 바꾸는 **모든 경로**에서 신규행이 사라진다
+      //   (사용자 신고 2026-08-22 "FILTER 후 INSERT ROW 시 INSERT ROW 가 보이지 않습니다").
+      //   아래 data effect 는 `data` 가 바뀔 때만 도는데, 필터 적용은 `data` 를 바꾸지 않으므로
+      //   그 경로로는 복구되지 않는다 → 여기서 다시 등록해야 한다.
+      const g = gridRef.current;
+      if (!g || g.columns.length === 0) return;
+      const inserted = dataRef.current.filter(
+        row => (row as unknown as WijmoRowItem)['CRUD_TYPE'] === 'I'
+      );
+      if (inserted.length === 0) return;
+      inserted.forEach(row => keepRowVisibleUnderFilter(g, row));
+      // ⚠ refresh 를 여기서 **동기로** 부르면 wijmo apply() 도중 재진입이 되어 내부 인덱스가 어긋난다
+      //   (이 파일의 기존 주석 계보). apply() 스택을 벗어난 다음 틱에 판정만 다시 시킨다.
+      //   refresh() 는 apply() 를 부르지 않으므로 filterApplied 가 다시 나지 않는다(무한루프 없음).
+      // ⚠ 이 refresh 는 **부모의 Insert 포커스 effect 보다 늦게** 돈다(effect 는 동기 커밋 안,
+      //   마이크로태스크는 그 뒤). refresh 로 제외행이 다시 나타나면 행 인덱스가 밀려, 방금 맞춘
+      //   스크롤 위치가 **다른 행**을 가리키게 된다(사용자 신고 2026-08-22: "잠깐 INSERT ROW 가
+      //   보이다가 SCROLL 되면서 위치가 달라집니다").
+      //   → refresh 전후로 **선택된 데이터 행 객체**를 기준으로 위치를 되맞춘다(인덱스는 밀리지만
+      //     행 객체는 그대로다 — 인덱스로 기억하면 안 되는 이유는 #144 §1 과 동일).
+      const keepItem =
+        g.selection.row >= 0
+          ? ((g.rows[g.selection.row]?.dataItem ?? null) as WijmoRowItem | null)
+          : null;
+      const keepCol = Math.max(0, g.selection.col);
+      queueMicrotask(() => {
+        if (gridRef.current !== g || g.columns.length === 0) return;
+        g.collectionView?.refresh();
+        if (!keepItem) return;
+        const idx = g.rows.findIndex(r => r.dataItem === keepItem);
+        if (idx < 0) return;
+        g.select(idx, Math.min(keepCol, Math.max(0, g.columns.length - 1)));
+        g.scrollIntoView(idx, -1);
+      });
     };
     gridFilter.filterApplied.addHandler(rememberFilter);
     return () => gridFilter.filterApplied.removeHandler(rememberFilter);
-  }, [gridFilterRef, dynamicColumns]);
+  }, [gridFilterRef, gridRef, dynamicColumns]);
 
   useEffect(() => {
     const g = gridRef.current;
@@ -814,12 +995,12 @@ export const ForecastPriceGrid = ({
     if (!g) return;
 
     editTrackerRef.current = new EditTracker(g as FlexGrid);
-    if (!gridFilterRef.current) {
-      // 동적(M_/W_/D_) 컬럼은 필터 제외 — 정적 컬럼만 필터 대상.
-      gridFilterRef.current = new FlexGridFilter(g as FlexGrid, {
-        filterColumns: staticColumns.map(c => c.colNm ?? '').filter(Boolean),
-      });
-    }
+    // ⭐ 2026-08-22 (hook #144 §2 적용) — 화면이 `FlexGridFilter` 를 직접 만들던 블록 제거.
+    //   `<DataGrid>` 가 `handleInitialized`(DataGrid.tsx:542)에서 이미 만들며, 그쪽이 React
+    //   자식 커밋 시점이라 이 부모 effect 보다 **먼저** 돈다 → `if (!gridFilterRef.current)` 가드에
+    //   항상 걸려 여기 코드는 실행된 적이 없다(죽은 코드). 그 결과 필터 대상이 화면 의도(정적 컬럼만)가
+    //   아니라 DataGrid 기본값 `['']`(전 컬럼)이었다.
+    //   → 대상 목록은 `<DataGrid filterColumns={...}>` 로 넘긴다(아래 JSX). 생성 주체는 DataGrid 단일.
 
     // 편집 가능 판정 — measure 권한(41번 매트릭스) + GridUtils 시간축 판정.
     const canEditCell = (binding: string, dataItem: WijmoRowItem): boolean => {
@@ -1086,6 +1267,9 @@ export const ForecastPriceGrid = ({
         if (col) col.dataMap = origDataMapRef.current[binding] ?? null;
       }
       const isInsert = isInsertRow(dataItem);
+      // ⭐ [2026-08-22] 상위 변경 → 하위(모달 조회조건 종속) 컬럼 초기화. apply* 보다 **먼저** 돈다 —
+      //   먼저 비워야 뒤이은 후보 재조회가 빈 값 기준으로 정상 동작한다.
+      if (isInsert) clearDependentCells(dataItem, binding);
       // #2 — Insert 행 Site/Incoterms 변경 → SALES_BUCKET 조회·세팅 (배분 요일 원천).
       //   #7 — Site 변경 시 편집가능 Measure 후보도 재조회(행별 캐시).
       if ((binding === 'SCM_SITE_ID' || binding === 'INCOTERMS') && isInsert) {
@@ -1100,15 +1284,15 @@ export const ForecastPriceGrid = ({
         (binding === 'SCM_SITE_ID' || binding === 'DIVISION_ID' || binding === 'INCOTERMS') &&
         isInsert
       ) {
-        applyEditMeasures(dataItem);
+        applyEditMeasures(dataItem, true);
       }
       // D9 — Model(ITEM_ID) 변경 → Cell Prod Site 후보 재조회 (AS-IS .cs L5854).
       //   Division 변경도 CMBO 바인드(@divisionId)에 들어가므로 함께 재조회.
       if ((binding === 'ITEM_ID' || binding === 'DIVISION_ID') && isInsert)
-        applyCellProdSites(dataItem);
+        applyCellProdSites(dataItem, true);
       // End Customer 변경 → Sales Site 후보 재조회 (AS-IS .cs L8237·8283·8294).
       if ((binding === 'END_CUSTOMER' || binding === 'DIVISION_ID') && isInsert)
-        applySalesSites(dataItem);
+        applySalesSites(dataItem, true);
       // [No.63-① ② 2026-08-11] Sales Site / FCST Type 변경으로 AS From Site 조건이 깨지면 **값도 비운다** —
       //   AS-IS 는 잠글 때마다 `SetText(AS_FROM_SITE, "")` 를 함께 호출한다(.cs L3481·3506·3587·3597).
       //   비우지 않으면 비축향으로 바꾼 뒤에도 이전 고객향 값이 payload 로 저장된다.
@@ -1232,6 +1416,12 @@ export const ForecastPriceGrid = ({
       const dataItem = sender.rows[e.row]?.dataItem as WijmoRowItem | undefined;
       if (!binding || !dataItem) return;
 
+      // ⭐ CUST 종속 메저 단계별 indent (사용자 지시 2026-08-26 — DMF0003 MktFcstGrid 파리티).
+      //   표시명은 공유 콤보 'Measure' dataMap(1단 ' └ ' / 2단 '    └ ' 공백4)에서 오는데,
+      //   선행 공백이 HTML 에서 collapse 되면 전 단계가 같은 깊이로 보인다 → MEASURE 셀만
+      //   white-space 보존 (다른 컬럼 영향 0).
+      if (binding === 'MEASURE') e.cell.style.whiteSpace = 'pre';
+
       if (kindOf(binding)) {
         const editable = canEditCell(binding, dataItem);
         e.cell.classList.toggle('wj-cell-editable', editable);
@@ -1251,6 +1441,10 @@ export const ForecastPriceGrid = ({
         //   boxShadow 는 예전 레일 구현의 잔재 — 같은 이유로 계속 지운다.
         e.cell.style.boxShadow = '';
         e.cell.style.borderLeft = binding === actualBoundaryRef.current ? '2px solid #1e8449' : '';
+        // 음수 = 빨간 글자 — AS-IS CustomCell.NegativeRed=true(:1876)·공용 SpreadInfo 기본 파리티.
+        //   정본 = @foundation/utils paintNegativeText (REQ:CHAT-20260820-6 계보 — sales-plan 동일 배선).
+        //   비음수는 반드시 제거(셀 DOM 재활용 잔상)·문자 값은 toGridNumber=0 → 자연 제외.
+        paintNegativeText(e.cell, toGridNumber(dataItem[binding]));
         // #11 숫자 표시 — NOTATION(POINT3/LOC)=소수3자리 / INTEGER=정수. 0/null 은 빈칸 (AS-IS :1853~1924).
         if (!sender.editRange?.contains(e.row, e.col)) {
           const v = dataItem[binding];
@@ -1279,7 +1473,11 @@ export const ForecastPriceGrid = ({
       } else {
         e.cell.style.removeProperty('background-color');
       }
-      if (personalColor?.text) {
+      // 음수 빨강 > 개인화 Text Color (sales-plan 정본 우선순위). 비음수 = 개인화 색 또는 제거.
+      const staticCellNumber = toGridNumber(dataItem[binding]);
+      if (staticCellNumber < 0) {
+        paintNegativeText(e.cell, staticCellNumber);
+      } else if (personalColor?.text) {
         e.cell.style.setProperty('color', personalColor.text, 'important');
       } else {
         e.cell.style.removeProperty('color');
@@ -1546,10 +1744,16 @@ export const ForecastPriceGrid = ({
       // ⭐ 메타 셀 콤보의 @토큰 해소 (정본 mkt-fcst MktFcstGrid — 2026-07-20 measure 코드 표시 사고 대응).
       //   `Measure` CMBO 는 `WHERE A.PROGRAM_ID = @mnuId` 라 미전달 시 '' 치환 → SHEET_MEASURE 0행 →
       //   CODE→NAME 매핑 부재 → 그리드가 measure **코드를 raw 로 표시**한다(DMF0082 measure 14종 전부).
-      //   ⚠️ divisionId 는 넣지 않는다 — DataGrid 는 comboParams 를 전 셀 콤보에 일괄 spread 하므로
-      //     관대형(@divisionId IS NULL OR …) 콤보들이 한꺼번에 "전체"→"division 한정"으로 바뀐다.
-      //     행 단위 종속은 GRID_EDIT_COMBO 스왑 경로가 담당한다.
-      comboParams={{ mnuId: `'${MENU_ID}'` }}
+      //   ⭐ [2026-08-18 사용자 확정] divisionId 를 **전달한다**. 종전엔 "전 셀 콤보 일괄 spread 로
+      //     관대형 콤보가 전체→division 한정으로 바뀐다"는 이유로 제외했으나, 이 화면은 division
+      //     스코프 화면이라 좁혀지는 쪽이 정상이다. 특히 **Insert 행에서 타 division 의 End Customer
+      //     를 고를 수 있으면 안 된다**(사용자 지적).
+      //     사내 실측(2026-08-18) — 셀 콤보 19종 중 @divisionId 토큰 보유는 5종뿐이고 전부 관대형,
+      //     전달 시 0행 되는 콤보 없음:
+      //       EndCustomerByDivisionDMF0082 7,228→1,338 / SiteByEndCustomer 2,532→461 /
+      //       PlantByDivisionCompany 45→12 / FcstTypeByUserGroupDMF0082 14→4 / CELL_PROD_SITE_ID 4→1
+      //     나머지 14종(Measure·Incoterms·CurrencyList 등)은 토큰이 없어 무영향.
+      comboParams={{ mnuId: `'${MENU_ID}'`, divisionId: q(searchParams.divisionId) }}
       selectionMode={SelectionMode.MultiRange}
       allowMerging={AllowMerging.All}
       alternatingRowStep={1}

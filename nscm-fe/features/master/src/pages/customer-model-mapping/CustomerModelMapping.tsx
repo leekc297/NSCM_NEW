@@ -53,7 +53,7 @@ export const CustomerModelMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   const handleDelete = () => {
     if (!gridRef.current) return;
-    GridAction.removeRow(gridRef.current, true);
+    GridAction.removeRow(gridRef.current);
   };
 
   const handleSave = () => {

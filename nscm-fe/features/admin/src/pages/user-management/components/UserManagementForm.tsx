@@ -1,11 +1,10 @@
+import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { FormItem, InputField } from '@shared/lges';
 import { Grid } from '@shared/mui';
 
 import { useUserManagementStore } from '../useUserManagementStore';
-
-import styles from './UserManagementForm.module.scss';
 
 export const UserManagementForm = () => {
   const { t } = useTranslation();
@@ -37,8 +36,7 @@ export const UserManagementForm = () => {
                   onChange={event => setSearchParams({ user: event.target.value })}
                 />
               )}
-              labelSize='long'
-              className={styles.formItem}
+              className={commonStyles.formItem}
             />
           </Grid>
           <Grid size={3}>
@@ -52,15 +50,13 @@ export const UserManagementForm = () => {
                   onChange={event => setSearchParams({ department: event.target.value })}
                 />
               )}
-              labelSize='long'
-              className={styles.formItem}
+              className={commonStyles.formItem}
             />
           </Grid>
           <Grid size={3}>
             <FormItem
               label={t('LBL00340', '_User Group')}
               labelAlign='right'
-              labelSize='long'
               render={() => (
                 <CustomDropdown
                   multiple
@@ -77,14 +73,13 @@ export const UserManagementForm = () => {
                   }}
                 />
               )}
-              className={styles.formItem}
+              className={commonStyles.formItem}
             />
           </Grid>
           <Grid size={3}>
             <FormItem
               label={t('LBL00007', '_Active')}
               labelAlign='right'
-              labelSize='long'
               render={() => (
                 <CustomDropdown
                   isInput={false}
@@ -101,7 +96,7 @@ export const UserManagementForm = () => {
                   }}
                 />
               )}
-              className={styles.formItem}
+              className={commonStyles.formItem}
             />
           </Grid>
         </>

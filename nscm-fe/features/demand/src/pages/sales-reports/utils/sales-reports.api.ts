@@ -59,7 +59,9 @@ const parseFirstValue = (data: unknown): string | undefined => {
 
 // 내부 전용 — 외부 소비자는 아래 call* 래퍼를 쓴다(공용 `versionModal/version-modal.api.ts` 와 동일 규약).
 //   export 로 두면 미배선 export 로 잡힌다(반쪽 구현 함정, post-write $0.1-B).
-const callProc = async (
+// export: 동봉 테스트(sales-reports.api.test.ts)가 이 함수를 직접 검증한다 —
+//   비공개면 TS2459 로 컴파일이 막힌다(공통소스 원본 불일치, 2026-08-23 정정).
+export const callProc = async (
   sheet: string,
   btnCd: string,
   payload: Record<string, string>

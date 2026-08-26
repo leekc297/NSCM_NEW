@@ -1,10 +1,12 @@
 // ⭐ SDM1010 — 조회/저장 FE 검증 + 저장 payload·날짜 순수함수 (테스트 대상 — etc-sales-reports validate 골격).
 import dayjs from '@foundation/dayjs';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
+import { safeString } from '@foundation/utils';
 
-import type { SaveTab1Payload } from './project-reg.api';
 import { DUP_KEY_COLUMNS, MSG, TAB_INDEX } from '../project-reg.constants';
 import type { SearchCondition, Tab1Row, ValidationResult } from '../project-reg.types';
+
+import type { SaveTab1Payload } from './project-reg.api';
 
 const YMD = /^\d{8}$/;
 const toDay = (s: string) => dayjs(`${s.slice(0, 4)}-${s.slice(4, 6)}-${s.slice(6, 8)}`);
@@ -13,7 +15,7 @@ const toDay = (s: string) => dayjs(`${s.slice(0, 4)}-${s.slice(4, 6)}-${s.slice(
 const parseAnyDate = (v: unknown): dayjs.Dayjs | null => {
   if (v == null || v === '') return null;
   if (v instanceof Date) return dayjs(v);
-  const s = String(v).trim();
+  const s = safeString(v).trim();
   if (s === '') return null;
   const d = YMD.test(s) ? toDay(s) : dayjs(s);
   if (d.isValid()) return d;
@@ -25,7 +27,7 @@ const parseAnyDate = (v: unknown): dayjs.Dayjs | null => {
 //   SAMPLE_*) → 'YYYY.MM.DD' (계약 결정 8 — formatItem 경로에서 소비. 파싱 불가 값은 원문 유지)
 export const toDisplayDate = (v: unknown): string => {
   const d = parseAnyDate(v);
-  return d ? d.format('YYYY.MM.DD') : String(v ?? '');
+  return d ? d.format('YYYY.MM.DD') : safeString(v);
 };
 
 // ⭐ P_SOP_DATE 입력 변환 — 'YYYY-MM-DD 00:00:00' (§2 TO_DATE 고정 마스크). 빈 값 = ''
@@ -62,7 +64,7 @@ export const validateRequiredInsert = (
   for (const row of insertedRows) {
     for (const col of requiredColumns) {
       const v = (row as Record<string, unknown>)[col.colNm];
-      if (v == null || String(v).trim() === '') {
+      if (v == null || safeString(v).trim() === '') {
         return { ok: false, msgId: MSG.REQUIRED_COLUMN, detail: col.colLblNm ?? col.colNm };
       }
     }
@@ -74,7 +76,7 @@ export const validateRequiredInsert = (
 export const validateDuplicate = (dirtyRows: Tab1Row[]): ValidationResult => {
   const keys = new Set<string>();
   for (const row of dirtyRows.filter(r => r.CRUD_TYPE !== 'D')) {
-    const key = DUP_KEY_COLUMNS.map(c => String((row as Record<string, unknown>)[c] ?? '')).join('|');
+    const key = DUP_KEY_COLUMNS.map(c => safeString((row as Record<string, unknown>)[c])).join('|');
     if (keys.has(key)) return { ok: false, msgId: MSG.DUPLICATE };
     keys.add(key);
   }

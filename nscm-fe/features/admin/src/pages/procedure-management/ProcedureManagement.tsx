@@ -10,7 +10,6 @@ import { ProcedureInfoGrid } from './components/ProcedureInfoGrid';
 import { ProcedureListGrid } from './components/ProcedureListGrid';
 import { ProcedureManagementForm } from './components/ProcedureManagementForm';
 import { MENU_ID, SHEET_INDEX, SHEETS } from './procedure-management.constants';
-import styles from './ProcedureManagement.module.scss';
 import { useProcedureManagementStore } from './useProcedureManagementStore';
 
 export const ProcedureManagement = ({ tabId, title }: PageProps<MENU_ID>) => {
@@ -101,22 +100,18 @@ export const ProcedureManagement = ({ tabId, title }: PageProps<MENU_ID>) => {
         hotkeyConfig={hotkeyConfig}
         searchParam={searchParams}
       />
-      <div className={styles.upperGrid}>
-        <ProcedureListGrid
-          gridRef={gridRefs[SHEET_INDEX.PROCEDURE_LIST]}
-          gridFilterRef={gridFilterRefs[SHEET_INDEX.PROCEDURE_LIST]}
-          data={procedureList?.o_rc ?? []}
-          setActiveGrid={setActiveGrid}
-        />
-      </div>
-      <div className={styles.lowerGrid}>
-        <ProcedureInfoGrid
-          gridRef={gridRefs[SHEET_INDEX.PROCEDURE_INFO]}
-          gridFilterRef={gridFilterRefs[SHEET_INDEX.PROCEDURE_INFO]}
-          data={procedureInfo?.o_rc ?? []}
-          setActiveGrid={setActiveGrid}
-        />
-      </div>
+      <ProcedureListGrid
+        gridRef={gridRefs[SHEET_INDEX.PROCEDURE_LIST]}
+        gridFilterRef={gridFilterRefs[SHEET_INDEX.PROCEDURE_LIST]}
+        data={procedureList?.o_rc ?? []}
+        setActiveGrid={setActiveGrid}
+      />
+      <ProcedureInfoGrid
+        gridRef={gridRefs[SHEET_INDEX.PROCEDURE_INFO]}
+        gridFilterRef={gridFilterRefs[SHEET_INDEX.PROCEDURE_INFO]}
+        data={procedureInfo?.o_rc ?? []}
+        setActiveGrid={setActiveGrid}
+      />
     </>
   );
 };

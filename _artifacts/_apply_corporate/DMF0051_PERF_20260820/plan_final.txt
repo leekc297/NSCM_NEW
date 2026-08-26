@@ -1,0 +1,396 @@
+﻿
+==============================================================================================================
+SQL_ID gybz7gcbv0a7j
+==============================================================================================================
+WITH T_DM51_WF AS (
+SELECT A.QTY AS QTY 
+
+                , A.COLNAME
+                , I.SORT_ORDER_NO
+                , EDY.EDIT_YN
+                , A.VERSION_NO
+,NVL(D.ITEM_NAME, '') AS ITEM_NAME
+,C.DEPT_ID
+,A.PROJECT_CODE AS END_CUSTOMER40
+,A.END_CUSTOMER
+,A.SCM_SITE_ID AS SCM_SITE_ID40
+,A.SCM_SITE_ID AS SCM_SITE_ID81
+,A.SCM_SITE_ID AS SCM_SITE_ID82
+,A.PROJECT_CODE AS PROJECT_CODE
+,A.PROJECT_CODE AS PROJECT_CODE82
+,A.BIZ_TYPE AS BIZ_TYPE_NAME81
+,A.ITEM_ID AS ITEM_ID
+,A.ITEM_ID AS ITEM_ID40
+,A.INCOTERMS
+,A.FCST_TYPE
+,A.PLANT_SITE_ID
+,J.ATTRIBUTE1 AS CELL_PROD_SITE
+,A.MEASURE
+,CASE WHEN A.VERSION_NO = 'CURRENT' THEN 'ZZZZZZZZZZZZZZZ' ELSE A.VERSION_NO END AS VERSION_SORT
+,CASE WHEN A.DIVISION_ID = '40' THEN A.PROJECT_NAME
+                                                                                        WHEN RTRIM(B.PROJECT_NAME) IS NULL THEN A.PROJECT_NAME
+                                                                                        ELSE B.PROJECT_NAME END PROJECT_NAME
+,CASE WHEN RTRIM(A.CURRENCY) IS NULL THEN C.CURRENCY ELSE NVL(A.CURRENCY, C.CURRENCY) END AS CURRENCY 
+,C.DEPT_ID AS DEPT_ID40
+,A.DIVISION_ID
+
+            FROM SCM_MGR.GT_DM51_RAW_DATA A
+            INNER JOIN SCM_MGR.SCM_MST_SITE             F ON (A.DIVISION_ID = F.DIVISION_ID AND A.SCM_SITE_ID = F.SCM_SITE_ID)
+            LEFT JOIN SCM_MGR.SCM_MST_PROJECT           B ON (A.DIVISION_ID = B.DIVISION_ID AND A.PROJECT_CODE = B.PROJECT_CODE)
+            LEFT JOIN SCM_MGR.GT_DM51_SCM_MST_SITE_ITEM C ON (A.DIVISION_ID = C.DIVISION_ID AND A.SCM_SITE_ID = C.SCM_SITE_ID AND A.PROJECT_CODE = C.PROJECT_CODE AND A.ITEM_ID = C.ITEM_ID)
+            LEFT JOIN SCM_MGR.GT_DM22_DM_MST_ITEM_SINGLE_V D ON (A.DIVISION_ID = D.DIVISION_ID AND A.ITEM_ID = D.ITEM_ID)
+            LEFT JOIN SCM_MGR.SCM_MST_SITE_ITEM         E ON (A.DIVISION_ID = E.DIVISION_ID AND A.PROJECT_CODE = E.PROJECT_CODE AND A.SCM_SITE_ID = E.SCM_SITE_ID AND A.ITEM_ID = E.ITEM_ID)
+            LEFT JOIN SCM_MGR.GT_DM51_SCM_CITY          G ON (A.DIVISION_ID = G.DIVISION_ID AND A.SCM_SITE_ID = G.SCM_SITE_ID
+                                                              AND CASE WHEN A.DIVISION_ID = '40' THEN A.PROJECT_CODE ELSE A.END_CUSTOMER END = G.END_CUSTOMER
+                                                              /*[PJ2024-50461] Team Mapping*/
+                                                              AND C.DEPT_ID = G.DEPT_ID )
+            JOIN SCM_MGR.GT_DM22_SELECT_MEASURE         I ON (A.MEASURE = I.MEASURE)
+            LEFT JOIN SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL J ON A.CELL_PROD_SITE = J.SEGMENT1 AND J.LOOKUP_TYPE = 'DM_CELL_PROD_SITE'
+            INNER JOIN SCM_MGR.SCM_ADM_USER_MNU_EDIT_AUTH_V EDY
+                 ON EDY.USER_ID = 'minyonglee1'
+                AND EDY.MNU_ID  = 'DMF0035'
+                AND EDY.UNIT_ID = A.DIVISION_ID
+            )
+            
+SELECT  DIVISION_ID 
+,DEPT_ID 
+,DEPT_ID40 
+,END_CUSTOMER 
+,END_CUSTOMER40 
+,SCM_SITE_ID40 
+,SCM_SITE_ID81 
+,SCM_SITE_ID82 
+,PROJECT_CODE 
+,PROJECT_CODE82 
+,PROJECT_NAME 
+,BIZ_TYPE_NAME81 
+,ITEM_ID40 
+,ITEM_ID 
+,ITEM_NAME 
+,INCOTERMS 
+,FCST_TYPE 
+,PLANT_SITE_ID 
+,CELL_PROD_SITE 
+,CURRENCY 
+,VERSION_SORT,VERSION_NO 
+,MEASURE 
+
+     , SORT_ORDER_NO
+     , EDIT_YN
+     , M_202608 
+,Y_2026 
+,Q_2026_3 
+,M_202609 
+,Q_2026_4 
+,M_202610 
+,M_202611 
+,M_202612 
+,Q_2027_1 
+,Y_2027 
+,M_202701 
+,M_202702 
+
+FROM (
+    SELECT  DIVISION_ID 
+,DEPT_ID 
+,DEPT_ID40 
+,END_CUSTOMER 
+,END_CUSTOMER40 
+,SCM_SITE_ID40 
+,SCM_SITE_ID81 
+,SCM_SITE_ID82 
+,PROJECT_CODE 
+,PROJECT_CODE82 
+,PROJECT_NAME 
+,BIZ_TYPE_NAME81 
+,ITEM_ID40 
+,ITEM_ID 
+,ITEM_NAME 
+,INCOTERMS 
+,FCST_TYPE 
+,PLANT_SITE_ID 
+,CELL_PROD_SITE 
+,CURRENCY 
+,VERSION_SORT,VERSION_NO 
+,MEASURE 
+
+         , SORT_ORDER_NO
+         , COLNAME
+         , EDIT_YN
+         , CASE WHEN MEASURE IN ('LOC','USD','KRW') THEN MAX(QTY)
+                ELSE SUM(QTY)
+           END AS QTY
+    FROM T_DM51_WF
+    GROUP BY  DIVISION_ID 
+,DEPT_ID 
+,DEPT_ID40 
+,END_CUSTOMER 
+,END_CUSTOMER40 
+,SCM_SITE_ID40 
+,SCM_SITE_ID81 
+,SCM_SITE_ID82 
+,PROJECT_CODE 
+,PROJECT_CODE82 
+,PROJECT_NAME 
+,BIZ_TYPE_NAME81 
+,ITEM_ID40 
+,ITEM_ID 
+,ITEM_NAME 
+,INCOTERMS 
+,FCST_TYPE 
+,PLANT_SITE_ID 
+,CELL_PROD_SITE 
+,CURRENCY 
+,VERSION_SORT,VERSION_NO 
+,MEASURE 
+, SORT_ORDER_NO, COLNAME, EDIT_YN
+    ) F
+PIVOT (
+    SUM(F.QTY) FOR COLNAME IN ( 'M_202608'  AS M_202608
+,'Y_2026'  AS Y_2026
+,'Q_2026_3'  AS Q_2026_3
+,'M_202609'  AS M_202609
+,'Q_2026_4'  AS Q_2026_4
+,'M_202610'  AS M_202610
+,'M_202611'  AS M_202611
+,'M_202612'  AS M_202612
+,'Q_2027_1'  AS Q_2027_1
+,'Y_2027'  AS Y_2027
+,'M_202701'  AS M_202701
+,'M_202702'  AS M_202702
+ )
+    )
+ORDER BY  DIVISION_ID  
+,DEPT_ID  
+,DEPT_ID40  
+,END_CUSTOMER  
+,END_CUSTOMER40  
+,SCM_SITE_ID40  
+,SCM_SITE_ID81  
+,SCM_SITE_ID82  
+,PROJECT_CODE  
+,PROJECT_CODE82  
+,PROJECT_NAME  
+,BIZ_TYPE_NAME81  
+,ITEM_ID40  
+,ITEM_ID ASC
+,ITEM_NAME ASC
+,INCOTERMS  
+,FCST_TYPE  
+,PLANT_SITE_ID  
+,CELL_PROD_SITE  
+,CURRENCY  
+,VERSION_SORT DESC,VERSION_NO DESC
+,SORT_ORDER_NO,MEASURE  
+
+--------------------------------------------------------------------------------------------------------------
+SQL_ID  gybz7gcbv0a7j, child number 0
+-------------------------------------
+WITH T_DM51_WF AS ( SELECT A.QTY AS QTY                   , A.COLNAME   
+              , I.SORT_ORDER_NO                 , EDY.EDIT_YN           
+      , A.VERSION_NO ,NVL(D.ITEM_NAME, '') AS ITEM_NAME ,C.DEPT_ID 
+,A.PROJECT_CODE AS END_CUSTOMER40 ,A.END_CUSTOMER ,A.SCM_SITE_ID AS 
+SCM_SITE_ID40 ,A.SCM_SITE_ID AS SCM_SITE_ID81 ,A.SCM_SITE_ID AS 
+SCM_SITE_ID82 ,A.PROJECT_CODE AS PROJECT_CODE ,A.PROJECT_CODE AS 
+PROJECT_CODE82 ,A.BIZ_TYPE AS BIZ_TYPE_NAME81 ,A.ITEM_ID AS ITEM_ID 
+,A.ITEM_ID AS ITEM_ID40 ,A.INCOTERMS ,A.FCST_TYPE ,A.PLANT_SITE_ID 
+,J.ATTRIBUTE1 AS CELL_PROD_SITE ,A.MEASURE ,CASE WHEN A.VERSION_NO = 
+'CURRENT' THEN 'ZZZZZZZZZZZZZZZ' ELSE A.VERSION_NO END AS VERSION_SORT 
+,CASE WHEN A.DIVISION_ID = '40' THEN A.PROJECT_NAME                     
+                                                                    
+WHEN RTRIM(B.PROJECT_NAME) IS NULL THEN A.PROJECT_NAME                  
+                                                                       
+ELSE B.PROJECT_NAME END PROJECT_NA
+ 
+Plan hash value: 1218434245
+ 
+------------------------------------------------------------------------------------------------------------------------------------------
+| Id  | Operation                                          | Name                                    | E-Rows |  OMem |  1Mem | Used-Mem |
+------------------------------------------------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT                                   |                                         |        |       |       |          |
+|   1 |  SORT GROUP BY PIVOT                               |                                         |  73062 |     9M|  3301K| 8992K (0)|
+|   2 |   VIEW                                             |                                         |  73062 |       |       |          |
+|   3 |    HASH GROUP BY                                   |                                         |  73062 |    70M|  7676K|   57M (0)|
+|   4 |     VIEW                                           | VM_NWVW_1                               |  73062 |       |       |          |
+|   5 |      HASH GROUP BY                                 |                                         |  73062 |    76M|  7811K|   71M (0)|
+|*  6 |       HASH JOIN RIGHT OUTER                        |                                         |  73062 |  1582K|  1406K| 1909K (0)|
+|   7 |        TABLE ACCESS FULL                           | SCM_MST_PROJECT                         |   8468 |       |       |          |
+|   8 |        NESTED LOOPS                                |                                         |  73062 |       |       |          |
+|*  9 |         HASH JOIN RIGHT OUTER                      |                                         |  73062 |  1281K|  1281K|  906K (0)|
+|  10 |          TABLE ACCESS BY INDEX ROWID BATCHED       | SCM_ADM_LOOKUP_MASTER_DETAIL            |     26 |       |       |          |
+|* 11 |           INDEX RANGE SCAN                         | PK_SCM_ADM_LOOKUP_MASTER_DETAIL         |     26 |       |       |          |
+|* 12 |          HASH JOIN RIGHT OUTER                     |                                         |  73062 |    18M|  2640K|   18M (0)|
+|  13 |           TABLE ACCESS FULL                        | GT_DM22_DM_MST_ITEM_SINGLE_V            |    169K|       |       |          |
+|* 14 |           HASH JOIN RIGHT OUTER                    |                                         |  72130 |   107M|    11M|  125M (0)|
+|  15 |            TABLE ACCESS FULL                       | GT_DM51_SCM_CITY                        |   1283K|       |       |          |
+|* 16 |            HASH JOIN RIGHT OUTER                   |                                         |  72130 |  3216K|  1320K| 3348K (0)|
+|  17 |             TABLE ACCESS FULL                      | GT_DM51_SCM_MST_SITE_ITEM               |  23193 |       |       |          |
+|* 18 |             HASH JOIN                              |                                         |  72130 |  1316K|  1316K|  931K (0)|
+|  19 |              TABLE ACCESS FULL                     | GT_DM22_SELECT_MEASURE                  |      9 |       |       |          |
+|* 20 |              HASH JOIN                             |                                         |  72130 |  1209K|  1209K|  893K (0)|
+|* 21 |               HASH JOIN                            |                                         |      6 |  1162K|  1162K|  807K (0)|
+|  22 |                NESTED LOOPS                        |                                         |      6 |       |       |          |
+|* 23 |                 TABLE ACCESS BY INDEX ROWID        | SCM_ADM_MNU_M                           |      1 |       |       |          |
+|* 24 |                  INDEX UNIQUE SCAN                 | PK_SCM_ADM_MNU_M                        |      1 |       |       |          |
+|* 25 |                 TABLE ACCESS BY INDEX ROWID BATCHED| SCM_ADM_USER_GR_MPG_M                   |      6 |       |       |          |
+|* 26 |                  INDEX SKIP SCAN                   | PK_SCM_ADM_USER_GR_MPG_M                |      6 |       |       |          |
+|* 27 |                TABLE ACCESS BY INDEX ROWID BATCHED | SCM_ADM_USER_GR_UNIT_AUTH_MPG_M         |     32 |       |       |          |
+|* 28 |                 INDEX RANGE SCAN                   | IX01_TB_SCM_ADM_USER_GR_UNIT_AUTH_MPG_M |     32 |       |       |          |
+|  29 |               TABLE ACCESS FULL                    | GT_DM51_RAW_DATA                        |    161K|       |       |          |
+|* 30 |         INDEX UNIQUE SCAN                          | PK_SCM_MST_SITE                         |      1 |       |       |          |
+------------------------------------------------------------------------------------------------------------------------------------------
+ 
+Outline Data
+-------------
+ 
+  /*+
+      BEGIN_OUTLINE_DATA
+      IGNORE_OPTIM_EMBEDDED_HINTS
+      OPTIMIZER_FEATURES_ENABLE('23.1.0')
+      DB_VERSION('23.1.0')
+      ALL_ROWS
+      OUTLINE_LEAF(@"SEL$085E0DB5")
+      MERGE(@"SEL$E241F553" >"SEL$64654B17")
+      OUTLINE_LEAF(@"SEL$E5AF52BF")
+      OUTLINE_LEAF(@"SEL$508AC92B")
+      MERGE(@"SEL$1" >"SEL$16")
+      OUTLINE(@"SEL$AFE161AE")
+      OUTLINE(@"SEL$E241F553")
+      MERGE(@"SEL$8F7BCF6F" >"SEL$14")
+      OUTLINE(@"SEL$64654B17")
+      ELIMINATE_JOIN(@"SEL$F98C168F" "E"@"SEL$7")
+      OUTLINE(@"SEL$16")
+      OUTLINE(@"SEL$1")
+      OUTLINE(@"SEL$14")
+      OUTLINE(@"SEL$8F7BCF6F")
+      MERGE(@"SEL$12" >"SEL$13")
+      OUTLINE(@"SEL$F98C168F")
+      MERGE(@"SEL$AA12C109" >"SEL$2")
+      OUTLINE(@"SEL$13")
+      OUTLINE(@"SEL$12")
+      OUTLINE(@"SEL$2")
+      OUTLINE(@"SEL$AA12C109")
+      MERGE(@"SEL$D26F370E" >"SEL$15")
+      OUTLINE(@"SEL$15")
+      OUTLINE(@"SEL$D26F370E")
+      MERGE(@"SEL$48E331E9" >"SEL$B453E8DF")
+      OUTLINE(@"SEL$B453E8DF")
+      ANSI_REARCH(@"SEL$11")
+      OUTLINE(@"SEL$48E331E9")
+      MERGE(@"SEL$AE3DF41B" >"SEL$65A156B2")
+      OUTLINE(@"SEL$11")
+      OUTLINE(@"SEL$65A156B2")
+      ANSI_REARCH(@"SEL$10")
+      OUTLINE(@"SEL$AE3DF41B")
+      MERGE(@"SEL$DF2C78B8" >"SEL$053E4C0F")
+      OUTLINE(@"SEL$10")
+      OUTLINE(@"SEL$053E4C0F")
+      ANSI_REARCH(@"SEL$9")
+      OUTLINE(@"SEL$DF2C78B8")
+      MERGE(@"SEL$7ECFCB8F" >"SEL$7673F794")
+      OUTLINE(@"SEL$9")
+      OUTLINE(@"SEL$7673F794")
+      ANSI_REARCH(@"SEL$954712BF")
+      OUTLINE(@"SEL$7ECFCB8F")
+      MERGE(@"SEL$E6082E05" >"SEL$E85BAFC7")
+      OUTLINE(@"SEL$954712BF")
+      ANSI_REARCH(@"SEL$8")
+      OUTLINE(@"SEL$E85BAFC7")
+      ANSI_REARCH(@"SEL$6EC43C9D")
+      OUTLINE(@"SEL$E6082E05")
+      MERGE(@"SEL$9D8F8CFF" >"SEL$BECCE419")
+      OUTLINE(@"SEL$8")
+      OUTLINE(@"SEL$6EC43C9D")
+      ANSI_REARCH(@"SEL$7")
+      OUTLINE(@"SEL$BECCE419")
+      ANSI_REARCH(@"SEL$267395E6")
+      OUTLINE(@"SEL$9D8F8CFF")
+      MERGE(@"SEL$BC9619ED" >"SEL$CFD5A148")
+      OUTLINE(@"SEL$7")
+      OUTLINE(@"SEL$267395E6")
+      ANSI_REARCH(@"SEL$6")
+      OUTLINE(@"SEL$CFD5A148")
+      ANSI_REARCH(@"SEL$3B59BFE8")
+      OUTLINE(@"SEL$BC9619ED")
+      MERGE(@"SEL$3" >"SEL$34F970FD")
+      OUTLINE(@"SEL$6")
+      OUTLINE(@"SEL$3B59BFE8")
+      ANSI_REARCH(@"SEL$5")
+      OUTLINE(@"SEL$34F970FD")
+      ANSI_REARCH(@"SEL$4")
+      OUTLINE(@"SEL$3")
+      OUTLINE(@"SEL$5")
+      OUTLINE(@"SEL$4")
+      NO_ACCESS(@"SEL$508AC92B" "F"@"SEL$1")
+      NO_ACCESS(@"SEL$E5AF52BF" "VM_NWVW_1"@"SEL$E5AF52BF")
+      USE_HASH_AGGREGATION(@"SEL$E5AF52BF" GROUP_BY)
+      INDEX_RS_ASC(@"SEL$085E0DB5" "MNU"@"SEL$13" ("SCM_ADM_MNU_M"."MNU_ID"))
+      INDEX_SS(@"SEL$085E0DB5" "GRP"@"SEL$12" ("SCM_ADM_USER_GR_MPG_M"."USER_GR_ID" "SCM_ADM_USER_GR_MPG_M"."USER_ID"))
+      BATCH_TABLE_ACCESS_BY_ROWID(@"SEL$085E0DB5" "GRP"@"SEL$12")
+      INDEX_RS_ASC(@"SEL$085E0DB5" "AUTH"@"SEL$12" ("SCM_ADM_USER_GR_UNIT_AUTH_MPG_M"."USER_ID"))
+      BATCH_TABLE_ACCESS_BY_ROWID(@"SEL$085E0DB5" "AUTH"@"SEL$12")
+      FULL(@"SEL$085E0DB5" "A"@"SEL$3")
+      FULL(@"SEL$085E0DB5" "I"@"SEL$9")
+      FULL(@"SEL$085E0DB5" "C"@"SEL$5")
+      FULL(@"SEL$085E0DB5" "G"@"SEL$8")
+      FULL(@"SEL$085E0DB5" "D"@"SEL$6")
+      INDEX_RS_ASC(@"SEL$085E0DB5" "J"@"SEL$10" ("SCM_ADM_LOOKUP_MASTER_DETAIL"."LOOKUP_TYPE" "SCM_ADM_LOOKUP_MASTER_DETAIL"."SEGMENT1" 
+              "SCM_ADM_LOOKUP_MASTER_DETAIL"."SEGMENT2" "SCM_ADM_LOOKUP_MASTER_DETAIL"."SEGMENT3" "SCM_ADM_LOOKUP_MASTER_DETAIL"."SEGMENT4" 
+              "SCM_ADM_LOOKUP_MASTER_DETAIL"."SEGMENT5"))
+      BATCH_TABLE_ACCESS_BY_ROWID(@"SEL$085E0DB5" "J"@"SEL$10")
+      INDEX(@"SEL$085E0DB5" "F"@"SEL$3" ("SCM_MST_SITE"."DIVISION_ID" "SCM_MST_SITE"."SCM_SITE_ID"))
+      FULL(@"SEL$085E0DB5" "B"@"SEL$4")
+      LEADING(@"SEL$085E0DB5" "MNU"@"SEL$13" "GRP"@"SEL$12" "AUTH"@"SEL$12" "A"@"SEL$3" "I"@"SEL$9" "C"@"SEL$5" "G"@"SEL$8" "D"@"SEL$6" 
+              "J"@"SEL$10" "F"@"SEL$3" "B"@"SEL$4")
+      USE_NL(@"SEL$085E0DB5" "GRP"@"SEL$12")
+      USE_HASH(@"SEL$085E0DB5" "AUTH"@"SEL$12")
+      USE_HASH(@"SEL$085E0DB5" "A"@"SEL$3")
+      USE_HASH(@"SEL$085E0DB5" "I"@"SEL$9")
+      USE_HASH(@"SEL$085E0DB5" "C"@"SEL$5")
+      USE_HASH(@"SEL$085E0DB5" "G"@"SEL$8")
+      USE_HASH(@"SEL$085E0DB5" "D"@"SEL$6")
+      USE_HASH(@"SEL$085E0DB5" "J"@"SEL$10")
+      USE_NL(@"SEL$085E0DB5" "F"@"SEL$3")
+      USE_HASH(@"SEL$085E0DB5" "B"@"SEL$4")
+      SWAP_JOIN_INPUTS(@"SEL$085E0DB5" "I"@"SEL$9")
+      SWAP_JOIN_INPUTS(@"SEL$085E0DB5" "C"@"SEL$5")
+      SWAP_JOIN_INPUTS(@"SEL$085E0DB5" "G"@"SEL$8")
+      SWAP_JOIN_INPUTS(@"SEL$085E0DB5" "D"@"SEL$6")
+      SWAP_JOIN_INPUTS(@"SEL$085E0DB5" "J"@"SEL$10")
+      SWAP_JOIN_INPUTS(@"SEL$085E0DB5" "B"@"SEL$4")
+      USE_HASH_AGGREGATION(@"SEL$085E0DB5" GROUP_BY)
+      END_OUTLINE_DATA
+  */
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   6 - access("A"."DIVISION_ID"="B"."DIVISION_ID" AND "A"."PROJECT_CODE"="B"."PROJECT_CODE")
+   9 - access("A"."CELL_PROD_SITE"="J"."SEGMENT1")
+  11 - access("J"."LOOKUP_TYPE"='DM_CELL_PROD_SITE')
+  12 - access("A"."DIVISION_ID"="D"."DIVISION_ID" AND "A"."ITEM_ID"="D"."ITEM_ID")
+  14 - access("A"."DIVISION_ID"="G"."DIVISION_ID" AND "A"."SCM_SITE_ID"="G"."SCM_SITE_ID" AND "G"."END_CUSTOMER"=CASE 
+              "A"."DIVISION_ID" WHEN '40' THEN "A"."PROJECT_CODE" ELSE "A"."END_CUSTOMER" END  AND "C"."DEPT_ID"="G"."DEPT_ID")
+  16 - access("A"."DIVISION_ID"="C"."DIVISION_ID" AND "A"."SCM_SITE_ID"="C"."SCM_SITE_ID" AND 
+              "A"."PROJECT_CODE"="C"."PROJECT_CODE" AND "A"."ITEM_ID"="C"."ITEM_ID")
+  18 - access("A"."MEASURE"="I"."MEASURE")
+  20 - access("AUTH"."UNIT_ID"="A"."DIVISION_ID")
+  21 - access("MNU"."UNIT_TP_CD"="AUTH"."UNIT_TP_CD" AND "AUTH"."USER_GR_ID"="GRP"."USER_GR_ID" AND 
+              "AUTH"."USER_ID"="GRP"."USER_ID")
+  23 - filter("MNU"."USE_YN"='Y')
+  24 - access("MNU"."MNU_ID"='DMF0035')
+  25 - filter("GRP"."USE_YN"='Y')
+  26 - access("GRP"."USER_ID"='minyonglee1')
+       filter("GRP"."USER_ID"='minyonglee1')
+  27 - filter("AUTH"."USE_YN"='Y')
+  28 - access("AUTH"."USER_ID"='minyonglee1')
+  30 - access("A"."DIVISION_ID"="F"."DIVISION_ID" AND "A"."SCM_SITE_ID"="F"."SCM_SITE_ID")
+ 
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+   - Warning: basic plan statistics not available. These are only collected when:
+       * hint 'gather_plan_statistics' is used for the statement or
+       * parameter 'statistics_level' is set to 'ALL', at session or system level
+   - Global temporary table session private statistics used
+ 

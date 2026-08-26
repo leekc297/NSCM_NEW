@@ -71,24 +71,46 @@ import commonStyles from '@foundation/styles/common-styles.module.scss';
 
 ## §2. FE 공통 모달 규칙
 
-### §2-1. Measure / Column 설정 모달은 공용 컴포넌트를 쓴다 ⭐ 확정 RULE (2026-08-13 사용자 확정 — 전 UI 일괄 적용)
+### §2-1. Measure / Column 설정 모달은 공용 컴포넌트를 쓴다 ⭐ 확정 RULE (2026-08-13 사용자 확정 — 전 UI 일괄 적용 / **2026-08-20 Column 정본 이동**)
 
-화면 폴더 안에 사본을 만들지 말고 `features/master/src/components` 의 공용 모달을 import 한다.
+화면 폴더 안에 사본을 만들지 말고 공용 모달을 import 한다.
 
 ```tsx
-import { ColumnLayoutModal, MeasureSelectModal } from 'features/master/src/components';
+// Column (GRID COLUMN SET) — ⭐ 2026-08-20 사용자 확정: shared 표준 정본 직행
+import { ColumnLayoutModal, toColumnLayoutSettings } from '@shared/components';
+// Measure (MEASURE SET) — master 공용 유지
+import { MeasureSelectModal } from 'features/master/src/components';
 ```
 
 | 용도 | 공용 정본 (유일) |
 | --- | --- |
 | Measure 선택 (MEASURE SET) | `nscm-fe/features/master/src/components/measureSelectModal/MeasureSelectModal.tsx` |
-| Column 표시/순서/폭/색 (GRID COLUMN SET) | `nscm-fe/features/master/src/components/columnLayoutModal/ColumnLayoutModal.tsx` |
+| Column 표시/순서/폭/색 (GRID COLUMN SET) | ⭐ **`nscm-fe/packages/shared/src/components/templates/modals/column-layout-modal/ColumnLayoutModal.tsx`** (2026-08-20 사용자 확정 — 다른 것 사용 금지) |
 
-⛔ **금지 2종** (2026-08-13 사용자 확정 — "작업 시점 전환" 정책 폐기, 전 UI 일괄 소급 완료):
+⭐ **Column 모달 정본 이동 (2026-08-20 사용자 확정)**:
+- 정본 = 위 `packages/shared/.../column-layout-modal` **유일**. import 는 `@shared/components` 로 한다.
+- 구 정본이던 `features/master/src/components/columnLayoutModal/` 은 **재수출 스텁**으로만 유지
+  (기존 화면 호환 — 스텁이므로 기존 import 도 런타임은 정본을 쓴다). 스텁에 구현을 되살리는 것 금지.
+- 사본 간 fix 분기 이력: HIDDEN_FROM_LIST(MEASURE) 순번 fix(2026-08-13, 구 master 사본에만 존재)는
+  2026-08-20 정본에 이식 완료 — 정본 외 파일에 fix 를 넣으면 이런 분기가 재발한다.
+- 신규 화면 grep 게이트: `grep -rn "master/src/components'.*ColumnLayoutModal\|columnLayoutModal" {페이지}/` = 0
+  (Column 모달은 `@shared/components` 만).
+
+⛔ **금지 3종** (2026-08-13 사용자 확정 — "작업 시점 전환" 정책 폐기, 전 UI 일괄 소급 완료):
 1. **화면 로컬 사본** — `{화면}/components/**/MeasureSelectModal.tsx` 류. 기존 7화면 사본
    (DMF0003/0021/0044/0048/0049/0082/SCP0013) 전부 공용 전환·삭제 완료.
 2. **`ColumnSettingModal` 사용** — 구세대 컬럼 모달. 신규 사용 금지, 잔존 사용처
    (DMF0020/0021/0043_01/0048) 는 `ColumnLayoutModal` 로 전환 완료. 컴포넌트는 DEPRECATED.
+3. **Column 모달의 master 경로 신규 import** — 신규 화면이 `features/master/src/components` 에서
+   `ColumnLayoutModal`/`toColumnLayoutSettings` 를 가져오는 것 (스텁은 기존 화면 호환 전용).
+   DMF0082 는 2026-08-20 `@shared/components` 직행으로 전환 완료(전환 정본 예).
+
+⛔ **금지 4번째 (2026-08-26 사용자 확정)** — **Measure 모달의 화면별 표시 변형 옵션 사용 금지**:
+Measure 모달의 정본 사용형 = **DMF0003(MktFcst) 배선** (master 공용 `MeasureSelectModal`,
+표시 변형 옵션 없이). 특정 화면만 모양을 바꾸는 옵션(예: `showMeasureCode` — Measure Code 컬럼
+추가 노출)을 켜면 사용자에게 "화면마다 다른 모달"로 보인다. DMF0082 의 `showMeasureCode` 는
+통합테스트 1st No.40 요구로 켰던 것을 **2026-08-26 사용자 지시로 제거(No.40 역전 기록)**.
+optional prop 확장 규칙(아래)은 유지하되, **표시(모양) 차이를 만드는 옵션은 전 화면 미사용**이 정본.
 
 **이유**: 사본을 만들면 계약(`measures` / `visibleMeasures` / `onApply`)이 화면마다 갈라져
 공용 쪽 수정이 반영되지 않는다. 화면별 차이는 **props 로만** 흡수하고, props 로 표현할 수 없으면

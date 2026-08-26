@@ -1,12 +1,9 @@
 import type { FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import {
-  ColumnLayoutModal,
   ItemByDivisionModal,
   MeasureSelectModal,
   ProjectByDivisionModal,
-  saveTitleSet,
-  toColumnLayoutSettings,
 } from 'features/master/src/components';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
@@ -14,11 +11,17 @@ import { apiClient } from '@foundation/apis';
 import { IcGridColumnSetup, IcMeasureSelect } from '@foundation/assets';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { useQueryClient } from '@foundation/query-client';
-import { keepRowVisibleUnderFilter, rebindFilterColumns } from '@foundation/utils';
+import { keepRowVisibleUnderFilter } from '@foundation/utils';
 import type { EditTracker } from '@foundation/utils';
-import { MainTitle, SubTitle } from '@shared/components';
+import {
+  ColumnLayoutModal,
+  MainTitle,
+  saveTitleSet,
+  SubTitle,
+  toColumnLayoutSettings,
+} from '@shared/components';
 import { useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
-import { useMessageStore, useSessionStore } from '@shared/stores';
+import { useDirtyReset, useMessageStore, useSessionStore } from '@shared/stores';
 
 import { MktFcstForm } from './components/MktFcstForm';
 import { MktFcstGrid } from './components/MktFcstGrid';
@@ -46,9 +49,43 @@ import type { BucketInfo, CurrentWeekInfo } from './useMktFcstStore';
 import { useMktFcstStore } from './useMktFcstStore';
 import { isEditableDivision } from './utils/mkt-fcst.division';
 import { applyCascadeClear, buildWsSupportComboFilters } from './utils/mkt-fcst.gridCombos';
+import { findGroupTopIndex, groupKeyBindings, type GroupKeyColumn } from './utils/mkt-fcst.merge';
 import { type PrContextAction, type PrContextResult, toCellStr } from './utils/mkt-fcst.prContext';
 import { buildSavePayload, buildUnfoldRows } from './utils/mkt-fcst.save';
 import { useMktFcstValidation } from './utils/mkt-fcst.validate';
+
+/**
+ * 저장 전 신규행 1건 — 그리드 표시 위치를 결정하는 앵커를 함께 보관한다.
+ *   anchor = Insert 를 누른 시점의 선택 셀이 속한 머지 블록의 첫 행 객체 참조.
+ *   null = 선택 없이 Insert (그리드 맨 위에 놓는다).
+ * 배열 순서 = 누른 순서. 같은 앵커에 여러 건이 걸리면 누른 순서대로 위에서 아래로 쌓인다.
+ * 정본 = forecast-price ForecastPrice.tsx PendingInsert (2026-08-17 기준 통일).
+ */
+interface PendingInsert {
+  row: MktFcstRow;
+  anchor: MktFcstRow | null;
+}
+
+/**
+ * 신규행 객체를 불변 갱신하면서 앵커 참조까지 새 객체로 옮긴다.
+ *   팝업(Project/Model) 확정부가 `{...r, ...}` 로 행 객체를 새로 만들기 때문에, 그 행을 앵커로
+ *   가리키던 형제 신규행이 참조를 잃고 orphan(맨 위)으로 튀는 것을 막는다.
+ */
+const remapPendingInserts = (
+  prev: PendingInsert[],
+  update: (row: MktFcstRow) => MktFcstRow
+): PendingInsert[] => {
+  const replaced = new Map<MktFcstRow, MktFcstRow>();
+  const next = prev.map(p => {
+    const row = update(p.row);
+    if (row !== p.row) replaced.set(p.row, row);
+    return { ...p, row };
+  });
+  return next.map(p => {
+    const moved = p.anchor ? replaced.get(p.anchor) : undefined;
+    return moved ? { ...p, anchor: moved } : p;
+  });
+};
 
 // AS-IS DMF0003_MktFcst (Demand > Demand Plan > MKT FCST / 시장예측).
 //   레이아웃: DMF0020(pivot + 동적컬럼 + 세로머지 + measure-group + 공통 DataGrid + SubTitle hotkeyConfig) 1:1 복제.
@@ -289,8 +326,18 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
     void setAlert({ type: 'alert', content: t('MSG00618', '_An error occurred while saving.') });
   };
 
-  // 신규 행 추적 (CRUD_TYPE='I')
-  const [insertedRows, setInsertedRows] = useState<MktFcstRow[]>([]);
+  // 신규 행 추적 (CRUD_TYPE='I') — 표시 위치 앵커를 함께 들고 있다(PendingInsert).
+  const [insertedRows, setInsertedRows] = useState<PendingInsert[]>([]);
+  // Insert 직후 포커스를 옮길 신규행 — rows 재계산 후 effect 가 소비하고 비운다.
+  const focusRowRef = useRef<MktFcstRow | null>(null);
+  // 앵커를 벗겨낸 신규행 목록 — 저장/검증/카운트처럼 표시 위치와 무관한 소비처가 쓴다(누른 순서).
+  const pendingRows = useMemo<MktFcstRow[]>(() => insertedRows.map(p => p.row), [insertedRows]);
+
+  // 이탈 가드(조회·탭 닫기·팝업 닫기) 확인 시 화면이 들고 있는 신규행 state 도 함께 버린다.
+  //   그리드 되돌리기는 DataGrid 가 자동 등록하지만, 그것은 itemsSource 배열에서 'I' 행을 지울 뿐이라
+  //   insertedRows 가 살아 있으면 다음 렌더의 rows useMemo 가 버린 행을 그대로 되살린다.
+  //   정본 = forecast-price ForecastPrice.tsx:121.
+  useDirtyReset(() => setInsertedRows([]));
 
   // ⭐ Division(조회조건) 변경 = Grid 초기화 의무 (memory feedback_division_change_grid_reset /
   //   cascade-combo-filter §1.4). 재조회는 Search 버튼으로만. Division 이 바뀌면 이전 division 의
@@ -381,20 +428,15 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
   //      캡쳐해 그 값으로 fetch → 첫 호출이 NULL payload(ORA-00936/-9994), setFilter 후 queryKey 변경으로
   //      두번째가 정상 → "조회 시 최초 1회 에러" 사고. setFilter(=queryKey 변경) + hasSearched(=enabled) 만으로
   //      react-query 가 항상 "최신 filters" 로 1회 자동 fetch 하게 둔다.
-  const handleSearch = async () => {
-    // [공통 UC-02] 미저장 편집(신규행·수정) 잔존 상태에서 재조회하면 아래 setInsertedRows([]) 와
-    //   editTracker reset 이 변경분을 **조용히 폐기**한다. 먼저 확인을 받는다.
-    //   (정본 = business-plan BusinessPlan.tsx:181 · hook #133 §5 UC-02 · MSG00703)
-    const pendingEdits = editTrackerRef.current?.getOriginalValues()?.size ?? 0;
-    if (insertedRows.length > 0 || pendingEdits > 0) {
-      const proceed = await setAlert({
-        type: 'confirm',
-        content: t('MSG00703', '_There are unsaved changes. Search again?'),
-      });
-      if (!proceed) return;
-    }
+  //   [공통 C2] 수정 중 재조회 가드(확인 팝업)는 여기서 하지 않는다. 조회 진입점 두 곳
+  //     (MktFcstForm 조회 버튼 · SubTitle F5)이 이미 공통 가드 confirmIfDirtyKey(..., 'search') 로
+  //     감싸 confirm + 편집분 되돌리기까지 수행한다. 화면이 같은 검사를 한 번 더 하면 팝업이 2연속으로
+  //     뜬다 — 공통 가드가 확인 직후 discardDirtyKey 로 그리드만 되돌리고 화면 state(insertedRows)는
+  //     남기기 때문에 여기 검사가 다시 걸렸다(2번째 팝업은 MSG00703 = 닫기 문구라 "이 화면을
+  //     닫으시겠습니까?" 로 떴다). 화면 state 정리는 위 useDirtyReset 등록이 담당한다.
+  const handleSearch = () => {
     if (!validation.validateFind(sc).ok) return;
-    void setToast({ message: t('LBL00665', '_Loading...'), type: 'default', duration: 2000 });
+    // void setToast({ message: t('LBL00665', '_Loading...'), type: 'default', duration: 2000 });
     setInsertedRows([]);
     setHasSearched(true); // 명시 조회 — 쿼리 enable
     setFilter(); // queryKey(filters) 갱신 → enabled 와 함께 react-query 자동 fetch (최신 payload)
@@ -453,6 +495,49 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
     return true;
   };
 
+  /**
+   * 선택한 셀이 속한 머지 블록의 첫 행 — Insert 앵커.
+   *
+   * 판정 입력은 그리드가 실제로 그리고 있는 것에서 뽑는다: 표시 순서(개인화로 바뀐다) · 표시 여부 ·
+   * 필터/정렬이 반영된 행 순서(g.rows). 조회 응답 배열(rows)이 아니다 — 사용자가 본 화면상의
+   * 블록과 어긋나면 안 된다.
+   *
+   * 범위 축 = 선택한 컬럼(g.selection.col). 축은 groupKeyBindings 에 인덱스 그대로 넘긴다
+   *   (binding 이름 역탐색 금지 — 인덱스가 밀려 조용히 폴백으로 떨어진다).
+   *
+   * 값이 빈 셀은 머지 대상이 아니므로 축에서 빼고 data Group(measure 블록) 기준으로 떨어뜨린다.
+   *
+   * 금지: wijmo 컬렉션(g.columns / g.rows)에 .map / .filter 를 쓰지 말 것 — Array 상속이라
+   *   species 규약(new ObservableArray(length))으로 새 ObservableArray 를 만들며 결과가 깨진다.
+   *   인덱스 루프로 순수 배열에 복사한 뒤 다룬다.
+   */
+  const groupTopRowOf = (index: number): MktFcstRow | undefined => {
+    const g = gridRef.current;
+    if (!g || index < 0) return undefined;
+
+    const columns: GroupKeyColumn[] = [];
+    for (let i = 0; i < g.columns.length; i++) {
+      const column = g.columns[i];
+      // visible 미지정(undefined)은 표시로 본다 — 잘못 빼면 축이 통째로 폴백된다.
+      columns.push({ binding: column?.binding ?? '', visible: column?.visible !== false });
+    }
+    const gridRowItems: (WijmoRowItem | undefined)[] = [];
+    for (let i = 0; i < g.rows.length; i++) {
+      gridRowItems.push(g.rows[i]?.dataItem as WijmoRowItem | undefined);
+    }
+
+    const clickedIndex = g.selection.col;
+    const clickedBinding = columns[clickedIndex]?.binding ?? '';
+    const clickedValue = clickedBinding ? gridRowItems[index]?.[clickedBinding] : undefined;
+    const isEmptyCell =
+      clickedValue === null || clickedValue === undefined || String(clickedValue).trim() === '';
+
+    const keyBindings = groupKeyBindings(columns, isEmptyCell ? -1 : clickedIndex);
+    return g.rows[findGroupTopIndex(gridRowItems, index, keyBindings)]?.dataItem as
+      | MktFcstRow
+      | undefined;
+  };
+
   // F8 Insert — AS-IS InsertRow(L2389~2509) 1:1 — 신규 행 1개 추가. CRUD_TYPE='I', Division=조회조건.
   //   Measure 는 편집 combo(SCM_MST_SHEET_MEASURE VALID_YN='Y' 동적, fallback MEASURE_FALLBACK)이고
   //   기본값 = 'MKT_FCST_RP' (AS-IS L2509 siMain.SetValue(Measure, "MKT_FCST_RP")). 좌측 키는 입력 가능.
@@ -465,6 +550,8 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
     if (!guardEditGates()) return;
     // ⭐ 편집제약 division(82 외)은 Insert 불가 — 버튼도 미표시이나 방어 가드(40·81 등 Insert 자체 불가).
     if (!editable) return;
+    const g = gridRef.current;
+    const selectedIndex = g?.selection.row ?? -1;
     const groupId = `I_${Date.now()}`;
     // 신규 행은 SP 산출 컬럼(EDIT_FLAG/MEASURE_GROUP/BUCKET 등)을 갖지 않는 의도적 부분 객체.
     //   SP 응답 계약(base ResponseData)은 해당 컬럼을 required 로 선언하므로 명시 캐스팅.
@@ -482,14 +569,24 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
       ITEM_TYPE: '',
       MEASURE: INSERT_DEFAULT_MEASURE,
     } as MktFcstRow;
-    setInsertedRows(prev => [newRow, ...prev]);
+    // 앵커 = 선택한 셀이 속한 머지 블록의 첫 행 — 그 바로 위에 놓는다 (앵커 null = 맨 위).
+    //   앵커가 포커스 행 자체면 그룹 중간(measure 2~3번째)을 찍었을 때 신규행이 measure 사이에 낀다.
+    //   요구는 data Group 제일 위 / 선택한 값의 병합한 데이터 위. 위치만 블록 맨 위로 올린다.
+    //   배열 끝에 붙여 누른 순서를 유지한다 — 같은 앵커에 연속 Insert 시 누른 순서대로 쌓인다.
+    const anchorRow = groupTopRowOf(selectedIndex) ?? null;
+    setInsertedRows(prev => [...prev, { row: newRow, anchor: anchorRow }]);
+    focusRowRef.current = newRow;
 
     // [공통 UC-01 — 2026-08-14 역전] 필터링 상태에서 Insert 해도 **필터를 유지한 채** 신규행이 보여야 한다.
     //   구 규약("Insert 시 필터 clear")은 사용자가 걸어둔 필터까지 날려 "필터가 풀린다"는 신고를 만들었다.
     //   ⇒ 신규행만 wijmo 예외 집합(`_newAddedRowsSet`)에 등록해 필터 조건 검사를 건너뛰게 한다.
     //   (정본 = business-plan BusinessPlan.tsx:241 · hook #133 §5 UC-01)
-    const grid = gridRef.current as unknown as FlexGridType<WijmoRowItem> | null;
-    if (grid) keepRowVisibleUnderFilter(grid, newRow as unknown as WijmoRowItem);
+    if (g) {
+      keepRowVisibleUnderFilter(
+        g as unknown as FlexGridType<WijmoRowItem>,
+        newRow as unknown as WijmoRowItem
+      );
+    }
   };
 
   // F9 Delete — AS-IS DeleteButton(L795~801) 1:1 — 선택 행이 신규('I')일 때만 목록 제거.
@@ -503,8 +600,8 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
       return;
     }
     const gid = sel.INSERT_GROUP_ID;
-    if (gid) setInsertedRows(prev => prev.filter(r => r.INSERT_GROUP_ID !== gid));
-    else setInsertedRows(prev => prev.filter(r => r !== sel));
+    if (gid) setInsertedRows(prev => prev.filter(p => p.row.INSERT_GROUP_ID !== gid));
+    else setInsertedRows(prev => prev.filter(p => p.row !== sel));
   };
 
   // A-08 [CG-05] 키 값이 바뀐 신규 행의 수량(D_/W_/M_) 전량 클리어 (.cs L5319~5379).
@@ -540,7 +637,7 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
       (editTracker?.getOriginalValues() as Map<MktFcstRow, Record<string, unknown>> | undefined) ??
       new Map<MktFcstRow, Record<string, unknown>>();
     const editedRows = [...changedRows.keys()].filter(r => r.CRUD_TYPE !== 'I');
-    const validateTargets: MktFcstRow[] = [...insertedRows, ...editedRows];
+    const validateTargets: MktFcstRow[] = [...pendingRows, ...editedRows];
     const asFromSite = sc.asYn ? sc.scmSiteIds.join('^') : '';
     const vr = validation.validateSaveRows(validateTargets, sc, sc.asYn, asFromSite);
     if (!vr.ok) return;
@@ -561,7 +658,7 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
       const wsTypes = new Set(
         (wsFcstTypeRows ?? []).map(r => strOf((r as { CODE?: unknown }).CODE)).filter(Boolean)
       );
-      for (const r of insertedRows) {
+      for (const r of pendingRows) {
         const rec = r as Record<string, unknown>;
         const site = strOf(rec.SCM_SITE_ID);
         const fcstType = strOf(rec.FCST_TYPE);
@@ -584,7 +681,7 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
       | Map<MktFcstRow, Record<string, unknown>>
       | undefined;
     const unfoldRows = buildUnfoldRows({
-      insertedRows: insertedRows as Record<string, unknown>[],
+      insertedRows: pendingRows as Record<string, unknown>[],
       editedChanges: (editedChanges ?? new Map()) as Map<
         Record<string, unknown>,
         Record<string, unknown>
@@ -617,7 +714,7 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
     });
     if (!ok) return;
 
-    void setToast({ message: t('LBL00665', '_Loading...'), type: 'default', duration: 3000 });
+    // void setToast({ message: t('LBL00665', '_Loading...'), type: 'default', duration: 3000 });
 
     try {
       // O_RESULT_CURSOR CODE!='0' 시 foundation responseInterceptor 가 MSG throw → catch 에서 alert.
@@ -713,7 +810,7 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
   // ⭐ 버튼 게이트 = 권한(hasButton) × division 편집허용(editable). 편집제약 division(82 외)은
   //   Insert/Delete/Save 미표시(false → SubTitle 버튼 숨김). Search 는 division 무관(조회 항상 가능).
   const hotkeyConfig: HotkeyConfig = {
-    search: hasButton('SEARCH') ? () => void handleSearch() : false,
+    search: hasButton('SEARCH') ? handleSearch : false,
     insert: editable && hasButton('INSERT') ? handleInsert : false,
     delete: editable && hasButton('DELETE') ? handleDelete : false,
     save: editable && hasButton('SAVE') ? handleSave : false,
@@ -725,17 +822,6 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   Measure : MeasureSelectModal(staticMeasures 실데이터 토글) → 그리드 measure 행 필터.
   //   Column  : 공용 ColumnLayoutModal(DMF0002_GET_TITLESET_POPUP + fallback) → applyColumnLayout.
   const customButtons = [
-    ...(hasButton('MEASURE_SELECT')
-      ? [
-          {
-            label: t('LBL00712', '_Measure'),
-            title: t('LBL00712', '_Measure'),
-            action: () => setOpenMeasureSelect(true),
-            iconComponent: <IcMeasureSelect />,
-            buttonLabel: '',
-          },
-        ]
-      : []),
     ...(hasButton('COLUMN_SETUP')
       ? [
           {
@@ -743,6 +829,17 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
             title: t('LBL00605', 'Column Setting'),
             action: () => setOpenColumnSetting(true),
             iconComponent: <IcGridColumnSetup />,
+            buttonLabel: '',
+          },
+        ]
+      : []),
+    ...(hasButton('MEASURE_SELECT')
+      ? [
+          {
+            label: t('LBL00712', '_Measure'),
+            title: t('LBL00712', '_Measure'),
+            action: () => setOpenMeasureSelect(true),
+            iconComponent: <IcMeasureSelect />,
             buttonLabel: '',
           },
         ]
@@ -760,7 +857,66 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   따라서 FE 는 SP 반환 measure 집합을 그대로 렌더한다(클라이언트 measure 행 필터 금지 —
   //   과거 visibleMeasures 필터가 SP 가 붙인 종속 메저를 잘라 숨기던 버그를 제거, AS-IS parity).
   //   메저 선택 변경은 모달 OK 의 saveTitleSet('M') + invalidateQueries 재조회로 SP 에서 반영됨.
-  const rows: MktFcstRow[] = useMemo(() => [...insertedRows, ...spRows], [insertedRows, spRows]);
+  // 조회행 + 신규행 병합 — 신규행은 앵커(= 선택 셀이 속한 머지 블록의 첫 행) 바로 위에 놓는다.
+  //   구 구현은 `[...insertedRows, ...spRows]` 라 선택과 무관하게 항상 맨 위였다
+  //   (2026-08-17 정정 — forecast-price ForecastPrice.tsx gridRows 와 동일 기준).
+  //   앵커가 사라진 경우(재조회로 객체 참조 교체 등)는 맨 위로 폴백 — 행이 증발하지 않게 한다.
+  const rows: MktFcstRow[] = useMemo(() => {
+    if (insertedRows.length === 0) return spRows;
+
+    const knownRows = new Set<MktFcstRow>(spRows);
+    insertedRows.forEach(pending => knownRows.add(pending.row));
+
+    // 앵커 -> 그 위에 놓을 신규행 목록(누른 순서 유지). 앵커 없는/유실된 건은 orphanRows.
+    const rowsByAnchor = new Map<MktFcstRow, MktFcstRow[]>();
+    const orphanRows: MktFcstRow[] = [];
+    insertedRows.forEach(({ row, anchor }) => {
+      if (!anchor || !knownRows.has(anchor)) {
+        orphanRows.push(row);
+        return;
+      }
+      const bucket = rowsByAnchor.get(anchor);
+      if (bucket) bucket.push(row);
+      else rowsByAnchor.set(anchor, [row]);
+    });
+
+    // 앵커가 신규행인 경우(추가한 행을 다시 찍고 Insert)까지 재귀로 펼친다.
+    const merged: MktFcstRow[] = [];
+    const emit = (target: MktFcstRow) => {
+      rowsByAnchor.get(target)?.forEach(emit);
+      merged.push(target);
+    };
+    orphanRows.forEach(emit);
+    spRows.forEach(emit);
+    return merged;
+  }, [insertedRows, spRows]);
+
+  // Insert 직후 새 행으로 포커스·스크롤 이동.
+  //   필수: 실패 시 다음 프레임에 한 번 더 시도한다. itemsSource 가 바뀌면 wijmo 는 스크롤을 0 으로
+  //   되돌리는데, 이 시점에 grid.rows 가 아직 새 배열을 반영하지 않았으면 findIndex 가 -1 이라
+  //   그대로 빠져나가 화면이 맨 위에 머문다 — 사용자는 중간에 생긴 신규행을 찾아 스크롤하게 된다.
+  //   재시도 후에도 못 찾으면 조용히 포기(다음 Insert 에 영향 없음).
+  useEffect(() => {
+    const target = focusRowRef.current;
+    if (!target) return;
+    const grid = gridRef.current;
+    if (!grid) return;
+    const focusTarget = (): boolean => {
+      const rowIndex = grid.rows.findIndex(r => r.dataItem === target);
+      if (rowIndex < 0) return false;
+      grid.select(rowIndex, Math.max(0, grid.selection.col));
+      grid.scrollIntoView(rowIndex, -1);
+      return true;
+    };
+    if (focusTarget()) {
+      focusRowRef.current = null;
+      return;
+    }
+    const frame = requestAnimationFrame(() => {
+      if (focusTarget()) focusRowRef.current = null;
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [rows]);
 
   return (
     <>
@@ -826,7 +982,7 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
           //   dataItem.PROJECT_OWNER 1:1). sales-plan(DMF0021) 과 동일하게 PROJECT_OWNER 세팅.
           if (!popupGroupId) return;
           setInsertedRows(prev =>
-            prev.map(r => {
+            remapPendingInserts(prev, r => {
               if (r.INSERT_GROUP_ID !== popupGroupId) return r;
               const next = {
                 ...r,
@@ -870,7 +1026,7 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
         ) => {
           if (!popupGroupId) return;
           setInsertedRows(prev =>
-            prev.map(r => {
+            remapPendingInserts(prev, r => {
               if (r.INSERT_GROUP_ID !== popupGroupId) return r;
               const next = {
                 ...r,

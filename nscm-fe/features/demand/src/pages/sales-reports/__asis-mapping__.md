@@ -1,4 +1,4 @@
-# __asis-mapping__.md — EID 1:1 대사표 (asis-coverage-check §0.0/§0.1)
+﻿# __asis-mapping__.md — EID 1:1 대사표 (asis-coverage-check §0.0/§0.1)
 
 > 원천: `DMF0044_SalesReports_주요이벤트_상세분석.md`, `DMF0044_SalesReports_상세동작_개발용.md`, `DMF0044_SalesReports_제약매트릭스_상세.md` · 생성: asis_mapping_gate.py --init
 > 상태 허용값: 미구현(초기) / 구현(구현 위치 필수) / 제외(사유 필수) / 해당없음(사유 필수 — 조회 전용 화면의 CRUD 행 등). 빈 칸 1개 = 게이트 실패.
@@ -28,7 +28,7 @@
 | E05-2 | §5.2 DMF0044_Sales_VersionPopUp (444행) — 구형. **현행 본화면에서는 호출 경로 없음** (btnSPVer 의 호출 코드가 주석… |  | AS-IS 호출 경로 없음(제약매트릭스 §0 실측: 팝업2 호출부 주석 / 팝업3 은 팝업2 경유만 / 팝업5 는 7파일 내 호출 0). 정책 확정 ② — dead 팝업 3종 이관 제외 | 제외 |
 | E05-3 | §5.3 DMF0044_Sales_VersionCopyPopUp (451행) — Sales_VersionPopUp 의 Copy 버튼에서만 진입 (현행 본화면 경… |  | AS-IS 호출 경로 없음(제약매트릭스 §0 실측: 팝업2 호출부 주석 / 팝업3 은 팝업2 경유만 / 팝업5 는 7파일 내 호출 0). 정책 확정 ② — dead 팝업 3종 이관 제외 | 제외 |
 | E05-4 | §5.4 DMF0044_MDFVersionPopUp (440행, 참고) — **본화면(정본) 어디에서도 인스턴스화되지 않음** (grep 실측: 정본 내 참조 … |  | AS-IS 호출 경로 없음(제약매트릭스 §0 실측: 팝업2 호출부 주석 / 팝업3 은 팝업2 경유만 / 팝업5 는 7파일 내 호출 0). 정책 확정 ② — dead 팝업 3종 이관 제외 | 제외 |
-| E05-5 | §5.5 보조 기능 | 버전창 Copy/Create/Delete/Transfer = components/versionModal/VersionModal.tsx / Exchange Rate = components/modals/ExchangeRateModal.tsx (버전 필수 MSG00688·ADMIN 저장) / Text 입력 = components/modals/TextboxModal.tsx (div82 전용) / Measure Show = features/master/src/components/measureSelectModal/MeasureSelectModal.tsx / **ITEM(Model) 더블클릭 모델 선택 = SalesReportsGrid.tsx:392~401 dblclick → SalesReportsModals.tsx:93 ItemByDivisionModal**(2026-08-11 deptId 행값 전달 파리티 정정) | Exchange 팝업 종료 후 자동 재조회 없음 = AS-IS 파리티(정책④) / 공용 정본 승격(hook #132) 반영 — 인용 경로 정정 2026-08-15 | 구현 |
+| E05-5 | §5.5 보조 기능 | 버전창 Copy/Create/Delete/Transfer = components/versionModal/VersionModal.tsx / Exchange Rate = components/modals/ExchangeRateModal.tsx (버전 필수 MSG00688·ADMIN 저장) / Text 입력 = components/modals/TextboxModal.tsx (div82 전용) / Measure Show = components/modals/MeasureSelectModal.tsx / **ITEM(Model) 더블클릭 모델 선택 = SalesReportsGrid.tsx:392~401 dblclick → SalesReportsModals.tsx:93 ItemByDivisionModal**(2026-08-11 deptId 행값 전달 파리티 정정) | Exchange 팝업 종료 후 자동 재조회 없음 = AS-IS 파리티(정책④) | 구현 |
 | E06 | §6 DMF0044_SalesReportExchangePopup — 환율 팝업 (721행) | nscm-fe/features/demand/src/pages/sales-reports/components/modals/ExchangeRateModal.tsx |  | 구현 |
 | E07 | §7 DMF0044_SalesReport_TextboxPopup — 텍스트박스(월별 코멘트) 팝업 (453행) | nscm-fe/features/demand/src/pages/sales-reports/components/modals/TextboxModal.tsx (division 82 전용) |  | 구현 |
 | E08 | §8 본화면 그리드 이벤트 배선 전수 (실측: 코드 L206~L208 + Designer.cs grep) | nscm-fe/features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx — beginningEdit/cellEditEnded/formatItem/dblclick 배선 |  | 구현 |
@@ -139,12 +139,70 @@
 | MODAL:DMF0044_Sales_VersionPopUp | AS-IS 팝업 (분석 md) — TO-BE 모달 구현 위치 기입 의무 |  | AS-IS 호출 경로 없음(제약매트릭스 §0 실측: 팝업2 호출부 주석 / 팝업3 은 팝업2 경유만 / 팝업5 는 7파일 내 호출 0). 정책 확정 ② — dead 팝업 3종 이관 제외 | 제외 |
 | MODAL:ExchangeRateModal | FE 실존 모달 (components/modals/ExchangeRateModal.tsx) — 분석 md 근거 확인 필요(FE 단독이면 사유 기입) | nscm-fe/features/demand/src/pages/sales-reports/components/modals/ExchangeRateModal.tsx |  | 구현 |
 | MODAL:ImagePopUp | AS-IS 팝업 (분석 md) — TO-BE 모달 구현 위치 기입 의무 |  | AS-IS `siMain.ImagePopUp`(L203) = FarPoint 셀 이미지 리소스 — 모달 아님(추출 아티팩트) | 해당없음 |
-| MODAL:MeasureSelectModal | FE 실존 모달 (components/modals/MeasureSelectModal.tsx) — 분석 md 근거 확인 필요(FE 단독이면 사유 기입) | features/master/src/components/measureSelectModal/MeasureSelectModal.tsx |  | 구현 |
 | MODAL:PopUp | AS-IS 팝업 (분석 md) — TO-BE 모달 구현 위치 기입 의무 |  | md 본문의 일반 단어 매칭 — 실체 없음(추출 아티팩트) | 해당없음 |
 | MODAL:SalesReportsModals | FE 실존 모달 (components/SalesReportsModals.tsx) — 분석 md 근거 확인 필요(FE 단독이면 사유 기입) | nscm-fe/features/demand/src/pages/sales-reports/components/SalesReportsModals.tsx (모달 컨테이너) |  | 구현 |
 | MODAL:Sales_VersionPopUp | AS-IS 팝업 (분석 md) — TO-BE 모달 구현 위치 기입 의무 |  | AS-IS 호출 경로 없음(제약매트릭스 §0 실측: 팝업2 호출부 주석 / 팝업3 은 팝업2 경유만 / 팝업5 는 7파일 내 호출 0). 정책 확정 ② — dead 팝업 3종 이관 제외 | 제외 |
 | MODAL:ShowDialog | AS-IS 팝업 (분석 md) — TO-BE 모달 구현 위치 기입 의무 |  | WinForms 모달 표시 **메서드명** — 모달 자체가 아님(추출 아티팩트) | 해당없음 |
 | MODAL:TextboxModal | FE 실존 모달 (components/modals/TextboxModal.tsx) — 분석 md 근거 확인 필요(FE 단독이면 사유 기입) | nscm-fe/features/demand/src/pages/sales-reports/components/modals/TextboxModal.tsx |  | 구현 |
+| MODAL:MeasureSelectModal | FE 실존 모달 (components/modals/MeasureSelectModal.tsx) — 분석 md 근거 확인 필요(FE 단독이면 사유 기입) | nscm-fe/features/demand/src/pages/sales-reports/components/modals/MeasureSelectModal.tsx |  | 구현 |
+| COMMON:UC-01 | 필터링 상태에서 신규행 Insert 시 필터를 **유지한 채** 추가 행이 보이도록 (keepRowVisibleUnderFilter — 필터 clear 금지, 1st 행3 + 2026-08-14 공통 수정사항①) |  |  | 미구현 |
+| COMMON:UC-02 | 데이터 수정 중 다른 데이터 조회 시도 = '수정 중인 데이터가 있습니다. 새로 조회하시겠습니까?' confirm (MSG00703 — 1st 행4) |  |  | 미구현 |
+| COMMON:UC-03 | 컬럼 추가/제외(Column/Measure 설정) 적용 시 기존 조회 데이터 Reset 후 재조회 유도 (hook #132 §2-2 — 1st 행5) |  |  | 미구현 |
+| COMMON:UC-04 | CRUD 완료 알림 = Alert 아닌 하단 중앙 Toast 후 자동 소멸 (LGES WDG 표준·hook #132 §3 — 1st 행6) |  |  | 미구현 |
+| COMMON:UC-05 | Excel Download 시 콤보 컬럼 데이터가 Code 아닌 Name 으로 출력 (gridAction dataMap 승계 — 1st 행7) |  |  | 미구현 |
+| COMMON:UC-06 | Key-in 조회조건 = 콤마 구분 다중 입력 시 전건 조회 (1st 행8) |  |  | 미구현 |
+| COMMON:UC-07 | 필터가 걸린 상태에서 재조회해도 조회되고 **필터도 그대로 적용** (rebindFilterColumns — 2026-08-14 공통 수정사항②) |  |  | 미구현 |
+| REQ:CHAT-20260820-2 | Report Type 선택/변경하면 (그리드·조회결과) 초기화 | Form 에 onReportTypeChange prop 신설 + Page 가 resetGrid+메타 재fetch |  | 구현 |
+| REQ:CHAT-20260820-3 | 숫자 data 는 소수점 10자리까지 표기 | AS-IS 실측: 자릿수=DATA_SCALE_NUMBER 메타 구동(SpreadInfo |  | 구현 |
+| REQ:CHAT-20260820-4 | 저장 클릭 시 아무 액션 없음(스피너 미표시) → 저장 진행 피드백 + 완료 메시지 표준화 (재현: 40 / Sales Plan / 2026 / Cutoff Data) | '^' bulk 저장은 react-query 밖이라 전역 스피너 미표시가 원인 |  | 구현 |
+| REQ:CHAT-20260820-5 | 저장 속도 이슈 — 타임아웃 메시지가 가끔 발생 (저장 SP 성능 개선) | PKG_DMF0044 [E20260820-CFMERGE/CFSETBASED/CFNOSTATS] 사내 적용·VALID (저위험 3건) |  | 구현 |
+| REQ:CHAT-20260820-6 | 값이 마이너스면 빨간색 표시 | 동적·정적 수치셀 formatItem 에서 음수 #c0392b important + 양수 removeProperty(셀 DOM 재사용 대비) |  | 구현 |
+| REQ:CHAT-20260820-7 | 버전 버튼 클릭 시 팝업 표시 전 main 화면 깜박임 현상 제거 | 모달 6종 상시 마운트 → 조건부 마운트(열린 것만) + 그리드 memo |  | 구현 |
+| REQ:CHAT-20260820-8 | measure 버튼도 동일한 깜박임 현상 제거 | 동일 조건부 마운트 적용(Measure) |  | 구현 |
+| REQ:CHAT-20260820-9 | exchange rate 버튼도 동일한 깜박임 현상 제거 | 동일 조건부 마운트 적용(Exchange Rate) |  | 구현 |
+| REQ:CHAT-20260820-10 | 병합 처리된 CELL 에 붙여넣기 시 병합이 유지될 것 | pastingCell 에서 병합 범위 선캡처 → pastedCell 에서 블록 전 행에 값 전파 + editTracker |  | 구현 |
+| REQ:CHAT-20260820-11 | ETC 라인추가(기본 2줄 입력라인)에 붙여넣기 시 병합 셀이 2줄로 분해되어 저장 불가한 현상 해소 | -10 의 블록 전파로 근본 해소 — ETC 2행 세트가 항상 동기되어 병합 분해·identityOf(head) 공란 차단(MSG00429) 동시 소멸 |  | 구현 |
+| REQ:CHAT-20260820-12 | exchange rate 팝업 조회 데이터가 AS-IS 와 다름 — 정합 (재현: R_S_20260715_V002_C) | PKG_DMF0044 [E20260820-EXAUTH] INNER→LEFT JOIN 4곳 사내 적용·VALID |  | 구현 |
+| REQ:CHAT-20260820-13 | exchange rate 팝업 = 조회 전용 (AS-IS 는 조회만 가능 — 현재 edit/save 기능 제거) | AS-IS 파리티(사용자 확정): 권한 API 가 시트 미구분(메뉴 합집합)이라 titleSet/SAVE(DM Viewer)가 새어들던 것을 시트 전용 코드 EX |  | 구현 |
+| REQ:CHAT-20260820-20 | Excel 다운로드 숫자 서식 = AS-IS #,##0.000;[Red]-#,##0.000 (DMF0044 .cs:396 / DMF0049 .cs:487 — 두 화면 모두 3자리 고정+음수 빨강). TO-BE 는 e |  | USER-DECISION 보류 — Excel 서식은 공용 gridAction.ts 변경 필요(전 화면 영향), 범위 사용자 확정 대기 | 제외 |
+
+## UI 공통(통합테스트) 체크 축 (2026-08-12 — 전 화면 상시 6항목)
+
+> 원천: `Doc/단위테스트_보완대상/통합테스트 사전점검_1st_20260806_공유용.xlsx` 구분='Common' 6행.
+> 화면 분석 md 에 없는 전 UI 공통 요구 — --check 가 부재 행을 FAIL 처리한다.
+
+| ID | 요지 (원천 md 1줄) | 구현 위치 (파일:라인) | 사유 (미구현/제외/해당없음 시 필수) | 상태 |
+|---|---|---|---|---|
+| COMMON:UC-01 | 필터링 상태에서 신규행 Insert 시 필터를 **유지한 채** 추가 행이 보이도록 (keepRowVisibleUnderFilter — 필터 clear 금지, 1st 행3 + 2026-08-14 공통 수정사항①) |  |  | 미구현 |
+| COMMON:UC-02 | 데이터 수정 중 다른 데이터 조회 시도 = '수정 중인 데이터가 있습니다. 새로 조회하시겠습니까?' confirm (MSG00703 — 1st 행4) |  |  | 미구현 |
+| COMMON:UC-03 | 컬럼 추가/제외(Column/Measure 설정) 적용 시 기존 조회 데이터 Reset 후 재조회 유도 (hook #132 §2-2 — 1st 행5) |  |  | 미구현 |
+| COMMON:UC-04 | CRUD 완료 알림 = Alert 아닌 하단 중앙 Toast 후 자동 소멸 (LGES WDG 표준·hook #132 §3 — 1st 행6) |  |  | 미구현 |
+| COMMON:UC-05 | Excel Download 시 콤보 컬럼 데이터가 Code 아닌 Name 으로 출력 (gridAction dataMap 승계 — 1st 행7) |  |  | 미구현 |
+| COMMON:UC-06 | Key-in 조회조건 = 콤마 구분 다중 입력 시 전건 조회 (1st 행8) |  |  | 미구현 |
+| COMMON:UC-07 | 필터가 걸린 상태에서 재조회해도 조회되고 **필터도 그대로 적용** (rebindFilterColumns — 2026-08-14 공통 수정사항②) |  |  | 미구현 |
+
+## 보완요청(REQ) 축 (2026-08-20 — 사용자 지정 보완요청 · 대상: DMF0044)
+
+> 원장: `Doc/단위테스트_보완대상/보완요청_원장.md` · 대상 UI=DMF0044 행 15건.
+> ⭐ 미적용 전제 — 원장 PENDING 행은 본 표 상태와 무관하게 --check FAIL. 전이는 실측 근거 기입 시에만 (사전 판단 SKIP 금지).
+
+| ID | 요지 (원천 md 1줄) | 구현 위치 (파일:라인) | 사유 (미구현/제외/해당없음 시 필수) | 상태 |
+|---|---|---|---|---|
+| REQ:CHAT-20260820-2 | Report Type 선택/변경하면 (그리드·조회결과) 초기화 | Form 에 onReportTypeChange prop 신설 + Page 가 resetGrid+메타 재fetch |  | 구현 |
+| REQ:CHAT-20260820-3 | 숫자 data 는 소수점 10자리까지 표기 | AS-IS 실측: 자릿수=DATA_SCALE_NUMBER 메타 구동(SpreadInfo |  | 구현 |
+| REQ:CHAT-20260820-4 | 저장 클릭 시 아무 액션 없음(스피너 미표시) → 저장 진행 피드백 + 완료 메시지 표준화 (재현: 40 / Sales Plan / 2026 / Cutoff Data) | '^' bulk 저장은 react-query 밖이라 전역 스피너 미표시가 원인 |  | 구현 |
+| REQ:CHAT-20260820-5 | 저장 속도 이슈 — 타임아웃 메시지가 가끔 발생 (저장 SP 성능 개선) | PKG_DMF0044 [E20260820-CFMERGE/CFSETBASED/CFNOSTATS] 사내 적용·VALID (저위험 3건) |  | 구현 |
+| REQ:CHAT-20260820-6 | 값이 마이너스면 빨간색 표시 | 동적·정적 수치셀 formatItem 에서 음수 #c0392b important + 양수 removeProperty(셀 DOM 재사용 대비) |  | 구현 |
+| REQ:CHAT-20260820-7 | 버전 버튼 클릭 시 팝업 표시 전 main 화면 깜박임 현상 제거 | 모달 6종 상시 마운트 → 조건부 마운트(열린 것만) + 그리드 memo |  | 구현 |
+| REQ:CHAT-20260820-8 | measure 버튼도 동일한 깜박임 현상 제거 | 동일 조건부 마운트 적용(Measure) |  | 구현 |
+| REQ:CHAT-20260820-9 | exchange rate 버튼도 동일한 깜박임 현상 제거 | 동일 조건부 마운트 적용(Exchange Rate) |  | 구현 |
+| REQ:CHAT-20260820-10 | 병합 처리된 CELL 에 붙여넣기 시 병합이 유지될 것 | pastingCell 에서 병합 범위 선캡처 → pastedCell 에서 블록 전 행에 값 전파 + editTracker |  | 구현 |
+| REQ:CHAT-20260820-11 | ETC 라인추가(기본 2줄 입력라인)에 붙여넣기 시 병합 셀이 2줄로 분해되어 저장 불가한 현상 해소 | -10 의 블록 전파로 근본 해소 — ETC 2행 세트가 항상 동기되어 병합 분해·identityOf(head) 공란 차단(MSG00429) 동시 소멸 |  | 구현 |
+| REQ:CHAT-20260820-12 | exchange rate 팝업 조회 데이터가 AS-IS 와 다름 — 정합 (재현: R_S_20260715_V002_C) | PKG_DMF0044 [E20260820-EXAUTH] INNER→LEFT JOIN 4곳 사내 적용·VALID |  | 구현 |
+| REQ:CHAT-20260820-13 | exchange rate 팝업 = 조회 전용 (AS-IS 는 조회만 가능 — 현재 edit/save 기능 제거) | AS-IS 파리티(사용자 확정): 권한 API 가 시트 미구분(메뉴 합집합)이라 titleSet/SAVE(DM Viewer)가 새어들던 것을 시트 전용 코드 EX |  | 구현 |
+| REQ:CHAT-20260820-20 | Excel 다운로드 숫자 서식 = AS-IS #,##0.000;[Red]-#,##0.000 (DMF0044 .cs:396 / DMF0049 .cs:487 — 두 화면 모두 3자리 고정+음수 빨강). TO-BE 는 e |  | USER-DECISION 보류 — Excel 서식은 공용 gridAction.ts 변경 필요(전 화면 영향), 범위 사용자 확정 대기 | 제외 |
+| REQ:CHAT-20260820-21 | Cutoff 저장 FULL SCAN 제거 — 인덱스 추가 또는 힌트, 그리고 890행 WHILE 루프 set-based 전환 |  | USER-DECISION 보류 — 승인 범위 밖(2단계/횡전개), 사용자 확정 대기 | 제외 |
+| REQ:CHAT-20260820-22 | 동일 권한 INNER JOIN 안티패턴이 환율 팝업 밖 5곳 잔존 (COPY_VERSION_POPUP / SALES_VERSION_POPUP 2곳 / TEXTBOX / VERSION_POPUP + GET_SALES_ |  | USER-DECISION 보류 — 승인 범위 밖(2단계/횡전개), 사용자 확정 대기 | 제외 |
 
 ## 0. 정책 확정 (사용자 2026-07-22)
 | # | 정책 | 반영 |
@@ -303,17 +361,3 @@ clbDivision 이중구독 / btnSPVer 구 팝업 호출(L1156~1163 주석 — CUTO
 | HANDLER:clbType_SelectedIndexChanged | AS-IS `DMF0044_Sales_Reports.cs:1394` (라이브 8행) | nscm-fe/features/demand/src/pages/sales-reports/components/SalesReportsForm.tsx Type 변경 핸들러 |  | 구현 |
 | HANDLER:spdMain_CellDoubleClick | AS-IS `DMF0044_Sales_Reports.cs:1307` (라이브 17행) | nscm-fe/features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx dblclickHandler |  | 구현 |
 | HANDLER:spdMain_Changed | AS-IS `DMF0044_Sales_Reports.cs:1166` (라이브 114행) | nscm-fe/features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx cellEditEndedHandler |  | 구현 |
-
-## §UC. UI 공통(통합테스트) 축 — COMMON:UC-01~07 (hook #133, 2026-08-15 판정)
-
-> 단일 원천 = `_artifacts/_diagnostics/asis_mapping_gate.py::UI_COMMON_ITEMS`. 정본 화면 = DMF0042.
-
-| ID | 요지(원천 1줄) | 구현 위치(파일:라인) | 사유 | 상태 |
-|---|---|---|---|---|
-| COMMON:UC-01 | 필터링 상태에서 신규행 Insert 시 필터를 **유지한 채** 추가 행이 보이도록 (keepRowVisibleUnderFilter — 필터 clear 금지) | SalesReports.tsx handleInsert 말미 `keepRowVisibleUnderFilter` 블록별 등록 (2026-08-15 신설) |  | 구현 |
-| COMMON:UC-02 | 데이터 수정 중 다른 데이터 조회 시도 = MSG00703 confirm | SalesReports.tsx handleSearch 선두 `hasPendingChanges()` → setAlert confirm MSG00703, 취소 시 조회 중단 (2026-08-15 신설 — 종전 hasPendingChanges 는 저장 경로에서만 쓰였다) |  | 구현 |
-| COMMON:UC-03 | 컬럼 추가/제외(Column/Measure 설정) 적용 시 기존 조회 데이터 Reset 후 재조회 유도 | components/SalesReportsModals.tsx ColumnLayoutModal onSave 선두 `onMeasureApply()`(=resetGrid, 2026-08-15 보완 — Column 경로 누락분) + MeasureSelectModal onApply `onMeasureApply()` + SalesReports.tsx resetGrid |  | 구현 |
-| COMMON:UC-04 | CRUD 완료 알림 = Alert 아닌 하단 중앙 Toast 후 자동 소멸 | SalesReports.tsx handleSave 성공 `setToast type:'success'`(MSG.SAVED) — 실패/SP 메시지만 Alert |  | 구현 |
-| COMMON:UC-05 | Excel Download 시 콤보 컬럼 데이터가 Code 아닌 Name 으로 출력 | 공용 `packages/foundation/src/utils/gridAction.ts` excelDownload dataMap 승계(2026-08-12 공용 보완 — 전 화면 발효) ← SalesReports.tsx:448 `excelFileName='SalesReports'` 경로 소비 |  | 구현 |
-| COMMON:UC-06 | Key-in 조회조건 = 콤마 구분 다중 입력 시 전건 조회 | 해당없음 — 조회조건 전수(components/SalesReportsForm.tsx) = Division·Version·CustomDropdown 뿐, **자유입력(key-in) 필드가 0개**. 콤마 다중 입력 대상 자체가 없다 | 조회조건에 key-in 필드 부재(2026-08-15 폼 전수 확인) | 해당없음 |
-| COMMON:UC-07 | 필터가 걸린 상태에서 재조회해도 조회되고 **필터도 그대로 적용** (rebindFilterColumns) | components/SalesReportsGrid.tsx updatedLayout `(0-a2) rebindFilterColumns` — columnGroups 재대입으로 끊긴 Column 참조만 재바인딩(동적 M_ 는 직전 sanitize 로 제외 유지). 2026-08-15 신설 |  | 구현 |

@@ -11,7 +11,6 @@ import {
   MergeManager,
 } from '@mescius/wijmo.grid';
 import {
-  EndCustomerField,
   ItemByDivisionModal,
   PeriodField,
   ProjectByDivisionModal,
@@ -23,6 +22,7 @@ import { apiClient } from '@foundation/apis';
 import { CELL_CONTROL_TYPE, CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
 import { GridAction } from '@foundation/utils';
+import { safeString } from '@foundation/utils';
 import { CustomDialog, CustomDropdown, DataGrid, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
 import { Button, FormItem, InputField, ProgressIndicator } from '@shared/lges';
@@ -52,6 +52,26 @@ const todayYmd = (): string => {
 // price 문자열 정규화 — ',' 제거 (AS-IS L1746 param_qty.Replace(",","")). 빈값은 '' 유지.
 const normPrice = (v: string | number | null | undefined): string =>
   v === undefined || v === null ? '' : String(v).replace(/,/g, '').trim();
+
+/**
+ * 숫자 셀 정규화 — 표시 서식(n3)이 먹도록 **문자열 숫자를 number 로** 바꾼다.
+ *
+ * Wijmo 의 `Column.format` 은 `Globalize.format(value, format)` 을 타는데 값이 string 이면
+ * 그대로 돌려준다. 즉 같은 컬럼이라도 SP 가 행마다 number/string 을 섞어 내리면 **string 행만**
+ * 서식이 빠져 정수처럼 보인다(사용자 신고 2026-08-22). 편집한 셀은 `dataType=Number` 로 커밋되어
+ * 3자리가 되므로 "수정한 것만 3자리" 라는 비대칭이 생긴다.
+ *
+ * 빈값은 숫자로 만들지 않는다 — 0 으로 바꾸면 "값 없음" 과 "0" 이 구분되지 않고,
+ * 저장 payload 가 0 을 실어 보내 원장에 없던 행이 생긴다.
+ */
+const toNumericCell = (v: unknown): string | number | undefined => {
+  if (v === null || v === undefined) return undefined;
+  if (typeof v === 'number') return v;
+  const s = safeString(v).replace(/,/g, '').trim();
+  if (s === '') return undefined;
+  const n = Number(s);
+  return Number.isFinite(n) ? n : (v as string);
+};
 
 // ⭐ UI Category Setup 미로드(BE 메타 실패) 시 fallback — SCM_MST_SHEET_COLUMNS 'Sales Price Save All'
 //   실측 25 컬럼 중 표시 컬럼 (2026-07-12 ora.py). 메타 로드 시엔 fixedColumns useMemo 가 대체.
@@ -238,7 +258,7 @@ export const SavePricePeriodModal = ({
   }, [open, divisionId, fetchSavePriceColumns]);
 
   // ===== Combo — Div 표시 + 셀 코드→명칭 DataMap 7종 (형제 PriceBatchInputModal 동일 등록명) =====
-  const [divQ, ssQ, teamQ, incoQ, currQ, fcstQ, customsQ] = useTabComboQueries({
+  const [divQ, ssQ, teamQ, incoQ, currQ, fcstQ, customsQ, endCustQ] = useTabComboQueries({
     filters: [
       'MyDivision',
       'SalesSite',
@@ -247,8 +267,18 @@ export const SavePricePeriodModal = ({
       'CurrencyList',
       { comboId: 'FcstType', divisionId },
       { comboId: 'CustomsHandbook', divisionId },
+      // ⭐ [CASCADE 2026-08-22] End Customer 조회조건 콤보 = AS-IS 팝업과 동일 등록본.
+      //   AS-IS `DMF0082_SaveSalesFuturePrice_Popup.cs:260`
+      //     Filter["DIVISION_ID"] = sDivision;
+      //     dtEndCustomer = DataService.GetDMInnerTable("EndCustomerByDivision", Filter);
+      //   (같은 블록의 `Filter["DEPT_ID"]` 는 **주석**이라 팀 축은 이 팝업에 없다 — 조회조건에도 Team 없음.)
+      //   구 배선은 공용 'EndCustomer' 콤보 + 클라 division 필터라 AS-IS 산식과 달랐다.
+      'EndCustomerByDivision',
     ],
   });
+  // 'ALL' 센티널 제거 — CustomDropdown 이 선택 해제 시 'ALL' 을 내보낸다(CustomDropdown.tsx:182-184).
+  //   그대로 서버 바인드에 넘기면 코드값 'ALL' 로 조회돼 0행이 된다(메인 화면과 동일 처리).
+  const endCustomerSel = endCustomers.filter(v => v !== 'ALL');
   type ComboItem = { CODE?: string; NAME?: string };
   const divItems = (divQ ?? []) as ComboItem[];
   // UI Category 존중 — cellCtrlObjTpCd=COMBO 컬럼만 DataMap 적용 (메타 미로드 시 전부 적용).
@@ -283,7 +313,12 @@ export const SavePricePeriodModal = ({
     const base: RawFlexGridColumnConfig[] =
       metaColumns && metaColumns.length > 0
         ? metaColumns
-            .filter(c => c.visible !== false && c.colNm !== 'PRICE_ALL')
+            // ⭐ 2026-08-22 — 시트 메타가 AS-IS `DEFAULT_FLAG` 기준으로 재확정되면서(패키지
+            //   SHEETCOL_SAVEPRICE_VISIBLE_FROM_DEFAULTFLAG_20260822) AS-IS 가 **데이터로만** 싣던
+            //   폭 0 컬럼(AUTHORITY_YN·DISPLAY_SEQ·NEW_FLAG·COL_LIST)도 VISIBLE_FLAG='Y' 가 됐다.
+            //   AS-IS 는 폭 0 으로 숨겼으므로 여기서도 폭 0 은 컬럼으로 만들지 않는다(#144 폭0=숨김 규약).
+            //   `PRICE_ALL` 은 메타도 'Y' 지만 아래에서 편집 상수로 append 하므로 이름으로 제외(중복 방지).
+            .filter(c => c.visible !== false && c.colNm !== 'PRICE_ALL' && (c.colWth ?? 80) > 0)
             .map(c => ({
               colNm: c.colNm,
               colLblNm: c.colLblNm || c.colNm,
@@ -468,7 +503,15 @@ export const SavePricePeriodModal = ({
       const out: PriceRow = {};
       for (const [k, v] of Object.entries(r)) {
         const m = /W_(\d{8})/.exec(k);
-        out[m ? `W_${m[1]}` : k] = v as string | number;
+        // ⭐ 2026-08-22 — 주차(W_) 값을 **숫자로 정규화**한다 (사용자 신고: "수정한 컬럼은 3자리로
+        //   나오는데 수정하지 않은 컬럼은 정수로 나오는 행이 있다").
+        //   원인: Wijmo 의 `format`(n3) 은 **숫자에만** 적용된다(Globalize.format). SP/JDBC 가
+        //   같은 컬럼을 행에 따라 string 으로 내려주면 그 셀만 서식이 안 붙어 raw 로 보인다.
+        //   편집하면 `dataType=Number`(normalizeDynamicColumns)로 커밋되어 그때부터 3자리가 되는데,
+        //   그 비대칭이 바로 신고 증상이다. 표시 이전에 타입을 맞춰 원천 제거한다.
+        //   ⚠ 숫자 컬럼만 변환한다 — 코드성 문자열(예: DIVISION_ID '0082')을 숫자로 바꾸면
+        //     앞자리 0 이 날아가므로 W_ 이외 키는 절대 건드리지 않는다.
+        out[m ? `W_${m[1]}` : k] = m ? toNumericCell(v) : (v as string | number);
       }
       // PRICE_ALL 초기값 = 첫 주차 값 (AS-IS: GetText(i, PriceAll+1) → SetText(i, PriceAll))
       const init = firstWeek !== undefined ? out[firstWeek] : undefined;
@@ -911,16 +954,58 @@ export const SavePricePeriodModal = ({
                       )}
                     />
                   </Grid>
-                  {/* End Customer — [PJ2025-50188] 추가 조회조건 (EndCustomerByDivision → 카탈로그) */}
-                  <EndCustomerField
-                    gridSize={3}
-                    division={divisionId}
-                    value={endCustomers}
-                    onChange={v => setEndCustomers(v)}
-                  />
+                  {/* End Customer — [PJ2025-50188] 추가 조회조건.
+                      ⭐ [CASCADE 2026-08-22] 메인 화면 ForecastPriceForm L120~150 과 동일 산식으로 교체.
+                        · 콤보 = `EndCustomerByDivision` (AS-IS 팝업 L260 등록본 1:1)
+                        · division 필터를 **명시 비교**로 건다 — 공용 `toOptions` 의 `|| !r.DIVISION_ID`
+                          우회는 division 이 빈 행을 전부 통과시킨다(메인 화면에서 같은 이유로 제거).
+                        · 선택 변경 시 하위(Sales Site) clear — cascade 의 필수 짝. */}
+                  <Grid size={3}>
+                    <FormItem
+                      label={t('LBL00503', 'End Customer')}
+                      labelAlign='right'
+                      render={() => (
+                        <CustomDropdown
+                          multiple
+                          allOption
+                          useClearIcon
+                          limitTags={1}
+                          value={endCustomers.join(',')}
+                          options={
+                            ((endCustQ ?? []) as Array<Record<string, string>>)
+                              .filter(item => item.DIVISION_ID === divisionId)
+                              .map(item => ({
+                                label: String(item.NAME ?? item.CODE),
+                                value: String(item.CODE),
+                              })) ?? []
+                          }
+                          onChange={(_, selected) => {
+                            setEndCustomers(
+                              String(selected ?? '')
+                                .split(',')
+                                .filter(Boolean)
+                            );
+                            setSalesSites([]); // 상위 변경 → 하위 초기화
+                          }}
+                        />
+                      )}
+                    />
+                  </Grid>
+                  {/* Sales Site — ⭐ [CASCADE 2026-08-22] Division + End Customer 서버 바인드.
+                      AS-IS 는 `UserSiteByEndCustomer(..., division, sEndCustomer)` 를 호출하지만
+                      `sEndCustomer` 는 **필드(L45=null)** 이고 값을 넣는 L224 가 주석이라 실제로는
+                      필터가 걸리지 않는다(= AS-IS 미완성). 메인 화면에서 이미 확정한 산식으로 맞춘다.
+                      div40 + End Customer 미선택 = BigFilter 'ScmSitebyEndCustomer40'(전체 40),
+                      그 외 = 'UserSiteByEndCustomer'(권한 D + 'W' 제외 + 고객 종속). */}
                   <SalesSiteField
                     gridSize={3}
                     division={divisionId}
+                    comboId={
+                      divisionId === '40' && endCustomerSel.length === 0
+                        ? 'ScmSitebyEndCustomer40'
+                        : 'UserSiteByEndCustomer'
+                    }
+                    endCustomer={endCustomerSel.join(',')}
                     value={salesSites}
                     onChange={v => setSalesSites(v)}
                   />
@@ -997,10 +1082,14 @@ export const SavePricePeriodModal = ({
 
             {/* Grid — 고정 25 컬럼(admin 메타) + 일괄입력 Price + 주차 3단 헤더 (계층 머지) */}
             <div className={styles.gridWrapper} ref={gridWrapRef}>
+              {/* ⭐ 2026-08-22 — 저장 중에도 스피너를 띄운다(사용자 요청).
+                  구 `open={loading}` 은 조회축(`isFetching || isTitleFetching`)만 봐서 저장 동안
+                  아무 표시가 없었다. 저장은 '^' bulk 로 수백~수천 행을 한 번에 보내 체감이 길다.
+                  버튼 disabled 는 이미 `loading || saving` 로 묶여 있어(Save L1097) 판정축을 맞춘다. */}
               <ProgressIndicator
                 shape='circular'
                 apprearance='infinite'
-                open={loading}
+                open={loading || saving}
                 placement='parent'
               />
               <DataGrid
@@ -1080,7 +1169,8 @@ export const SavePricePeriodModal = ({
             endCustomer: joinComma(endCustomers),
             salesSite: joinComma(salesSites),
             projectCode: projectCode || '',
-            itemId: '',
+            // [hook #143 §2] 폼에 입력돼 있는 Model 을 팝업 조회조건으로 이어 준다.
+            itemId,
           } as never
         }
         callFromCell={true}

@@ -1,0 +1,22 @@
+{
+ "00_CLOUD_PRECHECK.sql": "적용 전 확인 C1~C6 (read-only) — C3=DMF0074_40 판별 / C5=시퀀스 / C6=SP_W 0건",
+ "_README.md": "취합 근거·정정 계보·제외 사유·적용 순서·미해결",
+ "A_DB/00_GTT_DDL.sql": "GT_DM74_* 17종 자급 DDL (기존재 skip·멱등)",
+ "A_DB/01_PKG_DMF0074_SPEC.sql": "PKG SPEC 전체 교체 (51줄)",
+ "A_DB/02_PKG_DMF0074_BODY.sql": "PKG BODY 전체 교체 (3,980줄 · 0819 대비 +0행)",
+ "A_DB/05_FIX_HISTORY_SEQ_RESEED.sql": "HISTORY_SEQ 재시드 — PRECHECK C5 가 뒤처짐일 때만",
+ "A_DB/10_SHEET_COLUMNS.sql": "SCM_MST_SHEET_COLUMNS 58행 — 시트 단위 삭제 후 재적재",
+ "A_DB/12_EXCEL_COLUMNS.sql": "SCM_ADM_EXCEL_COLUMNS 2행 ⭐ DMF0074 + DMF0074_40",
+ "A_DB/20_WIRING_AUTH.sql": "배선 43행 + 권한 27행 MERGE (패밀리 포함)",
+ "A_DB/30_MSG_LBL_MNU.sql": "MSG/LBL/MNU 69행 INSERT-only (MSG01015 포함)",
+ "A_DB/90_VERIFY.sql": "적용 후 검증 V1~V7 (사내에서 전 항목 PASS 실측)",
+ "A_DB/91_DIAG_TEMPLATE_EMPTY.sql": "진단 — Excel Form 0건 퍼널",
+ "A_DB/92_DIAG_CLOUD_MRFPARITY.sql": "진단 — MRF 버전 사내/클라우드 대조",
+ "A_DB/93_DIAG_CLOUD_TEMPLATE_FUNNEL.sql": "진단 — 템플릿 조회 단계별 감소 지점",
+ "A_DB/94_DIAG_CLOUD_SPW_LEDGER.sql": "진단 — SP_W 버전 vs 원장 적재 행수",
+ "A_DB/95_FIX_CLOUD_EMPTY_SPW_VERSION.sql": "조치안(대증) — 빈 SP_W 버전 해소",
+ "_survey/collect_report.json": "기계 스윕 원자료",
+ "_survey/delta_vs_DMF0074_CLOUD_20260819.diff": "BODY 델타 (+0행)",
+ "_survey/file_desc.json": "본 목록의 용도 설명 원천",
+ "_survey/fe_check_20260823.txt": "FE 검증 원문 (type-check/lint, error 0)"
+}

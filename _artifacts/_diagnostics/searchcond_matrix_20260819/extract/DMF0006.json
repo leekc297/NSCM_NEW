@@ -1,0 +1,277 @@
+{
+  "ui": "DMF0006",
+  "ui_name_asis": "Customer Model Mapping",
+  "asis_file": "asis_stripped/DMF0006.cs",
+  "tobe_form": "nscm-fe/features/master/src/pages/customer-model-mapping/components/CustomerModelMappingForm.tsx",
+  "conditions": [
+    {
+      "cond": "Div.",
+      "asis": {
+        "label": "Division",
+        "control": "콤보단일(UsrCombo clbDivisions — DropDown, ALL 없음)",
+        "combo": "Data.Common(Data.Type.MyDivision, false, NowGroupID, UserId) → UP_FX_GetCommonDataList @Code='MyDivision'(L342 분기 존재)",
+        "params": "GROUP_ID(NowGroupID), USER_ID",
+        "filter": "SCM_MST_DIVISION — 사용자 권한(TB_FX_UserGroupAuthExtention AuthType D/J) + ATTRIBUTE3<>'EE' + VALID_YN='Y' (BigFilter 'MyDivision' 동일)",
+        "cascade": "변경 시 Team→EndCustomer→SalesSite 순차 재적재 + 40이면 그리드 PROJECT_CODE 컬럼 숨김·조회조건 Project 비활성(layoutControlItem9/btnProject Enabled=false)",
+        "div40": "EndCustomer=EndCustomerByDivision40 / SalesSite=ScmSitebyEndCustomer40(division,'') / Project 조건 비활성",
+        "div81": "EndCustomer=UserEndCustomerByDivisionDept / SalesSite=UserSiteByEndCustomer",
+        "div82": "81 과 동일 경로(else 분기)",
+        "required": "Y — 빈값이면 MSG00097 후 조회 중단",
+        "default": "첫 항목(사용자 첫 권한 division — setListBox 후 SelectedIndex=0)",
+        "evidence": ["DMF0006.cs:L142-144", "DMF0006.cs:L381-393", "DMF0006.cs:L820-874", "Designer.cs:L45,L633"]
+      },
+      "tobe": {
+        "label": "Div. (LBL00001)",
+        "control": "콤보단일(CustomDropdown 인라인 — 카탈로그 DivisionField 미사용)",
+        "combo": "MyDivision (CMBO DM)",
+        "params": "@sesUserId(세션 자동)",
+        "filter": "SCM_MST_DIVISION × SCM_ADM_USER_GR_UNIT_AUTH_MPG_M UNIT_TP_CD='D' 사용자 권한 + ATTRIBUTE3<>'EE' + VALID_YN='Y'",
+        "cascade": "변경 시 deptId/endCustomer/salesSite='ALL'·projectCode='' reset + store setSearchParams 가 staticColumns refetch·filters 무효화(그리드 비움)",
+        "div40": "isProjectDisabled=divisionId===DIVISION_NO_PROJECT('40') → Project 입력·팝업 잠금",
+        "div81": "공통",
+        "div82": "공통",
+        "required": "Y(암묵 — 단일콤보+기본값이라 공백 불가. AS-IS MSG00097 알림 로직은 미이식)",
+        "default": "session.div ?? '40'",
+        "evidence": ["CustomerModelMappingForm.tsx:L22-23,L46-71", "useCustomerModelMappingStore.ts:L27-37,L52-60", "customer-model-mapping.constants.ts:L32"]
+      }
+    },
+    {
+      "cond": "Team",
+      "asis": {
+        "label": "Team",
+        "control": "콤보다중(UsrCheckedList clbTeam)",
+        "combo": "Data.UserTeamByDivision(NowGroupID, UserId, division) → UP_FX_GetCommonDataList @Code='TeambyDivision'(L1880 분기 존재)",
+        "params": "GROUP_ID, USER_ID, DIVISION_ID",
+        "filter": "SCM_MST_SITE_ITEM OWNER(1번 토큰) 사용자의 부서 기준(40 방식 통일 E20260211-001049) + 권한 division IN",
+        "cascade": "변경 시 EndCustomer 재적재 → SalesSite 재적재 (clbTeam_SelectedIndexChanged)",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N",
+        "default": "ALL 플래그 true(setListBox DataSource 바인드)",
+        "evidence": ["DMF0006.cs:L146-149", "DMF0006.cs:L1149-1161", "Designer.cs:L47,L693"]
+      },
+      "tobe": {
+        "label": "Team (LBL00044)",
+        "control": "콤보다중(CustomDropdown multiple allOption useClearIcon — 인라인)",
+        "combo": "TeambyDivision (CMBO DM)",
+        "params": "@divisionId=`'${divisionId}'`(따옴표 전달), @sesUserId·@langCd·@Param1(서버)",
+        "filter": "AS-IS UP_FX 'TeambyDivision' 2분기 원문보존 변환(40=owner 경로/비40=SALES 배정부서) + FE 에서 DIVISION_ID 클라 필터·Map 중복제거",
+        "cascade": "변경 시 endCustomer/salesSite='ALL' reset",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N",
+        "default": "'ALL'",
+        "evidence": ["CustomerModelMappingForm.tsx:L28-36,L72-103", "useCustomerModelMappingStore.ts:L29"]
+      }
+    },
+    {
+      "cond": "End Customer",
+      "asis": {
+        "label": "End Customer",
+        "control": "콤보다중(UsrCheckedList clbEndCustomer)",
+        "combo": "40: Data.Common(EndCustomerByDivision40,false,div,team,GROUP,USER) / else: Data.UserEndCustomerByDivisionDept(GROUP,USER,div,team) → @Code='EndCustomerByDivision40'(L3904)/'EndCustomerByDivisionDept'(L860)",
+        "params": "40: division, team, GROUP_ID, USER_ID / else: GROUP_ID, USER_ID, division, team",
+        "filter": "40=SITE_ITEM owner-dept 의 PROJECT_CODE(+LOOKUP END_CUSTOMER union) / 비40=SCM_MST_SITE.END_CUSTOMER(+LOOKUP SEGMENT3 명칭)",
+        "cascade": "변경 시 SalesSite 재적재 (clbEndCustomer_SelectedIndexChanged)",
+        "div40": "원천=EndCustomerByDivision40(PROJECT_CODE 축)", "div81": "원천=UserEndCustomerByDivisionDept", "div82": "81 과 동일",
+        "required": "N",
+        "default": "ALL 플래그 true",
+        "evidence": ["DMF0006.cs:L151-162", "DMF0006.cs:L1126-1130", "DMF0006.cs:L846-872"]
+      },
+      "tobe": {
+        "label": "End Customer (LBL00080)",
+        "control": "콤보다중(CustomDropdown multiple allOption useClearIcon — 인라인)",
+        "combo": "EndCustomer (CMBO DM)",
+        "params": "@sesUserId(세션 자동)",
+        "filter": "단일 통합 쿼리(40=PROJECT_CODE/비40=END_CUSTOMER CASE) + FE 클라 필터 DIVISION_ID===division AND (deptId='ALL' or DEPT_ID∈deptId)",
+        "cascade": "변경 시 하위 reset 없음(AS-IS 는 SalesSite 재적재 — TO-BE SalesSite 는 endCustomer 미종속이라 cascade 불요)",
+        "div40": "공통(쿼리 내 CASE)", "div81": "공통", "div82": "공통",
+        "required": "N",
+        "default": "'ALL'",
+        "evidence": ["CustomerModelMappingForm.tsx:L104-135", "useCustomerModelMappingStore.ts:L30"]
+      }
+    },
+    {
+      "cond": "Sales Site",
+      "asis": {
+        "label": "Sales Site",
+        "control": "콤보다중(UsrCheckedList clbSalesSite)",
+        "combo": "Data.UserSiteByEndCustomer(GROUP,USER,div,endCustomer) → @Code='SiteByEndCustomer'(L907) / div40 Division 변경 시 Data.ScmSitebyEndCustomer40(GROUP,USER,div,'') → @Code='ScmSitebyEndCustomer40'(L3981)",
+        "params": "GROUP_ID, USER_ID, DIVISION_ID, END_CUSTOMER(또는 40: projectCode='')",
+        "filter": "SCM_MST_SITE SITE_TYPE='SALES' + 권한 division + VALID_YN='Y' (40 은 owner-dept 경유)",
+        "cascade": "Team/EndCustomer 변경에 종속 재적재",
+        "div40": "Division 변경 시 ScmSitebyEndCustomer40 사용", "div81": "SiteByEndCustomer", "div82": "81 과 동일",
+        "required": "N",
+        "default": "ALL 플래그 true",
+        "evidence": ["DMF0006.cs:L164-165", "DMF0006.cs:L856-869", "DMF0006.cs:L1128-1129,L1159-1160"]
+      },
+      "tobe": {
+        "label": "Sales Site (LBL00011)",
+        "control": "콤보다중(CustomDropdown multiple allOption useClearIcon — 인라인)",
+        "combo": "SalesSite (CMBO DM)",
+        "params": "@sesUserId(세션 자동)",
+        "filter": "SCM_MST_SITE SALES + 권한(UNIT_TP_CD='D') + VALID_YN='Y', FE 클라 필터 DIVISION_ID===division AND (deptId='ALL' or DEPT_ID∈deptId)",
+        "cascade": "endCustomer 미종속(AS-IS 와 상이 — division/dept 만 필터)",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N",
+        "default": "'ALL'",
+        "evidence": ["CustomerModelMappingForm.tsx:L136-165", "useCustomerModelMappingStore.ts:L31"]
+      }
+    },
+    {
+      "cond": "PJT",
+      "asis": {
+        "label": "Project",
+        "control": "텍스트(UsrMultiLineEditor umltProject) + 팝업버튼(btnProject) + Enter키=팝업",
+        "combo": "팝업 SCM0002_ProjectbyDivisionPopupEx.Form_Load(true, div, team, endCustomer, scmSite, project)",
+        "params": "division, team, endCustomer, scmSite, projectText",
+        "filter": "팝업 내부 조회(프로젝트 검색)",
+        "cascade": "없음(Division=40 시 조건 자체 비활성)",
+        "div40": "비활성(layoutControlItem9.Enabled=false, btnProject.Enabled=false)", "div81": "활성", "div82": "활성",
+        "required": "N",
+        "default": "''",
+        "evidence": ["DMF0006.cs:L186-196,L803-818", "DMF0006.cs:L828-838", "DMF0006.cs:L383,L412"]
+      },
+      "tobe": {
+        "label": "Project (LBL00617)",
+        "control": "텍스트(InputField)+팝업버튼(FunctionSearchIcon)+더블클릭 팝업",
+        "combo": "팝업 ProjectByDivisionModal(preSearchParams=searchParams 전체)",
+        "params": "divisionId, deptId, endCustomer, salesSite 등 searchParams 전달",
+        "filter": "모달 내부 조회",
+        "cascade": "Division 변경 시 projectCode='' reset",
+        "div40": "disabled(입력·팝업 모두 잠금 — DIVISION_NO_PROJECT='40')", "div81": "활성", "div82": "활성",
+        "required": "N",
+        "default": "''",
+        "evidence": ["CustomerModelMappingForm.tsx:L166-197,L279-285"]
+      }
+    },
+    {
+      "cond": "Model/Nickname",
+      "asis": {
+        "label": "Model / Nickname",
+        "control": "텍스트(UsrMultiLineEditor umltModel) + 팝업버튼(btnModelType) + Enter키=팝업",
+        "combo": "팝업 DM0002_ItembyDivisionPopupEx.Form_Load(true, div, team, endCustomer, scmSite, project, itemId)",
+        "params": "division, team, endCustomer, scmSiteId, project, itemText",
+        "filter": "팝업 내부 조회(모델 검색)",
+        "cascade": "없음",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N",
+        "default": "''",
+        "evidence": ["DMF0006.cs:L198-204,L784-802", "DMF0006.cs:L384,L413"]
+      },
+      "tobe": {
+        "label": "Model / Nickname (LBL00508)",
+        "control": "텍스트(InputField)+팝업버튼+더블클릭 팝업",
+        "combo": "팝업 ItemByDivisionModal(preSearchParams=searchParams 전체)",
+        "params": "searchParams 전달",
+        "filter": "모달 내부 조회",
+        "cascade": "없음(Division 변경에도 itemId 미reset — AS-IS 동일)",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N",
+        "default": "''",
+        "evidence": ["CustomerModelMappingForm.tsx:L198-227,L286-292"]
+      }
+    },
+    {
+      "cond": "Customer PJT",
+      "asis": {
+        "label": "Customer PJT",
+        "control": "텍스트(UsrMultiLineEditor umltCustomerPJT)",
+        "combo": "없음(자유 텍스트)",
+        "params": "GET p_customer_project_code",
+        "filter": "없음",
+        "cascade": "없음",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N",
+        "default": "''",
+        "evidence": ["DMF0006.cs:L385,L414", "Designer.cs:L40,L660"]
+      },
+      "tobe": {
+        "label": "Customer PJT (LBL00083)",
+        "control": "텍스트(InputField)",
+        "combo": "없음",
+        "params": "filters.customerPJT",
+        "filter": "없음",
+        "cascade": "없음",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N",
+        "default": "''",
+        "evidence": ["CustomerModelMappingForm.tsx:L228-241", "useCustomerModelMappingStore.ts:L32"]
+      }
+    },
+    {
+      "cond": "Customer Model",
+      "asis": {
+        "label": "Customer Model",
+        "control": "텍스트(UsrMultiLineEditor umltCustomerModel)",
+        "combo": "없음(자유 텍스트)",
+        "params": "GET p_customer_model",
+        "filter": "없음",
+        "cascade": "없음",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N",
+        "default": "''",
+        "evidence": ["DMF0006.cs:L386,L415", "Designer.cs:L41,L671"]
+      },
+      "tobe": {
+        "label": "Customer Model (LBL00084)",
+        "control": "텍스트(InputField)",
+        "combo": "없음",
+        "params": "filters.customerModel",
+        "filter": "없음",
+        "cascade": "없음",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N",
+        "default": "''",
+        "evidence": ["CustomerModelMappingForm.tsx:L242-255", "useCustomerModelMappingStore.ts:L33"]
+      }
+    },
+    {
+      "cond": "Active(YesOrNo)",
+      "asis": {
+        "label": "Active",
+        "control": "콤보단일(UsrCombo cboActive — DropDownList)",
+        "combo": "Data.Common(Data.Type.YesOrNo) — CallBizData('YesOrNo', SP 밖 고정 Y/N)",
+        "params": "없음",
+        "filter": "Y/N 고정 +ALL행(setListBox blnAllFlag=true) — ALL/Y/N",
+        "cascade": "없음",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N",
+        "default": "'Y' (setListBox 4번째 인자)",
+        "evidence": ["DMF0006.cs:L167-168,L232", "DMF0006.cs:L387,L416", "Designer.cs:L576-592,L771"]
+      },
+      "tobe": {
+        "label": "Active (LBL00007)",
+        "control": "콤보단일(CustomDropdown isInput=false allOption — extraConditions 행)",
+        "combo": "YesOrNo (CMBO ALL) — DUAL Y/N 고정",
+        "params": "없음(토큰 없음)",
+        "filter": "ALL/Y/N (allOption 이 ALL 행 담당)",
+        "cascade": "없음",
+        "div40": "공통", "div81": "공통", "div82": "공통",
+        "required": "N",
+        "default": "'Y'",
+        "evidence": ["CustomerModelMappingForm.tsx:L258-277", "useCustomerModelMappingStore.ts:L36"]
+      }
+    }
+  ],
+  "cascade_chains": [
+    "ASIS: Division→Team→EndCustomer→SalesSite (SIC 체인 — clbDivision L820 / clbTeam L1149 / clbEndCustomer L1126) + Division=40 → Project 조건 비활성·PROJECT_CODE 컬럼 숨김",
+    "TOBE: Division→(deptId,endCustomer,salesSite='ALL', projectCode='') 일괄 reset + staticColumns refetch·filters 무효화 / Team→(endCustomer,salesSite='ALL') / EndCustomer→하위 reset 없음(SalesSite 가 endCustomer 미종속)"
+  ],
+  "excluded": [
+    "그리드 셀 콤보 4종: TEAM_ID(UserTeamByDivisionAuth)/END_CUSTOMER(EndCustomerByDivision40·UserEndCustomerByDivisionDeptAuth)/SCM_SITE_ID(UserSiteByEndCustomerAuth)/셀 cascade (DMF0006.cs L725-747, L876-997)",
+    "그리드 셀 더블클릭 팝업 2종: SCM0002_ProjectbyDivisionPopupEx/DM0002_ItembyDivisionPopupEx (L999-1096)",
+    "기능 버튼: Search/Insert/Delete/Edit/Save/Excel (FindButton~ExcelButton)"
+  ],
+  "crosscheck": {
+    "catalog_screen": "Customer Model Mapping (search_conditions_scp_dm.md L1195)",
+    "catalog_asis_rows": 9, "catalog_tobe_rows": 9,
+    "my_asis_count": 9, "my_tobe_count": 9,
+    "reason": "행수 일치. 단 카탈로그가 Customer PJT/Customer Model 의 To-Be 유형을 '선택·다중 검색'으로 계획했으나 실코드는 자유 텍스트(InputField) — 소스 실측 우선"
+  },
+  "notes": [
+    "AS-IS clbDivisions 는 변수명이 clb* 이나 Designer 실체는 UsrCombo(단일 선택) — 카탈로그 '선택·단일'과 일치",
+    "AS-IS Search 필수검증 = Division 만(MSG00097). TO-BE 는 알림 없이 단일콤보 기본값으로 암묵 보장",
+    "TO-BE 는 @master/searchFields 카탈로그 필드를 쓰지 않고 전부 인라인 구현(2026 이전 작성 화면 패턴)",
+    "TO-BE store 는 /admin/menu/DMF0006/search-conditions(관리자 저장 조회조건) 로 초기 searchParams 를 1회 덮어씀 (useCustomerModelMappingStore.ts L77-93)",
+    "TO-BE SalesSite 가 endCustomer cascade 미적용 — AS-IS(UserSiteByEndCustomer 재적재)와 동작 차이 있음 (division/dept 클라 필터만)"
+  ]
+}

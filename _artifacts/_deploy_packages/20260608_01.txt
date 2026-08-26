@@ -1,6 +1,6 @@
-LBL00754	Upload Result
-LBL00755	Success
-LBL00756	Error
-LBL00757	Total
-LBL00758	Error Detail
-LBL00759	Excel File
+Error excelFileUplad: ORA-06550: line 1, column 7:
+PLS-00201: identifier 'DMF0014_CUST_FCST_EXCEL_UPLOAD' must be declared
+ORA-06550: line 1, column 7:
+PL/SQL: Statement ignored
+
+https://docs.oracle.com/error-help/db/ora-06550/

@@ -1,0 +1,430 @@
+-- DMF0044_CLOUD_20260820 / A_DB/01_DDL_GTT.sql
+-- GLOBAL TEMPORARY TABLE 자급 DDL — 기존재 가정 금지 (룰 22 이관패키지 GTT/TYPE 자급 의무).
+-- 축 확정 = ① PKG_DMF0044 소스 grep(주석 제거 LIVE) ② ALL_DEPENDENCIES 양축 합집합 → 딕셔너리 교차.
+--   grep 18종 / dep 18종 / 실존 GTT 18종 (양축 완전 일치).
+-- ⚠ -955(기존재) skip 방식의 맹점: 이름만 같고 컬럼 구조가 다른 구세대 GTT 가 남아 있으면
+--    조용히 통과한 뒤 런타임 ORA-00904/00932 로 터진다.
+--    적용 전 00_CLOUD_PRECHECK C2 의 컬럼 시그니처 대조를 반드시 수행할 것.
+-- DURATION 은 사내 실측 그대로 (SYS$SESSION → ON COMMIT PRESERVE ROWS / SYS$TRANSACTION → DELETE ROWS).
+
+-- GT_0044_BP_FCST_01 (16 cols, SYS$SESSION)
+BEGIN EXECUTE IMMEDIATE q'[
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_0044_BP_FCST_01 (
+    DIVISION_ID                            VARCHAR2(30 CHAR),
+    VERSION_NO                             VARCHAR2(100 CHAR),
+    CUTOFF_TYPE                            VARCHAR2(30 CHAR),
+    CUTOFF_YYYYMMDD                        VARCHAR2(8 CHAR),
+    PROJECT_CODE                           VARCHAR2(30 CHAR),
+    SCM_SITE_ID                            VARCHAR2(30 CHAR),
+    ITEM_ID                                VARCHAR2(50 CHAR),
+    DOM_EXP                                VARCHAR2(10 CHAR),
+    FCST_TYPE                              VARCHAR2(10 CHAR),
+    INCOTERMS                              VARCHAR2(10 CHAR),
+    CURRENCY                               VARCHAR2(10 CHAR),
+    MEASURE                                VARCHAR2(30 CHAR),
+    PLANT_SITE_ID                          VARCHAR2(30 CHAR),
+    YYYYMM                                 VARCHAR2(6 CHAR),
+    QTY                                    NUMBER,
+    OWNER                                  VARCHAR2(50 CHAR)
+) ON COMMIT PRESERVE ROWS
+]'; EXCEPTION WHEN OTHERS THEN IF SQLCODE != -955 THEN RAISE; END IF; END;
+/
+
+-- GT_0044_BP_FCST_02 (25 cols, SYS$SESSION)
+BEGIN EXECUTE IMMEDIATE q'[
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_0044_BP_FCST_02 (
+    DIVISION_ID                            VARCHAR2(30 CHAR),
+    VERSION_NO                             VARCHAR2(100 CHAR),
+    CUTOFF_TYPE                            VARCHAR2(30 CHAR),
+    CUTOFF_YYYYMMDD                        VARCHAR2(8 CHAR),
+    PROJECT_CODE                           VARCHAR2(30 CHAR),
+    SCM_SITE_ID                            VARCHAR2(30 CHAR),
+    ITEM_ID                                VARCHAR2(50 CHAR),
+    DOM_EXP                                VARCHAR2(10 CHAR),
+    FCST_TYPE                              VARCHAR2(10 CHAR),
+    INCOTERMS                              VARCHAR2(10 CHAR),
+    CURRENCY                               VARCHAR2(10 CHAR),
+    MEASURE                                VARCHAR2(30 CHAR),
+    PLANT_SITE_ID                          VARCHAR2(30 CHAR),
+    YYYYMM                                 VARCHAR2(6 CHAR),
+    QTY                                    NUMBER,
+    OWNER                                  VARCHAR2(50 CHAR),
+    DEPARTMENT_ID                          VARCHAR2(30 CHAR),
+    DEPARTMENT_NAME                        VARCHAR2(100 CHAR),
+    DEPT_ID                                VARCHAR2(30 CHAR),
+    DEPT_NAME                              VARCHAR2(100 CHAR),
+    CUST_REPORT                            VARCHAR2(100 CHAR),
+    END_CUST_REPORT                        VARCHAR2(100 CHAR),
+    PRODUCT_GROUP                          VARCHAR2(100 CHAR),
+    ATTRIBUTE1                             VARCHAR2(150 CHAR),
+    COMPANY_ID                             VARCHAR2(30 CHAR)
+) ON COMMIT PRESERVE ROWS
+]'; EXCEPTION WHEN OTHERS THEN IF SQLCODE != -955 THEN RAISE; END IF; END;
+/
+
+-- GT_0044_RESULTS (11 cols, SYS$SESSION)
+BEGIN EXECUTE IMMEDIATE q'[
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_0044_RESULTS (
+    ACTIVE_FLAG                            VARCHAR2(10 CHAR),
+    DIVISION_ID                            VARCHAR2(50 CHAR),
+    VERSION_NO                             VARCHAR2(100 CHAR),
+    CUTOFF_TYPE                            VARCHAR2(20 CHAR),
+    CUTOFF_YYYYMMDD                        VARCHAR2(8 CHAR),
+    YYYYMMDD                               VARCHAR2(8 CHAR),
+    CURRENCY                               VARCHAR2(10 CHAR),
+    UNIT_CURRENCY                          VARCHAR2(10 CHAR),
+    EXCHANGE_PRICE                         VARCHAR2(100 CHAR),
+    CREATED_BY                             VARCHAR2(100 CHAR),
+    LAST_UPDATED_BY                        VARCHAR2(100 CHAR)
+) ON COMMIT PRESERVE ROWS
+]'; EXCEPTION WHEN OTHERS THEN IF SQLCODE != -955 THEN RAISE; END IF; END;
+/
+
+-- GT_0044_RESULTS_MST (26 cols, SYS$SESSION)
+BEGIN EXECUTE IMMEDIATE q'[
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_0044_RESULTS_MST (
+    ACTIVE_FLAG                            VARCHAR2(10 CHAR),
+    DIVISION_ID                            VARCHAR2(50 CHAR),
+    VERSION_NO                             VARCHAR2(100 CHAR),
+    CUTOFF_TYPE                            VARCHAR2(100 CHAR),
+    CUTOFF_YYYYMMDD                        VARCHAR2(8 CHAR),
+    DEPARTMENT_ID                          VARCHAR2(100 CHAR),
+    DEPARTMENT_NAME                        VARCHAR2(200 CHAR),
+    DEPT_ID                                VARCHAR2(100 CHAR),
+    DEPT_NAME                              VARCHAR2(200 CHAR),
+    END_CUST_REPORT                        VARCHAR2(200 CHAR),
+    CUST_REPORT                            VARCHAR2(200 CHAR),
+    PRODUCT_GROUP                          VARCHAR2(200 CHAR),
+    PROJECT_CODE                           VARCHAR2(200 CHAR),
+    SCM_SITE_ID                            VARCHAR2(200 CHAR),
+    DOM_EXP                                VARCHAR2(200 CHAR),
+    FCST_TYPE                              VARCHAR2(200 CHAR),
+    INCOTERMS                              VARCHAR2(200 CHAR),
+    CELL_MODEL_INFO                        VARCHAR2(200 CHAR),
+    CELL_MODEL                             VARCHAR2(200 CHAR),
+    ITEM_ID                                VARCHAR2(200 CHAR),
+    MEASURE                                VARCHAR2(200 CHAR),
+    YYYYMMDD                               VARCHAR2(8 CHAR),
+    CURRENCY                               VARCHAR2(20 CHAR),
+    COMPANY_ID                             VARCHAR2(100 CHAR),
+    QTY                                    VARCHAR2(100 CHAR),
+    CREATED_BY                             VARCHAR2(100 CHAR)
+) ON COMMIT PRESERVE ROWS
+]'; EXCEPTION WHEN OTHERS THEN IF SQLCODE != -955 THEN RAISE; END IF; END;
+/
+
+-- GT_0044_RESULTS_MST_C (27 cols, SYS$SESSION)
+BEGIN EXECUTE IMMEDIATE q'[
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_0044_RESULTS_MST_C (
+    ACTIVE_FLAG                            VARCHAR2(1 CHAR),
+    DIVISION_ID                            VARCHAR2(30 CHAR),
+    VERSION_NO                             VARCHAR2(30 CHAR),
+    CUTOFF_TYPE                            VARCHAR2(20 CHAR),
+    CUTOFF_YYYYMMDD                        VARCHAR2(8 CHAR),
+    DEPARTMENT_ID                          VARCHAR2(10 CHAR),
+    DEPARTMENT_NAME                        VARCHAR2(50 CHAR),
+    DEPT_ID                                VARCHAR2(10 CHAR),
+    DEPT_NAME                              VARCHAR2(50 CHAR),
+    END_CUST_REPORT                        VARCHAR2(30 CHAR),
+    CUST_REPORT                            VARCHAR2(30 CHAR),
+    PRODUCT_GROUP                          VARCHAR2(30 CHAR),
+    PROJECT_CODE                           VARCHAR2(30 CHAR),
+    SCM_SITE_ID                            VARCHAR2(30 CHAR),
+    DOM_EXP                                VARCHAR2(2 CHAR),
+    FCST_TYPE                              VARCHAR2(10 CHAR),
+    INCOTERMS                              VARCHAR2(10 CHAR),
+    COMPANY_ID                             VARCHAR2(30 CHAR),
+    ITEM_ID                                VARCHAR2(50 CHAR),
+    MEASURE                                VARCHAR2(20 CHAR),
+    YYYYMMDD                               VARCHAR2(8 CHAR),
+    CURRENCY                               VARCHAR2(5 CHAR),
+    QTY                                    VARCHAR2(40 CHAR),
+    CREATED_BY                             VARCHAR2(150 CHAR),
+    PLAN_YN                                VARCHAR2(1 CHAR),
+    SEQ_RANK                               NUMBER(10,0),
+    SEQ_ROWNUM                             NUMBER(10,0)
+) ON COMMIT PRESERVE ROWS
+]'; EXCEPTION WHEN OTHERS THEN IF SQLCODE != -955 THEN RAISE; END IF; END;
+/
+
+-- GT_DMF0044_DEPT_RPT_C (11 cols, SYS$SESSION)
+BEGIN EXECUTE IMMEDIATE q'[
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_DMF0044_DEPT_RPT_C (
+    DIVISION_ID                            VARCHAR2(4000 CHAR),
+    PRODUCT_GROUP                          VARCHAR2(4000 CHAR),
+    MEASURE                                VARCHAR2(4000 CHAR),
+    YYYYMMDD                               VARCHAR2(4000 CHAR),
+    ATTRIBUTE1                             VARCHAR2(4000 CHAR),
+    ATTRIBUTE2                             VARCHAR2(4000 CHAR),
+    DEPARTMENT_ID                          VARCHAR2(4000 CHAR),
+    DEPT_ID                                VARCHAR2(4000 CHAR),
+    END_CUST_REPORT                        VARCHAR2(4000 CHAR),
+    CUST_REPORT                            VARCHAR2(4000 CHAR),
+    QTY                                    NUMBER
+) ON COMMIT PRESERVE ROWS
+]'; EXCEPTION WHEN OTHERS THEN IF SQLCODE != -955 THEN RAISE; END IF; END;
+/
+
+-- GT_DMF0044_ITEM_SINGLE_V (9 cols, SYS$TRANSACTION)
+BEGIN EXECUTE IMMEDIATE q'[
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_DMF0044_ITEM_SINGLE_V (
+    ITEM_ID                                VARCHAR2(4000 CHAR),
+    ITEM_CLASS_NAME                        VARCHAR2(4000 CHAR),
+    ENERGY                                 NUMBER,
+    CELL_QUANTITY                          NUMBER,
+    FORECAST_INFO_BIZ_TYPE                 VARCHAR2(4000 CHAR),
+    FORECAST_INFO_SPEC                     VARCHAR2(4000 CHAR),
+    NICK_NAME                              VARCHAR2(4000 CHAR),
+    FORECAST_INFO_CELL_MODEL               VARCHAR2(4000 CHAR),
+    FORECAST_INFO_CELL_PACK_COUNT          NUMBER
+) ON COMMIT DELETE ROWS
+]'; EXCEPTION WHEN OTHERS THEN IF SQLCODE != -955 THEN RAISE; END IF; END;
+/
+
+-- GT_DMF0_MEASURE (6 cols, SYS$TRANSACTION)
+BEGIN EXECUTE IMMEDIATE q'[
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_DMF0_MEASURE (
+    PLAN_RESULT                            VARCHAR2(4000 CHAR),
+    I_MEASURE                              VARCHAR2(4000 CHAR),
+    O_MEASURE                              VARCHAR2(4000 CHAR),
+    CALC_YN                                VARCHAR2(4000 CHAR),
+    QTY_AMT                                VARCHAR2(4000 CHAR),
+    SRC_TABLE                              VARCHAR2(4000 CHAR)
+) ON COMMIT DELETE ROWS
+]'; EXCEPTION WHEN OTHERS THEN IF SQLCODE != -955 THEN RAISE; END IF; END;
+/
+
+-- GT_DMF0_PLAN_C_CATCHUP (19 cols, SYS$TRANSACTION)
+BEGIN EXECUTE IMMEDIATE q'[
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_DMF0_PLAN_C_CATCHUP (
+    DIVISION_ID                            VARCHAR2(4000 CHAR),
+    VERSION_NO                             VARCHAR2(4000 CHAR),
+    CUTOFF_TYPE                            VARCHAR2(4000 CHAR),
+    CUTOFF_YYYYMMDD                        VARCHAR2(4000 CHAR),
+    PROJECT_CODE                           VARCHAR2(4000 CHAR),
+    SCM_SITE_ID                            VARCHAR2(4000 CHAR),
+    ITEM_ID                                VARCHAR2(4000 CHAR),
+    DOM_EXP                                VARCHAR2(4000 CHAR),
+    FCST_TYPE                              VARCHAR2(4000 CHAR),
+    INCOTERMS                              VARCHAR2(4000 CHAR),
+    CURRENCY                               VARCHAR2(4000 CHAR),
+    ORG_MEASURE                            VARCHAR2(4000 CHAR),
+    MEASURE                                VARCHAR2(4000 CHAR),
+    PLANT_SITE_ID                          VARCHAR2(4000 CHAR),
+    YYYYMMDD                               VARCHAR2(4000 CHAR),
+    QTY                                    NUMBER,
+    COMPANY_ID                             VARCHAR2(4000 CHAR),
+    SOLDTO_CUST_REPORT                     VARCHAR2(4000 CHAR),
+    CELL_PROD_SITE                         VARCHAR2(4000 CHAR)
+) ON COMMIT DELETE ROWS
+]'; EXCEPTION WHEN OTHERS THEN IF SQLCODE != -955 THEN RAISE; END IF; END;
+/
+
+-- GT_DMF0_REPORT (30 cols, SYS$TRANSACTION)
+BEGIN EXECUTE IMMEDIATE q'[
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_DMF0_REPORT (
+    DIVISION_ID                            VARCHAR2(4000 CHAR),
+    VERSION_NO                             VARCHAR2(4000 CHAR),
+    CUTOFF_TYPE                            VARCHAR2(4000 CHAR),
+    CUTOFF_YYYYMMDD                        VARCHAR2(4000 CHAR),
+    PROJECT_CODE                           VARCHAR2(4000 CHAR),
+    SCM_SITE_ID                            VARCHAR2(4000 CHAR),
+    ITEM_ID                                VARCHAR2(4000 CHAR),
+    DOM_EXP                                VARCHAR2(4000 CHAR),
+    FCST_TYPE                              VARCHAR2(4000 CHAR),
+    INCOTERMS                              VARCHAR2(4000 CHAR),
+    CURRENCY                               VARCHAR2(4000 CHAR),
+    MEASURE                                VARCHAR2(4000 CHAR),
+    PLANT_SITE_ID                          VARCHAR2(4000 CHAR),
+    YYYYMMDD                               VARCHAR2(4000 CHAR),
+    OWNER                                  VARCHAR2(4000 CHAR),
+    DEPARTMENT_ID                          VARCHAR2(4000 CHAR),
+    DEPARTMENT_NAME                        VARCHAR2(4000 CHAR),
+    DEPT_ID                                VARCHAR2(4000 CHAR),
+    DEPT_NAME                              VARCHAR2(4000 CHAR),
+    CUST_REPORT                            VARCHAR2(4000 CHAR),
+    END_CUST_REPORT                        VARCHAR2(4000 CHAR),
+    PRODUCT_GROUP                          VARCHAR2(4000 CHAR),
+    ATTRIBUTE1                             VARCHAR2(4000 CHAR),
+    COMPANY_ID                             VARCHAR2(4000 CHAR),
+    QTY                                    NUMBER,
+    SOLDTO_CUST_REPORT                     VARCHAR2(4000 CHAR),
+    APPLICATION                            VARCHAR2(4000 CHAR),
+    CUST_GROUP_DTL                         VARCHAR2(4000 CHAR),
+    COUNTRY                                VARCHAR2(4000 CHAR),
+    CELL_PROD_SITE                         VARCHAR2(4000 CHAR)
+) ON COMMIT DELETE ROWS
+]'; EXCEPTION WHEN OTHERS THEN IF SQLCODE != -955 THEN RAISE; END IF; END;
+/
+
+-- GT_DMF0_SCM_MST_SITE_ITEM (6 cols, SYS$TRANSACTION)
+BEGIN EXECUTE IMMEDIATE q'[
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_DMF0_SCM_MST_SITE_ITEM (
+    DIVISION_ID                            VARCHAR2(4000 CHAR),
+    PROJECT_CODE                           VARCHAR2(4000 CHAR),
+    SCM_SITE_ID                            VARCHAR2(4000 CHAR),
+    ITEM_ID                                VARCHAR2(4000 CHAR),
+    CELL_PER_CAR                           NUMBER,
+    CELL_PER_MODULE                        NUMBER
+) ON COMMIT DELETE ROWS
+]'; EXCEPTION WHEN OTHERS THEN IF SQLCODE != -955 THEN RAISE; END IF; END;
+/
+
+-- GT_DMF0_VERSION_COPY (21 cols, SYS$TRANSACTION)
+BEGIN EXECUTE IMMEDIATE q'[
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_DMF0_VERSION_COPY (
+    DIVISION_ID                            VARCHAR2(4000 CHAR),
+    VERSION_NO                             VARCHAR2(4000 CHAR),
+    CUTOFF_TYPE                            VARCHAR2(4000 CHAR),
+    CUTOFF_YYYYMMDD                        VARCHAR2(4000 CHAR),
+    PROJECT_CODE                           VARCHAR2(4000 CHAR),
+    SCM_SITE_ID                            VARCHAR2(4000 CHAR),
+    ITEM_ID                                VARCHAR2(4000 CHAR),
+    DOM_EXP                                VARCHAR2(4000 CHAR),
+    FCST_TYPE                              VARCHAR2(4000 CHAR),
+    INCOTERMS                              VARCHAR2(4000 CHAR),
+    CURRENCY                               VARCHAR2(4000 CHAR),
+    MEASURE                                VARCHAR2(4000 CHAR),
+    PLANT_SITE_ID                          VARCHAR2(4000 CHAR),
+    YYYYMMDD                               VARCHAR2(4000 CHAR),
+    QTY                                    NUMBER,
+    COMPANY_ID                             VARCHAR2(4000 CHAR),
+    SOLDTO_CUST_REPORT                     VARCHAR2(4000 CHAR),
+    DEPT_ID                                VARCHAR2(4000 CHAR),
+    ITEM_USE                               VARCHAR2(4000 CHAR),
+    END_CUSTOMER                           VARCHAR2(4000 CHAR),
+    CELL_PROD_SITE                         VARCHAR2(4000 CHAR)
+) ON COMMIT DELETE ROWS
+]'; EXCEPTION WHEN OTHERS THEN IF SQLCODE != -955 THEN RAISE; END IF; END;
+/
+
+-- GT_F044_DM_MST_ITEM_SINGLE_V (10 cols, SYS$SESSION)
+BEGIN EXECUTE IMMEDIATE q'[
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_F044_DM_MST_ITEM_SINGLE_V (
+    DIVISION_ID                            VARCHAR2(30 CHAR),
+    ITEM_ID                                VARCHAR2(50 CHAR),
+    ITEM_CLASS                             VARCHAR2(50 CHAR),
+    ITEM_NAME                              VARCHAR2(50 CHAR),
+    ITEM_CLASS_NAME                        VARCHAR2(50 CHAR),
+    NICK_NAME                              VARCHAR2(50 CHAR),
+    FORECAST_INFO_BIZ_TYPE                 VARCHAR2(50 CHAR),
+    ENERGE                                 VARCHAR2(50 CHAR),
+    ENERGE_WH                              VARCHAR2(15 CHAR),
+    ENERGE_KWH                             VARCHAR2(15 CHAR)
+) ON COMMIT PRESERVE ROWS
+]'; EXCEPTION WHEN OTHERS THEN IF SQLCODE != -955 THEN RAISE; END IF; END;
+/
+
+-- GT_F044_EXCHANGE_C (6 cols, SYS$SESSION)
+BEGIN EXECUTE IMMEDIATE q'[
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_F044_EXCHANGE_C (
+    DIVISION_ID                            VARCHAR2(30 CHAR),
+    VERSION_NO                             VARCHAR2(50 CHAR),
+    CURRENCY                               VARCHAR2(20 CHAR),
+    UNIT_CURRENCY                          VARCHAR2(20 CHAR),
+    YYYYMMDD                               VARCHAR2(8 CHAR),
+    EXCHANGE_PRICE                         NUMBER
+) ON COMMIT PRESERVE ROWS
+]'; EXCEPTION WHEN OTHERS THEN IF SQLCODE != -955 THEN RAISE; END IF; END;
+/
+
+-- GT_F044_PJT (4 cols, SYS$SESSION)
+BEGIN EXECUTE IMMEDIATE q'[
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_F044_PJT (
+    DIVISION_ID                            VARCHAR2(30 CHAR),
+    PROJECT_CODE                           VARCHAR2(30 CHAR),
+    PROJECT_NAME                           VARCHAR2(150 CHAR),
+    PRODUCT_GROUP_NAME                     VARCHAR2(30 CHAR)
+) ON COMMIT PRESERVE ROWS
+]'; EXCEPTION WHEN OTHERS THEN IF SQLCODE != -955 THEN RAISE; END IF; END;
+/
+
+-- GT_F044_REPORT_C (12 cols, SYS$SESSION)
+BEGIN EXECUTE IMMEDIATE q'[
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_F044_REPORT_C (
+    DATA_TYPE                              VARCHAR2(10 CHAR),
+    DIVISION_ID                            VARCHAR2(30 CHAR),
+    VERSION_NO                             VARCHAR2(50 CHAR),
+    DEPARTMENT_ID                          VARCHAR2(50 CHAR),
+    DEPT_ID                                VARCHAR2(50 CHAR),
+    CUST_REPORT                            VARCHAR2(200 CHAR),
+    END_CUST_REPORT                        VARCHAR2(200 CHAR),
+    PRODUCT_GROUP                          VARCHAR2(200 CHAR),
+    ATTRIBUTE1                             VARCHAR2(200 CHAR),
+    MEASURE                                VARCHAR2(100 CHAR),
+    YYYYMM                                 VARCHAR2(6 CHAR),
+    QTY                                    NUMBER
+) ON COMMIT PRESERVE ROWS
+]'; EXCEPTION WHEN OTHERS THEN IF SQLCODE != -955 THEN RAISE; END IF; END;
+/
+
+-- GT_F044_SELECT_MEASURE (5 cols, SYS$SESSION)
+BEGIN EXECUTE IMMEDIATE q'[
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_F044_SELECT_MEASURE (
+    PROGRAM_ID                             VARCHAR2(50 CHAR),
+    SHEET_NAME                             VARCHAR2(50 CHAR),
+    USER_ID                                VARCHAR2(50 CHAR),
+    MEASURE                                VARCHAR2(20 CHAR),
+    SORT_ORDER_NO                          NUMBER
+) ON COMMIT PRESERVE ROWS
+]'; EXCEPTION WHEN OTHERS THEN IF SQLCODE != -955 THEN RAISE; END IF; END;
+/
+
+-- GT_F044_T (52 cols, SYS$SESSION)
+BEGIN EXECUTE IMMEDIATE q'[
+CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_F044_T (
+    DATA_TYPE                              VARCHAR2(1 CHAR),
+    DIVISION_ID                            VARCHAR2(30 CHAR),
+    VERSION_NO                             VARCHAR2(30 CHAR),
+    CUTOFF_TYPE                            VARCHAR2(20 CHAR),
+    CUTOFF_YYYYMMDD                        VARCHAR2(8 CHAR),
+    DEPARTMENT_ID                          VARCHAR2(10 CHAR),
+    DEPARTMENT_NAME                        VARCHAR2(50 CHAR),
+    DEPT_ID                                VARCHAR2(10 CHAR),
+    DEPT_NAME                              VARCHAR2(50 CHAR),
+    END_CUST_REPORT                        VARCHAR2(30 CHAR),
+    END_CUSTOMER                           VARCHAR2(30 CHAR),
+    CUST_REPORT                            VARCHAR2(30 CHAR),
+    PRODUCT_GROUP                          VARCHAR2(30 CHAR),
+    PROJECT_CODE                           VARCHAR2(30 CHAR),
+    SCM_SITE_ID                            VARCHAR2(30 CHAR),
+    ITEM_ID                                VARCHAR2(50 CHAR),
+    NICK_NAME                              VARCHAR2(50 CHAR),
+    DOM_EXP                                VARCHAR2(3 CHAR),
+    FCST_TYPE                              VARCHAR2(10 CHAR),
+    INCOTERMS                              VARCHAR2(10 CHAR),
+    MEASURE                                VARCHAR2(20 CHAR),
+    PLANT_SITE_ID                          VARCHAR2(30 CHAR),
+    COMPANY_ID                             VARCHAR2(10 CHAR),
+    YYYYMM                                 VARCHAR2(8 CHAR),
+    CURRENCY                               VARCHAR2(5 CHAR),
+    QTY                                    NUMBER(30,10),
+    EDIT_FLAG                              CHAR(1 CHAR),
+    APP                                    VARCHAR2(50 CHAR),
+    SOLDTO_CUST_REPORT                     VARCHAR2(50 CHAR),
+    DMS_CUSTOMER                           VARCHAR2(50 CHAR),
+    BIZ_TYPE_NAME40                        VARCHAR2(50 CHAR),
+    APPLICATION_GR                         VARCHAR2(50 CHAR),
+    PRODUCT_DETAILS                        VARCHAR2(50 CHAR),
+    CELL_MODEL_INFO                        VARCHAR2(50 CHAR),
+    CELL_MODEL                             VARCHAR2(50 CHAR),
+    DISPLAY_SEQ1                           VARCHAR2(50 CHAR),
+    DISPLAY_SEQ2                           VARCHAR2(50 CHAR),
+    COUNTRY_CODE                           VARCHAR2(50 CHAR),
+    SOLDTO_CODE                            VARCHAR2(50 CHAR),
+    ITEM_NAME                              VARCHAR2(50 CHAR),
+    PROJECT_NAME                           VARCHAR2(150 CHAR),
+    CELL_PER_CAR                           VARCHAR2(50 CHAR),
+    MODULE_PER_CAR                         VARCHAR2(50 CHAR),
+    MODEL_TYPE                             VARCHAR2(40 CHAR),
+    SOLDTO_COUNTRY                         VARCHAR2(50 CHAR),
+    SHIPTO_COUNTRY                         VARCHAR2(50 CHAR),
+    CELL_NAME                              VARCHAR2(50 CHAR),
+    ITEM_USE                               VARCHAR2(50 CHAR),
+    CUST_GROUP_DTL                         VARCHAR2(30 CHAR),
+    CELL_PROD_SITE                         VARCHAR2(60 CHAR),
+    ENERGE_WH                              VARCHAR2(15 CHAR),
+    ENERGE_KWH                             VARCHAR2(15 CHAR)
+) ON COMMIT PRESERVE ROWS
+]'; EXCEPTION WHEN OTHERS THEN IF SQLCODE != -955 THEN RAISE; END IF; END;
+/

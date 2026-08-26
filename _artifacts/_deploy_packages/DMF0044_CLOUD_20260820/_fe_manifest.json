@@ -1,0 +1,191 @@
+{
+  "files": [
+    {
+      "path": "features/demand/src/pages/sales-reports/__asis-mapping__.md",
+      "lines": 363,
+      "note": "페이지 폴더"
+    },
+    {
+      "path": "features/demand/src/pages/sales-reports/components/modals/ExchangeRateModal.module.scss",
+      "lines": 42,
+      "note": "페이지 폴더"
+    },
+    {
+      "path": "features/demand/src/pages/sales-reports/components/modals/ExchangeRateModal.tsx",
+      "lines": 822,
+      "note": "페이지 폴더"
+    },
+    {
+      "path": "features/demand/src/pages/sales-reports/components/modals/index.ts",
+      "lines": 2,
+      "note": "페이지 폴더"
+    },
+    {
+      "path": "features/demand/src/pages/sales-reports/components/modals/TextboxModal.tsx",
+      "lines": 202,
+      "note": "페이지 폴더"
+    },
+    {
+      "path": "features/demand/src/pages/sales-reports/components/SalesReportsForm.module.scss",
+      "lines": 192,
+      "note": "페이지 폴더"
+    },
+    {
+      "path": "features/demand/src/pages/sales-reports/components/SalesReportsForm.tsx",
+      "lines": 151,
+      "note": "페이지 폴더"
+    },
+    {
+      "path": "features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx",
+      "lines": 626,
+      "note": "페이지 폴더"
+    },
+    {
+      "path": "features/demand/src/pages/sales-reports/components/SalesReportsModals.tsx",
+      "lines": 233,
+      "note": "페이지 폴더"
+    },
+    {
+      "path": "features/demand/src/pages/sales-reports/index.ts",
+      "lines": 1,
+      "note": "페이지 폴더"
+    },
+    {
+      "path": "features/demand/src/pages/sales-reports/sales-reports.constants.ts",
+      "lines": 105,
+      "note": "페이지 폴더"
+    },
+    {
+      "path": "features/demand/src/pages/sales-reports/sales-reports.types.ts",
+      "lines": 47,
+      "note": "페이지 폴더"
+    },
+    {
+      "path": "features/demand/src/pages/sales-reports/SalesReports.module.scss",
+      "lines": 147,
+      "note": "페이지 폴더"
+    },
+    {
+      "path": "features/demand/src/pages/sales-reports/SalesReports.tsx",
+      "lines": 512,
+      "note": "페이지 폴더"
+    },
+    {
+      "path": "features/demand/src/pages/sales-reports/useSalesReportsStore.ts",
+      "lines": 265,
+      "note": "페이지 폴더"
+    },
+    {
+      "path": "features/demand/src/pages/sales-reports/utils/sales-reports.api.ts",
+      "lines": 96,
+      "note": "페이지 폴더"
+    },
+    {
+      "path": "features/demand/src/pages/sales-reports/utils/sales-reports.division.ts",
+      "lines": 7,
+      "note": "페이지 폴더"
+    },
+    {
+      "path": "features/demand/src/pages/sales-reports/utils/sales-reports.editLock.ts",
+      "lines": 106,
+      "note": "페이지 폴더"
+    },
+    {
+      "path": "features/demand/src/pages/sales-reports/utils/sales-reports.gridCombos.ts",
+      "lines": 90,
+      "note": "페이지 폴더"
+    },
+    {
+      "path": "features/demand/src/pages/sales-reports/utils/sales-reports.merge.ts",
+      "lines": 86,
+      "note": "페이지 폴더"
+    },
+    {
+      "path": "features/demand/src/pages/sales-reports/utils/sales-reports.save.ts",
+      "lines": 241,
+      "note": "페이지 폴더"
+    },
+    {
+      "path": "features/demand/src/pages/sales-reports/utils/sales-reports.validate.ts",
+      "lines": 22,
+      "note": "페이지 폴더"
+    },
+    {
+      "path": "features/master/src/components/searchFields/SearchFields.tsx",
+      "lines": 894,
+      "note": "DivisionField / VersionField 원천 — SalesReportsForm·ExchangeRateModal 이 직접 import"
+    },
+    {
+      "path": "features/master/src/components/columnLayoutModal/ColumnLayoutModal.tsx",
+      "lines": 8,
+      "note": "features/master/src/components 배럴 폐포 (index.ts 가 re-export)"
+    },
+    {
+      "path": "features/master/src/components/columnLayoutModal/columnLayoutModal.utils.ts",
+      "lines": 21,
+      "note": "동 배럴 폐포"
+    },
+    {
+      "path": "packages/foundation/src/utils/mergeManager.ts",
+      "lines": 261,
+      "note": "@foundation/utils 배럴 폐포 — allowEmptyCellMerge 확장점 추가(기본값 false = 기존 동작 보존)"
+    },
+    {
+      "path": "packages/shared/src/components/molecules/customDropdown/CustomDropdown.tsx",
+      "lines": 291,
+      "note": "@shared/components 폐포 — SalesReportsForm·ExchangeRateModal 의 CustomDropdown"
+    },
+    {
+      "path": "packages/shared/src/components/templates/modals/column-layout-modal/ColumnLayoutModal.tsx",
+      "lines": 459,
+      "note": "@shared/components 폐포 — SalesReportsModals 의 ColumnLayoutModal 실체"
+    },
+    {
+      "path": "packages/shared/src/components/organisms/index.ts",
+      "lines": 12,
+      "note": "@shared/components 배럴 (organisms) — 폐포 경유"
+    },
+    {
+      "path": "packages/shared/src/components/organisms/olap-pivot-grid/OlapPivotGrid.tsx",
+      "lines": 239,
+      "note": "위 배럴이 re-export — 본 화면 미사용이나 배럴 타입 해석에 필요"
+    },
+    {
+      "path": "configs/types/procedures.d.ts",
+      "lines": 4300,
+      "note": "③ useTabProcQuery / useProcMutation 의 MENU_ID→프로시저 타입 원천"
+    },
+    {
+      "path": "public/locales/KO.json",
+      "lines": 36,
+      "note": "발췌 34/34코드 (원본 전체 914키)"
+    },
+    {
+      "path": "public/locales/EN.json",
+      "lines": 36,
+      "note": "발췌 34/34코드 (원본 전체 858키)"
+    },
+    {
+      "path": "public/locales/CN.json",
+      "lines": 36,
+      "note": "발췌 34/34코드 (원본 전체 852키)"
+    }
+  ],
+  "locales": {
+    "KO": {
+      "picked": 34,
+      "missing": [],
+      "src_keys": 914
+    },
+    "EN": {
+      "picked": 34,
+      "missing": [],
+      "src_keys": 858
+    },
+    "CN": {
+      "picked": 34,
+      "missing": [],
+      "src_keys": 852
+    }
+  }
+}

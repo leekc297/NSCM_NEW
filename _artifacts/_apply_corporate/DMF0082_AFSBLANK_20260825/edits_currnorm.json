@@ -1,0 +1,10 @@
+[
+ {
+  "old": "    UPDATE SCM_MGR.GT_DMF0082_MF_SP\n    SET    AS_FROM_SITE = ' '\n    WHERE  AS_FROM_SITE IS NULL;\n",
+  "new": "    UPDATE SCM_MGR.GT_DMF0082_MF_SP\n    SET    AS_FROM_SITE = ' '\n    WHERE  AS_FROM_SITE IS NULL;\n\n    /* [E20260825-CURRNORM] 수량 메저 행의 CURRENCY 표시키 통일 (사용자 신고 2026-08-25).\n       증상: CUST_FCST 계열 실적 행의 CURRENCY 가 '-'(센티널)·KRW/USD(실값)인데 계획 arm 은 ''(NULL)\n       → 같은 논리행이 CURRENCY 차이로 실적/계획 2행 분리 (AS_FROM_SITE 건과 동일 가족).\n       원인: 계획 원장(DM_PLN_MKT_FCST/_C)에는 CURRENCY 컴럼 자체가 없고(실측 ORA-904),\n       실적 원장(DM_PLN_SALES_PLAN_RESULT/_C)만 실컴럼 보유('-' 12,278행 포함 실측).\n       정정: 판가 메저(CURRENCY 가 실차원인 행)만 제외하고 수량 메저는 전행 ' ' 로 통일. */\n    UPDATE SCM_MGR.GT_DMF0082_MF_SP\n    SET    CURRENCY = ' '\n    WHERE  MEASURE NOT IN ('LOC', 'KRW', 'USD', 'MKT_AMT_LOC', 'MKT_AMT_KRW')\n    AND    (CURRENCY IS NULL OR CURRENCY <> ' ');\n"
+ },
+ {
+  "old": "    UPDATE SCM_MGR.GTT_MF_SP\n    SET    AS_FROM_SITE = ' '\n    WHERE  AS_FROM_SITE IS NULL;\n",
+  "new": "    UPDATE SCM_MGR.GTT_MF_SP\n    SET    AS_FROM_SITE = ' '\n    WHERE  AS_FROM_SITE IS NULL;\n\n    /* [E20260825-CURRNORM] 수량 메저 행의 CURRENCY 표시키 통일 (사용자 신고 2026-08-25).\n       증상: CUST_FCST 계열 실적 행의 CURRENCY 가 '-'(센티널)·KRW/USD(실값)인데 계획 arm 은 ''(NULL)\n       → 같은 논리행이 CURRENCY 차이로 실적/계획 2행 분리 (AS_FROM_SITE 건과 동일 가족).\n       원인: 계획 원장(DM_PLN_MKT_FCST/_C)에는 CURRENCY 컴럼 자체가 없고(실측 ORA-904),\n       실적 원장(DM_PLN_SALES_PLAN_RESULT/_C)만 실컴럼 보유('-' 12,278행 포함 실측).\n       정정: 판가 메저(CURRENCY 가 실차원인 행)만 제외하고 수량 메저는 전행 ' ' 로 통일. */\n    UPDATE SCM_MGR.GTT_MF_SP\n    SET    CURRENCY = ' '\n    WHERE  MEASURE NOT IN ('LOC', 'KRW', 'USD', 'MKT_AMT_LOC', 'MKT_AMT_KRW')\n    AND    (CURRENCY IS NULL OR CURRENCY <> ' ');\n"
+ }
+]

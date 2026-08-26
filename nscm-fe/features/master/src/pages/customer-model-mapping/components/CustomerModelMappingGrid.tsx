@@ -7,11 +7,12 @@ import {
   type FormatItemEventArgs,
 } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { useEffect, useRef, useState, type MutableRefObject } from 'react';
+import { useEffect, useMemo, useRef, useState, type MutableRefObject } from 'react';
 
 import type { EditTracker } from '@foundation/utils';
 import { GridUtils } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
+import { useTabComboQueries } from '@shared/hooks';
 
 import { ItemByDivisionModal, ProjectByDivisionModal } from '../../../components';
 import {
@@ -21,9 +22,11 @@ import {
   isDivisionAllowed,
   MODEL_TYPE_BINDING,
   PROJECT_CODE_BINDING,
+  TEAM_BINDING,
   type MENU_ID,
   type SHEETS,
 } from '../customer-model-mapping.constants';
+import { buildTeamDataMap, TEAM_INSERT_COMBO_ID } from '../customer-model-mapping.gridCombos';
 import { useCustomerModelMappingStore } from '../useCustomerModelMappingStore';
 
 type CustomerModelMappingRow = ResponseData<MENU_ID, SHEETS.CUSTOMER_MODEL_MAPPING>;
@@ -70,6 +73,64 @@ export const CustomerModelMappingGrid = ({
   // 행의 Division 이 허용 목록 밖이면 PJT Code 를 잠근다 (인라인 편집 + 팝업 + 색상).
   const isProjectCodeLocked = (row?: CustomerModelMappingRow): boolean =>
     !isDivisionAllowed(projectCodeDivisionAllow, row?.[DIVISION_BINDING]);
+
+  // Team 콤보 — 표시는 메타 콤보, 신규행 후보만 TEAM_INSERT_COMBO_ID (근거는 gridCombos 파일 주석).
+  //   표시 콤보 id 는 메타(cellCboDataTp)에서 읽는다 — 하드코딩 금지.
+  const teamColumn = staticColumn?.find(column => column.colNm === TEAM_BINDING);
+  const teamDisplayComboId = teamColumn?.cellCboDataTp;
+
+  // 표시 콤보는 공용 DataGrid 가 이미 같은 파라미터로 조회한다. 필터 값이 같으면 react-query 키가
+  //   같아 캐시를 공유하므로 요청은 늘지 않는다(조회조건 카탈로그 필드와 같은 관용구).
+  //   따옴표는 DataGrid comboParams 와 동일한 형태로 맞춘다 — 다르면 키가 갈려 같은 콤보를 두 번 탄다.
+  const teamComboFilters = useMemo(
+    () =>
+      teamDisplayComboId
+        ? [
+            { comboId: String(teamDisplayComboId), divisionId: `'${divisionId}'` },
+            { comboId: TEAM_INSERT_COMBO_ID, divisionId: `'${divisionId}'` },
+          ]
+        : [],
+    [teamDisplayComboId, divisionId]
+  );
+  const [teamDisplayRows, teamInsertRows] = useTabComboQueries({ filters: teamComboFilters });
+
+  // 재생성 시그니처 — division 을 반드시 포함한다. 빼면 division 전환 후 행수가 우연히 같을 때
+  //   useMemo 가 재계산되지 않아 이전 division 의 맵이 남는다(DMF0042 실측).
+  const teamComboSig = [
+    teamDisplayComboId ?? '',
+    teamColumn?.attribute2 ?? '',
+    divisionId,
+    teamDisplayRows?.length ?? 'x',
+    teamInsertRows?.length ?? 'x',
+  ].join('#');
+  const teamDataMap = useMemo(
+    () => buildTeamDataMap(teamDisplayRows ?? [], teamInsertRows ?? [], teamColumn?.attribute2),
+    // 시그니처가 바뀔 때만 다시 만든다 — 매 렌더 새 DataMap 을 붙이면 아래 재적용이 무한 반복된다.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [teamComboSig]
+  );
+
+  // 컬럼에 붙이기 — 공용 DataGrid 는 매 렌더 columnGroups 를 재대입해 Column 객체를 새로 만든다.
+  //   한 번만 대입하면 다음 렌더에 메타 콤보 맵으로 되돌아가므로 updatedLayout 마다 다시 건다
+  //   (DMF0049 EtcSalesReportsGrid 와 같은 처방).
+  useEffect(() => {
+    const g = gridRef.current;
+    if (!g || !teamDataMap) return;
+
+    const applyTeamDataMap = () => {
+      const column = g.columns.getColumn(TEAM_BINDING);
+      // 같은 참조면 재대입하지 않는다 — 대입이 invalidate 를 부르므로 그대로 두면 갱신 루프가 된다.
+      if (column && column.dataMap !== teamDataMap) column.dataMap = teamDataMap;
+    };
+    g.updatedLayout.addHandler(applyTeamDataMap);
+    applyTeamDataMap();
+
+    return () => {
+      g.updatedLayout?.removeHandler(applyTeamDataMap);
+    };
+    // data 도 deps 에 둔다 — 그리드 인스턴스는 첫 렌더에 아직 없을 수 있고(gridRef 는 자식이 채운다),
+    //   조회 때마다 한 번 더 걸어 두면 맵이 안 붙은 채 남는 경로가 없다. 재등록은 멱등이다.
+  }, [gridRef, teamDataMap, data]);
 
   // ⭐ Model Type(ITEM_CLASS_NAME) 별 Convert Qty(Pack/Module/Cell) 조건부 편집제어.
   //   AS-IS DM0006_CustomerModelMapping.cs L289~307 / L1075~1089 재현. 공용 DataGrid wrapper 는

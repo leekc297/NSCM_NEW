@@ -1,3 +1,4 @@
+import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { FormItem, InputField } from '@shared/lges';
@@ -23,7 +24,7 @@ export const DynamicQueryForm = ({ onSearch }: Props) => {
 
   return (
     <SearchArea
-      searchButtonLabel={t('LBL00722', 'Search')}
+      searchButtonLabel={t('LBL00112', 'Search')}
       isHidden={!openSearchArea}
       onSearch={onSearch}
       conditions={
@@ -32,6 +33,7 @@ export const DynamicQueryForm = ({ onSearch }: Props) => {
             <FormItem
               label={t('LBL00718', 'Report Name')}
               labelAlign='right'
+              className={commonStyles.formItem}
               render={() => (
                 <InputField
                   fullWidth
@@ -46,6 +48,7 @@ export const DynamicQueryForm = ({ onSearch }: Props) => {
             <FormItem
               label={t('LBL00719', 'Description')}
               labelAlign='right'
+              className={commonStyles.formItem}
               render={() => (
                 <InputField
                   fullWidth
@@ -60,6 +63,7 @@ export const DynamicQueryForm = ({ onSearch }: Props) => {
             <FormItem
               label={t('LBL00720', 'Role')}
               labelAlign='right'
+              className={commonStyles.formItem}
               render={() => (
                 <CustomDropdown
                   multiple

@@ -25,7 +25,10 @@ interface MessageState {
 
 interface MessageAction {
   reset: () => void;
-  close: () => void;
+  // 주의: 토스트와 알림은 각자 닫는다. 예전엔 close() 하나가 둘 다 껐는데, 토스트 자동닫힘(4초)
+  //   타이머가 그 사이 뜬 알림창까지 같이 꺼버리는 버그가 있었다. 두 상태의 생명주기는 독립이다.
+  closeToast: () => void;
+  closeAlert: () => void;
   setToast: (toast: ToastProps) => void;
   setAlert: (alert: AlertProps) => Promise<boolean>; // TODO: refactor; return type: Promise<boolean> - donglee
 }
@@ -43,9 +46,13 @@ export const useMessageStore = createPersistedStore<MessageState & MessageAction
   (set, _get) => ({
     ...initMessageState,
     reset: () => set(initMessageState),
-    close: () => {
+    closeToast: () => {
       set(state => {
         state.isOpenToast = false;
+      });
+    },
+    closeAlert: () => {
+      set(state => {
         state.isOpenAlert = false;
       });
     },

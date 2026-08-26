@@ -34,6 +34,10 @@ interface FcstUploadModalProps {
   //   [Upload] = 검증·분류(Success/Error) 만 / [OK] = 저장. onSave 는 검증 통과분(Error=0) DB 반영 콜백.
   //   반환 { ok, message } — ok=false 면 message alert. DMF0074: P_DMF0074_EXCEL_UPLOAD(P_MODE=1) call-proc.
   onSave?: () => Promise<{ ok: boolean; message?: string }>;
+  // 저장 confirm(MSG00001) 표시 여부 — 미지정 시 true(기존 호출부 동작 유지).
+  //   DMF0014 만 false (저장 피드백 표준화 2026-08-24 — 저장은 confirm 없이 바로 실행하고
+  //   결과만 Toast/Alert 로 알린다). ForecastPrice/MetalLinkPrice 는 기존대로 confirm 을 띄운다.
+  confirmBeforeSave?: boolean;
 }
 
 // DMF0014 HEADER_CONTENT 기본값 (사내 SCM_ADM_EXCEL_COLUMNS 실측 — AS-IS 원본 보존분)
@@ -72,6 +76,7 @@ export const FcstUploadModal = ({
   onUploaded,
   attributeHeaders = DMF0014_HEADERS,
   onSave,
+  confirmBeforeSave = true,
 }: FcstUploadModalProps) => {
   const { t } = useTranslation();
   const setAlert = useMessageStore.getState().setAlert;
@@ -231,8 +236,12 @@ export const FcstUploadModal = ({
       void setAlert({ type: 'alert', content: t('MSG00152', '_No data to save.') });
       return;
     }
-    const ok = await setAlert({ type: 'confirm', content: t('MSG00001', '_Save the changes?') });
-    if (!ok) return;
+    // 저장 confirm — confirmBeforeSave=false(DMF0014) 면 건너뛰고 바로 저장한다.
+    //   위 3중 검증(미검증/오류행/0건)을 이미 통과한 상태라, 결과만 Toast/Alert 로 알리면 된다.
+    if (confirmBeforeSave) {
+      const ok = await setAlert({ type: 'confirm', content: t('MSG00001', '_Save the changes?') });
+      if (!ok) return;
+    }
     savingRef.current = true;
     setSaving(true);
     try {
@@ -272,11 +281,14 @@ export const FcstUploadModal = ({
       }
       customContentArea={
         <div className={styles.contentWrap}>
-          {/* ⭐ 검증 스피너 (사용자 요구 2026-07-10) — 파일 선택 후 자동 분류 완료까지 표시 */}
+          {/* 진행 스피너 — 검증(파일 선택 후 자동 분류)과 저장(OK → onSave) 양쪽에 모두 표시한다.
+              필수: saving 을 빼지 말 것. 2-Step 저장(call-proc mode=1)은 수 초 걸리는데 스피너가
+              없으면 "눌렸나?" 싶어 재클릭을 유발한다. placement='parent' 백드롭이 그 사이
+              버튼 클릭도 막는다 (ExchangeRateModal / VersionCutoffModal 과 동일 패턴). */}
           <ProgressIndicator
             shape='circular'
             apprearance='infinite'
-            open={uploading}
+            open={uploading || saving}
             placement='parent'
           />
           <div className={styles.inputContainer}>

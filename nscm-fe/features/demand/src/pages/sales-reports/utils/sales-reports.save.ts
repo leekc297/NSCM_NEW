@@ -128,8 +128,16 @@ export interface EtcSaveTarget {
 export const buildEtcSaveRows = (params: {
   targets: EtcSaveTarget[];
   versionNo: string;
+  /**
+   * 조회 연도 M_ 전체 — **삭제(D) 세트 전용**.
+   *
+   * SP 는 `ACTIVE_FLAG='D'` 행을 15키 identity + `SUBSTR(YYYYMMDD,1,6)` 로 매칭해 지운다
+   * (`PKG_DMF0044` BODY (ETCWB-1)). 그래서 세트를 통째로 지우려면 전 월을 D 로 내보내야 한다 —
+   * 변경 월만 보내면 그 월만 지워지고 나머지가 남는다.
+   */
+  monthBindings?: string[];
 }): SaveBuildResult<EtcSaveRow> => {
-  const { targets, versionNo } = params;
+  const { targets, versionNo, monthBindings = [] } = params;
   const out: EtcSaveRow[] = [];
   const changesOf = new Map<SalesReportRow, Record<string, unknown> | undefined>(
     targets.map(t => [t.row, t.changes])
@@ -150,16 +158,21 @@ export const buildEtcSaveRows = (params: {
     if (identity.departmentId === '' && identity.departmentName === '') {
       return { rows: [], error: { ok: false, msgId: MSG.REQUIRED_FIELD, detail: 'Department' } };
     }
-    const activeFlag = headRec.CRUD_TYPE === 'I' ? 'I' : 'M';
+    // Delete(F9) 마킹 세트 = 'D' (공용 GridAction.removeRow 규약). SP 가 원장에서 지운다.
+    const isDelete = headRec.CRUD_TYPE === 'D';
+    const activeFlag = isDelete ? 'D' : headRec.CRUD_TYPE === 'I' ? 'I' : 'M';
     const cellModelInfo = str(headRec.CELL_MODEL_INFO);
     const cellModel = str(headRec.CELL_MODEL);
-    // 트리거 셀 = 세트 양쪽 변경분의 합집합 (AS-IS OR 조건 파리티)
-    const bindings = [
-      ...new Set([
-        ...changedMonthBindings(headRec, changesOf.get(head)),
-        ...(partner ? changedMonthBindings(partner as Rec, changesOf.get(partner)) : []),
-      ]),
-    ].sort();
+    // 트리거 셀 = 세트 양쪽 변경분의 합집합 (AS-IS OR 조건 파리티).
+    //   삭제는 변경 셀이 없으므로 **전 월**을 내보낸다 (위 monthBindings 주석 참조).
+    const bindings = isDelete
+      ? [...monthBindings].sort()
+      : [
+          ...new Set([
+            ...changedMonthBindings(headRec, changesOf.get(head)),
+            ...(partner ? changedMonthBindings(partner as Rec, changesOf.get(partner)) : []),
+          ]),
+        ].sort();
 
     for (const binding of bindings) {
       const emit = (src: Rec) =>

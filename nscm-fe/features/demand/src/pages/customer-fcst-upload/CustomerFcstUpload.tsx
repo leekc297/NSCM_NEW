@@ -8,7 +8,7 @@ import { apiClient } from '@foundation/apis';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { useQueryClient } from '@foundation/query-client';
 import type { EditTracker } from '@foundation/utils';
-import { Alert, MainTitle, SubTitle } from '@shared/components';
+import { MainTitle, SubTitle } from '@shared/components';
 import { useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
 import { FileExceldownloadIcon } from '@shared/lges-icons';
 import { useMessageStore, useSessionStore } from '@shared/stores';
@@ -61,6 +61,8 @@ export const CustomerFcstUpload = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   // ⭐ 명시 조회 게이트 — persist 된 stale filters 자동 발사 차단 (DMF0048 선례)
   const [hasSearched, setHasSearched] = useState(false);
+  // ⭐ 저장 in-flight — 재진입(더블클릭) 차단용. SalesPlan(DMF0021) isPending 표준 1:1.
+  const [isPending, setIsPending] = useState(false);
 
   const [openPrjByDivisionModal, setOpenPrjByDivisionModal] = useState<boolean>(false);
   const [openModelByDivisionModal, setOpenModelByDivisionModal] = useState<boolean>(false);
@@ -101,7 +103,7 @@ export const CustomerFcstUpload = ({ tabId, title }: PageProps<MENU_ID>) => {
     enabled: !dayRangeApplied,
   });
   useEffect(() => {
-    const range = (dayRangeData as { o_rc2?: { DAY_RANGE?: string }[] })?.o_rc2?.[0]?.DAY_RANGE;
+    const range = (dayRangeData as { o_rc1?: { DAY_RANGE?: string }[] })?.o_rc1?.[0]?.DAY_RANGE;
     if (!range) return;
     applyDayRange(range);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -149,6 +151,8 @@ export const CustomerFcstUpload = ({ tabId, title }: PageProps<MENU_ID>) => {
   };
 
   // F5 Search — refetch?.() 직접 호출 금지 (stale closure — setFilter + invalidateQueries 표준)
+  //   ⚠ invalidate 키는 tabId — useTabProcQuery 의 queryKey 는 [tabId, sheetName, action, filters]
+  //     라 MENU_ID prefix 로는 하나도 매칭되지 않는다 (tabId = MDI 탭 uuid).
   const handleSearch = () => {
     if (!validateFind()) return;
     void setToast({ message: t('LBL00665', '_Loading...'), type: 'default', duration: 2000 });
@@ -156,8 +160,22 @@ export const CustomerFcstUpload = ({ tabId, title }: PageProps<MENU_ID>) => {
     saveEntriesRef.current.clear(); // AS-IS FindData dtSave.Clear() 1:1
     editTrackerRef.current?.clearChanges();
     setFilters();
-    void queryClient.invalidateQueries({ queryKey: [MENU_ID] });
+    void queryClient.invalidateQueries({ queryKey: [tabId] });
     void fetchStaticColumns();
+  };
+
+  // Grid 초기화 규약 — 조회 결과의 전제(Division)가 바뀌면 화면에 남은 결과는 새 전제와 어긋나므로
+  //   비운다. 미저장 편집도 함께 버린다 — 남겨 두면 바뀐 전제로 저장된다.
+  //   clearFilters() 가 filters 를 없애면 MAIN/SPREAD_TITLE useTabProcQuery 가 disabled 되어
+  //   rows·기간 헤더가 비고, hasSearched=false 로 명시 조회 게이트도 되돌아간다.
+  //   자동 재조회하지 않는다 — 사용자가 Search 를 다시 눌러 새 Division 으로 조회한다.
+  //   Division 변경 시 Form 이 onDivisionChange 로 호출한다
+  //   (사용자 요구 2026-08-20. SalesReports/SalesPlan onDivisionChange 규약 1:1).
+  const resetGrid = () => {
+    saveEntriesRef.current.clear();
+    editTrackerRef.current?.clearChanges();
+    setHasSearched(false);
+    clearFilters();
   };
 
   // ----- spdMain_Changed 1:1 — D_ 셀 편집 → 필수 11건 검증(MSG00429 {label}) + SetSaveData 수집 -----
@@ -235,6 +253,15 @@ export const CustomerFcstUpload = ({ tabId, title }: PageProps<MENU_ID>) => {
   // ----- F7 Save — AS-IS SaveData 1:1: 'M' 고정 + 17 키 '^'delim payload -----
   //   ^delim 다건이므로 apiClient.post 직접 (useProcMutation array unfold 안 함 — 표준 선례)
   const handleSave = async () => {
+    // ⭐ 재진입 가드 (SalesPlan blockIfWorking 1:1) — 조회/저장이 아직 돌고 있으면 차단한다.
+    //   없으면 Save 더블클릭이 SP 를 2회 호출해 같은 수량이 중복 반영될 수 있다.
+    if (isFetching || isPending) {
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.WORK_IN_PROGRESS, '_이전 작업이 아직 실행 중입니다.'),
+      });
+      return;
+    }
     // ⭐ 근본 수정 (2026-07-08) — 저장 payload 를 그리드 공용 EditTracker 에서 직접 도출한다.
     //   기존 별도 수집 ref(saveEntriesRef)는 편집↔저장 사이 재렌더/재등록 타이밍에 취약해
     //   2행 이후 편집분이 유실("저장할 데이터 없음") → EditTracker('M' 표기와 동일·안정 출처)로 일원화.
@@ -296,19 +323,17 @@ export const CustomerFcstUpload = ({ tabId, title }: PageProps<MENU_ID>) => {
       void setAlert({ type: 'alert', content: t(MSG.NO_SAVE_DATA, '_No data to save.') });
       return;
     }
-    const ok = await setAlert({
-      type: 'confirm',
-      content: t(MSG.CONFIRM_SAVE, '_Save the changes?'),
-    });
-    if (!ok) return;
-
+    // 저장 confirm 없음 (표준화) — 저장은 되돌릴 수 있고 결과는 Toast 로 알린다.
+    //   confirm 은 삭제/전송취소처럼 되돌릴 수 없는 동작에만 쓴다. SalesPlan(DMF0021) 동일.
     const sesUserId = useSessionStore.getState().session.userId ?? '';
     // ⭐ createdByList — BE 가 가로채지 않는 키명 (createdBy 는 BE 세션 단일값으로 덮여 '^'×N 배열이
     //   1토큰으로 붕괴 → SP split 2행째부터 CREATED_BY NULL → ORA-01400. DMF0020 선례 동일, 2026-07-08).
     const rows = entries.map(e => ({ ...e, activeFlag: 'M', createdByList: sesUserId }));
     const payload = Object.fromEntries(SAVE_KEYS.map(k => [k, rows.map(r => r[k]).join('^')]));
 
+    // 진행 표시 — 전 화면 공통 'Loading...' 토스트 (LBL00665. SalesPlan/MktFcst 동일)
     void setToast({ message: t('LBL00665', '_Loading...'), type: 'default', duration: 3000 });
+    setIsPending(true);
     try {
       const res = await apiClient.post<Record<string, unknown>>(
         `/${MENU_ID}/${SHEETS.MAIN}/SAVE/call-proc`,
@@ -317,19 +342,25 @@ export const CustomerFcstUpload = ({ tabId, title }: PageProps<MENU_ID>) => {
       if (res.status >= 400 || Number(res.data?.code)) {
         const reason =
           (res.data as { message?: string })?.message?.trim() ||
-          t('MSG00618', '_An error occurred while saving.');
+          t(MSG.SAVE_ERROR, '_저장 중 오류가 발생했습니다.');
         void setAlert({ type: 'alert', content: reason });
         return;
       }
-      void setToast({ message: t('MSG00606', '_Saved.'), type: 'success' });
+      void setToast({ message: t(MSG.SAVED, '_성공적으로 저장되었습니다.'), type: 'success' });
       saveEntriesRef.current.clear();
       editTrackerRef.current?.clearChanges();
-      // AS-IS SaveData 성공 후 FindButton() 재조회 1:1
-      void queryClient.invalidateQueries({ queryKey: [MENU_ID] });
+      // AS-IS SaveData 성공 후 FindButton() 재조회 1:1.
+      //   ⚠ prefix 는 tabId (queryKey = [tabId, sheetName, action, filters]). 구 [MENU_ID] 는
+      //     어떤 쿼리와도 매칭되지 않아 저장 후 재조회가 통째로 무동작이었다 (2026-08-20 리포트).
+      //     저장은 filters 가 그대로라 키가 안 바뀌므로 invalidate 가 유일한 재조회 트리거다
+      //     (조회는 setFilters 로 키가 바뀌어 우연히 동작했음). demand-plan-waterfall 선례 동일.
+      void queryClient.invalidateQueries({ queryKey: [tabId] });
     } catch (e) {
       const msg =
-        e instanceof Error ? e.message : t('MSG00618', '_An error occurred while saving.');
+        e instanceof Error ? e.message : t(MSG.SAVE_ERROR, '_저장 중 오류가 발생했습니다.');
       void setAlert({ type: 'alert', content: msg });
+    } finally {
+      setIsPending(false);
     }
   };
 
@@ -341,8 +372,8 @@ export const CustomerFcstUpload = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   });
   // };
 
-  // F9 Delete — 버튼 미노출 처리 (사용자 요구: 업로드 전용 화면). AS-IS DeleteButton 은 Action='I'
-  //   (신규) 행만 삭제였고, 신규행 경로가 차단된 화면이라 원래도 실질 no-op 였다.
+  // F9 Delete — 버튼 미노출 처리 (사용자 요구 2026-08-21). AS-IS DeleteButton 은 Action='I'(신규) 행만
+  //   삭제 대상인데 이 화면은 신규행 경로가 차단(F8 Insert = MSG00380)되어 있어 실질 no-op 였다.
   // const handleDelete = () => undefined;
 
   // SubTitle 공통버튼 — hasButton 권한 분기. excel/sort/filter/condition = DefaultButtonActions 자동.
@@ -352,7 +383,7 @@ export const CustomerFcstUpload = ({ tabId, title }: PageProps<MENU_ID>) => {
     insert: false, // Insert 버튼 미노출 (undefined 면 버튼이 그려지므로 false 명시)
     // delete: hasButton('DELETE') ? handleDelete : false,
     delete: false, // Delete 버튼 미노출 (undefined 면 버튼이 그려지므로 false 명시)
-    save: false, // Save 버튼 미노출 hasButton('SAVE') ? handleSave : false,
+    save: hasButton('SAVE') ? () => void handleSave() : false,
     manual: false,
     // ⭐ [hook #135 §6] Excel 2종은 customButtons 로 배치한다 — 표준 `upload` 슬롯은 customButtons
     //   **뒤**에 렌더되어 "Excel Form → Excel Upload" 순서가 깨진다.
@@ -404,6 +435,7 @@ export const CustomerFcstUpload = ({ tabId, title }: PageProps<MENU_ID>) => {
       />
       <CustomerFcstUploadForm
         onSubmit={handleSearch}
+        onDivisionChange={resetGrid}
         setOpenPrjByDivisionModal={setOpenPrjByDivisionModal}
         setOpenModelByDivisionModal={setOpenModelByDivisionModal}
       />
@@ -474,6 +506,9 @@ export const CustomerFcstUpload = ({ tabId, title }: PageProps<MENU_ID>) => {
       <FcstUploadModal
         open={openFcstUploadModal}
         modalClose={() => setOpenFcstUploadModal(false)}
+        // 저장 confirm 미표시 (저장 피드백 표준화 2026-08-24) — 이 화면 한정.
+        //   공용 모달 기본값은 true 라 ForecastPrice/MetalLinkPrice 동작은 그대로다.
+        confirmBeforeSave={false}
         onSave={async () => {
           // PKG_DMF0014.P_DMF0014_CUST_FCST_EXCEL_UPLOAD(mode=1) — 검증 통과분 적재.
           //   createdBy=BE 세션 자동 · V_CREATION_DATE=MAX(최신 배치 자동 선택).
@@ -499,10 +534,10 @@ export const CustomerFcstUpload = ({ tabId, title }: PageProps<MENU_ID>) => {
           }
         }}
         onUploaded={() => {
-          void queryClient.invalidateQueries({ queryKey: [MENU_ID] });
+          // 업로드 후 재조회 — 위 handleSave 와 동일 이유로 prefix 는 tabId
+          void queryClient.invalidateQueries({ queryKey: [tabId] });
         }}
       />
-      <Alert />
     </>
   );
 };

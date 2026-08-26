@@ -478,9 +478,11 @@ export const SalesFuturePriceGrid = ({
         // 개인화 글자색 — 지정 시 적용, 없으면 잔존 제거(셀 재활용 대비).
         if (meta.textColor) e.cell.style.setProperty('color', meta.textColor, 'important');
         else e.cell.style.removeProperty('color');
-        // ⭐ FPModal 팝업셀 아이콘 = DMF0006 과 동일(MUI OpenInNew). (2026-07-01 사용자 요구: 구 🔍 이모지 → DMF0006 모양)
-        //   DMF0020 module scss 의 wj-cell-popup override(그라데이션 배경 + '↗') 및 insert 노란배경과 충돌 방지 위해
-        //   wj-cell-popup 클래스는 쓰지 않고, 전용 span(.popup-icon + styles.popupIcon)으로 동일 SVG 아이콘만 렌더.
+        // FPModal 팝업셀 아이콘 = DMF0006 과 동일(MUI OpenInNew). (2026-07-01 사용자 요구로 구 이모지에서 변경)
+        //   wj-cell-popup 클래스를 쓰지 않고 전용 span(.popup-icon + styles.popupIcon)으로 같은 SVG 만 렌더한다.
+        //   이유: 이 화면은 insert 셀에 solid Yellow 를 깔아야 하는데, 클래스를 붙이면 공용 wrapper
+        //   formatEditableColumns 의 재부착과 배경 규칙이 얽힌다. (2026-08-24: 회피 대상이던 module scss 의
+        //   wj-cell-popup 그라데이션 override 는 전역 누수라 제거됨 — 그래도 전용 span 방식은 그대로 유지.)
         toggleClass(e.cell, 'wj-cell-popup', false);
         if (editableForInsert && meta._ctrlType === 'FPModal') {
           const cellEl = e.cell;
@@ -653,9 +655,13 @@ export const SalesFuturePriceGrid = ({
           if (!isSibling) continue;
           const sm = String(item.MEASURE ?? '');
           if (!isExchangeTargetMeasure(currencyCodes, sm, baseCur)) continue; // RTF 등 비통화 measure 미변경
-          (item as Record<string, unknown>)[binding] = erMap
+          const rawSib = erMap
             ? getExchangeRate(erMap, div, baseCur, sm, yyyymm, locPrice, null)
             : locPrice;
+          // 셀에는 숫자 타입으로 넣는다 — getExchangeRate 는 string 을 돌려주는데 문자열 값에는
+          // 컬럼 format('n3') 이 적용되지 않아 천단위 콤마/소수 3자리 없이 raw 로 표시된다.
+          const sibNum = rawSib === '' ? NaN : Number(rawSib);
+          (item as Record<string, unknown>)[binding] = Number.isNaN(sibNum) ? null : sibNum;
         }
         s.invalidate(true);
         return;
@@ -977,15 +983,15 @@ export const SalesFuturePriceGrid = ({
 
   // ⭐ 조회조건 열기/닫기(extraConditions expand/collapse) 등으로 컨테이너 높이가 바뀌면
   //   계속 마운트된 Wijmo 그리드가 host 를 재측정하지 않아 하단 여백이 남는 사고(2026-06-30).
-  //   gridContainer 크기 변경을 ResizeObserver 로 감지 → invalidate(true) 로 레이아웃 재계산해 빈틈 제거.
-  const gridBoxRef = useRef<HTMLDivElement>(null);
+  //   래퍼 div 대신 그리드 자신의 hostElement(위 dblclickHandler 와 동일 참조)를 ResizeObserver 로
+  //   감시 → invalidate(true) 로 레이아웃 재계산해 빈틈 제거 (wrapper div 없이도 앵커 확보).
   useEffect(() => {
-    const el = gridBoxRef.current;
+    const g = (gridRef as { current: FlexGridType<FuturePriceRow> | null } | null)?.current;
+    const el = g?.hostElement;
     if (!el || typeof ResizeObserver === 'undefined') return;
     const ro = new ResizeObserver(() => {
-      const g = (gridRef as { current: FlexGridType<FuturePriceRow> | null } | null)?.current;
       try {
-        g?.invalidate(true);
+        g.invalidate(true);
       } catch {
         /* unmount race */
       }
@@ -995,30 +1001,30 @@ export const SalesFuturePriceGrid = ({
   }, [gridRef]);
 
   return (
-    <div className={styles.gridContainer} ref={gridBoxRef}>
-      <DataGrid
-        // ⚠️ key prop 금지 — sCls/lCls 는 이 화면에서 항상 undefined 라 실질 key 값은 colNm 목록뿐.
-        //   즉 컬럼 표시/순서만 바뀌어도(Column Setting 저장 등) 매번 wrapper 를 통째로 재마운트해
-        //   조회 완료 후 컬럼 추가 시 그리드가 재초기화되며 편집 가능 상태가 깨졌다(#23 회귀).
-        //   컬럼 변경은 staticColumns/dynamicColumns prop 변경만으로 반영 — 아래 useEffect(dep에
-        //   visibleColumns 포함)가 핸들러 재등록을 이미 전담하므로 remount 불필요.
-        className={styles.grid}
-        gridRef={gridRef as never}
-        // ⚠️ gridFilterRef 는 공용 DataGrid 에 전달하지 않음 — 피처가 FlexGridFilter 직접 소유(위 effect)해
-        //   filterColumns/이벤트 완전 제어(동적 머지컬럼 제외 + 필터후 재적용). DataGrid 의 filterColumns:[''] 기본 회피.
-        // ⭐ F7 Save(편집행 'U') — EditTracker 로 변경 셀 추적 + 비-insert 행 자동 CRUD_TYPE='M' 마킹.
-        editTrackerRef={editTrackerRef as never}
-        staticColumns={mainStaticColumns}
-        dynamicColumns={mainDynamicColumns}
-        itemsSource={rows as unknown as WijmoRowItem[]}
-        autoGenerateColumns={false}
-        allowSorting={true}
-        // ⭐ 데이터 셀 머지 — wrapper 가 allowMerging prop(default ColumnHeaders)을 매 렌더 재적용해
-        //   effect 의 g.allowMerging=All 을 되돌림 → 셀 머지 OFF. prop 으로 All 전달해 일관 적용.
-        allowMerging={AllowMerging.All}
-        // ⭐ 헤더 높이 — wrapper prop 미사용. 위 단일 useEffect(hook #93 P-B)가 전담
-        //   (정적 48 잔여까지 정규화 필요 → prop 의 defaultSize 단독으로는 불가, height 조작 일원화).
-      />
-    </div>
+    // <div className={styles.gridContainer} ref={gridBoxRef}>
+    <DataGrid
+      // ⚠️ key prop 금지 — sCls/lCls 는 이 화면에서 항상 undefined 라 실질 key 값은 colNm 목록뿐.
+      //   즉 컬럼 표시/순서만 바뀌어도(Column Setting 저장 등) 매번 wrapper 를 통째로 재마운트해
+      //   조회 완료 후 컬럼 추가 시 그리드가 재초기화되며 편집 가능 상태가 깨졌다(#23 회귀).
+      //   컬럼 변경은 staticColumns/dynamicColumns prop 변경만으로 반영 — 아래 useEffect(dep에
+      //   visibleColumns 포함)가 핸들러 재등록을 이미 전담하므로 remount 불필요.
+      className={styles.grid}
+      gridRef={gridRef as never}
+      // ⚠️ gridFilterRef 는 공용 DataGrid 에 전달하지 않음 — 피처가 FlexGridFilter 직접 소유(위 effect)해
+      //   filterColumns/이벤트 완전 제어(동적 머지컬럼 제외 + 필터후 재적용). DataGrid 의 filterColumns:[''] 기본 회피.
+      // ⭐ F7 Save(편집행 'U') — EditTracker 로 변경 셀 추적 + 비-insert 행 자동 CRUD_TYPE='M' 마킹.
+      editTrackerRef={editTrackerRef as never}
+      staticColumns={mainStaticColumns}
+      dynamicColumns={mainDynamicColumns}
+      itemsSource={rows as unknown as WijmoRowItem[]}
+      autoGenerateColumns={false}
+      allowSorting={true}
+      // ⭐ 데이터 셀 머지 — wrapper 가 allowMerging prop(default ColumnHeaders)을 매 렌더 재적용해
+      //   effect 의 g.allowMerging=All 을 되돌림 → 셀 머지 OFF. prop 으로 All 전달해 일관 적용.
+      allowMerging={AllowMerging.All}
+      // ⭐ 헤더 높이 — wrapper prop 미사용. 위 단일 useEffect(hook #93 P-B)가 전담
+      //   (정적 48 잔여까지 정규화 필요 → prop 의 defaultSize 단독으로는 불가, height 조작 일원화).
+    />
+    // </div>
   );
 };

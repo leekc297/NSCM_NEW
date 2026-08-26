@@ -1,7 +1,7 @@
 import type { CollectionView } from '@mescius/wijmo';
 import { type FlexGrid } from '@mescius/wijmo.grid';
 import { type FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { useEffect, useMemo, useRef } from 'react';
+import { useContext, useEffect, useMemo, useRef } from 'react';
 
 import { apiClient } from '@foundation/apis';
 import { CRUD_TYPE } from '@foundation/constants';
@@ -12,7 +12,12 @@ import { CustomDialog, CustomDropdown, DataGrid, SearchArea } from '@shared/comp
 import { useTabProcQuery } from '@shared/hooks';
 import { Button, FormItem } from '@shared/lges';
 import { ControlConfirmIcon } from '@shared/lges-icons';
-import { useMessageStore, useSessionStore } from '@shared/stores';
+import {
+  DialogScopeContext,
+  useDialogStore,
+  useMessageStore,
+  useSessionStore,
+} from '@shared/stores';
 
 import {
   MODAL_SHEET_DATA,
@@ -48,16 +53,52 @@ interface ContributeVersionModalProps {
   modalClose: () => void;
 }
 
+/**
+ * 팝업 안 그리드 단축키 — F8 = Insert / F9 = Delete.
+ * 일반 화면의 공용 SubTitle 단축키(Hotkeys.F8='insert' / F9='delete')와 같은 계약이며,
+ * 버튼 라벨은 그대로 두고 동작만 키보드로도 열어준다.
+ *
+ * 필수: 이 컴포넌트는 다이얼로그 안(customContentArea)에서 렌더돼야 한다 —
+ *   DialogScopeContext.Provider 가 CustomDialog 내부에 있어서(CustomDialog.tsx:243),
+ *   모달 컴포넌트 본문에서 useContext 하면 스코프가 항상 null 이다.
+ *
+ * 스코프 가드가 있어야 부모 화면 SubTitle 의 F8/F9 와 겹치지 않는다. 부모 SubTitle 도 같은
+ *   isActiveScope 로 걸러지므로(SubTitle.tsx:237) 이 팝업이 최상위일 때는 여기만 동작한다.
+ *   공용 DataGrid 의 팝업 F3/F4 자동 등록(DataGrid.tsx:757)과 동일한 규약이다.
+ *   선례: features/demand/.../sales-reports/components/modals/ExchangeRateModal.tsx (InsertHotkey).
+ */
+const GridHotkeys = ({ onInsert, onDelete }: { onInsert: () => void; onDelete: () => void }) => {
+  const scopeId = useContext(DialogScopeContext);
+  const handlersRef = useRef({ onInsert, onDelete });
+  handlersRef.current = { onInsert, onDelete };
+
+  useEffect(() => {
+    const handler = (keyboardEvent: KeyboardEvent) => {
+      if (keyboardEvent.key !== 'F8' && keyboardEvent.key !== 'F9') return;
+      if (!useDialogStore.getState().isActiveScope(scopeId)) return;
+      // 브라우저 기본 동작·상위 리스너 차단 (공용 F4 처리와 같은 캡처 단계 규약)
+      keyboardEvent.preventDefault();
+      keyboardEvent.stopImmediatePropagation();
+      if (keyboardEvent.key === 'F8') handlersRef.current.onInsert();
+      else handlersRef.current.onDelete();
+    };
+    globalThis.window.addEventListener('keydown', handler, true);
+    return () => globalThis.window.removeEventListener('keydown', handler, true);
+  }, [scopeId]);
+
+  return null;
+};
+
 export const ContributeVersionModal = ({ open, modalClose }: ContributeVersionModalProps) => {
   const { t } = useTranslation();
 
-  const initialized = useContributeVersionModalStore(s => s.initialized);
   const staticColumns = useContributeVersionModalStore(s => s.staticColumns);
   const fetchStaticColumns = useContributeVersionModalStore(s => s.fetchStaticColumns);
   const selectedYear = useContributeVersionModalStore(s => s.selectedYear);
   const setSelectedYear = useContributeVersionModalStore(s => s.setSelectedYear);
 
   const setAlert = useMessageStore(s => s.setAlert);
+  const setToast = useMessageStore(s => s.setToast);
   const sessionUserId = useSessionStore(s => s.session.userId ?? '');
   const queryClient = useQueryClient();
 
@@ -100,9 +141,13 @@ export const ContributeVersionModal = ({ open, modalClose }: ContributeVersionMo
   );
 
   // popup open 시 staticColumns + Year combo default 첫 항목 자동 선택 (AS-IS 동일).
+  // 열 때마다 컬럼 메타를 다시 받는다. 이 스토어는 sessionStorage 에 영속되므로(createPersistedStore)
+  //   `initialized` 로 건너뛰면 관리자(UI Category Setup)에서 바꾼 설정이 브라우저 탭을 닫기 전까지
+  //   영영 반영되지 않는다 — Year 를 FPNumber 로 바꿔도 문자가 계속 입력되던 원인이 이것이다.
+  //   영속 캐시는 첫 프레임을 즉시 그리는 용도로 남기고, 최신값은 매 open 마다 덮어쓴다.
   useEffect(() => {
     if (!open) return;
-    if (!initialized) void fetchStaticColumns();
+    void fetchStaticColumns();
   }, [open]);
 
   useEffect(() => {
@@ -149,7 +194,10 @@ export const ContributeVersionModal = ({ open, modalClose }: ContributeVersionMo
   const handleDelete = () => {
     const grid = gridRef.current;
     if (!grid) return;
-    GridAction.removeRow(grid);
+    // 선택 행이 없으면 공용 SubTitle 의 F9 와 같은 안내를 낸다 (조용한 무동작 방지).
+    if (!GridAction.removeRow(grid)) {
+      void setAlert({ type: 'alert', content: t('MSG00014', '_No selection') });
+    }
   };
 
   const handleSave = async () => {
@@ -214,14 +262,8 @@ export const ContributeVersionModal = ({ open, modalClose }: ContributeVersionMo
       }
     }
 
-    const ok = await setAlert({
-      type: 'confirm',
-      content: t('MSG00001', '수정한 내용을 저장하시겠습니까?'),
-    });
-    if (!ok) {
-      savingRef.current = false;
-      return;
-    }
+    // 저장 confirm 없이 바로 저장한다 (사용자 지시) — 신규행/수정행 구분 없이 동일 경로.
+    //   검증(위 필수값 루프)을 통과하면 Save 버튼 클릭 자체를 확정 의사로 본다.
 
     const buf = {
       activeFlag: '',
@@ -256,7 +298,8 @@ export const ContributeVersionModal = ({ open, modalClose }: ContributeVersionMo
         validYn: trim(buf.validYn),
         createdBy: trim(buf.createdBy),
       });
-      void setAlert({ type: 'alert', content: t('MSG00002', '저장이 완료되었습니다.') });
+      // 저장 성공은 Toast (AGENTS.md 저장 피드백 규칙) — 확인 버튼을 누를 이유가 없다.
+      void setToast({ type: 'success', message: t('MSG00002', '저장이 완료되었습니다.') });
       void queryClient.invalidateQueries({ queryKey: [MODAL_VERSION] });
       void refetch?.();
     } catch {
@@ -274,6 +317,7 @@ export const ContributeVersionModal = ({ open, modalClose }: ContributeVersionMo
       position='basic'
       handleClose={modalClose}
       disableButtonCancel
+      disableScale
       customHeaderTitle={
         <div className='headerContainer'>
           <div className='headerDot' />
@@ -282,6 +326,8 @@ export const ContributeVersionModal = ({ open, modalClose }: ContributeVersionMo
       }
       customContentArea={
         <div className={styles.dialogContentWrapper}>
+          {/* 버튼 라벨은 그대로 두고 F8(Insert)/F9(Delete) 키 동작만 추가 — 아래 버튼과 같은 핸들러. */}
+          <GridHotkeys onInsert={handleInsert} onDelete={handleDelete} />
           <SearchArea
             searchButtonLabel={t('LBL00722', '_Search')}
             onSearch={handleFind}

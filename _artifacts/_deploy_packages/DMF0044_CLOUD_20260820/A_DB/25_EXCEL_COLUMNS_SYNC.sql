@@ -1,0 +1,9 @@
+-- DMF0044_CLOUD_20260820 / A_DB/25_EXCEL_COLUMNS_SYNC.sql
+-- SCM_ADM_EXCEL_COLUMNS 축 — **사내 실측 0행** (조용한 스킵 금지 원칙에 따라 파일로 명기).
+--   PROGRAM_ID='DMF0044'                     : 0행
+--   본 화면 SHEET_NAME 3종으로 재조회        : 0행
+--
+--   즉 DMF0044 는 Excel Form/Upload 메타를 보유하지 않는다.
+--   화면의 [EXCEL] 버튼(MNU_BTN_MPG_M 'MDF Reports'/EXCEL)은 조회결과 그대로 내려받는
+--   클라이언트 다운로드이며, 업로드 적재 경로가 없다 (hook #135 2-Step Upload 대상 아님).
+--   → 적용할 DML 없음. 본 파일은 축 존재 증빙 전용이다.

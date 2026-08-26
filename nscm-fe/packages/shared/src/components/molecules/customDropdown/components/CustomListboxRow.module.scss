@@ -6,10 +6,24 @@
   color: #666;
 }
 
+// display:flex 는 필수. 블록으로 두면 라벨 span 이 인라인이 되어
+// clientWidth/scrollWidth 가 둘 다 0 으로 나와 잘림 판정(툴팁)이 성립하지 않고,
+// 인라인 요소에는 text-overflow 도 먹지 않아 말줄임표가 안 찍힌다.
 .childItem {
+  display: flex;
+  align-items: center;
+  gap: 4px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   padding: 6px 8px;
   cursor: pointer;
+}
+
+.childLabel {
+  flex: 1 1 auto;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

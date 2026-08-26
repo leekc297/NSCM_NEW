@@ -1,3 +1,4 @@
+import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { FormItem, InputField } from '@shared/lges';
@@ -24,10 +25,11 @@ export const ProcedureManagementForm = () => {
       isHidden={!isOpenSearchArea}
       conditions={
         <>
-          <Grid size={4}>
+          <Grid size={3}>
             <FormItem
               label={t('LBL00303', '_Schema')}
               labelAlign='right'
+              className={commonStyles.formItem}
               render={() => (
                 <CustomDropdown
                   multiple
@@ -45,10 +47,11 @@ export const ProcedureManagementForm = () => {
               )}
             />
           </Grid>
-          <Grid size={4}>
+          <Grid size={3}>
             <FormItem
               label={t('LBL00304', '_Procedure Name')}
               labelAlign='right'
+              className={commonStyles.formItem}
               render={() => (
                 <InputField
                   fullWidth
@@ -58,10 +61,11 @@ export const ProcedureManagementForm = () => {
               )}
             />
           </Grid>
-          <Grid size={4}>
+          <Grid size={3}>
             <FormItem
               label={t('LBL00325', '_Update YN')}
               labelAlign='right'
+              className={commonStyles.formItem}
               render={() => (
                 <CustomDropdown
                   isInput={false}

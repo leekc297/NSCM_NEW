@@ -3,7 +3,6 @@ import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useRef, useState } from 'react';
 
 import type { HotkeyConfig, PageProps } from '@foundation/models';
-import { GridAction } from '@foundation/utils';
 import { MainTitle, SubTitle, TabItem, TabWrapper } from '@shared/components';
 import { useTabProcQuery, useProcMutation, useSaveWithValidation } from '@shared/hooks';
 
@@ -62,11 +61,6 @@ export const UICategorySetup = ({ tabId, title }: PageProps<MENU_ID>) => {
     if (!initialized) void fetchStaticColumns();
   }, [tabId]);
 
-  const handleDelete = () => {
-    if (!gridRef[activeIndex].current) return;
-    GridAction.removeRow(gridRef[activeIndex].current, true);
-  };
-
   const handleSave = () => {
     if (activeIndex === SHEET_INDEX.COLUMN) {
       const saveData = (data?.[SHEETS.COLUMN] ?? []).filter(item => item.CRUD_TYPE);
@@ -78,7 +72,6 @@ export const UICategorySetup = ({ tabId, title }: PageProps<MENU_ID>) => {
   };
 
   const hotkeyConfig: HotkeyConfig = {
-    delete: handleDelete,
     save: handleSave,
     search: setFilters,
     manual: false,

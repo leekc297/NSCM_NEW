@@ -137,7 +137,7 @@ export const SalesSiteProjectModel = ({ tabId, title }: PageProps<MENU_ID>) => {
   const handleDelete = () => {
     if (!gridRefs[activeTab].current) return;
 
-    GridAction.removeRow(gridRefs[activeTab].current, true);
+    GridAction.removeRow(gridRefs[activeTab].current);
   };
 
   const hotkeyConfig: HotkeyConfig = {

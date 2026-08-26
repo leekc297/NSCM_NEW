@@ -15,6 +15,19 @@ interface MDIContainerProps {
   mirrorRouteOnMount?: boolean;
 }
 
+const GlobalProgressBar = () => {
+  const progress = useUIStore(state => state.progress);
+  return (
+    <ProgressIndicator
+      shape='linear'
+      apprearance='limited'
+      placement='parent'
+      open={progress > 0}
+      value={progress}
+    />
+  );
+};
+
 export const MDIContainer = ({ mirrorRouteOnMount = true }: MDIContainerProps) => {
   const tabs = useMDIStore(state => state.tabs);
   const activeIndex = useMDIStore(state => state.activeIndex);
@@ -34,13 +47,7 @@ export const MDIContainer = ({ mirrorRouteOnMount = true }: MDIContainerProps) =
           <ProgressIndicator shape='circular' open={!!isBusy} />
         </div>
       </div>
-      <ProgressIndicator
-        shape='linear'
-        apprearance='limited'
-        placement='parent'
-        open={progress > 0}
-        value={progress}
-      />
+      <GlobalProgressBar />
     </div>
   );
 };

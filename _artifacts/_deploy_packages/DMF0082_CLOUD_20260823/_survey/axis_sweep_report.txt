@@ -1,0 +1,266 @@
+========================================================================================================
+A. 메타 문자열 축 — SCM_ADM_%/SCM_MST_%/DM_ADM_% 전 테이블 기계 스윕
+========================================================================================================
+후보 테이블 158개 스캔
+
+  ⭐ SCM_ADM_API_M                              18행   보유컬럼=API_ID(17), API_MSG_ID(9), API_MSG_DESC(13), API_URL(11)
+  ⭐ SCM_ADM_CMBO_SQL_M                          7행   보유컬럼=SQL_ID(4), SQL_NM(7), SQL_DTL_CTN(2)
+  ⭐ SCM_ADM_CMBO_SQL_M_BK20260821               7행   보유컬럼=SQL_ID(4), SQL_NM(7), SQL_DTL_CTN(2)
+  ⭐ SCM_ADM_CMBO_SQL_M_BK20260821_FN            7행   보유컬럼=SQL_ID(4), SQL_NM(7), SQL_DTL_CTN(2)
+  ⭐ SCM_ADM_EXCEL_COLUMNS                       1행   보유컬럼=PROGRAM_ID(1), STORAGE_SQL_ID(1)
+  ⭐ SCM_ADM_EXCEL_UPLOAD                      163행   보유컬럼=PROGRAM_ID(163)
+  ⭐ SCM_ADM_LOOKUP_MASTER_DETAIL               21행   보유컬럼=SEGMENT1(6), SEGMENT2(15)
+  ⭐ SCM_ADM_LOOKUP_MASTER_DETAIL_H              1행   보유컬럼=SEGMENT1(1)
+  ⭐ SCM_ADM_MNU_BTN_MPG_M                      18행   보유컬럼=MNU_ID(18), API_ID(16)
+  ⭐ SCM_ADM_MNU_M                               1행   보유컬럼=MNU_ID(1)
+  ⭐ SCM_ADM_MSG_M                              15행   보유컬럼=MSG_DESC(15)
+  ⭐ SCM_ADM_PROC_M                            123행   보유컬럼=PROC_NM(123)
+  ⭐ SCM_ADM_PROGRAM                             1행   보유컬럼=PROGRAM_ID(1), PROGRAM_PATH(1), CLASS_NAME(1)
+  ⭐ SCM_ADM_USER_GR_MNU_BTN_MPG_M             100행   보유컬럼=MNU_ID(100)
+  ⭐ SCM_ADM_USER_GR_MNU_MPG_M                   6행   보유컬럼=MNU_ID(6)
+  ⭐ SCM_MST_SHEET_COLUMNS                      90행   보유컬럼=PROGRAM_ID(90), CELL_COMBO_DATA_TYPE(2)
+  ⭐ SCM_MST_SHEET_COLUMNS_0408                 69행   보유컬럼=PROGRAM_ID(69)
+  ⭐ SCM_MST_SHEET_COLUMNS_260408               69행   보유컬럼=PROGRAM_ID(69)
+  ⭐ SCM_MST_SHEET_MEASURE                      22행   보유컬럼=PROGRAM_ID(22)
+  ⭐ SCM_MST_TITLESET_USER                     349행   보유컬럼=PROGRAM_ID(349)
+
+=> A축 이관 대상 테이블 20개
+
+========================================================================================================
+E. 시간 축 — A축 테이블별 LAST_UPDATE_DATE 최대 / 기준일(20260820) 이후 행수
+========================================================================================================
+  SCM_ADM_API_M                          MAX=2026-08-13 22:00:57   20260820+ =     0행
+  SCM_ADM_CMBO_SQL_M                     MAX=2026-08-19 23:42:16   20260820+ =     0행
+  SCM_ADM_CMBO_SQL_M_BK20260821          MAX=2026-08-19 23:42:16   20260820+ =     0행
+  SCM_ADM_CMBO_SQL_M_BK20260821_FN       MAX=2026-08-19 23:42:16   20260820+ =     0행
+  SCM_ADM_EXCEL_COLUMNS                  MAX=2026-08-20 01:09:56   20260820+ =     1행  ⭐delta
+  SCM_ADM_EXCEL_UPLOAD                   MAX=2026-08-20 10:52:13   20260820+ =    86행  ⭐delta
+  SCM_ADM_LOOKUP_MASTER_DETAIL           MAX=2026-08-21 17:33:11   20260820+ =     1행  ⭐delta
+  SCM_ADM_LOOKUP_MASTER_DETAIL_H         MAX=2026-08-21 17:33:11   20260820+ =     1행  ⭐delta
+  SCM_ADM_MNU_BTN_MPG_M                  MAX=2026-08-13 22:00:57   20260820+ =     0행
+  SCM_ADM_MNU_M                          MAX=2026-07-21 17:30:41   20260820+ =     0행
+  SCM_ADM_MSG_M                          MAX=2026-08-21 14:10:27   20260820+ =     4행  ⭐delta
+  SCM_ADM_PROC_M                         MAX=2026-08-13 22:00:57   20260820+ =     0행
+  SCM_ADM_PROGRAM                        MAX=2026-06-12 14:37:03   20260820+ =     0행
+  SCM_ADM_USER_GR_MNU_BTN_MPG_M          MAX=2026-08-13 22:00:57   20260820+ =     0행
+  SCM_ADM_USER_GR_MNU_MPG_M              MAX=2026-07-27 11:25:37   20260820+ =     0행
+  SCM_MST_SHEET_COLUMNS                  MAX=2026-08-22 19:32:01   20260820+ =    44행  ⭐delta
+  SCM_MST_SHEET_COLUMNS_0408             MAX=2025-07-10 13:39:11   20260820+ =     0행
+  SCM_MST_SHEET_COLUMNS_260408           MAX=2025-07-10 13:39:11   20260820+ =     0행
+  SCM_MST_SHEET_MEASURE                  MAX=2026-08-11 20:14:04   20260820+ =     0행
+  SCM_MST_TITLESET_USER                  MAX=2026-08-22 18:25:02   20260820+ =    40행  ⭐delta
+
+========================================================================================================
+B. DB 객체 축 — 이름 매칭 + PKG 의존객체(GTT/함수/타입/뷰)
+========================================================================================================
+  INDEX          IX_GT_DMF0082_PARAM_TOKEN_01                 VALID    DDL=2026-08-15 05:06:16
+  PACKAGE        PKG_DMF0082                                  VALID    DDL=2026-08-15 12:09:46
+  PACKAGE BODY   PKG_DMF0082                                  VALID    DDL=2026-08-22 23:33:19
+  TABLE          ADM_PROC_M_BAK_DMF0082_0807                  VALID    DDL=2026-08-12 17:03:03
+  TABLE          BAK_DMF0082_ATTR2_ITEM_M_20260822            VALID    DDL=2026-08-22 14:00:52
+  TABLE          BAK_DMF0082_CELLPRODSITE_20260822            VALID    DDL=2026-08-22 14:31:02
+  TABLE          BAK_DMF0082_EDITCOMBO_20260821               VALID    DDL=2026-08-21 23:29:07
+  TABLE          BAK_DMF0082_SHEETCOL_20260821                VALID    DDL=2026-08-21 21:28:57
+  TABLE          BAK_DMF0082_VERSIONNO_VISIBLE_20260822       VALID    DDL=2026-08-22 15:33:09
+  TABLE          DROP_RUN_DMF0082_SAVE_MAIN_DATA              VALID    DDL=2026-06-17 22:53:19
+  TABLE          GT_DMF0082_ADMIN_GROUP_MEASURE               VALID    DDL=2026-07-21 16:38:33 [GTT]
+  TABLE          GT_DMF0082_CAL_MONTH_END_DATE                VALID    DDL=2026-07-21 16:38:33 [GTT]
+  TABLE          GT_DMF0082_CAL_WEEK_END_DATE                 VALID    DDL=2026-07-21 16:38:33 [GTT]
+  TABLE          GT_DMF0082_FCST_N_PRICE                      VALID    DDL=2026-07-21 16:38:33 [GTT]
+  TABLE          GT_DMF0082_FCST_PRICE_BUCKET                 VALID    DDL=2026-07-12 13:27:26 [GTT]
+  TABLE          GT_DMF0082_FCST_PRICE_DAILY                  VALID    DDL=2026-07-12 13:27:26 [GTT]
+  TABLE          GT_DMF0082_FCST_PRICE_EXCEL                  VALID    DDL=2026-07-12 13:27:26 [GTT]
+  TABLE          GT_DMF0082_FCST_PRICE_UNPIVOT                VALID    DDL=2026-07-12 13:27:26 [GTT]
+  TABLE          GT_DMF0082_FCST_PRICE_WEEKLY                 VALID    DDL=2026-07-12 13:27:26 [GTT]
+  TABLE          GT_DMF0082_MF_SP                             VALID    DDL=2026-08-07 13:27:43 [GTT]
+  TABLE          GT_DMF0082_MST_ITEM_SINGLE_A_V               VALID    DDL=2026-07-21 16:38:33 [GTT]
+  TABLE          GT_DMF0082_MST_ITEM_SINGLE_B_V               VALID    DDL=2026-07-21 16:38:33 [GTT]
+  TABLE          GT_DMF0082_MST_ITEM_SINGLE_ORI_V             VALID    DDL=2026-07-21 16:38:33 [GTT]
+  TABLE          GT_DMF0082_MST_ITEM_SINGLE_V                 VALID    DDL=2026-07-21 16:38:33 [GTT]
+  TABLE          GT_DMF0082_PARAM_TOKEN                       VALID    DDL=2026-08-15 05:06:16 [GTT]
+  TABLE          GT_DMF0082_PJT                               VALID    DDL=2026-07-13 01:32:08 [GTT]
+  TABLE          GT_DMF0082_SELECT_MEASURE                    VALID    DDL=2026-07-21 16:38:33 [GTT]
+  TABLE          GT_DMF0082_SITE_ITEM                         VALID    DDL=2026-07-21 16:38:33 [GTT]
+  TABLE          GT_DMF0082_SP_FILTER                         VALID    DDL=2026-07-13 00:22:33 [GTT]
+  TABLE          GT_DMF0082_TEMP_ADMIN_GROUP_MEASURE          VALID    DDL=2026-07-21 16:38:33 [GTT]
+  TABLE          GT_DMF0082_TEMP_FCST_N_PRICE                 VALID    DDL=2026-07-21 16:38:33 [GTT]
+  TABLE          GT_DMF0082_TEMP_INTO_GROUP_MEASURE           VALID    DDL=2026-07-21 16:38:33 [GTT]
+  TABLE          GT_DMF0082_TEMP_SELECT_MEASURE               VALID    DDL=2026-07-21 16:38:33 [GTT]
+  TABLE          GT_DMF0082_TEMP_SITE_ITEM                    VALID    DDL=2026-07-21 16:38:33 [GTT]
+  TABLE          GT_DMF0082_TEMP_SITE_ITEM_ALL                VALID    DDL=2026-07-21 16:38:33 [GTT]
+  TABLE          GT_DMF0082_TEMP_SITE_ITEM_ALL_V2             VALID    DDL=2026-07-21 16:38:33 [GTT]
+  TABLE          GT_DMF0082_TEMP_SITE_ITEM_V2                 VALID    DDL=2026-07-21 16:38:33 [GTT]
+  TABLE          GT_DMF0082_T_LAST_DATA_SETUP_FCST            VALID    DDL=2026-07-21 16:38:33 [GTT]
+  TABLE          GT_DMF0082_T_LAST_DATA_SETUP_FCST_C          VALID    DDL=2026-07-21 16:38:33 [GTT]
+  TABLE          GT_DMF0082_T_LAST_DATA_SETUP_PRICE           VALID    DDL=2026-07-21 16:38:33 [GTT]
+  TABLE          GT_DMF0082_T_LAST_DATA_SETUP_PRICE_C         VALID    DDL=2026-07-21 16:38:33 [GTT]
+  TABLE          GT_DMF0082_T_VERSION                         VALID    DDL=2026-07-21 16:38:34 [GTT]
+  TABLE          GT_DMF0082_T_WS_FCST                         VALID    DDL=2026-07-21 16:38:34 [GTT]
+  TABLE          SHEET_COLUMNS_BAK_DMF0082_0807               VALID    DDL=2026-08-12 17:03:18
+  TABLE          SHEET_MEASURE_BAK_DMF0082_0807               VALID    DDL=2026-08-12 17:03:17
+  TABLE          TITLESET_USER_BAK_DMF0082_0807               VALID    DDL=2026-08-12 17:03:05
+
+  -- PKG_DMF0082 의존 객체 (자급 대상 판정용) --
+  dep FUNCTION     FN_GET_DEPT_LIST
+  dep FUNCTION     FN_GET_MULTI_OWNER_NAME
+  dep FUNCTION     FN_MULTY_TIME
+  dep FUNCTION     FN_NEXT_DAY
+  dep FUNCTION     FN_STRING_SPLIT
+  dep FUNCTION     UF_FX_STRING_SPLIT
+  dep FUNCTION     UF_FX_STRING_SPLITFORIN
+  dep PACKAGE      PKG_DMF0082
+  dep PROCEDURE    PR_DM_PLN_CFM_TO_MKT_FCST
+  dep PROCEDURE    PR_DM_SYS_LOG_BATCH
+  dep PROCEDURE    PR_SCM_SYS_LOG_BATCH
+  dep VIEW         DM_MST_ITEM_SINGLE_V
+  dep VIEW         SCM_ADM_USER_MNU_EDIT_AUTH_V
+  dep VIEW         SCP_MST_BOD_V
+
+  -- PKG_DMF0082 참조 GTT (BODY 원문 스캔 + ALL_TABLES TEMPORARY='Y') --
+  GT_DMF0003_T_BNP                         GTT
+  GT_DMF0003_T_SSP_SYNC                    GTT
+  GT_DMF0003_VMI_DIO                       GTT
+  GT_DMF0082_CAL_MONTH_END_DATE            GTT
+  GT_DMF0082_CAL_WEEK_END_DATE             GTT
+  GT_DMF0082_FCST_PRICE_                   ⛔미존재
+  GT_DMF0082_FCST_PRICE_BUCKET             GTT
+  GT_DMF0082_FCST_PRICE_DAILY              GTT
+  GT_DMF0082_FCST_PRICE_EXCEL              GTT
+  GT_DMF0082_FCST_PRICE_UNPIVOT            GTT
+  GT_DMF0082_FCST_PRICE_WEEKLY             GTT
+  GT_DMF0082_MF_SP                         GTT
+  GT_DMF0082_MST_ITEM_SINGLE_A_V           GTT
+  GT_DMF0082_MST_ITEM_SINGLE_B_V           GTT
+  GT_DMF0082_MST_ITEM_SINGLE_ORI_V         GTT
+  GT_DMF0082_MST_ITEM_SINGLE_V             GTT
+  GT_DMF0082_PARAM_TOKEN                   GTT
+  GT_DMF0082_PJT                           GTT
+  GT_DMF0082_SP_FILTER                     GTT
+  GT_DMF0082_TEMP_ADMIN_GROUP_MEASURE      GTT
+  GT_DMF0082_TEMP_FCST_N_PRICE             GTT
+  GT_DMF0082_TEMP_INTO_GROUP_MEASURE       GTT
+  GT_DMF0082_TEMP_SELECT_MEASURE           GTT
+  GT_DMF0082_TEMP_SITE_ITEM                GTT
+  GT_DMF0082_TEMP_SITE_ITEM_ALL            GTT
+  GT_DMF0082_T_LAST_DATA_SETUP_FCST        GTT
+  GT_DMF0082_T_LAST_DATA_SETUP_FCST_C      GTT
+  GT_DMF0082_T_LAST_DATA_SETUP_PRICE       GTT
+  GT_DMF0082_T_LAST_DATA_SETUP_PRICE_C     GTT
+  GT_DMF0082_T_VERSION                     GTT
+  GT_DMF0082_T_WS_FCST                     GTT
+  GT_DMF0_T                                ⛔미존재
+  GT_PRDM1_MSHYCHU1                        GTT
+  GT_PRDM1_MSHYCHU2                        GTT
+  GT_PRDM1_TEMP_DAYINFO                    GTT
+  GT_PRDM1_TEMP_EXCEPTION_BIZ_TYPE         GTT
+  GT_PRDM1_TEMP_EXCEPTION_ITEM_LIST        GTT
+  GT_PRDM1_TEMP_EXCH                       GTT
+  GT_PRDM1_T_FCST                          GTT
+  GT_PRDM1_T_MAIN                          GTT
+  GT_PRDM1_T_PRICE                         GTT
+  GT_PRDM_SEND_TARGET_DATA                 GTT
+  GT_PRDM_T_MAIN                           GTT
+  => BODY 참조 GT_% 43종 (미존재 2)
+
+========================================================================================================
+F. BODY 마커 축 — [E2026MMDD-XXXX] 계보 (README 정정표 근거)
+========================================================================================================
+  E20260107-001651                    3회
+  E20260130-001907                    1회
+  E20260309-000271                   19회
+  E20260805-AFS                      14회
+  E20260806-DS2                       1회
+  E20260812-DS2                       4회
+  E20260812-PERF                     21회
+  E20260813-EXCELFORM                 1회
+  E20260813-UPLOADSAVE               10회
+  E20260814-CURMEASURE                1회
+  E20260814-FCSTNAME                  2회
+  E20260815-PERF                      2회
+  E20260815-PERF2                     1회
+  E20260815-SENTINEL                  1회
+  E20260815-SPLIT2GTT                 4회
+  E20260818-PRICECHK1                 1회
+  E20260818-UPLOADBATCH               1회
+  E20260819-LIMITMEAS                 5회
+  E20260819-MULTIJOIN                10회
+  E20260819-PJTNAME                   4회
+  E20260819-SENDERJOIN                5회
+  E20260819-XLS81LOC                 16회
+  E20260820-AFSNULL                  11회 ⭐
+  E20260820-MEASRULE                  1회 ⭐
+  E20260820-SENTINELDDL              12회 ⭐
+  E20260820-XLSSAVEPERF               2회 ⭐
+  E20260820-XLSWEEKLY                14회 ⭐
+  E20260822-DIV81DEL                  2회 ⭐
+  E20260822-KEYCOL                    2회 ⭐
+  E20260822-LOCWEEKSUM                1회 ⭐
+  => 마커 30종 / BODY 14753줄
+
+========================================================================================================
+C. MSG/LBL/MNU 축 — FE 소스 + PKG BODY 코드 추출 → 메타 실존
+========================================================================================================
+FE 44 MSG / 30 LBL   +   BODY 3 MSG / 0 LBL
+  MSG(합집합 45) = ['MSG00001', 'MSG00002', 'MSG00004', 'MSG00012', 'MSG00043', 'MSG00079', 'MSG00097', 'MSG00108', 'MSG00113', 'MSG00133', 'MSG00137', 'MSG00142', 'MSG00164', 'MSG00227', 'MSG00255', 'MSG00259', 'MSG00260', 'MSG00283', 'MSG00330', 'MSG00408', 'MSG00409', 'MSG00429', 'MSG00449', 'MSG00454', 'MSG00455', 'MSG00456', 'MSG00464', 'MSG00476', 'MSG00618', 'MSG00662', 'MSG00666', 'MSG00667', 'MSG00668', 'MSG00669', 'MSG00670', 'MSG00671', 'MSG00672', 'MSG00688', 'MSG00689', 'MSG00702', 'MSG00703', 'MSG00705', 'MSG00718', 'MSG01014', 'MSG01023']
+  LBL(합집합 30) = ['LBL00001', 'LBL00080', 'LBL00090', 'LBL00111', 'LBL00112', 'LBL00346', 'LBL00503', 'LBL00605', 'LBL00608', 'LBL00617', 'LBL00627', 'LBL00632', 'LBL00661', 'LBL00662', 'LBL00663', 'LBL00664', 'LBL00665', 'LBL00669', 'LBL00682', 'LBL00683', 'LBL00684', 'LBL00687', 'LBL00689', 'LBL00710', 'LBL00712', 'LBL00741', 'LBL00762', 'LBL00763', 'LBL00764', 'LBL00765']
+
+  MSG/LBL 메타 테이블 = ['SCM_ADM_MSG_M']
+  SCM_ADM_MSG_M            키=MSG_ID   보유 39/45종  ⛔ 사내 미등록=['MSG00079', 'MSG00133', 'MSG00259', 'MSG00449', 'MSG00456', 'MSG00464']  ⭐20260820+ 갱신=['MSG00703', 'MSG00718', 'MSG01023']
+
+  -- MNU 축 (메뉴/버튼/권한) --
+  SCM_ADM_MNU_M                          1행
+  SCM_ADM_MNU_BTN_MPG_M                 18행
+  SCM_ADM_USER_GR_MNU_BTN_MPG_M        100행
+  SCM_ADM_USER_GR_MNU_MPG_M              6행
+
+========================================================================================================
+D. CMBO 축 — 메타(표시/편집) + FE 소스 → CMBO_SQL_M 실존 + 공유 판정
+========================================================================================================
+  메타 콤보 27종 = ['APPLICATION', 'BizType', 'BizTypeByDivision', 'CELL_PROD_SITE_ID', 'CUST_GROUP_DTL', 'CurrencyList', 'CustGroup', 'CustomsHandbook', 'DOM_EXP', 'DeptId', 'Division', 'EndCustomerByDivision40', 'EndCustomerByDivisionDMF0082', 'EndCustomerByDivisionDept', 'FCST_TYPE_NOT_FREE', 'FcstTypeByUserGroupDMF0082', 'FromSiteByDivision', 'ITEM', 'Incoterms', 'IncotermsEdit', 'ItemType', 'Measure', 'PROJECT', 'ROUTE', 'SiteByEndCustomer', 'SoldCustomer', 'YesOrNo']
+  FE 후보 23종 = ['AS_FROM_SITE', 'AsIncotermsEdit', 'BucketType', 'CELL_PROD_SITE_ID', 'CustomsHandbook', 'DefaultBucketDay', 'EndCustomer', 'EndCustomerByDivision', 'FcstPriceEditMeasure', 'FcstType', 'FcstTypeByUserGroupDMF0082', 'FcstTypeEditDMF0082', 'FcstTypeEditMode', 'FcstTypeWs', 'ProjectByDivision', 'SalesBucket', 'SalesSite', 'ScmSitebyEndCustomer40', 'SiteByEndCustomer', 'SiteEndCustomerMapDMF0082', 'TeambyDivision', 'UserSiteByEndCustomer', 'UserTeamByDivision']
+  APPLICATION                            USE=Y LUD=2026-07-02 23:24 소비화면=8  ⚠공유
+  AS_FROM_SITE                           USE=Y LUD=2026-07-02 23:24 소비화면=1
+  AsIncotermsEdit                        USE=Y LUD=2026-08-04 21:57 소비화면=0
+  BizType                                USE=Y LUD=2026-06-15 22:25 소비화면=2  ⚠공유
+  BizTypeByDivision                      USE=Y LUD=2026-07-23 21:36 소비화면=11  ⚠공유
+  BucketType                             USE=Y LUD=2026-02-20 15:50 소비화면=1
+  CELL_PROD_SITE_ID                      USE=Y LUD=2026-07-14 23:09 소비화면=3  ⚠공유
+  CUST_GROUP_DTL                         USE=Y LUD=2026-07-02 23:24 소비화면=7  ⚠공유
+  CurrencyList                           USE=Y LUD=2026-02-20 15:50 소비화면=7  ⚠공유
+  CustGroup                              USE=Y LUD=2026-02-20 15:50 소비화면=6  ⚠공유
+  CustomsHandbook                        USE=Y LUD=2026-07-03 14:19 소비화면=2  ⚠공유
+  DOM_EXP                                USE=Y LUD=2026-07-01 14:39 소비화면=9  ⚠공유
+  DefaultBucketDay                       USE=Y LUD=2026-08-08 09:16 소비화면=0
+  DeptId                                 USE=Y LUD=2026-07-02 23:24 소비화면=9  ⚠공유
+  Division                               USE=Y LUD=2026-08-11 11:35 소비화면=24  ⚠공유
+  EndCustomer                            USE=Y LUD=2026-08-18 16:34 소비화면=7  ⚠공유
+  EndCustomerByDivision                  USE=Y LUD=2026-07-23 19:36 소비화면=0
+  EndCustomerByDivision40                USE=Y LUD=2026-08-05 17:26 소비화면=10  ⚠공유
+  EndCustomerByDivisionDMF0082           USE=Y LUD=2026-08-18 17:53 소비화면=1
+  EndCustomerByDivisionDept              USE=Y LUD=2026-02-20 15:50 소비화면=23  ⚠공유
+  FCST_TYPE_NOT_FREE                     USE=Y LUD=2026-07-01 14:39 소비화면=2  ⚠공유
+  FcstPriceEditMeasure                   USE=Y LUD=2026-08-11 18:58 소비화면=0
+  FcstType                               USE=Y LUD=2026-07-23 20:57 소비화면=13  ⚠공유
+  FcstTypeByUserGroupDMF0082             USE=Y LUD=2026-08-19 23:42 소비화면=1
+  FcstTypeEditDMF0082                    USE=Y LUD=2026-08-19 23:42 소비화면=0
+  FcstTypeEditMode                       USE=Y LUD=2026-07-20 15:35 소비화면=0
+  FcstTypeWs                             USE=Y LUD=2026-07-20 15:35 소비화면=0
+  FromSiteByDivision                     USE=Y LUD=2026-07-02 23:24 소비화면=13  ⚠공유
+  Incoterms                              USE=Y LUD=2026-02-20 15:50 소비화면=26  ⚠공유
+  IncotermsEdit                          USE=Y LUD=2026-02-20 15:50 소비화면=4  ⚠공유
+  ItemType                               USE=Y LUD=2026-02-20 15:50 소비화면=13  ⚠공유
+  Measure                                USE=Y LUD=2026-07-13 14:16 소비화면=14  ⚠공유
+  ROUTE                                  USE=Y LUD=2026-07-02 23:24 소비화면=6  ⚠공유
+  SalesBucket                            USE=Y LUD=2026-07-20 23:05 소비화면=0
+  SalesSite                              USE=Y LUD=2026-02-20 15:50 소비화면=1
+  ScmSitebyEndCustomer40                 USE=Y LUD=2026-02-20 15:50 소비화면=4  ⚠공유
+  SiteByEndCustomer                      USE=Y LUD=2026-07-23 19:42 소비화면=19  ⚠공유
+  SiteEndCustomerMapDMF0082              USE=Y LUD=2026-08-18 17:53 소비화면=0
+  SoldCustomer                           USE=Y LUD=2026-02-13 12:05 소비화면=8  ⚠공유
+  TeambyDivision                         USE=Y LUD=2026-08-12 19:58 소비화면=8  ⚠공유
+  UserSiteByEndCustomer                  USE=Y LUD=2026-08-04 20:45 소비화면=0
+  UserTeamByDivision                     USE=Y LUD=2026-07-23 19:36 소비화면=0
+  YesOrNo                                USE=Y LUD=2026-02-20 15:50 소비화면=66  ⚠공유
+  => CMBO 실존 43종 (공유 27)
+
+결과 저장 -> C:\Projects\NSCM\_artifacts\_deploy_packages\DMF0082_CLOUD_20260823\_survey\axis_sweep_result.json

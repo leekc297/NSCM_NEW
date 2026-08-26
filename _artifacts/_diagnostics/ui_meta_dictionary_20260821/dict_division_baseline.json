@@ -1,0 +1,1214 @@
+{
+ "meta": {
+  "compare_attrs": [
+   "CELL_CONTROL_OBJECT_TYPE_CODE",
+   "CELL_COMBO_DATA_TYPE",
+   "VISIBLE_FLAG",
+   "COLUMN_LABEL_NAME"
+  ],
+  "division_id_blank": "DIVISION_ID 공란 = division 무관(전 division 공통)으로 판정",
+  "join_key": "COLUMN_NAME (division 접미 정규화: cfg.norm_col)",
+  "name_suffixes_stripped": [
+   "40"
+  ],
+  "rule": "division 마다 AS-IS 기준 화면을 달리 본다 (00_config.DIVISION_BASELINE)",
+  "snapshot": "2026-08-21",
+  "undecidable_attrs": [
+   "INPUT_TP_CD"
+  ],
+  "undecidable_why": "AS-IS INPUT_TP_CD 는 전행 'S' 라 비교 의미가 없다. AS-IS 의 편집 가능 여부는 .cs LockRange/LockColumn 에 있고 메타에 없다 — 판정 불가 축.",
+  "usage": "대조표다. 이 값으로 메타를 자동 INSERT 하지 않는다 (ui-category-setup-no-arbitrary-data 승계).",
+  "why": "TO-BE 가 AS-IS 보다 넓은 division 을 개방한 화면은 자기 AS-IS 에 그 division 의 동작 근거가 없다. DMF0082 = DMF0082.cs:L342 dtDivision.Select(\"CODE='40'\") 로 조회조건 40 단일 고정 → 81/82 기준은 AS-IS DMF0003(Mkt Fcst)."
+ },
+ "targets": {
+  "DMF0082": {
+   "join_key": "COLUMN_NAME (division 접미 정규화: cfg.norm_col)",
+   "mapping": {
+    "40": "DMF0003 / Mkt Fcst",
+    "81": "DMF0082 / FcstNPrice",
+    "81_HD": "DMF0082 / FcstNPrice",
+    "81_HG": "DMF0082 / FcstNPrice",
+    "81_HM": "DMF0082 / FcstNPrice",
+    "81_ST": "DMF0082 / FcstNPrice",
+    "81_UC": "DMF0082 / FcstNPrice",
+    "82": "DMF0082 / FcstNPrice"
+   },
+   "name_suffixes_stripped": [
+    "40"
+   ],
+   "per_division": {
+    "40": {
+     "attr_mismatch": [
+      {
+       "column": "CUST_GROUP",
+       "diff": {
+        "CELL_COMBO_DATA_TYPE": {
+         "baseline": "CUST_GROUP",
+         "tobe": "CustGroup"
+        }
+       }
+      },
+      {
+       "column": "END_CUSTOMER",
+       "diff": {
+        "CELL_COMBO_DATA_TYPE": {
+         "baseline": "EndCustomerByDivision40",
+         "tobe": "EndCustomerByDivisionDMF0082"
+        }
+       }
+      },
+      {
+       "column": "FCST_TYPE",
+       "diff": {
+        "CELL_COMBO_DATA_TYPE": {
+         "baseline": "FCST_TYPE_NOT_ETC",
+         "tobe": "FcstTypeByUserGroupDMF0082"
+        }
+       }
+      },
+      {
+       "column": "ITEM_ID",
+       "diff": {
+        "CELL_COMBO_DATA_TYPE": {
+         "baseline": "",
+         "tobe": "ITEM"
+        },
+        "CELL_CONTROL_OBJECT_TYPE_CODE": {
+         "baseline": "FPTextBox",
+         "tobe": "FPTextModal"
+        }
+       }
+      },
+      {
+       "column": "MEASURE",
+       "diff": {
+        "VISIBLE_FLAG": {
+         "baseline": "N",
+         "tobe": "Y"
+        }
+       }
+      },
+      {
+       "column": "TEAM_NAME_KO",
+       "diff": {
+        "VISIBLE_FLAG": {
+         "baseline": "N",
+         "tobe": "Y"
+        }
+       }
+      }
+     ],
+     "attr_undecidable": [
+      {
+       "column": "DOM_EXP",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      },
+      {
+       "column": "END_CUSTOMER",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      },
+      {
+       "column": "FCST_TYPE",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      },
+      {
+       "column": "INCOTERMS",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      },
+      {
+       "column": "ITEM_ID",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      },
+      {
+       "column": "MEASURE",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      },
+      {
+       "column": "SCM_SITE_ID",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      }
+     ],
+     "baseline_columns": 49,
+     "baseline_source": "DMF0003 / Mkt Fcst",
+     "missing_vs_baseline": [
+      "FORECAST_INFO_PRODUCT_GROUP"
+     ],
+     "search_condition_note": "",
+     "search_conditions_unusable": [
+      "Div.",
+      "MKT FCST 미등록 제외 (표준명 외 — 체크박스, Invalid)",
+      "PJT",
+      "Plant Site",
+      "Sender Code"
+     ],
+     "search_conditions_usable": [
+      "Active(YesOrNo) — AS 체크",
+      "Biz. Type",
+      "Bucket",
+      "Cell Qty (표준명 외 — 체크박스)",
+      "Color (표준명 외 — 체크박스)",
+      "End Customer",
+      "Item Type",
+      "Model/Nickname",
+      "Owner",
+      "Period",
+      "Qty≥0 (표준명 외 — 체크박스)",
+      "Sales Site",
+      "Sum (표준명 외 — 체크박스)",
+      "Team"
+     ],
+     "self_source": false,
+     "tobe_columns": 52,
+     "tobe_only": [
+      "AS_FROM_SITE",
+      "CELL_PROD_SITE_ID",
+      "CURRENCY",
+      "VERSION_NO"
+     ]
+    },
+    "81": {
+     "attr_mismatch": [
+      {
+       "column": "CURRENCY",
+       "diff": {
+        "CELL_COMBO_DATA_TYPE": {
+         "baseline": "CURRENCY_LIST",
+         "tobe": "CurrencyList"
+        }
+       }
+      },
+      {
+       "column": "FCST_TYPE",
+       "diff": {
+        "CELL_COMBO_DATA_TYPE": {
+         "baseline": "FCST_TYPE_NOT_ETC",
+         "tobe": "FcstTypeByUserGroupDMF0082"
+        }
+       }
+      },
+      {
+       "column": "MEASURE",
+       "diff": {
+        "VISIBLE_FLAG": {
+         "baseline": "N",
+         "tobe": "Y"
+        }
+       }
+      },
+      {
+       "column": "VERSION_NO",
+       "diff": {
+        "VISIBLE_FLAG": {
+         "baseline": "N",
+         "tobe": "Y"
+        }
+       }
+      }
+     ],
+     "attr_undecidable": [
+      {
+       "column": "AS_FROM_SITE",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      },
+      {
+       "column": "CURRENCY",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      },
+      {
+       "column": "DOM_EXP",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      },
+      {
+       "column": "FCST_TYPE",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      },
+      {
+       "column": "INCOTERMS",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      },
+      {
+       "column": "MEASURE",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      }
+     ],
+     "baseline_columns": 23,
+     "baseline_source": "DMF0082 / FcstNPrice",
+     "missing_vs_baseline": [],
+     "search_condition_note": "",
+     "search_conditions_unusable": [
+      "Div.",
+      "Owner",
+      "PJT",
+      "Plant Site",
+      "Sender Code"
+     ],
+     "search_conditions_usable": [
+      "Biz. Type",
+      "Bucket",
+      "End Customer",
+      "Model/Nickname",
+      "Period",
+      "Qty≥0(체크)",
+      "Sales Site",
+      "Sum(체크)",
+      "Team",
+      "Ver."
+     ],
+     "self_source": true,
+     "tobe_columns": 45,
+     "tobe_only": [
+      "AS_YN",
+      "BIZ_TYPE",
+      "CELL_PER_CAR",
+      "CELL_PER_MODULE",
+      "DEPT_ID",
+      "DEPT_NAME",
+      "DEPT_NAME_KO",
+      "DIVISION_ID",
+      "END_CUSTOMER",
+      "GROUP_ID",
+      "ITEM_ID",
+      "MODULE_PER_CAR",
+      "NEW_FLAG",
+      "PLANT_SITE_ID",
+      "PROJECT_CODE",
+      "PROJECT_NAME",
+      "PROJECT_OWNER",
+      "PROJECT_STATUS",
+      "PROJECT_S_OP_REPORT",
+      "SCM_SITE_ID",
+      "TEAM_NAME_KO",
+      "VMI_STD_DIO"
+     ]
+    },
+    "81_HD": {
+     "attr_mismatch": [
+      {
+       "column": "CURRENCY",
+       "diff": {
+        "CELL_COMBO_DATA_TYPE": {
+         "baseline": "CURRENCY_LIST",
+         "tobe": "CurrencyList"
+        }
+       }
+      },
+      {
+       "column": "FCST_TYPE",
+       "diff": {
+        "CELL_COMBO_DATA_TYPE": {
+         "baseline": "FCST_TYPE_NOT_ETC",
+         "tobe": "FcstTypeByUserGroupDMF0082"
+        }
+       }
+      },
+      {
+       "column": "MEASURE",
+       "diff": {
+        "VISIBLE_FLAG": {
+         "baseline": "N",
+         "tobe": "Y"
+        }
+       }
+      },
+      {
+       "column": "VERSION_NO",
+       "diff": {
+        "VISIBLE_FLAG": {
+         "baseline": "N",
+         "tobe": "Y"
+        }
+       }
+      }
+     ],
+     "attr_undecidable": [
+      {
+       "column": "AS_FROM_SITE",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      },
+      {
+       "column": "CURRENCY",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      },
+      {
+       "column": "DOM_EXP",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      },
+      {
+       "column": "FCST_TYPE",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      },
+      {
+       "column": "INCOTERMS",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      },
+      {
+       "column": "MEASURE",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      }
+     ],
+     "baseline_columns": 23,
+     "baseline_source": "DMF0082 / FcstNPrice",
+     "missing_vs_baseline": [],
+     "search_condition_note": "",
+     "search_conditions_unusable": [
+      "Div.",
+      "Owner",
+      "PJT",
+      "Plant Site",
+      "Sender Code"
+     ],
+     "search_conditions_usable": [
+      "Biz. Type",
+      "Bucket",
+      "End Customer",
+      "Model/Nickname",
+      "Period",
+      "Qty≥0(체크)",
+      "Sales Site",
+      "Sum(체크)",
+      "Team",
+      "Ver."
+     ],
+     "self_source": true,
+     "tobe_columns": 44,
+     "tobe_only": [
+      "AS_YN",
+      "BIZ_TYPE",
+      "CELL_PER_CAR",
+      "CELL_PER_MODULE",
+      "DEPT_ID",
+      "DEPT_NAME_KO",
+      "DIVISION_ID",
+      "END_CUSTOMER",
+      "GROUP_ID",
+      "ITEM_ID",
+      "MODULE_PER_CAR",
+      "NEW_FLAG",
+      "PLANT_SITE_ID",
+      "PROJECT_CODE",
+      "PROJECT_NAME",
+      "PROJECT_OWNER",
+      "PROJECT_STATUS",
+      "PROJECT_S_OP_REPORT",
+      "SCM_SITE_ID",
+      "TEAM_NAME_KO",
+      "VMI_STD_DIO"
+     ]
+    },
+    "81_HG": {
+     "attr_mismatch": [
+      {
+       "column": "CURRENCY",
+       "diff": {
+        "CELL_COMBO_DATA_TYPE": {
+         "baseline": "CURRENCY_LIST",
+         "tobe": "CurrencyList"
+        }
+       }
+      },
+      {
+       "column": "FCST_TYPE",
+       "diff": {
+        "CELL_COMBO_DATA_TYPE": {
+         "baseline": "FCST_TYPE_NOT_ETC",
+         "tobe": "FcstTypeByUserGroupDMF0082"
+        }
+       }
+      },
+      {
+       "column": "MEASURE",
+       "diff": {
+        "VISIBLE_FLAG": {
+         "baseline": "N",
+         "tobe": "Y"
+        }
+       }
+      },
+      {
+       "column": "VERSION_NO",
+       "diff": {
+        "VISIBLE_FLAG": {
+         "baseline": "N",
+         "tobe": "Y"
+        }
+       }
+      }
+     ],
+     "attr_undecidable": [
+      {
+       "column": "AS_FROM_SITE",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      },
+      {
+       "column": "CURRENCY",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      },
+      {
+       "column": "DOM_EXP",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      },
+      {
+       "column": "FCST_TYPE",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      },
+      {
+       "column": "INCOTERMS",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      },
+      {
+       "column": "MEASURE",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      }
+     ],
+     "baseline_columns": 23,
+     "baseline_source": "DMF0082 / FcstNPrice",
+     "missing_vs_baseline": [],
+     "search_condition_note": "",
+     "search_conditions_unusable": [
+      "Div.",
+      "Owner",
+      "PJT",
+      "Plant Site",
+      "Sender Code"
+     ],
+     "search_conditions_usable": [
+      "Biz. Type",
+      "Bucket",
+      "End Customer",
+      "Model/Nickname",
+      "Period",
+      "Qty≥0(체크)",
+      "Sales Site",
+      "Sum(체크)",
+      "Team",
+      "Ver."
+     ],
+     "self_source": true,
+     "tobe_columns": 44,
+     "tobe_only": [
+      "AS_YN",
+      "BIZ_TYPE",
+      "CELL_PER_CAR",
+      "CELL_PER_MODULE",
+      "DEPT_ID",
+      "DEPT_NAME_KO",
+      "DIVISION_ID",
+      "END_CUSTOMER",
+      "GROUP_ID",
+      "ITEM_ID",
+      "MODULE_PER_CAR",
+      "NEW_FLAG",
+      "PLANT_SITE_ID",
+      "PROJECT_CODE",
+      "PROJECT_NAME",
+      "PROJECT_OWNER",
+      "PROJECT_STATUS",
+      "PROJECT_S_OP_REPORT",
+      "SCM_SITE_ID",
+      "TEAM_NAME_KO",
+      "VMI_STD_DIO"
+     ]
+    },
+    "81_HM": {
+     "attr_mismatch": [
+      {
+       "column": "CURRENCY",
+       "diff": {
+        "CELL_COMBO_DATA_TYPE": {
+         "baseline": "CURRENCY_LIST",
+         "tobe": "CurrencyList"
+        }
+       }
+      },
+      {
+       "column": "FCST_TYPE",
+       "diff": {
+        "CELL_COMBO_DATA_TYPE": {
+         "baseline": "FCST_TYPE_NOT_ETC",
+         "tobe": "FcstTypeByUserGroupDMF0082"
+        }
+       }
+      },
+      {
+       "column": "MEASURE",
+       "diff": {
+        "VISIBLE_FLAG": {
+         "baseline": "N",
+         "tobe": "Y"
+        }
+       }
+      },
+      {
+       "column": "VERSION_NO",
+       "diff": {
+        "VISIBLE_FLAG": {
+         "baseline": "N",
+         "tobe": "Y"
+        }
+       }
+      }
+     ],
+     "attr_undecidable": [
+      {
+       "column": "AS_FROM_SITE",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      },
+      {
+       "column": "CURRENCY",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      },
+      {
+       "column": "DOM_EXP",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      },
+      {
+       "column": "FCST_TYPE",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      },
+      {
+       "column": "INCOTERMS",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      },
+      {
+       "column": "MEASURE",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      }
+     ],
+     "baseline_columns": 23,
+     "baseline_source": "DMF0082 / FcstNPrice",
+     "missing_vs_baseline": [],
+     "search_condition_note": "",
+     "search_conditions_unusable": [
+      "Div.",
+      "Owner",
+      "PJT",
+      "Plant Site",
+      "Sender Code"
+     ],
+     "search_conditions_usable": [
+      "Biz. Type",
+      "Bucket",
+      "End Customer",
+      "Model/Nickname",
+      "Period",
+      "Qty≥0(체크)",
+      "Sales Site",
+      "Sum(체크)",
+      "Team",
+      "Ver."
+     ],
+     "self_source": true,
+     "tobe_columns": 44,
+     "tobe_only": [
+      "AS_YN",
+      "BIZ_TYPE",
+      "CELL_PER_CAR",
+      "CELL_PER_MODULE",
+      "DEPT_ID",
+      "DEPT_NAME_KO",
+      "DIVISION_ID",
+      "END_CUSTOMER",
+      "GROUP_ID",
+      "ITEM_ID",
+      "MODULE_PER_CAR",
+      "NEW_FLAG",
+      "PLANT_SITE_ID",
+      "PROJECT_CODE",
+      "PROJECT_NAME",
+      "PROJECT_OWNER",
+      "PROJECT_STATUS",
+      "PROJECT_S_OP_REPORT",
+      "SCM_SITE_ID",
+      "TEAM_NAME_KO",
+      "VMI_STD_DIO"
+     ]
+    },
+    "81_ST": {
+     "attr_mismatch": [
+      {
+       "column": "CURRENCY",
+       "diff": {
+        "CELL_COMBO_DATA_TYPE": {
+         "baseline": "CURRENCY_LIST",
+         "tobe": "CurrencyList"
+        }
+       }
+      },
+      {
+       "column": "FCST_TYPE",
+       "diff": {
+        "CELL_COMBO_DATA_TYPE": {
+         "baseline": "FCST_TYPE_NOT_ETC",
+         "tobe": "FcstTypeByUserGroupDMF0082"
+        }
+       }
+      },
+      {
+       "column": "MEASURE",
+       "diff": {
+        "VISIBLE_FLAG": {
+         "baseline": "N",
+         "tobe": "Y"
+        }
+       }
+      },
+      {
+       "column": "VERSION_NO",
+       "diff": {
+        "VISIBLE_FLAG": {
+         "baseline": "N",
+         "tobe": "Y"
+        }
+       }
+      }
+     ],
+     "attr_undecidable": [
+      {
+       "column": "AS_FROM_SITE",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      },
+      {
+       "column": "CURRENCY",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      },
+      {
+       "column": "DOM_EXP",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      },
+      {
+       "column": "FCST_TYPE",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      },
+      {
+       "column": "INCOTERMS",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      },
+      {
+       "column": "MEASURE",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      }
+     ],
+     "baseline_columns": 23,
+     "baseline_source": "DMF0082 / FcstNPrice",
+     "missing_vs_baseline": [],
+     "search_condition_note": "",
+     "search_conditions_unusable": [
+      "Div.",
+      "Owner",
+      "PJT",
+      "Plant Site",
+      "Sender Code"
+     ],
+     "search_conditions_usable": [
+      "Biz. Type",
+      "Bucket",
+      "End Customer",
+      "Model/Nickname",
+      "Period",
+      "Qty≥0(체크)",
+      "Sales Site",
+      "Sum(체크)",
+      "Team",
+      "Ver."
+     ],
+     "self_source": true,
+     "tobe_columns": 44,
+     "tobe_only": [
+      "AS_YN",
+      "BIZ_TYPE",
+      "CELL_PER_CAR",
+      "CELL_PER_MODULE",
+      "DEPT_ID",
+      "DEPT_NAME_KO",
+      "DIVISION_ID",
+      "END_CUSTOMER",
+      "GROUP_ID",
+      "ITEM_ID",
+      "MODULE_PER_CAR",
+      "NEW_FLAG",
+      "PLANT_SITE_ID",
+      "PROJECT_CODE",
+      "PROJECT_NAME",
+      "PROJECT_OWNER",
+      "PROJECT_STATUS",
+      "PROJECT_S_OP_REPORT",
+      "SCM_SITE_ID",
+      "TEAM_NAME_KO",
+      "VMI_STD_DIO"
+     ]
+    },
+    "81_UC": {
+     "attr_mismatch": [
+      {
+       "column": "CURRENCY",
+       "diff": {
+        "CELL_COMBO_DATA_TYPE": {
+         "baseline": "CURRENCY_LIST",
+         "tobe": "CurrencyList"
+        }
+       }
+      },
+      {
+       "column": "FCST_TYPE",
+       "diff": {
+        "CELL_COMBO_DATA_TYPE": {
+         "baseline": "FCST_TYPE_NOT_ETC",
+         "tobe": "FcstTypeByUserGroupDMF0082"
+        }
+       }
+      },
+      {
+       "column": "MEASURE",
+       "diff": {
+        "VISIBLE_FLAG": {
+         "baseline": "N",
+         "tobe": "Y"
+        }
+       }
+      },
+      {
+       "column": "VERSION_NO",
+       "diff": {
+        "VISIBLE_FLAG": {
+         "baseline": "N",
+         "tobe": "Y"
+        }
+       }
+      }
+     ],
+     "attr_undecidable": [
+      {
+       "column": "AS_FROM_SITE",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      },
+      {
+       "column": "CURRENCY",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      },
+      {
+       "column": "DOM_EXP",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      },
+      {
+       "column": "FCST_TYPE",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      },
+      {
+       "column": "INCOTERMS",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      },
+      {
+       "column": "MEASURE",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      }
+     ],
+     "baseline_columns": 23,
+     "baseline_source": "DMF0082 / FcstNPrice",
+     "missing_vs_baseline": [],
+     "search_condition_note": "",
+     "search_conditions_unusable": [
+      "Div.",
+      "Owner",
+      "PJT",
+      "Plant Site",
+      "Sender Code"
+     ],
+     "search_conditions_usable": [
+      "Biz. Type",
+      "Bucket",
+      "End Customer",
+      "Model/Nickname",
+      "Period",
+      "Qty≥0(체크)",
+      "Sales Site",
+      "Sum(체크)",
+      "Team",
+      "Ver."
+     ],
+     "self_source": true,
+     "tobe_columns": 44,
+     "tobe_only": [
+      "AS_YN",
+      "BIZ_TYPE",
+      "CELL_PER_CAR",
+      "CELL_PER_MODULE",
+      "DEPT_ID",
+      "DEPT_NAME_KO",
+      "DIVISION_ID",
+      "END_CUSTOMER",
+      "GROUP_ID",
+      "ITEM_ID",
+      "MODULE_PER_CAR",
+      "NEW_FLAG",
+      "PLANT_SITE_ID",
+      "PROJECT_CODE",
+      "PROJECT_NAME",
+      "PROJECT_OWNER",
+      "PROJECT_STATUS",
+      "PROJECT_S_OP_REPORT",
+      "SCM_SITE_ID",
+      "TEAM_NAME_KO",
+      "VMI_STD_DIO"
+     ]
+    },
+    "82": {
+     "attr_mismatch": [
+      {
+       "column": "CURRENCY",
+       "diff": {
+        "CELL_COMBO_DATA_TYPE": {
+         "baseline": "CURRENCY_LIST",
+         "tobe": "CurrencyList"
+        }
+       }
+      },
+      {
+       "column": "FCST_TYPE",
+       "diff": {
+        "CELL_COMBO_DATA_TYPE": {
+         "baseline": "FCST_TYPE_NOT_ETC",
+         "tobe": "FcstTypeByUserGroupDMF0082"
+        }
+       }
+      },
+      {
+       "column": "MEASURE",
+       "diff": {
+        "VISIBLE_FLAG": {
+         "baseline": "N",
+         "tobe": "Y"
+        }
+       }
+      },
+      {
+       "column": "VERSION_NO",
+       "diff": {
+        "VISIBLE_FLAG": {
+         "baseline": "N",
+         "tobe": "Y"
+        }
+       }
+      }
+     ],
+     "attr_undecidable": [
+      {
+       "column": "AS_FROM_SITE",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      },
+      {
+       "column": "CURRENCY",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      },
+      {
+       "column": "DOM_EXP",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      },
+      {
+       "column": "FCST_TYPE",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      },
+      {
+       "column": "INCOTERMS",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      },
+      {
+       "column": "MEASURE",
+       "diff": {
+        "INPUT_TP_CD": {
+         "baseline": "S",
+         "tobe": "IO"
+        }
+       }
+      }
+     ],
+     "baseline_columns": 22,
+     "baseline_source": "DMF0082 / FcstNPrice",
+     "missing_vs_baseline": [],
+     "search_condition_note": "",
+     "search_conditions_unusable": [
+      "Div.",
+      "Owner",
+      "PJT",
+      "Plant Site",
+      "Sender Code"
+     ],
+     "search_conditions_usable": [
+      "Biz. Type",
+      "Bucket",
+      "End Customer",
+      "Model/Nickname",
+      "Period",
+      "Qty≥0(체크)",
+      "Sales Site",
+      "Sum(체크)",
+      "Team",
+      "Ver."
+     ],
+     "self_source": true,
+     "tobe_columns": 40,
+     "tobe_only": [
+      "AS_YN",
+      "ATTR1",
+      "BIZ_TYPE",
+      "CELL_QUANTITY",
+      "DIVISION_ID",
+      "END_CUSTOMER",
+      "ENERGE",
+      "ITEM_ID",
+      "NEW_FLAG",
+      "PROJECT_CODE",
+      "PROJECT_NAME",
+      "PROJECT_OWNER",
+      "PROJECT_STATUS",
+      "PROJECT_S_OP_REPORT",
+      "SCM_SITE_ID",
+      "SENDER_NAME",
+      "TEAM_NAME_KO",
+      "VMI_STD_DIO"
+     ]
+    }
+   },
+   "target_sheet": "FcstNPrice"
+  }
+ }
+}

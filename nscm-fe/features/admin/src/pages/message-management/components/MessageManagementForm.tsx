@@ -1,11 +1,10 @@
+import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { FormItem, InputField } from '@shared/lges';
 import { Grid } from '@shared/mui';
 
 import { useMessageManagementStore } from '../useMessageManagementStore';
-
-import styles from './MessageManagementForm.module.scss';
 
 export const MessageManagementForm = () => {
   const { t } = useTranslation();
@@ -26,11 +25,10 @@ export const MessageManagementForm = () => {
       isHidden={!isOpenSearchArea}
       conditions={
         <>
-          <Grid size={4}>
+          <Grid size={3}>
             <FormItem
               label={t('LBL00052', '_Type')}
               labelAlign='right'
-              labelSize='long'
               render={() => (
                 <CustomDropdown
                   multiple
@@ -47,10 +45,10 @@ export const MessageManagementForm = () => {
                   }}
                 />
               )}
-              className={styles.formItem}
+              className={commonStyles.formItem}
             />
           </Grid>
-          <Grid size={4}>
+          <Grid size={3}>
             <FormItem
               label={t('MNU00060', '_Message')}
               labelAlign='right'
@@ -61,15 +59,13 @@ export const MessageManagementForm = () => {
                   onChange={event => setSearchParams({ message: event.target.value })}
                 />
               )}
-              labelSize='long'
-              className={styles.formItem}
+              className={commonStyles.formItem}
             />
           </Grid>
-          <Grid size={4}>
+          <Grid size={3}>
             <FormItem
               label={t('LBL00007', '_Active')}
               labelAlign='right'
-              labelSize='long'
               render={() => (
                 <CustomDropdown
                   isInput={false}
@@ -86,7 +82,7 @@ export const MessageManagementForm = () => {
                   }}
                 />
               )}
-              className={styles.formItem}
+              className={commonStyles.formItem}
             />
           </Grid>
         </>

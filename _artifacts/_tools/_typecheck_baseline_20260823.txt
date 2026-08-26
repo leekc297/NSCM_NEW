@@ -1,0 +1,381 @@
+﻿
+@admin:type-check: src/pages/dynamic-query/components/DynamicQueryEditModal.tsx(31,3): error TS2305: Module '"../dynami
+c-query.types"' has no exported member 'ValidateColumnRow'.
+@admin:type-check: src/pages/dynamic-query/useDynamicQuerySave.ts(16,3): error TS2305: Module '"./dynamic-query.types"'
+ has no exported member 'PendingModalColumnRow'.
+@admin:type-check: src/pages/dynamic-query/useDynamicQuerySave.ts(17,3): error TS2305: Module '"./dynamic-query.types"'
+ has no exported member 'PendingModalConditionRow'.
+@admin:type-check: src/pages/dynamic-query/useDynamicQuerySave.ts(18,3): error TS2305: Module '"./dynamic-query.types"'
+ has no exported member 'PendingQueryMeta'.
+@admin:type-check: src/pages/dynamic-query/useDynamicQuerySave.ts(73,55): error TS2339: Property 'selectedQueryId' does
+ not exist on type 'DynamicQueryState & DynamicQueryAction'.
+@admin:type-check: src/pages/dynamic-query/useDynamicQuerySave.ts(74,53): error TS2339: Property 'roleSelection' does n
+ot exist on type 'DynamicQueryState & DynamicQueryAction'.
+@admin:type-check: src/pages/dynamic-query/useDynamicQuerySave.ts(75,52): error TS2339: Property 'roleOriginal' does no
+t exist on type 'DynamicQueryState & DynamicQueryAction'.
+@admin:type-check: src/pages/dynamic-query/useDynamicQuerySave.ts(76,58): error TS2339: Property 'setSelectedQueryId' d
+oes not exist on type 'DynamicQueryState & DynamicQueryAction'.
+@admin:type-check: src/pages/dynamic-query/useDynamicQuerySave.ts(132,28): error TS7006: Parameter 'r' implicitly has a
+n 'any' type.
+@admin:type-check: src/pages/dynamic-query/useDynamicQuerySave.ts(274,46): error TS7006: Parameter 'r' implicitly has a
+n 'any' type.
+@admin:type-check: src/pages/dynamic-query/useDynamicQuerySave.ts(275,47): error TS7006: Parameter 'r' implicitly has a
+n 'any' type.
+@admin:type-check: src/pages/dynamic-query/useDynamicQuerySave.ts(277,26): error TS7006: Parameter 'g' implicitly has a
+n 'any' type.
+@admin:type-check: src/pages/dynamic-query/useDynamicQuerySave.ts(278,28): error TS7006: Parameter 'g' implicitly has a
+n 'any' type.
+@admin:type-check: src/pages/lookup/lookup.utils.test.ts(3,54): error TS2305: Module '"./lookup.utils"' has no exported
+ member 'toDetailSaveRow'.
+@report:type-check: src/pages/demand-plan-waterfall/components/DemandPlanWaterfallGrid.tsx(7,3): error TS2305: Module '
+"@shared/components"' has no exported member 'OlapPivotGrid'.
+@report:type-check: src/pages/demand-plan-waterfall/components/DemandPlanWaterfallGrid.tsx(8,3): error TS2305: Module '
+"@shared/components"' has no exported member 'unpivotWideRows'.
+@report:type-check: src/pages/demand-plan-waterfall/components/DemandPlanWaterfallGrid.tsx(9,8): error TS2305: Module '
+"@shared/components"' has no exported member 'OlapFieldDef'.
+@report:type-check: src/pages/demand-plan-waterfall/components/DemandPlanWaterfallGrid.tsx(10,8): error TS2305: Module 
+'"@shared/components"' has no exported member 'OlapPivotGridRef'.
+@report:type-check: src/pages/demand-plan-waterfall/components/DemandPlanWaterfallGrid.tsx(154,21): error TS7006: Param
+eter 'row' implicitly has an 'any' type.
+@report:type-check: src/pages/demand-plan-waterfall/components/OlapLayoutModal.tsx(4,45): error TS2305: Module '"@share
+d/components"' has no exported member 'OlapPivotGridRef'.
+@report:type-check: src/pages/demand-plan-waterfall/DemandPlanWaterfall.tsx(8,36): error TS2305: Module '"@shared/compo
+nents"' has no exported member 'OlapPivotGridRef'.
+@sdm:type-check: src/components/project-reg.authPopup.test.ts(30,56): error TS2345: Argument of type 'unknown' is not a
+ssignable to parameter of type 'Pick<unknown, "USER_ID" | "DEPT_ID" | "USER_NAME" | "JOB_CODE" | "JOB_NAME" | "DEPT_NAM
+E"> & { DPJT_KEY?: string | undefined; }'.
+@sdm:type-check: src/components/project-reg.authPopup.test.ts(56,33): error TS18046: 'x' is of type 'unknown'.
+@sdm:type-check: src/components/project-reg.authPopup.test.ts(82,33): error TS18046: 'x' is of type 'unknown'.
+@sdm:type-check: src/components/project-reg.authPopup.test.ts(104,35): error TS18046: 'x' is of type 'unknown'.
+@sdm:type-check: src/components/project-reg.authPopup.test.ts(108,34): error TS18046: 'x' is of type 'unknown'.
+@sdm:type-check: src/components/project-reg.authPopup.test.ts(125,33): error TS18046: 'x' is of type 'unknown'.
+@sdm:type-check: src/components/project-reg.authPopup.test.ts(132,32): error TS18046: 'x' is of type 'unknown'.
+@sdm:type-check: src/components/project-reg.authPopup.ts(41,24): error TS2344: Type '"USER_ID" | "DEPT_ID" | "USER_NAME
+" | "JOB_CODE" | "JOB_NAME" | "DEPT_NAME"' does not satisfy the constraint 'never'.
+@sdm:type-check: src/components/project-reg.authPopup.ts(66,39): error TS2345: Argument of type '(row: { USER_ID?: unkn
+own; }) => string' is not assignable to parameter of type '(value: unknown, index: number, array: unknown[]) => string'
+.
+@sdm:type-check: src/components/project-reg.authPopup.ts(67,43): error TS2345: Argument of type 'unknown' is not assign
+able to parameter of type '{ USER_ID?: unknown; }'.
+@sdm:type-check: src/components/project-reg.authPopup.ts(70,57): error TS2345: Argument of type 'unknown' is not assign
+able to parameter of type 'Pick<unknown, "USER_ID" | "DEPT_ID" | "USER_NAME" | "JOB_CODE" | "JOB_NAME" | "DEPT_NAME"> &
+ { DPJT_KEY?: string | undefined; }'.
+@sdm:type-check: src/components/project-reg.authPopup.ts(116,35): error TS2345: Argument of type '(row: { USER_ID?: unk
+nown; }) => string' is not assignable to parameter of type '(value: unknown, index: number, array: unknown[]) => string
+'.
+@sdm:type-check: src/components/project-reg.authPopup.ts(117,44): error TS2345: Argument of type 'unknown' is not assig
+nable to parameter of type '{ USER_ID?: unknown; }'.
+@sdm:type-check: src/components/project-reg.authPopup.ts(139,26): error TS2345: Argument of type 'unknown' is not assig
+nable to parameter of type '{ USER_ID?: unknown; }'.
+@sdm:type-check: src/components/project-reg.authPopup.ts(155,31): error TS2345: Argument of type 'unknown' is not assig
+nable to parameter of type '{ USER_ID?: unknown; }'.
+@sdm:type-check: src/components/project-reg.authPopup.ts(159,39): error TS2345: Argument of type 'unknown' is not assig
+nable to parameter of type 'Pick<unknown, "USER_ID" | "DEPT_ID" | "USER_NAME" | "JOB_CODE" | "JOB_NAME" | "DEPT_NAME"> 
+& { DPJT_KEY?: string | undefined; }'.
+@sdm:type-check: src/components/project-reg.authPopup.ts(175,23): error TS2345: Argument of type 'unknown' is not assig
+nable to parameter of type '{ USER_ID?: unknown; }'.
+@sdm:type-check: src/components/ProjectAuthRegModal.tsx(136,55): error TS2344: Type 'SHEETS.POP1_TREE' does not satisfy
+ the constraint '"project" | "myProject" | "popupOrg" | "popupUser" | "popupAuthWrite" | "popupAuthRead" | "popupAuthRe
+q" | "popupMyWork"'.
+@sdm:type-check: src/components/ProjectAuthRegModal.tsx(143,55): error TS2344: Type 'SHEETS.POP1_GRID1' does not satisf
+y the constraint '"project" | "myProject" | "popupOrg" | "popupUser" | "popupAuthWrite" | "popupAuthRead" | "popupAuthR
+eq" | "popupMyWork"'.
+@sdm:type-check: src/components/ProjectAuthRegModal.tsx(152,56): error TS2344: Type 'SHEETS.POP1_GRID2' does not satisf
+y the constraint '"project" | "myProject" | "popupOrg" | "popupUser" | "popupAuthWrite" | "popupAuthRead" | "popupAuthR
+eq" | "popupMyWork"'.
+@sdm:type-check: src/components/ProjectAuthRegModal.tsx(161,55): error TS2344: Type 'SHEETS.POP1_GRID3' does not satisf
+y the constraint '"project" | "myProject" | "popupOrg" | "popupUser" | "popupAuthWrite" | "popupAuthRead" | "popupAuthR
+eq" | "popupMyWork"'.
+@sdm:type-check: src/components/ProjectAuthRegModal.tsx(170,54): error TS2344: Type 'SHEETS.POP1_GRID4' does not satisf
+y the constraint '"project" | "myProject" | "popupOrg" | "popupUser" | "popupAuthWrite" | "popupAuthRead" | "popupAuthR
+eq" | "popupMyWork"'.
+@sdm:type-check: src/components/ProjectAuthRegModal.tsx(181,29): error TS2339: Property 'data' does not exist on type '
+ProcResponse<"SDM1010", SHEETS.POP1_GRID2>'.
+@sdm:type-check: src/components/ProjectAuthRegModal.tsx(184,27): error TS2339: Property 'data' does not exist on type '
+ProcResponse<"SDM1010", SHEETS.POP1_GRID3>'.
+@sdm:type-check: src/components/ProjectAuthRegModal.tsx(188,73): error TS2339: Property 'data' does not exist on type '
+ProcResponse<"SDM1010", SHEETS.POP1_GRID1>'.
+@sdm:type-check: src/components/ProjectAuthRegModal.tsx(191,56): error TS2339: Property 'data' does not exist on type '
+ProcResponse<"SDM1010", SHEETS.POP1_GRID4>'.
+@sdm:type-check: src/components/ProjectAuthRegModal.tsx(213,42): error TS2339: Property 'data' does not exist on type '
+ProcResponse<"SDM1010", SHEETS.POP1_TREE>'.
+@sdm:type-check: src/components/ProjectAuthRegModal.tsx(216,25): error TS18046: 'r' is of type 'unknown'.
+@sdm:type-check: src/components/ProjectAuthRegModal.tsx(217,54): error TS18046: 'r' is of type 'unknown'.
+@sdm:type-check: src/components/ProjectAuthRegModal.tsx(221,36): error TS18046: 'r' is of type 'unknown'.
+@sdm:type-check: src/components/ProjectAuthRegModal.tsx(223,38): error TS18046: 'r' is of type 'unknown'.
+@sdm:type-check: src/components/ProjectAuthRegModal.tsx(340,34): error TS2339: Property 'USER_ID' does not exist on typ
+e '{}'.
+@sdm:type-check: src/components/ProjectAuthRegModal.tsx(345,40): error TS2339: Property 'DPJT_AUTH_STATUS' does not exi
+st on type '{}'.
+@sdm:type-check: src/components/ProjectAuthRegModal.tsx(382,55): error TS18046: 'r' is of type 'unknown'.
+@sdm:type-check: src/components/ProjectAuthRegModal.tsx(420,60): error TS2339: Property 'data' does not exist on type '
+ProcResponse<"SDM1010", SHEETS.POP1_GRID2>'.
+@sdm:type-check: src/components/ProjectAuthRegModal.tsx(421,57): error TS2339: Property 'data' does not exist on type '
+ProcResponse<"SDM1010", SHEETS.POP1_GRID3>'.
+@sdm:type-check: src/components/ProjectAuthRegModal.tsx(536,27): error TS2344: Type 'unknown' does not satisfy the cons
+traint 'WijmoRowItem'.
+@sdm:type-check: src/components/ProjectAuthRegModal.tsx(557,29): error TS2344: Type 'unknown' does not satisfy the cons
+traint 'WijmoRowItem'.
+@sdm:type-check: src/components/ProjectAuthRegModal.tsx(582,29): error TS2344: Type 'unknown' does not satisfy the cons
+traint 'WijmoRowItem'.
+@sdm:type-check: src/components/ProjectAuthRegModal.tsx(598,29): error TS2344: Type 'unknown' does not satisfy the cons
+traint 'WijmoRowItem'.
+@sdm:type-check: src/pages/project-reg/components/modals/MyWorkModal.tsx(44,45): error TS2344: Type 'SHEETS.POP2_GRID5'
+ does not satisfy the constraint '"project" | "myProject" | "popupOrg" | "popupUser" | "popupAuthWrite" | "popupAuthRea
+d" | "popupAuthReq" | "popupMyWork"'.
+@sdm:type-check: src/pages/project-reg/components/modals/MyWorkModal.tsx(52,49): error TS2339: Property 'data' does not
+ exist on type 'ProcResponse<"SDM1010", SHEETS.POP2_GRID5>'.
+@sdm:type-check: src/pages/project-reg/components/modals/MyWorkModal.tsx(71,36): error TS7053: Element implicitly has a
+n 'any' type because expression of type 'string' can't be used to index type '{}'.
+@sdm:type-check: src/pages/project-reg/components/modals/MyWorkModal.tsx(106,23): error TS2344: Type 'unknown' does not
+ satisfy the constraint 'WijmoRowItem'.
+@sdm:type-check: src/pages/project-reg/components/ProjectRegTab1Grid.tsx(207,29): error TS7053: Element implicitly has 
+an 'any' type because expression of type 'string' can't be used to index type '{}'.
+@sdm:type-check: src/pages/project-reg/components/ProjectRegTab1Grid.tsx(208,34): error TS7053: Element implicitly has 
+an 'any' type because expression of type 'string' can't be used to index type '{}'.
+@sdm:type-check: src/pages/project-reg/components/ProjectRegTab1Grid.tsx(236,36): error TS7053: Element implicitly has 
+an 'any' type because expression of type 'string' can't be used to index type '{}'.
+@sdm:type-check: src/pages/project-reg/components/ProjectRegTab1Grid.tsx(275,32): error TS2339: Property 'DIVISION_ID' 
+does not exist on type '{}'.
+@sdm:type-check: src/pages/project-reg/components/ProjectRegTab1Grid.tsx(285,81): error TS2339: Property 'DIVISION_ID' 
+does not exist on type '{}'.
+@sdm:type-check: src/pages/project-reg/components/ProjectRegTab1Grid.tsx(321,50): error TS2339: Property 'CRUD_TYPE' do
+es not exist on type '{}'.
+@sdm:type-check: src/pages/project-reg/components/ProjectRegTab1Grid.tsx(322,13): error TS2339: Property 'CRUD_TYPE' do
+es not exist on type '{}'.
+@sdm:type-check: src/pages/project-reg/components/ProjectRegTab2Grid.tsx(62,29): error TS7053: Element implicitly has a
+n 'any' type because expression of type 'string' can't be used to index type '{}'.
+@sdm:type-check: src/pages/project-reg/components/ProjectRegTab2Grid.tsx(63,34): error TS7053: Element implicitly has a
+n 'any' type because expression of type 'string' can't be used to index type '{}'.
+@sdm:type-check: src/pages/project-reg/components/ProjectRegTab2Grid.tsx(77,36): error TS7053: Element implicitly has a
+n 'any' type because expression of type 'string' can't be used to index type '{}'.
+@sdm:type-check: src/pages/project-reg/project-reg.types.ts(16,45): error TS2344: Type 'SHEETS.TAB1' does not satisfy t
+he constraint '"project" | "myProject" | "popupOrg" | "popupUser" | "popupAuthWrite" | "popupAuthRead" | "popupAuthReq"
+ | "popupMyWork"'.
+@sdm:type-check: src/pages/project-reg/project-reg.types.ts(17,45): error TS2344: Type 'SHEETS.TAB2' does not satisfy t
+he constraint '"project" | "myProject" | "popupOrg" | "popupUser" | "popupAuthWrite" | "popupAuthRead" | "popupAuthReq"
+ | "popupMyWork"'.
+@sdm:type-check: src/pages/project-reg/project-reg.types.ts(18,48): error TS2344: Type 'SHEETS.POP1_TREE' does not sati
+sfy the constraint '"project" | "myProject" | "popupOrg" | "popupUser" | "popupAuthWrite" | "popupAuthRead" | "popupAut
+hReq" | "popupMyWork"'.
+@sdm:type-check: src/pages/project-reg/project-reg.types.ts(19,49): error TS2344: Type 'SHEETS.POP1_GRID1' does not sat
+isfy the constraint '"project" | "myProject" | "popupOrg" | "popupUser" | "popupAuthWrite" | "popupAuthRead" | "popupAu
+thReq" | "popupMyWork"'.
+@sdm:type-check: src/pages/project-reg/project-reg.types.ts(21,49): error TS2344: Type 'SHEETS.POP1_GRID2' does not sat
+isfy the constraint '"project" | "myProject" | "popupOrg" | "popupUser" | "popupAuthWrite" | "popupAuthRead" | "popupAu
+thReq" | "popupMyWork"'.
+@sdm:type-check: src/pages/project-reg/project-reg.types.ts(22,48): error TS2344: Type 'SHEETS.POP1_GRID4' does not sat
+isfy the constraint '"project" | "myProject" | "popupOrg" | "popupUser" | "popupAuthWrite" | "popupAuthRead" | "popupAu
+thReq" | "popupMyWork"'.
+@sdm:type-check: src/pages/project-reg/project-reg.types.ts(23,47): error TS2344: Type 'SHEETS.POP2_GRID5' does not sat
+isfy the constraint '"project" | "myProject" | "popupOrg" | "popupUser" | "popupAuthWrite" | "popupAuthRead" | "popupAu
+thReq" | "popupMyWork"'.
+@sdm:type-check: src/pages/project-reg/project-reg.types.ts(24,47): error TS2344: Type 'SHEETS.PERIOD' does not satisfy
+ the constraint '"project" | "myProject" | "popupOrg" | "popupUser" | "popupAuthWrite" | "popupAuthRead" | "popupAuthRe
+q" | "popupMyWork"'.
+@sdm:type-check: src/pages/project-reg/ProjectReg.tsx(91,55): error TS2344: Type 'SHEETS.TAB1' does not satisfy the con
+straint '"project" | "myProject" | "popupOrg" | "popupUser" | "popupAuthWrite" | "popupAuthRead" | "popupAuthReq" | "po
+pupMyWork"'.
+@sdm:type-check: src/pages/project-reg/ProjectReg.tsx(98,55): error TS2344: Type 'SHEETS.TAB2' does not satisfy the con
+straint '"project" | "myProject" | "popupOrg" | "popupUser" | "popupAuthWrite" | "popupAuthRead" | "popupAuthReq" | "po
+pupMyWork"'.
+@sdm:type-check: src/pages/project-reg/ProjectReg.tsx(108,57): error TS2344: Type 'SHEETS.PERIOD' does not satisfy the 
+constraint '"project" | "myProject" | "popupOrg" | "popupUser" | "popupAuthWrite" | "popupAuthRead" | "popupAuthReq" | 
+"popupMyWork"'.
+@sdm:type-check: src/pages/project-reg/ProjectReg.tsx(118,29): error TS2339: Property 'data' does not exist on type 'Pr
+ocResponse<"SDM1010", SHEETS.PERIOD>'.
+@sdm:type-check: src/pages/project-reg/ProjectReg.tsx(149,57): error TS2339: Property 'data' does not exist on type 'Pr
+ocResponse<"SDM1010", SHEETS.TAB1>'.
+@sdm:type-check: src/pages/project-reg/ProjectReg.tsx(154,55): error TS2339: Property 'data' does not exist on type 'Pr
+ocResponse<"SDM1010", SHEETS.TAB2>'.
+@sdm:type-check: src/pages/project-reg/ProjectReg.tsx(161,26): error TS18046: 'r' is of type 'unknown'.
+@sdm:type-check: src/pages/project-reg/ProjectReg.tsx(161,49): error TS18046: 'r' is of type 'unknown'.
+@sdm:type-check: src/pages/project-reg/ProjectReg.tsx(236,42): error TS18046: 'r' is of type 'unknown'.
+@sdm:type-check: src/pages/project-reg/ProjectReg.tsx(237,44): error TS18046: 'r' is of type 'unknown'.
+@sdm:type-check: src/pages/project-reg/ProjectReg.tsx(242,9): error TS18046: 'r' is of type 'unknown'.
+@sdm:type-check: src/pages/project-reg/ProjectReg.tsx(270,33): error TS18046: 'r' is of type 'unknown'.
+@sdm:type-check: src/pages/project-reg/ProjectReg.tsx(270,56): error TS18046: 'r' is of type 'unknown'.
+@sdm:type-check: src/pages/project-reg/ProjectReg.tsx(335,41): error TS18046: 'r' is of type 'unknown'.
+@sdm:type-check: src/pages/project-reg/ProjectReg.tsx(336,41): error TS18046: 'r' is of type 'unknown'.
+@sdm:type-check: src/pages/project-reg/ProjectReg.tsx(352,42): error TS18046: 'row' is of type 'unknown'.
+@sdm:type-check: src/pages/project-reg/ProjectReg.tsx(352,82): error TS18046: 'row' is of type 'unknown'.
+@sdm:type-check: src/pages/project-reg/ProjectReg.tsx(392,30): error TS18046: 'row' is of type 'unknown'.
+@sdm:type-check: src/pages/project-reg/ProjectReg.tsx(393,27): error TS18046: 'row' is of type 'unknown'.
+@sdm:type-check: src/pages/project-reg/ProjectReg.tsx(421,23): error TS18046: 'row' is of type 'unknown'.
+@sdm:type-check: src/pages/project-reg/ProjectReg.tsx(422,24): error TS18046: 'row' is of type 'unknown'.
+@sdm:type-check: src/pages/project-reg/ProjectReg.tsx(498,73): error TS18046: 'row' is of type 'unknown'.
+@sdm:type-check: src/pages/project-reg/useProjectRegStore.ts(10,40): error TS2344: Type 'SHEETS.TAB1' does not satisfy 
+the constraint '"project" | "myProject" | "popupOrg" | "popupUser" | "popupAuthWrite" | "popupAuthRead" | "popupAuthReq
+" | "popupMyWork"'.
+@sdm:type-check: src/pages/project-reg/useProjectRegStore.ts(11,40): error TS2344: Type 'SHEETS.TAB2' does not satisfy 
+the constraint '"project" | "myProject" | "popupOrg" | "popupUser" | "popupAuthWrite" | "popupAuthRead" | "popupAuthReq
+" | "popupMyWork"'.
+@sdm:type-check: src/pages/project-reg/utils/project-reg.editLock.ts(17,11): error TS2339: Property 'CRUD_TYPE' does no
+t exist on type '{}'.
+@sdm:type-check: src/pages/project-reg/utils/project-reg.editLock.ts(18,48): error TS2339: Property 'DPJT_REG_STATUS' d
+oes not exist on type '{}'.
+@sdm:type-check: src/pages/project-reg/utils/project-reg.editLock.ts(33,18): error TS2339: Property 'CRUD_TYPE' does no
+t exist on type '{}'.
+@sdm:type-check: src/pages/project-reg/utils/project-reg.editLock.ts(53,7): error TS2339: Property 'CRUD_TYPE' does not
+ exist on type '{}'.
+@sdm:type-check: src/pages/project-reg/utils/project-reg.editLock.ts(54,41): error TS2339: Property 'DPJT_REG_STATUS' d
+oes not exist on type '{}'.
+@sdm:type-check: src/pages/project-reg/utils/project-reg.editLock.ts(58,16): error TS2339: Property 'CRUD_TYPE' does no
+t exist on type '{}'.
+@sdm:type-check: src/pages/project-reg/utils/project-reg.editLock.ts(58,48): error TS2339: Property 'DPJT_REG_STATUS' d
+oes not exist on type '{}'.
+@sdm:type-check: src/pages/project-reg/utils/project-reg.editLock.ts(62,16): error TS2339: Property 'CRUD_TYPE' does no
+t exist on type '{}'.
+@sdm:type-check: src/pages/project-reg/utils/project-reg.editLock.ts(62,48): error TS2339: Property 'DPJT_KEY' does not
+ exist on type '{}'.
+@sdm:type-check: src/pages/project-reg/utils/project-reg.validate.ts(76,43): error TS18046: 'r' is of type 'unknown'.
+@sdm:type-check: src/pages/project-reg/utils/project-reg.validate.ts(91,20): error TS18046: 'row' is of type 'unknown'.
+@sdm:type-check: src/pages/project-reg/utils/project-reg.validate.ts(93,41): error TS18046: 'row' is of type 'unknown'.
+@sdm:type-check: src/pages/project-reg/utils/project-reg.validate.ts(94,37): error TS18046: 'row' is of type 'unknown'.
+@sdm:type-check: src/pages/project-reg/utils/project-reg.validate.ts(95,38): error TS18046: 'row' is of type 'unknown'.
+@sdm:type-check: src/pages/project-reg/utils/project-reg.validate.ts(96,38): error TS18046: 'row' is of type 'unknown'.
+@sdm:type-check: src/pages/project-reg/utils/project-reg.validate.ts(97,24): error TS18046: 'row' is of type 'unknown'.
+@sdm:type-check: src/pages/project-reg/utils/project-reg.validate.ts(98,23): error TS18046: 'row' is of type 'unknown'.
+@sdm:type-check: src/pages/project-reg/utils/project-reg.validate.ts(99,25): error TS18046: 'row' is of type 'unknown'.
+@sdm:type-check: src/pages/project-reg/utils/project-reg.validate.ts(100,22): error TS18046: 'row' is of type 'unknown'
+.
+@sdm:type-check: src/pages/project-reg/utils/project-reg.validate.ts(101,22): error TS18046: 'row' is of type 'unknown'
+.
+@sdm:type-check: src/pages/project-reg/utils/project-reg.validate.ts(102,25): error TS18046: 'row' is of type 'unknown'
+.
+@sdm:type-check: src/pages/project-reg/utils/project-reg.validate.ts(103,21): error TS18046: 'row' is of type 'unknown'
+.
+@sdm:type-check: src/pages/project-reg/utils/project-reg.validate.ts(104,29): error TS18046: 'row' is of type 'unknown'
+.
+@sdm:type-check: src/pages/project-reg/utils/project-reg.validate.ts(105,24): error TS18046: 'row' is of type 'unknown'
+.
+@master:type-check: src/components/columnLayoutModal/columnLayoutModal.utils.test.ts(30,24): error TS2345: Argument of 
+type 'string' is not assignable to parameter of type 'Record<string, unknown>'.
+@master:type-check: src/components/columnLayoutModal/columnLayoutModal.utils.test.ts(31,24): error TS2345: Argument of 
+type 'string' is not assignable to parameter of type 'Record<string, unknown>'.
+@demand:type-check: src/pages/BACKUP_20260818/business-plan/components/BusinessPlanModals.tsx(2,3): error TS2305: Modul
+e '"features/master/src/components"' has no exported member 'ColumnLayoutModal'.
+@demand:type-check: src/pages/BACKUP_20260818/business-plan/components/BusinessPlanModals.tsx(219,17): error TS7006: Pa
+rameter 'settings' implicitly has an 'any' type.
+@demand:type-check: src/pages/BACKUP_20260818/business-plan/components/BusinessPlanModals.tsx(222,26): error TS7006: Pa
+rameter 's' implicitly has an 'any' type.
+@demand:type-check: src/pages/BACKUP_20260818/business-plan/components/BusinessPlanModals.tsx(231,43): error TS7006: Pa
+rameter 's' implicitly has an 'any' type.
+@demand:type-check: src/pages/BACKUP_20260818/business-plan/components/BusinessPlanModals.tsx(234,26): error TS7006: Pa
+rameter 's' implicitly has an 'any' type.
+@demand:type-check: src/pages/BACKUP_20260818/business-plan/components/BusinessPlanModals.tsx(234,29): error TS7006: Pa
+rameter 'i' implicitly has an 'any' type.
+@demand:type-check: src/pages/BACKUP_20260818/customer-fcst-upload/CustomerFcstUpload.tsx(16,33): error TS2307: Cannot 
+find module '../../components' or its corresponding type declarations.
+@demand:type-check: src/pages/BACKUP_20260818/etc-sales-reports/components/EtcSalesReportsModals.tsx(2,3): error TS2305
+: Module '"features/master/src/components"' has no exported member 'ColumnLayoutModal'.
+@demand:type-check: src/pages/BACKUP_20260818/etc-sales-reports/components/EtcSalesReportsModals.tsx(10,30): error TS23
+07: Cannot find module '../../../components' or its corresponding type declarations.
+@demand:type-check: src/pages/BACKUP_20260818/etc-sales-reports/components/EtcSalesReportsModals.tsx(128,17): error TS7
+006: Parameter 'settings' implicitly has an 'any' type.
+@demand:type-check: src/pages/BACKUP_20260818/etc-sales-reports/components/EtcSalesReportsModals.tsx(134,26): error TS7
+006: Parameter 's' implicitly has an 'any' type.
+@demand:type-check: src/pages/BACKUP_20260818/etc-sales-reports/components/EtcSalesReportsModals.tsx(143,43): error TS7
+006: Parameter 's' implicitly has an 'any' type.
+@demand:type-check: src/pages/BACKUP_20260818/etc-sales-reports/components/EtcSalesReportsModals.tsx(146,26): error TS7
+006: Parameter 's' implicitly has an 'any' type.
+@demand:type-check: src/pages/BACKUP_20260818/etc-sales-reports/components/EtcSalesReportsModals.tsx(146,29): error TS7
+006: Parameter 'i' implicitly has an 'any' type.
+@demand:type-check: src/pages/BACKUP_20260818/metal-link-price/MetalLinkPrice.tsx(13,33): error TS2307: Cannot find mod
+ule '../../components' or its corresponding type declarations.
+@demand:type-check: src/pages/BACKUP_20260818/mkt-fcst/MktFcst.tsx(4,3): error TS2305: Module '"features/master/src/com
+ponents"' has no exported member 'ColumnLayoutModal'.
+@demand:type-check: src/pages/BACKUP_20260818/mkt-fcst/MktFcst.tsx(8,3): error TS2305: Module '"features/master/src/com
+ponents"' has no exported member 'saveTitleSet'.
+@demand:type-check: src/pages/BACKUP_20260818/mkt-fcst/MktFcst.tsx(9,3): error TS2305: Module '"features/master/src/com
+ponents"' has no exported member 'toColumnLayoutSettings'.
+@demand:type-check: src/pages/BACKUP_20260818/mkt-fcst/MktFcst.tsx(942,17): error TS7006: Parameter 'settings' implicit
+ly has an 'any' type.
+@demand:type-check: src/pages/BACKUP_20260818/mkt-fcst/MktFcst.tsx(948,26): error TS7006: Parameter 's' implicitly has 
+an 'any' type.
+@demand:type-check: src/pages/BACKUP_20260818/mkt-fcst/MktFcst.tsx(958,43): error TS7006: Parameter 's' implicitly has 
+an 'any' type.
+@demand:type-check: src/pages/BACKUP_20260818/mkt-fcst/MktFcst.tsx(964,32): error TS7006: Parameter 's' implicitly has 
+an 'any' type.
+@demand:type-check: src/pages/BACKUP_20260818/mkt-fcst/MktFcst.tsx(964,35): error TS7006: Parameter 'i' implicitly has 
+an 'any' type.
+@demand:type-check: src/pages/BACKUP_20260818/mkt-fcst/MktFcst.tsx(971,19): error TS7006: Parameter 'ok' implicitly has
+ an 'any' type.
+@demand:type-check: src/pages/BACKUP_20260818/mkt-fcst/MktFcst.tsx(1008,19): error TS7006: Parameter 'ok' implicitly ha
+s an 'any' type.
+@demand:type-check: src/pages/BACKUP_20260818/sales-monitoring/SalesMonitoring.tsx(4,3): error TS2305: Module '"feature
+s/master/src/components"' has no exported member 'ColumnLayoutModal'.
+@demand:type-check: src/pages/BACKUP_20260818/sales-monitoring/SalesMonitoring.tsx(6,3): error TS2305: Module '"feature
+s/master/src/components"' has no exported member 'saveTitleSet'.
+@demand:type-check: src/pages/BACKUP_20260818/sales-monitoring/SalesMonitoring.tsx(7,3): error TS2305: Module '"feature
+s/master/src/components"' has no exported member 'toColumnLayoutSettings'.
+@demand:type-check: src/pages/BACKUP_20260818/sales-monitoring/SalesMonitoring.tsx(326,17): error TS7006: Parameter 'se
+ttings' implicitly has an 'any' type.
+@demand:type-check: src/pages/BACKUP_20260818/sales-monitoring/SalesMonitoring.tsx(332,26): error TS7006: Parameter 's'
+ implicitly has an 'any' type.
+@demand:type-check: src/pages/BACKUP_20260818/sales-monitoring/SalesMonitoring.tsx(342,43): error TS7006: Parameter 's'
+ implicitly has an 'any' type.
+@demand:type-check: src/pages/BACKUP_20260818/sales-monitoring/SalesMonitoring.tsx(348,32): error TS7006: Parameter 's'
+ implicitly has an 'any' type.
+@demand:type-check: src/pages/BACKUP_20260818/sales-monitoring/SalesMonitoring.tsx(348,35): error TS7006: Parameter 'i'
+ implicitly has an 'any' type.
+@demand:type-check: src/pages/BACKUP_20260818/sales-monitoring/SalesMonitoring.tsx(355,19): error TS7006: Parameter 'ok
+' implicitly has an 'any' type.
+@demand:type-check: src/pages/BACKUP_20260818/sales-monitoring/SalesMonitoring.tsx(389,19): error TS7006: Parameter 'ok
+' implicitly has an 'any' type.
+@demand:type-check: src/pages/BACKUP_20260818/sales-plan/components/SalesPlanModals.tsx(3,3): error TS2305: Module '"fe
+atures/master/src/components"' has no exported member 'ColumnLayoutModal'.
+@demand:type-check: src/pages/BACKUP_20260818/sales-plan/components/SalesPlanModals.tsx(6,3): error TS2305: Module '"fe
+atures/master/src/components"' has no exported member 'saveTitleSet'.
+@demand:type-check: src/pages/BACKUP_20260818/sales-plan/components/SalesPlanModals.tsx(7,3): error TS2305: Module '"fe
+atures/master/src/components"' has no exported member 'toColumnLayoutSettings'.
+@demand:type-check: src/pages/BACKUP_20260818/sales-plan/components/SalesPlanModals.tsx(196,17): error TS7006: Paramete
+r 'settings' implicitly has an 'any' type.
+@demand:type-check: src/pages/BACKUP_20260818/sales-plan/components/SalesPlanModals.tsx(201,26): error TS7006: Paramete
+r 's' implicitly has an 'any' type.
+@demand:type-check: src/pages/BACKUP_20260818/sales-plan/components/SalesPlanModals.tsx(211,43): error TS7006: Paramete
+r 's' implicitly has an 'any' type.
+@demand:type-check: src/pages/BACKUP_20260818/sales-plan/components/SalesPlanModals.tsx(216,32): error TS7006: Paramete
+r 's' implicitly has an 'any' type.
+@demand:type-check: src/pages/BACKUP_20260818/sales-plan/components/SalesPlanModals.tsx(216,35): error TS7006: Paramete
+r 'i' implicitly has an 'any' type.
+@demand:type-check: src/pages/BACKUP_20260818/sales-plan/components/SalesPlanModals.tsx(223,19): error TS7006: Paramete
+r 'ok' implicitly has an 'any' type.
+@demand:type-check: src/pages/BACKUP_20260818/sales-plan/components/SalesPlanModals.tsx(256,19): error TS7006: Paramete
+r 'ok' implicitly has an 'any' type.
+@demand:type-check: src/pages/BACKUP_20260818/sales-reports/components/SalesReportsModals.tsx(2,3): error TS2305: Modul
+e '"features/master/src/components"' has no exported member 'ColumnLayoutModal'.
+@demand:type-check: src/pages/BACKUP_20260818/sales-reports/components/SalesReportsModals.tsx(10,30): error TS2307: Can
+not find module '../../../components' or its corresponding type declarations.
+@demand:type-check: src/pages/BACKUP_20260818/sales-reports/components/SalesReportsModals.tsx(147,17): error TS7006: Pa
+rameter 'settings' implicitly has an 'any' type.
+@demand:type-check: src/pages/BACKUP_20260818/sales-reports/components/SalesReportsModals.tsx(153,26): error TS7006: Pa
+rameter 's' implicitly has an 'any' type.
+@demand:type-check: src/pages/BACKUP_20260818/sales-reports/components/SalesReportsModals.tsx(162,43): error TS7006: Pa
+rameter 's' implicitly has an 'any' type.
+@demand:type-check: src/pages/BACKUP_20260818/sales-reports/components/SalesReportsModals.tsx(165,26): error TS7006: Pa
+rameter 's' implicitly has an 'any' type.
+@demand:type-check: src/pages/BACKUP_20260818/sales-reports/components/SalesReportsModals.tsx(165,29): error TS7006: Pa
+rameter 'i' implicitly has an 'any' type.
+@demand:type-check: src/pages/BACKUP_20260823/customer-fcst-upload/CustomerFcstUpload.tsx(16,33): error TS2307: Cannot 
+find module '../../components' or its corresponding type declarations.
+@demand:type-check: src/pages/BACKUP_20260823/etc-sales-reports/components/EtcSalesReportsModals.tsx(7,30): error TS230
+7: Cannot find module '../../../components' or its corresponding type declarations.
+@demand:type-check: src/pages/BACKUP_20260823/forecast-price/ForecastPrice.tsx(24,33): error TS2307: Cannot find module
+ '../../components' or its corresponding type declarations.
+@demand:type-check: src/pages/BACKUP_20260823/metal-link-price/MetalLinkPrice.tsx(13,33): error TS2307: Cannot find mod
+ule '../../components' or its corresponding type declarations.
+@demand:type-check: src/pages/BACKUP_20260823/sales-reports/components/SalesReportsModals.tsx(7,30): error TS2307: Cann
+ot find module '../../../components' or its corresponding type declarations.
+@demand:type-check: src/pages/sales-reports/utils/sales-reports.api.test.ts(11,10): error TS2459: Module '"./sales-repo
+rts.api"' declares 'callProc' locally, but it is not exported.
+@demand:type-check: src/pages/sales-reports/utils/sales-reports.editLock.test.ts(7,3): error TS2305: Module '"./sales-r
+eports.editLock"' has no exported member 'currentYyyymm'.
+@demand:type-check: src/pages/sales-reports/utils/sales-reports.editLock.test.ts(10,3): error TS2305: Module '"./sales-
+reports.editLock"' has no exported member 'existingStaticEditable'.
+@demand:type-check: src/pages/sales-reports/utils/sales-reports.editLock.test.ts(11,3): error TS2305: Module '"./sales-
+reports.editLock"' has no exported member 'insertStaticEditable'.
+@demand:type-check: src/pages/sales-reports/utils/sales-reports.save.test.ts(9,3): error TS2724: '"./sales-reports.save
+"' has no exported member named 'buildEtcInsertRows'. Did you mean 'buildEtcSaveRows'?
+
+

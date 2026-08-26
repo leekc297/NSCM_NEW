@@ -8,7 +8,7 @@ import {
   MergeManager,
 } from '@mescius/wijmo.grid';
 import { DivisionField } from 'features/master/src/components';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 
 import { apiClient } from '@foundation/apis';
 import type { BUTTON_TYPE } from '@foundation/constants';
@@ -17,10 +17,15 @@ import { useQuery } from '@foundation/query-client';
 import { type EditTracker, GridAction } from '@foundation/utils';
 import { CustomDialog, CustomDropdown, DataGrid, SearchArea } from '@shared/components';
 import { useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
-import { Button, FormItem } from '@shared/lges';
+import { Button, FormItem, ProgressIndicator } from '@shared/lges';
 import { FileExceldownloadIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
-import { useMessageStore, useSessionStore } from '@shared/stores';
+import {
+  DialogScopeContext,
+  useDialogStore,
+  useMessageStore,
+  useSessionStore,
+} from '@shared/stores';
 
 import { MENU_ID, MSG, SHEETS } from '../../sales-reports.constants';
 import { callSaveExchangeRate } from '../../utils/sales-reports.api';
@@ -38,6 +43,38 @@ interface Props {
   /** 부모 Version — AS-IS LoadData(sVersionNo) `_sVersionNo` (조회·저장 필수키) */
   versionNo: string;
 }
+
+/**
+ * F8 = Insert (공용 SubTitle 의 Insert(F8) 와 같은 계약).
+ *
+ * 필수: 이 컴포넌트는 **다이얼로그 안**(`customContentArea`)에서 렌더돼야 한다 —
+ *   `DialogScopeContext.Provider` 가 `CustomDialog` **내부**에 있어서, 모달 컴포넌트 본문에서
+ *   `useContext` 하면 스코프가 항상 null 이다(`useGuardedDialogClose` 주석과 같은 함정).
+ *
+ * 스코프 가드가 있어야 부모 화면 SubTitle 의 F8(그리드 행추가)과 겹치지 않는다. 부모 SubTitle 도
+ *   같은 `isActiveScope` 로 걸러지므로(SubTitle.tsx:236), 모달이 최상위일 때는 여기만 동작한다.
+ *   공용 `DataGrid` 의 팝업 F3/F4 자동 등록과 동일한 규약이다.
+ */
+const InsertHotkey = ({ onInsert }: { onInsert: () => void }) => {
+  const scopeId = useContext(DialogScopeContext);
+  const onInsertRef = useRef(onInsert);
+  onInsertRef.current = onInsert;
+
+  useEffect(() => {
+    const handler = (keyboardEvent: KeyboardEvent) => {
+      if (keyboardEvent.key !== 'F8') return;
+      if (!useDialogStore.getState().isActiveScope(scopeId)) return;
+      // 브라우저 기본 동작·상위 리스너 차단 (공용 F4 처리와 같은 캡처 단계 규약)
+      keyboardEvent.preventDefault();
+      keyboardEvent.stopImmediatePropagation();
+      onInsertRef.current();
+    };
+    globalThis.window.addEventListener('keydown', handler, true);
+    return () => globalThis.window.removeEventListener('keydown', handler, true);
+  }, [scopeId]);
+
+  return null;
+};
 
 /** grid 1행 = 통화쌍(Division×Currency×Unit) × 동적 월 컬럼 `D{BASIS_START_DATE}` 피벗.
  *  AS-IS InitSpread L248~301 의 정적 4컬럼 + 동적 월 컬럼 구조 1:1.
@@ -114,7 +151,14 @@ export const ExchangeRateModal = ({ open, modalClose, divisionId, year, versionN
   //   AS-IS EditButton(L327~390)의 SwitchLock 토글은 승계하지 않고, 그 결과 상태
   //   (정적 컬럼 잠금 + 월 컬럼만 개방)를 초기 상태로 고정한다. 권한 없으면 전체 잠금(조회 전용).
   const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID, enabled: open });
-  const canEdit = hasButton('SAVE');
+  // ⭐ 편집 권한은 **환율 시트 전용 코드**로 판정한다 (REQ:CHAT-20260820-13, 사용자 확정 = AS-IS 파리티).
+  //   `/admin/menu/{id}/auth` 는 BTN 코드 문자열 목록만 주고 **시트를 구분하지 않는다**(메뉴 단위 합집합).
+  //   DMF0044 는 `titleSet/SAVE` 가 DM Viewer 에도 부여돼 있어 `hasButton('SAVE')` 로 판정하면
+  //   **DM Viewer 에게 환율 편집·저장이 열린다** — AS-IS(`DMF0044_SalesReportExchangePopup.cs:148~162`)는
+  //   ADMIN/DM ADMIN 만 통과시키고 나머지 그룹은 Edit/Insert/Save 버튼을 숨긴다.
+  //   ⇒ 권한 판정 전용 코드 `EXRATE_SAVE`(exchangeRate 시트, ADMIN·DM ADMIN 만 부여)로 스코프를 좁힌다.
+  //     저장 호출 라우팅은 기존 `SAVE`(API_ID 보유)가 그대로 담당한다.
+  const canEdit = hasButton('EXRATE_SAVE');
 
   // 열 때마다 AS-IS Form_Load 초기 상태로 복원 (부모 Year/Division 승계 + 신규행 없음).
   //   ⭐ 자동조회 (사용자 지시 2026-08-10): 여기서 applied 를 즉시 세팅하고 아래 3 쿼리가
@@ -335,8 +379,7 @@ export const ExchangeRateModal = ({ open, modalClose, divisionId, year, versionN
 
   // ⭐ 헤더 머지 + No. 코너 + 편집 게이트 + 셀 컬러링 (initialized prop deprecated → useEffect)
   useEffect(() => {
-    const g = gridRef.current;
-    if (!g || !g.columnHeaders) return;
+    if (!open) return;
 
     const formatHandler = (_s: unknown, e: FormatItemEventArgs) => {
       if (e.panel.cellType === CellType.ColumnHeader) {
@@ -373,7 +416,6 @@ export const ExchangeRateModal = ({ open, modalClose, divisionId, year, versionN
         e.cell.classList.toggle('wj-cell-non-editable', lockedButEditable);
       }
     };
-    g.formatItem.addHandler(formatHandler);
 
     // 편집 게이트 — 월 컬럼 + DIVISION_ID 만 화면이 판정한다. 그 외 정적 컬럼(CURRENCY 'S' /
     //   UNIT_CURRENCY 'IM' / CURRENCY_UNITCURRENCY 'S')은 공용 메타 게이트(inputTpCd)에 위임하므로
@@ -395,10 +437,6 @@ export const ExchangeRateModal = ({ open, modalClose, divisionId, year, versionN
       if (!MONTH_BINDING.test(binding)) return;
       e.cancel = !isMonthCellEditableRef.current(item, binding);
     };
-    g.beginningEdit.addHandler(beginningEditHandler);
-
-    g.allowMerging = AllowMerging.All;
-    for (let i = 0; i < g.columns.length; i++) g.columns[i].allowMerging = true;
 
     // hook #108 — 커스텀 MergeManager 설치 시 nested 그룹의 네이티브 수평 span 이 무효화되므로
     //   동적 1단(연도) 머지를 직접 구현한다.
@@ -458,13 +496,42 @@ export const ExchangeRateModal = ({ open, modalClose, divisionId, year, versionN
         return null;
       }
     }
-    g.mergeManager = new ExchangeMerge();
-    g.invalidate(true);
+
+    // 그리드가 준비될 때까지 기다렸다 건다 (2026-08-21 결함 정정).
+    //   [문제] 종전에는 `if (!gridRef.current) return;` 으로 끝냈다. 그런데 이 모달은 다이얼로그
+    //     오픈 애니메이션 뒤에 그리드가 만들어질 수 있어(같은 파일의 헤더 정규화가 raf 루프로
+    //     방어하는 것과 같은 경로), 의존성이 바뀌는 시점(권한·메타·조회결과 도착)이 전부 그리드
+    //     생성 **전**이면 **핸들러가 영영 등록되지 않는다**.
+    //     그러면 편집 판정이 공용 게이트만 남는데, 월 컬럼은 동적 컬럼이라 `_inputEditType` 이 없어
+    //     `GridUtils.isEditableCell` 이 false → 권한이 있어도 전부 잠긴다.
+    //     Insert 를 누르면 편집이 되던 이유가 이것이다 — `rows` 가 바뀌어 effect 가 다시 돌면서
+    //     그제야 등록됐다(사용자 리포트 2026-08-21).
+    //   [해법] rAF 로 그리드를 기다린다. 등록 **순서**도 이걸로 보장된다 — 공용
+    //     `setEditableColumns` 는 그리드 생성 시점(handleInitialized)에 이미 걸려 있고
+    //     `cancel` 을 true/false 양쪽으로 쓰므로, 뒤에 등록된 이 핸들러가 최종 판정이 된다.
+    let raf = 0;
+    let bound: FlexGridType<ExchangeRatePivotRow> | null = null;
+    const bindGrid = () => {
+      const g = gridRef.current;
+      if (!g || !g.columnHeaders) {
+        raf = requestAnimationFrame(bindGrid);
+        return;
+      }
+      bound = g;
+      g.formatItem.addHandler(formatHandler);
+      g.beginningEdit.addHandler(beginningEditHandler);
+      g.allowMerging = AllowMerging.All;
+      for (let i = 0; i < g.columns.length; i++) g.columns[i].allowMerging = true;
+      g.mergeManager = new ExchangeMerge();
+      g.invalidate(true);
+    };
+    bindGrid();
 
     return () => {
+      cancelAnimationFrame(raf);
       try {
-        g.formatItem?.removeHandler(formatHandler);
-        g.beginningEdit?.removeHandler(beginningEditHandler);
+        bound?.formatItem?.removeHandler(formatHandler);
+        bound?.beginningEdit?.removeHandler(beginningEditHandler);
       } catch {
         /* unmount race */
       }
@@ -699,6 +766,14 @@ export const ExchangeRateModal = ({ open, modalClose, divisionId, year, versionN
       size={1200}
       handleClose={modalClose}
       disableButtonCancel
+      // 필수: 신규행 Unit(Currency) 셀 콤보 선택이 먹히게 하는 조건 — 자매 모달
+      //   forecast-price/ExchangeRateModal 이 2026-07-30 실측으로 확정한 원인과 같다
+      //   (CustomDialog L44~50 주석의 근거). Wijmo 드롭다운 ListBox 는 MuiDialog-container 밖에
+      //   append 되는데, MUI FocusTrap 이 포커스를 컨테이너로 되돌리는 순간 Wijmo 가 포커스 상실로
+      //   finishEditing() → 에디터(_edt) 를 파괴한다. 그 뒤 항목을 클릭하면 finishEditing() 이
+      //   _edt null 로 조기 반환해 값이 조용히 버려지고 리스트만 닫힌다.
+      //   주의: 그리드/dataMap 쪽을 고쳐도 이 prop 없이는 동작하지 않는다.
+      disableEnforceFocus
       customHeaderTitle={
         <div className='headerContainer'>
           <div className='headerDot' />
@@ -706,8 +781,10 @@ export const ExchangeRateModal = ({ open, modalClose, divisionId, year, versionN
         </div>
       }
       customContentArea={
-        <div className={styles.contentWrapper}>
-          {/* 조회조건 1행 — Div / Year (AS-IS usrConditionPanel1. hook #94 — 36px 표준 컴포넌트) */}
+        <div className={styles.dialogContentWrapper}>
+          {/* 조회조건 1행 — Div / Year (AS-IS usrConditionPanel1. hook #94 — 36px 표준 컴포넌트).
+              폭은 자매 모달 forecast-price/ExchangeRateModal 과 동일하게 **6 + 6 한 줄**로 맞춘다
+              (사용자 지시 2026-08-21). */}
           <SearchArea
             searchButtonLabel={t('LBL00664', 'Search')}
             onSearch={handleSearch}
@@ -718,10 +795,12 @@ export const ExchangeRateModal = ({ open, modalClose, divisionId, year, versionN
                     (형제 모달 DMF0042/DMF0020 동일 정책). AS-IS 재선택 가능 동작은 승계하지 않는다. */}
                 <DivisionField
                   value={inputDivisionId}
-                  gridSize={3}
+                  gridSize={6}
                   disabled
                   onChange={v => handleConditionChange(v, inputYear)}
                 />
+                {/* Year 는 원래 폭(3) 유지 — 6 으로 넓혔더니 셀렉트가 과하게 커졌다
+                    (사용자 지시 2026-08-21). Div 만 자매 모달과 같은 6 이다. */}
                 <Grid size={3}>
                   {/* ⚠ hook #121 §4 — 같은 행의 카탈로그 필드(DivisionField)가 commonStyles.formItem 을
                       쓰지 않으므로 라벨 폭 정합을 위해 동일 형태로 맞춘다 (VersionModal 정본 동일). */}
@@ -744,24 +823,47 @@ export const ExchangeRateModal = ({ open, modalClose, divisionId, year, versionN
             }
           />
 
-          {/* 액션 바 — AS-IS btnButtonList (Find 는 SearchArea 가 담당).
+          <div className={styles.gridWrapper}>
+            <DataGrid<ExchangeRatePivotRow>
+              gridRef={gridRef}
+              editTrackerRef={editTrackerRef}
+              className={styles.grid}
+              itemsSource={rows}
+              staticColumns={staticColumns}
+              dynamicColumns={dynamicColumns}
+              autoGenerateColumns={false}
+              frozenColumns={fixedBindings.length}
+              allowSorting={false}
+              allowMerging={AllowMerging.All}
+            />
+          </div>
+
+          {/* 진행 스피너 — 자매 모달 동일. 전역 스피너는 앱 셸에 있어 다이얼로그 뒤에 깔려 안 보인다.
+              placement='parent' = 백드롭을 부모(.dialogContentWrapper) 기준으로 덮는다.
+              덮는 동안 그리드/버튼 클릭도 함께 막힌다 (중복 저장 방지). */}
+          <ProgressIndicator shape='circular' placement='parent' open={saving} />
+
+          {/* 버튼 바 — AS-IS btnButtonList (Find 는 SearchArea 가 담당).
+              위치·간격은 자매 모달 forecast-price/ExchangeRateModal 과 동일하게 **그리드 아래
+              우측 정렬**로 맞춘다 (사용자 지시 2026-08-21 — 종전엔 그리드 위 액션 바였다).
               Insert/Save 는 AS-IS DefineProperty L148~162 와 동일하게 권한 없으면 숨긴다.
               ⭐ 사용자 확정(2026-08-10): Edit 버튼 미사용(권한 기반 상시 편집모드) /
                  OK 버튼 미사용(Save 가 저장+닫기 겸용) /
-                 우측 Insert → Excel → Save → Close 고정 순서. */}
-          <div className={styles.actionBar}>
-            <div className={styles.actionBarSpacer} />
-
-            {/* ⭐ 우측 고정 순서 = Insert → Excel(아이콘) → Save → Close (사용자 지시 2026-08-10).
-                Insert/Save 는 권한 보유 시에만 노출, Excel/Close 는 항상 노출. */}
+                 Insert → Excel → Save → Close 고정 순서. */}
+          <div className={styles.buttonWrapper}>
+            {/* 라벨은 자매 모달과 같은 'Insert' — 단축키 표기는 넣지 않는다(사용자 지시 2026-08-21).
+                F8 동작만 `InsertHotkey` 가 담당한다. */}
             {canEdit ? (
-              <Button
-                appearance='outlined'
-                priority='normal'
-                size='medium'
-                buttonLabel={t('LBL00121', 'Insert')}
-                onClick={handleInsert}
-              />
+              <>
+                <InsertHotkey onInsert={handleInsert} />
+                <Button
+                  appearance='outlined'
+                  priority='normal'
+                  size='medium'
+                  buttonLabel='Insert'
+                  onClick={handleInsert}
+                />
+              </>
             ) : null}
             {/* Excel = 아이콘 버튼 (hook #120 스타일 — 텍스트 금지). 아이콘 = @shared/lges-icons
                 FileExceldownloadIcon (형제 PriceBatchInputModal L1103 동일).
@@ -791,21 +893,6 @@ export const ExchangeRateModal = ({ open, modalClose, divisionId, year, versionN
               size='medium'
               buttonLabel={t('LBL00627', 'Close')}
               onClick={modalClose}
-            />
-          </div>
-
-          <div className={styles.gridWrapper}>
-            <DataGrid<ExchangeRatePivotRow>
-              gridRef={gridRef}
-              editTrackerRef={editTrackerRef}
-              className={styles.grid}
-              itemsSource={rows}
-              staticColumns={staticColumns}
-              dynamicColumns={dynamicColumns}
-              autoGenerateColumns={false}
-              frozenColumns={fixedBindings.length}
-              allowSorting={false}
-              allowMerging={AllowMerging.All}
             />
           </div>
         </div>

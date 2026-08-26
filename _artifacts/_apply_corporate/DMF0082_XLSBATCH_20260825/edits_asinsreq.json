@@ -1,0 +1,18 @@
+[
+ {
+  "old": "        DELETE FROM SCM_MGR.DM_PLN_MKT_FCST A\n        WHERE A.MEASURE IN ('MKT_FCST', 'VMI_In_Req')",
+  "new": "        DELETE FROM SCM_MGR.DM_PLN_MKT_FCST A\n        WHERE A.MEASURE IN ('MKT_FCST', 'VMI_In_Req', 'AS_In_Req')   --[E20260826-ASINSREQ] W/S AS_In_Req 입력 개방 (AS-IS 저장은 메저 무필터 — 파리티)"
+ },
+ {
+  "old": "                AND B.MEASURE IN ('MKT_FCST', 'VMI_In_Req')",
+  "new": "                AND B.MEASURE IN ('MKT_FCST', 'VMI_In_Req', 'AS_In_Req')   --[E20260826-ASINSREQ]"
+ },
+ {
+  "old": "                   WHERE M.MEASURE IN ('MKT_FCST', 'VMI_In_Req')",
+  "new": "                   WHERE M.MEASURE IN ('MKT_FCST', 'VMI_In_Req', 'AS_In_Req')   --[E20260826-ASINSREQ]"
+ },
+ {
+  "old": "        WHERE MEASURE IN ('MKT_FCST', 'VMI_In_Req');",
+  "new": "        WHERE MEASURE IN ('MKT_FCST', 'VMI_In_Req', 'AS_In_Req');   --[E20260826-ASINSREQ] 이력 동반 (AS-IS 무필터 파리티)"
+ }
+]

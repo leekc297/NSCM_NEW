@@ -1,0 +1,6 @@
+[
+ {
+  "old": "           OR NOT ( p_user_group = 'SCP Planner'\n                    OR EXISTS (SELECT 1\n                               FROM   SCM_MGR.SCM_ADM_USER_GR_MPG_M G\n                               WHERE  G.USER_ID    IN (p_user_group, p_created_by)\n                               AND    G.USER_GR_ID = 'SCP Planner'\n                               AND    G.USE_YN     = 'Y') )",
+  "new": "           --[E20260825-81AUTH] 81 계열은 룩업 전권 — 강제 개방 분기에서 제외 (LOC = 룩업 4그룹 통제, W/S 제외).\n           --  40 은 현행 유지(비 SCP 강제 개방 — REQ:1ST-36-1 계보).\n           OR ( p_division_id NOT LIKE '81%'\n                AND NOT ( p_user_group = 'SCP Planner'\n                    OR EXISTS (SELECT 1\n                               FROM   SCM_MGR.SCM_ADM_USER_GR_MPG_M G\n                               WHERE  G.USER_ID    IN (p_user_group, p_created_by)\n                               AND    G.USER_GR_ID = 'SCP Planner'\n                               AND    G.USE_YN     = 'Y') ) )"
+ }
+]

@@ -208,3 +208,19 @@ export const insertStaticEditable = (
       return false; // 참조컬럼 58종 등 그 외 전부 read-only (R5 붕괴 규칙)
   }
 };
+
+// R5 보조 — Insert 행 모달 전용 입력 셀 (직접 타이핑 불가, dblclick 팝업으로만 값 입력).
+//   PROJECT_CODE = 81·82 (AS-IS spdMain_CellDoubleClick L3834) / ITEM_ID = 40+Catch_Up (L3863).
+//   insertStaticEditable 은 false 를 유지해야 한다(직접 편집 차단) — 대신 표시(Yellow)와 팝업
+//   아이콘 판정에 이 함수를 쓴다. mkt-fcst FPModal 셀과 동일 계약(팝업 입력 = 편집 가능 Yellow).
+export const isInsertModalCell = (
+  binding: string,
+  row: SalesPlanRow,
+  divisionId: string
+): boolean => {
+  if (row.CRUD_TYPE !== 'I') return false;
+  const measure = typeof row.MEASURE === 'string' ? row.MEASURE : '';
+  if (binding === 'PROJECT_CODE') return !isDiv40(divisionId);
+  if (binding === 'ITEM_ID') return isDiv40(divisionId) && measure === EDIT_MEASURE.CATCH_UP;
+  return false;
+};

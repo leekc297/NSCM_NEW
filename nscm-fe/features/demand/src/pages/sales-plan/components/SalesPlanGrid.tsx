@@ -19,7 +19,7 @@ import {
 } from 'react';
 
 import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
-import type { EditTracker } from '@foundation/utils';
+import { type EditTracker, keepRowVisibleUnderFilter, paintNegativeText } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { isoWeeksOfMonth } from '@shared/lib/bucket-distribution';
@@ -46,17 +46,18 @@ import {
   isSalesPlanRowDependentCombo,
   salesPlanComboContextKey,
 } from '../utils/sales-plan.comboContext';
-import { isDiv40 } from '../utils/sales-plan.division';
 import {
   buildCutoff,
   buildMeasureAuth,
   dynKindOf,
   evalSalesPlanDynCell,
   insertStaticEditable,
+  isInsertModalCell,
 } from '../utils/sales-plan.editLock';
 import {
   applyMeasureSwitch,
   buildCatchUpFcstTypeMap,
+  dedupeComboRowsByCode,
   filterComboRowsByRow,
   toCellStr,
 } from '../utils/sales-plan.gridCombos';
@@ -155,6 +156,9 @@ export const SalesPlanGrid = ({
   const { t } = useTranslation();
   const setAlert = useMessageStore.getState().setAlert;
   const division = divisionId ?? '';
+  // 필터 예외 재등록(reapplyInsertRowVisibility)이 최신 rows 를 보게 하는 미러.
+  const rowsRef = useRef<SalesPlanRow[]>([]);
+  rowsRef.current = rows;
   const [rowComboContext, setRowComboContext] = useState(() =>
     buildSalesPlanComboContext(undefined, division)
   );
@@ -254,10 +258,12 @@ export const SalesPlanGrid = ({
   //   기존 데이터의 MEASURE 값 전 범위(31종)는 Insert 콤보(measureInfoRows 3종)보다 넓어서,
   //   fallback 이 없으면 Measure 컬럼이 CODE 그대로 노출된다.
   const staticMeasuresMap = useMemo(() => {
-    const measureRows = (staticMeasures ?? []).map(m => ({
-      CODE: m.colNm,
-      NAME: m.colLblNm || m.colNm,
-    }));
+    const measureRows = dedupeComboRowsByCode(
+      (staticMeasures ?? []).map(m => ({
+        CODE: m.colNm,
+        NAME: m.colLblNm || m.colNm,
+      }))
+    );
     return measureRows.length > 0 ? new DataMap(measureRows, 'CODE', 'NAME') : null;
   }, [staticMeasures]);
 
@@ -287,14 +293,22 @@ export const SalesPlanGrid = ({
   const dataMaps = useMemo<Record<string, DataMap | null>>(() => {
     const m: Record<string, DataMap | null> = {};
     comboColumns.forEach((c, i) => {
-      const arr = comboResults[i] ?? [];
+      // CODE 중복 제거 필수 — 목록 SP 의 권한/division 조인 중복이 드롭다운 항목 중복으로 보인다.
+      const arr = dedupeComboRowsByCode(
+        (comboResults[i] ?? []) as unknown as Record<string, unknown>[]
+      );
       m[c.colNm] = arr.length > 0 ? new DataMap(arr, 'CODE', 'NAME') : null;
     });
     // MEASURE — 콤보 응답이 없거나 0건이면 SHEET_MEASURE 메타로 대체 (CODE 노출 방지).
     if (!m.MEASURE && staticMeasuresMap) m.MEASURE = staticMeasuresMap;
+    // ITEM_ID(Model) — 컬럼 메타 콤보 경로는 divisionId 를 못 실어 보낸다(buildSalesPlanComboFilter
+    //   에 ITEM_ID case 가 없어 comboId 문자열만 나가고, BE makeComboQuery 가 미전달 @divisionId 를
+    //   '' 로 치환). 그래서 0건 → 표시 map 이 없어 셀이 CODE(TOOLING_R)로 보인다. Insert 드롭다운과
+    //   같은 division 스코프 목록(SalesPlanItemId)을 표시에도 쓴다 — 선택 즉시 NAME 으로 보인다.
+    if (!m.ITEM_ID && itemDropdownMap) m.ITEM_ID = itemDropdownMap;
     return m;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [comboSig, staticMeasuresMap]);
+  }, [comboSig, staticMeasuresMap, itemDropdownMap]);
 
   const comboRowsRef = useRef<Record<string, Record<string, unknown>[]>>({});
   const dataMapsRef = useRef<Record<string, DataMap | null>>({});
@@ -645,7 +659,10 @@ export const SalesPlanGrid = ({
       map.rowScopedCandidates = true;
       const allDisplayValues = map.getDisplayValues.bind(map) as (item?: unknown) => string[];
       map.getDisplayValues = (item?: unknown): string[] => {
-        const all = allDisplayValues(item);
+        // 표시명 중복 제거 — 소스 dedupe(dedupeComboRowsByCode) 뒤에도 서로 다른 CODE 가 같은
+        //   라벨을 쓰면 드롭다운에 같은 항목이 두 번 뜬다. 사용자는 구분할 수 없고 선택은
+        //   getKeyValue 가 고르는 한 코드로만 매핑되므로 목록 단계에서 1회로 접는다.
+        const all = [...new Set(allDisplayValues(item))];
         const codes = measureInfoCodesRef.current;
         if (codes.size === 0) return all; // SP 후보 미도착 — 전체 목록 유지(드롭다운을 비우지 않는다)
         const narrowed = all.filter(name => codes.has(String(map.getKeyValue(name) ?? '').trim()));
@@ -690,6 +707,13 @@ export const SalesPlanGrid = ({
       const binding = col.binding;
       // 당주 rail — 동적/정적 전 셀이 이 줄을 지나야 재활용 잔상이 남지 않는다 (isDyn 분기보다 앞).
       applyRail(e.cell, isCurrentWeekRail(binding));
+      // 음수 = 빨간 글자 (그리드 공통 규약. 정본 @foundation/utils paintNegativeText).
+      //   필수: 진입 직후 한 번만 칠한다 — 아래 분기들이 각자 return 하므로 분기 안에서 부르면
+      //   정적/동적 어디에도 안 걸리는 컬럼이 통째로 빠진다.
+      //   값 원천 = 그 셀이 실제로 그리는 원값(getCellData(..., false)). 콤보 컬럼은 CODE 가 와서
+      //   toGridNumber 가 0 을 돌려주므로 자연히 음수 판정에서 빠진다.
+      //   주의: 정적 셀은 아래에서 개인화 Text Color 와 우선순위를 다시 따진다(음수 빨강이 우선).
+      paintNegativeText(e.cell, toNumber(e.panel.getCellData(e.row, e.col, false)));
       const rowItem = (e.panel.rows[e.row] as unknown as { dataItem?: SalesPlanRow })?.dataItem;
       const isDyn = !staticBindingSet.has(binding) && !!dynKindOf(binding);
       const isInsert = rowItem?.CRUD_TYPE === 'I';
@@ -730,13 +754,13 @@ export const SalesPlanGrid = ({
 
       // 정적 셀 — Insert 행 화이트리스트(R5) = Yellow. 모달 셀 아이콘 (PROJECT_CODE 81·82 / ITEM_ID 40+Catch_Up).
       if (rowItem && isInsert) {
-        const editable = insertStaticEditable(binding, rowItem, division);
+        // 모달 전용 셀(PROJECT_CODE 81·82 / ITEM_ID 40+Catch_Up)도 입력 가능 셀 = Yellow.
+        //   insertStaticEditable 은 직접 타이핑 게이트라 false 지만, 팝업으로 값이 들어가므로
+        //   표시는 편집 가능이어야 한다 (mkt-fcst FPModal 셀과 동일 계약).
+        const isModalCell = isInsertModalCell(binding, rowItem, division);
+        const editable = insertStaticEditable(binding, rowItem, division) || isModalCell;
         toggleClass(e.cell, 'wj-cell-editable', editable);
         toggleClass(e.cell, 'wj-cell-non-editable', false);
-        const measure = toCellStr(rowItem.MEASURE);
-        const isModalCell =
-          (binding === 'PROJECT_CODE' && !isDiv40(division)) ||
-          (binding === 'ITEM_ID' && isDiv40(division) && measure === EDIT_MEASURE.CATCH_UP);
         toggleClass(e.cell, 'wj-cell-popup', false); // wrapper 자동 토글 무력화 (전용 span 사용)
         if (isModalCell) {
           const cellEl = e.cell;
@@ -761,13 +785,21 @@ export const SalesPlanGrid = ({
       //   미지정 시 removeProperty 필수 — Wijmo 셀 재활용으로 이전 컬럼 색이 남는다.
       const personalColor = colorMetaRef.current.get(binding);
       const insertEditable =
-        !!rowItem && isInsert && insertStaticEditable(binding, rowItem, division);
+        !!rowItem &&
+        isInsert &&
+        (insertStaticEditable(binding, rowItem, division) ||
+          isInsertModalCell(binding, rowItem, division));
       if (!insertEditable && personalColor?.cell) {
         e.cell.style.setProperty('background-color', personalColor.cell, 'important');
       } else {
         e.cell.style.removeProperty('background-color');
       }
-      if (personalColor?.text) {
+      // 글자색 우선순위: 음수 빨강 > 개인화 Text Color (mkt-fcst 동일 규약).
+      //   위에서 이미 칠한 음수색을 여기서 지우거나 덮지 않도록 3분기로 처리한다 — 단순히
+      //   personalColor 유무로만 갈라 쓰면 else 의 removeProperty 가 음수색을 도로 지운다.
+      if (toNumber(rowItem?.[binding]) < 0) {
+        paintNegativeText(e.cell, -1);
+      } else if (personalColor?.text) {
         e.cell.style.setProperty('color', personalColor.text, 'important');
       } else {
         e.cell.style.removeProperty('color');
@@ -1001,25 +1033,27 @@ export const SalesPlanGrid = ({
       }
     };
     g.cellEditEnded.addHandler(cellEditEndedHandler);
-    // ⭐ 붙여넣기 후 처리 (AS-IS spdMain_ClipboardPasted L5572~5596) — ITEM_ID 포함 시 종속
-    //   CELL_PROD_SITE_ID 콤보 재부착 + 동적 셀은 V-C 검증/추적 경로 공유.
+    // ⭐ 붙여넣기 후 처리 (AS-IS spdMain_ClipboardPasted L5572~5596).
+    //   붙여넣기도 셀 편집과 똑같은 후처리를 탄다 — Team 파생 / cascade 계단 clear / Measure 전환 /
+    //   동적 셀 V-C 검증·추적이 전부 cellEditEndedHandler 안에 있다.
+    //   2026-08-23 리포트: End Customer 를 붙여넣으면 Team 이 자동으로 안 채워졌다. 종전에는
+    //   ITEM_ID 와 동적 셀만 태워서 정적 콤보 셀(End Customer/Sales Site/Project/Measure 등)이
+    //   후처리를 통째로 건너뛰었다 — Team 파생뿐 아니라 하위 셀 clear 도 같이 빠져 있었다.
+    //   변경 판정 입력(editingCellRef)과 cascade dataMap 은 pastingCell(=beginningEditHandler)이
+    //   셀마다 먼저 세팅하므로, 편집 경로와 같은 전제로 안전하게 재사용된다.
     const pastedCellHandler = (
       s: FlexGridType<SalesPlanRow>,
       e: { row: number; col: number; data?: unknown }
     ) => {
-      const b = s.columns[e.col]?.binding ?? '';
-      if (b === 'ITEM_ID') {
-        const row = s.rows[e.row]?.dataItem as SalesPlanRow | undefined;
-        if (row) syncRowComboContext(row);
-        for (let i = 0; i < s.columns.length; i++) {
-          const c = s.columns[i];
-          const dm = dataMapsRef.current[c.binding ?? ''];
-          if (dm && c.dataMap !== dm) c.dataMap = dm;
-        }
-        s.invalidate(true);
-        return;
+      cellEditEndedHandler(s, e);
+      if ((s.columns[e.col]?.binding ?? '') !== 'ITEM_ID') return;
+      // Model 이 바뀌면 행 컨텍스트 종속 콤보(CELL_PROD_SITE_ID)를 표시용 map 으로 다시 붙인다.
+      for (let i = 0; i < s.columns.length; i++) {
+        const c = s.columns[i];
+        const dm = dataMapsRef.current[c.binding ?? ''];
+        if (dm && c.dataMap !== dm) c.dataMap = dm;
       }
-      if (dynKindOf(b)) cellEditEndedHandler(s, e);
+      s.invalidate(true);
     };
     g.pastedCell.addHandler(pastedCellHandler);
 
@@ -1060,17 +1094,9 @@ export const SalesPlanGrid = ({
       const row = g.rows[ht.row]?.dataItem as SalesPlanRow | undefined;
       if (!row || row.CRUD_TYPE !== 'I') return;
       // PROJECT_CODE 셀 (81·82 — L3834) / ITEM_ID 셀 (40 && Catch_Up — L3863)
-      if (binding === 'PROJECT_CODE' && !isDiv40(division)) {
-        onPopupCellDblClick?.('PROJECT', row);
-        return;
-      }
-      if (
-        binding === 'ITEM_ID' &&
-        isDiv40(division) &&
-        toCellStr(row.MEASURE) === EDIT_MEASURE.CATCH_UP
-      ) {
-        onPopupCellDblClick?.('ITEM', row);
-      }
+      //   판정은 formatItem 의 Yellow/아이콘 과 동일 함수 (isInsertModalCell) 로 통일.
+      if (!isInsertModalCell(binding, row, division)) return;
+      onPopupCellDblClick?.(binding === 'PROJECT_CODE' ? 'PROJECT' : 'ITEM', row);
     };
     g.hostElement.addEventListener('dblclick', dblclickHandler);
 
@@ -1234,7 +1260,29 @@ export const SalesPlanGrid = ({
     g?.invalidate(true);
   }, [calendarInfo, currentYyyymmdd, weekendCodeByBinding, gridRef]);
 
-  // ⭐ F4 Filter — 피처 소유 FlexGridFilter (동적 컬럼 필터 제외 + 필터후 머지/높이 재적용)
+  // 필터 상태에서 Insert — 값이 빈 신규행은 필터 조건에 걸려 CollectionView 에서 빠진다.
+  //   공용 keepRowVisibleUnderFilter 로 wijmo 예외 집합(grid._newAddedRowsSet)에 등록해 보이게 한다.
+  //   필터 자체의 보존은 공용 DataGrid 가 담당한다(itemsSourceChanged 의 capture -> clear -> restore).
+  //   주의: 등록은 한 번으로 끝나지 않는다. FlexGridFilter.apply() 가 그 Set 을 null 로 비우는데
+  //     (gridAction.ts keepRowVisibleUnderFilter 주석), DataGrid 의 필터 복원이 곧 apply() 라
+  //     Insert 마다 예외가 날아가 신규행이 다시 숨는다.
+  //     따라서 rows 변경 시 + filterApplied 시 양쪽에서 재등록한다. (DMF0020 배선 1:1)
+  const reapplyInsertRowVisibility = useCallback((): boolean => {
+    const g = (gridRef as { current: FlexGridType<SalesPlanRow> | null } | null)?.current;
+    // 컬럼이 없는 그리드에 refresh 를 걸면 wijmo 가 컬럼 인덱스 -1 로 계산하다 예외를 던진다.
+    if (!g || g.columns.length === 0) return false;
+    const insertRows = rowsRef.current.filter(r => r.CRUD_TYPE === 'I');
+    if (insertRows.length === 0) return false;
+    insertRows.forEach(row => keepRowVisibleUnderFilter(g as never, row as never));
+    return true;
+  }, [gridRef]);
+
+  useEffect(() => {
+    const g = (gridRef as { current: FlexGridType<SalesPlanRow> | null } | null)?.current;
+    if (reapplyInsertRowVisibility()) g?.collectionView?.refresh();
+  }, [gridRef, rows, reapplyInsertRowVisibility]);
+
+  // F4 Filter — 피처 소유 FlexGridFilter (동적 컬럼 필터 제외 + 필터후 머지/높이 재적용)
   useEffect(() => {
     const g = (gridRef as { current: FlexGridType<SalesPlanRow> | null } | null)?.current;
     if (!g || !gridFilterRef) return;
@@ -1247,18 +1295,37 @@ export const SalesPlanGrid = ({
     ) => {
       if (isDynamic(e.getColumn()?.binding)) e.cancel = true;
     };
-    const onFilterApplied = () => g.invalidate(true);
 
-    let f = gridFilterRef.current;
-    if (!f || f.grid !== g) {
-      f = new FlexGridFilter(g);
-      f.filterColumns = [''];
-      gridFilterRef.current = f;
+    // 금지: 여기서 새 FlexGridFilter 를 만들면 안 된다 ("필터 걸고 행추가하니 필터가 풀림" 의 원인).
+    //   공용 DataGrid 가 itemsSourceChanged 에 [capture -> FlexGridFilter 생성(=wijmo clear) -> restore]
+    //   를 등록 순서로 걸어 필터를 되살린다. 여기서 두 번째 인스턴스를 만들면 그 clear 핸들러가
+    //   restore 뒤에 붙어 마지막에 실행되므로 복원분이 도로 지워진다.
+    //   따라서 DataGrid 에 gridFilterRef 를 넘겨 인스턴스를 공유하고(아래 JSX), 없을 때만 안전망으로 만든다.
+    if (!gridFilterRef.current) {
+      const created = new FlexGridFilter(g);
+      created.filterColumns = [''];
+      gridFilterRef.current = created;
     }
+    const f = gridFilterRef.current;
+
+    // apply() 가 방금 예외 집합을 비웠으므로 여기서 되살린다.
+    //   주의: refresh 는 rAF 로 미룬다 — filterApplied 핸들러 안에서 부르면 wijmo apply() 도중
+    //   재진입이 되어 내부 인덱스가 어긋난다.
+    let raf = 0;
+    const onFilterApplied = () => {
+      g.invalidate(true);
+      if (!reapplyInsertRowVisibility()) return;
+      window.cancelAnimationFrame(raf);
+      raf = window.requestAnimationFrame(() => {
+        reapplyInsertRowVisibility();
+        g.collectionView?.refresh();
+      });
+    };
     f.filterChanging.addHandler(onFilterChanging as never);
     f.filterApplied.addHandler(onFilterApplied);
 
     return () => {
+      window.cancelAnimationFrame(raf);
       try {
         f?.filterChanging.removeHandler(onFilterChanging as never);
         f?.filterApplied.removeHandler(onFilterApplied);
@@ -1266,23 +1333,24 @@ export const SalesPlanGrid = ({
         /* unmount race */
       }
     };
-  }, [dynBindings, visibleColumns, gridRef, gridFilterRef]);
+  }, [dynBindings, visibleColumns, gridRef, gridFilterRef, reapplyInsertRowVisibility]);
 
   return (
-    <div className={styles.gridContainer}>
-      <DataGrid
-        key={mainStaticColumns.map(c => c.colNm).join(',')}
-        className={styles.grid}
-        gridRef={gridRef as never}
-        editTrackerRef={editTrackerRef as never}
-        staticColumns={mainStaticColumns}
-        dynamicColumns={mainDynamicColumns}
-        itemsSource={rows as unknown as WijmoRowItem[]}
-        autoGenerateColumns={false}
-        allowSorting={true}
-        allowMerging={AllowMerging.All}
-        useAggregationRow={false} // [2026-08-12 사용자 지시] Footer Summary 삭제
-      />
-    </div>
+    // <div className={styles.gridContainer}>
+    <DataGrid
+      key={mainStaticColumns.map(c => c.colNm).join(',')}
+      className={styles.grid}
+      gridRef={gridRef as never}
+      gridFilterRef={gridFilterRef}
+      editTrackerRef={editTrackerRef as never}
+      staticColumns={mainStaticColumns}
+      dynamicColumns={mainDynamicColumns}
+      itemsSource={rows as unknown as WijmoRowItem[]}
+      autoGenerateColumns={false}
+      allowSorting={true}
+      allowMerging={AllowMerging.All}
+      useAggregationRow={false} // [2026-08-12 사용자 지시] Footer Summary 삭제
+    />
+    // </div>
   );
 };

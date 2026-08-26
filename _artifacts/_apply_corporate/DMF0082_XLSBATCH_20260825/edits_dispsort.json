@@ -1,0 +1,18 @@
+[
+ {
+  "old": "    V_ORDERBY := REPLACE(V_ORDERBY, 'MEASURE_GROUP', ' CAST(SORT_ORDER_NO AS NUMBER(10,2))');\n    V_ORDERBY := REPLACE(V_ORDERBY, ', MEASURE', '');\n\n    -- ====================================================================================================\n    -- 권한 그룹 조회",
+  "new": "    V_ORDERBY := REPLACE(V_ORDERBY, 'MEASURE_GROUP', ' CAST(SORT_ORDER_NO AS NUMBER(10,2))');\n    V_ORDERBY := REPLACE(V_ORDERBY, ', MEASURE', '');\n\n    /* [E20260826-DISPSORT] 행 정렬 = 화면 표시값 정합 (사용자 신고 2026-08-26: Audi->VW 일부->BMW).\n       비40 그리드의 END_CUSTOMER 표시값은 FE 가 사이트 파생 고객명(ENDCUSTDISP)으로 교체하는데\n       정렬 키는 원장값(=프로젝트 코드)이라 표시 기준으로 어긋나 보인다(사내 실호출 재현).\n       정렬 키만 동일 파생식(사이트->고객명, SALES/VALID)으로 치환 — 40 은 원값 유지(회귀 0).\n       XFIN = 최종 SQL 래퍼 별칭 (아래 OPEN 직전 래핑) — 정규 상관으로 컬럼 캡처 위험 제거. */\n    IF INSTR(V_ORDERBY, 'END_CUSTOMER') > 0 THEN\n        V_ORDERBY := REPLACE(V_ORDERBY, 'END_CUSTOMER',\n            'CASE WHEN XFIN.DIVISION_ID = ''40'' THEN XFIN.END_CUSTOMER ELSE NVL((SELECT MAX(S9.END_CUSTOMER) FROM SCM_MGR.SCM_MST_SITE S9 WHERE S9.DIVISION_ID = XFIN.DIVISION_ID AND S9.SCM_SITE_ID = XFIN.SCM_SITE_ID AND S9.SITE_TYPE = ''SALES'' AND S9.VALID_YN = ''Y''), XFIN.END_CUSTOMER) END');\n    END IF;\n\n    -- ====================================================================================================\n    -- 권한 그룹 조회"
+ },
+ {
+  "old": "    V_SQL := REPLACE(V_SQL, '[@V_ORDERBY]',     V_ORDERBY);\n\n    OPEN O_RC1 FOR V_SQL;",
+  "new": "    V_SQL := REPLACE(V_SQL, '[@V_ORDERBY]',     '');\n    /* [E20260826-DISPSORT] XFIN 래퍼 — ORDER BY 를 래퍼 밖에 부착 (파생 정렬식의 정규 상관 대상) */\n    V_SQL := 'SELECT * FROM (' || CHR(10) || V_SQL || CHR(10) || ') XFIN ' || V_ORDERBY;\n\n    OPEN O_RC1 FOR V_SQL;"
+ },
+ {
+  "old": "    V_ORDERBY := REPLACE(V_ORDERBY, 'MEASURE_GROUP', ' CAST(SORT_ORDER_NO AS NUMBER(10,2))');   /* CAST ... NUMERIC(10,2) */\n    V_ORDERBY := REPLACE(V_ORDERBY, ', MEASURE', '');",
+  "new": "    V_ORDERBY := REPLACE(V_ORDERBY, 'MEASURE_GROUP', ' CAST(SORT_ORDER_NO AS NUMBER(10,2))');   /* CAST ... NUMERIC(10,2) */\n    V_ORDERBY := REPLACE(V_ORDERBY, ', MEASURE', '');\n\n    /* [E20260826-DISPSORT] 행 정렬 = 화면 표시값 정합 (사용자 신고 2026-08-26: Audi->VW 일부->BMW).\n       비40 그리드의 END_CUSTOMER 표시값은 FE 가 사이트 파생 고객명(ENDCUSTDISP)으로 교체하는데\n       정렬 키는 원장값(=프로젝트 코드)이라 표시 기준으로 어긋나 보인다(사내 실호출 재현).\n       정렬 키만 동일 파생식(사이트->고객명, SALES/VALID)으로 치환 — 40 은 원값 유지(회귀 0).\n       XFIN = 최종 SQL 래퍼 별칭 (아래 OPEN 직전 래핑) — 정규 상관으로 컬럼 캡처 위험 제거. */\n    IF INSTR(V_ORDERBY, 'END_CUSTOMER') > 0 THEN\n        V_ORDERBY := REPLACE(V_ORDERBY, 'END_CUSTOMER',\n            'CASE WHEN XFIN.DIVISION_ID = ''40'' THEN XFIN.END_CUSTOMER ELSE NVL((SELECT MAX(S9.END_CUSTOMER) FROM SCM_MGR.SCM_MST_SITE S9 WHERE S9.DIVISION_ID = XFIN.DIVISION_ID AND S9.SCM_SITE_ID = XFIN.SCM_SITE_ID AND S9.SITE_TYPE = ''SALES'' AND S9.VALID_YN = ''Y''), XFIN.END_CUSTOMER) END');\n    END IF;\n"
+ },
+ {
+  "old": "    V_SQL_TEXT := REPLACE(V_SQL_TEXT, '[@V_ORDERBY]',     V_ORDERBY);",
+  "new": "    V_SQL_TEXT := REPLACE(V_SQL_TEXT, '[@V_ORDERBY]',     '');\n    /* [E20260826-DISPSORT] XFIN 래퍼 (GET 지점과 동일) */\n    V_SQL_TEXT := 'SELECT * FROM (' || CHR(10) || V_SQL_TEXT || CHR(10) || ') XFIN ' || V_ORDERBY;"
+ }
+]

@@ -13,7 +13,7 @@ import {
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { type MutableRefObject, useEffect, useMemo, useRef } from 'react';
 
-import { CELL_INPUT_EDIT_TYPE, CRUD_TYPE } from '@foundation/constants';
+import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import type { FlexGridColumnConfig } from '@foundation/models';
 import type { EditTracker } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
@@ -136,7 +136,12 @@ export const buildDynamicColumns = (data: MainRow[], chkYear: boolean): FlexGrid
           // 구분 컬럼은 문자 컬럼 — 숫자 서식(n2) 을 걸면 wijmo 가 값을 숫자로 파싱/표시한다.
           // dataType 을 명시하지 않으면 itemsSource 첫 값으로 추론돼 빈 데이터일 때 Number 로
           // 잡히는 사고가 나므로 String 고정.
-          ...(isRbu999 ? { dataType: DataType.String } : { format: 'n2' }),
+          // 필수: 'f2' (fixed-point) — 'n2' 는 천단위 콤마를 붙인다(1234 입력 -> "1,234.00").
+          //   입력한 숫자가 콤마 없이 그대로 보여야 한다(사용자 요구 2026-08-23). 소수 2자리는 유지.
+          //   format 을 비우면 안 된다 — wijmo 기본 서식이 콤마를 다시 붙인다.
+          //   'd0' 계열도 콤마는 없지만 columnMapping.isNumericFormat 이 'd' 를 제외해
+          //   normalizeDynamicColumns 의 dataType=Number 자동 지정이 빠진다. 'f2' 는 그대로 유지된다.
+          ...(isRbu999 ? { dataType: DataType.String } : { format: 'f2' }),
           allowSorting: false,
           allowMerging: false,
           height: 24,
@@ -265,33 +270,6 @@ export const ContributeMainGrid = ({ gridRef, gridFilterRef, editTrackerRef, dat
     grid.formatItem.addHandler(handler);
     grid.invalidate();
     return () => grid.formatItem.removeHandler(handler);
-  }, [staticColumns, dynamicColumns]);
-
-  // AS-IS Dsdm_Changed 1:1 — 동적 컬럼 (Y#/M#) 수정만 변경 행으로 마킹.
-  // BASE 6 컬럼은 readonly 라 영향 없음.
-  // 마커는 CRUD_TYPE='M' (프레임워크 표준, GridUtils.getChangedRows 와 동일 규약) 를 쓴다.
-  // 금지: EDIT_FLAG 를 마커로 덮어쓰지 않는다 — 행 잠금 판정값이라 덮어쓰면 수정한 행이 잠긴다.
-  // dependency [staticColumns, dynamicColumns] — gridRef.current 가 set 된 후 등록 보장
-  // (handler 미등록 시 row.CRUD_TYPE 세팅 안 됨 → handleSave dirty=0 사고).
-  useEffect(() => {
-    const grid = gridRef.current ?? internalRef.current;
-    if (!grid) return;
-    const handler = (_s: FlexGridType<MainRow>, e: { row: number; col: number }) => {
-      const col = grid.columns[e.col];
-      if (!col?.binding) return;
-      if (!col.binding.startsWith('Y#') && !col.binding.startsWith('M#')) return;
-      const row = grid.rows[e.row]?.dataItem as MainRow | undefined;
-      if (row && isRowEditable(row)) row.CRUD_TYPE = CRUD_TYPE.MODIFY;
-    };
-    grid.cellEditEnded.addHandler(handler);
-    // 필수: 붙여넣기는 cellEditEnded 를 발생시키지 않는다 (wijmo 는 pastedCell 만 raise).
-    //   같은 마킹을 걸지 않으면 붙여넣은 값이 화면에는 보이는데 handleSave 의
-    //   `CRUD_TYPE === 'M'` 필터에 안 걸려 "수정한 내용이 없습니다" 로 통째로 버려진다.
-    grid.pastedCell.addHandler(handler as never);
-    return () => {
-      grid.cellEditEnded.removeHandler(handler);
-      grid.pastedCell.removeHandler(handler as never);
-    };
   }, [staticColumns, dynamicColumns]);
 
   // 다단 헤더 row 높이는 buildDynamicColumns 의 group/leaf 객체 안 `height: 24` 로 해결됨.

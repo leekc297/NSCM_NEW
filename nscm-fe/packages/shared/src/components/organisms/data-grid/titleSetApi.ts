@@ -106,10 +106,16 @@ export const saveTitleSet = async (params: {
 /** admin 컬럼 메타 1행 중 컬럼 설정 팝업이 쓰는 부분 (`/admin/menu/{mnuId}/column` = GridColumn DTO). */
 export interface ColumnMetaRow {
   colNm: string;
+  /** COLUMN_LABEL_NAME — 팝업 목록 라벨. */
+  colLblNm?: string;
+  /** SCM_MST_SHEET_COLUMNS.COLUMN_WIDTH — 관리자 기본 폭. Default 리셋의 폭 정본. */
+  colWth?: number;
   /** SCM_MST_SHEET_COLUMNS.VISIBLE_FLAG — 관리 노출 여부. false = 화면·팝업 어디에도 안 뜬다. */
   visible?: boolean;
-  /** DISPLAY_FLAG — 기본 표시 여부. 사용자가 켤 수 있으므로 팝업 목록에는 남아야 한다. */
+  /** DEFAULT_FLAG(SP 별칭 DISPLAY_FLAG) — 기본 표시 여부. 사용자가 켤 수 있으므로 팝업 목록에는 남는다. */
   display?: boolean;
+  /** USER_SELECTABLE_FLAG — 사용자 표시/비표시 변경 가능 여부. false = 고정(팝업 좌우 이동 잠금). */
+  personalizable?: boolean;
 }
 
 /**

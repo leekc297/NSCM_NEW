@@ -1,3 +1,4 @@
+
 import {
   Tooltip,
   addClass,
@@ -17,6 +18,7 @@ import { CellRange, CellType, GroupRow } from '@mescius/wijmo.grid';
 import { Selector } from '@mescius/wijmo.grid.selector';
 import dayjs from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek';
+import type { MutableRefObject } from 'react';
 
 import { CELL_CONTROL_TYPE, CELL_INPUT_EDIT_TYPE, CRUD_TYPE } from '@foundation/constants';
 import type { FlexGridColumnConfig } from '@foundation/models';
@@ -31,7 +33,53 @@ interface SummaryInfo {
   avg: number;
 }
 
-export const useDataGridUtils = <T extends WijmoRowItem = WijmoRowItem>() => {
+/**
+ * 화면이 주입하는 셀 편집가능 판정 컨텍스트.
+ * 정적 메타(GridUtils.isEditableCell)로는 못 다루는 동적(주/월/일) 컬럼을 위해, 화면이 자기
+ * 도메인 규칙(cutoff/권한/버킷/EDIT_FLAG 등)을 함수로 넘긴다.
+ */
+export interface CellEditableContext<T extends WijmoRowItem = WijmoRowItem> {
+  grid: FlexGrid<T>;
+  row: number;
+  col: number;
+  binding: string;
+  rowItem: T | null;
+  column: FlexGridColumnConfig | undefined;
+}
+
+export type IsCellEditable<T extends WijmoRowItem = WijmoRowItem> = (
+  ctx: CellEditableContext<T>
+) => boolean;
+
+interface DataGridUtilsOptions<T extends WijmoRowItem = WijmoRowItem> {
+  /**
+   * 편집가능 판정 주입(동적 화면). 미지정 시 정적 메타(GridUtils.isEditableCell)로 판정 — 기존 화면 무영향.
+   * 지정 시 색(wj-cell-editable)과 편집 게이트(beginningEdit/pastingCell)가 이 단일 함수를 공유한다.
+   *
+   * ref 로 받는 이유: 아래 핸들러들은 grid 생성 시 1회만 등록되므로, 화면 상태(division/cutoff 등)를
+   *   담은 predicate 를 값으로 넘기면 첫 렌더 closure 에 고정되어 stale 이 된다. ref 의 최신값을 읽어 막는다.
+   *   (훅 내부에 useRef 를 두면 dataGridUtils.test.ts 의 훅 밖 호출이 깨지므로 ref 는 DataGrid 가 소유해 주입.)
+   */
+  isCellEditableRef?: MutableRefObject<IsCellEditable<T> | undefined>;
+}
+
+export const useDataGridUtils = <T extends WijmoRowItem = WijmoRowItem>(
+  options?: DataGridUtilsOptions<T>
+) => {
+  // 편집가능 판정의 단일 진입점 — predicate 가 주입되면 그것을, 아니면 정적 메타를 쓴다.
+  const resolveEditable = (grid: FlexGrid<T>, row: number, col: number): boolean => {
+    const isCellEditable = options?.isCellEditableRef?.current;
+    if (!isCellEditable) return GridUtils.isEditableCell(grid, row, col);
+    return isCellEditable({
+      grid,
+      row,
+      col,
+      binding: (GridUtils.getBinding(grid, col) as string | undefined) ?? '',
+      rowItem: GridUtils.getRow(grid, row),
+      column: GridUtils.getColumn(grid, col),
+    });
+  };
+
   const _aggregateRange = (
     tally: SummaryInfo,
     grid: FlexGrid<T>,
@@ -155,10 +203,14 @@ export const useDataGridUtils = <T extends WijmoRowItem = WijmoRowItem>() => {
       cellInputEditType === CELL_INPUT_EDIT_TYPE.MANDATORY ||
       cellInputEditType === CELL_INPUT_EDIT_TYPE.OPTIONAL;
 
+    // ⭐ [2026-08-22] FPTextModal 도 돋보기 아이콘을 단다 — 텍스트 입력이 되더라도 모달이 있다는
+    //   사실이 보여야 한다(AS-IS `TextCellType.BackgroundImage = ImagePopUp` 파리티).
     toggleClass(
       formatItemEventArgs.cell,
       'is-popup',
-      cellCtrlType === CELL_CONTROL_TYPE.MODAL && isEditableCell
+      (cellCtrlType === CELL_CONTROL_TYPE.MODAL ||
+        cellCtrlType === CELL_CONTROL_TYPE.TEXT_MODAL) &&
+        isEditableCell
     );
   };
 
@@ -216,7 +268,7 @@ export const useDataGridUtils = <T extends WijmoRowItem = WijmoRowItem>() => {
         rowHeaderCell.dataset.status = dataItem['CRUD_TYPE'];
       }
     } else if (cellType === CellType.Cell) {
-      toggleClass(cell, 'wj-cell-editable', GridUtils.isEditableCell(grid, row, col));
+      toggleClass(cell, 'wj-cell-editable', resolveEditable(grid, row, col));
 
       const crudType = GridUtils.getRow(grid, row)?.CRUD_TYPE;
       const columnGroupProps = GridUtils.getColumn(grid, col);
@@ -224,7 +276,8 @@ export const useDataGridUtils = <T extends WijmoRowItem = WijmoRowItem>() => {
       toggleClass(
         cell,
         'wj-cell-popup',
-        columnGroupProps?._ctrlType === CELL_CONTROL_TYPE.MODAL &&
+        (columnGroupProps?._ctrlType === CELL_CONTROL_TYPE.MODAL ||
+          columnGroupProps?._ctrlType === CELL_CONTROL_TYPE.TEXT_MODAL) &&
           (columnGroupProps?._inputEditType === CELL_INPUT_EDIT_TYPE.MANDATORY ||
             columnGroupProps?._inputEditType === CELL_INPUT_EDIT_TYPE.OPTIONAL ||
             (columnGroupProps?._inputEditType?.startsWith('I') && crudType === CRUD_TYPE.INSERT))
@@ -265,13 +318,17 @@ export const useDataGridUtils = <T extends WijmoRowItem = WijmoRowItem>() => {
       const row = cellRangeEventArgs.row;
       const col = cellRangeEventArgs.col;
 
-      cellRangeEventArgs.cancel = !GridUtils.isEditableCell(grid, row, col);
+      // 색(formatEditableColumns)과 같은 resolveEditable 을 써 표시와 편집 게이트가 갈리지 않게 한다.
+      cellRangeEventArgs.cancel = !resolveEditable(grid, row, col);
     };
 
     const cellEditHandler = (sender: FlexGrid, cellRangeEventArgs: CellRangeEventArgs) => {
       const column = GridUtils.getColumn(sender, cellRangeEventArgs.col);
       const ctrlType = column?._ctrlType;
 
+      // ⛔ 모달 전용 셀만 직접 편집을 막는다.
+      //   ⭐ [2026-08-22] `FPTextModal` 은 **막지 않는다** — 타이핑과 모달을 둘 다 허용하는 값이다
+      //     (AS-IS 파리티). 여기에 TEXT_MODAL 을 함께 넣으면 신설 값의 존재 이유가 사라진다.
       if (ctrlType === CELL_CONTROL_TYPE.MODAL) {
         cellRangeEventArgs.cancel = true;
         return;

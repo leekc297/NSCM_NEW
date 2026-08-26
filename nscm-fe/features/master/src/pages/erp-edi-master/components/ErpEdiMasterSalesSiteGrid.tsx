@@ -7,14 +7,14 @@ import {
   type FormatItemEventArgs,
 } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { useState, type MutableRefObject } from 'react';
+import { useEffect, useState, type MutableRefObject } from 'react';
 
 import { CRUD_TYPE } from '@foundation/constants';
 import { GridUtils } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 import { useMessageStore } from '@shared/stores';
 
-import { CustomerModal, RegionModal, TeamModal } from '../../../components';
+import { CustomerModal, TeamModal } from '../../../components';
 import type { MENU_ID, SHEETS } from '../erp-edi-master.constants';
 import { useErpEdiMasterStore } from '../useErpEdiMasterStore';
 
@@ -26,7 +26,10 @@ interface ErpEdiMasterSalesSiteGridProps {
   data: ResponseData<MENU_ID, SHEETS.SALES_SITE, 'o_rc1'>[];
 }
 
-const YELLOW_HIGHLIGHT_COLUMNS = new Set([
+// AS-IS .cs L1227~1236 노란색 = 수정 가능 컬럼. 수정 모드 잠금 규칙(.cs L598~603 —
+//   DIVISION_ID / SCM_SITE_ID / REP_SOLDTO_CODE / REP_SHIPTO_CODE / LAST_UPDATE*)의 여집합과 같다.
+//   Yellow(wj-cell-editable) 표시와 편집 허용 판정을 이 한 집합으로 함께 쓴다.
+const EDITABLE_COLUMNS = new Set([
   'END_CUSTOMER',
   'SOLDTO_CUSTOMER',
   'COMPANY_ID',
@@ -39,6 +42,9 @@ const YELLOW_HIGHLIGHT_COLUMNS = new Set([
   'SHIP_PLAN_AUTO',
 ]);
 
+// 필수 입력 컬럼(헤더 빨간 점)은 여기서 정하지 않는다 — 공용 formatEditableColumns 가
+//   컬럼 메타 inputTpCd(M / IM)로 그리고, 저장 시 빈 값 차단도 같은 메타를 본다.
+
 export const ErpEdiMasterSalesSiteGrid = ({
   gridRef,
   gridFilterRef,
@@ -49,7 +55,6 @@ export const ErpEdiMasterSalesSiteGrid = ({
   const staticColumns = useErpEdiMasterStore(state => state.staticColumns.salesSite);
 
   const [openCustomerModal, setOpenCustomerModal] = useState(false);
-  const [openRegionModal, setOpenRegionModal] = useState(false);
   const [openTeamModal, setOpenTeamModal] = useState(false);
   const [clickedRow, setClickedRow] = useState<number>(-1);
 
@@ -61,30 +66,55 @@ export const ErpEdiMasterSalesSiteGrid = ({
 
     const dataItem = GridUtils.getRow(grid, ht.row);
     const binding = GridUtils.getBinding(grid, ht.col);
-    if (!dataItem || !binding) return;
-    if (dataItem.CRUD_TYPE !== CRUD_TYPE.INSERT) return;
+    if (!dataItem || typeof binding !== 'string' || !binding) return;
 
     setClickedRow(ht.row);
 
+    // 팝업(키 컬럼)은 신규행 전용 — AS-IS 수정 모드에서도 잠긴다(.cs L600~601).
+    //   COUNTRY_NAME / CITY_NAME 은 팝업이 아니라 텍스트 입력이라 여기서 다루지 않는다.
+    if (dataItem.CRUD_TYPE !== CRUD_TYPE.INSERT) return;
     if (binding === 'REP_SOLDTO_CODE' || binding === 'REP_SHIPTO_CODE') {
       setOpenCustomerModal(true);
-    } else if (binding === 'COUNTRY_NAME' || binding === 'CITY_NAME') {
-      setOpenRegionModal(true);
     } else if (binding === 'TEAM_NAME') {
       setOpenTeamModal(true);
     }
   };
+
+  // 편집 허용 범위 — 공용 DataGrid 의 setEditableColumns 는 컬럼 메타(_inputEditType) 기준으로
+  //   판정하므로, 화면 기준(AS-IS 노란색 집합)을 mount 후에 등록해 덮어쓴다.
+  //   Wijmo Event 는 등록 순서대로 호출 → 마지막 등록이 최종 결정 (표준 패턴: CustomerModelMappingGrid).
+  // deps 에 data/staticColumns 를 두는 이유: 공용 DataGrid 는 wijmo react 의 initialized(setTimeout)
+  //   에서 gridRef 를 채우므로 첫 useEffect 시점엔 grid 가 아직 없다. 조회/컬럼메타 도착 시 다시 걸린다.
+  useEffect(() => {
+    const grid = gridRef.current;
+    if (!grid) return;
+    const handleBeginningEdit = (
+      sender: FlexGrid<ResponseData<MENU_ID, SHEETS.SALES_SITE, 'o_rc1'>>,
+      e: CellRangeEventArgs
+    ) => {
+      const binding = GridUtils.getBinding(sender, e.col);
+      e.cancel = typeof binding !== 'string' || !EDITABLE_COLUMNS.has(binding);
+    };
+    grid.beginningEdit.addHandler(handleBeginningEdit);
+    // 붙여넣기도 같은 기준 — 안 걸면 타이핑은 되는데 Ctrl+V 만 막히는 상태가 된다.
+    grid.pastingCell.addHandler(handleBeginningEdit);
+    return () => {
+      grid.beginningEdit?.removeHandler(handleBeginningEdit);
+      grid.pastingCell?.removeHandler(handleBeginningEdit);
+    };
+  }, [gridRef, data, staticColumns]);
 
   // 노란색 셀 시각 (조회 모드 — 모든 행)
   const handleFormatItem = (
     grid: FlexGrid<ResponseData<MENU_ID, SHEETS.SALES_SITE, 'o_rc1'>>,
     args: FormatItemEventArgs
   ) => {
+    // 헤더는 손대지 않는다 — 필수 빨간 점은 공용 formatEditableColumns 가 메타로 그린다.
     if (args.panel.cellType !== CellType.Cell) return;
     const binding = GridUtils.getBinding(grid, args.col);
     if (typeof binding !== 'string') return;
     // 편집 가능 컬럼 = 표준 Yellow(`wj-cell-editable`). 그 외 = White+zebra (클래스 없음). hook #95.
-    toggleClass(args.cell, 'wj-cell-editable', YELLOW_HIGHLIGHT_COLUMNS.has(binding));
+    toggleClass(args.cell, 'wj-cell-editable', EDITABLE_COLUMNS.has(binding));
   };
 
   const setCustomer = (
@@ -126,8 +156,10 @@ export const ErpEdiMasterSalesSiteGrid = ({
   };
 
   // AS-IS shtSALES_SITEDataModel_Changed(.cs L2511) 4-branch 를 Wijmo cellEditEnded 로 이관.
-  //   행 추가 후 셀을 직접 편집(SOLDTO/COUNTRY/CITY/COUNTRY_NAME/CITY_NAME)할 때 자동 발동.
-  //   신규 행(CRUD_TYPE='I')에만 적용 — 기존 조회 행은 편집 대상 아님.
+  //   셀을 직접 편집(SOLDTO/COUNTRY/CITY/COUNTRY_NAME/CITY_NAME)할 때 자동 발동.
+  //   이름 클리어 연쇄(c/d)는 조회 행에도 적용 — AS-IS 도 신규행 조건이 없다.
+  //   Sales Site 자동조합(a/b)만 신규행 한정 — 조회행의 SSCM_SITE_ID 는 저장 키라 바꾸지 않는다
+  //   (AS-IS 수정 모드에서도 sSCM_SITE_ID 는 잠금, .cs L599).
   const handleCellEditEnded = (
     grid: FlexGrid<ResponseData<MENU_ID, SHEETS.SALES_SITE, 'o_rc1'>>,
     e: CellRangeEventArgs
@@ -135,13 +167,12 @@ export const ErpEdiMasterSalesSiteGrid = ({
     const dataItem = GridUtils.getRow(grid, e.row);
     const binding = GridUtils.getBinding(grid, e.col);
     if (!dataItem || !binding) return;
-    if (dataItem.CRUD_TYPE !== CRUD_TYPE.INSERT) return;
 
     // cascade 안 cascade 방지 (deferUpdate 로 batch — 룰 07 §2.10.8)
     grid.deferUpdate(() => {
       if (binding === 'SOLDTO_CUSTOMER' || binding === 'COUNTRY' || binding === 'CITY') {
         // Branch (a)+(b): 자동 조합 + 중복 검증
-        applyAutoScmSiteId(dataItem);
+        if (dataItem.CRUD_TYPE === CRUD_TYPE.INSERT) applyAutoScmSiteId(dataItem);
       } else if (binding === 'COUNTRY_NAME') {
         // Branch (c): CountryName 이 비면 COUNTRY + CITY + CITY_NAME 연쇄 클리어
         if (!(dataItem.COUNTRY_NAME ?? '')) {
@@ -157,22 +188,6 @@ export const ErpEdiMasterSalesSiteGrid = ({
       }
     });
     grid.refreshRange(new CellRange(e.row, 0, e.row, -1));
-  };
-
-  const setRegion = (
-    countryCode: string,
-    countryName: string,
-    cityCode: string,
-    cityName: string
-  ) => {
-    const dataItem = GridUtils.getRow(gridRef.current, clickedRow);
-    if (!dataItem) return;
-    dataItem.COUNTRY = countryCode;
-    dataItem.COUNTRY_NAME = countryName;
-    dataItem.CITY = cityCode;
-    dataItem.CITY_NAME = cityName;
-    applyAutoScmSiteId(dataItem);
-    gridRef.current?.refresh();
   };
 
   const setTeam = (teamId: string, teamName?: string) => {
@@ -193,7 +208,7 @@ export const ErpEdiMasterSalesSiteGrid = ({
         dblClick={handleDblClick}
         formatItem={handleFormatItem}
         cellEditEnded={handleCellEditEnded}
-        isReadOnly={true}
+        isReadOnly={false}
       />
       {openCustomerModal && (
         <CustomerModal
@@ -201,13 +216,6 @@ export const ErpEdiMasterSalesSiteGrid = ({
           modalClose={() => setOpenCustomerModal(false)}
           setSelectedValue={setCustomer}
           divisionId={GridUtils.getRow(gridRef.current, clickedRow)?.DIVISION_ID}
-        />
-      )}
-      {openRegionModal && (
-        <RegionModal
-          open={openRegionModal}
-          modalClose={() => setOpenRegionModal(false)}
-          setSelectedValue={setRegion}
         />
       )}
       {openTeamModal && (

@@ -1,0 +1,31 @@
+{
+  "same_after_norm": [
+    "features/demand/src/pages/forecast-price/components/ForecastPriceGridUtils.test.ts",
+    "features/demand/src/pages/forecast-price/components/ForecastPriceGridUtils.ts",
+    "features/demand/src/pages/forecast-price/components/modals/ExchangeRateModal.tsx",
+    "features/demand/src/pages/forecast-price/utils/forecast-price.save.ts"
+  ],
+  "ours_only": [
+    "features/demand/src/pages/forecast-price/__asis-mapping__.md",
+    "features/demand/src/pages/forecast-price/components/modals/SavePricePeriodModal.tsx",
+    "packages/shared/src/components/organisms/data-grid/dataGridUtils.ts",
+    "packages/shared/src/components/organisms/index.ts",
+    "packages/shared/src/stores/useDirtyRegistry.ts"
+  ],
+  "theirs_only": [],
+  "both": [
+    "features/demand/src/pages/forecast-price/components/ForecastPriceForm.tsx",
+    "features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx",
+    "features/demand/src/pages/forecast-price/components/modals/ForecastTemplateModal.tsx",
+    "features/demand/src/pages/forecast-price/forecast-price.constants.ts",
+    "features/demand/src/pages/forecast-price/ForecastPrice.tsx",
+    "features/demand/src/pages/forecast-price/utils/forecast-price.api.ts",
+    "features/demand/src/pages/forecast-price/utils/forecast-price.excelForm.ts",
+    "features/master/src/components/searchFields/SearchFields.tsx",
+    "packages/foundation/src/constants/column-config.ts",
+    "packages/shared/src/components/molecules/customDropdown/CustomDropdown.tsx",
+    "packages/shared/src/components/organisms/data-grid/DataGrid.tsx",
+    "packages/shared/src/components/templates/modals/column-layout-modal/ColumnLayoutModal.tsx",
+    "packages/shared/src/components/templates/modals/column-layout-modal/columnLayoutModal.utils.ts"
+  ]
+}

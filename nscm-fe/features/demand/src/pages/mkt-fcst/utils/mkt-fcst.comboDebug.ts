@@ -11,10 +11,15 @@ import { toCellStr } from './mkt-fcst.prContext';
 
 const ON = false;
 
+// 검색조건(Sales Site) 콤보 로그 스위치. 그리드 로그(ON)와 따로 켠다.
+//   확인 끝나면 false 로 되돌리거나 이 파일 + MktFcstForm 의 logSearchSalesSite 호출을 지운다.
+const ON_SEARCH = false;
+
 /** true = console.table(표, 항상 펼침) / false = 배열(▶ 로 접었다 펼쳤다) */
 const AS_TABLE = false;
 
 const off = (): boolean => !ON || !import.meta.env.DEV;
+const offSearch = (): boolean => !ON_SEARCH || !import.meta.env.DEV;
 
 type Row = Record<string, unknown>;
 
@@ -91,4 +96,47 @@ export const logComboEdit = (opts: {
   );
   list('편집 후보 리스트', after, keys);
   list('필터 전 전체', before, keys);
+};
+
+// ============================================================================
+// [검색조건] Sales Site 콤보 — 앞 조건(Division/Team/End Customer)이 바뀔 때마다
+//   어떤 콤보 SQL ID 가 선택됐고 서버에 무엇을 보냈는지, 결과가 몇 건인지 찍는다.
+// ============================================================================
+export const logSearchSalesSite = (opts: {
+  division: string;
+  deptIds: string[];
+  endCustomers: string[];
+  /** 실제로 호출한 콤보 SQL ID. */
+  comboId: string;
+  /** 그 ID 가 선택된 이유 (AS-IS 이벤트 환산). */
+  reason: string;
+  /** 서버로 보낸 파라미터 그대로 (값의 따옴표까지 보이게 찍는다). */
+  param: Record<string, string>;
+  /** End Customer 드롭다운에 실제로 걸린 옵션. */
+  endCustomerOptions: { label: string; value: string }[];
+  /** Sales Site 콤보 응답. undefined = 아직 로딩 중. */
+  salesSiteRows?: Row[];
+}): void => {
+  if (offSearch()) return;
+  const { division, deptIds, endCustomers, comboId, reason, param } = opts;
+  const rows = opts.salesSiteRows;
+  const paramText = Object.entries(param)
+    .map(([k, v]) => `${k}=${v}`)
+    .join('  ');
+  const lines = [
+    SEP,
+    `[검색조건 Sales Site] 콤보 SQL ID = ${comboId}`,
+    SEP,
+    `  선택 이유         : ${reason}`,
+    `  Division          : '${division}'`,
+    `  Team              : [${deptIds.join(',') || '미선택'}]`,
+    `  End Customer      : [${endCustomers.join(',') || '미선택'}]`,
+    `  전송 파라미터     : ${paramText}`,
+    `  End Customer 옵션 : ${opts.endCustomerOptions.length}건`,
+    `  Sales Site 결과   : ${rows === undefined ? '(로딩 중)' : `${rows.length}건`}`,
+  ];
+  console.log(lines.join('\n'));
+  if (rows !== undefined) {
+    list('Sales Site 리스트', rows, ['DIVISION_ID', 'DEPT_ID', 'END_CUSTOMER']);
+  }
 };

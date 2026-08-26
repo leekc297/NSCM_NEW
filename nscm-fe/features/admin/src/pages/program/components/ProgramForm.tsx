@@ -1,3 +1,4 @@
+import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { SearchArea } from '@shared/components';
 import { FormItem, InputField } from '@shared/lges';
 import { Grid } from '@shared/mui';
@@ -22,6 +23,7 @@ export const ProgramForm = () => {
           <FormItem
             label={t('LBL00644', 'Program ID(Name)')}
             labelAlign='right'
+            className={commonStyles.formItem}
             render={() => (
               <InputField
                 fullWidth

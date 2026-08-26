@@ -1,0 +1,21 @@
+{
+ "00_CLOUD_PRECHECK.sql": "적용 전 확인 C1~C9 — C4=⛔ 센티널 적용 게이트",
+ "_README.md": "취합 근거·정정 계보·제외 사유·적용 순서·미해결 (정본)",
+ "_INVENTORY.md": "선행판 인벤토리 (참고 이월)",
+ "A_DB/00_GTT_DDL.sql": "GT_DMF0082_* 33종 + 인덱스 1 자급 DDL (멱등)",
+ "A_DB/00B_DDL_DEFAULT_ON_NULL.sql": "DEFAULT ON NULL 5표 61열 (멱등)",
+ "A_DB/01_PKG_DMF0082_SPEC.sql": "PKG SPEC 전체 교체 (92줄)",
+ "A_DB/02_PKG_DMF0082_BODY.sql": "PKG BODY 전체 교체 (14,753줄 · 0820 대비 +149행)",
+ "A_DB/04_CMBO_SYNC.sql": "CMBO 24종 MERGE (⚠ 공유 콤보 포함 — 선별 적용)",
+ "A_DB/10_SHEET_COLUMNS.sql": "SHEET_COLUMNS 90행 (2시트) — 시트 단위 재적재",
+ "A_DB/11_SHEET_MEASURE.sql": "SHEET_MEASURE 22행 재적재",
+ "A_DB/12_EXCEL_COLUMNS.sql": "EXCEL_COLUMNS 1행 재적재",
+ "A_DB/20_WIRING_AUTH.sql": "배선 160행 + 권한 106행 MERGE (총 266)",
+ "A_DB/21_LOOKUP.sql": "LOOKUP_MASTER_DETAIL 21행 MERGE (NULL-safe ON)",
+ "A_DB/30_MSG_LBL_MNU.sql": "MSG/LBL/MNU 92코드 227행 INSERT-only",
+ "A_DB/90_VERIFY.sql": "적용 후 검증 V1~V10 (⭐ V2 오탐 정정본 · 사내 전항목 PASS)",
+ "_survey/collect_report.json": "기계 스윕 원자료",
+ "_survey/delta_vs_DMF0082_CLOUD_20260820.diff": "BODY 델타 +149행 (마커 3종)",
+ "_survey/file_desc.json": "본 목록의 용도 설명 원천",
+ "_survey/fe_check_20260823.txt": "FE 검증 원문 (type-check/lint, error 0)"
+}

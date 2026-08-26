@@ -21,16 +21,14 @@
     min-width: 0;
   }
 
-  // 칩 뒤의 빈 타이핑 input 은 <input> 고유폭(size=20 → 약 180px)이 flex-basis:auto 로
-  // 잡혀, 폭이 남아도 그 ~180px 를 예약해 칩을 밀어 잘리게 만든다.
-  // 칩 뒤(chipClip 형제) input 의 basis 를 0 으로 만들어 예약을 없애면, 그 폭을 칩이 써서
-  // 넓은 필드에선 라벨 전체가 보이고 좁을 때만 … 로 잘린다. (min-width 로 최소 클릭영역은 유지)
-  // 단일 선택엔 chipClip 이 없어 이 셀렉터가 매칭되지 않으므로 값 표시엔 영향 없다.
-  .chipClip ~ [class*='MuiAutocomplete-input'] {
-    flex-grow: 0;
-    flex-basis: 0;
-    width: 0;
-  }
+  // 칩 폭 배분 규칙 (사용자 확정 2026-08-21 - 스크린샷 기준)
+  //  - 칩 1개(+N 없음): 아이콘 자리를 뺀 남은 폭 전부를 칩이 쓴다.
+  //  - +N 이 있을 때: +N 을 먼저 온전히 확보하고, 남는 폭을 칩이 쓴다.
+  //  두 경우 모두 '남는 폭보다 라벨이 길 때만' 줄임표가 생긴다. 짧은 라벨은 자르지 않는다.
+  //
+  // 주의: 폭을 예약하는 input 규칙 자체는 여기(CSS 모듈)가 아니라 CustomDropdown.tsx 의
+  //   MULTI_CHIP_WIDTH_SX(sx)에 있다. 디자인시스템이 호출부 sx 를 마지막에 병합하므로
+  //   주입 순서와 무관하게 적용된다 - 같은 규칙을 이 파일에 두었을 때는 적용되지 않았다.
 
   // 다중 선택('ALL')은 placeholder 로 표시된다. 디자인시스템 테마가
   // input::placeholder 를 commonTextLighter(흐린 회색)로 강제 지정하고 있어,
@@ -56,4 +54,13 @@
   min-width: 0;
   flex: 0 1 auto;
   overflow: hidden;
+}
+
+// +N 배지 래퍼 — 칩보다 먼저 자리를 확보한다(flex:0 0 auto = 축소 금지).
+// 라벨이 아무리 길어도 +N 은 온전히 보이고, 줄어드는 쪽은 언제나 라벨 칩이다.
+// (Chip 이 className 을 전달하는지에 의존하지 않도록 chipClip 과 같은 span 래퍼로 감싼다.)
+.chipCount {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
 }

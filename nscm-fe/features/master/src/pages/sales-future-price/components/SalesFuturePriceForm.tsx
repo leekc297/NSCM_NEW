@@ -2,22 +2,23 @@ import { SearchArea } from '@shared/components';
 import { Grid } from '@shared/mui';
 
 import {
-  BizTypeField,
   BucketField,
-  DivisionField,
-  EndCustomerField,
   ItemField,
   OwnerField,
   PeriodField,
-  PlantSiteField,
   ProjectField,
-  SalesSiteField,
   SearchOverRangeField,
-  TeamField,
+  useCascadeFields,
   VersionField,
 } from '../../../components';
 import { useSalesFuturePriceValidation } from '../hooks/useSalesFuturePriceValidation';
-import { BUCKET_TYPE } from '../sales-future-price.constants';
+import {
+  BIZ_TYPE_CASCADE_COMBO_ID,
+  BUCKET_TYPE,
+  DIVISION,
+  PLANT_SITE_CASCADE_COMBO_ID,
+  SEARCH_CASCADE_COMBO_ID,
+} from '../sales-future-price.constants';
 import { useSalesFuturePriceStore } from '../useSalesFuturePriceStore';
 import { thisWeekMonday, yyyymmddOf } from '../utils/futurePriceDate';
 
@@ -30,19 +31,21 @@ interface Props {
 
 // AS-IS 캡쳐 (Doc/ui_cap/DMF0020_init.png) 1:1 layout + 사용자 사이즈 요구.
 //
-// ⭐ 2026-06-03 표준 카탈로그 (`@master/searchFields`) 사용 (사용자 명시 요구):
-//   "조회조건의 경우에는 항목별로 rule 로 관리. 사이즈, 데이터 추출경로 등록.
-//    화면별로 다 달라지는게 아니고 이전에 사용된 조회항목은 따로 요청하지 않아도 제대로 나와야"
+// 조회조건 순서 (2026-07-01 사용자 요구, gridSize={3} = 4개/단):
+//   1단(항상): Div / Team / End Customer / Biz.Type
+//   2단(항상): Sales Site / Project / Plant Site / Period
+//   3단(펼침): Model·Nickname / Owner / Bucket / Version
+//   4단(펼침): Search Over Range
+//   주의: Project 는 Division='40' 일 때 숨김 → 4개/단 유지 위해 빈 Grid 슬롯으로 대체.
 //
-//   카탈로그가 자동 적용: Grid size / FormItem / i18n LBL / combo 키 / popup modal /
-//                         preSearchParams 6필드 'ALL' default / required.
-//
-// Layout (12 column):
-//   Row 1: Div(4)        + Team(4)        + End Customer(4)
-//   Row 2: Biz.Type(4)   + Period(8)
-//   Row 3: Sales Site(4) + Project(4)     + Plant Site(4)
-//   Row 4: Model/Nick(4) + Owner(4)       + Bucket(2) + SearchRange(2)
-//   Row 5: Version(6)
+// 콤보 조회 방식은 MktFcst(DMF0003)와 같게 맞췄다 (2026-08-24). 단계마다 콤보를 따로 조회하고
+// 클라이언트에서 서로 필터링하던 카탈로그(DivisionField / TeamField / EndCustomerField /
+// SalesSiteField / PlantSiteField / BizTypeField) 대신, 조인 콤보 1건을 읽는 cascade 를 쓴다.
+//   - 한 SQL 결과라 모든 행에 모든 단계 컬럼이 차 있어 strict / 관대 분기가 없어진다
+//     (종전 EndCustomer 콤보의 DEPT_ID 공란 행 문제, Sales Site 콤보의 End Customer 를
+//      PROJECT_CODE 자리로 읽던 매핑이 모두 사라진다).
+//   - 하위 단계 값 초기화는 cascade 가 하고, 화면 고유 조회조건 초기화만 onChange 에서 얹는다.
+// prop 설명과 콤보 SQL 규약은 CascadeFields.tsx 파일 헤더 참조.
 export const SalesFuturePriceForm = ({ onSearch, onVersionOpen, hasInsertRows }: Props) => {
   const { t } = useTranslation();
   const validate = useSalesFuturePriceValidation();
@@ -51,58 +54,103 @@ export const SalesFuturePriceForm = ({ onSearch, onVersionOpen, hasInsertRows }:
   const set = useSalesFuturePriceStore(s => s.setSearchCondition);
   const openSearchArea = useSalesFuturePriceStore(s => s.openSearchArea);
 
+  // Div - Team - End Customer - Sales Site. Biz.Type 이 End Customer 와 Sales Site 사이에 끼어
+  // 배치가 찢어지므로 컴포넌트가 아니라 훅으로 받아 필요한 자리에 하나씩 꽂는다.
+  // cascade 계산은 levels 배열 순서를 따르고 렌더 위치와 무관하다.
+  //
+  // Division / Team 변경 시 종속 필드 reset 은 AS-IS clbDivisions_SelectedIndexChanged 정합이다.
+  // 복원/persist 로 divisionId 가 바뀔 때 복원값이 wipe 되지 않도록 useEffect 가 아니라 여기서
+  // 처리한다 — 사용자 조작일 때만 불린다.
+  const cascade = useCascadeFields({
+    comboId: SEARCH_CASCADE_COMBO_ID,
+    gridSize: 3,
+    // field 는 스토어 필드명 — value 로 넘긴 sc 의 키와 대조돼 오타가 컴파일에서 잡힌다.
+    levels: [
+      { key: 'division', field: 'divisionId' },
+      { key: 'team', field: 'deptIds' },
+      { key: 'endCustomer', field: 'endCustomers' },
+      { key: 'salesSite', field: 'scmSiteIds' },
+    ],
+    value: sc,
+    onChange: (next, changed) => {
+      if (changed === 'division' || changed === 'team') {
+        // 하위 단계(Team / End Customer / Sales Site) 초기화는 next 에 이미 들어 있다.
+        // 별개 콤보인 Plant Site / Biz.Type 과 popup 계열은 여기서 직접 비운다.
+        set({
+          ...next,
+          plantSiteIds: [],
+          bizTypes: [],
+          projectCodes: [],
+          itemIds: [],
+          owners: [],
+          bucketType: BUCKET_TYPE.WEEKLY,
+          versionId: 'CURRENT',
+          searchOverRange: true,
+        });
+        return;
+      }
+      // Plant Site 는 별개 콤보(plantSiteCascade)라 이 cascade 가 하위로 안 비운다.
+      // End Customer 가 바뀌면 여기서 직접 비운다 — 안 지우면 옵션에서 사라진 값이
+      // 조회조건에 남아 서버로 나간다.
+      if (changed === 'endCustomer') {
+        set({ ...next, plantSiteIds: [] });
+        return;
+      }
+      set(next);
+    },
+  });
+
+  // Biz.Type 은 Division 에서 갈라지는 별개 가지다. 2단(Div - Biz Type)이라 단계는 짧지만
+  // 구조는 아래 Plant Site 와 같다 — division 은 필터로만 쓰고 마지막 단계만 렌더한다.
+  // 주의: 종전 이 화면의 BizTypeField 는 전역 lookup('BizType')을 Division 구분 없이 그대로
+  // 보여줬다. 이 콤보로 바꾸면 Division 에 해당하는 Biz Type 만 나온다 (MktFcst 와 같은 동작).
+  const bizTypeCascade = useCascadeFields({
+    comboId: BIZ_TYPE_CASCADE_COMBO_ID,
+    gridSize: 3,
+    levels: [
+      { key: 'division', field: 'divisionId' },
+      { key: 'bizType', field: 'bizTypes' },
+    ],
+    value: sc,
+    onChange: next => set(next),
+  });
+
+  // Plant Site 도 Sales Site 의 하위가 아니라 Div - Team - End Customer 에서 갈라지는 별개
+  // 가지다. 콤보도 따로 등록돼 있고(4단 조인 형태는 같다) 상위 3단 값만 공유한다.
+  //   - 상위 3단은 필터로만 쓰고 렌더하지 않는다. 화면에는 마지막 단계만 꽂는다.
+  //   - 활성 기준은 81 계열 전용 — 종전 PlantSiteField 기본 게이트와 같다
+  //     (이 화면 상수는 DIVISION.ESS = '81' 이다 - MktFcst 쪽 명칭과 다르니 값 기준으로 본다).
+  const plantSiteEnabled = sc.divisionId.startsWith(DIVISION.ESS);
+  const plantSiteCascade = useCascadeFields({
+    comboId: PLANT_SITE_CASCADE_COMBO_ID,
+    gridSize: 3,
+    enabled: plantSiteEnabled,
+    levels: [
+      { key: 'division', field: 'divisionId' },
+      { key: 'team', field: 'deptIds' },
+      { key: 'endCustomer', field: 'endCustomers' },
+      { key: 'plantSite', field: 'plantSiteIds', disabled: !plantSiteEnabled },
+    ],
+    value: sc,
+    onChange: next => set(next),
+  });
+
   return (
     <SearchArea
       searchButtonLabel={t('LBL00514', { defaultValue: 'Search' })}
       isHidden={!openSearchArea}
       onSearch={onSearch}
-      // ⭐ 조회조건 순서 (2026-07-01 사용자 요구, gridSize={3} = 4개/단):
-      //    1단(항상): Div / Team / End Customer / Biz.Type
-      //    2단(항상): Sales Site / Project / Plant Site / Period
-      //    3단(펼침): Model·Nickname / Owner / Bucket / Version
-      //    4단(펼침): Search Over Range
-      //    ⚠ Project 는 Division='40' 일 때 숨김 → 4개/단 유지 위해 빈 Grid 슬롯으로 대체.
       conditions={
         <>
           {/* 1단 */}
-          {/* Division 변경 시 종속 필드 reset (AS-IS clbDivisions_SelectedIndexChanged) — 사용자 조작 시에만.
-              복원/persist 로 divisionId 가 바뀔 때 복원값이 wipe 되지 않도록 useEffect 대신 onChange 에서 처리. */}
-          <DivisionField
-            gridSize={3}
-            value={sc.divisionId}
-            onChange={v =>
-              set({
-                divisionId: v,
-                deptIds: [],
-                endCustomers: [],
-                scmSiteIds: [],
-                plantSiteIds: [],
-                bizTypes: [],
-              })
-            }
-          />
-          <TeamField
-            gridSize={3}
-            value={sc.deptIds}
-            onChange={v => set({ deptIds: v })}
-            division={sc.divisionId}
-          />
-          <EndCustomerField
-            gridSize={3}
-            value={sc.endCustomers}
-            onChange={v => set({ endCustomers: v })}
-            division={sc.divisionId}
-          />
-          <BizTypeField gridSize={3} value={sc.bizTypes} onChange={v => set({ bizTypes: v })} />
+          {cascade.field('division')}
+          {cascade.field('team')}
+          {cascade.field('endCustomer')}
+          {bizTypeCascade.field('bizType')}
 
           {/* 2단 */}
-          <SalesSiteField
-            gridSize={3}
-            value={sc.scmSiteIds}
-            onChange={v => set({ scmSiteIds: v })}
-            division={sc.divisionId}
-          />
-          {sc.divisionId !== '40' ? (
+          {cascade.field('salesSite')}
+          {sc.divisionId !== DIVISION.MOBILITY ? (
             <ProjectField
               gridSize={3}
               value={sc.projectCodes}
@@ -118,13 +166,7 @@ export const SalesFuturePriceForm = ({ onSearch, onVersionOpen, hasInsertRows }:
             // Division='40' → Project 숨김. 4개/단 레이아웃 유지 위한 빈 슬롯 (사용자 명시 2026-06-27).
             <Grid size={3} />
           )}
-          <PlantSiteField
-            gridSize={3}
-            value={sc.plantSiteIds}
-            onChange={v => set({ plantSiteIds: v })}
-            division={sc.divisionId}
-            endCustomer={sc.endCustomers.length > 0 ? sc.endCustomers.join(',') : undefined}
-          />
+          {plantSiteCascade.field('plantSite')}
           <PeriodField
             gridSize={3}
             start={sc.startYyyymmdd}
