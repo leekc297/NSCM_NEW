@@ -8,9 +8,8 @@ import type { EditTracker } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 
-import { TagLayer, type TagLayerHandle } from '../../project-registration/components/ProjectGrid';
+import { colorTypeColumnOf, TagLayer, type TagLayerHandle } from '../../../components/tag-layer';
 import {
-  colorTypeColumnOf,
   DISABLE_CHECK,
   DISABLE_YN_BINDING,
   MODAL_ATTR,
@@ -40,6 +39,7 @@ interface Props {
   gridRef: Ref<FlexGridType<Tab2Row>>;
   gridFilterRef?: MutableRefObject<FlexGridFilter | undefined>;
   editTrackerRef?: MutableRefObject<EditTracker | undefined>;
+  excludeFromDirtyCheck?: boolean;
   divisionId: string;
   staticColumns?: RawFlexGridColumnConfig[];
   onAuthRegCellClick?: (row: Tab2Row) => void;
@@ -50,6 +50,7 @@ export const ProjectMasterTab2Grid = ({
   gridRef,
   gridFilterRef,
   editTrackerRef,
+  excludeFromDirtyCheck,
   divisionId,
   staticColumns,
   onAuthRegCellClick,
@@ -301,6 +302,7 @@ export const ProjectMasterTab2Grid = ({
         gridRef={gridRef as never}
         gridFilterRef={gridFilterRef}
         editTrackerRef={editTrackerRef as never}
+        excludeFromDirtyCheck={excludeFromDirtyCheck}
         staticColumns={visibleColumns}
         itemsSource={rows as unknown as WijmoRowItem[]}
         autoGenerateColumns={false}

@@ -246,6 +246,38 @@ export const INSERT_DEFAULT_MEASURE = 'MKT_FCST_RP' as const;
 //   W/S Planner 가 AS 사이트를 고르면 이 값으로 셋팅. 후보 목록 1종 고정은 2026-08-10 결정대로 안 한다.
 export const AS_SITE_MEASURE = 'AS_In_Req' as const;
 
+// MDM 사용중지 모델 숨김 (AS-IS p_mdmActive_Sw='Y', .cs L3836/L3908). 그리드 셀 팝업 한정 —
+//   조회조건 팝업은 7-파라미터 오버로드라 미전달(.cs L5737).
+export const MDM_ACTIVE_FLAG = 'Y' as const;
+
+// 위 숨김 예외 measure (DM0002_ItembyDivisionPopupEx.cs L248~251).
+//   MEASURE_MODEL_KEEP 과 값은 같지만 의미가 달라 별도로 둔다.
+export const MDM_ACTIVE_EXEMPT_MEASURES: readonly string[] = ['AS_In_Req', 'BNPIn'];
+
+const ESS_MIN_KEYWORD_LENGTH = 3;
+
+// Model 셀 팝업 오픈 차단 판정 (AS-IS DM0002_ItembyDivisionPopupEx.cs L171~181).
+//   판정 입력은 AS-IS 와 동일 — division 은 조회조건 값(.cs L3830), project/model 은 클릭 행 값.
+//   주의: 둘 다 3자 미만일 때만 막는다(AND). 공용 팝업이 아니라 여기서 판정하는 이유는
+//   ItemByDivisionModal 이 20개 화면 공용이라서다.
+export const isEssItemPopupBlocked = ({
+  divisionId,
+  projectCode,
+  itemId,
+}: {
+  divisionId?: string;
+  projectCode?: string;
+  itemId?: string;
+}): boolean => {
+  const division = divisionId ?? '';
+  const isEssScope = division.includes('82') || division === 'ALL' || division === '';
+  if (!isEssScope) return false;
+  return (
+    (projectCode ?? '').trim().length < ESS_MIN_KEYWORD_LENGTH &&
+    (itemId ?? '').trim().length < ESS_MIN_KEYWORD_LENGTH
+  );
+};
+
 // 좌측 Freeze — 정적(좌측 고정) 컬럼 전체를 frozen block 으로 처리.
 //   실제 frozenColumns 는 공용 DataGrid wrapper 가 staticColumns 의 fixed(=true) findLastIndex+1 로 계산.
 //   따라서 MktFcstGrid 는 mainStaticColumns 에 fixed:true 를 주입 (PIVOT 동적 컬럼은 우측 비고정).
@@ -316,6 +348,8 @@ export const MSG = {
   SCP_TIME_WINDOW: 'MSG00477',
   // DM Planner류 시간창 — MSG00478 5파라미터 {0}~{4}=LIMIT_AUTH/EDIT_DAYS/FROM_TIME/TO_TIME/AUTH (.cs L862~874).
   DM_TIME_WINDOW: 'MSG00478',
+  // ESS 조회 가드 — 사내 MSG00147 EXACT (Model 셀 팝업 오픈 차단).
+  ESS_ITEM_SEARCH: 'MSG00147',
 } as const;
 
 // ⭐ AS-IS 권한 그룹명 원문 (UserInfoContext["NowGroupID"] 비교 문자열 — .cs 정확 일치, 공백·괄호 포함).

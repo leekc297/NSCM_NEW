@@ -17,6 +17,5 @@ export interface SearchCondition {
 // GET 커서 row (procedures.d.ts SDM5010 등재 — & { CRUD_TYPE?: string } 자동 부여)
 export type Tab1Row = ResponseData<MENU_ID, SHEETS.TAB1, RESPONSE_SET.DATA>;
 export type Tab2Row = ResponseData<MENU_ID, SHEETS.TAB2, RESPONSE_SET.DATA>;
-export type PeriodRow = ResponseData<MENU_ID, SHEETS.PERIOD, RESPONSE_SET.DATA>;
 
 export type ValidationResult = { ok: true } | { ok: false; msgId: string; detail?: string };

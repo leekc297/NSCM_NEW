@@ -18,7 +18,7 @@ export interface SearchCondition {
   bucketType: 'W' | 'M'; // cboBucketType (필수)
   searchOverRange: boolean; // usrDiscard ("Search over range")
   excludeNoPrice: boolean; // checkInvalidExec ("Price 미등록 제외")
-  versionId: string; // txtVersion / btnSPVer popup (default = CURRENT)
+  versionId: string; // txtVersion / btnSPVer popup (default = Current)
 }
 
 // 메인 그리드 행 (P_DMF0020_GET_SCM_MST_FUTURE_PRICE_M 결과 — wide format)

@@ -1,0 +1,136 @@
+// SYS0013 Dynamic Query — Designer(View) 좌우 분할 패널 레이아웃 (DESIGN TABPAGE2)
+// 참조: sales-site-project-model customPanelGroup 패턴.
+
+// View 탭 본문 — 상단 메타폼(auto) + 패널(flex:1) 세로 배치, TabItem 전체 높이 채움 (2026-06-28).
+.viewBody {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  gap: 8px;
+}
+
+// 좌우 분할 패널 — 메타폼 아래 남은 높이 전부 사용 (magic vh calc 제거).
+.designerPanelGroup {
+  flex: 1;
+  min-height: 0;
+  gap: 16px;
+  margin-top: 20px;
+  [class*='wj-flexgrid'] {
+    max-height: 100%;
+  }
+}
+
+// 좌측 스택 상하 드래그 바(Separator) — Columns / Condition / SQL 사이에 하나씩.
+// lookup .splitBar 형태 이식. react-resizable-panels Separator 는 기본 높이 0 + 커서 없음이라
+// 잡을 영역이 없다 → 여기서 두께/리사이즈 커서/중앙 구분선을 직접 부여해야 드래그가 동작한다.
+// (inline style 로 flexGrow/flexShrink:0 이 걸리므로 두께는 flex-basis 가 아닌 height 로 지정)
+// 색상은 lookup(블루 accent) 을 따르지 않고 중립 회색으로 유지 (사용자 요구).
+.rowSplitBar {
+  height: 16px;
+  cursor: row-resize;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    top: 50%;
+    height: 2px;
+    transform: translateY(-50%);
+    background: #d8dde3;
+    border-radius: 1px;
+    transition: background 0.15s ease;
+  }
+
+  &:hover::before,
+  &[data-separator='hover']::before,
+  &[data-separator='active']::before {
+    background: #b5bcc4;
+  }
+}
+
+// 좌측 정의 영역 — Column / Condition / SQL 세로 분할 PanelGroup(orientation='vertical').
+// gap 은 두지 않는다 → 사이 간격/드래그 영역은 위 .rowSplitBar(Separator) 가 담당.
+.leftPane {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+// 좌측 각 섹션 (TitleArea + grid) — Panel 이 높이를 관리하므로 height:100% 로 채운다.
+.leftSection {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  gap: 4px;
+}
+
+// 섹션 내 grid/viewer 영역 — 남은 공간 채움
+.gridFill {
+  flex: 1;
+  min-height: 0;
+}
+
+// 우측 결과 미리보기 영역
+.rightPane {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: auto;
+}
+
+.dialogContentWrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 8px;
+  overflow: hidden;
+  position: sticky;
+  top: 0;
+
+  .rightPane_1 {
+    display: flex;
+    flex-direction: column;
+    height: 50%;
+    gap: 8px;
+    overflow: hidden;
+  }
+
+  .rightPane_2 {
+    display: flex;
+    flex-direction: column;
+    height: 47%;
+    gap: 8px;
+    overflow: hidden;
+    margin-top: 24px;
+  }
+
+  .buttonWrapper {
+    display: flex;
+    justify-content: end;
+    gap: 4px;
+    margin-top: 5px;
+  }
+}
+
+.sqlTextarea {
+  width: 100%;
+  height: 100%; // 섹션(gridFill) 채움 — min-height 제거로 좌측 vscroll 방지 (2026-06-28)
+  min-height: 0;
+  padding: 12px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+    'Courier New', monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  background: #ffffff;
+  resize: none;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow: auto;
+}

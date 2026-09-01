@@ -449,6 +449,9 @@ export const applyCascadeClear = (
 
 /**
  * 신규(I) 행의 키 컬럼 = 이 값이 바뀌면 행의 정체가 바뀐다 (CG-05, .cs L5319~5379).
+ * 주의: 2026-08-27 요구로 이 목록을 쓰던 유일한 소비처(MktFcstGrid.applyStaticCascade 의 수량
+ * 전량 클리어)가 제거돼 현재 참조하는 코드가 없다. 키 컬럼셋 자체의 기록 + 클리어를 되살릴 때의
+ * 출처로 남긴다. 사유는 MktFcstGrid.tsx 의 A-08 [CG-05] 주석 참조.
  * 근거 컬럼셋은 utils/mkt-fcst.division.ts buildDuplicateKey(중복검증 키, AS-IS fnValidation
  * L4892~4956) 와 동일하다 — 저장 payload 가 이 키로 만들어지므로 키가 바뀐 행에 이전 키로 입력한
  * 수량을 그대로 남기면 다른 행의 수량을 저장하는 셈이 된다.

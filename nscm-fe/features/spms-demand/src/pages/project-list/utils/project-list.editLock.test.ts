@@ -6,13 +6,13 @@ import {
   canOpenAuthMgmt,
   canReqAuth,
   hasCheckedReq,
-  isAdminRow,
   isCellEditable,
+  isModifiableRow,
   isReqCheckToggleable,
 } from './project-list.editLock';
 
 // ⭐ SDM1020 나의 권한(행) × 기능 매트릭스 전수 (제약매트릭스 §1 — P-01~P-04 GET 커서 CASE 실측):
-//   ADMIN = 편집 ✅ · 권한관리 ✅('' NULL) · 권한요청 ⛔ · 체크박스 DISABLED
+//   ADMIN 예시 = MOD_ROW_YN Y · 권한관리 ✅('' NULL) · 권한요청 ⛔ · 체크박스 DISABLED
 //   WRITE(CONFIRM) = 편집 ⛔ · 권한관리 ⛔('-') · 권한요청 ⛔ · DISABLED
 //   READ/NONE = 편집 ⛔ · 권한관리 ⛔('-') · 권한요청 ✅ · UNCHECKED(요청 중 CHECKED)
 
@@ -24,6 +24,7 @@ const row = (over: Record<string, unknown> = {}): MainRow =>
     DPJT_AUTH_MGMT: '-',
     DPJT_AUTH_REQ_WRITE: 'UNCHECKED',
     DPJT_AUTH_REQ_READ: 'UNCHECKED',
+    MOD_ROW_YN: 'N',
     ...over,
   }) as unknown as MainRow;
 
@@ -33,38 +34,41 @@ const adminRow = () =>
     DPJT_AUTH_MGMT: null, // SP '' → NULL 직렬화 (노출)
     DPJT_AUTH_REQ_WRITE: 'DISABLED',
     DPJT_AUTH_REQ_READ: 'DISABLED',
+    MOD_ROW_YN: 'Y',
   });
 
-describe('P-01 행 편집 게이트 — ADMIN 행만 (isAdminRow · isCellEditable)', () => {
-  it('ADMIN 행 = 편집 가능 (IM/IO — 정오표 D5 재지정 축 + M/O 일반형)', () => {
-    expect(isAdminRow(adminRow())).toBe(true);
-    expect(isCellEditable('IM', adminRow())).toBe(true);
-    expect(isCellEditable('IO', adminRow())).toBe(true);
-    expect(isCellEditable('M', adminRow())).toBe(true);
-    expect(isCellEditable('O', adminRow())).toBe(true);
+describe('P-01 행 편집 게이트 — MOD_ROW_YN이 Y인 행만 (isModifiableRow · isCellEditable)', () => {
+  it('MOD_ROW_YN=Y 행 = 편집 가능 (IM/IO — 정오표 D5 재지정 축 + M/O 일반형)', () => {
+    const modifiableRow = row({ MOD_ROW_YN: 'Y' });
+    expect(isModifiableRow(modifiableRow)).toBe(true);
+    expect(isCellEditable('IM', modifiableRow)).toBe(true);
+    expect(isCellEditable('IO', modifiableRow)).toBe(true);
+    expect(isCellEditable('M', modifiableRow)).toBe(true);
+    expect(isCellEditable('O', modifiableRow)).toBe(true);
   });
 
-  it('비관리자(WRITE/READ/NONE) 행 = 전 셀 잠금', () => {
-    for (const auth of ['WRITE', 'READ', 'NONE', '']) {
-      expect(isCellEditable('IM', row({ DPJT_AUTH_TYPE: auth }))).toBe(false);
-      expect(isCellEditable('IO', row({ DPJT_AUTH_TYPE: auth }))).toBe(false);
+  it('MOD_ROW_YN이 Y가 아닌 행 = 전 셀 잠금', () => {
+    for (const modRowYn of ['N', '', undefined]) {
+      expect(isCellEditable('IM', row({ MOD_ROW_YN: modRowYn }))).toBe(false);
+      expect(isCellEditable('IO', row({ MOD_ROW_YN: modRowYn }))).toBe(false);
     }
   });
 
-  it('S/미지정 컬럼 = ADMIN 이어도 잠금 (INPUT_TP_CD 단일 원천) · 행 부재 = 잠금', () => {
-    expect(isCellEditable('S', adminRow())).toBe(false);
-    expect(isCellEditable(undefined, adminRow())).toBe(false);
+  it('S/미지정 컬럼 = MOD_ROW_YN이 Y여도 잠금 (INPUT_TP_CD 단일 원천) · 행 부재 = 잠금', () => {
+    const modifiableRow = row({ MOD_ROW_YN: 'Y' });
+    expect(isCellEditable('S', modifiableRow)).toBe(false);
+    expect(isCellEditable(undefined, modifiableRow)).toBe(false);
     expect(isCellEditable('IM', undefined)).toBe(false);
   });
 });
 
 describe('P-02 권한관리 링크 — SP 산출값 단일 원천 (canOpenAuthMgmt)', () => {
-  it("ADMIN 행 = ''(NULL 직렬화) → 링크 노출", () => {
+  it('ADMIN 행 = \'\'(NULL 직렬화) → 링크 노출', () => {
     expect(canOpenAuthMgmt(adminRow())).toBe(true);
     expect(canOpenAuthMgmt(row({ DPJT_AUTH_MGMT: '' }))).toBe(true);
   });
 
-  it("비관리자 행 = '-' 봉인 · 행 부재 = 차단", () => {
+  it('비관리자 행 = \'-\' 봉인 · 행 부재 = 차단', () => {
     expect(canOpenAuthMgmt(row())).toBe(false);
     expect(canOpenAuthMgmt(undefined)).toBe(false);
   });

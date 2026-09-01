@@ -1,0 +1,113 @@
+// procedures.d.ts 중 DMF0049 계약 블록 (L3352~L3462) — 클라우드판의 같은 키 블록만 교체. 전체본 덮어쓰기 ⛔
+// 시트 키: ['spreadTitle', 'measure', 'unitedVersion', 'titleSet']
+  /**
+   * EtcSalesReports — DMF0049 (Etc Sales Reports — DMF0044 파생 형제)
+   *
+   * SHEETS (PROC_M 2026-07-22 실측 — PKG 판 우선/조회·저장 standalone):
+   * - `MDF Reports`   (메인 — `DMF0049_GET_SALES_ETC_REPORTS_DATA` 8 IN[sesUserId 6번 BE주입],
+   *                    EDIT_AUTH_V 조인. division 세트행 40=3/81=2/82=1)
+   * - `spreadTitle`   (`PKG_DMF0049.P_DMF0049_GET_SPREAD_TITLE` 6 IN — 커서 2)
+   * - `measure`       (`PKG_DMF0049.P_DMF0049_GET_MEASURE` 3 IN)
+   * - `unitedVersion` (DMF0044 SP 공유 — API_ID 만 DMF0049_ 신규)
+   * - `titleSet`      (공유)
+   * SAVE('^' bulk 미등재): `DMF0049_SAVE_SALES_ETC_REPORT_C` 36 IN — DB POSITION 정본
+   *   (…31 cellModelInfo/32 cellModel/33 measure/34 yyyymmdd/35 qty/36 sesUserId).
+   */
+  DMF0049: {
+    'MDF Reports': {
+      request: {
+        divisionId: string; // 1 P_DIVISION_ID
+        mdfType: string; // 2 P_MDF_TYPE (REPORT_SP_W/BP_M)
+        yyyy: string; // 3 P_YYYY
+        spVersionNo: string; // 4 P_SP_VERSION_NO (United 주입 — 필수 MSG00283)
+        userGroup: string; // 5 P_USER_GROUP (EDIT_AUTH_V 조인)
+        userId: string; // 7 P_USER_ID
+        mnuId: string; // 8 P_MENU_ID
+      };
+      response: {
+        data: {
+          DIVISION_ID: string;
+          DEPARTMENT_ID: string;
+          DEPARTMENT_NAME: string;
+          DEPT_ID: string;
+          DEPT_NAME: string;
+          END_CUST_REPORT: string;
+          CUST_REPORT: string;
+          PRODUCT_GROUP: string;
+          ITEM_ID: string;
+          PROJECT_CODE: string;
+          END_CUSTOMER: string;
+          SCM_SITE_ID: string;
+          CURRENCY: string;
+          MEASURE: string;
+          DATA_SEQ: string | number;
+          EDIT_FLAG: string; // ⚠ 동적 셀 편집 판정 미사용 (DMF0049 매트릭스)
+          [key: string]: string | number;
+        };
+      };
+    };
+    spreadTitle: {
+      // PKG_DMF0049.P_DMF0049_GET_SPREAD_TITLE (6 IN — sesUserId 2번 BE주입)
+      request: {
+        divisionId: string; // 1
+        startDt: string; // 3 (선택연도 0101)
+        endDt: string; // 4 (선택연도 1231)
+        userId: string; // 5
+        mnuId: string; // 6
+      };
+      response: {
+        data: {
+          COLUMN_NAME: string;
+          COLUMN_LABEL_NAME: string;
+          SMALL_CLASS_LABEL_NAME: string;
+          LARGE_CLASS_LABEL_NAME: string;
+          SORT_ORDER_NO: string | number;
+          FIXED_FLAG: string;
+          VISIBLE_FLAG: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    measure: {
+      // PKG_DMF0049.P_DMF0049_GET_MEASURE (3 IN — division 세트 정의)
+      request: {
+        divisionId: string; // 1
+        userId: string; // 2
+        mnuId: string; // 3
+      };
+      response: {
+        data: { CODE: string; NAME: string; [key: string]: string | number };
+      };
+    };
+    unitedVersion: {
+      // PKG_DMF0044.P_DMF0044_GET_SALES_VERSION_POPUP 공유 (7 IN)
+      request: {
+        divisionId: string;
+        sdt: string;
+        edt: string;
+        versionType: string;
+        description: string;
+        userId: string;
+        mnuId: string;
+      };
+      response: {
+        data: {
+          VERSION_NO: string;
+          VERSION_TYPE: string;
+          VERSION_DESCRIPTION: string;
+          SEND_YN: string;
+          YYYYMMDD: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    titleSet: {
+      request: {
+        programId: string;
+        sheetName: string;
+        columnType: string;
+        divisionId: string;
+      };
+      response: { o_rc1: { COLUMN_NAME: string; COLUMN_LABEL: string; [key: string]: string } };
+    };
+  };

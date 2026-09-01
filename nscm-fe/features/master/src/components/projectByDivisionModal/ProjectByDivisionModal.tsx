@@ -341,13 +341,6 @@ export const ProjectByDivisionModal = ({
           </div>
           <div className={styles.buttonWrapper}>
             <Button
-              appearance='outlined'
-              priority='normal'
-              size='medium'
-              buttonLabel='Close'
-              onClick={modalClose}
-            />
-            <Button
               appearance='contained'
               buttonLabel='OK'
               iconComponent={<ControlConfirmIcon size='small' />}
@@ -355,6 +348,13 @@ export const ProjectByDivisionModal = ({
               priority='primary'
               size='medium'
               onClick={handleSubmit}
+            />
+            <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel='Close'
+              onClick={modalClose}
             />
           </div>
         </div>

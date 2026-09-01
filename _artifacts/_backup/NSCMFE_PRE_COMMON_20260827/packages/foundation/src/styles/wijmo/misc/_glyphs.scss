@@ -1,0 +1,374 @@
+@use './font-sizes.scss' as *;
+
+/*!
+    *
+    * Wijmo Library 5.20251.40
+    * https://developer.mescius.com/wijmo
+    *
+    * Copyright(c) MESCIUS inc. All rights reserved.
+    *
+    * Licensed under the End-User License Agreement For MESCIUS Wijmo Software.
+    * us.sales@mescius.com
+    * https://developer.mescius.com/wijmo/licensing
+    *
+    */
+
+// glyphs
+// https://css-tricks.com/the-shapes-of-css/
+.wj-glyph {
+  position: relative;
+  display: inline-block;
+  box-sizing: border-box;
+  text-align: center;
+  opacity: 0.75;
+  white-space: normal; // TFS 418680
+  cursor: pointer;
+}
+
+// Required for glyphs to render properly in OS contrast themes
+@media (forced-colors: active) {
+  .wj-glyph {
+    forced-color-adjust: none;
+    color: CanvasText;
+    background-color: Canvas;
+    opacity: 1;
+  }
+}
+
+.wj-glyph-asterisk {
+  @extend .wj-glyph;
+  &:after {
+    content: '\2731\fe0e';
+  }
+}
+
+.wj-glyph-calendar {
+  @extend .wj-glyph;
+  width: 1em;
+  height: 1em;
+  border: 0.1em solid;
+  border-top: 0.3em solid;
+  top: 0.15em; // TFS 440092
+  &:after {
+    // no text: TFS 379685
+    position: absolute;
+    left: 0.3em;
+    top: 0.1em;
+    width: 0.2em;
+    height: 0.4em;
+    border-right: 0.1em solid;
+    border-top: 0.07em solid;
+    opacity: 0.7;
+    content: ' ';
+  }
+}
+
+.wj-glyph-check {
+  @extend .wj-glyph;
+  &:after {
+    font-weight: bold;
+    content: '\2714\fe0e';
+  }
+}
+
+.wj-glyph-circle {
+  @extend .wj-glyph;
+  border: 0.3em solid;
+  border-radius: 50%;
+  top: -0.1em; // TFS 440092
+}
+
+.wj-glyph-clipboard {
+  @extend .wj-glyph;
+  &:after {
+    content: '\1f4cb\fe0e';
+  }
+}
+
+.wj-glyph-clock {
+  @extend .wj-glyph;
+  width: 1em;
+  height: 1em;
+  border: 0.1em solid;
+  border-radius: 50%;
+  top: 0.15em; // TFS 440092
+  &:after {
+    position: absolute;
+    border-left: 0.1em solid;
+    border-bottom: 0.1em solid;
+    width: 0.25em;
+    height: 0.3em;
+    top: 0.2em;
+    left: 0.35em;
+    content: ' ';
+  }
+}
+
+.wj-glyph-diamond {
+  @extend .wj-glyph;
+  &:after {
+    content: '\25c6\fe0e';
+  }
+}
+
+.wj-glyph-dimension {
+  @extend .wj-glyph;
+  &:after {
+    content: '\27c0\fe0e';
+  }
+}
+
+.wj-glyph-down {
+  @extend .wj-glyph;
+  border-top: 0.5em solid;
+  border-right: 0.4em solid transparent;
+  border-left: 0.4em solid transparent;
+}
+
+.wj-glyph-down-left {
+  @extend .wj-glyph;
+  border-top: 0.65em solid transparent;
+  border-left: 0.65em solid;
+}
+
+.wj-glyph-down-right {
+  @extend .wj-glyph;
+  top: -2px;
+  border-bottom: 0.65em solid;
+  border-left: 0.65em solid transparent;
+}
+
+.wj-glyph-drag {
+  @extend .wj-glyph;
+  width: 1em;
+  height: 1em;
+  &:after {
+    position: absolute;
+    top: 0.15em;
+    left: 0.1em;
+    width: 1em;
+    height: 1em;
+    background: radial-gradient(#000 1px, transparent 2px);
+    background-size: 0.33em 0.33em;
+    content: ' ';
+  }
+}
+
+@media (forced-colors: active) {
+  .wj-glyph-drag::after {
+    background: radial-gradient(CanvasText 0.08em, transparent 0.12em);
+    background-size: 0.33em 0.33em;
+  }
+}
+
+.wj-glyph-file {
+  @extend .wj-glyph;
+  border-left: 0.7em solid;
+  height: 0.85em;
+  &:after {
+    position: absolute;
+    transform: translateX(-100%);
+    border-top: 0.3em solid transparent;
+    border-left: 0.3em solid white;
+    content: ' ';
+  }
+}
+
+@media (forced-colors: active) {
+  .wj-glyph-file {
+    border-left-color: CanvasText;
+  }
+
+  .wj-glyph-file::after {
+    border-left-color: Canvas;
+    border-top-color: CanvasText;
+  }
+}
+
+.wj-glyph-left {
+  @extend .wj-glyph;
+  top: 1px;
+  border-top: 0.4em solid transparent;
+  border-right: 0.5em solid;
+  border-bottom: 0.4em solid transparent;
+}
+
+.wj-glyph-measure {
+  @extend .wj-glyph;
+  &:after {
+    content: '\1f4ca\fe0e';
+  }
+}
+
+.wj-glyph-pin {
+  @extend .wj-glyph;
+  top: -0.1em;
+  left: 0.1em;
+  width: 0.4em;
+  border-top: 0.6em solid;
+  &:before {
+    position: absolute;
+    border-left: 0.7em solid;
+    height: 0.1em;
+    left: -0.15em;
+    top: -0.1em;
+    content: ' ';
+  }
+  &:after {
+    position: absolute;
+    border-left: 0.15em solid;
+    height: 0.5em;
+    left: 0.15em;
+    top: -0.1em;
+    content: ' ';
+  }
+}
+
+@media (forced-colors: active) {
+  .wj-glyph-pin::after {
+    border-left-width: 0.12em;
+    left: 0.17em;
+  }
+}
+
+.wj-glyph-plus,
+.wj-glyph-minus {
+  @extend .wj-glyph;
+  border-top: 0.25em solid;
+  width: 0.9em;
+  top: -0.3em;
+}
+.wj-glyph-plus:after {
+  position: absolute;
+  box-sizing: border-box;
+  border-left: 0.25em solid;
+  width: 0.25em;
+  height: 0.95em;
+  left: 0.33em;
+  top: -0.6em;
+  content: ' ';
+}
+
+.wj-glyph-pencil {
+  @extend .wj-glyph;
+  &:after {
+    content: '\270e\fe0e';
+  }
+}
+
+.wj-glyph-right {
+  @extend .wj-glyph;
+  top: 1px;
+  border-top: 0.4em solid transparent;
+  border-bottom: 0.4em solid transparent;
+  border-left: 0.5em solid;
+}
+
+.wj-glyph-square {
+  @extend .wj-glyph;
+  border: 0.25em solid;
+}
+
+.wj-glyph-step-backward {
+  @extend .wj-glyph;
+  border-top: 0.4em solid transparent;
+  border-right: 0.5em solid;
+  border-bottom: 0.4em solid transparent;
+  top: 0.12em; // TFS 440092
+  &:after {
+    position: absolute;
+    border-left: 0.2em solid;
+    height: 0.75em;
+    transform: translate(-100%, -50%);
+    content: ' ';
+  }
+}
+[dir='rtl'] .wj-glyph-step-backward:after {
+  transform: translate(0, -50%);
+}
+
+.wj-glyph-step-forward {
+  @extend .wj-glyph;
+  border-top: 0.4em solid transparent;
+  border-bottom: 0.4em solid transparent;
+  border-left: 0.5em solid;
+  &:after {
+    position: absolute;
+    border-left: 0.2em solid;
+    height: 0.75em;
+    transform: translateY(-50%);
+    content: ' ';
+  }
+}
+[dir='rtl'] .wj-glyph-step-forward:after {
+  transform: translate(100%, -50%);
+}
+
+.wj-glyph-up {
+  @extend .wj-glyph;
+  border-right: 0.4em solid transparent;
+  border-bottom: 0.5em solid;
+  border-left: 0.4em solid transparent;
+}
+
+.wj-glyph-up-left {
+  @extend .wj-glyph;
+  border-bottom: 0.65em solid transparent;
+  border-left: 0.65em solid;
+}
+
+.wj-glyph-up-right {
+  @extend .wj-glyph;
+  border-top: 0.65em solid;
+  border-left: 0.65em solid transparent;
+}
+
+.wj-glyph-filter {
+  @extend .wj-glyph;
+  top: -0.1em;
+  width: 0.5em;
+  border-top: 0.5em solid;
+  border-right: 0.4em solid transparent;
+  border-left: 0.4em solid transparent;
+  &:after {
+    position: absolute;
+    border-left: 0.25em solid; // TFS 457654
+    left: -0.125em;
+    top: -0.2em;
+    height: 0.4em;
+    content: ' ';
+  }
+}
+
+.wj-glyph-search {
+  @extend .wj-glyph;
+  cursor: default;
+  font-size: $wj-glyph-font-size; //20px
+  transform: translate(5px, 9px);
+  width: 0.6em;
+  height: 0.6em;
+  border: 0.05em solid;
+  border-radius: 50%;
+  top: -0.1em;
+  margin-right: 0.13em;
+  &:after {
+    position: absolute;
+    width: 0.3em;
+    height: 0;
+    border-bottom: 0.07em solid;
+    top: 0.5em;
+    left: 0.4em;
+    content: '';
+    transform: rotate(45deg);
+  }
+}
+[dir='rtl'] .wj-glyph-search {
+  transform: translate(-5px, 9px);
+  margin-left: 0.13em;
+  margin-right: unset;
+}
+@media (forced-colors: active) {
+  .wj-glyph-search {
+    opacity: 1;
+  }
+}

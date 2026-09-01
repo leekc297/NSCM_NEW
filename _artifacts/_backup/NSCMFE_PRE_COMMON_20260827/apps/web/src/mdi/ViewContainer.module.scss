@@ -1,0 +1,64 @@
+.viewport {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+}
+
+.view {
+  height: 100%;
+  min-height: 0;
+  /* display 는 ViewContainer 가 인라인으로 토글(flex/none).
+     페이지 = MainTitle + SearchArea + SubTitle + Result 의 수직 flex 배치 —
+     Result(그리드, flex:1 1 0)가 남은 높이를 차지하고 스크롤은 그리드 내부에 생긴다. */
+  flex-direction: column;
+}
+
+/* Page 영역 전체화면 — 다이얼로그 최대화(MUI fullScreen)처럼 뷰포트 전체를 덮는다.
+   z-index 는 GNB/LNB(앱바 계열)보다 위, MUI Dialog(기본 1300)보다 아래. */
+.viewFullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  padding: 17px 30px; /* MDIContainer .mdiContent 와 동일한 여백 유지 */
+  overflow: auto;
+}
+
+.fallback {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  min-height: 200px;
+}
+
+.viewError {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  height: 100%;
+  min-height: 200px;
+  padding: 24px;
+  text-align: center;
+}
+
+.viewErrorTitle {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.viewErrorDetail {
+  max-width: 560px;
+  font-size: 13px;
+  color: #888;
+  word-break: break-all;
+}
+
+.viewErrorRetry {
+  padding: 6px 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+}

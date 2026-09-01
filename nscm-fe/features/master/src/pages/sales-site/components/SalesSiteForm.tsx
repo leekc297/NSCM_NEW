@@ -4,13 +4,17 @@ import { useTabComboQueries } from '@shared/hooks';
 import { Checkbox, FormItem, Label } from '@shared/lges';
 import { Grid } from '@shared/mui';
 
-import { useCascadeFields } from '../../../components';
-import {
-  DIVISION_NO_END_CUSTOMER,
-  SEARCH_CASCADE_COMBO_ID,
-  SHEET_INDEX,
-} from '../sales-site.constants';
+import { SHEET_INDEX, hasEndCustomer } from '../sales-site.constants';
 import { useSalesSiteStore } from '../useSalesSiteStore';
+import {
+  buildSalesSiteComboParam,
+  buildSalesSiteOptions,
+} from '../utils/sales-site.salesSiteCombo';
+import {
+  END_CUSTOMER_COLUMNS,
+  SOLD_CUSTOMER_COLUMNS,
+  toDivisionComboOptions,
+} from '../utils/sales-site.util';
 
 interface SalesSiteFormProps {
   setActiveTab: (tab: SHEET_INDEX) => void;
@@ -27,64 +31,45 @@ export const SalesSiteForm = ({
 
   const openSearchArea = useSalesSiteStore(state => state.openSearchArea);
   const searchParams = useSalesSiteStore(state => state.searchParams);
+  const salesSiteTrigger = useSalesSiteStore(state => state.salesSiteTrigger);
   const setSearchParams = useSalesSiteStore(state => state.setSearchParams);
   const fetchStaticColumns = useSalesSiteStore(state => state.fetchStaticColumns);
   const setSiteFilters = useSalesSiteStore(state => state.setSiteFilters);
 
-  // Division 40 은 End Customer 개념이 없어 그 단계 콤보만 잠근다 (콤보 조회 자체는 그대로).
-  const isEndCustomerDisabled = searchParams.divisionId === DIVISION_NO_END_CUSTOMER;
-
-  // Div / End Customer / Sales Site / Sold-To Customer 콤보는 CascadeFields 가 직접 조회한다.
-  // 여기서는 이 화면에만 있는 Active 콤보만 받는다.
-  const [yesOrNo] = useTabComboQueries({ filters: ['YesOrNo'] });
-
-  // Sold-To Customer 가 End Customer 와 Sales Site 사이에 끼어 배치가 찢어지므로 컴포넌트가
-  // 아니라 훅으로 받아 필요한 자리에 하나씩 꽂는다. cascade 계산은 아래 levels 배열 순서를 따르고
-  // 렌더 위치와 무관하다. 이 화면은 Team 조회조건이 없어 3단만 쓴다.
-  const cascade = useCascadeFields({
-    comboId: SEARCH_CASCADE_COMBO_ID,
-    gridSize: 3,
-    // field 는 스토어 필드명 — value 로 넘긴 searchParams 의 키와 대조돼 오타가 컴파일에서 잡힌다.
-    levels: [
-      { key: 'division', field: 'divisionId' },
-      { key: 'endCustomer', field: 'endCustomer', disabled: isEndCustomerDisabled },
-      { key: 'salesSite', field: 'salesSite' },
-    ],
-    value: searchParams,
-    onChange: (next, changed) => {
-      // 하위 단계 초기화는 next 에 이미 들어 있다. 이 화면 고유 항목만 얹는다 —
-      // Active 는 어느 단계가 바뀌든 초기화하고, Sold-To Customer 는 Division 소속 값이라
-      // Division 이 바뀔 때만 초기화한다. 종전 인라인 동작 그대로.
-      setSearchParams({
-        ...next,
-        ...(changed === 'division' ? { soldToCustomer: 'ALL' } : {}),
-        activeFlag: 'ALL',
-      });
-      setOpenDetailGrid(true);
-    },
+  /**
+   * 목록 정렬은 CustomDropdown 의 sortBy='label' 로 건다 - 표시명(NAME) 기준 숫자-영문-한글
+   * 순이다(sortOptionsBy 참조). Div 와 Active 는 항목이 몇 개뿐이라 서버 순서를 그대로 둔다.
+   *
+   * 조회조건 콤보는 항목마다 따로 받아 화면에서 division 으로 거른다. 조인 콤보 하나로 묶는
+   * cascade 는 이 화면에 쓰지 않는다 — Sales Site 목록의 원천이 조건마다 통째로 바뀌어
+   * (utils/sales-site.salesSiteCombo 참조) 다른 항목과 한 줄기로 엮이지 않기 때문이다.
+   */
+  const [divisions, endCustomers, yesOrNo] = useTabComboQueries({
+    filters: ['MyDivision', 'EndCustomerByDivision', 'YesOrNo'],
   });
 
-  // Sold-To Customer 는 Sales Site 와 다른 콤보('SoldCustomer')에서 뽑는 별개의 가지다 —
-  // 그 콤보의 cascade 는 Div - Team - Sold-To Customer 순이다. 상위 단계를 위 훅과 같은 field
-  // (divisionId)로 맞춰 두면 Div 값을 공유하면서 각자 자기 콤보를 좁힌다.
-  // 이 화면은 Team 조회조건이 없어 그 단계는 렌더하지 않는다 — 선택값이 없으니 필터도 걸리지 않고
-  // 전량이 그대로 흘러간다. Team 조회조건이 생기면 그 단계에 field 를 달아주면 된다.
-  // 콤보 SQL 이 표준 규약(DIVISION_CODE / TEAM_CODE / SOLD_CUSTOMER_CODE + _NAME)을 따르므로
-  // 단계별 columns 지정은 필요 없다.
-  const soldToCascade = useCascadeFields({
-    comboId: 'SoldCustomer',
-    gridSize: 3,
-    levels: [
-      { key: 'division', field: 'divisionId' },
-      { key: 'team' },
-      { key: 'soldToCustomer', field: 'soldToCustomer' },
-    ],
-    value: searchParams,
-    onChange: next => {
-      setSearchParams({ ...next, activeFlag: 'ALL' });
-      setOpenDetailGrid(true);
-    },
+  // Sold-To Customer 는 division 을 실어 보낸다. 파라미터가 react-query 키에 들어가므로
+  //   division 이 바뀌면 새 키가 되어 다시 조회된다. 파라미터 이름과 미선택 'ALL' 규약은
+  //   카탈로그 SoldToCustomerField 와 같다.
+  const [soldToCustomers] = useTabComboQueries({
+    filters: [{ comboId: 'SoldCustomer', PARAM1: searchParams.divisionId || 'ALL' }],
   });
+
+  /**
+   * Sales Site 만 원천이 셋이다. 트리거와 현재 조회조건으로 이번에 부를 콤보 1건을 조립하고,
+   * 화면은 어느 원천인지 몰라도 된다.
+   *
+   * 콤보 파라미터 객체는 react-query 키에 그대로 들어가고 키는 구조 해시라, 매 렌더 새 객체여도
+   * 같은 키다. 원천이나 값이 바뀐 순간에만 다른 키가 되어 그 1건만 조회된다 — 나머지 두 원천은
+   * 호출되지 않는다. AS-IS 의 "필터 경로 vs 재조회 경로" 구분이 여기서 유지된다.
+   */
+  const [salesSites] = useTabComboQueries({
+    filters: [buildSalesSiteComboParam(salesSiteTrigger, searchParams)],
+  });
+
+  // AS-IS 는 같은 if 블록에서 End Customer 칸 활성과 Sales Site 콤보 원천을 함께 정한다.
+  //   술어가 하나이므로 화면에서도 하나만 쓴다.
+  const isEndCustomerDisabled = !hasEndCustomer(searchParams.divisionId);
 
   return (
     <SearchArea
@@ -96,10 +81,120 @@ export const SalesSiteForm = ({
       }}
       conditions={
         <>
-          {cascade.field('division')}
-          {cascade.field('endCustomer')}
-          {soldToCascade.field('soldToCustomer')}
-          {cascade.field('salesSite')}
+          <Grid size={3}>
+            <FormItem
+              className={commonStyles.formItem}
+              label={t('LBL00001', '_Div.')}
+              labelAlign='right'
+              required
+              render={() => (
+                <CustomDropdown
+                  value={searchParams.divisionId}
+                  options={divisions?.map(item => ({ label: item.NAME, value: item.CODE })) ?? []}
+                  onChange={(_, option) => {
+                    setSearchParams(
+                      {
+                        divisionId: option,
+                        endCustomer: 'ALL',
+                        soldToCustomer: 'ALL',
+                        salesSite: 'ALL',
+                        activeFlag: 'ALL',
+                      },
+                      'division'
+                    );
+                    setOpenDetailGrid(true);
+                  }}
+                />
+              )}
+            />
+          </Grid>
+          <Grid size={3}>
+            <FormItem
+              className={commonStyles.formItem}
+              label={t('LBL00080', '_End Customer')}
+              labelAlign='right'
+              required
+              render={() => (
+                <CustomDropdown
+                  multiple
+                  allOption
+                  useClearIcon
+                  limitTags={1}
+                  sortBy='label'
+                  disabled={isEndCustomerDisabled}
+                  value={searchParams.endCustomer}
+                  options={toDivisionComboOptions(
+                    endCustomers,
+                    searchParams.divisionId,
+                    END_CUSTOMER_COLUMNS
+                  )}
+                  onChange={(_, options) => {
+                    // salesSite 를 함께 푸는 이유: End Customer 가 바뀌면 Sales Site 목록이
+                    //   다시 만들어진다. AS-IS 도 목록을 다시 그릴 때마다
+                    //   setListBox(..., true) 로 선택을 푼다.
+                    setSearchParams(
+                      { endCustomer: options, salesSite: 'ALL', activeFlag: 'ALL' },
+                      'endCustomer'
+                    );
+                    setOpenDetailGrid(true);
+                  }}
+                />
+              )}
+            />
+          </Grid>
+          <Grid size={3}>
+            <FormItem
+              className={commonStyles.formItem}
+              label={t('LBL00081', '_Sold-To Customer')}
+              labelAlign='right'
+              labelSize='middle'
+              render={() => (
+                <CustomDropdown
+                  multiple
+                  allOption
+                  useClearIcon
+                  limitTags={1}
+                  sortBy='label'
+                  value={searchParams.soldToCustomer}
+                  options={toDivisionComboOptions(
+                    soldToCustomers,
+                    searchParams.divisionId,
+                    SOLD_CUSTOMER_COLUMNS
+                  )}
+                  onChange={(_, options) => {
+                    setSearchParams(
+                      { soldToCustomer: options, salesSite: 'ALL', activeFlag: 'ALL' },
+                      'soldTo'
+                    );
+                    setOpenDetailGrid(true);
+                  }}
+                />
+              )}
+            />
+          </Grid>
+          <Grid size={3}>
+            <FormItem
+              className={commonStyles.formItem}
+              label={t('LBL00011', '_Sales Site')}
+              labelAlign='right'
+              render={() => (
+                <CustomDropdown
+                  multiple
+                  allOption
+                  useClearIcon
+                  limitTags={1}
+                  sortBy='label'
+                  value={searchParams.salesSite}
+                  options={buildSalesSiteOptions(salesSites, salesSiteTrigger, searchParams)}
+                  onChange={(_, options) => {
+                    // 'ALL' 을 빈 값으로 바꾸지 않는다 — CustomDropdown 이 전체선택을 'ALL'
+                    //   sentinel 로 내보내고 그 값이 그대로 돌아와야 전체 체크가 유지된다.
+                    setSearchParams({ salesSite: options });
+                  }}
+                />
+              )}
+            />
+          </Grid>
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
@@ -119,7 +214,7 @@ export const SalesSiteForm = ({
                   }
                   onChange={(_, options) => {
                     setSearchParams({
-                      activeFlag: options,
+                      activeFlag: options || 'ALL',
                     });
                   }}
                 />

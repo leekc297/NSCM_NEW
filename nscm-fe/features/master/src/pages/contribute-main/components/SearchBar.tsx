@@ -33,13 +33,14 @@ export const SearchBar = ({ onSearch, onYearChange }: Props) => {
   const openSearchArea = useContributeMainStore(s => s.openSearchArea);
   const searchParams = useContributeMainStore(s => s.searchParams);
   const setSearchParams = useContributeMainStore(s => s.setSearchParams);
+  const noFilters = useContributeMainStore(s => s.noFilters);
 
   // 년도 콤보 — DMF0043_GET_MAIN_VARSION_DATA standalone SP (combo 가 admin DB 미등재).
   const { data: yearData } = useTabProcQuery<typeof MENU_ID>({
     menuId: MENU_ID,
     sheetName: SHEETS.VERSION,
     tabId: MENU_ID,
-    filters: {},
+    filters: noFilters,
     enabled: true,
   });
 

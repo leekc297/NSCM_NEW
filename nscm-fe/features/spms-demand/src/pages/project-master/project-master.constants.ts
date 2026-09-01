@@ -12,7 +12,6 @@ export type MENU_ID = typeof MENU_ID;
 export enum SHEETS {
   TAB1 = 'TAB1',
   TAB2 = 'TAB2',
-  PERIOD = 'period', // PKG_SDM1010.P_SDM1010_GET_PERIOD 공유 배선 (계약 ① — 기간 기본값 M-1 앵커)
 }
 
 // 커서명 'data' (PROC_M 실등재 — SDM1010/SDM1020 RESPONSE_SET 용법 동일)
@@ -39,10 +38,7 @@ export const REG_CAT_MOD = 'MOD' as const;
 
 // ⭐ DISABLE_YN 서버 문자열 (계약 ⑥ — GET 은 CHECKED/UNCHECKED 2값. SAVE `disabled` 는
 //   'CHECKED' 정확 일치만 DISABLED, 그 외 NORMAL. FE 재파생 금지 — 값 그대로 왕복)
-export const DISABLE_CHECK = {
-  CHECKED: 'CHECKED',
-  UNCHECKED: 'UNCHECKED',
-} as const;
+export { CHECK_STATE as DISABLE_CHECK } from '../../lib/grid';
 
 // 조회조건 lookup 타입 (SCM0001_GET_LOOKUP_VALUES 도메인 — useTabLookupQueries 소비, CF-03/CF-05)
 export const LOOKUP = {
@@ -70,13 +66,13 @@ export const MSG = {
 // LBL 매핑 — 계약 ③ (재사용 8 + 신규 LBL00863)
 export const LBL = {
   DIV: 'LBL00001',
-  CUSTOMER: 'LBL00643',
-  CELL_TYPE: 'LBL00046',
+  CUSTOMER: 'LBL01003',
+  CELL_TYPE: 'LBL01005',
   BIZ_TYPE: 'LBL00607',
-  DEVELOP_STATUS: 'LBL00863', // 신규 (Development Status)
-  REG_COMP_DATE: 'LBL00857',
-  APPROVE: 'LBL00623', // TAB1 승인 버튼
-  REJECT: 'LBL00624', // TAB1 반려 버튼
+  DEVELOP_STATUS: 'LBL01007', // 신규 (Development Status)
+  REG_COMP_DATE: 'LBL01006',
+  APPROVE: 'LBL01004', // TAB1 승인 버튼
+  REJECT: 'LBL00863', // TAB1 반려 버튼
   SEARCH: 'LBL00112', // Search 라벨 고정 (hook #120 §5)
 } as const;
 
@@ -100,10 +96,6 @@ export const TAG_SOURCE: Record<string, { name: string; color: string }> = {
   },
 };
 
-// TAG 색 컬럼 관례 폴백 (`X_NAME`→`X_COLOR_TYPE` — SDM1010 colorTypeColumnOf 승계)
-export const colorTypeColumnOf = (binding: string): string =>
-  `${binding.replace(/_NAME$/, '')}_COLOR_TYPE`;
-
 // ⭐ 행 CELL_TYPE 종속 셀 콤보 (CF-15 — Cell Type 변경 시 Stack Method clear + dataMap 스왑.
 //   행 단위 종속은 이 1건뿐 — 조회 Division 축 콤보는 Division 변경 시 그리드가 비워지므로
 //   dataMap 재구성으로 충분, Cascade 문서 §4)
@@ -111,22 +103,9 @@ export const CELLTYPE_SCOPED_COMBO = 'StackMethodByCellType' as const;
 export const CELL_TYPE_BINDING = 'CELL_TYPE' as const;
 export const STACK_METHOD_BINDING = 'STACK_METHOD' as const;
 
-// TAB1 D-PJT Code 바인딩 (P-06/P-08 — '수정' 행 편집 불가 + 승인 시 6자리 FE 선검증 D12)
+// TAB1 D-PJT Code 바인딩 (P-06/P-08 — DPJT_CODE_MOD_YN 편집 게이트 + 승인 시 6자리 FE 선검증 D12)
 export const DPJT_CODE_BINDING = 'DPJT_CODE' as const;
 export const DPJT_CODE_LENGTH = 6 as const;
 
 // TAB2 비활성 체크 바인딩 (계약 ⑥ — FPCheckBox 클릭 토글 + CRUD_TYPE 'M' 마킹)
 export const DISABLE_YN_BINDING = 'DISABLE_YN' as const;
-
-// ⭐ 기간 기본값 — period 시트(PKG_SDM1010.P_SDM1010_GET_PERIOD 공유 배선 — 계약 ①) SEARCH 파라미터.
-//   M-1 시작(YMD_FR 앵커 소비) ~ Today(FE dayjs 병행 — GET_PERIOD 'C'(해당일)는 M bucket 에서
-//   D_FR_BASE 미할당 NULL 결함이라 서버 단독 산출 불가. SDM1020 계약 ⑤ dayjs 병행 판례).
-//   FR/TO 동일 bucket 만 — GET_PERIOD 종료일 분기가 P_FR_BUCKET 을 보는 결함 회피 (SDM1010 §15 ③)
-export const PERIOD_DEFAULT_FILTERS = {
-  frBucket: 'M',
-  frDateVal: '-1',
-  frBucketType: 'S',
-  toBucket: 'M',
-  toDateVal: '0',
-  toBucketType: 'E',
-} as const;

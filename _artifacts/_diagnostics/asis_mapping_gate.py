@@ -130,6 +130,28 @@ UI_COMMON_ITEMS = [
 ]
 
 
+# ── ⭐ UI 필수 12행동(UM) 축 (hook #149 ui-mandatory-12-behaviors — 사용자 지정 2026-08-28) ──────────────
+# 원천: 사용자 대화 2026-08-28 12항목 ("UI 신규 생성·보완 시 반드시 확인하고 미구현이면 구현").
+# 적용 범위(사용자 결정 A): **착수 화면부터** — 대사표에 UM 섹션이 있으면 12행 전수 판정(FAIL), 없으면 WARN(미착수).
+#   `--um-enforce` 로 전 화면 강제(옵션 B 전환 대비). 판정신호(코드 증거)는 REQ 축의 원장 행이 담당한다
+#   (REQ:CHAT-20260828-UM{nn}-{MENU}) — UM 섹션은 "12항목을 봤다/해당없음 사유" 를 강제하는 체크리스트 축.
+UI_MANDATORY_ITEMS = [
+    ("UM-01", "Div Default 선택(세션 division 우선·없으면 첫 행) + Division 변경 시 Grid 초기화·CRUD reset (hook #149 / #59 §1.4)"),
+    ("UM-02", "Team 선택 시 End Customer cascade (EndCustomerField cascade DEPT_ID strict — AS-IS EndCustomerByDivision(division, team))"),
+    ("UM-03", "Division 선택 시 Biz.Type / Plant Site cascade + 81*/82 활성 분기 (AS-IS cboDivision_SelectedIndexChanged)"),
+    ("UM-04", "숫자 자릿수 = AS-IS (타이틀 SP DATA_SCALE_NUMBER 소비 — SpreadInfo.cs L1433~1440 decimalPlaces)"),
+    ("UM-05", "초기 일자 = AS-IS (PR_GET_DAY_RANGE p_month — 당월 1일~+p_month 개월 말일)"),
+    ("UM-06", "헤더 높이 = 1단 크기(48px) 안에 최대 3줄 (#93 — DataGrid row 단위 강제)"),
+    ("UM-07", "필터 버튼(F4) 실동작 — gridFilterRef 페이지→Grid→DataGrid 관통 (OLAP = Grid Layout 레일 Filters)"),
+    ("UM-08", "(BUCKET) 선택 즉시 컬럼 가시성 반응 + ONLY_WEEKLY 경계 전환 시 grid 초기화·헤더 재생성 (AS-IS InitSpread)"),
+    ("UM-09", "(BUCKET) ONLY_WEEKLY 헤더 = AS-IS 3행(월/주차/SUM) 병합 없음, 주차:날짜 1:1 (사용자 결정 2026-08-28)"),
+    ("UM-10", "(BUCKET) 월/주차 헤더 더블클릭 접힘·펼침 — 머지 원점(getMergedRange) 복원 (#103)"),
+    ("UM-11", "(BUCKET) ONLY_WEEKLY 에도 최하단 sum (footer 는 bucket 무관 항상 — AS-IS InitSpreadFooterSum)"),
+    ("UM-12", "합계 값 기준 = AS-IS (SumIgnoreHidden = 표시 행·컬럼 클라이언트 합, SP 합계행 없음)"),
+]
+UM_SECTION_TITLE = "## UI 필수 12행동(UM) 축 (2026-08-28 — hook #149, 착수 화면부터)"
+
+
 # ── ⭐ 사용자 지정 보완요청(REQ) 축 (2026-08-20 사용자 확정 — "보완요청 미적용 재발 방지") ────────
 # 원천: `Doc/단위테스트_보완대상/보완요청_원장.md` (단일 원장 — 통합테스트 xlsx 98행 전수 + RULE/CHAT).
 # 배경(근본원인 갭②): 사용자 지시는 대사표에 평문으로만 남아 "보이지만 세지지 않는" 상태였고
@@ -168,6 +190,20 @@ def parse_request_ledger(path=None):
         if status not in REQ_STATUSES:
             errors.append(f"{_id}: 미지 상태 '{status}' (허용: {'/'.join(sorted(REQ_STATUSES))})")
             continue
+        # ⭐ hook #149 종결 게이트 (2026-08-31 신설 — "보완 없이 종료처리" 재발 방지):
+        #   APPLIED/VERIFIED 전이 근거 = 신고 증상 「재현」 + 정정 후 「해소」 2축 표기 의무.
+        #   존재 확인(코드/룩업/배선 실존)은 근거 불인정. 2026-08-31 이후 채록(CHAT-일자 실측) = FAIL,
+        #   그 이전 행 = 소급 WARN(화면별 작업 시점 재판정 — anti-simplification 소급 원칙).
+        if status in ("APPLIED", "VERIFIED"):
+            _dm = re.search(r"CHAT-(\d{8})", _id)
+            _txt = evidence + " " + gist
+            _has_repro = ("재현" in _txt) or ("양성" in _txt and "음성" in _txt)
+            _has_resolve = ("해소" in _txt) or ("음성" in _txt) or ("PASS" in _txt and "재현" in _txt)
+            if not (_has_repro and _has_resolve):
+                msg = f"{_id}: [G149] {status} 전이인데 근거에 「재현」/「해소」 2축 부재 — 존재 확인만으로 종결 의심"
+                if _dm and _dm.group(1) >= "20260831":
+                    errors.append(msg)
+                # 이전 채록분은 소급 WARN — 오류 목록엔 미편입(화면 작업 시점 재판정)
         rows.append({"id": _id, "src": src, "gist": gist, "ui": target_ui,
                      "signal": signal, "status": status, "onprem": onprem,
                      "cloud": cloud, "evidence": evidence})
@@ -625,6 +661,21 @@ def cmd_init(md_paths, page_dir, out_override=None, allow_legacy=False, menu=Non
         else:
             lines.append(f"| {_id} | {g} |  |  | {STATUS_INIT} |")
 
+    # ⭐ UI 필수 12행동(UM) 축 — hook #149 (2026-08-28). --init 은 항상 생성(기입값 보존). --check 는 섹션이 있을 때 전수 판정.
+    lines.append("")
+    lines.append(UM_SECTION_TITLE)
+    lines.append("")
+    lines.append("> 원천: 사용자 지정 12항목(2026-08-28) — hook #149 `ui-mandatory-12-behaviors`. 12행 전부 판정(구현+위치 / 해당없음+사유). 빈 행 = FAIL.")
+    lines.append("> 코드 증거(판정신호)는 원장 `REQ:CHAT-20260828-UM{nn}-<MENU>` 행이 담당 — 산문 '정합' 만으로 구현을 쓰지 말 것.")
+    lines.append("")
+    lines.append(header_cols)
+    lines.append("|---|---|---|---|---|")
+    for _id, g in UI_MANDATORY_ITEMS:
+        if _id in existing:
+            lines.append(existing.pop(_id))
+        else:
+            lines.append(f"| {_id} | {g} |  |  | {STATUS_INIT} |")
+
     # ⭐ 보완요청(REQ) 축 — 원장에서 이 화면 대상 행을 끌어와 대사표에 편입 (2026-08-20 신설, 기입값 보존)
     n_req = 0
     if menu:
@@ -853,7 +904,7 @@ def check_citations(page_dir, db_ids=None):
 
 
 def cmd_check(page_dir, matrix_only=False, handlers_only=False, citations=False,
-              requests_only=False, menu=None, requests_path=None):
+              requests_only=False, menu=None, requests_path=None, um_enforce=False):
     page = pathlib.Path(page_dir)
     target = page / MAPPING_FILENAME
     scope = ("AS-IS 핸들러 인벤토리" if handlers_only else
@@ -963,6 +1014,21 @@ def cmd_check(page_dir, matrix_only=False, handlers_only=False, citations=False,
             print(f"[FAIL] UI 공통(통합테스트) 축 부재 {len(missing_common)}건 — --init 재실행으로 섹션 생성 후 "
                   f"전 행 판정 기입 의무 (2026-08-12 사용자 지정): {', '.join(missing_common)}")
             return 1
+        # ⭐ UI 필수 12행동(UM) 축 (hook #149, 2026-08-28) — 옵션 A: 대사표에 UM 섹션(또는 UM- 행)이 있는 착수 화면만 전수 강제.
+        #   미착수 화면 = WARN (다음 착수 시 소급). --um-enforce = 전 화면 강제.
+        um_rows = {}
+        for line in target.read_text(encoding="utf-8", errors="ignore").splitlines():
+            m = RE_MAP_ROW.match(line.strip())
+            if m and m.group(1).startswith("UM-"):
+                um_rows[m.group(1)] = line
+        if um_rows or um_enforce:
+            missing_um = [i for i, _ in UI_MANDATORY_ITEMS if i not in um_rows]
+            if missing_um:
+                print(f"[FAIL] UI 필수 12행동(UM) 축 부재 {len(missing_um)}건 — 12행 전수 판정 의무 (hook #149): {', '.join(missing_um)}")
+                return 1
+            print(f"[PASS] UI 필수 12행동(UM) 축 12/12 행 존재 — 상태·사유는 아래 전수 판정에서 검증")
+        else:
+            print("[WARN] UI 필수 12행동(UM) 축 미착수 — 이 화면을 다음에 손댈 때 `--init … --um` 으로 섹션 생성 후 12행 판정 의무 (hook #149)")
 
     # ⭐ 보완요청(REQ) 축 — 원장 대조 (2026-08-20 신설, 사용자 확정 "미적용 전제" 원칙)
     #   근본원인 갭②③⑥⑦⑨ 봉인: 원장 미편입=FAIL / PENDING 잔존=FAIL / 비-PENDING 근거 공란=FAIL /
@@ -1075,6 +1141,7 @@ def main():
     ap.add_argument("--requests", metavar="원장경로",
                     help="보완요청 원장 md 경로 override (기본: Doc/단위테스트_보완대상/보완요청_원장.md — 음성 대조군 검증용)")
     ap.add_argument("--requests-only", action="store_true", help="--check 시 보완요청(REQ) 축만 판정 (러너 섹션 10)")
+    ap.add_argument("--um-enforce", action="store_true", help="--check 시 UI 필수 12행동(UM) 축을 미착수 화면에도 강제 (hook #149 옵션 B)")
     args = ap.parse_args()
     if args.init:
         if len(args.init) < 2:
@@ -1086,7 +1153,7 @@ def main():
         sys.exit(cmd_check(args.check, matrix_only=args.matrix_only,
                            handlers_only=args.handlers_only, citations=args.citations,
                            requests_only=args.requests_only, menu=args.menu,
-                           requests_path=args.requests))
+                           requests_path=args.requests, um_enforce=args.um_enforce))
     ap.error("--init 또는 --check 필요")
 
 

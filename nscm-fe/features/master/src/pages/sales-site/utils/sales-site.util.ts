@@ -23,6 +23,68 @@ const normalizeComboValue = (value: string | number | null | undefined) =>
 const readComboDivision = (item: ComboResponse) =>
   normalizeComboValue(item.DIVISION_ID) || normalizeComboValue(item.DIVISION_CODE);
 
+// 콤보 행에서 먼저 값이 있는 컬럼을 고른다. 공백만 든 셀은 없는 값으로 본다.
+//   같은 SQL_ID 라도 풀네임 컬럼으로 개정된 것과 종전 이름이 섞여 있어 양쪽을 다 견뎌야 한다
+//   (SearchFields.utils 의 readRow 와 같은 사정).
+const pickComboValue = (item: ComboResponse, columns: readonly string[]) => {
+  for (const column of columns) {
+    const value = normalizeComboValue(item[column]);
+    if (value !== '') return value;
+  }
+  return '';
+};
+
+/** 콤보가 코드/이름을 담아 내려주는 컬럼 후보. 앞에 적은 것부터 본다. */
+export interface ComboValueColumns {
+  code: readonly string[];
+  name: readonly string[];
+}
+
+/** 'EndCustomer' 콤보. 풀네임 개정본과 종전 이름을 함께 견딘다. */
+export const END_CUSTOMER_COLUMNS: ComboValueColumns = {
+  code: ['END_CUSTOMER', 'END_CUSTOMER_CODE', 'CODE'],
+  name: ['END_CUSTOMER_NAME', 'NAME'],
+};
+
+/** 'SoldCustomer' 콤보. CASCADE_LEVELS.soldToCustomer 와 같은 컬럼을 본다. */
+export const SOLD_CUSTOMER_COLUMNS: ComboValueColumns = {
+  code: ['SOLD_CUSTOMER_CODE', 'SOLDTO_CUSTOMER', 'CODE'],
+  name: ['SOLD_CUSTOMER_NAME', 'NAME'],
+};
+
+// 조회조건 드롭다운 옵션 — division 으로 좁히고 코드 기준 중복을 접는다.
+//   이 화면의 End Customer / Sold-To Customer 는 자기 콤보('EndCustomer' / 'SoldCustomer')를
+//   통째로 받아 여기서 거른다. 조인 콤보 cascade 로 묶지 않는 이유는 Sales Site 원천이
+//   조건마다 달라(utils/sales-site.salesSiteCombo 참조) 단계로 엮이지 않기 때문이다.
+//
+//   division 이 빈 행은 통과시킨다(관대 매칭). 카탈로그 SearchFields 의 toOptions 가 같은
+//   콤보를 그렇게 읽는다 — 자르면 목록이 통째로 비는 콤보가 있다.
+//   코드를 못 읽은 행은 버린다. 남기면 라벨도 값도 빈 항목이 드롭다운에 하나 뜬다.
+export const toDivisionComboOptions = (
+  comboRows: readonly ComboResponse[] | undefined,
+  divisionId: string,
+  columns: ComboValueColumns = { code: ['CODE'], name: ['NAME'] }
+) => {
+  const division = normalizeComboValue(divisionId);
+  return [
+    ...new Map(
+      (comboRows ?? [])
+        .filter(item => {
+          const rowDivision = readComboDivision(item);
+          return rowDivision === '' || rowDivision === division;
+        })
+        .map(item => {
+          const code = pickComboValue(item, columns.code);
+          return [
+            code,
+            { label: pickComboValue(item, columns.name) || code, value: code },
+          ] as const;
+        })
+        .filter(([code]) => code !== '')
+    ).values(),
+  ];
+};
+
 // 셀에 든 값(CODE 또는 NAME)을 콤보 기준 CODE 로 되돌린다.
 //   필수: 같은 division 안에서 먼저 찾는다. CODE 가 division 별로 중복되는 LGE 같은 값이
 //   다른 법인의 NAME 으로 먼저 걸리면 엉뚱한 CODE 로 풀린다.

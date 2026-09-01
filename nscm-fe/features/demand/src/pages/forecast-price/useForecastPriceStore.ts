@@ -34,6 +34,10 @@ interface ForecastPriceState {
   // ⭐ measure 별 편집권한 (GET drop3 커서 — AS-IS bEDIT_AUTH_SCM_FCST/MKT_FCST/LOC/VMI_IN_REQ 1:1).
   //   key=MEASURE, value=EDIT_FLAG==='Y'. 조회 응답 갱신 시 setMeasureAuth 로 반영.
   measureAuth: Record<string, boolean>;
+  // ⭐ measure 별 "시간창 因 잠금" (drop3 EDIT_AUTH_YN==='T' — [E20260826-AUTHVIEW]).
+  //   보유그룹의 시간창 정의 행이 있으나 지금이 창 밖 → 편집 시도 시 MSG00477 안내 대상.
+  //   (그룹 미보유 因 'N' 과 구분 — DM Viewer 등에는 시간 메시지를 띄우지 않는다.)
+  measureTimeGate: Record<string, boolean>;
   // 현재 주차 binding (GET drop2 THIS_YYYYMMWW) — 과거 잠금 경계 산출 입력.
   thisYyyymmww: string;
   // ⭐ 배분 캘린더 (GET drop4=O_RC5) — 'D_YYYYMMDD' → {monthDayCnt, weekDayCnt}. 월(M_) 배분(#1) 입력.
@@ -131,6 +135,7 @@ const initState: ForecastPriceState = {
   staticMeasures: [],
   dateColumns: [],
   measureAuth: {},
+  measureTimeGate: {},
   thisYyyymmww: '',
   calendar: {},
   m3CutoffYyyymm: '',
@@ -401,13 +406,20 @@ export const useForecastPriceStore = createPersistedStoreWithTab<
     },
     setMeasureAuth: rows => {
       // drop3 실측 컬럼 = EDIT_AUTH_YN (요일제한 TODAY_* 는 PKG 가 행별 EDIT_FLAG 에 종합 반영).
+      //   'T' = 시간창 因 잠금([E20260826-AUTHVIEW]) — 편집은 false, MSG00477 안내 대상으로 별도 맵.
+      //   같은 MEASURE 다행(요일 축 분리)이 올 수 있어 or-병합한다.
       const auth: Record<string, boolean> = {};
+      const timeGate: Record<string, boolean> = {};
       rows.forEach(r => {
         const m = typeof r.MEASURE === 'string' ? r.MEASURE : '';
-        if (m) auth[m] = (r.EDIT_AUTH_YN ?? '') === 'Y';
+        if (!m) return;
+        const v = r.EDIT_AUTH_YN ?? '';
+        auth[m] = (auth[m] ?? false) || v === 'Y';
+        timeGate[m] = (timeGate[m] ?? false) || v === 'T';
       });
       set(state => {
         state.measureAuth = auth;
+        state.measureTimeGate = timeGate;
       });
     },
     setThisYyyymmww: v => {

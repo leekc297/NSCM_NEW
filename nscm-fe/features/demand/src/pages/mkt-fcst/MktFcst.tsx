@@ -40,6 +40,9 @@ import {
   INSERT_DEFAULT_MEASURE,
   MEASURE_FALLBACK,
   MAIN_COLUMNS,
+  MDM_ACTIVE_EXEMPT_MEASURES,
+  MDM_ACTIVE_FLAG,
+  isEssItemPopupBlocked,
   MENU_ID,
   MSG,
   SHEETS,
@@ -97,6 +100,10 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
   const gridRef = useRef<FlexGridType<MktFcstRow>>(undefined);
   const gridFilterRef = useRef<FlexGridFilter>(undefined);
   const editTrackerRef = useRef<EditTracker<MktFcstRow>>(undefined);
+  // 행 단위 편집 콤보 선조회 호출구 (MktFcstGrid 가 채운다) — 팝업으로 Project Code 를 고르면
+  //   cellEditEnded 를 안 타서 MktFcstEditMeasure 캐시가 안 데워지고, 다음 Measure 편집 진입이
+  //   조회 콤보로 뜬다. 아래 ProjectByDivisionModal.setSelectedValue 에서 직접 부른다.
+  const prefetchRowParamComboRef = useRef<(row: Record<string, unknown>) => void>(undefined);
 
   const setAlert = useMessageStore.getState().setAlert;
   const setToast = useMessageStore.getState().setToast;
@@ -397,6 +404,12 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
     return typeof value === 'number' ? String(value) : fallback;
   };
 
+  // Model 셀 팝업의 MDM 사용중지 모델 숨김 여부. AS_In_Req/BNPIn 행은 빈값으로 예외 처리한다.
+  //   rowValue fallback 이 '' 인 이유: MEASURE 미설정 행을 예외로 오인하지 않기 위해서다.
+  const itemModalActiveFlag = MDM_ACTIVE_EXEMPT_MEASURES.includes(rowValue('MEASURE', ''))
+    ? ''
+    : MDM_ACTIVE_FLAG;
+
   // ⭐ Phase 2e POPUP state — SSP compare / SSP result / PR / PR history.
   //   (MasterChg 는 2026-07-13 사용자 결정으로 기능 전체 삭제 — AS-IS btnIncotermsChg 미이관 확정.)
   const [sspCompareParams, setSspCompareParams] = useState<SspSyncCompareParams | null>(null);
@@ -604,18 +617,11 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
     else setInsertedRows(prev => prev.filter(p => p.row !== sel));
   };
 
-  // A-08 [CG-05] 키 값이 바뀐 신규 행의 수량(D_/W_/M_) 전량 클리어 (.cs L5319~5379).
-  //   Project/Item 팝업 세팅은 셀 편집을 거치지 않아 그리드 cellEditEnded 의 같은 규칙이 발동하지
-  //   않는다 — 팝업 확정 경로에서 한 번 더 적용한다. 동적 컬럼 목록(dynColMetas)은 그리드 내부에만
-  //   있으므로 행 키 접두어로 골라낸다 (D_/W_/M_ = SP 가 만드는 기간 컬럼 접두어 규약).
-  //   불변 갱신 — 팝업 확정부가 setInsertedRows 의 map 안에서 객체를 새로 만들어 쓰기 때문.
-  const clearDynQuantities = <T extends Record<string, unknown>>(row: T): T => {
-    const next: Record<string, unknown> = { ...row };
-    for (const k of Object.keys(next)) {
-      if (/^[MWD]_/.test(k)) next[k] = null;
-    }
-    return next as T;
-  };
+  // A-08 [CG-05] 키 값이 바뀐 신규 행의 수량(D_/W_/M_) 전량 클리어(.cs L5319~5379)는 2026-08-27
+  //   요구로 제거했다 — 팝업(Project/Model) 확정 경로도 그리드 셀 편집 경로와 같이 걷어낸다.
+  //   두 경로의 규칙은 항상 일치해야 한다: 한쪽만 남기면 같은 키 컬럼인데 셀로 고치면 수량이
+  //   남고 팝업으로 고치면 날아가는 상태가 된다. 사유와 되살릴 때의 형태는 MktFcstGrid.tsx 의
+  //   applyStaticCascade 끝 A-08 [CG-05] 주석 참조.
 
   // F7 Save — I/M 통합 저장. AS-IS SaveData(L2146~2366) + SetSaveData(L5205~5332) 1:1.
   //   변경 D_(일자) 셀 → (identity keys + YYYYMMDD + QTY) 일자 row unfold → 15 키 '^'delim payload.
@@ -948,6 +954,7 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
         gridRef={gridRef}
         gridFilterRef={gridFilterRef}
         editTrackerRef={editTrackerRef}
+        prefetchRowParamComboRef={prefetchRowParamComboRef}
         divisionId={sc.divisionId}
         editable={editable}
         bucketType={sc.bucketType}
@@ -958,6 +965,26 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
         bucketInfo={bucketInfo}
         currentWeekInfo={currentWeekInfo}
         onPopupCellDblClick={(modalKey, row) => {
+          // ESS 가드 (AS-IS MSG00147) — 팝업 오픈 전 판정. 걸리면 알럿만 뜨고 팝업은 안 열린다.
+          if (modalKey === 'ITEM') {
+            const cell = (key: string) => toCellStr((row as Record<string, unknown>)[key]);
+            if (
+              isEssItemPopupBlocked({
+                divisionId: sc.divisionId,
+                projectCode: cell('PROJECT_CODE'),
+                itemId: cell('ITEM_ID40') || cell('ITEM_ID'),
+              })
+            ) {
+              void setAlert({
+                type: 'alert',
+                content: t(
+                  MSG.ESS_ITEM_SEARCH,
+                  '_ESS 혹은 ESS를 포함할 때 프로젝트 코드나 모델 코드는 3자리 이상이어야 합니다.'
+                ),
+              });
+              return;
+            }
+          }
           setPopupGroupId(row.INSERT_GROUP_ID ?? null);
           setPopupRow(row);
           if (modalKey === 'ITEM') setOpenItem(true);
@@ -990,16 +1017,28 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
                 PROJECT_NAME: projectName ?? '',
                 PROJECT_OWNER: projectOwner ?? '',
               };
-              // A-08 [CG-05] Project 는 키 컬럼 — 실제로 바뀐 경우만 수량 전량 클리어.
-              //   주의: 같은 값 재선택으로 입력한 수량이 날아가면 안 된다(그리드 changed 게이트와 동일).
+              // 같은 값 재선택이면 하위 초기화도 하지 않는다(그리드 changed 게이트와 동일).
               if (projectCode === r.PROJECT_CODE) return next;
               // 상위 값 변경 = 하위 값 초기화(2026-08-14 스펙: Project Code 변경 -> Model).
               //   필수: 팝업 선택은 cellEditEnded 를 타지 않으므로 여기서 직접 부른다 —
               //   빼먹으면 Project 만 바뀌고 이전 Project 의 Model 이 그대로 남아 저장된다.
+              //   수량(D_/W_/M_)은 건드리지 않는다 — 이 파일 handleSave 위의 A-08 [CG-05] 주석 참조.
               applyCascadeClear(next as Record<string, unknown>, 'PROJECT_CODE');
-              return clearDynQuantities(next);
+              return next;
             })
           );
+          // 필수: Project Code 는 MktFcstEditMeasure 의 파라미터다. 팝업 선택은 cellEditEnded 를
+          //   안 타므로 그 안의 선조회도 건너뛴다 - 여기서 직접 데워두지 않으면 다음 Measure 편집
+          //   진입이 캐시 미스로 스왑에 실패해 조회용 전체 Measure 목록이 뜬다.
+          //   updater 밖에서 부른다: setInsertedRows 의 updater 는 순수해야 하고 StrictMode 에서
+          //   두 번 실행된다. applyCascadeClear 가 지우는 건 Model 계열뿐이라 파라미터로 쓰는
+          //   DIVISION_ID / SCM_SITE_ID 는 popupRow 값 그대로 유효하다.
+          if (popupRow) {
+            prefetchRowParamComboRef.current?.({
+              ...(popupRow as Record<string, unknown>),
+              PROJECT_CODE: projectCode,
+            });
+          }
           setPopupGroupId(null);
         }}
         preSearchParams={
@@ -1034,8 +1073,9 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
                 ITEM_NAME: itemName ?? '',
                 NICK_NAME: nickName ?? '',
               };
-              // A-08 [CG-05] Item(Model) 도 키 컬럼 — 실제로 바뀐 경우만 수량 전량 클리어.
-              return itemId === r.ITEM_ID ? next : clearDynQuantities(next);
+              // Item(Model) 은 키 컬럼이지만 수량(D_/W_/M_)은 그대로 둔다 —
+              //   이 파일 handleSave 위의 A-08 [CG-05] 주석 참조.
+              return next;
             })
           );
           setPopupGroupId(null);
@@ -1048,6 +1088,7 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
             salesSite: rowValue('SCM_SITE_ID'),
             projectCode: rowValue('PROJECT_CODE', ''),
             itemId: '',
+            activeFlag: itemModalActiveFlag,
           } as never
         }
         callFromCell={true}

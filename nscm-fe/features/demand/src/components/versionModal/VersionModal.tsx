@@ -39,6 +39,7 @@ import {
   VERSION_TYPE_LOOKUP,
 } from './version-modal.constants';
 import styles from './VersionModal.module.scss';
+import { useVersionModalStore } from './versionModalStore';
 
 /** 본 팝업을 공유하는 화면 — procedures.d.ts 에 'unitedVersion' 시트가 등재된 2 화면.
  *  ⚠ Extract<MenuId, ...> 사용 금지: RawProcedureMap 이 Base 의 문자열 인덱스 시그니처를
@@ -97,12 +98,8 @@ export const VersionModal = ({
   const [edt, setEdt] = useState('');
   const [description, setDescription] = useState('');
   // 확정된 조회조건 — useTabProcQuery filters 참조 안정화 원천
-  const [applied, setApplied] = useState({
-    versionType: parentReportType,
-    sdt: '',
-    edt: '',
-    description: '',
-  });
+  const applied = useVersionModalStore(state => state.applied);
+  const setApplied = useVersionModalStore(state => state.setApplied);
 
   // 액션 옵션 (AS-IS chkResult / BasicDate / chkMV / MvMonth / chkUpdate)
   const [includeResult, setIncludeResult] = useState(false);
@@ -229,7 +226,7 @@ export const VersionModal = ({
   // Type 변경 — grid 초기화 + 실적 포함 해제 (AS-IS L496~501). 재조회는 Find 버튼.
   const handleTypeChange = (next: string) => {
     setVersionType(next);
-    setApplied(prev => ({ ...prev, versionType: next, sdt: '', edt: '' })); // enabled=false → grid 비움
+    setApplied({ ...applied, versionType: next, sdt: '', edt: '' }); // enabled=false → grid 비움
     setIncludeResult(false);
     setBasicDate('');
     setSelectedIdx(-1);

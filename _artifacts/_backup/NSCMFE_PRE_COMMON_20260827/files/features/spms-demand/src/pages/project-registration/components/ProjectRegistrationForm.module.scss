@@ -1,0 +1,47 @@
+// 등록완료일 Period 필드 — sales-plan SalesPlanForm.module.scss 와 동일한 처방(2026-08-07 기준):
+// DatePickerCalendar(MUI 내부) 높이를 조회조건 표준(36px)에 맞추고 시작/종료 두 달력을 좁게 배치한다.
+.datePickerFix {
+  width: 100%;
+  height: 36px;
+  display: flex;
+  align-items: center;
+
+  :global {
+    [class*='MuiBox-root'],
+    [class*='MuiFormControl-root'],
+    [class*='MuiTextField-root'],
+    [class*='MuiOutlinedInput-root'],
+    [class*='MuiInputBase-root'] {
+      height: 36px !important;
+      min-height: 36px !important;
+      box-sizing: border-box;
+    }
+
+    [class*='MuiInputBase-input'],
+    input {
+      box-sizing: border-box;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+    }
+  }
+}
+
+.periodSplit {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  width: 100%;
+
+  .datePickerFix {
+    flex: 0 0 auto;
+    width: 110px;
+    min-width: 0;
+  }
+}
+
+.periodSep {
+  flex: 0 0 auto;
+  color: var(--gray-400, #98a2b3);
+  user-select: none;
+}

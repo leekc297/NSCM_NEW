@@ -1,5 +1,3 @@
-import type { FlexGrid } from '@mescius/wijmo.grid';
-
 import dayjs from '@foundation/dayjs';
 
 import type { ProjectRow } from './project-registration.types';
@@ -87,15 +85,8 @@ export const buildProjectActionPayload = (rows: ProjectRow[]): ProjectRow[] => {
   ];
 };
 
-// useCheckbox 그리드에서 체크된 row 를 모은다 (auth-approval/auth-request 와 동일한 표준 헬퍼).
-export const collectCheckedRows = <T>(grid: FlexGrid<T> | null | undefined): T[] => {
-  if (!grid) return [];
-  const rows: T[] = [];
-  for (const element of grid.rows) {
-    if (element?.isSelected) rows.push(element.dataItem as T);
-  }
-  return rows;
-};
+// useCheckbox 그리드에서 체크된 row 를 모은다 — SDM 공통(lib/grid) 재노출 (기존 import 경로 유지)
+export { collectCheckedRows } from '../../lib/grid';
 
 export const formatSopDate = (value: WijmoPrimitive | undefined): string => {
   if (value == null || value === '') return '';

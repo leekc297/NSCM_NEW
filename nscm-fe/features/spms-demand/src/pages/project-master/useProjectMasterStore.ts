@@ -1,12 +1,50 @@
 import { apiClient } from '@foundation/apis';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
-import { createPersistedStoreWithTab } from '@shared/stores';
+import { fetchTitleSet } from '@shared/components';
+import { createPersistedStoreWithTab, useSessionStore } from '@shared/stores';
 
 import type { AuthManagementTarget } from '../../components/auth-management-popup';
 
 import { MENU_ID, SHEETS, TAB_INDEX } from './project-master.constants';
 import type { SearchCondition } from './project-master.types';
-import { toMultiParam, ymdToDash } from './utils/project-master.validate';
+import { defaultRegCompDates, toMultiParam, ymdToDash } from './utils/project-master.validate';
+
+type ColumnSheetName = SHEETS.TAB1 | SHEETS.TAB2;
+
+export interface ColumnLayoutSetting {
+  colNm: string;
+  visible: boolean;
+  width: number;
+  cellColor: string;
+  textColor: string;
+  order: number;
+}
+
+const DEFAULT_COL_WIDTH = 100;
+
+const applyLayoutToColumns = (
+  cols: RawFlexGridColumnConfig[],
+  settings: ColumnLayoutSetting[]
+): RawFlexGridColumnConfig[] => {
+  const byCol = new Map(settings.map(s => [s.colNm, s]));
+  return cols
+    .map(c => {
+      const s = byCol.get(c.colNm);
+      if (!s) return c;
+      return {
+        ...c,
+        display: s.visible,
+        colWth: s.width || DEFAULT_COL_WIDTH,
+        cellColor: s.cellColor,
+        textColor: s.textColor,
+      };
+    })
+    .sort(
+      (a, b) =>
+        (byCol.get(a.colNm)?.order ?? Number.MAX_SAFE_INTEGER) -
+        (byCol.get(b.colNm)?.order ?? Number.MAX_SAFE_INTEGER)
+    );
+};
 
 // SP filter payload — useTabProcQuery enabled 가드 (store 보관 참조만 전달 — 인라인 객체 금지)
 type FiltersBySheet = {
@@ -21,6 +59,8 @@ interface State {
   activeTab: TAB_INDEX;
   // admin SHEET_COLUMNS 동적 메타 — 시트별 (컬럼명 배열 하드코딩 금지. 조회 결과 data 는 저장하지 않는다)
   staticColumns: Partial<Record<SHEETS, RawFlexGridColumnConfig[]>>;
+  originalStaticColumns: Partial<Record<ColumnSheetName, RawFlexGridColumnConfig[]>>;
+  userColumnLayout: Record<ColumnSheetName, ColumnLayoutSetting[] | null>;
   // 권한관리 모달 (SDM1010 공용 승격분 — F-22) open 상태 + 대상 행 키
   authRegTarget: AuthManagementTarget | null;
 }
@@ -32,15 +72,17 @@ interface Action {
   clearFilters: () => void;
   setOpenSearchArea: (open?: boolean) => void;
   setActiveTab: (tab: TAB_INDEX) => void;
-  fetchStaticColumns: (sheets: SHEETS[]) => Promise<void>;
+  fetchStaticColumns: (sheets: ColumnSheetName[]) => Promise<void>;
+  applyColumnLayout: (sheetName: ColumnSheetName, settings: ColumnLayoutSetting[]) => void;
+  fetchUserColumnLayout: (sheetName: ColumnSheetName) => Promise<ColumnLayoutSetting[] | null>;
   openAuthRegModal: (target: AuthManagementTarget) => void;
   closeAuthRegModal: () => void;
 }
 
 // 기본 조회조건 — Division 은 MyDivision 첫 값 자동 보정(페이지 레벨 CF-01) / 멀티 4종 = [] (ALL) /
-//   등록 완료일 = period 시트 수신 후 M-1~Today 세팅 ('' = 미수신, E01-2)
+//   등록 완료일 = M-1(한 달 전 같은 날)~Today (FE dayjs 직접 산출 — period 시트 앵커 소비 폐기)
 const initSearch: SearchCondition = {
-  divisionId: '',
+  divisionId: useSessionStore.getState().session.div ?? '',
   endCustomers: [],
   cellTypes: [],
   bizTypes: [],
@@ -49,19 +91,29 @@ const initSearch: SearchCondition = {
   regCompDateTo: '',
 };
 
+const resetSearch = (): SearchCondition => {
+  const { fr, to } = defaultRegCompDates();
+  return { ...initSearch, regCompDateFr: fr, regCompDateTo: to };
+};
+
 const initState: State = {
   filters: {},
-  searchCondition: initSearch,
+  searchCondition: resetSearch(),
   openSearchArea: true,
   activeTab: TAB_INDEX.TAB1,
   staticColumns: {},
+  originalStaticColumns: {},
+  userColumnLayout: {
+    [SHEETS.TAB1]: null,
+    [SHEETS.TAB2]: null,
+  },
   authRegTarget: null,
 };
 
 export const useProjectMasterStore = createPersistedStoreWithTab<State & Action>(
   (set, get) => ({
     ...initState,
-    reset: () => set(initState),
+    reset: () => set({ ...initState, searchCondition: resetSearch() }),
     setSearchCondition: p =>
       set(state => {
         state.searchCondition = { ...get().searchCondition, ...p };
@@ -108,19 +160,94 @@ export const useProjectMasterStore = createPersistedStoreWithTab<State & Action>
       const divisionId = get().searchCondition.divisionId;
       await Promise.all(
         sheets.map(async sheet => {
+          if (get().userColumnLayout[sheet] === null) {
+            await get().fetchUserColumnLayout(sheet);
+          }
           try {
             const result = await apiClient.post<RawFlexGridColumnConfig[]>(
               `/admin/menu/${MENU_ID}/column`,
               { sheetNm: sheet, divisionId }
             );
             set(state => {
-              state.staticColumns[sheet] = result.data.result ?? [];
+              const fetched = result.data.result ?? [];
+              state.originalStaticColumns[sheet] = fetched;
+              const layout = state.userColumnLayout[sheet];
+              state.staticColumns[sheet] =
+                layout && layout.length > 0 ? applyLayoutToColumns(fetched, layout) : fetched;
             });
           } catch {
             // BE 메타 미응답 시 silent — 기존 배열 유지 (console 금지 룰 · 하드코딩 fallback 금지)
           }
         })
       );
+    },
+
+    applyColumnLayout: (sheetName, settings) => {
+      set(state => {
+        const shown = settings
+          .filter(s => s.visible)
+          .sort((a, b) => a.order - b.order)
+          .map((s, i) => ({ ...s, order: i + 1 }));
+        const hidden = settings
+          .filter(s => !s.visible)
+          .map(s => ({ ...s, order: Number.MAX_SAFE_INTEGER }));
+        const layout = [...shown, ...hidden];
+        state.userColumnLayout[sheetName] = layout;
+        const current = state.staticColumns[sheetName];
+        if (!current || current.length === 0) return;
+        state.staticColumns[sheetName] = applyLayoutToColumns(current, layout);
+      });
+    },
+
+    fetchUserColumnLayout: async sheetName => {
+      const rows = await fetchTitleSet({
+        menuId: MENU_ID,
+        sheetName,
+        columnType: 'C',
+        divisionId:
+          get().searchCondition.divisionId || useSessionStore.getState().session.div || '',
+      });
+      if (!rows || rows.length === 0) return null;
+      const isShown = (row: Record<string, string>) =>
+        String(row.USER_FLAG ?? row.DEFAULT_FLAG ?? 'Y')
+          .trim()
+          .toUpperCase() === 'Y';
+      const orderOf = (row: Record<string, string>) =>
+        Number(row.USER_SORT_ORDER_NO ?? row.SORT_ORDER_NO ?? 0);
+      const toSetting = (
+        row: Record<string, string>,
+        order: number,
+        visible: boolean
+      ): ColumnLayoutSetting => {
+        const width = Number(row.USER_COLUMN_WIDTH ?? row.COLUMN_WIDTH ?? 0);
+        return {
+          colNm: String(row.COLUMN_NAME ?? ''),
+          visible,
+          width: Number.isFinite(width) && width > 0 ? width : DEFAULT_COL_WIDTH,
+          cellColor: String(row.CELL_COLOR ?? ''),
+          textColor: String(row.TEXT_COLOR ?? ''),
+          order,
+        };
+      };
+      const shown = rows
+        .filter(isShown)
+        .sort((a, b) => orderOf(a) - orderOf(b))
+        .map((row, index) => toSetting(row, index + 1, true))
+        .filter(setting => setting.colNm);
+      const hidden = rows
+        .filter(row => !isShown(row))
+        .map(row => toSetting(row, Number.MAX_SAFE_INTEGER, false))
+        .filter(setting => setting.colNm);
+      if (shown.length === 0) return null;
+      const layout = [...shown, ...hidden];
+      set(state => {
+        state.userColumnLayout[sheetName] = layout;
+        const current = state.staticColumns[sheetName];
+        if (current && current.length > 0) {
+          state.staticColumns[sheetName] = applyLayoutToColumns(current, layout);
+        }
+      });
+      return layout;
     },
 
     openAuthRegModal: target =>

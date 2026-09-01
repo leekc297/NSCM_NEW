@@ -1,0 +1,51 @@
+{
+ "menu": "DMF0074",
+ "stamp": "20260831",
+ "db": {
+  "01_DDL_GTT.sql": "GTT 17본 (접두 ['GT_DM74'] + ALL_DEPENDENCIES)",
+  "10_PKG_DMF0074_SPEC.sql": "SPEC [('PACKAGE', 'VALID', '2026-08-10 20:46'), ('PACKAGE BODY', 'VALID', '2026-08-27 16:17')]",
+  "11_PKG_DMF0074_BODY.sql": "BODY [('PACKAGE', 'VALID', '2026-08-10 20:46'), ('PACKAGE BODY', 'VALID', '2026-08-27 16:17')]",
+  "12_FUNCTION_FN_NEXT_DAY.sql": "의존 FUNCTION (기이관이면 skip 가능)",
+  "13_PROCEDURE_PR_SCM_SYS_LOG_BATCH.sql": "의존 PROCEDURE (기이관이면 skip 가능)",
+  "20:SCM_ADM_PROGRAM": 1,
+  "20:SCM_ADM_MNU_M": 1,
+  "20:SCM_ADM_USER_GR_MNU_MPG_M": 3,
+  "20:SCM_ADM_MNU_BTN_MPG_M": 9,
+  "20:SCM_ADM_USER_GR_MNU_BTN_MPG_M": 24,
+  "20:SCM_ADM_API_M": 8,
+  "20_MENU_WIRING_AUTH.sql": "MERGE ON PK 실측",
+  "24:DMF0073_GET_VERSION_SALESPRICE": 9,
+  "24:PKG_DMF0074.P_DMF0074_EXCEL_UPLOAD": 5,
+  "24:PKG_DMF0074.P_DMF0074_GET_METAL_LINK_PRICE": 14,
+  "24:PKG_DMF0074.P_DMF0074_GET_METAL_LINK_TEMPLATE": 5,
+  "24_PROC_M.sql": "4 SP",
+  "22:SCM_MST_SHEET_COLUMNS:DMF0074/Metal Link Price": 58,
+  "22_SHEET_META.sql": "시트 단위 재적재",
+  "22A_SHEET_META_DEP_PROGRAMS.sql": "종속 PROGRAM_ID [] / 0행",
+  "25_EXCEL_COLUMNS.sql": "2행",
+  "26_LOOKUP_DETAIL.sql": "0행",
+  "21_CMBO_SQL.sql": "1본 (FE 요청 1: 미등재 [])",
+  "23_MSG_LBL_MNU.sql": "69행 / 미존재 ['MSG00049', 'MSG00427', 'MSG_API_DMF0074_MAIN_EXCEL', 'MSG_API_DMF0074_MAIN_FILTER', 'MSG_API_DMF0074_MAIN_SAVE', 'MSG_API_DMF0074_MAIN_SEARCH', 'MSG_API_DMF0074_MAIN_SORT', 'MSG_API_DMF0074_MAIN_UPLOAD', 'MSG_API_DMF0074_TEMPLATE_SEARCH', 'MSG_API_DMF0074_VERSION_SEARCH']",
+  "40_GRANT_SYNONYM.sql": "대상 3: ['PKG_DMF0074', 'FN_NEXT_DAY', 'PR_SCM_SYS_LOG_BATCH']",
+  "90_VERIFY.sql": "기대 카운트 실측 + V11~V14"
+ },
+ "fe": {
+  "merge": [
+   "procedures.d.ts.DMF0074_BLOCK.txt (L588~L689, 시트 키 ['template', 'version'])"
+  ],
+  "files": [],
+  "external_feature_imports": [],
+  "closure_size": 0,
+  "closure_changed_outside_screen": [],
+  "changed_set_size": 472
+ },
+ "notes": [
+  "[E20260831] Excel Upload Validation 클라우드 확인용 재취합. DB = 사내 라이브 현재 기준 전량 (BODY 08-27 16:17 — D4/D5 정정·D4-NOLOADGUARD 포함). FE = 이관 제외: metal-link-price 모달 2본+store 2본은 2026-08-31 공통소스(클라우드 원천) 반영에서 ADOPT_COMMON/ADD 실측 — 클라우드가 동본 또는 최신. ⚠ 데이터 전제: MAX(SP_W·ATTRIBUTE7=Y) 버전에 SPW 원장(PLAN_C/RESULT_C) 실존해야 C19 계열·화면 조회 가능(90_VERIFY ANCHOR 판정).",
+  "SCM_MST_TITLESET_USER / SCM_ADM_USER_MNU_SRCH_COND_M / SCM_ADM_EXCEL_UPLOAD(스테이징) / *_BAK* 는 사용자·임시 데이터라 이관 제외",
+  "_survey/fe_check_20260831.txt 동봉 (전체 lint + type-check)"
+ ],
+ "gates": {
+  "G4_NLS_hits": [],
+  "G2_dep_programs": []
+ }
+}

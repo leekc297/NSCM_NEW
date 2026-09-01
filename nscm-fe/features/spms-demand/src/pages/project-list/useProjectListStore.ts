@@ -7,7 +7,7 @@ import type { AuthManagementTarget } from '../../components/auth-management-popu
 
 import { MENU_ID, SHEETS } from './project-list.constants';
 import type { SearchCondition } from './project-list.types';
-import { defaultRegCompRange, toMultiParam, ymdToDash } from './utils/project-list.validate';
+import { defaultRegCompDates, toMultiParam, ymdToDash } from './utils/project-list.validate';
 import { toText } from './utils/project-list.value';
 
 // SP filter payload — useTabProcQuery enabled 가드 (store 보관 참조만 전달 — 인라인 객체 금지)
@@ -46,7 +46,7 @@ interface Action {
 }
 
 // 기본 조회조건 (P-27) — Division 은 MyDivision 첫 값 자동 보정(페이지 레벨) / 멀티 3종 = 'ALL' /
-//   등록 완료일 = period 시트 수신 후 M-1~Today 세팅 ('' = 미수신)
+//   등록 완료일 = M-1(한 달 전 같은 날)~Today (FE dayjs 직접 산출 — period 시트 앵커 소비 폐기)
 const initSearch: SearchCondition = {
   divisionId: '',
   endCustomers: 'ALL',
@@ -57,14 +57,14 @@ const initSearch: SearchCondition = {
 };
 
 const resetSearch = (): SearchCondition => {
-  const { fr, to } = defaultRegCompRange(undefined);
+  const { fr, to } = defaultRegCompDates();
   return { ...initSearch, regCompDateFr: fr, regCompDateTo: to };
 };
 
 const initState: State = {
   initialized: false,
   filters: {},
-  searchCondition: initSearch,
+  searchCondition: resetSearch(),
   openSearchArea: true,
   staticColumns: {},
   authRegTarget: null,

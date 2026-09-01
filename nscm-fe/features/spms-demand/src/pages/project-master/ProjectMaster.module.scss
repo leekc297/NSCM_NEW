@@ -50,24 +50,13 @@
   cursor: pointer;
 }
 
-// ⭐ TAB1 REG_COL 행 버튼 (승인/반려 — F-15 FE 파생 렌더. 클릭은 셀 핸들러 data-action 라우팅)
-.regBtn {
-  display: inline-block;
-  margin: 0 2px;
-  padding: 1px 8px;
-  border: 1px solid #0a6cff;
-  border-radius: 3px;
-  background: #ffffff;
-  color: #0a6cff;
-  font-size: 11px;
-  line-height: 16px;
-  white-space: nowrap;
-  cursor: pointer;
-}
-
-.regBtnReject {
-  border-color: #d33c3c;
-  color: #d33c3c;
+// ⭐ TAB1 REG_COL 행 버튼 컨테이너 — 권한관리 요청그리드와 같은 LGES Button을 portal 렌더링.
+.regButtons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 100%;
 }
 
 // ⭐ TAB2 비활성 체크박스 (계약 ⑥ — CHECKED/UNCHECKED 서버 문자열. 클릭은 셀 핸들러가 처리 —

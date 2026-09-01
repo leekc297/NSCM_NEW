@@ -160,7 +160,7 @@ export const useSalesFuturePriceValidation = () => {
       return { ok: false, msgId: MSG.SELECT_COPY_ROW };
     }
     // #7 — 현재 버전 아님
-    if (c.versionId !== 'CURRENT') {
+    if (c.versionId !== 'Current') {
       void setAlert({ type: 'alert', content: t('MSG00448', '_현재 버전이 아닙니다.') });
       return { ok: false, msgId: MSG.EDIT_NOT_CURRENT_VER };
     }

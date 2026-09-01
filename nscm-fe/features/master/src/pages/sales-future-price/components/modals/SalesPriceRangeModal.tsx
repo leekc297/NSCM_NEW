@@ -257,12 +257,14 @@ export const SalesPriceRangeModal = ({ open, modalClose, rows, onSaved }: Props)
 
           {/* Action — 표준 buttonWrapper */}
           <div className={styles.buttonWrapper}>
+            {/* Excel — 공용 GridAction.excelDownload 사용. 버튼 순서는 Excel 다음 Save, Close 가 마지막. */}
             <Button
               appearance='outlined'
               priority='normal'
               size='medium'
-              buttonLabel={t('LBL00627', 'Close')}
-              onClick={modalClose}
+              iconComponent={<FileExceldownloadIcon />}
+              disabled={localRows.length === 0}
+              onClick={handleExcel}
             />
             <Button
               appearance='contained'
@@ -274,14 +276,12 @@ export const SalesPriceRangeModal = ({ open, modalClose, rows, onSaved }: Props)
               disabled={saving || localRows.length === 0}
               onClick={handleSave}
             />
-            {/* Excel — AS-IS 버튼 순서(Save 다음 Excel) 유지. 공용 GridAction.excelDownload 사용. */}
             <Button
               appearance='outlined'
               priority='normal'
               size='medium'
-              iconComponent={<FileExceldownloadIcon />}
-              disabled={localRows.length === 0}
-              onClick={handleExcel}
+              buttonLabel={t('LBL00627', 'Close')}
+              onClick={modalClose}
             />
           </div>
         </div>

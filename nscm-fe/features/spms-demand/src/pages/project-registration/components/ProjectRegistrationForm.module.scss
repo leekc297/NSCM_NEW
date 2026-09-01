@@ -45,3 +45,8 @@
   color: var(--gray-400, #98a2b3);
   user-select: none;
 }
+
+.keepWordsFormItem > div:first-of-type {
+  white-space: normal;
+  word-break: keep-all;
+}

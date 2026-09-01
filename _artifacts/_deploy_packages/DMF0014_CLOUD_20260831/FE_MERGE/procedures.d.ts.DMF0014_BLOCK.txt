@@ -1,0 +1,88 @@
+// procedures.d.ts 중 DMF0014 계약 블록 (L1069~L1154) — 클라우드판의 같은 키 블록만 교체. 전체본 덮어쓰기 ⛔
+// 시트 키: ['spreadTitle', 'dayRange']
+  /**
+   * CustomerFcstUpload — DMF0014 (Customer FCST Upload)
+   *
+   * 사내 Oracle PKG_DMF0014 ALL_ARGUMENTS 실측 (2026-07-04 —
+   * _deploy_packages/DMF0014_CUST_FCST_UPLOAD_20260704/04_VERIFY/001_all_arguments.txt).
+   * SHEETS:
+   * - `FCST Upload`  (메인 — 식별 13 + EDIT_FLAG/EDIT_YN + 동적 D_ 기간 컬럼.
+   *                   SHT_NM = SCM_ADM_EXCEL_COLUMNS 기존 등록명 그대로 — excel-upload 체인 키)
+   * - `spreadTitle`  (동적 기간 헤더 — 전 버킷 D_ 접두: WEEKLY=주 시작일 / MONTHLY=월 시작일)
+   * - `dayRange`     (PR_GET_DAY_RANGE 재사용 — DMF0048 dayRange 와 동일 계약)
+   * SAVE(P_DMF0014_SAVE_CUST_FCST_UPLOAD_DATA 17 IN '^'delim)는 apiClient.post 직접 — 타입 미등재.
+   */
+  DMF0014: {
+    'FCST Upload': {
+      // PKG_DMF0014.P_DMF0014_GET_CUST_FCST_UPLOAD_DATA PROC_M(SORT_ORD 1~15 IN) 정확 일치
+      request: {
+        divisionId: string; // 1  P_DIVISION_ID (단일 필수)
+        deptId: string; // 2  P_DEPT_ID (Team — 콤마 delim, 빈값 'ALL')
+        endCustomer: string; // 3  P_END_CUSTOMER
+        scmSiteId: string; // 4  P_SCM_SITE_ID (Sales Site)
+        plantSiteId: string; // 5  P_PLANT_SITE_ID
+        projectCode: string; // 6  P_PROJECT_CODE (텍스트 raw — 빈값 '')
+        itemId: string; // 7  P_ITEM_ID (Model/Nickname 텍스트 raw)
+        startYyyymmdd: string; // 8  P_START_YYYYMMDD
+        endYyyymmdd: string; // 9  P_END_YYYYMMDD
+        bucketType: string; // 10 P_BUCKET_TYPE ('DAILY'/'WEEKLY'/'MONTHLY' full-word)
+        domExp: string; // 11 P_DOM_EXP (Customs Handbook)
+        createdBy: string; // 12 P_CREATED_BY (BE 세션 자동)
+        userinfo: string; // 13 P_USERINFO (AS-IS NowGroupID)
+        sesUserId: string; // 14 P_USER_ID (BE 세션 자동)
+        mnuId: string; // 15 P_MENU_ID (BE 메뉴 자동)
+      };
+      response: {
+        // O_RC1 — 식별 13 + EDIT_FLAG/EDIT_YN + 동적 D_ 기간 컬럼 (스모크 실측 15 cols)
+        o_rc1: {
+          DIVISION_ID: string;
+          SCM_SITE_ID: string;
+          PLANT_SITE_ID: string;
+          CUSTOMER_PROJECT_CODE: string;
+          CUSTOMER_MODEL: string;
+          INCOTERMS: string;
+          FCST_TYPE: string;
+          DOM_EXP: string;
+          MEASURE_GROUP: string;
+          MEASURE: string;
+          UPLOAD_UOM: string;
+          PROJECT_CODE: string;
+          ITEM_ID: string;
+          EDIT_FLAG: string; // 'Y' = 기간 셀 편집 가능 행 (AS-IS EditButton 판정 1:1)
+          EDIT_YN: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    spreadTitle: {
+      // PKG_DMF0014.P_DMF0014_GET_SPREAD_TITLE PROC_M (3 IN + 세션 2 + o_rc1)
+      request: {
+        startYyyymmdd: string; // 1 P_START_YYYYMMDD
+        endYyyymmdd: string; // 2 P_END_YYYYMMDD
+        bucketType: string; // 3 P_BUCKET_TYPE (full-word — 'W'/'M' 은 커서 미오픈, DPY-4025)
+        sesUserId: string; // 4 P_USER_ID (BE 세션 자동)
+        mnuId: string; // 5 P_MENU_ID (BE 메뉴 자동)
+      };
+      response: {
+        // O_RC1 — 스모크 실측: DAILY 184 / WEEKLY 27 / MONTHLY 6 행 (20260701~20261231)
+        o_rc1: {
+          COLUMN_NAME: string; // 'D_yyyymmdd' (전 버킷 D_ 접두 — WEEKLY=주 시작일)
+          COLUMN_LABEL: string; // 'yyyymmdd'
+          SMALL_LABEL_NAME: string; // 상단 그룹 라벨 (요일 / Wnn / yyyy-mm)
+          EDIT_YN: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    dayRange: {
+      // PR_GET_DAY_RANGE PROC_M 재사용 (DMF0048 배선분 — DELETE+INSERT 금지 정책)
+      request: {
+        createdBy: string; // 1 P_CREATED_BY (BE 세션 자동)
+        month: string; // 2 P_MONTH (AS-IS GetDayRange p_month=6 — .cs L1237)
+      };
+      response: {
+        o_rc1: { DAY_RANGE: string; [key: string]: string | number };
+        o_rc2: { DAY_RANGE: string; [key: string]: string | number };
+      };
+    };
+  };

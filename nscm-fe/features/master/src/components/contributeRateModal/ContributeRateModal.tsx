@@ -1,5 +1,5 @@
 import { CellType, type FlexGrid } from '@mescius/wijmo.grid';
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 
 import { GridUtils } from '@foundation/utils';
 import { CustomDialog, DataGrid } from '@shared/components';
@@ -44,11 +44,16 @@ export const ContributeRateModal = ({
     FlexGrid<ResponseData<MODAL_RATE, MODAL_SHEET_RATE, 'o_rc1'>> | undefined
   >();
 
+  // useTabProcQuery 는 filters 참조가 바뀌면 캐시를 버리고 재조회한다. yyyy prop 을
+  // 인라인 리터럴로 감싸면 값이 그대로여도 매 렌더 새 참조가 생겨 그리드가 깜빡인다 —
+  // useMemo 로 참조를 yyyy 에 고정한다.
+  const filters = useMemo(() => ({ yyyy }), [yyyy]);
+
   const { data } = useTabProcQuery<MODAL_RATE>({
     menuId: MODAL_RATE,
     sheetName: MODAL_SHEET_RATE,
     tabId: MODAL_RATE,
-    filters: { yyyy },
+    filters,
     enabled: open && !!yyyy,
   });
 

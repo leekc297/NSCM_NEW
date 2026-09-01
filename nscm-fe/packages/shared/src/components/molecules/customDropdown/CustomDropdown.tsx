@@ -37,6 +37,8 @@ const StyledPopper = styled(Popper)({
 interface SingleProps<T> extends Omit<DropdownFieldProps<T>, 'multiple' | 'onChange' | 'value'> {
   multiple?: false;
   allOption?: boolean;
+  // 목록 정렬. 안 주면 서버 순서 그대로. 위 sortOptionsBy 주석 참조.
+  sortBy?: DropdownSortKey;
   value?: string;
   onChange?: (event: React.SyntheticEvent, value: string) => void;
 }
@@ -45,6 +47,8 @@ interface SingleProps<T> extends Omit<DropdownFieldProps<T>, 'multiple' | 'onCha
 interface MultipleProps<T> extends Omit<DropdownFieldProps<T>, 'multiple' | 'onChange' | 'value'> {
   multiple: true;
   allOption?: boolean;
+  // 목록 정렬. 안 주면 서버 순서 그대로. 위 sortOptionsBy 주석 참조.
+  sortBy?: DropdownSortKey;
   value?: string;
   onChange?: (event: React.SyntheticEvent, value: string) => void;
 }
@@ -153,6 +157,67 @@ const dropSentinelOptions = <T extends { value: string }>(opts: T[], keep: Set<s
   return kept.length === opts.length ? opts : kept;
 };
 
+/**
+ * [2026-08-25 사용자 확정] 목록 정렬 - 옵트인. 기본은 서버 순서(등록 SQL 의 ORDER BY DISPLAY_SEQ)다.
+ *
+ * 기본을 정렬로 두지 않는 이유: DISPLAY_SEQ 가 업무 순서를 담은 콤보가 있다
+ * (Measure / Incoterms / Bucket). 가나다순으로 덮으면 그쪽이 망가진다. 그래서 순서가
+ * 무의미한 코드 목록에서만 sortBy="label" 로 켠다.
+ *
+ * 기준은 label - 사용자가 눈으로 찾는 값이다. 순서는 숫자 - 영어 - 한글 - 기타.
+ *   - 그룹을 먼저 가르는 이유: localeCompare 하나에 맡기면 한글이 영문 앞/뒤 어디로 갈지
+ *     로케일 구현에 끌려간다. 그룹을 명시하면 브라우저와 무관하게 같은 순서가 나온다.
+ *   - 그룹 안에서는 numeric 비교라 'Bucket 2' 가 'Bucket 10' 앞에 온다.
+ *   - 대소문자만 다른 항목은 동률이고 Array.sort 가 안정 정렬이라 서버 순서가 그대로 남는다.
+ *
+ * 주의: 넘어온 배열을 제자리에서 sort 하면 안 된다. 위 dedupe/센티널 제거는 변화가 없으면
+ *   호출자가 준 options 배열 참조를 그대로 돌려주므로, 제자리 정렬은 부모의 배열을 훼손한다.
+ *   (아래는 map 으로 새 배열을 만든 뒤 정렬하므로 원본은 건드리지 않는다)
+ *
+ * 주의: 표시 계층 전용이다. 데이터 계층(useTabComboQueries/apiClient)에서 순서를 바꾸면
+ *   부가 컬럼(DIVISION_ID·DEPT_ID·END_CUSTOMER)별 행에 기대는 cascade 가 함께 흔들린다.
+ */
+export type DropdownSortKey = 'label';
+
+const SORT_GROUP_DIGIT = 0;
+const SORT_GROUP_LATIN = 1;
+const SORT_GROUP_HANGUL = 2;
+const SORT_GROUP_ETC = 3;
+
+const sortGroupOf = (label: string): number => {
+  const head = label.charAt(0);
+  if (head === '') return SORT_GROUP_ETC;
+  if (head >= '0' && head <= '9') return SORT_GROUP_DIGIT;
+  if (/[A-Za-z]/.test(head)) return SORT_GROUP_LATIN;
+  if (/[가-힣ㄱ-ㆎ]/.test(head)) return SORT_GROUP_HANGUL;
+  return SORT_GROUP_ETC;
+};
+
+// 정렬 키로 쓸 문자열. label 은 제네릭상 unknown 이라 String() 을 그대로 걸면 객체가
+//   '[object Object]' 로 찍힌다(@typescript-eslint/no-base-to-string). 문자열/숫자만 받고
+//   그 밖은 빈 문자열로 떨궈 아래에서 value 로 넘어가게 한다.
+const toSortText = (v: unknown): string =>
+  typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '';
+
+const sortOptionsBy = <T extends { value: string; label?: unknown }>(
+  opts: T[],
+  sortBy?: DropdownSortKey
+): T[] => {
+  if (sortBy !== 'label') return opts;
+  // 비교 키는 한 번만 만든다 - 비교마다 변환/정규식을 다시 돌리지 않기 위해서다.
+  return opts
+    .map(opt => {
+      const label = (toSortText(opt?.label) || opt?.value || '').trim();
+      return { opt, label, group: sortGroupOf(label) };
+    })
+    .sort((a, b) =>
+      a.group !== b.group
+        ? a.group - b.group
+        : a.label.localeCompare(b.label, 'ko', { numeric: true, sensitivity: 'base' })
+    )
+    .map(decorated => decorated.opt);
+};
+
 export const CustomDropdown = ({
   options: rawOptions,
   value,
@@ -161,6 +226,7 @@ export const CustomDropdown = ({
   // 2개 이상 노출이 필요한 곳은 limitTags 를 직접 지정한다(예: Templates 데모).
   limitTags = 1,
   allOption,
+  sortBy,
   className,
   ...props
 }: SingleProps<DropdownOption> | MultipleProps<DropdownOption>) => {
@@ -236,9 +302,13 @@ export const CustomDropdown = ({
   // const splitValueSet = new Set(value?.trim().split(',') ?? []);
   const splitValueSet = new Set(value?.trim().split(',').filter(Boolean) ?? []);
 
-  // 표시 직전 정리 — ① 센티널 3형 제외(현재 선택값은 보존) ② value 기준 중복 제거.
-  //   (둘 다 변화가 없으면 원본 배열 참조를 그대로 돌려주어 불필요한 리렌더를 만들지 않는다)
-  const options = dedupeOptions(dropSentinelOptions(rawOptions, splitValueSet));
+  // 표시 직전 정리 — ① 센티널 3형 제외(현재 선택값은 보존) ② value 기준 중복 제거 ③ 정렬(옵트인).
+  //   (①② 는 변화가 없으면 원본 배열 참조를 그대로 돌려주어 불필요한 리렌더를 만들지 않는다.
+  //    ③ 은 sortBy 를 준 화면에서만 돈다 - 기본은 서버 순서라 안 준 화면은 비용이 0이다)
+  const options = sortOptionsBy(
+    dedupeOptions(dropSentinelOptions(rawOptions, splitValueSet)),
+    sortBy
+  );
 
   // TODO: 성능 개선 필요해보임, mockHeavyDropdown 기준 버벅거림 있음 - 강민재
   const selectedOptions = options.filter(opt => splitValueSet.has(opt.value));

@@ -6,7 +6,8 @@
 //       - Yearly+Y_ 입력(L2083~2287): 하위 M_ 균등 분할 + 나머지 마지막 칸. 실적구간(금주 월요일 이전
 //         M_) 은 continue 스킵(L2206/2232 — 분모에서 제외) → Q_ 롤업.
 //     · LOC·기타 (실수 double, L2289~2720): 배분 아닌 copy — 하위 M_ 에 동일값 기입(L2394~2403),
-//       상위 SUM 은 0 유지(L2341/2503 — 가격은 합산 무의미).
+//       상위 SUM(Q_·Y_) 도 편집값 **그대로** copy (합산 무의미 — L2341/2503/L2371~2382).
+//       금지: 0 기입(연 SUM 이 0.000 으로 깨짐) / Int 반올림(1.27 단가가 1 로 깨짐) — 2026-08-25 실측.
 //     · 소수 검사(L1843~1855): Business_Plan + 소수 → 소수부 절삭 + MSG00289(→ TO-BE MSG00679) 안내.
 //     · ⚠ CAR/CELL/ENERGY·금액(KRW/USD/SalesAmt) 파생은 FE 계산 금지 — 저장 SP·가격환산 SP 산출 ([14] ⚠).
 //   분모 = AS-IS 1:1 (전체 하위 월 분모 + 잠금(실적) 월 기입 스킵 — 사용자 확정 2026-07-15 F-2 ③).
@@ -103,23 +104,24 @@ export const applyCellChange = (params: {
   // 반영 후 값 조회 헬퍼 (patches 우선)
   const valOf = (b: string): number => (b in patches ? (patches[b] ?? 0) : toNumber(rowValues[b]));
 
+  // 가격류(LOC 등) 상위 SUM — 합산이 무의미해 편집값을 그대로 복사한다 (AS-IS Q_ SetText 취지).
+  //   금지: 0 기입 / Int 반올림(Math.round). 2026-08-25 실측 사고 2건 —
+  //     · 0 기입   : 편집 즉시 연 SUM 이 0.000 으로 보이고, 되돌려도 0 이 다시 쓰여 수정(M) 이 안 풀림.
+  //     · 반올림   : 1.270 셀을 더블클릭했다 그냥 빠져나오기만 해도 Q_ 가 1.000 으로 깨짐.
+  //   반올림 없는 copy 는 두 사고를 함께 막는다 — 값을 안 바꿨으면 SUM 도 그대로, 바꾸면 따라간다.
   const rollupQuarter = (mTag: DynTag): void => {
     const q = quarterOf(mTag, dynBindings);
     if (!q) return;
     const qTag = parseDynTag(q)!;
     const months = childMonths(qTag, dynBindings, thisMonth, false);
-    // ⭐ 2026-07-21 G4 교정 — Monthly LOC 편집 시 Q_ = "편집 셀값" Int 반올림 copy (합산 아님):
-    //   신정본 L2371~2376 `dQuarterlySum = Convert.ToInt32(편집셀값)` → L2382 Q_ SetText.
-    //   (Y_ 는 0 유지 = 신정본 L2399~2404 파리티. Convert.ToInt32=half-even vs Math.round=half-up —
-    //   정확히 .5 인 극단만 ±1, 실무 무시 가능 수용.)
-    patches[q] = isBp ? months.reduce((s, b) => s + valOf(b), 0) : Math.round(input);
+    patches[q] = isBp ? months.reduce((s, b) => s + valOf(b), 0) : input;
   };
   const rollupYear = (anyTag: DynTag): void => {
     const y = yearOf(anyTag, dynBindings);
     if (!y) return;
     const yTag = parseDynTag(y)!;
     const months = childMonths(yTag, dynBindings, thisMonth, false);
-    patches[y] = isBp ? months.reduce((s, b) => s + valOf(b), 0) : 0;
+    patches[y] = isBp ? months.reduce((s, b) => s + valOf(b), 0) : input;
   };
 
   if (tag.kind === 'M') {
@@ -164,11 +166,12 @@ export const applyCellChange = (params: {
       });
     }
   }
-  // Q_ 롤업 재계산 (L2265~2286) — 연 내 전 분기
+  // Q_ 롤업 재계산 (L2265~2286) — 연 내 전 분기. 가격류는 위 상위 SUM 규칙대로 편집값 copy
+  //   (하위 월 전체가 같은 값이 되므로 분기도 같은 값이다).
   childQuarters(tag, dynBindings).forEach(q => {
     const qTag = parseDynTag(q)!;
     const qMonths = childMonths(qTag, dynBindings, thisMonth, false);
-    patches[q] = isBp ? qMonths.reduce((s, b) => s + valOf(b), 0) : 0;
+    patches[q] = isBp ? qMonths.reduce((s, b) => s + valOf(b), 0) : input;
   });
   return { patches, truncated };
 };

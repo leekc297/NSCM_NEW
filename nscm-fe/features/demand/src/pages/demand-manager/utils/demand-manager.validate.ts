@@ -1,4 +1,4 @@
-import { MSG } from '../demand-manager.constants';
+import { MEASURE_SET_SIZE, MSG } from '../demand-manager.constants';
 import type { DemandManagerRow } from '../demand-manager.types';
 
 export interface ValidateResult {
@@ -60,23 +60,26 @@ export const validateSaveRow = (row: DemandManagerRow): ValidateResult => {
 };
 
 /**
- * 신규 행 짝 검증 — 그룹 키가 아직 없는 행들을 (Project, 시작월, 종료월) 로 묶어
- * 2행이 되지 않는 묶음이 하나라도 있으면 막는다 (AS-IS: 신규는 반드시 쌍).
+ * 신규 세트 짝 검증 — 신규 행(CRUD_TYPE='I')을 세트 그룹 키로 묶어 Measure 2행
+ * (MEASURE_SET_SIZE)이 되지 않는 묶음이 하나라도 있으면 막는다 (AS-IS: 신규는 반드시 쌍).
+ *
+ * 금지: '그룹 키가 빈 행' 을 골라 세지 말 것. AS-IS 는 신규 행에 키가 없어 (Project, 시작월,
+ *   종료월) 조합으로 짝을 찾았지만, TO-BE 는 Insert 시점에 화면이 KEYVALUE2 를 채워 넣는다
+ *   (DemandManager.handleInsert). 그래서 빈 키를 조건으로 두면 대상이 항상 0건이 되어 검증이
+ *   통째로 건너뛰어진다 (2026-08-27 실측 — MSG00113 이 한 번도 걸리지 않았다).
+ *
+ * 키가 비어 있는 신규 행은 세트를 이루지 못하므로 행마다 따로 세어 그대로 걸리게 둔다.
  */
 export const validateNewRowPairs = (rows: DemandManagerRow[]): ValidateResult => {
   const groups = new Map<string, number>();
-  rows
-    .filter(r => !String(r.KEYVALUE2 ?? '').trim())
-    .forEach(r => {
-      const key = [
-        String(r.PROJECT_NAME ?? ''),
-        String(r.ORDERSTART ?? ''),
-        String(r.ORDEREND ?? ''),
-      ].join('');
-      groups.set(key, (groups.get(key) ?? 0) + 1);
-    });
+  rows.forEach((r, index) => {
+    if (r.CRUD_TYPE !== 'I') return;
+    const key = String(r.KEYVALUE2 ?? r.INSERT_GROUP_ID ?? '').trim();
+    const bucket = key || `__nokey_${index}`;
+    groups.set(bucket, (groups.get(bucket) ?? 0) + 1);
+  });
   for (const cnt of groups.values()) {
-    if (cnt < 2) return { ok: false, msgId: MSG.REQUIRED_COLUMN };
+    if (cnt < MEASURE_SET_SIZE) return { ok: false, msgId: MSG.REQUIRED_COLUMN };
   }
   return OK;
 };

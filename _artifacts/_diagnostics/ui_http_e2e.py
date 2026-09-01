@@ -457,6 +457,144 @@ SCENARIOS["DMF0021"] = {
     },
 }
 
+# DMF0040 MKT FCST Comparison (2026-08-27 신설 — 신규 화면 T01)
+#   조회 전용 (AS-IS Insert/Delete/Save 빈 override·EditButton=MSG00109 → 버튼 미노출) → F축 SAVE 왕복 없음.
+#   메인 = PKG_DMF0040.P_DMF0040_GET_MKT_FCST_COMPARISON (18 IN — PROC_M seed_meta.py positional).
+#   versionNo='Current' 는 SP 지원 실측(81=544행) — 러너 안정 파라미터로 채택 (실버전 문자열은 주마다 낡는다).
+#   MEASURE 축 = SP 고정 생성 3종 (Version(A)/Version(B)/Difference — 2026-08-27 실증).
+SCENARIOS["DMF0040"] = {
+    "main_sheet": "mktFcstComparison",
+    "meta_sheet": "Mkt Fcst Waterfall",  # SHEET_COLUMNS/MEASURE 실명 (BTN 토큰과 분리형)
+    "divisions": ["40", "81", "82"],
+    "readonly_divisions": [],  # 저장 경로 자체가 없음 (아래 save_roundtrip 부재로 F축 전체 해당없음)
+    "key_columns": ["DIVISION_ID", "VERSION_NO", "MEASURE"],
+    # *40 접미 쌍 — DIVISION_ID CSV 로 분리 (40=*40 판 / 81·82=원판. SHEET_COLUMNS 실측)
+    "key_columns_by_division": {
+        "40": ["END_CUSTOMER40", "SCM_SITE_ID40", "ITEM_ID40"],
+        "81": ["END_CUSTOMER", "SCM_SITE_ID", "ITEM_ID"],
+        "82": ["END_CUSTOMER", "SCM_SITE_ID", "ITEM_ID"],
+    },
+    "combos": ["MyDivision", "ReportBucketType", "QtyType", "ItemType"],
+    # 셀 콤보 슬롯(D2) — 읽기 전용 화면: 그리드 셀 편집 진입이 없어 셀 콤보를 소비하지 않는다 (AS-IS 파리티 —
+    #   CELL_COMBO_DATA_TYPE 지정+컨트롤 공란 = 사전 D12 '원본 잔재, 정정 대상 아님' 판정과 동일 계보).
+    "cell_combo_notes": {
+        "PlantSitebyEndCustomer": "셀 편집 없음(읽기 전용) — 조회조건 Plant Site 는 SearchArea 공용 필드가 담당",
+        "SiteByEndCustomer": "셀 편집 없음(읽기 전용) — 조회조건 Sales Site 는 SearchArea 공용 필드가 담당",
+    },
+    "search_filters": lambda div, user, group: {
+        "divisionId": div, "scmSiteId": "ALL", "plantSiteId": "ALL", "teamId": "ALL",
+        "customer": "ALL", "bizType": "ALL", "projectCode": "", "itemId": "",
+        "fromYyyymmdd": "20260701", "toYyyymmdd": "20261231",
+        "sesUserId": user, "versionNo": "Current", "itemType": "ALL", "owner": "",
+        "diffOnly": "False", "bucket": "MONTHLY", "userId": user, "mnuId": "DMF0040",
+    },
+    "search_buttons": ["SEARCH"],
+    "result_cursor": "mktFcstComparison",
+    "modal_sheets": [
+        {"sheet": "version", "btn": "SEARCH", "filters": lambda div, user, group: {
+            "startYyyymmdd": "20250101", "endYyyymmdd": "20270201", "createdBy": user,
+            "divisionId": div, "versionType": "MF_W", "versionNo": ""}},
+        {"sheet": "spreadTitle", "btn": "SEARCH", "filters": lambda div, user, group: {
+            "startYyyymmdd": "20260701", "endYyyymmdd": "20261231",
+            "sesUserId": user, "divisionId": div, "bucket": "MONTHLY"}},
+    ],
+}
+
+# ================================================================================
+# DMF0053 Customer FCST Waterfall (2026-08-27 신규 생성 T01 — DMF0040 동형 읽기 전용 waterfall)
+#   저장 경로 없음 (Insert/Delete/Save AS-IS 주석) → F축 해당없음. Version 조회조건 미구현(versionNo='').
+#   EDI 원장(DM_DNM_EDI_CALLOFF_ITEM)은 81 계열 전용 — 40/82 rows=0 이 데이터 실측 정상 (코드 결함 아님).
+#   권한 4그룹 = ADMIN/DM ADMIN/DM Planner/DM Viewer (⚠ DMF0040 과 달리 DM Planner 포함·SCP Planner 무권한).
+SCENARIOS["DMF0053"] = {
+    "main_sheet": "custFcstWaterfall",
+    "meta_sheet": "CUST Fcst Waterfall",  # SHEET_COLUMNS/MEASURE 실명 (BTN 토큰과 분리형)
+    "divisions": ["40", "81", "82"],
+    "readonly_divisions": [],  # 저장 경로 자체가 없음 (save_roundtrip 부재로 F축 전체 해당없음)
+    "key_columns": ["DIVISION_ID", "MEASURE"],
+    "combos": ["MyDivision", "ReportBucketType", "QtyType", "ItemType"],
+    # 셀 콤보 슬롯(D2) — 읽기 전용: 셀 편집 진입 없음 (사전 D12 '원본 잔재, 정정 대상 아님' 계보)
+    "cell_combo_notes": {
+        "CityCode": "셀 편집 없음(읽기 전용) — CELL_COMBO_DATA_TYPE 지정+컨트롤 공란 = AS-IS 잔재 (사전 D12)",
+        "CountryCode": "동일 (사전 D12)",
+        "SiteByEndCustomer": "동일 — 조회조건 Sales Site 는 SearchArea 공용 필드가 담당",
+        "EndCustomerByDivisionDept": "셀 편집 없음(읽기 전용 — 조회 후 전열 잠금 L786·Insert 미노출) — 표시 전용 셀에 deptId 토큰 불요 (사전 D12)",
+        "Measure": "동일 — MEASURE 는 SP 산출값 표시 전용(CUST_FCST/EDI 하위). mnuId 토큰은 편집 콤보 경로에서만 필요",
+    },
+    "search_filters": lambda div, user, group: {
+        "divisionId": div, "deptId": "ALL", "endCustomer": "ALL", "scmSiteId": "ALL",
+        "projectCode": "", "itemId": "", "itemType": "ALL",
+        "fromYyyymmdd": "20260101", "toYyyymmdd": "20260630",
+        "sesUserId": user, "plantSiteId": "ALL", "bizType": "ALL", "owner": "",
+        "bucket": "MONTHLY", "userDeptId": "", "groupId": "",
+        "versionNo": "", "fromCreatedate": "20260101", "toCreatedate": "20260331",
+        "userId": user, "mnuId": "DMF0053",
+    },
+    "search_buttons": ["SEARCH"],
+    "result_cursor": "custFcstWaterfall",
+    "modal_sheets": [
+        {"sheet": "spreadTitle", "btn": "SEARCH", "filters": lambda div, user, group: {
+            "startYyyymmdd": "20260101", "endYyyymmdd": "20260630",
+            "sesUserId": user, "divisionId": div, "bucket": "MONTHLY",
+            "userId": user, "mnuId": "DMF0053"}},
+    ],
+}
+
+# ================================================================================
+# DMF0035 Demand Plan Waterfall (통합 3 GUBUN — MKT=PKG_DMF0035 / SALES=PKG_DMF0022 / BIZ=PKG_DMF0051, OLAP 피벗)
+#   조회 전용 → F축 해당없음. 2026-08-28 UM-01~12 적용 시 등록 (hook #125 §2 — 미등록은 러너가 ERROR).
+#   ⚠ SALES/BIZ 는 P_VERSION_TYPE LIKE '%CURRENT%'/버전에서만 GTT 적재 — 'CURRENT' 전달 (92_DIAGNOSE 판정 G).
+#   ⚠ PROJECT_CODE/ITEM_ID/OWNER 는 '' — 'ALL' 이면 SP 가 LIKE 필터로 전량 삭제(E52) → 0행.
+SCENARIOS["DMF0035"] = {
+    "main_sheet": "mktFcstWaterfall",
+    "meta_sheet": "Mkt Fcst Waterfall",
+    "divisions": ["40", "81", "82"],
+    "readonly_divisions": [],
+    "key_columns": ["DIVISION_ID", "VERSION_NO", "MEASURE"],
+    "combos": ["MyDivision", "ReportBucketType", "BucketType2", "QtyType", "ItemType", "SenderCode"],
+    "cell_combo_notes": {
+        "PlantSitebyEndCustomer": "셀 편집 없음(읽기 전용 OLAP) — 조회조건 Plant Site 는 SearchArea 공용 필드가 담당",
+        "SiteByEndCustomer": "동일 — 조회조건 Sales Site 는 SearchArea 공용 필드가 담당",
+        "EndCustomerByDivisionDept": "동일 — 표시 전용",
+        "Measure": "동일 — MEASURE 는 SP 산출값 표시 전용",
+    },
+    "search_filters": lambda div, user, group: {
+        "divisionId": div, "deptId": "ALL", "endCustomer": "ALL", "scmSiteId": "ALL",
+        "projectCode": "", "itemId": "", "itemType": "ALL",
+        "fromYyyymmdd": "20260801", "toYyyymmdd": "20270228",
+        "sesUserId": user, "plantSiteId": "ALL", "bizType": "ALL", "owner": "",
+        "userId": user, "menuId": "DMF0035",
+        "versionNo": "CURRENT", "bucket": "MONTHLY", "cellYn": "N",
+        "senderCode": "ALL", "userDeptId": "", "groupId": "",
+    },
+    "search_buttons": ["SEARCH"],
+    "result_cursor": "mktFcstWaterfall",
+    "modal_sheets": [
+        {"sheet": "mktFcstSpreadTitle", "btn": "SEARCH", "filters": lambda div, user, group: {
+            "divisionId": div, "bucket": "MONTHLY", "fromYyyymmdd": "20260801", "toYyyymmdd": "20270228",
+            "sesUserId": user, "userId": user}},
+        {"sheet": "salesPlanWaterfall", "btn": "SEARCH", "filters": lambda div, user, group: {
+            "divisionId": div, "deptId": "ALL", "endCustomer": "ALL", "scmSiteId": "ALL",
+            "projectCode": "", "itemId": "", "itemType": "ALL",
+            "fromYyyymmdd": "20260801", "nowYyyymmdd": "20260824", "toYyyymmdd": "20270228",
+            "sesUserId": user, "plantSiteId": "ALL", "bizType": "ALL", "owner": "",
+            "versionType": "CURRENT", "bucket": "MONTHLY", "internalYn": "N", "cellYn": "N",
+            "userDeptId": "", "groupId": "", "userId": user, "menuId": "DMF0035"}},
+        {"sheet": "salesPlanSpreadTitle", "btn": "SEARCH", "filters": lambda div, user, group: {
+            "divisionId": div, "bucket": "MONTHLY", "fromYyyymmdd": "20260801", "toYyyymmdd": "20270228",
+            "sesUserId": user, "userId": user}},
+        {"sheet": "bizPlanWaterfall", "btn": "SEARCH", "filters": lambda div, user, group: {
+            "divisionId": div, "deptId": "ALL", "endCustomer": "ALL", "scmSiteId": "ALL",
+            "projectCode": "", "itemId": "", "itemType": "ALL",
+            "fromYyyymmdd": "20260801", "nowYyyymmdd": "20260824", "toYyyymmdd": "20270228",
+            "sesUserId": user, "plantSiteId": "ALL", "bizType": "ALL", "owner": "",
+            "versionType": "CURRENT", "cellYn": "N", "qtyYn": "N", "userId": user, "menuId": "DMF0035"}},
+        {"sheet": "bizPlanSpreadTitle", "btn": "SEARCH", "filters": lambda div, user, group: {
+            "divisionId": div, "bucket": "MONTHLY", "fromYyyymmdd": "20260801", "toYyyymmdd": "20270228",
+            "sesUserId": user, "userId": user}},
+    ],
+}
+
+# ================================================================================
 # DMF0074 Metal Link Price (2026-08-18 신설 — 4축 점검 대사표→기능검증→테스트→권한별)
 #   조회 전용 화면 (Insert/Delete/Edit/Save = AS-IS 빈 override → 버튼 미노출) → F축 SAVE 왕복 없음.
 #   저장 유일 경로 = Excel Upload 2-Step (별도 실측: _dmf0074_test_b/c — 원장 왕복 검증 완료 2026-08-16).
@@ -502,9 +640,10 @@ SCENARIOS["DMF0044"] = {
         # AS-IS 제약매트릭스 §1 실측 — 이 화면 division 비교는 40/82 2종뿐(81 분기 없음)
         "divisions": ["40", "82"],
         "key_columns": ["DIVISION_ID", "MEASURE", "DEPARTMENT_ID", "DEPT_ID"],
+        # REQ:CHAT-20260828-05 — DEPT_ID(Team) 콤보 3종(DMF0044_DEPARTMENT_TEAM2/_TEAM/ETC_SALE_RESULT_TYPE_40) FE 소비 제거
+        #   (코드 그대로 표시·입력). 등록은 남아 있으나 FE 파라미터 축이 없으므로 대사 대상에서 제외(hook #117 §5.5 3분 일치).
         "combos": ["MyDivision", "CALENDAR_YYYY", "DMF0044_MDF_MEASURE",
-                   "DMF0044_DEPARTMENT_TEAM2", "DMF0044_DEPARTMENT_TEAM",
-                   "DMF0044_ETC_SALE_RESULT_TYPE_40", "DMF0005_REPORT_GROUP2",
+                   "DMF0005_REPORT_GROUP2",
                    "DMF0005_REPORT_GROUP3", "END_CUST_REPORT", "SOLD_TO_CUST_REPORT"],
         # D2 축 — 파라미터는 **컬럼 메타에서 자동 산출**(meta_cell_params). 전역 보충값 불필요.
         "cell_combo_params": {},
@@ -1055,11 +1194,14 @@ def main():
         rep.fail(f"[{primary}] 버튼 권한 목록 0건 — /auth 스키마 변경 또는 권한 미배선(권한 검증 불가)")
 
     rep.h("C. 컬럼·메저 메타 (division별)")
+    # meta_sheet — SHEET_COLUMNS/MEASURE 의 SHEET_NAME 이 PROC 시트 토큰(main_sheet)과 다른 분리형 화면용
+    #   (DMF0040: BTN='mktFcstComparison' vs 메타='Mkt Fcst Waterfall'). 미지정 시 기존 동작(main_sheet).
+    meta_sheet = sc.get("meta_sheet", sc["main_sheet"])
     for div in sc["divisions"]:
         c = psess.post(f"{a.base}/admin/menu/{a.menu}/column",
-                       json={"sheetNm": sc["main_sheet"], "divisionId": div}, timeout=60)
+                       json={"sheetNm": meta_sheet, "divisionId": div}, timeout=60)
         m = psess.post(f"{a.base}/admin/menu/{a.menu}/measure",
-                       json={"sheetNm": sc["main_sheet"], "divisionId": div}, timeout=60)
+                       json={"sheetNm": meta_sheet, "divisionId": div}, timeout=60)
         cols = (c.json() or {}).get("result") or [] if c.status_code == 200 else []
         meas = (m.json() or {}).get("result") or [] if m.status_code == 200 else []
         names = {str(x.get("colNm") or x.get("COLUMN_NAME") or "") for x in cols if isinstance(x, dict)}

@@ -234,12 +234,18 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   FindData_Main(Summary/Repair 재조회) + GetUpdateHistory(Update Start/End 최신).
   //   ⚠ 버튼 매핑 SHT_NM='main' (SCM_ADM_MNU_BTN_MPG_M) → 라우트 'main' 사용(이전 'summary'=ORA-01403).
   //   refetch() 직접 호출 — setSummaryFilters 는 filter 내용 동일(캐시) → 최신 미반영이므로.
+  //   주의: refetch() 는 enabled 를 무시하고 실행되므로 Repair 는 filter 가 있을 때만 부른다.
+  //   조회 직후(Summary 더블클릭 전)에는 filters[REPAIR] 가 없어 파라미터 없이 SP 가 나간다.
   const handleStatusUpdate = async () => {
     try {
       void setToast({ type: 'default', message: t('LBL00665', 'Loading...'), duration: 3000 });
       await apiClient.post(`/${MENU_ID}/main/STATUS_UPDATE/call-proc`, {});
       void setToast({ type: 'success', message: 'Status Update 완료. 재조회합니다.' });
-      await Promise.all([refetchSummary?.(), refetchRepair?.(), refetchHistory?.()]);
+      await Promise.all([
+        refetchSummary?.(),
+        filters[SHEETS.REPAIR] ? refetchRepair?.() : undefined,
+        refetchHistory?.(),
+      ]);
     } catch (e) {
       const msg = e instanceof Error ? e.message : 'Status Update 실패';
       void setAlert({ type: 'alert', content: msg });

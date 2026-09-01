@@ -32,7 +32,7 @@ import styles from '../../DemandManager.module.scss';
 interface Props {
   open: boolean;
   modalClose: () => void;
-  onSelect: (versionNo: string, label: string) => void;
+  onSelect: (versionNo: string) => void;
 }
 
 // 버전 목록 컬럼 — AS-IS DMF0068_VersionPopup 이 코드로 직접 만든 8개 중 표시 5개
@@ -52,7 +52,7 @@ const VERSION_COLUMNS: Array<{
 ];
 
 // Version 팝업 — AS-IS DMF0068_VersionPopup(389행) 1:1.
-//   사업부는 40 고정으로 열리고 기간 기본값은 오늘 기준 -12개월 ~ +3개월이다
+//   사업부는 40 고정으로 열리고 기간 기본값은 오늘 기준 -3개월 ~ +3개월이다
 //   (VERSION_POPUP_MONTHS_BACK / _FWD).
 //   한 건만 고를 수 있으며 두 건 이상이면 안내 후 막는다. 행 더블클릭은 바로 채택이다.
 export const VersionPopupModal = ({ open, modalClose, onSelect }: Props) => {
@@ -87,10 +87,9 @@ export const VersionPopupModal = ({ open, modalClose, onSelect }: Props) => {
 
   useEffect(() => {
     if (!open) return;
-    setSdt(
-      dayjs().subtract(VERSION_POPUP_MONTHS_BACK, 'month').startOf('month').format('YYYYMMDD')
-    );
-    setEdt(dayjs().add(VERSION_POPUP_MONTHS_FWD, 'month').endOf('month').format('YYYYMMDD'));
+    // AS-IS 와 동일하게 오늘 날짜 기준 ±개월. 월초/월말 스냅 없음(demand-manager.constants 주석 참조).
+    setSdt(dayjs().subtract(VERSION_POPUP_MONTHS_BACK, 'month').format('YYYYMMDD'));
+    setEdt(dayjs().add(VERSION_POPUP_MONTHS_FWD, 'month').format('YYYYMMDD'));
     setVersionType(VERSION_TYPE_DEFAULT);
     setDescription('');
   }, [open]);
@@ -145,7 +144,9 @@ export const VersionPopupModal = ({ open, modalClose, onSelect }: Props) => {
     }
     const versionNo = String(row.VERSION_NO ?? '');
     if (!versionNo) return;
-    onSelect(versionNo, `${versionNo} ${String(row.VERSION_DESCRIPTION ?? '')}`.trim());
+    // 조회조건 칸에는 VERSION_NO 만 넣는다. 설명을 붙여 두면 표시문과 조회키가 달라져
+    //   편집을 시작하는 순간 코드로 되돌려야 하고, 사용자에게는 값이 바뀌는 것처럼 보인다.
+    onSelect(versionNo);
     modalClose();
   };
 
@@ -240,7 +241,7 @@ export const VersionPopupModal = ({ open, modalClose, onSelect }: Props) => {
             conditions={
               <>
                 {/* Div — 40 고정. 콤보로 보여주되 선택은 잠근다(화면 자체가 Division 40 전용). */}
-                <Grid size={3}>
+                <Grid size={4}>
                   <FormItem
                     label={t('LBL00663', 'Div')}
                     labelAlign='right'
@@ -252,7 +253,7 @@ export const VersionPopupModal = ({ open, modalClose, onSelect }: Props) => {
                 {/* Period — 공용 카탈로그 PeriodField(@master/searchFields), 타 화면과 동일 DateRange.
                     값은 종전과 같은 YYYYMMDD 8자리라 SP filters 는 그대로다. */}
                 <PeriodField
-                  gridSize={5}
+                  gridSize={4}
                   label={t('LBL00013', 'Period')}
                   start={sdt}
                   end={edt}
@@ -274,12 +275,13 @@ export const VersionPopupModal = ({ open, modalClose, onSelect }: Props) => {
                     )}
                   />
                 </Grid>
-                <Grid size={6}>
+                <Grid size={4}>
                   <FormItem
                     label={t('LBL00608', 'Description')}
                     labelAlign='right'
                     render={() => (
                       <InputField
+                        fullWidth
                         value={description}
                         onChange={e => setDescription(e.target.value)}
                       />

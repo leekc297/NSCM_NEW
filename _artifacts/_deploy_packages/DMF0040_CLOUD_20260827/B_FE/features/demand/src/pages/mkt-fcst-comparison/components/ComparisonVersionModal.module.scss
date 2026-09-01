@@ -1,0 +1,32 @@
+// ComparisonVersionModal — 표준 모달 레이아웃 (DMF0035 WaterfallVersionModal 동형)
+.dialogContent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 4px 0;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.gridWrapper {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  border: 1px solid #e0e4e9;
+  border-radius: 4px;
+  overflow: hidden;
+  background: white;
+}
+
+.grid {
+  height: 100%;
+  width: 100%;
+}
+
+.buttonWrapper {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  flex: 0 0 auto;
+}

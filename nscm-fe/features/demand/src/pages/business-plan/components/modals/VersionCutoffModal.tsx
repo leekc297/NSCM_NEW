@@ -16,57 +16,57 @@ import { Grid } from '@shared/mui';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
 import { CUTOFF_VER_TYPE, MENU_ID, MSG, SHEETS } from '../../business-plan.constants';
-import type { CutoffVersionRow } from '../../business-plan.types';
+import type { MdfVersionRow } from '../../business-plan.types';
 import styles from '../../BusinessPlan.module.scss';
 import { callCutoff } from '../../utils/business-plan.api';
+
+import { useVersionCutoffModalStore } from './versionCutoffModalStore';
 
 interface Props {
   open: boolean;
   modalClose: () => void;
   divisionId: string;
-  // 메인 화면 조회기간 (yyyymmdd 8자리) — 팝업 기간의 기본값.
-  //   optional : 미전달 구버전 호출부에서도 크래시 없이 빈값으로 뜨게 둔다.
-  period?: { start: string; end: string };
 }
 
-// ⭐ 화면 입력은 일(日) 단위 yyyymmdd 8 그대로 보관하고(AS-IS DateTimePicker 와 동일 — 1일/말일로
-//   펼치지 않는다), SP 파라미터로 나갈 때만 앞 6자리를 잘라 yyyymm 계약을 지킨다 (2026-08-08 지시).
-const toYm = (yyyymmdd: string): string => (/^\d{8}$/.test(yyyymmdd) ? yyyymmdd.slice(0, 6) : '');
+// 화면 입력·SP 파라미터 모두 일(日) 단위 yyyymmdd 8자리다 (AS-IS DateTimePicker → drpPeriod.Value
+//   .ToString("yyyyMMdd") 그대로). 1일/말일로 펼치거나 6자리로 자르지 않는다.
 
-// 버전 목록 grid 컬럼 (DMF0042_GET_DM_PLN_BP_CUTOFF_VERSION 커서 — 조회 전용)
+// 버전 목록 grid 컬럼 = AS-IS VersionCutOffPopUp InitSpread L190~198 8종 1:1
+//   (Division / Version NO / Type / Description / Cutoff Date / Ver Seq / Update By / Update Date).
+//   원천은 DMF0042_GET_DM_MDF_VERSION 커서 — Ver. Cutoff · Replace 두 팝업이 같은 커서를 공유한다.
+//   금지: Description 을 Type 앞에 두기 / Created By·Creation Date 를 표시 컬럼으로 쓰기
+//   (AS-IS 는 SELECT 에만 있고 그리드에는 Update By/Date 를 쓴다 — 2026-08-25 리뷰).
 const VERSION_COLUMNS = [
-  { key: 'DIVISION_ID', header: 'Division', width: 80 },
-  { key: 'VERSION_NO', header: 'Version No', width: 140 },
-  { key: 'VERSION_DESCRIPTION', header: 'Description', width: 260 },
-  { key: 'VERSION_TYPE', header: 'Type', width: 80 },
-  { key: 'CREATED_BY', header: 'Created By', width: 110 },
-  { key: 'CREATION_DATE', header: 'Creation Date', width: 140 },
+  { key: 'DIVISION_ID', header: 'Division', width: 90, align: 'L' as const },
+  { key: 'VERSION_NO', header: 'Version No', width: 150, align: 'L' as const },
+  { key: 'VERSION_TYPE', header: 'Type', width: 70, align: 'C' as const },
+  { key: 'VERSION_DESCRIPTION', header: 'Description', width: 200, align: 'L' as const },
+  { key: 'YYYYMMDD', header: 'Cutoff Date', width: 100, align: 'C' as const },
+  { key: 'VER_CRE_SEQ', header: 'Ver Seq', width: 70, align: 'R' as const },
+  { key: 'LAST_UPDATED_BY', header: 'Update By', width: 120, align: 'L' as const },
+  { key: 'LAST_UPDATE_DATE', header: 'Update Date', width: 160, align: 'C' as const },
 ];
 
 // ⭐ Ver. Cutoff 모달 — AS-IS VersionCutOffPopUp(610줄) 1:1: 기존 버전 목록 조회
-//   (DMF0042_GET_DM_PLN_BP_CUTOFF_VERSION, versionType='BP_M') + 설명 입력 + Cutoff 실행
+//   (DMF0042_GET_DM_MDF_VERSION, versionType='BP_M') + 설명 입력 + Cutoff 실행
 //   (DMF0042_SAVE_DM_PLN_BP_FCST_CUTOFF — division 단일, createdBy BE주입).
 //   완료 안내 = MSG00675 '[Division ID : {0}] {1}' (AS-IS 00151). 권한 게이트 = 부모 hasButton('CUTOFF').
-export const VersionCutoffModal = ({ open, modalClose, divisionId, period }: Props) => {
+export const VersionCutoffModal = ({ open, modalClose, divisionId }: Props) => {
   const { t } = useTranslation();
   const setAlert = useMessageStore.getState().setAlert;
-  const gridRef = useRef<FlexGridType<CutoffVersionRow>>(undefined);
+  const gridRef = useRef<FlexGridType<MdfVersionRow>>(undefined);
 
-  // 기간 기본값 = 메인 화면 조회기간 승계 (설계서 popup-2 조회조건 'Default / 초기값' 칸).
-  //   월 1일/말일로 펼치지 않고 yyyymmdd 8자리 그대로 보관하며, SP 파라미터로 나갈 때만
-  //   앞 6자리를 잘라 yyyymm 계약을 지킨다.
-  //   부모 기간이 없는 경우에만 오늘 ~ +5개월로 대체한다.
+  // 기간 기본값 = **오늘 ~ 오늘+5개월** (AS-IS VersionCutOffPopUp L106~108 1:1):
+  //     sStartDate = DateTime.Now / sEndDate = DateTime.Now.AddMonths(5) → drpPeriod.InitValue
+  //   금지: 메인 화면 조회기간 승계. AS-IS 는 이 팝업의 기간을 메인과 무관하게 자기 기본값으로 연다
+  //   (2026-08-25 실화면 대조 — 메인 2026.08.01~2027.02.28 인데 팝업은 2026-08-25~2027-01-25).
   const defaultPeriod = () => ({
-    from: /^\d{8}$/.test(period?.start ?? '')
-      ? (period?.start as string)
-      : dayjs().format('YYYYMMDD'),
-    to: /^\d{8}$/.test(period?.end ?? '')
-      ? (period?.end as string)
-      : dayjs().add(5, 'month').format('YYYYMMDD'),
+    from: dayjs().format('YYYYMMDD'),
+    to: dayjs().add(5, 'month').format('YYYYMMDD'),
   });
 
-  const [startYmd, setStartYmd] = useState(() => defaultPeriod().from);
-  const [endYmd, setEndYmd] = useState(() => defaultPeriod().to);
+  const { startYmd, endYmd } = useVersionCutoffModalStore(state => state.period);
+  const setPeriod = useVersionCutoffModalStore(state => state.setPeriod);
   const [description, setDescription] = useState('');
   const [running, setRunning] = useState(false);
   const [lastError, setLastError] = useState('');
@@ -74,36 +74,41 @@ export const VersionCutoffModal = ({ open, modalClose, divisionId, period }: Pro
   useEffect(() => {
     if (open) {
       const { from, to } = defaultPeriod();
-      setStartYmd(from);
-      setEndYmd(to);
+      setPeriod({ startYmd: from, endYmd: to });
       setDescription('');
       setRunning(false);
       setLastError('');
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open, period?.start, period?.end]);
+  }, [open]);
 
   const sesUserId = useSessionStore.getState().session.userId ?? '';
+  // 조회 = DMF0042_GET_DM_MDF_VERSION (AS-IS FindData L278~285 — Replace 팝업과 같은 SP).
+  //   금지: DMF0042_GET_DM_PLN_BP_CUTOFF_VERSION 호출. AS-IS 는 versionType 'BP_M' 분기에서
+  //   이 SP 만 부르고, 그리드 8컬럼도 이 커서 기준이다 (2026-08-25 리뷰).
+  //   파라미터 6종 — 기간은 **yyyymmdd 8자리 그대로** (MDF 계약 P_FROM/TO_YYYYMMDD).
+  //   2번째 p_version_description 은 화면 Description 입력값이다 — AS-IS 는 조회(txtDes)와
+  //   실행(Confirm)이 같은 입력칸을 공유한다 (L281 · L333 · L529).
   const filters = useMemo(
     () => ({
       divisionId,
-      yyyymmFrom: toYm(startYmd),
-      yyyymmTo: toYm(endYmd),
-      versionType: CUTOFF_VER_TYPE, // 'BP_M' 고정 (AS-IS LoadDataDiv L2857)
+      versionDescription: description.trim(),
+      versionType: CUTOFF_VER_TYPE, // 'BP_M' 고정 (AS-IS txtType.Text)
+      fromYyyymmdd: startYmd,
+      toYyyymmdd: endYmd,
       userId: sesUserId,
       mnuId: MENU_ID,
     }),
-    [divisionId, startYmd, endYmd, sesUserId]
+    [divisionId, description, startYmd, endYmd, sesUserId]
   );
-  const { data, refetch } = useTabProcQuery<MENU_ID, SHEETS.CUTOFF_VERSION>({
+  const { data, refetch } = useTabProcQuery<MENU_ID, SHEETS.MDF_VERSION>({
     menuId: MENU_ID,
-    sheetName: SHEETS.CUTOFF_VERSION,
+    sheetName: SHEETS.MDF_VERSION,
     tabId: MENU_ID,
     filters,
     enabled: open,
   });
-  const versionRows = useMemo<CutoffVersionRow[]>(
-    () => (data as { data?: CutoffVersionRow[] } | undefined)?.data ?? [],
+  const versionRows = useMemo<MdfVersionRow[]>(
+    () => (data as { data?: MdfVersionRow[] } | undefined)?.data ?? [],
     [data]
   );
 
@@ -114,6 +119,7 @@ export const VersionCutoffModal = ({ open, modalClose, divisionId, period }: Pro
           colNm: c.key,
           colLblNm: c.header,
           colWth: c.width,
+          horzAlgnCd: c.align,
           fixed: false,
           visible: true,
           display: true,
@@ -187,7 +193,7 @@ export const VersionCutoffModal = ({ open, modalClose, divisionId, period }: Pro
       open={open}
       type='modal'
       position='basic'
-      size={900}
+      size={1200}
       handleClose={modalClose}
       disableButtonCancel
       customHeaderTitle={
@@ -230,17 +236,14 @@ export const VersionCutoffModal = ({ open, modalClose, divisionId, period }: Pro
                   gridSize={8}
                   start={startYmd}
                   end={endYmd}
-                  onChange={(start, end) => {
-                    setStartYmd(start);
-                    setEndYmd(end);
-                  }}
+                  onChange={(start, end) => setPeriod({ startYmd: start, endYmd: end })}
                 />
               </>
             }
           />
 
           <div className={styles.modalGridWrapper}>
-            <DataGrid<CutoffVersionRow>
+            <DataGrid<MdfVersionRow>
               gridRef={gridRef}
               itemsSource={versionRows}
               staticColumns={gridStaticColumns}

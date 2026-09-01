@@ -1,0 +1,29 @@
+body .customForm {
+  @include respond-to('HD') {
+    grid-template-columns: 100px auto;
+
+    & > div:first-of-type {
+      width: 100px;
+    }
+  }
+
+  @include respond-to('FHD') {
+    grid-template-columns: 140px auto;
+
+    & > div:first-of-type {
+      width: 140px;
+    }
+  }
+}
+
+.customCheckbox {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+}
+
+.customGrid {
+  display: flex;
+  align-items: center;
+}

@@ -66,7 +66,7 @@ export const ProjectRegistrationForm = ({ hidden, onSearch }: ProjectRegistratio
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
-              label={t('LBL00080', '_End Customer')}
+              label={t('LBL01003', '_End Customer')}
               labelAlign='right'
               render={() => (
                 <CustomDropdown
@@ -89,7 +89,7 @@ export const ProjectRegistrationForm = ({ hidden, onSearch }: ProjectRegistratio
               SCM0001_GET_LOOKUP_VALUES(p_lookup_type='SPMS_DPJT_AUTH_TYPE') 룩업 결과다. */}
           <Grid size={3}>
             <FormItem
-              className={commonStyles.formItem}
+              className={`${commonStyles.formItem} ${styles.keepWordsFormItem}`}
               label={t('LBL00879', '_My Authority')}
               labelAlign='right'
               render={() => (
@@ -115,7 +115,7 @@ export const ProjectRegistrationForm = ({ hidden, onSearch }: ProjectRegistratio
               SCM0001_GET_LOOKUP_VALUES(p_lookup_type='SPMS_DPJT_REG_STATUS') 룩업 결과다. */}
           <Grid size={3}>
             <FormItem
-              className={commonStyles.formItem}
+              className={`${commonStyles.formItem} ${styles.keepWordsFormItem}`}
               label={t('LBL00878', '_Reg. Status')}
               labelAlign='right'
               render={() => (
@@ -141,10 +141,9 @@ export const ProjectRegistrationForm = ({ hidden, onSearch }: ProjectRegistratio
               handleSearch 에서 시작>종료, 3년 초과 여부를 검증한다. */}
           <Grid size={6}>
             <FormItem
-              className={commonStyles.formItem}
+              className={`${commonStyles.formItem} ${styles.keepWordsFormItem}`}
               label={t('LBL00877', '_Reg. Completion Date')}
               labelAlign='right'
-              required
               render={() => (
                 <div className={styles.periodSplit}>
                   <div className={styles.datePickerFix}>

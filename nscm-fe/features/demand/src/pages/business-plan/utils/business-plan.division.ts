@@ -65,6 +65,60 @@ export const readBizTypeSlot = (row: Rec, divisionId: string): string => {
 export const readIncotermsSlot = (row: Rec, divisionId: string): string =>
   isDiv82(divisionId) ? str(row.INCOTERMS82) || str(row.INCOTERMS) : str(row.INCOTERMS);
 
+/**
+ * Energy 저장 슬롯 — SP 에 에너지 파라미터는 `P_UNIT_ENERGY` 하나뿐이다.
+ *   40 화면 컬럼은 `ENERGE_WH`, 82 는 `UNIT_ENERGY` 로 이름이 갈리므로 여기서 합친다.
+ *
+ * 금지: 40 기존행까지 ENERGE_WH 를 싣기. `UNIT_ENERGY` 는 저장 SP 의 **키 컬럼**이다
+ *   (P_DMF0042_SAVE_DM_PLN_BP_FCST L830~868 삭제 조인 · L940~962 중복제거 조인이
+ *   `A.UNIT_ENERGY = NVL(B.UNIT_ENERGY, 0)` 로 매칭). ENERGE_WH 는 품목 마스터 파생값이라
+ *   원장의 UNIT_ENERGY 와 다를 수 있고(AS-IS 40 은 p_UNIT_ENERGY 를 보낸 적이 없어 원장이 0),
+ *   기존행에 그 값을 실으면 키가 어긋나 update 가 아니라 **중복 행**이 생긴다.
+ *   신규행은 그 행이 원장에 처음 들어가는 순간이라 안전하다.
+ */
+export const readUnitEnergySlot = (row: Rec, divisionId: string): string =>
+  isDiv40(divisionId) && str(row.CRUD_TYPE) === 'I'
+    ? str(row.ENERGE_WH) || str(row.UNIT_ENERGY)
+    : str(row.UNIT_ENERGY);
+
+// ============================================================================
+// 셀 팝업(Model/Project) 사전 검색조건 — 더블클릭한 **그 신규행의 값**을 팝업 조회조건으로 올린다.
+//   팝업은 preSearchParams 를 열리자마자 조회 filters 로 그대로 쓴다(enabled: open) — 별도 조회 트리거 없음.
+//   행 값이 없는 칸은 'ALL'(Project 는 공란) — 팝업이 조건 미지정으로 해석하는 값이다.
+//   주의: 조회조건(Search Area) 값은 쓰지 않는다. 사용자가 그 행에서 고른 값이 기준이다 (2026-08-25 확정).
+// ============================================================================
+export interface CellPopupSearch {
+  divisionId: string;
+  deptId: string;
+  endCustomer: string;
+  salesSite: string;
+  projectCode: string;
+  // ITEM 팝업 전용 — 모델 검색어. 팝업을 열 때는 항상 공란(직전 검색어가 따라붙지 않게).
+  itemId?: string;
+  // PROJECT 팝업 전용 — AS-IS 호출 파라미터 고정값.
+  etc?: string;
+}
+
+export const buildCellPopupSearch = (
+  row: Rec,
+  divisionId: string,
+  target: 'ITEM' | 'PROJECT'
+): CellPopupSearch => {
+  // Project — 팝업에서 고를 값 자신이므로 PROJECT 호출에는 싣지 않는다.
+  //   40 은 Project 조건 자체가 없다(팝업도 40 이면 숨긴다). readProjectSlot 의 40 슬롯은
+  //   END_CUSTOMER40 값(저장 payload 규약)이라 조회조건으로 쓰면 엉뚱하게 좁힌다.
+  const projectCode =
+    target === 'PROJECT' || isDiv40(divisionId) ? '' : readProjectSlot(row, divisionId);
+  const base: CellPopupSearch = {
+    divisionId,
+    deptId: readDeptSlot(row, divisionId) || 'ALL',
+    endCustomer: readEndCustomerSlot(row, divisionId) || 'ALL',
+    salesSite: readScmSiteSlot(row, divisionId) || 'ALL',
+    projectCode,
+  };
+  return target === 'ITEM' ? { ...base, itemId: '' } : { ...base, etc: 'N' };
+};
+
 // ============================================================================
 // 저장 필수값 — division 분기 전수 (AS-IS MinColumnChk L3299~3360 컬럼셋 + SaveData L887~1057 값검증 +
 //   상세동작 §4.3: 40=고객/사이트/모델/인코텀즈/예측유형/통화/셀생산지 · 81=프로젝트/사이트/공장/모델/부서/고객/통화

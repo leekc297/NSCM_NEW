@@ -18,7 +18,7 @@ import { useMDIStore } from './useMDIStore';
 
 const VIEW_PREFIX = '/view/';
 
-export const getViewPath = (mnuId: string) => `${VIEW_PREFIX}${encodeURIComponent(mnuId)}`;
+const getViewPath = (mnuId: string) => `${VIEW_PREFIX}${encodeURIComponent(mnuId)}`;
 
 interface RouterSyncProps {
   /**
@@ -52,10 +52,7 @@ export const RouterSync = ({ mirrorOnMount = true }: RouterSyncProps) => {
     if (isMount && !mirrorOnMount) return; // 404 진입 — URL 을 유지해야 NotFound 가 보인다
 
     const target = getViewPath(String(activeTab.mnuId));
-    // 최초 진입 시 쿼리스트링을 보존한다 — /home?test=true 같은 진입 플래그가 미러링으로 지워지지 않게.
-    //   이후 탭 전환에서는 쿼리를 끌고 다니지 않도록 붙이지 않는다.
-    const nextUrl = isMount ? `${target}${location.search}` : target;
-    if (location.pathname !== target) navigate(nextUrl);
+    if (location.pathname !== target) navigate(target);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab?.tabId]);
 

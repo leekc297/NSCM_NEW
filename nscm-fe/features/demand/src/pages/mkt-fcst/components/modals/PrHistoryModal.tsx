@@ -1,5 +1,5 @@
 import type { FlexGrid } from '@mescius/wijmo.grid';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { DataGrid, CustomDialog, SearchArea } from '@shared/components';
 import { useTabProcQuery } from '@shared/hooks';
@@ -45,20 +45,26 @@ export const PrHistoryModal = ({ open, modalClose, params }: PrHistoryModalProps
   // 행 클릭 시 선택행의 PR_HEADER 표시 (AS-IS L275~293 — 초기값 = O_RC2 헤더의 PR_HEADER).
   const [selectedPrHeader, setSelectedPrHeader] = useState<string | null>(null);
 
-  const filters = {
-    popupType: 'View_History',
-    divisionId: params?.divisionId ?? '',
-    requestNo: '',
-    projectCode: params?.projectCode ?? '',
-    scmSiteId: params?.scmSiteId ?? '',
-    itemId: params?.itemId ?? '',
-    domExp: params?.domExp ?? '',
-    fcstType: params?.fcstType ?? '',
-    incoterms: params?.incoterms ?? '',
-    plantSiteId: params?.plantSiteId ?? '',
-    yyyymmdd: params?.yyyymmdd ?? '',
-    planQty: params?.planQty ?? '',
-  };
+  // useTabProcQuery 는 filters 참조가 바뀌면 캐시를 버리고 재조회한다. 인라인
+  // 리터럴로 넘기면 행 클릭으로 selectedPrHeader 가 바뀔 때마다 무관하게 새 참조가
+  // 생겨 그리드가 깜빡였다 — useMemo 로 참조를 params 에 고정한다.
+  const filters = useMemo(
+    () => ({
+      popupType: 'View_History',
+      divisionId: params?.divisionId ?? '',
+      requestNo: '',
+      projectCode: params?.projectCode ?? '',
+      scmSiteId: params?.scmSiteId ?? '',
+      itemId: params?.itemId ?? '',
+      domExp: params?.domExp ?? '',
+      fcstType: params?.fcstType ?? '',
+      incoterms: params?.incoterms ?? '',
+      plantSiteId: params?.plantSiteId ?? '',
+      yyyymmdd: params?.yyyymmdd ?? '',
+      planQty: params?.planQty ?? '',
+    }),
+    [params]
+  );
 
   const { data } = useTabProcQuery<MENU_ID, SHEETS.PR_HISTORY>({
     menuId: MENU_ID,

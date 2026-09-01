@@ -1,7 +1,6 @@
 import { CellType, type FlexGrid } from '@mescius/wijmo.grid';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
-import _ from '@foundation/lodash';
 import { GridUtils } from '@foundation/utils';
 import { SearchArea, DataGrid, CustomDialog } from '@shared/components';
 import { useTabProcQuery } from '@shared/hooks';
@@ -45,37 +44,36 @@ export const RegionModal = ({
   const staticColumns = useRegionModalStore(state => state.staticColumns);
   const fetchStaticColumns = useRegionModalStore(state => state.fetchStaticColumns);
 
-  const [modalFilters, setModalFilters] = useState<{
+  // 실제 조회 조건 — Search 버튼/Enter(그리고 팝업 오픈) 시에만 갱신되고, 그때 프로시저를 재호출한다.
+  //   (useTabProcQuery 는 filters 가 query key 라 값이 바뀌면 재조회. COM0001 은 country/city 를
+  //   IN 파라미터로 받는다 — configs/types/procedures.d.ts COM0001.region.request 참고)
+  const [searchParam, setSearchParam] = useState<{
     country: string;
     city: string;
   }>(EMPTY_FILTER);
+
+  // 입력 중인 값 — 조회하지 않고 로컬 state 에만 담아둔다.
+  const [countryInput, setCountryInput] = useState<string>(country);
+  const [cityInput, setCityInput] = useState<string>(city);
 
   const { data: regionData } = useTabProcQuery<MODAL_REGION>({
     menuId: MODAL_REGION,
     sheetName: MODAL_SHEET_REGION,
     tabId: MODAL_REGION,
-    filters: EMPTY_FILTER,
+    filters: searchParam,
     enabled: true,
   });
 
-  const countryKeyword = modalFilters.country.toLowerCase();
-  const cityKeyword = modalFilters.city.toLowerCase();
+  // 필터링은 프로시저(country/city 파라미터)가 하고, 그리드는 조회 결과를 그대로 보여준다.
+  //   useMemo — 매 렌더 새 배열이면 그리드가 re-bind 되어 스크롤·선택이 초기화된다.
+  const itemsSource = useMemo(() => regionData?.o_rc1 ?? [], [regionData]);
 
-  // Country/City 입력은 코드와 명칭 중 하나만 맞아도 통과
-  const itemsSource = (regionData?.o_rc1 ?? []).filter(
-    region =>
-      ((region.COUNTRY ?? '').toLowerCase().includes(countryKeyword) ||
-        (region.COUNTRY_NAME ?? '').toLowerCase().includes(countryKeyword)) &&
-      ((region.CITY ?? '').toLowerCase().includes(cityKeyword) ||
-        (region.CITY_NAME ?? '').toLowerCase().includes(cityKeyword))
-  );
-
-  const handleFilterChange = _.debounce((country: string, city: string) => {
-    setModalFilters({
-      country: country,
-      city: city,
+  const handleSearch = () => {
+    setSearchParam({
+      country: countryInput,
+      city: cityInput,
     });
-  }, 50);
+  };
 
   const handleDblClick = (mouseEvent: MouseEvent) => {
     const grid = gridRef.current;
@@ -113,10 +111,12 @@ export const RegionModal = ({
 
   useEffect(() => {
     if (!open) return;
-    setModalFilters({
+    setSearchParam({
       country: country,
       city: city,
     });
+    setCountryInput(country);
+    setCityInput(city);
     if (!initialized) void fetchStaticColumns();
   }, [open]);
 
@@ -136,6 +136,8 @@ export const RegionModal = ({
       customContentArea={
         <div className={styles.dialogContentWrapper}>
           <SearchArea
+            searchButtonLabel={t('LBL00664', 'Search')}
+            onSearch={handleSearch}
             conditions={
               <>
                 <Grid size={6}>
@@ -145,8 +147,9 @@ export const RegionModal = ({
                     render={() => (
                       <InputField
                         fullWidth
-                        value={modalFilters.country}
-                        onChange={e => handleFilterChange(e.target.value, modalFilters.city)}
+                        value={countryInput}
+                        onChange={e => setCountryInput(e.target.value)}
+                        onKeyDown={e => e.key === 'Enter' && handleSearch()}
                       />
                     )}
                   />
@@ -158,8 +161,9 @@ export const RegionModal = ({
                     render={() => (
                       <InputField
                         fullWidth
-                        value={modalFilters.city}
-                        onChange={e => handleFilterChange(modalFilters.country, e.target.value)}
+                        value={cityInput}
+                        onChange={e => setCityInput(e.target.value)}
+                        onKeyDown={e => e.key === 'Enter' && handleSearch()}
                       />
                     )}
                   />
@@ -178,13 +182,6 @@ export const RegionModal = ({
           </div>
           <div className={styles.buttonWrapper}>
             <Button
-              appearance='outlined'
-              priority='normal'
-              size='medium'
-              buttonLabel='Close'
-              onClick={modalClose}
-            />
-            <Button
               appearance='contained'
               buttonLabel='OK'
               iconComponent={<ControlConfirmIcon size='small' />}
@@ -192,6 +189,13 @@ export const RegionModal = ({
               priority='primary'
               size='medium'
               onClick={handleSubmit}
+            />
+            <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel='Close'
+              onClick={modalClose}
             />
           </div>
         </div>

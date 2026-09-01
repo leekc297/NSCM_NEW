@@ -363,13 +363,6 @@ export const NoticeSetupDialog = ({ onSave, onDelete, isSaving }: NoticeSetupDia
               onClick={openDraftPreview}
             />
             <Button
-              appearance='outlined'
-              priority='normal'
-              buttonLabel={t('LBL00394', '_Cancel')}
-              disabled={isImageUploading}
-              onClick={closeEditor}
-            />
-            <Button
               appearance='contained'
               priority='primary'
               buttonLabel={t('LBL00395', '_Save')}
@@ -385,6 +378,13 @@ export const NoticeSetupDialog = ({ onSave, onDelete, isSaving }: NoticeSetupDia
                 onClick={onDelete}
               />
             )}
+            <Button
+              appearance='outlined'
+              priority='normal'
+              buttonLabel={t('LBL00394', '_Cancel')}
+              disabled={isImageUploading}
+              onClick={closeEditor}
+            />
           </div>
         </div>
       }

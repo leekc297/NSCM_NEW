@@ -47,6 +47,9 @@ interface ContributeViewState {
   // ColumnLayoutModal OK 결과 (null = 미설정) — 표시/순서 + 폭/색.
   //   fetchStaticColumns 재조회 후 재적용 기준.
   userColumnLayout: ColumnLayoutSetting[] | null;
+  // Year SP 는 조회조건을 받지 않는다. store 필드로 참조를 고정해 다른 조회조건 변경 시
+  // Year 콤보가 불필요하게 재조회되는 걸 막는다.
+  noFilters: Record<string, never>;
 }
 
 interface ContributeViewAction {
@@ -102,6 +105,7 @@ const initState: ContributeViewState = {
   ratePopupOpen: false,
   columnSetPopupOpen: false,
   userColumnLayout: null,
+  noFilters: {},
 };
 
 // BE 가 폭을 안 내려줄 때의 기본 폭 (ColumnLayoutModal DEFAULT_COL_WIDTH 와 동일 계약).

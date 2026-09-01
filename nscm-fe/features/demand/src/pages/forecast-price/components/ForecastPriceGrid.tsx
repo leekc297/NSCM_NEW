@@ -16,15 +16,23 @@ import { CELL_CONTROL_TYPE, CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import dayjs from '@foundation/dayjs';
 import isoWeek from '@foundation/isoWeek';
 import type { ComboResponse, FlexGridColumnConfig } from '@foundation/models';
-import { CustomMergeManager, EditTracker, keepRowVisibleUnderFilter, paintNegativeText, toGridNumber } from '@foundation/utils';
+import {
+  CustomMergeManager,
+  EditTracker,
+  keepRowVisibleUnderFilter,
+  paintNegativeText,
+  toGridNumber,
+} from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
+import { useMessageStore } from '@shared/stores';
 
 import {
   AUTH_MEASURES,
   CELL_MODAL_KEY,
   GRID_EDIT_COMBO,
   MENU_ID,
+  MSG,
   PRICE_MEASURES,
 } from '../forecast-price.constants';
 import type { ForecastPriceRow, SpreadTitleRow } from '../forecast-price.types';
@@ -227,6 +235,16 @@ export const ForecastPriceGrid = ({
   const measureAuth = useForecastPriceStore(state => state.measureAuth);
   const measureAuthRef = useRef(measureAuth);
   measureAuthRef.current = measureAuth;
+
+  // ⭐ [E20260826-AUTHVIEW] 시간창 因 잠금 메저(drop3 'T') — 편집 시도 시 MSG00477 안내 (AS-IS
+  //   DMF0003 EditButton L849~856 파리티: SCP Planner 시간창 밖 = 메시지 후 차단).
+  //   beginningEdit 는 타이핑으로 연타될 수 있어 2초 억제로 스팸을 막는다.
+  const { t } = useTranslation();
+  const { setAlert } = useMessageStore();
+  const measureTimeGate = useForecastPriceStore(state => state.measureTimeGate);
+  const measureTimeGateRef = useRef(measureTimeGate);
+  measureTimeGateRef.current = measureTimeGate;
+  const lastTimeGateAlertRef = useRef(0);
 
   // ⭐ 배분 캘린더(drop4, #1) / M+3 기준월(drop1, #4) — 핸들러가 재구독 없이 최신 참조 (measureAuth 패턴).
   const calendar = useForecastPriceStore(state => state.calendar);
@@ -521,7 +539,7 @@ export const ForecastPriceGrid = ({
       .getCombo({
         comboId: 'FcstPriceEditMeasure',
         divisionId: q(div),
-        scmSiteId: `'${site.trim() !== '' ? site.replace(/'/g, "''") : ' '}'`,
+        scmSiteId: `'${site.trim() !== '' ? site.replace(/'/g, '\'\'') : ' '}'`,
         bucketType: q(bucketTypeParamRef.current),
       })
       .then(rows => {
@@ -1251,7 +1269,23 @@ export const ForecastPriceGrid = ({
         }
         return;
       }
-      if (kindOf(binding) && !canEditCell(binding, dataItem)) e.cancel = true;
+      if (kindOf(binding) && !canEditCell(binding, dataItem)) {
+        e.cancel = true;
+        // [E20260826-AUTHVIEW] 시간창 因 잠금 메저 = MSG00477 안내 (그룹 미보유 'N' 은 침묵 유지 —
+        //   DM Viewer 등에는 시간 메시지를 띄우지 않는다).
+        const measure = dataItem['MEASURE'];
+        if (
+          typeof measure === 'string' &&
+          measureTimeGateRef.current[measure] &&
+          Date.now() - lastTimeGateAlertRef.current > 2000
+        ) {
+          lastTimeGateAlertRef.current = Date.now();
+          void setAlert({
+            type: 'alert',
+            content: t(MSG.SCP_TIME_WINDOW, '_This is not an editable time window.'),
+          });
+        }
+      }
     };
 
     // 편집 종료 — 월/주/일 배분 (AS-IS spdMain_EditChange 분배 로직 1:1, GridUtils 재사용).

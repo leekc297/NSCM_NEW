@@ -68,7 +68,6 @@ export const DemandManager = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   // 명시 조회 게이트 — Search 를 눌러야 조회한다
   const [hasSearched, setHasSearched] = useState(false);
-  const [versionLabel, setVersionLabel] = useState('');
   const [openVersionModal, setOpenVersionModal] = useState(false);
   // 신규 세트(CRUD_TYPE='I') — 각 행이 표시 위치를 정하는 앵커를 함께 든다.
   //   앵커 = Insert 를 누른 시점에 선택된 행이 속한 세트의 첫 행 (utils/demand-manager.insertAnchor.ts).
@@ -328,10 +327,29 @@ export const DemandManager = ({ tabId, title }: PageProps<MENU_ID>) => {
         void setToast({ type: 'success', message: t(CRUD_MSG.SAVED.id, CRUD_MSG.SAVED.fallback) });
 
       if (reload) {
-        setInsertedRows([]);
-        setDeletedKeys([]);
-        editTrackerRef.current?.clearChanges();
-        await (refetch?.() ?? Promise.resolve());
+        // 저장 후 재조회 구간은 그리드 렌더를 멈춰 둔다.
+        //   이 구간에서 itemsSource 가 두 번 바뀐다 — (1) 대기 중이던 신규행 제거,
+        //   (2) 재조회 데이터 도착. wijmo 는 itemsSourceChanged 마다 컬럼 필터를 통째로
+        //   비우고(FlexGridFilter 생성자가 clear 를 건다) 공용 DataGrid 가 바로 뒤에서
+        //   되돌리는데(DataGrid.handleInitialized capture/restore 한 쌍), 그 사이나 두 번의
+        //   왕복 사이에 페인트가 끼면 "필터가 풀린 전체 그리드" 가 스쳐 보인다
+        //   (2026-08-27 사용자 지적). beginUpdate/endUpdate 는 그 구간의 렌더를 눌러
+        //   마지막 상태를 한 번만 그리게 한다 — 필터 복원 로직 자체는 그대로 돌아간다.
+        //   필수: endUpdate 는 finally 에서 부른다. 재조회가 던지면 그리드가 멈춰 있는 채로 남는다.
+        const g = gridRef.current;
+        try {
+          g?.beginUpdate();
+          setInsertedRows([]);
+          setDeletedKeys([]);
+          editTrackerRef.current?.clearChanges();
+          await (refetch?.() ?? Promise.resolve());
+        } finally {
+          try {
+            g?.endUpdate();
+          } catch {
+            /* unmount race */
+          }
+        }
         if (savedScroll && gridRef.current) gridRef.current.scrollPosition = savedScroll;
       }
     } catch (e) {
@@ -364,12 +382,7 @@ export const DemandManager = ({ tabId, title }: PageProps<MENU_ID>) => {
         <DemandManagerForm
           onSearch={handleSearch}
           onOpenVersionModal={() => setOpenVersionModal(true)}
-          versionLabel={versionLabel}
-          onChangeVersion={v => {
-            // 직접 입력값이 곧 조회에 쓰이는 VERSION_NO. 팝업 라벨은 해제한다.
-            setVersionLabel('');
-            setSearchCondition({ versionNo: v });
-          }}
+          onChangeVersion={v => setSearchCondition({ versionNo: v })}
         />
       )}
 
@@ -398,10 +411,7 @@ export const DemandManager = ({ tabId, title }: PageProps<MENU_ID>) => {
       <VersionPopupModal
         open={openVersionModal}
         modalClose={() => setOpenVersionModal(false)}
-        onSelect={(versionNo, label) => {
-          setSearchCondition({ versionNo });
-          setVersionLabel(label);
-        }}
+        onSelect={versionNo => setSearchCondition({ versionNo })}
       />
     </>
   );

@@ -1,0 +1,88 @@
+// procedures.d.ts DMF0040 블록 발췌 (2026-08-31 로컬 정본 L4573~L4657) — 클라우드 d.ts 에 **블록 단위로만** 병합.
+// 전체본 덮어쓰기 ⛔ (hook #148 d.ts 블록 경계 규약). 클라우드 블록과 동일하면 스킵.
+
+  /**
+   * MKT FCST Comparison — DMF0040 (Read-only Report, 신규 생성 2026-08-26)
+   *
+   * AS-IS DMF0040_MktFcst_Comparison (Forms.UIL 1,875행) — 버전(최대 2) 간 Waterfall 비교.
+   * SHEETS (전부 SEARCH — 저장 없음):
+   * - `mktFcstComparison` PKG_DMF0040.P_DMF0040_GET_MKT_FCST_COMPARISON (18 IN + O_RC1/O_RESULT_CURSOR)
+   * - `spreadTitle`       DMF0040_GET_SPREAD_TITLE (5 IN — 동적 시간축)
+   * - `version`           PKG_SCM0002.P_SCM0002_GET_VERSIONBYWATERFALLPOPUP (DMF0035 versionWf 동계약 — MF 축)
+   * PROC_M = _artifacts/_diagnostics/dmf0040_build_20260826/seed_meta.py (positional 20/7 실측 등재)
+   */
+  DMF0040: {
+    mktFcstComparison: {
+      request: {
+        divisionId: string; // 1  P_DIVISION_ID (단일 필수 — MSG00097)
+        scmSiteId: string; // 2  P_SCM_SITE_ID (Sales Site — 콤마, 빈값 'ALL')
+        plantSiteId: string; // 3  P_PLANT_SITE_ID
+        teamId: string; // 4  P_TEAM_ID
+        customer: string; // 5  P_CUSTOMER (End Customer)
+        bizType: string; // 6  P_BIZ_TYPE
+        projectCode: string; // 7  P_PROJECT_CODE (텍스트 raw — 40 비활성 '')
+        itemId: string; // 8  P_ITEM_ID
+        fromYyyymmdd: string; // 9  P_FROM_YYYYMMDD
+        toYyyymmdd: string; // 10 P_TO_YYYYMMDD
+        sesUserId: string; // 11 P_CREATED_BY (BE 세션 주입)
+        versionNo: string; // 12 P_VERSION_NO (콤마 최대 2 — MSG00255)
+        itemType: string; // 13 P_ITEM_TYPE
+        owner: string; // 14 P_OWNER
+        diffOnly: string; // 15 P_DIFF_ONLY ('True'|'False' — AS-IS bool 직렬화 파리티)
+        bucket: string; // 16 P_BUCKET (DAILY/WEEKLY/MONTHLY/ONLY_WEEKLY)
+        userId: string; // 17 P_USER_ID
+        mnuId: string; // 18 P_MENU_ID
+      };
+      response: {
+        o_rc1: {
+          VERSION_NO: string;
+          MEASURE: string;
+          MEASURE_GROUP: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    spreadTitle: {
+      request: {
+        startYyyymmdd: string; // 1 P_START_YYYYMMDD
+        endYyyymmdd: string; // 2 P_END_YYYYMMDD
+        sesUserId: string; // 3 P_CREATED_BY (BE 주입)
+        divisionId: string; // 4 P_DIVISION_ID
+        bucket: string; // 5 P_BUCKET
+      };
+      response: {
+        o_rc1: {
+          COLUMN_NAME: string;
+          COLUMN_LABEL_NAME: string;
+          SMALL_CLASS_LABEL_NAME: string;
+          LARGE_CLASS_LABEL_NAME: string;
+          DAY_CODE: string;
+          SORT_ORDER_NO: string | number;
+          [key: string]: string | number;
+        };
+      };
+    };
+    version: {
+      request: {
+        startYyyymmdd: string;
+        endYyyymmdd: string;
+        createdBy: string;
+        divisionId: string;
+        versionType: string; // 'MF_D,MF_W,MF_M' 조합 (체크박스)
+        versionNo: string; // 설명 검색어
+      };
+      response: {
+        o_rc1: {
+          CODE: string;
+          VERSION_NO: string;
+          VERSION_DESCRIPTION: string;
+          VERSION_TYPE: string;
+          VER_CRE_SEQ: string | number;
+          YYYYMMDD: string;
+          CREATED_BY: string;
+          CREATION_DATE: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+  };

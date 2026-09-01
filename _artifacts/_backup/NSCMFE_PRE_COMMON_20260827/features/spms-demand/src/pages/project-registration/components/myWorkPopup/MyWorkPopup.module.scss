@@ -1,0 +1,33 @@
+.dialogContentWrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.projectInfo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 6px 12px;
+  margin-bottom: 8px;
+  background: var(--gray-50, #f7f8fa);
+  border: 1px solid var(--gray-200, #e4e7ec);
+}
+
+.projectInfo span::before {
+  content: '* ';
+  color: var(--red-500, #e02020);
+}
+
+.gridWrapper {
+  flex: 1;
+  min-height: 0;
+}
+
+.buttonWrapper {
+  display: flex;
+  justify-content: end;
+  gap: 4px;
+  margin-top: 5px;
+}

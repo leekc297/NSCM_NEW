@@ -8,6 +8,7 @@ import { DataGrid } from '@shared/components';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { useSessionStore } from '@shared/stores';
 
+import { TagLayer, type TagLayerHandle } from '../../../components/tag-layer';
 import { RESPONSE_SET, SHEET_INDEX } from '../project-registration.constants';
 import { formatSopDate } from '../project-registration.grid-utils';
 import type { MyProjectRow } from '../project-registration.types';
@@ -15,7 +16,6 @@ import gridStyles from '../ProjectRegistration.module.scss';
 import { useProjectRegistrationStore } from '../useProjectRegistrationStore';
 
 import { MyWorkPopup } from './myWorkPopup/MyWorkPopup';
-import { TagLayer, type TagLayerHandle } from './ProjectGrid';
 
 interface MyProjectGridProps {
   gridRef: MutableRefObject<FlexGrid<MyProjectRow> | undefined>;

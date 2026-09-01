@@ -1,0 +1,22 @@
+// ============================================================================
+// date-picker.scss — 공통 DatePickerCalendar(@lges/design-system) 전역 보완
+//   date-range(single/multi) 의 일자~일자 구분자 '-' 정렬 일괄 적용.
+//   index.tsx 에서 wijmo.scss 다음(override 우선)에 import.
+//
+// 구조: [DateField(.MuiFormControl-root)] [구분자 <Typography variant="bodyBasic">"-"</Typography>] [DateField(.MuiFormControl-root)]
+//   - 세로: 구분자를 입력 행 높이만큼 stretch + 내부 flex-center → hyphen 글리프가 위로 뜨지 않고 세로 가운데.
+//   - 가로: 첫 일자 input 우측정렬 → '-' 가 두 일자 사이 가운데 (기본 좌측정렬 시 뒤 일자에 밀착되는 문제 해결).
+//   ⚠ 구조 선택자(FormControl↔bodyBasic↔FormControl)로 date-range 구분자에만 적용 — 일반 bodyBasic Typography 미영향.
+// ============================================================================
+
+// 세로 가운데
+.MuiFormControl-root + .MuiTypography-bodyBasic:has(+ .MuiFormControl-root) {
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+}
+
+// 가로 가운데 — 첫 일자(구분자 앞 DateField) 우측정렬
+.MuiFormControl-root:has(+ .MuiTypography-bodyBasic + .MuiFormControl-root) input {
+  text-align: right;
+}

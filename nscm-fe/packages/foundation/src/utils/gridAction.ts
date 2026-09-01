@@ -460,8 +460,23 @@ export const GridAction = {
       const binding = grid.columns[selectedCol].binding ?? '';
       const bindingIndex = gridFilter.filterColumns.indexOf(binding);
 
-      if (bindingIndex === -1) gridFilter.filterColumns.push(binding);
-      else gridFilter.filterColumns.splice(bindingIndex, 1);
+      if (bindingIndex === -1) {
+        gridFilter.filterColumns.push(binding);
+        continue;
+      }
+
+      gridFilter.filterColumns.splice(bindingIndex, 1);
+
+      // filterColumns 에서만 빼면 헤더 필터 아이콘만 사라질 뿐, 이미 걸린 필터 조건은
+      // 그대로 남아 필터링된 데이터가 계속 표시된다 — 해당 컬럼의 조건도 함께 지운다.
+      try {
+        const definition = JSON.parse(gridFilter.filterDefinition) as FilterDefinition;
+        const filters = (definition.filters ?? []).filter(f => f.binding !== binding);
+        if (filters.length !== (definition.filters ?? []).length)
+          gridFilter.filterDefinition = JSON.stringify({ ...definition, filters });
+      } catch {
+        // filterDefinition 파싱 실패 시엔 필터 목록(filterColumns) 갱신만 반영한다.
+      }
     }
 
     grid.invalidate();

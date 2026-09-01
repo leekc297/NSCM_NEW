@@ -12,6 +12,7 @@ import {
   TITLESET_COLUMN_TYPE,
 } from './business-plan.constants';
 import type { CutoffWindow, SearchCondition } from './business-plan.types';
+import { clampNowYyyymmdd } from './utils/business-plan.editLock';
 
 /** ColumnLayoutModal 개인화 1행 — 표시/순서/폭/색. */
 export interface ColumnLayoutSetting {
@@ -217,7 +218,10 @@ export const useBusinessPlanStore = createPersistedStoreWithTab<State & Action>(
             itemId: raw(c.itemIds), // 6
             itemType: j(c.itemTypes), // 7
             fromYyyymmdd: c.startYyyymmdd, // 8
-            nowYyyymmdd: thisWeekMonday(), // 9  ⭐ 금주 월요일 (AS-IS FindData L717 — 클라 산정 파리티)
+            // 9 P_NOW_YYYYMMDD — 금주 월요일을 조회 기간 안으로 클램프 (AS-IS FindData L790~796).
+            //   금지: thisWeekMonday() 를 그대로 보내기 — 기간이 통째로 미래/과거면 SP 의 실적·계획
+            //   경계가 AS-IS 와 달라진다. editLock cutoff 는 클램프 없는 원값을 그대로 쓴다.
+            nowYyyymmdd: clampNowYyyymmdd(thisWeekMonday(), c.startYyyymmdd, c.endYyyymmdd),
             toYyyymmdd: c.endYyyymmdd, // 10
             plantSiteId: j(c.plantSiteIds), // 12 (40 비활성 'ALL')
             bizType: j(c.bizTypes), // 13

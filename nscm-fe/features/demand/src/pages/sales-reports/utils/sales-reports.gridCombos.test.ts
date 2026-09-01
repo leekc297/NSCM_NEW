@@ -3,7 +3,10 @@ import { describe, expect, it } from 'vitest';
 import type { SalesReportRow } from '../sales-reports.types';
 
 import {
+  applyDeptIdChange,
   buildDataMap,
+  DEPT_CHANGE_CLEAR,
+  ETC_SALES_ITEM,
   filterComboRowsByRow,
   GRID_CASCADE_FILTERS,
   toCellStr,
@@ -55,5 +58,53 @@ describe('buildDataMap', () => {
   it('행이 있으면 DataMap 인스턴스를 만든다', () => {
     const map = buildDataMap([{ CODE: 'A', NAME: 'Alpha' }]);
     expect(map).not.toBeNull();
+  });
+});
+
+// REQ:CHAT-20260828-05 — DEPT_ID(팀) 변경 cascade (AS-IS spdMain_Changed L1370~1452 3분기 1:1)
+describe('applyDeptIdChange', () => {
+  const base = (): SalesReportRow =>
+    ({
+      DEPARTMENT_ID: 'D1',
+      DEPT_ID: 'T1',
+      ITEM_ID: 'M-1',
+      NICK_NAME: 'Model 1',
+      END_CUST_REPORT: 'E',
+      CUST_REPORT: 'C',
+      PRODUCT_GROUP: 'P',
+    }) as unknown as SalesReportRow;
+
+  it('DEPARTMENT_ID 공란 → 하위 3컬럼만 clear, MODEL 은 보존 (else 분기)', () => {
+    const row = base();
+    (row as Record<string, unknown>).DEPARTMENT_ID = '';
+    const changed = applyDeptIdChange(row);
+    expect(changed).toEqual([...DEPT_CHANGE_CLEAR]);
+    expect(row.ITEM_ID).toBe('M-1');
+    expect(row.END_CUST_REPORT).toBe('');
+    expect(row.CUST_REPORT).toBe('');
+    expect(row.PRODUCT_GROUP).toBe('');
+  });
+
+  it('팀 != \'MDF\' → MODEL/모델명 = \'기타매출\' 강제 + 3컬럼 clear', () => {
+    const row = base();
+    const changed = applyDeptIdChange(row);
+    expect(row.ITEM_ID).toBe(ETC_SALES_ITEM);
+    expect(row.NICK_NAME).toBe(ETC_SALES_ITEM);
+    expect(changed).toEqual([...DEPT_CHANGE_CLEAR, 'ITEM_ID', 'NICK_NAME']);
+  });
+
+  it('팀 == \'MDF\'(코드) → MODEL/모델명 clear (팝업으로 고르게)', () => {
+    const row = base();
+    (row as Record<string, unknown>).DEPT_ID = 'MDF';
+    applyDeptIdChange(row);
+    expect(row.ITEM_ID).toBe('');
+    expect(row.NICK_NAME).toBe('');
+  });
+
+  it('표시명이 \'MDF\' 인 코드도 teamNameOf 로 MDF 판정 (코드 우선)', () => {
+    const row = base();
+    (row as Record<string, unknown>).DEPT_ID = 'T9';
+    applyDeptIdChange(row, code => (code === 'T9' ? 'MDF' : ''));
+    expect(row.ITEM_ID).toBe('');
   });
 });

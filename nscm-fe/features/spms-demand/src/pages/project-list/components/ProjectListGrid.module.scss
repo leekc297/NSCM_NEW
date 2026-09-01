@@ -13,7 +13,7 @@
   }
 }
 
-// 편집 가능한 ADMIN 셀만 Yellow, 나머지는 기본 White+zebra.
+// 편집 가능한 행의 셀만 Yellow, 나머지는 기본 White+zebra.
 :global(.wj-cell-editable) {
   background: #fff8cd !important;
 }

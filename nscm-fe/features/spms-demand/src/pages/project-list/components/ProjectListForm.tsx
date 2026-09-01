@@ -1,15 +1,17 @@
-import { PeriodField } from 'features/master/src/components';
+import dayjs from 'dayjs';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabLookupQueries } from '@shared/hooks';
-import { FormItem } from '@shared/lges';
+import { DatePickerCalendar, FormItem } from '@shared/lges';
 import { Grid } from '@shared/mui';
 
 import { LOOKUP } from '../project-list.constants';
 import { useProjectListStore } from '../useProjectListStore';
+
+import styles from './ProjectListForm.module.scss';
 
 interface ProjectListFormProps {
   onSearch: () => void;
@@ -18,12 +20,17 @@ interface ProjectListFormProps {
   onDivisionChange: () => void;
 }
 
+const toDate = (value: string) => {
+  if (!/^\d{8}$/.test(value)) return null;
+  return dayjs(`${value.slice(0, 4)}-${value.slice(4, 6)}-${value.slice(6, 8)}`);
+};
+
 // SDM1020 조회조건 5종 (hook #112/#94/#120 — 1단 4개 · 높이 36px · Search 라벨 = LBL00112 고정):
 //   Row1: 사업부*(MyDivision Single — 첫 값 기본, LBL00001) /
 //         고객(EndCustomerByDivision Multi 검색+ALL — 사업부 종속, LBL00643) /
 //         나의 권한(lookup SPMS_DPJT_AUTH_TYPE Multi, LBL00855) /
 //         등록 상태(lookup SPMS_DPJT_REG_STATUS Multi, LBL00856)
-//   Row2: 등록 완료일*(From~To — 기본 M-1~Today, LBL00857. PeriodField 표준 — yyyymmdd)
+//   Row2: 등록 완료일*(From~To — 기본 M-1~Today, LBL00857. yyyymmdd)
 //   멀티 = 콤마 구분 string, 'ALL' = 전체 (CustomDropdown 계약). 계약 ③ LBL 전부 재사용 (신규 채번 0)
 export const ProjectListForm = ({ onSearch, onDivisionChange }: ProjectListFormProps) => {
   const { t } = useTranslation();
@@ -81,7 +88,7 @@ export const ProjectListForm = ({ onSearch, onDivisionChange }: ProjectListFormP
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
-              label={t('LBL00080', '_End Customer')}
+              label={t('LBL01003', '_End Customer')}
               labelAlign='right'
               render={() => (
                 <CustomDropdown
@@ -100,7 +107,7 @@ export const ProjectListForm = ({ onSearch, onDivisionChange }: ProjectListFormP
           </Grid>
           <Grid size={3}>
             <FormItem
-              className={commonStyles.formItem}
+              className={`${commonStyles.formItem} ${styles.keepWordsFormItem}`}
               label={t('LBL00879', '_My Authority')}
               labelAlign='right'
               render={() => (
@@ -120,7 +127,7 @@ export const ProjectListForm = ({ onSearch, onDivisionChange }: ProjectListFormP
           </Grid>
           <Grid size={3}>
             <FormItem
-              className={commonStyles.formItem}
+              className={`${commonStyles.formItem} ${styles.keepWordsFormItem}`}
               label={t('LBL00878', '_Reg Status')}
               labelAlign='right'
               render={() => (
@@ -139,15 +146,49 @@ export const ProjectListForm = ({ onSearch, onDivisionChange }: ProjectListFormP
             />
           </Grid>
 
-          {/* Row2 — 등록 완료일* (표준 PeriodField — yyyymmdd. 기본값 = M-1~Today, 페이지 레벨 주입.
+          {/* Row2 — 등록 완료일* (yyyymmdd. 기본값 = M-1~Today, 페이지 레벨 주입.
               필수 — 빈 값/역전 = MSG00108 (P-10, validate 차단)) */}
-          <PeriodField
-            gridSize={6}
-            label={t('LBL00877', '_Reg Complete Date')}
-            start={sc.regCompDateFr}
-            end={sc.regCompDateTo}
-            onChange={(start, end) => set({ regCompDateFr: start, regCompDateTo: end })}
-          />
+          <Grid size={6}>
+            <FormItem
+              className={`${commonStyles.formItem} ${styles.keepWordsFormItem}`}
+              label={t('LBL00877', '_Reg Complete Date')}
+              labelAlign='right'
+              render={() => (
+                <div className={styles.periodSplit}>
+                  <div className={styles.datePickerFix}>
+                    <DatePickerCalendar
+                      usecase='date'
+                      elevation
+                      size='small'
+                      format='YYYY.MM.DD'
+                      value={toDate(sc.regCompDateFr)}
+                      onChange={
+                        ((date: ReturnType<typeof dayjs> | null) => {
+                          set({ regCompDateFr: date?.format('YYYYMMDD') ?? '' });
+                        }) as never
+                      }
+                    />
+                  </div>
+                  <span className={styles.periodSep}>~</span>
+                  <div className={styles.datePickerFix}>
+                    <DatePickerCalendar
+                      usecase='date'
+                      elevation
+                      size='small'
+                      format='YYYY.MM.DD'
+                      value={toDate(sc.regCompDateTo)}
+                      mindate={toDate(sc.regCompDateFr) ?? undefined}
+                      onChange={
+                        ((date: ReturnType<typeof dayjs> | null) => {
+                          set({ regCompDateTo: date?.format('YYYYMMDD') ?? '' });
+                        }) as never
+                      }
+                    />
+                  </div>
+                </div>
+              )}
+            />
+          </Grid>
         </>
       }
     />

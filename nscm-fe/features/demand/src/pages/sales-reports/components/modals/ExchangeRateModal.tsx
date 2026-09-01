@@ -32,6 +32,7 @@ import { callSaveExchangeRate } from '../../utils/sales-reports.api';
 import { toCellStr } from '../../utils/sales-reports.gridCombos';
 
 import styles from './ExchangeRateModal.module.scss';
+import { useExchangeRateModalStore } from './exchangeRateModalStore';
 
 interface Props {
   open: boolean;
@@ -135,7 +136,8 @@ export const ExchangeRateModal = ({ open, modalClose, divisionId, year, versionN
   const [inputDivisionId, setInputDivisionId] = useState(divisionId);
   const [inputYear, setInputYear] = useState(year);
   // 확정 조회조건 — useTabProcQuery filters 참조 안정화 원천 (stale closure·인라인 filters 사고 방지)
-  const [applied, setApplied] = useState({ divisionId, year });
+  const applied = useExchangeRateModalStore(state => state.applied);
+  const setApplied = useExchangeRateModalStore(state => state.setApplied);
 
   // 신규 행 (AS-IS InsertRow L614~653 — CRUD_TYPE='I')
   const [insertedRows, setInsertedRows] = useState<ExchangeRatePivotRow[]>([]);

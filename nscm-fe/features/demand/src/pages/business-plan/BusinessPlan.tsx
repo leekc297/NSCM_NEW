@@ -8,7 +8,7 @@ import { useQueryClient } from '@foundation/query-client';
 import type { EditTracker } from '@foundation/utils';
 import { MainTitle, SubTitle } from '@shared/components';
 import { useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
-import { useDirtyReset, useMessageStore } from '@shared/stores';
+import { useDirtyReset, useMessageStore, useSessionStore } from '@shared/stores';
 
 import {
   INSERT_MEASURE_COMBO_ID,
@@ -214,6 +214,9 @@ export const BusinessPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
   const [openProject, setOpenProject] = useState(false);
   const [openItem, setOpenItem] = useState(false);
   const [popupGroupId, setPopupGroupId] = useState<string | null>(null);
+  // 더블클릭한 그 행 — 팝업 사전 검색조건(Team/End Customer/Sales Site/Project) 의 원천.
+  //   반영 대상은 블록 전 행(popupGroupId)이지만 조회조건은 사용자가 클릭한 행의 값을 쓴다.
+  const [popupRow, setPopupRow] = useState<BusinessPlanRow | null>(null);
 
   // 모달 open state — Column/Measure/Exchange/Cutoff/Replace
   const [openColumnSetting, setOpenColumnSetting] = useState(false);
@@ -318,10 +321,26 @@ export const BusinessPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
     const sel = g.selectedItems[0] as BusinessPlanRow | undefined;
     if (!sel || sel.CRUD_TYPE !== 'I') return; // silent (AS-IS L527)
     const gid = sel.INSERT_GROUP_ID;
+    const isRemoved = (p: PendingInsert) => (gid ? p.row.INSERT_GROUP_ID === gid : p.row === sel);
+
+    // ⭐ 삭제 행의 EditTracker 기록 제거 (2026-08-26 리포트 — "행추가 후 삭제했는데 Exchange Rate 가
+    //   '변경 중인 데이터가 있어 수행할 수 없습니다' 로 막힘").
+    //   공용 EditTracker 는 **신규행도 원본을 기록한다** — CRUD_TYPE='I' 는 마킹(M) 만 건너뛸 뿐
+    //   _originalValues 에는 그대로 들어간다(editTracker.ts storeChange). 그래서 행을 지워도 기록이
+    //   남아 hasPendingChanges() 가 영영 true 가 되고, pending 게이트를 쓰는 버튼
+    //   (Exchange Rate / Ver. Cutoff / Replace / Set Price / Bucket 변경)이 전부 막힌다.
+    //   clearChanges() 는 기존행 수정분까지 지우므로 삭제 대상 행만 골라 지운다.
+    const originals = editTrackerRef.current?.getOriginalValues() as
+      | Map<BusinessPlanRow, Record<string, unknown>>
+      | undefined;
+    if (originals) {
+      insertedRows.filter(isRemoved).forEach(p => originals.delete(p.row));
+      gridRef.current?.invalidate();
+    }
+
     // 삭제 대상이 다른 신규행의 앵커였다면 그 앵커를 삭제 행의 앵커로 승계시킨다.
     //   승계하지 않으면 앵커 유실로 딸린 행들이 그리드 맨 위로 튄다.
     setInsertedRows(prev => {
-      const isRemoved = (p: PendingInsert) => (gid ? p.row.INSERT_GROUP_ID === gid : p.row === sel);
       const inherited = new Map<BusinessPlanRow, BusinessPlanRow | null>();
       prev.filter(isRemoved).forEach(p => inherited.set(p.row, p.anchor));
       if (inherited.size === 0) return prev;
@@ -372,7 +391,9 @@ export const BusinessPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
       });
       return;
     }
-    const payload = buildSavePayload(build.rows);
+    // 감사 2키(createdBy/lastUpdatedBy)는 세션 userId 로 FE 가 싣는다 — BE call-proc 경로는
+    //   요청 파라미터에 없는 COL_NM 을 null 로 바인딩한다 (business-plan.save.ts 주석 참조).
+    const payload = buildSavePayload(build.rows, useSessionStore.getState().session.userId ?? '');
     if (!payload) {
       // 저장 대상 0건 (AS-IS L1087 MSG00275 → MSG00676)
       void setAlert({
@@ -646,6 +667,9 @@ export const BusinessPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
         validWindow={validWindow}
         onPopupCellDblClick={(modalKey, row) => {
           setPopupGroupId(row.INSERT_GROUP_ID ?? null);
+          // open 과 같은 이벤트에서 함께 세팅 — 팝업은 open 이 true 가 되는 렌더의
+          //   preSearchParams 를 한 번만 읽는다(useEffect deps=[open]). 순서가 갈리면 빈 조건으로 열린다.
+          setPopupRow(row);
           if (modalKey === 'ITEM') setOpenItem(true);
           else setOpenProject(true);
         }}
@@ -663,7 +687,9 @@ export const BusinessPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
         openExchangeRate={openExchangeRate}
         openCutoff={openCutoff}
         openReplace={openReplace}
+        popupRow={popupRow}
         onClose={(key: BusinessPlanModalKey) => {
+          if (key === 'ITEM' || key === 'PROJECT') setPopupRow(null);
           const closers: Record<BusinessPlanModalKey, (v: boolean) => void> = {
             PROJECT: setOpenProject,
             ITEM: setOpenItem,

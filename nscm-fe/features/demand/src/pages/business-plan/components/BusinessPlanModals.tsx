@@ -15,8 +15,9 @@ import {
   TITLESET_COLUMN_TYPE,
   TITLESET_MEASURE_TYPE,
 } from '../business-plan.constants';
+import type { BusinessPlanRow } from '../business-plan.types';
 import { useBusinessPlanStore } from '../useBusinessPlanStore';
-import { isDiv40 } from '../utils/business-plan.division';
+import { buildCellPopupSearch, isDiv40 } from '../utils/business-plan.division';
 
 import { ExchangeRateModal, ReplaceByCutoffModal, VersionCutoffModal } from './modals';
 
@@ -40,6 +41,8 @@ interface BusinessPlanModalsProps {
   openExchangeRate: boolean;
   openCutoff: boolean;
   openReplace: boolean;
+  // 셀 모달을 연 그 행 — Model/Project 팝업의 사전 검색조건 원천 (Team/End Customer/Sales Site/Project).
+  popupRow: BusinessPlanRow | null;
   onClose: (key: BusinessPlanModalKey) => void;
   // Exchange/Cutoff/Replace 완료 후 메인 재조회 (AS-IS FindData 재조회 1:1)
   onRefetch: () => void;
@@ -70,6 +73,7 @@ export const BusinessPlanModals = ({
   openExchangeRate,
   openCutoff,
   openReplace,
+  popupRow,
   onClose,
   onRefetch,
   applyToInsertBlock,
@@ -106,6 +110,17 @@ export const BusinessPlanModals = ({
 
   const div40 = isDiv40(divisionId);
 
+  // 셀 팝업 사전 검색조건 — 더블클릭한 그 행의 Team/End Customer/Sales Site/Project 를 그대로 올린다.
+  //   행이 없을 때(팝업 닫힘 상태)는 전량 'ALL' — 팝업은 open 시점 값만 읽으므로 표시에 영향 없다.
+  const itemSearch = useMemo(
+    () => buildCellPopupSearch(popupRow ?? {}, divisionId, 'ITEM'),
+    [popupRow, divisionId]
+  );
+  const projectSearch = useMemo(
+    () => buildCellPopupSearch(popupRow ?? {}, divisionId, 'PROJECT'),
+    [popupRow, divisionId]
+  );
+
   return (
     <>
       {/* 셀 모달 — PROJECT (81·82 신규행. division별 키 컬럼 분기 — AS-IS L1738~1796) */}
@@ -131,16 +146,7 @@ export const BusinessPlanModals = ({
                   }
           );
         }}
-        preSearchParams={
-          {
-            divisionId,
-            deptId: 'ALL',
-            endCustomer: 'ALL',
-            salesSite: 'ALL',
-            projectCode: '',
-            etc: 'N',
-          } as never
-        }
+        preSearchParams={projectSearch as never}
         callFromCell={true}
       />
 
@@ -160,15 +166,7 @@ export const BusinessPlanModals = ({
               : { ITEM_ID: itemId, ITEM_NAME: itemName ?? '', NICK_NAME: nickName ?? '' }
           );
         }}
-        preSearchParams={
-          {
-            divisionId,
-            deptId: 'ALL',
-            endCustomer: 'ALL',
-            salesSite: 'ALL',
-            itemId: '',
-          } as never
-        }
+        preSearchParams={itemSearch as never}
         callFromCell={true}
       />
 
@@ -272,12 +270,12 @@ export const BusinessPlanModals = ({
         defaultPeriod={{ start: period.start.slice(0, 6), end: period.end.slice(0, 6) }}
       />
 
-      {/* Ver. Cutoff — 'BP_M' 고정 (AS-IS L2857. 팝업 자체 저장 — blnOK 후 처리 없음 L2862) */}
+      {/* Ver. Cutoff — 'BP_M' 고정 (AS-IS L2857. 팝업 자체 저장 — blnOK 후 처리 없음 L2862).
+          기간은 메인을 승계하지 않는다 — 팝업 자체 기본값(오늘~+5개월, AS-IS L106~108). */}
       <VersionCutoffModal
         open={openCutoff}
         modalClose={() => onClose('CUTOFF')}
         divisionId={divisionId}
-        period={period}
       />
 
       {/* Replace by Cutoff — 선택 M_ 범위 from/to (AS-IS L3465. 실행 후 메인 재조회) */}

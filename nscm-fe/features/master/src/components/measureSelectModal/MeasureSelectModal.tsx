@@ -346,7 +346,7 @@ export const MeasureSelectModal = ({
             onRowDoubleClickRight={moveOneToBase}
           />
 
-          {/* 버튼바 — ColumnSettingModal 표준 동일. Default·Cancel=outlined, OK=contained+ConfirmIcon. */}
+          {/* 버튼바 — Default·Cancel=outlined, OK=contained+ConfirmIcon. 순서는 OK 다음 Cancel. */}
           <div className={styles.actionBar}>
             <Button
               appearance='outlined'
@@ -356,13 +356,6 @@ export const MeasureSelectModal = ({
               onClick={handleDefault}
             />
             <Button
-              appearance='outlined'
-              priority='normal'
-              size='medium'
-              buttonLabel='Cancel'
-              onClick={modalClose}
-            />
-            <Button
               appearance='contained'
               priority='primary'
               size='medium'
@@ -370,6 +363,13 @@ export const MeasureSelectModal = ({
               iconComponent={<ControlConfirmIcon size='small' />}
               iconPosition='leading'
               onClick={handleOk}
+            />
+            <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel='Cancel'
+              onClick={modalClose}
             />
           </div>
         </div>

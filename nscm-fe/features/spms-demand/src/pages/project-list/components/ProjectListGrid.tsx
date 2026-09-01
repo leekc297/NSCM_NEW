@@ -17,13 +17,11 @@ import type { EditTracker } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 
-import { TagLayer, type TagLayerHandle } from '../../project-registration/components/ProjectGrid';
+import { colorTypeColumnOf, TagLayer, type TagLayerHandle } from '../../../components/tag-layer';
+import { restoreMultiRangeSelection } from '../../../lib/grid';
 import {
-  AUTH_MGMT_LINK_LABEL,
-  AUTH_REQ_LINK_LABEL,
   CELL_TYPE_BINDING,
   CELLTYPE_SCOPED_COMBO,
-  colorTypeColumnOf,
   LINK_SEALED,
   MODAL_ATTR,
   REQ_ACTION_ATTR,
@@ -51,7 +49,7 @@ const CELL_TYPE_COMBO = 'CellTypeByDivision';
 const quoteCombo = (value?: string): string => `'${value && value.trim() !== '' ? value : 'ALL'}'`;
 
 // ⭐ SDM1020 'Project List' 단일 그리드 — 정적 30컬럼(계약 ④) admin 메타 100% 주도 (hook #113).
-//   - 편집 게이트 = utils/project-list.editLock (INPUT_TP_CD × ADMIN 행 — P-01. EditTracker 가
+//   - 편집 게이트 = utils/project-list.editLock (INPUT_TP_CD × MOD_ROW_YN='Y' 행 — P-01. EditTracker 가
 //     편집 확정 시 CRUD_TYPE 'M' 마킹 → [등록요청] 대상 축, P-06/P-25).
 //   - 셀 콤보 : CODE 컬럼 직결 dataMap(CODE→NAME 표시 — 콤보 셀 명칭 표시 의무). division 종속은
 //     조회 Division 단일 축(따옴표 전달) — Division 변경 시 그리드가 비워지므로 dataMap 재구성으로 충분.
@@ -136,7 +134,7 @@ export const ProjectListGrid = memo(function ProjectListGrid({
       if ((c.cellCboDataTp as unknown as string) === CELLTYPE_SCOPED_COMBO) {
         // 빈값 NVL 가드 = 전체 반환 (계약 ⑤ 스모크 실측 — 'ALL' 센티널 아님)
         param.divisionId = `'${divisionId}'`;
-        param.cellType = "''";
+        param.cellType = '\'\'';
       }
       return param;
     }),
@@ -353,7 +351,7 @@ export const ProjectListGrid = memo(function ProjectListGrid({
           e.cell.style.cursor = '';
           return;
         }
-        renderLink(e.cell, AUTH_MGMT_LINK_LABEL);
+        renderLink(e.cell, t('LBL00875', '_Authority Registration'));
         return;
       }
 
@@ -364,7 +362,7 @@ export const ProjectListGrid = memo(function ProjectListGrid({
           e.cell.style.cursor = '';
           return;
         }
-        renderLink(e.cell, AUTH_REQ_LINK_LABEL);
+        renderLink(e.cell, t('LBL01002', '_Authority Request'));
         return;
       }
 
@@ -389,14 +387,14 @@ export const ProjectListGrid = memo(function ProjectListGrid({
         if (e.cell.textContent !== text) e.cell.textContent = text;
       }
 
-      // 편집 가능한 ADMIN 셀만 Yellow, 나머지는 White+zebra.
+      // 편집 가능한 행의 셀만 Yellow, 나머지는 White+zebra.
       const inputTp = inputTpRef.current.get(binding);
       const editable = isCellEditable(inputTp, rowItem);
       toggleClass(e.cell, 'wj-cell-editable', editable);
     };
     g.formatItem.addHandler(formatHandler);
 
-    // 편집 시작 — INPUT_TP_CD × ADMIN 행 단일 원천. 링크/체크박스 셀은 편집기 자체 차단
+    // 편집 시작 — INPUT_TP_CD × MOD_ROW_YN 단일 원천. 링크/체크박스 셀은 편집기 자체 차단
     const beginningEditHandler = (
       s: FlexGridType<MainRow>,
       e: { cancel: boolean; row: number; col: number }
@@ -566,6 +564,7 @@ export const ProjectListGrid = memo(function ProjectListGrid({
         autoGenerateColumns={false}
         allowSorting={true}
         useCheckbox={true}
+        initialized={restoreMultiRangeSelection}
         loadedRows={handleLoadedRows}
       />
     </>

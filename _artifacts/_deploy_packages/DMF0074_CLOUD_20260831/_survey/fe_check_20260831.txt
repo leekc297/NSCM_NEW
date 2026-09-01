@@ -1,0 +1,633 @@
+﻿powershell : [ERROR] GET http://10.94.57.6:8081/repository/npm-group/@pnpm%2Fexe: fetch failed
+At line:1 char:302
++ ... tch {} } }; powershell -File C:\Projects\NSCM\_artifacts\_tools\fe-ch ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([ERROR] GET htt...e: fetch failed:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+For help, run: pnpm help
+pnpm   (요구 = "packageManager": "pnpm@10.28.2",)
+task=all  filter=(전체)
+--- gen (icons + i18n) ---
+✅ 67개의 아이콘이 index.ts에 등록되었습니다.
+🚀 다국어 동기화 스크립트 시작...
+✅ 메시지 원천: http://127.0.0.1:8080/admin/message (2895건)
+KO
+EN
+CN
+--- turbo run lint type-check --continue ---
+• turbo 2.8.5
+• Packages in scope: @admin, @authority, @demand, @factory, @foundation, @master, @report, @sdm, @shared, @shipping, @spms-demand, @supply, @web
+• Running lint, type-check in 13 packages
+• Remote caching disabled
+@foundation:lint: cache miss, executing 7103292d18ab6a29
+@web:lint: cache miss, executing a7c7d3ecdf1bea71
+@report:lint: cache miss, executing 60efd556e47c75f7
+@factory:lint: cache miss, executing ab98f7719038b6ec
+@admin:lint: cache miss, executing fb05fdbae49af521
+@shared:lint: cache miss, executing f9eb1bbdb611ec60
+@sdm:lint: cache miss, executing 680c7cb2786c0947
+@supply:lint: cache miss, executing deb6c3368e3f9470
+@spms-demand:lint: cache miss, executing f3af87f6787ef3a0
+@foundation:type-check: cache hit, replaying logs 703be12d9dc8cffa
+@foundation:type-check: 
+@foundation:type-check: > @foundation@0.1.0 type-check C:\Projects\NSCM\nscm-fe\packages\foundation
+@foundation:type-check: > tsc --noEmit
+@foundation:type-check: 
+@authority:lint: cache miss, executing 8780e134289e2dd8
+@report:lint: 
+@report:lint: > @report@0.1.0 lint C:\Projects\NSCM\nscm-fe\features\report
+@report:lint: > eslint src --color
+@report:lint: 
+@web:lint: 
+@web:lint: > @web@0.1.0 lint C:\Projects\NSCM\nscm-fe\apps\web
+@web:lint: > eslint src --color
+@web:lint: 
+@factory:lint: 
+@factory:lint: > @factory@0.1.0 lint C:\Projects\NSCM\nscm-fe\features\factory
+@factory:lint: > eslint src --color
+@factory:lint: 
+@foundation:lint: 
+@foundation:lint: > @foundation@0.1.0 lint C:\Projects\NSCM\nscm-fe\packages\foundation
+@foundation:lint: > eslint src --color
+@foundation:lint: 
+@sdm:lint: 
+@sdm:lint: > @sdm@0.1.0 lint C:\Projects\NSCM\nscm-fe\features\sdm
+@sdm:lint: > eslint src --color
+@sdm:lint: 
+@spms-demand:lint: 
+@spms-demand:lint: > @spms-demand@0.1.0 lint C:\Projects\NSCM\nscm-fe\features\spms-demand
+@spms-demand:lint: > eslint src --color
+@spms-demand:lint: 
+@supply:lint: 
+@supply:lint: > @supply@0.1.0 lint C:\Projects\NSCM\nscm-fe\features\supply
+@supply:lint: > eslint src --color
+@supply:lint: 
+@admin:lint: 
+@admin:lint: > @admin@0.1.0 lint C:\Projects\NSCM\nscm-fe\features\admin
+@admin:lint: > eslint src --color
+@admin:lint: 
+@authority:lint: 
+@authority:lint: > @authority@0.1.0 lint C:\Projects\NSCM\nscm-fe\features\authority
+@authority:lint: > eslint src --color
+@authority:lint: 
+@shared:lint: 
+@shared:lint: > @shared@0.1.0 lint C:\Projects\NSCM\nscm-fe\packages\shared
+@shared:lint: > eslint src --color
+@shared:lint: 
+@shipping:lint: cache miss, executing 526e33ac9927441b
+@shipping:lint: 
+@shipping:lint: > @shipping@0.1.0 lint C:\Projects\NSCM\nscm-fe\features\shipping
+@shipping:lint: > eslint src --color
+@shipping:lint: 
+@foundation:lint: [0m[0m
+@foundation:lint: [0m[4mC:\Projects\NSCM\nscm-fe\packages\foundation\src\apis\axios.test.ts[24m[0m
+@foundation:lint: [0m  [2m47:9[22m  [33mwarning[39m  Unsafe assignment of an `any` value  [2m@typescript-eslint/no-unsafe-assignment[22m[0m
+@foundation:lint: [0m[0m
+@foundation:lint: [0m[4mC:\Projects\NSCM\nscm-fe\packages\foundation\src\models\common\combo.ts[24m[0m
+@foundation:lint: [0m  [2m28:49[22m  [33mwarning[39m  Strings must use singlequote  [2mquotes[22m[0m
+@foundation:lint: [0m  [2m28:74[22m  [33mwarning[39m  Strings must use singlequote  [2mquotes[22m[0m
+@foundation:lint: [0m  [2m29:36[22m  [33mwarning[39m  Strings must use singlequote  [2mquotes[22m[0m
+@foundation:lint: [0m[0m
+@foundation:lint: [0m[4mC:\Projects\NSCM\nscm-fe\packages\foundation\src\models\common\page-props.ts[24m[0m
+@foundation:lint: [0m  [2m3:28[22m  [33mwarning[39m  'M' is defined but never used. Allowed unused vars must match /^_/u  [2munused-imports/no-unused-vars[22m[0m
+@foundation:lint: [0m[0m
+@foundation:lint: [0m[4mC:\Projects\NSCM\nscm-fe\packages\foundation\src\utils\columnMapping.ts[24m[0m
+@foundation:lint: [0m  [2m62:26[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@foundation:lint: [0m[0m
+@foundation:lint: [0m[33m[1m✖ 6 problems (0 errors, 6 warnings)[22m[39m[0m
+@foundation:lint: [0m[33m[1m[22m[39m[33m[1m  0 errors and 3 warnings potentially fixable with the `--fix` option.[22m[39m[0m
+@foundation:lint: [0m[33m[1m[22m[39m[0m
+@master:lint: cache miss, executing 7e801b87786c9b14
+@master:lint: 
+@master:lint: > @master@0.1.0 lint C:\Projects\NSCM\nscm-fe\features\master
+@master:lint: > eslint src --color
+@master:lint: 
+@demand:lint: cache miss, executing 74f7ae836668e598
+@demand:lint: 
+@demand:lint: > @demand@0.1.0 lint C:\Projects\NSCM\nscm-fe\features\demand
+@demand:lint: > eslint src --color
+@demand:lint: 
+@shared:type-check: cache hit, replaying logs e72ce8200074294a
+@shared:type-check: 
+@shared:type-check: > @shared@0.1.0 type-check C:\Projects\NSCM\nscm-fe\packages\shared
+@shared:type-check: > tsc --noEmit
+@shared:type-check: 
+@demand:type-check: cache miss, executing 6c33a06058d37c00
+@supply:type-check: cache hit, replaying logs 1fd1230e3a14ca8c
+@supply:type-check: 
+@supply:type-check: > @supply@0.1.0 type-check C:\Projects\NSCM\nscm-fe\features\supply
+@supply:type-check: > tsc --noEmit
+@supply:type-check: 
+@shipping:type-check: cache hit, replaying logs 80de9d21d1e86b71
+@shipping:type-check: 
+@shipping:type-check: > @shipping@0.1.0 type-check C:\Projects\NSCM\nscm-fe\features\shipping
+@shipping:type-check: > tsc --noEmit
+@shipping:type-check: 
+@spms-demand:type-check: cache hit, replaying logs b5c3d72e60bd2f24
+@spms-demand:type-check: 
+@spms-demand:type-check: > @spms-demand@0.1.0 type-check C:\Projects\NSCM\nscm-fe\features\spms-demand
+@spms-demand:type-check: > tsc --noEmit
+@spms-demand:type-check: 
+@report:type-check: cache hit, replaying logs 9ddc98d4763c3b39
+@report:type-check: 
+@report:type-check: > @report@0.1.0 type-check C:\Projects\NSCM\nscm-fe\features\report
+@report:type-check: > tsc --noEmit
+@report:type-check: 
+@master:type-check: cache hit, replaying logs 4648af911f6b2eac
+@master:type-check: 
+@master:type-check: > @master@0.1.0 type-check C:\Projects\NSCM\nscm-fe\features\master
+@master:type-check: > tsc --noEmit
+@master:type-check: 
+@admin:type-check: cache hit, replaying logs 02c2091c164296d4
+@admin:type-check: 
+@admin:type-check: > @admin@0.1.0 type-check C:\Projects\NSCM\nscm-fe\features\admin
+@admin:type-check: > tsc --noEmit
+@admin:type-check: 
+@factory:type-check: cache hit, replaying logs 85296db276d70d2e
+@factory:type-check: 
+@factory:type-check: > @factory@0.1.0 type-check C:\Projects\NSCM\nscm-fe\features\factory
+@factory:type-check: > tsc --noEmit
+@factory:type-check: 
+@sdm:type-check: cache hit, replaying logs 416adaa17fadd970
+@sdm:type-check: 
+@sdm:type-check: > @sdm@0.1.0 type-check C:\Projects\NSCM\nscm-fe\features\sdm
+@sdm:type-check: > tsc --noEmit
+@sdm:type-check: 
+@authority:type-check: cache hit, replaying logs b7dbfd8f2abee778
+@authority:type-check: 
+@authority:type-check: > @authority@0.1.0 type-check C:\Projects\NSCM\nscm-fe\features\authority
+@authority:type-check: > tsc --noEmit
+@authority:type-check: 
+@demand:type-check: 
+@demand:type-check: > @demand@0.1.0 type-check C:\Projects\NSCM\nscm-fe\features\demand
+@demand:type-check: > tsc --noEmit
+@demand:type-check: 
+@web:lint: [0m[0m
+@web:lint: [0m[4mC:\Projects\NSCM\nscm-fe\apps\web\src\mdi\MDI.types.ts[24m[0m
+@web:lint: [0m  [2m3:15[22m  [33mwarning[39m  'M' is defined but never used. Allowed unused vars must match /^_/u  [2munused-imports/no-unused-vars[22m[0m
+@web:lint: [0m[0m
+@web:lint: [0m[4mC:\Projects\NSCM\nscm-fe\apps\web\src\mdi\MDIContainer.tsx[24m[0m
+@web:lint: [0m  [2m34:9[22m  [33mwarning[39m  'progress' is assigned a value but never used. Allowed unused vars must match /^_/u  [2munused-imports/no-unused-vars[22m[0m
+@web:lint: [0m[0m
+@web:lint: [0m[4mC:\Projects\NSCM\nscm-fe\apps\web\src\mdi\useMDIStore.test.ts[24m[0m
+@web:lint: [0m  [2m11:7[22m  [33mwarning[39m  'PROC_NAME' is assigned a value but only used as a type. Allowed unused vars must match /^_/u  [2munused-imports/no-unused-vars[22m[0m
+@web:lint: [0m[0m
+@web:lint: [0m[4mC:\Projects\NSCM\nscm-fe\apps\web\src\pages\Templates.tsx[24m[0m
+@web:lint: [0m  [2m256:6[22m   [33mwarning[39m  React Hook useMemo has a missing dependency: 'sampleData'. Either include it or remove the dependency array  [2mreact-hooks/exhaustive-deps[22m[0m
+@web:lint: [0m  [2m669:37[22m  [33mwarning[39m  Unexpected empty arrow function                                                                              [2m@typescript-eslint/no-empty-function[22m[0m
+@web:lint: [0m[0m
+@web:lint: [0m[4mC:\Projects\NSCM\nscm-fe\apps\web\src\pages\TemplatesGantt.ts[24m[0m
+@web:lint: [0m  [2m122:67[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@web:lint: [0m[0m
+@web:lint: [0m[4mC:\Projects\NSCM\nscm-fe\apps\web\src\pages\TemplatesTreeView.tsx[24m[0m
+@web:lint: [0m  [2m14:14[22m  [33mwarning[39m  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  [2mreact-refresh/only-export-components[22m[0m
+@web:lint: [0m  [2m74:14[22m  [33mwarning[39m  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  [2mreact-refresh/only-export-components[22m[0m
+@web:lint: [0m[0m
+@web:lint: [0m[4mC:\Projects\NSCM\nscm-fe\apps\web\src\setup.ts[24m[0m
+@web:lint: [0m  [2m5:17[22m  [33mwarning[39m  Unexpected empty arrow function  [2m@typescript-eslint/no-empty-function[22m[0m
+@web:lint: [0m[0m
+@web:lint: [0m[33m[1m✖ 9 problems (0 errors, 9 warnings)[22m[39m[0m
+@web:lint: [0m[33m[1m[22m[39m[0m
+@sdm:lint: [0m[0m
+@sdm:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\sdm\src\components\ProjectAuthRegModal.tsx[24m[0m
+@sdm:lint: [0m  [2m25:20[22m  [33mwarning[39m  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `ProjectAuthRegModal.tsx` to same directory as `../pages/project-reg/ProjectReg.module.scss` or consider making `../pages/project-reg/ProjectReg.module.scss` a package  [2mimport/no-relative-parent-imports[22m[0m
+@sdm:lint: [0m[0m
+@sdm:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-list\ProjectList.tsx[24m[0m
+@sdm:lint: [0m  [2m138:49[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@sdm:lint: [0m[0m
+@sdm:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-list\components\ProjectListGrid.tsx[24m[0m
+@sdm:lint: [0m  [2m28:20[22m  [33mwarning[39m  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `ProjectListGrid.tsx` to same directory as `../ProjectList.module.scss` or consider making `../ProjectList.module.scss` a package  [2mimport/no-relative-parent-imports[22m[0m
+@sdm:lint: [0m[0m
+@sdm:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-master\ProjectMaster.tsx[24m[0m
+@sdm:lint: [0m  [2m166:49[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@sdm:lint: [0m[0m
+@sdm:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-master\components\ProjectMasterTab1Grid.tsx[24m[0m
+@sdm:lint: [0m  [2m23:20[22m  [33mwarning[39m  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `ProjectMasterTab1Grid.tsx` to same directory as `../ProjectMaster.module.scss` or consider making `../ProjectMaster.module.scss` a package  [2mimport/no-relative-parent-imports[22m[0m
+@sdm:lint: [0m[0m
+@sdm:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-master\components\ProjectMasterTab2Grid.tsx[24m[0m
+@sdm:lint: [0m  [2m21:20[22m  [33mwarning[39m  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `ProjectMasterTab2Grid.tsx` to same directory as `../ProjectMaster.module.scss` or consider making `../ProjectMaster.module.scss` a package  [2mimport/no-relative-parent-imports[22m[0m
+@sdm:lint: [0m[0m
+@sdm:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-reg\ProjectReg.tsx[24m[0m
+@sdm:lint: [0m  [2m173:49[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@sdm:lint: [0m  [2m283:20[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@sdm:lint: [0m  [2m290:16[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@sdm:lint: [0m[0m
+@sdm:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-reg\components\ProjectRegTab1Grid.tsx[24m[0m
+@sdm:lint: [0m  [2m20:20[22m  [33mwarning[39m  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `ProjectRegTab1Grid.tsx` to same directory as `../ProjectReg.module.scss` or consider making `../ProjectReg.module.scss` a package  [2mimport/no-relative-parent-imports[22m[0m
+@sdm:lint: [0m[0m
+@sdm:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-reg\components\ProjectRegTab2Grid.tsx[24m[0m
+@sdm:lint: [0m  [2m10:20[22m  [33mwarning[39m  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `ProjectRegTab2Grid.tsx` to same directory as `../ProjectReg.module.scss` or consider making `../ProjectReg.module.scss` a package  [2mimport/no-relative-parent-imports[22m[0m
+@sdm:lint: [0m[0m
+@sdm:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\sdm\src\pages\project-reg\components\modals\MyWorkModal.tsx[24m[0m
+@sdm:lint: [0m  [2m11:20[22m  [33mwarning[39m  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `MyWorkModal.tsx` to same directory as `../../ProjectReg.module.scss` or consider making `../../ProjectReg.module.scss` a package  [2mimport/no-relative-parent-imports[22m[0m
+@sdm:lint: [0m[0m
+@sdm:lint: [0m[33m[1m✖ 12 problems (0 errors, 12 warnings)[22m[39m[0m
+@sdm:lint: [0m[33m[1m[22m[39m[0m
+@shared:lint: [0m[0m
+@shared:lint: [0m[4mC:\Projects\NSCM\nscm-fe\packages\shared\src\components\molecules\colorPickerButton\ColorPickerButton.tsx[24m[0m
+@shared:lint: [0m  [2m125:27[22m  [33mwarning[39m  Do not use Array index in keys  [2mreact/no-array-index-key[22m[0m
+@shared:lint: [0m[0m
+@shared:lint: [0m[4mC:\Projects\NSCM\nscm-fe\packages\shared\src\components\molecules\columnSelectDualList\ColumnSelectDualList.tsx[24m[0m
+@shared:lint: [0m  [2m196:32[22m  [33mwarning[39m  Do not use Array index in keys  [2mreact/no-array-index-key[22m[0m
+@shared:lint: [0m[0m
+@shared:lint: [0m[4mC:\Projects\NSCM\nscm-fe\packages\shared\src\components\molecules\customDropdown\CustomDropdownMui.tsx[24m[0m
+@shared:lint: [0m  [2m32:17[22m  [33mwarning[39m  Unsafe object destructuring of a property with an `any` value  [2m@typescript-eslint/no-unsafe-assignment[22m[0m
+@shared:lint: [0m  [2m36:20[22m  [33mwarning[39m  Unsafe assignment of an `any` value                            [2m@typescript-eslint/no-unsafe-assignment[22m[0m
+@shared:lint: [0m[0m
+@shared:lint: [0m[4mC:\Projects\NSCM\nscm-fe\packages\shared\src\components\molecules\dialog\CustomDialog.tsx[24m[0m
+@shared:lint: [0m  [2m232:6[22m  [33mwarning[39m  React Hook useEffect has missing dependencies: 'height' and 'size'. Either include them or remove the dependency array. If 'setDialogSize' needs the current value of 'size', you can also switch to useReducer instead of useState and read 'size' in the reducer  [2mreact-hooks/exhaustive-deps[22m[0m
+@shared:lint: [0m[0m
+@shared:lint: [0m[4mC:\Projects\NSCM\nscm-fe\packages\shared\src\components\molecules\dialog\components\CustomDialogContent.tsx[24m[0m
+@shared:lint: [0m  [2m35:3[22m  [33mwarning[39m  'isMaximized' is defined but never used. Allowed unused args must match /^_/u       [2munused-imports/no-unused-vars[22m[0m
+@shared:lint: [0m  [2m36:3[22m  [33mwarning[39m  'onToggleMaximize' is defined but never used. Allowed unused args must match /^_/u  [2munused-imports/no-unused-vars[22m[0m
+@shared:lint: [0m[0m
+@shared:lint: [0m[4mC:\Projects\NSCM\nscm-fe\packages\shared\src\components\organisms\olap-pivot-grid\OlapPivotGrid.tsx[24m[0m
+@shared:lint: [0m  [2m158:49[22m  [33mwarning[39m  Unexpected empty arrow function  [2m@typescript-eslint/no-empty-function[22m[0m
+@shared:lint: [0m[0m
+@shared:lint: [0m[4mC:\Projects\NSCM\nscm-fe\packages\shared\src\components\organisms\result-area\ResultArea.tsx[24m[0m
+@shared:lint: [0m   [2m66:7[22m   [33mwarning[39m  Fast refresh only works when a file only exports components. Move your component(s) to a separate file. If all exports are HOCs, add them to the `extraHOCs` option  [2mreact-refresh/only-export-components[22m[0m
+@shared:lint: [0m  [2m118:7[22m   [33mwarning[39m  Fast refresh only works when a file only exports components. Move your component(s) to a separate file. If all exports are HOCs, add them to the `extraHOCs` option  [2mreact-refresh/only-export-components[22m[0m
+@shared:lint: [0m  [2m144:26[22m  [33mwarning[39m  Do not use Array index in keys                                                                                                                                       [2mreact/no-array-index-key[22m[0m
+@shared:lint: [0m[0m
+@shared:lint: [0m[4mC:\Projects\NSCM\nscm-fe\packages\shared\src\components\organisms\sub-title\SubTitle.tsx[24m[0m
+@shared:lint: [0m  [2m138:18[22m  [33mwarning[39m  The ref value 'gridFilter.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'gridFilter.current' to a variable inside the effect, and use that variable in the cleanup function  [2mreact-hooks/exhaustive-deps[22m[0m
+@shared:lint: [0m  [2m141:6[22m   [33mwarning[39m  React Hook useEffect has missing dependencies: 'countGridRef' and 'gridFilter'. Either include them or remove the dependency array. Mutable values like 'countGridRef.current' aren't valid dependencies because mutating them doesn't re-render the component       [2mreact-hooks/exhaustive-deps[22m[0m
+@shared:lint: [0m  [2m264:6[22m   [33mwarning[39m  React Hook useEffect has missing dependencies: 'buttonActions' and 'grid'. Either include them or remove the dependency array. Mutable values like 'grid.current' aren't valid dependencies because mutating them doesn't re-render the component                    [2mreact-hooks/exhaustive-deps[22m[0m
+@shared:lint: [0m[0m
+@shared:lint: [0m[4mC:\Projects\NSCM\nscm-fe\packages\shared\src\components\templates\modals\column-layout-modal\ColumnLayoutModal.tsx[24m[0m
+@shared:lint: [0m  [2m261:5[22m  [33mwarning[39m  React Hook useMemo has a missing dependency: 'hiddenFromList'. Either include it or remove the dependency array  [2mreact-hooks/exhaustive-deps[22m[0m
+@shared:lint: [0m  [2m265:5[22m  [33mwarning[39m  React Hook useMemo has a missing dependency: 'hiddenFromList'. Either include it or remove the dependency array  [2mreact-hooks/exhaustive-deps[22m[0m
+@shared:lint: [0m[0m
+@shared:lint: [0m[4mC:\Projects\NSCM\nscm-fe\packages\shared\src\components\templates\modals\column-layout-modal\columnLayoutModal.utils.test.ts[24m[0m
+@shared:lint: [0m  [2m128:15[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@shared:lint: [0m  [2m201:12[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@shared:lint: [0m  [2m203:12[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@shared:lint: [0m  [2m209:12[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@shared:lint: [0m  [2m210:12[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@shared:lint: [0m  [2m273:12[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@shared:lint: [0m  [2m274:12[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@shared:lint: [0m[0m
+@shared:lint: [0m[4mC:\Projects\NSCM\nscm-fe\packages\shared\src\components\templates\modals\message-modal\MessageModal.tsx[24m[0m
+@shared:lint: [0m  [2m110:6[22m  [33mwarning[39m  React Hook useEffect has missing dependencies: 'fetchStaticColumns', 'initialMessage', 'initialType', and 'initialized'. Either include them or remove the dependency array. If 'setModalFilters' needs the current value of 'initialType', you can also switch to useReducer instead of useState and read 'initialType' in the reducer  [2mreact-hooks/exhaustive-deps[22m[0m
+@shared:lint: [0m[0m
+@shared:lint: [0m[4mC:\Projects\NSCM\nscm-fe\packages\shared\src\components\templates\modals\sso-dept-modal\SsoDeptModal.tsx[24m[0m
+@shared:lint: [0m  [2m89:6[22m  [33mwarning[39m  React Hook useEffect has missing dependencies: 'fetchStaticColumns', 'initialDept', and 'initialized'. Either include them or remove the dependency array. If 'setSearchParam' needs the current value of 'initialDept', you can also switch to useReducer instead of useState and read 'initialDept' in the reducer  [2mreact-hooks/exhaustive-deps[22m[0m
+@shared:lint: [0m[0m
+@shared:lint: [0m[4mC:\Projects\NSCM\nscm-fe\packages\shared\src\components\templates\modals\sso-user-modal\SsoUserModal.tsx[24m[0m
+@shared:lint: [0m  [2m90:6[22m  [33mwarning[39m  React Hook useEffect has missing dependencies: 'fetchStaticColumns', 'initialUser', and 'initialized'. Either include them or remove the dependency array. If 'setSearchParam' needs the current value of 'initialUser', you can also switch to useReducer instead of useState and read 'initialUser' in the reducer  [2mreact-hooks/exhaustive-deps[22m[0m
+@shared:lint: [0m[0m
+@shared:lint: [0m[4mC:\Projects\NSCM\nscm-fe\packages\shared\src\hooks\useCustomQueryClient.ts[24m[0m
+@shared:lint: [0m  [2m105:6[22m  [33mwarning[39m  React Hook useEffect has missing dependencies: 'procedureAction', 'sheetName', and 'tabId'. Either include them or remove the dependency array  [2mreact-hooks/exhaustive-deps[22m[0m
+@shared:lint: [0m[0m
+@shared:lint: [0m[33m[1m✖ 27 problems (0 errors, 27 warnings)[22m[39m[0m
+@shared:lint: [0m[33m[1m[22m[39m[0m
+@spms-demand:lint: [0m[0m
+@spms-demand:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\spms-demand\src\components\tag-layer\TagLayer.tsx[24m[0m
+@spms-demand:lint: [0m  [2m235:14[22m  [33mwarning[39m  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  [2mreact-refresh/only-export-components[22m[0m
+@spms-demand:lint: [0m[0m
+@spms-demand:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\spms-demand\src\pages\project-list\ProjectList.tsx[24m[0m
+@spms-demand:lint: [0m  [2m127:49[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@spms-demand:lint: [0m[0m
+@spms-demand:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\spms-demand\src\pages\project-list\components\ProjectListGrid.tsx[24m[0m
+@spms-demand:lint: [0m  [2m137:26[22m  [33mwarning[39m  Strings must use singlequote                                                                 [2mquotes[22m[0m
+@spms-demand:lint: [0m  [2m219:11[22m  [33mwarning[39m  'allRows' is assigned a value but only used as a type. Allowed unused vars must match /^_/u  [2munused-imports/no-unused-vars[22m[0m
+@spms-demand:lint: [0m[0m
+@spms-demand:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\spms-demand\src\pages\project-list\utils\project-list.editLock.test.ts[24m[0m
+@spms-demand:lint: [0m  [2m66:6[22m  [33mwarning[39m  Strings must use singlequote  [2mquotes[22m[0m
+@spms-demand:lint: [0m  [2m71:6[22m  [33mwarning[39m  Strings must use singlequote  [2mquotes[22m[0m
+@spms-demand:lint: [0m[0m
+@spms-demand:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\spms-demand\src\pages\project-master\components\ProjectMasterTab1Grid.tsx[24m[0m
+@spms-demand:lint: [0m   [2m15:20[22m  [33mwarning[39m  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `ProjectMasterTab1Grid.tsx` to same directory as `../ProjectMaster.module.scss` or consider making `../ProjectMaster.module.scss` a package  [2mimport/no-relative-parent-imports[22m[0m
+@spms-demand:lint: [0m  [2m103:64[22m  [33mwarning[39m  Strings must use singlequote                                                                                                                                                                                                                                                                    [2mquotes[22m[0m
+@spms-demand:lint: [0m[0m
+@spms-demand:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\spms-demand\src\pages\project-master\components\ProjectMasterTab2Grid.tsx[24m[0m
+@spms-demand:lint: [0m  [2m20:20[22m  [33mwarning[39m  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `ProjectMasterTab2Grid.tsx` to same directory as `../ProjectMaster.module.scss` or consider making `../ProjectMaster.module.scss` a package  [2mimport/no-relative-parent-imports[22m[0m
+@spms-demand:lint: [0m[0m
+@spms-demand:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\spms-demand\src\pages\project-registration\ProjectRegistration.tsx[24m[0m
+@spms-demand:lint: [0m  [2m311:6[22m   [33mwarning[39m  React Hook useEffect has missing dependencies: 'fetchStaticColumns', 'filters', 'initialized', and 'setProjectFilters'. Either include them or remove the dependency array  [2mreact-hooks/exhaustive-deps[22m[0m
+@spms-demand:lint: [0m  [2m311:14[22m  [33mwarning[39m  React Hook useEffect has a complex expression in the dependency array. Extract it to a separate variable so it can be statically checked                                    [2mreact-hooks/exhaustive-deps[22m[0m
+@spms-demand:lint: [0m[0m
+@spms-demand:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\spms-demand\src\pages\project-registration\components\MyProjectGrid.tsx[24m[0m
+@spms-demand:lint: [0m  [2m15:24[22m  [33mwarning[39m  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `MyProjectGrid.tsx` to same directory as `../ProjectRegistration.module.scss` or consider making `../ProjectRegistration.module.scss` a package  [2mimport/no-relative-parent-imports[22m[0m
+@spms-demand:lint: [0m[0m
+@spms-demand:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\spms-demand\src\pages\project-registration\components\ProjectGrid.tsx[24m[0m
+@spms-demand:lint: [0m  [2m26:24[22m  [33mwarning[39m  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `ProjectGrid.tsx` to same directory as `../ProjectRegistration.module.scss` or consider making `../ProjectRegistration.module.scss` a package  [2mimport/no-relative-parent-imports[22m[0m
+@spms-demand:lint: [0m[0m
+@spms-demand:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\spms-demand\src\pages\project-registration\components\authManagementPopup\AuthManagementPopup.tsx[24m[0m
+@spms-demand:lint: [0m  [2m191:9[22m  [33mwarning[39m  The 'allRequestRows' logical expression could make the dependencies of useMemo Hook (at line 198) change on every render. To fix this, wrap the initialization of 'allRequestRows' in its own useMemo() Hook  [2mreact-hooks/exhaustive-deps[22m[0m
+@spms-demand:lint: [0m[0m
+@spms-demand:lint: [0m[33m[1m✖ 14 problems (0 errors, 14 warnings)[22m[39m[0m
+@spms-demand:lint: [0m[33m[1m[22m[39m[33m[1m  0 errors and 4 warnings potentially fixable with the `--fix` option.[22m[39m[0m
+@spms-demand:lint: [0m[33m[1m[22m[39m[0m
+@admin:lint: [0m[0m
+@admin:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\admin\src\pages\api-management\ApiManagement.tsx[24m[0m
+@admin:lint: [0m  [2m64:6[22m  [33mwarning[39m  React Hook useEffect has missing dependencies: 'fetchStaticColumns' and 'initialized'. Either include them or remove the dependency array  [2mreact-hooks/exhaustive-deps[22m[0m
+@admin:lint: [0m[0m
+@admin:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\admin\src\pages\dynamic-query\DynamicQuery.tsx[24m[0m
+@admin:lint: [0m  [2m287:5[22m  [33mwarning[39m  Unexpected console statement. Only these console methods are allowed: warn, error  [2mno-console[22m[0m
+@admin:lint: [0m  [2m373:7[22m  [33mwarning[39m  Unexpected console statement. Only these console methods are allowed: warn, error  [2mno-console[22m[0m
+@admin:lint: [0m  [2m402:9[22m  [33mwarning[39m  Unexpected console statement. Only these console methods are allowed: warn, error  [2mno-console[22m[0m
+@admin:lint: [0m[0m
+@admin:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\admin\src\pages\dynamic-query\components\DynamicQueryMainGrid.tsx[24m[0m
+@admin:lint: [0m  [2m59:35[22m  [33mwarning[39m  'g' is defined but never used. Allowed unused args must match /^_/u  [2munused-imports/no-unused-vars[22m[0m
+@admin:lint: [0m  [2m59:51[22m  [33mwarning[39m  Unexpected empty arrow function                                      [2m@typescript-eslint/no-empty-function[22m[0m
+@admin:lint: [0m  [2m60:32[22m  [33mwarning[39m  'g' is defined but never used. Allowed unused args must match /^_/u  [2munused-imports/no-unused-vars[22m[0m
+@admin:lint: [0m  [2m60:45[22m  [33mwarning[39m  'e' is defined but never used. Allowed unused args must match /^_/u  [2munused-imports/no-unused-vars[22m[0m
+@admin:lint: [0m  [2m60:81[22m  [33mwarning[39m  Unexpected empty arrow function                                      [2m@typescript-eslint/no-empty-function[22m[0m
+@admin:lint: [0m[0m
+@admin:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\admin\src\pages\dynamic-query\components\DynamicQueryModal.tsx[24m[0m
+@admin:lint: [0m  [2m29:20[22m  [33mwarning[39m  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `DynamicQueryModal.tsx` to same directory as `../DynamicQuery.module.scss` or consider making `../DynamicQuery.module.scss` a package  [2mimport/no-relative-parent-imports[22m[0m
+@admin:lint: [0m[0m
+@admin:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\admin\src\pages\dynamic-query\components\DynamicQueryResultGrid.tsx[24m[0m
+@admin:lint: [0m  [2m105:6[22m  [33mwarning[39m  React Hook useEffect has a missing dependency: 'defaultColums'. Either include it or remove the dependency array  [2mreact-hooks/exhaustive-deps[22m[0m
+@admin:lint: [0m[0m
+@admin:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\admin\src\pages\dynamic-query\components\DynamicQuerySQLViewer.tsx[24m[0m
+@admin:lint: [0m  [2m19:6[22m  [33mwarning[39m  React Hook useEffect has a missing dependency: 'sqlText'. Either include it or remove the dependency array  [2mreact-hooks/exhaustive-deps[22m[0m
+@admin:lint: [0m[0m
+@admin:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\admin\src\pages\group-management\GroupManagement.tsx[24m[0m
+@admin:lint: [0m  [2m75:6[22m  [33mwarning[39m  React Hook useEffect has missing dependencies: 'fetchStaticColumns', 'initialized', and 'setFilters'. Either include them or remove the dependency array  [2mreact-hooks/exhaustive-deps[22m[0m
+@admin:lint: [0m[0m
+@admin:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\admin\src\pages\group-management\useGroupManagementStore.test.tsx[24m[0m
+@admin:lint: [0m  [2m92:7[22m  [33mwarning[39m  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  [2m@typescript-eslint/no-floating-promises[22m[0m
+@admin:lint: [0m[0m
+@admin:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\admin\src\pages\group-menu\GroupMenuManagement.tsx[24m[0m
+@admin:lint: [0m  [2m123:6[22m  [33mwarning[39m  React Hook useEffect has missing dependencies: 'fetchStaticColumns', 'initialized', and 'setFilters'. Either include them or remove the dependency array  [2mreact-hooks/exhaustive-deps[22m[0m
+@admin:lint: [0m[0m
+@admin:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\admin\src\pages\group-user\components\GroupUserInfoGrid.tsx[24m[0m
+@admin:lint: [0m  [2m23:11[22m  [33mwarning[39m  't' is assigned a value but never used. Allowed unused vars must match /^_/u         [2munused-imports/no-unused-vars[22m[0m
+@admin:lint: [0m  [2m27:9[22m   [33mwarning[39m  'setAlert' is assigned a value but never used. Allowed unused vars must match /^_/u  [2munused-imports/no-unused-vars[22m[0m
+@admin:lint: [0m[0m
+@admin:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\admin\src\pages\menu-button-management\MenuButtonManagement.tsx[24m[0m
+@admin:lint: [0m  [2m75:6[22m  [33mwarning[39m  React Hook useEffect has missing dependencies: 'fetchStaticColumns' and 'initialized'. Either include them or remove the dependency array  [2mreact-hooks/exhaustive-deps[22m[0m
+@admin:lint: [0m[0m
+@admin:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\admin\src\pages\menu-management\MenuManagement.tsx[24m[0m
+@admin:lint: [0m  [2m152:9[22m  [33mwarning[39m  'onDelete' is assigned a value but never used. Allowed unused vars must match /^_/u                                                                       [2munused-imports/no-unused-vars[22m[0m
+@admin:lint: [0m  [2m248:6[22m  [33mwarning[39m  React Hook useEffect has missing dependencies: 'fetchStaticColumns', 'initialized', and 'setFilters'. Either include them or remove the dependency array  [2mreact-hooks/exhaustive-deps[22m[0m
+@admin:lint: [0m[0m
+@admin:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\admin\src\pages\message-management\MessageManagement.tsx[24m[0m
+@admin:lint: [0m  [2m47:6[22m  [33mwarning[39m  React Hook useEffect has missing dependencies: 'fetchStaticColumns' and 'initialized'. Either include them or remove the dependency array  [2mreact-hooks/exhaustive-deps[22m[0m
+@admin:lint: [0m[0m
+@admin:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\admin\src\pages\message-management\useMessageManagementStore.test.tsx[24m[0m
+@admin:lint: [0m  [2m115:7[22m  [33mwarning[39m  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  [2m@typescript-eslint/no-floating-promises[22m[0m
+@admin:lint: [0m[0m
+@admin:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\admin\src\pages\notice-setup\notice-setup.util.ts[24m[0m
+@admin:lint: [0m  [2m25:7[22m  [33mwarning[39m  'NOTICE_DATE_PATTERN' is assigned a value but never used. Allowed unused vars must match /^_/u  [2munused-imports/no-unused-vars[22m[0m
+@admin:lint: [0m[0m
+@admin:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\admin\src\pages\procedure-management\ProcedureManagement.tsx[24m[0m
+@admin:lint: [0m  [2m83:6[22m  [33mwarning[39m  React Hook useEffect has missing dependencies: 'fetchStaticColumns' and 'initialized'. Either include them or remove the dependency array  [2mreact-hooks/exhaustive-deps[22m[0m
+@admin:lint: [0m[0m
+@admin:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\admin\src\pages\ui-catrgory-setup\UICategorySetup.tsx[24m[0m
+@admin:lint: [0m  [2m62:6[22m  [33mwarning[39m  React Hook useEffect has missing dependencies: 'fetchStaticColumns' and 'initialized'. Either include them or remove the dependency array  [2mreact-hooks/exhaustive-deps[22m[0m
+@admin:lint: [0m[0m
+@admin:lint: [0m[33m[1m✖ 25 problems (0 errors, 25 warnings)[22m[39m[0m
+@admin:lint: [0m[33m[1m[22m[39m[0m
+@web:type-check: cache miss, executing 92e4c483080318be
+@web:type-check: 
+@web:type-check: > @web@0.1.0 type-check C:\Projects\NSCM\nscm-fe\apps\web
+@web:type-check: > tsc --noEmit
+@web:type-check: 
+@master:lint: [0m[0m
+@master:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\master\src\components\contributeRateModal\ContributeRateModal.tsx[24m[0m
+@master:lint: [0m  [2m91:6[22m  [33mwarning[39m  React Hook useEffect has missing dependencies: 'fetchStaticColumns' and 'initialized'. Either include them or remove the dependency array  [2mreact-hooks/exhaustive-deps[22m[0m
+@master:lint: [0m[0m
+@master:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\master\src\components\contributeVersionModal\ContributeVersionModal.tsx[24m[0m
+@master:lint: [0m  [2m151:6[22m  [33mwarning[39m  React Hook useEffect has a missing dependency: 'fetchStaticColumns'. Either include it or remove the dependency array  [2mreact-hooks/exhaustive-deps[22m[0m
+@master:lint: [0m  [2m160:6[22m  [33mwarning[39m  React Hook useEffect has a missing dependency: 'setSelectedYear'. Either include it or remove the dependency array     [2mreact-hooks/exhaustive-deps[22m[0m
+@master:lint: [0m[0m
+@master:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\master\src\components\customerModal\CustomerModal.tsx[24m[0m
+@master:lint: [0m  [2m116:6[22m  [33mwarning[39m  React Hook useEffect has missing dependencies: 'divisionId', 'fetchStaticColumns', 'initialized', 'shipTo', and 'soldTo'. Either include them or remove the dependency array. If 'setSearchParam' needs the current value of 'divisionId', you can also switch to useReducer instead of useState and read 'divisionId' in the reducer  [2mreact-hooks/exhaustive-deps[22m[0m
+@master:lint: [0m[0m
+@master:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\master\src\components\itemByDivisionModal\ItemByDivisionModal.tsx[24m[0m
+@master:lint: [0m  [2m330:6[22m  [33mwarning[39m  React Hook useEffect has missing dependencies: 'divisionId', 'fetchStaticColumns', 'initialized', 'preSearchParams.deptId', 'preSearchParams.divisionId', 'preSearchParams.endCustomer', 'preSearchParams.itemId', 'preSearchParams.projectCode', and 'preSearchParams.salesSite'. Either include them or remove the dependency array. If 'setSearchParam' needs the current value of 'preSearchParams.divisionId', you can also switch to useReducer instead of useState and read 'preSearchParams.divisionId' in the reducer  [2mreact-hooks/exhaustive-deps[22m[0m
+@master:lint: [0m[0m
+@master:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\master\src\components\ownerByDivisionModal\OwnerByDivisionModal.tsx[24m[0m
+@master:lint: [0m  [2m163:6[22m  [33mwarning[39m  React Hook useEffect has missing dependencies: 'fetchStaticColumns', 'initialized', 'ownerId', and 'preSearchParams'. Either include them or remove the dependency array. If 'setModalFilters' needs the current value of 'ownerId', you can also switch to useReducer instead of useState and read 'ownerId' in the reducer  [2mreact-hooks/exhaustive-deps[22m[0m
+@master:lint: [0m[0m
+@master:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\master\src\components\ownerModal\OwnerModal.tsx[24m[0m
+@master:lint: [0m  [2m161:6[22m  [33mwarning[39m  React Hook useEffect has missing dependencies: 'fetchStaticColumns', 'initialized', and 'userData?.o_rc1'. Either include them or remove the dependency array  [2mreact-hooks/exhaustive-deps[22m[0m
+@master:lint: [0m[0m
+@master:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\master\src\components\projectByDivisionModal\ProjectByDivisionModal.tsx[24m[0m
+@master:lint: [0m  [2m204:6[22m  [33mwarning[39m  React Hook useEffect has missing dependencies: 'fetchStaticColumns', 'initialized', 'preSearchParams.deptId', 'preSearchParams.divisionId', 'preSearchParams.endCustomer', 'preSearchParams.projectCode', and 'preSearchParams.salesSite'. Either include them or remove the dependency array. If 'setSearchParam' needs the current value of 'preSearchParams.divisionId', you can also switch to useReducer instead of useState and read 'preSearchParams.divisionId' in the reducer  [2mreact-hooks/exhaustive-deps[22m[0m
+@master:lint: [0m[0m
+@master:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\master\src\components\projectModal\ProjectModal.tsx[24m[0m
+@master:lint: [0m  [2m107:6[22m  [33mwarning[39m  React Hook useEffect has missing dependencies: 'fetchStaticColumns', 'initialized', 'preProject', and 'preSearchParams'. Either include them or remove the dependency array. If 'setModalFilters' needs the current value of 'preProject', you can also switch to useReducer instead of useState and read 'preProject' in the reducer  [2mreact-hooks/exhaustive-deps[22m[0m
+@master:lint: [0m[0m
+@master:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\master\src\components\regionModal\RegionModal.tsx[24m[0m
+@master:lint: [0m  [2m121:6[22m  [33mwarning[39m  React Hook useEffect has missing dependencies: 'city', 'country', 'fetchStaticColumns', and 'initialized'. Either include them or remove the dependency array. If 'setSearchParam' needs the current value of 'country', you can also switch to useReducer instead of useState and read 'country' in the reducer  [2mreact-hooks/exhaustive-deps[22m[0m
+@master:lint: [0m[0m
+@master:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\master\src\components\storageLocationModal\StorageLocationModal.tsx[24m[0m
+@master:lint: [0m  [2m92:6[22m  [33mwarning[39m  React Hook useEffect has missing dependencies: 'divisionId', 'fetchStaticColumns', 'initialized', and 'storageId'. Either include them or remove the dependency array. If 'setSearchParam' needs the current value of 'divisionId', you can also switch to useReducer instead of useState and read 'divisionId' in the reducer  [2mreact-hooks/exhaustive-deps[22m[0m
+@master:lint: [0m[0m
+@master:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\master\src\components\teamModal\TeamModal.tsx[24m[0m
+@master:lint: [0m  [2m93:6[22m  [33mwarning[39m  React Hook useEffect has missing dependencies: 'fetchStaticColumns', 'initialized', 'teamId', and 'teamName'. Either include them or remove the dependency array. If 'setSearchParam' needs the current value of 'teamId', you can also switch to useReducer instead of useState and read 'teamId' in the reducer  [2mreact-hooks/exhaustive-deps[22m[0m
+@master:lint: [0m[0m
+@master:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\master\src\components\versionModal\versionModal.api.ts[24m[0m
+@master:lint: [0m  [2m19:9[22m  [33mwarning[39m  Unsafe assignment of an `any` value  [2m@typescript-eslint/no-unsafe-assignment[22m[0m
+@master:lint: [0m[0m
+@master:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\master\src\pages\contribute-main\ContributeMain.tsx[24m[0m
+@master:lint: [0m  [2m280:5[22m  [33mwarning[39m  Unexpected console statement. Only these console methods are allowed: warn, error                                      [2mno-console[22m[0m
+@master:lint: [0m  [2m282:6[22m  [33mwarning[39m  React Hook useEffect has a missing dependency: 'fetchStaticColumns'. Either include it or remove the dependency array  [2mreact-hooks/exhaustive-deps[22m[0m
+@master:lint: [0m[0m
+@master:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\master\src\pages\contribute-main\components\ContributeMainGrid.tsx[24m[0m
+@master:lint: [0m  [2m273:6[22m  [33mwarning[39m  React Hook useEffect has a missing dependency: 'gridRef'. Either include it or remove the dependency array  [2mreact-hooks/exhaustive-deps[22m[0m
+@master:lint: [0m  [2m280:6[22m  [33mwarning[39m  React Hook useEffect has a missing dependency: 'gridRef'. Either include it or remove the dependency array  [2mreact-hooks/exhaustive-deps[22m[0m
+@master:lint: [0m  [2m311:6[22m  [33mwarning[39m  React Hook useEffect has a missing dependency: 'gridRef'. Either include it or remove the dependency array  [2mreact-hooks/exhaustive-deps[22m[0m
+@master:lint: [0m  [2m359:6[22m  [33mwarning[39m  React Hook useEffect has a missing dependency: 'gridRef'. Either include it or remove the dependency array  [2mreact-hooks/exhaustive-deps[22m[0m
+@master:lint: [0m[0m
+@master:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\master\src\pages\contribute-main\components\SearchBar.tsx[24m[0m
+@master:lint: [0m  [2m81:6[22m  [33mwarning[39m  React Hook useEffect has a missing dependency: 'setSearchParams'. Either include it or remove the dependency array  [2mreact-hooks/exhaustive-deps[22m[0m
+@master:lint: [0m[0m
+@master:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\master\src\pages\contribute-view\ContributeView.tsx[24m[0m
+@master:lint: [0m  [2m121:6[22m  [33mwarning[39m  React Hook useEffect has missing dependencies: 'fetchStaticColumns', 'searchParams.versionNo', and 'setFilters'. Either include them or remove the dependency array             [2mreact-hooks/exhaustive-deps[22m[0m
+@master:lint: [0m  [2m159:6[22m  [33mwarning[39m  React Hook useEffect has missing dependencies: 'mainData', 'searchParams.compatibilityYn', 'setAlert', 't', and 'validCnt'. Either include them or remove the dependency array  [2mreact-hooks/exhaustive-deps[22m[0m
+@master:lint: [0m[0m
+@master:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\master\src\pages\contribute-view\components\ContributeViewForm.tsx[24m[0m
+@master:lint: [0m  [2m107:6[22m  [33mwarning[39m  React Hook useEffect has a missing dependency: 'setSearchParams'. Either include it or remove the dependency array  [2mreact-hooks/exhaustive-deps[22m[0m
+@master:lint: [0m[0m
+@master:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\master\src\pages\contribute-view\components\ContributeViewGrid.tsx[24m[0m
+@master:lint: [0m  [2m74:7[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@master:lint: [0m[0m
+@master:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\master\src\pages\contribute-view\components\modals\ContributeVersionModal.tsx[24m[0m
+@master:lint: [0m  [2m180:6[22m  [33mwarning[39m  React Hook useEffect has a missing dependency: 'onSearch'. Either include it or remove the dependency array  [2mreact-hooks/exhaustive-deps[22m[0m
+@master:lint: [0m[0m
+@master:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\master\src\pages\customer-forecast-master\CustomerFcstMaster.tsx[24m[0m
+@master:lint: [0m  [2m135:6[22m  [33mwarning[39m  React Hook useEffect has missing dependencies: 'fetchStaticColumns' and 'initialized'. Either include them or remove the dependency array  [2mreact-hooks/exhaustive-deps[22m[0m
+@master:lint: [0m[0m
+@master:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\master\src\pages\customer-forecast-master\componenets\CustomerFcstMasterForm.tsx[24m[0m
+@master:lint: [0m  [2m72:6[22m  [33mwarning[39m  React Hook useEffect has a missing dependency: 'setSearchParams'. Either include it or remove the dependency array  [2mreact-hooks/exhaustive-deps[22m[0m
+@master:lint: [0m[0m
+@master:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\master\src\pages\customer-forecast-master\useCustomerFcstMasterStore.ts[24m[0m
+@master:lint: [0m  [2m65:11[22m  [33mwarning[39m  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  [2m@typescript-eslint/no-floating-promises[22m[0m
+@master:lint: [0m[0m
+@master:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\master\src\pages\customer-model-mapping\CustomerModelMapping.tsx[24m[0m
+@master:lint: [0m  [2m66:6[22m  [33mwarning[39m  React Hook useEffect has missing dependencies: 'fetchStaticColumns' and 'initialized'. Either include them or remove the dependency array  [2mreact-hooks/exhaustive-deps[22m[0m
+@master:lint: [0m[0m
+@master:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\master\src\pages\erp-edi-master\ErpEdiMaster.tsx[24m[0m
+@master:lint: [0m  [2m295:9[22m  [33mwarning[39m  'handleInsert' is assigned a value but never used. Allowed unused vars must match /^_/u  [2munused-imports/no-unused-vars[22m[0m
+@master:lint: [0m  [2m487:9[22m  [33mwarning[39m  'handleSave' is assigned a value but never used. Allowed unused vars must match /^_/u    [2munused-imports/no-unused-vars[22m[0m
+@master:lint: [0m[0m
+@master:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\master\src\pages\sales-future-price\SalesFuturePrice.tsx[24m[0m
+@master:lint: [0m  [2m169:9[22m  [33mwarning[39m  'loading' is assigned a value but never used. Allowed unused vars must match /^_/u                                                                                  [2munused-imports/no-unused-vars[22m[0m
+@master:lint: [0m  [2m671:7[22m  [33mwarning[39m  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  [2m@typescript-eslint/no-floating-promises[22m[0m
+@master:lint: [0m[0m
+@master:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\master\src\pages\sales-future-price\components\SalesFuturePriceGrid.tsx[24m[0m
+@master:lint: [0m   [2m31:20[22m  [33mwarning[39m  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `SalesFuturePriceGrid.tsx` to same directory as `../SalesFuturePrice.module.scss` or consider making `../SalesFuturePrice.module.scss` a package  [2mimport/no-relative-parent-imports[22m[0m
+@master:lint: [0m  [2m408:7[22m   [33mwarning[39m  Forbidden non-null assertion                                                                                                                                                                                                                                                                         [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@master:lint: [0m  [2m994:6[22m   [33mwarning[39m  React Hook useEffect has a missing dependency: 'gridFilterRef'. Either include it or remove the dependency array                                                                                                                                                                                     [2mreact-hooks/exhaustive-deps[22m[0m
+@master:lint: [0m[0m
+@master:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\master\src\pages\sales-future-price\components\modals\ExchangeRateModal.tsx[24m[0m
+@master:lint: [0m  [2m152:19[22m  [33mwarning[39m  Forbidden non-null assertion                                                                                                                                        [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@master:lint: [0m  [2m194:7[22m   [33mwarning[39m  Forbidden non-null assertion                                                                                                                                        [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@master:lint: [0m  [2m374:5[22m   [33mwarning[39m  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  [2m@typescript-eslint/no-floating-promises[22m[0m
+@master:lint: [0m[0m
+@master:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\master\src\pages\sales-future-price\components\modals\PriceBatchInputModal.tsx[24m[0m
+@master:lint: [0m  [2m251:55[22m  [33mwarning[39m  Unexpected empty arrow function      [2m@typescript-eslint/no-empty-function[22m[0m
+@master:lint: [0m  [2m600:7[22m   [33mwarning[39m  Forbidden non-null assertion         [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@master:lint: [0m  [2m916:5[22m   [33mwarning[39m  Unsafe assignment of an `any` value  [2m@typescript-eslint/no-unsafe-assignment[22m[0m
+@master:lint: [0m  [2m921:7[22m   [33mwarning[39m  Unsafe assignment of an `any` value  [2m@typescript-eslint/no-unsafe-assignment[22m[0m
+@master:lint: [0m[0m
+@master:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\master\src\pages\sales-site-project-model\SalesSiteProjectModel.tsx[24m[0m
+@master:lint: [0m  [2m155:6[22m  [33mwarning[39m  React Hook useEffect has missing dependencies: 'fetchStaticColumns' and 'initialized'. Either include them or remove the dependency array  [2mreact-hooks/exhaustive-deps[22m[0m
+@master:lint: [0m[0m
+@master:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\master\src\pages\sales-site\SalesSite.tsx[24m[0m
+@master:lint: [0m  [2m202:6[22m  [33mwarning[39m  React Hook useEffect has missing dependencies: 'fetchStaticColumns' and 'initialized'. Either include them or remove the dependency array  [2mreact-hooks/exhaustive-deps[22m[0m
+@master:lint: [0m[0m
+@master:lint: [0m[33m[1m✖ 45 problems (0 errors, 45 warnings)[22m[39m[0m
+@master:lint: [0m[33m[1m[22m[39m[0m
+@demand:lint: [0m[0m
+@demand:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\demand\src\pages\business-plan\components\BusinessPlanGrid.tsx[24m[0m
+@demand:lint: [0m   [2m35:20[22m  [33mwarning[39m  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `BusinessPlanGrid.tsx` to same directory as `../BusinessPlan.module.scss` or consider making `../BusinessPlan.module.scss` a package  [2mimport/no-relative-parent-imports[22m[0m
+@demand:lint: [0m  [2m264:17[22m  [33mwarning[39m  Forbidden non-null assertion                                                                                                                                                                                                                                                             [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@demand:lint: [0m  [2m282:19[22m  [33mwarning[39m  Forbidden non-null assertion                                                                                                                                                                                                                                                             [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@demand:lint: [0m  [2m290:21[22m  [33mwarning[39m  Forbidden non-null assertion                                                                                                                                                                                                                                                             [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@demand:lint: [0m  [2m353:7[22m   [33mwarning[39m  Forbidden non-null assertion                                                                                                                                                                                                                                                             [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@demand:lint: [0m  [2m374:19[22m  [33mwarning[39m  Forbidden non-null assertion                                                                                                                                                                                                                                                             [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@demand:lint: [0m[0m
+@demand:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\demand\src\pages\business-plan\components\modals\ExchangeRateModal.tsx[24m[0m
+@demand:lint: [0m  [2m197:19[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@demand:lint: [0m  [2m314:7[22m   [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@demand:lint: [0m[0m
+@demand:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\demand\src\pages\business-plan\components\modals\MeasureSelectModal.tsx[24m[0m
+@demand:lint: [0m  [2m8:20[22m  [33mwarning[39m  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `MeasureSelectModal.tsx` to same directory as `../../BusinessPlan.module.scss` or consider making `../../BusinessPlan.module.scss` a package  [2mimport/no-relative-parent-imports[22m[0m
+@demand:lint: [0m[0m
+@demand:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\demand\src\pages\business-plan\components\modals\ReplaceByCutoffModal.tsx[24m[0m
+@demand:lint: [0m  [2m20:20[22m  [33mwarning[39m  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `ReplaceByCutoffModal.tsx` to same directory as `../../BusinessPlan.module.scss` or consider making `../../BusinessPlan.module.scss` a package  [2mimport/no-relative-parent-imports[22m[0m
+@demand:lint: [0m[0m
+@demand:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\demand\src\pages\business-plan\components\modals\VersionCutoffModal.tsx[24m[0m
+@demand:lint: [0m  [2m20:20[22m  [33mwarning[39m  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `VersionCutoffModal.tsx` to same directory as `../../BusinessPlan.module.scss` or consider making `../../BusinessPlan.module.scss` a package  [2mimport/no-relative-parent-imports[22m[0m
+@demand:lint: [0m[0m
+@demand:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\demand\src\pages\business-plan\utils\business-plan.spread.ts[24m[0m
+@demand:lint: [0m  [2m115:18[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@demand:lint: [0m  [2m122:18[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@demand:lint: [0m  [2m172:18[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@demand:lint: [0m[0m
+@demand:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\demand\src\pages\demand-manager\DemandManager.tsx[24m[0m
+@demand:lint: [0m  [2m183:13[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@demand:lint: [0m  [2m299:17[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@demand:lint: [0m[0m
+@demand:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\demand\src\pages\demand-manager\components\DemandManagerGrid.tsx[24m[0m
+@demand:lint: [0m  [2m20:20[22m  [33mwarning[39m  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `DemandManagerGrid.tsx` to same directory as `../DemandManager.module.scss` or consider making `../DemandManager.module.scss` a package  [2mimport/no-relative-parent-imports[22m[0m
+@demand:lint: [0m[0m
+@demand:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\demand\src\pages\demand-manager\components\modals\VersionPopupModal.tsx[24m[0m
+@demand:lint: [0m  [2m30:20[22m  [33mwarning[39m  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `VersionPopupModal.tsx` to same directory as `../../DemandManager.module.scss` or consider making `../../DemandManager.module.scss` a package  [2mimport/no-relative-parent-imports[22m[0m
+@demand:lint: [0m[0m
+@demand:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\demand\src\pages\demand-manager\utils\demand-manager.merge.ts[24m[0m
+@demand:lint: [0m  [2m59:13[22m  [33mwarning[39m  Unsafe assignment of an `any` value  [2m@typescript-eslint/no-unsafe-assignment[22m[0m
+@demand:lint: [0m  [2m60:13[22m  [33mwarning[39m  Unsafe assignment of an `any` value  [2m@typescript-eslint/no-unsafe-assignment[22m[0m
+@demand:lint: [0m[0m
+@demand:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\demand\src\pages\etc-sales-reports\EtcSalesReports.tsx[24m[0m
+@demand:lint: [0m  [2m245:9[22m   [33mwarning[39m  'hasPendingChanges' is assigned a value but never used. Allowed unused vars must match /^_/u  [2munused-imports/no-unused-vars[22m[0m
+@demand:lint: [0m  [2m252:49[22m  [33mwarning[39m  Forbidden non-null assertion                                                                  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@demand:lint: [0m  [2m366:49[22m  [33mwarning[39m  Forbidden non-null assertion                                                                  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@demand:lint: [0m  [2m493:20[22m  [33mwarning[39m  Forbidden non-null assertion                                                                  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@demand:lint: [0m  [2m499:49[22m  [33mwarning[39m  Forbidden non-null assertion                                                                  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@demand:lint: [0m  [2m530:7[22m   [33mwarning[39m  Forbidden non-null assertion                                                                  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@demand:lint: [0m[0m
+@demand:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\demand\src\pages\etc-sales-reports\components\EtcSalesReportsGrid.tsx[24m[0m
+@demand:lint: [0m  [2m16:20[22m  [33mwarning[39m  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `EtcSalesReportsGrid.tsx` to same directory as `../EtcSalesReports.module.scss` or consider making `../EtcSalesReports.module.scss` a package  [2mimport/no-relative-parent-imports[22m[0m
+@demand:lint: [0m[0m
+@demand:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\demand\src\pages\forecast-price\components\ForecastPriceForm.tsx[24m[0m
+@demand:lint: [0m  [2m82:9[22m  [33mwarning[39m  'deptIds' is assigned a value but never used. Allowed unused vars must match /^_/u       [2munused-imports/no-unused-vars[22m[0m
+@demand:lint: [0m  [2m83:9[22m  [33mwarning[39m  'endCustomers' is assigned a value but never used. Allowed unused vars must match /^_/u  [2munused-imports/no-unused-vars[22m[0m
+@demand:lint: [0m[0m
+@demand:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\demand\src\pages\forecast-price\components\ForecastPriceGrid.tsx[24m[0m
+@demand:lint: [0m  [2m542:64[22m  [33mwarning[39m  Strings must use singlequote                                                                                                                                         [2mquotes[22m[0m
+@demand:lint: [0m  [2m627:6[22m   [33mwarning[39m  React Hook useEffect has missing dependencies: 'applyCellProdSites', 'applyEditMeasures', and 'applySalesSites'. Either include them or remove the dependency array  [2mreact-hooks/exhaustive-deps[22m[0m
+@demand:lint: [0m[0m
+@demand:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\demand\src\pages\forecast-price\components\modals\ExchangeRateModal.tsx[24m[0m
+@demand:lint: [0m  [2m263:19[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@demand:lint: [0m  [2m326:7[22m   [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@demand:lint: [0m[0m
+@demand:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\demand\src\pages\forecast-price\utils\forecast-price.combo.ts[24m[0m
+@demand:lint: [0m  [2m13:68[22m  [33mwarning[39m  Strings must use singlequote  [2mquotes[22m[0m
+@demand:lint: [0m[0m
+@demand:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\demand\src\pages\metal-link-price\MetalLinkPrice.tsx[24m[0m
+@demand:lint: [0m  [2m44:9[22m  [33mwarning[39m  'setToast' is assigned a value but never used. Allowed unused vars must match /^_/u  [2munused-imports/no-unused-vars[22m[0m
+@demand:lint: [0m[0m
+@demand:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\demand\src\pages\mkt-fcst\MktFcst.tsx[24m[0m
+@demand:lint: [0m  [2m245:9[22m  [33mwarning[39m  'dmTimeBlocked' is assigned a value but never used. Allowed unused vars must match /^_/u  [2munused-imports/no-unused-vars[22m[0m
+@demand:lint: [0m[0m
+@demand:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\demand\src\pages\mkt-fcst\components\MktFcstGrid.tsx[24m[0m
+@demand:lint: [0m    [2m36:20[22m  [33mwarning[39m  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `MktFcstGrid.tsx` to same directory as `../MktFcst.module.scss` or consider making `../MktFcst.module.scss` a package  [2mimport/no-relative-parent-imports[22m[0m
+@demand:lint: [0m   [2m571:19[22m  [33mwarning[39m  Forbidden non-null assertion                                                                                                                                                                                                                                              [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@demand:lint: [0m   [2m605:15[22m  [33mwarning[39m  Forbidden non-null assertion                                                                                                                                                                                                                                              [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@demand:lint: [0m   [2m652:30[22m  [33mwarning[39m  'idx' is defined but never used. Allowed unused args must match /^_/u                                                                                                                                                                                                     [2munused-imports/no-unused-vars[22m[0m
+@demand:lint: [0m  [2m1732:6[22m   [33mwarning[39m  React Hook useEffect has missing dependencies: 'editTrackerRef', 'editable', 'fetchRowParamCombo', 'gridRef', 'isAsBoundRow', 'isAsFromSiteEditable', 'setAlert', and 't'. Either include them or remove the dependency array                                             [2mreact-hooks/exhaustive-deps[22m[0m
+@demand:lint: [0m[0m
+@demand:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\demand\src\pages\mkt-fcst\components\modals\PrHistoryModal.tsx[24m[0m
+@demand:lint: [0m  [2m11:20[22m  [33mwarning[39m  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `PrHistoryModal.tsx` to same directory as `../../MktFcst.module.scss` or consider making `../../MktFcst.module.scss` a package  [2mimport/no-relative-parent-imports[22m[0m
+@demand:lint: [0m[0m
+@demand:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\demand\src\pages\mkt-fcst\components\modals\PrModal.tsx[24m[0m
+@demand:lint: [0m  [2m14:20[22m  [33mwarning[39m  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `PrModal.tsx` to same directory as `../../MktFcst.module.scss` or consider making `../../MktFcst.module.scss` a package  [2mimport/no-relative-parent-imports[22m[0m
+@demand:lint: [0m[0m
+@demand:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\demand\src\pages\mkt-fcst\components\modals\SspSyncCompareModal.tsx[24m[0m
+@demand:lint: [0m  [2m9:20[22m  [33mwarning[39m  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `SspSyncCompareModal.tsx` to same directory as `../../MktFcst.module.scss` or consider making `../../MktFcst.module.scss` a package  [2mimport/no-relative-parent-imports[22m[0m
+@demand:lint: [0m[0m
+@demand:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\demand\src\pages\mkt-fcst\components\modals\SspSyncResultModal.tsx[24m[0m
+@demand:lint: [0m  [2m7:20[22m  [33mwarning[39m  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `SspSyncResultModal.tsx` to same directory as `../../MktFcst.module.scss` or consider making `../../MktFcst.module.scss` a package  [2mimport/no-relative-parent-imports[22m[0m
+@demand:lint: [0m[0m
+@demand:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\demand\src\pages\mkt-fcst\utils\mkt-fcst.core.test.ts[24m[0m
+@demand:lint: [0m  [2m153:12[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@demand:lint: [0m  [2m154:12[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@demand:lint: [0m  [2m155:12[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@demand:lint: [0m  [2m156:12[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@demand:lint: [0m[0m
+@demand:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\demand\src\pages\sales-monitoring\SalesMonitoring.tsx[24m[0m
+@demand:lint: [0m  [2m44:9[22m  [33mwarning[39m  'setToast' is assigned a value but never used. Allowed unused vars must match /^_/u  [2munused-imports/no-unused-vars[22m[0m
+@demand:lint: [0m[0m
+@demand:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\demand\src\pages\sales-monitoring\components\SalesMonitoringGrid.tsx[24m[0m
+@demand:lint: [0m   [2m23:20[22m  [33mwarning[39m  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `SalesMonitoringGrid.tsx` to same directory as `../SalesMonitoring.module.scss` or consider making `../SalesMonitoring.module.scss` a package  [2mimport/no-relative-parent-imports[22m[0m
+@demand:lint: [0m  [2m184:17[22m  [33mwarning[39m  Forbidden non-null assertion                                                                                                                                                                                                                                                                      [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@demand:lint: [0m  [2m203:15[22m  [33mwarning[39m  Forbidden non-null assertion                                                                                                                                                                                                                                                                      [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@demand:lint: [0m  [2m278:7[22m   [33mwarning[39m  Forbidden non-null assertion                                                                                                                                                                                                                                                                      [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@demand:lint: [0m[0m
+@demand:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\demand\src\pages\sales-reports\SalesReports.tsx[24m[0m
+@demand:lint: [0m  [2m296:49[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@demand:lint: [0m  [2m473:20[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@demand:lint: [0m  [2m481:20[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@demand:lint: [0m  [2m592:49[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@demand:lint: [0m  [2m599:20[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@demand:lint: [0m  [2m612:20[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@demand:lint: [0m[0m
+@demand:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\demand\src\pages\sales-reports\components\SalesReportsGrid.tsx[24m[0m
+@demand:lint: [0m  [2m15:20[22m  [33mwarning[39m  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `SalesReportsGrid.tsx` to same directory as `../SalesReports.module.scss` or consider making `../SalesReports.module.scss` a package  [2mimport/no-relative-parent-imports[22m[0m
+@demand:lint: [0m[0m
+@demand:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\demand\src\pages\sales-reports\components\modals\ExchangeRateModal.tsx[24m[0m
+@demand:lint: [0m  [2m329:7[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+@demand:lint: [0m[0m
+@demand:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\demand\src\pages\sales-reports\components\modals\TextboxModal.tsx[24m[0m
+@demand:lint: [0m  [2m11:20[22m  [33mwarning[39m  Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `TextboxModal.tsx` to same directory as `../../SalesReports.module.scss` or consider making `../../SalesReports.module.scss` a package  [2mimport/no-relative-parent-imports[22m[0m
+@demand:lint: [0m[0m
+@demand:lint: [0m[4mC:\Projects\NSCM\nscm-fe\features\demand\src\pages\sales-reports\utils\sales-reports.api.test.ts[24m[0m
+@demand:lint: [0m  [2m24:6[22m  [33mwarning[39m  Strings must use singlequote  [2mquotes[22m[0m
+@demand:lint: [0m  [2m83:6[22m  [33mwarning[39m  Strings must use singlequote  [2mquotes[22m[0m
+@demand:lint: [0m[0m
+@demand:lint: [0m[33m[1m✖ 65 problems (0 errors, 65 warnings)[22m[39m[0m
+@demand:lint: [0m[33m[1m[22m[39m[33m[1m  0 errors and 4 warnings potentially fixable with the `--fix` option.[22m[39m[0m
+@demand:lint: [0m[33m[1m[22m[39m[0m
+
+ Tasks:    26 successful, 26 total
+Cached:    11 cached, 26 total
+  Time:    3m50.17s 
+

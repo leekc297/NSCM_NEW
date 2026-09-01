@@ -11,7 +11,7 @@ import {
   MergeManager,
 } from '@mescius/wijmo.grid';
 import { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { type MutableRefObject, useEffect, useMemo, useRef, type Ref } from 'react';
+import { type MutableRefObject, useCallback, useEffect, useMemo, useRef, type Ref } from 'react';
 
 import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
@@ -205,7 +205,7 @@ export const SalesFuturePriceGrid = ({
   // ⭐ division 필터는 SP(PR_GET_SHEET_COLUMN_LIST)가 SCM_MST_SHEET_COLUMNS.DIVISION_ID 컬럼으로
   //   서버측 처리 (store.fetchStaticColumns(divisionId), 2026-07-07 — attribute3 미사용).
   //   FE 는 visible 만 필터. (divisionId 변경 시 store 가 컬럼 재조회 → staticColumns 갱신.)
-  void divisionId; // division 은 SP 서버측 필터로 이관 — prop 은 부모 호환/미래 cascade 용 보존
+  // divisionId 는 컬럼 조회에는 쓰지 않는다(SP 서버측 필터). 아래 Team 콤보 파라미터로만 쓴다.
   const visibleColumns = useMemo(() => mergedColumns.filter(c => c.visible), [mergedColumns]);
   const fixedBindings = useMemo(() => visibleColumns.map(c => c.binding), [visibleColumns]);
 
@@ -222,6 +222,34 @@ export const SalesFuturePriceGrid = ({
   const comboResults = useTabComboQueries({
     filters: comboColumns.map(c => c._comboKey as string),
   });
+
+  // Team(DEPT_ID) 표시명 — 조회조건 Team 과 같은 원천 'TeambyDivision' 을 division 파라미터와 함께
+  //   따로 조회해 표시·편집 후보를 모두 이 원천으로 쓴다.
+  //   위 메타 콤보 조회는 comboId 문자열만 넘기므로 파라미터가 붙지 않는다. TeambyDivision 은 40 이
+  //   owner 경로 전용 분기라 divisionId 미전달('ALL' 분기)이면 팀이 반환되지 않아 dataMap 이 비고
+  //   DEPT_ID 코드가 그대로 노출된다(사용자 보고 2026-08-26). 메타 콤보가 'DeptId' 계열이면 코드
+  //   공간 자체가 달라(SCM_MST_SITE.DEPT_ID) 역시 매핑이 안 잡힌다 — DMF0071 BusinessPlanGrid 와 동일 사고.
+  //   주의: BE makeComboQuery 는 raw 문자열 치환이라 작은따옴표를 포함해 넘기는 계약이다.
+  //   금지: 편집 후보만 메타 콤보로 되돌리기 — 거기서 고른 CODE 는 표시 dataMap 에 없어 편집 종료
+  //   직후 다시 코드로 노출된다.
+  const [teamComboRows] = useTabComboQueries({
+    filters: [{ comboId: 'TeambyDivision', divisionId: `'${divisionId ?? ''}'` }] as never,
+  });
+  const teamSig = `${divisionId}#${teamComboRows?.length ?? 'x'}`;
+  // division 필터 + CODE dedup 을 거친 Team 후보 원본 — dataMap(표시) 과 cascade 스왑(편집) 공용.
+  const teamRows = useMemo<Record<string, unknown>[]>(() => {
+    const arr = ((teamComboRows ?? []) as unknown as Record<string, string>[]).filter(
+      r => !r.DIVISION_ID || !divisionId || r.DIVISION_ID === divisionId
+    );
+    // 같은 DEPT_ID 가 division 별로 중복 반환될 수 있어 CODE 기준 dedup.
+    return [...new Map(arr.map(r => [String(r.CODE ?? ''), r])).values()];
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [teamSig]);
+  const teamDataMap = useMemo<DataMap | null>(
+    () => (teamRows.length > 0 ? new DataMap(teamRows, 'CODE', 'NAME') : null),
+    [teamRows]
+  );
+
   // dataMap 재생성 안정화 — comboId + row count 시그니처가 바뀔 때만 rebuild
   //   (react-query 의 data 참조는 갱신 전까지 안정적이라, count 변화로 로드 완료를 감지).
   const comboSig = comboColumns
@@ -233,9 +261,13 @@ export const SalesFuturePriceGrid = ({
       const arr = comboResults[i] ?? [];
       m[c.binding] = arr.length > 0 ? new DataMap(arr, 'CODE', 'NAME') : null;
     });
+    // Team 표시 오버라이드 — 메타 콤보로는 코드가 안 풀린다(위 teamDataMap 주석 참조).
+    //   DEPT_ID 가 콤보 컬럼이 아니어도(메타에서 cell type 삭제) 등록한다 — updatedLayout 은
+    //   binding 으로 dataMap 을 붙이므로 읽기전용 컬럼도 이름으로 표시된다.
+    if (teamDataMap) m.DEPT_ID = teamDataMap;
     return m;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [comboSig]);
+  }, [comboSig, teamDataMap]);
 
   // ⭐ cascade (hook #59 / AS-IS spdMain_ComboSelChange L2612~2757) — 편집 진입 시 행 컨텍스트
   //   dataMap 스왑에 쓰는 콤보 원본 rows + 전체 dataMap 원복용 ref 미러 (핸들러 useEffect deps 밖 참조).
@@ -246,6 +278,9 @@ export const SalesFuturePriceGrid = ({
     comboColumns.forEach((c, i) => {
       rowsByBinding[c.binding] = (comboResults[i] ?? []) as unknown as Record<string, unknown>[];
     });
+    // Team — cascade 스왑 원본도 표시와 같은 원천(TeambyDivision)으로 덮는다.
+    //   다른 원천 rows 를 남겨두면 편집 후보가 다른 코드 공간이라 선택 직후 코드가 노출된다.
+    if (teamRows.length > 0) rowsByBinding.DEPT_ID = teamRows;
     comboRowsRef.current = rowsByBinding;
     dataMapsRef.current = dataMaps;
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -288,6 +323,20 @@ export const SalesFuturePriceGrid = ({
     ).padStart(2, '0')}`;
     return { week: ymd, month: ymd.slice(0, 6) };
   }, []);
+
+  // 동적 컬럼 과거 여부 — 컬럼 날짜 < 이번 주 월요일.
+  //   Monthly 도 SP 가 컬럼 키를 '월 1일' 8자리 날짜(M_20260801)로 내려주므로 Weekly 와 같은 기준을 쓴다.
+  //   AS-IS 정합(2026-08-26 실측): 오늘이 8/26 이면 8월(8/1)은 이번 주 월요일(8/24) 이전이라 편집불가고
+  //   9월부터 편집 가능하다. 종전처럼 6자리 month 끼리 비교하면 '202608' 이 '20260801' 보다 작아
+  //   현재월이 미래로 판정돼 8월이 편집가능(노랑)으로 열렸다.
+  //   SP 가 6자리(M_yyyymm)로 내려주는 등록본을 대비해 길이로 분기한다.
+  const isPastDynCol = useCallback(
+    (binding: string): boolean => {
+      const tag = binding.slice(2);
+      return tag.length <= 6 ? tag < todayCutoff.month : tag < todayCutoff.week;
+    },
+    [todayCutoff]
+  );
 
   // ⭐ combo dataMap 적용 = 아래 헤더높이와 동일한 persistent `updatedLayout` 핸들러에 통합(L621~).
   //   이유: 공유 DataGrid 가 매 렌더 columnGroups 재적용 시 컬럼의 dataMap 을 undefined 로 덮음
@@ -373,6 +422,16 @@ export const SalesFuturePriceGrid = ({
         _display: true,
       });
     }
+    // Monthly 는 2단(년월 + SUM) — AS-IS 헤더와 동일. 월 컬럼은 년월당 1개뿐이라 주차 그룹 아래 다시
+    //   일자 leaf 를 두면 3단이 되고, 그 leaf 헤더가 비어 공용 wrapper 가 binding(M_20260801)을
+    //   그대로 표시한다(사용자 보고 2026-08-26). 중간 그룹 없이 leaf 헤더를 'SUM' 으로 둔다.
+    if (bucketPrefix === 'M') {
+      return [...ymMap.values()].map(bucket => ({
+        header: bucket.ymLabel,
+        align: 'center',
+        columns: [...bucket.weeks.values()].flat().map(col => ({ ...col, header: 'SUM' })),
+      }));
+    }
     return [...ymMap.values()].map(bucket => ({
       header: bucket.ymLabel,
       align: 'center',
@@ -382,7 +441,7 @@ export const SalesFuturePriceGrid = ({
         columns: dayCols,
       })),
     }));
-  }, [dynBindings]);
+  }, [dynBindings, bucketPrefix]);
 
   // ⭐ grid 핸들러 + mergeManager useEffect 분리 등록.
   //    DataGrid wrapper 의 자동 기능 (setEditableColumns / setSortableColumns / formatItem default 등) 보존.
@@ -432,10 +491,7 @@ export const SalesFuturePriceGrid = ({
         // ⭐ backcolor 규칙 (사용자 명시 2026-06-28):
         //   - 과거 주차/월은 MEASURE 와 무관하게 Gray(편집불가, AS-IS L893~921).
         //   - 현재/미래 주차/월은 LOC 행만 Yellow(편집가능), 비-LOC(RTF/KRW/USD)는 White.
-        const tag = col.binding.slice(2);
-        const isPast = col.binding.startsWith('M_')
-          ? tag < todayCutoff.month
-          : tag < todayCutoff.week;
+        const isPast = isPastDynCol(col.binding);
         if (!isLocRow) {
           toggleClass(e.cell, 'wj-cell-editable', false);
           toggleClass(e.cell, 'wj-cell-non-editable', isPast);
@@ -577,9 +633,7 @@ export const SalesFuturePriceGrid = ({
           return;
         }
         // AS-IS L893~921 — LOC 라도 과거 주차/월(이번 주 월요일 이전)은 lock (formatItem gray 와 동일 cutoff).
-        const tag = binding.slice(2);
-        const isPast = binding.startsWith('M_') ? tag < todayCutoff.month : tag < todayCutoff.week;
-        if (isPast) {
+        if (isPastDynCol(binding)) {
           e.cancel = true; // 과거 주차/월 편집 차단
           return;
         }
@@ -606,9 +660,7 @@ export const SalesFuturePriceGrid = ({
       if (!/^[WM]_/.test(binding)) return; // 정적 col 은 wrapper 판정 유지 (insert IM/IO 는 wrapper 가 이미 허용)
       const row = s.rows[e.row].dataItem as FuturePriceRow | undefined;
       if (String(row?.MEASURE ?? '') !== 'LOC') return; // LOC 행만
-      const tag = binding.slice(2);
-      const isPast = binding.startsWith('M_') ? tag < todayCutoff.month : tag < todayCutoff.week;
-      if (isPast) return; // 과거 주차/월
+      if (isPastDynCol(binding)) return; // 과거 주차/월
       if (String(row?.CURRENCY ?? '').trim() === '') return; // 통화 미설정 (alert 는 편집 진입 시에만)
       e.cancel = false; // LOC + 현재/미래 + 통화 있음 → 붙여넣기 허용
     };
@@ -872,7 +924,7 @@ export const SalesFuturePriceGrid = ({
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [visibleColumns, dynBindings, onPopupCellDblClick, todayCutoff]);
+  }, [visibleColumns, dynBindings, onPopupCellDblClick, todayCutoff, isPastDynCol]);
 
   // ⭐ hook #93 P-B — 다단 헤더 총높이 = 48px 고정 (1단 48 / 2단 24×2 / 3단 16×3).
   //   별도 단일 효과(merge/format 효과와 분리 = 무간섭). height 조작은 오직 이 한 곳.

@@ -138,7 +138,7 @@ export const useCascadeFields = <V extends object>({
   // levels 순서대로 만든 엘리먼트. 화면이 이 중 필요한 것만 골라 원하는 자리에 꽂아도
   // 위 cascade 계산에는 영향이 없다 — 렌더 위치와 계산 순서는 분리돼 있다.
   const fields = resolved.map((level, i) => {
-    const { key, field, preset, label, disabled } = level;
+    const { key, field, preset, label, disabled, sortBy } = level;
     return (
       <Grid key={key} size={level.gridSize ?? gridSize ?? 4}>
         <FormItem
@@ -153,6 +153,7 @@ export const useCascadeFields = <V extends object>({
               useClearIcon={preset.allOption}
               limitTags={1}
               disabled={disabled}
+              sortBy={sortBy}
               value={readValue(value, field)}
               options={optionsByLevel[i]}
               onChange={(_, options) => handleChange(i, String(options ?? ''))}

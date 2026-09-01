@@ -27,9 +27,13 @@ const commonI18nConfig: InitOptions = {
     // version: Date.now(), // 초기 로드 시점의 타임스탬프
   },
 
-  // 리소스가 로드되지 않았을 때 서스펜스를 사용할지 여부
+  // 리소스가 로드되지 않았을 때 서스펜스를 사용할지 여부.
+  // 금지: true 로 되돌리지 말 것 — Header 는 MainLayout 이 eager import 라 Suspense 경계 밖에 있다
+  //   (경계는 LazyLoader/ViewContainer 안쪽 페이지에만 있음). 언어 전환으로 {lng}.json 을 새로
+  //   받는 동안 Header 의 useTranslation 이 suspend 하면 받아줄 fallback 이 없다.
+  //   false 면 t() 가 그동안 호출부 fallback 인자를 돌려주고 로드 완료 시 자연스럽게 교체된다.
   react: {
-    useSuspense: true,
+    useSuspense: false,
   },
 };
 

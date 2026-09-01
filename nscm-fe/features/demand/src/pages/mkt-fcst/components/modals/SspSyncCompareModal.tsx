@@ -1,5 +1,5 @@
 import type { FlexGrid } from '@mescius/wijmo.grid';
-import { useRef } from 'react';
+import { useMemo, useRef } from 'react';
 
 import { DataGrid, CustomDialog } from '@shared/components';
 import { useTabProcQuery } from '@shared/hooks';
@@ -35,16 +35,23 @@ export const SspSyncCompareModal = ({ open, modalClose, params }: SspSyncCompare
   const { t } = useTranslation();
   const gridRef = useRef<FlexGrid<ResponseData<MENU_ID, SHEETS.SSP_COMPARE>>>();
 
-  const filters = params ?? {
-    divisionId: '',
-    scmSiteId: '',
-    projectCode: '',
-    itemId: '',
-    domExp: '',
-    fcstType: '',
-    incoterms: '',
-    yyyymmdd: '',
-  };
+  // useTabProcQuery 는 filters 참조가 바뀌면 캐시를 버리고 재조회한다. params 가
+  // null 인 동안 fallback 객체를 매 렌더 새로 만들면 값이 그대로여도 참조가 계속
+  // 바뀌므로 useMemo 로 참조를 params 에 고정한다.
+  const filters = useMemo(
+    () =>
+      params ?? {
+        divisionId: '',
+        scmSiteId: '',
+        projectCode: '',
+        itemId: '',
+        domExp: '',
+        fcstType: '',
+        incoterms: '',
+        yyyymmdd: '',
+      },
+    [params]
+  );
 
   const { data } = useTabProcQuery<MENU_ID, SHEETS.SSP_COMPARE>({
     menuId: MENU_ID,

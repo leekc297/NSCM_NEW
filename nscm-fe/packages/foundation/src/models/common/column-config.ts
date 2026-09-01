@@ -25,6 +25,12 @@ export interface RawFlexGridColumnConfig {
   sClsLblNm?: string;
   lClsLblNm?: string;
   dataMap?: ComboResponse[];
+  /**
+   * 행 파라미터 콤보(PARAM10='D') 조회 결과 — 행 값 조합 키 -> 그 조합의 후보 행.
+   * admin 메타에서 오는 값이 아니라 DataGrid 가 조회 후 주입한다(dataMap 과 같은 성격).
+   * 키가 없으면 아직 조회 전, 빈 배열이면 0건이다. 둘을 구분해서 다뤄야 한다.
+   */
+  rowParamRows?: Record<string, ComboResponse[]>;
   allowMerging?: boolean;
   attribute1?: string;
   attribute2?: string;

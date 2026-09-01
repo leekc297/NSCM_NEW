@@ -25,8 +25,8 @@ export interface ComboResponse {
 //   - 값 안의 홑따옴표는 '' 로 이스케이프한다.
 export const quoteComboValue = (value: string | undefined): string => {
   const trimmed = (value ?? '').trim();
-  if (trimmed.length >= 2 && trimmed.startsWith("'") && trimmed.endsWith("'")) return trimmed;
-  return `'${trimmed.replace(/'/g, "''")}'`;
+  if (trimmed.length >= 2 && trimmed.startsWith('\'') && trimmed.endsWith('\'')) return trimmed;
+  return `'${trimmed.replace(/'/g, '\'\'')}'`;
 };
 
 export const quoteComboParams = (params: ComboParam): ComboParam => {

@@ -78,6 +78,7 @@
 | 저장 시 **ORA-01400** (NOT NULL 위반) — AS-IS 는 정상 저장 | NOT NULL 컬럼에 `NVL(x,'')`(=NULL) 대입. 문자 `NVL(x,'-')` / 숫자 `NVL(x,0)` 로 보정. DATE 에 `TO_CHAR(SYSDATE,..)` 는 ORA-01861 | **oracle-null-sentinel-and-notnull-default(#119)** |
 | BE 응답 `-9994` / 로그 `InvocationTargetException: null` | **래퍼가 실오류를 가림** — `SCM_COM_SYS_LOG.EXCT_MSG_CTN`(전체 ORA 체인) 또는 BE 콘솔 `Caused by:` 로 확보 (SCM_COM_SQL_LOG.EXCEPTION 은 null 로 잘림) | sp-exception-handler-debug-friendly §4.5 |
 | 업로드 기간(동적) 컬럼 값이 스테이징에서 전부 빈값 → 'Invalid ... Bucket' 류 검증 실패 | `SCM_ADM_EXCEL_COLUMNS.HEADER_CONTENT` 파이프 수 < 파일 컬럼 수 — BE 가 파이프 수만큼만 매핑(초과분 절단). 사내↔클라우드 메타 불일치 1순위 | 사내값 대조 후 UPDATE 동기 (DMF0014 13_HEADER_SYNC 선례) |
+| **조회 옵션/필터가 무효** (체크·지정해도 건수 동일 — 배선·파라미터·필터 블록은 전부 실존) | **변환 단순화** — 필터 의미가 AS-IS 와 다름 (예: AS-IS 키 단위 `NOT EXISTS+SUM(QTY)<>0` → 셀 단위 `WHERE QTY=0` DELETE). **형제 proc(_CURRENT 등)에 올바른 변환이 실존**할 수 있음 — 동형 SP 대조가 최단 진단. 판정은 증상 재현(N/Y 건수 실측)으로만 | [E20260831-QTYKEY] DMF0082 실사고 + hook #149 (존재 ≠ 동작) |
 
 ## §4 자기 점검 (작업 종료 직전)
 

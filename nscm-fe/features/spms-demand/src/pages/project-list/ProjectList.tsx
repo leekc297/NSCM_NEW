@@ -12,29 +12,23 @@ import { useMessageStore } from '@shared/stores';
 
 // ⭐ 권한관리 모달 = SDM1010 공용 승격분 (features/sdm/src/components — 모달 내부 MENU_ID SDM1010 유지)
 import { AuthManagementPopup } from '../../components/auth-management-popup';
+import { runPerRowProc } from '../../lib/call-proc';
+import { collectCheckedRows } from '../../lib/grid';
 
 import { ProjectListForm } from './components/ProjectListForm';
 import { ProjectListGrid } from './components/ProjectListGrid';
-import {
-  BTN,
-  MENU_ID,
-  MSG,
-  PERIOD_DEFAULT_FILTERS,
-  REQ_CHECK_BINDINGS,
-  SHEETS,
-} from './project-list.constants';
+import { BTN, MENU_ID, MSG, REQ_CHECK_BINDINGS, SHEETS } from './project-list.constants';
 import type { MainRow, ReqCheckOrigin } from './project-list.types';
 import { useProjectListStore } from './useProjectListStore';
-import type { CallProcResult } from './utils/project-list.api';
 import { callReqProjectAuth, callReqProjectReg } from './utils/project-list.api';
 import { canOpenAuthMgmt, canReqAuth, hasCheckedReq } from './utils/project-list.editLock';
-import { defaultRegCompRange, toReqPayload, validateSearch } from './utils/project-list.validate';
+import { toReqPayload, validateSearch } from './utils/project-list.validate';
 import { toText } from './utils/project-list.value';
 
 // SDM1020 Project List (SDM > SDM_Project — ROUTE_PATH 'sdm/project-list').
 //   ⭐ 표준 = SDM1010 골격 1:1 승계 (hook #134 — SDM 도메인 정본) + 메타 등재 계약
 //     `_artifacts/_apply_corporate/SDM1020_META_20260819/_CONTRACT.md` 단일 원천 배선.
-//   단일 그리드 '프로젝트 조회/변경' — **저장 버튼 없음** (P-25): 셀 편집(ADMIN 행만, P-01)은
+//   단일 그리드 '프로젝트 조회/변경' — **저장 버튼 없음** (P-25): 셀 편집(MOD_ROW_YN='Y', P-01)은
 //   CRUD_TYPE 'M' 마킹만 하고, [등록요청] 버튼이 Checked+`'M'` 행을 **행별 단건 call-proc** 으로 저장
 //   (D4 — SP 는 P_ACTIVE_FLAG 분기 부재. '^' join 금지 — 확정 결정).
 //   권한요청 = 그리드 내 링크(NONE/READ 행만, P-03) + 입력/조회 체크박스 서버 3상태 (P-04/P-05).
@@ -89,26 +83,8 @@ export const ProjectList = ({ tabId, title }: PageProps<MENU_ID>) => {
     enabled: !!filters[SHEETS.MAIN],
   });
 
-  // ⭐ 등록 완료일 기본값 M-1~Today (P-27 — period 시트 = PR_GET_DAY_RANGE 공유 배선, 계약 ⑤.
-  //   o_rc2 DAY_RANGE 의 당월 1일 앵커 소비 + dayjs 병행 산출. 상수 filters 참조 = 인라인 객체 금지)
-  const { data: periodData } = useTabProcQuery<MENU_ID, SHEETS.PERIOD>({
-    menuId: MENU_ID,
-    sheetName: SHEETS.PERIOD,
-    tabId,
-    filters: PERIOD_DEFAULT_FILTERS,
-    enabled: true,
-  });
-  const scRef = useRef(sc);
-  scRef.current = sc;
-  useEffect(() => {
-    const range = periodData?.o_rc2?.[0]?.DAY_RANGE;
-    if (range == null) return;
-    // 기본값 주입은 "둘 다 빈 초기 상태"에서만 — 사용자가 손댄 기간은 보존 (SDM1010 period 패턴)
-    if (scRef.current.regCompDateFr !== '' || scRef.current.regCompDateTo !== '') return;
-    const { fr, to } = defaultRegCompRange(range);
-    setSearchCondition({ regCompDateFr: fr, regCompDateTo: to });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [periodData]);
+  // 등록 완료일 기본값 M-1(한 달 전 같은 날)~Today 는 store 초기값/reset 에서 FE dayjs 로 직접
+  // 산출한다 — 이전의 period 시트(PR_GET_DAY_RANGE) 앵커 소비·주입 effect 는 폐기 (P-27 변경).
 
   // 재조회 = EditTracker clear + 체크박스 원본 스냅샷 폐기 (서버 3상태가 새 단일 원천)
   useEffect(() => {
@@ -176,36 +152,10 @@ export const ProjectList = ({ tabId, title }: PageProps<MENU_ID>) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [divisions, sc.divisionId]);
 
-  // ⭐ 행별 단건 순차 실행 공통 — CODE '0'+EVENT 합산 (project-reg 계약 이식).
-  //   중도 실패: BTN SP 는 내부 COMMIT(O-4) — 앞선 행은 이미 확정이므로 오류 안내 후 재조회로
-  //   원장 상태와 정합시킨다 (미확정 pending 재전송 시 변경본 중복 INSERT 방지)
-  const runPerRow = async (
-    calls: Array<() => Promise<CallProcResult>>
-  ): Promise<{ ok: boolean; totalEvent: number; message?: string }> => {
-    let totalEvent = 0;
-    for (const call of calls) {
-      const res = await call();
-      if (!res.ok) return { ok: false, totalEvent, message: res.message };
-      totalEvent += res.event;
-    }
-    return { ok: true, totalEvent };
-  };
-
-  // 체크박스 선택 행 수집 (등록요청 대상 — row.isSelected)
-  const collectChecked = (): MainRow[] => {
-    const g = gridRef.current;
-    if (!g) return [];
-    const picked: MainRow[] = [];
-    for (const r of g.rows) {
-      if (r?.isSelected) picked.push(r.dataItem as MainRow);
-    }
-    return picked;
-  };
-
   // 등록요청(REQ) — Checked 0건(P-07 MSG00709) → 'M' 행 0건(P-06 MSG00004) → confirm(P-08 MSG00710)
   //   → 행별 단건 (변경본 INSERT + 원본 MODIFYING — D3 정정분) → EVENT>0 toast MSG00711 / EVENT 0 안내
   const handleReq = async () => {
-    const checked = collectChecked();
+    const checked = collectCheckedRows(gridRef.current);
     if (checked.length === 0) {
       alertMsg(MSG.NO_CHECKED, '_선택한 항목이 존재하지 않습니다.');
       return;
@@ -217,7 +167,7 @@ export const ProjectList = ({ tabId, title }: PageProps<MENU_ID>) => {
       return;
     }
     if (!(await confirmMsg(MSG.REQ_CONFIRM, '_프로젝트를 등록/변경 하시겠습니까?'))) return;
-    const r = await runPerRow(targets.map(row => () => callReqProjectReg(toReqPayload(row))));
+    const r = await runPerRowProc(targets.map(row => () => callReqProjectReg(toReqPayload(row))));
     if (!r.ok) {
       void setAlert({
         type: 'alert',

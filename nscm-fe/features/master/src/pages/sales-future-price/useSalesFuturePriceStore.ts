@@ -101,6 +101,22 @@ const periodStart = dayjs().startOf('month').format('YYYYMMDD');
 // 종료일 = 시작월 +5개월의 말일 (예: 2026.07.01 → 2026.12.31)
 const periodEnd = dayjs().startOf('month').add(5, 'month').endOf('month').format('YYYYMMDD');
 
+// Version 조회키 정본화 — 이 화면의 '현재 버전' 정본 값은 'Current' 다 (AS-IS txtVersion 표기 1:1).
+//   Version 팝업 SP 가 현재버전 행의 VERSION_NO 를 'Current' 로 내려주고, 조회 SP 도 이 표기를 받는다
+//   (2026-08-26 프로시저 수정 반영. 그 전에는 'CURRENT' 만 받아 표기가 어긋나면 0건이었다).
+//   조회 SP 파라미터(setFilter versionType)와 편집 게이트(SalesFuturePrice handleInsert/handleSave,
+//   validateEdit 의 versionId !== 'Current')가 모두 이 값을 쓴다.
+//   표기가 대소문자만 다른 값으로 들어올 수 있는 경계(팝업 선택 / F6 저장조건 복원 — 정본 전환 전에
+//   'CURRENT' 로 저장된 조건이 남아 있다)에서 정본으로 접어 게이트 오판을 막는다.
+//   버전은 최대 2개까지 콤마로 결합돼 오므로 토큰 단위로 처리한다.
+export const normalizeVersionIds = (ids: string): string =>
+  ids
+    .split(',')
+    .map(v => v.trim())
+    .filter(Boolean)
+    .map(v => (v.toUpperCase() === 'CURRENT' ? 'Current' : v))
+    .join(',');
+
 const initSearch: SearchCondition = {
   divisionId: DIVISION.MOBILITY,
   deptIds: [],
@@ -117,7 +133,7 @@ const initSearch: SearchCondition = {
   bucketType: BUCKET_TYPE.WEEKLY,
   searchOverRange: false,
   excludeNoPrice: false,
-  versionId: 'CURRENT',
+  versionId: 'Current',
 };
 
 const makeEmptyCols = (): StaticColumnsBySheet =>
@@ -219,7 +235,7 @@ export const useSalesFuturePriceStore = createPersistedStoreWithTab<State & Acti
             owner: j(c.owners),
             overRange: c.searchOverRange ? 'Y' : 'N',
             invalidExec: c.excludeNoPrice ? 'Y' : 'N',
-            versionType: c.versionId || 'CURRENT',
+            versionType: c.versionId || 'Current',
             bucketType: c.bucketType,
           } as never,
         };
@@ -349,6 +365,11 @@ export const useSalesFuturePriceStore = createPersistedStoreWithTab<State & Acti
           if (ARRAY_KEYS.has(paramNm)) patch[paramNm] = val ? val.split(',').filter(Boolean) : [];
           else if (BOOL_KEYS.has(paramNm)) patch[paramNm] = val === 'true';
           else patch[paramNm] = val;
+        }
+        // 정본 전환(2026-08-26) 전에 저장된 조회조건에는 현재버전이 'CURRENT' 로 남아 있다 —
+        //   조회/편집 게이트가 쓰는 정본 표기로 접는다. normalizeVersionIds 주석 참조.
+        if (typeof patch.versionId === 'string') {
+          patch.versionId = normalizeVersionIds(patch.versionId);
         }
         set(state => {
           state.searchCondition = {

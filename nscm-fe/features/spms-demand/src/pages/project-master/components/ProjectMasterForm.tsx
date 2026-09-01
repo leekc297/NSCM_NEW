@@ -1,14 +1,16 @@
-import { PeriodField } from 'features/master/src/components';
 import { useMemo } from 'react';
 
+import dayjs from '@foundation/dayjs';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabLookupQueries } from '@shared/hooks';
-import { FormItem } from '@shared/lges';
+import { DatePickerCalendar, FormItem } from '@shared/lges';
 import { Grid } from '@shared/mui';
 
 import { LBL, LOOKUP } from '../project-master.constants';
 import { useProjectMasterStore } from '../useProjectMasterStore';
+
+import styles from './ProjectMasterForm.module.scss';
 
 interface ProjectMasterFormProps {
   hidden: boolean;
@@ -61,6 +63,12 @@ export const ProjectMasterForm = ({
     String(v ?? '')
       .split(',')
       .filter(Boolean);
+  const toDate = (value: string) => {
+    const normalized = /^\d{8}$/.test(value)
+      ? `${value.slice(0, 4)}-${value.slice(4, 6)}-${value.slice(6, 8)}`
+      : value;
+    return /^\d{4}-\d{2}-\d{2}$/.test(normalized) ? dayjs(normalized) : null;
+  };
 
   return (
     <SearchArea
@@ -148,7 +156,7 @@ export const ProjectMasterForm = ({
               필수·역전 = MSG00108 / 3년 초과 = MSG00164 (P-02/P-03, validate 차단)) */}
           <Grid size={3}>
             <FormItem
-              className={commonStyles.formItem}
+              className={`${commonStyles.formItem} ${styles.keepWordsFormItem}`}
               label={t(LBL.DEVELOP_STATUS, '_Development Status')}
               labelAlign='right'
               render={() => (
@@ -166,13 +174,47 @@ export const ProjectMasterForm = ({
               )}
             />
           </Grid>
-          <PeriodField
-            gridSize={6}
-            label={t(LBL.REG_COMP_DATE, '_Reg Complete Date')}
-            start={sc.regCompDateFr}
-            end={sc.regCompDateTo}
-            onChange={(start, end) => set({ regCompDateFr: start, regCompDateTo: end })}
-          />
+          <Grid size={6}>
+            <FormItem
+              className={`${commonStyles.formItem} ${styles.keepWordsFormItem}`}
+              label={t(LBL.REG_COMP_DATE, '_Reg Complete Date')}
+              labelAlign='right'
+              render={() => (
+                <div className={styles.periodSplit}>
+                  <div className={styles.datePickerFix}>
+                    <DatePickerCalendar
+                      usecase='date'
+                      elevation
+                      size='small'
+                      format='YYYY.MM.DD'
+                      value={toDate(sc.regCompDateFr)}
+                      onChange={
+                        ((date: ReturnType<typeof dayjs> | null) => {
+                          set({ regCompDateFr: date?.format('YYYYMMDD') ?? '' });
+                        }) as never
+                      }
+                    />
+                  </div>
+                  <span className={styles.periodSep}>~</span>
+                  <div className={styles.datePickerFix}>
+                    <DatePickerCalendar
+                      usecase='date'
+                      elevation
+                      size='small'
+                      format='YYYY.MM.DD'
+                      value={toDate(sc.regCompDateTo)}
+                      mindate={toDate(sc.regCompDateFr) ?? undefined}
+                      onChange={
+                        ((date: ReturnType<typeof dayjs> | null) => {
+                          set({ regCompDateTo: date?.format('YYYYMMDD') ?? '' });
+                        }) as never
+                      }
+                    />
+                  </div>
+                </div>
+              )}
+            />
+          </Grid>
         </>
       }
     />

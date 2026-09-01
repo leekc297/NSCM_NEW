@@ -1,6 +1,7 @@
 import { toggleClass } from '@mescius/wijmo';
 import {
   AllowMerging,
+  CellRange,
   CellType,
   DataMap,
   type FlexGrid as FlexGridType,
@@ -158,24 +159,30 @@ export const BusinessPlanGrid = ({
   );
   const comboResults = useTabComboQueries({ filters: comboFilters });
 
-  // ⭐ Team 표시 전용 콤보 — 'TeambyDivision' (조회조건 Team 과 같은 원천).
+  // Team 콤보 — 'TeambyDivision' (조회조건 Team 과 같은 원천). 표시·편집 후보를 모두 이 원천으로 쓴다.
   //   그리드 행의 DEPT_ID 는 조회 SP 가 SCM_MST_SITE_ITEM.DEPT_ID 로 채우는데, 메타 지정 콤보
   //   'DeptId' 는 SCM_MST_SITE.DEPT_ID 와 품목 OWNER 의 부서만 뽑아 코드 공간이 달라 매핑이
-  //   안 잡힌다(코드가 그대로 노출). 표시만 같은 원천으로 덮고, 편집 콤보는 등록본 'DeptId' 를
-  //   GRID_EDIT_COMBO 로 유지한다 — CELL_PROD_SITE 와 동일 구조.
+  //   안 잡힌다(코드가 그대로 노출).
+  //   금지: 편집 후보만 'DeptId' 로 되돌리기 (GRID_EDIT_COMBO 등록 / cascade 원본 메타 rows 사용).
+  //   그 목록에서 고른 CODE 는 표시 dataMap(TeambyDivision)에 없어 편집 종료 원복 직후 다시
+  //   코드로 노출된다 — 신규행 Team 선택 시 코드 표시 사고 (2026-08-25 실측).
   const [teamComboRows] = useTabComboQueries({
     filters: [{ comboId: 'TeambyDivision', divisionId: q(division) }] as never,
   });
   const teamSig = `${division}#${teamComboRows?.length ?? 'x'}`;
-  const teamDataMap = useMemo<DataMap | null>(() => {
+  // division 필터 + CODE dedup 을 거친 Team 후보 원본 — dataMap(표시) 과 cascade 스왑(편집) 공용.
+  const teamRows = useMemo<Record<string, unknown>[]>(() => {
     const arr = ((teamComboRows ?? []) as unknown as Record<string, string>[]).filter(
       r => !r.DIVISION_ID || !division || r.DIVISION_ID === division
     );
     // 같은 DEPT_ID 가 division 별로 중복 반환될 수 있어 CODE 기준 dedup.
-    const uniq = [...new Map(arr.map(r => [String(r.CODE ?? ''), r])).values()];
-    return uniq.length > 0 ? new DataMap(uniq, 'CODE', 'NAME') : null;
+    return [...new Map(arr.map(r => [String(r.CODE ?? ''), r])).values()];
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [teamSig]);
+  const teamDataMap = useMemo<DataMap | null>(
+    () => (teamRows.length > 0 ? new DataMap(teamRows, 'CODE', 'NAME') : null),
+    [teamRows]
+  );
   const comboSig = comboColumns
     .map((c, i) => `${c.cellCboDataTp}#${comboResults[i]?.length ?? 'x'}`)
     .join(',');
@@ -202,6 +209,12 @@ export const BusinessPlanGrid = ({
     comboColumns.forEach((c, i) => {
       rowsByBinding[c.colNm] = (comboResults[i] ?? []) as unknown as Record<string, unknown>[];
     });
+    // Team — cascade 스왑 원본도 표시와 같은 원천(TeambyDivision)으로 덮는다.
+    //   메타 'DeptId' rows 를 남겨두면 편집 후보가 다른 코드 공간이라 선택 직후 코드가 노출된다.
+    if (teamRows.length > 0) {
+      if ('DEPT_ID' in rowsByBinding) rowsByBinding.DEPT_ID = teamRows;
+      if ('DEPT_ID40' in rowsByBinding) rowsByBinding.DEPT_ID40 = teamRows;
+    }
     comboRowsRef.current = rowsByBinding;
     dataMapsRef.current = dataMaps;
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -621,16 +634,31 @@ export const BusinessPlanGrid = ({
         });
         // EditTracker — patch 전 셀(oldVal)→후 셀 추적 (Red 마킹·SAVE 수집 단일 소스)
         for (const [b, v] of Object.entries(patches)) {
-          const oldVal = b === binding ? (e.data ?? null) : (rec[b] ?? null);
+          const oldVal = rec[b] ?? null;
           rec[b] = v;
-          if (row.CRUD_TYPE !== 'I') {
-            editTrackerRef?.current?.storeChange(
-              row as never,
-              b,
-              (oldVal ?? null) as never,
-              (v ?? null) as never
-            );
+          if (row.CRUD_TYPE === 'I') continue;
+          const tracker = editTrackerRef?.current;
+          if (!tracker) continue;
+          if (b === binding) {
+            // 편집 셀 자신 — 원본 대비 판정은 EditTracker 의 cellEditEnded 핸들러가 이 핸들러보다
+            //   먼저 끝냈다(공용 DataGrid 가 그리드 생성 시점에 먼저 건다). 여기서 다시 원본을
+            //   실어 보내면 안 된다.
+            //   금지: oldVal(= 방금 커밋된 새 값)이나 e.data 를 원본으로 넘기기.
+            //     Wijmo finishEditing 은 CellEditEndingEventArgs 를 data 인자 없이 만들어
+            //     e.data 가 항상 undefined 다. 원래 값으로 되돌린 편집에서는 EditTracker 가 방금
+            //     기록을 지운 직후라 storeChange 가 '기록 없음' 으로 보고 undefined/새 값을 원본으로
+            //     재등록한다 → 되돌려도 수정(M)·Red 가 영영 안 풀린다 (2026-08-24 리포트).
+            //   기록이 남아 있을 때만 재판정한다 — 절삭(소수 → 정수)으로 값이 바뀐 경우를 반영한다.
+            const originals = tracker.getOriginalValues().get(row as never) as
+              | Record<string, unknown>
+              | undefined;
+            if (originals && b in originals) {
+              tracker.storeChange(row as never, b, originals[b] as never, (v ?? null) as never);
+            }
+            continue;
           }
+          // 배분·롤업으로 함께 바뀐 셀 — 이 핸들러만이 원본(patch 직전 값)을 안다.
+          tracker.storeChange(row as never, b, (oldVal ?? null) as never, (v ?? null) as never);
         }
         // Business_Plan 소수 절삭 안내 (AS-IS L1853 MSG00289 → MSG00679)
         if (truncated) {
@@ -643,7 +671,7 @@ export const BusinessPlanGrid = ({
         return;
       }
 
-      // ===== 정적 셀 — cascade 계단 clear (정의 시) =====
+      // ===== 정적 셀 — cascade 계단 clear (정의 시) + 신규행 블록 전파 =====
       if (!staticBindingSet.has(binding)) return;
       const prev = editingCellRef.current;
       const newVal = rec[binding];
@@ -654,19 +682,69 @@ export const BusinessPlanGrid = ({
           rec[k] = '';
         });
       }
+      // 신규행 정적 값은 Measure 블록(INSERT_GROUP_ID) 전 행이 공유한다 — 한 행만 바뀌면 계층 머지가
+      //   값 기준이라 블록이 쪼개져 보이고(2026-08-25 리포트), 저장 시 행마다 키가 어긋난다.
+      //   필수: 여기서 직접 맞춘다. Wijmo 는 편집 커밋만 머지 범위에 반영하고,
+      //     · Delete 키   : _deleteRange 가 **선택 범위**만 순회하며 셀 하나씩 ''(빈값) 기입
+      //     · 붙여넣기    : expandSelectionOnCopyPaste=false (공용 DataGrid) — 앵커 한 칸만 기입
+      //   이라 두 경로 모두 한 행만 바뀐다. 두 경로 다 cellEditEnded/pastedCell 을 태우므로 여기가 단일 지점.
+      //   MEASURE 는 블록 안에서 행마다 달라야 하는 유일한 정적 컬럼이라 제외한다(편집도 잠겨 있다).
+      if (row.CRUD_TYPE === 'I' && binding !== 'MEASURE') {
+        const gid = toCellStr(row.INSERT_GROUP_ID);
+        if (gid) {
+          for (const other of rowsRef.current) {
+            if (other === row || toCellStr(other.INSERT_GROUP_ID) !== gid) continue;
+            const rec2 = other as Record<string, unknown>;
+            rec2[binding] = newVal;
+            if (clearTargets && changed) {
+              clearTargets.forEach(k => {
+                rec2[k] = '';
+              });
+            }
+          }
+        }
+      }
       editingCellRef.current = null;
       s.invalidate(true);
     };
     g.cellEditEnded.addHandler(cellEditEndedHandler);
-    // 붙여넣기 후 처리 — 동적 셀은 배분/추적 경로 공유
+    // 붙여넣기 후 처리 — 동적 셀은 배분/추적, 정적 셀은 블록 전파 경로를 공유한다.
+    //   (붙여넣기는 편집 세션을 거치지 않아 cellEditEnded 가 안 뜬다 — 여기서 같은 핸들러를 태운다.)
     const pastedCellHandler = (
       s: FlexGridType<BusinessPlanRow>,
       e: { row: number; col: number; data?: unknown }
     ) => {
       const b = s.columns[e.col]?.binding ?? '';
-      if (dynKindOf(b)) cellEditEndedHandler(s, e);
+      if (dynKindOf(b) || staticBindingSet.has(b)) cellEditEndedHandler(s, e);
     };
     g.pastedCell.addHandler(pastedCellHandler);
+
+    // ===== 신규행 블록 정적 셀 — 선택을 머지 좌상단으로 스냅 (붙여넣기 성립 조건) =====
+    //   wijmo.grid pasteRange 의 가드:
+    //     `let s = getMergedRange(cells, C, d, false);
+    //      if (!(s && (s.leftCol != d || s.topRow != C)) && _allowEdit(C, d)) { ... onPastingCell ... }`
+    //   → 세로 머지된 셀은 **좌상단(블록 첫 행)** 이 아니면 붙여넣기를 통째로 건너뛴다. 신규행 블록은
+    //     정적 값이 전 행 동일 = 항상 머지 상태라, 2~3번째 행을 찍고 붙여넣으면 pastingCell 조차
+    //     안 뜨고 아무 일도 일어나지 않는다 (2026-08-25 리포트).
+    //   금지: DOM 'paste' 이벤트로 가로채기. wijmo 는 Ctrl+V 를 keydown 에서 받아
+    //     `wijmo.Clipboard.paste(cb)` — **숨은 textarea 로 포커스를 옮겨** 읽으므로 그리드는 그
+    //     시점에 포커스를 갖지 않는다(그 방식으로 시도했다가 실패).
+    //   ⇒ 선택 자체를 좌상단으로 맞춰 wijmo 기본 경로를 성립시키고, 행 전파는 pastedCell 이 맡는다.
+    //     사용자에게 머지 블록은 한 칸으로 보이므로 스냅은 눈에 띄지 않는다.
+    const selectionChangedHandler = (s: FlexGridType<BusinessPlanRow>) => {
+      const sel = s.selection;
+      if (sel.row < 0 || sel.col < 0) return;
+      if (sel.row !== sel.row2 || sel.col !== sel.col2) return; // 드래그 다중선택은 건드리지 않는다
+      const row = s.rows[sel.row]?.dataItem as BusinessPlanRow | undefined;
+      if (row?.CRUD_TYPE !== 'I') return;
+      const binding = s.columns[sel.col]?.binding ?? '';
+      if (!staticBindingSet.has(binding)) return;
+      const merged = s.getMergedRange(s.cells, sel.row, sel.col);
+      if (!merged || merged.topRow === sel.row) return;
+      // 재진입 안전 — 스냅 후 재호출되면 topRow === sel.row 라 즉시 반환한다.
+      s.select(new CellRange(merged.topRow, sel.col, merged.topRow, sel.col), false);
+    };
+    g.selectionChanged.addHandler(selectionChangedHandler);
 
     // ===== 더블클릭 — 헤더 드릴다운 + 셀 모달 (AS-IS spdMain_CellDoubleClick L1598~1797) =====
     const dblclickHandler = (ev: MouseEvent) => {
@@ -771,6 +849,11 @@ export const BusinessPlanGrid = ({
       }
       try {
         g.pastedCell?.removeHandler(pastedCellHandler);
+      } catch {
+        /* unmount race */
+      }
+      try {
+        g.selectionChanged?.removeHandler(selectionChangedHandler);
       } catch {
         /* unmount race */
       }

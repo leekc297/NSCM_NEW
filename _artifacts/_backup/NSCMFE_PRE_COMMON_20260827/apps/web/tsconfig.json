@@ -1,0 +1,10 @@
+{
+  "extends": "../../configs/tsconfig.base.json",
+  "compilerOptions": {
+    "types": ["vite/client", "node"],
+    "jsx": "react-jsx",
+    "baseUrl": "../../"
+  },
+  "include": ["src", "../../configs/types/*.d.ts"],
+  "exclude": ["node_modules", "dist", "build"]
+}

@@ -21,6 +21,7 @@ import { PeriodField } from '../../../../components';
 import { MENU_ID, SHEETS } from '../../contribute-view.constants';
 
 import styles from './ContributeVersionModal.module.scss';
+import { useContributeVersionModalStore } from './contributeVersionModalStore';
 
 // AS-IS DMF0043_Contribute_View.cs btnSPVer_Click (.cs L453~471):
 //   DMF0043_VersionPopup popVersion = new DMF0043_VersionPopup();
@@ -127,13 +128,8 @@ export const ContributeVersionModal = ({ open, onClose, onSelect }: Props) => {
   // AS-IS txtDes.Text — Description 자유 입력 (LIKE 검색)
   const [description, setDescription] = useState<string>('');
 
-  const [filters, setFilters] = useState<{
-    startYyyymmdd: string;
-    endYyyymmdd: string;
-    divisionId: string;
-    versionType: string;
-    description: string;
-  }>();
+  const filters = useContributeVersionModalStore(state => state.filters);
+  const setFilters = useContributeVersionModalStore(state => state.setFilters);
 
   const { data } = useTabProcQuery({
     menuId: MENU_ID,
@@ -343,13 +339,6 @@ export const ContributeVersionModal = ({ open, onClose, onSelect }: Props) => {
 
           <div className={styles.buttonWrapper}>
             <Button
-              appearance='outlined'
-              priority='normal'
-              size='medium'
-              buttonLabel={t('LBL00627', '_Close')}
-              onClick={onClose}
-            />
-            <Button
               appearance='contained'
               buttonLabel={t('LBL00716', '_OK')}
               iconComponent={<ControlConfirmIcon size='small' />}
@@ -357,6 +346,13 @@ export const ContributeVersionModal = ({ open, onClose, onSelect }: Props) => {
               priority='primary'
               size='medium'
               onClick={handleConfirm}
+            />
+            <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel={t('LBL00627', '_Close')}
+              onClick={onClose}
             />
           </div>
         </div>

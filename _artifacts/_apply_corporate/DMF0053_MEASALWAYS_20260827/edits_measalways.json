@@ -1,0 +1,10 @@
+[
+ {
+  "old": "               AND ( C.DEFAULT_FLAG = 'Y'\n                  OR ( C.VISIBLE_FLAG = 'N'\n                   AND NVL(TRIM(C.DEFAULT_FLAG), '-') = '-'\n                   AND C.VALID_YN = 'Y' ) );\n",
+  "new": "               AND ( C.DEFAULT_FLAG = 'Y'\n                  OR ( C.VISIBLE_FLAG = 'N'\n                   AND NVL(TRIM(C.DEFAULT_FLAG), '-') = '-'\n                   AND C.VALID_YN = 'Y' )\n                   -- [E20260827-MEASALWAYS] MEASURE 는 표시 플래그와 무관하게 항상 편입 — WF CTE 의 F.MEASURE 참조 필수.\n                   --   (VISIBLE_FLAG='Y' 로 운영 변경 시 숨김 분기에서 빠져 ORA-00904 F.MEASURE 사고 2026-08-27)\n                   OR C.COLUMN_NAME = 'MEASURE' );\n"
+ },
+ {
+  "old": "                     SELECT C.SORT_ORDER_NO, C.COLUMN_NAME, C.DATA_SORT_METHOD_CODE\n                       FROM SCM_MST_SHEET_COLUMNS C\n                      WHERE C.PROGRAM_ID   = V_PROGRAM_ID\n                        AND C.SHEET_NAME   = V_SHEET_NAME\n                        AND C.VISIBLE_FLAG = 'N'\n                        AND NVL(TRIM(C.DEFAULT_FLAG), '-') = '-'\n                        AND C.VALID_YN     = 'Y' );\n",
+  "new": "                     SELECT C.SORT_ORDER_NO, C.COLUMN_NAME, C.DATA_SORT_METHOD_CODE\n                       FROM SCM_MST_SHEET_COLUMNS C\n                      WHERE C.PROGRAM_ID   = V_PROGRAM_ID\n                        AND C.SHEET_NAME   = V_SHEET_NAME\n                        AND ( ( C.VISIBLE_FLAG = 'N'\n                        AND NVL(TRIM(C.DEFAULT_FLAG), '-') = '-'\n                        AND C.VALID_YN     = 'Y' )\n                            -- [E20260827-MEASALWAYS] MEASURE 항상 편입 (위와 동일 사유 — 사용자 설정 분기)\n                            OR C.COLUMN_NAME = 'MEASURE' ) );\n"
+ }
+]

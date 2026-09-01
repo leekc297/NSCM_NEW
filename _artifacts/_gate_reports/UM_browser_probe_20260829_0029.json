@@ -1,0 +1,37 @@
+[
+ {
+  "menu": "DMF0040",
+  "checks": [
+   [
+    "UM-01 Division 기본 선택",
+    true,
+    "value='40 Mobility & IT Battery'"
+   ],
+   [
+    "Search 버튼 존재",
+    true,
+    ""
+   ],
+   [
+    "조회 행 렌더",
+    false,
+    "rows=0"
+   ],
+   [
+    "UM-07 Filter 버튼/F4 → 필터 아이콘 토글",
+    false,
+    "icons 0→0"
+   ],
+   [
+    "UM-06 헤더 총높이(조회 후) = 48",
+    false,
+    "{'rows': [], 'total': 0}"
+   ],
+   [
+    "UM-11 footer 합계 행",
+    false,
+    "{'present': False, 'sample': []}"
+   ]
+  ]
+ }
+]

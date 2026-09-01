@@ -1,0 +1,124 @@
+// procedures.d.ts 의 DMF0053 계약 블록 — 사내 L4571~L4689 (119줄, 시트 키 ['custFcstWaterfall', 'spreadTitle']) — 2026-08-27 재생성 (초판 경계 결함 정정)
+// 병합법: 클라우드 procedures.d.ts 의 `  DMF0053: { ... },` 블록(있으면 그 위 JSDoc 포함)을 아래 BEGIN~END 사이로 교체, 없으면 RawProcedureMap 안 임의 위치에 삽입.
+// ⛔ FE_MERGE/configs/types/procedures.d.ts(사내 전체본) 로 파일 덮어쓰기 금지 — 클라우드 전용 항목(예: DMF0051 등) 유실.
+// ----- BEGIN BLOCK -----
+  /**
+   * Customer FCST Waterfall — DMF0053 (Read-only Report, 신규 생성 2026-08-27)
+   *
+   * AS-IS DMF0053_CustFcstWaterfall (Forms.UIL 1,822행) — Customer FCST vs EDI Waterfall.
+   * SHEETS (전부 SEARCH — 저장 없음):
+   * - `custFcstWaterfall` PKG_DMF0053.P_DMF0053_GET_CUST_FCST_WATERFALL (21 IN + O_RC1~3/O_RESULT_CURSOR)
+   * - `spreadTitle`       PKG_DMF0053.P_DMF0053_GET_SPREAD_TITLE (7 IN — 동적 시간축)
+   * Version 조회조건 미구현 (AS-IS btnVersion 숨김) — versionNo='' 고정.
+   * PROC_M = _artifacts/_diagnostics/dmf0053_build_20260827/seed_meta.sql (positional 25/9 실측 등재)
+   */
+  DMF0053: {
+    custFcstWaterfall: {
+      request: {
+        divisionId: string; // 1  P_DIVISION_ID (단일 필수 — MSG00097)
+        deptId: string; // 2  P_DEPT_ID (Team — 콤마, 빈값 'ALL')
+        endCustomer: string; // 3  P_END_CUSTOMER
+        scmSiteId: string; // 4  P_SCM_SITE_ID (Sales Site)
+        projectCode: string; // 5  P_PROJECT_CODE (텍스트 raw — 40 비활성 '')
+        itemId: string; // 6  P_ITEM_ID
+        itemType: string; // 7  P_ITEM_TYPE
+        fromYyyymmdd: string; // 8  P_FROM_YYYYMMDD (Period*)
+        toYyyymmdd: string; // 9  P_TO_YYYYMMDD
+        sesUserId: string; // 10 P_CREATED_BY (BE 세션 주입)
+        plantSiteId: string; // 11 P_PLANT_SITE_ID
+        bizType: string; // 12 P_BIZ_TYPE
+        owner: string; // 13 P_OWNER
+        bucket: string; // 14 P_BUCKET (DAILY/WEEKLY/MONTHLY/ONLY_WEEKLY)
+        userDeptId: string; // 15 P_USER_DEPT_ID (BODY 미사용 실측 — '' 전달)
+        groupId: string; // 16 P_GROUP_ID (BODY 미사용 실측 — '' 전달)
+        versionNo: string; // 17 P_VERSION_NO (Version 조회조건 미구현 — '' 고정)
+        fromCreatedate: string; // 18 P_FROM_CREATEDATE (Input Date*)
+        toCreatedate: string; // 19 P_TO_CREATEDATE
+        userId: string; // 20 P_USER_ID
+        mnuId: string; // 21 P_MENU_ID
+      };
+      response: {
+        o_rc1: {
+          MEASURE: string;
+          MEASURE_GROUP: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    spreadTitle: {
+      request: {
+        startYyyymmdd: string; // 1 P_START_YYYYMMDD
+        endYyyymmdd: string; // 2 P_END_YYYYMMDD
+        sesUserId: string; // 3 P_CREATED_BY (BE 주입)
+        divisionId: string; // 4 P_DIVISION_ID
+        bucket: string; // 5 P_BUCKET
+        userId: string; // 6 P_USER_ID
+        mnuId: string; // 7 P_MENU_ID
+      };
+      response: {
+        o_rc1: {
+          COLUMN_NAME: string;
+          COLUMN_LABEL_NAME: string;
+          SMALL_CLASS_LABEL_NAME: string;
+          LARGE_CLASS_LABEL_NAME: string;
+          DAY_CODE: string;
+          SORT_ORDER_NO: string | number;
+          [key: string]: string | number;
+        };
+      };
+    };
+  };
+}
+
+type ProcessedProcedures = {
+  [M in keyof RawProcedureMap]: {
+    [S in keyof RawProcedureMap[M]]: {
+      request: RawProcedureMap[M][S]['request'];
+      response: {
+        [RS in keyof RawProcedureMap[M][S]['response']]:
+        (RawProcedureMap[M][S]['response'][RS] & { CRUD_TYPE?: string });
+      };
+    };
+  };
+};
+
+declare global {
+  type ProcedureMap = ProcessedProcedures;
+
+  type MenuId = keyof ProcedureMap;
+  type SheetName<M extends MenuId> = Extract<keyof ProcedureMap[M], string>;
+  
+  /**
+   * MenuId, SheetName에서 정의한 검색조건
+   */
+  type ProcRequest<M extends MenuId, S extends SheetName<M>> = ProcedureMap[M][S]['request'];
+
+  /**
+   * MenuId, SheetName에서 정의한 response set의 key(ex. o_rc1 ...)
+   */
+  type ResponseKeys<M extends MenuId, S extends SheetName<M>> = Extract<keyof ProcedureMap[M][S]['response'], string>;
+
+  /**
+   * MenuId, SheetName에서 정의한 response data
+   */
+  type ResponseData<
+    M extends MenuId,
+    S extends SheetName<M>,
+    RS extends ResponseKeys<M, S> = ResponseKeys<M, S>,
+  > = ProcedureMap[M][S]['response'][RS];
+
+  /**
+   * MenuId, SheetName에서 정의한 api의 전체 response
+   */
+  type ProcResponse<M extends MenuId, S extends SheetName<M>> = {[RS in ResponseKeys<M, S>]: ResponseData<M, S, RS>[]};
+
+  interface MutateRequest<M extends MenuId, S extends SheetName<M>, RS extends ResponseKeys<M, S>> {
+    data: ResponseData<M, S, RS>[]
+  }
+
+  interface MutateResponse {
+    DATARESULT: number;
+    errMsg: any; // 프로시저 에러 메시지는 동적이므로 any 유지
+  }
+}
+// ----- END BLOCK -----

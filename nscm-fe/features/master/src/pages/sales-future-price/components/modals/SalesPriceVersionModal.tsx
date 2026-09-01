@@ -1,6 +1,5 @@
 import type { FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
-import dayjs from 'dayjs';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 
 import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
@@ -15,6 +14,7 @@ import { PeriodField } from '../../../../components';
 import { MENU_ID, SHEETS } from '../../sales-future-price.constants';
 
 import styles from './SalesPriceVersionModal.module.scss';
+import { useSalesPriceVersionModalStore } from './salesPriceVersionModalStore';
 
 // AS-IS DMF0020_SalesFuturePrice.cs btnSPVer_Click (.cs L3895~)
 //   DMF0073_VersionBySalesPricePopup popVersion = new DMF0073_VersionBySalesPricePopup();
@@ -98,25 +98,17 @@ export const SalesPriceVersionModal = ({ open, modalClose, defaultDivision, onAp
   }, [myDivisions]);
 
   // AS-IS Period (-3M ~ +3M) — 표준 PeriodField (YYYYMMDD string)
-  const [periodFrom, setPeriodFrom] = useState<string>(() =>
-    dayjs().subtract(3, 'month').format('YYYYMMDD')
-  );
-  const [periodTo, setPeriodTo] = useState<string>(() =>
-    dayjs().add(3, 'month').format('YYYYMMDD')
-  );
   // ⭐ Division = 메인 화면 조회 division 고정 — 수정 불가 (사용자 요구 2026-07-02)
-  const [divisionId, setDivisionId] = useState<string>(defaultDivision);
-  const [description, setDescription] = useState<string>('');
+  const { divisionId, periodFrom, periodTo, description } = useSalesPriceVersionModalStore(
+    state => state.searchParams
+  );
+  const setSearchParams = useSalesPriceVersionModalStore(state => state.setSearchParams);
+  const resetSearchParams = useSalesPriceVersionModalStore(state => state.resetSearchParams);
 
   // popup open 시 default value reset
   useEffect(() => {
-    if (open) {
-      setDivisionId(defaultDivision);
-      setPeriodFrom(dayjs().subtract(3, 'month').format('YYYYMMDD'));
-      setPeriodTo(dayjs().add(3, 'month').format('YYYYMMDD'));
-      setDescription('');
-    }
-  }, [open, defaultDivision]);
+    if (open) resetSearchParams(defaultDivision);
+  }, [open, defaultDivision, resetSearchParams]);
 
   // SP filter — DB SP signature 정확 매핑 (DMF0073_GET_VERSION_SALESPRICE 9 인자):
   //   P_START_YYYYMMDD / P_END_YYYYMMDD / P_CREATED_BY / P_DIVISION_ID
@@ -234,7 +226,7 @@ export const SalesPriceVersionModal = ({ open, modalClose, defaultDivision, onAp
                         disabled
                         value={divisionId}
                         options={divisionOptions}
-                        onChange={(_, option) => setDivisionId(String(option))}
+                        onChange={(_, option) => setSearchParams({ divisionId: String(option) })}
                       />
                     )}
                   />
@@ -243,10 +235,9 @@ export const SalesPriceVersionModal = ({ open, modalClose, defaultDivision, onAp
                   gridSize={4}
                   start={periodFrom}
                   end={periodTo}
-                  onChange={(start, end) => {
-                    setPeriodFrom(start);
-                    setPeriodTo(end);
-                  }}
+                  onChange={(start, end) =>
+                    setSearchParams({ periodFrom: start, periodTo: end })
+                  }
                 />
                 <Grid size={3}>
                   <FormItem
@@ -256,7 +247,7 @@ export const SalesPriceVersionModal = ({ open, modalClose, defaultDivision, onAp
                       <InputField
                         fullWidth
                         value={description}
-                        onChange={e => setDescription(e.target.value)}
+                        onChange={e => setSearchParams({ description: e.target.value })}
                       />
                     )}
                   />
@@ -280,13 +271,6 @@ export const SalesPriceVersionModal = ({ open, modalClose, defaultDivision, onAp
           {/* Action — 표준 buttonWrapper (하단 우측 정렬, @shared/lges Button) */}
           <div className={styles.buttonWrapper}>
             <Button
-              appearance='outlined'
-              priority='normal'
-              size='medium'
-              buttonLabel={t('LBL00627', 'Close')}
-              onClick={modalClose}
-            />
-            <Button
               appearance='contained'
               priority='primary'
               size='medium'
@@ -295,6 +279,13 @@ export const SalesPriceVersionModal = ({ open, modalClose, defaultDivision, onAp
               iconPosition='leading'
               disabled={loading}
               onClick={handleApply}
+            />
+            <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel={t('LBL00627', 'Close')}
+              onClick={modalClose}
             />
           </div>
         </div>

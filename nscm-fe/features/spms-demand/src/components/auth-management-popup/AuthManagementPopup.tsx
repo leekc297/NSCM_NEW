@@ -11,6 +11,7 @@ import { Button, InputField, ProgressIndicator } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { useMessageStore, useSessionStore, useTabid } from '@shared/stores';
 
+import { restoreMultiRangeSelection } from '../../lib/grid';
 import {
   MENU_ID,
   RESPONSE_SET,
@@ -26,7 +27,7 @@ import type {
 import { AUTH_TYPE } from '../../pages/project-registration/project-registration.types';
 
 import styles from './AuthManagementPopup.module.scss';
-import { buildOrgTree } from './authManagementPopup.utils';
+import { buildOrgTree, collectDeptPathIds } from './authManagementPopup.utils';
 import { OrgTree } from './OrgTree';
 import { useAuthManagementPopupStore } from './useAuthManagementPopupStore';
 
@@ -102,6 +103,11 @@ export const AuthManagementPopup = ({
     enabled: open && !!sesDivisionId && !!sesUserId,
     queryOptions: { staleTime: 0 },
   });
+  // 세션 사용자의 부서 — 조직도 프로시저가 행마다 내려주는 SES_DEPT_ID(첫 행 기준).
+  // 팝업을 연 그리드 행의 DEPT_ID 가 아니라 이 값을 조직도 기본 선택/펼침 부서로 쓴다.
+  const sesDeptId = String(
+    ((orgData?.orgList as unknown as OrgTreeRow[] | undefined) ?? [])[0]?.SES_DEPT_ID ?? ''
+  ).trim();
   // 사용자 목록 — 부서 선택 또는 User ID(Name) 검색 조건이 있을 때 조회한다.
   const { data: userData } = useTabProcQuery<MENU_ID, SHEETS.POPUP_USER>({
     menuId: MENU_ID,
@@ -165,13 +171,17 @@ export const AuthManagementPopup = ({
   }, [open, initialized, fetchStaticColumns]);
 
   // 팝업을 열 때(또는 대상 프로젝트가 바뀔 때) 서버 데이터로 초안을 리셋한다.
+  // 부서는 빈 값이 아니라 세션 사용자의 부서(SES_DEPT_ID)로 시작한다 — 조직도에서 그 부서가
+  // 선택된 상태로 열리고(buildOrgTree 의 isSelected), 그 부서 사용자 목록도 바로 조회된다.
+  // SES_DEPT_ID 는 조직도 프로시저 응답이라 열린 직후 비동기로 도착한다 — 도착 시 이 effect 가
+  // 다시 돌아 기본 부서를 채운다 (그 시점엔 검색어 등도 아직 초기값이라 함께 리셋돼도 무해).
   useEffect(() => {
     if (!open) return;
-    setSelectedDeptId('');
+    setSelectedDeptId(sesDeptId);
     setRequestHandled(new Map());
     setUserKeyword('');
     setAppliedUserKeyword('');
-  }, [open, pjtKey]);
+  }, [open, pjtKey, sesDeptId]);
 
   // open 도 의존성에 둔다 — 저장 안 하고 닫은 로컬 추가분(authMgmtDraft)은 authWriteData/
   // authReadData 참조가 안 바뀌어도(재조회 안 일어나도) 재오픈 시 서버 원본으로 되돌려야 한다.
@@ -187,8 +197,15 @@ export const AuthManagementPopup = ({
   }, [open, authWriteData, authReadData]);
 
   const orgTree = useMemo(
-    () => buildOrgTree((orgData?.orgList as unknown as OrgTreeRow[] | undefined) ?? []),
-    [orgData]
+    () => buildOrgTree((orgData?.orgList as unknown as OrgTreeRow[] | undefined) ?? [], sesDeptId),
+    [orgData, sesDeptId]
+  );
+  // 세션 사용자 부서(SES_DEPT_ID)까지의 경로를 기본 펼침으로 넘긴다.
+  // Tree 가 배열 참조 변경 시 펼침 상태를 리셋하므로 useMemo 로 참조를 고정한다 —
+  // 조직도 재조회 때만 바뀐다.
+  const defaultExpandedDeptIds = useMemo(
+    () => collectDeptPathIds(orgTree, sesDeptId),
+    [orgTree, sesDeptId]
   );
   const userRows = hasUserCondition
     ? ((userData?.userList as unknown as PopupUserRow[] | undefined) ?? [])
@@ -596,13 +613,13 @@ export const AuthManagementPopup = ({
     <CustomDialog
       open={open}
       size={1240}
-      height='90vh'
+      height={800}
       disableScale
       type='modal'
       position='basic'
       handleClose={onClose}
       customHeaderTitle={
-        <div className='headerContainer'>
+        <div className={`headerContainer ${styles.headerContainer}`}>
           <div className='headerDot' />
           <h2 className='headerTitle'>{t('LBL00868', '_Project Authority Management')}</h2>
         </div>
@@ -643,7 +660,12 @@ export const AuthManagementPopup = ({
           <div className={styles.workspace}>
             {/* 조직도(부서 트리) — 노드를 고르면 그 부서 사용자 목록이 오른쪽에 뜬다. */}
             <div className={styles.orgTreePanel}>
-              <OrgTree nodes={orgTree} onSelect={handleSelectDept} className={styles.orgTree} />
+              <OrgTree
+                nodes={orgTree}
+                onSelect={handleSelectDept}
+                defaultExpandedDeptIds={defaultExpandedDeptIds}
+                className={styles.orgTree}
+              />
             </div>
             {/* 사용자 목록 — 선택된 조직 노드 소속 사용자. 체크 후 우측 (+) 버튼으로 권한 리스트에 추가. */}
             <div className={`${styles.gridPanel} ${styles.userPanel}`}>
@@ -654,6 +676,7 @@ export const AuthManagementPopup = ({
                 staticColumns={staticColumns[RESPONSE_SET.POPUP_USER]}
                 useCheckbox
                 isReadOnly
+                initialized={restoreMultiRangeSelection}
               />
             </div>
             {/* (+) 버튼 2개 — 위: 체크된 사용자를 입력 권한 리스트로, 아래: 조회 권한 리스트로 추가.
@@ -707,6 +730,7 @@ export const AuthManagementPopup = ({
                 useCheckbox
                 isReadOnly
                 excludeFromDirtyCheck
+                initialized={restoreMultiRangeSelection}
               />
             </div>
             <div className={styles.authorityMoveButtons}>
@@ -751,6 +775,7 @@ export const AuthManagementPopup = ({
                 useCheckbox
                 isReadOnly
                 excludeFromDirtyCheck
+                initialized={restoreMultiRangeSelection}
               />
             </div>
             {/* 권한 요청 리스트 — 입력/조회 승인은 위 권한 리스트로 이동한 뒤 OK에서 저장한다.

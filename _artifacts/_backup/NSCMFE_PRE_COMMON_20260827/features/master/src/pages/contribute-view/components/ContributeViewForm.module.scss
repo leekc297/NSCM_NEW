@@ -1,0 +1,47 @@
+// AS-IS DMF0043_Contribute_View Designer.cs 조회조건 패널
+// SearchArea + FormItem + CustomDropdown + InputField 변환 후 SCSS 는 inputWithSearch 만 유지.
+// reference: sales-site-project-model/SalesSiteProjectModelForm.module.scss
+
+.inputWithSearch {
+  & > div:first-child {
+    display: flex;
+    align-items: center;
+  }
+  & button {
+    position: absolute;
+    right: -40px;
+  }
+}
+
+.customCheckbox {
+  display: flex;
+  height: 35px;
+  gap: 4px;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.customGrid {
+  display: flex;
+  align-items: left;
+}
+// .customDropDown {
+//   width: 337.67px; // !important;
+//   height: 32px;
+//   & > div {
+//     height: 32px;
+//     div {
+//       fieldset {
+
+//       }
+//     }
+//   }
+// }
+
+// .MuiFormControl-root .MuiOutlinedInput-root {
+//   height: 32px; 
+//   min-height: 32px; 
+//   width: 337.67px !important;
+// }
+
+

@@ -25,6 +25,7 @@ export const NnMasterMappingForm = ({ onSearch }: Props) => {
   const { t } = useTranslation();
   const sc = useNnMasterMappingStore(s => s.searchCondition);
   const set = useNnMasterMappingStore(s => s.setSearchCondition);
+  const noFilters = useNnMasterMappingStore(s => s.noFilters);
 
   const [openProjectModal, setOpenProjectModal] = useState(false);
   const [openItemModal, setOpenItemModal] = useState(false);
@@ -55,7 +56,7 @@ export const NnMasterMappingForm = ({ onSearch }: Props) => {
     menuId: MENU_ID,
     sheetName: SHEETS.DATA_TYPE,
     tabId: MENU_ID,
-    filters: {},
+    filters: noFilters,
     enabled: true,
   });
 
@@ -68,9 +69,9 @@ export const NnMasterMappingForm = ({ onSearch }: Props) => {
     gridSize: 3,
     levels: [
       { key: 'division', field: 'divisionId' },
-      { key: 'team', field: 'deptId' },
-      { key: 'endCustomer', field: 'endCustomer' },
-      { key: 'salesSite', field: 'scmSiteId' },
+      { key: 'team', field: 'deptId', sortBy: 'label' },
+      { key: 'endCustomer', field: 'endCustomer', sortBy: 'label' },
+      { key: 'salesSite', field: 'scmSiteId', sortBy: 'label' },
     ],
     value: sc,
     onChange: (next, changed) => {

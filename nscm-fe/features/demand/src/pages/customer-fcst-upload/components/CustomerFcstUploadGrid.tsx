@@ -1,3 +1,4 @@
+import { toggleClass } from '@mescius/wijmo';
 import {
   type CellRangeEventArgs,
   CellType,
@@ -177,6 +178,7 @@ export const CustomerFcstUploadGrid = ({
     const formatHandler = (_s: FlexGrid<CustomerFcstUploadRow>, e: FormatItemEventArgs) => {
       const col = e.panel.columns[e.col];
       if (!col) return;
+      const binding = col.binding ?? '';
 
       if (e.panel.cellType === CellType.ColumnHeader) {
         e.cell.style.textAlign = 'center';
@@ -186,15 +188,39 @@ export const CustomerFcstUploadGrid = ({
         else if (text === 'SUN') e.cell.style.color = '#c0392b';
         return;
       }
-      // 셀 편집가능 색(wj-cell-editable)과 편집 게이트는 공통 DataGrid 의 isCellEditable predicate 로 이관.
-      //   formatHandler 는 헤더 요일색만 담당한다.
+      if (e.panel.cellType !== CellType.Cell) return;
+      if (!binding) return;
+
+      // #95 — 편집 가능 셀만 Yellow (D_ 기간 셀 × EDIT_FLAG='Y' 행), 그 외 White + zebra
+      if (dynBindings.has(binding)) {
+        const item = (e.panel.rows[e.row] as { dataItem?: CustomerFcstUploadRow }).dataItem;
+        const editable = item?.EDIT_FLAG === 'Y';
+        toggleClass(e.cell, 'wj-cell-editable', editable);
+        toggleClass(e.cell, 'wj-cell-non-editable', false);
+        return;
+      }
+      toggleClass(e.cell, 'wj-cell-editable', false);
+      toggleClass(e.cell, 'wj-cell-non-editable', false);
     };
     g.formatItem.addHandler(formatHandler);
 
-    // 편집 가드(D_ 기간 셀 × EDIT_FLAG='Y' 행만 허용)는 공통 DataGrid 의 isCellEditable predicate 로 이관.
-    //   predicate 가 beginningEdit/pastingCell cancel 을 색과 동일한 기준으로 처리한다.
+    // ⭐ 편집 가드 — D_ 기간 셀 × EDIT_FLAG='Y' 행만 허용 (AS-IS FindData 전체 잠금 → EditButton
+    //   에서 'Y' 행 식별 컬럼만 잠금 유지 1:1. F2 토글은 TO-BE 표준(mkt-fcst)대로 상시 판정으로 대체)
+    const beginningEditHandler = (
+      _s: FlexGrid<CustomerFcstUploadRow>,
+      e: CellRangeEventArgs & { cancel: boolean }
+    ) => {
+      const binding = _s.columns[e.col]?.binding ?? '';
+      if (!dynBindings.has(binding)) {
+        e.cancel = true;
+        return;
+      }
+      const item = (_s.rows[e.row] as { dataItem?: CustomerFcstUploadRow }).dataItem;
+      if (item?.EDIT_FLAG !== 'Y') e.cancel = true;
+    };
+    g.beginningEdit.addHandler(beginningEditHandler);
 
-    // spdMain_Changed(CellsUpdated) 1:1 — 편집 종료 셀을 메인으로 통지 (검증+수집은 메인 소관)
+    // ⭐ spdMain_Changed(CellsUpdated) 1:1 — 편집 종료 셀을 메인으로 통지 (검증+수집은 메인 소관)
     const cellEditEndedHandler = (_s: FlexGrid<CustomerFcstUploadRow>, e: CellRangeEventArgs) => {
       const binding = _s.columns[e.col]?.binding ?? '';
       if (!dynBindings.has(binding)) return;
@@ -206,6 +232,11 @@ export const CustomerFcstUploadGrid = ({
     return () => {
       try {
         g.formatItem?.removeHandler(formatHandler);
+      } catch {
+        /* unmount race */
+      }
+      try {
+        g.beginningEdit?.removeHandler(beginningEditHandler);
       } catch {
         /* unmount race */
       }
@@ -311,10 +342,6 @@ export const CustomerFcstUploadGrid = ({
       itemsSource={data}
       autoGenerateColumns={false}
       allowSorting={true}
-      // D_ 기간 셀 × EDIT_FLAG='Y' 행만 편집 가능 (색·편집 게이트 단일 판정)
-      isCellEditable={({ binding, rowItem }) =>
-        dynBindings.has(binding) && rowItem?.EDIT_FLAG === 'Y'
-      }
     />
   );
 };

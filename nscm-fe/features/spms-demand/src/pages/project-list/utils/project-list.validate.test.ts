@@ -4,7 +4,7 @@ import { MSG } from '../project-list.constants';
 import type { MainRow, SearchCondition } from '../project-list.types';
 
 import {
-  defaultRegCompRange,
+  defaultRegCompDates,
   toDisplayDate,
   toMultiParam,
   toReqPayload,
@@ -91,17 +91,12 @@ describe('toSopDateParam / toDisplayDate — 날짜 변환', () => {
   });
 });
 
-describe('defaultRegCompRange — P-27 기본 M-1~Today (계약 ⑤ dayjs 병행)', () => {
-  it('DAY_RANGE 앵커(당월 1일) 수신 시 fr = 전월 1일 / to = 오늘', () => {
-    const { fr, to } = defaultRegCompRange('20260801:20260930');
-    expect(fr).toBe('20260701');
-    expect(/^\d{8}$/.test(to)).toBe(true);
-  });
-
-  it('DAY_RANGE 비정형/미수신 = 클라이언트 당월 1일 앵커 폴백 (fr 8자리·fr<=to)', () => {
-    const { fr, to } = defaultRegCompRange(undefined);
+describe('defaultRegCompDates — P-27 기본 M-1(한 달 전 같은 날)~Today', () => {
+  it('fr = 오늘 - 1개월 / to = 오늘 (둘 다 yyyymmdd)', () => {
+    const { fr, to } = defaultRegCompDates();
     expect(/^\d{8}$/.test(fr)).toBe(true);
-    expect(fr <= to).toBe(true);
+    expect(/^\d{8}$/.test(to)).toBe(true);
+    expect(fr < to).toBe(true);
   });
 });
 

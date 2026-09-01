@@ -136,13 +136,10 @@ class AxiosConfig {
     menuId: M,
     sheetName: S,
     procedureAction: string,
-    params?: ProcRequest<M, S>,
-    stream = false
+    params?: ProcRequest<M, S>
   ): Promise<ApiResponse<ProcResponse<M, S>>> {
-    // stream=true 면 단일패스 스트리밍 엔드포인트(call-proc-stream) 사용. 응답 형태 동일.
-    const suffix = stream ? 'call-proc-stream' : 'call-proc';
     const response = await this.post<ProcResponse<M, S>, ProcRequest<M, S>>(
-      `${menuId}/${sheetName}/${procedureAction}/${suffix}`,
+      `${menuId}/${sheetName}/${procedureAction}/call-proc`,
       params
     );
     return response.data;

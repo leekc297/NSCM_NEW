@@ -122,6 +122,8 @@ export interface OrgTreeRow {
   UPPER_DEPT_ID: string | null;
   USER_COUNT: number;
   ORGN: string;
+  /** 세션 사용자의 부서 — 조직도 기본 선택/펼침 기준 (행마다 동일 값, 첫 행 사용) */
+  SES_DEPT_ID: string;
 }
 
 // 권한관리 팝업 — 선택한 조직 노드 소속 사용자 목록 1행("UI컬럼 및 Measure정의" D=POP1_GRID1).

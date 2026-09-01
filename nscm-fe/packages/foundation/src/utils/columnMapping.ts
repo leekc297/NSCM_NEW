@@ -11,6 +11,8 @@ import type {
   RawFlexGridColumnConfig,
 } from '@foundation/models';
 
+import { safeString } from './string';
+
 const alignMap = {
   L: 'left',
   R: 'right',
@@ -35,7 +37,8 @@ const getDataType = (ctrlType: CELL_CONTROL_TYPE): DataType | undefined => {
     case CELL_CONTROL_TYPE.NUMBER_TEXT:
       return DataType.Number;
     case CELL_CONTROL_TYPE.CHECKBOX:
-      // TODO: 체크박스 디자인 조절 필요 + 값 매핑 필요
+      // TODO: 체크박스 디자인 조절 필요
+      // 'Y'/'N' 원본값과 boolean 커밋값의 동치 판정은 EditTracker.isSameValue 에서 처리(값 매핑 해결).
       return DataType.Boolean;
     default:
       return undefined;
@@ -123,6 +126,44 @@ export const parseComboFilterBindings = (bindingString?: string): Record<string,
   return result;
 };
 
+/**
+ * 행 파라미터 콤보 판정 — 컬럼 메타 PARAM10(ATTRIBUTE10) 이 'D' 인 콤보 컬럼.
+ *
+ * D 면 PARAM2 오른쪽이 "콤보 결과 컬럼명" 이 아니라 "콤보 SQL 바인드명" 으로 해석된다.
+ * 같은 슬롯에 두 문법이 겹치므로 판정이 곧 해석 스위치다.
+ *
+ * D 로 등록됐어도 PARAM2 가 비었거나 형식이 틀리면 false 를 돌려 F 경로로 떨어뜨린다 —
+ * 실을 파라미터가 없으면 재조회 자체가 성립하지 않는다. parseComboFilterBindings 가
+ * "형식이 틀리면 조건 전체 폐기" 인 것과 같은 성격이다.
+ */
+export const isRowParamCombo = (column: RawFlexGridColumnConfig): boolean =>
+  column.cellCtrlObjTpCd === CELL_CONTROL_TYPE.COMBO &&
+  !!column.cellCboDataTp &&
+  (column.attribute10 ?? '').trim().toUpperCase() === 'D' &&
+  Object.keys(parseComboFilterBindings(column.attribute2)).length > 0;
+
+/** 행 파라미터 값 정규화 — 조회 파라미터와 조합 키가 같은 규칙을 쓰도록 한 곳에 둔다. */
+export const rowParamValue = (rowItem: WijmoRowItem | undefined, binding: string): string =>
+  safeString(rowItem?.[binding]).trim();
+
+// 구분자: 데이터에 나타나지 않는 제어문자(Unit Separator, \x1F). '|' 같은 문자를 쓰면
+// ('A','BC') 와 ('AB','C') 가 같은 키로 뭉개진다.
+const ROW_PARAM_KEY_SEPARATOR = '\x1F';
+
+/**
+ * 행 파라미터 조합 키 — PARAM2 선언 순서대로 행 값을 이어 붙인다.
+ *
+ * 조회 대상을 모을 때와 결과를 찾을 때가 반드시 이 함수를 함께 써야 한다. 규칙이 갈리면
+ * 조회는 나갔는데 후보를 못 찾아 드롭다운이 영영 비는 상태가 된다.
+ */
+export const rowParamKey = (
+  bindings: Record<string, string>,
+  rowItem: WijmoRowItem | undefined
+): string =>
+  Object.keys(bindings)
+    .map(binding => rowParamValue(rowItem, binding))
+    .join(ROW_PARAM_KEY_SEPARATOR);
+
 /** 행의 상위 셀이 아직 안 채워진 상태 (null / undefined / 공백문자열). */
 const isBlankRowValue = (value: WijmoPrimitive): boolean =>
   value === null || value === undefined || (typeof value === 'string' && value.trim() === '');
@@ -149,6 +190,60 @@ export const filterComboRowsByRowItem = (
       return rowItem[bindingOfRow] === comboRow[keyOfDataMap];
     })
   );
+};
+
+/**
+ * 화면이 코드로 든 cascade 표 1건 — 행 컬럼(rowKey) 값으로 콤보 응답 컬럼(comboKey)을 맞춘다.
+ * 두 이름은 다를 수 있다 (행 END_CUSTOMER40 <-> 콤보 END_CUSTOMER 등).
+ */
+export interface ComboCascadeRule {
+  rowKey: string;
+  comboKey: string;
+  /**
+   * 콤보 쪽 값이 비어 있어도 통과시키지 않는다.
+   * 상위를 고른 뒤에는 그 상위의 것만 보여야 하는 단계에서 켠다 (End Customer -> Sales Site).
+   */
+  strict?: boolean;
+}
+
+/**
+ * 행 컨텍스트로 콤보 후보를 좁힌다 — 화면이 코드로 든 cascade 표를 적용하는 경로.
+ *
+ * 위 filterComboRowsByRowItem(컬럼 메타 attribute2 주도)과 규칙이 다르다. 여기에는 콤보 쪽 관대
+ * 통과가 있다 — 콤보 행에 그 컬럼이 없거나 비어 있으면 통과시킨다(strict 면 통과시키지 않는다).
+ * 필수: 이 관대 통과가 없으면 그 키를 안 내려주는 콤보(서버에서 이미 걸러 컬럼 자체가 없는 경우
+ * 포함)에서 후보가 통째로 0건이 되어 드롭다운이 빈 채로 굳는다.
+ * 행 쪽은 값이 비었거나 'ALL' 이면 그 조건을 건너뛴다.
+ *
+ * 돌려주기 전에 DIVISION_ID|CODE 로 중복을 제거한다. 콤보 SQL 이 부가 컬럼별로 같은 CODE 를 여러
+ * 행 내려주면 드롭다운에 같은 항목이 반복되기 때문이다. division 을 키에 남겨 두는 것은 division
+ * 컨텍스트가 다른 동명 코드까지 합치지 않기 위해서다.
+ *
+ * 새 화면은 이 함수보다 컬럼 메타 attribute2 를 먼저 검토할 것 — 콤보가 좁힘 기준 컬럼을 결과로도
+ * 내려주고 표시 콤보와 편집 후보 콤보가 같다면 메타 한 줄로 끝나고 화면 코드가 필요 없다.
+ */
+export const filterComboRowsByCascade = <T extends Record<string, unknown>>(
+  comboRows: T[],
+  row: Record<string, unknown>,
+  rules: readonly ComboCascadeRule[]
+): T[] => {
+  const filtered = comboRows.filter(comboRow =>
+    rules.every(({ rowKey, comboKey, strict }) => {
+      const rowValue = safeString(row[rowKey]).trim();
+      if (rowValue === '' || rowValue === 'ALL') return true;
+      const comboValue = safeString(comboRow[comboKey]).trim();
+      return strict ? rowValue === comboValue : comboValue === '' || rowValue === comboValue;
+    })
+  );
+
+  return [
+    ...new Map(
+      filtered.map(comboRow => [
+        `${safeString(comboRow.DIVISION_ID)}|${safeString(comboRow.CODE)}`,
+        comboRow,
+      ])
+    ).values(),
+  ];
 };
 
 /** 상위 콤보를 바꾼 뒤 후보 밖으로 밀려난 하위 셀. 되돌릴 원본을 함께 돌려준다(EditTracker 기록용). */
@@ -188,7 +283,11 @@ export const findStaleComboCells = (
       ({ column, filterKeys }) =>
         column.cellCtrlObjTpCd === CELL_CONTROL_TYPE.COMBO &&
         !!column.cellCboDataTp &&
-        filterKeys.length > 0
+        filterKeys.length > 0 &&
+        // 행 파라미터 콤보는 PARAM2 오른쪽이 콤보 결과 컬럼이 아니라 SQL 바인드명이라
+        //   이 판정(콤보 결과와 행 값 비교)이 성립하지 않는다. 재조회 결과로 판정하는
+        //   경로는 아직 없으므로 대상에서 뺀다 — 종전 동작과 같다.
+        !isRowParamCombo(column)
     );
 
   const stale: StaleComboCell[] = [];
@@ -218,16 +317,118 @@ export const findStaleComboCells = (
   return stale;
 };
 
+/**
+ * 표시 목록 중복 제거 — CODE(TRIM) 기준 first-wins.
+ *
+ * 콤보 SQL 은 화면 표시용 CODE/NAME 외에 좁힘용 부가 컬럼(DIVISION_ID·TEAM_ID·END_CUSTOMER …)을
+ * 같이 준다. 그래서 같은 CODE 가 부가 컬럼 값마다 여러 행으로 오고, 그리드에 그 부가 컬럼이 없으면
+ * 행별로 더 좁힐 수도 없어 드롭다운에 같은 항목이 여러 번 뜬다
+ * (NnMasterMapping SCM_SITE_ID = 콤보에 TEAM_ID 가 있는데 그리드엔 그 컬럼이 없다).
+ *
+ * NAME 이 아니라 CODE 로 합친다 — 서로 다른 CODE 가 같은 라벨을 쓰는 경우까지 합치면 고를 수 있는
+ * 항목 자체가 사라진다.
+ */
+const dedupeComboRowsByCode = (comboRows: ComboResponse[]): ComboResponse[] => {
+  const seen = new Map<string, ComboResponse>();
+  for (const comboRow of comboRows) {
+    const key = String(comboRow?.CODE ?? '').trim();
+    if (!seen.has(key)) seen.set(key, comboRow);
+  }
+  return seen.size === comboRows.length ? comboRows : [...seen.values()];
+};
+
+/**
+ * 표시 목록 정렬 갈래 — 숫자(0) / 영어(1) / 한글(2) / 그 외(3).
+ * 첫 글자만 본다. '3공장' 은 숫자, 'Site 1' 은 영어, '가산' 은 한글이다.
+ */
+const displayNameGroup = (name: string): number => {
+  const first = name.trim().charAt(0);
+  if (/[0-9]/.test(first)) return 0;
+  if (/[A-Za-z]/.test(first)) return 1;
+  if (/[가-힣ㄱ-ㅎㅏ-ㅣ]/.test(first)) return 2;
+  return 3;
+};
+
+/**
+ * 표시 목록 정렬 — 숫자 -> 영어 -> 한글 -> 그 외, 같은 갈래 안에서는 사전순.
+ *
+ * 주의: 콤보 SQL 의 ORDER BY 를 덮어쓴다. 등록 순서 그대로 보여야 하는 콤보가 생기면 컬럼 메타
+ * dataSortMthdCd(현재 미사용)를 조건으로 걸어 화면별로 가른다.
+ * 순서만 바꿀 뿐 후보 집합은 그대로라, findStaleComboCells 의 값 유효성 판정과 어긋나지 않는다.
+ */
+const sortComboDisplayNames = (names: string[]): string[] =>
+  [...names].sort((a, b) => {
+    const groupGap = displayNameGroup(a) - displayNameGroup(b);
+    if (groupGap !== 0) return groupGap;
+    // numeric: 자릿수가 아니라 값으로 비교한다 ('3공장' < '10공장').
+    // sensitivity base: 대소문자로는 순서를 가르지 않는다(같으면 원래 순서 유지).
+    return a.localeCompare(b, 'ko', { numeric: true, sensitivity: 'base' });
+  });
+
 const getDataMap = (dataMap: ComboResponse[] | undefined, bindingString?: string) => {
   if (!dataMap || dataMap.length === 0) return undefined;
 
   const wjDataMap = new DataMap(dataMap, 'CODE', 'NAME');
-  if (!bindingString) return wjDataMap;
+  const hasRowFilter = Object.keys(parseComboFilterBindings(bindingString)).length > 0;
 
-  if (Object.keys(parseComboFilterBindings(bindingString)).length <= 0) return wjDataMap;
+  // 손대는 것은 표시 목록뿐이다. 원본 행(collectionView.items)은 그대로 둬야 행별 좁힘 기준과
+  //   부가 컬럼으로 CODE 를 되찾는 경로(sales-site resolveComboCodeByDivision)가 산다.
+  // 필수 순서: 좁힘 -> 중복 제거 -> 정렬. 중복 제거를 좁힘보다 앞에 두면 부가 컬럼별 행이 사라져
+  //   cascade 가 깨진다 (CustomDropdown dedupeOptions 와 같은 사정).
+  wjDataMap.getDisplayValues = (rowItem?: WijmoRowItem) =>
+    sortComboDisplayNames(
+      dedupeComboRowsByCode(
+        // rowItem 없이 부르는 경로(컬럼 필터 등)는 좁힐 근거가 없으므로 전량을 대상으로 둔다.
+        hasRowFilter && rowItem
+          ? filterComboRowsByRowItem(dataMap, bindingString, rowItem)
+          : dataMap
+      ).map(item => item.NAME)
+    );
 
-  wjDataMap.getDisplayValues = (rowItem: WijmoRowItem) =>
-    filterComboRowsByRowItem(dataMap, bindingString, rowItem).map(item => item.NAME);
+  return wjDataMap;
+};
+
+/**
+ * 행 파라미터 콤보(PARAM10='D')의 DataMap.
+ *
+ * 전체 목록(파라미터 없는 메타 콤보)과 행별 조회 결과를 하나로 합친다.
+ *   · 셀 라벨은 전체 목록이 담당한다 - 후보 밖 코드라도 이름이 안 깨진다.
+ *   · 드롭다운 후보는 그 행 조합의 조회 결과만이다. 조회 전이든 0건이든 빈 목록이고,
+ *     전체 목록이 후보로 새는 경로는 없다.
+ *   · 라벨을 코드로 되돌리는 getKeyValue 도 이 합집합에서 찾는다 - 후보 행이 합집합에
+ *     없으면 사용자가 고른 값이 빈 값으로 커밋된다.
+ *
+ * 합집합에서 전체 목록을 앞에 둔다. DataMap 내부 색인은 같은 CODE 중 첫 항목만 담으므로
+ * 표시명이 메타 기준으로 고정된다.
+ *
+ * 금지: 편집 시점에 column.dataMap 을 갈아끼우지 말 것. dataMap 은 셀이 아니라 컬럼
+ * 속성이라 그 컬럼 전 행이 좁혀진 맵을 탄다(2026-08-21 DMF0049 실사고).
+ */
+const getRowParamDataMap = (column: RawFlexGridColumnConfig): DataMap | undefined => {
+  const bindings = parseComboFilterBindings(column.attribute2);
+  const metaRows = column.dataMap ?? [];
+  // 후보는 Map 스냅샷으로 고정한다. column.rowParamRows 를 살아 있는 참조로 들고 있으면
+  //   DataMap 색인(아래 allRows 복사본)과 시점이 갈린다 - 생성 뒤 주입된 후보는 색인에 없어
+  //   드롭다운에 이름 대신 코드 원문이 뜨고, 라벨을 코드로 되돌리지 못해 고른 값이 빈 값으로
+  //   커밋된다. 두 축을 반드시 같은 스냅샷에서 뽑을 것.
+  // 겸해서 plain object 인덱싱 위험도 사라진다 - 바인딩이 하나뿐인 컬럼은 조합 키에 구분자가
+  //   없어 행 값이 그대로 키가 되는데, 그 값이 'constructor' 면 프로토타입 체인이 걸려 후보
+  //   자리에 함수가 온다.
+  const rowsByKey = new Map(Object.entries(column.rowParamRows ?? {}));
+  const allRows = [...metaRows, ...[...rowsByKey.values()].flat()];
+  if (allRows.length === 0) return undefined;
+
+  const wjDataMap = new DataMap(allRows, 'CODE', 'NAME');
+
+  wjDataMap.getDisplayValues = (rowItem?: WijmoRowItem) =>
+    sortComboDisplayNames(
+      dedupeComboRowsByCode(
+        // rowItem 없이 부르는 경로(컬럼 필터 등)는 좁힐 근거가 없으므로 전량을 준다 -
+        //   F 경로(getDataMap)와 같은 규칙이다. 드롭다운은 항상 rowItem 과 함께 오므로
+        //   "후보에 전체 목록이 새면 안 된다" 규칙과 충돌하지 않는다.
+        rowItem ? (rowsByKey.get(rowParamKey(bindings, rowItem)) ?? []) : allRows
+      ).map(item => wjDataMap.getDisplayValue(item.CODE))
+    );
 
   return wjDataMap;
 };
@@ -306,7 +507,9 @@ const toLeafColumn = (column: NormalizedRawColumn): FlexGridColumnConfig => ({
   _personalizable: column.personalizable,
   _sClsLblNm: column.sClsLblNm,
   _lClsLblNm: column.lClsLblNm,
-  dataMap: getDataMap(column.dataMap, column.attribute2),
+  dataMap: isRowParamCombo(column)
+    ? getRowParamDataMap(column)
+    : getDataMap(column.dataMap, column.attribute2),
   isRequired: false, // TODO: 논의 필요..? -강민재
   editor: column.cellCtrlObjTpCd ? getEditor(column.cellCtrlObjTpCd) : undefined,
   dataType: column.cellCtrlObjTpCd ? getDataType(column.cellCtrlObjTpCd) : undefined,

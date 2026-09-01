@@ -8,6 +8,7 @@ import {
   DataMap,
   _EditHandler,
   SelectionMode,
+  type CellRangeEventArgs,
   type FlexGrid as TFlexGrid,
 } from '@mescius/wijmo.grid';
 import { FlexGridFilter } from '@mescius/wijmo.grid.filter';
@@ -59,7 +60,7 @@ import type { ColumnLayoutRow } from '../../molecules/columnLayoutList/ColumnLay
 import { ColumnLayoutModal } from '../../templates/modals/column-layout-modal/ColumnLayoutModal';
 import { toColumnLayoutSettings } from '../../templates/modals/column-layout-modal/columnLayoutModal.utils';
 
-import { useDataGridUtils, type IsCellEditable } from './dataGridUtils';
+import { useDataGridUtils } from './dataGridUtils';
 import { attachGridContextMenu, type GridContextMenuItem } from './gridContextMenu';
 import {
   applyGridLayout,
@@ -69,6 +70,7 @@ import {
   type GridLayoutRow,
   type TitleSetSaveRow,
 } from './titleSetApi';
+import { useRowParamCombos } from './useRowParamCombos';
 
 const initialIndexRowHeaderWidth = 50;
 
@@ -214,15 +216,6 @@ interface DataGridProps<T extends WijmoRowItem = WijmoRowItem> extends FlexGridP
   itemsSource?: T[];
   staticColumns?: RawFlexGridColumnConfig[];
   dynamicColumns?: FlexGridColumnConfig[];
-  /**
-   * 셀 편집가능 판정 주입 — 정적 메타(_inputEditType)로 못 다루는 동적(주/월/일) 컬럼용.
-   * 지정 시 색(wj-cell-editable)과 편집 게이트(beginningEdit/pastingCell)가 이 단일 함수를 공유한다
-   *   (화면이 formatItem 에서 wj-cell-editable 을 직접 토글하거나 자체 beginningEdit 게이트를 걸 필요가 없어진다).
-   * 미지정 시 기존 동작(GridUtils.isEditableCell) 그대로 — 회귀 0.
-   * 주의: 과거 Gray(wj-cell-non-editable)·변경색·rail·popup 등 화면 고유 장식은 이 predicate 소관이 아니라
-   *   화면 formatItem 이 계속 담당한다(공통 핸들러는 wj-cell-editable 만 찍는다).
-   */
-  isCellEditable?: IsCellEditable<T>;
   useSummaryTooltip?: boolean;
   useCellTooptip?: boolean;
   useCheckbox?: boolean;
@@ -289,7 +282,6 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
   itemsSource = [],
   staticColumns = [],
   dynamicColumns = [],
-  isCellEditable,
   useSummaryTooltip = true,
   useCellTooptip = true,
   useCheckbox = false,
@@ -326,9 +318,6 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
   headerRowHeightRef.current = headerRowHeight;
   const emptyCellAsZeroRef = useRef(emptyCellAsZero);
   emptyCellAsZeroRef.current = emptyCellAsZero;
-  // 편집가능 판정 predicate — 핸들러는 grid init 때 1회 등록되므로 ref 로 최신 closure 를 읽힌다.
-  const isCellEditableRef = useRef(isCellEditable);
-  isCellEditableRef.current = isCellEditable;
 
   // 정렬 사용 여부 — 화면이 allowSorting 을 false/None 으로 주면 정렬 자체를 막는다.
   // wijmo 기본 정렬은 handleInitialized 에서 항상 None 이고 실제 정렬은 공용 헤더 클릭
@@ -610,7 +599,7 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
     setSortableColumnHeaderClick,
     setResultColumn,
     setHandleUppercase,
-  } = useDataGridUtils<T>({ isCellEditableRef });
+  } = useDataGridUtils<T>();
 
   // 자동 콤보 필터 — comboId + comboParams(@mnuId/@divisionId 등) 를 함께 전달해 파라미터 콤보 해소.
   //   (기존엔 comboId 만 전달 → @mnuId 필요 콤보가 빈 결과가 되던 문제 fix. comboParams 미지정 시 종전과 동일)
@@ -640,6 +629,16 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
   const comboQueryMapRef = useRef(comboQueryMap);
   comboQueryMapRef.current = comboQueryMap;
 
+  // 컬럼 메타 PARAM10='D' 인 콤보 — 행 값 조합마다 따로 조회한다. 규칙은 useRowParamCombos 참조.
+  const { rowParamRows, registerTouchedRow } = useRowParamCombos({
+    columns: layoutAppliedColumns.filter(column => column.display),
+    data: itemsSource,
+  });
+
+  // 핸들러는 grid 생성 시 한 번만 걸리므로 ref 로 최신 콜백을 본다.
+  const registerTouchedRowRef = useRef(registerTouchedRow);
+  registerTouchedRowRef.current = registerTouchedRow;
+
   const mappedStaticColumns = mapRawColumnsToWijmoColumns(
     layoutAppliedColumns
       .filter(column => column.display)
@@ -649,6 +648,7 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
           column.cellCtrlObjTpCd === CELL_CONTROL_TYPE.COMBO && column.cellCboDataTp
             ? comboQueryMap[column.cellCboDataTp]
             : undefined,
+        rowParamRows: rowParamRows[column.colNm],
       }))
   ).map(col => ({
     ...col,
@@ -767,6 +767,31 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
     grid.cellEditEnded.addHandler(clearStaleComboCellsHandler as never);
     grid.pastedCell.addHandler(clearStaleComboCellsHandler as never);
 
+    // 행 파라미터 콤보(PARAM10='D')가 쓸 행 조합을 조회 대상에 올린다.
+    //   wijmo 가 dataItem 을 제자리 수정해 itemsSource 참조가 안 바뀌므로 이 등록이 없으면
+    //   방금 입력한 값으로는 조회가 영영 안 나가고 드롭다운이 빈 채로 남는다.
+    const registerRowParamHandler = (sender: TFlexGrid<T>, event: { row: number; col: number }) => {
+      const touchedBinding = sender.columns[event.col]?.binding ?? '';
+      if (!touchedBinding) return;
+      const row = sender.rows[event.row]?.dataItem as WijmoRowItem | undefined;
+      if (!row) return;
+      registerTouchedRowRef.current(touchedBinding, row);
+    };
+    grid.cellEditEnded.addHandler(registerRowParamHandler as never);
+    grid.pastedCell.addHandler(registerRowParamHandler as never);
+
+    // 편집이 시작되는 시점에도 올린다 — 편집 결과만으로는 못 메우는 경로가 있다.
+    //   GridAction.addRow 는 source.splice 로 행을 끼워 넣을 뿐 React state 를 안 건드려
+    //   렌더가 아예 안 난다. 그래서 신규행 조합은 렌더 시점에 읽는 itemsSource 에 안 잡히고,
+    //   회사 코드를 안 채운 채 Sales Plant 를 열면 그 조합이 슬롯에 없어 드롭다운이 빈 채로 뜬다.
+    //   여기서 올리면 조회가 돌아올 때 렌더가 나며 채워진다(첫 진입은 한 박자 늦을 수 있다).
+    //   재렌더 폭주가 없는 근거: 이미 등록된 조합이면 훅이 prev 를 그대로 돌려준다.
+    const registerRowParamOnEditHandler = (sender: TFlexGrid<T>, event: CellRangeEventArgs) => {
+      // 공통 편집 가능 판정(setEditableColumns)이 이미 막은 셀이면 관여하지 않는다.
+      if (event.cancel) return;
+      registerRowParamHandler(sender, event);
+    };
+
     grid.allowDragging = AllowDragging.None;
     grid.allowSorting = AllowSorting.None;
     // ⭐ Overflow 비트(8) 필수 — 없으면(ColumnsAllCells = 5) wijmo _MouseHandler._handleResizing 의
@@ -791,6 +816,9 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
     grid.formatItem.addHandler(formatSortableColumns);
 
     setEditableColumns(grid);
+    // 위 setEditableColumns 뒤에 걸어야 한다 — wijmo Event 는 등록 순서대로 부르므로 앞에 걸면
+    //   편집 가능 판정이 event.cancel 을 세우기 전에 돌아 그 가드가 무의미해진다.
+    grid.beginningEdit.addHandler(registerRowParamOnEditHandler as never);
     setMoveCellByTab(grid);
     if (sortingEnabled) setSortableColumnHeaderClick(grid);
     setMoveByMetakey(grid, staticColumns.length);
@@ -862,8 +890,23 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
       if (h == null) return;
       const headerRows = grid.columnHeaders?.rows;
       if (!headerRows || headerRows.length === 0) return;
-      if (Math.round(headerRows.defaultSize) === h) return;
-      headerRows.defaultSize = h;
+      // ⭐ #93 (2026-08-28 실측 정정) — wijmo `_ColumnGroupHandler._buildColumnGroups` 는 columnGroups 대입 때마다
+      //   각 헤더 row 에 **명시 height** 를 넣는다(정의 객체의 height — 1단 정적 컬럼이 3행을 세로 병합하면 그 48 이
+      //   전 행에 들어가 3단 헤더가 144px 로 벌어진다). 명시 height 가 있으면 defaultSize 는 무시되므로
+      //   row 단위로도 강제한다. guard: 이미 목표 높이면 skip → updatedLayout 무한 루프 방지.
+      let changed = false;
+      for (let i = 0; i < headerRows.length; i += 1) {
+        const r = headerRows[i];
+        if (Math.round(r.height ?? headerRows.defaultSize) !== h) {
+          r.height = h;
+          changed = true;
+        }
+      }
+      if (Math.round(headerRows.defaultSize) !== h) {
+        headerRows.defaultSize = h;
+        changed = true;
+      }
+      if (!changed) return;
     });
 
     // 상위에서 넘긴 initialized 는 내부 설정이 모두 끝난 뒤 마지막에 호출한다.

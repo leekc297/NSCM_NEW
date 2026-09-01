@@ -34,6 +34,38 @@ export const GUBUN_SHEET: Record<Gubun, { main: SHEETS; title: SHEETS }> = {
   [GUBUN.BIZ_PLAN]: { main: SHEETS.BIZ_PLAN, title: SHEETS.BIZ_PLAN_TITLE },
 };
 
+/**
+ * [E20260831-METASHEET] UI CATEGORY(SHEET_COLUMNS) 메타 조회 축 — **AS-IS SpreadInfo 시트명 그대로**
+ * (사용자 지시 2026-08-31 "SHEET 명은 AS-IS 명칭 동일하게").
+ * 실사고: FE 가 call-proc 배선 시트명(camel)으로 `/admin/menu/DMF0035/column` 을 호출해
+ *   MKT('Mkt Fcst Waterfall' 48행)·BIZ('Biz Plan Waterfall' 38행) 가 0행 → Grid Layout Fields 에
+ *   DEFAULT(Rows) 만 노출. SALES/BIZ 메타는 통합 원천 화면의 **종속 PROGRAM_ID**(DMF0022/DMF0051) 소속
+ *   (hook #148 G2 — DMF0035=DMF0022+DMF0051 통합 계보)이라 프로그램 경로도 함께 스위칭해야 한다.
+ * ⚠ call-proc 배선 시트명(SHEETS enum, camel)은 별개 축 — 개명 금지 (BTN/API/PROC 배선이 그 표기).
+ */
+export const GUBUN_META: Record<
+  Gubun,
+  { programId: string; sheetNm: string; measureSheetNm: string }
+> = {
+  // ⚠ 축별 시트명이 다르다(사내 실측 2026-08-31): SALES 는 COLUMN 축='salesPlanWaterfall'(65행) /
+  //   MEASURE 축='Sales Plan Waterfall'(31행). 실측 표기 그대로 — 개명 ⛔.
+  [GUBUN.MKT_FCST]: {
+    programId: 'DMF0035',
+    sheetNm: 'Mkt Fcst Waterfall',
+    measureSheetNm: 'Mkt Fcst Waterfall',
+  },
+  [GUBUN.SALES_PLAN]: {
+    programId: 'DMF0022',
+    sheetNm: 'salesPlanWaterfall',
+    measureSheetNm: 'Sales Plan Waterfall',
+  },
+  [GUBUN.BIZ_PLAN]: {
+    programId: 'DMF0051',
+    sheetNm: 'Biz Plan Waterfall',
+    measureSheetNm: 'Biz Plan Waterfall',
+  },
+};
+
 /** MKT/SALES 버킷 (AS-IS DMF0003_GET_REPORT_BUCKET_TYPE_CODE) */
 export const BUCKET_TYPE = {
   DAILY: 'DAILY',
@@ -96,3 +128,52 @@ export const QTY_MEASURES_BIZ = [...QTY_MEASURES_SALES, 'Business_Plan'] as cons
 
 /** 기간(버킷) 컬럼 판정 — D_yyyymmdd / W_yyyymmWW / M_yyyymm / Q_yyyy_q / Y_yyyy */
 export const PERIOD_COLUMN_REGEX = /^(D_|W_|M_|Q_|Y_)\d/;
+
+/**
+ * UM-08 — bucket 전환 시 AS-IS `InitSpread()`(타이틀 재조회 + 시트 재생성 = 그리드 비움) 경계.
+ * DMF0035 cboBucketType_SelectedIndexChanged .cs:1594~1610: ①(구 WEEKLY|MONTHLY) → 신 DAILY
+ * ②신·구 중 하나가 ONLY_WEEKLY. 그 외 = SetSpreadColumn() 가시성 토글뿐.
+ * BIZ(M/Q/Y 3계층 — 0051 은 FE 컬럼 토글만) 은 경계 없음.
+ */
+export const isBucketResetBoundary = (gubun: Gubun, prev: string, next: string): boolean =>
+  gubun !== GUBUN.BIZ_PLAN &&
+  prev !== next &&
+  (prev === BUCKET_TYPE.ONLY_WEEKLY ||
+    next === BUCKET_TYPE.ONLY_WEEKLY ||
+    ((prev === BUCKET_TYPE.WEEKLY || prev === BUCKET_TYPE.MONTHLY) && next === BUCKET_TYPE.DAILY));
+
+/**
+ * UM-04 — 기간 컬럼 소수 자릿수 (SP DATA_SCALE_NUMBER: MKT 타이틀 기간 컬럼은 NULL → AS-IS
+ * SpreadInfo.cs L1433~1440 decimalPlaces=0). 행별 NOTATION 이 있으면 그것이 우선한다(formatByNotation).
+ */
+export const scaleOf = (raw: string | number | null | undefined, fallback = 0): number => {
+  const s = String(raw ?? '').trim();
+  if (!s) return fallback;
+  const n = Number(s);
+  return Number.isFinite(n) && n > 0 ? Math.trunc(n) : fallback;
+};
+
+/**
+ * UM-04 — AS-IS DMF0035 [E20231106-000212] 행별 NOTATION 포맷 (.cs:1199~1273 SetRowFormat 1:1).
+ *   INTEGER : 정수 표기 `###,###,###,##0` (0.000 도 0)
+ *   POINT   : 정수면 정수 / 소수면 소수 3자리까지(꼬리 0 제거) `###,###,###,###.###` · 0.xxx 는 `0.###`
+ *   POINT3  : 무조건 소수 3자리 `###,###,###,###.###` 로 채움(`.#00`/`.##0` = 0 패딩) · 0.000 은 0
+ *   DEFAULT/'' : 컬럼 기본 포맷(호출측 fallback)
+ * @returns 표시 문자열 (fallback = null 이면 호출측이 기본 포맷 유지)
+ */
+export const formatByNotation = (value: number, notation: string): string | null => {
+  const n = String(notation ?? '')
+    .trim()
+    .toUpperCase();
+  const int0 = (v: number): string => Math.round(v).toLocaleString('en-US');
+  if (n === 'INTEGER') return int0(value);
+  if (n === 'POINT') {
+    if (Number.isInteger(value)) return int0(value);
+    return value.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 3 });
+  }
+  if (n === 'POINT3') {
+    if (Math.abs(value) < 0.0005) return '0';
+    return value.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
+  }
+  return null;
+};

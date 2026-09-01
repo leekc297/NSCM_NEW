@@ -96,7 +96,8 @@ export const callProc = async (
   return { ok: true, count: parseCount(res.data) };
 };
 
-// 메인 SAVE — PKG_DMF0042.P_DMF0042_SAVE_DM_PLN_BP_FCST ('^' bulk 19키 + 감사 2 BE주입)
+// 메인 SAVE — PKG_DMF0042.P_DMF0042_SAVE_DM_PLN_BP_FCST (SP 21 IN — '^' bulk 19키 + 감사 2키.
+//   감사 2키도 FE 가 세션 userId 로 싣는다 — BE 자동 주입은 sesUserId/sesLangCd 뿐이다.)
 export const callSaveBusinessPlan = (payload: Record<string, string>): Promise<CallProcResult> =>
   callProc(SHEETS.MAIN, 'SAVE', payload);
 

@@ -1,0 +1,61 @@
+{
+ "menu": "DMF0040",
+ "stamp": "20260827",
+ "db": {
+  "01_DDL_GTT.sql": "GTT 6본 (접두 ['GT_DM40'] + ALL_DEPENDENCIES)",
+  "10_PKG_DMF0040_SPEC.sql": "SPEC [('PACKAGE', 'VALID', '2026-07-21 16:39'), ('PACKAGE BODY', 'VALID', '2026-08-27 00:28')]",
+  "11_PKG_DMF0040_BODY.sql": "BODY [('PACKAGE', 'VALID', '2026-07-21 16:39'), ('PACKAGE BODY', 'VALID', '2026-08-27 00:28')]",
+  "12_PKG_DMF0007_SPEC.sql": "SPEC [('PACKAGE', 'VALID', '2026-07-21 16:39'), ('PACKAGE BODY', 'VALID', '2026-08-25 11:41')]",
+  "13_PKG_DMF0007_BODY.sql": "BODY [('PACKAGE', 'VALID', '2026-07-21 16:39'), ('PACKAGE BODY', 'VALID', '2026-08-25 11:41')]",
+  "14_FUNCTION_FN_MULTY_TIME.sql": "의존 FUNCTION (기이관이면 skip 가능)",
+  "15_PROCEDURE_PR_SCM_SYS_LOG_BATCH.sql": "의존 PROCEDURE (기이관이면 skip 가능)",
+  "20:SCM_ADM_PROGRAM": 1,
+  "20:SCM_ADM_MNU_M": 1,
+  "20:SCM_ADM_USER_GR_MNU_MPG_M": 4,
+  "20:SCM_ADM_MNU_BTN_MPG_M": 5,
+  "20:SCM_ADM_USER_GR_MNU_BTN_MPG_M": 20,
+  "20:SCM_ADM_API_M": 5,
+  "20_MENU_WIRING_AUTH.sql": "MERGE ON PK 실측",
+  "24:DMF0002_GET_TITLESET_POPUP": 7,
+  "24:DMF0040_GET_SPREAD_TITLE": 7,
+  "24:PKG_DMF0040.P_DMF0040_GET_MKT_FCST_COMPARISON": 20,
+  "24:PKG_SCM0002.P_SCM0002_GET_VERSIONBYWATERFALLPOPUP": 8,
+  "24:SCM0002_SET_TITLESET_POPUP": 14,
+  "24_PROC_M.sql": "5 SP",
+  "22:SCM_MST_SHEET_COLUMNS:Mkt Fcst Waterfall": 48,
+  "22:SCM_MST_SHEET_MEASURE:Mkt Fcst Waterfall": 3,
+  "22_SHEET_META.sql": "시트 단위 재적재",
+  "25_EXCEL_COLUMNS.sql": "0행",
+  "26_LOOKUP_DETAIL.sql": "0행",
+  "21_CMBO_SQL.sql": "12본 (FE 요청 16: 미등재 [' ', 'CityCode', 'CountryCode', 'VersionNo'])",
+  "23_MSG_LBL_MNU.sql": "72행 / 미존재 ['MSG00166', 'MSG_API_DMF0040_mktFcstComparison_SEARCH', 'MSG_API_DMF0040_spreadTitle_SEARCH', 'MSG_API_DMF0040_titleSet_SAVE', 'MSG_API_DMF0040_titleSet_SEARCH', 'MSG_API_DMF0040_version_SEARCH']",
+  "90_VERIFY.sql": "기대 카운트 실측"
+ },
+ "fe": {
+  "merge": [
+   "configs/types/procedures.d.ts",
+   "procedures.d.ts.DMF0040_BLOCK.txt (추출 L4486~L4495)"
+  ],
+  "files": [
+   "features/demand/src/pages/mkt-fcst-comparison/index.ts",
+   "features/demand/src/pages/mkt-fcst-comparison/mkt-fcst-comparison.constants.ts",
+   "features/demand/src/pages/mkt-fcst-comparison/mkt-fcst-comparison.types.ts",
+   "features/demand/src/pages/mkt-fcst-comparison/MktFcstComparison.tsx",
+   "features/demand/src/pages/mkt-fcst-comparison/useMktFcstComparisonStore.ts",
+   "features/demand/src/pages/mkt-fcst-comparison/__asis-mapping__.md",
+   "features/demand/src/pages/mkt-fcst-comparison/components/ComparisonVersionModal.module.scss",
+   "features/demand/src/pages/mkt-fcst-comparison/components/ComparisonVersionModal.tsx",
+   "features/demand/src/pages/mkt-fcst-comparison/components/MktFcstComparisonForm.module.scss",
+   "features/demand/src/pages/mkt-fcst-comparison/components/MktFcstComparisonForm.tsx",
+   "features/demand/src/pages/mkt-fcst-comparison/components/MktFcstComparisonGrid.tsx",
+   "features/demand/src/pages/mkt-fcst-comparison/utils/mkt-fcst-comparison.api.ts"
+  ],
+  "external_feature_imports": [
+   "features/master/src/components"
+  ]
+ },
+ "notes": [
+  "공통 수정분 = procedures.d.ts(DMF0040 계약 블록).",
+  "SCM_MST_TITLESET_USER / SCM_ADM_USER_MNU_SRCH_COND_M / SCM_ADM_EXCEL_UPLOAD(스테이징) / *_BAK* 는 사용자·임시 데이터라 이관 제외"
+ ]
+}

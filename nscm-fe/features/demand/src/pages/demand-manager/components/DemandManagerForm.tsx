@@ -13,8 +13,7 @@ import styles from './DemandManagerForm.module.scss';
 interface Props {
   onSearch: () => void;
   onOpenVersionModal: () => void;
-  versionLabel: string;
-  /** Version 직접 입력 — 입력값이 곧 조회에 쓰이는 VERSION_NO 다(팝업 라벨은 해제된다). */
+  /** Version 직접 입력 — 입력값이 곧 조회에 쓰이는 VERSION_NO 다. */
   onChangeVersion: (versionNo: string) => void;
 }
 
@@ -24,12 +23,7 @@ interface Props {
 const ymToDayjs = (ym: string): Dayjs | null =>
   /^\d{6}$/.test(ym) ? dayjs(`${ym.slice(0, 4)}-${ym.slice(4, 6)}-01`) : null;
 
-export const DemandManagerForm = ({
-  onSearch,
-  onOpenVersionModal,
-  versionLabel,
-  onChangeVersion,
-}: Props) => {
+export const DemandManagerForm = ({ onSearch, onOpenVersionModal, onChangeVersion }: Props) => {
   const { t } = useTranslation();
 
   const sc = useDemandManagerStore(s => s.searchCondition);
@@ -46,12 +40,12 @@ export const DemandManagerForm = ({
           {/* Version — 직접 입력 + 우측 팝업 버튼. 기본 선택값이 없어 미선택 시 빈 칸이고,
               조회는 MSG00283 으로 막는다.
               공용 VersionField 를 쓰지 않는 이유: 빈 값에 'Current' 를 대신 표시해
-              (DMF0082/DMF0093 은 그 값이 유효한 버전 토큰) 선택된 것처럼 보이기 때문.
+              (DMF0082/DMF0020 은 그 값이 유효한 버전 토큰) 선택된 것처럼 보이기 때문.
 
-              ⭐ 표시값은 팝업 채택 시 'VERSION_NO + 설명'(versionLabel)이지만, 조회에 나가는 값은
-                VERSION_NO(sc.versionNo) 하나다. 그래서 라벨이 떠 있는 상태로 편집을 시작하면
-                설명까지 VERSION_NO 로 들어가 버린다 → 포커스 순간 라벨을 풀어 코드만 남긴다. */}
-          <Grid size={6}>
+              표시값 = 조회키 = VERSION_NO 하나다. 팝업이 설명을 덧붙여 보여주다가 포커스 순간
+                코드로 되돌리면 값이 저절로 바뀌는 것처럼 보여서(2026-08-27 사용자 지적) 없앴다. */}
+          {/* size=3 — DMF0020 sales-future-price 의 VersionField(gridSize=3)와 동일 폭 */}
+          <Grid size={3}>
             <FormItem
               label={t('LBL00513', 'Version')}
               labelAlign='right'
@@ -61,10 +55,7 @@ export const DemandManagerForm = ({
                 <div className={styles.versionCell}>
                   <InputField
                     fullWidth
-                    value={versionLabel || sc.versionNo}
-                    onFocus={() => {
-                      if (versionLabel) onChangeVersion(sc.versionNo);
-                    }}
+                    value={sc.versionNo}
                     onChange={e => onChangeVersion(e.target.value)}
                   />
                   <Button
@@ -79,7 +70,7 @@ export const DemandManagerForm = ({
           </Grid>
 
           {/* Period — 월 구간. 이 값이 그리드 월 컬럼 개수와 헤더를 결정한다 */}
-          <Grid size={6}>
+          <Grid size={4}>
             <FormItem
               label={t('LBL00013', 'Period')}
               labelAlign='right'

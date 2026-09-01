@@ -53,7 +53,7 @@ interface ErpEdiMasterAction {
   reset: () => void;
   /** DMF0004 표준 명칭 (Form 호출). Partial<SearchCondition> 받음 */
   setSearchParams: (params: Partial<SearchCondition>) => void;
-  /** DMF0004 표준 명칭 (Form 호출). Summary + Repair filters 동시 set */
+  /** DMF0004 표준 명칭 (Form 호출). 상단 Summary(+Update History) 만 조회 */
   setSummaryFilters: () => void;
   /** 첫 진입 시 Summary/Repair 자동 조회 없이 Update History(Form 상단 Last Update)만 조회 */
   setUpdateHistoryFilter: () => void;
@@ -126,21 +126,16 @@ export const useErpEdiMasterStore = createPersistedStoreWithTab<
         state.searchParams = { ...get().searchParams, ...params };
       });
     },
-    // AS-IS FindData_Main + FindData_SubRepair (.cs L727, L800): Summary + Repair 동시 호출
-    // + AS-IS .cs L2918 DMF0000_GET_UPDATE_HISTORY 동반 호출 — Form 의 Last Update Start/End 표시
+    // 조회 = 상단 Summary 만 (AS-IS 동일). 화면은 Summary 더블클릭 -> Repair -> 하단 순의 드릴다운이라
+    //   조회 시점에 Repair 까지 채우면 아직 고르지 않은 sender/flag 로 오른쪽이 먼저 차버린다.
+    //   Repair 는 handleSummaryDoubleClick 의 setRepairFilter() 가 조회한다.
+    // AS-IS .cs L2918 DMF0000_GET_UPDATE_HISTORY 동반 호출 — Form 의 Last Update Start/End 표시
     setSummaryFilters: () => {
       const sesUserId = useSessionStore.getState().session.userId ?? '';
       set(state => {
         const c = state.searchParams;
         state.filters[SHEETS.SUMMARY] = {
           divisionId: c.divisionId,
-          sesUserId,
-          menuId: MENU_ID,
-        };
-        state.filters[SHEETS.REPAIR] = {
-          divisionId: c.divisionId,
-          senderName: c.senderName,
-          flag: c.flag,
           sesUserId,
           menuId: MENU_ID,
         };
@@ -232,12 +227,16 @@ export const useErpEdiMasterStore = createPersistedStoreWithTab<
         state.filters[SHEETS.SSPM] = undefined;
       });
     },
+    // 필수: repairContext 도 함께 비운다. filter 만 지우면 이전 division 의 드릴다운 선택이 남아
+    //   하단 탭을 한 번만 눌러도 activeTab/repairContext effect 가 옛 division 값으로 하단을 다시 조회한다
+    //   (handleInsert 의 prefill 도 옛 값이 된다).
     clearAllGrids: () => {
       set(state => {
         state.filters[SHEETS.SUMMARY] = undefined;
         state.filters[SHEETS.REPAIR] = undefined;
         state.filters[SHEETS.SALES_SITE] = undefined;
         state.filters[SHEETS.SSPM] = undefined;
+        state.repairContext = undefined;
       });
     },
     setSalesSiteFilters: input => {

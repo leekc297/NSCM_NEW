@@ -40,30 +40,32 @@ export const StorageLocationModal = ({
     filters: ['MyDivision'],
   });
 
-  const EMPTY_FILER = useMemo(() => ({ divisionId: divisionId, storageId: '' }), [divisionId]);
-
-  const [modalFilters, setModalFilters] = useState<{
+  // 실제 조회 조건 — Search 버튼/Enter(그리고 팝업 오픈) 시에만 갱신되고, 그때 프로시저를 재호출한다.
+  //   (useTabProcQuery 는 filters 가 query key 라 값이 바뀌면 재조회. COM0003 은 storageId 를
+  //   IN 파라미터로 받는다 — configs/types/procedures.d.ts COM0003.sloc.request 참고)
+  const [searchParam, setSearchParam] = useState<{
     divisionId: string;
     storageId: string;
-  }>(EMPTY_FILER);
+  }>({ divisionId, storageId });
+
+  // 입력 중인 값 — 조회하지 않고 로컬 state 에만 담아둔다.
+  const [storageIdInput, setStorageIdInput] = useState<string>(storageId);
 
   const { data: slocData } = useTabProcQuery<MODAL_SLOC>({
     menuId: MODAL_SLOC,
     sheetName: MODAL_SHEET_SLOC,
     tabId: MODAL_SLOC,
-    filters: EMPTY_FILER,
+    filters: searchParam,
     enabled: true,
   });
 
-  const itemsSource = (slocData?.o_rc1 ?? []).filter(sloc =>
-    (sloc.STORAGE_ID ?? '').toLowerCase().includes(modalFilters.storageId.toLowerCase())
-  );
+  // 필터링은 프로시저(storageId 파라미터)가 하고, 그리드는 조회 결과를 그대로 보여준다.
+  //   useMemo — 매 렌더 새 배열이면 그리드가 re-bind 되어 스크롤·선택이 초기화된다.
+  const itemsSource = useMemo(() => slocData?.o_rc1 ?? [], [slocData]);
 
-  // 입력값은 제어 컴포넌트로 둔다. modaless 라 닫아도 언마운트되지 않아, defaultValue 로 두면 다시 열 때
-  //   초기화 effect 가 state 를 되돌려도 입력창에는 직전 문자가 그대로 남는다.
-  // 주의: debounce 금지 - 제어 입력에서 setState 를 늦추면 타이핑이 밀리거나 글자가 유실된다.
-  const handleFilterChange = (storageId: string) =>
-    setModalFilters(filter => ({ ...filter, storageId }));
+  const handleSearch = () => {
+    setSearchParam(param => ({ ...param, storageId: storageIdInput }));
+  };
 
   const handleDblClick = (mouseEvent: MouseEvent) => {
     const grid = gridRef.current;
@@ -81,10 +83,11 @@ export const StorageLocationModal = ({
 
   useEffect(() => {
     if (!open) return;
-    setModalFilters({
+    setSearchParam({
       divisionId: divisionId,
       storageId: storageId,
     });
+    setStorageIdInput(storageId);
     if (!initialized) void fetchStaticColumns();
   }, [open]);
 
@@ -104,6 +107,8 @@ export const StorageLocationModal = ({
       customContentArea={
         <div className={styles.dialogContentWrapper}>
           <SearchArea
+            searchButtonLabel={t('LBL00664', 'Search')}
+            onSearch={handleSearch}
             conditions={
               <>
                 <Grid size={6}>
@@ -126,8 +131,9 @@ export const StorageLocationModal = ({
                     render={() => (
                       <InputField
                         fullWidth
-                        value={modalFilters.storageId}
-                        onChange={e => handleFilterChange(e.target.value)}
+                        value={storageIdInput}
+                        onChange={e => setStorageIdInput(e.target.value)}
+                        onKeyDown={e => e.key === 'Enter' && handleSearch()}
                       />
                     )}
                   />

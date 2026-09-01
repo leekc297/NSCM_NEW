@@ -21,6 +21,7 @@ import { useMessageStore } from '@shared/stores';
 import { EXCHANGE_RATE_COLUMNS, MENU_ID, SHEETS } from '../../sales-future-price.constants';
 
 import styles from './ExchangeRateModal.module.scss';
+import { useExchangeRateModalStore } from './exchangeRateModalStore';
 
 interface Props {
   open: boolean;
@@ -87,7 +88,8 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
   const [periodTo, setPeriodTo] = useState(defaultPeriod.end);
   // 조회에 실제 반영되는 "확정 기간": 달력 선택(periodFrom/To)은 UI 편집값일 뿐,
   //   query key 로는 이 확정값만 사용 → 달력만 바꿨을 때 자동 재조회되지 않음. 최초 open + Search 버튼에서만 갱신.
-  const [queryPeriod, setQueryPeriod] = useState(defaultPeriod);
+  const queryPeriod = useExchangeRateModalStore(state => state.queryPeriod);
+  const setQueryPeriod = useExchangeRateModalStore(state => state.setQueryPeriod);
 
   useEffect(() => {
     if (open) {
@@ -96,7 +98,7 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
       setPeriodTo(defaultPeriod.end);
       setQueryPeriod(defaultPeriod); // 최초 open: 확정 기간 세팅(= 자동 1회 조회)
     }
-  }, [open, defaultDivision, defaultPeriod]);
+  }, [open, defaultDivision, defaultPeriod, setQueryPeriod]);
 
   // sheet 'exchange' — SP PKG_DMF0020.P_DMF0020_GET_FUTUREPRICE_INFO (4 IN + 2 OUT, divisionId 인자 없음)
   //   filters useMemo 안정화 + enabled false + Find 트리거 (refetch loop 방지)

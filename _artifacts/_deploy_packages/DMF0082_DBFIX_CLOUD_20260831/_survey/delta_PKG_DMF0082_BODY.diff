@@ -1,0 +1,161 @@
+--- 02_PKG_DMF0082_BODY.sql
++++ LIVE_20260831_QTYKEY
+@@ -1,13 +1,3 @@
+--- ====================================================================================================
+--- DMF0082_CLOUD_20260826_PENDING / PKG_DMF0082 BODY 전체 교체 (사내 라이브 신선 덤프 2026-08-26 v4)
+--- 미이관 마커 18종 (08-25 15종 + 08-26 3계열):
+---   SCPPLOC 1 / AFSBLANK 2 / AFSNVL 1 / 81AUTH 3 / CUSTSUB 1 / CURRNORM 2
+---   / XLSMASTER 3 / XLSBATCH 1 / XLSBATCH2 1 / XLSPRJ 1
+---   / XLSPRICECOL 3 / XLSPRICECOL2 11 / SAVEPOPCLOB 1 / SAVEPOPCLOB2 3 / SAVEPOPPERF 1
+---   / E20260826-CUSTSUBR 1 / E20260826-ASINSREQ 4 (CUST 종속 메저 실적 축 — DM_PLN_MKT_FCST_RESULT, 14행 결손 정정)
+---   / E20260826-CUSTSUBORPH 1 (모 CUST_FCST 없는 키의 종속 메저 고아 행 제외 — 클라우드 발현 정정, v3 필수 후속)
+--- ⚠ 전체 교체 방식 / 24_(HEADER_CONTENT) 와 같은 배포창 연속 적용 필수.
+--- ====================================================================================================
+ CREATE OR REPLACE PACKAGE BODY           "PKG_DMF0082" IS
+     --[E20260813-UPLOADSAVE] Excel Upload 적재 경로 전용 플래그.
+     --   P_DMF0082_SAVE_MAIN_DATA 의 '^' 파싱부를 건너뛰게 한다(본체는 무수정 재사용).
+@@ -3232,15 +3222,11 @@
+         AND    B.USER_ID  = 'DM_ADMIN'
+     );
+ 
++        -- ====================================================================================================
++    -- [E20260831-QTYKEY] QTY 필터 이설 — 구 `DELETE WHERE QTY = 0`(셀 단위)은 결함:
++    --   키의 타 메저 행이 남아 그리드 행이 그대로 조회됨(통합테스트 40 실측 — 체크해도 건수 동일).
++    --   AS-IS 1:1 9축 키 필터로 교체, 위치 = 조회조건 필터·중복 제거 이후(CUSTSUBORPH 직전) 참조.
+     -- ====================================================================================================
+-    -- QTY 필터 (P_QTY_YN = 'Y' 이면 QTY=0 제거)
+-    -- ====================================================================================================
+-
+-    IF p_qty_yn = 'Y' THEN
+-        DELETE FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE
+-        WHERE QTY = 0;
+-    END IF;
+-
+     -- ====================================================================================================
+     -- [PLANT_SITE 2026-08-04] 조회조건 Plant Site 필터 (81 전용 — FE 40/82 비활성 = 'ALL')
+     --   스테이징 완료 후 GTT 단일 지점 필터 (measure 분기별 술어 살포 대신 — 누락 0 보장, DMF0082 SAVE 팝업 동일 split 함수)
+@@ -3329,6 +3315,53 @@
+ 
+ 
+     -- ====================================================================================================
++
++    -- ====================================================================================================
++    /* [E20260831-QTYKEY] Qty >= 0 체크(p_qty_yn='Y') = AS-IS DMF0082_GET_MAIN_DATA L5890~ 1:1.
++       구 구현(셀 단위 QTY=0 DELETE)은 키의 타 메저 행이 남아 필터가 무효였다(통합테스트 40: 7,668건 불변).
++       정본 의미 = **9축 키 단위**: MEASURE IN ('MKT_FCST','SCM_FCST') 의 SUM(QTY) <> 0 인 키만 잔존
++       (그 키의 전 메저 행 유지 — AS-IS #MF_SP DELETE NOT EXISTS 동형).
++       동형 정본 = 본 PKG P_DMF0082_GET_MAIN_DATA_CURRENT 의 p_qty_yn 블록(변환 시 이 proc 만 단순화된 결함).
++       위치 = 조회조건 필터·중복 제거 이후(AS-IS 는 전 필터 완료된 #MF_SP 최종 단계) — CUSTSUBORPH 앞
++       (모행이 여기서 잘린 CUST 종속 메저는 아래 안전망이 함께 제거). 등호 비교 = AS-IS 파리티. */
++    -- ====================================================================================================
++    IF p_qty_yn = 'Y' THEN
++        DELETE FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE SP
++        WHERE  NOT EXISTS (SELECT 1
++                           FROM  (SELECT DIVISION_ID
++                                       , SCM_SITE_ID
++                                       , PROJECT_CODE
++                                       , ITEM_ID
++                                       , INCOTERMS
++                                       , FCST_TYPE
++                                       , DOM_EXP
++                                       , END_CUSTOMER
++                                       , CELL_PROD_SITE_ID
++                                  FROM   SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE
++                                  WHERE  MEASURE IN ('MKT_FCST','SCM_FCST')
++                                  GROUP BY DIVISION_ID
++                                       , SCM_SITE_ID
++                                       , PROJECT_CODE
++                                       , ITEM_ID
++                                       , INCOTERMS
++                                       , FCST_TYPE
++                                       , DOM_EXP
++                                       , END_CUSTOMER
++                                       , CELL_PROD_SITE_ID
++                                  HAVING SUM(QTY) <> 0
++                                 ) TT
++                           WHERE  1 = 1
++                           AND    TT.DIVISION_ID       = SP.DIVISION_ID
++                           AND    TT.SCM_SITE_ID       = SP.SCM_SITE_ID
++                           AND    TT.PROJECT_CODE      = SP.PROJECT_CODE
++                           AND    TT.ITEM_ID           = SP.ITEM_ID
++                           AND    TT.INCOTERMS         = SP.INCOTERMS
++                           AND    TT.FCST_TYPE         = SP.FCST_TYPE
++                           AND    TT.DOM_EXP           = SP.DOM_EXP
++                           AND    TT.END_CUSTOMER      = SP.END_CUSTOMER
++                           AND    TT.CELL_PROD_SITE_ID = SP.CELL_PROD_SITE_ID
++                          );
++    END IF;
+ 
+     /* [E20260826-CUSTSUBORPH] CUST 종속 메저 고아 행 제외 (사용자 지시 2026-08-26 — 클라우드 실측).
+        증상: 모 CUST_FCST 행이 없는 그리드 키에 └ 종속 메저(EDI/Commercial_Agreement 등)만 조회.
+@@ -3481,7 +3514,24 @@
+                     SELECT 1
+                     FROM   SCM_MGR.GTT_TEMP_INTO_GROUP_MEASURE B
+                     WHERE  B.MEASURE = A.SEGMENT4
+-               ) THEN 'Y' ELSE 'N' END AS EDIT_AUTH_YN
++               ) THEN 'Y'
++                --[E20260826-AUTHVIEW] 시간창 因 잠금 구분값 'T' — 보유그룹의 시간창 정의 행(A1 요일)이 있으나
++                --  지금이 창 밖이라 INTO 에서 탈락한 경우. FE 는 'Y' 비교라 'T'=잠금 유지, MSG00477 표기에만 사용.
++                --  (그룹 미보유 因 잠금 'N' 과 구분 — DM Viewer 등에 시간 메시지 오표기 방지)
++                WHEN EXISTS (
++                    SELECT 1
++                    FROM   SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL T
++                    WHERE  T.LOOKUP_TYPE = 'GET_ADMIN_GROUP_MEASURE'
++                    AND    T.VALID_YN = 'Y'
++                    AND   (T.SEGMENT1 = p_user_group
++                           OR T.SEGMENT1 IN (SELECT G.USER_GR_ID FROM SCM_MGR.SCM_ADM_USER_GR_MPG_M G
++                                             WHERE G.USER_ID IN (p_user_group, p_created_by) AND G.USE_YN = 'Y'))
++                    AND    T.SEGMENT2 = VA_PROGRAM_ID
++                    AND    T.SEGMENT3 = p_division_id
++                    AND    T.SEGMENT4 = A.SEGMENT4
++                    AND    REPLACE(T.ATTRIBUTE1, ' ', '') IS NOT NULL
++               ) THEN 'T'
++                ELSE 'N' END AS EDIT_AUTH_YN
+          , CASE WHEN A.ATTRIBUTE1 IS NOT NULL THEN 'Y' ELSE 'N' END AS TODAY_LIMIT_YN
+          , A.ATTRIBUTE1 AS TODAY_DAY_LIST
+     FROM   SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL A
+@@ -3526,7 +3576,16 @@
+                                FROM   SCM_MGR.SCM_ADM_USER_GR_MPG_M G
+                                WHERE  G.USER_ID    IN (p_user_group, p_created_by)
+                                AND    G.USER_GR_ID = 'SCP Planner'
+-                               AND    G.USE_YN     = 'Y') ) )    -- SCP Planner 미보유 = 종전 개방 유지
++                               AND    G.USE_YN     = 'Y') )    -- SCP Planner 미보유 = 종전 개방 유지
++                --[E20260826-AUTHVIEW] DM Viewer = 편집 전면 불가 (사용자 지시 2026-08-26) — 강제 개방에서 제외.
++                --  AS-IS 파리티: 40 룩업 LOC 4그룹(ADMIN/DM ADMIN/DM Planner/SCM PI Admin)에 Viewer 없음 = bEDIT_AUTH_LOC false.
++                --  겸유자(Viewer+편집그룹)는 룩업 INTO 경유 기본 'Y' 라 회귀 없음.
++                AND NOT ( p_user_group = 'DM Viewer'
++                    OR EXISTS (SELECT 1
++                               FROM   SCM_MGR.SCM_ADM_USER_GR_MPG_M G
++                               WHERE  G.USER_ID    IN (p_user_group, p_created_by)
++                               AND    G.USER_GR_ID = 'DM Viewer'
++                               AND    G.USE_YN     = 'Y') ) )
+          );
+ 
+     UPDATE SCM_MGR.GT_DMF0082_TEMP_ADMIN_GROUP_MEASURE
+@@ -3538,7 +3597,19 @@
+     WHERE  MEASURE = 'AS_In_Req';
+ 
+     UPDATE SCM_MGR.GT_DMF0082_TEMP_ADMIN_GROUP_MEASURE
+-    SET    EDIT_AUTH_YN = CASE WHEN p_division_id IN ('40', '82') THEN 'Y' ELSE 'N' END
++    SET    EDIT_AUTH_YN = CASE WHEN p_division_id IN ('40', '82')
++                                --[E20260826-AUTHVIEW] DM Viewer 단독(편집그룹 룩업 행 INTO 부재) = VMI 차단 (사용자 지시 2026-08-26).
++                                --  겸유자(Viewer+편집그룹)는 INTO 에 그 그룹의 VMI 행이 있어 개방 유지 — 회귀 없음.
++                                --[E20260826-SCPVMI] SCP Planner 도 제외 (사용자 지시 2026-08-26 "시간 밖 = 수정·INSERT/DELETE 전면 불가").
++                                --  AS-IS 파리티: 40 VMI 룩업 4그룹(ADMIN/DM ADMIN/DM Planner/SCM PI Admin)에 SCP 없음 = bEDIT_AUTH_VMI false.
++                                --  겸유자(편집그룹 겸유)는 INTO 에 그 그룹 VMI 행이 있어 개방 유지 — 회귀 없음.
++                                AND NOT ( ( p_user_group IN ('DM Viewer', 'SCP Planner')
++                                            OR EXISTS (SELECT 1 FROM SCM_MGR.SCM_ADM_USER_GR_MPG_M G
++                                                       WHERE G.USER_ID IN (p_user_group, p_created_by)
++                                                       AND   G.USER_GR_ID IN ('DM Viewer', 'SCP Planner') AND G.USE_YN = 'Y') )
++                                          AND NOT EXISTS (SELECT 1 FROM SCM_MGR.GTT_TEMP_INTO_GROUP_MEASURE B
++                                                          WHERE B.MEASURE = 'VMI_In_Req') )
++                               THEN 'Y' ELSE 'N' END
+     WHERE  MEASURE = 'VMI_In_Req';
+ 
+     --3). [E20260819-LIMITMEAS] LIMIT_MEASURE 존재 시 해당 메저 강제 'N' (donor 이식 — EDIT_FLAG→EDIT_AUTH_YN 컬럼명만 상이)
+@@ -14994,5 +15065,3 @@
+ END P_DMF0082_POPUP_GET_SPREAD_TITLE_DATE;
+ 
+ END PKG_DMF0082;
+-/
+-

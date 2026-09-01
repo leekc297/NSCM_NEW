@@ -1,10 +1,20 @@
+import type { MeasureMeta } from 'features/master/src/components';
+
 import { apiClient } from '@foundation/apis';
 import dayjs from '@foundation/dayjs';
 import _ from '@foundation/lodash';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { createPersistedStoreWithTab } from '@shared/stores';
 
-import { BUCKET_TYPE, BUCKET2_TYPE, GUBUN, GUBUN_SHEET, MENU_ID, SHEETS } from './demand-plan-waterfall.constants';
+import {
+  BUCKET_TYPE,
+  BUCKET2_TYPE,
+  GUBUN,
+  GUBUN_SHEET,
+  MENU_ID,
+  SHEETS,
+  type Gubun,
+} from './demand-plan-waterfall.constants';
 import type { SearchParams } from './demand-plan-waterfall.types';
 
 interface Filters {
@@ -21,21 +31,56 @@ interface DemandPlanWaterfallState {
   filters: Filters;
   isOpenSearchArea: boolean;
   staticColumns: RawFlexGridColumnConfig[];
+  /** [E20260831-MEASURE] 공통 메저 선택 — SHEET_MEASURE 메타 (활성 GUBUN 종속 PROGRAM 기준) */
+  staticMeasures: MeasureMeta[];
+  /** [E20260831-MEASURE] GUBUN 별 표시 메저 선택 (null = 전체 — MeasureSelectModal OK 결과) */
+  visibleMeasures: Record<Gubun, string[] | null>;
+  /** F6 저장 조회조건 복원 1회 가드 (탭 오픈당) — MotherStore PRESERVED_ON_CONDITION_RESET 보존 키 */
+  initialized: boolean;
 }
 
 interface DemandPlanWaterfallAction {
   reset: () => void;
+  /** [COND 2026-08-27] UI 오픈 시 F6 저장 조회조건(SCM_ADM_USER_MNU_SRCH_COND_M) 복원 — 정본 sales-future-price */
+  restoreSearchConditions: () => Promise<void>;
   setSearchParams: (searchParams: Partial<SearchParams>) => void;
   setFilters: (input: { userId: string }) => boolean;
   setOpenSearchArea: (open?: boolean) => void;
-  fetchStaticColumns: (input: { divisionId: string; sheetNm: string }) => Promise<void>;
+  fetchStaticColumns: (input: {
+    divisionId: string;
+    sheetNm: string;
+    /** [E20260831-METASHEET] 종속 PROGRAM_ID (SALES=DMF0022 / BIZ=DMF0051) — 미지정 = MENU_ID */
+    programId?: string;
+  }) => Promise<void>;
+  /** [E20260831-MEASURE] SHEET_MEASURE 메타 fetch — 활성 GUBUN 의 종속 PROGRAM/메저 시트명 기준 */
+  fetchStaticMeasures: (input: {
+    divisionId: string;
+    measureSheetNm: string;
+    programId: string;
+  }) => Promise<void>;
+  /** [E20260831-MEASURE] MeasureSelectModal OK — GUBUN 별 표시 메저 적용 (null = 전체) */
+  applyVisibleMeasures: (gubun: Gubun, codes: string[] | null) => void;
+  /** UM-01 (#59 §1.4) — Division 변경 = 조회 결과 비움 (AS-IS cboDivision_SelectedIndexChanged → InitSpread .cs:1397) */
+  clearData: () => void;
+  /**
+   * UM-08 — bucket 경계 전환(AS-IS InitSpread .cs:1594~1610): 활성 GUBUN 의 메인 데이터는 비우고
+   * 타이틀만 새 bucket 으로 즉시 재조회해 빈 그리드에 새 헤더를 그린다.
+   */
+  resetForBucket: (bucket: string) => void;
 }
 
 /** AS-IS PR_GET_DAY_RANGE(p_month=6) — 당월 1일 ~ +6개월 말일 (.cs:2101-2115) */
-const defaultPeriod = () => ({
-  startYyyymmdd: dayjs().startOf('month').format('YYYYMMDD'),
-  endYyyymmdd: dayjs().add(6, 'month').endOf('month').format('YYYYMMDD'),
-});
+// [E20260831-PERIOD6M] AS-IS PR_GET_DAY_RANGE(p_month=6) 1:1 — FROM=당월 1일 / TO=FROM+6개월−1일.
+//   구 구현 `dayjs().add(6,'month').endOf('month')` 는 "오늘+6개월 달의 말일"이라 최대 7개월 구간
+//   (8월 실측: 2027-02-28 — 사용자 신고 W08/W35 "종료일자 잘못됨. 6개월").
+//   forecast-price 2026-08-10 동일 함정 정정 선례(.add(6,'month') 하루 초과) 1:1.
+const defaultPeriod = () => {
+  const from = dayjs().startOf('month');
+  return {
+    startYyyymmdd: from.format('YYYYMMDD'),
+    endYyyymmdd: from.add(6, 'month').subtract(1, 'day').format('YYYYMMDD'),
+  };
+};
 
 const initSearchParams: SearchParams = {
   gubun: GUBUN.MKT_FCST, // 사용자 확정 — 초기값 MKT FCST
@@ -49,7 +94,8 @@ const initSearchParams: SearchParams = {
   projectCodes: [],
   itemIds: [],
   owners: [],
-  version: '',
+  // [E20260831-VERCUR] MKT 기본 버전 = 'CURRENT' (사용자 지시 2026-08-31 — SP 1급 값 실측: PKG_DMF0035 L645/L850)
+  version: 'CURRENT',
   ...defaultPeriod(),
   bucket: BUCKET_TYPE.MONTHLY, // 3화면 공통 기본 MONTHLY (AS-IS .cs:430/445/318)
   senderCodes: [],
@@ -68,7 +114,32 @@ const initState: DemandPlanWaterfallState = {
   filters: {},
   isOpenSearchArea: true,
   staticColumns: [],
+  staticMeasures: [],
+  visibleMeasures: {
+    [GUBUN.MKT_FCST]: null,
+    [GUBUN.SALES_PLAN]: null,
+    [GUBUN.BIZ_PLAN]: null,
+  },
+  initialized: false,
 };
+
+/**
+ * [COND 2026-08-27] 저장 조회조건 역파싱 키 분류 — 저장(GridAction.personalizeCondition)은 모든 값을
+ * 문자열로 coerce(배열=콤마 join / 불리언=String)하므로 SearchParams 타입대로 되돌린다.
+ * 저장돼 있어도 현재 SearchParams 에 없는 키(구버전 잔재)는 버린다.
+ */
+const ARRAY_KEYS = new Set<string>(
+  Object.entries(initSearchParams)
+    .filter(([, v]) => Array.isArray(v))
+    .map(([k]) => k)
+);
+const BOOL_KEYS = new Set<string>(
+  Object.entries(initSearchParams)
+    .filter(([, v]) => typeof v === 'boolean')
+    .map(([k]) => k)
+);
+const GUBUN_VALUES = new Set<string>(Object.values(GUBUN));
+const ROW_TOTALS_VALUES = new Set<string>(['GrandTotals', 'Subtotals', 'None']);
 
 /**
  * 멀티 필터 → SP 규약: 빈 배열 = 'ALL' (⚠ '' 전달 시 SP 의 <> 'ALL' 분기가 빈 토큰으로
@@ -94,7 +165,7 @@ const calcNowYyyymmdd = (fromYyyymmdd: string, toYyyymmdd: string): string => {
 export const useDemandPlanWaterfallStore = createPersistedStoreWithTab<
   DemandPlanWaterfallState & DemandPlanWaterfallAction
 >(
-  set => ({
+  (set, get) => ({
     ...initState,
     reset: () =>
       set(state => {
@@ -103,6 +174,39 @@ export const useDemandPlanWaterfallStore = createPersistedStoreWithTab<
         state.isOpenSearchArea = true;
         state.staticColumns = [];
       }),
+    // ⭐ [COND 2026-08-27] F6 저장 조회조건 복원 — 탭 오픈 시 1회(initialized 가드). F10(Reset Condition) 은
+    //   SubTitle 공통이 DB 삭제 + MotherStore.resetSearchCondition(reset() 후 initialized 보존) 으로 처리하므로
+    //   초기화 직후 재복원되지 않는다. 저장조건 없음/조회 실패 = 기본값 유지.
+    restoreSearchConditions: async () => {
+      if (get().initialized) return;
+      set(state => {
+        state.initialized = true;
+      });
+      try {
+        const res = await apiClient.get<{ paramNm: string; paramCtn: string }[]>(
+          `/admin/menu/${MENU_ID}/search-conditions`
+        );
+        const rows = res.data.result ?? [];
+        if (rows.length === 0) return;
+        const patch: Record<string, unknown> = {};
+        for (const { paramNm, paramCtn } of rows) {
+          if (!(paramNm in initSearchParams)) continue;
+          const val = paramCtn ?? '';
+          if (ARRAY_KEYS.has(paramNm)) patch[paramNm] = val ? val.split(',').filter(Boolean) : [];
+          else if (BOOL_KEYS.has(paramNm)) patch[paramNm] = val === 'true';
+          else patch[paramNm] = val;
+        }
+        // 열거형 키는 유효값만 채택 (구버전 저장값·오염 방어)
+        if (typeof patch.gubun === 'string' && !GUBUN_VALUES.has(patch.gubun)) delete patch.gubun;
+        if (typeof patch.rowTotals === 'string' && !ROW_TOTALS_VALUES.has(patch.rowTotals))
+          delete patch.rowTotals;
+        set(state => {
+          state.searchParams = { ...state.searchParams, ...(patch as Partial<SearchParams>) };
+        });
+      } catch {
+        // 저장조건 미존재/조회 실패 시 기본값 유지 (console 금지 룰)
+      }
+    },
     setSearchParams: searchParams =>
       set(state => {
         state.searchParams = { ...state.searchParams, ...searchParams };
@@ -198,15 +302,46 @@ export const useDemandPlanWaterfallStore = createPersistedStoreWithTab<
       set(state => {
         state.isOpenSearchArea = open ?? !state.isOpenSearchArea;
       }),
-    fetchStaticColumns: async ({ divisionId, sheetNm }) => {
+    // [E20260831-METASHEET] 메타 조회 = AS-IS 시트명 + 종속 PROGRAM_ID 경로 (GUBUN_META — constants 주석 참조).
+    //   programId 미지정 시 기존 동작(MENU_ID) 유지.
+    fetchStaticColumns: async ({ divisionId, sheetNm, programId }) => {
       const result = await apiClient.post<RawFlexGridColumnConfig[]>(
-        `/admin/menu/${MENU_ID}/column`,
+        `/admin/menu/${programId ?? MENU_ID}/column`,
         { sheetNm, divisionId }
       );
       set(state => {
         state.staticColumns = result.data.result;
       });
     },
+    // [E20260831-MEASURE] SHEET_MEASURE fetch — DMF0003 정본형(/admin/menu/{pgm}/measure). SALES 는 메저 시트명이
+    //   컬럼 축과 다름('Sales Plan Waterfall' — GUBUN_META.measureSheetNm 실측 표기).
+    fetchStaticMeasures: async ({ divisionId, measureSheetNm, programId }) => {
+      const result = await apiClient.post<MeasureMeta[]>(`/admin/menu/${programId}/measure`, {
+        sheetNm: measureSheetNm,
+        divisionId,
+      });
+      set(state => {
+        state.staticMeasures = result.data.result ?? [];
+      });
+    },
+    applyVisibleMeasures: (gubun, codes) =>
+      set(state => {
+        state.visibleMeasures[gubun] = codes;
+      }),
+    clearData: () =>
+      set(state => {
+        state.filters = {};
+      }),
+    resetForBucket: bucket =>
+      set(state => {
+        const { main, title } = GUBUN_SHEET[state.searchParams.gubun];
+        const current = state.filters as Record<string, unknown>;
+        const titleFilter = current[title] as Record<string, unknown> | undefined;
+        const next: Record<string, unknown> = { ...current };
+        delete next[main];
+        if (titleFilter) next[title] = { ...titleFilter, bucket };
+        state.filters = next as Filters;
+      }),
   }),
   'demand-plan-waterfall'
 );
@@ -214,9 +349,13 @@ export const useDemandPlanWaterfallStore = createPersistedStoreWithTab<
 /** GUBUN 전환 시 리셋 값 — 버킷 체계 스왑(M/Q/Y ↔ D/W/M/OW) + 버전·전용 조건 클리어 */
 export const gubunResetParams = (gubun: SearchParams['gubun']): Partial<SearchParams> => ({
   gubun,
-  version: '',
+  // [E20260831-VERCUR] waterfall type 변경 시 버전 초기값 = 'CURRENT' (전 타입 — 사용자 지시 2026-08-31 2차.
+  //   1차는 MKT 한정이었으나 "변경 시 초기값 CURRENT" 로 전 타입 확정. SALES/BIZ 는 팝업으로 교체 선택 가능)
+  version: 'CURRENT',
   senderCodes: [],
   isQtyNotZeroChecked: false,
   isCellQtyChecked: false,
   bucket: gubun === GUBUN.BIZ_PLAN ? BUCKET2_TYPE.MONTHLY : BUCKET_TYPE.MONTHLY,
+  // [E20260831-PERIOD6M] waterfall type 변경 시 PERIOD 도 6개월 초기값 재설정 (사용자 지시 2026-08-31)
+  ...defaultPeriod(),
 });

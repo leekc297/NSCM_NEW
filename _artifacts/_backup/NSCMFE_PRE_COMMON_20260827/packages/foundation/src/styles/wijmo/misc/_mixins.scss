@@ -1,0 +1,77 @@
+@use "sass:color";
+@use "sass:meta";
+/*!
+    *
+    * Wijmo Library 5.20251.40
+    * https://developer.mescius.com/wijmo
+    *
+    * Copyright(c) MESCIUS inc. All rights reserved.
+    *
+    * Licensed under the End-User License Agreement For MESCIUS Wijmo Software.
+    * us.sales@mescius.com
+    * https://developer.mescius.com/wijmo/licensing
+    *
+    */
+
+// darken a color or return an almost transparent black 
+@function safedarken($color, $amount) {
+    @if meta.type-of($color) == 'color' and $color != transparent {
+        @return color.adjust($color, $lightness: -$amount);
+    } @else {
+        @return rgba(0, 0, 0, .08);
+    }
+}
+
+// lighten a color or return an almost transparent white
+@function safelighten($color, $amount) {
+    @if meta.type-of($color) == 'color' and $color != transparent {
+        @return color.adjust($color, $lightness: $amount);
+    }
+    @else {
+        @return rgba(255, 255, 255, 0.08);
+    }
+}
+
+// darken light colors, lighten dark colors
+@function safechangecolor($color, $amount) {
+    @if meta.type-of($color) == 'color' and color.channel(color.to-space($color, hsl), 'lightness') > 50% {
+        @return safedarken($color, $amount);
+    }
+    @else {
+        @return safelighten($color, $amount);
+    }
+}
+
+// create a background with an optional gradient
+@mixin backgradient($color, $gradient, $transparentColor: null, $replacementColor: null) {
+    // if color is null, render nothing (e.g. backgradient($wj-cell-frz, true))
+    @if $color {
+        // is color is the same as the background, darken slightly
+        @if $transparentColor == transparent {
+            $color: $replacementColor;
+        }
+        // output the background
+        background: $color;
+        // output the optional gradient
+        @if $gradient {
+            @if meta.type-of($color) == 'color' and color.channel(color.to-space($color, hsl), 'lightness') > 50% {
+                $otherColor: safedarken($color, 12%);
+                background-image: linear-gradient($color, $otherColor);
+            }
+            @else {
+                $otherColor: safelighten($color, 12%);
+                background-image: linear-gradient($color, $otherColor);
+            }
+        }
+    }
+}
+
+// add prefixes to a property
+// https://css-tricks.com/snippets/sass/mixin-prefix-properties/
+@mixin prefix($property, $value, $prefixes: ()) {
+    #{$property}: $value;
+
+    @each $prefix in $prefixes {
+        #{'-' + $prefix + '-' + $property}: $value;
+    }
+}

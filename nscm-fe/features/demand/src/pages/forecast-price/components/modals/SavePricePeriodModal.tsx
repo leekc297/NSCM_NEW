@@ -35,6 +35,7 @@ import { useForecastPriceStore } from '../../useForecastPriceStore';
 import { buildSavePayload, type SaveRow } from '../../utils/forecast-price.save';
 
 import styles from './SavePricePeriodModal.module.scss';
+import { useSavePricePeriodModalStore } from './savePricePeriodModalStore';
 
 // yyyymmdd → 해당 주 "월요일" yyyymmdd (AS-IS drpDateTime 월요일 정렬 L196~202 + MSG00330 정합).
 const snapMonday = (yyyymmdd: string): string => {
@@ -207,16 +208,14 @@ export const SavePricePeriodModal = ({
   const gridWrapRef = useRef<HTMLDivElement>(null);
 
   // ── 조회조건 상태 (AS-IS LoadData 승계 + Form_Load 초기화) ──
-  const [divisionId, setDivisionId] = useState(defaultDivision);
-  const [endCustomers, setEndCustomers] = useState<string[]>(defaultEndCustomers);
-  const [salesSites, setSalesSites] = useState<string[]>(defaultSalesSites);
-  const [projectCode, setProjectCode] = useState('');
-  const [itemId, setItemId] = useState('');
-  const [periodFrom, setPeriodFrom] = useState(defaultPeriod.start);
-  const [periodTo, setPeriodTo] = useState(defaultPeriod.end);
+  const { divisionId, endCustomers, salesSites, projectCode, itemId, periodFrom, periodTo } =
+    useSavePricePeriodModalStore(state => state.searchParams);
+  const setSearchParams = useSavePricePeriodModalStore(state => state.setSearchParams);
+  const resetSearchParams = useSavePricePeriodModalStore(state => state.resetSearchParams);
+  const searched = useSavePricePeriodModalStore(state => state.searched);
+  const setSearched = useSavePricePeriodModalStore(state => state.setSearched);
   const [openProject, setOpenProject] = useState(false);
   const [openItem, setOpenItem] = useState(false);
-  const [searched, setSearched] = useState(false);
   const [saving, setSaving] = useState(false); // AS-IS blnWork (연속작업 방지 — MSG00137)
 
   // Project 활성 = Division 81*/82 (AS-IS lblProject.Enabled L281/L313 — 40 은 비활성+클리어)
@@ -229,20 +228,22 @@ export const SavePricePeriodModal = ({
   useEffect(() => {
     if (open) {
       // 재진입 초기화 — AS-IS LoadData + Form_Load 1:1 (조회조건 승계 + 미조회 상태).
-      setDivisionId(defaultDivision);
-      setEndCustomers(defaultEndCustomers);
-      setSalesSites(defaultSalesSites);
-      setProjectCode('');
-      setItemId('');
-      setSearched(false);
       // ⭐ 기간 기본값 — 부모 기간의 월요일 스냅 + 시작일은 이번 주 월요일 이상
       //   (AS-IS Form_Load L189~202: MinDate1 = 이번주 월요일 + From/To 월요일 정렬).
       const thisMon = snapMonday(todayYmd());
       const fromMon = snapMonday(defaultPeriod.start);
       const from = fromMon > thisMon ? fromMon : thisMon;
       const to = snapMonday(defaultPeriod.end);
-      setPeriodFrom(from);
-      setPeriodTo(to < from ? from : to);
+      resetSearchParams({
+        divisionId: defaultDivision,
+        endCustomers: defaultEndCustomers,
+        salesSites: defaultSalesSites,
+        projectCode: '',
+        itemId: '',
+        periodFrom: from,
+        periodTo: to < from ? from : to,
+      });
+      setSearched(false);
     }
     // ⭐ 초기화는 **모달 open 전환 시에만** — deps 에 default* 를 넣으면 부모 리렌더(예: Save confirm
     //   alert 표시)마다 새 참조(defaultPeriod={{...}})가 들어와 effect 가 재실행되고 searched=false 로
@@ -548,8 +549,9 @@ export const SavePricePeriodModal = ({
       return;
     }
     // 조회 확정 시 표시값도 월요일 스냅으로 정렬 (선택 중엔 raw → Find 시점에 커밋).
-    if (periodFrom !== fromMon) setPeriodFrom(fromMon);
-    if (periodTo !== toMon) setPeriodTo(toMon);
+    if (periodFrom !== fromMon || periodTo !== toMon) {
+      setSearchParams({ periodFrom: fromMon, periodTo: toMon });
+    }
     setSearched(true);
     void refetchTitle?.();
     void refetch?.();
@@ -949,7 +951,7 @@ export const SavePricePeriodModal = ({
                             label: String(i.NAME ?? i.CODE),
                             value: String(i.CODE),
                           }))}
-                          onChange={(_, option) => setDivisionId(String(option))}
+                          onChange={(_, option) => setSearchParams({ divisionId: String(option) })}
                         />
                       )}
                     />
@@ -980,12 +982,12 @@ export const SavePricePeriodModal = ({
                               })) ?? []
                           }
                           onChange={(_, selected) => {
-                            setEndCustomers(
-                              String(selected ?? '')
+                            setSearchParams({
+                              endCustomers: String(selected ?? '')
                                 .split(',')
-                                .filter(Boolean)
-                            );
-                            setSalesSites([]); // 상위 변경 → 하위 초기화
+                                .filter(Boolean),
+                              salesSites: [], // 상위 변경 → 하위 초기화
+                            });
                           }}
                         />
                       )}
@@ -1007,7 +1009,7 @@ export const SavePricePeriodModal = ({
                     }
                     endCustomer={endCustomerSel.join(',')}
                     value={salesSites}
-                    onChange={v => setSalesSites(v)}
+                    onChange={v => setSearchParams({ salesSites: v })}
                   />
                   {/* Period — 월요일 스냅 (AS-IS drpDateTime 월요일 정렬).
                       ⚠️ 첫 클릭(단일 날짜) 때 스냅하면 제어값이 픽커의 range 앵커와 어긋나 두번째 날짜
@@ -1020,11 +1022,9 @@ export const SavePricePeriodModal = ({
                     end={periodTo}
                     onChange={(start, end) => {
                       if (start && end && start !== end) {
-                        setPeriodFrom(snapMonday(start));
-                        setPeriodTo(snapMonday(end));
+                        setSearchParams({ periodFrom: snapMonday(start), periodTo: snapMonday(end) });
                       } else {
-                        setPeriodFrom(start);
-                        setPeriodTo(end);
+                        setSearchParams({ periodFrom: start, periodTo: end });
                       }
                     }}
                   />
@@ -1114,13 +1114,6 @@ export const SavePricePeriodModal = ({
                 onClick={handleExcel}
               />
               <Button
-                appearance='outlined'
-                priority='normal'
-                size='medium'
-                buttonLabel={t('LBL00627', 'Close')}
-                onClick={modalClose}
-              />
-              <Button
                 appearance='contained'
                 priority='primary'
                 size='medium'
@@ -1129,6 +1122,13 @@ export const SavePricePeriodModal = ({
                 iconPosition='leading'
                 disabled={loading || saving || rows.length === 0}
                 onClick={() => void handleSave()}
+              />
+              <Button
+                appearance='outlined'
+                priority='normal'
+                size='medium'
+                buttonLabel={t('LBL00627', 'Close')}
+                onClick={modalClose}
               />
             </div>
           </div>
@@ -1140,7 +1140,7 @@ export const SavePricePeriodModal = ({
         open={openProject}
         modalClose={() => setOpenProject(false)}
         setSelectedValue={code => {
-          setProjectCode(code ?? '');
+          setSearchParams({ projectCode: code ?? '' });
         }}
         preSearchParams={
           {
@@ -1160,7 +1160,7 @@ export const SavePricePeriodModal = ({
         open={openItem}
         modalClose={() => setOpenItem(false)}
         setSelectedValue={id => {
-          setItemId(id ?? '');
+          setSearchParams({ itemId: id ?? '' });
         }}
         preSearchParams={
           {

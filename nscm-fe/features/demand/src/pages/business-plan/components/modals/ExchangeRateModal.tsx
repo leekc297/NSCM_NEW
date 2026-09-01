@@ -23,6 +23,7 @@ import { EXCHANGE_CATE, MENU_ID, MSG, SHEETS } from '../../business-plan.constan
 import { callSaveExchangeRate } from '../../utils/business-plan.api';
 
 import styles from './ExchangeRateModal.module.scss';
+import { useExchangeRateModalStore } from './exchangeRateModalStore';
 
 // ⭐ 조회 파라미터는 yyyymm(6) 계약 유지 — 화면 입력만 부모와 동일한 달력(PeriodField, yyyymmdd 8)
 //   으로 통일하고 여기서 왕복 변환한다. from=1일 / to=말일로 펼친다.
@@ -89,7 +90,10 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
   const setAlert = useMessageStore.getState().setAlert;
   const setToast = useMessageStore.getState().setToast;
   const gridRef = useRef<FlexGridType<PivotRow>>(undefined);
-  const [divisionId, setDivisionId] = useState(defaultDivision);
+  // 확정 조회조건(Division/기간) — useTabProcQuery filters 참조 안정화 원천
+  const applied = useExchangeRateModalStore(state => state.applied);
+  const setApplied = useExchangeRateModalStore(state => state.setApplied);
+  const divisionId = applied.divisionId;
   const [savedAny, setSavedAny] = useState(false);
 
   // 환율 저장 권한 — 설계서 [권한] 시트 '환율 저장' 행: 모달을 열 수 있는 그룹(EXCHANGE_RATE)과
@@ -110,17 +114,13 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
     });
   }, [myDivisions]);
 
-  const [periodFrom, setPeriodFrom] = useState(defaultPeriod.start);
-  const [periodTo, setPeriodTo] = useState(defaultPeriod.end);
+  const periodFrom = applied.periodFrom;
+  const periodTo = applied.periodTo;
 
-  // ⭐ 변경 건수 — **버튼 라벨(Save (N)) 전용 캐시**. 저장의 근거가 아니다.
-  //   저장은 handleSave 가 collectEdits 로 그리드에서 직접 계산한다 (2026-08-07 재설계).
-  const [editCount, setEditCount] = useState(0);
   // Insert 신규 행 (AS-IS InsertRow — Division 고정 + Currency/Unit 콤보 편집)
   const [insertedRows, setInsertedRows] = useState<PivotRow[]>([]);
 
   const clearEdits = () => {
-    setEditCount(0);
     setInsertedRows([]);
   };
 
@@ -135,14 +135,16 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
 
   useEffect(() => {
     if (open) {
-      setDivisionId(defaultDivision);
-      setPeriodFrom(defaultPeriod.start);
-      setPeriodTo(defaultPeriod.end);
+      setApplied({
+        divisionId: defaultDivision,
+        periodFrom: defaultPeriod.start,
+        periodTo: defaultPeriod.end,
+      });
       setSavedAny(false);
       clearEdits();
       setOpenSeq(n => n + 1); // 오염된 행 객체 폐기 → pivot 재생성 (위 openSeq 주석)
     }
-  }, [open, defaultDivision, defaultPeriod]);
+  }, [open, defaultDivision, defaultPeriod, setApplied]);
 
   const sesUserId = useSessionStore.getState().session.userId ?? '';
   const startYyyymmdd = periodFrom.length === 6 ? `${periodFrom}01` : periodFrom;
@@ -387,9 +389,10 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
        * 행 M 표식도 여기서 확정한다. 공통 EditTracker 도 CRUD_TYPE 을 건드리지만 이 핸들러가
        * grid 초기화 이후 등록돼 마지막에 실행되므로 여기 값이 최종이다.
        */
-      //   ⚠ 카운트/표식 갱신용 — 저장의 근거는 handleSave 가 직접 부르는 collectEdits 다.
+      //   ⚠ 행 M 표식 갱신용 — 저장의 근거는 handleSave 가 직접 부르는 collectEdits 다.
+      //   반환값(변경 건수)은 쓰지 않는다. Save 버튼에 건수를 표시하지 않기로 했다 (2026-08-25 사용자 요구).
       const recomputeEdits = (s: FlexGridType<PivotRow>) => {
-        setEditCount(collectEdits(s).length);
+        collectEdits(s); // 부수효과: 행 CRUD_TYPE('M'/'') 확정
         s.invalidate();
       };
 
@@ -569,7 +572,15 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
   const handleInsert = () => {
     setInsertedRows(prev => [
       ...prev,
-      { DIVISION_ID: divisionId, CURRENCY: '', UNIT_CURRENCY: '', EDIT_FLAG: 'Y', CRUD_TYPE: 'I' },
+      // Currency 기본값 KRW — 대부분의 등록이 KRW 라 매번 고르지 않게 한다 (2026-08-25 사용자 요구).
+      //   'CurrencyList' 콤보에 있는 코드라 드롭다운 표시/재선택 모두 정상이다.
+      {
+        DIVISION_ID: divisionId,
+        CURRENCY: 'KRW',
+        UNIT_CURRENCY: '',
+        EDIT_FLAG: 'Y',
+        CRUD_TYPE: 'I',
+      },
     ]);
   };
 
@@ -681,7 +692,7 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
                       <CustomDropdown
                         value={divisionId}
                         options={divisionOptions}
-                        onChange={(_, option) => setDivisionId(String(option))}
+                        onChange={(_, option) => setApplied({ divisionId: String(option) })}
                         disabled
                       />
                     )}
@@ -695,8 +706,7 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
                   start={toYmd(periodFrom, 'start')}
                   end={toYmd(periodTo, 'end')}
                   onChange={(start, end) => {
-                    setPeriodFrom(toYm(start));
-                    setPeriodTo(toYm(end));
+                    setApplied({ periodFrom: toYm(start), periodTo: toYm(end) });
                   }}
                 />
               </>
@@ -731,7 +741,7 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
                 appearance='contained'
                 priority='primary'
                 size='medium'
-                buttonLabel={editCount > 0 ? `Save (${editCount})` : 'Save'}
+                buttonLabel='Save'
                 onClick={() => void handleSave()}
               />
             )}

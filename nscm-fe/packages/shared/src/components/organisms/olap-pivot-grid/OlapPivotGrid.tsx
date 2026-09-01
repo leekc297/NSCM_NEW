@@ -35,6 +35,21 @@ export interface OlapPivotGridProps {
   columnFields: OlapFieldDef[];
   /** 값 필드 (집계 대상). */
   valueFields: OlapFieldDef[];
+  /**
+   * 등록만 하고 어느 축에도 두지 않는 필드 — 필드 레일에서 드래그로 배치할 후보 (DMF0035 사용자 지시 2026-08-28:
+   * UI CATEGORY 전체 컬럼 등록·DEFAULT 만 Rows / BUCKET 3종 등록·선택 버킷만 Columns).
+   */
+  extraFields?: OlapFieldDef[];
+  /**
+   * 사용자가 레일/드래그로 축 구성을 바꿨을 때(engine.viewDefinitionChanged) 각 축의 필드 **헤더** 목록을 통지.
+   * 화면이 버킷 필드 이동 → 조회조건 bucket 갱신 같은 후속 처리를 한다. props 재적용으로 인한 변경은 통지하지 않는다.
+   */
+  onLayoutChange?: (layout: { rows: string[]; columns: string[]; filters: string[]; values: string[] }) => void;
+  /**
+   * 내부 PivotGrid(FlexGrid 파생) 인스턴스가 준비된 직후 통지 — 화면이 formatItem/헤더 높이/필터 등 그리드 후처리를
+   * 붙일 때 ref 폴링 대신 이 시점을 deps 로 쓴다 (ref 만 보면 마운트 전 effect 가 빈손으로 끝난다).
+   */
+  onGridInit?: (grid: unknown) => void;
   /** 소계/총계 표시 (waterfall 은 기본 미표시 — AS-IS footer SUM 은 열 총계로 대체 가능). */
   showRowTotals?: 'None' | 'Subtotals' | 'GrandTotals';
   showColumnTotals?: 'None' | 'Subtotals' | 'GrandTotals';
@@ -69,14 +84,18 @@ const applyFields = (
 ) => {
   collection.clear();
   for (const def of defs) {
-    const field = engine.fields.getField(def.binding);
+    // 필드 키 = header(없으면 binding) — 같은 binding 을 다른 이름으로 여러 번 등록할 수 있다
+    //   (예: DMF0035 버킷 3종 Monthly/Weekly/Daily 가 모두 PERIOD 에 바인딩).
+    const field = engine.fields.getField(def.header ?? def.binding);
     if (!field) continue;
-    if (def.header) field.header = def.header;
     if (def.format) field.format = def.format;
     if (isValue) field.aggregate = AGGS[def.aggregate ?? 'Sum'];
     collection.push(field);
   }
 };
+
+const headersOf = (c: { length: number; [i: number]: PivotField }): string[] =>
+  Array.from({ length: c.length }, (_, i) => c[i].header);
 
 export const OlapPivotGrid = forwardRef<OlapPivotGridRef, OlapPivotGridProps>(
   (
@@ -85,6 +104,9 @@ export const OlapPivotGrid = forwardRef<OlapPivotGridRef, OlapPivotGridProps>(
       rowFields,
       columnFields,
       valueFields,
+      extraFields,
+      onLayoutChange,
+      onGridInit,
       showRowTotals = 'None',
       showColumnTotals = 'None',
       height,
@@ -109,16 +131,24 @@ export const OlapPivotGrid = forwardRef<OlapPivotGridRef, OlapPivotGridProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    // props 재적용 중에는 onLayoutChange 를 내지 않는다(사용자 조작만 통지)
+    const applyingRef = useRef(false);
     useEffect(() => {
+      applyingRef.current = true;
       engine.deferUpdate(() => {
         engine.itemsSource = itemsSource;
-        // autoGenerateFields=false 라 필드 사전 등록 필요 — 바인딩 합집합으로 등록.
-        // ⚠ PivotFieldCollection.getField() 는 **header 명**으로 조회하므로 등록 시 header=binding
-        //   으로 두고, 표시 라벨은 applyFields 에서 필드 확보 후에 입힌다 (header=라벨로 등록하면
-        //   binding 조회가 전부 실패 → 행/열/값 필드 0 → 그리드 백지).
+        // autoGenerateFields=false 라 필드 사전 등록 필요 — 축 필드 + 후보(extraFields) 합집합으로 등록.
+        // ⚠ PivotFieldCollection.getField() 는 **header 명**으로 조회하므로 필드 키 = header(없으면 binding).
+        //   같은 binding 을 다른 header 로 중복 등록할 수 있어야 한다(버킷 3종 → PERIOD) — 키는 header 로 유일.
         engine.fields.clear();
-        for (const def of [...rowFields, ...columnFields, ...valueFields]) {
-          engine.fields.push(new PivotField(engine, def.binding, def.binding));
+        const seen = new Set<string>();
+        for (const def of [...rowFields, ...columnFields, ...valueFields, ...(extraFields ?? [])]) {
+          const key = def.header ?? def.binding;
+          if (seen.has(key)) continue;
+          seen.add(key);
+          const f = new PivotField(engine, def.binding, key);
+          if (def.format) f.format = def.format;
+          engine.fields.push(f);
         }
         applyFields(engine.rowFields, engine, rowFields, false);
         applyFields(engine.columnFields, engine, columnFields, false);
@@ -126,18 +156,47 @@ export const OlapPivotGrid = forwardRef<OlapPivotGridRef, OlapPivotGridProps>(
         engine.showRowTotals = TOTALS[showRowTotals];
         engine.showColumnTotals = TOTALS[showColumnTotals];
       });
+      applyingRef.current = false;
     }, [
       engine,
       itemsSource,
       rowFields,
       columnFields,
       valueFields,
+      extraFields,
       showRowTotals,
       showColumnTotals,
     ]);
 
+    // 사용자 축 편집(레일 DnD 등) 통지 — viewDefinitionChanged 는 props 재적용에도 발화하므로 applyingRef 로 가른다
+    const onLayoutChangeRef = useRef(onLayoutChange);
+    onLayoutChangeRef.current = onLayoutChange;
+    useEffect(() => {
+      const h = () => {
+        if (applyingRef.current || engine.isUpdating) return;
+        onLayoutChangeRef.current?.({
+          rows: headersOf(engine.rowFields),
+          columns: headersOf(engine.columnFields),
+          filters: headersOf(engine.filterFields),
+          values: headersOf(engine.valueFields),
+        });
+      };
+      engine.viewDefinitionChanged.addHandler(h);
+      return () => engine.viewDefinitionChanged.removeHandler(h);
+    }, [engine]);
+
     // PivotGrid 는 FlexGrid 파생 — initialized 로 인스턴스를 잡아 xlsx 변환에 사용
     const gridInstanceRef = useRef<unknown>(null);
+    const onGridInitRef = useRef(onGridInit);
+    onGridInitRef.current = onGridInit;
+    // 언마운트(= 내부 PivotGrid dispose) 통지 — 화면이 dispose 된 인스턴스를 붙들고 columnHeaders 등에 접근하지 않게
+    useEffect(
+      () => () => {
+        gridInstanceRef.current = null;
+        onGridInitRef.current?.(null);
+      },
+      []
+    );
 
     // ── 컬럼 폭 자동 최적화 (opt-in — DMF0035 사용자 지정 2026-08-20) ────────────────
     //   목적: 셀 데이터가 **2행(줄바꿈)으로 표시되지 않도록** 내용 전체가 1행에 들어가는 폭으로
@@ -150,6 +209,11 @@ export const OlapPivotGrid = forwardRef<OlapPivotGridRef, OlapPivotGridProps>(
     autoFitRef.current = autoFitColumns;
     const fitBusyRef = useRef(false);
     const lastFitSignRef = useRef('');
+    // [FITONCE 2026-08-27] 자동맞춤은 **피벗 뷰 갱신(engine.updatedView = 조회/필드 변경) 직후 1회**만.
+    //   종전엔 updatedLayout 마다 폭 서명이 바뀌면 재맞춤해, 사용자가 컬럼을 드래그로 줄여도
+    //   그 리사이즈가 updatedLayout 을 발화 → 즉시 최적화 폭으로 되돌아갔다(사용자 신고 2026-08-27).
+    //   updatedView 에서 pending 을 세우고, 그 뒤 첫 updatedLayout 에서만 소비한다.
+    const fitPendingRef = useRef(false);
     const fitColumns = useRef<() => void>(() => {});
     fitColumns.current = () => {
       const VALUE_MIN = 64;
@@ -166,6 +230,9 @@ export const OlapPivotGrid = forwardRef<OlapPivotGridRef, OlapPivotGridProps>(
       }
       const g = gridInstanceRef.current as FitGrid | null;
       if (!autoFitRef.current || fitBusyRef.current || !g || !g.columns.length) return;
+      // 뷰 갱신으로 예약된 맞춤만 수행 — 사용자 컬럼 리사이즈가 만든 layout 이벤트는 무시(폭 보존)
+      if (!fitPendingRef.current) return;
+      fitPendingRef.current = false;
       // 이미 이 폭 구성으로 맞춰 둔 상태면 재적용하지 않는다 — autoSize→layout→autoSize 진동 차단
       const sign = (grid: FitGrid) =>
         [
@@ -233,8 +300,14 @@ export const OlapPivotGrid = forwardRef<OlapPivotGridRef, OlapPivotGridProps>(
           showSelectedHeaders='All'
           initialized={(g: unknown) => {
             gridInstanceRef.current = g as never;
+            onGridInitRef.current?.(g);
             const grid = g as { updatedLayout?: { addHandler: (h: () => void) => void } };
-            // 컬럼 재생성이 끝난 뒤(레이아웃 갱신 완료)에 폭을 잡는다 — §autoFitColumns 참조
+            // 뷰 갱신(조회/필드 변경) → 맞춤 예약. PivotGrid 는 이 뒤 컬럼을 재생성하고 updatedLayout 을 낸다.
+            engine.updatedView.addHandler(() => {
+              fitPendingRef.current = true;
+            });
+            // 컬럼 재생성이 끝난 뒤(레이아웃 갱신 완료)에 폭을 잡는다 — §autoFitColumns 참조.
+            //   사용자 리사이즈의 updatedLayout 은 pending 이 없어 통과(폭 유지) — [FITONCE]
             grid.updatedLayout?.addHandler(() => fitColumns.current());
           }}
           style={{ height: '100%' }}

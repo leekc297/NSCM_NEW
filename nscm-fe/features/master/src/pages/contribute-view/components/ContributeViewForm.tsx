@@ -28,22 +28,27 @@ interface Props {
 //   txtVersion   (UsrMultiLineEditor, readonly)   → Version (btnSPVer 로만 채움)
 //   btnSPVer     (UsrButton, image)               → Version popup trigger (InputField endAdornment)
 //   usrCust      (UsrMultiLineEditor, free-form)  → 고객군 (InputField)
-//   usrType      (UsrCombo, DropDownList)         → 제품군 (CustomDropdown — ReportGroup3 lookup)
-//   usrBiz       (UsrCombo, DropDownList)         → Biz (CustomDropdown — DmBizType lookup)
+//   usrType      (UsrCombo, DropDownList)         → 제품군 (CustomDropdown multiple — ReportGroup3 lookup)
+//   usrBiz       (UsrCombo, DropDownList)         → Biz (CustomDropdown multiple — DmBizType lookup)
 //   chkM         (UsrCheckBox)                    → [M$] 백만 단위 (Checkbox)
 //   usrChk       (UsrCheckBox)                    → 정합성 체크 (Checkbox)
 //   btnColumn / btnCutOff — Form 에서 제거 (SubTitle customButton + 기여율버전관리 분리)
+//
+// 제품군/Biz 는 AS-IS 단일 선택이었으나 사용자 요구로 다중 선택으로 바꿨다. CustomDropdown 계약상
+// 값은 여전히 string(콤마 구분)이고, 전체 선택/미선택은 'ALL' sentinel(= 필터 없음)로 나간다 —
+// 그래서 스토어 타입(ViewSearchCondition)과 SP 파라미터 계약은 그대로다.
 export const ContributeViewForm = ({ onSearch, onOpenVersionPopup }: Props) => {
   const { t } = useTranslation();
   const searchParams = useContributeViewStore(s => s.searchParams);
   const setSearchParams = useContributeViewStore(s => s.setSearchParams);
+  const noFilters = useContributeViewStore(s => s.noFilters);
 
   // AS-IS InitControls (.cs L104~108) + GetVersionData — Year SP 콤보 데이터
   const { data: yearData } = useTabProcQuery({
     menuId: MENU_ID,
     sheetName: SHEETS.VERSION,
     tabId: MENU_ID,
-    filters: {},
+    filters: noFilters,
     enabled: true,
   });
 
@@ -105,8 +110,14 @@ export const ContributeViewForm = ({ onSearch, onOpenVersionPopup }: Props) => {
     [yearOptions]
   );
 
+  // 콤보 원천의 '전체' 행(CODE='ALL')은 목록에서 뺀다. 다중 선택의 SELECT ALL 이 같은 뜻이라
+  // 중복이고, 무엇보다 조회조건 기본값 'ALL'(= 필터 없음)이 그 행과 매칭돼 진입하자마자
+  // ALL 칩이 선택된 것처럼 뜬다. 원천에 그 행이 없으면 이 filter 는 아무 일도 하지 않는다.
   const productGroupOptions = useMemo(
-    () => (reportGroup ?? []).map(item => ({ label: item.NAME, value: item.CODE })),
+    () =>
+      (reportGroup ?? [])
+        .filter(item => item.CODE !== 'ALL')
+        .map(item => ({ label: item.NAME, value: item.CODE })),
     [reportGroup]
   );
 
@@ -183,9 +194,13 @@ export const ContributeViewForm = ({ onSearch, onOpenVersionPopup }: Props) => {
               className={commonStyles.formItem}
               render={() => (
                 <CustomDropdown
+                  multiple
+                  allOption
+                  useClearIcon
+                  limitTags={1}
                   value={searchParams.productGroup}
                   options={productGroupOptions}
-                  onChange={(_, option) => setSearchParams({ productGroup: option })}
+                  onChange={(_, options) => setSearchParams({ productGroup: options })}
                 />
               )}
             />
@@ -211,9 +226,13 @@ export const ContributeViewForm = ({ onSearch, onOpenVersionPopup }: Props) => {
               className={commonStyles.formItem}
               render={() => (
                 <CustomDropdown
+                  multiple
+                  allOption
+                  useClearIcon
+                  limitTags={1}
                   value={searchParams.bizType}
                   options={bizTypeOptions}
-                  onChange={(_, option) => setSearchParams({ bizType: option })}
+                  onChange={(_, options) => setSearchParams({ bizType: options })}
                 />
               )}
             />

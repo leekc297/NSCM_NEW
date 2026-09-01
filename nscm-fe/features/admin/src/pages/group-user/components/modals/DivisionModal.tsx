@@ -14,6 +14,7 @@ import { MENU_ID, POPUP_SHEETS } from '../../group-user.constants';
 import type { DivisionPopupRow } from '../../group-user.types';
 
 import styles from './DivisionModal.module.scss';
+import { useDivisionModalStore } from './divisionModalStore';
 
 interface Props {
   open: boolean;
@@ -27,7 +28,8 @@ export const DivisionModal = ({ open, onClose, onSelect }: Props) => {
   const gridRef = useRef<FlexGrid<DivisionPopupRow>>();
   const gridFilterRef = useRef<FlexGridFilter>();
 
-  const [filters, setFilters] = useState<{ searchText: string }>();
+  const filters = useDivisionModalStore(state => state.filters);
+  const setFilters = useDivisionModalStore(state => state.setFilters);
 
   const { data } = useTabProcQuery<MENU_ID, POPUP_SHEETS.DIVISION_POPUP>({
     menuId: MENU_ID,
@@ -138,13 +140,6 @@ export const DivisionModal = ({ open, onClose, onSelect }: Props) => {
 
           <div className={styles.buttonWrapper}>
             <Button
-              appearance='outlined'
-              priority='normal'
-              size='medium'
-              buttonLabel={t('LBL00627', '_Close')}
-              onClick={onClose}
-            />
-            <Button
               appearance='contained'
               buttonLabel={t('LBL00716', '_OK')}
               iconComponent={<ControlConfirmIcon size='small' />}
@@ -152,6 +147,13 @@ export const DivisionModal = ({ open, onClose, onSelect }: Props) => {
               priority='primary'
               size='medium'
               onClick={handleConfirm}
+            />
+            <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel={t('LBL00627', '_Close')}
+              onClick={onClose}
             />
           </div>
         </div>

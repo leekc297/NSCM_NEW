@@ -32,11 +32,11 @@ export const DIVISION_LOOKUP = 'MyDivision' as const;
 //   AS-IS 도 콤보 첫 항목이 선택된 상태로 열린다. 사내 실측(Division 40): REPORT_SP_W 176건 / REPORT_BP_M 139건.
 export const VERSION_TYPE_DEFAULT = 'REPORT_SP_W' as const;
 
-// ⭐ 버전 팝업 기본 기간 — 과거 12개월 ~ 향후 3개월.
-//   AS-IS 는 오늘 기준 ±3개월이었으나, 버전 생성이 뜸한 구간에서는 팝업이 통째로 비어 보인다
-//   (사내 실측 2026-07-30: Division 40 REPORT_SP_W 최신 버전이 2026-03-11 → ±3개월 창에 0건).
-//   기간은 팝업에서 바꿀 수 있으므로 기본값을 넓게 잡는다.
-export const VERSION_POPUP_MONTHS_BACK = 12 as const;
+// 버전 팝업 기본 기간 — AS-IS DMF0068_VersionPopup 과 동일하게 오늘 기준 -3개월 ~ +3개월.
+//   월초/월말로 스냅하지 않고 오늘 날짜를 그대로 더하고 뺀다 (AS-IS 표시: 2026-05-27 ~ 2026-11-27).
+//   2026-07-30 에는 버전이 뜸한 구간에서 팝업이 비어 보인다는 이유로 과거를 12개월로 넓혔었으나,
+//   2026-08-27 사용자 요구로 AS-IS 로 되돌렸다. 기간은 팝업에서 직접 바꿀 수 있다.
+export const VERSION_POPUP_MONTHS_BACK = 3 as const;
 export const VERSION_POPUP_MONTHS_FWD = 3 as const;
 
 // ⭐ Measure 2행 1세트 — AS-IS dtMeasureS()/dtMeasureB() 는 내용이 동일하므로 단일 정의로 승계.

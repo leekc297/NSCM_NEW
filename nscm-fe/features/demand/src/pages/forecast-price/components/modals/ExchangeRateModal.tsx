@@ -22,6 +22,7 @@ import { useMessageStore, useUIStore, useSessionStore } from '@shared/stores';
 import { EXCHANGE_RATE_COLUMNS, MENU_ID, MSG, SHEETS } from '../../forecast-price.constants';
 
 import styles from './ExchangeRateModal.module.scss';
+import { useExchangeRateModalStore } from './exchangeRateModalStore';
 
 interface Props {
   open: boolean;
@@ -143,23 +144,24 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
     return [{ value: 'ALL', label: t('LBL00632', 'All') }, ...base];
   }, [myDivisions, t]);
 
-  const [periodFrom, setPeriodFrom] = useState(defaultPeriod.start);
-  const [periodTo, setPeriodTo] = useState(defaultPeriod.end);
+  // 확정 조회기간 — useTabProcQuery filters 참조 안정화 원천
+  const queryPeriod = useExchangeRateModalStore(state => state.queryPeriod);
+  const setQueryPeriod = useExchangeRateModalStore(state => state.setQueryPeriod);
 
   useEffect(() => {
     if (open) {
       setDivisionId(defaultDivision);
-      setPeriodFrom(defaultPeriod.start);
-      setPeriodTo(defaultPeriod.end);
+      setQueryPeriod({ start: defaultPeriod.start, end: defaultPeriod.end });
       editsRef.current.clear();
       setInsertedRows([]);
     }
-  }, [open, defaultDivision, defaultPeriod.start, defaultPeriod.end]);
+  }, [open, defaultDivision, defaultPeriod.start, defaultPeriod.end, setQueryPeriod]);
 
   // sheet 'futurePriceInfo' — SP DMF0082_POPUP_GET_FUTUREPRICE_INFO (4 IN + 2 OUT, divisionId 인자 없음
   //   — sesUserId/mnuId BE 자동). filters useMemo 안정화 (refetch loop 방지)
-  const startYyyymmdd = periodFrom.length === 6 ? `${periodFrom}01` : periodFrom;
-  const endYyyymmdd = periodTo.length === 6 ? `${periodTo}31` : periodTo;
+  const startYyyymmdd =
+    queryPeriod.start.length === 6 ? `${queryPeriod.start}01` : queryPeriod.start;
+  const endYyyymmdd = queryPeriod.end.length === 6 ? `${queryPeriod.end}31` : queryPeriod.end;
   const filters = useMemo(() => ({ startYyyymmdd, endYyyymmdd }), [startYyyymmdd, endYyyymmdd]);
   // ⭐ 자동조회 (2026-07-07 사용자 요구 — Batch Price Input 제외 전 modal 자동조회):
   //   enabled=open → modal open 시 react-query 가 filters(기간)로 자동 fetch. Find 버튼은 재조회용 유지.
@@ -557,7 +559,7 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
   }, [open]);
 
   const handleFind = () => {
-    if (periodFrom > periodTo) {
+    if (queryPeriod.start > queryPeriod.end) {
       void setAlert({
         type: 'alert',
         content: t('MSG00108', '_시작 월이 종료 월보다 늦을 수 없습니다.'),
@@ -758,12 +760,9 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
                 </Grid>
                 <PeriodField
                   gridSize={6}
-                  start={periodFrom}
-                  end={periodTo}
-                  onChange={(start, end) => {
-                    setPeriodFrom(start);
-                    setPeriodTo(end);
-                  }}
+                  start={queryPeriod.start}
+                  end={queryPeriod.end}
+                  onChange={(start, end) => setQueryPeriod({ start, end })}
                 />
               </>
             }

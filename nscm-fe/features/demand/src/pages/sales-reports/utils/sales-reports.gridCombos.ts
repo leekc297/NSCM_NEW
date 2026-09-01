@@ -44,86 +44,15 @@ export const GRID_CASCADE_FILTERS: Record<string, { rowKey: string; comboKey: st
 //   TO-BE 등가 = 원천 콤보를 화면 단위로 받아 `beginningEdit` 에서 행 컨텍스트로 골라 스왑(hook #59 §5-G).
 // ============================================================================
 
-/** DEPARTMENT_ID 의 '기타' 센티널 (AS-IS L1178 `sDEPT_NAME != "기타"` 분기) — 내부 전용 */
-const ETC_DEPARTMENT = '기타';
-
 /** 행별 콤보 원천 — 그리드가 화면 진입 시 한 번에 받는다 */
 export const ROW_COMBO_IDS = {
-  /** DEPARTMENT_ID 미입력 시의 DEPT_ID 후보 (AS-IS InsertRow L990 — Param1='' 분기) */
-  DEPT_DEFAULT: 'DMF0044_DEPARTMENT_TEAM2',
-  /** DEPARTMENT_ID 입력 시 (AS-IS Changed L1180 — UPPER_DEPT_ID 필터). 부모키 컬럼 동반 반환 */
-  DEPT_BY_DEPARTMENT: 'DMF0044_DEPARTMENT_TEAM',
-  /** DEPARTMENT_ID='기타' 시 (AS-IS Changed L1195) */
-  DEPT_ETC: 'DMF0044_ETC_SALE_RESULT_TYPE_40',
+  // DEPT_ID(Team) 콤보 3종(DMF0044_DEPARTMENT_TEAM2 / _TEAM / ETC_SALE_RESULT_TYPE_40)은 제거 —
+  //   사용자 지시 2026-08-28 (REQ:CHAT-20260828-05): 메타에 콤보 미설정 컬럼이라 코드 그대로 표시·입력.
   /** DEPT_ID 변경 시 CUST_REPORT (AS-IS Changed L1244) */
   CUST_REPORT: 'DMF0005_REPORT_GROUP2',
   /** DEPT_ID 변경 시 PRODUCT_GROUP (AS-IS Changed L1225 `GetLookupData("REPORT_GROUP3")`) */
   PRODUCT_GROUP: 'DMF0005_REPORT_GROUP3',
 } as const;
-
-/**
- * DEPT_ID 후보 행 해석 — AS-IS 3분기 1:1 (L990 / L1180 / L1195).
- *   미입력 → TEAM2 · '기타' → ETC · 그 외 → TEAM 을 DEPARTMENT_ID 로 필터
- * ⚠ 필터는 `filterComboRowsByRow` 와 같은 관대 규약(공란/'ALL' 통과)을 쓴다.
- */
-export const resolveDeptIdRows = (
-  row: SalesReportRow | undefined,
-  src: {
-    deptDefault: Record<string, unknown>[];
-    deptByDepartment: Record<string, unknown>[];
-    deptEtc: Record<string, unknown>[];
-  }
-): Record<string, unknown>[] => {
-  const department = toCellStr((row as Record<string, unknown>)?.DEPARTMENT_ID).trim();
-  if (!department) return src.deptDefault;
-  if (department === ETC_DEPARTMENT) return src.deptEtc;
-  return src.deptByDepartment.filter(cr => toCellStr(cr.DEPARTMENT_ID).trim() === department);
-};
-
-/**
- * DEPT_ID 컬럼 DataMap — 표시는 컬럼 전체(superset)로 고정하고, 드롭다운 후보만 행 컨텍스트로 좁힌다.
- *
- * 금지: `beginningEdit` 에서 `column.dataMap` 을 행별/cascade 콤보로 갈아끼우지 말 것
- *   (2026-08-21 결함 — DMF0049 Team 에서 먼저 잡혔고 이 화면도 같은 구조였다).
- *   wijmo 는 셀 표시 글자를 `Column.dataMap.getDisplayValue(key)` 로 만들고, 그 함수는 맵에 없는
- *   키를 만나면 **원값(코드)을 그대로** 돌려준다(`@mescius/wijmo.grid` DataMap 구현).
- *   dataMap 은 셀이 아니라 **컬럼** 속성이라, 한 셀이 편집에 들어가면 그 컬럼 전 행이 좁혀진 맵을
- *   타고 후보에 없는 코드가 전부 원 코드로 드러난다. 편집이 끝나면 원복되므로 사용자에게는
- *   "Team 에 포커스만 가면 코드로 보였다 이름으로 돌아온다"로 보인다.
- * 대신 wijmo 가 후보 목록 전용으로 제공하는 `DataMap.getDisplayValues(dataItem)` 를 쓴다 —
- *   공용 컬럼 매핑(`packages/foundation/src/utils/columnMapping.ts` getDataMap)과 같은 처방이다.
- *
- * 후보 우선순위는 옛 `beginningEdit` 분기 1:1 이다 — 행별 콤보 3분기(`resolveDeptIdRows`)가
- *   0건일 때만 메타 콤보를 상위 셀 값으로 거른다(AS-IS ComboSelChange M-6).
- * 표시명 우선순위는 **메타 콤보(metaRows)** 다. 같은 CODE 가 여러 원천에 있으면 먼저 넣은 쪽이
- *   이기므로(DataMap 내부 색인이 첫 항목만 담는다) 편집 전후 글자가 갈리지 않는다. 후보 라벨도
- *   같은 맵을 거쳐 만들어 드롭다운과 셀이 같은 이름 체계를 쓴다.
- *
- * 규약 전문 = `.atlas/wiki/wijmo-column-datamap-not-per-cell.md`.
- */
-export const buildDeptIdDataMap = (src: {
-  /** 메타 콤보(`cellCboDataTp`) rows — 표시명 원천이자 cascade fallback */
-  metaRows: Record<string, unknown>[];
-  deptDefault: Record<string, unknown>[];
-  deptByDepartment: Record<string, unknown>[];
-  deptEtc: Record<string, unknown>[];
-}): DataMap | null => {
-  const superset = [...src.metaRows, ...src.deptDefault, ...src.deptEtc, ...src.deptByDepartment];
-  if (superset.length === 0) return null;
-  const dataMap = new DataMap(superset, 'CODE', 'NAME');
-  dataMap.getDisplayValues = (rowItem?: unknown): string[] => {
-    const row = rowItem as SalesReportRow | undefined;
-    const rowScoped = resolveDeptIdRows(row, src);
-    const candidates =
-      rowScoped.length > 0
-        ? rowScoped
-        : row
-          ? filterComboRowsByRow(src.metaRows, row, GRID_CASCADE_FILTERS.DEPT_ID)
-          : src.metaRows;
-    return candidates.map(cr => dataMap.getDisplayValue(toCellStr(cr.CODE)));
-  };
-  return dataMap;
-};
 
 /** DEPARTMENT_ID 변경 시 clear 대상 (AS-IS L1187~1191 / L1211~1215 — 양 분기 동일 5컬럼) */
 export const DEPARTMENT_CHANGE_CLEAR = [
@@ -133,3 +62,48 @@ export const DEPARTMENT_CHANGE_CLEAR = [
   'CUST_REPORT',
   'PRODUCT_GROUP',
 ] as const;
+
+/** DEPT_ID 의 'MDF' 센티널 (AS-IS L1396 `sTEAM_NAME != "MDF"` 분기) — 내부 전용 */
+const MDF_TEAM = 'MDF';
+
+/** 비MDF 팀의 MODEL 강제값 (AS-IS L1405~1406). 이 값이면 Item 팝업도 열리지 않는다(M-8 L93) */
+export const ETC_SALES_ITEM = '기타매출';
+
+/** DEPT_ID 변경 시 clear 대상 (AS-IS L1407~1409 / L1424~1426 / L1450~1452 — 3분기 공통) */
+export const DEPT_CHANGE_CLEAR = ['END_CUST_REPORT', 'CUST_REPORT', 'PRODUCT_GROUP'] as const;
+
+/**
+ * DEPT_ID(팀) 변경 cascade — AS-IS spdMain_Changed L1370~1452 의 값 세팅분 1:1.
+ *
+ *   · DEPARTMENT_ID 공란            → 하위 3컬럼만 clear. MODEL 은 건드리지 않는다 (else 분기 L1444~1452)
+ *   · DEPARTMENT_ID 있고 팀 != 'MDF' → MODEL/모델명 = '기타매출' 강제 + 3컬럼 clear (L1396~1409)
+ *   · DEPARTMENT_ID 있고 팀 == 'MDF' → MODEL/모델명 clear + 3컬럼 clear (L1411~1426)
+ *
+ * 비MDF 팀은 모델을 고를 수 없다는 뜻이다 — 강제된 '기타매출' 값 자체가 Item 팝업 진입을 막는
+ *   가드(`SalesReportsGrid` dblclick, AS-IS L1314)와 같은 열쇠라 두 규칙이 한 값으로 맞물린다.
+ *
+ * 판정값: AS-IS 는 팀 셀의 `GetValue`(=코드)로 'MDF' 를 본다. 다만 콤보 등재에 따라 'MDF' 가
+ *   코드가 아니라 표시명 쪽일 수 있어 `teamNameOf` 로 표시명도 함께 본다(코드 우선).
+ *
+ * @returns 값이 바뀐 binding 목록 — 호출부가 Insert 세트 동기화(syncInsertSet)에 그대로 넘긴다.
+ */
+export const applyDeptIdChange = (
+  row: SalesReportRow,
+  teamNameOf?: (code: string) => string
+): string[] => {
+  const rec = row as Record<string, unknown>;
+  const changed: string[] = [...DEPT_CHANGE_CLEAR];
+  DEPT_CHANGE_CLEAR.forEach(col => {
+    rec[col] = '';
+  });
+
+  if (!toCellStr(rec.DEPARTMENT_ID).trim()) return changed;
+
+  const team = toCellStr(rec.DEPT_ID).trim();
+  const isMdf = team === MDF_TEAM || (teamNameOf?.(team) ?? '').trim() === MDF_TEAM;
+  const model = isMdf ? '' : ETC_SALES_ITEM;
+  rec.ITEM_ID = model;
+  rec.NICK_NAME = model;
+  changed.push('ITEM_ID', 'NICK_NAME');
+  return changed;
+};

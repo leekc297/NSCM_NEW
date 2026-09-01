@@ -1,6 +1,5 @@
 import { CellType, type FlexGrid } from '@mescius/wijmo.grid';
-import _ from 'lodash';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { GridUtils } from '@foundation/utils';
 import { SearchArea, DataGrid, CustomDialog } from '@shared/components';
@@ -36,31 +35,35 @@ export const SsoDeptModal = ({
   const staticColumns = useSsoDeptModalStore(state => state.staticColumns);
   const fetchStaticColumns = useSsoDeptModalStore(state => state.fetchStaticColumns);
 
-  const [modalFilters, setModalFilters] = useState<{
-    dept: string;
+  // 실제 조회 조건 — Search 버튼/Enter(그리고 팝업 오픈) 시에만 갱신되고, 그때 프로시저를 재호출한다.
+  //   (useTabProcQuery 는 filters 가 query key 라 값이 바뀌면 재조회. COM0011 은 department 를
+  //   IN 파라미터로 받는다 — configs/types/procedures.d.ts COM0011.ssoDept.request 참고)
+  const [searchParam, setSearchParam] = useState<{
+    department: string;
   }>({
-    dept: initialDept,
+    department: initialDept,
   });
+
+  // 입력 중인 값 — 조회하지 않고 로컬 state 에만 담아둔다.
+  const [deptInput, setDeptInput] = useState<string>(initialDept);
 
   const { data } = useTabProcQuery<POPUP_ID, SHEETS.SSO_DEPT>({
     menuId: POPUP_ID,
     sheetName: SHEETS.SSO_DEPT,
     tabId: POPUP_ID,
-    filters: undefined,
+    filters: searchParam,
     enabled: true,
   });
 
-  const itemsSource = (data?.o_rc ?? []).filter(
-    dept =>
-      (dept.DEPT_ID ?? '').toLowerCase().includes(modalFilters.dept.toLowerCase()) ||
-      (dept.DEPT_NM ?? '').toLowerCase().includes(modalFilters.dept.toLowerCase())
-  );
+  // 필터링은 프로시저(department 파라미터)가 하고, 그리드는 조회 결과를 그대로 보여준다.
+  //   useMemo — 매 렌더 새 배열이면 그리드가 re-bind 되어 스크롤·선택이 초기화된다.
+  const itemsSource = useMemo(() => data?.o_rc ?? [], [data]);
 
-  const handleFilterChange = _.debounce((dept: string) => {
-    setModalFilters({
-      dept: dept,
+  const handleSearch = () => {
+    setSearchParam({
+      department: deptInput,
     });
-  }, 50);
+  };
 
   const handleDblClick = (e: MouseEvent) => {
     const grid = gridRef.current;
@@ -78,9 +81,10 @@ export const SsoDeptModal = ({
 
   useEffect(() => {
     if (!open) return;
-    setModalFilters({
-      dept: initialDept,
+    setSearchParam({
+      department: initialDept,
     });
+    setDeptInput(initialDept);
     if (!initialized) void fetchStaticColumns();
   }, [open]);
 
@@ -101,6 +105,7 @@ export const SsoDeptModal = ({
         <div className={styles.dialogContentWrapper}>
           <SearchArea
             searchButtonLabel={t('LBL00722', '_Search')}
+            onSearch={handleSearch}
             conditions={
               <Grid size={8}>
                 <FormItem
@@ -109,8 +114,9 @@ export const SsoDeptModal = ({
                   render={() => (
                     <InputField
                       fullWidth
-                      defaultValue={initialDept}
-                      onChange={event => handleFilterChange(event.target.value)}
+                      value={deptInput}
+                      onChange={event => setDeptInput(event.target.value)}
+                      onKeyDown={e => e.key === 'Enter' && handleSearch()}
                     />
                   )}
                   labelSize='long'

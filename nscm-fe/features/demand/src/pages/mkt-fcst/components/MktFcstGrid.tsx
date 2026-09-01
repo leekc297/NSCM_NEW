@@ -41,6 +41,7 @@ import {
   buildEditCutoff,
   dynKindOf,
   evalDynCell,
+  isPastDynColumn,
   thisWeekMondayYmd,
 } from '../utils/mkt-fcst.editLock';
 import {
@@ -60,7 +61,6 @@ import {
   GRID_CASCADE_CLEAR,
   GRID_CASCADE_FILTERS,
   GRID_EDIT_COMBO,
-  ROW_KEY_BINDINGS,
   ROW_PARAM_EDIT_COMBO,
   rowParamComboKey,
   rowSalesSite,
@@ -87,6 +87,17 @@ const toNumber = (v: unknown): number => {
   if (v == null || v === '') return 0;
   const n = typeof v === 'number' ? v : Number(toCellStr(v).replace(/,/g, ''));
   return Number.isFinite(n) ? n : 0;
+};
+
+// 수량 셀 = 동적 기간 컬럼(M_/W_/D_). 좌측 정적 컬럼은 정수 규칙 대상이 아니다.
+const isQtyBinding = (binding: string): boolean => /^[MWD]_/.test(binding);
+
+// 수량 정수화 — 소수점 이하 버림(1.5 -> 1). 반올림이 아닌 이유: AS-IS 주/월 분배가
+//   정수 몫+나머지 가산이라 반올림하면 합이 어긋난다.
+const truncQty = (v: unknown): unknown => {
+  if (v == null || v === '') return v;
+  const n = typeof v === 'number' ? v : Number(toCellStr(v).replace(/,/g, ''));
+  return Number.isFinite(n) ? Math.trunc(n) : v;
 };
 
 /**
@@ -119,6 +130,13 @@ interface Props {
   gridFilterRef?: MutableRefObject<FlexGridFilter | undefined>;
   // F7 Save — EditTracker 로 변경 셀 추적 + 비-insert 행 자동 CRUD_TYPE='M' 마킹.
   editTrackerRef?: MutableRefObject<EditTracker<MktFcstRow> | undefined>;
+  // 행 단위 편집 콤보(ROW_PARAM_EDIT_COMBO) 선조회 호출구 — 그리드 밖에서 행 값이 바뀔 때 부모가 부른다.
+  //   필요한 이유: 선조회는 cellEditEnded 에만 걸려 있는데 Project Code 는 FPModal 팝업 셀이라
+  //   셀 편집을 타지 않는다. 팝업으로 Project 를 고르면 MktFcstEditMeasure 파라미터 조합이
+  //   바뀌는데 캐시가 안 데워져, 다음 Measure 편집 진입이 스왑에 실패하고 조회 콤보가 그대로 뜬다
+  //   (전체 Measure 목록이 보이는 증상). 응답이 도착한 뒤 다시 열면 정상이라 간헐적으로 보인다.
+  //   호출부는 MktFcst.tsx ProjectByDivisionModal.setSelectedValue — applyCascadeClear 옆.
+  prefetchRowParamComboRef?: MutableRefObject<((row: Record<string, unknown>) => void) | undefined>;
   onPopupCellDblClick?: (modalKey: string, row: MktFcstRow) => void;
   // ⭐ Phase 2e — contextMenu PR (Request/View PR + History). 검증 통과 결과를 MktFcst.tsx 로 전달.
   onPrContext?: (action: PrContextAction, result: PrContextResult) => void;
@@ -168,6 +186,7 @@ export const MktFcstGrid = ({
   gridRef,
   gridFilterRef,
   editTrackerRef,
+  prefetchRowParamComboRef,
   onPopupCellDblClick,
   onPrContext,
   onSspCompare,
@@ -415,6 +434,11 @@ export const MktFcstGrid = ({
   //   beginningEdit 은 동기라 그 자리에서 await 할 수 없다 = 선조회가 유일한 방법.
   const rowParamComboRowsRef = useRef<Record<string, Record<string, unknown>[]>>({});
   const rowParamComboPendingRef = useRef<Set<string>>(new Set());
+  // 조회는 끝났는데 0건인 파라미터 조합. rows 캐시([])만으로는 "아직 안 받음" 과 구분이
+  //   안 돼 따로 표시한다 — applyRowParamCombo 가 재요청 대신 조회 콤보 유지로 넘어가는 근거다.
+  const rowParamComboEmptyRef = useRef<Set<string>>(new Set());
+  // 조회가 실패한 파라미터 조합. rows 캐시에는 안 넣으므로 다음 편집 진입에서 재시도된다.
+  const rowParamComboFailedRef = useRef<Set<string>>(new Set());
   const fetchRowParamCombo = useCallback(
     (binding: string, row: Record<string, unknown>) => {
       const cfg = ROW_PARAM_EDIT_COMBO[binding];
@@ -422,15 +446,30 @@ export const MktFcstGrid = ({
       const param = cfg.buildParam(row, division, sesUserId);
       const key = rowParamComboKey(binding, param);
       // 같은 파라미터 조합은 1회만 — 캐시 hit / 진행 중이면 재요청하지 않는다.
-      if (rowParamComboRowsRef.current[key] || rowParamComboPendingRef.current.has(key)) return;
+      //   필수: 값의 진리값이 아니라 키 존재 여부로 본다. 판정 기준은 "받아 둔 적이 있는가"이고
+      //   0건 응답도 받아 둔 것이다 — [] 가 truthy 라 우연히 동작하는 형태를 남기지 않는다.
+      if (key in rowParamComboRowsRef.current || rowParamComboPendingRef.current.has(key)) return;
       rowParamComboPendingRef.current.add(key);
+      rowParamComboFailedRef.current.delete(key);
       void apiClient
         .getCombo(param)
         .then(res => {
-          rowParamComboRowsRef.current[key] = asComboRows(res);
+          const comboRows = asComboRows(res);
+          rowParamComboRowsRef.current[key] = comboRows;
+          if (comboRows.length === 0) {
+            // 0건 = 스왑할 후보가 없다 → 조회 콤보가 편집에 그대로 쓰여 제약이 풀린 것처럼
+            //   보인다. 콤보 등록/파라미터를 봐야 하는 상태라 조용히 넘기지 않는다
+            //   (GRID_EDIT_COMBO 0건 경로와 같은 취지 — 그쪽은 편집 진입 때 logComboEdit 로 남긴다).
+            rowParamComboEmptyRef.current.add(key);
+            console.warn('[DMF0003] row-param combo returned 0 rows', { binding, param });
+          } else {
+            rowParamComboEmptyRef.current.delete(key);
+          }
         })
         .catch((error: unknown) => {
           // 실패 시 조회 콤보 dataMap 이 그대로 남는다 — 조용히 삼키지 않는다.
+          //   rows 캐시에는 넣지 않는다: 다음 편집 진입에서 다시 시도해 일시 오류를 복구한다.
+          rowParamComboFailedRef.current.add(key);
           console.error('[DMF0003] row-param combo lookup failed', { binding, param }, error);
         })
         .finally(() => {
@@ -449,6 +488,19 @@ export const MktFcstGrid = ({
       fetchRowParamCombo(b, { DIVISION_ID: division })
     );
   }, [division, fetchRowParamCombo]);
+
+  // 그리드 밖(FPModal 팝업)에서 행 값이 바뀐 경우의 선조회 호출구 — Props.prefetchRowParamComboRef
+  //   주석 참조. 위 워밍업과 같은 일을 임의의 행 스냅샷으로 한다.
+  //   ready 게이트가 있는 콤보(INCOTERMS — Sales site 필요)는 fetchRowParamCombo 가 알아서 거른다.
+  useEffect(() => {
+    if (!prefetchRowParamComboRef) return;
+    prefetchRowParamComboRef.current = (row: Record<string, unknown>) => {
+      Object.keys(ROW_PARAM_EDIT_COMBO).forEach(b => fetchRowParamCombo(b, row));
+    };
+    return () => {
+      prefetchRowParamComboRef.current = undefined;
+    };
+  }, [prefetchRowParamComboRef, fetchRowParamCombo]);
 
   // [E20260402-001736] W/S 분기 자료 — wsPlannerYn(store) + W/S FcstType 4종(FcstTypeWs =
   //   SALES_TYPE_CODE2). 용도: MEASURE 편집 후보 필터(사이트 축 우선 / W/S 축은 사이트 미선택 행) /
@@ -880,10 +932,17 @@ export const MktFcstGrid = ({
         toggleClass(e.cell, 'mkt-cell-ssp-full', false);
         toggleClass(e.cell, 'mkt-cell-ssp-partial', false);
         toggleClass(e.cell, 'wj-cell-editable', state.editable);
-        // ⭐ Color 체크박스 제거 (2026-07-03 사용자 결정 — AS-IS 실행 UI 에 미표시·초기 false).
-        //   AS-IS chkColor=false 경로 = 과거영역 Gray 배경 없음 (편집 잠금은 beginningEdit 에서 유지,
-        //   편집 가능 Yellow 는 #95 표준 유지). Gray 는 어떤 경우에도 칠하지 않는다.
-        toggleClass(e.cell, 'wj-cell-non-editable', false);
+        // 실적 구간 = Gray — DMF0020(forecast-price) 파리티 (사용자 지시 2026-08-27).
+        //   판정은 컬럼(기간) 단위 isPastDynColumn 이다. evalDynCell.isPast 를 쓰면 안 된다:
+        //   그 함수는 division 편집제약·행 EDIT_FLAG!='Y'·비활성 bucket 에서 날짜를 보기 전에
+        //   isPast=false 로 되돌아오므로, 읽기전용 measure 행(RTF/SCM FCST 등)만 흰색으로 남아
+        //   실적 컬럼이 얼룩진다. DMF0020 은 컬럼 하나로 판정해 실적 구간이 고르게 회색이다.
+        //   편집 차단은 그대로 evalDynCell(state.editable) 담당 — 색과 잠금의 역할만 나눈 것이다.
+        toggleClass(
+          e.cell,
+          'wj-cell-non-editable',
+          isPastDynColumn({ binding: col.binding, divisionId: division, cutoff: editCutoff })
+        );
         return;
       }
 
@@ -1031,6 +1090,8 @@ export const MktFcstGrid = ({
     //   Div 를 바꿨으면 파라미터가 달라져 캐시 키도 달라진다(= 실조회).
     //   캐시가 아직 없으면(값이 방금 정해졌거나 응답 전) 요청만 걸고 이번엔 조회 dataMap 을 유지한다
     //   — 편집 진입은 동기라 여기서 await 할 수 없다. 다음 진입부터 편집 후보가 뜬다.
+    //   0건 응답은 받아 둔 것으로 치고 재요청하지 않는다: 그 파라미터 조합에는 편집 후보가 없다는
+    //   뜻이라 조회 콤보가 그대로 쓰인다(로그로 남긴다). 조회 실패만 다음 진입에서 재시도한다.
     //   반환값: 이 컬럼을 여기서 처리했는가. false 면 호출부가 일반 편집 콤보 경로로 계속 간다.
     const applyRowParamCombo = (
       col: Column,
@@ -1042,20 +1103,49 @@ export const MktFcstGrid = ({
       // ready 미충족(INCOTERMS: 행 Sales site 공란) → 스왑 없음 = 조회 콤보 그대로.
       if (cfg.ready && !cfg.ready(rowRec)) return true;
       const param = cfg.buildParam(rowRec, division, sesUserId);
-      const cached = rowParamComboRowsRef.current[rowParamComboKey(binding, param)];
+      const key = rowParamComboKey(binding, param);
+      const paramText = JSON.stringify(param);
+      const cached = rowParamComboRowsRef.current[key];
       if (cached && cached.length > 0) {
         swapEditCandidates({
           col,
           binding,
           rowRec,
           comboId: cfg.comboId,
-          param: JSON.stringify(param),
+          param: paramText,
           dependsOn: '행 단위 콤보 조회 (그 행 값이 콤보 파라미터)',
           src: cached,
         });
-      } else {
-        fetchRowParamCombo(binding, rowRec);
+        return true;
       }
+      // 여기부터는 스왑 없음 = 조회 콤보 dataMap 이 그대로 편집에 쓰인다. 세 경우를 구분한다.
+      //   (1) 조회 완료 0건 — 재요청해도 결과가 같다(캐시 키가 파라미터 조합이라 응답도 고정).
+      //     GRID_EDIT_COMBO 0건 경로와 같은 모양으로 남긴다. 로그가 없으면 "편집 제약이 간헐적으로
+      //     풀린다" 로만 보이고 원인을 짚을 수 없다.
+      if (rowParamComboEmptyRef.current.has(key)) {
+        logComboEdit({
+          binding,
+          comboId: cfg.comboId,
+          param: paramText,
+          dependsOn:
+            '주의: 행 단위 편집 콤보 0건 → 조회 콤보 dataMap 유지. 콤보 등록/파라미터 확인 필요',
+          before: [],
+          after: [],
+        });
+        return true;
+      }
+      //   (2) 직전 조회 실패 — 아래에서 재시도한다. (3) 아직 안 받음(첫 진입/응답 전) — 요청만 건다.
+      if (rowParamComboFailedRef.current.has(key)) {
+        logComboEdit({
+          binding,
+          comboId: cfg.comboId,
+          param: paramText,
+          dependsOn: '주의: 직전 행 단위 편집 콤보 조회 실패 → 조회 콤보 dataMap 유지, 재시도',
+          before: [],
+          after: [],
+        });
+      }
+      fetchRowParamCombo(binding, rowRec);
       return true;
     };
 
@@ -1362,23 +1452,14 @@ export const MktFcstGrid = ({
           if (!isAsFromSiteEditable(rec, true)) rec.AS_FROM_SITE = '';
         }
       }
-      // A-08 [CG-05] I 행 키값 변경 → 수량 전량 클리어 (.cs L5319~5379) — 키가 바뀌면 행의 정체가
-      //   바뀌므로 이전 키 기준으로 입력한 수량은 남길 수 없다(AS-IS 는 여기서 dtSave 행까지 제거한다.
-      //   TO-BE 는 수량 0건이면 저장 검증 bInputCheck 이 걸러내므로 클리어만으로 등가).
-      //   같은 INSERT_GROUP 형제 행 일괄 — 위 동기화가 키 값을 형제에도 복사하니 형제 정체도 같이 바뀐다.
-      //   키 목록은 gridCombos.ROW_KEY_BINDINGS(= division.ts buildDuplicateKey 컬럼셋) 단일 출처.
-      //   주의: changed 게이트 필수 — 같은 값 재선택·형제 동기화로 입력한 수량이 날아가면 안 된다.
-      //   keepCols 예외: 행 전체를 복사해 붙여넣으면 키와 수량이 같은 동작에서 함께 들어온다 —
-      //     방금 붙여넣은 수량까지 지우면 붙여넣기가 무의미해진다.
-      if (changed && ROW_KEY_BINDINGS.includes(binding)) {
-        for (const item of view.items) {
-          if (item.CRUD_TYPE !== 'I' || item.INSERT_GROUP_ID !== gid) continue;
-          const rec = item as Record<string, unknown>;
-          for (const b of dynBindings) {
-            if (!keepCols.includes(b)) rec[b] = null;
-          }
-        }
-      }
+      // A-08 [CG-05] I 행 키값 변경 시 수량 전량 클리어(.cs L5319~5379)는 2026-08-27 요구로 제거했다.
+      //   증상: AS From Site 미입력 상태로 W35~W38 수량을 넣고 저장하면 MSG00476 이 AS From Site 를
+      //   요구하는데, 그 값을 채우는 순간 키 변경으로 잡혀 방금 넣은 수량이 전부 날아갔다.
+      //   저장 검증이 "수량 먼저 → AS From Site 나중" 순서를 강제하므로 매번 밟는 경로였다.
+      //   그 대가로 키를 바꾼 행은 이전 키로 넣은 수량을 그대로 들고 저장된다 — 최종 키 기준의
+      //   중복 검증(division.ts buildDuplicateKey)과 저장 검증이 남은 방어선이다.
+      //   되살릴 때는 gridCombos.ROW_KEY_BINDINGS 를 키 목록으로 쓰던 형태를 참고할 것
+      //   (changed 게이트 + keepCols 예외가 함께 있어야 한다).
     };
 
     // 편집 종료 — (A) 정적 cols = Insert 행 group 동기화 / (B) 동적 cols(D_/W_/M_) = 재계산 cascade.
@@ -1407,6 +1488,10 @@ export const MktFcstGrid = ({
         if (!canModelChangeRef.current) return; // 재진입 차단 (AS-IS L2885)
         const row = s.rows[e.row].dataItem as MktFcstRow | undefined;
         if (!row) return;
+        // 아래 재계산이 이 값을 읽어 합을 쌓으므로 한 번 더 버린다(드래그 채우기 등 에디터 미경유 경로).
+        const qtyRec = row as Record<string, unknown>;
+        const qtyInt = truncQty(qtyRec[binding]);
+        if (qtyInt !== qtyRec[binding]) qtyRec[binding] = qtyInt;
         runDynRecalc(s, e.row, binding, row);
         return;
       }
@@ -1603,6 +1688,26 @@ export const MktFcstGrid = ({
     };
     g.cellEditEnding.addHandler(editChangeHandler);
 
+    // 수량 셀 소수점 입력 차단 — '.' 키를 아예 못 치게 한다(2026-08-28 사용자 요구).
+    //   capture 로 잡는 이유: Wijmo 에디터가 keydown 을 먼저 소비하면 이미 값이 들어간 뒤다.
+    const blockQtyDotKey = (ev: KeyboardEvent) => {
+      if (ev.key !== '.' && ev.key !== 'Decimal') return;
+      if (!isQtyBinding(g.columns[g.selection.col]?.binding ?? '')) return;
+      ev.preventDefault();
+    };
+    g.hostElement.addEventListener('keydown', blockQtyDotKey, true);
+
+    // 키 입력 외 경로(셀 안에서 Ctrl+V, 드래그 채우기)로 들어온 소수는 커밋 시점에 버린다.
+    //   에디터 값을 고쳐야 EditTracker 가 '1 -> 1.5 -> 1' 을 수정(M)으로 잡지 않는다.
+    const truncQtyOnCommit = (s: FlexGridType<MktFcstRow>, e: CellRangeEventArgs) => {
+      if (!isQtyBinding(g.columns[e.col]?.binding ?? '')) return;
+      const ed = s.activeEditor;
+      if (!ed || !ed.value.includes('.')) return;
+      const n = truncQty(ed.value);
+      if (typeof n === 'number') ed.value = String(n);
+    };
+    g.cellEditEnding.addHandler(truncQtyOnCommit);
+
     // ⭐ Phase 2e — spdMain_ClipboardPasted (AS-IS .cs L5416~5448). 붙여넣기된 셀이 ScmSiteId40(Div40)/
     //   ScmSiteId(81·82) 컬럼이면 해당 행 Measure/Incoterms 콤보 재조회·재설정.
     //   Wijmo 는 whole-range 'pasted' 이벤트가 없어 pastedCell(셀당) 사용. TO-BE 콤보 dataMap 은
@@ -1620,6 +1725,8 @@ export const MktFcstGrid = ({
       // 배치의 첫 셀이면(=flush 예약 없음) 이전 배치에서 취소돼 남은 값을 버린다.
       if (pasteFlushTimer === null) pasteOldValues.clear();
       const b = g.columns[e.col]?.binding ?? '';
+      // Ctrl+V 는 에디터를 안 거치므로 값에서 직접 버린다. 셀 거부는 안 한다(대량 붙여넣기가 막힌다).
+      if (isQtyBinding(b)) e.data = truncQty(e.data);
       const rec = s.rows[e.row]?.dataItem as Record<string, unknown> | undefined;
       pasteOldValues.set(`${e.row}:${e.col}`, rec?.[b]);
     };
@@ -1708,6 +1815,16 @@ export const MktFcstGrid = ({
       }
       try {
         g.cellEditEnding?.removeHandler(editChangeHandler);
+      } catch {
+        /* unmount race */
+      }
+      try {
+        g.cellEditEnding?.removeHandler(truncQtyOnCommit);
+      } catch {
+        /* unmount race */
+      }
+      try {
+        g.hostElement?.removeEventListener('keydown', blockQtyDotKey, true);
       } catch {
         /* unmount race */
       }

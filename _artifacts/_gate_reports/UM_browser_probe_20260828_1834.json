@@ -1,0 +1,57 @@
+[
+ {
+  "menu": "DMF0040",
+  "checks": [
+   [
+    "UM-01 Division 기본 선택",
+    true,
+    "value='40 Mobility & IT Battery'"
+   ],
+   [
+    "Search 버튼 존재",
+    true,
+    ""
+   ],
+   [
+    "조회 행 렌더",
+    true,
+    "rows=23"
+   ],
+   [
+    "UM-07 Filter 버튼/F4 → 필터 아이콘 토글",
+    true,
+    "icons 0→1"
+   ],
+   [
+    "UM-06 헤더 총높이(조회 후) = 48",
+    false,
+    "{'rows': [144, 96], 'total': 0}"
+   ],
+   [
+    "UM-11 footer 합계 행",
+    true,
+    "{'present': True, 'sample': ['Sum', '252,377,722.000', '640,487,950.000', '614,182,804.000', '639,689,836.000', '702,994,142.000']}"
+   ],
+   [
+    "UM-08 ONLY_WEEKLY 전환 = 그리드 비움(0040/0053) 또는 재피벗(0035)",
+    true,
+    "rows=0"
+   ],
+   [
+    "Search 버튼 존재",
+    true,
+    ""
+   ],
+   [
+    "UM-09 ONLY_WEEKLY 헤더 총 48 (3행)",
+    false,
+    "{'rows': [144, 48, 48], 'total': 0}"
+   ],
+   [
+    "UM-11 ONLY_WEEKLY footer",
+    true,
+    "{'present': True, 'sample': ['Sum', '0.000', '0.000', '0.000', '0.000', '174,905,006.000']}"
+   ]
+  ]
+ }
+]

@@ -1,0 +1,57 @@
+[
+ {
+  "menu": "DMF0035",
+  "checks": [
+   [
+    "UM-01 Division 기본 선택",
+    true,
+    "value='40 Mobility & IT Battery'"
+   ],
+   [
+    "Search 버튼 존재",
+    true,
+    ""
+   ],
+   [
+    "조회 행 렌더",
+    true,
+    "rows=27"
+   ],
+   [
+    "UM-07 (OLAP) Filter/F4 → Grid Layout 레일(Filters 영역) 열림",
+    true,
+    "rail=True"
+   ],
+   [
+    "UM-06 헤더 총높이(조회 후) = 48",
+    true,
+    "{'rows': [48], 'total': 48}"
+   ],
+   [
+    "UM-11 OLAP 총계 행(GrandTotals)",
+    true,
+    "['Grand Total|538,026,395']"
+   ],
+   [
+    "UM-08 ONLY_WEEKLY 전환 = 그리드 비움(0040/0053) 또는 재피벗(0035)",
+    true,
+    "rows=0"
+   ],
+   [
+    "Search 버튼 존재",
+    true,
+    ""
+   ],
+   [
+    "UM-09 ONLY_WEEKLY 헤더 총 48 (3행)",
+    true,
+    "{'rows': [16, 16, 16], 'total': 48}"
+   ],
+   [
+    "UM-11 ONLY_WEEKLY footer",
+    true,
+    "{'present': False, 'sample': []}"
+   ]
+  ]
+ }
+]

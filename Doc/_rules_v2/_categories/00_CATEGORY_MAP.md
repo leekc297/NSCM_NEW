@@ -1,4 +1,4 @@
-# 00_CATEGORY_MAP — 룰 카테고리 총괄 맵 / Rule Category Map
+﻿# 00_CATEGORY_MAP — 룰 카테고리 총괄 맵 / Rule Category Map
 
 > **신설**: 2026-07-30 (사용자 요구 — "관련되는 RULE 을 모아서 관리함으로써 적용할 때 오류를 줄이고자")
 > **목적**: 기존 트리거 매트릭스(작업 유형 T01~T20)와 **직교하는 주제 축** — "UI 디자인 관련 룰 전부"처럼 주제로 모아 열 수 있게 한다.
@@ -174,6 +174,8 @@
 | 145 | verification-evidence-and-scale | 12, 10, 11 |
 | 146 | asis-grid-cell-event-full-extraction | 11, 03, 12 |
 | 147 | excel-upload-nls-safe-parsing | 12, 09 |
+| 148 | cloud-deploy-silent-failure-gates | 12, 10, 09 |
+| 149 | remediation-closure-symptom-reproduction | 12, 10 |
 
 ## 커버리지 검증 (신규 hook 등재 시 재실행 의무)
 
@@ -214,3 +216,4 @@ ls Doc/_rules_v2/hooks/*.md | wc -l
 | `_mapping/asis_to_tobe.md`(격차 10)/`search_conditions_scp_dm.md` | 11 / 04 |
 | 룰 v1: 02/28(git)·21(진단)·22/29/30(배포·환경)·31(Figma)·32(Oracle 도구) | 12 / 10 / 12 / 01 / 09·10 |
 > 2026-08-23 **#147 excel-upload-nls-safe-parsing 신설** — 카테고리 12(주·프로세스/운영) + 09(Oracle SP). 엑셀 업로드 값 파싱의 NLS·셀서식 의존 제거(사내 정상·클라우드 전건 반려 실사고 계보).
+> 2026-08-28 **#148 cloud-deploy-silent-failure-gates 신설** — 카테고리 12(주·이관 패키지 게이트) + 10(클라우드만 실패 진단 순서) + 09(동적 SQL NLS). 룰 본문에만 있고 생성기에 없던 V11 이 재발한 계보.

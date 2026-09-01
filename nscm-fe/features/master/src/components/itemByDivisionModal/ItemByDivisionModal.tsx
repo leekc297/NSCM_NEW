@@ -43,6 +43,7 @@ interface ItemByDivisionModalProps {
     deptId?: string,
     deptName?: string
   ) => void;
+  /** 팝업 조회조건 초기값. activeFlag='Y' 면 MDM 사용중지 모델을 뺀다(AS-IS p_mdmActive_Sw). */
   preSearchParams: ProcRequest<MODAL_ITEM_BY_DIVISION, MODAL_SHEET_ITEM_BY_DIVISION>;
   callFromCell: boolean;
   // 호출 화면별 헤더 title 커스터마이즈 (옵션). 기본값: LBL00343 '_ItemByDivisionPopup'
@@ -320,6 +321,8 @@ export const ItemByDivisionModal = ({
       salesSite: preSearchParams.salesSite ?? 'ALL',
       projectCode: preSearchParams.projectCode ?? '',
       itemId: '',
+      // 값을 준 호출처만 조건에 싣는다 — 빈값이면 키를 만들지 않아 기존 요청 본문이 그대로다.
+      ...(preSearchParams.activeFlag ? { activeFlag: preSearchParams.activeFlag } : {}),
     });
     setModalFilters({ itemId: preSearchParams.itemId ?? '' });
     setItemId(preSearchParams.itemId);
@@ -502,13 +505,6 @@ export const ItemByDivisionModal = ({
           </div>
           <div className={styles.buttonWrapper}>
             <Button
-              appearance='outlined'
-              priority='normal'
-              size='medium'
-              buttonLabel='Close'
-              onClick={modalClose}
-            />
-            <Button
               appearance='contained'
               buttonLabel='OK'
               iconComponent={<ControlConfirmIcon size='small' />}
@@ -516,6 +512,13 @@ export const ItemByDivisionModal = ({
               priority='primary'
               size='medium'
               onClick={handleSubmit}
+            />
+            <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel='Close'
+              onClick={modalClose}
             />
           </div>
         </div>

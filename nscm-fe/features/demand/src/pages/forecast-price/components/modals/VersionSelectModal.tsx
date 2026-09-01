@@ -1,6 +1,6 @@
 import type { FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
 import { PeriodField } from 'features/master/src/components';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 
 import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import dayjs from '@foundation/dayjs';
@@ -15,6 +15,7 @@ import { useMessageStore } from '@shared/stores';
 import { MENU_ID, MSG, SHEETS } from '../../forecast-price.constants';
 
 import styles from './VersionSelectModal.module.scss';
+import { useVersionSelectModalStore } from './versionSelectModalStore';
 
 // AS-IS DMF0082 Version 선택 — ⭐ 2026-07-24 원본 재실측 정정:
 //   실제 AS-IS 팝업 = **SCM0002_VersionByWaterfallPopup** (제목 "Version Popup", MNU00179).
@@ -112,26 +113,24 @@ export const VersionSelectModal = ({
   //   (MetalLinkVersionModal MultiTimeZone 동일 규칙).
   const defaultFrom = defaultPeriod?.start || dayjs().subtract(3, 'month').format('YYYYMMDD');
   const defaultTo = defaultPeriod?.end || dayjs().add(3, 'month').format('YYYYMMDD');
-  const [periodFrom, setPeriodFrom] = useState<string>(defaultFrom);
-  const [periodTo, setPeriodTo] = useState<string>(defaultTo);
-  const [divisionId, setDivisionId] = useState<string>(defaultDivision);
-  const [description, setDescription] = useState<string>('');
-
   // Day / Week — AS-IS Designer 기본값 = Week 만 Checked (chkWeek.Checked = true L149~150).
   //   ⭐ Manual(chkMonth) 은 2026-08-11 제거 — 통합테스트 No.33 "Day, Week 버튼만 필요"(사용자 요구).
-  const [chkDay, setChkDay] = useState<boolean>(false);
-  const [chkWeek, setChkWeek] = useState<boolean>(true);
+  const { divisionId, periodFrom, periodTo, description, chkDay, chkWeek } =
+    useVersionSelectModalStore(state => state.searchParams);
+  const setSearchParams = useVersionSelectModalStore(state => state.setSearchParams);
 
   useEffect(() => {
     if (open) {
-      setDivisionId(defaultDivision);
-      setPeriodFrom(defaultFrom);
-      setPeriodTo(defaultTo);
-      setDescription('');
-      setChkDay(false);
-      setChkWeek(true);
+      setSearchParams({
+        divisionId: defaultDivision,
+        periodFrom: defaultFrom,
+        periodTo: defaultTo,
+        description: '',
+        chkDay: false,
+        chkWeek: true,
+      });
     }
-  }, [open, defaultDivision, defaultFrom, defaultTo]);
+  }, [open, defaultDivision, defaultFrom, defaultTo, setSearchParams]);
 
   // DMF0073_GET_VERSION_SALESPRICE (9-arg — sesUserId/mnuId BE 자동. DB 배선 P1-7 SQL 참조).
   // ⭐ versionType = Day/Week/Manual 체크박스 → AS-IS SP 축 확장 결과 토큰 (파일 상단 주석 참조).
@@ -238,7 +237,7 @@ export const VersionSelectModal = ({
                         disabled // 메인 화면 조회 division 고정 (AS-IS ctor division 1:1)
                         value={divisionId}
                         options={divisionOptions}
-                        onChange={(_, option) => setDivisionId(String(option))}
+                        onChange={(_, option) => setSearchParams({ divisionId: String(option) })}
                       />
                     )}
                   />
@@ -247,10 +246,9 @@ export const VersionSelectModal = ({
                   gridSize={4}
                   start={periodFrom}
                   end={periodTo}
-                  onChange={(start, end) => {
-                    setPeriodFrom(start);
-                    setPeriodTo(end);
-                  }}
+                  onChange={(start, end) =>
+                    setSearchParams({ periodFrom: start, periodTo: end })
+                  }
                 />
                 {/* AS-IS chkDay / chkWeek — Designer L140~165 배치 순서 그대로.
                     ⭐ Manual(chkMonth) 체크박스는 2026-08-11 제거(통합테스트 No.33 사용자 요구).
@@ -260,12 +258,12 @@ export const VersionSelectModal = ({
                     <Checkbox
                       labelText='Day'
                       checked={chkDay}
-                      onChange={(checked: boolean) => setChkDay(checked)}
+                      onChange={(checked: boolean) => setSearchParams({ chkDay: checked })}
                     />
                     <Checkbox
                       labelText='Week'
                       checked={chkWeek}
-                      onChange={(checked: boolean) => setChkWeek(checked)}
+                      onChange={(checked: boolean) => setSearchParams({ chkWeek: checked })}
                     />
                   </Stack>
                 </Grid>
@@ -277,7 +275,7 @@ export const VersionSelectModal = ({
                       <InputField
                         fullWidth
                         value={description}
-                        onChange={e => setDescription(e.target.value)}
+                        onChange={e => setSearchParams({ description: e.target.value })}
                       />
                     )}
                   />
@@ -296,13 +294,6 @@ export const VersionSelectModal = ({
           </div>
           <div className={styles.buttonWrapper}>
             <Button
-              appearance='outlined'
-              priority='normal'
-              size='medium'
-              buttonLabel={t('LBL00627', 'Close')}
-              onClick={modalClose}
-            />
-            <Button
               appearance='contained'
               priority='primary'
               size='medium'
@@ -311,6 +302,13 @@ export const VersionSelectModal = ({
               iconPosition='leading'
               disabled={loading}
               onClick={handleApply}
+            />
+            <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel={t('LBL00627', 'Close')}
+              onClick={modalClose}
             />
           </div>
         </div>

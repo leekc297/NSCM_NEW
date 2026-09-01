@@ -35,13 +35,6 @@ export interface VersionModalProps {
 
 type SalesVersionRow = ResponseData<MODAL_SALES_VERSION, MODAL_SALES_VERSION_SHEET, 'data'>;
 
-interface VersionSearchConditions {
-  sdt: string;
-  edt: string;
-  versionType: string;
-  description: string;
-}
-
 const isSalesPlanType = (versionType: string) => versionType.includes('SP');
 const isReportType = (versionType: string) => versionType.startsWith('REPORT_');
 const isValidDate = (value: string) =>
@@ -71,6 +64,8 @@ export const VersionModal = ({
   const { hasButton } = useTabBtnPermissions({ menuId: MODAL_SALES_VERSION });
   const staticColumns = useVersionModalStore(state => state.staticColumns);
   const fetchStaticColumns = useVersionModalStore(state => state.fetchStaticColumns);
+  const searchConditions = useVersionModalStore(state => state.searchConditions);
+  const setSearchConditions = useVersionModalStore(state => state.setSearchConditions);
 
   const [sdt, setSdt] = useState<Dayjs | null>(null);
   const [edt, setEdt] = useState<Dayjs | null>(null);
@@ -81,12 +76,6 @@ export const VersionModal = ({
   const [movePlan, setMovePlan] = useState(false);
   const [movePlanMonth, setMovePlanMonth] = useState<Dayjs | null>(null);
   const [updateLatest, setUpdateLatest] = useState(true);
-  const [searchConditions, setSearchConditions] = useState<VersionSearchConditions>({
-    sdt: '',
-    edt: '',
-    versionType: '',
-    description: '',
-  });
   const [selectedIdx, setSelectedIdx] = useState(-1);
   const [running, setRunning] = useState(false);
   // Type 변경 = Grid 초기화. 목록/액션 버튼(Create·Transfer·Copy·Delete)이 전부 versionType 축이라

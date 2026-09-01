@@ -1,6 +1,5 @@
 import { CellType, type FlexGrid } from '@mescius/wijmo.grid';
-import _ from 'lodash';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { GridUtils } from '@foundation/utils';
 import { SearchArea, DataGrid, CustomDialog } from '@shared/components';
@@ -36,32 +35,35 @@ export const SsoUserModal = ({
   const staticColumns = useSsoUserModalStore(state => state.staticColumns);
   const fetchStaticColumns = useSsoUserModalStore(state => state.fetchStaticColumns);
 
-  const [modalFilters, setModalFilters] = useState<{
+  // 실제 조회 조건 — Search 버튼/Enter(그리고 팝업 오픈) 시에만 갱신되고, 그때 프로시저를 재호출한다.
+  //   (useTabProcQuery 는 filters 가 query key 라 값이 바뀌면 재조회. COM0010 은 user 를 IN
+  //   파라미터로 받는다 — configs/types/procedures.d.ts COM0010.ssoUser.request 참고)
+  const [searchParam, setSearchParam] = useState<{
     user: string;
   }>({
     user: initialUser,
   });
 
+  // 입력 중인 값 — 조회하지 않고 로컬 state 에만 담아둔다.
+  const [userInput, setUserInput] = useState<string>(initialUser);
+
   const { data } = useTabProcQuery<POPUP_ID, SHEETS.SSO_USER>({
     menuId: POPUP_ID,
     sheetName: SHEETS.SSO_USER,
     tabId: POPUP_ID,
-    filters: undefined,
+    filters: searchParam,
     enabled: true,
   });
 
-  const itemsSource = (data?.o_rc ?? []).filter(
-    user =>
-      (user.USER_ID ?? '').toLowerCase().includes(modalFilters.user.toLowerCase()) ||
-      (user.USER_ENG_NM ?? '').toLowerCase().includes(modalFilters.user.toLowerCase()) ||
-      (user.USER_NM ?? '').toLowerCase().includes(modalFilters.user.toLowerCase())
-  );
+  // 필터링은 프로시저(user 파라미터)가 하고, 그리드는 조회 결과를 그대로 보여준다.
+  //   useMemo — 매 렌더 새 배열이면 그리드가 re-bind 되어 스크롤·선택이 초기화된다.
+  const itemsSource = useMemo(() => data?.o_rc ?? [], [data]);
 
-  const handleFilterChange = _.debounce((user: string) => {
-    setModalFilters({
-      user: user,
+  const handleSearch = () => {
+    setSearchParam({
+      user: userInput,
     });
-  }, 50);
+  };
 
   const handleDblClick = (e: MouseEvent) => {
     const grid = gridRef.current;
@@ -80,9 +82,10 @@ export const SsoUserModal = ({
 
   useEffect(() => {
     if (!open) return;
-    setModalFilters({
+    setSearchParam({
       user: initialUser,
     });
+    setUserInput(initialUser);
     if (!initialized) void fetchStaticColumns();
   }, [open]);
 
@@ -103,6 +106,7 @@ export const SsoUserModal = ({
         <div className={styles.dialogContentWrapper}>
           <SearchArea
             searchButtonLabel={t('LBL00722', '_Search')}
+            onSearch={handleSearch}
             conditions={
               <Grid size={8}>
                 <FormItem
@@ -111,8 +115,9 @@ export const SsoUserModal = ({
                   render={() => (
                     <InputField
                       fullWidth
-                      defaultValue={initialUser}
-                      onChange={event => handleFilterChange(event.target.value)}
+                      value={userInput}
+                      onChange={event => setUserInput(event.target.value)}
+                      onKeyDown={e => e.key === 'Enter' && handleSearch()}
                     />
                   )}
                   labelSize='long'

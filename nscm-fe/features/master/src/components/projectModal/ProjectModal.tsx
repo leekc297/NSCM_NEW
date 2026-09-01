@@ -1,5 +1,5 @@
 import { CellType, type FlexGrid } from '@mescius/wijmo.grid';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { GridUtils } from '@foundation/utils';
 import { CustomDropdown, DataGrid, CustomDialog, SearchArea } from '@shared/components';
@@ -43,15 +43,20 @@ export const ProjectModal = ({
     filters: ['MyDivision'],
   });
 
-  const DEFAULT_FILTER = {
-    divisionId: searchParam.divisionId,
-  };
+  // useTabProcQuery 는 filters 참조가 바뀌면 캐시를 버리고 재조회한다. 이전엔
+  // DEFAULT_FILTER 라는 상수 이름의 객체를 렌더 본문에서 매번 새로 만들어 넘겼는데,
+  // searchParam.divisionId 가 그대로여도 다른 이유로 리렌더될 때마다 그리드가
+  // 깜빡였다. useMemo 로 참조를 divisionId 에 고정한다.
+  const filters = useMemo(
+    () => ({ divisionId: searchParam.divisionId }),
+    [searchParam.divisionId]
+  );
 
   const { data: projectData } = useTabProcQuery<MODAL_PROJECT>({
     menuId: MODAL_PROJECT,
     sheetName: MODAL_SHEET_PROJECT,
     tabId: 'ProjectModal',
-    filters: DEFAULT_FILTER,
+    filters,
     enabled: open,
   });
 
@@ -167,13 +172,6 @@ export const ProjectModal = ({
           </div>
           <div className={styles.buttonWrapper}>
             <Button
-              appearance='outlined'
-              priority='normal'
-              size='medium'
-              buttonLabel='Close'
-              onClick={modalClose}
-            />
-            <Button
               appearance='contained'
               buttonLabel='OK'
               iconComponent={<ControlConfirmIcon size='small' />}
@@ -181,6 +179,13 @@ export const ProjectModal = ({
               priority='primary'
               size='medium'
               onClick={handleSubmit}
+            />
+            <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel='Close'
+              onClick={modalClose}
             />
           </div>
         </div>

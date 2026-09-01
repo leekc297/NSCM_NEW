@@ -1,35 +1,42 @@
 import type { FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
+import { IcGridColumnSetup } from '@foundation/assets';
+import { CRUD_TYPE } from '@foundation/constants';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
+import { useQueryClient } from '@foundation/query-client';
 import type { EditTracker } from '@foundation/utils';
-import { MainTitle, SubTitle, TabItem, TabWrapper } from '@shared/components';
-import { useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
+import {
+  ColumnLayoutModal,
+  MainTitle,
+  saveTitleSet,
+  SubTitle,
+  TabItem,
+  TabWrapper,
+  toColumnLayoutSettings,
+} from '@shared/components';
+import {
+  useSaveWithValidation,
+  useTabBtnPermissions,
+  useTabComboQueries,
+  useTabProcQuery,
+} from '@shared/hooks';
 import { useMessageStore } from '@shared/stores';
 
 import { AuthManagementPopup } from '../../components/auth-management-popup';
+import { runPerRowProc } from '../../lib/call-proc';
 
 import { ProjectMasterForm } from './components/ProjectMasterForm';
 import { ProjectMasterTab1Grid } from './components/ProjectMasterTab1Grid';
 import { ProjectMasterTab2Grid } from './components/ProjectMasterTab2Grid';
-import {
-  BTN,
-  LBL,
-  MENU_ID,
-  MSG,
-  PERIOD_DEFAULT_FILTERS,
-  SHEETS,
-  TAB_INDEX,
-} from './project-master.constants';
+import { BTN, LBL, MENU_ID, MSG, SHEETS, TAB_INDEX } from './project-master.constants';
 import type { Tab1Row, Tab2Row } from './project-master.types';
 import styles from './ProjectMaster.module.scss';
 import { useProjectMasterStore } from './useProjectMasterStore';
-import type { CallProcResult } from './utils/project-master.api';
 import { callCancelTab1, callConfirmTab1, callSaveTab2 } from './utils/project-master.api';
 import { isDpjtCodeValid } from './utils/project-master.editLock';
 import {
-  defaultRegCompRange,
   toCancelPayload,
   toConfirmPayload,
   toSaveTab2Payload,
@@ -74,10 +81,15 @@ export const ProjectMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
   const activeTab = useProjectMasterStore(s => s.activeTab);
   const setActiveTab = useProjectMasterStore(s => s.setActiveTab);
   const staticColumns = useProjectMasterStore(s => s.staticColumns);
+  const originalStaticColumns = useProjectMasterStore(s => s.originalStaticColumns);
+  const applyColumnLayout = useProjectMasterStore(s => s.applyColumnLayout);
   const fetchStaticColumns = useProjectMasterStore(s => s.fetchStaticColumns);
   const authRegTarget = useProjectMasterStore(s => s.authRegTarget);
   const openAuthRegModal = useProjectMasterStore(s => s.openAuthRegModal);
   const closeAuthRegModal = useProjectMasterStore(s => s.closeAuthRegModal);
+  const [openColumnSetting, setOpenColumnSetting] = useState(false);
+  const queryClient = useQueryClient();
+  const { saveWithValidation } = useSaveWithValidation();
 
   const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID }); // SPMS Administrator 단독 (P-21)
 
@@ -97,26 +109,8 @@ export const ProjectMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
     enabled: !!filters[SHEETS.TAB2],
   });
 
-  // ⭐ 등록 완료일 기본값 M-1~Today (E01-2 — period 시트 = P_SDM1010_GET_PERIOD 공유 배선, 계약 ①.
-  //   YMD_FR(M-1 시작) 앵커 소비 + To=Today FE dayjs 병행. 상수 filters 참조 = 인라인 객체 금지)
-  const { data: periodData } = useTabProcQuery<MENU_ID, SHEETS.PERIOD>({
-    menuId: MENU_ID,
-    sheetName: SHEETS.PERIOD,
-    tabId,
-    filters: PERIOD_DEFAULT_FILTERS,
-    enabled: true,
-  });
-  const scRef = useRef(sc);
-  scRef.current = sc;
-  useEffect(() => {
-    const row = periodData?.data?.[0];
-    if (!row) return;
-    // 기본값 주입은 "둘 다 빈 초기 상태"에서만 — 사용자가 손댄 기간은 보존 (SDM1010 period 패턴)
-    if (scRef.current.regCompDateFr !== '' || scRef.current.regCompDateTo !== '') return;
-    const { fr, to } = defaultRegCompRange(row.YMD_FR);
-    setSearchCondition({ regCompDateFr: fr, regCompDateTo: to });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [periodData]);
+  // 등록 완료일 기본값 M-1(한 달 전 같은 날)~Today 는 store 초기값/reset 에서 FE dayjs 로 직접
+  // 산출한다 — 이전의 period 시트(P_SDM1010_GET_PERIOD) YMD_FR 앵커 소비·주입 effect 는 폐기 (E01-2 변경).
 
   // 재조회 = EditTracker clear (조회 성공 시 CRUD pending reset — E04/E18)
   useEffect(() => {
@@ -211,24 +205,14 @@ export const ProjectMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
       if (!ok) return;
     }
     setActiveTab(nextTab);
-  };
-
-  // ⭐ 행별 단건 순차 실행 공통 — CODE '0'+EVENT 합산 (project-list 계약 이식).
-  //   중도 실패: BTN·SAVE SP 는 내부 COMMIT(D21) — 앞선 행은 이미 확정이므로 오류 안내 후
-  //   재조회로 원장 상태와 정합시킨다
-  const runPerRow = async (
-    calls: Array<() => Promise<CallProcResult>>
-  ): Promise<{ ok: boolean; totalEvent: number; message?: string }> => {
-    let totalEvent = 0;
-    for (const call of calls) {
-      const res = await call();
-      if (!res.ok) return { ok: false, totalEvent, message: res.message };
-      totalEvent += res.event;
+    if (nextTab === TAB_INDEX.TAB1 && !hasPendingChanges(TAB_INDEX.TAB1)) {
+      setFilter(SHEETS.TAB1);
+      void fetchStaticColumns([SHEETS.TAB1]);
     }
-    return { ok: true, totalEvent };
   };
 
-  // TAB1 승인 (E06 — 행 단건 P-09): 6자리 D-PJT Code FE 선검증(P-08/D12) → confirm MSG01008 →
+  // TAB1 승인 (E06 — 행 단건 P-09): 6자리 D-PJT Code FE 선검증(P-08/D12) →
+  //   공용 필수값 검증 → confirm MSG01008 →
   //   편집값 반영 payload(계약 ① 14키) → CODE '0'+EVENT>0 = toast MSG01009 + 재조회 / 그 외 MSG01010
   const handleConfirmRow = async (row: Tab1Row) => {
     if (!isDpjtCodeValid(row.DPJT_CODE)) {
@@ -236,6 +220,18 @@ export const ProjectMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
       setToast({ type: 'default', message: 'D-PJT Code는 6자리로 입력해야 합니다.' });
       return;
     }
+
+    // 승인 대상은 조회 행이지만, IM 필수 메타는 신규행 Save와 동일하게 검증한다.
+    let passedMandatoryValidation = false;
+    saveWithValidation(
+      [{ ...row, CRUD_TYPE: CRUD_TYPE.INSERT }],
+      staticColumns[SHEETS.TAB1] ?? [],
+      () => {
+        passedMandatoryValidation = true;
+      }
+    );
+    if (!passedMandatoryValidation) return;
+
     if (!(await confirmMsg(MSG.CONFIRM_CONFIRM, '_선택한 프로젝트 등록 요청을 승인하시겠습니까?')))
       return;
     const r = await callConfirmTab1(toConfirmPayload(row));
@@ -243,10 +239,10 @@ export const ProjectMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
       // EVENT 0 = 갱신 0건 (D12 — 허위성공 방어: 실패 처리, 성공 토스트 금지)
       void setAlert({
         type: 'alert',
-        content:
-          r.message && !r.ok
-            ? r.message
-            : t(MSG.CONFIRM_FAIL, '_프로젝트 등록 요청 승인에 실패하였습니다.'),
+        content: t(
+          !r.ok && r.messageId ? r.messageId : MSG.CONFIRM_FAIL,
+          '_프로젝트 등록 요청 승인에 실패하였습니다.'
+        ),
       });
       return;
     }
@@ -289,7 +285,7 @@ export const ProjectMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
       alertMsg(MSG.NO_CHANGES, '_수정한 내용이 없습니다.');
       return;
     }
-    const r = await runPerRow(dirty.map(row => () => callSaveTab2(toSaveTab2Payload(row))));
+    const r = await runPerRowProc(dirty.map(row => () => callSaveTab2(toSaveTab2Payload(row))));
     if (!r.ok) {
       void setAlert({
         type: 'alert',
@@ -324,6 +320,15 @@ export const ProjectMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
     upload: false,
   };
 
+  const columnSettingSheet = isTab1 ? SHEETS.TAB1 : SHEETS.TAB2;
+  const columnSettingButton = {
+    label: t('LBL00605', 'Column Setting'),
+    title: t('LBL00605', 'Column Setting'),
+    action: () => setOpenColumnSetting(true),
+    iconComponent: <IcGridColumnSetup />,
+    buttonLabel: '',
+  };
+
   // ⭐ 페이지 최상위 = fragment (래퍼 div 금지 — hook #132)
   return (
     <div className={styles.container}>
@@ -352,6 +357,63 @@ export const ProjectMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
           useHotkey={true}
           hotkeyConfig={hotkeyConfig}
           searchParam={sc}
+          customButtons={[columnSettingButton]}
+        />
+        <ColumnLayoutModal
+          open={openColumnSetting}
+          modalClose={() => setOpenColumnSetting(false)}
+          menuId={MENU_ID}
+          sheetName={columnSettingSheet}
+          columnType='C'
+          divisionId={sc.divisionId}
+          fallbackColumns={(staticColumns[columnSettingSheet] ?? []).map(column => ({
+            key: column.colNm,
+            header: column.colLblNm ?? column.colNm,
+            width: column.colWth ?? 100,
+            display: column.display,
+            personalizable: column.personalizable,
+          }))}
+          title={t('LBL00605', 'Column Setting')}
+          leftTitle={t('LBL00764', 'Invisible')}
+          rightTitle={t('LBL00765', 'Visible')}
+          initialSettings={toColumnLayoutSettings(staticColumns[columnSettingSheet] ?? [])}
+          defaultSettings={toColumnLayoutSettings(originalStaticColumns[columnSettingSheet] ?? [])}
+          onSave={settings => {
+            applyColumnLayout(
+              columnSettingSheet,
+              settings.map(setting => ({
+                colNm: setting.COLUMN_NAME,
+                visible: setting.USER_FLAG === 'Y',
+                width: setting.COL_WIDTH,
+                cellColor: setting.CELL_COLOR,
+                textColor: setting.TEXT_COLOR,
+                order: setting.SORT_ORDER_NO,
+              }))
+            );
+            const visible = settings.filter(setting => setting.USER_FLAG === 'Y');
+            void saveTitleSet({
+              menuId: MENU_ID,
+              sheetName: columnSettingSheet,
+              columnType: 'C',
+              rows: visible.map((setting, index) => ({
+                name: setting.COLUMN_NAME,
+                sortOrderNo: index + 1,
+                colWidth: setting.COL_WIDTH,
+                cellColor: setting.CELL_COLOR,
+                textColor: setting.TEXT_COLOR,
+              })),
+            }).then(ok => {
+              if (!ok) {
+                void setAlert({
+                  type: 'alert',
+                  content: t('MSG00618', '_An error occurred while saving.'),
+                });
+                return;
+              }
+              void queryClient.invalidateQueries({ queryKey: [MENU_ID] });
+              void fetchStaticColumns([columnSettingSheet]);
+            });
+          }}
         />
       </div>
 
@@ -368,6 +430,7 @@ export const ProjectMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
               gridRef={tab1GridRef as never}
               gridFilterRef={tab1FilterRef}
               editTrackerRef={tab1TrackerRef}
+              excludeFromDirtyCheck={activeTab !== TAB_INDEX.TAB1}
               divisionId={sc.divisionId}
               staticColumns={staticColumns[SHEETS.TAB1]}
               canConfirm={hasButton(BTN.CONFIRM)}
@@ -385,6 +448,7 @@ export const ProjectMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
               gridRef={tab2GridRef as never}
               gridFilterRef={tab2FilterRef}
               editTrackerRef={tab2TrackerRef}
+              excludeFromDirtyCheck={activeTab !== TAB_INDEX.TAB2}
               divisionId={sc.divisionId}
               staticColumns={staticColumns[SHEETS.TAB2]}
               onAuthRegCellClick={handleAuthRegCellClick}

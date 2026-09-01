@@ -1,0 +1,235 @@
+// procedures.d.ts 의 DMF0035 계약 블록 — 사내 L156~L385 (230줄, 시트 키 ['mktFcstWaterfall', 'salesPlanWaterfall', 'bizPlanWaterfall', 'mktFcstSpreadTitle', 'salesPlanSpreadTitle', 'bizPlanSpreadTitle', 'version', 'versionWf']) — 2026-08-27 재생성 (초판 경계 결함 정정)
+// 병합법: 클라우드 procedures.d.ts 의 `  DMF0035: { ... },` 블록(있으면 그 위 JSDoc 포함)을 아래 BEGIN~END 사이로 교체, 없으면 RawProcedureMap 안 임의 위치에 삽입.
+// ⛔ FE_MERGE/configs/types/procedures.d.ts(사내 전체본) 로 파일 덮어쓰기 금지 — 클라우드 전용 항목(예: DMF0051 등) 유실.
+// ----- BEGIN BLOCK -----
+  /**
+   * Demand Plan Waterfall — DMF0035 (Read-only Report, AS-IS 3 UI 통합 2026-08-06)
+   *
+   * GUBUN(MKT_FCST/SALES_PLAN/BIZ_PLAN, 초기값 MKT_FCST) = 메인+타이틀 시트 스위칭.
+   * SHEETS(canonical PROC):
+   * - `mktFcstWaterfall`   PKG_DMF0035.P_DMF0035_GET_MKT_FCST_WATERFALL   (AS-IS 19 IN + USER/MENU = 21)
+   * - `salesPlanWaterfall` PKG_DMF0022.P_DMF0022_GET_DM_PLN_SALES_PLAN_WATERFALL (20+2=22 — DMF0022 재사용)
+   * - `bizPlanWaterfall`   PKG_DMF0051.P_DMF0051_GET_DM_PLN_BIZ_PLAN_WATERFALL   (AS-IS 17 IN + 2 = 19)
+   * - `*SpreadTitle`       각 PKG GET_SPREAD_TITLE (5 IN — Two-pass 2차)
+   * - `version`            DMF0073_GET_VERSION_SALESPRICE 9-arg 공유 계약 (DMF0082.version 동일)
+   * 정본: Doc/화면분석서/DMF0035_DemandPlanWaterfall_ASIS_통합분석_v1.0.md §4.3
+   */
+  DMF0035: {
+    mktFcstWaterfall: {
+      request: {
+        divisionId: string;
+        deptId: string;
+        endCustomer: string;
+        scmSiteId: string;
+        projectCode: string;
+        itemId: string;
+        itemType: string;
+        fromYyyymmdd: string;
+        toYyyymmdd: string;
+        sesUserId: string;
+        plantSiteId: string;
+        bizType: string;
+        owner: string;
+        versionNo: string;
+        bucket: string;
+        cellYn: string;
+        senderCode: string;
+        userDeptId: string;
+        groupId: string;
+        userId: string;
+        menuId: string;
+      };
+      response: {
+        o_rc1: {
+          VERSION_NO: string;
+          MEASURE: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    salesPlanWaterfall: {
+      request: {
+        divisionId: string;
+        deptId: string;
+        endCustomer: string;
+        scmSiteId: string;
+        projectCode: string;
+        itemId: string;
+        itemType: string;
+        fromYyyymmdd: string;
+        nowYyyymmdd: string;
+        toYyyymmdd: string;
+        sesUserId: string;
+        plantSiteId: string;
+        bizType: string;
+        owner: string;
+        internalYn: string;
+        cellYn: string;
+        versionType: string;
+        bucket: string;
+        userDeptId: string;
+        groupId: string;
+        userId: string;
+        menuId: string;
+      };
+      response: {
+        o_rc1: {
+          VERSION_NO: string;
+          MEASURE: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    bizPlanWaterfall: {
+      request: {
+        divisionId: string;
+        deptId: string;
+        endCustomer: string;
+        scmSiteId: string;
+        projectCode: string;
+        itemId: string;
+        itemType: string;
+        fromYyyymmdd: string;
+        nowYyyymmdd: string;
+        toYyyymmdd: string;
+        sesUserId: string;
+        plantSiteId: string;
+        bizType: string;
+        owner: string;
+        versionType: string;
+        cellYn: string;
+        qtyYn: string;
+        userId: string;
+        menuId: string;
+      };
+      response: {
+        o_rc1: {
+          VERSION_NO: string;
+          MEASURE: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    mktFcstSpreadTitle: {
+      request: {
+        divisionId: string;
+        bucket: string;
+        fromYyyymmdd: string;
+        toYyyymmdd: string;
+        sesUserId: string;
+        userId: string;
+      };
+      response: {
+        o_rc1: {
+          COLUMN_NAME: string;
+          COLUMN_LABEL_NAME: string;
+          SMALL_CLASS_LABEL_NAME: string;
+          LARGE_CLASS_LABEL_NAME: string;
+          DAY_CODE: string;
+          SORT_ORDER_NO: string;
+          COLUMN_WIDTH: string;
+          VISIBLE_FLAG: string;
+          HORIZONTAL_ALIGN_CODE: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    salesPlanSpreadTitle: {
+      request: {
+        divisionId: string;
+        bucket: string;
+        fromYyyymmdd: string;
+        toYyyymmdd: string;
+        sesUserId: string;
+        userId: string;
+      };
+      response: {
+        o_rc1: {
+          COLUMN_NAME: string;
+          COLUMN_LABEL_NAME: string;
+          SMALL_CLASS_LABEL_NAME: string;
+          LARGE_CLASS_LABEL_NAME: string;
+          DAY_CODE: string;
+          SORT_ORDER_NO: string;
+          COLUMN_WIDTH: string;
+          VISIBLE_FLAG: string;
+          HORIZONTAL_ALIGN_CODE: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    bizPlanSpreadTitle: {
+      request: {
+        divisionId: string;
+        bucket: string;
+        fromYyyymmdd: string;
+        toYyyymmdd: string;
+        sesUserId: string;
+        userId: string;
+      };
+      response: {
+        o_rc1: {
+          COLUMN_NAME: string;
+          COLUMN_LABEL_NAME: string;
+          SMALL_CLASS_LABEL_NAME: string;
+          LARGE_CLASS_LABEL_NAME: string;
+          DAY_CODE: string;
+          SORT_ORDER_NO: string;
+          COLUMN_WIDTH: string;
+          VISIBLE_FLAG: string;
+          HORIZONTAL_ALIGN_CODE: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    version: {
+      request: {
+        startYyyymmdd: string;
+        endYyyymmdd: string;
+        createdBy: string;
+        divisionId: string;
+        versionType: string;
+        description: string;
+      };
+      response: {
+        o_rc1: {
+          CODE: string;
+          VERSION_NO: string;
+          VERSION_DESCRIPTION: string;
+          VERSION_TYPE: string;
+          MONTHLY_ROLLING_FCST: string;
+          CREATED_BY: string;
+          CREATION_DATE: string;
+          EDIT_YN: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    // MKT/BIZ Version 모달 — PKG_SCM0002.P_SCM0002_GET_VERSIONBYWATERFALLPOPUP
+    //   (versionNo = 설명 LIKE 검색어. 축 'MF_SF_*'/'BP_*' — SP 내부 분기. 2026-08-06 배선)
+    versionWf: {
+      request: {
+        startYyyymmdd: string;
+        endYyyymmdd: string;
+        createdBy: string;
+        divisionId: string;
+        versionType: string;
+        versionNo: string;
+      };
+      response: {
+        o_rc1: {
+          CODE: string;
+          VERSION_NO: string;
+          VERSION_DESCRIPTION: string;
+          VERSION_TYPE: string;
+          EDI_APPLY: string;
+          VER_CRE_SEQ: string | number;
+          YYYYMMDD: string;
+          CREATED_BY: string;
+          CREATION_DATE: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+  };
+// ----- END BLOCK -----

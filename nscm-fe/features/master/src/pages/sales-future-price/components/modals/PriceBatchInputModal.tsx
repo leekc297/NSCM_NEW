@@ -40,6 +40,7 @@ import { fromYyyymmdd, isPeriodInverted, yyyymmddOf } from '../../utils/futurePr
 import { toStr } from '../../utils/futurePriceGroup';
 
 import styles from './PriceBatchInputModal.module.scss';
+import { usePriceBatchInputModalStore } from './priceBatchInputModalStore';
 import type { SalesPriceRangeRow } from './SalesPriceRangeModal';
 
 // yyyymmdd → 월요일 정렬 (AS-IS drpDateTime 월요일 정렬 + MSG00330 정합).
@@ -268,13 +269,8 @@ export const PriceBatchInputModal = ({
   //   enabled:false 라 fetch 도 안 되므로 data 가 undefined → 그리드가 즉시 비어 버린다.
   //   (사용자 지적 2026-08-23: 조회조건만 골라도 데이터가 사라짐 — 필터가 아니라 쿼리 키 전환이 원인.)
   //   → 조회 버튼을 눌러야만 스냅샷이 갱신되고, SP 조회 / 화면 필터 / 저장 주차 산출이 모두 이 값을 쓴다.
-  const [appliedCond, setAppliedCond] = useState<{
-    salesSite: string[];
-    projectTokens: string[];
-    itemId: string;
-    periodFrom: string;
-    periodTo: string;
-  } | null>(null);
+  const appliedCond = usePriceBatchInputModalStore(state => state.appliedCond);
+  const setAppliedCond = usePriceBatchInputModalStore(state => state.setAppliedCond);
   // 조회 버튼 클릭 카운터 — 스냅샷 반영(리렌더) 후 refetch 하기 위한 트리거.
   //   handleFind 안에서 곧바로 refetch 하면 아직 이전 스냅샷 기준 쿼리 키에 붙은 refetch 가 실행된다.
   const [searchTick, setSearchTick] = useState(0);
@@ -451,7 +447,7 @@ export const PriceBatchInputModal = ({
       owner: 'ALL',
       overRange: 'N',
       invalidExec: 'N',
-      versionType: 'CURRENT',
+      versionType: 'Current',
       // ⭐ 'W' — 기간 내 주차(W_yyyymmdd) 단위로 주별 컬럼 표시 + 저장 시 일괄 price 확장.
       bucketType: 'W',
     } as never;
@@ -539,9 +535,17 @@ export const PriceBatchInputModal = ({
   );
 
   // ⭐ 동적 주별 bindings (W_yyyymmdd) — 주 시작일(월요일 OR 월 1일, 월경계 분할 주차) 만.
-  //   SalesFuturePriceGrid dynBindings 와 동일 규칙 → 메인 그리드와 동일한 주별 컬럼 집합.
+  //   요구(div 40/81/81_JV): 'Period 에 설정된 기간만큼 Spread 가 그려지고 데이터가 조회되어야 함
+  //   (데이터가 없으면 없는대로 기간만큼 조회 결과 보여지도록)'.
+  //
+  //   기준은 GET 응답 키다 — 화면에 값을 실제로 바인딩하는 건 이 키뿐이라, 여기서 벗어난 키로 컬럼을
+  //   만들면 컬럼은 기간만큼 그려져도 셀이 전부 빈다(2026-08-26 실측: Period 로만 산출했더니 Batch Price 는
+  //   차 있는데 주별 셀이 통째로 비었다 — 즉 SP 가 내려주는 주차 날짜가 Period 산출값과 다르다).
+  //   그 위에 Period 로 산출한 주차(enumerateWeekStarts — 저장 경로가 쓰는 것과 동일) 중 응답에 없는
+  //   것만 얹어 '없으면 없는대로' 빈 컬럼을 채운다. 응답 키는 하나도 잃지 않으므로 표시가 깨지지 않는다.
+  //   조회 전(appliedCond 없음)에는 빈 배열 — 팝업 진입 직후 데이터 없이 컬럼만 뜨는 것은 피한다.
   const dynBindings = useMemo<string[]>(() => {
-    if (rows.length === 0) return [];
+    if (!appliedCond) return [];
     const set = new Set<string>();
     for (const r of rows) {
       for (const k of Object.keys(r)) {
@@ -552,8 +556,11 @@ export const PriceBatchInputModal = ({
         set.add(k);
       }
     }
+    for (const w of enumerateWeekStarts(appliedCond.periodFrom, appliedCond.periodTo)) {
+      set.add(`W_${w}`);
+    }
     return [...set].sort();
-  }, [rows]);
+  }, [rows, appliedCond]);
   // ⭐ 헤더높이 정규화가 "데이터 기반 예상 tier 수"로 defaultSize 를 선제 설정하도록 ref 로 최신 dynBindings 참조.
   //   (런타임 headerRows.length 는 3단 build 전 1로 오인 → 48 굳어 3단이 상속 시 144px 잔존 → 이 ref 로 회피.)
   const dynBindingsRef = useRef(dynBindings);
@@ -1356,13 +1363,6 @@ export const PriceBatchInputModal = ({
                 onClick={handleExcel}
               />
               <Button
-                appearance='outlined'
-                priority='normal'
-                size='medium'
-                buttonLabel={t('LBL00627', 'Close')}
-                onClick={modalClose}
-              />
-              <Button
                 appearance='contained'
                 priority='primary'
                 size='medium'
@@ -1371,6 +1371,13 @@ export const PriceBatchInputModal = ({
                 iconPosition='leading'
                 disabled={loading || saving || rows.length === 0}
                 onClick={handleSave}
+              />
+              <Button
+                appearance='outlined'
+                priority='normal'
+                size='medium'
+                buttonLabel={t('LBL00627', 'Close')}
+                onClick={modalClose}
               />
             </div>
           </div>

@@ -625,13 +625,6 @@ export const DynamicQueryModal = ({
           </PanelGroup>
           <div className={styles.buttonWrapper}>
             <Button
-              appearance='outlined'
-              priority='normal'
-              size='medium'
-              buttonLabel={t('LBL00107', '_Close')}
-              onClick={() => modalClose()}
-            />
-            <Button
               appearance='contained'
               buttonLabel={t('LBL00111', '_Save')}
               iconPosition='leading'
@@ -639,6 +632,13 @@ export const DynamicQueryModal = ({
               priority='primary'
               size='medium'
               onClick={() => handleSave()}
+            />
+            <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel={t('LBL00107', '_Close')}
+              onClick={() => modalClose()}
             />
           </div>
         </div>

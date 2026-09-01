@@ -166,15 +166,15 @@ export const GRID_EDIT_COMBO: Record<string, { comboId: string }> = {
   //   조회 표시(코드→한글)는 SHEET_COLUMNS 메타 FPComboBox='DMF0042CellProdSite'(ALL) 가 담당
   //   ([E20240731-000845] InitSpread L392~397) — P7 SQL 와 반드시 세트 적용(원복 로직이 표시 dataMap 전제).
   CELL_PROD_SITE: { comboId: 'DMF0042CellProdSiteValid' },
-  // Team — 편집은 설계서 등록본 'DeptId' 그대로. 표시는 BusinessPlanGrid 가 'TeambyDivision' 으로
-  //   덮는다 (CELL_PROD_SITE 와 같은 '표시 콤보 != 편집 콤보' 구조).
+  // 금지: Team(DEPT_ID·DEPT_ID40) 편집 콤보를 'DeptId' 로 등록하지 말 것.
   //   두 콤보의 DEPT_ID 출처가 다르다 —
   //     DeptId         : SCM_MST_SITE.DEPT_ID  UNION  품목 OWNER 의 부서
   //     TeambyDivision : SCM_MST_SITE_ITEM.DEPT_ID
-  //   그리드 행의 Team 은 조회 SP 가 SCM_MST_SITE_ITEM.DEPT_ID 로 채우므로 DeptId 로는
-  //   코드→명칭 매핑이 안 잡혀 코드가 그대로 보였다 (2026-08-21 실측).
-  DEPT_ID: { comboId: 'DeptId' },
-  DEPT_ID40: { comboId: 'DeptId' },
+  //   그리드 행의 Team 은 조회 SP 가 SCM_MST_SITE_ITEM.DEPT_ID 로 채우므로 표시 dataMap 은
+  //   BusinessPlanGrid 가 'TeambyDivision' 으로 덮는다. 편집만 'DeptId' 로 되돌리면 거기서 고른
+  //   CODE 가 표시 dataMap 에 없어 편집 종료 원복 직후 코드가 그대로 노출된다
+  //   (2026-08-25 신규행 Team 선택 실측). 편집 후보도 TeambyDivision 원본을 쓴다 —
+  //   BusinessPlanGrid 의 teamRows cascade 스왑 참조.
 };
 
 // Ver. Cutoff / Replace 버전 타입 고정값 (AS-IS LoadDataDiv "BP_M" — [27]/[28])

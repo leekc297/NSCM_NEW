@@ -101,6 +101,52 @@ export const buildEditCutoff = (
 //   8자리 W_yyyymmdd 데이터 row fallback 형식에 한해 가능). 보강스펙 §1 Weekly 잠금 = 시트잠금/상한 기준.
 const tagOf = (binding: string): string => binding.slice(2);
 
+/**
+ * 컬럼(기간) 단위 과거(실적) 판정 — 행(measure)·division 편집허용과 무관하게 "그 컬럼이 실적
+ * 구간인가" 만 본다. DMF0020(forecast-price) isPastPeriodLocked 와 같은 축이며, 실적 구간 회색
+ * (wj-cell-non-editable) 의 단일 출처다.
+ *
+ * evalDynCell 과 나누어 쓰는 이유: evalDynCell 은 편집 가능 여부를 내는 함수라 division 편집제약,
+ * 행 EDIT_FLAG != 'Y', 비활성 bucket 을 만나면 날짜를 보기도 전에 되돌아온다(그 셀들은 "과거라서"
+ * 잠긴 게 아니므로 isPast=false 가 맞다). 그 결과 실적 구간 회색을 evalDynCell.isPast 로 칠하면
+ * 읽기전용 measure 행(RTF/SCM FCST 등)만 흰색으로 남아 컬럼이 얼룩진다 — DMF0020 은 컬럼 하나로
+ * 판정하므로 실적 구간 전체가 고르게 회색이다. 색은 이 함수, 편집 차단은 evalDynCell 이 맡는다.
+ *
+ * 기준(evalDynCell 의 날짜 판정과 동일):
+ *   D_yyyymmdd     : 오늘(당일) 이전
+ *   W_yyyymm+ISO_WEEK : 현재 주 컬럼(헤더 초록 강조)보다 앞 위치. 현재 주 미검출(-1)이면 판정 안 함
+ *   M_yyyymm       : 당월 이전 (+Division 40 은 O_RC2 8주차 이전 월도 실적 취급)
+ * bucket 은 보지 않는다 — Sum 체크박스/헤더 드릴로 상위·하위 버킷 컬럼이 함께 보일 때도 그 컬럼의
+ * 실적 여부는 같기 때문이다.
+ */
+export const isPastDynColumn = (params: {
+  binding: string;
+  divisionId: string;
+  cutoff: EditCutoff;
+}): boolean => {
+  const { binding, divisionId, cutoff } = params;
+  const kind = dynKindOf(binding);
+  if (!kind) return false;
+  const tag = tagOf(binding);
+
+  if (kind === 'D') return tag < cutoff.today;
+
+  if (kind === 'W') {
+    if (cutoff.thisWeekIndex < 0) return false;
+    const idx = weekIndexOf(binding, cutoff.weekBindings);
+    // 목록에 없는 W_ 컬럼(-1)은 판정 불가 -> 실적 아님(안전측 개방).
+    return idx >= 0 && idx < cutoff.thisWeekIndex;
+  }
+
+  const isPastMonth = tag < cutoff.month;
+  // Division 40 — 8주차(O_RC2 BASIS_YYYYMM) 이전 월 추가 잠금 (보강스펙 5, AS-IS L974~981).
+  const isBefore8Week =
+    divisionId === DIVISION.MOBILITY &&
+    cutoff.div40MonthCutoff !== null &&
+    tag < cutoff.div40MonthCutoff;
+  return isPastMonth || isBefore8Week;
+};
+
 // ⭐ 동적 셀(M_/W_/D_) 편집 가능 여부 — bucket × division × measure × past 종합 (보강스펙 §1).
 //   반환 true = 편집 가능(Yellow) / false = 잠금(과거=Gray, 비활성 bucket=White 비편집).
 //   isPast 만 별도 반환하여 formatItem 이 "과거 Gray" 와 "비활성 bucket White" 를 구분 가능하게 함.
@@ -143,8 +189,6 @@ export const evalDynCell = (params: {
     if (editFlag !== 'Y') return { editable: false, isPast: false };
   }
 
-  const tag = tagOf(binding);
-
   // (1) bucket 별 활성 컬럼 분기 (보강스펙 §1) —
   //     Daily   : D_ 만 활성 / W_·M_ 비활성(White).
   //     Weekly  : W_ + 현재월 M_ 활성 / D_ 비활성.
@@ -153,7 +197,7 @@ export const evalDynCell = (params: {
     if (kind !== 'D') return { editable: false, isPast: false };
     // ⭐ 과거일 잠금 = 오늘(당일) 이전 일자 (2026-07-23 사용자 지시 — 당일 포함 이후만 편집).
     //   기존 '이번 주 월요일' 기준은 이번 주 월~어제까지도 편집 허용 → 요구(오늘부터)와 불일치하여 today 로 교정.
-    const isPast = tag < cutoff.today;
+    const isPast = isPastDynColumn({ binding, divisionId, cutoff });
     return { editable: !isPast, isPast };
   }
 
@@ -173,20 +217,14 @@ export const evalDynCell = (params: {
     //   컬럼 배열은 SP SORT_ORDER_NO(BASIS_START_DATE) 정렬 = 시간순이므로 index 비교로 과거가 확정된다.
     //   thisWeekIndex < 0(현재 주 컬럼 미검출)이면 잠그지 않는다 — 오탐 잠금 방지.
     if (cutoff.thisWeekIndex < 0) return { editable: true, isPast: false };
-    const idx = weekIndexOf(binding, cutoff.weekBindings);
-    // 목록에 없는 W_ 컬럼(-1)은 판정 불가 → 개방(위와 동일 안전측).
-    const isPast = idx >= 0 && idx < cutoff.thisWeekIndex;
+    // 목록에 없는 W_ 컬럼(-1)은 판정 불가 → 개방(위와 동일 안전측) — isPastDynColumn 이 담당.
+    const isPast = isPastDynColumn({ binding, divisionId, cutoff });
     return { editable: !isPast, isPast };
   }
 
   // Monthly
   if (kind !== 'M') return { editable: false, isPast: false };
-  // 일반 과거월 잠금.
-  const isPastMonth = tag < cutoff.month;
-  // Division 40 — 8주차(O_RC2 BASIS_YYYYMM) 이전 월 추가 잠금 (보강스펙 §5, AS-IS L974~981).
-  const isDiv40 = divisionId === DIVISION.MOBILITY;
-  const isBefore8Week =
-    isDiv40 && cutoff.div40MonthCutoff !== null && tag < cutoff.div40MonthCutoff;
-  const isPast = isPastMonth || isBefore8Week;
+  // 일반 과거월 잠금 + Division 40 8주차(O_RC2) 이전 월 — 판정은 isPastDynColumn 단일 출처.
+  const isPast = isPastDynColumn({ binding, divisionId, cutoff });
   return { editable: !isPast, isPast };
 };

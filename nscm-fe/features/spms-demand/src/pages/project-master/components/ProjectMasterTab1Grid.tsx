@@ -1,32 +1,24 @@
 import type { FlexGrid as FlexGridType, FormatItemEventArgs } from '@mescius/wijmo.grid';
-import { CellType, DataMap } from '@mescius/wijmo.grid';
+import { CellType } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { type MutableRefObject, type Ref, useEffect, useMemo, useRef } from 'react';
+import { type MutableRefObject, type Ref, useEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 
-import type { ComboParam, RawFlexGridColumnConfig } from '@foundation/models';
+import type { RawFlexGridColumnConfig } from '@foundation/models';
 import type { EditTracker } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
-import { useTabComboQueries } from '@shared/hooks';
+import { Button } from '@shared/lges';
 
-import { TagLayer, type TagLayerHandle } from '../../project-registration/components/ProjectGrid';
-import {
-  CELL_TYPE_BINDING,
-  CELLTYPE_SCOPED_COMBO,
-  colorTypeColumnOf,
-  MODAL_ATTR,
-  REG_ACTION_ATTR,
-  STACK_METHOD_BINDING,
-  TAG_ATTR,
-  TAG_SOURCE,
-} from '../project-master.constants';
+import { colorTypeColumnOf, TagLayer, type TagLayerHandle } from '../../../components/tag-layer';
+import { MODAL_ATTR, REG_ACTION_ATTR, TAG_ATTR, TAG_SOURCE } from '../project-master.constants';
 import type { Tab1Row } from '../project-master.types';
 import styles from '../ProjectMaster.module.scss';
-import { isCellEditableTab1, isEditableInputTp, isModRow } from '../utils/project-master.editLock';
+import { isCellEditableTab1, isModRow } from '../utils/project-master.editLock';
 import { toDisplayDate } from '../utils/project-master.validate';
 import { toText } from '../utils/project-master.value';
 
 // ⭐ SDM5010 TAB1 '프로젝트 등록 요청' 그리드 — 정적 24컬럼(계약 ④) admin 메타 100% 주도 (hook #113).
-//   - 편집 게이트 = utils/project-master.editLock (INPUT_TP_CD × '수정' 행 D-PJT Code 잠금 —
+//   - 편집 게이트 = utils/project-master.editLock (INPUT_TP_CD × DPJT_CODE_MOD_YN —
 //     P-06/P-07. EditTracker 가 편집 확정 시 CRUD_TYPE 'M' 마킹 → 편집값은 승인 파라미터로 전달 E05).
 //   - 셀 콤보 : CODE 컬럼 직결 dataMap(CODE→NAME 표시 — 콤보 셀 명칭 표시 의무). division 종속은
 //     조회 Division 단일 축(따옴표 전달) — Division 변경 시 그리드가 비워지므로 dataMap 재구성으로
@@ -45,6 +37,7 @@ interface Props {
   gridRef: Ref<FlexGridType<Tab1Row>>;
   gridFilterRef?: MutableRefObject<FlexGridFilter | undefined>;
   editTrackerRef?: MutableRefObject<EditTracker | undefined>;
+  excludeFromDirtyCheck?: boolean;
   divisionId: string;
   staticColumns?: RawFlexGridColumnConfig[];
   // 행 버튼 노출 게이트 (hasButton CONFIRM/CANCEL — 페이지 소유)
@@ -57,11 +50,19 @@ interface Props {
   onAuthRegCellClick?: (row: Tab1Row) => void;
 }
 
+// SDM1010과 동일한 DataGrid 행 단위 콤보 필터. DB 메타 반영 전까지만 빈 ATTRIBUTE2를 보완한다.
+const COMBO_ROW_FILTER_BY_COLNM: Record<string, string> = {
+  END_CUSTOMER: 'DIVISION_ID:DIVISION_ID',
+  CELL_TYPE: 'DIVISION_ID:DIVISION_ID',
+  STACK_METHOD: 'DIVISION_ID:DIVISION_ID,CELL_TYPE:CELL_TYPE',
+};
+
 export const ProjectMasterTab1Grid = ({
   rows,
   gridRef,
   gridFilterRef,
   editTrackerRef,
+  excludeFromDirtyCheck,
   divisionId,
   staticColumns,
   canConfirm,
@@ -73,10 +74,21 @@ export const ProjectMasterTab1Grid = ({
   onAuthRegCellClick,
 }: Props) => {
   const tagLayerRef = useRef<TagLayerHandle>(null);
+  const actionPortalsRef = useRef<Map<string, HTMLDivElement>>(new Map());
+  const [, setPortalTick] = useState(0);
+
+  const actionKey = (row: Tab1Row) => String(row.DPJT_KEY ?? '');
 
   // ⭐ 정적 컬럼 — admin 메타 100% 주도 (visible/display 2 boolean 만. FALLBACK 금지)
   const visibleColumns = useMemo<RawFlexGridColumnConfig[]>(
-    () => (staticColumns ?? []).filter(c => c.visible !== false && c.display !== false),
+    () =>
+      (staticColumns ?? [])
+        .filter(c => c.visible !== false && c.display !== false)
+        .map(column =>
+          COMBO_ROW_FILTER_BY_COLNM[column.colNm] && !column.attribute2
+            ? { ...column, attribute2: COMBO_ROW_FILTER_BY_COLNM[column.colNm] }
+            : column
+        ),
     [staticColumns]
   );
   const staticBindingSet = useMemo(
@@ -87,77 +99,10 @@ export const ProjectMasterTab1Grid = ({
   // ===== Grid 콤보 — 메타(FPComboBox + cellCboDataTp) 기반. division 종속 콤보는 따옴표 전달
   //   (BE makeComboQuery raw 치환 — @divisionId 토큰 없는 콤보는 전달해도 무해).
   //   StackMethodByCellType 은 @cellType 토큰 필수 — 기본 map 은 빈 값(전체 반환 NVL 가드) =====
-  const comboColumns = useMemo(
-    () =>
-      visibleColumns.filter(
-        c => (c.cellCtrlObjTpCd as unknown as string) === 'FPComboBox' && !!c.cellCboDataTp
-      ),
-    [visibleColumns]
+  const comboParams = useMemo(
+    () => ({ divisionId: `'${divisionId || 'ALL'}'`, cellType: '\'\'' }),
+    [divisionId]
   );
-  const q = (v?: string): string => `'${v && v.trim() !== '' ? v : 'ALL'}'`;
-  const comboResults = useTabComboQueries({
-    filters: comboColumns.map((c): ComboParam => {
-      const param: ComboParam = { comboId: c.cellCboDataTp as string, divisionId: q(divisionId) };
-      if ((c.cellCboDataTp as unknown as string) === CELLTYPE_SCOPED_COMBO) {
-        // 빈값 NVL 가드 = 전체 반환 ('ALL' 센티널 아님 — SDM1020 실측 계보)
-        param.divisionId = `'${divisionId}'`;
-        param.cellType = "''";
-      }
-      return param;
-    }),
-  });
-  // ⚠ division 을 시그니처에 포함 — 미포함 시 division 전환 후 행수가 우연히 같으면
-  //   이전 division 의 dataMap 이 잔존한다 (DMF0042 실측 계보)
-  const comboSig = comboColumns
-    .map((c, i) => `${c.cellCboDataTp}@${divisionId}#${comboResults[i]?.length ?? 'x'}`)
-    .join(',');
-  const dataMaps = useMemo<Record<string, DataMap | null>>(() => {
-    const m: Record<string, DataMap | null> = {};
-    comboColumns.forEach((c, i) => {
-      const arr = comboResults[i] ?? [];
-      m[c.colNm] = arr.length > 0 ? new DataMap(arr, 'CODE', 'NAME') : null;
-    });
-    return m;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [comboSig]);
-
-  // ===== ⭐ CF-15 행 CELL_TYPE 종속 — StackMethodByCellType 을 CellType 코드별 선적재 후
-  //   beginningEdit 에서 행 CELL_TYPE 의 dataMap 으로 스왑 (hook #59 §5-G) =====
-  const cellTypeCodes = useMemo(() => {
-    const i = comboColumns.findIndex(
-      c => (c.cellCboDataTp as unknown as string) === 'CellTypeByDivision'
-    );
-    return i >= 0 ? (comboResults[i] ?? []).map(r => String(r.CODE)) : [];
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [comboSig]);
-  const stackScopedFilters = useMemo(
-    () =>
-      cellTypeCodes.map(
-        (ct): ComboParam => ({
-          comboId: CELLTYPE_SCOPED_COMBO,
-          divisionId: `'${divisionId}'`,
-          cellType: `'${ct}'`,
-        })
-      ),
-    [cellTypeCodes, divisionId]
-  );
-  const stackScopedResults = useTabComboQueries({ filters: stackScopedFilters });
-  const stackScopedSig = stackScopedFilters
-    .map((f, i) => `${f.cellType}#${stackScopedResults[i]?.length ?? 'x'}`)
-    .join(',');
-  const stackMapsRef = useRef<Record<string, DataMap>>({});
-  useEffect(() => {
-    const maps: Record<string, DataMap> = {};
-    stackScopedFilters.forEach((f, i) => {
-      const arr = (stackScopedResults[i] ?? []) as unknown as Record<string, string>[];
-      const ct = String(f.cellType ?? '').replace(/'/g, '');
-      if (arr.length > 0) maps[ct] = new DataMap(arr, 'CODE', 'NAME');
-    });
-    stackMapsRef.current = maps;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [stackScopedSig]);
-  // CELL_TYPE 편집 직전 값 (변경 여부 판정 — 동일 값 재선택 시 STACK_METHOD clear 방지)
-  const preEditCellTypeRef = useRef<string>('');
 
   // ⭐ 메타 ref 미러 — 핸들러가 effect 안에서 등록되므로 최신 메타를 ref 로 본다
   const inputTpRef = useRef<Map<string, string | undefined>>(new Map());
@@ -188,10 +133,12 @@ export const ProjectMasterTab1Grid = ({
       if (!rowItem || !meta) return;
       const rec = rowItem as Record<string, unknown>;
       const ctrlType = (meta.cellCtrlObjTpCd as unknown as string) ?? '';
+      const inputTp = inputTpRef.current.get(binding);
+      const editable = isCellEditableTab1(inputTp, binding, rowItem);
 
       // ⭐ '수정' 구분 행 색상 (P-05/F-10 — DPJT_REG_CAT='MOD' 행 단위. 색상 토큰 미기재(T-7)라
       //   공통 warning 계열 임시 — 편집 Yellow(.wj-cell-editable)가 최종 우선)
-      toggleClass(e.cell, styles.rowMod, isModRow(rowItem));
+      toggleClass(e.cell, styles.rowMod, isModRow(rowItem) && editable);
 
       // ⚠ 편집 중 셀은 건드리지 않는다 — 삽입된 편집기 <input> 이 지워지는 사고 방어 (DMF0044 계보)
       const isEditing = g.editRange?.contains(e.row, e.col) ?? false;
@@ -229,24 +176,18 @@ export const ProjectMasterTab1Grid = ({
 
       // ⭐ REG_COL 셀 (승인/반려 행 버튼 — F-15 FE 파생 렌더. hasButton 게이트 E06/E07)
       if (meta.attribute1 === REG_ACTION_ATTR) {
-        e.cell.textContent = '';
         e.cell.style.textAlign = 'center';
-        if (canConfirm) {
-          const btn = document.createElement('button');
-          btn.type = 'button';
-          btn.className = styles.regBtn;
-          btn.dataset.action = 'confirm';
-          btn.textContent = approveLabel;
-          e.cell.appendChild(btn);
+        const key = actionKey(rowItem);
+        const existing = actionPortalsRef.current.get(key);
+        if (existing) {
+          if (e.cell.firstElementChild !== existing) e.cell.replaceChildren(existing);
+          return;
         }
-        if (canCancel) {
-          const btn = document.createElement('button');
-          btn.type = 'button';
-          btn.className = `${styles.regBtn} ${styles.regBtnReject}`;
-          btn.dataset.action = 'cancel';
-          btn.textContent = rejectLabel;
-          e.cell.appendChild(btn);
-        }
+        const container = globalThis.document.createElement('div');
+        container.className = styles.regButtons;
+        e.cell.replaceChildren(container);
+        actionPortalsRef.current.set(key, container);
+        setPortalTick(tick => tick + 1);
         return;
       }
 
@@ -258,11 +199,9 @@ export const ProjectMasterTab1Grid = ({
 
       // ⭐ 편집 색 — 편집 게이트와 **같은 함수**(isCellEditableTab1) 사용 (#95 — 편집 Yellow /
       //   잠금 Gray). 공용 formatEditableColumns 보다 뒤에 걸려 본 판정이 최종
-      const inputTp = inputTpRef.current.get(binding);
-      const editable = isCellEditableTab1(inputTp, binding, rowItem);
       toggleClass(e.cell, 'wj-cell-editable', editable);
-      // 편집형 컬럼인데 행 조건('수정' 행 D-PJT Code)으로 잠긴 셀만 Gray (S 컬럼은 기본 White+zebra)
-      toggleClass(e.cell, 'wj-cell-non-editable', isEditableInputTp(inputTp) && !editable);
+      // TAB1의 수정 불가 셀은 별도 배경색 없이 기본 White+zebra를 유지한다.
+      toggleClass(e.cell, 'wj-cell-non-editable', false);
     };
     g.formatItem.addHandler(formatHandler);
 
@@ -282,38 +221,9 @@ export const ProjectMasterTab1Grid = ({
         return;
       }
       e.cancel = !isCellEditableTab1(inputTpRef.current.get(binding), binding, row);
-      if (e.cancel) return;
-      // ⭐ CF-15 — STACK_METHOD 는 행 CELL_TYPE 의 dataMap 으로 스왑 (hook #59 §5-G)
-      if (binding === STACK_METHOD_BINDING) {
-        const ct = String(row?.CELL_TYPE ?? '');
-        const dm = stackMapsRef.current[ct];
-        const col = s.columns[e.col];
-        if (col && dm && col.dataMap !== dm) col.dataMap = dm;
-      }
-      if (binding === CELL_TYPE_BINDING) preEditCellTypeRef.current = String(row?.CELL_TYPE ?? '');
     };
     g.beginningEdit.addHandler(beginningEditHandler);
     g.pastingCell.addHandler(beginningEditHandler as never);
-
-    // 편집 종료 — ① CELL_TYPE 변경 시 STACK_METHOD clear (CF-15 계단식) ② STACK_METHOD dataMap 원복
-    const cellEditEndedHandler = (s: FlexGridType<Tab1Row>, e: { row: number; col: number }) => {
-      const binding = s.columns[e.col]?.binding ?? '';
-      const row = s.rows[e.row]?.dataItem as Tab1Row | undefined;
-      if (!row) return;
-      const rec = row as Record<string, unknown>;
-      if (binding === CELL_TYPE_BINDING && toText(rec[binding]) !== preEditCellTypeRef.current) {
-        rec[STACK_METHOD_BINDING] = '';
-        s.invalidate();
-      }
-      if (binding === STACK_METHOD_BINDING) {
-        // ⭐ 전체 dataMap 원복 (hook #59 §5-G — 누락 시 타 행이 마지막 편집 행의 cellType 맵으로 표시)
-        const col = s.columns[e.col];
-        const base = dataMaps[binding];
-        if (col && base && col.dataMap !== base) col.dataMap = base;
-      }
-    };
-    g.cellEditEnded.addHandler(cellEditEndedHandler);
-    g.pastedCell.addHandler(cellEditEndedHandler as never);
 
     // 클릭 라우팅 — FPModal(권한관리)/REG_ACTION(승인·반려 버튼) 메타 소비 (바인딩 하드코딩 금지)
     const clickHandler = (ev: MouseEvent) => {
@@ -330,10 +240,7 @@ export const ProjectMasterTab1Grid = ({
         return;
       }
       if (meta.attribute1 === REG_ACTION_ATTR) {
-        // 행 단건 (P-09/P-10) — 클릭한 버튼의 data-action 으로 승인/반려 분기
-        const action = (ev.target as HTMLElement | null)?.closest('button')?.dataset.action;
-        if (action === 'confirm' && canConfirm) onConfirmClick?.(row);
-        if (action === 'cancel' && canCancel) onCancelClick?.(row);
+        return;
       }
     };
     g.hostElement.addEventListener('click', clickHandler);
@@ -353,8 +260,6 @@ export const ProjectMasterTab1Grid = ({
         g.formatItem?.removeHandler(cornerHandler);
         g.beginningEdit?.removeHandler(beginningEditHandler);
         g.pastingCell?.removeHandler(beginningEditHandler as never);
-        g.cellEditEnded?.removeHandler(cellEditEndedHandler);
-        g.pastedCell?.removeHandler(cellEditEndedHandler as never);
         g.hostElement?.removeEventListener('click', clickHandler);
       } catch {
         /* unmount race */
@@ -363,7 +268,6 @@ export const ProjectMasterTab1Grid = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     visibleColumns,
-    dataMaps,
     canConfirm,
     canCancel,
     approveLabel,
@@ -378,11 +282,6 @@ export const ProjectMasterTab1Grid = ({
     const g = (gridRef as { current: FlexGridType<Tab1Row> | null } | null)?.current;
     if (!g) return;
     const applyHeaderHeight = () => {
-      for (let i = 0; i < g.columns.length; i++) {
-        const col = g.columns[i];
-        const dm = dataMaps[col.binding ?? ''];
-        if (dm && col.dataMap !== dm) col.dataMap = dm;
-      }
       const headerRows = g.columnHeaders?.rows;
       if (!headerRows || headerRows.length === 0) return;
       const per = Math.round(48 / headerRows.length);
@@ -404,7 +303,19 @@ export const ProjectMasterTab1Grid = ({
         /* unmount race */
       }
     };
-  }, [visibleColumns, dataMaps, gridRef]);
+  }, [visibleColumns, gridRef]);
+
+  useEffect(() => {
+    const validKeys = new Set(rows.map(row => String(row.DPJT_KEY ?? '')));
+    let changed = false;
+    actionPortalsRef.current.forEach((_, key) => {
+      if (!validKeys.has(key)) {
+        actionPortalsRef.current.delete(key);
+        changed = true;
+      }
+    });
+    if (changed) setPortalTick(tick => tick + 1);
+  }, [rows]);
 
   return (
     <>
@@ -415,11 +326,43 @@ export const ProjectMasterTab1Grid = ({
         gridRef={gridRef as never}
         gridFilterRef={gridFilterRef}
         editTrackerRef={editTrackerRef as never}
+        excludeFromDirtyCheck={excludeFromDirtyCheck}
         staticColumns={visibleColumns}
+        comboParams={comboParams}
         itemsSource={rows as unknown as WijmoRowItem[]}
         autoGenerateColumns={false}
         allowSorting={true}
       />
+      {[...actionPortalsRef.current.entries()].flatMap(([key, container]) => {
+        const row = rows.find(item => actionKey(item) === key);
+        if (!row) return [];
+        return [
+          createPortal(
+            <>
+              {canConfirm && (
+                <Button
+                  appearance='contained'
+                  priority='primary'
+                  size='small'
+                  buttonLabel={approveLabel}
+                  onClick={() => onConfirmClick?.(row)}
+                />
+              )}
+              {canCancel && (
+                <Button
+                  appearance='outlined'
+                  priority='normal'
+                  size='small'
+                  buttonLabel={rejectLabel}
+                  onClick={() => onCancelClick?.(row)}
+                />
+              )}
+            </>,
+            container,
+            key
+          ),
+        ];
+      })}
     </>
   );
 };

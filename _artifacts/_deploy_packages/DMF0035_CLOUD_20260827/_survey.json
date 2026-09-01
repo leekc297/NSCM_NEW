@@ -1,0 +1,83 @@
+{
+ "menu": "DMF0035",
+ "stamp": "20260827",
+ "db": {
+  "01_DDL_GTT.sql": "GTT 49본 (접두 ['GT_DM35'] + ALL_DEPENDENCIES)",
+  "10_PKG_DMF0035_SPEC.sql": "SPEC [('PACKAGE', 'VALID', '2026-08-06 14:54'), ('PACKAGE BODY', 'VALID', '2026-08-20 23:07')]",
+  "11_PKG_DMF0035_BODY.sql": "BODY [('PACKAGE', 'VALID', '2026-08-06 14:54'), ('PACKAGE BODY', 'VALID', '2026-08-20 23:07')]",
+  "12_PKG_DMF0022_SPEC.sql": "SPEC [('PACKAGE', 'VALID', '2026-08-10 20:46'), ('PACKAGE BODY', 'VALID', '2026-08-21 00:53')]",
+  "13_PKG_DMF0022_BODY.sql": "BODY [('PACKAGE', 'VALID', '2026-08-10 20:46'), ('PACKAGE BODY', 'VALID', '2026-08-21 00:53')]",
+  "14_PKG_DMF0051_SPEC.sql": "SPEC [('PACKAGE', 'VALID', '2026-08-06 14:53'), ('PACKAGE BODY', 'VALID', '2026-08-21 01:38')]",
+  "15_PKG_DMF0051_BODY.sql": "BODY [('PACKAGE', 'VALID', '2026-08-06 14:53'), ('PACKAGE BODY', 'VALID', '2026-08-21 01:38')]",
+  "16_PKG_SCM0002_SPEC.sql": "SPEC [('PACKAGE', 'VALID', '2026-07-27 15:54'), ('PACKAGE BODY', 'VALID', '2026-08-20 15:48')]",
+  "17_PKG_SCM0002_BODY.sql": "BODY [('PACKAGE', 'VALID', '2026-07-27 15:54'), ('PACKAGE BODY', 'VALID', '2026-08-20 15:48')]",
+  "18_FUNCTION_FN_GET_DM_MKT_OWNER_NAME.sql": "의존 FUNCTION (기이관이면 skip 가능)",
+  "19_FUNCTION_FN_NEXT_DAY.sql": "의존 FUNCTION (기이관이면 skip 가능)",
+  "20_FUNCTION_UF_FX_STRING_SPLIT.sql": "의존 FUNCTION (기이관이면 skip 가능)",
+  "21_PROCEDURE_PR_SCM_SYS_LOG_BATCH.sql": "의존 PROCEDURE (기이관이면 skip 가능)",
+  "22_FUNCTION_FN_SPLITSTRING.sql": "의존 FUNCTION (기이관이면 skip 가능)",
+  "23_FUNCTION_FN_SCM_SYS_NVL.sql": "의존 FUNCTION (기이관이면 skip 가능)",
+  "24_FUNCTION_SCM_ARR_SPL_CNT.sql": "의존 FUNCTION (기이관이면 skip 가능)",
+  "25_FUNCTION_SCM_ARR_SPL_VAL.sql": "의존 FUNCTION (기이관이면 skip 가능)",
+  "20:SCM_ADM_PROGRAM": 1,
+  "20:SCM_ADM_MNU_M": 1,
+  "20:SCM_ADM_USER_GR_MNU_MPG_M": 5,
+  "20:SCM_ADM_MNU_BTN_MPG_M": 8,
+  "20:SCM_ADM_USER_GR_MNU_BTN_MPG_M": 40,
+  "20:SCM_ADM_API_M": 8,
+  "20_MENU_WIRING_AUTH.sql": "MERGE ON PK 실측",
+  "24:DMF0073_GET_VERSION_SALESPRICE": 9,
+  "24:PKG_DMF0022.P_DMF0022_GET_DM_PLN_SALES_PLAN_WATERFALL": 25,
+  "24:PKG_DMF0022.P_DMF0022_GET_SPREAD_TITLE": 9,
+  "24:PKG_DMF0035.P_DMF0035_GET_MKT_FCST_WATERFALL": 25,
+  "24:PKG_DMF0035.P_DMF0035_GET_SPREAD_TITLE": 7,
+  "24:PKG_DMF0051.P_DMF0051_GET_DM_PLN_BIZ_PLAN_WATERFALL": 22,
+  "24:PKG_DMF0051.P_DMF0051_GET_SPREAD_TITLE": 9,
+  "24:PKG_SCM0002.P_SCM0002_GET_VERSIONBYWATERFALLPOPUP": 8,
+  "24_PROC_M.sql": "8 SP",
+  "22:SCM_MST_SHEET_COLUMNS:Mkt Fcst Waterfall": 71,
+  "22:SCM_MST_SHEET_MEASURE:Mkt Fcst Waterfall": 49,
+  "22_SHEET_META.sql": "시트 단위 재적재",
+  "25_EXCEL_COLUMNS.sql": "0행",
+  "26_LOOKUP_DETAIL.sql": "0행",
+  "21_CMBO_SQL.sql": "17본 (FE 요청 21: 미등재 [' ', 'CityCode', 'CountryCode', 'VersionNo'])",
+  "23_MSG_LBL_MNU.sql": "66행 / 미존재 ['MSG_API_DMF0035_bizPlanSpreadTitle_SEARCH', 'MSG_API_DMF0035_bizPlanWaterfall_SEARCH', 'MSG_API_DMF0035_mktFcstSpreadTitle_SEARCH', 'MSG_API_DMF0035_mktFcstWaterfall_SEARCH', 'MSG_API_DMF0035_salesPlanSpreadTitle_SEARCH', 'MSG_API_DMF0035_salesPlanWaterfall_SEARCH', 'MSG_API_DMF0035_versionWf_SEARCH', 'MSG_API_DMF0035_version_SEARCH']",
+  "90_VERIFY.sql": "기대 카운트 실측"
+ },
+ "fe": {
+  "merge": [
+   "packages/shared/src/components/organisms/olap-pivot-grid/OlapPivotGrid.tsx",
+   "configs/types/procedures.d.ts",
+   "procedures.d.ts.DMF0035_BLOCK.txt (추출 L157~L4492)",
+   "features/report/package.json",
+   "features/report/tsconfig.json",
+   "features/report/src/index.ts"
+  ],
+  "files": [
+   "features/report/src/pages/demand-plan-waterfall/demand-plan-waterfall.constants.ts",
+   "features/report/src/pages/demand-plan-waterfall/demand-plan-waterfall.types.ts",
+   "features/report/src/pages/demand-plan-waterfall/DemandPlanWaterfall.tsx",
+   "features/report/src/pages/demand-plan-waterfall/index.ts",
+   "features/report/src/pages/demand-plan-waterfall/useDemandPlanWaterfallStore.ts",
+   "features/report/src/pages/demand-plan-waterfall/__asis-mapping__.md",
+   "features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.module.scss",
+   "features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx",
+   "features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallGrid.tsx",
+   "features/report/src/pages/demand-plan-waterfall/components/OlapChartPane.module.scss",
+   "features/report/src/pages/demand-plan-waterfall/components/OlapChartPane.tsx",
+   "features/report/src/pages/demand-plan-waterfall/components/WaterfallVersionModal.module.scss",
+   "features/report/src/pages/demand-plan-waterfall/components/WaterfallVersionModal.tsx",
+   "features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.module.scss",
+   "features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.tsx",
+   "features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/olapFieldRail.utils.ts",
+   "features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/RailIcons.tsx"
+  ],
+  "external_feature_imports": [
+   "features/master/src/components"
+  ]
+ },
+ "notes": [
+  "화면 폴더는 features/**report**/src/pages (report 도메인). 공통 수정분 = OlapPivotGrid(FITONCE 폭 보존) + procedures.d.ts + report 피처 스캐폴드(클라우드에 report 피처 부재 시).",
+  "SCM_MST_TITLESET_USER / SCM_ADM_USER_MNU_SRCH_COND_M / SCM_ADM_EXCEL_UPLOAD(스테이징) / *_BAK* 는 사용자·임시 데이터라 이관 제외"
+ ]
+}

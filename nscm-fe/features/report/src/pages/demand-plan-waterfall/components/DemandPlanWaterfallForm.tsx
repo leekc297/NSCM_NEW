@@ -12,6 +12,7 @@ import {
 } from 'features/master/src/components';
 import { useEffect, useState } from 'react';
 
+import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { clsx } from '@shared/clsx';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
@@ -37,6 +38,10 @@ import { WaterfallVersionModal } from './WaterfallVersionModal';
 
 interface DemandPlanWaterfallFormProps {
   onSubmit: () => void;
+  /** UM-01 — Division 변경 = Grid 초기화(#59 §1.4, AS-IS cboDivision_SelectedIndexChanged → InitSpread .cs:1397) */
+  onDivisionChange?: () => void;
+  /** UM-08 — bucket 전환 (경계 판정·InitSpread 등가는 페이지가 담당) */
+  onBucketChange?: (prev: string, next: string) => void;
 }
 
 // GUBUN 콤보 — 통합 UI 고유 상수 (DMF0044 REPORT_TYPE as-const 선례). 초기값 MKT_FCST (사용자 확정).
@@ -61,7 +66,11 @@ const BUCKET2_OPTIONS = [
   { value: BUCKET2_TYPE.YEARLY, label: 'YEARLY' },
 ];
 
-export const DemandPlanWaterfallForm = ({ onSubmit }: DemandPlanWaterfallFormProps) => {
+export const DemandPlanWaterfallForm = ({
+  onSubmit,
+  onDivisionChange,
+  onBucketChange,
+}: DemandPlanWaterfallFormProps) => {
   const { t } = useTranslation();
 
   const searchParams = useDemandPlanWaterfallStore(state => state.searchParams);
@@ -76,6 +85,9 @@ export const DemandPlanWaterfallForm = ({ onSubmit }: DemandPlanWaterfallFormPro
   const isBiz = gubun === GUBUN.BIZ_PLAN;
   const isDivision40 = searchParams.divisionId === '40';
   const isDivision81 = searchParams.divisionId === '81'; // EDI Sender — '81' 정확일치 (AS-IS .cs:350-359)
+  // UM-03 — AS-IS cboDivision_SelectedIndexChanged .cs:1417~1423: 81 계열·82 = Project/Plant Site 활성, 그 외(40) 비활성
+  const isProjectPlantEnabled =
+    searchParams.divisionId.startsWith('81') || searchParams.divisionId === '82';
 
   // ONLY_WEEKLY 시 Sum 강제 해제 (AS-IS .cs:504-507)
   useEffect(() => {
@@ -103,9 +115,10 @@ export const DemandPlanWaterfallForm = ({ onSubmit }: DemandPlanWaterfallFormPro
       ? rows.map(item => ({ label: item.NAME, value: item.CODE }))
       : fallback;
 
-  const bucketOptions = isBiz
-    ? comboOr(bucketType2, BUCKET2_OPTIONS)
-    : comboOr(reportBucketType, []);
+  // [E20260831-NOONLYWEEKLY] 조회조건 BUCKET 에서 ONLY_WEEKLY 제거 (사용자 지시 2026-08-31)
+  const bucketOptions = (
+    isBiz ? comboOr(bucketType2, BUCKET2_OPTIONS) : comboOr(reportBucketType, [])
+  ).filter(option => option.value !== BUCKET_TYPE.ONLY_WEEKLY);
   const qtyOptions = comboOr(qtyType, DIVISOR_OPTIONS);
 
   return (
@@ -119,28 +132,12 @@ export const DemandPlanWaterfallForm = ({ onSubmit }: DemandPlanWaterfallFormPro
         sx={{ flexShrink: 0 }}
         conditions={
           <>
-            {/* Row 1 — Waterfall Type(구 Gubun — 명칭 사용자 확정 2026-08-06) / Div* / Team / End Customer */}
-            <Grid size={3}>
-              <FormItem
-                label={t('', 'Waterfall Type')}
-                labelAlign='right'
-                render={() => (
-                  <CustomDropdown
-                    isInput={false}
-                    value={gubun}
-                    options={GUBUN_OPTIONS}
-                    onChange={(_, option) => {
-                      // GUBUN 전환 = 시트 전환 — 버킷 체계 스왑 + 버전·전용 조건 클리어
-                      setSearchParams(gubunResetParams(option as Gubun));
-                    }}
-                  />
-                )}
-              />
-            </Grid>
+            {/* Row 1 — Div* / Team / End Customer / Sales Site (Waterfall Type 은 Bucket 뒤 — 사용자 지시 2026-08-27) */}
             <DivisionField
               gridSize={3}
               value={searchParams.divisionId}
-              onChange={option =>
+              onChange={option => {
+                if (option === searchParams.divisionId) return;
                 // Division cascade + 팝업류 클리어 (AS-IS .cs:1609-1612)
                 setSearchParams({
                   divisionId: option,
@@ -154,8 +151,10 @@ export const DemandPlanWaterfallForm = ({ onSubmit }: DemandPlanWaterfallFormPro
                   owners: [],
                   version: '',
                   senderCodes: [],
-                })
-              }
+                });
+                // UM-01 — AS-IS .cs:1397 InitSpread(): 남은 조회 결과는 새 division 과 어긋나므로 비운다
+                onDivisionChange?.();
+              }}
             />
             <TeamField
               gridSize={3}
@@ -163,13 +162,25 @@ export const DemandPlanWaterfallForm = ({ onSubmit }: DemandPlanWaterfallFormPro
               onChange={v => setSearchParams({ deptIds: v, endCustomers: [], salesSiteIds: [] })}
               division={searchParams.divisionId}
             />
+            {/* UM-02 — Team → End Customer cascade (AS-IS clbTeam_SelectedIndexChanged .cs:339/366:
+                EndCustomerByDivision(division, team) 재적재). 공용 필드 cascade(DEPT_ID) 로 팀 선택 시 좁힌다.
+                [E20260831-UM02FIX] 기본 콤보('EndCustomer')는 DEPT_ID 속성이 없어 strict cascade 가 팀 선택 시
+                전 행을 탈락시켰다(40 실측 0행 — 사용자 신고 2026-08-31). 정본 콤보 'EndCustomerByDivision'
+                (40=SITE_ITEM owner-dept 축 DEPT_ID 보유 + lookup UNION) 로 교체. DEPT_ID 는 40 축에만 실리므로
+                cascade 는 40 한정(타 division 은 lookup 축 = 팀 무관 — AS-IS 등가). */}
             <EndCustomerField
               gridSize={3}
               value={searchParams.endCustomers}
               onChange={v => setSearchParams({ endCustomers: v, salesSiteIds: [] })}
               division={searchParams.divisionId}
+              comboId='EndCustomerByDivision'
+              cascade={
+                searchParams.divisionId === '40'
+                  ? { DEPT_ID: { values: searchParams.deptIds, strict: true } }
+                  : undefined
+              }
             />
-            {/* Row 2 — Sales Site / Ver. / Period* / Bucket */}
+            {/* AS-IS .cs:1440 — Sales Site 재적재의 team 파라미터: 81 계열·82 는 string.Empty / 40 은 team */}
             <SalesSiteField
               gridSize={3}
               value={searchParams.salesSiteIds}
@@ -177,13 +188,15 @@ export const DemandPlanWaterfallForm = ({ onSubmit }: DemandPlanWaterfallFormPro
               division={searchParams.divisionId}
               comboId='UserSiteByEndCustomer'
               endCustomer={searchParams.endCustomers.join(',')}
-              deptId={searchParams.deptIds.join(',')}
+              deptId={isProjectPlantEnabled ? '' : searchParams.deptIds.join(',')}
             />
+            {/* Row 2 — Ver. / Period* / Bucket / Waterfall Type(구 Gubun — 명칭 사용자 확정 2026-08-06) */}
             <Grid size={3}>
               <FormItem
+                className={commonStyles.formItem}
                 label={t('LBL00031', 'Ver.')}
                 labelAlign='right'
-                required={!isMkt} // MKT 만 비필수(''=CURRENT) — SALES/BIZ 필수 (통합분석 §4.3)
+                required // [E20260831-VERREQ] 전 waterfall type 필수 (사용자 지시 2026-08-31 — 구 'MKT 비필수' 폐기. 기본값 CURRENT)
                 render={() => (
                   <InputField
                     fullWidth
@@ -217,6 +230,7 @@ export const DemandPlanWaterfallForm = ({ onSubmit }: DemandPlanWaterfallFormPro
             />
             <Grid size={3}>
               <FormItem
+                className={commonStyles.formItem}
                 label={t('LBL00710', 'Bucket')}
                 labelAlign='right'
                 render={() => (
@@ -225,7 +239,28 @@ export const DemandPlanWaterfallForm = ({ onSubmit }: DemandPlanWaterfallFormPro
                     value={searchParams.bucket}
                     options={bucketOptions}
                     onChange={(_, option) => {
+                      // UM-08 — 컬럼 가시성은 즉시 반응(Grid visiblePrefixes), 경계 전환은 페이지가 InitSpread 등가 처리
+                      const prev = searchParams.bucket;
                       setSearchParams({ bucket: option });
+                      if (prev !== option) onBucketChange?.(prev, option);
+                    }}
+                  />
+                )}
+              />
+            </Grid>
+            <Grid size={3}>
+              <FormItem
+                className={commonStyles.formItem}
+                label={t('', 'Waterfall Type')}
+                labelAlign='right'
+                render={() => (
+                  <CustomDropdown
+                    isInput={false}
+                    value={gubun}
+                    options={GUBUN_OPTIONS}
+                    onChange={(_, option) => {
+                      // GUBUN 전환 = 시트 전환 — 버킷 체계 스왑 + 버전·전용 조건 클리어
+                      setSearchParams(gubunResetParams(option as Gubun));
                     }}
                   />
                 )}
@@ -238,6 +273,7 @@ export const DemandPlanWaterfallForm = ({ onSubmit }: DemandPlanWaterfallFormPro
             {/* Row 3 — QTY / (SALES·BIZ) KRW/USD/LOC / (MKT) Sender Code */}
             <Grid size={3}>
               <FormItem
+                className={commonStyles.formItem}
                 label={t('', 'QTY')}
                 labelAlign='right'
                 render={() => (
@@ -254,6 +290,7 @@ export const DemandPlanWaterfallForm = ({ onSubmit }: DemandPlanWaterfallFormPro
               <>
                 <Grid size={3}>
                   <FormItem
+                    className={commonStyles.formItem}
                     label={t('', 'KRW')}
                     labelAlign='right'
                     render={() => (
@@ -268,6 +305,7 @@ export const DemandPlanWaterfallForm = ({ onSubmit }: DemandPlanWaterfallFormPro
                 </Grid>
                 <Grid size={3}>
                   <FormItem
+                    className={commonStyles.formItem}
                     label={t('', 'USD')}
                     labelAlign='right'
                     render={() => (
@@ -282,6 +320,7 @@ export const DemandPlanWaterfallForm = ({ onSubmit }: DemandPlanWaterfallFormPro
                 </Grid>
                 <Grid size={3}>
                   <FormItem
+                    className={commonStyles.formItem}
                     label={t('', 'LOC')}
                     labelAlign='right'
                     render={() => (
@@ -300,6 +339,7 @@ export const DemandPlanWaterfallForm = ({ onSubmit }: DemandPlanWaterfallFormPro
             {isMkt && (
               <Grid size={3}>
                 <FormItem
+                  className={commonStyles.formItem}
                   label={t('LBL00090', 'Sender Code')}
                   labelAlign='right'
                   render={() => (
@@ -339,7 +379,7 @@ export const DemandPlanWaterfallForm = ({ onSubmit }: DemandPlanWaterfallFormPro
               endCustomers={searchParams.endCustomers}
               scmSiteIds={searchParams.salesSiteIds}
               projectCodes={searchParams.projectCodes}
-              disabled={isDivision40} // div40 Project disable (AS-IS .cs:348-357)
+              disabled={!isProjectPlantEnabled} // UM-03 — 81 계열·82 만 활성 (AS-IS .cs:1417~1423 / 348-357)
             />
             <ItemField
               gridSize={3}
@@ -353,6 +393,7 @@ export const DemandPlanWaterfallForm = ({ onSubmit }: DemandPlanWaterfallFormPro
             />
             <Grid size={3}>
               <FormItem
+                className={commonStyles.formItem}
                 label={t('', 'Item Type')}
                 labelAlign='right'
                 render={() => (
@@ -389,6 +430,7 @@ export const DemandPlanWaterfallForm = ({ onSubmit }: DemandPlanWaterfallFormPro
               onChange={v => setSearchParams({ plantSiteIds: v })}
               division={searchParams.divisionId}
               endCustomer={searchParams.endCustomers.join(',')}
+              disabled={!isProjectPlantEnabled} // UM-03 — AS-IS .cs:1421 lblPlantSite.Enabled = 81 계열·82 만
             />
             <OwnerField
               gridSize={3}
@@ -405,6 +447,7 @@ export const DemandPlanWaterfallForm = ({ onSubmit }: DemandPlanWaterfallFormPro
                 체크박스가 맨 앞에 붙으므로 NBSP 라벨로 라벨 칸 폭을 유지한다. */}
             <Grid size={3}>
               <FormItem
+                className={commonStyles.formItem}
                 label={' '}
                 labelAlign='right'
                 render={() => (

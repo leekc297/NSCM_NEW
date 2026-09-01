@@ -8,7 +8,6 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { apiClient } from '@foundation/apis';
 import { API_CONFIG } from '@foundation/constants';
 import { i18n } from '@foundation/i18n';
-import { quoteComboParams } from '@foundation/models';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { useQuery } from '@foundation/query-client';
 import {
@@ -18,8 +17,6 @@ import {
   TabItem,
   MainTitle,
   SearchArea,
-  ToastMessage,
-  Alert,
 } from '@shared/components';
 import type { DropdownOption } from '@shared/lges';
 import { Divider, FormItem, InputField } from '@shared/lges';
@@ -217,69 +214,7 @@ const ImageUploadExample = () => {
   );
 };
 
-/**
- * 회귀 테스트 섹션 — 최근 수정 2건을 화면에서 바로 재현/검증한다.
- *   1) 토스트 자동닫힘(4초)이 그 사이 뜬 알림(Alert)을 끄지 않는다.
- *   2) 공통 콤보 파라미터가 서버로 나갈 때 자동으로 홑따옴표 인용된다(idempotent).
- * 이 페이지(/ui)는 앱 셸(MDIContainer) 밖이라 ToastMessage/Alert 를 Templates 가 직접 마운트한다.
- */
-const RegressionTestSection = () => {
-  const { setToast, setAlert } = useMessageStore();
-  const [division, setDivision] = useState('81_UC');
-
-  const reproToastKeepsAlert = () => {
-    // 로딩 토스트 표시 → 4초 자동닫힘 타이머 시작.
-    setToast({ message: '로딩중... (4초 뒤 자동으로 닫힘)' });
-    // 서버가 2.5초 뒤 에러를 리턴하는 상황을 흉내낸다 → 에러 알림 표시.
-    setTimeout(() => {
-      void setAlert({
-        type: 'alert',
-        content: '에러 메시지 — 확인을 누를 때까지 유지되어야 한다 (토스트 4초 타이머와 무관).',
-      });
-    }, 2500);
-  };
-
-  const comboPayload = JSON.stringify(
-    quoteComboParams({ comboId: 'TeambyDivision', divisionId: division }),
-    null,
-    2
-  );
-
-  return (
-    <section aria-labelledby='regression-test'>
-      <h2 id='regression-test'>회귀 테스트 (최근 수정 검증)</h2>
-
-      <h3>1) 토스트 자동닫힘이 알림을 끄지 않는다</h3>
-      <p style={{ color: '#666', fontSize: 13, whiteSpace: 'pre-line' }}>
-        {'버튼 → 로딩 토스트(4초 자동닫힘) + 2.5초 뒤 에러 알림.\n' +
-          '수정 후: 4초에 토스트만 닫히고 알림은 확인 누를 때까지 유지.\n' +
-          '수정 전: 알림이 뜬 지 약 1초 만에 토스트와 함께 사라졌음.'}
-      </p>
-      <button onClick={reproToastKeepsAlert}>로딩 토스트 + 2.5초 뒤 에러 알림</button>
-
-      <h3 style={{ marginTop: 20 }}>2) 공통 콤보 파라미터 자동 인용</h3>
-      <p style={{ color: '#666', fontSize: 13 }}>
-        division 값을 바꾸면 서버(POST admin/combo)로 실제 전송되는 payload 를 보여준다. raw 문자열은
-        홑따옴표가 자동으로 붙고, 이미 인용된 값은 그대로 둔다(idempotent).
-      </p>
-      <input
-        value={division}
-        onChange={e => setDivision(e.target.value)}
-        placeholder="예: 81_UC / 40 / '81_UC'"
-        style={{ padding: 4, width: 260 }}
-      />
-      <pre style={{ background: '#f5f5f5', padding: 8, marginTop: 8, fontSize: 13 }}>
-        {comboPayload}
-      </pre>
-    </section>
-  );
-};
-
-/**
- * @param embedded MDI 탭으로 렌더될 때 true — 전역 ToastMessage/Alert(MDIContainer)를 재사용하므로
- *   자체 마운트를 생략한다. 단독 /ui 라우트(셸 밖)에서는 false 라 직접 마운트해 토스트/알림이 동작한다.
- */
-export const Templates = ({ embedded = false }: { embedded?: boolean } = {}) => {
+export const Templates = () => {
   const { t } = useTranslation();
 
   const tabs = useMDIStore(state => state.tabs);
@@ -332,9 +267,6 @@ export const Templates = ({ embedded = false }: { embedded?: boolean } = {}) => 
       }}
     >
       <h1>Templates</h1>
-      <Divider />
-
-      <RegressionTestSection />
       <Divider />
 
       <section aria-labelledby='file-upload'>
@@ -787,17 +719,6 @@ export const Templates = ({ embedded = false }: { embedded?: boolean } = {}) => 
       </section>
       <Divider />
       <ImageUploadExample />
-
-      {/*
-        MDI 탭(embedded)에선 MDIContainer 가 전역 토스트/알림을 이미 렌더하므로 생략한다(중복 방지).
-        단독 /ui 라우트는 셸 밖이라 전역 토스트/알림이 없어 여기서 직접 마운트한다.
-      */}
-      {!embedded && (
-        <>
-          <ToastMessage />
-          <Alert />
-        </>
-      )}
     </div>
   );
 };

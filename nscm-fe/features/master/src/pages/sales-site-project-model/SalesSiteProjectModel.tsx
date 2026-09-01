@@ -86,6 +86,7 @@ export const SalesSiteProjectModel = ({ tabId, title }: PageProps<MENU_ID>) => {
   };
 
   const handleSave = () => {
+    gridRefs[activeTab].current?.finishEditing();
     if (activeTab === SHEET_INDEX.PRODUCTION) {
       // ⭐ 신규행 PROJECT_CODE 보정 — SCM_MST_SITE_ITEM.PROJECT_CODE 는 NOT NULL 이다.
       //   GridAction.addRow 는 시드한 키만으로 행을 만들어서, 사용자가 안 건드린 컬럼은 저장 JSON 에

@@ -1,0 +1,10 @@
+[
+ {
+  "old": "\t\t\t\t WHERE \t1=1\n\t\t\t\t   AND\tUG.USER_ID = P_USER_ID\n\t\t\t\t   AND\tGMB.MNU_ID = P_MNU_ID\n\t\t\t\t   AND\tGMB.SHT_NM = P_SHT_NM\n\t\t\t\t   AND\tGMB.MNU_BTN_CD = P_MNU_BTN_CD\n\t\t\t) THEN 'Y' ELSE 'N' END AS HAS_AUTH_YN",
+  "new": "\t\t\t\t WHERE \t1=1\n\t\t\t\t   AND\tUG.USER_ID = P_USER_ID\n\t\t\t\t   AND\tGMB.MNU_ID = P_MNU_ID\n\t\t\t\t   AND\tGMB.SHT_NM = P_SHT_NM\n\t\t\t\t   AND\tGMB.MNU_BTN_CD = P_MNU_BTN_CD\n\t\t\t\t   AND\tUG.USE_YN = 'Y'    --[E20260826-BTNUSEYN] 회수(USE_YN='N') 행 실효화 — 버튼 숨김과 API 게이트 동기\n\t\t\t\t   AND\tGMB.USE_YN = 'Y'   --[E20260826-BTNUSEYN]\n\t\t\t) THEN 'Y' ELSE 'N' END AS HAS_AUTH_YN"
+ },
+ {
+  "old": "\t\t\t WHERE \t1=1\n\t\t\t   AND \tUG.USER_ID = P_USER_ID\n\t\t\t   AND\tGM.MNU_ID = P_MNU_ID\n\t\t\t   AND\tUG.USE_YN = 'Y'\n\t\t\t;\n\tEND;",
+  "new": "\t\t\t WHERE \t1=1\n\t\t\t   AND \tUG.USER_ID = P_USER_ID\n\t\t\t   AND\tGM.MNU_ID = P_MNU_ID\n\t\t\t   AND\tUG.USE_YN = 'Y'\n\t\t\t   AND\tGMB.USE_YN = 'Y'   --[E20260826-BTNUSEYN] 회수(USE_YN='N') 행 실효화 — admin 회수 의도 반영 (2026-08-26)\n\t\t\t;\n\tEND;"
+ }
+]

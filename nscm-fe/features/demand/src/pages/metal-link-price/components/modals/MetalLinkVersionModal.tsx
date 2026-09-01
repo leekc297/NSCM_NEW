@@ -1,7 +1,6 @@
 import type { FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
-import dayjs from 'dayjs';
 import { PeriodField } from 'features/master/src/components';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 
 import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
@@ -15,6 +14,7 @@ import { useMessageStore } from '@shared/stores';
 import { MENU_ID, MSG, SHEETS } from '../../metal-link-price.constants';
 
 import styles from './MetalLinkVersionModal.module.scss';
+import { useMetalLinkVersionModalStore } from './metalLinkVersionModalStore';
 
 // AS-IS DMF0074_MetalLinkPrice.cs btnSPVer_Click (.cs L673~702):
 //   popVersion.Form_Load(true, "SP", division, 오늘-3M, 오늘+3M) — DMF0073_VersionBySalesPricePopup.
@@ -80,24 +80,16 @@ export const MetalLinkVersionModal = ({
   // ⭐ Period 기본값 = AS-IS 오늘-3M ~ 오늘+3M (.cs L676 Form_Load 인자 1:1).
   //   부모창(메인 조회조건) 날짜를 물려받던 방식은 AS-IS 와 달라 폐기 (사용자 지시 2026-08-10).
   //   DMF0020 SalesPriceVersionModal 과 동일 — 두 화면 모두 DMF0073 팝업 재사용.
-  const [periodFrom, setPeriodFrom] = useState<string>(() =>
-    dayjs().subtract(3, 'month').format('YYYYMMDD')
+  const { divisionId, periodFrom, periodTo, description } = useMetalLinkVersionModalStore(
+    state => state.searchParams
   );
-  const [periodTo, setPeriodTo] = useState<string>(() =>
-    dayjs().add(3, 'month').format('YYYYMMDD')
-  );
-  const [divisionId, setDivisionId] = useState<string>(defaultDivision);
-  const [description, setDescription] = useState<string>('');
+  const setSearchParams = useMetalLinkVersionModalStore(state => state.setSearchParams);
+  const resetSearchParams = useMetalLinkVersionModalStore(state => state.resetSearchParams);
 
   // popup open 시 default value reset
   useEffect(() => {
-    if (open) {
-      setDivisionId(defaultDivision);
-      setPeriodFrom(dayjs().subtract(3, 'month').format('YYYYMMDD'));
-      setPeriodTo(dayjs().add(3, 'month').format('YYYYMMDD'));
-      setDescription('');
-    }
-  }, [open, defaultDivision]);
+    if (open) resetSearchParams(defaultDivision);
+  }, [open, defaultDivision, resetSearchParams]);
 
   // DMF0073_GET_VERSION_SALESPRICE (9-arg — sesUserId/mnuId BE 자동).
   // ⭐ versionType 'SP_W' 고정 (2026-07-10 실측 정정 — SP 필터는 VERSION_TYPE 정확 토큰 매칭
@@ -200,7 +192,7 @@ export const MetalLinkVersionModal = ({
                         disabled // 메인 화면 조회 division 고정 (AS-IS ctor division 1:1)
                         value={divisionId}
                         options={divisionOptions}
-                        onChange={(_, option) => setDivisionId(String(option))}
+                        onChange={(_, option) => setSearchParams({ divisionId: String(option) })}
                       />
                     )}
                   />
@@ -209,10 +201,9 @@ export const MetalLinkVersionModal = ({
                   gridSize={4}
                   start={periodFrom}
                   end={periodTo}
-                  onChange={(start, end) => {
-                    setPeriodFrom(start);
-                    setPeriodTo(end);
-                  }}
+                  onChange={(start, end) =>
+                    setSearchParams({ periodFrom: start, periodTo: end })
+                  }
                 />
                 <Grid size={3}>
                   <FormItem
@@ -222,7 +213,7 @@ export const MetalLinkVersionModal = ({
                       <InputField
                         fullWidth
                         value={description}
-                        onChange={e => setDescription(e.target.value)}
+                        onChange={e => setSearchParams({ description: e.target.value })}
                       />
                     )}
                   />
@@ -241,13 +232,6 @@ export const MetalLinkVersionModal = ({
           </div>
           <div className={styles.buttonWrapper}>
             <Button
-              appearance='outlined'
-              priority='normal'
-              size='medium'
-              buttonLabel={t('LBL00627', 'Close')}
-              onClick={modalClose}
-            />
-            <Button
               appearance='contained'
               priority='primary'
               size='medium'
@@ -256,6 +240,13 @@ export const MetalLinkVersionModal = ({
               iconPosition='leading'
               disabled={loading}
               onClick={handleApply}
+            />
+            <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel={t('LBL00627', 'Close')}
+              onClick={modalClose}
             />
           </div>
         </div>

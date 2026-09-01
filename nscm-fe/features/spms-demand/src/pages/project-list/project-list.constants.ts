@@ -17,7 +17,6 @@ export type MENU_ID = typeof MENU_ID;
 // 서버로 보낼 sheet 이름(요청). 화면설계서의 프로시저명과 1:1 대응:
 export enum SHEETS {
   MAIN = 'Project List', // SHT_NM 실명(공백 포함) — API_ID 시트 토큰은 'main' (계약 ② — DMF0003 'Mkt Fcst' 전례)
-  PERIOD = 'period', // PR_GET_DAY_RANGE 공유 배선 (SDM1020_period_SEARCH — 실서명 2-IN createdBy/month)
   /** 화면설계서 — 프로젝트 조회/변경(편집 가능한 프로젝트 마스터 그리드) */
   PROJECT = 'project',
   /** 권한관리 팝업 — 조직도(부서 트리) */
@@ -51,24 +50,15 @@ export const BTN = {
 
 // 나의 권한 도메인 (lookup SPMS_DPJT_AUTH_TYPE + GET 커서 파생 'NONE' — REQUEST 상태 치환 포함)
 export const AUTH_TYPE = {
-  ADMIN: 'ADMIN', // 유일 편집·권한관리 링크 행 (P-01/P-02)
+  ADMIN: 'ADMIN', // 권한관리 링크 행 (P-02)
   WRITE: 'WRITE',
   READ: 'READ',
   NONE: 'NONE',
 } as const;
 
-// 나의 권한 도메인 (lookup SPMS_DPJT_AUTH_TYPE + GET 커서 파생 'NONE' — REQUEST 상태 치환 포함)
-export const REG_STATUS = {
-  REJECT: 'REJECT',
-} as const;
-
 // ⭐ 권한요청 체크박스 서버 3상태 문자열 (P-04 — GET 커서 DPJT_AUTH_REQ_WRITE/_READ 단일 원천.
 //   FE 하드코딩 파생 금지: DISABLED=편집 잠금(ADMIN·WRITE CONFIRM) / CHECKED=요청 진행 중 / UNCHECKED=선택 가능)
-export const REQ_CHECK = {
-  DISABLED: 'DISABLED',
-  CHECKED: 'CHECKED',
-  UNCHECKED: 'UNCHECKED',
-} as const;
+export { CHECK_STATE as REQ_CHECK } from '../../lib/grid';
 
 // 조회조건 lookup 타입 (SCM0001_GET_LOOKUP_VALUES 도메인 — SDM1010 Form 소비 패턴 동일)
 export const LOOKUP = {
@@ -82,9 +72,9 @@ export const MSG = {
   DATE_INVERTED: 'MSG00108', // 등록 완료일 필수·역전 (P-10)
   NO_CHANGES: 'MSG00004', // 수정된 내용 없음 (P-06 — 근사 재사용 확정)
   NO_CHECKED: 'MSG00709', // 선택 항목 없음 (P-07)
-  REQ_CONFIRM: 'MSG00710', // 등록/변경 confirm (P-08)
-  REQ_DONE: 'MSG00711', // 등록요청 성공 (toast)
-  REQ_FAIL: 'MSG00712', // 등록요청 실패
+  REQ_CONFIRM: 'MSG00709', // 등록/변경 confirm (P-08)
+  REQ_DONE: 'MSG00712', // 등록요청 성공 (toast)
+  REQ_FAIL: 'MSG00711', // 등록요청 실패
   PENDING_SEARCH_CONFIRM: 'MSG00703', // 수정 pending 중 재조회 confirm (UC-02)
   AUTHREQ_EMPTY: 'MSG01002', // 권한요청 항목 없음 (P-11)
   AUTHREQ_CONFIRM: 'MSG01003', // 권한요청 confirm (P-12)
@@ -106,14 +96,6 @@ export const REQ_ACTION_ATTR = 'REQ_ACTION' as const;
 
 // SP 가 링크 봉인 행에 내려주는 표시값 (P-02/P-03 — '-' = 비노출. ADMIN 행은 ''(NULL) = 노출)
 export const LINK_SEALED = '-' as const;
-// 링크 라벨 리터럴 (GRID 목업 U12/U18 표기 — LBL 미채번 관행. SDM1010 리터럴 관례 동일)
-export const AUTH_MGMT_LINK_LABEL = '권한관리' as const;
-export const AUTH_REQ_LINK_LABEL = '권한요청' as const;
-
-// ⭐ TAG pill 색 컬럼 관례 (SDM1010 colorTypeColumnOf 승계 — `X_NAME`→`X_COLOR_TYPE`)
-export const colorTypeColumnOf = (binding: string): string =>
-  `${binding.replace(/_NAME$/, '')}_COLOR_TYPE`;
-
 // ⭐ D2 커서명 불일치 보정 오버라이드 — TAG 3요소(값/NAME/COLOR)의 커서 실컬럼 매핑.
 //   DPJT_AUTH_REQ_STATUS 의 NAME/COLOR 는 커서 실명 `DPJT_AUTH_REQ_WRITE_NAME`/`_WRITE_COLOR_TYPE`
 //   (정오표 D2 — 메타를 커서명으로 정합한 계약 ④와 동일 축). 미등재 바인딩은 관례 함수로 폴백.
@@ -136,8 +118,3 @@ export const REQ_CHECK_BINDINGS = {
   WRITE: 'DPJT_AUTH_REQ_WRITE',
   READ: 'DPJT_AUTH_REQ_READ',
 } as const;
-
-// ⭐ period 시트 SEARCH 파라미터 — PR_GET_DAY_RANGE 실서명 2-IN (계약 ⑤. createdBy 는 SP NVL 가드
-//   대상이라 '' 전달, month=1 → o_rc2 DAY_RANGE = '당월1일:익월말일' — 당월 1일 앵커만 소비.
-//   M-1~Today 산출은 utils/project-list.validate `defaultRegCompRange` — dayjs 병행 승인, 계약 ⑤)
-export const PERIOD_DEFAULT_FILTERS = { createdBy: '', month: '1' } as const;

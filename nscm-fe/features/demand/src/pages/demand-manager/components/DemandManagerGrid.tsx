@@ -18,6 +18,7 @@ import {
 } from '../demand-manager.constants';
 import type { DemandManagerRow, LookupProjectRow, MonthColumnMeta } from '../demand-manager.types';
 import styles from '../DemandManager.module.scss';
+import { groupKeyOf } from '../utils/demand-manager.insertAnchor';
 import { DemandManagerMergeManager } from '../utils/demand-manager.merge';
 import { isOutOfOrderRange } from '../utils/demand-manager.months';
 
@@ -60,11 +61,27 @@ const paintNegative = (cell: HTMLElement, value: number) => {
   else cell.style.removeProperty('color');
 };
 
-/** 세트의 첫 행인지 — 바로 위 행과 그룹 키가 다르면 첫 행 */
-const isSetHead = (rows: DemandManagerRow[], idx: number): boolean => {
-  if (idx <= 0) return true;
-  const key = (r: DemandManagerRow | undefined) => String(r?.KEYVALUE2 ?? r?.INSERT_GROUP_ID ?? '');
-  return key(rows[idx]) !== key(rows[idx - 1]);
+/**
+ * 그리드 행 인덱스로 데이터 행을 읽는다.
+ *
+ * 금지: rows 배열을 그리드 행 인덱스로 직접 인덱싱하지 말 것. 필터나 정렬이 걸리면
+ *   그리드가 보여주는 행 순서(CollectionView)와 원본 배열 순서가 서로 다르기 때문에
+ *   엉뚱한 행을 보고 판정한다 (2026-08-27 실측 — Project 컬럼에 필터를 걸고 행추가하면
+ *   신규 행의 Project 가 편집 불가로 보였다).
+ */
+const rowAt = (
+  grid: FlexGridType<DemandManagerRow>,
+  index: number
+): DemandManagerRow | undefined =>
+  index >= 0 ? (grid.rows[index]?.dataItem as DemandManagerRow | undefined) : undefined;
+
+/** 세트의 첫 행인지 — 그리드 기준으로 바로 위 행과 그룹 키가 다르면 첫 행 */
+const isSetHeadAt = (grid: FlexGridType<DemandManagerRow>, index: number): boolean => {
+  if (index <= 0) return true;
+  const key = groupKeyOf(rowAt(grid, index));
+  // 그룹 키가 없는 행은 세트를 이루지 못하므로 자기 자신이 첫 행이다 (findGroupTopIndex 동일 규약)
+  if (!key) return true;
+  return key !== groupKeyOf(rowAt(grid, index - 1));
 };
 
 export const DemandManagerGrid = ({
@@ -151,17 +168,18 @@ export const DemandManagerGrid = ({
     /** 셀 편집 가능 여부 — TO-BE 는 조회 직후부터 편집 가능하다(별도 편집 모드 전환 없음).
      *  권한 + 세트 첫 행 + 편집 대상 컬럼 세 조건만 본다. */
     const editableAt = (binding: string, rowIndex: number): boolean => {
-      const { canEdit: ce, rows: rs } = ctxRef.current;
+      const { canEdit: ce } = ctxRef.current;
       if (!ce) return false;
       if (!EDITABLE_BINDINGS.includes(binding as (typeof EDITABLE_BINDINGS)[number])) return false;
       // 짝 행에서는 Project·수주기간을 고칠 수 없다 (첫 행 값을 따라간다)
       if (
-        !isSetHead(rs, rowIndex) &&
+        !isSetHeadAt(g, rowIndex) &&
         PAIR_FOLLOW_BINDINGS.includes(binding as (typeof PAIR_FOLLOW_BINDINGS)[number])
       ) {
         return false;
       }
-      const row = rs[rowIndex];
+      // 판정 대상 행은 반드시 그리드에서 읽는다 (rowAt 주석 참조)
+      const row = rowAt(g, rowIndex);
       // Project 는 신규 세트에서만 입력할 수 있다 — 조회된 행에서는 잠근다
       if (
         INSERT_ONLY_BINDINGS.includes(binding as (typeof INSERT_ONLY_BINDINGS)[number]) &&
@@ -189,13 +207,19 @@ export const DemandManagerGrid = ({
         //   0 판정은 자른 뒤에 한다 — -0.4 같은 값이 '-0' 으로 찍히거나 빨갛게 칠해지지 않도록.
         const shown = Math.trunc(n);
         e.cell.textContent = shown === 0 ? '0' : shown.toLocaleString();
-        toggleClass(e.cell, 'wj-cell-non-editable', true);
+        // 룰 #95 3색 규칙 — 편집 Yellow / 과거(입력 가능했던 구간) Gray / 그 밖은 White.
+        //   월 컬럼은 애초에 입력 칸이 아니라 표시 전용이므로 White 다. AS-IS 도 잠금 셀을
+        //   백색으로 둔다(__asis-mapping__ 5절 '잠금·백색'). 전체 회색 금지.
+        toggleClass(e.cell, 'wj-cell-non-editable', false);
         paintNegative(e.cell, shown);
         return;
       }
       if (staticBindingSet.has(binding)) {
+        // 편집 가능만 Yellow 로 칠하고 나머지는 White 로 둔다(룰 #95, 위 월 컬럼 주석 참조).
+        //   금지: 편집 불가라는 이유로 Gray 를 칠하지 말 것 — 표시 전용 컬럼까지 회색이 되어
+        //   그리드 전체가 잠긴 것처럼 보인다(2026-08-27 사용자 지적).
         toggleClass(e.cell, 'wj-cell-editable', editableAt(binding, e.row));
-        toggleClass(e.cell, 'wj-cell-non-editable', !editableAt(binding, e.row));
+        toggleClass(e.cell, 'wj-cell-non-editable', false);
       }
       // 수량 등 숫자 셀 음수 표시. 문자열 컬럼은 toNumber 가 0 을 돌려주므로 자연히 제외된다.
       paintNegative(e.cell, toNumber(rowItem?.[binding]));
@@ -395,7 +419,11 @@ export const DemandManagerGrid = ({
       dynamicColumns={mainDynamicColumns}
       itemsSource={rows}
       autoGenerateColumns={false}
-      allowSorting={false}
+      // 정렬은 F3(Sort)로 켜진 컬럼의 헤더를 눌렀을 때만 걸린다(공용 DataGrid 규약).
+      //   여기에 false 를 주면 공용 측이 헤더 클릭 핸들러를 아예 달지 않아 F3 자체가 무력해진다
+      //   (2026-08-27 사용자 지적 — 정렬이 안 됨). 월 컬럼은 mainDynamicColumns 에서
+      //   allowSorting:false 로 만들고 공용 핸들러도 _dynamic 컬럼을 걸러낸다.
+      allowSorting={true}
       allowMerging={AllowMerging.All}
     />
     // </div>

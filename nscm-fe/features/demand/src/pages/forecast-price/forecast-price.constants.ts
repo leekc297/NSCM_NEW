@@ -219,6 +219,9 @@ export const MSG = {
   EDIT_MODE_NO_INPUT: 'MSG00669', // [신규] 수정모드에서는 입력할 수 없습니다. (AS-IS MSG00408)
   QTY_PRICE_REQUIRED: 'MSG00670', // [신규] 추가된 행에 수량/가격 미입력 (AS-IS MSG00449)
   MEASURE_NOT_EDITABLE: 'MSG00671', // [신규] 수정할 수 없는 메져입니다. (AS-IS MSG00464)
+  // [E20260826-AUTHVIEW] SCP Planner 시간창 밖 편집 시도 안내 — AS-IS DMF0003 EditButton L856 동코드 재사용
+  //   (locales KO/EN/CN 기등재 실측 2026-08-26). drop3 EDIT_AUTH_YN==='T'(시간창 因 잠금) 메저 한정.
+  SCP_TIME_WINDOW: 'MSG00477', // SCP Planner 권한사용자의 수정 가능한 시간이 아닙니다.
   // AS FROM SITE 필수 (현업 요청 2026-07-31, 81/82 신규 확장). 사내 기등록 ID 를 그대로 쓴다 —
   //   DMF0003(MKT FCST)이 같은 규칙에 이미 사용 중이라 신규 채번이 아니다 (mkt-fcst.constants L306).
   AS_FROM_SITE_REQUIRED: 'MSG00476',

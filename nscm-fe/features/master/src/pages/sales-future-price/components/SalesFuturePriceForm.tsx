@@ -1,5 +1,4 @@
 import { SearchArea } from '@shared/components';
-import { Grid } from '@shared/mui';
 
 import {
   BucketField,
@@ -36,7 +35,7 @@ interface Props {
 //   2단(항상): Sales Site / Project / Plant Site / Period
 //   3단(펼침): Model·Nickname / Owner / Bucket / Version
 //   4단(펼침): Search Over Range
-//   주의: Project 는 Division='40' 일 때 숨김 → 4개/단 유지 위해 빈 Grid 슬롯으로 대체.
+//   주의: Project 는 Division='40' 일 때 비활성(칸은 유지) — 4개/단 레이아웃은 그대로다.
 //
 // 콤보 조회 방식은 MktFcst(DMF0003)와 같게 맞췄다 (2026-08-24). 단계마다 콤보를 따로 조회하고
 // 클라이언트에서 서로 필터링하던 카탈로그(DivisionField / TeamField / EndCustomerField /
@@ -67,9 +66,9 @@ export const SalesFuturePriceForm = ({ onSearch, onVersionOpen, hasInsertRows }:
     // field 는 스토어 필드명 — value 로 넘긴 sc 의 키와 대조돼 오타가 컴파일에서 잡힌다.
     levels: [
       { key: 'division', field: 'divisionId' },
-      { key: 'team', field: 'deptIds' },
-      { key: 'endCustomer', field: 'endCustomers' },
-      { key: 'salesSite', field: 'scmSiteIds' },
+      { key: 'team', field: 'deptIds', sortBy: 'label' },
+      { key: 'endCustomer', field: 'endCustomers', sortBy: 'label' },
+      { key: 'salesSite', field: 'scmSiteIds', sortBy: 'label' },
     ],
     value: sc,
     onChange: (next, changed) => {
@@ -84,8 +83,11 @@ export const SalesFuturePriceForm = ({ onSearch, onVersionOpen, hasInsertRows }:
           itemIds: [],
           owners: [],
           bucketType: BUCKET_TYPE.WEEKLY,
-          versionId: 'CURRENT',
-          searchOverRange: true,
+          versionId: 'Current',
+          // Search over range 는 기본값 unchecked — division/team 변경 시 함께 해제한다
+          //   (사용자 요구 2026-08-25). 종전 true 는 division 만 바꿔도 조회기간이 52주로
+          //   자동 확장된 것처럼 보이게 했다.
+          searchOverRange: false,
         });
         return;
       }
@@ -129,7 +131,7 @@ export const SalesFuturePriceForm = ({ onSearch, onVersionOpen, hasInsertRows }:
       { key: 'division', field: 'divisionId' },
       { key: 'team', field: 'deptIds' },
       { key: 'endCustomer', field: 'endCustomers' },
-      { key: 'plantSite', field: 'plantSiteIds', disabled: !plantSiteEnabled },
+      { key: 'plantSite', field: 'plantSiteIds', disabled: !plantSiteEnabled, sortBy: 'label' },
     ],
     value: sc,
     onChange: next => set(next),
@@ -150,22 +152,22 @@ export const SalesFuturePriceForm = ({ onSearch, onVersionOpen, hasInsertRows }:
 
           {/* 2단 */}
           {cascade.field('salesSite')}
-          {sc.divisionId !== DIVISION.MOBILITY ? (
-            <ProjectField
-              gridSize={3}
-              value={sc.projectCodes}
-              onChange={v => set({ projectCodes: v })}
-              division={sc.divisionId}
-              deptIds={sc.deptIds}
-              endCustomers={sc.endCustomers}
-              scmSiteIds={sc.scmSiteIds}
-              projectCodes={sc.projectCodes}
-              multiCheckbox
-            />
-          ) : (
-            // Division='40' → Project 숨김. 4개/단 레이아웃 유지 위한 빈 슬롯 (사용자 명시 2026-06-27).
-            <Grid size={3} />
-          )}
+          {/* Project — Division='40' 도 칸은 그대로 두고 비활성만 한다 (사용자 요구 2026-08-26).
+              40 은 프로젝트 역할을 END_CUSTOMER40 이 대신해 조회 키로 쓰지 않지만, 숨기면 division 을
+              오갈 때 조회조건 자리가 통째로 바뀌어 다른 화면처럼 보인다. Plant Site 의 비활성 처리와 같은 방식.
+              종전에는 빈 Grid 슬롯으로 대체했다. */}
+          <ProjectField
+            gridSize={3}
+            value={sc.projectCodes}
+            onChange={v => set({ projectCodes: v })}
+            division={sc.divisionId}
+            deptIds={sc.deptIds}
+            endCustomers={sc.endCustomers}
+            scmSiteIds={sc.scmSiteIds}
+            projectCodes={sc.projectCodes}
+            multiCheckbox
+            disabled={sc.divisionId === DIVISION.MOBILITY}
+          />
           {plantSiteCascade.field('plantSite')}
           <PeriodField
             gridSize={3}

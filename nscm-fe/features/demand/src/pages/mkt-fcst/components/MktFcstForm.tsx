@@ -69,7 +69,7 @@ export const MktFcstForm = ({ onSearch, insertedRowCount = 0 }: MktFcstFormProps
       { key: 'division', field: 'divisionId' },
       { key: 'team', field: 'deptIds' },
       { key: 'endCustomer', field: 'endCustomers' },
-      { key: 'plantSite', field: 'plantSiteIds', disabled: !plantSiteEnabled },
+      { key: 'plantSite', field: 'plantSiteIds', disabled: !plantSiteEnabled, sortBy: 'label' },
     ],
     value: sc,
     onChange: next => set(next),
@@ -155,9 +155,9 @@ export const MktFcstForm = ({ onSearch, insertedRowCount = 0 }: MktFcstFormProps
             gridSize={3}
             levels={[
               { key: 'division', field: 'divisionId' },
-              { key: 'team', field: 'deptIds' },
-              { key: 'endCustomer', field: 'endCustomers' },
-              { key: 'salesSite', field: 'scmSiteIds' },
+              { key: 'team', field: 'deptIds', sortBy: 'label' },
+              { key: 'endCustomer', field: 'endCustomers', sortBy: 'label' },
+              { key: 'salesSite', field: 'scmSiteIds', sortBy: 'label' },
             ]}
             value={sc}
             onChange={(next, changed) => {

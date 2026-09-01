@@ -1,0 +1,2 @@
+-- 22A — PKG BODY 가 V_PROGRAM_ID/PROGRAM_ID 리터럴로 읽는 종속 PROGRAM_ID [] 의 시트 메타 (hook #148 G2) [20260831]
+-- 종속 PROGRAM_ID 없음 (또는 시트 메타 0행)

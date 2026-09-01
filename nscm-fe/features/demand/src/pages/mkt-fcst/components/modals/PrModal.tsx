@@ -62,20 +62,26 @@ export const PrModal = ({ open, modalClose, params, onSaved }: PrModalProps) => 
   const [puchMgr, setPuchMgr] = useState('');
   const [puchGroup, setPuchGroup] = useState('');
 
-  const filters = {
-    popupType: open && params ? effectiveType : '',
-    requestNo: '',
-    divisionId: params?.divisionId ?? '',
-    projectCode: params?.projectCode ?? '',
-    scmSiteId: params?.scmSiteId ?? '',
-    itemId: params?.itemId ?? '',
-    domExp: params?.domExp ?? '',
-    fcstType: params?.fcstType ?? '',
-    incoterms: params?.incoterms ?? '',
-    plantSiteId: params?.plantSiteId ?? '',
-    yyyymmdd: params?.yyyymmdd ?? '',
-    planQty: params?.planQty ?? '',
-  };
+  // useTabProcQuery 는 filters 참조가 바뀌면 캐시를 버리고 재조회한다. 인라인
+  // 리터럴로 넘기면 prHeader/puchMgr/puchGroup 입력 같은 무관한 로컬 state가 바뀔
+  // 때마다 새 참조가 생겨 그리드가 깜빡였다 — useMemo 로 참조를 실제 조건에 고정한다.
+  const filters = useMemo(
+    () => ({
+      popupType: open && params ? effectiveType : '',
+      requestNo: '',
+      divisionId: params?.divisionId ?? '',
+      projectCode: params?.projectCode ?? '',
+      scmSiteId: params?.scmSiteId ?? '',
+      itemId: params?.itemId ?? '',
+      domExp: params?.domExp ?? '',
+      fcstType: params?.fcstType ?? '',
+      incoterms: params?.incoterms ?? '',
+      plantSiteId: params?.plantSiteId ?? '',
+      yyyymmdd: params?.yyyymmdd ?? '',
+      planQty: params?.planQty ?? '',
+    }),
+    [open, params, effectiveType]
+  );
 
   const { data, refetch } = useTabProcQuery<MENU_ID, SHEETS.PR_POPUP>({
     menuId: MENU_ID,
@@ -305,13 +311,6 @@ export const PrModal = ({ open, modalClose, params, onSaved }: PrModalProps) => 
             />
           </div>
           <div className={styles.modalButtonWrapper}>
-            <Button
-              appearance='outlined'
-              priority='normal'
-              size='medium'
-              buttonLabel='Close'
-              onClick={modalClose}
-            />
             {!isReadOnly && (
               <Button
                 appearance='contained'
@@ -321,6 +320,13 @@ export const PrModal = ({ open, modalClose, params, onSaved }: PrModalProps) => 
                 onClick={handleSave}
               />
             )}
+            <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel='Close'
+              onClick={modalClose}
+            />
           </div>
         </div>
       }

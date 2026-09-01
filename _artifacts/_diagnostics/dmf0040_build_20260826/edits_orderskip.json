@@ -1,0 +1,6 @@
+[
+ {
+  "old": "        WHERE  U.USER_INQUIRY_COLUMN_TYPE_CODE = 'C'\n        AND    U.PROGRAM_ID                    = V_PROGRAM_ID\n        AND    U.SHEET_NAME                    = V_SHEET_NAME\n        AND    U.USER_ID                       = P_CREATED_BY\n        ORDER BY SORT_ORDER_NO",
+  "new": "        WHERE  U.USER_INQUIRY_COLUMN_TYPE_CODE = 'C'\n        AND    U.PROGRAM_ID                    = V_PROGRAM_ID\n        AND    U.SHEET_NAME                    = V_SHEET_NAME\n        AND    U.USER_ID                       = P_CREATED_BY\n        --[E20260827-SORTCODE] VERSION_NO/MEASURE 는 ORDER BY 제외 (SORT_ORDER_NO 가 대신) —\n        --  구 L1444 REPLACE(',VERSION_NO','') 는 이름만 지우고 방향 토큰(ASC)을 남겨 ORA-03048 (실증 2026-08-27)\n        AND    U.COLUMN_NAME NOT IN ('VERSION_NO', 'MEASURE')\n        ORDER BY SORT_ORDER_NO"
+ }
+]

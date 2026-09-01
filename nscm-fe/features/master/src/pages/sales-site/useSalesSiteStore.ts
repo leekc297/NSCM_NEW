@@ -3,6 +3,7 @@ import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { createPersistedStoreWithTab, useSessionStore } from '@shared/stores';
 
 import { SHEETS, MENU_ID, RESPONSE_SET } from './sales-site.constants';
+import type { SalesSiteTrigger } from './utils/sales-site.salesSiteCombo';
 
 interface SearchParamProps {
   divisionId: string;
@@ -23,6 +24,13 @@ interface SalesSiteState {
   staticColumns: {
     [key in RESPONSE_SET]: RawFlexGridColumnConfig[];
   };
+  /**
+   * 조회조건 Sales Site 콤보의 원천을 정하는 "마지막에 바뀐 항목".
+   *
+   * searchParams 바깥에 두는 이유: setSiteFilters 가 { ...searchParams } 를 그대로 proc 요청에
+   * 실어 보낸다. 안에 두면 서버가 모르는 필드가 조회 파라미터로 새어 나간다.
+   */
+  salesSiteTrigger: SalesSiteTrigger;
 
   openSearchArea: boolean;
   error: string | null;
@@ -32,7 +40,10 @@ interface SalesSiteAction {
   reset: () => void;
   setSiteFilters: () => void;
   setDetailFilters: (filter?: ProcRequest<MENU_ID, SHEETS.CUSTOMER>) => void;
-  setSearchParams: (searchParams: Partial<SearchParamProps>) => void;
+  setSearchParams: (
+    searchParams: Partial<SearchParamProps>,
+    salesSiteTrigger?: SalesSiteTrigger
+  ) => void;
   fetchStaticColumns: (divisionId?: string) => Promise<void>;
   setOpenSearchArea: (open?: boolean) => void;
 }
@@ -53,6 +64,7 @@ const initSalesSiteStoreState: SalesSiteState = {
     [SHEETS.CUSTOMER]: undefined,
   },
   searchParams: initSearchParams,
+  salesSiteTrigger: 'division',
   staticColumns: {
     [RESPONSE_SET.SITE]: [],
     [RESPONSE_SET.CUSTOMER]: [],
@@ -79,9 +91,16 @@ export const useSalesSiteStore = createPersistedStoreWithTab<SalesSiteState & Sa
         state.filters[SHEETS.CUSTOMER] = filter ? { ...filter } : undefined;
       });
     },
-    setSearchParams: searchParams => {
+    // salesSiteTrigger 는 Sales Site 목록 원천을 바꾸는 조회조건(Division / End Customer /
+    //   Sold-To Customer)의 핸들러만 넘긴다. 값과 트리거를 한 번의 set() 으로 커밋해야
+    //   둘이 어긋난 중간 상태로 콤보 파라미터가 조립되지 않는다.
+    setSearchParams: (
+      searchParams: Partial<SearchParamProps>,
+      salesSiteTrigger?: SalesSiteTrigger
+    ) => {
       set(state => {
         state.searchParams = { ...get().searchParams, ...searchParams };
+        if (salesSiteTrigger) state.salesSiteTrigger = salesSiteTrigger;
         if (searchParams.divisionId) {
           state.filters = initSalesSiteStoreState.filters;
         }

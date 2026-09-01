@@ -5,4 +5,5 @@
 // 진입: /home?test=true (또는 /view/home?test=true). 해제: 쿼리 제거 후 새로고침.
 import { Templates } from './Templates';
 
-export const TestPage = () => <Templates embedded />;
+// 공통소스 08-25 동기화에서 Templates 의 embedded prop 이 제거됨(공통 HEAD 자체 TS2322) — 로컬 정합 2026-08-27
+export const TestPage = () => <Templates />;

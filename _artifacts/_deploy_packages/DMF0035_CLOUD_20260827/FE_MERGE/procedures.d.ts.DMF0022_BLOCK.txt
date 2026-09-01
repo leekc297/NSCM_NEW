@@ -1,0 +1,102 @@
+// procedures.d.ts 의 DMF0022 계약 블록 — 사내 L58~L155 (98줄, 시트 키 ['salesPlanWaterfall', 'spreadTitle']) — DMF0035 Sales Plan 축 종속 [2026-08-27 DEP-PROGRAM]
+// 병합법: 클라우드 `  DMF0022: { ... },` 블록 교체(없으면 삽입). 파일 전체 덮어쓰기 ⛔
+// ----- BEGIN BLOCK -----
+  /**
+   * Sales Plan Waterfall — DMF0022 (Read-only Report)
+   *
+   * SHEETS:
+   * - `salesPlanWaterfall` (메인 조회. canonical PROC `PKG_DMF0022.P_DMF0022_GET_DM_PLN_SALES_PLAN_WATERFALL`)
+   * - `spreadTitle`        (동적 컬럼 SP `DMF0022_GET_SPREAD_TITLE` — Two-pass 2차. SCM_MST_SHEET_COLUMNS 미등록 — TODO §F6)
+   *
+   * PROC IN 이름은 S1.db.md §4 PKG-prefixed canonical 따름.
+   */
+  DMF0022: {
+    salesPlanWaterfall: {
+      request: {
+        divisionId: string;
+        deptId: string;
+        endCustomer: string;
+        scmSiteId: string;
+        projectCode: string;
+        itemId: string;
+        itemType: string;
+        fromYyyymmdd: string;
+        nowYyyymmdd: string;
+        toYyyymmdd: string;
+        sesUserId: string;
+        plantSiteId: string;
+        bizType: string;
+        owner: string;
+        internalYn: string;
+        cellYn: string;
+        versionType: string;
+        bucket: string;
+        userDeptId: string;
+        groupId: string;
+        userId: string;
+        menuId: string;
+      };
+      response: {
+        o_rc1: {
+          DIVISION_ID: string;
+          DEPT_ID: string;
+          END_CUSTOMER: string;
+          END_CUSTOMER40: string;
+          SCM_SITE_ID: string;
+          CUST_GROUP: string;
+          PROJECT_CODE: string;
+          CUST_GROUP_DTL: string;
+          OWNER: string;
+          APPLICATION: string;
+          ROUTE: string;
+          PROJECT_NAME: string;
+          PROJECT_STATUS: string;
+          PROJECT_OWNER: string;
+          BIZ_TYPE_NAME: string;
+          BIZ_TYPE_NAME40: string;
+          GROUP_ID: string;
+          ITEM_ID: string;
+          TEXT: string;
+          ITEM_CLASS_NAME: string;
+          ITEM_NAME: string;
+          ITEM_TYPE: string;
+          NICK_NAME: string;
+          INCOTERMS: string;
+          FCST_TYPE: string;
+          DOM_EXP: string;
+          PLANT_SITE_ID: string;
+          CELL_PROD_SITE_ID: string;
+          CURRENCY: string;
+          COMPANY_ID: string;
+          VERSION_NO: string;
+          MEASURE: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    spreadTitle: {
+      request: {
+        divisionId: string;
+        bucket: string;
+        fromYyyymmdd: string;
+        toYyyymmdd: string;
+        sesUserId: string;
+        userId: string;
+      };
+      response: {
+        o_rc1: {
+          COLUMN_NAME: string;
+          COLUMN_LABEL_NAME: string;
+          SMALL_CLASS_LABEL_NAME: string;
+          LARGE_CLASS_LABEL_NAME: string;
+          DAY_CODE: string;
+          SORT_ORDER_NO: string;
+          COLUMN_WIDTH: string;
+          VISIBLE_FLAG: string;
+          HORIZONTAL_ALIGN_CODE: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+  };
+// ----- END BLOCK -----

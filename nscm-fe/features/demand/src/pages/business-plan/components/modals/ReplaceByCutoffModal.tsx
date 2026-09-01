@@ -20,6 +20,8 @@ import type { MdfVersionRow } from '../../business-plan.types';
 import styles from '../../BusinessPlan.module.scss';
 import { callReplaceByCutoff } from '../../utils/business-plan.api';
 
+import { useReplaceByCutoffModalStore } from './replaceByCutoffModalStore';
+
 // ⭐ 조회 파라미터는 yyyymm(6) 계약 유지 — 화면 입력만 달력(PeriodField, yyyymmdd 8)으로 통일하고
 //   여기서 왕복 변환한다. from=1일 / to=말일로 펼친다.
 const toYmd = (yyyymm: string, edge: 'start' | 'end'): string => {
@@ -40,14 +42,20 @@ interface Props {
   range?: { from: string; to: string }; // yyyymm
 }
 
-// 버전 목록 grid 컬럼 (DMF0042_GET_DM_MDF_VERSION 커서 — 행 선택 = Replace 대상 버전)
+// 버전 목록 grid 컬럼 = AS-IS ReplaceByCutOffPopUp InitSpread L173~182 8종 1:1
+//   (Division / Version NO / Type / Description / Cutoff Date / Ver Seq / Update By / Update Date).
+//   원천은 DMF0042_GET_DM_MDF_VERSION 커서 — Ver. Cutoff · Replace 두 팝업이 같은 커서를 공유한다.
+//   금지: Description 을 Type 앞에 두기 / Created By·Creation Date 를 표시 컬럼으로 쓰기
+//   (AS-IS 는 SELECT 에만 있고 그리드에는 Update By/Date 를 쓴다 — 2026-08-25 리뷰).
 const VERSION_COLUMNS = [
-  { key: 'DIVISION_ID', header: 'Division', width: 80 },
-  { key: 'VERSION_NO', header: 'Version No', width: 140 },
-  { key: 'VERSION_DESCRIPTION', header: 'Description', width: 260 },
-  { key: 'VERSION_TYPE', header: 'Type', width: 80 },
-  { key: 'CREATED_BY', header: 'Created By', width: 110 },
-  { key: 'CREATION_DATE', header: 'Creation Date', width: 140 },
+  { key: 'DIVISION_ID', header: 'Division', width: 90, align: 'L' as const },
+  { key: 'VERSION_NO', header: 'Version No', width: 150, align: 'L' as const },
+  { key: 'VERSION_TYPE', header: 'Type', width: 70, align: 'C' as const },
+  { key: 'VERSION_DESCRIPTION', header: 'Description', width: 260, align: 'L' as const },
+  { key: 'YYYYMMDD', header: 'Cutoff Date', width: 100, align: 'C' as const },
+  { key: 'VER_CRE_SEQ', header: 'Ver Seq', width: 70, align: 'R' as const },
+  { key: 'LAST_UPDATED_BY', header: 'Update By', width: 120, align: 'L' as const },
+  { key: 'LAST_UPDATE_DATE', header: 'Update Date', width: 160, align: 'C' as const },
 ];
 
 // ⭐ Replace by Cutoff 모달 — AS-IS ReplaceByCutOffPopUp(562줄) 1:1: 버전 목록 조회
@@ -62,19 +70,18 @@ export const ReplaceByCutoffModal = ({ open, modalClose, divisionId, range }: Pr
   const rangeFrom = range?.from ?? '';
   const rangeTo = range?.to ?? '';
 
-  const [yyyymmFrom, setYyyymmFrom] = useState(rangeFrom);
-  const [yyyymmTo, setYyyymmTo] = useState(rangeTo);
+  const { yyyymmFrom, yyyymmTo } = useReplaceByCutoffModalStore(state => state.range);
+  const setRange = useReplaceByCutoffModalStore(state => state.setRange);
   const [running, setRunning] = useState(false);
   const [appliedAny, setAppliedAny] = useState(false);
 
   useEffect(() => {
     if (open) {
-      setYyyymmFrom(rangeFrom);
-      setYyyymmTo(rangeTo);
+      setRange({ yyyymmFrom: rangeFrom, yyyymmTo: rangeTo });
       setRunning(false);
       setAppliedAny(false);
     }
-  }, [open, rangeFrom, rangeTo]);
+  }, [open, rangeFrom, rangeTo, setRange]);
 
   const sesUserId = useSessionStore.getState().session.userId ?? '';
   const filters = useMemo(
@@ -108,6 +115,7 @@ export const ReplaceByCutoffModal = ({ open, modalClose, divisionId, range }: Pr
           colNm: c.key,
           colLblNm: c.header,
           colWth: c.width,
+          horzAlgnCd: c.align,
           fixed: false,
           visible: true,
           display: true,
@@ -193,7 +201,7 @@ export const ReplaceByCutoffModal = ({ open, modalClose, divisionId, range }: Pr
       open={open}
       type='modal'
       position='basic'
-      size={900}
+      size={1200}
       handleClose={() => modalClose(appliedAny)}
       disableButtonCancel
       customHeaderTitle={
@@ -228,10 +236,9 @@ export const ReplaceByCutoffModal = ({ open, modalClose, divisionId, range }: Pr
                   gridSize={8}
                   start={toYmd(yyyymmFrom, 'start')}
                   end={toYmd(yyyymmTo, 'end')}
-                  onChange={(start, end) => {
-                    setYyyymmFrom(toYm(start));
-                    setYyyymmTo(toYm(end));
-                  }}
+                  onChange={(start, end) =>
+                    setRange({ yyyymmFrom: toYm(start), yyyymmTo: toYm(end) })
+                  }
                 />
               </>
             }

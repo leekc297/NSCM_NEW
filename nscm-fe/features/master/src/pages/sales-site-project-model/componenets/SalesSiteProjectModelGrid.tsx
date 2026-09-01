@@ -20,7 +20,6 @@ import {
   SINGLE_OWNER_DIVISIONS,
 } from '../sales-site-project-model.constants';
 import { useEditBaseline } from '../sales-site-project-model.editBaseline';
-import { useGridCombos } from '../sales-site-project-model.gridCombos';
 import { useSalesSiteProjectModelStore } from '../useSalesSiteProjectModelStore';
 
 interface SalesSiteProjectModelGridProps {
@@ -63,13 +62,6 @@ export const SalesSiteProjectModelGrid = ({
 
   // 조회 원본 기준선으로 수정상태(M)를 재판정 — 사유는 sales-site-project-model.editBaseline 참조.
   const resyncRow = useEditBaseline({ gridRef, editTrackerRef, data });
-
-  // 파라미터가 필요한 셀 콤보(Sales Plant 등) 적용 — 규칙은 sales-site-project-model.gridCombos 참조.
-  const gridComboHandlers = useGridCombos({
-    staticColumns: staticColumns[SHEETS.PRODUCTION],
-    data,
-    divisionId: filters[SHEETS.PRODUCTION]?.divisionId,
-  });
 
   const handleTeamSelected = (teamId: string, teamName?: string) => {
     if (!clickedDataItem) return;
@@ -119,10 +111,15 @@ export const SalesSiteProjectModelGrid = ({
       clickedDataItem.OWNER = owners;
       clickedDataItem.OWNER_NAME = ownersNames;
 
-      // COM0004(owner popup) 결과에 DEPT_ID/DEPT_NAME_KO 가 함께 내려와 별도 조회가 필요없다.
-      // 다중 선택이면 소속이 있는 첫 담당자 기준 — 소속이 비면 기존 팀 값을 지우지 않는다.
+      // Team(DEPT_ID/TEAM_NAME)은 비어 있을 때만 담당자 소속으로 채운다.
+      //   COM0004(owner popup) 결과에 담당자 소속(DEPT_ID/DEPT_NAME_KO)이 함께 내려와 별도 조회가
+      //   필요없다. 다만 행의 Team 은 담당자 소속과 별개로 관리하는 값이라, 이미 값이 있으면
+      //   Owner 만 바꿔도 Team 이 덮어써지는 사고가 났다 - 채워져 있으면 건드리지 않는다.
+      //   저장 키인 DEPT_ID 를 기준으로 판정한다(TEAM_NAME 은 표시용).
+      //   Team 을 직접 바꾸려면 Team 컬럼 더블클릭(TeamModal)을 쓴다.
+      //   다중 선택이면 소속이 있는 첫 담당자 기준 - 소속이 비면 기존 팀 값을 지우지 않는다.
       const ownerWithDept = selectedUsers.find(item => !!item.DEPT_ID);
-      if (ownerWithDept) {
+      if (!clickedDataItem.DEPT_ID && ownerWithDept) {
         const deptId = ownerWithDept.DEPT_ID;
         const deptName = ownerWithDept.DEPT_NAME_KO ?? '';
 
@@ -279,7 +276,6 @@ export const SalesSiteProjectModelGrid = ({
         allowMerging={AllowMerging.ColumnHeaders}
         gotFocus={handleFocus}
         dblClick={handleGridDblClick}
-        {...gridComboHandlers}
       />
       <TeamModal
         open={openTeamModal}

@@ -7,14 +7,11 @@ export type OrgTreeNode = OrgTreeRow &
     childrens?: OrgTreeNode[];
   };
 
-// 조직도 최상위가 "LG 에너지솔루션"(그룹) 아래 동명의 "LG 에너지솔루션"(법인) 노드를 형제들
-// (CHO/CFO/여수공장 등) 사이에 자식으로 하나 더 갖고 내려온다 — 트리는 바깥쪽 중복 래퍼를
-// 건너뛰고 그 안쪽 "LG 에너지솔루션"에서 시작해야 한다(요청 4). 이름은 실제 라벨(공백 포함)과
-// 정확히 일치해야 매치된다 — 원본 데이터가 "LG 에너지솔루션"으로 공백을 포함한다.
-const ORG_ROOT_NAME = 'LG 에너지솔루션';
-
 // 프로시저의 UPPER_DEPT_ID를 부모 키로 사용해 디자인시스템 Tree 데이터로 조립한다.
-export const buildOrgTree = (rows: OrgTreeRow[]): OrgTreeNode[] => {
+// selectedDeptId 를 주면 그 부서 노드에 isSelected 를 켠다 — Tree 는 내부 선택 상태를 data 로
+// 초기화하므로 팝업이 열릴 때 대상 부서가 클릭된 상태로 보이고, 이후 다른 노드를 클릭하면
+// Tree 내부 로직이 나머지 노드의 isSelected 를 알아서 끈다(단일 선택).
+export const buildOrgTree = (rows: OrgTreeRow[], selectedDeptId = ''): OrgTreeNode[] => {
   const nodes = rows.flatMap<OrgTreeNode>(row => {
     const deptId = String(row.DEPT_ID ?? '').trim();
     if (!deptId) return [];
@@ -24,6 +21,7 @@ export const buildOrgTree = (rows: OrgTreeRow[]): OrgTreeNode[] => {
         DEPT_ID: deptId,
         UPPER_DEPT_ID: String(row.UPPER_DEPT_ID ?? '').trim() || null,
         checked: false,
+        isSelected: deptId === selectedDeptId,
         id: deptId,
         nodeName: String(row.DEPT_NAME ?? '').trim() || deptId,
       } satisfies OrgTreeNode,
@@ -46,10 +44,18 @@ export const buildOrgTree = (rows: OrgTreeRow[]): OrgTreeNode[] => {
     levelPath[level - 1] = node;
   }
 
-  // roots가 "기타관련부서" 같은 다른 최상위 형제를 포함해도 트리는 ORG_ROOT_NAME 하나만
-  // 보여준다 — 래퍼는 안쪽 동명 노드로 치환하고 나머지 형제 root는 버린다(요청 4).
-  const orgRoot = roots.find(root => root.nodeName === ORG_ROOT_NAME);
-  if (!orgRoot) return roots;
-  const innerRoot = (orgRoot.childrens ?? []).find(child => child.nodeName === ORG_ROOT_NAME);
-  return [innerRoot ?? orgRoot];
+  return roots;
+};
+
+// 조직도에서 특정 부서까지의 루트→대상 경로 DEPT_ID 목록을 만든다. 디자인시스템 Tree 의
+// expandedNodes 는 "id 가 포함된 노드를 펼침"이므로, 조상 전부와 대상 부서 자신을 함께 담아야
+// 트리를 열었을 때 그 부서가 펼쳐진 상태로 보인다. 못 찾으면 빈 배열(기본 펼침 없음).
+export const collectDeptPathIds = (nodes: OrgTreeNode[], deptId: string): string[] => {
+  if (!deptId) return [];
+  for (const node of nodes) {
+    if (node.DEPT_ID === deptId) return [node.DEPT_ID];
+    const childPath = collectDeptPathIds(node.childrens ?? [], deptId);
+    if (childPath.length > 0) return [node.DEPT_ID, ...childPath];
+  }
+  return [];
 };

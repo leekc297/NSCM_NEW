@@ -32,7 +32,9 @@ import styles from './CustomerFcstTemplateModal.module.scss';
  *   "EXCEL UPLOAD 기능이 있는 경우 DMF0082 의 EXCEL FORM/EXCEL UPLOAD 양식을 기본 RULE 로").
  *
  * [조회] `FORM_DATA` 배선 — BTN_MPG 'FORM_DATA' → API 'DMF0014_GET_EXCEL_FORM'
- *   → `PKG_DMF0014.P_DMF0014_GET_EXCEL_FORM_DATA`. **화면 조회조건에 걸린 데이터 전체**를 양식으로 준다.
+ *   → `PKG_DMF0014.P_DMF0014_GET_EXCEL_FORM_DATA`.
+ *   ⭐ [E20260827-EXCELFORM-HDRONLY] SP 는 **헤더 캐리어 1행**(식별 컬럼 NULL + PERIOD_BUCKETS)만 반환 —
+ *   양식은 데이터 없이 헤더만 생성한다(사용자 요청 2026-08-27, hook #135 "현재 조회조건 데이터" 원칙의 화면별 예외).
  *   - IN = 메인 조회(FCST Upload)와 동일 축·동일 이름 → `store.filters` 를 가공 없이 전달
  *   - 값은 업로드 검증이 기대하는 표기로 SP 가 이미 내려준다 → FE 콤보 변환 없음(§3-3)
  *
@@ -125,6 +127,11 @@ export const CustomerFcstTemplateModal = ({
   //   기본구간(6개월 WEEKLY) = 26주 → 값 컬럼 26개. 구 `W27~W31` 5칸 고정은 폐기(사용자 지시 2026-08-14).
   //   버킷 목록은 SP `PERIOD_BUCKETS`(조회구간 전량, VALID_YN 무관) — 조회 전에는 값 컬럼이 없다.
   const periodBuckets = useMemo(() => extractPeriodBuckets(rows), [rows]);
+  // ⭐ [E20260827-EXCELFORM-HDRONLY] SP 는 식별 컬럼 전부 NULL 인 **헤더 캐리어 1행**만 내려준다
+  //   (사용자 요청 2026-08-27: "Excel Form 조회 시 데이터 없이 HEADER 만"). 그 행은 컬럼(PERIOD_BUCKETS)
+  //   생성에만 쓰고 미리보기·다운로드의 데이터행에는 넣지 않는다 → 양식 = 헤더 1행 + 빈 시트.
+  const headerOnly = rows.length > 0 && rows.every(r => !r['SCM_SITE_ID']);
+  const dataRows = useMemo(() => (headerOnly ? [] : rows), [headerOnly, rows]);
   const formColumns = useMemo(
     () => buildExcelFormColumns(staticColumns, periodBuckets),
     [staticColumns, periodBuckets]
@@ -179,7 +186,7 @@ export const CustomerFcstTemplateModal = ({
       });
       return;
     }
-    const exportRows = buildExcelFormRows(rows, formColumns);
+    const exportRows = buildExcelFormRows(dataRows, formColumns);
     // ⭐ [2026-08-14] 미리보기 배경색을 **파일에도** 유지한다. 양식에서 배경색은 장식이 아니라
     //   "여기에 입력하라"는 유일한 표식이라, 화면에만 칠하면 파일을 연 순간 인지 수단이 사라진다.
     //   exportRows 와 rows 는 같은 순서·같은 길이(1단 헤더 = 일자행 없음)라 index 로 원본 행을 찾는다.
@@ -192,7 +199,7 @@ export const CustomerFcstTemplateModal = ({
       'DMF0014_Template',
       (_row, column, rowIndex) => {
         if (!valueSlots.has(column.key)) return undefined;
-        return uploadableWeekTokens(rows[rowIndex]).has(column.key)
+        return uploadableWeekTokens(dataRows[rowIndex]).has(column.key)
           ? EXCEL_FILL.UPLOADABLE
           : EXCEL_FILL.BLOCKED;
       }
@@ -241,13 +248,13 @@ export const CustomerFcstTemplateModal = ({
               }
             />
           </div>
-          {/* 조회 전 = 업로드 양식 미리보기(헤더만) / 조회 후 = 조회조건에 걸린 키 조합 */}
+          {/* 조회 전 = 식별 컬럼만 / 조회 후 = 식별 컬럼 + 조회구간 버킷 일자 컬럼 (데이터행 없음 — HDRONLY) */}
           <div className={styles.gridWrapper}>
             <DataGrid
               gridRef={gridRef}
               isReadOnly
               staticColumns={gridColumns}
-              itemsSource={rows as WijmoRowItem[]}
+              itemsSource={dataRows as WijmoRowItem[]}
             />
           </div>
           {/* 하단 — Excel Download 아이콘 버튼 + Close 맨 오른쪽 (정본 동일) */}

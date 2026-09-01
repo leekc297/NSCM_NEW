@@ -1,0 +1,16 @@
+.toastContainer {
+  // 뷰포트 기준으로 고정 위치 설정
+  position: fixed;
+
+  // 아래에서 60px 띄우기
+  bottom: -60px;
+
+  // 좌우 중앙 정렬 로직
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999; // 다른 요소들보다 위에 오도록 설정
+
+  &.open {
+    bottom: 60px;
+  }
+}

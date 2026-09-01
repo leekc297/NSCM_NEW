@@ -1,0 +1,13 @@
+@use 'sass:map';
+
+$breakpoints: (
+  "HD": 1366px,
+  "FHD": 1920px
+);
+
+@mixin respond-to($size) {
+  $width: map.get($breakpoints, $size);
+  @media (min-width: $width) {
+    @content;
+  }
+}

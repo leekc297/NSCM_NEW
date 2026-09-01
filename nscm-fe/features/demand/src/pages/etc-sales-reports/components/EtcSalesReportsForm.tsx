@@ -147,6 +147,8 @@ export const EtcSalesReportsForm = ({
               라벨은 BP/SP 구분이 있어 label prop 으로만 오버라이드하고(기본값 LBL00513 보존),
               미선택 상태는 'Current' 가 아니므로 emptyText='' 로 둔다. */}
           <VersionField
+            // BOX WIDTH = 타 조회항목(1개) 동일 — 기본 size 6 은 2배폭 (사용자 지정 2026-08-28, DMF0044 동일)
+            gridSize={3}
             value={sc.versionLabel}
             onOpenPopup={onOpenVersionModal}
             // 직접 입력(key-in) 허용 — 친 문자열을 그대로 조회키(versionNo)로 쓴다 (DMF0044 동일 규약).

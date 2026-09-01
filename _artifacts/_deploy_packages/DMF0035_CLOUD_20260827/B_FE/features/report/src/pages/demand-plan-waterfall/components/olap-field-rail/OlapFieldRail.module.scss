@@ -1,0 +1,599 @@
+// OLAP Field Rail — 디자인 핸드오프 "1a Docked field rail" (Industry 디자인 시스템) 1:1.
+//   토큰은 README §Design Tokens 를 CSS 변수로 정의(레일 루트 스코프). radius 0 · hairline border.
+//   폰트: Barlow / Barlow Condensed (Google Fonts) — 미로드 시 system-ui 폴백.
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@400;500;600&display=swap');
+
+.rail {
+  --color-bg: #f2f2f3;
+  --color-surface: #f7f7f8;
+  --color-paper: #ffffff;
+  --color-text: #1d1f20;
+  --text-70: rgba(29, 31, 32, 0.7);
+  --text-55: rgba(29, 31, 32, 0.55);
+  --text-38: rgba(29, 31, 32, 0.38);
+  --color-accent: #5980a6;
+  --color-accent-700: #416180;
+  --color-accent-800: #2c455d;
+  --tint-04: rgba(89, 128, 166, 0.04);
+  --tint-06: rgba(89, 128, 166, 0.06);
+  --tint-10: rgba(89, 128, 166, 0.1);
+  --tint-11: rgba(89, 128, 166, 0.11);
+  --line: rgba(29, 31, 32, 0.16);
+  --line-soft: rgba(29, 31, 32, 0.08);
+  --line-hair: rgba(29, 31, 32, 0.07);
+  --line-strong: rgba(29, 31, 32, 0.28);
+  --line-zone: rgba(29, 31, 32, 0.18);
+  --line-control: rgba(29, 31, 32, 0.22);
+  --font-head: 'Barlow Condensed', system-ui, sans-serif;
+  --font-body: 'Barlow', system-ui, sans-serif;
+  --rail-w: 300px;
+
+  width: var(--rail-w);
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-left: 1px solid var(--line);
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 12px;
+  transition: width 160ms ease-out;
+  overflow: hidden;
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  :global(:focus-visible),
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+}
+
+// 접힘 — 28px 가장자리 + 다시 열기 어포던스
+.railCollapsed {
+  width: 28px;
+  cursor: pointer;
+
+  > *:not(.reopen) {
+    display: none;
+  }
+}
+
+.reopen {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 10px;
+  color: var(--text-55);
+  background: transparent;
+  border: 0;
+  width: 100%;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--color-accent-700);
+    background: rgba(89, 128, 166, 0.12);
+  }
+
+  svg {
+    font-size: 14px;
+  }
+}
+
+.kicker {
+  font-family: var(--font-head);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+// ── 1. 헤더 ─────────────────────────────
+.head {
+  height: 34px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  border-bottom: 1px solid var(--line);
+
+  .kicker {
+    font-size: 12px;
+    letter-spacing: 0.12em;
+  }
+}
+
+// ── 버튼 3종 ─────────────────────────────
+.btn {
+  font-family: var(--font-body);
+  font-size: 12px;
+  height: 26px;
+  padding: 0 10px;
+  border: 1px solid var(--line-control);
+  background: transparent;
+  color: var(--color-text);
+  border-radius: 0;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--tint-10);
+    border-color: var(--color-accent);
+  }
+
+  &:active {
+    background: rgba(89, 128, 166, 0.2);
+    border-color: var(--color-accent-700);
+  }
+}
+
+.btnGhost {
+  composes: btn;
+  display: inline-flex; // (composes 는 최상위 단일 클래스라 허용)
+  align-items: center;
+  gap: 2px;
+  border-color: transparent;
+  color: var(--text-55);
+  font-size: 11px;
+  height: 22px;
+  padding: 0 8px;
+
+  &:hover {
+    background: rgba(89, 128, 166, 0.12);
+    border-color: transparent;
+    color: var(--color-accent-700);
+  }
+
+  svg {
+    font-size: 12px;
+  }
+}
+
+.btnPrimary {
+  font-family: var(--font-head);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  height: 28px;
+  padding: 0 16px;
+  border: 1px solid var(--color-accent);
+  background: var(--color-accent);
+  color: #fff;
+  border-radius: 0;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background: var(--color-accent-700);
+    border-color: var(--color-accent-700);
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: default;
+  }
+}
+
+// ── 2. 컨트롤 블록 ─────────────────────────
+.controls {
+  padding: 10px 12px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-bottom: 1px solid rgba(29, 31, 32, 0.1);
+}
+
+.lbl {
+  font-family: var(--font-head);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-55);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+// 컨트롤 박스(셀렉트/검색 입력 공용) — CSS Modules 의 composes 는 중첩 선택자에서 불가라 mixin 으로
+@mixin control-box {
+  width: 100%;
+  height: 28px;
+  padding: 0 8px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--color-text);
+  background: var(--color-paper);
+  border: 1px solid var(--line-control);
+  border-radius: 0;
+
+  &:hover {
+    border-color: var(--color-accent);
+  }
+
+  &::placeholder {
+    color: var(--text-38);
+  }
+}
+
+.selWrap {
+  position: relative;
+
+  select {
+    @include control-box;
+    appearance: none;
+    padding-right: 24px;
+    cursor: pointer;
+  }
+
+  .chev {
+    position: absolute;
+    right: 8px;
+    top: 7px;
+    font-size: 12px;
+    color: rgba(29, 31, 32, 0.5);
+    pointer-events: none;
+  }
+}
+
+.search {
+  position: relative;
+
+  input {
+    @include control-box;
+    padding-left: 26px;
+  }
+
+  .ico {
+    position: absolute;
+    left: 8px;
+    top: 7px;
+    font-size: 13px;
+    color: rgba(29, 31, 32, 0.45);
+    pointer-events: none;
+  }
+}
+
+// ── 3. 필드 목록 ─────────────────────────
+.fieldList {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid rgba(29, 31, 32, 0.1);
+}
+
+.fieldListHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px 4px;
+}
+
+.count {
+  font-size: 10.5px;
+  color: rgba(29, 31, 32, 0.5);
+}
+
+.fieldListScroll {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 0 6px 8px;
+}
+
+.fitem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 26px;
+  padding: 0 6px;
+  cursor: grab;
+
+  &:hover {
+    background: rgba(89, 128, 166, 0.09);
+  }
+
+  &.dragging {
+    opacity: 0.5;
+  }
+}
+
+.cb {
+  width: 13px;
+  height: 13px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-paper);
+  border: 1px solid rgba(29, 31, 32, 0.32);
+  border-radius: 0;
+  padding: 0;
+  color: #fff;
+  cursor: pointer;
+
+  svg {
+    font-size: 9px;
+    display: none;
+  }
+
+  &.on {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+
+    svg {
+      display: block;
+    }
+  }
+}
+
+.badge {
+  width: 15px;
+  height: 15px;
+  flex: none;
+  border: 1px solid var(--line-control);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: ui-monospace, monospace;
+  font-size: 8.5px;
+  color: var(--text-55);
+}
+
+.fname {
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.grip {
+  font-size: 10px;
+  color: rgba(29, 31, 32, 0.32);
+  display: inline-flex;
+  flex: none;
+}
+
+.empty {
+  padding: 10px 6px;
+  font-size: 11px;
+  color: var(--text-38);
+}
+
+// ── 4. 레이아웃 영역 ─────────────────────
+.zones {
+  padding: 10px 12px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.zone {
+  border: 1px solid var(--line-zone);
+  background: var(--color-paper);
+  display: flex;
+  flex-direction: column;
+
+  &.sm {
+    min-height: 64px;
+  }
+
+  &.lg {
+    min-height: 96px;
+  }
+}
+
+.zoneHead {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 7px;
+  border-bottom: 1px solid rgba(29, 31, 32, 0.1);
+  font-family: var(--font-head);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-55);
+
+  svg {
+    color: var(--color-accent);
+    font-size: 11px;
+  }
+}
+
+.zoneBody {
+  flex: 1;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  &.over {
+    background: var(--tint-06);
+  }
+}
+
+.dropzone {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  margin: 5px;
+  font-size: 10.5px;
+  color: var(--text-38);
+  border: 1px dashed var(--line);
+}
+
+// 드롭 위치 표시선 — 1px dashed accent
+.insertLine {
+  height: 0;
+  border-top: 1px dashed var(--color-accent);
+  margin: -2px 0;
+}
+
+.chip {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 21px;
+  padding: 0 5px;
+  border: 1px solid rgba(89, 128, 166, 0.55);
+  background: var(--tint-10);
+  font-size: 11px;
+  color: var(--color-accent-800);
+  cursor: grab;
+
+  &.dragging {
+    opacity: 0.5;
+  }
+
+  .grip {
+    font-size: 9px;
+    color: rgba(29, 31, 32, 0.35);
+  }
+
+  .chipName {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .x {
+    margin-left: auto;
+    display: inline-flex;
+    color: rgba(29, 31, 32, 0.4);
+    font-size: 11px;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--color-accent-700);
+    }
+  }
+}
+
+.agg {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  color: rgba(29, 31, 32, 0.5);
+  font-size: 10px;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  font-family: var(--font-body);
+
+  svg {
+    font-size: 9px;
+  }
+}
+
+.aggMenu {
+  position: absolute;
+  z-index: 5;
+  top: 100%;
+  left: 0;
+  margin-top: 2px;
+  min-width: 96px;
+  background: var(--color-paper);
+  border: 1px solid var(--line-control);
+  box-shadow: 0 12px 32px rgba(43, 43, 45, 0.22);
+  display: flex;
+  flex-direction: column;
+
+  button {
+    font-family: var(--font-body);
+    font-size: 11px;
+    text-align: left;
+    height: 24px;
+    padding: 0 8px;
+    background: transparent;
+    border: 0;
+    color: var(--color-text);
+    cursor: pointer;
+
+    &:hover {
+      background: var(--tint-10);
+    }
+
+    &.on {
+      color: var(--color-accent-700);
+      font-weight: 600;
+    }
+  }
+}
+
+// ── 5. 푸터 ─────────────────────────────
+.foot {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 9px 12px;
+  border-top: 1px solid var(--line);
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11.5px;
+  color: var(--text-70);
+  cursor: pointer;
+}
+
+.pending {
+  margin-left: 6px;
+  font-family: var(--font-body);
+  letter-spacing: 0;
+  text-transform: none;
+  font-size: 11px;
+}
+
+// ── 그리드 메타 스트립(그리드 팬 상단) ─────
+.gridMeta {
+  height: 30px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 12px;
+  border-bottom: 1px solid rgba(29, 31, 32, 0.1);
+  font-family: 'Barlow', system-ui, sans-serif;
+  font-size: 11px;
+  color: rgba(29, 31, 32, 0.55);
+  background: #fff;
+
+  .kicker {
+    font-size: 11px;
+    color: #416180;
+  }
+
+  .vr {
+    width: 1px;
+    height: 12px;
+    background: rgba(29, 31, 32, 0.16);
+  }
+}

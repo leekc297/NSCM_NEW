@@ -5,6 +5,8 @@
 // react-refresh/only-export-components 가 걸린다 (SearchFields.utils.ts 와 같은 이유).
 // ====================================================================================
 
+import type { DropdownSortKey } from '@shared/components';
+
 // ====================================================================================
 // 단계 카탈로그
 // ====================================================================================
@@ -123,6 +125,12 @@ export interface CascadeLevelSpec<F extends string = string> {
   label?: string;
   /** 콤보 컬럼명 직접 지정. 콤보 SQL 이 표준 규약과 다른 이름을 쓸 때만. */
   columns?: { code: string; name: string };
+  /**
+   * 이 단계 목록 정렬. 미지정 = 콤보가 준 순서 그대로(기존 동작).
+   * 'label' 을 주면 표시명 기준 숫자-영어-한글 순으로 정렬한다 (CustomDropdown sortOptionsBy 참조).
+   * 단계마다 따로 켠다 - 같은 조인 콤보를 쓰는 다른 화면/단계는 영향받지 않는다.
+   */
+  sortBy?: DropdownSortKey;
   disabled?: boolean;
   gridSize?: number;
 }

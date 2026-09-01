@@ -17,6 +17,7 @@
 ## B. MSSQL→Oracle 변환 함정 (조용히 틀리는 것들)
 | # | Hook | 강도 | 계율 1줄 |
 |---:|---|:--:|---|
+| 148 | [cloud-deploy-silent-failure-gates](../hooks/cloud-deploy-silent-failure-gates.md) | ⭐⭐ | 동적 SQL `CAST(문자 AS DATE)` ⛔ → `TO_DATE(x,'YYYYMMDD')` + `DD-MON-RR` 세션 모사 검증 (#109 §6) |
 | 119 | [oracle-null-sentinel-and-notnull-default](../hooks/oracle-null-sentinel-and-notnull-default.md) | ⭐⭐ | `ISNULL(x,'')` 두 의도 모두 깨짐 — 센티널 `'-'` 통일 / JOIN=양변 NVL / NOT NULL INSERT 기본값 / DATE=SYSDATE |
 | 118 | [mssql-ci-collation-parity](../hooks/mssql-ci-collation-parity.md) | ⭐⭐ | CI collation 등가 상실 — 리터럴 비교 `UPPER()` + 전 오브젝트 sweep / '.0' 사문 REPLACE=의도 복원 |
 | 116 | [sp-parallel-dml-txn-guard](../hooks/sp-parallel-dml-txn-guard.md) | ⭐⭐ | 도입부 ALTER SESSION PARALLEL DML = 내부 호출 시 ORA-12841 → 허용 가드 |

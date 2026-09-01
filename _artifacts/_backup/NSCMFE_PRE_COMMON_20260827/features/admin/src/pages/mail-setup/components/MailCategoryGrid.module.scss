@@ -1,0 +1,35 @@
+.gridSection {
+  display: flex;
+  min-height: 220px;
+  flex: 1;
+  flex-direction: column;
+}
+
+.gridWrapper {
+  height: 260px;
+  min-height: 200px;
+}
+
+// AS-IS SCM0006 의 SQL VIEW 컬럼 버튼. 공통 그리드는 FPButton(cellCtrlObjTpCd) 렌더링이 없어
+//   화면에서 직접 그린다. 스타일·마크업은 NoticeSetupGrid 의 ACTION 컬럼 버튼과 동일 규약.
+.viewCell {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.viewButton {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #315ccb;
+  cursor: pointer;
+  font: inherit;
+
+  &:hover,
+  &:focus-visible {
+    outline: none;
+    text-decoration: underline;
+  }
+}

@@ -1,4 +1,4 @@
-﻿export { };
+export { };
 
 // 배열 타입에서 요소 타입만 추출하는 헬퍼
 type Unpacked<T> = T extends (infer U)[] ? U : T;
@@ -1145,6 +1145,94 @@ interface RawProcedureMap extends Base {
       request: {
         createdBy: string; // 1 P_CREATED_BY (BE 세션 자동)
         month: string; // 2 P_MONTH (AS-IS GetDayRange p_month=6 — .cs L1237)
+      };
+      response: {
+        o_rc1: { DAY_RANGE: string; [key: string]: string | number };
+        o_rc2: { DAY_RANGE: string; [key: string]: string | number };
+      };
+    };
+  };
+
+  /**
+   * CustPsiUpload — DMF0013 (Customer PSI Upload)
+   *
+   * DMF0014(CustomerFcstUpload)를 복제·파생한 화면 — MeasureGroup 고정값만 "PSI" 로 분기
+   * (AS-IS DMF0013_CustPsiUpload.cs 헤더 주석이 "DMF0014_CustFcstUpload" 로 남음, 원장 §0.3).
+   * 타입 형상(request/response)은 DMF0014 와 동일하다 — SP 는 DMF0013 계열(직접 GET/SAVE)이나
+   * PROC_M ALL_ARGUMENTS 가 이 FE 저장소에 없어(seed 만, 원장 §7.3-1) DMF0014 실측 형상을 승계한다.
+   * SHEETS:
+   * - `PSI Upload`  (메인 — AS-IS SheetView "PSI Upload" 등록명 그대로. excel-upload 체인 키)
+   * - `spreadTitle` (동적 기간 헤더 — 공유 SP DM.DMF0014_GET_SPREAD_TITLE 재사용, 원장 §6.1)
+   * - `dayRange`    (PR_GET_DAY_RANGE 재사용 — DMF0014/DMF0048 와 동일 계약)
+   * SAVE(P_DMF0013_SAVE_CUST_PSI_UPLOAD_DATA 17 IN '^'delim)는 apiClient.post 직접 — 타입 미등재.
+   */
+  DMF0013: {
+    'PSI Upload': {
+      // DM.DMF0013_GET_CUST_PSI_UPLOAD_DATA (13 IN + 세션 2 — DMF0014 형상 승계, 원장 §E10 L435~448)
+      request: {
+        divisionId: string; // 1  P_DIVISION_ID (단일 필수)
+        deptId: string; // 2  P_DEPT_ID (Team — 콤마 delim, 빈값 'ALL')
+        endCustomer: string; // 3  P_END_CUSTOMER
+        scmSiteId: string; // 4  P_SCM_SITE_ID (Sales Site)
+        plantSiteId: string; // 5  P_PLANT_SITE_ID
+        projectCode: string; // 6  P_PROJECT_CODE (텍스트 raw — 빈값 '')
+        itemId: string; // 7  P_ITEM_ID (Model 텍스트 raw)
+        startYyyymmdd: string; // 8  P_START_YYYYMMDD
+        endYyyymmdd: string; // 9  P_END_YYYYMMDD
+        bucketType: string; // 10 P_BUCKET_TYPE ('DAILY'/'WEEKLY'/'MONTHLY' full-word)
+        domExp: string; // 11 P_DOM_EXP (Customs Handbook)
+        createdBy: string; // 12 P_CREATED_BY (BE 세션 자동)
+        userinfo: string; // 13 P_USERINFO (AS-IS NowGroupID)
+        sesUserId: string; // 14 P_USER_ID (BE 세션 자동)
+        mnuId: string; // 15 P_MENU_ID (BE 메뉴 자동)
+      };
+      response: {
+        // O_RC1 — 식별 14 (DIVISION_ID~EDIT_FLAG) + 동적 D_ 기간 컬럼 (원장 §3.1).
+        //   EDIT_YN 유무(14 vs 15열)는 admin SHEET_COLUMNS 실측 필요(원장 §5-4) — 승계로 함께 선언.
+        o_rc1: {
+          DIVISION_ID: string;
+          SCM_SITE_ID: string;
+          PLANT_SITE_ID: string;
+          CUSTOMER_PROJECT_CODE: string;
+          CUSTOMER_MODEL: string;
+          INCOTERMS: string;
+          FCST_TYPE: string;
+          DOM_EXP: string;
+          MEASURE_GROUP: string; // 이 화면 고정값 "PSI" (AS-IS InsertRow L631)
+          MEASURE: string;
+          UPLOAD_UOM: string;
+          PROJECT_CODE: string;
+          ITEM_ID: string;
+          EDIT_FLAG: string; // 'Y' = 기간 셀 편집 가능 행 (AS-IS EditButton 판정 1:1)
+          EDIT_YN: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    spreadTitle: {
+      // 공유 SP DM.DMF0014_GET_SPREAD_TITLE (3 IN + 세션 2 + o_rc1) — DMF0013 이 그대로 재사용(원장 §6.1)
+      request: {
+        startYyyymmdd: string; // 1 P_START_YYYYMMDD
+        endYyyymmdd: string; // 2 P_END_YYYYMMDD
+        bucketType: string; // 3 P_BUCKET_TYPE (full-word)
+        sesUserId: string; // 4 P_USER_ID (BE 세션 자동)
+        mnuId: string; // 5 P_MENU_ID (BE 메뉴 자동)
+      };
+      response: {
+        o_rc1: {
+          COLUMN_NAME: string; // 'D_yyyymmdd' (전 버킷 D_ 접두)
+          COLUMN_LABEL: string; // 'yyyymmdd'
+          SMALL_LABEL_NAME: string; // 상단 그룹 라벨 (요일 / Wnn / yyyy-mm)
+          EDIT_YN: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    dayRange: {
+      // PR_GET_DAY_RANGE PROC_M 재사용 (AS-IS GetDayRange p_month=6 — 원장 §6.1)
+      request: {
+        createdBy: string; // 1 P_CREATED_BY (BE 세션 자동)
+        month: string; // 2 P_MONTH (AS-IS p_month=6)
       };
       response: {
         o_rc1: { DAY_RANGE: string; [key: string]: string | number };
@@ -4476,6 +4564,159 @@ interface RawProcedureMap extends Base {
           YMD_FR: string;
           DATE_TO: string;
           YMD_TO: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+  };
+
+  /**
+   * MKT FCST Comparison — DMF0040 (Read-only Report, 신규 생성 2026-08-26)
+   *
+   * AS-IS DMF0040_MktFcst_Comparison (Forms.UIL 1,875행) — 버전(최대 2) 간 Waterfall 비교.
+   * SHEETS (전부 SEARCH — 저장 없음):
+   * - `mktFcstComparison` PKG_DMF0040.P_DMF0040_GET_MKT_FCST_COMPARISON (18 IN + O_RC1/O_RESULT_CURSOR)
+   * - `spreadTitle`       DMF0040_GET_SPREAD_TITLE (5 IN — 동적 시간축)
+   * - `version`           PKG_SCM0002.P_SCM0002_GET_VERSIONBYWATERFALLPOPUP (DMF0035 versionWf 동계약 — MF 축)
+   * PROC_M = _artifacts/_diagnostics/dmf0040_build_20260826/seed_meta.py (positional 20/7 실측 등재)
+   */
+  DMF0040: {
+    mktFcstComparison: {
+      request: {
+        divisionId: string; // 1  P_DIVISION_ID (단일 필수 — MSG00097)
+        scmSiteId: string; // 2  P_SCM_SITE_ID (Sales Site — 콤마, 빈값 'ALL')
+        plantSiteId: string; // 3  P_PLANT_SITE_ID
+        teamId: string; // 4  P_TEAM_ID
+        customer: string; // 5  P_CUSTOMER (End Customer)
+        bizType: string; // 6  P_BIZ_TYPE
+        projectCode: string; // 7  P_PROJECT_CODE (텍스트 raw — 40 비활성 '')
+        itemId: string; // 8  P_ITEM_ID
+        fromYyyymmdd: string; // 9  P_FROM_YYYYMMDD
+        toYyyymmdd: string; // 10 P_TO_YYYYMMDD
+        sesUserId: string; // 11 P_CREATED_BY (BE 세션 주입)
+        versionNo: string; // 12 P_VERSION_NO (콤마 최대 2 — MSG00255)
+        itemType: string; // 13 P_ITEM_TYPE
+        owner: string; // 14 P_OWNER
+        diffOnly: string; // 15 P_DIFF_ONLY ('True'|'False' — AS-IS bool 직렬화 파리티)
+        bucket: string; // 16 P_BUCKET (DAILY/WEEKLY/MONTHLY/ONLY_WEEKLY)
+        userId: string; // 17 P_USER_ID
+        mnuId: string; // 18 P_MENU_ID
+      };
+      response: {
+        o_rc1: {
+          VERSION_NO: string;
+          MEASURE: string;
+          MEASURE_GROUP: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    spreadTitle: {
+      request: {
+        startYyyymmdd: string; // 1 P_START_YYYYMMDD
+        endYyyymmdd: string; // 2 P_END_YYYYMMDD
+        sesUserId: string; // 3 P_CREATED_BY (BE 주입)
+        divisionId: string; // 4 P_DIVISION_ID
+        bucket: string; // 5 P_BUCKET
+      };
+      response: {
+        o_rc1: {
+          COLUMN_NAME: string;
+          COLUMN_LABEL_NAME: string;
+          SMALL_CLASS_LABEL_NAME: string;
+          LARGE_CLASS_LABEL_NAME: string;
+          DAY_CODE: string;
+          SORT_ORDER_NO: string | number;
+          [key: string]: string | number;
+        };
+      };
+    };
+    version: {
+      request: {
+        startYyyymmdd: string;
+        endYyyymmdd: string;
+        createdBy: string;
+        divisionId: string;
+        versionType: string; // 'MF_D,MF_W,MF_M' 조합 (체크박스)
+        versionNo: string; // 설명 검색어
+      };
+      response: {
+        o_rc1: {
+          CODE: string;
+          VERSION_NO: string;
+          VERSION_DESCRIPTION: string;
+          VERSION_TYPE: string;
+          VER_CRE_SEQ: string | number;
+          YYYYMMDD: string;
+          CREATED_BY: string;
+          CREATION_DATE: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+  };
+
+  /**
+   * Customer FCST Waterfall — DMF0053 (Read-only Report, 신규 생성 2026-08-27)
+   *
+   * AS-IS DMF0053_CustFcstWaterfall (Forms.UIL 1,822행) — Customer FCST vs EDI Waterfall.
+   * SHEETS (전부 SEARCH — 저장 없음):
+   * - `custFcstWaterfall` PKG_DMF0053.P_DMF0053_GET_CUST_FCST_WATERFALL (21 IN + O_RC1~3/O_RESULT_CURSOR)
+   * - `spreadTitle`       PKG_DMF0053.P_DMF0053_GET_SPREAD_TITLE (7 IN — 동적 시간축)
+   * Version 조회조건 미구현 (AS-IS btnVersion 숨김) — versionNo='' 고정.
+   * PROC_M = _artifacts/_diagnostics/dmf0053_build_20260827/seed_meta.sql (positional 25/9 실측 등재)
+   */
+  DMF0053: {
+    custFcstWaterfall: {
+      request: {
+        divisionId: string; // 1  P_DIVISION_ID (단일 필수 — MSG00097)
+        deptId: string; // 2  P_DEPT_ID (Team — 콤마, 빈값 'ALL')
+        endCustomer: string; // 3  P_END_CUSTOMER
+        scmSiteId: string; // 4  P_SCM_SITE_ID (Sales Site)
+        projectCode: string; // 5  P_PROJECT_CODE (텍스트 raw — 40 비활성 '')
+        itemId: string; // 6  P_ITEM_ID
+        itemType: string; // 7  P_ITEM_TYPE
+        fromYyyymmdd: string; // 8  P_FROM_YYYYMMDD (Period*)
+        toYyyymmdd: string; // 9  P_TO_YYYYMMDD
+        sesUserId: string; // 10 P_CREATED_BY (BE 세션 주입)
+        plantSiteId: string; // 11 P_PLANT_SITE_ID
+        bizType: string; // 12 P_BIZ_TYPE
+        owner: string; // 13 P_OWNER
+        bucket: string; // 14 P_BUCKET (DAILY/WEEKLY/MONTHLY/ONLY_WEEKLY)
+        userDeptId: string; // 15 P_USER_DEPT_ID (BODY 미사용 실측 — '' 전달)
+        groupId: string; // 16 P_GROUP_ID (BODY 미사용 실측 — '' 전달)
+        versionNo: string; // 17 P_VERSION_NO (Version 조회조건 미구현 — '' 고정)
+        fromCreatedate: string; // 18 P_FROM_CREATEDATE (Input Date*)
+        toCreatedate: string; // 19 P_TO_CREATEDATE
+        userId: string; // 20 P_USER_ID
+        mnuId: string; // 21 P_MENU_ID
+      };
+      response: {
+        o_rc1: {
+          MEASURE: string;
+          MEASURE_GROUP: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    spreadTitle: {
+      request: {
+        startYyyymmdd: string; // 1 P_START_YYYYMMDD
+        endYyyymmdd: string; // 2 P_END_YYYYMMDD
+        sesUserId: string; // 3 P_CREATED_BY (BE 주입)
+        divisionId: string; // 4 P_DIVISION_ID
+        bucket: string; // 5 P_BUCKET
+        userId: string; // 6 P_USER_ID
+        mnuId: string; // 7 P_MENU_ID
+      };
+      response: {
+        o_rc1: {
+          COLUMN_NAME: string;
+          COLUMN_LABEL_NAME: string;
+          SMALL_CLASS_LABEL_NAME: string;
+          LARGE_CLASS_LABEL_NAME: string;
+          DAY_CODE: string;
+          SORT_ORDER_NO: string | number;
           [key: string]: string | number;
         };
       };

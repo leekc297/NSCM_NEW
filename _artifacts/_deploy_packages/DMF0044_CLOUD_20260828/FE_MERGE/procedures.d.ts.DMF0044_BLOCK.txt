@@ -1,0 +1,137 @@
+// procedures.d.ts 중 DMF0044 계약 블록 (L3181~L3315) — 클라우드판의 같은 키 블록만 교체. 전체본 덮어쓰기 ⛔
+// 시트 키: ['spreadTitle', 'measure', 'unitedVersion', 'exchangeRate', 'textbox', 'titleSet']
+  DMF0044: {
+    'MDF Reports': {
+      // PKG_DMF0044.P_DMF0044_GET_SALES_REPORTS_DATA (9 IN — sesUserId BE주입, 나머지 FE)
+      request: {
+        divisionId: string; // 1 P_DIVISION_ID (필수)
+        mdfType: string; // 2 P_MDF_TYPE (REPORT_SP_W / REPORT_BP_M)
+        yyyy: string; // 3 P_YYYY (선택 연도)
+        spVersionNo: string; // 4 P_SP_VERSION_NO (United 팝업 주입 — 필수 MSG00283)
+        dataType: string; // 5 P_DATA_TYPE (ALL/1/2)
+        userGroup: string; // 6 P_USER_GROUP (권한 그룹 — FE 필수 전달)
+        userId: string; // 8 P_USER_ID
+        mnuId: string; // 9 P_MNU_ID
+      };
+      response: {
+        // 커서 1 — 본문 (정적 46컬럼 admin 메타 + 동적 M_yyyymm 12컬럼. 2행 Measure 블록)
+        data: {
+          DIVISION_ID: string;
+          DEPARTMENT_ID: string;
+          DEPARTMENT_NAME: string;
+          DEPT_ID: string;
+          DEPT_NAME: string;
+          END_CUST_REPORT: string;
+          CUST_REPORT: string;
+          PRODUCT_GROUP: string;
+          ITEM_ID: string;
+          NICK_NAME: string;
+          MEASURE: string;
+          CURRENCY: string;
+          COMPANY_ID: string;
+          CUTOFF_TYPE: string;
+          CUTOFF_YYYYMMDD: string;
+          SCM_SITE_ID: string;
+          PROJECT_CODE: string;
+          FCST_TYPE: string;
+          INCOTERMS: string;
+          EDIT_FLAG: string; // 행 편집권 (4변수 매트릭스 입력 1)
+          [key: string]: string | number; // + M_yyyymm 동적 12컬럼 + 정적 46
+        };
+      };
+    };
+    spreadTitle: {
+      // DMF0044_GET_SPREAD_TITLE (standalone 4 IN — sesUserId BE주입)
+      request: {
+        divisionId: string; // 1 P_DIVISION_ID
+        startDt: string; // 3 P_START_DT (선택연도 0101)
+        endDt: string; // 4 P_END_DT (선택연도 1231)
+      };
+      response: {
+        data: {
+          COLUMN_NAME: string; // binding (M_yyyymm / B_* / 정적)
+          COLUMN_LABEL_NAME: string;
+          SMALL_CLASS_LABEL_NAME: string;
+          LARGE_CLASS_LABEL_NAME: string; // 연 span
+          SORT_ORDER_NO: string | number;
+          FIXED_FLAG: string;
+          VISIBLE_FLAG: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    measure: {
+      // PKG_DMF0044.P_DMF0044_GET_MEASURE (3 IN — Measure 2행 블록 정의. Insert 강제 세팅 원천)
+      request: {
+        dataType: string; // 1 P_DATA_TYPE
+        userId: string; // 2 P_USER_ID
+        mnuId: string; // 3 P_MNU_ID
+      };
+      response: {
+        data: { CODE: string; NAME: string; [key: string]: string | number };
+      };
+    };
+    unitedVersion: {
+      // PKG_DMF0044.P_DMF0044_GET_SALES_VERSION_POPUP (7 IN)
+      request: {
+        divisionId: string; // 1 P_DIVISION_ID
+        sdt: string; // 2 P_SDT (기본 당월-1)
+        edt: string; // 3 P_EDT (기본 당월+5)
+        versionType: string; // 4 P_VERSION_TYPE (REPORT_SP_W/REPORT_BP_M 계열)
+        description: string; // 5 P_DESCRIPTION (검색어)
+        userId: string; // 6 P_USER_ID
+        mnuId: string; // 7 P_MNU_ID
+      };
+      response: {
+        data: {
+          VERSION_NO: string;
+          VERSION_TYPE: string;
+          VERSION_DESCRIPTION: string;
+          SEND_YN: string; // Transfer 게이트 (N=전송가능/Y=취소가능/C=취소됨)
+          YYYYMMDD: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    exchangeRate: {
+      // PKG_DMF0044.P_DMF0044_GET_SCM_MST_EXCHANGE_RATE_POPUP(+_DATA) (6 IN 동일 — sesUserId BE주입)
+      request: {
+        divisionId: string; // 1 P_DIVISION_ID
+        year: string; // 2 P_YEAR
+        versionNo: string; // 4 P_VERSION_NO
+        userId: string; // 5 P_USER_ID
+        mnuId: string; // 6 P_MNU_ID
+      };
+      response: {
+        data: {
+          DIVISION_ID: string;
+          CURRENCY: string;
+          UNIT_CURRENCY: string;
+          [key: string]: string | number; // + 월 피벗 컬럼
+        };
+      };
+    };
+    textbox: {
+      // PKG_DMF0044.P_DMF0044_GET_TEXTBOX (3 IN / ⭐ OUT 4커서 — o_rc1=data, o_rc2=MONDAY 기준월, o_rc3)
+      request: {
+        versionNo: string; // 1 P_VERSION_NO
+        userId: string; // 2 P_USER_ID
+        mnuId: string; // 3 P_MNU_ID
+      };
+      response: {
+        data: { YYYYMM: string; [key: string]: string | number };
+        rc2: { MONDAY: string; [key: string]: string | number };
+        rc3: { [key: string]: string | number };
+      };
+    };
+    titleSet: {
+      // SCM0002_SET_TITLESET_POPUP 공유 계약 (DMF0042 동일)
+      request: {
+        programId: string;
+        sheetName: string;
+        columnType: string;
+        divisionId: string;
+      };
+      response: { o_rc1: { COLUMN_NAME: string; COLUMN_LABEL: string; [key: string]: string } };
+    };
+  };

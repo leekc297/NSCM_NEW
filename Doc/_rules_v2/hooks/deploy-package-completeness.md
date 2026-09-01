@@ -257,6 +257,12 @@ ls _artifacts/_deploy_packages/{화면}/04_Verify/*_Diagnose.sql        # Diagno
 2. **PROC_M 이관은 `DELETE(SP 단위) 후 INSERT`** — `MERGE ON (PROC_NM, SORT_ORD)` + COL_NM UPDATE 는
    PK(PROC_NM, COL_NM, COL_TP_CD) 환경에서 **ORA-00001** (SYS0012 클라우드 사고).
    상세: `proc-meta-signature-match.md` §0.4.
+2-B. ⭐ **[E20260831-ONKEY] 무 PK 테이블 MERGE = 논리키 실측 폴백 의무** — 생성기가 "ON = PK 실측" 규약일 때
+   PK/UK 가 없는 테이블(`SCM_ADM_EXCEL_COLUMNS` 실측 0건)은 **`ON ()` 빈 절이 생성되어 ORA-00936**
+   (DMF0074_CLOUD_20260831 클라우드 적용 실패 — 사용자 실측 2026-08-31). 의무: ①생성기에 논리키 폴백 맵
+   (`EXCEL_COLUMNS → (PROGRAM_ID, SHEET_NAME)`) + 사용 시점 유일성 실측 assert + 폴백 미등록 시 생성 차단
+   ②산출물 검사 `grep "S ON ()"` = 0건 ③메모리 `feedback_merge_on_key_must_match_pk` 계보(추정 금지·실측만).
+   정본 구현 = `_ui_cloud_pkg_build_20260831.py::LOGICAL_KEY_FALLBACK`.
 3. **메타 존재 검사는 정확 키로**: API_M 은 `API_ID` 정확 일치 (`API_URL LIKE '%메뉴ID%'` 오진 —
    API_URL=SP명이라 메뉴ID 미포함 다수). 체인 확정 = `PR_GET_PROC_INFO_LIST` 1콜.
 4. **적용 후 검증 SQL 을 패키지에 동봉** (90_DIAGNOSE 폴더 표준 — SYS0012_APPROVAL_20260702 참조):
@@ -326,6 +332,15 @@ INNER JOIN SCM_ADM_USER_MNU_EDIT_AUTH_V EDY
 
 ---
 
+## §4.8 ⭐⭐⭐ 2026-08-28 — §4.7-B V11 이 **생성기에 미구현되어 8일 만에 재발** + 4축 추가 (hook #148 로 분리)
+
+2026-08-27 DMF0040/0053/0035 클라우드 이관 후 5건 실패가 전부 이관 축 누락: ①앱계정 GRANT/시노님(`40_GRANT_SYNONYM.sql`) ②동적 SQL NLS(#109 §6)
+③메뉴 행 부재(§4.7-B **그대로 재발** — 4 패키지 `90_VERIFY` 에 V11 없었음) ④통합 화면 종속 PROGRAM_ID 메타(`22A_SHEET_META_DEP_PROGRAMS.sql`)
+⑤`procedures.d.ts` 블록 경계 결함. 교훈 = **hook 본문의 의무는 생성기 코드에 있을 때만 룰이다.** 상세·게이트·진단 순서 = [[cloud-deploy-silent-failure-gates]](#148).
+`90_VERIFY` 는 V11(메뉴 행+권한 뷰) / V12(앱계정 EXECUTE+시노님) / V13(종속 PROGRAM_ID 메타) 3 게이트 의무.
+
+---
+
 ## §5. 변경 이력
 
 - **2026-06-02 작성** (DMF0072/0008/0043/0043_01 deploy zip 누락 4건 사후 보강 작업 — 사용자 명시 요구)
@@ -367,3 +382,4 @@ SELECT '<CODE>', '<LANG>', '...', NULL, '<TP>', 'Y', 'admin', SYSDATE, 'admin', 
 
 > 본문·예외·자동 생성기 = **hook #140 `msg-table-cloud-sync-and-insert-only` §B**.
 > 정본 산출물 = `_artifacts/_cloud_to_corp/MSG_SYNC/out_*/30_CLOUD_PUSH.sql`.
+- 2026-08-28: §4.8 신설 — V11 미구현 재발 + 4축(GRANT/NLS/종속 PROGRAM_ID/d.ts 블록) → hook #148 분리.

@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
 
 import type { Menu } from '@foundation/models';
 import { useClearAppData } from '@shared/hooks';
@@ -11,7 +10,6 @@ import { useMDIStore } from '../mdi/useMDIStore';
 import styles from './Home.module.scss';
 import { getNoticeTextPreview } from './noticeContent';
 import { NoticePreviewModal } from './NoticePreviewModal';
-import { TestPage } from './TestPage';
 import {
   useHomeNotices,
   formatNoticeDate,
@@ -49,11 +47,6 @@ const collectFavorites = (menus: Menu[]): FavoriteEntry[] => {
 export const HomePage = () => {
   const { t } = useTranslation();
   const [id, setId] = useState('minyonglee1');
-
-  // 개발용 테스트 진입 — /home?test=true (또는 /view/home?test=true) 이면 대시보드 대신 TestPage 렌더.
-  //   RouterSync 가 /view/home 으로 미러링해도 쿼리를 보존하므로 플래그가 유지된다.
-  const [searchParams] = useSearchParams();
-  const isTestMode = searchParams.get('test') === 'true';
 
   const isLogin = useSessionStore(state => state.isLogin);
   const login = useSessionStore(state => state.login);
@@ -121,11 +114,6 @@ export const HomePage = () => {
         </form>
       </div>
     );
-  }
-
-  // 개발용 테스트 페이지 — 로그인 상태에서 ?test=true 로 진입한 경우 대시보드 대신 노출.
-  if (isTestMode) {
-    return <TestPage />;
   }
 
   return (

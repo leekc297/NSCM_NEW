@@ -1,0 +1,45 @@
+.gridSection {
+  display: flex;
+  min-height: 360px;
+  flex: 1;
+  flex-direction: column;
+}
+
+.gridWrapper {
+  height: calc(100vh - 285px);
+  min-height: 320px;
+}
+
+.guide {
+  margin: 8px 2px 0;
+  color: #707781;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.actions {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+
+.actionButton {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #315ccb;
+  cursor: pointer;
+  font: inherit;
+
+  &:hover,
+  &:focus-visible {
+    text-decoration: underline;
+    outline: none;
+  }
+}
+
+.actionSeparator {
+  color: #c1c6cc;
+}

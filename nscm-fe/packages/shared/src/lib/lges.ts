@@ -30,6 +30,8 @@ export {
   type DropdownFieldProps,
   Divider,
   ProgressIndicator,
+  ProcessTab,
+  type ProcessTabDataProps,
   MessageBar,
   TextField,
   FileUploader,

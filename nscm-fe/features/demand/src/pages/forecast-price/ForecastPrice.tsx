@@ -552,7 +552,12 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
       //   그 결과 AS-IS(`MKT_FCST`) 와 초기값이 달라졌다(사용자 신고 2026-08-22).
       //   ⇒ 복사는 계속 하지 않고(35번 충족), 기본값만 AS-IS else 분기와 동일하게 복원한다.
       //   부수효과: 공백 measure 일 때 잠기던 수량/가격 셀이 처음부터 열린다(AS-IS 와 동일).
-      MEASURE: 'MKT_FCST',
+      //   [E20260826-AUTHVIEW] + MKT_FCST 편집권한이 없는 그룹(예: SCP Planner — 시간창 메저 = SCM_FCST)은
+      //     AS-IS 하드코딩 기본값이 곧바로 "편집 불가 메저" 가 되는 모순(사용자 신고 2026-08-26).
+      //     drop3 'Y' 인 첫 메저로 폴백 — ADMIN/DM 계열은 MKT_FCST='Y' 라 기존값 그대로(8/22 결정 보존).
+      MEASURE: measureAuth['MKT_FCST']
+        ? 'MKT_FCST'
+        : (['SCM_FCST', 'LOC', 'VMI_In_Req'].find(m => measureAuth[m]) ?? 'MKT_FCST'),
       // ⭐ [2026-08-22 사용자 결정 — AS-IS 로직 이식] CURRENCY 는 **시드에서 복사하지 않는다.**
       //   AS-IS `InsertRow()` 의 두 분기는 **원자적**이다:
       //     if (bFocusYN) → Measure **와** CURRENCY 를 둘 다 포커스 행에서 복사 (`.cs:2664·2668`)
@@ -768,6 +773,10 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
     }
   };
 
+  // [E20260826-AUTHVIEW] 편집 가능 메저 존재 여부 — drop3(measureAuth) 에 'Y' 가 하나라도 있는가.
+  //   DM Viewer(전 메저 N)·시간창 밖 SCP Planner(전 메저 N/T) 는 false → 편집 진입 버튼 숨김.
+  const hasEditAuth = Object.values(measureAuth).some(Boolean);
+
   const hotkeyConfig = {
     search: () => void handleSubmit(),
     manual: false as const, // Manual(F1) 버튼 미표시 (전체 삭제 방침 — 강민재)
@@ -775,7 +784,10 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
     //   과거(조회 전용) 버전은 전 행 EDIT_FLAG='N' → isEditableVersion=false → 세 버튼 숨김(미렌더).
     //   Insert 는 handleInsert 내부에도 동일 가드가 있으나, 버튼 자체를 숨겨 진입점을 원천 차단한다.
     //   [UICATEGORY 2026-08-07] div 82 = 조회 전용 — isCurVersion 이 true 여도 세 버튼 차단(!isDiv82).
-    ...(hasButton('SAVE') && isEditableVersion && !isDiv82
+    //   [E20260826-AUTHVIEW] + 편집 가능 메저 존재(hasEditAuth) — hasButton('SAVE') 는 메뉴 단위
+    //     합집합이라 DM Viewer 의 titleSet:SAVE 가 MAIN 편집 버튼까지 열었다(사용자 지시 2026-08-26:
+    //     DM Viewer = INSERT/DELETE/수정 전면 불가). drop3 전 메저 'N'(Viewer·시간창 밖 SCP)이면 숨김.
+    ...(hasButton('SAVE') && isEditableVersion && !isDiv82 && hasEditAuth
       ? {
           insert: handleInsert,
           delete: () => void handleDelete(),
@@ -816,7 +828,9 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         ]
       : []),
     // [UICATEGORY 2026-08-07] div 82 = 조회 전용 — Price Batch Input(기간 일괄 저장 진입점)도 숨김 (사용자 지정)
-    ...(!isDiv82
+    // [E20260826-AUTHVIEW] + 판가 편집권한(LOC='Y') 보유 시에만 — SCP Planner(판가 불가)·DM Viewer(전면 불가)
+    //   숨김 (사용자 지시 2026-08-26). 판가 일괄 입력의 권한 축 = drop3 LOC (AS-IS bEDIT_AUTH_LOC 계보).
+    ...(!isDiv82 && measureAuth['LOC'] === true
       ? [
           {
             // 명칭 = DMF0020 과 동일 'Price Batch Input' (LBL00662, 2026-07-12 요청)

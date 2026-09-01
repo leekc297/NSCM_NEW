@@ -54,7 +54,38 @@ export const monthInQuarter = (mTag: DynTag, qTag: DynTag): boolean =>
   mTag.year === qTag.year && mTag.quarter === qTag.quarter;
 export const monthInYear = (mTag: DynTag, yTag: DynTag): boolean => mTag.year === yTag.year;
 
-// ⭐ cutoff 기준 — 금주 월요일 (AS-IS GetThisWeekMonday L3023~3042 1:1. 조회 p_now_yyyymmdd 와 동일 원천).
+/**
+ * 조회 파라미터 `p_now_yyyymmdd` — 금주 월요일을 **조회 기간 안으로 클램프** (AS-IS FindData L790~796):
+ *   `if (시작일 >= 금주월요일) now = 시작일`
+ *   `if (종료일 <= 금주월요일) now = 종료일 + 1일`
+ *
+ * 금지: 클램프 없이 금주 월요일만 보내기. 조회 기간이 통째로 미래(또는 과거)면 SP 안의
+ *   실적↔계획 경계가 AS-IS 와 달라져 같은 조건인데 값이 다르게 나온다 (2026-08-26 AS-IS 대조).
+ * 주의: **editLock cutoff 는 클램프하지 않은 금주 월요일 그대로**다 — AS-IS 도 EditButton 은
+ *   GetThisWeekMonday 원값을 쓴다. 두 값을 섞으면 편집 잠금 구간이 조회 기간에 따라 흔들린다.
+ */
+export const clampNowYyyymmdd = (
+  monday: string,
+  startYyyymmdd: string,
+  endYyyymmdd: string
+): string => {
+  if (!/^\d{8}$/.test(monday)) return monday;
+  if (/^\d{8}$/.test(startYyyymmdd) && startYyyymmdd >= monday) return startYyyymmdd;
+  if (/^\d{8}$/.test(endYyyymmdd) && endYyyymmdd <= monday) {
+    // 종료일 + 1일 — 문자열 자리연산 대신 Date 로 월/연 넘김을 처리한다.
+    const d = new Date(
+      Number(endYyyymmdd.slice(0, 4)),
+      Number(endYyyymmdd.slice(4, 6)) - 1,
+      Number(endYyyymmdd.slice(6, 8)) + 1
+    );
+    const pad = (n: number): string => String(n).padStart(2, '0');
+    return `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}`;
+  }
+  return monday;
+};
+
+// ⭐ cutoff 기준 — 금주 월요일 (AS-IS GetThisWeekMonday L3023~3042 1:1. 조회 p_now_yyyymmdd 의 원본 —
+//   단 조회로 나갈 때는 clampNowYyyymmdd 로 기간 안으로 잘라 보낸다).
 export interface BizPlanCutoff {
   nowYyyymmdd: string; // 금주 월요일
   thisMonth: string; // yyyymm
@@ -213,6 +244,11 @@ export const insertStaticEditable = (
       return d81; // 81 만 개방 (L1259 — 81 아니면 lock)
     case 'UNIT_ENERGY':
       return d82; // 82 에너지 원단위 (직접 입력)
+    case 'ENERGE_WH':
+      // 40 Energy(WH) — 신규행 직접 입력 (2026-08-25 사용자 요구). 저장은 P_UNIT_ENERGY 슬롯으로 나간다
+      //   (readUnitEnergySlot). AS-IS 는 이 컬럼을 파생으로 보고 잠갔으나(DMF0005 L759 · DMF0021 L3274)
+      //   TO-BE 40 은 입력값을 저장한다.
+      return d40;
     case 'ITEM_USE':
       return d82;
     case 'CURRENCY':

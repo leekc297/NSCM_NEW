@@ -6,8 +6,8 @@
 //
 // 사용 예 (신규 화면):
 //   import {
-//     DivisionField, TeamField, EndCustomerField, SalesSiteField, BizTypeField,
-//     PlantSiteField, ProjectField, ItemField, OwnerField,
+//     DivisionField, TeamField, EndCustomerField, SalesSiteField, SoldToCustomerField,
+//     BizTypeField, PlantSiteField, ProjectField, ItemField, OwnerField,
 //     PeriodField, BucketField, VersionField, SearchOverRangeField,
 //   } from '@master/searchFields';
 //
@@ -31,7 +31,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import commonStyles from '@foundation/styles/common-styles.module.scss';
-import { CustomDropdown } from '@shared/components';
+import { CustomDropdown, type DropdownSortKey } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { Button, DatePickerCalendar, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
@@ -69,6 +69,21 @@ interface PopupFieldProps {
   projectCodes?: string[];
   gridSize?: number;
 }
+
+// ====================================================================================
+// 임시 일괄 정렬 (2026-08-25 사용자 요구) — End Customer / Sales Site / Plant Site 세 칸.
+//
+// 세 칸은 코드 목록이라 콤보가 준 순서(DISPLAY_SEQ)에 업무 의미가 없어 표시명 순으로 세운다.
+// 화면마다 sortBy 를 달지 않고 카탈로그 기본값으로 둔 것은 "일괄 적용 + 한 번에 해제" 요구
+// 때문이다. 해제할 때는 아래 값을 undefined 로 바꾸면 세 칸이 동시에 콤보 순서로 돌아간다
+// (호출부는 손댈 것이 없다).
+//
+// 임시: 정식 결정이 나면 이 상수를 지우고 화면별 sortBy prop 으로 되돌린다.
+// 주의: 나머지 칸(Team / Biz Type / Sold-To Customer / Bucket ...)에는 걸지 않는다. 업무 순서를
+//   담은 콤보가 섞여 있어 일괄 정렬은 그쪽을 망가뜨린다 (CustomDropdown sortOptionsBy 주석 참조).
+// 호출부가 sortBy 를 명시하면 그 값이 이긴다.
+// ====================================================================================
+const TEMP_LIST_SORT_BY: DropdownSortKey | undefined = 'label';
 
 // i18n helper — LBL+5자리 표준 (KO.json 미등록 시 fallback 영문)
 const useL = () => {
@@ -342,6 +357,7 @@ export const EndCustomerField = ({
   comboId,
   cascade,
   disabled,
+  sortBy,
   debugLabel,
 }: MultiFieldProps & {
   /**
@@ -359,6 +375,12 @@ export const EndCustomerField = ({
    * 미지정 = 기존 동작(무영향). 판정은 호출 측 책임 (예: divisionId === '40').
    */
   disabled?: boolean;
+  /**
+   * 목록 정렬. 미지정 = 위 TEMP_LIST_SORT_BY(임시 일괄 'label'). 화면이 명시하면 그 값이 이긴다.
+   * 'label' 은 표시명 기준 숫자-영어-한글 순 (CustomDropdown sortOptionsBy 참조).
+   * 표시 계층 전용이라 cascade 가 좁히는 원본 행 순서는 건드리지 않는다.
+   */
+  sortBy?: DropdownSortKey;
   /** 임시 로컬 디버그 — 넘기면 cascade 단계별 결과가 콘솔에 찍힌다. SearchFields.debug 참조. */
   debugLabel?: string;
 }) => {
@@ -395,6 +417,7 @@ export const EndCustomerField = ({
             useClearIcon
             limitTags={1}
             disabled={disabled}
+            sortBy={sortBy ?? TEMP_LIST_SORT_BY}
             value={value.join(',')}
             options={options}
             onChange={(_, options) =>
@@ -424,6 +447,7 @@ export const SalesSiteField = ({
   deptId,
   asYn,
   cascade,
+  sortBy,
   debugLabel,
 }: MultiFieldProps & {
   /**
@@ -449,6 +473,12 @@ export const SalesSiteField = ({
    * 관대 매칭에 의해 no-op 이다.
    */
   cascade?: CascadeFilter;
+  /**
+   * 목록 정렬. 미지정 = 위 TEMP_LIST_SORT_BY(임시 일괄 'label'). 화면이 명시하면 그 값이 이긴다.
+   * 'label' 은 표시명 기준 숫자-영어-한글 순 (CustomDropdown sortOptionsBy 참조).
+   * 표시 계층 전용이라 cascade 가 좁히는 원본 행 순서는 건드리지 않는다.
+   */
+  sortBy?: DropdownSortKey;
   /** 임시 로컬 디버그 — 넘기면 cascade 단계별 결과가 콘솔에 찍힌다. SearchFields.debug 참조. */
   debugLabel?: string;
 }) => {
@@ -508,6 +538,7 @@ export const SalesSiteField = ({
             allOption
             useClearIcon
             limitTags={1}
+            sortBy={sortBy ?? TEMP_LIST_SORT_BY}
             value={value.join(',')}
             options={options}
             onChange={(_, options) =>
@@ -525,7 +556,113 @@ export const SalesSiteField = ({
 };
 
 // ====================================================================================
-// 5. PlantSiteField (size=4, combo=PlantSitebyEndCustomer)
+// 5. SoldToCustomerField (size=4, combo=SoldCustomer)
+// ====================================================================================
+export const SoldToCustomerField = ({
+  value,
+  onChange,
+  division,
+  gridSize,
+  comboId,
+  endCustomer,
+  deptId,
+  cascade,
+  debugLabel,
+}: MultiFieldProps & {
+  /**
+   * opt-in 서버 바인드 콤보 대체 — SalesSiteField 와 같은 모양이다.
+   * 미지정이면 기본 'SoldCustomer' 를 전량 받아 클라에서 좁힌다(종전 동작).
+   * 지정하면 @divisionId / @endCustomer / @deptId 를 실어 서버에서 좁힌 결과를 받는다.
+   * 파라미터가 react-query 키에 들어가므로 상위 조회조건이 바뀌면 새 키가 되어 자동으로
+   * 재조회된다 — refetch 를 직접 부르지 않는다.
+   *
+   * 주의: 파라미터 값은 홑따옴표로 감싼다. BE makeComboQuery 가 등록 SQL 의 @키 를 bind 가
+   * 아니라 raw 문자열로 치환하기 때문이다. 다중 선택은 'A,B' 한 덩어리, 미선택은 'ALL' 이며
+   * SQL 이 'ALL' 분기를 갖는다. SQL 에 없는 @키 는 치환되지 않고 그냥 남는다(no-op).
+   */
+  comboId?: string;
+  endCustomer?: string;
+  deptId?: string;
+  /** 클라이언트 cascade 필터. CascadeFilter 주석 참조. 예: { TEAM_CODE: sc.deptIds } */
+  cascade?: CascadeFilter;
+  /** 임시 로컬 디버그 — 넘기면 cascade 단계별 결과가 콘솔에 찍힌다. SearchFields.debug 참조. */
+  debugLabel?: string;
+}) => {
+  const L = useL();
+  const q = (v?: string): string => `'${v && v.trim() !== '' ? v : 'ALL'}'`;
+  const [soldCustomers] = useTabComboQueries(
+    comboId
+      ? {
+          filters: [
+            {
+              comboId,
+              divisionId: q(division),
+              endCustomer: q(endCustomer),
+              deptId: q(deptId),
+            },
+          ],
+        }
+      : { filters: ['SoldCustomer'] }
+  );
+  const rawRows = (soldCustomers ?? []) as Row[];
+  // division 최우선 — 나머지 cascade 는 전부 이 결과 위에서만 돈다.
+  const steps = runCascade(rawRows, division, cascade);
+  const cascadeRows = steps[steps.length - 1].rows;
+  // 컬럼명은 두 벌을 다 견딘다 — 조인 콤보는 SOLD_CUSTOMER_CODE / _NAME(카탈로그 풀네임)로,
+  // 서버 바인드 콤보는 CODE / NAME 으로 내려온다. toOptions 는 CODE / NAME 만 보므로 쓰지 않는다.
+  const options = cascadeRows
+    .map(r => ({
+      label: String(r.SOLD_CUSTOMER_NAME ?? r.NAME ?? r.SOLD_CUSTOMER_CODE ?? r.CODE ?? ''),
+      value: String(r.SOLD_CUSTOMER_CODE ?? r.CODE ?? ''),
+    }))
+    .filter(o => o.value !== '');
+  // 임시 로컬 디버그 — 렌더마다 찍히지 않게 입력이 실제로 바뀐 시점에만 찍는다.
+  const debugSignature = `${rawRows.length}|${division ?? ''}|${JSON.stringify(cascade ?? {})}`;
+  useEffect(() => {
+    if (!debugLabel) return;
+    logCascade({
+      label: debugLabel,
+      comboId: comboId ?? 'SoldCustomer',
+      param: comboId
+        ? `divisionId=${q(division)}, endCustomer=${q(endCustomer)}, deptId=${q(deptId)}`
+        : undefined,
+      division,
+      rawRows,
+      steps,
+      options,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debugLabel, debugSignature]);
+  return (
+    <Grid size={gridSize ?? 4}>
+      <FormItem
+        className={commonStyles.formItem}
+        label={L('LBL00081', 'Sold-To Customer')}
+        labelAlign='right'
+        render={() => (
+          <CustomDropdown
+            multiple
+            allOption
+            useClearIcon
+            limitTags={1}
+            value={value.join(',')}
+            options={options}
+            onChange={(_, options) =>
+              onChange(
+                String(options ?? '')
+                  .split(',')
+                  .filter(Boolean)
+              )
+            }
+          />
+        )}
+      />
+    </Grid>
+  );
+};
+
+// ====================================================================================
+// 6. PlantSiteField (size=4, combo=PlantSitebyEndCustomer)
 // ====================================================================================
 // Plant Site — combo `PlantSitebyEndCustomer`.
 //   2026-08-22 콤보 SQL 개정: 파라미터를 받지 않고 전량(DIVISION_ID / END_CUSTOMER / CODE / NAME)
@@ -542,6 +679,7 @@ export const PlantSiteField = ({
   comboId,
   cascade,
   disabled: disabledOverride,
+  sortBy,
   debugLabel,
 }: MultiFieldProps & {
   /** End Customer 조회조건 (콤마 조인). 콤보의 END_CUSTOMER 컬럼과 엄격 매칭한다. */
@@ -559,6 +697,12 @@ export const PlantSiteField = ({
    * DMF0048 처럼 AS-IS 가 40 만 비활성인 화면은 호출 측이 직접 지정한다.
    */
   disabled?: boolean;
+  /**
+   * 목록 정렬. 미지정 = 위 TEMP_LIST_SORT_BY(임시 일괄 'label'). 화면이 명시하면 그 값이 이긴다.
+   * 'label' 은 표시명 기준 숫자-영어-한글 순 (CustomDropdown sortOptionsBy 참조).
+   * 표시 계층 전용이라 cascade 가 좁히는 원본 행 순서는 건드리지 않는다.
+   */
+  sortBy?: DropdownSortKey;
   /** 임시 로컬 디버그 — 넘기면 cascade 단계별 결과가 콘솔에 찍힌다. SearchFields.debug 참조. */
   debugLabel?: string;
 }) => {
@@ -623,6 +767,7 @@ export const PlantSiteField = ({
             useClearIcon
             limitTags={1}
             disabled={disabled}
+            sortBy={sortBy ?? TEMP_LIST_SORT_BY}
             value={value.join(',')}
             options={options}
             onChange={(_, opts) =>
@@ -640,7 +785,7 @@ export const PlantSiteField = ({
 };
 
 // ====================================================================================
-// 6. BizTypeField (size=4, combo=BizType — SCM_ADM_LOOKUP_MASTER_DETAIL LOOKUP_TYPE='BIZ_TYPE')
+// 7. BizTypeField (size=4, combo=BizType — SCM_ADM_LOOKUP_MASTER_DETAIL LOOKUP_TYPE='BIZ_TYPE')
 // ====================================================================================
 export const BizTypeField = ({
   value,
@@ -689,7 +834,7 @@ export const BizTypeField = ({
 };
 
 // ====================================================================================
-// 7. ProjectField (size=4, popup=ProjectByDivisionModal, 6필드 'ALL' 자동)
+// 8. ProjectField (size=4, popup=ProjectByDivisionModal, 6필드 'ALL' 자동)
 // ====================================================================================
 interface ProjectFieldProps extends PopupFieldProps {
   // 체크박스 선택 모드(재기동 시 선택값 carry 없음).
@@ -764,7 +909,7 @@ export const ProjectField = (props: ProjectFieldProps) => {
 };
 
 // ====================================================================================
-// 8. ItemField — Model / Nickname (size=4, popup=ItemByDivisionModal, headerTitle='Model / Nickname')
+// 9. ItemField — Model / Nickname (size=4, popup=ItemByDivisionModal, headerTitle='Model / Nickname')
 // ====================================================================================
 interface ItemFieldProps extends PopupFieldProps {
   itemIds?: string[];
@@ -839,7 +984,7 @@ export const ItemField = (props: ItemFieldProps) => {
 };
 
 // ====================================================================================
-// 9. OwnerField (size=4, popup=OwnerByDivisionModal, 6필드 'ALL' 자동)
+// 10. OwnerField (size=4, popup=OwnerByDivisionModal, 6필드 'ALL' 자동)
 // ====================================================================================
 interface OwnerFieldProps extends PopupFieldProps {
   owners?: string[];
@@ -912,7 +1057,7 @@ export const OwnerField = (props: OwnerFieldProps) => {
 };
 
 // ====================================================================================
-// 10. PeriodField (size=8, DatePickerCalendar date-range-multi)
+// 11. PeriodField (size=8, DatePickerCalendar date-range-multi)
 //     dayjs customParseFormat plugin 미등록 환경 → YYYY-MM-DD 변환
 // ====================================================================================
 const toDayjs = (s: string) => {
@@ -996,7 +1141,7 @@ export const PeriodField = ({ start, end, onChange, gridSize, label, mode }: Per
 };
 
 // ====================================================================================
-// 11. BucketField (size=2, combo=BucketType — W/M filter)
+// 12. BucketField (size=2, combo=BucketType — W/M filter)
 // ====================================================================================
 interface BucketFieldProps {
   value: 'W' | 'M';
@@ -1036,7 +1181,7 @@ export const BucketField = ({ value, onChange, gridSize }: BucketFieldProps) => 
 };
 
 // ====================================================================================
-// 12. VersionField (size=6, popup, 우측 🔍)
+// 13. VersionField (size=6, popup, 우측 🔍)
 // ====================================================================================
 interface VersionFieldProps {
   value: string;
@@ -1103,7 +1248,7 @@ export const VersionField = ({
 };
 
 // ====================================================================================
-// 13. SearchOverRangeField (size=4, checkbox)
+// 14. SearchOverRangeField (size=4, checkbox)
 // ====================================================================================
 interface CheckFieldProps {
   value: boolean;

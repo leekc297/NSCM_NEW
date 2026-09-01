@@ -1,5 +1,5 @@
 import { CellType, type FlexGrid } from '@mescius/wijmo.grid';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { GridUtils } from '@foundation/utils';
 import { SearchArea, DataGrid, CustomDialog } from '@shared/components';
@@ -47,42 +47,41 @@ export const OwnerModal = ({
   const staticColumns = useOwnerModalStore(state => state.staticColumns);
   const fetchStaticColumns = useOwnerModalStore(state => state.fetchStaticColumns);
 
-  const DEFAULT_FILTER = useMemo(
-    () => ({
-      divisionId: divisionId,
-      user: '',
-    }),
-    [divisionId]
-  );
+  // 실제 조회 조건 — Search 버튼/Enter(그리고 팝업 오픈) 시에만 갱신되고, 그때 프로시저를 재호출한다.
+  //   (useTabProcQuery 는 filters 가 query key 라 값이 바뀌면 재조회. COM0004 는 user 를 IN
+  //   파라미터로 받는다 — configs/types/procedures.d.ts COM0004.owner.request 참고)
+  const [searchParam, setSearchParam] = useState<{
+    divisionId: string;
+    user: string;
+  }>({ divisionId, user: '' });
+
+  // divisionId prop 이 팝업을 닫지 않고도 바뀌는 호출처가 있을 수 있어 반영해 둔다
+  //   (기존 DEFAULT_FILTER 가 divisionId 의존 useMemo 였던 것과 동일한 반응성 유지).
+  useEffect(() => {
+    setSearchParam(prev => ({ ...prev, divisionId }));
+  }, [divisionId]);
+
+  // 입력 중인 값 — 조회하지 않고 로컬 state 에만 담아둔다.
+  const [userInput, setUserInput] = useState<string>('');
 
   const { data: userData } = useTabProcQuery<MODAL_OWNER>({
     menuId: MODAL_OWNER,
     sheetName: MODAL_SHEET_OWNER,
     tabId: 'OwnerModal',
-    filters: DEFAULT_FILTER,
+    filters: searchParam,
     enabled: true,
   });
-
-  const [modalFilters, setModalFilters] = useState<{
-    user: string;
-  }>({ user: DEFAULT_FILTER.user });
 
   const [selectedUsers, setSelectedUsers] = useState<
     ResponseData<MODAL_OWNER, MODAL_SHEET_OWNER, 'o_rc1'>[]
   >([]);
 
+  // 필터링(user 키워드)은 프로시저가 하고, 여기서는 이미 선택된 사용자만 후보에서 제외한다.
   const candidateUsers = (userData?.o_rc1 ?? []).filter(
-    user =>
-      ((user.USER_NAME ?? '').toLowerCase().includes(modalFilters.user.toLowerCase()) ||
-        (user.USER_ID ?? '').toLowerCase().includes(modalFilters.user.toLowerCase())) &&
-      !selectedUsers.some(selected => selected.USER_ID === user.USER_ID)
+    user => !selectedUsers.some(selected => selected.USER_ID === user.USER_ID)
   );
 
-  // 입력값은 제어 컴포넌트로 둔다. defaultValue 는 최초 마운트 때만 반영되는데 이 모달은 modaless 라
-  //   닫아도 언마운트되지 않는다 - 다시 열 때 초기화 effect 가 state 를 비워도 입력창에는 직전
-  //   문자가 그대로 남아 있었다 (ItemByDivisionModal, OwnerByDivisionModal 과 같은 규약).
-  // 주의: debounce 금지 - 제어 입력에서 setState 를 늦추면 타이핑이 밀리거나 글자가 유실된다.
-  const handleFilterChange = (user: string) => setModalFilters({ user });
+  const handleSearch = () => setSearchParam(prev => ({ ...prev, user: userInput }));
 
   const handleSelectUsers = () => {
     const selectedItems = candidateGridRef.current?.selectedItems as ResponseData<
@@ -153,9 +152,8 @@ export const OwnerModal = ({
 
   useEffect(() => {
     if (!open) return;
-    setModalFilters({
-      user: '',
-    });
+    setSearchParam(prev => ({ ...prev, user: '' }));
+    setUserInput('');
     const ownerList = ownerId?.split(',') || [];
     const allUsers = userData?.o_rc1 ?? [];
     setSelectedUsers(allUsers.filter(user => ownerList.includes(user.USER_ID)));
@@ -178,6 +176,8 @@ export const OwnerModal = ({
       customContentArea={
         <div className={styles.dialogContentWrapper}>
           <SearchArea
+            searchButtonLabel={t('LBL00664', 'Search')}
+            onSearch={handleSearch}
             conditions={
               <Grid size={4}>
                 <FormItem
@@ -186,8 +186,9 @@ export const OwnerModal = ({
                   render={() => (
                     <InputField
                       fullWidth
-                      value={modalFilters.user}
-                      onChange={e => handleFilterChange(e.target.value)}
+                      value={userInput}
+                      onChange={e => setUserInput(e.target.value)}
+                      onKeyDown={e => e.key === 'Enter' && handleSearch()}
                     />
                   )}
                 />
@@ -229,13 +230,6 @@ export const OwnerModal = ({
               onClick={() => {}}
             /> */}
             <Button
-              appearance='outlined'
-              priority='normal'
-              size='medium'
-              buttonLabel='Close'
-              onClick={modalClose}
-            />
-            <Button
               appearance='contained'
               buttonLabel='OK'
               iconComponent={<ControlConfirmIcon size='small' />}
@@ -243,6 +237,13 @@ export const OwnerModal = ({
               priority='primary'
               size='medium'
               onClick={handleSubmit}
+            />
+            <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel='Close'
+              onClick={modalClose}
             />
           </div>
         </div>

@@ -1,0 +1,56 @@
+{
+ "menu": "DMF0014",
+ "stamp": "20260831",
+ "db": {
+  "01_DDL_GTT.sql": "GTT 32본 (접두 ['GT_DM14', 'GT_DPCF'] + ALL_DEPENDENCIES)",
+  "10_PKG_DMF0014_SPEC.sql": "SPEC [('PACKAGE', 'VALID', '2026-08-14 14:05'), ('PACKAGE BODY', 'VALID', '2026-08-27 16:51')]",
+  "11_PKG_DMF0014_BODY.sql": "BODY [('PACKAGE', 'VALID', '2026-08-14 14:05'), ('PACKAGE BODY', 'VALID', '2026-08-27 16:51')]",
+  "12_FUNCTION_FN_SCM_GET_WHERE_SQL.sql": "의존 FUNCTION (기이관이면 skip 가능)",
+  "13_PROCEDURE_PR_DM_PLN_CUST_FCST_TO_MKT_FCST.sql": "의존 PROCEDURE (기이관이면 skip 가능)",
+  "14_PROCEDURE_PR_DM_PLN_CUST_FCST_TO_MKT_FCST_40.sql": "의존 PROCEDURE (기이관이면 skip 가능)",
+  "15_PROCEDURE_PR_DM_SYS_LOG_BATCH.sql": "의존 PROCEDURE (기이관이면 skip 가능)",
+  "16_PROCEDURE_PR_SCM_SYS_LOG_BATCH.sql": "의존 PROCEDURE (기이관이면 skip 가능)",
+  "20:SCM_ADM_PROGRAM": 1,
+  "20:SCM_ADM_MNU_M": 1,
+  "20:SCM_ADM_USER_GR_MNU_MPG_M": 6,
+  "20:SCM_ADM_MNU_BTN_MPG_M": 12,
+  "20:SCM_ADM_USER_GR_MNU_BTN_MPG_M": 60,
+  "20:SCM_ADM_API_M": 12,
+  "20_MENU_WIRING_AUTH.sql": "MERGE ON PK 실측",
+  "24:PKG_DMF0014.P_DMF0014_CUST_FCST_EXCEL_UPLOAD": 5,
+  "24:PKG_DMF0014.P_DMF0014_GET_CUST_FCST_UPLOAD_DATA": 17,
+  "24:PKG_DMF0014.P_DMF0014_GET_EXCEL_FORM_DATA": 17,
+  "24:PKG_DMF0014.P_DMF0014_GET_SPREAD_TITLE": 7,
+  "24:PKG_DMF0014.P_DMF0014_SAVE_CUST_FCST_UPLOAD_DATA": 18,
+  "24:PR_GET_DAY_RANGE": 5,
+  "24_PROC_M.sql": "6 SP",
+  "22:SCM_MST_SHEET_COLUMNS:DMF0014/FCST Upload": 15,
+  "22_SHEET_META.sql": "시트 단위 재적재",
+  "22A_SHEET_META_DEP_PROGRAMS.sql": "종속 PROGRAM_ID [] / 0행",
+  "25_EXCEL_COLUMNS.sql": "1행",
+  "26_LOOKUP_DETAIL.sql": "0행",
+  "21_CMBO_SQL.sql": "3본 (FE 요청 3: 미등재 [])",
+  "23_MSG_LBL_MNU.sql": "81행 / 미존재 ['MSG_API_DMF0014_DAY_RANGE_SEARCH', 'MSG_API_DMF0014_MAIN_DELETE', 'MSG_API_DMF0014_MAIN_EXCEL', 'MSG_API_DMF0014_MAIN_FILTER', 'MSG_API_DMF0014_MAIN_INSERT', 'MSG_API_DMF0014_MAIN_SAVE', 'MSG_API_DMF0014_MAIN_SEARCH', 'MSG_API_DMF0014_MAIN_SORT', 'MSG_API_DMF0014_MAIN_UPLOAD', 'MSG_API_DMF0014_SPREAD_TITLE_SEARCH', 'MSG_API_DMF0014_UPLOAD_SAVE']",
+  "40_GRANT_SYNONYM.sql": "대상 6: ['PKG_DMF0014', 'FN_SCM_GET_WHERE_SQL', 'PR_DM_PLN_CUST_FCST_TO_MKT_FCST', 'PR_DM_PLN_CUST_FCST_TO_MKT_FCST_40', 'PR_DM_SYS_LOG_BATCH', 'PR_SCM_SYS_LOG_BATCH']",
+  "90_VERIFY.sql": "기대 카운트 실측 + V11~V14"
+ },
+ "fe": {
+  "merge": [
+   "procedures.d.ts.DMF0014_BLOCK.txt (L1069~L1154, 시트 키 ['spreadTitle', 'dayRange'])"
+  ],
+  "files": [],
+  "external_feature_imports": [],
+  "closure_size": 0,
+  "closure_changed_outside_screen": [],
+  "changed_set_size": 472
+ },
+ "notes": [
+  "[E20260831] Excel Upload Validation 클라우드 확인용 재취합. DB = 사내 라이브 현재 기준 전량 (0827 패키지 대비 delta: PR_DM_PLN_CUST_FCST_TO_MKT_FCST_40 이 0827 18:12 취합 후 20:14 재배포 — 구 패키지 14번 파일은 구본). FE = 이관 제외: customer-fcst-upload 6파일은 2026-08-31 공통소스(클라우드 원천) 반영에서 ADOPT_COMMON/SAME 실측 — 클라우드가 동본 또는 최신.",
+  "SCM_MST_TITLESET_USER / SCM_ADM_USER_MNU_SRCH_COND_M / SCM_ADM_EXCEL_UPLOAD(스테이징) / *_BAK* 는 사용자·임시 데이터라 이관 제외",
+  "_survey/fe_check_20260831.txt 동봉 (전체 lint + type-check)"
+ ],
+ "gates": {
+  "G4_NLS_hits": [],
+  "G2_dep_programs": []
+ }
+}

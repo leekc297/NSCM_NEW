@@ -1,6 +1,6 @@
 import type { FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 
 import { GridAction } from '@foundation/utils';
 import { CustomDialog, CustomDropdown, SearchArea } from '@shared/components';
@@ -23,6 +23,7 @@ import type { MetalLinkTemplateRow } from '../../metal-link-price.types';
 import { MetalLinkPriceGrid } from '../MetalLinkPriceGrid';
 
 import styles from './MetalLinkTemplateModal.module.scss';
+import { useMetalLinkTemplateModalStore } from './metalLinkTemplateModalStore';
 
 // ⭐ AS-IS DMF0074_MetalLinkPricePopup (물리 347줄 — btnTemplate 'Excel Form' .cs L704~713) 1:1:
 //   팝업 = 조회 그리드 + Excel Export 가 곧 "템플릿 다운로드" (서버 파일 다운로드 아님).
@@ -66,10 +67,11 @@ export const MetalLinkTemplateModal = ({
   }, [myDivisions]);
 
   // AS-IS 자동조회 없음 — Search 명시 게이트 (모달 닫으면 초기화)
-  const [hasSearched, setHasSearched] = useState(false);
+  const hasSearched = useMetalLinkTemplateModalStore(state => state.hasSearched);
+  const setHasSearched = useMetalLinkTemplateModalStore(state => state.setHasSearched);
   useEffect(() => {
     if (!open) setHasSearched(false);
-  }, [open]);
+  }, [open, setHasSearched]);
 
   // sesUserId/mnuId 는 BE 세션 자동 (division-gate 키 — 보강 전송, DMF0014 선례)
   const filters = useMemo(() => {

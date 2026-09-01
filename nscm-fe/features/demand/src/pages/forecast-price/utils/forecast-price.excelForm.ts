@@ -120,10 +120,7 @@ export const pruneEmptyInfoColumns = (
 ): ExcelFormColumn[] => {
   if (rows.length === 0) return [...columns];
   return columns.filter(
-    col =>
-      col.isToken ||
-      col.isMonth ||
-      rows.some(r => String(r[col.key] ?? '').trim() !== '')
+    col => col.isToken || col.isMonth || rows.some(r => String(r[col.key] ?? '').trim() !== '')
   );
 };
 

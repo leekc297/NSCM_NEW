@@ -19,9 +19,10 @@ import {
   staticEditableByMeta,
 } from '../utils/sales-reports.editLock';
 import {
+  applyDeptIdChange,
   buildDataMap,
-  buildDeptIdDataMap,
   DEPARTMENT_CHANGE_CLEAR,
+  ETC_SALES_ITEM,
   ROW_COMBO_IDS,
   toCellStr,
 } from '../utils/sales-reports.gridCombos';
@@ -171,13 +172,16 @@ const SalesReportsGridComponent = ({
   }, [comboSig]);
   // ⭐ 행별 콤보 원천 (2026-08-09 이관) — AS-IS `.cs` 가 SetCellTypeCombo 로 붙이던 분.
   //   메타(SHEET_COLUMNS)에는 AS-IS 도 바인딩이 없어 별도 fetch 가 원천이다.
-  const rowComboIds = useMemo(() => Object.values(ROW_COMBO_IDS), []);
-  const rowComboResults = useTabComboQueries({
-    filters: rowComboIds.map(id =>
-      // DEPT_DEFAULT(TEAM2)만 division 분기 — AS-IS Param1 은 division (UP_FX TEAM2 분기)
-      id === ROW_COMBO_IDS.DEPT_DEFAULT ? { comboId: id, divisionId: q(division) } : id
-    ),
-  });
+  //   ⭐ DEPT_ID(Team) 명칭 바인딩 제거 (사용자 지시 2026-08-28, REQ:CHAT-20260828-05) —
+  //     메타에 콤보 미설정인 컬럼이라 코드 그대로 표시한다(명칭은 인접 DEPT_NAME 컬럼 소관).
+  //     DEPT 계열 3종(DEPT_DEFAULT/DEPT_BY_DEPARTMENT/DEPT_ETC) fetch 도 함께 걷어냈다 —
+  //     소비처가 buildDeptIdDataMap 뿐이었다. 'MDF' cascade 판정은 코드 비교로 동작(원천 실측:
+  //     DMF0044_DEPARTMENT_TEAM2 SEGMENT1='MDF' — 명칭 아님).
+  const rowComboIds = useMemo(
+    () => [ROW_COMBO_IDS.CUST_REPORT, ROW_COMBO_IDS.PRODUCT_GROUP],
+    []
+  );
+  const rowComboResults = useTabComboQueries({ filters: rowComboIds });
   const rowComboSig = rowComboIds
     .map((id, i) => `${id}@${division}#${rowComboResults[i]?.length ?? 'x'}`)
     .join(',');
@@ -190,29 +194,17 @@ const SalesReportsGridComponent = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rowComboSig]);
 
-  // DEPT_ID 메타 콤보 rows — 표시명 원천이자 행별 콤보 0건 시의 cascade fallback
-  const deptMetaRows = useMemo<Record<string, unknown>[]>(() => {
-    const i = comboColumns.findIndex(c => c.colNm === 'DEPT_ID');
-    return i >= 0 ? ((comboResults[i] ?? []) as unknown as Record<string, unknown>[]) : [];
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [comboSig]);
-
   // 메타에 없는(= `.cs` 가 런타임에 붙이던) 콤보의 컬럼 DataMap.
   //   금지: 편집 진입 시 `column.dataMap` 을 갈아끼우지 말 것 — dataMap 은 셀이 아니라 **컬럼**
   //   속성이라 그 컬럼 전 행의 표시가 함께 바뀌고, 좁혀진 맵에 없는 코드는 원 코드로 드러난다
-  //   (근거·대안은 `utils/sales-reports.gridCombos.ts` buildDeptIdDataMap 주석 참조).
+  //   (규약 전문 = `.atlas/wiki/wijmo-column-datamap-not-per-cell.md`).
+  //   DEPT_ID 는 여기 없다 — 코드 그대로 표시·입력한다(REQ:CHAT-20260828-05, 위 rowComboIds 주석).
   const rowScopedDataMaps = useMemo<Record<string, DataMap | null>>(
     () => ({
-      DEPT_ID: buildDeptIdDataMap({
-        metaRows: deptMetaRows,
-        deptDefault: rowComboRows[ROW_COMBO_IDS.DEPT_DEFAULT] ?? [],
-        deptByDepartment: rowComboRows[ROW_COMBO_IDS.DEPT_BY_DEPARTMENT] ?? [],
-        deptEtc: rowComboRows[ROW_COMBO_IDS.DEPT_ETC] ?? [],
-      }),
       CUST_REPORT: buildDataMap(rowComboRows[ROW_COMBO_IDS.CUST_REPORT] ?? []),
       PRODUCT_GROUP: buildDataMap(rowComboRows[ROW_COMBO_IDS.PRODUCT_GROUP] ?? []),
     }),
-    [deptMetaRows, rowComboRows]
+    [rowComboRows]
   );
 
   // 컬럼에 실제로 붙일 DataMap — 메타 콤보 위에 행별 콤보를 덮는다.
@@ -516,6 +508,13 @@ const SalesReportsGridComponent = ({
     g.beginningEdit.addHandler(beginningEditHandler);
     g.pastingCell.addHandler(beginningEditHandler as never);
 
+    // 팀 코드 -> 표시명. 'MDF' 판정용이며 값 원천은 그리드에 실제로 붙어 있는 컬럼 DataMap 이다
+    //   (여기서 훅 클로저의 맵을 잡으면 콤보가 늦게 도착한 회차에 낡은 맵을 보게 된다).
+    const teamNameOf = (code: string): string => {
+      const dm = g.columns.getColumn('DEPT_ID')?.dataMap;
+      return dm ? toCellStr(dm.getDisplayValue(code)) : '';
+    };
+
     // 편집 종료 — 수치셀 빈값 → '0' (AS-IS L1295~1302) + 종속 컬럼 cascade clear
     const cellEditEndedHandler = (
       s: FlexGridType<SalesReportRow>,
@@ -527,7 +526,7 @@ const SalesReportsGridComponent = ({
         (row as Record<string, unknown>)[binding] = '0';
       }
       // ⭐ DEPARTMENT_ID 변경 → 하위 컬럼 clear (AS-IS L1187~1191 / L1211~1215 — 양 분기 동일 5컬럼).
-      //   DEPT_ID 후보는 다음 편집 진입 시 `resolveDeptIdRows` 가 새 DEPARTMENT_ID 로 다시 고른다.
+      //   DEPT_ID 는 콤보가 아니므로(REQ:CHAT-20260828-05) clear 만 하면 된다.
       const clears: string[] = [];
       if (binding === 'DEPARTMENT_ID' && row) {
         const rec = row as Record<string, unknown>;
@@ -537,6 +536,14 @@ const SalesReportsGridComponent = ({
         });
         rec.DEPT_ID = '';
         clears.push('DEPT_ID');
+        s.invalidate();
+      }
+      // DEPT_ID(팀) 변경 -> MODEL(ITEM_ID)/모델명 강제 + 하위 3컬럼 clear (AS-IS L1370~1452).
+      //   팀이 'MDF' 가 아니면 MODEL 은 '기타매출' 로 고정된다(L1396 분기) — 그 값 자체가 아래
+      //   dblclick 가드의 열쇠라 Item 팝업도 함께 닫힌다. 'MDF' 면 비워서 팝업으로 고르게 한다.
+      //   상위 DEPARTMENT_ID 가 비어 있으면 MODEL 은 건드리지 않는다(AS-IS else 분기).
+      if (binding === 'DEPT_ID' && row) {
+        clears.push(...applyDeptIdChange(row, teamNameOf));
         s.invalidate();
       }
       // 신규 세트는 병합이 없으므로 방금 바뀐 값(+ cascade clear 분)을 세트 전체에 맞춘다
@@ -613,7 +620,7 @@ const SalesReportsGridComponent = ({
       const binding = g.columns[ht.col]?.binding ?? '';
       const row = g.rows[ht.row]?.dataItem as SalesReportRow | undefined;
       if (!row || binding !== 'ITEM_ID') return;
-      if (toCellStr(row.ITEM_ID).trim() === '기타매출') return;
+      if (toCellStr(row.ITEM_ID).trim() === ETC_SALES_ITEM) return;
       onItemCellDblClickRef.current?.(row);
     };
     g.hostElement.addEventListener('dblclick', dblclickHandler);

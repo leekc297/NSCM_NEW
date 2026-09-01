@@ -314,11 +314,8 @@ export const FcstUploadModal = ({
               )}
             />
             <div className={styles.buttonGroup}>
-              <Button priority='normal' appearance='outlined' onClick={handleClose}>
-                {t('LBL00717', '_Cancel')}
-              </Button>
               {twoStep ? (
-                // ⭐ 2-Step (사용자 요구 2026-07-10) — 파일 선택 시 자동 검증 (Upload 버튼 없음).
+                // 2-Step (사용자 요구 2026-07-10) — 파일 선택 시 자동 검증 (Upload 버튼 없음).
                 //   OK = 저장. 검증 완료(분류) + Error 0 일 때만 활성 (전량 게이트).
                 <Button
                   iconComponent={<ControlConfirmIcon size='default' />}
@@ -338,6 +335,9 @@ export const FcstUploadModal = ({
                   {t('LBL00716', '_OK')}
                 </Button>
               )}
+              <Button priority='normal' appearance='outlined' onClick={handleClose}>
+                {t('LBL00717', '_Cancel')}
+              </Button>
             </div>
           </div>
           <Label

@@ -32,7 +32,7 @@ import { SalesFuturePriceGrid } from './components/SalesFuturePriceGrid';
 import { useSalesFuturePriceValidation } from './hooks/useSalesFuturePriceValidation';
 import {
   ADMIN_SHEET_NAME,
-  type BUCKET_TYPE,
+  BUCKET_TYPE,
   DIVISION,
   MAIN_COLUMNS,
   MEASURE_4,
@@ -50,7 +50,7 @@ import {
   getExchangeRate,
   isExchangeTargetMeasure,
 } from './salesPriceExchange';
-import { useSalesFuturePriceStore } from './useSalesFuturePriceStore';
+import { normalizeVersionIds, useSalesFuturePriceStore } from './useSalesFuturePriceStore';
 import { isEditableDivision } from './utils/editableDivision';
 import { groupKeyOf, toStr } from './utils/futurePriceGroup';
 
@@ -329,7 +329,7 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
     if (!editable) return; // 편집제약 division 방어 (버튼도 미표시되나 이중 가드)
     // ⭐ isCurVersion 게이트 (MSG00448) — 과거버전 조회 상태에서는 Insert 불가.
     //   AS-IS EditButton(.cs L868~): txtVersion=='Current' 조회일 때만 편집/신규 허용.
-    if (sc.versionId !== 'CURRENT') {
+    if (sc.versionId !== 'Current') {
       void setAlert({
         type: 'alert',
         content: t(MSG.EDIT_NOT_CURRENT_VER, '_현재 버전이 아닙니다.'),
@@ -458,7 +458,7 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
       return;
     }
     // ⭐ isCurVersion 게이트 (MSG00448) — 과거버전 조회 상태에서는 저장 불가 (AS-IS L868 편집 대전제).
-    if (sc.versionId !== 'CURRENT') {
+    if (sc.versionId !== 'Current') {
       void setAlert({
         type: 'alert',
         content: t(MSG.EDIT_NOT_CURRENT_VER, '_현재 버전이 아닙니다.'),
@@ -475,11 +475,8 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
     const v = validate.validateSaveRows(targetRows, [...insertedRows, ...spRowsAll], sc);
     if (!v.ok) return;
 
-    const ok = await setAlert({
-      type: 'confirm',
-      content: t(MSG.CONFIRM_SAVE, '_저장하시겠습니까?'),
-    });
-    if (!ok) return;
+    // 저장 확인창(MSG00001) 없이 즉시 저장 (사용자 요구 2026-08-25).
+    //   위 검증(validateSaveRows)을 모두 통과한 시점이다. 팝업(PriceBatchInputModal) 정책과 동일.
 
     // void setToast({ message: t('LBL00665', 'Loading...'), type: 'default', duration: 3000 });
 
@@ -532,14 +529,23 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
       );
     };
 
-    // 저장 대상 동적 셀 키 추출 — AS-IS L1640: M_(월 SUM) 제외, W_(주차) 만.
-    //   'I' 행 = 입력된 모든 W_ 셀 / 'M' 행 = EditTracker 가 변경 표시한 W_ 셀만.
+    // 저장 대상 동적 셀 키 추출 — 현재 조회 Bucket 의 컬럼만.
+    //   Weekly = W_yyyymmdd / Monthly = M_yyyymmdd (SP 는 월 컬럼도 '월 1일' 8자리 날짜로 내려준다.
+    //   M_20260801 형태 — 그래서 아래 dk.slice(2) 가 두 bucket 모두 유효한 YYYYMMDD 가 된다.)
+    //   AS-IS L1640 이 M_ 을 제외한 것은 W_/M_ 이 한 그리드에 공존하는 화면에서 월 SUM 컬럼을 빼기
+    //   위한 것이다. TO-BE 는 SP 가 bucketType 별로 한 벌만 내려주므로 W_ 로 고정하면 Monthly 편집분이
+    //   통째로 수집에서 빠져 저장이 아예 안 된다(사용자 보고 2026-08-26 'No data to save').
+    //   그래도 W_ 고정 대신 bucket 분기를 쓰는 이유: Weekly 조회 행에 M_ 키가 섞여 내려오더라도
+    //   신규행('I' = 행의 모든 동적 키 수집)이 월 SUM 을 저장하는 사고를 막는다(AS-IS L1640 의도 보존).
+    //   'I' 행 = 입력된 모든 셀 / 'M' 행 = EditTracker 가 변경 표시한 셀만.
+    // sc.bucketType 은 'W' | 'M' 리터럴 타입이라 enum 과 직접 비교가 안 된다 — 그리드 prop(L800) 과 같은 캐스트.
+    const dynKeyRe = (sc.bucketType as BUCKET_TYPE) === BUCKET_TYPE.MONTHLY ? /^M_\d+$/ : /^W_\d+$/;
     const collectDynKeys = (row: FuturePriceRow, isInsert: boolean): string[] => {
-      const allW = Object.keys(row).filter(k => /^W_\d+$/.test(k));
-      if (isInsert) return allW;
+      const allDyn = Object.keys(row).filter(k => dynKeyRe.test(k));
+      if (isInsert) return allDyn;
       const changed = changedMap?.get(row as never);
       if (!changed) return [];
-      return allW.filter(k => k in changed);
+      return allDyn.filter(k => k in changed);
     };
 
     // 키 컬럼은 모두 LOC 행(그룹 대표 = AS-IS CurrentDataRow) 값 사용, measure/price 만 가변.
@@ -595,7 +601,7 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         if (isInsert && (rawLoc === undefined || rawLoc === '' || rawLoc === null)) continue;
         const locPrice =
           rawLoc === undefined || rawLoc === '' || rawLoc === null ? '0' : toStr(rawLoc);
-        const yyyymmdd = dk.slice(2); // W_yyyymmdd → yyyymmdd
+        const yyyymmdd = dk.slice(2); // W_yyyymmdd / M_yyyymmdd(월 1일) → yyyymmdd
         const yyyymm = yyyymmdd.slice(0, 6);
 
         // LOC entry — price==0 → 'D' (AS-IS [E20240206-000758]: LOC 메져만 0 시 상태 D).
@@ -767,11 +773,17 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
             iconComponent: <IcGridColumnSetup />,
             buttonLabel: '',
           },
-          {
-            label: t('LBL00662', 'Price Batch Input'),
-            title: t('LBL00662', 'Price Batch Input'),
-            action: () => setOpenBatch(true),
-          },
+          // Price Batch Input - 편집가능 division(현행 82)에서만 노출. 편집제약 division(40/81 계열)은
+          //   셀 편집/Insert/Delete/Save 가 모두 막혀 있으므로 일괄입력 진입점도 함께 숨긴다.
+          ...(editable
+            ? [
+                {
+                  label: t('LBL00662', 'Price Batch Input'),
+                  title: t('LBL00662', 'Price Batch Input'),
+                  action: () => setOpenBatch(true),
+                },
+              ]
+            : []),
         ]}
       />
 
@@ -818,7 +830,8 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         open={openVersion}
         modalClose={() => setOpenVersion(false)}
         defaultDivision={sc.divisionId}
-        onApply={vIds => setSearchCondition({ versionId: vIds })}
+        // 표기 흔들림 방어 — 정본('Current')으로 접어 담는다(normalizeVersionIds 주석 참조).
+        onApply={vIds => setSearchCondition({ versionId: normalizeVersionIds(vIds) })}
       />
       {/* 저장 후 Range Rate 초과 리스트 (AS-IS DMF0020_SalesPriceRangePopUp — SAVE O_RC1) */}
       <SalesPriceRangeModal

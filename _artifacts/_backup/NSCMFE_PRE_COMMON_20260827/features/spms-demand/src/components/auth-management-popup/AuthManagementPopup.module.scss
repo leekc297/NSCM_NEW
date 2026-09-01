@@ -1,0 +1,145 @@
+.wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.projectBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 38px;
+  padding: 6px 12px;
+  background: var(--gray-50, #f7f8fa);
+  border: 1px solid var(--gray-200, #e4e7ec);
+}
+
+.projectName,
+.userSearch {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.projectName span::before {
+  content: '* ';
+  color: var(--red-500, #e02020);
+}
+
+.userSearch > span {
+  font-weight: 600;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: 280px 333px 44px 473px;
+  grid-template-rows: minmax(160px, 1fr) 44px minmax(160px, 1fr) minmax(180px, 1.15fr);
+  gap: 8px;
+  flex: 1;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.orgTreePanel {
+  grid-column: 1;
+  grid-row: 1 / 5;
+  overflow: auto;
+  border: 1px solid var(--gray-200, #e4e7ec);
+}
+
+.orgTree {
+  height: 100%;
+  overflow: auto;
+}
+
+.gridPanel {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.userPanel {
+  grid-column: 2;
+  grid-row: 1 / 5;
+}
+
+.inputPanel {
+  grid-column: 4;
+  grid-row: 1;
+}
+
+.viewPanel {
+  grid-column: 4;
+  grid-row: 3;
+}
+
+.addButtonColumn {
+  grid-column: 3;
+  grid-row: 1 / 4;
+  display: grid;
+  grid-template-rows: minmax(160px, 1fr) 44px minmax(160px, 1fr);
+}
+
+.authTransferButtons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding-top: 24px;
+}
+
+.inputTransferButtons {
+  grid-row: 1;
+}
+
+.viewTransferButtons {
+  grid-row: 3;
+}
+
+.authorityMoveButtons {
+  grid-column: 4;
+  grid-row: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.panelTitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+  padding: 4px 0;
+}
+
+.requestPanel {
+  grid-column: 4;
+  grid-row: 4;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.processButtons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 100%;
+}
+
+.buttonWrapper {
+  display: flex;
+  flex: 0 0 auto;
+  justify-content: end;
+  gap: 4px;
+  margin-top: 5px;
+}

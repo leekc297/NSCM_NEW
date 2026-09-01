@@ -96,6 +96,7 @@ export const ContributeVersionModal = ({ open, modalClose }: ContributeVersionMo
   const fetchStaticColumns = useContributeVersionModalStore(s => s.fetchStaticColumns);
   const selectedYear = useContributeVersionModalStore(s => s.selectedYear);
   const setSelectedYear = useContributeVersionModalStore(s => s.setSelectedYear);
+  const noFilters = useContributeVersionModalStore(s => s.noFilters);
 
   const setAlert = useMessageStore(s => s.setAlert);
   const setToast = useMessageStore(s => s.setToast);
@@ -111,7 +112,7 @@ export const ContributeVersionModal = ({ open, modalClose }: ContributeVersionMo
     menuId: MODAL_VERSION,
     sheetName: MODAL_SHEET_YEAR,
     tabId: MODAL_VERSION,
-    filters: {},
+    filters: noFilters,
     enabled: open,
   });
 
@@ -120,11 +121,16 @@ export const ContributeVersionModal = ({ open, modalClose }: ContributeVersionMo
     [yearData]
   );
 
+  // useTabProcQuery 는 filters 참조가 바뀌면 캐시를 버리고 재조회한다. 인라인 리터럴로
+  // 넘기면 selectedYear 가 그대로여도 이 컴포넌트가 리렌더될 때마다(staticColumns 갱신 등)
+  // 새 참조가 생겨 그리드가 깜빡였다 — useMemo 로 참조를 selectedYear 에 고정한다.
+  const rateFilters = useMemo(() => ({ yyyy: selectedYear }), [selectedYear]);
+
   const { data: rateData, refetch } = useTabProcQuery<MODAL_VERSION>({
     menuId: MODAL_VERSION,
     sheetName: MODAL_SHEET_DATA,
     tabId: MODAL_VERSION,
-    filters: { yyyy: selectedYear },
+    filters: rateFilters,
     enabled: open && !!selectedYear,
   });
 
@@ -379,13 +385,6 @@ export const ContributeVersionModal = ({ open, modalClose }: ContributeVersionMo
               onClick={handleDelete}
             />
             <Button
-              appearance='outlined'
-              priority='normal'
-              size='medium'
-              buttonLabel={t('LBL00107', '_Close')}
-              onClick={() => modalClose()}
-            />
-            <Button
               appearance='contained'
               buttonLabel={t('LBL00111', '_Save')}
               iconComponent={<ControlConfirmIcon size='small' />}
@@ -393,6 +392,13 @@ export const ContributeVersionModal = ({ open, modalClose }: ContributeVersionMo
               priority='primary'
               size='medium'
               onClick={() => void handleSave()}
+            />
+            <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel={t('LBL00107', '_Close')}
+              onClick={() => modalClose()}
             />
           </div>
         </div>

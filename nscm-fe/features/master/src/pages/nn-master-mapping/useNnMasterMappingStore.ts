@@ -14,6 +14,9 @@ interface State {
   openSearchArea: boolean;
   // BE 메타 SHEET_COLUMNS 동적 fetch (admin UI Category Setup 즉시 반영, 룰 #65)
   staticColumns: { main: RawFlexGridColumnConfig[] };
+  // Data Type SP 는 조회조건을 받지 않는다. store 필드로 참조를 고정해 다른 조회조건 변경 시
+  // Data Type 콤보가 불필요하게 재조회되는 걸 막는다.
+  noFilters: Record<string, never>;
 }
 
 interface Action {
@@ -41,6 +44,7 @@ const initState: State = {
   searchCondition: initSearch,
   openSearchArea: true,
   staticColumns: { main: [] },
+  noFilters: {},
 };
 
 export const useNnMasterMappingStore = createPersistedStoreWithTab<State & Action>(

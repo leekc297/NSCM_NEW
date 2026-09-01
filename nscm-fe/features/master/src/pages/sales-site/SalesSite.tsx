@@ -5,7 +5,12 @@ import { useEffect, useRef, useState } from 'react';
 import type { ComboResponse, HotkeyConfig, PageProps } from '@foundation/models';
 import { GridAction } from '@foundation/utils';
 import { MainTitle, SubTitle, TabItem, TabWrapper } from '@shared/components';
-import { useProcMutation, useSaveWithValidation, useTabProcQuery } from '@shared/hooks';
+import {
+  useInvalidateCombos,
+  useProcMutation,
+  useSaveWithValidation,
+  useTabProcQuery,
+} from '@shared/hooks';
 import { Panel, PanelGroup, PanelSeparator } from '@shared/panel';
 
 import { SalesSiteBucketGrid } from './components/SalesSiteBucketGrid';
@@ -17,6 +22,7 @@ import type { RESPONSE_SET } from './sales-site.constants';
 import { MENU_ID, SHEET_INDEX, SHEETS } from './sales-site.constants';
 import styles from './SalesSite.module.scss';
 import { useSalesSiteStore } from './useSalesSiteStore';
+import { SALES_SITE_STALE_COMBO_IDS } from './utils/sales-site.salesSiteCombo';
 import { resolveComboCodeByDivision } from './utils/sales-site.util';
 
 export const SalesSite = ({ tabId, title }: PageProps<MENU_ID>) => {
@@ -43,6 +49,7 @@ export const SalesSite = ({ tabId, title }: PageProps<MENU_ID>) => {
   const [openDetailGrid, setOpenDetailGrid] = useState<boolean>(true);
 
   const { saveWithValidation } = useSaveWithValidation();
+  const invalidateCombos = useInvalidateCombos();
 
   const { data: siteData } = useTabProcQuery<MENU_ID, SHEETS.SITE>({
     menuId: MENU_ID,
@@ -122,6 +129,8 @@ export const SalesSite = ({ tabId, title }: PageProps<MENU_ID>) => {
   };
 
   const handleSave = () => {
+    gridRefs[activeTab].current?.finishEditing();
+
     switch (activeTab) {
       case SHEET_INDEX.SITE: {
         const grid = gridRefs[SHEET_INDEX.SITE].current;
@@ -145,7 +154,14 @@ export const SalesSite = ({ tabId, title }: PageProps<MENU_ID>) => {
           })
         );
         const staticColumn = staticColumns.salesSite;
-        saveWithValidation(saveData, staticColumn, mutateSite);
+        // 이 그리드가 조회조건 Sales Site 콤보의 원천이다 — 저장으로 사이트가 늘거나(신규)
+        //   Active 가 바뀌면 콤보 목록도 달라지므로 저장 성공 직후 콤보를 다시 받는다.
+        //   mutate 호출 단위 onSuccess 는 훅 기본 onSuccess(토스트 + 그리드 재조회) 다음에 이어서 실행된다.
+        saveWithValidation(saveData, staticColumn, rows =>
+          mutateSite(rows, {
+            onSuccess: () => void invalidateCombos([...SALES_SITE_STALE_COMBO_IDS]),
+          })
+        );
         break;
       }
       case SHEET_INDEX.CUSTOMER: {

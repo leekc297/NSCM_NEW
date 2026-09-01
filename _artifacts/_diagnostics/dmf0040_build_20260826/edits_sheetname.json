@@ -1,0 +1,6 @@
+[
+ {
+  "old": "    V_SHEET_NAME            VARCHAR2(200  CHAR) := 'mktFcstWaterfall';",
+  "new": "    V_SHEET_NAME            VARCHAR2(200  CHAR) := 'Mkt Fcst Waterfall';   --[E20260827-SHEETNAME] 변환 결함 정정 — SHEET_COLUMNS/MEASURE/TITLESET 실명(공백 포함, 실측 48/49행)과 불일치로 titleset 초기화·C_TITLE 0행 → GROUP BY/ORDER BY 붕괴(ORA-00936, DBMS_OUTPUT 캡처 실증 2026-08-27)"
+ }
+]

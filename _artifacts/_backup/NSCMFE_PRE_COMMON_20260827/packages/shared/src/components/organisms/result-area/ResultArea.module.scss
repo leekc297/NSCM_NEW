@@ -1,0 +1,102 @@
+// SubTitle 아래 "제목 + 그리드" 를 한 프레임으로 묶는 결과 영역.
+//   min-width/min-height:0 은 필수 — flexbox 기본값 min-*:auto 로는 그리드 콘텐츠가 부풀어
+//   우측/하단이 잘린다.
+
+.resultArea {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+}
+
+// 제목 헤더는 자체 높이(auto), 본문이 남은 공간을 모두 차지한다.
+.body {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+}
+
+// 여러 ResultArea 를 묶는 컨테이너. 방향은 .column / .row 로 결정.
+.group {
+  display: flex;
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+}
+
+.column {
+  flex-direction: column;
+}
+
+.row {
+  flex-direction: row;
+}
+
+// 이하 split(드래그 분할) 전용.
+// Panel 직속 자식 — Panel 이 높이를 관리하므로 flex-grow 가 아니라 height:100% 로 채운다.
+.panel {
+  display: flex;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+
+  > * {
+    flex: 1 1 0;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+  }
+
+  // Panel 높이는 % 로 계산되므로 그리드가 자기 콘텐츠만큼 부풀지 않게 상한을 건다.
+  [class*='wj-flexgrid'] {
+    max-height: 100%;
+  }
+}
+
+// 드래그 바(Separator). react-resizable-panels v4 Separator 는 기본 두께 0 + 커서 없음이라
+// 잡을 영역이 없다 → 두께/리사이즈 커서/중앙 구분선을 여기서 부여해야 드래그가 동작한다.
+// (inline style 로 flexGrow/flexShrink:0 이 걸리므로 두께는 flex-basis 가 아닌 width/height 로 지정)
+.splitBar {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    background: #d8dde3;
+    border-radius: 1px;
+    transition: background 0.15s ease;
+  }
+
+  &:hover::before,
+  &[data-separator='hover']::before,
+  &[data-separator='active']::before {
+    background: #1976d2;
+  }
+}
+
+.splitBarRow {
+  height: 16px;
+  cursor: row-resize;
+
+  &::before {
+    inset-inline: 0;
+    top: 50%;
+    height: 2px;
+    transform: translateY(-50%);
+  }
+}
+
+.splitBarCol {
+  width: 16px;
+  cursor: col-resize;
+
+  &::before {
+    inset-block: 0;
+    left: 50%;
+    width: 2px;
+    transform: translateX(-50%);
+  }
+}

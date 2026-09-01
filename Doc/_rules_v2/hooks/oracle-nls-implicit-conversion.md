@@ -106,3 +106,20 @@ SELECT line, text FROM user_source
 | PKG_DMF0044 | 1 | Sales Reports |
 | PKG_DMF0074 | ~~3~~ **0** | ✅ 2026-08-25 정정 (E20260825-DATECONV) |
 | 기타 standalone (DMF0022/0035/0074 구본·PR_SCP_OPT 등) | 다수 | 미배선 레거시 여부 확인 후 판단 |
+
+## §6. ⭐⭐ 2026-08-27 증보 — 동적 SQL 안의 `CAST(문자 AS DATE)` = 클라우드 BE 세션만 ORA-01861 (사용자 명시)
+
+> 사용자 원문: "동적 SQL 내에서 일자변환에 대해서 정확한 형변환 문장이 있어야 합니다."
+
+### 실사고 (DMF0040 클라우드, 2026-08-27)
+- `PKG_DMF0040` 동적 SQL 7곳 `TO_CHAR(FN_NEXT_DAY(CAST(F.CUTOFF_YYYYMMDD AS DATE),'MON')-7,'YYYYMMDD')` — `CUTOFF_YYYYMMDD` 는 VARCHAR2 'YYYYMMDD'.
+- SCM_MGR DBeaver 재현·사내 BE 는 통과, **클라우드 BE JDBC 세션(`NLS_DATE_FORMAT='DD-MON-RR'`) 만** `ORA-01861 @ DBMS_SQL` → 화면 "SQL ERROR".
+- 정정 `[E20260827-NLSDATE]`: `TO_DATE(F.CUTOFF_YYYYMMDD,'YYYYMMDD')`. 같은 스윕에서 DMF0014 `PR_DM_PLN_CUST_FCST_TO_MKT_FCST_40` 의 `CAST(A.SUMMARY_BUCKET_VALUE AS DATE)` 1곳 선제 정정.
+
+### 의무
+1. 동적 SQL(문자열로 조립되는 SQL) 안의 문자→DATE 는 **예외 없이 `TO_DATE(x,'마스크')`**. `CAST(x AS DATE)` 는 문자 인자에 대해 ⛔ (SYSTIMESTAMP/NULL 인자만 허용).
+2. 검증은 **클라우드 NLS 모사 세션**으로: `ALTER SESSION SET NLS_DATE_FORMAT='DD-MON-RR'` 후 (a) ASIS 식 재현 실패 (b) 정정 식·정정 SP 통과. `RR/MM/DD`·`YYYY-MM-DD` 는 4자리 연도를 관용 허용해 **재현되지 않으므로 검증 근거로 쓰지 않는다** (정본 `_artifacts/_diagnostics/dmf0040_nlsdate_verify.py`).
+3. 이관 패키지 생성 시 동봉 SP 원문 NLS 스캔 0건 게이트 ([[cloud-deploy-silent-failure-gates]] §3 G5).
+
+### 잔여 동일 패턴 인벤토리 (2026-08-27 SCM_MGR 전수 — 정정 대기, 소급은 화면 작업 시점)
+`SCP0039_GET_VALIDATION_INTRANSIT_INVENTORY`(2) · `SSP0046_GET_SHIPMENT_REQUEST`(1) · `SSP0060_GET_SHIPMENT_PLAN`(3) · 구 standalone `DMF0040_GET_MKT_FCST_COMPARISON`(7, PKG 이전 유물·미배선).

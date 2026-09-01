@@ -1,4 +1,4 @@
-# 카테고리 12 — 프로세스·운영·배포 / Process, Ops & Deploy
+﻿# 카테고리 12 — 프로세스·운영·배포 / Process, Ops & Deploy
 
 > **연다: 언제?** 작업 시작/종료 게이트, 사내 DB 적용, 이관 패키지, git, 로컬 환경, 이슈 관리 시.
 
@@ -10,6 +10,7 @@
 | 37 | [pre-submit](../hooks/pre-submit.md) | 🅒 | PR 제출 직전 통합 검증 (머지 게이트) |
 | 46 | [screen-completion-gate](../hooks/screen-completion-gate.md) | ⭐⭐ | 화면 종료 선언 전 **8 게이트** + 보고 양식 + ⭐ **완료 선언 = ui_gate_runner 리포트 첨부 의무 (2026-08-07)** |
 | 101 | [ui-work-entry-playbook](../hooks/ui-work-entry-playbook.md) | ⭐⭐⭐ | "보완"/"신규 생성" 진입 절차 (카테고리 01·11 공유) |
+| 149 | [remediation-closure-symptom-reproduction](../hooks/remediation-closure-symptom-reproduction.md) | ⭐⭐⭐ | **보완요청 종결 게이트 (2026-08-31)** — 신고 증상 재현→정정→해소 실측 2축 의무·존재≠동작(실존 확인은 전이 근거 불인정)·클라우드 신고=사용자 실측 전 Y ⛔·원인 프레임 이월 금지 |
 
 > ⭐ **실행 hook 7종 + 보조 검증 도구 3종 (2026-08-07)** — 단일 소스 = `RULESET_MASTER §6.1`:
 > 실행 hook 에 `check-ui-gates.ps1`(G-A~**G-E** — G-E=모달 확정버튼 부재 의심) · `check-meta-sql.ps1`(SHEET_COLUMNS CTRL/INPUT_TP_CD 값 단언) 추가.
@@ -25,6 +26,7 @@
 | 14 | [deploy-package-completeness](../hooks/deploy-package-completeness.md) | ⭐ | 이관 패키지 PRE/POST 인벤토리 + 클라우드 PRECHECK·채번충돌 |
 | 122 | [cloud-ui-db-object-fetch](../hooks/cloud-ui-db-object-fetch.md) | ⭐⭐ | 클라우드 생성 UI DB 객체 **역이관** 표준 — 발견 4축→DDL 원문→메타 INSERT-only 에미터→DISCOVER↔VERIFY 카운트 대조. 템플릿=SYS0016_CLOUD_FETCH_20260804 |
 | 60 | [sp-patch-file-deploy](../hooks/sp-patch-file-deploy.md) | ⭐⭐ | patch 형식·의존순서 (카테고리 09 공유) |
+| 148 | [cloud-deploy-silent-failure-gates](../hooks/cloud-deploy-silent-failure-gates.md) | ⭐⭐⭐ | 클라우드 이관 조용한-실패 5계보 — `40_GRANT_SYNONYM`·`22A` 종속 PROGRAM_ID 메타·`90_VERIFY` V11~V13·d.ts 블록 경계·NLS 스캔. 룰=생성기 코드 |
 | 44 | [scmd-app-grant-mandatory](../hooks/scmd-app-grant-mandatory.md) | ⭐⭐ | GRANT+SYNONYM + 패키지 09_GRANT 필수 |
 | 78 | [ui-category-setup-no-arbitrary-data](../hooks/ui-category-setup-no-arbitrary-data.md) | ⭐⭐⭐ | 메타 임의 생성 금지 (카테고리 08 공유) — DML=사용자 승인 후 |
 

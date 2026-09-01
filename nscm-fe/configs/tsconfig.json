@@ -1,0 +1,18 @@
+{
+  // 에디터 전용 프로젝트 — configs/types/*.d.ts 를 단독으로 열었을 때 TS 서버·typescript-eslint(projectService)가
+  // 이 tsconfig 를 최근접 프로젝트로 잡아 global.d.ts 의 전역 타입(JsonPrimitive/WijmoRowItem 등)을 함께 로드한다.
+  // 빌드/타입체크는 각 패키지 tsconfig 가 "../../configs/types/*.d.ts" 를 include 하므로 종전과 동일 (2026-08-27).
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": "../",
+    "noEmit": true,
+    "incremental": false,
+    "composite": false,
+    "declaration": false,
+    "declarationMap": false,
+    "sourceMap": false,
+    "types": ["vite/client", "node"]
+  },
+  "include": ["types/*.d.ts"],
+  "references": []
+}

@@ -1,36 +1,16 @@
 // ⭐ SDM5010 — call-proc 직접 호출 헬퍼 (PKG_SDM5010 — 승인 CONFIRM/반려 CANCEL/TAB2 SAVE).
 //   ⭐ 전 액션 = **행별 단건 호출** (확정 결정 — '^' 다행 금지: 빈 토큰 행밀림·날짜 파싱 함정,
 //     SDM1010 §0.2 계보). 빈 값 = '' (단건이라 안전 — '-' 센티널 금지: TO_DATE 파싱 오류).
-//   ⭐ 성공판정 = 결과커서 **CODE 이름** '0' + **EVENT 처리건수** (project-list.api 계약 이식 —
-//     위치기반 추출 금지, memory feedback_callproc_result_cursor_code_check. EVENT 0 =
-//     실패 처리·성공 토스트 금지 — D12 허위성공 방어 정오표 방침).
+//   ⭐ 성공판정 = parseCallProcResult 공통 (SDM lib/call-proc — CODE 이름 '0' + EVENT 처리건수.
+//     실패 시 EVENT 의 MSG##### 코드는 messageId 로 추출 — D10/D12 정정분. EVENT 0 =
+//     실패 처리·성공 토스트 금지 — 허위성공 방어 정오표 방침).
 //   실패(예외)는 RAISE_APPLICATION_ERROR → HTTP 오류 경로로 수신. BTN 2본은 내부 COMMIT 보유 (D21).
 import { apiClient } from '@foundation/apis';
 
+import { parseCallProcResult, type CallProcResult } from '../../../lib/call-proc';
 import { BTN, MENU_ID, SHEETS } from '../project-master.constants';
 
-import { toText } from './project-master.value';
-
-export interface CallProcResult {
-  ok: boolean;
-  /** SP 결과커서 CODE 원문 — '0'=성공 ('1'/'-1' = 가드 실패 — D10/D12 정정분·SAVE 계약 외 FLAG) */
-  code?: string;
-  /** SP 결과커서 MSG ('SUCCESS') 또는 BE 오류 메시지 */
-  message?: string;
-  /** SP 결과커서 EVENT — 처리건수 (NULL → 0. EVENT 0 = 성공 토스트 금지 축) */
-  event: number;
-}
-
-// 결과커서 rows 추출 — result 가 배열(단일 커서) 또는 {커서명: rows[]} 객체 양쪽 대응
-const extractRows = (data: unknown): Record<string, unknown>[] | undefined => {
-  const result = (data as { result?: unknown })?.result;
-  if (Array.isArray(result)) return result as Record<string, unknown>[];
-  if (result && typeof result === 'object') {
-    const arr = Object.values(result as Record<string, unknown>).find(v => Array.isArray(v));
-    return arr as Record<string, unknown>[] | undefined;
-  }
-  return undefined;
-};
+export type { CallProcResult } from '../../../lib/call-proc';
 
 const callProc = async (
   sheet: string,
@@ -41,29 +21,7 @@ const callProc = async (
     `/${MENU_ID}/${sheet}/${btnCd}/call-proc`,
     payload
   );
-  // status 500/403 은 responseErrorInterceptor 가 resolve → 직접 차단 (false success 방지 — gate §1-3)
-  if (res.status >= 400 || Number((res.data as { code?: string })?.code)) {
-    return {
-      ok: false,
-      event: 0,
-      message: (res.data as { message?: string })?.message?.trim(),
-    };
-  }
-  const first = extractRows(res.data)?.[0];
-  if (!first || !('CODE' in first)) {
-    // CODE 커서 미반환 응답 — PKG_SDM5010 계약(전 SP O_RESULT_CURSOR 필수)에서 비정상 → 실패 취급
-    return { ok: false, event: 0, message: undefined };
-  }
-  // ⭐ 이름 기반 추출 (CODE/MSG/EVENT — 커서 계약)
-  const code = toText(first.CODE).trim();
-  const msg = typeof first.MSG === 'string' ? first.MSG.trim() : undefined;
-  const event = Number(toText(first.EVENT).trim() || '0');
-  return {
-    ok: code === '0',
-    code,
-    message: msg,
-    event: Number.isFinite(event) ? event : 0,
-  };
+  return parseCallProcResult(res.status, res.data);
 };
 
 // 승인 payload (P_SDM5010_BTN_TAB1_CONFIRM 15 IN 중 sesUserId BE주입 제외 14키 —

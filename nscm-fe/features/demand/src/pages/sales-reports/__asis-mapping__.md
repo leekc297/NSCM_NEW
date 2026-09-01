@@ -100,7 +100,7 @@
 | M-3 | 메인 / MEASURE | nscm-fe/features/demand/src/pages/sales-reports/utils/sales-reports.editLock.ts:71 else — d40 && isPast |  | 구현 |
 | M-4 | 메인 / MEASURE (InsertRow) | nscm-fe/features/demand/src/pages/sales-reports/SalesReports.tsx:152 handleInsert(2행 세트 measure 강제) + nscm-fe/features/demand/src/pages/sales-reports/utils/sales-reports.editLock.ts:51~55 (Insert 행 = MEASURE 강제 세팅 전제) — ⚠ 2026-08-11 전환: 잠금 판정의 하드코딩 화이트리스트(구 INSERT_LOCKED_COLUMNS)는 **폐기**되고 UI Category Setup `INPUT_TP_CD` 단일 원천(staticEditableByMeta)이 대신한다 |  | 구현 |
 | M-5 | 메인 / 기간 셀 (spdMain_Changed) | nscm-fe/features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx cellEditEndedHandler — 동적 셀 빈값 → '0' |  | 구현 |
-| M-6 | 메인 / DEPARTMENT_ID 값 | nscm-fe/features/demand/src/pages/sales-reports/utils/sales-reports.gridCombos.ts resolveDeptIdRows(3분기) + DEPARTMENT_CHANGE_CLEAR (2026-08-09 이관 — CMBO DMF0044_DEPARTMENT_TEAM / _ETC_SALE_RESULT_TYPE_40 신규 등록) |  | 구현 |
+| M-6 | 메인 / DEPARTMENT_ID 값 | nscm-fe/features/demand/src/pages/sales-reports/utils/sales-reports.gridCombos.ts DEPARTMENT_CHANGE_CLEAR (하위 5컬럼 clear) — DEPT_ID 콤보 3분기(resolveDeptIdRows)는 **2026-08-28 제거**(REQ:CHAT-20260828-05 사용자 지시: DEPT_ID 는 메타 콤보 미설정 컬럼 → 코드 그대로 표시·입력, 명칭은 DEPT_NAME 소관) |  | 구현(콤보 제거) |
 | M-7 | 메인 / DEPT_ID(팀) 값 | nscm-fe/features/demand/src/pages/sales-reports/utils/sales-reports.gridCombos.ts ROW_COMBO_IDS.CUST_REPORT('DMF0005_REPORT_GROUP2') — beginningEdit 스왑. 'MDF' 분기의 ITEM/NICK 강제세팅은 §6 승계 금지 대상 |  | 구현 |
 | M-8 | 메인 / ITEM_ID 값 (더블클릭) | nscm-fe/features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx dblclickHandler — ITEM_ID '기타매출' 제외 |  | 구현 |
 | V-1 | 구간 기준 / `sCurMonth = DateTime.Today("yyyyMM")`, `iStartCol = MEASURE+1` | nscm-fe/features/demand/src/pages/sales-reports/useSalesReportsStore.ts thisMonth = dayjs().format('YYYYMM') (조회 시점 고정) |  | 구현 |
@@ -303,7 +303,7 @@ clbDivision 이중구독 / btnSPVer 구 팝업 호출(L1156~1163 주석 — CUTO
 | SQL_ID | 필요 토큰 | FE 전달 | 판정 | 비고 |
 |---|---|---|---|---|
 | DMF0044_DEPARTMENT_TEAM2 | divisionId | divisionId | ✅ | DEPARTMENT_ID 미입력 시 DEPT_ID 후보 (AS-IS InsertRow L990) |
-| DMF0044_DEPARTMENT_TEAM | - (superset) | - | ✅ | **신규 등록**. AS-IS 는 `@Param1=UPPER_DEPT_ID` 서버 필터 → TO-BE 는 부모키 `DEPARTMENT_ID` 동반 반환 후 `resolveDeptIdRows` 클라 필터 |
+| DMF0044_DEPARTMENT_TEAM | - (superset) | - | ⛔ 미사용 | 등록은 유지하나 **FE 소비 제거 (2026-08-28, REQ:CHAT-20260828-05)** — DEPT_ID 코드 직접 입력. (구: 부모키 `DEPARTMENT_ID` 동반 반환 후 `resolveDeptIdRows` 클라 필터) |
 | DMF0044_ETC_SALE_RESULT_TYPE_40 | - | - | ✅ | **신규 등록**. DEPARTMENT_ID='기타' 분기 (AS-IS L1195) |
 | DMF0005_REPORT_GROUP2 | - | - | ✅ | CUST_REPORT (AS-IS L1244) |
 | DMF0005_REPORT_GROUP3 | - | - | ✅ | PRODUCT_GROUP (AS-IS L1225 `GetLookupData`) |
