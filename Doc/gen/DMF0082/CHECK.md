@@ -1,0 +1,111 @@
+# [Harness] DMF0082 forecast-price — BLOCK 1 / WARN 108
+
+- BLOCK F11 빈 catch 금지(콤보 호출 실패 삼킴) @components/ForecastPriceGrid.tsx:783
+- WARN F15 onSearch inline 함수 — store setFilters 를 직접 넘길 것 (룰 06 §3.5) @components/modals/ForecastTemplateModal.tsx:224
+- WARN G02 As-is 엔드포인트 DM.DMF0082_GET_MAIN_DATA (DMF0082_GET_MAIN_DATA) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 DM.DMF0082_SAVE_MAIN_DATA (DMF0082_SAVE_MAIN_DATA) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 DM.PR_GET_DAY_RANGE (PR_GET_DAY_RANGE) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 DM.DMF0082_POPUP_GET_FUTUREPRICE_INFO (DMF0082_POPUP_GET_FUTUREPRICE_INFO) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 DM.DMF0003_GET_MKT_FCST_COMPARE_POPUP (DMF0003_GET_MKT_FCST_COMPARE_POPUP) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 DM.DMF0082_POPUP_GET_WEEKDATA (DMF0082_POPUP_GET_WEEKDATA) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 DM.DMF0082_POPUP_GET_MEASURE_COUNTINFO_SAVE_PRICE (DMF0082_POPUP_GET_MEASURE_COUNTINFO_SAVE_PRICE) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 DM.DMF0082_POPUP_GET_MEASURE_COUNTINFO (DMF0082_POPUP_GET_MEASURE_COUNTINFO) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 DM.DMF0082_POPUP_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP (DMF0082_POPUP_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 DM.DMF0082_POPUP_GET_SPREAD_TITLE_SAVE_PRICE (DMF0082_POPUP_GET_SPREAD_TITLE_SAVE_PRICE) 매핑표 §4 에 없음
+- WARN G03 As-is 이벤트 chkSum.CheckedChanged → chkSum_CheckedChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 btnMeasure.Click → btnMeasure_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 btnColumn.Click → btnColumn_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboBucketType.SelectedIndexChanged → cboBucketType_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboBucketType.Click → cboBucketType_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 clbCustomer.SelectedIndexChanged → clbCustomer_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 clbTeam.SelectedIndexChanged → clbTeam_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 clbDivision.Click → clbDivision_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 btnSavePricePeriod.Click → btnSavePricePeriod_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 btnItemId.Click → btnItemId_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 btnVersion.Click → btnVersion_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 btnVersion.KeyDown → txtVersion_KeyDown 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 btnExchangeRate.Click → btnExchangeRate_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.ClipboardPasted → spdMain_ClipboardPasted 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.LeaveCell → spdMain_LeaveCell 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.CellDoubleClick → spdMain_CellDoubleClick 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.ComboSelChange → spdMain_ComboSelChange 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.EditChange → spdMain_EditChange 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.TopChange → spdMain_TopChange 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 this.Load → Form_Load 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 dsdm.Changed → spdMain_Changed 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboBucketType.SelectedIndexChanged → cboBucketType_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 dsdm.Changed → spdMain_Changed 매핑표 §2 에 없음
+- WARN G04 As-is 컨트롤 chkSum / UsrCheckBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboQty / UsrCheckBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnMeasure / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnColumn / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboBucketType / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 drpPeriod / UsrDateRangePicker 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 clbSalesSite / UsrCheckedList 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 clbBizType / UsrCheckedList 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 clbCustomer / UsrCheckedList 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 clbTeam / UsrCheckedList 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 clbDivision / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtVersion / UsrMultiLineEditor 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnSavePricePeriod / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtItemId / UsrMultiLineEditor 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnItemId / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnVersion / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnExchangeRate / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 spdMain / FpSpread 매핑표 §1 에 없음
+- WARN D01 사전 밖 컴포넌트 <ForecastPriceRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @ForecastPrice.tsx
+- WARN D01 사전 밖 컴포넌트 <EditTracker> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @ForecastPrice.tsx
+- WARN D01 사전 밖 컴포넌트 <WijmoRowItem> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @ForecastPrice.tsx
+- WARN D01 사전 밖 컴포넌트 <ForecastPriceRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @ForecastPrice.tsx
+- WARN D01 사전 밖 컴포넌트 <WijmoRowItem> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @ForecastPrice.tsx
+- WARN D01 사전 밖 컴포넌트 <WijmoRowItem> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @ForecastPrice.tsx
+- WARN D01 사전 밖 컴포넌트 <ForecastPriceRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @ForecastPrice.tsx
+- WARN D01 사전 밖 컴포넌트 <FileExceldownloadIcon> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @ForecastPrice.tsx
+- WARN D01 사전 밖 컴포넌트 <FileExceluploadIcon> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @ForecastPrice.tsx
+- WARN D01 사전 밖 컴포넌트 <IcExchangeRate> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @ForecastPrice.tsx
+- WARN D01 사전 밖 컴포넌트 <FcstUploadModal> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @ForecastPrice.tsx
+- WARN D01 사전 밖 컴포넌트 <ForecastPriceRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/ForecastPriceGrid.tsx
+- WARN D01 사전 밖 컴포넌트 <ForecastPriceRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/ForecastPriceGrid.tsx
+- WARN D01 사전 밖 컴포넌트 <ForecastPriceRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/ForecastPriceGrid.tsx
+- WARN D01 사전 밖 컴포넌트 <EditTracker> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/ForecastPriceGrid.tsx
+- WARN D01 사전 밖 컴포넌트 <DataMap> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/ForecastPriceGrid.tsx
+- WARN D01 사전 밖 컴포넌트 <DataMap> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/ForecastPriceGrid.tsx
+- WARN D01 사전 밖 컴포넌트 <DataMap> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/ForecastPriceGrid.tsx
+- WARN D01 사전 밖 컴포넌트 <DynColMeta> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/ForecastPriceGrid.tsx
+- WARN D01 사전 밖 컴포넌트 <DynColMeta> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/ForecastPriceGrid.tsx
+- WARN D01 사전 밖 컴포넌트 <ForecastPriceRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/ForecastPriceGrid.tsx
+- WARN D01 사전 밖 컴포넌트 <PivotRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/modals/ExchangeRateModal.tsx
+- WARN D01 사전 밖 컴포넌트 <PivotRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/modals/ExchangeRateModal.tsx
+- WARN D01 사전 밖 컴포넌트 <PivotRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/modals/ExchangeRateModal.tsx
+- WARN D01 사전 밖 컴포넌트 <PivotRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/modals/ExchangeRateModal.tsx
+- WARN D01 사전 밖 컴포넌트 <TFlexGrid> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/modals/ForecastTemplateModal.tsx
+- WARN D01 사전 밖 컴포넌트 <FileExceldownloadIcon> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/modals/ForecastTemplateModal.tsx
+- WARN D01 사전 밖 컴포넌트 <PriceRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/modals/SavePricePeriodModal.tsx
+- WARN D01 사전 밖 컴포넌트 <HTMLDivElement> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/modals/SavePricePeriodModal.tsx
+- WARN D01 사전 밖 컴포넌트 <PriceRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/modals/SavePricePeriodModal.tsx
+- WARN D01 사전 밖 컴포넌트 <FileExceldownloadIcon> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/modals/SavePricePeriodModal.tsx
+- WARN D01 사전 밖 컴포넌트 <ControlConfirmIcon> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/modals/SavePricePeriodModal.tsx
+- WARN D01 사전 밖 컴포넌트 <VersionPopupRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/modals/VersionSelectModal.tsx
+- WARN D01 사전 밖 컴포넌트 <VersionPopupRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/modals/VersionSelectModal.tsx
+- WARN D01 사전 밖 컴포넌트 <ControlConfirmIcon> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/modals/VersionSelectModal.tsx
+- WARN D01 사전 밖 컴포넌트 <T> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @useForecastPriceStore.test.tsx
+- WARN D01 사전 밖 컴포넌트 <T> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @useForecastPriceStore.test.tsx
+- WARN D01 사전 밖 컴포넌트 <T> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @useForecastPriceStore.test.tsx
+- WARN D01 사전 밖 컴포넌트 <T> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @useForecastPriceStore.test.tsx
+- WARN D01 사전 밖 컴포넌트 <T> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @useForecastPriceStore.test.tsx
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @ForecastPrice.tsx:246
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/ForecastPriceGrid.tsx:315
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/modals/SavePricePeriodModal.tsx:380
+- WARN R10 감사키 빈문자열 (#99 §0.1) @components/modals/VersionSelectModal.tsx:144
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @utils/forecast-price.save.test.ts:30
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @utils/forecast-price.validate.test.ts:24
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @utils/forecast-price.wsAuth.test.ts:38
+- WARN R16 진입 Page 1174 라인 > 400 — components/ 분리 (#9) @ForecastPrice.tsx
+- WARN B05 Page: useTabProcQuery<MENU_ID> 조회 — 화면 조회는 메타 기반 call-proc 훅으로 — apiClient 직접 호출 금지
+- WARN B06 SubTitle hotkeyConfig 에 search 지정 — F5 조회 배선(룰 25 §1.5.1)
+- WARN B10 As-is 팝업 DMF0082_SaveSalesFuturePrice_Popup → components/modals/*Modal.tsx 또는 매핑표에 공통 모달 재사용 명시 — 룰 25 §3 연결 POPUP 1:1
+- WARN B20 __tests__/*.spec.ts 단위 테스트 — 룰 17 9-Step ⑨
+- WARN B21 Doc/gen/DMF0082/register.json — 등록 3-키 초안 — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/DMF0082/e2e_plan.json — E2E 플랜 — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/DMF0082/DMF0082_registration.sql — Oracle 메타 등록 SQL(gen-register-sql.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/DMF0082/DMF0082_PKG.sql — Oracle PKG 골격(gen-pkg.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)

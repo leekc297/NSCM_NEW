@@ -24,6 +24,21 @@ const rules = [
   ['P20', 'BLOCK', /TODO 이식/g, '미이식 TODO 잔존'], ['P21', 'BLOCK', /SELECT NULL AS TODO_COLUMN FROM DUAL WHERE 1 = 0/g, '빈 결과셋 스텁 잔존'],
 ];
 for (const [c, lv, re, msg] of rules) { let m; let n = 0; const src = /TODO/.test(msg) || /스텁/.test(msg) ? raw : code; while ((m = re.exec(src)) && n < 20) { n++; add(lv, c, msg, lineOf(src === raw ? m.index : m.index)); } }
+// ── P30+: 이관 Oracle 룰 (10_RULES_KEEP.md §H)
+{
+  const R2 = [
+    ['P30', 'BLOCK', /\bNVL\s*\([^,()]+,\s*NULL\s*\)/gi, 'NVL(x, NULL) 금지 — ISNULL(x,\'\') 오변환 계보 (#127)'],
+    ['P31', 'BLOCK', /\bTRUNCATE\s+TABLE\s+\w*(GTT|TMP|TEMP)\w*/gi, 'GTT TRUNCATE(DDL) 금지 → DELETE (#107)'],
+    ['P32', 'WARN', /\bTO_DATE\s*\(\s*[\w.:]+\s*\)/gi, '단일 인자 TO_DATE 금지 — 마스크 명시 (#109 NLS 암묵변환)'],
+    ['P33', 'WARN', /\bTO_CHAR\s*\(\s*(SYSDATE|\w*_DT|\w*_DATE|\w*DTM)\s*\)/gi, 'DATE TO_CHAR 무마스크 금지 (#109)'],
+    ['P34', 'WARN', /\bSUBSTR\s*\(\s*[^,]+,\s*0\s*,/gi, 'SUBSTR(s,0,n) — MSSQL 0 인덱스 잔재 audit (#61)'],
+    ['P35', 'WARN', /\/\*\+\s*(INDEX|FULL|LEADING|USE_NL|USE_HASH)/gi, '힌트 우선 금지 — ①함수 제거 ②인덱스 구문 ③힌트 순서 (#129)'],
+    ['P36', 'WARN', /\bUTL_CALL_STACK\.SUBPROGRAM\s*\(\s*1\s*\)\s*\(\s*([2-9])\s*\)/gi, 'UTL_CALL_STACK.SUBPROGRAM(1)(N) — .COUNT>=N 안전체크 동반 (#62)'],
+    ['P37', 'WARN', /\bREGEXP_(SUBSTR|REPLACE|LIKE)\s*\(/gi, 'REGEXP 함수 — 성능 안티패턴 후보(문자열 분해는 GTT 사전적재) (#31/#110)'],
+    ['P38', 'WARN', /WHEN\s+OTHERS\s+THEN\s+NULL\s*;/gi, 'WHEN OTHERS THEN NULL — 예외 삼킴 금지, 전파 (#137)'],
+  ];
+  for (const [c, lv, re, msg] of R2) { let m; let n = 0; while ((m = re.exec(code)) && n < 20) { n++; add(lv, c, msg, lineOf(m.index)); } }
+}
 if (asisBlocks) add('BLOCK', 'P00', `ASIS 원문 블록 ${asisBlocks}개 잔존 — 이식 후 삭제`);
 if (!/CREATE OR REPLACE PACKAGE BODY/i.test(raw)) add('BLOCK', 'P90', 'PACKAGE BODY 없음');
 // 규약: 모든 PROCEDURE 에 O_RESULT_CURSOR, EXCEPTION WHEN OTHERS

@@ -1,0 +1,56 @@
+# [Harness] DMF0043 contribute-main — BLOCK 0 / WARN 54
+
+- WARN S01 표준 파일 없음: components/{Page}Form.tsx
+- WARN G01 As-is 시트 'ContributeRate' 가 SHEETS enum 에 없음 (배포 SHEET_NAME 케이싱 그대로)
+- WARN G01 As-is 시트 'ContributeSalesList' 가 SHEETS enum 에 없음 (배포 SHEET_NAME 케이싱 그대로)
+- WARN G02 As-is 엔드포인트 DM.DMF0043_GET_CONTRIBUTE_MAIN_DATA (DMF0043_GET_CONTRIBUTE_MAIN_DATA) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 DM.DMF0043_SAVE_DM_MST_CONTRIBUTE_RATIO (DMF0043_SAVE_DM_MST_CONTRIBUTE_RATIO) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 DM.DMF0043_GET_MAIN_VARSION_DATA (DMF0043_GET_MAIN_VARSION_DATA) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 DM.DMF0043_GET_CONTRIBUTION_SALES_LIST (DMF0043_GET_CONTRIBUTION_SALES_LIST) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 DM.DMF0043_GET_CONTRIBUTE_RATE_POPUP (DMF0043_GET_CONTRIBUTE_RATE_POPUP) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 DM.DMF0043_SAVE_DM_MST_CONTRIBUTE_VER (DMF0043_SAVE_DM_MST_CONTRIBUTE_VER) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 DM.DMF0043_GET_CONTRIBUTE_YEAR_POPUP (DMF0043_GET_CONTRIBUTE_YEAR_POPUP) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 DM.DMF0043_GET_CONT_VIEW_VERSIONPOPUP (DMF0043_GET_CONT_VIEW_VERSIONPOPUP) 매핑표 §4 에 없음
+- WARN G03 As-is 이벤트 chkYear.CheckedChanged → chkYear_CheckedChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 usrDiscard.Click → usrDiscard_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 btnCutOff.Click → btnCutOff_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 usrHis.CheckedChanged → usrHis_CheckedChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 this.Load → Form_Load 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 usrYear.SelectedIndexChanged → usrYear_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 dsdm.Changed → spdMain_Changed 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 dsdm.Changed → spdMain_Changed 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 dsdm.Changed → spdMain_Changed 매핑표 §2 에 없음
+- WARN G04 As-is 컨트롤 usrYear / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 chkYear / UsrCheckBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 usrDiscard / UsrCheckBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnCutOff / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 usrHis / UsrCheckBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 spdMain / FpSpread 매핑표 §1 에 없음
+- WARN D01 사전 밖 컴포넌트 <MainRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @ContributeMain.tsx
+- WARN D01 사전 밖 컴포넌트 <MainRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @ContributeMain.tsx
+- WARN D01 사전 밖 컴포넌트 <MainRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/ContributeMainGrid.tsx
+- WARN D01 사전 밖 컴포넌트 <MainRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/ContributeMainGrid.tsx
+- WARN D01 사전 밖 컴포넌트 <MainRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/ContributeMainGrid.tsx
+- WARN D01 사전 밖 컴포넌트 <MainRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/ContributeMainGrid.tsx
+- WARN D01 사전 밖 컴포넌트 <MainRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/ContributeMainGrid.tsx
+- WARN D01 사전 밖 컴포넌트 <MainRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/ContributeMainGrid.tsx
+- WARN D01 사전 밖 컴포넌트 <MainRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/ContributeMainGrid.tsx
+- WARN D01 사전 밖 컴포넌트 <MainRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/ContributeMainGrid.tsx
+- WARN V01 As-is Validation 6건인데 hooks/use*Validation.ts 없음 (룰 09 100% 적용)
+- WARN V01 As-is Expression 5건인데 hooks/use*Expression.ts 없음 (룰 09 100% 적용)
+- WARN R10 감사키 빈문자열 (#99 §0.1) @ContributeMain.tsx:168
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/ContributeMainGrid.repro.test.ts:28
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/ContributeMainGrid.tsx:277
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @useContributeMainStore.ts:128
+- WARN B05 Page: useTabProcQuery<MENU_ID> 조회 — 화면 조회는 메타 기반 call-proc 훅으로 — apiClient 직접 호출 금지
+- WARN B08 As-is InsertButton override 있음 → hotkeyConfig.insert 가 false 가 아니어야 함 — As-is 기능 누락(members.csv InsertButton)
+- WARN B08 As-is DeleteButton override 있음 → hotkeyConfig.delete 가 false 가 아니어야 함 — As-is 기능 누락(members.csv DeleteButton)
+- WARN B10 As-is 팝업 DMF0043_ContributeRatePopup → components/modals/*Modal.tsx 또는 매핑표에 공통 모달 재사용 명시 — 룰 25 §3 연결 POPUP 1:1
+- WARN B10 As-is 팝업 DMF0043_VersionPopup → components/modals/*Modal.tsx 또는 매핑표에 공통 모달 재사용 명시 — 룰 25 §3 연결 POPUP 1:1
+- WARN B19 validation.md 9행 → hooks/use{Page}Validation.ts — 룰 09 100% 적용
+- WARN B19 expressions.md 6행 → hooks/use{Page}Expression.ts — 룰 09 100% 적용
+- WARN B20 __tests__/*.spec.ts 단위 테스트 — 룰 17 9-Step ⑨
+- WARN B21 Doc/gen/DMF0043/register.json — 등록 3-키 초안 — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/DMF0043/e2e_plan.json — E2E 플랜 — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/DMF0043/DMF0043_registration.sql — Oracle 메타 등록 SQL(gen-register-sql.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/DMF0043/DMF0043_PKG.sql — Oracle PKG 골격(gen-pkg.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)

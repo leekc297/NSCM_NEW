@@ -101,6 +101,31 @@ if (ID && cfg.analysisRoot) {
 }
 
 // ── B) 기초 누락 방지(완료 정의 DoD) — 룰 25/12/13/17 의 '기초' 항목을 기계 판정. 산출: Doc/gen/<ID>/DOD.md
+// ── R: 이관 룰 게이트 (tools/VibeManager/rules/10_RULES_KEEP.md — 출처 hook 번호 표기). 주석 제거 후 검사.
+{
+  const stripC = t => t.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+  const R = [
+    ['R01', 'BLOCK', /from\s+'(\.\.\/){3,}|from\s+'@(foundation|shared)\/[^'/]+\/[^'/]+\//, '페이지 폴더 밖 상대 import / alias deep import — 2-depth alias 만 (#71 framework-foundation-entry)'],
+    ['R02', 'BLOCK', /from\s+'(clsx|lodash|react-i18next|@tanstack\/react-query)'/, '직접 import 금지 → @foundation 재export (#40 react-query-foundation-reexport, UI체크 3.3)'],
+    ['R03', 'BLOCK', /\bwindow\.(alert|confirm)\s*\(|(^|[^\w.])alert\s*\(/m, 'window.alert/confirm → useMessageStore (#26 messaging-api)'],
+    ['R04', 'BLOCK', /(^|[^\w])<FlexGrid(Column)?(\s|\/?>)/m, 'FlexGrid JSX 직접 금지 → 공용 DataGrid (#10 datagrid-shared-component)'],
+    ['R05', 'BLOCK', /:\s*any\b|as\s+any\b|as\s+unknown\s+as\b/, '`any` / `as unknown as` 금지 (#73 procedure-dts-ssot)'],
+    ['R06', 'BLOCK', /<DataGrid[^>]*\binitialized=/, 'DataGrid initialized prop deprecated → useEffect+gridRef (#70 runtime-pitfalls)'],
+    ['R07', 'BLOCK', /use\w+Store\(\s*(state|s)\s*=>\s*(state|s)\.\w+\s*\?\?\s*(\[\]|\{\})/, 'zustand selector ?? 폴백 금지 — 초기값 stable 참조 (#70)'],
+    ['R08', 'BLOCK', /useTabProcQuery<[^>]*>\(\s*\{[^}]*\bfilters:\s*\{/, 'useTabProcQuery filters 인라인 객체 리터럴 금지(참조 비교 → 무한 재요청) (#70)'],
+    ['R09', 'BLOCK', /\b(rowStatus|ROW_STATUS|actionFlag|isNewRow)\b/, '자체 행상태 필드 금지 — CRUD_TYPE 전용 (#99 §0)'],
+    ['R10', 'WARN', /createdBy:\s*''|map\(\(\)\s*=>\s*''\)/, '감사키 빈문자열 (#99 §0.1)'],
+    ['R11', 'BLOCK', /\bfetch\s*\(|from\s+'axios'/, '직접 fetch/axios 금지 → useTabProcQuery/useProcMutation/apiClient (.claude/rules/00-fe-screen §E)'],
+    ['R12', 'BLOCK', /style=\{\{/, 'inline style 금지 → SCSS Module (절대금지 ⑤)'],
+    ['R13', 'BLOCK', /console\.log\(/, 'console.log 금지 (절대금지 ③)'],
+    ['R14', 'WARN', /<dialog[\s>]|from\s+'@mui\/material'/, '인라인 dialog/MUI Dialog 금지 → CustomDialog (#35)'],
+  ];
+  for (const [f, t] of Object.entries(src)) { if (/\.(test|spec|repro\.test)\.tsx?$/.test(rel(f))) continue; const c = stripC(t); for (const [code, lv, re, msg] of R) { const m = re.exec(c); if (m) F(lv === 'BLOCK' && !FINAL ? 'WARN' : lv, code, msg, `${rel(f)}:${c.slice(0, m.index).split('\n').length}`); } }
+  // R15: apiClient.post(call-proc) 직접 호출 후 5줄 안에 결과 판정(res.status >= 400 || code) 없음 (gate §1-3)
+  for (const [f, t] of Object.entries(src)) { const lines = stripC(t).split('\n'); lines.forEach((ln, i) => { if (/apiClient\.post\([^)]*call-proc/.test(ln) && !/status\s*>=\s*400|\.code\)/.test(lines.slice(i, i + 6).join('\n'))) F(FINAL ? 'BLOCK' : 'WARN', 'R15', 'call-proc 직접 호출 결과 판정 없음 — if (res.status >= 400 || Number(res.data.code)) (gate §1-3)', `${rel(f)}:${i + 1}`); }); }
+  // R16: 진입 Page 400 라인 초과 (#9 components-folder-pattern)
+  for (const [f, t] of Object.entries(src)) if (/^(?!.*components\/).*\.tsx$/.test(rel(f)) && /PageProps</.test(t) && t.split('\n').length > 400) F('WARN', 'R16', `진입 Page ${t.split('\n').length} 라인 > 400 — components/ 분리 (#9)`, rel(f));
+}
 const DOD = []; const dod = (code, ok, what, how, level) => { DOD.push({ code, ok, what, how }); if (!ok) F(level || (FINAL ? 'BLOCK' : 'WARN'), code, `${what} — ${how}`); };
 {
   const all = Object.values(src).join('\n'); const pageFiles = Object.entries(src).filter(([f]) => /^(?!.*components\/).*\.tsx$/.test(rel(f)) && /PageProps</.test(src[f]));
